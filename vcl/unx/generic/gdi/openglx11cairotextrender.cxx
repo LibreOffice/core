@@ -11,7 +11,6 @@
 
 #include <openglgdiimpl.hxx>
 #include <salbmp.hxx>
-#include <vcl/salbtype.hxx>
 
 #include <cairo.h>
 

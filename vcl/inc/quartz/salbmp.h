@@ -22,7 +22,8 @@
 
 #include <tools/gen.hxx>
 
-#include <vcl/salbtype.hxx>
+#include <vcl/BitmapBuffer.hxx>
+#include <vcl/BitmapPalette.hxx>
 
 #include <quartz/salgdi.h>
 

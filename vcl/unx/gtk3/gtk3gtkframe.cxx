@@ -54,7 +54,6 @@
 #include <unx/gtk/gtkbackend.hxx>
 
 #include <dlfcn.h>
-#include <vcl/salbtype.hxx>
 #include <window.h>
 #include <strings.hrc>
 #include <bitmaps.hlst>

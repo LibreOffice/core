@@ -53,7 +53,6 @@
 #include <X11/Xatom.h>
 
 #include <dlfcn.h>
-#include <vcl/salbtype.hxx>
 #include <window.h>
 #include <strings.hrc>
 #include <bitmaps.hlst>

@@ -20,7 +20,6 @@
 #include <poll.h>
 #include <salgdiimpl.hxx>
 
-#include <vcl/salbtype.hxx>
 #include <vcl/sysdata.hxx>
 #include <sal/log.hxx>
 
