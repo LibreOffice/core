@@ -648,7 +648,23 @@ typedef enum
      * Profiling tracing information single string of multiple lines
      * containing <pid> <timestamp> and zone start/stop information
      */
-    LOK_CALLBACK_PROFILE_FRAME = 41
+    LOK_CALLBACK_PROFILE_FRAME = 41,
+
+    /**
+     * The position and size of the cell selection area. It is used to
+     * draw the selection handles for cells in Calc documents.
+     *
+     * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
+     */
+    LOK_CALLBACK_CELL_SELECTION_AREA = 42,
+
+    /**
+     * The position and size of the cell auto fill area. It is used to
+     * trigger auto fill functionality if that area is hit.
+     *
+     * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
+     */
+    LOK_CALLBACK_CELL_AUTO_FILL_AREA = 43,
 }
 LibreOfficeKitCallbackType;
 
