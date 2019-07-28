@@ -5890,22 +5890,40 @@ static void updateLibreOfficeKitSelection(const ScViewData* pViewData, const std
         return;
 
     // selection start handle
-    tools::Rectangle aStart(aBoundingBox.Left() / nPPTX, aBoundingBox.Top() / nPPTY,
-            aBoundingBox.Left() / nPPTX, (aBoundingBox.Top() / nPPTY) + 256);
-
-    // selection end handle
-    tools::Rectangle aEnd(aBoundingBox.Right() / nPPTX, (aBoundingBox.Bottom() / nPPTY) - 256,
+    tools::Rectangle aRectangle(
+            aBoundingBox.Left()  / nPPTX, aBoundingBox.Top() / nPPTY,
             aBoundingBox.Right() / nPPTX, aBoundingBox.Bottom() / nPPTY);
 
     // the selection itself
     OString aSelection = comphelper::string::join("; ", aRectangles).getStr();
 
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, aRectangle.toString().getStr());
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aSelection.getStr());
     SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", aSelection.getStr());
 }
+
+namespace
+{
+
+void updateLibreOfficeKitAutoFill(const ScViewData* pViewData, tools::Rectangle const & rRectangle)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    double nPPTX = pViewData->GetPPTX();
+    double nPPTY = pViewData->GetPPTY();
+
+    // selection start handle
+    tools::Rectangle aLogicRectangle(
+            rRectangle.Left()  / nPPTX, rRectangle.Top() / nPPTY,
+            rRectangle.Right() / nPPTX, rRectangle.Bottom() / nPPTY);
+
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_AUTO_FILL_AREA, aLogicRectangle.toString().getStr());
+}
+
+} //end anonymous namespace
 
 void ScGridWindow::UpdateCursorOverlay()
 {
@@ -6147,6 +6165,7 @@ void ScGridWindow::UpdateSelectionOverlay()
     {
         ScTabViewShell* pViewShell = pViewData->GetViewShell();
         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY");
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, "EMPTY");
         SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "EMPTY");
     }
 
@@ -6177,9 +6196,11 @@ void ScGridWindow::UpdateAutoFillOverlay()
         SCCOL nX = aAutoMarkPos.Col();
         SCROW nY = aAutoMarkPos.Row();
 
-        if (!maVisibleRange.isInside(nX, nY))
+        if (!maVisibleRange.isInside(nX, nY) && !comphelper::LibreOfficeKit::isActive())
+        {
             // Autofill mark is not visible.  Bail out.
             return;
+        }
 
         SCTAB nTab = pViewData->GetTabNo();
         ScDocument* pDoc = pViewData->GetDocument();
@@ -6212,8 +6233,11 @@ void ScGridWindow::UpdateAutoFillOverlay()
 
         // #i70788# get the OverlayManager safely
         rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
-
-        if (xOverlayManager.is() && !comphelper::LibreOfficeKit::isActive())
+        if (comphelper::LibreOfficeKit::isActive()) // notify the LibreOfficeKit
+        {
+            updateLibreOfficeKitAutoFill(pViewData, aFillRect);
+        }
+        else if (xOverlayManager.is())
         {
             Color aHandleColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
             if (pViewData->GetActivePart() != eWhich)
