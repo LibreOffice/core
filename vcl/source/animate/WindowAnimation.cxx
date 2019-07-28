@@ -28,7 +28,7 @@
 bool WindowAnimation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDestSz,
                             long nCallerId, OutputDevice* pFirstFrameOutDev)
 {
-    if (!maAnimationFrames.empty())
+    if (!maFrames.empty())
     {
         bool bRendererDoesNotExist
             = mpAnimationRenderers->RepaintRenderers(pOut, nCallerId, rDestPt, rDestSz);
@@ -46,7 +46,7 @@ bool WindowAnimation::Start(OutputDevice* pOut, const Point& rDestPt, const Size
 
         if (!mbIsInAnimation)
         {
-            RestartTimer(maAnimationFrames[mnFrameIndex]->mnWait);
+            RestartTimer(maFrames[mnFrameIndex]->mnWait);
             mbIsInAnimation = true;
         }
 

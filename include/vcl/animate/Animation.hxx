@@ -67,8 +67,8 @@ public:
     void SetNotifyHdl(const Link<Animation*, void>& rLink) { maTimeoutNotifier = rLink; }
     const Link<Animation*, void>& GetNotifyHdl() const { return maTimeoutNotifier; }
 
-    std::vector<std::unique_ptr<AnimationFrame>>& GetAnimationFrames() { return maAnimationFrames; }
-    size_t Count() const { return maAnimationFrames.size(); }
+    std::vector<std::unique_ptr<AnimationFrame>>& GetAnimationFrames() { return maFrames; }
+    size_t Count() const { return maFrames.size(); }
     bool Insert(const AnimationFrame& rAnimationFrame);
     const AnimationFrame& Get(sal_uInt16 nAnimation) const;
     void Replace(const AnimationFrame& rNewAnimationBmp, sal_uInt16 nAnimation);
@@ -95,7 +95,7 @@ public:
     SAL_DLLPRIVATE sal_uLong ImplGetCurPos() const { return mnFrameIndex; }
 
 protected:
-    std::vector<std::unique_ptr<AnimationFrame>> maAnimationFrames;
+    std::vector<std::unique_ptr<AnimationFrame>> maFrames;
     AnimationRenderers* mpAnimationRenderers;
     bool mbIsInAnimation;
     size_t mnFrameIndex;
