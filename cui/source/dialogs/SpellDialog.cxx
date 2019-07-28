@@ -19,7 +19,6 @@
 
 #include <memory>
 #include "SpellAttrib.hxx"
-#include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
@@ -33,38 +32,23 @@
 #include <editeng/splwrap.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/wghtitem.hxx>
-#include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XServiceDisplayName.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <sfx2/app.hxx>
-#include <vcl/cursor.hxx>
 #include <vcl/event.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/help.hxx>
-#include <vcl/graphicfilter.hxx>
-#include <vcl/ptrstyle.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/texteng.hxx>
 #include <vcl/weld.hxx>
-#include <osl/file.hxx>
-#include <editeng/optitems.hxx>
-#include <editeng/svxenum.hxx>
 #include <svx/SpellDialogChildWindow.hxx>
 #include <SpellDialog.hxx>
-#include <svx/dlgutil.hxx>
 #include <optlingu.hxx>
-#include <svx/svxerr.hxx>
 #include <treeopt.hxx>
 #include <svtools/langtab.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 

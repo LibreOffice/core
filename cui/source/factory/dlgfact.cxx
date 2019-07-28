@@ -23,16 +23,12 @@
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/pageids.hxx>
-#include <sfx2/request.hxx>
-#include <sal/log.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
-#include <svx/ucsubset.hxx>
 #include <numfmt.hxx>
 #include <splitcelldlg.hxx>
 #include <dstribut.hxx>
 #include <cuiimapwnd.hxx>
-#include <hlmarkwn.hxx>
 #include <cui/cuicharmap.hxx>
 #include <srchxtra.hxx>
 #include <textanim.hxx>
@@ -83,7 +79,6 @@
 #include <sdrcelldlg.hxx>
 #include <newtabledlg.hxx>
 #include <macroass.hxx>
-#include <acccfg.hxx>
 #include <insrc.hxx>
 #include <passwdomdlg.hxx>
 #include <screenshotannotationdlg.hxx>

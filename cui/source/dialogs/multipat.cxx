@@ -23,14 +23,12 @@
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <sfx2/filedlghelper.hxx>
 
 #include <multipat.hxx>
 #include <dialmgr.hxx>
 
 #include <strings.hrc>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 

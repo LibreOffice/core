@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/cjkoptions.hxx>
-#include <svx/flagsdef.hxx>
 #include <sdrcelldlg.hxx>
 #include <cuitabarea.hxx>
 #include <svx/svdmodel.hxx>

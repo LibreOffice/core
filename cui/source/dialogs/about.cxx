@@ -22,16 +22,13 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/button.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 
-#include <tools/stream.hxx>
-#include <rtl/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>
 #include <com/sun/star/uno/Any.h>
@@ -43,18 +40,13 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/bootstrap.hxx>
-#include <basegfx/numeric/ftools.hxx>
-#include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <svtools/optionsdrawinglayer.hxx>
 
-#include <sfx2/sfxuno.hxx>
 #include <about.hxx>
 #include <dialmgr.hxx>
 #include <strings.hrc>
 #include <config_buildid.h>
 #include <sfx2/app.hxx>
-#include <rtl/ustrbuf.hxx>
 
 #if HAVE_FEATURE_OPENCL
 #include <opencl/openclwrapper.hxx>

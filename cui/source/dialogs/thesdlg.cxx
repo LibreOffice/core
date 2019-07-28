@@ -18,25 +18,14 @@
  */
 
 #include <thesdlg.hxx>
-#include <strings.hrc>
-#include <dialmgr.hxx>
 
 #include <tools/debug.hxx>
 #include <svl/lngmisc.hxx>
 #include <vcl/event.hxx>
-#include <vcl/graphicfilter.hxx>
-#include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/dlgutil.hxx>
-#include <svx/svxerr.hxx>
-#include <editeng/unolingu.hxx>
-#include <svx/langbox.hxx>
 #include <svtools/langtab.hxx>
-#include <unotools/lingucfg.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <i18nlangtag/mslangid.hxx>
 #include <comphelper/string.hxx>
-#include <osl/file.hxx>
 
 #include <stack>
 #include <algorithm>

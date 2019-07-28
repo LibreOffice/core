@@ -17,25 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <basic/basmgr.hxx>
-
 #include <macropg.hxx>
 #include <svl/eitem.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <sfx2/app.hxx>
-#include <sfx2/objsh.hxx>
-#include <com/sun/star/container/NoSuchElementException.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <bitmaps.hlst>
-#include <cfg.hxx>
 #include <cfgutil.hxx>
 #include <dialmgr.hxx>
 #include <helpids.h>
 #include <headertablistbox.hxx>
 #include "macropg_impl.hxx"
 #include <svl/macitem.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <strings.hrc>
 #include <comphelper/namedvaluecollection.hxx>
