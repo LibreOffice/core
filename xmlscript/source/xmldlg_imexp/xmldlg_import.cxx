@@ -117,8 +117,7 @@ OUString ControlElement::getControlModelName(
     OUString const& rDefaultModel,
     Reference< xml::input::XAttributes > const & xAttributes )
 {
-    OUString aModel;
-    aModel = xAttributes->getValueByUidName( m_xImport->XMLNS_DIALOGS_UID, "control-implementation");
+    OUString aModel = xAttributes->getValueByUidName( m_xImport->XMLNS_DIALOGS_UID, "control-implementation");
     if (aModel.isEmpty())
         aModel = rDefaultModel;
     return aModel;

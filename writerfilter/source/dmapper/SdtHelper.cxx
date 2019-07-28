@@ -134,8 +134,7 @@ void SdtHelper::createDateContentControl(bool bInsideTable)
             return;
         }
 
-        uno::Reference<uno::XInterface> xFieldInterface;
-        xFieldInterface
+        uno::Reference<uno::XInterface> xFieldInterface
             = m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.text.Fieldmark");
         uno::Reference<text::XFormField> xFormField(xFieldInterface, uno::UNO_QUERY);
         uno::Reference<text::XTextContent> xToInsert(xFormField, uno::UNO_QUERY);

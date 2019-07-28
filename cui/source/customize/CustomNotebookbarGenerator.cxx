@@ -130,8 +130,7 @@ static OUString getUIDirPath()
 
 char* CustomNotebookbarGenerator::convertToCharPointer(const OUString& sString)
 {
-    char* cString = nullptr;
-    cString = new char[sString.getLength() + 1];
+    char* cString = new char[sString.getLength() + 1];
     for (int nIdx = 0; nIdx < sString.getLength(); nIdx++)
         *(cString + nIdx) = char(sString[nIdx]);
     *(cString + sString.getLength()) = '\0';

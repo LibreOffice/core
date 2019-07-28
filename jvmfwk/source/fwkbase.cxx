@@ -117,8 +117,7 @@ boost::optional<VersionInfo> VendorSettings::getVersionInformation(const OUStrin
 {
     OSL_ASSERT(!sVendor.isEmpty());
     OString osVendor = OUStringToOString(sVendor, RTL_TEXTENCODING_UTF8);
-    CXPathObjectPtr pathObject;
-    pathObject = xmlXPathEvalExpression(
+    CXPathObjectPtr pathObject = xmlXPathEvalExpression(
         reinterpret_cast<xmlChar const *>(
             OString(
                 "/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"" + osVendor

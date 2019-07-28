@@ -107,8 +107,7 @@ namespace cppu_ifcontainer
                 pContainer->addInterface(xRef);
                 aListeners.push_back(xRef);
             }
-            Sequence< Reference< XInterface > > aElements;
-            aElements = pContainer->getElements();
+            Sequence< Reference< XInterface > > aElements = pContainer->getElements();
 
             CPPUNIT_ASSERT_MESSAGE("query contents",
                                    bool(static_cast<int>(aElements.getLength()) == nTests));

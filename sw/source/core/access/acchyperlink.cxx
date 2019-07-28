@@ -214,8 +214,7 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
 
                 for( const OUString& aLink : aNames )
                 {
-                    uno::Any aAny;
-                    aAny = xLinks->getByName( aLink );
+                    uno::Any aAny = xLinks->getByName( aLink );
                     aAny >>= xSubLinks;
                     if (xSubLinks->hasByName(sText.copy(1)) )
                         return true;

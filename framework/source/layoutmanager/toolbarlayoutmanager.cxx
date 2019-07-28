@@ -2261,10 +2261,9 @@ void ToolbarLayoutManager::implts_findNextDockingPos( ui::DockingArea DockingAre
         DockingArea = ui::DockingArea_DOCKINGAREA_TOP;
     uno::Reference< awt::XWindow > xDockingWindow( m_xDockAreaWindows[static_cast<int>(DockingArea)] );
     ::Size                         aDockingWinSize;
-    vcl::Window*                        pDockingWindow( nullptr );
 
     // Retrieve output size from container Window
-    pDockingWindow  = VCLUnoHelper::GetWindow( xDockingWindow ).get();
+    vcl::Window* pDockingWindow  = VCLUnoHelper::GetWindow( xDockingWindow ).get();
     if ( pDockingWindow )
         aDockingWinSize = pDockingWindow->GetOutputSizePixel();
     aReadLock.clear();

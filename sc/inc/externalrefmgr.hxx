@@ -305,8 +305,7 @@ private:
         {
             const ScAddress& s = rRange.aStart;
             const ScAddress& e = rRange.aEnd;
-            size_t hash = 17;
-            hash = hash * 37 + s.Tab();
+            size_t hash = s.Tab();
             hash = hash * 37 + s.Col();
             hash = hash * 37 + s.Row();
             hash = hash * 37 + e.Tab();
