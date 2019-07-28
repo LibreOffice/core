@@ -18,7 +18,6 @@
  */
 
 #include <cfgutil.hxx>
-#include <cfg.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -36,28 +35,19 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/ui/theUICategoryDescription.hpp>
 
-#include <basic/sbx.hxx>
-#include <basic/basicmanagerrepository.hxx>
-#include <basic/sbstar.hxx>
-#include <basic/sbxmeth.hxx>
-#include <basic/sbmod.hxx>
 #include <basic/basmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
-#include <sfx2/app.hxx>
 #include <sfx2/minfitem.hxx>
 #include <comphelper/DisableInteractionHelper.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <svtools/imagemgr.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <unotools/configmgr.hxx>
 #include <dialmgr.hxx>
-#include <svl/stritem.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/help.hxx>

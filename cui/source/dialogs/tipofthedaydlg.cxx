@@ -19,15 +19,14 @@
 
 #include <tipofthedaydlg.hxx>
 
-#include <config_folders.h>
 #include <dialmgr.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <tipoftheday.hrc>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/help.hxx>
 #include <vcl/virdev.hxx>
-#include <sfx2/sfxhelp.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/random.hxx>
 

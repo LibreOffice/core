@@ -22,18 +22,15 @@
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <dialmgr.hxx>
-#include <sfx2/tabdlg.hxx>
 #include <sfx2/app.hxx>
 #include <svx/fmsrccfg.hxx>
 #include <svx/fmsrcimp.hxx>
 #include <strings.hrc>
 #include <cuifmsearch.hxx>
-#include <svx/srchdlg.hxx>
 #include <svl/cjkoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <svx/svxdlg.hxx>
-#include <sal/macros.h>
 
 using namespace css::uno;
 using namespace css::i18n;

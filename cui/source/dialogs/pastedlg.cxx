@@ -18,7 +18,6 @@
  */
 
 #include <memory>
-#include <com/sun/star/embed/Aspects.hpp>
 
 #include <pastedlg.hxx>
 #include <svtools/insdlg.hxx>
@@ -27,8 +26,6 @@
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <tools/lineend.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 
 SvPasteObjectDialog::SvPasteObjectDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/pastespecial.ui", "PasteSpecialDialog")

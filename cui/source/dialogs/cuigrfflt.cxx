@@ -27,13 +27,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/request.hxx>
 #include <tools/helpers.hxx>
 #include <cuigrfflt.hxx>
-#include <svx/dialogs.hrc>
 
 CuiGraphicPreviewWindow::CuiGraphicPreviewWindow()
     : mpOrigGraphic(nullptr)

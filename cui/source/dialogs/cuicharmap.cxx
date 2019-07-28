@@ -20,14 +20,12 @@
 #include <stdio.h>
 
 #include <vcl/svapp.hxx>
-#include <svtools/colorcfg.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
 
 #include <rtl/textenc.h>
 #include <svx/ucsubset.hxx>
-#include <sfx2/objsh.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/virdev.hxx>
@@ -38,14 +36,11 @@
 
 #include <dialmgr.hxx>
 #include <cui/cuicharmap.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <sfx2/app.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/editids.hrc>
 #include <editeng/fontitem.hxx>
 #include <strings.hrc>
-#include <macroass.hxx>
 #include <unicode/uchar.h>
 #include <unicode/utypes.h>
 

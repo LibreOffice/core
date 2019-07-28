@@ -40,8 +40,6 @@
 #include <unotools/syslocale.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -49,10 +47,8 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
-#include <sfx2/sfxuno.hxx>
 #include <dialmgr.hxx>
 #include <strings.hrc>
-#include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 

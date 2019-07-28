@@ -17,19 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
-
 #include <iconcdlg.hxx>
 #include <cuihyperdlg.hxx>
 
 #include <sal/log.hxx>
-#include <unotools/viewoptions.hxx>
-#include <svtools/apearcfg.hxx>
-#include <vcl/mnemonic.hxx>
-#include <vcl/i18nhelp.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/builderfactory.hxx>
 
 /**********************************************************************
 |

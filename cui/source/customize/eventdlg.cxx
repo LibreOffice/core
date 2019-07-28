@@ -29,21 +29,8 @@
 #include <rtl/ustring.hxx>
 
 #include "eventdlg.hxx"
-
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/evntconf.hxx>
-#include <sfx2/minfitem.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/docfac.hxx>
-#include <sfx2/fcontnr.hxx>
-#include <unotools/eventcfg.hxx>
-
-#include <headertablistbox.hxx>
 #include "macropg_impl.hxx"
 
-#include <bitmaps.hlst>
-#include <cfgutil.hxx>
 #include <cfg.hxx>
 
 using namespace ::com::sun::star;

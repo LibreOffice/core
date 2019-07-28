@@ -24,16 +24,15 @@
 #include <svl/whiter.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/flagsdef.hxx>
-#include <svx/svxitems.hrc>
 #include <svx/strarray.hxx>
 #include <editeng/flstitem.hxx>
 #include <chardlg.hxx>
 #include <paragrph.hxx>
 #include <backgrnd.hxx>
-#include <svx/dialogs.hrc>
+#include <editeng/editids.hrc>
+#include <svx/svxids.hrc>
 #include <tools/debug.hxx>
 #include <tools/resary.hxx>
-#include <rtl/strbuf.hxx>
 #include <vcl/svapp.hxx>
 
 SvxSearchFormatDialog::SvxSearchFormatDialog(weld::Window* pParent, const SfxItemSet& rSet)

@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <sfx2/request.hxx>
 
 #include <sfx2/viewfrm.hxx>
-#include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include <hlmailtp.hxx>
-#include <bitmaps.hlst>
 
 #include <comphelper/lok.hxx>
 

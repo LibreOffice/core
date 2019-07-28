@@ -17,16 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/processfactory.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <config_folders.h>
 #include <CustomNotebookbarGenerator.hxx>
 #include <osl/file.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/builder.hxx>
+#include <vcl/EnumContext.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <officecfg/Office/UI/ToolbarMode.hxx>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <unotools/confignode.hxx>
-#include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 
 #define aUIItemIDLength 255

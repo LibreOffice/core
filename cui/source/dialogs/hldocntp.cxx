@@ -20,7 +20,6 @@
 #include <hldocntp.hxx>
 #include <osl/file.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/docfac.hxx>
 #include <sfx2/docfilt.hxx>
 #include <svl/stritem.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>
@@ -33,16 +32,13 @@
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
-#include <sfx2/filedlghelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
-#include <bitmaps.hlst>
 #include <cuihyperdlg.hxx>
 #include <dialmgr.hxx>
 #include <strings.hrc>

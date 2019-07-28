@@ -24,12 +24,9 @@
 #include <cfgutil.hxx>
 #include <dialmgr.hxx>
 
-#include <sfx2/msg.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/minfitem.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <svl/stritem.hxx>
 
 #include <sal/macros.h>
 #include <vcl/edit.hxx>
@@ -41,7 +38,6 @@
 
 
 // include interface declarations
-#include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -55,7 +51,6 @@
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/UIConfigurationManager.hpp>
-#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
@@ -69,7 +64,6 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 // namespaces
 

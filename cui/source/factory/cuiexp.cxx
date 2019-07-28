@@ -17,41 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/basedlgs.hxx>
-#include <svx/ucsubset.hxx>
-#include <cuigaldlg.hxx>
-#include <hlmarkwn.hxx>
-#include <srchxtra.hxx>
-#include <cuisrchdlg.hxx>
-#include <transfrm.hxx>
-#include <labdlg.hxx>
-#include <cuitbxform.hxx>
-#include <optdict.hxx>
-#include <dlgname.hxx>
-#include <cuiimapwnd.hxx>
-#include <multipat.hxx>
-#include <cuifmsearch.hxx>
-#include <cuigrfflt.hxx>
-#include <cuitabarea.hxx>
-#include <insdlg.hxx>
-#include <pastedlg.hxx>
-#include <linkdlg.hxx>
-#include <postdlg.hxx>
-#include <passwdomdlg.hxx>
-#include <screenshotannotationdlg.hxx>
-#include <cui/cuicharmap.hxx>
-#include <cuihyperdlg.hxx>
-#include <cfgutil.hxx>
-#include <SignatureLineDialog.hxx>
-#include <SignSignatureLineDialog.hxx>
-#include <SpellDialog.hxx>
-#include <zoom.hxx>
-#include <showcols.hxx>
-#include <hyphen.hxx>
-#include <thesdlg.hxx>
-#include <hangulhanjadlg.hxx>
-#include <dstribut.hxx>
-#include <tipofthedaydlg.hxx>
 #include "dlgfact.hxx"
 #include <sal/types.h>
 

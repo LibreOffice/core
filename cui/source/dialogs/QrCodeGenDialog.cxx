@@ -10,7 +10,6 @@
 #include <QrCodeGenDialog.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/xmltools.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <utility>
