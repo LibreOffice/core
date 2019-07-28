@@ -30,6 +30,7 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <i18nutil/searchopt.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>

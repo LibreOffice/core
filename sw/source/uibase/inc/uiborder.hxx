@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_UIBORDER_HXX
 
 #include <sfx2/basedlgs.hxx>
+#include <svx/flagsdef.hxx>
 
 class SwBorderDlg : public SfxSingleTabDialogController
 {

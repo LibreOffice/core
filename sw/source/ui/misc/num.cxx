@@ -23,6 +23,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/numitem.hxx>
+#include <cmdid.h>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>

@@ -24,7 +24,6 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XAutoTextGroup.hpp>
 #include <com/sun/star/text/XAutoTextEntry.hpp>
 #include <com/sun/star/text/XAutoTextContainer2.hpp>

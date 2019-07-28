@@ -20,10 +20,8 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_PRCNTFLD_HXX
 
 #include <svtools/unitconv.hxx>
-#include <vcl/field.hxx>
 #include <vcl/weld.hxx>
 #include <swdllapi.h>
-#include "uitool.hxx"
 
 class SW_DLLPUBLIC SwPercentField
 {

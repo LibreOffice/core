@@ -25,6 +25,7 @@
 #include <unoprnms.hxx>
 #include <i18nutil/unicode.hxx>
 #include <svtools/colorcfg.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/jobset.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

@@ -38,6 +38,7 @@
 #include <fmtcol.hxx>
 #include <swuipardlg.hxx>
 #include <chrdlgmodes.hxx>
+#include <pardlg.hxx>
 #include <pattern.hxx>
 #include <poolfmt.hxx>
 #include <uitool.hxx>

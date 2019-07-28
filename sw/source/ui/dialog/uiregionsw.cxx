@@ -47,6 +47,7 @@
 #include <wrtsh.hxx>
 #include <swundo.hxx>
 #include <column.hxx>
+#include <fmtclbl.hxx>
 #include <fmtfsize.hxx>
 #include <frmatr.hxx>
 #include <shellio.hxx>

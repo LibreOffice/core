@@ -21,6 +21,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <svx/swframetypes.hxx>
 
 namespace vcl { class Window; }
 class SfxItemSet;

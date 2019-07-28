@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FLDMGR_HXX
 
 #include <fldbas.hxx>
+#include <pam.hxx>
 #include <swdllapi.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>

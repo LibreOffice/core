@@ -22,6 +22,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/customweld.hxx>
 
 #include <tox.hxx>
 #include "toxmgr.hxx"

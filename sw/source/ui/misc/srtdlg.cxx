@@ -21,6 +21,7 @@
 
 #include <srtdlg.hxx>
 
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
@@ -38,6 +39,7 @@
 #include <app.hrc>
 #include <strings.hrc>
 #include <swtable.hxx>
+#include <sortopt.hxx>
 #include <node.hxx>
 #include <tblsel.hxx>
 #include <sfx2/request.hxx>
