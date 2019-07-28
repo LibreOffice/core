@@ -139,8 +139,7 @@ static void initWindow(GtvApplicationWindow* window)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-    GList *focusChain = nullptr;
-    focusChain = g_list_append( focusChain, window->lokdocview );
+    GList *focusChain = g_list_append( focusChain, window->lokdocview );
 
     gtk_container_set_focus_chain ( GTK_CONTAINER (priv->container), focusChain );
 #ifdef __GNUC__

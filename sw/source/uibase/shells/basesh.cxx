@@ -399,8 +399,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                         // destroyed after the paste.
                         SwView* pView = &rView;
                         bool bRet = false;
-                        SotClipboardFormatId nFormatId = SotClipboardFormatId::NONE;
-                        nFormatId = pDlg->GetFormatOnly();
+                        SotClipboardFormatId nFormatId = pDlg->GetFormatOnly();
 
                         if( nFormatId != SotClipboardFormatId::NONE )
                             bRet = SwTransferable::PasteFormat( rSh, *aDataHelper, nFormatId );

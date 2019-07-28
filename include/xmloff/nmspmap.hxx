@@ -55,10 +55,7 @@ struct QNamePairHash
 {
     size_t operator()( const QNamePair &r1 ) const
     {
-        size_t hash = 17;
-        hash = hash * 37 + r1.first;
-        hash = hash * 37 + r1.second.hashCode();
-        return hash;
+        return r1.first * 37 + r1.second.hashCode();
     }
 };
 
