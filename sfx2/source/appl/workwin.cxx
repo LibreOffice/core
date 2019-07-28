@@ -1289,6 +1289,9 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                 else
                     bCreate = true;
 
+                if (pCW->aInfo.nFlags & SfxChildWindowFlags::NEVERCLONE)
+                    pCW->bCreate = bCreate = false; // Don't create and remember that we haven't created.
+
                 // Currently, no window here, but it is enabled; windows
                 // Create window and if possible theContext
                 if ( bCreate )

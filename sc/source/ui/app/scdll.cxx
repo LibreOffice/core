@@ -26,6 +26,7 @@
 #include <svx/tbxcolor.hxx>
 
 #include <comphelper/classids.hxx>
+#include <comphelper/lok.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -255,7 +256,9 @@ void ScDLL::Init()
     SvxHlinkDlgWrapper          ::RegisterChildWindow(false, pMod);
     SvxFontWorkChildWindow      ::RegisterChildWindow(false, pMod);
     SvxIMapDlgChildWindow       ::RegisterChildWindow(false, pMod);
-    ScSpellDialogChildWindow    ::RegisterChildWindow(false, pMod);
+    ScSpellDialogChildWindow::RegisterChildWindow(
+        false, pMod, comphelper::LibreOfficeKit::isActive() ? SfxChildWindowFlags::NEVERCLONE
+                                                            : SfxChildWindowFlags::NONE);
 
     ScValidityRefChildWin::RegisterChildWindow(false, pMod);
     sc::SearchResultsDlgWrapper::RegisterChildWindow(false, pMod);
