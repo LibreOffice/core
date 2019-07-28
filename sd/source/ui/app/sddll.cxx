@@ -93,6 +93,7 @@
 #include <sfx2/charmappopup.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <vcl/FilterConfigItem.hxx>
+#include <comphelper/lok.hxx>
 #include <o3tl/make_unique.hxx>
 #include <sdabstdlg.hxx>
 #include <sdfilter.hxx>
@@ -175,7 +176,9 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     SvxBmpMaskChildWindow::RegisterChildWindow(false, pMod);
     SvxIMapDlgChildWindow::RegisterChildWindow(false, pMod);
     SvxHlinkDlgWrapper::RegisterChildWindow(false, pMod);
-    ::sd::SpellDialogChildWindow::RegisterChildWindow(false, pMod);
+    ::sd::SpellDialogChildWindow::RegisterChildWindow(
+        false, pMod, comphelper::LibreOfficeKit::isActive() ? SfxChildWindowFlags::NEVERCLONE
+                                                            : SfxChildWindowFlags::NONE);
 #if HAVE_FEATURE_AVMEDIA
     ::avmedia::MediaPlayer::RegisterChildWindow(false, pMod);
 #endif
