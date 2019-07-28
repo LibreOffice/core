@@ -59,6 +59,7 @@
 #include <com/sun/star/scanner/ScannerManager.hpp>
 #include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 #include <ooo/vba/XSinkCaller.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <docsh.hxx>
 #include <swmodule.hxx>
@@ -347,7 +348,9 @@ void SwDLL::RegisterControls()
     SwInsertAuthMarkWrapper::RegisterChildWindow( false, pMod );
     SwWordCountWrapper::RegisterChildWindow( false, pMod );
     SvxRubyChildWindow::RegisterChildWindow( false, pMod);
-    SwSpellDialogChildWindow::RegisterChildWindow(false, pMod);
+    SwSpellDialogChildWindow::RegisterChildWindow(
+        false, pMod, comphelper::LibreOfficeKit::isActive() ? SfxChildWindowFlags::NEVERCLONE
+                                                            : SfxChildWindowFlags::NONE);
 
     CharmapPopup::RegisterControl(SID_CHARMAP_CONTROL, pMod );
 

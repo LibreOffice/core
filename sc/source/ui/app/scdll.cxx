@@ -22,6 +22,7 @@
 #include <svx/fmobjfac.hxx>
 #include <svx/objfac3d.hxx>
 
+#include <comphelper/lok.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/app.hxx>
 #include <avmedia/mediatoolbox.hxx>
@@ -238,7 +239,9 @@ void ScDLL::Init()
     SvxHlinkDlgWrapper          ::RegisterChildWindow(false, pMod);
     SvxFontWorkChildWindow      ::RegisterChildWindow(false, pMod);
     SvxIMapDlgChildWindow       ::RegisterChildWindow(false, pMod);
-    ScSpellDialogChildWindow    ::RegisterChildWindow(false, pMod);
+    ScSpellDialogChildWindow::RegisterChildWindow(
+        false, pMod, comphelper::LibreOfficeKit::isActive() ? SfxChildWindowFlags::NEVERCLONE
+                                                            : SfxChildWindowFlags::NONE);
 
     ScValidityRefChildWin::RegisterChildWindow(false, pMod);
     sc::SearchResultsDlgWrapper::RegisterChildWindow(false, pMod);
