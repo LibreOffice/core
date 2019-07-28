@@ -73,6 +73,7 @@
 #include <svx/strarray.hxx>
 #include <svx/svxids.hrc>
 
+#include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 

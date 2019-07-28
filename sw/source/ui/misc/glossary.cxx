@@ -20,6 +20,8 @@
 #include <hintids.hxx>
 
 #include <o3tl/any.hxx>
+#include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/help.hxx>
 #include <svl/stritem.hxx>

@@ -19,6 +19,7 @@
 
 #include <optcomp.hxx>
 
+#include <cmdid.h>
 #include <docsh.hxx>
 #include <swmodule.hxx>
 #include <swtypes.hxx>
@@ -28,6 +29,7 @@
 
 #include <globals.hrc>
 #include <unotools/configmgr.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>

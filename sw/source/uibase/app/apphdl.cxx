@@ -41,6 +41,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/objface.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 #include <view.hxx>
 #include <pview.hxx>

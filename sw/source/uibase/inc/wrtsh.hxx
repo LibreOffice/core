@@ -21,13 +21,13 @@
 
 #include <swdllapi.h>
 #include <fesh.hxx>
-#include <sortopt.hxx>
 #include <swurl.hxx>
 #include <IMark.hxx>
 #include "navmgr.hxx"
 #include <boost/optional.hpp>
 #include <o3tl/typed_flags_set.hxx>
 #include <svx/swframetypes.hxx>
+#include <vcl/weld.hxx>
 
 namespace vcl { class Window; }
 class SbxArray;

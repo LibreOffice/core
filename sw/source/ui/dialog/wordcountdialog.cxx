@@ -30,6 +30,7 @@
 #include <svl/cjkoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 SwWordCountFloatDlg::~SwWordCountFloatDlg()
 {

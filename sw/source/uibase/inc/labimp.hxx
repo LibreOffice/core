@@ -19,9 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_LABIMP_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_LABIMP_HXX
 
-#include <sfx2/tabdlg.hxx>
-#include "label.hxx"
-#include "labimg.hxx"
+#include <vcl/weld.hxx>
 
 #define GETFLDVAL(rField)         (rField).Denormalize((rField).GetValue(FieldUnit::TWIP))
 #define SETFLDVAL(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FieldUnit::TWIP)

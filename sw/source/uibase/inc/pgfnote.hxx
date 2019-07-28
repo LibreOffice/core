@@ -21,10 +21,6 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#include <vcl/field.hxx>
-
-#include <vcl/fixed.hxx>
-
 #include <svtools/ctrlbox.hxx>
 #include <svx/colorbox.hxx>
 

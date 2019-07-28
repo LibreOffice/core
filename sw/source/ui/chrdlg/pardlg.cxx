@@ -30,6 +30,7 @@
 #include <globals.hrc>
 #include <swuipardlg.hxx>
 #include <pagedesc.hxx>
+#include <pardlg.hxx>
 #include <paratr.hxx>
 #include <drpcps.hxx>
 #include <uitool.hxx>

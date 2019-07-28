@@ -19,7 +19,11 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_MEDIASH_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_MEDIASH_HXX
 
-#include "frmsh.hxx"
+#include <sfx2/module.hxx>
+#include <sfx2/shell.hxx>
+
+#include "basesh.hxx"
+#include <shellid.hxx>
 
 class SwMediaShell: public SwBaseShell
 {

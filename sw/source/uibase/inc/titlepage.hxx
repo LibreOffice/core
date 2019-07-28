@@ -12,6 +12,8 @@
 
 #include <sfx2/basedlgs.hxx>
 
+#include <fmtpdsc.hxx>
+
 namespace vcl { class Window; }
 class SwWrtShell;
 class SwPageDesc;

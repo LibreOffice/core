@@ -19,17 +19,15 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_OPTLOAD_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_OPTLOAD_HXX
 
+#include <tools/globname.hxx>
 #include <sfx2/tabdlg.hxx>
 
 #include <vcl/customweld.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/field.hxx>
+#include <vcl/edit.hxx>
 #include <vcl/weld.hxx>
-#include <svx/strarray.hxx>
 #include <sfx2/basedlgs.hxx>
-#include "caption.hxx"
+
+#include <SwCapObjType.hxx>
 
 class SwFieldMgr;
 class SvTreeListEntry;

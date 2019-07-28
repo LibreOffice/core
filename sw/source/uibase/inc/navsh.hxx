@@ -9,9 +9,11 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_NAVSH_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_NAVSH_HXX
 
-#include "frmsh.hxx"
+#include <sfx2/module.hxx>
+#include <sfx2/shell.hxx>
 
-class SfxItemSet;
+#include "basesh.hxx"
+#include <shellid.hxx>
 
 class SwNavigationShell: public SwBaseShell
 {

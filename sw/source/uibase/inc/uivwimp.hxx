@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_UIVWIMP_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_UIVWIMP_HXX
 
-#include <config_features.h>
-
 #include <view.hxx>
 
 #include <sfx2/objsh.hxx>

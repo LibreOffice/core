@@ -21,9 +21,6 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#include <swtypes.hxx>
-#include "swtablerep.hxx"
-
 class SwWrtShell;
 struct TColumn;
 

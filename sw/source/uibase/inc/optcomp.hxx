@@ -21,9 +21,6 @@
 
 #include <memory>
 #include <sfx2/tabdlg.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
 #include <unotools/compatibility.hxx>
 #include <unotools/compatibilityviewoptions.hxx>
 #include <rtl/ustring.hxx>
