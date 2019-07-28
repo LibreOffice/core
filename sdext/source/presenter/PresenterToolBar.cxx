@@ -752,9 +752,8 @@ void PresenterToolBar::Layout (
                 nX+aPartSizes[nIndex].Width, nY+aTotalSize.Height);
 
             // Add space for gaps between elements.
-            if (rxPart->size() > 1)
-                if (bIsHorizontal)
-                    aBoundingBox.X2 += (rxPart->size() - 1) * nGapWidth;
+            if (rxPart->size() > 1 && bIsHorizontal)
+                aBoundingBox.X2 += (rxPart->size() - 1) * nGapWidth;
 
             LayoutPart(rxCanvas, rxPart, aBoundingBox, aPartSizes[nIndex], bIsHorizontal);
             bIsHorizontal = !bIsHorizontal;

@@ -976,43 +976,40 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
         {
             aL.eType = aR.eType = SbxDECIMAL;
             bDecimal = true;
-            if( rOp.Get( aR ) )
+            if( rOp.Get( aR ) && Get( aL ) )
             {
-                if( Get( aL ) )
+                if( aL.pDecimal && aR.pDecimal )
                 {
-                    if( aL.pDecimal && aR.pDecimal )
+                    bool bOk = true;
+                    switch( eOp )
                     {
-                        bool bOk = true;
-                        switch( eOp )
-                        {
-                            case SbxMUL:
-                                bOk = ( *(aL.pDecimal) *= *(aR.pDecimal) );
-                                break;
-                            case SbxDIV:
-                                if( aR.pDecimal->isZero() )
-                                    SetError( ERRCODE_BASIC_ZERODIV );
-                                else
-                                    bOk = ( *(aL.pDecimal) /= *(aR.pDecimal) );
-                                break;
-                            case SbxPLUS:
-                                bOk = ( *(aL.pDecimal) += *(aR.pDecimal) );
-                                break;
-                            case SbxMINUS:
-                                bOk = ( *(aL.pDecimal) -= *(aR.pDecimal) );
-                                break;
-                            case SbxNEG:
-                                bOk = ( aL.pDecimal->neg() );
-                                break;
-                            default:
-                                SetError( ERRCODE_BASIC_BAD_ARGUMENT );
-                        }
-                        if( !bOk )
-                            SetError( ERRCODE_BASIC_MATH_OVERFLOW );
+                        case SbxMUL:
+                            bOk = ( *(aL.pDecimal) *= *(aR.pDecimal) );
+                            break;
+                        case SbxDIV:
+                            if( aR.pDecimal->isZero() )
+                                SetError( ERRCODE_BASIC_ZERODIV );
+                            else
+                                bOk = ( *(aL.pDecimal) /= *(aR.pDecimal) );
+                            break;
+                        case SbxPLUS:
+                            bOk = ( *(aL.pDecimal) += *(aR.pDecimal) );
+                            break;
+                        case SbxMINUS:
+                            bOk = ( *(aL.pDecimal) -= *(aR.pDecimal) );
+                            break;
+                        case SbxNEG:
+                            bOk = ( aL.pDecimal->neg() );
+                            break;
+                        default:
+                            SetError( ERRCODE_BASIC_BAD_ARGUMENT );
                     }
-                    else
-                    {
-                        SetError( ERRCODE_BASIC_CONVERSION );
-                    }
+                    if( !bOk )
+                        SetError( ERRCODE_BASIC_MATH_OVERFLOW );
+                }
+                else
+                {
+                    SetError( ERRCODE_BASIC_CONVERSION );
                 }
             }
         }
