@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_UITOOL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_UITOOL_HXX
 
-#include <tools/wintypes.hxx>
 #include <vcl/field.hxx>
 #include <vcl/weld.hxx>
 #include <swtypes.hxx>

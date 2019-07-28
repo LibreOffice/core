@@ -11,6 +11,7 @@
 #include <wrtsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/svapp.hxx>
 #include <cmdid.h>
 #include <view.hxx>
 #include <doc.hxx>

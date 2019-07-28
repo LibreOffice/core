@@ -47,6 +47,7 @@
 #include <drpcps.hxx>
 #include <swuipardlg.hxx>
 #include <pattern.hxx>
+#include <pardlg.hxx>
 #include <rowht.hxx>
 #include <selglos.hxx>
 #include <splittbl.hxx>

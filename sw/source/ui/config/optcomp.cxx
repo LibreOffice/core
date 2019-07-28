@@ -19,6 +19,7 @@
 
 #include <optcomp.hxx>
 
+#include <cmdid.h>
 #include <docsh.hxx>
 #include <swmodule.hxx>
 #include <swtypes.hxx>

@@ -73,6 +73,7 @@
 #include <tblafmt.hxx>
 #include <cellatr.hxx>
 #include <swtable.hxx>
+#include <swtablerep.hxx>
 #include <dbfld.hxx>
 #include <fmtcol.hxx>
 #include <section.hxx>

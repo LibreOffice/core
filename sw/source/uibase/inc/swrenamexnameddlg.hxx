@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_SWRENAMEXNAMEDDLG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SWRENAMEXNAMEDDLG_HXX
 
+#include <vcl/edit.hxx>
 #include <vcl/weld.hxx>
-#include "actctrl.hxx"
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 

@@ -22,6 +22,7 @@
 #include <edtwin.hxx>
 #include <wrtsh.hxx>
 #include <globals.hrc>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/wrkwin.hxx>
 #include <linguistic/lngprops.hxx>

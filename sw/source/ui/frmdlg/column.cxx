@@ -41,6 +41,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 #include <swmodule.hxx>
 #include <sal/macros.h>

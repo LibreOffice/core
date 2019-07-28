@@ -11,6 +11,7 @@
 
 #include <vcl/menubtn.hxx>
 
+#include "edtwin.hxx"
 
 class SwEditWin;
 class SwPageFrame;

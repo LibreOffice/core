@@ -38,6 +38,7 @@
 #include <sfx2/printer.hxx>
 #include <svtools/unitconv.hxx>
 #include <vcl/print.hxx>
+#include <vcl/svapp.hxx>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/scripttypeitem.hxx>

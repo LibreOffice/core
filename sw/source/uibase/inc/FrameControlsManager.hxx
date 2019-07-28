@@ -9,14 +9,12 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_FRAMECONTROLSMANAGER_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FRAMECONTROLSMANAGER_HXX
 
-#include <viewsh.hxx>
 #include "FrameControl.hxx"
 
 #include <tools/gen.hxx>
 
 #include <map>
 #include <memory>
-#include <vector>
 
 class SwPageFrame;
 class SwEditWin;

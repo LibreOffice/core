@@ -10,8 +10,8 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_DOCVW_UNFLOATTABLEBUTTON_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_DOCVW_UNFLOATTABLEBUTTON_HXX
 
+#include "edtwin.hxx"
 #include "FrameControl.hxx"
-#include <vcl/menubtn.hxx>
 
 /** Class for unfloat table button
  *
