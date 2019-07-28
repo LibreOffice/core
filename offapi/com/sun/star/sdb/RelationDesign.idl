@@ -57,7 +57,7 @@ published service RelationDesign
         Recognized parameters are:
         <ul>
             <li><b>Frame</b><br>
-            has to be an com::sun::star::frame::XFrame interface specifying the frame to plug the
+            has to be a com::sun::star::frame::XFrame interface specifying the frame to plug the
             RelationDesign component into.
             </li>
             <li><b>DataSourceName</b><br>

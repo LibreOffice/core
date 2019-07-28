@@ -34,7 +34,7 @@ interface XCustomShapeHandle: com::sun::star::uno::XInterface
     /** is getting the actual handle position
 
         @returns
-            a the actual handle position
+            the actual handle position
      */
     com::sun::star::awt::Point getPosition();
 

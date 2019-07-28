@@ -28,7 +28,7 @@
 
 module com {  module sun {  module star {  module sdb {
 
-/** specifies a office database document which is a storable document.
+/** specifies an office database document which is a storable document.
 
     <p>These documents contain information about forms, and reports, and the properties of a data source.</p>
 
@@ -202,7 +202,7 @@ service OfficeDatabaseDocument
 
     /** implements life time control
 
-        <p>Whoever retrieves a OfficeDatabaseDocument should be aware of
+        <p>Whoever retrieves an OfficeDatabaseDocument should be aware of
         life time issues, since a document needs to be closed when nobody needs it anymore.</p>
 
         <p>This implies that clients of a document need to ensure that as soon as they don't

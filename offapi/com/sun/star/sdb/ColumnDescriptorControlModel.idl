@@ -33,7 +33,7 @@
  module com {  module sun {  module star {  module sdb {
 
 
-/** specifies the standard model of an ColumnDescriptorControl.
+/** specifies the standard model of a ColumnDescriptorControl.
  */
 service ColumnDescriptorControlModel
 {

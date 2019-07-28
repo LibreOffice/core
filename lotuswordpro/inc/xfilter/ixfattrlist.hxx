@@ -73,7 +73,7 @@ class   IXFAttrList
 public:
     virtual ~IXFAttrList(){}
     /**
-     * @descr:  Add a attribute to the attribute list.
+     * @descr:  Add an attribute to the attribute list.
      */
     virtual void    AddAttribute(const OUString& name, const OUString& value) = 0;
 

@@ -42,7 +42,7 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    /** determines if the back ground color is set to transparent.
+    /** determines if the background color is set to transparent.
      */
     [attribute,bound] boolean ControlBackgroundTransparent
     {
