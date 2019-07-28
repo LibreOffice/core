@@ -436,48 +436,6 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         sRelPathUser  = sLocalizedUserPath;
     }
 
-    // read content of level 3 (presets, targets)
-    css::uno::Sequence< OUString > lNames;
-    const OUString*       pNames;
-    sal_Int32             c;
-    sal_Int32             i;
-    std::vector<OUString> lPresets;
-    std::vector<OUString> lTargets;
-
-    // read preset names of share layer
-    if (xShare.is())
-    {
-        lNames  = xShare->getElementNames();
-        pNames  = lNames.getConstArray();
-        c       = lNames.getLength();
-
-        for (i=0; i<c; ++i)
-        {
-            OUString sTemp = pNames[i];
-            sal_Int32       nPos  = sTemp.indexOf(".xml");
-            if (nPos > -1)
-                sTemp = sTemp.copy(0,nPos);
-            lPresets.push_back(sTemp);
-        }
-    }
-
-    // read preset names of user layer
-    if (xUser.is())
-    {
-        lNames  = xUser->getElementNames();
-        pNames  = lNames.getConstArray();
-        c       = lNames.getLength();
-
-        for (i=0; i<c; ++i)
-        {
-            OUString sTemp = pNames[i];
-            sal_Int32       nPos  = sTemp.indexOf(".xml");
-            if (nPos > -1)
-                sTemp = sTemp.copy(0,nPos);
-            lTargets.push_back(sTemp);
-        }
-    }
-
     {
         SolarMutexGuard g;
         m_xWorkingStorageShare = xShare;
