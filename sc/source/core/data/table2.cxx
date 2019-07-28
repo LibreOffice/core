@@ -2191,7 +2191,7 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
                                 for (size_t nEntry=0; nEntry<nEntryCount; nEntry++)
                                 {
                                     const ScFormatEntry* pEntry = pFormat->GetEntry(nEntry);
-                                    if(pEntry->GetType() != ScFormatEntry::Type::Condition ||
+                                    if(pEntry->GetType() != ScFormatEntry::Type::Condition &&
                                        pEntry->GetType() != ScFormatEntry::Type::ExtCondition)
                                         continue;
 
