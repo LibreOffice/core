@@ -217,24 +217,16 @@ void ContentInfo::Dump() const
 }
 #endif
 
-bool ContentInfo::Equals( const ContentInfo& rCompare, bool bComparePool ) const
+bool ContentInfo::Equals(const ContentInfo& rCompare, bool bComparePool) const
 {
-    if( (maText == rCompare.maText) &&
-            (aStyle == rCompare.aStyle ) &&
-            (maCharAttribs.size() == rCompare.maCharAttribs.size()) &&
-            (eFamily == rCompare.eFamily ) &&
-            aParaAttribs.Equals( rCompare.aParaAttribs, bComparePool ) )
-    {
-        for (size_t i = 0, n = maCharAttribs.size(); i < n; ++i)
-        {
-            if (!(*(maCharAttribs[i]) == *(rCompare.maCharAttribs[i])))
-                return false;
-        }
-
-        return true;
-    }
-
-    return false;
+    return maText == rCompare.maText && aStyle == rCompare.aStyle && eFamily == rCompare.eFamily
+           && aParaAttribs.Equals(rCompare.aParaAttribs, bComparePool)
+           && std::equal(maCharAttribs.cbegin(), maCharAttribs.cend(),
+                         rCompare.maCharAttribs.cbegin(), rCompare.maCharAttribs.cend(),
+                         [](const std::unique_ptr<XEditAttribute>& pAttribute1,
+                            const std::unique_ptr<XEditAttribute>& pAttribute2) -> bool {
+                             return *pAttribute1 == *pAttribute2;
+                         });
 }
 
 EditTextObject::EditTextObject( SfxItemPool* pPool ) :
