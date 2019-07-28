@@ -466,7 +466,6 @@ public:
     void setGroupInfo(const css::sheet::DataPilotFieldGroupInfo* pInfo);
 
                             // XDataPilotFieldGrouping
-    static bool HasString(const css::uno::Sequence< OUString >& aItems, const OUString& aString);
     virtual css::uno::Reference < css::sheet::XDataPilotField > SAL_CALL
         createNameGroup(const css::uno::Sequence< OUString >& aItems) override;
     virtual css::uno::Reference < css::sheet::XDataPilotField > SAL_CALL
