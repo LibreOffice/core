@@ -103,8 +103,7 @@ void TipOfTheDayDialog::UpdateTip()
     Graphic aGraphic;
     if (GraphicFilter::LoadGraphic(aURL + aImage, OUString(), aGraphic) == ERRCODE_NONE)
     {
-        ScopedVclPtr<VirtualDevice> m_pVirDev;
-        m_pVirDev = m_pImage->create_virtual_device();
+        ScopedVclPtr<VirtualDevice> m_pVirDev = m_pImage->create_virtual_device();
         m_pVirDev->SetOutputSizePixel(aGraphic.GetSizePixel());
         m_pVirDev->DrawBitmapEx(Point(0, 0), aGraphic.GetBitmapEx());
         m_pImage->set_image(m_pVirDev.get());

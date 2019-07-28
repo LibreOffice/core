@@ -666,8 +666,8 @@ Reference< drawing::XDrawPage > SdPhotoAlbumDialog::appendNewSlide(AutoLayout aL
     const Reference< drawing::XDrawPages >& xDrawPages
 )
 {
-    Reference< drawing::XDrawPage > xSlide; // Create the slide
-    xSlide = xDrawPages->insertNewByIndex( xDrawPages->getCount() );
+    // Create the slide
+    Reference< drawing::XDrawPage > xSlide = xDrawPages->insertNewByIndex( xDrawPages->getCount() );
     SdPage* pSlide = m_pDoc->GetSdPage( m_pDoc->GetSdPageCount(PageKind::Standard)-1, PageKind::Standard);
     pSlide->SetAutoLayout(aLayout, true); // Set the layout here
     return xSlide;

@@ -28,9 +28,7 @@ void TableColumn::testTableColumnProperties()
 {
     uno::Reference<beans::XPropertySet> xPS(init(), uno::UNO_QUERY_THROW);
 
-    OUString aPropName;
-
-    aPropName = "Width";
+    OUString aPropName = "Width";
     testLongProperty(xPS, aPropName);
 
     // currently changing the value to false has no effect

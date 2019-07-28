@@ -88,10 +88,7 @@ inline SdrOnOffItem makeSdrTextWordWrapItem( bool bAuto ) {
 
 inline size_t SdrCustomShapeGeometryItem::PropertyPairHash::operator()( const SdrCustomShapeGeometryItem::PropertyPair &r1 ) const
 {
-    size_t hash = 17;
-    hash = hash * 37 + r1.first.hashCode();
-    hash = hash * 37 + r1.second.hashCode();
-    return hash;
+    return r1.first.hashCode() * 37 + r1.second.hashCode();
 };
 
 #endif
