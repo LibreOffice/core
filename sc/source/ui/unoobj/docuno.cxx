@@ -617,15 +617,7 @@ Size ScModelObj::getDocumentSize()
     };
 
     long nDocWidthPixel = pViewData->GetLOKWidthHelper().computePosition(nEndCol, GetColWidthPx);
-
-
-    auto GetRowHeightPx = [pThisDoc, nTab](SCROW nRow) {
-        const sal_uInt16 nSize = pThisDoc->GetRowHeight(nRow, nTab);
-        return ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
-    };
-
-    long nDocHeightPixel = pViewData->GetLOKHeightHelper().computePosition(nEndRow, GetRowHeightPx);
-
+    long nDocHeightPixel = pThisDoc->GetScaledRowHeight( 0, nEndRow, nTab, 1.0 / TWIPS_PER_PIXEL );
 
     if (nDocWidthPixel > 0 && nDocHeightPixel > 0)
     {
