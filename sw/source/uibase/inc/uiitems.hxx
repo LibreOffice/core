@@ -22,7 +22,6 @@
 #include <memory>
 #include <svl/poolitem.hxx>
 #include <swdllapi.h>
-#include <cmdid.h>
 #include <pagedesc.hxx>
 
 class SwNumRule;

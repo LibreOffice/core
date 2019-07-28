@@ -24,6 +24,7 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/button.hxx>
 #include <vcl/oldprintadaptor.hxx>

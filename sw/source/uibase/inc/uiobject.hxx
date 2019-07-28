@@ -13,7 +13,8 @@
 #include <memory>
 #include <vcl/uitest/uiobject.hxx>
 
-class SwEditWin;
+#include "edtwin.hxx"
+#include "navipi.hxx"
 
 class SwEditWinUIObject : public WindowUIObject
 {
@@ -37,8 +38,6 @@ private:
     VclPtr<SwEditWin> mxEditWin;
 
 };
-
-class SwNavigationPI;
 
 class SwNavigationPIUIObject : public WindowUIObject
 {

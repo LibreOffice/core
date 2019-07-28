@@ -23,6 +23,8 @@
 #include <swtypes.hxx>
 #include <tabcol.hxx>
 
+#include <vcl/weld.hxx>
+
 class SwFrameFormat;
 class SwWrtShell;
 namespace vcl { class Window; }

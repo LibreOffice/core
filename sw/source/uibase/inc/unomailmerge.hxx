@@ -23,7 +23,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <unotools/configitem.hxx>
 
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -21,9 +21,9 @@
 
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/window.hxx>
 #include <limits.h>
-
-namespace vcl { class Window; }
 
 class SwShadowCursor
 {

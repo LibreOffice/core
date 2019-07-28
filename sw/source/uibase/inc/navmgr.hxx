@@ -10,12 +10,8 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_NAVMGR_HXX
 
 #include <vector>
-#include <memory>
 
-#include <swtypes.hxx>
-#include <calbck.hxx>
 #include <unocrsr.hxx>
-#include <vcl/svapp.hxx>
 
 class   SwWrtShell;
 struct  SwPosition;

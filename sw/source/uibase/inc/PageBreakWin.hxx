@@ -9,9 +9,10 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_PAGEBREAKWIN_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_PAGEBREAKWIN_HXX
 
+#include "edtwin.hxx"
 #include "FrameControl.hxx"
 #include <vcl/builder.hxx>
-#include <vcl/menubtn.hxx>
+#include <vcl/timer.hxx>
 #include <boost/optional.hpp>
 
 class Menu;

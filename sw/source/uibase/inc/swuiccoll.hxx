@@ -21,6 +21,8 @@
 
 #include <sfx2/tabdlg.hxx>
 
+#include <ccoll.hxx>
+
 class SwWrtShell;
 class SwFormat;
 

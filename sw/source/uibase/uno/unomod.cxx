@@ -24,6 +24,7 @@
 #include <unomid.h>
 #include <unoprnms.hxx>
 #include <unomap.hxx>
+#include <usrpref.hxx>
 #include <prtopt.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>

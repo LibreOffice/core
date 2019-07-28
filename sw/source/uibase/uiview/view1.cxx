@@ -35,6 +35,7 @@
 #include <edtwin.hxx>
 #include <formatclipboard.hxx>
 #include <cmdid.h>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <wordcountdialog.hxx>

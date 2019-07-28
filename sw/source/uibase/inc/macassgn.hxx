@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_MACASSGN_HXX
 
 #include <sfx2/evntconf.hxx>
+#include <vcl/weld.hxx>
 
 class SwWrtShell;
 class SvxMacroItem;
