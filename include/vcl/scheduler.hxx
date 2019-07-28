@@ -45,7 +45,7 @@ public:
 
     static void       ImplDeInitScheduler();
 
-    /// Process one pending Timer with highhest priority
+    /// Process one pending Timer with highest priority
     static void       CallbackTaskScheduling();
     /// Process one pending task ahead of time with highest priority.
     static bool       ProcessTaskScheduling();

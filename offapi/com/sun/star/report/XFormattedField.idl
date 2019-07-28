@@ -25,7 +25,7 @@
 
  module com {  module sun {  module star {  module report {
 
-/** describes a control which can be used for displaying values with a arbitrary formatting.
+/** describes a control which can be used for displaying values with an arbitrary formatting.
 
     @see com::sun::star::report::XReportControlModel
     @see com::sun::star::util::XNumberFormatsSupplier

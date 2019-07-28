@@ -50,7 +50,7 @@ published service EmbeddedObjectDescriptor
         <p>
         Setting of this property to true tells the embedded object that
         controls the document to store or not to store the graphical
-        representation of the document in to the object persistence.
+        representation of the document into the object persistence.
         If this property is not set the object makes the decision itself.
         </p>
     */

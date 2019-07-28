@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module sdb {
             in the exception.
         </li>
         <li><b>parameter requests</b><br/>
-            If your interaction request supplies an com::sun::star::sdb::ParametersRequest,
+            If your interaction request supplies a com::sun::star::sdb::ParametersRequest,
             the handler will open a standard dialog asking the user to fill in parameter values.
             <br/>
             In the case you want to use this feature of the handler, you should supply a special continuation

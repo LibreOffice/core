@@ -56,7 +56,7 @@ struct SystemEnvData
     HWND                hWnd;           // the window hwnd
 #elif defined( MACOSX )
     NSView*             mpNSView;       // the cocoa (NSView *) implementing this object
-    bool                mbOpenGL;       // use a OpenGL providing NSView
+    bool                mbOpenGL;       // use an OpenGL providing NSView
 #elif defined( ANDROID )
     // Nothing
 #elif defined( IOS )
@@ -170,7 +170,7 @@ struct SystemWindowData
 {
 #if defined(_WIN32)                  // meaningless on Windows
 #elif defined( MACOSX )
-    bool            bOpenGL;        // create a OpenGL providing NSView
+    bool            bOpenGL;        // create an OpenGL providing NSView
     bool            bLegacy;        // create a 2.1 legacy context, only valid if bOpenGL == true
 #elif defined( ANDROID )
     // Nothing

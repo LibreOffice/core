@@ -30,7 +30,7 @@ module com { module sun { module star { module resource {
 /**
     Interface derived from XStringResourceManager containing
     basic persistence functionality limited to operations that
-    are independent from a associated location or storage.
+    are independent from an associated location or storage.
 
     @see XStringResourceManager.
 */

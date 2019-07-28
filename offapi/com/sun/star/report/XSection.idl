@@ -78,11 +78,11 @@ interface XSection
     */
     [attribute,bound] unsigned long Height;
 
-    /** Defines the back ground color of the section.
+    /** Defines the background color of the section.
     */
     [attribute,bound] com::sun::star::util::Color BackColor;
 
-    /** determines if the back ground color is set to transparent.
+    /** determines if the background color is set to transparent.
      */
     [attribute,bound] boolean BackTransparent;
 
