@@ -33,7 +33,9 @@
 #include <win/salgdi.h>
 #include <win/salbmp.h>
 #include <win/scoped_gdi.hxx>
-#include <vcl/salbtype.hxx>
+#include <vcl/BitmapAccessMode.hxx>
+#include <vcl/BitmapBuffer.hxx>
+#include <vcl/BitmapPalette.hxx>
 #include <win/salframe.h>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>

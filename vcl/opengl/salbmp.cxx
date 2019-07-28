@@ -28,7 +28,6 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/salbtype.hxx>
 #include <svdata.hxx>
 #include <salgdi.hxx>
 #include <vcleventlisteners.hxx>

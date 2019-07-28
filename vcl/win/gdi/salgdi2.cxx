@@ -31,7 +31,10 @@
 #include <win/salframe.h>
 #include <opengl/salbmp.hxx>
 
-#include <vcl/salbtype.hxx>
+#include <vcl/BitmapAccessMode.hxx>
+#include <vcl/BitmapBuffer.hxx>
+#include <vcl/BitmapPalette.hxx>
+#include <vcl/Scanline.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <outdata.hxx>
 #include <salgdiimpl.hxx>

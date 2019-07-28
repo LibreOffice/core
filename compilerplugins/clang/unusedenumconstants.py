@@ -148,7 +148,6 @@ def is_ignore(srcLoc):
          "vcl/inc/unx/gendata.hxx",
          "vcl/inc/salwtype.hxx",
          "include/vcl/svapp.hxx",
-         "include/vcl/salbtype.hxx",
          "include/vcl/commandevent.hxx", # CommandEvent, MediaCommand, ShowDialogId
          "include/canvas/rendering/irendermodule.hxx", # canvas::IRenderModule::PrimitiveType
          "sal/osl/unx/file.cxx", # FileHandle_Impl::Kind

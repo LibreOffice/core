@@ -8,7 +8,6 @@
  */
 
 #include <memory>
-#include <vcl/salbtype.hxx>
 #include <vcl/lazydelete.hxx>
 
 #include <svdata.hxx>

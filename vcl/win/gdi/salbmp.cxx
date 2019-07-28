@@ -18,7 +18,11 @@
 
 #include <svsys.h>
 #include <vcl/bitmap.hxx>
-#include <vcl/salbtype.hxx>
+#include <vcl/BitmapAccessMode.hxx>
+#include <vcl/BitmapBuffer.hxx>
+#include <vcl/BitmapPalette.hxx>
+#include <vcl/ColorMask.hxx>
+#include <vcl/Scanline.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <win/wincomp.hxx>
 #include <win/salgdi.h>

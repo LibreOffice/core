@@ -302,14 +302,6 @@ blacklist:
     include/vcl/mtfxmldump.hxx:
     # Full definition needed for o3tl::enumarray
     - vcl/metaactiontypes.hxx
-    include/vcl/salbtype.hxx:
-    # TODO remove this file entirely, contains only these headers now
-    - vcl/BitmapAccessMode.hxx
-    - vcl/BitmapBuffer.hxx
-    - vcl/BitmapColor.hxx
-    - vcl/BitmapPalette.hxx
-    - vcl/ColorMask.hxx
-    - vcl/Scanline.hxx
     include/vcl/outdevstate.hxx:
     # Full definition needed for boost::optional
     - vcl/mapmod.hxx
