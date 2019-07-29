@@ -19,16 +19,25 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_CHARTSTYLE_HXX
 #define INCLUDED_CHART2_SOURCE_INC_CHARTSTYLE_HXX
 
+#include <cppuhelper/implbase.hxx>
+#include <comphelper/uno3.hxx>
 #include <com/sun/star/chart2/XChartStyle.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <vector>
 
 namespace chart2
 {
-class ChartStyle : public css::chart2::XChartStyle
+class ChartStyle : public cppu::WeakImplHelper<
+                      css::chart2::XChartStyle
+                    , css::lang::XServiceInfo >
 {
 public:
-    ChartStyle();
+    explicit ChartStyle();
     virtual ~ChartStyle();
+    /// XServiceInfo declarations
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // _____ XChartStyle _____
     virtual css::uno::Reference<css::beans::XPropertySet>
