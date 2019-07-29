@@ -28,7 +28,6 @@ postprocess_XCDS := \
 	graphicfilter.xcd \
 	impress.xcd \
 	korea.xcd \
-	librelogo.xcd \
 	lingucomponent.xcd \
 	main.xcd \
 	math.xcd \
@@ -107,11 +106,6 @@ postprocess_FILES_impress := \
 	$(postprocess_MOD)/org/openoffice/Office/Jobs-impress.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/ProtocolHandler-impress.xcu \
 	$(postprocess_MOD)/org/openoffice/Setup-impress.xcu
-
-postprocess_DEPS_librelogo := main writer
-postprocess_FILES_librelogo := \
-	$(postprocess_MOD)/org/openoffice/Office/Addons-librelogo.xcu \
-	$(postprocess_MOD)/org/openoffice/Office/UI/WriterWindowState-librelogo.xcu
 
 postprocess_DEPS_korea := main
 postprocess_FILES_korea := \
