@@ -110,6 +110,8 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
         ModifyListenerHelper::addListener( m_xPageBackground, this );
         m_xChartTypeManager.set( xContext->getServiceManager()->createInstanceWithContext(
                 "com.sun.star.chart2.ChartTypeManager", m_xContext ), uno::UNO_QUERY );
+        m_xChartStyle.set( xContext->getServiceManager()->createInstanceWithContext(
+                "com.sun.star.chart2.ChartStyle" , m_xContext ), uno::UNO_QUERY );
     }
     osl_atomic_decrement(&m_refCount);
 }
@@ -152,6 +154,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
         Reference< beans::XPropertySet > xNewPageBackground = CreateRefClone< beans::XPropertySet >()( rOther.m_xPageBackground );
         Reference< chart2::XChartTypeManager > xChartTypeManager = CreateRefClone< chart2::XChartTypeManager >()( rOther.m_xChartTypeManager );
         Reference< container::XNameAccess > xXMLNamespaceMap = CreateRefClone< container::XNameAccess >()( rOther.m_xXMLNamespaceMap );
+        Reference< chart2::XChartStyle > xChartStyle = CreateRefClone< chart2::XChartStyle >()( rOther.m_xChartStyle );
 
         {
             MutexGuard aGuard( m_aModelMutex );
@@ -161,6 +164,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
             m_xPageBackground = xNewPageBackground;
             m_xChartTypeManager = xChartTypeManager;
             m_xXMLNamespaceMap = xXMLNamespaceMap;
+            m_xChartStyle = xChartStyle;
         }
 
         ModifyListenerHelper::addListener( xNewTitle, xListener );
@@ -928,6 +932,13 @@ void SAL_CALL ChartModel::setTitleObject( const uno::Reference< chart2::XTitle >
         ModifyListenerHelper::addListener( m_xTitle, this );
     }
     setModified( true );
+}
+
+// _____ XChartStyled _____
+uno::Reference< chart2::XChartStyle > SAL_CALL ChartModel::getChartStyle()
+{
+    MutexGuard aGuard( m_aModelMutex );
+    return m_xChartStyle;
 }
 
 // ____ XInterface (for old API wrapper) ____

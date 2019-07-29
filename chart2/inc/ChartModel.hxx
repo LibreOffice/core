@@ -38,6 +38,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/XChartStyle.hpp>
+#include <com/sun/star/chart2/XChartStyled.hpp>
 #include <com/sun/star/qa/XDumper.hpp>
 
 // public API
@@ -85,6 +86,7 @@ typedef cppu::WeakImplHelper<
         ,css::chart2::XChartDocument  // derived from XModel
         ,css::chart2::data::XDataReceiver   // public API
         ,css::chart2::XTitled
+        ,css::chart2::XChartStyled
         ,css::frame::XLoadable
         ,css::util::XCloneable
         ,css::embed::XVisualObject
@@ -385,6 +387,9 @@ public:
     // ____ XTitled ____
     virtual css::uno::Reference< css::chart2::XTitle > SAL_CALL getTitleObject() override;
     virtual void SAL_CALL setTitleObject( const css::uno::Reference< css::chart2::XTitle >& Title ) override;
+
+    // _____ XChartStyled _____
+    virtual css::uno::Reference< css::chart2::XChartStyle > SAL_CALL getChartStyle() override;
 
     // ____ XInterface (for old API wrapper) ____
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
