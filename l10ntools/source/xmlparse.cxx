@@ -376,7 +376,7 @@ void XMLFile::InsertL10NElement( XMLElement* pElement )
     else        // Already there
     {
         pElem=pos->second;
-        if ( (*pElem)[ sLanguage ] )
+        if ( pElem->count(sLanguage) )
         {
             fprintf(stdout,"Error: Duplicated entry. ID = %s  LANG = %s in File %s\n", sId.getStr(), sLanguage.getStr(), m_sFileName.getStr() );
             exit( -1 );
