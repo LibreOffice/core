@@ -1103,12 +1103,77 @@ sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, sa
     return nLong;
 }
 
+namespace {
+
+bool checkConversionUnits(MapUnit eInUnit, FieldUnit eOutUnit)
+{
+    return eOutUnit != FieldUnit::PERCENT
+        && eOutUnit != FieldUnit::CUSTOM
+        && eOutUnit != FieldUnit::NONE
+        && eInUnit != MapUnit::MapPixel
+        && eInUnit != MapUnit::MapSysFont
+        && eInUnit != MapUnit::MapAppFont
+        && eInUnit != MapUnit::MapRelative;
+}
+
+double convertValue( double nValue, long nDigits, FieldUnit eInUnit, FieldUnit eOutUnit )
+{
+    if ( nDigits < 0 )
+    {
+        while ( nDigits )
+        {
+            nValue += 5;
+            nValue /= 10;
+            nDigits++;
+        }
+    }
+    else
+    {
+        nValue *= ImplPower10(nDigits);
+    }
+
+    if ( eInUnit != eOutUnit )
+    {
+        sal_Int64 nDiv  = aImplFactor[sal_uInt16(eInUnit)][sal_uInt16(eOutUnit)];
+        sal_Int64 nMult = aImplFactor[sal_uInt16(eOutUnit)][sal_uInt16(eInUnit)];
+
+        SAL_WARN_IF( nMult <= 0, "vcl", "illegal *" );
+        SAL_WARN_IF( nDiv  <= 0, "vcl", "illegal /" );
+
+        if ( nMult != 1 && nMult > 0)
+            nValue *= nMult;
+        if ( nDiv != 1 && nDiv > 0 )
+        {
+            nValue += (nValue < 0) ? (-nDiv/2) : (nDiv/2);
+            nValue /= nDiv;
+        }
+    }
+    return nValue;
+}
+
+}
+
 sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_uInt16 nDigits,
                                      MapUnit eInUnit, FieldUnit eOutUnit )
 {
+    if ( !checkConversionUnits(eInUnit, eOutUnit) )
+    {
+        OSL_FAIL( "invalid parameters" );
+        return nValue;
+    }
+
+    long nDecDigits = nDigits;
+    FieldUnit eFieldUnit = ImplMap2FieldUnit( eInUnit, nDecDigits );
+
+    // Avoid sal_Int64 <-> double conversion issues if possible:
+    if (eFieldUnit == eOutUnit && nDigits == 0)
+    {
+        return nValue;
+    }
+
     return static_cast<sal_Int64>(
         nonValueDoubleToValueDouble(
-            ConvertDoubleValue( nValue, nDigits, eInUnit, eOutUnit ) ) );
+            convertValue( nValue, nDecDigits, eFieldUnit, eOutUnit ) ) );
 }
 
 double MetricField::ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
@@ -1168,13 +1233,7 @@ double MetricField::ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, sa
 double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
                                         MapUnit eInUnit, FieldUnit eOutUnit )
 {
-    if ( eOutUnit == FieldUnit::PERCENT ||
-         eOutUnit == FieldUnit::CUSTOM ||
-         eOutUnit == FieldUnit::NONE ||
-         eInUnit == MapUnit::MapPixel ||
-         eInUnit == MapUnit::MapSysFont ||
-         eInUnit == MapUnit::MapAppFont ||
-         eInUnit == MapUnit::MapRelative )
+    if ( !checkConversionUnits(eInUnit, eOutUnit) )
     {
         OSL_FAIL( "invalid parameters" );
         return nValue;
@@ -1183,37 +1242,7 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
     long nDecDigits = nDigits;
     FieldUnit eFieldUnit = ImplMap2FieldUnit( eInUnit, nDecDigits );
 
-    if ( nDecDigits < 0 )
-    {
-        while ( nDecDigits )
-        {
-            nValue += 5;
-            nValue /= 10;
-            nDecDigits++;
-        }
-    }
-    else
-    {
-        nValue *= ImplPower10(nDecDigits);
-    }
-
-    if ( eFieldUnit != eOutUnit )
-    {
-        sal_Int64 nDiv  = aImplFactor[sal_uInt16(eFieldUnit)][sal_uInt16(eOutUnit)];
-        sal_Int64 nMult = aImplFactor[sal_uInt16(eOutUnit)][sal_uInt16(eFieldUnit)];
-
-        SAL_WARN_IF( nMult <= 0, "vcl", "illegal *" );
-        SAL_WARN_IF( nDiv  <= 0, "vcl", "illegal /" );
-
-        if ( nMult != 1 && nMult > 0)
-            nValue *= nMult;
-        if ( nDiv != 1 && nDiv > 0 )
-        {
-            nValue += (nValue < 0) ? (-nDiv/2) : (nDiv/2);
-            nValue /= nDiv;
-        }
-    }
-    return nValue;
+    return convertValue(nValue, nDecDigits, eFieldUnit, eOutUnit);
 }
 
 double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
