@@ -49,7 +49,7 @@ namespace
     };
 }
 
-// Should only be called from a ImplInit method for initialization or
+// Should only be called from an ImplInit method for initialization or
 // after checking bNew is different from the current mbHorzSplit value.
 // The public method that does that check is Splitter::SetHorizontal().
 void Splitter::ImplInitHorVer(bool bNew)

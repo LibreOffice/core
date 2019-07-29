@@ -84,7 +84,7 @@ static bool is_formatting_mark( sal_Unicode c )
 
 /* #i100057# filter formatting marks out of strings before passing them to
    the transliteration. The real solution would have been an additional TransliterationModule
-   to ignore these marks during transliteration; however changin the code in i18npool that actually
+   to ignore these marks during transliteration; however changing the code in i18npool that actually
    implements this could produce unwanted side effects.
 
    Of course this copying around is not really good, but looking at i18npool, one more time

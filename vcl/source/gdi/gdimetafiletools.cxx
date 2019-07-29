@@ -194,7 +194,7 @@ namespace
         aPixelPoly.transform(aTransform);
 
         // to fill the non-covered parts, use the Xor fill rule of
-        // tools::PolyPolygon painting. Start with a all-covering polygon and
+        // tools::PolyPolygon painting. Start with an all-covering polygon and
         // add the clip polygon one
         basegfx::B2DPolyPolygon aInvertPixelPoly;
 

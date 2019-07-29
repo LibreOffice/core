@@ -658,7 +658,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mnMarginBottom                      = 0;
     mbFrame                             = false;                     // true: Window is a frame window
     mbBorderWin                         = false;                     // true: Window is a border window
-    mbOverlapWin                        = false;                     // true: Window is a overlap window
+    mbOverlapWin                        = false;                     // true: Window is an overlap window
     mbSysWin                            = false;                     // true: SystemWindow is the base class
     mbDialog                            = false;                     // true: Dialog is the base class
     mbDockWin                           = false;                     // true: DockingWindow is the base class
@@ -2795,7 +2795,7 @@ void Window::setPosSizePixel( long nX, long nY,
         // Resize should be called directly. If we haven't
         // set the correct size, we get a second resize from
         // the system with the correct size. This can be happened
-        // if the size is to small or to large.
+        // if the size is too small or too large.
         ImplHandleResize( pWindow, nWidth, nHeight );
     }
     else

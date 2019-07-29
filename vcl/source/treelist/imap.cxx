@@ -111,7 +111,7 @@ void IMapObject::Read( SvStream& rIStm )
 
     ReadIMapObject( rIStm );
 
-    // from version 4 onwards we read a eventlist
+    // from version 4 onwards we read an eventlist
     if ( nReadVersion >= 0x0004 )
     {
         aEventList.Read(rIStm);

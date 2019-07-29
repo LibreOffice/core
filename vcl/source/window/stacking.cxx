@@ -212,7 +212,7 @@ void Window::ImplToBottomChild()
 
 void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
 {
-    SAL_WARN_IF( !ImplIsOverlapWindow(), "vcl", "Window::ImplCalcToTop(): Is not a OverlapWindow" );
+    SAL_WARN_IF( !ImplIsOverlapWindow(), "vcl", "Window::ImplCalcToTop(): Is not an OverlapWindow" );
 
     if ( !mpWindowImpl->mbFrame )
     {
@@ -238,7 +238,7 @@ void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
 
 void Window::ImplToTop( ToTopFlags nFlags )
 {
-    SAL_WARN_IF( !ImplIsOverlapWindow(), "vcl", "Window::ImplToTop(): Is not a OverlapWindow" );
+    SAL_WARN_IF( !ImplIsOverlapWindow(), "vcl", "Window::ImplToTop(): Is not an OverlapWindow" );
 
     if ( mpWindowImpl->mbFrame )
     {

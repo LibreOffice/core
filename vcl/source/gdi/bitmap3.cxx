@@ -884,7 +884,7 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
             }
             default:
             {
-                OSL_ENSURE(false, "BitDepth adaption failed (!)");
+                OSL_ENSURE(false, "BitDepth adaptation failed (!)");
                 break;
             }
         }

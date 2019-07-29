@@ -6273,7 +6273,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         //
         // * If there is many to one or many to many mapping, use an
         //   ActualText span embedding the original string, since ToUnicode
-        //   can’t handle these.
+        //   can't handle these.
         // * If the one glyph is used for several Unicode code points, also
         //   use ActualText since ToUnicode can map each glyph in the font
         //   only once.
@@ -6299,7 +6299,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         if (pGlyph->IsInCluster())
             assert(aCodeUnits.empty());
 
-        // A glyph can’t have more than one ToUnicode entry, use ActualText
+        // A glyph can't have more than one ToUnicode entry, use ActualText
         // instead.
         if (!aCodeUnits.empty() && !bUseActualText)
         {
