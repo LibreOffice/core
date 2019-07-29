@@ -80,7 +80,7 @@ public class NestedRegistry extends TestCase {
     * Creates a temporary copy of file, which is deleted when VM exits.
     * @param src Source file path.
     * @param dst Destination file path.
-    * @throws java.io.IOException If any problems occur during copiing.
+    * @throws java.io.IOException If any problems occur during copying.
     */
     protected void copyFile(String src, String dst, PrintWriter log)
             throws java.io.IOException {
@@ -125,7 +125,7 @@ public class NestedRegistry extends TestCase {
     * <ul>
     *  <li> <code>'NR'</code> for {@link ifc.registry._XSimpleRegistry} :
     *     Just informs interface test that <code>NestedRegistry</code>
-    *     service is tested. If this relation exists, than some methods
+    *     service is tested. If this relation exists, then some methods
     *     are not supported. The relation is a <code>String</code> with
     *     object name.</li>
     *  <li> <code>'XSimpleRegistry.open'</code> for

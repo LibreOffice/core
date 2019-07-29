@@ -56,7 +56,7 @@ public class JobHandler extends TestCase {
         log.println("Service test.Job is "
             + (serviceRegistered ? "already" : "not yet")  + " registered.");
         if (! serviceRegistered){
-            String message = "You have to register 'test.Job' before office is stared.\n";
+            String message = "You have to register 'test.Job' before office is started.\n";
             message += "Please run '$OFFICEPATH/program/pkgchk $DOCPTH/qadevlibs/JobExecutor.jar'";
             throw new StatusException(message, new Exception());
         }
