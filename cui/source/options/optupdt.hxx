@@ -31,36 +31,37 @@
 class SvxOnlineUpdateTabPage : public SfxTabPage
 {
 private:
-    VclPtr<CheckBox>           m_pAutoCheckCheckBox;
-    VclPtr<RadioButton>        m_pEveryDayButton;
-    VclPtr<RadioButton>        m_pEveryWeekButton;
-    VclPtr<RadioButton>        m_pEveryMonthButton;
-    VclPtr<PushButton>         m_pCheckNowButton;
-    VclPtr<CheckBox>           m_pAutoDownloadCheckBox;
-    VclPtr<FixedText>          m_pDestPathLabel;
-    VclPtr<FixedText>          m_pDestPath;
-    VclPtr<PushButton>         m_pChangePathButton;
-    VclPtr<FixedText>          m_pLastChecked;
-    VclPtr<CheckBox>           m_pExtrasCheckBox;
-    VclPtr<FixedText>          m_pUserAgentLabel;
     OUString       m_aNeverChecked;
     OUString       m_aLastCheckedTemplate;
 
-    DECL_LINK(FileDialogHdl_Impl, Button*, void);
-    DECL_LINK(CheckNowHdl_Impl, Button*, void);
-    DECL_LINK(AutoCheckHdl_Impl, Button*, void);
-    DECL_LINK(ExtrasCheckHdl_Impl, Button*, void);
-
     css::uno::Reference< css::container::XNameReplace > m_xUpdateAccess;
     css::uno::Reference<css::configuration::XReadWriteAccess> m_xReadWriteAccess;
+
+    std::unique_ptr<weld::Label> m_xNeverChecked;
+    std::unique_ptr<weld::CheckButton> m_xAutoCheckCheckBox;
+    std::unique_ptr<weld::RadioButton> m_xEveryDayButton;
+    std::unique_ptr<weld::RadioButton> m_xEveryWeekButton;
+    std::unique_ptr<weld::RadioButton> m_xEveryMonthButton;
+    std::unique_ptr<weld::Button> m_xCheckNowButton;
+    std::unique_ptr<weld::CheckButton> m_xAutoDownloadCheckBox;
+    std::unique_ptr<weld::Label> m_xDestPathLabel;
+    std::unique_ptr<weld::Label> m_xDestPath;
+    std::unique_ptr<weld::Button> m_xChangePathButton;
+    std::unique_ptr<weld::Label> m_xLastChecked;
+    std::unique_ptr<weld::CheckButton> m_xExtrasCheckBox;
+    std::unique_ptr<weld::Label> m_xUserAgentLabel;
+
+    DECL_LINK(FileDialogHdl_Impl, weld::Button&, void);
+    DECL_LINK(CheckNowHdl_Impl, weld::Button&, void);
+    DECL_LINK(AutoCheckHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ExtrasCheckHdl_Impl, weld::Button&, void);
 
     void                    UpdateLastCheckedText();
     void                    UpdateUserAgent();
 
 public:
-    SvxOnlineUpdateTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    SvxOnlineUpdateTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxOnlineUpdateTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>      Create( TabPageParent pParent, const SfxItemSet* rSet );
 
@@ -68,7 +69,6 @@ public:
     virtual void            Reset( const SfxItemSet* rSet ) override;
     virtual void            FillUserData() override;
 };
-
 
 #endif
 
