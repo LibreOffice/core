@@ -6,7 +6,7 @@ import type_options
 */
 
 SpecialCommand:
-  writer_command | calc_command | impress_command | math_command
+  writer_command | calc_command | impress_command | math_command | draw_command
 ;
 
 /*
@@ -144,7 +144,7 @@ impress_Type_command:
   This part for all the math log statments:
    
     1)  element selector 
-    2) Type
+    2)  Type
 
   then we can add whatever we need in the future
 */
@@ -156,4 +156,19 @@ math_element_selector:
 ;
 math_Type_command:
     'Type on math ' what_to_type=Type_options
+;
+
+//=================================================================//
+/*
+  This part for all the draw log statments:
+   
+    1) Type
+
+  then we can add whatever we need in the future
+*/
+draw_command:
+    draw_Type_command
+;
+draw_Type_command:
+    'Type on draw ' what_to_type=Type_options
 ;

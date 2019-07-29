@@ -230,6 +230,9 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
     else if(pUIObject->get_type()=="WindowUIObject" && rID=="math_edit"){
         aContent = "Type on math " + aKeyCode ;
     }
+    else if(rID=="draw_win"){
+        aContent = "Type on draw " + aKeyCode ;
+    }
     else{
         aContent =  "Type on '" + rID + "' " + aKeyCode + " from " + aParentID ;
     }
