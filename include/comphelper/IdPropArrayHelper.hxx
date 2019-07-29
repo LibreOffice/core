@@ -100,9 +100,10 @@ namespace comphelper
         OSL_ENSURE(s_nRefCount, "OIdPropertyArrayUsageHelper::getArrayHelper : suspicious call : have a refcount of 0 !");
         ::osl::MutexGuard aGuard(OIdPropertyArrayUsageHelperMutex<TYPE>::get());
         // do we have the array already?
-        if (! (*s_pMap)[nId] )
+        auto& rEntry = (*s_pMap)[nId];
+        if (!rEntry)
         {
-            (*s_pMap)[nId] = createArrayHelper(nId);
+            rEntry = createArrayHelper(nId);
             OSL_ENSURE((*s_pMap)[nId], "OIdPropertyArrayUsageHelper::getArrayHelper : createArrayHelper returned nonsense !");
         }
         return (*s_pMap)[nId];
