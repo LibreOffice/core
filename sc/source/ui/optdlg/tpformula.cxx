@@ -31,42 +31,40 @@
 
 #include <unotools/localedatawrapper.hxx>
 
-
-ScTpFormulaOptions::ScTpFormulaOptions(vcl::Window* pParent, const SfxItemSet& rCoreAttrs) :
-    SfxTabPage(pParent, "OptFormula", "modules/scalc/ui/optformula.ui", &rCoreAttrs),
-    mnDecSep(0)
+ScTpFormulaOptions::ScTpFormulaOptions(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+    : SfxTabPage(pParent, "modules/scalc/ui/optformula.ui", "OptFormula", &rCoreAttrs)
+    , mnDecSep(0)
+    , mxLbFormulaSyntax(m_xBuilder->weld_combo_box("formulasyntax"))
+    , mxCbEnglishFuncName(m_xBuilder->weld_check_button("englishfuncname"))
+    , mxBtnCustomCalcDefault(m_xBuilder->weld_radio_button("calcdefault"))
+    , mxBtnCustomCalcCustom(m_xBuilder->weld_radio_button("calccustom"))
+    , mxBtnCustomCalcDetails(m_xBuilder->weld_button("details"))
+    , mxEdSepFuncArg(m_xBuilder->weld_entry("function"))
+    , mxEdSepArrayCol(m_xBuilder->weld_entry("arraycolumn"))
+    , mxEdSepArrayRow(m_xBuilder->weld_entry("arrayrow"))
+    , mxBtnSepReset(m_xBuilder->weld_button("reset"))
+    , mxLbOOXMLRecalcOptions(m_xBuilder->weld_combo_box("ooxmlrecalc"))
+    , mxLbODFRecalcOptions(m_xBuilder->weld_combo_box("odfrecalc"))
 {
-    get(mpLbFormulaSyntax, "formulasyntax");
-    get(mpCbEnglishFuncName, "englishfuncname");
-    get(mpBtnCustomCalcDefault, "calcdefault");
-    get(mpBtnCustomCalcCustom, "calccustom");
-    get(mpBtnCustomCalcDetails, "details");
-    get(mpEdSepFuncArg, "function");
-    get(mpEdSepArrayCol, "arraycolumn");
-    get(mpEdSepArrayRow, "arrayrow");
-    get(mpBtnSepReset, "reset");
-    get(mpLbOOXMLRecalcOptions, "ooxmlrecalc");
-    get(mpLbODFRecalcOptions, "odfrecalc");
+    mxLbFormulaSyntax->append_text(ScResId(SCSTR_FORMULA_SYNTAX_CALC_A1));
+    mxLbFormulaSyntax->append_text(ScResId(SCSTR_FORMULA_SYNTAX_XL_A1));
+    mxLbFormulaSyntax->append_text(ScResId(SCSTR_FORMULA_SYNTAX_XL_R1C1));
 
-    mpLbFormulaSyntax->InsertEntry(ScResId(SCSTR_FORMULA_SYNTAX_CALC_A1));
-    mpLbFormulaSyntax->InsertEntry(ScResId(SCSTR_FORMULA_SYNTAX_XL_A1));
-    mpLbFormulaSyntax->InsertEntry(ScResId(SCSTR_FORMULA_SYNTAX_XL_R1C1));
+    Link<weld::Button&,void> aLink2 = LINK( this, ScTpFormulaOptions, ButtonHdl );
+    mxBtnSepReset->connect_clicked(aLink2);
+    mxBtnCustomCalcDefault->connect_clicked(aLink2);
+    mxBtnCustomCalcCustom->connect_clicked(aLink2);
+    mxBtnCustomCalcDetails->connect_clicked(aLink2);
 
-    Link<Button*,void> aLink2 = LINK( this, ScTpFormulaOptions, ButtonHdl );
-    mpBtnSepReset->SetClickHdl(aLink2);
-    mpBtnCustomCalcDefault->SetClickHdl(aLink2);
-    mpBtnCustomCalcCustom->SetClickHdl(aLink2);
-    mpBtnCustomCalcDetails->SetClickHdl(aLink2);
+    Link<weld::Entry&,void> aLink = LINK( this, ScTpFormulaOptions, SepModifyHdl );
+    mxEdSepFuncArg->connect_changed(aLink);
+    mxEdSepArrayCol->connect_changed(aLink);
+    mxEdSepArrayRow->connect_changed(aLink);
 
-    Link<Edit&,void> aLink = LINK( this, ScTpFormulaOptions, SepModifyHdl );
-    mpEdSepFuncArg->SetModifyHdl(aLink);
-    mpEdSepArrayCol->SetModifyHdl(aLink);
-    mpEdSepArrayRow->SetModifyHdl(aLink);
-
-    Link<Control&,void> aLink3 = LINK( this, ScTpFormulaOptions, SepEditOnFocusHdl );
-    mpEdSepFuncArg->SetGetFocusHdl(aLink3);
-    mpEdSepArrayCol->SetGetFocusHdl(aLink3);
-    mpEdSepArrayRow->SetGetFocusHdl(aLink3);
+    Link<weld::Widget&,void> aLink3 = LINK( this, ScTpFormulaOptions, SepEditOnFocusHdl );
+    mxEdSepFuncArg->connect_focus_in(aLink3);
+    mxEdSepArrayCol->connect_focus_in(aLink3);
+    mxEdSepArrayRow->connect_focus_in(aLink3);
 
     // Get the decimal separator for current locale.
     OUString aSep = ScGlobal::GetpLocaleData()->getNumDecimalSep();
@@ -78,59 +76,40 @@ ScTpFormulaOptions::ScTpFormulaOptions(vcl::Window* pParent, const SfxItemSet& r
 
 ScTpFormulaOptions::~ScTpFormulaOptions()
 {
-    disposeOnce();
-}
-
-void ScTpFormulaOptions::dispose()
-{
-    mpLbFormulaSyntax.clear();
-    mpCbEnglishFuncName.clear();
-    mpBtnCustomCalcDefault.clear();
-    mpBtnCustomCalcCustom.clear();
-    mpBtnCustomCalcDetails.clear();
-    mpEdSepFuncArg.clear();
-    mpEdSepArrayCol.clear();
-    mpEdSepArrayRow.clear();
-    mpBtnSepReset.clear();
-    mpLbOOXMLRecalcOptions.clear();
-    mpLbODFRecalcOptions.clear();
-    SfxTabPage::dispose();
 }
 
 void ScTpFormulaOptions::ResetSeparators()
 {
     OUString aFuncArg, aArrayCol, aArrayRow;
     ScFormulaOptions::GetDefaultFormulaSeparators(aFuncArg, aArrayCol, aArrayRow);
-    mpEdSepFuncArg->SetText(aFuncArg);
-    mpEdSepArrayCol->SetText(aArrayCol);
-    mpEdSepArrayRow->SetText(aArrayRow);
+    mxEdSepFuncArg->set_text(aFuncArg);
+    mxEdSepArrayCol->set_text(aArrayCol);
+    mxEdSepArrayRow->set_text(aArrayRow);
 }
 
-void ScTpFormulaOptions::OnFocusSeparatorInput(Edit* pEdit)
+void ScTpFormulaOptions::OnFocusSeparatorInput(weld::Entry* pEdit)
 {
     if (!pEdit)
         return;
 
     // Make sure the entire text is selected.
-    sal_Int32 nLen = pEdit->GetText().getLength();
-    Selection aSel(0, static_cast<sal_uInt16>(nLen));
-    pEdit->SetSelection(aSel);
-    maOldSepValue = pEdit->GetText();
+    pEdit->select_region(0, -1);
+    maOldSepValue = pEdit->get_text();
 }
 
 void ScTpFormulaOptions::UpdateCustomCalcRadioButtons(bool bDefault)
 {
     if (bDefault)
     {
-        mpBtnCustomCalcDefault->Check();
-        mpBtnCustomCalcCustom->Check(false);
-        mpBtnCustomCalcDetails->Disable();
+        mxBtnCustomCalcDefault->set_active(true);
+        mxBtnCustomCalcCustom->set_active(false);
+        mxBtnCustomCalcDetails->set_sensitive(false);
     }
     else
     {
-        mpBtnCustomCalcDefault->Check(false);
-        mpBtnCustomCalcCustom->Check();
-        mpBtnCustomCalcDetails->Enable();
+        mxBtnCustomCalcDefault->set_active(false);
+        mxBtnCustomCalcCustom->set_active(true);
+        mxBtnCustomCalcDetails->set_sensitive(true);
     }
 }
 
@@ -185,76 +164,76 @@ bool ScTpFormulaOptions::IsValidSeparator(const OUString& rSep) const
 bool ScTpFormulaOptions::IsValidSeparatorSet() const
 {
     // Make sure the column and row separators are different.
-    OUString aColStr = mpEdSepArrayCol->GetText();
-    OUString aRowStr = mpEdSepArrayRow->GetText();
+    OUString aColStr = mxEdSepArrayCol->get_text();
+    OUString aRowStr = mxEdSepArrayRow->get_text();
     return aColStr != aRowStr;
 }
 
-IMPL_LINK( ScTpFormulaOptions, ButtonHdl, Button*, pBtn, void )
+IMPL_LINK( ScTpFormulaOptions, ButtonHdl, weld::Button&, rBtn, void )
 {
-    if (pBtn == mpBtnSepReset)
+    if (&rBtn == mxBtnSepReset.get())
         ResetSeparators();
-    else if (pBtn == mpBtnCustomCalcDefault)
+    else if (&rBtn == mxBtnCustomCalcDefault.get())
         UpdateCustomCalcRadioButtons(true);
-    else if (pBtn == mpBtnCustomCalcCustom)
+    else if (&rBtn == mxBtnCustomCalcCustom.get())
         UpdateCustomCalcRadioButtons(false);
-    else if (pBtn == mpBtnCustomCalcDetails)
+    else if (&rBtn == mxBtnCustomCalcDetails.get())
         LaunchCustomCalcSettings();
 }
 
-IMPL_LINK( ScTpFormulaOptions, SepModifyHdl, Edit&, rEdit, void )
+IMPL_LINK( ScTpFormulaOptions, SepModifyHdl, weld::Entry&, rEdit, void )
 {
-    OUString aStr = rEdit.GetText();
+    OUString aStr = rEdit.get_text();
     if (aStr.getLength() > 1)
     {
         // In case the string is more than one character long, only grab the
         // first character.
         aStr = aStr.copy(0, 1);
-        rEdit.SetText(aStr);
+        rEdit.set_text(aStr);
     }
 
     if ((!IsValidSeparator(aStr) || !IsValidSeparatorSet()) && !maOldSepValue.isEmpty())
         // Invalid separator.  Restore the old value.
-        rEdit.SetText(maOldSepValue);
+        rEdit.set_text(maOldSepValue);
 
     OnFocusSeparatorInput(&rEdit);
 }
 
-IMPL_LINK( ScTpFormulaOptions, SepEditOnFocusHdl, Control&, rControl, void )
+IMPL_LINK( ScTpFormulaOptions, SepEditOnFocusHdl, weld::Widget&, rControl, void )
 {
-    OnFocusSeparatorInput(static_cast<Edit*>(&rControl));
+    OnFocusSeparatorInput(dynamic_cast<weld::Entry*>(&rControl));
 }
 
 VclPtr<SfxTabPage> ScTpFormulaOptions::Create(TabPageParent pParent, const SfxItemSet* rCoreSet)
 {
-    return VclPtr<ScTpFormulaOptions>::Create(pParent.pParent, *rCoreSet);
+    return VclPtr<ScTpFormulaOptions>::Create(pParent, *rCoreSet);
 }
 
 bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)
 {
     bool bRet = false;
     ScFormulaOptions aOpt;
-    bool bEnglishFuncName = mpCbEnglishFuncName->IsChecked();
-    sal_Int16 aSyntaxPos      = mpLbFormulaSyntax->GetSelectedEntryPos();
-    OUString aSep             = mpEdSepFuncArg->GetText();
-    OUString aSepArrayCol     = mpEdSepArrayCol->GetText();
-    OUString aSepArrayRow     = mpEdSepArrayRow->GetText();
-    sal_Int16 nOOXMLRecalcMode = mpLbOOXMLRecalcOptions->GetSelectedEntryPos();
-    sal_Int16 nODFRecalcMode = mpLbODFRecalcOptions->GetSelectedEntryPos();
+    bool bEnglishFuncName = mxCbEnglishFuncName->get_active();
+    sal_Int16 aSyntaxPos      = mxLbFormulaSyntax->get_active();
+    OUString aSep             = mxEdSepFuncArg->get_text();
+    OUString aSepArrayCol     = mxEdSepArrayCol->get_text();
+    OUString aSepArrayRow     = mxEdSepArrayRow->get_text();
+    sal_Int16 nOOXMLRecalcMode = mxLbOOXMLRecalcOptions->get_active();
+    sal_Int16 nODFRecalcMode = mxLbODFRecalcOptions->get_active();
 
-    if (mpBtnCustomCalcDefault->IsChecked())
+    if (mxBtnCustomCalcDefault->get_active())
     {
         // When Default is selected, reset all the calc config settings to default.
         maCurrentConfig.reset();
     }
 
-    if ( mpLbFormulaSyntax->GetSavedValue() != aSyntaxPos
-         || mpCbEnglishFuncName->GetSavedValue() != (bEnglishFuncName ? 1 : 0)
-         || mpEdSepFuncArg->GetSavedValue() != aSep
-         || mpEdSepArrayCol->GetSavedValue() != aSepArrayCol
-         || mpEdSepArrayRow->GetSavedValue() != aSepArrayRow
-         || mpLbOOXMLRecalcOptions->GetSavedValue() != nOOXMLRecalcMode
-         || mpLbODFRecalcOptions->GetSavedValue() != nODFRecalcMode
+    if ( mxLbFormulaSyntax->get_saved_value() != mxLbFormulaSyntax->get_text(aSyntaxPos)
+         || mxCbEnglishFuncName->get_saved_state() != (bEnglishFuncName ? 1 : 0)
+         || mxEdSepFuncArg->get_saved_value() != aSep
+         || mxEdSepArrayCol->get_saved_value() != aSepArrayCol
+         || mxEdSepArrayRow->get_saved_value() != aSepArrayRow
+         || mxLbOOXMLRecalcOptions->get_saved_value() != mxLbOOXMLRecalcOptions->get_text(nOOXMLRecalcMode)
+         || mxLbODFRecalcOptions->get_saved_value() != mxLbODFRecalcOptions->get_text(nODFRecalcMode)
          || maSavedConfig != maCurrentConfig
          || maSavedDocOptions != maCurrentDocOptions )
     {
@@ -308,31 +287,31 @@ void ScTpFormulaOptions::Reset(const SfxItemSet* rCoreSet)
     switch (eGram)
     {
     case ::formula::FormulaGrammar::GRAM_NATIVE:
-        mpLbFormulaSyntax->SelectEntryPos(0);
+        mxLbFormulaSyntax->set_active(0);
         break;
     case ::formula::FormulaGrammar::GRAM_NATIVE_XL_A1:
-        mpLbFormulaSyntax->SelectEntryPos(1);
+        mxLbFormulaSyntax->set_active(1);
         break;
     case ::formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1:
-        mpLbFormulaSyntax->SelectEntryPos(2);
+        mxLbFormulaSyntax->set_active(2);
         break;
     default:
-        mpLbFormulaSyntax->SelectEntryPos(0);
+        mxLbFormulaSyntax->set_active(0);
     }
 
-    mpLbFormulaSyntax->SaveValue();
+    mxLbFormulaSyntax->save_value();
 
     ScRecalcOptions eOOXMLRecalc = aOpt.GetOOXMLRecalcOptions();
-    mpLbOOXMLRecalcOptions->SelectEntryPos(static_cast<sal_uInt16>(eOOXMLRecalc));
-    mpLbOOXMLRecalcOptions->SaveValue();
+    mxLbOOXMLRecalcOptions->set_active(static_cast<sal_uInt16>(eOOXMLRecalc));
+    mxLbOOXMLRecalcOptions->save_value();
 
     ScRecalcOptions eODFRecalc = aOpt.GetODFRecalcOptions();
-    mpLbODFRecalcOptions->SelectEntryPos(static_cast<sal_uInt16>(eODFRecalc));
-    mpLbODFRecalcOptions->SaveValue();
+    mxLbODFRecalcOptions->set_active(static_cast<sal_uInt16>(eODFRecalc));
+    mxLbODFRecalcOptions->save_value();
 
     // english function name.
-    mpCbEnglishFuncName->Check( aOpt.GetUseEnglishFuncName() );
-    mpCbEnglishFuncName->SaveValue();
+    mxCbEnglishFuncName->set_active( aOpt.GetUseEnglishFuncName() );
+    mxCbEnglishFuncName->save_state();
 
     // Separators
     OUString aSep = aOpt.GetFormulaSepArg();
@@ -342,13 +321,13 @@ void ScTpFormulaOptions::Reset(const SfxItemSet* rCoreSet)
     if (aSep.getLength() == 1 && aSepArrayRow.getLength() == 1 && aSepArrayCol.getLength() == 1)
     {
         // Each separator must be one character long.
-        mpEdSepFuncArg->SetText(aSep);
-        mpEdSepArrayCol->SetText(aSepArrayCol);
-        mpEdSepArrayRow->SetText(aSepArrayRow);
+        mxEdSepFuncArg->set_text(aSep);
+        mxEdSepArrayCol->set_text(aSepArrayCol);
+        mxEdSepArrayRow->set_text(aSepArrayRow);
 
-        mpEdSepFuncArg->SaveValue();
-        mpEdSepArrayCol->SaveValue();
-        mpEdSepArrayRow->SaveValue();
+        mxEdSepFuncArg->save_value();
+        mxEdSepArrayCol->save_value();
+        mxEdSepArrayRow->save_value();
     }
     else
         ResetSeparators();
