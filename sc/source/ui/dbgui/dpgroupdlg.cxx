@@ -109,7 +109,7 @@ IMPL_LINK(ScDPGroupEditHelper, ClickHdl, weld::Button&, rButton, void)
 }
 
 ScDPNumGroupEditHelper::ScDPNumGroupEditHelper(weld::RadioButton& rRbAuto,
-    weld::RadioButton& rRbMan, DoubleField& rEdValue)
+    weld::RadioButton& rRbMan, ScDoubleField& rEdValue)
     : ScDPGroupEditHelper(rRbAuto, rRbMan, rEdValue.get_widget())
     , mrEdValue(rEdValue)
 {
@@ -150,11 +150,11 @@ ScDPNumGroupDlg::ScDPNumGroupDlg(weld::Window* pParent, const ScDPNumGroupInfo& 
     : GenericDialogController(pParent, "modules/scalc/ui/groupbynumber.ui", "PivotTableGroupByNumber")
     , mxRbAutoStart(m_xBuilder->weld_radio_button("auto_start"))
     , mxRbManStart(m_xBuilder->weld_radio_button("manual_start"))
-    , mxEdStart(new DoubleField(m_xBuilder->weld_entry("edit_start")))
+    , mxEdStart(new ScDoubleField(m_xBuilder->weld_entry("edit_start")))
     , mxRbAutoEnd(m_xBuilder->weld_radio_button("auto_end"))
     , mxRbManEnd(m_xBuilder->weld_radio_button("manual_end"))
-    , mxEdEnd(new DoubleField(m_xBuilder->weld_entry("edit_end")))
-    , mxEdBy(new DoubleField(m_xBuilder->weld_entry("edit_by")))
+    , mxEdEnd(new ScDoubleField(m_xBuilder->weld_entry("edit_end")))
+    , mxEdBy(new ScDoubleField(m_xBuilder->weld_entry("edit_by")))
     , maStartHelper(*mxRbAutoStart, *mxRbManStart, *mxEdStart)
     , maEndHelper(*mxRbAutoEnd, *mxRbManEnd, *mxEdEnd)
 {

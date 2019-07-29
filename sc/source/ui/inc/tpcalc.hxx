@@ -52,7 +52,7 @@ private:
     std::unique_ptr<weld::Label> m_xFtSteps;
     std::unique_ptr<weld::SpinButton> m_xEdSteps;
     std::unique_ptr<weld::Label> m_xFtEps;
-    std::unique_ptr<DoubleField> m_xEdEps;
+    std::unique_ptr<ScDoubleField> m_xEdEps;
 
     std::unique_ptr<weld::RadioButton> m_xBtnDateStd;
     std::unique_ptr<weld::RadioButton> m_xBtnDateSc10;
