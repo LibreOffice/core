@@ -484,7 +484,6 @@ custom_widgets = [
     'SameContentListBox',
     'ScCsvTableBox',
     'ScDataTableView',
-    'ScDoubleField',
     'SdPageObjsTLB',
     'SearchBox',
     'SearchResultsBox',

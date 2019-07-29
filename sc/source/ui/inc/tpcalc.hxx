@@ -40,46 +40,44 @@ public:
     virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;
 
 private:
-                ScTpCalcOptions( vcl::Window*            pParent,
-                                 const SfxItemSet&  rCoreSet );
-                virtual ~ScTpCalcOptions() override;
-    virtual void dispose() override;
+    ScTpCalcOptions(TabPageParent pParent, const SfxItemSet&  rCoreSet);
+    virtual ~ScTpCalcOptions() override;
 
 private:
-    VclPtr<CheckBox>       m_pBtnIterate;
-    VclPtr<FixedText>      m_pFtSteps;
-    VclPtr<NumericField>   m_pEdSteps;
-    VclPtr<FixedText>      m_pFtEps;
-    VclPtr<ScDoubleField>  m_pEdEps;
-
-    VclPtr<RadioButton>    m_pBtnDateStd;
-    VclPtr<RadioButton>    m_pBtnDateSc10;
-    VclPtr<RadioButton>    m_pBtnDate1904;
-
-    VclPtr<CheckBox>       m_pBtnCase;
-    VclPtr<CheckBox>       m_pBtnCalc;
-    VclPtr<CheckBox>       m_pBtnMatch;
-    VclPtr<RadioButton>    m_pBtnWildcards;
-    VclPtr<RadioButton>    m_pBtnRegex;
-    VclPtr<RadioButton>    m_pBtnLiteral;
-    VclPtr<CheckBox>       m_pBtnLookUp;
-    VclPtr<CheckBox>       m_pBtnGeneralPrec;
-
-    VclPtr<FixedText>      m_pFtPrec;
-    VclPtr<NumericField>   m_pEdPrec;
-
-    VclPtr<CheckBox>       m_pBtnThread;
-
     std::unique_ptr<ScDocOptions> pOldOptions;
     std::unique_ptr<ScDocOptions> pLocalOptions;
     sal_uInt16 const             nWhichCalc;
+
+    std::unique_ptr<weld::CheckButton> m_xBtnIterate;
+    std::unique_ptr<weld::Label> m_xFtSteps;
+    std::unique_ptr<weld::SpinButton> m_xEdSteps;
+    std::unique_ptr<weld::Label> m_xFtEps;
+    std::unique_ptr<DoubleField> m_xEdEps;
+
+    std::unique_ptr<weld::RadioButton> m_xBtnDateStd;
+    std::unique_ptr<weld::RadioButton> m_xBtnDateSc10;
+    std::unique_ptr<weld::RadioButton> m_xBtnDate1904;
+
+    std::unique_ptr<weld::CheckButton> m_xBtnCase;
+    std::unique_ptr<weld::CheckButton> m_xBtnCalc;
+    std::unique_ptr<weld::CheckButton> m_xBtnMatch;
+    std::unique_ptr<weld::RadioButton> m_xBtnWildcards;
+    std::unique_ptr<weld::RadioButton> m_xBtnRegex;
+    std::unique_ptr<weld::RadioButton> m_xBtnLiteral;
+    std::unique_ptr<weld::CheckButton> m_xBtnLookUp;
+    std::unique_ptr<weld::CheckButton> m_xBtnGeneralPrec;
+
+    std::unique_ptr<weld::Label> m_xFtPrec;
+    std::unique_ptr<weld::SpinButton> m_xEdPrec;
+
+    std::unique_ptr<weld::CheckButton> m_xBtnThread;
 
 private:
     void            Init();
 
     // Handler:
-    DECL_LINK( RadioClickHdl, Button*, void );
-    DECL_LINK( CheckClickHdl, Button*, void );
+    DECL_LINK( RadioClickHdl, weld::Button&, void );
+    DECL_LINK( CheckClickHdl, weld::ToggleButton&, void );
 };
 
 #endif
