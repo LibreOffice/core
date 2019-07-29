@@ -23,7 +23,7 @@
 #include <systools/win32/comtools.hxx>
 
 /*
-    an APartment Neutral dataobject wrapper; this wrapper of a IDataObject
+    an APartment Neutral dataobject wrapper; this wrapper of an IDataObject
     pointer can be used from any apartment without RPC_E_WRONG_THREAD
     which normally occurs if an apartment tries to use an interface
     pointer of another apartment; we use containment to hold the original
