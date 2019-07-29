@@ -223,7 +223,9 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
             OSL_ENSURE(false, "wrong family");
     }
 
-    if (!sPage.isEmpty())
+    if (bNew)
+        SetCurPageId("organizer");
+    else if (!sPage.isEmpty())
         SetCurPageId(sPage);
 }
 
