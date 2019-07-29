@@ -32,63 +32,57 @@
 #include <svx/colorbox.hxx>
 #include <svtools/unitconv.hxx>
 
-ScTpContentOptions::ScTpContentOptions( vcl::Window*         pParent,
-                             const SfxItemSet&  rArgSet ) :
-    SfxTabPage(pParent, "TpViewPage", "modules/scalc/ui/tpviewpage.ui", &rArgSet)
+ScTpContentOptions::ScTpContentOptions(TabPageParent pParent, const SfxItemSet&  rArgSet)
+    : SfxTabPage(pParent, "modules/scalc/ui/tpviewpage.ui", "TpViewPage", &rArgSet)
+    , m_xGridLB(m_xBuilder->weld_combo_box("grid"))
+    , m_xColorFT(m_xBuilder->weld_label("color_label"))
+    , m_xColorLB(new ColorListBox(m_xBuilder->weld_menu_button("color"), pParent.GetFrameWeld()))
+    , m_xBreakCB(m_xBuilder->weld_check_button("break"))
+    , m_xGuideLineCB(m_xBuilder->weld_check_button("guideline"))
+    , m_xFormulaCB(m_xBuilder->weld_check_button("formula"))
+    , m_xNilCB(m_xBuilder->weld_check_button("nil"))
+    , m_xAnnotCB(m_xBuilder->weld_check_button("annot"))
+    , m_xValueCB(m_xBuilder->weld_check_button("value"))
+    , m_xAnchorCB(m_xBuilder->weld_check_button("anchor"))
+    , m_xClipMarkCB(m_xBuilder->weld_check_button("clipmark"))
+    , m_xRangeFindCB(m_xBuilder->weld_check_button("rangefind"))
+    , m_xObjGrfLB(m_xBuilder->weld_combo_box("objgrf"))
+    , m_xDiagramLB(m_xBuilder->weld_combo_box("diagram"))
+    , m_xDrawLB(m_xBuilder->weld_combo_box("draw"))
+    , m_xSyncZoomCB(m_xBuilder->weld_check_button("synczoom"))
+    , m_xRowColHeaderCB(m_xBuilder->weld_check_button("rowcolheader"))
+    , m_xHScrollCB(m_xBuilder->weld_check_button("hscroll"))
+    , m_xVScrollCB(m_xBuilder->weld_check_button("vscroll"))
+    , m_xTblRegCB(m_xBuilder->weld_check_button("tblreg"))
+    , m_xOutlineCB(m_xBuilder->weld_check_button("outline"))
+    , m_xSummaryCB(m_xBuilder->weld_check_button("cbSummary"))
 {
-    get(pGridLB,"grid");
-    get(pColorFT,"color_label");
-    get(pColorLB,"color");
-    get(pBreakCB,"break");
-    get(pGuideLineCB,"guideline");
-
-    get(pFormulaCB,"formula");
-    get(pNilCB,"nil");
-    get(pAnnotCB,"annot");
-    get(pValueCB,"value");
-    get(pAnchorCB,"anchor");
-    get(pClipMarkCB,"clipmark");
-    get(pRangeFindCB,"rangefind");
-
-    get(pObjGrfLB,"objgrf");
-    get(pDiagramLB,"diagram");
-    get(pDrawLB,"draw");
-
-    get(pSyncZoomCB,"synczoom");
-
-    get(pRowColHeaderCB,"rowcolheader");
-    get(pHScrollCB,"hscroll");
-    get(pVScrollCB,"vscroll");
-    get(pTblRegCB,"tblreg");
-    get(pOutlineCB,"outline");
-    get(pSummaryCB,"cbSummary");
-
     SetExchangeSupport();
-    Link<ListBox&,void> aSelObjHdl(LINK( this, ScTpContentOptions, SelLbObjHdl ) );
-    pObjGrfLB->  SetSelectHdl(aSelObjHdl);
-    pDiagramLB-> SetSelectHdl(aSelObjHdl);
-    pDrawLB->    SetSelectHdl(aSelObjHdl);
-    pGridLB->    SetSelectHdl( LINK( this, ScTpContentOptions, GridHdl ) );
+    Link<weld::ComboBox&,void> aSelObjHdl(LINK( this, ScTpContentOptions, SelLbObjHdl ) );
+    m_xObjGrfLB->connect_changed(aSelObjHdl);
+    m_xDiagramLB->connect_changed(aSelObjHdl);
+    m_xDrawLB->connect_changed(aSelObjHdl);
+    m_xGridLB->connect_changed( LINK( this, ScTpContentOptions, GridHdl ) );
 
-    Link<Button*, void> aCBHdl(LINK( this, ScTpContentOptions, CBHdl ) );
-    pFormulaCB  ->SetClickHdl(aCBHdl);
-    pNilCB      ->SetClickHdl(aCBHdl);
-    pAnnotCB    ->SetClickHdl(aCBHdl);
-    pValueCB    ->SetClickHdl(aCBHdl);
-    pAnchorCB   ->SetClickHdl(aCBHdl);
-    pClipMarkCB ->SetClickHdl(aCBHdl);
+    Link<weld::ToggleButton&, void> aCBHdl(LINK( this, ScTpContentOptions, CBHdl ) );
+    m_xFormulaCB->connect_toggled(aCBHdl);
+    m_xNilCB->connect_toggled(aCBHdl);
+    m_xAnnotCB->connect_toggled(aCBHdl);
+    m_xValueCB->connect_toggled(aCBHdl);
+    m_xAnchorCB->connect_toggled(aCBHdl);
+    m_xClipMarkCB->connect_toggled(aCBHdl);
 
-    pVScrollCB  ->SetClickHdl(aCBHdl);
-    pHScrollCB  ->SetClickHdl(aCBHdl);
-    pTblRegCB   ->SetClickHdl(aCBHdl);
-    pOutlineCB  ->SetClickHdl(aCBHdl);
-    pBreakCB    ->SetClickHdl(aCBHdl);
-    pGuideLineCB->SetClickHdl(aCBHdl);
-    pRowColHeaderCB->SetClickHdl(aCBHdl);
-    pSummaryCB->SetClickHdl(aCBHdl);
+    m_xVScrollCB->connect_toggled(aCBHdl);
+    m_xHScrollCB->connect_toggled(aCBHdl);
+    m_xTblRegCB->connect_toggled(aCBHdl);
+    m_xOutlineCB->connect_toggled(aCBHdl);
+    m_xBreakCB->connect_toggled(aCBHdl);
+    m_xGuideLineCB->connect_toggled(aCBHdl);
+    m_xRowColHeaderCB->connect_toggled(aCBHdl);
+    m_xSummaryCB->connect_toggled(aCBHdl);
 
-    pColorLB->SetSlotId(SID_ATTR_CHAR_COLOR);
-    pColorLB->SetAutoDisplayColor(SC_STD_GRIDCOLOR);
+    m_xColorLB->SetSlotId(SID_ATTR_CHAR_COLOR);
+    m_xColorLB->SetAutoDisplayColor(SC_STD_GRIDCOLOR);
 }
 
 ScTpContentOptions::~ScTpContentOptions()
@@ -98,79 +92,57 @@ ScTpContentOptions::~ScTpContentOptions()
 
 void ScTpContentOptions::dispose()
 {
-    pLocalOptions.reset();
-    pGridLB.clear();
-    pColorFT.clear();
-    pColorLB.clear();
-    pBreakCB.clear();
-    pGuideLineCB.clear();
-    pFormulaCB.clear();
-    pNilCB.clear();
-    pAnnotCB.clear();
-    pValueCB.clear();
-    pAnchorCB.clear();
-    pClipMarkCB.clear();
-    pRangeFindCB.clear();
-    pObjGrfLB.clear();
-    pDiagramLB.clear();
-    pDrawLB.clear();
-    pSyncZoomCB.clear();
-    pRowColHeaderCB.clear();
-    pHScrollCB.clear();
-    pVScrollCB.clear();
-    pTblRegCB.clear();
-    pOutlineCB.clear();
-    pSummaryCB.clear();
+    m_xColorLB.reset();
     SfxTabPage::dispose();
 }
 
 VclPtr<SfxTabPage> ScTpContentOptions::Create( TabPageParent pParent,
                                                const SfxItemSet*     rCoreSet )
 {
-    return VclPtr<ScTpContentOptions>::Create(pParent.pParent, *rCoreSet);
+    return VclPtr<ScTpContentOptions>::Create(pParent, *rCoreSet);
 }
 
 bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
 {
     bool bRet = false;
-    if( pFormulaCB ->IsValueChangedFromSaved() ||
-        pNilCB     ->IsValueChangedFromSaved() ||
-        pAnnotCB   ->IsValueChangedFromSaved() ||
-        pValueCB   ->IsValueChangedFromSaved() ||
-        pAnchorCB  ->IsValueChangedFromSaved() ||
-        pClipMarkCB->IsValueChangedFromSaved() ||
-        pObjGrfLB  ->IsValueChangedFromSaved() ||
-        pDiagramLB ->IsValueChangedFromSaved() ||
-        pDrawLB    ->IsValueChangedFromSaved() ||
-        pGridLB        ->IsValueChangedFromSaved() ||
-        pRowColHeaderCB->IsValueChangedFromSaved() ||
-        pHScrollCB     ->IsValueChangedFromSaved() ||
-        pVScrollCB     ->IsValueChangedFromSaved() ||
-        pTblRegCB      ->IsValueChangedFromSaved() ||
-        pOutlineCB     ->IsValueChangedFromSaved() ||
-        pColorLB       ->IsValueChangedFromSaved() ||
-        pBreakCB       ->IsValueChangedFromSaved() ||
-        pSummaryCB     ->IsValueChangedFromSaved() ||
-        pGuideLineCB   ->IsValueChangedFromSaved())
+    if( m_xFormulaCB->get_state_changed_from_saved() ||
+        m_xNilCB->get_state_changed_from_saved() ||
+        m_xAnnotCB->get_state_changed_from_saved() ||
+        m_xValueCB->get_state_changed_from_saved() ||
+        m_xAnchorCB->get_state_changed_from_saved() ||
+        m_xClipMarkCB->get_state_changed_from_saved() ||
+        m_xObjGrfLB->get_value_changed_from_saved() ||
+        m_xDiagramLB->get_value_changed_from_saved() ||
+        m_xDrawLB->get_value_changed_from_saved() ||
+        m_xGridLB->get_value_changed_from_saved() ||
+        m_xRowColHeaderCB->get_state_changed_from_saved() ||
+        m_xHScrollCB->get_state_changed_from_saved() ||
+        m_xVScrollCB->get_state_changed_from_saved() ||
+        m_xTblRegCB->get_state_changed_from_saved() ||
+        m_xOutlineCB->get_state_changed_from_saved() ||
+        m_xColorLB->IsValueChangedFromSaved() ||
+        m_xBreakCB->get_state_changed_from_saved() ||
+        m_xSummaryCB->get_state_changed_from_saved() ||
+        m_xGuideLineCB->get_state_changed_from_saved())
     {
-        NamedColor aNamedColor = pColorLB->GetSelectedEntry();
+        NamedColor aNamedColor = m_xColorLB->GetSelectedEntry();
         if (aNamedColor.first == COL_AUTO)
         {
             aNamedColor.first = SC_STD_GRIDCOLOR;
             aNamedColor.second.clear();
         }
-        pLocalOptions->SetGridColor(aNamedColor.first, aNamedColor.second);
-        rCoreSet->Put(ScTpViewItem(*pLocalOptions));
+        m_xLocalOptions->SetGridColor(aNamedColor.first, aNamedColor.second);
+        rCoreSet->Put(ScTpViewItem(*m_xLocalOptions));
         bRet = true;
     }
-    if(pRangeFindCB->IsValueChangedFromSaved())
+    if(m_xRangeFindCB->get_state_changed_from_saved())
     {
-        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_RANGEFINDER, pRangeFindCB->IsChecked()));
+        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_RANGEFINDER, m_xRangeFindCB->get_active()));
         bRet = true;
     }
-    if(pSyncZoomCB->IsValueChangedFromSaved())
+    if(m_xSyncZoomCB->get_state_changed_from_saved())
     {
-        rCoreSet->Put(SfxBoolItem(SID_SC_OPT_SYNCZOOM, pSyncZoomCB->IsChecked()));
+        rCoreSet->Put(SfxBoolItem(SID_SC_OPT_SYNCZOOM, m_xSyncZoomCB->get_active()));
         bRet = true;
     }
 
@@ -181,67 +153,67 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
 {
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rCoreSet->GetItemState(SID_SCVIEWOPTIONS, false , &pItem))
-        pLocalOptions.reset( new ScViewOptions(
+        m_xLocalOptions.reset( new ScViewOptions(
                             static_cast<const ScTpViewItem*>(pItem)->GetViewOptions() ) );
     else
-        pLocalOptions.reset( new ScViewOptions );
-    pFormulaCB ->Check(pLocalOptions->GetOption(VOPT_FORMULAS));
-    pNilCB     ->Check(pLocalOptions->GetOption(VOPT_NULLVALS));
-    pAnnotCB   ->Check(pLocalOptions->GetOption(VOPT_NOTES));
-    pValueCB   ->Check(pLocalOptions->GetOption(VOPT_SYNTAX));
-    pAnchorCB  ->Check(pLocalOptions->GetOption(VOPT_ANCHOR));
-    pClipMarkCB->Check(pLocalOptions->GetOption(VOPT_CLIPMARKS));
+        m_xLocalOptions.reset( new ScViewOptions );
+    m_xFormulaCB ->set_active(m_xLocalOptions->GetOption(VOPT_FORMULAS));
+    m_xNilCB     ->set_active(m_xLocalOptions->GetOption(VOPT_NULLVALS));
+    m_xAnnotCB   ->set_active(m_xLocalOptions->GetOption(VOPT_NOTES));
+    m_xValueCB   ->set_active(m_xLocalOptions->GetOption(VOPT_SYNTAX));
+    m_xAnchorCB  ->set_active(m_xLocalOptions->GetOption(VOPT_ANCHOR));
+    m_xClipMarkCB->set_active(m_xLocalOptions->GetOption(VOPT_CLIPMARKS));
 
-    pObjGrfLB  ->SelectEntryPos( static_cast<sal_uInt16>(pLocalOptions->GetObjMode(VOBJ_TYPE_OLE)) );
-    pDiagramLB ->SelectEntryPos( static_cast<sal_uInt16>(pLocalOptions->GetObjMode(VOBJ_TYPE_CHART)) );
-    pDrawLB    ->SelectEntryPos( static_cast<sal_uInt16>(pLocalOptions->GetObjMode(VOBJ_TYPE_DRAW)) );
+    m_xObjGrfLB  ->set_active( static_cast<sal_uInt16>(m_xLocalOptions->GetObjMode(VOBJ_TYPE_OLE)) );
+    m_xDiagramLB ->set_active( static_cast<sal_uInt16>(m_xLocalOptions->GetObjMode(VOBJ_TYPE_CHART)) );
+    m_xDrawLB    ->set_active( static_cast<sal_uInt16>(m_xLocalOptions->GetObjMode(VOBJ_TYPE_DRAW)) );
 
-    pRowColHeaderCB->Check( pLocalOptions->GetOption(VOPT_HEADER) );
-    pHScrollCB->Check( pLocalOptions->GetOption(VOPT_HSCROLL) );
-    pVScrollCB->Check( pLocalOptions->GetOption(VOPT_VSCROLL) );
-    pTblRegCB ->Check( pLocalOptions->GetOption(VOPT_TABCONTROLS) );
-    pOutlineCB->Check( pLocalOptions->GetOption(VOPT_OUTLINER) );
-    pSummaryCB->Check( pLocalOptions->GetOption(VOPT_SUMMARY) );
+    m_xRowColHeaderCB->set_active( m_xLocalOptions->GetOption(VOPT_HEADER) );
+    m_xHScrollCB->set_active( m_xLocalOptions->GetOption(VOPT_HSCROLL) );
+    m_xVScrollCB->set_active( m_xLocalOptions->GetOption(VOPT_VSCROLL) );
+    m_xTblRegCB ->set_active( m_xLocalOptions->GetOption(VOPT_TABCONTROLS) );
+    m_xOutlineCB->set_active( m_xLocalOptions->GetOption(VOPT_OUTLINER) );
+    m_xSummaryCB->set_active( m_xLocalOptions->GetOption(VOPT_SUMMARY) );
 
     InitGridOpt();
 
-    pBreakCB->Check( pLocalOptions->GetOption(VOPT_PAGEBREAKS) );
-    pGuideLineCB->Check( pLocalOptions->GetOption(VOPT_HELPLINES) );
+    m_xBreakCB->set_active( m_xLocalOptions->GetOption(VOPT_PAGEBREAKS) );
+    m_xGuideLineCB->set_active( m_xLocalOptions->GetOption(VOPT_HELPLINES) );
 
     if(SfxItemState::SET == rCoreSet->GetItemState(SID_SC_INPUT_RANGEFINDER, false, &pItem))
-        pRangeFindCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+        m_xRangeFindCB->set_active(static_cast<const SfxBoolItem*>(pItem)->GetValue());
     if(SfxItemState::SET == rCoreSet->GetItemState(SID_SC_OPT_SYNCZOOM, false, &pItem))
-        pSyncZoomCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+        m_xSyncZoomCB->set_active(static_cast<const SfxBoolItem*>(pItem)->GetValue());
 
-    pRangeFindCB->SaveValue();
-    pSyncZoomCB->SaveValue();
+    m_xRangeFindCB->save_state();
+    m_xSyncZoomCB->save_state();
 
-    pFormulaCB->SaveValue();
-    pNilCB->SaveValue();
-    pAnnotCB->SaveValue();
-    pValueCB->SaveValue();
-    pAnchorCB->SaveValue();
-    pClipMarkCB->SaveValue();
-    pObjGrfLB->SaveValue();
-    pDiagramLB->SaveValue();
-    pDrawLB->SaveValue();
-    pRowColHeaderCB->SaveValue();
-    pHScrollCB->SaveValue();
-    pVScrollCB->SaveValue();
-    pTblRegCB->SaveValue();
-    pOutlineCB->SaveValue();
-    pGridLB->SaveValue();
-    pColorLB->SaveValue();
-    pBreakCB->SaveValue();
-    pGuideLineCB->SaveValue();
-    pSummaryCB->SaveValue();
+    m_xFormulaCB->save_state();
+    m_xNilCB->save_state();
+    m_xAnnotCB->save_state();
+    m_xValueCB->save_state();
+    m_xAnchorCB->save_state();
+    m_xClipMarkCB->save_state();
+    m_xObjGrfLB->save_value();
+    m_xDiagramLB->save_value();
+    m_xDrawLB->save_value();
+    m_xRowColHeaderCB->save_state();
+    m_xHScrollCB->save_state();
+    m_xVScrollCB->save_state();
+    m_xTblRegCB->save_state();
+    m_xOutlineCB->save_state();
+    m_xGridLB->save_value();
+    m_xColorLB->SaveValue();
+    m_xBreakCB->save_state();
+    m_xGuideLineCB->save_state();
+    m_xSummaryCB->save_state();
 }
 
 void ScTpContentOptions::ActivatePage( const SfxItemSet& rSet)
 {
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rSet.GetItemState(SID_SCVIEWOPTIONS, false , &pItem))
-        *pLocalOptions = static_cast<const ScTpViewItem*>(pItem)->GetViewOptions();
+        *m_xLocalOptions = static_cast<const ScTpViewItem*>(pItem)->GetViewOptions();
 }
 
 DeactivateRC ScTpContentOptions::DeactivatePage( SfxItemSet* pSetP )
@@ -251,53 +223,53 @@ DeactivateRC ScTpContentOptions::DeactivatePage( SfxItemSet* pSetP )
     return DeactivateRC::LeavePage;
 }
 
-IMPL_LINK( ScTpContentOptions, SelLbObjHdl, ListBox&, rLb, void )
+IMPL_LINK( ScTpContentOptions, SelLbObjHdl, weld::ComboBox&, rLb, void )
 {
-    const sal_Int32 nSelPos = rLb.GetSelectedEntryPos();
+    const sal_Int32 nSelPos = rLb.get_active();
     ScVObjMode  eMode   = ScVObjMode(nSelPos);
     ScVObjType  eType   = VOBJ_TYPE_OLE;
 
-    if ( &rLb == pDiagramLB )
+    if ( &rLb == m_xDiagramLB.get() )
         eType = VOBJ_TYPE_CHART;
-    else if ( &rLb == pDrawLB )
+    else if ( &rLb == m_xDrawLB.get() )
         eType = VOBJ_TYPE_DRAW;
 
-    pLocalOptions->SetObjMode( eType, eMode );
+    m_xLocalOptions->SetObjMode( eType, eMode );
 }
 
-IMPL_LINK( ScTpContentOptions, CBHdl, Button*, pBtn, void )
+IMPL_LINK( ScTpContentOptions, CBHdl, weld::ToggleButton&, rBtn, void )
 {
     ScViewOption eOption = VOPT_FORMULAS;
-    bool         bChecked = static_cast<CheckBox*>(pBtn)->IsChecked();
+    bool         bChecked = rBtn.get_active();
 
-    if (      pFormulaCB   == pBtn )   eOption = VOPT_FORMULAS;
-    else if ( pNilCB       == pBtn )   eOption = VOPT_NULLVALS;
-    else if ( pAnnotCB     == pBtn )   eOption = VOPT_NOTES;
-    else if ( pValueCB     == pBtn )   eOption = VOPT_SYNTAX;
-    else if ( pAnchorCB    == pBtn )   eOption = VOPT_ANCHOR;
-    else if ( pClipMarkCB  == pBtn )   eOption = VOPT_CLIPMARKS;
-    else if ( pVScrollCB       == pBtn )   eOption = VOPT_VSCROLL;
-    else if ( pHScrollCB       == pBtn )   eOption = VOPT_HSCROLL;
-    else if ( pTblRegCB        == pBtn )   eOption = VOPT_TABCONTROLS;
-    else if ( pOutlineCB       == pBtn )   eOption = VOPT_OUTLINER;
-    else if ( pBreakCB         == pBtn )   eOption = VOPT_PAGEBREAKS;
-    else if ( pGuideLineCB     == pBtn )   eOption = VOPT_HELPLINES;
-    else if ( pRowColHeaderCB  == pBtn )   eOption = VOPT_HEADER;
-    else if ( pSummaryCB  == pBtn )   eOption = VOPT_SUMMARY;
+    if (m_xFormulaCB.get() == &rBtn )   eOption = VOPT_FORMULAS;
+    else if ( m_xNilCB.get() == &rBtn )   eOption = VOPT_NULLVALS;
+    else if ( m_xAnnotCB.get() == &rBtn )   eOption = VOPT_NOTES;
+    else if ( m_xValueCB.get() == &rBtn )   eOption = VOPT_SYNTAX;
+    else if ( m_xAnchorCB.get() == &rBtn )   eOption = VOPT_ANCHOR;
+    else if ( m_xClipMarkCB.get() == &rBtn )   eOption = VOPT_CLIPMARKS;
+    else if ( m_xVScrollCB.get()  == &rBtn )   eOption = VOPT_VSCROLL;
+    else if ( m_xHScrollCB.get() == &rBtn )   eOption = VOPT_HSCROLL;
+    else if ( m_xTblRegCB.get() == &rBtn )   eOption = VOPT_TABCONTROLS;
+    else if ( m_xOutlineCB.get() == &rBtn )   eOption = VOPT_OUTLINER;
+    else if ( m_xBreakCB.get() == &rBtn )   eOption = VOPT_PAGEBREAKS;
+    else if ( m_xGuideLineCB.get() == &rBtn )   eOption = VOPT_HELPLINES;
+    else if ( m_xRowColHeaderCB.get() == &rBtn )   eOption = VOPT_HEADER;
+    else if ( m_xSummaryCB.get()  == &rBtn )   eOption = VOPT_SUMMARY;
 
-    pLocalOptions->SetOption( eOption, bChecked );
+    m_xLocalOptions->SetOption( eOption, bChecked );
 }
 
 void ScTpContentOptions::InitGridOpt()
 {
-    bool    bGrid = pLocalOptions->GetOption( VOPT_GRID );
-    bool    bGridOnTop = pLocalOptions->GetOption( VOPT_GRID_ONTOP );
+    bool    bGrid = m_xLocalOptions->GetOption( VOPT_GRID );
+    bool    bGridOnTop = m_xLocalOptions->GetOption( VOPT_GRID_ONTOP );
     sal_Int32   nSelPos = 0;
 
     if ( bGrid || bGridOnTop )
     {
-        pColorFT->Enable();
-        pColorLB->Enable();
+        m_xColorFT->set_sensitive(true);
+        m_xColorLB->set_sensitive(true);
         if ( !bGridOnTop )
             nSelPos = 0;
         else
@@ -305,33 +277,33 @@ void ScTpContentOptions::InitGridOpt()
     }
     else
     {
-        pColorFT->Disable();
-        pColorLB->Disable();
+        m_xColorFT->set_sensitive(false);
+        m_xColorLB->set_sensitive(false);
         nSelPos = 2;
     }
 
-    pGridLB->SelectEntryPos (nSelPos);
+    m_xGridLB->set_active (nSelPos);
 
     //  select grid color entry
     OUString  aName;
-    Color     aCol    = pLocalOptions->GetGridColor( &aName );
+    Color     aCol    = m_xLocalOptions->GetGridColor( &aName );
 
     if (aName.trim().isEmpty() && aCol == SC_STD_GRIDCOLOR)
         aCol = COL_AUTO;
 
-    pColorLB->SelectEntry(std::make_pair(aCol, aName));
+    m_xColorLB->SelectEntry(std::make_pair(aCol, aName));
 }
 
-IMPL_LINK( ScTpContentOptions, GridHdl, ListBox&, rLb, void )
+IMPL_LINK( ScTpContentOptions, GridHdl, weld::ComboBox&, rLb, void )
 {
-    sal_Int32   nSelPos = rLb.GetSelectedEntryPos();
+    sal_Int32   nSelPos = rLb.get_active();
     bool    bGrid = ( nSelPos <= 1 );
     bool    bGridOnTop = ( nSelPos == 1 );
 
-    pColorFT->Enable(bGrid);
-    pColorLB->Enable(bGrid);
-    pLocalOptions->SetOption( VOPT_GRID, bGrid );
-    pLocalOptions->SetOption( VOPT_GRID_ONTOP, bGridOnTop );
+    m_xColorFT->set_sensitive(bGrid);
+    m_xColorLB->set_sensitive(bGrid);
+    m_xLocalOptions->SetOption( VOPT_GRID, bGrid );
+    m_xLocalOptions->SetOption( VOPT_GRID_ONTOP, bGridOnTop );
 }
 
 ScTpLayoutOptions::ScTpLayoutOptions(TabPageParent pParent, const SfxItemSet& rArgSet)

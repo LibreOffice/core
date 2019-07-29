@@ -30,44 +30,43 @@ class ScViewOptions;
 class ScTpContentOptions : public SfxTabPage
 {
     friend class VclPtr<ScTpContentOptions>;
-    VclPtr<ListBox>         pGridLB;
-    VclPtr<FixedText>       pColorFT;
-    VclPtr<SvxColorListBox> pColorLB;
-    VclPtr<CheckBox>        pBreakCB;
-    VclPtr<CheckBox>        pGuideLineCB;
+    std::unique_ptr<ScViewOptions> m_xLocalOptions;
 
-    VclPtr<CheckBox>        pFormulaCB;
-    VclPtr<CheckBox>        pNilCB;
-    VclPtr<CheckBox>        pAnnotCB;
-    VclPtr<CheckBox>        pValueCB;
-    VclPtr<CheckBox>        pAnchorCB;
-    VclPtr<CheckBox>        pClipMarkCB;
-    VclPtr<CheckBox>        pRangeFindCB;
+    std::unique_ptr<weld::ComboBox> m_xGridLB;
+    std::unique_ptr<weld::Label> m_xColorFT;
+    std::unique_ptr<ColorListBox> m_xColorLB;
+    std::unique_ptr<weld::CheckButton> m_xBreakCB;
+    std::unique_ptr<weld::CheckButton> m_xGuideLineCB;
 
-    VclPtr<ListBox>         pObjGrfLB;
-    VclPtr<ListBox>         pDiagramLB;
-    VclPtr<ListBox>         pDrawLB;
+    std::unique_ptr<weld::CheckButton> m_xFormulaCB;
+    std::unique_ptr<weld::CheckButton> m_xNilCB;
+    std::unique_ptr<weld::CheckButton> m_xAnnotCB;
+    std::unique_ptr<weld::CheckButton> m_xValueCB;
+    std::unique_ptr<weld::CheckButton> m_xAnchorCB;
+    std::unique_ptr<weld::CheckButton> m_xClipMarkCB;
+    std::unique_ptr<weld::CheckButton> m_xRangeFindCB;
 
-    VclPtr<CheckBox>        pSyncZoomCB;
+    std::unique_ptr<weld::ComboBox> m_xObjGrfLB;
+    std::unique_ptr<weld::ComboBox> m_xDiagramLB;
+    std::unique_ptr<weld::ComboBox> m_xDrawLB;
 
-    VclPtr<CheckBox>        pRowColHeaderCB;
-    VclPtr<CheckBox>        pHScrollCB;
-    VclPtr<CheckBox>        pVScrollCB;
-    VclPtr<CheckBox>        pTblRegCB;
-    VclPtr<CheckBox>        pOutlineCB;
-    VclPtr<CheckBox>        pSummaryCB;
+    std::unique_ptr<weld::CheckButton> m_xSyncZoomCB;
 
-    std::unique_ptr<ScViewOptions> pLocalOptions;
+    std::unique_ptr<weld::CheckButton> m_xRowColHeaderCB;
+    std::unique_ptr<weld::CheckButton> m_xHScrollCB;
+    std::unique_ptr<weld::CheckButton> m_xVScrollCB;
+    std::unique_ptr<weld::CheckButton> m_xTblRegCB;
+    std::unique_ptr<weld::CheckButton> m_xOutlineCB;
+    std::unique_ptr<weld::CheckButton> m_xSummaryCB;
 
     void    InitGridOpt();
-    DECL_LINK( GridHdl, ListBox&, void );
-    DECL_LINK( SelLbObjHdl, ListBox&, void );
-    DECL_LINK( CBHdl, Button*, void );
+    DECL_LINK( GridHdl, weld::ComboBox&, void );
+    DECL_LINK( SelLbObjHdl, weld::ComboBox&, void );
+    DECL_LINK( CBHdl, weld::ToggleButton&, void );
 
-            ScTpContentOptions( vcl::Window*         pParent,
-                             const SfxItemSet&  rArgSet );
-            virtual ~ScTpContentOptions() override;
+    ScTpContentOptions(TabPageParent pParent, const SfxItemSet& rArgSet);
     virtual void dispose() override;
+    virtual ~ScTpContentOptions() override;
 
 public:
     static  VclPtr<SfxTabPage> Create          ( TabPageParent pParent,
