@@ -2227,7 +2227,7 @@ openDocumentInThread (gpointer data)
     }
 
     priv->m_pOffice->pClass->registerCallback(priv->m_pOffice, globalCallbackWorker, pDocView);
-    priv->m_pDocument = priv->m_pOffice->pClass->documentLoad( priv->m_pOffice, priv->m_aDocPath.c_str() );
+    priv->m_pDocument = priv->m_pOffice->pClass->documentLoadWithOptions( priv->m_pOffice, priv->m_aDocPath.c_str(), "en-US" );
     if ( !priv->m_pDocument )
     {
         char *pError = priv->m_pOffice->pClass->getError( priv->m_pOffice );
