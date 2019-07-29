@@ -36,7 +36,6 @@ $(eval $(call gb_AutoInstall_add_module,ooo,LIBO_LIB_FILE,LIBO_EXECUTABLE,LIBO_J
 $(eval $(call gb_AutoInstall_add_module,ooobinarytable,LIBO_LIB_FILE_BINARYTABLE))
 $(eval $(call gb_AutoInstall_add_module,python,LIBO_LIB_FILE,LIBO_EXECUTABLE))
 $(eval $(call gb_AutoInstall_add_module,python_scriptprovider,))
-$(eval $(call gb_AutoInstall_add_module,python_librelogo,))
 $(eval $(call gb_AutoInstall_add_module,postgresqlsdbc,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,pdfimport,LIBO_LIB_FILE,LIBO_EXECUTABLE))
 $(eval $(call gb_AutoInstall_add_module,quickstart,,LIBO_EXECUTABLE))
