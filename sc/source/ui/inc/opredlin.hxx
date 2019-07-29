@@ -25,14 +25,14 @@ class SvxColorListBox;
 
 class ScRedlineOptionsTabPage : public SfxTabPage
 {
-    VclPtr<SvxColorListBox>    m_pContentColorLB;
-    VclPtr<SvxColorListBox>    m_pRemoveColorLB;
-    VclPtr<SvxColorListBox>    m_pInsertColorLB;
-    VclPtr<SvxColorListBox>    m_pMoveColorLB;
+    std::unique_ptr<ColorListBox> m_xContentColorLB;
+    std::unique_ptr<ColorListBox> m_xRemoveColorLB;
+    std::unique_ptr<ColorListBox> m_xInsertColorLB;
+    std::unique_ptr<ColorListBox> m_xMoveColorLB;
 
 public:
 
-    ScRedlineOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    ScRedlineOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet );
     virtual ~ScRedlineOptionsTabPage() override;
     virtual void dispose() override;
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );

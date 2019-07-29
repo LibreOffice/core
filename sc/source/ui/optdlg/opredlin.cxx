@@ -28,18 +28,17 @@
 
 #include <opredlin.hxx>
 
-ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( vcl::Window* pParent,
-                                                    const SfxItemSet& rSet )
-    : SfxTabPage(pParent,"OptChangesPage", "modules/scalc/ui/optchangespage.ui", &rSet)
+ScRedlineOptionsTabPage::ScRedlineOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "modules/scalc/ui/optchangespage.ui", "OptChangesPage", &rSet)
+    , m_xContentColorLB(new ColorListBox(m_xBuilder->weld_menu_button("changes"), pParent.GetFrameWeld()))
+    , m_xRemoveColorLB(new ColorListBox(m_xBuilder->weld_menu_button("deletions"), pParent.GetFrameWeld()))
+    , m_xInsertColorLB(new ColorListBox(m_xBuilder->weld_menu_button("entries"), pParent.GetFrameWeld()))
+    , m_xMoveColorLB(new ColorListBox(m_xBuilder->weld_menu_button("insertions"), pParent.GetFrameWeld()))
 {
-    get(m_pContentColorLB, "changes");
-    m_pContentColorLB->SetSlotId(SID_AUTHOR_COLOR);
-    get(m_pRemoveColorLB, "deletions");
-    m_pRemoveColorLB->SetSlotId(SID_AUTHOR_COLOR);
-    get(m_pInsertColorLB, "entries");
-    m_pInsertColorLB->SetSlotId(SID_AUTHOR_COLOR);
-    get(m_pMoveColorLB, "insertions");
-    m_pMoveColorLB->SetSlotId(SID_AUTHOR_COLOR);
+    m_xContentColorLB->SetSlotId(SID_AUTHOR_COLOR);
+    m_xRemoveColorLB->SetSlotId(SID_AUTHOR_COLOR);
+    m_xInsertColorLB->SetSlotId(SID_AUTHOR_COLOR);
+    m_xMoveColorLB->SetSlotId(SID_AUTHOR_COLOR);
 }
 
 ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
@@ -49,32 +48,32 @@ ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
 
 void ScRedlineOptionsTabPage::dispose()
 {
-    m_pContentColorLB.clear();
-    m_pRemoveColorLB.clear();
-    m_pInsertColorLB.clear();
-    m_pMoveColorLB.clear();
+    m_xContentColorLB.reset();
+    m_xRemoveColorLB.reset();
+    m_xInsertColorLB.reset();
+    m_xMoveColorLB.reset();
     SfxTabPage::dispose();
 }
 
 VclPtr<SfxTabPage> ScRedlineOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<ScRedlineOptionsTabPage>::Create( pParent.pParent, *rSet );
+    return VclPtr<ScRedlineOptionsTabPage>::Create( pParent, *rSet );
 }
 
 bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet* /* rSet */ )
 {
     ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
 
-    Color nNew = m_pContentColorLB->GetSelectEntryColor();
+    Color nNew = m_xContentColorLB->GetSelectEntryColor();
     aAppOptions.SetTrackContentColor(nNew);
 
-    nNew = m_pMoveColorLB->GetSelectEntryColor();
+    nNew = m_xMoveColorLB->GetSelectEntryColor();
     aAppOptions.SetTrackMoveColor(nNew);
 
-    nNew = m_pInsertColorLB->GetSelectEntryColor();
+    nNew = m_xInsertColorLB->GetSelectEntryColor();
     aAppOptions.SetTrackInsertColor(nNew);
 
-    nNew = m_pRemoveColorLB->GetSelectEntryColor();
+    nNew = m_xRemoveColorLB->GetSelectEntryColor();
     aAppOptions.SetTrackDeleteColor(nNew);
 
     SC_MOD()->SetAppOptions(aAppOptions);
@@ -93,16 +92,16 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet* /* rSet */ )
     ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
 
     Color nColor = aAppOptions.GetTrackContentColor();
-    m_pContentColorLB->SelectEntry(nColor);
+    m_xContentColorLB->SelectEntry(nColor);
 
     nColor = aAppOptions.GetTrackMoveColor();
-    m_pMoveColorLB->SelectEntry(nColor);
+    m_xMoveColorLB->SelectEntry(nColor);
 
     nColor = aAppOptions.GetTrackInsertColor();
-    m_pInsertColorLB->SelectEntry(nColor);
+    m_xInsertColorLB->SelectEntry(nColor);
 
     nColor = aAppOptions.GetTrackDeleteColor();
-    m_pRemoveColorLB->SelectEntry(nColor);
+    m_xRemoveColorLB->SelectEntry(nColor);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
