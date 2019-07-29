@@ -21,13 +21,9 @@
 #define INCLUDED_SC_SOURCE_UI_INC_TPFORMULA_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
 
 #include <calcconfig.hxx>
 #include <docoptio.hxx>
-
-class Edit;
 
 class ScTpFormulaOptions : public SfxTabPage
 {
@@ -35,44 +31,28 @@ class ScTpFormulaOptions : public SfxTabPage
 public:
     using SfxTabPage::DeactivatePage;
 
-    static  VclPtr<SfxTabPage> Create (TabPageParent pParent, const SfxItemSet* rCoreSet);
+    static  VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rCoreSet);
 
     virtual bool FillItemSet(SfxItemSet* rCoreSet) override;
     virtual void Reset( const SfxItemSet* rCoreSet ) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet ) override;
 
 private:
-    explicit ScTpFormulaOptions(vcl::Window* pParent, const SfxItemSet& rCoreSet);
+    explicit ScTpFormulaOptions(TabPageParent pParent, const SfxItemSet& rCoreSet);
     virtual ~ScTpFormulaOptions() override;
-    virtual void dispose() override;
     void ResetSeparators();
-    void OnFocusSeparatorInput(Edit* pEdit);
+    void OnFocusSeparatorInput(weld::Entry* pEdit);
     void UpdateCustomCalcRadioButtons(bool bDefault);
     void LaunchCustomCalcSettings();
 
     bool IsValidSeparator(const OUString& rSep) const;
     bool IsValidSeparatorSet() const;
 
-    DECL_LINK( ButtonHdl, Button*, void );
-    DECL_LINK( SepModifyHdl, Edit&, void );
-    DECL_LINK( SepEditOnFocusHdl, Control&, void );
+    DECL_LINK( ButtonHdl, weld::Button&, void );
+    DECL_LINK( SepModifyHdl, weld::Entry&, void );
+    DECL_LINK( SepEditOnFocusHdl, weld::Widget&, void );
 
 private:
-    VclPtr<ListBox>     mpLbFormulaSyntax;
-    VclPtr<CheckBox>    mpCbEnglishFuncName;
-
-    VclPtr<RadioButton> mpBtnCustomCalcDefault;
-    VclPtr<RadioButton> mpBtnCustomCalcCustom;
-    VclPtr<PushButton>  mpBtnCustomCalcDetails;
-
-    VclPtr<Edit>        mpEdSepFuncArg;
-    VclPtr<Edit>        mpEdSepArrayCol;
-    VclPtr<Edit>        mpEdSepArrayRow;
-    VclPtr<PushButton>  mpBtnSepReset;
-
-    VclPtr<ListBox>     mpLbOOXMLRecalcOptions;
-    VclPtr<ListBox>     mpLbODFRecalcOptions;
-
     /** Stores old separator value of currently focused separator edit box.
         This value is used to revert undesired value change. */
     OUString maOldSepValue;
@@ -84,6 +64,21 @@ private:
     ScDocOptions maCurrentDocOptions;
 
     sal_Unicode mnDecSep;
+
+    std::unique_ptr<weld::ComboBox> mxLbFormulaSyntax;
+    std::unique_ptr<weld::CheckButton> mxCbEnglishFuncName;
+
+    std::unique_ptr<weld::RadioButton> mxBtnCustomCalcDefault;
+    std::unique_ptr<weld::RadioButton> mxBtnCustomCalcCustom;
+    std::unique_ptr<weld::Button> mxBtnCustomCalcDetails;
+
+    std::unique_ptr<weld::Entry> mxEdSepFuncArg;
+    std::unique_ptr<weld::Entry> mxEdSepArrayCol;
+    std::unique_ptr<weld::Entry> mxEdSepArrayRow;
+    std::unique_ptr<weld::Button> mxBtnSepReset;
+
+    std::unique_ptr<weld::ComboBox> mxLbOOXMLRecalcOptions;
+    std::unique_ptr<weld::ComboBox> mxLbODFRecalcOptions;
 };
 
 #endif
