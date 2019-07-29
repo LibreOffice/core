@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_108843e5",
+        "filename": "jvmfwk/plugins/sunmajor/pluginlib/util.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-29T07:15:06Z",
+      "side": 1,
+      "message": "looks like m_arData should just be a std::vector",
+      "revId": "dd88975915a689b30d458b0fda9d28a6c12743a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
