@@ -25,22 +25,20 @@
 
 class OfaMSFilterTabPage : public SfxTabPage
 {
-    VclPtr<CheckBox>       aWBasicCodeCB;
-    VclPtr<CheckBox>       aWBasicWbctblCB;
-    VclPtr<CheckBox>       aWBasicStgCB;
-    VclPtr<CheckBox>       aEBasicCodeCB;
-    VclPtr<CheckBox>       aEBasicExectblCB;
-    VclPtr<CheckBox>       aEBasicStgCB;
-    VclPtr<CheckBox>       aPBasicCodeCB;
-    VclPtr<CheckBox>       aPBasicStgCB;
+    std::unique_ptr<weld::CheckButton> m_xWBasicCodeCB;
+    std::unique_ptr<weld::CheckButton> m_xWBasicWbctblCB;
+    std::unique_ptr<weld::CheckButton> m_xWBasicStgCB;
+    std::unique_ptr<weld::CheckButton> m_xEBasicCodeCB;
+    std::unique_ptr<weld::CheckButton> m_xEBasicExectblCB;
+    std::unique_ptr<weld::CheckButton> m_xEBasicStgCB;
+    std::unique_ptr<weld::CheckButton> m_xPBasicCodeCB;
+    std::unique_ptr<weld::CheckButton> m_xPBasicStgCB;
 
-
-    DECL_LINK(LoadWordBasicCheckHdl_Impl, Button*, void);
-    DECL_LINK(LoadExcelBasicCheckHdl_Impl, Button*, void);
+    DECL_LINK(LoadWordBasicCheckHdl_Impl, weld::Button&, void);
+    DECL_LINK(LoadExcelBasicCheckHdl_Impl, weld::Button&, void);
 public:
-    OfaMSFilterTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    OfaMSFilterTabPage(TabPageParent pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet );
