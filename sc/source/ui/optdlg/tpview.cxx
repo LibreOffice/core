@@ -334,35 +334,29 @@ IMPL_LINK( ScTpContentOptions, GridHdl, ListBox&, rLb, void )
     pLocalOptions->SetOption( VOPT_GRID_ONTOP, bGridOnTop );
 }
 
-ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
-                                        const SfxItemSet&   rArgSet ) :
-    SfxTabPage( pParent, "ScGeneralPage",
-                "modules/scalc/ui/scgeneralpage.ui", &rArgSet),
-    pDoc(nullptr)
+ScTpLayoutOptions::ScTpLayoutOptions(TabPageParent pParent, const SfxItemSet& rArgSet)
+    : SfxTabPage(pParent, "modules/scalc/ui/scgeneralpage.ui", "ScGeneralPage", &rArgSet)
+    , pDoc(nullptr)
+    , m_xUnitLB(m_xBuilder->weld_combo_box("unitlb"))
+    , m_xTabMF(m_xBuilder->weld_metric_spin_button("tabmf", FieldUnit::CM))
+    , m_xAlwaysRB(m_xBuilder->weld_radio_button("alwaysrb"))
+    , m_xRequestRB(m_xBuilder->weld_radio_button("requestrb"))
+    , m_xNeverRB(m_xBuilder->weld_radio_button("neverrb"))
+    , m_xAlignCB(m_xBuilder->weld_check_button("aligncb"))
+    , m_xAlignLB(m_xBuilder->weld_combo_box("alignlb"))
+    , m_xEditModeCB(m_xBuilder->weld_check_button("editmodecb"))
+    , m_xFormatCB(m_xBuilder->weld_check_button("formatcb"))
+    , m_xExpRefCB(m_xBuilder->weld_check_button("exprefcb"))
+    , m_xSortRefUpdateCB(m_xBuilder->weld_check_button("sortrefupdatecb"))
+    , m_xMarkHdrCB(m_xBuilder->weld_check_button("markhdrcb"))
+    , m_xTextFmtCB(m_xBuilder->weld_check_button("textfmtcb"))
+    , m_xReplWarnCB(m_xBuilder->weld_check_button("replwarncb"))
+    , m_xLegacyCellSelectionCB(m_xBuilder->weld_check_button("legacy_cell_selection_cb"))
 {
-    get( m_pUnitLB, "unitlb");
-    get( m_pTabMF, "tabmf");
-
-    get( m_pAlwaysRB, "alwaysrb");
-    get( m_pRequestRB, "requestrb");
-    get( m_pNeverRB, "neverrb");
-
-    get( m_pAlignCB, "aligncb");
-    get( m_pAlignLB, "alignlb");
-    get( m_pEditModeCB, "editmodecb");
-    get( m_pFormatCB, "formatcb");
-    get( m_pExpRefCB, "exprefcb");
-    get( m_pSortRefUpdateCB, "sortrefupdatecb");
-    get( m_pMarkHdrCB, "markhdrcb");
-    get( m_pTextFmtCB, "textfmtcb");
-    get( m_pReplWarnCB, "replwarncb");
-    get( m_pLegacyCellSelectionCB, "legacy_cell_selection_cb");
-
     SetExchangeSupport();
 
-    m_pUnitLB->SetSelectHdl( LINK( this, ScTpLayoutOptions, MetricHdl ) );
-
-    m_pAlignCB->SetClickHdl(LINK(this, ScTpLayoutOptions, AlignHdl));
+    m_xUnitLB->connect_changed( LINK( this, ScTpLayoutOptions, MetricHdl ) );
+    m_xAlignCB->connect_toggled(LINK(this, ScTpLayoutOptions, AlignHdl));
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(SCSTR_UNIT); ++i)
     {
@@ -378,8 +372,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
             case FieldUnit::INCH:
             {
                 // only use these metrics
-                sal_Int32 nPos = m_pUnitLB->InsertEntry( sMetric );
-                m_pUnitLB->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_IntPtr>(eFUnit)) );
+                m_xUnitLB->append(OUString::number(static_cast<sal_uInt32>(eFUnit)), sMetric);
             }
             break;
             default:
@@ -392,34 +385,12 @@ ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
 
 ScTpLayoutOptions::~ScTpLayoutOptions()
 {
-    disposeOnce();
 }
-
-void ScTpLayoutOptions::dispose()
-{
-    m_pUnitLB.clear();
-    m_pTabMF.clear();
-    m_pAlwaysRB.clear();
-    m_pRequestRB.clear();
-    m_pNeverRB.clear();
-    m_pAlignCB.clear();
-    m_pAlignLB.clear();
-    m_pEditModeCB.clear();
-    m_pFormatCB.clear();
-    m_pExpRefCB.clear();
-    m_pSortRefUpdateCB.clear();
-    m_pMarkHdrCB.clear();
-    m_pTextFmtCB.clear();
-    m_pReplWarnCB.clear();
-    m_pLegacyCellSelectionCB.clear();
-    SfxTabPage::dispose();
-}
-
 
 VclPtr<SfxTabPage> ScTpLayoutOptions::Create( TabPageParent pParent,
                                               const SfxItemSet*   rCoreSet )
 {
-    VclPtrInstance<ScTpLayoutOptions> pNew( pParent.pParent, *rCoreSet );
+    VclPtrInstance<ScTpLayoutOptions> pNew( pParent, *rCoreSet );
     ScDocShell* pDocSh = dynamic_cast< ScDocShell *>( SfxObjectShell::Current() );
 
     if(pDocSh!=nullptr)
@@ -430,34 +401,34 @@ VclPtr<SfxTabPage> ScTpLayoutOptions::Create( TabPageParent pParent,
 bool    ScTpLayoutOptions::FillItemSet( SfxItemSet* rCoreSet )
 {
     bool bRet = true;
-    const sal_Int32 nMPos = m_pUnitLB->GetSelectedEntryPos();
-    if ( m_pUnitLB->IsValueChangedFromSaved() )
+    if (m_xUnitLB->get_value_changed_from_saved())
     {
-        sal_uInt16 nFieldUnit = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(m_pUnitLB->GetEntryData( nMPos )));
+        const sal_Int32 nMPos = m_xUnitLB->get_active();
+        sal_uInt16 nFieldUnit = m_xUnitLB->get_id(nMPos).toUInt32();
         rCoreSet->Put( SfxUInt16Item( SID_ATTR_METRIC, nFieldUnit ) );
         bRet = true;
     }
 
-    if(m_pTabMF->IsValueChangedFromSaved())
+    if (m_xTabMF->get_value_changed_from_saved())
     {
         rCoreSet->Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
-                    sal::static_int_cast<sal_uInt16>( m_pTabMF->Denormalize(m_pTabMF->GetValue(FieldUnit::TWIP)) )));
+                    sal::static_int_cast<sal_uInt16>( m_xTabMF->denormalize(m_xTabMF->get_value(FieldUnit::TWIP)) )));
         bRet = true;
     }
 
     ScLkUpdMode nSet=LM_ALWAYS;
 
-    if(m_pRequestRB->IsChecked())
+    if (m_xRequestRB->get_active())
     {
         nSet=LM_ON_DEMAND;
     }
-    else if(m_pNeverRB->IsChecked())
+    else if (m_xNeverRB->get_active())
     {
         nSet=LM_NEVER;
     }
 
-    if(m_pRequestRB->IsValueChangedFromSaved() ||
-       m_pNeverRB->IsValueChangedFromSaved() )
+    if (m_xRequestRB->get_state_changed_from_saved() ||
+        m_xNeverRB->get_state_changed_from_saved() )
     {
         if(pDoc)
             pDoc->SetLinkMode(nSet);
@@ -466,63 +437,63 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet* rCoreSet )
         SC_MOD()->SetAppOptions(aAppOptions);
         bRet = true;
     }
-    if(m_pAlignCB->IsValueChangedFromSaved())
+    if (m_xAlignCB->get_state_changed_from_saved())
     {
-        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_SELECTION, m_pAlignCB->IsChecked()));
+        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_SELECTION, m_xAlignCB->get_active()));
         bRet = true;
     }
 
-    if(m_pAlignLB->IsValueChangedFromSaved())
+    if (m_xAlignLB->get_value_changed_from_saved())
     {
-        rCoreSet->Put(SfxUInt16Item(SID_SC_INPUT_SELECTIONPOS, m_pAlignLB->GetSelectedEntryPos()));
+        rCoreSet->Put(SfxUInt16Item(SID_SC_INPUT_SELECTIONPOS, m_xAlignLB->get_active()));
         bRet = true;
     }
 
-    if(m_pEditModeCB->IsValueChangedFromSaved())
+    if (m_xEditModeCB->get_state_changed_from_saved())
     {
-        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_EDITMODE, m_pEditModeCB->IsChecked()));
+        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_EDITMODE, m_xEditModeCB->get_active()));
         bRet = true;
     }
 
-    if(m_pFormatCB->IsValueChangedFromSaved())
+    if (m_xFormatCB->get_state_changed_from_saved())
     {
-        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_FMT_EXPAND, m_pFormatCB->IsChecked()));
+        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_FMT_EXPAND, m_xFormatCB->get_active()));
         bRet = true;
     }
 
-    if(m_pExpRefCB->IsValueChangedFromSaved())
+    if (m_xExpRefCB->get_state_changed_from_saved())
     {
-        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_REF_EXPAND, m_pExpRefCB->IsChecked()));
+        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_REF_EXPAND, m_xExpRefCB->get_active()));
         bRet = true;
     }
 
-    if (m_pSortRefUpdateCB->IsValueChangedFromSaved())
+    if (m_xSortRefUpdateCB->get_state_changed_from_saved())
     {
-        rCoreSet->Put(SfxBoolItem(SID_SC_OPT_SORT_REF_UPDATE, m_pSortRefUpdateCB->IsChecked()));
+        rCoreSet->Put(SfxBoolItem(SID_SC_OPT_SORT_REF_UPDATE, m_xSortRefUpdateCB->get_active()));
         bRet = true;
     }
 
-    if(m_pMarkHdrCB->IsValueChangedFromSaved())
+    if (m_xMarkHdrCB->get_state_changed_from_saved())
     {
-        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_MARK_HEADER, m_pMarkHdrCB->IsChecked()));
+        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_MARK_HEADER, m_xMarkHdrCB->get_active()));
         bRet = true;
     }
 
-    if(m_pTextFmtCB->IsValueChangedFromSaved())
+    if (m_xTextFmtCB->get_state_changed_from_saved())
     {
-        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_TEXTWYSIWYG, m_pTextFmtCB->IsChecked()));
+        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_TEXTWYSIWYG, m_xTextFmtCB->get_active()));
         bRet = true;
     }
 
-    if( m_pReplWarnCB->IsValueChangedFromSaved() )
+    if (m_xReplWarnCB->get_state_changed_from_saved())
     {
-        rCoreSet->Put( SfxBoolItem( SID_SC_INPUT_REPLCELLSWARN, m_pReplWarnCB->IsChecked() ) );
+        rCoreSet->Put( SfxBoolItem( SID_SC_INPUT_REPLCELLSWARN, m_xReplWarnCB->get_active() ) );
         bRet = true;
     }
 
-    if( m_pLegacyCellSelectionCB->IsValueChangedFromSaved() )
+    if (m_xLegacyCellSelectionCB->get_state_changed_from_saved())
     {
-        rCoreSet->Put( SfxBoolItem( SID_SC_INPUT_LEGACY_CELL_SELECTION, m_pLegacyCellSelectionCB->IsChecked() ) );
+        rCoreSet->Put( SfxBoolItem( SID_SC_INPUT_LEGACY_CELL_SELECTION, m_xLegacyCellSelectionCB->get_active() ) );
         bRet = true;
     }
 
@@ -531,31 +502,31 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet* rCoreSet )
 
 void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
 {
-    m_pUnitLB->SetNoSelection();
+    m_xUnitLB->set_active(-1);
     if ( rCoreSet->GetItemState( SID_ATTR_METRIC ) >= SfxItemState::DEFAULT )
     {
         const SfxUInt16Item& rItem = rCoreSet->Get( SID_ATTR_METRIC );
         FieldUnit eFieldUnit = static_cast<FieldUnit>(rItem.GetValue());
 
-        for ( sal_Int32 i = 0; i < m_pUnitLB->GetEntryCount(); ++i )
+        for (sal_Int32 i = 0, nEntryCount = m_xUnitLB->get_count(); i < nEntryCount; ++i)
         {
-            if ( static_cast<FieldUnit>(reinterpret_cast<sal_IntPtr>(m_pUnitLB->GetEntryData( i ))) == eFieldUnit )
+            if (m_xUnitLB->get_id(i).toUInt32() == static_cast<sal_uInt32>(eFieldUnit))
             {
-                m_pUnitLB->SelectEntryPos( i );
+                m_xUnitLB->set_active(i);
                 break;
             }
         }
-        ::SetFieldUnit(*m_pTabMF, eFieldUnit);
+        ::SetFieldUnit(*m_xTabMF, eFieldUnit);
     }
-    m_pUnitLB->SaveValue();
+    m_xUnitLB->save_value();
 
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rCoreSet->GetItemState(SID_ATTR_DEFTABSTOP, false, &pItem))
-        m_pTabMF->SetValue(m_pTabMF->Normalize(static_cast<const SfxUInt16Item*>(pItem)->GetValue()), FieldUnit::TWIP);
-    m_pTabMF->SaveValue();
+        m_xTabMF->set_value(m_xTabMF->normalize(static_cast<const SfxUInt16Item*>(pItem)->GetValue()), FieldUnit::TWIP);
+    m_xTabMF->save_value();
 
-    m_pUnitLB       ->SaveValue();
-    m_pTabMF        ->SaveValue();
+    m_xUnitLB->save_value();
+    m_xTabMF->save_value();
 
     ScLkUpdMode nSet=LM_UNKNOWN;
 
@@ -572,65 +543,65 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
 
     switch(nSet)
     {
-        case LM_ALWAYS:     m_pAlwaysRB->  Check();    break;
-        case LM_NEVER:      m_pNeverRB->   Check();    break;
-        case LM_ON_DEMAND:  m_pRequestRB-> Check();    break;
+        case LM_ALWAYS:     m_xAlwaysRB->set_active(true);    break;
+        case LM_NEVER:      m_xNeverRB->set_active(true);    break;
+        case LM_ON_DEMAND:  m_xRequestRB->set_active(true);    break;
         default:
         {
             // added to avoid warnings
         }
     }
     if(SfxItemState::SET == rCoreSet->GetItemState(SID_SC_INPUT_SELECTION, false, &pItem))
-        m_pAlignCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+        m_xAlignCB->set_active(static_cast<const SfxBoolItem*>(pItem)->GetValue());
 
     if(SfxItemState::SET == rCoreSet->GetItemState(SID_SC_INPUT_SELECTIONPOS, false, &pItem))
-        m_pAlignLB->SelectEntryPos(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
+        m_xAlignLB->set_active(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
 
     if(SfxItemState::SET == rCoreSet->GetItemState(SID_SC_INPUT_EDITMODE, false, &pItem))
-        m_pEditModeCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+        m_xEditModeCB->set_active(static_cast<const SfxBoolItem*>(pItem)->GetValue());
 
     if(SfxItemState::SET == rCoreSet->GetItemState(SID_SC_INPUT_FMT_EXPAND, false, &pItem))
-        m_pFormatCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+        m_xFormatCB->set_active(static_cast<const SfxBoolItem*>(pItem)->GetValue());
 
     if(SfxItemState::SET == rCoreSet->GetItemState(SID_SC_INPUT_REF_EXPAND, false, &pItem))
-        m_pExpRefCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+        m_xExpRefCB->set_active(static_cast<const SfxBoolItem*>(pItem)->GetValue());
 
     if (rCoreSet->HasItem(SID_SC_OPT_SORT_REF_UPDATE, &pItem))
-        m_pSortRefUpdateCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+        m_xSortRefUpdateCB->set_active(static_cast<const SfxBoolItem*>(pItem)->GetValue());
 
     if(SfxItemState::SET == rCoreSet->GetItemState(SID_SC_INPUT_MARK_HEADER, false, &pItem))
-        m_pMarkHdrCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+        m_xMarkHdrCB->set_active(static_cast<const SfxBoolItem*>(pItem)->GetValue());
 
     if(SfxItemState::SET == rCoreSet->GetItemState(SID_SC_INPUT_TEXTWYSIWYG, false, &pItem))
-        m_pTextFmtCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+        m_xTextFmtCB->set_active(static_cast<const SfxBoolItem*>(pItem)->GetValue());
 
     if( SfxItemState::SET == rCoreSet->GetItemState( SID_SC_INPUT_REPLCELLSWARN, false, &pItem ) )
-        m_pReplWarnCB->Check( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        m_xReplWarnCB->set_active( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
 
     if( SfxItemState::SET == rCoreSet->GetItemState( SID_SC_INPUT_LEGACY_CELL_SELECTION, false, &pItem ) )
-        m_pLegacyCellSelectionCB->Check( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        m_xLegacyCellSelectionCB->set_active( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
 
-    m_pAlignCB    ->SaveValue();
-    m_pAlignLB    ->SaveValue();
-    m_pEditModeCB ->SaveValue();
-    m_pFormatCB   ->SaveValue();
+    m_xAlignCB->save_state();
+    m_xAlignLB->save_value();
+    m_xEditModeCB->save_state();
+    m_xFormatCB->save_state();
 
-    m_pExpRefCB   ->SaveValue();
-    m_pSortRefUpdateCB->SaveValue();
-    m_pMarkHdrCB  ->SaveValue();
-    m_pTextFmtCB  ->SaveValue();
-    m_pReplWarnCB ->SaveValue();
+    m_xExpRefCB->save_state();
+    m_xSortRefUpdateCB->save_state();
+    m_xMarkHdrCB->save_state();
+    m_xTextFmtCB->save_state();
+    m_xReplWarnCB->save_state();
 
-    m_pLegacyCellSelectionCB->SaveValue();
+    m_xLegacyCellSelectionCB->save_state();
 
-    AlignHdl(m_pAlignCB);
+    AlignHdl(*m_xAlignCB);
 
-    m_pAlwaysRB->SaveValue();
-    m_pNeverRB->SaveValue();
-    m_pRequestRB->SaveValue();
+    m_xAlwaysRB->save_state();
+    m_xNeverRB->save_state();
+    m_xRequestRB->save_state();
 }
 
-void    ScTpLayoutOptions::ActivatePage( const SfxItemSet& /* rCoreSet */ )
+void ScTpLayoutOptions::ActivatePage( const SfxItemSet& /* rCoreSet */ )
 {
 }
 
@@ -641,22 +612,22 @@ DeactivateRC ScTpLayoutOptions::DeactivatePage( SfxItemSet* pSetP )
     return DeactivateRC::LeavePage;
 }
 
-IMPL_LINK_NOARG(ScTpLayoutOptions, MetricHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScTpLayoutOptions, MetricHdl, weld::ComboBox&, void)
 {
-    const sal_Int32 nMPos = m_pUnitLB->GetSelectedEntryPos();
-    if(nMPos != LISTBOX_ENTRY_NOTFOUND)
+    const sal_Int32 nMPos = m_xUnitLB->get_active();
+    if (nMPos != -1)
     {
-        FieldUnit eFieldUnit = static_cast<FieldUnit>(reinterpret_cast<sal_IntPtr>(m_pUnitLB->GetEntryData( nMPos )));
+        FieldUnit eFieldUnit = static_cast<FieldUnit>(m_xUnitLB->get_id(nMPos).toUInt32());
         sal_Int64 nVal =
-            m_pTabMF->Denormalize( m_pTabMF->GetValue( FieldUnit::TWIP ) );
-        ::SetFieldUnit( *m_pTabMF, eFieldUnit );
-        m_pTabMF->SetValue( m_pTabMF->Normalize( nVal ), FieldUnit::TWIP );
+            m_xTabMF->denormalize( m_xTabMF->get_value( FieldUnit::TWIP ) );
+        ::SetFieldUnit( *m_xTabMF, eFieldUnit );
+        m_xTabMF->set_value( m_xTabMF->normalize( nVal ), FieldUnit::TWIP );
     }
 }
 
-IMPL_LINK( ScTpLayoutOptions, AlignHdl, Button*, pBox, void )
+IMPL_LINK(ScTpLayoutOptions, AlignHdl, weld::ToggleButton&, rBox, void)
 {
-    m_pAlignLB->Enable(static_cast<CheckBox*>(pBox)->IsChecked());
+    m_xAlignLB->set_sensitive(rBox.get_active());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
