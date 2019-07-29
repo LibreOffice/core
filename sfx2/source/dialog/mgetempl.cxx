@@ -83,7 +83,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(TabPageParent pParent, const Sf
     // this Page needs ExchangeSupport
     SetExchangeSupport();
 
-    if ( aFollow == aName )
+    if ( aFollow.isEmpty() || aFollow == aName )
         m_xEditStyleBtn->set_sensitive(false);
     else
         m_xEditStyleBtn->set_sensitive(true);
@@ -489,7 +489,10 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet* /*rAttrSet*/ )
             pStyle->SetFollow( aFollow );
 
         if ( aFollow.isEmpty() )
+        {
             m_xFollowLb->set_active_text( aName );
+            m_xEditStyleBtn->set_sensitive( false );
+        }
         else
             m_xFollowLb->set_active_text( aFollow );
     }
