@@ -1217,7 +1217,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
             break;
         }
 
-        // if a item is set, this doesn't mean we want it :)
+        // if an item is set, this doesn't mean we want it :)
         if( PropertyState_DIRECT_VALUE == eState )
         {
             switch( pEntry->nWID )

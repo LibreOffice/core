@@ -2397,7 +2397,7 @@ EffectSequenceHelper::createTextGroup(const CustomAnimationEffectPtr& pEffect,
                                       sal_Int32 nTextGrouping, double fTextGroupingAuto,
                                       bool bAnimateForm, bool bTextReverse)
 {
-    // first finde a free group-id
+    // first find a free group-id
     sal_Int32 nGroupId = 0;
 
     CustomAnimationTextGroupMap::iterator aIter( maGroupMap.begin() );

@@ -76,7 +76,7 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit, bool )
     if (!m_xProgrInfo)
       return true;
 
-    // update status bar or show a error message?
+    // update status bar or show an error message?
     if(nInit == reinterpret_cast<void*>(1))
     {
         std::unique_ptr<weld::MessageDialog> xErrBox(Application::CreateMessageDialog(m_xDialog.get(),

@@ -542,7 +542,7 @@ class NodeContext
     OUString msEffectPresetId;
     OUString msEffectPresetSubType;
 
-    /// constructor helper for initializing user datas.
+    /// constructor helper for initializing user data.
     void initUserData();
 
     /// constructor helper to initialize maChildNodes.

@@ -124,7 +124,7 @@ void AccessibleDrawDocumentView::ViewForwarderChanged()
 }
 
 /**  The page shape is created on every call at the moment (provided that
-     every thing goes well).
+     everything goes well).
 */
 rtl::Reference<AccessiblePageShape> AccessibleDrawDocumentView::CreateDrawPageShape()
 {

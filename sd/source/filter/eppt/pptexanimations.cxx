@@ -423,7 +423,7 @@ bool AnimationExporter::hasAfterEffectNode( const Reference< XAnimationNode >& x
 }
 
 // check if this group only contain empty groups. this may happen when
-// after effect nodes are not exported at theire original position
+// after effect nodes are not exported at their original position
 bool AnimationExporter::isEmptyNode( const Reference< XAnimationNode >& xNode ) const
 {
     if( xNode.is() ) switch( xNode->getType() )

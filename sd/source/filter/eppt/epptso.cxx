@@ -889,7 +889,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
             }
             nCharColor |= 0xfe000000;
             if ( nInstance == 4 )                       // special handling for normal textobjects:
-                nPropertyFlags |= nCharAttr & 0x217;    // not all attributes ar inherited
+                nPropertyFlags |= nCharAttr & 0x217;    // not all attributes are inherited
             else
             {
                 if ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Bold, nCharAttr ) )
