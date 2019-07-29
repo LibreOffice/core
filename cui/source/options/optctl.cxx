@@ -24,57 +24,38 @@
 
 // class SvxCTLOptionsPage -----------------------------------------------------
 
-IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl, Button*, void)
+IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl, weld::Button&, void)
 {
-    bool bIsSequenceChecking = m_pSequenceCheckingCB->IsChecked();
-    m_pRestrictedCB->Enable( bIsSequenceChecking );
-    m_pTypeReplaceCB->Enable( bIsSequenceChecking );
+    bool bIsSequenceChecking = m_xSequenceCheckingCB->get_active();
+    m_xRestrictedCB->set_sensitive( bIsSequenceChecking );
+    m_xTypeReplaceCB->set_sensitive( bIsSequenceChecking );
     // #i48117#: by default restricted and type&replace have to be switched on
-    if(bIsSequenceChecking)
+    if (bIsSequenceChecking)
     {
-        m_pTypeReplaceCB->Check();
-        m_pRestrictedCB->Check();
+        m_xTypeReplaceCB->set_active(true);
+        m_xRestrictedCB->set_active(true);
     }
 }
 
-SvxCTLOptionsPage::SvxCTLOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
-
-    SfxTabPage( pParent, "OptCTLPage", "cui/ui/optctlpage.ui", &rSet  )
-
+SvxCTLOptionsPage::SvxCTLOptionsPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "cui/ui/optctlpage.ui", "OptCTLPage", &rSet)
+    , m_xSequenceCheckingCB(m_xBuilder->weld_check_button("sequencechecking"))
+    , m_xRestrictedCB(m_xBuilder->weld_check_button("restricted"))
+    , m_xTypeReplaceCB(m_xBuilder->weld_check_button("typeandreplace"))
+    , m_xMovementLogicalRB(m_xBuilder->weld_radio_button("movementlogical"))
+    , m_xMovementVisualRB(m_xBuilder->weld_radio_button("movementvisual"))
+    , m_xNumeralsLB(m_xBuilder->weld_combo_box("numerals"))
 {
-    get( m_pSequenceCheckingCB, "sequencechecking");
-    get( m_pRestrictedCB, "restricted");
-    get( m_pTypeReplaceCB, "typeandreplace");
-
-    get( m_pMovementLogicalRB, "movementlogical");
-    get( m_pMovementVisualRB, "movementvisual");
-
-    get( m_pNumeralsLB, "numerals");
-
-    m_pSequenceCheckingCB->SetClickHdl( LINK( this, SvxCTLOptionsPage, SequenceCheckingCB_Hdl ) );
-
-    m_pNumeralsLB->SetDropDownLineCount( m_pNumeralsLB->GetEntryCount() );
+    m_xSequenceCheckingCB->connect_clicked(LINK(this, SvxCTLOptionsPage, SequenceCheckingCB_Hdl));
 }
 
 SvxCTLOptionsPage::~SvxCTLOptionsPage()
 {
-    disposeOnce();
-}
-
-void SvxCTLOptionsPage::dispose()
-{
-    m_pSequenceCheckingCB.clear();
-    m_pRestrictedCB.clear();
-    m_pTypeReplaceCB.clear();
-    m_pMovementLogicalRB.clear();
-    m_pMovementVisualRB.clear();
-    m_pNumeralsLB.clear();
-    SfxTabPage::dispose();
 }
 
 VclPtr<SfxTabPage> SvxCTLOptionsPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxCTLOptionsPage>::Create( pParent.pParent, *rAttrSet );
+    return VclPtr<SvxCTLOptionsPage>::Create( pParent, *rAttrSet );
 }
 
 bool SvxCTLOptionsPage::FillItemSet( SfxItemSet* )
@@ -83,29 +64,29 @@ bool SvxCTLOptionsPage::FillItemSet( SfxItemSet* )
     SvtCTLOptions aCTLOptions;
 
     // Sequence checking
-    bool bChecked = m_pSequenceCheckingCB->IsChecked();
-    if ( m_pSequenceCheckingCB->IsValueChangedFromSaved() )
+    bool bChecked = m_xSequenceCheckingCB->get_active();
+    if ( m_xSequenceCheckingCB->get_state_changed_from_saved() )
     {
         aCTLOptions.SetCTLSequenceChecking( bChecked );
         bModified = true;
     }
 
-    bChecked = m_pRestrictedCB->IsChecked();
-    if( m_pRestrictedCB->IsValueChangedFromSaved() )
+    bChecked = m_xRestrictedCB->get_active();
+    if( m_xRestrictedCB->get_state_changed_from_saved() )
     {
         aCTLOptions.SetCTLSequenceCheckingRestricted( bChecked );
         bModified = true;
     }
-    bChecked = m_pTypeReplaceCB->IsChecked();
-    if( m_pTypeReplaceCB->IsValueChangedFromSaved())
+    bChecked = m_xTypeReplaceCB->get_active();
+    if( m_xTypeReplaceCB->get_state_changed_from_saved())
     {
         aCTLOptions.SetCTLSequenceCheckingTypeAndReplace(bChecked);
         bModified = true;
     }
 
-    bool bLogicalChecked = m_pMovementLogicalRB->IsChecked();
-    if ( m_pMovementLogicalRB->IsValueChangedFromSaved() ||
-         m_pMovementVisualRB->IsValueChangedFromSaved() )
+    bool bLogicalChecked = m_xMovementLogicalRB->get_active();
+    if ( m_xMovementLogicalRB->get_state_changed_from_saved() ||
+         m_xMovementVisualRB->get_state_changed_from_saved() )
     {
         SvtCTLOptions::CursorMovement eMovement =
             bLogicalChecked ? SvtCTLOptions::MOVEMENT_LOGICAL : SvtCTLOptions::MOVEMENT_VISUAL;
@@ -113,9 +94,9 @@ bool SvxCTLOptionsPage::FillItemSet( SfxItemSet* )
         bModified = true;
     }
 
-    if ( m_pNumeralsLB->IsValueChangedFromSaved() )
+    if (m_xNumeralsLB->get_value_changed_from_saved())
     {
-        const sal_Int32 nPos = m_pNumeralsLB->GetSelectedEntryPos();
+        const sal_Int32 nPos = m_xNumeralsLB->get_active();
         aCTLOptions.SetCTLTextNumerals( static_cast<SvtCTLOptions::TextNumerals>(nPos) );
         bModified = true;
     }
@@ -127,19 +108,19 @@ void SvxCTLOptionsPage::Reset( const SfxItemSet* )
 {
     SvtCTLOptions aCTLOptions;
 
-    m_pSequenceCheckingCB->Check( aCTLOptions.IsCTLSequenceChecking() );
-    m_pRestrictedCB->Check( aCTLOptions.IsCTLSequenceCheckingRestricted() );
-    m_pTypeReplaceCB->Check( aCTLOptions.IsCTLSequenceCheckingTypeAndReplace() );
+    m_xSequenceCheckingCB->set_active( aCTLOptions.IsCTLSequenceChecking() );
+    m_xRestrictedCB->set_active( aCTLOptions.IsCTLSequenceCheckingRestricted() );
+    m_xTypeReplaceCB->set_active( aCTLOptions.IsCTLSequenceCheckingTypeAndReplace() );
 
     SvtCTLOptions::CursorMovement eMovement = aCTLOptions.GetCTLCursorMovement();
     switch ( eMovement )
     {
         case SvtCTLOptions::MOVEMENT_LOGICAL :
-            m_pMovementLogicalRB->Check();
+            m_xMovementLogicalRB->set_active(true);
             break;
 
         case SvtCTLOptions::MOVEMENT_VISUAL :
-            m_pMovementVisualRB->Check();
+            m_xMovementVisualRB->set_active(true);
             break;
 
         default:
@@ -147,19 +128,19 @@ void SvxCTLOptionsPage::Reset( const SfxItemSet* )
     }
 
     sal_uInt16 nPos = static_cast<sal_uInt16>(aCTLOptions.GetCTLTextNumerals());
-    DBG_ASSERT( nPos < m_pNumeralsLB->GetEntryCount(), "SvxCTLOptionsPage::Reset(): invalid numerals enum" );
-    m_pNumeralsLB->SelectEntryPos( nPos );
+    DBG_ASSERT( nPos < m_xNumeralsLB->get_count(), "SvxCTLOptionsPage::Reset(): invalid numerals enum" );
+    m_xNumeralsLB->set_active(nPos);
 
-    m_pSequenceCheckingCB->SaveValue();
-    m_pRestrictedCB->SaveValue();
-    m_pTypeReplaceCB->SaveValue();
-    m_pMovementLogicalRB->SaveValue();
-    m_pMovementVisualRB->SaveValue();
-    m_pNumeralsLB->SaveValue();
+    m_xSequenceCheckingCB->save_state();
+    m_xRestrictedCB->save_state();
+    m_xTypeReplaceCB->save_state();
+    m_xMovementLogicalRB->save_state();
+    m_xMovementVisualRB->save_state();
+    m_xNumeralsLB->save_value();
 
-    bool bIsSequenceChecking = m_pSequenceCheckingCB->IsChecked();
-    m_pRestrictedCB->Enable( bIsSequenceChecking );
-    m_pTypeReplaceCB->Enable( bIsSequenceChecking );
+    bool bIsSequenceChecking = m_xSequenceCheckingCB->get_active();
+    m_xRestrictedCB->set_sensitive( bIsSequenceChecking );
+    m_xTypeReplaceCB->set_sensitive( bIsSequenceChecking );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
