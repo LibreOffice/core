@@ -48,15 +48,14 @@ public:
 class SdTpOptionsContents : public SfxTabPage
 {
 private:
-    VclPtr<CheckBox>    m_pCbxRuler;
-    VclPtr<CheckBox>    m_pCbxDragStripes;
-    VclPtr<CheckBox>    m_pCbxHandlesBezier;
-    VclPtr<CheckBox>    m_pCbxMoveOutline;
+    std::unique_ptr<weld::CheckButton> m_xCbxRuler;
+    std::unique_ptr<weld::CheckButton> m_xCbxDragStripes;
+    std::unique_ptr<weld::CheckButton> m_xCbxHandlesBezier;
+    std::unique_ptr<weld::CheckButton> m_xCbxMoveOutline;
 
 public:
-            SdTpOptionsContents( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
-            virtual ~SdTpOptionsContents() override;
-    virtual void dispose() override;
+    SdTpOptionsContents(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    virtual ~SdTpOptionsContents() override;
 
     static  VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;

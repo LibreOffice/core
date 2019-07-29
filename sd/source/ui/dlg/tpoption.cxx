@@ -106,45 +106,34 @@ VclPtr<SfxTabPage> SdTpOptionsSnap::Create( TabPageParent pWindow,
 |*  TabPage to adjust the content options
 |*
 \************************************************************************/
-
-SdTpOptionsContents::SdTpOptionsContents( vcl::Window* pParent, const SfxItemSet& rInAttrs  ) :
-    SfxTabPage ( pParent, "SdViewPage", "modules/simpress/ui/sdviewpage.ui", &rInAttrs )
+SdTpOptionsContents::SdTpOptionsContents(TabPageParent pParent, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pParent, "modules/simpress/ui/sdviewpage.ui", "SdViewPage", &rInAttrs)
+    , m_xCbxRuler(m_xBuilder->weld_check_button("ruler"))
+    , m_xCbxDragStripes(m_xBuilder->weld_check_button("dragstripes"))
+    , m_xCbxHandlesBezier(m_xBuilder->weld_check_button("handlesbezier"))
+    , m_xCbxMoveOutline(m_xBuilder->weld_check_button("moveoutline"))
 {
-    get( m_pCbxRuler, "ruler");
-    get( m_pCbxDragStripes, "dragstripes");
-    get( m_pCbxHandlesBezier, "handlesbezier");
-    get( m_pCbxMoveOutline, "moveoutline");
 }
 
 SdTpOptionsContents::~SdTpOptionsContents()
 {
-    disposeOnce();
-}
-
-void SdTpOptionsContents::dispose()
-{
-    m_pCbxRuler.clear();
-    m_pCbxDragStripes.clear();
-    m_pCbxHandlesBezier.clear();
-    m_pCbxMoveOutline.clear();
-    SfxTabPage::dispose();
 }
 
 bool SdTpOptionsContents::FillItemSet( SfxItemSet* rAttrs )
 {
     bool bModified = false;
 
-    if( m_pCbxRuler->IsValueChangedFromSaved() ||
-        m_pCbxMoveOutline->IsValueChangedFromSaved() ||
-        m_pCbxDragStripes->IsValueChangedFromSaved() ||
-        m_pCbxHandlesBezier->IsValueChangedFromSaved() )
+    if( m_xCbxRuler->get_state_changed_from_saved() ||
+        m_xCbxMoveOutline->get_state_changed_from_saved() ||
+        m_xCbxDragStripes->get_state_changed_from_saved() ||
+        m_xCbxHandlesBezier->get_state_changed_from_saved() )
     {
         SdOptionsLayoutItem aOptsItem;
 
-        aOptsItem.GetOptionsLayout().SetRulerVisible( m_pCbxRuler->IsChecked() );
-        aOptsItem.GetOptionsLayout().SetMoveOutline( m_pCbxMoveOutline->IsChecked() );
-        aOptsItem.GetOptionsLayout().SetDragStripes( m_pCbxDragStripes->IsChecked() );
-        aOptsItem.GetOptionsLayout().SetHandlesBezier( m_pCbxHandlesBezier->IsChecked() );
+        aOptsItem.GetOptionsLayout().SetRulerVisible( m_xCbxRuler->get_active() );
+        aOptsItem.GetOptionsLayout().SetMoveOutline( m_xCbxMoveOutline->get_active() );
+        aOptsItem.GetOptionsLayout().SetDragStripes( m_xCbxDragStripes->get_active() );
+        aOptsItem.GetOptionsLayout().SetHandlesBezier( m_xCbxHandlesBezier->get_active() );
 
         rAttrs->Put( aOptsItem );
         bModified = true;
@@ -157,21 +146,21 @@ void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
     SdOptionsLayoutItem aLayoutItem( static_cast<const SdOptionsLayoutItem&>( rAttrs->
                         Get( ATTR_OPTIONS_LAYOUT ) ) );
 
-    m_pCbxRuler->Check( aLayoutItem.GetOptionsLayout().IsRulerVisible() );
-    m_pCbxMoveOutline->Check( aLayoutItem.GetOptionsLayout().IsMoveOutline() );
-    m_pCbxDragStripes->Check( aLayoutItem.GetOptionsLayout().IsDragStripes() );
-    m_pCbxHandlesBezier->Check( aLayoutItem.GetOptionsLayout().IsHandlesBezier() );
+    m_xCbxRuler->set_active( aLayoutItem.GetOptionsLayout().IsRulerVisible() );
+    m_xCbxMoveOutline->set_active( aLayoutItem.GetOptionsLayout().IsMoveOutline() );
+    m_xCbxDragStripes->set_active( aLayoutItem.GetOptionsLayout().IsDragStripes() );
+    m_xCbxHandlesBezier->set_active( aLayoutItem.GetOptionsLayout().IsHandlesBezier() );
 
-    m_pCbxRuler->SaveValue();
-    m_pCbxMoveOutline->SaveValue();
-    m_pCbxDragStripes->SaveValue();
-    m_pCbxHandlesBezier->SaveValue();
+    m_xCbxRuler->save_state();
+    m_xCbxMoveOutline->save_state();
+    m_xCbxDragStripes->save_state();
+    m_xCbxHandlesBezier->save_state();
 }
 
-VclPtr<SfxTabPage> SdTpOptionsContents::Create( TabPageParent pWindow,
+VclPtr<SfxTabPage> SdTpOptionsContents::Create( TabPageParent pParent,
                                                 const SfxItemSet* rAttrs )
 {
-    return VclPtr<SdTpOptionsContents>::Create( pWindow.pParent, *rAttrs );
+    return VclPtr<SdTpOptionsContents>::Create( pParent, *rAttrs );
 }
 
 /*************************************************************************
