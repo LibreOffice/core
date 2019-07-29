@@ -165,9 +165,10 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     ii = 0;
     while (ii < nch)
     {
-        hhstr[ii] = readHBox(hwpf);
-        if (!hhstr[ii])
+        auto hBox = readHBox(hwpf);
+        if (!hBox)
             return false;
+        hhstr[ii] = std::move(hBox);
         if (hhstr[ii]->hh == CH_END_PARA)
             break;
         if( hhstr[ii]->hh < CH_END_PARA )
