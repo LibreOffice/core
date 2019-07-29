@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_039ebf55",
+        "filename": "testtools/source/performance/ubtest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-07-29T12:51:03Z",
+      "side": 1,
+      "message": "See https://opengrok.libreoffice.org/search?project\u003dcore\u0026full\u003dconnectr\u0026defs\u003d\u0026refs\u003d\u0026path\u003d\u0026hist\u003d\u0026type\u003d\u0026si\u003dfull\nI don\u0027t know if it can be changed but if it\u0027s the case, the other places indicated in the provided link should be changed too.",
+      "range": {
+        "startLine": 345,
+        "startChar": 34,
+        "endLine": 345,
+        "endChar": 43
+      },
+      "revId": "9715d87f7f8a418a3997222e1eafc7e34e135efa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
