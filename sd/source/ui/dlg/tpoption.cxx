@@ -171,38 +171,37 @@ VclPtr<SfxTabPage> SdTpOptionsContents::Create( TabPageParent pParent,
 #define TABLE_COUNT 12
 #define TOKEN ':'
 
-SdTpOptionsMisc::SdTpOptionsMisc(vcl::Window* pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "OptSavePage", "modules/simpress/ui/optimpressgeneralpage.ui", &rInAttrs)
+SdTpOptionsMisc::SdTpOptionsMisc(TabPageParent pParent, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pParent, "modules/simpress/ui/optimpressgeneralpage.ui", "OptSavePage", &rInAttrs)
     , nWidth(0)
     , nHeight(0)
+    , m_xCbxQuickEdit(m_xBuilder->weld_check_button("qickedit"))
+    , m_xCbxPickThrough(m_xBuilder->weld_check_button("textselected"))
+    , m_xNewDocumentFrame(m_xBuilder->weld_frame("newdocumentframe"))
+    , m_xCbxStartWithTemplate(m_xBuilder->weld_check_button("startwithwizard"))
+    , m_xCbxMasterPageCache(m_xBuilder->weld_check_button("backgroundback"))
+    , m_xCbxCopy(m_xBuilder->weld_check_button("copywhenmove"))
+    , m_xCbxMarkedHitMovesAlways(m_xBuilder->weld_check_button("objalwymov"))
+    , m_xPresentationFrame(m_xBuilder->weld_frame("presentationframe"))
+    , m_xLbMetric(m_xBuilder->weld_combo_box("units"))
+    , m_xMtrFldTabstop(m_xBuilder->weld_metric_spin_button("metricFields", FieldUnit::MM))
+    , m_xCbxEnableSdremote(m_xBuilder->weld_check_button("enremotcont"))
+    , m_xCbxEnablePresenterScreen(m_xBuilder->weld_check_button("enprsntcons"))
+    , m_xCbxUsePrinterMetrics(m_xBuilder->weld_check_button("printermetrics"))
+    , m_xCbxCompatibility(m_xBuilder->weld_check_button("cbCompatibility"))
+    , m_xScaleFrame(m_xBuilder->weld_frame("scaleframe"))
+    , m_xCbScale(m_xBuilder->weld_combo_box("scaleBox"))
+    , m_xNewDocLb(m_xBuilder->weld_label("newdoclbl"))
+    , m_xFiInfo1(m_xBuilder->weld_label("info1"))
+    , m_xMtrFldOriginalWidth(m_xBuilder->weld_metric_spin_button("metricWidthFields", FieldUnit::MM))
+    , m_xWidthLb(m_xBuilder->weld_label("widthlbl"))
+    , m_xHeightLb(m_xBuilder->weld_label("heightlbl"))
+    , m_xFiInfo2(m_xBuilder->weld_label("info2"))
+    , m_xMtrFldOriginalHeight(m_xBuilder->weld_metric_spin_button("metricHeightFields", FieldUnit::MM))
+    , m_xCbxDistrot(m_xBuilder->weld_check_button("distrotcb"))
+    , m_xMtrFldInfo1(m_xBuilder->weld_metric_spin_button("metricInfo1Fields", FieldUnit::MM))
+    , m_xMtrFldInfo2(m_xBuilder->weld_metric_spin_button("metricInfo2Fields", FieldUnit::MM))
 {
-    get(m_pCbxQuickEdit , "qickedit");
-    get(m_pCbxPickThrough , "textselected");
-    get(m_pNewDocumentFrame, "newdocumentframe");
-    get(m_pCbxStartWithTemplate,"startwithwizard");
-    get(m_pCbxMasterPageCache , "backgroundback");
-    get(m_pCbxCopy , "copywhenmove");
-    get(m_pCbxMarkedHitMovesAlways , "objalwymov");
-    get(m_pLbMetric , "units");
-    get(m_pCbxEnableSdremote , "enremotcont");
-    get(m_pCbxEnablePresenterScreen , "enprsntcons");
-    get(m_pCbxUsePrinterMetrics , "printermetrics");
-    get(m_pPresentationFrame , "presentationframe");
-    get(m_pScaleFrame , "scaleframe");
-    get(m_pCbScale , "scaleBox");
-    get(m_pMtrFldTabstop , "metricFields");
-    get(m_pMtrFldOriginalWidth , "metricWidthFields");
-    get(m_pMtrFldOriginalHeight , "metricHeightFields");
-    get(m_pMtrFldInfo1 , "metricInfo1Fields");
-    get(m_pMtrFldInfo2 , "metricInfo2Fields");
-    get(m_pCbxCompatibility ,"cbCompatibility" );
-    get(m_pFiInfo1 , "info1");
-    get(m_pFiInfo2 , "info2");
-    get(m_pNewDocLb , "newdoclbl");
-    get(m_pWidthLb , "widthlbl");
-    get(m_pHeightLb , "heightlbl");
-    get(m_pCbxDistrot , "distrotcb");
-
     SetExchangeSupport();
 
     // set metric
@@ -217,36 +216,33 @@ SdTpOptionsMisc::SdTpOptionsMisc(vcl::Window* pParent, const SfxItemSet& rInAttr
     else
         eFUnit = SfxModule::GetCurrentFieldUnit();
 
-    SetFieldUnit( *m_pMtrFldTabstop , eFUnit );
+    SetFieldUnit( *m_xMtrFldTabstop , eFUnit );
 
     // Impress is default mode, let' hide the entire scale frame etc.
-    m_pCbxDistrot->Hide();
-    m_pScaleFrame->Hide();
+    m_xCbxDistrot->hide();
+    m_xScaleFrame->hide();
 
     // fill ListBox with metrics
     for (sal_uInt32 i = 0; i < SvxFieldUnitTable::Count(); ++i)
     {
         OUString sMetric = SvxFieldUnitTable::GetString(i);
-        sal_IntPtr nFieldUnit = sal_uInt16(SvxFieldUnitTable::GetValue(i));
-        sal_Int32 nPos = m_pLbMetric->InsertEntry( sMetric );
-        m_pLbMetric->SetEntryData( nPos, reinterpret_cast<void*>(nFieldUnit) );
+        sal_uInt32 nFieldUnit = sal_uInt32(SvxFieldUnitTable::GetValue(i));
+        m_xLbMetric->append(OUString::number(nFieldUnit), sMetric);
     }
-    m_pLbMetric->SetSelectHdl( LINK( this, SdTpOptionsMisc, SelectMetricHdl_Impl ) );
+    m_xLbMetric->connect_changed( LINK( this, SdTpOptionsMisc, SelectMetricHdl_Impl ) );
 
-    SetFieldUnit( *m_pMtrFldOriginalWidth, eFUnit );
-    SetFieldUnit( *m_pMtrFldOriginalHeight, eFUnit );
-    m_pMtrFldOriginalWidth->SetLast( 999999999 );
-    m_pMtrFldOriginalWidth->SetMax( 999999999 );
-    m_pMtrFldOriginalHeight->SetLast( 999999999 );
-    m_pMtrFldOriginalHeight->SetMax( 999999999 );
+    SetFieldUnit( *m_xMtrFldOriginalWidth, eFUnit );
+    SetFieldUnit( *m_xMtrFldOriginalHeight, eFUnit );
+    m_xMtrFldOriginalWidth->set_max(999999999, FieldUnit::NONE);
+    m_xMtrFldOriginalHeight->set_max(999999999, FieldUnit::NONE);
 
     // temporary fields for info texts (for formatting/calculation)
-    m_pMtrFldInfo1->SetUnit( eFUnit );
-    m_pMtrFldInfo1->SetMax( 999999999 );
-    m_pMtrFldInfo1->SetDecimalDigits( 2 );
-    m_pMtrFldInfo2->SetUnit( eFUnit );
-    m_pMtrFldInfo2->SetMax( 999999999 );
-    m_pMtrFldInfo2->SetDecimalDigits( 2 );
+    m_xMtrFldInfo1->set_unit( eFUnit );
+    m_xMtrFldInfo1->set_max(999999999, FieldUnit::NONE);
+    m_xMtrFldInfo1->set_digits( 2 );
+    m_xMtrFldInfo2->set_unit( eFUnit );
+    m_xMtrFldInfo2->set_max(999999999, FieldUnit::NONE);
+    m_xMtrFldInfo2->set_digits( 2 );
 
     // determine PoolUnit
     SfxItemPool* pPool = rInAttrs.GetPool();
@@ -258,52 +254,20 @@ SdTpOptionsMisc::SdTpOptionsMisc(vcl::Window* pParent, const SfxItemSet& rInAttr
         { 1, 2, 4, 5, 8, 10, 16, 20, 30, 40, 50, 100 };
 
     for( sal_uInt16 i = 0; i < TABLE_COUNT; i++ )
-        m_pCbScale->InsertEntry( GetScale( 1, aTable[i] ) );
+        m_xCbScale->append_text( GetScale( 1, aTable[i] ) );
     for( sal_uInt16 i = 1; i < TABLE_COUNT; i++ )
-        m_pCbScale->InsertEntry( GetScale(  aTable[i], 1 ) );
+        m_xCbScale->append_text( GetScale(  aTable[i], 1 ) );
 }
 
 SdTpOptionsMisc::~SdTpOptionsMisc()
 {
-    disposeOnce();
-}
-
-void SdTpOptionsMisc::dispose()
-{
-    m_pCbxQuickEdit.clear();
-    m_pCbxPickThrough.clear();
-    m_pNewDocumentFrame.clear();
-    m_pCbxStartWithTemplate.clear();
-    m_pCbxMasterPageCache.clear();
-    m_pCbxCopy.clear();
-    m_pCbxMarkedHitMovesAlways.clear();
-    m_pPresentationFrame.clear();
-    m_pLbMetric.clear();
-    m_pMtrFldTabstop.clear();
-    m_pCbxEnableSdremote.clear();
-    m_pCbxEnablePresenterScreen.clear();
-    m_pCbxUsePrinterMetrics.clear();
-    m_pCbxCompatibility.clear();
-    m_pScaleFrame.clear();
-    m_pCbScale.clear();
-    m_pNewDocLb.clear();
-    m_pFiInfo1.clear();
-    m_pMtrFldOriginalWidth.clear();
-    m_pWidthLb.clear();
-    m_pHeightLb.clear();
-    m_pFiInfo2.clear();
-    m_pMtrFldOriginalHeight.clear();
-    m_pCbxDistrot.clear();
-    m_pMtrFldInfo1.clear();
-    m_pMtrFldInfo2.clear();
-    SfxTabPage::dispose();
 }
 
 void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
 {
-    // We have to call SaveValue again since it can happen that the value
+    // We have to call save_state again since it can happen that the value
     // has no effect on other TabPages
-    m_pLbMetric->SaveValue();
+    m_xLbMetric->save_value();
     // change metric if necessary (since TabPage is in the Dialog where
     // the metric is set)
     const SfxPoolItem* pAttr = nullptr;
@@ -315,46 +279,45 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
 
     FieldUnit eFUnit = static_cast<FieldUnit>(static_cast<long>(pItem->GetValue()));
 
-    if( eFUnit == m_pMtrFldOriginalWidth->GetUnit() )
+    if( eFUnit == m_xMtrFldOriginalWidth->get_unit() )
         return;
 
     // set metrics
-    sal_Int64 nVal = m_pMtrFldOriginalWidth->Denormalize( m_pMtrFldOriginalWidth->GetValue( FieldUnit::TWIP ) );
-    SetFieldUnit( *m_pMtrFldOriginalWidth, eFUnit, true );
-    m_pMtrFldOriginalWidth->SetValue( m_pMtrFldOriginalWidth->Normalize( nVal ), FieldUnit::TWIP );
+    sal_Int64 nVal = m_xMtrFldOriginalWidth->denormalize( m_xMtrFldOriginalWidth->get_value( FieldUnit::TWIP ) );
+    SetFieldUnit( *m_xMtrFldOriginalWidth, eFUnit, true );
+    m_xMtrFldOriginalWidth->set_value( m_xMtrFldOriginalWidth->normalize( nVal ), FieldUnit::TWIP );
 
-    nVal = m_pMtrFldOriginalHeight->Denormalize( m_pMtrFldOriginalHeight->GetValue( FieldUnit::TWIP ) );
-    SetFieldUnit( *m_pMtrFldOriginalHeight, eFUnit, true );
-    m_pMtrFldOriginalHeight->SetValue( m_pMtrFldOriginalHeight->Normalize( nVal ), FieldUnit::TWIP );
+    nVal = m_xMtrFldOriginalHeight->denormalize( m_xMtrFldOriginalHeight->get_value( FieldUnit::TWIP ) );
+    SetFieldUnit( *m_xMtrFldOriginalHeight, eFUnit, true );
+    m_xMtrFldOriginalHeight->set_value( m_xMtrFldOriginalHeight->normalize( nVal ), FieldUnit::TWIP );
 
     if( nWidth == 0 || nHeight == 0 )
         return;
 
-    m_pMtrFldInfo1->SetUnit( eFUnit );
-    m_pMtrFldInfo2->SetUnit( eFUnit );
+    m_xMtrFldInfo1->set_unit( eFUnit );
+    m_xMtrFldInfo2->set_unit( eFUnit );
 
-    SetMetricValue( *m_pMtrFldInfo1, nWidth, ePoolUnit );
-    aInfo1 = m_pMtrFldInfo1->GetText();
-    m_pFiInfo1->SetText( aInfo1 );
+    SetMetricValue( *m_xMtrFldInfo1, nWidth, ePoolUnit );
+    aInfo1 = m_xMtrFldInfo1->get_text();
+    m_xFiInfo1->set_label( aInfo1 );
 
-    SetMetricValue( *m_pMtrFldInfo2, nHeight, ePoolUnit );
-    aInfo2 = m_pMtrFldInfo2->GetText();
-    m_pFiInfo2->SetText( aInfo2 );
+    SetMetricValue( *m_xMtrFldInfo2, nHeight, ePoolUnit );
+    aInfo2 = m_xMtrFldInfo2->get_text();
+    m_xFiInfo2->set_label( aInfo2 );
 }
 
 DeactivateRC SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
 {
     // check parser
     sal_Int32 nX, nY;
-    if( SetScale( m_pCbScale->GetText(), nX, nY ) )
+    if( SetScale( m_xCbScale->get_active_text(), nX, nY ) )
     {
         if( pActiveSet )
             FillItemSet( pActiveSet );
         return DeactivateRC::LeavePage;
     }
 
-    vcl::Window* pWin = GetParent();
-    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetDialogFrameWeld(),
                                                VclMessageType::Warning, VclButtonsType::YesNo,
                                                SdResId(STR_WARN_SCALE_FAIL)));
     if (xWarn->run() == RET_YES)
@@ -370,30 +333,30 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
 {
     bool bModified = false;
 
-    if( m_pCbxStartWithTemplate->IsValueChangedFromSaved()     ||
-        m_pCbxMarkedHitMovesAlways->IsValueChangedFromSaved()  ||
-        m_pCbxQuickEdit->IsValueChangedFromSaved()             ||
-        m_pCbxPickThrough->IsValueChangedFromSaved()           ||
-        m_pCbxMasterPageCache->IsValueChangedFromSaved()       ||
-        m_pCbxCopy->IsValueChangedFromSaved()                  ||
-        m_pCbxEnableSdremote->IsValueChangedFromSaved()        ||
-        m_pCbxEnablePresenterScreen->IsValueChangedFromSaved() ||
-        m_pCbxCompatibility->IsValueChangedFromSaved()         ||
-        m_pCbxUsePrinterMetrics->IsValueChangedFromSaved() )
+    if( m_xCbxStartWithTemplate->get_state_changed_from_saved()     ||
+        m_xCbxMarkedHitMovesAlways->get_state_changed_from_saved()  ||
+        m_xCbxQuickEdit->get_state_changed_from_saved()             ||
+        m_xCbxPickThrough->get_state_changed_from_saved()           ||
+        m_xCbxMasterPageCache->get_state_changed_from_saved()       ||
+        m_xCbxCopy->get_state_changed_from_saved()                  ||
+        m_xCbxEnableSdremote->get_state_changed_from_saved()        ||
+        m_xCbxEnablePresenterScreen->get_state_changed_from_saved() ||
+        m_xCbxCompatibility->get_state_changed_from_saved()         ||
+        m_xCbxUsePrinterMetrics->get_state_changed_from_saved() )
     {
         SdOptionsMiscItem aOptsItem;
 
-        aOptsItem.GetOptionsMisc().SetStartWithTemplate( m_pCbxStartWithTemplate->IsChecked() );
-        aOptsItem.GetOptionsMisc().SetMarkedHitMovesAlways( m_pCbxMarkedHitMovesAlways->IsChecked() );
-        aOptsItem.GetOptionsMisc().SetQuickEdit( m_pCbxQuickEdit->IsChecked() );
-        aOptsItem.GetOptionsMisc().SetPickThrough( m_pCbxPickThrough->IsChecked() );
-        aOptsItem.GetOptionsMisc().SetMasterPagePaintCaching( m_pCbxMasterPageCache->IsChecked() );
-        aOptsItem.GetOptionsMisc().SetDragWithCopy( m_pCbxCopy->IsChecked() );
-        aOptsItem.GetOptionsMisc().SetEnableSdremote( m_pCbxEnableSdremote->IsChecked() );
-        aOptsItem.GetOptionsMisc().SetEnablePresenterScreen( m_pCbxEnablePresenterScreen->IsChecked() );
-        aOptsItem.GetOptionsMisc().SetSummationOfParagraphs( m_pCbxCompatibility->IsChecked() );
+        aOptsItem.GetOptionsMisc().SetStartWithTemplate( m_xCbxStartWithTemplate->get_active() );
+        aOptsItem.GetOptionsMisc().SetMarkedHitMovesAlways( m_xCbxMarkedHitMovesAlways->get_active() );
+        aOptsItem.GetOptionsMisc().SetQuickEdit( m_xCbxQuickEdit->get_active() );
+        aOptsItem.GetOptionsMisc().SetPickThrough( m_xCbxPickThrough->get_active() );
+        aOptsItem.GetOptionsMisc().SetMasterPagePaintCaching( m_xCbxMasterPageCache->get_active() );
+        aOptsItem.GetOptionsMisc().SetDragWithCopy( m_xCbxCopy->get_active() );
+        aOptsItem.GetOptionsMisc().SetEnableSdremote( m_xCbxEnableSdremote->get_active() );
+        aOptsItem.GetOptionsMisc().SetEnablePresenterScreen( m_xCbxEnablePresenterScreen->get_active() );
+        aOptsItem.GetOptionsMisc().SetSummationOfParagraphs( m_xCbxCompatibility->get_active() );
         aOptsItem.GetOptionsMisc().SetPrinterIndependentLayout (
-            m_pCbxUsePrinterMetrics->IsChecked()
+            m_xCbxUsePrinterMetrics->get_active()
             ? css::document::PrinterIndependentLayout::DISABLED
             : css::document::PrinterIndependentLayout::ENABLED);
         rAttrs->Put( aOptsItem );
@@ -402,26 +365,26 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
     }
 
     // metric
-    const sal_Int32 nMPos = m_pLbMetric->GetSelectedEntryPos();
-    if ( m_pLbMetric->IsValueChangedFromSaved() )
+    if (m_xLbMetric->get_value_changed_from_saved())
     {
-        sal_uInt16 nFieldUnit = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(m_pLbMetric->GetEntryData( nMPos )));
+        const sal_Int32 nMPos = m_xLbMetric->get_active();
+        sal_uInt16 nFieldUnit = m_xLbMetric->get_id(nMPos).toUInt32();
         rAttrs->Put( SfxUInt16Item( GetWhich( SID_ATTR_METRIC ), nFieldUnit ) );
         bModified = true;
     }
 
     // tabulator space
-    if( m_pMtrFldTabstop->IsValueChangedFromSaved() )
+    if( m_xMtrFldTabstop->get_value_changed_from_saved() )
     {
         sal_uInt16 nWh = GetWhich( SID_ATTR_DEFTABSTOP );
         MapUnit eUnit = rAttrs->GetPool()->GetMetric( nWh );
-        SfxUInt16Item aDef( nWh,static_cast<sal_uInt16>(GetCoreValue( *m_pMtrFldTabstop, eUnit )) );
+        SfxUInt16Item aDef( nWh,static_cast<sal_uInt16>(GetCoreValue( *m_xMtrFldTabstop, eUnit )) );
         rAttrs->Put( aDef );
         bModified = true;
     }
 
     sal_Int32 nX, nY;
-    if( SetScale( m_pCbScale->GetText(), nX, nY ) )
+    if( SetScale( m_xCbScale->get_active_text(), nX, nY ) )
     {
         rAttrs->Put( SfxInt32Item( ATTR_OPTIONS_SCALE_X, nX ) );
         rAttrs->Put( SfxInt32Item( ATTR_OPTIONS_SCALE_Y, nY ) );
@@ -437,42 +400,42 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     SdOptionsMiscItem aOptsItem( static_cast<const SdOptionsMiscItem&>( rAttrs->
                         Get( ATTR_OPTIONS_MISC ) ) );
 
-    m_pCbxStartWithTemplate->Check( aOptsItem.GetOptionsMisc().IsStartWithTemplate() );
-    m_pCbxMarkedHitMovesAlways->Check( aOptsItem.GetOptionsMisc().IsMarkedHitMovesAlways() );
-    m_pCbxQuickEdit->Check( aOptsItem.GetOptionsMisc().IsQuickEdit() );
-    m_pCbxPickThrough->Check( aOptsItem.GetOptionsMisc().IsPickThrough() );
-    m_pCbxMasterPageCache->Check( aOptsItem.GetOptionsMisc().IsMasterPagePaintCaching() );
-    m_pCbxCopy->Check( aOptsItem.GetOptionsMisc().IsDragWithCopy() );
-    m_pCbxEnableSdremote->Check( aOptsItem.GetOptionsMisc().IsEnableSdremote() );
-    m_pCbxEnablePresenterScreen->Check( aOptsItem.GetOptionsMisc().IsEnablePresenterScreen() );
-    m_pCbxCompatibility->Check( aOptsItem.GetOptionsMisc().IsSummationOfParagraphs() );
-    m_pCbxUsePrinterMetrics->Check( aOptsItem.GetOptionsMisc().GetPrinterIndependentLayout()==1 );
-    m_pCbxStartWithTemplate->SaveValue();
-    m_pCbxMarkedHitMovesAlways->SaveValue();
-    m_pCbxQuickEdit->SaveValue();
-    m_pCbxPickThrough->SaveValue();
+    m_xCbxStartWithTemplate->set_active( aOptsItem.GetOptionsMisc().IsStartWithTemplate() );
+    m_xCbxMarkedHitMovesAlways->set_active( aOptsItem.GetOptionsMisc().IsMarkedHitMovesAlways() );
+    m_xCbxQuickEdit->set_active( aOptsItem.GetOptionsMisc().IsQuickEdit() );
+    m_xCbxPickThrough->set_active( aOptsItem.GetOptionsMisc().IsPickThrough() );
+    m_xCbxMasterPageCache->set_active( aOptsItem.GetOptionsMisc().IsMasterPagePaintCaching() );
+    m_xCbxCopy->set_active( aOptsItem.GetOptionsMisc().IsDragWithCopy() );
+    m_xCbxEnableSdremote->set_active( aOptsItem.GetOptionsMisc().IsEnableSdremote() );
+    m_xCbxEnablePresenterScreen->set_active( aOptsItem.GetOptionsMisc().IsEnablePresenterScreen() );
+    m_xCbxCompatibility->set_active( aOptsItem.GetOptionsMisc().IsSummationOfParagraphs() );
+    m_xCbxUsePrinterMetrics->set_active( aOptsItem.GetOptionsMisc().GetPrinterIndependentLayout()==1 );
+    m_xCbxStartWithTemplate->save_state();
+    m_xCbxMarkedHitMovesAlways->save_state();
+    m_xCbxQuickEdit->save_state();
+    m_xCbxPickThrough->save_state();
 
-    m_pCbxMasterPageCache->SaveValue();
-    m_pCbxCopy->SaveValue();
-    m_pCbxEnableSdremote->SaveValue();
-    m_pCbxEnablePresenterScreen->SaveValue();
-    m_pCbxCompatibility->SaveValue();
-    m_pCbxUsePrinterMetrics->SaveValue();
+    m_xCbxMasterPageCache->save_state();
+    m_xCbxCopy->save_state();
+    m_xCbxEnableSdremote->save_state();
+    m_xCbxEnablePresenterScreen->save_state();
+    m_xCbxCompatibility->save_state();
+    m_xCbxUsePrinterMetrics->save_state();
 
     // metric
     sal_uInt16 nWhich = GetWhich( SID_ATTR_METRIC );
-    m_pLbMetric->SetNoSelection();
+    m_xLbMetric->set_active(-1);
 
     if ( rAttrs->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
     {
         const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rAttrs->Get( nWhich ));
-        long nFieldUnit = static_cast<long>(rItem.GetValue());
+        sal_uInt32 nFieldUnit = static_cast<sal_uInt32>(rItem.GetValue());
 
-        for ( sal_Int32 i = 0; i < m_pLbMetric->GetEntryCount(); ++i )
+        for (sal_Int32 i = 0, nEntryCount = m_xLbMetric->get_count(); i < nEntryCount; ++i)
         {
-            if ( reinterpret_cast<sal_IntPtr>(m_pLbMetric->GetEntryData( i )) == nFieldUnit )
+            if (m_xLbMetric->get_id(i).toUInt32() == nFieldUnit)
             {
-                m_pLbMetric->SelectEntryPos( i );
+                m_xLbMetric->set_active( i );
                 break;
             }
         }
@@ -484,10 +447,10 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     {
         MapUnit eUnit = rAttrs->GetPool()->GetMetric( nWhich );
         const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rAttrs->Get( nWhich ));
-        SetMetricValue( *m_pMtrFldTabstop, rItem.GetValue(), eUnit );
+        SetMetricValue( *m_xMtrFldTabstop, rItem.GetValue(), eUnit );
     }
-    m_pLbMetric->SaveValue();
-    m_pMtrFldTabstop->SaveValue();
+    m_xLbMetric->save_value();
+    m_xMtrFldTabstop->save_value();
     //Scale
     sal_Int32 nX = static_cast<const SfxInt32Item&>( rAttrs->
                  Get( ATTR_OPTIONS_SCALE_X ) ).GetValue();
@@ -498,70 +461,66 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     nHeight = static_cast<const SfxUInt32Item&>( rAttrs->
                     Get( ATTR_OPTIONS_SCALE_HEIGHT ) ).GetValue();
 
-    m_pCbScale->SetText( GetScale( nX, nY ) );
+    m_xCbScale->set_entry_text( GetScale( nX, nY ) );
 
-    m_pMtrFldOriginalWidth->Hide();
-    m_pMtrFldOriginalWidth->SetText( aInfo1 ); // empty
-    m_pMtrFldOriginalHeight->Hide();
-    m_pMtrFldOriginalHeight->SetText( aInfo2 ); //empty
-    m_pFiInfo1->Hide();
-    m_pFiInfo2->Hide();
+    m_xMtrFldOriginalWidth->hide();
+    m_xMtrFldOriginalWidth->set_text( aInfo1 ); // empty
+    m_xMtrFldOriginalHeight->hide();
+    m_xMtrFldOriginalHeight->set_text( aInfo2 ); //empty
+    m_xFiInfo1->hide();
+    m_xFiInfo2->hide();
 
     UpdateCompatibilityControls ();
 }
 
-VclPtr<SfxTabPage> SdTpOptionsMisc::Create( TabPageParent pWindow,
+VclPtr<SfxTabPage> SdTpOptionsMisc::Create( TabPageParent pParent,
                                             const SfxItemSet* rAttrs )
 {
-    return VclPtr<SdTpOptionsMisc>::Create( pWindow.pParent, *rAttrs );
+    return VclPtr<SdTpOptionsMisc>::Create( pParent, *rAttrs );
 }
 
-IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl, weld::ComboBox&, void)
 {
-    sal_Int32 nPos = m_pLbMetric->GetSelectedEntryPos();
-
-    if( nPos != LISTBOX_ENTRY_NOTFOUND )
+    int nPos = m_xLbMetric->get_active();
+    if (nPos != -1)
     {
-        FieldUnit eUnit = static_cast<FieldUnit>(reinterpret_cast<sal_IntPtr>(m_pLbMetric->GetEntryData( nPos )));
+        FieldUnit eUnit = static_cast<FieldUnit>(m_xLbMetric->get_id(nPos).toUInt32());
         sal_Int64 nVal =
-            m_pMtrFldTabstop->Denormalize( m_pMtrFldTabstop->GetValue( FieldUnit::TWIP ) );
-        SetFieldUnit( *m_pMtrFldTabstop, eUnit );
-        m_pMtrFldTabstop->SetValue( m_pMtrFldTabstop->Normalize( nVal ), FieldUnit::TWIP );
+            m_xMtrFldTabstop->denormalize(m_xMtrFldTabstop->get_value(FieldUnit::TWIP));
+        SetFieldUnit( *m_xMtrFldTabstop, eUnit );
+        m_xMtrFldTabstop->set_value( m_xMtrFldTabstop->normalize( nVal ), FieldUnit::TWIP );
     }
 }
 
 void SdTpOptionsMisc::SetImpressMode()
 {
 #ifndef ENABLE_SDREMOTE_BLUETOOTH
-    m_pCbxEnableSdremote->Hide();
+    m_xCbxEnableSdremote->hide();
 #else
     (void) this; // loplugin:staticmethods
 #endif
 }
 
-void    SdTpOptionsMisc::SetDrawMode()
+void SdTpOptionsMisc::SetDrawMode()
 {
-    m_pScaleFrame->Show();
-    m_pNewDocumentFrame->Hide();
-    m_pCbxEnableSdremote->Hide();
-    m_pCbxEnablePresenterScreen->Hide();
-    m_pCbxCompatibility->Hide();
-    m_pNewDocLb->Hide();
-    m_pCbScale->Show();
-    m_pPresentationFrame->Hide();
-    m_pMtrFldInfo1->Hide();
-    m_pMtrFldInfo2->Hide();
-    m_pWidthLb->Hide();
-    m_pHeightLb->Hide();
-    m_pFiInfo1->Show();
-    m_pMtrFldOriginalWidth->Show();
-    m_pFiInfo2->Show();
-    m_pMtrFldOriginalHeight->Show();
-    m_pCbxDistrot->Show();
-    m_pCbxCompatibility->Hide();
-    // Move the printer-independent-metrics check box in the place that the
-    // spacing-between-paragraphs check box normally is in.
-    m_pCbxUsePrinterMetrics->SetPosPixel (m_pCbxCompatibility->GetPosPixel());
+    m_xScaleFrame->show();
+    m_xNewDocumentFrame->hide();
+    m_xCbxEnableSdremote->hide();
+    m_xCbxEnablePresenterScreen->hide();
+    m_xCbxCompatibility->hide();
+    m_xNewDocLb->hide();
+    m_xCbScale->show();
+    m_xPresentationFrame->hide();
+    m_xMtrFldInfo1->hide();
+    m_xMtrFldInfo2->hide();
+    m_xWidthLb->hide();
+    m_xHeightLb->hide();
+    m_xFiInfo1->show();
+    m_xMtrFldOriginalWidth->show();
+    m_xFiInfo2->show();
+    m_xMtrFldOriginalHeight->show();
+    m_xCbxDistrot->show();
+    m_xCbxCompatibility->hide();
 }
 
 OUString SdTpOptionsMisc::GetScale( sal_Int32 nX, sal_Int32 nY )
@@ -642,8 +601,8 @@ void SdTpOptionsMisc::UpdateCompatibilityControls()
         // bIsEnabled and disable the controls.
     }
 
-    m_pCbxCompatibility->Enable(bIsEnabled);
-    m_pCbxUsePrinterMetrics->Enable (bIsEnabled);
+    m_xCbxCompatibility->set_sensitive(bIsEnabled);
+    m_xCbxUsePrinterMetrics->set_sensitive(bIsEnabled);
 }
 
 void SdTpOptionsMisc::PageCreated(const SfxAllItemSet& aSet)
