@@ -21,6 +21,8 @@ namespace LibreOfficeKit
 
 static bool g_bActive(false);
 
+static bool g_bMobile(false);
+
 static bool g_bPartInInvalidation(false);
 
 static bool g_bTiledPainting(false);
@@ -50,6 +52,16 @@ void setActive(bool bActive)
 bool isActive()
 {
     return g_bActive;
+}
+
+void setMobile(bool bIsMobile)
+{
+    g_bMobile = bIsMobile;
+}
+
+bool isMobile()
+{
+    return g_bMobile;
 }
 
 void setPartInInvalidation(bool bPartInInvalidation)
