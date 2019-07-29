@@ -87,6 +87,7 @@ class ul_Compiler:
             'math_element_selector':self.handle_math_element_selector,
             'math_Type_command':self.handle_math_Type_command,
             'setZoom_command':self.handle_setZoom_command,
+            'draw_Type_command':self.handle_draw_Type_command,
 
             'writer_Copy_Text':self.do_nothing,
             'writer_Cut_Text':self.do_nothing,
@@ -165,7 +166,7 @@ class ul_Compiler:
         line="\t\tMainWindow = self.xUITest.getTopFocusWindow()\n"
         self.variables.append(line)
         app={"writer":"writer_edit","calc":"grid_window","impress":"impress_win"\
-            ,"math":"math_edit"}
+            ,"math":"math_edit","draw":"draw_win"}
         self.current_app=app[StarterCommand.program_name]
         self.prev_command=StarterCommand
 
@@ -390,6 +391,17 @@ class ul_Compiler:
             self.write_line_with_one_parameters(self.current_app,"TYPE","KEYCODE",math_Type_command.what_to_type.input_key_code)
 
         self.prev_command=math_Type_command
+
+    def handle_draw_Type_command (self,draw_Type_command):
+
+        self.init_app()
+        if(draw_Type_command.what_to_type.__class__.__name__=="char"):
+            self.write_line_with_one_parameters(self.current_app,"TYPE","TEXT",draw_Type_command.what_to_type.input_char)
+
+        elif(draw_Type_command.what_to_type.__class__.__name__=="KeyCode"):
+            self.write_line_with_one_parameters(self.current_app,"TYPE","KEYCODE",draw_Type_command.what_to_type.input_key_code)
+
+        self.prev_command=draw_Type_command
 
     def handle_math_element_selector (self,math_element_selector):
 
