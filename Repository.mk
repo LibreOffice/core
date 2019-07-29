@@ -1048,10 +1048,6 @@ $(eval $(call gb_Helper_register_packages_for_install,python_scriptprovider, \
     scriptproviderforpython \
 ))
 
-$(eval $(call gb_Helper_register_packages_for_install,python_librelogo, \
-	librelogo \
-	librelogo_properties \
-))
 endif # DISABLE_PYTHON
 
 # External executables
