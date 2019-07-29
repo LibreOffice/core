@@ -1,6 +1,8 @@
 import type_options
+
 /*
     This file for the log statments that relates to each diffrent applications
+    Each Grammar Command here is related to his own application
 */
 
 SpecialCommand:
@@ -10,9 +12,14 @@ SpecialCommand:
 /*
   This part for all the writer log statments:
    
-    1)  Type 
+    1)  Type
     2)  Select
     3)  GOTO page
+    4)  Create Table
+    5)  Copy Text
+    6)  Cut Text
+    7)  Paste Text
+    8)  Insert Break Page
 
   then we can add whatever we need in the future
 */
@@ -45,6 +52,7 @@ writer_Paste_Text:
 writer_Insert_BreakPage:
   'Insert Break Page'
 ;
+
 //=================================================================//
 /*
   This part for all the calc log statments:
@@ -52,6 +60,14 @@ writer_Insert_BreakPage:
     1)  select sheet
     2)  Select cell or range
     3)  launch AutoFill
+    4)  Delete Cells
+    5)  Remove Content of a cell
+    6)  Insert new Cells
+    7)  Cut Cells
+    8)  Copy Cells
+    9)  Paste Cells
+    10) Merge Cells
+    11) Unmerge Cells
 
   then we can add whatever we need in the future
 */
@@ -71,10 +87,6 @@ calc_Select_cell:
 ;
 calc_AutoFill_filter:
   'Lanuch AutoFilter from Col' col_num=INT 'and Row' row_num=INT
-;
-//this is the select options
-select_options:
-    one_cell | range_of_cells
 ;
 range_of_cells:
     '{' '"RANGE":' input_range=STRING '}'
@@ -106,12 +118,17 @@ calc_Merge_Cells:
 calc_UNMerge_Cells:
     'Delete the merge between' '{' '"CELL":' input_range=STRING '}'
 ;
+//this is the select options
+select_options:
+    one_cell | range_of_cells
+;
+
 //=================================================================//
 /*
   This part for all the impress log statments:
    
     1)  Type 
-    3)  Set zoom
+    2)  Set zoom
 
   then we can add whatever we need in the future
 */
@@ -121,6 +138,7 @@ impress_command:
 impress_Type_command:
     'Type on impress ' what_to_type=Type_options
 ;
+
 //=================================================================//
 /*
   This part for all the math log statments:
@@ -139,6 +157,3 @@ math_element_selector:
 math_Type_command:
     'Type on math ' what_to_type=Type_options
 ;
-
-
-
