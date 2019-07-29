@@ -24,16 +24,6 @@
 #include <vcl/weld.hxx>
 
 /** An edit control that contains a double precision floating-point value. */
-class ScDoubleField : public Edit
-{
-public:
-    explicit            ScDoubleField( vcl::Window* pParent, WinBits nStyle );
-
-    bool                GetValue( double& rfValue ) const;
-    void                SetValue( double fValue,
-                                  sal_Int32 nDecPlaces = 12 );
-};
-
 class DoubleField
 {
 private:
