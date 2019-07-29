@@ -46,6 +46,52 @@
       "revId": "f53fcf9cfcc0bef415f9d2d95132ccd8bbe96061",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_904533b6",
+        "filename": "include/xmloff/nmspmap.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-29T07:10:13Z",
+      "side": 0,
+      "message": "Here, too",
+      "range": {
+        "startLine": 58,
+        "startChar": 22,
+        "endLine": 59,
+        "endChar": 24
+      },
+      "revId": "f53fcf9cfcc0bef415f9d2d95132ccd8bbe96061",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_5019dbd4",
+        "filename": "sc/inc/externalrefmgr.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-29T07:10:13Z",
+      "side": 0,
+      "message": "and here?",
+      "range": {
+        "startLine": 308,
+        "startChar": 26,
+        "endLine": 309,
+        "endChar": 28
+      },
+      "revId": "f53fcf9cfcc0bef415f9d2d95132ccd8bbe96061",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
