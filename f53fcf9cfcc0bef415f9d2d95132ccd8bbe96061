@@ -22,6 +22,30 @@
       "revId": "f53fcf9cfcc0bef415f9d2d95132ccd8bbe96061",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_f0ffcf64",
+        "filename": "vcl/source/control/field.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-29T07:02:10Z",
+      "side": 1,
+      "message": "note that this patch just moved that code around from MetricField::ConvertDoubleValue to here, unchanged",
+      "parentUuid": "bf659307_90d773ee",
+      "range": {
+        "startLine": 1125,
+        "startChar": 12,
+        "endLine": 1127,
+        "endChar": 22
+      },
+      "revId": "f53fcf9cfcc0bef415f9d2d95132ccd8bbe96061",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
