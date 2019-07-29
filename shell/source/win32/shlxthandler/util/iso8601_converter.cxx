@@ -103,7 +103,7 @@ std::wstring iso8601_date_to_local_date(const std::wstring& isoDate )
    conforming to the current locale
 
    Expect format PTnHnMnS according to
-   ISO 8601 where n is abitrary number
+   ISO 8601 where n is arbitrary number
    of digits
 */
 

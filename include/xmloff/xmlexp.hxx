@@ -382,7 +382,7 @@ public:
     css::uno::Reference< css::xml::sax::XAttributeList > GetXAttrList() { return mxAttrList.get(); }
 
     // Get document handler. This methods are not const, because the
-    // reference allowes modifications through the handler.
+    // reference allows modifications through the handler.
     const css::uno::Reference< css::xml::sax::XDocumentHandler > & GetDocHandler() { return mxHandler; }
 
     // Get original URL.

@@ -508,7 +508,7 @@ namespace pcr
 
 
         // an implementation of the ->IStringKeyBooleanUIUpdate interface which calls
-        // am arbitrary ->XObjectInspectorUI method taking a string and a boolean flag
+        // an arbitrary ->XObjectInspectorUI method taking a string and a boolean flag
         class DefaultStringKeyBooleanUIUpdate : public IStringKeyBooleanUIUpdate
         {
         private:
