@@ -100,6 +100,62 @@ const std::type_index getTypeFromMysqlType(enum_field_types type)
 }
 }
 
+bool OPreparedResultSet::fetchResult()
+{
+    // allocate array if it does not exist
+    if (m_aData == nullptr)
+    {
+        m_aData.reset(new MYSQL_BIND[m_nColumnCount]);
+        memset(m_aData.get(), 0, m_nColumnCount * sizeof(MYSQL_BIND));
+        m_aMetaData.reset(new BindMetaData[m_nColumnCount]);
+    }
+    for (sal_Int32 i = 0; i < m_nColumnCount; ++i)
+    {
+        m_aMetaData[i].is_null = 0;
+        m_aMetaData[i].length = 0l;
+        m_aMetaData[i].error = 0;
+
+        m_aData[i].is_null = &m_aMetaData[i].is_null;
+        m_aData[i].buffer_length = m_aFields[i].type == MYSQL_TYPE_BLOB ? 0 : m_aFields[i].length;
+        m_aData[i].length = &m_aMetaData[i].length;
+        m_aData[i].error = &m_aMetaData[i].error;
+        m_aData[i].buffer = nullptr;
+        m_aData[i].buffer_type = m_aFields[i].type;
+
+        // allocates memory, if it is a fixed size type. If not then nullptr
+        mysqlc_sdbc_driver::allocateSqlVar(&m_aData[i].buffer, m_aData[i].buffer_type,
+                                           m_aFields[i].length);
+    }
+    mysql_stmt_bind_result(m_pStmt, m_aData.get());
+    int failure = mysql_stmt_fetch(m_pStmt);
+
+    for (sal_Int32 i = 0; i < m_nColumnCount; ++i)
+    {
+        if (*m_aData[i].error)
+        {
+            // expected if we have a BLOB, as buffer_length is set to 0. We want to
+            // fetch it piece by piece
+            // see https://bugs.mysql.com/file.php?id=12361&bug_id=33086
+            if (m_aData[i].buffer == nullptr)
+            {
+                m_aData[i].buffer_length = *m_aData[i].length;
+                m_aData[i].buffer = malloc(*m_aData[i].length);
+                mysql_stmt_fetch_column(m_pStmt, &m_aData[i], i, 0);
+            }
+        }
+    }
+
+    if (failure == 1)
+    {
+        MYSQL* pMysql = m_rConnection.getMysqlConnection();
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(pMysql), mysql_errno(pMysql),
+                                                     *this, m_encoding);
+    }
+    else if (failure == MYSQL_NO_DATA)
+        return false;
+    return true;
+}
+
 rtl::OUString SAL_CALL OPreparedResultSet::getImplementationName()
 {
     return rtl::OUString("com.sun.star.sdbcx.mysqlc.ResultSet");
@@ -127,9 +183,12 @@ OPreparedResultSet::OPreparedResultSet(OConnection& rConn, OPreparedStatement* p
     , m_pStmt(pStmt)
     , m_encoding(rConn.getConnectionEncoding())
 {
-    m_nFieldCount = mysql_stmt_field_count(pStmt);
+    m_nColumnCount = mysql_stmt_field_count(pStmt);
     m_pResult = mysql_stmt_result_metadata(m_pStmt);
+    if (m_pResult != nullptr)
+        mysql_stmt_store_result(m_pStmt);
     m_aFields = mysql_fetch_fields(m_pResult);
+    m_nRowCount = mysql_stmt_num_rows(pStmt);
 }
 
 void OPreparedResultSet::disposing()
@@ -167,7 +226,7 @@ sal_Int32 SAL_CALL OPreparedResultSet::findColumn(const rtl::OUString& columnNam
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
 
     MYSQL_FIELD* pFields = mysql_fetch_fields(m_pResult);
-    for (sal_Int32 i = 0; i < m_nFieldCount; ++i)
+    for (sal_Int32 i = 0; i < m_nColumnCount; ++i)
     {
         if (columnName.equalsIgnoreAsciiCaseAscii(pFields[i].name))
             return i + 1; // sdbc indexes from 1
@@ -200,7 +259,10 @@ template <typename T> T OPreparedResultSet::retrieveValue(sal_Int32 nColumnIndex
         return getRowSetValue(nColumnIndex);
 }
 
-namespace connectivity { namespace mysqlc {
+namespace connectivity
+{
+namespace mysqlc
+{
 template <> uno::Sequence<sal_Int8> OPreparedResultSet::retrieveValue(sal_Int32 column)
 {
     // TODO make conversion possible
@@ -259,7 +321,8 @@ template <> OUString OPreparedResultSet::retrieveValue(sal_Int32 column)
     OUString sReturn = OUString(sStr, *m_aData[column - 1].length, m_encoding);
     return sReturn;
 }
-}}
+}
+}
 
 ORowSetValue OPreparedResultSet::getRowSetValue(sal_Int32 nColumnIndex)
 {
@@ -448,7 +511,7 @@ sal_Bool SAL_CALL OPreparedResultSet::isBeforeFirst()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
 
-    return m_nCurrentField == 0;
+    return m_nCurrentRow == 0;
 }
 
 sal_Bool SAL_CALL OPreparedResultSet::isAfterLast()
@@ -456,7 +519,7 @@ sal_Bool SAL_CALL OPreparedResultSet::isAfterLast()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
 
-    return m_nCurrentField >= m_nFieldCount;
+    return m_nCurrentRow > m_nRowCount;
 }
 
 sal_Bool SAL_CALL OPreparedResultSet::isFirst()
@@ -464,7 +527,7 @@ sal_Bool SAL_CALL OPreparedResultSet::isFirst()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
 
-    return m_nCurrentField == 1 && !isAfterLast();
+    return m_nCurrentRow == 1 && !isAfterLast();
 }
 
 sal_Bool SAL_CALL OPreparedResultSet::isLast()
@@ -472,16 +535,17 @@ sal_Bool SAL_CALL OPreparedResultSet::isLast()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
 
-    return mysql_field_tell(m_pResult) == static_cast<unsigned>(m_nFieldCount);
+    return m_nCurrentRow == m_nRowCount;
 }
 
 void SAL_CALL OPreparedResultSet::beforeFirst()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
+    mysql_stmt_data_seek(m_pStmt, 0);
 
-    mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedResultSet::beforeFirst",
-                                                            *this);
+    m_nCurrentRow = 0;
+    m_aData.reset();
 }
 
 void SAL_CALL OPreparedResultSet::afterLast()
@@ -512,6 +576,7 @@ sal_Bool SAL_CALL OPreparedResultSet::first()
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
 
     mysql_stmt_data_seek(m_pStmt, 0);
+    m_nCurrentRow = 0;
     next();
 
     return true;
@@ -522,7 +587,7 @@ sal_Bool SAL_CALL OPreparedResultSet::last()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
 
-    mysql_stmt_data_seek(m_pStmt, m_nFieldCount - 1);
+    mysql_stmt_data_seek(m_pStmt, m_nRowCount - 1);
     next();
 
     return true;
@@ -533,11 +598,10 @@ sal_Bool SAL_CALL OPreparedResultSet::absolute(sal_Int32 row)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
 
-    sal_Int32 nFields = static_cast<sal_Int32>(m_nFieldCount);
-    sal_Int32 nToGo = row < 0 ? nFields - row : row - 1;
+    sal_Int32 nToGo = row < 0 ? m_nRowCount - row : row - 1;
 
-    if (nToGo >= nFields)
-        nToGo = nFields - 1;
+    if (nToGo >= m_nRowCount)
+        nToGo = m_nRowCount - 1;
     if (nToGo < 0)
         nToGo = 0;
 
@@ -552,19 +616,18 @@ sal_Bool SAL_CALL OPreparedResultSet::relative(sal_Int32 row)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
 
-    sal_Int32 nFields = static_cast<sal_Int32>(m_nFieldCount);
     if (row == 0)
         return true;
 
-    sal_Int32 nToGo = m_nCurrentField + row;
-    if (nToGo >= nFields)
-        nToGo = nFields - 1;
+    sal_Int32 nToGo = m_nCurrentRow + row;
+    if (nToGo >= m_nRowCount)
+        nToGo = m_nRowCount - 1;
     if (nToGo < 0)
         nToGo = 0;
 
     mysql_stmt_data_seek(m_pStmt, nToGo);
     next();
-    m_nCurrentField += row;
+    m_nCurrentRow += row;
 
     return true;
 }
@@ -574,12 +637,12 @@ sal_Bool SAL_CALL OPreparedResultSet::previous()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
 
-    if (m_nCurrentField <= 1)
+    if (m_nCurrentRow <= 1)
         return false;
 
-    mysql_stmt_data_seek(m_pStmt, m_nCurrentField - 2);
+    mysql_stmt_data_seek(m_pStmt, m_nCurrentRow - 2);
     next();
-    --m_nFieldCount;
+    --m_nCurrentRow;
     return true;
 }
 
@@ -619,68 +682,13 @@ sal_Bool SAL_CALL OPreparedResultSet::next()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
-
-    bool bFirstRun = false;
-    // allocate array if it does not exist
-    if (m_aData == nullptr)
-    {
-        bFirstRun = true;
-        m_aData.reset(new MYSQL_BIND[m_nFieldCount]);
-        memset(m_aData.get(), 0, m_nFieldCount * sizeof(MYSQL_BIND));
-        m_aMetaData.reset(new BindMetaData[m_nFieldCount]);
-    }
-    for (sal_Int32 i = 0; i < m_nFieldCount; ++i)
-    {
-        m_aMetaData[i].is_null = 0;
-        m_aMetaData[i].length = 0l;
-        m_aMetaData[i].error = 0;
-
-        m_aData[i].is_null = &m_aMetaData[i].is_null;
-        m_aData[i].buffer_length = m_aFields[i].type == MYSQL_TYPE_BLOB ? 0 : m_aFields[i].length;
-        m_aData[i].length = &m_aMetaData[i].length;
-        m_aData[i].error = &m_aMetaData[i].error;
-        m_aData[i].buffer = nullptr;
-        m_aData[i].buffer_type = m_aFields[i].type;
-
-        // allocates memory, if it is a fixed size type. If not then nullptr
-        mysqlc_sdbc_driver::allocateSqlVar(&m_aData[i].buffer, m_aData[i].buffer_type,
-                                           m_aFields[i].length);
-    }
-    mysql_stmt_bind_result(m_pStmt, m_aData.get());
-    if (bFirstRun)
-        mysql_stmt_store_result(m_pStmt);
-    int failure = mysql_stmt_fetch(m_pStmt);
-
-    for (sal_Int32 i = 0; i < m_nFieldCount; ++i)
-    {
-        if (*m_aData[i].error)
-        {
-            // expected if we have a BLOB, as buffer_length is set to 0. We want to
-            // fetch it piece by piece
-            // see https://bugs.mysql.com/file.php?id=12361&bug_id=33086
-            if (m_aData[i].buffer == nullptr)
-            {
-                m_aData[i].buffer_length = *m_aData[i].length;
-                m_aData[i].buffer = malloc(*m_aData[i].length);
-                mysql_stmt_fetch_column(m_pStmt, &m_aData[i], i, 0);
-            }
-        }
-    }
-
-    if (failure == 1)
-    {
-        MYSQL* pMysql = m_rConnection.getMysqlConnection();
-        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(pMysql), mysql_errno(pMysql),
-                                                     *this, m_encoding);
-    }
-    else if (failure == MYSQL_NO_DATA)
-        return false;
+    bool hasData = fetchResult();
 
     // current field cannot be asked as a number. We have to keep track it
     // manually.
-    m_nCurrentField += 1;
+    m_nCurrentRow += 1;
 
-    return true;
+    return hasData;
 }
 
 sal_Bool SAL_CALL OPreparedResultSet::wasNull()
@@ -1081,7 +1089,7 @@ void OPreparedResultSet::checkColumnIndex(sal_Int32 index)
 {
     if (!m_aData)
         throw SQLException("Cursor out of range", *this, rtl::OUString(), 1, Any());
-    if (index < 1 || index > static_cast<int>(m_nFieldCount))
+    if (index < 1 || index > static_cast<int>(m_nColumnCount))
     {
         /* static object for efficiency or thread safety is a problem ? */
         throw SQLException("index out of range", *this, rtl::OUString(), 1, Any());

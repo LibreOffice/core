@@ -53,6 +53,7 @@ public:
     void testDBMetaData();
     void testTimestampField();
     void testNumericConversionPrepared();
+    void testPreparedStmtIsAfterLast();
 
     CPPUNIT_TEST_SUITE(MysqlTestDriver);
     CPPUNIT_TEST(testDBConnection);
@@ -62,6 +63,7 @@ public:
     CPPUNIT_TEST(testDBMetaData);
     CPPUNIT_TEST(testTimestampField);
     CPPUNIT_TEST(testNumericConversionPrepared);
+    CPPUNIT_TEST(testPreparedStmtIsAfterLast);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -388,6 +390,45 @@ void MysqlTestDriver::testNumericConversionPrepared()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(11), xRow->getLong(1));
 
     xStatement->executeUpdate("DROP TABLE myTestTable");
+}
+
+/**
+ * Test cursor positioning method isAfterLast in case of using prepared
+ * statement.
+ */
+void MysqlTestDriver::testPreparedStmtIsAfterLast()
+{
+    Reference<XConnection> xConnection = m_xDriver->connect(m_sUrl, m_infos);
+    if (!xConnection.is())
+        CPPUNIT_ASSERT_MESSAGE("cannot connect to data source!", xConnection.is());
+    uno::Reference<XStatement> xStatement = xConnection->createStatement();
+    CPPUNIT_ASSERT(xStatement.is());
+    xStatement->executeUpdate("DROP TABLE IF EXISTS myTestTable");
+
+    // create test table
+    xStatement->executeUpdate("CREATE TABLE myTestTable (id INTEGER PRIMARY KEY)");
+    Reference<XPreparedStatement> xPrepared
+        = xConnection->prepareStatement(OUString{ "INSERT INTO myTestTable VALUES (?)" });
+    Reference<XParameters> xParams(xPrepared, UNO_QUERY);
+    constexpr int ROW_COUNT = 6;
+    for (int i = 0; i < ROW_COUNT; ++i)
+    {
+        xParams->setShort(1, i);
+        xPrepared->executeUpdate();
+    }
+
+    // query test table
+    xPrepared = xConnection->prepareStatement("SELECT id from myTestTable where id = 3");
+    Reference<XResultSet> xResultSet = xPrepared->executeQuery();
+
+    // There should be exactly one row, therefore IsAfterLast is false at first.
+    xResultSet->next();
+    CPPUNIT_ASSERT(!xResultSet->isAfterLast());
+
+    // attempt to fetch more data
+    bool hasData = xResultSet->next();
+    CPPUNIT_ASSERT(!hasData); // now we are on "AfterLast"
+    CPPUNIT_ASSERT(xResultSet->isAfterLast());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MysqlTestDriver);
