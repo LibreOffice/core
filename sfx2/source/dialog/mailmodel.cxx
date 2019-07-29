@@ -647,7 +647,7 @@ SfxMailModel::~SfxMailModel()
 
 void SfxMailModel::AddToAddress( const OUString& rAddress )
 {
-    // don't add a empty address
+    // don't add an empty address
     if ( !rAddress.isEmpty() )
     {
         if ( !mpToList )

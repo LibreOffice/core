@@ -477,7 +477,7 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMast
 
     pBindings->SetWorkWindow_Impl( this );
 
-    // For the ObjectBars a integral place in the Childlist is reserved,
+    // For the ObjectBars an integral place in the Childlist is reserved,
     // so that they always come in a defined order.
     for (int i=0; i<SFX_OBJECTBAR_MAX; ++i)
         aChildren.push_back( nullptr );
@@ -670,7 +670,7 @@ void SfxWorkWindow::ArrangeChildren_Impl( bool bForce )
     SvBorder aBorder;
     if ( nChildren && IsVisible_Impl() )
         aBorder = Arrange_Impl();
-    // If the current application document contains a IPClient, then the
+    // If the current application document contains an IPClient, then the
     // object through SetTopToolFramePixel has to be assigned the available
     // space. The object will then point to its UITools and sets the app border
     // (-> SfxInPlaceEnv_Impl:: ArrangeChildren_Impl ()). Otherwise the

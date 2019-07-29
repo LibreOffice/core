@@ -461,7 +461,7 @@ SfxDispatcher::~SfxDispatcher()
     }
 }
 
-/** With this method, one or more <SfxShell> are poped from the SfxDispatcher.
+/** With this method, one or more <SfxShell> are popped from the SfxDispatcher.
     The SfxShell is marked for popping and a timer is set up. Only when the
     timer has reached the end, the pop is actually performed
     ( <SfxDispatcher::Flush()> ) and the <SfxBindings> is invalidated.
@@ -1691,7 +1691,7 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
             bool bIsServerShell = !xImp->pFrame || bIsInPlace;
 
             // Of course ShellServer-Slots are also executable even when it is
-            // executed on a container dispatcher without a IPClient.
+            // executed on a container dispatcher without an IPClient.
             if ( !bIsServerShell )
             {
                 SfxViewShell *pViewSh = xImp->pFrame->GetViewShell();

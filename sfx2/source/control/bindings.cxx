@@ -1136,7 +1136,7 @@ std::unique_ptr<SfxItemSet> SfxBindings::CreateSet_Impl
     std::size_t nCachePos = pImpl->nMsgPos;
     const SfxSlot *pSibling = pRealSlot->GetNextSlot();
 
-    // the Slots ODF a interfaces ar linked in a circle
+    // the Slots ODF and interfaces are linked in a circle
     while ( pSibling > pRealSlot )
     {
         SfxStateFunc pSiblingFnc=nullptr;

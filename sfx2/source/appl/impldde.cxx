@@ -124,7 +124,7 @@ bool SvDDEObject::GetData( css::uno::Any & rData /*out param*/,
         pConnection.reset( new DdeConnection( sServer, sTopic ) );
     }
 
-    if( bWaitForData ) // we are in an rekursive loop, get out again
+    if( bWaitForData ) // we are in a recursive loop, get out again
         return false;
 
     // Lock against Reentrance

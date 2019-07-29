@@ -1095,7 +1095,7 @@ sal_Int32 SAL_CALL ThumbnailViewItemAcc::getAccessibleIndexInParent()
         for (sal_uInt16 i=0; i<nCount && !bDone; i++)
         {
             // Guard the retrieval of the i-th child with a try/catch block
-            // just in case the number of children changes in the mean time.
+            // just in case the number of children changes in the meantime.
             try
             {
                 pItem = mpParent->mrParent.ImplGetVisibleItem (i);

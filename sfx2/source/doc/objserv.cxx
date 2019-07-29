@@ -970,7 +970,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             if ( nId == SID_EXPORTDOCASPDF )
             {
-                // This function is used by the SendMail function that needs information if a export
+                // This function is used by the SendMail function that needs information if an export
                 // file was written or not. This could be due to cancellation of the export
                 // or due to an error. So IO abort must be handled like an error!
                 nErrorCode = ( lErr != ERRCODE_IO_ABORT ) && ( nErrorCode == ERRCODE_NONE ) ? nErrorCode : lErr;
