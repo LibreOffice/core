@@ -564,10 +564,6 @@ void SidebarController::OpenThenToggleDeck (
 void SidebarController::OpenThenSwitchToDeck (
     const OUString& rsDeckId)
 {
-    SfxSplitWindow* pSplitWindow = GetSplitWindow();
-    if ( pSplitWindow && !pSplitWindow->IsFadeIn() )
-        // tdf#83546 Collapsed sidebar should expand first
-        pSplitWindow->FadeIn();
     RequestOpenDeck();
     SwitchToDeck(rsDeckId);
 
@@ -1121,6 +1117,11 @@ void SidebarController::RequestCloseDeck()
 
 void SidebarController::RequestOpenDeck()
 {
+    SfxSplitWindow* pSplitWindow = GetSplitWindow();
+    if ( pSplitWindow && !pSplitWindow->IsFadeIn() )
+        // tdf#83546 Collapsed sidebar should expand first
+        pSplitWindow->FadeIn();
+
     mbIsDeckRequestedOpen = true;
     UpdateDeckOpenState();
 }
