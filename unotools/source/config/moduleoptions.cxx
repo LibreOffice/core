@@ -40,10 +40,10 @@
 /*-************************************************************************************************************
     @descr          These values are used to define necessary keys from our configuration management to support
                     all functionality of these implementation.
-                    It's a fast way to make changes if some keys change his name or location!
+                    It's a fast way to make changes if some keys change its name or location!
 
                     Property handle are necessary to specify right position in return list of configuration
-                    for asked values. We ask it with a list of properties to get his values. The returned list
+                    for asked values. We ask it with a list of properties to get its values. The returned list
                     has the same order like our given name list!
                     e.g.:
                             NAMELIST[ PROPERTYHANDLE_xxx ] => VALUELIST[ PROPERTYHANDLE_xxx ]
@@ -359,7 +359,7 @@ void SvtModuleOptions_Impl::ImplCommit()
     }
     // Resize commit list to real size.
     // If nothing to do - suppress calling of configuration ...
-    // It could be to expensive :-)
+    // It could be too expensive :-)
     if( nRealCount > 0 )
     {
         lCommitProperties.realloc( nRealCount );
@@ -572,7 +572,7 @@ css::uno::Sequence< OUString > SvtModuleOptions_Impl::impl_ExpandSetNames( const
 
 /*-************************************************************************************************************
     @short      helper to classify given factory by name
-    @descr      Every factory has his own long and short name. So we can match right enum value for internal using.
+    @descr      Every factory has its own long and short name. So we can match right enum value for internal using.
 
     @attention  We change in/out parameter "eFactory" in every case! But you should use it only, if return value is sal_True!
                 Algorithm:  Set out-parameter to probably value ... and check the longname.
@@ -671,7 +671,7 @@ bool SvtModuleOptions_Impl::ClassifyFactoryByName( const OUString& sName, SvtMod
 *//*-*************************************************************************************************************/
 void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< OUString >& lFactories )
 {
-    // Expand every set node name in lFactories to full qualified paths to his properties
+    // Expand every set node name in lFactories to full qualified paths to its properties
     // and get right values from configuration.
     const css::uno::Sequence< OUString > lProperties = impl_ExpandSetNames( lFactories  );
     const css::uno::Sequence< css::uno::Any >   lValues     = GetProperties( lProperties );

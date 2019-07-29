@@ -226,8 +226,8 @@ public:
     STDMETHOD(Get_XAccChildID)(/*[out,retval]*/ long* childID) override;
     // AccObjectManagerAgent is a management object in UNO, here keep its pointer for
     // the implementation of accNavigate when descendant manage happens for List,Tree, or Table
-    // AccObjectManagerAgent and the following UNO objects XAccessble,XAccessibleSelection,
-    // XAccessibleAction are all used to operate UNO accessiblility information directly when
+    // AccObjectManagerAgent and the following UNO objects XAccessible,XAccessibleSelection,
+    // XAccessibleAction are all used to operate UNO accessibility information directly when
     // implement some specific MSAA methods,such as accSelection,accNavigate
     static AccObjectManagerAgent* g_pAgent;
 

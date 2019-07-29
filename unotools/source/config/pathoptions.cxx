@@ -217,7 +217,7 @@ const OUString& SvtPathOptions_Impl::GetPath( SvtPathOptions::Paths ePath )
         OUString    aResult;
         sal_Int32   nHandle = m_aMapEnumToPropHandle[ static_cast<sal_Int32>(ePath) ];
 
-        // Substitution is done by the service itself using the substition service
+        // Substitution is done by the service itself using the substitution service
         Any         a = m_xPathSettings->getFastPropertyValue( nHandle );
         a >>= aPathValue;
         if( ePath == SvtPathOptions::PATH_ADDIN     ||
@@ -289,7 +289,7 @@ void SvtPathOptions_Impl::SetPath( SvtPathOptions::Paths ePath, const OUString& 
                 aNewValue = rNewPath;
         }
 
-        // Resubstitution is done by the service itself using the substition service
+        // Resubstitution is done by the service itself using the substitution service
         a <<= aNewValue;
         try
         {

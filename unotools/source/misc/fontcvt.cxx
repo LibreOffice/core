@@ -1263,7 +1263,7 @@ sal_Unicode ConvertChar::RecodeChar( sal_Unicode cChar ) const
                 if ( IsStarSymbol( OUString::createFromAscii(mpSubsFontName) ) )
                 {
                     cRetVal = 0xE12C;
-                    SAL_WARN( "unotools.misc", "Forcing a bullet substition from 0x" <<
+                    SAL_WARN( "unotools.misc", "Forcing a bullet substitution from 0x" <<
                         OString::number(cChar, 16) << " to 0x" <<
                         OString::number(cRetVal, 16));
                 }
@@ -1275,7 +1275,7 @@ sal_Unicode ConvertChar::RecodeChar( sal_Unicode cChar ) const
 }
 
 // recode the string assuming the character codes are symbol codes
-// from an traditional symbol font (i.e. U+F020..U+F0FF)
+// from a traditional symbol font (i.e. U+F020..U+F0FF)
 void ConvertChar::RecodeString( OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen ) const
 {
     sal_Int32 nLastIndex = nIndex + nLen;
