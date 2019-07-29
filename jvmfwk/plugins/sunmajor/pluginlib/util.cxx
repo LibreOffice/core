@@ -365,7 +365,9 @@ void AsynchReader::execute()
         {
             //Save the data we have in m_arData into a temporary array
             std::unique_ptr<sal_Char[]> arTmp( new sal_Char[m_nDataSize]);
-            memcpy(arTmp.get(), m_arData.get(), m_nDataSize);
+            if (m_nDataSize != 0) {
+                memcpy(arTmp.get(), m_arData.get(), m_nDataSize);
+            }
             //Enlarge m_arData to hold the newly read data
             m_arData.reset(new sal_Char[static_cast<size_t>(m_nDataSize + nRead)]);
             //Copy back the data that was already in m_arData
