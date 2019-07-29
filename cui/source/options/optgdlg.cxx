@@ -605,8 +605,8 @@ static bool DisplayNameCompareLessThan(const vcl::IconThemeInfo& rInfo1, const v
     return rInfo1.GetDisplayName().compareTo(rInfo2.GetDisplayName()) < 0;
 }
 
-OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "OptViewPage", "cui/ui/optviewpage.ui", &rSet)
+OfaViewTabPage::OfaViewTabPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "cui/ui/optviewpage.ui", "OptViewPage", &rSet)
     , nSizeLB_InitialSelection(0)
     , nSidebarSizeLB_InitialSelection(0)
     , nNotebookbarSizeLB_InitialSelection(0)
@@ -615,50 +615,48 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     , pCanvasSettings(new CanvasSettings)
     , mpDrawinglayerOpt(new SvtOptionsDrawinglayer)
     , mpOpenGLConfig(new svt::OpenGLCfg)
+    , m_xIconSizeLB(m_xBuilder->weld_combo_box("iconsize"))
+    , m_xSidebarIconSizeLB(m_xBuilder->weld_combo_box("sidebariconsize"))
+    , m_xNotebookbarIconSizeLB(m_xBuilder->weld_combo_box("notebookbariconsize"))
+    , m_xIconStyleLB(m_xBuilder->weld_combo_box("iconstyle"))
+    , m_xFontAntiAliasing(m_xBuilder->weld_check_button("aafont"))
+    , m_xAAPointLimitLabel(m_xBuilder->weld_label("aafrom"))
+    , m_xAAPointLimit(m_xBuilder->weld_metric_spin_button("aanf", FieldUnit::PIXEL))
+    , m_xMenuIconsLB(m_xBuilder->weld_combo_box("menuicons"))
+    , m_xContextMenuShortcutsLB(m_xBuilder->weld_combo_box("contextmenushortcuts"))
+    , m_xFontShowCB(m_xBuilder->weld_check_button("showfontpreview"))
+    , m_xUseHardwareAccell(m_xBuilder->weld_check_button("useaccel"))
+    , m_xUseAntiAliase(m_xBuilder->weld_check_button("useaa"))
+    , m_xUseOpenGL(m_xBuilder->weld_check_button("useopengl"))
+    , m_xForceOpenGL(m_xBuilder->weld_check_button("forceopengl"))
+    , m_xOpenGLStatusEnabled(m_xBuilder->weld_label("openglenabled"))
+    , m_xOpenGLStatusDisabled(m_xBuilder->weld_label("opengldisabled"))
+    , m_xMousePosLB(m_xBuilder->weld_combo_box("mousepos"))
+    , m_xMouseMiddleLB(m_xBuilder->weld_combo_box("mousemiddle"))
 {
-    get(m_pIconSizeLB, "iconsize");
-    get(m_pSidebarIconSizeLB, "sidebariconsize");
-    get(m_pNotebookbarIconSizeLB, "notebookbariconsize");
-    get(m_pIconStyleLB, "iconstyle");
-
-    get(m_pFontAntiAliasing, "aafont");
-    get(m_pAAPointLimitLabel, "aafrom");
-    get(m_pAAPointLimit, "aanf");
-    get(m_pMenuIconsLB, "menuicons");
-    get(m_pContextMenuShortcutsLB, "contextmenushortcuts");
-    get(m_pFontShowCB, "showfontpreview");
-    get(m_pUseHardwareAccell, "useaccel");
-    get(m_pUseAntiAliase, "useaa");
-    get(m_pUseOpenGL, "useopengl");
-    get(m_pForceOpenGL, "forceopengl");
-    get(m_pOpenGLStatusEnabled, "openglenabled");
-    get(m_pOpenGLStatusDisabled, "opengldisabled");
-    get(m_pMousePosLB, "mousepos");
-    get(m_pMouseMiddleLB, "mousemiddle");
-
     if (Application::GetToolkitName() == "gtk3")
     {
-        m_pUseOpenGL->Hide();
-        m_pForceOpenGL->Hide();
-        m_pOpenGLStatusEnabled->Hide();
-        m_pOpenGLStatusDisabled->Hide();
+        m_xUseOpenGL->hide();
+        m_xForceOpenGL->hide();
+        m_xOpenGLStatusEnabled->hide();
+        m_xOpenGLStatusDisabled->hide();
     }
 
 #if defined( UNX )
-    m_pFontAntiAliasing->SetToggleHdl( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
+    m_xFontAntiAliasing->connect_toggled( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
 #else
     // on this platform, we do not have the anti aliasing options
-    m_pFontAntiAliasing->Hide();
-    m_pAAPointLimitLabel->Hide();
-    m_pAAPointLimit->Hide();
+    m_xFontAntiAliasing->hide();
+    m_xAAPointLimitLabel->hide();
+    m_xAAPointLimit->hide();
 
 #endif
 
-    m_pForceOpenGL->SetToggleHdl(LINK(this, OfaViewTabPage, OnForceOpenGLToggled));
+    m_xForceOpenGL->connect_toggled(LINK(this, OfaViewTabPage, OnForceOpenGLToggled));
 
     // Set known icon themes
-    OUString sAutoStr( m_pIconStyleLB->GetEntry( 0 ) );
-    m_pIconStyleLB->Clear();
+    OUString sAutoStr( m_xIconStyleLB->get_text( 0 ) );
+    m_xIconStyleLB->clear();
     StyleSettings aStyleSettings = Application::GetSettings().GetStyleSettings();
     mInstalledIconThemes = aStyleSettings.GetInstalledIconThemes();
     std::sort(mInstalledIconThemes.begin(), mInstalledIconThemes.end(), DisplayNameCompareLessThan);
@@ -670,77 +668,51 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     OUString entryForAuto = sAutoStr + " (" +
                                 autoIconTheme.GetDisplayName() +
                                 ")";
-    m_pIconStyleLB->InsertEntry(entryForAuto);
-
-    for (auto const& installIconTheme : mInstalledIconThemes)
-    {
-        m_pIconStyleLB->InsertEntry(installIconTheme.GetDisplayName());
-    }
+    m_xIconStyleLB->append_text(entryForAuto);
 
     // separate auto and other icon themes
-    m_pIconStyleLB->SetSeparatorPos( 0 );
-    m_pIconStyleLB->SelectEntryPos(0);
+    m_xIconStyleLB->append_separator();
+
+    for (auto const& installIconTheme : mInstalledIconThemes)
+        m_xIconStyleLB->append_text(installIconTheme.GetDisplayName());
+
+    m_xIconStyleLB->set_active(0);
 
     // FIXME: should really add code to show a 'lock' icon here.
     if (officecfg::Office::Common::VCL::UseOpenGL::isReadOnly())
-        m_pUseOpenGL->Enable(false);
+        m_xUseOpenGL->set_sensitive(false);
     if (officecfg::Office::Common::VCL::ForceOpenGL::isReadOnly())
-        m_pForceOpenGL->Enable(false);
+        m_xForceOpenGL->set_sensitive(false);
 
     UpdateOGLStatus();
 }
 
 OfaViewTabPage::~OfaViewTabPage()
 {
-    disposeOnce();
-}
-
-void OfaViewTabPage::dispose()
-{
-    mpDrawinglayerOpt.reset();
-    pCanvasSettings.reset();
-    pAppearanceCfg.reset();
-    m_pIconSizeLB.clear();
-    m_pSidebarIconSizeLB.clear();
-    m_pNotebookbarIconSizeLB.clear();
-    m_pIconStyleLB.clear();
-    m_pFontAntiAliasing.clear();
-    m_pAAPointLimitLabel.clear();
-    m_pAAPointLimit.clear();
-    m_pMenuIconsLB.clear();
-    m_pContextMenuShortcutsLB.clear();
-    m_pFontShowCB.clear();
-    m_pUseHardwareAccell.clear();
-    m_pUseAntiAliase.clear();
-    m_pUseOpenGL.clear();
-    m_pForceOpenGL.clear();
-    m_pOpenGLStatusEnabled.clear();
-    m_pOpenGLStatusDisabled.clear();
-    m_pMousePosLB.clear();
-    m_pMouseMiddleLB.clear();
-    SfxTabPage::dispose();
 }
 
 #if defined( UNX )
-IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled, CheckBox&, void )
+IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled, weld::ToggleButton&, void )
 {
-    bool bAAEnabled = m_pFontAntiAliasing->IsChecked();
+    bool bAAEnabled = m_xFontAntiAliasing->get_active();
 
-    m_pAAPointLimitLabel->Enable( bAAEnabled );
-    m_pAAPointLimit->Enable( bAAEnabled );
+    m_xAAPointLimitLabel->set_sensitive(bAAEnabled);
+    m_xAAPointLimit->set_sensitive(bAAEnabled);
 }
 #endif
 
-IMPL_LINK_NOARG(OfaViewTabPage, OnForceOpenGLToggled, CheckBox&, void)
+IMPL_LINK_NOARG(OfaViewTabPage, OnForceOpenGLToggled, weld::ToggleButton&, void)
 {
-    if (m_pForceOpenGL->IsChecked())
+    if (m_xForceOpenGL->get_active())
+    {
         // Ignoring the opengl blacklist implies that opengl is on.
-        m_pUseOpenGL->Check();
+        m_xUseOpenGL->set_active(true);
+    }
 }
 
 VclPtr<SfxTabPage> OfaViewTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<OfaViewTabPage>::Create(pParent.pParent, *rAttrSet);
+    return VclPtr<OfaViewTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool OfaViewTabPage::FillItemSet( SfxItemSet* )
@@ -753,7 +725,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     bool bRepaintWindows(false);
 
     SvtMiscOptions aMiscOptions;
-    const sal_Int32 nSizeLB_NewSelection = m_pIconSizeLB->GetSelectedEntryPos();
+    const sal_Int32 nSizeLB_NewSelection = m_xIconSizeLB->get_active();
     if( nSizeLB_InitialSelection != nSizeLB_NewSelection )
     {
         // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
@@ -770,7 +742,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         aMiscOptions.SetSymbolsSize( eSet );
     }
 
-    const sal_Int32 nSidebarSizeLB_NewSelection = m_pSidebarIconSizeLB->GetSelectedEntryPos();
+    const sal_Int32 nSidebarSizeLB_NewSelection = m_xSidebarIconSizeLB->get_active();
     if( nSidebarSizeLB_InitialSelection != nSidebarSizeLB_NewSelection )
     {
         // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
@@ -786,7 +758,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         aMiscOptions.SetSidebarIconSize( eSet );
     }
 
-    const sal_Int32 nNotebookbarSizeLB_NewSelection = m_pNotebookbarIconSizeLB->GetSelectedEntryPos();
+    const sal_Int32 nNotebookbarSizeLB_NewSelection = m_xNotebookbarIconSizeLB->get_active();
     if( nNotebookbarSizeLB_InitialSelection != nNotebookbarSizeLB_NewSelection )
     {
         // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
@@ -797,12 +769,12 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
             case 1: eSet = ToolBoxButtonSize::Small; break;
             case 2: eSet = ToolBoxButtonSize::Large; break;
             default:
-                OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of m_pNotebookbarIconSizeLB should not be possible!" );
+                OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of m_xNotebookbarIconSizeLB should not be possible!" );
         }
         aMiscOptions.SetNotebookbarIconSize( eSet );
     }
 
-    const sal_Int32 nStyleLB_NewSelection = m_pIconStyleLB->GetSelectedEntryPos();
+    const sal_Int32 nStyleLB_NewSelection = m_xIconStyleLB->get_active();
     if( nStyleLB_InitialSelection != nStyleLB_NewSelection )
     {
         // 0 means choose style automatically
@@ -810,7 +782,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
             aMiscOptions.SetIconTheme("auto");
         else
         {
-            const sal_Int32 pos = m_pIconStyleLB->GetSelectedEntryPos();
+            const sal_Int32 pos = m_xIconStyleLB->get_active();
             const vcl::IconThemeInfo& iconThemeId = mInstalledIconThemes.at(pos-1);
             aMiscOptions.SetIconTheme(iconThemeId.GetThemeId());
         }
@@ -821,7 +793,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
     // Mouse Snap Mode
     SnapType eOldSnap = pAppearanceCfg->GetSnapMode();
-    SnapType eNewSnap = static_cast<SnapType>(m_pMousePosLB->GetSelectedEntryPos());
+    SnapType eNewSnap = static_cast<SnapType>(m_xMousePosLB->get_active());
     if(eNewSnap > SnapType::NONE)
         eNewSnap = SnapType::NONE;
 
@@ -833,7 +805,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
     // Middle Mouse Button
     MouseMiddleButtonAction eOldMiddleMouse = pAppearanceCfg->GetMiddleMouseButton();
-    short eNewMiddleMouse = m_pMouseMiddleLB->GetSelectedEntryPos();
+    short eNewMiddleMouse = m_xMouseMiddleLB->get_active();
     if(eNewMiddleMouse > 2)
         eNewMiddleMouse = 2;
 
@@ -844,71 +816,71 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     }
 
 #if defined( UNX )
-    if ( m_pFontAntiAliasing->IsValueChangedFromSaved() )
+    if (m_xFontAntiAliasing->get_state_changed_from_saved())
     {
-        pAppearanceCfg->SetFontAntiAliasing( m_pFontAntiAliasing->IsChecked() );
+        pAppearanceCfg->SetFontAntiAliasing(m_xFontAntiAliasing->get_active());
         bAppearanceChanged = true;
     }
 
-    if ( m_pAAPointLimit->IsValueChangedFromSaved() )
+    if (m_xAAPointLimit->get_value_changed_from_saved())
     {
-        pAppearanceCfg->SetFontAntialiasingMinPixelHeight( m_pAAPointLimit->GetValue() );
+        pAppearanceCfg->SetFontAntialiasingMinPixelHeight(m_xAAPointLimit->get_value(FieldUnit::PIXEL));
         bAppearanceChanged = true;
     }
 #endif
 
-    if ( m_pFontShowCB->IsValueChangedFromSaved() )
+    if (m_xFontShowCB->get_state_changed_from_saved())
     {
-        aFontOpt.EnableFontWYSIWYG( m_pFontShowCB->IsChecked() );
+        aFontOpt.EnableFontWYSIWYG(m_xFontShowCB->get_active());
         bModified = true;
     }
 
-    if(m_pMenuIconsLB->IsValueChangedFromSaved())
+    if (m_xMenuIconsLB->get_value_changed_from_saved())
     {
-        aMenuOpt.SetMenuIconsState(m_pMenuIconsLB->GetSelectedEntryPos() == 0 ?
+        aMenuOpt.SetMenuIconsState(m_xMenuIconsLB->get_active() == 0 ?
             TRISTATE_INDET :
-            static_cast<TriState>(m_pMenuIconsLB->GetSelectedEntryPos() - 1));
+            static_cast<TriState>(m_xMenuIconsLB->get_active() - 1));
         bModified = true;
         bMenuOptModified = true;
         bAppearanceChanged = true;
     }
 
-    if(m_pContextMenuShortcutsLB->IsValueChangedFromSaved())
+    if (m_xContextMenuShortcutsLB->get_value_changed_from_saved())
     {
-        aMenuOpt.SetContextMenuShortcuts(m_pContextMenuShortcutsLB->GetSelectedEntryPos() == 0 ?
+        aMenuOpt.SetContextMenuShortcuts(m_xContextMenuShortcutsLB->get_active() == 0 ?
             TRISTATE_INDET :
-            static_cast<TriState>(m_pContextMenuShortcutsLB->GetSelectedEntryPos() - 1));
+            static_cast<TriState>(m_xContextMenuShortcutsLB->get_active() - 1));
         bModified = true;
         bMenuOptModified = true;
         bAppearanceChanged = true;
     }
 
     // #i95644#  if disabled, do not use value, see in ::Reset()
-    if(m_pUseHardwareAccell->IsEnabled())
+    if (m_xUseHardwareAccell->get_sensitive())
     {
-        if(m_pUseHardwareAccell->IsValueChangedFromSaved())
+        if(m_xUseHardwareAccell->get_state_changed_from_saved())
         {
-            pCanvasSettings->EnabledHardwareAcceleration(m_pUseHardwareAccell->IsChecked());
+            pCanvasSettings->EnabledHardwareAcceleration(m_xUseHardwareAccell->get_active());
             bModified = true;
         }
     }
 
     // #i95644#  if disabled, do not use value, see in ::Reset()
-    if(m_pUseAntiAliase->IsEnabled())
+    if (m_xUseAntiAliase->get_sensitive())
     {
-        if(m_pUseAntiAliase->IsChecked() != mpDrawinglayerOpt->IsAntiAliasing())
+        if (m_xUseAntiAliase->get_active() != mpDrawinglayerOpt->IsAntiAliasing())
         {
-            mpDrawinglayerOpt->SetAntiAliasing(m_pUseAntiAliase->IsChecked());
+            mpDrawinglayerOpt->SetAntiAliasing(m_xUseAntiAliase->get_active());
             bModified = true;
             bRepaintWindows = true;
         }
     }
 
-    if (m_pUseOpenGL->IsValueChangedFromSaved() ||
-        m_pForceOpenGL->IsValueChangedFromSaved())
+    if (m_xUseOpenGL->get_state_changed_from_saved() ||
+        m_xForceOpenGL->get_state_changed_from_saved())
     {
-        mpOpenGLConfig->setUseOpenGL(m_pUseOpenGL->IsChecked());
-        mpOpenGLConfig->setForceOpenGL(m_pForceOpenGL->IsChecked());
+        mpOpenGLConfig->setUseOpenGL(m_xUseOpenGL->get_active());
+        mpOpenGLConfig->setForceOpenGL(m_xForceOpenGL->get_active());
         bModified = true;
     }
 
@@ -939,8 +911,8 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         }
     }
 
-    if (m_pUseOpenGL->IsValueChangedFromSaved() ||
-        m_pForceOpenGL->IsValueChangedFromSaved())
+    if (m_xUseOpenGL->get_state_changed_from_saved() ||
+        m_xForceOpenGL->get_state_changed_from_saved())
     {
         SolarMutexGuard aGuard;
         if( svtools::executeRestartDialog(
@@ -966,8 +938,8 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
         else if (aMiscOptions.GetSymbolsSize() == SFX_SYMBOLS_SIZE_32)
             nSizeLB_InitialSelection = 3;
     }
-    m_pIconSizeLB->SelectEntryPos( nSizeLB_InitialSelection );
-    m_pIconSizeLB->SaveValue();
+    m_xIconSizeLB->set_active( nSizeLB_InitialSelection );
+    m_xIconSizeLB->save_value();
 
     if( aMiscOptions.GetSidebarIconSize() == ToolBoxButtonSize::DontCare )
         ; // do nothing
@@ -975,16 +947,16 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
         nSidebarSizeLB_InitialSelection = 1;
     else if( aMiscOptions.GetSidebarIconSize() == ToolBoxButtonSize::Large )
         nSidebarSizeLB_InitialSelection = 2;
-    m_pSidebarIconSizeLB->SelectEntryPos( nSidebarSizeLB_InitialSelection );
-    m_pSidebarIconSizeLB->SaveValue();
+    m_xSidebarIconSizeLB->set_active( nSidebarSizeLB_InitialSelection );
+    m_xSidebarIconSizeLB->save_value();
     if( aMiscOptions.GetNotebookbarIconSize() == ToolBoxButtonSize::DontCare )
         ; // do nothing
     else if( aMiscOptions.GetNotebookbarIconSize() == ToolBoxButtonSize::Small )
         nNotebookbarSizeLB_InitialSelection = 1;
     else if( aMiscOptions.GetNotebookbarIconSize() == ToolBoxButtonSize::Large )
         nNotebookbarSizeLB_InitialSelection = 2;
-    m_pNotebookbarIconSizeLB->SelectEntryPos( nNotebookbarSizeLB_InitialSelection );
-    m_pNotebookbarIconSizeLB->SaveValue();
+    m_xNotebookbarIconSizeLB->set_active(nNotebookbarSizeLB_InitialSelection);
+    m_xNotebookbarIconSizeLB->save_value();
 
     if (aMiscOptions.IconThemeWasSetAutomatically()) {
         nStyleLB_InitialSelection = 0;
@@ -993,79 +965,79 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
         const OUString& selected = aMiscOptions.GetIconTheme();
         const vcl::IconThemeInfo& selectedInfo =
                 vcl::IconThemeInfo::FindIconThemeById(mInstalledIconThemes, selected);
-        nStyleLB_InitialSelection = m_pIconStyleLB->GetEntryPos(selectedInfo.GetDisplayName());
+        nStyleLB_InitialSelection = m_xIconStyleLB->find_text(selectedInfo.GetDisplayName());
     }
 
-    m_pIconStyleLB->SelectEntryPos( nStyleLB_InitialSelection );
-    m_pIconStyleLB->SaveValue();
+    m_xIconStyleLB->set_active(nStyleLB_InitialSelection);
+    m_xIconStyleLB->save_value();
 
     // Mouse Snap
-    m_pMousePosLB->SelectEntryPos(static_cast<sal_Int32>(pAppearanceCfg->GetSnapMode()));
-    m_pMousePosLB->SaveValue();
+    m_xMousePosLB->set_active(static_cast<sal_Int32>(pAppearanceCfg->GetSnapMode()));
+    m_xMousePosLB->save_value();
 
     // Mouse Snap
-    m_pMouseMiddleLB->SelectEntryPos(static_cast<short>(pAppearanceCfg->GetMiddleMouseButton()));
-    m_pMouseMiddleLB->SaveValue();
+    m_xMouseMiddleLB->set_active(static_cast<short>(pAppearanceCfg->GetMiddleMouseButton()));
+    m_xMouseMiddleLB->save_value();
 
 #if defined( UNX )
-    m_pFontAntiAliasing->Check( pAppearanceCfg->IsFontAntiAliasing() );
-    m_pAAPointLimit->SetValue( pAppearanceCfg->GetFontAntialiasingMinPixelHeight() );
+    m_xFontAntiAliasing->set_active( pAppearanceCfg->IsFontAntiAliasing() );
+    m_xAAPointLimit->set_value(pAppearanceCfg->GetFontAntialiasingMinPixelHeight(), FieldUnit::PIXEL);
 #endif
 
     // WorkingSet
     SvtFontOptions aFontOpt;
-    m_pFontShowCB->Check( aFontOpt.IsFontWYSIWYGEnabled() );
+    m_xFontShowCB->set_active( aFontOpt.IsFontWYSIWYGEnabled() );
     SvtMenuOptions aMenuOpt;
-    m_pMenuIconsLB->SelectEntryPos(aMenuOpt.GetMenuIconsState() == 2 ? 0 : aMenuOpt.GetMenuIconsState() + 1);
-    m_pMenuIconsLB->SaveValue();
+    m_xMenuIconsLB->set_active(aMenuOpt.GetMenuIconsState() == 2 ? 0 : aMenuOpt.GetMenuIconsState() + 1);
+    m_xMenuIconsLB->save_value();
 
     TriState eContextMenuShortcuts = aMenuOpt.GetContextMenuShortcuts();
     bool bContextMenuShortcutsNonDefault = eContextMenuShortcuts == TRISTATE_FALSE || eContextMenuShortcuts == TRISTATE_TRUE;
-    m_pContextMenuShortcutsLB->SelectEntryPos(bContextMenuShortcutsNonDefault ? eContextMenuShortcuts + 1 : 0);
-    m_pContextMenuShortcutsLB->SaveValue();
+    m_xContextMenuShortcutsLB->set_active(bContextMenuShortcutsNonDefault ? eContextMenuShortcuts + 1 : 0);
+    m_xContextMenuShortcutsLB->save_value();
 
     { // #i95644# HW accel (unified to disable mechanism)
         if(pCanvasSettings->IsHardwareAccelerationAvailable())
         {
-            m_pUseHardwareAccell->Check(pCanvasSettings->IsHardwareAccelerationEnabled());
-            m_pUseHardwareAccell->Enable(!pCanvasSettings->IsHardwareAccelerationRO());
+            m_xUseHardwareAccell->set_active(pCanvasSettings->IsHardwareAccelerationEnabled());
+            m_xUseHardwareAccell->set_sensitive(!pCanvasSettings->IsHardwareAccelerationRO());
         }
         else
         {
-            m_pUseHardwareAccell->Check(false);
-            m_pUseHardwareAccell->Disable();
+            m_xUseHardwareAccell->set_active(false);
+            m_xUseHardwareAccell->set_sensitive(false);
         }
 
-        m_pUseHardwareAccell->SaveValue();
+        m_xUseHardwareAccell->save_state();
     }
 
     { // #i95644# AntiAliasing
         if(mpDrawinglayerOpt->IsAAPossibleOnThisSystem())
         {
-            m_pUseAntiAliase->Check(mpDrawinglayerOpt->IsAntiAliasing());
+            m_xUseAntiAliase->set_active(mpDrawinglayerOpt->IsAntiAliasing());
         }
         else
         {
-            m_pUseAntiAliase->Check(false);
-            m_pUseAntiAliase->Disable();
+            m_xUseAntiAliase->set_active(false);
+            m_xUseAntiAliase->set_sensitive(false);
         }
 
-        m_pUseAntiAliase->SaveValue();
+        m_xUseAntiAliase->save_state();
     }
-    m_pUseOpenGL->Check(mpOpenGLConfig->useOpenGL());
-    m_pForceOpenGL->Check(mpOpenGLConfig->forceOpenGL());
+    m_xUseOpenGL->set_active(mpOpenGLConfig->useOpenGL());
+    m_xForceOpenGL->set_active(mpOpenGLConfig->forceOpenGL());
 
 #if defined( UNX )
-    m_pFontAntiAliasing->SaveValue();
-    m_pAAPointLimit->SaveValue();
+    m_xFontAntiAliasing->save_state();
+    m_xAAPointLimit->save_value();
 #endif
-    m_pFontShowCB->SaveValue();
+    m_xFontShowCB->save_state();
 
-    m_pUseOpenGL->SaveValue();
-    m_pForceOpenGL->SaveValue();
+    m_xUseOpenGL->save_state();
+    m_xForceOpenGL->save_state();
 
 #if defined( UNX )
-    LINK( this, OfaViewTabPage, OnAntialiasingToggled ).Call( *m_pFontAntiAliasing );
+    OnAntialiasingToggled(*m_xFontAntiAliasing);
 #endif
 }
 
@@ -1079,8 +1051,8 @@ void OfaViewTabPage::UpdateOGLStatus()
 #else
     bool bEnabled = false;
 #endif
-    m_pOpenGLStatusEnabled->Show(bEnabled);
-    m_pOpenGLStatusDisabled->Show(!bEnabled);
+    m_xOpenGLStatusEnabled->set_visible(bEnabled);
+    m_xOpenGLStatusDisabled->set_visible(!bEnabled);
 }
 
 struct LanguageConfig_Impl

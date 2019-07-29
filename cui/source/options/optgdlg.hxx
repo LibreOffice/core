@@ -78,31 +78,6 @@ class SvtTabAppearanceCfg;
 class OfaViewTabPage : public SfxTabPage
 {
 private:
-    VclPtr<ListBox>        m_pIconSizeLB;
-    VclPtr<ListBox>        m_pSidebarIconSizeLB;
-    VclPtr<ListBox>        m_pNotebookbarIconSizeLB;
-    VclPtr<ListBox>        m_pIconStyleLB;
-
-    VclPtr<CheckBox>       m_pFontAntiAliasing;
-    VclPtr<FixedText>      m_pAAPointLimitLabel;
-    VclPtr<MetricField>    m_pAAPointLimit;
-
-    VclPtr<ListBox>        m_pMenuIconsLB;
-    VclPtr<ListBox>        m_pContextMenuShortcutsLB;
-
-    VclPtr<CheckBox>       m_pFontShowCB;
-
-    VclPtr<CheckBox>       m_pUseHardwareAccell;
-    VclPtr<CheckBox>       m_pUseAntiAliase;
-    VclPtr<CheckBox>       m_pUseOpenGL;
-    VclPtr<CheckBox>       m_pForceOpenGL;
-
-    VclPtr<FixedText>      m_pOpenGLStatusEnabled;
-    VclPtr<FixedText>      m_pOpenGLStatusDisabled;
-
-    VclPtr<ListBox>        m_pMousePosLB;
-    VclPtr<ListBox>        m_pMouseMiddleLB;
-
     sal_Int32      nSizeLB_InitialSelection;
     sal_Int32      nSidebarSizeLB_InitialSelection;
     sal_Int32      nNotebookbarSizeLB_InitialSelection;
@@ -115,16 +90,40 @@ private:
 
     std::vector<vcl::IconThemeInfo> mInstalledIconThemes;
 
+    std::unique_ptr<weld::ComboBox> m_xIconSizeLB;
+    std::unique_ptr<weld::ComboBox> m_xSidebarIconSizeLB;
+    std::unique_ptr<weld::ComboBox> m_xNotebookbarIconSizeLB;
+    std::unique_ptr<weld::ComboBox> m_xIconStyleLB;
+
+    std::unique_ptr<weld::CheckButton> m_xFontAntiAliasing;
+    std::unique_ptr<weld::Label> m_xAAPointLimitLabel;
+    std::unique_ptr<weld::MetricSpinButton> m_xAAPointLimit;
+
+    std::unique_ptr<weld::ComboBox> m_xMenuIconsLB;
+    std::unique_ptr<weld::ComboBox> m_xContextMenuShortcutsLB;
+
+    std::unique_ptr<weld::CheckButton> m_xFontShowCB;
+
+    std::unique_ptr<weld::CheckButton> m_xUseHardwareAccell;
+    std::unique_ptr<weld::CheckButton> m_xUseAntiAliase;
+    std::unique_ptr<weld::CheckButton> m_xUseOpenGL;
+    std::unique_ptr<weld::CheckButton> m_xForceOpenGL;
+
+    std::unique_ptr<weld::Label> m_xOpenGLStatusEnabled;
+    std::unique_ptr<weld::Label> m_xOpenGLStatusDisabled;
+
+    std::unique_ptr<weld::ComboBox> m_xMousePosLB;
+    std::unique_ptr<weld::ComboBox> m_xMouseMiddleLB;
+
 #if defined( UNX )
-    DECL_LINK( OnAntialiasingToggled, CheckBox&, void );
+    DECL_LINK(OnAntialiasingToggled, weld::ToggleButton&, void);
 #endif
-    DECL_LINK(OnForceOpenGLToggled, CheckBox&, void);
+    DECL_LINK(OnForceOpenGLToggled, weld::ToggleButton&, void);
     void UpdateOGLStatus();
 
 public:
-    OfaViewTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    OfaViewTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~OfaViewTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
