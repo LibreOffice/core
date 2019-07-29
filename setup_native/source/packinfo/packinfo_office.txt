@@ -22,10 +22,15 @@
 # scpModule
 # shellscript file (optional)
 # solarispackagename
+# solarisreplaces (optional)
+# solarisincompat (optional)
 # solarisrequires (optional)
 # solarisprovides (optional)
+# freebsdrequires (optional)
+# freebsdprovides (optional)
 # packagename
 # linuxreplaces (optional)
+# linuxincompat (optional)
 # requires (optional)
 # provides (optional)
 # copyright
