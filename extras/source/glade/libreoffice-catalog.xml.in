@@ -239,10 +239,6 @@
       </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Double Field" name="scuilo-ScDoubleField"
-                        generic-name="Double Field" parent="GtkEntry"
-                        icon-name="widget-gtk-textentry"/>
-
     <glade-widget-class title="Open Document ListBox" name="dbulo-OpenDocumentListBox"
                         generic-name="Open Document ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>

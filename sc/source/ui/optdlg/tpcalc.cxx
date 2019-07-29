@@ -32,82 +32,54 @@
 
 #include <tpcalc.hxx>
 
-ScTpCalcOptions::ScTpCalcOptions(vcl::Window* pParent, const SfxItemSet& rCoreAttrs)
-    : SfxTabPage(pParent, "OptCalculatePage",
-        "modules/scalc/ui/optcalculatepage.ui", &rCoreAttrs)
+ScTpCalcOptions::ScTpCalcOptions(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+    : SfxTabPage(pParent, "modules/scalc/ui/optcalculatepage.ui", "OptCalculatePage", &rCoreAttrs)
     , pOldOptions(new ScDocOptions(
         static_cast<const ScTpCalcItem&>(rCoreAttrs.Get(
             GetWhich(SID_SCDOCOPTIONS))).GetDocOptions()))
     , pLocalOptions(new ScDocOptions)
     , nWhichCalc(GetWhich(SID_SCDOCOPTIONS))
+    , m_xBtnIterate(m_xBuilder->weld_check_button("iterate"))
+    , m_xFtSteps(m_xBuilder->weld_label("stepsft"))
+    , m_xEdSteps(m_xBuilder->weld_spin_button("steps"))
+    , m_xFtEps(m_xBuilder->weld_label("minchangeft"))
+    , m_xEdEps(new DoubleField(m_xBuilder->weld_entry("minchange")))
+    , m_xBtnDateStd(m_xBuilder->weld_radio_button("datestd"))
+    , m_xBtnDateSc10(m_xBuilder->weld_radio_button("datesc10"))
+    , m_xBtnDate1904(m_xBuilder->weld_radio_button("date1904"))
+    , m_xBtnCase(m_xBuilder->weld_check_button("case"))
+    , m_xBtnCalc(m_xBuilder->weld_check_button("calc"))
+    , m_xBtnMatch(m_xBuilder->weld_check_button("match"))
+    , m_xBtnWildcards(m_xBuilder->weld_radio_button("formulawildcards"))
+    , m_xBtnRegex(m_xBuilder->weld_radio_button("formularegex"))
+    , m_xBtnLiteral(m_xBuilder->weld_radio_button("formulaliteral"))
+    , m_xBtnLookUp(m_xBuilder->weld_check_button("lookup"))
+    , m_xBtnGeneralPrec(m_xBuilder->weld_check_button("generalprec"))
+    , m_xFtPrec(m_xBuilder->weld_label("precft"))
+    , m_xEdPrec(m_xBuilder->weld_spin_button("prec"))
+    , m_xBtnThread(m_xBuilder->weld_check_button("threadingenabled"))
 {
-    get(m_pBtnIterate, "iterate");
-    get(m_pFtSteps, "stepsft");
-    get(m_pEdSteps, "steps");
-    get(m_pFtEps, "minchangeft");
-    get(m_pEdEps, "minchange");
-    get(m_pBtnDateStd, "datestd");
-    get(m_pBtnDateSc10, "datesc10");
-    get(m_pBtnDate1904, "date1904");
-    get(m_pBtnCase, "case");
-    get(m_pBtnCalc, "calc");
-    get(m_pBtnMatch, "match");
-    get(m_pBtnWildcards, "formulawildcards");
-    get(m_pBtnRegex, "formularegex");
-    get(m_pBtnLiteral, "formulaliteral");
-    get(m_pBtnLookUp, "lookup");
-    get(m_pBtnGeneralPrec, "generalprec");
-    get(m_pFtPrec, "precft");
-    get(m_pEdPrec, "prec");
-    get(m_pBtnThread, "threadingenabled");
     Init();
     SetExchangeSupport();
 }
 
 ScTpCalcOptions::~ScTpCalcOptions()
 {
-    disposeOnce();
-}
-
-void ScTpCalcOptions::dispose()
-{
-    pOldOptions.reset();
-    pLocalOptions.reset();
-    m_pBtnIterate.clear();
-    m_pFtSteps.clear();
-    m_pEdSteps.clear();
-    m_pFtEps.clear();
-    m_pEdEps.clear();
-    m_pBtnDateStd.clear();
-    m_pBtnDateSc10.clear();
-    m_pBtnDate1904.clear();
-    m_pBtnCase.clear();
-    m_pBtnCalc.clear();
-    m_pBtnMatch.clear();
-    m_pBtnWildcards.clear();
-    m_pBtnRegex.clear();
-    m_pBtnLiteral.clear();
-    m_pBtnLookUp.clear();
-    m_pBtnGeneralPrec.clear();
-    m_pFtPrec.clear();
-    m_pEdPrec.clear();
-    m_pBtnThread.clear();
-    SfxTabPage::dispose();
 }
 
 void ScTpCalcOptions::Init()
 {
-    m_pBtnIterate->SetClickHdl( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
-    m_pBtnGeneralPrec->SetClickHdl( LINK(this, ScTpCalcOptions, CheckClickHdl) );
-    m_pBtnDateStd->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
-    m_pBtnDateSc10->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
-    m_pBtnDate1904->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
-    m_pBtnThread->SetClickHdl( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
+    m_xBtnIterate->connect_toggled( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
+    m_xBtnGeneralPrec->connect_toggled( LINK(this, ScTpCalcOptions, CheckClickHdl) );
+    m_xBtnDateStd->connect_clicked( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
+    m_xBtnDateSc10->connect_clicked( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
+    m_xBtnDate1904->connect_clicked( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
+    m_xBtnThread->connect_toggled( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
 }
 
 VclPtr<SfxTabPage> ScTpCalcOptions::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<ScTpCalcOptions>::Create( pParent.pParent, *rAttrSet );
+    return VclPtr<ScTpCalcOptions>::Create( pParent, *rAttrSet );
 }
 
 void ScTpCalcOptions::Reset( const SfxItemSet* /* rCoreAttrs */ )
@@ -117,12 +89,12 @@ void ScTpCalcOptions::Reset( const SfxItemSet* /* rCoreAttrs */ )
 
     *pLocalOptions  = *pOldOptions;
 
-    m_pBtnCase->Check( !pLocalOptions->IsIgnoreCase() );
-    m_pBtnCase->Enable( !officecfg::Office::Calc::Calculate::Other::CaseSensitive::isReadOnly() );
-    m_pBtnCalc->Check( pLocalOptions->IsCalcAsShown() );
-    m_pBtnCalc->Enable( !officecfg::Office::Calc::Calculate::Other::Precision::isReadOnly() );
-    m_pBtnMatch->Check( pLocalOptions->IsMatchWholeCell() );
-    m_pBtnMatch->Enable( !officecfg::Office::Calc::Calculate::Other::SearchCriteria::isReadOnly() );
+    m_xBtnCase->set_active( !pLocalOptions->IsIgnoreCase() );
+    m_xBtnCase->set_sensitive( !officecfg::Office::Calc::Calculate::Other::CaseSensitive::isReadOnly() );
+    m_xBtnCalc->set_active( pLocalOptions->IsCalcAsShown() );
+    m_xBtnCalc->set_sensitive( !officecfg::Office::Calc::Calculate::Other::Precision::isReadOnly() );
+    m_xBtnMatch->set_active( pLocalOptions->IsMatchWholeCell() );
+    m_xBtnMatch->set_sensitive( !officecfg::Office::Calc::Calculate::Other::SearchCriteria::isReadOnly() );
     bool bWildcards = pLocalOptions->IsFormulaWildcardsEnabled();
     bool bRegex = pLocalOptions->IsFormulaRegexEnabled();
     // If both, Wildcards and Regex, are set then Wildcards shall take
@@ -130,79 +102,79 @@ void ScTpCalcOptions::Reset( const SfxItemSet* /* rCoreAttrs */ )
     // simultaneously couldn't be set using UI but editing the configuration.
     if (bWildcards && bRegex)
         bRegex = false;
-    m_pBtnWildcards->Check( bWildcards );
-    m_pBtnRegex->Check( bRegex );
-    m_pBtnWildcards->Enable( !officecfg::Office::Calc::Calculate::Other::Wildcards::isReadOnly() );
-    m_pBtnRegex->Enable( !officecfg::Office::Calc::Calculate::Other::RegularExpressions::isReadOnly() );
-    m_pBtnLiteral->Check( !bWildcards && !bRegex );
-    m_pBtnLiteral->Enable( m_pBtnWildcards->IsEnabled() || m_pBtnRegex->IsEnabled() );
+    m_xBtnWildcards->set_active( bWildcards );
+    m_xBtnRegex->set_active( bRegex );
+    m_xBtnWildcards->set_sensitive( !officecfg::Office::Calc::Calculate::Other::Wildcards::isReadOnly() );
+    m_xBtnRegex->set_sensitive( !officecfg::Office::Calc::Calculate::Other::RegularExpressions::isReadOnly() );
+    m_xBtnLiteral->set_active( !bWildcards && !bRegex );
+    m_xBtnLiteral->set_sensitive( m_xBtnWildcards->get_sensitive() || m_xBtnRegex->get_sensitive() );
     // if either regex or wildcards radio button is set and read-only, disable all three
-    if ( (!m_pBtnWildcards->IsEnabled() && bWildcards) || (!m_pBtnRegex->IsEnabled() && bRegex) )
+    if ( (!m_xBtnWildcards->get_sensitive() && bWildcards) || (!m_xBtnRegex->get_sensitive() && bRegex) )
     {
-        m_pBtnWildcards->Enable( false );
-        m_pBtnRegex->Enable( false );
-        m_pBtnLiteral->Enable( false );
+        m_xBtnWildcards->set_sensitive( false );
+        m_xBtnRegex->set_sensitive( false );
+        m_xBtnLiteral->set_sensitive( false );
     }
-    m_pBtnLookUp->Check( pLocalOptions->IsLookUpColRowNames() );
-    m_pBtnLookUp->Enable( !officecfg::Office::Calc::Calculate::Other::FindLabel::isReadOnly() );
-    m_pBtnIterate->Check( pLocalOptions->IsIter() );
-    m_pEdSteps->SetValue( pLocalOptions->GetIterCount() );
-    m_pEdEps->SetValue( pLocalOptions->GetIterEps(), 6 );
+    m_xBtnLookUp->set_active( pLocalOptions->IsLookUpColRowNames() );
+    m_xBtnLookUp->set_sensitive( !officecfg::Office::Calc::Calculate::Other::FindLabel::isReadOnly() );
+    m_xBtnIterate->set_active( pLocalOptions->IsIter() );
+    m_xEdSteps->set_value( pLocalOptions->GetIterCount() );
+    m_xEdEps->SetValue( pLocalOptions->GetIterEps(), 6 );
 
     pLocalOptions->GetDate( d, m, y );
 
     switch ( y )
     {
         case 1899:
-            m_pBtnDateStd->Check();
+            m_xBtnDateStd->set_active(true);
             break;
         case 1900:
-            m_pBtnDateSc10->Check();
+            m_xBtnDateSc10->set_active(true);
             break;
         case 1904:
-            m_pBtnDate1904->Check();
+            m_xBtnDate1904->set_active(true);
             break;
     }
 
     sal_uInt16 nPrec = pLocalOptions->GetStdPrecision();
     if (nPrec == SvNumberFormatter::UNLIMITED_PRECISION)
     {
-        m_pFtPrec->Disable();
-        m_pEdPrec->Disable();
-        m_pBtnGeneralPrec->Check(false);
+        m_xFtPrec->set_sensitive(false);
+        m_xEdPrec->set_sensitive(false);
+        m_xBtnGeneralPrec->set_active(false);
     }
     else
     {
-        m_pBtnGeneralPrec->Check();
-        m_pFtPrec->Enable();
-        m_pEdPrec->Enable();
-        m_pEdPrec->SetValue(nPrec);
+        m_xBtnGeneralPrec->set_active(true);
+        m_xFtPrec->set_sensitive(true);
+        m_xEdPrec->set_sensitive(true);
+        m_xEdPrec->set_value(nPrec);
     }
 
-    m_pBtnThread->Enable( !officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::isReadOnly() );
-    m_pBtnThread->Check( officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get() );
+    m_xBtnThread->set_sensitive( !officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::isReadOnly() );
+    m_xBtnThread->set_active( officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get() );
 
-    CheckClickHdl(m_pBtnIterate);
+    CheckClickHdl(*m_xBtnIterate);
 }
 
 bool ScTpCalcOptions::FillItemSet( SfxItemSet* rCoreAttrs )
 {
     // every other options are updated in handlers
-    pLocalOptions->SetIterCount( static_cast<sal_uInt16>(m_pEdSteps->GetValue()) );
-    pLocalOptions->SetIgnoreCase( !m_pBtnCase->IsChecked() );
-    pLocalOptions->SetCalcAsShown( m_pBtnCalc->IsChecked() );
-    pLocalOptions->SetMatchWholeCell( m_pBtnMatch->IsChecked() );
-    pLocalOptions->SetFormulaWildcardsEnabled( m_pBtnWildcards->IsChecked() );
-    pLocalOptions->SetFormulaRegexEnabled( m_pBtnRegex->IsChecked() );
-    pLocalOptions->SetLookUpColRowNames( m_pBtnLookUp->IsChecked() );
+    pLocalOptions->SetIterCount( static_cast<sal_uInt16>(m_xEdSteps->get_value()) );
+    pLocalOptions->SetIgnoreCase( !m_xBtnCase->get_active() );
+    pLocalOptions->SetCalcAsShown( m_xBtnCalc->get_active() );
+    pLocalOptions->SetMatchWholeCell( m_xBtnMatch->get_active() );
+    pLocalOptions->SetFormulaWildcardsEnabled( m_xBtnWildcards->get_active() );
+    pLocalOptions->SetFormulaRegexEnabled( m_xBtnRegex->get_active() );
+    pLocalOptions->SetLookUpColRowNames( m_xBtnLookUp->get_active() );
 
-    if (m_pBtnGeneralPrec->IsChecked())
+    if (m_xBtnGeneralPrec->get_active())
         pLocalOptions->SetStdPrecision(
-            static_cast<sal_uInt16>(m_pEdPrec->GetValue()) );
+            static_cast<sal_uInt16>(m_xEdPrec->get_value()) );
     else
         pLocalOptions->SetStdPrecision( SvNumberFormatter::UNLIMITED_PRECISION );
 
-    bool bShouldEnableThreading = m_pBtnThread->IsChecked();
+    bool bShouldEnableThreading = m_xBtnThread->get_active();
     if (bShouldEnableThreading != officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get())
     {
         std::shared_ptr<comphelper::ConfigurationChanges> xBatch(comphelper::ConfigurationChanges::create());
@@ -228,7 +200,7 @@ DeactivateRC ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
     DeactivateRC nReturn = DeactivateRC::KeepPage;
 
     double fEps;
-    if( m_pEdEps->GetValue( fEps ) && (fEps > 0.0) )
+    if( m_xEdEps->GetValue( fEps ) && (fEps > 0.0) )
     {
         pLocalOptions->SetIterEps( fEps );
         nReturn = DeactivateRC::LeavePage;
@@ -240,7 +212,7 @@ DeactivateRC ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
                     VclButtonsType::Ok, ScResId(STR_INVALID_EPS)));
         xBox->run();
 
-        m_pEdEps->GrabFocus();
+        m_xEdEps->grab_focus();
     }
     else if ( pSetP )
         FillItemSet( pSetP );
@@ -250,51 +222,50 @@ DeactivateRC ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 
 // Handler:
 
-IMPL_LINK( ScTpCalcOptions, RadioClickHdl, Button*, pBtn, void )
+IMPL_LINK( ScTpCalcOptions, RadioClickHdl, weld::Button&, rBtn, void )
 {
-    if (pBtn == m_pBtnDateStd)
+    if (&rBtn == m_xBtnDateStd.get())
     {
         pLocalOptions->SetDate( 30, 12, 1899 );
     }
-    else if (pBtn == m_pBtnDateSc10)
+    else if (&rBtn == m_xBtnDateSc10.get())
     {
         pLocalOptions->SetDate( 1, 1, 1900 );
     }
-    else if (pBtn == m_pBtnDate1904)
+    else if (&rBtn == m_xBtnDate1904.get())
     {
         pLocalOptions->SetDate( 1, 1, 1904 );
     }
 }
 
-IMPL_LINK( ScTpCalcOptions, CheckClickHdl, Button*, p, void )
+IMPL_LINK(ScTpCalcOptions, CheckClickHdl, weld::ToggleButton&, rBtn, void)
 {
-    CheckBox* pBtn = static_cast<CheckBox*>(p);
-    if (pBtn == m_pBtnGeneralPrec)
+    if (&rBtn == m_xBtnGeneralPrec.get())
     {
-        if (pBtn->IsChecked())
+        if (rBtn.get_active())
         {
-            m_pEdPrec->Enable();
-            m_pFtPrec->Enable();
+            m_xEdPrec->set_sensitive(true);
+            m_xFtPrec->set_sensitive(true);
         }
         else
         {
-            m_pEdPrec->Disable();
-            m_pFtPrec->Disable();
+            m_xEdPrec->set_sensitive(false);
+            m_xFtPrec->set_sensitive(false);
         }
     }
-    else if (pBtn == m_pBtnIterate)
+    else if (&rBtn == m_xBtnIterate.get())
     {
-        if ( pBtn->IsChecked() )
+        if (rBtn.get_active())
         {
             pLocalOptions->SetIter( true );
-            m_pFtSteps->Enable();  m_pEdSteps->Enable();
-            m_pFtEps->Enable();  m_pEdEps->Enable();
+            m_xFtSteps->set_sensitive(true);  m_xEdSteps->set_sensitive(true);
+            m_xFtEps->set_sensitive(true);  m_xEdEps->set_sensitive(true);
         }
         else
         {
             pLocalOptions->SetIter( false );
-            m_pFtSteps->Disable(); m_pEdSteps->Disable();
-            m_pFtEps->Disable(); m_pEdEps->Disable();
+            m_xFtSteps->set_sensitive(false); m_xEdSteps->set_sensitive(false);
+            m_xFtEps->set_sensitive(false); m_xEdEps->set_sensitive(false);
         }
     }
 }

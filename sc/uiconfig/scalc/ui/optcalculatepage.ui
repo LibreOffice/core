@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -163,7 +163,6 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">formularegex</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -179,9 +178,8 @@
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
-                    <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">formulaliteral</property>
+                    <property name="group">formulawildcards</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -197,9 +195,8 @@
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
-                    <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">formulawildcard</property>
+                    <property name="group">formulawildcards</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -263,6 +260,7 @@
                       <object class="GtkSpinButton" id="prec">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
                       <packing>
@@ -338,10 +336,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="optcalculatepage|stepsft">_Steps:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">steps</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -353,10 +351,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="optcalculatepage|minchangeft">_Minimum change:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">minchange</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -367,6 +365,7 @@
                   <object class="GtkSpinButton" id="steps">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>
@@ -375,10 +374,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="scuilo-ScDoubleField" id="minchange">
+                  <object class="GtkEntry" id="minchange">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
+                    <property name="activates_default">True</property>
                     <property name="width_chars">12</property>
                   </object>
                   <packing>
@@ -434,7 +434,6 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">datesc10</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -451,7 +450,7 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">date1904</property>
+                    <property name="group">datestd</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
