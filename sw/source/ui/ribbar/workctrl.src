@@ -138,12 +138,12 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     };
     FixedLine FL_SEP
     {
-        //no position, no text
+        // no position, no text
         Size = MAP_APPFONT ( 20, 4 ) ;
     };
     FixedText FI_INFO
     {
-        //no position, no text
+        // no position, no text
         Size = MAP_APPFONT ( 20, 8 ) ;
         Center = TRUE ;
     };
@@ -201,7 +201,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     };
     String ST_POSTIT
     {
-        Text [ en-US ] = "Note" ;
+        Text [ en-US ] = "Comment" ;
     };
     String ST_SRCH_REP
     {
@@ -226,12 +226,12 @@ Noch ein paar Reserven
             ToolBoxItem
             {
                 Identifier = NID_NEXT;
-                Text = "Vorwärts" ;
+                Text = "VorwÃ¤rts" ;
                         };
             ToolBoxItem
             {
                 Identifier = NID_PREV;
-                Text = "Rückwärts" ;
+                Text = "RÃ¼ckwÃ¤rts" ;
                         };
             ToolBoxItem
             {
@@ -247,7 +247,7 @@ Noch ein paar Reserven
 
 */
 /***************************************************************
-    Strings fuer die Quickhelp der View-PgUp/Down-Buttons
+    Quickhelp strings for View-Up/Down buttons
 ***************************************************************/
 String STR_IMGBTN_NEXT_DOWN
 {
@@ -307,11 +307,11 @@ String STR_IMGBTN_FTN_DOWN
 };
 String STR_IMGBTN_MARK_DOWN
 {
-    Text [ en-US ] = "Next Reminder" ;
+    Text [ en-US ] = "Next reminder" ;
 };
 String STR_IMGBTN_POSTIT_DOWN
 {
-    Text [ en-US ] = "Next Note" ;
+    Text [ en-US ] = "Next comment" ;
 };
 String STR_IMGBTN_SRCH_REP_DOWN
 {
@@ -379,11 +379,11 @@ String STR_IMGBTN_FTN_UP
 };
 String STR_IMGBTN_MARK_UP
 {
-    Text [ en-US ] = "Previous Reminder" ;
+    Text [ en-US ] = "Previous reminder" ;
 };
 String STR_IMGBTN_POSTIT_UP
 {
-    Text [ en-US ] = "Previous Note" ;
+    Text [ en-US ] = "Previous comment" ;
 };
 String STR_IMGBTN_SRCH_REP_UP
 {
