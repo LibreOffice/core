@@ -164,7 +164,6 @@ $(eval $(call gb_Module_add_uicheck_targets,sw,\
 	UITest_sw_findReplace \
 	UITest_sw_findSimilarity \
 	UITest_chapterNumbering \
-	UITest_librelogo \
 	UITest_options \
 	UITest_classification \
 	UITest_writer_macro_tests \
