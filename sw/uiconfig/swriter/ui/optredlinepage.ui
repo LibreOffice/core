@@ -2,7 +2,6 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="OptRedLinePage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -85,10 +84,17 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxcorelo-SvxColorListBox" id="insertcolor">
+                  <object class="GtkMenuButton" id="insertcolor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="valign">center</property>
+                    <property name="receives_default">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="label" translatable="no"></property>
+                    <child>
+                      <placeholder/>
+                    </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="insertcolor-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="optredlinepage|insertcolor-atkobject">Color of Insertions</property>
@@ -101,11 +107,28 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxFontPrevWindow" id="insertedpreview:border">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="text" translatable="yes" context="optredlinepage|insertedpreview">Insert</property>
+                    <property name="vexpand">True</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="vscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="insertedpreview">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -196,10 +219,17 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxcorelo-SvxColorListBox" id="deletedcolor">
+                  <object class="GtkMenuButton" id="deletedcolor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="valign">center</property>
+                    <property name="receives_default">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="label" translatable="no"></property>
+                    <child>
+                      <placeholder/>
+                    </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="deletedcolor-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="optredlinepage|deletedcolor-atkobject">Color of Deletions</property>
@@ -212,11 +242,28 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxFontPrevWindow" id="deletedpreview:border">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="text" translatable="yes" context="optredlinepage|deletedpreview">Delete</property>
+                    <property name="vexpand">True</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="vscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="deletedpreview">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -307,10 +354,17 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxcorelo-SvxColorListBox" id="changedcolor">
+                  <object class="GtkMenuButton" id="changedcolor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="valign">center</property>
+                    <property name="receives_default">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="label" translatable="no"></property>
+                    <child>
+                      <placeholder/>
+                    </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="changedcolor-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="optredlinepage|changedcolor-atkobject">Color of Changed Attributes</property>
@@ -323,11 +377,28 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxFontPrevWindow" id="changedpreview:border">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="text" translatable="yes" context="optredlinepage|changedpreview">Attributes</property>
+                    <property name="vexpand">True</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="vscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="changedpreview">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -379,10 +450,17 @@
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
                 <child>
-                  <object class="svxcorelo-SvxColorListBox" id="markcolor">
+                  <object class="GtkMenuButton" id="markcolor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="valign">center</property>
+                    <property name="receives_default">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="label" translatable="no"></property>
+                    <child>
+                      <placeholder/>
+                    </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="markcolor-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="optredlinepage|markcolor-atkobject">Color of Mark</property>
@@ -423,10 +501,28 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="swuilo-SwMarkPreview" id="markpreview">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="vscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="markpreview">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
