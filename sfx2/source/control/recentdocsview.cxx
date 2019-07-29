@@ -44,6 +44,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <sfx2/strings.hrc>
 #include <bitmaps.hlst>
+#include <vcl/virdev.hxx>
 
 #include <officecfg/Office/Common.hxx>
 
@@ -239,6 +240,7 @@ void RecentDocsView::Reload()
         OUString aURL;
         OUString aTitle;
         BitmapEx aThumbnail;
+        BitmapEx aModule;
 
         for ( const auto& rProp : rRecentEntry )
         {
@@ -261,6 +263,17 @@ void RecentDocsView::Reload()
                     aThumbnail = aReader.Read();
                 }
             }
+        }
+
+        aModule = getDefaultThumbnail(aURL);
+        if (!aModule.IsEmpty() && !aThumbnail.IsEmpty()) {
+            ScopedVclPtr<VirtualDevice> m_pVirDev(VclPtr<VirtualDevice>::Create());
+            Size aSize(aThumbnail.GetSizePixel());
+            m_pVirDev->SetOutputSizePixel(aSize);
+            m_pVirDev->DrawBitmapEx(Point(), aThumbnail);
+            m_pVirDev->DrawBitmapEx(Point(aSize.Width()-50,aSize.Height()-50), Size(40,40), aModule);
+            aThumbnail = m_pVirDev->GetBitmapEx(Point(), aSize);
+            m_pVirDev.disposeAndClear();
         }
 
         if(!aURL.isEmpty())
