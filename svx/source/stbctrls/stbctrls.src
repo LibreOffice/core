@@ -266,7 +266,7 @@ Image RID_SVXBMP_SLIDERBUTTON
 {
     ImageBitmap = Bitmap
     {
-        File = "navigationball_10.png" ;
+        File = "slidecontrol.png" ;
     };
 };
 Image RID_SVXBMP_SLIDERDECREASE
@@ -287,7 +287,7 @@ Image RID_SVXBMP_SLIDERBUTTON_HC
 {
     ImageBitmap = Bitmap
     {
-        File = "navigationball_10_h.png" ;
+        File = "slidecontrol_h.png" ;
     };
 };
 Image RID_SVXBMP_SLIDERDECREASE_HC
