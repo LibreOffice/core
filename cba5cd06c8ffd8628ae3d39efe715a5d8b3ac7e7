@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_904c53c8",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 10437,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-07-29T07:32:27Z",
+      "side": 1,
+      "message": "see writer format-\u003ebullets and numbering for something that assert now where silent return of nullptr for missing button was expected",
+      "revId": "cba5cd06c8ffd8628ae3d39efe715a5d8b3ac7e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
