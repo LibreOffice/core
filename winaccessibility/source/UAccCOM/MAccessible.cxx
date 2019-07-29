@@ -1333,7 +1333,7 @@ STDMETHODIMP CMAccessible::Put_XAccAgent(hyper pAgent)
 * When a UNO control disposing, it disposes its listeners,
 * then notify AccObject in bridge management, then notify
 * COM that the XAccessible is invalid,so set m_xAccessible as NULL
-* @param    isDestroy, true is it need to be destroyed.
+* @param    isDestroy, true is it needs to be destroyed.
 * @return   S_OK if successful and E_FAIL if failure.
 */
 STDMETHODIMP CMAccessible::NotifyDestroy(BOOL isDestroy)

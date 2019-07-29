@@ -434,7 +434,7 @@ bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
         if(( m_nMode & ConfigItemMode::AllLocales ) == ConfigItemMode::AllLocales )
         {
             // If ConfigItem works in "ALL_LOCALES"-mode ... we must support a Sequence< PropertyValue >
-            // as value of an localized configuration entry!
+            // as value of a localized configuration entry!
             // How we can do that?
             // We must split all PropertyValues to "Sequence< OUString >" AND "Sequence< Any >"!
             impl_unpackLocalizedProperties( rNames, rValues, lNames, lValues );

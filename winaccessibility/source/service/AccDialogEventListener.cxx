@@ -87,7 +87,7 @@ void AccDialogEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
     }
     else if (oldValue >>= xChild)
     {
-        //delete a existing child
+        //delete an existing child
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();

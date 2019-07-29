@@ -547,9 +547,9 @@ void SAL_CALL ScVbaControl::fireEvent( const script::ScriptEvent& rEvt )
             if ( xControl.is() ) // normal control ( from dialog/userform )
             {
                 // #FIXME We should probably store a reference to the
-                // parent dialog/userform here ( other wise the name of
+                // parent dialog/userform here (otherwise the name of
                 // dialog could be changed and we won't be aware of it.
-                // ( OTOH this is probably an unlikely scenario )
+                // (OTOH this is probably an unlikely scenario)
                 evt.Source = xThisControl;
                 aEvt.Source = xControl;
                 evt.ScriptCode = m_sLibraryAndCodeName;
