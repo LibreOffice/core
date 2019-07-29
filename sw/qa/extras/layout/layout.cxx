@@ -98,18 +98,6 @@ void SwLayoutWriter::CheckRedlineFootnotesHidden()
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFootnotes)
 {
-    // currently need experimental mode
-    Resetter _([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::ExperimentalMode::set(false, pBatch);
-        return pBatch->commit();
-    });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::ExperimentalMode::set(true, pBatch);
-    pBatch->commit();
-
     createDoc("redline_footnotes.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -206,18 +194,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFootnotes)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
 {
-    // currently need experimental mode
-    Resetter _([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::ExperimentalMode::set(false, pBatch);
-        return pBatch->commit();
-    });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::ExperimentalMode::set(true, pBatch);
-    pBatch->commit();
-
     loadURL("private:factory/swriter", nullptr);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -484,18 +460,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
 {
-    // currently need experimental mode
-    Resetter _([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::ExperimentalMode::set(false, pBatch);
-        return pBatch->commit();
-    });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::ExperimentalMode::set(true, pBatch);
-    pBatch->commit();
-
     loadURL("private:factory/swriter", nullptr);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -779,18 +743,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
 {
-    // currently need experimental mode
-    Resetter _([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::ExperimentalMode::set(false, pBatch);
-        return pBatch->commit();
-    });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::ExperimentalMode::set(true, pBatch);
-    pBatch->commit();
-
     loadURL("private:factory/swriter", nullptr);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -1169,18 +1121,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
 {
-    // currently need experimental mode
-    Resetter _([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::ExperimentalMode::set(false, pBatch);
-        return pBatch->commit();
-    });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::ExperimentalMode::set(true, pBatch);
-    pBatch->commit();
-
     loadURL("private:factory/swriter", nullptr);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -1645,18 +1585,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
 {
-    // currently need experimental mode
-    Resetter _([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::ExperimentalMode::set(false, pBatch);
-        return pBatch->commit();
-    });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::ExperimentalMode::set(true, pBatch);
-    pBatch->commit();
-
     loadURL("private:factory/swriter", nullptr);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -1933,18 +1861,6 @@ void SwLayoutWriter::CheckRedlineSectionsHidden()
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineSections)
 {
-    // currently need experimental mode
-    Resetter _([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::ExperimentalMode::set(false, pBatch);
-        return pBatch->commit();
-    });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::ExperimentalMode::set(true, pBatch);
-    pBatch->commit();
-
     createDoc("redline_sections.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -2013,18 +1929,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineSections)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
 {
-    // currently need experimental mode
-    Resetter _([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::ExperimentalMode::set(false, pBatch);
-        return pBatch->commit();
-    });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::ExperimentalMode::set(true, pBatch);
-    pBatch->commit();
-
     createDoc("redline_table.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -2145,18 +2049,6 @@ void SwLayoutWriter::CheckRedlineCharAttributesHidden()
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineCharAttributes)
 {
-    // currently need experimental mode
-    Resetter _([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::ExperimentalMode::set(false, pBatch);
-        return pBatch->commit();
-    });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::ExperimentalMode::set(true, pBatch);
-    pBatch->commit();
-
     createDoc("redline_charatr.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
