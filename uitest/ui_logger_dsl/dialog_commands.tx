@@ -1,5 +1,8 @@
-//this file for the Dialog commands
-
+/*
+  this file for the Dialog commands
+  It handle all types of Dialog the Modeless and the Modal
+  Also It handle the Close Dialog Commands
+*/
 DialogCommand:
   OpenDialog | CloseDialog
 ;
@@ -13,6 +16,7 @@ OpenModalDialog :
 OpenModelessDialog :
   'Open Modeless ' dialog_name=ID
 ;
+
 CloseDialog:
   //the additional_note=STRING? if you need to add name in the future
   //Also it's used to make instance of the command of type CloseDialog

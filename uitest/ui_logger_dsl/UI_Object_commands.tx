@@ -1,21 +1,21 @@
 import type_options
+
 /*
-    this file is for: 
-        ButtonUIObject	
-        EditUIObject	
-        CheckBoxUIObject	
-        RadioButtonUIObject	
-        ListBoxUIObject
-        ComboBoxUIObject	
-        SpinUIObject	
-        SpinFieldUIObject	
-        TabControlUIObject
+    this file is for The Grammar of: 
+        1)  ButtonUIObject : ( Click event )
+        2)  EditUIObject	: ( Type event - Clear event - Select Text event )
+        3)  CheckBoxUIObject	: ( Toggle the value  )
+        4)  RadioButtonUIObject	: ( Select event )
+        5)  ListBoxUIObject : ( Select event )
+        6)  ComboBoxUIObject	( Select event )
+        7)  SpinUIObject		( Increase event - Decrease event )
+        8)  TabControlUIObject ( Change tab event )
 */
 
 UIObjectCommand:
   ButtonUIObject | CheckBoxUIObject | EditUIObject | 
   RadioButtonUIObject | ListBoxUIObject | ComboBoxUIObject | 
-  SpinUIObject | SpinFieldUIObject | TabControlUIObject | General_type_command_on_UI_Object
+  SpinFieldUIObject | TabControlUIObject
 ;
 
 ButtonUIObject:
@@ -43,13 +43,8 @@ SpinFieldUIObject:
 ListBoxUIObject:
    'Select element with position ' POS=INT 'in' list_id=STRING 'from' parent_id=ID 
 ;
-//==========================================
-SpinUIObject:
-	'from' parent_id=ID 
-  //unkown for now 
-;
-//==========================================
 
+//=============================================================
 //hellper grammer for EditUIObject
 action_on_UIObject:
     Type_action | SELECT | Clear
@@ -65,12 +60,8 @@ Clear:
   'Clear' edit_button=STRING
 ;
 
+//=============================================================
 //helper functions for SpinUIObject
 increase_or_ecrease:
   'Increase' | 'Decrease'
-;
-
-//==================================================
-General_type_command_on_UI_Object:
-  'Type on' UI_Obj=STRING  what_to_type=Type_options 'from' parent_id=ID  
 ;
