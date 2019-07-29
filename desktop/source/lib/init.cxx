@@ -3261,7 +3261,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     }
 
     bool bResult = false;
-    if (bNotifyWhenFinished && pDocument->mpCallbackFlushHandlers[nView])
+    if (bNotifyWhenFinished && pDocument->mpCallbackFlushHandlers.count(nView))
     {
         bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector),
                 new DispatchResultListener(pCommand, pDocument->mpCallbackFlushHandlers[nView]));
