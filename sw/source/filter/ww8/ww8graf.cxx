@@ -2089,6 +2089,14 @@ void SwWW8ImplReader::MapWrapIntoFlyFormat(SvxMSDffImportRec const * pRecord,
             pNd->SetContour(&aPoly);
         }
     }
+    else if (pFlyFormat->GetSurround().IsContour())
+    {
+        // Contour is enabled, but no polygon is set: disable contour, because Word does not
+        // Writer-style auto-contour in that case.
+        SwFormatSurround aSurround(pFlyFormat->GetSurround());
+        aSurround.SetContour(false);
+        pFlyFormat->SetFormatAttr(aSurround);
+    }
 }
 
 static sal_Int32 lcl_ConvertCrop(sal_uInt32 const nCrop, sal_Int32 const nSize)
