@@ -278,21 +278,6 @@ packageversion = "%PACKAGEVERSION"
 End
 
 Start
-module = "gid_Module_Optional_Pyuno_LibreLogo"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-librelogo"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-pyuno,%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-writer,SUNWPython"
-packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-librelogo"
-freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-pyuno,%BASISPACKAGEPREFIX%PRODUCTVERSION-writer"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-pyuno %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX%PRODUCTVERSION-writer %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-copyright = "2019 The Document Foundation"
-solariscopyright = "solariscopyrightfile"
-vendor = "The Document Foundation"
-description = "LibreLogo toolbar for %PRODUCTNAME %PRODUCTVERSION Writer"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-End
-
-Start
 module = "gid_Module_Script_Provider_For_Python"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-python-script-provider"
 solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"

@@ -81,7 +81,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	jurt \
 	jvmaccess \
 	jvmfwk \
-	librelogo \
 	libreofficekit \
 	lingucomponent \
 	linguistic \

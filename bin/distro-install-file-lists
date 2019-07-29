@@ -141,14 +141,12 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
             merge_flists gid_Module_Optional_Pymailmerge       $FILELISTSDIR/pyuno_list.txt
             merge_flists gid_Module_Pyuno                      $FILELISTSDIR/pyuno_list.txt
             merge_flists gid_Module_Script_Provider_For_Python $FILELISTSDIR/pyuno_list.txt
-            merge_flists gid_Module_Optional_Pyuno_LibreLogo   $FILELISTSDIR/pyuno_list.txt
             merge_flists gid_Module_Optional_Xsltfiltersamples $FILELISTSDIR/common_list.txt
         else
             merge_flists gid_Module_Optional_Grfflt            $FILELISTSDIR/common_list.txt
             merge_flists gid_Module_Optional_Headless          $FILELISTSDIR/common_list.txt
             merge_flists gid_Module_Optional_Pymailmerge       $FILELISTSDIR/mailmerge_list.txt
             merge_flists gid_Module_Pyuno                      $FILELISTSDIR/pyuno_list.txt
-            merge_flists gid_Module_Optional_Pyuno_LibreLogo   $FILELISTSDIR/pyuno_list.txt
             merge_flists gid_Module_Script_Provider_For_Python $FILELISTSDIR/pyuno_list.txt
             merge_flists gid_Module_Optional_Xsltfiltersamples $FILELISTSDIR/filters_list.txt
         fi
@@ -157,7 +155,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         merge_flists gid_Module_Optional_Headless          $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Optional_Pymailmerge       $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Pyuno                      $FILELISTSDIR/common_list.txt
-        merge_flists gid_Module_Optional_Pyuno_LibreLogo   $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Script_Provider_For_Python $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Optional_Xsltfiltersamples $FILELISTSDIR/common_list.txt
     fi

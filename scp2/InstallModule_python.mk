@@ -12,7 +12,6 @@ $(eval $(call gb_InstallModule_InstallModule,scp2/python))
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/python,\
 	python \
 	python_scriptprovider \
-	python_librelogo \
 ))
 
 ifeq ($(DISABLE_PYTHON),TRUE)
@@ -37,12 +36,7 @@ endif
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/python,\
     scp2/source/python/file_python \
-    scp2/source/python/file_python_librelogo \
     scp2/source/python/module_python \
-))
-
-$(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/python,\
-    scp2/source/python/module_python_librelogo \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
