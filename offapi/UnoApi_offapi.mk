@@ -638,6 +638,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/chart2,\
 	CandleStickChartType \
 	ChartDocument \
 	ChartDocumentWrapper \
+	ChartStyle \
 	ChartType \
 	ChartTypeManager \
 	ChartTypeTemplate\
@@ -2023,6 +2024,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2,\
 	XChartShape \
 	XChartShapeContainer \
 	XChartStyle \
+	XChartStyled \
 	XChartType \
 	XChartTypeContainer \
 	XChartTypeManager \

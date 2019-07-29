@@ -19,7 +19,10 @@
 
 #include <ChartStyle.hxx>
 #include <com/sun/star/chart2/ChartObjectType.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace chart2
 {
@@ -40,6 +43,29 @@ css::uno::Reference< css::beans::XPropertySet> ChartStyle::getStyleForObject( co
         throw css::lang::IllegalArgumentException( "Unknown Chart Object Style requested", nullptr, 0 );
 }
 
-} // namespace chart2
+// _____ XServiceInfo _____
+OUString SAL_CALL ChartStyle::getImplementationName()
+{
+    return OUString("com.sun.star.comp.chart2.ChartStyle");
+}
+
+sal_Bool SAL_CALL ChartStyle::supportsService( const OUString& rServiceName )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ChartStyle::getSupportedServiceNames()
+{
+    return { "com.sun.star.chart2.ChartStyle" };
+}
+
+} //  namespace chart2
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+com_sun_star_comp_chart2_ChartStyle_get_implementation(css::uno::XComponentContext *,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new chart2::ChartStyle);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
