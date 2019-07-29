@@ -264,10 +264,8 @@ public:
 };
 
 // mark preview
-class SwMarkPreview : public vcl::Window
+class SwMarkPreview : public weld::CustomWidgetController
 {
-    Size m_aInitialSize;
-
     Color m_aBgCol;    // background
     Color const m_aTransCol; // transparency
     Color m_aMarkCol;  // marks
@@ -282,51 +280,52 @@ class SwMarkPreview : public vcl::Window
 
     sal_uInt16 nMarkPos;
 
-    void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     void PaintPage(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect);
     void InitColors();
 
-protected:
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
-
 public:
-    SwMarkPreview(vcl::Window* pParent, WinBits nWinBits);
+    SwMarkPreview();
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual ~SwMarkPreview() override;
 
     void SetColor(const Color& rCol) { m_aMarkCol = rCol; }
     void SetMarkPos(sal_uInt16 nPos) { nMarkPos = nPos; }
-    virtual Size GetOptimalSize() const override;
 };
 
 // redlining options
 class SwRedlineOptionsTabPage : public SfxTabPage
 {
-    VclPtr<ListBox>             m_pInsertLB;
-    VclPtr<SvxColorListBox>     m_pInsertColorLB;
-    VclPtr<SvxFontPrevWindow>   m_pInsertedPreviewWN;
+    std::unique_ptr<weld::ComboBox> m_xInsertLB;
+    std::unique_ptr<ColorListBox> m_xInsertColorLB;
+    std::unique_ptr<FontPrevWindow> m_xInsertedPreviewWN;
+    std::unique_ptr<weld::CustomWeld> m_xInsertedPreview;
 
-    VclPtr<ListBox>             m_pDeletedLB;
-    VclPtr<SvxColorListBox>     m_pDeletedColorLB;
-    VclPtr<SvxFontPrevWindow>   m_pDeletedPreviewWN;
+    std::unique_ptr<weld::ComboBox> m_xDeletedLB;
+    std::unique_ptr<ColorListBox> m_xDeletedColorLB;
+    std::unique_ptr<FontPrevWindow> m_xDeletedPreviewWN;
+    std::unique_ptr<weld::CustomWeld> m_xDeletedPreview;
 
-    VclPtr<ListBox>             m_pChangedLB;
-    VclPtr<SvxColorListBox>     m_pChangedColorLB;
-    VclPtr<SvxFontPrevWindow>   m_pChangedPreviewWN;
+    std::unique_ptr<weld::ComboBox> m_xChangedLB;
+    std::unique_ptr<ColorListBox> m_xChangedColorLB;
+    std::unique_ptr<FontPrevWindow> m_xChangedPreviewWN;
+    std::unique_ptr<weld::CustomWeld> m_xChangedPreview;
 
-    VclPtr<ListBox>             m_pMarkPosLB;
-    VclPtr<SvxColorListBox>     m_pMarkColorLB;
-    VclPtr<SwMarkPreview>       m_pMarkPreviewWN;
+    std::unique_ptr<weld::ComboBox> m_xMarkPosLB;
+    std::unique_ptr<ColorListBox> m_xMarkColorLB;
+    std::unique_ptr<SwMarkPreview> m_xMarkPreviewWN;
+    std::unique_ptr<weld::CustomWeld> m_xMarkPreview;
 
-    DECL_LINK(AttribHdl, ListBox&, void);
+    DECL_LINK(AttribHdl, weld::ComboBox&, void);
     void ChangedMaskPrev();
-    DECL_LINK(ChangedMaskPrevHdl, ListBox&, void);
-    DECL_LINK(ChangedMaskColorPrevHdl, SvxColorListBox&, void);
-    DECL_LINK(ColorHdl, SvxColorListBox&, void);
+    DECL_LINK(ChangedMaskPrevHdl, weld::ComboBox&, void);
+    DECL_LINK(ChangedMaskColorPrevHdl, ColorListBox&, void);
+    DECL_LINK(ColorHdl, ColorListBox&, void);
 
-    static void InitFontStyle(SvxFontPrevWindow& rExampleWin);
+    static void InitFontStyle(FontPrevWindow& rExampleWin, const OUString& rText);
 
 public:
-    SwRedlineOptionsTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    SwRedlineOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwRedlineOptionsTabPage() override;
     virtual void dispose() override;
 

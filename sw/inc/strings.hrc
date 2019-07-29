@@ -1355,6 +1355,10 @@
 
 #define STR_MAILCONFIG_DLG_TITLE                NC_("STR_MAILCONFIG_DLG_TITLE", "Email settings")
 
+#define STR_OPT_PREVIEW_INSERTED                NC_("optredlinepage|insertedpreview", "Insert")
+#define STR_OPT_PREVIEW_DELETED                 NC_("optredlinepage|deletedpreview", "Delete")
+#define STR_OPT_PREVIEW_CHANGED                 NC_("optredlinepage|changedpreview", "Attributes")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
