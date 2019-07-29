@@ -965,46 +965,33 @@ struct SvxEMailTabPage_Impl
     bool bROHideContent;
 };
 
-SvxEMailTabPage::SvxEMailTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage( pParent, "OptEmailPage", "cui/ui/optemailpage.ui", &rSet)
+SvxEMailTabPage::SvxEMailTabPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage( pParent, "cui/ui/optemailpage.ui", "OptEmailPage", &rSet)
     , pImpl(new SvxEMailTabPage_Impl)
+    , m_xMailContainer(m_xBuilder->weld_container("program"))
+    , m_xMailerURLFI(m_xBuilder->weld_image("lockemail"))
+    , m_xMailerURLED(m_xBuilder->weld_entry("url"))
+    , m_xMailerURLPB(m_xBuilder->weld_button("browse"))
+    , m_xSuppressHiddenContainer(m_xBuilder->weld_container("suppressHiddenCont"))
+    , m_xSuppressHiddenFI(m_xBuilder->weld_image("lockSuppressHidden"))
+    , m_xSuppressHidden(m_xBuilder->weld_check_button("suppressHidden"))
+    , m_xDefaultFilterFT(m_xBuilder->weld_label("browsetitle"))
 {
-    get(m_pMailContainer, "program");
-    get(m_pMailerURLFI, "lockemail");
-    get(m_pMailerURLED, "url");
-    get(m_pMailerURLPB, "browse");
-    get(m_pSuppressHiddenContainer, "suppressHiddenCont");
-    get(m_pSuppressHiddenFI, "lockSuppressHidden");
-    get(m_pSuppressHidden, "suppressHidden");
-    m_sDefaultFilterName = get<FixedText>("browsetitle")->GetText();
-    m_pMailerURLPB->SetClickHdl( LINK( this, SvxEMailTabPage, FileDialogHdl_Impl ) );
+    m_sDefaultFilterName = m_xDefaultFilterFT->get_label();
+    m_xMailerURLPB->connect_clicked( LINK( this, SvxEMailTabPage, FileDialogHdl_Impl ) );
 }
 
 /* -------------------------------------------------------------------------*/
 
 SvxEMailTabPage::~SvxEMailTabPage()
 {
-    disposeOnce();
-}
-
-void SvxEMailTabPage::dispose()
-{
-    pImpl.reset();
-    m_pMailContainer.clear();
-    m_pMailerURLFI.clear();
-    m_pMailerURLED.clear();
-    m_pMailerURLPB.clear();
-    m_pSuppressHiddenContainer.clear();
-    m_pSuppressHiddenFI.clear();
-    m_pSuppressHidden.clear();
-    SfxTabPage::dispose();
 }
 
 /* -------------------------------------------------------------------------*/
 
 VclPtr<SfxTabPage>  SvxEMailTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxEMailTabPage>::Create(pParent.pParent, *rAttrSet);
+    return VclPtr<SvxEMailTabPage>::Create(pParent, *rAttrSet);
 }
 
 /* -------------------------------------------------------------------------*/
@@ -1013,16 +1000,16 @@ bool SvxEMailTabPage::FillItemSet( SfxItemSet* )
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
         comphelper::ConfigurationChanges::create());
-    if (!pImpl->bROProgram && m_pMailerURLED->IsValueChangedFromSaved())
+    if (!pImpl->bROProgram && m_xMailerURLED->get_value_changed_from_saved())
     {
-        pImpl->sProgram = m_pMailerURLED->GetText();
+        pImpl->sProgram = m_xMailerURLED->get_text();
         officecfg::Office::Common::ExternalMailer::Program::set(
             pImpl->sProgram, batch);
     }
     if (!pImpl->bROHideContent
-        && pImpl->bHideContent != m_pSuppressHidden->IsChecked())
+        && pImpl->bHideContent != m_xSuppressHidden->get_active())
     {
-        pImpl->bHideContent = m_pSuppressHidden->IsChecked();
+        pImpl->bHideContent = m_xSuppressHidden->get_active();
         officecfg::Office::Security::HiddenContent::RemoveHiddenContent::set(
             pImpl->bHideContent, batch);
     }
@@ -1034,33 +1021,33 @@ bool SvxEMailTabPage::FillItemSet( SfxItemSet* )
 
 void SvxEMailTabPage::Reset( const SfxItemSet* )
 {
-    m_pMailerURLED->Enable();
-    m_pMailerURLPB->Enable();
+    m_xMailerURLED->set_sensitive(true);
+    m_xMailerURLPB->set_sensitive(true);
 
     if (pImpl->bROProgram)
-        m_pMailerURLFI->Show();
+        m_xMailerURLFI->show();
 
-    m_pMailerURLED->SetText(pImpl->sProgram);
-    m_pMailerURLED->SaveValue();
+    m_xMailerURLED->set_text(pImpl->sProgram);
+    m_xMailerURLED->save_value();
 
-    m_pMailContainer->Enable(!pImpl->bROProgram);
+    m_xMailContainer->set_sensitive(!pImpl->bROProgram);
 
     if (pImpl->bROHideContent)
-        m_pSuppressHiddenFI->Show();
+        m_xSuppressHiddenFI->show();
 
-    m_pSuppressHidden->Check(pImpl->bHideContent);
+    m_xSuppressHidden->set_active(pImpl->bHideContent);
 
-    m_pSuppressHiddenContainer->Enable(!pImpl->bROHideContent);
+    m_xSuppressHiddenContainer->set_sensitive(!pImpl->bROHideContent);
 }
 
 /* -------------------------------------------------------------------------*/
 
-IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, Button*, pButton, void )
+IMPL_LINK_NOARG(SvxEMailTabPage, FileDialogHdl_Impl, weld::Button&, void)
 {
-    if (m_pMailerURLPB == pButton && !pImpl->bROProgram)
+    if (!pImpl->bROProgram)
     {
         FileDialogHelper aHelper(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, GetFrameWeld());
-        OUString sPath = m_pMailerURLED->GetText();
+        OUString sPath = m_xMailerURLED->get_text();
         if ( sPath.isEmpty() )
             sPath = "/usr/bin";
 
@@ -1077,7 +1064,7 @@ IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, Button*, pButton, void )
             {
                 sPath.clear();
             }
-            m_pMailerURLED->SetText(sPath);
+            m_xMailerURLED->set_text(sPath);
         }
     }
 }
