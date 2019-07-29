@@ -942,6 +942,18 @@ void FontPrevWindow::SetFont( const SvxFont& rNormalOutFont, const SvxFont& rCJK
     Invalidate();
 }
 
+void FontPrevWindow::SetColor(const Color &rColor)
+{
+    pImpl->mpColor.reset(new Color(rColor));
+    Invalidate();
+}
+
+void FontPrevWindow::ResetColor()
+{
+    pImpl->mpColor.reset();
+    Invalidate();
+}
+
 void FontPrevWindow::SetBackColor(const Color &rColor)
 {
     pImpl->mpBackColor.reset(new Color(rColor));

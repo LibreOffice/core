@@ -512,7 +512,6 @@ custom_widgets = [
     'SvxTextEncodingBox',
     'SvxTextEncodingBox',
     'SwAddressPreview',
-    'SwMarkPreview',
     'SwNavHelpToolBox',
     'TableValueSet',
     'TemplateDefaultView',

@@ -86,6 +86,8 @@ public:
     void                SetFont( const SvxFont& rNormalFont, const SvxFont& rCJKFont, const SvxFont& rCTLFont );
     SvxFont&            GetCJKFont();
     SvxFont&            GetCTLFont();
+    void                SetColor( const Color& rColor );
+    void                ResetColor();
     void                SetBackColor( const Color& rColor );
     void                SetTextLineColor(const Color& rColor);
     void                SetOverlineColor(const Color& rColor);
