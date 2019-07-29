@@ -19,8 +19,6 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTCTL_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTCTL_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
 #include <sfx2/tabdlg.hxx>
 
 // class SvxCTLOptionsPage -----------------------------------------------------
@@ -28,22 +26,18 @@
 class SvxCTLOptionsPage : public SfxTabPage
 {
 private:
+    std::unique_ptr<weld::CheckButton> m_xSequenceCheckingCB;
+    std::unique_ptr<weld::CheckButton> m_xRestrictedCB;
+    std::unique_ptr<weld::CheckButton> m_xTypeReplaceCB;
+    std::unique_ptr<weld::RadioButton> m_xMovementLogicalRB;
+    std::unique_ptr<weld::RadioButton> m_xMovementVisualRB;
+    std::unique_ptr<weld::ComboBox> m_xNumeralsLB;
 
-    VclPtr<CheckBox>            m_pSequenceCheckingCB;
-    VclPtr<CheckBox>            m_pRestrictedCB;
-    VclPtr<CheckBox>            m_pTypeReplaceCB;
-
-    VclPtr<RadioButton>         m_pMovementLogicalRB;
-    VclPtr<RadioButton>         m_pMovementVisualRB;
-
-    VclPtr<ListBox>             m_pNumeralsLB;
-
-    DECL_LINK( SequenceCheckingCB_Hdl, Button*, void );
+    DECL_LINK( SequenceCheckingCB_Hdl, weld::Button&, void );
 
 public:
-    SvxCTLOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    SvxCTLOptionsPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxCTLOptionsPage() override;
-    virtual void dispose() override;
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
