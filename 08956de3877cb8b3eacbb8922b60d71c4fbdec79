@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_3079c7fb",
+        "filename": "cui/uiconfig/ui/bulletandposition.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-07-29T07:14:43Z",
+      "side": 1,
+      "message": "Does this work with non-English UI? I would expect you need translatable\u003d\"yes\" context\u003d\"...\" to have that working.",
+      "revId": "08956de3877cb8b3eacbb8922b60d71c4fbdec79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
