@@ -1246,14 +1246,17 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
                     aNew += pSField->GetFormula();
 
                     SwSbxValue aValue = aCalc.Calculate( aNew );
-                    double nErg = aValue.GetDouble();
-                    // only update one field
-                    if( !aValue.IsVoidValue() && (!pUpdateField || pUpdateField == pTextField) )
+                    if (!aCalc.IsCalcError())
                     {
-                        pSField->SetValue(nErg, pLayout);
+                        double nErg = aValue.GetDouble();
+                        // only update one field
+                        if( !aValue.IsVoidValue() && (!pUpdateField || pUpdateField == pTextField) )
+                        {
+                            pSField->SetValue(nErg, pLayout);
 
-                        if( pSeqNd )
-                            pSFieldTyp->SetChapter(*pSField, *pSeqNd, pLayout);
+                            if( pSeqNd )
+                                pSFieldTyp->SetChapter(*pSField, *pSeqNd, pLayout);
+                        }
                     }
                 }
             }
