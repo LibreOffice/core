@@ -167,7 +167,7 @@ private:
 
 // Structure of the index lines
 #define FORM_TITLE              0
-#define FORM_ALPHA_DELIMITTER   1
+#define FORM_ALPHA_DELIMITER   1
 #define FORM_PRIMARY_KEY        2
 #define FORM_SECONDARY_KEY      3
 #define FORM_ENTRY              4

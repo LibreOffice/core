@@ -56,7 +56,7 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
     void InsertSorted(std::unique_ptr<SwTOXSortTabBase> pBase);
 
     // insert alpha delimiter at creation
-    void InsertAlphaDelimitter( const SwTOXInternational& rIntl );
+    void InsertAlphaDelimiter( const SwTOXInternational& rIntl );
 
     // replace page num placeholder with actual page number
     void UpdatePageNum_( SwTextNode* pNd,
