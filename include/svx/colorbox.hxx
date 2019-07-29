@@ -97,7 +97,7 @@ private:
     weld::Window* const m_pTopLevel;
     Link<ColorListBox&, void> m_aSelectedLink;
     ListBoxColorWrapper m_aColorWrapper;
-    Color const m_aAutoDisplayColor;
+    Color m_aAutoDisplayColor;
     Color m_aSaveColor;
     NamedColor m_aSelectedColor;
     sal_uInt16 m_nSlotId;
@@ -128,6 +128,8 @@ public:
 
     void SetNoSelection() { getColorWindow()->SetNoSelection(); }
     bool IsNoSelection() const { return getColorWindow()->IsNoSelection(); }
+
+    void SetAutoDisplayColor(const Color &rColor) { m_aAutoDisplayColor = rColor; }
 
     void ShowPreview(const NamedColor &rColor);
     void EnsurePaletteManager();
