@@ -46,7 +46,7 @@
 
 #include <docsh.hxx>
 
-typedef std::vector<SwStartNode*> SwSttNdPtrs;
+typedef std::vector<SwStartNode*> SwStartNodePointers;
 
 // function to determine the highest level in the given range
 static sal_uInt16 HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange );
@@ -435,8 +435,8 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
     sal_uLong nInsPos = 0; // counter for tmp array
 
     // array as a stack, storing all StartOfSelections
-    SwSttNdPtrs aSttNdStack;
-    SwSttNdPtrs::size_type nLevel = 0; // level counter
+    SwStartNodePointers aSttNdStack;
+    SwStartNodePointers::size_type nLevel = 0; // level counter
 
     // set start index
     SwNodeIndex  aIdx( aIndex );
@@ -1016,7 +1016,7 @@ void SwNodes::SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEn
 {
     SwNodeIndex aTmpIdx( aStart, +1 );
     // array forms a stack, holding all StartOfSelections
-    SwSttNdPtrs aSttNdStack;
+    SwStartNodePointers aSttNdStack;
     SwStartNode* pTmp = aStart.GetNode().GetStartNode();
     aSttNdStack.push_back( pTmp );
 
