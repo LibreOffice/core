@@ -1,4 +1,5 @@
 //this file for the staters commands when you open any LO application
+//It's translate automatic that the buttom you push to open the app is a starter buttom
 
 StarterCommand:
   'Start' program_name=Program
