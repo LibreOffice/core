@@ -858,20 +858,6 @@
           <value>true</value>
         </prop>
       </node>
-      <node oor:name="private:resource/toolbar/addon_LibreLogo.OfficeToolBar" oor:op="replace" install:module="librelogo">
-        <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Logo</value>
-        </prop>
-        <prop oor:name="Visible" oor:type="xs:boolean">
-          <value>false</value>
-        </prop>
-        <prop oor:name="Locked" oor:type="xs:boolean">
-          <value>false</value>
-        </prop>
-        <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-          <value>false</value>
-        </prop>
-      </node>
       <node oor:name="private:resource/toolbar/changes" oor:op="replace">
         <prop oor:name="DockPos" oor:type="xs:string">
           <value>1,2</value>
