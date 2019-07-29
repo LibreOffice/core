@@ -106,6 +106,7 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
     const sal_Int32 nOldStartPos = nStartPos;
 
     if (bOptions.allowPunctuationOutsideMargin &&
+            nStartPos != Text.getLength() &&
             hangingCharacters.indexOf(Text[nStartPos]) != -1 &&
             (Text.iterateCodePoints( &nStartPos ), nStartPos == Text.getLength())) {
         ; // do nothing
