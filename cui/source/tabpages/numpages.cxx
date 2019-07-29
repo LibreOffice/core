@@ -2528,6 +2528,10 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(TabPageParent pParent, const SfxIte
 {
     SetExchangeSupport();
 
+    m_xAlignedAtMF->set_range(0, SAL_MAX_INT32, FieldUnit::NONE);
+    m_xListtabMF->set_range(0, SAL_MAX_INT32, FieldUnit::NONE);
+    m_xIndentAtMF->set_range(0, SAL_MAX_INT32, FieldUnit::NONE);
+
     m_xRelativeCB->set_active(true);
     m_xAlignLB->connect_changed(LINK(this, SvxNumPositionTabPage, EditModifyHdl_Impl));
     m_xAlign2LB->connect_changed(LINK(this, SvxNumPositionTabPage, EditModifyHdl_Impl));
