@@ -155,24 +155,24 @@ public:
 struct SvxEMailTabPage_Impl;
 class SvxEMailTabPage : public SfxTabPage
 {
-    VclPtr<VclContainer> m_pMailContainer;
-    VclPtr<FixedImage>   m_pMailerURLFI;
-    VclPtr<Edit>         m_pMailerURLED;
-    VclPtr<PushButton>   m_pMailerURLPB;
-    VclPtr<VclContainer> m_pSuppressHiddenContainer;
-    VclPtr<FixedImage>   m_pSuppressHiddenFI;
-    VclPtr<CheckBox>     m_pSuppressHidden;
-
     OUString      m_sDefaultFilterName;
 
     std::unique_ptr<SvxEMailTabPage_Impl> pImpl;
 
-    DECL_LINK(  FileDialogHdl_Impl, Button*, void );
+    std::unique_ptr<weld::Container> m_xMailContainer;
+    std::unique_ptr<weld::Image> m_xMailerURLFI;
+    std::unique_ptr<weld::Entry> m_xMailerURLED;
+    std::unique_ptr<weld::Button> m_xMailerURLPB;
+    std::unique_ptr<weld::Container> m_xSuppressHiddenContainer;
+    std::unique_ptr<weld::Image> m_xSuppressHiddenFI;
+    std::unique_ptr<weld::CheckButton> m_xSuppressHidden;
+    std::unique_ptr<weld::Label> m_xDefaultFilterFT;
+
+    DECL_LINK(FileDialogHdl_Impl, weld::Button&, void);
 
 public:
-    SvxEMailTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    SvxEMailTabPage(TabPageParent pParent, const SfxItemSet& rSet );
     virtual ~SvxEMailTabPage() override;
-    virtual void        dispose() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
@@ -181,6 +181,5 @@ public:
 };
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_OPTINET2_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

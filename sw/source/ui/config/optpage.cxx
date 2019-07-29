@@ -1741,7 +1741,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
 
     // initialise preview
     InitFontStyle(*m_xInsertedPreviewWN, SwResId(STR_OPT_PREVIEW_INSERTED));
-    InitFontStyle(*m_xDeletedPreviewWN, SwResId(STR_OPT_PREVIEW_DELETED));
+    InitFontStyle(*m_xDeletedPreviewWN, SwResId(STR_OPT_PREVIEW_DELETEDED));
     InitFontStyle(*m_xChangedPreviewWN, SwResId(STR_OPT_PREVIEW_CHANGED));
 
     Color nColor = rInsertAttr.m_nColor;
