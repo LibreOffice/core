@@ -35,12 +35,12 @@ sal_Unicode lclGetDecSep()
 
 } // namespace
 
-DoubleField::DoubleField(std::unique_ptr<weld::Entry> xEntry)
+ScDoubleField::ScDoubleField(std::unique_ptr<weld::Entry> xEntry)
     : m_xEntry(std::move(xEntry))
 {
 }
 
-bool DoubleField::GetValue( double& rfValue ) const
+bool ScDoubleField::GetValue( double& rfValue ) const
 {
     OUString aStr(comphelper::string::strip(m_xEntry->get_text(), ' '));
     bool bOk = !aStr.isEmpty();
@@ -54,7 +54,7 @@ bool DoubleField::GetValue( double& rfValue ) const
     return bOk;
 }
 
-void DoubleField::SetValue( double fValue, sal_Int32 nDecPlaces )
+void ScDoubleField::SetValue( double fValue, sal_Int32 nDecPlaces )
 {
     m_xEntry->set_text( ::rtl::math::doubleToUString( fValue, rtl_math_StringFormat_G,
         nDecPlaces, lclGetDecSep(), true/*bEraseTrailingDecZeros*/ ) );

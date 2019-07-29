@@ -23,7 +23,7 @@
 #include <vcl/weld.hxx>
 #include <dpnumgroupinfo.hxx>
 
-class DoubleField;
+class ScDoubleField;
 class SvtCalendarBox;
 
 class ScDPGroupEditHelper
@@ -57,7 +57,7 @@ class ScDPNumGroupEditHelper : public ScDPGroupEditHelper
 public:
     explicit ScDPNumGroupEditHelper(weld::RadioButton& rRbAuto,
                                     weld::RadioButton& rRbMan,
-                                    DoubleField& rEdValue);
+                                    ScDoubleField& rEdValue);
 
     virtual             ~ScDPNumGroupEditHelper() {}
 private:
@@ -65,7 +65,7 @@ private:
     virtual void        ImplSetValue( double fValue ) override;
 
 private:
-    DoubleField&        mrEdValue;
+    ScDoubleField&        mrEdValue;
 };
 
 class ScDPDateGroupEditHelper : public ScDPGroupEditHelper
@@ -97,11 +97,11 @@ public:
 private:
     std::unique_ptr<weld::RadioButton> mxRbAutoStart;
     std::unique_ptr<weld::RadioButton> mxRbManStart;
-    std::unique_ptr<DoubleField> mxEdStart;
+    std::unique_ptr<ScDoubleField> mxEdStart;
     std::unique_ptr<weld::RadioButton> mxRbAutoEnd;
     std::unique_ptr<weld::RadioButton> mxRbManEnd;
-    std::unique_ptr<DoubleField> mxEdEnd;
-    std::unique_ptr<DoubleField> mxEdBy;
+    std::unique_ptr<ScDoubleField> mxEdEnd;
+    std::unique_ptr<ScDoubleField> mxEdBy;
     ScDPNumGroupEditHelper maStartHelper;
     ScDPNumGroupEditHelper maEndHelper;
 };

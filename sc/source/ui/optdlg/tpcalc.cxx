@@ -43,7 +43,7 @@ ScTpCalcOptions::ScTpCalcOptions(TabPageParent pParent, const SfxItemSet& rCoreA
     , m_xFtSteps(m_xBuilder->weld_label("stepsft"))
     , m_xEdSteps(m_xBuilder->weld_spin_button("steps"))
     , m_xFtEps(m_xBuilder->weld_label("minchangeft"))
-    , m_xEdEps(new DoubleField(m_xBuilder->weld_entry("minchange")))
+    , m_xEdEps(new ScDoubleField(m_xBuilder->weld_entry("minchange")))
     , m_xBtnDateStd(m_xBuilder->weld_radio_button("datestd"))
     , m_xBtnDateSc10(m_xBuilder->weld_radio_button("datesc10"))
     , m_xBtnDate1904(m_xBuilder->weld_radio_button("date1904"))
