@@ -325,7 +325,7 @@ void SvFileObject::Edit(weld::Window* pParent, sfx2::SvBaseLink* pLink, const Li
 
 IMPL_LINK_NOARG( SvFileObject, LoadGrfReady_Impl, void*, void )
 {
-    // When we come form here there it can not be an error no more.
+    // When we come from here there it can not be an error no more.
     bLoadError = false;
     bWaitForData = false;
 

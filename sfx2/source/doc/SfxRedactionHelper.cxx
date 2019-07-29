@@ -432,7 +432,7 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget* pRedactionTarge
     MetaAction* pCurrAct;
 
     // Watch for TEXTARRAY actions.
-    // They contain the text of paragraphes.
+    // They contain the text of paragraphs.
     for (pCurrAct = const_cast<GDIMetaFile&>(rMtf).FirstAction(); pCurrAct;
          pCurrAct = const_cast<GDIMetaFile&>(rMtf).NextAction())
     {

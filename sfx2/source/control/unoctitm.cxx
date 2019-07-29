@@ -720,7 +720,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                     if ( bMasterSlave )
                     {
                         // Extract slave command and add argument to the args list. Master slot MUST
-                        // have a argument that has the same name as the master slot and type is SfxStringItem.
+                        // have an argument that has the same name as the master slot and type is SfxStringItem.
                         sal_Int32 nIndex = lNewArgs.getLength();
                         lNewArgs.realloc( nIndex+1 );
                         lNewArgs[nIndex].Name   = OUString::createFromAscii( pSlot->pUnoName );

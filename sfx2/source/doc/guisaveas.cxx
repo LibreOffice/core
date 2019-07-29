@@ -1379,7 +1379,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
         }
         else if ( nStatusSave != STATUS_SAVE )
         {
-            // this should be a usual SaveAs operation
+            // this should be an usual SaveAs operation
             nStoreMode = SAVEAS_REQUESTED;
             if ( nStatusSave == STATUS_SAVEAS_STANDARDNAME )
                 bSetStandardName = true;

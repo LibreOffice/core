@@ -177,7 +177,7 @@ private:
 ErrCode CheckPasswd_Impl
 (
     SfxObjectShell*  pDoc,
-    SfxMedium*       pFile      // the Medium and its Password shold be obtained
+    SfxMedium*       pFile      // the Medium and its Password should be obtained
 )
 
 /*  [Description]
@@ -703,7 +703,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
                 // Run synchronous, so that not the next document is loaded
                 // when rescheduling
-                // TODO/LATER: use URLList argument and always remove one document after another, each step in asychronous execution, until finished
+                // TODO/LATER: use URLList argument and always remove one document after another, each step in asynchronous execution, until finished
                 // but only if reschedule is a problem
                 GetDispatcher_Impl()->Execute( SID_OPENDOC, SfxCallMode::SYNCHRON, *rReq.GetArgs() );
 

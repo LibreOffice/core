@@ -506,7 +506,7 @@ Reference < XContent > SfxMedium::GetContent() const
         }
         else
         {
-            // TODO: SAL_WARN( "sfx.doc", "SfxMedium::GetContent()\nCreate Content? This code exists as fallback only. Please clarify, why its used.");
+            // TODO: SAL_WARN( "sfx.doc", "SfxMedium::GetContent()\nCreate Content? This code exists as fallback only. Please clarify, why it's used.");
             OUString aURL;
             if ( !pImpl->m_aName.isEmpty() )
                 osl::FileBase::getFileURLFromSystemPath( pImpl->m_aName, aURL );
@@ -1307,7 +1307,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
             if ( bLoading && GetURLObject().GetProtocol() == INetProtocol::File )
             {
                 // let the original document be opened to check the possibility to open it for editing
-                // and to let the writable stream stay open to hold the lock on the document
+                // and to let the writeable stream stay open to hold the lock on the document
                 GetLockingStream_Impl();
             }
 
@@ -1349,7 +1349,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                     bool bUseSystemLock = comphelper::isFileUrl( pImpl->m_aLogicName ) && IsSystemFileLockingUsed();
 
                     // TODO/LATER: This implementation does not allow to detect the system lock on saving here, actually this is no big problem
-                    // if system lock is used the writeable stream should be available
+                    // if system lock is used the writable stream should be available
                     bool bHandleSysLocked = ( bLoading && bUseSystemLock && !pImpl->xStream.is() && !pImpl->m_pOutStream );
 
                     // The file is attempted to get locked for the duration of lockfile creation on save
@@ -2444,7 +2444,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
     if ( !pImpl->m_aBackupURL.isEmpty() )
         return;
 
-    // the copiing to the backup catalog failed ( for example because
+    // the copying to the backup catalog failed ( for example because
     // of using an encrypted partition as target catalog )
     // since the user did not specify to make backup explicitly
     // office should try to make backup in another place,

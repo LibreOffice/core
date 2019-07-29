@@ -173,7 +173,7 @@ void SfxControllerItem::SetId( sal_uInt16 nItemId )
 }
 
 
-// creates a atomic item for a controller without registration.
+// creates an atomic item for a controller without registration.
 
 SfxControllerItem::SfxControllerItem():
     nId(0),
