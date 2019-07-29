@@ -24,12 +24,12 @@
 #include <vcl/weld.hxx>
 
 /** An edit control that contains a double precision floating-point value. */
-class DoubleField
+class ScDoubleField
 {
 private:
     std::unique_ptr<weld::Entry> m_xEntry;
 public:
-    explicit            DoubleField(std::unique_ptr<weld::Entry> xEntry);
+    explicit ScDoubleField(std::unique_ptr<weld::Entry> xEntry);
 
     bool GetValue(double& rfValue) const;
     void SetValue(double fValue, sal_Int32 nDecPlaces = 12);
