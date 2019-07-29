@@ -1582,6 +1582,8 @@ private:
 
     void set_background(const OUString* pColor)
     {
+        if (!pColor && !m_pBgCssProvider)
+            return;
         GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(GTK_WIDGET(m_pWidget));
         if (m_pBgCssProvider)
         {
