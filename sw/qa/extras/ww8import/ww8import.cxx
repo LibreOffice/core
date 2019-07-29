@@ -15,6 +15,7 @@
 #include <viscrs.hxx>
 #include <wrtsh.hxx>
 #include <ndgrf.hxx>
+#include <fmtsrnd.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -83,6 +84,25 @@ DECLARE_WW8IMPORT_TEST(testTdf107773, "tdf107773.doc")
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     // This was 1, multi-page table was imported as a floating one.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+}
+
+DECLARE_WW8IMPORT_TEST(testTdf112535, "tdf112535.doc")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc->GetSpzFrameFormats());
+
+    SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT(!rFormats.empty());
+
+    const SwFrameFormat* pFormat = rFormats[0];
+    CPPUNIT_ASSERT(pFormat);
+
+    // Without the accompanying fix in place, this test would have failed: auto-contour was enabled
+    // in Writer, but not in Word.
+    CPPUNIT_ASSERT(!pFormat->GetSurround().IsContour());
 }
 
 DECLARE_WW8IMPORT_TEST(testTdf106291, "tdf106291.doc")
