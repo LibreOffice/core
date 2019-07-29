@@ -1192,7 +1192,7 @@ void SdPage::DestroyDefaultPresObj(PresObjKind eObjKind)
 
 /**************************************************************************
 |*
-|* assign a AutoLayout
+|* assign an AutoLayout
 |*
 \*************************************************************************/
 
@@ -2308,7 +2308,7 @@ SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, 
 
 /*************************************************************************
 |*
-|* Returns the PresObjKind of a object
+|* Returns the PresObjKind of an object
 |*
 \************************************************************************/
 
@@ -2356,7 +2356,7 @@ void SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eKind )
 
 /*************************************************************************
 |*
-|* Set the text of a object
+|* Set the text of an object
 |*
 \************************************************************************/
 

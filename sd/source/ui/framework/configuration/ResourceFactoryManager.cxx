@@ -77,7 +77,7 @@ void ResourceFactoryManager::AddFactory (
 
     if (rsURL.indexOf('*') >= 0 || rsURL.indexOf('?') >= 0)
     {
-        // The URL is a URL pattern not an single URL.
+        // The URL is a URL pattern not a single URL.
         maFactoryPatternList.emplace_back(rsURL, rxFactory);
 
 #if defined VERBOSE && VERBOSE>=1

@@ -165,7 +165,7 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
         {
             case VclEventId::ObjectDying:
             {
-                // Window is dying.  Unregister from VCL Window.
+                // Window is dying. Unregister from VCL Window.
                 // This is also attempted in the disposing() method.
                 vcl::Window* pWindow = maShapeTreeInfo.GetWindow();
                 vcl::Window* pDyingWindow = rEvent.GetWindow();
@@ -459,7 +459,7 @@ void AccessibleDocumentViewBase::impl_dispose()
         mxWindow = nullptr;
     }
 
-    // Unregister form the model.
+    // Unregister from the model.
     if (mxModel.is())
         mxModel->removeEventListener (
             static_cast<awt::XWindowListener*>(this));

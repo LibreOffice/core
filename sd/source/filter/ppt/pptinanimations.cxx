@@ -548,7 +548,7 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
         }
     }
 
-    // check for after-affect
+    // check for after-effect
     Sequence< NamedValue > aUserData( xNode->getUserData() );
     NamedValue* pValue = aUserData.getArray();
     NamedValue* pLastValue = pValue;

@@ -1171,7 +1171,7 @@ bool HtmlExport::WriteHtml( const OUString& rFileName, bool bAddExtension, const
     return nErr == ERRCODE_NONE;
 }
 
-/** creates a outliner text for the title objects of a page
+/** creates an outliner text for the title objects of a page
  */
 OUString HtmlExport::CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage, const Color& rBackgroundColor )
 {
@@ -1193,7 +1193,7 @@ OUString HtmlExport::CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage, 
     return OUString();
 }
 
-// creates a outliner text for a page
+// creates an outliner text for a page
 OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage const * pPage,
                                        bool bHeadLine, const Color& rBackgroundColor)
 {
@@ -1362,7 +1362,7 @@ void HtmlExport::WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutl
     pOutliner->Clear();
 }
 
-// creates a outliner text for a note page
+// creates an outliner text for a note page
 OUString HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
                                            SdPage* pPage,
                                            const Color& rBackgroundColor )
@@ -1691,7 +1691,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                 /**
                     insert areas into Imagemap of the object, if the object has
-                    such a Imagemap
+                    such an Imagemap
                 */
                 if (pIMapInfo)
                 {
@@ -1711,7 +1711,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                         if (nPgNum == SDRPAGE_NOTFOUND)
                         {
-                            // is the bookmark a object?
+                            // is the bookmark an object?
                             pObj = mpDoc->GetObj( aURL );
                             if (pObj)
                                 nPgNum = pObj->getSdrPageFromSdrObject()->GetPageNum();
@@ -1797,7 +1797,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                             if( nPgNum == SDRPAGE_NOTFOUND )
                             {
-                                // is the bookmark a object?
+                                // is the bookmark an object?
                                 pObj = mpDoc->GetObj(pInfo->GetBookmark());
                                 if (pObj)
                                     nPgNum = pObj->getSdrPageFromSdrObject()->GetPageNum();
@@ -2713,7 +2713,7 @@ OUString HtmlExport::CreateLink( const OUString& aLink,
     return aStr.makeStringAndClear();
 }
 
-// creates a image tag
+// creates an image tag
 OUString HtmlExport::CreateImage( const OUString& aImage, const OUString& aAltText )
 {
     OUStringBuffer aStr( "<img src=\"");
@@ -2828,7 +2828,7 @@ OUString HtmlExport::StringToHTMLString( const OUString& rString )
     return OUString( static_cast<char const *>(aMemStm.GetData()), nLength, RTL_TEXTENCODING_UTF8 );
 }
 
-// creates a url for a specific page
+// creates a URL for a specific page
 OUString HtmlExport::CreatePageURL( sal_uInt16 nPgNum )
 {
     if(mbFrames)

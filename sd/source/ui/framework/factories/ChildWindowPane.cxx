@@ -130,7 +130,7 @@ vcl::Window* ChildWindowPane::GetWindow()
         // shell has already been activated.  The activation is not
         // necessary for the code to work properly but is used to optimize
         // the layouting and displaying of the window.  When it is made
-        // visible to early then some layouting seems to be made twice or at
+        // visible too early then some layouting seems to be made twice or at
         // an inconvenient time and the overall process of initializing the
         // Impress takes longer.
         if (!mbHasBeenActivated && mpShell != nullptr && !mpShell->IsActive())

@@ -480,7 +480,7 @@ void CustomAnimationList::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
         }
     }
 
-    // Allow normal proccessing; this calls our NotifyStartDrag().
+    // Allow normal processing; this calls our NotifyStartDrag().
     SvTreeListBox::StartDrag( nAction, rPosPixel );
 }
 

@@ -357,7 +357,7 @@ OUString SdPageObjsTLB::GetObjectName(
 }
 
 /**
- * select a entry in TreeLB
+ * select an entry in TreeLB
  */
 bool SdPageObjsTLB::SelectEntry( const OUString& rName )
 {
@@ -1759,7 +1759,7 @@ void SdPageObjsTLV::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
 }
 
 /**
- * select a entry in TreeLB
+ * select an entry in TreeLB
  */
 bool SdPageObjsTLV::SelectEntry( const OUString& rName )
 {

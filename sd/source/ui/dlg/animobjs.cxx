@@ -454,7 +454,7 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, Button*, pBtn, void )
         }
     }
 
-    // can we create a animation group
+    // can we create an animation group
     if (m_FrameList.empty())
     {
         m_pBtnCreateGroup->Disable();
@@ -586,7 +586,7 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
     }
     else
     {
-        // enable 'group object' only if it is not a Animated GIF
+        // enable 'group object' only if it is not an Animated GIF
         if (m_FrameList.empty())
         {
             m_pRbtGroup->Enable();
@@ -748,7 +748,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                     // increment => next one inserted after this one
                     ++m_nCurrentFrame;
                 }
-                // if a animated GIF is taken, only such one can be created
+                // if an animated GIF is taken, only such one can be created
                 m_pRbtBitmap->Check();
                 m_pRbtGroup->Enable( false );
                 bAnimObj = true;
@@ -849,7 +849,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
     }
 
     // if there was nothing in the animator before but now is something
-    // there, we can create a animation group
+    // there, we can create an animation group
     if (nCloneCount == 0 && !m_FrameList.empty())
     {
         m_pBtnCreateGroup->Enable();

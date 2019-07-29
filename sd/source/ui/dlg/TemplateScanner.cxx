@@ -223,7 +223,7 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning()
         aProps[0] = TITLE;
         aProps[1] = "TargetDirURL";
 
-        //  Create an cursor to iterate over the template folders.
+        //  Create a cursor to iterate over the template folders.
         mxFolderResultSet.set( aTemplateDir.createCursor(aProps, ::ucbhelper::INCLUDE_FOLDERS_ONLY));
         if (mxFolderResultSet.is())
             eNextState = GATHER_FOLDER_LIST;
