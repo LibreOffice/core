@@ -85,34 +85,33 @@ class ScDocument;
 class ScTpLayoutOptions : public SfxTabPage
 {
     friend class VclPtrInstance<ScTpLayoutOptions>;
-    VclPtr<ListBox>        m_pUnitLB;
-    VclPtr<MetricField>    m_pTabMF;
-
-    VclPtr<RadioButton>    m_pAlwaysRB;
-    VclPtr<RadioButton>    m_pRequestRB;
-    VclPtr<RadioButton>    m_pNeverRB;
-
-    VclPtr<CheckBox>       m_pAlignCB;
-    VclPtr<ListBox>        m_pAlignLB;
-    VclPtr<CheckBox>       m_pEditModeCB;
-    VclPtr<CheckBox>       m_pFormatCB;
-    VclPtr<CheckBox>       m_pExpRefCB;
-    VclPtr<CheckBox>       m_pSortRefUpdateCB;
-    VclPtr<CheckBox>       m_pMarkHdrCB;
-    VclPtr<CheckBox>       m_pTextFmtCB;
-    VclPtr<CheckBox>       m_pReplWarnCB;
-    VclPtr<CheckBox>       m_pLegacyCellSelectionCB;
-
-    DECL_LINK(MetricHdl, ListBox&, void );
-    DECL_LINK( AlignHdl, Button*, void );
-
     ScDocument *pDoc;
 
-            ScTpLayoutOptions( vcl::Window*          pParent,
-                             const SfxItemSet&  rArgSet );
+    std::unique_ptr<weld::ComboBox> m_xUnitLB;
+    std::unique_ptr<weld::MetricSpinButton> m_xTabMF;
+
+    std::unique_ptr<weld::RadioButton> m_xAlwaysRB;
+    std::unique_ptr<weld::RadioButton> m_xRequestRB;
+    std::unique_ptr<weld::RadioButton> m_xNeverRB;
+
+    std::unique_ptr<weld::CheckButton> m_xAlignCB;
+    std::unique_ptr<weld::ComboBox> m_xAlignLB;
+    std::unique_ptr<weld::CheckButton> m_xEditModeCB;
+    std::unique_ptr<weld::CheckButton> m_xFormatCB;
+    std::unique_ptr<weld::CheckButton> m_xExpRefCB;
+    std::unique_ptr<weld::CheckButton> m_xSortRefUpdateCB;
+    std::unique_ptr<weld::CheckButton> m_xMarkHdrCB;
+    std::unique_ptr<weld::CheckButton> m_xTextFmtCB;
+    std::unique_ptr<weld::CheckButton> m_xReplWarnCB;
+    std::unique_ptr<weld::CheckButton> m_xLegacyCellSelectionCB;
+
+    DECL_LINK(MetricHdl, weld::ComboBox&, void );
+    DECL_LINK( AlignHdl, weld::ToggleButton&, void );
+
+
+    ScTpLayoutOptions(TabPageParent pParent, const SfxItemSet&  rArgSet );
 public:
     virtual ~ScTpLayoutOptions() override;
-    virtual void        dispose() override;
     static  VclPtr<SfxTabPage> Create          ( TabPageParent pParent,
                                           const SfxItemSet*     rCoreSet );
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;
