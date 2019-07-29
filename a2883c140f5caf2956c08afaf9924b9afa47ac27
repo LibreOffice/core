@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_437ef7e4",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6276,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-07-29T19:35:57Z",
+      "side": 1,
+      "message": "Please drop this change; it’s not a “typo.”",
+      "revId": "a2883c140f5caf2956c08afaf9924b9afa47ac27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_e382abc8",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6302,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-07-29T19:35:57Z",
+      "side": 1,
+      "message": "Also this",
+      "revId": "a2883c140f5caf2956c08afaf9924b9afa47ac27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_26e99119",
+        "filename": "vcl/source/gdi/print.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1213,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-07-29T19:35:57Z",
+      "side": 1,
+      "message": "Please fix the number concordance as well: “format”",
+      "revId": "a2883c140f5caf2956c08afaf9924b9afa47ac27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
