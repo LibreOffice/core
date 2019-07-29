@@ -793,7 +793,7 @@ ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic ) const
 {
     ErrCode nRet = ERRCODE_NONE;
 
-    // rhbz#1079672 do not return maGraphic, it need not be the selected file
+    // rhbz#1079672 do not return maGraphic, it needs not to be the selected file
 
     OUString aPath;
     Sequence<OUString> aPathSeq = mxFileDlg->getFiles();

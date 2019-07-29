@@ -2280,7 +2280,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                             }
                             else
                             {
-                                // It may be that the Wrongs in the list ar not
+                                // It may be that the Wrongs in the list are not
                                 // spanning exactly over words because the
                                 // WordDelimiters during expansion are not
                                 // evaluated.

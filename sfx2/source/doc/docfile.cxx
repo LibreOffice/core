@@ -506,7 +506,7 @@ Reference < XContent > SfxMedium::GetContent() const
         }
         else
         {
-            // TODO: SAL_WARN( "sfx.doc", "SfxMedium::GetContent()\nCreate Content? This code exists as fallback only. Please clarify, why its used.");
+            // TODO: SAL_WARN( "sfx.doc", "SfxMedium::GetContent()\nCreate Content? This code exists as fallback only. Please clarify, why it's used.");
             OUString aURL;
             if ( !pImpl->m_aName.isEmpty() )
                 osl::FileBase::getFileURLFromSystemPath( pImpl->m_aName, aURL );
@@ -2444,7 +2444,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
     if ( !pImpl->m_aBackupURL.isEmpty() )
         return;
 
-    // the copiing to the backup catalog failed ( for example because
+    // the copying to the backup catalog failed ( for example because
     // of using an encrypted partition as target catalog )
     // since the user did not specify to make backup explicitly
     // office should try to make backup in another place,

@@ -1056,7 +1056,7 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq,
                 // E.g. Sequence<Sequence<sal_Int32>> , the index would refer to Sequence<sal_Int32>
                 // In this case arDimSeqIndices would have the size 1. That is the elements are not counted
                 // but the Sequences that contain those elements.
-                // The indices ar 0 based
+                // The indices are 0 based
                 std::unique_ptr<sal_Int32[]> sarDimsSeqIndices;
                 sal_Int32* arDimsSeqIndices= nullptr;
                 if( dimsSeq > 0)

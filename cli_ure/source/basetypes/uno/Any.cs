@@ -61,7 +61,7 @@ public struct Any
 
     /** constructs an instance.
 
-       <p>If the arguments ar invalid then an exception is thrown.</p>
+       <p>If the arguments are invalid then an exception is thrown.</p>
        @exception System.Exception
      */
     public Any(Type type, object value)
