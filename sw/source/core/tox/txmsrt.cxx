@@ -722,7 +722,7 @@ bool SwTOXPara::IsFullPara() const
 // Table
 SwTOXTable::SwTOXTable( const SwContentNode& rNd )
     : SwTOXSortTabBase( TOX_SORT_TABLE, &rNd, nullptr, nullptr ),
-    nLevel(FORM_ALPHA_DELIMITTER)
+    nLevel(FORM_ALPHA_DELIMITER)
 {
 }
 

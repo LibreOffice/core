@@ -3439,7 +3439,7 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
     for( sal_uInt16 i=1; i < nSize; ++i )
     {
         if( TOX_INDEX == m_pCurrentForm->GetTOXType() &&
-            FORM_ALPHA_DELIMITTER == i )
+            FORM_ALPHA_DELIMITER == i )
         {
             aStr = SwResId(STR_ALPHA);
         }
