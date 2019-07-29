@@ -70,8 +70,9 @@ class OPreparedResultSet final : public OBase_Mutex,
     MYSQL_FIELD* m_aFields;
 
     rtl_TextEncoding m_encoding;
-    sal_Int32 m_nCurrentField = 0;
-    sal_Int32 m_nFieldCount;
+    sal_Int32 m_nCurrentRow = 0;
+    sal_Int32 m_nColumnCount;
+    sal_Int32 m_nRowCount;
 
     // Use c style arrays, because we have to work with pointers
     // on these.
@@ -95,6 +96,8 @@ class OPreparedResultSet final : public OBase_Mutex,
     template <typename T> T safelyRetrieveValue(sal_Int32 nColumnIndex);
     template <typename T> T retrieveValue(sal_Int32 nColumnIndex);
     connectivity::ORowSetValue getRowSetValue(sal_Int32 nColumnIndex);
+
+    bool fetchResult();
 
     // you can't delete objects of this type
     virtual ~OPreparedResultSet() override = default;
