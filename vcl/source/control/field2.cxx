@@ -985,7 +985,7 @@ static sal_uInt16 ImplCutMonthFromString( OUString& rStr, const CalendarWrapper&
 static OUString ImplGetDateSep( const LocaleDataWrapper& rLocaleDataWrapper, ExtDateFieldFormat eFormat )
 {
     if ( ( eFormat == ExtDateFieldFormat::ShortYYMMDD_DIN5008 ) || ( eFormat == ExtDateFieldFormat::ShortYYYYMMDD_DIN5008 ) )
-        return OUString("-");
+        return "-";
     else
         return rLocaleDataWrapper.getDateSep();
 }

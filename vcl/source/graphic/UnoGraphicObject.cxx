@@ -49,7 +49,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return OUString("com.sun.star.graphic.GraphicObject");
+        return "com.sun.star.graphic.GraphicObject";
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override

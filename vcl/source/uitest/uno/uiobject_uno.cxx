@@ -187,7 +187,7 @@ OUString SAL_CALL UIObjectUnoObj::getType()
 
 OUString SAL_CALL UIObjectUnoObj::getImplementationName()
 {
-    return OUString("org.libreoffice.uitest.UIObject");
+    return "org.libreoffice.uitest.UIObject";
 }
 
 sal_Bool UIObjectUnoObj::supportsService(OUString const & ServiceName)

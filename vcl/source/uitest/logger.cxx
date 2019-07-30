@@ -223,7 +223,7 @@ namespace {
 OUString StringMapToOUString(const std::map<OUString, OUString>& rParameters)
 {
     if (rParameters.empty())
-        return OUString("");
+        return "";
 
     OUStringBuffer aParameterString = " {";
 

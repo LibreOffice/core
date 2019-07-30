@@ -53,7 +53,7 @@ IconThemeSelector::IconThemeSelector()
 IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvironment)
 {
     if (comphelper::LibreOfficeKit::isActive())
-        return OUString("colibre");
+        return "colibre";
 
 #ifdef _WIN32
     (void)desktopEnvironment;
@@ -94,7 +94,7 @@ IconThemeSelector::SelectIconThemeForDesktopEnvironment(
         }
         //if a dark variant is preferred, and we didn't have an exact match, then try our one and only dark theme
         if (mPreferDarkIconTheme && icon_theme_is_in_installed_themes("breeze_dark", installedThemes)) {
-            return OUString("breeze_dark");
+            return "breeze_dark";
         }
     }
 

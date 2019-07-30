@@ -150,10 +150,7 @@ void Qt5Clipboard::handleChanged(QClipboard::Mode aMode)
         listener->changedContents(aEv);
 }
 
-OUString Qt5Clipboard::getImplementationName()
-{
-    return OUString("com.sun.star.datatransfer.Qt5Clipboard");
-}
+OUString Qt5Clipboard::getImplementationName() { return "com.sun.star.datatransfer.Qt5Clipboard"; }
 
 css::uno::Sequence<OUString> Qt5Clipboard::getSupportedServiceNames()
 {

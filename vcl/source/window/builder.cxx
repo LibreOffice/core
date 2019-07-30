@@ -79,13 +79,13 @@ namespace
     OUString mapStockToImageResource(const OUString& sType)
     {
         if (sType == "gtk-index")
-            return OUString(SV_RESID_BITMAP_INDEX);
+            return SV_RESID_BITMAP_INDEX;
         else if (sType == "gtk-refresh")
-            return OUString(SV_RESID_BITMAP_REFRESH);
+            return SV_RESID_BITMAP_REFRESH;
         else if (sType == "gtk-apply")
-            return OUString(IMG_APPLY);
+            return IMG_APPLY;
         else if (sType == "gtk-dialog-error")
-            return OUString(IMG_ERROR);
+            return IMG_ERROR;
         return OUString();
     }
 

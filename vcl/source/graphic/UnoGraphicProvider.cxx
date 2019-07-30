@@ -90,7 +90,7 @@ GraphicProvider::GraphicProvider()
 
 OUString SAL_CALL GraphicProvider::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.graphic.GraphicProvider" );
+    return "com.sun.star.comp.graphic.GraphicProvider";
 }
 
 sal_Bool SAL_CALL GraphicProvider::supportsService( const OUString& ServiceName )

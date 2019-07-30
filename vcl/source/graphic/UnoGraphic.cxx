@@ -85,7 +85,7 @@ void SAL_CALL Graphic::release() throw()
 
 OUString SAL_CALL Graphic::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.graphic.Graphic" );
+    return "com.sun.star.comp.graphic.Graphic";
 }
 
 sal_Bool SAL_CALL Graphic::supportsService( const OUString& rServiceName )

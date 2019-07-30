@@ -435,10 +435,7 @@ void Gtk3KDE5FilePicker::disposing(const lang::EventObject& rEvent)
     }
 }
 
-OUString SAL_CALL Gtk3KDE5FilePicker::getImplementationName()
-{
-    return OUString(FILE_PICKER_IMPL_NAME);
-}
+OUString SAL_CALL Gtk3KDE5FilePicker::getImplementationName() { return FILE_PICKER_IMPL_NAME; }
 
 sal_Bool SAL_CALL Gtk3KDE5FilePicker::supportsService(const OUString& ServiceName)
 {

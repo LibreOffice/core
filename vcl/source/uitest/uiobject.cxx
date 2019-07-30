@@ -49,7 +49,7 @@ void UIObject::execute(const OUString& /*rAction*/,
 
 OUString UIObject::get_type() const
 {
-    return OUString("Generic UIObject");
+    return "Generic UIObject";
 }
 
 std::unique_ptr<UIObject> UIObject::get_child(const OUString&)
@@ -450,7 +450,7 @@ std::set<OUString> WindowUIObject::get_children() const
 
 OUString WindowUIObject::get_name() const
 {
-    return OUString("WindowUIObject");
+    return "WindowUIObject";
 }
 
 namespace {
@@ -577,7 +577,7 @@ void ButtonUIObject::execute(const OUString& rAction,
 
 OUString ButtonUIObject::get_name() const
 {
-    return OUString("ButtonUIObject");
+    return "ButtonUIObject";
 }
 
 OUString ButtonUIObject::get_action(VclEventId nEvent) const
@@ -618,7 +618,7 @@ StringMap DialogUIObject::get_state()
 
 OUString DialogUIObject::get_name() const
 {
-    return OUString("DialogUIObject");
+    return "DialogUIObject";
 }
 
 std::unique_ptr<UIObject> DialogUIObject::create(vcl::Window* pWindow)
@@ -720,7 +720,7 @@ OUString EditUIObject::get_action(VclEventId nEvent) const
 
 OUString EditUIObject::get_name() const
 {
-    return OUString("EditUIObject");
+    return "EditUIObject";
 }
 
 std::unique_ptr<UIObject> EditUIObject::create(vcl::Window* pWindow)
@@ -781,7 +781,7 @@ StringMap MultiLineEditUIObject::get_state()
 
 OUString MultiLineEditUIObject::get_name() const
 {
-    return OUString("MultiLineEditUIObject");
+    return "MultiLineEditUIObject";
 }
 
 std::unique_ptr<UIObject> MultiLineEditUIObject::create(vcl::Window* pWindow)
@@ -821,7 +821,7 @@ StringMap CheckBoxUIObject::get_state()
 
 OUString CheckBoxUIObject::get_name() const
 {
-    return OUString("CheckBoxUIObject");
+    return "CheckBoxUIObject";
 }
 
 OUString CheckBoxUIObject::get_action(VclEventId nEvent) const
@@ -871,7 +871,7 @@ StringMap RadioButtonUIObject::get_state()
 
 OUString RadioButtonUIObject::get_name() const
 {
-    return OUString("RadioButtonUIObject");
+    return "RadioButtonUIObject";
 }
 
 OUString RadioButtonUIObject::get_action(VclEventId nEvent) const
@@ -920,7 +920,7 @@ StringMap TabPageUIObject::get_state()
 
 OUString TabPageUIObject::get_name() const
 {
-    return OUString("TabPageUIObject");
+    return "TabPageUIObject";
 }
 
 ListBoxUIObject::ListBoxUIObject(const VclPtr<ListBox>& xListBox):
@@ -976,7 +976,7 @@ StringMap ListBoxUIObject::get_state()
 
 OUString ListBoxUIObject::get_name() const
 {
-    return OUString("ListBoxUIObject");
+    return "ListBoxUIObject";
 }
 
 OUString ListBoxUIObject::get_action(VclEventId nEvent) const
@@ -1052,7 +1052,7 @@ StringMap ComboBoxUIObject::get_state()
 
 OUString ComboBoxUIObject::get_name() const
 {
-    return OUString("ComboBoxUIObject");
+    return "ComboBoxUIObject";
 }
 
 OUString ComboBoxUIObject::get_action(VclEventId nEvent) const
@@ -1128,7 +1128,7 @@ OUString SpinUIObject::get_action(VclEventId nEvent) const
 
 OUString SpinUIObject::get_name() const
 {
-    return OUString("SpinUIObject");
+    return "SpinUIObject";
 }
 
 SpinFieldUIObject::SpinFieldUIObject(const VclPtr<SpinField>& xSpinField):
@@ -1190,7 +1190,7 @@ OUString SpinFieldUIObject::get_action(VclEventId nEvent) const
 
 OUString SpinFieldUIObject::get_name() const
 {
-    return OUString("SpinFieldUIObject");
+    return "SpinFieldUIObject";
 }
 
 std::unique_ptr<UIObject> SpinFieldUIObject::create(vcl::Window* pWindow)
@@ -1254,7 +1254,7 @@ OUString TabControlUIObject::get_action(VclEventId nEvent) const
 
 OUString TabControlUIObject::get_name() const
 {
-    return OUString("TabControlUIObject");
+    return "TabControlUIObject";
 }
 
 std::unique_ptr<UIObject> TabControlUIObject::create(vcl::Window* pWindow)

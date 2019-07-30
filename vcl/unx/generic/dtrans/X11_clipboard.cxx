@@ -215,7 +215,7 @@ Reference< XInterface > X11Clipboard::getReference() throw()
 
 OUString SAL_CALL X11Clipboard::getImplementationName(  )
 {
-    return OUString(X11_CLIPBOARD_IMPLEMENTATION_NAME);
+    return X11_CLIPBOARD_IMPLEMENTATION_NAME;
 }
 
 sal_Bool SAL_CALL X11Clipboard::supportsService( const OUString& ServiceName )

@@ -151,7 +151,7 @@ Sequence< OUString > FontIdentificator_getSupportedServiceNames()
 
 OUString FontIdentificator_getImplementationName()
 {
-    return OUString( "vcl::FontIdentificator" );
+    return "vcl::FontIdentificator";
 }
 
 Reference< XInterface > FontIdentificator_createInstance( const Reference< XMultiServiceFactory >&  )

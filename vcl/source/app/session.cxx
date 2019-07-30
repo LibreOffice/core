@@ -389,7 +389,7 @@ OUString vcl_session_getImplementationName()
 {
     SAL_INFO("vcl.se", "vcl_session_getImplementationName");
 
-    return OUString( "com.sun.star.frame.VCLSessionManagerClient" );
+    return "com.sun.star.frame.VCLSessionManagerClient";
 }
 
 Sequence< OUString > vcl_session_getSupportedServiceNames()

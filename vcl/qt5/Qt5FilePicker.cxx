@@ -826,7 +826,7 @@ void Qt5FilePicker::disposing(const lang::EventObject& rEvent)
 
 OUString SAL_CALL Qt5FilePicker::getImplementationName()
 {
-    return OUString("com.sun.star.ui.dialogs.Qt5FilePicker");
+    return "com.sun.star.ui.dialogs.Qt5FilePicker";
 }
 
 sal_Bool SAL_CALL Qt5FilePicker::supportsService(const OUString& ServiceName)

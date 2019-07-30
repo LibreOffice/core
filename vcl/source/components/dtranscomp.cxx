@@ -111,7 +111,7 @@ Sequence< OUString > GenericClipboard::getSupportedServiceNames_static()
 
 OUString GenericClipboard::getImplementationName()
 {
-    return OUString("com.sun.star.datatransfer.VCLGenericClipboard");
+    return "com.sun.star.datatransfer.VCLGenericClipboard";
 }
 
 Sequence< OUString > GenericClipboard::getSupportedServiceNames()
@@ -155,7 +155,7 @@ void GenericClipboard::setContents(
 
 OUString GenericClipboard::getName()
 {
-    return OUString( "CLIPBOARD"  );
+    return "CLIPBOARD";
 }
 
 sal_Int8 GenericClipboard::getRenderingCapabilities()
@@ -213,7 +213,7 @@ Reference< XInterface > ClipboardFactory::createInstanceWithArguments( const Seq
 
 OUString Clipboard_getImplementationName()
 {
-    return OUString(
+    return
     #if defined MACOSX
     "com.sun.star.datatransfer.clipboard.AquaClipboard"
     #elif defined IOS
@@ -225,7 +225,7 @@ OUString Clipboard_getImplementationName()
     #else
     "com.sun.star.datatransfer.VCLGenericClipboard"
     #endif
-     );
+     ;
 }
 
 Reference< XSingleServiceFactory > Clipboard_createFactory()
@@ -260,7 +260,7 @@ public:
     virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) override;
 
     OUString SAL_CALL getImplementationName() override
-    { return OUString("com.sun.star.datatransfer.dnd.VclGenericDragSource"); }
+    { return "com.sun.star.datatransfer.dnd.VclGenericDragSource"; }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
@@ -317,7 +317,7 @@ OUString DragSource_getImplementationName()
 #if defined MACOSX
     return OUString("com.sun.star.comp.datatransfer.dnd.OleDragSource_V1");
 #elif defined UNX
-    return OUString("com.sun.star.datatransfer.dnd.XdndSupport");
+    return "com.sun.star.datatransfer.dnd.XdndSupport";
 #else
     return OUString("com.sun.star.datatransfer.dnd.VclGenericDragSource");
 #endif
@@ -357,7 +357,7 @@ public:
     virtual void        SAL_CALL setDefaultActions( sal_Int8 actions ) override;
 
     OUString SAL_CALL getImplementationName() override
-    { return OUString("com.sun.star.datatransfer.dnd.VclGenericDropTarget"); }
+    { return "com.sun.star.datatransfer.dnd.VclGenericDropTarget"; }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
@@ -415,7 +415,7 @@ Sequence< OUString > DropTarget_getSupportedServiceNames()
 
 OUString DropTarget_getImplementationName()
 {
-    return OUString(
+    return
     #if defined MACOSX
     "com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1"
     #elif defined UNX
@@ -423,7 +423,7 @@ OUString DropTarget_getImplementationName()
     #else
     "com.sun.star.datatransfer.dnd.VclGenericDropTarget"
     #endif
-                   );
+                   ;
 }
 
 Reference< XInterface > DropTarget_createInstance( const Reference< XMultiServiceFactory >&  )

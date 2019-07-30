@@ -4005,7 +4005,7 @@ void SelectionManagerHolder::startDrag(
 
 OUString SelectionManagerHolder::getImplementationName()
 {
-    return OUString(XDND_IMPLEMENTATION_NAME);
+    return XDND_IMPLEMENTATION_NAME;
 }
 
 sal_Bool SelectionManagerHolder::supportsService( const OUString& ServiceName )
