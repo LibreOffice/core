@@ -55,7 +55,7 @@ OUString SAL_CALL ORptTypeDetection::detect( Sequence< css::beans::PropertyValue
     {
         INetURLObject aURL(sTemp);
         if ( aURL.GetFileExtension().equalsIgnoreAsciiCase("orp") )
-            return OUString("StarBaseReport");
+            return "StarBaseReport";
         else
         {
             try
@@ -66,7 +66,7 @@ OUString SAL_CALL ORptTypeDetection::detect( Sequence< css::beans::PropertyValue
                     OUString sMediaType;
                     xProp->getPropertyValue("MediaType") >>= sMediaType;
                     if ( sMediaType == MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII )
-                        return OUString("StarBaseReport");
+                        return "StarBaseReport";
                     ::comphelper::disposeComponent(xProp);
                 }
             }

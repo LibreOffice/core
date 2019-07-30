@@ -121,7 +121,7 @@ uno::Reference< uno::XInterface > OShape::create(uno::Reference< uno::XComponent
 
 OUString OShape::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.report.Shape");
+    return "com.sun.star.comp.report.Shape";
 }
 
 
@@ -421,7 +421,7 @@ OUString SAL_CALL OShape::getShapeType(  )
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( m_aProps.aComponent.m_xShape.is() )
         return m_aProps.aComponent.m_xShape->getShapeType();
-    return OUString("com.sun.star.drawing.CustomShape");
+    return "com.sun.star.drawing.CustomShape";
 }
 
 ::sal_Int32 SAL_CALL OShape::getZOrder()

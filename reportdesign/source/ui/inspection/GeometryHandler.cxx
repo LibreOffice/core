@@ -255,7 +255,7 @@ uno::Sequence< OUString > SAL_CALL GeometryHandler::getSupportedServiceNames(  )
 
 OUString GeometryHandler::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.report.GeometryHandler");
+    return "com.sun.star.comp.report.GeometryHandler";
 }
 
 uno::Sequence< OUString > GeometryHandler::getSupportedServiceNames_static(  )

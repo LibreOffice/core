@@ -89,7 +89,7 @@ uno::Sequence< OUString > SAL_CALL DataProviderHandler::getSupportedServiceNames
 
 OUString DataProviderHandler::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.report.DataProviderHandler");
+    return "com.sun.star.comp.report.DataProviderHandler";
 }
 
 uno::Sequence< OUString > DataProviderHandler::getSupportedServiceNames_static(  )

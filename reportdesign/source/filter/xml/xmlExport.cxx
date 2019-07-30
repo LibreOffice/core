@@ -77,7 +77,7 @@ namespace rptxml
 
     OUString ORptExportHelper::getImplementationName_Static(  )
     {
-        return OUString("com.sun.star.comp.report.XMLSettingsExporter");
+        return "com.sun.star.comp.report.XMLSettingsExporter";
     }
 
     Sequence< OUString > ORptExportHelper::getSupportedServiceNames_Static(  )
@@ -93,7 +93,7 @@ namespace rptxml
 
     OUString ORptContentExportHelper::getImplementationName_Static(  )
     {
-        return OUString("com.sun.star.comp.report.XMLContentExporter");
+        return "com.sun.star.comp.report.XMLContentExporter";
     }
 
     Sequence< OUString > ORptContentExportHelper::getSupportedServiceNames_Static(  )
@@ -111,7 +111,7 @@ namespace rptxml
 
     OUString ORptStylesExportHelper::getImplementationName_Static(  )
     {
-        return OUString("com.sun.star.comp.report.XMLStylesExporter");
+        return "com.sun.star.comp.report.XMLStylesExporter";
     }
 
     Sequence< OUString > ORptStylesExportHelper::getSupportedServiceNames_Static(  )
@@ -128,7 +128,7 @@ namespace rptxml
 
     OUString ORptMetaExportHelper::getImplementationName_Static(  )
     {
-        return OUString("com.sun.star.comp.report.XMLMetaExporter");
+        return "com.sun.star.comp.report.XMLMetaExporter";
     }
 
     Sequence< OUString > ORptMetaExportHelper::getSupportedServiceNames_Static(  )
@@ -145,7 +145,7 @@ namespace rptxml
 
     OUString ODBFullExportHelper::getImplementationName_Static(  )
     {
-        return OUString("com.sun.star.comp.report.XMLFullExporter");
+        return "com.sun.star.comp.report.XMLFullExporter";
     }
 
     Sequence< OUString > ODBFullExportHelper::getSupportedServiceNames_Static(  )
@@ -307,7 +307,7 @@ Reference< XInterface > ORptExport::create(Reference< XComponentContext > const 
 
 OUString ORptExport::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.report.ExportFilter");
+    return "com.sun.star.comp.report.ExportFilter";
 }
 
 

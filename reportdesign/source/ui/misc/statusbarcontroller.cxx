@@ -49,7 +49,7 @@ OUString SAL_CALL OStatusbarController::getImplementationName()
 
 OUString OStatusbarController::getImplementationName_Static()
 {
-    return OUString("com.sun.star.report.comp.StatusbarController");
+    return "com.sun.star.report.comp.StatusbarController";
 }
 
 Sequence< OUString> OStatusbarController::getSupportedServiceNames_Static()

@@ -77,7 +77,7 @@ namespace rptui
 
     OUString DefaultComponentInspectorModel::getImplementationName_Static(  )
     {
-        return OUString("com.sun.star.comp.report.DefaultComponentInspectorModel");
+        return "com.sun.star.comp.report.DefaultComponentInspectorModel";
     }
 
     Sequence< OUString > DefaultComponentInspectorModel::getSupportedServiceNames_static(  )

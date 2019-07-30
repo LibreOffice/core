@@ -84,7 +84,7 @@ uno::Sequence< OUString > SAL_CALL ImportDocumentHandler::getSupportedServiceNam
 
 OUString ImportDocumentHandler::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.report.ImportDocumentHandler");
+    return "com.sun.star.comp.report.ImportDocumentHandler";
 }
 
 uno::Sequence< OUString > ImportDocumentHandler::getSupportedServiceNames_static(  )

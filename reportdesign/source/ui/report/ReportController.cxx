@@ -255,7 +255,7 @@ OUString SAL_CALL OReportController::getImplementationName()
 
 OUString OReportController::getImplementationName_Static()
 {
-    return OUString("com.sun.star.report.comp.ReportDesign");
+    return "com.sun.star.report.comp.ReportDesign";
 }
 
 Sequence< OUString> OReportController::getSupportedServiceNames_Static()

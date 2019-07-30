@@ -66,7 +66,7 @@ uno::Sequence< OUString > SAL_CALL ReportComponentHandler::getSupportedServiceNa
 
 OUString ReportComponentHandler::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.report.ReportComponentHandler");
+    return "com.sun.star.comp.report.ReportComponentHandler";
 }
 
 uno::Sequence< OUString > ReportComponentHandler::getSupportedServiceNames_static(  )

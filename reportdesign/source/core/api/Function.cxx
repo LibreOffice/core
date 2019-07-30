@@ -57,7 +57,7 @@ void SAL_CALL OFunction::dispose()
 
 OUString OFunction::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.report.OFunction");
+    return "com.sun.star.comp.report.OFunction";
 }
 
 

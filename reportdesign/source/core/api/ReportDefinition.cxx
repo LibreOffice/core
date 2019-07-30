@@ -681,7 +681,7 @@ void SAL_CALL OReportDefinition::disposing()
 
 OUString OReportDefinition::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.report.OReportDefinition");
+    return "com.sun.star.comp.report.OReportDefinition";
 }
 
 OUString SAL_CALL OReportDefinition::getImplementationName(  )
@@ -2219,7 +2219,7 @@ OUString SAL_CALL OReportDefinition::getShapeType(  )
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     if ( m_aProps->m_xShape.is() )
         return m_aProps->m_xShape->getShapeType();
-    return OUString("com.sun.star.drawing.OLE2Shape");
+    return "com.sun.star.drawing.OLE2Shape";
 }
 
 typedef ::cppu::WeakImplHelper< container::XNameContainer,

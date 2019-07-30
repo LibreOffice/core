@@ -268,7 +268,7 @@ uno::Reference< uno::XInterface > ORptImportHelper::create(uno::Reference< uno::
 
 OUString ORptImportHelper::getImplementationName_Static(  )
 {
-    return OUString(SERVICE_SETTINGSIMPORTER);
+    return SERVICE_SETTINGSIMPORTER;
 }
 
 Sequence< OUString > ORptImportHelper::getSupportedServiceNames_Static(  )
@@ -285,7 +285,7 @@ Reference< XInterface > ORptContentImportHelper::create(const Reference< XCompon
 
 OUString ORptContentImportHelper::getImplementationName_Static(  )
 {
-    return OUString(SERVICE_CONTENTIMPORTER);
+    return SERVICE_CONTENTIMPORTER;
 }
 
 Sequence< OUString > ORptContentImportHelper::getSupportedServiceNames_Static(  )
@@ -304,7 +304,7 @@ Reference< XInterface > ORptStylesImportHelper::create(Reference< XComponentCont
 
 OUString ORptStylesImportHelper::getImplementationName_Static(  )
 {
-    return OUString(SERVICE_STYLESIMPORTER);
+    return SERVICE_STYLESIMPORTER;
 }
 
 Sequence< OUString > ORptStylesImportHelper::getSupportedServiceNames_Static(  )
@@ -322,7 +322,7 @@ Reference< XInterface > ORptMetaImportHelper::create(Reference< XComponentContex
 
 OUString ORptMetaImportHelper::getImplementationName_Static(  )
 {
-    return OUString(SERVICE_METAIMPORTER);
+    return SERVICE_METAIMPORTER;
 }
 
 Sequence< OUString > ORptMetaImportHelper::getSupportedServiceNames_Static(  )
@@ -364,7 +364,7 @@ uno::Reference< XInterface > ORptFilter::create(uno::Reference< XComponentContex
 
 OUString ORptFilter::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.report.OReportFilter");
+    return "com.sun.star.comp.report.OReportFilter";
 }
 
 uno::Sequence< OUString > ORptFilter::getSupportedServiceNames_Static(  )
