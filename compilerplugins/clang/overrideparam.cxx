@@ -54,10 +54,6 @@ bool OverrideParam::VisitCXXMethodDecl(const CXXMethodDecl * methodDecl) {
         return true;
     }
     loplugin::DeclCheck dc(methodDecl);
-    // there is an InsertEntry override here which causes trouble if I modify it
-    if (dc.Function("InsertEntry").Class("SvxCheckListBox").GlobalNamespace()) {
-        return true;
-    }
     // This class is overriding ShowCursor(bool) AND declaring a ShowCursor() method.
     // Adding a default param causes 'ambiguous override'.
     if (dc.Function("ShowCursor").Class("ScTabViewShell").GlobalNamespace()) {

@@ -26,7 +26,6 @@
 #include <vcl/lstbox.hxx>
 #include <unotools/compatibility.hxx>
 #include <unotools/compatibilityviewoptions.hxx>
-#include <svx/checklbx.hxx>
 #include <rtl/ustring.hxx>
 
 class SwWrtShell;
