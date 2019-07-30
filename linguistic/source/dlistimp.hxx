@@ -122,7 +122,7 @@ public:
 
 inline OUString DicList::getImplementationName_Static() throw()
 {
-    return OUString( "com.sun.star.lingu2.DicList" );
+    return "com.sun.star.lingu2.DicList";
 }
 
 

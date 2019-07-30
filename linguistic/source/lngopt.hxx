@@ -207,7 +207,7 @@ public:
 
 inline OUString LinguProps::getImplementationName_Static() throw()
 {
-    return OUString( "com.sun.star.lingu2.LinguProps" );
+    return "com.sun.star.lingu2.LinguProps";
 }
 
 
