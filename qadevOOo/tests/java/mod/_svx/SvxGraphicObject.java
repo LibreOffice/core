@@ -143,7 +143,7 @@ public class SvxGraphicObject extends TestCase {
      *      service instance. </li>
      *  <li> <code>'XTEXTINFO'</code> for
      *      {@link ifc.text._XText} :
-     *      creator which can create instnaces of
+     *      creator which can create instances of
      *      <code>com.sun.star.text.TextField.URL</code>
      *      service. </li>
      * </ul>
