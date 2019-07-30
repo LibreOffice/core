@@ -444,7 +444,7 @@ css::uno::Reference< css::uno::XInterface > createDefault(
 }
 
 OUString getImplementationName() {
-    return OUString("com.sun.star.comp.configuration.ConfigurationProvider");
+    return "com.sun.star.comp.configuration.ConfigurationProvider";
 }
 
 css::uno::Sequence< OUString > getSupportedServiceNames() {

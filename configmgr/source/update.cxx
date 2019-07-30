@@ -148,7 +148,7 @@ css::uno::Reference< css::uno::XInterface > create(
 }
 
 OUString getImplementationName() {
-    return OUString("com.sun.star.comp.configuration.Update");
+    return "com.sun.star.comp.configuration.Update";
 }
 
 css::uno::Sequence< OUString > getSupportedServiceNames() {
