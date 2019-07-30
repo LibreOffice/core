@@ -617,7 +617,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale)
 OUString SAL_CALL
 BreakIteratorImpl::getImplementationName()
 {
-    return OUString("com.sun.star.i18n.BreakIterator");
+    return "com.sun.star.i18n.BreakIterator";
 }
 
 sal_Bool SAL_CALL

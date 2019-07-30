@@ -400,7 +400,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
 OUString SAL_CALL
 Collator_Unicode::getImplementationName()
 {
-    return OUString(implementationName);
+    return implementationName;
 }
 
 sal_Bool SAL_CALL

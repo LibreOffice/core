@@ -353,7 +353,7 @@ CalendarImpl::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativ
 OUString SAL_CALL
 CalendarImpl::getImplementationName()
 {
-    return OUString("com.sun.star.i18n.CalendarImpl");
+    return "com.sun.star.i18n.CalendarImpl";
 }
 
 sal_Bool SAL_CALL

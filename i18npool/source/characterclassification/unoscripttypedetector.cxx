@@ -66,7 +66,7 @@ UnoScriptTypeDetector::endOfCTLScriptType( const OUString& Text, sal_Int32 nPos 
 OUString SAL_CALL
 UnoScriptTypeDetector::getImplementationName()
 {
-    return OUString("com.sun.star.i18n.ScriptTypeDetector");
+    return "com.sun.star.i18n.ScriptTypeDetector";
 }
 
 sal_Bool SAL_CALL

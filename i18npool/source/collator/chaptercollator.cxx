@@ -77,7 +77,7 @@ const sal_Char cChapCollator[] = "com.sun.star.i18n.ChapterCollator";
 OUString SAL_CALL
 ChapterCollator::getImplementationName()
 {
-    return OUString(cChapCollator);
+    return cChapCollator;
 }
 
 sal_Bool SAL_CALL

@@ -172,11 +172,11 @@ NumberFormatCodeMapper::mapElementTypeShortToString(sal_Int16 formatType)
     switch ( formatType )
     {
         case css::i18n::KNumberFormatType::SHORT :
-            return OUString(  "short"  );
+            return "short";
         case css::i18n::KNumberFormatType::MEDIUM :
-            return OUString(  "medium"  );
+            return "medium";
         case css::i18n::KNumberFormatType::LONG :
-            return OUString(  "long"  );
+            return "long";
     }
     return OUString();
 }
@@ -200,21 +200,21 @@ NumberFormatCodeMapper::mapElementUsageShortToString(sal_Int16 formatUsage)
     switch ( formatUsage )
     {
         case css::i18n::KNumberFormatUsage::DATE :
-            return OUString(  "DATE"  );
+            return "DATE";
         case css::i18n::KNumberFormatUsage::TIME :
-            return OUString(  "TIME"  );
+            return "TIME";
         case css::i18n::KNumberFormatUsage::DATE_TIME :
-            return OUString(  "DATE_TIME"  );
+            return "DATE_TIME";
         case css::i18n::KNumberFormatUsage::FIXED_NUMBER :
-            return OUString(  "FIXED_NUMBER"  );
+            return "FIXED_NUMBER";
         case css::i18n::KNumberFormatUsage::FRACTION_NUMBER :
-            return OUString(  "FRACTION_NUMBER"  );
+            return "FRACTION_NUMBER";
         case css::i18n::KNumberFormatUsage::PERCENT_NUMBER :
-            return OUString(  "PERCENT_NUMBER"  );
+            return "PERCENT_NUMBER";
         case css::i18n::KNumberFormatUsage::CURRENCY :
-            return OUString(  "CURRENCY"  );
+            return "CURRENCY";
         case css::i18n::KNumberFormatUsage::SCIENTIFIC_NUMBER :
-            return OUString(  "SCIENTIFIC_NUMBER"  );
+            return "SCIENTIFIC_NUMBER";
     }
     return OUString();
 }
@@ -247,7 +247,7 @@ NumberFormatCodeMapper::mapElementUsageStringToShort(const OUString& formatUsage
 OUString SAL_CALL
 NumberFormatCodeMapper::getImplementationName()
 {
-    return OUString("com.sun.star.i18n.NumberFormatCodeMapper");
+    return "com.sun.star.i18n.NumberFormatCodeMapper";
 }
 
 sal_Bool SAL_CALL NumberFormatCodeMapper::supportsService(const OUString& rServiceName)

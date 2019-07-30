@@ -638,7 +638,7 @@ TransliterationImpl::loadModuleByName( const OUString& implName,
 OUString SAL_CALL
 TransliterationImpl::getImplementationName()
 {
-    return OUString("com.sun.star.i18n.Transliteration");
+    return "com.sun.star.i18n.Transliteration";
 }
 
 sal_Bool SAL_CALL

@@ -175,7 +175,7 @@ OUString SAL_CALL IndexEntrySupplier::getIndexFollowPageWord( sal_Bool bMorePage
 OUString SAL_CALL
 IndexEntrySupplier::getImplementationName()
 {
-    return OUString( implementationName );
+    return implementationName;
 }
 
 sal_Bool SAL_CALL
