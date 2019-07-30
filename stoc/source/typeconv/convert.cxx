@@ -264,7 +264,7 @@ TypeConverter_Impl::TypeConverter_Impl() {}
 // XServiceInfo
 OUString TypeConverter_Impl::getImplementationName()
 {
-    return OUString("com.sun.star.comp.stoc.TypeConverter");
+    return "com.sun.star.comp.stoc.TypeConverter";
 }
 
 // XServiceInfo

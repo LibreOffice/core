@@ -472,7 +472,7 @@ void FilePolicy::refresh()
 
 OUString FilePolicy::getImplementationName()
 {
-    return OUString(IMPL_NAME);
+    return IMPL_NAME;
 }
 
 sal_Bool FilePolicy::supportsService( OUString const & serviceName )

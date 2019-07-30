@@ -838,7 +838,7 @@ Reference< security::XAccessControlContext > AccessController::getContext()
 
 OUString AccessController::getImplementationName()
 {
-    return OUString("com.sun.star.security.comp.stoc.AccessController");
+    return "com.sun.star.security.comp.stoc.AccessController";
 }
 
 sal_Bool AccessController::supportsService( OUString const & serviceName )

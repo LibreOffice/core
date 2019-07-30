@@ -65,7 +65,7 @@ static Sequence< OUString > invadp_getSupportedServiceNames()
 
 static OUString invadp_getImplementationName()
 {
-    return OUString(IMPLNAME);
+    return IMPLNAME;
 }
 
 struct hash_ptr

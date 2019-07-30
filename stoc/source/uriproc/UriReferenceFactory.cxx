@@ -287,7 +287,7 @@ private:
 
 OUString Factory::getImplementationName()
 {
-    return OUString("com.sun.star.comp.uri.UriReferenceFactory");
+    return "com.sun.star.comp.uri.UriReferenceFactory";
 }
 
 sal_Bool Factory::supportsService(OUString const & serviceName)

@@ -117,7 +117,7 @@ void IdlReflectionServiceImpl::dispose()
 
 OUString IdlReflectionServiceImpl::getImplementationName()
 {
-    return OUString("com.sun.star.comp.stoc.CoreReflection");
+    return "com.sun.star.comp.stoc.CoreReflection";
 }
 
 sal_Bool IdlReflectionServiceImpl::supportsService( const OUString & rServiceName )

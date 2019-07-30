@@ -76,7 +76,7 @@ DllComponentLoader::DllComponentLoader( const Reference<XComponentContext> & xCt
 
 OUString SAL_CALL DllComponentLoader::getImplementationName(  )
 {
-    return OUString("com.sun.star.comp.stoc.DLLComponentLoader");
+    return "com.sun.star.comp.stoc.DLLComponentLoader";
 }
 
 sal_Bool SAL_CALL DllComponentLoader::supportsService( const OUString& ServiceName )
