@@ -1050,7 +1050,7 @@ sal_Bool SAL_CALL NestedRegistryImpl::hasElements(  )
 
 OUString SAL_CALL NestedRegistryImpl::getImplementationName(  )
 {
-    return OUString("com.sun.star.comp.stoc.NestedRegistry");
+    return "com.sun.star.comp.stoc.NestedRegistry";
 }
 
 sal_Bool SAL_CALL NestedRegistryImpl::supportsService( const OUString& ServiceName )

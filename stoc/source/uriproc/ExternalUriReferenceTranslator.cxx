@@ -70,7 +70,7 @@ private:
 
 OUString Translator::getImplementationName()
 {
-    return OUString("com.sun.star.comp.uri.ExternalUriReferenceTranslator");
+    return "com.sun.star.comp.uri.ExternalUriReferenceTranslator";
 }
 
 sal_Bool Translator::supportsService(OUString const & serviceName)

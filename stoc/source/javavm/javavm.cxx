@@ -187,7 +187,7 @@ bool SingletonFactory::m_bDisposed = false;
 
 OUString serviceGetImplementationName()
 {
-    return OUString("com.sun.star.comp.stoc.JavaVirtualMachine");
+    return "com.sun.star.comp.stoc.JavaVirtualMachine";
 }
 
 css::uno::Sequence< OUString > serviceGetSupportedServiceNames()

@@ -52,7 +52,7 @@ static Sequence< OUString > ns_getSupportedServiceNames()
 
 static OUString ns_getImplementationName()
 {
-    return OUString(IMPLNAME);
+    return IMPLNAME;
 }
 
 typedef std::unordered_map< OUString, Reference<XInterface > > HashMap_OWString_Interface;

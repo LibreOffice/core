@@ -450,7 +450,7 @@ bool AllPermission::implies( Permission const & ) const
 
 OUString AllPermission::toString() const
 {
-    return OUString("com.sun.star.security.AllPermission");
+    return "com.sun.star.security.AllPermission";
 }
 
 

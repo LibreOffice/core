@@ -76,7 +76,7 @@ static Sequence< OUString > loader_getSupportedServiceNames()
 
 static OUString loader_getImplementationName()
 {
-    return OUString( "com.sun.star.comp.stoc.JavaComponentLoader" );
+    return "com.sun.star.comp.stoc.JavaComponentLoader";
 }
 
 class JavaComponentLoader : public WeakImplHelper<XImplementationLoader, XServiceInfo>

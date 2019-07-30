@@ -1534,7 +1534,7 @@ private:
     }
 
     virtual OUString SAL_CALL getImplementationName() override
-    { return OUString("com.sun.star.comp.stoc.Introspection"); }
+    { return "com.sun.star.comp.stoc.Introspection"; }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }

@@ -1115,7 +1115,7 @@ ImplementationRegistration::ImplementationRegistration( const Reference < XCompo
 // XServiceInfo
 OUString ImplementationRegistration::getImplementationName()
 {
-    return OUString("com.sun.star.comp.stoc.ImplementationRegistration");
+    return "com.sun.star.comp.stoc.ImplementationRegistration";
 }
 
 // XServiceInfo

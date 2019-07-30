@@ -375,7 +375,7 @@ private:
 
 OUString Parser::getImplementationName()
 {
-    return OUString("com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript");
+    return "com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript";
 }
 
 sal_Bool Parser::supportsService(OUString const & serviceName)

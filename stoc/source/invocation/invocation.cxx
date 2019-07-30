@@ -72,7 +72,7 @@ static Sequence< OUString > inv_getSupportedServiceNames()
 
 static OUString inv_getImplementationName()
 {
-    return OUString(IMPLNAME);
+    return IMPLNAME;
 }
 
 // TODO: Implement centrally

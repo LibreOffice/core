@@ -894,7 +894,7 @@ void OServiceManager::initialize( Sequence< Any > const & )
 // XServiceInfo
 OUString OServiceManager::getImplementationName()
 {
-    return OUString("com.sun.star.comp.stoc.OServiceManager");
+    return "com.sun.star.comp.stoc.OServiceManager";
 }
 
 // XServiceInfo
@@ -1153,7 +1153,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override
-        { return OUString("com.sun.star.comp.stoc.ORegistryServiceManager"); }
+        { return "com.sun.star.comp.stoc.ORegistryServiceManager"; }
 
     Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 

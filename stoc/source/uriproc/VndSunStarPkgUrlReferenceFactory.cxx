@@ -70,7 +70,7 @@ private:
 
 OUString Factory::getImplementationName()
 {
-    return OUString("com.sun.star.comp.uri.VndSunStarPkgUrlReferenceFactory");
+    return "com.sun.star.comp.uri.VndSunStarPkgUrlReferenceFactory";
 }
 
 sal_Bool Factory::supportsService(OUString const & serviceName)
