@@ -86,7 +86,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL SoundHandler::getTypes()
     return aTypeCollection.getTypes();
 }
 
-#define IMPLEMENTATIONNAME_SOUNDHANDLER OUString("com.sun.star.comp.framework.SoundHandler")
+#define IMPLEMENTATIONNAME_SOUNDHANDLER "com.sun.star.comp.framework.SoundHandler"
 
 /*===========================================================================================================*/
 /* XServiceInfo */
