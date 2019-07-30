@@ -138,11 +138,11 @@ OUString showDirection(
 {
     switch (direction) {
     case unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN:
-        return OUString("[in]");
+        return "[in]";
     case unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_OUT:
-        return OUString("[out]");
+        return "[out]";
     case unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN_OUT:
-        return OUString("[inout]");
+        return "[inout]";
     default:
         assert(false && "this cannot happen"); for (;;) { std::abort(); }
     }
