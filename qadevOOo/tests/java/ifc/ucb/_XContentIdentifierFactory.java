@@ -43,7 +43,7 @@ public class _XContentIdentifierFactory extends MultiMethodTest {
     /**
      * Calls the tested method with a file url and
      * gets an identifier. <p>
-     * Has <b> OK </b> status if content identifier an provider sheme are
+     * Has <b> OK </b> status if content identifier and provider scheme are
      * proper. <p>
      */
     public void _createContentIdentifier() {
