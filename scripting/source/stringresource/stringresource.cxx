@@ -80,7 +80,7 @@ static Sequence< OUString > getSupportedServiceNames_StringResourceImpl()
 
 static OUString getImplementationName_StringResourceImpl()
 {
-    return OUString( "com.sun.star.comp.scripting.StringResource" );
+    return "com.sun.star.comp.scripting.StringResource";
 }
 
 static Reference< XInterface > create_StringResourceImpl(
@@ -683,7 +683,7 @@ StringResourcePersistenceImpl::~StringResourcePersistenceImpl()
 
 OUString StringResourcePersistenceImpl::getImplementationName(  )
 {
-    return OUString( "com.sun.star.comp.scripting.StringResource");
+    return "com.sun.star.comp.scripting.StringResource";
 }
 
 
@@ -2065,7 +2065,7 @@ static Sequence< OUString > getSupportedServiceNames_StringResourceWithStorageIm
 
 static OUString getImplementationName_StringResourceWithStorageImpl()
 {
-    return OUString( "com.sun.star.comp.scripting.StringResourceWithStorage" );
+    return "com.sun.star.comp.scripting.StringResourceWithStorage";
 }
 
 static Reference< XInterface > create_StringResourceWithStorageImpl(
@@ -2351,7 +2351,7 @@ static Sequence< OUString > getSupportedServiceNames_StringResourceWithLocationI
 
 static OUString getImplementationName_StringResourceWithLocationImpl()
 {
-    return OUString( "com.sun.star.comp.scripting.StringResourceWithLocation" );
+    return "com.sun.star.comp.scripting.StringResourceWithLocation";
 }
 
 static Reference< XInterface > create_StringResourceWithLocationImpl(

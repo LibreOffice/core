@@ -72,8 +72,8 @@ Sequence< OUString > mspf_getSupportedServiceNames( )
 
 OUString mspf_getImplementationName( )
 {
-    return OUString(
-        "com.sun.star.script.provider.MasterScriptProviderFactory");
+    return
+        "com.sun.star.script.provider.MasterScriptProviderFactory";
 }
 
 Reference< XInterface >

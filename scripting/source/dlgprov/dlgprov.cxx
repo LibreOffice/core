@@ -69,7 +69,7 @@ namespace comp_DialogModelProvider
 
     OUString _getImplementationName()
     {
-        return OUString("com.sun.star.comp.scripting.DialogModelProvider");
+        return "com.sun.star.comp.scripting.DialogModelProvider";
     }
 
     uno::Sequence< OUString > _getSupportedServiceNames()
@@ -160,7 +160,7 @@ namespace dlgprov
 
     static OUString getImplementationName_DialogProviderImpl()
     {
-        return OUString( "com.sun.star.comp.scripting.DialogProvider"  );
+        return "com.sun.star.comp.scripting.DialogProvider";
     }
 
 

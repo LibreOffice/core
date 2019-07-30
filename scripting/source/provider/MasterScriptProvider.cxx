@@ -656,7 +656,7 @@ sal_Bool SAL_CALL MasterScriptProvider::hasElements(  )
 
 OUString SAL_CALL MasterScriptProvider::getImplementationName( )
 {
-    return OUString( "com.sun.star.script.provider.MasterScriptProvider"  );
+    return "com.sun.star.script.provider.MasterScriptProvider";
 }
 
 sal_Bool SAL_CALL MasterScriptProvider::supportsService( const OUString& serviceName )
@@ -700,7 +700,7 @@ static Sequence< OUString > sp_getSupportedServiceNames( )
 
 static OUString sp_getImplementationName( )
 {
-    return OUString( "com.sun.star.script.provider.MasterScriptProvider"  );
+    return "com.sun.star.script.provider.MasterScriptProvider";
 }
 
 // ***** registration or ScriptingFrameworkURIHelper
@@ -718,8 +718,8 @@ static Sequence< OUString > urihelper_getSupportedServiceNames( )
 
 static OUString urihelper_getImplementationName( )
 {
-    return OUString(
-        "com.sun.star.script.provider.ScriptURIHelper");
+    return
+        "com.sun.star.script.provider.ScriptURIHelper";
 }
 
 static const struct cppu::ImplementationEntry s_entries [] =

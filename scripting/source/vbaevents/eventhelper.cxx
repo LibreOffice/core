@@ -575,7 +575,7 @@ public:
 
     OUString SAL_CALL getImplementationName() override
     {
-        return OUString( "ooo.vba.EventListener"  );
+        return "ooo.vba.EventListener";
     }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -921,7 +921,7 @@ public:
 
     OUString SAL_CALL getImplementationName() override
     {
-        return OUString( "ooo.vba.VBAToOOEventDesc"  );
+        return "ooo.vba.VBAToOOEventDesc";
     }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
