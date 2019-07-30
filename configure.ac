@@ -10431,10 +10431,7 @@ if test "x$enable_gtk3" = "xyes"; then
     if test "x$ENABLE_GTK3" = "xTRUE"; then
         AC_DEFINE(ENABLE_GTK3)
         R="gtk3"
-        dnl Avoid installed by unpackaged files for now.
-        if test -z "$PKGFORMAT"; then
-            GOBJECT_INTROSPECTION_CHECK(INTROSPECTION_REQUIRED_VERSION)
-        fi
+        GOBJECT_INTROSPECTION_CHECK(INTROSPECTION_REQUIRED_VERSION)
     else
         AC_MSG_ERROR([gtk3 or dependent libraries of the correct versions, not found])
     fi
