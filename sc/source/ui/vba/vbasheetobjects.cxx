@@ -444,7 +444,7 @@ bool ScVbaControlContainer::implPickShape( const uno::Reference< drawing::XShape
 
 OUString ScVbaControlContainer::implGetShapeServiceName() const
 {
-    return OUString( "com.sun.star.drawing.ControlShape" );
+    return "com.sun.star.drawing.ControlShape";
 }
 
 bool ScVbaControlContainer::implCheckProperties( const uno::Reference< beans::XPropertySet >& /*rxModelProps*/ ) const

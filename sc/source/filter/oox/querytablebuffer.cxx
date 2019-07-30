@@ -86,7 +86,7 @@ void lclAppendWebQueryTableIndex( OUStringBuffer& rTables, sal_Int32 nTableIndex
 OUString lclBuildWebQueryTables( const WebPrModel::TablesVector& rTables )
 {
     if( rTables.empty() )
-        return OUString( "HTML_tables" );
+        return "HTML_tables";
 
     OUStringBuffer aTables;
     for( const auto& rTable : rTables )

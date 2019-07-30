@@ -76,27 +76,27 @@ OUString ScXMLExportDataPilot::getDPOperatorXML(
             if (eSearchType == utl::SearchParam::SearchType::Regexp)
                 return GetXMLToken(XML_MATCH);
             else
-                return OUString("=");
+                return "=";
         }
         case SC_NOT_EQUAL :
         {
             if (eSearchType == utl::SearchParam::SearchType::Regexp)
                 return GetXMLToken(XML_NOMATCH);
             else
-                return OUString("!=");
+                return "!=";
         }
         case SC_BOTPERC :
             return GetXMLToken(XML_BOTTOM_PERCENT);
         case SC_BOTVAL :
             return GetXMLToken(XML_BOTTOM_VALUES);
         case SC_GREATER :
-            return OUString(">");
+            return ">";
         case SC_GREATER_EQUAL :
-            return OUString(">=");
+            return ">=";
         case SC_LESS :
-            return OUString("<");
+            return "<";
         case SC_LESS_EQUAL :
-            return OUString("<=");
+            return "<=";
         case SC_TOPPERC :
             return GetXMLToken(XML_TOP_PERCENT);
         case SC_TOPVAL :
@@ -104,7 +104,7 @@ OUString ScXMLExportDataPilot::getDPOperatorXML(
         default:
             OSL_FAIL("This FilterOperator is not supported.");
     }
-    return OUString("=");
+    return "=";
 }
 
 void ScXMLExportDataPilot::WriteDPCondition(const ScQueryEntry& aQueryEntry, bool bIsCaseSensitive,

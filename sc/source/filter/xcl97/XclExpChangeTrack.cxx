@@ -45,7 +45,7 @@ static OString lcl_GuidToOString( sal_uInt8 aGuid[ 16 ] )
             "{%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
             aGuid[ 0 ], aGuid[ 1 ], aGuid[ 2 ], aGuid[ 3 ], aGuid[ 4 ], aGuid[ 5 ], aGuid[ 6 ], aGuid[ 7 ],
             aGuid[ 8 ], aGuid[ 9 ], aGuid[ 10 ], aGuid[ 11 ], aGuid[ 12 ], aGuid[ 13 ], aGuid[ 14 ], aGuid[ 15 ] );
-    return OString( sBuf );
+    return sBuf;
 }
 
 static OString lcl_DateTimeToOString( const DateTime& rDateTime )
@@ -56,7 +56,7 @@ static OString lcl_DateTimeToOString( const DateTime& rDateTime )
             rDateTime.GetYear(), rDateTime.GetMonth(), rDateTime.GetDay(),
             rDateTime.GetHour(), rDateTime.GetMin(), rDateTime.GetSec(),
             rDateTime.GetNanoSec() );
-    return OString( sBuf );
+    return sBuf;
 }
 
 // local functions

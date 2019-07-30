@@ -290,7 +290,7 @@ public:
     // XDefaultMethod
     OUString SAL_CALL getDefaultMethodName(  ) override;
         // XDefaultProperty
-        OUString SAL_CALL getDefaultPropertyName(  ) override { return OUString("Value"); }
+        OUString SAL_CALL getDefaultPropertyName(  ) override { return "Value"; }
 
 // #TODO completely rewrite ScVbaRange, it's become a hackfest
 // it needs to be closer to ScCellRangeBase in that the underlying

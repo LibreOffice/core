@@ -84,7 +84,7 @@ Reference<XAccessible> ScAccessibleFilterTopWindow::getAccessibleChild(
 
 OUString ScAccessibleFilterTopWindow::getImplementationName()
 {
-    return OUString("ScAccessibleFilterTopWindow");
+    return "ScAccessibleFilterTopWindow";
 }
 
 void ScAccessibleFilterTopWindow::setAccessibleChild(

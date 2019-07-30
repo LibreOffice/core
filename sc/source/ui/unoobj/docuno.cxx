@@ -2845,7 +2845,7 @@ uno::Sequence<OUString> SAL_CALL ScModelObj::getAvailableServiceNames()
 // XServiceInfo
 OUString SAL_CALL ScModelObj::getImplementationName()
 {
-    return OUString( "ScModelObj" );
+    return "ScModelObj";
     /* // Matching the .component information:
        return OUString( "com.sun.star.comp.Calc.SpreadsheetDocument" );
     */

@@ -400,10 +400,10 @@ OUString XclChartHelper::GetErrorBarValuesRole( sal_uInt8 nBarType )
 {
     switch( nBarType )
     {
-        case EXC_CHSERERR_XPLUS:    return OUString( EXC_CHPROP_ROLE_ERRORBARS_POSX );
-        case EXC_CHSERERR_XMINUS:   return OUString( EXC_CHPROP_ROLE_ERRORBARS_NEGX );
-        case EXC_CHSERERR_YPLUS:    return OUString( EXC_CHPROP_ROLE_ERRORBARS_POSY );
-        case EXC_CHSERERR_YMINUS:   return OUString( EXC_CHPROP_ROLE_ERRORBARS_NEGY );
+        case EXC_CHSERERR_XPLUS:    return EXC_CHPROP_ROLE_ERRORBARS_POSX;
+        case EXC_CHSERERR_XMINUS:   return EXC_CHPROP_ROLE_ERRORBARS_NEGX;
+        case EXC_CHSERERR_YPLUS:    return EXC_CHPROP_ROLE_ERRORBARS_POSY;
+        case EXC_CHSERERR_YMINUS:   return EXC_CHPROP_ROLE_ERRORBARS_NEGY;
         default:    OSL_FAIL( "XclChartHelper::GetErrorBarValuesRole - unknown bar type" );
     }
     return OUString();

@@ -29,7 +29,7 @@ ScVbaChartTitle::ScVbaChartTitle( const uno::Reference< XHelperInterface >& xPar
 OUString
 ScVbaChartTitle::getServiceImplName()
 {
-    return OUString("ScVbaChartTitle");
+    return "ScVbaChartTitle";
 }
 
 uno::Sequence< OUString >

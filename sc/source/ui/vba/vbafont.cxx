@@ -313,7 +313,7 @@ ScVbaFont::getOutlineFont()
 OUString
 ScVbaFont::getServiceImplName()
 {
-    return OUString("ScVbaFont");
+    return "ScVbaFont";
 }
 
 uno::Sequence< OUString >

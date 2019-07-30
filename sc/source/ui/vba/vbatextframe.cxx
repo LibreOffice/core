@@ -43,7 +43,7 @@ ScVbaTextFrame::Characters()
 OUString
 ScVbaTextFrame::getServiceImplName()
 {
-    return OUString("ScVbaTextFrame");
+    return "ScVbaTextFrame";
 }
 
 uno::Sequence< OUString >

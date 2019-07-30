@@ -188,7 +188,7 @@ ScVbaChartObjects::createCollectionObject( const css::uno::Any& aSource )
 OUString
 ScVbaChartObjects::getServiceImplName()
 {
-    return OUString("ScVbaChartObjects");
+    return "ScVbaChartObjects";
 }
 
 css::uno::Sequence<OUString>

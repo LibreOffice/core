@@ -146,7 +146,7 @@ sal_Int32 ScVbaFileDialog::Show()
 OUString
 ScVbaFileDialog::getServiceImplName()
 {
-    return OUString("ScVbaFileDialog");
+    return "ScVbaFileDialog";
 }
 
 uno::Sequence<OUString>

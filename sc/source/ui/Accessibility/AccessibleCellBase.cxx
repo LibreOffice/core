@@ -265,7 +265,7 @@ uno::Any SAL_CALL
 
 OUString SAL_CALL ScAccessibleCellBase::getImplementationName()
 {
-    return OUString("ScAccessibleCellBase");
+    return "ScAccessibleCellBase";
 }
 
     //=====  XTypeProvider  ===================================================

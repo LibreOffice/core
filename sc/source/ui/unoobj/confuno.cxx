@@ -620,7 +620,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDocumentConfiguration )
 // XServiceInfo
 OUString SAL_CALL ScDocumentConfiguration::getImplementationName()
 {
-    return OUString( "ScDocumentConfiguration" );
+    return "ScDocumentConfiguration";
 }
 
 sal_Bool SAL_CALL ScDocumentConfiguration::supportsService( const OUString& rServiceName )

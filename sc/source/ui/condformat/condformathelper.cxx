@@ -43,17 +43,17 @@ OUString getExpression(sal_Int32 nIndex)
     switch(nIndex)
     {
         case 0:
-            return OUString("=");
+            return "=";
         case 1:
-            return OUString("<");
+            return "<";
         case 2:
-            return OUString(">");
+            return ">";
         case 3:
-            return OUString("<=");
+            return "<=";
         case 4:
-            return OUString(">=");
+            return ">=";
         case 5:
-            return OUString("!=");
+            return "!=";
         case 6:
             return ScResId(STR_COND_BETWEEN);
         case 7:

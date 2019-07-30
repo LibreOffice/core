@@ -3692,7 +3692,7 @@ ScVbaRange::createEnumeration()
 OUString SAL_CALL
 ScVbaRange::getDefaultMethodName(  )
 {
-    return OUString( "Item" );
+    return "Item";
 }
 
 // returns calc internal col. width ( in points )
@@ -5573,7 +5573,7 @@ ScVbaRange::Subtotal( ::sal_Int32 _nGroupBy, ::sal_Int32 _nFunction, const uno::
 OUString
 ScVbaRange::getServiceImplName()
 {
-    return OUString("ScVbaRange");
+    return "ScVbaRange";
 }
 
 uno::Sequence< OUString >

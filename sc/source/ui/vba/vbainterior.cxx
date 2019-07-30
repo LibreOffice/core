@@ -403,7 +403,7 @@ void SAL_CALL ScVbaInterior::setPatternTintAndShade(const uno::Any& /*rAny*/)
 OUString
 ScVbaInterior::getServiceImplName()
 {
-    return OUString("ScVbaInterior");
+    return "ScVbaInterior";
 }
 
 uno::Sequence< OUString >

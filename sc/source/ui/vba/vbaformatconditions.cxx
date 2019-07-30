@@ -273,7 +273,7 @@ ScVbaFormatConditions::removeFormatCondition( const OUString& _sStyleName, bool 
 OUString
 ScVbaFormatConditions::getServiceImplName()
 {
-    return OUString("ScVbaFormatConditions");
+    return "ScVbaFormatConditions";
 }
 
 uno::Sequence< OUString >

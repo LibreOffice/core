@@ -141,7 +141,7 @@ ScVbaFormatCondition::notifyRange()
 OUString
 ScVbaFormatCondition::getServiceImplName()
 {
-    return OUString("ScVbaFormatCondition");
+    return "ScVbaFormatCondition";
 }
 
 uno::Sequence< OUString >

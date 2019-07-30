@@ -874,7 +874,7 @@ OUString ScDPResultData::GetMeasureDimensionName(long nMeasure) const
     if ( nMeasure < 0 )
     {
         OSL_FAIL("GetMeasureDimensionName: negative");
-        return OUString("***");
+        return "***";
     }
 
     return mrSource.GetDataDimName(nMeasure);

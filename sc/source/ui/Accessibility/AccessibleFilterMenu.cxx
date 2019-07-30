@@ -130,7 +130,7 @@ Reference<XAccessibleStateSet> ScAccessibleFilterMenu::getAccessibleStateSet()
 
 OUString ScAccessibleFilterMenu::getImplementationName()
 {
-    return OUString("ScAccessibleFilterMenu");
+    return "ScAccessibleFilterMenu";
 }
 
 // XAccessibleEventBroadcaster

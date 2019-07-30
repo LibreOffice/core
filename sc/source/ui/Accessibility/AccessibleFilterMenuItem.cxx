@@ -65,7 +65,7 @@ Reference<XAccessibleStateSet> ScAccessibleFilterMenuItem::getAccessibleStateSet
 
 OUString ScAccessibleFilterMenuItem::getImplementationName()
 {
-    return OUString("ScAccessibleFilterMenuItem");
+    return "ScAccessibleFilterMenuItem";
 }
 
 // XAccessibleAction
@@ -83,7 +83,7 @@ sal_Bool ScAccessibleFilterMenuItem::doAccessibleAction(sal_Int32 /*nIndex*/)
 
 OUString ScAccessibleFilterMenuItem::getAccessibleActionDescription(sal_Int32 /*nIndex*/)
 {
-    return OUString("click");
+    return "click";
 }
 
 Reference<XAccessibleKeyBinding> ScAccessibleFilterMenuItem::getAccessibleActionKeyBinding(

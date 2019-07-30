@@ -131,7 +131,7 @@ ScVbaChartObject::getChart()
 OUString
 ScVbaChartObject::getServiceImplName()
 {
-    return OUString("ScVbaChartObject");
+    return "ScVbaChartObject";
 }
 
 uno::Sequence< OUString >

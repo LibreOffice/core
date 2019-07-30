@@ -616,7 +616,7 @@ void SAL_CALL ScVbaPageSetup::setPaperSize( sal_Int32 papersize )
 OUString
 ScVbaPageSetup::getServiceImplName()
 {
-    return OUString("ScVbaPageSetup");
+    return "ScVbaPageSetup";
 }
 
 uno::Sequence< OUString >

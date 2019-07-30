@@ -5688,7 +5688,7 @@ OString ScGridWindow::getCellCursor(const Fraction& /*rZoomX*/, const Fraction& 
     // one (client-side) for tiled rendering too.
     if (!mpOOCursors)
     {
-        return OString("EMPTY");
+        return "EMPTY";
     }
 
     SCCOL nX = pViewData->GetCurX();

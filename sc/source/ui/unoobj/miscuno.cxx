@@ -217,7 +217,7 @@ uno::Any SAL_CALL ScIndexEnumeration::nextElement()
 
 OUString SAL_CALL ScIndexEnumeration::getImplementationName()
 {
-    return OUString("ScIndexEnumeration");
+    return "ScIndexEnumeration";
 }
 
 sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const OUString& ServiceName )

@@ -240,7 +240,7 @@ ScVbaGlobals::getAvailableServiceNames(  )
 OUString
 ScVbaGlobals::getServiceImplName()
 {
-    return OUString("ScVbaGlobals");
+    return "ScVbaGlobals";
 }
 
 uno::Sequence< OUString >

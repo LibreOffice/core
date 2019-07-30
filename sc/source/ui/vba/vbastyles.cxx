@@ -183,7 +183,7 @@ ScVbaStyles::Delete(const OUString& _sStyleName)
 OUString
 ScVbaStyles::getServiceImplName()
 {
-    return OUString("ScVbaStyles");
+    return "ScVbaStyles";
 }
 
 uno::Sequence< OUString >

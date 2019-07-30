@@ -168,7 +168,7 @@ ScVbaOLEObjects::getElementType()
 OUString
 ScVbaOLEObjects::getServiceImplName()
 {
-    return OUString("ScVbaOLEObjects");
+    return "ScVbaOLEObjects";
 }
 
 uno::Sequence< OUString >

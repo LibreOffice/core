@@ -44,7 +44,7 @@ uno::Reference<drawing::XShape > ScPageObj::CreateShape( SdrObject *pObj ) const
 
 OUString SAL_CALL ScPageObj::getImplementationName()
 {
-    return OUString("ScPageObj");
+    return "ScPageObj";
 }
 
 sal_Bool SAL_CALL ScPageObj::supportsService( const OUString& rServiceName )

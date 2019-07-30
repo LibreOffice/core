@@ -118,7 +118,7 @@ uno::Reference< excel::XMenuItem > SAL_CALL ScVbaMenuItems::Add( const OUString&
 OUString
 ScVbaMenuItems::getServiceImplName()
 {
-    return OUString("ScVbaMenuItems");
+    return "ScVbaMenuItems";
 }
 
 uno::Sequence<OUString>

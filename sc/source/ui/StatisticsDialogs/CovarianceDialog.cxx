@@ -38,7 +38,7 @@ const OUString ScCovarianceDialog::getLabel()
 
 const OUString ScCovarianceDialog::getTemplate()
 {
-    return OUString("=COVAR(%VAR1%; %VAR2%)");
+    return "=COVAR(%VAR1%; %VAR2%)";
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

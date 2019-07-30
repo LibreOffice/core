@@ -1046,7 +1046,7 @@ ScVbaChart::getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup)
 OUString
 ScVbaChart::getServiceImplName()
 {
-    return OUString("ScVbaChart");
+    return "ScVbaChart";
 }
 
 uno::Sequence< OUString >

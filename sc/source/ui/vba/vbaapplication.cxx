@@ -742,7 +742,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor )
 OUString SAL_CALL
 ScVbaApplication::getName()
 {
-    return OUString("Microsoft Excel" );
+    return "Microsoft Excel";
 }
 
 // #TODO #FIXME get/setDisplayAlerts are just stub impl
@@ -974,7 +974,7 @@ ScVbaApplication::getOperatingSystem()
         return OUString("Macintosh");
 #elif defined(UNX)
         // M. Office is not available on Unix systems, so it is not documented.
-        return OUString("Unix");
+        return "Unix";
 #else
         return OUString("Unknown");
 #endif
@@ -1419,7 +1419,7 @@ void SAL_CALL ScVbaApplication::Undo()
 OUString SAL_CALL
 ScVbaApplication::getIID()
 {
-    return OUString("{82154425-0FBF-11d4-8313-005004526AB4}");
+    return "{82154425-0FBF-11d4-8313-005004526AB4}";
 }
 
 // XConnectable
@@ -1427,7 +1427,7 @@ ScVbaApplication::getIID()
 OUString SAL_CALL
 ScVbaApplication::GetIIDForClassItselfNotCoclass()
 {
-    return OUString("{82154426-0FBF-11D4-8313-005004526AB4}");
+    return "{82154426-0FBF-11D4-8313-005004526AB4}";
 }
 
 TypeAndIID SAL_CALL
@@ -1463,7 +1463,7 @@ ScVbaApplication::CallSinks( const OUString& Method, uno::Sequence< uno::Any >& 
 OUString
 ScVbaApplication::getServiceImplName()
 {
-    return OUString("ScVbaApplication");
+    return "ScVbaApplication";
 }
 
 uno::Sequence< OUString >

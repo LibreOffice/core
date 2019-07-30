@@ -294,7 +294,7 @@ OUString SAL_CALL ScVbaWorkbook::getAuthor()
 {
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS( getModel(), uno::UNO_QUERY );
     if (!xDPS.is())
-        return OUString("?");
+        return "?";
     uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
     return xDocProps->getAuthor();
 }
@@ -394,7 +394,7 @@ ScVbaWorkbook::Names( const uno::Any& aIndex )
 OUString
 ScVbaWorkbook::getServiceImplName()
 {
-    return OUString("ScVbaWorkbook");
+    return "ScVbaWorkbook";
 }
 
 uno::Sequence< OUString >

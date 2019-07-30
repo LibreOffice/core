@@ -327,7 +327,7 @@ void SAL_CALL
 
 OUString SAL_CALL ScAccessibleEditObject::getImplementationName()
 {
-    return OUString("ScAccessibleEditObject");
+    return "ScAccessibleEditObject";
 }
 
 //=====  XTypeProvider  =======================================================

@@ -29,7 +29,7 @@ ScVbaAxisTitle::ScVbaAxisTitle( const uno::Reference< XHelperInterface >& xParen
 OUString
 ScVbaAxisTitle::getServiceImplName()
 {
-    return OUString("ScVbaAxisTitle");
+    return "ScVbaAxisTitle";
 }
 
 uno::Sequence< OUString >

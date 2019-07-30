@@ -983,7 +983,7 @@ ScVbaWorksheet::getControlShape( const OUString& sName )
 OUString
 ScVbaWorksheet::getServiceImplName()
 {
-    return OUString("ScVbaWorksheet");
+    return "ScVbaWorksheet";
 }
 
 void SAL_CALL

@@ -271,7 +271,7 @@ std::unique_ptr<UIObject> ScGridWinUIObject::create(vcl::Window* pWindow)
 
 OUString ScGridWinUIObject::get_name() const
 {
-    return OUString("ScGridWinUIObject");
+    return "ScGridWinUIObject";
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

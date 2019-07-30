@@ -1388,7 +1388,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDocumentPagePreview::ge
 
 OUString SAL_CALL ScAccessibleDocumentPagePreview::getImplementationName()
 {
-    return OUString("ScAccessibleDocumentPagePreview");
+    return "ScAccessibleDocumentPagePreview";
 }
 
 uno::Sequence< OUString> SAL_CALL ScAccessibleDocumentPagePreview::getSupportedServiceNames()

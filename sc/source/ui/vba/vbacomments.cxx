@@ -93,7 +93,7 @@ ScVbaComments::getElementType()
 OUString
 ScVbaComments::getServiceImplName()
 {
-    return OUString("ScVbaComments");
+    return "ScVbaComments";
 }
 
 css::uno::Sequence<OUString>

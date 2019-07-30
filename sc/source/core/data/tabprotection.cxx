@@ -66,11 +66,11 @@ OUString ScPassHashHelper::getHashURI(ScPasswordHash eHash)
     switch (eHash)
     {
         case PASSHASH_SHA256:
-            return OUString(URI_SHA256_ODF12);
+            return URI_SHA256_ODF12;
         case PASSHASH_SHA1:
-            return OUString(URI_SHA1);
+            return URI_SHA1;
         case PASSHASH_XL:
-            return OUString(URI_XLS_LEGACY);
+            return URI_XLS_LEGACY;
         case PASSHASH_UNSPECIFIED:
         default:
             ;

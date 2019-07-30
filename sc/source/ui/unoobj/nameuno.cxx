@@ -408,7 +408,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScNamedRangeObj )
 
 OUString SAL_CALL ScNamedRangeObj::getImplementationName()
 {
-    return OUString( "ScNamedRangeObj" );
+    return "ScNamedRangeObj";
 }
 
 sal_Bool SAL_CALL ScNamedRangeObj::supportsService( const OUString& rServiceName )

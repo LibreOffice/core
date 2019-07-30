@@ -27,7 +27,7 @@ ScExcelBiffDetect::~ScExcelBiffDetect() {}
 
 OUString ScExcelBiffDetect::getImplementationName()
 {
-    return OUString("com.sun.star.comp.calc.ExcelBiffFormatDetector");
+    return "com.sun.star.comp.calc.ExcelBiffFormatDetector";
 }
 
 sal_Bool ScExcelBiffDetect::supportsService( const OUString& aName )

@@ -249,7 +249,7 @@ ScVbaHPageBreaks::getElementType()
 OUString
 ScVbaHPageBreaks::getServiceImplName()
 {
-    return OUString("ScVbaHPageBreaks");
+    return "ScVbaHPageBreaks";
 }
 
 uno::Sequence< OUString >
@@ -306,7 +306,7 @@ ScVbaVPageBreaks::getElementType()
 OUString
 ScVbaVPageBreaks::getServiceImplName()
 {
-    return OUString("ScVbaVPageBreaks");
+    return "ScVbaVPageBreaks";
 }
 
 uno::Sequence< OUString >

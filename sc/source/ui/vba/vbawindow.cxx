@@ -872,7 +872,7 @@ void SAL_CALL ScVbaWindow::setTabRatio( double fRatio )
 OUString
 ScVbaWindow::getServiceImplName()
 {
-    return OUString("ScVbaWindow");
+    return "ScVbaWindow";
 }
 
 uno::Sequence< OUString >

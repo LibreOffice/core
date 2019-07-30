@@ -527,7 +527,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePreviewTable::getAcce
 
 OUString SAL_CALL ScAccessiblePreviewTable::getImplementationName()
 {
-    return OUString("ScAccessiblePreviewTable");
+    return "ScAccessiblePreviewTable";
 }
 
 uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewTable::getSupportedServiceNames()
@@ -557,7 +557,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessiblePreviewTable::getImplementationId()
 
 OUString ScAccessiblePreviewTable::createAccessibleDescription()
 {
-    return OUString(STR_ACC_TABLE_DESCR);
+    return STR_ACC_TABLE_DESCR;
 }
 
 OUString ScAccessiblePreviewTable::createAccessibleName()
