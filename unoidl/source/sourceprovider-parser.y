@@ -82,27 +82,27 @@ void error(YYLTYPE location, yyscan_t yyscanner, OUString const & message) {
 OUString flagName(unoidl::detail::SourceProviderFlags flag) {
     switch (flag) {
     case unoidl::detail::FLAG_ATTRIBUTE:
-        return OUString("attribute");
+        return "attribute";
     case unoidl::detail::FLAG_BOUND:
-        return OUString("bound");
+        return "bound";
     case unoidl::detail::FLAG_CONSTRAINED:
-        return OUString("constrained");
+        return "constrained";
     case unoidl::detail::FLAG_MAYBEAMBIGUOUS:
-        return OUString("maybeambiguous");
+        return "maybeambiguous";
     case unoidl::detail::FLAG_MAYBEDEFAULT:
-        return OUString("maybedefault");
+        return "maybedefault";
     case unoidl::detail::FLAG_MAYBEVOID:
-        return OUString("maybevoid");
+        return "maybevoid";
     case unoidl::detail::FLAG_OPTIONAL:
-        return OUString("optional");
+        return "optional";
     case unoidl::detail::FLAG_PROPERTY:
-        return OUString("property");
+        return "property";
     case unoidl::detail::FLAG_READONLY:
-        return OUString("readonly");
+        return "readonly";
     case unoidl::detail::FLAG_REMOVABLE:
-        return OUString("removable");
+        return "removable";
     case unoidl::detail::FLAG_TRANSIENT:
-        return OUString("transient");
+        return "transient";
     default:
         assert(false && "this cannot happen"); for (;;) { std::abort(); }
     }
@@ -3988,35 +3988,35 @@ OUString SourceProviderType::getName() const {
     }
     switch (type) {
     case unoidl::detail::SourceProviderType::TYPE_VOID:
-        return OUString("void");
+        return "void";
     case unoidl::detail::SourceProviderType::TYPE_BOOLEAN:
-        return OUString("boolean");
+        return "boolean";
     case unoidl::detail::SourceProviderType::TYPE_BYTE:
-        return OUString("byte");
+        return "byte";
     case unoidl::detail::SourceProviderType::TYPE_SHORT:
-        return OUString("short");
+        return "short";
     case unoidl::detail::SourceProviderType::TYPE_UNSIGNED_SHORT:
-        return OUString("unsigned short");
+        return "unsigned short";
     case unoidl::detail::SourceProviderType::TYPE_LONG:
-        return OUString("long");
+        return "long";
     case unoidl::detail::SourceProviderType::TYPE_UNSIGNED_LONG:
-        return OUString("unsigned long");
+        return "unsigned long";
     case unoidl::detail::SourceProviderType::TYPE_HYPER:
-        return OUString("hyper");
+        return "hyper";
     case unoidl::detail::SourceProviderType::TYPE_UNSIGNED_HYPER:
-        return OUString("unsigned hyper");
+        return "unsigned hyper";
     case unoidl::detail::SourceProviderType::TYPE_FLOAT:
-        return OUString("float");
+        return "float";
     case unoidl::detail::SourceProviderType::TYPE_DOUBLE:
-        return OUString("double");
+        return "double";
     case unoidl::detail::SourceProviderType::TYPE_CHAR:
-        return OUString("char");
+        return "char";
     case unoidl::detail::SourceProviderType::TYPE_STRING:
-        return OUString("string");
+        return "string";
     case unoidl::detail::SourceProviderType::TYPE_TYPE:
-        return OUString("type");
+        return "type";
     case unoidl::detail::SourceProviderType::TYPE_ANY:
-        return OUString("any");
+        return "any";
     case unoidl::detail::SourceProviderType::TYPE_SEQUENCE:
         assert(subtypes.size() == 1);
         return "[]" + subtypes.front().getName();
