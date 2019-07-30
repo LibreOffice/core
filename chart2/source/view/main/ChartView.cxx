@@ -2364,6 +2364,7 @@ void formatPage(
 {
     try
     {
+        uno::Reference< chart2::XChartDocument > rxModel( rChartModel, uno::UNO_QUERY );
         uno::Reference< beans::XPropertySet > xModelPage( rChartModel.getPageBackground());
         if( ! xModelPage.is())
             return;
@@ -2373,14 +2374,14 @@ void formatPage(
 
         //format page
         tPropertyNameValueMap aNameValueMap;
-        PropertyMapper::getValueMap( aNameValueMap, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xModelPage );
+        PropertyMapper::getValueMap( rxModel, 1, aNameValueMap, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xModelPage );
 
         OUString aCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) );
         aNameValueMap.emplace( "Name", uno::Any( aCID ) ); //CID OUString
 
         tNameSequence aNames;
         tAnySequence aValues;
-        PropertyMapper::getMultiPropertyListsFromValueMap( aNames, aValues, aNameValueMap );
+        PropertyMapper::getMultiPropertyListsFromValueMap(rxModel, 1, aNames, aValues, aNameValueMap );
 
         ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(xShapeFactory);
         pShapeFactory->createRectangle(

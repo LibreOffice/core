@@ -29,6 +29,7 @@
 #include <ThreeDHelper.hxx>
 #include <defines.hxx>
 #include <editeng/unoprnms.hxx>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <svx/unoshape.hxx>
@@ -172,9 +173,10 @@ void VDiagram::createShapes_2d()
                 OSL_ENSURE( m_xDiagram.is(), "Invalid Diagram model" );
                 if( m_xDiagram.is() )
                 {
+                    uno::Reference< chart2::XChartDocument > rxModel( m_xDiagram, uno::UNO_QUERY );
                     uno::Reference< beans::XPropertySet > xWallProp( m_xDiagram->getWall());
                     if( xWallProp.is())
-                        PropertyMapper::setMappedProperties( xProp, xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties() );
+                        PropertyMapper::setMappedProperties( rxModel, 1, xProp, xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties() );
                 }
                 if( !bAddFloorAndWall )
                 {

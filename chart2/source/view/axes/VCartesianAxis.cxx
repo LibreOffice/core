@@ -29,6 +29,7 @@
 #include "Tickmarks_Equidistant.hxx"
 #include <ExplicitCategoriesProvider.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
@@ -437,10 +438,11 @@ static void getAxisLabelProperties(
     const AxisLabelProperties& rAxisLabelProp,
     sal_Int32 nLimitedSpaceForText, bool bLimitedHeight )
 {
+    Reference<chart2::XChartDocument> rxModel(rAxisProp.m_xAxisModel, uno::UNO_QUERY);
     Reference<beans::XPropertySet> xProps(rAxisProp.m_xAxisModel, uno::UNO_QUERY);
 
     PropertyMapper::getTextLabelMultiPropertyLists(
-        xProps, rPropNames, rPropValues, false, nLimitedSpaceForText, bLimitedHeight, false);
+        rxModel, 1, xProps, rPropNames, rPropValues, false, nLimitedSpaceForText, bLimitedHeight, false);
 
     LabelPositionHelper::doDynamicFontResize(
         rPropValues, rPropNames, xProps, rAxisLabelProp.m_aFontReferenceSize);

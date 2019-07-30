@@ -33,6 +33,7 @@
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
@@ -89,6 +90,7 @@ double lcl_CalcViewFontSize(
 }
 
 void lcl_getProperties(
+    const Reference< chart2::XChartDocument > & rxModel,
     const Reference< beans::XPropertySet > & xLegendProp,
     tPropertyValues & rOutLineFillProperties,
     tPropertyValues & rOutTextProperties,
@@ -99,16 +101,16 @@ void lcl_getProperties(
     {
         // set rOutLineFillProperties
         ::chart::tPropertyNameValueMap aLineFillValueMap;
-        ::chart::PropertyMapper::getValueMap( aLineFillValueMap, ::chart::PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xLegendProp );
+        ::chart::PropertyMapper::getValueMap( rxModel, 1 , aLineFillValueMap, ::chart::PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xLegendProp );
 
         aLineFillValueMap[ "LineJoint" ] <<= drawing::LineJoint_ROUND;
 
         ::chart::PropertyMapper::getMultiPropertyListsFromValueMap(
-            rOutLineFillProperties.first, rOutLineFillProperties.second, aLineFillValueMap );
+            rxModel, 1 , rOutLineFillProperties.first, rOutLineFillProperties.second, aLineFillValueMap );
 
         // set rOutTextProperties
         ::chart::tPropertyNameValueMap aTextValueMap;
-        ::chart::PropertyMapper::getValueMap( aTextValueMap, ::chart::PropertyMapper::getPropertyNameMapForCharacterProperties(), xLegendProp );
+        ::chart::PropertyMapper::getValueMap( rxModel, 1 , aTextValueMap, ::chart::PropertyMapper::getPropertyNameMapForCharacterProperties(), xLegendProp );
 
         aTextValueMap[ "TextAutoGrowHeight" ] <<= true;
         aTextValueMap[ "TextAutoGrowWidth" ] <<= true;
@@ -141,7 +143,7 @@ void lcl_getProperties(
         }
 
         ::chart::PropertyMapper::getMultiPropertyListsFromValueMap(
-            rOutTextProperties.first, rOutTextProperties.second, aTextValueMap );
+            rxModel, 1 , rOutTextProperties.first, rOutTextProperties.second, aTextValueMap );
     }
 }
 
@@ -893,6 +895,7 @@ void VLegend::createShapes(
             tPropertyValues aLineFillProperties;
             tPropertyValues aTextProperties;
 
+            Reference< chart2::XChartDocument > rxModel( m_xLegend, uno::UNO_QUERY );
             Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY );
             css::chart::ChartLegendExpansion eExpansion = css::chart::ChartLegendExpansion_HIGH;
             awt::Size aLegendSize( rAvailableSpace );
@@ -918,7 +921,7 @@ void VLegend::createShapes(
                     }
                 }
                 xLegendProp->getPropertyValue("AnchorPosition") >>= eLegendPosition;
-                lcl_getProperties( xLegendProp, aLineFillProperties, aTextProperties, rPageSize );
+                lcl_getProperties( rxModel, xLegendProp, aLineFillProperties, aTextProperties, rPageSize );
             }
 
             // create entries

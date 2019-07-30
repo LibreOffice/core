@@ -48,17 +48,17 @@ void getPropNamesAndValues( const Reference< beans::XPropertySet >& xProp,
     switch( ePropertyType )
     {
         case ::chart::VLegendSymbolFactory::PropertyType::FilledSeries:
-            ::chart::PropertyMapper::getValueMap( aValueMap, aFilledSeriesNameMap, xProp );
+            ::chart::PropertyMapper::getValueMapWithoutModel( aValueMap, aFilledSeriesNameMap, xProp );
             break;
         case ::chart::VLegendSymbolFactory::PropertyType::LineSeries:
-            ::chart::PropertyMapper::getValueMap( aValueMap, aLineSeriesNameMap, xProp );
+            ::chart::PropertyMapper::getValueMapWithoutModel( aValueMap, aLineSeriesNameMap, xProp );
             break;
         case ::chart::VLegendSymbolFactory::PropertyType::Line:
-            ::chart::PropertyMapper::getValueMap( aValueMap, aLineNameMap, xProp );
+            ::chart::PropertyMapper::getValueMapWithoutModel( aValueMap, aLineNameMap, xProp );
             break;
     }
 
-    ::chart::PropertyMapper::getMultiPropertyListsFromValueMap( rNames, rValues, aValueMap );
+    ::chart::PropertyMapper::getMultiPropertyListsFromValueMapWithoutModel( rNames, rValues, aValueMap );
 
     uno::Any* pLineWidthAny = ::chart::PropertyMapper::getValuePointer(rValues,rNames,"LineWidth");
     sal_Int32 nLineWidth = 0;
