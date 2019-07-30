@@ -1184,7 +1184,7 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
 
 OUString TestBridgeImpl::getImplementationName()
 {
-    return OUString( IMPLNAME );
+    return IMPLNAME;
 }
 
 sal_Bool TestBridgeImpl::supportsService( const OUString & rServiceName )

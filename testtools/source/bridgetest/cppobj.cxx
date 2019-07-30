@@ -1101,7 +1101,7 @@ Reference< XCurrentContextChecker > Test_Impl::getCurrentContextChecker()
 
 OUString Test_Impl::getImplementationName()
 {
-    return OUString( IMPLNAME );
+    return IMPLNAME;
 }
 
 sal_Bool Test_Impl::supportsService( const OUString & rServiceName )

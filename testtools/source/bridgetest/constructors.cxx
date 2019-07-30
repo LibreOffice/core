@@ -413,8 +413,8 @@ css::uno::Reference< css::uno::XInterface > create(
 }
 
 OUString getImplementationName() {
-    return OUString(
-            "comp.test.testtools.bridgetest.Constructors");
+    return
+            "comp.test.testtools.bridgetest.Constructors";
 }
 
 css::uno::Sequence< OUString > getSupportedServiceNames() {
@@ -430,8 +430,8 @@ css::uno::Reference< css::uno::XInterface > create2(
 }
 
 OUString getImplementationName2() {
-    return OUString(
-            "comp.test.testtools.bridgetest.Constructors2");
+    return
+            "comp.test.testtools.bridgetest.Constructors2";
 }
 
 css::uno::Sequence< OUString > getSupportedServiceNames2() {
