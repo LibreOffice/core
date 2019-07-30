@@ -45,19 +45,19 @@ OUString TblStylePrHandler::getTypeString()
 {
     switch (m_nType)
     {
-        case TBL_STYLE_WHOLETABLE: return OUString("wholeTable");
-        case TBL_STYLE_FIRSTROW: return OUString("firstRow");
-        case TBL_STYLE_LASTROW: return OUString("lastRow");
-        case TBL_STYLE_FIRSTCOL: return OUString("firstCol");
-        case TBL_STYLE_LASTCOL: return OUString("lastCol");
-        case TBL_STYLE_BAND1VERT: return OUString("band1Vert");
-        case TBL_STYLE_BAND2VERT: return OUString("band2Vert");
-        case TBL_STYLE_BAND1HORZ: return OUString("band1Horz");
-        case TBL_STYLE_BAND2HORZ: return OUString("band2Horz");
-        case TBL_STYLE_NECELL: return OUString("neCell");
-        case TBL_STYLE_NWCELL: return OUString("nwCell");
-        case TBL_STYLE_SECELL: return OUString("seCell");
-        case TBL_STYLE_SWCELL: return OUString("swCell");
+        case TBL_STYLE_WHOLETABLE: return "wholeTable";
+        case TBL_STYLE_FIRSTROW: return "firstRow";
+        case TBL_STYLE_LASTROW: return "lastRow";
+        case TBL_STYLE_FIRSTCOL: return "firstCol";
+        case TBL_STYLE_LASTCOL: return "lastCol";
+        case TBL_STYLE_BAND1VERT: return "band1Vert";
+        case TBL_STYLE_BAND2VERT: return "band2Vert";
+        case TBL_STYLE_BAND1HORZ: return "band1Horz";
+        case TBL_STYLE_BAND2HORZ: return "band2Horz";
+        case TBL_STYLE_NECELL: return "neCell";
+        case TBL_STYLE_NWCELL: return "nwCell";
+        case TBL_STYLE_SECELL: return "seCell";
+        case TBL_STYLE_SWCELL: return "swCell";
         default: break;
     }
     return OUString();

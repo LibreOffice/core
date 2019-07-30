@@ -169,21 +169,21 @@ OUString ThemeTable::getStringForTheme(const Id id)
     switch (id)
     {
         case NS_ooxml::LN_Value_ST_Theme_majorEastAsia:
-            return OUString("majorEastAsia");
+            return "majorEastAsia";
         case NS_ooxml::LN_Value_ST_Theme_majorBidi:
-            return OUString("majorBidi");
+            return "majorBidi";
         case NS_ooxml::LN_Value_ST_Theme_majorAscii:
-            return OUString("majorAscii");
+            return "majorAscii";
         case NS_ooxml::LN_Value_ST_Theme_majorHAnsi:
-            return OUString("majorHAnsi");
+            return "majorHAnsi";
         case NS_ooxml::LN_Value_ST_Theme_minorEastAsia:
-            return OUString("minorEastAsia");
+            return "minorEastAsia";
         case NS_ooxml::LN_Value_ST_Theme_minorBidi:
-            return OUString("minorBidi");
+            return "minorBidi";
         case NS_ooxml::LN_Value_ST_Theme_minorAscii:
-            return OUString("minorAscii");
+            return "minorAscii";
         case NS_ooxml::LN_Value_ST_Theme_minorHAnsi:
-            return OUString("minorHAnsi");
+            return "minorHAnsi";
     }
     return OUString();
 }
@@ -290,18 +290,18 @@ OUString ThemeTable::fromLCIDToScriptTag(LanguageType lang)
         case 0x460  :  // lidKashmiri
         case 0x463  :  // lidPashto
         case 0x48c  :  // lidDari
-            return OUString("Arab");
+            return "Arab";
         case 0x42b  :  // lidArmenian
-            return OUString("Armn");
+            return "Armn";
         case 0x445  :  // lidBengali
         case 0x845  :  // lidBengaliBangladesh
         case 0x44d  :  // lidAssamese
         case 0x458  :  // lidManipuri
-            return OUString("Beng");
+            return "Beng";
         case 0x45d  :  // lidInuktitut
-            return OUString("Cans");
+            return "Cans";
         case 0x45c  :  // lidCherokee
-            return OUString("Cher");
+            return "Cher";
         case 0x419  :  // lidRussian
         case 0x402  :  // lidBulgarian
         case 0x281a :  // lidSerbianCyrillic
@@ -322,7 +322,7 @@ OUString ThemeTable::fromLCIDToScriptTag(LanguageType lang)
         case 0x450  :  // lidMongolian
         case 0x46d  :  // lidBashkir
         case 0x485  :  // lidSakha
-            return OUString("Cyrl");
+            return "Cyrl";
         case 0x439  :  // lidHindi
         case 0x44e  :  // lidMarathi
         case 0x44f  :  // lidSanskrit
@@ -331,39 +331,39 @@ OUString ThemeTable::fromLCIDToScriptTag(LanguageType lang)
         case 0x860  :  // lidKashmiriIndia
         case 0x461  :  // lidNepali
         case 0x861  :  // lidNepaliIndia
-            return OUString("Deva");
+            return "Deva";
         case 0x45e  :  // lidAmharic
         case 0x473  :  // lidTigrignaEthiopic
         case 0x873  :  // lidTigrignaEritrea
-            return OUString("Ethi");
+            return "Ethi";
         case 0x437  :  // lidGeorgian
-            return OUString("Geor");
+            return "Geor";
         case 0x408  :  // lidGreek
-            return OUString("Grek");
+            return "Grek";
         case 0x447  :  // lidGujarati
-            return OUString("Gujr");
+            return "Gujr";
         case 0x446  :  // lidPunjabi
-            return OUString("Guru");
+            return "Guru";
         case 0x412  :  // lidKoreanExtWansung
-            return OUString("Hang");
+            return "Hang";
         case 0x804  :  // lidChineseSimp
         case 0x1004 :  // lidSingapore
-            return OUString("Hans");
+            return "Hans";
         case 0x404  :  // lidChineseTrad
         case 0xc04  :  // lidHongkong
         case 0x1404 :  // lidMacau
-            return OUString("Hant");
+            return "Hant";
         case 0x40d  :  // lidHebrew
         case 0x43d  :  // lidYiddish
-            return OUString("Hebr");
+            return "Hebr";
         case 0x411  :  // lidJapanese
-            return OUString("Jpan");
+            return "Jpan";
         case 0x453  :  // lidKhmer
-            return OUString("Khmr");
+            return "Khmr";
         case 0x44b  :  // lidKannada
-            return OUString("Knda");
+            return "Knda";
         case 0x454  :  // lidLao
-            return OUString("Laoo");
+            return "Laoo";
         case 0x409  :  // lidAmerican
         case 0xc09  :  // lidAustralian
         case 0x809  :  // lidBritish
@@ -522,36 +522,36 @@ OUString ThemeTable::fromLCIDToScriptTag(LanguageType lang)
         case 0x486  :  // lidKiche
         case 0x487  :  // lidKinyarwanda
         case 0x488  :  // lidWolof
-            return OUString("Latn");
+            return "Latn";
         case 0x44c  :  // lidMalayalam
-            return OUString("Mlym");
+            return "Mlym";
         case 0x850  :  // lidMongolianMongo
-            return OUString("Mong");
+            return "Mong";
         case 0x455  :  // lidBurmese
-            return OUString("Mymr");
+            return "Mymr";
         case 0x448  :  // lidOriya
-            return OUString("Orya");
+            return "Orya";
         case 0x45b  :  // lidSinhalese
-            return OUString("Sinh");
+            return "Sinh";
         case 0x45a  :  // lidSyriac
-            return OUString("Syrc");
+            return "Syrc";
         case 0x449  :  // lidTamil
-            return OUString("Taml");
+            return "Taml";
         case 0x44a  :  // lidTelugu
-            return OUString("Telu");
+            return "Telu";
         case 0x465  :  // lidMaldivian
-            return OUString("Thaa");
+            return "Thaa";
         case 0x41e  :  // lidThai
-            return OUString("Thai");
+            return "Thai";
         case 0x451  :  // lidTibetan
         case 0x851  :  // lidBhutanese
-            return OUString("Tibt");
+            return "Tibt";
         case 0x480  :  // lidUighur
-            return OUString("Uigh");
+            return "Uigh";
         case 0x42a  :  // lidVietnamese
-            return OUString("Viet");
+            return "Viet";
         case 0x478  :  // lidYi
-            return OUString("Yiii");
+            return "Yiii";
         default:
             return OUString();
     }
