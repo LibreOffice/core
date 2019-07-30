@@ -108,7 +108,7 @@ XTYPEPROVIDER_IMPL_5( ContentProvider,
 // XServiceInfo methods.
 
 XSERVICEINFO_COMMOM_IMPL( ContentProvider,
-                          OUString( "com.sun.star.comp.ucb.TransientDocumentsContentProvider" ) )
+                          "com.sun.star.comp.ucb.TransientDocumentsContentProvider" )
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface >
 ContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )

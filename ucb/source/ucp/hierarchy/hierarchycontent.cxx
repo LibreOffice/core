@@ -246,7 +246,7 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyContent::getTypes()
 // virtual
 OUString SAL_CALL HierarchyContent::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.ucb.HierarchyContent" );
+    return "com.sun.star.comp.ucb.HierarchyContent";
 }
 
 

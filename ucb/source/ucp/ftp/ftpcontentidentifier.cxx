@@ -101,7 +101,7 @@ OUString SAL_CALL
 FTPContentIdentifier::getContentProviderScheme(
 )
 {
-    return OUString("ftp");
+    return "ftp";
 }
 
 

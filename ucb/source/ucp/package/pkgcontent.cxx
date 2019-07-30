@@ -360,7 +360,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 // virtual
 OUString SAL_CALL Content::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.ucb.PackageContent" );
+    return "com.sun.star.comp.ucb.PackageContent";
 }
 
 

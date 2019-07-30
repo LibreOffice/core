@@ -84,7 +84,7 @@ SortedDynamicResultSet::~SortedDynamicResultSet()
 
 OUString SAL_CALL SortedDynamicResultSet::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.ucb.SortedDynamicResultSet" );
+    return "com.sun.star.comp.ucb.SortedDynamicResultSet";
 }
 
 sal_Bool SAL_CALL SortedDynamicResultSet::supportsService( const OUString& ServiceName )
@@ -424,7 +424,7 @@ OUString SAL_CALL SortedDynamicResultSetFactory::getImplementationName()
 
 OUString SortedDynamicResultSetFactory::getImplementationName_Static()
 {
-    return OUString( "com.sun.star.comp.ucb.SortedDynamicResultSetFactory" );
+    return "com.sun.star.comp.ucb.SortedDynamicResultSetFactory";
 }
 
 sal_Bool SAL_CALL SortedDynamicResultSetFactory::supportsService( const OUString& ServiceName )

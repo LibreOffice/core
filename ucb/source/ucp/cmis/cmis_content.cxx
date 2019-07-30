@@ -1703,7 +1703,7 @@ namespace cmis
 
     OUString SAL_CALL Content::getImplementationName()
     {
-       return OUString("com.sun.star.comp.CmisContent");
+       return "com.sun.star.comp.CmisContent";
     }
 
     uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()

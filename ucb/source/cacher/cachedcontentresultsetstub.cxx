@@ -161,7 +161,7 @@ Sequence< Type > SAL_CALL CachedContentResultSetStub
 
 OUString SAL_CALL CachedContentResultSetStub::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.ucb.CachedContentResultSetStub" );
+    return "com.sun.star.comp.ucb.CachedContentResultSetStub";
 }
 
 sal_Bool SAL_CALL CachedContentResultSetStub::supportsService( const OUString& ServiceName )
@@ -541,7 +541,7 @@ XTYPEPROVIDER_IMPL_3( CachedContentResultSetStubFactory,
 // CachedContentResultSetStubFactory XServiceInfo methods.
 
 XSERVICEINFO_COMMOM_IMPL( CachedContentResultSetStubFactory,
-                          OUString( "com.sun.star.comp.ucb.CachedContentResultSetStubFactory" ) )
+                          "com.sun.star.comp.ucb.CachedContentResultSetStubFactory" )
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface >
 CachedContentResultSetStubFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & )
