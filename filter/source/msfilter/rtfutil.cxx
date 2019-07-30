@@ -36,7 +36,7 @@ OString OutHex(sal_uLong nHex, sal_uInt8 nLen)
             *pStr += 39;
         nHex >>= 4;
     }
-    return OString(pStr);
+    return pStr;
 }
 
 // Ideally, this function should work on (sal_uInt32) Unicode scalar values

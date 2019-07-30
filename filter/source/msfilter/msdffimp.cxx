@@ -7007,40 +7007,40 @@ static const char* GetInternalServerName_Impl( const SvGlobalName& aGlobName )
 OUString SvxMSDffManager::GetFilterNameFromClassID( const SvGlobalName& aGlobName )
 {
     if ( aGlobName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_60 ) )
-        return OUString( "StarOffice XML (Writer)" );
+        return "StarOffice XML (Writer)";
 
     if ( aGlobName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_8 ) )
-        return OUString( "writer8" );
+        return "writer8";
 
     if ( aGlobName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_60 ) )
-        return OUString( "StarOffice XML (Calc)" );
+        return "StarOffice XML (Calc)";
 
     if ( aGlobName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_8 ) )
-        return OUString( "calc8" );
+        return "calc8";
 
     if ( aGlobName == SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_60 ) )
-        return OUString( "StarOffice XML (Impress)" );
+        return "StarOffice XML (Impress)";
 
     if ( aGlobName == SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_8 ) )
-        return OUString( "impress8" );
+        return "impress8";
 
     if ( aGlobName == SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_60 ) )
-        return OUString( "StarOffice XML (Draw)" );
+        return "StarOffice XML (Draw)";
 
     if ( aGlobName == SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_8 ) )
-        return OUString( "draw8" );
+        return "draw8";
 
     if ( aGlobName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_60 ) )
-        return OUString( "StarOffice XML (Math)" );
+        return "StarOffice XML (Math)";
 
     if ( aGlobName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_8 ) )
-        return OUString( "math8" );
+        return "math8";
 
     if ( aGlobName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_60 ) )
-        return OUString( "StarOffice XML (Chart)" );
+        return "StarOffice XML (Chart)";
 
     if ( aGlobName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_8 ) )
-        return OUString( "chart8" );
+        return "chart8";
 
     return OUString();
 }

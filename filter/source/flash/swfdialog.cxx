@@ -42,7 +42,7 @@ using namespace ::com::sun::star::document;
 
 OUString SWFDialog_getImplementationName ()
 {
-    return OUString ( SERVICE_NAME );
+    return SERVICE_NAME;
 }
 
 

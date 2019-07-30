@@ -115,7 +115,7 @@ public:
 
     virtual OUString getClassName() const
     {
-        return OUString( "TextField" );
+        return "TextField";
     }
     virtual bool equalTo( const TextField & aTextField ) const = 0;
     virtual void growCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets ) const = 0;
@@ -152,7 +152,7 @@ public:
 
     virtual OUString getClassName() const override
     {
-        return OUString( "FixedTextField" );
+        return "FixedTextField";
     }
     virtual bool equalTo( const TextField & aTextField ) const override
     {
@@ -177,7 +177,7 @@ public:
     FixedDateTimeField() {}
     virtual OUString getClassName() const override
     {
-        return OUString( "FixedDateTimeField" );
+        return "FixedDateTimeField";
     }
     virtual void growCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets ) const override
     {
@@ -192,7 +192,7 @@ public:
     FooterField() {}
     virtual OUString getClassName() const override
     {
-        return OUString( "FooterField" );
+        return "FooterField";
     }
     virtual void growCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets ) const override
     {
@@ -207,7 +207,7 @@ class VariableTextField : public TextField
 public:
     virtual OUString getClassName() const override
     {
-        return OUString( "VariableTextField" );
+        return "VariableTextField";
     }
 };
 
@@ -223,7 +223,7 @@ public:
     }
     virtual OUString getClassName() const override
     {
-        return OUString( "VariableDateTimeField" );
+        return "VariableDateTimeField";
     }
     virtual bool equalTo( const TextField & aTextField ) const override
     {

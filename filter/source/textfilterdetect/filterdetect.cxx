@@ -214,7 +214,7 @@ void SAL_CALL PlainTextFilterDetect::initialize(const uno::Sequence<uno::Any>& /
 
 OUString PlainTextFilterDetect_getImplementationName()
 {
-    return OUString("com.sun.star.comp.filters.PlainTextFilterDetect");
+    return "com.sun.star.comp.filters.PlainTextFilterDetect";
 }
 
 uno::Sequence<OUString> PlainTextFilterDetect_getSupportedServiceNames()

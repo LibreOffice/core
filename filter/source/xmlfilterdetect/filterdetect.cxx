@@ -221,7 +221,7 @@ void SAL_CALL FilterDetect::initialize( const Sequence< Any >& /*aArguments*/ )
 
 OUString FilterDetect_getImplementationName ()
 {
-    return OUString( "com.sun.star.comp.filters.XMLFilterDetect" );
+    return "com.sun.star.comp.filters.XMLFilterDetect";
 }
 
 Sequence< OUString > FilterDetect_getSupportedServiceNames()

@@ -512,7 +512,7 @@ uno::Sequence< OUString > VBAMacroResolver_getSupportedServiceNames()
 
 OUString VBAMacroResolver_getImplementationName()
 {
-    return OUString( "com.sun.star.comp.vba.VBAMacroResolver" );
+    return "com.sun.star.comp.vba.VBAMacroResolver";
 }
 
 uno::Reference< uno::XInterface > VBAMacroResolver_createInstance( const uno::Reference< uno::XComponentContext >& )
