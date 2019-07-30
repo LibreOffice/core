@@ -135,24 +135,6 @@ struct LanguageConfig_Impl;
 
 class OfaLanguagesTabPage : public SfxTabPage
 {
-    VclPtr<ListBox>        m_pUserInterfaceLB;
-    VclPtr<FixedText>      m_pLocaleSettingFT;
-    VclPtr<SvxLanguageBox> m_pLocaleSettingLB;
-    VclPtr<CheckBox>       m_pDecimalSeparatorCB;
-    VclPtr<FixedText>      m_pCurrencyFT;
-    VclPtr<ListBox>        m_pCurrencyLB;
-    VclPtr<FixedText>      m_pDatePatternsFT;
-    VclPtr<Edit>           m_pDatePatternsED;
-
-    VclPtr<SvxLanguageBox> m_pWesternLanguageLB;
-    VclPtr<FixedText>      m_pWesternLanguageFT;
-    VclPtr<SvxLanguageBox> m_pAsianLanguageLB;
-    VclPtr<SvxLanguageBox> m_pComplexLanguageLB;
-    VclPtr<CheckBox>       m_pCurrentDocCB;
-    VclPtr<CheckBox>       m_pAsianSupportCB;
-    VclPtr<CheckBox>       m_pCTLSupportCB;
-    VclPtr<CheckBox>       m_pIgnoreLanguageChangeCB;
-
     bool        m_bOldAsian;
     bool        m_bOldCtl;
     std::unique_ptr<LanguageConfig_Impl> pLangConfig;
@@ -162,14 +144,31 @@ class OfaLanguagesTabPage : public SfxTabPage
 
     bool            m_bDatePatternsValid;
 
-    DECL_LINK(  SupportHdl, Button*, void ) ;
-    DECL_LINK(  LocaleSettingHdl, ListBox&, void ) ;
-    DECL_LINK(  DatePatternsHdl, Edit&, void ) ;
+    std::unique_ptr<weld::ComboBox> m_xUserInterfaceLB;
+    std::unique_ptr<weld::Label> m_xLocaleSettingFT;
+    std::unique_ptr<LanguageBox> m_xLocaleSettingLB;
+    std::unique_ptr<weld::CheckButton> m_xDecimalSeparatorCB;
+    std::unique_ptr<weld::Label> m_xCurrencyFT;
+    std::unique_ptr<weld::ComboBox> m_xCurrencyLB;
+    std::unique_ptr<weld::Label> m_xDatePatternsFT;
+    std::unique_ptr<weld::Entry> m_xDatePatternsED;
+
+    std::unique_ptr<LanguageBox> m_xWesternLanguageLB;
+    std::unique_ptr<weld::Label> m_xWesternLanguageFT;
+    std::unique_ptr<LanguageBox> m_xAsianLanguageLB;
+    std::unique_ptr<LanguageBox> m_xComplexLanguageLB;
+    std::unique_ptr<weld::CheckButton> m_xCurrentDocCB;
+    std::unique_ptr<weld::CheckButton> m_xAsianSupportCB;
+    std::unique_ptr<weld::CheckButton> m_xCTLSupportCB;
+    std::unique_ptr<weld::CheckButton> m_xIgnoreLanguageChangeCB;
+
+    DECL_LINK(SupportHdl, weld::ToggleButton&, void);
+    DECL_LINK(LocaleSettingHdl, weld::ComboBox&, void);
+    DECL_LINK(DatePatternsHdl, weld::Entry&, void);
 
 public:
-    OfaLanguagesTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    OfaLanguagesTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~OfaLanguagesTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 

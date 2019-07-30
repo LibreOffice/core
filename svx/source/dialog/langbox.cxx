@@ -19,7 +19,6 @@
 
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
-#include <com/sun/star/i18n/ScriptType.hpp>
 #include <linguistic/misc.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -578,9 +577,9 @@ int LanguageBox::ImplTypeToPos(LanguageType eType) const
     return m_xControl->find_id(OUString::number(static_cast<sal_uInt16>(eType)));
 }
 
-void LanguageBox::InsertLanguage(const LanguageType nLangType)
+void LanguageBox::InsertLanguage(const LanguageType nLangType, sal_Int16 nType)
 {
-    weld::ComboBoxEntry aEntry = BuildEntry(nLangType);
+    weld::ComboBoxEntry aEntry = BuildEntry(nLangType, nType);
     if (aEntry.sString.isEmpty())
         return;
     if (aEntry.sImage.isEmpty())
@@ -589,7 +588,17 @@ void LanguageBox::InsertLanguage(const LanguageType nLangType)
         m_xControl->append(aEntry.sId, aEntry.sString, aEntry.sImage);
 }
 
-weld::ComboBoxEntry LanguageBox::BuildEntry(const LanguageType nLangType)
+void LanguageBox::InsertLanguage(const LanguageType nLangType)
+{
+    InsertLanguage(nLangType, css::i18n::ScriptType::WEAK);
+}
+
+void LanguageBox::InsertDefaultLanguage(sal_Int16 nType)
+{
+    InsertLanguage(LANGUAGE_SYSTEM, nType);
+}
+
+weld::ComboBoxEntry LanguageBox::BuildEntry(const LanguageType nLangType, sal_Int16 nType)
 {
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage(nLangType);
     // For obsolete and to be replaced languages check whether an entry of the
@@ -609,7 +618,7 @@ weld::ComboBoxEntry LanguageBox::BuildEntry(const LanguageType nLangType)
     LanguageType nRealLang = nLang;
     if (nRealLang == LANGUAGE_SYSTEM)
     {
-        nRealLang = MsLangId::resolveSystemLanguageByScriptType(nRealLang, css::i18n::ScriptType::WEAK);
+        nRealLang = MsLangId::resolveSystemLanguageByScriptType(nRealLang, nType);
         aStrEntry += " - ";
         aStrEntry += SvtLanguageTable::GetLanguageString( nRealLang );
     }
