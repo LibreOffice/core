@@ -430,7 +430,7 @@ namespace unotools
 #define SERVICE_NAME "com.sun.star.rendering.PolyPolygon2D"
     OUString SAL_CALL UnoPolyPolygon::getImplementationName()
     {
-        return OUString( IMPLEMENTATION_NAME );
+        return IMPLEMENTATION_NAME;
     }
 
     sal_Bool SAL_CALL UnoPolyPolygon::supportsService( const OUString& ServiceName )
