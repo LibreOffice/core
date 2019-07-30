@@ -93,7 +93,7 @@ namespace emfio
 
         OUString XEmfParser_getImplementationName()
         {
-            return OUString( "emfio::emfreader::XEmfParser" );
+            return "emfio::emfreader::XEmfParser";
         }
 
         uno::Reference< uno::XInterface > XEmfParser_createInstance(const uno::Reference< uno::XComponentContext >& context)
