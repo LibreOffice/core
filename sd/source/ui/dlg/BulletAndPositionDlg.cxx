@@ -970,7 +970,16 @@ IMPL_LINK_NOARG(SvxBulletAndPositionDlg, PopupActivateHdl_Impl, weld::ToggleButt
                     }
                     pVD->SetOutputSizePixel(aBitmap.GetSizePixel(), false);
                     pVD->DrawBitmapEx(Point(), aBitmap);
-                    m_xGalleryMenu->append(sItemId, sGrfName, *pVD);
+
+                    // We want to show only icon names not full path.
+                    // That part finds the last index of the slash and
+                    // gets the part before .gif
+
+                    sal_Int32 last = sGrfName.lastIndexOf("/");
+                    last++;
+                    OUString sIconName = sGrfName.getToken(0, '.', last);
+
+                    m_xGalleryMenu->append(sItemId, sIconName, *pVD);
                 }
                 else
                 {
