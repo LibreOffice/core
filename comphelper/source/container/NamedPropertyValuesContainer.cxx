@@ -141,7 +141,7 @@ sal_Bool SAL_CALL NamedPropertyValuesContainer::hasElements(  )
 //XServiceInfo
 OUString SAL_CALL NamedPropertyValuesContainer::getImplementationName(  )
 {
-    return OUString( "NamedPropertyValuesContainer" );
+    return "NamedPropertyValuesContainer";
 }
 
 sal_Bool SAL_CALL NamedPropertyValuesContainer::supportsService( const OUString& ServiceName )

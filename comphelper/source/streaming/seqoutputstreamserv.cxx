@@ -73,7 +73,7 @@ SequenceOutputStreamService::SequenceOutputStreamService()
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL SequenceOutputStreamService::getImplementationName()
 {
-    return OUString("com.sun.star.comp.SequenceOutputStreamService");
+    return "com.sun.star.comp.SequenceOutputStreamService";
 }
 
 sal_Bool SAL_CALL SequenceOutputStreamService::supportsService( OUString const & serviceName )

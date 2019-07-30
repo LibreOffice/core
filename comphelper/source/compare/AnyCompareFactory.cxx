@@ -108,7 +108,7 @@ void SAL_CALL AnyCompareFactory::initialize( const Sequence< Any >& aArguments )
 
 OUString SAL_CALL AnyCompareFactory::getImplementationName(  )
 {
-    return OUString( "AnyCompareFactory" );
+    return "AnyCompareFactory";
 }
 
 sal_Bool SAL_CALL AnyCompareFactory::supportsService( const OUString& ServiceName )

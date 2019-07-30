@@ -72,7 +72,7 @@ OUString GraphicMimeTypeHelper::GetMimeTypeForXGraphic(const Reference<XGraphic>
     {
         return aSourceMimeType;
     }
-    return OUString("");
+    return "";
 }
 
 OUString
@@ -94,29 +94,29 @@ OUString GraphicMimeTypeHelper::GetMimeTypeForConvertDataFormat(ConvertDataForma
     switch (convertDataFormat)
     {
         case ConvertDataFormat::BMP:
-            return OUString("image/bmp");
+            return "image/bmp";
         case ConvertDataFormat::GIF:
-            return OUString("image/gif");
+            return "image/gif";
         case ConvertDataFormat::JPG:
-            return OUString("image/jpeg");
+            return "image/jpeg";
         case ConvertDataFormat::PCT:
-            return OUString("image/x-pict");
+            return "image/x-pict";
         case ConvertDataFormat::PNG:
-            return OUString("image/png");
+            return "image/png";
         case ConvertDataFormat::SVM:
-            return OUString("image/x-svm");
+            return "image/x-svm";
         case ConvertDataFormat::TIF:
-            return OUString("image/tiff");
+            return "image/tiff";
         case ConvertDataFormat::WMF:
-            return OUString("image/x-wmf");
+            return "image/x-wmf";
         case ConvertDataFormat::EMF:
-            return OUString("image/x-emf");
+            return "image/x-emf";
         case ConvertDataFormat::SVG:
-            return OUString("image/svg+xml");
+            return "image/svg+xml";
         case ConvertDataFormat::MET: // What is this?
         case ConvertDataFormat::Unknown:
         default:
-            return OUString("");
+            return "";
     }
 }
 }

@@ -113,7 +113,7 @@ namespace comphelper
 
     OUString SAL_CALL OPropertyBag::getImplementationName()
     {
-        return OUString( "com.sun.star.comp.comphelper.OPropertyBag" );
+        return "com.sun.star.comp.comphelper.OPropertyBag";
     }
 
     sal_Bool SAL_CALL OPropertyBag::supportsService( const OUString& rServiceName )

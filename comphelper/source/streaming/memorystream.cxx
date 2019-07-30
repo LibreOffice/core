@@ -92,7 +92,7 @@ UNOMemoryStream::UNOMemoryStream()
 // XServiceInfo
 OUString SAL_CALL UNOMemoryStream::getImplementationName()
 {
-    return OUString("com.sun.star.comp.MemoryStream");
+    return "com.sun.star.comp.MemoryStream";
 }
 
 sal_Bool SAL_CALL UNOMemoryStream::supportsService(const OUString& ServiceName)
