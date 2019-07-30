@@ -86,7 +86,7 @@ class theImplNames : public rtl::Static<ImplNames, theImplNames> {};
 
 OUString s_impl_name()
 {
-    return OUString(IMPL_NAME);
+    return IMPL_NAME;
 }
 
 Sequence< OUString > const & s_get_service_names()
