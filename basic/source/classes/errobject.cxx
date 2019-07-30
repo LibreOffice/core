@@ -151,7 +151,7 @@ ErrObject::Raise( const uno::Any& Number, const uno::Any& Source, const uno::Any
 OUString SAL_CALL
 ErrObject::getDefaultPropertyName(  )
 {
-    return OUString( "Number" );
+    return "Number";
 }
 
 void ErrObject::setData( const uno::Any& Number, const uno::Any& Source, const uno::Any& Description, const uno::Any& HelpFile, const uno::Any& HelpContext )
