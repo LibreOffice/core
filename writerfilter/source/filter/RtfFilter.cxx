@@ -186,7 +186,7 @@ void RtfFilter::initialize(const uno::Sequence< uno::Any >& /*aArguments*/)
 
 OUString RtfFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Writer.RtfFilter");
+    return "com.sun.star.comp.Writer.RtfFilter";
 }
 
 sal_Bool RtfFilter::supportsService(const OUString& rServiceName)

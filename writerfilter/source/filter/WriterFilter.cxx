@@ -320,7 +320,7 @@ void WriterFilter::initialize(const uno::Sequence< uno::Any >& rArguments)
 
 OUString WriterFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Writer.WriterFilter");
+    return "com.sun.star.comp.Writer.WriterFilter";
 }
 
 

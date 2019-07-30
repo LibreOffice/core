@@ -705,7 +705,7 @@ const OUString DomainMapper_Impl::GetDefaultParaStyleName()
             return pEntry->sConvertedStyleName;
         }
         else
-            return OUString( "Standard");
+            return "Standard";
     }
     return m_sDefaultParaStyleName;
 }
@@ -2788,7 +2788,7 @@ static OUString lcl_ExtractToken(OUString const& rCommand,
                 {
                     rHaveToken = true;
                     ++rIndex;
-                    return OUString("FORMULA");
+                    return "FORMULA";
                 }
             break;
             default:

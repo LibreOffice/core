@@ -3645,23 +3645,23 @@ OUString DomainMapper::getBracketStringFromEnum(const sal_Int32 nIntValue, const
     {
     case NS_ooxml::LN_Value_ST_CombineBrackets_round:
         if (bIsPrefix)
-            return OUString( "(" );
-        return OUString( ")" );
+            return "(";
+        return ")";
 
     case NS_ooxml::LN_Value_ST_CombineBrackets_square:
         if (bIsPrefix)
-            return OUString( "[" );
-        return OUString( "]" );
+            return "[";
+        return "]";
 
     case NS_ooxml::LN_Value_ST_CombineBrackets_angle:
         if (bIsPrefix)
-            return OUString( "<" );
-        return OUString( ">" );
+            return "<";
+        return ">";
 
     case NS_ooxml::LN_Value_ST_CombineBrackets_curly:
         if (bIsPrefix)
-            return OUString( "{" );
-        return OUString( "}" );
+            return "{";
+        return "}";
 
     case NS_ooxml::LN_Value_ST_CombineBrackets_none:
     default:
