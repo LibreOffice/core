@@ -303,7 +303,7 @@ OUString RootAccess::getImplementationName()
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    return OUString("configmgr.RootAccess");
+    return "configmgr.RootAccess";
 }
 
 }

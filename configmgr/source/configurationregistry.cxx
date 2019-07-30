@@ -637,7 +637,7 @@ css::uno::Reference< css::uno::XInterface > create(
 }
 
 OUString getImplementationName() {
-    return OUString("com.sun.star.comp.configuration.ConfigurationRegistry");
+    return "com.sun.star.comp.configuration.ConfigurationRegistry";
 }
 
 css::uno::Sequence< OUString > getSupportedServiceNames() {

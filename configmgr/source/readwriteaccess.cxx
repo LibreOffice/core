@@ -139,7 +139,7 @@ css::uno::Reference< css::uno::XInterface > create(
 }
 
 OUString getImplementationName() {
-    return OUString("com.sun.star.comp.configuration.ReadWriteAccess");
+    return "com.sun.star.comp.configuration.ReadWriteAccess";
 }
 
 css::uno::Sequence< OUString > getSupportedServiceNames() {

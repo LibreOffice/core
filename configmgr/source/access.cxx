@@ -232,7 +232,7 @@ OUString Access::getImplementationName()
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    return OUString("org.openoffice-configmgr::Access");
+    return "org.openoffice-configmgr::Access";
 }
 
 sal_Bool Access::supportsService(OUString const & ServiceName)
