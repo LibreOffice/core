@@ -35,14 +35,6 @@ struct SwCompatibilityOptPage_Impl;
 class SwCompatibilityOptPage : public SfxTabPage
 {
 private:
-    // controls
-    VclPtr<VclFrame>               m_pMain;
-    VclPtr<VclFrame>               m_pGlobalOptionsFrame;
-    VclPtr<ListBox>                m_pFormattingLB;
-    VclPtr<ListBox>                m_pGlobalOptionsLB;
-    VclPtr<SvxCheckListBox>        m_pOptionsLB;
-    VclPtr<SvxCheckListBox>        m_pGlobalOptionsCLB;
-    VclPtr<PushButton>             m_pDefaultPB;
     // config item
     SvtCompatibilityOptions m_aConfigItem;
     // config item
@@ -57,9 +49,18 @@ private:
     sal_uLong                   m_nSavedOptions;
     bool                        m_bSavedMSFormsMenuOption;
 
+    // controls
+    std::unique_ptr<weld::Frame> m_xMain;
+    std::unique_ptr<weld::Frame> m_xGlobalOptionsFrame;
+    std::unique_ptr<weld::ComboBox> m_xFormattingLB;
+    std::unique_ptr<weld::ComboBox> m_xGlobalOptionsLB;
+    std::unique_ptr<weld::TreeView> m_xOptionsLB;
+    std::unique_ptr<weld::TreeView> m_xGlobalOptionsCLB;
+    std::unique_ptr<weld::Button> m_xDefaultPB;
+
     // handler
-    DECL_LINK(SelectHdl, ListBox&, void);
-    DECL_LINK(UseAsDefaultHdl, Button*, void);
+    DECL_LINK(SelectHdl, weld::ComboBox&, void);
+    DECL_LINK(UseAsDefaultHdl, weld::Button&, void);
 
     // private methods
     void                    InitControls( const SfxItemSet& rSet );
@@ -68,9 +69,8 @@ private:
     void                    WriteOptions();
 
 public:
-    SwCompatibilityOptPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    SwCompatibilityOptPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwCompatibilityOptPage() override;
-    virtual void            dispose() override;
 
     static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 

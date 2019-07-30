@@ -498,7 +498,6 @@ custom_widgets = [
     'SvtURLBox',
     'Svx3DPreviewControl',
     'SvxCharViewControl',
-    'SvxCheckListBox',
     'SvxColorListBox',
     'SvxColorValueSet',
     'SvxFillAttrBox',

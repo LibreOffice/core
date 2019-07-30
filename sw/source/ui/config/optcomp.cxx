@@ -52,97 +52,65 @@ struct SwCompatibilityOptPage_Impl
     std::vector< SvtCompatibilityEntry > m_aList;
 };
 
-SwCompatibilityOptPage::SwCompatibilityOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "OptCompatPage", "modules/swriter/ui/optcompatpage.ui", &rSet)
+SwCompatibilityOptPage::SwCompatibilityOptPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/optcompatpage.ui", "OptCompatPage", &rSet)
     , m_pWrtShell(nullptr)
     , m_pImpl(new SwCompatibilityOptPage_Impl)
     , m_nSavedOptions(0)
     , m_bSavedMSFormsMenuOption(false)
+    , m_xMain(m_xBuilder->weld_frame("compatframe"))
+    , m_xGlobalOptionsFrame(m_xBuilder->weld_frame("globalcompatframe"))
+    , m_xFormattingLB(m_xBuilder->weld_combo_box("format"))
+    , m_xGlobalOptionsLB(m_xBuilder->weld_combo_box("globaloptions"))
+    , m_xOptionsLB(m_xBuilder->weld_tree_view("options"))
+    , m_xGlobalOptionsCLB(m_xBuilder->weld_tree_view("globaloptioncheckbox"))
+    , m_xDefaultPB(m_xBuilder->weld_button("default"))
 {
-    get(m_pMain, "compatframe");
-    get(m_pGlobalOptionsFrame, "globalcompatframe");
-    get(m_pFormattingLB, "format");
-    get(m_pGlobalOptionsLB, "globaloptions");
-    get(m_pOptionsLB, "options");
-    get(m_pGlobalOptionsCLB, "globaloptioncheckbox");
-    get(m_pDefaultPB, "default");
+    std::vector<int> aWidths;
+    aWidths.push_back(m_xOptionsLB->get_checkbox_column_width());
+    m_xOptionsLB->set_column_fixed_widths(aWidths);
+    m_xGlobalOptionsCLB->set_column_fixed_widths(aWidths);
 
+    int nPos = 0;
     for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Module) + 1; i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
     {
         int nCoptIdx = i - 2; /* Do not consider "Name" & "Module" indexes */
 
-        const OUString sEntry = m_pFormattingLB->GetEntry( nCoptIdx );
-        SvTreeListEntry* pEntry = m_pOptionsLB->SvTreeListBox::InsertEntry( sEntry );
-        if ( pEntry )
-        {
-            m_pOptionsLB->SetCheckButtonState( pEntry, SvButtonState::Unchecked );
-        }
+        const OUString sEntry = m_xFormattingLB->get_text(nCoptIdx);
+        m_xOptionsLB->append();
+        m_xOptionsLB->set_toggle(nPos, TRISTATE_FALSE, 0);
+        m_xOptionsLB->set_text(nPos, sEntry, 1);
+        ++nPos;
     }
 
-    m_sUserEntry = m_pFormattingLB->GetEntry(m_pFormattingLB->GetEntryCount()-1);
+    m_sUserEntry = m_xFormattingLB->get_text(m_xFormattingLB->get_count() - 1);
 
-    m_pFormattingLB->Clear();
-
-    m_pOptionsLB->SetStyle( m_pOptionsLB->GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
-    m_pOptionsLB->SetHighlightRange();
-
+    m_xFormattingLB->clear();
 
     // Set MSOCompatibleFormsMenu entry attributes
     const bool bReadOnly = officecfg::Office::Compatibility::View::MSCompatibleFormsMenu::isReadOnly();
+    m_xGlobalOptionsCLB->set_sensitive(!bReadOnly);
+
+    m_xGlobalOptionsCLB->append();
     const bool bChecked = m_aViewConfigItem.HasMSOCompatibleFormsMenu();
+    m_xGlobalOptionsCLB->set_toggle(0, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+    m_xGlobalOptionsCLB->set_text(0, m_xGlobalOptionsLB->get_text(0), 1);
 
-    SvTreeListEntry* pEntry;
-    if(bReadOnly)
-    {
-        pEntry = m_pGlobalOptionsCLB->SvTreeListBox::InsertEntry( m_pGlobalOptionsLB->GetEntry( 0 ), nullptr, false,
-                                                                  TREELIST_APPEND, nullptr, SvLBoxButtonKind::DisabledCheckbox);
-    }
-    else
-    {
-        pEntry = m_pGlobalOptionsCLB->SvTreeListBox::InsertEntry( m_pGlobalOptionsLB->GetEntry( 0 ) );
-    }
+    m_xGlobalOptionsLB->clear();
 
-    if ( pEntry )
-    {
-        SvLBoxButton* pButton = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
-        assert(pButton);
-        if (bChecked)
-            pButton->SetStateChecked();
-        else
-            pButton->SetStateUnchecked();
-    }
-
-    m_pGlobalOptionsLB->Clear();
-
-    m_pGlobalOptionsCLB->SetStyle( m_pGlobalOptionsCLB->GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
-    m_pGlobalOptionsCLB->SetHighlightRange();
     // tdf#125799, we let only the doc options grow/shrink but give this one more than its bare
     // min request height because there's only one row in it and that looks somewhat abrupt
-    m_pGlobalOptionsCLB->set_height_request(m_pGlobalOptionsCLB->get_preferred_size().Height() * 2);
+    m_xGlobalOptionsCLB->set_size_request(-1, m_xGlobalOptionsCLB->get_preferred_size().Height() * 2);
 
     InitControls( rSet );
 
     // set handler
-    m_pFormattingLB->SetSelectHdl( LINK( this, SwCompatibilityOptPage, SelectHdl ) );
-    m_pDefaultPB->SetClickHdl( LINK( this, SwCompatibilityOptPage, UseAsDefaultHdl ) );
+    m_xFormattingLB->connect_changed( LINK( this, SwCompatibilityOptPage, SelectHdl ) );
+    m_xDefaultPB->connect_clicked( LINK( this, SwCompatibilityOptPage, UseAsDefaultHdl ) );
 }
 
 SwCompatibilityOptPage::~SwCompatibilityOptPage()
 {
-    disposeOnce();
-}
-
-void SwCompatibilityOptPage::dispose()
-{
-    m_pImpl.reset();
-    m_pMain.clear();
-    m_pGlobalOptionsFrame.clear();
-    m_pFormattingLB.clear();
-    m_pGlobalOptionsLB.clear();
-    m_pOptionsLB.clear();
-    m_pGlobalOptionsCLB.clear();
-    m_pDefaultPB.clear();
-    SfxTabPage::dispose();
 }
 
 static sal_uLong convertBools2Ulong_Impl
@@ -231,11 +199,11 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     }
     else
     {
-        m_pMain->Disable();
-        m_pGlobalOptionsFrame->Disable();
+        m_xMain->set_sensitive(false);
+        m_xGlobalOptionsFrame->set_sensitive(false);
     }
-    const OUString& rText = m_pMain->get_label();
-    m_pMain->set_label(rText.replaceAll("%DOCNAME", sDocTitle));
+    const OUString& rText = m_xMain->get_label();
+    m_xMain->set_label(rText.replaceAll("%DOCNAME", sDocTitle));
 
     // loading file formats
     Sequence< Sequence< PropertyValue > > aList = m_aConfigItem.GetList();
@@ -277,8 +245,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
         if ( sNewEntry.isEmpty() )
             sNewEntry = sEntryName;
 
-        const sal_Int32 nPos = m_pFormattingLB->InsertEntry( sNewEntry );
-        sal_uLong nOptions = convertBools2Ulong_Impl(
+        sal_uInt32 nOptions = convertBools2Ulong_Impl(
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::UsePrtMetrics ),
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::AddSpacing ),
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::AddSpacingAtPages ),
@@ -294,22 +261,19 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::MsWordTrailingBlanks ),
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::SubtractFlysAnchoredAtFlys ),
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::EmptyDbFieldHidesPara ) );
-        m_pFormattingLB->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_IntPtr>(nOptions)) );
+        m_xFormattingLB->append(OUString::number(nOptions), sNewEntry);
     }
-
-    m_pFormattingLB->SetDropDownLineCount( m_pFormattingLB->GetEntryCount() );
 }
 
-IMPL_LINK_NOARG(SwCompatibilityOptPage, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwCompatibilityOptPage, SelectHdl, weld::ComboBox&, void)
 {
-    const sal_Int32 nPos = m_pFormattingLB->GetSelectedEntryPos();
-    sal_uLong nOptions = reinterpret_cast<sal_uLong>(m_pFormattingLB->GetEntryData( nPos ));
-    SetCurrentOptions( nOptions );
+    sal_uInt32 nOptions = m_xFormattingLB->get_active_id().toUInt32();
+    SetCurrentOptions(nOptions);
 }
 
-IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl, Button*, void)
+IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl, weld::Button&, void)
 {
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/querydefaultcompatdialog.ui"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDialogFrameWeld(), "modules/swriter/ui/querydefaultcompatdialog.ui"));
     std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryDefaultCompatDialog"));
     if (xQueryBox->run() == RET_YES)
     {
@@ -317,10 +281,10 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl, Button*, void)
             [](const SvtCompatibilityEntry& rItem) { return rItem.isDefaultEntry(); });
         if (pItem != m_pImpl->m_aList.end())
         {
-            const sal_Int32 nCount = m_pOptionsLB->GetEntryCount();
+            const sal_Int32 nCount = m_xOptionsLB->n_children();
             for ( sal_Int32 i = 0; i < nCount; ++i )
             {
-                bool bChecked = m_pOptionsLB->IsChecked(static_cast< sal_uLong >( i ));
+                bool bChecked = m_xOptionsLB->get_toggle(i, 0);
 
                 int nCoptIdx = i + 2; /* Consider "Name" & "Module" indexes */
                 pItem->setValue<bool>( SvtCompatibilityEntry::Index(nCoptIdx), bChecked );
@@ -333,12 +297,12 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl, Button*, void)
 
 void SwCompatibilityOptPage::SetCurrentOptions( sal_uLong nOptions )
 {
-    const sal_uLong nCount = m_pOptionsLB->GetEntryCount();
+    const int nCount = m_xOptionsLB->n_children();
     OSL_ENSURE( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
-    for ( sal_uLong i = 0; i < nCount; ++i )
+    for (int i = 0; i < nCount; ++i)
     {
         bool bChecked = ( ( nOptions & 0x00000001 ) == 0x00000001 );
-        m_pOptionsLB->CheckEntryPos( i, bChecked );
+        m_xOptionsLB->set_toggle(i, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
         nOptions = nOptions >> 1;
     }
 }
@@ -378,7 +342,7 @@ void SwCompatibilityOptPage::WriteOptions()
 
 VclPtr<SfxTabPage> SwCompatibilityOptPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwCompatibilityOptPage>::Create( pParent.pParent, *rAttrSet );
+    return VclPtr<SwCompatibilityOptPage>::Create( pParent, *rAttrSet );
 }
 
 bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
@@ -387,12 +351,12 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
     if ( m_pWrtShell )
     {
         sal_uLong nSavedOptions = m_nSavedOptions;
-        const sal_uLong nCount = m_pOptionsLB->GetEntryCount();
+        const int nCount = m_xOptionsLB->n_children();
         OSL_ENSURE( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
 
-        for ( sal_uLong i = 0; i < nCount; ++i )
+        for (int i = 0; i < nCount; ++i)
         {
-            bool bChecked = m_pOptionsLB->IsChecked(i);
+            bool bChecked = m_xOptionsLB->get_toggle(i, 0) == TRISTATE_TRUE;
             bool bSavedChecked = ( ( nSavedOptions & 0x00000001 ) == 0x00000001 );
             if ( bChecked != bSavedChecked )
             {
@@ -472,7 +436,7 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
     if ( bModified )
         WriteOptions();
 
-    bool bNewMSFormsMenuOption = m_pGlobalOptionsCLB->IsChecked(0);
+    bool bNewMSFormsMenuOption = m_xGlobalOptionsCLB->get_toggle(0, 0);
     if (m_bSavedMSFormsMenuOption != bNewMSFormsMenuOption)
     {
         m_aViewConfigItem.SetMSOCompatibleFormsMenu(bNewMSFormsMenuOption);
@@ -483,7 +447,7 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
         {
             SolarMutexGuard aGuard;
             if (svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
-                                              GetFrameWeld(), svtools::RESTART_REASON_MSCOMPATIBLE_FORMS_MENU))
+                                              GetDialogFrameWeld(), svtools::RESTART_REASON_MSCOMPATIBLE_FORMS_MENU))
             {
                 GetParentDialog()->EndDialog(RET_OK);
             }
@@ -495,13 +459,13 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
 
 void SwCompatibilityOptPage::Reset( const SfxItemSet*  )
 {
-    m_pOptionsLB->SelectEntryPos( 0 );
+    m_xOptionsLB->select(0);
 
     sal_uLong nOptions = GetDocumentOptions();
     SetCurrentOptions( nOptions );
     m_nSavedOptions = nOptions;
 
-    m_pGlobalOptionsCLB->CheckEntryPos( 0, m_aViewConfigItem.HasMSOCompatibleFormsMenu() );
+    m_xGlobalOptionsCLB->set_toggle(0, m_aViewConfigItem.HasMSOCompatibleFormsMenu() ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
     m_bSavedMSFormsMenuOption = m_aViewConfigItem.HasMSOCompatibleFormsMenu();
 }
 

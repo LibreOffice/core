@@ -31,8 +31,6 @@ SvxCheckListBox::SvxCheckListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     Init_Impl();
 }
 
-VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxCheckListBox, WB_TABSTOP)
-
 SvxCheckListBox::~SvxCheckListBox()
 {
     disposeOnce();
