@@ -294,7 +294,7 @@ const Sequence< OUString > ProgressBar::impl_getStaticSupportedServiceNames()
 
 const OUString ProgressBar::impl_getStaticImplementationName()
 {
-    return OUString("stardiv.UnoControls.ProgressBar");
+    return "stardiv.UnoControls.ProgressBar";
 }
 
 //  protected method

@@ -349,7 +349,7 @@ const Sequence< OUString > StatusIndicator::impl_getStaticSupportedServiceNames(
 
 const OUString StatusIndicator::impl_getStaticImplementationName()
 {
-    return OUString("stardiv.UnoControls.StatusIndicator");
+    return "stardiv.UnoControls.StatusIndicator";
 }
 
 //  protected method
