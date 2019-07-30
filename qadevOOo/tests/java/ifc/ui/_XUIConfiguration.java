@@ -63,7 +63,7 @@ public class _XUIConfiguration extends MultiMethodTest {
     }
 
     /**
-     * adds a listener an fire an event
+     * adds a listener and fire an event
      * Has <B>OK</B> status if listener was called
      */
     public void _addConfigurationListener() {
