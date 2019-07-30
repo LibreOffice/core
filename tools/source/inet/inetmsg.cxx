@@ -247,9 +247,9 @@ OUString INetMIMEMessage::GetDefaultContentType()
             aParentCT = pParent->GetDefaultContentType();
 
         if (aParentCT.equalsIgnoreAsciiCase("multipart/digest"))
-            return OUString("message/rfc822");
+            return "message/rfc822";
     }
-    return OUString("text/plain; charset=us-ascii");
+    return "text/plain; charset=us-ascii";
 }
 
 void INetMIMEMessage::EnableAttachMultipartFormDataChild()

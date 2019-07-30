@@ -59,10 +59,7 @@ bool XmlWalker::open(SvStream* pStream)
     return true;
 }
 
-OString XmlWalker::name()
-{
-    return OString(reinterpret_cast<const char*>(mpImpl->mpCurrent->name));
-}
+OString XmlWalker::name() { return reinterpret_cast<const char*>(mpImpl->mpCurrent->name); }
 
 OString XmlWalker::content()
 {
