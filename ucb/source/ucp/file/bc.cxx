@@ -223,7 +223,7 @@ BaseContent::dispose()
 OUString SAL_CALL
 BaseContent::getImplementationName()
 {
-    return OUString("com.sun.star.comp.ucb.FileContent");
+    return "com.sun.star.comp.ucb.FileContent";
 }
 
 sal_Bool SAL_CALL

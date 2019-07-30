@@ -121,7 +121,7 @@ XTYPEPROVIDER_IMPL_4( CachedDynamicResultSet
 
 OUString SAL_CALL CachedDynamicResultSet::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.ucb.CachedDynamicResultSet" );
+    return "com.sun.star.comp.ucb.CachedDynamicResultSet";
 }
 
 sal_Bool SAL_CALL CachedDynamicResultSet::supportsService( const OUString& ServiceName )
@@ -195,7 +195,7 @@ XTYPEPROVIDER_IMPL_3( CachedDynamicResultSetFactory,
 // CachedDynamicResultSetFactory XServiceInfo methods.
 
 XSERVICEINFO_COMMOM_IMPL( CachedDynamicResultSetFactory,
-                         OUString( "com.sun.star.comp.ucb.CachedDynamicResultSetFactory" ) )
+                         "com.sun.star.comp.ucb.CachedDynamicResultSetFactory" )
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface >
 CachedDynamicResultSetFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )

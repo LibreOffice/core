@@ -1329,7 +1329,7 @@ css::uno::Any SAL_CALL Content::queryInterface( const css::uno::Type & rType )
 
 OUString SAL_CALL Content::getImplementationName()
 {
-       return OUString("com.sun.star.comp.GIOContent");
+       return "com.sun.star.comp.GIOContent";
 }
 
 css::uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()

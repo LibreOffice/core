@@ -310,7 +310,7 @@ namespace cmis
 
     OUString SAL_CALL RepoContent::getImplementationName()
     {
-       return OUString("com.sun.star.comp.CmisRepoContent");
+       return "com.sun.star.comp.CmisRepoContent";
     }
 
     uno::Sequence< OUString > SAL_CALL RepoContent::getSupportedServiceNames()
@@ -321,7 +321,7 @@ namespace cmis
 
     OUString SAL_CALL RepoContent::getContentType()
     {
-        return OUString( CMIS_REPO_TYPE );
+        return CMIS_REPO_TYPE;
     }
 
     uno::Any SAL_CALL RepoContent::execute(

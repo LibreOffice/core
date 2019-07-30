@@ -333,7 +333,7 @@ void SAL_CALL UniversalContentBroker::removeEventListener(
 // XServiceInfo methods.
 
 XSERVICEINFO_COMMOM_IMPL( UniversalContentBroker,
-                          OUString( "com.sun.star.comp.ucb.UniversalContentBroker" ) )
+                          "com.sun.star.comp.ucb.UniversalContentBroker" )
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface >
 UniversalContentBroker_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )

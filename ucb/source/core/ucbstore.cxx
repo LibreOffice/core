@@ -158,7 +158,7 @@ UcbStore::~UcbStore()
 }
 
 XSERVICEINFO_COMMOM_IMPL( UcbStore,
-                          OUString( "com.sun.star.comp.ucb.UcbStore" ) )
+                          "com.sun.star.comp.ucb.UcbStore" )
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface >
 UcbStore_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
@@ -258,7 +258,7 @@ PropertySetRegistry::~PropertySetRegistry()
 
 OUString SAL_CALL PropertySetRegistry::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.ucb.PropertySetRegistry" );
+    return "com.sun.star.comp.ucb.PropertySetRegistry";
 }
 
 sal_Bool SAL_CALL PropertySetRegistry::supportsService( const OUString& ServiceName )
@@ -1096,7 +1096,7 @@ PersistentPropertySet::~PersistentPropertySet()
 
 OUString SAL_CALL PersistentPropertySet::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.ucb.PersistentPropertySet" );
+    return "com.sun.star.comp.ucb.PersistentPropertySet";
 }
 
 sal_Bool SAL_CALL PersistentPropertySet::supportsService( const OUString& ServiceName )

@@ -222,7 +222,7 @@ OUString NeonUri::GetPathBaseName () const
         return aTemp;
     }
     else
-        return OUString("/");
+        return "/";
 }
 
 bool NeonUri::operator== ( const NeonUri & rOther ) const

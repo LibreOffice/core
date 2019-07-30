@@ -120,7 +120,7 @@ public:
     virtual void SAL_CALL setHidden( const OUString& FileURL, sal_Bool bHidden ) override;
 
     OUString SAL_CALL getImplementationName() override
-    { return OUString(IMPLEMENTATION_NAME); }
+    { return IMPLEMENTATION_NAME; }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }

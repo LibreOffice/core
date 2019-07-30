@@ -115,7 +115,7 @@ uno::Reference< uno::XInterface > create(
 
 OUString implName()
 {
-    return OUString("com.sun.star.comp.ucb.ExpandContentProvider");
+    return "com.sun.star.comp.ucb.ExpandContentProvider";
 }
 
 

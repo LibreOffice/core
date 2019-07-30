@@ -50,7 +50,7 @@ UcbContentProviderProxyFactory::~UcbContentProviderProxyFactory()
 // XServiceInfo methods.
 
 XSERVICEINFO_COMMOM_IMPL( UcbContentProviderProxyFactory,
-                          OUString( "com.sun.star.comp.ucb.UcbContentProviderProxyFactory" ) )
+                          "com.sun.star.comp.ucb.UcbContentProviderProxyFactory" )
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface >
 UcbContentProviderProxyFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
@@ -174,7 +174,7 @@ Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()
 
 OUString SAL_CALL UcbContentProviderProxy::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.ucb.UcbContentProviderProxy" );
+    return "com.sun.star.comp.ucb.UcbContentProviderProxy";
 }
 
 sal_Bool SAL_CALL UcbContentProviderProxy::supportsService( const OUString& ServiceName )

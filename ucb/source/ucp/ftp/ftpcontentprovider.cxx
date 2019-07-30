@@ -106,7 +106,7 @@ OUString SAL_CALL FTPContentProvider::getImplementationName()
 
 OUString FTPContentProvider::getImplementationName_Static()
 {
-    return OUString("com.sun.star.comp.FTPContentProvider");
+    return "com.sun.star.comp.FTPContentProvider";
 }
 
 sal_Bool SAL_CALL FTPContentProvider::supportsService( const OUString& ServiceName )

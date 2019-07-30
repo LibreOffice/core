@@ -163,7 +163,7 @@ namespace ucb { namespace ucp { namespace ext
 
     OUString SAL_CALL Content::getImplementationName()
     {
-        return OUString(  "org.openoffice.comp.ucp.ext.Content"  );
+        return "org.openoffice.comp.ucp.ext.Content";
     }
 
 

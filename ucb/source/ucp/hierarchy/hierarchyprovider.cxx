@@ -99,7 +99,7 @@ XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
 // XServiceInfo methods.
 
 XSERVICEINFO_COMMOM_IMPL( HierarchyContentProvider,
-                          OUString( "com.sun.star.comp.ucb.HierarchyContentProvider" ) )
+                          "com.sun.star.comp.ucb.HierarchyContentProvider" )
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface >
 HierarchyContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )

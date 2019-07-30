@@ -90,7 +90,7 @@ UcbCommandEnvironment::getSupportedServiceNames()
 // static
 OUString UcbCommandEnvironment::getImplementationName_Static()
 {
-    return OUString( "com.sun.star.comp.ucb.CommandEnvironment" );
+    return "com.sun.star.comp.ucb.CommandEnvironment";
 }
 
 

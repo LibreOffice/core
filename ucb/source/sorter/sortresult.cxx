@@ -148,7 +148,7 @@ SortedResultSet::~SortedResultSet()
 
 OUString SAL_CALL SortedResultSet::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.ucb.SortedResultSet" );
+    return "com.sun.star.comp.ucb.SortedResultSet";
 }
 
 sal_Bool SAL_CALL SortedResultSet::supportsService( const OUString& ServiceName )

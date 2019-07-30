@@ -77,8 +77,8 @@ DocumentContentFactory::getSupportedServiceNames()
 // static
 OUString DocumentContentFactory::getImplementationName_Static()
 {
-    return OUString(
-        "com.sun.star.comp.ucb.TransientDocumentsDocumentContentFactory" );
+    return
+        "com.sun.star.comp.ucb.TransientDocumentsDocumentContentFactory";
 }
 
 

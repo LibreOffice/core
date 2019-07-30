@@ -56,7 +56,7 @@ namespace ucb { namespace ucp { namespace ext
 
     OUString ContentProvider::getImplementationName_static()
     {
-        return OUString(  "org.openoffice.comp.ucp.ext.ContentProvider"  );
+        return "org.openoffice.comp.ucp.ext.ContentProvider";
     }
 
 
@@ -89,13 +89,13 @@ namespace ucb { namespace ucp { namespace ext
 
     OUString ContentProvider::getRootURL()
     {
-        return OUString(  "vnd.sun.star.extension://"  );
+        return "vnd.sun.star.extension://";
     }
 
 
     OUString ContentProvider::getArtificialNodeContentType()
     {
-        return OUString(  "application/vnd.sun.star.extension-content"  );
+        return "application/vnd.sun.star.extension-content";
     }
 
 

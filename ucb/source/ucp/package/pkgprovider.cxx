@@ -141,7 +141,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 // XServiceInfo methods.
 
 XSERVICEINFO_COMMOM_IMPL( ContentProvider,
-                          OUString( "com.sun.star.comp.ucb.PackageContentProvider" ) )
+                          "com.sun.star.comp.ucb.PackageContentProvider" )
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface >
 ContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )

@@ -229,7 +229,7 @@ XTYPEPROVIDER_IMPL_4( HierarchyDataSource,
 // XServiceInfo methods.
 
 XSERVICEINFO_COMMOM_IMPL( HierarchyDataSource,
-                          OUString( "com.sun.star.comp.ucb.HierarchyDataSource" ) )
+                          "com.sun.star.comp.ucb.HierarchyDataSource" )
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface >
 HierarchyDataSource_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
@@ -611,7 +611,7 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
 
 OUString SAL_CALL HierarchyDataAccess::getImplementationName()
 {
-    return OUString("com.sun.star.comp.ucb.HierarchyDataAccess");
+    return "com.sun.star.comp.ucb.HierarchyDataAccess";
 }
 
 sal_Bool SAL_CALL HierarchyDataAccess::supportsService( const OUString& ServiceName )

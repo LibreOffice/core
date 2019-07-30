@@ -401,7 +401,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 // virtual
 OUString SAL_CALL Content::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.ucb.WebDAVContent" );
+    return "com.sun.star.comp.ucb.WebDAVContent";
 }
 
 
@@ -434,9 +434,9 @@ OUString SAL_CALL Content::getContentType()
     }
 
     if ( bFolder )
-        return OUString( WEBDAV_COLLECTION_TYPE );
+        return WEBDAV_COLLECTION_TYPE;
 
-    return OUString( WEBDAV_CONTENT_TYPE );
+    return WEBDAV_CONTENT_TYPE;
 }
 
 

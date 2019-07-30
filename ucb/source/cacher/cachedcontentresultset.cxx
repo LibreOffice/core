@@ -939,7 +939,7 @@ XTYPEPROVIDER_IMPL_11( CachedContentResultSet
 
 OUString SAL_CALL CachedContentResultSet::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.ucb.CachedContentResultSet" );
+    return "com.sun.star.comp.ucb.CachedContentResultSet";
 }
 
 sal_Bool SAL_CALL CachedContentResultSet::supportsService( const OUString& ServiceName )
@@ -2104,7 +2104,7 @@ XTYPEPROVIDER_IMPL_3( CachedContentResultSetFactory,
 // CachedContentResultSetFactory XServiceInfo methods.
 
 XSERVICEINFO_COMMOM_IMPL( CachedContentResultSetFactory,
-                          OUString( "com.sun.star.comp.ucb.CachedContentResultSetFactory" ) )
+                          "com.sun.star.comp.ucb.CachedContentResultSetFactory" )
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface >
 CachedContentResultSetFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
