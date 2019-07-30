@@ -523,7 +523,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getAvailableServiceNames(
 // lang::XServiceInfo
 OUString SAL_CALL SvxUnoDrawingModel::getImplementationName()
 {
-    return OUString("SvxUnoDrawingModel");
+    return "SvxUnoDrawingModel";
 }
 
 sal_Bool SAL_CALL SvxUnoDrawingModel::supportsService( const OUString& ServiceName )
@@ -656,7 +656,7 @@ void SAL_CALL SvxUnoDrawPagesAccess::remove( const uno::Reference< drawing::XDra
 
 OUString SAL_CALL SvxUnoDrawPagesAccess::getImplementationName(  )
 {
-    return OUString( "SvxUnoDrawPagesAccess" );
+    return "SvxUnoDrawPagesAccess";
 }
 
 sal_Bool SAL_CALL SvxUnoDrawPagesAccess::supportsService( const OUString& ServiceName )

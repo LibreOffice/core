@@ -76,7 +76,7 @@ sal_Bool SAL_CALL SvxUnoColorTable::supportsService( const  OUString& ServiceNam
 
 OUString SAL_CALL SvxUnoColorTable::getImplementationName()
 {
-    return OUString("com.sun.star.drawing.SvxUnoColorTable");
+    return "com.sun.star.drawing.SvxUnoColorTable";
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getSupportedServiceNames()

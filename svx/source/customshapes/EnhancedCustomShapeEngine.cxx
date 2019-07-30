@@ -135,7 +135,7 @@ void SAL_CALL EnhancedCustomShapeEngine::initialize( const Sequence< Any >& aArg
 // XServiceInfo
 OUString SAL_CALL EnhancedCustomShapeEngine::getImplementationName()
 {
-    return OUString( "com.sun.star.drawing.EnhancedCustomShapeEngine" );
+    return "com.sun.star.drawing.EnhancedCustomShapeEngine";
 }
 sal_Bool SAL_CALL EnhancedCustomShapeEngine::supportsService( const OUString& rServiceName )
 {

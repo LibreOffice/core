@@ -116,7 +116,7 @@ void SAL_CALL GalleryItem::release()
 
 OUString SAL_CALL GalleryItem::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.gallery.GalleryItem" );
+    return "com.sun.star.comp.gallery.GalleryItem";
 }
 
 sal_Bool SAL_CALL GalleryItem::supportsService( const OUString& ServiceName )

@@ -97,7 +97,7 @@ void SAL_CALL
 OUString SAL_CALL
     AccessibleGraphicShape::getImplementationName()
 {
-    return OUString("AccessibleGraphicShape");
+    return "AccessibleGraphicShape";
 }
 
 

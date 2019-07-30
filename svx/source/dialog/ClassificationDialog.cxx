@@ -119,15 +119,15 @@ OUString classificationTypeToString(svx::ClassificationType const & reType)
     switch(reType)
     {
         case svx::ClassificationType::CATEGORY:
-            return OUString("CATEGORY"); break;
+            return "CATEGORY"; break;
         case svx::ClassificationType::MARKING:
-            return OUString("MARKING"); break;
+            return "MARKING"; break;
         case svx::ClassificationType::TEXT:
-            return OUString("TEXT"); break;
+            return "TEXT"; break;
         case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
-            return OUString("INTELLECTUAL_PROPERTY_PART"); break;
+            return "INTELLECTUAL_PROPERTY_PART"; break;
         case svx::ClassificationType::PARAGRAPH:
-            return OUString("PARAGRAPH"); break;
+            return "PARAGRAPH"; break;
     }
     return OUString();
 }

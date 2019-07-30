@@ -83,7 +83,7 @@ namespace svx
     static OUString NamespaceMap_getImplementationName()
         throw()
     {
-        return OUString( "com.sun.star.comp.Svx.NamespaceMap" );
+        return "com.sun.star.comp.Svx.NamespaceMap";
     }
 
 

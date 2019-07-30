@@ -322,7 +322,7 @@ void SAL_CALL ExtrusionDirectionControl::initialize( const css::uno::Sequence< c
 
 OUString ExtrusionDirectionControl::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.svx.ExtrusionDirectionController" );
+    return "com.sun.star.comp.svx.ExtrusionDirectionController";
 }
 
 
@@ -559,7 +559,7 @@ void SAL_CALL ExtrusionDepthController::initialize( const css::uno::Sequence< cs
 
 OUString ExtrusionDepthController::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.svx.ExtrusionDepthController" );
+    return "com.sun.star.comp.svx.ExtrusionDepthController";
 }
 
 
@@ -810,7 +810,7 @@ void SAL_CALL ExtrusionLightingControl::initialize( const css::uno::Sequence< cs
 
 OUString ExtrusionLightingControl::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.svx.ExtrusionLightingController" );
+    return "com.sun.star.comp.svx.ExtrusionLightingController";
 }
 
 
@@ -936,7 +936,7 @@ void SAL_CALL ExtrusionSurfaceControl::initialize( const css::uno::Sequence< css
 
 OUString ExtrusionSurfaceControl::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.svx.ExtrusionSurfaceController" );
+    return "com.sun.star.comp.svx.ExtrusionSurfaceController";
 }
 
 

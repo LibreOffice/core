@@ -67,19 +67,19 @@ namespace
 {
     OUString lcl_getNamePropertyName( )
     {
-        return OUString( "Name" );
+        return "Name";
     }
     OUString lcl_getDescPropertyName( )
     {
-        return OUString( "HelpText" );
+        return "HelpText";
     }
     OUString lcl_getLabelPropertyName( )
     {
-        return OUString( "Label" );
+        return "Label";
     }
     OUString lcl_getLabelControlPropertyName( )
     {
-        return OUString("LabelControl");
+        return "LabelControl";
     }
     // return the property which should be used as AccessibleName
     const OUString lcl_getPreferredAccNameProperty( const Reference< XPropertySetInfo >& _rxPSI )
@@ -298,7 +298,7 @@ void SAL_CALL AccessibleControlShape::grabFocus()
 
 OUString SAL_CALL AccessibleControlShape::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.accessibility.AccessibleControlShape" );
+    return "com.sun.star.comp.accessibility.AccessibleControlShape";
 }
 
 OUString AccessibleControlShape::CreateAccessibleBaseName()

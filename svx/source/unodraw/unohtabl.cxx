@@ -54,7 +54,7 @@ SvxUnoHatchTable::SvxUnoHatchTable( SdrModel* pModel ) throw()
 
 OUString SAL_CALL SvxUnoHatchTable::getImplementationName()
 {
-    return OUString("SvxUnoHatchTable");
+    return "SvxUnoHatchTable";
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoHatchTable::getSupportedServiceNames(  )

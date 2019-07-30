@@ -315,7 +315,7 @@ OUString SAL_CALL AccessibleShape::getAccessibleDescription()
     if( m_pShape && !m_pShape->GetDescription().isEmpty())
         return m_pShape->GetDescription() ;
     else
-        return OUString(" ");
+        return " ";
 }
 
 // XAccessibleContext
@@ -877,7 +877,7 @@ uno::Any SAL_CALL AccessibleShape::getExtendedAttributes()
 OUString SAL_CALL
     AccessibleShape::getImplementationName()
 {
-    return OUString("AccessibleShape");
+    return "AccessibleShape";
 }
 
 

@@ -121,7 +121,7 @@ RecoveryUI::RecoveryUI(const css::uno::Reference< css::uno::XComponentContext >&
 
 OUString SAL_CALL RecoveryUI::getImplementationName()
 {
-    return OUString("com.sun.star.comp.svx.RecoveryUI");
+    return "com.sun.star.comp.svx.RecoveryUI";
 }
 
 sal_Bool SAL_CALL RecoveryUI::supportsService(const OUString& sServiceName)

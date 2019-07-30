@@ -3065,7 +3065,7 @@ uno::Sequence<uno::Any> SvxShape::getPropertyDefaults(
 
 OUString SAL_CALL SvxShape::getImplementationName()
 {
-    return OUString("SvxShape");
+    return "SvxShape";
 }
 
 const char sUNO_service_style_ParagraphProperties[]          = "com.sun.star.style.ParagraphProperties";
@@ -3897,7 +3897,7 @@ void SAL_CALL SvxShapeText::release() throw()
 
 OUString SAL_CALL SvxShapeText::getImplementationName()
 {
-    return OUString("SvxShapeText");
+    return "SvxShapeText";
 }
 
 

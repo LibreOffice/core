@@ -126,25 +126,25 @@ OUString ImpItemListRow::GetItemTypeStr() const
 {
     switch(eItemType)
     {
-        case ItemType::BYTE      : return OUString("Byte");     break;
-        case ItemType::INT16     : return OUString("Int16");    break;
-        case ItemType::UINT16    : return OUString("UInt16");   break;
-        case ItemType::INT32     : return OUString("Int32");    break;
-        case ItemType::UINT32    : return OUString("UInt32");   break;
-        case ItemType::ENUM      : return OUString("Enum");     break;
-        case ItemType::BOOL      : return OUString("Bool");     break;
-        case ItemType::FLAG      : return OUString("Flag");     break;
-        case ItemType::STRING    : return OUString("String");   break;
-        case ItemType::POINT     : return OUString("Point");    break;
-        case ItemType::RECT      : return OUString("Rectangle");break;
-        case ItemType::RANGE     : return OUString("Range");    break;
-        case ItemType::FRACTION  : return OUString("Fraction"); break;
-        case ItemType::XCOLOR    : return OUString("XColor");   break;
-        case ItemType::COLOR     : return OUString("Color");    break;
-        case ItemType::FONT      : return OUString("Font");     break;
-        case ItemType::FONTHEIGHT: return OUString("FontHeight");break;
-        case ItemType::FONTWIDTH : return OUString("FontWidth"); break;
-        case ItemType::FIELD     : return OUString("Field");     break;
+        case ItemType::BYTE      : return "Byte";     break;
+        case ItemType::INT16     : return "Int16";    break;
+        case ItemType::UINT16    : return "UInt16";   break;
+        case ItemType::INT32     : return "Int32";    break;
+        case ItemType::UINT32    : return "UInt32";   break;
+        case ItemType::ENUM      : return "Enum";     break;
+        case ItemType::BOOL      : return "Bool";     break;
+        case ItemType::FLAG      : return "Flag";     break;
+        case ItemType::STRING    : return "String";   break;
+        case ItemType::POINT     : return "Point";    break;
+        case ItemType::RECT      : return "Rectangle";break;
+        case ItemType::RANGE     : return "Range";    break;
+        case ItemType::FRACTION  : return "Fraction"; break;
+        case ItemType::XCOLOR    : return "XColor";   break;
+        case ItemType::COLOR     : return "Color";    break;
+        case ItemType::FONT      : return "Font";     break;
+        case ItemType::FONTHEIGHT: return "FontHeight";break;
+        case ItemType::FONTWIDTH : return "FontWidth"; break;
+        case ItemType::FIELD     : return "Field";     break;
         default: break;
     }
 

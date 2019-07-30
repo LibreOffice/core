@@ -55,7 +55,7 @@ SvxUnoDashTable::SvxUnoDashTable( SdrModel* pModel ) throw()
 
 OUString SAL_CALL SvxUnoDashTable::getImplementationName()
 {
-    return OUString("SvxUnoDashTable");
+    return "SvxUnoDashTable";
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDashTable::getSupportedServiceNames(  )

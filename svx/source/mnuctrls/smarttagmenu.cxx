@@ -218,7 +218,7 @@ IMPL_LINK( SmartTagMenuController, MenuSelect, Menu*, pMenu, bool )
 
 OUString SmartTagMenuController::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.svx.SmartTagMenuController" );
+    return "com.sun.star.comp.svx.SmartTagMenuController";
 }
 
 css::uno::Sequence< OUString > SmartTagMenuController::getSupportedServiceNames()

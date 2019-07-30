@@ -457,7 +457,7 @@ public:
     {
     }
 
-    virtual OUString GetComponentServiceName() override {return OUString("Edit");}
+    virtual OUString GetComponentServiceName() override {return "Edit";}
     virtual void SAL_CALL createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) override;
 
 protected:
@@ -647,7 +647,7 @@ sal_Bool SAL_CALL FormController::supportsService(const OUString& ServiceName)
 
 OUString SAL_CALL FormController::getImplementationName()
 {
-    return OUString("org.openoffice.comp.svx.FormController");
+    return "org.openoffice.comp.svx.FormController";
 }
 
 Sequence< OUString> SAL_CALL FormController::getSupportedServiceNames()

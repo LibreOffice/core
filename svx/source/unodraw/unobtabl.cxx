@@ -75,7 +75,7 @@ bool SvxUnoBitmapTable::isValid( const NameOrIndex* pItem ) const
 
 OUString SAL_CALL SvxUnoBitmapTable::getImplementationName()
 {
-    return OUString("SvxUnoBitmapTable");
+    return "SvxUnoBitmapTable";
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoBitmapTable::getSupportedServiceNames(  )

@@ -466,7 +466,7 @@ void SAL_CALL AccessibleCell::removeAccessibleEventListener( const Reference<XAc
 
 OUString SAL_CALL AccessibleCell::getImplementationName()
 {
-    return OUString("AccessibleCell");
+    return "AccessibleCell";
 }
 
 

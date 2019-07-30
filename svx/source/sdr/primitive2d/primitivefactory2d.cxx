@@ -49,7 +49,7 @@ public:
     virtual css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXDrawPage( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage, const css::uno::Sequence< css::beans::PropertyValue >& aParms ) override;
 
     OUString SAL_CALL getImplementationName() override
-    { return OUString("com.sun.star.comp.graphic.PrimitiveFactory2D"); }
+    { return "com.sun.star.comp.graphic.PrimitiveFactory2D"; }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }

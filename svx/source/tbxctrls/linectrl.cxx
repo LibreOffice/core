@@ -496,7 +496,7 @@ VclPtr<vcl::Window> SvxLineEndToolBoxControl::createPopupWindow( vcl::Window* pP
 
 OUString SvxLineEndToolBoxControl::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.svx.LineEndToolBoxControl" );
+    return "com.sun.star.comp.svx.LineEndToolBoxControl";
 }
 
 css::uno::Sequence<OUString> SvxLineEndToolBoxControl::getSupportedServiceNames()
