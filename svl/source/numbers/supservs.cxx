@@ -98,7 +98,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
 
 OUString SAL_CALL SvNumberFormatsSupplierServiceObject::getImplementationName(  )
 {
-    return OUString("com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject");
+    return "com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject";
 }
 
 sal_Bool SAL_CALL SvNumberFormatsSupplierServiceObject::supportsService( const OUString& _rServiceName )

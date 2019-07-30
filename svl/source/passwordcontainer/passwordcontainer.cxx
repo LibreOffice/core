@@ -1315,7 +1315,7 @@ Sequence< OUString > PasswordContainer::impl_getStaticSupportedServiceNames(  )
 
 OUString PasswordContainer::impl_getStaticImplementationName()
 {
-    return OUString("stardiv.svl.PasswordContainer");
+    return "stardiv.svl.PasswordContainer";
 }
 
 Reference< XInterface > SAL_CALL PasswordContainer::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager )
