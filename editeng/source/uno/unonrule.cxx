@@ -155,7 +155,7 @@ Reference< XCloneable > SAL_CALL SvxUnoNumberingRules::createClone(  )
 
 OUString SAL_CALL SvxUnoNumberingRules::getImplementationName(  )
 {
-    return OUString( "SvxUnoNumberingRules" );
+    return "SvxUnoNumberingRules";
 }
 
 sal_Bool SAL_CALL SvxUnoNumberingRules::supportsService( const OUString& ServiceName )

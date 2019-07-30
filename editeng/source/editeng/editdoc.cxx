@@ -2121,10 +2121,10 @@ sal_Int32 EditDoc::Count() const
 OUString EditDoc::GetSepStr( LineEnd eEnd )
 {
     if ( eEnd == LINEEND_CR )
-        return OUString("\015"); // 0x0d
+        return "\015"; // 0x0d
     if ( eEnd == LINEEND_LF )
-        return OUString("\012"); // 0x0a
-    return OUString("\015\012"); // 0x0d, 0x0a
+        return "\012"; // 0x0a
+    return "\015\012"; // 0x0d, 0x0a
 }
 
 OUString EditDoc::GetText( LineEnd eEnd ) const

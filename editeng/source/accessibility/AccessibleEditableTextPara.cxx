@@ -2694,7 +2694,7 @@ namespace accessibility
     OUString SAL_CALL AccessibleEditableTextPara::getImplementationName()
     {
 
-        return OUString("AccessibleEditableTextPara");
+        return "AccessibleEditableTextPara";
     }
 
     sal_Bool SAL_CALL AccessibleEditableTextPara::supportsService (const OUString& sServiceName)

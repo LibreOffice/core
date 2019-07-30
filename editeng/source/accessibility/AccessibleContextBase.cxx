@@ -388,7 +388,7 @@ void SAL_CALL AccessibleContextBase::removeAccessibleEventListener (
 // XServiceInfo
 OUString SAL_CALL AccessibleContextBase::getImplementationName()
 {
-    return OUString("AccessibleContextBase");
+    return "AccessibleContextBase";
 }
 
 sal_Bool SAL_CALL AccessibleContextBase::supportsService (const OUString& sServiceName)
@@ -476,7 +476,7 @@ void AccessibleContextBase::SetAccessibleName (
 
 OUString AccessibleContextBase::CreateAccessibleName()
 {
-    return OUString("Empty Name");
+    return "Empty Name";
 }
 
 

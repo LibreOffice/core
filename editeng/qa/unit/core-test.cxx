@@ -815,7 +815,7 @@ public:
 
     virtual OUString CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_Int32, boost::optional<Color>&, boost::optional<Color>& ) override
     {
-        return OUString("jim@bob.com"); // a sophisticated view of value:
+        return "jim@bob.com"; // a sophisticated view of value:
     }
 };
 
