@@ -20,6 +20,7 @@
 #include <iostream>
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 // Define a "string constant" to be a constant expression either of type "array
@@ -110,6 +111,70 @@ public:
 
     void run() override;
 
+    bool TraverseFunctionDecl(FunctionDecl * decl) {
+        returnTypes_.push(compat::getDeclaredReturnType(decl));
+        auto const ret = RecursiveASTVisitor::TraverseFunctionDecl(decl);
+        assert(!returnTypes_.empty());
+        assert(returnTypes_.top() == compat::getDeclaredReturnType(decl));
+        returnTypes_.pop();
+        return ret;
+    }
+
+    bool TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl * decl) {
+        returnTypes_.push(compat::getDeclaredReturnType(decl));
+        auto const ret = RecursiveASTVisitor::TraverseCXXDeductionGuideDecl(
+            decl);
+        assert(!returnTypes_.empty());
+        assert(returnTypes_.top() == compat::getDeclaredReturnType(decl));
+        returnTypes_.pop();
+        return ret;
+    }
+
+    bool TraverseCXXMethodDecl(CXXMethodDecl * decl) {
+        returnTypes_.push(compat::getDeclaredReturnType(decl));
+        auto const ret = RecursiveASTVisitor::TraverseCXXMethodDecl(decl);
+        assert(!returnTypes_.empty());
+        assert(returnTypes_.top() == compat::getDeclaredReturnType(decl));
+        returnTypes_.pop();
+        return ret;
+    }
+
+    bool TraverseCXXConstructorDecl(CXXConstructorDecl * decl) {
+        returnTypes_.push(compat::getDeclaredReturnType(decl));
+        auto const ret = RecursiveASTVisitor::TraverseCXXConstructorDecl(decl);
+        assert(!returnTypes_.empty());
+        assert(returnTypes_.top() == compat::getDeclaredReturnType(decl));
+        returnTypes_.pop();
+        return ret;
+    }
+
+    bool TraverseCXXDestructorDecl(CXXDestructorDecl * decl) {
+        returnTypes_.push(compat::getDeclaredReturnType(decl));
+        auto const ret = RecursiveASTVisitor::TraverseCXXDestructorDecl(decl);
+        assert(!returnTypes_.empty());
+        assert(returnTypes_.top() == compat::getDeclaredReturnType(decl));
+        returnTypes_.pop();
+        return ret;
+    }
+
+    bool TraverseCXXConversionDecl(CXXConversionDecl * decl) {
+        returnTypes_.push(compat::getDeclaredReturnType(decl));
+        auto const ret = RecursiveASTVisitor::TraverseCXXConversionDecl(decl);
+        assert(!returnTypes_.empty());
+        assert(returnTypes_.top() == compat::getDeclaredReturnType(decl));
+        returnTypes_.pop();
+        return ret;
+    }
+
+    bool TraverseObjCMethodDecl(ObjCMethodDecl * decl) {
+        returnTypes_.push(decl->getReturnType());
+        auto const ret = RecursiveASTVisitor::TraverseObjCMethodDecl(decl);
+        assert(!returnTypes_.empty());
+        assert(returnTypes_.top() == decl->getReturnType());
+        returnTypes_.pop();
+        return ret;
+    }
+
     bool TraverseCallExpr(CallExpr * expr);
 
     bool TraverseCXXMemberCallExpr(CXXMemberCallExpr * expr);
@@ -121,6 +186,8 @@ public:
     bool VisitCallExpr(CallExpr const * expr);
 
     bool VisitCXXConstructExpr(CXXConstructExpr const * expr);
+
+    bool VisitReturnStmt(ReturnStmt const * stmt);
 
 private:
     enum class ContentKind { Ascii, Utf8, Arbitrary };
@@ -183,6 +250,7 @@ private:
     void handleFunArgOstring(
         CallExpr const * expr, unsigned arg, FunctionDecl const * callee);
 
+    std::stack<QualType> returnTypes_;
     std::stack<Expr const *> calls_;
 };
 
@@ -1204,6 +1272,54 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
         }
     }
 
+    return true;
+}
+
+bool StringConstant::VisitReturnStmt(ReturnStmt const * stmt) {
+    if (ignoreLocation(stmt)) {
+        return true;
+    }
+    auto const e1 = stmt->getRetValue();
+    if (e1 == nullptr) {
+        return true;
+    }
+    auto const tc1 = loplugin::TypeCheck(e1->getType().getTypePtr());
+    if (!(tc1.Class("OString").Namespace("rtl").GlobalNamespace()
+          || tc1.Class("OUString").Namespace("rtl").GlobalNamespace()))
+    {
+        return true;
+    }
+    assert(!returnTypes_.empty());
+    auto const tc2 = loplugin::TypeCheck(returnTypes_.top().getTypePtr());
+    if (!(tc2.Class("OString").Namespace("rtl").GlobalNamespace()
+          || tc2.Class("OUString").Namespace("rtl").GlobalNamespace()))
+    {
+        return true;
+    }
+    auto const e2 = dyn_cast<CXXFunctionalCastExpr>(e1->IgnoreImplicit());
+    if (e2 == nullptr) {
+        return true;
+    }
+    auto const e3 = dyn_cast<CXXBindTemporaryExpr>(e2->getSubExpr());
+    if (e3 == nullptr) {
+        return true;
+    }
+    auto const e4 = dyn_cast<CXXConstructExpr>(e3->getSubExpr());
+    if (e4 == nullptr) {
+        return true;
+    }
+    if (e4->getNumArgs() != 2) {
+        return true;
+    }
+    auto const e5 = e4->getArg(1);
+    if (!(isa<CXXDefaultArgExpr>(e5)
+          && (loplugin::TypeCheck(e5->getType()).Struct("Dummy").Namespace("libreoffice_internal")
+              .Namespace("rtl").GlobalNamespace())))
+    {
+        return true;
+    }
+    report(DiagnosticsEngine::Warning, "elide constructor call", compat::getBeginLoc(e1))
+        << e1->getSourceRange();
     return true;
 }
 
