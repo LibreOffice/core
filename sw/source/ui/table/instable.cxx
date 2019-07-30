@@ -147,7 +147,7 @@ void SwInsTableDlg::InitAutoTableFormat()
     // Change this min variable if you add autotable manually.
     minTableIndexInLb = 1;
     maxTableIndexInLb = minTableIndexInLb + static_cast<sal_uInt8>(pTableTable->size());
-    lbIndex = 1;
+    lbIndex = 0;
     m_xLbFormat->select( lbIndex );
     tbIndex = lbIndexToTableIndex(lbIndex);
 

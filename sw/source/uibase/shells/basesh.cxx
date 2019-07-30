@@ -2742,7 +2742,6 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                     rSh.GetTableFormat()->SetName( aTableName );
 
                 if( pTAFormat != nullptr && !aAutoName.isEmpty()
-                        && aAutoName != SwStyleNameMapper::GetUIName( RES_POOLTABSTYLE_DEFAULT, OUString() )
                         && aAutoName != SwViewShell::GetShellRes()->aStrNone )
                 {
                     SwTableNode* pTableNode = const_cast<SwTableNode*>( rSh.IsCursorInTable() );
