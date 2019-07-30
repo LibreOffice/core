@@ -3023,16 +3023,16 @@ OUString getFieldTypeString( const chart2::DataPointCustomLabelFieldType aType )
     switch (aType)
     {
     case chart2::DataPointCustomLabelFieldType_CATEGORYNAME:
-        return OUString("CATEGORYNAME");
+        return "CATEGORYNAME";
 
     case chart2::DataPointCustomLabelFieldType_SERIESNAME:
-        return OUString("SERIESNAME");
+        return "SERIESNAME";
 
     case chart2::DataPointCustomLabelFieldType_VALUE:
-        return OUString("VALUE");
+        return "VALUE";
 
     case chart2::DataPointCustomLabelFieldType_CELLREF:
-        return OUString("CELLREF");
+        return "CELLREF";
 
     default:
         break;

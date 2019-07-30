@@ -600,39 +600,39 @@ OUString ControlModelBase::getServiceName() const
     ApiControlType eCtrlType = getControlType();
     if( mbAwtModel ) switch( eCtrlType )
     {
-        case API_CONTROL_BUTTON:        return OUString( "com.sun.star.awt.UnoControlButtonModel" );
-        case API_CONTROL_FIXEDTEXT:     return OUString( "com.sun.star.awt.UnoControlFixedTextModel" );
-        case API_CONTROL_IMAGE:         return OUString( "com.sun.star.awt.UnoControlImageControlModel" );
-        case API_CONTROL_CHECKBOX:      return OUString( "com.sun.star.awt.UnoControlCheckBoxModel" );
-        case API_CONTROL_RADIOBUTTON:   return OUString( "com.sun.star.form.component.RadioButton" );
-        case API_CONTROL_EDIT:          return OUString( "com.sun.star.awt.UnoControlEditModel" );
-        case API_CONTROL_NUMERIC:       return OUString( "com.sun.star.awt.UnoControlNumericFieldModel" );
-        case API_CONTROL_LISTBOX:       return OUString( "com.sun.star.form.component.ListBox" );
-        case API_CONTROL_COMBOBOX:      return OUString( "com.sun.star.form.component.ComboBox" );
-        case API_CONTROL_SPINBUTTON:    return OUString( "com.sun.star.form.component.SpinButton" );
-        case API_CONTROL_SCROLLBAR:     return OUString( "com.sun.star.form.component.ScrollBar" );
-        case API_CONTROL_PROGRESSBAR:   return OUString( "com.sun.star.awt.UnoControlProgressBarModel" );
-        case API_CONTROL_GROUPBOX:      return OUString( "com.sun.star.form.component.GroupBox" );
-        case API_CONTROL_FRAME:         return OUString( "com.sun.star.awt.UnoFrameModel" );
-        case API_CONTROL_PAGE:          return OUString( "com.sun.star.awt.UnoPageModel" );
-        case API_CONTROL_MULTIPAGE:     return OUString( "com.sun.star.awt.UnoMultiPageModel" );
-        case API_CONTROL_DIALOG:        return OUString( "com.sun.star.awt.UnoControlDialogModel" );
+        case API_CONTROL_BUTTON:        return "com.sun.star.awt.UnoControlButtonModel";
+        case API_CONTROL_FIXEDTEXT:     return "com.sun.star.awt.UnoControlFixedTextModel";
+        case API_CONTROL_IMAGE:         return "com.sun.star.awt.UnoControlImageControlModel";
+        case API_CONTROL_CHECKBOX:      return "com.sun.star.awt.UnoControlCheckBoxModel";
+        case API_CONTROL_RADIOBUTTON:   return "com.sun.star.form.component.RadioButton";
+        case API_CONTROL_EDIT:          return "com.sun.star.awt.UnoControlEditModel";
+        case API_CONTROL_NUMERIC:       return "com.sun.star.awt.UnoControlNumericFieldModel";
+        case API_CONTROL_LISTBOX:       return "com.sun.star.form.component.ListBox";
+        case API_CONTROL_COMBOBOX:      return "com.sun.star.form.component.ComboBox";
+        case API_CONTROL_SPINBUTTON:    return "com.sun.star.form.component.SpinButton";
+        case API_CONTROL_SCROLLBAR:     return "com.sun.star.form.component.ScrollBar";
+        case API_CONTROL_PROGRESSBAR:   return "com.sun.star.awt.UnoControlProgressBarModel";
+        case API_CONTROL_GROUPBOX:      return "com.sun.star.form.component.GroupBox";
+        case API_CONTROL_FRAME:         return "com.sun.star.awt.UnoFrameModel";
+        case API_CONTROL_PAGE:          return "com.sun.star.awt.UnoPageModel";
+        case API_CONTROL_MULTIPAGE:     return "com.sun.star.awt.UnoMultiPageModel";
+        case API_CONTROL_DIALOG:        return "com.sun.star.awt.UnoControlDialogModel";
         default:    OSL_FAIL( "ControlModelBase::getServiceName - no AWT model service supported" );
     }
     else switch( eCtrlType )
     {
-        case API_CONTROL_BUTTON:        return OUString( "com.sun.star.form.component.CommandButton" );
-        case API_CONTROL_FIXEDTEXT:     return OUString( "com.sun.star.form.component.FixedText" );
-        case API_CONTROL_IMAGE:         return OUString( "com.sun.star.form.component.DatabaseImageControl" );
-        case API_CONTROL_CHECKBOX:      return OUString( "com.sun.star.form.component.CheckBox" );
-        case API_CONTROL_RADIOBUTTON:   return OUString( "com.sun.star.form.component.RadioButton" );
-        case API_CONTROL_EDIT:          return OUString( "com.sun.star.form.component.TextField" );
-        case API_CONTROL_NUMERIC:       return OUString( "com.sun.star.form.component.NumericField" );
-        case API_CONTROL_LISTBOX:       return OUString( "com.sun.star.form.component.ListBox" );
-        case API_CONTROL_COMBOBOX:      return OUString( "com.sun.star.form.component.ComboBox" );
-        case API_CONTROL_SPINBUTTON:    return OUString( "com.sun.star.form.component.SpinButton" );
-        case API_CONTROL_SCROLLBAR:     return OUString( "com.sun.star.form.component.ScrollBar" );
-        case API_CONTROL_GROUPBOX:      return OUString( "com.sun.star.form.component.GroupBox" );
+        case API_CONTROL_BUTTON:        return "com.sun.star.form.component.CommandButton";
+        case API_CONTROL_FIXEDTEXT:     return "com.sun.star.form.component.FixedText";
+        case API_CONTROL_IMAGE:         return "com.sun.star.form.component.DatabaseImageControl";
+        case API_CONTROL_CHECKBOX:      return "com.sun.star.form.component.CheckBox";
+        case API_CONTROL_RADIOBUTTON:   return "com.sun.star.form.component.RadioButton";
+        case API_CONTROL_EDIT:          return "com.sun.star.form.component.TextField";
+        case API_CONTROL_NUMERIC:       return "com.sun.star.form.component.NumericField";
+        case API_CONTROL_LISTBOX:       return "com.sun.star.form.component.ListBox";
+        case API_CONTROL_COMBOBOX:      return "com.sun.star.form.component.ComboBox";
+        case API_CONTROL_SPINBUTTON:    return "com.sun.star.form.component.SpinButton";
+        case API_CONTROL_SCROLLBAR:     return "com.sun.star.form.component.ScrollBar";
+        case API_CONTROL_GROUPBOX:      return "com.sun.star.form.component.GroupBox";
         default:    OSL_FAIL( "ControlModelBase::getServiceName - no form component service supported" );
     }
     return OUString();

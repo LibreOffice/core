@@ -596,7 +596,7 @@ void SAL_CALL ShapeContextHandler::setMediaDescriptor(const uno::Sequence<beans:
 
 OUString ShapeContextHandler::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.oox.ShapeContextHandler" );
+    return "com.sun.star.comp.oox.ShapeContextHandler";
 }
 
 uno::Sequence< OUString > ShapeContextHandler::getSupportedServiceNames()

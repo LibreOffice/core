@@ -312,7 +312,7 @@ GraphicHelper* PowerPointImport::implCreateGraphicHelper() const
 
 OUString PowerPointImport::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.oox.ppt.PowerPointImport" );
+    return "com.sun.star.comp.oox.ppt.PowerPointImport";
 }
 
 }}

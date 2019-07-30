@@ -2124,7 +2124,7 @@ static OUString GetAutoNumType(SvxNumType nNumberingType, bool bSDot, bool bPBeh
         case SVX_NUM_ARABIC :
         {
             if (sPrefixSuffix.isEmpty())
-                return OUString("arabicPlain");
+                return "arabicPlain";
             else
                 return "arabic" + sPrefixSuffix;
         }

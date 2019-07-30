@@ -100,7 +100,7 @@ DocumentPropertiesImport::DocumentPropertiesImport( const Reference< XComponentC
 // XServiceInfo
 OUString SAL_CALL DocumentPropertiesImport::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.oox.docprop.DocumentPropertiesImporter" );
+    return "com.sun.star.comp.oox.docprop.DocumentPropertiesImporter";
 }
 
 sal_Bool SAL_CALL DocumentPropertiesImport::supportsService( const OUString& rServiceName )
