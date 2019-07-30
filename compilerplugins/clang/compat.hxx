@@ -256,6 +256,18 @@ inline bool isExplicitSpecified(clang::CXXConversionDecl const * decl) {
 #endif
 }
 
+inline clang::QualType getDeclaredReturnType(clang::FunctionDecl const * decl) {
+#if CLANG_VERSION >= 80000
+    return decl->getDeclaredReturnType();
+#else
+    // <https://github.com/llvm/llvm-project/commit/4576a77b809649f5b8d0ff8c7a4be57eeee0ecf9>
+    // "PR33222: Require the declared return type not the actual return type to":
+    auto *TSI = decl->getTypeSourceInfo();
+    clang::QualType T = TSI ? TSI->getType() : decl->getType();
+    return T->castAs<clang::FunctionType>()->getReturnType();
+#endif
+}
+
 }
 
 #endif
