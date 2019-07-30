@@ -819,16 +819,12 @@ const SvxURLField* ScEditShell::GetURLField()
 {
     ScInputHandler* pHdl = GetMyInputHdl();
     EditView* pActiveView = pHdl ? pHdl->GetActiveView() : pEditView;
-    if ( pActiveView )
-    {
-        const SvxFieldItem* pFieldItem = pActiveView->GetFieldAtSelection();
-        if (pFieldItem)
-        {
-            const SvxFieldData* pField = pFieldItem->GetField();
-            if ( auto pURLField = dynamic_cast<const SvxURLField*>( pField) )
-                return pURLField;
-        }
-    }
+    if (!pActiveView)
+        return nullptr;
+
+    const SvxFieldData* pField = pActiveView->GetFieldAtCursor();
+    if (auto pURLField = dynamic_cast<const SvxURLField*>(pField))
+        return pURLField;
 
     return nullptr;
 }
