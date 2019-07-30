@@ -126,7 +126,7 @@ TVFactory::getAvailableServiceNames( )
 OUString
 TVFactory::getImplementationName_static()
 {
-    return OUString( "com.sun.star.help.TreeViewImpl" );
+    return "com.sun.star.help.TreeViewImpl";
 }
 
 Sequence< OUString >
