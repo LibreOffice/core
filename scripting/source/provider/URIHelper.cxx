@@ -237,8 +237,8 @@ ScriptingFrameworkURIHelper::getRootStorageURI()
 OUString SAL_CALL
 ScriptingFrameworkURIHelper::getImplementationName()
 {
-    return OUString(
-        "com.sun.star.script.provider.ScriptURIHelper" );
+    return
+        "com.sun.star.script.provider.ScriptURIHelper";
 }
 
 sal_Bool SAL_CALL

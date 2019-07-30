@@ -544,7 +544,7 @@ public:
 
     virtual OUString SAL_CALL getName() override
     {
-        return OUString("Root");
+        return "Root";
     }
 
     virtual Sequence< Reference< browse::XBrowseNode > > SAL_CALL
@@ -632,8 +632,8 @@ bnf_getSupportedServiceNames( )
 OUString
 bnf_getImplementationName( )
 {
-    return OUString(
-        "com.sun.star.script.browse.BrowseNodeFactory" );
+    return
+        "com.sun.star.script.browse.BrowseNodeFactory";
 }
 
 Reference< XInterface >

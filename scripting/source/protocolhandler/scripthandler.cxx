@@ -434,7 +434,7 @@ Sequence< OUString > ScriptProtocolHandler::impl_getStaticSupportedServiceNames(
 /* Helper for XServiceInfo */
 OUString ScriptProtocolHandler::impl_getStaticImplementationName()
 {
-    return OUString("com.sun.star.comp.ScriptProtocolHandler");
+    return "com.sun.star.comp.ScriptProtocolHandler";
 }
 
 /* Helper for registry */

@@ -70,7 +70,7 @@ namespace basprov
 
     static OUString getImplementationName_BasicProviderImpl()
     {
-        return OUString( "com.sun.star.comp.scripting.ScriptProviderForBasic"  );
+        return "com.sun.star.comp.scripting.ScriptProviderForBasic";
     }
 
 
@@ -399,7 +399,7 @@ namespace basprov
 
     OUString BasicProviderImpl::getName(  )
     {
-        return OUString("Basic");
+        return "Basic";
     }
 
 
