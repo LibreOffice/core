@@ -53,7 +53,7 @@ module com {  module sun {  module star {  module ui {
 
     @since OOo 2.0
 */
-interface XAcceleratorConfiguration
+published interface XAcceleratorConfiguration
 {
     /** return the list of all key events, which
         are available at this configuration set.
