@@ -58,7 +58,7 @@ static Sequence<OUString> getSupportedServiceNames_NumberText_Impl()
     return names;
 }
 
-static OUString getImplementationName_NumberText_Impl() { return OUString(IMPLNAME); }
+static OUString getImplementationName_NumberText_Impl() { return IMPLNAME; }
 
 static osl::Mutex& GetNumberTextMutex()
 {
@@ -158,7 +158,7 @@ uno::Sequence<Locale> SAL_CALL NumberText_Impl::getAvailableLanguages()
     return aRes;
 }
 
-OUString SAL_CALL NumberText_Impl::getImplementationName() { return OUString(IMPLNAME); }
+OUString SAL_CALL NumberText_Impl::getImplementationName() { return IMPLNAME; }
 
 sal_Bool SAL_CALL NumberText_Impl::supportsService(const OUString& ServiceName)
 {
