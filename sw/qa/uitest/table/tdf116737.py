@@ -25,7 +25,7 @@ class tdf116737(UITestCase):
         xDialog = self.xUITest.getTopFocusWindow()
 
         formatlbinstable = xDialog.getChild("formatlbinstable")
-        entry = formatlbinstable.getChild("11") #Simple List Shaded
+        entry = formatlbinstable.getChild("12") #Simple List Shaded
         entry.executeAction("SELECT", tuple())
 
         xOkBtn = xDialog.getChild("ok")
