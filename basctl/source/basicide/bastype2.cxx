@@ -1413,10 +1413,10 @@ OUString SbTreeListBox::GetRootEntryBitmaps(const ScriptDocument& rDocument)
         else
         {
             // default icon
-            return OUString(RID_BMP_DOCUMENT);
+            return RID_BMP_DOCUMENT;
         }
     }
-    return OUString(RID_BMP_INSTALLATION);
+    return RID_BMP_INSTALLATION;
 }
 
 void SbTreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
