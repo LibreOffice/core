@@ -219,7 +219,7 @@ void SAL_CALL WordPerfectImportFilter::initialize(const Sequence<Any>& /*aArgume
 // XServiceInfo
 OUString SAL_CALL WordPerfectImportFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Writer.WordPerfectImportFilter");
+    return "com.sun.star.comp.Writer.WordPerfectImportFilter";
 }
 
 sal_Bool SAL_CALL WordPerfectImportFilter::supportsService(const OUString& rServiceName)

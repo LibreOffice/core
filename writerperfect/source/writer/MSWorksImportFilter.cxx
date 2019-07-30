@@ -129,7 +129,7 @@ void MSWorksImportFilter::doRegisterHandlers(OdtGenerator& rGenerator)
 // XServiceInfo
 OUString SAL_CALL MSWorksImportFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Writer.MSWorksImportFilter");
+    return "com.sun.star.comp.Writer.MSWorksImportFilter";
 }
 
 sal_Bool SAL_CALL MSWorksImportFilter::supportsService(const OUString& rServiceName)

@@ -68,7 +68,7 @@ bool PresentationImportFilter::doDetectFormat(librevenge::RVNGInputStream&, OUSt
 // XServiceInfo
 OUString SAL_CALL PresentationImportFilter::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.Wpft.QA.PresentationImportFilter");
+    return "org.libreoffice.comp.Wpft.QA.PresentationImportFilter";
 }
 
 sal_Bool SAL_CALL PresentationImportFilter::supportsService(const OUString& rServiceName)

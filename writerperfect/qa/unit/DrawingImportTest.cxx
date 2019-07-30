@@ -68,7 +68,7 @@ bool DrawingImportFilter::doDetectFormat(librevenge::RVNGInputStream&, OUString&
 // XServiceInfo
 OUString SAL_CALL DrawingImportFilter::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.Wpft.QA.DrawingImportFilter");
+    return "org.libreoffice.comp.Wpft.QA.DrawingImportFilter";
 }
 
 sal_Bool SAL_CALL DrawingImportFilter::supportsService(const OUString& rServiceName)

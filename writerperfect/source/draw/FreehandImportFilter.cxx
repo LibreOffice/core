@@ -41,7 +41,7 @@ bool FreehandImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, O
 // XServiceInfo
 OUString SAL_CALL FreehandImportFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Draw.FreehandImportFilter");
+    return "com.sun.star.comp.Draw.FreehandImportFilter";
 }
 
 sal_Bool SAL_CALL FreehandImportFilter::supportsService(const OUString& rServiceName)

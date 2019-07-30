@@ -90,7 +90,7 @@ void MWAWPresentationImportFilter::doRegisterHandlers(OdpGenerator& rGenerator)
 // XServiceInfo
 OUString SAL_CALL MWAWPresentationImportFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Impress.MWAWPresentationImportFilter");
+    return "com.sun.star.comp.Impress.MWAWPresentationImportFilter";
 }
 sal_Bool SAL_CALL MWAWPresentationImportFilter::supportsService(const OUString& rServiceName)
 {

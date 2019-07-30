@@ -48,7 +48,7 @@ bool WPGImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUStri
 // XServiceInfo
 OUString SAL_CALL WPGImportFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Draw.WPGImportFilter");
+    return "com.sun.star.comp.Draw.WPGImportFilter";
 }
 
 sal_Bool SAL_CALL WPGImportFilter::supportsService(const OUString& rServiceName)

@@ -79,7 +79,7 @@ void StarOfficeCalcImportFilter::doRegisterHandlers(OdsGenerator& rGenerator)
 // XServiceInfo
 OUString SAL_CALL StarOfficeCalcImportFilter::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.Calc.StarOfficeCalcImportFilter");
+    return "org.libreoffice.comp.Calc.StarOfficeCalcImportFilter";
 }
 
 sal_Bool SAL_CALL StarOfficeCalcImportFilter::supportsService(const OUString& rServiceName)

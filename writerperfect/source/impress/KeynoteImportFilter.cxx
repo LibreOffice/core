@@ -240,7 +240,7 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
 // XServiceInfo
 OUString SAL_CALL KeynoteImportFilter::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.Impress.KeynoteImportFilter");
+    return "org.libreoffice.comp.Impress.KeynoteImportFilter";
 }
 
 sal_Bool SAL_CALL KeynoteImportFilter::supportsService(const OUString& rServiceName)

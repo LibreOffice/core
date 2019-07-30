@@ -97,7 +97,7 @@ bool EBookImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUSt
 // XServiceInfo
 OUString SAL_CALL EBookImportFilter::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.Writer.EBookImportFilter");
+    return "org.libreoffice.comp.Writer.EBookImportFilter";
 }
 
 sal_Bool SAL_CALL EBookImportFilter::supportsService(const OUString& rServiceName)

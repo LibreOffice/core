@@ -46,7 +46,7 @@ bool PagesImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUSt
 // XServiceInfo
 OUString SAL_CALL PagesImportFilter::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.Writer.PagesImportFilter");
+    return "org.libreoffice.comp.Writer.PagesImportFilter";
 }
 
 sal_Bool SAL_CALL PagesImportFilter::supportsService(const OUString& rServiceName)

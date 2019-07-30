@@ -42,7 +42,7 @@ bool ZMFImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUStri
 // XServiceInfo
 OUString SAL_CALL ZMFImportFilter::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.Draw.ZMFImportFilter");
+    return "org.libreoffice.comp.Draw.ZMFImportFilter";
 }
 
 sal_Bool SAL_CALL ZMFImportFilter::supportsService(const OUString& rServiceName)

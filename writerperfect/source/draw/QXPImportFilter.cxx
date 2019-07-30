@@ -42,7 +42,7 @@ bool QXPImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUStri
 // XServiceInfo
 OUString SAL_CALL QXPImportFilter::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.Draw.QXPImportFilter");
+    return "org.libreoffice.comp.Draw.QXPImportFilter";
 }
 
 sal_Bool SAL_CALL QXPImportFilter::supportsService(const OUString& rServiceName)
