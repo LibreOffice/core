@@ -1362,7 +1362,7 @@ static oslFileError get_filesystem_attributes(
             pInfo->uValidFields   |= osl_VolumeInfo_Mask_MaxNameLength;
             pInfo->uMaxNameLength  = mcl;
 
-            // Should the uMaxPathLength be set to 32767, "\\?\" prefix allowes it
+            // Should the uMaxPathLength be set to 32767, "\\?\" prefix allows it
             pInfo->uValidFields   |= osl_VolumeInfo_Mask_MaxPathLength;
             pInfo->uMaxPathLength  = MAX_PATH;
 

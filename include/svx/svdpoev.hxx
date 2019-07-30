@@ -68,7 +68,7 @@ public:
     void ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     void RotateMarkedPoints(const Point& rRef, long nAngle);
 
-    // This probably creates an abitrary amount of new objects
+    // This probably creates an arbitrary amount of new objects
     void RipUpAtMarkedPoints() override;
     bool IsRipUpAtMarkedPointsPossible() const override;
 
