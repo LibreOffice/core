@@ -63,7 +63,7 @@ namespace pcr
 
     OUString MasterDetailLinkDialog::getImplementationName_static()
     {
-        return OUString("org.openoffice.comp.form.ui.MasterDetailLinkDialog");
+        return "org.openoffice.comp.form.ui.MasterDetailLinkDialog";
     }
 
 

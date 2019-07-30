@@ -106,7 +106,7 @@ namespace pcr
 
     OUString SubmissionPropertyHandler::getImplementationName_static(  )
     {
-        return OUString( "com.sun.star.comp.extensions.SubmissionPropertyHandler" );
+        return "com.sun.star.comp.extensions.SubmissionPropertyHandler";
     }
 
 

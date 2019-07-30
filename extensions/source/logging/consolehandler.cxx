@@ -233,7 +233,7 @@ namespace logging
 
     OUString SAL_CALL ConsoleHandler::getImplementationName()
     {
-        return OUString("com.sun.star.comp.extensions.ConsoleHandler");
+        return "com.sun.star.comp.extensions.ConsoleHandler";
     }
 
     sal_Bool SAL_CALL ConsoleHandler::supportsService( const OUString& _rServiceName )

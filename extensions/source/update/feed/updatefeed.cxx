@@ -756,7 +756,7 @@ UpdateInformationProvider::getServiceNames()
 OUString
 UpdateInformationProvider::getImplName()
 {
-    return OUString("vnd.sun.UpdateInformationProvider");
+    return "vnd.sun.UpdateInformationProvider";
 }
 
 

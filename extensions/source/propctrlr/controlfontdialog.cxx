@@ -87,7 +87,7 @@ namespace pcr
 
     OUString OControlFontDialog::getImplementationName_static()
     {
-        return OUString("org.openoffice.comp.form.ui.OControlFontDialog");
+        return "org.openoffice.comp.form.ui.OControlFontDialog";
     }
 
 

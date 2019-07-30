@@ -550,7 +550,7 @@ namespace pcr
 
     OUString OPropertyBrowserController::getImplementationName_static(  )
     {
-        return OUString("org.openoffice.comp.extensions.ObjectInspector");
+        return "org.openoffice.comp.extensions.ObjectInspector";
     }
 
 

@@ -64,7 +64,7 @@ namespace pcr
 
     OUString EditPropertyHandler::getImplementationName_static(  )
     {
-        return OUString( "com.sun.star.comp.extensions.EditPropertyHandler" );
+        return "com.sun.star.comp.extensions.EditPropertyHandler";
     }
 
 

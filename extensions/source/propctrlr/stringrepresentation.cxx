@@ -613,8 +613,8 @@ bool StringRepresentation::convertStringToGenericValue( const OUString& _rString
 namespace comp_StringRepresentation {
 
 OUString _getImplementationName() {
-    return OUString(
-        "StringRepresentation");
+    return
+        "StringRepresentation";
 }
 
 uno::Sequence< OUString > _getSupportedServiceNames()

@@ -283,7 +283,7 @@ namespace pcr
 
     OUString GenericPropertyHandler::getImplementationName_static(  )
     {
-        return OUString( "com.sun.star.comp.extensions.GenericPropertyHandler" );
+        return "com.sun.star.comp.extensions.GenericPropertyHandler";
     }
 
     Sequence< OUString > GenericPropertyHandler::getSupportedServiceNames_static(  )

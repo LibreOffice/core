@@ -129,7 +129,7 @@ namespace logging
 
     OUString SAL_CALL PlainTextFormatter::getImplementationName()
     {
-        return OUString("com.sun.star.comp.extensions.PlainTextFormatter");
+        return "com.sun.star.comp.extensions.PlainTextFormatter";
     }
 
     Sequence< OUString > SAL_CALL PlainTextFormatter::getSupportedServiceNames()

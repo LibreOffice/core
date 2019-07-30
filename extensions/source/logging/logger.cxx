@@ -215,7 +215,7 @@ namespace logging
 
     OUString SAL_CALL LoggerPool::getImplementationName()
     {
-        return OUString("com.sun.star.comp.extensions.LoggerPool");
+        return "com.sun.star.comp.extensions.LoggerPool";
     }
 
     sal_Bool SAL_CALL LoggerPool::supportsService( const OUString& _rServiceName )

@@ -332,7 +332,7 @@ namespace logging
 
     OUString SAL_CALL FileHandler::getImplementationName()
     {
-        return OUString("com.sun.star.comp.extensions.FileHandler");
+        return "com.sun.star.comp.extensions.FileHandler";
     }
 
     sal_Bool SAL_CALL FileHandler::supportsService( const OUString& _rServiceName )

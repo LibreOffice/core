@@ -300,7 +300,7 @@ namespace logging
 
     OUString SAL_CALL CsvFormatter::getImplementationName()
     {
-        return OUString("com.sun.star.comp.extensions.CsvFormatter");
+        return "com.sun.star.comp.extensions.CsvFormatter";
     }
 
     Sequence< OUString > SAL_CALL CsvFormatter::getSupportedServiceNames()

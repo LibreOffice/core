@@ -159,7 +159,7 @@ namespace pcr
 
     OUString ObjectInspectorModel::getImplementationName_static(  )
     {
-        return OUString( "org.openoffice.comp.extensions.ObjectInspectorModel" );
+        return "org.openoffice.comp.extensions.ObjectInspectorModel";
     }
 
 

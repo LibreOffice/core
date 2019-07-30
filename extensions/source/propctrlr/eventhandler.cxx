@@ -463,7 +463,7 @@ namespace pcr
 
     OUString EventHandler::getImplementationName_static(  )
     {
-        return OUString(  "com.sun.star.comp.extensions.EventHandler"  );
+        return "com.sun.star.comp.extensions.EventHandler";
     }
 
     Sequence< OUString > EventHandler::getSupportedServiceNames_static(  )

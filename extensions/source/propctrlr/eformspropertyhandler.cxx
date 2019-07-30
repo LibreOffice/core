@@ -75,7 +75,7 @@ namespace pcr
 
     OUString EFormsPropertyHandler::getImplementationName_static(  )
     {
-        return OUString( "com.sun.star.comp.extensions.EFormsPropertyHandler" );
+        return "com.sun.star.comp.extensions.EFormsPropertyHandler";
     }
 
 

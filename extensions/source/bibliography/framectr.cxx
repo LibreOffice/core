@@ -165,7 +165,7 @@ BibFrameController_Impl::~BibFrameController_Impl()
 
 OUString SAL_CALL BibFrameController_Impl::getImplementationName()
 {
-    return OUString("com.sun.star.comp.extensions.Bibliography");
+    return "com.sun.star.comp.extensions.Bibliography";
 }
 
 sal_Bool SAL_CALL BibFrameController_Impl::supportsService( const OUString& sServiceName )

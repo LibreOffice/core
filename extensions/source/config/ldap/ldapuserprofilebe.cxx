@@ -204,7 +204,7 @@ css::uno::Any LdapUserProfileBe::getPropertyValue(
 
 
 OUString LdapUserProfileBe::getLdapUserProfileBeName() {
-    return OUString("com.sun.star.comp.configuration.backend.LdapUserProfileBe");
+    return "com.sun.star.comp.configuration.backend.LdapUserProfileBe";
 }
 
 

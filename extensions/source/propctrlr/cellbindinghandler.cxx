@@ -59,7 +59,7 @@ namespace pcr
 
     OUString CellBindingPropertyHandler::getImplementationName_static(  )
     {
-        return OUString( "com.sun.star.comp.extensions.CellBindingPropertyHandler" );
+        return "com.sun.star.comp.extensions.CellBindingPropertyHandler";
     }
 
 

@@ -164,7 +164,7 @@ namespace pcr
 
     OUString FormComponentPropertyHandler::getImplementationName_static(  )
     {
-        return OUString(  "com.sun.star.comp.extensions.FormComponentPropertyHandler"  );
+        return "com.sun.star.comp.extensions.FormComponentPropertyHandler";
     }
 
 
