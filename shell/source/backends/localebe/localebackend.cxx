@@ -316,7 +316,7 @@ css::uno::Any LocaleBackend::getPropertyValue(
 
 
 OUString LocaleBackend::getBackendName() {
-    return OUString("com.sun.star.comp.configuration.backend.LocaleBackend") ;
+    return "com.sun.star.comp.configuration.backend.LocaleBackend" ;
 }
 
 OUString SAL_CALL LocaleBackend::getImplementationName()

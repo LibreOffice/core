@@ -237,7 +237,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 
 OUString SAL_CALL ShellExec::getImplementationName(  )
 {
-    return OUString("com.sun.star.comp.system.SystemShellExecute");
+    return "com.sun.star.comp.system.SystemShellExecute";
 }
 
 sal_Bool SAL_CALL ShellExec::supportsService( const OUString& ServiceName )
