@@ -626,7 +626,7 @@ Sequence< OUString > SchXMLImport_getSupportedServiceNames() throw()
 
 OUString SchXMLImport_getImplementationName() throw()
 {
-    return OUString(  "SchXMLImport"  );
+    return "SchXMLImport";
 }
 
 Reference< uno::XInterface > SchXMLImport_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
@@ -643,7 +643,7 @@ Sequence< OUString > SchXMLImport_Styles_getSupportedServiceNames() throw()
 
 OUString SchXMLImport_Styles_getImplementationName() throw()
 {
-    return OUString( "SchXMLImport.Styles" );
+    return "SchXMLImport.Styles";
 }
 
 Reference< uno::XInterface > SchXMLImport_Styles_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
@@ -658,7 +658,7 @@ Sequence< OUString > SchXMLImport_Content_getSupportedServiceNames() throw()
 
 OUString SchXMLImport_Content_getImplementationName() throw()
 {
-    return OUString(  "SchXMLImport.Content"  );
+    return "SchXMLImport.Content";
 }
 
 Reference< uno::XInterface > SchXMLImport_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
@@ -673,7 +673,7 @@ Sequence< OUString > SchXMLImport_Meta_getSupportedServiceNames() throw()
 
 OUString SchXMLImport_Meta_getImplementationName() throw()
 {
-    return OUString(  "SchXMLImport.Meta"  );
+    return "SchXMLImport.Meta";
 }
 
 Reference< uno::XInterface > SchXMLImport_Meta_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)

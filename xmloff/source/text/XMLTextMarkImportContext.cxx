@@ -145,7 +145,7 @@ static OUString lcl_getFieldmarkName(OUString const& name)
 {
     if (name == "msoffice.field.FORMTEXT" ||
         name == "ecma.office-open-xml.field.FORMTEXT")
-        return OUString(ODF_FORMTEXT);
+        return ODF_FORMTEXT;
     else
         return name;
 }

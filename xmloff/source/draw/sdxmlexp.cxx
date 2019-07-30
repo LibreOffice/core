@@ -2602,7 +2602,7 @@ uno::Sequence< OUString > classname##_getSupportedServiceNames() throw()\
 }\
 OUString classname##_getImplementationName() throw()\
 {\
-    return OUString( implementationname );\
+    return implementationname;\
 }\
 uno::Reference< uno::XInterface > classname##_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr)\
 {\

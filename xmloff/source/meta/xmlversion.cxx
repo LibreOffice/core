@@ -425,7 +425,7 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
 
 OUString XMLVersionListPersistence::getImplementationName()
 {
-    return OUString("XMLVersionListPersistence");
+    return "XMLVersionListPersistence";
 }
 
 sal_Bool XMLVersionListPersistence::supportsService(

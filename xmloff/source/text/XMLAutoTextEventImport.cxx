@@ -112,7 +112,7 @@ Sequence< OUString >
 
 OUString XMLAutoTextEventImport_getImplementationName() throw()
 {
-    return OUString( "com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter" );
+    return "com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter";
 }
 
 Reference< XInterface > XMLAutoTextEventImport_createInstance(

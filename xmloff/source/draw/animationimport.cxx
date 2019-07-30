@@ -95,7 +95,7 @@ Sequence< OUString > AnimationsImport_getSupportedServiceNames() throw()
 
 OUString AnimationsImport_getImplementationName() throw()
 {
-    return OUString( "xmloff::AnimationsImport" );
+    return "xmloff::AnimationsImport";
 }
 
 static OUString
