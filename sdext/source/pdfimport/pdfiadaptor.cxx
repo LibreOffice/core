@@ -198,7 +198,7 @@ void SAL_CALL PDFIHybridAdaptor::setTargetDocument( const uno::Reference< lang::
 
 OUString PDFIHybridAdaptor::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.documents.HybridPDFImport");
+    return "org.libreoffice.comp.documents.HybridPDFImport";
 }
 
 sal_Bool PDFIHybridAdaptor::supportsService(OUString const & ServiceName)
