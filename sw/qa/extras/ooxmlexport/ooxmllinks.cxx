@@ -216,6 +216,16 @@ DECLARE_LINKS_EXPORT_TEST(testAbsoluteToAbsoluteExport, "absolute-link.docx", US
     CPPUNIT_ASSERT(sTarget.endsWith("test.docx"));
 }
 
+DECLARE_LINKS_EXPORT_TEST(testTdf126590_export, "tdf126590.docx", USE_ABSOLUTE, DONT_MODIFY_LINK)
+{
+    xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    if (!pXmlDoc)
+        return;
+    // in the original file: Target="file:///C:\TEMP\test.docx" => invalid file URI
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
+                "file:///C:/TEMP/test.docx");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

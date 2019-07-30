@@ -4493,10 +4493,16 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                         if (!sURL.isEmpty())
                         {
+                            if (sURL.startsWith("file:///"))
+                            {
+                                // file:///absolute\path\to\file => invalid file URI (Writer cannot open)
+                                // convert all blackslashes to slashes:
+                                sURL = sURL.replace('\\', '/');
+                            }
                             // Try to make absolute any relative URLs, except
                             // for relative same-document URLs that only contain
                             // a fragment part:
-                            if (!sURL.startsWith("#") && !m_aSaveOpt.IsSaveRelFSys()) {
+                            else if (!sURL.startsWith("#") && !m_aSaveOpt.IsSaveRelFSys()) {
                                 try {
                                     sURL = rtl::Uri::convertRelToAbs(
                                         m_aBaseUrl, sURL);
