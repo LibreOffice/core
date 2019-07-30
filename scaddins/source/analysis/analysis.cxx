@@ -143,7 +143,7 @@ double AnalysisAddIn::FactDouble( sal_Int32 nNum )
 
 OUString AnalysisAddIn::getImplementationName_Static()
 {
-    return OUString( MY_IMPLNAME );
+    return MY_IMPLNAME;
 }
 
 uno::Sequence< OUString > AnalysisAddIn::getSupportedServiceNames_Static()
@@ -165,7 +165,7 @@ uno::Reference< uno::XInterface > AnalysisAddIn_CreateInstance(
 OUString SAL_CALL AnalysisAddIn::getServiceName()
 {
     // name of specific AddIn service
-    return OUString( MY_SERVICE );
+    return MY_SERVICE;
 }
 
 // XServiceInfo

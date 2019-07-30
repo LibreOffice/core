@@ -172,7 +172,7 @@ OUString ScaDateAddIn::GetFuncDescrStr(const char** pResId, sal_uInt16 nStrIndex
 
 OUString ScaDateAddIn::getImplementationName_Static()
 {
-    return OUString( MY_IMPLNAME );
+    return MY_IMPLNAME;
 }
 
 uno::Sequence< OUString > ScaDateAddIn::getSupportedServiceNames_Static()
@@ -188,7 +188,7 @@ uno::Sequence< OUString > ScaDateAddIn::getSupportedServiceNames_Static()
 OUString SAL_CALL ScaDateAddIn::getServiceName()
 {
     // name of specific AddIn service
-    return OUString( MY_SERVICE );
+    return MY_SERVICE;
 }
 
 // XServiceInfo
