@@ -34,7 +34,7 @@ namespace
 {
     OUString str_ac_singleton()
     {
-        return OUString("/singletons/com.sun.star.security.theAccessController");
+        return "/singletons/com.sun.star.security.theAccessController";
     }
 }
 

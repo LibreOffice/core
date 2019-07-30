@@ -894,8 +894,8 @@ void cppuhelper::ServiceManager::initialize(
 
 OUString cppuhelper::ServiceManager::getImplementationName()
 {
-    return OUString(
-        "com.sun.star.comp.cppuhelper.bootstrap.ServiceManager");
+    return
+        "com.sun.star.comp.cppuhelper.bootstrap.ServiceManager";
 }
 
 sal_Bool cppuhelper::ServiceManager::supportsService(

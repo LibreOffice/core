@@ -1886,8 +1886,8 @@ void cppuhelper::TypeManager::disposing() {} //TODO
 
 OUString cppuhelper::TypeManager::getImplementationName()
 {
-    return OUString(
-        "com.sun.star.comp.cppuhelper.bootstrap.TypeManager");
+    return
+        "com.sun.star.comp.cppuhelper.bootstrap.TypeManager";
 }
 
 sal_Bool cppuhelper::TypeManager::supportsService(
