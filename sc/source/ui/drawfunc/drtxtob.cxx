@@ -273,39 +273,13 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     bool bDone = false;
                     if (eMode == HLINK_DEFAULT || eMode == HLINK_FIELD)
                     {
-                        const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
-                        if (pFieldItem)
-                        {
-                            const SvxFieldData* pField = pFieldItem->GetField();
-                            if ( dynamic_cast<const SvxURLField*>( pField) )
-                            {
-                                //  select old field
-
-                                ESelection aSel = pOutView->GetSelection();
-                                aSel.Adjust();
-                                aSel.nEndPara = aSel.nStartPara;
-                                aSel.nEndPos = aSel.nStartPos + 1;
-                                pOutView->SetSelection( aSel );
-                            }
-                        }
+                        pOutView->GetFieldAtCursor();
 
                         //  insert new field
-
                         SvxURLField aURLField( rURL, rName, SvxURLFormat::Repr );
                         aURLField.SetTargetFrame( rTarget );
                         SvxFieldItem aURLItem( aURLField, EE_FEATURE_FIELD );
                         pOutView->InsertField( aURLItem );
-
-                        //  select new field
-
-                        ESelection aSel = pOutView->GetSelection();
-                        if ( aSel.nStartPos == aSel.nEndPos && aSel.nStartPos > 0 )
-                        {
-                            //  Cursor is behind the inserted field -> extend selection to the left
-
-                            --aSel.nStartPos;
-                            pOutView->SetSelection( aSel );
-                        }
 
                         bDone = true;
                     }
@@ -319,9 +293,8 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             break;
 
         case SID_OPEN_HYPERLINK:
-            if (const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection())
+            if (const SvxFieldData* pField = pOutView->GetFieldAtCursor())
             {
-                const SvxFieldData* pField = pFieldItem->GetField();
                 if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                 {
                     ScGlobal::OpenURL(pURLField->GetURL(), pURLField->GetTargetFrame(), true);
@@ -397,18 +370,15 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         if ( pOutView )
         {
             bool bField = false;
-            const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
-            if (pFieldItem)
+            const SvxFieldData* pField = pOutView->GetFieldAtCursor();
+            if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
             {
-                const SvxFieldData* pField = pFieldItem->GetField();
-                if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
-                {
-                    aHLinkItem.SetName( pURLField->GetRepresentation() );
-                    aHLinkItem.SetURL( pURLField->GetURL() );
-                    aHLinkItem.SetTargetFrame( pURLField->GetTargetFrame() );
-                    bField = true;
-                }
+                aHLinkItem.SetName( pURLField->GetRepresentation() );
+                aHLinkItem.SetURL( pURLField->GetURL() );
+                aHLinkItem.SetTargetFrame( pURLField->GetTargetFrame() );
+                bField = true;
             }
+
             if (!bField)
             {
                 // use selected text as name for urls
@@ -427,17 +397,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
     {
         SdrView* pView = pViewData->GetScDrawView();
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
-        bool bEnable = false;
-        if ( pOutView )
-        {
-            const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
-            if ( pFieldItem )
-            {
-                const SvxFieldData* pField = pFieldItem->GetField();
-                bEnable = dynamic_cast<const SvxURLField*>( pField) !=  nullptr;
-            }
-        }
-        if( !bEnable )
+        if( !URLFieldHelper::IsCursorAtURLField(pOutView) )
         {
             rSet.DisableItem( SID_OPEN_HYPERLINK );
             rSet.DisableItem( SID_EDIT_HYPERLINK );
