@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_01aa37d3",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmllinks.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-07-30T11:44:15Z",
+      "side": 1,
+      "message": "Is there value in having this as a separate test, rather than folding this into the below export test?\n\nIf there is, it would be good to document what is the intention of this test and that one.\n\nAlso, please document how the test failed without the fix. Is this absolute URL was a relative one? Was it an empty string? Something else?",
+      "revId": "977b82ed6ecbaefecdf3a28ddfa359f8ffd56cc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_e1a4e30a",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4516,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-07-30T11:44:15Z",
+      "side": 1,
+      "message": "Are you sure it\u0027s not possible to have relative URLs starting with file:///? I don\u0027t know.",
+      "revId": "977b82ed6ecbaefecdf3a28ddfa359f8ffd56cc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
