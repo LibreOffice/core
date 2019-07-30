@@ -52,7 +52,7 @@ public class _XTextContent extends MultiMethodTest {
     /**
      * Tries to get the anchor of the text content
      * an XTextRange is returned. <p>
-     * The test is OK if an not null text range is returned
+     * The test is OK if a not null text range is returned
      */
     public void _getAnchor() {
         log.println("getAnchor()");

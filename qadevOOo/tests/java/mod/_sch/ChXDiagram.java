@@ -338,7 +338,7 @@ public class ChXDiagram extends TestCase {
     } // finish method getTestEnvironment
 
     /**
-    * Inserts a value or a formula in the cell of the spreasheet.
+    * Inserts a value or a formula in the cell of the spreadsheet.
     * @param CellX is the column index of the cell
     * @param CellY is the row index of the cell
     * @param theValue string representation of the value
