@@ -26,6 +26,7 @@
 #include <set>
 #include <iterator>
 #include <algorithm>
+#include <atomic>
 
 #include <boost/optional.hpp>
 
@@ -243,12 +244,12 @@ public:
         Statement const& i_rStatement);
     static std::shared_ptr<Resource> extractResource_NoLock(
         const uno::Reference< rdf::XResource > & i_xResource);
-    static void extractResourceToCacheKey(
+    static void extractResourceToCacheKey_NoLock(
         const uno::Reference< rdf::XResource > & i_xResource,
         OUStringBuffer& rBuf);
     static std::shared_ptr<Node> extractNode_NoLock(
         const uno::Reference< rdf::XNode > & i_xNode);
-    static void extractNodeToCacheKey(
+    static void extractNodeToCacheKey_NoLock(
         const uno::Reference< rdf::XNode > & i_xNode,
         OUStringBuffer& rBuffer);
     static Statement extractStatement_NoLock(
@@ -550,7 +551,7 @@ public:
 private:
 
     std::vector<rdf::Statement> m_vStatements;
-    int m_nIndex = 0;
+    std::atomic<std::size_t> m_nIndex = 0;
 };
 
 
@@ -558,16 +559,19 @@ private:
 sal_Bool SAL_CALL
 librdf_GraphResult2::hasMoreElements()
 {
-    return m_nIndex < static_cast<int>(m_vStatements.size());
+    return m_nIndex < m_vStatements.size();
 }
 
 css::uno::Any SAL_CALL
 librdf_GraphResult2::nextElement()
 {
-    if (m_nIndex >= static_cast<int>(m_vStatements.size()))
+    std::size_t const n = m_nIndex++;
+    if (m_vStatements.size() < n)
+    {
+        m_nIndex = m_vStatements.size(); // avoid overflow
         throw container::NoSuchElementException();
-    m_nIndex++;
-    return uno::makeAny(m_vStatements[m_nIndex-1]);
+    }
+    return uno::makeAny(m_vStatements[n]);
 }
 
 /** result of tuple queries ("SELECT").
@@ -731,7 +735,7 @@ private:
     librdf_NamedGraph(librdf_NamedGraph const&) = delete;
     librdf_NamedGraph& operator=(librdf_NamedGraph const&) = delete;
 
-    static OUString createCacheKey(
+    static OUString createCacheKey_NoLock(
         const uno::Reference< rdf::XResource > & i_xSubject,
         const uno::Reference< rdf::XURI > & i_xPredicate,
         const uno::Reference< rdf::XNode > & i_xObject);
@@ -741,8 +745,9 @@ private:
     librdf_Repository *const m_pRep;
     uno::Reference< rdf::XURI > const m_xName;
 
-    // Querying is rather slow, so cache the results.
+    /// Querying is rather slow, so cache the results.
     std::map<OUString, std::vector<rdf::Statement>> m_aStatementsCache;
+    ::osl::Mutex m_CacheMutex;
 };
 
 
@@ -784,6 +789,7 @@ void SAL_CALL librdf_NamedGraph::clear()
         throw lang::WrappedTargetRuntimeException( ex.Message,
                         *this, anyEx );
     }
+    ::osl::MutexGuard g(m_CacheMutex);
     m_aStatementsCache.clear();
 }
 
@@ -797,7 +803,10 @@ void SAL_CALL librdf_NamedGraph::addStatement(
         throw rdf::RepositoryException(
             "librdf_NamedGraph::addStatement: repository is gone", *this);
     }
-    m_aStatementsCache.clear();
+    {
+        ::osl::MutexGuard g(m_CacheMutex);
+        m_aStatementsCache.clear();
+    }
     m_pRep->addStatementGraph_NoLock(
             i_xSubject, i_xPredicate, i_xObject, m_xName);
 }
@@ -812,22 +821,25 @@ void SAL_CALL librdf_NamedGraph::removeStatements(
         throw rdf::RepositoryException(
             "librdf_NamedGraph::removeStatements: repository is gone", *this);
     }
-    m_aStatementsCache.clear();
+    {
+        ::osl::MutexGuard g(m_CacheMutex);
+        m_aStatementsCache.clear();
+    }
     m_pRep->removeStatementsGraph_NoLock(
             i_xSubject, i_xPredicate, i_xObject, m_xName);
 }
 
-OUString librdf_NamedGraph::createCacheKey(
+OUString librdf_NamedGraph::createCacheKey_NoLock(
     const uno::Reference< rdf::XResource > & i_xSubject,
     const uno::Reference< rdf::XURI > & i_xPredicate,
     const uno::Reference< rdf::XNode > & i_xObject)
 {
     OUStringBuffer cacheKey(256);
-    librdf_TypeConverter::extractResourceToCacheKey(i_xSubject, cacheKey);
+    librdf_TypeConverter::extractResourceToCacheKey_NoLock(i_xSubject, cacheKey);
     cacheKey.append("\t");
-    librdf_TypeConverter::extractResourceToCacheKey(i_xPredicate, cacheKey);
+    librdf_TypeConverter::extractResourceToCacheKey_NoLock(i_xPredicate, cacheKey);
     cacheKey.append("\t");
-    librdf_TypeConverter::extractNodeToCacheKey(i_xObject, cacheKey);
+    librdf_TypeConverter::extractNodeToCacheKey_NoLock(i_xObject, cacheKey);
     return cacheKey.makeStringAndClear();
 }
 
@@ -837,10 +849,14 @@ librdf_NamedGraph::getStatements(
     const uno::Reference< rdf::XURI > & i_xPredicate,
     const uno::Reference< rdf::XNode > & i_xObject)
 {
-    OUString cacheKey = createCacheKey(i_xSubject, i_xPredicate, i_xObject);
-    auto it = m_aStatementsCache.find(cacheKey);
-    if (it != m_aStatementsCache.end())
-        return new librdf_GraphResult2(it->second);
+    OUString cacheKey = createCacheKey_NoLock(i_xSubject, i_xPredicate, i_xObject);
+    {
+        ::osl::MutexGuard g(m_CacheMutex);
+        auto it = m_aStatementsCache.find(cacheKey);
+        if (it != m_aStatementsCache.end()) {
+            return new librdf_GraphResult2(it->second);
+        }
+    }
 
     uno::Reference< rdf::XRepository > xRep( m_wRep );
     if (!xRep.is()) {
@@ -850,7 +866,10 @@ librdf_NamedGraph::getStatements(
     std::vector<rdf::Statement> vStatements = m_pRep->getStatementsGraph_NoLock(
             i_xSubject, i_xPredicate, i_xObject, m_xName);
 
-    m_aStatementsCache.emplace(cacheKey, vStatements);
+    {
+        ::osl::MutexGuard g(m_CacheMutex);
+        m_aStatementsCache.emplace(cacheKey, vStatements);
+    }
     return new librdf_GraphResult2(vStatements);
 }
 
@@ -2130,7 +2149,7 @@ librdf_TypeConverter::extractResource_NoLock(
 }
 
 void
-librdf_TypeConverter::extractResourceToCacheKey(
+librdf_TypeConverter::extractResourceToCacheKey_NoLock(
     const uno::Reference< rdf::XResource > & i_xResource, OUStringBuffer& rBuffer)
 {
     if (!i_xResource.is()) {
@@ -2213,7 +2232,7 @@ librdf_TypeConverter::extractNode_NoLock(
 
 // extract blank or URI or literal node - call without Mutex locked
 void
-librdf_TypeConverter::extractNodeToCacheKey(
+librdf_TypeConverter::extractNodeToCacheKey_NoLock(
     const uno::Reference< rdf::XNode > & i_xNode,
     OUStringBuffer& rBuffer)
 {
@@ -2222,7 +2241,7 @@ librdf_TypeConverter::extractNodeToCacheKey(
     }
     uno::Reference< rdf::XResource > xResource(i_xNode, uno::UNO_QUERY);
     if (xResource.is()) {
-        return extractResourceToCacheKey(xResource, rBuffer);
+        return extractResourceToCacheKey_NoLock(xResource, rBuffer);
     }
     uno::Reference< rdf::XLiteral> xLiteral(i_xNode, uno::UNO_QUERY);
     OSL_ENSURE(xLiteral.is(),
