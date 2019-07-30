@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkFrame" id="OptProxyPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -28,10 +27,10 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="optproxypage|label2">Proxy s_erver:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">proxymode</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -39,11 +38,12 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxNoSpaceEdit" id="http">
+              <object class="GtkEntry" id="http">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
+                <property name="activates_default">True</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -51,11 +51,12 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxNoSpaceEdit" id="https">
+              <object class="GtkEntry" id="https">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
+                <property name="activates_default">True</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -63,11 +64,12 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxNoSpaceEdit" id="ftp">
+              <object class="GtkEntry" id="ftp">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
+                <property name="activates_default">True</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -80,6 +82,7 @@
                 <property name="can_focus">True</property>
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
+                <property name="activates_default">True</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -87,13 +90,14 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxNoSpaceEdit" id="httpport">
+              <object class="GtkEntry" id="httpport">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="valign">center</property>
                 <property name="max_length">5</property>
+                <property name="activates_default">True</property>
                 <property name="width_chars">5</property>
-                <property name="only_numeric">True</property>
+                <property name="input_purpose">digits</property>
               </object>
               <packing>
                 <property name="left_attach">3</property>
@@ -101,13 +105,14 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxNoSpaceEdit" id="httpsport">
+              <object class="GtkEntry" id="httpsport">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="valign">center</property>
                 <property name="max_length">5</property>
+                <property name="activates_default">True</property>
                 <property name="width_chars">5</property>
-                <property name="only_numeric">True</property>
+                <property name="input_purpose">digits</property>
               </object>
               <packing>
                 <property name="left_attach">3</property>
@@ -115,13 +120,14 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxNoSpaceEdit" id="ftpport">
+              <object class="GtkEntry" id="ftpport">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="valign">center</property>
                 <property name="max_length">5</property>
+                <property name="activates_default">True</property>
                 <property name="width_chars">5</property>
-                <property name="only_numeric">True</property>
+                <property name="input_purpose">digits</property>
               </object>
               <packing>
                 <property name="left_attach">3</property>
@@ -148,10 +154,10 @@
               <object class="GtkLabel" id="httpft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="optproxypage|httpft">HT_TP proxy:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">http</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -175,10 +181,10 @@
               <object class="GtkLabel" id="httpsft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="optproxypage|httpsft">HTTP_S proxy:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">https</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -189,10 +195,10 @@
               <object class="GtkLabel" id="ftpft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="optproxypage|ftpft">_FTP proxy:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">ftp</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -203,10 +209,10 @@
               <object class="GtkLabel" id="noproxyft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="optproxypage|noproxyft">_No proxy for:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">noproxy</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -243,8 +249,8 @@
               <object class="GtkLabel" id="noproxydesc">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="optproxypage|noproxydesc">Separator ;</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>

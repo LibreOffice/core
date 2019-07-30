@@ -29,49 +29,31 @@ namespace svx {
     class SecurityOptionsDialog;
 }
 
-
-// class SvxNoSpaceEdit --------------------------------------------------
-
-class SvxNoSpaceEdit : public Edit
-{
-private:
-    bool bOnlyNumeric;
-public:
-    SvxNoSpaceEdit(vcl::Window* pParent, WinBits nStyle)
-        : Edit(pParent, nStyle)
-        , bOnlyNumeric(false)
-    {}
-    virtual void KeyInput(const KeyEvent& rKEvent) override;
-    virtual void Modify() override;
-    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
-};
-
 // class SvxProxyTabPage -------------------------------------------------
-
 class SvxProxyTabPage : public SfxTabPage
 {
 private:
 
-    VclPtr<ListBox>        m_pProxyModeLB;
+    std::unique_ptr<weld::ComboBox> m_xProxyModeLB;
 
-    VclPtr<FixedText>      m_pHttpProxyFT;
-    VclPtr<SvxNoSpaceEdit> m_pHttpProxyED;
-    VclPtr<FixedText>      m_pHttpPortFT;
-    VclPtr<SvxNoSpaceEdit> m_pHttpPortED;
+    std::unique_ptr<weld::Label> m_xHttpProxyFT;
+    std::unique_ptr<weld::Entry> m_xHttpProxyED;
+    std::unique_ptr<weld::Label> m_xHttpPortFT;
+    std::unique_ptr<weld::Entry> m_xHttpPortED;
 
-    VclPtr<FixedText>      m_pHttpsProxyFT;
-    VclPtr<SvxNoSpaceEdit> m_pHttpsProxyED;
-    VclPtr<FixedText>      m_pHttpsPortFT;
-    VclPtr<SvxNoSpaceEdit> m_pHttpsPortED;
+    std::unique_ptr<weld::Label> m_xHttpsProxyFT;
+    std::unique_ptr<weld::Entry> m_xHttpsProxyED;
+    std::unique_ptr<weld::Label> m_xHttpsPortFT;
+    std::unique_ptr<weld::Entry> m_xHttpsPortED;
 
-    VclPtr<FixedText>      m_pFtpProxyFT;
-    VclPtr<SvxNoSpaceEdit> m_pFtpProxyED;
-    VclPtr<FixedText>      m_pFtpPortFT;
-    VclPtr<SvxNoSpaceEdit> m_pFtpPortED;
+    std::unique_ptr<weld::Label> m_xFtpProxyFT;
+    std::unique_ptr<weld::Entry> m_xFtpProxyED;
+    std::unique_ptr<weld::Label> m_xFtpPortFT;
+    std::unique_ptr<weld::Entry> m_xFtpPortED;
 
-    VclPtr<FixedText>      m_pNoProxyForFT;
-    VclPtr<Edit>           m_pNoProxyForED;
-    VclPtr<FixedText>      m_pNoProxyDescFT;
+    std::unique_ptr<weld::Label> m_xNoProxyForFT;
+    std::unique_ptr<weld::Entry> m_xNoProxyForED;
+    std::unique_ptr<weld::Label> m_xNoProxyDescFT;
 
     css::uno::Reference< css::uno::XInterface > m_xConfigurationUpdateAccess;
 
@@ -80,13 +62,15 @@ private:
     void ReadConfigDefaults_Impl();
     void RestoreConfigDefaults_Impl();
 
-    DECL_LINK( ProxyHdl_Impl, ListBox&, void );
-    DECL_STATIC_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Control&, void );
+    DECL_LINK(PortChangedHdl, weld::Entry&, void);
+    DECL_STATIC_LINK(SvxProxyTabPage, NumberOnlyTextFilterHdl, OUString&, bool);
+    DECL_STATIC_LINK(SvxProxyTabPage, NoSpaceTextFilterHdl, OUString&, bool);
+    DECL_LINK(ProxyHdl_Impl, weld::ComboBox&, void);
+    DECL_STATIC_LINK(SvxProxyTabPage, LoseFocusHdl_Impl, weld::Widget&, void);
 
 public:
-    SvxProxyTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    SvxProxyTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxProxyTabPage() override;
-    virtual void dispose() override;
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
