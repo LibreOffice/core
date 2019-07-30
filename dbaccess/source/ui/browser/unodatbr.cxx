@@ -195,7 +195,7 @@ css::uno::Sequence<OUString> SAL_CALL SbaTableQueryBrowser::getSupportedServiceN
 
 OUString SbaTableQueryBrowser::getImplementationName_Static()
 {
-    return OUString("org.openoffice.comp.dbu.ODatasourceBrowser");
+    return "org.openoffice.comp.dbu.ODatasourceBrowser";
 }
 
 css::uno::Sequence<OUString> SbaTableQueryBrowser::getSupportedServiceNames_Static()
@@ -3438,7 +3438,7 @@ OUString SbaTableQueryBrowser::getContextMenuResourceName( Control& _rControl ) 
     if ( &m_pTreeView->getListBox() != &_rControl )
         return OUString();
 
-    return OUString("explorer");
+    return "explorer";
 }
 
 IController& SbaTableQueryBrowser::getCommandController()

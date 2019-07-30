@@ -60,7 +60,7 @@ OUString SAL_CALL ODBTypeWizDialog::getImplementationName()
 
 OUString ODBTypeWizDialog::getImplementationName_Static()
 {
-    return OUString("org.openoffice.comp.dbu.ODBTypeWizDialog");
+    return "org.openoffice.comp.dbu.ODBTypeWizDialog";
 }
 
 css::uno::Sequence<OUString> SAL_CALL ODBTypeWizDialog::getSupportedServiceNames()

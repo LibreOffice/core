@@ -73,7 +73,7 @@ void OCallableStatement::release() throw ()
 // XServiceInfo
 OUString OCallableStatement::getImplementationName(  )
 {
-    return OUString("com.sun.star.sdb.OCallableStatement");
+    return "com.sun.star.sdb.OCallableStatement";
 }
 
 Sequence< OUString > OCallableStatement::getSupportedServiceNames(  )

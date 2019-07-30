@@ -102,7 +102,7 @@ Any SAL_CALL OQueryComposer::queryInterface( const Type & rType )
 // XServiceInfo
 OUString OQueryComposer::getImplementationName(  )
 {
-    return OUString("com.sun.star.sdb.dbaccess.OQueryComposer");
+    return "com.sun.star.sdb.dbaccess.OQueryComposer";
 }
 
 sal_Bool OQueryComposer::supportsService( const OUString& _rServiceName )

@@ -159,10 +159,10 @@ namespace dbmm
         {
             switch ( _eType )
             {
-            case eBeanShell:    return OUString("beanshell");
-            case eJavaScript:   return OUString("javascript");
-            case ePython:       return OUString("python"); // TODO: is this correct?
-            case eJava:         return OUString("java");
+            case eBeanShell:    return "beanshell";
+            case eJavaScript:   return "javascript";
+            case ePython:       return "python"; // TODO: is this correct?
+            case eJava:         return "java";
             default:
                 break;
             }

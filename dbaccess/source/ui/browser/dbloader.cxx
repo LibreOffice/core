@@ -79,7 +79,7 @@ public:
     // static methods
     static OUString          getImplementationName_Static() throw(  )
     {
-        return OUString("org.openoffice.comp.dbu.DBContentLoader");
+        return "org.openoffice.comp.dbu.DBContentLoader";
     }
     static Sequence< OUString> getSupportedServiceNames_Static() throw(  );
     static css::uno::Reference< css::uno::XInterface >

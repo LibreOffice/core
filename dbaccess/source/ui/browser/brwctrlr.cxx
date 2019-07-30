@@ -431,7 +431,7 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setMode( const OUSt
 
 OUString SAL_CALL SbaXDataBrowserController::FormControllerImpl::getMode(  )
 {
-    return OUString( "DataMode" );
+    return "DataMode";
 }
 
 Sequence< OUString > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getSupportedModes(  )

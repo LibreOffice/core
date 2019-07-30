@@ -335,7 +335,7 @@ Reference<XSidebarProvider> SAL_CALL OGenericUnoController::getSidebar()
 
 OUString SAL_CALL OGenericUnoController::getViewControllerName()
 {
-    return OUString( "Default" );
+    return "Default";
 }
 
 Sequence< PropertyValue > SAL_CALL OGenericUnoController::getCreationArguments()

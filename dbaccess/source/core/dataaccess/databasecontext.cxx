@@ -206,7 +206,7 @@ ODatabaseContext::~ODatabaseContext()
 // Helper
 OUString ODatabaseContext::getImplementationName_static()
 {
-    return OUString("com.sun.star.comp.dba.ODatabaseContext");
+    return "com.sun.star.comp.dba.ODatabaseContext";
 }
 
 Reference< XInterface > ODatabaseContext::Create(const Reference< XComponentContext >& _rxContext)

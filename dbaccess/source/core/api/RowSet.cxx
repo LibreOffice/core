@@ -468,7 +468,7 @@ Any SAL_CALL ORowSet::queryAggregation( const Type& rType )
 // css::XServiceInfo
 OUString SAL_CALL ORowSet::getImplementationName()
 {
-    return OUString("com.sun.star.comp.dba.ORowSet");
+    return "com.sun.star.comp.dba.ORowSet";
 }
 
 sal_Bool SAL_CALL ORowSet::supportsService( const OUString& _rServiceName )
@@ -2866,7 +2866,7 @@ void ORowSetClone::release() throw()
 // XServiceInfo
 OUString ORowSetClone::getImplementationName(  )
 {
-    return OUString("com.sun.star.sdb.ORowSetClone");
+    return "com.sun.star.sdb.ORowSetClone";
 }
 
 sal_Bool ORowSetClone::supportsService( const OUString& _rServiceName )

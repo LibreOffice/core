@@ -61,7 +61,7 @@ OUString SAL_CALL OTableFilterDialog::getImplementationName()
 
 OUString OTableFilterDialog::getImplementationName_Static()
 {
-    return OUString("org.openoffice.comp.dbu.OTableFilterDialog");
+    return "org.openoffice.comp.dbu.OTableFilterDialog";
 }
 
 css::uno::Sequence<OUString> SAL_CALL OTableFilterDialog::getSupportedServiceNames()

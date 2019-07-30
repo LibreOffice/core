@@ -83,7 +83,7 @@ css::uno::Sequence<OUString> SAL_CALL SbaExternalSourceBrowser::getSupportedServ
 
 OUString SbaExternalSourceBrowser::getImplementationName_Static()
 {
-    return OUString("org.openoffice.comp.dbu.OFormGridView");
+    return "org.openoffice.comp.dbu.OFormGridView";
 }
 
 css::uno::Sequence<OUString> SbaExternalSourceBrowser::getSupportedServiceNames_Static()

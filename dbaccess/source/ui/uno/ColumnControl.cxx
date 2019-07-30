@@ -55,7 +55,7 @@ Reference< XInterface > OColumnControl::Create(const Reference< XMultiServiceFac
 
 OUString OColumnControl::GetComponentServiceName()
 {
-    return OUString("com.sun.star.sdb.ColumnDescriptorControl");
+    return "com.sun.star.sdb.ColumnDescriptorControl";
 }
 
 void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit*/, const Reference< XWindowPeer >& rParentPeer)

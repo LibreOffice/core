@@ -166,7 +166,7 @@ namespace
 
     OUString SAL_CALL DataAccessDescriptor::getImplementationName()
     {
-        return OUString( "com.sun.star.comp.dba.DataAccessDescriptor" );
+        return "com.sun.star.comp.dba.DataAccessDescriptor";
     }
 
     sal_Bool SAL_CALL DataAccessDescriptor::supportsService( const OUString& rServiceName )
@@ -219,7 +219,7 @@ namespace
 
     OUString SAL_CALL DataAccessDescriptorFactory::getImplementationName()
     {
-        return OUString( "com.sun.star.comp.dba.DataAccessDescriptorFactory" );
+        return "com.sun.star.comp.dba.DataAccessDescriptorFactory";
     }
 
     sal_Bool SAL_CALL DataAccessDescriptorFactory::supportsService( const OUString& rServiceName )

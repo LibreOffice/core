@@ -87,13 +87,13 @@ namespace dbaccess
             switch ( i_eType )
             {
             case FORM:
-                return OUString("form");
+                return "form";
             case REPORT:
-                return OUString("report");
+                return "report";
             case TABLE:
-                return OUString("table");
+                return "table";
             case QUERY:
-                return OUString("query");
+                return "query";
             default:
                 break;
             }
@@ -343,15 +343,15 @@ namespace dbaccess
         switch ( i_eType )
         {
         case FORM:
-            return OUString("forms");
+            return "forms";
         case REPORT:
-            return OUString("reports");
+            return "reports";
         case TABLE:
-            return OUString("tables");
+            return "tables";
         case QUERY:
-            return OUString("queries");
+            return "queries";
         case RELATION_DESIGN:
-            return OUString("relations");
+            return "relations";
         default:
             break;
         }

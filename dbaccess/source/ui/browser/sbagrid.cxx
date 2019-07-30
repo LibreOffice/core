@@ -132,7 +132,7 @@ OUString SAL_CALL SbaXGridControl::getImplementationName()
 
 OUString SbaXGridControl::getImplementationName_Static()
 {
-    return OUString("com.sun.star.comp.dbu.SbaXGridControl");
+    return "com.sun.star.comp.dbu.SbaXGridControl";
 }
 
 Sequence< OUString> SbaXGridControl::getSupportedServiceNames_Static()

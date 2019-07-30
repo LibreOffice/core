@@ -109,7 +109,7 @@ void OPreparedStatement::release() throw ()
 // XServiceInfo
 OUString OPreparedStatement::getImplementationName(  )
 {
-    return OUString("com.sun.star.sdb.OPreparedStatement");
+    return "com.sun.star.sdb.OPreparedStatement";
 }
 
 sal_Bool OPreparedStatement::supportsService( const OUString& _rServiceName )

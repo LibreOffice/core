@@ -60,7 +60,7 @@ namespace dbmm
 
     OUString MacroMigrationDialogService::getImplementationName_static()
     {
-        return OUString( "com.sun.star.comp.dbaccess.macromigration.MacroMigrationDialogService" );
+        return "com.sun.star.comp.dbaccess.macromigration.MacroMigrationDialogService";
     }
 
     Sequence< OUString > MacroMigrationDialogService::getSupportedServiceNames_static()

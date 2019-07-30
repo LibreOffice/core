@@ -335,7 +335,7 @@ void SAL_CALL OQueryContainer::disposing( const css::lang::EventObject& _rSource
 
 OUString OQueryContainer::determineContentType() const
 {
-    return OUString( "application/vnd.org.openoffice.DatabaseQueryContainer" );
+    return "application/vnd.org.openoffice.DatabaseQueryContainer";
 }
 
 Reference< XContent > OQueryContainer::implCreateWrapper(const OUString& _rName)

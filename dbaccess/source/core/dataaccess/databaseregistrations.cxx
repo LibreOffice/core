@@ -54,17 +54,17 @@ namespace dbaccess
 
     static OUString getConfigurationRootPath()
     {
-        return OUString("org.openoffice.Office.DataAccess/RegisteredNames");
+        return "org.openoffice.Office.DataAccess/RegisteredNames";
     }
 
     static OUString getLocationNodeName()
     {
-        return OUString("Location");
+        return "Location";
     }
 
     static OUString getNameNodeName()
     {
-        return OUString("Name");
+        return "Name";
     }
 
     // DatabaseRegistrations - declaration

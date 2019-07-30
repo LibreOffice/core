@@ -213,7 +213,7 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( )
 
 OUString SAL_CALL OQueryDescriptor_Base::getImplementationName(  )
 {
-    return OUString("com.sun.star.sdb.OQueryDescriptor");
+    return "com.sun.star.sdb.OQueryDescriptor";
 }
 
 sal_Bool SAL_CALL OQueryDescriptor_Base::supportsService( const OUString& _rServiceName )

@@ -113,7 +113,7 @@ namespace dbaui
         /// @throws RuntimeException
         static OUString getImplementationName_Static()
         {
-            return OUString("org.openoffice.comp.dbu.OViewDesign");
+            return "org.openoffice.comp.dbu.OViewDesign";
         }
         /// @throws RuntimeException
         static Sequence< OUString > getSupportedServiceNames_Static()
@@ -213,7 +213,7 @@ OUString SAL_CALL OQueryController::getImplementationName()
 
 OUString OQueryController::getImplementationName_Static()
 {
-    return OUString("org.openoffice.comp.dbu.OQueryDesign");
+    return "org.openoffice.comp.dbu.OQueryDesign";
 }
 
 Sequence< OUString> OQueryController::getSupportedServiceNames_Static()

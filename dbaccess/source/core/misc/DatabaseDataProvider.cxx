@@ -107,7 +107,7 @@ uno::Any DatabaseDataProvider::queryInterface(uno::Type const & type)
 
 OUString DatabaseDataProvider::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.dbaccess.DatabaseDataProvider");
+    return "com.sun.star.comp.dbaccess.DatabaseDataProvider";
 }
 
 // XServiceInfo

@@ -87,7 +87,7 @@ Reference< XInterface > SAL_CALL OCommandContainer::createInstance( )
 
 OUString OCommandContainer::determineContentType() const
 {
-    return OUString( "application/vnd.org.openoffice.DatabaseCommandDefinitionContainer" );
+    return "application/vnd.org.openoffice.DatabaseCommandDefinitionContainer";
 }
 
 }   // namespace dbaccess

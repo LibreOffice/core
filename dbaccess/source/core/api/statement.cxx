@@ -426,7 +426,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( OStatement, OStatementBase, OStatement_IFACE )
 // XServiceInfo
 OUString OStatement::getImplementationName(  )
 {
-    return OUString("com.sun.star.sdb.OStatement");
+    return "com.sun.star.sdb.OStatement";
 }
 
 sal_Bool OStatement::supportsService( const OUString& _rServiceName )

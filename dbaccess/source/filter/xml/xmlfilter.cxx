@@ -225,7 +225,7 @@ ODBFilter::~ODBFilter() throw()
 
 OUString ODBFilter::getImplementationName_Static()
 {
-    return OUString("com.sun.star.comp.sdb.DBFilter");
+    return "com.sun.star.comp.sdb.DBFilter";
 }
 
 

@@ -87,7 +87,7 @@ IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnDescriptor )
 // css::lang::XServiceInfo
 OUString OTableColumnDescriptor::getImplementationName(  )
 {
-    return OUString("com.sun.star.sdb.OTableColumnDescriptor");
+    return "com.sun.star.sdb.OTableColumnDescriptor";
 }
 
 Sequence< OUString > OTableColumnDescriptor::getSupportedServiceNames(  )
@@ -146,7 +146,7 @@ IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumn )
 
 OUString OTableColumn::getImplementationName(  )
 {
-    return OUString("com.sun.star.sdb.OTableColumn");
+    return "com.sun.star.sdb.OTableColumn";
 }
 
 ::cppu::IPropertyArrayHelper& SAL_CALL OTableColumn::getInfoHelper()
@@ -287,7 +287,7 @@ IMPLEMENT_GET_IMPLEMENTATION_ID( OQueryColumn )
 
 OUString SAL_CALL OQueryColumn::getImplementationName(  )
 {
-    return OUString( "org.openoffice.comp.dbaccess.OQueryColumn"  );
+    return "org.openoffice.comp.dbaccess.OQueryColumn";
 }
 
 ::cppu::IPropertyArrayHelper& SAL_CALL OQueryColumn::getInfoHelper()
@@ -433,7 +433,7 @@ IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnDescriptorWrapper )
 // css::lang::XServiceInfo
 OUString OTableColumnDescriptorWrapper::getImplementationName(  )
 {
-    return OUString("com.sun.star.sdb.OTableColumnDescriptorWrapper");
+    return "com.sun.star.sdb.OTableColumnDescriptorWrapper";
 }
 
 Sequence< OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  )
@@ -594,7 +594,7 @@ IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnWrapper )
 
 OUString OTableColumnWrapper::getImplementationName(  )
 {
-    return OUString("com.sun.star.sdb.OTableColumnWrapper" );
+    return "com.sun.star.sdb.OTableColumnWrapper";
 }
 
 Sequence< OUString > OTableColumnWrapper::getSupportedServiceNames(  )
