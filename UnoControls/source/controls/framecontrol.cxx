@@ -260,7 +260,7 @@ const Sequence< OUString > FrameControl::impl_getStaticSupportedServiceNames()
 
 const OUString FrameControl::impl_getStaticImplementationName()
 {
-    return OUString("stardiv.UnoControls.FrameControl");
+    return "stardiv.UnoControls.FrameControl";
 }
 
 //  OPropertySetHelper

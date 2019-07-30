@@ -530,7 +530,7 @@ const Sequence< OUString > ProgressMonitor::impl_getStaticSupportedServiceNames(
 //  impl but public method to register service
 const OUString ProgressMonitor::impl_getStaticImplementationName()
 {
-    return OUString("stardiv.UnoControls.ProgressMonitor");
+    return "stardiv.UnoControls.ProgressMonitor";
 }
 
 //  protected method
