@@ -4511,10 +4511,14 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                         if (!sURL.isEmpty())
                         {
+                            if (sURL.startsWith("file:///"))
+                            {
+                                sURL = sURL.replaceAll("\\", "/");
+                            }
                             // Try to make absolute any relative URLs, except
                             // for relative same-document URLs that only contain
                             // a fragment part:
-                            if (!sURL.startsWith("#")) {
+                            else if (!sURL.startsWith("#")) {
                                 try {
                                     sURL = rtl::Uri::convertRelToAbs(
                                         m_aBaseUrl, sURL);

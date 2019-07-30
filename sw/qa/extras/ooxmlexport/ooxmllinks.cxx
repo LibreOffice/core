@@ -181,6 +181,13 @@ DECLARE_LINKS_IMPORT_TEST(testTdf123627_import, "tdf123627.docx", USE_RELATIVE)
     CPPUNIT_ASSERT(sTarget.endsWith("New/test.docx"));
 }
 
+DECLARE_LINKS_IMPORT_TEST(testTdf126590_import, "tdf126590.docx", USE_ABSOLUTE)
+{
+    uno::Reference<text::XTextRange> xText = getRun(getParagraph(1), 1);
+    OUString sTarget = getProperty<OUString>(xText, "HyperLinkURL");
+    CPPUNIT_ASSERT_EQUAL(OUString("file:///C:/TEMP/test.docx"), sTarget);
+}
+
 /* EXPORT */
 
 DECLARE_LINKS_EXPORT_TEST(testRelativeToRelativeExport, "relative-link.docx", USE_RELATIVE,
@@ -238,6 +245,16 @@ DECLARE_LINKS_EXPORT_TEST(testTdf123627_export, "tdf123627.docx", USE_RELATIVE, 
     OUString sTarget = getXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]", "Target");
 //    CPPUNIT_ASSERT(!sTarget.startsWith("file:///"));
     CPPUNIT_ASSERT(sTarget.endsWith("New/test.docx"));
+}
+
+DECLARE_LINKS_EXPORT_TEST(testTdf126590_export, "tdf126590.docx", USE_ABSOLUTE, DONT_MODIFY_LINK)
+{
+    xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
+                "file:///C:/TEMP/test.docx");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
