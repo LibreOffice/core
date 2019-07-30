@@ -1401,7 +1401,7 @@ void FastSaxParser::setNamespaceHandler( const uno::Reference< css::xml::sax::XF
 
 OUString FastSaxParser::getImplementationName()
 {
-    return OUString("com.sun.star.comp.extensions.xml.sax.FastParser");
+    return "com.sun.star.comp.extensions.xml.sax.FastParser";
 }
 
 sal_Bool FastSaxParser::supportsService( const OUString& ServiceName )

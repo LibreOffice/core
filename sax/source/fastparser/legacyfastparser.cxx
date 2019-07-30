@@ -357,7 +357,7 @@ void SaxLegacyFastParser::setLocale( const Locale &locale )
 
 OUString SaxLegacyFastParser::getImplementationName()
 {
-    return OUString("com.sun.star.comp.extensions.xml.sax.LegacyFastParser");
+    return "com.sun.star.comp.extensions.xml.sax.LegacyFastParser";
 }
 
 sal_Bool SaxLegacyFastParser::supportsService(const OUString& ServiceName)

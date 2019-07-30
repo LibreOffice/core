@@ -427,12 +427,12 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
 
 static OUString getTrueString()
 {
-    return OUString( "true" );
+    return "true";
 }
 
 static OUString getFalseString()
 {
-    return OUString( "false" );
+    return "false";
 }
 
 /** convert string to boolean */
