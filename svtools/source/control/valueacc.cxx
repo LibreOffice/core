@@ -262,7 +262,7 @@ sal_Int16 SAL_CALL ValueSetAcc::getAccessibleRole()
 OUString SAL_CALL ValueSetAcc::getAccessibleDescription()
 {
     ThrowIfDisposed();
-    return OUString( "ValueSet" );
+    return "ValueSet";
 }
 
 

@@ -406,7 +406,7 @@ sal_Int16 SvDetachedEventDescriptor::getIndex(const SvMacroItemId nID) const
 
 OUString SvDetachedEventDescriptor::getImplementationName()
 {
-    return OUString("SvDetachedEventDescriptor");
+    return "SvDetachedEventDescriptor";
 }
 
 

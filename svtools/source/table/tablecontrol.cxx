@@ -383,7 +383,7 @@ namespace svt { namespace table
 
     OUString TableControl::GetRowDescription( sal_Int32) const
     {
-        return OUString( "row description" );
+        return "row description";
     }
 
 
@@ -397,7 +397,7 @@ namespace svt { namespace table
 
     OUString TableControl::GetColumnDescription( sal_uInt16) const
     {
-        return OUString( "col description" );
+        return "col description";
     }
 
 

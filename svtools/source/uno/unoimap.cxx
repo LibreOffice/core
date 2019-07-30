@@ -386,11 +386,11 @@ OUString SAL_CALL SvUnoImageMapObject::getImplementationName()
     {
     case IMAP_OBJ_POLYGON:
     default:
-        return OUString("org.openoffice.comp.svt.ImageMapPolygonObject");
+        return "org.openoffice.comp.svt.ImageMapPolygonObject";
     case IMAP_OBJ_CIRCLE:
-        return OUString("org.openoffice.comp.svt.ImageMapCircleObject");
+        return "org.openoffice.comp.svt.ImageMapCircleObject";
     case IMAP_OBJ_RECTANGLE:
-        return OUString("org.openoffice.comp.svt.ImageMapRectangleObject");
+        return "org.openoffice.comp.svt.ImageMapRectangleObject";
     }
 }
 
@@ -650,7 +650,7 @@ sal_Bool SAL_CALL SvUnoImageMap::hasElements(  )
 // XSerivceInfo
 OUString SAL_CALL SvUnoImageMap::getImplementationName(  )
 {
-    return OUString( "org.openoffice.comp.svt.SvUnoImageMap" );
+    return "org.openoffice.comp.svt.SvUnoImageMap";
 }
 
 sal_Bool SAL_CALL SvUnoImageMap::supportsService( const OUString& ServiceName )
