@@ -67,7 +67,7 @@ class OFormattedModel final
 
         // XServiceInfo
         OUString SAL_CALL getImplementationName() override
-        { return OUString("com.sun.star.form.OFormattedModel"); }
+        { return "com.sun.star.form.OFormattedModel"; }
 
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
@@ -148,7 +148,7 @@ class OFormattedModel final
 
         // css::lang::XServiceInfo
         OUString SAL_CALL getImplementationName() override
-        { return OUString("com.sun.star.form.OFormattedControl"); }
+        { return "com.sun.star.form.OFormattedControl"; }
 
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 

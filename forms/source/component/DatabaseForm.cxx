@@ -3696,7 +3696,7 @@ void SAL_CALL ODatabaseForm::propertyChange( const PropertyChangeEvent& evt )
 
 OUString SAL_CALL ODatabaseForm::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.forms.ODatabaseForm" );
+    return "com.sun.star.comp.forms.ODatabaseForm";
 }
 
 
@@ -3729,7 +3729,7 @@ const sal_uInt16 DONTAPPLYFILTER    = 0x0002;
 
 OUString ODatabaseForm::getServiceName()
 {
-    return OUString(FRM_COMPONENT_FORM);  // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_FORM;  // old (non-sun) name for compatibility !
 }
 
 void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutStream)

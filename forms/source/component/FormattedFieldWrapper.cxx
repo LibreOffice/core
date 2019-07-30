@@ -173,12 +173,12 @@ Any SAL_CALL OFormattedFieldWrapper::queryAggregation(const Type& _rType)
 OUString SAL_CALL OFormattedFieldWrapper::getServiceName()
 {
     // return the old compatibility name for an EditModel
-    return OUString(FRM_COMPONENT_EDIT);
+    return FRM_COMPONENT_EDIT;
 }
 
 OUString SAL_CALL OFormattedFieldWrapper::getImplementationName(  )
 {
-    return OUString("com.sun.star.comp.forms.OFormattedFieldWrapper_ForcedFormatted");
+    return "com.sun.star.comp.forms.OFormattedFieldWrapper_ForcedFormatted";
 }
 
 sal_Bool SAL_CALL OFormattedFieldWrapper::supportsService( const OUString& _rServiceName )

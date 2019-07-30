@@ -335,7 +335,7 @@ Sequence< Type > OFormattedModel::_getTypes()
 // XPersistObject
 OUString SAL_CALL OFormattedModel::getServiceName()
 {
-    return OUString(FRM_COMPONENT_EDIT);
+    return FRM_COMPONENT_EDIT;
 }
 
 // XPropertySet

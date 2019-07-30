@@ -158,7 +158,7 @@ namespace frm
 
     OUString SAL_CALL FormOperations::getImplementationName(  )
     {
-        return OUString( "com.sun.star.comp.forms.FormOperations" );
+        return "com.sun.star.comp.forms.FormOperations";
     }
 
     sal_Bool SAL_CALL FormOperations::supportsService( const OUString& ServiceName )

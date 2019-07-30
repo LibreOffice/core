@@ -33,7 +33,7 @@ using namespace ::com::sun::star::util;
 
 OUString SAL_CALL OFormsCollection::getServiceName()
 {
-    return OUString("com.sun.star.form.Forms");
+    return "com.sun.star.form.Forms";
 }
 
 Sequence< sal_Int8 > SAL_CALL OFormsCollection::getImplementationId(  )
@@ -85,7 +85,7 @@ Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType)
 
 OUString SAL_CALL OFormsCollection::getImplementationName()
 {
-    return OUString("com.sun.star.form.OFormsCollection");
+    return "com.sun.star.form.OFormsCollection";
 }
 
 sal_Bool SAL_CALL OFormsCollection::supportsService( const OUString& _rServiceName )

@@ -62,7 +62,7 @@ namespace frm
 
     OUString SAL_CALL OSpinButtonModel::getImplementationName()
     {
-        return OUString( "com.sun.star.comp.forms.OSpinButtonModel" );
+        return "com.sun.star.comp.forms.OSpinButtonModel";
     }
 
         // note that we're passing OControlModel as "base class". This is because
@@ -185,7 +185,7 @@ namespace frm
 
     OUString SAL_CALL OSpinButtonModel::getServiceName()
     {
-        return OUString(FRM_SUN_COMPONENT_SPINBUTTON);
+        return FRM_SUN_COMPONENT_SPINBUTTON;
     }
 
 

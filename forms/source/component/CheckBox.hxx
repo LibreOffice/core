@@ -35,7 +35,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override
-    { return OUString("com.sun.star.form.OCheckBoxModel"); }
+    { return "com.sun.star.form.OCheckBoxModel"; }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
@@ -66,7 +66,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override
-    { return OUString("com.sun.star.form.OCheckBoxControl"); }
+    { return "com.sun.star.form.OCheckBoxControl"; }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
