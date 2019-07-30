@@ -28,6 +28,30 @@ struct Foo2 {
     void foo(OString const &) const {}
 };
 
+OString ret1() {
+    return OString("foo"); // expected-error {{elide constructor call [loplugin:stringconstant]}}
+}
+
+OString const ret2() {
+    return OString("foo"); // expected-error {{elide constructor call [loplugin:stringconstant]}}
+}
+
+auto ret3() {
+    return OString("foo");
+}
+
+OUString ret4() {
+    return OUString("foo"); // expected-error {{elide constructor call [loplugin:stringconstant]}}
+}
+
+OUString const ret5() {
+    return OUString("foo"); // expected-error {{elide constructor call [loplugin:stringconstant]}}
+}
+
+auto ret6() {
+    return OUString("foo");
+}
+
 int main() {
     char const s1[] = "foo";
     char const * const s2 = "foo";
