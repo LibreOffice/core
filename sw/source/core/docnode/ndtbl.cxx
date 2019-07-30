@@ -538,6 +538,9 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
             aNdIdx += 3; // StartNode, TextNode, EndNode  == 3 Nodes
         }
     }
+
+    if( pTAFormat ) rNdTable.SetTableStyleName(pTAFormat->GetName());
+
     // Insert Frames
     GetNodes().GoNext( &aNdIdx ); // Go to the next ContentNode
     pTableNd->MakeOwnFrames( &aNdIdx );
