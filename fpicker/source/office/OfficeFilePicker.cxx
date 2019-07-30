@@ -1080,7 +1080,7 @@ Sequence< OUString > SvtFilePicker::impl_getStaticSupportedServiceNames()
 /* Helper for XServiceInfo */
 OUString SvtFilePicker::impl_getStaticImplementationName()
 {
-    return OUString( "com.sun.star.svtools.OfficeFilePicker" );
+    return "com.sun.star.svtools.OfficeFilePicker";
 }
 
 /* Helper for registry */
@@ -1144,7 +1144,7 @@ Sequence< OUString > SvtRemoteFilePicker::impl_getStaticSupportedServiceNames()
 /* Helper for XServiceInfo */
 OUString SvtRemoteFilePicker::impl_getStaticImplementationName()
 {
-    return OUString( "com.sun.star.svtools.RemoteFilePicker" );
+    return "com.sun.star.svtools.RemoteFilePicker";
 }
 
 /* Helper for registry */

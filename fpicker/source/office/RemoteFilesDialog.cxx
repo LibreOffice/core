@@ -417,30 +417,30 @@ static OUString lcl_GetServiceType( const ServicePtr& pService )
     switch( aProtocol )
     {
         case INetProtocol::Ftp:
-            return OUString( "FTP" );
+            return "FTP";
         case INetProtocol::Cmis:
         {
             OUString sHost = pService->GetUrlObject().GetHost( INetURLObject::DecodeMechanism::WithCharset );
 
             if( sHost.startsWith( GDRIVE_BASE_URL ) )
-                return OUString( "Google Drive" );
+                return "Google Drive";
             else if( sHost.startsWith( ALFRESCO_CLOUD_BASE_URL ) )
-                return OUString( "Alfresco Cloud" );
+                return "Alfresco Cloud";
             else if( sHost.startsWith( ONEDRIVE_BASE_URL ) )
-                return OUString( "OneDrive" );
+                return "OneDrive";
 
-            return OUString( "CMIS" );
+            return "CMIS";
         }
         case INetProtocol::Smb:
-            return OUString( "Windows Share" );
+            return "Windows Share";
         case INetProtocol::File:
-            return OUString( "SSH" );
+            return "SSH";
         case INetProtocol::Http:
-            return OUString( "WebDAV" );
+            return "WebDAV";
         case INetProtocol::Https:
-            return OUString( "WebDAV" );
+            return "WebDAV";
         case INetProtocol::Generic:
-            return OUString( "SSH" );
+            return "SSH";
         default:
             return OUString();
     }
