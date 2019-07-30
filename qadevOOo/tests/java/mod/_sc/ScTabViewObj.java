@@ -211,11 +211,11 @@ public class ScTabViewObj extends TestCase {
                 try {
                     myForm = (XForm) AnyConverter.toObject(new Type(XForm.class),xForm.getByName("Standard"));
                 } catch (WrappedTargetException ex) {
-                    log.println("ERROR: could not XFormm 'Standard': " + ex.toString());
+                    log.println("ERROR: could not XForm 'Standard': " + ex.toString());
                 } catch (com.sun.star.lang.IllegalArgumentException ex) {
-                    log.println("ERROR: could not XFormm 'Standard': " + ex.toString());
+                    log.println("ERROR: could not XForm 'Standard': " + ex.toString());
                 } catch (NoSuchElementException ex) {
-                    log.println("ERROR: could not XFormm 'Standard': " + ex.toString());
+                    log.println("ERROR: could not XForm 'Standard': " + ex.toString());
                 }
                 if (myForm == null)
                     log.println("ERROR: could not get XForm: null");

@@ -116,7 +116,7 @@ public class ModuleManager extends TestCase {
         XFrame xDrawFrame = xDrawController.getFrame();
 
         // get impress interfaces
-        log.println("creating a impress document");
+        log.println("creating an impress document");
         xImpressDoc = SOF.createImpressDoc(null);
         XModel xImpressMode1 = UnoRuntime.queryInterface(XModel.class,
                                                        xImpressDoc);

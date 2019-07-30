@@ -67,7 +67,7 @@ public class _XTextRangeCompare extends MultiMethodTest {
     /**
      * Retrieves <code>XText</code> interface from relation 'TEXTDOC'
      * or from 'TEXT'.
-     * @throws StatusException If neither 'TEXTDOC' nore 'TEXT'
+     * @throws StatusException If neither 'TEXTDOC' nor 'TEXT'
      * relation exists.
      */
     @Override
@@ -87,7 +87,7 @@ public class _XTextRangeCompare extends MultiMethodTest {
 
         if (oText == null) {
             throw new StatusException(Status.failed
-                ("Neither 'TEXTDOC' nore 'TEXT' relation not found")) ;
+                ("Neither 'TEXTDOC' nor 'TEXT' relation not found")) ;
         }
     }
 
