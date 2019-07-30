@@ -1218,7 +1218,7 @@ private:
 
 OUString ColorPicker_getImplementationName()
 {
-    return OUString( "com.sun.star.cui.ColorPicker" );
+    return "com.sun.star.cui.ColorPicker";
 }
 
 Reference< XInterface > ColorPicker_createInstance( Reference< XComponentContext > const & )

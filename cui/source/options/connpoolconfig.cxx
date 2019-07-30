@@ -40,37 +40,37 @@ namespace offapp
 
     static OUString getConnectionPoolNodeName()
     {
-        return OUString("org.openoffice.Office.DataAccess/ConnectionPool" );
+        return "org.openoffice.Office.DataAccess/ConnectionPool";
     }
 
 
     static OUString getEnablePoolingNodeName()
     {
-        return OUString("EnablePooling");
+        return "EnablePooling";
     }
 
 
     static OUString getDriverSettingsNodeName()
     {
-        return OUString("DriverSettings");
+        return "DriverSettings";
     }
 
 
     static OUString getDriverNameNodeName()
     {
-        return OUString("DriverName");
+        return "DriverName";
     }
 
 
     static OUString getEnableNodeName()
     {
-        return OUString("Enable");
+        return "Enable";
     }
 
 
     static OUString getTimeoutNodeName()
     {
-        return OUString("Timeout");
+        return "Timeout";
     }
 
     void ConnectionPoolConfig::GetOptions(SfxItemSet& _rFillItems)
