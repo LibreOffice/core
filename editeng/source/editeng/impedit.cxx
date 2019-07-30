@@ -31,6 +31,7 @@
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#include <comphelper/lok.hxx>
 #include <editeng/flditem.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/inputctx.hxx>
@@ -411,7 +412,10 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
             OString sRectangle;
             // If we are not in selection mode, then the exported own selection should be empty.
-            if (pEditEngine->pImpEditEngine->IsInSelectionMode() || mpOtherShell)
+            // This is needed always in Online, regardless whether in "selection mode" (whatever
+            // that is) or not, for tdf#125568, but I don't have the clout to make this completely
+            // unconditional also for desktop LO.
+            if (comphelper::LibreOfficeKit::isActive() || pEditEngine->pImpEditEngine->IsInSelectionMode() || mpOtherShell)
             {
                 std::vector<tools::Rectangle> aRectangles;
                 pRegion->GetRegionRectangles(aRectangles);
