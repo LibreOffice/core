@@ -385,7 +385,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
 
 OUString PDFDetector::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.documents.PDFDetector");
+    return "org.libreoffice.comp.documents.PDFDetector";
 }
 
 sal_Bool PDFDetector::supportsService(OUString const & ServiceName)

@@ -36,7 +36,7 @@ SaxAttrList::SaxAttrList( const std::unordered_map< OUString, OUString >& rMap )
 namespace {
     OUString getCDATAString()
     {
-        return OUString( "CDATA" );
+        return "CDATA";
     }
 }
 

@@ -92,7 +92,7 @@ namespace {
 
 OUString PresenterScreenJob::getImplementationName_static()
 {
-    return OUString("org.libreoffice.comp.PresenterScreenJob");
+    return "org.libreoffice.comp.PresenterScreenJob";
 }
 
 Sequence<OUString> PresenterScreenJob::getSupportedServiceNames_static()

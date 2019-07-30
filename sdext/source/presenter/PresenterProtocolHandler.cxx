@@ -229,7 +229,7 @@ private:
 
 OUString PresenterProtocolHandler::getImplementationName_static()
 {
-    return OUString("org.libreoffice.comp.PresenterScreenProtocolHandler");
+    return "org.libreoffice.comp.PresenterScreenProtocolHandler";
 }
 
 Sequence<OUString> PresenterProtocolHandler::getSupportedServiceNames_static()

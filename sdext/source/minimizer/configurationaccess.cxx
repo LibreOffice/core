@@ -37,7 +37,7 @@ using namespace ::com::sun::star::container;
 
 static OUString GetPathToConfigurationRoot()
 {
-    return OUString("org.openoffice.Office.PresentationMinimizer");
+    return "org.openoffice.Office.PresentationMinimizer";
 }
 
 void OptimizerSettings::LoadSettingsFromConfiguration( const Reference< XNameAccess >& rSettings )
