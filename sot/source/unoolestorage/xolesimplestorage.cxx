@@ -677,7 +677,7 @@ void SAL_CALL OLESimpleStorage::setClassInfo( const uno::Sequence< sal_Int8 >& /
 //  XServiceInfo
 OUString SAL_CALL OLESimpleStorage::getImplementationName()
 {
-    return OUString("com.sun.star.comp.embed.OLESimpleStorage");
+    return "com.sun.star.comp.embed.OLESimpleStorage";
 }
 
 sal_Bool SAL_CALL OLESimpleStorage::supportsService( const OUString& ServiceName )
