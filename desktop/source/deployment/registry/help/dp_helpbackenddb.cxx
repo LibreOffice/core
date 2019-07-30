@@ -50,22 +50,22 @@ HelpBackendDb::HelpBackendDb(
 
 OUString HelpBackendDb::getDbNSName()
 {
-    return OUString(EXTENSION_REG_NS);
+    return EXTENSION_REG_NS;
 }
 
 OUString HelpBackendDb::getNSPrefix()
 {
-    return OUString(NS_PREFIX);
+    return NS_PREFIX;
 }
 
 OUString HelpBackendDb::getRootElementName()
 {
-    return OUString(ROOT_ELEMENT_NAME);
+    return ROOT_ELEMENT_NAME;
 }
 
 OUString HelpBackendDb::getKeyElementName()
 {
-    return OUString(KEY_ELEMENT_NAME);
+    return KEY_ELEMENT_NAME;
 }
 
 

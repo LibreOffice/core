@@ -140,7 +140,7 @@ uno::Reference< uno::XInterface > UnxSplash_createInstance(const uno::Reference<
 
 OUString UnxSplash_getImplementationName()
 {
-    return OUString( "com.sun.star.office.comp.PipeSplashScreen" );
+    return "com.sun.star.office.comp.PipeSplashScreen";
 }
 
 uno::Sequence< OUString > UnxSplash_getSupportedServiceNames() throw()

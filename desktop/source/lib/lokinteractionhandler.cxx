@@ -64,7 +64,7 @@ LOKInteractionHandler::~LOKInteractionHandler()
 
 OUString SAL_CALL LOKInteractionHandler::getImplementationName()
 {
-    return OUString("com.sun.star.comp.uui.LOKInteractionHandler");
+    return "com.sun.star.comp.uui.LOKInteractionHandler";
 }
 
 sal_Bool SAL_CALL LOKInteractionHandler::supportsService(OUString const & rServiceName)

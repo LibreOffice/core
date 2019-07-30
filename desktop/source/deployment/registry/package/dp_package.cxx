@@ -304,7 +304,7 @@ void BackendImpl::disposing()
 // XServiceInfo
 OUString BackendImpl::getImplementationName()
 {
-    return OUString("com.sun.star.comp.deployment.bundle.PackageRegistryBackend");
+    return "com.sun.star.comp.deployment.bundle.PackageRegistryBackend";
 }
 
 sal_Bool BackendImpl::supportsService(OUString const & ServiceName)

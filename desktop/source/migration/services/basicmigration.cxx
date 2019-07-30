@@ -41,7 +41,7 @@ namespace migration
 
     OUString BasicMigration_getImplementationName()
     {
-        return OUString("com.sun.star.comp.desktop.migration.Basic");
+        return "com.sun.star.comp.desktop.migration.Basic";
     }
 
 

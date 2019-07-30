@@ -49,22 +49,22 @@ ExtensionBackendDb::ExtensionBackendDb(
 
 OUString ExtensionBackendDb::getDbNSName()
 {
-    return OUString(EXTENSION_REG_NS);
+    return EXTENSION_REG_NS;
 }
 
 OUString ExtensionBackendDb::getNSPrefix()
 {
-    return OUString(NS_PREFIX);
+    return NS_PREFIX;
 }
 
 OUString ExtensionBackendDb::getRootElementName()
 {
-    return OUString(ROOT_ELEMENT_NAME);
+    return ROOT_ELEMENT_NAME;
 }
 
 OUString ExtensionBackendDb::getKeyElementName()
 {
-    return OUString(KEY_ELEMENT_NAME);
+    return KEY_ELEMENT_NAME;
 }
 
 void ExtensionBackendDb::addEntry(OUString const & url, Data const & data)

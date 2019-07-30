@@ -641,7 +641,7 @@ css::uno::Reference< css::uno::XInterface > desktop::splash::create(
 }
 
 OUString desktop::splash::getImplementationName() {
-    return OUString("com.sun.star.office.comp.SplashScreen");
+    return "com.sun.star.office.comp.SplashScreen";
 }
 
 css::uno::Sequence< OUString > desktop::splash::getSupportedServiceNames()

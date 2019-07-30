@@ -50,22 +50,22 @@ ComponentBackendDb::ComponentBackendDb(
 
 OUString ComponentBackendDb::getDbNSName()
 {
-    return OUString(EXTENSION_REG_NS);
+    return EXTENSION_REG_NS;
 }
 
 OUString ComponentBackendDb::getNSPrefix()
 {
-    return OUString(NS_PREFIX);
+    return NS_PREFIX;
 }
 
 OUString ComponentBackendDb::getRootElementName()
 {
-    return OUString(ROOT_ELEMENT_NAME);
+    return ROOT_ELEMENT_NAME;
 }
 
 OUString ComponentBackendDb::getKeyElementName()
 {
-    return OUString(KEY_ELEMENT_NAME);
+    return KEY_ELEMENT_NAME;
 }
 
 void ComponentBackendDb::addEntry(OUString const & url, Data const & data)

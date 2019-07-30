@@ -147,7 +147,7 @@ JavaMigration::~JavaMigration()
 
 OUString jvmfwk_getImplementationName()
 {
-    return OUString(IMPL_NAME);
+    return IMPL_NAME;
 }
 
 css::uno::Sequence< OUString > jvmfwk_getSupportedServiceNames()
