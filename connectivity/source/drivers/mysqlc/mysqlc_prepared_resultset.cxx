@@ -314,7 +314,10 @@ template <> DateTime OPreparedResultSet::retrieveValue(sal_Int32 column)
 
 template <> OUString OPreparedResultSet::retrieveValue(sal_Int32 column)
 {
-    if (getTypeFromMysqlType(m_aFields[column - 1].type) != std::type_index(typeid(OUString)))
+    // redirect call to the appropiate method if needed
+    // BLOB can be simply read out as string
+    if (getTypeFromMysqlType(m_aFields[column - 1].type) != std::type_index(typeid(OUString))
+        && m_aFields[column - 1].type != MYSQL_TYPE_BLOB)
         return getRowSetValue(column);
     const char* sStr = static_cast<const char*>(m_aData[column - 1].buffer);
 
@@ -352,6 +355,9 @@ ORowSetValue OPreparedResultSet::getRowSetValue(sal_Int32 nColumnIndex)
         case MYSQL_TYPE_DECIMAL:
         case MYSQL_TYPE_NEWDECIMAL:
             return getString(nColumnIndex);
+        case MYSQL_TYPE_BLOB:
+            throw SQLException("Column with type BLOB cannot be converted", *this, OUString(), 1,
+                               Any());
         default:
             SAL_WARN("connectivity.mysqlc", "OPreparedResultSet::getRowSetValue: unknown type: "
                                                 << m_aFields[nColumnIndex - 1].type);
