@@ -210,12 +210,14 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
                         &SvtFilterOptions::SetSmartArt2Shape },
     };
 
-    bool bCheck, bFirst = true;
+    bool bFirstCol = true;
     for( const ChkCBoxEntries & rEntry : aChkArr )
     {
-        sal_uInt16 nCol = bFirst ? 1 : 2;
-        if (bFirst)
-            bFirst = false;
+        // we loop through the list, alternating reading the first/second column,
+        // each row appears twice in the list (except for smartart, which is import
+        // only
+        sal_uInt16 nCol = bFirstCol ? 1 : 2;
+        bFirstCol = !bFirstCol;
         SvTreeListEntry* pEntry = GetEntry4Type( rEntry.eType );
         if( pEntry )
         {
@@ -223,7 +225,7 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
             if (rItem.GetType() == SvLBoxItemType::Button)
             {
                 SvItemStateFlags nButtonFlags = rItem.GetButtonFlags();
-                bCheck = SvButtonState::Checked ==
+                bool bCheck = SvButtonState::Checked ==
                         SvLBoxButtonData::ConvertToButtonState( nButtonFlags );
 
                 if( bCheck != (rOpt.*rEntry.FnIs)() )
@@ -283,12 +285,14 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
         { MSFltrPg2_CheckBoxEntries::SmartArt, &SvtFilterOptions::IsSmartArt2Shape },
     };
 
-    bool bFirst = true;
+    bool bFirstCol = true;
     for( const ChkCBoxEntries & rArr : aChkArr )
     {
-        sal_uInt16 nCol = bFirst ? 1 : 2;
-        if (bFirst)
-            bFirst = false;
+        // we loop through the list, alternating reading the first/second column,
+        // each row appears twice in the list (except for smartart, which is import
+        // only
+        sal_uInt16 nCol = bFirstCol ? 1 : 2;
+        bFirstCol = !bFirstCol;
         SvTreeListEntry* pEntry = GetEntry4Type( rArr.eType );
         if( pEntry )
         {
