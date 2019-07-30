@@ -218,6 +218,7 @@ bool SalDisplay::BestVisual( Display     *pDisplay,
     if( nVID && sal_GetVisualInfo( pDisplay, nVID, rVI ) )
         return rVI.visualid == nDefVID;
 
+// TODO skia
     bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled();
     if (bUseOpenGL && BestOpenGLVisual(pDisplay, nScreen, rVI))
         return rVI.visualid == nDefVID;

@@ -568,6 +568,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/opengl/LineRenderUtils \
     vcl/source/opengl/OpenGLContext \
     vcl/source/opengl/OpenGLHelper \
+    vcl/source/skia/SkiaHelper \
  ))
 
 # runtime dependency

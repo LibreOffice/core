@@ -58,6 +58,7 @@ $(eval $(call gb_Library_use_externals,vclplug_gen,\
 	icuuc \
 	valgrind \
 	Xrender \
+	skia \
 ))
 
 $(eval $(call gb_Library_add_libs,vclplug_gen,\

@@ -47,6 +47,8 @@
 #include <o3tl/safeint.hxx>
 #include <opengl/salbmp.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include <skia/salbmp.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #if defined HAVE_VALGRIND_HEADERS
 #include <valgrind/memcheck.h>
@@ -57,7 +59,9 @@
 
 std::shared_ptr<SalBitmap> X11SalInstance::CreateSalBitmap()
 {
-    if (OpenGLHelper::isVCLOpenGLEnabled())
+    if (SkiaHelper::isVCLSkiaEnabled())
+        return std::make_shared<SkiaSalBitmap>();
+    else if (OpenGLHelper::isVCLOpenGLEnabled())
         return std::make_shared<OpenGLSalBitmap>();
     else
         return std::make_shared<X11SalBitmap>();

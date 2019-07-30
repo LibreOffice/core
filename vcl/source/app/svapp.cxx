@@ -1149,6 +1149,7 @@ OUString Application::GetHWOSConfInfo()
     aDetails.append( "; " );
 
     aDetails.append( VclResId(SV_APP_UIRENDER) );
+// TODO skia
 #if HAVE_FEATURE_OPENGL
     if ( OpenGLWrapper::isVCLOpenGLEnabled() )
         aDetails.append( VclResId(SV_APP_GL) );
