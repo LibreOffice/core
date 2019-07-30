@@ -55,9 +55,9 @@ void SvTabListBox::SetTabs()
 
     // Picking the rightmost tab.
     // HACK for the explorer! If ViewParent != 0, the first tab of the tree
-    // listbox is calculated by the tre listbox itself! This behavior is
+    // listbox is calculated by the tree listbox itself! This behavior is
     // necessary for ButtonsOnRoot, as the explorer does not know in this
-    // case, which additional offset it need to add to the tabs in this mode
+    // case, which additional offset it needs to add to the tabs in this mode
     // -- the tree listbox knows that, though!
     /*
     if( !pViewParent )

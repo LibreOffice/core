@@ -1976,7 +1976,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                                                 : rRenderContext.GetSettings().GetStyleSettings().GetMenuColor();
                         rRenderContext.SetBackground(Wallpaper(aBg));
                     }
-                    // how much space is there for the text ?
+                    // how much space is there for the text?
                     long nMaxItemTextWidth = aOutSz.Width() - aTmpPos.X() - nExtra - nOuterSpaceX;
                     if (!IsMenuBar() && pData->aAccelKey.GetCode() && !ImplAccelDisabled())
                     {

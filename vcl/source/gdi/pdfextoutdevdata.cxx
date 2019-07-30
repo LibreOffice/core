@@ -393,7 +393,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
             case PDFExtOutDevDataSync::BeginGroup :
             {
                 /* first determining if this BeginGroup is starting a GfxLink,
-                   by searching for a EndGroup or a EndGroupGfxLink */
+                   by searching for an EndGroup or an EndGroupGfxLink */
                 mbGroupIgnoreGDIMtfActions = false;
                 auto isStartingGfxLink = std::any_of(mActions.begin(), mActions.end(),
                     [](const PDFExtOutDevDataSync& rAction) { return rAction.eAct == PDFExtOutDevDataSync::EndGroupGfxLink; });

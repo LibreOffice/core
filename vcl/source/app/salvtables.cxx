@@ -679,7 +679,7 @@ public:
 
     virtual VclPtr<VirtualDevice> create_virtual_device() const override
     {
-        // create with (annoying) seperate alpha layer that LibreOffice itself uses
+        // create with (annoying) separate alpha layer that LibreOffice itself uses
         return VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
     }
 

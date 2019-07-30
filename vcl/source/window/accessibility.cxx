@@ -241,7 +241,7 @@ sal_uInt16 Window::GetAccessibleChildWindowCount()
 
 vcl::Window* Window::GetAccessibleChildWindow( sal_uInt16 n )
 {
-    // report the menubarwindow as a the first child of THE workwindow
+    // report the menubarwindow as the first child of THE workwindow
     if( GetType() == WindowType::WORKWINDOW && static_cast<WorkWindow *>(this)->GetMenuBar() )
     {
         if( n == 0 )

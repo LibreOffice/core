@@ -853,7 +853,7 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
             aFont.SetFamilyName( aName );
         }
 
-        // No Name, than set all names
+        // No Name, then set all names
         if ( aFont.GetFamilyName().isEmpty() )
         {
             if ( nFlags & GetDefaultFontFlags::OnlyOne )
