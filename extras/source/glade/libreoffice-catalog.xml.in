@@ -150,9 +150,6 @@
     <glade-widget-class title="File View" name="svtlo-SvtFileView"
                         generic-name="File View" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Check List Box" name="svxcorelo-SvxCheckListBox"
-                        generic-name="Check List Box" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Table Preview" name="swuilo-AutoFmtPreview"
                         generic-name="Table Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
