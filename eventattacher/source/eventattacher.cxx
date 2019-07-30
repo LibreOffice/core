@@ -288,7 +288,7 @@ static Reference< XInterface > EventAttacherImpl_CreateInstance( const Reference
 
 OUString SAL_CALL EventAttacherImpl::getImplementationName(  )
 {
-    return OUString(  IMPLNAME  );
+    return IMPLNAME;
 }
 
 sal_Bool SAL_CALL EventAttacherImpl::supportsService( const OUString& ServiceName )
