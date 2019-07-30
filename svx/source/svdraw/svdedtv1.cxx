@@ -763,8 +763,6 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr)
     }
 
     const bool bUndo = IsUndoEnabled();
-    if( bUndo )
-        EndTextEditAllViews();
 
     // TODO: check if WhichRange is necessary.
     const size_t nMarkCount=GetMarkedObjectCount();
