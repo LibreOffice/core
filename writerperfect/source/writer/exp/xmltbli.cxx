@@ -239,7 +239,10 @@ void XMLTableContext::startElement(
 
 void XMLTableContext::endElement(const OUString& /*rName*/)
 {
-    GetImport().GetGenerator().closeTable();
+    if (m_bTableOpened)
+    {
+        GetImport().GetGenerator().closeTable();
+    }
 }
 
 } // namespace exp
