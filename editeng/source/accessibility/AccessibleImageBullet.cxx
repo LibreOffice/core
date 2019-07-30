@@ -348,7 +348,7 @@ namespace accessibility
     OUString SAL_CALL AccessibleImageBullet::getImplementationName()
     {
 
-        return OUString("AccessibleImageBullet");
+        return "AccessibleImageBullet";
     }
 
     sal_Bool SAL_CALL AccessibleImageBullet::supportsService (const OUString& sServiceName)

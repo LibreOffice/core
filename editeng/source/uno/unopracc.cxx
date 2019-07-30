@@ -83,7 +83,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxAccessibleTextPropertySet::getImplementati
 // XServiceInfo
 OUString SAL_CALL SAL_CALL SvxAccessibleTextPropertySet::getImplementationName()
 {
-    return OUString("SvxAccessibleTextPropertySet");
+    return "SvxAccessibleTextPropertySet";
 }
 
 sal_Bool SAL_CALL SvxAccessibleTextPropertySet::supportsService (const OUString& sServiceName)

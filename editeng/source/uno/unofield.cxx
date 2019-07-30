@@ -619,39 +619,39 @@ OUString SAL_CALL SvxUnoTextField::getPresentation( sal_Bool bShowCommand )
         switch (mnServiceId)
         {
             case text::textfield::Type::DATE:
-                return OUString("Date");
+                return "Date";
             case text::textfield::Type::URL:
-                return OUString("URL");
+                return "URL";
             case text::textfield::Type::PAGE:
-                return OUString("Page");
+                return "Page";
             case text::textfield::Type::PAGES:
-                return OUString("Pages");
+                return "Pages";
             case text::textfield::Type::TIME:
-                return OUString("Time");
+                return "Time";
             case text::textfield::Type::DOCINFO_TITLE:
-                return OUString("File");
+                return "File";
             case text::textfield::Type::TABLE:
-                return OUString("Table");
+                return "Table";
             case text::textfield::Type::EXTENDED_TIME:
-                return OUString("ExtTime");
+                return "ExtTime";
             case text::textfield::Type::EXTENDED_FILE:
-                return OUString("ExtFile");
+                return "ExtFile";
             case text::textfield::Type::AUTHOR:
-                return OUString("Author");
+                return "Author";
             case text::textfield::Type::MEASURE:
-                return OUString("Measure");
+                return "Measure";
             case text::textfield::Type::PRESENTATION_HEADER:
-                return OUString("Header");
+                return "Header";
             case text::textfield::Type::PRESENTATION_FOOTER:
-                return OUString("Footer");
+                return "Footer";
             case text::textfield::Type::PRESENTATION_DATE_TIME:
-                return OUString("DateTime");
+                return "DateTime";
             case text::textfield::Type::PAGE_NAME:
-                return OUString("PageName");
+                return "PageName";
             case text::textfield::Type::DOCINFO_CUSTOM:
-                return OUString("Custom");
+                return "Custom";
             default:
-                return OUString("Unknown");
+                return "Unknown";
         }
     }
     else
@@ -818,7 +818,7 @@ void SvxUnoTextField::disposing()
 // lang::XServiceInfo
 OUString SAL_CALL SvxUnoTextField::getImplementationName()
 {
-    return OUString("SvxUnoTextField");
+    return "SvxUnoTextField";
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()

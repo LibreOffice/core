@@ -357,7 +357,7 @@ void SAL_CALL SvxUnoTextContent::setPropertyToDefault( const OUString& PropertyN
 
 OUString SAL_CALL SvxUnoTextContent::getImplementationName()
 {
-    return OUString("SvxUnoTextContent");
+    return "SvxUnoTextContent";
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoTextContent::getSupportedServiceNames()
@@ -633,7 +633,7 @@ void SAL_CALL SvxUnoTextCursor::setString( const OUString& aString )
 // lang::XServiceInfo
 OUString SAL_CALL SvxUnoTextCursor::getImplementationName()
 {
-    return OUString("SvxUnoTextCursor");
+    return "SvxUnoTextCursor";
 }
 
 sal_Bool SAL_CALL SvxUnoTextCursor::supportsService( const OUString& ServiceName )

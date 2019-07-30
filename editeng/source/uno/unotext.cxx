@@ -1592,7 +1592,7 @@ uno::Reference< text::XText > SAL_CALL SvxUnoTextRange::getText()
 // lang::XServiceInfo
 OUString SAL_CALL SvxUnoTextRange::getImplementationName()
 {
-    return OUString("SvxUnoTextRange");
+    return "SvxUnoTextRange";
 }
 
 
@@ -2155,7 +2155,7 @@ void SvxUnoTextBase::copyText(
 // lang::XServiceInfo
 OUString SAL_CALL SvxUnoTextBase::getImplementationName()
 {
-    return OUString("SvxUnoTextBase");
+    return "SvxUnoTextBase";
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoTextBase::getSupportedServiceNames(  )
