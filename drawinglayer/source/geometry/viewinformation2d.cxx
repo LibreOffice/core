@@ -81,32 +81,32 @@ namespace drawinglayer
             // the local UNO API strings
             static OUString getNamePropertyObjectTransformation()
             {
-                return OUString("ObjectTransformation");
+                return "ObjectTransformation";
             }
 
             static OUString getNamePropertyViewTransformation()
             {
-                return OUString("ViewTransformation");
+                return "ViewTransformation";
             }
 
             static OUString getNamePropertyViewport()
             {
-                return OUString("Viewport");
+                return "Viewport";
             }
 
             static OUString getNamePropertyTime()
             {
-                return OUString("Time");
+                return "Time";
             }
 
             static OUString getNamePropertyVisualizedPage()
             {
-                return OUString("VisualizedPage");
+                return "VisualizedPage";
             }
 
             static OUString getNamePropertyReducedDisplayQuality()
             {
-                return OUString("ReducedDisplayQuality");
+                return "ReducedDisplayQuality";
             }
 
             void impInterpretPropertyValues(const uno::Sequence< beans::PropertyValue >& rViewParameters)

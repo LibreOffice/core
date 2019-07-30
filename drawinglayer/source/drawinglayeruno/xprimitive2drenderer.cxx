@@ -87,7 +87,7 @@ namespace drawinglayer
 
         OUString XPrimitive2DRenderer_getImplementationName()
         {
-            return OUString( "drawinglayer::unorenderer::XPrimitive2DRenderer" );
+            return "drawinglayer::unorenderer::XPrimitive2DRenderer";
         }
 
         uno::Reference< uno::XInterface > XPrimitive2DRenderer_createInstance(const uno::Reference< lang::XMultiServiceFactory >&)

@@ -79,47 +79,47 @@ namespace drawinglayer
             // the local UNO API strings
             static OUString getNamePropertyObjectTransformation()
             {
-                return OUString("ObjectTransformation");
+                return "ObjectTransformation";
             }
 
             static OUString getNamePropertyOrientation()
             {
-                return OUString("Orientation");
+                return "Orientation";
             }
 
             static OUString getNamePropertyProjection()
             {
-                return OUString("Projection");
+                return "Projection";
             }
 
             static OUString getNamePropertyProjection_30()
             {
-                return OUString("Projection30");
+                return "Projection30";
             }
 
             static OUString getNamePropertyProjection_31()
             {
-                return OUString("Projection31");
+                return "Projection31";
             }
 
             static OUString getNamePropertyProjection_32()
             {
-                return OUString("Projection32");
+                return "Projection32";
             }
 
             static OUString getNamePropertyProjection_33()
             {
-                return OUString("Projection33");
+                return "Projection33";
             }
 
             static OUString getNamePropertyDeviceToView()
             {
-                return OUString("DeviceToView");
+                return "DeviceToView";
             }
 
             static OUString getNamePropertyTime()
             {
-                return OUString("Time");
+                return "Time";
             }
 
             // a central PropertyValue parsing method to allow transportation of
