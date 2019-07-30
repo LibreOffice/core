@@ -148,7 +148,7 @@ void SAL_CALL LotusWordProImportFilter::initialize( const Sequence< Any >& /*aAr
 // XServiceInfo
 OUString SAL_CALL LotusWordProImportFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Writer.LotusWordProImportFilter");
+    return "com.sun.star.comp.Writer.LotusWordProImportFilter";
 }
 
 sal_Bool SAL_CALL LotusWordProImportFilter::supportsService(const OUString& rServiceName)

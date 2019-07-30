@@ -535,7 +535,7 @@ OUString LwpFootnoteOptions::GetContinuedOnMessage()
         return m_ContinuedOnMessage.str();
     }
     // else return default message
-    return OUString(STRID_FOOTCONTINUEDON);
+    return STRID_FOOTCONTINUEDON;
 }
 
 /**
@@ -548,7 +548,7 @@ OUString LwpFootnoteOptions::GetContinuedFromMessage()
         return m_ContinuedFromMessage.str();
     }
     // else return default message
-    return OUString(STRID_FOOTCONTINUEDFROM);
+    return STRID_FOOTCONTINUEDFROM;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
