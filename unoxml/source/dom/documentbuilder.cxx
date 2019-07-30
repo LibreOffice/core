@@ -110,7 +110,7 @@ namespace DOM
 
     OUString CDocumentBuilder::_getImplementationName()
     {
-        return OUString(aImplementationName);
+        return aImplementationName;
     }
     Sequence<OUString> CDocumentBuilder::_getSupportedServiceNames()
     {

@@ -2446,7 +2446,7 @@ librdf_TypeConverter::convertToStatement(librdf_statement* i_pStmt,
 namespace comp_librdf_Repository {
 
 OUString _getImplementationName() {
-    return OUString("librdf_Repository");
+    return "librdf_Repository";
 }
 
 uno::Sequence< OUString > _getSupportedServiceNames()

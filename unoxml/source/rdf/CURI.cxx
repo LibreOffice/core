@@ -794,8 +794,8 @@ OUString SAL_CALL CURI::getLocalName()
 namespace comp_CURI {
 
 OUString _getImplementationName() {
-    return OUString(
-        "CURI");
+    return
+        "CURI";
 }
 
 css::uno::Sequence< OUString > _getSupportedServiceNames()

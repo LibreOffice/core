@@ -51,7 +51,7 @@ namespace DOM
 
     OUString CSAXDocumentBuilder::_getImplementationName()
     {
-        return OUString(aImplementationName);
+        return aImplementationName;
     }
     Sequence<OUString> CSAXDocumentBuilder::_getSupportedServiceNames()
     {

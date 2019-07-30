@@ -48,7 +48,7 @@ namespace DOM
 
     OUString SAL_CALL CCDATASection::getNodeName()
     {
-        return OUString( "#cdata-section" );
+        return "#cdata-section";
     }
 
     OUString SAL_CALL CCDATASection::getNodeValue()

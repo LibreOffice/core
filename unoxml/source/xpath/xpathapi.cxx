@@ -67,7 +67,7 @@ namespace XPath
 
     OUString CXPathAPI::_getImplementationName()
     {
-        return OUString(aImplementationName);
+        return aImplementationName;
     }
 
     Sequence<OUString> CXPathAPI::_getSupportedServiceNames()
