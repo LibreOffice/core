@@ -161,7 +161,7 @@ static OString makeTempName(const OString& prefix)
 #endif
 #endif
 
-    return OString(tmpFilePattern);
+    return tmpFilePattern;
 }
 
 bool copyFile(const OString* source, const OString& target)
