@@ -101,7 +101,7 @@ void MathTypeFilter::setTargetDocument(const uno::Reference< lang::XComponent >&
 
 OUString MathTypeFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Math.MathTypeFilter");
+    return "com.sun.star.comp.Math.MathTypeFilter";
 }
 
 sal_Bool MathTypeFilter::supportsService(const OUString& rServiceName)

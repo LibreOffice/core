@@ -104,7 +104,7 @@ std::unique_ptr<UIObject> ElementSelectorUIObject::create(vcl::Window* pWindow)
 
 OUString ElementSelectorUIObject::get_name() const
 {
-    return OUString("SmElementSelector");
+    return "SmElementSelector";
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
