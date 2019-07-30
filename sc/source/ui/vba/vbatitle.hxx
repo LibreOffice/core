@@ -131,7 +131,7 @@ public:
 // XHelperInterface
     OUString getServiceImplName() override
     {
-        return OUString("TitleImpl");
+        return "TitleImpl";
     }
     css::uno::Sequence< OUString > getServiceNames() override
     {

@@ -698,7 +698,7 @@ OString XclXmlUtils::ToOString( const Color& rColor )
     char buf[9];
     sprintf( buf, "%.2X%.2X%.2X%.2X", 0xFF-rColor.GetTransparency(), rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue() );
     buf[8] = '\0';
-    return OString( buf );
+    return buf;
 }
 
 OStringBuffer& XclXmlUtils::ToOString( OStringBuffer& s, const ScAddress& rAddress )
@@ -1128,7 +1128,7 @@ bool XclExpXmlStream::exportDocument()
 
 OUString XclExpXmlStream::getImplementationName()
 {
-    return OUString( "TODO" );
+    return "TODO";
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -48,7 +48,7 @@ ScVbaMenuItem::Delete( )
 OUString
 ScVbaMenuItem::getServiceImplName()
 {
-    return OUString("ScVbaMenuItem");
+    return "ScVbaMenuItem";
 }
 
 uno::Sequence<OUString>

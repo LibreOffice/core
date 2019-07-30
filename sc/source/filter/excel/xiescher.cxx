@@ -2164,7 +2164,7 @@ void XclImpButtonObj::DoProcessControl( ScfPropertySet& rPropSet ) const
 
 OUString XclImpButtonObj::DoGetServiceName() const
 {
-    return OUString( "com.sun.star.form.component.CommandButton" );
+    return "com.sun.star.form.component.CommandButton";
 }
 
 XclTbxEventType XclImpButtonObj::DoGetEventType() const
@@ -2256,7 +2256,7 @@ void XclImpCheckBoxObj::DoProcessControl( ScfPropertySet& rPropSet ) const
 
 OUString XclImpCheckBoxObj::DoGetServiceName() const
 {
-    return OUString( "com.sun.star.form.component.CheckBox" );
+    return "com.sun.star.form.component.CheckBox";
 }
 
 XclTbxEventType XclImpCheckBoxObj::DoGetEventType() const
@@ -2349,7 +2349,7 @@ void XclImpOptionButtonObj::DoProcessControl( ScfPropertySet& rPropSet ) const
 
 OUString XclImpOptionButtonObj::DoGetServiceName() const
 {
-    return OUString( "com.sun.star.form.component.RadioButton" );
+    return "com.sun.star.form.component.RadioButton";
 }
 
 XclTbxEventType XclImpOptionButtonObj::DoGetEventType() const
@@ -2378,7 +2378,7 @@ void XclImpLabelObj::DoProcessControl( ScfPropertySet& rPropSet ) const
 
 OUString XclImpLabelObj::DoGetServiceName() const
 {
-    return OUString( "com.sun.star.form.component.FixedText" );
+    return "com.sun.star.form.component.FixedText";
 }
 
 XclTbxEventType XclImpLabelObj::DoGetEventType() const
@@ -2429,7 +2429,7 @@ void XclImpGroupBoxObj::DoProcessControl( ScfPropertySet& rPropSet ) const
 
 OUString XclImpGroupBoxObj::DoGetServiceName() const
 {
-    return OUString( "com.sun.star.form.component.GroupBox" );
+    return "com.sun.star.form.component.GroupBox";
 }
 
 XclTbxEventType XclImpGroupBoxObj::DoGetEventType() const
@@ -2451,7 +2451,7 @@ void XclImpDialogObj::DoProcessControl( ScfPropertySet& rPropSet ) const
 OUString XclImpDialogObj::DoGetServiceName() const
 {
     // dialog frame faked by a groupbox
-    return OUString( "com.sun.star.form.component.GroupBox" );
+    return "com.sun.star.form.component.GroupBox";
 }
 
 XclTbxEventType XclImpDialogObj::DoGetEventType() const
@@ -2607,7 +2607,7 @@ void XclImpSpinButtonObj::DoProcessControl( ScfPropertySet& rPropSet ) const
 
 OUString XclImpSpinButtonObj::DoGetServiceName() const
 {
-    return OUString( "com.sun.star.form.component.SpinButton" );
+    return "com.sun.star.form.component.SpinButton";
 }
 
 XclTbxEventType XclImpSpinButtonObj::DoGetEventType() const
@@ -2647,7 +2647,7 @@ void XclImpScrollBarObj::DoProcessControl( ScfPropertySet& rPropSet ) const
 
 OUString XclImpScrollBarObj::DoGetServiceName() const
 {
-    return OUString( "com.sun.star.form.component.ScrollBar" );
+    return "com.sun.star.form.component.ScrollBar";
 }
 
 XclTbxEventType XclImpScrollBarObj::DoGetEventType() const
@@ -2769,7 +2769,7 @@ void XclImpListBoxObj::DoProcessControl( ScfPropertySet& rPropSet ) const
 
 OUString XclImpListBoxObj::DoGetServiceName() const
 {
-    return OUString( "com.sun.star.form.component.ListBox" );
+    return "com.sun.star.form.component.ListBox";
 }
 
 XclTbxEventType XclImpListBoxObj::DoGetEventType() const

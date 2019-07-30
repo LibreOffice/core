@@ -342,7 +342,7 @@ uno::Reference< XAccessible > SAL_CALL
 OUString
     ScAccessibleTableBase::createAccessibleDescription()
 {
-    return OUString(STR_ACC_TABLE_DESCR);
+    return STR_ACC_TABLE_DESCR;
 }
 
 OUString ScAccessibleTableBase::createAccessibleName()
@@ -414,7 +414,7 @@ void SAL_CALL ScAccessibleTableBase::deselectAccessibleChild( sal_Int32 /* nSele
 
 OUString SAL_CALL ScAccessibleTableBase::getImplementationName()
 {
-    return OUString("ScAccessibleTableBase");
+    return "ScAccessibleTableBase";
 }
 
     //=====  XTypeProvider  ===================================================

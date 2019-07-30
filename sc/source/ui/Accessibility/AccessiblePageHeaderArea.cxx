@@ -168,7 +168,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 OUString SAL_CALL
        ScAccessiblePageHeaderArea::getImplementationName()
 {
-    return OUString("ScAccessiblePageHeaderArea");
+    return "ScAccessiblePageHeaderArea";
 }
 
 uno::Sequence< OUString> SAL_CALL

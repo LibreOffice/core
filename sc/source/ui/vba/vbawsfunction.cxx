@@ -283,7 +283,7 @@ ScVbaWSFunction::getExactName( const OUString& aApproximateName )
 OUString
 ScVbaWSFunction::getServiceImplName()
 {
-    return OUString("ScVbaWSFunction");
+    return "ScVbaWSFunction";
 }
 
 uno::Sequence< OUString >

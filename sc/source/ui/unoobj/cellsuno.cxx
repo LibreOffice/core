@@ -4621,7 +4621,7 @@ sal_Bool SAL_CALL ScCellRangesObj::hasElements()
 // XServiceInfo
 OUString SAL_CALL ScCellRangesObj::getImplementationName()
 {
-    return OUString( "ScCellRangesObj" );
+    return "ScCellRangesObj";
 }
 
 sal_Bool SAL_CALL ScCellRangesObj::supportsService( const OUString& rServiceName )
@@ -5839,7 +5839,7 @@ const SfxItemPropertyMap& ScCellRangeObj::GetItemPropertyMap()
 
 OUString SAL_CALL ScCellRangeObj::getImplementationName()
 {
-    return OUString( "ScCellRangeObj" );
+    return "ScCellRangeObj";
 }
 
 sal_Bool SAL_CALL ScCellRangeObj::supportsService( const OUString& rServiceName )
@@ -6539,7 +6539,7 @@ const SfxItemPropertyMap& ScCellObj::GetItemPropertyMap()
 
 OUString SAL_CALL ScCellObj::getImplementationName()
 {
-    return OUString( "ScCellObj" );
+    return "ScCellObj";
 }
 
 sal_Bool SAL_CALL ScCellObj::supportsService( const OUString& rServiceName )
@@ -8367,7 +8367,7 @@ const SfxItemPropertyMap& ScTableSheetObj::GetItemPropertyMap()
 
 OUString SAL_CALL ScTableSheetObj::getImplementationName()
 {
-    return OUString( "ScTableSheetObj" );
+    return "ScTableSheetObj";
 }
 
 sal_Bool SAL_CALL ScTableSheetObj::supportsService( const OUString& rServiceName )

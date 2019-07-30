@@ -172,7 +172,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewCell::getAccessi
 
 OUString SAL_CALL ScAccessiblePreviewCell::getImplementationName()
 {
-    return OUString("ScAccessiblePreviewCell");
+    return "ScAccessiblePreviewCell";
 }
 
 uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewCell::getSupportedServiceNames()

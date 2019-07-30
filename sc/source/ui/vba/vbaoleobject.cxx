@@ -134,7 +134,7 @@ void SAL_CALL ScVbaOLEObject::setLinkedCell( const OUString& _linkedcell )
 OUString
 ScVbaOLEObject::getServiceImplName()
 {
-    return OUString("ScVbaOLEObject");
+    return "ScVbaOLEObject";
 }
 
 uno::Sequence< OUString >

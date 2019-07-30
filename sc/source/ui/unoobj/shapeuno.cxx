@@ -1427,7 +1427,7 @@ ScShapeObj::getEvents(  )
 
 OUString SAL_CALL ScShapeObj::getImplementationName(  )
 {
-    return OUString( "com.sun.star.comp.sc.ScShapeObj" );
+    return "com.sun.star.comp.sc.ScShapeObj";
 }
 
 sal_Bool SAL_CALL ScShapeObj::supportsService( const OUString& ServiceName )

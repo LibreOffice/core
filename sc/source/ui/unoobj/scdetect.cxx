@@ -330,7 +330,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
 
 OUString SAL_CALL ScFilterDetect::getImplementationName()
 {
-    return OUString("com.sun.star.comp.calc.FormatDetector");
+    return "com.sun.star.comp.calc.FormatDetector";
 }
 
 sal_Bool ScFilterDetect::supportsService( const OUString& sServiceName )

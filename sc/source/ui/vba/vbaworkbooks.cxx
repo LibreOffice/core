@@ -267,7 +267,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
 OUString
 ScVbaWorkbooks::getServiceImplName()
 {
-    return OUString("ScVbaWorkbooks");
+    return "ScVbaWorkbooks";
 }
 
 css::uno::Sequence<OUString>

@@ -111,7 +111,7 @@ using namespace ::formula;
 
 OUString ScXMLImport_getImplementationName() throw()
 {
-    return OUString( "com.sun.star.comp.Calc.XMLOasisImporter" );
+    return "com.sun.star.comp.Calc.XMLOasisImporter";
 }
 
 uno::Sequence< OUString > ScXMLImport_getSupportedServiceNames() throw()
@@ -129,7 +129,7 @@ uno::Reference< uno::XInterface > ScXMLImport_createInstance(
 
 OUString ScXMLImport_Meta_getImplementationName() throw()
 {
-    return OUString( "com.sun.star.comp.Calc.XMLOasisMetaImporter" );
+    return "com.sun.star.comp.Calc.XMLOasisMetaImporter";
 }
 
 uno::Sequence< OUString > ScXMLImport_Meta_getSupportedServiceNames() throw()
@@ -147,7 +147,7 @@ uno::Reference< uno::XInterface > ScXMLImport_Meta_createInstance(
 
 OUString ScXMLImport_Styles_getImplementationName() throw()
 {
-    return OUString( "com.sun.star.comp.Calc.XMLOasisStylesImporter" );
+    return "com.sun.star.comp.Calc.XMLOasisStylesImporter";
 }
 
 uno::Sequence< OUString > ScXMLImport_Styles_getSupportedServiceNames() throw()
@@ -165,7 +165,7 @@ uno::Reference< uno::XInterface > ScXMLImport_Styles_createInstance(
 
 OUString ScXMLImport_Content_getImplementationName() throw()
 {
-    return OUString( "com.sun.star.comp.Calc.XMLOasisContentImporter" );
+    return "com.sun.star.comp.Calc.XMLOasisContentImporter";
 }
 
 uno::Sequence< OUString > ScXMLImport_Content_getSupportedServiceNames() throw()
@@ -183,7 +183,7 @@ uno::Reference< uno::XInterface > ScXMLImport_Content_createInstance(
 
 OUString ScXMLImport_Settings_getImplementationName() throw()
 {
-    return OUString( "com.sun.star.comp.Calc.XMLOasisSettingsImporter" );
+    return "com.sun.star.comp.Calc.XMLOasisSettingsImporter";
 }
 
 uno::Sequence< OUString > ScXMLImport_Settings_getSupportedServiceNames() throw()

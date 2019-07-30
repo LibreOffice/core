@@ -1964,7 +1964,7 @@ void SAL_CALL
 OUString SAL_CALL
     ScAccessibleDocument::getImplementationName()
 {
-    return OUString("ScAccessibleDocument");
+    return "ScAccessibleDocument";
 }
 
 uno::Sequence< OUString> SAL_CALL

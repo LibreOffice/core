@@ -167,7 +167,7 @@ ScVbaStyle::getMergeCells(  )
 OUString
 ScVbaStyle::getServiceImplName()
 {
-    return OUString("ScVbaStyle");
+    return "ScVbaStyle";
 }
 
 uno::Sequence< OUString >

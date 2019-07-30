@@ -1904,7 +1904,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScStyleObj )
 
 OUString SAL_CALL ScStyleObj::getImplementationName()
 {
-    return OUString("ScStyleObj" );
+    return "ScStyleObj";
 }
 
 sal_Bool SAL_CALL ScStyleObj::supportsService( const OUString& rServiceName )

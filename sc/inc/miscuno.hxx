@@ -35,7 +35,7 @@
 #define SC_SIMPLE_SERVICE_INFO( ClassName, ClassNameAscii, ServiceAscii )            \
 OUString SAL_CALL ClassName::getImplementationName()                      \
 {                                                                                    \
-    return OUString(ClassNameAscii);                         \
+    return ClassNameAscii;                         \
 }                                                                                    \
 sal_Bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
 {                                                                                    \

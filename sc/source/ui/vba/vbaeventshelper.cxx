@@ -629,7 +629,7 @@ void SAL_CALL ScVbaEventsHelper::notifyEvent( const css::document::EventObject& 
 
 OUString ScVbaEventsHelper::getImplementationName()
 {
-    return OUString("ScVbaEventsHelper");
+    return "ScVbaEventsHelper";
 }
 
 css::uno::Sequence<OUString> ScVbaEventsHelper::getSupportedServiceNames()

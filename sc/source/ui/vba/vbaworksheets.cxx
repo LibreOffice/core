@@ -446,7 +446,7 @@ ScVbaWorksheets::Item(const uno::Any& Index, const uno::Any& Index2)
 OUString
 ScVbaWorksheets::getServiceImplName()
 {
-    return OUString("ScVbaWorksheets");
+    return "ScVbaWorksheets";
 }
 
 css::uno::Sequence<OUString>

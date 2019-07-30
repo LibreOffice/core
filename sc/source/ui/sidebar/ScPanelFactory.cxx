@@ -118,7 +118,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
 
 OUString ScPanelFactory::getImplementationName()
 {
-    return OUString("org.apache.openoffice.comp.sc.sidebar.ScPanelFactory");
+    return "org.apache.openoffice.comp.sc.sidebar.ScPanelFactory";
 }
 
 sal_Bool ScPanelFactory::supportsService(OUString const & ServiceName)

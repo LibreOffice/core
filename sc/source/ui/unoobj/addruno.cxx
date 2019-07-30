@@ -281,7 +281,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScAddressConversionObj )
 
 OUString SAL_CALL ScAddressConversionObj::getImplementationName()
 {
-    return OUString("ScAddressConversionObj" );
+    return "ScAddressConversionObj";
 }
 
 sal_Bool SAL_CALL ScAddressConversionObj::supportsService( const OUString& rServiceName )

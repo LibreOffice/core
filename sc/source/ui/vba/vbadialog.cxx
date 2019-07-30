@@ -65,7 +65,7 @@ ScVbaDialog::mapIndexToName( sal_Int32 nIndex )
 OUString
 ScVbaDialog::getServiceImplName()
 {
-    return OUString("ScVbaDialog");
+    return "ScVbaDialog";
 }
 
 uno::Sequence< OUString >

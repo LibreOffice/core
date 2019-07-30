@@ -32,7 +32,7 @@ ScVbaMenuBar::Menus( const uno::Any& aIndex )
 OUString
 ScVbaMenuBar::getServiceImplName()
 {
-    return OUString("ScVbaMenuBar");
+    return "ScVbaMenuBar";
 }
 
 uno::Sequence<OUString>

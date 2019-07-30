@@ -276,7 +276,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePageHeader::getAccess
 
 OUString SAL_CALL ScAccessiblePageHeader::getImplementationName()
 {
-    return OUString("ScAccessiblePageHeader");
+    return "ScAccessiblePageHeader";
 }
 
 uno::Sequence<OUString> SAL_CALL ScAccessiblePageHeader::getSupportedServiceNames()

@@ -85,9 +85,9 @@ OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>
     switch (eFormat)
     {
         case orcus::format_t::gnumeric:
-            return OUString("Gnumeric XML");
+            return "Gnumeric XML";
         case orcus::format_t::xls_xml:
-            return OUString("calc_MS_Excel_2003_XML");
+            return "calc_MS_Excel_2003_XML";
         default:
             ;
     }

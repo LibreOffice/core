@@ -2075,7 +2075,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDatabaseRangeObj )
 // XServiceInfo
 OUString SAL_CALL ScDatabaseRangeObj::getImplementationName()
 {
-    return OUString( "ScDatabaseRangeObj" );
+    return "ScDatabaseRangeObj";
 }
 
 sal_Bool SAL_CALL ScDatabaseRangeObj::supportsService( const OUString& rServiceName )

@@ -365,7 +365,7 @@ ScVbaValidation::getType()
 OUString
 ScVbaValidation::getServiceImplName()
 {
-    return OUString("ScVbaValidation");
+    return "ScVbaValidation";
 }
 
 uno::Sequence< OUString >

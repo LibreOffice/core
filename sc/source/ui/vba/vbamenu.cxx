@@ -51,7 +51,7 @@ ScVbaMenu::MenuItems( const uno::Any& aIndex )
 OUString
 ScVbaMenu::getServiceImplName()
 {
-    return OUString("ScVbaMenu");
+    return "ScVbaMenu";
 }
 
 uno::Sequence<OUString>

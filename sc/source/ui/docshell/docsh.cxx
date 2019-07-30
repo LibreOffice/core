@@ -2660,37 +2660,37 @@ bool ScDocShell::PrepareClose( bool bUI )
 
 OUString ScDocShell::GetOwnFilterName()
 {
-    return OUString(pFilterSc50);
+    return pFilterSc50;
 }
 
 OUString ScDocShell::GetHtmlFilterName()
 {
-    return OUString(pFilterHtml);
+    return pFilterHtml;
 }
 
 OUString ScDocShell::GetWebQueryFilterName()
 {
-    return OUString(pFilterHtmlWebQ);
+    return pFilterHtmlWebQ;
 }
 
 OUString ScDocShell::GetAsciiFilterName()
 {
-    return OUString(pFilterAscii);
+    return pFilterAscii;
 }
 
 OUString ScDocShell::GetLotusFilterName()
 {
-    return OUString(pFilterLotus);
+    return pFilterLotus;
 }
 
 OUString ScDocShell::GetDBaseFilterName()
 {
-    return OUString(pFilterDBase);
+    return pFilterDBase;
 }
 
 OUString ScDocShell::GetDifFilterName()
 {
-    return OUString(pFilterDif);
+    return pFilterDif;
 }
 
 bool ScDocShell::HasAutomaticTableName( const OUString& rFilter )

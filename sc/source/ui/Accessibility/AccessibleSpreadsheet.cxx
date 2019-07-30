@@ -1253,7 +1253,7 @@ void ScAccessibleSpreadsheet::AddMarkedRange(const ScRange& rRange)
 
 OUString SAL_CALL ScAccessibleSpreadsheet::getImplementationName()
 {
-    return OUString("ScAccessibleSpreadsheet");
+    return "ScAccessibleSpreadsheet";
 }
 
 uno::Sequence< OUString> SAL_CALL

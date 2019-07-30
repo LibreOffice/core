@@ -69,7 +69,7 @@ ScVbaPivotTables::getElementType()
 OUString
 ScVbaPivotTables::getServiceImplName()
 {
-    return OUString("ScVbaPivotTables");
+    return "ScVbaPivotTables";
 }
 
 css::uno::Sequence<OUString>

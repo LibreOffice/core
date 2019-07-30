@@ -703,7 +703,7 @@ void SAL_CALL ScAccessibleCsvRuler::release() throw ()
 
 OUString SAL_CALL ScAccessibleCsvRuler::getImplementationName()
 {
-    return OUString( RULER_IMPL_NAME );
+    return RULER_IMPL_NAME;
 }
 
 // XTypeProvider --------------------------------------------------------------
@@ -1186,7 +1186,7 @@ void SAL_CALL ScAccessibleCsvGrid::release() throw ()
 
 OUString SAL_CALL ScAccessibleCsvGrid::getImplementationName()
 {
-    return OUString( GRID_IMPL_NAME );
+    return GRID_IMPL_NAME;
 }
 
 // XTypeProvider --------------------------------------------------------------
@@ -1458,7 +1458,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( ScAccessibleCsvCell, ScAccessibleCsvControl, A
 
 OUString SAL_CALL ScAccessibleCsvCell::getImplementationName()
 {
-    return OUString( CELL_IMPL_NAME );
+    return CELL_IMPL_NAME;
 }
 
 // helpers --------------------------------------------------------------------

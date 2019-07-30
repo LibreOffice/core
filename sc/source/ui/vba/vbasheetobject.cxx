@@ -516,7 +516,7 @@ VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaButton, "ooo.vba.excel.Button" )
 
 OUString ScVbaButton::implGetBaseName() const
 {
-    return OUString( "Button" );
+    return "Button";
 }
 
 void ScVbaButton::implSetDefaultProperties()

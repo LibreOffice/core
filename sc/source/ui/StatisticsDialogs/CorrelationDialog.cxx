@@ -33,7 +33,7 @@ const OUString ScCorrelationDialog::getLabel()
 
 const OUString ScCorrelationDialog::getTemplate()
 {
-    return OUString("=CORREL(%VAR1%; %VAR2%)");
+    return "=CORREL(%VAR1%; %VAR2%)";
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

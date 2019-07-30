@@ -394,21 +394,21 @@ private:
                 if (eSearchType == utl::SearchParam::SearchType::Regexp)
                     return GetXMLToken(XML_MATCH);
                 else
-                    return OUString("=");
+                    return "=";
             }
             case SC_GREATER:
-                return OUString(">");
+                return ">";
             case SC_GREATER_EQUAL:
-                return OUString(">=");
+                return ">=";
             case SC_LESS:
-                return OUString("<");
+                return "<";
             case SC_LESS_EQUAL:
-                return OUString("<=");
+                return "<=";
             case SC_NOT_EQUAL:
                 if (eSearchType == utl::SearchParam::SearchType::Regexp)
                     return GetXMLToken(XML_NOMATCH);
                 else
-                    return OUString("!=");
+                    return "!=";
             case SC_TOPPERC:
                 return GetXMLToken(XML_TOP_PERCENT);
             case SC_TOPVAL:
@@ -416,7 +416,7 @@ private:
             default:
                 ;
         }
-        return OUString("=");
+        return "=";
     }
 
     class WriteSetItem

@@ -417,7 +417,7 @@ namespace calc
 
     OUString SAL_CALL OCellValueBinding::getImplementationName(  )
     {
-        return OUString( "com.sun.star.comp.sheet.OCellValueBinding" );
+        return "com.sun.star.comp.sheet.OCellValueBinding";
     }
 
     sal_Bool SAL_CALL OCellValueBinding::supportsService( const OUString& _rServiceName )

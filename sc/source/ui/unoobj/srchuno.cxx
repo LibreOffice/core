@@ -177,7 +177,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScCellSearchObj )
 
 OUString SAL_CALL ScCellSearchObj::getImplementationName()
 {
-    return OUString( "ScCellSearchObj" );
+    return "ScCellSearchObj";
 }
 
 sal_Bool SAL_CALL ScCellSearchObj::supportsService( const OUString& rServiceName )

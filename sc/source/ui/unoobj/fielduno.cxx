@@ -1286,7 +1286,7 @@ UNO3_GETIMPLEMENTATION_IMPL(ScEditFieldObj);
 
 OUString SAL_CALL ScEditFieldObj::getImplementationName()
 {
-    return OUString("ScEditFieldObj");
+    return "ScEditFieldObj";
 }
 
 sal_Bool SAL_CALL ScEditFieldObj::supportsService( const OUString& rServiceName )

@@ -218,7 +218,7 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
 OUString
 ScVbaComment::getServiceImplName()
 {
-    return OUString("ScVbaComment");
+    return "ScVbaComment";
 }
 
 uno::Sequence< OUString >

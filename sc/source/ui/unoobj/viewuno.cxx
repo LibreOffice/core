@@ -2044,7 +2044,7 @@ void ScTabViewObj::RangeSelChanged( const OUString& rText )
 // XServiceInfo
 OUString SAL_CALL ScTabViewObj::getImplementationName()
 {
-    return OUString( "ScTabViewObj" );
+    return "ScTabViewObj";
 }
 
 sal_Bool SAL_CALL ScTabViewObj::supportsService( const OUString& rServiceName )

@@ -417,7 +417,7 @@ void SAL_CALL ScAccessibleContextBase::notifyEvent(
 // XServiceInfo
 OUString SAL_CALL ScAccessibleContextBase::getImplementationName()
 {
-    return OUString("ScAccessibleContextBase");
+    return "ScAccessibleContextBase";
 }
 
 sal_Bool SAL_CALL ScAccessibleContextBase::supportsService(const OUString& sServiceName)

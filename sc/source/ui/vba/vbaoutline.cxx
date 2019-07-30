@@ -42,7 +42,7 @@ ScVbaOutline::ShowLevels( const uno::Any& RowLevels, const uno::Any& ColumnLevel
 OUString
 ScVbaOutline::getServiceImplName()
 {
-    return OUString("ScVbaOutline");
+    return "ScVbaOutline";
 }
 
 uno::Sequence< OUString >

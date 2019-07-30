@@ -137,7 +137,7 @@ namespace calc
 
     OUString SAL_CALL OCellListSource::getImplementationName(  )
     {
-        return OUString( "com.sun.star.comp.sheet.OCellListSource" );
+        return "com.sun.star.comp.sheet.OCellListSource";
     }
 
     sal_Bool SAL_CALL OCellListSource::supportsService( const OUString& _rServiceName )

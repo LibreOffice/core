@@ -201,7 +201,7 @@ ScVbaName::Delete()
 OUString
 ScVbaName::getServiceImplName()
 {
-    return OUString( "ScVbaName" );
+    return "ScVbaName";
 }
 
 uno::Sequence< OUString >

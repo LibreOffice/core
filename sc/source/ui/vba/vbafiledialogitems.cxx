@@ -100,7 +100,7 @@ sal_Int32 ScVbaFileDialogSelectedItems::getCount()
 OUString
 ScVbaFileDialogSelectedItems::getServiceImplName()
 {
-    return OUString("ScVbaFileDialogSelectedItems");
+    return "ScVbaFileDialogSelectedItems";
 }
 
 uno::Sequence<OUString>

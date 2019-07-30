@@ -425,19 +425,19 @@ OUString VmlDrawing::getShapeBaseName( const ::oox::vml::ShapeBase& rShape ) con
     {
         switch( pClientData->mnObjType )
         {
-            case XML_Button:    return OUString( "Button" );
-            case XML_Checkbox:  return OUString( "Check Box" );
-            case XML_Dialog:    return OUString( "Dialog Frame" );
-            case XML_Drop:      return OUString( "Drop Down" );
-            case XML_Edit:      return OUString( "Edit Box" );
-            case XML_GBox:      return OUString( "Group Box" );
-            case XML_Label:     return OUString( "Label" );
-            case XML_List:      return OUString( "List Box" );
-            case XML_Note:      return OUString( "Comment" );
+            case XML_Button:    return "Button";
+            case XML_Checkbox:  return "Check Box";
+            case XML_Dialog:    return "Dialog Frame";
+            case XML_Drop:      return "Drop Down";
+            case XML_Edit:      return "Edit Box";
+            case XML_GBox:      return "Group Box";
+            case XML_Label:     return "Label";
+            case XML_List:      return "List Box";
+            case XML_Note:      return "Comment";
             case XML_Pict:      return (pClientData->mbDde || getOleObjectInfo( rShape.getShapeId() )) ? OUString( "Object" ) : OUString( "Picture" );
-            case XML_Radio:     return OUString( "Option Button" );
-            case XML_Scroll:    return OUString( "Scroll Bar" );
-            case XML_Spin:      return OUString( "Spinner" );
+            case XML_Radio:     return "Option Button";
+            case XML_Scroll:    return "Scroll Bar";
+            case XML_Spin:      return "Spinner";
         }
     }
     return ::oox::vml::Drawing::getShapeBaseName( rShape );

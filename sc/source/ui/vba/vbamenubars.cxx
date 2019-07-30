@@ -98,7 +98,7 @@ ScVbaMenuBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ )
 OUString
 ScVbaMenuBars::getServiceImplName()
 {
-    return OUString("ScVbaMenuBars");
+    return "ScVbaMenuBars";
 }
 
 uno::Sequence<OUString>

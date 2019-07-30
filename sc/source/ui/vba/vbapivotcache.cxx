@@ -34,7 +34,7 @@ ScVbaPivotCache::Refresh()
 OUString
 ScVbaPivotCache::getServiceImplName()
 {
-    return OUString("ScVbaPivotCache");
+    return "ScVbaPivotCache";
 }
 
 uno::Sequence< OUString >

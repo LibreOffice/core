@@ -100,7 +100,7 @@ ScVbaAssistant::Name(  )
 OUString
 ScVbaAssistant::getServiceImplName()
 {
-    return OUString("ScVbaAssistant");
+    return "ScVbaAssistant";
 }
 
 uno::Sequence< OUString >

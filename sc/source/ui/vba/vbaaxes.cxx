@@ -195,7 +195,7 @@ ScVbaAxes::createCollectionObject(const css::uno::Any& aSource)
 OUString
 ScVbaAxes::getServiceImplName()
 {
-    return OUString("ScVbaAxes");
+    return "ScVbaAxes";
 }
 
 uno::Sequence< OUString >

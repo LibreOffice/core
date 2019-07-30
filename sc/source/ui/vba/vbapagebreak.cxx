@@ -95,7 +95,7 @@ template class ScVbaPageBreak< excel::XHPageBreak >;
 OUString
 ScVbaHPageBreak::getServiceImplName()
 {
-    return OUString("ScVbaHPageBreak");
+    return "ScVbaHPageBreak";
 }
 
 uno::Sequence< OUString >
@@ -126,7 +126,7 @@ ScVbaVPageBreak::~ScVbaVPageBreak()
 OUString
 ScVbaVPageBreak::getServiceImplName()
 {
-    return OUString("ScVbaVPageBreak");
+    return "ScVbaVPageBreak";
 }
 
 uno::Sequence< OUString >

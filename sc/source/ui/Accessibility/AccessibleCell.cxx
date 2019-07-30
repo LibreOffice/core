@@ -289,7 +289,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 
 OUString SAL_CALL ScAccessibleCell::getImplementationName()
 {
-    return OUString("ScAccessibleCell");
+    return "ScAccessibleCell";
 }
 
 uno::Sequence< OUString> SAL_CALL

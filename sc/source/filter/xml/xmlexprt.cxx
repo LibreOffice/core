@@ -4445,23 +4445,23 @@ OUString getCondFormatEntryType(const ScColorScaleEntry& rEntry, bool bFirst = t
     switch(rEntry.GetType())
     {
         case COLORSCALE_MIN:
-            return OUString("minimum");
+            return "minimum";
         case COLORSCALE_MAX:
-            return OUString("maximum");
+            return "maximum";
         case COLORSCALE_PERCENT:
-            return OUString("percent");
+            return "percent";
         case COLORSCALE_PERCENTILE:
-            return OUString("percentile");
+            return "percentile";
         case COLORSCALE_FORMULA:
-            return OUString("formula");
+            return "formula";
         case COLORSCALE_VALUE:
-            return OUString("number");
+            return "number";
         case COLORSCALE_AUTO:
             // only important for data bars
             if(bFirst)
-                return OUString("auto-minimum");
+                return "auto-minimum";
             else
-                return OUString("auto-maximum");
+                return "auto-maximum";
     }
     return OUString();
 }
@@ -4471,31 +4471,31 @@ OUString getDateStringForType(condformat::ScCondFormatDateType eType)
     switch(eType)
     {
         case condformat::TODAY:
-            return OUString("today");
+            return "today";
         case condformat::YESTERDAY:
-            return OUString("yesterday");
+            return "yesterday";
         case condformat::TOMORROW:
-            return OUString("tomorrow");
+            return "tomorrow";
         case condformat::LAST7DAYS:
-            return OUString("last-7-days");
+            return "last-7-days";
         case condformat::THISWEEK:
-            return OUString("this-week");
+            return "this-week";
         case condformat::LASTWEEK:
-            return OUString("last-week");
+            return "last-week";
         case condformat::NEXTWEEK:
-            return OUString("next-week");
+            return "next-week";
         case condformat::THISMONTH:
-            return OUString("this-month");
+            return "this-month";
         case condformat::LASTMONTH:
-            return OUString("last-month");
+            return "last-month";
         case condformat::NEXTMONTH:
-            return OUString("next-month");
+            return "next-month";
         case condformat::THISYEAR:
-            return OUString("this-year");
+            return "this-year";
         case condformat::LASTYEAR:
-            return OUString("last-year");
+            return "last-year";
         case condformat::NEXTYEAR:
-            return OUString("next-year");
+            return "next-year";
     }
 
     return OUString();

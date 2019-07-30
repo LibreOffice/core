@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 
 OUString ScDocument_getImplementationName() throw()
 {
-    return OUString( "com.sun.star.comp.Calc.SpreadsheetDocument" );
+    return "com.sun.star.comp.Calc.SpreadsheetDocument";
 }
 
 uno::Sequence< OUString > ScDocument_getSupportedServiceNames() throw()

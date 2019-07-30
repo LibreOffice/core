@@ -1009,7 +1009,7 @@ OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, const 
         break;
     }
 
-    return OString("");
+    return "";
 }
 
 }

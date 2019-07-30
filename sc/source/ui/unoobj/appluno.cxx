@@ -190,7 +190,7 @@ uno::Reference<uno::XInterface> ScSpreadsheetSettings_CreateInstance(
 
 OUString ScSpreadsheetSettings::getImplementationName_Static()
 {
-    return OUString( "stardiv.StarCalc.ScSpreadsheetSettings" );
+    return "stardiv.StarCalc.ScSpreadsheetSettings";
 }
 
 uno::Sequence<OUString> ScSpreadsheetSettings::getSupportedServiceNames_Static()

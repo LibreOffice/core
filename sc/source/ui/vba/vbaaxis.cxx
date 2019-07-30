@@ -640,7 +640,7 @@ void SAL_CALL ScVbaAxis::setLeft( double left )
 OUString
 ScVbaAxis::getServiceImplName()
 {
-    return OUString("ScVbaAxis");
+    return "ScVbaAxis";
 }
 
 uno::Sequence< OUString >

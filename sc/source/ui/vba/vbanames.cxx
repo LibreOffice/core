@@ -238,7 +238,7 @@ ScVbaNames::createCollectionObject( const uno::Any& aSource )
 OUString
 ScVbaNames::getServiceImplName()
 {
-    return OUString( "ScVbaNames" );
+    return "ScVbaNames";
 }
 
 css::uno::Sequence<OUString>

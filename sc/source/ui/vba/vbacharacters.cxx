@@ -118,7 +118,7 @@ ScVbaCharacters::Delete(  )
 OUString
 ScVbaCharacters::getServiceImplName()
 {
-    return OUString("ScVbaCharacters");
+    return "ScVbaCharacters";
 }
 
 uno::Sequence< OUString >
