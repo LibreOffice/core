@@ -844,7 +844,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
 
     OUString ODatabaseMetaDataResultSet::getImplementationName_Static(  )
     {
-        return OUString("org.openoffice.comp.helper.DatabaseMetaDataResultSet");
+        return "org.openoffice.comp.helper.DatabaseMetaDataResultSet";
     }
 
     Sequence< OUString > ODatabaseMetaDataResultSet::getSupportedServiceNames_Static(  )

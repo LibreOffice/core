@@ -32,10 +32,7 @@ namespace connectivity
 {
 namespace writer
 {
-OUString ODriver::getImplementationName_Static()
-{
-    return OUString("com.sun.star.comp.sdbc.writer.ODriver");
-}
+OUString ODriver::getImplementationName_Static() { return "com.sun.star.comp.sdbc.writer.ODriver"; }
 
 OUString SAL_CALL ODriver::getImplementationName() { return getImplementationName_Static(); }
 

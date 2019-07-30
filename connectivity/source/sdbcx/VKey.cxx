@@ -40,8 +40,8 @@ using namespace ::com::sun::star::lang;
 OUString SAL_CALL OKey::getImplementationName(  )
 {
     if(isNew())
-        return OUString("com.sun.star.sdbcx.VKeyDescriptor");
-    return OUString("com.sun.star.sdbcx.VKey");
+        return "com.sun.star.sdbcx.VKeyDescriptor";
+    return "com.sun.star.sdbcx.VKey";
 }
 
 css::uno::Sequence< OUString > SAL_CALL OKey::getSupportedServiceNames(  )

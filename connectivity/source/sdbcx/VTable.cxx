@@ -44,8 +44,8 @@ using namespace ::com::sun::star::lang;
 OUString SAL_CALL OTable::getImplementationName(  )
 {
     if(isNew())
-        return OUString("com.sun.star.sdbcx.VTableDescriptor");
-    return OUString("com.sun.star.sdbcx.Table");
+        return "com.sun.star.sdbcx.VTableDescriptor";
+    return "com.sun.star.sdbcx.Table";
 }
 
 

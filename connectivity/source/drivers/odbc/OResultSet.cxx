@@ -65,7 +65,7 @@ namespace
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
 OUString SAL_CALL OResultSet::getImplementationName(  )
 {
-    return OUString("com.sun.star.sdbcx.odbc.ResultSet");
+    return "com.sun.star.sdbcx.odbc.ResultSet";
 }
 
  Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames(  )

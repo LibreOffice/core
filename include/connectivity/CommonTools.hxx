@@ -154,7 +154,7 @@ namespace connectivity
 #define IMPLEMENT_SERVICE_INFO(classname, implasciiname, serviceasciiname)  \
     OUString SAL_CALL classname::getImplementationName(  )   \
     {   \
-        return OUString(implasciiname); \
+        return implasciiname; \
     }   \
     css::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  )  \
     {   \

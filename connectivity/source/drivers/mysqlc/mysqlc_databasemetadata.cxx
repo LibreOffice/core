@@ -171,11 +171,11 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxIndexLength() { return 256; }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns() { return true; }
 
-OUString SAL_CALL ODatabaseMetaData::getCatalogTerm() { return OUString("n/a"); }
+OUString SAL_CALL ODatabaseMetaData::getCatalogTerm() { return "n/a"; }
 
-OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString() { return OUString("\""); }
+OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString() { return "\""; }
 
-OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters() { return OUString("#@"); }
+OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters() { return "#@"; }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames() { return true; }
 
@@ -366,9 +366,9 @@ OUString SAL_CALL ODatabaseMetaData::getUserName()
     return OUString();
 }
 
-OUString SAL_CALL ODatabaseMetaData::getDriverName() { return OUString("MySQL Connector/OO.org"); }
+OUString SAL_CALL ODatabaseMetaData::getDriverName() { return "MySQL Connector/OO.org"; }
 
-OUString SAL_CALL ODatabaseMetaData::getDriverVersion() { return OUString("0.9.2"); }
+OUString SAL_CALL ODatabaseMetaData::getDriverVersion() { return "0.9.2"; }
 
 OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion()
 {
@@ -376,11 +376,11 @@ OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion()
                              m_rConnection.getConnectionEncoding());
 }
 
-OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName() { return OUString("MySQL"); }
+OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName() { return "MySQL"; }
 
-OUString SAL_CALL ODatabaseMetaData::getProcedureTerm() { return OUString("procedure"); }
+OUString SAL_CALL ODatabaseMetaData::getProcedureTerm() { return "procedure"; }
 
-OUString SAL_CALL ODatabaseMetaData::getSchemaTerm() { return OUString("database"); }
+OUString SAL_CALL ODatabaseMetaData::getSchemaTerm() { return "database"; }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMajorVersion()
 {
@@ -404,85 +404,85 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion()
 
 OUString SAL_CALL ODatabaseMetaData::getSQLKeywords()
 {
-    return OUString("ACCESSIBLE, ADD, ALL,"
-                    "ALTER, ANALYZE, AND, AS, ASC, ASENSITIVE, BEFORE,"
-                    "BETWEEN, BIGINT, BINARY, BLOB, BOTH, BY, CALL,"
-                    "CASCADE, CASE, CHANGE, CHAR, CHARACTER, CHECK,"
-                    "COLLATE, COLUMN, CONDITION, CONNECTION, CONSTRAINT,"
-                    "CONTINUE, CONVERT, CREATE, CROSS, CURRENT_DATE,"
-                    "CURRENT_TIME, CURRENT_TIMESTAMP, CURRENT_USER, CURSOR,"
-                    "DATABASE, DATABASES, DAY_HOUR, DAY_MICROSECOND,"
-                    "DAY_MINUTE, DAY_SECOND, DEC, DECIMAL, DECLARE,"
-                    "DEFAULT, DELAYED, DELETE, DESC, DESCRIBE,"
-                    "DETERMINISTIC, DISTINCT, DISTINCTROW, DIV, DOUBLE,"
-                    "DROP, DUAL, EACH, ELSE, ELSEIF, ENCLOSED,"
-                    "ESCAPED, EXISTS, EXIT, EXPLAIN, FALSE, FETCH,"
-                    "FLOAT, FLOAT4, FLOAT8, FOR, FORCE, FOREIGN, FROM,"
-                    "FULLTEXT, GRANT, GROUP, HAVING, HIGH_PRIORITY,"
-                    "HOUR_MICROSECOND, HOUR_MINUTE, HOUR_SECOND, IF,"
-                    "IGNORE, IN, INDEX, INFILE, INNER, INOUT,"
-                    "INSENSITIVE, INSERT, INT, INT1, INT2, INT3, INT4,"
-                    "INT8, INTEGER, INTERVAL, INTO, IS, ITERATE, JOIN,"
-                    "KEY, KEYS, KILL, LEADING, LEAVE, LEFT, LIKE,"
-                    "LOCALTIMESTAMP, LOCK, LONG, LONGBLOB, LONGTEXT,"
-                    "LOOP, LOW_PRIORITY, MATCH, MEDIUMBLOB, MEDIUMINT,"
-                    "MEDIUMTEXT, MIDDLEINT, MINUTE_MICROSECOND,"
-                    "MINUTE_SECOND, MOD, MODIFIES, NATURAL, NOT,"
-                    "NO_WRITE_TO_BINLOG, NULL, NUMERIC, ON, OPTIMIZE,"
-                    "OPTION, OPTIONALLY, OR, ORDER, OUT, OUTER,"
-                    "OUTFILE, PRECISION, PRIMARY, PROCEDURE, PURGE,"
-                    "RANGE, READ, READS, READ_ONLY, READ_WRITE, REAL,"
-                    "REFERENCES, REGEXP, RELEASE, RENAME, REPEAT,"
-                    "REPLACE, REQUIRE, RESTRICT, RETURN, REVOKE, RIGHT,"
-                    "RLIKE, SCHEMA, SCHEMAS, SECOND_MICROSECOND, SELECT,"
-                    "SENSITIVE, SEPARATOR, SET, SHOW, SMALLINT, SPATIAL,"
-                    "SPECIFIC, SQL, SQLEXCEPTION, SQLSTATE, SQLWARNING,"
-                    "SQL_BIG_RESULT, SQL_CALC_FOUND_ROWS, SQL_SMALL_RESULT,"
-                    "SSL, STARTING, STRAIGHT_JOIN, TABLE, TERMINATED,"
-                    "THEN, TINYBLOB, TINYINT, TINYTEXT, TO, TRAILING,"
-                    "TRIGGER, TRUE, UNDO, UNION, UNIQUE, UNLOCK,"
-                    "UNSIGNED, UPDATE, USAGE, USE, USING, UTC_DATE,"
-                    "UTC_TIME, UTC_TIMESTAMP, VALUES, VARBINARY, VARCHAR,"
-                    "VARCHARACTER, VARYING, WHEN, WHERE, WHILE, WITH,"
-                    "WRITE, X509, XOR, YEAR_MONTH, ZEROFILL"
-                    "GENERAL, IGNORE_SERVER_IDS, MASTER_HEARTBEAT_PERIOD,"
-                    "MAXVALUE, RESIGNAL, SIGNAL, SLOW");
+    return "ACCESSIBLE, ADD, ALL,"
+           "ALTER, ANALYZE, AND, AS, ASC, ASENSITIVE, BEFORE,"
+           "BETWEEN, BIGINT, BINARY, BLOB, BOTH, BY, CALL,"
+           "CASCADE, CASE, CHANGE, CHAR, CHARACTER, CHECK,"
+           "COLLATE, COLUMN, CONDITION, CONNECTION, CONSTRAINT,"
+           "CONTINUE, CONVERT, CREATE, CROSS, CURRENT_DATE,"
+           "CURRENT_TIME, CURRENT_TIMESTAMP, CURRENT_USER, CURSOR,"
+           "DATABASE, DATABASES, DAY_HOUR, DAY_MICROSECOND,"
+           "DAY_MINUTE, DAY_SECOND, DEC, DECIMAL, DECLARE,"
+           "DEFAULT, DELAYED, DELETE, DESC, DESCRIBE,"
+           "DETERMINISTIC, DISTINCT, DISTINCTROW, DIV, DOUBLE,"
+           "DROP, DUAL, EACH, ELSE, ELSEIF, ENCLOSED,"
+           "ESCAPED, EXISTS, EXIT, EXPLAIN, FALSE, FETCH,"
+           "FLOAT, FLOAT4, FLOAT8, FOR, FORCE, FOREIGN, FROM,"
+           "FULLTEXT, GRANT, GROUP, HAVING, HIGH_PRIORITY,"
+           "HOUR_MICROSECOND, HOUR_MINUTE, HOUR_SECOND, IF,"
+           "IGNORE, IN, INDEX, INFILE, INNER, INOUT,"
+           "INSENSITIVE, INSERT, INT, INT1, INT2, INT3, INT4,"
+           "INT8, INTEGER, INTERVAL, INTO, IS, ITERATE, JOIN,"
+           "KEY, KEYS, KILL, LEADING, LEAVE, LEFT, LIKE,"
+           "LOCALTIMESTAMP, LOCK, LONG, LONGBLOB, LONGTEXT,"
+           "LOOP, LOW_PRIORITY, MATCH, MEDIUMBLOB, MEDIUMINT,"
+           "MEDIUMTEXT, MIDDLEINT, MINUTE_MICROSECOND,"
+           "MINUTE_SECOND, MOD, MODIFIES, NATURAL, NOT,"
+           "NO_WRITE_TO_BINLOG, NULL, NUMERIC, ON, OPTIMIZE,"
+           "OPTION, OPTIONALLY, OR, ORDER, OUT, OUTER,"
+           "OUTFILE, PRECISION, PRIMARY, PROCEDURE, PURGE,"
+           "RANGE, READ, READS, READ_ONLY, READ_WRITE, REAL,"
+           "REFERENCES, REGEXP, RELEASE, RENAME, REPEAT,"
+           "REPLACE, REQUIRE, RESTRICT, RETURN, REVOKE, RIGHT,"
+           "RLIKE, SCHEMA, SCHEMAS, SECOND_MICROSECOND, SELECT,"
+           "SENSITIVE, SEPARATOR, SET, SHOW, SMALLINT, SPATIAL,"
+           "SPECIFIC, SQL, SQLEXCEPTION, SQLSTATE, SQLWARNING,"
+           "SQL_BIG_RESULT, SQL_CALC_FOUND_ROWS, SQL_SMALL_RESULT,"
+           "SSL, STARTING, STRAIGHT_JOIN, TABLE, TERMINATED,"
+           "THEN, TINYBLOB, TINYINT, TINYTEXT, TO, TRAILING,"
+           "TRIGGER, TRUE, UNDO, UNION, UNIQUE, UNLOCK,"
+           "UNSIGNED, UPDATE, USAGE, USE, USING, UTC_DATE,"
+           "UTC_TIME, UTC_TIMESTAMP, VALUES, VARBINARY, VARCHAR,"
+           "VARCHARACTER, VARYING, WHEN, WHERE, WHILE, WITH,"
+           "WRITE, X509, XOR, YEAR_MONTH, ZEROFILL"
+           "GENERAL, IGNORE_SERVER_IDS, MASTER_HEARTBEAT_PERIOD,"
+           "MAXVALUE, RESIGNAL, SIGNAL, SLOW";
 }
 
-OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape() { return OUString("\\"); }
+OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape() { return "\\"; }
 
 OUString SAL_CALL ODatabaseMetaData::getStringFunctions()
 {
-    return OUString("ASCII,BIN,BIT_LENGTH,CHAR,CHARACTER_LENGTH,CHAR_LENGTH,CONCAT,"
-                    "CONCAT_WS,CONV,ELT,EXPORT_SET,FIELD,FIND_IN_SET,HEX,INSERT,"
-                    "INSTR,LCASE,LEFT,LENGTH,LOAD_FILE,LOCATE,LOCATE,LOWER,LPAD,"
-                    "LTRIM,MAKE_SET,MATCH,MID,OCT,OCTET_LENGTH,ORD,POSITION,"
-                    "QUOTE,REPEAT,REPLACE,REVERSE,RIGHT,RPAD,RTRIM,SOUNDEX,"
-                    "SPACE,STRCMP,SUBSTRING,SUBSTRING,SUBSTRING,SUBSTRING,"
-                    "SUBSTRING_INDEX,TRIM,UCASE,UPPER");
+    return "ASCII,BIN,BIT_LENGTH,CHAR,CHARACTER_LENGTH,CHAR_LENGTH,CONCAT,"
+           "CONCAT_WS,CONV,ELT,EXPORT_SET,FIELD,FIND_IN_SET,HEX,INSERT,"
+           "INSTR,LCASE,LEFT,LENGTH,LOAD_FILE,LOCATE,LOCATE,LOWER,LPAD,"
+           "LTRIM,MAKE_SET,MATCH,MID,OCT,OCTET_LENGTH,ORD,POSITION,"
+           "QUOTE,REPEAT,REPLACE,REVERSE,RIGHT,RPAD,RTRIM,SOUNDEX,"
+           "SPACE,STRCMP,SUBSTRING,SUBSTRING,SUBSTRING,SUBSTRING,"
+           "SUBSTRING_INDEX,TRIM,UCASE,UPPER";
 }
 
 OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions()
 {
-    return OUString("DAYOFWEEK,WEEKDAY,DAYOFMONTH,DAYOFYEAR,MONTH,DAYNAME,"
-                    "MONTHNAME,QUARTER,WEEK,YEAR,HOUR,MINUTE,SECOND,PERIOD_ADD,"
-                    "PERIOD_DIFF,TO_DAYS,FROM_DAYS,DATE_FORMAT,TIME_FORMAT,"
-                    "CURDATE,CURRENT_DATE,CURTIME,CURRENT_TIME,NOW,SYSDATE,"
-                    "CURRENT_TIMESTAMP,UNIX_TIMESTAMP,FROM_UNIXTIME,"
-                    "SEC_TO_TIME,TIME_TO_SEC");
+    return "DAYOFWEEK,WEEKDAY,DAYOFMONTH,DAYOFYEAR,MONTH,DAYNAME,"
+           "MONTHNAME,QUARTER,WEEK,YEAR,HOUR,MINUTE,SECOND,PERIOD_ADD,"
+           "PERIOD_DIFF,TO_DAYS,FROM_DAYS,DATE_FORMAT,TIME_FORMAT,"
+           "CURDATE,CURRENT_DATE,CURTIME,CURRENT_TIME,NOW,SYSDATE,"
+           "CURRENT_TIMESTAMP,UNIX_TIMESTAMP,FROM_UNIXTIME,"
+           "SEC_TO_TIME,TIME_TO_SEC";
 }
 
 OUString SAL_CALL ODatabaseMetaData::getSystemFunctions()
 {
-    return OUString("DATABASE,USER,SYSTEM_USER,"
-                    "SESSION_USER,PASSWORD,ENCRYPT,LAST_INSERT_ID,VERSION");
+    return "DATABASE,USER,SYSTEM_USER,"
+           "SESSION_USER,PASSWORD,ENCRYPT,LAST_INSERT_ID,VERSION";
 }
 
 OUString SAL_CALL ODatabaseMetaData::getNumericFunctions()
 {
-    return OUString("ABS,ACOS,ASIN,ATAN,ATAN2,BIT_COUNT,CEILING,COS,"
-                    "COT,DEGREES,EXP,FLOOR,LOG,LOG10,MAX,MIN,MOD,PI,POW,"
-                    "POWER,RADIANS,RAND,ROUND,SIN,SQRT,TAN,TRUNCATE");
+    return "ABS,ACOS,ASIN,ATAN,ATAN2,BIT_COUNT,CEILING,COS,"
+           "COT,DEGREES,EXP,FLOOR,LOG,LOG10,MAX,MIN,MOD,PI,POW,"
+           "POWER,RADIANS,RAND,ROUND,SIN,SQRT,TAN,TRUNCATE";
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar() { return false; }

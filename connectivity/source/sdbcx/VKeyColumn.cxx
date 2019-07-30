@@ -31,8 +31,8 @@ using namespace cppu;
 OUString SAL_CALL OKeyColumn::getImplementationName(  )
 {
     if(isNew())
-        return OUString("com.sun.star.sdbcx.VKeyColumnDescriptor");
-    return OUString("com.sun.star.sdbcx.VKeyColumn");
+        return "com.sun.star.sdbcx.VKeyColumnDescriptor";
+    return "com.sun.star.sdbcx.VKeyColumn";
 }
 
 css::uno::Sequence< OUString > SAL_CALL OKeyColumn::getSupportedServiceNames(  )

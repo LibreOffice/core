@@ -258,7 +258,7 @@ OUString SAL_CALL ODatabaseMetaData::getCatalogTerm(  )
 OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     // normally this is "
-    return OUString( "\"");
+    return "\"";
 }
 
 OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters(  )

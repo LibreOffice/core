@@ -80,7 +80,7 @@ void OEvoabDriver::disposing()
 
 OUString OEvoabDriver::getImplementationName_Static(  )
 {
-    return OUString(EVOAB_DRIVER_IMPL_NAME);
+    return EVOAB_DRIVER_IMPL_NAME;
     // this name is referenced in the configuration and in the evoab.xml
     // Please take care when changing it.
 }

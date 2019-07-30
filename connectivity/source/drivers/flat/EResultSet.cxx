@@ -47,7 +47,7 @@ OFlatResultSet::OFlatResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTr
 
 OUString SAL_CALL OFlatResultSet::getImplementationName(  )
 {
-    return OUString("com.sun.star.sdbcx.flat.ResultSet");
+    return "com.sun.star.sdbcx.flat.ResultSet";
 }
 
 Sequence< OUString > SAL_CALL OFlatResultSet::getSupportedServiceNames(  )

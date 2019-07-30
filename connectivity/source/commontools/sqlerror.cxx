@@ -142,9 +142,9 @@ namespace connectivity
             switch (_eCondition)
             {
                 case css::sdb::ErrorCondition::DB_NOT_CONNECTED:
-                    return OUString(STR_DB_NOT_CONNECTED_STATE);
+                    return STR_DB_NOT_CONNECTED_STATE;
                 case css::sdb::ErrorCondition::DATA_CANNOT_SELECT_UNFILTERED:
-                    return OUString(STR_DATA_CANNOT_SELECT_UNFILTERED_STATE);
+                    return STR_DATA_CANNOT_SELECT_UNFILTERED_STATE;
             }
             return OUString();
         }

@@ -42,7 +42,7 @@ namespace connectivity
 
     OUString ParameterSubstitution::getImplementationName_Static(  )
     {
-        return OUString("org.openoffice.comp.helper.ParameterSubstitution");
+        return "org.openoffice.comp.helper.ParameterSubstitution";
     }
 
     OUString SAL_CALL ParameterSubstitution::getImplementationName(  )

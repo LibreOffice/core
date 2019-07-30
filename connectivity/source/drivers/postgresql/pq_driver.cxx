@@ -70,7 +70,7 @@ namespace pq_sdbc_driver
 
 static OUString DriverGetImplementationName()
 {
-    return OUString( "org.openoffice.comp.connectivity.pq.Driver.noext" );
+    return "org.openoffice.comp.connectivity.pq.Driver.noext";
 }
 
 static Sequence< OUString > DriverGetSupportedServiceNames()

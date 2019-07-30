@@ -138,7 +138,7 @@ void FirebirdDriver::disposing()
 //----- static ServiceInfo ---------------------------------------------------
 OUString FirebirdDriver::getImplementationName_Static()
 {
-    return OUString("com.sun.star.comp.sdbc.firebird.Driver");
+    return "com.sun.star.comp.sdbc.firebird.Driver";
 }
 
 Sequence< OUString > FirebirdDriver::getSupportedServiceNames_Static()

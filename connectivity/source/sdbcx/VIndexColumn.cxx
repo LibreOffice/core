@@ -30,8 +30,8 @@ using namespace ::com::sun::star::uno;
 OUString SAL_CALL OIndexColumn::getImplementationName(  )
 {
     if(isNew())
-        return OUString("com.sun.star.sdbcx.VIndexColumnDescriptor");
-    return OUString("com.sun.star.sdbcx.VIndexColumn");
+        return "com.sun.star.sdbcx.VIndexColumnDescriptor";
+    return "com.sun.star.sdbcx.VIndexColumn";
 }
 
 css::uno::Sequence< OUString > SAL_CALL OIndexColumn::getSupportedServiceNames(  )

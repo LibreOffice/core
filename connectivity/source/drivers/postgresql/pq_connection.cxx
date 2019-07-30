@@ -119,7 +119,7 @@ public:
 
 static OUString    ConnectionGetImplementationName()
 {
-    return OUString( "org.openoffice.comp.connectivity.pq.Connection.noext" );
+    return "org.openoffice.comp.connectivity.pq.Connection.noext";
 }
 static css::uno::Sequence<OUString> ConnectionGetSupportedServiceNames()
 {

@@ -46,7 +46,7 @@ OComponentResultSet::OComponentResultSet( OStatement_Base* pStmt,connectivity::O
 
 OUString SAL_CALL OComponentResultSet::getImplementationName(  )
 {
-    return OUString("com.sun.star.sdbcx.component.ResultSet");
+    return "com.sun.star.sdbcx.component.ResultSet";
 }
 
 Sequence< OUString > SAL_CALL OComponentResultSet::getSupportedServiceNames(  )

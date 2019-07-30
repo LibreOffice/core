@@ -42,8 +42,8 @@ using namespace ::com::sun::star::lang;
 OUString SAL_CALL OIndex::getImplementationName(  )
 {
     if(isNew())
-        return OUString("com.sun.star.sdbcx.VIndexDescriptor");
-    return OUString("com.sun.star.sdbcx.VIndex");
+        return "com.sun.star.sdbcx.VIndexDescriptor";
+    return "com.sun.star.sdbcx.VIndex";
 }
 
 css::uno::Sequence< OUString > SAL_CALL OIndex::getSupportedServiceNames(  )

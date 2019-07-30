@@ -942,17 +942,17 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const OUString& _rSour
 }
 static OUString lcl_getReportEngines()
 {
-    return OUString("org.openoffice.Office.DataAccess/ReportEngines");
+    return "org.openoffice.Office.DataAccess/ReportEngines";
 }
 
 static OUString lcl_getDefaultReportEngine()
 {
-    return OUString("DefaultReportEngine");
+    return "DefaultReportEngine";
 }
 
 static OUString lcl_getReportEngineNames()
 {
-    return OUString("ReportEngineNames");
+    return "ReportEngineNames";
 }
 
 OUString getDefaultReportEngineServiceName(const Reference< XComponentContext >& _rxORB)
@@ -979,10 +979,10 @@ OUString getDefaultReportEngineServiceName(const Reference< XComponentContext >&
             }
         }
         else
-            return OUString("org.libreoffice.report.pentaho.SOReportJobFactory");
+            return "org.libreoffice.report.pentaho.SOReportJobFactory";
     }
     else
-        return OUString("org.libreoffice.report.pentaho.SOReportJobFactory");
+        return "org.libreoffice.report.pentaho.SOReportJobFactory";
     return OUString();
 }
 

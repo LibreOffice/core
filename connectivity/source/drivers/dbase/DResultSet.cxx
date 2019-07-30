@@ -49,7 +49,7 @@ ODbaseResultSet::ODbaseResultSet( OStatement_Base* pStmt,connectivity::OSQLParse
 
 OUString SAL_CALL ODbaseResultSet::getImplementationName(  )
 {
-    return OUString("com.sun.star.sdbcx.dbase.ResultSet");
+    return "com.sun.star.sdbcx.dbase.ResultSet";
 }
 
 Sequence< OUString > SAL_CALL ODbaseResultSet::getSupportedServiceNames(  )
