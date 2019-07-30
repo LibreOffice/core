@@ -419,7 +419,7 @@ Reference< XInterface > ODataInputStream_CreateInstance(
 
 OUString ODataInputStream_getImplementationName()
 {
-    return OUString("com.sun.star.comp.io.stm.DataInputStream");
+    return "com.sun.star.comp.io.stm.DataInputStream";
 }
 
 Sequence<OUString> ODataInputStream_getSupportedServiceNames()
@@ -737,7 +737,7 @@ Reference< XInterface > ODataOutputStream_CreateInstance(
 
 OUString ODataOutputStream_getImplementationName()
 {
-    return OUString("com.sun.star.comp.io.stm.DataOutputStream");
+    return "com.sun.star.comp.io.stm.DataOutputStream";
 }
 
 Sequence<OUString> ODataOutputStream_getSupportedServiceNames()
@@ -985,7 +985,7 @@ Reference< XInterface > OObjectOutputStream_CreateInstance(
 
 OUString OObjectOutputStream_getImplementationName()
 {
-    return OUString("com.sun.star.comp.io.stm.ObjectOutputStream");
+    return "com.sun.star.comp.io.stm.ObjectOutputStream";
 }
 
 Sequence<OUString> OObjectOutputStream_getSupportedServiceNames()
@@ -1267,7 +1267,7 @@ Reference< XInterface > OObjectInputStream_CreateInstance( const Reference < XCo
 
 OUString OObjectInputStream_getImplementationName()
 {
-    return OUString("com.sun.star.comp.io.stm.ObjectInputStream");
+    return "com.sun.star.comp.io.stm.ObjectInputStream";
 }
 
 Sequence<OUString> OObjectInputStream_getSupportedServiceNames()

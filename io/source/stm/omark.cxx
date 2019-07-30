@@ -373,7 +373,7 @@ Reference< XInterface > OMarkableOutputStream_CreateInstance(
 
 OUString    OMarkableOutputStream_getImplementationName()
 {
-    return OUString("com.sun.star.comp.io.stm.MarkableOutputStream");
+    return "com.sun.star.comp.io.stm.MarkableOutputStream";
 }
 
 Sequence<OUString> OMarkableOutputStream_getSupportedServiceNames()
@@ -784,7 +784,7 @@ Reference < XInterface > OMarkableInputStream_CreateInstance(
 
 OUString    OMarkableInputStream_getImplementationName()
 {
-    return OUString("com.sun.star.comp.io.stm.MarkableInputStream");
+    return "com.sun.star.comp.io.stm.MarkableInputStream";
 }
 
 Sequence<OUString> OMarkableInputStream_getSupportedServiceNames()

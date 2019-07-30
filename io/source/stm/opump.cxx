@@ -446,7 +446,7 @@ Reference< XInterface > OPumpImpl_CreateInstance(
 
 OUString OPumpImpl_getImplementationName()
 {
-    return OUString("com.sun.star.comp.io.Pump");
+    return "com.sun.star.comp.io.Pump";
 }
 
 Sequence<OUString> OPumpImpl_getSupportedServiceNames()
