@@ -154,7 +154,6 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             nParam = NS_ooxml::LN_Value_ST_TabTlc_underscore;
             break;
         case RTF_TLEQ:
-            break;
         default:
             break;
     }
