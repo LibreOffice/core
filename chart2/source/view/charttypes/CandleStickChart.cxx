@@ -25,6 +25,7 @@
 #include "BarPositionHelper.hxx"
 #include <DateHelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
@@ -110,6 +111,7 @@ void CandleStickChart::createShapes()
         {
             m_xChartTypeModelProps->getPropertyValue( "ShowFirst" ) >>= bShowFirst;
 
+            uno::Reference< XChartDocument > rxModel( m_xChartTypeModel, uno::UNO_QUERY );
             uno::Reference< beans::XPropertySet > xWhiteDayProps;
             uno::Reference< beans::XPropertySet > xBlackDayProps;
             m_xChartTypeModelProps->getPropertyValue( "Japanese" ) >>= bJapaneseStyle;
@@ -117,11 +119,11 @@ void CandleStickChart::createShapes()
             m_xChartTypeModelProps->getPropertyValue( "BlackDay" ) >>= xBlackDayProps;
 
             tPropertyNameValueMap aWhiteBox_Map;
-            PropertyMapper::getValueMap( aWhiteBox_Map, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xWhiteDayProps );
+            PropertyMapper::getValueMap( rxModel, 1, aWhiteBox_Map, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xWhiteDayProps );
             PropertyMapper::getMultiPropertyListsFromValueMap( aWhiteBox_Names, aWhiteBox_Values, aWhiteBox_Map );
 
             tPropertyNameValueMap aBlackBox_Map;
-            PropertyMapper::getValueMap( aBlackBox_Map, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xBlackDayProps );
+            PropertyMapper::getValueMap( rxModel, 1, aBlackBox_Map, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xBlackDayProps );
             PropertyMapper::getMultiPropertyListsFromValueMap( aBlackBox_Names, aBlackBox_Values, aBlackBox_Map );
         }
     }

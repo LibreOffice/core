@@ -52,6 +52,7 @@
 #include <unonames.hxx>
 #include <SpecialCharacters.hxx>
 
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
@@ -1540,10 +1541,11 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
 
             if( !aFormula.isEmpty())
             {
+                Reference< XChartDocument > rxModel( m_xChartTypeModel, uno::UNO_QUERY );
                 // set fill and line properties on creation
                 tNameSequence aNames;
                 tAnySequence  aValues;
-                PropertyMapper::getPreparedTextShapePropertyLists( xEquationProperties, aNames, aValues );
+                PropertyMapper::getPreparedTextShapePropertyLists( rxModel, 1, xEquationProperties, aNames, aValues );
 
                 uno::Reference< drawing::XShape > xTextShape = m_pShapeFactory->createText(
                     xEquationTarget, aFormula.makeStringAndClear(),
@@ -1592,7 +1594,7 @@ void VSeriesPlotter::setMappedProperties(
         , tPropertyNameValueMap const * pOverwriteMap )
 {
     uno::Reference< beans::XPropertySet > xTargetProp( xTargetShape, uno::UNO_QUERY );
-    PropertyMapper::setMappedProperties(xTargetProp,xSource,rMap,pOverwriteMap);
+    PropertyMapper::setMappedPropertiesWithoutModel( xTargetProp,xSource,rMap,pOverwriteMap);
 }
 
 void VSeriesPlotter::setTimeResolutionOnXAxis( long TimeResolution, const Date& rNullDate )
