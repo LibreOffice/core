@@ -69,6 +69,9 @@ $(call gb_UnpackedTarget_get_target,%).zip :
 $(call gb_UnpackedTarget_get_target,%).oxt :
 	$(call gb_UnpackedTarget__command,unzip,$@,$*)
 
+$(call gb_UnpackedTarget_get_target,%).tar.zst :
+	$(call gb_UnpackedTarget__command,untar,$@,$*,--use-compress-program unzstd)
+
 .PHONY : $(call gb_UnpackedTarget_get_clean_target,%)
 $(call gb_UnpackedTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),UPK,1)
