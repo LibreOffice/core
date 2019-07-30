@@ -35,7 +35,7 @@ namespace migration
 
     OUString WordbookMigration_getImplementationName()
     {
-        return OUString( "com.sun.star.comp.desktop.migration.Wordbooks" );
+        return "com.sun.star.comp.desktop.migration.Wordbooks";
     }
 
 

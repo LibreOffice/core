@@ -57,7 +57,7 @@ namespace migration
 
 OUString OO3ExtensionMigration_getImplementationName()
 {
-    return OUString( "com.sun.star.comp.desktop.migration.OOo3Extensions" );
+    return "com.sun.star.comp.desktop.migration.OOo3Extensions";
 }
 
 
