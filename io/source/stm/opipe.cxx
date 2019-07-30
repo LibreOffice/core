@@ -363,7 +363,7 @@ Reference < XInterface > OPipeImpl_CreateInstance(
 
 OUString    OPipeImpl_getImplementationName()
 {
-    return OUString( IMPLEMENTATION_NAME );
+    return IMPLEMENTATION_NAME;
 }
 
 Sequence<OUString> OPipeImpl_getSupportedServiceNames()

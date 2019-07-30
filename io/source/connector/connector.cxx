@@ -164,7 +164,7 @@ namespace stoc_connector
 
     OUString connector_getImplementationName()
     {
-        return OUString( IMPLEMENTATION_NAME );
+        return IMPLEMENTATION_NAME;
     }
 
         OUString OConnector::getImplementationName()

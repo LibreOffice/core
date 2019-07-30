@@ -225,7 +225,7 @@ Reference< XInterface > TextOutputStream_CreateInstance(
 
 OUString TextOutputStream_getImplementationName()
 {
-    return OUString( IMPLEMENTATION_NAME );
+    return IMPLEMENTATION_NAME;
 }
 
 

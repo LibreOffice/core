@@ -392,7 +392,7 @@ Reference< XInterface > TextInputStream_CreateInstance(
 
 OUString TextInputStream_getImplementationName()
 {
-    return OUString ( IMPLEMENTATION_NAME );
+    return IMPLEMENTATION_NAME;
 }
 
 Sequence< OUString > TextInputStream_getSupportedServiceNames()

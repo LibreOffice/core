@@ -241,7 +241,7 @@ namespace io_acceptor
 
     OUString acceptor_getImplementationName()
     {
-        return OUString( IMPLEMENTATION_NAME );
+        return IMPLEMENTATION_NAME;
     }
 
     Reference< XInterface > acceptor_CreateInstance( const Reference< XComponentContext > & xCtx)
