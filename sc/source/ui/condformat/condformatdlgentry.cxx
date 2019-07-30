@@ -33,6 +33,7 @@
 #include <tabvwsh.hxx>
 #include <simpleformulacalc.hxx>
 #include <unotools/charclass.hxx>
+#include <comphelper/lok.hxx>
 
 #include <colorformat.hxx>
 #include <scresid.hxx>
@@ -48,7 +49,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(vcl::Window* pParent, ScDocument* pDoc, const S
     , mpDoc(pDoc)
     , maPos(rPos)
 {
-    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), "modules/scalc/ui/conditionalentry.ui"));
+    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), (comphelper::LibreOfficeKit::isMobile()?OUString("modules/scalc/ui/conditionalentrymobile.ui"):OUString("modules/scalc/ui/conditionalentry.ui"))));
 
     get(maGrid, "grid");
     get(maFtCondNr, "number");
