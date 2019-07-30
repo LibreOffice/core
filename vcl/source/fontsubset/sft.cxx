@@ -910,7 +910,7 @@ static int findname( const sal_uInt8 *name, sal_uInt16 n, sal_uInt16 platformID,
  * Fix: if (1, 0, 0) and (3, 1, 1033) are not found need to look for (1, 0, *) - that will
  * require a change in algorithm
  *
- * /d/fonts/fdltest/Korean/h2drrm has unsorted names and a an unknown (to me) Mac LanguageID,
+ * /d/fonts/fdltest/Korean/h2drrm has unsorted names and an unknown (to me) Mac LanguageID,
  * but (1, 0, 1042) strings usable
  * Fix: change algorithm, and use (1, 0, *) if both standard Mac and MS strings are not found
  */
@@ -1009,9 +1009,9 @@ static void GetNames(TrueTypeFont *t)
     }
 
     /* #i60349# sanity check psname
-     * psname pratically has to be 7bit ascii and should not contains spaces
+     * psname practically has to be 7bit ASCII and should not contain spaces
      * there is a class of broken fonts which do not fulfill that at all, so let's try
-     * if the family name is 7bit ascii and take it instead if so
+     * if the family name is 7bit ASCII and take it instead if so
      */
     /* check psname */
     for( i = 0; t->psname[i] != 0 && bPSNameOK; i++ )

@@ -48,7 +48,7 @@ OUString convert_to_absolute_path(const OUString& path)
         SAL_WARN("vcl.app", "Could not resolve path '" << path << "' to search for icon themes.");
         if (rc == osl::FileBase::E_MULTIHOP)
         {
-            throw std::runtime_error("Provided a recursive symlink to a icon theme directory that could not be resolved.");
+            throw std::runtime_error("Provided a recursive symlink to an icon theme directory that could not be resolved.");
         }
     }
     return resolver.m_aStatus.getFileURL();
@@ -143,7 +143,7 @@ IconThemeScanner::ReadIconThemesFromPath(const OUString& dir)
 /*static*/ bool
 IconThemeScanner::FileIsValidIconTheme(const OUString& filename)
 {
-    // check whether we can construct a IconThemeInfo from it
+    // check whether we can construct an IconThemeInfo from it
     if (!IconThemeInfo::UrlCanBeParsed(filename)) {
         SAL_INFO("vcl.app", "File '" << filename << "' does not seem to be an icon theme.");
         return false;

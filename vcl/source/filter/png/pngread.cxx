@@ -122,7 +122,7 @@ private:
     sal_uInt8           mnInterlaceType;
     const BitmapColor   mcTranspColor;  // transparency mask's transparency "color"
     const BitmapColor   mcOpaqueColor;  // transparency mask's opaque "color"
-    bool                mbTransparent : 1;  // graphic includes an tRNS Chunk or an alpha Channel
+    bool                mbTransparent : 1;  // graphic includes a tRNS Chunk or an alpha Channel
     bool                mbAlphaChannel : 1; // is true for ColorType 4 and 6
     bool                mbRGBTriple : 1;
     bool                mbPalette : 1;      // false if we need a Palette

@@ -329,7 +329,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
         Color   aTextLineColor( aOldTextLineColor );
         Color   aOverlineColor( aOldOverlineColor );
 
-        // we don't have a automatic color, so black is always drawn on white
+        // we don't have an automatic color, so black is always drawn on white
         if ( aTextColor == COL_BLACK )
             aTextColor = COL_WHITE;
         if ( aTextLineColor == COL_BLACK )
