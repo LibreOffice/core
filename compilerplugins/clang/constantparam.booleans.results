@@ -254,10 +254,6 @@ cui/source/inc/hangulhanjadlg.hxx:60
     class rtl::OUString svx::SuggestionDisplay::GetEntry(unsigned short) const
     unsigned short nPos
     0
-cui/source/inc/radiobtnbox.hxx:40
-    void svx::SvxRadioButtonListBox::SvxRadioButtonListBox(class SvSimpleTableContainer &,long)
-    long nBits
-    0
 cui/source/inc/scriptdlg.hxx:122
     void SvxScriptOrgDialog::insertEntry(const class rtl::OUString &,const class rtl::OUString &,const class weld::TreeIter *,_Bool,class std::unique_ptr<class SFEntry, struct std::default_delete<class SFEntry> > &&,const class rtl::OUString &,_Bool)
     _Bool bChildrenOnDemand
@@ -1113,10 +1109,6 @@ include/svx/algitem.hxx:35
 include/svx/algitem.hxx:39
     void SvxOrientationItem::SvxOrientationItem(int,_Bool,const unsigned short)
     const unsigned short nId
-    0
-include/svx/checklbx.hxx:55
-    void SvxCheckListBox::SelectEntryPos(unsigned long)
-    unsigned long nPos
     0
 include/svx/colorwindow.hxx:147
     void ColorWindow::ColorWindow(const class std::shared_ptr<class PaletteManager> &,class ColorStatus &,unsigned short,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,class weld::Window *,class weld::MenuButton *,_Bool,const class std::function<void (const class rtl::OUString &, const struct std::pair<class Color, class rtl::OUString> &)> &)

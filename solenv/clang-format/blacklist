@@ -2810,7 +2810,6 @@ cui/source/inc/paragrph.hxx
 cui/source/inc/passwdomdlg.hxx
 cui/source/inc/pastedlg.hxx
 cui/source/inc/postdlg.hxx
-cui/source/inc/radiobtnbox.hxx
 cui/source/inc/screenshotannotationdlg.hxx
 cui/source/inc/scriptdlg.hxx
 cui/source/inc/sdrcelldlg.hxx
@@ -2882,7 +2881,6 @@ cui/source/options/optsave.cxx
 cui/source/options/optsave.hxx
 cui/source/options/optupdt.cxx
 cui/source/options/optupdt.hxx
-cui/source/options/radiobtnbox.cxx
 cui/source/options/sdbcdriverenum.cxx
 cui/source/options/sdbcdriverenum.hxx
 cui/source/options/securityoptions.cxx
@@ -7075,7 +7073,6 @@ include/svx/bmpmask.hxx
 include/svx/camera3d.hxx
 include/svx/charmap.hxx
 include/svx/charthelper.hxx
-include/svx/checklbx.hxx
 include/svx/chrtitem.hxx
 include/svx/clipboardctl.hxx
 include/svx/clipfmtitem.hxx
@@ -14005,7 +14002,6 @@ svx/source/dialog/SvxNumOptionsTabPageHelper.cxx
 svx/source/dialog/_bmpmask.cxx
 svx/source/dialog/_contdlg.cxx
 svx/source/dialog/charmap.cxx
-svx/source/dialog/checklbx.cxx
 svx/source/dialog/compressgraphicdialog.cxx
 svx/source/dialog/connctrl.cxx
 svx/source/dialog/contimp.hxx
