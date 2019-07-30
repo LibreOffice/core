@@ -90,7 +90,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return OUString("com.sun.star.comp.framework.ModuleUIConfigurationManager");
+        return "com.sun.star.comp.framework.ModuleUIConfigurationManager";
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override

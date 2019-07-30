@@ -329,9 +329,9 @@ void ResourceMenuController::disposing()
 OUString ResourceMenuController::getImplementationName()
 {
     if ( m_bToolbarContainer )
-        return OUString( "com.sun.star.comp.framework.ToolbarAsMenuController" );
+        return "com.sun.star.comp.framework.ToolbarAsMenuController";
 
-    return OUString( "com.sun.star.comp.framework.ResourceMenuController" );
+    return "com.sun.star.comp.framework.ResourceMenuController";
 }
 
 css::uno::Sequence< OUString > ResourceMenuController::getSupportedServiceNames()
@@ -380,7 +380,7 @@ void SaveAsMenuController::impl_setPopupMenu()
 
 OUString SaveAsMenuController::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.framework.SaveAsMenuController" );
+    return "com.sun.star.comp.framework.SaveAsMenuController";
 }
 
 }

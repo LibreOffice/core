@@ -46,7 +46,7 @@ class UICommandDescription : private cppu::BaseMutex,
 
         virtual OUString SAL_CALL getImplementationName() override
         {
-            return OUString("com.sun.star.comp.framework.UICommandDescription");
+            return "com.sun.star.comp.framework.UICommandDescription";
         }
 
         virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override

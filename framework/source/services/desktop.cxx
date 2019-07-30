@@ -81,7 +81,7 @@ enum PropHandle {
 
 OUString SAL_CALL Desktop::getImplementationName()
 {
-    return OUString("com.sun.star.comp.framework.Desktop");
+    return "com.sun.star.comp.framework.Desktop";
 }
 
 sal_Bool SAL_CALL Desktop::supportsService(OUString const & ServiceName)

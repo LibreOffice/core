@@ -23,17 +23,17 @@ namespace framework{
 
 const OUString JobConst::ANSWER_DEACTIVATE_JOB()
 {
-    return OUString("Deactivate");
+    return "Deactivate";
 }
 
 const OUString JobConst::ANSWER_SAVE_ARGUMENTS()
 {
-    return OUString("SaveArguments");
+    return "SaveArguments";
 }
 
 const OUString JobConst::ANSWER_SEND_DISPATCHRESULT()
 {
-    return OUString("SendDispatchResult");
+    return "SendDispatchResult";
 }
 
 } // namespace framework

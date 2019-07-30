@@ -82,7 +82,7 @@ namespace framework
             DECLARE_XTYPEPROVIDER()
             virtual OUString SAL_CALL getImplementationName() override
             {
-                return OUString("com.sun.star.comp.framework.LayoutManager");
+                return "com.sun.star.comp.framework.LayoutManager";
             }
 
             virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override

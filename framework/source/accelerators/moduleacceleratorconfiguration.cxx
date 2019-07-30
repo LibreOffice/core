@@ -69,7 +69,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return OUString("com.sun.star.comp.framework.ModuleAcceleratorConfiguration");
+        return "com.sun.star.comp.framework.ModuleAcceleratorConfiguration";
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override

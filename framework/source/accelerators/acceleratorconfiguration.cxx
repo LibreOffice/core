@@ -471,7 +471,7 @@ OUString XMLBasedAcceleratorConfiguration::impl_ts_getLocale() const
     OUString sISOLocale = officecfg::Setup::L10N::ooLocale::get();
 
     if (sISOLocale.isEmpty())
-        return OUString("en-US");
+        return "en-US";
     return sISOLocale;
 }
 
@@ -1326,7 +1326,7 @@ OUString XCUBasedAcceleratorConfiguration::impl_ts_getLocale() const
     OUString sISOLocale = officecfg::Setup::L10N::ooLocale::get();
 
     if (sISOLocale.isEmpty())
-        return OUString("en-US");
+        return "en-US";
     return sISOLocale;
 }
 

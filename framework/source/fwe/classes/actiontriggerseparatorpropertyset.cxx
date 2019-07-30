@@ -91,7 +91,7 @@ void ActionTriggerSeparatorPropertySet::release() throw()
 // XServiceInfo
 OUString SAL_CALL ActionTriggerSeparatorPropertySet::getImplementationName()
 {
-    return OUString( IMPLEMENTATIONNAME_ACTIONTRIGGERSEPARATOR );
+    return IMPLEMENTATIONNAME_ACTIONTRIGGERSEPARATOR;
 }
 
 sal_Bool SAL_CALL ActionTriggerSeparatorPropertySet::supportsService( const OUString& ServiceName )

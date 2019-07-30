@@ -134,7 +134,7 @@ ModuleManager::ModuleManager(const css::uno::Reference< css::uno::XComponentCont
 
 OUString ModuleManager::getImplementationName()
 {
-    return OUString("com.sun.star.comp.framework.ModuleManager");
+    return "com.sun.star.comp.framework.ModuleManager";
 }
 
 sal_Bool ModuleManager::supportsService(OUString const & ServiceName)

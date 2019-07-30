@@ -281,7 +281,7 @@ ContextChangeEventMultiplexer::FocusDescriptor* ContextChangeEventMultiplexer::G
 
 OUString SAL_CALL ContextChangeEventMultiplexer::getImplementationName()
 {
-    return OUString("org.apache.openoffice.comp.framework.ContextChangeEventMultiplexer");
+    return "org.apache.openoffice.comp.framework.ContextChangeEventMultiplexer";
 }
 
 sal_Bool SAL_CALL ContextChangeEventMultiplexer::supportsService ( const OUString& rsServiceName)

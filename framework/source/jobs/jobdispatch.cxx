@@ -92,7 +92,7 @@ public:
 public:
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return OUString("com.sun.star.comp.framework.jobs.JobDispatch");
+        return "com.sun.star.comp.framework.jobs.JobDispatch";
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override

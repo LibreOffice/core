@@ -303,7 +303,7 @@ GenericPopupToolbarController::GenericPopupToolbarController(
 
 OUString GenericPopupToolbarController::getImplementationName()
 {
-    return OUString("com.sun.star.comp.framework.GenericPopupToolbarController");
+    return "com.sun.star.comp.framework.GenericPopupToolbarController";
 }
 
 sal_Bool GenericPopupToolbarController::supportsService(OUString const & rServiceName)
@@ -564,7 +564,7 @@ void SaveToolbarController::dispose()
 
 OUString SaveToolbarController::getImplementationName()
 {
-    return OUString("com.sun.star.comp.framework.SaveToolbarController");
+    return "com.sun.star.comp.framework.SaveToolbarController";
 }
 
 sal_Bool SaveToolbarController::supportsService( OUString const & rServiceName )
@@ -608,7 +608,7 @@ NewToolbarController::NewToolbarController(
 
 OUString NewToolbarController::getImplementationName()
 {
-    return OUString("org.apache.openoffice.comp.framework.NewToolbarController");
+    return "org.apache.openoffice.comp.framework.NewToolbarController";
 }
 
 sal_Bool NewToolbarController::supportsService(OUString const & rServiceName)
