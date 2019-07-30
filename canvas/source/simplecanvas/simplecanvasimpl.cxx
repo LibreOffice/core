@@ -173,7 +173,7 @@ namespace
         // Ifc XServiceName
         virtual OUString SAL_CALL getServiceName(  ) override
         {
-            return OUString( SERVICE_NAME );
+            return SERVICE_NAME;
         }
 
         // Ifc XSimpleCanvas

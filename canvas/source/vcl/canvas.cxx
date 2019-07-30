@@ -127,7 +127,7 @@ namespace vclcanvas
 
     OUString SAL_CALL Canvas::getServiceName(  )
     {
-        return OUString( CANVAS_SERVICE_NAME );
+        return CANVAS_SERVICE_NAME;
     }
 
     bool Canvas::repaint( const GraphicObjectSharedPtr& rGrf,
