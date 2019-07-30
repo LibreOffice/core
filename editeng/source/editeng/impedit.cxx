@@ -40,7 +40,6 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/lokhelper.hxx>
