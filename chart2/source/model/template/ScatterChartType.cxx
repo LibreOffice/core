@@ -187,7 +187,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 
 OUString SAL_CALL ScatterChartType::getChartType()
 {
-    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER);
+    return CHART2_SERVICE_NAME_CHARTTYPE_SCATTER;
 }
 
 uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedMandatoryRoles()
@@ -223,7 +223,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ScatterChartType::getProperty
 
 OUString SAL_CALL ScatterChartType::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.ScatterChartType");
+    return "com.sun.star.comp.chart.ScatterChartType";
 }
 
 sal_Bool SAL_CALL ScatterChartType::supportsService( const OUString& rServiceName )

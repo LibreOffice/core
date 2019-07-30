@@ -150,12 +150,12 @@ uno::Reference< util::XCloneable > SAL_CALL NetChartType::createClone()
 // ____ XChartType ____
 OUString SAL_CALL NetChartType::getChartType()
 {
-    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_NET);
+    return CHART2_SERVICE_NAME_CHARTTYPE_NET;
 }
 
 OUString SAL_CALL NetChartType::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.NetChartType");
+    return "com.sun.star.comp.chart.NetChartType";
 }
 
 sal_Bool SAL_CALL NetChartType::supportsService( const OUString& rServiceName )

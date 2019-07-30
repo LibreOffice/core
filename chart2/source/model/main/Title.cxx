@@ -355,7 +355,7 @@ void Title::fireModifyEvent()
 
 OUString SAL_CALL Title::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart2.Title");
+    return "com.sun.star.comp.chart2.Title";
 }
 
 sal_Bool SAL_CALL Title::supportsService( const OUString& rServiceName )

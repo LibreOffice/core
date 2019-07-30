@@ -48,7 +48,7 @@ uno::Reference< util::XCloneable > SAL_CALL BarChartType::createClone()
 // ____ XChartType ____
 OUString SAL_CALL BarChartType::getChartType()
 {
-    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_BAR);
+    return CHART2_SERVICE_NAME_CHARTTYPE_BAR;
 }
 
 uno::Sequence< OUString > BarChartType::getSupportedPropertyRoles()
@@ -62,7 +62,7 @@ uno::Sequence< OUString > BarChartType::getSupportedPropertyRoles()
 
 OUString SAL_CALL BarChartType::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.BarChartType");
+    return "com.sun.star.comp.chart.BarChartType";
 }
 
 sal_Bool SAL_CALL BarChartType::supportsService( const OUString& rServiceName )

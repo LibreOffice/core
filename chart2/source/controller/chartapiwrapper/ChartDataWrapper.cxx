@@ -672,7 +672,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
 
 OUString SAL_CALL ChartDataWrapper::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.ChartData");
+    return "com.sun.star.comp.chart.ChartData";
 }
 
 sal_Bool SAL_CALL ChartDataWrapper::supportsService( const OUString& rServiceName )

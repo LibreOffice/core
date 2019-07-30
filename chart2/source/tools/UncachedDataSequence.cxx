@@ -147,7 +147,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL UncachedDataSequence::getPropertyS
 
 OUString SAL_CALL UncachedDataSequence::getImplementationName()
 {
-    return OUString(lcl_aServiceName);
+    return lcl_aServiceName;
 }
 
 sal_Bool SAL_CALL UncachedDataSequence::supportsService( const OUString& rServiceName )

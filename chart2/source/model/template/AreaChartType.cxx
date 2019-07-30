@@ -47,12 +47,12 @@ uno::Reference< util::XCloneable > SAL_CALL AreaChartType::createClone()
 // ____ XChartType ____
 OUString SAL_CALL AreaChartType::getChartType()
 {
-    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_AREA);
+    return CHART2_SERVICE_NAME_CHARTTYPE_AREA;
 }
 
 OUString SAL_CALL AreaChartType::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.AreaChartType");
+    return "com.sun.star.comp.chart.AreaChartType";
 }
 
 sal_Bool SAL_CALL AreaChartType::supportsService( const OUString& rServiceName )

@@ -51,12 +51,12 @@ uno::Reference< util::XCloneable > SAL_CALL FilledNetChartType::createClone()
 // ____ XChartType ____
 OUString SAL_CALL FilledNetChartType::getChartType()
 {
-    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET);
+    return CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET;
 }
 
 OUString SAL_CALL FilledNetChartType::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.FilledNetChartType");
+    return "com.sun.star.comp.chart.FilledNetChartType";
 }
 
 sal_Bool SAL_CALL FilledNetChartType::supportsService( const OUString& rServiceName )

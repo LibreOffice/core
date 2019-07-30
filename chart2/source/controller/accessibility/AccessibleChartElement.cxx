@@ -141,7 +141,7 @@ sal_Int32 AccessibleChartElement::ImplGetAccessibleChildCount() const
 // ________ XServiceInfo ________
 OUString SAL_CALL AccessibleChartElement::getImplementationName()
 {
-    return OUString( "AccessibleChartElement" );
+    return "AccessibleChartElement";
 }
 
 // ________ AccessibleChartElement::XAccessibleContext (override) ________

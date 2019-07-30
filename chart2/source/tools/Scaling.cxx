@@ -72,12 +72,12 @@ uno::Reference< XScaling > SAL_CALL LogarithmicScaling::getInverseScaling()
 
 OUString SAL_CALL LogarithmicScaling::getServiceName()
 {
-    return OUString(lcl_aServiceName_Logarithmic);
+    return lcl_aServiceName_Logarithmic;
 }
 
 OUString SAL_CALL LogarithmicScaling::getImplementationName()
 {
-    return OUString(lcl_aServiceName_Logarithmic);
+    return lcl_aServiceName_Logarithmic;
 }
 
 sal_Bool SAL_CALL LogarithmicScaling::supportsService( const OUString& rServiceName )
@@ -121,12 +121,12 @@ uno::Reference< XScaling > SAL_CALL ExponentialScaling::getInverseScaling()
 
 OUString SAL_CALL ExponentialScaling::getServiceName()
 {
-    return OUString(lcl_aServiceName_Exponential);
+    return lcl_aServiceName_Exponential;
 }
 
 OUString SAL_CALL ExponentialScaling::getImplementationName()
 {
-    return OUString(lcl_aServiceName_Exponential);
+    return lcl_aServiceName_Exponential;
 }
 
 sal_Bool SAL_CALL ExponentialScaling::supportsService( const OUString& rServiceName )
@@ -174,12 +174,12 @@ uno::Reference< XScaling > SAL_CALL
 
 OUString SAL_CALL LinearScaling::getServiceName()
 {
-    return OUString(lcl_aServiceName_Linear);
+    return lcl_aServiceName_Linear;
 }
 
 OUString SAL_CALL LinearScaling::getImplementationName()
 {
-    return OUString(lcl_aServiceName_Linear) ;
+    return lcl_aServiceName_Linear ;
 }
 
 sal_Bool SAL_CALL LinearScaling::supportsService( const OUString& rServiceName )
@@ -226,12 +226,12 @@ uno::Reference< XScaling > SAL_CALL
     OUString SAL_CALL
 PowerScaling::getServiceName()
 {
-    return OUString(lcl_aServiceName_Power);
+    return lcl_aServiceName_Power;
 }
 
 OUString SAL_CALL PowerScaling::getImplementationName()
 {
-    return OUString(lcl_aServiceName_Power);
+    return lcl_aServiceName_Power;
 }
 
 sal_Bool SAL_CALL PowerScaling::supportsService( const OUString& rServiceName )

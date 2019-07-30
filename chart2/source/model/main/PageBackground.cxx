@@ -199,7 +199,7 @@ void PageBackground::firePropertyChangeEvent()
 
 OUString SAL_CALL PageBackground::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart2.PageBackground");
+    return "com.sun.star.comp.chart2.PageBackground";
 }
 
 sal_Bool SAL_CALL PageBackground::supportsService( const OUString& rServiceName )

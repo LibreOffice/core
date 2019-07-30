@@ -75,7 +75,7 @@ AccessibleChartShape::~AccessibleChartShape()
 // ________ XServiceInfo ________
 OUString AccessibleChartShape::getImplementationName()
 {
-    return OUString( "AccessibleChartShape" );
+    return "AccessibleChartShape";
 }
 
 // ________ XAccessibleContext ________

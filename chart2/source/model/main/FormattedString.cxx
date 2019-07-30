@@ -256,7 +256,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( FormattedString, FormattedString_Base, ::prope
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL FormattedString::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.FormattedString");
+    return "com.sun.star.comp.chart.FormattedString";
 }
 
 sal_Bool SAL_CALL FormattedString::supportsService( const OUString& rServiceName )

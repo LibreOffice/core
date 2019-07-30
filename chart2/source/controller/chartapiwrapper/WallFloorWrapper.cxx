@@ -148,7 +148,7 @@ std::vector< std::unique_ptr<WrappedProperty> > WallFloorWrapper::createWrappedP
 
 OUString SAL_CALL WallFloorWrapper::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.WallOrFloor");
+    return "com.sun.star.comp.chart.WallOrFloor";
 }
 
 sal_Bool SAL_CALL WallFloorWrapper::supportsService( const OUString& rServiceName )

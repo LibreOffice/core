@@ -146,7 +146,7 @@ void SAL_CALL LabeledDataSequence::removeModifyListener( const Reference< util::
 
 OUString SAL_CALL LabeledDataSequence::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart2.LabeledDataSequence");
+    return "com.sun.star.comp.chart2.LabeledDataSequence";
 }
 
 sal_Bool SAL_CALL LabeledDataSequence::supportsService( const OUString& rServiceName )

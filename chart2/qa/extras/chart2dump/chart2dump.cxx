@@ -32,7 +32,7 @@
 #define DECLARE_DUMP_TEST(TestName, BaseClass, DumpMode) \
     class TestName : public BaseClass { \
         protected:\
-            virtual OUString getTestName() override { return OUString(#TestName); } \
+            virtual OUString getTestName() override { return #TestName; } \
         public:\
             TestName() : BaseClass(DumpMode) {}; \
             CPPUNIT_TEST_SUITE(TestName); \
@@ -107,7 +107,7 @@ protected:
 
     virtual OUString getTestName() { return OUString(); }
     OUString const & getTestFileName() { return m_sTestFileName; }
-    OUString getTestFileDirName() { return OUString("/chart2/qa/extras/chart2dump/data/"); }
+    OUString getTestFileDirName() { return "/chart2/qa/extras/chart2dump/data/"; }
     OUString getReferenceDirName()
     {
         return "/chart2/qa/extras/chart2dump/reference/" + getTestName().toAsciiLowerCase() + "/";

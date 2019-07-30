@@ -154,7 +154,7 @@ uno::Reference< util::XCloneable > SAL_CALL LineChartType::createClone()
 // ____ XChartType ____
 OUString SAL_CALL LineChartType::getChartType()
 {
-    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_LINE);
+    return CHART2_SERVICE_NAME_CHARTTYPE_LINE;
 }
 
 // ____ OPropertySet ____
@@ -180,7 +180,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL LineChartType::getPropertySet
 
 OUString SAL_CALL LineChartType::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.LineChartType");
+    return "com.sun.star.comp.chart.LineChartType";
 }
 
 sal_Bool SAL_CALL LineChartType::supportsService( const OUString& rServiceName )

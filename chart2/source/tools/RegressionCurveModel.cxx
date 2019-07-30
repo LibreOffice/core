@@ -226,19 +226,19 @@ OUString SAL_CALL RegressionCurveModel::getServiceName()
     switch( m_eRegressionCurveType )
     {
         case CURVE_TYPE_MEAN_VALUE:
-            return OUString("com.sun.star.chart2.MeanValueRegressionCurve");
+            return "com.sun.star.chart2.MeanValueRegressionCurve";
         case CURVE_TYPE_LINEAR:
-            return OUString("com.sun.star.chart2.LinearRegressionCurve");
+            return "com.sun.star.chart2.LinearRegressionCurve";
         case CURVE_TYPE_LOGARITHM:
-            return OUString("com.sun.star.chart2.LogarithmicRegressionCurve");
+            return "com.sun.star.chart2.LogarithmicRegressionCurve";
         case CURVE_TYPE_EXPONENTIAL:
-            return OUString("com.sun.star.chart2.ExponentialRegressionCurve");
+            return "com.sun.star.chart2.ExponentialRegressionCurve";
         case CURVE_TYPE_POWER:
-            return OUString("com.sun.star.chart2.PotentialRegressionCurve");
+            return "com.sun.star.chart2.PotentialRegressionCurve";
         case CURVE_TYPE_POLYNOMIAL:
-            return OUString("com.sun.star.chart2.PolynomialRegressionCurve");
+            return "com.sun.star.chart2.PolynomialRegressionCurve";
         case CURVE_TYPE_MOVING_AVERAGE:
-            return OUString("com.sun.star.chart2.MovingAverageRegressionCurve");
+            return "com.sun.star.chart2.MovingAverageRegressionCurve";
     }
 
     return OUString();

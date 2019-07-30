@@ -237,7 +237,7 @@ Reference< css::accessibility::XAccessible > SelectorListBox::CreateAccessible()
 
 OUString SAL_CALL ElementSelectorToolbarController::getImplementationName()
 {
-    return OUString(lcl_aServiceName);
+    return lcl_aServiceName;
 }
 
 sal_Bool SAL_CALL ElementSelectorToolbarController::supportsService( const OUString& rServiceName )

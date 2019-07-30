@@ -579,7 +579,7 @@ uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNames()
 // ____ XServiceInfo ____
 OUString SAL_CALL ChartTypeManager::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.ChartTypeManager");
+    return "com.sun.star.comp.chart.ChartTypeManager";
 }
 
 sal_Bool SAL_CALL ChartTypeManager::supportsService( const OUString& rServiceName )

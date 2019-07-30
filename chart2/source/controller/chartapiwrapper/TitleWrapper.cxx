@@ -232,7 +232,7 @@ void SAL_CALL TitleWrapper::setSize( const awt::Size& /*aSize*/ )
 // ____ XShapeDescriptor (base of XShape) ____
 OUString SAL_CALL TitleWrapper::getShapeType()
 {
-    return OUString( "com.sun.star.chart.ChartTitle" );
+    return "com.sun.star.chart.ChartTitle";
 }
 
 // ____ XComponent ____
@@ -482,7 +482,7 @@ std::vector< std::unique_ptr<WrappedProperty> > TitleWrapper::createWrappedPrope
 
 OUString SAL_CALL TitleWrapper::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.Title");
+    return "com.sun.star.comp.chart.Title";
 }
 
 sal_Bool SAL_CALL TitleWrapper::supportsService( const OUString& rServiceName )

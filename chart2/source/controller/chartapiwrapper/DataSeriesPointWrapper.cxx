@@ -831,7 +831,7 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const OUString& rProperty
 
 OUString SAL_CALL DataSeriesPointWrapper::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.DataSeries");
+    return "com.sun.star.comp.chart.DataSeries";
 }
 
 sal_Bool SAL_CALL DataSeriesPointWrapper::supportsService( const OUString& rServiceName )

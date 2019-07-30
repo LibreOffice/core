@@ -52,7 +52,7 @@ CreationWizardUnoDlg::~CreationWizardUnoDlg()
 // lang::XServiceInfo
 OUString SAL_CALL CreationWizardUnoDlg::getImplementationName()
 {
-    return OUString(CHART_WIZARD_DIALOG_SERVICE_IMPLEMENTATION_NAME);
+    return CHART_WIZARD_DIALOG_SERVICE_IMPLEMENTATION_NAME;
 }
 
 sal_Bool SAL_CALL CreationWizardUnoDlg::supportsService( const OUString& rServiceName )

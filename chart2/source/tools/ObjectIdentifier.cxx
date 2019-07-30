@@ -504,7 +504,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForParticles(
 OUString ObjectIdentifier::createParticleForDiagram()
 {
     //TODO: if more than one diagram is implemented, add the correct diagram index here
-    return OUString("D=0");
+    return "D=0";
 }
 
 OUString ObjectIdentifier::createParticleForCoordinateSystem(

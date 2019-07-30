@@ -92,7 +92,7 @@ std::set<OUString> ChartUIObject::get_children() const
 
 OUString ChartUIObject::get_type() const
 {
-    return OUString("ChartUIObject for type: ");
+    return "ChartUIObject for type: ";
 }
 
 ChartWindowUIObject::ChartWindowUIObject(const VclPtr<chart::ChartWindow>& xChartWindow):
@@ -195,7 +195,7 @@ std::unique_ptr<UIObject> ChartWindowUIObject::create(vcl::Window* pWindow)
 
 OUString ChartWindowUIObject::get_name() const
 {
-    return OUString("ChartWindowUIObject");
+    return "ChartWindowUIObject";
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

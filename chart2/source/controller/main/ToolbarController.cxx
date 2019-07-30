@@ -100,7 +100,7 @@ void ChartToolbarController::update()
 
 OUString ChartToolbarController::getImplementationName()
 {
-    return OUString("org.libreoffice.chart2.Chart2ToolboxController");
+    return "org.libreoffice.chart2.Chart2ToolboxController";
 }
 
 sal_Bool ChartToolbarController::supportsService(OUString const & ServiceName)

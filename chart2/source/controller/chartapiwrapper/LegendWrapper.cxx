@@ -314,7 +314,7 @@ void SAL_CALL LegendWrapper::setSize( const awt::Size& aSize )
 // ____ XShapeDescriptor (base of XShape) ____
 OUString SAL_CALL LegendWrapper::getShapeType()
 {
-    return OUString( "com.sun.star.chart.ChartLegend" );
+    return "com.sun.star.chart.ChartLegend";
 }
 
 // ____ XComponent ____
@@ -398,7 +398,7 @@ std::vector< std::unique_ptr<WrappedProperty> > LegendWrapper::createWrappedProp
 
 OUString SAL_CALL LegendWrapper::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.Legend");
+    return "com.sun.star.comp.chart.Legend";
 }
 
 sal_Bool SAL_CALL LegendWrapper::supportsService( const OUString& rServiceName )

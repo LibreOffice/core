@@ -97,12 +97,12 @@ uno::Reference< XScaling > SAL_CALL DateScaling::getInverseScaling()
 
 OUString SAL_CALL DateScaling::getServiceName()
 {
-    return OUString(lcl_aServiceName_DateScaling);
+    return lcl_aServiceName_DateScaling;
 }
 
 OUString SAL_CALL DateScaling::getImplementationName()
 {
-    return OUString(lcl_aServiceName_DateScaling);
+    return lcl_aServiceName_DateScaling;
 }
 
 sal_Bool SAL_CALL DateScaling::supportsService( const OUString& rServiceName )
@@ -180,12 +180,12 @@ uno::Reference< XScaling > SAL_CALL InverseDateScaling::getInverseScaling()
 
 OUString SAL_CALL InverseDateScaling::getServiceName()
 {
-    return OUString(lcl_aServiceName_InverseDateScaling);
+    return lcl_aServiceName_InverseDateScaling;
 }
 
 OUString SAL_CALL InverseDateScaling::getImplementationName()
 {
-    return OUString(lcl_aServiceName_InverseDateScaling);
+    return lcl_aServiceName_InverseDateScaling;
 }
 
 sal_Bool SAL_CALL InverseDateScaling::supportsService( const OUString& rServiceName )

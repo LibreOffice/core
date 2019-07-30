@@ -1246,7 +1246,7 @@ sal_Bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlav
 
 OUString SAL_CALL ChartView::getImplementationName()
 {
-    return OUString(CHART_VIEW_SERVICE_IMPLEMENTATION_NAME);
+    return CHART_VIEW_SERVICE_IMPLEMENTATION_NAME;
 }
 
 sal_Bool SAL_CALL ChartView::supportsService( const OUString& rServiceName )

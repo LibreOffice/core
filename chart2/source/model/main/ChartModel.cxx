@@ -298,7 +298,7 @@ void ChartModel::impl_adjustAdditionalShapesPositionAndSize( const awt::Size& aV
 
 OUString SAL_CALL ChartModel::getImplementationName()
 {
-    return OUString(CHART_MODEL_SERVICE_IMPLEMENTATION_NAME);
+    return CHART_MODEL_SERVICE_IMPLEMENTATION_NAME;
 }
 
 sal_Bool SAL_CALL ChartModel::supportsService( const OUString& rServiceName )

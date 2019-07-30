@@ -477,11 +477,11 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
         // "Area" "StackedArea" "PercentStackedArea" "ThreeDArea"
         // "StackedThreeDArea" "PercentStackedThreeDArea"
         if( aName.indexOf( "Area" ) != -1 )
-            return OUString("com.sun.star.chart.AreaDiagram");
+            return "com.sun.star.chart.AreaDiagram";
 
         // "Pie" "PieAllExploded" "ThreeDPie" "ThreeDPieAllExploded"
         if( aName.indexOf( "Pie" ) != -1 )
-            return OUString("com.sun.star.chart.PieDiagram");
+            return "com.sun.star.chart.PieDiagram";
 
         // "Column" "StackedColumn" "PercentStackedColumn" "ThreeDColumnDeep"
         // "ThreeDColumnFlat" "StackedThreeDColumnFlat"
@@ -490,33 +490,33 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
         // "StackedThreeDBarFlat" "PercentStackedThreeDBarFlat" "ColumnWithLine"
         // "StackedColumnWithLine"
         if( aName.indexOf( "Column" ) != -1 || aName.indexOf( "Bar" ) != -1 )
-            return OUString( "com.sun.star.chart.BarDiagram" );
+            return "com.sun.star.chart.BarDiagram";
 
         // "Donut" "DonutAllExploded" "ThreeDDonut" "ThreeDDonutAllExploded"
         if( aName.indexOf( "Donut" ) != -1 )
-            return OUString( "com.sun.star.chart.DonutDiagram" );
+            return "com.sun.star.chart.DonutDiagram";
 
         // "ScatterLineSymbol" "ScatterLine" "ScatterSymbol" "ThreeDScatter"
         if( aName.indexOf( "Scatter" ) != -1 )
-            return OUString( "com.sun.star.chart.XYDiagram" );
+            return "com.sun.star.chart.XYDiagram";
 
         // "FilledNet" "StackedFilledNet" "PercentStackedFilledNet"
         if( aName.indexOf( "FilledNet" ) != -1 )
-            return OUString( "com.sun.star.chart.FilledNetDiagram" );
+            return "com.sun.star.chart.FilledNetDiagram";
 
         // "Net" "NetSymbol" "NetLine" "StackedNet" "StackedNetSymbol"
         // "StackedNetLine" "PercentStackedNet" "PercentStackedNetSymbol"
         // "PercentStackedNetLine"
         if( aName.indexOf( "Net" ) != -1 )
-            return OUString( "com.sun.star.chart.NetDiagram" );
+            return "com.sun.star.chart.NetDiagram";
 
         // "StockLowHighClose" "StockOpenLowHighClose" "StockVolumeLowHighClose"
         // "StockVolumeOpenLowHighClose"
         if( aName.indexOf( "Stock" ) != -1 )
-            return OUString( "com.sun.star.chart.StockDiagram" );
+            return "com.sun.star.chart.StockDiagram";
 
         if( aName.indexOf( "Bubble" ) != -1 )
-            return OUString( "com.sun.star.chart.BubbleDiagram" );
+            return "com.sun.star.chart.BubbleDiagram";
 
         // Note: this must be checked after Bar, Net and Scatter
 
@@ -525,7 +525,7 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
         // "PercentStackedLineSymbol" "ThreeDLine" "StackedThreeDLine"
         // "PercentStackedThreeDLine" "ThreeDLineDeep"
         if( aName.indexOf( "Line" ) != -1 || aName.indexOf( "Symbol" ) != -1 )
-            return OUString( "com.sun.star.chart.LineDiagram" );
+            return "com.sun.star.chart.LineDiagram";
 
         OSL_FAIL( "unknown template" );
     }
@@ -729,7 +729,7 @@ void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
 // ____ XShapeDescriptor (base of XShape) ____
 OUString SAL_CALL DiagramWrapper::getShapeType()
 {
-    return OUString( "com.sun.star.chart.Diagram" );
+    return "com.sun.star.chart.Diagram";
 }
 
 // ____ XDiagramPositioning ____
@@ -1869,7 +1869,7 @@ std::vector< std::unique_ptr<WrappedProperty> > DiagramWrapper::createWrappedPro
 
 OUString SAL_CALL DiagramWrapper::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.Diagram");
+    return "com.sun.star.comp.chart.Diagram";
 }
 
 sal_Bool SAL_CALL DiagramWrapper::supportsService( const OUString& rServiceName )

@@ -280,43 +280,43 @@ OUString ChartController::GetContextName()
 
     uno::Any aAny = getSelection();
     if (!aAny.hasValue())
-        return OUString("Chart");
+        return "Chart";
 
     OUString aCID;
     aAny >>= aCID;
 
     if (aCID.isEmpty())
-        return OUString("Chart");
+        return "Chart";
 
     ObjectType eObjectID = ObjectIdentifier::getObjectType(aCID);
     switch (eObjectID)
     {
         case OBJECTTYPE_DATA_SERIES:
-            return OUString("Series");
+            return "Series";
         break;
         case OBJECTTYPE_DATA_ERRORS_X:
         case OBJECTTYPE_DATA_ERRORS_Y:
         case OBJECTTYPE_DATA_ERRORS_Z:
-            return OUString("ErrorBar");
+            return "ErrorBar";
         case OBJECTTYPE_AXIS:
-            return OUString("Axis");
+            return "Axis";
         case OBJECTTYPE_GRID:
-            return OUString("Grid");
+            return "Grid";
         case OBJECTTYPE_DIAGRAM:
             {
                 css::uno::Reference<css::chart2::XChartType> xChartType = getChartType(css::uno::Reference<css::chart2::XChartDocument>(getModel(), uno::UNO_QUERY));
                 if (xChartType.is() && xChartType->getChartType() == "com.sun.star.chart2.PieChartType")
-                    return OUString("ChartElements");
+                    return "ChartElements";
                 break;
             }
         case OBJECTTYPE_DATA_CURVE:
         case OBJECTTYPE_DATA_AVERAGE_LINE:
-            return OUString("Trendline");
+            return "Trendline";
         default:
         break;
     }
 
-    return OUString("Chart");
+    return "Chart";
 }
 
 // private methods
@@ -338,7 +338,7 @@ bool ChartController::impl_isDisposedOrSuspended() const
 
 OUString SAL_CALL ChartController::getImplementationName()
 {
-    return OUString(CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME);
+    return CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME;
 }
 
 sal_Bool SAL_CALL ChartController::supportsService( const OUString& rServiceName )

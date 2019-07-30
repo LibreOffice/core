@@ -377,7 +377,7 @@ uno::Sequence< uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyDefaults( const
 
 OUString SAL_CALL MinMaxLineWrapper::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.ChartLine");
+    return "com.sun.star.comp.chart.ChartLine";
 }
 
 sal_Bool SAL_CALL MinMaxLineWrapper::supportsService( const OUString& rServiceName )

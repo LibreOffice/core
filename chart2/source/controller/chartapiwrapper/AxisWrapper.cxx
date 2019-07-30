@@ -476,7 +476,7 @@ void SAL_CALL AxisWrapper::setSize( const awt::Size& /*aSize*/ )
 // ____ XShapeDescriptor (base of XShape) ____
 OUString SAL_CALL AxisWrapper::getShapeType()
 {
-    return OUString("com.sun.star.chart.ChartAxis");
+    return "com.sun.star.chart.ChartAxis";
 }
 
 // ____ XNumberFormatsSupplier ____
@@ -643,7 +643,7 @@ std::vector< std::unique_ptr<WrappedProperty> > AxisWrapper::createWrappedProper
 
 OUString SAL_CALL AxisWrapper::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.Axis");
+    return "com.sun.star.comp.chart.Axis";
 }
 
 sal_Bool SAL_CALL AxisWrapper::supportsService( const OUString& rServiceName )

@@ -209,7 +209,7 @@ uno::Reference< util::XCloneable > SAL_CALL CandleStickChartType::createClone()
 // ____ XChartType ____
 OUString SAL_CALL CandleStickChartType::getChartType()
 {
-    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK);
+    return CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK;
 }
 
 uno::Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedMandatoryRoles()
@@ -259,7 +259,7 @@ Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedOptionalRoles()
 
 OUString SAL_CALL CandleStickChartType::getRoleOfSequenceForSeriesLabel()
 {
-    return OUString("values-last");
+    return "values-last";
 }
 
 // ____ OPropertySet ____
@@ -314,7 +314,7 @@ void SAL_CALL CandleStickChartType::setFastPropertyValue_NoBroadcast(
 
 OUString SAL_CALL CandleStickChartType::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.CandleStickChartType") ;
+    return "com.sun.star.comp.chart.CandleStickChartType" ;
 }
 
 sal_Bool SAL_CALL CandleStickChartType::supportsService( const OUString& rServiceName )

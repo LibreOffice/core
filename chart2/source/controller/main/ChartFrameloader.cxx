@@ -57,7 +57,7 @@ bool ChartFrameLoader::impl_checkCancel()
 
 OUString SAL_CALL ChartFrameLoader::getImplementationName()
 {
-    return OUString(CHART_FRAMELOADER_SERVICE_IMPLEMENTATION_NAME);
+    return CHART_FRAMELOADER_SERVICE_IMPLEMENTATION_NAME;
 }
 
 sal_Bool SAL_CALL ChartFrameLoader::supportsService( const OUString& rServiceName )

@@ -810,7 +810,7 @@ Color AccessibleBase::getColor( eColorType eColType )
 // ________ AccessibleBase::XServiceInfo ________
 OUString SAL_CALL AccessibleBase::getImplementationName()
 {
-    return OUString( "AccessibleBase" );
+    return "AccessibleBase";
 }
 
 sal_Bool SAL_CALL AccessibleBase::supportsService( const OUString& ServiceName )

@@ -166,7 +166,7 @@ std::vector< std::unique_ptr<WrappedProperty> > GridWrapper::createWrappedProper
 
 OUString SAL_CALL GridWrapper::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.Grid");
+    return "com.sun.star.comp.chart.Grid";
 }
 
 sal_Bool SAL_CALL GridWrapper::supportsService( const OUString& rServiceName )
