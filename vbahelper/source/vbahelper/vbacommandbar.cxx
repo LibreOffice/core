@@ -177,7 +177,7 @@ ScVbaCommandBar::FindControl( const uno::Any& /*aType*/, const uno::Any& /*aId*/
 OUString
 ScVbaCommandBar::getServiceImplName()
 {
-    return OUString("ScVbaCommandBar");
+    return "ScVbaCommandBar";
 }
 
 uno::Sequence<OUString>
@@ -259,7 +259,7 @@ uno::Any SAL_CALL VbaDummyCommandBar::FindControl( const uno::Any& /*aType*/, co
 
 OUString VbaDummyCommandBar::getServiceImplName()
 {
-    return OUString("VbaDummyCommandBar");
+    return "VbaDummyCommandBar";
 }
 
 uno::Sequence< OUString > VbaDummyCommandBar::getServiceNames()

@@ -79,7 +79,7 @@ public:
     virtual void SAL_CALL setRowSource( const OUString& _rowsource ) override;
 
     // XDefaultProperty
-        OUString SAL_CALL getDefaultPropertyName(  ) override { return OUString("Value"); }
+        OUString SAL_CALL getDefaultPropertyName(  ) override { return "Value"; }
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

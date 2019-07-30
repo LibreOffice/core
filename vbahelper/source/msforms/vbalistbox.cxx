@@ -261,7 +261,7 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaListBox::getFont()
 OUString
 ScVbaListBox::getServiceImplName()
 {
-    return OUString("ScVbaListBox");
+    return "ScVbaListBox";
 }
 
 uno::Sequence< OUString >

@@ -30,7 +30,7 @@ ScVbaImage::ScVbaImage( const uno::Reference< XHelperInterface >& xParent, const
 OUString
 ScVbaImage::getServiceImplName()
 {
-    return OUString("ScVbaImage");
+    return "ScVbaImage";
 }
 
 uno::Sequence< OUString >

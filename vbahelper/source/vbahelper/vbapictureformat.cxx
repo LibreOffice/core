@@ -118,7 +118,7 @@ ScVbaPictureFormat::IncrementContrast( double increment )
 OUString
 ScVbaPictureFormat::getServiceImplName()
 {
-    return OUString("ScVbaPictureFormat");
+    return "ScVbaPictureFormat";
 }
 
 uno::Sequence< OUString >

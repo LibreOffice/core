@@ -400,7 +400,7 @@ ScVbaShapeRange:: createCollectionObject( const css::uno::Any& aSource )
 OUString
 ScVbaShapeRange::getServiceImplName()
 {
-    return OUString("ScVbaShapeRange");
+    return "ScVbaShapeRange";
 }
 
 uno::Sequence< OUString >

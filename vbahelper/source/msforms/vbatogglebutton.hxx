@@ -53,7 +53,7 @@ public:
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
     // XDefaultProperty
-    OUString SAL_CALL getDefaultPropertyName(  ) override { return OUString("Value"); }
+    OUString SAL_CALL getDefaultPropertyName(  ) override { return "Value"; }
 };
 #endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBATOGGLEBUTTON_HXX
 

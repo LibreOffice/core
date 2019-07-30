@@ -141,7 +141,7 @@ VbaTextFrame::Characters()
 OUString
 VbaTextFrame::getServiceImplName()
 {
-    return OUString("VbaTextFrame");
+    return "VbaTextFrame";
 }
 
 uno::Sequence< OUString >

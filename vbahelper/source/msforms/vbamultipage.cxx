@@ -86,7 +86,7 @@ ScVbaMultiPage::setValue( const sal_Int32 _value )
 OUString
 ScVbaMultiPage::getServiceImplName()
 {
-    return OUString( "ScVbaMultiPage" );
+    return "ScVbaMultiPage";
 }
 
 uno::Any SAL_CALL

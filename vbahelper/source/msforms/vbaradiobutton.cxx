@@ -94,7 +94,7 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaRadioButton::getFont()
 OUString
 ScVbaRadioButton::getServiceImplName()
 {
-    return OUString( "ScVbaRadioButton" );
+    return "ScVbaRadioButton";
 }
 
 uno::Sequence< OUString >

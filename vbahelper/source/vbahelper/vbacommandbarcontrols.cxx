@@ -230,7 +230,7 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 OUString
 ScVbaCommandBarControls::getServiceImplName()
 {
-    return OUString("ScVbaCommandBarControls");
+    return "ScVbaCommandBarControls";
 }
 
 uno::Sequence<OUString>
@@ -299,7 +299,7 @@ uno::Reference< XCommandBarControl > SAL_CALL VbaDummyCommandBarControls::Add(
 // XHelperInterface
 OUString VbaDummyCommandBarControls::getServiceImplName()
 {
-    return OUString("VbaDummyCommandBarControls");
+    return "VbaDummyCommandBarControls";
 }
 
 uno::Sequence<OUString> VbaDummyCommandBarControls::getServiceNames()

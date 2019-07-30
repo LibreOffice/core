@@ -171,7 +171,7 @@ ScVbaFillFormat::ForeColor()
 OUString
 ScVbaFillFormat::getServiceImplName()
 {
-    return OUString("ScVbaFillFormat");
+    return "ScVbaFillFormat";
 }
 
 uno::Sequence< OUString >

@@ -742,7 +742,7 @@ ScVbaShape::WrapFormat()
 OUString
 ScVbaShape::getServiceImplName()
 {
-    return OUString("ScVbaShape");
+    return "ScVbaShape";
 }
 
 uno::Sequence< OUString >

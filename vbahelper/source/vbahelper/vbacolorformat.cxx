@@ -154,7 +154,7 @@ ScVbaColorFormat::setSchemeColor( sal_Int32 _schemecolor )
 OUString
 ScVbaColorFormat::getServiceImplName()
 {
-    return OUString("ScVbaColorFormat");
+    return "ScVbaColorFormat";
 }
 
 uno::Sequence< OUString >

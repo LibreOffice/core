@@ -148,7 +148,7 @@ void SAL_CALL ScVbaToggleButton::setLocked( sal_Bool bLocked )
 OUString
 ScVbaToggleButton::getServiceImplName()
 {
-    return OUString( "ScVbaToggleButton" );
+    return "ScVbaToggleButton";
 }
 
 uno::Sequence< OUString >

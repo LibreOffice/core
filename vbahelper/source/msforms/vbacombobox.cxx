@@ -253,7 +253,7 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaComboBox::getFont()
 OUString
 ScVbaComboBox::getServiceImplName()
 {
-    return OUString("ScVbaComboBox");
+    return "ScVbaComboBox";
 }
 
 sal_Int32 SAL_CALL ScVbaComboBox::getBackColor()

@@ -167,7 +167,7 @@ void SAL_CALL ScVbaTextBox::setLocked( sal_Bool bLocked )
 OUString
 ScVbaTextBox::getServiceImplName()
 {
-    return OUString( "ScVbaTextBox" );
+    return "ScVbaTextBox";
 }
 
 uno::Sequence< OUString >

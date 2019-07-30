@@ -41,7 +41,7 @@ ScVbaPages::createCollectionObject( const css::uno::Any& aSource )
 OUString
 ScVbaPages::getServiceImplName()
 {
-    return OUString( "ScVbaPages" );
+    return "ScVbaPages";
 }
 
 uno::Reference< container::XEnumeration > SAL_CALL
