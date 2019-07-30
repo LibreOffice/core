@@ -594,7 +594,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     OUString XMLBasicImporter::getImplementationName(  )
     {
-        return OUString( "com.sun.star.comp.xmlscript.XMLBasicImporter" );
+        return "com.sun.star.comp.xmlscript.XMLBasicImporter";
     }
 
     Sequence< OUString > XMLBasicImporter::getSupportedServiceNames(  )
@@ -618,7 +618,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     OUString XMLOasisBasicImporter::getImplementationName(  )
     {
-        return OUString( "com.sun.star.comp.xmlscript.XMLOasisBasicImporter" );
+        return "com.sun.star.comp.xmlscript.XMLOasisBasicImporter";
     }
 
     Sequence< OUString > XMLOasisBasicImporter::getSupportedServiceNames(  )

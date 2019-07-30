@@ -54,7 +54,7 @@ Sequence< OUString > getSupportedServiceNames_DocumentHandlerImpl()
 
 OUString getImplementationName_DocumentHandlerImpl()
 {
-    return OUString( "com.sun.star.comp.xml.input.SaxDocumentHandler" );
+    return "com.sun.star.comp.xml.input.SaxDocumentHandler";
 }
 
 typedef std::unordered_map< OUString, sal_Int32 > t_OUString2LongMap;
