@@ -170,7 +170,7 @@ public:
 
 inline OUString LngSvcMgr::getImplementationName_Static()
 {
-    return OUString( "com.sun.star.lingu2.LngSvcMgr" );
+    return "com.sun.star.lingu2.LngSvcMgr";
 }
 
 

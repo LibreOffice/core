@@ -94,7 +94,7 @@ public:
 
 inline OUString ConvDicList::getImplementationName_Static() throw()
 {
-    return OUString( "com.sun.star.lingu2.ConvDicList" );
+    return "com.sun.star.lingu2.ConvDicList";
 }
 
 

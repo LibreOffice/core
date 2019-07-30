@@ -613,7 +613,7 @@ void SAL_CALL ConvDic::removeFlushListener(
 
 OUString SAL_CALL ConvDic::getImplementationName(  )
 {
-    return OUString( "com.sun.star.lingu2.ConvDic" );
+    return "com.sun.star.lingu2.ConvDic";
 }
 
 sal_Bool SAL_CALL ConvDic::supportsService( const OUString& rServiceName )
