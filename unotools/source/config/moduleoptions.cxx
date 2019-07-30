@@ -922,16 +922,16 @@ OUString SvtModuleOptions::GetModuleName( EModule eModule ) const
 {
     switch( eModule )
     {
-        case SvtModuleOptions::EModule::WRITER    :   { return OUString("Writer"); }
-        case SvtModuleOptions::EModule::WEB       :   { return OUString("Web"); }
-        case SvtModuleOptions::EModule::GLOBAL    :   { return OUString("Global"); }
-        case SvtModuleOptions::EModule::CALC      :   { return OUString("Calc"); }
-        case SvtModuleOptions::EModule::DRAW      :   { return OUString("Draw"); }
-        case SvtModuleOptions::EModule::IMPRESS   :   { return OUString("Impress"); }
-        case SvtModuleOptions::EModule::MATH      :   { return OUString("Math"); }
-        case SvtModuleOptions::EModule::CHART     :   { return OUString("Chart"); }
-        case SvtModuleOptions::EModule::BASIC     :   { return OUString("Basic"); }
-        case SvtModuleOptions::EModule::DATABASE  :   { return OUString("Database"); }
+        case SvtModuleOptions::EModule::WRITER    :   { return "Writer"; }
+        case SvtModuleOptions::EModule::WEB       :   { return "Web"; }
+        case SvtModuleOptions::EModule::GLOBAL    :   { return "Global"; }
+        case SvtModuleOptions::EModule::CALC      :   { return "Calc"; }
+        case SvtModuleOptions::EModule::DRAW      :   { return "Draw"; }
+        case SvtModuleOptions::EModule::IMPRESS   :   { return "Impress"; }
+        case SvtModuleOptions::EModule::MATH      :   { return "Math"; }
+        case SvtModuleOptions::EModule::CHART     :   { return "Chart"; }
+        case SvtModuleOptions::EModule::BASIC     :   { return "Basic"; }
+        case SvtModuleOptions::EModule::DATABASE  :   { return "Database"; }
         default:
             OSL_FAIL( "unknown module" );
             break;

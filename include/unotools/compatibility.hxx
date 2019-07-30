@@ -73,12 +73,12 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityEntry
 
         static OUString getUserEntryName()
         {
-            return OUString( "_user" );
+            return "_user";
         }
 
         static OUString getDefaultEntryName()
         {
-            return OUString( "_default" );
+            return "_default";
         }
 
         static Index getIndex( const OUString& rName )
