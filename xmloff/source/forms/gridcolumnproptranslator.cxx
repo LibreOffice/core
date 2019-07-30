@@ -41,12 +41,12 @@ namespace xmloff
     {
         OUString getParaAlignProperty()
         {
-            return OUString( "ParaAdjust" );
+            return "ParaAdjust";
         }
 
         OUString getAlignProperty()
         {
-            return OUString( "Align" );
+            return "Align";
         }
 
         sal_Int32 findStringElement( const Sequence< OUString >& _rNames, const OUString& _rName )

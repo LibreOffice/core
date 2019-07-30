@@ -212,7 +212,7 @@ Sequence< OUString > XMLAutoTextEventExport_getSupportedServiceNames()
 
 OUString XMLAutoTextEventExport_getImplementationName() throw()
 {
-    return OUString( "com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"  );
+    return "com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter";
 }
 
 Reference< XInterface > XMLAutoTextEventExport_createInstance(
@@ -232,7 +232,7 @@ Sequence< OUString > XMLAutoTextEventExportOOO_getSupportedServiceNames()
 
 OUString XMLAutoTextEventExportOOO_getImplementationName() throw()
 {
-    return OUString( "com.sun.star.comp.Writer.XMLAutotextEventsExporter"  );
+    return "com.sun.star.comp.Writer.XMLAutotextEventsExporter";
 }
 
 Reference< XInterface > XMLAutoTextEventExportOOO_createInstance(

@@ -196,7 +196,7 @@ XMLMetaExportComponent_get_implementation(
 
 OUString XMLMetaExportOOO_getImplementationName() throw()
 {
-    return OUString( "XMLMetaExportOOo" );
+    return "XMLMetaExportOOo";
 }
 
 uno::Reference< uno::XInterface > XMLMetaExportOOO_createInstance(

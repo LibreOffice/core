@@ -435,7 +435,7 @@ namespace xmloff
         static const char sUnnamedName[] = "unnamed";
         OSL_ENSURE(m_xParentContainer.is(), "OElementImport::implGetDefaultName: no parent container!");
         if (!m_xParentContainer.is())
-            return OUString(sUnnamedName);
+            return sUnnamedName;
         Sequence< OUString > aNames = m_xParentContainer->getElementNames();
 
         for (sal_Int32 i=0; i<32768; ++i)   // the limit is nearly arbitrary ...
@@ -448,7 +448,7 @@ namespace xmloff
                 return sReturn;
         }
         OSL_FAIL("OElementImport::implGetDefaultName: did not find a free name!");
-        return OUString(sUnnamedName);
+        return sUnnamedName;
     }
 
     PropertyGroups::const_iterator OElementImport::impl_matchPropertyGroup( const PropertyGroups& i_propertyGroups ) const
@@ -2042,7 +2042,7 @@ namespace xmloff
 
     OUString OFormImport::determineDefaultServiceName() const
     {
-        return OUString("com.sun.star.form.component.Form");
+        return "com.sun.star.form.component.Form";
     }
 
 }   // namespace xmloff

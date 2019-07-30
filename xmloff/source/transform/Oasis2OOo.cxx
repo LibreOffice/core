@@ -1962,7 +1962,7 @@ Sequence< OUString > SAL_CALL Oasis2OOoTransformer::getSupportedServiceNames(  )
 
 OUString Oasis2OOoTransformer_getImplementationName() throw()
 {
-    return OUString( "com.sun.star.comp.Oasis2OOoTransformer" );
+    return "com.sun.star.comp.Oasis2OOoTransformer";
 }
 
 Sequence< OUString > Oasis2OOoTransformer_getSupportedServiceNames()

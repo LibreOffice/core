@@ -126,7 +126,7 @@ XMLTextImportHelper::MakeBackpatcherImpl()
 
 static OUString GetSequenceNumber()
 {
-    return OUString("SequenceNumber");
+    return "SequenceNumber";
 }
 
 

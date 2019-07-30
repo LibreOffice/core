@@ -3643,7 +3643,7 @@ Sequence< OUString > SchXMLExport_getSupportedServiceNames() throw()
 
 OUString SchXMLExport_getImplementationName() throw()
 {
-    return OUString(  "SchXMLExport.Compact"  );
+    return "SchXMLExport.Compact";
 }
 
 Reference< uno::XInterface > SchXMLExport_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
@@ -3660,7 +3660,7 @@ Sequence< OUString > SchXMLExport_Oasis_getSupportedServiceNames() throw()
 
 OUString SchXMLExport_Oasis_getImplementationName() throw()
 {
-    return OUString(  "SchXMLExport.Oasis.Compact"  );
+    return "SchXMLExport.Oasis.Compact";
 }
 
 Reference< uno::XInterface > SchXMLExport_Oasis_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
@@ -3680,7 +3680,7 @@ Sequence< OUString > SchXMLExport_Styles_getSupportedServiceNames() throw()
 
 OUString SchXMLExport_Styles_getImplementationName() throw()
 {
-    return OUString(  "SchXMLExport.Styles" );
+    return "SchXMLExport.Styles";
 }
 
 Reference< uno::XInterface > SchXMLExport_Styles_createInstance(const Reference< lang::XMultiServiceFactory >& rSMgr)
@@ -3696,7 +3696,7 @@ Sequence< OUString > SchXMLExport_Oasis_Styles_getSupportedServiceNames() throw(
 
 OUString SchXMLExport_Oasis_Styles_getImplementationName() throw()
 {
-    return OUString( "SchXMLExport.Oasis.Styles" );
+    return "SchXMLExport.Oasis.Styles";
 }
 
 Reference< uno::XInterface > SchXMLExport_Oasis_Styles_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
@@ -3711,7 +3711,7 @@ Sequence< OUString > SchXMLExport_Content_getSupportedServiceNames() throw()
 
 OUString SchXMLExport_Content_getImplementationName() throw()
 {
-    return OUString(  "SchXMLExport.Content" );
+    return "SchXMLExport.Content";
 }
 
 Reference< uno::XInterface > SchXMLExport_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
@@ -3727,7 +3727,7 @@ Sequence< OUString > SchXMLExport_Oasis_Content_getSupportedServiceNames() throw
 
 OUString SchXMLExport_Oasis_Content_getImplementationName() throw()
 {
-    return OUString(  "SchXMLExport.Oasis.Content" );
+    return "SchXMLExport.Oasis.Content";
 }
 
 Reference< uno::XInterface > SchXMLExport_Oasis_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
@@ -3743,7 +3743,7 @@ Sequence< OUString > SchXMLExport_Oasis_Meta_getSupportedServiceNames() throw()
 
 OUString SchXMLExport_Oasis_Meta_getImplementationName() throw()
 {
-    return OUString(  "SchXMLExport.Oasis.Meta" );
+    return "SchXMLExport.Oasis.Meta";
 }
 
 Reference< uno::XInterface > SchXMLExport_Oasis_Meta_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)

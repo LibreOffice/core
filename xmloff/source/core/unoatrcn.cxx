@@ -236,7 +236,7 @@ void SAL_CALL SvUnoAttributeContainer::removeByName(const OUString& Name)
 //XServiceInfo
 OUString SAL_CALL SvUnoAttributeContainer::getImplementationName()
 {
-    return OUString( "SvUnoAttributeContainer" );
+    return "SvUnoAttributeContainer";
 }
 
 uno::Sequence< OUString > SvUnoAttributeContainer::getSupportedServiceNames()

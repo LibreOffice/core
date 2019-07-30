@@ -1980,7 +1980,7 @@ Sequence< css::uno::Type > SAL_CALL OOo2OasisTransformer::getTypes()
 
 OUString OOo2OasisTransformer_getImplementationName() throw()
 {
-    return OUString( "com.sun.star.comp.OOo2OasisTransformer" );
+    return "com.sun.star.comp.OOo2OasisTransformer";
 }
 
 Sequence< OUString > OOo2OasisTransformer_getSupportedServiceNames() throw()
@@ -1999,7 +1999,7 @@ Reference< XInterface > OOo2OasisTransformer_createInstance(
 #define OOO_IMPORTER( className, implName, subServiceName )             \
 OUString className##_getImplementationName() throw()           \
 {                                                                       \
-    return OUString(implName);         \
+    return implName;         \
 }                                                                       \
                                                                         \
 Sequence< OUString > className##_getSupportedServiceNames() throw()\
