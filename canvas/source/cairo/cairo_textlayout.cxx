@@ -553,7 +553,7 @@ namespace cairocanvas
 
     OUString SAL_CALL TextLayout::getImplementationName()
     {
-        return OUString( "CairoCanvas::TextLayout" );
+        return "CairoCanvas::TextLayout";
     }
 
     sal_Bool SAL_CALL TextLayout::supportsService( const OUString& ServiceName )

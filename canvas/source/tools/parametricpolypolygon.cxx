@@ -194,7 +194,7 @@ namespace canvas
 
     OUString SAL_CALL ParametricPolyPolygon::getImplementationName(  )
     {
-        return OUString( "Canvas::ParametricPolyPolygon" );
+        return "Canvas::ParametricPolyPolygon";
     }
 
     sal_Bool SAL_CALL ParametricPolyPolygon::supportsService( const OUString& ServiceName )

@@ -140,7 +140,7 @@ namespace oglcanvas
 
     OUString SAL_CALL SpriteCanvas::getServiceName(  )
     {
-        return OUString( SPRITECANVAS_SERVICE_NAME );
+        return SPRITECANVAS_SERVICE_NAME;
     }
 
     void SpriteCanvas::show( const ::rtl::Reference< CanvasCustomSprite >& xSprite )

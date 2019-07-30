@@ -78,7 +78,7 @@ namespace canvas
 
     OUString SAL_CALL CachedPrimitiveBase::getImplementationName(  )
     {
-        return OUString("canvas::CachedPrimitiveBase");
+        return "canvas::CachedPrimitiveBase";
     }
 
     sal_Bool SAL_CALL CachedPrimitiveBase::supportsService( const OUString& ServiceName )

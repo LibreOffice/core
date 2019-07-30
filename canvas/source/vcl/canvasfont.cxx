@@ -153,7 +153,7 @@ namespace vclcanvas
 
     OUString SAL_CALL CanvasFont::getImplementationName()
     {
-        return OUString( "VCLCanvas::CanvasFont" );
+        return "VCLCanvas::CanvasFont";
     }
 
     sal_Bool SAL_CALL CanvasFont::supportsService( const OUString& ServiceName )

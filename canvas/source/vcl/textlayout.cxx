@@ -409,7 +409,7 @@ namespace vclcanvas
 
     OUString SAL_CALL TextLayout::getImplementationName()
     {
-        return OUString( "VCLCanvas::TextLayout" );
+        return "VCLCanvas::TextLayout";
     }
 
     sal_Bool SAL_CALL TextLayout::supportsService( const OUString& ServiceName )

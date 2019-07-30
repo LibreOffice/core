@@ -133,7 +133,7 @@ namespace cairocanvas
 
     OUString SAL_CALL CanvasFont::getImplementationName()
     {
-        return OUString( "CairoCanvas::CanvasFont" );
+        return "CairoCanvas::CanvasFont";
     }
 
     sal_Bool SAL_CALL CanvasFont::supportsService( const OUString& ServiceName )

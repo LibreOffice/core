@@ -217,7 +217,7 @@ CanvasFactory::~CanvasFactory()
 // XServiceInfo
 OUString CanvasFactory::getImplementationName()
 {
-    return OUString("com.sun.star.comp.rendering.CanvasFactory");
+    return "com.sun.star.comp.rendering.CanvasFactory";
 }
 
 sal_Bool CanvasFactory::supportsService( OUString const & serviceName )

@@ -135,7 +135,7 @@ namespace cairocanvas
 
     OUString SAL_CALL CanvasCustomSprite::getImplementationName()
     {
-        return OUString( "CairoCanvas.CanvasCustomSprite" );
+        return "CairoCanvas.CanvasCustomSprite";
     }
 
     sal_Bool SAL_CALL CanvasCustomSprite::supportsService( const OUString& ServiceName )
