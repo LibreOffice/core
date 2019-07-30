@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <comphelper/lok.hxx>
 #include <condformatdlg.hxx>
 
 #include <sfx2/dispatch.hxx>
@@ -410,7 +411,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     weld::Window* pParent, ScViewData* pViewData,
     const ScCondFormatDlgItem* pItem)
         : ScAnyRefDlgController(pB, pCW, pParent,
-                        "modules/scalc/ui/conditionalformatdialog.ui",
+                        (comphelper::LibreOfficeKit::isMobile()?OUString("modules/scalc/ui/conditionalformatdialogmobile.ui"):OUString("modules/scalc/ui/conditionalformatdialog.ui")),
                         "ConditionalFormatDialog")
     , mpViewData(pViewData)
     , mpDlgItem(static_cast<ScCondFormatDlgItem*>(pItem->Clone()))

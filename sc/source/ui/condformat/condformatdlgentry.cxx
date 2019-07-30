@@ -31,6 +31,7 @@
 #include <stlpool.hxx>
 #include <tabvwsh.hxx>
 #include <unotools/charclass.hxx>
+#include <comphelper/lok.hxx>
 
 #include <colorformat.hxx>
 #include <scresid.hxx>
@@ -41,7 +42,7 @@
 
 ScCondFrmtEntry::ScCondFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, const ScAddress& rPos)
     : mpParent(pParent)
-    , mxBuilder(Application::CreateBuilder(pParent->GetContainer(), "modules/scalc/ui/conditionalentry.ui"))
+    , mxBuilder(Application::CreateBuilder(pParent->GetContainer(), (comphelper::LibreOfficeKit::isMobile()?OUString("modules/scalc/ui/conditionalentrymobile.ui"):OUString("modules/scalc/ui/conditionalentry.ui"))))
     , mxBorder(mxBuilder->weld_widget("border"))
     , mxGrid(mxBuilder->weld_container("grid"))
     , mxFtCondNr(mxBuilder->weld_label("number"))
