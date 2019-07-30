@@ -79,7 +79,7 @@ UUIInteractionHandler::UUIInteractionHandler(
 
 OUString SAL_CALL UUIInteractionHandler::getImplementationName()
 {
-    return OUString("com.sun.star.comp.uui.UUIInteractionHandler");
+    return "com.sun.star.comp.uui.UUIInteractionHandler";
 }
 
 sal_Bool SAL_CALL
