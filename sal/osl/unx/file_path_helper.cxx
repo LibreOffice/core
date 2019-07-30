@@ -35,7 +35,7 @@ static const OUString FPH_LOCAL_DIR_ENTRY()
 { return OUString(FPH_CHAR_DOT); }
 
 static const OUString FPH_PARENT_DIR_ENTRY()
-{ return OUString(".."); }
+{ return ".."; }
 
 void osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
 {
