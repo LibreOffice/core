@@ -581,7 +581,7 @@ sal_Int16 SAL_CALL VCLXAccessibleList::getAccessibleRole()
 // XServiceInfo
 OUString VCLXAccessibleList::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleList" );
+    return "com.sun.star.comp.toolkit.AccessibleList";
 }
 
 Sequence< OUString > VCLXAccessibleList::getSupportedServiceNames()

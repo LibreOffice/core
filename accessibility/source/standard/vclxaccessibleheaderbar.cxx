@@ -56,7 +56,7 @@ VCLXAccessibleHeaderBar::~VCLXAccessibleHeaderBar()
 
 OUString VCLXAccessibleHeaderBar::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleHeaderBar" );
+    return "com.sun.star.comp.toolkit.AccessibleHeaderBar";
 }
 
 

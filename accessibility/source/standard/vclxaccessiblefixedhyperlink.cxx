@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 
 OUString VCLXAccessibleFixedHyperlink::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleFixedHyperlink" );
+    return "com.sun.star.comp.toolkit.AccessibleFixedHyperlink";
 }
 
 

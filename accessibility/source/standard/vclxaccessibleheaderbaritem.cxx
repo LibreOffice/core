@@ -101,7 +101,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleHeaderBarItem, OAccessibleExtend
 // XServiceInfo
 OUString VCLXAccessibleHeaderBarItem::getImplementationName()
 {
-    return OUString("com.sun.star.comp.svtools.AccessibleHeaderBarItem");
+    return "com.sun.star.comp.svtools.AccessibleHeaderBarItem";
 }
 
 sal_Bool VCLXAccessibleHeaderBarItem::supportsService( const OUString& rServiceName )

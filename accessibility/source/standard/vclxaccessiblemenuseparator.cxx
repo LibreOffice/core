@@ -42,7 +42,7 @@ VCLXAccessibleMenuSeparator::VCLXAccessibleMenuSeparator( Menu* pParent, sal_uIn
 
 OUString VCLXAccessibleMenuSeparator::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleMenuSeparator" );
+    return "com.sun.star.comp.toolkit.AccessibleMenuSeparator";
 }
 
 

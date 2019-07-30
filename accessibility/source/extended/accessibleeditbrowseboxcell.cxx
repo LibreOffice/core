@@ -60,7 +60,7 @@ namespace accessibility
 
     OUString SAL_CALL EditBrowseBoxTableCell::getImplementationName()
     {
-        return OUString( "com.sun.star.comp.svtools.TableCellProxy" );
+        return "com.sun.star.comp.svtools.TableCellProxy";
     }
 
     IMPLEMENT_FORWARD_XINTERFACE2( EditBrowseBoxTableCell, AccessibleBrowseBoxCell, OAccessibleContextWrapperHelper )

@@ -289,7 +289,7 @@ void SAL_CALL AccessibleBrowseBoxHeaderBar::release() throw ()
 
 OUString SAL_CALL AccessibleBrowseBoxHeaderBar::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderBar" );
+    return "com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderBar";
 }
 
 Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxHeaderBar::getImplementationId()

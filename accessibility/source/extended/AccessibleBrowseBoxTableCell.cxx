@@ -147,7 +147,7 @@ namespace accessibility
     */
     OUString SAL_CALL AccessibleBrowseBoxTableCell::getImplementationName()
     {
-        return OUString( "com.sun.star.comp.svtools.AccessibleBrowseBoxTableCell" );
+        return "com.sun.star.comp.svtools.AccessibleBrowseBoxTableCell";
     }
 
     /** @return  The count of visible children. */

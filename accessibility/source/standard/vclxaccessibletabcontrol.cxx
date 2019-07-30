@@ -330,7 +330,7 @@ void VCLXAccessibleTabControl::disposing()
 
 OUString VCLXAccessibleTabControl::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleTabControl" );
+    return "com.sun.star.comp.toolkit.AccessibleTabControl";
 }
 
 

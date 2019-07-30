@@ -94,7 +94,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleScrollBar, VCLXAccessibleCompone
 
 OUString VCLXAccessibleScrollBar::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleScrollBar" );
+    return "com.sun.star.comp.toolkit.AccessibleScrollBar";
 }
 
 

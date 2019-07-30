@@ -122,7 +122,7 @@ void SAL_CALL AccessibleGridControlHeaderCell::grabFocus()
 */
 OUString SAL_CALL AccessibleGridControlHeaderCell::getImplementationName()
 {
-    return OUString( "com.sun.star.accessibility.AccessibleGridControlHeaderCell" );
+    return "com.sun.star.accessibility.AccessibleGridControlHeaderCell";
 }
 
 tools::Rectangle AccessibleGridControlHeaderCell::implGetBoundingBox()

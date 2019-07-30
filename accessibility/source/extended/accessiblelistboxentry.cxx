@@ -253,7 +253,7 @@ namespace accessibility
 
     OUString SAL_CALL AccessibleListBoxEntry::getImplementationName()
     {
-        return OUString( "com.sun.star.comp.svtools.AccessibleTreeListBoxEntry" );
+        return "com.sun.star.comp.svtools.AccessibleTreeListBoxEntry";
     }
 
     Sequence< OUString > SAL_CALL AccessibleListBoxEntry::getSupportedServiceNames()
@@ -800,9 +800,9 @@ namespace accessibility
             if(getAccessibleRole() == AccessibleRole::CHECK_BOX)
             {
                 if ( state == SvButtonState::Checked )
-                    return OUString("UnCheck");
+                    return "UnCheck";
                 else if (state == SvButtonState::Unchecked)
-                    return OUString("Check");
+                    return "Check";
             }
             else
             {

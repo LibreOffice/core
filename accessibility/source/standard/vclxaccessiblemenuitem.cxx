@@ -152,7 +152,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleMenuItem, OAccessibleMenuItemCom
 
 OUString VCLXAccessibleMenuItem::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleMenuItem" );
+    return "com.sun.star.comp.toolkit.AccessibleMenuItem";
 }
 
 
@@ -414,7 +414,7 @@ OUString VCLXAccessibleMenuItem::getAccessibleActionDescription ( sal_Int32 nInd
     if ( nIndex != 0 )
         throw IndexOutOfBoundsException();
 
-    return OUString(RID_STR_ACC_ACTION_SELECT);
+    return RID_STR_ACC_ACTION_SELECT;
 }
 
 

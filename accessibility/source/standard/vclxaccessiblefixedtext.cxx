@@ -47,7 +47,7 @@ void VCLXAccessibleFixedText::FillAccessibleStateSet( utl::AccessibleStateSetHel
 
 OUString VCLXAccessibleFixedText::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleFixedText" );
+    return "com.sun.star.comp.toolkit.AccessibleFixedText";
 }
 
 

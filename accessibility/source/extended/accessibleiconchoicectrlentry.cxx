@@ -228,7 +228,7 @@ namespace accessibility
 
     OUString SAL_CALL AccessibleIconChoiceCtrlEntry::getImplementationName()
     {
-        return OUString( "com.sun.star.comp.svtools.AccessibleIconChoiceControlEntry" );
+        return "com.sun.star.comp.svtools.AccessibleIconChoiceControlEntry";
     }
 
     Sequence< OUString > SAL_CALL AccessibleIconChoiceCtrlEntry::getSupportedServiceNames()
@@ -664,7 +664,7 @@ namespace accessibility
         checkActionIndex_Impl( nIndex );
         EnsureIsAlive();
 
-        return OUString( "Select" );
+        return "Select";
     }
 
     Reference< XAccessibleKeyBinding > AccessibleIconChoiceCtrlEntry::getAccessibleActionKeyBinding( sal_Int32 nIndex )

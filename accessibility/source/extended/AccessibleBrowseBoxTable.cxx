@@ -184,7 +184,7 @@ sal_Bool SAL_CALL AccessibleBrowseBoxTable::isAccessibleSelected(
 
 OUString SAL_CALL AccessibleBrowseBoxTable::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.svtools.AccessibleBrowseBoxTable" );
+    return "com.sun.star.comp.svtools.AccessibleBrowseBoxTable";
 }
 
 // internal virtual methods ---------------------------------------------------

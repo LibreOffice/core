@@ -114,7 +114,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleButton, VCLXAccessibleTextCompon
 
 OUString VCLXAccessibleButton::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleButton" );
+    return "com.sun.star.comp.toolkit.AccessibleButton";
 }
 
 
@@ -193,7 +193,7 @@ OUString VCLXAccessibleButton::getAccessibleActionDescription ( sal_Int32 nIndex
     if ( nIndex != 0 )
         throw IndexOutOfBoundsException();
 
-    return OUString(RID_STR_ACC_ACTION_CLICK);
+    return RID_STR_ACC_ACTION_CLICK;
 }
 
 
