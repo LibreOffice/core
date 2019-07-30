@@ -498,7 +498,7 @@ OUString SAL_CALL ODatabaseMetaData::getCatalogTerm(  )
 
 OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
-    return OUString("\"");
+    return "\"";
 }
 
 OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters(  )
@@ -851,7 +851,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  )
 
 OUString SAL_CALL ODatabaseMetaData::getURL(  )
 {
-    return OUString(  "sdbc:file:" );
+    return "sdbc:file:";
 }
 
 OUString SAL_CALL ODatabaseMetaData::getUserName(  )
@@ -916,12 +916,12 @@ OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape(  )
 
 OUString SAL_CALL ODatabaseMetaData::getStringFunctions(  )
 {
-    return OUString("UCASE,LCASE,ASCII,LENGTH,OCTET_LENGTH,CHAR_LENGTH,CHARACTER_LENGTH,CHAR,CONCAT,LOCATE,SUBSTRING,LTRIM,RTRIM,SPACE,REPLACE,REPEAT,INSERT,LEFT,RIGHT");
+    return "UCASE,LCASE,ASCII,LENGTH,OCTET_LENGTH,CHAR_LENGTH,CHARACTER_LENGTH,CHAR,CONCAT,LOCATE,SUBSTRING,LTRIM,RTRIM,SPACE,REPLACE,REPEAT,INSERT,LEFT,RIGHT";
 }
 
 OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions(  )
 {
-    return OUString("DAYOFWEEK,DAYOFMONTH,DAYOFYEAR,MONTH,DAYNAME,MONTHNAME,QUARTER,WEEK,YEAR,HOUR,MINUTE,SECOND,CURDATE,CURTIME,NOW");
+    return "DAYOFWEEK,DAYOFMONTH,DAYOFYEAR,MONTH,DAYNAME,MONTHNAME,QUARTER,WEEK,YEAR,HOUR,MINUTE,SECOND,CURDATE,CURTIME,NOW";
 }
 
 OUString SAL_CALL ODatabaseMetaData::getSystemFunctions(  )
@@ -931,7 +931,7 @@ OUString SAL_CALL ODatabaseMetaData::getSystemFunctions(  )
 
 OUString SAL_CALL ODatabaseMetaData::getNumericFunctions(  )
 {
-    return OUString("ABS,SIGN,MOD,FLOOR,CEILING,ROUND,EXP,LN,LOG,LOG10,POWER,SQRT,PI,COS,SIN,TAN,ACOS,ASIN,ATAN,ATAN2,DEGREES,RADIANS");
+    return "ABS,SIGN,MOD,FLOOR,CEILING,ROUND,EXP,LN,LOG,LOG10,POWER,SQRT,PI,COS,SIN,TAN,ACOS,ASIN,ATAN,ATAN2,DEGREES,RADIANS";
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar(  )

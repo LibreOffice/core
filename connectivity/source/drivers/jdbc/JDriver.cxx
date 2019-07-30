@@ -55,7 +55,7 @@ java_sql_Driver::~java_sql_Driver()
 
 OUString java_sql_Driver::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.sdbc.JDBCDriver");
+    return "com.sun.star.comp.sdbc.JDBCDriver";
         // this name is referenced in the configuration and in the jdbc.xml
         // Please take care when changing it.
 }

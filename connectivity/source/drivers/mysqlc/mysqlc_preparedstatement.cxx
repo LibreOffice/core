@@ -43,7 +43,7 @@ using ::osl::MutexGuard;
 
 OUString OPreparedStatement::getImplementationName()
 {
-    return OUString("com.sun.star.sdbcx.mysqlc.PreparedStatement");
+    return "com.sun.star.sdbcx.mysqlc.PreparedStatement";
 }
 
 css::uno::Sequence<OUString> OPreparedStatement::getSupportedServiceNames()

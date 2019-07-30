@@ -158,7 +158,7 @@ bool OPreparedResultSet::fetchResult()
 
 OUString SAL_CALL OPreparedResultSet::getImplementationName()
 {
-    return OUString("com.sun.star.sdbcx.mysqlc.ResultSet");
+    return "com.sun.star.sdbcx.mysqlc.ResultSet";
 }
 
 uno::Sequence<OUString> SAL_CALL OPreparedResultSet::getSupportedServiceNames()

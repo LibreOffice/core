@@ -37,8 +37,8 @@ using namespace ::com::sun::star::sdbc;
 OUString SAL_CALL OColumn::getImplementationName(  )
 {
     if(isNew())
-        return OUString("com.sun.star.sdbcx.VColumnDescriptor");
-    return OUString("com.sun.star.sdbcx.VColumn");
+        return "com.sun.star.sdbcx.VColumnDescriptor";
+    return "com.sun.star.sdbcx.VColumn";
 }
 
 css::uno::Sequence< OUString > SAL_CALL OColumn::getSupportedServiceNames(  )

@@ -98,7 +98,7 @@ bool OResultSet::checkNull(sal_Int32 column)
 
 OUString SAL_CALL OResultSet::getImplementationName()
 {
-    return OUString("com.sun.star.sdbcx.mysqlc.ResultSet");
+    return "com.sun.star.sdbcx.mysqlc.ResultSet";
 }
 
 uno::Sequence<OUString> SAL_CALL OResultSet::getSupportedServiceNames()

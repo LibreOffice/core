@@ -38,7 +38,7 @@ using namespace ::com::sun::star::lang;
 
 OUString ODriver::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.sdbc.calc.ODriver");
+    return "com.sun.star.comp.sdbc.calc.ODriver";
 }
 
 OUString SAL_CALL ODriver::getImplementationName(  )

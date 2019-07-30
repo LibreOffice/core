@@ -185,37 +185,37 @@ OUString firebird::ColumnTypeInfo::getColumnTypeName() const
     switch (aType)
     {
      case SQL_TEXT:
-         return OUString("SQL_TEXT");
+         return "SQL_TEXT";
      case SQL_VARYING:
-         return OUString("SQL_VARYING");
+         return "SQL_VARYING";
      case SQL_SHORT:
-         return OUString("SQL_SHORT");
+         return "SQL_SHORT";
      case SQL_LONG:
-         return OUString("SQL_LONG");
+         return "SQL_LONG";
      case SQL_FLOAT:
-         return OUString("SQL_FLOAT");
+         return "SQL_FLOAT";
      case SQL_DOUBLE:
-         return OUString("SQL_DOUBLE");
+         return "SQL_DOUBLE";
      case SQL_D_FLOAT:
-         return OUString("SQL_D_FLOAT");
+         return "SQL_D_FLOAT";
      case SQL_TIMESTAMP:
-         return OUString("SQL_TIMESTAMP");
+         return "SQL_TIMESTAMP";
      case SQL_BLOB:
-         return OUString("SQL_BLOB");
+         return "SQL_BLOB";
      case SQL_ARRAY:
-         return OUString("SQL_ARRAY");
+         return "SQL_ARRAY";
      case SQL_TYPE_TIME:
-         return OUString("SQL_TYPE_TIME");
+         return "SQL_TYPE_TIME";
      case SQL_TYPE_DATE:
-         return OUString("SQL_TYPE_DATE");
+         return "SQL_TYPE_DATE";
      case SQL_INT64:
-         return OUString("SQL_INT64");
+         return "SQL_INT64";
      case SQL_NULL:
-         return OUString("SQL_NULL");
+         return "SQL_NULL";
      case SQL_QUAD:
-         return OUString("SQL_QUAD");
+         return "SQL_QUAD";
      case SQL_BOOLEAN:
-         return OUString("SQL_BOOLEAN");
+         return "SQL_BOOLEAN";
      default:
          assert(false); // Should never happen
          return OUString();

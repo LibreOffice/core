@@ -461,17 +461,17 @@ OUString getStandardSQLState( StandardSQLState _eState )
 {
     switch ( _eState )
     {
-    case StandardSQLState::INVALID_DESCRIPTOR_INDEX:  return OUString("07009");
-    case StandardSQLState::INVALID_CURSOR_STATE:      return OUString("24000");
-    case StandardSQLState::COLUMN_NOT_FOUND:          return OUString("42S22");
-    case StandardSQLState::GENERAL_ERROR:             return OUString("HY000");
-    case StandardSQLState::INVALID_SQL_DATA_TYPE:     return OUString("HY004");
-    case StandardSQLState::FUNCTION_SEQUENCE_ERROR:   return OUString("HY010");
-    case StandardSQLState::INVALID_CURSOR_POSITION:   return OUString("HY109");
-    case StandardSQLState::FEATURE_NOT_IMPLEMENTED:   return OUString("HYC00");
-    case StandardSQLState::FUNCTION_NOT_SUPPORTED:    return OUString("IM001");
-    case StandardSQLState::CONNECTION_DOES_NOT_EXIST: return OUString("08003");
-    default:                                          return OUString("HY001"); // General Error
+    case StandardSQLState::INVALID_DESCRIPTOR_INDEX:  return "07009";
+    case StandardSQLState::INVALID_CURSOR_STATE:      return "24000";
+    case StandardSQLState::COLUMN_NOT_FOUND:          return "42S22";
+    case StandardSQLState::GENERAL_ERROR:             return "HY000";
+    case StandardSQLState::INVALID_SQL_DATA_TYPE:     return "HY004";
+    case StandardSQLState::FUNCTION_SEQUENCE_ERROR:   return "HY010";
+    case StandardSQLState::INVALID_CURSOR_POSITION:   return "HY109";
+    case StandardSQLState::FEATURE_NOT_IMPLEMENTED:   return "HYC00";
+    case StandardSQLState::FUNCTION_NOT_SUPPORTED:    return "IM001";
+    case StandardSQLState::CONNECTION_DOES_NOT_EXIST: return "08003";
+    default:                                          return "HY001"; // General Error
     }
 }
 

@@ -202,7 +202,7 @@ void OConnection::construct(const OUString& url, const Sequence<PropertyValue>& 
 
 OUString OConnection::getImplementationName()
 {
-    return OUString("com.sun.star.sdbc.drivers.mysqlc.OConnection");
+    return "com.sun.star.sdbc.drivers.mysqlc.OConnection";
 }
 
 css::uno::Sequence<OUString> OConnection::getSupportedServiceNames()

@@ -525,7 +525,7 @@ Reference< XInterface > OSDBCDriverManager::Create( const Reference< XMultiServi
 
 OUString OSDBCDriverManager::getImplementationName_static(  )
 {
-    return OUString("com.sun.star.comp.sdbc.OSDBCDriverManager");
+    return "com.sun.star.comp.sdbc.OSDBCDriverManager";
 }
 
 
@@ -538,7 +538,7 @@ Sequence< OUString > OSDBCDriverManager::getSupportedServiceNames_static(  )
 
 OUString OSDBCDriverManager::getSingletonName_static(  )
 {
-    return OUString(  "com.sun.star.sdbc.DriverManager"  );
+    return "com.sun.star.sdbc.DriverManager";
 }
 
 

@@ -66,7 +66,7 @@ namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 
 OUString SAL_CALL OEvoabResultSet::getImplementationName(  )
 {
-    return OUString("com.sun.star.sdbcx.evoab.ResultSet");
+    return "com.sun.star.sdbcx.evoab.ResultSet";
 }
 
  Sequence< OUString > SAL_CALL OEvoabResultSet::getSupportedServiceNames(  )

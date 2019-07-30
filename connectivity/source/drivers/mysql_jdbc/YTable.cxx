@@ -57,7 +57,7 @@ namespace mysql
 class OMySQLKeysHelper : public OKeysHelper
 {
 protected:
-    virtual OUString getDropForeignKey() const override { return OUString(" DROP FOREIGN KEY "); }
+    virtual OUString getDropForeignKey() const override { return " DROP FOREIGN KEY "; }
 
 public:
     OMySQLKeysHelper(OTableHelper* _pTable, ::osl::Mutex& _rMutex,
@@ -286,7 +286,7 @@ void OMySQLTable::alterColumnType(sal_Int32 nNewType, const OUString& _rColName,
     executeStatement(sSql);
 }
 
-OUString OMySQLTable::getTypeCreatePattern() const { return OUString("(M,D)"); }
+OUString OMySQLTable::getTypeCreatePattern() const { return "(M,D)"; }
 
 void OMySQLTable::alterDefaultValue(const OUString& _sNewDefault, const OUString& _rColName)
 {
@@ -332,6 +332,6 @@ void OMySQLTable::executeStatement(const OUString& _rStatement)
     }
 }
 
-OUString OMySQLTable::getRenameStart() const { return OUString("RENAME TABLE "); }
+OUString OMySQLTable::getRenameStart() const { return "RENAME TABLE "; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

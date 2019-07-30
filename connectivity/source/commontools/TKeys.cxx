@@ -257,7 +257,7 @@ sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Re
 
 OUString OKeysHelper::getDropForeignKey() const
 {
-    return OUString(" DROP CONSTRAINT ");
+    return " DROP CONSTRAINT ";
 }
 
 // XDrop

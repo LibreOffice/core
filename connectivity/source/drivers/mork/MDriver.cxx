@@ -33,7 +33,7 @@ MorkDriver::MorkDriver(const css::uno::Reference< css::uno::XComponentContext >&
 
 OUString SAL_CALL MorkDriver::getImplementationName()
 {
-    return OUString(MORK_DRIVER_IMPL_NAME);
+    return MORK_DRIVER_IMPL_NAME;
 }
 
 sal_Bool SAL_CALL MorkDriver::supportsService(const OUString& serviceName)

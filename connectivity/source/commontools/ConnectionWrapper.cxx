@@ -109,7 +109,7 @@ OConnectionWrapper::~OConnectionWrapper()
 
 OUString SAL_CALL OConnectionWrapper::getImplementationName(  )
 {
-    return OUString( "com.sun.star.sdbc.drivers.OConnectionWrapper" );
+    return "com.sun.star.sdbc.drivers.OConnectionWrapper";
 }
 
 

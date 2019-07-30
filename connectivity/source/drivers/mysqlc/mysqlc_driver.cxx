@@ -56,7 +56,7 @@ void MysqlCDriver::disposing()
 // static ServiceInfo
 OUString MysqlCDriver::getImplementationName_Static()
 {
-    return OUString("com.sun.star.comp.sdbc.mysqlc.MysqlCDriver");
+    return "com.sun.star.comp.sdbc.mysqlc.MysqlCDriver";
 }
 
 Sequence<OUString> MysqlCDriver::getSupportedServiceNames_Static()

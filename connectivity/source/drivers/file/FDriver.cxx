@@ -62,7 +62,7 @@ void OFileDriver::disposing()
 
 OUString OFileDriver::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.sdbc.driver.file.Driver");
+    return "com.sun.star.sdbc.driver.file.Driver";
 }
 
 Sequence< OUString > OFileDriver::getSupportedServiceNames_Static(  )

@@ -40,7 +40,7 @@ using namespace css::lang;
 
 OUString ODriver::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.sdbc.flat.ODriver");
+    return "com.sun.star.comp.sdbc.flat.ODriver";
 }
 
 

@@ -196,9 +196,9 @@ namespace connectivity
         switch( getFieldType( nCol ) )
         {
             case DataType::BIT:
-                return OUString("BIT");
+                return "BIT";
             case DataType::VARCHAR:
-                return OUString("VARCHAR");
+                return "VARCHAR";
             default:
                 break;
         }
@@ -446,7 +446,7 @@ OUString SAL_CALL OEvoabDatabaseMetaData::getCatalogTerm(  )
 OUString OEvoabDatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     // normally this is "
-    return OUString("\"");
+    return "\"";
 }
 
 OUString SAL_CALL OEvoabDatabaseMetaData::getExtraNameCharacters(  )
@@ -802,12 +802,12 @@ OUString SAL_CALL OEvoabDatabaseMetaData::getDriverName(  )
 
 OUString SAL_CALL OEvoabDatabaseMetaData::getDriverVersion()
 {
-    return OUString( "1" );
+    return "1";
 }
 
 OUString SAL_CALL OEvoabDatabaseMetaData::getDatabaseProductVersion(  )
 {
-    return OUString( "0" );
+    return "0";
 }
 
 OUString SAL_CALL OEvoabDatabaseMetaData::getDatabaseProductName(  )

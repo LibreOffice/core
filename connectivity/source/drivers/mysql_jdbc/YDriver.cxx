@@ -401,7 +401,7 @@ ODriverDelegator::getDataDefinitionByURL(const OUString& url, const Sequence<Pro
 
 OUString ODriverDelegator::getImplementationName_Static()
 {
-    return OUString("org.openoffice.comp.drivers.MySQL.Driver");
+    return "org.openoffice.comp.drivers.MySQL.Driver";
 }
 
 Sequence<OUString> ODriverDelegator::getSupportedServiceNames_Static()

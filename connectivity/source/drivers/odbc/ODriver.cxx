@@ -59,7 +59,7 @@ void ODBCDriver::disposing()
 
 OUString ODBCDriver::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.sdbc.ODBCDriver");
+    return "com.sun.star.comp.sdbc.ODBCDriver";
         // this name is referenced in the configuration and in the odbc.xml
         // Please take care when changing it.
 }

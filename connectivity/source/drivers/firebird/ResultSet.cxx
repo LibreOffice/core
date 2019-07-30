@@ -872,7 +872,7 @@ uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertyS
 // ---- XServiceInfo -----------------------------------------------------------
 OUString SAL_CALL OResultSet::getImplementationName()
 {
-    return OUString("com.sun.star.sdbcx.firebird.ResultSet");
+    return "com.sun.star.sdbcx.firebird.ResultSet";
 }
 
 Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames()

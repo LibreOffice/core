@@ -485,7 +485,7 @@ namespace connectivity
 
     OUString ODriverDelegator::getImplementationName_Static(  )
     {
-        return OUString("com.sun.star.sdbcx.comp.hsqldb.Driver");
+        return "com.sun.star.sdbcx.comp.hsqldb.Driver";
     }
 
     Sequence< OUString > ODriverDelegator::getSupportedServiceNames_Static(  )

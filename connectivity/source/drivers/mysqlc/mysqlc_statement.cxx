@@ -326,7 +326,7 @@ void OCommonStatement::getFastPropertyValue(Any& _rValue, sal_Int32 nHandle) con
     }
 }
 
-OUString OStatement::getImplementationName() { return OUString("com.sun.star.sdbcx.OStatement"); }
+OUString OStatement::getImplementationName() { return "com.sun.star.sdbcx.OStatement"; }
 
 css::uno::Sequence<OUString> OStatement::getSupportedServiceNames()
 {

@@ -71,7 +71,7 @@ void MozillaBootstrap::disposing()
 
 OUString SAL_CALL MozillaBootstrap::getImplementationName(  )
 {
-    return OUString(MOZAB_MozillaBootstrap_IMPL_NAME);
+    return MOZAB_MozillaBootstrap_IMPL_NAME;
 }
 
 sal_Bool SAL_CALL MozillaBootstrap::supportsService( const OUString& _rServiceName )

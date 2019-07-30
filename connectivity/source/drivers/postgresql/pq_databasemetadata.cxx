@@ -182,7 +182,7 @@ sal_Bool DatabaseMetaData::nullsAreSortedAtEnd(  )
 
 OUString DatabaseMetaData::getDatabaseProductName(  )
 {
-    return OUString("PostgreSQL");
+    return "PostgreSQL";
 }
 
 OUString DatabaseMetaData::getDatabaseProductVersion(  )
@@ -191,12 +191,12 @@ OUString DatabaseMetaData::getDatabaseProductVersion(  )
 }
 OUString DatabaseMetaData::getDriverName(  )
 {
-    return OUString("postgresql-sdbc");
+    return "postgresql-sdbc";
 }
 
 OUString DatabaseMetaData::getDriverVersion(  )
 {
-    return OUString(PQ_SDBC_DRIVER_VERSION);
+    return PQ_SDBC_DRIVER_VERSION;
 }
 
 sal_Int32 DatabaseMetaData::getDriverMajorVersion(  )
@@ -272,7 +272,7 @@ sal_Bool DatabaseMetaData::storesMixedCaseQuotedIdentifiers(  )
 
 OUString DatabaseMetaData::getIdentifierQuoteString(  )
 {
-    return OUString("\"");
+    return "\"";
 }
 
 OUString DatabaseMetaData::getSQLKeywords(  )
@@ -282,7 +282,7 @@ OUString DatabaseMetaData::getSQLKeywords(  )
     // I understand this to mean "reserved keywords" only.
     // See http://www.postgresql.org/docs/current/static/sql-keywords-appendix.html
     // LEM TODO: consider using pg_get_keywords(), filter on catcode
-    return OUString(
+    return
         "ANALYSE,"
         "ANALYZE,"
         "ARRAY," //SQL:1999
@@ -308,7 +308,7 @@ OUString DatabaseMetaData::getSQLKeywords(  )
         "VARIADIC,"
         "VERBOSE,"
         "WINDOW" //SQL:2003
- );
+ ;
 }
 OUString DatabaseMetaData::getNumericFunctions(  )
 {
@@ -318,7 +318,7 @@ OUString DatabaseMetaData::getNumericFunctions(  )
     //           Currently this is just a list of supported functions in PostgreSQL, with PostgreSQL names.
     //           And it is my job to map from Open Group CLI names/syntax to PostgreSQL names/syntax. Where? By parsing the SQL???
     //           Should look at what the JDBC driver is doing.
-    return OUString(
+    return
         "abs,"
         "cbrt,"
         "ceil,"
@@ -348,13 +348,13 @@ OUString DatabaseMetaData::getNumericFunctions(  )
         "cot,"
         "sin,"
         "tan"
- );
+ ;
 }
 
 OUString DatabaseMetaData::getStringFunctions(  )
 {
     // See http://www.postgresql.org/docs/9.1/static/functions-string.html
-    return OUString(
+    return
         "bit_length,"
         "char_length,"
         "character_length,"
@@ -402,14 +402,14 @@ OUString DatabaseMetaData::getStringFunctions(  )
         "to_ascii,"
         "to_hex,"
         "translate"
- );
+ ;
 }
 
 OUString DatabaseMetaData::getSystemFunctions(  )
 {
     // See http://www.postgresql.org/docs/9.1/static/functions-info.html
     // and http://www.postgresql.org/docs/9.1/static/functions-admin.html
-    return OUString(
+    return
         "current_catalog,"
         "current_database,"
         "current_query,"
@@ -532,12 +532,12 @@ OUString DatabaseMetaData::getSystemFunctions(  )
         "pg_try_advisory_xact_lock,"
         "pg_try_advisory_xact_lock_shared,"
         "pg_sleep"
- );
+ ;
 }
 OUString DatabaseMetaData::getTimeDateFunctions(  )
 {
     // TODO
-    return OUString(
+    return
         "age,"
         "age,"
         "clock_timestamp,"
@@ -561,15 +561,15 @@ OUString DatabaseMetaData::getTimeDateFunctions(  )
         "statement_timestamp,"
         "timeofday,"
         "transaction_timestamp,"
- );
+ ;
 }
 OUString DatabaseMetaData::getSearchStringEscape(  )
 {
-    return OUString("\\");
+    return "\\";
 }
 OUString DatabaseMetaData::getExtraNameCharacters(  )
 {
-    return OUString("$");
+    return "$";
 }
 
 sal_Bool DatabaseMetaData::supportsAlterTableWithAddColumn(  )
@@ -724,17 +724,17 @@ sal_Bool DatabaseMetaData::supportsLimitedOuterJoins(  )
 
 OUString DatabaseMetaData::getSchemaTerm(  )
 {
-    return OUString("SCHEMA");
+    return "SCHEMA";
 }
 
 OUString DatabaseMetaData::getProcedureTerm(  )
 {
-    return OUString("function");
+    return "function";
 }
 
 OUString DatabaseMetaData::getCatalogTerm(  )
 {
-    return OUString("DATABASE");
+    return "DATABASE";
 }
 
 sal_Bool DatabaseMetaData::isCatalogAtStart(  )
@@ -744,7 +744,7 @@ sal_Bool DatabaseMetaData::isCatalogAtStart(  )
 
 OUString DatabaseMetaData::getCatalogSeparator(  )
 {
-    return OUString(".");
+    return ".";
 }
 
 sal_Bool DatabaseMetaData::supportsSchemasInDataManipulation(  )
