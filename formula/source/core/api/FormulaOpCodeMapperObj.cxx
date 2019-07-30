@@ -87,7 +87,7 @@ OUString SAL_CALL FormulaOpCodeMapperObj::getImplementationName(  )
 
 OUString FormulaOpCodeMapperObj::getImplementationName_Static()
 {
-    return OUString( "simple.formula.FormulaOpCodeMapperObj" );
+    return "simple.formula.FormulaOpCodeMapperObj";
 }
 
 uno::Sequence< OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNames(  )
