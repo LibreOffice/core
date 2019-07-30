@@ -63,7 +63,7 @@ static Sequence< OUString > getSupportedServiceNames_LangGuess_Impl()
 
 static OUString getImplementationName_LangGuess_Impl()
 {
-    return OUString( IMPLNAME );
+    return IMPLNAME;
 }
 
 static osl::Mutex &  GetLangGuessMutex()
@@ -313,7 +313,7 @@ void SAL_CALL LangGuess_Impl::enableLanguages(
 
 OUString SAL_CALL LangGuess_Impl::getImplementationName(  )
 {
-    return OUString( IMPLNAME );
+    return IMPLNAME;
 }
 
 sal_Bool SAL_CALL LangGuess_Impl::supportsService( const OUString& ServiceName )

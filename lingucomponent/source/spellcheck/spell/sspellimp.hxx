@@ -122,7 +122,7 @@ public:
 
 inline OUString SpellChecker::getImplementationName_Static() throw()
 {
-    return OUString( "org.openoffice.lingu.MySpellSpellChecker" );
+    return "org.openoffice.lingu.MySpellSpellChecker";
 }
 
 #endif

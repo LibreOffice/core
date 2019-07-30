@@ -125,7 +125,7 @@ private:
 
 inline OUString Hyphenator::getImplementationName_Static() throw()
 {
-    return OUString( "org.openoffice.lingu.LibHnjHyphenator" );
+    return "org.openoffice.lingu.LibHnjHyphenator";
 }
 
 #endif
