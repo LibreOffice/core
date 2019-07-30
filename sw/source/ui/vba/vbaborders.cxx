@@ -134,7 +134,7 @@ private:
 protected:
     virtual OUString getServiceImplName() override
     {
-        return OUString("SwVbaBorder");
+        return "SwVbaBorder";
     }
 
     virtual css::uno::Sequence<OUString> getServiceNames() override
@@ -343,7 +343,7 @@ void SAL_CALL SwVbaBorders::setShadow( sal_Bool /*_shadow*/ )
 OUString
 SwVbaBorders::getServiceImplName()
 {
-    return OUString("SwVbaBorders");
+    return "SwVbaBorders";
 }
 
 uno::Sequence< OUString >

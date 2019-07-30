@@ -247,7 +247,7 @@ void SAL_CALL SwVbaPageSetup::setSectionStart( ::sal_Int32 /*_sectionstart*/ )
 OUString
 SwVbaPageSetup::getServiceImplName()
 {
-    return OUString("SwVbaPageSetup");
+    return "SwVbaPageSetup";
 }
 
 uno::Sequence< OUString >

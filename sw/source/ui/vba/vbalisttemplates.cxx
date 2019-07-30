@@ -84,7 +84,7 @@ SwVbaListTemplates::createCollectionObject( const css::uno::Any& aSource )
 OUString
 SwVbaListTemplates::getServiceImplName()
 {
-    return OUString("SwVbaListTemplates");
+    return "SwVbaListTemplates";
 }
 
 css::uno::Sequence<OUString>

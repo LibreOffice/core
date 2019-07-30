@@ -77,7 +77,7 @@ SwVbaVariable::getIndex()
 OUString
 SwVbaVariable::getServiceImplName()
 {
-    return OUString("SwVbaVariable");
+    return "SwVbaVariable";
 }
 
 uno::Sequence< OUString >

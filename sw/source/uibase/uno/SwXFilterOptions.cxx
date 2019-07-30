@@ -124,7 +124,7 @@ void SAL_CALL SwXFilterOptions::initialize(const uno::Sequence<uno::Any>& rArgum
 
 OUString SwXFilterOptions::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Writer.FilterOptionsDialog");
+    return "com.sun.star.comp.Writer.FilterOptionsDialog";
 }
 
 sal_Bool SwXFilterOptions::supportsService( const OUString& rServiceName )

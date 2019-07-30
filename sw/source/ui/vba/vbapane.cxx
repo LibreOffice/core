@@ -50,7 +50,7 @@ SwVbaPane::Close( )
 OUString
 SwVbaPane::getServiceImplName()
 {
-    return OUString("SwVbaPane");
+    return "SwVbaPane";
 }
 
 uno::Sequence< OUString >

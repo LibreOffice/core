@@ -68,7 +68,7 @@ SwVbaSection::PageSetup( )
 OUString
 SwVbaSection::getServiceImplName()
 {
-    return OUString("SwVbaSection");
+    return "SwVbaSection";
 }
 
 uno::Sequence< OUString >

@@ -65,7 +65,7 @@ using namespace css;
 #define DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, password, BaseClass) \
     class TestName : public BaseClass { \
         protected:\
-    virtual OUString getTestName() override { return OUString(#TestName); } \
+    virtual OUString getTestName() override { return #TestName; } \
         public:\
     CPPUNIT_TEST_SUITE(TestName); \
     CPPUNIT_TEST(Import); \
@@ -86,7 +86,7 @@ using namespace css;
 #define DECLARE_SW_EXPORTONLY_TEST(TestName, filename, password, BaseClass) \
     class TestName : public BaseClass { \
         protected:\
-    virtual OUString getTestName() override { return OUString(#TestName); } \
+    virtual OUString getTestName() override { return #TestName; } \
         public:\
     CPPUNIT_TEST_SUITE(TestName); \
     CPPUNIT_TEST(Import_Export_Import); \
@@ -113,7 +113,7 @@ using namespace css;
 #define DECLARE_SW_IMPORT_TEST(TestName, filename, password, BaseClass) \
     class TestName : public BaseClass { \
         protected:\
-    virtual OUString getTestName() override { return OUString(#TestName); } \
+    virtual OUString getTestName() override { return #TestName; } \
         public:\
     CPPUNIT_TEST_SUITE(TestName); \
     CPPUNIT_TEST(Import); \
@@ -130,7 +130,7 @@ using namespace css;
 #define DECLARE_SW_EXPORT_TEST(TestName, filename, password, BaseClass) \
     class TestName : public BaseClass { \
         protected:\
-    virtual OUString getTestName() override { return OUString(#TestName); } \
+    virtual OUString getTestName() override { return #TestName; } \
         public:\
     CPPUNIT_TEST_SUITE(TestName); \
     CPPUNIT_TEST(Import_Export); \

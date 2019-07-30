@@ -1230,7 +1230,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
 
 OUString SAL_CALL SwAccessibleTable::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Writer.SwAccessibleTableView");
+    return "com.sun.star.comp.Writer.SwAccessibleTableView";
 }
 
 sal_Bool SAL_CALL SwAccessibleTable::supportsService(
@@ -1807,7 +1807,7 @@ uno::Reference< XAccessibleTable >
 OUString SAL_CALL SwAccessibleTableColHeaders::getImplementationName()
 {
     static const sal_Char sImplName[] = "com.sun.star.comp.Writer.SwAccessibleTableColumnHeadersView";
-    return OUString(sImplName);
+    return sImplName;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -138,7 +138,7 @@ float SAL_CALL SwVbaGlobals::CentimetersToPoints( float Centimeters )
 OUString
 SwVbaGlobals::getServiceImplName()
 {
-    return OUString("SwVbaGlobals");
+    return "SwVbaGlobals";
 }
 
 uno::Sequence< OUString >

@@ -75,7 +75,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return OUString("lo.writer.MMCurrentEntryController");
+        return "lo.writer.MMCurrentEntryController";
     }
 
     virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
@@ -136,7 +136,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return OUString("lo.writer.MMExcludeEntryController");
+        return "lo.writer.MMExcludeEntryController";
     }
 
     virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override

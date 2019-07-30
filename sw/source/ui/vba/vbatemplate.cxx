@@ -115,7 +115,7 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index )
 OUString
 SwVbaTemplate::getServiceImplName()
 {
-    return OUString("SwVbaTemplate");
+    return "SwVbaTemplate";
 }
 
 uno::Sequence< OUString >

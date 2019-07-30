@@ -82,7 +82,7 @@ SwVbaFrames::createCollectionObject( const css::uno::Any& aSource )
 OUString
 SwVbaFrames::getServiceImplName()
 {
-    return OUString("SwVbaFrames");
+    return "SwVbaFrames";
 }
 
 css::uno::Sequence<OUString>

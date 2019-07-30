@@ -966,7 +966,7 @@ sal_Bool SwXTextTables::hasElements()
 
 OUString SwXTextTables::getImplementationName()
 {
-    return OUString("SwXTextTables");
+    return "SwXTextTables";
 }
 
 sal_Bool SwXTextTables::supportsService(const OUString& rServiceName)
@@ -1119,7 +1119,7 @@ Any SwXFrameEnumeration<T>::nextElement()
 template<FlyCntType T>
 OUString SwXFrameEnumeration<T>::getImplementationName()
 {
-    return OUString("SwXFrameEnumeration");
+    return "SwXFrameEnumeration";
 }
 
 template<FlyCntType T>
@@ -1136,7 +1136,7 @@ Sequence< OUString > SwXFrameEnumeration<T>::getSupportedServiceNames()
 
 OUString SwXFrames::getImplementationName()
 {
-    return OUString("SwXFrames");
+    return "SwXFrames";
 }
 
 sal_Bool SwXFrames::supportsService(const OUString& rServiceName)
@@ -1284,7 +1284,7 @@ sal_Bool SwXFrames::hasElements()
 
 OUString SwXTextFrames::getImplementationName()
 {
-    return OUString("SwXTextFrames");
+    return "SwXTextFrames";
 }
 
 sal_Bool SwXTextFrames::supportsService(const OUString& rServiceName)
@@ -1309,7 +1309,7 @@ SwXTextFrames::~SwXTextFrames()
 
 OUString SwXTextGraphicObjects::getImplementationName()
 {
-    return OUString("SwXTextGraphicObjects");
+    return "SwXTextGraphicObjects";
 }
 
 sal_Bool SwXTextGraphicObjects::supportsService(const OUString& rServiceName)
@@ -1334,7 +1334,7 @@ SwXTextGraphicObjects::~SwXTextGraphicObjects()
 
 OUString SwXTextEmbeddedObjects::getImplementationName()
 {
-    return OUString("SwXTextEmbeddedObjects");
+    return "SwXTextEmbeddedObjects";
 }
 
 sal_Bool SwXTextEmbeddedObjects::supportsService(const OUString& rServiceName)
@@ -1359,7 +1359,7 @@ SwXTextEmbeddedObjects::~SwXTextEmbeddedObjects()
 
 OUString SwXTextSections::getImplementationName()
 {
-    return OUString("SwXTextSections");
+    return "SwXTextSections";
 }
 
 sal_Bool SwXTextSections::supportsService(const OUString& rServiceName)
@@ -1535,7 +1535,7 @@ uno::Reference< XTextSection >  SwXTextSections::GetObject( SwSectionFormat& rFo
 
 OUString SwXBookmarks::getImplementationName()
 {
-    return OUString("SwXBookmarks");
+    return "SwXBookmarks";
 }
 
 sal_Bool SwXBookmarks::supportsService(const OUString& rServiceName)
@@ -1734,7 +1734,7 @@ sal_Bool SwXNumberingRulesCollection::hasElements()
 
 OUString SwXFootnotes::getImplementationName()
 {
-    return OUString("SwXFootnotes");
+    return "SwXFootnotes";
 }
 
 sal_Bool SwXFootnotes::supportsService(const OUString& rServiceName)
@@ -1830,7 +1830,7 @@ Reference<XFootnote>    SwXFootnotes::GetObject( SwDoc& rDoc, const SwFormatFoot
 
 OUString SwXReferenceMarks::getImplementationName()
 {
-    return OUString("SwXReferenceMarks");
+    return "SwXReferenceMarks";
 }
 
 sal_Bool SwXReferenceMarks::supportsService(const OUString& rServiceName)

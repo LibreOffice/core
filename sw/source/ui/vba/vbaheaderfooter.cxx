@@ -86,7 +86,7 @@ SwVbaHeaderFooter::Shapes( const uno::Any& index )
 OUString
 SwVbaHeaderFooter::getServiceImplName()
 {
-    return OUString("SwVbaHeaderFooter");
+    return "SwVbaHeaderFooter";
 }
 
 uno::Sequence< OUString >

@@ -208,7 +208,7 @@ SwVbaTables::createCollectionObject( const uno::Any& aSource )
 OUString
 SwVbaTables::getServiceImplName()
 {
-    return OUString("SwVbaTables");
+    return "SwVbaTables";
 }
 
 // XEnumerationAccess

@@ -260,7 +260,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatApplyBulletedLists( sal_Bool /*_autofor
 OUString
 SwVbaOptions::getServiceImplName()
 {
-    return OUString("SwVbaOptions");
+    return "SwVbaOptions";
 }
 
 uno::Sequence< OUString >

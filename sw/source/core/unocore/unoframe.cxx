@@ -1186,7 +1186,7 @@ sal_Int64 SAL_CALL SwXFrame::getSomething( const ::uno::Sequence< sal_Int8 >& rI
 
 OUString SwXFrame::getImplementationName()
 {
-    return OUString("SwXFrame");
+    return "SwXFrame";
 }
 
 sal_Bool SwXFrame::supportsService(const OUString& rServiceName)
@@ -3130,7 +3130,7 @@ void SwXFrame::setSize(const awt::Size& aSize)
 
 OUString SwXFrame::getShapeType()
 {
-    return OUString("FrameShape");
+    return "FrameShape";
 }
 
 SwXTextFrame::SwXTextFrame( SwDoc *_pDoc ) :
@@ -3331,7 +3331,7 @@ void SwXTextFrame::removeEventListener(const uno::Reference< lang::XEventListene
 
 OUString SwXTextFrame::getImplementationName()
 {
-    return OUString("SwXTextFrame");
+    return "SwXTextFrame";
 }
 
 sal_Bool SwXTextFrame::supportsService(const OUString& rServiceName)
@@ -3403,7 +3403,7 @@ SwXTextGraphicObject::CreateXTextGraphicObject(SwDoc & rDoc, SwFrameFormat *cons
 
 OUString SwXTextGraphicObject::getImplementationName()
 {
-    return OUString("SwXTextGraphicObject");
+    return "SwXTextGraphicObject";
 }
 
 sal_Bool SwXTextGraphicObject::supportsService(const OUString& rServiceName)
@@ -3541,7 +3541,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL SwXTextEmbeddedObject::getReplaceme
 
 OUString SwXTextEmbeddedObject::getImplementationName()
 {
-    return OUString("SwXTextEmbeddedObject");
+    return "SwXTextEmbeddedObject";
 }
 
 sal_Bool SwXTextEmbeddedObject::supportsService(const OUString& rServiceName)

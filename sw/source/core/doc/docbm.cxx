@@ -516,7 +516,7 @@ IDocumentMarkAccess::MarkType IDocumentMarkAccess::GetType(const IMark& rBkmk)
 
 OUString IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()
 {
-    return OUString("__RefHeading__");
+    return "__RefHeading__";
 }
 
 bool IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& rPaM )

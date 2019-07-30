@@ -52,7 +52,7 @@ void SwVbaListTemplate::applyListTemplate( uno::Reference< beans::XPropertySet >
 OUString
 SwVbaListTemplate::getServiceImplName()
 {
-    return OUString("SwVbaListTemplate");
+    return "SwVbaListTemplate";
 }
 
 uno::Sequence< OUString >

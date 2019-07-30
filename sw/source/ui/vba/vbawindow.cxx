@@ -118,11 +118,11 @@ SwVbaWindow::getCaption()
 {
     SwView* pView = word::getView( m_xModel );
     if( !pView )
-        return OUString("");
+        return "";
 
     uno::Reference< css::beans::XPropertySet > xFrameProps( pView->GetViewFrame()->GetFrame().GetFrameInterface()->getController()->getFrame(), uno::UNO_QUERY );
     if( !xFrameProps.is() )
-        return OUString("");
+        return "";
 
     OUString sTitle;
     xFrameProps->getPropertyValue( "Title" ) >>= sTitle;
@@ -163,7 +163,7 @@ SwVbaWindow::ActivePane()
 OUString
 SwVbaWindow::getServiceImplName()
 {
-    return OUString("SwVbaWindow");
+    return "SwVbaWindow";
 }
 
 uno::Sequence< OUString >

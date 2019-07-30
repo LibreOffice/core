@@ -195,7 +195,7 @@ SwVbaCells::createCollectionObject( const uno::Any& aSource )
 OUString
 SwVbaCells::getServiceImplName()
 {
-    return OUString("SwVbaCells");
+    return "SwVbaCells";
 }
 
 uno::Sequence<OUString>

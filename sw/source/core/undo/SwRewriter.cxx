@@ -57,15 +57,15 @@ OUString SwRewriter::GetPlaceHolder(SwUndoArg eId)
     switch (eId)
     {
         case UndoArg1:
-            return OUString("$1");
+            return "$1";
         case UndoArg2:
-            return OUString("$2");
+            return "$2";
         case UndoArg3:
-            return OUString("$3");
+            return "$3";
         default:
             break;
     }
-    return OUString("$1");
+    return "$1";
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

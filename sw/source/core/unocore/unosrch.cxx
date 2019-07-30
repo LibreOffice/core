@@ -642,7 +642,7 @@ bool    SwXTextSearch::HasReplaceAttributes() const
 
 OUString SwXTextSearch::getImplementationName()
 {
-    return OUString("SwXTextSearch");
+    return "SwXTextSearch";
 }
 
 sal_Bool SwXTextSearch::supportsService(const OUString& rServiceName)

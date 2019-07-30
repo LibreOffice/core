@@ -371,7 +371,7 @@ void SAL_CALL SwVbaListLevel::setTrailingCharacter( ::sal_Int32 _trailingcharact
 OUString
 SwVbaListLevel::getServiceImplName()
 {
-    return OUString("SwVbaListLevel");
+    return "SwVbaListLevel";
 }
 
 uno::Sequence< OUString >

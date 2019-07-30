@@ -214,7 +214,7 @@ Any SAL_CALL SwXTextDefaults::getPropertyDefault( const OUString& rPropertyName 
 
 OUString SAL_CALL SwXTextDefaults::getImplementationName(  )
 {
-    return OUString("SwXTextDefaults");
+    return "SwXTextDefaults";
 }
 
 sal_Bool SAL_CALL SwXTextDefaults::supportsService( const OUString& rServiceName )

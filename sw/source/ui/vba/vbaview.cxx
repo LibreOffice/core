@@ -374,7 +374,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType )
 OUString
 SwVbaView::getServiceImplName()
 {
-    return OUString("SwVbaView");
+    return "SwVbaView";
 }
 
 uno::Sequence< OUString >

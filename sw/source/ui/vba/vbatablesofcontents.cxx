@@ -164,7 +164,7 @@ SwVbaTablesOfContents::createCollectionObject( const uno::Any& aSource )
 OUString
 SwVbaTablesOfContents::getServiceImplName()
 {
-    return OUString("SwVbaTablesOfContents");
+    return "SwVbaTablesOfContents";
 }
 
 uno::Sequence<OUString>

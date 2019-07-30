@@ -139,7 +139,7 @@ namespace sw
     // XServiceInfo
     OUString LayoutDumpFilter::getImplementationName(  )
     {
-        return OUString( "com.sun.star.comp.Writer.LayoutDump" );
+        return "com.sun.star.comp.Writer.LayoutDump";
     }
 
     sal_Bool LayoutDumpFilter::supportsService( const OUString& rServiceName )

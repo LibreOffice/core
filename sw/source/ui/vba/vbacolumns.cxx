@@ -132,7 +132,7 @@ SwVbaColumns::createCollectionObject( const uno::Any& aSource )
 OUString
 SwVbaColumns::getServiceImplName()
 {
-    return OUString("SwVbaColumns");
+    return "SwVbaColumns";
 }
 
 uno::Sequence<OUString>

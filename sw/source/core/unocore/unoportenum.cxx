@@ -321,7 +321,7 @@ sal_Int64 SAL_CALL SwXTextPortionEnumeration::getSomething(
 
 OUString SwXTextPortionEnumeration::getImplementationName()
 {
-    return OUString("SwXTextPortionEnumeration");
+    return "SwXTextPortionEnumeration";
 }
 
 sal_Bool

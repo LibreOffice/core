@@ -248,7 +248,7 @@ SwVbaTabStops::createCollectionObject( const css::uno::Any& aSource )
 OUString
 SwVbaTabStops::getServiceImplName()
 {
-    return OUString("SwVbaTabStops");
+    return "SwVbaTabStops";
 }
 
 css::uno::Sequence<OUString>

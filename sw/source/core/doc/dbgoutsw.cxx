@@ -806,30 +806,30 @@ static OUString lcl_TokenType2Str(FormTokenType nType)
     switch(nType)
     {
     case TOKEN_ENTRY_NO:
-        return OUString("NO");
+        return "NO";
     case TOKEN_ENTRY_TEXT:
-        return OUString("ENTRY_TEXT");
+        return "ENTRY_TEXT";
     case TOKEN_ENTRY:
-        return OUString("ENTRY");
+        return "ENTRY";
     case TOKEN_TAB_STOP:
-        return OUString("TAB_STOP");
+        return "TAB_STOP";
     case TOKEN_TEXT:
-        return OUString("TOKEN_TEXT");
+        return "TOKEN_TEXT";
     case TOKEN_PAGE_NUMS:
-        return OUString("NUMS");
+        return "NUMS";
     case TOKEN_CHAPTER_INFO:
-        return OUString("CHAPTER_INFO");
+        return "CHAPTER_INFO";
     case TOKEN_LINK_START:
-        return OUString("LINK_START");
+        return "LINK_START";
     case TOKEN_LINK_END:
-        return OUString("LINK_END");
+        return "LINK_END";
     case TOKEN_AUTHORITY:
-        return OUString("AUTHORITY");
+        return "AUTHORITY";
     case TOKEN_END:
-        return OUString("END");
+        return "END";
     default:
         OSL_FAIL("should not be reached");
-        return OUString("??");
+        return "??";
     }
 }
 

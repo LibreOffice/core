@@ -118,7 +118,7 @@ void SwEditWinUIObject::execute(const OUString& rAction,
 
 OUString SwEditWinUIObject::get_name() const
 {
-    return OUString("SwEditWinUIObject");
+    return "SwEditWinUIObject";
 }
 
 std::unique_ptr<UIObject> SwEditWinUIObject::create(vcl::Window* pWindow)
@@ -163,7 +163,7 @@ std::unique_ptr<UIObject> SwNavigationPIUIObject::create(vcl::Window* pWindow)
 
 OUString SwNavigationPIUIObject::get_name() const
 {
-    return OUString("SwNavigationPIUIObject");
+    return "SwNavigationPIUIObject";
 }
 
 

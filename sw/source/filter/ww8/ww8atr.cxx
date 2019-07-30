@@ -2581,7 +2581,7 @@ OUString FieldString(ww::eField eIndex)
 {
     if (const char *pField = ww::GetEnglishFieldName(eIndex))
         return " " + OUString::createFromAscii(pField) + " ";
-    return OUString("  ");
+    return "  ";
 }
 
 void WW8AttributeOutput::HiddenField( const SwField& rField )

@@ -191,7 +191,7 @@ SwXFootnote::getSomething(const uno::Sequence< sal_Int8 >& rId)
 OUString SAL_CALL
 SwXFootnote::getImplementationName()
 {
-    return OUString("SwXFootnote");
+    return "SwXFootnote";
 }
 
 static char const*const g_ServicesFootnote[] =

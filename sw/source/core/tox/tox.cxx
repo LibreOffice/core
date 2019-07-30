@@ -499,16 +499,16 @@ void SwForm::AdjustTabStops( SwDoc const & rDoc ) // #i21237#
     }
 }
 
-OUString SwForm::GetFormEntry()       {return OUString("<E>");}
-OUString SwForm::GetFormTab()         {return OUString("<T>");}
-OUString SwForm::GetFormPageNums()    {return OUString("<#>");}
-OUString SwForm::GetFormLinkStt()     {return OUString("<LS>");}
-OUString SwForm::GetFormLinkEnd()     {return OUString("<LE>");}
-OUString SwForm::GetFormEntryNum()    {return OUString("<E#>");}
-OUString SwForm::GetFormEntryText()    {return OUString("<ET>");}
-OUString SwForm::GetFormChapterMark() {return OUString("<C>");}
-OUString SwForm::GetFormText()        {return OUString("<X>");}
-OUString SwForm::GetFormAuth()        {return OUString("<A>");}
+OUString SwForm::GetFormEntry()       {return "<E>";}
+OUString SwForm::GetFormTab()         {return "<T>";}
+OUString SwForm::GetFormPageNums()    {return "<#>";}
+OUString SwForm::GetFormLinkStt()     {return "<LS>";}
+OUString SwForm::GetFormLinkEnd()     {return "<LE>";}
+OUString SwForm::GetFormEntryNum()    {return "<E#>";}
+OUString SwForm::GetFormEntryText()    {return "<ET>";}
+OUString SwForm::GetFormChapterMark() {return "<C>";}
+OUString SwForm::GetFormText()        {return "<X>";}
+OUString SwForm::GetFormAuth()        {return "<A>";}
 
 SwTOXBase::SwTOXBase(const SwTOXType* pTyp, const SwForm& rForm,
                      SwTOXElement nCreaType, const OUString& rTitle )

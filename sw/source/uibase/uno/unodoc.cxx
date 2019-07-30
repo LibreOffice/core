@@ -40,7 +40,7 @@ uno::Sequence< OUString > SwTextDocument_getSupportedServiceNames() throw()
 
 OUString SwTextDocument_getImplementationName() throw()
 {
-    return OUString( "com.sun.star.comp.Writer.TextDocument" );
+    return "com.sun.star.comp.Writer.TextDocument";
 }
 
 uno::Reference< uno::XInterface > SwTextDocument_createInstance(

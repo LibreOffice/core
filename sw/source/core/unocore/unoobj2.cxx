@@ -480,7 +480,7 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
-        { return OUString("SwXParagraphEnumeration"); }
+        { return "SwXParagraphEnumeration"; }
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName) override
         { return cppu::supportsService(this, rServiceName); };
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
@@ -863,7 +863,7 @@ SwXTextRange::getSomething(const uno::Sequence< sal_Int8 >& rId)
 OUString SAL_CALL
 SwXTextRange::getImplementationName()
 {
-    return OUString("SwXTextRange");
+    return "SwXTextRange";
 }
 
 sal_Bool SAL_CALL SwXTextRange::supportsService(const OUString& rServiceName)
@@ -1448,7 +1448,7 @@ struct SwXTextRangesImpl final : public SwXTextRanges
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
-        { return OUString("SwXTextRanges"); };
+        { return "SwXTextRanges"; };
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName) override
         { return cppu::supportsService(this, rServiceName); };
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
@@ -1566,7 +1566,7 @@ struct SwXParaFrameEnumerationImpl final : public SwXParaFrameEnumeration
 {
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
-        { return OUString("SwXParaFrameEnumeration"); };
+        { return "SwXParaFrameEnumeration"; };
     virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
         { return cppu::supportsService(this, rServiceName); };
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override

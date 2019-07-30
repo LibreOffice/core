@@ -350,7 +350,7 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 )
 OUString
 SwVbaStyles::getServiceImplName()
 {
-    return OUString("SwVbaStyles");
+    return "SwVbaStyles";
 }
 
 uno::Sequence< OUString >

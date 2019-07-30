@@ -297,7 +297,7 @@ protected:
 #define DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, file, BaseClass, selection, column) \
     class TestName : public BaseClass { \
     protected: \
-        virtual OUString getTestName() override { return OUString(#TestName); } \
+        virtual OUString getTestName() override { return #TestName; } \
     public: \
         CPPUNIT_TEST_SUITE(TestName); \
         CPPUNIT_TEST(MailMerge); \

@@ -4517,17 +4517,17 @@ OUString SwTextNode::GetLabelFollowedBy() const
             {
                 case SvxNumberFormat::LISTTAB:
                 {
-                    return OUString("\t");
+                    return "\t";
                 }
                 break;
                 case SvxNumberFormat::SPACE:
                 {
-                    return OUString(" ");
+                    return " ";
                 }
                 break;
                 case SvxNumberFormat::NEWLINE:
                 {
-                    return OUString("\n");
+                    return "\n";
                 }
                 break;
                 case SvxNumberFormat::NOTHING:

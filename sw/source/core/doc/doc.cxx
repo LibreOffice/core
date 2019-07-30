@@ -1789,7 +1789,7 @@ OUString SwDoc::GetPaMDescr(const SwPaM & rPam)
         return SwResId(STR_PARAGRAPHS);
     }
 
-    return OUString("??");
+    return "??";
 }
 
 bool SwDoc::ContainsHiddenChars() const

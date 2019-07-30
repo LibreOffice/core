@@ -73,9 +73,9 @@ OUString SAL_CALL SwAccessibleHeaderFooter::getAccessibleDescription()
 OUString SAL_CALL SwAccessibleHeaderFooter::getImplementationName()
 {
     if( AccessibleRole::HEADER == GetRole() )
-        return OUString(sImplementationNameHeader);
+        return sImplementationNameHeader;
     else
-        return OUString(sImplementationNameFooter);
+        return sImplementationNameFooter;
 }
 
 sal_Bool SAL_CALL SwAccessibleHeaderFooter::supportsService(const OUString& sTestServiceName)

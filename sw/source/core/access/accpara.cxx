@@ -879,7 +879,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getBackground()
 
 OUString SAL_CALL SwAccessibleParagraph::getImplementationName()
 {
-    return OUString(sImplementationName);
+    return sImplementationName;
 }
 
 sal_Bool SAL_CALL SwAccessibleParagraph::supportsService(

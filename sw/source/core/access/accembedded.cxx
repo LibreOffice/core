@@ -74,7 +74,7 @@ void SAL_CALL
 
 OUString SAL_CALL SwAccessibleEmbeddedObject::getImplementationName()
 {
-    return OUString(sImplementationName);
+    return sImplementationName;
 }
 
 sal_Bool SAL_CALL SwAccessibleEmbeddedObject::supportsService(const OUString& sTestServiceName)

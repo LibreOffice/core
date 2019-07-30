@@ -862,7 +862,7 @@ sal_Bool SAL_CALL NavElementToolBoxControl::supportsService( const OUString& Ser
 
 OUString SAL_CALL NavElementToolBoxControl::getImplementationName()
 {
-    return OUString("lo.writer.NavElementToolBoxController");
+    return "lo.writer.NavElementToolBoxController";
 }
 
 uno::Sequence< OUString > SAL_CALL NavElementToolBoxControl::getSupportedServiceNames()

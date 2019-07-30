@@ -58,7 +58,7 @@ SwVbaParagraph::setStyle( const uno::Any& style )
 OUString
 SwVbaParagraph::getServiceImplName()
 {
-    return OUString("SwVbaParagraph");
+    return "SwVbaParagraph";
 }
 
 uno::Sequence< OUString >
@@ -160,7 +160,7 @@ SwVbaParagraphs::createCollectionObject( const css::uno::Any& aSource )
 OUString
 SwVbaParagraphs::getServiceImplName()
 {
-    return OUString("SwVbaParagraphs");
+    return "SwVbaParagraphs";
 }
 
 css::uno::Sequence<OUString>

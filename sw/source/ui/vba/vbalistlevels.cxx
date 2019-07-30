@@ -90,7 +90,7 @@ SwVbaListLevels::createCollectionObject( const css::uno::Any& aSource )
 OUString
 SwVbaListLevels::getServiceImplName()
 {
-    return OUString("SwVbaListLevels");
+    return "SwVbaListLevels";
 }
 
 css::uno::Sequence<OUString>

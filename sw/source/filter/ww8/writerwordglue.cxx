@@ -317,7 +317,7 @@ namespace myImplHelpers
     static OUString FindBestMSSubstituteFont(const OUString &rFont)
     {
         if (IsStarSymbol(rFont))
-            return OUString("Arial Unicode MS");
+            return "Arial Unicode MS";
         return GetSubsFontName(rFont, SubsFontFlags::ONLYONE | SubsFontFlags::MS);
     }
 

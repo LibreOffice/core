@@ -550,7 +550,7 @@ sal_Int32 SwVbaParagraphFormat::getMSWordAlignment( style::ParagraphAdjust _alig
 OUString
 SwVbaParagraphFormat::getServiceImplName()
 {
-    return OUString("SwVbaParagraphFormat");
+    return "SwVbaParagraphFormat";
 }
 
 uno::Sequence< OUString >

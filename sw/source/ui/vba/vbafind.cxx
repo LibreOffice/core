@@ -392,7 +392,7 @@ SwVbaFind::ClearFormatting(  )
 OUString
 SwVbaFind::getServiceImplName()
 {
-    return OUString("SwVbaFind");
+    return "SwVbaFind";
 }
 
 uno::Sequence< OUString >

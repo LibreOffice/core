@@ -358,7 +358,7 @@ void SAL_CALL SwXBookmark::setName(const OUString& rName)
 OUString SAL_CALL
 SwXBookmark::getImplementationName()
 {
-    return OUString("SwXBookmark");
+    return "SwXBookmark";
 }
 
 sal_Bool SAL_CALL SwXBookmark::supportsService(const OUString& rServiceName)

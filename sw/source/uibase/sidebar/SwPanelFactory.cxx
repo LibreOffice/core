@@ -67,7 +67,7 @@ public:
         const css::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
 
     OUString SAL_CALL getImplementationName() override
-    { return OUString("org.apache.openoffice.comp.sw.sidebar.SwPanelFactory"); }
+    { return "org.apache.openoffice.comp.sw.sidebar.SwPanelFactory"; }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }

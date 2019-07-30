@@ -221,7 +221,7 @@ void SAL_CALL SwVbaWrapFormat::setDistanceRight( float _distanceright )
 OUString
 SwVbaWrapFormat::getServiceImplName()
 {
-    return OUString("SwVbaWrapFormat");
+    return "SwVbaWrapFormat";
 }
 
 uno::Sequence< OUString >

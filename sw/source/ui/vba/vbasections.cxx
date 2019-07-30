@@ -175,7 +175,7 @@ SwVbaSections::createCollectionObject( const css::uno::Any& aSource )
 OUString
 SwVbaSections::getServiceImplName()
 {
-    return OUString("SwVbaSections");
+    return "SwVbaSections";
 }
 
 css::uno::Sequence<OUString>

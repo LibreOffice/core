@@ -77,7 +77,7 @@ const sal_uInt16 SwNumRule::maDefNumIndents[ MAXLEVEL ] = {
 
 OUString SwNumRule::GetOutlineRuleName()
 {
-    return OUString("Outline");
+    return "Outline";
 }
 
 const SwNumFormat& SwNumRule::Get( sal_uInt16 i ) const
