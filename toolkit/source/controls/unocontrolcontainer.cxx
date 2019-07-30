@@ -780,7 +780,7 @@ void UnoControlContainer::setVisible( sal_Bool bVisible )
 
 OUString UnoControlContainer::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlContainer");
+    return "stardiv.Toolkit.UnoControlContainer";
 }
 
 css::uno::Sequence<OUString> UnoControlContainer::getSupportedServiceNames()

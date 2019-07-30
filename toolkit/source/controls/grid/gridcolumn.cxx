@@ -263,7 +263,7 @@ namespace toolkit
 
     OUString SAL_CALL GridColumn::getImplementationName(  )
     {
-        return OUString( "org.openoffice.comp.toolkit.GridColumn" );
+        return "org.openoffice.comp.toolkit.GridColumn";
     }
 
     sal_Bool SAL_CALL GridColumn::supportsService( const OUString& i_serviceName )

@@ -365,7 +365,7 @@ void StdTabController::activateLast(  )
 
 OUString StdTabController::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.StdTabController");
+    return "stardiv.Toolkit.StdTabController";
 }
 
 sal_Bool StdTabController::supportsService(OUString const & ServiceName)

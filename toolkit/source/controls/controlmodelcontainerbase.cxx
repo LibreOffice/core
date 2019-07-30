@@ -178,13 +178,13 @@ static void lcl_throwElementExistException( )
 
 static OUString getTabIndexPropertyName( )
 {
-    return OUString( "TabIndex" );
+    return "TabIndex";
 }
 
 
 static OUString getStepPropertyName( )
 {
-    return OUString( "Step" );
+    return "Step";
 }
 
 

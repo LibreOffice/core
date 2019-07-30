@@ -85,7 +85,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER3( VCLXAccessibleComponent, OAccessibleExtendedCo
 
 OUString VCLXAccessibleComponent::getImplementationName()
 {
-    return OUString("com.sun.star.comp.toolkit.AccessibleWindow");
+    return "com.sun.star.comp.toolkit.AccessibleWindow";
 }
 
 sal_Bool VCLXAccessibleComponent::supportsService( const OUString& rServiceName )

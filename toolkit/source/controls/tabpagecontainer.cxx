@@ -63,7 +63,7 @@ UnoControlTabPageContainerModel::UnoControlTabPageContainerModel( const Referenc
 
 OUString UnoControlTabPageContainerModel::getServiceName()
 {
-    return OUString("com.sun.star.awt.tab.UnoControlTabPageContainerModel");
+    return "com.sun.star.awt.tab.UnoControlTabPageContainerModel";
 }
 
 uno::Any UnoControlTabPageContainerModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -220,7 +220,7 @@ UnoControlTabPageContainer::UnoControlTabPageContainer( const uno::Reference< un
 
 OUString UnoControlTabPageContainer::GetComponentServiceName()
 {
-    return OUString("TabPageContainer");
+    return "TabPageContainer";
 }
 
 void SAL_CALL UnoControlTabPageContainer::dispose(  )

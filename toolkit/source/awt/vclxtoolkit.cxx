@@ -1833,7 +1833,7 @@ css::uno::Reference< css::datatransfer::clipboard::XClipboard > SAL_CALL VCLXToo
 // XServiceInfo
 OUString VCLXToolkit::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.VCLXToolkit");
+    return "stardiv.Toolkit.VCLXToolkit";
 }
 
 sal_Bool VCLXToolkit::supportsService( const OUString& rServiceName )

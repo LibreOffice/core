@@ -85,7 +85,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
     OUString UnoControlRoadmapModel::getImplementationName()
     {
-        return OUString("stardiv.Toolkit.UnoControlRoadmapModel");
+        return "stardiv.Toolkit.UnoControlRoadmapModel";
     }
 
     css::uno::Sequence<OUString>
@@ -385,7 +385,7 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
 
     OUString UnoRoadmapControl::GetComponentServiceName()
     {
-        return OUString("Roadmap");
+        return "Roadmap";
     }
 
 
@@ -481,7 +481,7 @@ void SAL_CALL UnoRoadmapControl::propertyChange( const PropertyChangeEvent& evt 
 
 OUString UnoRoadmapControl::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoRoadmapControl");
+    return "stardiv.Toolkit.UnoRoadmapControl";
 }
 
 css::uno::Sequence<OUString> UnoRoadmapControl::getSupportedServiceNames()

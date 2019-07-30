@@ -48,7 +48,7 @@ sal_Int32 VCLXPointer::getType()
 
 OUString VCLXPointer::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.VCLXPointer");
+    return "stardiv.Toolkit.VCLXPointer";
 }
 
 sal_Bool VCLXPointer::supportsService(OUString const & ServiceName)

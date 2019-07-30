@@ -317,7 +317,7 @@ private:
 
     OUString SAL_CALL DefaultGridColumnModel::getImplementationName(  )
     {
-        return OUString("stardiv.Toolkit.DefaultGridColumnModel");
+        return "stardiv.Toolkit.DefaultGridColumnModel";
     }
 
     sal_Bool SAL_CALL DefaultGridColumnModel::supportsService( const OUString& i_serviceName )

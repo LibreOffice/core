@@ -407,7 +407,7 @@ namespace toolkit
 
     OUString UnoControlFormattedFieldModel::getImplementationName()
     {
-        return OUString("stardiv.Toolkit.UnoControlFormattedFieldModel");
+        return "stardiv.Toolkit.UnoControlFormattedFieldModel";
     }
 
     css::uno::Sequence<OUString>
@@ -431,7 +431,7 @@ namespace toolkit
 
     OUString UnoFormattedFieldControl::GetComponentServiceName()
     {
-        return OUString("FormattedField");
+        return "FormattedField";
     }
 
 
@@ -456,7 +456,7 @@ namespace toolkit
 
     OUString UnoFormattedFieldControl::getImplementationName()
     {
-        return OUString("stardiv.Toolkit.UnoFormattedFieldControl");
+        return "stardiv.Toolkit.UnoFormattedFieldControl";
     }
 
     css::uno::Sequence<OUString>

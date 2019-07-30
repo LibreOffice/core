@@ -52,7 +52,7 @@ namespace toolkit
 
     OUString UnoControlScrollBarModel::getImplementationName()
     {
-        return OUString("stardiv.Toolkit.UnoControlScrollBarModel");
+        return "stardiv.Toolkit.UnoControlScrollBarModel";
     }
 
     css::uno::Sequence<OUString>
@@ -104,7 +104,7 @@ namespace toolkit
 
     OUString UnoScrollBarControl::GetComponentServiceName()
     {
-        return OUString("ScrollBar");
+        return "ScrollBar";
     }
 
     // css::uno::XInterface
@@ -290,7 +290,7 @@ namespace toolkit
 
     OUString UnoScrollBarControl::getImplementationName()
     {
-        return OUString("stardiv.Toolkit.UnoScrollBarControl");
+        return "stardiv.Toolkit.UnoScrollBarControl";
     }
 
     css::uno::Sequence<OUString> UnoScrollBarControl::getSupportedServiceNames()
