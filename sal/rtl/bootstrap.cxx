@@ -104,7 +104,7 @@ OUString recursivelyExpandMacros(
         if (requestStack->file == requestFile &&
             requestStack->key == requestKey)
         {
-            return OUString("***RECURSION DETECTED***");
+            return "***RECURSION DETECTED***";
         }
     }
     ExpandRequestLink link = { requestStack, requestFile, requestKey };

@@ -47,7 +47,7 @@
 namespace {
 struct Gregorian : public rtl::StaticWithInit<OUString, Gregorian> {
     const OUString operator () () {
-        return OUString( CONST_TEST_STRING );
+        return CONST_TEST_STRING;
     }
 };
 }
