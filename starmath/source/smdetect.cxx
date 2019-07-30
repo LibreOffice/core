@@ -80,7 +80,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
             {
                 sal_uInt8 nVersion;
                 if ( GetMathTypeVersion( aStorage.get(), nVersion ) && nVersion <=3 )
-                    return OUString("math_MathType_3x");
+                    return "math_MathType_3x";
             }
         }
     }
@@ -114,7 +114,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                                0 == strncmp( "<math:math> ", aBuffer, 12));
 
             if ( bIsMathType )
-                return OUString("math_MathML_XML_Math");
+                return "math_MathML_XML_Math";
         }
     }
 
@@ -124,7 +124,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 /* XServiceInfo */
 OUString SAL_CALL SmFilterDetect::getImplementationName()
 {
-    return OUString("com.sun.star.comp.math.FormatDetector");
+    return "com.sun.star.comp.math.FormatDetector";
 }
 
 /* XServiceInfo */

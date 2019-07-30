@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 
 OUString SmDocument_getImplementationName() throw()
 {
-    return OUString( "com.sun.star.comp.Math.FormulaDocument" );
+    return "com.sun.star.comp.Math.FormulaDocument";
 }
 
 uno::Sequence< OUString > SmDocument_getSupportedServiceNames() throw()

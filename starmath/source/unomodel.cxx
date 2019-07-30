@@ -387,7 +387,7 @@ static sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
 
 OUString SmModel::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Math.FormulaDocument");
+    return "com.sun.star.comp.Math.FormulaDocument";
 }
 
 sal_Bool SmModel::supportsService(const OUString& rServiceName)

@@ -156,7 +156,7 @@ sal_Int32 AccessibleSmElementsControl::getBackground()
 // XServiceInfo
 OUString AccessibleSmElementsControl::getImplementationName()
 {
-    return OUString("com.sun.star.comp.toolkit.AccessibleSmElementsControl");
+    return "com.sun.star.comp.toolkit.AccessibleSmElementsControl";
 }
 
 sal_Bool AccessibleSmElementsControl::supportsService(const OUString& rServiceName)

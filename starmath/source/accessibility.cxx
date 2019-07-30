@@ -720,7 +720,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
 
 OUString SAL_CALL SmGraphicAccessible::getImplementationName()
 {
-    return OUString("SmGraphicAccessible");
+    return "SmGraphicAccessible";
 }
 
 sal_Bool SAL_CALL SmGraphicAccessible::supportsService(
@@ -1763,7 +1763,7 @@ void SAL_CALL SmEditAccessible::removeAccessibleEventListener( const uno::Refere
 
 OUString SAL_CALL SmEditAccessible::getImplementationName()
 {
-    return OUString("SmEditAccessible");
+    return "SmEditAccessible";
 }
 
 sal_Bool SAL_CALL SmEditAccessible::supportsService(

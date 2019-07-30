@@ -107,7 +107,7 @@ void AccessibleSmElement::disposing()
 
 OUString AccessibleSmElement::getImplementationName()
 {
-    return OUString("com.sun.star.comp.toolkit.AccessibleSmElement");
+    return "com.sun.star.comp.toolkit.AccessibleSmElement";
 }
 
 sal_Bool AccessibleSmElement::supportsService(const OUString& rServiceName)
@@ -274,7 +274,7 @@ OUString AccessibleSmElement::getAccessibleActionDescription(sal_Int32 nIndex)
 
     testAction(nIndex);
 
-    return OUString("press");
+    return "press";
 }
 
 uno::Reference<XAccessibleKeyBinding>

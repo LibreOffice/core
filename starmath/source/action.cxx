@@ -47,7 +47,7 @@ void SmFormatAction::Repeat(SfxRepeatTarget& rDocSh)
 
 OUString SmFormatAction::GetComment() const
 {
-    return OUString(RID_UNDOFORMATNAME);
+    return RID_UNDOFORMATNAME;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
