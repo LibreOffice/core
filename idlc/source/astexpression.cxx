@@ -1169,9 +1169,9 @@ OString AstExpression::toString()
                 return OString::number(m_exprValue->u.byval);
             case ET_boolean:
                 if ( m_exprValue->u.lval == 0)
-                    return OString("FALSE");
+                    return "FALSE";
                 else
-                    return OString("TRUE");
+                    return "TRUE";
             default:
                 OSL_ASSERT(false);
                 return OString();
