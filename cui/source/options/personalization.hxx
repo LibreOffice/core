@@ -20,18 +20,17 @@ class SvxPersonalizationTabPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 private:
-    VclPtr<RadioButton> m_pNoPersona; ///< Just the default look, without any bitmap
-    VclPtr<RadioButton> m_pDefaultPersona; ///< Use the built-in bitmap
-    VclPtr<PushButton> m_vDefaultPersonaImages
+    std::unique_ptr<weld::RadioButton> m_xNoPersona; ///< Just the default look, without any bitmap
+    std::unique_ptr<weld::RadioButton> m_xDefaultPersona; ///< Use the built-in bitmap
+    std::unique_ptr<weld::Button> m_vDefaultPersonaImages
         [MAX_DEFAULT_PERSONAS]; ///< Buttons to show the default persona images
     OUString m_aPersonaSettings; ///< Header and footer images + color to be set in the settings.
 
     std::vector<OUString> m_vDefaultPersonaSettings;
 
 public:
-    SvxPersonalizationTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    SvxPersonalizationTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxPersonalizationTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
 
@@ -58,7 +57,7 @@ public:
 
 private:
     /// Handle the default Persona selection
-    DECL_LINK(DefaultPersona, Button*, void);
+    DECL_LINK(DefaultPersona, weld::Button&, void);
 };
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_PERSONALIZATION_HXX

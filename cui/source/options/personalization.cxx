@@ -44,45 +44,35 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
 
-SvxPersonalizationTabPage::SvxPersonalizationTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "PersonalizationTabPage", "cui/ui/personalization_tab.ui", &rSet)
+// persona
+SvxPersonalizationTabPage::SvxPersonalizationTabPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "cui/ui/personalization_tab.ui", "PersonalizationTabPage", &rSet)
+    , m_xNoPersona(m_xBuilder->weld_radio_button("no_persona"))
+    , m_xDefaultPersona(m_xBuilder->weld_radio_button("default_persona"))
 {
-    // persona
-    get(m_pNoPersona, "no_persona");
-    get(m_pDefaultPersona, "default_persona");
-
     for (sal_uInt32 i = 0; i < MAX_DEFAULT_PERSONAS; ++i)
     {
-        OUString sDefaultId("default" + OUString::number(i));
-        get(m_vDefaultPersonaImages[i], OUStringToOString(sDefaultId, RTL_TEXTENCODING_UTF8));
-        m_vDefaultPersonaImages[i]->SetClickHdl(
+        OString sDefaultId("default" + OString::number(i));
+        m_vDefaultPersonaImages[i] = m_xBuilder->weld_button(sDefaultId);
+        m_vDefaultPersonaImages[i]->connect_clicked(
             LINK(this, SvxPersonalizationTabPage, DefaultPersona));
     }
 
     LoadDefaultImages();
 }
 
-SvxPersonalizationTabPage::~SvxPersonalizationTabPage() { disposeOnce(); }
-
-void SvxPersonalizationTabPage::dispose()
-{
-    m_pNoPersona.clear();
-    m_pDefaultPersona.clear();
-    for (VclPtr<PushButton>& i : m_vDefaultPersonaImages)
-        i.clear();
-    SfxTabPage::dispose();
-}
+SvxPersonalizationTabPage::~SvxPersonalizationTabPage() {}
 
 VclPtr<SfxTabPage> SvxPersonalizationTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxPersonalizationTabPage>::Create(pParent.pParent, *rSet);
+    return VclPtr<SvxPersonalizationTabPage>::Create(pParent, *rSet);
 }
 
 bool SvxPersonalizationTabPage::FillItemSet(SfxItemSet*)
 {
     // persona
     OUString aPersona("default");
-    if (m_pNoPersona->IsChecked())
+    if (m_xNoPersona->get_active())
         aPersona = "no";
 
     bool bModified = false;
@@ -128,9 +118,9 @@ void SvxPersonalizationTabPage::Reset(const SfxItemSet*)
     }
 
     if (aPersona == "no")
-        m_pNoPersona->Check();
+        m_xNoPersona->set_active(true);
     else
-        m_pDefaultPersona->Check();
+        m_xDefaultPersona->set_active(true);
 }
 
 void SvxPersonalizationTabPage::LoadDefaultImages()
@@ -164,22 +154,21 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
 
         INetURLObject aURLObj(gallery + aPreviewFile);
         aFilter.ImportGraphic(aGraphic, aURLObj);
-        BitmapEx aBmp = aGraphic.GetBitmapEx();
-        m_vDefaultPersonaImages[nIndex]->SetModeImage(Image(aBmp));
-        m_vDefaultPersonaImages[nIndex]->SetQuickHelpText(aName);
-        m_vDefaultPersonaImages[nIndex++]->Show();
+        m_vDefaultPersonaImages[nIndex]->set_image(aGraphic.GetXGraphic());
+        m_vDefaultPersonaImages[nIndex]->set_tooltip_text(aName);
+        m_vDefaultPersonaImages[nIndex++]->show();
         foundOne = true;
     }
 
-    m_pDefaultPersona->Enable(foundOne);
+    m_xDefaultPersona->set_sensitive(foundOne);
 }
 
-IMPL_LINK(SvxPersonalizationTabPage, DefaultPersona, Button*, pButton, void)
+IMPL_LINK(SvxPersonalizationTabPage, DefaultPersona, weld::Button&, rButton, void)
 {
-    m_pDefaultPersona->Check();
+    m_xDefaultPersona->set_active(true);
     for (sal_Int32 nIndex = 0; nIndex < MAX_DEFAULT_PERSONAS; ++nIndex)
     {
-        if (pButton == m_vDefaultPersonaImages[nIndex])
+        if (&rButton == m_vDefaultPersonaImages[nIndex].get())
             m_aPersonaSettings = m_vDefaultPersonaSettings[nIndex];
     }
 }
