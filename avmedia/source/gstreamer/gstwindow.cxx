@@ -175,7 +175,7 @@ void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventLis
 
 OUString SAL_CALL Window::getImplementationName(  )
 {
-    return OUString( AVMEDIA_GST_WINDOW_IMPLEMENTATIONNAME );
+    return AVMEDIA_GST_WINDOW_IMPLEMENTATIONNAME;
 }
 
 sal_Bool SAL_CALL Window::supportsService( const OUString& ServiceName )
