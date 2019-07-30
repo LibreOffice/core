@@ -112,7 +112,7 @@ OUString SAL_CALL ContentProvider::getImplementationName()
 
 OUString ContentProvider::getImplementationName_Static()
 {
-    return OUString("CHelpContentProvider" );
+    return "CHelpContentProvider";
 }
 
 sal_Bool SAL_CALL

@@ -103,7 +103,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 // virtual
 OUString SAL_CALL Content::getImplementationName()
 {
-    return OUString( "CHelpContent" );
+    return "CHelpContent";
 }
 
 // virtual
@@ -119,7 +119,7 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 // virtual
 OUString SAL_CALL Content::getContentType()
 {
-    return OUString( MYUCP_CONTENT_TYPE );
+    return MYUCP_CONTENT_TYPE;
 }
 
 // XCommandProcessor methods.
