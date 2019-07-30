@@ -154,7 +154,7 @@ void SAL_CALL SignatureCreatorImpl::initialize( const cssu::Sequence< cssu::Any 
 
 OUString SignatureCreatorImpl_getImplementationName ()
 {
-    return OUString ( IMPLEMENTATION_NAME );
+    return IMPLEMENTATION_NAME;
 }
 
 cssu::Sequence< OUString > SignatureCreatorImpl_getSupportedServiceNames(  )

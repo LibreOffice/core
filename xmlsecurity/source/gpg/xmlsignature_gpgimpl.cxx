@@ -516,7 +516,7 @@ Sequence< OUString > XMLSignature_GpgImpl::impl_getSupportedServiceNames() {
 }
 
 OUString XMLSignature_GpgImpl::impl_getImplementationName() {
-    return OUString("com.sun.star.xml.security.bridge.xmlsec.XMLSignature_GpgImpl") ;
+    return "com.sun.star.xml.security.bridge.xmlsec.XMLSignature_GpgImpl" ;
 }
 
 //Helper for registry

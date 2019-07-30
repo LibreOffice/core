@@ -136,7 +136,7 @@ SecurityEnvironment_NssImpl::~SecurityEnvironment_NssImpl() {
 
 /* XServiceInfo */
 OUString SAL_CALL SecurityEnvironment_NssImpl::getImplementationName() {
-    return OUString("com.sun.star.xml.crypto.SecurityEnvironment");
+    return "com.sun.star.xml.crypto.SecurityEnvironment";
 }
 
 /* XServiceInfo */

@@ -243,7 +243,7 @@ OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponen
         SAL_INFO(
             "xmlsecurity.xmlsec",
             "Using Mozilla profile from MOZILLA_CERTIFICATE_FOLDER=" << pEnv);
-        return OString(pEnv);
+        return pEnv;
     }
 
     // second, try to get saved user-preference
@@ -582,7 +582,7 @@ css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL ONSSInitializer
 /* XServiceInfo */
 OUString SAL_CALL ONSSInitializer::getImplementationName()
 {
-    return OUString("com.sun.star.xml.crypto.NSSInitializer");
+    return "com.sun.star.xml.crypto.NSSInitializer";
 }
 
 sal_Bool SAL_CALL ONSSInitializer::supportsService( const OUString& rServiceName )

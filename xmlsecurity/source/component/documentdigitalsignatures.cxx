@@ -230,7 +230,7 @@ void DocumentDigitalSignatures::initialize( const Sequence< Any >& aArguments)
 
 OUString DocumentDigitalSignatures::getImplementationName()
 {
-    return OUString("com.sun.star.security.DocumentDigitalSignatures");
+    return "com.sun.star.security.DocumentDigitalSignatures";
 }
 
 sal_Bool DocumentDigitalSignatures::supportsService(

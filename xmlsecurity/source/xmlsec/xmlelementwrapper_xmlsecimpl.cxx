@@ -59,7 +59,7 @@ sal_Int64 SAL_CALL XMLElementWrapper_XmlSecImpl::getSomething( const uno::Sequen
 /* XServiceInfo */
 OUString SAL_CALL XMLElementWrapper_XmlSecImpl::getImplementationName(  )
 {
-    return OUString("com.sun.star.xml.wrapper.XMLElementWrapper");
+    return "com.sun.star.xml.wrapper.XMLElementWrapper";
 }
 
 sal_Bool SAL_CALL XMLElementWrapper_XmlSecImpl::supportsService( const OUString& rServiceName )

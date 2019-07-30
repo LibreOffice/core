@@ -109,7 +109,7 @@ void SAL_CALL SignatureVerifierImpl::initialize(
 
 OUString SignatureVerifierImpl_getImplementationName ()
 {
-    return OUString( IMPLEMENTATION_NAME );
+    return IMPLEMENTATION_NAME;
 }
 
 cssu::Sequence< OUString > SignatureVerifierImpl_getSupportedServiceNames(  )

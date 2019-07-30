@@ -68,7 +68,7 @@ uno::Sequence< OUString > SAL_CALL SEInitializerGpg::getSupportedServiceNames()
 
 OUString SAL_CALL SEInitializerGpg::getImplementationName()
 {
-    return OUString("com.sun.star.xml.security.SEInitializer_Gpg");
+    return "com.sun.star.xml.security.SEInitializer_Gpg";
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*

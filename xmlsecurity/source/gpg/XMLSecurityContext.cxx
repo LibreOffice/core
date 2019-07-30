@@ -68,7 +68,7 @@ void SAL_CALL XMLSecurityContextGpg::setDefaultSecurityEnvironmentIndex(sal_Int3
 
 /* XServiceInfo */
 OUString SAL_CALL XMLSecurityContextGpg::getImplementationName() {
-    return OUString("com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl");
+    return "com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl";
 }
 
 /* XServiceInfo */
