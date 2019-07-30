@@ -608,6 +608,12 @@ typedef enum
      * On-load notification of the document signature status.
      */
     LOK_CALLBACK_SIGNATURE_STATUS = 40,
+
+    /**
+     * Profiling tracing information single string of multiple lines
+     * containing <pid> <timestamp> and zone start/stop information
+     */
+    LOK_CALLBACK_PROFILE_FRAME = 41
 }
 LibreOfficeKitCallbackType;
 
