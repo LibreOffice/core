@@ -41,7 +41,7 @@ bool MSPUBImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUSt
 // XServiceInfo
 OUString SAL_CALL MSPUBImportFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Draw.MSPUBImportFilter");
+    return "com.sun.star.comp.Draw.MSPUBImportFilter";
 }
 
 sal_Bool SAL_CALL MSPUBImportFilter::supportsService(const OUString& rServiceName)

@@ -41,7 +41,7 @@ bool VisioImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUSt
 // XServiceInfo
 OUString SAL_CALL VisioImportFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Draw.VisioImportFilter");
+    return "com.sun.star.comp.Draw.VisioImportFilter";
 }
 
 sal_Bool SAL_CALL VisioImportFilter::supportsService(const OUString& rServiceName)

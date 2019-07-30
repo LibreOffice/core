@@ -45,7 +45,7 @@ bool CMXImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUStri
 // XServiceInfo
 OUString SAL_CALL CMXImportFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Draw.CMXImportFilter");
+    return "com.sun.star.comp.Draw.CMXImportFilter";
 }
 
 sal_Bool SAL_CALL CMXImportFilter::supportsService(const OUString& rServiceName)

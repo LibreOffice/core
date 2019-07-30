@@ -427,7 +427,7 @@ void MSWorksCalcImportFilter::doRegisterHandlers(OdsGenerator&) {}
 // XServiceInfo
 OUString SAL_CALL MSWorksCalcImportFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Calc.MSWorksCalcImportFilter");
+    return "com.sun.star.comp.Calc.MSWorksCalcImportFilter";
 }
 
 sal_Bool SAL_CALL MSWorksCalcImportFilter::supportsService(const OUString& rServiceName)

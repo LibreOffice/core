@@ -16,7 +16,7 @@ namespace writerperfect
 {
 template <> struct DocumentHandlerFor<OdtGenerator>
 {
-    static const OUString name() { return OUString("com.sun.star.comp.Writer.XMLOasisImporter"); }
+    static const OUString name() { return "com.sun.star.comp.Writer.XMLOasisImporter"; }
 };
 }
 

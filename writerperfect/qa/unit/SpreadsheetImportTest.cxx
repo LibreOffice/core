@@ -67,7 +67,7 @@ bool SpreadsheetImportFilter::doDetectFormat(librevenge::RVNGInputStream&, OUStr
 // XServiceInfo
 OUString SAL_CALL SpreadsheetImportFilter::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.Wpft.QA.SpreadsheetImportFilter");
+    return "org.libreoffice.comp.Wpft.QA.SpreadsheetImportFilter";
 }
 
 sal_Bool SAL_CALL SpreadsheetImportFilter::supportsService(const OUString& rServiceName)

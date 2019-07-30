@@ -82,7 +82,7 @@ void StarOfficePresentationImportFilter::doRegisterHandlers(OdpGenerator& rGener
 // XServiceInfo
 OUString SAL_CALL StarOfficePresentationImportFilter::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.Impress.StarOfficePresentationImportFilter");
+    return "org.libreoffice.comp.Impress.StarOfficePresentationImportFilter";
 }
 
 sal_Bool SAL_CALL StarOfficePresentationImportFilter::supportsService(const OUString& rServiceName)

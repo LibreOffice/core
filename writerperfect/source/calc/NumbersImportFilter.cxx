@@ -48,7 +48,7 @@ void NumbersImportFilter::doRegisterHandlers(OdsGenerator&) {}
 // XServiceInfo
 OUString SAL_CALL NumbersImportFilter::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.Calc.NumbersImportFilter");
+    return "org.libreoffice.comp.Calc.NumbersImportFilter";
 }
 
 sal_Bool SAL_CALL NumbersImportFilter::supportsService(const OUString& rServiceName)

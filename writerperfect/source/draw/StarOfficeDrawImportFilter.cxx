@@ -81,7 +81,7 @@ void StarOfficeDrawImportFilter::doRegisterHandlers(OdgGenerator& rGenerator)
 // XServiceInfo
 OUString SAL_CALL StarOfficeDrawImportFilter::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.Draw.StarOfficeDrawImportFilter");
+    return "org.libreoffice.comp.Draw.StarOfficeDrawImportFilter";
 }
 
 sal_Bool SAL_CALL StarOfficeDrawImportFilter::supportsService(const OUString& rServiceName)

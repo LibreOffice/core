@@ -45,7 +45,7 @@ bool CDRImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUStri
 // XServiceInfo
 OUString SAL_CALL CDRImportFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Draw.CDRImportFilter");
+    return "com.sun.star.comp.Draw.CDRImportFilter";
 }
 
 sal_Bool SAL_CALL CDRImportFilter::supportsService(const OUString& rServiceName)

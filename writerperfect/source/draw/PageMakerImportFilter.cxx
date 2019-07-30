@@ -42,7 +42,7 @@ bool PageMakerImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, 
 // XServiceInfo
 OUString SAL_CALL PageMakerImportFilter::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.Draw.PageMakerImportFilter");
+    return "org.libreoffice.comp.Draw.PageMakerImportFilter";
 }
 
 sal_Bool SAL_CALL PageMakerImportFilter::supportsService(const OUString& rServiceName)

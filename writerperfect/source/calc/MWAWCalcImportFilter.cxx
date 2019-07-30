@@ -108,7 +108,7 @@ void MWAWCalcImportFilter::doRegisterHandlers(OdsGenerator& rGenerator)
 // XServiceInfo
 OUString SAL_CALL MWAWCalcImportFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Calc.MWAWCalcImportFilter");
+    return "com.sun.star.comp.Calc.MWAWCalcImportFilter";
 }
 
 sal_Bool SAL_CALL MWAWCalcImportFilter::supportsService(const OUString& rServiceName)

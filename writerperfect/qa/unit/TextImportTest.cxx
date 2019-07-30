@@ -65,7 +65,7 @@ bool TextImportFilter::doDetectFormat(librevenge::RVNGInputStream&, OUString& rT
 // XServiceInfo
 OUString SAL_CALL TextImportFilter::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.Wpft.QA.TextImportFilter");
+    return "org.libreoffice.comp.Wpft.QA.TextImportFilter";
 }
 
 sal_Bool SAL_CALL TextImportFilter::supportsService(const OUString& rServiceName)

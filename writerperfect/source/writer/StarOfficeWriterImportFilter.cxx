@@ -107,7 +107,7 @@ void StarOfficeWriterImportFilter::doRegisterHandlers(OdtGenerator& rGenerator)
 // XServiceInfo
 OUString SAL_CALL StarOfficeWriterImportFilter::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.Writer.StarOfficeWriterImportFilter");
+    return "org.libreoffice.comp.Writer.StarOfficeWriterImportFilter";
 }
 
 sal_Bool SAL_CALL StarOfficeWriterImportFilter::supportsService(const OUString& rServiceName)

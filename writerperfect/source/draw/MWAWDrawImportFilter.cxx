@@ -100,7 +100,7 @@ void MWAWDrawImportFilter::doRegisterHandlers(OdgGenerator& rGenerator)
 // XServiceInfo
 OUString SAL_CALL MWAWDrawImportFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Draw.MWAWDrawImportFilter");
+    return "com.sun.star.comp.Draw.MWAWDrawImportFilter";
 }
 
 sal_Bool SAL_CALL MWAWDrawImportFilter::supportsService(const OUString& rServiceName)

@@ -179,7 +179,7 @@ void EPUBExportFilter::setSourceDocument(const uno::Reference<lang::XComponent>&
 
 OUString EPUBExportFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Writer.EPUBExportFilter");
+    return "com.sun.star.comp.Writer.EPUBExportFilter";
 }
 
 sal_Bool EPUBExportFilter::supportsService(const OUString& rServiceName)

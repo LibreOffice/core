@@ -41,7 +41,7 @@ bool AbiWordImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OU
 // XServiceInfo
 OUString SAL_CALL AbiWordImportFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Writer.AbiWordImportFilter");
+    return "com.sun.star.comp.Writer.AbiWordImportFilter";
 }
 
 sal_Bool SAL_CALL AbiWordImportFilter::supportsService(const OUString& rServiceName)
