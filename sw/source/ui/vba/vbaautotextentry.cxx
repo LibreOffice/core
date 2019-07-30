@@ -78,7 +78,7 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
 OUString
 SwVbaAutoTextEntry::getServiceImplName()
 {
-    return OUString("SwVbaAutoTextEntry");
+    return "SwVbaAutoTextEntry";
 }
 
 uno::Sequence< OUString >
@@ -117,7 +117,7 @@ SwVbaAutoTextEntries::createCollectionObject( const css::uno::Any& aSource )
 OUString
 SwVbaAutoTextEntries::getServiceImplName()
 {
-    return OUString("SwVbaAutoTextEntries");
+    return "SwVbaAutoTextEntries";
 }
 
 css::uno::Sequence<OUString>

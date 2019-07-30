@@ -1694,7 +1694,7 @@ void SAL_CALL SwXTextSection::setName(const OUString& rName)
 OUString SAL_CALL
 SwXTextSection::getImplementationName()
 {
-    return OUString("SwXTextSection");
+    return "SwXTextSection";
 }
 
 sal_Bool SAL_CALL SwXTextSection::supportsService(const OUString& rServiceName)

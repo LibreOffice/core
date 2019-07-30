@@ -169,7 +169,7 @@ SwXReferenceMark::getSomething(const uno::Sequence< sal_Int8 >& rId)
 
 OUString SAL_CALL SwXReferenceMark::getImplementationName()
 {
-    return OUString("SwXReferenceMark");
+    return "SwXReferenceMark";
 }
 
 sal_Bool SAL_CALL
@@ -860,7 +860,7 @@ SwXMeta::getSomething( const uno::Sequence< sal_Int8 > & i_rId )
 OUString SAL_CALL
 SwXMeta::getImplementationName()
 {
-    return OUString("SwXMeta");
+    return "SwXMeta";
 }
 
 sal_Bool SAL_CALL
@@ -1266,7 +1266,7 @@ SwXMetaField::~SwXMetaField()
 OUString SAL_CALL
 SwXMetaField::getImplementationName()
 {
-    return OUString("SwXMetaField");
+    return "SwXMetaField";
 }
 
 sal_Bool SAL_CALL

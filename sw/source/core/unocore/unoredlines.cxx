@@ -91,7 +91,7 @@ sal_Bool SwXRedlines::hasElements(  )
 
 OUString SwXRedlines::getImplementationName()
 {
-    return OUString("SwXRedlines");
+    return "SwXRedlines";
 }
 
 sal_Bool SwXRedlines::supportsService(const OUString& ServiceName)
@@ -146,7 +146,7 @@ uno::Any SwXRedlineEnumeration::nextElement()
 
 OUString SwXRedlineEnumeration::getImplementationName()
 {
-    return OUString("SwXRedlineEnumeration");
+    return "SwXRedlineEnumeration";
 }
 
 sal_Bool SwXRedlineEnumeration::supportsService(const OUString& ServiceName)

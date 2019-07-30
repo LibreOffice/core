@@ -212,7 +212,7 @@ void SAL_CALL SwVbaStyle::setNextParagraphStyle( const uno::Any& _nextparagraphs
 OUString
 SwVbaStyle::getServiceImplName()
 {
-    return OUString("SwVbaStyle");
+    return "SwVbaStyle";
 }
 
 uno::Sequence< OUString >

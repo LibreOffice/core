@@ -425,7 +425,7 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclWindowEvent&, rEve
 
 OUString SAL_CALL SwAccessibleDocument::getImplementationName()
 {
-    return OUString(sImplementationName);
+    return sImplementationName;
 }
 
 sal_Bool SAL_CALL SwAccessibleDocument::supportsService(const OUString& sTestServiceName)

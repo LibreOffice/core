@@ -76,7 +76,7 @@ private:
 public:
     static OUString propName()
     {
-        return OUString("CharUnderline");
+        return "CharUnderline";
     }
 
     static UnderLineMapper& instance()
@@ -130,7 +130,7 @@ SwVbaFont::setUnderline( const uno::Any& _underline )
 OUString
 SwVbaFont::getServiceImplName()
 {
-    return OUString("SwVbaFont");
+    return "SwVbaFont";
 }
 
 void SAL_CALL

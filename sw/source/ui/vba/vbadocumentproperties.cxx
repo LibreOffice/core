@@ -455,7 +455,7 @@ public:
     virtual OUString SAL_CALL getLinkSource(  ) override;
     virtual void SAL_CALL setLinkSource( const OUString& LinkSource ) override;
     //XDefaultProperty
-    virtual OUString SAL_CALL getDefaultPropertyName(  ) override { return OUString("Value"); }
+    virtual OUString SAL_CALL getDefaultPropertyName(  ) override { return "Value"; }
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual uno::Sequence<OUString> getServiceNames() override;
@@ -612,7 +612,7 @@ SwVbaBuiltInDocumentProperty::setLinkSource( const OUString& /*LinkSource*/ )
 OUString
 SwVbaBuiltInDocumentProperty::getServiceImplName()
 {
-    return OUString("SwVbaBuiltinDocumentProperty");
+    return "SwVbaBuiltinDocumentProperty";
 }
 
 uno::Sequence<OUString>
@@ -762,7 +762,7 @@ SwVbaBuiltinDocumentProperties::createCollectionObject( const uno::Any& aSource 
 OUString
 SwVbaBuiltinDocumentProperties::getServiceImplName()
 {
-    return OUString("SwVbaBuiltinDocumentProperties");
+    return "SwVbaBuiltinDocumentProperties";
 }
 
 uno::Sequence<OUString>
@@ -893,7 +893,7 @@ SwVbaCustomDocumentProperties::Add( const OUString& Name, sal_Bool LinkToContent
 OUString
 SwVbaCustomDocumentProperties::getServiceImplName()
 {
-    return OUString("SwVbaCustomDocumentProperties");
+    return "SwVbaCustomDocumentProperties";
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

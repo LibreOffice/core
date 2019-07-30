@@ -489,7 +489,7 @@ SwXFieldMaster::getSomething(const uno::Sequence< sal_Int8 >& rId)
 OUString SAL_CALL
 SwXFieldMaster::getImplementationName()
 {
-    return OUString("SwXFieldMaster");
+    return "SwXFieldMaster";
 }
 
 namespace
@@ -2612,7 +2612,7 @@ void SAL_CALL SwXTextField::update()
 
 OUString SAL_CALL SwXTextField::getImplementationName()
 {
-    return OUString("SwXTextField");
+    return "SwXTextField";
 }
 
 static OUString OldNameToNewName_Impl( const OUString &rOld )
@@ -2691,7 +2691,7 @@ const SwField* SwXTextField::Impl::GetField() const
 
 OUString SwXTextFieldMasters::getImplementationName()
 {
-    return OUString("SwXTextFieldMasters");
+    return "SwXTextFieldMasters";
 }
 
 sal_Bool SwXTextFieldMasters::supportsService(const OUString& rServiceName)
@@ -2890,7 +2890,7 @@ public:
 
 OUString SwXTextFieldTypes::getImplementationName()
 {
-    return OUString("SwXTextFieldTypes");
+    return "SwXTextFieldTypes";
 }
 
 sal_Bool SwXTextFieldTypes::supportsService(const OUString& rServiceName)
@@ -2997,7 +2997,7 @@ public:
 OUString SAL_CALL
 SwXFieldEnumeration::getImplementationName()
 {
-    return OUString("SwXFieldEnumeration");
+    return "SwXFieldEnumeration";
 }
 
 sal_Bool SAL_CALL SwXFieldEnumeration::supportsService(const OUString& rServiceName)

@@ -40,7 +40,7 @@ SwAccessiblePreview::~SwAccessiblePreview()
 
 OUString SwAccessiblePreview::getImplementationName( )
 {
-    return OUString( sImplementationName );
+    return sImplementationName;
 }
 
 sal_Bool SwAccessiblePreview::supportsService( const OUString& rServiceName )

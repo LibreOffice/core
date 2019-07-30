@@ -87,7 +87,7 @@ SwVbaListGalleries::createCollectionObject( const css::uno::Any& aSource )
 OUString
 SwVbaListGalleries::getServiceImplName()
 {
-    return OUString("SwVbaListGalleries");
+    return "SwVbaListGalleries";
 }
 
 css::uno::Sequence<OUString>

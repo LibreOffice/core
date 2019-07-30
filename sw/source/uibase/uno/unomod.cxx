@@ -230,7 +230,7 @@ Reference< XPropertySet >  SwXModule::getPrintSettings()
 
 OUString SwXModule::getImplementationName()
 {
-    return OUString( "SwXModule"  );
+    return "SwXModule";
 }
 
 sal_Bool SwXModule::supportsService(const OUString& rServiceName)
@@ -497,7 +497,7 @@ void SwXPrintSettings::_postGetValues ()
 
 OUString SwXPrintSettings::getImplementationName()
 {
-    return OUString("SwXPrintSettings");
+    return "SwXPrintSettings";
 }
 
 sal_Bool SwXPrintSettings::supportsService(const OUString& rServiceName)
@@ -941,7 +941,7 @@ void SwXViewSettings::_postGetValues ()
 
 OUString SwXViewSettings::getImplementationName()
 {
-    return OUString("SwXViewSettings");
+    return "SwXViewSettings";
 }
 
 sal_Bool SwXViewSettings::supportsService(const OUString& rServiceName)

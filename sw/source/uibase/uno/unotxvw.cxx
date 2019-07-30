@@ -837,7 +837,7 @@ void SAL_CALL SwXTextView::removeVetoableChangeListener(
 
 OUString SwXTextView::getImplementationName()
 {
-    return OUString("SwXTextView");
+    return "SwXTextView";
 }
 
 sal_Bool SwXTextView::supportsService(const OUString& rServiceName)
@@ -1651,7 +1651,7 @@ void SwXTextViewCursor::gotoStartOfLine(sal_Bool bExpand)
 
 OUString SwXTextViewCursor::getImplementationName()
 {
-    return OUString("SwXTextViewCursor");
+    return "SwXTextViewCursor";
 }
 
 sal_Bool SwXTextViewCursor::supportsService(const OUString& rServiceName)

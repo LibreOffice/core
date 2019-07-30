@@ -412,7 +412,7 @@ SwVbaRange::Fields( const uno::Any& index )
 OUString
 SwVbaRange::getServiceImplName()
 {
-    return OUString("SwVbaRange");
+    return "SwVbaRange";
 }
 
 uno::Sequence< OUString >

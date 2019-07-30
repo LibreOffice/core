@@ -349,7 +349,7 @@ SwVbaRows::createCollectionObject( const uno::Any& aSource )
 OUString
 SwVbaRows::getServiceImplName()
 {
-    return OUString("SwVbaRows");
+    return "SwVbaRows";
 }
 
 uno::Sequence<OUString>

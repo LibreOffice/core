@@ -79,7 +79,7 @@ OUString SwVbaEventsHelper::implGetDocumentModuleName( const EventHandlerInfo& /
         const uno::Sequence< uno::Any >& /*rArgs*/ ) const
 {
     // TODO: get actual codename from document
-    return OUString( "ThisDocument" );
+    return "ThisDocument";
 }
 
 namespace vbaeventshelper

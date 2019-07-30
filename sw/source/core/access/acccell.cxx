@@ -240,7 +240,7 @@ OUString SAL_CALL SwAccessibleCell::getAccessibleDescription()
 
 OUString SAL_CALL SwAccessibleCell::getImplementationName()
 {
-    return OUString(sImplementationName);
+    return sImplementationName;
 }
 
 sal_Bool SAL_CALL SwAccessibleCell::supportsService(const OUString& sTestServiceName)

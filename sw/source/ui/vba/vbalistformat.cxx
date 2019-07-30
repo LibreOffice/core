@@ -95,7 +95,7 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
 OUString
 SwVbaListFormat::getServiceImplName()
 {
-    return OUString("SwVbaListFormat");
+    return "SwVbaListFormat";
 }
 
 uno::Sequence< OUString >

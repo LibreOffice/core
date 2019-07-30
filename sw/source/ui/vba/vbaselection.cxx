@@ -1153,7 +1153,7 @@ SwVbaSelection::Paragraphs( const uno::Any& aIndex )
 OUString
 SwVbaSelection::getServiceImplName()
 {
-    return OUString("SwVbaSelection");
+    return "SwVbaSelection";
 }
 
 uno::Sequence< OUString >

@@ -135,7 +135,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 /* XServiceInfo */
 OUString SAL_CALL SwFilterDetect::getImplementationName()
 {
-    return OUString("com.sun.star.comp.writer.FormatDetector" );
+    return "com.sun.star.comp.writer.FormatDetector";
 }
 
 /* XServiceInfo */

@@ -77,7 +77,7 @@ void SwVbaColumn::SelectColumn( const uno::Reference< frame::XModel >& xModel, c
 OUString
 SwVbaColumn::getServiceImplName()
 {
-    return OUString("SwVbaColumn");
+    return "SwVbaColumn";
 }
 
 uno::Sequence< OUString >

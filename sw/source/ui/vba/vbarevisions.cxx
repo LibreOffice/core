@@ -158,7 +158,7 @@ void SAL_CALL SwVbaRevisions::RejectAll(  )
 OUString
 SwVbaRevisions::getServiceImplName()
 {
-    return OUString("SwVbaRevisions");
+    return "SwVbaRevisions";
 }
 
 css::uno::Sequence<OUString>

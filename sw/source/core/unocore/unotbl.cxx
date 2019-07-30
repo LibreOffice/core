@@ -1268,7 +1268,7 @@ uno::Any SwXCell::GetAny() const
 }
 
 OUString SwXCell::getImplementationName()
-    { return OUString("SwXCell"); }
+    { return "SwXCell"; }
 
 sal_Bool SwXCell::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
@@ -1277,7 +1277,7 @@ uno::Sequence< OUString > SwXCell::getSupportedServiceNames()
     { return {"com.sun.star.text.CellProperties"}; }
 
 OUString SwXTextTableRow::getImplementationName()
-    { return OUString("SwXTextTableRow"); }
+    { return "SwXTextTableRow"; }
 
 sal_Bool SwXTextTableRow::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
@@ -1463,7 +1463,7 @@ SwTableLine* SwXTextTableRow::FindLine(SwTable* pTable, SwTableLine const * pLin
 // SwXTextTableCursor
 
 OUString SwXTextTableCursor::getImplementationName()
-    { return OUString("SwXTextTableCursor"); }
+    { return "SwXTextTableCursor"; }
 
 sal_Bool SwXTextTableCursor::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
@@ -3144,7 +3144,7 @@ void SwXTextTable::Impl::Notify(const SfxHint& rHint)
 }
 
 OUString SAL_CALL SwXTextTable::getImplementationName()
-    { return OUString("SwXTextTable"); }
+    { return "SwXTextTable"; }
 
 sal_Bool SwXTextTable::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
@@ -3233,7 +3233,7 @@ sal_Int64 SAL_CALL SwXCellRange::getSomething( const uno::Sequence< sal_Int8 >& 
 
 
 OUString SwXCellRange::getImplementationName()
-    { return OUString("SwXCellRange"); }
+    { return "SwXCellRange"; }
 
 sal_Bool SwXCellRange::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
@@ -3906,7 +3906,7 @@ public:
 //  SwXTableRows
 
 OUString SwXTableRows::getImplementationName()
-    { return OUString("SwXTableRows"); }
+    { return "SwXTableRows"; }
 
 sal_Bool SwXTableRows::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
@@ -4074,7 +4074,7 @@ class SwXTableColumns::Impl : public SvtListener
 };
 
 OUString SwXTableColumns::getImplementationName()
-    { return OUString("SwXTableColumns"); }
+    { return "SwXTableColumns"; }
 
 sal_Bool SwXTableColumns::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }

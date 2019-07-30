@@ -278,7 +278,7 @@ const unsigned short aUnoToSvxAdjust[] =
 
 OUString SwXFootnoteProperties::getImplementationName()
 {
-    return OUString("SwXFootnoteProperties");
+    return "SwXFootnoteProperties";
 }
 
 sal_Bool SwXFootnoteProperties::supportsService(const OUString& rServiceName)
@@ -558,7 +558,7 @@ void SwXFootnoteProperties::removeVetoableChangeListener(
 
 OUString SwXEndnoteProperties::getImplementationName()
 {
-    return OUString("SwXEndnoteProperties");
+    return "SwXEndnoteProperties";
 }
 
 sal_Bool SwXEndnoteProperties::supportsService(const OUString& rServiceName)
@@ -761,7 +761,7 @@ void SwXEndnoteProperties::removeVetoableChangeListener(const OUString& /*Proper
 
 OUString SwXLineNumberingProperties::getImplementationName()
 {
-    return OUString("SwXLineNumberingProperties");
+    return "SwXLineNumberingProperties";
 }
 
 sal_Bool SwXLineNumberingProperties::supportsService(const OUString& rServiceName)
@@ -1051,7 +1051,7 @@ sal_Int64 SwXNumberingRules::getSomething( const uno::Sequence< sal_Int8 > & rId
 
 OUString SwXNumberingRules::getImplementationName()
 {
-    return OUString("SwXNumberingRules");
+    return "SwXNumberingRules";
 }
 
 sal_Bool SwXNumberingRules::supportsService(const OUString& rServiceName)
@@ -2254,7 +2254,7 @@ void SwXNumberingRules::Impl::Notify(const SfxHint& rHint)
 
 OUString SwXChapterNumbering::getImplementationName()
 {
-    return OUString("SwXChapterNumbering");
+    return "SwXChapterNumbering";
 }
 
 sal_Bool SwXChapterNumbering::supportsService(const OUString& rServiceName)
@@ -2282,7 +2282,7 @@ SwXChapterNumbering::~SwXChapterNumbering()
 
 OUString SwXTextColumns::getImplementationName()
 {
-    return OUString("SwXTextColumns");
+    return "SwXTextColumns";
 }
 
 sal_Bool SwXTextColumns::supportsService(const OUString& rServiceName)

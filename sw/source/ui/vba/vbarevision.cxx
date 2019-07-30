@@ -78,7 +78,7 @@ SwVbaRevision::Reject( )
 OUString
 SwVbaRevision::getServiceImplName()
 {
-    return OUString("SwVbaRevision");
+    return "SwVbaRevision";
 }
 
 uno::Sequence< OUString >

@@ -54,7 +54,7 @@ sal_Bool SAL_CALL SwVbaField::Update()
 OUString
 SwVbaField::getServiceImplName()
 {
-    return OUString("SwVbaField");
+    return "SwVbaField";
 }
 
 uno::Sequence<OUString>
@@ -503,7 +503,7 @@ sal_Int32 SAL_CALL SwVbaFields::Update()
 OUString
 SwVbaFields::getServiceImplName()
 {
-    return OUString("SwVbaFields");
+    return "SwVbaFields";
 }
 
 // XEnumerationAccess

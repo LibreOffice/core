@@ -287,7 +287,7 @@ SwVbaDocument::PageSetup( )
 OUString
 SwVbaDocument::getServiceImplName()
 {
-    return OUString("SwVbaDocument");
+    return "SwVbaDocument";
 }
 
 uno::Any SAL_CALL
@@ -627,7 +627,7 @@ SwVbaDocument::getFormControls()
 OUString SAL_CALL
 SwVbaDocument::getIID()
 {
-    return OUString("{82154424-0FBF-11d4-8313-005004526AB4}");
+    return "{82154424-0FBF-11d4-8313-005004526AB4}";
 }
 
 // XConnectable
@@ -635,7 +635,7 @@ SwVbaDocument::getIID()
 OUString SAL_CALL
 SwVbaDocument::GetIIDForClassItselfNotCoclass()
 {
-    return OUString("{82154428-0FBF-11D4-8313-005004526AB4}");
+    return "{82154428-0FBF-11D4-8313-005004526AB4}";
 }
 
 TypeAndIID SAL_CALL

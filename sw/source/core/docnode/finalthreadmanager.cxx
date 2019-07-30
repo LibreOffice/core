@@ -274,7 +274,7 @@ FinalThreadManager::~FinalThreadManager()
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL FinalThreadManager::getImplementationName()
 {
-    return OUString("com.sun.star.util.comp.FinalThreadManager");
+    return "com.sun.star.util.comp.FinalThreadManager";
 }
 
 sal_Bool SAL_CALL FinalThreadManager::supportsService(OUString const & serviceName)

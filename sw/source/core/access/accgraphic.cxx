@@ -43,7 +43,7 @@ SwAccessibleGraphic::~SwAccessibleGraphic()
 
 OUString SAL_CALL SwAccessibleGraphic::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Writer.SwAccessibleGraphic");
+    return "com.sun.star.comp.Writer.SwAccessibleGraphic";
 }
 
 sal_Bool SAL_CALL SwAccessibleGraphic::supportsService(const OUString& sTestServiceName)

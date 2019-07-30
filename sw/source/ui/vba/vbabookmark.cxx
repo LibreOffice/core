@@ -86,7 +86,7 @@ uno::Any SAL_CALL SwVbaBookmark::Range()
 OUString
 SwVbaBookmark::getServiceImplName()
 {
-    return OUString("SwVbaBookmark");
+    return "SwVbaBookmark";
 }
 
 uno::Sequence< OUString >

@@ -444,7 +444,7 @@ SwXDocumentIndex::getSomething(const uno::Sequence< sal_Int8 >& rId)
 OUString SAL_CALL
 SwXDocumentIndex::getImplementationName()
 {
-    return OUString("SwXDocumentIndex");
+    return "SwXDocumentIndex";
 }
 
 sal_Bool SAL_CALL
@@ -1672,7 +1672,7 @@ SwXDocumentIndexMark::getSomething(const uno::Sequence< sal_Int8 >& rId)
 OUString SAL_CALL
 SwXDocumentIndexMark::getImplementationName()
 {
-    return OUString("SwXDocumentIndexMark");
+    return "SwXDocumentIndexMark";
 }
 
 sal_Bool SAL_CALL SwXDocumentIndexMark::supportsService(const OUString& rServiceName)
@@ -2331,7 +2331,7 @@ SwXDocumentIndexes::~SwXDocumentIndexes()
 OUString SAL_CALL
 SwXDocumentIndexes::getImplementationName()
 {
-    return OUString("SwXDocumentIndexes");
+    return "SwXDocumentIndexes";
 }
 
 sal_Bool SAL_CALL SwXDocumentIndexes::supportsService(const OUString& rServiceName)
@@ -2510,7 +2510,7 @@ SwXDocumentIndex::StyleAccess_Impl::~StyleAccess_Impl()
 OUString SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getImplementationName()
 {
-    return OUString("SwXDocumentIndex::StyleAccess_Impl");
+    return "SwXDocumentIndex::StyleAccess_Impl";
 }
 
 sal_Bool SAL_CALL
@@ -2623,7 +2623,7 @@ SwXDocumentIndex::TokenAccess_Impl::~TokenAccess_Impl()
 OUString SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getImplementationName()
 {
-    return OUString("SwXDocumentIndex::TokenAccess_Impl");
+    return "SwXDocumentIndex::TokenAccess_Impl";
 }
 
 sal_Bool SAL_CALL SwXDocumentIndex::TokenAccess_Impl::supportsService(

@@ -876,9 +876,9 @@ uno::Reference < container::XNameContainer > SwXMLStylesContext_Impl::GetStylesC
 OUString SwXMLStylesContext_Impl::GetServiceName( sal_uInt16 nFamily ) const
 {
     if( XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily )
-        return OUString( "com.sun.star.style.FrameStyle" );
+        return "com.sun.star.style.FrameStyle";
     else if( XML_STYLE_FAMILY_TABLE_CELL == nFamily )
-        return OUString( "com.sun.star.style.CellStyle" );
+        return "com.sun.star.style.CellStyle";
 
     return SvXMLStylesContext::GetServiceName( nFamily );
 }

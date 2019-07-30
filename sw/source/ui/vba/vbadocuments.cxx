@@ -150,7 +150,7 @@ SwVbaDocuments::OpenOld( const OUString& FileName, const uno::Any& ConfirmConver
 OUString
 SwVbaDocuments::getServiceImplName()
 {
-    return OUString("SwVbaDocuments");
+    return "SwVbaDocuments";
 }
 
 uno::Sequence<OUString>

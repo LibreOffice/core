@@ -300,7 +300,7 @@ SwXParagraph::getSomething(const uno::Sequence< sal_Int8 >& rId)
 OUString SAL_CALL
 SwXParagraph::getImplementationName()
 {
-    return OUString("SwXParagraph");
+    return "SwXParagraph";
 }
 
 sal_Bool SAL_CALL

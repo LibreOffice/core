@@ -1164,7 +1164,7 @@ void SAL_CALL SwXMailMerge::removeMailMergeEventListener(
 
 OUString SAL_CALL SwXMailMerge::getImplementationName()
 {
-    return OUString( "SwXMailMerge" );
+    return "SwXMailMerge";
 }
 
 sal_Bool SAL_CALL SwXMailMerge::supportsService( const OUString& rServiceName )

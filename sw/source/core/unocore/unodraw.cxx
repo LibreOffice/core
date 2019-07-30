@@ -440,7 +440,7 @@ uno::Any SwXShapesEnumeration::nextElement()
 
 OUString SwXShapesEnumeration::getImplementationName()
 {
-    return OUString("SwXShapeEnumeration");
+    return "SwXShapeEnumeration";
 }
 
 sal_Bool SwXShapesEnumeration::supportsService(const OUString& ServiceName)
@@ -462,7 +462,7 @@ uno::Reference< container::XEnumeration > SwXDrawPage::createEnumeration()
 
 OUString SwXDrawPage::getImplementationName()
 {
-    return OUString("SwXDrawPage");
+    return "SwXDrawPage";
 }
 
 sal_Bool SwXDrawPage::supportsService(const OUString& rServiceName)
@@ -2146,7 +2146,7 @@ void SwXShape::removeEventListener(
 
 OUString SwXShape::getImplementationName()
 {
-    return OUString("SwXShape");
+    return "SwXShape";
 }
 
 sal_Bool SwXShape::supportsService(const OUString& rServiceName)

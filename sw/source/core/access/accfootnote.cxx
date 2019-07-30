@@ -89,9 +89,9 @@ OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription()
 OUString SAL_CALL SwAccessibleFootnote::getImplementationName()
 {
     if( AccessibleRole::END_NOTE == GetRole() )
-        return OUString(sImplementationNameEndnote);
+        return sImplementationNameEndnote;
     else
-        return OUString(sImplementationNameFootnote);
+        return sImplementationNameFootnote;
 }
 
 sal_Bool SAL_CALL SwAccessibleFootnote::supportsService(const OUString& sTestServiceName)

@@ -832,7 +832,7 @@ bool SwXTextCursor::IsAtEndOfMeta() const
 
 OUString SwXTextCursor::getImplementationName()
 {
-    return OUString("SwXTextCursor");
+    return "SwXTextCursor";
 }
 
 sal_Bool SAL_CALL SwXTextCursor::supportsService(const OUString& rServiceName)

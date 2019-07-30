@@ -258,7 +258,7 @@ SwVbaSystem::PrivateProfileString( const OUString& rFilename, const OUString& rS
 OUString
 SwVbaSystem::getServiceImplName()
 {
-    return OUString("SwVbaSystem");
+    return "SwVbaSystem";
 }
 
 uno::Sequence< OUString >

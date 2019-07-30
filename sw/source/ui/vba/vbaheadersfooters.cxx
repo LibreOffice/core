@@ -121,7 +121,7 @@ SwVbaHeadersFooters::createCollectionObject( const uno::Any& aSource )
 OUString
 SwVbaHeadersFooters::getServiceImplName()
 {
-    return OUString("SwVbaHeadersFooters");
+    return "SwVbaHeadersFooters";
 }
 
 uno::Sequence<OUString>

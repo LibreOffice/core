@@ -59,9 +59,9 @@ const OUString SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
     if (rUserData == FILTER_XML ||
         rUserData == FILTER_XMLV ||
         rUserData == FILTER_XMLVW)
-        return OUString("content.xml");
+        return "content.xml";
     if (rUserData == sWW6 || rUserData == FILTER_WW8)
-        return OUString("WordDocument");
+        return "WordDocument";
     return OUString();
 }
 

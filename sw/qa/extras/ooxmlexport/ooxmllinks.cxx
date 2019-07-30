@@ -26,7 +26,7 @@
     class TestName : public Test                                                                   \
     {                                                                                              \
     protected:                                                                                     \
-        virtual OUString getTestName() override { return OUString(#TestName); }                    \
+        virtual OUString getTestName() override { return #TestName; }                    \
         virtual void postLoad(const char*) override                                                \
         {                                                                                          \
             if (!bUseTempDir)                                                                      \
@@ -90,7 +90,7 @@
     class TestName : public Test                                                                   \
     {                                                                                              \
     protected:                                                                                     \
-        virtual OUString getTestName() override { return OUString(#TestName); }                    \
+        virtual OUString getTestName() override { return #TestName; }                    \
                                                                                                    \
     public:                                                                                        \
         CPPUNIT_TEST_SUITE(TestName);                                                              \

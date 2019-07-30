@@ -46,7 +46,7 @@ void SAL_CALL SwVbaFrame::Select()
 OUString
 SwVbaFrame::getServiceImplName()
 {
-    return OUString("SwVbaFrame");
+    return "SwVbaFrame";
 }
 
 uno::Sequence< OUString >

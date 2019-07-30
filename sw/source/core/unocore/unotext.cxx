@@ -2237,7 +2237,7 @@ SwXBodyText::~SwXBodyText()
 OUString SAL_CALL
 SwXBodyText::getImplementationName()
 {
-    return OUString("SwXBodyText");
+    return "SwXBodyText";
 }
 
 sal_Bool SAL_CALL SwXBodyText::supportsService(const OUString& rServiceName)

@@ -34,7 +34,7 @@ SwVbaTabStop::~SwVbaTabStop()
 OUString
 SwVbaTabStop::getServiceImplName()
 {
-    return OUString("SwVbaTabStop");
+    return "SwVbaTabStop";
 }
 
 uno::Sequence< OUString >

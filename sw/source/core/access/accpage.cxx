@@ -133,7 +133,7 @@ bool SwAccessiblePage::HasCursor()
 
 OUString SwAccessiblePage::getImplementationName( )
 {
-    return OUString(sImplementationName);
+    return sImplementationName;
 }
 
 sal_Bool SwAccessiblePage::supportsService( const OUString& rServiceName)

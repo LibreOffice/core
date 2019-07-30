@@ -1412,7 +1412,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return OUString("SwDrawPagesObj");
+        return "SwDrawPagesObj";
     }
 
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override
@@ -1781,7 +1781,7 @@ Sequence< OUString > SwXTextDocument::getAvailableServiceNames()
 
 OUString SwXTextDocument::getImplementationName()
 {
-    return OUString("SwXTextDocument");
+    return "SwXTextDocument";
     /* // Matching the .component information:
        return dynamic_cast<SwGlobalDocShell*>( pDocShell ) != nullptr
            ? OUString("com.sun.star.comp.Writer.GlobalDocument")
@@ -3962,7 +3962,7 @@ sal_Bool SwXLinkTargetSupplier::hasElements()
 
 OUString SwXLinkTargetSupplier::getImplementationName()
 {
-    return OUString("SwXLinkTargetSupplier");
+    return "SwXLinkTargetSupplier";
 }
 
 sal_Bool SwXLinkTargetSupplier::supportsService(const OUString& rServiceName)
@@ -4218,7 +4218,7 @@ Reference< XNameAccess >  SwXLinkNameAccessWrapper::getLinks()
 
 OUString SwXLinkNameAccessWrapper::getImplementationName()
 {
-    return OUString("SwXLinkNameAccessWrapper");
+    return "SwXLinkNameAccessWrapper";
 }
 
 sal_Bool SwXLinkNameAccessWrapper::supportsService(const OUString& rServiceName)
@@ -4284,7 +4284,7 @@ void SwXOutlineTarget::removeVetoableChangeListener(
 
 OUString SwXOutlineTarget::getImplementationName()
 {
-    return OUString("SwXOutlineTarget");
+    return "SwXOutlineTarget";
 }
 
 sal_Bool SwXOutlineTarget::supportsService(const OUString& ServiceName)

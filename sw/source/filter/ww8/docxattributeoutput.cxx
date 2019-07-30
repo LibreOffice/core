@@ -487,15 +487,15 @@ static OString convertToOOXMLVertOrient(sal_Int16 nOrient)
     {
         case text::VertOrientation::CENTER:
         case text::VertOrientation::LINE_CENTER:
-            return OString( "center" );
+            return "center";
         case text::VertOrientation::BOTTOM:
-            return OString( "bottom" );
+            return "bottom";
         case text::VertOrientation::LINE_BOTTOM:
-            return OString( "outside" );
+            return "outside";
         case text::VertOrientation::TOP:
-            return OString( "top" );
+            return "top";
         case text::VertOrientation::LINE_TOP:
-            return OString( "inside" );
+            return "inside";
         default:
             return OString();
     }
@@ -506,16 +506,16 @@ static OString convertToOOXMLHoriOrient(sal_Int16 nOrient, bool bIsPosToggle)
     switch( nOrient )
     {
         case text::HoriOrientation::LEFT:
-            return OString( bIsPosToggle ? "inside" : "left" );
+            return bIsPosToggle ? "inside" : "left";
         case text::HoriOrientation::INSIDE:
-            return OString( "inside" );
+            return "inside";
         case text::HoriOrientation::RIGHT:
-            return OString( bIsPosToggle ? "outside" : "right" );
+            return bIsPosToggle ? "outside" : "right";
         case text::HoriOrientation::OUTSIDE:
-            return OString( "outside" );
+            return "outside";
         case text::HoriOrientation::CENTER:
         case text::HoriOrientation::FULL:
-            return OString( "center" );
+            return "center";
         default:
             return OString();
     }
@@ -526,13 +526,13 @@ static OString convertToOOXMLVertOrientRel(sal_Int16 nOrientRel)
     switch (nOrientRel)
     {
         case text::RelOrientation::PAGE_PRINT_AREA:
-            return OString("margin");
+            return "margin";
         case text::RelOrientation::PAGE_FRAME:
-            return OString("page");
+            return "page";
         case text::RelOrientation::FRAME:
         case text::RelOrientation::TEXT_LINE:
         default:
-            return OString("text");
+            return "text";
     }
 }
 
@@ -541,14 +541,14 @@ static OString convertToOOXMLHoriOrientRel(sal_Int16 nOrientRel)
     switch (nOrientRel)
     {
         case text::RelOrientation::PAGE_PRINT_AREA:
-            return OString("margin");
+            return "margin";
         case text::RelOrientation::PAGE_FRAME:
-            return OString("page");
+            return "page";
         case text::RelOrientation::CHAR:
         case text::RelOrientation::PAGE_RIGHT:
         case text::RelOrientation::FRAME:
         default:
-            return OString("text");
+            return "text";
     }
 }
 
@@ -6510,22 +6510,22 @@ OString DocxAttributeOutput::TransHighlightColor( sal_uInt8 nIco )
 {
     switch (nIco)
     {
-        case 1: return OString("black"); break;
-        case 2: return OString("blue"); break;
-        case 3: return OString("cyan"); break;
-        case 4: return OString("green"); break;
-        case 5: return OString("magenta"); break;
-        case 6: return OString("red"); break;
-        case 7: return OString("yellow"); break;
-        case 8: return OString("white"); break;
-        case 9: return OString("darkBlue"); break;
-        case 10: return OString("darkCyan"); break;
-        case 11: return OString("darkGreen"); break;
-        case 12: return OString("darkMagenta"); break;
-        case 13: return OString("darkRed"); break;
-        case 14: return OString("darkYellow"); break;
-        case 15: return OString("darkGray"); break;
-        case 16: return OString("lightGray"); break;
+        case 1: return "black"; break;
+        case 2: return "blue"; break;
+        case 3: return "cyan"; break;
+        case 4: return "green"; break;
+        case 5: return "magenta"; break;
+        case 6: return "red"; break;
+        case 7: return "yellow"; break;
+        case 8: return "white"; break;
+        case 9: return "darkBlue"; break;
+        case 10: return "darkCyan"; break;
+        case 11: return "darkGreen"; break;
+        case 12: return "darkMagenta"; break;
+        case 13: return "darkRed"; break;
+        case 14: return "darkYellow"; break;
+        case 15: return "darkGray"; break;
+        case 16: return "lightGray"; break;
         default: return OString(); break;
     }
 }

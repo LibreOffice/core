@@ -44,7 +44,7 @@ SwVbaListGallery::ListTemplates( const uno::Any& index )
 OUString
 SwVbaListGallery::getServiceImplName()
 {
-    return OUString("SwVbaListGallery");
+    return "SwVbaListGallery";
 }
 
 uno::Sequence< OUString >

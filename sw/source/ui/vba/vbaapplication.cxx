@@ -165,7 +165,7 @@ SwVbaApplication::RemoveSink( sal_uInt32 nNumber )
 OUString SAL_CALL
 SwVbaApplication::getName()
 {
-    return OUString("Microsoft Word" );
+    return "Microsoft Word";
 }
 
 uno::Reference< word::XDocument > SAL_CALL
@@ -372,7 +372,7 @@ void SAL_CALL SwVbaApplication::setTop( sal_Int32 _top )
 
 OUString SAL_CALL SwVbaApplication::getStatusBar()
 {
-    return OUString("");
+    return "";
 }
 
 uno::Any SAL_CALL SwVbaApplication::getCustomizationContext()
@@ -443,7 +443,7 @@ void SAL_CALL SwVbaApplication::Move( sal_Int32 Left, sal_Int32 Top )
 OUString SAL_CALL
 SwVbaApplication::getIID()
 {
-    return OUString("{82154421-0FBF-11d4-8313-005004526AB4}");
+    return "{82154421-0FBF-11d4-8313-005004526AB4}";
 }
 
 // XConnectable
@@ -451,7 +451,7 @@ SwVbaApplication::getIID()
 OUString SAL_CALL
 SwVbaApplication::GetIIDForClassItselfNotCoclass()
 {
-    return OUString("{82154423-0FBF-11D4-8313-005004526AB4}");
+    return "{82154423-0FBF-11D4-8313-005004526AB4}";
 }
 
 TypeAndIID SAL_CALL
@@ -475,7 +475,7 @@ SwVbaApplication::FindConnectionPoint()
 OUString
 SwVbaApplication::getServiceImplName()
 {
-    return OUString("SwVbaApplication");
+    return "SwVbaApplication";
 }
 
 uno::Sequence< OUString >

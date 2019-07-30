@@ -197,7 +197,7 @@ void SwXAutoTextContainer::removeByName(const OUString& aGroupName)
 
 OUString SwXAutoTextContainer::getImplementationName()
 {
-    return OUString("SwXAutoTextContainer" );
+    return "SwXAutoTextContainer";
 }
 
 sal_Bool SwXAutoTextContainer::supportsService(const OUString& rServiceName)
@@ -665,7 +665,7 @@ void SwXAutoTextGroup::Invalidate()
 
 OUString SwXAutoTextGroup::getImplementationName()
 {
-    return OUString("SwXAutoTextGroup");
+    return "SwXAutoTextGroup";
 }
 
 sal_Bool SwXAutoTextGroup::supportsService(const OUString& rServiceName)
@@ -939,7 +939,7 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
 
 OUString SwXAutoTextEntry::getImplementationName()
 {
-    return OUString("SwXAutoTextEntry");
+    return "SwXAutoTextEntry";
 }
 
 sal_Bool SwXAutoTextEntry::supportsService(const OUString& rServiceName)
@@ -978,7 +978,7 @@ SwAutoTextEventDescriptor::~SwAutoTextEventDescriptor()
 
 OUString SwAutoTextEventDescriptor::getImplementationName()
 {
-    return OUString("SwAutoTextEventDescriptor");
+    return "SwAutoTextEventDescriptor";
 }
 
 void SwAutoTextEventDescriptor::replaceByName(

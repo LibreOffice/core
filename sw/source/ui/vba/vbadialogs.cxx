@@ -35,7 +35,7 @@ SwVbaDialogs::Item( const uno::Any &aItem )
 OUString
 SwVbaDialogs::getServiceImplName()
 {
-    return OUString("SwVbaDialogs");
+    return "SwVbaDialogs";
 }
 
 uno::Sequence< OUString >

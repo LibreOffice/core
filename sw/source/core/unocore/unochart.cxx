@@ -1409,7 +1409,7 @@ void SAL_CALL SwChartDataProvider::removeEventListener(
 
 OUString SAL_CALL SwChartDataProvider::getImplementationName(  )
 {
-    return OUString("SwChartDataProvider");
+    return "SwChartDataProvider";
 }
 
 sal_Bool SAL_CALL SwChartDataProvider::supportsService(const OUString& rServiceName )
@@ -1775,7 +1775,7 @@ uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL S
 
 OUString SAL_CALL SwChartDataSource::getImplementationName(  )
 {
-    return OUString("SwChartDataSource");
+    return "SwChartDataSource";
 }
 
 sal_Bool SAL_CALL SwChartDataSource::supportsService(const OUString& rServiceName )
@@ -2172,7 +2172,7 @@ void SAL_CALL SwChartDataSequence::removeVetoableChangeListener(
 
 OUString SAL_CALL SwChartDataSequence::getImplementationName(  )
 {
-    return OUString("SwChartDataSequence");
+    return "SwChartDataSequence";
 }
 
 sal_Bool SAL_CALL SwChartDataSequence::supportsService(const OUString& rServiceName )
@@ -2646,7 +2646,7 @@ uno::Reference< util::XCloneable > SAL_CALL SwChartLabeledDataSequence::createCl
 
 OUString SAL_CALL SwChartLabeledDataSequence::getImplementationName(  )
 {
-    return OUString("SwChartLabeledDataSequence");
+    return "SwChartLabeledDataSequence";
 }
 
 sal_Bool SAL_CALL SwChartLabeledDataSequence::supportsService(

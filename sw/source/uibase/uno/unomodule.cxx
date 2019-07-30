@@ -135,7 +135,7 @@ uno::Reference< frame::XDispatch > SAL_CALL SwUnoModule::queryDispatch(
 // XServiceInfo
 OUString SAL_CALL SwUnoModule::getImplementationName(  )
 {
-    return OUString( "com.sun.star.comp.Writer.WriterModule" );
+    return "com.sun.star.comp.Writer.WriterModule";
 }
 
 sal_Bool SAL_CALL SwUnoModule::supportsService( const OUString& sServiceName )

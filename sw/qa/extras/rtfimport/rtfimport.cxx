@@ -757,10 +757,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf105511)
 {
     struct DefaultLocale : public comphelper::ConfigurationProperty<DefaultLocale, OUString>
     {
-        static OUString path()
-        {
-            return OUString("/org.openoffice.Office.Linguistic/General/DefaultLocale");
-        }
+        static OUString path() { return "/org.openoffice.Office.Linguistic/General/DefaultLocale"; }
         ~DefaultLocale() = delete;
     };
     auto batch = comphelper::ConfigurationChanges::create();

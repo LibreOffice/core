@@ -51,7 +51,7 @@ void SAL_CALL SwVbaReplacement::ClearFormatting( )
 OUString
 SwVbaReplacement::getServiceImplName()
 {
-    return OUString("SwVbaReplacement");
+    return "SwVbaReplacement";
 }
 
 uno::Sequence< OUString >

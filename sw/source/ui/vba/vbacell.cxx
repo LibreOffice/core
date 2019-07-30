@@ -91,7 +91,7 @@ void SAL_CALL SwVbaCell::SetHeight( float height, sal_Int32 heightrule )
 OUString
 SwVbaCell::getServiceImplName()
 {
-    return OUString("SwVbaCell");
+    return "SwVbaCell";
 }
 
 uno::Sequence< OUString >

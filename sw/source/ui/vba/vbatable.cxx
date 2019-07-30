@@ -112,7 +112,7 @@ SwVbaTable::Columns( const uno::Any& index )
 OUString
 SwVbaTable::getServiceImplName()
 {
-    return OUString("SwVbaTable");
+    return "SwVbaTable";
 }
 
 uno::Sequence<OUString>

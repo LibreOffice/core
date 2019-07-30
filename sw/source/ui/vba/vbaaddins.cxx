@@ -80,7 +80,7 @@ SwVbaAddins::createCollectionObject( const css::uno::Any& aSource )
 OUString
 SwVbaAddins::getServiceImplName()
 {
-    return OUString("SwVbaAddins");
+    return "SwVbaAddins";
 }
 
 css::uno::Sequence<OUString>

@@ -98,7 +98,7 @@ SwVbaPanes::createCollectionObject( const css::uno::Any& aSource )
 OUString
 SwVbaPanes::getServiceImplName()
 {
-    return OUString("SwVbaPanes");
+    return "SwVbaPanes";
 }
 
 css::uno::Sequence<OUString>

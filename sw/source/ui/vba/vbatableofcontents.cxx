@@ -96,7 +96,7 @@ void SAL_CALL SwVbaTableOfContents::Update(  )
 OUString
 SwVbaTableOfContents::getServiceImplName()
 {
-    return OUString("SwVbaTableOfContents");
+    return "SwVbaTableOfContents";
 }
 
 uno::Sequence< OUString >

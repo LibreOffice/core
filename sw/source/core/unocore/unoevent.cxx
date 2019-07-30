@@ -106,7 +106,7 @@ SwHyperlinkEventDescriptor::~SwHyperlinkEventDescriptor()
 
 OUString SwHyperlinkEventDescriptor::getImplementationName()
 {
-    return OUString("SwHyperlinkEventDescriptor");
+    return "SwHyperlinkEventDescriptor";
 }
 
 void SwHyperlinkEventDescriptor::copyMacrosFromINetFormat(
@@ -227,7 +227,7 @@ const SvxMacroItem& SwFrameStyleEventDescriptor::getMacroItem()
 
 OUString SwFrameStyleEventDescriptor::getImplementationName()
 {
-    return OUString("SwFrameStyleEventDescriptor");
+    return "SwFrameStyleEventDescriptor";
 }
 
 sal_uInt16 SwFrameStyleEventDescriptor::getMacroItemWhich() const

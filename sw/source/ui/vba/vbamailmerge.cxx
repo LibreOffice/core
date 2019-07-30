@@ -45,7 +45,7 @@ void SAL_CALL SwVbaMailMerge::OpenDataSource(
 {
 }
 
-OUString SwVbaMailMerge::getServiceImplName() { return OUString("SwVbaMailMerge"); }
+OUString SwVbaMailMerge::getServiceImplName() { return "SwVbaMailMerge"; }
 
 css::uno::Sequence<OUString> SwVbaMailMerge::getServiceNames()
 {

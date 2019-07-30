@@ -123,19 +123,19 @@ static OUString lcl_getFieldCode( const IFieldmark* pFieldmark )
     if ( !pFieldmark)
         return OUString();
     if ( pFieldmark->GetFieldname( ) == ODF_FORMTEXT )
-        return OUString(" FORMTEXT ");
+        return " FORMTEXT ";
     if ( pFieldmark->GetFieldname( ) == ODF_FORMDROPDOWN )
-        return OUString(" FORMDROPDOWN ");
+        return " FORMDROPDOWN ";
     if ( pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX )
-        return OUString(" FORMCHECKBOX ");
+        return " FORMCHECKBOX ";
     if ( pFieldmark->GetFieldname( ) == ODF_FORMDATE )
-        return OUString(" ODFFORMDATE ");
+        return " ODFFORMDATE ";
     if ( pFieldmark->GetFieldname( ) == ODF_TOC )
-        return OUString(" TOC ");
+        return " TOC ";
     if ( pFieldmark->GetFieldname( ) == ODF_HYPERLINK )
-        return OUString(" HYPERLINK ");
+        return " HYPERLINK ";
     if ( pFieldmark->GetFieldname( ) == ODF_PAGEREF )
-        return OUString(" PAGEREF ");
+        return " PAGEREF ";
     return pFieldmark->GetFieldname();
 }
 

@@ -77,7 +77,7 @@ void SAL_CALL SwVbaAddin::setInstalled( sal_Bool _installed )
 OUString
 SwVbaAddin::getServiceImplName()
 {
-    return OUString("SwVbaAddin");
+    return "SwVbaAddin";
 }
 
 uno::Sequence< OUString >

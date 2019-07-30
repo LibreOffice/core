@@ -209,7 +209,7 @@ SwVbaBookmarks::Exists( const OUString& rName )
 OUString
 SwVbaBookmarks::getServiceImplName()
 {
-    return OUString("SwVbaBookmarks");
+    return "SwVbaBookmarks";
 }
 
 css::uno::Sequence<OUString>

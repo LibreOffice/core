@@ -264,7 +264,7 @@ OUString SAL_CALL SwAccessibleTextFrame::getAccessibleDescription()
 
 OUString SAL_CALL SwAccessibleTextFrame::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Writer.SwAccessibleTextFrameView");
+    return "com.sun.star.comp.Writer.SwAccessibleTextFrameView";
 }
 
 sal_Bool SAL_CALL SwAccessibleTextFrame::supportsService(const OUString& sTestServiceName)
