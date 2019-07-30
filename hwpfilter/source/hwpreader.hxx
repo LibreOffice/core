@@ -242,12 +242,12 @@ void HwpImportFilter::setTargetDocument( const Reference< XComponent >& xDoc )
 
 OUString HwpImportFilter::getImplementationName_Static() throw()
 {
-    return OUString( IMPLEMENTATION_NAME );
+    return IMPLEMENTATION_NAME;
 }
 
 OUString HwpImportFilter::getImplementationName()
 {
-    return OUString( IMPLEMENTATION_NAME );
+    return IMPLEMENTATION_NAME;
 }
 
 sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName )
