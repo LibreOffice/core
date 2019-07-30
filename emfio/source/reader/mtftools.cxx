@@ -174,7 +174,7 @@ namespace emfio
     OUString getLODefaultLanguage()
     {
         if (utl::ConfigManager::IsFuzzing())
-            return OUString("en-US");
+            return "en-US";
         OUString result(officecfg::Office::Linguistic::General::DefaultLocale::get());
         if (result.isEmpty())
             result = officecfg::Setup::L10N::ooSetupSystemLocale::get();
