@@ -239,7 +239,7 @@ void SAL_CALL MutableTreeDataModel::removeEventListener( const Reference< XEvent
 
 OUString SAL_CALL MutableTreeDataModel::getImplementationName(  )
 {
-    return OUString( "toolkit.MutableTreeDataModel" );
+    return "toolkit.MutableTreeDataModel";
 }
 
 sal_Bool SAL_CALL MutableTreeDataModel::supportsService( const OUString& ServiceName )
@@ -504,7 +504,7 @@ OUString SAL_CALL MutableTreeNode::getCollapsedGraphicURL(  )
 
 OUString SAL_CALL MutableTreeNode::getImplementationName(  )
 {
-    return OUString( "toolkit.MutableTreeNode" );
+    return "toolkit.MutableTreeNode";
 }
 
 sal_Bool SAL_CALL MutableTreeNode::supportsService( const OUString& ServiceName )

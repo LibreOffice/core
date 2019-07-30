@@ -144,7 +144,7 @@ public:
 
     OUString UnoSpinButtonModel::getServiceName( )
     {
-        return OUString("com.sun.star.awt.UnoControlSpinButtonModel");
+        return "com.sun.star.awt.UnoControlSpinButtonModel";
     }
 
 
@@ -183,7 +183,7 @@ public:
 
     OUString SAL_CALL UnoSpinButtonModel::getImplementationName(  )
     {
-        return OUString( "stardiv.Toolkit.UnoSpinButtonModel" );
+        return "stardiv.Toolkit.UnoSpinButtonModel";
     }
 
 
@@ -208,7 +208,7 @@ public:
 
     OUString UnoSpinButtonControl::GetComponentServiceName()
     {
-        return OUString("SpinButton");
+        return "SpinButton";
     }
 
 
@@ -246,7 +246,7 @@ public:
 
     OUString SAL_CALL UnoSpinButtonControl::getImplementationName(  )
     {
-        return OUString( "stardiv.Toolkit.UnoSpinButtonControl" );
+        return "stardiv.Toolkit.UnoSpinButtonControl";
     }
 
 

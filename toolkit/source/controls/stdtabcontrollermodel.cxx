@@ -419,7 +419,7 @@ void StdTabControllerModel::read( const css::uno::Reference< css::io::XObjectInp
 
 OUString StdTabControllerModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.StdTabControllerModel");
+    return "stardiv.Toolkit.StdTabControllerModel";
 }
 
 sal_Bool StdTabControllerModel::supportsService(OUString const & ServiceName)

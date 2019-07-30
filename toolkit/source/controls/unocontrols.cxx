@@ -149,7 +149,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlEditModel::getPropertySetInf
 
 OUString UnoControlEditModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlEditModel");
+    return "stardiv.Toolkit.UnoControlEditModel";
 }
 
 css::uno::Sequence<OUString> UnoControlEditModel::getSupportedServiceNames()
@@ -468,7 +468,7 @@ void UnoEditControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines )
 
 OUString UnoEditControl::getImplementationName(  )
 {
-    return OUString( "stardiv.Toolkit.UnoEditControl" );
+    return "stardiv.Toolkit.UnoEditControl";
 }
 
 uno::Sequence< OUString > UnoEditControl::getSupportedServiceNames()
@@ -543,7 +543,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFileControlModel::getPropert
 
 OUString UnoControlFileControlModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlFileControlModel");
+    return "stardiv.Toolkit.UnoControlFileControlModel";
 }
 
 css::uno::Sequence<OUString>
@@ -574,12 +574,12 @@ UnoFileControl::UnoFileControl()
 
 OUString UnoFileControl::GetComponentServiceName()
 {
-    return OUString("filecontrol");
+    return "filecontrol";
 }
 
 OUString UnoFileControl::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoFileControl");
+    return "stardiv.Toolkit.UnoFileControl";
 }
 
 css::uno::Sequence<OUString> UnoFileControl::getSupportedServiceNames()
@@ -724,7 +724,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlButtonModel::getPropertySetI
 
 OUString UnoControlButtonModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlButtonModel");
+    return "stardiv.Toolkit.UnoControlButtonModel";
 }
 
 css::uno::Sequence<OUString> UnoControlButtonModel::getSupportedServiceNames()
@@ -882,7 +882,7 @@ awt::Size UnoButtonControl::calcAdjustedSize( const awt::Size& rNewSize )
 
 OUString UnoButtonControl::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoButtonControl");
+    return "stardiv.Toolkit.UnoButtonControl";
 }
 
 css::uno::Sequence<OUString> UnoButtonControl::getSupportedServiceNames()
@@ -919,7 +919,7 @@ OUString UnoControlImageControlModel::getServiceName()
 
 OUString UnoControlImageControlModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlImageControlModel");
+    return "stardiv.Toolkit.UnoControlImageControlModel";
 }
 
 css::uno::Sequence<OUString>
@@ -1018,7 +1018,7 @@ UnoImageControlControl::UnoImageControlControl()
 
 OUString UnoImageControlControl::GetComponentServiceName()
 {
-    return OUString("fixedimage");
+    return "fixedimage";
 }
 
 void UnoImageControlControl::dispose()
@@ -1051,7 +1051,7 @@ awt::Size UnoImageControlControl::calcAdjustedSize( const awt::Size& rNewSize )
 
 OUString UnoImageControlControl::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoImageControlControl");
+    return "stardiv.Toolkit.UnoImageControlControl";
 }
 
 css::uno::Sequence<OUString> UnoImageControlControl::getSupportedServiceNames()
@@ -1116,7 +1116,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlRadioButtonModel::getPropert
 
 OUString UnoControlRadioButtonModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlRadioButtonModel");
+    return "stardiv.Toolkit.UnoControlRadioButtonModel";
 }
 
 css::uno::Sequence<OUString>
@@ -1151,7 +1151,7 @@ UnoRadioButtonControl::UnoRadioButtonControl()
 
 OUString UnoRadioButtonControl::GetComponentServiceName()
 {
-    return OUString("radiobutton");
+    return "radiobutton";
 }
 
 void UnoRadioButtonControl::dispose()
@@ -1295,7 +1295,7 @@ awt::Size UnoRadioButtonControl::calcAdjustedSize( const awt::Size& rNewSize )
 
 OUString UnoRadioButtonControl::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoRadioButtonControl");
+    return "stardiv.Toolkit.UnoRadioButtonControl";
 }
 
 css::uno::Sequence<OUString> UnoRadioButtonControl::getSupportedServiceNames()
@@ -1358,7 +1358,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlCheckBoxModel::getPropertySe
 
 OUString UnoControlCheckBoxModel::getImplementationName()
 {
-    return OUString( "stardiv.Toolkit.UnoControlCheckBoxModel");
+    return "stardiv.Toolkit.UnoControlCheckBoxModel";
 }
 
 css::uno::Sequence<OUString> UnoControlCheckBoxModel::getSupportedServiceNames()
@@ -1391,7 +1391,7 @@ UnoCheckBoxControl::UnoCheckBoxControl()
 
 OUString UnoCheckBoxControl::GetComponentServiceName()
 {
-    return OUString("checkbox");
+    return "checkbox";
 }
 
 void UnoCheckBoxControl::dispose()
@@ -1509,7 +1509,7 @@ awt::Size UnoCheckBoxControl::calcAdjustedSize( const awt::Size& rNewSize )
 
 OUString UnoCheckBoxControl::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoCheckBoxControl");
+    return "stardiv.Toolkit.UnoCheckBoxControl";
 }
 
 css::uno::Sequence<OUString> UnoCheckBoxControl::getSupportedServiceNames()
@@ -1540,7 +1540,7 @@ UnoControlFixedHyperlinkModel::UnoControlFixedHyperlinkModel( const Reference< X
 
 OUString UnoControlFixedHyperlinkModel::getServiceName()
 {
-    return OUString( "com.sun.star.awt.UnoControlFixedHyperlinkModel" );
+    return "com.sun.star.awt.UnoControlFixedHyperlinkModel";
 }
 
 uno::Any UnoControlFixedHyperlinkModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -1595,7 +1595,7 @@ UnoFixedHyperlinkControl::UnoFixedHyperlinkControl()
 
 OUString UnoFixedHyperlinkControl::GetComponentServiceName()
 {
-    return OUString("fixedhyperlink");
+    return "fixedhyperlink";
 }
 
 // uno::XInterface
@@ -1733,7 +1733,7 @@ UnoControlFixedTextModel::UnoControlFixedTextModel( const Reference< XComponentC
 
 OUString UnoControlFixedTextModel::getServiceName()
 {
-    return OUString( "stardiv.vcl.controlmodel.FixedText" );
+    return "stardiv.vcl.controlmodel.FixedText";
 }
 
 uno::Any UnoControlFixedTextModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -1765,7 +1765,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFixedTextModel::getPropertyS
 
 OUString UnoControlFixedTextModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlFixedTextModel");
+    return "stardiv.Toolkit.UnoControlFixedTextModel";
 }
 
 css::uno::Sequence<OUString>
@@ -1798,7 +1798,7 @@ UnoFixedTextControl::UnoFixedTextControl()
 
 OUString UnoFixedTextControl::GetComponentServiceName()
 {
-    return OUString("fixedtext");
+    return "fixedtext";
 }
 
 // uno::XInterface
@@ -1872,7 +1872,7 @@ awt::Size UnoFixedTextControl::calcAdjustedSize( const awt::Size& rNewSize )
 
 OUString UnoFixedTextControl::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoFixedTextControl");
+    return "stardiv.Toolkit.UnoFixedTextControl";
 }
 
 css::uno::Sequence<OUString> UnoFixedTextControl::getSupportedServiceNames()
@@ -1939,7 +1939,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlGroupBoxModel::getPropertySe
 
 OUString UnoControlGroupBoxModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlGroupBoxModel");
+    return "stardiv.Toolkit.UnoControlGroupBoxModel";
 }
 
 css::uno::Sequence<OUString> UnoControlGroupBoxModel::getSupportedServiceNames()
@@ -1971,7 +1971,7 @@ UnoGroupBoxControl::UnoGroupBoxControl()
 
 OUString UnoGroupBoxControl::GetComponentServiceName()
 {
-    return OUString("groupbox");
+    return "groupbox";
 }
 
 sal_Bool UnoGroupBoxControl::isTransparent()
@@ -1981,7 +1981,7 @@ sal_Bool UnoGroupBoxControl::isTransparent()
 
 OUString UnoGroupBoxControl::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoGroupBoxControl");
+    return "stardiv.Toolkit.UnoGroupBoxControl";
 }
 
 css::uno::Sequence<OUString> UnoGroupBoxControl::getSupportedServiceNames()
@@ -2131,7 +2131,7 @@ UnoControlListBoxModel::~UnoControlListBoxModel()
 
 OUString UnoControlListBoxModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlListBoxModel");
+    return "stardiv.Toolkit.UnoControlListBoxModel";
 }
 
 css::uno::Sequence<OUString> UnoControlListBoxModel::getSupportedServiceNames()
@@ -2565,12 +2565,12 @@ UnoListBoxControl::UnoListBoxControl()
 
 OUString UnoListBoxControl::GetComponentServiceName()
 {
-    return OUString("listbox");
+    return "listbox";
 }
 
 OUString UnoListBoxControl::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoListBoxControl");
+    return "stardiv.Toolkit.UnoListBoxControl";
 }
 
 css::uno::Sequence<OUString> UnoListBoxControl::getSupportedServiceNames()
@@ -2979,7 +2979,7 @@ UnoControlComboBoxModel::UnoControlComboBoxModel( const Reference< XComponentCon
 
 OUString UnoControlComboBoxModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlComboBoxModel");
+    return "stardiv.Toolkit.UnoControlComboBoxModel";
 }
 
 css::uno::Sequence<OUString> UnoControlComboBoxModel::getSupportedServiceNames()
@@ -3071,7 +3071,7 @@ UnoComboBoxControl::UnoComboBoxControl()
 
 OUString UnoComboBoxControl::getImplementationName()
 {
-    return OUString( "stardiv.Toolkit.UnoComboBoxControl");
+    return "stardiv.Toolkit.UnoComboBoxControl";
 }
 
 css::uno::Sequence<OUString> UnoComboBoxControl::getSupportedServiceNames()
@@ -3085,7 +3085,7 @@ css::uno::Sequence<OUString> UnoComboBoxControl::getSupportedServiceNames()
 
 OUString UnoComboBoxControl::GetComponentServiceName()
 {
-    return OUString("combobox");
+    return "combobox";
 }
 
 void UnoComboBoxControl::dispose()
@@ -3512,7 +3512,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlDateFieldModel::getPropertyS
 
 OUString UnoControlDateFieldModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlDateFieldModel");
+    return "stardiv.Toolkit.UnoControlDateFieldModel";
 }
 
 css::uno::Sequence<OUString>
@@ -3546,7 +3546,7 @@ UnoDateFieldControl::UnoDateFieldControl()
 
 OUString UnoDateFieldControl::GetComponentServiceName()
 {
-    return OUString("datefield");
+    return "datefield";
 }
 
 // uno::XInterface
@@ -3730,7 +3730,7 @@ sal_Bool UnoDateFieldControl::isStrictFormat()
 
 OUString UnoDateFieldControl::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoDateFieldControl");
+    return "stardiv.Toolkit.UnoDateFieldControl";
 }
 
 css::uno::Sequence<OUString> UnoDateFieldControl::getSupportedServiceNames()
@@ -3789,7 +3789,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlTimeFieldModel::getPropertyS
 
 OUString UnoControlTimeFieldModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlTimeFieldModel");
+    return "stardiv.Toolkit.UnoControlTimeFieldModel";
 }
 
 css::uno::Sequence<OUString>
@@ -3822,7 +3822,7 @@ UnoTimeFieldControl::UnoTimeFieldControl()
 
 OUString UnoTimeFieldControl::GetComponentServiceName()
 {
-    return OUString("timefield");
+    return "timefield";
 }
 
 // uno::XInterface
@@ -3966,7 +3966,7 @@ sal_Bool UnoTimeFieldControl::isStrictFormat()
 
 OUString UnoTimeFieldControl::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoTimeFieldControl");
+    return "stardiv.Toolkit.UnoTimeFieldControl";
 }
 
 css::uno::Sequence<OUString> UnoTimeFieldControl::getSupportedServiceNames()
@@ -4025,7 +4025,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlNumericFieldModel::getProper
 
 OUString UnoControlNumericFieldModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlNumericFieldModel");
+    return "stardiv.Toolkit.UnoControlNumericFieldModel";
 }
 
 css::uno::Sequence<OUString>
@@ -4058,7 +4058,7 @@ UnoNumericFieldControl::UnoNumericFieldControl()
 
 OUString UnoNumericFieldControl::GetComponentServiceName()
 {
-    return OUString("numericfield");
+    return "numericfield";
 }
 
 // uno::XInterface
@@ -4173,7 +4173,7 @@ sal_Bool UnoNumericFieldControl::isStrictFormat()
 
 OUString UnoNumericFieldControl::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoNumericFieldControl");
+    return "stardiv.Toolkit.UnoNumericFieldControl";
 }
 
 css::uno::Sequence<OUString> UnoNumericFieldControl::getSupportedServiceNames()
@@ -4256,7 +4256,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlCurrencyFieldModel::getPrope
 
 OUString UnoControlCurrencyFieldModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlCurrencyFieldModel");
+    return "stardiv.Toolkit.UnoControlCurrencyFieldModel";
 }
 
 css::uno::Sequence<OUString>
@@ -4289,7 +4289,7 @@ UnoCurrencyFieldControl::UnoCurrencyFieldControl()
 
 OUString UnoCurrencyFieldControl::GetComponentServiceName()
 {
-    return OUString("longcurrencyfield");
+    return "longcurrencyfield";
 }
 
 // uno::XInterface
@@ -4403,7 +4403,7 @@ sal_Bool UnoCurrencyFieldControl::isStrictFormat()
 
 OUString UnoCurrencyFieldControl::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoCurrencyFieldControl");
+    return "stardiv.Toolkit.UnoCurrencyFieldControl";
 }
 
 css::uno::Sequence<OUString>
@@ -4482,7 +4482,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlPatternFieldModel::getProper
 
 OUString UnoControlPatternFieldModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlPatternFieldModel");
+    return "stardiv.Toolkit.UnoControlPatternFieldModel";
 }
 
 css::uno::Sequence<OUString>
@@ -4513,7 +4513,7 @@ UnoPatternFieldControl::UnoPatternFieldControl()
 
 OUString UnoPatternFieldControl::GetComponentServiceName()
 {
-    return OUString("patternfield");
+    return "patternfield";
 }
 
 void UnoPatternFieldControl::ImplSetPeerProperty( const OUString& rPropName, const uno::Any& rVal )
@@ -4596,7 +4596,7 @@ sal_Bool UnoPatternFieldControl::isStrictFormat()
 
 OUString UnoPatternFieldControl::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoPatternFieldControl");
+    return "stardiv.Toolkit.UnoPatternFieldControl";
 }
 
 css::uno::Sequence<OUString> UnoPatternFieldControl::getSupportedServiceNames()
@@ -4667,7 +4667,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlProgressBarModel::getPropert
 
 OUString UnoControlProgressBarModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlProgressBarModel");
+    return "stardiv.Toolkit.UnoControlProgressBarModel";
 }
 
 css::uno::Sequence<OUString>
@@ -4698,7 +4698,7 @@ UnoProgressBarControl::UnoProgressBarControl()
 
 OUString UnoProgressBarControl::GetComponentServiceName()
 {
-    return OUString("ProgressBar");
+    return "ProgressBar";
 }
 
 // uno::XInterface
@@ -4767,7 +4767,7 @@ sal_Int32 UnoProgressBarControl::getValue()
 
 OUString UnoProgressBarControl::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoProgressBarControl");
+    return "stardiv.Toolkit.UnoProgressBarControl";
 }
 
 css::uno::Sequence<OUString> UnoProgressBarControl::getSupportedServiceNames()
@@ -4834,7 +4834,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFixedLineModel::getPropertyS
 
 OUString UnoControlFixedLineModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlFixedLineModel");
+    return "stardiv.Toolkit.UnoControlFixedLineModel";
 }
 
 css::uno::Sequence<OUString>
@@ -4867,7 +4867,7 @@ UnoFixedLineControl::UnoFixedLineControl()
 
 OUString UnoFixedLineControl::GetComponentServiceName()
 {
-    return OUString("FixedLine");
+    return "FixedLine";
 }
 
 sal_Bool UnoFixedLineControl::isTransparent()
@@ -4877,7 +4877,7 @@ sal_Bool UnoFixedLineControl::isTransparent()
 
 OUString UnoFixedLineControl::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoFixedLineControl");
+    return "stardiv.Toolkit.UnoFixedLineControl";
 }
 
 css::uno::Sequence<OUString> UnoFixedLineControl::getSupportedServiceNames()

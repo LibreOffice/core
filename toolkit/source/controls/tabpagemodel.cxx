@@ -59,7 +59,7 @@ UnoControlTabPageModel::UnoControlTabPageModel( Reference< XComponentContext > c
 
 OUString SAL_CALL UnoControlTabPageModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlTabPageModel");
+    return "stardiv.Toolkit.UnoControlTabPageModel";
 }
 
 css::uno::Sequence< OUString > SAL_CALL UnoControlTabPageModel::getSupportedServiceNames()
@@ -72,7 +72,7 @@ css::uno::Sequence< OUString > SAL_CALL UnoControlTabPageModel::getSupportedServ
 
 OUString UnoControlTabPageModel::getServiceName( )
 {
-    return OUString("com.sun.star.awt.tab.UnoControlTabPageModel");
+    return "com.sun.star.awt.tab.UnoControlTabPageModel";
 }
 
 Any UnoControlTabPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -171,12 +171,12 @@ UnoControlTabPage::~UnoControlTabPage()
 
 OUString UnoControlTabPage::GetComponentServiceName()
 {
-    return OUString("TabPageModel");
+    return "TabPageModel";
 }
 
 OUString SAL_CALL UnoControlTabPage::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlTabPage");
+    return "stardiv.Toolkit.UnoControlTabPage";
 }
 
 sal_Bool SAL_CALL UnoControlTabPage::supportsService(OUString const & ServiceName)

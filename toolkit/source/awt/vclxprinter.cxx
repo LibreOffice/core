@@ -360,7 +360,7 @@ css::uno::Reference< css::awt::XInfoPrinter > VCLXPrinterServer::createInfoPrint
 
 OUString VCLXPrinterServer::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.VCLXPrinterServer");
+    return "stardiv.Toolkit.VCLXPrinterServer";
 }
 
 sal_Bool VCLXPrinterServer::supportsService(OUString const & ServiceName)

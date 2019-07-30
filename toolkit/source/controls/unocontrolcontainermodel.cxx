@@ -47,7 +47,7 @@ OUString UnoControlContainerModel::getServiceName()
 
 OUString UnoControlContainerModel::getImplementationName()
 {
-    return OUString("stardiv.Toolkit.UnoControlContainerModel");
+    return "stardiv.Toolkit.UnoControlContainerModel";
 }
 
 css::uno::Sequence<OUString>

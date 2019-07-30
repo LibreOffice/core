@@ -65,7 +65,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override
-    { return OUString("stardiv.Toolkit.GridControlModel"); }
+    { return "stardiv.Toolkit.GridControlModel"; }
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
@@ -116,7 +116,7 @@ public:
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override
-    { return OUString("stardiv.Toolkit.GridControl"); }
+    { return "stardiv.Toolkit.GridControl"; }
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {

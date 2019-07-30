@@ -103,13 +103,13 @@ protected:
 
     OUString SAL_CALL SpinningProgressControlModel::getServiceName()
     {
-        return OUString("com.sun.star.awt.SpinningProgressControlModel");
+        return "com.sun.star.awt.SpinningProgressControlModel";
     }
 
 
     OUString SAL_CALL SpinningProgressControlModel::getImplementationName(  )
     {
-        return OUString("org.openoffice.comp.toolkit.SpinningProgressControlModel");
+        return "org.openoffice.comp.toolkit.SpinningProgressControlModel";
     }
 
 
