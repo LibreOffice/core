@@ -52,7 +52,7 @@ static Sequence< OUString > resolver_getSupportedServiceNames()
 
 static OUString resolver_getImplementationName()
 {
-    return OUString(IMPLNAME);
+    return IMPLNAME;
 }
 
 class ResolverImpl : public WeakImplHelper< XServiceInfo, XUnoUrlResolver >
