@@ -440,7 +440,7 @@ OUString OCommonEmbeddedObject::GetFilterName( sal_Int32 nVersion ) const
         if (utl::ConfigManager::IsFuzzing() && nVersion == SOFFICE_FILEFORMAT_CURRENT &&
             sDocumentServiceName == "com.sun.star.chart2.ChartDocument")
         {
-            return OUString("chart8");
+            return "chart8";
         }
         try {
             ::comphelper::MimeConfigurationHelper aHelper( m_xContext );

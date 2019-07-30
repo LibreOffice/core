@@ -51,7 +51,7 @@ uno::Sequence< OUString > UNOEmbeddedObjectCreator::impl_staticGetSupportedServi
 
 OUString UNOEmbeddedObjectCreator::impl_staticGetImplementationName()
 {
-    return OUString("com.sun.star.comp.embed.EmbeddedObjectCreator");
+    return "com.sun.star.comp.embed.EmbeddedObjectCreator";
 }
 
 
