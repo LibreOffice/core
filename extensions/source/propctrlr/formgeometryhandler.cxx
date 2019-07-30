@@ -310,7 +310,7 @@ namespace pcr
 
     OUString FormGeometryHandler::getImplementationName_static(  )
     {
-        return OUString( "com.sun.star.comp.extensions.FormGeometryHandler" );
+        return "com.sun.star.comp.extensions.FormGeometryHandler";
     }
 
 

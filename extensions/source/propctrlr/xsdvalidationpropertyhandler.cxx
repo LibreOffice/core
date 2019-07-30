@@ -87,7 +87,7 @@ namespace pcr
 
     OUString XSDValidationPropertyHandler::getImplementationName_static(  )
     {
-        return OUString( "com.sun.star.comp.extensions.XSDValidationPropertyHandler" );
+        return "com.sun.star.comp.extensions.XSDValidationPropertyHandler";
     }
 
 

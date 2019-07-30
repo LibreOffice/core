@@ -57,7 +57,7 @@ namespace dbp
 
     OUString OGroupBoxSI::getImplementationName()
     {
-        return OUString("org.openoffice.comp.dbp.OGroupBoxWizard");
+        return "org.openoffice.comp.dbp.OGroupBoxWizard";
     }
 
 
@@ -69,7 +69,7 @@ namespace dbp
 
     OUString OListComboSI::getImplementationName()
     {
-        return OUString("org.openoffice.comp.dbp.OListComboWizard");
+        return "org.openoffice.comp.dbp.OListComboWizard";
     }
 
 
@@ -81,7 +81,7 @@ namespace dbp
 
     OUString OGridSI::getImplementationName()
     {
-        return OUString("org.openoffice.comp.dbp.OGridWizard");
+        return "org.openoffice.comp.dbp.OGridWizard";
     }
 
 

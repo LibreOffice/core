@@ -83,7 +83,7 @@ sal_Bool SAL_CALL SimpleTextFormatter::supportsService(const OUString& _rService
 
 OUString SAL_CALL SimpleTextFormatter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.extensions.SimpleTextFormatter");
+    return "com.sun.star.comp.extensions.SimpleTextFormatter";
 }
 
 Sequence<OUString> SAL_CALL SimpleTextFormatter::getSupportedServiceNames()

@@ -105,7 +105,7 @@ public:
 
                             {
                                 //!
-                                return OUString("com.sun.star.extensions.Bibliography");
+                                return "com.sun.star.extensions.Bibliography";
                                 //!
                             }
 

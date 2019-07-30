@@ -121,7 +121,7 @@ namespace pcr
 
     OUString FormController::getImplementationName_static(  )
     {
-        return OUString("org.openoffice.comp.extensions.FormController");
+        return "org.openoffice.comp.extensions.FormController";
     }
 
 
@@ -248,7 +248,7 @@ namespace pcr
 
     OUString DialogController::getImplementationName_static(  )
     {
-        return OUString("org.openoffice.comp.extensions.DialogController");
+        return "org.openoffice.comp.extensions.DialogController";
     }
 
 

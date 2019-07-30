@@ -91,7 +91,7 @@ namespace pcr
 
     OUString OTabOrderDialog::getImplementationName_static()
     {
-        return OUString("org.openoffice.comp.form.ui.OTabOrderDialog");
+        return "org.openoffice.comp.form.ui.OTabOrderDialog";
     }
 
 

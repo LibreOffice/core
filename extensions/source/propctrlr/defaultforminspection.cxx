@@ -78,7 +78,7 @@ namespace pcr
 
     OUString DefaultFormComponentInspectorModel::getImplementationName_static(  )
     {
-        return OUString("org.openoffice.comp.extensions.DefaultFormComponentInspectorModel");
+        return "org.openoffice.comp.extensions.DefaultFormComponentInspectorModel";
     }
 
 

@@ -74,7 +74,7 @@ namespace abp
 
     OUString SAL_CALL OABSPilotUno::getImplementationName()
     {
-        return OUString("org.openoffice.comp.abp.OAddressBookSourcePilot");
+        return "org.openoffice.comp.abp.OAddressBookSourcePilot";
     }
 
     css::uno::Sequence<OUString> SAL_CALL OABSPilotUno::getSupportedServiceNames()

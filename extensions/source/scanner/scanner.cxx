@@ -67,7 +67,7 @@ css::uno::Sequence<OUString> ScannerManager::getSupportedServiceNames()
 
 OUString ScannerManager::getImplementationName_Static() throw()
 {
-    return OUString( "com.sun.star.scanner.ScannerManager" );
+    return "com.sun.star.scanner.ScannerManager";
 }
 
 

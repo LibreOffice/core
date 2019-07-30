@@ -69,7 +69,7 @@ namespace pcr
 
     OUString DefaultHelpProvider::getImplementationName_static(  )
     {
-        return OUString("org.openoffice.comp.extensions.DefaultHelpProvider");
+        return "org.openoffice.comp.extensions.DefaultHelpProvider";
     }
 
 

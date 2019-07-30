@@ -57,7 +57,7 @@ namespace pcr
 
     OUString ButtonNavigationHandler::getImplementationName_static(  )
     {
-        return OUString( "com.sun.star.comp.extensions.ButtonNavigationHandler" );
+        return "com.sun.star.comp.extensions.ButtonNavigationHandler";
     }
 
 
