@@ -171,7 +171,7 @@ css::uno::Reference< css::rdf::XURI > SAL_CALL CLiteral::getDatatype()
 namespace comp_CLiteral {
 
 OUString _getImplementationName() {
-    return OUString( "CLiteral");
+    return "CLiteral";
 }
 
 css::uno::Sequence< OUString > _getSupportedServiceNames()

@@ -113,7 +113,7 @@ OUString SAL_CALL CBlankNode::getStringValue()
 namespace comp_CBlankNode {
 
 OUString _getImplementationName() {
-    return OUString( "CBlankNode");
+    return "CBlankNode";
 }
 
 css::uno::Sequence< OUString > _getSupportedServiceNames()

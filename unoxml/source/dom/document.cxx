@@ -906,7 +906,7 @@ namespace DOM
     OUString SAL_CALL CDocument::getNodeName()
     {
         // does not need mutex currently
-        return OUString("#document");
+        return "#document";
     }
 
     OUString SAL_CALL CDocument::getNodeValue()

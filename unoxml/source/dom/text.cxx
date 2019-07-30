@@ -60,7 +60,7 @@ namespace DOM
 
     OUString SAL_CALL CText::getNodeName()
     {
-        return OUString("#text");
+        return "#text";
     }
 
     Reference< XText > SAL_CALL CText::splitText(sal_Int32 /*offset*/)
