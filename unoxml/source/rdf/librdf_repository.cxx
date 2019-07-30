@@ -566,7 +566,7 @@ css::uno::Any SAL_CALL
 librdf_GraphResult2::nextElement()
 {
     std::size_t const n = m_nIndex++;
-    if (m_vStatements.size() < n)
+    if (m_vStatements.size() <= n)
     {
         m_nIndex = m_vStatements.size(); // avoid overflow
         throw container::NoSuchElementException();
