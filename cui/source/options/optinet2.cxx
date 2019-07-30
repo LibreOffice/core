@@ -532,91 +532,68 @@ IMPL_STATIC_LINK(SvxProxyTabPage, LoseFocusHdl_Impl, weld::Widget&, rControl, vo
 /*  SvxSecurityTabPage                                             */
 /*                                                                  */
 /********************************************************************/
-
-SvxSecurityTabPage::SvxSecurityTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "OptSecurityPage", "cui/ui/optsecuritypage.ui", &rSet)
+SvxSecurityTabPage::SvxSecurityTabPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "cui/ui/optsecuritypage.ui", "OptSecurityPage", &rSet)
     , mpSecOptions(new SvtSecurityOptions)
+    , m_xSecurityOptionsPB(m_xBuilder->weld_button("options"))
+    , m_xSavePasswordsCB(m_xBuilder->weld_check_button("savepassword"))
+    , m_xShowConnectionsPB(m_xBuilder->weld_button("connections"))
+    , m_xMasterPasswordCB(m_xBuilder->weld_check_button("usemasterpassword"))
+    , m_xMasterPasswordFT(m_xBuilder->weld_label("masterpasswordtext"))
+    , m_xMasterPasswordPB(m_xBuilder->weld_button("masterpassword"))
+    , m_xMacroSecFrame(m_xBuilder->weld_container("macrosecurity"))
+    , m_xMacroSecPB(m_xBuilder->weld_button("macro"))
+    , m_xCertFrame(m_xBuilder->weld_container("certificatepath"))
+    , m_xCertPathPB(m_xBuilder->weld_button("cert"))
+    , m_xTSAURLsFrame(m_xBuilder->weld_container("tsaurls"))
+    , m_xTSAURLsPB(m_xBuilder->weld_button("tsas"))
+    , m_xNoPasswordSaveFT(m_xBuilder->weld_label("nopasswordsave"))
 {
-    get(m_pSecurityOptionsPB, "options");
-    get(m_pSavePasswordsCB, "savepassword");
-
     //fdo#65595, we need height-for-width support here, but for now we can
     //bodge it
-    Size aPrefSize(m_pSavePasswordsCB->get_preferred_size());
-    Size aSize(m_pSavePasswordsCB->CalcMinimumSize(56*approximate_char_width()));
-    if (aPrefSize.Width() > aSize.Width())
+    Size aPrefSize(m_xSavePasswordsCB->get_preferred_size());
+    int nMaxWidth = m_xSavePasswordsCB->get_approximate_digit_width() * 40;
+    if (aPrefSize.Width() > nMaxWidth)
     {
-        m_pSavePasswordsCB->set_width_request(aSize.Width());
-        m_pSavePasswordsCB->set_height_request(aSize.Height());
+        m_xSavePasswordsCB->set_label_line_wrap(true);
+        m_xSavePasswordsCB->set_size_request(nMaxWidth, -1);
     }
 
-    get(m_pShowConnectionsPB, "connections");
-    get(m_pMasterPasswordCB, "usemasterpassword");
-    get(m_pMasterPasswordFT, "masterpasswordtext");
-    get(m_pMasterPasswordPB, "masterpassword");
-    get(m_pMacroSecFrame, "macrosecurity");
-    get(m_pMacroSecPB, "macro");
-    get(m_pCertFrame, "certificatepath");
-    get(m_pCertPathPB, "cert");
-    get(m_pTSAURLsFrame, "tsaurls");
-    get(m_pTSAURLsPB, "tsas");
-    m_sPasswordStoringDeactivateStr = get<FixedText>("nopasswordsave")->GetText();
+    m_sPasswordStoringDeactivateStr = m_xNoPasswordSaveFT->get_label();
 
     InitControls();
 
-    m_pSecurityOptionsPB->SetClickHdl( LINK( this, SvxSecurityTabPage, SecurityOptionsHdl ) );
-    m_pSavePasswordsCB->SetClickHdl( LINK( this, SvxSecurityTabPage, SavePasswordHdl ) );
-    m_pMasterPasswordPB->SetClickHdl( LINK( this, SvxSecurityTabPage, MasterPasswordHdl ) );
-    m_pMasterPasswordCB->SetClickHdl( LINK( this, SvxSecurityTabPage, MasterPasswordCBHdl ) );
-    m_pShowConnectionsPB->SetClickHdl( LINK( this, SvxSecurityTabPage, ShowPasswordsHdl ) );
-    m_pMacroSecPB->SetClickHdl( LINK( this, SvxSecurityTabPage, MacroSecPBHdl ) );
-    m_pCertPathPB->SetClickHdl( LINK( this, SvxSecurityTabPage, CertPathPBHdl ) );
-    m_pTSAURLsPB->SetClickHdl( LINK( this, SvxSecurityTabPage, TSAURLsPBHdl ) );
+    m_xSecurityOptionsPB->connect_clicked( LINK( this, SvxSecurityTabPage, SecurityOptionsHdl ) );
+    m_xSavePasswordsCB->connect_clicked( LINK( this, SvxSecurityTabPage, SavePasswordHdl ) );
+    m_xMasterPasswordPB->connect_clicked( LINK( this, SvxSecurityTabPage, MasterPasswordHdl ) );
+    m_xMasterPasswordCB->connect_clicked( LINK( this, SvxSecurityTabPage, MasterPasswordCBHdl ) );
+    m_xShowConnectionsPB->connect_clicked( LINK( this, SvxSecurityTabPage, ShowPasswordsHdl ) );
+    m_xMacroSecPB->connect_clicked( LINK( this, SvxSecurityTabPage, MacroSecPBHdl ) );
+    m_xCertPathPB->connect_clicked( LINK( this, SvxSecurityTabPage, CertPathPBHdl ) );
+    m_xTSAURLsPB->connect_clicked( LINK( this, SvxSecurityTabPage, TSAURLsPBHdl ) );
 
     ActivatePage( rSet );
 }
 
 SvxSecurityTabPage::~SvxSecurityTabPage()
 {
-    disposeOnce();
 }
 
-void SvxSecurityTabPage::dispose()
-{
-    mpSecOptions.reset();
-    mpCertPathDlg.reset();
-    m_xSecOptDlg.reset();
-    m_pSecurityOptionsPB.clear();
-    m_pSavePasswordsCB.clear();
-    m_pShowConnectionsPB.clear();
-    m_pMasterPasswordCB.clear();
-    m_pMasterPasswordFT.clear();
-    m_pMasterPasswordPB.clear();
-    m_pMacroSecFrame.clear();
-    m_pMacroSecPB.clear();
-    m_pCertFrame.clear();
-    m_pCertPathPB.clear();
-    m_pTSAURLsFrame.clear();
-    m_pTSAURLsPB.clear();
-
-    SfxTabPage::dispose();
-}
-
-IMPL_LINK_NOARG(SvxSecurityTabPage, SecurityOptionsHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, SecurityOptionsHdl, weld::Button&, void)
 {
     if (!m_xSecOptDlg)
-        m_xSecOptDlg.reset(new svx::SecurityOptionsDialog(GetFrameWeld(), mpSecOptions.get()));
-    (void)m_xSecOptDlg->run();
+        m_xSecOptDlg.reset(new svx::SecurityOptionsDialog(GetDialogFrameWeld(), mpSecOptions.get()));
+    m_xSecOptDlg->run();
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl, weld::Button&, void)
 {
     try
     {
         Reference< task::XPasswordContainer2 > xMasterPasswd(
             task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
-        if ( m_pSavePasswordsCB->IsChecked() )
+        if ( m_xSavePasswordsCB->get_active() )
         {
             bool bOldValue = xMasterPasswd->allowPersistentStoring( true );
             xMasterPasswd->removeMasterPassword();
@@ -626,16 +603,16 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl, Button*, void)
 
             if ( xMasterPasswd->changeMasterPassword(xTmpHandler) )
             {
-                m_pMasterPasswordPB->Enable();
-                m_pMasterPasswordCB->Check();
-                m_pMasterPasswordCB->Enable();
-                m_pMasterPasswordFT->Enable();
-                m_pShowConnectionsPB->Enable();
+                m_xMasterPasswordPB->set_sensitive(true);
+                m_xMasterPasswordCB->set_active(true);
+                m_xMasterPasswordCB->set_sensitive(true);
+                m_xMasterPasswordFT->set_sensitive(true);
+                m_xShowConnectionsPB->set_sensitive(true);
             }
             else
             {
                 xMasterPasswd->allowPersistentStoring( bOldValue );
-                m_pSavePasswordsCB->Check( false );
+                m_xSavePasswordsCB->set_active( false );
             }
         }
         else
@@ -650,27 +627,27 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl, Button*, void)
             if( RET_YES == nRet )
             {
                 xMasterPasswd->allowPersistentStoring( false );
-                m_pMasterPasswordCB->Check();
-                m_pMasterPasswordPB->Enable( false );
-                m_pMasterPasswordCB->Enable( false );
-                m_pMasterPasswordFT->Enable( false );
-                m_pShowConnectionsPB->Enable( false );
+                m_xMasterPasswordCB->set_active(true);
+                m_xMasterPasswordPB->set_sensitive( false );
+                m_xMasterPasswordCB->set_sensitive( false );
+                m_xMasterPasswordFT->set_sensitive( false );
+                m_xShowConnectionsPB->set_sensitive( false );
             }
             else
             {
-                m_pSavePasswordsCB->Check();
-                m_pMasterPasswordPB->Enable();
-                m_pShowConnectionsPB->Enable();
+                m_xSavePasswordsCB->set_active(true);
+                m_xMasterPasswordPB->set_sensitive(true);
+                m_xShowConnectionsPB->set_sensitive(true);
             }
         }
     }
     catch (const Exception&)
     {
-        m_pSavePasswordsCB->Check( !m_pSavePasswordsCB->IsChecked() );
+        m_xSavePasswordsCB->set_active( !m_xSavePasswordsCB->get_active() );
     }
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordHdl, weld::Button&, void)
 {
     try
     {
@@ -688,7 +665,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordHdl, Button*, void)
     {}
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl, weld::Button&, void)
 {
     try
     {
@@ -698,42 +675,42 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl, Button*, void)
         uno::Reference<task::XInteractionHandler> xTmpHandler(task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(),
                                                               VCLUnoHelper::GetInterface(GetParentDialog())));
 
-        if ( m_pMasterPasswordCB->IsChecked() )
+        if ( m_xMasterPasswordCB->get_active() )
         {
             if (xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->changeMasterPassword(xTmpHandler))
             {
-                m_pMasterPasswordPB->Enable();
-                m_pMasterPasswordFT->Enable();
+                m_xMasterPasswordPB->set_sensitive(true);
+                m_xMasterPasswordFT->set_sensitive(true);
             }
             else
             {
-                m_pMasterPasswordCB->Check( false );
-                m_pMasterPasswordPB->Enable();
-                m_pMasterPasswordFT->Enable();
+                m_xMasterPasswordCB->set_active( false );
+                m_xMasterPasswordPB->set_sensitive(true);
+                m_xMasterPasswordFT->set_sensitive(true);
             }
         }
         else
         {
             if ( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->useDefaultMasterPassword(xTmpHandler) )
             {
-                m_pMasterPasswordPB->Enable( false );
-                m_pMasterPasswordFT->Enable( false );
+                m_xMasterPasswordPB->set_sensitive( false );
+                m_xMasterPasswordFT->set_sensitive( false );
             }
             else
             {
-                m_pMasterPasswordCB->Check();
-                m_pMasterPasswordPB->Enable();
-                m_pShowConnectionsPB->Enable();
+                m_xMasterPasswordCB->set_active(true);
+                m_xMasterPasswordPB->set_sensitive(true);
+                m_xShowConnectionsPB->set_sensitive(true);
             }
         }
     }
     catch (const Exception&)
     {
-        m_pSavePasswordsCB->Check( !m_pSavePasswordsCB->IsChecked() );
+        m_xSavePasswordsCB->set_active( !m_xSavePasswordsCB->get_active() );
     }
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl, weld::Button&, void)
 {
     try
     {
@@ -753,7 +730,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl, Button*, void)
     {}
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, CertPathPBHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, CertPathPBHdl, weld::Button&, void)
 {
     if (!mpCertPathDlg)
         mpCertPathDlg.reset(new CertPathDialog(GetDialogFrameWeld()));
@@ -769,7 +746,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, CertPathPBHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, TSAURLsPBHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, TSAURLsPBHdl, weld::Button&, void)
 {
     // Unlike the mpCertPathDlg, we *don't* keep the same dialog object around between
     // invocations. Seems clearer to my little brain that way.
@@ -777,7 +754,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, TSAURLsPBHdl, Button*, void)
     aTSAURLsDlg.run();
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl, weld::Button&, void)
 {
     try
     {
@@ -792,7 +769,6 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl, Button*, void)
     }
 }
 
-
 void SvxSecurityTabPage::InitControls()
 {
     // Hide all controls which belong to the macro security button in case the macro
@@ -806,18 +782,18 @@ void SvxSecurityTabPage::InitControls()
               && mpSecOptions->IsReadOnly( SvtSecurityOptions::EOption::SecureUrls ) ) )
     {
         //Hide these
-        m_pMacroSecFrame->Hide();
+        m_xMacroSecFrame->hide();
     }
 
 #ifndef UNX
-    m_pCertFrame->Hide();
+    m_xCertFrame->hide();
 #endif
 
-    m_pMasterPasswordPB->Enable( false );
-    m_pMasterPasswordCB->Enable( false );
-    m_pMasterPasswordCB->Check();
-    m_pMasterPasswordFT->Enable( false );
-    m_pShowConnectionsPB->Enable( false );
+    m_xMasterPasswordPB->set_sensitive( false );
+    m_xMasterPasswordCB->set_sensitive( false );
+    m_xMasterPasswordCB->set_active(true);
+    m_xMasterPasswordFT->set_sensitive( false );
+    m_xShowConnectionsPB->set_sensitive( false );
 
     // initialize the password saving checkbox
     try
@@ -827,29 +803,29 @@ void SvxSecurityTabPage::InitControls()
 
         if ( xMasterPasswd->isPersistentStoringAllowed() )
         {
-            m_pMasterPasswordCB->Enable();
-            m_pShowConnectionsPB->Enable();
-            m_pSavePasswordsCB->Check();
+            m_xMasterPasswordCB->set_sensitive(true);
+            m_xShowConnectionsPB->set_sensitive(true);
+            m_xSavePasswordsCB->set_active(true);
 
             if ( xMasterPasswd->isDefaultMasterPasswordUsed() )
-                m_pMasterPasswordCB->Check( false );
+                m_xMasterPasswordCB->set_active( false );
             else
             {
-                m_pMasterPasswordPB->Enable();
-                m_pMasterPasswordCB->Check();
-                m_pMasterPasswordFT->Enable();
+                m_xMasterPasswordPB->set_sensitive(true);
+                m_xMasterPasswordCB->set_active(true);
+                m_xMasterPasswordFT->set_sensitive(true);
             }
         }
     }
     catch (const Exception&)
     {
-        m_pSavePasswordsCB->Enable( false );
+        m_xSavePasswordsCB->set_sensitive( false );
     }
 }
 
 VclPtr<SfxTabPage> SvxSecurityTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxSecurityTabPage>::Create(pParent.pParent, *rAttrSet);
+    return VclPtr<SvxSecurityTabPage>::Create(pParent, *rAttrSet);
 }
 
 void SvxSecurityTabPage::ActivatePage( const SfxItemSet& )
