@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_6648e9cb",
+        "filename": "vcl/source/gdi/pdfbuildin_fonts.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-30T07:37:30Z",
+      "side": 1,
+      "message": "these header guard defines are generally derived from the file\u0027s pathname (which also spells \"buildin\")",
+      "revId": "bfdf2594315cce95b95a2c1891a4518bc8f281c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
