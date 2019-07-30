@@ -108,7 +108,7 @@ static PyRef getObjectFromLoaderModule( const char * func )
 
 static OUString getImplementationName()
 {
-    return OUString( "org.openoffice.comp.pyuno.Loader" );
+    return "org.openoffice.comp.pyuno.Loader";
 }
 
 static Sequence< OUString > getSupportedServiceNames()

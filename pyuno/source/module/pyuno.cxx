@@ -89,7 +89,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
 {
     assert( pVal );
     if (pTypeRef->eTypeClass == typelib_TypeClass_VOID)
-        return OUString("void");
+        return "void";
 
     OUStringBuffer buf( 64 );
     buf.append( '(' );
