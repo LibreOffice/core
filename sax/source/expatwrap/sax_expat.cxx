@@ -518,7 +518,7 @@ void SaxExpatParser::setLocale( const Locale & )
 // XServiceInfo
 OUString SaxExpatParser::getImplementationName()
 {
-    return OUString("com.sun.star.comp.extensions.xml.sax.ParserExpat");
+    return "com.sun.star.comp.extensions.xml.sax.ParserExpat";
 }
 
 // XServiceInfo

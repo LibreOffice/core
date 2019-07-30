@@ -1043,7 +1043,7 @@ bool isFirstCharWhitespace( const sal_Unicode *p ) throw()
 // XServiceInfo
 OUString SAXWriter::getImplementationName()
 {
-    return OUString("com.sun.star.extensions.xml.sax.Writer");
+    return "com.sun.star.extensions.xml.sax.Writer";
 }
 
 // XServiceInfo
