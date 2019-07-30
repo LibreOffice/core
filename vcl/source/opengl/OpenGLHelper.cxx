@@ -79,7 +79,7 @@ OString loadShader(const OUString& rFilename)
         assert(nSize == nBytesRead);
         content.get()[nBytesRead] = 0;
         SAL_INFO("vcl.opengl", "Read " << nBytesRead << " bytes from " << aFileURL);
-        return OString(content.get());
+        return content.get();
     }
     else
     {

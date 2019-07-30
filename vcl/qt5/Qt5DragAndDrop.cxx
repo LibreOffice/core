@@ -110,7 +110,7 @@ void Qt5DragSource::fire_dragEnd(sal_Int8 nAction)
 
 OUString SAL_CALL Qt5DragSource::getImplementationName()
 {
-    return OUString("com.sun.star.datatransfer.dnd.VclQt5DragSource");
+    return "com.sun.star.datatransfer.dnd.VclQt5DragSource";
 }
 
 sal_Bool SAL_CALL Qt5DragSource::supportsService(OUString const& ServiceName)
@@ -134,7 +134,7 @@ Qt5DropTarget::Qt5DropTarget()
 
 OUString SAL_CALL Qt5DropTarget::getImplementationName()
 {
-    return OUString("com.sun.star.datatransfer.dnd.VclQt5DropTarget");
+    return "com.sun.star.datatransfer.dnd.VclQt5DropTarget";
 }
 
 sal_Bool SAL_CALL Qt5DropTarget::supportsService(OUString const& ServiceName)

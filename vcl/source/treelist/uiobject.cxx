@@ -83,7 +83,7 @@ std::set<OUString> TreeListUIObject::get_children() const
 
 OUString TreeListUIObject::get_name() const
 {
-    return OUString("TreeListUIObject");
+    return "TreeListUIObject";
 }
 
 std::unique_ptr<UIObject> TreeListUIObject::create(vcl::Window* pWindow)
@@ -167,7 +167,7 @@ std::set<OUString> TreeListEntryUIObject::get_children() const
 
 OUString TreeListEntryUIObject::get_type() const
 {
-    return OUString("TreeListEntry");
+    return "TreeListEntry";
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

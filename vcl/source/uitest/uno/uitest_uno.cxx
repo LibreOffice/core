@@ -97,7 +97,7 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getFloatWin
 
 OUString SAL_CALL UITestUnoObj::getImplementationName()
 {
-    return OUString("org.libreoffice.uitest.UITest");
+    return "org.libreoffice.uitest.UITest";
 }
 
 sal_Bool UITestUnoObj::supportsService(OUString const & ServiceName)

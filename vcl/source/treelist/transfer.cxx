@@ -257,7 +257,7 @@ void SAL_CALL TransferableHelper::TerminateListener::notifyTermination( const Ev
 
 OUString SAL_CALL TransferableHelper::TerminateListener::getImplementationName()
 {
-    return OUString("com.sun.star.comp.svt.TransferableHelperTerminateListener");
+    return "com.sun.star.comp.svt.TransferableHelperTerminateListener";
 }
 
 sal_Bool SAL_CALL TransferableHelper::TerminateListener::supportsService(const OUString& /*rServiceName*/)

@@ -23,11 +23,11 @@ namespace
 OUString collectPushFlags(PushFlags nFlags)
 {
     if ((nFlags & PushFlags::ALL) == PushFlags::ALL)
-        return OUString("PushAll");
+        return "PushAll";
     else if ((nFlags & PUSH_ALLFONT) == PUSH_ALLFONT)
-        return OUString("PushAllFont");
+        return "PushAllFont";
     else if ((nFlags & PUSH_ALLTEXT) == PUSH_ALLTEXT)
-        return OUString("PushAllText");
+        return "PushAllText";
 
     std::vector<OUString> aStrings;
 
@@ -116,7 +116,7 @@ OUString convertDrawTextFlagsToString(DrawTextFlags eDrawTextFlags)
     OUString aString;
 
     if (aStrings.empty())
-        return OUString("None");
+        return "None";
 
     aString = aStrings[0];
     for (size_t i = 1; i < aStrings.size(); ++i)
@@ -130,11 +130,11 @@ OUString convertRopToString(RasterOp eRop)
 {
     switch (eRop)
     {
-        case RasterOp::OverPaint: return OUString("overpaint");
-        case RasterOp::Xor:       return OUString("xor");
-        case RasterOp::N0:        return OUString("0");
-        case RasterOp::N1:        return OUString("1");
-        case RasterOp::Invert:    return OUString("invert");
+        case RasterOp::OverPaint: return "overpaint";
+        case RasterOp::Xor:       return "xor";
+        case RasterOp::N0:        return "0";
+        case RasterOp::N1:        return "1";
+        case RasterOp::Invert:    return "invert";
     }
     return OUString();
 }
@@ -143,10 +143,10 @@ OUString convertTextAlignToString(TextAlign eAlign)
 {
     switch (eAlign)
     {
-        case ALIGN_BASELINE:             return OUString("baseline");
-        case ALIGN_BOTTOM:               return OUString("bottom");
-        case ALIGN_TOP:                  return OUString("top");
-        case TextAlign_FORCE_EQUAL_SIZE: return OUString("equalsize");
+        case ALIGN_BASELINE:             return "baseline";
+        case ALIGN_BOTTOM:               return "bottom";
+        case ALIGN_TOP:                  return "top";
+        case TextAlign_FORCE_EQUAL_SIZE: return "equalsize";
     }
     return OUString();
 }
@@ -161,9 +161,9 @@ OUString convertLineStyleToString(LineStyle eAlign)
 {
     switch (eAlign)
     {
-        case LineStyle::NONE:    return OUString("none");
-        case LineStyle::Solid:   return OUString("solid");
-        case LineStyle::Dash:    return OUString("dash");
+        case LineStyle::NONE:    return "none";
+        case LineStyle::Solid:   return "solid";
+        case LineStyle::Dash:    return "dash";
         default: break;
     }
     return OUString();
@@ -174,10 +174,10 @@ OUString convertLineJoinToString(basegfx::B2DLineJoin eJoin)
     switch (eJoin)
     {
         default:
-        case basegfx::B2DLineJoin::NONE:    return OUString("none");
-        case basegfx::B2DLineJoin::Bevel:   return OUString("bevel");
-        case basegfx::B2DLineJoin::Miter:   return OUString("miter");
-        case basegfx::B2DLineJoin::Round:   return OUString("round");
+        case basegfx::B2DLineJoin::NONE:    return "none";
+        case basegfx::B2DLineJoin::Bevel:   return "bevel";
+        case basegfx::B2DLineJoin::Miter:   return "miter";
+        case basegfx::B2DLineJoin::Round:   return "round";
     }
 }
 
@@ -186,9 +186,9 @@ OUString convertLineCapToString(css::drawing::LineCap eCap)
     switch (eCap)
     {
         default:
-        case css::drawing::LineCap_BUTT:   return OUString("butt");
-        case css::drawing::LineCap_ROUND:  return OUString("round");
-        case css::drawing::LineCap_SQUARE: return OUString("square");
+        case css::drawing::LineCap_BUTT:   return "butt";
+        case css::drawing::LineCap_ROUND:  return "round";
+        case css::drawing::LineCap_SQUARE: return "square";
     }
 }
 
@@ -197,10 +197,10 @@ OUString convertPolygonFlags(PolyFlags eFlags)
     switch (eFlags)
     {
         default:
-        case PolyFlags::Normal:    return OUString("normal");
-        case PolyFlags::Control:   return OUString("control");
-        case PolyFlags::Smooth:    return OUString("smooth");
-        case PolyFlags::Symmetric: return OUString("symmetric");
+        case PolyFlags::Normal:    return "normal";
+        case PolyFlags::Control:   return "control";
+        case PolyFlags::Smooth:    return "smooth";
+        case PolyFlags::Symmetric: return "symmetric";
     }
 }
 
@@ -208,18 +208,18 @@ OUString convertFontWeigthToString(FontWeight eFontWeight)
 {
     switch (eFontWeight)
     {
-        case WEIGHT_DONTKNOW:   return OUString("unknown");
-        case WEIGHT_THIN:       return OUString("thin");
-        case WEIGHT_ULTRALIGHT: return OUString("ultralight");
-        case WEIGHT_LIGHT:      return OUString("light");
-        case WEIGHT_SEMILIGHT:  return OUString("semilight");
-        case WEIGHT_NORMAL:     return OUString("normal");
-        case WEIGHT_MEDIUM:     return OUString("medium");
-        case WEIGHT_SEMIBOLD:   return OUString("semibold");
-        case WEIGHT_BOLD:       return OUString("bold");
-        case WEIGHT_ULTRABOLD:  return OUString("ultrabold");
-        case WEIGHT_BLACK:      return OUString("black");
-        case FontWeight_FORCE_EQUAL_SIZE: return OUString("equalsize");
+        case WEIGHT_DONTKNOW:   return "unknown";
+        case WEIGHT_THIN:       return "thin";
+        case WEIGHT_ULTRALIGHT: return "ultralight";
+        case WEIGHT_LIGHT:      return "light";
+        case WEIGHT_SEMILIGHT:  return "semilight";
+        case WEIGHT_NORMAL:     return "normal";
+        case WEIGHT_MEDIUM:     return "medium";
+        case WEIGHT_SEMIBOLD:   return "semibold";
+        case WEIGHT_BOLD:       return "bold";
+        case WEIGHT_ULTRABOLD:  return "ultrabold";
+        case WEIGHT_BLACK:      return "black";
+        case FontWeight_FORCE_EQUAL_SIZE: return "equalsize";
     }
     return OUString();
 }
@@ -228,14 +228,14 @@ OUString convertFontStrikeoutToString(FontStrikeout eFontStrikeout)
 {
     switch (eFontStrikeout)
     {
-        case STRIKEOUT_NONE:     return OUString("none");
-        case STRIKEOUT_SINGLE:   return OUString("single");
-        case STRIKEOUT_DOUBLE:   return OUString("double");
-        case STRIKEOUT_DONTKNOW: return OUString("dontknow");
-        case STRIKEOUT_BOLD:     return OUString("bold");
-        case STRIKEOUT_SLASH:    return OUString("slash");
-        case STRIKEOUT_X:        return OUString("x");
-        case FontStrikeout_FORCE_EQUAL_SIZE: return OUString("equalsize");
+        case STRIKEOUT_NONE:     return "none";
+        case STRIKEOUT_SINGLE:   return "single";
+        case STRIKEOUT_DOUBLE:   return "double";
+        case STRIKEOUT_DONTKNOW: return "dontknow";
+        case STRIKEOUT_BOLD:     return "bold";
+        case STRIKEOUT_SLASH:    return "slash";
+        case STRIKEOUT_X:        return "x";
+        case FontStrikeout_FORCE_EQUAL_SIZE: return "equalsize";
     }
     return OUString();
 }
@@ -244,26 +244,26 @@ OUString convertFontLineStyleToString(FontLineStyle eFontLineStyle)
 {
     switch (eFontLineStyle)
     {
-        case LINESTYLE_NONE:            return OUString("none");
-        case LINESTYLE_SINGLE:          return OUString("single");
-        case LINESTYLE_DOUBLE:          return OUString("double");
-        case LINESTYLE_DOTTED:          return OUString("dotted");
-        case LINESTYLE_DONTKNOW:        return OUString("dontknow");
-        case LINESTYLE_DASH:            return OUString("dash");
-        case LINESTYLE_LONGDASH:        return OUString("longdash");
-        case LINESTYLE_DASHDOT:         return OUString("dashdot");
-        case LINESTYLE_DASHDOTDOT:      return OUString("dashdotdot");
-        case LINESTYLE_SMALLWAVE:       return OUString("smallwave");
-        case LINESTYLE_WAVE:            return OUString("wave");
-        case LINESTYLE_DOUBLEWAVE:      return OUString("doublewave");
-        case LINESTYLE_BOLD:            return OUString("bold");
-        case LINESTYLE_BOLDDOTTED:      return OUString("bolddotted");
-        case LINESTYLE_BOLDDASH:        return OUString("bolddash");
-        case LINESTYLE_BOLDLONGDASH:    return OUString("boldlongdash");
-        case LINESTYLE_BOLDDASHDOT:     return OUString("bolddashdot");
-        case LINESTYLE_BOLDDASHDOTDOT:  return OUString("bolddashdotdot");
-        case LINESTYLE_BOLDWAVE:        return OUString("boldwave");
-        case FontLineStyle_FORCE_EQUAL_SIZE: return OUString("equalsize");
+        case LINESTYLE_NONE:            return "none";
+        case LINESTYLE_SINGLE:          return "single";
+        case LINESTYLE_DOUBLE:          return "double";
+        case LINESTYLE_DOTTED:          return "dotted";
+        case LINESTYLE_DONTKNOW:        return "dontknow";
+        case LINESTYLE_DASH:            return "dash";
+        case LINESTYLE_LONGDASH:        return "longdash";
+        case LINESTYLE_DASHDOT:         return "dashdot";
+        case LINESTYLE_DASHDOTDOT:      return "dashdotdot";
+        case LINESTYLE_SMALLWAVE:       return "smallwave";
+        case LINESTYLE_WAVE:            return "wave";
+        case LINESTYLE_DOUBLEWAVE:      return "doublewave";
+        case LINESTYLE_BOLD:            return "bold";
+        case LINESTYLE_BOLDDOTTED:      return "bolddotted";
+        case LINESTYLE_BOLDDASH:        return "bolddash";
+        case LINESTYLE_BOLDLONGDASH:    return "boldlongdash";
+        case LINESTYLE_BOLDDASHDOT:     return "bolddashdot";
+        case LINESTYLE_BOLDDASHDOTDOT:  return "bolddashdotdot";
+        case LINESTYLE_BOLDWAVE:        return "boldwave";
+        case FontLineStyle_FORCE_EQUAL_SIZE: return "equalsize";
     }
     return OUString();
 }
@@ -335,9 +335,9 @@ OUString convertBitmapExTransparentType(TransparentType eType)
     switch (eType)
     {
         default:
-        case TransparentType::NONE:   return OUString("none");
-        case TransparentType::Bitmap: return OUString("bitmap");
-        case TransparentType::Color:  return OUString("color");
+        case TransparentType::NONE:   return "none";
+        case TransparentType::Bitmap: return "bitmap";
+        case TransparentType::Color:  return "color";
     }
 }
 
@@ -346,21 +346,21 @@ OUString convertMapUnitToString(MapUnit eUnit)
     switch (eUnit)
     {
         default:
-        case MapUnit::LASTENUMDUMMY:    return OUString("LASTENUMDUMMY");
-        case MapUnit::Map1000thInch:    return OUString("Map1000thInch");
-        case MapUnit::Map100thInch:     return OUString("Map100thInch");
-        case MapUnit::Map100thMM:       return OUString("Map100thMM");
-        case MapUnit::Map10thInch:      return OUString("Map10thInch");
-        case MapUnit::Map10thMM:        return OUString("Map10thMM");
-        case MapUnit::MapAppFont:       return OUString("MapAppFont");
-        case MapUnit::MapCM:            return OUString("MapCM");
-        case MapUnit::MapInch:          return OUString("MapInch");
-        case MapUnit::MapMM:            return OUString("MapMM");
-        case MapUnit::MapPixel:         return OUString("MapPixel");
-        case MapUnit::MapPoint:         return OUString("MapPoint");
-        case MapUnit::MapRelative:      return OUString("MapRelative");
-        case MapUnit::MapSysFont:       return OUString("MapSysFont");
-        case MapUnit::MapTwip:          return OUString("MapTwip");
+        case MapUnit::LASTENUMDUMMY:    return "LASTENUMDUMMY";
+        case MapUnit::Map1000thInch:    return "Map1000thInch";
+        case MapUnit::Map100thInch:     return "Map100thInch";
+        case MapUnit::Map100thMM:       return "Map100thMM";
+        case MapUnit::Map10thInch:      return "Map10thInch";
+        case MapUnit::Map10thMM:        return "Map10thMM";
+        case MapUnit::MapAppFont:       return "MapAppFont";
+        case MapUnit::MapCM:            return "MapCM";
+        case MapUnit::MapInch:          return "MapInch";
+        case MapUnit::MapMM:            return "MapMM";
+        case MapUnit::MapPixel:         return "MapPixel";
+        case MapUnit::MapPoint:         return "MapPoint";
+        case MapUnit::MapRelative:      return "MapRelative";
+        case MapUnit::MapSysFont:       return "MapSysFont";
+        case MapUnit::MapTwip:          return "MapTwip";
     }
 }
 
@@ -377,13 +377,13 @@ OUString convertGradientStyle(GradientStyle eStyle)
 {
     switch (eStyle)
     {
-        case GradientStyle::Linear:     return OUString("Linear");
-        case GradientStyle::Axial:      return OUString("Axial");
-        case GradientStyle::Radial:     return OUString("Radial");
-        case GradientStyle::Elliptical: return OUString("Elliptical");
-        case GradientStyle::Square:     return OUString("Square");
-        case GradientStyle::Rect:       return OUString("Rect");
-        case GradientStyle::FORCE_EQUAL_SIZE: return OUString("ForceEqualSize");
+        case GradientStyle::Linear:     return "Linear";
+        case GradientStyle::Axial:      return "Axial";
+        case GradientStyle::Radial:     return "Radial";
+        case GradientStyle::Elliptical: return "Elliptical";
+        case GradientStyle::Square:     return "Square";
+        case GradientStyle::Rect:       return "Rect";
+        case GradientStyle::FORCE_EQUAL_SIZE: return "ForceEqualSize";
     }
     return OUString();
 }
@@ -392,10 +392,10 @@ OUString convertHatchStyle(HatchStyle eStyle)
 {
     switch (eStyle)
     {
-        case HatchStyle::Single: return OUString("Single");
-        case HatchStyle::Double: return OUString("Double");
-        case HatchStyle::Triple: return OUString("Triple");
-        case HatchStyle::FORCE_EQUAL_SIZE: return OUString("ForceEqualSize");
+        case HatchStyle::Single: return "Single";
+        case HatchStyle::Double: return "Double";
+        case HatchStyle::Triple: return "Triple";
+        case HatchStyle::FORCE_EQUAL_SIZE: return "ForceEqualSize";
     }
     return OUString();
 }
@@ -404,19 +404,19 @@ OUString convertWallpaperStyleToString(WallpaperStyle eWallpaperStyle)
 {
     switch (eWallpaperStyle)
     {
-        case WallpaperStyle::NONE: return OUString("NONE");
-        case WallpaperStyle::Tile: return OUString("Tile");
-        case WallpaperStyle::Center: return OUString("Center");
-        case WallpaperStyle::Scale: return OUString("Scale");
-        case WallpaperStyle::TopLeft: return OUString("TopLeft");
-        case WallpaperStyle::Top: return OUString("Top");
-        case WallpaperStyle::TopRight: return OUString("TopRight");
-        case WallpaperStyle::Left: return OUString("Left");
-        case WallpaperStyle::Right: return OUString("Right");
-        case WallpaperStyle::BottomLeft: return OUString("BottomLeft");
-        case WallpaperStyle::Bottom: return OUString("Bottom");
-        case WallpaperStyle::BottomRight: return OUString("BottomRight");
-        case WallpaperStyle::ApplicationGradient: return OUString("ApplicationGradient");
+        case WallpaperStyle::NONE: return "NONE";
+        case WallpaperStyle::Tile: return "Tile";
+        case WallpaperStyle::Center: return "Center";
+        case WallpaperStyle::Scale: return "Scale";
+        case WallpaperStyle::TopLeft: return "TopLeft";
+        case WallpaperStyle::Top: return "Top";
+        case WallpaperStyle::TopRight: return "TopRight";
+        case WallpaperStyle::Left: return "Left";
+        case WallpaperStyle::Right: return "Right";
+        case WallpaperStyle::BottomLeft: return "BottomLeft";
+        case WallpaperStyle::Bottom: return "Bottom";
+        case WallpaperStyle::BottomRight: return "BottomRight";
+        case WallpaperStyle::ApplicationGradient: return "ApplicationGradient";
     }
     return OUString();
 }

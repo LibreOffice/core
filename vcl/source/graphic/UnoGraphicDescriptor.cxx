@@ -192,7 +192,7 @@ void SAL_CALL GraphicDescriptor::release()
 
 OUString SAL_CALL GraphicDescriptor::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.graphic.GraphicDescriptor"  );
+    return "com.sun.star.comp.graphic.GraphicDescriptor";
 }
 
 sal_Bool SAL_CALL GraphicDescriptor::supportsService( const OUString& ServiceName )

@@ -161,7 +161,7 @@ void DropTarget::dragOver( const DropTargetDragEvent& dtde ) throw()
 // XServiceInfo
 OUString DropTarget::getImplementationName()
 {
-    return OUString(XDND_DROPTARGET_IMPLEMENTATION_NAME);
+    return XDND_DROPTARGET_IMPLEMENTATION_NAME;
 }
 
 sal_Bool DropTarget::supportsService( const OUString& ServiceName )

@@ -175,7 +175,7 @@ void KF5FilePicker::addCustomControl(sal_Int16 controlId)
 // XServiceInfo
 OUString SAL_CALL KF5FilePicker::getImplementationName()
 {
-    return OUString("com.sun.star.ui.dialogs.KF5FilePicker");
+    return "com.sun.star.ui.dialogs.KF5FilePicker";
 }
 
 sal_Bool SAL_CALL KF5FilePicker::supportsService(const OUString& ServiceName)

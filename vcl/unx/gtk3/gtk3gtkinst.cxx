@@ -337,7 +337,7 @@ public:
 
 OUString VclGtkClipboard::getImplementationName()
 {
-    return OUString("com.sun.star.datatransfer.VclGtkClipboard");
+    return "com.sun.star.datatransfer.VclGtkClipboard";
 }
 
 Sequence< OUString > VclGtkClipboard::getSupportedServiceNames()
@@ -730,7 +730,7 @@ GtkDropTarget::GtkDropTarget()
 
 OUString SAL_CALL GtkDropTarget::getImplementationName()
 {
-    return OUString("com.sun.star.datatransfer.dnd.VclGtkDropTarget");
+    return "com.sun.star.datatransfer.dnd.VclGtkDropTarget";
 }
 
 sal_Bool SAL_CALL GtkDropTarget::supportsService(OUString const & ServiceName)
@@ -915,7 +915,7 @@ void GtkDragSource::initialize(const css::uno::Sequence<css::uno::Any >& rArgume
 
 OUString SAL_CALL GtkDragSource::getImplementationName()
 {
-    return OUString("com.sun.star.datatransfer.dnd.VclGtkDragSource");
+    return "com.sun.star.datatransfer.dnd.VclGtkDragSource";
 }
 
 sal_Bool SAL_CALL GtkDragSource::supportsService(OUString const & ServiceName)
