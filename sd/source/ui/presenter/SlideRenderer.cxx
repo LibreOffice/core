@@ -62,7 +62,7 @@ void SAL_CALL SlideRenderer::initialize (const Sequence<Any>& rArguments)
 
 OUString SlideRenderer::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Draw.SlideRenderer");
+    return "com.sun.star.comp.Draw.SlideRenderer";
 }
 
 sal_Bool SlideRenderer::supportsService(OUString const & ServiceName)

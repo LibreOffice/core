@@ -294,7 +294,7 @@ void LayoutToolbarMenu::SelectHdl(void const * pControl)
 /// @throws css::uno::RuntimeException
 static OUString SlideLayoutController_getImplementationName()
 {
-    return OUString( "com.sun.star.comp.sd.SlideLayoutController" );
+    return "com.sun.star.comp.sd.SlideLayoutController";
 }
 
 /// @throws RuntimeException
@@ -307,7 +307,7 @@ static Sequence< OUString >  SlideLayoutController_getSupportedServiceNames()
 /// @throws css::uno::RuntimeException
 static OUString InsertSlideController_getImplementationName()
 {
-    return OUString( "com.sun.star.comp.sd.InsertSlideController" );
+    return "com.sun.star.comp.sd.InsertSlideController";
 }
 
 /// @throws RuntimeException

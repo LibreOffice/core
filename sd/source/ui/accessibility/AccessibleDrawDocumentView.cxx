@@ -369,7 +369,7 @@ void SAL_CALL
 OUString SAL_CALL
     AccessibleDrawDocumentView::getImplementationName()
 {
-    return OUString("AccessibleDrawDocumentView");
+    return "AccessibleDrawDocumentView";
 }
 
 css::uno::Sequence< OUString> SAL_CALL

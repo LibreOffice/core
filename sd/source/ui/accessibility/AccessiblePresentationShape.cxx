@@ -51,7 +51,7 @@ AccessiblePresentationShape::~AccessiblePresentationShape()
 OUString SAL_CALL
     AccessiblePresentationShape::getImplementationName()
 {
-    return OUString("AccessiblePresentationShape");
+    return "AccessiblePresentationShape";
 }
 
 /// Set this object's name if is different to the current name.

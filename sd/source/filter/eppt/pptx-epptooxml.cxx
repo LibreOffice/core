@@ -2001,7 +2001,7 @@ bool PowerPointExport::ImplCreateMainNotes()
 
 OUString PowerPointExport::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Impress.oox.PowerPointExport");
+    return "com.sun.star.comp.Impress.oox.PowerPointExport";
 }
 
 void PowerPointExport::WriteDiagram(const FSHelperPtr& pFS, PowerPointShapeExport& rDML, const css::uno::Reference<css::drawing::XShape>& rXShape, int nDiagramId)

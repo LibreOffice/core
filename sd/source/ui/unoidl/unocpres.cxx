@@ -63,7 +63,7 @@ UNO3_GETIMPLEMENTATION_IMPL( SdXCustomPresentation );
 // XServiceInfo
 OUString SAL_CALL SdXCustomPresentation::getImplementationName()
 {
-    return OUString( "SdXCustomPresentation" ) ;
+    return "SdXCustomPresentation" ;
 }
 
 sal_Bool SAL_CALL SdXCustomPresentation::supportsService( const OUString& ServiceName )
@@ -274,7 +274,7 @@ SdXCustomPresentationAccess::~SdXCustomPresentationAccess() throw()
 // XServiceInfo
 OUString SAL_CALL SdXCustomPresentationAccess::getImplementationName()
 {
-    return OUString( "SdXCustomPresentationAccess" );
+    return "SdXCustomPresentationAccess";
 }
 
 sal_Bool SAL_CALL SdXCustomPresentationAccess::supportsService( const OUString& ServiceName )

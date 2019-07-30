@@ -542,7 +542,7 @@ Reference< XAnimationNode > SAL_CALL RandomAnimationNode::appendChild( const Ref
 // XServiceInfo
 OUString RandomAnimationNode::getImplementationName()
 {
-    return OUString( "sd::RandomAnimationNode" ) ;
+    return "sd::RandomAnimationNode" ;
 }
 
 // XServiceInfo

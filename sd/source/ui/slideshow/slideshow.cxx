@@ -239,7 +239,7 @@ void SlideShow::CreateController(  ViewShell* pViewSh, ::sd::View* pView, vcl::W
 // XServiceInfo
 OUString SAL_CALL SlideShow::getImplementationName(  )
 {
-    return OUString( "com.sun.star.comp.sd.SlideShow" );
+    return "com.sun.star.comp.sd.SlideShow";
 }
 
 sal_Bool SAL_CALL SlideShow::supportsService( const OUString& ServiceName )

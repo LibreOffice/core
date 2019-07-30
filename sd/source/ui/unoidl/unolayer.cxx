@@ -95,7 +95,7 @@ UNO3_GETIMPLEMENTATION_IMPL( SdLayer );
 // XServiceInfo
 OUString SAL_CALL SdLayer::getImplementationName()
 {
-    return OUString("SdUnoLayer");
+    return "SdUnoLayer";
 }
 
 sal_Bool SAL_CALL SdLayer::supportsService( const OUString& ServiceName )
@@ -400,7 +400,7 @@ void SAL_CALL SdLayerManager::removeEventListener( const uno::Reference< lang::X
 // XServiceInfo
 OUString SAL_CALL SdLayerManager::getImplementationName()
 {
-    return OUString("SdUnoLayerManager");
+    return "SdUnoLayerManager";
 }
 
 sal_Bool SAL_CALL SdLayerManager::supportsService( const OUString& ServiceName )

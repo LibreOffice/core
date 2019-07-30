@@ -534,7 +534,7 @@ Any SdUnoDrawView::getDrawViewMode() const
 // XServiceInfo
 OUString SAL_CALL SdUnoDrawView::getImplementationName(  )
 {
-    return OUString( "com.sun.star.comp.sd.SdUnoDrawView") ;
+    return "com.sun.star.comp.sd.SdUnoDrawView" ;
 }
 
 sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName )

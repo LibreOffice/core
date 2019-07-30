@@ -43,7 +43,7 @@ void SAL_CALL UpdateRequest::execute (const Reference<XConfiguration>&)
 
 OUString SAL_CALL UpdateRequest::getName()
 {
-    return OUString("UpdateRequest");
+    return "UpdateRequest";
 }
 
 void SAL_CALL UpdateRequest::setName (const OUString&)

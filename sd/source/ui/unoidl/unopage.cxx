@@ -1996,7 +1996,7 @@ SdrObject* SdPageLinkTargets::FindObject( const OUString& rName ) const throw()
 // XServiceInfo
 OUString SAL_CALL SdPageLinkTargets::getImplementationName()
 {
-    return OUString( "SdPageLinkTargets" );
+    return "SdPageLinkTargets";
 }
 
 sal_Bool SAL_CALL SdPageLinkTargets::supportsService( const OUString& ServiceName )
@@ -2194,7 +2194,7 @@ OUString SdDrawPage::getUiNameFromPageApiName( const OUString& rApiName )
 // XServiceInfo
 OUString SAL_CALL SdDrawPage::getImplementationName()
 {
-    return OUString( "SdDrawPage" );
+    return "SdDrawPage";
 }
 
 Sequence< OUString > SAL_CALL SdDrawPage::getSupportedServiceNames()
@@ -2714,7 +2714,7 @@ Sequence< sal_Int8 > SAL_CALL SdMasterPage::getImplementationId()
 // XServiceInfo
 OUString SAL_CALL SdMasterPage::getImplementationName()
 {
-    return OUString( "SdMasterPage" );
+    return "SdMasterPage";
 }
 
 Sequence< OUString > SAL_CALL SdMasterPage::getSupportedServiceNames()

@@ -1164,7 +1164,7 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
 // lang::XServiceInfo
 OUString SAL_CALL SdXImpressDocument::getImplementationName()
 {
-    return OUString( "SdXImpressDocument" );
+    return "SdXImpressDocument";
     /* // Matching the .component information:
        return mbImpressDoc
            ? OUString("com.sun.star.comp.Draw.PresentationDocument")
@@ -2996,7 +2996,7 @@ void SAL_CALL SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPag
 
 OUString SAL_CALL SdDrawPagesAccess::getImplementationName(  )
 {
-    return OUString( "SdDrawPagesAccess" );
+    return "SdDrawPagesAccess";
 }
 
 sal_Bool SAL_CALL SdDrawPagesAccess::supportsService( const OUString& ServiceName )
@@ -3253,7 +3253,7 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
 
 OUString SAL_CALL SdMasterPagesAccess::getImplementationName(  )
 {
-    return OUString( "SdMasterPagesAccess" );
+    return "SdMasterPagesAccess";
 }
 
 sal_Bool SAL_CALL SdMasterPagesAccess::supportsService( const OUString& ServiceName )
@@ -3431,7 +3431,7 @@ SdPage* SdDocLinkTargets::FindPage( const OUString& rName ) const
 // XServiceInfo
 OUString SAL_CALL SdDocLinkTargets::getImplementationName()
 {
-    return OUString( "SdDocLinkTargets" );
+    return "SdDocLinkTargets";
 }
 
 sal_Bool SAL_CALL SdDocLinkTargets::supportsService( const OUString& ServiceName )
