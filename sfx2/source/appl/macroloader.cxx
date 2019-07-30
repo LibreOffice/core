@@ -62,7 +62,7 @@ SfxMacroLoader::SfxMacroLoader(const css::uno::Sequence< css::uno::Any >& aArgum
 
 OUString SAL_CALL SfxMacroLoader::getImplementationName()
 {
-    return OUString("com.sun.star.comp.sfx2.SfxMacroLoader");
+    return "com.sun.star.comp.sfx2.SfxMacroLoader";
 }
 
 sal_Bool SAL_CALL SfxMacroLoader::supportsService(OUString const & ServiceName)

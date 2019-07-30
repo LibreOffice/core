@@ -137,7 +137,7 @@ ClassificationCategoriesController::ClassificationCategoriesController(const uno
 
 OUString ClassificationCategoriesController::getImplementationName()
 {
-    return OUString("com.sun.star.comp.sfx2.ClassificationCategoriesController");
+    return "com.sun.star.comp.sfx2.ClassificationCategoriesController";
 }
 
 sal_Bool ClassificationCategoriesController::supportsService(const OUString& rServiceName)

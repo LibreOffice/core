@@ -195,7 +195,7 @@ sal_Int16 SAL_CALL ThumbnailViewAcc::getAccessibleRole()
 OUString SAL_CALL ThumbnailViewAcc::getAccessibleDescription()
 {
     ThrowIfDisposed();
-    return OUString("ThumbnailView");
+    return "ThumbnailView";
 }
 
 OUString SAL_CALL ThumbnailViewAcc::getAccessibleName()
@@ -652,7 +652,7 @@ sal_Int16 SAL_CALL SfxThumbnailViewAcc::getAccessibleRole()
 OUString SAL_CALL SfxThumbnailViewAcc::getAccessibleDescription()
 {
     ThrowIfDisposed();
-    return OUString("ThumbnailView");
+    return "ThumbnailView";
 }
 
 OUString SAL_CALL SfxThumbnailViewAcc::getAccessibleName()

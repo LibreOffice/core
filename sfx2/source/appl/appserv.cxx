@@ -159,22 +159,22 @@ namespace
         switch ( eApp )
         {
             case vcl::EnumContext::Application::Writer:
-                return OUString( "Writer" );
+                return "Writer";
                 break;
             case vcl::EnumContext::Application::Calc:
-                return OUString( "Calc" );
+                return "Calc";
                 break;
             case vcl::EnumContext::Application::Impress:
-                return OUString( "Impress" );
+                return "Impress";
                 break;
             case vcl::EnumContext::Application::Draw:
-                return OUString( "Draw" );
+                return "Draw";
                 break;
             case vcl::EnumContext::Application::Formula:
-                return OUString( "Formula" );
+                return "Formula";
                 break;
             case vcl::EnumContext::Application::Base:
-                return OUString( "Base" );
+                return "Base";
                 break;
             default:
                 return OUString();

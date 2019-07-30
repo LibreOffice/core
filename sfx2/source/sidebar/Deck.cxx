@@ -341,7 +341,7 @@ static const OUString GetWindowClassification(const vcl::Window* pWindow)
     }
     else
     {
-        return OUString("window");
+        return "window";
     }
 }
 

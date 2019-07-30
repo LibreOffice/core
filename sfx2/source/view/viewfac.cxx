@@ -39,7 +39,7 @@ OUString SfxViewFactory::GetAPIViewName() const
         return m_sViewName;
 
     if ( GetOrdinal() == SFX_INTERFACE_NONE )
-        return OUString( "Default" );
+        return "Default";
 
     return GetLegacyViewName();
 }

@@ -121,7 +121,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
 
 OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName()
 {
-    return OUString("com.sun.star.comp.sfx2.SfxTerminateListener");
+    return "com.sun.star.comp.sfx2.SfxTerminateListener";
 }
 
 sal_Bool SAL_CALL SfxTerminateListener_Impl::supportsService( const OUString& sServiceName )
