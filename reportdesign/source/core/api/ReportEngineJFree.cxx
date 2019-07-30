@@ -83,7 +83,7 @@ void SAL_CALL OReportEngineJFree::dispose()
 
 OUString OReportEngineJFree::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.report.OReportEngineJFree");
+    return "com.sun.star.comp.report.OReportEngineJFree";
 }
 
 

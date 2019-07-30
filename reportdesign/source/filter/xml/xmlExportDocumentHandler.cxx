@@ -109,7 +109,7 @@ uno::Sequence< OUString > SAL_CALL ExportDocumentHandler::getSupportedServiceNam
 
 OUString ExportDocumentHandler::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.report.ExportDocumentHandler");
+    return "com.sun.star.comp.report.ExportDocumentHandler";
 }
 
 

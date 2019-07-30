@@ -69,7 +69,7 @@ public:
     /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static()
     {
-        return OUString("com.sun.star.comp.report.ORptTypeDetection");
+        return "com.sun.star.comp.report.ORptTypeDetection";
     }
     /// @throws css::uno::RuntimeException
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();

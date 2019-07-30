@@ -93,7 +93,7 @@ void SAL_CALL OFixedText::dispose()
 
 OUString OFixedText::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.report.OFixedText");
+    return "com.sun.star.comp.report.OFixedText";
 }
 
 
@@ -316,7 +316,7 @@ OUString SAL_CALL OFixedText::getShapeType(  )
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( m_aProps.aComponent.m_xShape.is() )
         return m_aProps.aComponent.m_xShape->getShapeType();
-    return OUString("com.sun.star.drawing.ControlShape");
+    return "com.sun.star.drawing.ControlShape";
 }
 
 

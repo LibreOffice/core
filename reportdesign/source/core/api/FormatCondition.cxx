@@ -58,7 +58,7 @@ void SAL_CALL OFormatCondition::dispose()
 
 OUString OFormatCondition::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.report.OFormatCondition");
+    return "com.sun.star.comp.report.OFormatCondition";
 }
 
 
