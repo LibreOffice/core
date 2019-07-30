@@ -1679,7 +1679,7 @@ static uno::Reference < XInterface > ZipPackage_createInstance(
 
 OUString ZipPackage::static_getImplementationName()
 {
-    return OUString("com.sun.star.packages.comp.ZipPackage");
+    return "com.sun.star.packages.comp.ZipPackage";
 }
 
 Sequence< OUString > ZipPackage::static_getSupportedServiceNames()

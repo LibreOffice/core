@@ -87,7 +87,7 @@ static Reference < XInterface > ManifestReader_createInstance( Reference< XMulti
 }
 OUString ManifestReader::static_getImplementationName()
 {
-    return OUString( "com.sun.star.packages.manifest.comp.ManifestReader" );
+    return "com.sun.star.packages.manifest.comp.ManifestReader";
 }
 
 Sequence < OUString > ManifestReader::static_getSupportedServiceNames()

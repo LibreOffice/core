@@ -461,7 +461,7 @@ uno::Sequence< OUString > OZipFileAccess::impl_staticGetSupportedServiceNames()
 
 OUString OZipFileAccess::impl_staticGetImplementationName()
 {
-    return OUString("com.sun.star.comp.package.zip.ZipFileAccess");
+    return "com.sun.star.comp.package.zip.ZipFileAccess";
 }
 
 uno::Reference< uno::XInterface > OZipFileAccess::impl_staticCreateSelfInstance(
