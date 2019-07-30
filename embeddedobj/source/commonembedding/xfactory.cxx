@@ -47,7 +47,7 @@ uno::Sequence< OUString > OOoEmbeddedObjectFactory::impl_staticGetSupportedServi
 
 OUString OOoEmbeddedObjectFactory::impl_staticGetImplementationName()
 {
-    return OUString("com.sun.star.comp.embed.OOoEmbeddedObjectFactory");
+    return "com.sun.star.comp.embed.OOoEmbeddedObjectFactory";
 }
 
 uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::impl_staticCreateSelfInstance(
@@ -395,7 +395,7 @@ uno::Sequence< OUString > OOoSpecialEmbeddedObjectFactory::impl_staticGetSupport
 
 OUString OOoSpecialEmbeddedObjectFactory::impl_staticGetImplementationName()
 {
-    return OUString("com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory");
+    return "com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory";
 }
 
 uno::Reference< uno::XInterface > OOoSpecialEmbeddedObjectFactory::impl_staticCreateSelfInstance(

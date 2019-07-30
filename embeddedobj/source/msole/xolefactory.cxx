@@ -46,7 +46,7 @@ uno::Sequence< OUString > OleEmbeddedObjectFactory::impl_staticGetSupportedServi
 
 OUString OleEmbeddedObjectFactory::impl_staticGetImplementationName()
 {
-    return OUString("com.sun.star.comp.embed.OLEEmbeddedObjectFactory");
+    return "com.sun.star.comp.embed.OLEEmbeddedObjectFactory";
 }
 
 
