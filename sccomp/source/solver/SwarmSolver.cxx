@@ -253,7 +253,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return OUString("com.sun.star.comp.Calc.SwarmSolver");
+        return "com.sun.star.comp.Calc.SwarmSolver";
     }
 
     sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
