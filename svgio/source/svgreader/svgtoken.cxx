@@ -355,12 +355,12 @@ namespace svgio
 
         const OUString getStrTitle()
         {
-            return OUString(aSVGStrTitle);
+            return aSVGStrTitle;
         }
 
         const OUString getStrDesc()
         {
-            return OUString(aSVGStrDesc);
+            return aSVGStrDesc;
         }
     } // end of namespace svgreader
 } // end of namespace svgio

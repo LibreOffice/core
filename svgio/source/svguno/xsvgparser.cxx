@@ -86,7 +86,7 @@ namespace svgio
 
         OUString XSvgParser_getImplementationName()
         {
-            return OUString( "svgio::svgreader::XSvgParser" );
+            return "svgio::svgreader::XSvgParser";
         }
 
         uno::Reference< uno::XInterface > XSvgParser_createInstance(const uno::Reference< uno::XComponentContext >& context)
