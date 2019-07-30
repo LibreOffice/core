@@ -615,6 +615,8 @@ void SidebarController::SwitchToDefaultDeck()
 void SidebarController::SwitchToDeck (
     const OUString& rsDeckId)
 {
+    maFocusManager.Clear();
+  
     if (  msCurrentDeckId != rsDeckId
         || ! mbIsDeckOpen
         || mnRequestedForceFlags!=SwitchFlag_NoForce)
