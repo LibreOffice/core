@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <svx/svxdllapi.h>
 #include <vcl/image.hxx>
 #include <vcl/lstbox.hxx>
@@ -130,9 +131,10 @@ private:
     bool m_bLangNoneIsLangAll;
     bool m_bWithCheckmark;
 
-    SVX_DLLPRIVATE weld::ComboBoxEntry BuildEntry(const LanguageType nLangType);
+    SVX_DLLPRIVATE weld::ComboBoxEntry BuildEntry(const LanguageType nLangType, sal_Int16 nType = css::i18n::ScriptType::WEAK);
     SVX_DLLPRIVATE void AddLanguages(const std::vector< LanguageType >& rLanguageTypes, SvxLanguageListFlags nLangList,
                                      std::vector<weld::ComboBoxEntry>& rEntries);
+    SVX_DLLPRIVATE void InsertLanguage(const LanguageType nLangType, sal_Int16 nType);
 
     SVX_DLLPRIVATE int ImplTypeToPos(LanguageType eType) const;
     SVX_DLLPRIVATE void ImplClear();
@@ -143,12 +145,14 @@ public:
                             bool bHasLangNone, bool bLangNoneIsLangAll = false,
                             bool bCheckSpellAvail = false );
     void            InsertLanguage(const LanguageType nLangType);
+    void            InsertDefaultLanguage(sal_Int16 nType);
 
     EditedAndValid      GetEditedAndValid() const { return m_eEditedAndValid;}
     sal_Int32           SaveEditedAsEntry();
 
     void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_aChangeHdl = rLink; }
     void connect_focus_in(const Link<weld::Widget&, void>& rLink) { m_xControl->connect_focus_in(rLink); }
+    void grab_focus() { m_xControl->grab_focus(); }
     void save_active_id() { m_eSavedLanguage = get_active_id(); }
     LanguageType get_saved_active_id() const { return m_eSavedLanguage; }
     bool get_active_id_changed_from_saved() const { return m_eSavedLanguage != get_active_id(); }
