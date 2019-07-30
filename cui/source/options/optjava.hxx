@@ -53,19 +53,6 @@ class   OfaTreeOptionsDialog;
 class SvxJavaOptionsPage : public SfxTabPage
 {
 private:
-    VclPtr<CheckBox>                   m_pJavaEnableCB;
-    VclPtr<VclContainer>               m_pJavaBox;
-    VclPtr<SvxJavaListBox>             m_pJavaList;
-    VclPtr<FixedText>                  m_pJavaPathText;
-    VclPtr<PushButton>                 m_pAddBtn;
-    VclPtr<PushButton>                 m_pParameterBtn;
-    VclPtr<PushButton>                 m_pClassPathBtn;
-    VclPtr<PushButton>                 m_pExpertConfigBtn;
-
-    std::unique_ptr<SvxJavaParameterDlg> m_xParamDlg;
-    std::unique_ptr<SvxJavaClassPathDlg> m_xPathDlg;
-    VclPtr<OfaTreeOptionsDialog>       m_pParentDlg;
-
 #if HAVE_FEATURE_JAVA
     std::vector<std::unique_ptr<JavaInfo>> m_parJavaInfo;
     std::vector<OUString>   m_parParameters;
@@ -76,38 +63,54 @@ private:
     OUString                m_sAddDialogText;
     Idle                    m_aResetIdle;
 
-    VclPtr<CheckBox>               m_pExperimentalCB;
-    VclPtr<CheckBox>               m_pMacroCB;
-
-    std::vector<std::unique_ptr<JavaInfo>>
-                            m_aAddedInfos;
+    std::vector<std::unique_ptr<JavaInfo>> m_aAddedInfos;
 
     rtl::Reference< ::svt::DialogClosedListener >           xDialogListener;
     css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
-    DECL_LINK(        EnableHdl_Impl, Button*, void);
-    DECL_LINK(        CheckHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK(        SelectHdl_Impl, SvTreeListBox*, void);
-    DECL_LINK(        AddHdl_Impl, Button*, void);
-    DECL_LINK(        ParameterHdl_Impl, Button*, void);
-    DECL_LINK(        ClassPathHdl_Impl, Button*, void);
-    DECL_LINK(        ResetHdl_Impl, Timer *, void);
+    std::unique_ptr<weld::CheckButton> m_xJavaEnableCB;
+    std::unique_ptr<weld::TreeView> m_xJavaList;
+    std::unique_ptr<weld::Label> m_xJavaPathText;
+    std::unique_ptr<weld::Button> m_xAddBtn;
+    std::unique_ptr<weld::Button> m_xParameterBtn;
+    std::unique_ptr<weld::Button> m_xClassPathBtn;
+    std::unique_ptr<weld::Button> m_xExpertConfigBtn;
 
-    DECL_LINK(        StartFolderPickerHdl, void *, void );
-    DECL_LINK(        DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
+    std::unique_ptr<SvxJavaParameterDlg> m_xParamDlg;
+    std::unique_ptr<SvxJavaClassPathDlg> m_xPathDlg;
 
-    DECL_STATIC_LINK(SvxJavaOptionsPage, ExpertConfigHdl_Impl, Button*, void);
+    std::unique_ptr<weld::CheckButton> m_xExperimentalCB;
+    std::unique_ptr<weld::CheckButton> m_xMacroCB;
+
+    std::unique_ptr<weld::Label> m_xAccessibilityText;
+    std::unique_ptr<weld::Label> m_xAddDialogText;
+
+    std::unique_ptr<weld::Widget> m_xJavaFrame;
+
+    DECL_LINK(EnableHdl_Impl, weld::Button&, void);
+    typedef std::pair<int, int> row_col;
+    DECL_LINK(CheckHdl_Impl, const row_col&, void);
+    DECL_LINK(SelectHdl_Impl, weld::TreeView&, void);
+    DECL_LINK(AddHdl_Impl, weld::Button&, void);
+    DECL_LINK(ParameterHdl_Impl, weld::Button&, void);
+    DECL_LINK(ClassPathHdl_Impl, weld::Button&, void);
+    DECL_LINK(ResetHdl_Impl, Timer *, void);
+
+    DECL_LINK(StartFolderPickerHdl, void *, void);
+    DECL_LINK(DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void);
+
+    DECL_LINK(ExpertConfigHdl_Impl, weld::Button&, void);
 
     void                    ClearJavaInfo();
     void                    ClearJavaList();
     void                    LoadJREs();
     void                    AddJRE( JavaInfo const * _pInfo );
-    void                    HandleCheckEntry( SvTreeListEntry* _pEntry );
+    void                    HandleCheckEntry(int nCheckedRow);
     void                    AddFolder( const OUString& _rFolder );
     void                    RequestRestart( svtools::RestartReason eReason );
 
 public:
-    SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    SvxJavaOptionsPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxJavaOptionsPage() override;
     virtual void            dispose() override;
 
