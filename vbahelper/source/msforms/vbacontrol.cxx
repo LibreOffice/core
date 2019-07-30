@@ -696,7 +696,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ )
 OUString
 ScVbaControl::getServiceImplName()
 {
-    return OUString("ScVbaControl");
+    return "ScVbaControl";
 }
 
 uno::Sequence< OUString >

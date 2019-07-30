@@ -76,7 +76,7 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaLabel::getFont()
 
 OUString ScVbaLabel::getServiceImplName()
 {
-    return OUString( "ScVbaLabel" );
+    return "ScVbaLabel";
 }
 
 sal_Int32 SAL_CALL ScVbaLabel::getBackColor()

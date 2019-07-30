@@ -131,7 +131,7 @@ public:
 #define VBAHELPER_IMPL_XHELPERINTERFACE( classname, servicename ) \
 OUString classname::getServiceImplName() \
 { \
-    return OUString( #classname ); \
+    return #classname; \
 } \
 css::uno::Sequence< OUString > classname::getServiceNames() \
 { \

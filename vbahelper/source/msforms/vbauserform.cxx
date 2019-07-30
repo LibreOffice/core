@@ -182,7 +182,7 @@ ScVbaUserForm::UnloadObject(  )
 OUString
 ScVbaUserForm::getServiceImplName()
 {
-    return OUString("ScVbaUserForm");
+    return "ScVbaUserForm";
 }
 
 uno::Sequence< OUString >

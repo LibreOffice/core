@@ -81,15 +81,15 @@ ScVbaLineFormat::convertArrowheadStyleToLineStartEndName( sal_Int32 nArrowheadSt
         case office::MsoArrowheadStyle::msoArrowheadNone:
             return OUString();
         case office::MsoArrowheadStyle::msoArrowheadStealth:
-            return OUString("Arrow concave");
+            return "Arrow concave";
         case office::MsoArrowheadStyle::msoArrowheadOpen:
-            return OUString("Line Arrow");
+            return "Line Arrow";
         case office::MsoArrowheadStyle::msoArrowheadOval:
-            return  OUString("Circle");
+            return  "Circle";
         case office::MsoArrowheadStyle::msoArrowheadDiamond:
-            return OUString("Square 45");
+            return "Square 45";
         case office::MsoArrowheadStyle::msoArrowheadTriangle:
-            return OUString("Arrow");
+            return "Arrow";
         default:
             throw uno::RuntimeException( "Invalid Arrow Style!" );
     }
@@ -427,7 +427,7 @@ ScVbaLineFormat::ForeColor()
 OUString
 ScVbaLineFormat::getServiceImplName()
 {
-    return OUString("ScVbaLineFormat");
+    return "ScVbaLineFormat";
 }
 
 uno::Sequence< OUString >

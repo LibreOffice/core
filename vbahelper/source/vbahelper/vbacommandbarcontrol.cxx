@@ -179,7 +179,7 @@ ScVbaCommandBarControl::Controls( const uno::Any& aIndex )
 OUString
 ScVbaCommandBarControl::getServiceImplName()
 {
-    return OUString("ScVbaCommandBarControl");
+    return "ScVbaCommandBarControl";
 }
 
 uno::Sequence<OUString>
@@ -209,7 +209,7 @@ ScVbaCommandBarPopup::ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelp
 OUString
 ScVbaCommandBarPopup::getServiceImplName()
 {
-    return OUString("ScVbaCommandBarPopup");
+    return "ScVbaCommandBarPopup";
 }
 
 uno::Sequence<OUString>
@@ -239,7 +239,7 @@ ScVbaCommandBarButton::ScVbaCommandBarButton( const css::uno::Reference< ov::XHe
 OUString
 ScVbaCommandBarButton::getServiceImplName()
 {
-    return OUString("ScVbaCommandBarButton");
+    return "ScVbaCommandBarButton";
 }
 
 uno::Sequence<OUString>

@@ -112,7 +112,7 @@ uno::Reference< msforms::XNewFont > SAL_CALL VbaButton::getFont()
 OUString
 VbaButton::getServiceImplName()
 {
-    return OUString("VbaButton");
+    return "VbaButton";
 }
 
 uno::Sequence< OUString >

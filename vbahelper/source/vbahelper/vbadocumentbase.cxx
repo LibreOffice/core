@@ -296,7 +296,7 @@ VbaDocumentBase::getVBProject()
 OUString
 VbaDocumentBase::getServiceImplName()
 {
-    return OUString( "VbaDocumentBase" );
+    return "VbaDocumentBase";
 }
 
 uno::Sequence< OUString >

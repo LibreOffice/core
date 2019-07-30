@@ -99,7 +99,7 @@ ScVbaScrollBar::setSmallChange( ::sal_Int32 _smallchange )
 OUString
 ScVbaScrollBar::getServiceImplName()
 {
-    return OUString("ScVbaScrollBar" );
+    return "ScVbaScrollBar";
 }
 
 uno::Sequence< OUString >

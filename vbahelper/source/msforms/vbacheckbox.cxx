@@ -86,7 +86,7 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaCheckbox::getFont()
 OUString
 ScVbaCheckbox::getServiceImplName()
 {
-    return OUString("ScVbaCheckbox");
+    return "ScVbaCheckbox";
 }
 
 uno::Sequence< OUString >

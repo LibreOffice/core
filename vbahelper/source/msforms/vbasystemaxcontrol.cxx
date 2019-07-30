@@ -68,7 +68,7 @@ sal_Bool SAL_CALL VbaSystemAXControl::hasProperty( const OUString& aName )
 OUString
 VbaSystemAXControl::getServiceImplName()
 {
-    return OUString( "VbaSystemAXControl" );
+    return "VbaSystemAXControl";
 }
 
 

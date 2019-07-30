@@ -120,7 +120,7 @@ ScVbaShapes::getElementType()
 OUString
 ScVbaShapes::getServiceImplName()
 {
-    return OUString("ScVbaShapes");
+    return "ScVbaShapes";
 }
 
 uno::Sequence< OUString >

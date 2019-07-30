@@ -45,7 +45,7 @@ ScVbaProgressBar::setValue( const uno::Any& _value )
 OUString
 ScVbaProgressBar::getServiceImplName()
 {
-    return OUString( "ScVbaProgressBar" );
+    return "ScVbaProgressBar";
 }
 
 uno::Sequence< OUString >

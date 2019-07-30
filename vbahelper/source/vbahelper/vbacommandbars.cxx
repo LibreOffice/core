@@ -220,7 +220,7 @@ ScVbaCommandBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ )
 OUString
 ScVbaCommandBars::getServiceImplName()
 {
-    return OUString("ScVbaCommandBars");
+    return "ScVbaCommandBars";
 }
 
 uno::Sequence<OUString>

@@ -313,7 +313,7 @@ public:
     // XDefaultMethod
     OUString SAL_CALL getDefaultMethodName(  ) override
     {
-        return OUString("Item");
+        return "Item";
     }
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override = 0;

@@ -71,7 +71,7 @@ ScVbaSpinButton::setMin( sal_Int32 nVal )
 OUString
 ScVbaSpinButton::getServiceImplName()
 {
-    return OUString( "ScVbaSpinButton" );
+    return "ScVbaSpinButton";
 }
 
 uno::Sequence< OUString >
