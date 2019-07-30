@@ -207,7 +207,7 @@ OUString SAL_CALL
     AccessiblePageShape::getImplementationName()
 {
     ThrowIfDisposed ();
-    return OUString("AccessiblePageShape");
+    return "AccessiblePageShape";
 }
 
 css::uno::Sequence< OUString> SAL_CALL
@@ -247,7 +247,7 @@ void AccessiblePageShape::dispose()
 OUString
     AccessiblePageShape::CreateAccessibleBaseName()
 {
-    return OUString ("PageShape");
+    return "PageShape";
 }
 
 OUString

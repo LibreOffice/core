@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 
 OUString SdDrawingDocument_getImplementationName()
 {
-    return OUString( "com.sun.star.comp.Draw.DrawingDocument" );
+    return "com.sun.star.comp.Draw.DrawingDocument";
 }
 
 uno::Sequence< OUString > SdDrawingDocument_getSupportedServiceNames()
@@ -61,7 +61,7 @@ uno::Reference< uno::XInterface > SdDrawingDocument_createInstance(
 
 OUString SdPresentationDocument_getImplementationName()
 {
-    return OUString( "com.sun.star.comp.Draw.PresentationDocument" );
+    return "com.sun.star.comp.Draw.PresentationDocument";
 }
 
 uno::Sequence< OUString > SdPresentationDocument_getSupportedServiceNames()

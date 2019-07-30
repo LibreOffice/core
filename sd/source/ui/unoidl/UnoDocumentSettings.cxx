@@ -1384,7 +1384,7 @@ void SAL_CALL DocumentSettings::firePropertiesChangeEvent( const Sequence< OUStr
 // XServiceInfo
 OUString SAL_CALL DocumentSettings::getImplementationName(  )
 {
-    return OUString( "com.sun.star.comp.Draw.DocumentSettings" );
+    return "com.sun.star.comp.Draw.DocumentSettings";
 }
 
 sal_Bool SAL_CALL DocumentSettings::supportsService( const OUString& ServiceName )

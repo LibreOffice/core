@@ -589,7 +589,7 @@ void SAL_CALL AccessibleSlideSorterView::deselectAccessibleChild (sal_Int32 nChi
 OUString SAL_CALL
        AccessibleSlideSorterView::getImplementationName()
 {
-    return OUString("AccessibleSlideSorterView");
+    return "AccessibleSlideSorterView";
 }
 
 sal_Bool SAL_CALL AccessibleSlideSorterView::supportsService (const OUString& sServiceName)

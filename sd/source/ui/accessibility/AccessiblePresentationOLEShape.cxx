@@ -49,7 +49,7 @@ AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape()
 OUString SAL_CALL
     AccessiblePresentationOLEShape::getImplementationName()
 {
-    return OUString("AccessiblePresentationOLEShape");
+    return "AccessiblePresentationOLEShape";
 }
 
 /// Set this object's name if it is different to the current name.

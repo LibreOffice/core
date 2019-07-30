@@ -405,7 +405,7 @@ void SAL_CALL
 OUString SAL_CALL
     AccessibleDocumentViewBase::getImplementationName()
 {
-    return OUString("AccessibleDocumentViewBase");
+    return "AccessibleDocumentViewBase";
 }
 
 css::uno::Sequence< OUString> SAL_CALL
@@ -581,7 +581,7 @@ void SAL_CALL AccessibleDocumentViewBase::disposing()
 OUString
     AccessibleDocumentViewBase::CreateAccessibleName()
 {
-    return OUString ("AccessibleDocumentViewBase");
+    return "AccessibleDocumentViewBase";
 }
 
 void AccessibleDocumentViewBase::Activated()

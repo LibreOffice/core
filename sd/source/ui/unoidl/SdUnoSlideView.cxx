@@ -154,7 +154,7 @@ Any SAL_CALL SdUnoSlideView::getFastPropertyValue (
 // XServiceInfo
 OUString SAL_CALL SdUnoSlideView::getImplementationName(  )
 {
-    return OUString( "com.sun.star.comp.sd.SdUnoSlideView" );
+    return "com.sun.star.comp.sd.SdUnoSlideView";
 }
 
 sal_Bool SAL_CALL SdUnoSlideView::supportsService( const OUString& ServiceName )

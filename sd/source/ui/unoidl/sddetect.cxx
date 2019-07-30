@@ -104,7 +104,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                 if ( ( n8 & 0xf0 ) == 0 )
                     // we are supporting binary cgm format only, so
                     // this is a small test to exclude cgm text
-                    return OUString("impress_CGM_Computer_Graphics_Metafile");
+                    return "impress_CGM_Computer_Graphics_Metafile";
             }
         }
         else
@@ -137,7 +137,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
 // XServiceInfo
 OUString SAL_CALL SdFilterDetect::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.draw.FormatDetector" );
+    return "com.sun.star.comp.draw.FormatDetector";
 }
 
 // XServiceInfo

@@ -103,7 +103,7 @@ void SAL_CALL SdHtmlOptionsDialog::initialize( const Sequence< Any > & )
 // XServiceInfo
 OUString SAL_CALL SdHtmlOptionsDialog::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.draw.SdHtmlOptionsDialog" );
+    return "com.sun.star.comp.draw.SdHtmlOptionsDialog";
 }
 
 sal_Bool SAL_CALL SdHtmlOptionsDialog::supportsService( const OUString& rServiceName )

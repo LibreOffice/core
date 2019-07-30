@@ -221,8 +221,8 @@ void SAL_CALL Configuration::setName (const OUString&)
 
 OUString Configuration::getImplementationName()
 {
-    return OUString(
-        "com.sun.star.comp.Draw.framework.configuration.Configuration");
+    return
+        "com.sun.star.comp.Draw.framework.configuration.Configuration";
 }
 
 sal_Bool Configuration::supportsService(OUString const & ServiceName)

@@ -1218,7 +1218,7 @@ void SdStyleSheetPool::throwIfDisposed()
 // XServiceInfo
 OUString SAL_CALL SdStyleSheetPool::getImplementationName()
 {
-    return OUString( "SdStyleSheetPool" );
+    return "SdStyleSheetPool";
 }
 
 sal_Bool SAL_CALL SdStyleSheetPool::supportsService( const OUString& ServiceName )

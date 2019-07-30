@@ -264,7 +264,7 @@ void DisplayModeController::setToolboxItemImage(const OUString& rImage)
 
 OUString SAL_CALL DisplayModeController::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.sd.DisplayModeController" );
+    return "com.sun.star.comp.sd.DisplayModeController";
 }
 
 Sequence< OUString > SAL_CALL DisplayModeController::getSupportedServiceNames(  )

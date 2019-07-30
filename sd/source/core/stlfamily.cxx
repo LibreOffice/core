@@ -165,7 +165,7 @@ SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName )
 // XServiceInfo
 OUString SAL_CALL SdStyleFamily::getImplementationName()
 {
-    return OUString( "SdStyleFamily" );
+    return "SdStyleFamily";
 }
 
 sal_Bool SAL_CALL SdStyleFamily::supportsService( const OUString& ServiceName )

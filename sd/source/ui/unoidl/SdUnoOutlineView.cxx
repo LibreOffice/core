@@ -140,7 +140,7 @@ Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
 // XServiceInfo
 OUString SAL_CALL SdUnoOutlineView::getImplementationName(  )
 {
-    return OUString("com.sun.star.comp.sd.SdUnoOutlineView");
+    return "com.sun.star.comp.sd.SdUnoOutlineView";
 }
 
 sal_Bool SAL_CALL SdUnoOutlineView::supportsService( const OUString& ServiceName )

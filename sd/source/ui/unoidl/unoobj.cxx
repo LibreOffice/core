@@ -1622,7 +1622,7 @@ sal_Bool SAL_CALL SdUnoEventsAccess::hasElements(  )
 // XServiceInfo
 OUString SAL_CALL SdUnoEventsAccess::getImplementationName(  )
 {
-    return OUString( "SdUnoEventsAccess" );
+    return "SdUnoEventsAccess";
 }
 
 sal_Bool SAL_CALL SdUnoEventsAccess::supportsService( const OUString& ServiceName )

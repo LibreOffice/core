@@ -166,7 +166,7 @@ void MasterPagesSelector::Fill()
 
 OUString MasterPagesSelector::GetContextMenuUIFile() const
 {
-    return OUString("modules/simpress/ui/mastermenu.ui");
+    return "modules/simpress/ui/mastermenu.ui";
 }
 
 IMPL_LINK_NOARG(MasterPagesSelector, ClickHandler, ValueSet*, void)

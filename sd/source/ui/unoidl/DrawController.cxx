@@ -204,7 +204,7 @@ OUString SAL_CALL DrawController::getImplementationName(  )
     // Do not throw an exception at the moment.  This leads to a crash
     // under Solaris on reload.  See issue i70929 for details.
     //    ThrowIfDisposed();
-    return OUString("DrawController") ;
+    return "DrawController" ;
 }
 
 static const char ssServiceName[] = "com.sun.star.drawing.DrawingDocumentDrawView";

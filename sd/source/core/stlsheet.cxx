@@ -662,12 +662,12 @@ OUString SdStyleSheet::GetFamilyString( SfxStyleFamily eFamily )
     switch( eFamily )
     {
     case SfxStyleFamily::Frame:
-        return OUString( "cell" );
+        return "cell";
     default:
         OSL_FAIL( "SdStyleSheet::GetFamilyString(), illegal family!" );
         [[fallthrough]];
     case SfxStyleFamily::Para:
-        return OUString( "graphics" );
+        return "graphics";
     }
 }
 
@@ -833,7 +833,7 @@ void SdStyleSheet::notifyModifyListener()
 // XServiceInfo
 OUString SAL_CALL SdStyleSheet::getImplementationName()
 {
-    return OUString( "SdStyleSheet" );
+    return "SdStyleSheet";
 }
 
 sal_Bool SAL_CALL SdStyleSheet::supportsService( const OUString& ServiceName )

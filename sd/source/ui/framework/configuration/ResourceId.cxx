@@ -383,7 +383,7 @@ void SAL_CALL ResourceId::initialize (const Sequence<Any>& aArguments)
 
 OUString ResourceId::getImplementationName()
 {
-    return OUString("com.sun.star.comp.Draw.framework.ResourceId");
+    return "com.sun.star.comp.Draw.framework.ResourceId";
 }
 
 sal_Bool ResourceId::supportsService(OUString const & ServiceName)

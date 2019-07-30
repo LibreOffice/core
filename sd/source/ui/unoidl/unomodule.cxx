@@ -107,7 +107,7 @@ uno::Reference< frame::XDispatch > SAL_CALL SdUnoModule::queryDispatch( const ut
 // XServiceInfo
 OUString SAL_CALL SdUnoModule::getImplementationName(  )
 {
-    return OUString( "com.sun.star.comp.Draw.DrawingModule" );
+    return "com.sun.star.comp.Draw.DrawingModule";
 }
 
 sal_Bool SAL_CALL SdUnoModule::supportsService( const OUString& sServiceName )

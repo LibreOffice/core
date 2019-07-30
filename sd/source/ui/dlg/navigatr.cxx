@@ -664,11 +664,11 @@ OUString SdNavigatorWin::GetDragTypeSdBmpId(NavigatorDragType eDT)
         case NAVIGATOR_DRAGTYPE_NONE:
                 return OUString();
         case NAVIGATOR_DRAGTYPE_URL:
-                return OUString(BMP_HYPERLINK);
+                return BMP_HYPERLINK;
         case NAVIGATOR_DRAGTYPE_EMBEDDED:
-                return OUString(BMP_EMBEDDED);
+                return BMP_EMBEDDED;
         case NAVIGATOR_DRAGTYPE_LINK:
-                return OUString(BMP_LINK);
+                return BMP_LINK;
         default: OSL_FAIL( "No resource for DragType available!" );
     }
     return OUString();

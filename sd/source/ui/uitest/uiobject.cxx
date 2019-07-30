@@ -163,7 +163,7 @@ std::set<OUString> ImpressWindowUIObject::get_children() const
 
 OUString ImpressWindowUIObject::get_name() const
 {
-    return OUString("ImpressWindowUIObject");
+    return "ImpressWindowUIObject";
 }
 
 std::unique_ptr<UIObject> ImpressWindowUIObject::create(vcl::Window* pWindow)
