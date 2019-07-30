@@ -35,9 +35,9 @@ namespace xmlsec
         switch (rKind)
         {
             case css::security::CertificateKind_X509:
-                return OUString("X.509");
+                return "X.509";
             case css::security::CertificateKind_OPENPGP:
-                return OUString("OpenPGP");
+                return "OpenPGP";
             default:
                 return OUString();
         }

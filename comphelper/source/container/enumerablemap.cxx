@@ -648,7 +648,7 @@ namespace comphelper
 
     OUString EnumerableMap::getImplementationName_static(  )
     {
-        return OUString( "org.openoffice.comp.comphelper.EnumerableMap" );
+        return "org.openoffice.comp.comphelper.EnumerableMap";
     }
 
 

@@ -133,7 +133,7 @@ sal_Bool SAL_CALL IndexedPropertyValuesContainer::hasElements(  )
 //XServiceInfo
 OUString SAL_CALL IndexedPropertyValuesContainer::getImplementationName(  )
 {
-    return OUString( "IndexedPropertyValuesContainer" );
+    return "IndexedPropertyValuesContainer";
 }
 
 sal_Bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const OUString& ServiceName )

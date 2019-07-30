@@ -499,7 +499,7 @@ OUString MimeConfigurationHelper::GetFactoryNameByStringClassID( const OUString&
         {
             uno::Sequence< sal_Int8 > aClassID = GetSequenceClassIDRepresentation( aStringClassID );
             if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_DUMMY_CLASSID ) ) )
-                return OUString( "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory" );
+                return "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory";
         }
     }
 

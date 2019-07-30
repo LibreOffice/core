@@ -235,7 +235,7 @@ sal_Bool SAL_CALL GenericPropertySet::supportsService( const  OUString& ServiceN
 
 OUString SAL_CALL GenericPropertySet::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.comphelper.GenericPropertySet" );
+    return "com.sun.star.comp.comphelper.GenericPropertySet";
 }
 
 Sequence< OUString > SAL_CALL GenericPropertySet::getSupportedServiceNames(  )

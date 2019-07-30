@@ -131,7 +131,7 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
 
 OUString SAL_CALL OOfficeRestartManager::getImplementationName()
 {
-    return OUString("com.sun.star.comp.task.OfficeRestartManager");
+    return "com.sun.star.comp.task.OfficeRestartManager";
 }
 
 sal_Bool SAL_CALL OOfficeRestartManager::supportsService( const OUString& aServiceName )

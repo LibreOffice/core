@@ -189,7 +189,7 @@ OfficeInstallationDirectories::makeAbsoluteURL( const OUString& URL )
 OUString SAL_CALL
 OfficeInstallationDirectories::getImplementationName()
 {
-    return OUString("com.sun.star.comp.util.OfficeInstallationDirectories");
+    return "com.sun.star.comp.util.OfficeInstallationDirectories";
 }
 
 // virtual

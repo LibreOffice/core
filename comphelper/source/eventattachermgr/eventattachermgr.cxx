@@ -629,7 +629,7 @@ void SAL_CALL ImplEventAttacherManager::removeScriptListener(const Reference< XS
 // Methods of XPersistObject
 OUString SAL_CALL ImplEventAttacherManager::getServiceName()
 {
-    return OUString( "com.sun.star.uno.script.EventAttacherManager" );
+    return "com.sun.star.uno.script.EventAttacherManager";
 }
 
 void SAL_CALL ImplEventAttacherManager::write(const Reference< XObjectOutputStream >& OutStream)
