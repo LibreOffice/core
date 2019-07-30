@@ -256,7 +256,7 @@ static OUString ImplPatternReformat( const OUString& rStr,
                 nStrIndex++;
             else
             {
-                // Otherwise we check if it is a invalid character. This is the case if it does not
+                // Otherwise we check if it is an invalid character. This is the case if it does not
                 // fit in the pattern of the next non-literal character.
                 n = i+1;
                 while ( n < rEditMask.getLength() )
@@ -2297,7 +2297,7 @@ void TimeFormatter::ImplInit()
 {
     meFormat        = TimeFieldFormat::F_NONE;
     mbDuration      = false;
-    mnTimeFormat    = TimeFormat::Hour24;  // Should become a ExtTimeFieldFormat in next implementation, merge with mbDuration and meFormat
+    mnTimeFormat    = TimeFormat::Hour24;  // Should become an ExtTimeFieldFormat in next implementation, merge with mbDuration and meFormat
 }
 
 TimeFormatter::TimeFormatter(Edit* pEdit) :

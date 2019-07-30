@@ -69,7 +69,7 @@ public:
     bool Read(SvStream& rStream) override;
 };
 
-/// End of a object: 'endobj' keyword.
+/// End of an object: 'endobj' keyword.
 class PDFEndObjectElement : public PDFElement
 {
 public:

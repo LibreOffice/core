@@ -864,7 +864,7 @@ i12626
     void pushResource( ResourceKind eKind, const OString& rResource, sal_Int32 nObject );
 
     void appendBuildinFontsToDict( OStringBuffer& rDict ) const;
-    /* writes a the font dictionary and emits all font objects
+    /* writes the font dictionary and emits all font objects
      * returns object id of font directory (or 0 on error)
      */
     bool emitFonts();

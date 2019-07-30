@@ -1210,7 +1210,7 @@ void Printer::SetPrinterSettingsPreferred( bool bPaperSizeFromSetup)
     }
 }
 
-// Map user paper format to a available printer paper formats
+// Map user paper format to an available printer paper format
 void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNearest )
 {
     ImplJobSetup& rData = aJobSetup.ImplGetData();

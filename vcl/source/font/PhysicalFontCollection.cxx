@@ -1110,7 +1110,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
        if( pFoundData )
        {
 #ifdef UNX
-            /* #96738# don't use mincho as an replacement for "MS Mincho" on X11: Mincho is
+            /* #96738# don't use mincho as a replacement for "MS Mincho" on X11: Mincho is
             a korean bitmap font that is not suitable here. Use the font replacement table,
             that automatically leads to the desired "HG Mincho Light J". Same story for
             MS Gothic, there are thai and korean "Gothic" fonts, so we even prefer Andale */

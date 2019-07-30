@@ -3138,7 +3138,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
     Point aMousePos = rMEvt.GetPosPixel();
 
     // only highlight when the focus is not inside a child window of a toolbox
-    // eg, in a edit control
+    // eg, in an edit control
     // and do not highlight when focus is in a different toolbox
     bool bDrawHotSpot = true;
     vcl::Window *pWin = Application::GetFocusWindow();

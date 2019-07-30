@@ -1820,7 +1820,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         if (!aStr.isEmpty())
         {
             long nMaxWidth = std::max(mnMaxWidth, GetOutputSizePixel().Width() - 2 * gnBorder);
-            // a multiline entry should only be as wide a the window
+            // a multiline entry should only be as wide as the window
             if (pEntry->mnFlags & ListBoxEntryFlags::MultiLine)
                 nMaxWidth = GetOutputSizePixel().Width() - 2 * gnBorder;
 

@@ -432,7 +432,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
             else
                 nAbsSize += rItem.mnSize;
         }
-        // map relative values to percentages (percentage here one tenth of a procent)
+        // map relative values to percentages (percentage here one tenth of a percent)
         nPercent *= nPercentFactor;
         if ( nRelCount )
         {

@@ -1576,7 +1576,7 @@ void MetricField::SetLast( sal_Int64 nNewLast, FieldUnit eInUnit )
 
 sal_Int64 MetricField::GetLast( FieldUnit eOutUnit ) const
 {
-    // conver
+    // convert
     return MetricField::ConvertValue( mnLast, mnBaseValue, GetDecimalDigits(),
                                       meUnit, eOutUnit );
 }

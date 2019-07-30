@@ -868,7 +868,7 @@ bool GIFReader::ProcessGIF()
     }
 
     // set stream to right position,
-    // if data could be read put it a the old
+    // if data could be read put it at the old
     // position otherwise at the actual one
     if( bRead || bEnd )
         nLastPos = rIStm.Tell();
