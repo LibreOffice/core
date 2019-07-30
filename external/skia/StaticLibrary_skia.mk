@@ -9,14 +9,11 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,skia))
 
-$(eval $(call gb_StaticLibrary_use_externals,skia,\
-	freetype \
-	fontconfig \
-))
-
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,skia))
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,skia))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,skia,skia))
+
+#$(eval $(call gb_Library_set_precompiled_header,skia,$(SRCDIR)/external/skia/inc/pch/precompiled_skia))
 
 $(eval $(call gb_StaticLibrary_add_defs,skia,\
 	-DSK_GAMMA_SRGB \
@@ -33,39 +30,23 @@ $(eval $(call gb_StaticLibrary_add_defs,skia,\
 	-DNDEBUG \
 ))
 
+# TODO
+$(eval $(call gb_Library_add_defs,skia,\
+    -DSK_USER_CONFIG_HEADER="<$(SRCDIR)/external/skia/configs/SkUserConfig.h>" \
+))
+
+$(eval $(call gb_StaticLibrary_use_externals,skia,\
+	freetype \
+	fontconfig \
+))
+
 $(eval $(call gb_StaticLibrary_add_cxxflags,skia, \
-	-Wno-unused-parameter \
-	-Wno-shadow \
 	-mssse3 \
 ))
 
 $(eval $(call gb_StaticLibrary_set_include,skia,\
 	$$(INCLUDE) \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/include/codec \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/include/core \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/include/config \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/include/gpu \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/include/pipe \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/include/lazy \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/include/ports \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/include/images \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/include/utils \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/include/utils/mac \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/include/utils/win \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/include/views \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/include/effects \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/include/xml \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/include/pathops \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/include/private \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/src/core \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/src/lazy \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/src/image \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/src/gpu \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/src/gpu/effects \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/src/gl \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/src/utils \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/src/sfnt \
-	-I$(call gb_UnpackedTarball_get_dir,skia)/src/shaders \
+	-I$(call gb_UnpackedTarball_get_dir,skia) \
 ))
 
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,skia,cpp))

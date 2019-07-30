@@ -11,6 +11,12 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,skia))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,skia,$(SKIA_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_add_file,skia,SkUserConfig.h,external/skia/configs/SkUserConfig.h))
+skia_patches :=
+
+$(eval $(call gb_UnpackedTarball_set_patchlevel,skia,0))
+
+$(eval $(call gb_UnpackedTarball_add_patches,skia,\
+    $(foreach patch,$(skia_patches),external/skia/$(patch)) \
+))
 
 # vim: set noet sw=4 ts=4:
