@@ -76,7 +76,7 @@ uno::Sequence< OUString > OStorageFactory::impl_staticGetSupportedServiceNames()
 
 OUString OStorageFactory::impl_staticGetImplementationName()
 {
-    return OUString("com.sun.star.comp.embed.StorageFactory");
+    return "com.sun.star.comp.embed.StorageFactory";
 }
 
 uno::Reference< uno::XInterface > OStorageFactory::impl_staticCreateSelfInstance(

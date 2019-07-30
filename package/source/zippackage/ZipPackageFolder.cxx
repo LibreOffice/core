@@ -409,7 +409,7 @@ void ZipPackageFolder::doInsertByName ( ZipPackageEntry *pEntry, bool bSetParent
 
 OUString ZipPackageFolder::getImplementationName()
 {
-    return OUString("ZipPackageFolder");
+    return "ZipPackageFolder";
 }
 
 uno::Sequence< OUString > ZipPackageFolder::getSupportedServiceNames()

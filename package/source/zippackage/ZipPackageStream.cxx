@@ -1316,7 +1316,7 @@ void ZipPackageStream::setSize ( const sal_Int64 nNewSize )
 }
 OUString ZipPackageStream::getImplementationName()
 {
-    return OUString ("ZipPackageStream");
+    return "ZipPackageStream";
 }
 
 Sequence< OUString > ZipPackageStream::getSupportedServiceNames()

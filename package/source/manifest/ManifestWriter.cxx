@@ -80,7 +80,7 @@ static Reference < XInterface > ManifestWriter_createInstance( Reference< XMulti
 
 OUString ManifestWriter::static_getImplementationName()
 {
-    return OUString ( "com.sun.star.packages.manifest.comp.ManifestWriter" );
+    return "com.sun.star.packages.manifest.comp.ManifestWriter";
 }
 
 Sequence < OUString > ManifestWriter::static_getSupportedServiceNames()
