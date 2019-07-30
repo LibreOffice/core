@@ -122,7 +122,7 @@ void SAL_CALL XMLSecurityContext_NssImpl::setDefaultSecurityEnvironmentIndex( sa
 
 /* XServiceInfo */
 OUString SAL_CALL XMLSecurityContext_NssImpl::getImplementationName() {
-    return OUString("com.sun.star.xml.crypto.XMLSecurityContext");
+    return "com.sun.star.xml.crypto.XMLSecurityContext";
 }
 
 /* XServiceInfo */

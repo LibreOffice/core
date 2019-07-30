@@ -92,7 +92,7 @@ void SAL_CALL SEInitializer_NssImpl::freeSecurityContext( const uno::Reference< 
 /* XServiceInfo */
 OUString SAL_CALL SEInitializer_NssImpl::getImplementationName(  )
 {
-    return OUString("com.sun.star.xml.crypto.SEInitializer");
+    return "com.sun.star.xml.crypto.SEInitializer";
 }
 sal_Bool SAL_CALL SEInitializer_NssImpl::supportsService( const OUString& rServiceName )
 {
@@ -119,7 +119,7 @@ NSSInitializer_NssImpl::NSSInitializer_NssImpl(const uno::Reference<uno::XCompon
 
 OUString NSSInitializer_NssImpl::getImplementationName()
 {
-    return OUString("com.sun.star.xml.crypto.NSSInitializer");
+    return "com.sun.star.xml.crypto.NSSInitializer";
 }
 
 uno::Sequence<OUString> SAL_CALL NSSInitializer_NssImpl::getSupportedServiceNames()

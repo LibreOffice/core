@@ -887,7 +887,7 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::compressedSetDocumentLocator( sal_I
 /* XServiceInfo */
 OUString SAL_CALL XMLDocumentWrapper_XmlSecImpl::getImplementationName(  )
 {
-    return OUString("com.sun.star.xml.wrapper.XMLDocumentWrapper");
+    return "com.sun.star.xml.wrapper.XMLDocumentWrapper";
 }
 
 sal_Bool SAL_CALL XMLDocumentWrapper_XmlSecImpl::supportsService( const OUString& rServiceName )

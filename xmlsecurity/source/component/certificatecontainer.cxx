@@ -122,7 +122,7 @@ CertificateContainer::hasCertificate( const OUString & url, const OUString & cer
 OUString SAL_CALL
 CertificateContainer::getImplementationName( )
 {
-    return OUString("com.sun.star.security.CertificateContainer");
+    return "com.sun.star.security.CertificateContainer";
 }
 
 sal_Bool SAL_CALL

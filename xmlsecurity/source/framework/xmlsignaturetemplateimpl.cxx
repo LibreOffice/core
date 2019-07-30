@@ -113,7 +113,7 @@ Sequence< OUString > XMLSignatureTemplateImpl::impl_getSupportedServiceNames() {
 }
 
 OUString XMLSignatureTemplateImpl::impl_getImplementationName() {
-    return OUString("com.sun.star.xml.security.framework.XMLSignatureTemplateImpl") ;
+    return "com.sun.star.xml.security.framework.XMLSignatureTemplateImpl" ;
 }
 
 //Helper for registry

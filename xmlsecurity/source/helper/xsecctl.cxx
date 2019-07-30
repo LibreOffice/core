@@ -54,13 +54,13 @@ OUString getDigestURI(sal_Int32 nID)
     switch( nID )
     {
         case cssxc::DigestID::SHA1:
-            return OUString(ALGO_XMLDSIGSHA1);
+            return ALGO_XMLDSIGSHA1;
         case cssxc::DigestID::SHA256:
-            return OUString(ALGO_XMLDSIGSHA256);
+            return ALGO_XMLDSIGSHA256;
         case cssxc::DigestID::SHA512:
-            return OUString(ALGO_XMLDSIGSHA512);
+            return ALGO_XMLDSIGSHA512;
         default:
-            return OUString(ALGO_XMLDSIGSHA1);
+            return ALGO_XMLDSIGSHA1;
     }
 }
 OUString getSignatureURI(svl::crypto::SignatureMethodAlgorithm eAlgorithm, sal_Int32 nDigestID)
@@ -91,13 +91,13 @@ OUString getSignatureURI(svl::crypto::SignatureMethodAlgorithm eAlgorithm, sal_I
     switch (nDigestID)
     {
         case cssxc::DigestID::SHA1:
-            return OUString(ALGO_RSASHA1);
+            return ALGO_RSASHA1;
         case cssxc::DigestID::SHA256:
-            return OUString(ALGO_RSASHA256);
+            return ALGO_RSASHA256;
         case cssxc::DigestID::SHA512:
-            return OUString(ALGO_RSASHA512);
+            return ALGO_RSASHA512;
         default:
-            return OUString(ALGO_RSASHA1);
+            return ALGO_RSASHA1;
     }
 }
 }

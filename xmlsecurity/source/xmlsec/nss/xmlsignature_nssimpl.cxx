@@ -282,7 +282,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
 /* XServiceInfo */
 OUString SAL_CALL XMLSignature_NssImpl::getImplementationName()
 {
-    return OUString("com.sun.star.xml.crypto.XMLSignature");
+    return "com.sun.star.xml.crypto.XMLSignature";
 }
 
 /* XServiceInfo */

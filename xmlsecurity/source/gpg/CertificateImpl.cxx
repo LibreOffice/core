@@ -255,7 +255,7 @@ const GpgME::Key* CertificateImpl::getCertificate() const
 /* XServiceInfo */
 OUString SAL_CALL CertificateImpl::getImplementationName()
 {
-    return OUString("com.sun.star.xml.security.gpg.XCertificate_GpgImpl");
+    return "com.sun.star.xml.security.gpg.XCertificate_GpgImpl";
 }
 
 /* XServiceInfo */
