@@ -303,7 +303,7 @@ void SAL_CALL RegressionEquation::setText( const uno::Sequence< uno::Reference< 
 
 OUString SAL_CALL RegressionEquation::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart2.RegressionEquation");
+    return "com.sun.star.comp.chart2.RegressionEquation";
 }
 
 sal_Bool SAL_CALL RegressionEquation::supportsService( const OUString& rServiceName )

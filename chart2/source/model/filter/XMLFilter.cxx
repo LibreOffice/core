@@ -738,7 +738,7 @@ OUString XMLFilter::getMediaType(bool _bOasis)
 
 OUString SAL_CALL XMLFilter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart2.XMLFilter");
+    return "com.sun.star.comp.chart2.XMLFilter";
 }
 
 sal_Bool SAL_CALL XMLFilter::supportsService( const OUString& rServiceName )
@@ -764,7 +764,7 @@ void XMLReportFilterHelper::isOasisFormat(const Sequence< beans::PropertyValue >
 }
 OUString XMLReportFilterHelper::getMediaType(bool )
 {
-    return OUString(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_CHART_ASCII);
+    return MIMETYPE_OASIS_OPENDOCUMENT_REPORT_CHART_ASCII;
 }
 
 } //  namespace chart

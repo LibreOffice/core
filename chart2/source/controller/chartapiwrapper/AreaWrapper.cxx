@@ -106,7 +106,7 @@ void SAL_CALL AreaWrapper::setSize( const awt::Size& /*aSize*/ )
 // ____ XShapeDescriptor (base of XShape) ____
 OUString SAL_CALL AreaWrapper::getShapeType()
 {
-    return OUString( "com.sun.star.chart.ChartArea" );
+    return "com.sun.star.chart.ChartArea";
 }
 
 // ____ XComponent ____
@@ -157,7 +157,7 @@ std::vector< std::unique_ptr<WrappedProperty> > AreaWrapper::createWrappedProper
 
 OUString SAL_CALL AreaWrapper::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.Area");
+    return "com.sun.star.comp.chart.Area";
 }
 
 sal_Bool SAL_CALL AreaWrapper::supportsService( const OUString& rServiceName )

@@ -86,7 +86,7 @@ OUString RegressionCurveCalculator::getFormattedString(
     double fNumber, const sal_Int32* pStringLength /* = nullptr */ )
 {
     if ( pStringLength && *pStringLength <= 0 )
-        return OUString("###");
+        return "###";
     OUString aResult;
 
     if( xNumFormatter.is() )

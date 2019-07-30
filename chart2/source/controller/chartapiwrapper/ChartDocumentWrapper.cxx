@@ -1410,7 +1410,7 @@ std::vector< std::unique_ptr<WrappedProperty> > ChartDocumentWrapper::createWrap
 
 OUString SAL_CALL ChartDocumentWrapper::getImplementationName()
 {
-    return OUString(CHART_CHARTAPIWRAPPER_IMPLEMENTATION_NAME);
+    return CHART_CHARTAPIWRAPPER_IMPLEMENTATION_NAME;
 }
 
 sal_Bool SAL_CALL ChartDocumentWrapper::supportsService( const OUString& rServiceName )

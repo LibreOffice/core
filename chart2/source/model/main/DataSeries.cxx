@@ -537,7 +537,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( DataSeries, DataSeries_Base, OPropertySet )
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL DataSeries::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.DataSeries");
+    return "com.sun.star.comp.chart.DataSeries";
 }
 
 sal_Bool SAL_CALL DataSeries::supportsService( const OUString& rServiceName )

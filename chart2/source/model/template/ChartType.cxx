@@ -116,7 +116,7 @@ Sequence< OUString > SAL_CALL ChartType::getSupportedPropertyRoles()
 
 OUString SAL_CALL ChartType::getRoleOfSequenceForSeriesLabel()
 {
-    return OUString("values-y");
+    return "values-y";
 }
 
 void ChartType::impl_addDataSeriesWithoutNotification(

@@ -676,7 +676,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( Diagram, Diagram_Base, ::property::OPropertySe
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL Diagram::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart2.Diagram");
+    return "com.sun.star.comp.chart2.Diagram";
 }
 
 sal_Bool SAL_CALL Diagram::supportsService( const OUString& rServiceName )

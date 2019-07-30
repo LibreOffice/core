@@ -165,7 +165,7 @@ void ConfigColorScheme::notify( const OUString & rPropertyName )
 
 OUString SAL_CALL ConfigColorScheme::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart2.ConfigDefaultColorScheme") ;
+    return "com.sun.star.comp.chart2.ConfigDefaultColorScheme" ;
 }
 
 sal_Bool SAL_CALL ConfigColorScheme::supportsService( const OUString& rServiceName )

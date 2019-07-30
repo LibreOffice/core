@@ -144,7 +144,7 @@ uno::Reference< util::XCloneable > SAL_CALL ColumnChartType::createClone()
 // ____ XChartType ____
 OUString SAL_CALL ColumnChartType::getChartType()
 {
-    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN);
+    return CHART2_SERVICE_NAME_CHARTTYPE_COLUMN;
 }
 
 uno::Sequence< OUString > ColumnChartType::getSupportedPropertyRoles()
@@ -179,7 +179,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ColumnChartType::getPropertyS
 
 OUString SAL_CALL ColumnChartType::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.ColumnChartType");
+    return "com.sun.star.comp.chart.ColumnChartType";
 }
 
 sal_Bool SAL_CALL ColumnChartType::supportsService( const OUString& rServiceName )

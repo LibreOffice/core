@@ -47,7 +47,7 @@ ChartTypeUnoDlg::~ChartTypeUnoDlg()
 // lang::XServiceInfo
 OUString SAL_CALL ChartTypeUnoDlg::getImplementationName()
 {
-    return OUString(CHART_TYPE_DIALOG_SERVICE_IMPLEMENTATION_NAME);
+    return CHART_TYPE_DIALOG_SERVICE_IMPLEMENTATION_NAME;
 }
 
 css::uno::Sequence<OUString> SAL_CALL ChartTypeUnoDlg::getSupportedServiceNames()

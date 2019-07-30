@@ -455,7 +455,7 @@ uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL E
 
 OUString SAL_CALL ErrorBar::getImplementationName()
 {
-    return OUString(lcl_aServiceName);
+    return lcl_aServiceName;
 }
 
 sal_Bool SAL_CALL ErrorBar::supportsService( const OUString& rServiceName )

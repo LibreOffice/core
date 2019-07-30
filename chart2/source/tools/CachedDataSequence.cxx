@@ -245,7 +245,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL CachedDataSequence::getPropertySet
 
 OUString SAL_CALL CachedDataSequence::getImplementationName()
 {
-    return OUString(lcl_aServiceName);
+    return lcl_aServiceName;
 }
 
 sal_Bool SAL_CALL CachedDataSequence::supportsService( const OUString& rServiceName )

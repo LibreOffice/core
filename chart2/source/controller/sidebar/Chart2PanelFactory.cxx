@@ -119,7 +119,7 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
 
 OUString ChartPanelFactory::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.chart2.sidebar.ChartPanelFactory");
+    return "org.libreoffice.comp.chart2.sidebar.ChartPanelFactory";
 }
 
 sal_Bool ChartPanelFactory::supportsService(OUString const & ServiceName)

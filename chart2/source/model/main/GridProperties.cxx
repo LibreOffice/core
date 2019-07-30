@@ -216,7 +216,7 @@ void GridProperties::firePropertyChangeEvent()
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL GridProperties::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart2.GridProperties");
+    return "com.sun.star.comp.chart2.GridProperties";
 }
 
 sal_Bool SAL_CALL GridProperties::supportsService( const OUString& rServiceName )

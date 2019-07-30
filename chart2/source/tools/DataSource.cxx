@@ -56,7 +56,7 @@ void SAL_CALL DataSource::setData( const Sequence< Reference< chart2::data::XLab
 
 OUString SAL_CALL DataSource::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.DataSource");
+    return "com.sun.star.comp.chart.DataSource";
 }
 
 sal_Bool SAL_CALL DataSource::supportsService( const OUString& rServiceName )

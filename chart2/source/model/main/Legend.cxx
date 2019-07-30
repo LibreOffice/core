@@ -268,7 +268,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL Legend::getPropertySetInfo()
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL Legend::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart2.Legend");
+    return "com.sun.star.comp.chart2.Legend";
 }
 
 sal_Bool SAL_CALL Legend::supportsService( const OUString& rServiceName )

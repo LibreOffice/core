@@ -146,7 +146,7 @@ protected:
     virtual OUString SAL_CALL
         getImplementationName() override
     {
-        return OUString( "com.sun.star.comp.chart2.report.XMLFilter" );
+        return "com.sun.star.comp.chart2.report.XMLFilter";
     }
     // ____ XImporter ____
     virtual void SAL_CALL setTargetDocument(

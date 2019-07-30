@@ -142,7 +142,7 @@ uno::Reference< util::XCloneable > SAL_CALL PieChartType::createClone()
 // ____ XChartType ____
 OUString SAL_CALL PieChartType::getChartType()
 {
-    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_PIE);
+    return CHART2_SERVICE_NAME_CHARTTYPE_PIE;
 }
 
 Reference< chart2::XCoordinateSystem > SAL_CALL
@@ -213,7 +213,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL PieChartType::getPropertySetI
 
 OUString SAL_CALL PieChartType::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.PieChartType");
+    return "com.sun.star.comp.chart.PieChartType";
 }
 
 sal_Bool SAL_CALL PieChartType::supportsService( const OUString& rServiceName )

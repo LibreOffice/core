@@ -344,7 +344,7 @@ uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const 
 
 OUString SAL_CALL UpDownBarWrapper::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.ChartArea");
+    return "com.sun.star.comp.chart.ChartArea";
 }
 
 sal_Bool SAL_CALL UpDownBarWrapper::supportsService( const OUString& rServiceName )

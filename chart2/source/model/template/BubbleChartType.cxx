@@ -142,7 +142,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 
 OUString SAL_CALL BubbleChartType::getChartType()
 {
-    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE);
+    return CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE;
 }
 
 uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedMandatoryRoles()
@@ -165,7 +165,7 @@ uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedPropertyRoles()
 
 OUString SAL_CALL BubbleChartType::getRoleOfSequenceForSeriesLabel()
 {
-    return OUString("values-size");
+    return "values-size";
 }
 
 // ____ OPropertySet ____
@@ -192,7 +192,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL BubbleChartType::getPropertyS
 
 OUString SAL_CALL BubbleChartType::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart.BubbleChartType");
+    return "com.sun.star.comp.chart.BubbleChartType";
 }
 
 sal_Bool SAL_CALL BubbleChartType::supportsService( const OUString& rServiceName )

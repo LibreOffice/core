@@ -372,7 +372,7 @@ bool DataInterpreter::UseCategoriesAsX( const Sequence< beans::PropertyValue > &
 
 OUString SAL_CALL DataInterpreter::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart2.DataInterpreter");
+    return "com.sun.star.comp.chart2.DataInterpreter";
 }
 
 sal_Bool SAL_CALL DataInterpreter::supportsService( const OUString& rServiceName )

@@ -1230,7 +1230,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeFromXML( const OUString& aXM
     if( !aRange.aLowerRight.bIsEmpty &&
         ( aRange.aUpperLeft.nColumn != aRange.aLowerRight.nColumn ) &&
         ( aRange.aUpperLeft.nRow != aRange.aLowerRight.nRow ) )
-        return OUString(lcl_aCompleteRange);
+        return lcl_aCompleteRange;
 
     // attention: this data provider has the limitation that it stores
     // internally if data comes from columns or rows. It is intended for
@@ -1241,7 +1241,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeFromXML( const OUString& aXM
     if( m_bDataInColumns )
     {
         if( aRange.aUpperLeft.nColumn == 0 )
-            return OUString(lcl_aCategoriesRangeName);
+            return lcl_aCategoriesRangeName;
         if( aRange.aUpperLeft.nRow == 0 )
             return lcl_aLabelRangePrefix + OUString::number( aRange.aUpperLeft.nColumn - 1 );
 
@@ -1250,7 +1250,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeFromXML( const OUString& aXM
 
     // data in rows
     if( aRange.aUpperLeft.nRow == 0 )
-        return OUString(lcl_aCategoriesRangeName);
+        return lcl_aCategoriesRangeName;
     if( aRange.aUpperLeft.nColumn == 0 )
         return lcl_aLabelRangePrefix + OUString::number( aRange.aUpperLeft.nRow - 1 );
 
@@ -1498,7 +1498,7 @@ Reference< util::XCloneable > SAL_CALL InternalDataProvider::createClone()
 OUString SAL_CALL InternalDataProvider::getImplementationName()
 {
     // note: in xmloff this name is used to indicate usage of own data
-    return OUString("com.sun.star.comp.chart.InternalDataProvider");
+    return "com.sun.star.comp.chart.InternalDataProvider";
 }
 
 sal_Bool SAL_CALL InternalDataProvider::supportsService( const OUString& rServiceName )

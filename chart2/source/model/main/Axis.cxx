@@ -596,7 +596,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( Axis, Axis_Base, ::property::OPropertySet )
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL Axis::getImplementationName()
 {
-    return OUString("com.sun.star.comp.chart2.Axis");
+    return "com.sun.star.comp.chart2.Axis";
 }
 
 sal_Bool SAL_CALL Axis::supportsService( const OUString& rServiceName )
