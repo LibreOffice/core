@@ -50,7 +50,7 @@ css::uno::Reference< css::uno::XInterface > BridgeFactory::static_create(
 }
 
 OUString BridgeFactory::static_getImplementationName() {
-    return OUString("com.sun.star.comp.bridge.BridgeFactory");
+    return "com.sun.star.comp.bridge.BridgeFactory";
 }
 
 css::uno::Sequence< OUString >
