@@ -753,7 +753,7 @@ void SfxFrameLoader_Impl::cancel()
 /* XServiceInfo */
 OUString SAL_CALL SfxFrameLoader_Impl::getImplementationName()
 {
-    return OUString("com.sun.star.comp.office.FrameLoader");
+    return "com.sun.star.comp.office.FrameLoader";
 }
 
 /* XServiceInfo */

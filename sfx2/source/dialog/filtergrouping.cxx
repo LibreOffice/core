@@ -395,7 +395,7 @@ namespace sfx2
 
     static OUString getSeparatorString()
     {
-        return OUString(";");
+        return ";";
     }
 
 

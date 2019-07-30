@@ -148,7 +148,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
 
 OUString SAL_CALL OPackageStructureCreator::getImplementationName()
 {
-    return OUString("com.sun.star.comp.embed.PackageStructureCreator");
+    return "com.sun.star.comp.embed.PackageStructureCreator";
 }
 
 sal_Bool SAL_CALL OPackageStructureCreator::supportsService( const OUString& ServiceName )

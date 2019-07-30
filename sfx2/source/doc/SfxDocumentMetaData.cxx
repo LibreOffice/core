@@ -326,7 +326,7 @@ public:
 // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override
     {
-        return OUString("CompatWriterDocPropsImpl");
+        return "CompatWriterDocPropsImpl";
     }
 
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override
@@ -1264,7 +1264,7 @@ SfxDocumentMetaData::SfxDocumentMetaData(
 OUString SAL_CALL
 SfxDocumentMetaData::getImplementationName()
 {
-    return OUString("SfxDocumentMetaData");
+    return "SfxDocumentMetaData";
 }
 
 sal_Bool SAL_CALL

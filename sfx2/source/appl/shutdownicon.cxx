@@ -100,7 +100,7 @@ void SAL_CALL SfxNotificationListener_Impl::disposing( const EventObject& )
 
 OUString SAL_CALL ShutdownIcon::getImplementationName()
 {
-    return OUString("com.sun.star.comp.desktop.QuickstartWrapper");
+    return "com.sun.star.comp.desktop.QuickstartWrapper";
 }
 
 sal_Bool SAL_CALL ShutdownIcon::supportsService(OUString const & ServiceName)

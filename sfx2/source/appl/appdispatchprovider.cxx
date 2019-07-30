@@ -102,7 +102,7 @@ void SfxAppDispatchProvider::initialize(
 
 OUString SAL_CALL SfxAppDispatchProvider::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.sfx2.AppDispatchProvider" );
+    return "com.sun.star.comp.sfx2.AppDispatchProvider";
 }
 
 sal_Bool SAL_CALL SfxAppDispatchProvider::supportsService( const OUString& sServiceName )

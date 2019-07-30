@@ -96,7 +96,7 @@ void SAL_CALL OwnSubFilterService::cancel()
 
 OUString SAL_CALL OwnSubFilterService::getImplementationName()
 {
-    return OUString("com.sun.star.comp.document.OwnSubFilter");
+    return "com.sun.star.comp.document.OwnSubFilter";
 }
 
 sal_Bool SAL_CALL OwnSubFilterService::supportsService( const OUString& ServiceName )

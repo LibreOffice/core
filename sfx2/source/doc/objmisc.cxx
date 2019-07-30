@@ -709,7 +709,7 @@ OUString SfxObjectShell::GetTitle( sal_uInt16  nMaxLength ) const
     {
         static bool bRecur = false;
         if ( bRecur )
-            return OUString("-not available-");
+            return "-not available-";
         bRecur = true;
 
         OUString aTitle;

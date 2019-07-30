@@ -2130,7 +2130,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return OUString("com.sun.star.comp.sfx2.DocumentTemplates");
+        return "com.sun.star.comp.sfx2.DocumentTemplates";
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override

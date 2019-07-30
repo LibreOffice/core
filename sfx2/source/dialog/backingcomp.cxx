@@ -271,7 +271,7 @@ css::uno::Sequence< sal_Int8 > SAL_CALL BackingComp::getImplementationId()
 
 OUString SAL_CALL BackingComp::getImplementationName()
 {
-    return OUString("com.sun.star.comp.sfx2.BackingComp");
+    return "com.sun.star.comp.sfx2.BackingComp";
 }
 
 sal_Bool SAL_CALL BackingComp::supportsService( /*IN*/ const OUString& sServiceName )
