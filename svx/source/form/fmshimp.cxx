@@ -439,28 +439,28 @@ namespace
     {
         switch (nType)
         {
-            case OBJ_FM_EDIT            : return OUString(FM_COMPONENT_TEXTFIELD);
-            case OBJ_FM_BUTTON          : return OUString(FM_COMPONENT_COMMANDBUTTON);
-            case OBJ_FM_FIXEDTEXT       : return OUString(FM_COMPONENT_FIXEDTEXT);
-            case OBJ_FM_LISTBOX         : return OUString(FM_COMPONENT_LISTBOX);
-            case OBJ_FM_CHECKBOX        : return OUString(FM_COMPONENT_CHECKBOX);
-            case OBJ_FM_RADIOBUTTON     : return OUString(FM_COMPONENT_RADIOBUTTON);
-            case OBJ_FM_GROUPBOX        : return OUString(FM_COMPONENT_GROUPBOX);
-            case OBJ_FM_COMBOBOX        : return OUString(FM_COMPONENT_COMBOBOX);
-            case OBJ_FM_GRID            : return OUString(FM_COMPONENT_GRIDCONTROL);
-            case OBJ_FM_IMAGEBUTTON     : return OUString(FM_COMPONENT_IMAGEBUTTON);
-            case OBJ_FM_FILECONTROL     : return OUString(FM_COMPONENT_FILECONTROL);
-            case OBJ_FM_DATEFIELD       : return OUString(FM_COMPONENT_DATEFIELD);
-            case OBJ_FM_TIMEFIELD       : return OUString(FM_COMPONENT_TIMEFIELD);
-            case OBJ_FM_NUMERICFIELD    : return OUString(FM_COMPONENT_NUMERICFIELD);
-            case OBJ_FM_CURRENCYFIELD   : return OUString(FM_COMPONENT_CURRENCYFIELD);
-            case OBJ_FM_PATTERNFIELD    : return OUString(FM_COMPONENT_PATTERNFIELD);
-            case OBJ_FM_HIDDEN          : return OUString(FM_COMPONENT_HIDDENCONTROL);
-            case OBJ_FM_IMAGECONTROL    : return OUString(FM_COMPONENT_IMAGECONTROL);
-            case OBJ_FM_FORMATTEDFIELD  : return OUString(FM_COMPONENT_FORMATTEDFIELD);
-            case OBJ_FM_SCROLLBAR       : return OUString(FM_SUN_COMPONENT_SCROLLBAR);
-            case OBJ_FM_SPINBUTTON      : return OUString(FM_SUN_COMPONENT_SPINBUTTON);
-            case OBJ_FM_NAVIGATIONBAR   : return OUString(FM_SUN_COMPONENT_NAVIGATIONBAR);
+            case OBJ_FM_EDIT            : return FM_COMPONENT_TEXTFIELD;
+            case OBJ_FM_BUTTON          : return FM_COMPONENT_COMMANDBUTTON;
+            case OBJ_FM_FIXEDTEXT       : return FM_COMPONENT_FIXEDTEXT;
+            case OBJ_FM_LISTBOX         : return FM_COMPONENT_LISTBOX;
+            case OBJ_FM_CHECKBOX        : return FM_COMPONENT_CHECKBOX;
+            case OBJ_FM_RADIOBUTTON     : return FM_COMPONENT_RADIOBUTTON;
+            case OBJ_FM_GROUPBOX        : return FM_COMPONENT_GROUPBOX;
+            case OBJ_FM_COMBOBOX        : return FM_COMPONENT_COMBOBOX;
+            case OBJ_FM_GRID            : return FM_COMPONENT_GRIDCONTROL;
+            case OBJ_FM_IMAGEBUTTON     : return FM_COMPONENT_IMAGEBUTTON;
+            case OBJ_FM_FILECONTROL     : return FM_COMPONENT_FILECONTROL;
+            case OBJ_FM_DATEFIELD       : return FM_COMPONENT_DATEFIELD;
+            case OBJ_FM_TIMEFIELD       : return FM_COMPONENT_TIMEFIELD;
+            case OBJ_FM_NUMERICFIELD    : return FM_COMPONENT_NUMERICFIELD;
+            case OBJ_FM_CURRENCYFIELD   : return FM_COMPONENT_CURRENCYFIELD;
+            case OBJ_FM_PATTERNFIELD    : return FM_COMPONENT_PATTERNFIELD;
+            case OBJ_FM_HIDDEN          : return FM_COMPONENT_HIDDENCONTROL;
+            case OBJ_FM_IMAGECONTROL    : return FM_COMPONENT_IMAGECONTROL;
+            case OBJ_FM_FORMATTEDFIELD  : return FM_COMPONENT_FORMATTEDFIELD;
+            case OBJ_FM_SCROLLBAR       : return FM_SUN_COMPONENT_SCROLLBAR;
+            case OBJ_FM_SPINBUTTON      : return FM_SUN_COMPONENT_SPINBUTTON;
+            case OBJ_FM_NAVIGATIONBAR   : return FM_SUN_COMPONENT_NAVIGATIONBAR;
         }
         return OUString();
     }

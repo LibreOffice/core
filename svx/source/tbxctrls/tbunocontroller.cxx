@@ -303,7 +303,7 @@ sal_Bool SAL_CALL FontHeightToolBoxControl::supportsService( const OUString& Ser
 
 OUString SAL_CALL FontHeightToolBoxControl::getImplementationName()
 {
-    return OUString("com.sun.star.svx.FontHeightToolBoxController");
+    return "com.sun.star.svx.FontHeightToolBoxController";
 }
 
 uno::Sequence< OUString > SAL_CALL FontHeightToolBoxControl::getSupportedServiceNames(  )

@@ -131,7 +131,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::supportsService( const  OUString& ServiceNa
 
 OUString SAL_CALL SvxUnoMarkerTable::getImplementationName()
 {
-    return OUString("SvxUnoMarkerTable");
+    return "SvxUnoMarkerTable";
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getSupportedServiceNames(  )

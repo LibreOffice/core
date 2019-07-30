@@ -102,7 +102,7 @@ void SAL_CALL
 OUString SAL_CALL
     AccessibleOLEShape::getImplementationName()
 {
-    return OUString("AccessibleOLEShape");
+    return "AccessibleOLEShape";
 }
 
 

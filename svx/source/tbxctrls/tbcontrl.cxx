@@ -3309,7 +3309,7 @@ void SvxFontNameToolBoxControl::dispose()
 
 OUString SvxFontNameToolBoxControl::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.svx.FontNameToolBoxControl" );
+    return "com.sun.star.comp.svx.FontNameToolBoxControl";
 }
 
 sal_Bool SvxFontNameToolBoxControl::supportsService( const OUString& rServiceName )
@@ -3550,7 +3550,7 @@ void SvxColorToolBoxControl::functionSelected( const OUString& /*rCommand*/ )
 
 OUString SvxColorToolBoxControl::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.svx.ColorToolBoxControl" );
+    return "com.sun.star.comp.svx.ColorToolBoxControl";
 }
 
 css::uno::Sequence<OUString> SvxColorToolBoxControl::getSupportedServiceNames()
@@ -3609,7 +3609,7 @@ VclPtr<vcl::Window> SvxFrameToolBoxControl::createPopupWindow( vcl::Window* pPar
 
 OUString SvxFrameToolBoxControl::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.svx.FrameToolBoxControl" );
+    return "com.sun.star.comp.svx.FrameToolBoxControl";
 }
 
 css::uno::Sequence< OUString > SvxFrameToolBoxControl::getSupportedServiceNames()
@@ -3714,7 +3714,7 @@ void SvxCurrencyToolBoxControl::execute( sal_Int16 nSelectModifier )
 
 OUString SvxCurrencyToolBoxControl::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.svx.CurrencyToolBoxControl" );
+    return "com.sun.star.comp.svx.CurrencyToolBoxControl";
 }
 
 css::uno::Sequence<OUString> SvxCurrencyToolBoxControl::getSupportedServiceNames()

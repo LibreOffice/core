@@ -45,7 +45,7 @@ CrashReportUI::CrashReportUI()
 
 OUString SAL_CALL CrashReportUI::getImplementationName()
 {
-    return OUString("com.sun.star.comp.svx.CrashReportUI");
+    return "com.sun.star.comp.svx.CrashReportUI";
 }
 
 sal_Bool SAL_CALL CrashReportUI::supportsService(const OUString& sServiceName)

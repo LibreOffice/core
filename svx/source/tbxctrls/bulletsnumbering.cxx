@@ -217,7 +217,7 @@ void SAL_CALL NumberingToolBoxControl::initialize( const css::uno::Sequence< css
 
 OUString SAL_CALL NumberingToolBoxControl::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.svx.NumberingToolBoxControl" );
+    return "com.sun.star.comp.svx.NumberingToolBoxControl";
 }
 
 css::uno::Sequence< OUString > SAL_CALL NumberingToolBoxControl::getSupportedServiceNames()

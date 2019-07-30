@@ -381,7 +381,7 @@ sal_Bool SAL_CALL SvxUnoDrawPool::supportsService( const  OUString& ServiceName 
 
 OUString SAL_CALL SvxUnoDrawPool::getImplementationName()
 {
-    return OUString("SvxUnoDrawPool");
+    return "SvxUnoDrawPool";
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawPool::getSupportedServiceNames(  )

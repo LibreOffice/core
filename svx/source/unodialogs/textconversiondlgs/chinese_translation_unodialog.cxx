@@ -62,7 +62,7 @@ OUString SAL_CALL ChineseTranslation_UnoDialog::getImplementationName()
 
 OUString ChineseTranslation_UnoDialog::getImplementationName_Static()
 {
-    return OUString("com.sun.star.comp.linguistic2.ChineseTranslationDialog");
+    return "com.sun.star.comp.linguistic2.ChineseTranslationDialog";
 }
 
 sal_Bool SAL_CALL ChineseTranslation_UnoDialog::supportsService( const OUString& ServiceName )

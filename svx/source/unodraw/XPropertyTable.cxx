@@ -277,7 +277,7 @@ uno::Type SAL_CALL SvxUnoXColorTable::getElementType()
 // XServiceInfo
 OUString SAL_CALL SvxUnoXColorTable::getImplementationName(  )
 {
-    return OUString( "SvxUnoXColorTable" );
+    return "SvxUnoXColorTable";
 }
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXColorTable::getSupportedServiceNames(  )
@@ -344,7 +344,7 @@ uno::Type SAL_CALL SvxUnoXLineEndTable::getElementType()
 // XServiceInfo
 OUString SAL_CALL SvxUnoXLineEndTable::getImplementationName(  )
 {
-    return OUString( "SvxUnoXLineEndTable" );
+    return "SvxUnoXLineEndTable";
 }
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXLineEndTable::getSupportedServiceNames(  )
@@ -421,7 +421,7 @@ uno::Type SAL_CALL SvxUnoXDashTable::getElementType()
 // XServiceInfo
 OUString SAL_CALL SvxUnoXDashTable::getImplementationName(  )
 {
-    return OUString( "SvxUnoXDashTable" );
+    return "SvxUnoXDashTable";
 }
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXDashTable::getSupportedServiceNames(  )
@@ -493,7 +493,7 @@ uno::Type SAL_CALL SvxUnoXHatchTable::getElementType()
 // XServiceInfo
 OUString SAL_CALL SvxUnoXHatchTable::getImplementationName(  )
 {
-    return OUString( "SvxUnoXHatchTable" );
+    return "SvxUnoXHatchTable";
 }
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXHatchTable::getSupportedServiceNames(  )
@@ -577,7 +577,7 @@ uno::Type SAL_CALL SvxUnoXGradientTable::getElementType()
 // XServiceInfo
 OUString SAL_CALL SvxUnoXGradientTable::getImplementationName(  )
 {
-    return OUString( "SvxUnoXGradientTable" );
+    return "SvxUnoXGradientTable";
 }
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXGradientTable::getSupportedServiceNames(  )
@@ -648,7 +648,7 @@ uno::Type SAL_CALL SvxUnoXBitmapTable::getElementType()
 // XServiceInfo
 OUString SAL_CALL SvxUnoXBitmapTable::getImplementationName(  )
 {
-    return OUString( "SvxUnoXBitmapTable" );
+    return "SvxUnoXBitmapTable";
 }
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXBitmapTable::getSupportedServiceNames(  )

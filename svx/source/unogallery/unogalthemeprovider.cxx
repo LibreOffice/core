@@ -87,7 +87,7 @@ GalleryThemeProvider::GalleryThemeProvider() :
 
 OUString SAL_CALL GalleryThemeProvider::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.gallery.GalleryThemeProvider" );
+    return "com.sun.star.comp.gallery.GalleryThemeProvider";
 }
 
 sal_Bool SAL_CALL GalleryThemeProvider::supportsService( const OUString& ServiceName )

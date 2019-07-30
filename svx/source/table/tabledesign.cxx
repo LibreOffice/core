@@ -204,7 +204,7 @@ const CellStyleNameMap& TableDesignStyle::getCellStyleNameMap()
 // XServiceInfo
 OUString SAL_CALL TableDesignStyle::getImplementationName()
 {
-    return OUString("TableDesignStyle");
+    return "TableDesignStyle";
 }
 
 sal_Bool SAL_CALL TableDesignStyle::supportsService( const OUString& ServiceName )
@@ -454,7 +454,7 @@ void SAL_CALL TableDesignStyle::disposing( const css::lang::EventObject& )
 // XServiceInfo
 OUString SAL_CALL TableDesignFamily::getImplementationName()
 {
-    return OUString("TableDesignFamily");
+    return "TableDesignFamily";
 }
 
 sal_Bool SAL_CALL TableDesignFamily::supportsService( const OUString& ServiceName )
@@ -472,7 +472,7 @@ Sequence< OUString > SAL_CALL TableDesignFamily::getSupportedServiceNames()
 // XNamed
 OUString SAL_CALL TableDesignFamily::getName()
 {
-    return OUString( "table" );
+    return "table";
 }
 
 void SAL_CALL TableDesignFamily::setName( const OUString& )

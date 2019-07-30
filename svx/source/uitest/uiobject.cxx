@@ -56,7 +56,7 @@ std::unique_ptr<UIObject> SvxShowCharSetUIObject::create(vcl::Window* pWindow)
 
 OUString SvxShowCharSetUIObject::get_name() const
 {
-    return OUString("SvxShowCharSetUIObject");
+    return "SvxShowCharSetUIObject";
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

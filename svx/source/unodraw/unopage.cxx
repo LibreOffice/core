@@ -854,7 +854,7 @@ SdrObject *SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xS
 // css::lang::XServiceInfo
 OUString SAL_CALL SvxDrawPage::getImplementationName()
 {
-    return OUString("SvxDrawPage");
+    return "SvxDrawPage";
 }
 
 sal_Bool SAL_CALL SvxDrawPage::supportsService( const OUString& ServiceName )

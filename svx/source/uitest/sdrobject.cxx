@@ -158,7 +158,7 @@ void SdrUIObject::execute(const OUString& rAction,
 
 OUString SdrUIObject::get_type() const
 {
-    return OUString("SdrUIObject");
+    return "SdrUIObject";
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

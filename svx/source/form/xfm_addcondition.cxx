@@ -58,7 +58,7 @@ namespace svxform
 
     OUString OAddConditionDialog_GetImplementationName()
     {
-        return OUString("org.openoffice.comp.svx.OAddConditionDialog");
+        return "org.openoffice.comp.svx.OAddConditionDialog";
     }
 
     OAddConditionDialog::OAddConditionDialog( const Reference< XComponentContext >& _rxORB )

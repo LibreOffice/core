@@ -391,13 +391,13 @@ void SAL_CALL AccessibleTableShape::release(  ) throw ()
 
 OUString SAL_CALL AccessibleTableShape::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.accessibility.AccessibleTableShape" );
+    return "com.sun.star.comp.accessibility.AccessibleTableShape";
 }
 
 
 OUString AccessibleTableShape::CreateAccessibleBaseName()
 {
-    return OUString("TableShape");
+    return "TableShape";
 }
 
 

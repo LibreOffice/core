@@ -1091,8 +1091,8 @@ OUString SAL_CALL SvXMLGraphicImportExportHelper::resolveOutputStream( const Ref
 OUString SAL_CALL SvXMLGraphicImportExportHelper::getImplementationName()
 {
     if( m_eGraphicHelperMode == SvXMLGraphicHelperMode::Read )
-        return OUString("com.sun.star.comp.Svx.GraphicImportHelper");
-    return OUString("com.sun.star.comp.Svx.GraphicExportHelper");
+        return "com.sun.star.comp.Svx.GraphicImportHelper";
+    return "com.sun.star.comp.Svx.GraphicExportHelper";
 }
 
 sal_Bool SAL_CALL SvXMLGraphicImportExportHelper::supportsService( const OUString& ServiceName )

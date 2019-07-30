@@ -395,7 +395,7 @@ void SAL_CALL FontworkAlignmentControl::initialize( const css::uno::Sequence< cs
 
 OUString FontworkAlignmentControl::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.svx.FontworkAlignmentController" );
+    return "com.sun.star.comp.svx.FontworkAlignmentController";
 }
 
 
@@ -608,7 +608,7 @@ void SAL_CALL FontworkCharacterSpacingControl::initialize( const css::uno::Seque
 
 OUString FontworkCharacterSpacingControl::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.svx.FontworkCharacterSpacingController" );
+    return "com.sun.star.comp.svx.FontworkCharacterSpacingController";
 }
 
 

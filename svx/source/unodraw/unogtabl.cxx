@@ -54,7 +54,7 @@ SvxUnoGradientTable::SvxUnoGradientTable( SdrModel* pModel ) throw()
 
 OUString SAL_CALL SvxUnoGradientTable::getImplementationName()
 {
-    return OUString("SvxUnoGradientTable");
+    return "SvxUnoGradientTable";
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoGradientTable::getSupportedServiceNames(  )

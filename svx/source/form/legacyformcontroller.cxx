@@ -175,7 +175,7 @@ namespace svxform
 
     OUString SAL_CALL LegacyFormController::getImplementationName(  )
     {
-        return OUString( "org.openoffice.comp.svx.LegacyFormController" );
+        return "org.openoffice.comp.svx.LegacyFormController";
     }
 
     sal_Bool SAL_CALL LegacyFormController::supportsService( const OUString& _serviceName )

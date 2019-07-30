@@ -376,7 +376,7 @@ sal_Bool SAL_CALL FmXGridControl::supportsService(const OUString& ServiceName)
 
 OUString SAL_CALL FmXGridControl::getImplementationName()
 {
-    return OUString("com.sun.star.form.FmXGridControl");
+    return "com.sun.star.form.FmXGridControl";
 }
 
 css::uno::Sequence<OUString> SAL_CALL FmXGridControl::getSupportedServiceNames()
@@ -404,7 +404,7 @@ void SAL_CALL FmXGridControl::dispose()
 
 OUString FmXGridControl::GetComponentServiceName()
 {
-    return OUString("DBGrid");
+    return "DBGrid";
 }
 
 
@@ -1024,7 +1024,7 @@ namespace fmgridif
 {
     static const OUString getDataModeIdentifier()
     {
-        return OUString("DataMode");
+        return "DataMode";
     }
 }
 using namespace fmgridif;

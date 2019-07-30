@@ -1223,7 +1223,7 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
 // XServiceInfo
 OUString SAL_CALL GraphicExporter::getImplementationName(  )
 {
-    return OUString( "com.sun.star.comp.Draw.GraphicExporter" );
+    return "com.sun.star.comp.Draw.GraphicExporter";
 }
 
 sal_Bool SAL_CALL GraphicExporter::supportsService( const OUString& ServiceName )
