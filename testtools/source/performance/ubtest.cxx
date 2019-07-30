@@ -342,7 +342,7 @@ static void createInstance( Reference< T > & rxOut,
                         xMgr, Reference< XRegistryKey >() ) ) );
                     // connector
                     xSet->insert( makeAny( loadLibComponentFactory(
-                        OUString("connectr"),
+                        OUString("connector"),
                         OUString("com.sun.star.comp.stoc.Connector"),
                         xMgr, Reference< XRegistryKey >() ) ) );
                     // iiop bridge

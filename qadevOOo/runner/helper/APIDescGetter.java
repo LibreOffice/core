@@ -942,7 +942,7 @@ public class APIDescGetter extends DescGetter
         ArrayList<String> removed = new ArrayList<String>();
         removed.add("acceptor");
         removed.add("brdgfctr");
-        removed.add("connectr");
+        removed.add("connector");
         removed.add("corefl");
         removed.add("cpld");
         removed.add("defreg");
