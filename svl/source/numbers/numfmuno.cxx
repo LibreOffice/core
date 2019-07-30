@@ -331,7 +331,7 @@ sal_Int32 SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber( cons
 
 OUString SAL_CALL SvNumberFormatterServiceObj::getImplementationName()
 {
-    return OUString("com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject");
+    return "com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject";
 }
 
 sal_Bool SAL_CALL SvNumberFormatterServiceObj::supportsService( const OUString& ServiceName )
@@ -571,7 +571,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getFormatForLocale( sal_Int32 nKey, const
 
 OUString SAL_CALL SvNumberFormatsObj::getImplementationName()
 {
-    return OUString("SvNumberFormatsObj");
+    return "SvNumberFormatsObj";
 }
 
 sal_Bool SAL_CALL SvNumberFormatsObj::supportsService( const OUString& ServiceName )
@@ -781,7 +781,7 @@ void SAL_CALL SvNumberFormatObj::setPropertyValues( const uno::Sequence<beans::P
 
 OUString SAL_CALL SvNumberFormatObj::getImplementationName()
 {
-    return OUString("SvNumberFormatObj");
+    return "SvNumberFormatObj";
 }
 
 sal_Bool SAL_CALL SvNumberFormatObj::supportsService( const OUString& ServiceName )
@@ -907,7 +907,7 @@ void SAL_CALL SvNumberFormatSettingsObj::removeVetoableChangeListener( const OUS
 
 OUString SAL_CALL SvNumberFormatSettingsObj::getImplementationName()
 {
-    return OUString("SvNumberFormatSettingsObj");
+    return "SvNumberFormatSettingsObj";
 }
 
 sal_Bool SAL_CALL SvNumberFormatSettingsObj::supportsService( const OUString& ServiceName )

@@ -358,12 +358,12 @@ OUString PKIStatusToString(int n)
 {
     switch (n)
     {
-    case 0: return OUString("granted");
-    case 1: return OUString("grantedWithMods");
-    case 2: return OUString("rejection");
-    case 3: return OUString("waiting");
-    case 4: return OUString("revocationWarning");
-    case 5: return OUString("revocationNotification");
+    case 0: return "granted";
+    case 1: return "grantedWithMods";
+    case 2: return "rejection";
+    case 3: return "waiting";
+    case 4: return "revocationWarning";
+    case 5: return "revocationNotification";
     default: return "unknown (" + OUString::number(n) + ")";
     }
 }

@@ -41,15 +41,15 @@ OUString SvxMacro::GetLanguage()const
 {
     if(eType==STARBASIC)
     {
-        return OUString(SVX_MACRO_LANGUAGE_STARBASIC);
+        return SVX_MACRO_LANGUAGE_STARBASIC;
     }
     else if(eType==JAVASCRIPT)
     {
-        return OUString(SVX_MACRO_LANGUAGE_JAVASCRIPT);
+        return SVX_MACRO_LANGUAGE_JAVASCRIPT;
     }
     else if(eType==EXTENDED_STYPE)
     {
-        return OUString(SVX_MACRO_LANGUAGE_SF);
+        return SVX_MACRO_LANGUAGE_SF;
 
     }
     return aLibName;

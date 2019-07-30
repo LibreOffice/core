@@ -45,7 +45,7 @@ uno::Sequence< OUString > FSStorageFactory::impl_staticGetSupportedServiceNames(
 
 OUString FSStorageFactory::impl_staticGetImplementationName()
 {
-    return OUString("com.sun.star.comp.embed.FileSystemStorageFactory");
+    return "com.sun.star.comp.embed.FileSystemStorageFactory";
 }
 
 uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::impl_staticCreateSelfInstance(

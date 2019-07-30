@@ -293,7 +293,7 @@ OUString INetContentTypes::GetContentType(INetContentType eTypeID)
     if (aTypeName.isEmpty())
     {
         OSL_FAIL("INetContentTypes::GetContentType(): Bad ID");
-        return OUString(CONTENT_TYPE_STR_APP_OCTSTREAM);
+        return CONTENT_TYPE_STR_APP_OCTSTREAM;
     }
     return aTypeName;
 }
