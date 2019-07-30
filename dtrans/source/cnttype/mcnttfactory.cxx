@@ -52,7 +52,7 @@ Reference< XMimeContentType > CMimeContentTypeFactory::createMimeContentType( co
 
 OUString SAL_CALL CMimeContentTypeFactory::getImplementationName(  )
 {
-    return OUString( MIMECONTENTTYPEFACTORY_IMPL_NAME );
+    return MIMECONTENTTYPEFACTORY_IMPL_NAME;
 }
 
 sal_Bool SAL_CALL CMimeContentTypeFactory::supportsService( const OUString& ServiceName )
