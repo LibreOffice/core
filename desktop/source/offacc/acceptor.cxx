@@ -186,7 +186,7 @@ void Acceptor::initialize( const Sequence<Any>& aArguments )
 // XServiceInfo
 OUString Acceptor::impl_getImplementationName()
 {
-    return OUString("com.sun.star.office.comp.Acceptor");
+    return "com.sun.star.office.comp.Acceptor";
 }
 OUString Acceptor::getImplementationName()
 {

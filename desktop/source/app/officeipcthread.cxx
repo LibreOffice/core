@@ -317,7 +317,7 @@ oslSignalAction SalMainPipeExchangeSignal_impl(SAL_UNUSED_PARAMETER void* /*pDat
 // XServiceInfo
 OUString SAL_CALL RequestHandlerController::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.RequestHandlerController" );
+    return "com.sun.star.comp.RequestHandlerController";
 }
 
 sal_Bool RequestHandlerController::supportsService(

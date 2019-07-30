@@ -44,22 +44,22 @@ ExecutableBackendDb::ExecutableBackendDb(
 
 OUString ExecutableBackendDb::getDbNSName()
 {
-    return OUString(EXTENSION_REG_NS);
+    return EXTENSION_REG_NS;
 }
 
 OUString ExecutableBackendDb::getNSPrefix()
 {
-    return OUString(NS_PREFIX);
+    return NS_PREFIX;
 }
 
 OUString ExecutableBackendDb::getRootElementName()
 {
-    return OUString(ROOT_ELEMENT_NAME);
+    return ROOT_ELEMENT_NAME;
 }
 
 OUString ExecutableBackendDb::getKeyElementName()
 {
-    return OUString(ENTRY_NAME);
+    return ENTRY_NAME;
 }
 
 
