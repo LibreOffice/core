@@ -178,7 +178,7 @@ Sequence< OUString > SvtFolderPicker::impl_getStaticSupportedServiceNames()
 /* Helper for XServiceInfo */
 OUString SvtFolderPicker::impl_getStaticImplementationName()
 {
-    return OUString( "com.sun.star.svtools.OfficeFolderPicker" );
+    return "com.sun.star.svtools.OfficeFolderPicker";
 }
 
 /* Helper for registry */
