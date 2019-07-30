@@ -254,10 +254,6 @@
 #define RID_SVXSTR_ERROR_TYPE_LABEL                 NC_("RID_SVXSTR_ERROR_TYPE_LABEL", "Type:")
 #define RID_SVXSTR_ERROR_MESSAGE_LABEL              NC_("RID_SVXSTR_ERROR_MESSAGE_LABEL", "Message:")
 
-//abbreviation for "[Load]"
-#define RID_SVXSTR_HEADER1                          NC_("RID_SVXSTR_HEADER1", "[L]")
-//abbreviation for "[Save]"
-#define RID_SVXSTR_HEADER2                          NC_("RID_SVXSTR_HEADER2", "[S]")
 #define RID_SVXSTR_CHG_MATH                         NC_("RID_SVXSTR_CHG_MATH", "MathType to %PRODUCTNAME Math or reverse")
 #define RID_SVXSTR_CHG_WRITER                       NC_("RID_SVXSTR_CHG_WRITER", "WinWord to %PRODUCTNAME Writer or reverse")
 #define RID_SVXSTR_CHG_CALC                         NC_("RID_SVXSTR_CHG_CALC", "Excel to %PRODUCTNAME Calc or reverse")
