@@ -143,7 +143,7 @@ void SAL_CALL SvFilterOptionsDialog::initialize(const uno::Sequence<uno::Any>& r
 // XServiceInfo
 OUString SAL_CALL SvFilterOptionsDialog::getImplementationName()
 {
-    return OUString( "com.sun.star.svtools.SvFilterOptionsDialog" );
+    return "com.sun.star.svtools.SvFilterOptionsDialog";
 }
 sal_Bool SAL_CALL SvFilterOptionsDialog::supportsService( const OUString& rServiceName )
 {

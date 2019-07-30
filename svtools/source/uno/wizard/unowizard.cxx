@@ -257,7 +257,7 @@ namespace {
 
     OUString SAL_CALL Wizard::getImplementationName()
     {
-        return OUString("com.sun.star.comp.svtools.uno.Wizard");
+        return "com.sun.star.comp.svtools.uno.Wizard";
     }
 
 

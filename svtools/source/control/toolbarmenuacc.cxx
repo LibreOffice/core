@@ -200,7 +200,7 @@ sal_Int16 SAL_CALL ToolbarMenuAcc::getAccessibleRole()
 OUString SAL_CALL ToolbarMenuAcc::getAccessibleDescription()
 {
     ThrowIfDisposed();
-    return OUString( "ToolbarMenu" );
+    return "ToolbarMenu";
 }
 
 

@@ -38,7 +38,7 @@ StringMap SimpleTableUIObject::get_state()
 
 OUString SimpleTableUIObject::get_type() const
 {
-    return OUString("SimpleTable");
+    return "SimpleTable";
 }
 
 std::unique_ptr<UIObject> SimpleTableUIObject::createFromContainer(vcl::Window* pWindow)

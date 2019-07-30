@@ -97,7 +97,7 @@ namespace {
 
     OUString SAL_CALL OAddressBookSourceDialogUno::getImplementationName()
     {
-        return OUString( "com.sun.star.comp.svtools.OAddressBookSourceDialogUno" );
+        return "com.sun.star.comp.svtools.OAddressBookSourceDialogUno";
     }
 
 

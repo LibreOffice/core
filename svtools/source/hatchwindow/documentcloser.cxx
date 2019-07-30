@@ -210,7 +210,7 @@ void SAL_CALL ODocumentCloser::removeEventListener( const uno::Reference< lang::
 // XServiceInfo
 OUString SAL_CALL ODocumentCloser::getImplementationName(  )
 {
-    return OUString( "com.sun.star.comp.embed.DocumentCloser" );
+    return "com.sun.star.comp.embed.DocumentCloser";
 }
 
 sal_Bool SAL_CALL ODocumentCloser::supportsService( const OUString& ServiceName )

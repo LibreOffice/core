@@ -303,7 +303,7 @@ sal_Int32 SvtRulerAccessible::getBackground(  )
 // XServiceInfo
 OUString SAL_CALL SvtRulerAccessible::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.ui.SvtRulerAccessible" );
+    return "com.sun.star.comp.ui.SvtRulerAccessible";
 }
 
 sal_Bool SAL_CALL SvtRulerAccessible::supportsService( const OUString& sServiceName )

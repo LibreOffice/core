@@ -64,7 +64,7 @@ uno::Reference< embed::XHatchWindow > SAL_CALL OHatchWindowFactory::createHatchW
 
 OUString SAL_CALL OHatchWindowFactory::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.embed.HatchWindowFactory" );
+    return "com.sun.star.comp.embed.HatchWindowFactory";
 }
 
 sal_Bool SAL_CALL OHatchWindowFactory::supportsService( const OUString& ServiceName )

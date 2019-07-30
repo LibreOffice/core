@@ -140,7 +140,7 @@ void SAL_CALL GraphicRendererVCL::release()
 
 OUString SAL_CALL GraphicRendererVCL::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.graphic.GraphicRendererVCL" );
+    return "com.sun.star.comp.graphic.GraphicRendererVCL";
 }
 
 sal_Bool SAL_CALL GraphicRendererVCL::supportsService( const OUString& ServiceName )
