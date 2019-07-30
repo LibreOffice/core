@@ -171,41 +171,41 @@ OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& r
     bool bDocm = rFileName.endsWithIgnoreAsciiCase(".docm");
 
     if( rContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" && !bDocm )
-        return OUString( "writer_MS_Word_2007" );
+        return "writer_MS_Word_2007";
 
     if( rContentType == "application/vnd.ms-word.document.macroEnabled.main+xml" || bDocm )
-        return OUString( "writer_MS_Word_2007_VBA" );
+        return "writer_MS_Word_2007_VBA";
 
     if( rContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml" ||
         rContentType == "application/vnd.ms-word.template.macroEnabledTemplate.main+xml" )
-        return OUString( "writer_MS_Word_2007_Template" );
+        return "writer_MS_Word_2007_Template";
 
     if( rContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml")
-        return OUString( "MS Excel 2007 XML" );
+        return "MS Excel 2007 XML";
 
     if (rContentType == "application/vnd.ms-excel.sheet.macroEnabled.main+xml")
-        return OUString( "MS Excel 2007 VBA XML" );
+        return "MS Excel 2007 VBA XML";
 
     if( rContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml" ||
         rContentType == "application/vnd.ms-excel.template.macroEnabled.main+xml" )
-        return OUString( "MS Excel 2007 XML Template" );
+        return "MS Excel 2007 XML Template";
 
     if ( rContentType == "application/vnd.ms-excel.sheet.binary.macroEnabled.main" )
-        return OUString( "MS Excel 2007 Binary" );
+        return "MS Excel 2007 Binary";
 
     if (rContentType == "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml")
-        return OUString( "MS PowerPoint 2007 XML" );
+        return "MS PowerPoint 2007 XML";
 
     if (rContentType == "application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml")
-        return OUString( "MS PowerPoint 2007 XML VBA" );
+        return "MS PowerPoint 2007 XML VBA";
 
     if( rContentType == "application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml" ||
         rContentType == "application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml" )
-        return OUString( "MS PowerPoint 2007 XML AutoPlay" );
+        return "MS PowerPoint 2007 XML AutoPlay";
 
     if( rContentType == "application/vnd.openxmlformats-officedocument.presentationml.template.main+xml" ||
         rContentType == "application/vnd.ms-powerpoint.template.macroEnabled.main+xml" )
-        return OUString( "MS PowerPoint 2007 XML Template" );
+        return "MS PowerPoint 2007 XML Template";
 
     return OUString();
 }
@@ -358,7 +358,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
 
 OUString SAL_CALL FilterDetect::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.oox.FormatDetector" );
+    return "com.sun.star.comp.oox.FormatDetector";
 }
 
 sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )

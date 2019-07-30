@@ -43,7 +43,7 @@ FastTokenHandler::~FastTokenHandler()
 // XServiceInfo
 OUString SAL_CALL FastTokenHandler::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.oox.core.FastTokenHandler" );
+    return "com.sun.star.comp.oox.core.FastTokenHandler";
 }
 
 sal_Bool SAL_CALL FastTokenHandler::supportsService( const OUString& rServiceName )
