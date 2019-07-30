@@ -58,7 +58,7 @@ namespace
 {
 OUString getServiceImplementationName()
 {
-    return OUString("com.sun.star.comp.configuration.backend.KF5Backend");
+    return "com.sun.star.comp.configuration.backend.KF5Backend";
 }
 
 css::uno::Sequence<OUString> getServiceSupportedServiceNames()

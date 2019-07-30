@@ -58,8 +58,8 @@
 namespace {
 
 OUString getDefaultImplementationName() {
-    return OUString(
-            "com.sun.star.comp.configuration.backend.DesktopBackend");
+    return
+            "com.sun.star.comp.configuration.backend.DesktopBackend";
 }
 
 css::uno::Sequence< OUString > getDefaultSupportedServiceNames() {

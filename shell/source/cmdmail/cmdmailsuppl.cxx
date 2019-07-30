@@ -283,7 +283,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
 OUString SAL_CALL CmdMailSuppl::getImplementationName(  )
 {
-    return OUString("com.sun.star.comp.system.SimpleCommandMail");
+    return "com.sun.star.comp.system.SimpleCommandMail";
 }
 
 sal_Bool SAL_CALL CmdMailSuppl::supportsService( const OUString& ServiceName )
