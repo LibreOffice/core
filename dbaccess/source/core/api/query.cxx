@@ -355,7 +355,7 @@ void OQuery::registerProperties()
 
 OUString OQuery::determineContentType() const
 {
-    return OUString( "application/vnd.org.openoffice.DatabaseQuery" );
+    return "application/vnd.org.openoffice.DatabaseQuery";
 }
 
 }   // namespace dbaccess

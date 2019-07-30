@@ -88,7 +88,7 @@ IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2(OCommandDefinition,OCommandDefinition_PROP
 
 OUString SAL_CALL OCommandDefinition::getImplementationName()
 {
-    return OUString("com.sun.star.comp.dba.OCommandDefinition");
+    return "com.sun.star.comp.dba.OCommandDefinition";
 }
 
 css::uno::Sequence<OUString> SAL_CALL OCommandDefinition::getSupportedServiceNames()

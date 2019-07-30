@@ -98,7 +98,7 @@ OUString SAL_CALL ORelationController::getImplementationName()
 
 OUString ORelationController::getImplementationName_Static()
 {
-    return OUString("org.openoffice.comp.dbu.ORelationDesign");
+    return "org.openoffice.comp.dbu.ORelationDesign";
 }
 
 Sequence< OUString> ORelationController::getSupportedServiceNames_Static()

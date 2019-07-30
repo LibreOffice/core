@@ -105,7 +105,7 @@ public:
     // static methods
     static OUString                 getImplementationName_Static() throw(  )
     {
-        return OUString("org.openoffice.comp.dbflt.DBTypeDetection");
+        return "org.openoffice.comp.dbflt.DBTypeDetection";
     }
     static Sequence< OUString> getSupportedServiceNames_Static() throw(  );
     static css::uno::Reference< css::uno::XInterface >
@@ -172,7 +172,7 @@ OUString SAL_CALL DBTypeDetection::detect( css::uno::Sequence< css::beans::Prope
                     }
                 }
 
-                return OUString("StarBase");
+                return "StarBase";
             }
             ::comphelper::disposeComponent(xStorageProperties);
         }
@@ -240,7 +240,7 @@ public:
     // static methods
     static OUString                 getImplementationName_Static() throw(  )
     {
-        return OUString("org.openoffice.comp.dbflt.DBContentLoader2");
+        return "org.openoffice.comp.dbflt.DBContentLoader2";
     }
     static Sequence< OUString > getSupportedServiceNames_Static() throw(  );
     static css::uno::Reference< css::uno::XInterface >

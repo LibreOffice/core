@@ -67,7 +67,7 @@ OBookmarkContainer::~OBookmarkContainer()
 // XServiceInfo
 OUString SAL_CALL OBookmarkContainer::getImplementationName(  )
 {
-    return OUString("com.sun.star.comp.dba.OBookmarkContainer");
+    return "com.sun.star.comp.dba.OBookmarkContainer";
 }
 
 sal_Bool SAL_CALL OBookmarkContainer::supportsService( const OUString& _rServiceName )

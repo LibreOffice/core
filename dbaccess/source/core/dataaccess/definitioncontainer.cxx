@@ -147,7 +147,7 @@ css::uno::Sequence<sal_Int8> ODefinitionContainer::getImplementationId()
 // XServiceInfo
 OUString SAL_CALL ODefinitionContainer::getImplementationName(  )
 {
-    return OUString("com.sun.star.sdb.ODefinitionContainer");
+    return "com.sun.star.sdb.ODefinitionContainer";
 }
 
 Sequence< OUString > SAL_CALL ODefinitionContainer::getSupportedServiceNames(  )

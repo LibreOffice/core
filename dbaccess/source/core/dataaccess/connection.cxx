@@ -78,7 +78,7 @@ namespace dbaccess
 // XServiceInfo
 OUString OConnection::getImplementationName(  )
 {
-    return OUString("com.sun.star.comp.dbaccess.Connection");
+    return "com.sun.star.comp.dbaccess.Connection";
 }
 
 sal_Bool OConnection::supportsService( const OUString& _rServiceName )

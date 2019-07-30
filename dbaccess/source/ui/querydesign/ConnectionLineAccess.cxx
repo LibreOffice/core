@@ -59,7 +59,7 @@ namespace dbaui
     }
     OUString SAL_CALL OConnectionLineAccess::getImplementationName()
     {
-        return OUString("org.openoffice.comp.dbu.ConnectionLineAccessibility");
+        return "org.openoffice.comp.dbu.ConnectionLineAccessibility";
     }
     // XAccessibleContext
     sal_Int32 SAL_CALL OConnectionLineAccess::getAccessibleChildCount(  )
@@ -100,7 +100,7 @@ namespace dbaui
     }
     OUString SAL_CALL OConnectionLineAccess::getAccessibleDescription(  )
     {
-        return OUString("Relation");
+        return "Relation";
     }
     Reference< XAccessibleRelationSet > SAL_CALL OConnectionLineAccess::getAccessibleRelationSet(  )
     {

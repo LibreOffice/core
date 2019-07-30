@@ -548,7 +548,7 @@ void SAL_CALL ODatabaseSource::disposing( const css::lang::EventObject& Source )
 // XServiceInfo
 OUString ODatabaseSource::getImplementationName(  )
 {
-    return OUString("com.sun.star.comp.dba.ODatabaseSource");
+    return "com.sun.star.comp.dba.ODatabaseSource";
 }
 
 Sequence< OUString > ODatabaseSource::getSupportedServiceNames(  )

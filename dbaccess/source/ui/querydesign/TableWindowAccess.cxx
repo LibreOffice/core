@@ -70,7 +70,7 @@ namespace dbaui
     }
     OUString SAL_CALL OTableWindowAccess::getImplementationName()
     {
-        return OUString("org.openoffice.comp.dbu.TableWindowAccessibility");
+        return "org.openoffice.comp.dbu.TableWindowAccessibility";
     }
     Sequence< OUString > SAL_CALL OTableWindowAccess::getSupportedServiceNames()
     {

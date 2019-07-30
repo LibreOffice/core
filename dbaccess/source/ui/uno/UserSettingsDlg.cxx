@@ -61,7 +61,7 @@ OUString SAL_CALL OUserSettingsDialog::getImplementationName()
 
 OUString OUserSettingsDialog::getImplementationName_Static()
 {
-    return OUString("org.openoffice.comp.dbu.OUserSettingsDialog");
+    return "org.openoffice.comp.dbu.OUserSettingsDialog";
 }
 
 css::uno::Sequence<OUString> SAL_CALL OUserSettingsDialog::getSupportedServiceNames()

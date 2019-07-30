@@ -243,7 +243,7 @@ void SAL_CALL OViewContainer::elementReplaced( const ContainerEvent& /*Event*/ )
 OUString OViewContainer::getTableTypeRestriction() const
 {
     // no restriction at all (other than the ones provided externally)
-    return OUString( "VIEW"  );
+    return "VIEW";
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

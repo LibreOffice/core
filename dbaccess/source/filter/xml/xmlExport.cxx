@@ -112,7 +112,7 @@ namespace dbaxml
 
     OUString ODBExportHelper::getImplementationName_Static(  )
     {
-        return OUString("com.sun.star.comp.sdb.XMLSettingsExporter");
+        return "com.sun.star.comp.sdb.XMLSettingsExporter";
     }
 
     Sequence< OUString > ODBExportHelper::getSupportedServiceNames_Static(  )
@@ -127,7 +127,7 @@ namespace dbaxml
     }
     OUString ODBFullExportHelper::getImplementationName_Static(  )
     {
-        return OUString("com.sun.star.comp.sdb.XMLFullExporter");
+        return "com.sun.star.comp.sdb.XMLFullExporter";
     }
     Sequence< OUString > ODBFullExportHelper::getSupportedServiceNames_Static(  )
     {
@@ -144,24 +144,24 @@ namespace dbaxml
         switch (_rType.getTypeClass())
         {
             case TypeClass_STRING:
-                return OUString("string");
+                return "string";
             case TypeClass_DOUBLE:
-                return OUString("double");
+                return "double";
             case TypeClass_BOOLEAN:
-                return OUString("boolean");
+                return "boolean";
             case TypeClass_BYTE:
             case TypeClass_SHORT:
-                return OUString("short");
+                return "short";
             case TypeClass_LONG:
-                return OUString("int");
+                return "int";
             case TypeClass_HYPER:
-                return OUString("long");
+                return "long";
             case TypeClass_ENUM:
-                return OUString("int");
+                return "int";
 
             default:
                 OSL_FAIL( "lcl_implGetPropertyXMLType: unsupported value type!" );
-                return OUString("double");
+                return "double";
         }
     }
 
@@ -252,7 +252,7 @@ ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext, OUString 
 
 OUString ODBExport::getImplementationName_Static()
 {
-    return OUString("com.sun.star.comp.sdb.DBExportFilter");
+    return "com.sun.star.comp.sdb.DBExportFilter";
 }
 
 css::uno::Sequence<OUString> ODBExport::getSupportedServiceNames_Static()

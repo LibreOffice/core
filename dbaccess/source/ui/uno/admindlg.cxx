@@ -61,7 +61,7 @@ OUString SAL_CALL ODataSourcePropertyDialog::getImplementationName()
 
 OUString ODataSourcePropertyDialog::getImplementationName_Static()
 {
-    return OUString("org.openoffice.comp.dbu.ODatasourceAdministrationDialog");
+    return "org.openoffice.comp.dbu.ODatasourceAdministrationDialog";
 }
 
 css::uno::Sequence<OUString> SAL_CALL ODataSourcePropertyDialog::getSupportedServiceNames()

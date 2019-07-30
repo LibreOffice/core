@@ -40,7 +40,7 @@ namespace dbaui
     }
     OUString SAL_CALL OJoinDesignViewAccess::getImplementationName()
     {
-        return OUString("org.openoffice.comp.dbu.JoinViewAccessibility");
+        return "org.openoffice.comp.dbu.JoinViewAccessibility";
     }
     void OJoinDesignViewAccess::clearTableView()
     {

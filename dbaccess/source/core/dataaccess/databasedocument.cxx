@@ -1874,7 +1874,7 @@ void SAL_CALL ODatabaseDocument::removeEventListener( const Reference< lang::XEv
 // XServiceInfo
 OUString ODatabaseDocument::getImplementationName()
 {
-    return OUString("com.sun.star.comp.dba.ODatabaseDocument");
+    return "com.sun.star.comp.dba.ODatabaseDocument";
 }
 
 Sequence< OUString > ODatabaseDocument::getSupportedServiceNames()

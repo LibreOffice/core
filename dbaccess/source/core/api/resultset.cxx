@@ -169,7 +169,7 @@ void OResultSet::close()
 // XServiceInfo
 OUString OResultSet::getImplementationName(  )
 {
-    return OUString("com.sun.star.sdb.OResultSet");
+    return "com.sun.star.sdb.OResultSet";
 }
 
 sal_Bool OResultSet::supportsService( const OUString& _rServiceName )

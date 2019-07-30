@@ -63,7 +63,7 @@ public:
 #define IMPLEMENT_SERVICE_INFO_IMPLNAME(classname, implasciiname)   \
     OUString SAL_CALL classname::getImplementationName(  )   \
     {   \
-        return OUString(implasciiname); \
+        return implasciiname; \
     }   \
 
 #define IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(classname, implasciiname)    \
@@ -73,7 +73,7 @@ public:
     }   \
     OUString classname::getImplementationName_Static(  )    \
     {   \
-        return OUString(implasciiname); \
+        return implasciiname; \
     }   \
 
 #define IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \

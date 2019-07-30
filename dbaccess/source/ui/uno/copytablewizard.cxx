@@ -420,7 +420,7 @@ OUString SAL_CALL CopyTableWizard::getImplementationName()
 
 OUString CopyTableWizard::getImplementationName_Static()
 {
-    return OUString( "org.openoffice.comp.dbu.CopyTableWizard" );
+    return "org.openoffice.comp.dbu.CopyTableWizard";
 }
 
 css::uno::Sequence<OUString> SAL_CALL CopyTableWizard::getSupportedServiceNames()

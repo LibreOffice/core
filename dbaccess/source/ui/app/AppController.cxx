@@ -161,7 +161,7 @@ OUString SAL_CALL OApplicationController::getImplementationName()
 
 OUString OApplicationController::getImplementationName_Static()
 {
-    return OUString(SERVICE_SDB_APPLICATIONCONTROLLER);
+    return SERVICE_SDB_APPLICATIONCONTROLLER;
 }
 
 Sequence< OUString> OApplicationController::getSupportedServiceNames_Static()
@@ -2260,7 +2260,7 @@ void OApplicationController::onDeleteEntry()
 
 OUString OApplicationController::getContextMenuResourceName( Control& /*_rControl*/ ) const
 {
-    return OUString("edit");
+    return "edit";
 }
 
 IController& OApplicationController::getCommandController()

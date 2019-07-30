@@ -106,7 +106,7 @@ namespace sdbtools
 
     OUString ConnectionTools::getImplementationName_static()
     {
-        return OUString( "com.sun.star.comp.dbaccess.ConnectionTools" );
+        return "com.sun.star.comp.dbaccess.ConnectionTools";
     }
 
     Sequence< OUString > ConnectionTools::getSupportedServiceNames_static()

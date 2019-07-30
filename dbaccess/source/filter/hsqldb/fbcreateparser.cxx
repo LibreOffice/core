@@ -43,40 +43,40 @@ OUString lcl_DataTypetoFbTypeName(sal_Int32 eType)
     {
         case DataType::CHAR:
         case DataType::BINARY:
-            return OUString("CHAR");
+            return "CHAR";
         case DataType::VARCHAR:
         case DataType::VARBINARY:
-            return OUString("VARCHAR");
+            return "VARCHAR";
         case DataType::TINYINT: // no such type in Firebird
         case DataType::SMALLINT:
-            return OUString("SMALLINT");
+            return "SMALLINT";
         case DataType::INTEGER:
-            return OUString("INTEGER");
+            return "INTEGER";
         case DataType::BIGINT:
-            return OUString("BIGINT");
+            return "BIGINT";
         case DataType::NUMERIC:
-            return OUString("NUMERIC");
+            return "NUMERIC";
         case DataType::DECIMAL:
-            return OUString("DECIMAL");
+            return "DECIMAL";
         case DataType::BOOLEAN:
-            return OUString("BOOLEAN");
+            return "BOOLEAN";
         case DataType::LONGVARCHAR:
         case DataType::LONGVARBINARY:
         case DataType::CLOB:
         case DataType::BLOB:
         case DataType::OTHER:
-            return OUString("BLOB");
+            return "BLOB";
         case DataType::DATE:
-            return OUString("DATE");
+            return "DATE";
         case DataType::TIME:
-            return OUString("TIME");
+            return "TIME";
         case DataType::TIMESTAMP:
-            return OUString("TIMESTAMP");
+            return "TIMESTAMP";
         case DataType::DOUBLE:
         case DataType::REAL:
-            return OUString("DOUBLE PRECISION");
+            return "DOUBLE PRECISION";
         case DataType::FLOAT:
-            return OUString("FLOAT");
+            return "FLOAT";
         default:
             assert(false);
             return OUString();
@@ -91,12 +91,12 @@ OUString lcl_getTypeModifier(sal_Int32 eType)
     {
         case DataType::CLOB:
         case DataType::LONGVARCHAR:
-            return OUString("SUB_TYPE 1");
+            return "SUB_TYPE 1";
         case DataType::LONGVARBINARY:
-            return OUString("SUB_TYPE -9546");
+            return "SUB_TYPE -9546";
         case DataType::BINARY:
         case DataType::VARBINARY:
-            return OUString("CHARACTER SET OCTETS");
+            return "CHARACTER SET OCTETS";
         default:
             return OUString();
     }

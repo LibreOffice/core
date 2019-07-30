@@ -146,7 +146,7 @@ IMPLEMENT_FORWARD_XINTERFACE3( OComponentDefinition,OContentHelper,ODataSettings
 
 OUString SAL_CALL OComponentDefinition::getImplementationName()
 {
-    return OUString("com.sun.star.comp.dba.OComponentDefinition");
+    return "com.sun.star.comp.dba.OComponentDefinition";
 }
 
 Sequence< OUString > SAL_CALL OComponentDefinition::getSupportedServiceNames()

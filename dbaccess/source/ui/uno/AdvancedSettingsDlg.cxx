@@ -92,7 +92,7 @@ namespace dbaui
 
     OUString OAdvancedSettingsDialog::getImplementationName_Static()
     {
-        return OUString("org.openoffice.comp.dbu.OAdvancedSettingsDialog");
+        return "org.openoffice.comp.dbu.OAdvancedSettingsDialog";
     }
 
     css::uno::Sequence<OUString> SAL_CALL OAdvancedSettingsDialog::getSupportedServiceNames()

@@ -76,7 +76,7 @@ OUString SAL_CALL OSQLMessageDialog::getImplementationName()
 
 OUString OSQLMessageDialog::getImplementationName_Static()
 {
-    return OUString("org.openoffice.comp.dbu.OSQLMessageDialog");
+    return "org.openoffice.comp.dbu.OSQLMessageDialog";
 }
 
 css::uno::Sequence<OUString> SAL_CALL OSQLMessageDialog::getSupportedServiceNames()

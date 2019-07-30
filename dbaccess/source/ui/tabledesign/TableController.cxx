@@ -114,7 +114,7 @@ OUString SAL_CALL OTableController::getImplementationName()
 
 OUString OTableController::getImplementationName_Static()
 {
-    return OUString("org.openoffice.comp.dbu.OTableDesign");
+    return "org.openoffice.comp.dbu.OTableDesign";
 }
 
 Sequence< OUString> OTableController::getSupportedServiceNames_Static()
