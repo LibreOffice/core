@@ -198,7 +198,7 @@ static OUString exportBackground(FlashExporter &aFlashExporter, const Reference<
     {
         osl_removeFile(fullpath.pData);
         if ( 0xffff == nCached )
-            return OUString("NULL");
+            return "NULL";
         else
             return "slide" + OUString::number(nCached+1) + OUString::createFromAscii(suffix) + ".swf";
     }
@@ -479,7 +479,7 @@ void SAL_CALL FlashExportFilter::initialize( const css::uno::Sequence< css::uno:
 
 OUString FlashExportFilter_getImplementationName ()
 {
-    return OUString ( "com.sun.star.comp.Impress.FlashExportFilter" );
+    return "com.sun.star.comp.Impress.FlashExportFilter";
 }
 
 Sequence< OUString > FlashExportFilter_getSupportedServiceNames(  )

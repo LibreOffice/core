@@ -95,7 +95,7 @@ css::uno::Sequence< OUString > SAL_CALL FrameLoaderFactory::getAvailableServiceN
 
 OUString FrameLoaderFactory::impl_getImplementationName()
 {
-    return OUString( "com.sun.star.comp.filter.config.FrameLoaderFactory" );
+    return "com.sun.star.comp.filter.config.FrameLoaderFactory";
 }
 
 

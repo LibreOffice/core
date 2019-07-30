@@ -71,7 +71,7 @@ sal_Bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Referen
 
 OUString PDFInteractionHandler_getImplementationName ()
 {
-    return OUString ( "com.sun.star.comp.PDF.PDFExportInteractionHandler" );
+    return "com.sun.star.comp.PDF.PDFExportInteractionHandler";
 }
 
 

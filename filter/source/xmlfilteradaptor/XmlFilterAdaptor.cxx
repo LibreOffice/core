@@ -348,7 +348,7 @@ void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )
 }
 OUString XmlFilterAdaptor_getImplementationName ()
 {
-    return OUString( "com.sun.star.comp.Writer.XmlFilterAdaptor" );
+    return "com.sun.star.comp.Writer.XmlFilterAdaptor";
 }
 
 Sequence< OUString > XmlFilterAdaptor_getSupportedServiceNames(  )

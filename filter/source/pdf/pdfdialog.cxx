@@ -35,7 +35,7 @@ using namespace ::com::sun::star::beans;
 
 OUString PDFDialog_getImplementationName ()
 {
-    return OUString ( "com.sun.star.comp.PDF.PDFDialog" );
+    return "com.sun.star.comp.PDF.PDFDialog";
 }
 
 

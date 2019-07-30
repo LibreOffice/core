@@ -82,7 +82,7 @@ namespace filter {
                      const Sequence< OUString >& userData) override;
 
             OUString SAL_CALL getImplementationName() override
-            { return OUString("com.sun.star.comp.filter.OdfFlatXml"); }
+            { return "com.sun.star.comp.filter.OdfFlatXml"; }
 
             sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
             { return cppu::supportsService(this, ServiceName); }
@@ -204,7 +204,7 @@ OdfFlatXml::exporter(const Sequence< PropertyValue >& sourceData,
 
 OUString OdfFlatXml::impl_getImplementationName()
 {
-    return OUString("com.sun.star.comp.filter.OdfFlatXml");
+    return "com.sun.star.comp.filter.OdfFlatXml";
 }
 
 Sequence< OUString > OdfFlatXml::impl_getSupportedServiceNames()

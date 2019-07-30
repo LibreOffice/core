@@ -165,7 +165,7 @@ void SAL_CALL XMLFilterDialogComponent::release() throw ()
 /// @throws RuntimeException
 static OUString XMLFilterDialogComponent_getImplementationName()
 {
-    return OUString( "com.sun.star.comp.ui.XSLTFilterDialog" );
+    return "com.sun.star.comp.ui.XSLTFilterDialog";
 }
 
 /// @throws RuntimeException

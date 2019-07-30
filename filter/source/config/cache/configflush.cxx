@@ -103,7 +103,7 @@ void SAL_CALL ConfigFlush::removeRefreshListener(const css::uno::Reference< css:
 
 OUString ConfigFlush::impl_getImplementationName()
 {
-    return OUString("com.sun.star.comp.filter.config.ConfigFlush");
+    return "com.sun.star.comp.filter.config.ConfigFlush";
 }
 
 

@@ -1203,7 +1203,7 @@ bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      utl::MediaDescri
 
 OUString TypeDetection::impl_getImplementationName()
 {
-    return OUString( "com.sun.star.comp.filter.config.TypeDetection" );
+    return "com.sun.star.comp.filter.config.TypeDetection";
 }
 
 

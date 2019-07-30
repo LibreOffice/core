@@ -503,7 +503,7 @@ std::vector<OUString> FilterFactory::impl_readSortedFilterListFromConfig(const O
 
 OUString FilterFactory::impl_getImplementationName()
 {
-    return OUString( "com.sun.star.comp.filter.config.FilterFactory" );
+    return "com.sun.star.comp.filter.config.FilterFactory";
 }
 
 

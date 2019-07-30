@@ -71,17 +71,17 @@ static SvGlobalName GetEmbeddedVersion( const SvGlobalName& aAppName )
 static OUString GetStorageType( const SvGlobalName& aEmbName )
 {
     if ( aEmbName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_8 ) )
-        return OUString( "LibreOffice.MathDocument.1" );
+        return "LibreOffice.MathDocument.1";
     else if ( aEmbName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_8 ) )
-        return OUString( "LibreOffice.WriterDocument.1" );
+        return "LibreOffice.WriterDocument.1";
     else if ( aEmbName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_8 ) )
-        return OUString( "LibreOffice.CalcDocument.1" );
+        return "LibreOffice.CalcDocument.1";
     else if ( aEmbName == SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_8 ) )
-        return OUString( "LibreOffice.DrawDocument.1" );
+        return "LibreOffice.DrawDocument.1";
     else if ( aEmbName == SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_8 ) )
-        return OUString( "LibreOffice.ImpressDocument.1" );
+        return "LibreOffice.ImpressDocument.1";
     else if ( aEmbName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_8 ) )
-        return OUString("LibreOffice.ChartDocument.1");
+        return "LibreOffice.ChartDocument.1";
     return OUString();
 }
 

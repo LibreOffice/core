@@ -175,7 +175,7 @@ OUString T602ImportFilter::detect( Sequence<PropertyValue>& Descriptor)
         (aData[1] != 'C') || (aData[2] != 'T') || (aData[3] != ' '))
         return OUString();
 
-    return OUString(  "writer_T602_Document"  );
+    return "writer_T602_Document";
 }
 
 // XFilter
@@ -865,7 +865,7 @@ Sequence< OUString > SAL_CALL T602ImportFilter::getSupportedServiceNames(  )
 
 OUString T602ImportFilter_getImplementationName ()
 {
-    return OUString ( "com.sun.star.comp.Writer.T602ImportFilter" );
+    return "com.sun.star.comp.Writer.T602ImportFilter";
 }
 
 Sequence< OUString > T602ImportFilter_getSupportedServiceNames(  )
@@ -1135,7 +1135,7 @@ Sequence< OUString > SAL_CALL T602ImportFilterDialog::getSupportedServiceNames( 
 
 OUString T602ImportFilterDialog_getImplementationName ()
 {
-    return OUString ( "com.sun.star.comp.Writer.T602ImportFilterDialog" );
+    return "com.sun.star.comp.Writer.T602ImportFilterDialog";
 }
 
 Sequence< OUString > T602ImportFilterDialog_getSupportedServiceNames(  )
