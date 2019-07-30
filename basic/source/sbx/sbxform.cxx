@@ -849,7 +849,7 @@ OUString SbxBasicFormater::BasicFormatNull( const OUString& sFormatStrg )
     {
         return sNullFormatStrg;
     }
-    return OUString("null");
+    return "null";
 }
 
 OUString SbxBasicFormater::BasicFormat( double dNumber, const OUString& _sFormatStrg )

@@ -454,7 +454,7 @@ SfxDialogLibraryContainer:: HasExecutableCode( const OUString& /*Library*/ )
 
 OUString SAL_CALL SfxDialogLibraryContainer::getImplementationName( )
 {
-    return OUString("com.sun.star.comp.sfx2.DialogLibraryContainer");
+    return "com.sun.star.comp.sfx2.DialogLibraryContainer";
 }
 
 Sequence< OUString > SAL_CALL SfxDialogLibraryContainer::getSupportedServiceNames( )
