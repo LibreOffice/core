@@ -190,7 +190,7 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
 OUString SAL_CALL
 CharacterClassificationImpl::getImplementationName()
 {
-    return OUString("com.sun.star.i18n.CharacterClassification");
+    return "com.sun.star.i18n.CharacterClassification";
 }
 
 sal_Bool SAL_CALL

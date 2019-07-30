@@ -1526,7 +1526,7 @@ static uno::Sequence< OUString > getServiceName_Static()
 
 static OUString getImplementationName_Static()
 {
-    return OUString( cSearchImpl );
+    return cSearchImpl;
 }
 
 OUString SAL_CALL

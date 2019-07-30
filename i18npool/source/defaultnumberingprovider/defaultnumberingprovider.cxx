@@ -1108,7 +1108,7 @@ OUString DefaultNumberingProvider::getNumberingIdentifier( sal_Int16 nNumberingT
 
 OUString DefaultNumberingProvider::getImplementationName()
 {
-    return OUString("com.sun.star.text.DefaultNumberingProvider");
+    return "com.sun.star.text.DefaultNumberingProvider";
 }
 
 sal_Bool DefaultNumberingProvider::supportsService(const OUString& rServiceName)

@@ -208,7 +208,7 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
 
 OUString SAL_CALL CollatorImpl::getImplementationName()
 {
-    return OUString("com.sun.star.i18n.Collator");
+    return "com.sun.star.i18n.Collator";
 }
 
 sal_Bool SAL_CALL CollatorImpl::supportsService(const OUString& rServiceName)

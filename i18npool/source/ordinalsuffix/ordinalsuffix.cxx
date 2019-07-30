@@ -138,7 +138,7 @@ const sal_Char cOrdinalSuffix[] = "com.sun.star.i18n.OrdinalSuffix";
 
 OUString SAL_CALL OrdinalSuffixService::getImplementationName()
 {
-    return OUString(cOrdinalSuffix);
+    return cOrdinalSuffix;
 }
 
 sal_Bool SAL_CALL OrdinalSuffixService::supportsService( const OUString& rServiceName)

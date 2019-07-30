@@ -1575,7 +1575,7 @@ sal_Bool OutlineNumbering::hasElements(  )
 OUString SAL_CALL
 LocaleDataImpl::getImplementationName()
 {
-    return OUString("com.sun.star.i18n.LocaleDataImpl");
+    return "com.sun.star.i18n.LocaleDataImpl";
 }
 
 sal_Bool SAL_CALL LocaleDataImpl::supportsService(const OUString& rServiceName)

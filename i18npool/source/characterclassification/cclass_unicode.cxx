@@ -276,7 +276,7 @@ ParseResult SAL_CALL cclass_Unicode::parsePredefinedToken(
 
 OUString SAL_CALL cclass_Unicode::getImplementationName()
 {
-    return OUString("com.sun.star.i18n.CharacterClassification_Unicode");
+    return "com.sun.star.i18n.CharacterClassification_Unicode";
 }
 
 sal_Bool SAL_CALL cclass_Unicode::supportsService(const OUString& rServiceName)
