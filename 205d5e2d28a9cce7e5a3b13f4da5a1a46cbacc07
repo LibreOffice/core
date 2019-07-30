@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_015f97e2",
+        "filename": "sw/source/core/inc/UndoCore.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-30T12:48:50Z",
+      "side": 1,
+      "message": "these 2 other SwFrameFormat* have the same problem, no?",
+      "revId": "205d5e2d28a9cce7e5a3b13f4da5a1a46cbacc07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
