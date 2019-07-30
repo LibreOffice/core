@@ -102,7 +102,7 @@ XTYPEPROVIDER_IMPL_3( ResultSetImplHelper,
 
 OUString SAL_CALL ResultSetImplHelper::getImplementationName()
 {
-    return OUString( "ResultSetImplHelper" );
+    return "ResultSetImplHelper";
 }
 
 sal_Bool SAL_CALL ResultSetImplHelper::supportsService( const OUString& ServiceName )
