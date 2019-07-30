@@ -498,7 +498,7 @@ static Sequence<OUString> getSupportedServiceNames_PAR()
 
 static OUString getImplementationName_PAR()
 {
-    return OUString( "animcore::ParallelTimeContainer" );
+    return "animcore::ParallelTimeContainer";
 }
 
 static Sequence<OUString> getSupportedServiceNames_SEQ()
@@ -508,7 +508,7 @@ static Sequence<OUString> getSupportedServiceNames_SEQ()
 
 static OUString getImplementationName_SEQ()
 {
-    return OUString( "animcore::SequenceTimeContainer" );
+    return "animcore::SequenceTimeContainer";
 }
 
 static Sequence<OUString> getSupportedServiceNames_ITERATE()
@@ -518,7 +518,7 @@ static Sequence<OUString> getSupportedServiceNames_ITERATE()
 
 static OUString getImplementationName_ITERATE()
 {
-    return OUString( "animcore::IterateContainer" );
+    return "animcore::IterateContainer";
 }
 
 static Sequence<OUString> getSupportedServiceNames_ANIMATE()
@@ -528,7 +528,7 @@ static Sequence<OUString> getSupportedServiceNames_ANIMATE()
 
 static OUString getImplementationName_ANIMATE()
 {
-        return OUString( "animcore::Animate" );
+        return "animcore::Animate";
 }
 
 static Sequence<OUString> getSupportedServiceNames_SET()
@@ -538,7 +538,7 @@ static Sequence<OUString> getSupportedServiceNames_SET()
 
 static OUString getImplementationName_SET()
 {
-    return OUString( "animcore::AnimateSet" );
+    return "animcore::AnimateSet";
 }
 
 static Sequence<OUString> getSupportedServiceNames_ANIMATECOLOR()
@@ -548,7 +548,7 @@ static Sequence<OUString> getSupportedServiceNames_ANIMATECOLOR()
 
 static OUString getImplementationName_ANIMATECOLOR()
 {
-    return OUString( "animcore::AnimateColor" );
+    return "animcore::AnimateColor";
 }
 
 static Sequence<OUString> getSupportedServiceNames_ANIMATEMOTION()
@@ -558,7 +558,7 @@ static Sequence<OUString> getSupportedServiceNames_ANIMATEMOTION()
 
 static OUString getImplementationName_ANIMATEMOTION()
 {
-    return OUString( "animcore::AnimateMotion" );
+    return "animcore::AnimateMotion";
 }
 
 static Sequence<OUString> getSupportedServiceNames_ANIMATETRANSFORM()
@@ -568,7 +568,7 @@ static Sequence<OUString> getSupportedServiceNames_ANIMATETRANSFORM()
 
 static OUString getImplementationName_ANIMATETRANSFORM()
 {
-    return OUString( "animcore::AnimateTransform" );
+    return "animcore::AnimateTransform";
 }
 
 static Sequence<OUString> getSupportedServiceNames_TRANSITIONFILTER()
@@ -578,7 +578,7 @@ static Sequence<OUString> getSupportedServiceNames_TRANSITIONFILTER()
 
 static OUString getImplementationName_TRANSITIONFILTER()
 {
-        return OUString( "animcore::TransitionFilter" );
+        return "animcore::TransitionFilter";
 }
 
 static Sequence<OUString> getSupportedServiceNames_AUDIO()
@@ -588,7 +588,7 @@ static Sequence<OUString> getSupportedServiceNames_AUDIO()
 
 static OUString getImplementationName_AUDIO()
 {
-        return OUString( "animcore::Audio" );
+        return "animcore::Audio";
 }
 
 static Sequence<OUString> getSupportedServiceNames_COMMAND()
@@ -598,7 +598,7 @@ static Sequence<OUString> getSupportedServiceNames_COMMAND()
 
 static OUString getImplementationName_COMMAND()
 {
-    return OUString( "animcore::Command" );
+    return "animcore::Command";
 }
 
 // XInterface
