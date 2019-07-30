@@ -427,7 +427,7 @@ OString PoEntry::genKeyId(const OString& rGenerator)
         nCRC >>= 6;
     }
     sKeyId[5] = '\0';
-    return OString(sKeyId);
+    return sKeyId;
 }
 
 namespace
@@ -439,7 +439,7 @@ namespace
         struct tm* pNow = localtime(&aNow);
         char pBuff[50];
         strftime( pBuff, sizeof pBuff, "%Y-%m-%d %H:%M%z", pNow );
-        return OString(pBuff);
+        return pBuff;
     }
 }
 
