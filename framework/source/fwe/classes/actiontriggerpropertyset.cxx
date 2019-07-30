@@ -96,7 +96,7 @@ void SAL_CALL ActionTriggerPropertySet::release() throw ()
 // XServiceInfo
 OUString SAL_CALL ActionTriggerPropertySet::getImplementationName()
 {
-    return OUString( IMPLEMENTATIONNAME_ACTIONTRIGGER );
+    return IMPLEMENTATIONNAME_ACTIONTRIGGER;
 }
 
 sal_Bool SAL_CALL ActionTriggerPropertySet::supportsService( const OUString& ServiceName )

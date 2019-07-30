@@ -94,7 +94,7 @@ css::uno::Sequence< OUString > PopupMenuDispatcher::impl_getStaticSupportedServi
 
 OUString PopupMenuDispatcher::impl_getStaticImplementationName()
 {
-    return OUString(IMPLEMENTATIONNAME_POPUPMENUDISPATCHER);
+    return IMPLEMENTATIONNAME_POPUPMENUDISPATCHER;
 }
 
 css::uno::Reference< css::uno::XInterface >

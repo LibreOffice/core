@@ -196,7 +196,7 @@ sal_Bool SAL_CALL RootActionTriggerContainer::hasElements()
 // XServiceInfo
 OUString SAL_CALL RootActionTriggerContainer::getImplementationName()
 {
-    return OUString( IMPLEMENTATIONNAME_ROOTACTIONTRIGGERCONTAINER );
+    return IMPLEMENTATIONNAME_ROOTACTIONTRIGGERCONTAINER;
 }
 
 sal_Bool SAL_CALL RootActionTriggerContainer::supportsService( const OUString& ServiceName )

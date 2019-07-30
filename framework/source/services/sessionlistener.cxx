@@ -112,7 +112,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return OUString("com.sun.star.comp.frame.SessionListener");
+        return "com.sun.star.comp.frame.SessionListener";
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override

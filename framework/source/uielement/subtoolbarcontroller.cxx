@@ -419,7 +419,7 @@ void SubToolBarController::dispose()
 
 OUString SubToolBarController::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.framework.SubToolBarController" );
+    return "com.sun.star.comp.framework.SubToolBarController";
 }
 
 sal_Bool SubToolBarController::supportsService( const OUString& rServiceName )

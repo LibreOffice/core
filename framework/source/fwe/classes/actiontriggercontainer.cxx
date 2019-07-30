@@ -100,7 +100,7 @@ Sequence< OUString > SAL_CALL ActionTriggerContainer::getAvailableServiceNames()
 // XServiceInfo
 OUString SAL_CALL ActionTriggerContainer::getImplementationName()
 {
-    return OUString( IMPLEMENTATIONNAME_ACTIONTRIGGERCONTAINER );
+    return IMPLEMENTATIONNAME_ACTIONTRIGGERCONTAINER;
 }
 
 sal_Bool SAL_CALL ActionTriggerContainer::supportsService( const OUString& ServiceName )

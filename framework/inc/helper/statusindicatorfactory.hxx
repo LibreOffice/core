@@ -192,7 +192,7 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper<
 
         virtual OUString SAL_CALL getImplementationName() override
         {
-            return OUString("com.sun.star.comp.framework.StatusIndicatorFactory");
+            return "com.sun.star.comp.framework.StatusIndicatorFactory";
         }
 
         virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override

@@ -150,7 +150,7 @@ OUString ThesaurusMenuController::getThesImplName( const css::lang::Locale& rLoc
 
 OUString ThesaurusMenuController::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.framework.ThesaurusMenuController" );
+    return "com.sun.star.comp.framework.ThesaurusMenuController";
 }
 
 css::uno::Sequence< OUString > ThesaurusMenuController::getSupportedServiceNames()
