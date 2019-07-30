@@ -49,8 +49,9 @@
  <toolbar:toolbaritem xlink:href=".uno:ControlProperties"/>
  <toolbar:toolbaritem xlink:href=".uno:FormProperties"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ShowDataNavigator"/>
  <toolbar:toolbaritem xlink:href=".uno:ShowFmExplorer"/>
- <toolbar:toolbaritem xlink:href=".uno:AddField"/>
+ <toolbar:toolbaritem xlink:href=".uno:AddField" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:TabDialog"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:OpenReadOnly"/>
