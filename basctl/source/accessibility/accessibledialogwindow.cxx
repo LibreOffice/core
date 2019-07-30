@@ -536,7 +536,7 @@ void AccessibleDialogWindow::disposing()
 // XServiceInfo
 OUString AccessibleDialogWindow::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.basctl.AccessibleWindow" );
+    return "com.sun.star.comp.basctl.AccessibleWindow";
 }
 
 sal_Bool AccessibleDialogWindow::supportsService( const OUString& rServiceName )

@@ -85,7 +85,7 @@ OUString SIDEModel::getImplementationName()
 
 OUString SIDEModel::getImplementationName_Static()
 {
-    return OUString( "com.sun.star.comp.basic.BasicIDE" );
+    return "com.sun.star.comp.basic.BasicIDE";
 }
 
 sal_Bool SIDEModel::supportsService(const OUString& rServiceName)
