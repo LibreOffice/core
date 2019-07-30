@@ -287,8 +287,8 @@ void SvxHyperlinkInternetTp::RemoveImproperProtocol(const OUString& aProperSchem
 OUString SvxHyperlinkInternetTp::GetSchemeFromButtons() const
 {
     if( m_xRbtLinktypFTP->get_active() )
-        return OUString(INET_FTP_SCHEME);
-    return OUString(INET_HTTP_SCHEME);
+        return INET_FTP_SCHEME;
+    return INET_HTTP_SCHEME;
 }
 
 INetProtocol SvxHyperlinkInternetTp::GetSmartProtocolFromButtons() const

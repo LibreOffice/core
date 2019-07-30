@@ -42,16 +42,16 @@ static OUString lcl_activeAppName(vcl::EnumContext::Application eApp)
     switch (eApp)
     {
         case vcl::EnumContext::Application::Writer:
-            return OUString("ActiveWriter");
+            return "ActiveWriter";
             break;
         case vcl::EnumContext::Application::Calc:
-            return OUString("ActiveCalc");
+            return "ActiveCalc";
             break;
         case vcl::EnumContext::Application::Impress:
-            return OUString("ActiveImpress");
+            return "ActiveImpress";
             break;
         case vcl::EnumContext::Application::Draw:
-            return OUString("ActiveDraw");
+            return "ActiveDraw";
             break;
         default:
             return OUString();
@@ -64,16 +64,16 @@ static OUString lcl_getAppName(vcl::EnumContext::Application eApp)
     switch (eApp)
     {
         case vcl::EnumContext::Application::Writer:
-            return OUString("Writer");
+            return "Writer";
             break;
         case vcl::EnumContext::Application::Calc:
-            return OUString("Calc");
+            return "Calc";
             break;
         case vcl::EnumContext::Application::Impress:
-            return OUString("Impress");
+            return "Impress";
             break;
         case vcl::EnumContext::Application::Draw:
-            return OUString("Draw");
+            return "Draw";
             break;
         default:
             return OUString();

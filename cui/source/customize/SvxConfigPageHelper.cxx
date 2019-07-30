@@ -226,29 +226,29 @@ OUString SvxConfigPageHelper::GetModuleName( const OUString& aModuleId )
 {
     if ( aModuleId == "com.sun.star.text.TextDocument" ||
          aModuleId == "com.sun.star.text.GlobalDocument" )
-        return OUString("Writer");
+        return "Writer";
     else if ( aModuleId == "com.sun.star.text.WebDocument" )
-        return OUString("Writer/Web");
+        return "Writer/Web";
     else if ( aModuleId == "com.sun.star.drawing.DrawingDocument" )
-        return OUString("Draw");
+        return "Draw";
     else if ( aModuleId == "com.sun.star.presentation.PresentationDocument" )
-        return OUString("Impress");
+        return "Impress";
     else if ( aModuleId == "com.sun.star.sheet.SpreadsheetDocument" )
-        return OUString("Calc");
+        return "Calc";
     else if ( aModuleId == "com.sun.star.script.BasicIDE" )
-        return OUString("Basic");
+        return "Basic";
     else if ( aModuleId == "com.sun.star.formula.FormulaProperties" )
-        return OUString("Math");
+        return "Math";
     else if ( aModuleId == "com.sun.star.sdb.RelationDesign" )
-        return OUString("Relation Design");
+        return "Relation Design";
     else if ( aModuleId == "com.sun.star.sdb.QueryDesign" )
-        return OUString("Query Design");
+        return "Query Design";
     else if ( aModuleId == "com.sun.star.sdb.TableDesign" )
-        return OUString("Table Design");
+        return "Table Design";
     else if ( aModuleId == "com.sun.star.sdb.DataSourceBrowser" )
-        return OUString("Data Source Browser" );
+        return "Data Source Browser";
     else if ( aModuleId == "com.sun.star.sdb.DatabaseDocument" )
-        return OUString("Database" );
+        return "Database";
 
     return OUString();
 }

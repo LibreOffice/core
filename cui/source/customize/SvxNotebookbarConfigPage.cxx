@@ -88,15 +88,15 @@ static OUString getFileName(const OUString& aFileName)
 static OUString getModuleId(const OUString& sModuleName)
 {
     if (sModuleName == "Writer")
-        return OUString("com.sun.star.text.TextDocument");
+        return "com.sun.star.text.TextDocument";
     else if (sModuleName == "Draw")
-        return OUString("com.sun.star.drawing.DrawingDocument");
+        return "com.sun.star.drawing.DrawingDocument";
     else if (sModuleName == "Impress")
-        return OUString("com.sun.star.presentation.PresentationDocument");
+        return "com.sun.star.presentation.PresentationDocument";
     else if (sModuleName == "Calc")
-        return OUString("com.sun.star.sheet.SpreadsheetDocument");
+        return "com.sun.star.sheet.SpreadsheetDocument";
     else
-        return OUString("None");
+        return "None";
 }
 
 SvxNotebookbarConfigPage::SvxNotebookbarConfigPage(TabPageParent pParent, const SfxItemSet& rSet)
