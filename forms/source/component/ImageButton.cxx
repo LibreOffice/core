@@ -84,7 +84,7 @@ void OImageButtonModel::describeFixedProperties( Sequence< Property >& _rProps )
 
 OUString OImageButtonModel::getServiceName()
 {
-    return OUString(FRM_COMPONENT_IMAGEBUTTON);   // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_IMAGEBUTTON;   // old (non-sun) name for compatibility !
 }
 
 void OImageButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream)

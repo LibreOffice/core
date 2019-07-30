@@ -177,7 +177,7 @@ void OFileControlModel::describeFixedProperties( Sequence< Property >& _rProps )
 
 OUString SAL_CALL OFileControlModel::getServiceName()
 {
-    return OUString(FRM_COMPONENT_FILECONTROL);   // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_FILECONTROL;   // old (non-sun) name for compatibility !
 }
 
 

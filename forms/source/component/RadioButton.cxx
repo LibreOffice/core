@@ -247,7 +247,7 @@ void ORadioButtonModel::describeFixedProperties( Sequence< Property >& _rProps )
 
 OUString SAL_CALL ORadioButtonModel::getServiceName()
 {
-    return OUString(FRM_COMPONENT_RADIOBUTTON);   // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_RADIOBUTTON;   // old (non-sun) name for compatibility !
 }
 
 

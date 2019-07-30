@@ -754,7 +754,7 @@ void OGridControlModel::approveNewElement( const Reference< XPropertySet >& _rxO
 // XPersistObject
 OUString SAL_CALL OGridControlModel::getServiceName()
 {
-    return OUString(FRM_COMPONENT_GRID);  // old (non-sun) name for compatibility!
+    return FRM_COMPONENT_GRID;  // old (non-sun) name for compatibility!
 }
 
 void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream)

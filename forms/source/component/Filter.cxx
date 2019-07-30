@@ -874,7 +874,7 @@ namespace frm
 
     OUString SAL_CALL OFilterControl::getImplementationName(  )
     {
-        return OUString( "com.sun.star.comp.forms.OFilterControl" );
+        return "com.sun.star.comp.forms.OFilterControl";
     }
 
     sal_Bool SAL_CALL OFilterControl::supportsService( const OUString& ServiceName )

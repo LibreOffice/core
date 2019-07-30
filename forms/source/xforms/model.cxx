@@ -600,7 +600,7 @@ Sequence<sal_Int8> Model::getImplementationId()
 
 OUString Model::getImplementationName()
 {
-    return OUString("com.sun.star.form.Model");
+    return "com.sun.star.form.Model";
 }
 
 sal_Bool Model::supportsService(OUString const & ServiceName)

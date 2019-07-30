@@ -138,7 +138,7 @@ IMPLEMENT_DEFAULT_CLONING( OTimeModel )
 
 OUString SAL_CALL OTimeModel::getServiceName()
 {
-    return OUString(FRM_COMPONENT_TIMEFIELD); // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_TIMEFIELD; // old (non-sun) name for compatibility !
 }
 
 // XPropertySet

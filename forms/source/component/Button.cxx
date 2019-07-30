@@ -129,7 +129,7 @@ css::uno::Sequence<OUString>  OButtonModel::getSupportedServiceNames()
 
 OUString OButtonModel::getServiceName()
 {
-    return OUString(FRM_COMPONENT_COMMANDBUTTON); // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_COMMANDBUTTON; // old (non-sun) name for compatibility !
 }
 
 

@@ -339,7 +339,7 @@ void OImageControlModel::describeAggregateProperties( Sequence< Property >& /* [
 
 OUString OImageControlModel::getServiceName()
 {
-    return OUString(FRM_COMPONENT_IMAGECONTROL);  // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_IMAGECONTROL;  // old (non-sun) name for compatibility !
 }
 
 

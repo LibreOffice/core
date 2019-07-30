@@ -83,7 +83,7 @@ void OFixedTextModel::describeAggregateProperties( Sequence< Property >& _rAggre
 
 OUString SAL_CALL OFixedTextModel::getServiceName()
 {
-    return OUString(FRM_COMPONENT_FIXEDTEXT); // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_FIXEDTEXT; // old (non-sun) name for compatibility !
 }
 
 

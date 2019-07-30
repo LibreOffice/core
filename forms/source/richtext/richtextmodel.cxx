@@ -228,7 +228,7 @@ namespace frm
 
     OUString SAL_CALL ORichTextModel::getImplementationName()
     {
-        return OUString( "com.sun.star.comp.forms.ORichTextModel" );
+        return "com.sun.star.comp.forms.ORichTextModel";
     }
 
     Sequence< OUString > SAL_CALL ORichTextModel::getSupportedServiceNames()
@@ -497,7 +497,7 @@ namespace frm
 
     OUString SAL_CALL ORichTextModel::getServiceName()
     {
-        return OUString(FRM_SUN_COMPONENT_RICHTEXTCONTROL);
+        return FRM_SUN_COMPONENT_RICHTEXTCONTROL;
     }
 
 

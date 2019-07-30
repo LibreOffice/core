@@ -548,7 +548,7 @@ namespace frm
 
     OUString SAL_CALL OListBoxModel::getServiceName()
     {
-        return OUString(FRM_COMPONENT_LISTBOX);   // old (non-sun) name for compatibility !
+        return FRM_COMPONENT_LISTBOX;   // old (non-sun) name for compatibility !
     }
 
 

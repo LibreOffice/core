@@ -117,7 +117,7 @@ void ONumericModel::describeFixedProperties( Sequence< Property >& _rProps ) con
 
 OUString SAL_CALL ONumericModel::getServiceName()
 {
-    return OUString(FRM_COMPONENT_NUMERICFIELD);  // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_NUMERICFIELD;  // old (non-sun) name for compatibility !
 }
 
 

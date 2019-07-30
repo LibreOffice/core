@@ -126,7 +126,7 @@ css::uno::Sequence<OUString> SAL_CALL OHiddenModel::getSupportedServiceNames()
 
 OUString SAL_CALL OHiddenModel::getServiceName()
 {
-    return OUString(FRM_COMPONENT_HIDDEN);    // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_HIDDEN;    // old (non-sun) name for compatibility !
 }
 
 

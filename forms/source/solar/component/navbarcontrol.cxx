@@ -162,7 +162,7 @@ namespace frm
 
     OUString SAL_CALL ONavigationBarControl::getImplementationName()
     {
-        return OUString( "com.sun.star.comp.form.ONavigationBarControl" );
+        return "com.sun.star.comp.form.ONavigationBarControl";
     }
 
 

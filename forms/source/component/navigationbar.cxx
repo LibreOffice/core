@@ -144,7 +144,7 @@ namespace frm
 
     OUString SAL_CALL ONavigationBarModel::getImplementationName()
     {
-        return OUString( "com.sun.star.comp.form.ONavigationBarModel" );
+        return "com.sun.star.comp.form.ONavigationBarModel";
     }
 
 
@@ -161,7 +161,7 @@ namespace frm
 
     OUString SAL_CALL ONavigationBarModel::getServiceName()
     {
-        return OUString(FRM_SUN_COMPONENT_NAVTOOLBAR);
+        return FRM_SUN_COMPONENT_NAVTOOLBAR;
     }
 
     #define PERSIST_TABSTOP         0x0001

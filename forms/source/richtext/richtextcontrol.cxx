@@ -215,7 +215,7 @@ namespace frm
 
     OUString SAL_CALL ORichTextControl::getImplementationName()
     {
-        return OUString( "com.sun.star.comp.form.ORichTextControl" );
+        return "com.sun.star.comp.form.ORichTextControl";
     }
 
     Sequence< OUString > SAL_CALL ORichTextControl::getSupportedServiceNames()

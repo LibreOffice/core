@@ -117,7 +117,7 @@ void OCheckBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) co
 
 OUString SAL_CALL OCheckBoxModel::getServiceName()
 {
-    return OUString(FRM_COMPONENT_CHECKBOX);  // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_CHECKBOX;  // old (non-sun) name for compatibility !
 }
 
 

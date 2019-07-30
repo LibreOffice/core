@@ -36,7 +36,7 @@ public:
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override
-    { return OUString("com.sun.star.form.OCurrencyModel"); }
+    { return "com.sun.star.form.OCurrencyModel"; }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
@@ -68,7 +68,7 @@ public:
     explicit OCurrencyControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override
-    { return OUString("com.sun.star.form.OCurrencyControl"); }
+    { return "com.sun.star.form.OCurrencyControl"; }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };

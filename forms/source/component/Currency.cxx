@@ -167,7 +167,7 @@ void OCurrencyModel::describeFixedProperties( Sequence< Property >& _rProps ) co
 
 OUString SAL_CALL OCurrencyModel::getServiceName()
 {
-    return OUString(FRM_COMPONENT_CURRENCYFIELD); // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_CURRENCYFIELD; // old (non-sun) name for compatibility !
 }
 
 

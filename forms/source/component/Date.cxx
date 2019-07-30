@@ -146,7 +146,7 @@ css::uno::Sequence<OUString> SAL_CALL ODateModel::getSupportedServiceNames()
 
 OUString SAL_CALL ODateModel::getServiceName()
 {
-    return OUString(FRM_COMPONENT_DATEFIELD); // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_DATEFIELD; // old (non-sun) name for compatibility !
 }
 
 // XPropertySet

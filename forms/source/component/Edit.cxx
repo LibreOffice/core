@@ -304,7 +304,7 @@ void OEditModel::disposing()
 
 OUString SAL_CALL OEditModel::getServiceName()
 {
-    return OUString(FRM_COMPONENT_EDIT);  // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_EDIT;  // old (non-sun) name for compatibility !
 }
 
 // XServiceInfo
