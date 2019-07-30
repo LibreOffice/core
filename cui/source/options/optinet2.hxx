@@ -86,45 +86,46 @@ class SvxSecurityTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
     friend class VclPtr<SvxSecurityTabPage>;
 private:
-    VclPtr<PushButton>         m_pSecurityOptionsPB;
-
-    VclPtr<CheckBox>           m_pSavePasswordsCB;
-    VclPtr<PushButton>         m_pShowConnectionsPB;
-
-    VclPtr<CheckBox>           m_pMasterPasswordCB;
-    VclPtr<FixedText>          m_pMasterPasswordFT;
-    VclPtr<PushButton>         m_pMasterPasswordPB;
-
-    VclPtr<VclContainer>       m_pMacroSecFrame;
-    VclPtr<PushButton>         m_pMacroSecPB;
-
-    VclPtr<VclContainer>       m_pCertFrame;
-    VclPtr<PushButton>         m_pCertPathPB;
-
-    VclPtr<VclContainer>       m_pTSAURLsFrame;
-    VclPtr<PushButton>         m_pTSAURLsPB;
-
     std::unique_ptr<SvtSecurityOptions>         mpSecOptions;
     std::unique_ptr<svx::SecurityOptionsDialog> m_xSecOptDlg;
 
     std::unique_ptr<CertPathDialog> mpCertPathDlg;
 
-    OUString            m_sPasswordStoringDeactivateStr;
+    OUString m_sPasswordStoringDeactivateStr;
 
-    DECL_LINK(SecurityOptionsHdl, Button*, void);
-    DECL_LINK(SavePasswordHdl, Button*, void);
-    DECL_LINK(MasterPasswordHdl, Button*, void);
-    DECL_LINK(MasterPasswordCBHdl, Button*, void);
-    DECL_LINK(ShowPasswordsHdl, Button*, void);
-    DECL_LINK(MacroSecPBHdl, Button*, void );
-    DECL_LINK(CertPathPBHdl, Button*, void );
-    DECL_LINK(TSAURLsPBHdl, Button*, void );
+    std::unique_ptr<weld::Button> m_xSecurityOptionsPB;
+
+    std::unique_ptr<weld::CheckButton> m_xSavePasswordsCB;
+    std::unique_ptr<weld::Button> m_xShowConnectionsPB;
+
+    std::unique_ptr<weld::CheckButton> m_xMasterPasswordCB;
+    std::unique_ptr<weld::Label> m_xMasterPasswordFT;
+    std::unique_ptr<weld::Button> m_xMasterPasswordPB;
+
+    std::unique_ptr<weld::Container> m_xMacroSecFrame;
+    std::unique_ptr<weld::Button> m_xMacroSecPB;
+
+    std::unique_ptr<weld::Container> m_xCertFrame;
+    std::unique_ptr<weld::Button> m_xCertPathPB;
+
+    std::unique_ptr<weld::Container> m_xTSAURLsFrame;
+    std::unique_ptr<weld::Button> m_xTSAURLsPB;
+
+    std::unique_ptr<weld::Label> m_xNoPasswordSaveFT;
+
+    DECL_LINK(SecurityOptionsHdl, weld::Button&, void);
+    DECL_LINK(SavePasswordHdl, weld::Button&, void);
+    DECL_LINK(MasterPasswordHdl, weld::Button&, void);
+    DECL_LINK(MasterPasswordCBHdl, weld::Button&, void);
+    DECL_LINK(ShowPasswordsHdl, weld::Button&, void);
+    DECL_LINK(MacroSecPBHdl, weld::Button&, void );
+    DECL_LINK(CertPathPBHdl, weld::Button&, void );
+    DECL_LINK(TSAURLsPBHdl, weld::Button&, void );
 
     void                InitControls();
 
-                SvxSecurityTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual     ~SvxSecurityTabPage() override;
-    virtual void dispose() override;
+    SvxSecurityTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    virtual ~SvxSecurityTabPage() override;
 
 protected:
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
