@@ -17,6 +17,7 @@ class tdf116737(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
         xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
         document = self.ui_test.get_component()
 
         #Insert => Insert Table / It's not possible to select a table style

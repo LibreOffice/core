@@ -538,6 +538,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
             aNdIdx += 3; // StartNode, TextNode, EndNode  == 3 Nodes
         }
     }
+
     // Insert Frames
     GetNodes().GoNext( &aNdIdx ); // Go to the next ContentNode
     pTableNd->MakeOwnFrames( &aNdIdx );
