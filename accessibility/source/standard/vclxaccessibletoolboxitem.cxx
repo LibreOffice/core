@@ -292,7 +292,7 @@ void SAL_CALL VCLXAccessibleToolBoxItem::disposing()
 
 OUString VCLXAccessibleToolBoxItem::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleToolBoxItem" );
+    return "com.sun.star.comp.toolkit.AccessibleToolBoxItem";
 }
 
 sal_Bool VCLXAccessibleToolBoxItem::supportsService( const OUString& rServiceName )
@@ -666,7 +666,7 @@ OUString VCLXAccessibleToolBoxItem::getAccessibleActionDescription ( sal_Int32 n
     if ( nIndex != 0 )
         throw IndexOutOfBoundsException();
 
-    return OUString(RID_STR_ACC_ACTION_CLICK);
+    return RID_STR_ACC_ACTION_CLICK;
 }
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleToolBoxItem::getAccessibleActionKeyBinding( sal_Int32 nIndex )

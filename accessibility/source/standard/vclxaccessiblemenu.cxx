@@ -77,7 +77,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleMenu, VCLXAccessibleMenuItem, VC
 
 OUString VCLXAccessibleMenu::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleMenu" );
+    return "com.sun.star.comp.toolkit.AccessibleMenu";
 }
 
 

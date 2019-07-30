@@ -100,7 +100,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleTextField::getAccessibleParent( 
 
 OUString VCLXAccessibleTextField::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleTextField" );
+    return "com.sun.star.comp.toolkit.AccessibleTextField";
 }
 
 

@@ -679,7 +679,7 @@ void SAL_CALL VCLXAccessibleToolBox::disposing()
 // XServiceInfo
 OUString VCLXAccessibleToolBox::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleToolBox" );
+    return "com.sun.star.comp.toolkit.AccessibleToolBox";
 }
 
 Sequence< OUString > VCLXAccessibleToolBox::getSupportedServiceNames()

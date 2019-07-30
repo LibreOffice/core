@@ -303,7 +303,7 @@ namespace accessibility
 
     OUString SAL_CALL AccessibleListBox::getImplementationName()
     {
-        return OUString( "com.sun.star.comp.svtools.AccessibleTreeListBox" );
+        return "com.sun.star.comp.svtools.AccessibleTreeListBox";
     }
 
     Sequence< OUString > SAL_CALL AccessibleListBox::getSupportedServiceNames()

@@ -126,7 +126,7 @@ void VCLXAccessibleMenuBar::disposing()
 
 OUString VCLXAccessibleMenuBar::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleMenuBar" );
+    return "com.sun.star.comp.toolkit.AccessibleMenuBar";
 }
 
 

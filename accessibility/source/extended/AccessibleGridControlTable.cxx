@@ -303,7 +303,7 @@ void SAL_CALL AccessibleGridControlTable::release() throw ()
 
 OUString SAL_CALL AccessibleGridControlTable::getImplementationName()
 {
-    return OUString( "com.sun.star.accessibility.AccessibleGridControlTable" );
+    return "com.sun.star.accessibility.AccessibleGridControlTable";
 }
 
 // internal virtual methods ---------------------------------------------------

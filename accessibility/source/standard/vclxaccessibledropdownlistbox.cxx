@@ -57,7 +57,7 @@ bool VCLXAccessibleDropDownListBox::IsValid() const
 
 OUString VCLXAccessibleDropDownListBox::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleDropDownListBox" );
+    return "com.sun.star.comp.toolkit.AccessibleDropDownListBox";
 }
 
 

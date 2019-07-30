@@ -73,7 +73,7 @@ void VCLXAccessibleDropDownComboBox::ProcessWindowEvent (const VclWindowEvent& r
 
 OUString VCLXAccessibleDropDownComboBox::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleDropDownComboBox" );
+    return "com.sun.star.comp.toolkit.AccessibleDropDownComboBox";
 }
 
 

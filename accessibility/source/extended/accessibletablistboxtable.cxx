@@ -313,7 +313,7 @@ namespace accessibility
 
     OUString AccessibleTabListBoxTable::getImplementationName()
     {
-        return OUString( "com.sun.star.comp.svtools.AccessibleTabListBoxTable" );
+        return "com.sun.star.comp.svtools.AccessibleTabListBoxTable";
     }
 
     // XAccessibleSelection

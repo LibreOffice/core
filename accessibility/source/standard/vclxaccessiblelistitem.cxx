@@ -172,7 +172,7 @@ void SAL_CALL VCLXAccessibleListItem::disposing()
 
 OUString VCLXAccessibleListItem::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleListItem" );
+    return "com.sun.star.comp.toolkit.AccessibleListItem";
 }
 
 sal_Bool VCLXAccessibleListItem::supportsService( const OUString& rServiceName )

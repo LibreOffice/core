@@ -248,7 +248,7 @@ void VCLXAccessibleTabPage::disposing()
 
 OUString VCLXAccessibleTabPage::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleTabPage" );
+    return "com.sun.star.comp.toolkit.AccessibleTabPage";
 }
 
 

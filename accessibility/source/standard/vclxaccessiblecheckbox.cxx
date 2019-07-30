@@ -155,7 +155,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleCheckBox, VCLXAccessibleTextComp
 
 OUString VCLXAccessibleCheckBox::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleCheckBox" );
+    return "com.sun.star.comp.toolkit.AccessibleCheckBox";
 }
 
 

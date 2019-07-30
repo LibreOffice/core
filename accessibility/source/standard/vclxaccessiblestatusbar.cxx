@@ -266,7 +266,7 @@ void VCLXAccessibleStatusBar::disposing()
 
 OUString VCLXAccessibleStatusBar::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleStatusBar" );
+    return "com.sun.star.comp.toolkit.AccessibleStatusBar";
 }
 
 

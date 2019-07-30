@@ -42,7 +42,7 @@ bool VCLXAccessiblePopupMenu::IsFocused()
 
 OUString VCLXAccessiblePopupMenu::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessiblePopupMenu" );
+    return "com.sun.star.comp.toolkit.AccessiblePopupMenu";
 }
 
 

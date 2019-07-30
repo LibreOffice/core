@@ -176,7 +176,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleEdit, VCLXAccessibleTextComponen
 
 OUString VCLXAccessibleEdit::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleEdit" );
+    return "com.sun.star.comp.toolkit.AccessibleEdit";
 }
 
 
@@ -263,7 +263,7 @@ OUString VCLXAccessibleEdit::getAccessibleActionDescription ( sal_Int32 nIndex )
     if ( nIndex != 0)
         throw IndexOutOfBoundsException();
 
-    return OUString( "activate" );
+    return "activate";
 }
 
 

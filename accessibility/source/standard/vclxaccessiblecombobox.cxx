@@ -46,7 +46,7 @@ bool VCLXAccessibleComboBox::IsValid() const
 
 OUString VCLXAccessibleComboBox::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleComboBox" );
+    return "com.sun.star.comp.toolkit.AccessibleComboBox";
 }
 
 

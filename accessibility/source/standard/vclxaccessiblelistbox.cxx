@@ -56,7 +56,7 @@ bool VCLXAccessibleListBox::IsValid() const
 
 OUString VCLXAccessibleListBox::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.toolkit.AccessibleListBox" );
+    return "com.sun.star.comp.toolkit.AccessibleListBox";
 }
 
 

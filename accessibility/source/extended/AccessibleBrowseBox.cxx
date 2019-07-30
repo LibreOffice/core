@@ -166,7 +166,7 @@ void SAL_CALL AccessibleBrowseBox::grabFocus()
 
 OUString SAL_CALL AccessibleBrowseBox::getImplementationName()
 {
-    return OUString( "com.sun.star.comp.svtools.AccessibleBrowseBox" );
+    return "com.sun.star.comp.svtools.AccessibleBrowseBox";
 }
 
 

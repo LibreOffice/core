@@ -125,7 +125,7 @@ namespace accessibility
 
     OUString SAL_CALL AccessibleIconChoiceCtrl::getImplementationName()
     {
-        return OUString( "com.sun.star.comp.svtools.AccessibleIconChoiceControl" );
+        return "com.sun.star.comp.svtools.AccessibleIconChoiceControl";
     }
 
     Sequence< OUString > SAL_CALL AccessibleIconChoiceCtrl::getSupportedServiceNames()
