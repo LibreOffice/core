@@ -39,7 +39,7 @@ UUIInteractionRequestStringResolver::~UUIInteractionRequestStringResolver()
 OUString SAL_CALL
 UUIInteractionRequestStringResolver::getImplementationName()
 {
-    return OUString("com.sun.star.comp.uui.UUIInteractionRequestStringResolver");
+    return "com.sun.star.comp.uui.UUIInteractionRequestStringResolver";
 }
 
 sal_Bool SAL_CALL

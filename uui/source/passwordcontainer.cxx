@@ -317,7 +317,7 @@ PasswordContainerInteractionHandler::getSupportedServiceNames()
 OUString
 PasswordContainerInteractionHandler::getImplementationName_Static()
 {
-    return OUString( "com.sun.star.comp.uui.PasswordContainerInteractionHandler" );
+    return "com.sun.star.comp.uui.PasswordContainerInteractionHandler";
 }
 
 
