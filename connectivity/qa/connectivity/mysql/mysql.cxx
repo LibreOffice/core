@@ -55,6 +55,7 @@ public:
     void testTimestampField();
     void testNumericConversionPrepared();
     void testPreparedStmtIsAfterLast();
+    void testGetStringFromBloColumnb();
 
     CPPUNIT_TEST_SUITE(MysqlTestDriver);
     CPPUNIT_TEST(testDBConnection);
@@ -65,6 +66,7 @@ public:
     CPPUNIT_TEST(testTimestampField);
     CPPUNIT_TEST(testNumericConversionPrepared);
     CPPUNIT_TEST(testPreparedStmtIsAfterLast);
+    CPPUNIT_TEST(testGetStringFromBloColumnb);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -444,6 +446,49 @@ void MysqlTestDriver::testPreparedStmtIsAfterLast()
     bool hasData = xResultSet->next();
     CPPUNIT_ASSERT(!hasData); // now we are on "AfterLast"
     CPPUNIT_ASSERT(xResultSet->isAfterLast());
+    xStatement->executeUpdate("DROP TABLE IF EXISTS myTestTable");
+}
+
+void MysqlTestDriver::testGetStringFromBloColumnb()
+{
+    Reference<XConnection> xConnection = m_xDriver->connect(m_sUrl, m_infos);
+    if (!xConnection.is())
+        CPPUNIT_ASSERT_MESSAGE("cannot connect to data source!", xConnection.is());
+    uno::Reference<XStatement> xStatement = xConnection->createStatement();
+    CPPUNIT_ASSERT(xStatement.is());
+    xStatement->executeUpdate("DROP TABLE IF EXISTS myTestTable");
+
+    // create test table
+    xStatement->executeUpdate("CREATE TABLE myTestTable (id INTEGER PRIMARY KEY, tinytexty "
+                              "TINYTEXT, texty TEXT, mediumTexty MEDIUMTEXT, longtexty LONGTEXT)");
+    Reference<XPreparedStatement> xPrepared = xConnection->prepareStatement(
+        OUString{ "INSERT INTO myTestTable VALUES (?, ?, ?, ?, ?)" });
+    Reference<XParameters> xParams(xPrepared, UNO_QUERY);
+    constexpr int ROW_COUNT = 6;
+    for (int i = 0; i < ROW_COUNT; ++i)
+    {
+        xParams->setShort(1, i);
+        xParams->setString(2, OUString::number(i));
+        xParams->setString(3, OUString::number(i));
+        xParams->setString(4, OUString::number(i));
+        xParams->setString(5, OUString::number(i));
+        xPrepared->executeUpdate();
+    }
+
+    // query test table
+    xPrepared = xConnection->prepareStatement(
+        "SELECT tinytexty, texty, mediumtexty, longtexty from myTestTable where texty LIKE '3'");
+    Reference<XResultSet> xResultSet = xPrepared->executeQuery();
+    xResultSet->next();
+    Reference<XRow> xRow(xResultSet, UNO_QUERY);
+
+    // all the textual blob types should be able to be queried via getString().
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), xRow->getString(1));
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), xRow->getString(2));
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), xRow->getString(3));
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), xRow->getString(4));
+
+    xStatement->executeUpdate("DROP TABLE IF EXISTS myTestTable");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MysqlTestDriver);
