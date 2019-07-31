@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_dc450472",
+        "filename": "svx/source/svdraw/svdxcgv.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-07-31T01:54:43Z",
+      "side": 1,
+      "message": "Urk, this is pretty ugly type switching.\n\nIf there\u0027s no better way, then please at least use GetObjIdentifier() and OBJ_OLE2, which is the idiomatic way for drawing layer shapes...",
+      "revId": "05ca44dd72459e99536b59056ac01c05039df555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
