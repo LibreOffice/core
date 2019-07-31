@@ -60,6 +60,7 @@ private:
 
     VclPtr<VclContainer> m_pQuickStarterFrame;
     VclPtr<CheckBox>     m_pQuickLaunchCB;
+    VclPtr<CheckBox>     m_xCrashReport;
 
     DECL_LINK( TwoFigureHdl, Edit&, void );
 protected:
