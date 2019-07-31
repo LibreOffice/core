@@ -21,44 +21,48 @@
 #define INCLUDED_CUI_SOURCE_OPTIONS_CONNPOOLOPTIONS_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
 
+#include "connpoolsettings.hxx"
 
 namespace offapp
 {
-
-    struct DriverPooling;
-    class DriverListControl;
     class ConnectionPoolOptionsPage final : public SfxTabPage
     {
         using TabPage::ActivatePage;
 
-        VclPtr<CheckBox>               m_pEnablePooling;
-        VclPtr<FixedText>              m_pDriversLabel;
-        VclPtr<DriverListControl>      m_pDriverList;
-        VclPtr<FixedText>              m_pDriverLabel;
-        VclPtr<FixedText>              m_pDriver;
-        VclPtr<CheckBox>               m_pDriverPoolingEnabled;
-        VclPtr<FixedText>              m_pTimeoutLabel;
-        VclPtr<NumericField>           m_pTimeout;
+        OUString m_sYes;
+        OUString m_sNo;
+        DriverPoolingSettings m_aSettings;
+        DriverPoolingSettings m_aSavedSettings;
+
+        std::unique_ptr<weld::CheckButton> m_xEnablePooling;
+        std::unique_ptr<weld::Label> m_xDriversLabel;
+        std::unique_ptr<weld::TreeView> m_xDriverList;
+        std::unique_ptr<weld::Label> m_xDriverLabel;
+        std::unique_ptr<weld::Label> m_xDriver;
+        std::unique_ptr<weld::CheckButton> m_xDriverPoolingEnabled;
+        std::unique_ptr<weld::Label> m_xTimeoutLabel;
+        std::unique_ptr<weld::SpinButton> m_xTimeout;
 
     public:
-        ConnectionPoolOptionsPage(vcl::Window* _pParent, const SfxItemSet& _rAttrSet);
+        ConnectionPoolOptionsPage(TabPageParent _pParent, const SfxItemSet& _rAttrSet);
         virtual ~ConnectionPoolOptionsPage() override;
-        virtual void dispose() override;
         static VclPtr<SfxTabPage>  Create(TabPageParent _pParent, const SfxItemSet* _rAttrSet);
 
     private:
-        virtual bool        EventNotify( NotifyEvent& _rNEvt ) override;
-
         virtual bool        FillItemSet(SfxItemSet* _rSet) override;
         virtual void        Reset(const SfxItemSet* _rSet) override;
         virtual void        ActivatePage( const SfxItemSet& _rSet) override;
 
-        DECL_LINK( OnEnabledDisabled, Button*, void );
-        DECL_LINK( OnDriverRowChanged, const DriverPooling*, void );
+        void updateRow(size_t nRow);
+        void updateCurrentRow();
+        void UpdateDriverList(const DriverPoolingSettings& _rSettings);
+        bool isModifiedDriverList() const;
+        void saveDriverList() { m_aSavedSettings = m_aSettings; }
+
+        DECL_LINK(OnEnabledDisabled, weld::Button&, void);
+        DECL_LINK(OnSpinValueChanged, weld::SpinButton&, void);
+        DECL_LINK(OnDriverRowChanged, weld::TreeView&, void);
 
         void implInitControls(const SfxItemSet& _rSet);
 

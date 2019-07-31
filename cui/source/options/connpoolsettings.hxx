@@ -54,7 +54,9 @@ namespace offapp
 
         DriverPoolingSettings();
 
-        sal_Int32 size() const { return m_aDrivers.size(); }
+        size_t size() const { return m_aDrivers.size(); }
+        DriverPooling& operator[]( size_t nPos ) { return m_aDrivers[nPos]; }
+        bool empty() const { return m_aDrivers.empty(); }
 
         const_iterator  begin() const   { return m_aDrivers.begin(); }
         const_iterator  end() const     { return m_aDrivers.end(); }
