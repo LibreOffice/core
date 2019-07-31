@@ -33,7 +33,7 @@
 #include <tools/color.hxx>
 #include <vcl/salgtype.hxx>
 
-// abstracting quartz color instead of having to use an CGFloat[] array
+// abstracting quartz color instead of having to use a CGFloat[] array
 class RGBAColor
 {
 public:

@@ -185,7 +185,7 @@ enum class SalEvent;
   actual mouse event initiating this drag operation.
   Mouse events can only be received by subclassing
   NSView and overriding methods like 'mouseDown' etc.
-  hence we implement a event hook here so that the
+  hence we implement an event hook here so that the
   D&D service can register as listener for mouse
   messages and use the last 'mouseDown' or
   'mouseDragged' message to initiate the drag

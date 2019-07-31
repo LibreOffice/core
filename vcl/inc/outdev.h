@@ -36,7 +36,7 @@ class VirtualDevice;
 class PhysicalFontCollection;
 enum class AddFontSubstituteFlags;
 
-// an ImplDeviceFontList is created by an PhysicalFontCollection
+// an ImplDeviceFontList is created by a PhysicalFontCollection
 // it becomes invalid when original PhysicalFontCollection is modified
 class ImplDeviceFontList
 {

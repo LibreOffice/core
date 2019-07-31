@@ -49,7 +49,7 @@ public class OfficeTableTemplateLayoutController extends SectionLayoutController
      * Initializes the layout controller. This method is called exactly once. It is the creators responsibility to call
      * this method.
      *
-     * <p>Calling initialize after the first advance must result in a IllegalStateException.</p>
+     * <p>Calling initialize after the first advance must result in an IllegalStateException.</p>
      *
      * @param node           the currently processed object or layout node.
      * @param flowController the current flow controller.

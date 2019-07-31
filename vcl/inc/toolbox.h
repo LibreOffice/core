@@ -76,7 +76,7 @@ struct ImplToolItem
                                       const OUString& rTxt,
                                       ToolBoxItemBits nItemBits );
 
-    // returns the size of a item, taking toolbox orientation into account
+    // returns the size of an item, taking toolbox orientation into account
     // the default size is the precomputed size for standard items
     // ie those that are just ordinary buttons (no windows or text etc.)
     // bCheckMaxWidth indicates that item windows must not exceed maxWidth in which case they will be painted as buttons

@@ -767,7 +767,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                     masterPageName = currentMasterPage.getStyleName();
                 }
                 // But we skip this (and therefore the resulting pagebreak) if there is no manual break
-                // and no other condition that would force an break.
+                // and no other condition that would force a break.
             }
             else if (currentRole == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER || currentRole == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER)
             {
@@ -1040,7 +1040,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         sectionHeight = new LengthCalculator();
         if (role == OfficeDocumentReportTarget.ROLE_TEMPLATE || role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER || role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER)
         {
-            // Start buffering with an dummy styles-collection, so that the global styles don't get polluted ..
+            // Start buffering with a dummy styles-collection, so that the global styles don't get polluted...
             startBuffering(new OfficeStylesCollection(), true);
         }
         else if (role == OfficeDocumentReportTarget.ROLE_PAGE_HEADER)

@@ -34,7 +34,7 @@ import org.jfree.report.structure.Element;
 
 /**
  * This layoutcontroller simply checks, whether the parent layout controller
- * is a OfficeGroupLayoutController and whether this layout controller is
+ * is an OfficeGroupLayoutController and whether this layout controller is
  * processing the normal flow or an repeating section. If a repeating section
  * is being processed, an marker attribute is added to the element's call
  * to OutputProcessor.startElement() and OutputProcessor.endElement().
