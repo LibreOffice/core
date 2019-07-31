@@ -73,6 +73,7 @@ class ImpPDFTabDialog final : public SfxTabDialogController
     bool                        mbReduceImageResolution;
     sal_Int32                   mnMaxImageResolution;
     bool                        mbUseTaggedPDF;
+    bool                        mbUseTaggedPDFUserSelection;
     sal_Int32                   mnPDFTypeSelection;
     bool                        mbExportNotes;
     bool                        mbViewPDF;
@@ -164,8 +165,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
 {
     friend class ImpPDFTabLinksPage;
 
-    bool                         mbTaggedPDFUserSelection;
-    bool                         mbExportFormFieldsUserSelection;
+    bool                         mbUseTaggedPDFUserSelection;
     bool                         mbIsPresentation;
     bool                         mbIsSpreadsheet;
     bool                         mbIsWriter;
