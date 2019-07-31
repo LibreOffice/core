@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_97cf657e",
+        "filename": "sfx2/source/dialog/mgetempl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-07-31T09:02:23Z",
+      "side": 1,
+      "message": "disable or rather hide completely?",
+      "range": {
+        "startLine": 494,
+        "startChar": 29,
+        "endLine": 494,
+        "endChar": 42
+      },
+      "revId": "a684184a065f7d7fe91683e4a422aa4d5be0b55a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
