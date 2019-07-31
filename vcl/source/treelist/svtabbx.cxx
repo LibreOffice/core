@@ -122,7 +122,7 @@ void SvTabListBox::SetTabs(sal_uInt16 nTabs, long const pTabPositions[], MapUnit
         aSize = LogicToLogic( aSize, &aMMSource, &aMMDest );
         long nNewTab = aSize.Width();
         mvTabList[nIdx].SetPos( nNewTab );
-        mvTabList[nIdx].nFlags = SvLBoxTabFlags::ADJUST_LEFT;
+        mvTabList[nIdx].nFlags & (SvLBoxTabFlags::ADJUST_LEFT | SvLBoxTabFlags::ADJUST_CENTER | SvLBoxTabFlags::ADJUST_RIGHT);
     }
     SvTreeListBox::nTreeFlags |= SvTreeFlags::RECALCTABS;
     if( IsUpdateMode() )
