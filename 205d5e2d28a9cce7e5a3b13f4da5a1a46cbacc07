@@ -16,6 +16,24 @@
       "revId": "205d5e2d28a9cce7e5a3b13f4da5a1a46cbacc07",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_b71e290a",
+        "filename": "sw/source/core/inc/UndoCore.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2019-07-31T08:29:24Z",
+      "side": 1,
+      "message": "Initially i thought that these two are permanent. however i\u0027ve created test scenario, when m_pOldFormat is invalidated too.\n\nWhat\u0027s about m_pFrameFormat - to this moment I did not able to invalidate it. So left it as it was before. However i\u0027m not sure this is best strategy",
+      "parentUuid": "bf659307_015f97e2",
+      "revId": "205d5e2d28a9cce7e5a3b13f4da5a1a46cbacc07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
