@@ -30,7 +30,7 @@ namespace LibreOfficeKit
 COMPHELPER_DLLPUBLIC void setActive(bool bActive = true);
 
 // Set LOK view to mobile
-COMPHELPER_DLLPUBLIC void setMobile(bool bIsMobile = true);
+COMPHELPER_DLLPUBLIC void setMobile(int nViewId, bool bIsMobile = true);
 
 enum class statusIndicatorCallbackType { Start, SetValue, Finish };
 
@@ -43,7 +43,7 @@ COMPHELPER_DLLPUBLIC void setStatusIndicatorCallback(void (*callback)(void *data
 COMPHELPER_DLLPUBLIC bool isActive();
 
 // Check whether we are serving to a mobile view/device
-COMPHELPER_DLLPUBLIC bool isMobile();
+COMPHELPER_DLLPUBLIC bool isMobile(int nViewId);
 
 /// Shift the coordinates before rendering each bitmap.
 /// Used by Calc to render each tile separately.

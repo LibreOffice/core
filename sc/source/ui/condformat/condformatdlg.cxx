@@ -17,6 +17,7 @@
 #include <svl/intitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/lstbox.hxx>
@@ -516,7 +517,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     vcl::Window* pParent, ScViewData* pViewData,
     const ScCondFormatDlgItem* pItem)
         : ScAnyRefDlg(pB, pCW, pParent, "ConditionalFormatDialog",
-                        (comphelper::LibreOfficeKit::isMobile()?OUString("modules/scalc/ui/conditionalformatdialogmobile.ui"):OUString("modules/scalc/ui/conditionalformatdialog.ui")))
+                        (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView())?OUString("modules/scalc/ui/conditionalformatdialogmobile.ui"):OUString("modules/scalc/ui/conditionalformatdialog.ui")))
     , mpViewData(pViewData)
     , mpLastEdit(nullptr)
     , mpDlgItem(static_cast<ScCondFormatDlgItem*>(pItem->Clone()))
