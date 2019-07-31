@@ -3336,7 +3336,7 @@ bool SwTabFrame::GetInfo( SfxPoolItem &rHint ) const
     return true;
 }
 
-SwContentFrame *SwTabFrame::FindLastContent()
+SwFrame *SwTabFrame::FindLastContentOrTable()
 {
     SwFrame *pRet = m_pLower;
 
@@ -3398,17 +3398,21 @@ SwContentFrame *SwTabFrame::FindLastContent()
         while ( pRet->GetNext() )
             pRet = pRet->GetNext();
 
-        while (pRet && pRet->IsTabFrame()) // possibly there's only tables here!
-        {   // tdf#126138 skip table, don't look inside
-            // TODO this is actually not ideal, e.g. SwFrame::FindNext_() might
-            // -if there's a table at the end- return a lower frame inside that
-            // table instead of the "next" one... probably this function should
-            // really return SwFrame* to be able to return a SwTabFrame?
-            pRet = pRet->GetPrev();
-        }
-
-        if (pRet && pRet->IsSctFrame())
+        if (pRet->IsSctFrame())
             pRet = static_cast<SwSectionFrame*>(pRet)->FindLastContent();
+    }
+
+    assert(pRet == nullptr || dynamic_cast<SwContentFrame*>(pRet) || dynamic_cast<SwTabFrame*>(pRet));
+    return pRet;
+}
+
+SwContentFrame *SwTabFrame::FindLastContent()
+{
+    SwFrame * pRet(FindLastContentOrTable());
+
+    while (pRet && pRet->IsTabFrame()) // possibly there's only tables here!
+    {   // tdf#126138 skip table, don't look inside
+        pRet = pRet->GetPrev();
     }
 
     assert(pRet == nullptr || dynamic_cast<SwContentFrame*>(pRet));

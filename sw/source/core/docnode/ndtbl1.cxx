@@ -1502,7 +1502,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor,
     // It's more robust if we calculate the minimum values for the whole Table
     const SwTabFrame *pTab = pStart->ImplFindTabFrame();
     pStart = const_cast<SwLayoutFrame*>(static_cast<SwLayoutFrame const *>(pTab->FirstCell()));
-    pEnd   = const_cast<SwLayoutFrame*>(pTab->FindLastContent()->GetUpper());
+    pEnd   = const_cast<SwLayoutFrame*>(pTab->FindLastContentOrTable()->GetUpper());
     while( !pEnd->IsCellFrame() )
         pEnd = pEnd->GetUpper();
     ::lcl_CalcColValues( aMins, aTabCols, pStart, pEnd, false, /*bColumnWidth=*/true );

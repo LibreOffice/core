@@ -136,6 +136,8 @@ public:
     virtual bool Prepare( const PrepareHint ePrep = PREP_CLEAR,
                           const void *pVoid = nullptr, bool bNotify = true ) override;
 
+                 SwFrame *FindLastContentOrTable();
+    inline const SwFrame *FindLastContentOrTable() const;
                  SwContentFrame *FindLastContent();
     inline const SwContentFrame *FindLastContent() const;
 
@@ -227,6 +229,11 @@ public:
 
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 };
+
+inline const SwFrame *SwTabFrame::FindLastContentOrTable() const
+{
+    return const_cast<SwTabFrame*>(this)->FindLastContentOrTable();
+}
 
 inline const SwContentFrame *SwTabFrame::FindLastContent() const
 {

@@ -916,7 +916,7 @@ SwLayoutFrame *SwFrame::GetNextLeaf( MakePageType eMakePage )
     SwLayoutFrame *pLayLeaf = nullptr;
     if ( IsTabFrame() )
     {
-        SwContentFrame* pTmp = static_cast<SwTabFrame*>(this)->FindLastContent();
+        SwFrame *const pTmp = static_cast<SwTabFrame*>(this)->FindLastContentOrTable();
         if ( pTmp )
             pLayLeaf = pTmp->GetUpper();
     }

@@ -1667,7 +1667,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
         pLayLeaf = nullptr;
     else if( IsTabFrame() )
     {
-        SwContentFrame* pTmpCnt = static_cast<SwTabFrame*>(this)->FindLastContent();
+        SwFrame *const pTmpCnt = static_cast<SwTabFrame*>(this)->FindLastContentOrTable();
         pLayLeaf = pTmpCnt ? pTmpCnt->GetUpper() : nullptr;
     }
     else if (pCellLeaf && CanContainSplitSection(this))
