@@ -11,6 +11,7 @@
 #include <condformatdlg.hxx>
 
 #include <sfx2/dispatch.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
@@ -411,7 +412,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     weld::Window* pParent, ScViewData* pViewData,
     const ScCondFormatDlgItem* pItem)
         : ScAnyRefDlgController(pB, pCW, pParent,
-                        (comphelper::LibreOfficeKit::isMobile()?OUString("modules/scalc/ui/conditionalformatdialogmobile.ui"):OUString("modules/scalc/ui/conditionalformatdialog.ui")),
+                        (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView())?OUString("modules/scalc/ui/conditionalformatdialogmobile.ui"):OUString("modules/scalc/ui/conditionalformatdialog.ui")),
                         "ConditionalFormatDialog")
     , mpViewData(pViewData)
     , mpDlgItem(static_cast<ScCondFormatDlgItem*>(pItem->Clone()))

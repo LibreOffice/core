@@ -20,6 +20,7 @@
 #include <svl/style.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/frame.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/colorbox.hxx>
@@ -42,7 +43,7 @@
 
 ScCondFrmtEntry::ScCondFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, const ScAddress& rPos)
     : mpParent(pParent)
-    , mxBuilder(Application::CreateBuilder(pParent->GetContainer(), (comphelper::LibreOfficeKit::isMobile()?OUString("modules/scalc/ui/conditionalentrymobile.ui"):OUString("modules/scalc/ui/conditionalentry.ui"))))
+    , mxBuilder(Application::CreateBuilder(pParent->GetContainer(), (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView())?OUString("modules/scalc/ui/conditionalentrymobile.ui"):OUString("modules/scalc/ui/conditionalentry.ui"))))
     , mxBorder(mxBuilder->weld_widget("border"))
     , mxGrid(mxBuilder->weld_container("grid"))
     , mxFtCondNr(mxBuilder->weld_label("number"))
