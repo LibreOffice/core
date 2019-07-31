@@ -2900,6 +2900,11 @@ public:
         m_xTreeView->Resize();
     }
 
+    virtual void set_centered_column(int nCol) override
+    {
+        m_xTreeView->SetTabJustify(nCol, SvTabJustify::AdjustCenter);
+    }
+
     virtual int get_column_width(int nColumn) const override
     {
         LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());

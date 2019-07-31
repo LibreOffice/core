@@ -37,7 +37,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
 static constexpr SvLBoxTabFlags MYTABMASK =
-    SvLBoxTabFlags::ADJUST_RIGHT | SvLBoxTabFlags::ADJUST_LEFT | SvLBoxTabFlags::ADJUST_CENTER;
+    SvLBoxTabFlags::ADJUST_RIGHT | SvLBoxTabFlags::ADJUST_LEFT | SvLBoxTabFlags::ADJUST_CENTER | SvLBoxTabFlags::FORCE;
 
 // SvTreeListBox callback
 
@@ -122,7 +122,7 @@ void SvTabListBox::SetTabs(sal_uInt16 nTabs, long const pTabPositions[], MapUnit
         aSize = LogicToLogic( aSize, &aMMSource, &aMMDest );
         long nNewTab = aSize.Width();
         mvTabList[nIdx].SetPos( nNewTab );
-        mvTabList[nIdx].nFlags & (SvLBoxTabFlags::ADJUST_LEFT | SvLBoxTabFlags::ADJUST_CENTER | SvLBoxTabFlags::ADJUST_RIGHT);
+        mvTabList[nIdx].nFlags & MYTABMASK;
     }
     SvTreeListBox::nTreeFlags |= SvTreeFlags::RECALCTABS;
     if( IsUpdateMode() )
@@ -452,7 +452,8 @@ void SvTabListBox::SetTabJustify( sal_uInt16 nTab, SvTabJustify eJustify)
     SvLBoxTab& rTab = mvTabList[ nTab ];
     SvLBoxTabFlags nFlags = rTab.nFlags;
     nFlags &= ~MYTABMASK;
-    nFlags |= static_cast<SvLBoxTabFlags>(eJustify);
+    // see SvLBoxTab::CalcOffset for force, which only matters for centering
+    nFlags |= static_cast<SvLBoxTabFlags>(eJustify) | SvLBoxTabFlags::FORCE;
     rTab.nFlags = nFlags;
     SvTreeListBox::nTreeFlags |= SvTreeFlags::RECALCTABS;
     if( IsUpdateMode() )
