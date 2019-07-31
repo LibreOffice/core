@@ -227,7 +227,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         }
         else
         {
-            if(comphelper::LibreOfficeKit::isActive() && comphelper::LibreOfficeKit::isMobile())
+            if(comphelper::LibreOfficeKit::isActive() && comphelper::LibreOfficeKit::isMobile(-1))
             {
                 // Disable embedded object editing (e.g. chart) on mobile
                 if(nNextState == embed::EmbedStates::INPLACE_ACTIVE || nNextState == embed::EmbedStates::UI_ACTIVE)

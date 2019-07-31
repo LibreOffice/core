@@ -3198,12 +3198,12 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     // Set/unset mobile view for LOK
     if (gImpl && aCommand == ".uno:LOKSetMobile")
     {
-        comphelper::LibreOfficeKit::setMobile();
+        comphelper::LibreOfficeKit::setMobile(nView);
         return;
     }
     else if (gImpl && aCommand == ".uno:LOKUnSetMobile")
     {
-        comphelper::LibreOfficeKit::setMobile(false);
+        comphelper::LibreOfficeKit::setMobile(nView, false);
         return;
     }
 

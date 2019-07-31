@@ -20,6 +20,7 @@
 #include <vcl/vclevent.hxx>
 #include <svl/style.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/colorbox.hxx>
@@ -49,7 +50,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(vcl::Window* pParent, ScDocument* pDoc, const S
     , mpDoc(pDoc)
     , maPos(rPos)
 {
-    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), (comphelper::LibreOfficeKit::isMobile()?OUString("modules/scalc/ui/conditionalentrymobile.ui"):OUString("modules/scalc/ui/conditionalentry.ui"))));
+    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView())?OUString("modules/scalc/ui/conditionalentrymobile.ui"):OUString("modules/scalc/ui/conditionalentry.ui"))));
 
     get(maGrid, "grid");
     get(maFtCondNr, "number");
