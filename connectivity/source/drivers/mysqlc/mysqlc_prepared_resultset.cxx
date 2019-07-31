@@ -309,7 +309,7 @@ template <> DateTime OPreparedResultSet::retrieveValue(sal_Int32 column)
 
 template <> OUString OPreparedResultSet::retrieveValue(sal_Int32 column)
 {
-    // redirect call to the appropiate method if needed
+    // redirect call to the appropriate method if needed
     // BLOB can be simply read out as string
     if (getTypeFromMysqlType(m_aFields[column - 1].type) != std::type_index(typeid(OUString))
         && m_aFields[column - 1].type != MYSQL_TYPE_BLOB)
