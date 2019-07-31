@@ -224,9 +224,6 @@
 // $(ROW) can be a number or the caption of the row in quotes
 #define RID_SVXSTR_DIAGRAM_ROW                      NC_("RID_SVXSTR_DIAGRAM_ROW", "Data Series $(ROW)")
 
-#define RID_SVXSTR_DRIVER_NAME                      NC_("RID_SVXSTR_DRIVER_NAME", "Driver name")
-#define RID_SVXSTR_POOLED_FLAG                      NC_("RID_SVXSTR_POOLED_FLAG", "Pool")
-#define RID_SVXSTR_POOL_TIMEOUT                     NC_("RID_SVXSTR_POOL_TIMEOUT", "Timeout")
 #define RID_SVXSTR_YES                              NC_("RID_SVXSTR_YES", "Yes")
 #define RID_SVXSTR_NO                               NC_("RID_SVXSTR_NO", "No")
 

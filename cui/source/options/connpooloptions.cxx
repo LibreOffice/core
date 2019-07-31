@@ -33,81 +33,7 @@ using ::svt::EditBrowseBox;
 
 namespace offapp
 {
-    /// Widget for the Connection Pool options page
-    class DriverListControl : public EditBrowseBox
-    {
-        using Window::Update;
-    protected:
-        DriverPoolingSettings                   m_aSavedSettings;
-        DriverPoolingSettings                   m_aSettings;
-        DriverPoolingSettings::const_iterator   m_aSeekRow;
-
-        OUString                                m_sYes;
-        OUString                                m_sNo;
-
-        Link<const DriverPooling*,void>               m_aRowChangeHandler;
-
-    public:
-        explicit DriverListControl(vcl::Window* _pParent);
-
-        virtual void Init() override;
-                void Update(const DriverPoolingSettings& _rSettings);
-        virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const override;
-
-        // the handler will be called with a DriverPoolingSettings::const_iterator as parameter,
-        // or NULL if no valid current row exists
-        void SetRowChangeHandler(const Link<const DriverPooling*,void>& _rHdl) { m_aRowChangeHandler = _rHdl; }
-
-        DriverPooling* getCurrentRow();
-        void                                    updateCurrentRow();
-
-        const DriverPoolingSettings& getSettings() const { return m_aSettings; }
-
-        void        saveValue()             { m_aSavedSettings = m_aSettings; }
-        bool    isModified() const;
-
-    protected:
-        virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) override;
-        virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) override;
-
-        virtual void PaintCell( OutputDevice& rDev, const ::tools::Rectangle& rRect, sal_uInt16 nColId ) const override;
-
-        virtual bool SeekRow( long nRow ) override;
-        virtual bool SaveModified() override;
-
-        virtual bool IsTabAllowed(bool _bForward) const override;
-
-        virtual void StateChanged( StateChangedType nStateChange ) override;
-
-        virtual void CursorMoved() override;
-
-    protected:
-        virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId) override;
-
-
-    private:
-        OUString implGetCellText(const DriverPoolingSettings::const_iterator& _rPos, sal_uInt16 _nColId) const;
-    };
-
-    DriverListControl::DriverListControl(vcl::Window* _pParent)
-        :EditBrowseBox(_pParent, EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT, WB_BORDER,
-                       BrowserMode::AUTO_VSCROLL | BrowserMode::AUTO_HSCROLL | BrowserMode::HIDECURSOR | BrowserMode::AUTOSIZE_LASTCOL | BrowserMode::KEEPHIGHLIGHT)
-        ,m_aSeekRow(m_aSettings.end())
-        ,m_sYes(CuiResId(RID_SVXSTR_YES))
-        ,m_sNo(CuiResId(RID_SVXSTR_NO))
-    {
-        SetStyle((GetStyle() & ~WB_HSCROLL) | WB_AUTOHSCROLL);
-    }
-
-    VCL_BUILDER_FACTORY(DriverListControl)
-
-    bool DriverListControl::IsTabAllowed(bool /*_bForward*/) const
-    {
-        // no travelling within the fields via RETURN and TAB
-        return false;
-    }
-
-    bool DriverListControl::isModified() const
+    bool ConnectionPoolOptionsPage::isModifiedDriverList() const
     {
         if (m_aSettings.size() != m_aSavedSettings.size())
             return true;
@@ -123,220 +49,80 @@ namespace offapp
         return false;
     }
 
-
-    void DriverListControl::Init()
+    ConnectionPoolOptionsPage::ConnectionPoolOptionsPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+        : SfxTabPage(pParent, "cui/ui/connpooloptions.ui", "ConnPoolPage", &_rAttrSet)
+        , m_sYes(CuiResId(RID_SVXSTR_YES))
+        , m_sNo(CuiResId(RID_SVXSTR_NO))
+        , m_xEnablePooling(m_xBuilder->weld_check_button("connectionpooling"))
+        , m_xDriversLabel(m_xBuilder->weld_label("driverslabel"))
+        , m_xDriverList(m_xBuilder->weld_tree_view("driverlist"))
+        , m_xDriverLabel(m_xBuilder->weld_label("driverlabel"))
+        , m_xDriver(m_xBuilder->weld_label("driver"))
+        , m_xDriverPoolingEnabled(m_xBuilder->weld_check_button("enablepooling"))
+        , m_xTimeoutLabel(m_xBuilder->weld_label("timeoutlabel"))
+        , m_xTimeout(m_xBuilder->weld_spin_button("timeout"))
     {
-        EditBrowseBox::Init();
+        m_xDriverList->set_size_request(m_xDriverList->get_approximate_digit_width() * 60,
+                                        m_xDriverList->get_height_rows(12));
+        m_xDriverList->show();
 
-        Size aColWidth = LogicToPixel(Size(160, 0), MapMode(MapUnit::MapAppFont));
-        InsertDataColumn(1, CuiResId(RID_SVXSTR_DRIVER_NAME), aColWidth.Width());
-        aColWidth = LogicToPixel(Size(30, 0), MapMode(MapUnit::MapAppFont));
-        InsertDataColumn(2, CuiResId(RID_SVXSTR_POOLED_FLAG), aColWidth.Width());
-        aColWidth = LogicToPixel(Size(60, 0), MapMode(MapUnit::MapAppFont));
-        InsertDataColumn(3, CuiResId(RID_SVXSTR_POOL_TIMEOUT), aColWidth.Width());
-            // Attention: the resource of the string is local to the resource of the enclosing dialog!
+        m_xEnablePooling->connect_clicked( LINK(this, ConnectionPoolOptionsPage, OnEnabledDisabled) );
+        m_xDriverPoolingEnabled->connect_clicked( LINK(this, ConnectionPoolOptionsPage, OnEnabledDisabled) );
+
+        m_xDriverList->connect_changed(LINK(this, ConnectionPoolOptionsPage, OnDriverRowChanged));
+        m_xTimeout->connect_value_changed(LINK(this, ConnectionPoolOptionsPage, OnSpinValueChanged));
     }
 
-
-    void DriverListControl::CursorMoved()
+    void ConnectionPoolOptionsPage::updateRow(size_t nRow)
     {
-        EditBrowseBox::CursorMoved();
-
-        // call the row change handler
-        if ( m_aRowChangeHandler.IsSet() )
+        auto const& currentSetting = m_aSettings[nRow];
+        m_xDriverList->set_text(nRow, currentSetting.sName, 0);
+        if (currentSetting.bEnabled)
         {
-            if ( GetCurRow() >= 0 )
-            {   // == -1 may happen in case the browse box has just been cleared
-                m_aRowChangeHandler.Call( getCurrentRow() );
-            }
+            m_xDriverList->set_text(nRow, m_sYes, 1);
+            m_xDriverList->set_text(nRow, OUString::number(currentSetting.nTimeoutSeconds), 2);
         }
+        else
+            m_xDriverList->set_text(nRow, m_sNo, 1);
     }
 
-    DriverPooling* DriverListControl::getCurrentRow()
+    void ConnectionPoolOptionsPage::updateCurrentRow()
     {
-        OSL_ENSURE( ( GetCurRow() < m_aSettings.size() ) && ( GetCurRow() >= 0 ),
-            "DriverListControl::getCurrentRow: invalid current row!");
-
-        if ( ( GetCurRow() >= 0 ) && ( GetCurRow() < m_aSettings.size() ) )
-            return &(*(m_aSettings.begin() + GetCurRow()));
-
-        return nullptr;
+        int nRow = m_xDriverList->get_selected_index();
+        if (nRow == -1)
+            return;
+        updateRow(nRow);
     }
 
-
-    void DriverListControl::updateCurrentRow()
-    {
-        Window::Invalidate( GetRowRectPixel( GetCurRow() ), InvalidateFlags::Update );
-    }
-
-
-    void DriverListControl::Update(const DriverPoolingSettings& _rSettings)
+    void ConnectionPoolOptionsPage::UpdateDriverList(const DriverPoolingSettings& _rSettings)
     {
         m_aSettings = _rSettings;
 
-        SetUpdateMode(false);
-        RowRemoved(0, GetRowCount());
-        RowInserted(0, m_aSettings.size());
-        SetUpdateMode(true);
+        m_xDriverList->freeze();
+        m_xDriverList->clear();
 
-        ActivateCell(1, 0);
-    }
-
-
-    sal_uInt32 DriverListControl::GetTotalCellWidth(long nRow, sal_uInt16 nColId)
-    {
-        return GetDataWindow().GetTextWidth(GetCellText(nRow, nColId));
-    }
-
-
-    OUString DriverListControl::implGetCellText(const DriverPoolingSettings::const_iterator& _rPos, sal_uInt16 _nColId) const
-    {
-        OSL_ENSURE(_rPos < m_aSettings.end(), "DriverListControl::implGetCellText: invalid position!");
-
-        OUString sReturn;
-        switch (_nColId)
+        for (size_t i = 0; i < m_aSettings.size(); ++i)
         {
-            case 1:
-                sReturn = _rPos->sName;
-                break;
-            case 2:
-                sReturn = _rPos->bEnabled ? m_sYes : m_sNo;
-                break;
-            case 3:
-                if (_rPos->bEnabled)
-                    sReturn = OUString::number(_rPos->nTimeoutSeconds);
-                break;
-            default:
-                OSL_FAIL("DriverListControl::implGetCellText: invalid column id!");
+            m_xDriverList->append();
+            updateRow(i);
         }
-        return sReturn;
-    }
 
+        m_xDriverList->thaw();
 
-    void DriverListControl::StateChanged( StateChangedType nStateChange )
-    {
-        if (StateChangedType::Enable == nStateChange)
-            Window::Invalidate(InvalidateFlags::Update);
-        EditBrowseBox::StateChanged( nStateChange );
-    }
-
-
-    OUString DriverListControl::GetCellText( long nRow, sal_uInt16 nColId ) const
-    {
-        OUString sReturn;
-        if (nRow > m_aSettings.size())
+        if (!m_aSettings.empty())
         {
-            OSL_FAIL("DriverListControl::GetCellText: don't ask me for such rows!");
+            m_xDriverList->select(0);
+            OnDriverRowChanged(*m_xDriverList);
         }
-        else
-        {
-            sReturn = implGetCellText(m_aSettings.begin() + nRow, nColId);
-        }
-        return sReturn;
-    }
-
-
-    void DriverListControl::InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol )
-    {
-        rController->GetWindow().SetText(GetCellText(nRow, nCol));
-    }
-
-
-    ::svt::CellController* DriverListControl::GetController( long /*nRow*/, sal_uInt16 /*nCol*/ )
-    {
-        return nullptr;
-    }
-
-
-    bool DriverListControl::SaveModified()
-    {
-        return true;
-    }
-
-
-    bool DriverListControl::SeekRow( long _nRow )
-    {
-        EditBrowseBox::SeekRow(_nRow);
-
-        if (_nRow < m_aSettings.size())
-            m_aSeekRow = m_aSettings.begin() + _nRow;
-        else
-            m_aSeekRow = m_aSettings.end();
-
-        return m_aSeekRow != m_aSettings.end();
-    }
-
-
-    void DriverListControl::PaintCell( OutputDevice& rDev, const ::tools::Rectangle& rRect, sal_uInt16 nColId ) const
-    {
-        OSL_ENSURE(m_aSeekRow != m_aSettings.end(), "DriverListControl::PaintCell: invalid row!");
-
-        if (m_aSeekRow != m_aSettings.end())
-        {
-            rDev.SetClipRegion(vcl::Region(rRect));
-
-            DrawTextFlags nStyle = DrawTextFlags::Clip;
-            if (!IsEnabled())
-                nStyle |= DrawTextFlags::Disable;
-            switch (nColId)
-            {
-                case 1: nStyle |= DrawTextFlags::Left; break;
-                case 2:
-                case 3: nStyle |= DrawTextFlags::Center; break;
-            }
-
-            rDev.DrawText(rRect, implGetCellText(m_aSeekRow, nColId), nStyle);
-
-            rDev.SetClipRegion();
-        }
-    }
-
-    ConnectionPoolOptionsPage::ConnectionPoolOptionsPage(vcl::Window* _pParent, const SfxItemSet& _rAttrSet)
-        : SfxTabPage(_pParent, "ConnPoolPage", "cui/ui/connpooloptions.ui", &_rAttrSet)
-    {
-        get(m_pEnablePooling, "connectionpooling");
-        get(m_pDriversLabel, "driverslabel");
-        get(m_pDriverList, "driverlist");
-        get(m_pDriverLabel, "driverlabel");
-        get(m_pDriver, "driver");
-        get(m_pDriverPoolingEnabled, "enablepooling");
-        get(m_pTimeoutLabel, "timeoutlabel");
-        get(m_pTimeout, "timeout");
-
-        Size aControlSize(248, 100);
-        aControlSize = LogicToPixel(aControlSize, MapMode(MapUnit::MapAppFont));
-        m_pDriverList->set_width_request(aControlSize.Width());
-        m_pDriverList->set_height_request(aControlSize.Height());
-        m_pDriverList->Init();
-        m_pDriverList->Show();
-
-        m_pEnablePooling->SetClickHdl( LINK(this, ConnectionPoolOptionsPage, OnEnabledDisabled) );
-        m_pDriverPoolingEnabled->SetClickHdl( LINK(this, ConnectionPoolOptionsPage, OnEnabledDisabled) );
-
-        m_pDriverList->SetRowChangeHandler( LINK(this, ConnectionPoolOptionsPage, OnDriverRowChanged) );
     }
 
     ConnectionPoolOptionsPage::~ConnectionPoolOptionsPage()
     {
-        disposeOnce();
     }
 
-    void ConnectionPoolOptionsPage::dispose()
+    VclPtr<SfxTabPage> ConnectionPoolOptionsPage::Create(TabPageParent pParent, const SfxItemSet* _rAttrSet)
     {
-        m_pEnablePooling.clear();
-        m_pDriversLabel.clear();
-        m_pDriverList.clear();
-        m_pDriverLabel.clear();
-        m_pDriver.clear();
-        m_pDriverPoolingEnabled.clear();
-        m_pTimeoutLabel.clear();
-        m_pTimeout.clear();
-        SfxTabPage::dispose();
-    }
-
-    VclPtr<SfxTabPage> ConnectionPoolOptionsPage::Create(TabPageParent _pParent, const SfxItemSet* _rAttrSet)
-    {
-        return VclPtr<ConnectionPoolOptionsPage>::Create(_pParent.pParent, *_rAttrSet);
+        return VclPtr<ConnectionPoolOptionsPage>::Create(pParent, *_rAttrSet);
     }
 
     void ConnectionPoolOptionsPage::implInitControls(const SfxItemSet& _rSet)
@@ -344,35 +130,29 @@ namespace offapp
         // the enabled flag
         const SfxBoolItem* pEnabled = _rSet.GetItem<SfxBoolItem>(SID_SB_POOLING_ENABLED);
         OSL_ENSURE(pEnabled, "ConnectionPoolOptionsPage::implInitControls: missing the Enabled item!");
-        m_pEnablePooling->Check(pEnabled == nullptr || pEnabled->GetValue());
+        m_xEnablePooling->set_active(pEnabled == nullptr || pEnabled->GetValue());
 
-        m_pEnablePooling->SaveValue();
+        m_xEnablePooling->save_state();
 
         // the settings for the single drivers
         const DriverPoolingSettingsItem* pDriverSettings = _rSet.GetItem<DriverPoolingSettingsItem>(SID_SB_DRIVER_TIMEOUTS);
         if (pDriverSettings)
-            m_pDriverList->Update(pDriverSettings->getSettings());
+            UpdateDriverList(pDriverSettings->getSettings());
         else
         {
             OSL_FAIL("ConnectionPoolOptionsPage::implInitControls: missing the DriverTimeouts item!");
-            m_pDriverList->Update(DriverPoolingSettings());
+            UpdateDriverList(DriverPoolingSettings());
         }
-        m_pDriverList->saveValue();
+        saveDriverList();
 
         // reflect the new settings
-        OnEnabledDisabled(m_pEnablePooling);
+        OnEnabledDisabled(*m_xEnablePooling);
     }
 
-
-    bool ConnectionPoolOptionsPage::EventNotify( NotifyEvent& _rNEvt )
+    IMPL_LINK_NOARG(ConnectionPoolOptionsPage, OnSpinValueChanged, weld::SpinButton&, void)
     {
-        if (MouseNotifyEvent::LOSEFOCUS == _rNEvt.GetType())
-            if (m_pTimeout->IsWindowOrChild(_rNEvt.GetWindow()))
-                commitTimeoutField();
-
-        return SfxTabPage::EventNotify(_rNEvt);
+        commitTimeoutField();
     }
-
 
     bool ConnectionPoolOptionsPage::FillItemSet(SfxItemSet* _rSet)
     {
@@ -380,22 +160,21 @@ namespace offapp
 
         bool bModified = false;
         // the enabled flag
-        if (m_pEnablePooling->IsValueChangedFromSaved())
+        if (m_xEnablePooling->get_state_changed_from_saved())
         {
-            _rSet->Put(SfxBoolItem(SID_SB_POOLING_ENABLED, m_pEnablePooling->IsChecked()));
+            _rSet->Put(SfxBoolItem(SID_SB_POOLING_ENABLED, m_xEnablePooling->get_active()));
             bModified = true;
         }
 
         // the settings for the single drivers
-        if (m_pDriverList->isModified())
+        if (isModifiedDriverList())
         {
-            _rSet->Put(DriverPoolingSettingsItem(SID_SB_DRIVER_TIMEOUTS, m_pDriverList->getSettings()));
+            _rSet->Put(DriverPoolingSettingsItem(SID_SB_DRIVER_TIMEOUTS, m_aSettings));
             bModified = true;
         }
 
         return bModified;
     }
-
 
     void ConnectionPoolOptionsPage::ActivatePage( const SfxItemSet& _rSet)
     {
@@ -403,69 +182,70 @@ namespace offapp
         implInitControls(_rSet);
     }
 
-
     void ConnectionPoolOptionsPage::Reset(const SfxItemSet* _rSet)
     {
         implInitControls(*_rSet);
     }
 
-
-    IMPL_LINK( ConnectionPoolOptionsPage, OnDriverRowChanged, const DriverPooling*, pDriverPos, void )
+    IMPL_LINK_NOARG(ConnectionPoolOptionsPage, OnDriverRowChanged, weld::TreeView&, void)
     {
-        bool bValidRow = (nullptr != pDriverPos);
-        m_pDriverPoolingEnabled->Enable(bValidRow && m_pEnablePooling->IsChecked());
-        m_pTimeoutLabel->Enable(bValidRow);
-        m_pTimeout->Enable(bValidRow);
+        const int nDriverPos = m_xDriverList->get_selected_index();
+        bool bValidRow = (nDriverPos != -1);
+        m_xDriverPoolingEnabled->set_sensitive(bValidRow && m_xEnablePooling->get_active());
+        m_xTimeoutLabel->set_sensitive(bValidRow);
+        m_xTimeout->set_sensitive(bValidRow);
 
         if (!bValidRow)
         {   // positioned on an invalid row
-            m_pDriver->SetText(OUString());
+            m_xDriver->set_label(OUString());
         }
         else
         {
-            m_pDriver->SetText(pDriverPos->sName);
-            m_pDriverPoolingEnabled->Check(pDriverPos->bEnabled);
-            m_pTimeout->SetText(OUString::number(pDriverPos->nTimeoutSeconds));
+            auto const& currentSetting = m_aSettings[nDriverPos];
+            m_xDriver->set_label(currentSetting.sName);
+            m_xDriverPoolingEnabled->set_active(currentSetting.bEnabled);
+            m_xTimeout->set_value(currentSetting.nTimeoutSeconds);
 
-            OnEnabledDisabled(m_pDriverPoolingEnabled);
+            OnEnabledDisabled(*m_xDriverPoolingEnabled);
         }
     }
-
 
     void ConnectionPoolOptionsPage::commitTimeoutField()
     {
-        if (DriverPooling* pCurrentDriver = m_pDriverList->getCurrentRow())
-        {
-            pCurrentDriver->nTimeoutSeconds = static_cast<long>(m_pTimeout->GetValue());
-            m_pDriverList->updateCurrentRow();
-        }
+        const int nDriverPos = m_xDriverList->get_selected_index();
+        if (nDriverPos == -1)
+            return;
+        m_aSettings[nDriverPos].nTimeoutSeconds = m_xTimeout->get_value();
+        updateCurrentRow();
     }
 
-
-    IMPL_LINK( ConnectionPoolOptionsPage, OnEnabledDisabled, Button*, _pCheckBox, void )
+    IMPL_LINK( ConnectionPoolOptionsPage, OnEnabledDisabled, weld::Button&, rCheckBox, void )
     {
-        bool bGloballyEnabled = m_pEnablePooling->IsChecked();
-        bool bLocalDriverChanged = m_pDriverPoolingEnabled == _pCheckBox;
+        bool bGloballyEnabled = m_xEnablePooling->get_active();
+        bool bLocalDriverChanged = m_xDriverPoolingEnabled.get() == &rCheckBox;
 
-        if (m_pEnablePooling == _pCheckBox)
+        if (m_xEnablePooling.get() == &rCheckBox)
         {
-            m_pDriversLabel->Enable(bGloballyEnabled);
-            m_pDriverList->Enable(bGloballyEnabled);
-            m_pDriverLabel->Enable(bGloballyEnabled);
-            m_pDriver->Enable(bGloballyEnabled);
-            m_pDriverPoolingEnabled->Enable(bGloballyEnabled);
+            m_xDriversLabel->set_sensitive(bGloballyEnabled);
+            m_xDriverList->set_sensitive(bGloballyEnabled);
+            m_xDriverLabel->set_sensitive(bGloballyEnabled);
+            m_xDriver->set_sensitive(bGloballyEnabled);
+            m_xDriverPoolingEnabled->set_sensitive(bGloballyEnabled);
         }
         else
             OSL_ENSURE(bLocalDriverChanged, "ConnectionPoolOptionsPage::OnEnabledDisabled: where did this come from?");
 
-        m_pTimeoutLabel->Enable(bGloballyEnabled && m_pDriverPoolingEnabled->IsChecked());
-        m_pTimeout->Enable(bGloballyEnabled && m_pDriverPoolingEnabled->IsChecked());
+        m_xTimeoutLabel->set_sensitive(bGloballyEnabled && m_xDriverPoolingEnabled->get_active());
+        m_xTimeout->set_sensitive(bGloballyEnabled && m_xDriverPoolingEnabled->get_active());
 
         if (bLocalDriverChanged)
         {
             // update the list
-            m_pDriverList->getCurrentRow()->bEnabled = m_pDriverPoolingEnabled->IsChecked();
-            m_pDriverList->updateCurrentRow();
+            const int nDriverPos = m_xDriverList->get_selected_index();
+            if (nDriverPos == -1)
+                return;
+            m_aSettings[nDriverPos].bEnabled = m_xDriverPoolingEnabled->get_active();
+            updateCurrentRow();
         }
     }
 
