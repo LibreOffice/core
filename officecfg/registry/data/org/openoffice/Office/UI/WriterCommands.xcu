@@ -238,6 +238,17 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:RejectTrackedChangeToNext" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Reject and Move to Next</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Reject Track Change and select the next one</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:RejectAllTrackedChanges" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Reject All</value>
@@ -261,6 +272,17 @@
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">Accept Change</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AcceptTrackedChangeToNext" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Accept and Move to Next</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Accept Track Change and select the next one</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

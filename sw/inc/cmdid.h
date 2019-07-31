@@ -141,6 +141,8 @@
 #define FN_REDLINE_PREV_CHANGE       (FN_EDIT2 + 42)    /* Go to the previous change */
 #define FN_REDLINE_ACCEPT_ALL        (FN_EDIT2 + 43)    /* Redlining Accept All*/
 #define FN_REDLINE_REJECT_ALL        (FN_EDIT2 + 44)    /* Redlining Reject All*/
+#define FN_REDLINE_ACCEPT_TONEXT     (FN_EDIT2 + 45)    /* Redlining Accept and jump to next*/
+#define FN_REDLINE_REJECT_TONEXT     (FN_EDIT2 + 46)    /* Redlining Reject and jump to next*/
 
 // Region: Edit
 #define FN_REFRESH_VIEW         (FN_VIEW + 1)   /* Refresh/Redraw */

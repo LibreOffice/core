@@ -152,6 +152,18 @@ interface BaseTextEditView
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
+    FN_REDLINE_ACCEPT_TONEXT
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
+    ]
+    FN_REDLINE_REJECT_TONEXT
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
+    ]
 
     SID_DOCUMENT_COMPARE // status(play)
     [

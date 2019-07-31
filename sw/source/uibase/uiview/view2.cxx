@@ -668,6 +668,8 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case FN_REDLINE_ACCEPT_DIRECT:
         case FN_REDLINE_REJECT_DIRECT:
+        case FN_REDLINE_ACCEPT_TONEXT:
+        case FN_REDLINE_REJECT_TONEXT:
         {
             SwDoc *pDoc = m_pWrtShell->GetDoc();
             SwPaM *pCursor = m_pWrtShell->GetCursor();
@@ -685,7 +687,7 @@ void SwView::Execute(SfxRequest &rReq)
 
             if( pCursor->HasMark() && nRedline == SwRedlineTable::npos)
             {
-                if (FN_REDLINE_ACCEPT_DIRECT == nSlot)
+                if (FN_REDLINE_ACCEPT_DIRECT == nSlot || FN_REDLINE_ACCEPT_TONEXT == nSlot)
                     m_pWrtShell->AcceptRedlinesInSelection();
                 else
                     m_pWrtShell->RejectRedlinesInSelection();
@@ -711,11 +713,16 @@ void SwView::Execute(SfxRequest &rReq)
                 assert(pRedline != nullptr);
                 if (pRedline)
                 {
-                    if (FN_REDLINE_ACCEPT_DIRECT == nSlot)
+                    if (FN_REDLINE_ACCEPT_DIRECT == nSlot || FN_REDLINE_ACCEPT_TONEXT == nSlot)
                         m_pWrtShell->AcceptRedline(nRedline);
                     else
                         m_pWrtShell->RejectRedline(nRedline);
                 }
+            }
+            if (FN_REDLINE_ACCEPT_TONEXT == nSlot || FN_REDLINE_REJECT_TONEXT == nSlot)
+            {
+                // Go to next change after accepting or rejecting one (tdf#101977)
+                GetViewFrame()->GetDispatcher()->Execute(FN_REDLINE_NEXT_CHANGE, SfxCallMode::ASYNCHRON);
             }
         }
         break;
