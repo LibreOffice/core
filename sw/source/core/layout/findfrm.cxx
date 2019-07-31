@@ -782,7 +782,7 @@ SwFrame *SwFrame::FindNext_()
         if ( static_cast<SwTabFrame*>(this)->GetFollow() )
             return static_cast<SwTabFrame*>(this)->GetFollow();
 
-        pThis = static_cast<SwTabFrame*>(this)->FindLastContent();
+        pThis = static_cast<SwTabFrame*>(this)->FindLastContentOrTable();
         if ( !pThis )
             pThis = this;
         bIgnoreTab = true;
@@ -912,7 +912,7 @@ SwContentFrame *SwFrame::FindNextCnt_( const bool _bInSameFootnote )
             if( pThis )
                 return static_cast<SwContentFrame*>(pThis);
         }
-        pThis = static_cast<SwTabFrame*>(this)->FindLastContent();
+        pThis = static_cast<SwTabFrame*>(this)->FindLastContentOrTable();
         if ( !pThis )
             return nullptr;
     }

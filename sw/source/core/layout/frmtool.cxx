@@ -3706,11 +3706,15 @@ const SwContentFrame* GetCellContent( const SwLayoutFrame& rCell )
         const SwTabFrame* pTmpTab = pContent->FindTabFrame();
         if ( pTmpTab != pTab )
         {
-            pContent = pTmpTab->FindLastContent();
-            if ( pContent )
-
-                pContent = pContent->FindNextCnt();
-
+            SwFrame const*const pTmp = pTmpTab->FindLastContentOrTable();
+            if (pTmp)
+            {
+                pContent = pTmp->FindNextCnt();
+            }
+            else
+            {
+                pContent = nullptr;
+            }
         }
         else
             break;

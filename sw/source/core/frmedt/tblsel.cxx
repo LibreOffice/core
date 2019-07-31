@@ -1689,7 +1689,7 @@ static void lcl_FindStartEndCol( const SwLayoutFrame *&rpStart,
         nEX = ::lcl_CalcWish( rpEnd, nWish, nPrtWidth ) + aRectFnSet.GetPrtLeft(*pTab);
     }
 
-    const SwContentFrame* pLastContent = pTab->FindLastContent();
+    SwFrame const*const pLastContent = pTab->FindLastContentOrTable();
     rpEnd = pLastContent ? pLastContent->GetUpper() : nullptr;
     // --> Made code robust. If pTab does not have a lower,
     // we would crash here.
@@ -1745,7 +1745,7 @@ static void lcl_FindStartEndCol( const SwLayoutFrame *&rpStart,
         {
             pTmpTab = static_cast<const SwTabFrame*>(pTmpTab->FindPrev());
             OSL_ENSURE( pTmpTab->IsTabFrame(), "Predecessor of Follow not Master.");
-            rpEnd = pTmpTab->FindLastContent()->GetUpper();
+            rpEnd = pTmpTab->FindLastContentOrTable()->GetUpper();
             while( !rpEnd->IsCellFrame() )
                 rpEnd = rpEnd->GetUpper();
             while ( aRectFnSet.GetLeft(rpEnd->getFrameArea()) > nEX )
@@ -1921,7 +1921,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
                     pFirst = ::lcl_FindNextCellFrame( pFirst );
             }
             const SwLayoutFrame* pLast = nullptr;
-            const SwFrame* pLastContent = pTable->FindLastContent();
+            SwFrame const*const pLastContent = pTable->FindLastContentOrTable();
             if ( pLastContent )
                 pLast = ::lcl_FindCellFrame( pLastContent->GetUpper() );
 
