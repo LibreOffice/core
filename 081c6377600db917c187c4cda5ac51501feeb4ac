@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_80739eb1",
+        "filename": "starmath/inc/node.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-07-31T16:54:13Z",
+      "side": 1,
+      "message": "I\u0027m not sure but I thought it should rather be \"a child\".\nIndeed since there are several children, I suppose the obscure case is when \"a\" child...",
+      "range": {
+        "startLine": 585,
+        "startChar": 67,
+        "endLine": 585,
+        "endChar": 70
+      },
+      "revId": "081c6377600db917c187c4cda5ac51501feeb4ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_206ad2b2",
+        "filename": "starmath/source/accessibility.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-07-31T16:54:13Z",
+      "side": 1,
+      "message": "Rather \"there are\"",
+      "range": {
+        "startLine": 1037,
+        "startChar": 54,
+        "endLine": 1037,
+        "endChar": 63
+      },
+      "revId": "081c6377600db917c187c4cda5ac51501feeb4ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_005f8e0e",
+        "filename": "starmath/source/mathmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-07-31T16:54:13Z",
+      "side": 1,
+      "message": "I must recognize I don\u0027t understand the whole meaning.",
+      "range": {
+        "startLine": 893,
+        "startChar": 2,
+        "endLine": 893,
+        "endChar": 37
+      },
+      "revId": "081c6377600db917c187c4cda5ac51501feeb4ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
