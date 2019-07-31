@@ -525,10 +525,13 @@ bool VCartesianAxis::isBreakOfLabelsAllowed(
            rAxisLabelProperties.fRotationAngleDegree == 90.0 ||
            rAxisLabelProperties.fRotationAngleDegree == 270.0 ) )
         return false;
-    if ( !m_aAxisProperties.m_bSwapXAndY )
+    //no break for complex vertical category axis
+    if( !m_aAxisProperties.m_bSwapXAndY )
         return bIsHorizontalAxis;
-    else
+    else if( m_aAxisProperties.m_bSwapXAndY && !m_aAxisProperties.m_bComplexCategories )
         return bIsVerticalAxis;
+    else
+        return false;
 }
 namespace{
 
@@ -1645,7 +1648,11 @@ void VCartesianAxis::createLabels()
             {
                 aComplexProps.bLineBreakAllowed = true;
                 aComplexProps.bOverlapAllowed = aComplexProps.fRotationAngleDegree != 0.0;
-
+                //Only the first level of complex vertical category axis labels orientation should be horizontal
+                if( nTextLevel > 0 && m_aAxisProperties.m_bSwapXAndY )
+                {
+                    aComplexProps.fRotationAngleDegree = 90.0;
+                }
             }
             AxisLabelProperties& rAxisLabelProperties =  m_aAxisProperties.m_bComplexCategories ? aComplexProps : m_aAxisLabelProperties;
             while (!createTextShapes(m_xTextTarget, *apTickIter, rAxisLabelProperties,
