@@ -263,6 +263,7 @@ OfaMiscTabPage::OfaMiscTabPage(TabPageParent pParent, const SfxItemSet& rSet)
     , m_xYearValueField(m_xBuilder->weld_spin_button("year"))
     , m_xToYearFT(m_xBuilder->weld_label("toyear"))
     , m_xCollectUsageInfo(m_xBuilder->weld_check_button("collectusageinfo"))
+    , m_xCrashReport(m_xBuilder->weld_check_button("crashreport"))
     , m_xQuickStarterFrame(m_xBuilder->weld_widget("quickstarter"))
 #if defined(UNX)
     , m_xQuickLaunchCB(m_xBuilder->weld_check_button("systray"))
@@ -362,6 +363,14 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
         bModified = true;
     }
 
+#if HAVE_FEATURE_BREAKPAD
+    if (m_xCrashReport->get_state_changed_from_saved())
+    {
+        officecfg::Office::Common::Misc::CrashReport::set(m_xCrashReport->get_active(), batch);
+        bModified = true;
+    }
+#endif
+
     batch->commit();
 
     if( m_xQuickLaunchCB->get_state_changed_from_saved())
@@ -404,6 +413,14 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_xCollectUsageInfo->set_active(officecfg::Office::Common::Misc::CollectUsageInformation::get());
     m_xCollectUsageInfo->set_sensitive(!officecfg::Office::Common::Misc::CollectUsageInformation::isReadOnly());
     m_xCollectUsageInfo->save_state();
+
+#if HAVE_FEATURE_BREAKPAD
+    m_xCrashReport->set_active(officecfg::Office::Common::Misc::CrashReport::get());
+    m_xCrashReport->set_sensitive(!officecfg::Office::Common::Misc::CrashReport::isReadOnly());
+    m_xCrashReport->save_state();
+#else
+    m_xCrashReport->hide();
+#endif
 
     SfxItemState eState = rSet->GetItemState( SID_ATTR_QUICKLAUNCHER, false, &pItem );
     if ( SfxItemState::SET == eState )

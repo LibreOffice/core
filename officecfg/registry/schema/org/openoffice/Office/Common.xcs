@@ -5471,6 +5471,13 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="CrashReport" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - General -->
+        <info>
+          <desc>Enable sending crash reports to The Document Foundation</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="ShowTipOfTheDay" oor:type="xs:boolean" oor:nillable="false">
         <!-- UIHints: Tools - Options - General -->
         <info>

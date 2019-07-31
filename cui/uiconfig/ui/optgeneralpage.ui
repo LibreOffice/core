@@ -63,7 +63,6 @@
                   <object class="GtkCheckButton" id="cbShowTipOfTheDay">
                     <property name="label" translatable="yes" context="optgeneralpage|TipOfTheDayCheckbox">Show "Tip of the Day" dialog on start-up</property>
                     <property name="visible">True</property>
-                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="active">True</property>
@@ -328,14 +327,41 @@
             <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
-              <object class="GtkCheckButton" id="collectusageinfo">
-                <property name="label" translatable="yes" context="optgeneralpage|collectusageinfo">Collect usage data and send it to The Document Foundation</property>
+              <object class="GtkGrid">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkCheckButton" id="collectusageinfo">
+                    <property name="label" translatable="yes" context="optgeneralpage|collectusageinfo">Collect usage data and send it to The Document Foundation</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="margin_top">1</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="crashreport">
+                    <property name="label" translatable="yes" context="optgeneralpage|crashreport">Sen_d crash reports to The Document Foundation</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="halign">start</property>
+                    <property name="use_underline">True</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
               </object>
             </child>
           </object>
