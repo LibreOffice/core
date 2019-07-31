@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_925f7340",
+        "filename": "vcl/source/treelist/svtabbx.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-31T14:57:37Z",
+      "side": 1,
+      "message": "this should be\n   \u0026\u003d\nnot\n  \u0026",
+      "revId": "ce38fb57a872ed42944f26044538862bbfb7cd82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
