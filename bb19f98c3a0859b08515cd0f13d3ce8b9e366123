@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_20af32e4",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2019-07-31T17:16:08Z",
+      "side": 1,
+      "message": "I moved these a bit in the xcu.\n\nI tend to agree that this is not very useful in the main menu, so I removed them from there. \nOnly placed on the toolbar for now, and we have a bug requesting this function for the notebookbar (bug 124369) - I suggest considering other placement options of these commands there (CT sidebar? Manage changes dialog?).",
+      "parentUuid": "bf659307_32678750",
+      "revId": "bb19f98c3a0859b08515cd0f13d3ce8b9e366123",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_327ea7e4",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2019-07-31T13:19:59Z",
       "side": 1,
       "message": "No shortcut possible here?",
+      "range": {
+        "startLine": 307,
+        "startChar": 34,
+        "endLine": 307,
+        "endChar": 57
+      },
+      "revId": "bb19f98c3a0859b08515cd0f13d3ce8b9e366123",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_40aa66d2",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2019-07-31T17:16:08Z",
+      "side": 1,
+      "message": "Since I just removed them from the main menu, I see now little value in adding accelerators at all - so I rather removed the other one.",
+      "parentUuid": "bf659307_327ea7e4",
       "range": {
         "startLine": 307,
         "startChar": 34,
