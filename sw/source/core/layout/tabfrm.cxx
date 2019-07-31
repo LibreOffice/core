@@ -3398,10 +3398,20 @@ SwContentFrame *SwTabFrame::FindLastContent()
         while ( pRet->GetNext() )
             pRet = pRet->GetNext();
 
-        if( pRet->IsSctFrame() )
+        while (pRet && pRet->IsTabFrame()) // possibly there's only tables here!
+        {   // tdf#126138 skip table, don't look inside
+            // TODO this is actually not ideal, e.g. SwFrame::FindNext_() might
+            // -if there's a table at the end- return a lower frame inside that
+            // table instead of the "next" one... probably this function should
+            // really return SwFrame* to be able to return a SwTabFrame?
+            pRet = pRet->GetPrev();
+        }
+
+        if (pRet && pRet->IsSctFrame())
             pRet = static_cast<SwSectionFrame*>(pRet)->FindLastContent();
     }
 
+    assert(pRet == nullptr || dynamic_cast<SwContentFrame*>(pRet));
     return static_cast<SwContentFrame*>(pRet);
 }
 
