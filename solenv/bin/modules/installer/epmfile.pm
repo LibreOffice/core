@@ -1182,15 +1182,15 @@ sub set_autoprovreq_in_specfile
 {
     my ($changefile, $findrequires, $bindir) = @_;
 
-    my $autoreqprovline;
+    my $autoreqprovline = "AutoReqProv\: no\n";
 
     if ( $findrequires )
     {
-        $autoreqprovline = "AutoProv\: no\n%define _use_internal_dependency_generator 0\n%define __find_requires $bindir/$findrequires\n";
-    }
-    else
-    {
-        $autoreqprovline = "AutoReqProv\: no\n";
+        # don't let rpm invoke it, we never want to use AutoReq because
+        # rpm will generate Requires: config(packagename)
+        open (FINDREQUIRES, "echo | $bindir/$findrequires |");
+        while (<FINDREQUIRES>) { $autoreqprovline .= "Requires: $_\n"; }
+        close (FINDREQUIRES);
     }
 
     $autoreqprovline .= "%define _binary_filedigest_algorithm 1\n%define _binary_payload w9.gzdio\n";
