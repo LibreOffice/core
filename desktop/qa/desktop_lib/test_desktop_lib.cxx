@@ -1941,10 +1941,10 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
     CPPUNIT_ASSERT(aView1.m_aOwnCursor.IsEmpty());
 
     Scheduler::ProcessEventsToIdle();
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+    pDocument->m_pDocumentClass->setView(pDocument, nView1);
+    pDocument->m_pDocumentClass->registerCallback(pDocument, nullptr, nullptr);
+    pDocument->m_pDocumentClass->setView(pDocument, nView2);
+    pDocument->m_pDocumentClass->registerCallback(pDocument, nullptr, nullptr);
 }
 
 #if HAVE_MORE_FONTS
@@ -2141,9 +2141,11 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
     ViewCallback aView2;
     LibLODocument_Impl* pDocument = loadDoc("comments.odt");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    int nView1 = pDocument->m_pDocumentClass->getView(pDocument);
     pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView1);
     pDocument->m_pDocumentClass->createView(pDocument);
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    int nView2 = pDocument->m_pDocumentClass->getView(pDocument);
     pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView2);
 
     // Add a new comment
@@ -2217,7 +2219,10 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), aTree.get_child("comments").size());
 
-    pDocument->m_pDocumentClass->registerCallback(pDocument, nullptr, reinterpret_cast<void*>(1));
+    pDocument->m_pDocumentClass->setView(pDocument, nView1);
+    pDocument->m_pDocumentClass->registerCallback(pDocument, nullptr, nullptr);
+    pDocument->m_pDocumentClass->setView(pDocument, nView2);
+    pDocument->m_pDocumentClass->registerCallback(pDocument, nullptr, nullptr);
 }
 
 void DesktopLOKTest::testRunMacro()
