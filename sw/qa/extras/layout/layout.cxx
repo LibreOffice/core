@@ -2406,6 +2406,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122800)
     // This failed, if the textarray length of the first axis label not 22.
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf126244)
+{
+    SwDoc* pDoc = createDoc("tdf126244.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Test the first level of vertical category axis labels orientation. The first level orientation should be horizontal.
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/font[1]", "orientation", "0");
+    // Test the second level of vertical category axis labels orientation. The second level orientation should be vertical.
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/font[5]", "orientation", "900");
+    // Test the third level of vertical category axis labels orientation. The third level orientation should be vertical.
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/font[7]", "orientation", "900");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124796)
 {
     SwDoc* pDoc = createDoc("tdf124796.odt");
