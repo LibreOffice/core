@@ -1034,7 +1034,7 @@ static SfxItemState GetSvxEditEngineItemState( EditEngine const & rEditEngine, c
         rEditEngine.GetCharAttribs( nPara, aAttribs );
 
         bool bEmpty = true;     // we found no item inside the selection of this paragraph
-        bool bGaps  = false;    // we found items but theire gaps between them
+        bool bGaps  = false;    // we found items but there are gaps between them
         sal_Int32 nLastEnd = nPos;
 
         const SfxPoolItem* pParaItem = nullptr;
