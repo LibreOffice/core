@@ -27,286 +27,286 @@ Resource RID_SIDEBAR_RESOURCE
 {
     Image IMAGE_SIDEBAR_PLUS
     {
-        ImageBitmap = Bitmap { File = "plus.png" ;};
+        ImageBitmap = Bitmap { File = "plus.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_PLUS_HC
     {
-        ImageBitmap = Bitmap { File = "plus_hc.png" ;};
+        ImageBitmap = Bitmap { File = "plus_hc.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_MINUS
     {
-        ImageBitmap = Bitmap { File = "minus.png" ;};
+        ImageBitmap = Bitmap { File = "minus.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_MINUS_HC
     {
-        ImageBitmap = Bitmap { File = "minus_hc.png" ;};
+        ImageBitmap = Bitmap { File = "minus_hc.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_GRIP
     {
-        ImageBitmap = Bitmap { File = "grip.png" ;};
+        ImageBitmap = Bitmap { File = "grip.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_GRIP_HC
     {
-        ImageBitmap = Bitmap { File = "grip_hc.png" ;};
+        ImageBitmap = Bitmap { File = "grip_hc.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_MENU
     {
-        ImageBitmap = Bitmap { File = "symphony/open_more.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/open_more.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_MENU_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/open_more_hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/open_more_hc.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_DETAIL_DIALOG
     {
-        ImageBitmap = Bitmap { File = "symphony/morebutton.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/morebutton.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_DETAIL_DIALOG_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/morebutton_h.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/morebutton_h.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_TOOLBOX_SEPARATOR
     {
-        ImageBitmap = Bitmap { File = "separator.png" ;};
+        ImageBitmap = Bitmap { File = "separator.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_DECK_3D_LARGE
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-3d-large.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-3d-large.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_3D_LARGE_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-3d-large-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-3d-large-hc.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_3D_SMALL
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-3d-small.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-3d-small.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_3D_SMALL_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-3d-small-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-3d-small-hc.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_DECK_ANIMATION_LARGE
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-animation-large.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-animation-large.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_ANIMATION_LARGE_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-animation-large-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-animation-large-hc.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_ANIMATION_SMALL
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-animation-small.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-animation-small.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_ANIMATION_SMALL_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-animation-small-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-animation-small-hc.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_DECK_COLORS_LARGE
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-colors-large.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-colors-large.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_COLORS_LARGE_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-colors-large-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-colors-large-hc.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_COLORS_SMALL
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-colors-small.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-colors-small.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_COLORS_SMALL_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-colors-small-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-colors-small-hc.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_DECK_EYEDROPPER_LARGE
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-eyedropper-large.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-eyedropper-large.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_EYEDROPPER_LARGE_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-eyedropper-large-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-eyedropper-large-hc.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_EYEDROPPER_SMALL
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-eyedropper-small.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-eyedropper-small.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_EYEDROPPER_SMALL_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-eyedropper-small-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-eyedropper-small-hc.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_DECK_GALLERY_LARGE
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-gallery-large.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-gallery-large.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_GALLERY_LARGE_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-gallery-large-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-gallery-large-hc.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_GALLERY_SMALL
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-gallery-small.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-gallery-small.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_GALLERY_SMALL_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-gallery-small-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-gallery-small-hc.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_DECK_IMGANIM_LARGE
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-imganim-large.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-imganim-large.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_IMGANIM_LARGE_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-imganim-large-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-imganim-large-hc.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_IMGANIM_SMALL
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-imganim-small.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-imganim-small.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_IMGANIM_SMALL_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-imganim-small-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-imganim-small-hc.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_DECK_NAVIGATOR_LARGE
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-navigator-large.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-navigator-large.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_NAVIGATOR_LARGE_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-navigator-large-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-navigator-large-hc.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_NAVIGATOR_SMALL
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-navigator-small.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-navigator-small.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_NAVIGATOR_SMALL_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-navigator-small-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-navigator-small-hc.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_PROPERTIES_DECK_LARGE
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-property-large.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-property-large.png" ;} ;
     };
     Image IMAGE_SIDEBAR_PROPERTIES_DECK_LARGE_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-property-large-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-property-large-hc.png" ;} ;
     };
     Image IMAGE_SIDEBAR_PROPERTIES_DECK_SMALL
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-property-small.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-property-small.png" ;} ;
     };
     Image IMAGE_SIDEBAR_PROPERTIES_DECK_SMALL_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-property-small-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-property-small-hc.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_DECK_STYLE_LARGE
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-style-large.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-style-large.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_STYLE_LARGE_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-style-large-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-style-large-hc.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_STYLE_SMALL
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-style-small.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-style-small.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_STYLE_SMALL_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-style-small-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-style-small-hc.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_DECK_TEMPLATE_LARGE
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-template-large.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-template-large.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_TEMPLATE_LARGE_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-template-large-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-template-large-hc.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_TEMPLATE_SMALL
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-template-small.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-template-small.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_TEMPLATE_SMALL_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-template-small-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-template-small-hc.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_DECK_TRANSITION_LARGE
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-transition-large.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-transition-large.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_TRANSITION_LARGE_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-transition-large-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-transition-large-hc.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_TRANSITION_SMALL
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-transition-small.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-transition-small.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_TRANSITION_SMALL_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-transition-small-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-transition-small-hc.png" ;} ;
     };
 
     Image IMAGE_SIDEBAR_DECK_FUNCTIONS_LARGE
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-functions-large.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-functions-large.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_FUNCTIONS_LARGE_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-functions-large-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-functions-large-hc.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_FUNCTIONS_SMALL
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-functions-small.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-functions-small.png" ;} ;
     };
     Image IMAGE_SIDEBAR_DECK_FUNCTIONS_SMALL_HC
     {
-        ImageBitmap = Bitmap { File = "symphony/sidebar-functions-small-hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/sidebar-functions-small-hc.png" ;} ;
     };
 
     String STRING_CUSTOMIZATION
     {
-        Text [en-US] = "Customization";
+        Text [en-US] = "Customization" ;
     };
     String STRING_RESTORE
     {
-        Text [en-US] = "Restore Default";
+        Text [en-US] = "Restore Default" ;
     };
 };
 
 String SFX_STR_SIDEBAR_MORE_OPTIONS
 {
-    Text [en-US] = "More Options";
+    Text [en-US] = "More Options" ;
 };
 
 String SFX_STR_SIDEBAR_CLOSE_DECK
 {
-    Text [en-US] = "Close Sidebar Deck";
+    Text [en-US] = "Close Sidebar Deck" ;
 };
 
 String SFX_STR_SIDEBAR_ACCESSIBILITY_PANEL_PREFIX
 {
-    Text [en-US] = "Panel: ";
+    Text [en-US] = "Panel: " ;
 };
 
 // ********************************************************************** EOF

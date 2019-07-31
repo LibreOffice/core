@@ -320,7 +320,7 @@ void Theme::UpdateTheme (void)
         setPropertyValue(
             maPropertyIdToNameMap[Color_TabItemBorder],
             Any(sal_Int32(rStyle.GetActiveBorderColor().GetRGBColor())));
-        //                    mbIsHighContrastMode ? 0x00ff00 : 0xbfbfbf)));
+        //                  mbIsHighContrastMode ? 0x00ff00 : 0xbfbfbf)));
 
         setPropertyValue(
             maPropertyIdToNameMap[Paint_DropDownBackground],
@@ -342,16 +342,16 @@ void Theme::UpdateTheme (void)
         setPropertyValue(
             maPropertyIdToNameMap[Paint_TabItemBackgroundHighlight],
             Any(sal_Int32(rStyle.GetActiveTabColor().GetRGBColor())));
-        //                    mbIsHighContrastMode ? 0x000000 : 0x00ffffff)));
+        //                  mbIsHighContrastMode ? 0x000000 : 0x00ffffff)));
 
         setPropertyValue(
             maPropertyIdToNameMap[Paint_HorizontalBorder],
             Any(sal_Int32(aBorderColor.GetRGBColor())));
-        //                    mbIsHighContrastMode ? 0x00ff00 : 0xe4e4e4)));
+        //                  mbIsHighContrastMode ? 0x00ff00 : 0xe4e4e4)));
         setPropertyValue(
             maPropertyIdToNameMap[Paint_VerticalBorder],
             Any(sal_Int32(aBorderColor.GetRGBColor())));
-        //                    mbIsHighContrastMode ? 0x00ff00 : 0xe4e4e4)));
+        //                  mbIsHighContrastMode ? 0x00ff00 : 0xe4e4e4)));
 
         setPropertyValue(
             maPropertyIdToNameMap[Image_Grip],
@@ -381,8 +381,8 @@ void Theme::UpdateTheme (void)
             maPropertyIdToNameMap[Image_PanelMenu],
             Any(
                 mbIsHighContrastMode
-                    ? A2S("private:graphicrepository/sfx2/res/symphony/morebutton.png")
-                    : A2S("private:graphicrepository/sfx2/res/symphony/morebutton_h.png")));
+                    ? A2S("private:graphicrepository/sfx2/res/symphony/morebutton_h.png")
+                    : A2S("private:graphicrepository/sfx2/res/symphony/morebutton.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_Closer],
             Any(A2S("private:graphicrepository/sfx2/res/closedoc.png")));
