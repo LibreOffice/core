@@ -1912,9 +1912,11 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
     ViewCallback aView2;
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    int nView1 = SfxLokHelper::getView();
     pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView1);
     pDocument->m_pDocumentClass->createView(pDocument);
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    int nView2 = SfxLokHelper::getView();
     pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView2);
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'x', 0);
@@ -1939,7 +1941,10 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
     CPPUNIT_ASSERT(aView1.m_aOwnCursor.IsEmpty());
 
     Scheduler::ProcessEventsToIdle();
-    pDocument->m_pDocumentClass->registerCallback(pDocument, nullptr, reinterpret_cast<void*>(1));
+    SfxLokHelper::setView(nView1);
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+    SfxLokHelper::setView(nView2);
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 #if HAVE_MORE_FONTS
