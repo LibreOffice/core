@@ -71,6 +71,7 @@ interface TextDocument : BaseTextDocument
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
+
 }
 
 shell SwDocShell

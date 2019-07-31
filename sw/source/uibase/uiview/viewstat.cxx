@@ -296,6 +296,8 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case FN_REDLINE_ACCEPT_DIRECT:
             case FN_REDLINE_REJECT_DIRECT:
+            case FN_REDLINE_ACCEPT_TONEXT:
+            case FN_REDLINE_REJECT_TONEXT:
             {
                 SwDoc *pDoc = m_pWrtShell->GetDoc();
                 SwPaM *pCursor = m_pWrtShell->GetCursor();
