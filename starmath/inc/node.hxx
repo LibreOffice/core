@@ -117,7 +117,7 @@ public:
     virtual             ~SmNode();
 
     /**
-     * Returns true if this is a instance of SmVisibleNode's subclass, false otherwise.
+     * Returns true if this is an instance of SmVisibleNode's subclass, false otherwise.
      */
     virtual bool        IsVisible() const = 0;
 
@@ -453,7 +453,7 @@ public:
  *
  * This node is used with commands: oper, uoper and boper.
  * E.g. in "A boper op B", "op" will be an instance of SmGlyphSpecialNode.
- * "boper" simply interprets "op", the following token, as an binary operator.
+ * "boper" simply interprets "op", the following token, as a binary operator.
  * The command "uoper" interprets the following token as unary operator.
  * For these commands an instance of SmGlyphSpecialNode is used for the
  * operator token, following the command.
@@ -560,7 +560,7 @@ public:
 
 /** Error node, for parsing errors
  *
- * This node is used for parsing errors and draws an questionmark turned upside
+ * This node is used for parsing errors and draws a questionmark turned upside
  * down (inverted question mark).
  */
 class SmErrorNode : public SmMathSymbolNode
@@ -582,7 +582,7 @@ public:
  *
  * This is the root node for the formula tree. This node is also used for the
  * STACK and BINOM commands. When used for root node, its
- * children are instances of SmLineNode, and in some obscure cases the a child
+ * children are instances of SmLineNode, and in some obscure cases the child
  * can be an instance of SmExpressionNode, mainly when errors occur.
  */
 class SmTableNode : public SmStructureNode
