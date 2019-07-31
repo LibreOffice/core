@@ -2025,7 +2025,7 @@ void Desktop::OpenClients()
 #endif
 
 #if HAVE_FEATURE_BREAKPAD
-    if (crashReportInfoExists())
+    if (officecfg::Office::Common::Misc::CrashReport::get() && crashReportInfoExists())
         handleCrashReport();
 #endif
 

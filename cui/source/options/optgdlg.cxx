@@ -279,6 +279,8 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pToYearFT, "toyear");
     get(m_pCollectUsageInfo, "collectusageinfo");
     get(m_pQuickStarterFrame, "quickstarter");
+    get(m_xCrashReport, "crashreport");
+
 
 #if defined(UNX)
     get(m_pQuickLaunchCB, "systray");
@@ -376,6 +378,14 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
         bModified = true;
     }
 
+#if HAVE_FEATURE_BREAKPAD
+    if (m_xCrashReport->IsValueChangedFromSaved())
+    {
+        officecfg::Office::Common::Misc::CrashReport::set(m_xCrashReport->IsChecked(), batch);
+        bModified = true;
+    }
+#endif
+
     batch->commit();
 
     if( m_pQuickLaunchCB->IsValueChangedFromSaved())
@@ -415,6 +425,14 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_pCollectUsageInfo->Check(officecfg::Office::Common::Misc::CollectUsageInformation::get());
     m_pCollectUsageInfo->Enable(!officecfg::Office::Common::Misc::CollectUsageInformation::isReadOnly());
     m_pCollectUsageInfo->SaveValue();
+
+#if HAVE_FEATURE_BREAKPAD
+    m_xCrashReport->Check(officecfg::Office::Common::Misc::CrashReport::get());
+    m_xCrashReport->Enable(!officecfg::Office::Common::Misc::CrashReport::isReadOnly());
+    m_xCrashReport->SaveValue();
+#else
+    m_xCrashReport->Disable();
+#endif
 
     SfxItemState eState = rSet->GetItemState( SID_ATTR_QUICKLAUNCHER, false, &pItem );
     if ( SfxItemState::SET == eState )

@@ -5400,6 +5400,13 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="CrashReport" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - General -->
+        <info>
+          <desc>Enable sending crash reports to The Document Foundation</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="UseOpenCL" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines whether OpenCL can be used, when available, to speed up
