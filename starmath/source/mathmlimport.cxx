@@ -890,7 +890,7 @@ public:
 };
 
 
-/*avert thy gaze from the proginator*/
+/*avert the gaze from the originator*/
 class SmXMLRowContext_Impl : public SmXMLDocContext_Impl
 {
 protected:

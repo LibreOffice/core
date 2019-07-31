@@ -272,7 +272,7 @@ private:
  * denoted by | in "H|".
  *
  * Parameter variables:
- *  The following variables are used to transfer parameters in to calls and results out
+ *  The following variables are used to transfer parameters into calls and results out
  *  of calls.
  *      pRightMost : SmCaretPosGraphEntry*
  *

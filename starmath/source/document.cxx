@@ -394,7 +394,7 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
     rPosition.AdjustY(maFormat.GetDistance( DIS_TOPSPACE  ) );
 
     //! in case of high contrast-mode (accessibility option!)
-    //! the draw mode needs to be set to default, because when imbedding
+    //! the draw mode needs to be set to default, because when embedding
     //! Math for example in Calc in "a over b" the fraction bar may not
     //! be visible else. More generally: the FillColor may have been changed.
     DrawModeFlags nOldDrawMode = DrawModeFlags::Default;

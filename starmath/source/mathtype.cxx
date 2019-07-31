@@ -1817,7 +1817,7 @@ bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSize)
     }
     else
     {
-        /*sizetable should theoreticaly be filled with the default sizes
+        /*sizetable should theoretically be filled with the default sizes
          *of the various font groupings matching starmaths equivalents
          in aTypeFaces, and a test would be done to see if the new font
          size would be the same as what starmath would have chosen for
