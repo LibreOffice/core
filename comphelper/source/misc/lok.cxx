@@ -12,6 +12,7 @@
 #include <sal/log.hxx>
 
 #include <iostream>
+#include <map>
 
 namespace comphelper
 {
@@ -20,8 +21,6 @@ namespace LibreOfficeKit
 {
 
 static bool g_bActive(false);
-
-static bool g_bMobile(false);
 
 static bool g_bPartInInvalidation(false);
 
@@ -44,6 +43,9 @@ static LanguageTag g_aLanguageTag("en-US", true);
 /// Scaling of the cairo or CoreGraphics canvas painting for HiDPI or zooming in Calc.
 static double g_fDPIScale(1.0);
 
+/// List of <viewid, bMobile> pairs
+static std::map<int, bool> g_vIsViewMobile;
+
 void setActive(bool bActive)
 {
     g_bActive = bActive;
@@ -54,14 +56,24 @@ bool isActive()
     return g_bActive;
 }
 
-void setMobile(bool bIsMobile)
+void setMobile(int nViewId, bool bMobile)
 {
-    g_bMobile = bIsMobile;
+    if (g_vIsViewMobile.find(nViewId) != g_vIsViewMobile.end())
+        g_vIsViewMobile[nViewId] = bMobile;
+    else
+        g_vIsViewMobile.insert(std::make_pair(nViewId, bMobile));
 }
 
-bool isMobile()
+bool isMobile(int nViewId)
 {
-    return g_bMobile;
+    // No view given, so act as a global var
+    if (nViewId == -1)
+            return g_vIsViewMobile.size() > 0;
+
+    if (g_vIsViewMobile.find(nViewId) != g_vIsViewMobile.end())
+        return g_vIsViewMobile[nViewId];
+    else
+        return false;
 }
 
 void setPartInInvalidation(bool bPartInInvalidation)
