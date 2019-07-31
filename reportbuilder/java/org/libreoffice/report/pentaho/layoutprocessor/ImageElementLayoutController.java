@@ -157,7 +157,7 @@ public class ImageElementLayoutController
             final Section columns = (Section) table.findFirstChild(OfficeNamespaces.TABLE_NS, OfficeToken.TABLE_COLUMNS);
             if (columns.getNodeCount() <= columnPos + colSpan)
             {
-                // the colspan is to large. The table definition is therefore invalid. We do not try to fix this.
+                // the colspan is too large. The table definition is therefore invalid. We do not try to fix this.
                 LOGGER.warn(
                         "The Table's defined columns do not match the col-span or col-position. Unable to calculate the image-size.");
                 return null;

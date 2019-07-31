@@ -43,7 +43,7 @@ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
 
 /**
  * Before writing the table cell, we have to evaluate the children of the cell. The cell itself can either be empty or it
- * has a one ore more paragraphs inside. The paragraph contains a single report element, but may contain additional
+ * has one ore more paragraphs inside. The paragraph contains a single report element, but may contain additional
  * other content.
  *
  * @since 05.03.2007

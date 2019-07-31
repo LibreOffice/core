@@ -555,7 +555,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                 }
                 case OfficeDocumentReportTarget.STATE_IN_CONTENT:
                 {
-                    // Either a ordinary section or a group ..
+                    // Either an ordinary section or a group ..
                     // A group.
                     if (ReportTargetUtil.isElementOfType(JFreeReportInfo.REPORT_NAMESPACE, "report-body", attrs))
                     {

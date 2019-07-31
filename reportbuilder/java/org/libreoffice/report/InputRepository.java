@@ -54,7 +54,7 @@ public interface InputRepository
     InputRepository openInputRepository(final String name) throws IOException;
 
     /**
-     * This returns an version number for the given resource. Return zero, if
+     * This returns a version number for the given resource. Return zero, if
      * the resource is not versionable, else return a unique number for each version.
      * As rule of thumb: Increase the version number by at least one for each change
      * made to the resource.

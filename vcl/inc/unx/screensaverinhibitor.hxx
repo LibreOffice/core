@@ -45,7 +45,7 @@ private:
     // There are a bunch of different dbus based inhibition APIs. Some call
     // themselves ScreenSaver inhibition, some are PowerManagement inhibition,
     // but they appear to have the same effect. There doesn't appear to be one
-    // all encompassing standard, hence we should just try all of tem.
+    // all encompassing standard, hence we should just try all of them.
     //
     // The current APIs we have: (note: the list of supported environments is incomplete)
     // FDO: org.freedesktop.ScreenSaver::Inhibit - appears to be supported only by KDE?
