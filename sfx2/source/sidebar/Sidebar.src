@@ -19,6 +19,8 @@
  *
  *************************************************************/
 
+
+
 #include "Sidebar.hrc"
 
 Resource RID_SIDEBAR_RESOURCE
@@ -60,7 +62,7 @@ Resource RID_SIDEBAR_RESOURCE
 
     Image IMAGE_SIDEBAR_MENU_HC
     {
-        ImageBitmap = Bitmap { File = "menu_hc.png" ;};
+        ImageBitmap = Bitmap { File = "symphony/open_more_hc.png" ;};
     };
 
     Image IMAGE_SIDEBAR_DETAIL_DIALOG
@@ -284,11 +286,11 @@ Resource RID_SIDEBAR_RESOURCE
 
     String STRING_CUSTOMIZATION
     {
-    Text [en-US] = "Customization";
+        Text [en-US] = "Customization";
     };
     String STRING_RESTORE
     {
-    Text [en-US] = "Restore Default";
+        Text [en-US] = "Restore Default";
     };
 };
 
@@ -307,3 +309,4 @@ String SFX_STR_SIDEBAR_ACCESSIBILITY_PANEL_PREFIX
     Text [en-US] = "Panel: ";
 };
 
+// ********************************************************************** EOF

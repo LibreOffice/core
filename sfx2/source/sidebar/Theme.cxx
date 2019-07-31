@@ -19,6 +19,8 @@
  *
  *************************************************************/
 
+
+
 #include "precompiled_sfx2.hxx"
 
 #include "sfx2/sidebar/Theme.hxx"
@@ -345,7 +347,7 @@ void Theme::UpdateTheme (void)
         setPropertyValue(
             maPropertyIdToNameMap[Paint_HorizontalBorder],
             Any(sal_Int32(aBorderColor.GetRGBColor())));
-        //                    mbIsHighContrastMode ? 0x00ff00 :  0xe4e4e4)));
+        //                    mbIsHighContrastMode ? 0x00ff00 : 0xe4e4e4)));
         setPropertyValue(
             maPropertyIdToNameMap[Paint_VerticalBorder],
             Any(sal_Int32(aBorderColor.GetRGBColor())));
@@ -373,7 +375,7 @@ void Theme::UpdateTheme (void)
             maPropertyIdToNameMap[Image_TabBarMenu],
             Any(
                 mbIsHighContrastMode
-                    ? A2S("private:graphicrepository/sfx2/res/menu_hc.png")
+                    ? A2S("private:graphicrepository/sfx2/res/symphony/open_more_hc.png")
                     : A2S("private:graphicrepository/sfx2/res/symphony/open_more.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_PanelMenu],
