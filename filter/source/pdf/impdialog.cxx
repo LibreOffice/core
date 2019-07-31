@@ -554,8 +554,8 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     case 2:
         // PDF A-2b
         mxCbPDFA->set_active(true);
-        mxRbPDFA2b->set_active(true);
         mxRbPDFA1b->set_active(false);
+        mxRbPDFA2b->set_active(true);
         break;
     }
     ToggleExportPDFAHdl( *mxCbPDFA );
@@ -575,7 +575,6 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
 
     mxLbFormsFormat->set_active(static_cast<sal_uInt16>(pParent->mnFormsType));
     mxCbAllowDuplicateFieldNames->set_active( pParent->mbAllowDuplicateFieldNames );
-    mxFormsFrame->set_sensitive( pParent->mbExportFormFields );
 
     mxCbExportBookmarks->set_active( pParent->mbExportBookmarks );
 
@@ -787,46 +786,42 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, weld::ToggleButton&, 
     if (pSecPage)
         pSecPage->ImplPDFASecurityControl(!mxCbPDFA->get_active());
 
-    // PDF/A-1 needs tagged PDF, so force disable the control, will be forced in pdfexport.
-    bool bPDFA1Sel = mxCbPDFA->get_active();
-    mxFormsFrame->set_sensitive(bPDFA1Sel);
-    if(bPDFA1Sel)
+    const bool bIsPDFA = mxCbPDFA->get_active();
+
+    mxCbTaggedPDF->set_sensitive(!bIsPDFA);
+    mxCbExportFormFields->set_sensitive(!bIsPDFA);
+    mxRbPDFA1b->set_sensitive(bIsPDFA);
+    mxRbPDFA2b->set_sensitive(bIsPDFA);
+    mxFormsFrame->set_sensitive(!bIsPDFA);
+
+    if (bIsPDFA)
     {
-        // store the values of subordinate controls
+        // store the users selection of subordinate controls and set required PDF/A values
         mbTaggedPDFUserSelection = mxCbTaggedPDF->get_active();
-        mxCbTaggedPDF->set_active(true);
-        mxCbTaggedPDF->set_sensitive(false);
         mbExportFormFieldsUserSelection = mxCbExportFormFields->get_active();
+        mxCbTaggedPDF->set_active(true);
         mxCbExportFormFields->set_active(false);
-        mxCbExportFormFields->set_sensitive(false);
-        mxRbPDFA1b->set_sensitive(true);
-        mxRbPDFA2b->set_sensitive(true);
+
+        // if a password was set, inform the user that this will not be used
+        if (pSecPage && pSecPage->hasPassword())
+        {
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xContainer.get(),
+                                                      VclMessageType::Warning, VclButtonsType::Ok,
+                                                      PDFFilterResId(STR_WARN_PASSWORD_PDFA)));
+            xBox->run();
+        }
     }
     else
     {
-        // retrieve the values of subordinate controls
-        mxCbTaggedPDF->set_sensitive(false);
-        mxCbTaggedPDF->set_sensitive(true);
+        // restore the users values of subordinate controls
         mxCbTaggedPDF->set_active(mbTaggedPDFUserSelection);
         mxCbExportFormFields->set_active(mbExportFormFieldsUserSelection);
-        mxRbPDFA1b->set_sensitive(false);
-        mxRbPDFA2b->set_sensitive(false);
     }
 
-    // PDF/A-2 doesn't allow launch action, so enable/disable the selection on
-    // Link page
+    // PDF/A doesn't allow launch action, so enable/disable the selection on the Link page
     ImpPDFTabLinksPage* pLinksPage = mpParent ? mpParent->getLinksPage() : nullptr;
     if (pLinksPage)
-        pLinksPage->ImplPDFALinkControl(!mxCbPDFA->get_active());
-
-    // if a password was set, inform the user that this will not be used in PDF/A case
-    if( mxCbPDFA->get_active() && pSecPage && pSecPage->hasPassword() )
-    {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xContainer.get(),
-                                                  VclMessageType::Warning, VclButtonsType::Ok,
-                                                  PDFFilterResId(STR_WARN_PASSWORD_PDFA)));
-        xBox->run();
-    }
+        pLinksPage->ImplPDFALinkControl(!bIsPDFA);
 }
 
 /// The option features tab page
