@@ -880,6 +880,7 @@ public:
     virtual void columns_autosize() = 0;
     virtual void set_column_fixed_widths(const std::vector<int>& rWidths) = 0;
     virtual int get_column_width(int nCol) const = 0;
+    virtual void set_centered_column(int nCol) = 0;
     virtual OUString get_column_title(int nColumn) const = 0;
     virtual void set_column_title(int nColumn, const OUString& rTitle) = 0;
 

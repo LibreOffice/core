@@ -1,17 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/nu01.png</property>
+    <property name="icon_name">svx/res/nu01.png</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/nu02.png</property>
+    <property name="icon_name">svx/res/nu02.png</property>
+  </object>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name check1 -->
+      <column type="gboolean"/>
+      <!-- column-name check2 -->
+      <column type="gboolean"/>
+      <!-- column-name check3 -->
+      <column type="gboolean"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name text1 -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name checkvis1 -->
+      <column type="gboolean"/>
+      <!-- column-name checktri1 -->
+      <column type="gboolean"/>
+      <!-- column-name checkvis2 -->
+      <column type="gboolean"/>
+      <!-- column-name checktri2 -->
+      <column type="gboolean"/>
+      <!-- column-name checkvis3 -->
+      <column type="gboolean"/>
+      <!-- column-name checktri3 -->
+      <column type="gboolean"/>
+    </columns>
   </object>
   <object class="GtkBox" id="OptFontsPage">
     <property name="visible">True</property>
@@ -55,10 +82,10 @@
                       <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="optfontspage|label2">_Font:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">font1</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -69,93 +96,112 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="optfontspage|label3">Re_place with:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">font2</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
+                        <property name="width">3</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-FontNameBox" id="font1">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="id_column">1</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="svtlo-FontNameBox" id="font2">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="id_column">1</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="always">
-                        <property name="can_focus">False</property>
-                        <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes" context="optfontspage|always">Always</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="screenonly">
-                        <property name="can_focus">False</property>
-                        <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes" context="optfontspage|screenonly">Screen only</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="font">
-                        <property name="can_focus">False</property>
-                        <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes" context="optfontspage|font">Font</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="replacewith">
-                        <property name="can_focus">False</property>
-                        <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes" context="optfontspage|replacewith">Replace with</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="svtlo-SvSimpleTableContainer" id="checklb">
+                      <object class="GtkScrolledWindow" id="checklbscroll">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkTreeView" id="checklb">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="model">liststore1</property>
+                            <property name="search_column">0</property>
+                            <property name="show_expanders">False</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkCellRendererToggle" id="cellrenderer1"/>
+                                  <attributes>
+                                    <attribute name="visible">4</attribute>
+                                    <attribute name="active">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <property name="title" translatable="yes" context="optfontspage|always">Always</property>
+                                <child>
+                                  <object class="GtkCellRendererToggle" id="cellrenderer5"/>
+                                  <attributes>
+                                    <attribute name="visible">5</attribute>
+                                    <attribute name="active">1</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn7">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <property name="title" translatable="yes" context="optfontspage|screenonly">Screen only</property>
+                                <child>
+                                  <object class="GtkCellRendererToggle" id="cellrenderer7"/>
+                                  <attributes>
+                                    <attribute name="visible">6</attribute>
+                                    <attribute name="active">2</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn5">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <property name="title" translatable="yes" context="optfontspage|font">Font</property>
+                                <property name="clickable">True</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer4"/>
+                                  <attributes>
+                                    <attribute name="text">3</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn9">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <property name="title" translatable="yes" context="optfontspage|replacewith">Replace with</property>
+                                <property name="clickable">True</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer9"/>
+                                  <attributes>
+                                    <attribute name="text">4</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
+                        <property name="top_attach">2</property>
                         <property name="width">4</property>
                       </packing>
                     </child>
@@ -188,10 +234,40 @@
                       </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <object class="GtkComboBoxText" id="font2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="has_entry">True</property>
+                        <child internal-child="entry">
+                          <object class="GtkEntry">
+                            <property name="can_focus">False</property>
+                            <property name="activates_default">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                      </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <object class="GtkComboBoxText" id="font1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="has_entry">True</property>
+                        <child internal-child="entry">
+                          <object class="GtkEntry">
+                            <property name="can_focus">False</property>
+                            <property name="activates_default">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -262,10 +338,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="optfontspage|label8">Fon_ts:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">fontname</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -277,10 +353,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="optfontspage|label9">_Size:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">fontheight</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -316,7 +392,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="fontheight">
+                  <object class="GtkComboBoxText" id="fontheight">
                     <property name="width_request">100</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
