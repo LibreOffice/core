@@ -505,7 +505,10 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet* /*rAttrSet*/ )
             pStyle->SetParent( aParent );
 
         if ( aParent.isEmpty() )
+        {
             m_xBaseLb->set_active_text( SfxResId(STR_NONE) );
+            m_xEditLinkStyleBtn->set_sensitive( false );
+        }
         else
             m_xBaseLb->set_active_text( aParent );
 
@@ -516,6 +519,8 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet* /*rAttrSet*/ )
             m_xBaseLb->set_sensitive(false);
         }
     }
+    else
+        m_xEditLinkStyleBtn->set_sensitive( false );
 
     if (m_xFilterLb->get_sensitive())
     {
