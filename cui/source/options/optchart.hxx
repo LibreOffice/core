@@ -22,10 +22,9 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svtools/valueset.hxx>
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
 #include <svx/xtable.hxx>
 #include <svx/PaletteManager.hxx>
+#include <vcl/customweld.hxx>
 
 #include "cfgchart.hxx"
 
@@ -34,13 +33,6 @@ typedef std::vector<Color> ImpColorList;
 class SvxDefaultColorOptPage : public SfxTabPage
 {
 private:
-    VclPtr<ListBox>                m_pLbChartColors;
-    VclPtr<ListBox>                m_pLbPaletteSelector;
-    VclPtr<SvxColorValueSet>       m_pValSetColorBox;
-    VclPtr<PushButton>             m_pPBDefault;
-    VclPtr<PushButton>             m_pPBAdd;
-    VclPtr<PushButton>             m_pPBRemove;
-
     std::unique_ptr<SvxChartOptions>        m_SvxChartOptionsUniquePtr;
     // no reason to use a cloned SfxItem here (SvxChartColorTableItem)
     // that just leads to non-const SfxItem and potential trouble
@@ -49,23 +41,31 @@ private:
     ImpColorList            aColorList;
     PaletteManager          aPaletteManager;
 
-    DECL_LINK( ResetToDefaults, Button *, void );
-    DECL_LINK( AddChartColor, Button *, void );
-    DECL_LINK( RemoveChartColor, Button *, void );
-    DECL_LINK(BoxClickedHdl, ValueSet*, void);
-    DECL_LINK( SelectPaletteLbHdl, ListBox&, void );
+    std::unique_ptr<weld::TreeView> m_xLbChartColors;
+    std::unique_ptr<weld::ComboBox> m_xLbPaletteSelector;
+    std::unique_ptr<weld::Button> m_xPBDefault;
+    std::unique_ptr<weld::Button> m_xPBAdd;
+    std::unique_ptr<weld::Button> m_xPBRemove;
+    std::unique_ptr<ColorValueSet> m_xValSetColorBox;
+    std::unique_ptr<weld::CustomWeld> m_xValSetColorBoxWin;
+
+    DECL_LINK(ResetToDefaults, weld::Button&, void);
+    DECL_LINK(AddChartColor, weld::Button&, void);
+    DECL_LINK(RemoveChartColor, weld::Button&, void);
+    DECL_LINK(BoxClickedHdl, SvtValueSet*, void);
+    DECL_LINK(SelectPaletteLbHdl, weld::ComboBox&, void);
 
     void FillPaletteLB();
 
 private:
-    void InsertColorEntry(const XColorEntry& rEntry, sal_Int32 nPos = LISTBOX_APPEND);
+    void InsertColorEntry(const XColorEntry& rEntry, sal_Int32 nPos = -1);
     void RemoveColorEntry(sal_Int32 nPos);
     void ModifyColorEntry(const XColorEntry& rEntry, sal_Int32 nPos);
     void ClearColorEntries();
     void FillBoxChartColorLB();
 
 public:
-    SvxDefaultColorOptPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    SvxDefaultColorOptPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxDefaultColorOptPage() override;
     virtual void dispose() override;
 
