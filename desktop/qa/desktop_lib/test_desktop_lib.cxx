@@ -1803,15 +1803,26 @@ void DesktopLOKTest::testRedlineCalc()
 
 class ViewCallback
 {
+    LibLODocument_Impl* mpDocument;
+    int mnView;
 public:
     bool m_bTilesInvalidated;
     tools::Rectangle m_aOwnCursor;
     boost::property_tree::ptree m_aCommentCallbackResult;
     boost::property_tree::ptree m_aCallbackWindowResult;
 
-    ViewCallback()
-        : m_bTilesInvalidated(false)
+    ViewCallback(LibLODocument_Impl* pDocument)
+        : mpDocument(pDocument),
+          m_bTilesInvalidated(false)
     {
+        mnView = SfxLokHelper::getView();
+        mpDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, this);
+    }
+
+    ~ViewCallback()
+    {
+        mpDocument->m_pDocumentClass->setView(mpDocument, mnView);
+        mpDocument->m_pDocumentClass->registerCallback(mpDocument, nullptr, nullptr);
     }
 
     static void callback(int nType, const char* pPayload, void* pData)
@@ -1908,16 +1919,12 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
     // Load a document and type a character into the body text of the second view.
     comphelper::LibreOfficeKit::setActive();
 
-    ViewCallback aView1;
-    ViewCallback aView2;
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    int nView1 = SfxLokHelper::getView();
-    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView1);
+    ViewCallback aView1(pDocument);
     pDocument->m_pDocumentClass->createView(pDocument);
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    int nView2 = SfxLokHelper::getView();
-    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView2);
+    ViewCallback aView2(pDocument);
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
@@ -1941,10 +1948,6 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
     CPPUNIT_ASSERT(aView1.m_aOwnCursor.IsEmpty());
 
     Scheduler::ProcessEventsToIdle();
-    pDocument->m_pDocumentClass->setView(pDocument, nView1);
-    pDocument->m_pDocumentClass->registerCallback(pDocument, nullptr, nullptr);
-    pDocument->m_pDocumentClass->setView(pDocument, nView2);
-    pDocument->m_pDocumentClass->registerCallback(pDocument, nullptr, nullptr);
 }
 
 #if HAVE_MORE_FONTS
@@ -2137,16 +2140,12 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
     comphelper::LibreOfficeKit::setActive();
     // Comments callback are emitted only if tiled annotations are off
     comphelper::LibreOfficeKit::setTiledAnnotations(false);
-    ViewCallback aView1;
-    ViewCallback aView2;
     LibLODocument_Impl* pDocument = loadDoc("comments.odt");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    int nView1 = pDocument->m_pDocumentClass->getView(pDocument);
-    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView1);
+    ViewCallback aView1(pDocument);
     pDocument->m_pDocumentClass->createView(pDocument);
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    int nView2 = pDocument->m_pDocumentClass->getView(pDocument);
-    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView2);
+    ViewCallback aView2(pDocument);
 
     // Add a new comment
     OString aCommandArgs("{ \"Text\": { \"type\": \"string\", \"value\": \"Additional comment\" }, \"Author\": { \"type\": \"string\", \"value\": \"LOK User1\" } }");
@@ -2218,11 +2217,6 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
     CPPUNIT_ASSERT(!aStream.str().empty());
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), aTree.get_child("comments").size());
-
-    pDocument->m_pDocumentClass->setView(pDocument, nView1);
-    pDocument->m_pDocumentClass->registerCallback(pDocument, nullptr, nullptr);
-    pDocument->m_pDocumentClass->setView(pDocument, nView2);
-    pDocument->m_pDocumentClass->registerCallback(pDocument, nullptr, nullptr);
 }
 
 void DesktopLOKTest::testRunMacro()
@@ -2619,13 +2613,12 @@ void DesktopLOKTest::testDialogPaste()
 
 void DesktopLOKTest::testShowHideDialog()
 {
-    ViewCallback aView;
 
     comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
 
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView);
+    ViewCallback aView(pDocument);
 
     pDocument->pClass->postUnoCommand(pDocument, ".uno:HyperlinkDialog", nullptr, false);
     Scheduler::ProcessEventsToIdle();
@@ -2642,7 +2635,6 @@ void DesktopLOKTest::testShowHideDialog()
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(std::string("invalidate"), aView.m_aCallbackWindowResult.get<std::string>("action"));
-    pDocument->m_pDocumentClass->registerCallback(pDocument, nullptr, reinterpret_cast<void*>(1));
 }
 
 namespace {
