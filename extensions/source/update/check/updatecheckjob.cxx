@@ -160,7 +160,7 @@ UpdateCheckJob::getServiceNames()
 OUString
 UpdateCheckJob::getImplName()
 {
-    return OUString("vnd.sun.UpdateCheck");
+    return "vnd.sun.UpdateCheck";
 }
 
 
