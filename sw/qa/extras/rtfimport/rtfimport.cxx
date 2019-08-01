@@ -436,7 +436,7 @@ DECLARE_RTFIMPORT_TEST(testFdo79319, "fdo79319.rtf")
     // the thin horizontal rule was imported as a big fat rectangle
     uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xShape, "RelativeWidth"));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(15238), xShape->getSize().Width, 10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(16508), xShape->getSize().Width, 10);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(53), xShape->getSize().Height, 10);
 #if 0
     CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER, getProperty<sal_Int16>(xShape, "VertOrient"));
