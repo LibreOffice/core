@@ -462,7 +462,7 @@ IMAGE_SETEVENT:
     if( sGrfNm.isEmpty() )
         return;
 
-    // When we are in a ordered list and the paragraph is still empty and not
+    // When we are in an ordered list and the paragraph is still empty and not
     // numbered, it may be a graphic for a bullet list.
     if( !m_pPam->GetPoint()->nContent.GetIndex() &&
         GetNumInfo().GetDepth() > 0 && GetNumInfo().GetDepth() <= MAXLEVEL &&

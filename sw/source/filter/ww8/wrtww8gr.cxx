@@ -495,7 +495,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,
     sal_Int16 nXSizeAdd = 0, nYSizeAdd = 0;
     sal_Int16 nCropL = 0, nCropR = 0, nCropT = 0, nCropB = 0;
 
-            // write Crop-Attribut content in Header ( if available )
+            // write Crop-Attribute content in Header ( if available )
     const SfxPoolItem* pItem;
     if (pAttrSet && (SfxItemState::SET
         == pAttrSet->GetItemState(RES_GRFATR_CROPGRF, false, &pItem)))

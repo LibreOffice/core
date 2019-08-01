@@ -3653,7 +3653,7 @@ void WW8AttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
 // FillOrder is still missing
 
 /**
- * ReplaceCr() is used for Pagebreaks and Pagedescs. A already written CR
+ * ReplaceCr() is used for Pagebreaks and Pagedescs. An already written CR
  * will be replaced by a break character. Replace must be called right after
  * the writing of CR.
  *

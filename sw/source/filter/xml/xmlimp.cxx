@@ -639,7 +639,7 @@ void SwXMLImport::startDocument()
             if( !pDoc )
                 return;
 
-            // Is there a edit shell. If yes, then we are currently inserting
+            // Is there an edit shell. If yes, then we are currently inserting
             // a document. We then have to insert at the current edit shell's
             // cursor position. That not quite clean code, but there is no other
             // way currently.
@@ -687,7 +687,7 @@ void SwXMLImport::startDocument()
             SwPaM *pPaM = pTextCursor->GetPaM();
             const SwPosition* pPos = pPaM->GetPoint();
 
-            // Split once and remember the node that has been splitted.
+            // Split once and remember the node that has been split.
             pDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
             *m_pSttNdIdx = pPos->nNode.GetIndex()-1;
 
@@ -763,7 +763,7 @@ void SwXMLImport::endDocument()
         SwPaM *pPaM = pTextCursor->GetPaM();
         if( IsInsertMode() && m_pSttNdIdx->GetIndex() )
         {
-            // If we are in insert mode, join the splitted node that is in front
+            // If we are in insert mode, join the split node that is in front
             // of the new content with the first new node. Or in other words:
             // Revert the first split node.
             SwTextNode* pTextNode = m_pSttNdIdx->GetNode().GetTextNode();

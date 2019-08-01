@@ -817,7 +817,7 @@ void CSS1Parser::ParseRule()
 // id_selector
 //  : '#' IDENT
 
-// pseude_element
+// pseudo_element
 //  : IDENT
 
 std::unique_ptr<CSS1Selector> CSS1Parser::ParseSelector()

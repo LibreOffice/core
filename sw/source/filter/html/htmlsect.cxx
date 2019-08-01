@@ -674,7 +674,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
     {
         if( !bAppended )
         {
-            // If the pam is at the start of a section, a additional text
+            // If the pam is at the start of a section, an additional text
             // node must be inserted. Otherwise, the new section will be
             // inserted in front of the old one.
             SwNodeIndex aPrvNdIdx( m_pPam->GetPoint()->nNode, -1 );

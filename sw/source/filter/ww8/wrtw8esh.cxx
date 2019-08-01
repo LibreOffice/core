@@ -1007,10 +1007,10 @@ void WW8Export::AppendFlyInFlys(const ww8::Frame& rFrameFormat,
             0x03, 0x6a, 0, 0, 0, 0, // sprmCObjLocation
             0x55, 0x08, 1           // sprmCFSpec
         };
-                                                // fSpec-Attribut true
+                                                // fSpec-Attribute true
 
         // A special character is required in the text for DrawObjects,
-        // therefore a fSpec-Attribut
+        // therefore a fSpec-Attribute
         m_pChpPlc->AppendFkpEntry( Strm().Tell() );
         WriteChar( 0x8 );
         m_pChpPlc->AppendFkpEntry( Strm().Tell(), sizeof( aSpec8 ), aSpec8 );
@@ -1219,7 +1219,7 @@ bool MSWord_SdrAttrIter::IsTextAttr(sal_Int32 nSwPos)
 // HasItem is used for the consolidation  of the double attribute Underline and
 // WordLineMode as a TextItem. OutAttr() calls the output function, which can
 // query for other items at the start position of attribute via HasItem().
-// Only attributes with a end can be queried.
+// Only attributes with an end can be queried.
 // The search is done with bDeep.
 const SfxPoolItem* MSWord_SdrAttrIter::HasTextItem(sal_uInt16 nWhich) const
 {

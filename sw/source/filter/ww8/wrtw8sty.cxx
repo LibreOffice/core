@@ -777,7 +777,7 @@ wwFont::wwFont(const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily
 void wwFont::Write(SvStream *pTableStrm) const
 {
     pTableStrm->WriteBytes(maWW8_FFN, sizeof(maWW8_FFN));    // fixed part
-    // from Ver8 following two fields interjected,
+    // from Ver8 following two fields intersected,
     // we ignore them.
     //char  panose[ 10 ];       //  0x6   PANOSE
     //char  fs[ 24     ];       //  0x10  FONTSIGNATURE
@@ -1625,7 +1625,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         // it as title page.
         // With Left/Right changes it's different - we have to detect where
         // the change of pages is, but here it's too late for that!
-        // tdf#101814 if there is already a explicit first-page, no point
+        // tdf#101814 if there is already an explicit first-page, no point
         // in checking heuristics here.
         if ( !titlePage && pPd->GetFollow() && pPd != pPd->GetFollow() &&
              pPd->GetFollow()->GetFollow() == pPd->GetFollow() &&

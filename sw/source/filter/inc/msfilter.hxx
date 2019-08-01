@@ -171,7 +171,7 @@ namespace sw
                 for this word style.
 
                 It will only return a failure in the pathological case of
-                catastropic failure elsewhere of there exist already styles
+                catastrophic failure elsewhere of there exist already styles
                 rName and WW-rName[0..SAL_MAX_INT32], which is both unlikely
                 and impossible.
             */
@@ -228,7 +228,7 @@ namespace sw
                 for this word style.
 
                 It will only return a failure in the pathological case of
-                catastropic failure elsewhere of there exist already styles
+                catastrophic failure elsewhere of there exist already styles
                 rName and WW-rName[0..SAL_MAX_INT32], which is both unlikely
                 and impossible.
             */

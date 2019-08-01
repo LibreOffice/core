@@ -1237,7 +1237,7 @@ void WW8AttributeOutput::FieldVanish( const OUString& rText, ww::eField /*eType*
 
 void AttributeOutputBase::TOXMark( const SwTextNode& rNode, const SwTOXMark& rAttr )
 {
-    // it's a field; so get the Text form the Node and build the field
+    // it's a field; so get the Text from the Node and build the field
     OUString sText;
     ww::eField eType = ww::eNONE;
 
@@ -1895,7 +1895,7 @@ bool MSWordExportBase::GetBookmarks( const SwTextNode& rNd, sal_Int32 nStt,
             const sal_Int32 nBStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nBEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
-            // Keep only the bookmars starting or ending in the snippet
+            // Keep only the bookmarks starting or ending in the snippet
             bool bIsStartOk = ( pMark->GetMarkStart().nNode == nNd ) && ( nBStart >= nStt ) && ( nBStart <= nEnd );
             bool bIsEndOk = ( pMark->GetMarkEnd().nNode == nNd ) && ( nBEnd >= nStt ) && ( nBEnd <= nEnd );
 
@@ -1926,7 +1926,7 @@ bool MSWordExportBase::GetAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int3
             const sal_Int32 nBStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nBEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
-            // Keep only the bookmars starting or ending in the snippet
+            // Keep only the bookmarks starting or ending in the snippet
             bool bIsStartOk = ( pMark->GetMarkStart().nNode == nNd ) && ( nBStart >= nStt ) && ( nBStart <= nEnd );
             bool bIsEndOk = ( pMark->GetMarkEnd().nNode == nNd ) && ( nBEnd >= nStt ) && ( nBEnd <= nEnd );
 

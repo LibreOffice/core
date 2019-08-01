@@ -4896,7 +4896,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
 /* At this point we are certain that, WriteImage returns empty RelId
    for unhandled graphic type. Therefore we write the picture description
    and not the relation( coz there ain't any), so that the user knows
-   there is a image/graphic in the doc but it is broken instead of
+   there is an image/graphic in the doc but it is broken instead of
    completely discarding it.
 */
     if ( aRelId.isEmpty() )

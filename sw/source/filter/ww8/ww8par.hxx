@@ -1342,7 +1342,7 @@ private:
 
     bool m_bEmbeddObj;        // EmbeddField is being read
 
-    bool m_bCurrentAND_fNumberAcross; // current active Annotated List Deskriptor - ROW flag
+    bool m_bCurrentAND_fNumberAcross; // current active Annotated List Descriptor - ROW flag
 
     bool m_bNoLnNumYet;       // no Line Numbering has been activated yet (we import
                             //     the very 1st Line Numbering and ignore the rest)
