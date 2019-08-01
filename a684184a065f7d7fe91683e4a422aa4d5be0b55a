@@ -22,6 +22,30 @@
       "revId": "a684184a065f7d7fe91683e4a422aa4d5be0b55a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_40e26603",
+        "filename": "sfx2/source/dialog/mgetempl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-08-01T05:32:25Z",
+      "side": 1,
+      "message": "Without the patch applied when a different next style is selected and then selected back to the style being created the edit button is disabled. Also when the style dialog is opened to modify a style the edit button is disabled on open if the next style is the style being modified so I believe disable is the right choice for this.",
+      "parentUuid": "bf659307_97cf657e",
+      "range": {
+        "startLine": 494,
+        "startChar": 29,
+        "endLine": 494,
+        "endChar": 42
+      },
+      "revId": "a684184a065f7d7fe91683e4a422aa4d5be0b55a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
