@@ -258,7 +258,7 @@ private:
                 // handler is triggered upon next effect events (multiplexer
                 // prio=-1)!  Posting a notifyNextEffect() here is only safe
                 // (we don't run into busy loop), because we assume that
-                // someone has registerered above for next effects
+                // someone has registered above for next effects
                 // (multiplexer prio=0) at the user event queue.
                 return mrEventQueue.addEventWhenQueueIsEmpty(
                     makeEvent( [this] () {

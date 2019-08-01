@@ -354,7 +354,7 @@ CSS1Token CSS1Parser::GetNextToken()
                     m_cNextCh = GetNextChar();
                 }
 
-                // check now, of there is an unit
+                // check now, of there is a unit
                 switch( m_cNextCh )
                 {
                 case '%': // PERCENTAGE
@@ -391,7 +391,7 @@ CSS1Token CSS1Parser::GetNextToken()
 
                         aIdent += sTmpBuffer2;
 
-                        // Is it an unit?
+                        // Is it a unit?
                         const sal_Char *pCmp1 = nullptr, *pCmp2 = nullptr, *pCmp3 = nullptr;
                         double nScale1 = 1., nScale2 = 1.;
                         CSS1Token nToken1 = CSS1_LENGTH,

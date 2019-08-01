@@ -642,7 +642,7 @@ public:
 
         This method is used by XCommand nodes and all sound
         playing nodes should listen for this command and
-        stop theire sounds when its fired.
+        stop their sounds when it's fired.
 
         @return true, if this event was processed by
         anybody. If false is returned, no handler processed
