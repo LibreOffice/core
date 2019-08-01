@@ -14,7 +14,6 @@ desktop/uiconfig/ui/updatedialog.ui://GtkLabel[@id='UPDATE_LABEL'] orphan-label
 desktop/uiconfig/ui/updatedialog.ui://GtkLabel[@id='UPDATE_CHECKING'] orphan-label
 desktop/uiconfig/ui/updatedialog.ui://GtkSpinner[@id='THROBBER'] no-labelled-by
 desktop/uiconfig/ui/updatedialog.ui://GtkLabel[@id='DESCRIPTION_LABEL'] orphan-label
-desktop/uiconfig/ui/updatedialog.ui://GtkTextView[@id='DESCRIPTIONS:border'] no-labelled-by
 desktop/uiconfig/ui/updateinstalldialog.ui://GtkLabel[@id='EXTENSION_NAME'] orphan-label
 desktop/uiconfig/ui/updaterequireddialog.ui://GtkLabel[@id='updatelabel'] orphan-label
 desktop/uiconfig/ui/updaterequireddialog.ui://GtkDrawingArea[@id='extensions'] no-labelled-by
