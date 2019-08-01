@@ -1053,10 +1053,6 @@ void FastSaxParserImpl::parse()
                 reinterpret_cast<const char*>(seqOut.getConstArray()), nRead, nullptr );
             if( !rEntity.mpParser )
                 throw SAXException("Couldn't create parser", Reference< XInterface >(), Any() );
-
-            // Tell libxml2 parser to decode entities in attribute values.
-            // coverity[unsafe_xml_parse_config] - entity support is required
-            xmlCtxtUseOptions(rEntity.mpParser, XML_PARSE_NOENT);
         }
         else
         {
