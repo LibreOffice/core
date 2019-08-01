@@ -949,6 +949,8 @@ void SdTiledRenderingTest::testResizeTableColumn()
 /// A view callback tracks callbacks invoked on one specific view.
 class ViewCallback
 {
+    SfxViewShell* mpViewShell;
+    int mnView;
 public:
     bool m_bGraphicSelectionInvalidated;
     bool m_bGraphicViewSelectionInvalidated;
@@ -971,6 +973,15 @@ public:
           m_bTilesInvalidated(false),
           m_bViewSelectionSet(false)
     {
+        mpViewShell = SfxViewShell::Current();
+        mpViewShell->registerLibreOfficeKitViewCallback(&ViewCallback::callback, this);
+        mnView = SfxLokHelper::getView();
+    }
+
+    ~ViewCallback()
+    {
+        SfxLokHelper::setView(mnView);
+        mpViewShell->registerLibreOfficeKitViewCallback(nullptr, nullptr);
     }
 
     static void callback(int nType, const char* pPayload, void* pData)
@@ -1057,10 +1068,8 @@ void SdTiledRenderingTest::testViewCursors()
     // Create two views.
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
     SfxLokHelper::createView();
     ViewCallback aView2;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
 
     // Select the shape in the second view.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -1074,8 +1083,6 @@ void SdTiledRenderingTest::testViewCursors()
     CPPUNIT_ASSERT(aView1.m_bGraphicViewSelectionInvalidated);
     // Second view notices that there was a selection change in its own view.
     CPPUNIT_ASSERT(aView2.m_bGraphicSelectionInvalidated);
-    mxComponent->dispose();
-    mxComponent.clear();
 }
 
 void SdTiledRenderingTest::testViewCursorParts()
@@ -1085,11 +1092,9 @@ void SdTiledRenderingTest::testViewCursorParts()
     // Create two views.
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
     SfxLokHelper::createView();
     pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ViewCallback aView2;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
 
     // Select the shape in the second view.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -1113,9 +1118,6 @@ void SdTiledRenderingTest::testViewCursorParts()
     // First view ignores view selection, as it would be for part 1, and it's in part 0.
     // This failed when the "part" was always 0 in the callback.
     CPPUNIT_ASSERT(!aView1.m_bGraphicViewSelectionInvalidated);
-
-    mxComponent->dispose();
-    mxComponent.clear();
 }
 
 void SdTiledRenderingTest::testCursorViews()
@@ -1124,9 +1126,8 @@ void SdTiledRenderingTest::testCursorViews()
 
     // Create the first view.
     SdXImpressDocument* pXImpressDocument = createDoc("title-shape.odp");
-    ViewCallback aView1;
     int nView1 = SfxLokHelper::getView();
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    ViewCallback aView1;
 
     // Begin text edit on the only object on the slide.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -1149,8 +1150,6 @@ void SdTiledRenderingTest::testCursorViews()
     // second view as well, even if the second view was created after begin
     // text edit in the first view.
     ViewCallback aView2;
-    aView2.m_bViewLock = false;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
     // This failed: the second view didn't get a lock notification, even if the
     // first view already started text edit.
     CPPUNIT_ASSERT(aView2.m_bViewLock);
@@ -1162,9 +1161,6 @@ void SdTiledRenderingTest::testCursorViews()
     // This failed: the second view was not invalidated when pressing a key in
     // the first view.
     CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
-
-    mxComponent->dispose();
-    mxComponent.clear();
 }
 
 void SdTiledRenderingTest::testViewLock()
@@ -1174,7 +1170,6 @@ void SdTiledRenderingTest::testViewLock()
     // Load a document that has a shape and create two views.
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
     SfxLokHelper::createView();
     pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
 
@@ -1192,9 +1187,6 @@ void SdTiledRenderingTest::testViewLock()
     // the first view.
     pView->SdrEndTextEdit();
     CPPUNIT_ASSERT(!aView1.m_bViewLock);
-
-    mxComponent->dispose();
-    mxComponent.clear();
 }
 
 void SdTiledRenderingTest::testUndoLimiting()
@@ -1247,7 +1239,6 @@ void SdTiledRenderingTest::testCreateViewGraphicSelection()
     // Load a document and register a callback.
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
 
     // Select the only shape in the document and assert that the graphic selection is changed.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -1269,14 +1260,9 @@ void SdTiledRenderingTest::testCreateViewGraphicSelection()
     // Check that when the first view has a shape selected and we register a
     // callback on the second view, then it gets a "graphic view selection".
     ViewCallback aView2;
-    aView2.m_bGraphicViewSelectionInvalidated = false;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
     // This failed, the created new view had no "view selection" of the first
     // view's selected shape.
     CPPUNIT_ASSERT(aView2.m_bGraphicViewSelectionInvalidated);
-
-    mxComponent->dispose();
-    mxComponent.clear();
 }
 
 void SdTiledRenderingTest::testCreateViewTextCursor()
@@ -1286,7 +1272,6 @@ void SdTiledRenderingTest::testCreateViewTextCursor()
     // Load a document and register a callback.
     SdXImpressDocument* pXImpressDocument = createDoc("title-shape.odp");
     ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
 
     // Begin text edit.
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
@@ -1311,8 +1296,6 @@ void SdTiledRenderingTest::testCreateViewTextCursor()
     SfxLokHelper::createView();
     pXImpressDocument->initializeForTiledRendering({});
     ViewCallback aView2;
-    aView2.m_bViewSelectionSet = false;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
     bool bFoundCursor = false;
     for (const auto& rInvalidation : aView1.m_aViewCursorInvalidations)
     {
@@ -1330,9 +1313,6 @@ void SdTiledRenderingTest::testCreateViewTextCursor()
     // This failed: the text view selection of the first view wasn't seen by
     // the second view.
     CPPUNIT_ASSERT(aView2.m_bViewSelectionSet);
-
-    mxComponent->dispose();
-    mxComponent.clear();
 }
 
 void SdTiledRenderingTest::testTdf102223()
@@ -1383,7 +1363,6 @@ void SdTiledRenderingTest::testPostKeyEventInvalidation()
     SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
     CPPUNIT_ASSERT_EQUAL(0, pXImpressDocument->getPart());
     ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdrView* pView = pViewShell->GetView();
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
@@ -1397,7 +1376,6 @@ void SdTiledRenderingTest::testPostKeyEventInvalidation()
     SfxLokHelper::createView();
     pXImpressDocument->initializeForTiledRendering({});
     ViewCallback aView2;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
     pXImpressDocument->setPart(1);
     sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
     SdrView* pView2 = pViewShell2->GetView();
@@ -1416,9 +1394,6 @@ void SdTiledRenderingTest::testPostKeyEventInvalidation()
     Scheduler::ProcessEventsToIdle();
     // This failed: moving the cursor caused unexpected invalidation.
     CPPUNIT_ASSERT(!aView2.m_bTilesInvalidated);
-
-    mxComponent->dispose();
-    mxComponent.clear();
 }
 
 /**
@@ -1646,7 +1621,6 @@ void SdTiledRenderingTest::testCommentCallbacks()
     }));
     ViewCallback aView1;
     int nView1 = SfxLokHelper::getView();
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
 
     SfxLokHelper::createView();
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
@@ -1655,7 +1629,6 @@ void SdTiledRenderingTest::testCommentCallbacks()
     }));
     pXImpressDocument->initializeForTiledRendering(aArgs);
     ViewCallback aView2;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
     int nView2 = SfxLokHelper::getView();
 
     SfxLokHelper::setView(nView1);
@@ -1742,9 +1715,6 @@ void SdTiledRenderingTest::testCommentCallbacks()
     CPPUNIT_ASSERT_EQUAL(nComment1, aView1.m_aCommentCallbackResult.get<int>("id"));
     CPPUNIT_ASSERT_EQUAL(nComment1, aView2.m_aCommentCallbackResult.get<int>("id"));
 
-    mxComponent->dispose();
-    mxComponent.clear();
-
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
 }
 
@@ -1755,7 +1725,6 @@ void SdTiledRenderingTest::testMultiViewInsertDeletePage()
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     ViewCallback aView1;
     int nView1 = SfxLokHelper::getView();
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
     uno::Sequence<beans::PropertyValue> aArgs;
     SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
 
@@ -1763,7 +1732,6 @@ void SdTiledRenderingTest::testMultiViewInsertDeletePage()
     SfxLokHelper::createView();
     pXImpressDocument->initializeForTiledRendering(aArgs);
     ViewCallback aView2;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
     int nView2 = SfxLokHelper::getView();
 
     // the document has 8 slides
@@ -1789,9 +1757,6 @@ void SdTiledRenderingTest::testMultiViewInsertDeletePage()
     // See if current slide number changed in 2nd view too
     SfxLokHelper::setView(nView2);
     CPPUNIT_ASSERT_EQUAL(4, pXImpressDocument->getPart());
-
-    mxComponent->dispose();
-    mxComponent.clear();
 }
 
 void SdTiledRenderingTest::testDisableUndoRepair()
