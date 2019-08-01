@@ -250,6 +250,22 @@ DECLARE_RTFEXPORT_TEST(testBtlrCell, "btlr-cell.rtf")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, getProperty<sal_Int16>(xC1, "WritingMode"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTbrlFrame, "tbrl-frame.odt")
+{
+    if (!mbExported)
+    {
+        return;
+    }
+
+    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    auto nActual = getProperty<sal_Int16>(xShape, "WritingMode");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 0
+    // i.e. custom wrting mode was lost.
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, nActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
