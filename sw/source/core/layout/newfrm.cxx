@@ -461,16 +461,6 @@ void SwRootFrame::DestroyImpl()
 {
     mbTurboAllowed = false;
     mpTurbo = nullptr;
-    // fdo#39510 crash on document close with footnotes
-    // Object ownership in writer and esp. in layout are a mess: Before the
-    // document/layout split SwDoc and SwRootFrame were essentially one object
-    // and magically/uncleanly worked around their common destruction by call
-    // to SwDoc::IsInDtor() -- even from the layout. As of now destruction of
-    // the layout proceeds forward through the frames. Since SwTextFootnote::DelFrames
-    // also searches backwards to find the master of footnotes, they must be
-    // considered to be owned by the SwRootFrame and also be destroyed here,
-    // before tearing down the (now footnote free) rest of the layout.
-    RemoveFootnotes(nullptr, false, true);
 
     if(pBlink)
         pBlink->FrameDelete( this );
@@ -479,8 +469,11 @@ void SwRootFrame::DestroyImpl()
     {
         SwDoc *pDoc = pRegisteredInNonConst->GetDoc();
         pDoc->DelFrameFormat( pRegisteredInNonConst );
+        // do this before calling RemoveFootnotes() because footnotes
+        // can contain anchored objects
         pDoc->GetDocumentLayoutManager().ClearSwLayouterEntries();
     }
+
     delete mpDestroy;
     mpDestroy = nullptr;
 
@@ -493,6 +486,17 @@ void SwRootFrame::DestroyImpl()
 
     // Some accessible shells are left => problems on second SwFrame::Destroy call
     assert(0 == mnAccessibleShells);
+
+    // fdo#39510 crash on document close with footnotes
+    // Object ownership in writer and esp. in layout are a mess: Before the
+    // document/layout split SwDoc and SwRootFrame were essentially one object
+    // and magically/uncleanly worked around their common destruction by call
+    // to SwDoc::IsInDtor() -- even from the layout. As of now destruction of
+    // the layout proceeds forward through the frames. Since SwTextFootnote::DelFrames
+    // also searches backwards to find the master of footnotes, they must be
+    // considered to be owned by the SwRootFrame and also be destroyed here,
+    // before tearing down the (now footnote free) rest of the layout.
+    RemoveFootnotes(nullptr, false, true);
 
     SwLayoutFrame::DestroyImpl();
 }

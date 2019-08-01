@@ -2432,6 +2432,33 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
         if (bStealAttr)
             m_pCtrlStck->StealAttr(rPam.GetPoint()->nNode);
 
+        if (m_pLastAnchorPos || m_pPreviousNode)
+        {
+            SwNodeIndex aToBeJoined(aPref, 1);
+
+            if (m_pLastAnchorPos)
+            {
+                //If the last anchor pos is here, then clear the anchor pos.
+                //This "last anchor pos" is only used for fixing up the
+                //positions of things anchored to page breaks and here
+                //we are removing the last paragraph of a frame, so there
+                //cannot be a page break at this point so we can
+                //safely reset m_pLastAnchorPos to avoid any dangling
+                //SwIndex's pointing into the deleted paragraph
+                SwNodeIndex aLastAnchorPos(m_pLastAnchorPos->nNode);
+                if (aLastAnchorPos == aToBeJoined)
+                    m_pLastAnchorPos.reset();
+            }
+
+            if (m_pPreviousNode)
+            {
+                //If the drop character start pos is here, then clear it.
+                SwNodeIndex aDropCharPos(*m_pPreviousNode);
+                if (aDropCharPos == aToBeJoined)
+                    m_pPreviousNode = nullptr;
+            }
+        }
+
         pNode->JoinNext();
 
         bRet = true;
@@ -6252,7 +6279,7 @@ void SwWW8ImplReader::EndSprm( sal_uInt16 nId )
         (this->*rSprm.pReadFnc)( nId, nullptr, -1 );
 }
 
-short SwWW8ImplReader::ImportSprm(const sal_uInt8* pPos,sal_uInt16 nId)
+short SwWW8ImplReader::ImportSprm(const sal_uInt8* pPos, sal_Int32 nMemLen, sal_uInt16 nId)
 {
     if (!nId)
         nId = m_pSprmParser->GetSprmId(pPos);
@@ -6262,7 +6289,7 @@ short SwWW8ImplReader::ImportSprm(const sal_uInt8* pPos,sal_uInt16 nId)
     const SprmReadInfo& rSprm = GetSprmReadInfo(nId);
 
     sal_uInt16 nFixedLen = m_pSprmParser->DistanceToData(nId);
-    sal_uInt16 nL = m_pSprmParser->GetSprmSize(nId, pPos);
+    sal_uInt16 nL = m_pSprmParser->GetSprmSize(nId, pPos, nMemLen);
 
     if (rSprm.pReadFnc)
         (this->*rSprm.pReadFnc)(nId, pPos + nFixedLen, nL - nFixedLen);

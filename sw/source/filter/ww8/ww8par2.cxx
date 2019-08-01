@@ -401,14 +401,16 @@ long SwWW8ImplReader::Read_Footnote(WW8PLCFManResult* pRes)
     if (eEDN == pRes->nSprmId)
     {
         aDesc.meType = MAN_EDN;
-        if (m_pPlcxMan->GetEdn())
-            aDesc.mbAutoNum = 0 != *static_cast<short const *>(m_pPlcxMan->GetEdn()->GetData());
+        WW8PLCFx_SubDoc* pEndNote = m_pPlcxMan->GetEdn();
+        if (const void* pData = pEndNote ? pEndNote->GetData() : nullptr)
+            aDesc.mbAutoNum = 0 != *static_cast<short const*>(pData);
     }
     else
     {
         aDesc.meType = MAN_FTN;
-        if (m_pPlcxMan->GetFootnote())
-            aDesc.mbAutoNum = 0 != *static_cast<short const *>(m_pPlcxMan->GetFootnote()->GetData());
+        WW8PLCFx_SubDoc* pFootNote = m_pPlcxMan->GetFootnote();
+        if (const void* pData = pFootNote ? pFootNote->GetData() : nullptr)
+            aDesc.mbAutoNum = 0 != *static_cast<short const*>(pData);
     }
 
     aDesc.mnStartCp = pRes->nCp2OrIdx;
@@ -945,17 +947,20 @@ WW8LvlType GetNumType(sal_uInt8 nWwLevelNo)
     return nRet;
 }
 
-SwNumRule *ANLDRuleMap::GetNumRule(sal_uInt8 nNumType)
+SwNumRule *ANLDRuleMap::GetNumRule(SwDoc& rDoc, sal_uInt8 nNumType)
 {
-    return (WW8_Numbering == nNumType ? mpNumberingNumRule : mpOutlineNumRule);
+    const OUString& rNumRule = WW8_Numbering == nNumType ? msNumberingNumRule : msOutlineNumRule;
+    if (rNumRule.isEmpty())
+        return nullptr;
+    return rDoc.FindNumRulePtr(rNumRule);
 }
 
-void ANLDRuleMap::SetNumRule(SwNumRule *pRule, sal_uInt8 nNumType)
+void ANLDRuleMap::SetNumRule(const OUString& rNumRule, sal_uInt8 nNumType)
 {
     if (WW8_Numbering == nNumType)
-        mpNumberingNumRule = pRule;
+        msNumberingNumRule = rNumRule;
     else
-        mpOutlineNumRule = pRule;
+        msOutlineNumRule = rNumRule;
 }
 
 // StartAnl is called at the beginning of a row area that contains
@@ -969,7 +974,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
         return;
 
     m_nWwNumType = nT;
-    SwNumRule *pNumRule = m_aANLDRules.GetNumRule(m_nWwNumType);
+    SwNumRule *pNumRule = m_aANLDRules.GetNumRule(m_rDoc, m_nWwNumType);
 
     // check for COL numbering:
     const sal_uInt8* pS12 = nullptr;// sprmAnld
@@ -1027,7 +1032,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
     m_pCtrlStck->NewAttr(*m_pPaM->GetPoint(),
         SfxStringItem(RES_FLTR_NUMRULE, sNumRule));
 
-    m_aANLDRules.SetNumRule(pNumRule, m_nWwNumType);
+    m_aANLDRules.SetNumRule(sNumRule, m_nWwNumType);
 }
 
 // NextAnlLine() is called once for every row of a
@@ -1037,7 +1042,7 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
     if (!m_bAnl)
         return;
 
-    SwNumRule *pNumRule = m_aANLDRules.GetNumRule(m_nWwNumType);
+    SwNumRule *pNumRule = m_aANLDRules.GetNumRule(m_rDoc, m_nWwNumType);
 
     // pNd->UpdateNum ohne Regelwerk gibt GPF spaetestens beim Speichern als
     // sdw3
@@ -1046,7 +1051,7 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
     if (*pSprm13 == 10 || *pSprm13 == 11)
     {
         m_nSwNumLevel = 0;
-        if (!pNumRule->GetNumFormat(m_nSwNumLevel))
+        if (pNumRule && !pNumRule->GetNumFormat(m_nSwNumLevel))
         {
             // not defined yet
             // sprmAnld o. 0
@@ -1058,7 +1063,7 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
     {
         m_nSwNumLevel = *pSprm13 - 1;             // outline
         // undefined
-        if (!pNumRule->GetNumFormat(m_nSwNumLevel))
+        if (pNumRule && !pNumRule->GetNumFormat(m_nSwNumLevel))
         {
             if (m_pNumOlst)                       // there was a OLST
             {
@@ -1111,7 +1116,7 @@ void SwWW8ImplReader::StopAnlToRestart(sal_uInt8 nNewType, bool bGoBack)
     else
         m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_NUMRULE);
 
-    m_aANLDRules.mpNumberingNumRule = nullptr;
+    m_aANLDRules.msNumberingNumRule.clear();
     /*
      #i18816#
      my take on this problem is that moving either way from an outline to a
@@ -1121,7 +1126,7 @@ void SwWW8ImplReader::StopAnlToRestart(sal_uInt8 nNewType, bool bGoBack)
         (((m_nWwNumType == WW8_Outline) && (nNewType == WW8_Numbering)) ||
         ((m_nWwNumType == WW8_Numbering) && (nNewType == WW8_Outline)));
     if (!bNumberingNotStopOutline)
-        m_aANLDRules.mpOutlineNumRule = nullptr;
+        m_aANLDRules.msOutlineNumRule.clear();
 
     m_nSwNumLevel = 0xff;
     m_nWwNumType = WW8_None;
@@ -3616,7 +3621,7 @@ void WW8RStyle::ImportSprms(sal_uInt8 *pSprms, short nLen, bool bPap)
     WW8SprmIter aSprmIter(pSprms, nLen, maSprmParser);
     while (const sal_uInt8* pSprm = aSprmIter.GetSprms())
     {
-        pIo->ImportSprm(pSprm);
+        pIo->ImportSprm(pSprm, aSprmIter.GetRemLen(), aSprmIter.GetAktId());
         aSprmIter.advance();
     }
 

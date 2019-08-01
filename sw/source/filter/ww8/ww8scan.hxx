@@ -118,7 +118,7 @@ public:
     /// Return the SPRM id at the beginning of this byte sequence
     sal_uInt16 GetSprmId(const sal_uInt8* pSp) const;
 
-    sal_uInt16 GetSprmSize(sal_uInt16 nId, const sal_uInt8* pSprm) const;
+    sal_uInt16 GetSprmSize(sal_uInt16 nId, const sal_uInt8* pSprm, sal_Int32 nRemLen) const;
 
     /// Get known len of a sprms head, the bytes of the sprm id + any bytes
     /// reserved to hold a variable length
@@ -126,7 +126,7 @@ public:
 
     /// Get len of a sprms data area, ignoring the bytes of the sprm id and
     /// ignoring any len bytes. Reports the remaining data after those bytes
-    sal_uInt16 GetSprmTailLen(sal_uInt16 nId, const sal_uInt8 * pSprm) const;
+    sal_uInt16 GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm, sal_Int32 nRemLen) const;
 
     /// The minimum acceptable sprm len possible for this type of parser
     int MinSprmLen() const { return (IsSevenMinus(meVersion)) ? 2 : 3; }
@@ -253,20 +253,21 @@ private:
     sal_uInt16 nAktId;
     sal_uInt16 nAktSize;
 
-    long nRemLen;   // length of remaining SPRMs (including akt. SPRM)
+    sal_Int32 nRemLen;   // length of remaining SPRMs (including akt. SPRM)
 
     void UpdateMyMembers();
 
 public:
-    explicit WW8SprmIter( const sal_uInt8* pSprms_, long nLen_,
+    explicit WW8SprmIter(const sal_uInt8* pSprms_, sal_Int32 nLen_,
         const wwSprmParser &rSprmParser);
-    void  SetSprms( const sal_uInt8* pSprms_, long nLen_ );
+    void  SetSprms(const sal_uInt8* pSprms_, sal_Int32 nLen_);
     const sal_uInt8* FindSprm(sal_uInt16 nId);
     void  advance();
     const sal_uInt8* GetSprms() const
         { return ( pSprms && (0 < nRemLen) ) ? pSprms : nullptr; }
     const sal_uInt8* GetAktParams() const { return pAktParams; }
     sal_uInt16 GetAktId() const { return nAktId; }
+    sal_Int32 GetRemLen() const { return nRemLen; }
 
 private:
     WW8SprmIter(const WW8SprmIter&) = delete;

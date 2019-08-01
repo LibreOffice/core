@@ -273,6 +273,8 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
                 nLastWidth = maDefaultList.back()->nTwips;
 
             nColCnt = 0;
+            if (pActDefault != pInsDefault)
+                pActDefault = nullptr;
             maDefaultList.clear();
             pDefMerge = nullptr;
             nLastToken = pInfo->nToken;
