@@ -927,6 +927,11 @@ DECLARE_OOXMLEXPORT_TEST(testExtraSectionBreak, "1_page.docx")
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
     xCursor->jumpToLastPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
+
+    // tdf126544 Styles were being added before their base/parent/inherited-from style existed, and so were using default settings.
+    uno::Reference<container::XNameAccess> xParaStyles(getStyles("ParagraphStyles"));
+    uno::Reference<style::XStyle> xStyle(xParaStyles->getByName("Heading 1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( OUString("Heading Base"), xStyle->getParentStyle() );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testcolumnbreak, "columnbreak.docx")
