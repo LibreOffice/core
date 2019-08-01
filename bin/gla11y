@@ -249,6 +249,7 @@ widgets_labels = [
 progname = os.path.basename(sys.argv[0])
 
 suppressions = {}
+suppressions_to_line = {}
 false_positives = {}
 ids = {}
 ids_dup = {}
@@ -1297,9 +1298,12 @@ def main():
     if suppr is not None:
         try:
             supprfile = open(suppr, 'r')
+            line_no = 1;
             for line in supprfile.readlines():
                 prefix = line.rstrip()
                 suppressions[prefix] = True
+                suppressions_to_line[prefix] = line_no
+                line_no = line_no + 1;
             supprfile.close()
         except IOError:
             pass
@@ -1370,7 +1374,10 @@ def main():
             n += 1
 
     if n > 0:
-        print("%s suppression%s unused" % (n, 's' if n > 1 else ''))
+        print("%s suppression%s unused:" % (n, 's' if n > 1 else ''))
+        for (suppr,unused) in suppressions.items():
+            if unused:
+                print("    %s:%s" % (suppressions_to_line[suppr], suppr))
 
     if gen_supprfile is not None:
         gen_supprfile.close()

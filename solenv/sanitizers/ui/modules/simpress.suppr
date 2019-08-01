@@ -1,15 +1,9 @@
 sd/uiconfig/simpress/ui/customanimationspanel.ui://sdlo-PropertyControl[@id='effect_property_list'] no-labelled-by
-sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkMenuButton[@id='color'] button-no-label
 sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkSpinButton[@id='fontsize'] no-labelled-by
 sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkSpinButton[@id='rotate'] no-labelled-by
 sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkSpinButton[@id='transparent'] no-labelled-by
 sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkSpinButton[@id='scale'] no-labelled-by
 sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkEntry[@id='entry'] no-labelled-by
-sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkMenuButton[@id='fontsizemenu'] button-no-label
-sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkMenuButton[@id='transparentmenu'] button-no-label
-sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkMenuButton[@id='rotatemenu'] button-no-label
-sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkMenuButton[@id='scalemenu'] button-no-label
-sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkMenuButton[@id='entrymenu'] button-no-label
 sd/uiconfig/simpress/ui/customanimationeffecttab.ui://GtkButton[@id='sound_preview'] button-no-label
 sd/uiconfig/simpress/ui/customanimationeffecttab.ui://GtkLabel[@id='prop_label1'] orphan-label
 sd/uiconfig/simpress/ui/customanimationtexttab.ui://GtkSpinButton[@id='auto_after_value'] no-labelled-by
