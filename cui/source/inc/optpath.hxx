@@ -41,27 +41,24 @@ class SvxPathTabPage;
 class SvxPathTabPage : public SfxTabPage
 {
 private:
-    VclPtr<SvSimpleTableContainer> m_pPathCtrl;
-    VclPtr<PushButton>         m_pStandardBtn;
-    VclPtr<PushButton>         m_pPathBtn;
-
-    VclPtr<svx::OptHeaderTabListBox> pPathBox;
     std::unique_ptr<OptPath_Impl>               pImpl;
 
     rtl::Reference< ::svt::DialogClosedListener > xDialogListener;
     css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
+    std::unique_ptr<weld::Button> m_xStandardBtn;
+    std::unique_ptr<weld::Button> m_xPathBtn;
+    std::unique_ptr<weld::TreeView> m_xPathBox;
+
     void        ChangeCurrentEntry( const OUString& _rFolder );
 
-    DECL_LINK( PathHdl_Impl, Button*, void);
-    DECL_LINK( DoubleClickPathHdl_Impl, SvTreeListBox*, bool);
-    DECL_LINK( StandardHdl_Impl, Button*, void);
+    DECL_LINK(PathHdl_Impl, weld::Button&, void);
+    DECL_LINK(DoubleClickPathHdl_Impl, weld::TreeView&, void);
+    DECL_LINK(StandardHdl_Impl, weld::Button&, void);
 
-    DECL_LINK( PathSelect_Impl, SvTreeListBox*, void);
-    DECL_LINK( HeaderSelect_Impl, HeaderBar *, void );
-    DECL_LINK( HeaderEndDrag_Impl, HeaderBar *, void );
+    DECL_LINK(PathSelect_Impl, weld::TreeView&, void);
 
-    DECL_LINK( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
+    DECL_LINK(DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void);
 
     void        GetPathList( sal_uInt16 _nPathHandle, OUString& _rInternalPath,
                              OUString& _rUserPath, OUString& _rWritablePath, bool& _rReadOnly );
@@ -69,15 +66,14 @@ private:
                              const OUString& _rUserPath, const OUString& _rWritablePath );
 
 public:
-    SvxPathTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SvxPathTabPage() override;
+    SvxPathTabPage( TabPageParent pParent, const SfxItemSet& rSet );
     virtual void dispose() override;
+    virtual ~SvxPathTabPage() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
-    virtual void        FillUserData() override;
 };
 
 #endif

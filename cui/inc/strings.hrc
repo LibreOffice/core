@@ -389,6 +389,8 @@
 #define RID_SVXSTR_ABOUT_WEBSITE                    NC_("aboutdialog|website", "~Website")
 #define RID_SVXSTR_ABOUT_CREDITS                    NC_("aboutdialog|credits", "Cre~dits")
 
+#define RID_SVXSTR_EDIT_PATHS                       NC_("optpathspage|editpaths", "Edit Paths: %1")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
