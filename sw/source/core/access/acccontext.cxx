@@ -1077,7 +1077,7 @@ void SwAccessibleContext::DisposeChild( const SwAccessibleChild& rChildFrameOrOb
          IsShowing( *(GetMap()), rChildFrameOrObj ) ||
          !SwAccessibleChild( GetFrame() ).IsVisibleChildrenOnly() )
     {
-        // If the object could have existed before, than there is nothing to do,
+        // If the object could have existed before, then there is nothing to do,
         // because no wrapper exists now and therefore no one is interested to
         // get notified of the movement.
         if( rChildFrameOrObj.GetSwFrame() )
@@ -1173,7 +1173,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
                      ( rOldFrame.Left() == 0 && rOldFrame.Top() == 0 );
     if( IsShowing( *(GetMap()), rChildFrameOrObj ) )
     {
-        // If the object could have existed before, than there is nothing to do,
+        // If the object could have existed before, then there is nothing to do,
         // because no wrapper exists now and therefore no one is interested to
         // get notified of the movement.
         if( bNew || (bVisibleChildrenOnly && !IsShowing( rOldFrame )) )
@@ -1211,7 +1211,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
     }
     else
     {
-        // If the frame was visible before, than a child event for the parent
+        // If the frame was visible before, then a child event for the parent
         // needs to be send. However, there is no wrapper existing, and so
         // no notifications for grandchildren are required. If the are
         // grandgrandchildren, they would be notified by the layout.

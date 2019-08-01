@@ -28,7 +28,7 @@
  * If you access it by index, managing the index is the responsibility of
  * the cache user.
  *
- * The cached objects are derrived from the base class SwCacheObj.
+ * The cached objects are derived from the base class SwCacheObj.
  * In it, the cache objects are doubly-linked which allows for the use of
  * an LRU algorithm.
  *
@@ -127,7 +127,7 @@ public:
 
 /**
  * The Cache object base class
- * Users of the Cache must derrive a class from the SwCacheObj and store
+ * Users of the Cache must derive a class from the SwCacheObj and store
  * their payload there
  */
 class SwCacheObj
@@ -186,9 +186,9 @@ public:
  * The Cache object is created in the ctor.
  * If the Cache does not return one, the member is set to 0 and one is
  * created on the Get() and added to the Cache (if possible).
- * Cache users must derrive a class from SwCacheAccess in order to
+ * Cache users must derive a class from SwCacheAccess in order to
  * guarantee type safety. The base class should always be called for the
- * Get(). A derrived Get() should only ever guarantee type safety.
+ * Get(). A derived Get() should only ever guarantee type safety.
  * Cache objects are always locked for the instance's life time.
  */
 class SwCacheAccess

@@ -224,7 +224,7 @@ public:
 
         definition found in /core/layout/paintfrm.cxx
 
-        @return true, if background color is transparent or a existing background
+        @return true, if background color is transparent or an existing background
         graphic is transparent.
     */
     bool IsBackgroundTransparent() const;

@@ -1180,7 +1180,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
         m_nMin > MAX_TABWIDTH )
     {
         // If
-        // - a inner table's minimum is larger than the available space, or
+        // - an inner table's minimum is larger than the available space, or
         // - a top table's minimum is larger than USHORT_MAX the table
         // has to be adapted to the available space or USHORT_MAX.
         // We preserve the widths' ratio amongst themselves, however.

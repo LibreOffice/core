@@ -1110,7 +1110,7 @@ std::unique_ptr<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &
         //   position with the same brackets as the winner-attribute.
 
         // In the following loop rPos is the critical position and it will be
-        // evaluated, if at rPos starts a interrupting or a maintaining
+        // evaluated, if at rPos starts an interrupting or a maintaining
         // continuity attribute.
 
         // iterAtStartOfNode is positioned to the first hint of the node
@@ -2145,7 +2145,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
         {
             // For Solaris, this optimization can causes trouble:
             // Setting this to the portion width ( = rMulti.Width() )
-            // can make GetTextBreak inside SwTextGuess::Guess return to small
+            // can make GetTextBreak inside SwTextGuess::Guess return too small
             // values. Therefore we add some extra twips.
             if( nActWidth > nTmpX + rMulti.Width() + 6 )
                 nActWidth = nTmpX + rMulti.Width() + 6;

@@ -545,7 +545,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, size_t nOldPos,
         while ( pTmpObj )
         {
             // #i38563# - assure, that anchor frame exists.
-            // If object is anchored inside a invisible part of the document
+            // If object is anchored inside an invisible part of the document
             // (e.g. page header, whose page style isn't applied, or hidden
             // section), no anchor frame exists.
             const SwFrame* pTmpAnchorFrame = lcl_FindAnchor( pTmpObj, true );
@@ -598,7 +598,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, size_t nOldPos,
                 break;
 
             // #i38563# - assure, that anchor frame exists.
-            // If object is anchored inside a invisible part of the document
+            // If object is anchored inside an invisible part of the document
             // (e.g. page header, whose page style isn't applied, or hidden
             // section), no anchor frame exists.
             const SwFrame* pTmpAnchorFrame = lcl_FindAnchor( pTmpObj, true );
@@ -769,9 +769,9 @@ void SwDrawView::MarkListHasChanged()
 void SwDrawView::ModelHasChanged()
 {
     // The ModelHasChanged() call in DrawingLayer also updates
-    // a eventually active text edit view (OutlinerView). This also leads
+    // an eventually active text edit view (OutlinerView). This also leads
     // to newly setting the background color for that edit view. Thus,
-    // this method rescues the current background color if a OutlinerView
+    // this method rescues the current background color if an OutlinerView
     // exists and re-establishes it then. To be more safe, the OutlinerView
     // will be fetched again (maybe textedit has ended).
     OutlinerView* pView = GetTextEditOutlinerView();

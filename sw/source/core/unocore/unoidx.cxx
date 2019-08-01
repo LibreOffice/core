@@ -1118,7 +1118,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             break;
             case WID_PARA_HEAD:
             {
-                //Header steht an Pos 0
+                //Header is at position 0
                 OUString aString;
                 SwStyleNameMapper::FillProgName(rForm.GetTemplate( 0 ), aString,
                         SwGetPoolIdFromName::TxtColl );

@@ -181,7 +181,7 @@ public:
     // The object has been moved by the layout
     virtual void InvalidatePosOrSize( const SwRect& rOldBox ) override;
 
-    // The object is not visible an longer and should be destroyed
+    // The object is not visible any longer and should be destroyed
     virtual void Dispose(bool bRecursive, bool bCanSkipInvisible = true) override;
 
     virtual void DisposeChild( const sw::access::SwAccessibleChild& rFrameOrObj,

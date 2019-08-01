@@ -432,7 +432,7 @@ lcl_MakeParagraphSignatureFieldText(const uno::Reference<frame::XModel>& xModel,
     return lcl_MakeParagraphSignatureFieldText(aDescr, utf8Text);
 }
 
-/// Generate the next valid ID for the a new signature on this paragraph.
+/// Generate the next valid ID for the new signature on this paragraph.
 OUString lcl_getNextSignatureId(const uno::Reference<frame::XModel>& xModel,
                                 const uno::Reference<text::XTextContent>& xParagraph)
 {

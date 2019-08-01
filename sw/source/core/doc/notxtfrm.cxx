@@ -556,7 +556,7 @@ void SwNoTextFrame::MakeAll(vcl::RenderContext* pRenderContext)
             // set the SwFrameAreaDefinition(s) back to BoundAreas of
             // the transformed SwFrame. All needed information is part
             // of the already correctly created Transformations of the
-            // upper frame, so it can bre re-created on the fly
+            // upper frame, so it can be re-created on the fly
             if(pUpperFly->isTransformableSwFrame())
             {
                 pUpperFly->getTransformableSwFrame()->adaptFrameAreasToTransformations();

@@ -50,7 +50,7 @@ SwNodeNum::~SwNodeNum()
 void SwNodeNum::ChangeNumRule( SwNumRule& rNumRule )
 {
     OSL_ENSURE( GetNumRule() && GetTextNode(),
-            "<SwNodeNum::ChangeNumRule(..)> - missing list style and/or text node. Serious defect -> please informm OD." );
+            "<SwNodeNum::ChangeNumRule(..)> - missing list style and/or text node. Serious defect -> please inform OD." );
     if ( GetNumRule() && GetTextNode() )
     {
         GetNumRule()->RemoveTextNode( *(GetTextNode()) );

@@ -2313,7 +2313,7 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
 #ifdef DBG_UTIL
     if ( m_bIndicator && pImp->GetShell()->GetWin() )
     {
-        // Do not invalidate indicator, this may cause a endless loop. Instead, just repaint it
+        // Do not invalidate indicator, this may cause an endless loop. Instead, just repaint it
         // This should be replaced by an overlay object in the future, anyways. Since it's only for debug
         // purposes, it is not urgent.
             m_bIndicator = false; SHOW_IDLE( COL_LIGHTGREEN );

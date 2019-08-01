@@ -1546,7 +1546,7 @@ namespace //local functions originally from docfmt.cxx
                 //current setting attribute set is a character range properties set and comes from a MS Word
                 //binary file, and the setting range include a paragraph end position (0X0D);
                 //more specifications, as such property inside the character range properties set recorded in
-                //MS Word binary file are dealed and inserted into data model (SwDoc) one by one, so we
+                //MS Word binary file are dealt and inserted into data model (SwDoc) one by one, so we
                 //only dealing the scenario that the char properties set with 1 item inside;
 
                     if (bExpandCharToPara && pCharSet && pCharSet->Count() ==1 )
@@ -1678,7 +1678,7 @@ namespace //local functions originally from docfmt.cxx
         //current setting attribute set is a character range properties set and comes from a MS Word
         //binary file, and the setting range include a paragraph end position (0X0D);
         //more specifications, as such property inside the character range properties set recorded in
-        //MS Word binary file are dealed and inserted into data model (SwDoc) one by one, so we
+        //MS Word binary file are dealt and inserted into data model (SwDoc) one by one, so we
         //only dealing the scenario that the char properties set with 1 item inside;
         if (bExpandCharToPara && pCharSet && pCharSet->Count() ==1)
         {
@@ -1904,7 +1904,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
     // Move hard page brakes to the following Node.
     bool bSavePageBreak = false, bSavePageDesc = false;
 
-    /* #i9185# This whould lead to a segmentation fault if not caught above. */
+    /* #i9185# This would lead to a segmentation fault if not caught above. */
     sal_uLong nNextNd = rEnd.nNode.GetIndex() + 1;
     SwTableNode *const pTableNd = m_rDoc.GetNodes()[ nNextNd ]->GetTableNode();
 
@@ -4662,7 +4662,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 }
             }
             else if( bCanMoveBack )
-            {   //Insertion at the first position of a text node. It will not be splitted, the table
+            {   // Insertion at the first position of a text node. It will not be split, the table
                 // will be inserted before the text node.
                 // See below, before the SetInsertRange function of the undo object will be called,
                 // the CpyPam would be moved to the next content position. This has to be avoided

@@ -2998,7 +2998,7 @@ SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
             SetCountedInList(true);
     }
 
-    // In case the numbering caused a style form the pool to be assigned to
+    // In case the numbering caused a style from the pool to be assigned to
     // the new node, don't overwrite that here!
     if( pColl != pNode->GetTextColl() ||
         ( bChgFollow && pColl != GetTextColl() ))

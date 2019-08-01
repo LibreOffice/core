@@ -503,7 +503,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
 
             // Initialize again because this doesn't happen in docfld anymore for
             // elements != SwFieldIds::Database. E.g. if there is an expression field before
-            // an DB_Field in a document.
+            // a DB_Field in a document.
             const sal_uInt32 nTmpRec = pMgr->GetSelectedRecordId(sSourceName, sTableName);
             VarChange(sDBNum, nTmpRec);
 

@@ -962,7 +962,7 @@ public:
     void appendGrabBag(std::vector<css::beans::PropertyValue>& rInteropGrabBag, const OUString& aKey, const OUString& aValue);
     void appendGrabBag(std::vector<css::beans::PropertyValue>& rInteropGrabBag, const OUString& aKey, std::vector<css::beans::PropertyValue>& rValue);
 
-    /// Enable, disable an check status of grabbags
+    /// Enable, disable and check status of grabbags
     void enableInteropGrabBag(const OUString& aName);
     void disableInteropGrabBag();
     bool isInteropGrabBagEnabled();

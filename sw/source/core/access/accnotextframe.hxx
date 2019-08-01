@@ -85,7 +85,7 @@ public:
     virtual sal_Int32 SAL_CALL
         getAccessibleImageWidth(  ) override;
 
-    // The object is not visible an longer and should be destroyed
+    // The object is not visible any longer and should be destroyed
     virtual void Dispose(bool bRecursive, bool bCanSkipInvisible = true) override;
 
     virtual sal_Int32 SAL_CALL getCaretPosition(  ) override;

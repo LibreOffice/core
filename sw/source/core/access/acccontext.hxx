@@ -290,10 +290,10 @@ public:
 
     // thread safe C++ interface
 
-    // The object is not visible an longer and should be destroyed
+    // The object is not visible any longer and should be destroyed
     virtual void Dispose(bool bRecursive, bool bCanSkipInvisible = true);
 
-    // The child object is not visible an longer and should be destroyed
+    // The child object is not visible any longer and should be destroyed
     virtual void DisposeChild(const sw::access::SwAccessibleChild& rFrameOrObj, bool bRecursive, bool bCanSkipInvisible);
 
     // The object has been moved by the layout
@@ -344,7 +344,7 @@ public:
         return Select( nullptr, pObj, bAdd );
     }
 
-    //This method is used to updated the selected state and fire the selected state changed event.
+    //This method is used to update the selected state and fire the selected state changed event.
     virtual bool SetSelectedState(bool bSeleted);
     bool  IsSeletedInDoc() { return m_isSelectedInDoc; }
 

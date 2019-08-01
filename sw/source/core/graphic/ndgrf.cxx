@@ -164,7 +164,7 @@ bool SwGrfNode::ReRead(
 
         if( !sURLLink.isEmpty() )
         {
-            // Note: If there is DDE in the FltName, than it is a DDE-linked graphic
+            // Note: if there is DDE in the FltName, then it is a DDE-linked graphic
             OUString sCmd( sURLLink );
             if( !rFltName.isEmpty() )
             {
