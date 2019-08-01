@@ -32,7 +32,6 @@ SwUndoFormatColl::SwUndoFormatColl( const SwPaM& rRange,
     : SwUndo( SwUndoId::SETFMTCOLL, rRange.GetDoc() ),
       SwUndRng( rRange ),
       pHistory( new SwHistory ),
-      pFormatColl( pColl ),
       mbReset( bReset ),
       mbResetListAttrs( bResetListAttrs )
 {
@@ -71,12 +70,10 @@ void SwUndoFormatColl::DoSetFormatColl(SwDoc & rDoc, SwPaM const & rPaM)
 {
     // Only one TextFrameColl can be applied to a section, thus request only in
     // this array.
-
-    // does the format still exist?
-    if (rDoc.GetTextFormatColls()->IsAlive(static_cast<SwTextFormatColl*>(pFormatColl)))
+    SwTextFormatColl * pFormatColl = rDoc.FindTextFormatCollByName(aFormatName);
+    if (pFormatColl)
     {
-        rDoc.SetTextFormatColl(rPaM, static_cast<SwTextFormatColl*>(pFormatColl), mbReset,
-                           mbResetListAttrs);
+        rDoc.SetTextFormatColl(rPaM, pFormatColl, mbReset, mbResetListAttrs);
     }
 }
 
@@ -84,9 +81,6 @@ SwRewriter SwUndoFormatColl::GetRewriter() const
 {
     SwRewriter aResult;
 
-    // #i31191# Use stored format name instead of
-    // pFormatColl->GetName(), because pFormatColl does not have to be available
-    // anymore.
     aResult.AddRule(UndoArg1, aFormatName );
 
     return aResult;
