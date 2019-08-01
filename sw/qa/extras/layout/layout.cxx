@@ -23,6 +23,11 @@
 #include <edtwin.hxx>
 #include <view.hxx>
 #include <txtfrm.hxx>
+#include <pagefrm.hxx>
+#include <bodyfrm.hxx>
+#include <sortedobjs.hxx>
+#include <anchoredobject.hxx>
+#include <ndtxt.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
 
@@ -73,6 +78,7 @@ public:
     void testTdf118719();
     void testTdf123651();
     void testBtlrCell();
+    void testImageComment();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testRedlineFootnotes);
@@ -114,6 +120,7 @@ public:
     CPPUNIT_TEST(testTdf118719);
     CPPUNIT_TEST(testTdf123651);
     CPPUNIT_TEST(testBtlrCell);
+    CPPUNIT_TEST(testImageComment);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2905,6 +2912,41 @@ void SwLayoutWriter::testBtlrCell()
     // i.e. the paint rectangle position was incorrect, text was not painted on scrolling up.
     CPPUNIT_ASSERT_EQUAL(SwRect(1691, 4217, 572, 269), aRect);
 #endif
+}
+
+void SwLayoutWriter::testImageComment()
+{
+    // Load a document that has "aaa" in it, then a commented image (4th char is the as-char image,
+    // 5th char is the comment anchor).
+    SwDoc* pDoc = createDoc("image-comment.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Look up a layout position which is on the right of the image.
+    SwRootFrame* pRoot = pWrtShell->GetLayout();
+    CPPUNIT_ASSERT(pRoot->GetLower()->IsPageFrame());
+    SwPageFrame* pPage = static_cast<SwPageFrame*>(pRoot->GetLower());
+    CPPUNIT_ASSERT(pPage->GetLower()->IsBodyFrame());
+    SwBodyFrame* pBody = static_cast<SwBodyFrame*>(pPage->GetLower());
+    CPPUNIT_ASSERT(pBody->GetLower()->IsTextFrame());
+    SwTextFrame* pTextFrame = static_cast<SwTextFrame*>(pBody->GetLower());
+    CPPUNIT_ASSERT(pTextFrame->GetDrawObjs());
+    SwSortedObjs& rDrawObjs = *pTextFrame->GetDrawObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rDrawObjs.size());
+    SwAnchoredObject* pDrawObj = rDrawObjs[0];
+    const SwRect& rDrawObjRect = pDrawObj->GetObjRect();
+    Point aPoint = rDrawObjRect.Center();
+    aPoint.setX(aPoint.getX() + rDrawObjRect.Width() / 2);
+
+    // Ask for the doc model pos of this layout point.
+    SwPosition aPosition(*pTextFrame->GetTextNodeForFirstText());
+    pTextFrame->GetCursorOfst(&aPosition, aPoint);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 5
+    // - Actual  : 4
+    // i.e. the cursor got positioned between the image and its comment, so typing extended the
+    // comment, instead of adding content after the commented image.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), aPosition.nContent.GetIndex());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
