@@ -69,7 +69,7 @@ static uno::Sequence< OUString > getServiceNames()
 
 static OUString getImplementationName()
 {
-    return OUString("vnd.sun.UpdateCheckUI");
+    return "vnd.sun.UpdateCheckUI";
 }
 
 

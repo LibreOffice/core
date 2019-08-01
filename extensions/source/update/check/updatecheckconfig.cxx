@@ -440,7 +440,7 @@ UpdateCheckConfig::getServiceNames()
 OUString
 UpdateCheckConfig::getImplName()
 {
-    return OUString("vnd.sun.UpdateCheckConfig");
+    return "vnd.sun.UpdateCheckConfig";
 }
 
 uno::Type SAL_CALL
