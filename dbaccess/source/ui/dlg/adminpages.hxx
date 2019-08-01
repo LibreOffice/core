@@ -63,11 +63,11 @@ namespace dbaui
         virtual void Disable() override { m_pSaveValue->set_sensitive(false); }
     };
 
-    template <> class OSaveValueWidgetWrapper<weld::CheckButton> : public ISaveValueWrapper
+    template <> class OSaveValueWidgetWrapper<weld::ToggleButton> : public ISaveValueWrapper
     {
-        weld::CheckButton*  m_pSaveValue;
+        weld::ToggleButton*  m_pSaveValue;
     public:
-        explicit OSaveValueWidgetWrapper(weld::CheckButton* _pSaveValue) : m_pSaveValue(_pSaveValue)
+        explicit OSaveValueWidgetWrapper(weld::ToggleButton* _pSaveValue) : m_pSaveValue(_pSaveValue)
         { OSL_ENSURE(m_pSaveValue,"Illegal argument!"); }
 
         virtual void SaveValue() override { m_pSaveValue->save_state(); }

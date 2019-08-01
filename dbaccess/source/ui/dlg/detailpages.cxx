@@ -322,7 +322,7 @@ namespace dbaui
     {
         OCommonBehaviourTabPage::fillControls(_rControlList);
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xEDHostname.get()));
-        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::CheckButton>(m_xUseCatalog.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xUseCatalog.get()));
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::SpinButton>(m_xNFPortNumber.get()));
     }
     void OUserDriverDetailsPage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
@@ -523,7 +523,7 @@ namespace dbaui
         m_aMySQLSettings.fillControls( _rControlList );
 
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xUserName.get()));
-        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::CheckButton>(m_xPasswordRequired.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xPasswordRequired.get()));
     }
 
     void MySQLNativePage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
