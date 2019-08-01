@@ -3271,6 +3271,12 @@ public:
         set_sensitive(pEntry, bSensitive, col);
     }
 
+    virtual void set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col) override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        set_sensitive(rVclIter.iter, bSensitive, col);
+    }
+
     virtual TriState get_toggle(int pos, int col) const override
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
