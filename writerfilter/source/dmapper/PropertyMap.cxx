@@ -382,8 +382,8 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
     , m_nPageNumber( -1 )
     , m_nPageNumberType( -1 )
     , m_nBreakType( -1 )
-    , m_nLeftMargin( 3175 )  // page left margin,  default 0x708 (1800) twip -> 3175 1/100 mm
-    , m_nRightMargin( 3175 ) // page right margin,  default 0x708 (1800) twip -> 3175 1/100 mm
+    , m_nLeftMargin( 2540 )  // page left margin,  default 1 inch = 1440 twip -> 2540 1/100 mm
+    , m_nRightMargin( 2540 ) // page right margin,  default 1 inch = 1440 twip -> 2540 1/100 mm
     , m_nTopMargin( 2540 )
     , m_nBottomMargin( 2540 )
     , m_nHeaderTop( 1270 )    // 720 twip
@@ -420,10 +420,10 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
     Insert( PROP_HEIGHT, uno::makeAny( static_cast<sal_Int32>(aLetter.getHeight()) ) );
     // page width, 1/100mm
     Insert( PROP_WIDTH, uno::makeAny( static_cast<sal_Int32>(aLetter.getWidth()) ) );
-    // page left margin, default 0x708 (1800) twip -> 3175 1/100 mm
-    Insert( PROP_LEFT_MARGIN, uno::makeAny( sal_Int32(3175) ) );
-    // page right margin, default 0x708 (1800) twip -> 3175 1/100 mm
-    Insert( PROP_RIGHT_MARGIN, uno::makeAny( sal_Int32(3175) ) );
+    // page left margin, default 0x5a0 (1440) twip -> 2540 1/100 mm
+    Insert( PROP_LEFT_MARGIN, uno::makeAny( sal_Int32(2540) ) );
+    // page right margin, default 0x5a0 (1440) twip -> 2540 1/100 mm
+    Insert( PROP_RIGHT_MARGIN, uno::makeAny( sal_Int32(2540) ) );
     // page top margin, default 0x5a0 (1440) twip -> 2540 1/100 mm
     Insert( PROP_TOP_MARGIN, uno::makeAny( sal_Int32(2540) ) );
     // page bottom margin, default 0x5a0 (1440) twip -> 2540 1/100 mm
