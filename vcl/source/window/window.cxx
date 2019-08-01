@@ -3161,9 +3161,9 @@ LOKWindowsMap& GetLOKWindowsMap()
     assert(comphelper::LibreOfficeKit::isActive());
 
     // Map to remember the LOKWindowId <-> Window binding.
-    static std::unique_ptr<LOKWindowsMap> s_pLOKWindowsMap(new LOKWindowsMap);
+    static LOKWindowsMap s_aLOKWindowsMap;
 
-    return *s_pLOKWindowsMap;
+    return s_aLOKWindowsMap;
 }
 
 }
