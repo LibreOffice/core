@@ -218,7 +218,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
                                   bool bAddImageSep)
 {
     OUString aText(GetText());
-    bool bDrawImage = HasImage() && ! (ImplGetButtonState() & DrawButtonFlags::NoImage);
+    bool bDrawImage = HasImage();
     bool bDrawText  = !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText);
     bool bHasSymbol = pSymbolRect != nullptr;
 
@@ -1618,7 +1618,7 @@ Size PushButton::CalcMinimumSize() const
         else
             aSize = Size( 26, 24 );
     }
-    else if ( Button::HasImage() && ! (ImplGetButtonState() & DrawButtonFlags::NoImage) )
+    else if ( Button::HasImage() )
         aSize = GetModeImage().GetSizePixel();
     if( mnDDStyle == PushButtonDropdownStyle::MenuButton ||
         mnDDStyle == PushButtonDropdownStyle::SplitMenuButton )
@@ -2016,7 +2016,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
     if ( !maImage )
     {
         if ( ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) ) ||
-             ( HasImage() &&  ! (ImplGetButtonState() & DrawButtonFlags::NoImage) ) )
+             HasImage() )
         {
             DrawTextFlags nTextStyle = Button::ImplGetTextStyle( nWinStyle, nDrawFlags );
 
@@ -2847,7 +2847,7 @@ Size RadioButton::CalcMinimumSize() const
         aSize.AdjustHeight(8);
     }
 
-    if (Button::HasImage() && !(ImplGetButtonState() & DrawButtonFlags::NoImage))
+    if (Button::HasImage())
     {
         Size aImgSize = GetModeImage().GetSizePixel();
         aSize = Size(std::max(aImgSize.Width(), aSize.Width()),
@@ -3033,7 +3033,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
     pDev->IntersectClipRegion( tools::Rectangle( rPos, rSize ) );
 
     if ( ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) ) ||
-         ( HasImage() && !  (ImplGetButtonState() & DrawButtonFlags::NoImage) ) )
+         ( HasImage() ) )
     {
         DrawTextFlags nTextStyle = Button::ImplGetTextStyle( nWinStyle, nDrawFlags );
 
