@@ -54,8 +54,8 @@ void setupConfigurationValuesIfPossible(sal_Int64& rMemoryLimit,
 
 Manager& Manager::get()
 {
-    static std::unique_ptr<Manager> gStaticManager(new Manager);
-    return *gStaticManager;
+    static Manager gStaticManager;
+    return gStaticManager;
 }
 
 Manager::Manager()
