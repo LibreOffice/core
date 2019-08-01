@@ -20,7 +20,7 @@ def get_url_for_data_file(file_name):
     return get_srcdir_url() + "/sw/qa/uitest/writer_tests/data/" + file_name
 
 #TSCP: add advanced classification dialog https://cgit.freedesktop.org/libreoffice/core/commit/?id=71ee09947d5a71105d64fd225bb3672dfa7ce834
-# This adds a advanced classification dialog, which enables the user
+# This adds an advanced classification dialog, which enables the user
 # to manually construct a header/footer message from classification
 # properties in cases where the user needs more control. All the
 # text is inserted as fields into the end document and can be changed

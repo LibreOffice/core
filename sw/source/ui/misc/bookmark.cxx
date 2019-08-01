@@ -206,7 +206,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, RenameHdl, weld::Button&, void)
     }
 }
 
-// callback to a insert button. Inserts a new text mark to the current position.
+// callback to an insert button. Inserts a new text mark to the current position.
 IMPL_LINK_NOARG(SwInsertBookmarkDlg, InsertHdl, weld::Button&, void)
 {
     OUString sBookmark = m_xEditBox->get_text();

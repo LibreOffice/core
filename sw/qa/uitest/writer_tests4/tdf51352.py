@@ -25,7 +25,7 @@ class tdf51352(UITestCase):
         xOkBtn = xDialog.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())
         #-put the cursor inside first cell top left for example
-        #-insert a inner table (by default 2x2) inside this cell
+        #-insert an inner table (by default 2x2) inside this cell
         self.ui_test.execute_dialog_through_command(".uno:InsertTable")
         xDialog = self.xUITest.getTopFocusWindow()
         xOkBtn = xDialog.getChild("ok")
@@ -37,7 +37,7 @@ class tdf51352(UITestCase):
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
         self.assertEqual(document.TextTables.getCount(), 2)
-        #4. From menu "Table->Covert->Table to Text
+        #4. From menu "Table->Convert->Table to Text
         self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText")
         xDialog = self.xUITest.getTopFocusWindow()
         xOkBtn = xDialog.getChild("ok")

@@ -262,7 +262,7 @@ public:
 
     /// Is node in the visible area of the Shell?
     bool IsInVisibleArea( SwViewShell const * pSh ) const;
-    /// Is node in an protected area?
+    /// Is node in a protected area?
     bool IsInProtectSect() const;
     /**  Is node in something that is protected (range, frame,
         table cells ... including anchor in case of frames or footnotes)? */

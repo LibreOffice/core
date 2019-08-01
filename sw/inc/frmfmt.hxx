@@ -226,7 +226,7 @@ public:
         Method determines, if background of fly frame is transparent.
 
         @return true, if background color is transparent, but not "no fill"
-        or a existing background graphic is transparent.
+        or an existing background graphic is transparent.
     */
     virtual bool IsBackgroundTransparent() const override;
 

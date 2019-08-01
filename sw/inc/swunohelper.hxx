@@ -64,7 +64,7 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
     // is the URL an existing file?
 SW_DLLPUBLIC bool UCB_IsFile( const OUString& rURL );
 
-    // is the URL a existing directory?
+    // is the URL an existing directory?
 bool UCB_IsDirectory( const OUString& rURL );
 
 /// helper to check if fill style is set to color or bitmap

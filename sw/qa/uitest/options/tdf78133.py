@@ -30,7 +30,7 @@ class tdf78133(UITestCase):
         xLOEntry.executeAction("EXPAND", tuple())
         xLoAppColorsEntry = xLOEntry.getChild('8')
         xLoAppColorsEntry.executeAction("SELECT", tuple())          #Applications Colors
-        #change text boundaries chckbox, save
+        #change text boundaries checkbox, save
         docboundaries = xDialog.getChild("docboundaries")
         docboundaries.executeAction("CLICK", tuple())
         xOKBtn = xDialog.getChild("ok")
@@ -44,7 +44,7 @@ class tdf78133(UITestCase):
         xLOEntry.executeAction("EXPAND", tuple())
         xLoAppColorsEntry = xLOEntry.getChild('8')
         xLoAppColorsEntry.executeAction("SELECT", tuple())          #Applications Colors
-        #change text boundaries chckbox, save
+        #change text boundaries checkbox, save
         docboundaries = xDialog.getChild("docboundaries")
         self.assertEqual(get_state_as_dict(docboundaries)["Selected"], "false")
         xOKBtn = xDialog.getChild("ok")

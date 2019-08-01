@@ -24,7 +24,7 @@ class tdf53460(UITestCase):
         xOkBtn.executeAction("CLICK", tuple())
 
         #-put the cursor inside first cell top left for example
-        #-insert a inner table (by default 2x2) inside this cell
+        #-insert an inner table (by default 2x2) inside this cell
         self.ui_test.execute_dialog_through_command(".uno:InsertTable")
         xDialog = self.xUITest.getTopFocusWindow()
         xOkBtn = xDialog.getChild("ok")

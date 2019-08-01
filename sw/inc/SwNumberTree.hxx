@@ -293,7 +293,7 @@ public:
     /** Invalidation and notification of complete numbering tree
 
         #i64010#
-        Usage: on <IsCounted()> state change its needed to invalidate the
+        Usage: on <IsCounted()> state change it's needed to invalidate the
                complete numbering tree due to wide influence of this change.
     */
     void InvalidateAndNotifyTree()

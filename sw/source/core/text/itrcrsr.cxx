@@ -1265,7 +1265,7 @@ static bool ConsiderNextPortionForCursorOffset(SwLinePortion* pPor, sal_uInt16 n
         return false;
     }
 
-    // If we're poast the target position, stop the iteration in general.
+    // If we're past the target position, stop the iteration in general.
     // Exception: don't stop the iteration between as-char fly portions and their comments.
     if (nWidth30 >= nX && (!pPor->IsFlyCntPortion() || !pPor->GetNextPortion()->IsPostItsPortion()))
     {
