@@ -318,6 +318,10 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
 
             m_xPathBox->set_text(*xIter, aValueInternal, 2);
 
+            m_xPathBox->set_sensitive(*xIter, !bReadOnly, 0);
+            m_xPathBox->set_sensitive(*xIter, !bReadOnly, 1);
+            m_xPathBox->set_sensitive(*xIter, !bReadOnly, 2);
+
             PathUserData_Impl* pPathImpl = new PathUserData_Impl(i);
             pPathImpl->sUserPath = sUser;
             pPathImpl->sWritablePath = sWritable;

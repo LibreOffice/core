@@ -6870,6 +6870,19 @@ private:
         g_DragSource = nullptr;
     }
 
+    int get_sensitive_model_col(int col)
+    {
+        if (col == -1)
+            col = m_nTextCol;
+        else
+            col = get_model_col(col);
+        col += m_nIdCol + 1; // skip over id column
+        col += m_aToggleVisMap.size(); // skip over toggle columns
+        col += m_aToggleTriStateMap.size(); // skip over tristate columns
+        col += m_aWeightMap.size(); // skip over weight columns
+        return col;
+    }
+
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), pBuilder, bTakeOwnership)
@@ -7480,15 +7493,13 @@ public:
 
     virtual void set_sensitive(int pos, bool bSensitive, int col) override
     {
-        if (col == -1)
-            col = m_nTextCol;
-        else
-            col = get_model_col(col);
-        col += m_nIdCol + 1; // skip over id column
-        col += m_aToggleVisMap.size(); // skip over toggle columns
-        col += m_aToggleTriStateMap.size(); // skip over tristate columns
-        col += m_aWeightMap.size(); // skip over weight columns
-        set(pos, col, bSensitive);
+        set(pos, get_sensitive_model_col(col), bSensitive);
+    }
+
+    virtual void set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col) override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        set(rGtkIter.iter, get_sensitive_model_col(col), bSensitive);
     }
 
     void set_image(const GtkTreeIter& iter, int col, GdkPixbuf* pixbuf)

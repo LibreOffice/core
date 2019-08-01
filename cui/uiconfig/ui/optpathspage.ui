@@ -12,6 +12,20 @@
       <column type="gchararray"/>
       <!-- column-name text2 -->
       <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name weight1 -->
+      <column type="gint"/>
+      <!-- column-name weight2 -->
+      <column type="gint"/>
+      <!-- column-name weight3 -->
+      <column type="gint"/>
+      <!-- column-name sensitive1 -->
+      <column type="gboolean"/>
+      <!-- column-name sensitive2 -->
+      <column type="gboolean"/>
+      <!-- column-name sensitive3 -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkBox" id="OptPathsPage">
