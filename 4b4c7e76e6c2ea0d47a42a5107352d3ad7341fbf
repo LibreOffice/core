@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_e0485acd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-08-01T08:50:48Z",
+      "side": 1,
+      "message": "well it was built in this case but not packaged which is kind of pointless... are you sure that the Fedora package (which does copy it manually) actually uses --with-package-format\u003drpm? i dont see it in the spec file...",
+      "revId": "4b4c7e76e6c2ea0d47a42a5107352d3ad7341fbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
