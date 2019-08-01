@@ -684,11 +684,10 @@ using namespace ::com::sun::star;
         callModifiedHdl();
     }
 
-    VclPtr<OGenericAdministrationPage> OSpreadSheetConnectionPageSetup::CreateDocumentOrSpreadSheetTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    VclPtr<OGenericAdministrationPage> OSpreadSheetConnectionPageSetup::CreateDocumentOrSpreadSheetTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
     {
         return VclPtr<OSpreadSheetConnectionPageSetup>::Create( pParent, _rAttrSet );
     }
-
 
     OSpreadSheetConnectionPageSetup::OSpreadSheetConnectionPageSetup(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
         : OConnectionTabPageSetup(pParent, "dbaccess/ui/dbwizspreadsheetpage.ui", "DBWizSpreadsheetPage",
@@ -798,7 +797,7 @@ using namespace ::com::sun::star;
         return bChangedSomething;
     }
 
-    VclPtr<OGenericAdministrationPage> OFinalDBPageSetup::CreateFinalDBTabPageSetup(vcl::Window* pParent, const SfxItemSet& _rAttrSet)
+    VclPtr<OGenericAdministrationPage> OFinalDBPageSetup::CreateFinalDBTabPageSetup(TabPageParent pParent, const SfxItemSet& _rAttrSet)
     {
         return VclPtr<OFinalDBPageSetup>::Create( pParent, _rAttrSet);
     }
