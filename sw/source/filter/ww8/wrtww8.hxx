@@ -968,7 +968,7 @@ public:
     SvStream *pTableStrm, *pDataStrm;   ///< Streams for WW97 Export
 
     std::unique_ptr<WW8Fib> pFib;                       ///< File Information Block
-    std::unique_ptr<WW8Dop> pDop;                       ///< DOcument Properties
+    std::unique_ptr<WW8Dop> pDop;                       ///< Document Properties
     std::unique_ptr<WW8_WrPlcFootnoteEdn> pFootnote;    ///< Footnotes - structure to remember them, and output
     std::unique_ptr<WW8_WrPlcFootnoteEdn> pEdn;         ///< Endnotes - structure to remember them, and output
     std::unique_ptr<WW8_WrPlcSepx> pSepx;               ///< Sections/headers/footers

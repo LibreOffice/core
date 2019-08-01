@@ -798,7 +798,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
     }
 
     /*
-     Don't worry about the new pPlcxMan, the restorer removes it when
+     Don't worry about the new pPlcxMan, the restore removes it when
      replacing the current one with the old one.
     */
     aSave.Restore(this);
@@ -857,7 +857,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
         {
             long nMinStartCp = rStartCp;
             long nMaxEndCp   = rEndCp;
-            // quickly grab the TextBox-Break-Deskriptor-PLCF
+            // quickly grab the TextBox-Break-Descriptor-PLCF
             pT = m_xPlcxMan->GetTxbxBkd();
             if (!pT) // It can occur on occasion, Caolan
                 return false;

@@ -176,7 +176,7 @@ struct WW8PLCFxDesc;
 class  WW8PLCFx_PCD;
 
 /**
- reads array of strings (see MS documentation: STring TaBle stored in File)
+ reads array of strings (see MS documentation: String Table stored in File)
  returns NOT the original pascal strings but an array of converted char*
 
  attention: the *extra data* of each string are SKIPPED and ignored

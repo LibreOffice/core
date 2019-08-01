@@ -250,7 +250,7 @@ ErrCode SwHTMLWriter::WriteStream()
     m_aFontHeights[6] = rHtmlOptions.GetFontSize( 6 ) * 20;
 
     // output styles anyway
-    // (then also top nad bottom paragraph spacing)
+    // (then also top and bottom paragraph spacing)
     m_nExportMode = rHtmlOptions.GetExportMode();
     m_nHTMLMode = GetHtmlMode(nullptr);
 

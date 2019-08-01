@@ -1027,7 +1027,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     {
     case text::HoriOrientation::LEFT:
         // If a left-aligned table has no right sided flow, then we don't need
-        // a ALIGN=LEFT in the table.
+        // an ALIGN=LEFT in the table.
         if( eSurround==css::text::WrapTextMode_NONE || eSurround==css::text::WrapTextMode_LEFT )
             eTabHoriOri = text::HoriOrientation::NONE;
         break;

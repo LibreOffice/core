@@ -810,7 +810,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
     // nLevelB is an index in the aOfsNumsXCH array.
     for(sal_uInt16 nLevelB = 0; nLevelB <= nLevel; ++nLevelB)
     {
-        // nPos is a one-based character offset to a level placeholder in
+        // nPos is an one-based character offset to a level placeholder in
         // sNumString.
         sal_uInt8 nPos = aOfsNumsXCH[nLevelB];
         if (nPos && nPos < sNumString.getLength())

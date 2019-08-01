@@ -585,7 +585,7 @@ namespace sw
         /** Does a node have a "page break before" applied
 
             Both text nodes and tables in writer can have "page break before"
-            This function gives a unified view to both entities
+            This function gives an unified view to both entities
 
             @param rNode
             The SwNode to query the page break of
