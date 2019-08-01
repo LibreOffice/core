@@ -499,28 +499,9 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
     if ( dynamic_cast<const SwCursorShell*>( &rVSh) ==  nullptr )
         return;
 
-    OUString sFileURL = rURL;
-    INetURLObject aURL( sFileURL );
-    if( aURL.GetProtocol() == INetProtocol::NotValid && !sFileURL.startsWith("#") )
-    {
-        // May be the relative link -> try to convert to absolute path
-        OUString sParentPath =
-            rVSh.GetDoc()->GetDocShell()->GetMedium()->GetURLObject().GetPath();
-
-        bool bCorrectURL = true;
-        aURL = INetURLObject();
-        bCorrectURL &= aURL.setFSysPath( sParentPath, FSysStyle::Detect );
-        bCorrectURL &= aURL.insertName( sFileURL );
-
-        if( bCorrectURL )
-            sFileURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
-    }
-
-    // We are doing tiledRendering, let the client handles the URL loading,
-    // unless we are jumping to a TOC mark.
     if (comphelper::LibreOfficeKit::isActive() && !rURL.startsWith("#"))
     {
-        rVSh.GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, sFileURL.toUtf8().getStr());
+        rVSh.GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, rURL.toUtf8().getStr());
         return;
     }
 
@@ -545,7 +526,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
         sReferer = pDShell->GetMedium()->GetName();
     SfxViewFrame* pViewFrame = rSh.GetView().GetViewFrame();
     SfxFrameItem aView( SID_DOCFRAME, pViewFrame );
-    SfxStringItem aName( SID_FILE_NAME, sFileURL );
+    SfxStringItem aName( SID_FILE_NAME, rURL );
     SfxStringItem aTargetFrameName( SID_TARGETNAME, sTargetFrame );
     SfxStringItem aReferer( SID_REFERER, sReferer );
 
