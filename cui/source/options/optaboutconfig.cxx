@@ -8,7 +8,6 @@
  */
 
 #include "optaboutconfig.hxx"
-#include "optHeaderTabListbox.hxx"
 
 #include <vcl/button.hxx>
 #include <vcl/event.hxx>
@@ -37,7 +36,6 @@
 #include <vector>
 #include <iostream>
 
-using namespace svx;
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;

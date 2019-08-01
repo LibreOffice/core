@@ -24,12 +24,6 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
 
-class SvTreeListEntry;
-namespace svx
-{
-    class OptHeaderTabListBox;
-}
-
 namespace svx
 {
 

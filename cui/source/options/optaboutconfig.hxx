@@ -19,7 +19,6 @@
 
 #include <vector>
 
-namespace svx { class OptHeaderTabListBox; }
 class CuiAboutConfigTabPage;
 class CuiAboutConfigValueDialog;
 struct Prop_Impl;
