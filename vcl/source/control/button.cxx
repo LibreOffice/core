@@ -219,7 +219,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
 {
     OUString aText(GetText());
     bool bDrawImage = HasImage();
-    bool bDrawText  = !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText);
+    bool bDrawText  = !aText.isEmpty();
     bool bHasSymbol = pSymbolRect != nullptr;
 
     // No text and no image => nothing to do => return
@@ -839,23 +839,19 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
     {
         long nSeparatorX = 0;
         tools::Rectangle aSymbolRect = aInRect;
-        if (!(ImplGetButtonState() & DrawButtonFlags::NoText))
-        {
-            // calculate symbol size
-            long nSymbolSize    = pDev->GetTextHeight() / 2 + 1;
 
-            nSeparatorX = aInRect.Right() - 2*nSymbolSize;
-            aSize.AdjustWidth( -(2*nSymbolSize) );
+        // calculate symbol size
+        long nSymbolSize    = pDev->GetTextHeight() / 2 + 1;
 
-            // center symbol rectangle in the separated area
-            aSymbolRect.AdjustRight( -(nSymbolSize/2) );
-            aSymbolRect.SetLeft( aSymbolRect.Right() - nSymbolSize );
+        nSeparatorX = aInRect.Right() - 2*nSymbolSize;
+        aSize.AdjustWidth( -(2*nSymbolSize) );
 
-            ImplDrawAlignedImage( pDev, aPos, aSize, nImageSep,
-                                  nTextStyle, nullptr, true );
-        }
-        else
-            ImplCalcSymbolRect( aSymbolRect );
+        // center symbol rectangle in the separated area
+        aSymbolRect.AdjustRight( -(nSymbolSize/2) );
+        aSymbolRect.SetLeft( aSymbolRect.Right() - nSymbolSize );
+
+        ImplDrawAlignedImage( pDev, aPos, aSize, nImageSep,
+                              nTextStyle, nullptr, true );
 
         long nDistance = (aSymbolRect.GetHeight() > 10) ? 2 : 1;
         DecorationView aDecoView( pDev );
@@ -1626,7 +1622,7 @@ Size PushButton::CalcMinimumSize() const
         long nSymbolSize = GetTextHeight() / 2 + 1;
         aSize.AdjustWidth(2*nSymbolSize );
     }
-    if ( !PushButton::GetText().isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) )
+    if (!PushButton::GetText().isEmpty())
     {
         Size textSize = GetTextRect( tools::Rectangle( Point(), Size( 0x7fffffff, 0x7fffffff ) ),
                                      PushButton::GetText(), ImplGetTextStyle( DrawFlags::NONE ) ).GetSize();
@@ -2015,8 +2011,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
     // no image radio button
     if ( !maImage )
     {
-        if ( ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) ) ||
-             HasImage() )
+        if (!aText.isEmpty() || HasImage())
         {
             DrawTextFlags nTextStyle = Button::ImplGetTextStyle( nWinStyle, nDrawFlags );
 
@@ -2085,7 +2080,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
         long        nTextWidth  = pDev->GetCtrlTextWidth( aText );
 
         // calculate position and sizes
-        if ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) )
+        if (!aText.isEmpty())
         {
             Size aTmpSize( (aImageSize.Width()+8), (aImageSize.Height()+8) );
             if ( bTopImage )
@@ -2855,7 +2850,7 @@ Size RadioButton::CalcMinimumSize() const
     }
 
     OUString aText = GetText();
-    if ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) )
+    if (!aText.isEmpty())
     {
         bool bTopImage = (GetStyle() & WB_TOP) != 0;
 
@@ -3032,8 +3027,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
     pDev->Push( PushFlags::CLIPREGION | PushFlags::LINECOLOR );
     pDev->IntersectClipRegion( tools::Rectangle( rPos, rSize ) );
 
-    if ( ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) ) ||
-         ( HasImage() ) )
+    if (!aText.isEmpty() || HasImage())
     {
         DrawTextFlags nTextStyle = Button::ImplGetTextStyle( nWinStyle, nDrawFlags );
 
@@ -3359,7 +3353,7 @@ void CheckBox::Resize()
 
 void CheckBox::GetFocus()
 {
-    if ( GetText().isEmpty() || (ImplGetButtonState() & DrawButtonFlags::NoText) )
+    if (GetText().isEmpty())
     {
         // increase button size to have space for focus rect
         // checkboxes without text will draw focusrect around the check
@@ -3391,7 +3385,7 @@ void CheckBox::LoseFocus()
     HideFocus();
     Button::LoseFocus();
 
-    if ( GetText().isEmpty() || (ImplGetButtonState() & DrawButtonFlags::NoText) )
+    if (GetText().isEmpty())
     {
         // decrease button size again (see GetFocus())
         // checkboxes without text will draw focusrect around the check
@@ -3672,7 +3666,7 @@ Size CheckBox::CalcMinimumSize( long nMaxWidth ) const
     nMaxWidth -= aSize.Width();
 
     OUString aText = GetText();
-    if ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) )
+    if (!aText.isEmpty())
     {
         // subtract what will be added later
         nMaxWidth-=2;
