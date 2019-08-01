@@ -378,7 +378,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         ::std::swap( aGradient.StartColor, aGradient.EndColor );
                         ::std::swap( nStartTrans, nEndTrans );
                     }
-                    else
+                    else if (!maGradientProps.maGradientStops.empty())
                     {
                         // A copy of the gradient stops for local modification
                         GradientFillProperties::GradientStopMap aGradientStops(maGradientProps.maGradientStops);

@@ -388,7 +388,7 @@ static ImplUniToDBCSHighTab const aKSC5601DBCSHighTab[256] =
     { 0x07, 0xFE, aImplUniToDBCSTab_KSC5601_5D },               /* 0x5D */
     { 0x02, 0xFB, aImplUniToDBCSTab_KSC5601_5E },               /* 0x5E */
     { 0x01, 0xFF, aImplUniToDBCSTab_KSC5601_5F },               /* 0x5F */
-    { 0x07, 0xFB, aImplUniToDBCSTab_KSC5601_60 },               /* 0x60 */
+    { 0x0F, 0xFB, aImplUniToDBCSTab_KSC5601_60 },               /* 0x60 */
     { 0x01, 0xFF, aImplUniToDBCSTab_KSC5601_61 },               /* 0x61 */
     { 0x00, 0xFF, aImplUniToDBCSTab_KSC5601_62 },               /* 0x62 */
     { 0x01, 0xF7, aImplUniToDBCSTab_KSC5601_63 },               /* 0x63 */
@@ -401,13 +401,13 @@ static ImplUniToDBCSHighTab const aKSC5601DBCSHighTab[256] =
     { 0x02, 0xFB, aImplUniToDBCSTab_KSC5601_6A },               /* 0x6A */
     { 0x04, 0xEC, aImplUniToDBCSTab_KSC5601_6B },               /* 0x6B */
     { 0x08, 0xF3, aImplUniToDBCSTab_KSC5601_6C },               /* 0x6C */
-    { 0x03, 0xFB, aImplUniToDBCSTab_KSC5601_6D },               /* 0x6D */
+    { 0x0B, 0xFB, aImplUniToDBCSTab_KSC5601_6D },               /* 0x6D */
     { 0x17, 0xFF, aImplUniToDBCSTab_KSC5601_6E },               /* 0x6E */
     { 0x01, 0xFE, aImplUniToDBCSTab_KSC5601_6F },               /* 0x6F */
     { 0x01, 0xFD, aImplUniToDBCSTab_KSC5601_70 },               /* 0x70 */
     { 0x04, 0xFF, aImplUniToDBCSTab_KSC5601_71 },               /* 0x71 */
     { 0x00, 0xFD, aImplUniToDBCSTab_KSC5601_72 },               /* 0x72 */
-    { 0x02, 0xFE, aImplUniToDBCSTab_KSC5601_73 },               /* 0x73 */
+    { 0x0A, 0xFE, aImplUniToDBCSTab_KSC5601_73 },               /* 0x73 */
     { 0x01, 0xF7, aImplUniToDBCSTab_KSC5601_74 },               /* 0x74 */
     { 0x01, 0xFC, aImplUniToDBCSTab_KSC5601_75 },               /* 0x75 */
     { 0x00, 0xFE, aImplUniToDBCSTab_KSC5601_76 },               /* 0x76 */
@@ -1020,7 +1020,7 @@ static ImplUniToDBCSHighTab const aJOHABDBCSHighTab[256] =
     { 0x07, 0xFE, aImplUniToDBCSTab_JOHAB_5D },                 /* 0x5D */
     { 0x02, 0xFB, aImplUniToDBCSTab_JOHAB_5E },                 /* 0x5E */
     { 0x01, 0xFF, aImplUniToDBCSTab_JOHAB_5F },                 /* 0x5F */
-    { 0x07, 0xFB, aImplUniToDBCSTab_JOHAB_60 },                 /* 0x60 */
+    { 0x0F, 0xFB, aImplUniToDBCSTab_JOHAB_60 },                 /* 0x60 */
     { 0x01, 0xFF, aImplUniToDBCSTab_JOHAB_61 },                 /* 0x61 */
     { 0x00, 0xFF, aImplUniToDBCSTab_JOHAB_62 },                 /* 0x62 */
     { 0x01, 0xF7, aImplUniToDBCSTab_JOHAB_63 },                 /* 0x63 */
@@ -1033,7 +1033,7 @@ static ImplUniToDBCSHighTab const aJOHABDBCSHighTab[256] =
     { 0x02, 0xFB, aImplUniToDBCSTab_JOHAB_6A },                 /* 0x6A */
     { 0x04, 0xEC, aImplUniToDBCSTab_JOHAB_6B },                 /* 0x6B */
     { 0x08, 0xF3, aImplUniToDBCSTab_JOHAB_6C },                 /* 0x6C */
-    { 0x03, 0xFB, aImplUniToDBCSTab_JOHAB_6D },                 /* 0x6D */
+    { 0x0B, 0xFB, aImplUniToDBCSTab_JOHAB_6D },                 /* 0x6D */
     { 0x17, 0xFF, aImplUniToDBCSTab_JOHAB_6E },                 /* 0x6E */
     { 0x01, 0xFE, aImplUniToDBCSTab_JOHAB_6F },                 /* 0x6F */
     { 0x01, 0xFD, aImplUniToDBCSTab_JOHAB_70 },                 /* 0x70 */

@@ -59,11 +59,11 @@ ShapeContainer::~ShapeContainer()
 {
 }
 
-ShapeType& ShapeContainer::createShapeType()
+std::shared_ptr<ShapeType> ShapeContainer::createShapeType()
 {
     std::shared_ptr< ShapeType > xShape( new ShapeType( mrDrawing ) );
     maTypes.push_back( xShape );
-    return *xShape;
+    return xShape;
 }
 
 void ShapeContainer::finalizeFragmentImport()

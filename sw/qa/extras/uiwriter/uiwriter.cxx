@@ -208,6 +208,7 @@ public:
     void testTdf99004();
     void testTdf84695();
     void testTdf84695NormalChar();
+    void testRedlineCopyPaste();
     void testTdf78727();
     void testTdf104814();
     void testTdf105417();
@@ -325,6 +326,7 @@ public:
     CPPUNIT_TEST(testTdf99004);
     CPPUNIT_TEST(testTdf84695);
     CPPUNIT_TEST(testTdf84695NormalChar);
+    CPPUNIT_TEST(testRedlineCopyPaste);
     CPPUNIT_TEST(testTdf78727);
     CPPUNIT_TEST(testTdf104814);
     CPPUNIT_TEST(testTdf105417);
@@ -3778,6 +3780,40 @@ void SwUiWriterTest::testTdf84695NormalChar()
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // This was empty, pressing a normal character did not start the fly frame edit mode.
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xShape->getString());
+}
+
+void SwUiWriterTest::testRedlineCopyPaste()
+{
+    // regressed in tdf#106746
+    SwDoc* pDoc = createDoc();
+
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, "abzdezgh");
+    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+
+    // Turn on track changes, make changes, turn off track changes
+    uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
+    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    lcl_selectCharacters(aPaM, 2, 3);
+    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "c", false);
+    lcl_selectCharacters(aPaM, 6, 7);
+    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "f", false);
+    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(false));
+
+    // Create the clipboard document.
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Select the whole content, copy, delete the original and paste the copied content
+    pWrtShell->SelAll();
+    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Delete();
+    pWrtShell->Paste(&aClipboard);
+
+    // With the bug this is "abzcdefgh", ie. contains the first deleted piece, too
+    CPPUNIT_ASSERT_EQUAL(OUString("abcdefgh"), pTextNode->GetText());
 }
 
 void SwUiWriterTest::testTdf78727()

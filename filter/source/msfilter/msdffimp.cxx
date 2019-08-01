@@ -223,13 +223,23 @@ DffPropertyReader::DffPropertyReader( const SvxMSDffManager& rMan )
     InitializePropSet( DFF_msofbtOPT );
 }
 
+namespace
+{
+    bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
+    {
+        const sal_uInt64 nMaxSeek(rSt.Tell() + rSt.remainingSize());
+        return (nOffset <= nMaxSeek && rSt.Seek(nOffset) == nOffset);
+    }
+}
+
 void DffPropertyReader::SetDefaultPropSet( SvStream& rStCtrl, sal_uInt32 nOffsDgg ) const
 {
     delete pDefaultPropSet;
     sal_uInt32 nMerk = rStCtrl.Tell();
-    rStCtrl.Seek( nOffsDgg );
+    bool bOk = checkSeek(rStCtrl, nOffsDgg);
     DffRecordHeader aRecHd;
-    bool bOk = ReadDffRecordHeader( rStCtrl, aRecHd );
+    if (bOk)
+        bOk = ReadDffRecordHeader( rStCtrl, aRecHd );
     if (bOk && aRecHd.nRecType == DFF_msofbtDggContainer)
     {
         if ( SvxMSDffManager::SeekToRec( rStCtrl, DFF_msofbtOPT, aRecHd.GetRecEndFilePos() ) )
@@ -1108,7 +1118,8 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
 {
     Size aBitmapSizePixel( static_cast< sal_Int32 >( ( rObjData.aBoundRect.GetWidth() / 2540.0 ) * 90.0 ),      // we will create a bitmap with 90 dpi
                            static_cast< sal_Int32 >( ( rObjData.aBoundRect.GetHeight() / 2540.0 ) * 90.0 ) );
-    if ( aBitmapSizePixel.Width() && aBitmapSizePixel.Height() && ( aBitmapSizePixel.Width() <= 1024 ) && ( aBitmapSizePixel.Height() <= 1024 ) )
+    if (aBitmapSizePixel.Width() > 0 && aBitmapSizePixel.Height() > 0 &&
+        aBitmapSizePixel.Width() <= 1024 && aBitmapSizePixel.Height() <= 1024)
     {
         double fFocusX = rManager.GetPropertyValue( DFF_Prop_fillToRight, 0 ) / 65536.0;
         double fFocusY = rManager.GetPropertyValue( DFF_Prop_fillToBottom, 0 ) / 65536.0;
@@ -4094,11 +4105,15 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                         return pRet;
                     sal_Int32 nShapeId;
                     SdrObject* pTmp = ImportGroup( aRecHd2, rSt, pClientData, aGroupClientAnchor, aGroupChildAnchor, nCalledByGroup + 1, &nShapeId );
-                    if ( pTmp && pRet && static_cast<SdrObjGroup*>(pRet)->GetSubList() )
+                    if (pTmp)
                     {
-                        static_cast<SdrObjGroup*>(pRet)->GetSubList()->NbcInsertObject( pTmp );
-                        if( nShapeId )
-                            insertShapeId( nShapeId, pTmp );
+                        SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(pRet);
+                        if (pGroup && pGroup->GetSubList())
+                        {
+                            pGroup->GetSubList()->NbcInsertObject(pTmp);
+                            if (nShapeId)
+                                insertShapeId(nShapeId, pTmp);
+                        }
                     }
                 }
                 else if ( aRecHd2.nRecType == DFF_msofbtSpContainer )
@@ -4107,11 +4122,15 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                         return pRet;
                     sal_Int32 nShapeId;
                     SdrObject* pTmp = ImportShape( aRecHd2, rSt, pClientData, aClientRect, aGlobalChildRect, nCalledByGroup + 1, &nShapeId );
-                    if ( pTmp && pRet && static_cast<SdrObjGroup*>(pRet)->GetSubList())
+                    if (pTmp)
                     {
-                        static_cast<SdrObjGroup*>(pRet)->GetSubList()->NbcInsertObject( pTmp );
-                        if( nShapeId )
-                            insertShapeId( nShapeId, pTmp );
+                        SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(pRet);
+                        if (pGroup && pGroup->GetSubList())
+                        {
+                            pGroup->GetSubList()->NbcInsertObject(pTmp);
+                            if (nShapeId)
+                                insertShapeId(nShapeId, pTmp);
+                        }
                     }
                 }
                 if (!aRecHd2.SeekToEndOfRecord(rSt))
@@ -5804,13 +5823,10 @@ void SvxMSDffManager::CheckTxBxStoryChain()
     and remembering the File-Offsets for each Blip
                        ============
 ******************************************************************************/
-void SvxMSDffManager::GetCtrlData( sal_uInt32 nOffsDgg_ )
+void SvxMSDffManager::GetCtrlData(sal_uInt32 nOffsDggL)
 {
-    // absolutely remember Start Offset, in case we have to position again
-    sal_uInt32 nOffsDggL = nOffsDgg_;
-
     // position control stream
-    if (nOffsDggL != rStCtrl.Seek(nOffsDggL))
+    if (!checkSeek(rStCtrl, nOffsDggL))
         return;
 
     sal_uInt8   nVer;
@@ -6004,7 +6020,10 @@ bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
                 return false;
         }
         else
-            rSt.SeekRel( nLength );
+        {
+            if (!checkSeek(rSt, rSt.Tell() + nLength))
+                return false;
+        }
         nReadSpGrCont += nLength;
     }
     while( nReadSpGrCont < nLenShapeGroupCont );
