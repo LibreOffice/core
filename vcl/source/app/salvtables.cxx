@@ -3799,6 +3799,7 @@ public:
 
     virtual void make_sorted() override
     {
+        assert(m_xTreeView->IsUpdateMode() && "don't sort when frozen");
         m_xTreeView->SetStyle(m_xTreeView->GetStyle() | WB_SORT);
         m_xTreeView->GetModel()->SetCompareHdl(LINK(this, SalInstanceTreeView, CompareHdl));
         set_sort_order(true);
