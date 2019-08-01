@@ -70,6 +70,30 @@
       "revId": "0934fb54f5c33345a8d00f151514d8f3aa6470bc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_43cb5071",
+        "filename": "shell/source/win32/SysShExec.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-01T12:49:13Z",
+      "side": 1,
+      "message": "\u003e\u003e By the way, the conversion to the system filepath in our code seems\n\u003e\u003e redundant then (but the conversion in ShellExecuteExW isn\u0027t\n\u003e\u003e documented, and I also don\u0027t know since when it happens...) If we\n\u003e\u003e could drop it, the fix to i#4789 would be redundant.\n\u003e I don\u0027t understand the above paragraph at all.\n\nWell - I meant that since ShellExecuteExW converts file URLs to system paths, then why do we try doing that? why not remove lines 429-434.\n\nWrt \"the fix to i#4789 would be redundant\" - that was a thinko. That fix (https://bz.apache.org/ooo/show_bug.cgi?id\u003d4789) wasn\u0027t about URLs, but about system paths passed to the function, so my idea is wrong wrt that.",
+      "parentUuid": "bf659307_a3058cc4",
+      "range": {
+        "startLine": 318,
+        "startChar": 37,
+        "endLine": 318,
+        "endChar": 90
+      },
+      "revId": "0934fb54f5c33345a8d00f151514d8f3aa6470bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
