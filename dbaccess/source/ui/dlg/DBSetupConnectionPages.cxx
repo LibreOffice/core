@@ -709,53 +709,39 @@ using namespace ::com::sun::star;
         return bChangedSomething;
     }
 
-    VclPtr<OGenericAdministrationPage> OAuthentificationPageSetup::CreateAuthentificationTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    VclPtr<OGenericAdministrationPage> OAuthentificationPageSetup::CreateAuthentificationTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
     {
         return VclPtr<OAuthentificationPageSetup>::Create( pParent, _rAttrSet);
     }
 
-
-    OAuthentificationPageSetup::OAuthentificationPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OGenericAdministrationPage(pParent, "AuthentificationPage", "dbaccess/ui/authentificationpage.ui", _rCoreAttrs )
+    OAuthentificationPageSetup::OAuthentificationPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs)
+        : OGenericAdministrationPage(pParent, "dbaccess/ui/authentificationpage.ui", "AuthentificationPage", _rCoreAttrs)
+        , m_xFTHelpText(m_xBuilder->weld_label("helptext"))
+        , m_xFTUserName(m_xBuilder->weld_label("generalUserNameLabel"))
+        , m_xETUserName(m_xBuilder->weld_entry("generalUserNameEntry"))
+        , m_xCBPasswordRequired(m_xBuilder->weld_check_button("passRequiredCheckbutton"))
+        , m_xPBTestConnection(m_xBuilder->weld_button("testConnectionButton"))
     {
-        get(m_pFTHelpText, "helptext");
-        get(m_pFTUserName, "generalUserNameLabel");
-        get(m_pETUserName, "generalUserNameEntry");
-        get(m_pCBPasswordRequired, "passRequiredCheckbutton");
-        get(m_pPBTestConnection, "testConnectionButton");
-        m_pETUserName->SetModifyHdl(LINK(this,OGenericAdministrationPage,OnControlEditModifyHdl));
-        m_pCBPasswordRequired->SetClickHdl(LINK(this,OGenericAdministrationPage,OnControlModifiedClick));
-        m_pPBTestConnection->SetClickHdl(LINK(this,OGenericAdministrationPage,OnTestConnectionClickHdl));
-
-        LayoutHelper::fitSizeRightAligned( *m_pPBTestConnection );
+        m_xETUserName->connect_changed(LINK(this,OGenericAdministrationPage,OnControlEntryModifyHdl));
+        m_xCBPasswordRequired->connect_toggled(LINK(this,OGenericAdministrationPage,OnControlModifiedButtonClick));
+        m_xPBTestConnection->connect_clicked(LINK(this,OGenericAdministrationPage,OnTestConnectionButtonClickHdl));
     }
 
     OAuthentificationPageSetup::~OAuthentificationPageSetup()
     {
-        disposeOnce();
-    }
-
-    void OAuthentificationPageSetup::dispose()
-    {
-        m_pFTHelpText.clear();
-        m_pFTUserName.clear();
-        m_pETUserName.clear();
-        m_pCBPasswordRequired.clear();
-        m_pPBTestConnection.clear();
-        OGenericAdministrationPage::dispose();
     }
 
     void OAuthentificationPageSetup::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pFTHelpText));
-        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pFTUserName));
-        _rControlList.emplace_back(new ODisableWrapper<PushButton>(m_pPBTestConnection));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTHelpText.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTUserName.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Button>(m_xPBTestConnection.get()));
     }
 
     void OAuthentificationPageSetup::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        _rControlList.emplace_back(new OSaveValueWrapper<Edit>(m_pETUserName));
-        _rControlList.emplace_back(new OSaveValueWrapper<CheckBox>(m_pCBPasswordRequired));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xETUserName.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xCBPasswordRequired.get()));
     }
 
     void OAuthentificationPageSetup::implInitControls(const SfxItemSet& _rSet, bool /*_bSaveValue*/)
@@ -766,23 +752,23 @@ using namespace ::com::sun::star;
         const SfxStringItem* pUidItem = _rSet.GetItem<SfxStringItem>(DSID_USER);
         const SfxBoolItem* pAllowEmptyPwd = _rSet.GetItem<SfxBoolItem>(DSID_PASSWORDREQUIRED);
 
-        m_pETUserName->SetText(pUidItem->GetValue());
-        m_pCBPasswordRequired->Check(pAllowEmptyPwd->GetValue());
+        m_xETUserName->set_text(pUidItem->GetValue());
+        m_xCBPasswordRequired->set_active(pAllowEmptyPwd->GetValue());
 
-        m_pETUserName->ClearModifyFlag();
+        m_xETUserName->save_value();
     }
 
     bool OAuthentificationPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = false;
 
-        if (m_pETUserName->IsValueChangedFromSaved())
+        if (m_xETUserName->get_value_changed_from_saved())
         {
-            _rSet->Put(SfxStringItem(DSID_USER, m_pETUserName->GetText()));
+            _rSet->Put(SfxStringItem(DSID_USER, m_xETUserName->get_text()));
             _rSet->Put(SfxStringItem(DSID_PASSWORD, OUString()));
             bChangedSomething = true;
         }
-        fillBool(*_rSet,m_pCBPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
+        fillBool(*_rSet, m_xCBPasswordRequired.get(), DSID_PASSWORDREQUIRED, false, bChangedSomething);
         return bChangedSomething;
     }
 

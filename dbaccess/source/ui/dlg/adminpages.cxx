@@ -124,11 +124,6 @@ namespace dbaui
         callModifiedHdl(&rCtrl);
     }
 
-    IMPL_LINK(OGenericAdministrationPage, OnControlModifiedClick, Button*, rCtrl, void)
-    {
-        callModifiedHdl(&rCtrl);
-    }
-
     IMPL_LINK(OGenericAdministrationPage, ControlModifiedCheckBoxHdl, CheckBox&, rCtrl, void)
     {
         callModifiedHdl(&rCtrl);
@@ -298,47 +293,6 @@ namespace dbaui
         {
             _rSet.Put(SfxStringItem(_nID, pEdit->GetText()));
             _bChangedSomething = true;
-        }
-    }
-
-    IMPL_LINK_NOARG(OGenericAdministrationPage, OnTestConnectionClickHdl, Button*, void)
-    {
-        OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        bool bSuccess = false;
-        if ( m_pAdminDialog )
-        {
-            m_pAdminDialog->saveDatasource();
-            OGenericAdministrationPage::implInitControls(*m_pItemSetHelper->getOutputSet(), true);
-            bool bShowMessage = true;
-            try
-            {
-                std::pair< Reference<XConnection>,bool> aConnectionPair = m_pAdminDialog->createConnection();
-                bShowMessage = aConnectionPair.second;
-                bSuccess = aConnectionPair.first.is();
-                ::comphelper::disposeComponent(aConnectionPair.first);
-            }
-            catch(Exception&)
-            {
-            }
-            if ( bShowMessage )
-            {
-                MessageType eImage = MessageType::Info;
-                OUString aMessage,sTitle;
-                sTitle = DBA_RES(STR_CONNECTION_TEST);
-                if ( bSuccess )
-                {
-                    aMessage = DBA_RES(STR_CONNECTION_SUCCESS);
-                }
-                else
-                {
-                    eImage = MessageType::Error;
-                    aMessage = DBA_RES(STR_CONNECTION_NO_SUCCESS);
-                }
-                OSQLMessageBox aMsg(GetFrameWeld(), sTitle, aMessage, MessBoxStyle::Ok, eImage);
-                aMsg.run();
-            }
-            if ( !bSuccess )
-                m_pAdminDialog->clearPassword();
         }
     }
 

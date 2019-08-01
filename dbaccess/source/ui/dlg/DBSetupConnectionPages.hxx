@@ -227,17 +227,16 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
-        static VclPtr<OGenericAdministrationPage> CreateAuthentificationTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
-        OAuthentificationPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
+        static VclPtr<OGenericAdministrationPage> CreateAuthentificationTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
+        OAuthentificationPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OAuthentificationPageSetup() override;
-        virtual void dispose() override;
 
     private:
-        VclPtr<FixedText>  m_pFTHelpText;
-        VclPtr<FixedText>  m_pFTUserName;
-        VclPtr<Edit>       m_pETUserName;
-        VclPtr<CheckBox>   m_pCBPasswordRequired;
-        VclPtr<PushButton> m_pPBTestConnection;
+        std::unique_ptr<weld::Label> m_xFTHelpText;
+        std::unique_ptr<weld::Label> m_xFTUserName;
+        std::unique_ptr<weld::Entry> m_xETUserName;
+        std::unique_ptr<weld::CheckButton> m_xCBPasswordRequired;
+        std::unique_ptr<weld::Button> m_xPBTestConnection;
 
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
         virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
