@@ -38,7 +38,7 @@ import java.util.ArrayList;
 // __________ Implementation __________
 
 /**
- * It's not allowed to call synchronous back inside an oneway interface call.
+ * It's not allowed to call synchronous back inside a oneway interface call.
  * (see IOnewayLink too). So we start a thread (implemented by this class), which
  * gets all necessary parameters from the original called object and
  * call it back later inside his run() method. So the execution of such oneway call
