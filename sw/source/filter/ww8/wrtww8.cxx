@@ -783,7 +783,7 @@ const SfxPoolItem* MSWordExportBase::HasItem( sal_uInt16 nWhich ) const
     const SfxPoolItem* pItem=nullptr;
     if (m_pISet)
     {
-        // if write a EditEngine text, then the WhichIds are greater as
+        // if write an EditEngine text, then the WhichIds are greater than
         // our own Ids. So the Id have to translate from our into the
         // EditEngine Range
         nWhich = sw::hack::GetSetWhichFromSwDocWhich(*m_pISet, *m_pDoc, nWhich);
@@ -805,7 +805,7 @@ const SfxPoolItem& MSWordExportBase::GetItem(sal_uInt16 nWhich) const
     assert((m_pISet || m_pChpIter) && "Where is my ItemSet / pChpIter ?");
     if (m_pISet)
     {
-        // if write a EditEngine text, then the WhichIds are greater as
+        // if write an EditEngine text, then the WhichIds are greater than
         // our own Ids. So the Id have to translate from our into the
         // EditEngine Range
         nWhich = sw::hack::GetSetWhichFromSwDocWhich(*m_pISet, *m_pDoc, nWhich);

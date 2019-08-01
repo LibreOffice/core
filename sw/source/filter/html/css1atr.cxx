@@ -1511,7 +1511,7 @@ static Writer& OutCSS1_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     const SfxItemSet& rFormatItemSet = rFormat.GetAttrSet();
     SfxItemSet aItemSet( *rFormatItemSet.GetPool(), rFormatItemSet.GetRanges() );
     aItemSet.Set( rFormatItemSet ); // Was nDeep!=1 that is not working
-                                    // for script dependent items buts should
+                                    // for script dependent items but should
                                     // not make a difference for any other
 
     bool bSetDefaults = true, bClearSame = true;

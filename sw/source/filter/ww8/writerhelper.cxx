@@ -617,7 +617,7 @@ namespace sw
             {
                 // This method will now just concatenate the polygons contained
                 // in the given PolyPolygon. Anything else which might be thought of
-                // for reducing to a single polygon will just need nore power and
+                // for reducing to a single polygon will just need more power and
                 // cannot create more correct results.
                 sal_uInt32 nPointCount(0);
                 sal_uInt16 a;

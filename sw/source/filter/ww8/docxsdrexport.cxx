@@ -693,7 +693,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     * reference : http://www.schemacentral.com/sc/ooxml/e-wp_extent-1.html
     *
     *   Though ECMA mentions the max value as aforementioned. It appears that MSO does not
-    *  handle for the same, infact it actually can handles a max value of int32 i.e
+    *  handle for the same, in fact it actually can handle a max value of int32 i.e
     *   2147483647( MAX_INTEGER_VALUE ).
     *  Therefore changing the following accordingly so that LO sync's up with MSO.
     **/
