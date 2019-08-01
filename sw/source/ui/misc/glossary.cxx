@@ -777,8 +777,8 @@ void SwGlossaryDlg::Init()
         }
     }
 
-    m_xCategoryBox->make_sorted();
     m_xCategoryBox->thaw();
+    m_xCategoryBox->make_sorted();
 
     if (xSelEntry)
     {
