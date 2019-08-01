@@ -429,6 +429,8 @@ void ScTiledRenderingTest::testEmptyColumnSelection()
 /// A view callback tracks callbacks invoked on one specific view.
 class ViewCallback
 {
+    SfxViewShell* mpViewShell;
+    int mnView;
 public:
     bool m_bOwnCursorInvalidated;
     bool m_bViewCursorInvalidated;
@@ -441,7 +443,7 @@ public:
     OString m_sCellFormula;
     boost::property_tree::ptree m_aCommentCallbackResult;
 
-    ViewCallback()
+    ViewCallback(bool bDeleteListenerOnDestruct=true)
         : m_bOwnCursorInvalidated(false),
           m_bViewCursorInvalidated(false),
           m_bTextViewSelectionInvalidated(false),
@@ -451,6 +453,20 @@ public:
           m_bInvalidateTiles(false),
           m_bViewLock(false)
     {
+        mpViewShell = SfxViewShell::Current();
+        mpViewShell->registerLibreOfficeKitViewCallback(&ViewCallback::callback, this);
+        mnView = SfxLokHelper::getView();
+        if (!bDeleteListenerOnDestruct)
+            mpViewShell = nullptr;
+    }
+
+    ~ViewCallback()
+    {
+        if (mpViewShell)
+        {
+            SfxLokHelper::setView(mnView);
+            mpViewShell->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+        }
     }
 
     static void callback(int nType, const char* pPayload, void* pData)
@@ -532,14 +548,9 @@ void ScTiledRenderingTest::testViewCursors()
 
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
     ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
-    int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2;
-    aView2.m_bViewCursorInvalidated = false;
-    aView2.m_bOwnCursorInvalidated = false;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2(/*bDeleteListenerOnDestruct*/false);
     // This was false, the new view did not get the view (cell) cursor of the old view.
     CPPUNIT_ASSERT(aView2.m_bViewCursorInvalidated);
     CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated);
@@ -548,8 +559,6 @@ void ScTiledRenderingTest::testViewCursors()
     Scheduler::ProcessEventsToIdle();
     SfxLokHelper::destroyView(SfxLokHelper::getView());
     CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand, const uno::Sequence<beans::PropertyValue>& rArguments)
@@ -573,12 +582,9 @@ void ScTiledRenderingTest::testTextViewSelection()
     // Create two views, and leave the second one current.
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
     ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
-    int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
-    ViewCallback aView2;
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2;
 
     // Create a selection on two cells in the second view, that's a text selection in LOK terms.
     aView1.m_bTextViewSelectionInvalidated = false;
@@ -586,9 +592,6 @@ void ScTiledRenderingTest::testTextViewSelection()
     Scheduler::ProcessEventsToIdle();
     // Make sure the first view got its notification.
     CPPUNIT_ASSERT(aView1.m_bTextViewSelectionInvalidated);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void ScTiledRenderingTest::testDocumentSizeChanged()
@@ -618,12 +621,9 @@ void ScTiledRenderingTest::testViewLock()
     // Load a document that has a shape and create two views.
     ScModelObj* pModelObj = createDoc("shape.ods");
     ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
-    int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
-    ViewCallback aView2;
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2;
 
     // Begin text edit in the second view and assert that the first gets a lock
     // notification.
@@ -642,9 +642,6 @@ void ScTiledRenderingTest::testViewLock()
     // the first view.
     pView->SdrEndTextEdit();
     CPPUNIT_ASSERT(!aView1.m_bViewLock);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void ScTiledRenderingTest::testColRowResize()
@@ -722,7 +719,6 @@ void ScTiledRenderingTest::testTextEditViews()
 
     // view #1
     ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
     // text edit a cell in view #1
@@ -732,11 +728,9 @@ void ScTiledRenderingTest::testTextEditViews()
     CPPUNIT_ASSERT(lcl_hasEditView(*pViewData));
 
     // view #2
-    int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
-    ViewCallback aView2;
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2;
 
     // move cell cursor i view #2
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
@@ -745,9 +739,6 @@ void ScTiledRenderingTest::testTextEditViews()
 
     // check that text edit view in view #1 has not be killed
     CPPUNIT_ASSERT(lcl_hasEditView(*pViewData));
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void ScTiledRenderingTest::testTextEditViewInvalidations()
@@ -760,17 +751,14 @@ void ScTiledRenderingTest::testTextEditViewInvalidations()
     CPPUNIT_ASSERT(pViewData);
 
     // view #1
-    ViewCallback aView1;
     int nView1 = SfxLokHelper::getView();
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    ViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
     // view #2
     SfxLokHelper::createView();
-    int nView2 = SfxLokHelper::getView();
-    ViewCallback aView2;
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2;
 
     // text edit a cell in view #1
     SfxLokHelper::setView(nView1);
@@ -800,10 +788,8 @@ void ScTiledRenderingTest::testTextEditViewInvalidations()
 
     // view #3
     SfxLokHelper::createView();
-    int nView3 = SfxLokHelper::getView();
-    ViewCallback aView3;
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView3);
+    ViewCallback aView3;
 
     // text edit a cell in view #1
     SfxLokHelper::setView(nView1);
@@ -812,13 +798,6 @@ void ScTiledRenderingTest::testTextEditViewInvalidations()
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'y', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView3.m_bInvalidateTiles);
-
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView3);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void ScTiledRenderingTest::testCreateViewGraphicSelection()
@@ -829,7 +808,6 @@ void ScTiledRenderingTest::testCreateViewGraphicSelection()
     // Load a document that has a shape and create two views.
     ScModelObj* pModelObj = createDoc("shape.ods");
     ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
 
     // Mark the graphic in the first view.
     const ScViewData* pViewData = ScDocShell::GetViewData();
@@ -847,14 +825,11 @@ void ScTiledRenderingTest::testCreateViewGraphicSelection()
     // Create a second view.
     int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
-    ViewCallback aView2;
-    aView2.m_bGraphicViewSelection = false;
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2;
     CPPUNIT_ASSERT(aView2.m_bGraphicViewSelection);
     CPPUNIT_ASSERT(aView1.m_bGraphicViewSelection);
 
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
     SfxLokHelper::setView(nView1);
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
@@ -867,7 +842,6 @@ void ScTiledRenderingTest::testGraphicInvalidate()
     // Load a document that has a shape and create two views.
     ScModelObj* pModelObj = createDoc("shape.ods");
     ViewCallback aView;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
 
     // Click to select graphic
     aView.m_bGraphicSelection = false;
@@ -896,7 +870,6 @@ void ScTiledRenderingTest::testAutoSum()
     createDoc("small.ods");
 
     ViewCallback aView;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
 
     uno::Sequence<beans::PropertyValue> aArgs;
     comphelper::dispatchCommand(".uno:AutoSum", aArgs);
@@ -974,7 +947,6 @@ void ScTiledRenderingTest::testInvalidateOnCopyPasteCells()
 
     // view
     ViewCallback aView;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
 
     uno::Sequence<beans::PropertyValue> aArgs;
     // select and copy cells
@@ -1012,7 +984,6 @@ void ScTiledRenderingTest::testInvalidateOnInserRowCol()
 
     // view
     ViewCallback aView;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
 
     uno::Sequence<beans::PropertyValue> aArgs;
     // move downward
@@ -1051,92 +1022,86 @@ void ScTiledRenderingTest::testCommentCallback()
     // Comments callback are emitted only if tiled annotations are off
     comphelper::LibreOfficeKit::setTiledAnnotations(false);
 
-    ScModelObj* pModelObj = createDoc("small.ods");
-    ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
-    int nView1 = SfxLokHelper::getView();
-
-    // Create a 2nd view
-    SfxLokHelper::createView();
-    pModelObj->initializeForTiledRendering({});
-    ViewCallback aView2;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
-    int nView2 = SfxLokHelper::getView();
-
-    SfxLokHelper::setView(nView1);
-
-    // Add a new comment
-    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        {"Text", uno::makeAny(OUString("Comment"))},
-        {"Author", uno::makeAny(OUString("LOK User1"))},
-    }));
-    comphelper::dispatchCommand(".uno:InsertAnnotation", aArgs);
-    Scheduler::ProcessEventsToIdle();
+        ScModelObj* pModelObj = createDoc("small.ods");
+        ViewCallback aView1;
+        int nView1 = SfxLokHelper::getView();
 
-    // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
-    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(std::string("1"), aView1.m_aCommentCallbackResult.get<std::string>("id"));
-    CPPUNIT_ASSERT_EQUAL(std::string("1"), aView2.m_aCommentCallbackResult.get<std::string>("id"));
-    CPPUNIT_ASSERT_EQUAL(std::string("0"), aView1.m_aCommentCallbackResult.get<std::string>("tab"));
-    CPPUNIT_ASSERT_EQUAL(std::string("0"), aView2.m_aCommentCallbackResult.get<std::string>("tab"));
-    CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
-    CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("0, 255, 1274, 254"), aView1.m_aCommentCallbackResult.get<std::string>("cellPos"));
-    CPPUNIT_ASSERT_EQUAL(std::string("0, 255, 1274, 254"), aView2.m_aCommentCallbackResult.get<std::string>("cellPos"));
+        // Create a 2nd view
+        SfxLokHelper::createView();
+        pModelObj->initializeForTiledRendering({});
+        ViewCallback aView2;
 
-    std::string aCommentId = aView1.m_aCommentCallbackResult.get<std::string>("id");
+        SfxLokHelper::setView(nView1);
 
-    // Edit a comment
-    // Select some random cell, we should be able to edit the cell note without
-    // selecting the cell
-    ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
-    if (pTabViewShell)
-        pTabViewShell->SetCursor(3, 100);
-    aArgs = comphelper::InitPropertySequence(
-    {
-        {"Id", uno::makeAny(OUString::createFromAscii(aCommentId.c_str()))},
-        {"Text", uno::makeAny(OUString("Edited comment"))},
-        {"Author", uno::makeAny(OUString("LOK User2"))},
-    });
-    comphelper::dispatchCommand(".uno:EditAnnotation", aArgs);
-    Scheduler::ProcessEventsToIdle();
+        // Add a new comment
+        uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        {
+            {"Text", uno::makeAny(OUString("Comment"))},
+            {"Author", uno::makeAny(OUString("LOK User1"))},
+        }));
+        comphelper::dispatchCommand(".uno:InsertAnnotation", aArgs);
+        Scheduler::ProcessEventsToIdle();
 
-    // We received a LOK_CALLBACK_COMMENT callback with comment 'Modify' action
-    CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(aCommentId, aView1.m_aCommentCallbackResult.get<std::string>("id"));
-    CPPUNIT_ASSERT_EQUAL(aCommentId, aView2.m_aCommentCallbackResult.get<std::string>("id"));
-    CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
-    CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("0, 255, 1274, 254"), aView1.m_aCommentCallbackResult.get<std::string>("cellPos"));
-    CPPUNIT_ASSERT_EQUAL(std::string("0, 255, 1274, 254"), aView2.m_aCommentCallbackResult.get<std::string>("cellPos"));
+        // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
+        CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+        CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
+        CPPUNIT_ASSERT_EQUAL(std::string("1"), aView1.m_aCommentCallbackResult.get<std::string>("id"));
+        CPPUNIT_ASSERT_EQUAL(std::string("1"), aView2.m_aCommentCallbackResult.get<std::string>("id"));
+        CPPUNIT_ASSERT_EQUAL(std::string("0"), aView1.m_aCommentCallbackResult.get<std::string>("tab"));
+        CPPUNIT_ASSERT_EQUAL(std::string("0"), aView2.m_aCommentCallbackResult.get<std::string>("tab"));
+        CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
+        CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
+        CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
+        CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
+        CPPUNIT_ASSERT_EQUAL(std::string("0, 255, 1274, 254"), aView1.m_aCommentCallbackResult.get<std::string>("cellPos"));
+        CPPUNIT_ASSERT_EQUAL(std::string("0, 255, 1274, 254"), aView2.m_aCommentCallbackResult.get<std::string>("cellPos"));
 
-    // Delete the comment
-    if (pTabViewShell)
-        pTabViewShell->SetCursor(4, 43);
-    aArgs = comphelper::InitPropertySequence(
-    {
-        {"Id", uno::makeAny(OUString::createFromAscii(aCommentId.c_str()))}
-    });
-    comphelper::dispatchCommand(".uno:DeleteNote", aArgs);
-    Scheduler::ProcessEventsToIdle();
+        std::string aCommentId = aView1.m_aCommentCallbackResult.get<std::string>("id");
 
-    // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
-    CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(aCommentId, aView1.m_aCommentCallbackResult.get<std::string>("id"));
-    CPPUNIT_ASSERT_EQUAL(aCommentId, aView2.m_aCommentCallbackResult.get<std::string>("id"));
+        // Edit a comment
+        // Select some random cell, we should be able to edit the cell note without
+        // selecting the cell
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+        if (pTabViewShell)
+            pTabViewShell->SetCursor(3, 100);
+        aArgs = comphelper::InitPropertySequence(
+        {
+            {"Id", uno::makeAny(OUString::createFromAscii(aCommentId.c_str()))},
+            {"Text", uno::makeAny(OUString("Edited comment"))},
+            {"Author", uno::makeAny(OUString("LOK User2"))},
+        });
+        comphelper::dispatchCommand(".uno:EditAnnotation", aArgs);
+        Scheduler::ProcessEventsToIdle();
 
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+        // We received a LOK_CALLBACK_COMMENT callback with comment 'Modify' action
+        CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+        CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
+        CPPUNIT_ASSERT_EQUAL(aCommentId, aView1.m_aCommentCallbackResult.get<std::string>("id"));
+        CPPUNIT_ASSERT_EQUAL(aCommentId, aView2.m_aCommentCallbackResult.get<std::string>("id"));
+        CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
+        CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
+        CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
+        CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
+        CPPUNIT_ASSERT_EQUAL(std::string("0, 255, 1274, 254"), aView1.m_aCommentCallbackResult.get<std::string>("cellPos"));
+        CPPUNIT_ASSERT_EQUAL(std::string("0, 255, 1274, 254"), aView2.m_aCommentCallbackResult.get<std::string>("cellPos"));
+
+        // Delete the comment
+        if (pTabViewShell)
+            pTabViewShell->SetCursor(4, 43);
+        aArgs = comphelper::InitPropertySequence(
+        {
+            {"Id", uno::makeAny(OUString::createFromAscii(aCommentId.c_str()))}
+        });
+        comphelper::dispatchCommand(".uno:DeleteNote", aArgs);
+        Scheduler::ProcessEventsToIdle();
+
+        // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
+        CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+        CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
+        CPPUNIT_ASSERT_EQUAL(aCommentId, aView1.m_aCommentCallbackResult.get<std::string>("id"));
+        CPPUNIT_ASSERT_EQUAL(aCommentId, aView2.m_aCommentCallbackResult.get<std::string>("id"));
+    }
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
 }
 
@@ -1152,16 +1117,14 @@ void ScTiledRenderingTest::testUndoLimiting()
     CPPUNIT_ASSERT(pUndoManager);
 
     // view #1
-    ViewCallback aView1;
     int nView1 = SfxLokHelper::getView();
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    ViewCallback aView1;
 
     // view #2
     SfxLokHelper::createView();
-    ViewCallback aView2;
     int nView2 = SfxLokHelper::getView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2;
 
     // text edit a cell in view #1
     SfxLokHelper::setView(nView1);
@@ -1204,11 +1167,6 @@ void ScTiledRenderingTest::testUndoLimiting()
     Scheduler::ProcessEventsToIdle();
     // check that redo has been executed on view #1
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetRedoActionCount());
-
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void ScTiledRenderingTest::testUndoRepairDispatch()
@@ -1223,16 +1181,14 @@ void ScTiledRenderingTest::testUndoRepairDispatch()
     CPPUNIT_ASSERT(pUndoManager);
 
     // view #1
-    ViewCallback aView1;
     int nView1 = SfxLokHelper::getView();
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    ViewCallback aView1;
 
     // view #2
     SfxLokHelper::createView();
-    ViewCallback aView2;
     int nView2 = SfxLokHelper::getView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2;
 
     // text edit a cell in view #1
     SfxLokHelper::setView(nView1);
@@ -1262,10 +1218,6 @@ void ScTiledRenderingTest::testUndoRepairDispatch()
     Scheduler::ProcessEventsToIdle();
     // check that undo has been executed on view #2 in repair mode
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
-
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void ScTiledRenderingTest::testInsertGraphicInvalidations()
@@ -1279,7 +1231,6 @@ void ScTiledRenderingTest::testInsertGraphicInvalidations()
 
     // view
     ViewCallback aView;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
 
     // we need to paint a tile in the view for triggering the tile invalidation solution
     int nCanvasWidth = 256;
