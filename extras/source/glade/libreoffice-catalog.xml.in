@@ -218,10 +218,6 @@
                         generic-name="LanguageBox" parent="VclComboBoxText"
                         icon-name="widget-gtk-combobox"/>
 
-    <glade-widget-class title="Open Document ListBox" name="dbulo-OpenDocumentListBox"
-                        generic-name="Open Document ListBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
-
     <glade-widget-class title="Fill Type ListBox" name="svxlo-SvxFillTypeBox"
                         generic-name="Fill Type ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
@@ -245,10 +241,6 @@
     <glade-widget-class title="Same Content Preset ListBox" name="svxcorelo-SameContentListBox"
                         generic-name="Same Content Preset ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
-
-    <glade-widget-class title="Open Document Button" name="dbulo-OpenDocumentButton"
-                        generic-name="Open Document Button" parent="GtkButton"
-                        icon-name="widget-gtk-button"/>
 
     <glade-widget-class title="Relation Control" name="dbulo-ORelationControl"
                         generic-name="Relation Control" parent="GtkTreeView"
