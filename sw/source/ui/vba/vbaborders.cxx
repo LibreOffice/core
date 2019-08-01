@@ -80,7 +80,7 @@ private:
                 break;
             case word::WdBorderType::wdBorderDiagonalDown:
             case word::WdBorderType::wdBorderDiagonalUp:
-                // #TODO have to ignore at the momement, would be
+                // #TODO have to ignore at the moment, would be
                 // nice to investigate what we can do here
                 break;
             default:
@@ -122,7 +122,7 @@ private:
 
             case word::WdBorderType::wdBorderDiagonalDown:
             case word::WdBorderType::wdBorderDiagonalUp:
-                // #TODO have to ignore at the momement, would be
+                // #TODO have to ignore at the moment, would be
                 // nice to investigate what we can do here
                 break;
             default:

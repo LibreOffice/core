@@ -653,7 +653,7 @@ SwWordBasic::FileClose( const css::uno::Any& Save )
     //
     // FIXME: Error handling. If there is no current document, return some kind of error? But for
     // now, just ignore errors. This code is written to work for a very specific customer use case
-    // ayway, not for an arbitrary sequence of COM calls to the "VBA" API.
+    // anyway, not for an arbitrary sequence of COM calls to the "VBA" API.
     dispatchRequests(xModel,".uno:CloseDoc");
 }
 

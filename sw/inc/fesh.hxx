@@ -266,7 +266,7 @@ public:
     /// Is selected frame within another frame?
     const SwFrameFormat* IsFlyInFly();
 
-    /** If an object as been given, exactly this object is selected
+    /** If an object has been given, exactly this object is selected
      (instead of searching over position). */
     bool SelectObj( const Point& rSelPt, sal_uInt8 nFlag = 0, SdrObject *pObj = nullptr );
     void DelSelectedObj();

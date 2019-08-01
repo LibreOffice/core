@@ -60,7 +60,7 @@ public:
 
     /** method to determine, if the corresponding invisible layer ID for a visible one.
 
-        Note: If given layer ID is a invisible one, method returns given layer ID.
+        Note: If given layer ID is an invisible one, method returns given layer ID.
         Note: If given layer ID is unknown, method returns given layer ID.
 
         @param _nVisibleLayerId

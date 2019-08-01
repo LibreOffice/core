@@ -307,7 +307,7 @@ short SwOutlineTabDialog::Ok()
     // set levels for all created templates; has to be done in order to
     // delete possibly cancelled assignments again.
 
-    // encapsulate changes into a action to avoid effects on the current cursor
+    // encapsulate changes into an action to avoid effects on the current cursor
     // position during the changes.
     rWrtSh.StartAction();
 

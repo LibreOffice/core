@@ -39,7 +39,7 @@ class TestXTextRange(unittest.TestCase):
         xTextRangeStart.setString("before")
         self.assertEqual(xTextRangeStart.getString(), "before")
 
-        # Owerwrite strings
+        # Overwrite strings
         xTextRangeStart.setString("beforebeforebeforebefore")
         xTextRangeStart.setString("before2")
         xTextRangeStart.setString("before3")

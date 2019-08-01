@@ -692,7 +692,7 @@ void SwIndexMarkPane::ModifyHdl(const weld::Widget& rBox)
         m_xPhoneticFT2->set_sensitive(bKeyEnable&&bKey2HasText&&m_bIsPhoneticReadingEnabled);
         m_xPhoneticED2->set_sensitive(bKeyEnable&&bKey2HasText&&m_bIsPhoneticReadingEnabled);
     }
-    else //m_xEntryED  !!m_xEntryED is not a ListBox but a Edit
+    else //m_xEntryED  !!m_xEntryED is not a ListBox but an Edit
     {
         bool bHasText = !m_xEntryED->get_text().isEmpty();
         if(!bHasText)

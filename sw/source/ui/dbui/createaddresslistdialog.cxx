@@ -108,7 +108,7 @@ SwAddressControl_Impl::SwAddressControl_Impl(weld::Builder& rBuilder)
 void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
 {
     m_pData = &rDBData;
-    //when the address data is updated then remove the controls an build again
+    //when the address data is updated then remove the controls and build again
     if (!m_aLines.empty())
     {
         m_aLines.clear();

@@ -905,7 +905,7 @@ DECLARE_RTFEXPORT_TEST(testLandscape, "landscape.rtf")
     // Check landscape flag.
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 
-    // All pages should have flag orientiation
+    // All pages should have flag orientation
     uno::Reference<container::XNameAccess> pageStyles = getStyles("PageStyles");
 
     // get a page cursor

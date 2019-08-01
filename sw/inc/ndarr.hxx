@@ -151,7 +151,7 @@ public:
 
     /// A still empty section.
     SwNode& GetEndOfPostIts() const     { return *m_pEndOfPostIts; }
-    /// Section fpr all footnotes.
+    /// Section for all footnotes.
     SwNode& GetEndOfInserts() const     { return *m_pEndOfInserts; }
     /// Section for all Flys/Header/Footers.
     SwNode& GetEndOfAutotext() const    { return *m_pEndOfAutotext; }

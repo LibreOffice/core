@@ -4514,7 +4514,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                             if (sURL.startsWith("file:///"))
                             {
                                 // file:///absolute\path\to\file => invalid file URI (Writer cannot open)
-                                // convert all blackslashes to slashes:
+                                // convert all backslashes to slashes:
                                 sURL = sURL.replace('\\', '/');
                             }
                             // Try to make absolute any relative URLs, except
@@ -4842,7 +4842,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                                   OUString::createFromAscii(aIt->second.cFieldServiceName));
                         uno::Reference< beans::XPropertySet > xTC(xFieldInterface,
                                   uno::UNO_QUERY_THROW);
-                        OUString sCmd(pContext->GetCommand());//sCmd is the entire instrText inclusing the index e.g. CITATION Kra06 \l 1033
+                        OUString sCmd(pContext->GetCommand());//sCmd is the entire instrText including the index e.g. CITATION Kra06 \l 1033
                         if( !sCmd.isEmpty()){
                             uno::Sequence<beans::PropertyValue> aValues( comphelper::InitPropertySequence({
                                 { "Identifier", uno::Any(sCmd) }
