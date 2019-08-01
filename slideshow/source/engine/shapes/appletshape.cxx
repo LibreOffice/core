@@ -45,7 +45,7 @@ namespace slideshow
         class AppletShape : public ExternalShapeBase
         {
         public:
-            /** Create a shape for the given XShape for a applet object
+            /** Create a shape for the given XShape for an applet object
 
                 @param xShape
                 The XShape to represent.

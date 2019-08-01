@@ -189,7 +189,7 @@ namespace slideshow
                 EndUpdater is destroyed, the Layer leaves update mode
                 again.
 
-                @return a update end RAII object.
+                @return an update end RAII object.
             */
             EndUpdater beginUpdate();
 

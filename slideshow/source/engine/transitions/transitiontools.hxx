@@ -30,7 +30,7 @@
 namespace slideshow {
 namespace internal {
 
-/// Create a unit rect.
+/// Create an unit rect.
 ::basegfx::B2DPolygon createUnitRect();
 
 /// Flips on X-axis:

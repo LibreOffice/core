@@ -442,7 +442,7 @@ namespace slideshow
                 the shape.
 
                 The char scaling changes the scale of the whole shape
-                text (uniformely, i.e. both in x and in y direction).
+                text (uniformly, i.e. both in x and in y direction).
              */
             double getCharScale() const;
             /** Set the new char scale globally for the shape

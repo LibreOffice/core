@@ -26,7 +26,7 @@
 namespace slideshow {
 namespace internal {
 
-/// Generate a iris wipe
+/// Generate an iris wipe
 class EllipseWipe : public ParametricPolyPolygon
 {
 public:
