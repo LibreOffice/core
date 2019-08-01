@@ -42,12 +42,8 @@
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>
 
-#include <map>
-
 namespace basctl
 {
-
-using std::map;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -79,6 +75,8 @@ MacroChooser::MacroChooser(weld::Window* pParnt, const Reference< frame::XFrame 
 {
     m_xBasicBox->set_size_request(m_xBasicBox->get_approximate_digit_width() * 30, m_xBasicBox->get_height_rows(18));
     m_xMacroBox->set_size_request(m_xMacroBox->get_approximate_digit_width() * 30, m_xMacroBox->get_height_rows(18));
+    // tdf#70813 The macros should be listed alphabetically
+    m_xMacroBox->make_sorted();
 
     m_aMacrosInTxtBaseStr = m_xMacrosInTxt->get_label();
 
@@ -474,27 +472,19 @@ IMPL_LINK_NOARG(MacroChooser, BasicSelectHdl, weld::TreeView&, void)
     {
         m_xMacrosInTxt->set_label(m_aMacrosInTxtBaseStr + " " + pModule->GetName());
 
-        // The macros should be called in the same order that they
-        // are written down in the module.
+        m_xMacroBox->freeze();
 
-        map< sal_uInt16, SbMethod* > aMacros;
         size_t nMacroCount = pModule->GetMethods()->Count();
         for ( size_t iMeth = 0; iMeth  < nMacroCount; iMeth++ )
         {
             SbMethod* pMethod = static_cast<SbMethod*>(pModule->GetMethods()->Get( iMeth ));
-            if( pMethod->IsHidden() )
+            assert(pMethod && "Method not found!");
+            if (pMethod->IsHidden())
                 continue;
-            DBG_ASSERT( pMethod, "Method not found! (NULL)" );
-            sal_uInt16 nStart, nEnd;
-            pMethod->GetLineRange( nStart, nEnd );
-            aMacros.emplace( nStart, pMethod );
+            m_xMacroBox->append_text(pMethod->GetName());
         }
 
-        m_xMacroBox->freeze();
-        for (auto const& macro : aMacros)
-            m_xMacroBox->append_text(macro.second->GetName());
         m_xMacroBox->thaw();
-        m_xMacroBox->make_sorted();
 
         if (m_xMacroBox->get_iter_first(*m_xMacroBoxIter))
             m_xMacroBox->set_cursor(*m_xMacroBoxIter);
