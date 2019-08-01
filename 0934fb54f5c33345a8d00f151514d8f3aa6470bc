@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_2004124a",
+        "filename": "shell/source/win32/SysShExec.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-01T09:38:28Z",
+      "side": 1,
+      "message": "wouldn\u0027t it be better to fix getSystemPathFromFileURL then?",
+      "range": {
+        "startLine": 318,
+        "startChar": 37,
+        "endLine": 318,
+        "endChar": 90
+      },
+      "revId": "0934fb54f5c33345a8d00f151514d8f3aa6470bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
