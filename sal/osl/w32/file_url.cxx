@@ -818,7 +818,8 @@ oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** p
             {
                 case PATHTYPE_ABSOLUTE_UNC:
                     nIgnore = SAL_N_ELEMENTS( WSTR_LONG_PATH_PREFIX_UNC ) - 1;
-                    OSL_ENSURE( nIgnore == 8, "Unexpected long path UNC prefix!" );
+                    static_assert(SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1 == 8,
+                                  "Unexpected long path UNC prefix!");
 
                     /* generate the normal UNC path */
                     nLength = rtl_uString_getLength( strPath );
@@ -831,7 +832,8 @@ oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** p
 
                 case PATHTYPE_ABSOLUTE_LOCAL:
                     nIgnore = SAL_N_ELEMENTS( WSTR_LONG_PATH_PREFIX ) - 1;
-                    OSL_ENSURE( nIgnore == 4, "Unexpected long path prefix!" );
+                    static_assert(SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1 == 4,
+                                  "Unexpected long path prefix!");
 
                     /* generate the normal path */
                     nLength = rtl_uString_getLength( strPath );
