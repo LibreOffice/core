@@ -2138,7 +2138,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         // add interaction handler too
         if (gImpl)
         {
-            // gImpl does not have to exist when running from an unit test
+            // gImpl does not have to exist when running from a unit test
             rtl::Reference<LOKInteractionHandler> const pInteraction(
                     new LOKInteractionHandler("saveas", gImpl, pDocument));
             uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction.get());

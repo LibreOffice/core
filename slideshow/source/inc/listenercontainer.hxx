@@ -167,7 +167,7 @@ struct ListenerOperations< std::weak_ptr<ListenerTargetT> >
 
 /** Container for objects that can be notified.
 
-    This templatized container holds listener objects, than can get
+    This templatized container holds listener objects, then can get
     notified (by calling certain methods on them).
 
     @tpl Listener

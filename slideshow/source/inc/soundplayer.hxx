@@ -104,7 +104,7 @@ namespace slideshow
             // TODO(Q3): obsolete when boost::enable_shared_ptr_from_this
             //           is available
             ::std::shared_ptr<SoundPlayer> mThis;
-            // Temp file for pakcage url.
+            // Temp file for package url.
             ::std::shared_ptr<::avmedia::MediaTempFile> mpMediaTempFile;
             css::uno::Reference< css::media::XPlayer > mxPlayer;
         };

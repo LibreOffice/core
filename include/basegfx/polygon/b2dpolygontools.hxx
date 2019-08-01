@@ -277,7 +277,7 @@ namespace basegfx
          */
         BASEGFX_DLLPUBLIC B2DPolygon createPolygonFromEllipse( const B2DPoint& rCenter, double fRadiusX, double fRadiusY, sal_uInt32 nStartQuadrant = 0);
 
-        /** Create an unit ellipse polygon with the given angles, from start to end
+        /** Create a unit ellipse polygon with the given angles, from start to end
          */
         BASEGFX_DLLPUBLIC B2DPolygon createPolygonFromEllipseSegment( const B2DPoint& rCenter, double fRadiusX, double fRadiusY, double fStart, double fEnd );
 
