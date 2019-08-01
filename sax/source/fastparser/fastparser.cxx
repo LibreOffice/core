@@ -242,6 +242,7 @@ public:
     void parse();
     void produce( bool bForceFlush = false );
     bool m_bIgnoreMissingNSDecl;
+    bool m_bEnableEntities; // fdo#60471 thank you Adobe Illustrator
     bool m_bDisableThreadedParser;
 
 private:
@@ -629,6 +630,7 @@ namespace sax_fastparser {
 
 FastSaxParserImpl::FastSaxParserImpl() :
     m_bIgnoreMissingNSDecl(false),
+    m_bEnableEntities(false),
     m_bDisableThreadedParser(false),
     mpTop(nullptr)
 {
@@ -1054,9 +1056,12 @@ void FastSaxParserImpl::parse()
             if( !rEntity.mpParser )
                 throw SAXException("Couldn't create parser", Reference< XInterface >(), Any() );
 
-            // Tell libxml2 parser to decode entities in attribute values.
-            // coverity[unsafe_xml_parse_config] - entity support is required
-            xmlCtxtUseOptions(rEntity.mpParser, XML_PARSE_NOENT);
+            if (m_bEnableEntities)
+            {
+                // Tell libxml2 parser to decode entities in attribute values.
+                // coverity[unsafe_xml_parse_config] - entity support is required
+                xmlCtxtUseOptions(rEntity.mpParser, XML_PARSE_NOENT);
+            }
         }
         else
         {
@@ -1343,7 +1348,7 @@ FastSaxParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments)
             if ( str == "IgnoreMissingNSDecl" )
                 mpImpl->m_bIgnoreMissingNSDecl = true;
             else if ( str == "DoSmeplease" )
-                ; //just ignore as this is already immune to billion laughs
+                mpImpl->m_bEnableEntities = true;
             else if ( str == "DisableThreadedParser" )
                 mpImpl->m_bDisableThreadedParser = true;
             else

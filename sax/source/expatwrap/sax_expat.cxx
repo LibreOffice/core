@@ -146,7 +146,7 @@ class SaxExpatParser_Impl
 {
 public: // module scope
     Mutex               aMutex;
-    bool m_bEnableDoS; // fdo#60471 thank you Adobe Illustrator
+    bool m_bEnableEntities; // fdo#60471 thank you Adobe Illustrator
 
     css::uno::Reference< XDocumentHandler >   rDocumentHandler;
     css::uno::Reference< XExtendedDocumentHandler > rExtendedDocumentHandler;
@@ -178,7 +178,7 @@ public: // module scope
 
 public:
     SaxExpatParser_Impl()
-        : m_bEnableDoS(false)
+        : m_bEnableEntities(false)
         , bExceptionWasThrown(false)
         , bRTExceptionWasThrown(false)
     {
@@ -378,7 +378,7 @@ SaxExpatParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments
         if ((rArguments[0] >>= str) && "DoSmeplease" == str)
         {
             MutexGuard guard( m_pImpl->aMutex );
-            m_pImpl->m_bEnableDoS = true;
+            m_pImpl->m_bEnableEntities = true;
         }
     }
 }
@@ -446,7 +446,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     XML_SetCharacterDataHandler( entity.pParser , call_callbackCharacters );
     XML_SetProcessingInstructionHandler(entity.pParser ,
                                         call_callbackProcessingInstruction );
-    if (!m_pImpl->m_bEnableDoS)
+    if (!m_pImpl->m_bEnableEntities)
     {
         XML_SetEntityDeclHandler(entity.pParser, call_callbackEntityDecl);
     }
