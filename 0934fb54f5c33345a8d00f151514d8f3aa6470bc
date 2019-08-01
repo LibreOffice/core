@@ -22,6 +22,30 @@
       "revId": "0934fb54f5c33345a8d00f151514d8f3aa6470bc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_c379a093",
+        "filename": "shell/source/win32/SysShExec.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-01T11:22:51Z",
+      "side": 1,
+      "message": "Someone had made https://git.libreoffice.org/core/+/d3248d1fd83cca67a11dd593c124694382bf5f34 - and the commit message is not particularly telling ;-) - so I don\u0027t know what to expect and which consequences that might have.\n\nAnyway: getSystemPathFromFileURL not handling fragment looks rather correct to me; the fragment isn\u0027t a part of a filesystem path, while it is for URIs. And just dropping it would be ~dataloss. Actually, in this case, the URL with fragment is kept until the final call to ShellExecuteExW, because line 432 fails. And if ShellExecuteExW didn\u0027t itself convert file URLs to system filepath, the URL would reach LibreOffice, allowing to navigate to the fragment ...\n\nBy the way, the conversion to the system filepath in our code seems redundant then (but the conversion in ShellExecuteExW isn\u0027t documented, and I also don\u0027t know since when it happens...) If we could drop it, the fix to i#4789 would be redundant.",
+      "parentUuid": "bf659307_2004124a",
+      "range": {
+        "startLine": 318,
+        "startChar": 37,
+        "endLine": 318,
+        "endChar": 90
+      },
+      "revId": "0934fb54f5c33345a8d00f151514d8f3aa6470bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
