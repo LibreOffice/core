@@ -22,6 +22,7 @@
 #include "connpooloptions.hxx"
 #include <svl/filenotation.hxx>
 #include <helpids.h>
+#include <tools/debug.hxx>
 #include <svtools/editbrowsebox.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
@@ -36,7 +37,6 @@
 #include <svl/itemset.hxx>
 #include "doclinkdialog.hxx"
 #include <unotools/localfilehelper.hxx>
-#include "optHeaderTabListbox.hxx"
 #include <sfx2/docfilt.hxx>
 #include <dialmgr.hxx>
 #include "dbregisterednamesconfig.hxx"

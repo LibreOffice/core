@@ -50,7 +50,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <officecfg/Office/Common.hxx>
-#include "optHeaderTabListbox.hxx"
 #include <vcl/help.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>

@@ -28,16 +28,10 @@
 #include <svtools/dialogclosedlistener.hxx>
 
 // forward ---------------------------------------------------------------
-
-namespace svx
-{
-    class OptHeaderTabListBox;
-}
 struct OptPath_Impl;
 class SvxPathTabPage;
 
 // class SvxPathTabPage --------------------------------------------------
-
 class SvxPathTabPage : public SfxTabPage
 {
 private:

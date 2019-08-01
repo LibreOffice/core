@@ -169,7 +169,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/options/optfltr \
     cui/source/options/optgdlg \
     cui/source/options/optgenrl \
-    cui/source/options/optHeaderTabListbox \
     cui/source/options/opthtml \
     cui/source/options/optinet2 \
     cui/source/options/optjava \
