@@ -24,6 +24,7 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <uno/current_context.hxx>
 
 #include <strings.hrc>
 #include <bitmaps.hlst>
@@ -47,6 +48,7 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
+#include <comphelper/DisableInteractionHelper.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -247,14 +249,24 @@ SvxScriptOrgDialog::getLangNodeFromRootNode( Reference< browse::XBrowseNode > co
 
     try
     {
-        Sequence < Reference< browse::XBrowseNode > > children = rootNode->getChildNodes();
-        for ( sal_Int32 n = 0; n < children.getLength(); n++ )
+        auto tryFind = [&] {
+            const Sequence<Reference<browse::XBrowseNode>> children = rootNode->getChildNodes();
+            const auto it = std::find_if(children.begin(), children.end(),
+                                         [&](const Reference<browse::XBrowseNode>& child) {
+                                             return child->getName() == language;
+                                         });
+            return (it != children.end()) ? *it : nullptr;
+        };
         {
-            if ( children[ n ]->getName() == language )
-            {
-                langNode = children[ n ];
-                break;
-            }
+            // First try without Java interaction, to avoid warnings for non-JRE-dependent providers
+            css::uno::ContextLayer layer(
+                new comphelper::NoEnableJavaInteractionContext(css::uno::getCurrentContext()));
+            langNode = tryFind();
+        }
+        if (!langNode)
+        {
+            // Now try with Java interaction enabled
+            langNode = tryFind();
         }
     }
     catch ( Exception& )
