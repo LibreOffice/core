@@ -43,7 +43,6 @@ SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChi
     , mpSidebarController()
     , mbIsReadyToDrag(false)
     , mbSidebarVisibleInLOK(rChildWindow.IsSidebarVisibleInLOK())
-    , mpOldViewShell(SfxViewShell::Current())
 {
     // Get the XFrame from the bindings.
     if (pSfxBindings==nullptr || pSfxBindings->GetDispatcher()==nullptr)
