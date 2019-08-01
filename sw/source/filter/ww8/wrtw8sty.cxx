@@ -317,6 +317,26 @@ void MSWordStyles::BuildStylesTable()
     }
 }
 
+OString MSWordStyles::CreateStyleId(const OUString &rName)
+{
+    OStringBuffer aStyleIdBuf(rName.getLength());
+    for (int i = 0; i < rName.getLength(); ++i)
+    {
+        sal_Unicode nChar = rName[i];
+        if (('0' <= nChar && nChar <= '9') ||
+            ('a' <= nChar && nChar <= 'z') ||
+            ('A' <= nChar && nChar <= 'Z'))
+        {
+            // first letter should be uppercase
+            if (aStyleIdBuf.isEmpty() && 'a' <= nChar && nChar <= 'z')
+                aStyleIdBuf.append(char(nChar - ('a' - 'A')));
+            else
+                aStyleIdBuf.append(char(nChar));
+        }
+    }
+    return aStyleIdBuf.makeStringAndClear();
+}
+
 void MSWordStyles::BuildStyleIds()
 {
     std::unordered_set<OString> aUsed;
@@ -331,23 +351,9 @@ void MSWordStyles::BuildStyleIds()
             aName = m_pFormatA[n]->GetName();
         else if (m_aNumRules.find(n) != m_aNumRules.end())
             aName = m_aNumRules[n]->GetName();
-        OStringBuffer aStyleIdBuf(aName.getLength());
-        for (int i = 0; i < aName.getLength(); ++i)
-        {
-            sal_Unicode nChar = aName[i];
-            if (('0' <= nChar && nChar <= '9') ||
-                ('a' <= nChar && nChar <= 'z') ||
-                ('A' <= nChar && nChar <= 'Z'))
-            {
-                // first letter should be uppercase
-                if (aStyleIdBuf.isEmpty() && 'a' <= nChar && nChar <= 'z')
-                    aStyleIdBuf.append(char(nChar - ('a' - 'A')));
-                else
-                    aStyleIdBuf.append(char(nChar));
-            }
-        }
 
-        OString aStyleId(aStyleIdBuf.makeStringAndClear());
+        OString aStyleId = CreateStyleId(aName);
+
         if (aStyleId.isEmpty())
             aStyleId = "Style";
 

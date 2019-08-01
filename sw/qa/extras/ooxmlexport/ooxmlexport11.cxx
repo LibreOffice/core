@@ -873,7 +873,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf126243, "tdf120338.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     // export change tracking rejection data for tracked paragraph style change
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:pPrChange/w:pPr/w:pStyle", "val", "Heading 3");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:pPrChange/w:pPr/w:pStyle", "val", "Heading3");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf126245, "tdf126245.docx")
