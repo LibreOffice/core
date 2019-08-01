@@ -46,6 +46,30 @@
       "revId": "0934fb54f5c33345a8d00f151514d8f3aa6470bc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_a3058cc4",
+        "filename": "shell/source/win32/SysShExec.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-01T12:07:20Z",
+      "side": 1,
+      "message": "\u003e Someone had made https://git.libreoffice.org/core/+/d3248d1fd83cca67a11dd593c124694382bf5f34\n \u003e - and the commit message is not particularly telling ;-) - so I\n \u003e don\u0027t know what to expect and which consequences that might have.\n\nIndeed, that change is poorly documented, with \"handle\" apparently meaning \"reject as invalid\" in \"Handle URLs with query or fragment (or containing NUL chars)\".  (And at least technically file URLs don\u0027t support a query or fragment part, see \u003chttps://mailarchive.ietf.org/arch/msg/art/VnL3SxwPwFtWWoATm7cab02HFu0\u003e \"[art] Question regarding RFC 8089\".)  So while I wouldn\u0027t consider ignoring a fragment in getSystemPathFromFileURL as dataloss (as it would be ignored because it is just not relevant for extracting a system path from the URL), probably better indeed to keep the status quo and instead apply this change you came up with here.\n\n[...]\n\n \u003e By the way, the conversion to the system filepath in our code seems\n \u003e redundant then (but the conversion in ShellExecuteExW isn\u0027t\n \u003e documented, and I also don\u0027t know since when it happens...) If we\n \u003e could drop it, the fix to i#4789 would be redundant.\n\nI don\u0027t understand the above paragraph at all.",
+      "parentUuid": "bf659307_c379a093",
+      "range": {
+        "startLine": 318,
+        "startChar": 37,
+        "endLine": 318,
+        "endChar": 90
+      },
+      "revId": "0934fb54f5c33345a8d00f151514d8f3aa6470bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
