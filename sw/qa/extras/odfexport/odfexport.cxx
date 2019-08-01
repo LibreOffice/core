@@ -445,6 +445,26 @@ DECLARE_ODFEXPORT_TEST(testFdo38244, "fdo38244.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
 }
 
+DECLARE_ODFEXPORT_TEST(testSenderInitials, "sender-initials.fodt")
+{
+    // Test sender-initial properties (both annotation metadata and text field)
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    // first 3 are annotations, last 2 are text fields
+    for (unsigned i = 0; i < 3; ++i)
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("I"), getProperty<OUString>(xPropertySet, "Initials"));
+    }
+    for (unsigned i = 0; i < 2; ++i)
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPropertySet, "IsFixed"));
+        CPPUNIT_ASSERT_EQUAL(OUString("I"), getProperty<OUString>(xPropertySet, "Content"));
+    }
+}
+
 DECLARE_ODFEXPORT_TEST(testTdf92379, "tdf92379.fodt")
 {
     // frame style fo:background-color was not imported

@@ -866,14 +866,14 @@ inline long Get_Long( sal_uInt8 *& p )
     return Get_ULong(p);
 }
 
-WW8SprmIter::WW8SprmIter(const sal_uInt8* pSprms_, long nLen_,
+WW8SprmIter::WW8SprmIter(const sal_uInt8* pSprms_, sal_Int32 nLen_,
     const wwSprmParser &rParser)
     :  mrSprmParser(rParser), pSprms( pSprms_), nRemLen( nLen_)
 {
     UpdateMyMembers();
 }
 
-void WW8SprmIter::SetSprms(const sal_uInt8* pSprms_, long nLen_)
+void WW8SprmIter::SetSprms(const sal_uInt8* pSprms_, sal_Int32 nLen_)
 {
     pSprms = pSprms_;
     nRemLen = nLen_;
@@ -900,7 +900,7 @@ void WW8SprmIter::UpdateMyMembers()
     if (bValid)
     {
         nAktId = mrSprmParser.GetSprmId(pSprms);
-        nAktSize = mrSprmParser.GetSprmSize(nAktId, pSprms);
+        nAktSize = mrSprmParser.GetSprmSize(nAktId, pSprms, nRemLen);
         pAktParams = pSprms + mrSprmParser.DistanceToData(nAktId);
         bValid = nAktSize <= nRemLen;
         SAL_WARN_IF(!bValid, "sw.ww8", "sprm longer than remaining bytes, doc or parser is wrong");
@@ -2150,7 +2150,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
 
     if (!failure)
     {
-        size_t nSiz = 6 * nIMax + 4;
+        size_t nSiz = (4 + nStru) * nIMax + 4;
         size_t nElems = ( nSiz + 3 ) / 4;
         pPLCF_PosArray = new sal_Int32[ nElems ]; // Pointer to Pos-array
 
@@ -2205,7 +2205,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
         for (sal_Int32 i = 0; i < ncpN; ++i)         // construct PNs
         {
             ShortToSVBT16(static_cast<sal_uInt16>(nPN + i), p);
-            p+=2;
+            p += nStru;
         }
     }
 
@@ -3502,7 +3502,7 @@ bool WW8PLCFx_SEPX::Find4Sprms(sal_uInt16 nId1,sal_uInt16 nId2,sal_uInt16 nId3,s
     p4 = nullptr;
 
     sal_uInt8* pSp = pSprms;
-    sal_uInt16 i=0;
+    size_t i = 0;
     while (i + maSprmParser.MinSprmLen() <= nSprmSiz)
     {
         // Sprm found?
@@ -3520,7 +3520,7 @@ bool WW8PLCFx_SEPX::Find4Sprms(sal_uInt16 nId1,sal_uInt16 nId2,sal_uInt16 nId3,s
             bOk = false;
         bFound |= bOk;
         // increment pointer so that it points to next SPRM
-        const sal_uInt16 x = maSprmParser.GetSprmSize(nAktId, pSp);
+        const sal_uInt16 x = maSprmParser.GetSprmSize(nAktId, pSp, nSprmSiz - i);
         i += x;
         pSp += x;
     }
@@ -3533,8 +3533,7 @@ const sal_uInt8* WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const
         return nullptr;
 
     sal_uInt8* pSp = pSprms;
-
-    sal_uInt16 i=0;
+    size_t i = 0;
     while (i + maSprmParser.MinSprmLen() <= nSprmSiz)
     {
         // Sprm found?
@@ -3546,7 +3545,7 @@ const sal_uInt8* WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const
                 return pRet;
         }
         // increment pointer so that it points to next SPRM
-        const sal_uInt16 x = maSprmParser.GetSprmSize(nAktId, pSp);
+        const sal_uInt16 x = maSprmParser.GetSprmSize(nAktId, pSp, nSprmSiz - i);
         i += x;
         pSp += x;
     }
@@ -4895,7 +4894,7 @@ void WW8PLCFMan::GetSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
     else if (p->nSprmsLen >= maSprmParser.MinSprmLen()) //normal
     {
         // Length of actual sprm
-        pRes->nMemLen = maSprmParser.GetSprmSize(pRes->nSprmId, pRes->pMemPos);
+        pRes->nMemLen = maSprmParser.GetSprmSize(pRes->nSprmId, pRes->pMemPos, p->nSprmsLen);
         if (pRes->nMemLen > p->nSprmsLen)
         {
             SAL_WARN("sw.ww8", "Short sprm, len " << pRes->nMemLen << " claimed, max possible is " << p->nSprmsLen);
@@ -5003,7 +5002,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
             if( p->pMemPos )
             {
                 // Length of last sprm
-                const sal_uInt16 nSprmL = maSprmParser.GetSprmSize(nLastId, p->pMemPos);
+                const sal_uInt16 nSprmL = maSprmParser.GetSprmSize(nLastId, p->pMemPos, p->nSprmsLen);
 
                 // Reduce length of all sprms by length of last sprm
                 p->nSprmsLen -= nSprmL;
@@ -5330,8 +5329,19 @@ void WW8PLCFxDesc::Restore( const WW8PLCFxSave1& rSave )
             pPLCFx->GetSprms(&aD);
             pPLCFx->SetDirty(false);
             aD.ReduceByOffset();
-            pMemPos = aD.pMemPos + rSave.nPLCFxMemOfs;
-            nSprmsLen = nOrigSprmsLen - rSave.nPLCFxMemOfs;
+
+            if (nOrigSprmsLen > aD.nSprmsLen)
+            {
+                //two entries exist for the same offset, cut and run
+                SAL_WARN("sw.ww8", "restored properties don't match saved properties, bailing out");
+                nSprmsLen = 0;
+                pMemPos = nullptr;
+            }
+            else
+            {
+                nSprmsLen = nOrigSprmsLen - rSave.nPLCFxMemOfs;
+                pMemPos = aD.pMemPos + rSave.nPLCFxMemOfs;
+            }
         }
     }
 }
@@ -7885,7 +7895,7 @@ sal_uInt16 WW8DopTypography::GetConvertedLang() const
 
 //              Sprms
 
-sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm)
+sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm, sal_Int32 nRemLen)
     const
 {
     SprmInfo aSprm = GetSprmInfo(nId);
@@ -7900,15 +7910,26 @@ sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm)
                 nL = static_cast< sal_uInt16 >(pSprm[1 + mnDelta] + aSprm.nLen);
             else
             {
-                sal_uInt8 nDel = pSprm[2 + mnDelta];
-                sal_uInt8 nIns = pSprm[3 + mnDelta + 4 * nDel];
+                sal_uInt8 nDelIdx = 2 + mnDelta;
+                sal_uInt8 nDel = nDelIdx < nRemLen ? pSprm[nDelIdx] : 0;
+                sal_uInt8 nInsIdx = 3 + mnDelta + 4 * nDel;
+                sal_uInt8 nIns = nInsIdx < nRemLen ? pSprm[nInsIdx] : 0;
 
                 nL = 2 + 4 * nDel + 3 * nIns;
             }
             break;
         case 0xD608:
-            nL = SVBT16ToShort( &pSprm[1 + mnDelta] );
+        {
+            sal_uInt8 nIndex = 1 + mnDelta;
+            if (nIndex + 1 >= nRemLen)
+            {
+                SAL_WARN("sw.ww8", "sprm longer than remaining bytes, doc or parser is wrong");
+                nL = 0;
+            }
+            else
+                nL = SVBT16ToShort(&pSprm[nIndex]);
             break;
+        }
         default:
             switch (aSprm.nVari)
             {
@@ -7960,9 +7981,9 @@ sal_uInt16 wwSprmParser::GetSprmId(const sal_uInt8* pSp) const
 }
 
 // with tokens and length byte
-sal_uInt16 wwSprmParser::GetSprmSize(sal_uInt16 nId, const sal_uInt8* pSprm) const
+sal_uInt16 wwSprmParser::GetSprmSize(sal_uInt16 nId, const sal_uInt8* pSprm, sal_Int32 nRemLen) const
 {
-    return GetSprmTailLen(nId, pSprm) + 1 + mnDelta + SprmDataOfs(nId);
+    return GetSprmTailLen(nId, pSprm, nRemLen) + 1 + mnDelta + SprmDataOfs(nId);
 }
 
 sal_uInt8 wwSprmParser::SprmDataOfs(sal_uInt16 nId) const
@@ -7982,7 +8003,7 @@ sal_uInt8* wwSprmParser::findSprmData(sal_uInt16 nId, sal_uInt8* pSprms,
     {
         const sal_uInt16 nAktId = GetSprmId(pSprms);
         // set pointer to data
-        sal_uInt16 nSize = GetSprmSize(nAktId, pSprms);
+        sal_uInt16 nSize = GetSprmSize(nAktId, pSprms, nLen);
 
         bool bValid = nSize <= nLen;
 

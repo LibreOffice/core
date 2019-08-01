@@ -118,6 +118,7 @@ private:
     bool                mbGrayScale : 1;
     bool                mbzCodecInUse : 1;
     bool                mbStatus : 1;
+    bool                mbIDATStarted : 1;  // true if IDAT seen
     bool                mbIDAT : 1;         // true if finished with enough IDAT chunks
     bool                mbGamma : 1;        // true if Gamma Correction available
     bool                mbpHYs : 1;         // true if physical size of pixel available
@@ -200,6 +201,7 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mbGrayScale( false ),
     mbzCodecInUse   ( false ),
     mbStatus( true ),
+    mbIDATStarted( false ),
     mbIDAT( false ),
     mbGamma             ( false ),
     mbpHYs              ( false ),
@@ -368,7 +370,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
 
             case PNGCHUNK_PLTE :
             {
-                if ( !mbPalette )
+                if (!mbPalette && !mbIDATStarted)
                     mbStatus = ImplReadPalette();
             }
             break;
@@ -498,7 +500,7 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
     }
 
     mbPalette = true;
-    mbIDAT = mbAlphaChannel = mbTransparent = false;
+    mbIDATStarted = mbIDAT = mbAlphaChannel = mbTransparent = false;
     mbGrayScale = mbRGBTriple = false;
     mnTargetDepth = mnPngDepth;
     sal_uInt64 nScansize64 = ( ( static_cast< sal_uInt64 >( maOrigSize.Width() ) * mnPngDepth ) + 7 ) >> 3;
@@ -900,6 +902,8 @@ void PNGReaderImpl::ImplReadIDAT()
 {
     if( mnChunkLen > 0 )
     {
+        mbIDATStarted = true;
+
         if ( !mbzCodecInUse )
         {
             mbzCodecInUse = true;
