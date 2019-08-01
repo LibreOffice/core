@@ -145,7 +145,6 @@ class SwUndoFormatColl : public SwUndo, private SwUndRng
 {
     OUString aFormatName;
     std::unique_ptr<SwHistory> pHistory;
-    SwFormatColl* const pFormatColl;
     // for correct <ReDo(..)> and <Repeat(..)>
     // boolean, which indicates that the attributes are reset at the nodes
     // before the format has been applied.
