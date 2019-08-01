@@ -16,6 +16,24 @@
       "revId": "b28cc1165ae3a9d6b74accce26b329642fb41035",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_c01d1674",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-08-01T10:30:52Z",
+      "side": 1,
+      "message": "I think, based on your great improvement, now we can fix the old redline problems in a better way, than previously, eg. not as this OOo 3.2 hack.\n\nIn that form, redlining didn\u0027t meet the minimal requirements of the office/legal work, related to the following serious problems:\n\ntdf#54819: it was not possible to keep the paragraph style AND numbering after deletion of wholly paragraphs.\n\nThis was also a serious WYSIWYG violation, because format AND numbering loss were occurred mostly at saving, or setting Hide changes mode. That means, documents with change tracking had already have unintended format changes caused by this incompleteness, and now LibreOffice will be able to fix these older documents, too.\n\nI\u0027ve started to write a TODO list to fix the formatting change handling, ie. store the property change of the paragraphs modified in LibrEOffice, to export it in DOCX. \nIn the case of ODT, maybe we could be back-compatible by \nchoosing the stored information properly.\n\nFor example, tdf#119571, update the style of the joined paragraph, is part of the redlining problem. I started to do the same, as MSO, changing the style of the joined paragraphs. Storing these in ODT is back-compatible, ie. LibreOffice won\u0027t change the format of the old documents. But maybe it would be better to drop that (it has a lot of problems, including WYSIWYG violation), and store the previous style of the paragraph, and add run-time paragraph style changing during the ODT import to support not only the accept/actual styles, but the rejection, too, as in the DOCX format.\n\nMy next, smaller steps will be to extend tdf#119571 for all joined paragraph (last time I limited it only to the last paragraph), and store the paragraph property changes as ExtraData to fix the missing run-time rejection of paragraph formatting changes. (Undo has already been working correctly). Most precisely, I got a feedback today, that the import/export of the DOCX rejection data is not perfect yet, because it works only in LibreOffice, so I am checking that now.\n\nI believe, for the future migrations, interoperability and a working redlining implementation are more important than the possible back-compatibility issues, but maybe we could handle those, too, checking the version of creator of the documents.",
+      "parentUuid": "bf659307_c01756a3",
+      "revId": "b28cc1165ae3a9d6b74accce26b329642fb41035",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
