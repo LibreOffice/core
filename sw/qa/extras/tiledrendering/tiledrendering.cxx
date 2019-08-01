@@ -733,6 +733,8 @@ void SwTiledRenderingTest::testPartHash()
 /// A view callback tracks callbacks invoked on one specific view.
 class ViewCallback
 {
+    SfxViewShell* mpViewShell;
+    int mnView;
 public:
     bool m_bOwnCursorInvalidated;
     int m_nOwnCursorInvalidatedBy;
@@ -757,7 +759,7 @@ public:
     /// Post-it / annotation payload.
     boost::property_tree::ptree m_aComment;
 
-    ViewCallback()
+    ViewCallback(SfxViewShell* pViewShell, std::function<void(ViewCallback&)> const & rBeforeInstallFunc = {})
         : m_bOwnCursorInvalidated(false),
           m_nOwnCursorInvalidatedBy(-1),
           m_bOwnCursorAtOrigin(false),
@@ -771,6 +773,19 @@ public:
           m_bViewLock(false),
           m_bCalled(false)
     {
+        // Because one call-site wants to set the bool fields up before the callback is installed
+        if (rBeforeInstallFunc)
+            rBeforeInstallFunc(*this);
+
+        mpViewShell = pViewShell;
+        mpViewShell->registerLibreOfficeKitViewCallback(&ViewCallback::callback, this);
+        mnView = SfxLokHelper::getView();
+    }
+
+    ~ViewCallback()
+    {
+        SfxLokHelper::setView(mnView);
+        mpViewShell->registerLibreOfficeKitViewCallback(nullptr, nullptr);
     }
 
     static void callback(int nType, const char* pPayload, void* pData)
@@ -930,12 +945,10 @@ void SwTiledRenderingTest::testMissingInvalidation()
 
     // Create two views.
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    ViewCallback aView1(SfxViewShell::Current());
     int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
-    ViewCallback aView2;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2(SfxViewShell::Current());
     int nView2 = SfxLokHelper::getView();
 
     // First view: put the cursor into the first word.
@@ -958,11 +971,6 @@ void SwTiledRenderingTest::testMissingInvalidation()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
     CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
-
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testViewCursors()
@@ -970,13 +978,9 @@ void SwTiledRenderingTest::testViewCursors()
     comphelper::LibreOfficeKit::setActive();
 
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
-    int nView1 = SfxLokHelper::getView();
+    ViewCallback aView1(SfxViewShell::Current());
     SfxLokHelper::createView();
-    int nView2 = SfxLokHelper::getView();
-    ViewCallback aView2;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2(SfxViewShell::Current());
     CPPUNIT_ASSERT(aView1.m_bOwnCursorInvalidated);
     CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
     CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated);
@@ -1004,11 +1008,6 @@ void SwTiledRenderingTest::testViewCursors()
     CPPUNIT_ASSERT(aView1.m_bViewSelectionSet);
     CPPUNIT_ASSERT(aView2.m_bOwnSelectionSet);
     CPPUNIT_ASSERT(!aView2.m_bViewSelectionSet);
-
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testShapeViewCursors()
@@ -1017,14 +1016,10 @@ void SwTiledRenderingTest::testShapeViewCursors()
 
     // Load a document and create a view, so we have 2 ones.
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
-    ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
-    int nView1 = SfxLokHelper::getView();
+    ViewCallback aView1(SfxViewShell::Current());
     SfxLokHelper::createView();
-    int nView2 = SfxLokHelper::getView();
-    ViewCallback aView2;
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2(SfxViewShell::Current());
     SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
 
     // Start shape text in the second view.
@@ -1052,11 +1047,6 @@ void SwTiledRenderingTest::testShapeViewCursors()
     CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated && aLastViewCursor1 != aView1.m_aViewCursor);
     CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated && aLastOwnCursor2 != aView2.m_aOwnCursor);
     CPPUNIT_ASSERT_EQUAL(aLastViewCursor2, aView2.m_aViewCursor);
-
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testViewCursorVisibility()
@@ -1065,14 +1055,10 @@ void SwTiledRenderingTest::testViewCursorVisibility()
 
     // Load a document that has a shape and create two views.
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
-    ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
-    int nView1 = SfxLokHelper::getView();
+    ViewCallback aView1(SfxViewShell::Current());
     SfxLokHelper::createView();
-    int nView2 = SfxLokHelper::getView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2(SfxViewShell::Current());
     // This failed, initially the view cursor in the second view wasn't visible.
     CPPUNIT_ASSERT(aView2.m_bViewCursorVisible);
 
@@ -1087,11 +1073,6 @@ void SwTiledRenderingTest::testViewCursorVisibility()
     Scheduler::ProcessEventsToIdle();
     // Make sure the "view/text" cursor of the first view gets a notification.
     CPPUNIT_ASSERT(!aView1.m_bViewCursorVisible);
-
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testViewCursorCleanup()
@@ -1100,37 +1081,30 @@ void SwTiledRenderingTest::testViewCursorCleanup()
 
     // Load a document that has a shape and create two views.
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
-    ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
-    int nView1 = SfxLokHelper::getView();
+    ViewCallback aView1(SfxViewShell::Current());
     int nView2 = SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    {
+        ViewCallback aView2(SfxViewShell::Current());
 
-    // Click on the shape in the second view.
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    SdrObject* pObject = pPage->GetObj(0);
-    Point aCenter = pObject->GetSnapRect().Center();
-    aView1.m_bGraphicViewSelection = false;
-    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
-    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
-    Scheduler::ProcessEventsToIdle();
-    // Make sure there is a graphic view selection on the first view.
-    CPPUNIT_ASSERT(aView1.m_bGraphicViewSelection);
-
+        // Click on the shape in the second view.
+        SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+        SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+        SdrObject* pObject = pPage->GetObj(0);
+        Point aCenter = pObject->GetSnapRect().Center();
+        aView1.m_bGraphicViewSelection = false;
+        pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
+        pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
+        Scheduler::ProcessEventsToIdle();
+        // Make sure there is a graphic view selection on the first view.
+        CPPUNIT_ASSERT(aView1.m_bGraphicViewSelection);
+    }
     // Now destroy the second view.
     SfxLokHelper::destroyView(nView2);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), SfxLokHelper::getViewsCount());
     // Make sure that the graphic view selection on the first view is cleaned up.
     CPPUNIT_ASSERT(!aView1.m_bGraphicViewSelection);
-
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testViewLock()
@@ -1139,13 +1113,10 @@ void SwTiledRenderingTest::testViewLock()
 
     // Load a document that has a shape and create two views.
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
-    ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
-    int nView1 = SfxLokHelper::getView();
-    int nView2 = SfxLokHelper::createView();
+    ViewCallback aView1(SfxViewShell::Current());
+    SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2(SfxViewShell::Current());
 
     // Begin text edit in the second view and assert that the first gets a lock
     // notification.
@@ -1161,11 +1132,6 @@ void SwTiledRenderingTest::testViewLock()
     // the first view.
     pWrtShell->EndTextEdit();
     CPPUNIT_ASSERT(!aView1.m_bViewLock);
-
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testTextEditViewInvalidations()
@@ -1173,13 +1139,10 @@ void SwTiledRenderingTest::testTextEditViewInvalidations()
     // Load a document that has a shape and create two views.
     comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
-    ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
-    int nView1 = SfxLokHelper::getView();
-    int nView2 = SfxLokHelper::createView();
+    ViewCallback aView1(SfxViewShell::Current());
+    SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2(SfxViewShell::Current());
 
     // Begin text edit in the second view.
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
@@ -1200,11 +1163,6 @@ void SwTiledRenderingTest::testTextEditViewInvalidations()
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
 
     pWrtShell->EndTextEdit();
-
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testUndoInvalidations()
@@ -1212,14 +1170,11 @@ void SwTiledRenderingTest::testUndoInvalidations()
     // Load a document and create two views.
     comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    ViewCallback aView1(SfxViewShell::Current());
     int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
-    int nView2 = SfxLokHelper::getView();
+    ViewCallback aView2(SfxViewShell::Current());
     SfxLokHelper::setView(nView1);
 
     // Insert a character the end of the document.
@@ -1241,11 +1196,6 @@ void SwTiledRenderingTest::testUndoInvalidations()
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
     // Undo was dispatched on the first view, this second view was not invalidated.
     CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
-
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testUndoLimiting()
@@ -1428,8 +1378,7 @@ void SwTiledRenderingTest::testShapeTextUndoGroupShells()
     // Load a document and create a view.
     comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
-    ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    ViewCallback aView1(SfxViewShell::Current());
     sal_Int32 nView1 = SfxLokHelper::getView();
 
     // Begin text edit.
@@ -1462,13 +1411,9 @@ void SwTiledRenderingTest::testShapeTextUndoGroupShells()
 
     // Create a second view, and make sure that the new view sees the same
     // cursor position as the old one.
-    int nView2 = SfxLokHelper::createView();
+    SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering({});
-    ViewCallback aView2;
-    aView2.m_aViewCursor = tools::Rectangle();
-    aView2.m_bViewSelectionSet = false;
-    aView2.m_bViewLock = false;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2(SfxViewShell::Current());
     // Difference was 935 twips, the new view didn't see the editeng cursor of
     // the old one. The new difference should be <1px, but here we deal with twips.
     CPPUNIT_ASSERT(std::abs(aView1.m_aOwnCursor.Top() - aView2.m_aViewCursor.Top()) < 10);
@@ -1478,11 +1423,6 @@ void SwTiledRenderingTest::testShapeTextUndoGroupShells()
     // This was false, the new view wasn't aware of the shape text lock created
     // by the old view.
     CPPUNIT_ASSERT(aView2.m_bViewLock);
-
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testTrackChanges()
@@ -1494,9 +1434,8 @@ void SwTiledRenderingTest::testTrackChanges()
     // Turn on trak changes, type "zzz" at the end, and move to the start.
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
     xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
-    ViewCallback aView;
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
+    ViewCallback aView(pWrtShell->GetSfxViewShell());
     pWrtShell->EndOfSection();
     pWrtShell->Insert("zzz");
     pWrtShell->StartOfSection();
@@ -1594,10 +1533,9 @@ void SwTiledRenderingTest::testSetViewGraphicSelection()
     comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("frame.odt");
     int nView1 = SfxLokHelper::getView();
-    ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    ViewCallback aView1(SfxViewShell::Current());
     // Create a second view, and switch back to the first view.
-    int nView2 = SfxLokHelper::createView();
+    SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering({});
     SfxLokHelper::setView(nView1);
 
@@ -1613,11 +1551,6 @@ void SwTiledRenderingTest::testSetViewGraphicSelection()
     pWrtShell->ShellLoseFocus();
     // This failed, mark handles were hidden in the first view.
     CPPUNIT_ASSERT(!pView->areMarkHandlesHidden());
-
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testCreateViewGraphicSelection()
@@ -1625,8 +1558,7 @@ void SwTiledRenderingTest::testCreateViewGraphicSelection()
     // Load a document.
     comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("frame.odt");
-    ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    ViewCallback aView1(SfxViewShell::Current());
 
     // Mark the textframe in the first view.
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
@@ -1639,28 +1571,20 @@ void SwTiledRenderingTest::testCreateViewGraphicSelection()
     CPPUNIT_ASSERT(aView1.m_bGraphicSelection);
 
     // Create a second view.
-    int nView1 = SfxLokHelper::getView();
-    int nView2 = SfxLokHelper::createView();
+    SfxLokHelper::createView();
     // This was false, creating a second view cleared the selection of the
     // first one.
     CPPUNIT_ASSERT(aView1.m_bGraphicSelection);
 
     // Make sure that the hidden text cursor isn't visible in the second view, either.
-    ViewCallback aView2;
-    aView2.m_bViewCursorVisible = true;
-    aView2.m_bGraphicViewSelection = false;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2(SfxViewShell::Current(),
+        [](ViewCallback& rView) { rView.m_bViewCursorVisible = true; });
     // This was true, the second view didn't get the visibility of the text
     // cursor of the first view.
     CPPUNIT_ASSERT(!aView2.m_bViewCursorVisible);
     // This was false, the second view didn't get the graphic selection of the
     // first view.
     CPPUNIT_ASSERT(aView2.m_bGraphicViewSelection);
-
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testCreateViewTextSelection()
@@ -1668,8 +1592,7 @@ void SwTiledRenderingTest::testCreateViewTextSelection()
     // Load a document.
     comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    ViewCallback aView1(SfxViewShell::Current());
 
     // Create a text selection:
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
@@ -1682,20 +1605,12 @@ void SwTiledRenderingTest::testCreateViewTextSelection()
     CPPUNIT_ASSERT_EQUAL(OUString("bbb"), pShellCursor->GetText());
 
     // Create a second view.
-    int nView1 = SfxLokHelper::getView();
-    int nView2 = SfxLokHelper::createView();
+    SfxLokHelper::createView();
 
     // Make sure that the text selection is visible in the second view.
-    ViewCallback aView2;
-    aView2.m_bViewSelectionSet = true;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2(SfxViewShell::Current());
     // This failed, the second view didn't get the text selection of the first view.
     CPPUNIT_ASSERT(!aView2.m_aViewSelection.isEmpty());
-
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testRedlineColors()
@@ -1724,8 +1639,7 @@ void SwTiledRenderingTest::testCommentEndTextEdit()
     // Create a document, type a character and remember the cursor position.
     comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc();
-    ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    ViewCallback aView1(SfxViewShell::Current());
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
@@ -1780,8 +1694,7 @@ void SwTiledRenderingTest::testCommentInsert()
         {"Text", uno::makeAny(OUString("some text"))},
         {"Author", uno::makeAny(OUString("me"))},
     });
-    ViewCallback aView;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
+    ViewCallback aView(SfxViewShell::Current());
     comphelper::dispatchCommand(".uno:InsertAnnotation", xFrame, aPropertyValues);
     Scheduler::ProcessEventsToIdle();
     OString aAnchorPos(aView.m_aComment.get_child("anchorPos").get_value<std::string>().c_str());
@@ -1791,7 +1704,6 @@ void SwTiledRenderingTest::testCommentInsert()
     // i.e. the anchor position was a non-empty rectangle.
     CPPUNIT_ASSERT_EQUAL(OString("1418, 1418, 0, 0"), aAnchorPos);
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testCursorPosition()
@@ -1799,25 +1711,17 @@ void SwTiledRenderingTest::testCursorPosition()
     // Load a document and register a callback, should get an own cursor.
     comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc();
-    ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    ViewCallback aView1(SfxViewShell::Current());
 
     // Crete a second view, so the first view gets a collaborative cursor.
-    int nView1 = SfxLokHelper::getView();
-    int nView2 = SfxLokHelper::createView();
+    SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering({});
-    ViewCallback aView2;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2(SfxViewShell::Current());
 
     // Make sure the two are exactly the same.
     // This failed, own cursor was at '1418, 1418', collaborative cursor was at
     // '1425, 1425', due to pixel alignment.
     CPPUNIT_ASSERT_EQUAL(aView1.m_aOwnCursor.toString(), aView1.m_aViewCursor.toString());
-
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testPaintCallbacks()
@@ -1828,12 +1732,10 @@ void SwTiledRenderingTest::testPaintCallbacks()
     // Load a document and register a callback for the first view.
     comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc();
-    ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
-    int nView1 = SfxLokHelper::getView();
+    ViewCallback aView1(SfxViewShell::Current());
 
     // Create a second view and paint a tile on that second view.
-    int nView2 = SfxLokHelper::createView();
+    SfxLokHelper::createView();
     int nCanvasWidth = 256;
     int nCanvasHeight = 256;
     std::vector<unsigned char> aBuffer(nCanvasWidth * nCanvasHeight * 4);
@@ -1844,14 +1746,6 @@ void SwTiledRenderingTest::testPaintCallbacks()
     aView1.m_bCalled = false;
     pXTextDocument->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/0, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
     CPPUNIT_ASSERT(!aView1.m_bCalled);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testUndoRepairResult()
@@ -1956,12 +1850,12 @@ void SwTiledRenderingTest::testDisableUndoRepair()
 
     // Create two views.
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    ViewCallback aView1;
+    ViewCallback aView1(SfxViewShell::Current());
     SwView* pView1 = dynamic_cast<SwView*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView1);
     int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
-    ViewCallback aView2;
+    ViewCallback aView2(SfxViewShell::Current());
     SwView* pView2 = dynamic_cast<SwView*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView2);
     int nView2 = SfxLokHelper::getView();
@@ -2009,11 +1903,6 @@ void SwTiledRenderingTest::testDisableUndoRepair()
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'l', 0);
     Scheduler::ProcessEventsToIdle();
     checkUndoRepairStates(pXTextDocument, pView1, pView2);
-
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testAllTrackedChanges()
@@ -2425,14 +2314,12 @@ void SwTiledRenderingTest::testVisCursorInvalidation()
     comphelper::LibreOfficeKit::setActive();
 
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    ViewCallback aView1(SfxViewShell::Current());
     int nView1 = SfxLokHelper::getView();
 
     SfxLokHelper::createView();
     int nView2 = SfxLokHelper::getView();
-    ViewCallback aView2;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    ViewCallback aView2(SfxViewShell::Current());
     Scheduler::ProcessEventsToIdle();
 
 
@@ -2493,10 +2380,6 @@ void SwTiledRenderingTest::testVisCursorInvalidation()
     CPPUNIT_ASSERT_EQUAL(nView2, aView2.m_nOwnCursorInvalidatedBy);
 
     comphelper::LibreOfficeKit::setViewIdForVisCursorInvalidation(false);
-    SfxLokHelper::setView(nView1);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    SfxLokHelper::setView(nView2);
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testSemiTransparent()
