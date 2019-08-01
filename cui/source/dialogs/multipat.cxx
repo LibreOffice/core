@@ -67,7 +67,7 @@ void SvxMultiPathDialog::HandleEntryChecked(int nRow)
         for (int i = 0; i < nCount; ++i)
         {
             if (i != nRow)
-                m_xRadioLB->set_toggle(i, TRISTATE_TRUE, 0);
+                m_xRadioLB->set_toggle(i, TRISTATE_FALSE, 0);
         }
     }
 }
