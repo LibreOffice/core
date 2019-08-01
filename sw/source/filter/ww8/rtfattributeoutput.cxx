@@ -3524,6 +3524,16 @@ void RtfAttributeOutput::FormatLineNumbering(const SwFormatLineNumber& rNumberin
 
 void RtfAttributeOutput::FormatFrameDirection(const SvxFrameDirectionItem& rDirection)
 {
+    if (m_rExport.GetRTFFlySyntax())
+    {
+        if (rDirection.GetValue() == SvxFrameDirection::Vertical_RL_TB)
+        {
+            // Top to bottom non-ASCII font
+            m_aFlyProperties.push_back(std::make_pair<OString, OString>("txflTextFlow", "3"));
+        }
+        return;
+    }
+
     if (!m_rExport.m_bOutPageDescs)
     {
         SvxFrameDirection nDir = rDirection.GetValue();

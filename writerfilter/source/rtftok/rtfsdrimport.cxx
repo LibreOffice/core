@@ -454,8 +454,13 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             ; // Ignore: complementer of lineColor
         else if (rProperty.first == "txflTextFlow" && xPropertySet.is())
         {
-            if (rProperty.second.toInt32() == 1)
-                eWritingMode = text::WritingMode_TB_RL;
+            switch (rProperty.second.toInt32())
+            {
+                case 1: // Top to bottom ASCII font
+                case 3: // Top to bottom non-ASCII font
+                    eWritingMode = text::WritingMode_TB_RL;
+                    break;
+            }
         }
         else if (rProperty.first == "fLine" && xPropertySet.is())
             resolveFLine(xPropertySet, rProperty.second.toInt32());
