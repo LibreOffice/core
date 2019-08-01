@@ -1429,12 +1429,12 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             break;
 
         case RES_TXTATR_ANNOTATION:
-            OSL_ENSURE(false, "What is a annotation doing in the control stack,"
+            OSL_ENSURE(false, "What is an annotation doing in the control stack,"
                 "probably should have been in the endstack");
             break;
 
         case RES_TXTATR_INPUTFIELD:
-            OSL_ENSURE(false, "What is a input field doing in the control stack,"
+            OSL_ENSURE(false, "What is an input field doing in the control stack,"
                 "probably should have been in the endstack");
             break;
 
@@ -1781,7 +1781,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
     else
     {
         // Here we have a tab definition which inserts no extra tabs, or deletes
-        // no existing tabs. An older version of writer is probably the creater
+        // no existing tabs. An older version of writer is probably the creator
         // of the document  :-( . So if we are importing a style we can just
         // ignore it. But if we are importing into text we cannot as during
         // text SwWW8ImplReader::Read_Tab is called at the begin and end of
@@ -2633,7 +2633,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
 // WW: Table in APO is possible (Both Start-Ends occur at the same time)
 // WW: APO in Table not possible
 
-// This mean that of a Table is the content of a APO, the APO start needs
+// This mean that of a Table is the content of an APO, the APO start needs
 // to be edited first, so that the Table remains in the APO and not the
 // other way around.
 // At the End, however, we need to edit the Table End first as the APO
@@ -2888,11 +2888,11 @@ void SwWW8ImplReader::PostProcessAttrs()
  #i9241#
  It appears that some documents that are in a baltic 8 bit encoding which has
  some undefined characters can have use made of those characters, in which
- case they default to CP1252. If not then its perhaps that the font encoding
+ case they default to CP1252. If not then it's perhaps that the font encoding
  is only in use for 6/7 and for 8+ if we are in 8bit mode then the encoding
  is always 1252.
 
- So a encoding converter that on an undefined character attempts to
+ So an encoding converter that on an undefined character attempts to
  convert from 1252 on the undefined character
 */
 static std::size_t Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
@@ -3265,14 +3265,14 @@ namespace
 // categorization is. So we don't do that here yet.
 
 // Additional to the categorization, when word encounters weak text for ambiguous
-// chars it uses idcthint to indicate which way to bias. We don't have a idcthint
+// chars it uses idcthint to indicate which way to bias. We don't have an idcthint
 // feature in writer.
 
 // So what we currently do here then is to split our text into non-weak/weak
 // sections and uses word's idcthint to determine what font it would use and
 // force that on for the segment. Following what we *do* know about word's
 // categorization, we know that the range 0x0020 and 0x007F is sprmCRgFtc0 in
-// word, something we map to LATIN, so we consider all weaks chars in that range
+// word, something we map to LATIN, so we consider all weak chars in that range
 // to auto-bias to LATIN.
 
 // See https://bugs.libreoffice.org/show_bug.cgi?id=34319 for an example
@@ -3946,7 +3946,7 @@ void SwWW8ImplReader::ClearParaEndPosition()
 
 void SwWW8ImplReader::ReadAttrs(WW8_CP& rTextPos, WW8_CP& rNext, long nTextEnd, bool& rbStartLine)
 {
-    // Dow we have attributes?
+    // Do we have attributes?
     if( rTextPos >= rNext )
     {
         do

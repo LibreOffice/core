@@ -489,7 +489,7 @@ SwHTMLParser::~SwHTMLParser()
     DeleteFormImpl();
     DeleteFootEndNoteImpl();
 
-    OSL_ENSURE(!m_xTable.get(), "It exists still a open table");
+    OSL_ENSURE(!m_xTable.get(), "It exists still an open table");
     m_pImageMaps.reset();
 
     OSL_ENSURE( m_vPendingStack.empty(),
@@ -3956,7 +3956,7 @@ void SwHTMLParser::NewPara()
     // progress bar
     ShowStatline();
 
-    OSL_ENSURE( m_nOpenParaToken == HtmlTokenId::NONE, "Now a open paragraph element will be lost." );
+    OSL_ENSURE( m_nOpenParaToken == HtmlTokenId::NONE, "Now an open paragraph element will be lost." );
     m_nOpenParaToken = HtmlTokenId::PARABREAK_ON;
 }
 

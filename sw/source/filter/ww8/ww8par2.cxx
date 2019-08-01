@@ -705,7 +705,7 @@ void SwWW8ImplReader::SetAnld(SwNumRule* pNumR, WW8_ANLD const * pAD, sal_uInt8 
 {
     SwNumFormat aNF;
     if (pAD)
-    {                                                       // there is a Anld-Sprm
+    {                                                       // there is an Anld-Sprm
         m_bCurrentAND_fNumberAcross = 0 != pAD->fNumberAcross;
         WW8_ANLV const &rAV = pAD->eAnlv;
         SetBaseAnlv(aNF, rAV, nSwLevel);                    // set the base format
@@ -1101,7 +1101,7 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS, short nLen)
 {
     if (!bVer67)
     {
-        //the ww8 version of this is unusual in masquerading as a a srpm with a
+        //the ww8 version of this is unusual in masquerading as a srpm with a
         //single byte len arg while it really has a word len arg, after this
         //increment nLen is correct to describe the remaining amount of data
         pS++;
@@ -2816,11 +2816,11 @@ WW8SelBoxInfo* WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact)
 {
     if (!m_MergeGroups.empty())
     {
-        // still valid area near the boundery
+        // still valid area near the boundary
         const short nTolerance = 4;
-        // box boundery
+        // box boundary
         short nX2 = nX1 + nWidth;
-        // approximate group boundery
+        // approximate group boundary
         short nGrX1;
         short nGrX2;
 
@@ -2831,7 +2831,7 @@ WW8SelBoxInfo* WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact)
             WW8SelBoxInfo& rActGroup = *m_MergeGroups[ iGr ];
             if (!rActGroup.bGroupLocked)
             {
-                // approximate group boundery with room (tolerance) to the *outside*
+                // approximate group boundary with room (tolerance) to the *outside*
                 nGrX1 = rActGroup.nGroupXStart - nTolerance;
                 nGrX2 = rActGroup.nGroupXStart
                         + rActGroup.nGroupWidth + nTolerance;

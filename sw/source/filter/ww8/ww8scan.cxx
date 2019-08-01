@@ -542,7 +542,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
                             // chp.ftcSym
         {0x080A, { 1, L_FIX} }, // "sprmCFOle2" chp.fOle2;1 or 0;bit;
         {NS_sprm::LN_CIdCharType, { 0, L_FIX} }, // "sprmCIdCharType" obsolete: not applicable in
-                            // Word97 and later versions;;;
+                            // Word97 and later versions;
         {0x2A0C, { 1, L_FIX} }, // "sprmCHighlight" chp.fHighlight,
                             // chp.icoHighlight;ico (fHighlight is set to 1 iff
                             // ico is not 0)
@@ -1656,7 +1656,7 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
     }
 
     // the text and the fib share the same stream, if the text is inside the fib
-    // then its definitely a bad offset. The smallest FIB supported is that of
+    // then it's definitely a bad offset. The smallest FIB supported is that of
     // WW2 which is 326 bytes in size
     if (nRet < nSmallestPossibleFib)
     {
@@ -4763,7 +4763,7 @@ bool WW8PLCFx_FactoidBook::getIsEnd() const
     return m_bIsEnd;
 }
 
-// In the end of an paragraph in WW6 the attribute extends after the <CR>.
+// In the end of a paragraph in WW6 the attribute extends after the <CR>.
 // This will be reset by one character to be used with SW,
 // if we don't expect trouble thereby.
 void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
@@ -5074,7 +5074,7 @@ WW8PLCFMan::~WW8PLCFMan()
 }
 
 // 0. which attr class,
-// 1. if it's a attr start,
+// 1. if it's an attr start,
 // 2. CP, where is next attr change
 sal_uInt16 WW8PLCFMan::WhereIdx(bool *const pbStart, WW8_CP *const pPos) const
 {
@@ -7058,7 +7058,7 @@ static void lcl_checkFontname( OUString& sString )
     // for efficiency, we'd like to use String methods as far as possible.
     // Hence, we will:
     // 1) convert all invalid chars to \u0001
-    // 2) then erase all \u0001 chars (if any were found), and
+    // 2) then erase all \u0001 chars (if anywere found), and
     // 3) erase leading/trailing ';', in case a font name was
     //    completely removed
 
@@ -7420,7 +7420,7 @@ const WW8_FFN* WW8Fonts::GetFont( sal_uInt16 nNum ) const
     return &m_aFontA[nNum];
 }
 
-// Search after a header/footer for a index in the ww list from header/footer
+// Search after a header/footer for an index in the ww list from header/footer
 
 // specials for WinWord6 and -7:
 //

@@ -1103,7 +1103,7 @@ class HTMLEndPosLst
     bool ExistsOffTagItem( sal_uInt16 nWhich, sal_Int32 nStartPos,
                                           sal_Int32 nEndPos );
 
-    // adapt the end of a splitted item
+    // adapt the end of a split item
     void FixSplittedItem( HTMLStartEndPos *pPos, sal_Int32 nNewEnd,
                             HTMLStartEndPositions::size_type nStartPos );
 
@@ -1422,13 +1422,13 @@ void HTMLEndPosLst::FixSplittedItem( HTMLStartEndPos *pPos, sal_Int32 nNewEnd,
         if( pTest->GetStart() >= nNewEnd )
         {
             // the Test attribute and all the following ones start, after the
-            // splitted attribute ends
+            // split attribute ends
             break;
         }
         else if( nTestEnd > nNewEnd )
         {
-            // the Test attribute starts before the splitted attribute
-            // ends, and ends afterwards, i.e., it must be splitted, as well
+            // the Test attribute starts before the split attribute
+            // ends, and ends afterwards, i.e., it must be split, as well
 
             // set the new end
             pTest->SetEnd( nNewEnd );
@@ -1467,7 +1467,7 @@ void HTMLEndPosLst::InsertItem( const SfxPoolItem& rItem, sal_Int32 nStart,
             if( pTest->GetStart() < nStart )
             {
                 // the Test attribute ends, before the new one ends. Thus, the
-                // new attribute must be splitted.
+                // new attribute must be split.
                 InsertItem_( new HTMLStartEndPos( rItem, nStart, nTestEnd ), i );
                 nStart = nTestEnd;
             }
@@ -1535,7 +1535,7 @@ void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
                         aEndLst.erase( it );
                 }
 
-                // if necessary, insert the second part of the splitted
+                // if necessary, insert the second part of the split
                 // attribute
                 if( nTestEnd > nEnd )
                 {

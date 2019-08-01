@@ -3371,7 +3371,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             if( !bForceFrame && (bTopTable || pCurTable->HasParentSection()) )
             {
                 SplitAttrTab(pTCntxt->xAttrTab, bTopTable);
-                // If we reuse a already existing paragraph, we can't add
+                // If we reuse an already existing paragraph, we can't add
                 // PostIts since the paragraph gets behind that table.
                 // They're gonna be moved into the first paragraph of the table
                 // If we have tables in tables, we also can't add PostIts to a

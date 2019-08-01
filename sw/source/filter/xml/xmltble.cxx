@@ -585,7 +585,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
             sal_uInt32 nWidth = nCPos - nOldCPos;
 
             // If a base width is given, the table has either an automatic
-            // or margin alignment, or an percentage width. In either case,
+            // or margin alignment, or a percentage width. In either case,
             // relative widths should be exported.
             if( nBaseWidth )
             {

@@ -229,7 +229,7 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
 
                 while( sal_uInt16(-1) != nCurPos )
                 {
-                    // add an Number to it
+                    // add a Number to it
                     sShortcut = aLNm + OUString::number( ++nStart );
                     nCurPos = rBlocks.GetIndex( sShortcut );
                 }
