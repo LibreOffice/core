@@ -531,22 +531,6 @@ void Button::SetSmallSymbol()
     mpButtonData->mbSmallSymbol = true;
 }
 
-void Button::EnableImageDisplay( bool bEnable )
-{
-    if( bEnable )
-        mpButtonData->mnButtonState &= ~DrawButtonFlags::NoImage;
-    else
-        mpButtonData->mnButtonState |= DrawButtonFlags::NoImage;
-}
-
-void Button::EnableTextDisplay( bool bEnable )
-{
-    if( bEnable )
-        mpButtonData->mnButtonState &= ~DrawButtonFlags::NoText;
-    else
-        mpButtonData->mnButtonState |= DrawButtonFlags::NoText;
-}
-
 bool Button::IsSmallSymbol () const
 {
     return mpButtonData->mbSmallSymbol;

@@ -1494,14 +1494,6 @@ include/vcl/alpha.hxx:58
     void AlphaMask::Replace(unsigned char,unsigned char)
     unsigned char cSearchTransparency
     0
-include/vcl/button.hxx:87
-    void Button::EnableImageDisplay(_Bool)
-    _Bool bEnable
-    1
-include/vcl/button.hxx:88
-    void Button::EnableTextDisplay(_Bool)
-    _Bool bEnable
-    1
 include/vcl/combobox.hxx:120
     void ComboBox::EnableMultiSelection(_Bool)
     _Bool bMulti
