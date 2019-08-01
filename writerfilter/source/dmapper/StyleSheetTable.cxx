@@ -982,7 +982,13 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                             StyleSheetEntryPtr pParent = FindStyleSheetByISTD( pEntry->sBaseStyleIdentifier );
                             // Writer core doesn't support numbering styles having a parent style, it seems
                             if (pParent.get() != nullptr && !bListStyle)
-                                xStyle->setParentStyle(ConvertStyleName( pParent->sStyleName ));
+                            {
+                                const OUString sParentStyleName = ConvertStyleName( pParent->sStyleName );
+                                if ( !sParentStyleName.isEmpty() && !xStyles->hasByName( sParentStyleName ) )
+                                    aMissingParent.emplace_back( sParentStyleName, xStyle );
+                                else
+                                    xStyle->setParentStyle( sParentStyleName );
+                            }
                         }
                         catch( const uno::RuntimeException& )
                         {
