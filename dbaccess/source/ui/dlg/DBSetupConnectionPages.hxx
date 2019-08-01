@@ -40,7 +40,7 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
-        static VclPtr<OGenericAdministrationPage> CreateDocumentOrSpreadSheetTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static VclPtr<OGenericAdministrationPage> CreateDocumentOrSpreadSheetTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
         OSpreadSheetConnectionPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OSpreadSheetConnectionPageSetup() override;
 
@@ -251,7 +251,7 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
-        static VclPtr<OGenericAdministrationPage> CreateFinalDBTabPageSetup( vcl::Window* pParent, const SfxItemSet& _rAttrSet);
+        static VclPtr<OGenericAdministrationPage> CreateFinalDBTabPageSetup(TabPageParent pParent, const SfxItemSet& _rAttrSet);
 
         OFinalDBPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OFinalDBPageSetup() override;
