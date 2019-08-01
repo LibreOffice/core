@@ -2995,11 +2995,9 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 
                     m_pSerializer->startElementNS(XML_w, XML_pPr);
 
-                    if ( !sParaStyleName.isEmpty() )
-                    {
-                        OString sStyleName = OUStringToOString( sParaStyleName, RTL_TEXTENCODING_UTF8 );
+                    OString sStyleName = m_rExport.m_pStyles->CreateStyleId( sParaStyleName );
+                    if ( !sStyleName.isEmpty() )
                         m_pSerializer->singleElementNS(XML_w, XML_pStyle, FSNS(XML_w, XML_val), sStyleName);
-                    }
 
                     // The 'm_rExport.SdrExporter().getFlyAttrList()', 'm_pParagraphSpacingAttrList' are used to hold information
                     // that should be collected by different properties in the core, and are all flushed together
