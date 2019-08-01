@@ -1589,6 +1589,9 @@ public:
     /// Get id of the style (rFormat).
     sal_uInt16 GetSlot( const SwFormat* pFormat ) const;
 
+    /// create style id using only ASCII characters of the style name
+    static OString CreateStyleId(const OUString &rName);
+
     /// Get styleId of the nId-th style (nId is its position in pFormatA).
     OString const & GetStyleId(sal_uInt16 nId) const;
 
