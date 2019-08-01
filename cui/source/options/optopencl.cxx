@@ -25,7 +25,6 @@
 #include <opencl/openclwrapper.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svtools/restartdialog.hxx>
-#include "optHeaderTabListbox.hxx"
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
