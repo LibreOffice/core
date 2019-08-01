@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_263c2ac7",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-08-01T17:32:56Z",
+      "side": 0,
+      "message": "looks like after this both these flag/enum values are unused i.e. we never set them, only read them, which means they can be dropped, and the logic simplified",
+      "revId": "a65bf4751d3a774fd3ae8ee9968628a655e6d245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
