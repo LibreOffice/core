@@ -84,9 +84,6 @@ public:
     void                SetImageAlign( ImageAlign eAlign );
     ImageAlign          GetImageAlign() const;
 
-    void                EnableImageDisplay( bool bEnable );
-    void                EnableTextDisplay( bool bEnable );
-
     bool                IsSmallSymbol() const;
     void                SetSmallSymbol();
     virtual bool        set_property(const OString &rKey, const OUString &rValue) override;
