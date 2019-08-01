@@ -7157,6 +7157,8 @@ public:
 
     virtual void make_sorted() override
     {
+        // thaw wants to restore sort state of freeze
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
         m_xSorter.reset(new comphelper::string::NaturalStringSorter(
                             ::comphelper::getProcessComponentContext(),
                             Application::GetSettings().GetUILanguageTag().getLocale()));

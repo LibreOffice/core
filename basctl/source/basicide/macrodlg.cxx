@@ -493,8 +493,8 @@ IMPL_LINK_NOARG(MacroChooser, BasicSelectHdl, weld::TreeView&, void)
         m_xMacroBox->freeze();
         for (auto const& macro : aMacros)
             m_xMacroBox->append_text(macro.second->GetName());
-        m_xMacroBox->make_sorted();
         m_xMacroBox->thaw();
+        m_xMacroBox->make_sorted();
 
         if (m_xMacroBox->get_iter_first(*m_xMacroBoxIter))
             m_xMacroBox->set_cursor(*m_xMacroBoxIter);
