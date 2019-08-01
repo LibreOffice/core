@@ -254,7 +254,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
 Note: spelling in a selection only, or starting in a mid of a drawing object requires
 further changes elsewhere. (Especially if it should work in sc and sd as well.)
 The code below would only be part of the solution.
-(Keeping it a as a comment for the time being)
+(Keeping it as a comment for the time being)
                 ESelection aCurSel( pOLV->GetSelection() );
                 ESelection aSentenceSel( pOLV->GetEditView().GetEditEngine()->SelectSentence( aCurSel ) );
                 if (!aCurSel.HasRange())

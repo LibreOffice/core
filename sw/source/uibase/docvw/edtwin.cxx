@@ -324,7 +324,7 @@ static bool IsMinMove(const Point &rStartPos, const Point &rLPt)
 
 /**
  * For MouseButtonDown - determine whether a DrawObject
- * an NO SwgFrame was hit! Shift/Ctrl should only result
+ * a NO SwgFrame was hit! Shift/Ctrl should only result
  * in selecting, with DrawObjects; at SwgFlys to trigger
  * hyperlinks if applicable (Download/NewWindow!)
  */
@@ -2657,7 +2657,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
     // in case the buffered characters are inserted
     if( bFlushBuffer && !m_aInBuffer.isEmpty() )
     {
-        // bFlushCharBuffer was not resetted here
+        // bFlushCharBuffer was not reset here
         // why not?
         bool bSave = g_bFlushCharBuffer;
         FlushInBuffer();
@@ -4194,7 +4194,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                             m_aSaveCallEvent.Set( EVENT_OBJECT_URLITEM, pFormat );
                     }
 
-                    // should be over a InternetField with an
+                    // should be over an InternetField with an
                     // embedded macro?
                     if( m_aSaveCallEvent != aLastCallEvent )
                     {
@@ -4891,7 +4891,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     }
     ReleaseMouse();
     // Only processed MouseEvents arrive here; only at these this mode can
-    // be resetted.
+    // be reset.
     m_bMBPressed = false;
 
     // Make this call just to be sure. Selecting has finished surely by now.
@@ -5033,7 +5033,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     m_aKeyInputFlushTimer.SetTimeout( 200 );
     m_aKeyInputFlushTimer.SetInvokeHandler(LINK(this, SwEditWin, KeyInputFlushHandler));
 
-    // TemplatePointer for colors should be resetted without
+    // TemplatePointer for colors should be reset without
     // selection after single click, but not after double-click (tdf#122442)
     m_aTemplateTimer.SetTimeout(GetSettings().GetMouseSettings().GetDoubleClickTime());
     m_aTemplateTimer.SetInvokeHandler(LINK(this, SwEditWin, TemplateTimerHdl));

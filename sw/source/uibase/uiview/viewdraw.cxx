@@ -554,7 +554,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
     SdrObject* pToBeActivated = pObj;
 
     // Always the original object is edited. To allow the TextEdit to happen
-    // where the VirtObj is positioned, on demand a occurring offset is set at
+    // where the VirtObj is positioned, on demand an occurring offset is set at
     // the TextEdit object. That offset is used for creating and managing the
     // OutlinerView.
     Point aNewTextEditOffset(0, 0);

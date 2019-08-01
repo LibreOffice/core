@@ -216,7 +216,7 @@ public:
     void            ExecCommand(const OUString& rCmd, bool bModifier);
 
     void            ShowTree();
-    /** folded together will not be glidled */
+    /** folded together will not be glided */
     void            HideTree();
 
     bool            IsConstantView() { return State::CONSTANT == m_eState; }
