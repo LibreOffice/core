@@ -242,38 +242,27 @@ using namespace ::com::sun::star;
         OGenericAdministrationPage::callModifiedHdl();
     }
 
-    VclPtr<OMySQLIntroPageSetup> OMySQLIntroPageSetup::CreateMySQLIntroTabPage( vcl::Window* _pParent, const SfxItemSet& _rAttrSet )
+    VclPtr<OMySQLIntroPageSetup> OMySQLIntroPageSetup::CreateMySQLIntroTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet)
     {
-        return VclPtr<OMySQLIntroPageSetup>::Create( _pParent, _rAttrSet);
+        return VclPtr<OMySQLIntroPageSetup>::Create(pParent, rAttrSet);
     }
 
-
-    OMySQLIntroPageSetup::OMySQLIntroPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
-            :OGenericAdministrationPage(pParent, "DBWizMysqlIntroPage", "dbaccess/ui/dbwizmysqlintropage.ui", _rCoreAttrs)
+    OMySQLIntroPageSetup::OMySQLIntroPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs)
+        : OGenericAdministrationPage(pParent, "dbaccess/ui/dbwizmysqlintropage.ui", "DBWizMysqlIntroPage", _rCoreAttrs)
+        , m_xODBCDatabase(m_xBuilder->weld_radio_button("odbc"))
+        , m_xJDBCDatabase(m_xBuilder->weld_radio_button("jdbc"))
+        , m_xNATIVEDatabase(m_xBuilder->weld_radio_button("directly"))
     {
-        get(m_pODBCDatabase, "odbc");
-        get(m_pJDBCDatabase, "jdbc");
-        get(m_pNATIVEDatabase, "directly");
-
-        m_pODBCDatabase->SetToggleHdl(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
-        m_pJDBCDatabase->SetToggleHdl(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
-        m_pNATIVEDatabase->SetToggleHdl(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
+        m_xODBCDatabase->connect_toggled(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
+        m_xJDBCDatabase->connect_toggled(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
+        m_xNATIVEDatabase->connect_toggled(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
     }
 
     OMySQLIntroPageSetup::~OMySQLIntroPageSetup()
     {
-        disposeOnce();
     }
 
-    void OMySQLIntroPageSetup::dispose()
-    {
-        m_pODBCDatabase.clear();
-        m_pJDBCDatabase.clear();
-        m_pNATIVEDatabase.clear();
-        OGenericAdministrationPage::dispose();
-    }
-
-    IMPL_LINK_NOARG(OMySQLIntroPageSetup, OnSetupModeSelected, RadioButton&, void)
+    IMPL_LINK_NOARG(OMySQLIntroPageSetup, OnSetupModeSelected, weld::ToggleButton&, void)
     {
         maClickHdl.Call( this );
     }
@@ -284,17 +273,17 @@ using namespace ::com::sun::star;
         const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>( _rSet.GetItem(DSID_TYPECOLLECTION) );
         bool bHasMySQLNative = ( pCollectionItem != nullptr ) && pCollectionItem->getCollection()->hasDriver( "sdbc:mysql:mysqlc:" );
         if ( bHasMySQLNative )
-            m_pNATIVEDatabase->Show();
+            m_xNATIVEDatabase->show();
 
         // if any of the options is checked, then there's nothing to do
-        if ( m_pODBCDatabase->IsChecked() || m_pJDBCDatabase->IsChecked() || m_pNATIVEDatabase->IsChecked() )
+        if ( m_xODBCDatabase->get_active() || m_xJDBCDatabase->get_active() || m_xNATIVEDatabase->get_active() )
             return;
 
         // prefer "native" or "JDBC"
         if ( bHasMySQLNative )
-            m_pNATIVEDatabase->Check();
+            m_xNATIVEDatabase->set_active(true);
         else
-            m_pJDBCDatabase->Check();
+            m_xJDBCDatabase->set_active(true);
     }
 
     void OMySQLIntroPageSetup::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& /*_rControlList*/)
@@ -313,9 +302,9 @@ using namespace ::com::sun::star;
 
     OMySQLIntroPageSetup::ConnectionType OMySQLIntroPageSetup::getMySQLMode()
     {
-        if (m_pJDBCDatabase->IsChecked())
+        if (m_xJDBCDatabase->get_active())
             return VIA_JDBC;
-        else if (m_pNATIVEDatabase->IsChecked())
+        else if (m_xNATIVEDatabase->get_active())
             return VIA_NATIVE;
         else
             return VIA_ODBC;

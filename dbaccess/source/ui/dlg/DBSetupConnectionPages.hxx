@@ -200,11 +200,10 @@ namespace dbaui
             VIA_NATIVE
         };
 
-        OMySQLIntroPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
+        OMySQLIntroPageSetup(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
         virtual ~OMySQLIntroPageSetup() override;
-        virtual void dispose() override;
 
-        static VclPtr<OMySQLIntroPageSetup> CreateMySQLIntroTabPage( vcl::Window* _pParent, const SfxItemSet& _rAttrSet );
+        static VclPtr<OMySQLIntroPageSetup> CreateMySQLIntroTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
         ConnectionType      getMySQLMode();
         void                SetClickHdl( const Link<OMySQLIntroPageSetup *, void>& rLink ) { maClickHdl = rLink; }
 
@@ -215,13 +214,12 @@ namespace dbaui
         virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
 
     private:
-        VclPtr<RadioButton>         m_pODBCDatabase;
-        VclPtr<RadioButton>         m_pJDBCDatabase;
-        VclPtr<RadioButton>         m_pNATIVEDatabase;
+        std::unique_ptr<weld::RadioButton> m_xODBCDatabase;
+        std::unique_ptr<weld::RadioButton> m_xJDBCDatabase;
+        std::unique_ptr<weld::RadioButton> m_xNATIVEDatabase;
         Link<OMySQLIntroPageSetup *, void> maClickHdl;
 
-        DECL_LINK(OnSetupModeSelected, RadioButton&, void);
-
+        DECL_LINK(OnSetupModeSelected, weld::ToggleButton&, void);
     };
 
     // OAuthentificationPageSetup
