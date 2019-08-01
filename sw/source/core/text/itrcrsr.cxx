@@ -1246,6 +1246,27 @@ bool SwTextCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
     return true;
 }
 
+/**
+ * Determines if SwTextCursor::GetCursorOfst() should consider the next portion when calculating the
+ * doc model position from a Point.
+ */
+static bool ConsiderNextPortionForCursorOffset(SwLinePortion* pPor, sal_uInt16 nWidth30, sal_uInt16 nX)
+{
+    if (!pPor->GetPortion())
+    {
+        return false;
+    }
+
+    // If we're poast the target position, stop the iteration in general.
+    // Exception: don't stop the iteration between as-char fly portions and their comments.
+    if (nWidth30 >= nX && (!pPor->IsFlyCntPortion() || !pPor->GetPortion()->IsPostItsPortion()))
+    {
+        return false;
+    }
+
+    return !pPor->IsBreakPortion();
+}
+
 // Return: Offset in String
 sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
                                     bool bChgNode, SwCursorMoveState* pCMS ) const
@@ -1333,7 +1354,7 @@ sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
                      30 :
                      nWidth;
 
-    while( pPor->GetPortion() && nWidth30 < nX && !pPor->IsBreakPortion() )
+    while (ConsiderNextPortionForCursorOffset(pPor, nWidth30, nX))
     {
         nX = nX - nWidth;
         nCurrStart = nCurrStart + pPor->GetLen();
@@ -1507,7 +1528,14 @@ sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
         {
             if ( pPor->IsPostItsPortion() || pPor->IsBreakPortion() ||
                  pPor->InToxRefGrp() )
+            {
+                if (pPor->IsPostItsPortion())
+                {
+                    // Offset would be nCurrStart + nLength below, do the same for post-it portions.
+                    nCurrStart += pPor->GetLen();
+                }
                 return nCurrStart;
+            }
             if ( pPor->InFieldGrp() )
             {
                 if( bRightOver && !static_cast<SwFieldPortion*>(pPor)->HasFollow() )
