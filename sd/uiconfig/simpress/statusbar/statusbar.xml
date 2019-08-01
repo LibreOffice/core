@@ -28,5 +28,5 @@
  <statusbar:statusbaritem xlink:href=".uno:PageStatus" statusbar:align="left" statusbar:width="124"/>
  <statusbar:statusbaritem xlink:href=".uno:LayoutStatus" statusbar:align="left" statusbar:autosize="true" statusbar:width="54"/>
  <statusbar:statusbaritem xlink:href=".uno:ZoomSlider" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="130"/>
- <statusbar:statusbaritem xlink:href=".uno:Zoom" statusbar:align="center" statusbar:width="36"/>
+ <statusbar:statusbaritem xlink:href=".uno:Zoom" statusbar:align="center" statusbar:width="35"/>
 </statusbar:statusbar>
