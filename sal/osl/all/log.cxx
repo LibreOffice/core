@@ -149,6 +149,8 @@ char const * getLogLevel() {
     return pLevel;
 }
 
+#if !defined ANDROID
+
 std::ofstream * getLogFile() {
     static std::ofstream* const pFile = [] {
         std::ofstream* pResult = nullptr;
@@ -242,6 +244,8 @@ void maybeOutputTimestamp(std::ostringstream &s) {
         s << relativeTimestamp << ':';
     }
 }
+
+#endif
 
 }
 
