@@ -682,7 +682,7 @@ public:
     void SwitchHorizontalToVertical( Point& rPoint ) const;
 
     /**
-     * Calculates the a limit value when switching from
+     * Calculates the limit value when switching from
      * horizontal to vertical layout
      */
     long SwitchHorizontalToVertical( long nLimit ) const;

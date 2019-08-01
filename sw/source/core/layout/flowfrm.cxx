@@ -1462,7 +1462,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                         // #i102458#
                         // Correction:
                         // A proportional line spacing of the previous text frame
-                        // is added up to a own leading line spacing.
+                        // is added up to an own leading line spacing.
                         // Otherwise, the maximum of the leading line spacing
                         // of the previous text frame and the own leading line
                         // spacing is built.
@@ -1508,7 +1508,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                         // #i102458#
                         // Correction:
                         // A proportional line spacing of the previous text frame
-                        // is added up to a own leading line spacing.
+                        // is added up to an own leading line spacing.
                         // Otherwise, the maximum of the leading line spacing
                         // of the previous text frame and the own leading line
                         // spacing is built.
@@ -2110,7 +2110,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
     }
     else if ( IsPageBreak( true ) ) // Do we have to respect a PageBreak?
     {
-        // If the previous page doesn't have an Frame in the body,
+        // If the previous page doesn't have a Frame in the body,
         // flowing back makes sense despite the PageBreak (otherwise,
         // we'd get an empty page).
         // Of course we need to overlook empty pages!

@@ -215,7 +215,7 @@ void SwFormat::CopyAttrs( const SwFormat& rFormat )
 
 SwFormat::~SwFormat()
 {
-    // This happens at a ObjectDying message. Thus put all dependent
+    // This happens at an ObjectDying message. Thus put all dependent
     // ones on DerivedFrom.
     if( HasWriterListeners() )
     {

@@ -992,7 +992,7 @@ SwSectionNode::SwSectionNode(SwNodeIndex const& rIdx,
                 lcl_initParent(*this, rFormat) ) )
 {
     // Set the connection from Format to Node
-    // Suppress Modify; no one's interessted anyway
+    // Suppress Modify; no one's interested anyway
     rFormat.LockModify();
     rFormat.SetFormatAttr( SwFormatContent( this ) );
     rFormat.UnlockModify();

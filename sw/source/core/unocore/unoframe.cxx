@@ -293,7 +293,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     // use brush items, but *only* if no FillStyle properties are used; if both are used and when applying both
     // in the obvious order some attributes may be wrong since they are set by the 1st set, but not
     // redefined as needed by the 2nd set when they are default (and thus no tset) in the 2nd set. If
-    // it is necessary for any reason to set both (it should not) a in-between step will be needed
+    // it is necessary for any reason to set both (it should not) an in-between step will be needed
     // that resets the items for FillAttributes in rToSet to default.
     // Note: There are other mechanisms in XMLOFF to pre-sort this relationship already, but this version
     // was used initially, is tested and works. Keep it to be able to react when another feed adds attributes

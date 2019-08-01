@@ -2086,7 +2086,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     pTableNd->DelFrames();
 
     {
-        // Conver the Table formulas to their relative representation
+        // Convert the Table formulas to their relative representation
         SwTableFormulaUpdate aMsgHint( this );
         aMsgHint.m_eFlags = TBL_RELBOXNAME;
         pSrcDoc->getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );

@@ -205,7 +205,7 @@ public:
     void DeRegisterShell( SwViewShell *pSh );
 
     /**
-     * Set up Start-/EndAction for all Shells on a as high as possible
+     * Set up Start-/EndAction for all Shells on an as high as possible
      * (Shell section) level.
      * For the StarONE binding, which does not know the Shells directly.
      * The ChangeLinkd of the CursorShell (UI notifications) is called

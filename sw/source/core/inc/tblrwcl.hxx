@@ -110,7 +110,7 @@ void sw_BoxSetSplitBoxFormats( SwTableBox* pBox, SwCollectTableLineBoxes* pSplPa
  */
 struct SwSaveRowSpan
 {
-    sal_uInt16 const mnSplitLine; // the line number where the table has been splitted
+    sal_uInt16 const mnSplitLine; // the line number where the table has been split
     std::vector< long > mnRowSpans; // the row span attributes in this line
     SwSaveRowSpan( SwTableBoxes& rBoxes, sal_uInt16 nSplitLn );
 };

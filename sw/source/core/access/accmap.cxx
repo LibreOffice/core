@@ -1442,7 +1442,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
     }
 }
 
-//Marge with DoInvalidateShapeFocus
+//Merge with DoInvalidateShapeFocus
 void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=false*/)
 {
     std::unique_ptr<SwAccessibleObjShape_Impl[]> pShapes;
@@ -1607,7 +1607,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
     }
 }
 
-//Marge with DoInvalidateShapeSelection
+//Merge with DoInvalidateShapeSelection
 /*
 void SwAccessibleMap::DoInvalidateShapeFocus()
 {
@@ -2601,7 +2601,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
                     if( xAcc.is() )
                         xOldAcc = xAcc; // avoid extra invalidation
                     else
-                        xAcc = xOldAcc; // make sure ate least one
+                        xAcc = xOldAcc; // make sure at least one
                 }
                 if( !xAcc.is() )
                     xAcc = GetContext( aFrameOrObj.GetSwFrame() );

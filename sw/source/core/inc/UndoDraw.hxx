@@ -67,7 +67,7 @@ public:
     void SetGroupFormat( SwDrawFrameFormat* );
 };
 
-// Action "ungroup drawing object" is now splitted into three parts - see
+// Action "ungroup drawing object" is now split into three parts - see
 // method <SwDoc::UnGroupSelection(..)>:
 // - creation for <SwDrawFrameFormat> instances for the group members of the
 //   selected group objects

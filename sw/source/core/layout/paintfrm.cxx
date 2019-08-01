@@ -1586,7 +1586,7 @@ static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
  * Method introduced for bug fix #103876# in order to optimize drawing tiled
  * background graphics. Previously, this code was integrated in method
  * <lcl_DrawGraphic>.
- * Method implemented as a inline, checking the conditions and calling method
+ * Method implemented as an inline, checking the conditions and calling method
  * method <lcl_implDrawGraphicBackgrd(..)> for the intrinsic drawing.
  *
  * @param _rBackgrdBrush
@@ -1964,7 +1964,7 @@ void DrawGraphic(
         pOutDev->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
         pOutDev->SetLineColor();
 
-        // check, if a existing background graphic (not filling the complete
+        // check, if an existing background graphic (not filling the complete
         // background) is transparent drawn and the background color is
         // "no fill" respectively "auto fill", if background transparency
         // has to be considered.
@@ -5126,7 +5126,7 @@ void SwFrame::PaintSwFrameShadowAndBorder(
 
             if(rAttrs.JoinedWithPrev(*this))
             {
-                // tdf#115296 re-add adaption of vert distance to close the evtl.
+                // tdf#115296 re-add adaptation of vert distance to close the evtl.
                 // existing gap to previous frame
                 const SwFrame* pPrevFrame(GetPrev());
                 (aRect.*_rRectFn->fnSetTop)( (pPrevFrame->*_rRectFn->fnGetPrtBottom)() );
@@ -5137,7 +5137,7 @@ void SwFrame::PaintSwFrameShadowAndBorder(
 
             if(rAttrs.JoinedWithNext(*this))
             {
-                // tdf#115296 re-add adaption of vert distance to close the evtl.
+                // tdf#115296 re-add adaptation of vert distance to close the evtl.
                 // existing gap to next frame
                 const SwFrame* pNextFrame(GetNext());
                 (aRect.*_rRectFn->fnSetBottom)( (pNextFrame->*_rRectFn->fnGetPrtTop)() );
@@ -6531,7 +6531,7 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
             // OD 19.12.2002 #106318# - do *not* consider fly frames with
             // a transparent background.
             // OD 2004-02-12 #110582#-2 - do *not* consider fly frame, which
-            // belongs to a invisible layer
+            // belongs to an invisible layer
             if ( pFly->IsBackgroundTransparent() ||
                  !pFly->GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( pObj->GetLayer() ) )
             {
@@ -7120,7 +7120,7 @@ void SwFrame::Retouch( const SwPageFrame * pPage, const SwRect &rRect ) const
  * which has a background graphic. But there are some special cases:
  * (1) No background brush is taken from a page frame, if view option "IsPageBack"
  *     isn't set.
- * (2) Background brush from a index section is taken under special conditions.
+ * (2) Background brush from an index section is taken under special conditions.
  *     In this case parameter <rpCol> is set to the index shading color.
  * (3) New (OD 20.08.2002) - Background brush is taken, if on background drawing
  *     of the frame transparency is considered and its color is not "no fill"/"auto fill"

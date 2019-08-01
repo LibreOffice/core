@@ -195,7 +195,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
         pDoc->SetAutoCorrExceptWord( nullptr );
     }
 
-    // If there was not only a overwrite but also an insert, delete the surplus
+    // If there was not only an overwrite but also an insert, delete the surplus
     if( aInsStr.getLength() > aDelStr.getLength() )
     {
         rIdx += aDelStr.getLength();

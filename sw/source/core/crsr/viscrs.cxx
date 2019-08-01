@@ -688,7 +688,7 @@ short SwShellCursor::MaxReplaceArived()
         }
     }
     else
-        // otherwise from the Basic, and than switch to RET_YES
+        // otherwise from the Basic, and then switch to RET_YES
         nRet = RET_YES;
 
     return nRet;

@@ -2308,7 +2308,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
 
         case SwComparePosition::Inside:
             {
-                // this one needs to be splitted
+                // this one needs to be split
                 pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
                 if( *pRStt == *pStt )
                 {

@@ -282,7 +282,7 @@ void SwEditShell::GetSelectedText( OUString &rBuf, ParaBreakType nHndlParaBrk )
         SwReaderWriter::GetWriter( FILTER_TEXT, OUString(), xWrt );
         if( xWrt.is() )
         {
-            // write selected areas into a ASCII document
+            // write selected areas into an ASCII document
             SwWriter aWriter( aStream, *this);
             xWrt->SetShowProgress(false);
 

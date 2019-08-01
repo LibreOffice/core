@@ -304,7 +304,7 @@ void SwAttrIter::SeekFwd(const sal_Int32 nOldPos, const sal_Int32 nNewPos)
 
 bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
 {
-    // note: nNewPos isn't necessarily a index returned from GetNextAttr
+    // note: nNewPos isn't necessarily an index returned from GetNextAttr
     std::pair<SwTextNode const*, sal_Int32> const newPos( m_pMergedPara
         ? sw::MapViewToModel(*m_pMergedPara, nNewPos)
         : std::make_pair(m_pTextNode, sal_Int32(nNewPos)));

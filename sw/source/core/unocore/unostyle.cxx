@@ -2833,7 +2833,7 @@ void SwXStyle::PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet
         SetStyleProperty(rEntry, rPropSet, rVal, rBaseImpl);
     }
 
-    // reset paret at ItemSet from SetItem
+    // reset parent at ItemSet from SetItem
     rSetSet.SetParent(nullptr);
 
     // set the new SvxSetItem at the real target and delete it

@@ -1302,7 +1302,7 @@ static void lcl_SetNumUsedBit(std::vector<sal_uInt8>& rSetFlags, size_t nFormatS
 {
     OUString sName = rObj.GetName();
     lcl_SetNumUsedBit(rSetFlags, nFormatSize, nNmLen, sName, rCmpName);
-    // tdf#122487 take groups into account, interate and recurse through their
+    // tdf#122487 take groups into account, iterate and recurse through their
     // contents for name collision check
     if (rObj.IsGroupObject())
     {

@@ -387,7 +387,7 @@ sal_uInt16 SwTextFormatColl::ResetAllFormatAttr()
     const bool bOldState( mbStayAssignedToListLevelOfOutlineStyle );
     mbStayAssignedToListLevelOfOutlineStyle = true;
     // #i70748#
-    // Outline level is no longer a member, it is a attribute now.
+    // Outline level is no longer a member, it is an attribute now.
     // Thus, it needs to be restored, if the paragraph style is assigned
     // to the outline style
     const int nAssignedOutlineStyleLevel = IsAssignedToListLevelOfOutlineStyle()

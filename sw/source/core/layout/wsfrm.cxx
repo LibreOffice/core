@@ -1316,7 +1316,7 @@ void SwLayoutFrame::Paste( SwFrame* pParent, SwFrame* pSibling)
     // There are the following cases:
     // (A) Header and footer frames both in vertical and in horizontal layout
     //      have to size the width to the upper/parent. A dimension in the height
-    //      has to cause a adjustment/grow of the upper/parent.
+    //      has to cause an adjustment/grow of the upper/parent.
     //      --> <fnRect> = fnRectHori
     // (B) Cell and column frames in vertical layout, the width has to be the
     //          same as upper/parent and a dimension in height causes adjustment/grow

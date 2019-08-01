@@ -257,7 +257,7 @@ bool SwOLENode::RestorePersistentData()
         SfxObjectShell* p = GetDoc()->GetPersist();
         if( !p )
         {
-            // TODO/LATER: Isn't a EmbeddedObjectContainer sufficient here?
+            // TODO/LATER: Isn't an EmbeddedObjectContainer sufficient here?
             // What happens to this document?
             OSL_ENSURE( false, "Why are we creating a DocShell here?" );
             p = new SwDocShell( GetDoc(), SfxObjectCreateMode::INTERNAL );
@@ -857,7 +857,7 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
         SfxObjectShell* p = pDoc->GetPersist();
         if( !p )
         {
-            // TODO/LATER: Isn't a EmbeddedObjectContainer sufficient here?
+            // TODO/LATER: Isn't an EmbeddedObjectContainer sufficient here?
             // What happens to the document?
             OSL_ENSURE( false, "Why are we creating a DocShell here??" );
             p = new SwDocShell( pDoc, SfxObjectCreateMode::INTERNAL );

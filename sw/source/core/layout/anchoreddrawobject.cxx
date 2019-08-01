@@ -355,7 +355,7 @@ void SwAnchoredDrawObject::MakeObjPos()
     }
 }
 
-/** method for the intrinsic positioning of a at-paragraph|at-character
+/** method for the intrinsic positioning of an at-paragraph|at-character
     anchored drawing object
 
     #i32795# - helper method for method <MakeObjPos>
@@ -449,7 +449,7 @@ void SwAnchoredDrawObject::MakeObjPosAnchoredAtPara()
     }
 }
 
-/** method for the intrinsic positioning of a at-page|at-frame anchored
+/** method for the intrinsic positioning of an at-page|at-frame anchored
     drawing object
 
     #i32795# - helper method for method <MakeObjPos>

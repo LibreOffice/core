@@ -279,7 +279,7 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     {
         // RotateFlyFrame3: Also need to clear ContourCache (if used),
         // usually done in SwFlyFrame::NotifyDrawObj, but there relies on
-        // being in transform mode which is already resetted then
+        // being in transform mode which is already reset then
         if(isTransformableSwFrame())
         {
             ::ClrContourCache(GetVirtDrawObj());

@@ -2892,7 +2892,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
 
                 // If we're flowing back and own a Footnote, the Footnote also flows
                 // with us. So that it doesn't obstruct us, we send ourselves
-                // a ADJUST_FRM.
+                // an ADJUST_FRM.
                 // pVoid != 0 means MoveBwd()
                     const sal_uInt16 nWhich = pHt->Which();
                     if (RES_TXTATR_FIELD == nWhich ||
@@ -3568,9 +3568,9 @@ void SwTextFrame::CalcHeightOfLastLine( const bool _bUseFont )
     // determine height of last line
     if ( _bUseFont || pIDSA->get(DocumentSettingId::OLD_LINE_SPACING ) )
     {
-        // former determination of last line height for proprotional line
+        // former determination of last line height for proportional line
         // spacing - take height of font set at the paragraph
-        // FIXME actually ... must the font match across all nodes?
+        // FIXME actually... must the font match across all nodes?
         SwFont aFont( &GetTextNodeForParaProps()->GetSwAttrSet(), pIDSA );
 
         // we must ensure that the font is restored correctly on the OutputDevice
