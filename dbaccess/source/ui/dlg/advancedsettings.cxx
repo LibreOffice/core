@@ -172,7 +172,7 @@ namespace dbaui
         {
             if (booleanSetting.xControl)
             {
-                _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::CheckButton>(booleanSetting.xControl.get()));
+                _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(booleanSetting.xControl.get()));
             }
         }
 
@@ -317,7 +317,7 @@ namespace dbaui
 
     void GeneratedValuesPage::fillControls( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList )
     {
-        _rControlList.emplace_back( new OSaveValueWidgetWrapper<weld::CheckButton>( m_xAutoRetrievingEnabled.get() ) );
+        _rControlList.emplace_back( new OSaveValueWidgetWrapper<weld::ToggleButton>( m_xAutoRetrievingEnabled.get() ) );
         _rControlList.emplace_back( new OSaveValueWidgetWrapper<weld::Entry>( m_xAutoIncrement.get() ) );
         _rControlList.emplace_back( new OSaveValueWidgetWrapper<weld::Entry>( m_xAutoRetrieving.get() ) );
     }

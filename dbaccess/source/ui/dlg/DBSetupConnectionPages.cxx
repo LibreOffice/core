@@ -710,7 +710,7 @@ using namespace ::com::sun::star;
     void OSpreadSheetConnectionPageSetup::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         OConnectionTabPageSetup::fillControls(_rControlList);
-        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::CheckButton>(m_xPasswordrequired.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xPasswordrequired.get()));
 
     }
 
@@ -798,87 +798,70 @@ using namespace ::com::sun::star;
         return bChangedSomething;
     }
 
-    VclPtr<OGenericAdministrationPage> OFinalDBPageSetup::CreateFinalDBTabPageSetup( vcl::Window* pParent, const SfxItemSet& _rAttrSet)
+    VclPtr<OGenericAdministrationPage> OFinalDBPageSetup::CreateFinalDBTabPageSetup(vcl::Window* pParent, const SfxItemSet& _rAttrSet)
     {
         return VclPtr<OFinalDBPageSetup>::Create( pParent, _rAttrSet);
     }
 
-
-    OFinalDBPageSetup::OFinalDBPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs)
-        : OGenericAdministrationPage(pParent, "PageFinal",
-            "dbaccess/ui/finalpagewizard.ui", _rCoreAttrs)
+    OFinalDBPageSetup::OFinalDBPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs)
+        : OGenericAdministrationPage(pParent, "dbaccess/ui/finalpagewizard.ui", "PageFinal", _rCoreAttrs)
+        , m_xFTFinalHeader(m_xBuilder->weld_label("headerText"))
+        , m_xFTFinalHelpText(m_xBuilder->weld_label("helpText"))
+        , m_xRBRegisterDataSource(m_xBuilder->weld_radio_button("yesregister"))
+        , m_xRBDontregisterDataSource(m_xBuilder->weld_radio_button("noregister"))
+        , m_xFTAdditionalSettings(m_xBuilder->weld_label("additionalText"))
+        , m_xCBOpenAfterwards(m_xBuilder->weld_check_button("openediting"))
+        , m_xCBStartTableWizard(m_xBuilder->weld_check_button("usewizard"))
+        , m_xFTFinalText(m_xBuilder->weld_label("finishText"))
     {
-        get(m_pFTFinalHeader, "headerText");
-        get(m_pFTFinalHelpText, "helpText");
-        get(m_pRBRegisterDataSource, "yesregister");
-        get(m_pRBDontregisterDataSource, "noregister");
-        get(m_pFTAdditionalSettings, "additionalText");
-        get(m_pCBOpenAfterwards, "openediting");
-        get(m_pCBStartTableWizard, "usewizard");
-        get(m_pFTFinalText, "finishText");
-
-        m_pCBOpenAfterwards->SetClickHdl(LINK(this, OFinalDBPageSetup, OnOpenSelected));
-        m_pCBStartTableWizard->SetClickHdl(LINK(this,OGenericAdministrationPage,OnControlModifiedClick));
-        m_pRBRegisterDataSource->SetState(true);
+        m_xCBOpenAfterwards->connect_toggled(LINK(this, OFinalDBPageSetup, OnOpenSelected));
+        m_xCBStartTableWizard->connect_toggled(LINK(this,OGenericAdministrationPage,OnControlModifiedButtonClick));
+        m_xRBRegisterDataSource->set_active(true);
     }
 
     OFinalDBPageSetup::~OFinalDBPageSetup()
     {
-        disposeOnce();
-    }
-
-    void OFinalDBPageSetup::dispose()
-    {
-        m_pFTFinalHeader.clear();
-        m_pFTFinalHelpText.clear();
-        m_pRBRegisterDataSource.clear();
-        m_pRBDontregisterDataSource.clear();
-        m_pFTAdditionalSettings.clear();
-        m_pCBOpenAfterwards.clear();
-        m_pCBStartTableWizard.clear();
-        m_pFTFinalText.clear();
-        OGenericAdministrationPage::dispose();
     }
 
     bool OFinalDBPageSetup::IsDatabaseDocumentToBeRegistered()
     {
-        return m_pRBRegisterDataSource->IsChecked() && m_pRBRegisterDataSource->IsEnabled();
+        return m_xRBRegisterDataSource->get_active() && m_xRBRegisterDataSource->get_sensitive();
     }
 
     bool OFinalDBPageSetup::IsDatabaseDocumentToBeOpened()
     {
-        return m_pCBOpenAfterwards->IsChecked() && m_pCBOpenAfterwards->IsEnabled();
+        return m_xCBOpenAfterwards->get_active() && m_xCBOpenAfterwards->get_sensitive();
     }
 
     bool OFinalDBPageSetup::IsTableWizardToBeStarted()
     {
-        return m_pCBStartTableWizard->IsChecked() && m_pCBStartTableWizard->IsEnabled();
+        return m_xCBStartTableWizard->get_active() && m_xCBStartTableWizard->get_sensitive();
     }
 
     void OFinalDBPageSetup::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pFTFinalHeader));
-        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pFTFinalHelpText));
-        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pFTAdditionalSettings));
-        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pFTFinalText));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTFinalHeader.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTFinalHelpText.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTAdditionalSettings.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTFinalText.get()));
     }
 
     void OFinalDBPageSetup::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        _rControlList.emplace_back(new OSaveValueWrapper<CheckBox>(m_pCBOpenAfterwards));
-        _rControlList.emplace_back(new OSaveValueWrapper<CheckBox>(m_pCBStartTableWizard));
-        _rControlList.emplace_back(new OSaveValueWrapper<RadioButton>(m_pRBRegisterDataSource));
-        _rControlList.emplace_back(new OSaveValueWrapper<RadioButton>(m_pRBDontregisterDataSource));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xCBOpenAfterwards.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xCBStartTableWizard.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xRBRegisterDataSource.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xRBDontregisterDataSource.get()));
     }
 
     void OFinalDBPageSetup::implInitControls(const SfxItemSet& /*_rSet*/, bool /*_bSaveValue*/)
     {
-        m_pCBOpenAfterwards->Check();
+        m_xCBOpenAfterwards->set_active(true);
     }
 
     void OFinalDBPageSetup::enableTableWizardCheckBox( bool _bSupportsTableCreation)
     {
-        m_pCBStartTableWizard->Enable(_bSupportsTableCreation);
+        m_xCBStartTableWizard->set_sensitive(_bSupportsTableCreation);
     }
 
     bool OFinalDBPageSetup::FillItemSet( SfxItemSet* /*_rSet*/ )
@@ -886,9 +869,9 @@ using namespace ::com::sun::star;
         return true;
     }
 
-    IMPL_LINK(OFinalDBPageSetup, OnOpenSelected, Button*, _pBox, void)
+    IMPL_LINK(OFinalDBPageSetup, OnOpenSelected, weld::ToggleButton&, rBox, void)
     {
-        m_pCBStartTableWizard->Enable( _pBox->IsEnabled() && static_cast<CheckBox*>(_pBox)->IsChecked() );
+        m_xCBStartTableWizard->set_sensitive(rBox.get_sensitive() && rBox.get_active());
         callModifiedHdl();
     }
 }

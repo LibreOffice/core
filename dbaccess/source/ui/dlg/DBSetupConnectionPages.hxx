@@ -253,28 +253,27 @@ namespace dbaui
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
         static VclPtr<OGenericAdministrationPage> CreateFinalDBTabPageSetup( vcl::Window* pParent, const SfxItemSet& _rAttrSet);
 
-        OFinalDBPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
+        OFinalDBPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OFinalDBPageSetup() override;
-        virtual void dispose() override;
         bool IsDatabaseDocumentToBeRegistered();
         bool IsDatabaseDocumentToBeOpened();
         bool IsTableWizardToBeStarted();
         void enableTableWizardCheckBox( bool _bSupportsTableCreation);
 
-        DECL_LINK(OnOpenSelected, Button*, void);
+        DECL_LINK(OnOpenSelected, weld::ToggleButton&, void);
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
         virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
         virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
     private:
-        VclPtr<FixedText>   m_pFTFinalHeader;
-        VclPtr<FixedText>   m_pFTFinalHelpText;
-        VclPtr<RadioButton> m_pRBRegisterDataSource;
-        VclPtr<RadioButton> m_pRBDontregisterDataSource;
-        VclPtr<FixedText>   m_pFTAdditionalSettings;
-        VclPtr<CheckBox>    m_pCBOpenAfterwards;
-        VclPtr<CheckBox>    m_pCBStartTableWizard;
-        VclPtr<FixedText>   m_pFTFinalText;
+        std::unique_ptr<weld::Label> m_xFTFinalHeader;
+        std::unique_ptr<weld::Label> m_xFTFinalHelpText;
+        std::unique_ptr<weld::RadioButton> m_xRBRegisterDataSource;
+        std::unique_ptr<weld::RadioButton> m_xRBDontregisterDataSource;
+        std::unique_ptr<weld::Label> m_xFTAdditionalSettings;
+        std::unique_ptr<weld::CheckButton> m_xCBOpenAfterwards;
+        std::unique_ptr<weld::CheckButton> m_xCBStartTableWizard;
+        std::unique_ptr<weld::Label> m_xFTFinalText;
     };
 
 }   // namespace dbaui
