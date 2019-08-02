@@ -349,7 +349,7 @@ namespace
 
                     default:
                         {
-                            pDelPam.reset(new SwPaM( *pCpyStt, pDelPam.get() ));
+                            pDelPam.reset(new SwPaM( *pCpyStt, pDelPam.release() ));
                             if( *pStt < *pRStt )
                             {
                                 lcl_NonCopyCount( rPam, aCorrIdx, pRStt->nNode.GetIndex(), nDelCount );

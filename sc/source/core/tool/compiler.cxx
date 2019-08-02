@@ -2223,14 +2223,16 @@ Label_MaskStateMachine:
                 {
                     // One range operator may form Sheet1.A:A, which we need to
                     // pass as one entity to IsReference().
-                    mnRangeOpPosInSymbol = pSym - &cSymbol[0];
                     if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
                     {
                         SetError(errStringOverflow);
                         eState = ssStop;
                     }
                     else
+                    {
+                        mnRangeOpPosInSymbol = pSym - &cSymbol[0];
                         *pSym++ = c;
+                    }
                 }
                 else if ( 128 <= c || '\'' == c )
                 {   // High values need reparsing with i18n,
@@ -2680,6 +2682,8 @@ Label_MaskStateMachine:
             SetError( errStringOverflow );
             nLen = MAXSTRLEN-1;
         }
+        if (mnRangeOpPosInSymbol >= nLen)
+            mnRangeOpPosInSymbol = -1;
         lcl_UnicodeStrNCpy( cSymbol, aSymbol.getStr(), nLen );
         pSym = &cSymbol[nLen];
     }
@@ -3182,6 +3186,8 @@ bool ScCompiler::IsReference( const OUString& rName, const OUString* pErrRef )
             return true;
         // Now try with a symbol up to the range operator, rewind source
         // position.
+        if (mnRangeOpPosInSymbol == MAXSTRLEN-1)
+            return false;
         sal_Int32 nLen = mnRangeOpPosInSymbol;
         while (cSymbol[++nLen])
             ;
