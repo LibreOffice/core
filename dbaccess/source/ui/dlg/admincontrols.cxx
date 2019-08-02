@@ -369,6 +369,32 @@ namespace dbaui
             m_xHostPortRadio->set_active(true);
     }
 
+    bool DBMySQLNativeSettings::canAdvance() const
+    {
+        if (m_xDatabaseName->get_text().isEmpty())
+            return false;
+
+        if  (   m_xHostPortRadio->get_active()
+            &&  (   ( m_xHostName->get_text().isEmpty() )
+                ||  ( m_xPort->get_text().isEmpty() )
+                )
+            )
+            return false;
+
+#ifdef UNX
+        if  (   ( m_xSocketRadio->get_active() )
+            &&  ( m_xSocket->get_text().isEmpty() )
+            )
+#else
+        if  (   ( m_xNamedPipeRadio->get_active() )
+            &&  ( m_xNamedPipe->get_text().isEmpty() )
+            )
+#endif
+            return false;
+
+        return true;
+    }
+
 } // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
