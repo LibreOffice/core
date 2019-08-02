@@ -576,7 +576,7 @@ void SwView::Execute(SfxRequest &rReq)
                 Sequence <sal_Int8> aPasswd = rIDRA.GetRedlinePassword();
                 if( aPasswd.hasElements() )
                 {
-                    OSL_ENSURE( !static_cast<const SfxBoolItem*>(pItem)->GetValue(), "SwView::Execute(): password set an redlining off doesn't match!" );
+                    OSL_ENSURE( !static_cast<const SfxBoolItem*>(pItem)->GetValue(), "SwView::Execute(): password set and redlining off doesn't match!" );
                     // xmlsec05:    new password dialog
                     SfxPasswordDialog aPasswdDlg(GetFrameWeld());
                     aPasswdDlg.SetMinLen(1);

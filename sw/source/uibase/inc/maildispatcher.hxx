@@ -88,7 +88,7 @@ public:
         a listener for mail dispatcher events. For every mail message sent
         the notification will be sent. While handling such notification a
         client may enqueue new mail messages. If there are no more mail
-        messages to send an respective notification is sent and the mail
+        messages to send a respective notification is sent and the mail
         dispatcher waits for more mail messages.
 
         @precond not isStarted()

@@ -1749,7 +1749,7 @@ void SwContentTree::Display( bool bActive )
                     Expand(pEntry);
                     if(nEntryRelPos && nCntType == m_nLastSelType)
                     {
-                        // Now maybe select a additional child
+                        // Now maybe select an additional child
                         SvTreeListEntry* pChild = pEntry;
                         SvTreeListEntry* pTemp = nullptr;
                         sal_uLong nPos = 1;
@@ -1829,7 +1829,7 @@ void SwContentTree::Display( bool bActive )
             }
             else
             {
-                // Now maybe select a additional child
+                // Now maybe select an additional child
                 SvTreeListEntry* pChild = pParent;
                 SvTreeListEntry* pTemp = nullptr;
                 sal_uLong nPos = 1;

@@ -226,7 +226,7 @@ bool SwWrtShell::GoStart( bool bKeepArea, bool *pMoveTable,
         }
         else if( bBoxSelection && pMoveTable )
         {
-            // JP 09.01.96: We have a box selection (or a empty cell)
+            // JP 09.01.96: We have a box selection (or an empty cell)
             //              and we want select (pMoveTable will be
             //              set in SelAll). Then the table must not
             //              be left, otherwise there is no selection

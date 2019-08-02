@@ -51,7 +51,7 @@ SwXDispatchProviderInterceptor::SwXDispatchProviderInterceptor(SwView& rVw) :
         osl_atomic_increment(&m_refCount);
         m_xIntercepted->registerDispatchProviderInterceptor(static_cast<frame::XDispatchProviderInterceptor*>(this));
         // this should make us the top-level dispatch-provider for the component, via a call to our
-        // setDispatchProvider we should have got an fallback for requests we (i.e. our master) cannot fulfill
+        // setDispatchProvider we should have got a fallback for requests we (i.e. our master) cannot fulfill
         uno::Reference< lang::XComponent> xInterceptedComponent(m_xIntercepted, uno::UNO_QUERY);
         if (xInterceptedComponent.is())
             xInterceptedComponent->addEventListener(static_cast<lang::XEventListener*>(this));

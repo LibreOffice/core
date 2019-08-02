@@ -228,7 +228,7 @@ IMPL_LINK( SwBaseShell, InsertDBTextHdl, void*, p, void )
         bool bDispose = false;
         Reference< sdbc::XConnection> xConnection = pDBStruct->xConnection;
         Reference<XDataSource> xSource = SwDBManager::getDataSourceAsParent(xConnection,pDBStruct->aDBData.sDataSource);
-        // #111987# the connection is disposed an so no parent has been found
+        // #111987# the connection is disposed and so no parent has been found
         if(xConnection.is() && !xSource.is())
             return;
 

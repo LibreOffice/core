@@ -203,7 +203,7 @@ void SwGlossaryHdl::RenameGroup(const OUString& rOld, OUString& rNew, const OUSt
     }
 }
 
-// delete a autotext-file-group
+// delete an autotext-file-group
 bool SwGlossaryHdl::DelGroup(const OUString &rGrpName)
 {
     OUString sGroup(rGrpName);
@@ -304,7 +304,7 @@ bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShortNam
     return nSuccess != sal_uInt16(-1);
 }
 
-// Delete a autotext
+// Delete an autotext
 bool SwGlossaryHdl::DelGlossary(const OUString &rShortName)
 {
     SwTextBlocks *pGlossary = pCurGrp ? pCurGrp.get()

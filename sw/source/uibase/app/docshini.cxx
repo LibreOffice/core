@@ -373,7 +373,7 @@ SwDocShell::SwDocShell( SwDoc *const pD, SfxObjectCreateMode const eMode )
 // Dtor
 SwDocShell::~SwDocShell()
 {
-    // disable chart related objects now because in ~SwDoc it may be to late for this
+    // disable chart related objects now because in ~SwDoc it may be too late for this
     if (m_xDoc)
     {
         m_xDoc->getIDocumentChartDataProviderAccess().GetChartControllerHelper().Disconnect();

@@ -453,7 +453,7 @@ void SwWrtShell::ExtSelWrd(const Point *pPt, bool )
         return;
 
     // Bug 66823: actual crsr has in additional mode no selection?
-    // Then destroy the actual an go to prev, this will be expand
+    // Then destroy the actual and go to prev, this will be expand
     if( !HasMark() && GoPrevCursor() )
     {
         bool bHasMark = HasMark(); // that's wrong!
@@ -511,7 +511,7 @@ void SwWrtShell::ExtSelLn(const Point *pPt, bool )
         return;
 
     // Bug 66823: actual crsr has in additional mode no selection?
-    // Then destroy the actual an go to prev, this will be expand
+    // Then destroy the actual and go to prev, this will be expand
     if( !HasMark() && GoPrevCursor() )
     {
         bool bHasMark = HasMark(); // that's wrong!

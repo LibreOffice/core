@@ -48,7 +48,7 @@ class StoredChapterNumberingRules
     : public ::cppu::WeakImplHelper<container::XNamed,container::XIndexReplace>
 {
 private:
-    // TODO in case this ever becomes accessible via api need a invalidate
+    // TODO in case this ever becomes accessible via API need an invalidate
     SwChapterNumRules & m_rNumRules;
     sal_uInt16 const m_nIndex;
 
@@ -227,7 +227,7 @@ public:
                       GetNamespaceMap_().GetNameByKey(XML_NAMESPACE_SVG));
 
         {
-            // let's just have a office:styles as a dummy root
+            // let's just have an office:styles as a dummy root
             SvXMLElementExport styles(*this,
                     XML_NAMESPACE_OFFICE, XML_STYLES, true, true);
 
