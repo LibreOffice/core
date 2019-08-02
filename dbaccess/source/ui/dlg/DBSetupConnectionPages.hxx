@@ -128,17 +128,16 @@ namespace dbaui
     class OGeneralSpecialJDBCConnectionPageSetup final : public OGenericAdministrationPage
     {
     public:
-        OGeneralSpecialJDBCConnectionPageSetup(   vcl::Window* pParent
+        OGeneralSpecialJDBCConnectionPageSetup(TabPageParent pParent
                                         , const SfxItemSet& _rCoreAttrs
                                         , sal_uInt16 _nPortId
                                         , const char* pDefaultPortResId
                                         , const char* pHelpTextResId
                                         , const char* pHeaderTextResId
                                         , const char* pDriverClassId );
-        virtual ~OGeneralSpecialJDBCConnectionPageSetup() override;
-        virtual void dispose() override;
-    static VclPtr<OGenericAdministrationPage> CreateMySQLJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
-    static VclPtr<OGenericAdministrationPage> CreateOracleJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+    virtual ~OGeneralSpecialJDBCConnectionPageSetup() override;
+    static VclPtr<OGenericAdministrationPage> CreateMySQLJDBCTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet );
+    static VclPtr<OGenericAdministrationPage> CreateOracleJDBCTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet );
 
     private:
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
@@ -147,23 +146,24 @@ namespace dbaui
         virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
         virtual void callModifiedHdl(void* pControl = nullptr) override;
 
-        DECL_LINK(OnTestJavaClickHdl, Button*, void);
-        VclPtr<FixedText>          m_pHeaderText;
-        VclPtr<FixedText>          m_pFTHelpText;
-        VclPtr<FixedText>          m_pFTDatabasename;
-        VclPtr<Edit>               m_pETDatabasename;
-        VclPtr<FixedText>          m_pFTHostname;
-        VclPtr<Edit>               m_pETHostname;
-        VclPtr<FixedText>          m_pFTPortNumber;
-        VclPtr<FixedText>          m_pFTDefaultPortNumber;
-        VclPtr<NumericField>       m_pNFPortNumber;
-
-        VclPtr<FixedText>          m_pFTDriverClass;
-        VclPtr<Edit>               m_pETDriverClass;
-        VclPtr<PushButton>         m_pPBTestJavaDriver;
+        DECL_LINK(OnTestJavaClickHdl, weld::Button&, void);
 
         OUString              m_sDefaultJdbcDriverName;
         sal_uInt16              m_nPortId;
+
+        std::unique_ptr<weld::Label> m_xHeaderText;
+        std::unique_ptr<weld::Label> m_xFTHelpText;
+        std::unique_ptr<weld::Label> m_xFTDatabasename;
+        std::unique_ptr<weld::Entry> m_xETDatabasename;
+        std::unique_ptr<weld::Label> m_xFTHostname;
+        std::unique_ptr<weld::Entry> m_xETHostname;
+        std::unique_ptr<weld::Label> m_xFTPortNumber;
+        std::unique_ptr<weld::Label> m_xFTDefaultPortNumber;
+        std::unique_ptr<weld::SpinButton> m_xNFPortNumber;
+
+        std::unique_ptr<weld::Label> m_xFTDriverClass;
+        std::unique_ptr<weld::Entry> m_xETDriverClass;
+        std::unique_ptr<weld::Button> m_xPBTestJavaDriver;
     };
 
     // OJDBCConnectionPageSetup

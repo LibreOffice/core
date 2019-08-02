@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="dba">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">1000000000000</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkBox" id="SpecialJDBCConnectionPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -31,10 +36,11 @@
       <object class="GtkLabel" id="helpLabel">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">0</property>
         <property name="label" translatable="yes" context="specialjdbcconnectionpage|helpLabel">Please enter the required information to connect to a MySQL database using JDBC. Note that a JDBC driver class must be installed on your system and registered with %PRODUCTNAME. Please contact your system administrator if you are unsure about the following settings. </property>
         <property name="wrap">True</property>
+        <property name="width_chars">80</property>
         <property name="max_width_chars">80</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -54,10 +60,10 @@
           <object class="GtkLabel" id="dbNameLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">1</property>
             <property name="label" translatable="yes" context="specialjdbcconnectionpage|dbNameLabel">_Database name:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">dbNameEntry</property>
+            <property name="xalign">1</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -68,10 +74,10 @@
           <object class="GtkLabel" id="hostNameLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">1</property>
             <property name="label" translatable="yes" context="specialjdbcconnectionpage|hostNameLabel">_Server:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">hostNameEntry</property>
+            <property name="xalign">1</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -82,10 +88,10 @@
           <object class="GtkLabel" id="portNumLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">1</property>
             <property name="label" translatable="yes" context="specialjdbcconnectionpage|portNumLabel">_Port number:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">portNumEntry</property>
+            <property name="xalign">1</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -97,6 +103,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
+            <property name="activates_default">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -108,6 +115,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
+            <property name="activates_default">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -125,6 +133,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="adjustment">adjustment1</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -184,6 +193,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
+            <property name="activates_default">True</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
