@@ -136,7 +136,7 @@ published service GenericDrawPage
 
 
     /** this property is true if the averaged background filling colors luminance
-        is belove an application specified threshold value. This can be used to
+        is below an application specified threshold value. This can be used to
         determine the actual value of an auto color.
     */
     [readonly, optional, property] boolean IsBackgroundDark;
