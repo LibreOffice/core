@@ -165,7 +165,7 @@ published service FillProperties
     */
     [property] long FillBitmapSizeY;
 
-    /** this enum selects how a area is filled with a single bitmap.
+    /** this enum selects how an area is filled with a single bitmap.
 
         <p>This property corresponds to the properties
         #FillBitmapStretch and #FillBitmapTile.</p>

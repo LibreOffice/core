@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module form {  module binding {
 /** This service specifies a date input field which is data-aware and thus can be bound to a
     database field, and additionally supports binding to arbitrary external values.
 
-    <p>If an com::sun::star::form::binding::ValueBinding instance is
+    <p>If a com::sun::star::form::binding::ValueBinding instance is
     set at the field, it will exchange it's content with the binding as com::sun::star::util::Date.
     </p>
 

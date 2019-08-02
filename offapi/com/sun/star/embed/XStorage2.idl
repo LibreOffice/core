@@ -51,7 +51,7 @@ interface XStorage2 : XStorage
             can be a combination of ElementModes values
 
         @param aEncryptionData
-            this parameter allowes to specify an encryption data to decrypt the
+            this parameter allows to specify an encryption data to decrypt the
             stream, the encryption data must be correct, otherwise an
             exception will be thrown
 
@@ -107,7 +107,7 @@ interface XStorage2 : XStorage
             the name of the substream that should be copied
 
         @param aEncryptionData
-            this parameter allowes to specify an encryption data for the
+            this parameter allows to specify an encryption data for the
             stream, the encryption data must be correct, otherwise an
             exception will be thrown
 

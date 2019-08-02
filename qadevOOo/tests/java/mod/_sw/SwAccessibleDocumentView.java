@@ -54,7 +54,7 @@ public class SwAccessibleDocumentView extends TestCase {
     /**
     * Called to create an instance of <code>TestEnvironment</code>
     * with an object to test and related objects. The method is called from
-    * <code>getTestEnvironment()</code>. Obtains accissible object for
+    * <code>getTestEnvironment()</code>. Obtains accessible object for
     * text document.
     *
     * @param Param test parameters

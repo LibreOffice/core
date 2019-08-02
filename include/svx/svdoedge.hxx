@@ -88,7 +88,7 @@ public:
     long                        nAngle2;           // exit angle at Obj2
     sal_uInt16                  nObj1Lines;        // 1..3
     sal_uInt16                  nObj2Lines;        // 1..3
-    sal_uInt16                  nMiddleLine;       // 0xFFFF=none, otherwiese point number of the beginning of the line
+    sal_uInt16                  nMiddleLine;       // 0xFFFF=none, otherwise point number of the beginning of the line
 
 public:
     SdrEdgeInfoRec()
@@ -288,7 +288,7 @@ public:
     // for geometry access
     ::basegfx::B2DPolygon getEdgeTrack() const;
 
-    // helper method for SdrDragMethod::AddConnectorOverlays. Adds a overlay polygon for
+    // helper method for SdrDragMethod::AddConnectorOverlays. Adds an overlay polygon for
     // this connector to rResult.
     basegfx::B2DPolygon ImplAddConnectorOverlay(SdrDragMethod& rDragMethod, bool bTail1, bool bTail2, bool bDetail) const;
 };
