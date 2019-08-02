@@ -157,7 +157,7 @@ public class ColumnRowInfo {
     }
 
     /**
-     * Test if the row height as been set manually.
+     * Test if the row height has been set manually.
      *
      * @return {@code true} if user defined otherwise {@code false}.
      */
