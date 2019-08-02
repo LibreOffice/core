@@ -143,7 +143,7 @@ public:
     */
     inline void SAL_CALL makeComplete() const;
 
-    /** Gets the UNacquired type description pointer.
+    /** Gets the unacquired type description pointer.
 
         @return stored pointer of type description
     */

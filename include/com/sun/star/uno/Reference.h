@@ -81,7 +81,7 @@ protected:
 public:
     /** Gets interface pointer. This call does not acquire the interface.
 
-        @return UNacquired interface pointer
+        @return unacquired interface pointer
     */
     XInterface * SAL_CALL get() const
         { return _pInterface; }
@@ -420,7 +420,7 @@ public:
 
     /** Dereference operator: Used to call interface methods.
 
-        @return UNacquired interface pointer
+        @return unacquired interface pointer
     */
     interface_type * SAL_CALL operator -> () const {
         assert(_pInterface != NULL);
@@ -430,7 +430,7 @@ public:
     /** Indirection operator.
 
         @since LibreOffice 6.3
-        @return UNacquired interface reference
+        @return unacquired interface reference
     */
     interface_type & SAL_CALL operator * () const {
         assert(_pInterface != NULL);
@@ -439,7 +439,7 @@ public:
 
     /** Gets interface pointer. This call does not acquire the interface.
 
-        @return UNacquired interface pointer
+        @return unacquired interface pointer
     */
     interface_type * SAL_CALL get() const
         { return castFromXInterface(_pInterface); }

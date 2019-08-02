@@ -146,7 +146,7 @@ public:
 
     /** Provides a pointer to the C mapping. The returned mapping is NOT acquired!
 
-        @return UNacquired C mapping
+        @return unacquired C mapping
     */
     uno_Mapping * SAL_CALL get() const
         { return _pMapping; }

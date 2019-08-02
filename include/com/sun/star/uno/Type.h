@@ -149,7 +149,7 @@ public:
 
     /** Gets the C typelib type description reference pointer. Does not acquire the reference!
 
-        @return UNacquired type description reference
+        @return unacquired type description reference
     */
     typelib_TypeDescriptionReference * SAL_CALL getTypeLibType() const
         { return _pType; }

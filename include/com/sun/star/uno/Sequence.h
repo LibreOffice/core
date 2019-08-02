@@ -245,9 +245,9 @@ public:
     */
     inline void SAL_CALL realloc( sal_Int32 nSize );
 
-    /** Provides UNacquired sequence handle.
+    /** Provides unacquired sequence handle.
 
-        @return UNacquired sequence handle
+        @return unacquired sequence handle
     */
     uno_Sequence * SAL_CALL get() const
         { return _pSequence; }

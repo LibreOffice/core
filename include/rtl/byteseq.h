@@ -306,15 +306,15 @@ public:
     */
     inline void SAL_CALL realloc( sal_Int32 nSize );
 
-    /** Returns the UNacquired C handle of the sequence
+    /** Returns the unacquired C handle of the sequence
 
-        @return UNacquired handle of the sequence
+        @return unacquired handle of the sequence
     */
     sal_Sequence * SAL_CALL getHandle() const
         { return _pSequence; }
-    /** Returns the UNacquired C handle of the sequence (for compatibility reasons)
+    /** Returns the unacquired C handle of the sequence (for compatibility reasons)
 
-        @return UNacquired handle of the sequence
+        @return unacquired handle of the sequence
     */
     sal_Sequence * SAL_CALL get() const
         { return _pSequence; }

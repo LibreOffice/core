@@ -128,9 +128,9 @@ public:
     }
 #endif
 
-    /** Provides UNacquired pointer to the set C environment.
+    /** Provides unacquired pointer to the set C environment.
 
-        @return UNacquired pointer to the C environment struct
+        @return unacquired pointer to the C environment struct
     */
     uno_Environment * SAL_CALL get() const
         { return _pEnv; }
