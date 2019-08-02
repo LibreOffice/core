@@ -116,14 +116,6 @@ namespace basctl
 
     namespace
     {
-        bool StringCompareLessThan( const OUString& lhs, const OUString& rhs )
-        {
-            auto const sort = comphelper::string::NaturalStringSorter(
-                comphelper::getProcessComponentContext(),
-                Application::GetSettings().GetUILanguageTag().getLocale());
-            return sort.compare(lhs, rhs) < 0;
-        }
-
         class FilterDocuments : public docs::IDocumentDescriptorFilter
         {
         public:
@@ -1138,11 +1130,13 @@ namespace basctl
         // sort document list by doc title?
         if ( _eListType == DocumentsSorted )
         {
-            std::sort( aScriptDocs.begin(), aScriptDocs.end(),
-                []( const ScriptDocument& lhs, const ScriptDocument& rhs )
-            {
-                return StringCompareLessThan( lhs.getTitle(), rhs.getTitle() );
-            });
+            auto const sort = comphelper::string::NaturalStringSorter(
+                comphelper::getProcessComponentContext(),
+                Application::GetSettings().GetUILanguageTag().getLocale());
+            std::sort(aScriptDocs.begin(), aScriptDocs.end(),
+                      [&sort](const ScriptDocument& rLHS, const ScriptDocument& rRHS) {
+                          return sort.compare(rLHS.getTitle(), rRHS.getTitle()) < 0;
+                      });
         }
 
         return aScriptDocs;
@@ -1222,8 +1216,13 @@ namespace basctl
         }
 
         // sort
-        std::sort( aModuleNames.begin(), aModuleNames.end(), StringCompareLessThan );
-
+        auto const sort = comphelper::string::NaturalStringSorter(
+            comphelper::getProcessComponentContext(),
+            Application::GetSettings().GetUILanguageTag().getLocale());
+        std::sort(aModuleNames.begin(), aModuleNames.end(),
+                  [&sort](const OUString& rLHS, const OUString& rRHS) {
+                      return sort.compare(rLHS, rRHS) < 0;
+                  });
         return aModuleNames;
     }
 
