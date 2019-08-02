@@ -663,15 +663,38 @@ void SwUndoResetAttr::SetAttrs( const std::set<sal_uInt16> &rAttrs )
     m_Ids.insert( rAttrs.begin(), rAttrs.end() );
 }
 
-SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,
-                        const SetAttrMode nFlags )
-    : SwUndo( SwUndoId::INSATTR, rRange.GetDoc() ), SwUndRng( rRange )
-    , m_AttrSet( rRange.GetDoc()->GetAttrPool(), {{rAttr.Which(), rAttr.Which()}} )
-    , m_pHistory( new SwHistory )
-    , m_nNodeIndex( ULONG_MAX )
-    , m_nInsertFlags( nFlags )
+SwUndoAttr::SwUndoAttr(const SwPaM& rRange, const SfxPoolItem& rAttr,
+    const SetAttrMode nFlags)
+    : SwUndo(SwUndoId::INSATTR, rRange.GetDoc()), SwUndRng(rRange)
+    , m_AttrSet(rRange.GetDoc()->GetAttrPool(), { {rAttr.Which(), rAttr.Which()} })
+    , m_pHistory(new SwHistory)
+    , m_nNodeIndex(ULONG_MAX)
+    , m_nInsertFlags(nFlags)
 {
-    m_AttrSet.Put( rAttr );
+    m_AttrSet.Put(rAttr);
+
+    SfxItemIter aIter(m_AttrSet);
+    const SfxPoolItem* pItem = aIter.GetCurItem();
+    uno::Any aValue;
+    while (pItem)
+    {
+        if (pItem->Which() == RES_TXTATR_CHARFMT)
+        {
+            pItem->QueryValue(aValue, RES_TXTATR_CHARFMT);
+            aValue >>= m_aChrFormatName;
+        }
+        if (pItem->Which() == RES_TXTATR_INETFMT)
+        {
+            pItem->QueryValue(aValue, RES_TXTATR_INETFMT);
+            aValue >>= m_aInetFormatName;
+        }
+        if (pItem->Which() == RES_TXTATR_AUTOFMT)
+        {
+            pItem->QueryValue(aValue, RES_TXTATR_AUTOFMT);
+            aValue >>= m_aAutoFormatName;
+        }
+        pItem = aIter.NextItem();
+    }
 }
 
 SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxItemSet& rSet,
@@ -764,6 +787,24 @@ void SwUndoAttr::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
     SwPaM & rPam = AddUndoRedoPaM(rContext);
+
+    // Restore pointers to char formats from names
+    SfxItemIter aIter(m_AttrSet);
+    const SfxPoolItem* pItem = aIter.GetCurItem();
+    while (pItem)
+    {
+        if (pItem->Which() == RES_TXTATR_CHARFMT && !m_aChrFormatName.isEmpty())
+        {
+            SwCharFormat* pCharFormat = rDoc.FindCharFormatByName(m_aChrFormatName);
+            if (pCharFormat)
+            {
+                SwFormatCharFormat aFormat(pCharFormat);
+                m_AttrSet.Put(aFormat);
+                break;
+            }
+        }
+        pItem = aIter.NextItem();
+    }
 
     if ( m_pRedlineData.get() &&
          IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) ) {
