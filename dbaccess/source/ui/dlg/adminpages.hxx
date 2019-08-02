@@ -123,7 +123,6 @@ namespace dbaui
         css::uno::Reference< css::uno::XComponentContext >
                                    m_xORB;
     public:
-        OGenericAdministrationPage(vcl::Window* _pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet);
         OGenericAdministrationPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& rAttrSet);
         /// set a handler which gets called every time something on the page has been modified
         void SetModifiedHandler(const Link<OGenericAdministrationPage const *, void>& _rHandler) { m_aModifiedHandler = _rHandler; }
