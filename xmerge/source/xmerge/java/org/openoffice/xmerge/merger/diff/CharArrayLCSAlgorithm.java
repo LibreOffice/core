@@ -79,7 +79,7 @@ public class CharArrayLCSAlgorithm {
         int modSeqlen = modSeq.length + 1;
         int[][] diffTable;
 
-        // initialize the diffTable (it need to be 1 row/col bigger
+        // initialize the diffTable (it needs to be 1 row/col bigger
         // than the original str)
         diffTable = new int[orgSeqlen][];
         for (int i = 0; i < orgSeqlen; i++) {

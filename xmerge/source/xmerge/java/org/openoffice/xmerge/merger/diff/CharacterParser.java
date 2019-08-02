@@ -33,7 +33,7 @@ import java.util.List;
  * {@code Node}).</p>
  *
  * <p>Note: Once the XML Tree is parsed, then the {@code Iterator} will be a
- * snap shot of  that tree.  That means even the tree is modified later, than
+ * snapshot of that tree. That means even the tree is modified later, then
  * the cached paragraph {@code Node} list will not be updated accordingly. For
  * this reason and for performance reasons this {@code Iterator} does not
  * support any operation methods such as insert, remove or replace. The main

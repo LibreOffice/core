@@ -36,7 +36,7 @@ import org.openoffice.xmerge.util.Debug;
 public final class CharacterBaseParagraphMerge implements NodeMergeAlgorithm {
 
     /**
-     * Merge two paragraph {@code Node} by using Longest Common Subsequence
+     * Merge two paragraphs {@code Node} by using Longest Common Subsequence
      * (LCS) character algorithm defined in {@link
      * org.openoffice.xmerge.merger.diff.CharArrayLCSAlgorithm
      * CharArrayLCSAlgorithm}.

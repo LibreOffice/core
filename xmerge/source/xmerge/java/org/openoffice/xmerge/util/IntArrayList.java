@@ -64,7 +64,7 @@ public class IntArrayList {
      * input as {@code fillValue}.</p>
      *
      * @param  minCapacity  The minimum capacity of the list.
-     * @param  fillValue    This method adds in a integer for each slot that was
+     * @param  fillValue    This method adds in an integer for each slot that was
      *                      added to ensure that the list meets the minimum
      *                      capacity. {@code fillValue} is the value used as the
      *                      initial value of these added elements.
