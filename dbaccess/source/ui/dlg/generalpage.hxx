@@ -104,7 +104,7 @@ namespace dbaui
     class OGeneralPageDialog : public OGeneralPage
     {
     public:
-        OGeneralPageDialog( vcl::Window* pParent, const SfxItemSet& _rItems );
+        OGeneralPageDialog(TabPageParent pParent, const SfxItemSet& _rItems);
 
     protected:
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
