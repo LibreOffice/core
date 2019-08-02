@@ -203,27 +203,6 @@ namespace dbaui
     {
         return true;
     }
-    void OGenericAdministrationPage::fillBool( SfxItemSet& _rSet, CheckBox const * _pCheckBox, sal_uInt16 _nID, bool& _bChangedSomething, bool _bRevertValue )
-    {
-        if ( _pCheckBox && _pCheckBox->IsValueChangedFromSaved() )
-        {
-            bool bValue = _pCheckBox->IsChecked();
-            if ( _bRevertValue )
-                bValue = !bValue;
-
-            if ( _pCheckBox->IsTriStateEnabled() )
-            {
-                OptionalBoolItem aValue( _nID );
-                if ( _pCheckBox->GetState() != TRISTATE_INDET )
-                    aValue.SetValue( bValue );
-                _rSet.Put( aValue );
-            }
-            else
-                _rSet.Put( SfxBoolItem( _nID, bValue ) );
-
-            _bChangedSomething = true;
-        }
-    }
     void OGenericAdministrationPage::fillBool( SfxItemSet& _rSet, const weld::CheckButton* pCheckBox, sal_uInt16 _nID, bool bOptionalBool, bool& _bChangedSomething, bool _bRevertValue )
     {
         if (pCheckBox && pCheckBox->get_state_changed_from_saved())
@@ -245,27 +224,11 @@ namespace dbaui
             _bChangedSomething = true;
         }
     }
-    void OGenericAdministrationPage::fillInt32(SfxItemSet& _rSet, NumericField const * _pEdit, sal_uInt16 _nID, bool& _bChangedSomething)
-    {
-        if( _pEdit && _pEdit->IsValueChangedFromSaved() )
-        {
-            _rSet.Put(SfxInt32Item(_nID, static_cast<sal_Int32>(_pEdit->GetValue())));
-            _bChangedSomething = true;
-        }
-    }
     void OGenericAdministrationPage::fillInt32(SfxItemSet& _rSet, const weld::SpinButton* pEdit, sal_uInt16 _nID, bool& _bChangedSomething)
     {
         if (pEdit && pEdit->get_value_changed_from_saved())
         {
             _rSet.Put(SfxInt32Item(_nID, pEdit->get_value()));
-            _bChangedSomething = true;
-        }
-    }
-    void OGenericAdministrationPage::fillString(SfxItemSet& _rSet, Edit const * _pEdit, sal_uInt16 _nID, bool& _bChangedSomething)
-    {
-        if( _pEdit && _pEdit->IsValueChangedFromSaved() )
-        {
-            _rSet.Put(SfxStringItem(_nID, _pEdit->GetText()));
             _bChangedSomething = true;
         }
     }
