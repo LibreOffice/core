@@ -678,6 +678,15 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,
     , m_nInsertFlags( nFlags )
 {
     m_AttrSet.Put( rAttr );
+
+    // Save character style as a style name, not as a reference
+    const SfxPoolItem* pItem = m_AttrSet.GetItem(RES_TXTATR_CHARFMT);
+    if (pItem)
+    {
+        uno::Any aValue;
+        pItem->QueryValue(aValue, RES_TXTATR_CHARFMT);
+        aValue >>= m_aChrFormatName;
+    }
 }
 
 SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxItemSet& rSet,
@@ -688,6 +697,14 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxItemSet& rSet,
     , m_nNodeIndex( ULONG_MAX )
     , m_nInsertFlags( nFlags )
 {
+    // Save character style as a style name, not as a reference
+    const SfxPoolItem* pItem = m_AttrSet.GetItem(RES_TXTATR_CHARFMT);
+    if (pItem)
+    {
+        uno::Any aValue;
+        pItem->QueryValue(aValue, RES_TXTATR_CHARFMT);
+        aValue >>= m_aChrFormatName;
+    }
 }
 
 SwUndoAttr::~SwUndoAttr()
@@ -770,6 +787,17 @@ void SwUndoAttr::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
     SwPaM & rPam = AddUndoRedoPaM(rContext);
+
+    // Restore pointer to char format from name
+    if (!m_aChrFormatName.isEmpty())
+    {
+        SwCharFormat* pCharFormat = rDoc.FindCharFormatByName(m_aChrFormatName);
+        if (pCharFormat)
+        {
+            SwFormatCharFormat aFormat(pCharFormat);
+            m_AttrSet.Put(aFormat);
+        }
+    }
 
     if ( m_pRedlineData.get() &&
          IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) ) {
