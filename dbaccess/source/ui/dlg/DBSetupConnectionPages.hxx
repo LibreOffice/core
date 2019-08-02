@@ -77,10 +77,9 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
-        static VclPtr<OGenericAdministrationPage> CreateLDAPTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
-        OLDAPConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
+        static VclPtr<OGenericAdministrationPage> CreateLDAPTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet );
+        OLDAPConnectionPageSetup( TabPageParent pParent, const SfxItemSet& _rCoreAttrs );
         virtual ~OLDAPConnectionPageSetup() override;
-        virtual void dispose() override;
         virtual void callModifiedHdl(void* pControl = nullptr) override;
 
     protected:
@@ -89,15 +88,15 @@ namespace dbaui
         virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
 
     private:
-        VclPtr<FixedText>          m_pFTHelpText;
-        VclPtr<FixedText>          m_pFTHostServer;
-        VclPtr<Edit>               m_pETHostServer;
-        VclPtr<FixedText>          m_pFTBaseDN;
-        VclPtr<Edit>               m_pETBaseDN;
-        VclPtr<FixedText>          m_pFTPortNumber;
-        VclPtr<NumericField>       m_pNFPortNumber;
-        VclPtr<FixedText>          m_pFTDefaultPortNumber;
-        VclPtr<CheckBox>           m_pCBUseSSL;
+        std::unique_ptr<weld::Label> m_xFTHelpText;
+        std::unique_ptr<weld::Label> m_xFTHostServer;
+        std::unique_ptr<weld::Entry> m_xETHostServer;
+        std::unique_ptr<weld::Label> m_xFTBaseDN;
+        std::unique_ptr<weld::Entry> m_xETBaseDN;
+        std::unique_ptr<weld::Label> m_xFTPortNumber;
+        std::unique_ptr<weld::SpinButton> m_xNFPortNumber;
+        std::unique_ptr<weld::Label> m_xFTDefaultPortNumber;
+        std::unique_ptr<weld::CheckButton> m_xCBUseSSL;
     };
 
     // MySQLNativeSetupPage
