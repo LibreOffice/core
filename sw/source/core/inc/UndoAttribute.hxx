@@ -42,6 +42,7 @@ class SwUndoAttr : public SwUndo, private SwUndRng
     std::unique_ptr<SwRedlineSaveDatas> m_pRedlineSaveData;
     sal_uLong m_nNodeIndex;                         // Offset: for Redlining
     const SetAttrMode m_nInsertFlags;               // insert flags
+    OUString m_aChrFormatName;
 
     void RemoveIdx( SwDoc& rDoc );
 
