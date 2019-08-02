@@ -366,7 +366,7 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
 
     // b) normal notification about changed items
     //    FeatureDescriptor = "Update"
-    //    State             = Lits of information [seq< NamedValue >]
+    //    State             = List of information [seq< NamedValue >]
     if (aEvent.FeatureDescriptor != RECOVERY_OPERATIONSTATE_UPDATE)
         return;
 

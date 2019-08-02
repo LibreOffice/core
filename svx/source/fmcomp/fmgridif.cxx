@@ -540,7 +540,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
             // forward the design mode
             bool bForceAlivePeer = m_bInDraw && !maComponentInfos.bVisible;
             // (we force an alive-mode peer if we're in "draw", cause in this case the peer will be used for drawing in
-            // foreign devices. We ensure this with the visibility check as an living peer is assumed to be noncritical
+            // foreign devices. We ensure this with the visibility check as a living peer is assumed to be noncritical
             // only if invisible)
             Any aOldCursorBookmark;
             if (!mbDesignMode || bForceAlivePeer)
@@ -1468,8 +1468,8 @@ sal_Bool FmXGridPeer::commit()
 void FmXGridPeer::cursorMoved(const EventObject& _rEvent)
 {
     VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
-    // we are not interested in move to insert row only in the resetted event
-    // which is fired after positioning an the insert row
+    // we are not interested in move to insert row only in the reset event
+    // which is fired after positioning and the insert row
     if (pGrid && pGrid->IsOpen() && !::comphelper::getBOOL(Reference< XPropertySet > (_rEvent.Source, UNO_QUERY_THROW)->getPropertyValue(FM_PROP_ISNEW)))
         pGrid->positioned();
 }
@@ -2622,7 +2622,7 @@ Sequence< css::util::URL>& FmXGridPeer::getSupportedURLs()
         for ( sal_Int32 i = 0; i < tmp.getLength(); ++i, ++pSupported)
             pSupported->Complete = OUString::createFromAscii(sSupported[i]);
 
-        // let an css::util::URL-transformer normalize the URLs
+        // let a css::util::URL-transformer normalize the URLs
         Reference< css::util::XURLTransformer >  xTransformer(
             util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
         for (css::util::URL & rURL : tmp)

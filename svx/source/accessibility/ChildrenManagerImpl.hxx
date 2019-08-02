@@ -91,7 +91,7 @@ public:
         @param rxShapeList
             List of UNO shapes to manage.
         @param rShapeTreeInfo
-            Bundel of information passed down the shape tree.
+            Bundle of information passed down the shape tree.
         @param rContext
             An accessible context object that is called for fireing events
             for new and deleted children, i.e. that holds a list of
@@ -191,7 +191,7 @@ public:
     */
     void SetShapeList (const css::uno::Reference<css::drawing::XShapes>& xShapeList);
 
-    /** Add a accessible shape.  This does not modify the list of UNO shapes
+    /** Add an accessible shape.  This does not modify the list of UNO shapes
         or the list of visible shapes.  Accessible shapes are, at the
         moment, not tested against the visible area but are always appended
         to the list of visible children.
@@ -320,7 +320,7 @@ private:
     */
     css::uno::Reference<css::accessibility::XAccessible> mxParent;
 
-    /** Bundel of information passed down the shape tree.
+    /** Bundle of information passed down the shape tree.
     */
     AccessibleShapeTreeInfo maShapeTreeInfo;
 
