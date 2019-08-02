@@ -203,7 +203,6 @@ IMPL_STATIC_LINK(SfxCharmapCtrl, FocusHdl, Control&, pItem, void)
 IMPL_LINK(SfxCharmapCtrl, CharClickHdl, SvxCharViewControl*, rView, void)
 {
     rView->InsertCharToDoc();
-    GrabFocusToDocument();
     Close();
 }
 

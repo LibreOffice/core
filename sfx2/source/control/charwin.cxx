@@ -29,6 +29,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
+#include <sfx2/viewfrm.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -336,7 +337,8 @@ void SvxCharViewControl::InsertCharToDoc()
     aArgs[1].Name = "FontName";
     aArgs[1].Value <<= maFont.GetFamilyName();
 
-    comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
+    uno::Reference<frame::XFrame> xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+    comphelper::dispatchCommand(".uno:InsertSymbol", xFrame, aArgs);
 }
 
 void SvxCharViewControl::createContextMenu()
