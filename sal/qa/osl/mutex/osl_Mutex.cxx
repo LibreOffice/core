@@ -253,7 +253,7 @@ namespace osl_Mutex
 
         /** Create two threads to write data to the same buffer, use Mutex to assure
             during one thread write data five times, the other thread should not begin writing.
-            the two threads wrote two different datas: their thread ID, so we can check the datas
+            the two threads wrote two different data: their thread ID, so we can check the data
             in buffer to know the order of the two threads writing
         */
         void ctor_001()
@@ -270,7 +270,7 @@ namespace osl_Mutex
 
             bool bRes = false;
 
-            // every 5 datas should the same
+            // every 5 data should the same
             // LLA: this is not a good check, it's too fix
             if (m_Data.buffer[0] == m_Data.buffer[1] &&
                 m_Data.buffer[1] == m_Data.buffer[2] &&
@@ -309,7 +309,7 @@ namespace osl_Mutex
 
             bool bRes = false;
 
-            // every 5 datas should the same
+            // every 5 data should the same
             if ( ( m_Res.data1 == 0 ) && ( m_Res.data2 == 3 ) )
                 bRes = true;
 

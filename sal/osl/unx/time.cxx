@@ -167,7 +167,7 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, Ti
         /* check if daylight saving time is in effect */
         bias = aTime.tm_isdst > 0 ? altzone : timezone;
 #else
-        /* exspect daylight saving time to be one hour */
+        /* expect daylight saving time to be one hour */
         bias = aTime.tm_isdst > 0 ? timezone - 3600 : timezone;
 #endif
 
@@ -243,7 +243,7 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal
     /* check if daylight saving time is in effect */
     bias = pLocalTime->tm_isdst > 0 ? altzone : timezone;
 #else
-    /* exspect daylight saving time to be one hour */
+    /* expect daylight saving time to be one hour */
     bias = pLocalTime->tm_isdst > 0 ? timezone - 3600 : timezone;
 #endif
 

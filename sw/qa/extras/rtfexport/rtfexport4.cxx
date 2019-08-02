@@ -159,7 +159,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTbrlFrame, "tbrl-frame.odt")
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2
     // - Actual  : 0
-    // i.e. custom wrting mode was lost.
+    // i.e. custom writing mode was lost.
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, nActual);
 }
 

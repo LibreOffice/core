@@ -261,7 +261,7 @@ static ImplTextEncodingData const aImplISO88591TextEncodingData
 /* 7-Bit ASCII */
 /* 1-Byte, 0x00-0x7F ASCII without exception */
 /* For the import we use ISO-8859-1 with MS extension (MS-1252), because */
-/* when the 8-Bit is set, the chance, that this is a ISO-8859-1 character */
+/* when the 8-Bit is set, the chance, that this is an ISO-8859-1 character */
 /* is the greatest. For the export all chars greater than 127 are not */
 /* converted and are replaced by the replacement character. */
 /* Last-Changes from us: */

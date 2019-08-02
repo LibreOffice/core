@@ -302,7 +302,7 @@ public:
 
     // test that parent and child process have the
     // same environment when osl_executeProcess will
-    // be called with out setting new environment
+    // be called without setting new environment
     // variables
    void osl_execProc_parent_equals_child_environment()
     {

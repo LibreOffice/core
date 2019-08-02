@@ -32,7 +32,7 @@ static ImplReplaceCharData const aImplRepCharTab[] =
   { 0x00A1, 0x0021 },   /* INVERTED EXCLAMATION MARK */
   { 0x00B7, 0x0045 },   /* MIDDLE DOT */
   { 0x00BF, 0x003F },   /* INVERTED QUESTION MARK */
-  { 0x00D7, 0x002A },   /* MULTIPLIKATION SIGN */
+  { 0x00D7, 0x002A },   /* MULTIPLICATION SIGN */
   { 0x00F7, 0x002F },   /* DIVISION SIGN */
   { 0x2000, 0x0020 },   /* EN QUAD */
   { 0x2001, 0x0020 },   /* EM QUAD */

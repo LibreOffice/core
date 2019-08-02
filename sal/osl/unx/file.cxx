@@ -493,7 +493,7 @@ oslFileError FileHandle_Impl::writeFileAt(
 
             if (nBytesToWrite >= m_bufsiz)
             {
-                // buffer to small, write through to file
+                // buffer too small, write through to file
                 sal_uInt64 uDone = 0;
                 result = writeAt(nOffset, &(buffer[*pBytesWritten]), nBytesToWrite, &uDone);
                 if (result != osl_File_E_None)

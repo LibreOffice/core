@@ -93,7 +93,7 @@ oslFileError SAL_CALL osl_abbreviateSystemPath( rtl_uString *ustrSystemPath, rtl
 
     rtl_uString_newConcat( pustrCompacted, ustrPath, ustrFile );
 
-    /* Event now if path was compacted to ".../..." it can be to large */
+    /* Event now if path was compacted to ".../..." it can be too large */
 
     uPathWidth += uFileWidth;
 

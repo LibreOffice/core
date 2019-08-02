@@ -211,7 +211,7 @@ static bool rtl_impl_convertUStringToString(rtl_String ** pTarget,
         sal_Size                    nMaxCharLen;
 
         /* Optimization for UTF-8 - we try to calculate the exact length */
-        /* For all other encoding we try an good estimation */
+        /* For all other encoding we try a good estimation */
         if ( nEncoding == RTL_TEXTENCODING_UTF8 )
         {
             nNewLen = rtl_ImplGetFastUTF8ByteLen( pSource, nLength );
