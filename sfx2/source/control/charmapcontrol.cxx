@@ -203,7 +203,6 @@ IMPL_STATIC_LINK(SfxCharmapCtrl, FocusHdl, Control&, pItem, void)
 IMPL_LINK(SfxCharmapCtrl, CharClickHdl, SvxCharViewControl*, rView, void)
 {
     rView->InsertCharToDoc();
-    GrabFocusToDocument();
     Close();
 }
 
@@ -211,7 +210,7 @@ IMPL_LINK_NOARG(SfxCharmapCtrl, OpenDlgHdl, Button*, void)
 {
     Close();
 
-    comphelper::dispatchCommand(".uno:InsertSymbol", {});
+    comphelper::dispatchCommand(".uno:InsertSymbol", GetFrame(), {});
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
