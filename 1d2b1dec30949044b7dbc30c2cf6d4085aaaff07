@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_89174952",
+        "filename": "sw/source/uibase/docvw/AnnotationWin2.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2019-08-02T17:34:15Z",
+      "side": 1,
+      "message": "Should be no need to do that in a user-event I think.",
+      "revId": "1d2b1dec30949044b7dbc30c2cf6d4085aaaff07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
