@@ -498,7 +498,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                         const XFillBitmapItem& rBmpItm = p3DObj->GetMergedItem(XATTR_FILLBITMAP);
                         aFillBmp = rBmpItm.GetGraphicObject().GetGraphic().GetBitmapEx();
 
-                        // #i122777# old adaption of FillStyle bitmap size to 5-times the original size; this is not needed
+                        // #i122777# old adaptation of FillStyle bitmap size to 5-times the original size; this is not needed
                         // anymore and was used in old times to male the fill look better when converting to 3D. Removed
                         // from regular 3D objects for some time, also needs to be removed from CustomShapes
 

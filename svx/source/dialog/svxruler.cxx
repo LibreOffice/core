@@ -2881,7 +2881,7 @@ void SvxRuler::CalcMinMax()
                         nMaxLeft += nDragOffset;
 
                         // nMaxRight
-                        // linear / proprotional move
+                        // linear / proportional move
                         if((SvxRulerDragFlags::OBJECT_SIZE_PROPORTIONAL & nDragType) ||
                            (SvxRulerDragFlags::OBJECT_SIZE_LINEAR & nDragType) )
                         {

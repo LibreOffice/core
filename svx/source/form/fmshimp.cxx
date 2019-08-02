@@ -2897,7 +2897,7 @@ void FmXFormShell::impl_collectFormSearchContexts_nothrow_Lock( const Reference<
                 aNextLevelPrefix.append( '/' );
             aNextLevelPrefix.append( sCurrentFormName );
 
-            // remember both the form and it's "display name"
+            // remember both the form and its "display name"
             _out_rForms.push_back( xCurrentAsForm );
             _out_rNames.push_back( sCompleteCurrentName.makeStringAndClear() );
 
@@ -3756,7 +3756,7 @@ namespace
             if ( isEmbeddedInDatabase( _rxLoadable.get(), xConn ) )
                 return true;
 
-            // is there already a active connection
+            // is there already an active connection
             xSet->getPropertyValue(FM_PROP_ACTIVE_CONNECTION) >>= xConn;
             if ( xConn.is() )
                 return true;

@@ -759,7 +759,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 Reference<runtime::XFormController> const xController(GetImpl()->getActiveController_Lock());
 
                 if  (   GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_FILTER_NAVIGATOR )
-                        // closing the window was denied, for instance because of a invalid criterion
+                        // closing the window was denied, for instance because of an invalid criterion
 
                     ||  (   xController.is()
                         &&  !GetImpl()->getActiveControllerFeatures_Lock()->commitCurrentControl()

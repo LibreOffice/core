@@ -684,7 +684,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
         sal_Int32 nColType = xServiceQuestion.is() ? getColumnTypeByModelName(xServiceQuestion->getServiceName()) : 0;
         if (nColType == TYPE_TEXTFIELD)
         {   // edit fields and formatted fields have the same service name, thus getColumnTypeByModelName returns TYPE_TEXTFIELD
-            // in both cases. And as columns don't have an css::lang::XServiceInfo interface, we have to distinguish both
+            // in both cases. And as columns don't have a css::lang::XServiceInfo interface, we have to distinguish both
             // types via the existence of special properties
             if (xPropSet.is())
             {

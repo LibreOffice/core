@@ -147,7 +147,7 @@ namespace drawinglayer
 
 double getMinimalDepthInViewCoordinates(const E3dCompoundObject& rObject)
 {
-    // this is a E3dCompoundObject, so it cannot be a scene (which is a E3dObject).
+    // this is an E3dCompoundObject, so it cannot be a scene (which is an E3dObject).
     // Get primitive sequence using VC
     const sdr::contact::ViewContactOfE3d& rVCObject = static_cast< sdr::contact::ViewContactOfE3d& >(rObject.GetViewContact());
     const drawinglayer::primitive3d::Primitive3DContainer aPrimitives = rVCObject.getViewIndependentPrimitive3DContainer();
@@ -168,7 +168,7 @@ double getMinimalDepthInViewCoordinates(const E3dCompoundObject& rObject)
             // and the object's transform is part of aPrimitives (and taken into account when decomposing
             // to PolygonHairlinePrimitive3D and PolyPolygonMaterialPrimitive3D). The missing part may be
             // some Scene SdrObjects lying in-between which may need to be added. This is e.g. used in chart,
-            // and generally allowed in 3d scenes an their 3d object hierarchy
+            // and generally allowed in 3d scenes and their 3d object hierarchy
             basegfx::B3DHomMatrix aInBetweenSceneMatrix;
             E3dScene* pParentScene(rObject.getParentE3dSceneFromE3dObject());
 

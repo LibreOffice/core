@@ -211,7 +211,7 @@ void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const tool
         // objects without own model and without a page/view with the new
         // mechanism.
 
-        // New stuff: Use a ObjectContactOfObjListPainter.
+        // New stuff: Use an ObjectContactOfObjListPainter.
         sdr::contact::SdrObjectVector aObjectVector;
 
         for (size_t a = 0; a < pSdrPage->GetObjCount(); ++a)
