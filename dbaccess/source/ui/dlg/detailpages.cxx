@@ -489,7 +489,7 @@ namespace dbaui
         aMsg.run();
     }
 
-    void OGeneralSpecialJDBCDetailsPage::callModifiedHdl(void* pControl)
+    void OGeneralSpecialJDBCDetailsPage::callModifiedHdl(weld::Widget* pControl)
     {
         if (m_bUseClass && pControl == m_xEDDriverClass.get())
             m_xTestJavaDriver->set_sensitive(!m_xEDDriverClass->get_text().trim().isEmpty());

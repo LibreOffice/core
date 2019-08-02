@@ -30,7 +30,7 @@ namespace dbaui
 {
 
     // MySQLNativeSettings
-    MySQLNativeSettings::MySQLNativeSettings(weld::Widget* pParent, const Link<void*,void>& rControlModificationLink)
+    MySQLNativeSettings::MySQLNativeSettings(weld::Widget* pParent, const Link<weld::Widget*,void>& rControlModificationLink)
         : m_xBuilder(Application::CreateBuilder(pParent, "dbaccess/ui/mysqlnativesettings.ui"))
         , m_xContainer(m_xBuilder->weld_widget("MysqlNativeSettings"))
         , m_xDatabaseNameLabel(m_xBuilder->weld_label("dbnamelabel"))

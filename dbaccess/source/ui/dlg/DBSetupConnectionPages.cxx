@@ -218,7 +218,7 @@ using namespace ::com::sun::star;
         callModifiedHdl();
     }
 
-    void OLDAPConnectionPageSetup::callModifiedHdl(void *)
+    void OLDAPConnectionPageSetup::callModifiedHdl(weld::Widget*)
     {
         bool bRoadmapState = ((!m_xETHostServer->get_text().isEmpty() ) && ( !m_xETBaseDN->get_text().isEmpty() ) && (!m_xFTPortNumber->get_label().isEmpty() ));
         SetRoadmapStateValue(bRoadmapState);
@@ -344,7 +344,7 @@ using namespace ::com::sun::star;
         callModifiedHdl();
     }
 
-    void MySQLNativeSetupPage::callModifiedHdl(void*)
+    void MySQLNativeSetupPage::callModifiedHdl(weld::Widget*)
     {
         SetRoadmapStateValue( m_xMySQLSettings->canAdvance() );
 
@@ -512,7 +512,7 @@ using namespace ::com::sun::star;
         aMsg.run();
     }
 
-    void OGeneralSpecialJDBCConnectionPageSetup::callModifiedHdl(void* pControl)
+    void OGeneralSpecialJDBCConnectionPageSetup::callModifiedHdl(weld::Widget* pControl)
     {
         if (pControl == m_xETDriverClass.get())
             m_xPBTestJavaDriver->set_sensitive( !m_xETDriverClass->get_text().trim().isEmpty() );

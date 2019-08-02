@@ -182,7 +182,7 @@ namespace dbaui
         virtual void    ActivatePage() override;
 
     protected:
-        virtual void callModifiedHdl(void* /*pControl*/ = nullptr) { m_aModifiedHandler.Call(this); }
+        virtual void callModifiedHdl(weld::Widget* /*pControl*/ = nullptr) { m_aModifiedHandler.Call(this); }
 
         /// called from within DeactivatePage. The page is allowed to be deactivated if this method returns sal_True
         virtual bool prepareLeave() { return true; }
@@ -256,7 +256,7 @@ namespace dbaui
         /** This link be used for controls where the tabpage does not need to take any special action when the control
             is modified. The implementation just calls callModifiedHdl.
         */
-        DECL_LINK(OnControlModified, void*, void);
+        DECL_LINK(OnControlModified, weld::Widget*, void);
         DECL_LINK(OnControlEntryModifyHdl, weld::Entry&, void);
         DECL_LINK(OnControlSpinButtonModifyHdl, weld::SpinButton&, void);
         DECL_LINK(OnControlModifiedButtonClick, weld::ToggleButton&, void);
