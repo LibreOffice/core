@@ -98,6 +98,7 @@ public:
     void testCreateViewTextSelection();
     void testRedlineColors();
     void testCommentEndTextEdit();
+    void testCommentInsert();
     void testCursorPosition();
     void testPaintCallbacks();
     void testUndoRepairResult();
@@ -156,6 +157,7 @@ public:
     CPPUNIT_TEST(testCreateViewTextSelection);
     CPPUNIT_TEST(testRedlineColors);
     CPPUNIT_TEST(testCommentEndTextEdit);
+    CPPUNIT_TEST(testCommentInsert);
     CPPUNIT_TEST(testCursorPosition);
     CPPUNIT_TEST(testPaintCallbacks);
     CPPUNIT_TEST(testUndoRepairResult);
@@ -727,6 +729,8 @@ public:
     boost::property_tree::ptree m_aRedlineTableChanged;
     /// Redline table modified payload
     boost::property_tree::ptree m_aRedlineTableModified;
+    /// Post-it / annotation payload.
+    boost::property_tree::ptree m_aComment;
 
     ViewCallback()
         : m_bOwnCursorInvalidated(false),
@@ -859,6 +863,14 @@ public:
             std::stringstream aStream(pPayload);
             boost::property_tree::read_json(aStream, m_aRedlineTableModified);
             m_aRedlineTableModified = m_aRedlineTableModified.get_child("redline");
+        }
+        break;
+        case LOK_CALLBACK_COMMENT:
+        {
+            m_aComment.clear();
+            std::stringstream aStream(pPayload);
+            boost::property_tree::read_json(aStream, m_aComment);
+            m_aComment = m_aComment.get_child("comment");
         }
         break;
         }
@@ -1719,6 +1731,41 @@ void SwTiledRenderingTest::testCommentEndTextEdit()
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
+}
+
+void SwTiledRenderingTest::testCommentInsert()
+{
+    // Load a document with an as-char image in it.
+    comphelper::LibreOfficeKit::setActive();
+    comphelper::LibreOfficeKit::setTiledAnnotations(false);
+    SwXTextDocument* pXTextDocument = createDoc("image-comment.odt");
+    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    SwView* pView = pDoc->GetDocShell()->GetView();
+
+    // Select the image.
+    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    // Make sure SwTextShell is replaced with SwDrawShell right now, not after 120 ms, as set in the
+    // SwView ctor.
+    pView->StopShellTimer();
+
+    // Add a comment.
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    {
+        {"Text", uno::makeAny(OUString("some text"))},
+        {"Author", uno::makeAny(OUString("me"))},
+    });
+    ViewCallback aView;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
+    comphelper::dispatchCommand(".uno:InsertAnnotation", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+    OString aAnchorPos(aView.m_aComment.get_child("anchorPos").get_value<std::string>().c_str());
+    // Without the accompanying fix in place, this test would have failed with
+    // - Expected: 1418, 1418, 0, 0
+    // - Actual  : 1418, 1418, 1024, 1024
+    // i.e. the anchor position was a non-empty rectangle.
+    CPPUNIT_ASSERT_EQUAL(OString("1418, 1418, 0, 0"), aAnchorPos);
+    comphelper::LibreOfficeKit::setTiledAnnotations(true);
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
 void SwTiledRenderingTest::testCursorPosition()
