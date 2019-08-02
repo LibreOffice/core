@@ -67,10 +67,6 @@ void setMobile(int nViewId, bool bMobile)
 
 bool isMobile(int nViewId)
 {
-    // No view given, so act as a global var
-    if (nViewId == -1)
-            return g_vIsViewMobile.size() > 0;
-
     if (g_vIsViewMobile.find(nViewId) != g_vIsViewMobile.end())
         return g_vIsViewMobile[nViewId];
     else
