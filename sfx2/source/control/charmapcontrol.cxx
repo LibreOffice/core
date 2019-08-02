@@ -20,6 +20,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/charmapcontrol.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <vcl/event.hxx>
 
 using namespace css;
@@ -203,7 +204,6 @@ IMPL_STATIC_LINK(SfxCharmapCtrl, FocusHdl, Control&, pItem, void)
 IMPL_LINK(SfxCharmapCtrl, CharClickHdl, SvxCharViewControl*, rView, void)
 {
     rView->InsertCharToDoc();
-    GrabFocusToDocument();
     Close();
 }
 
@@ -211,7 +211,8 @@ IMPL_LINK_NOARG(SfxCharmapCtrl, OpenDlgHdl, Button*, void)
 {
     Close();
 
-    comphelper::dispatchCommand(".uno:InsertSymbol", {});
+    uno::Reference<frame::XFrame> xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+    comphelper::dispatchCommand(".uno:InsertSymbol", xFrame, {});
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
