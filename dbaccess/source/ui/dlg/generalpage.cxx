@@ -400,8 +400,8 @@ namespace dbaui
     }
 
     // OGeneralPageDialog
-    OGeneralPageDialog::OGeneralPageDialog( vcl::Window* pParent, const SfxItemSet& _rItems )
-        :OGeneralPage( pParent, "dbaccess/ui/generalpagedialog.ui", _rItems )
+    OGeneralPageDialog::OGeneralPageDialog(TabPageParent pParent, const SfxItemSet& _rItems)
+        : OGeneralPage(pParent, "dbaccess/ui/generalpagedialog.ui", _rItems)
     {
     }
 
