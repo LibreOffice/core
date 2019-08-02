@@ -155,10 +155,17 @@ namespace {
 
             const SwPostItField* pField = pWin->GetPostItField();
             const SwRect& aRect = pWin->GetAnchorRect();
-            const tools::Rectangle aSVRect(aRect.Pos().getX(),
+            tools::Rectangle aSVRect(aRect.Pos().getX(),
                                     aRect.Pos().getY(),
                                     aRect.Pos().getX() + aRect.SSize().Width(),
                                     aRect.Pos().getY() + aRect.SSize().Height());
+
+            if (!pItem->maLayoutInfo.mPositionFromCommentAnchor)
+            {
+                // Comments on frames: anchor position is the corner position, not the whole frame.
+                aSVRect.SetSize(Size(0, 0));
+            }
+
             std::vector<OString> aRects;
             for (const basegfx::B2DRange& aRange : pWin->GetAnnotationTextRanges())
             {
