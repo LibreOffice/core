@@ -19,112 +19,114 @@
  *
  *************************************************************/
 
+
+
 #include "ParaPropertyPanel.hrc"
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include "helpid.hrc"
 
-#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+#define MASKCOLOR MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
-#define SVX_PROPERTYPANEL_PARA_VERT_IDLIST \
-    IdList =               \
-    {                      \
-        IID_VERT_TOP ;     \
+#define SVX_PROPERTYPANEL_PARA_VERT_IDLIST  \
+    IdList =                \
+    {                       \
+        IID_VERT_TOP ;      \
         IID_VERT_CENTER ;   \
         IID_VERT_BOTTOM ;   \
-    };                     \
+    };                      \
     IdCount = { 3 ; };
 
 #define SVX_PROPERTYPANEL_PARA_NUMBULLET_IDLIST \
-    IdList =               \
-    {                      \
-        IID_BULLET ;       \
-        IID_NUMBER ;       \
-    };                     \
+    IdList =                \
+    {                       \
+        IID_BULLET ;        \
+        IID_NUMBER ;        \
+    };                      \
     IdCount = { 2 ; };
 
-//add by wj for sym2_7380
+// add by wj for sym2_7380
 #define SVX_PROPERTYPANEL_PARA_NUMBULLET_IDLIST_RTL \
-    IdList =               \
-    {                      \
-        IID_BULLET ;       \
-        IID_NUMBER ;       \
-    };                     \
+    IdList =                \
+    {                       \
+        IID_BULLET ;        \
+        IID_NUMBER ;        \
+    };                      \
     IdCount = { 2 ; };
 
 Control RID_SIDEBAR_PARA_PANEL
 {
-    OutputSize = TRUE;
-    DialogControl = TRUE;
-    Border = FALSE;
-    Size = MAP_APPFONT( PROPERTYPAGE_WIDTH, PARA_SECTIONPAGE_HEIGHT );
+    OutputSize = TRUE ;
+    DialogControl = TRUE ;
+    Border = FALSE ;
+    Size = MAP_APPFONT ( PROPERTYPAGE_WIDTH, PARA_SECTIONPAGE_HEIGHT ) ;
     HelpID = HID_PROPERTYPANEL_PARA_SECTION ;
-    Text = "Paragraph";
+    Text = "Paragraph" ;
 
     ToolBox TBX_HORIZONTALALIGNMENT
     {
-        Pos = MAP_APPFONT ( TBX_HORI_ALIGN_X , TBX_HORI_ALIGN_Y );
-        Size = MAP_APPFONT ( ALIGNMENT_TBX_WIDTH*4 ,ALIGNMENT_TBX_HEIGHT);
+        Pos = MAP_APPFONT ( TBX_HORI_ALIGN_X, TBX_HORI_ALIGN_Y ) ;
+        Size = MAP_APPFONT ( ALIGNMENT_TBX_WIDTH*4 ,ALIGNMENT_TBX_HEIGHT) ;
         SVLook = TRUE ;
         Border = FALSE ;
-        HelpID = HID_PPROPERTYPANEL_PARA_TBX_HALIGN;
-        Text = "Horizontal Alignment";
+        HelpID = HID_PPROPERTYPANEL_PARA_TBX_HALIGN ;
+        Text = "Horizontal Alignment" ;
         ItemList =
         {
             ToolBoxItem
             {
                 Identifier = BT_SUBSTLEFT ;
-                HelpID = HID_PPROPERTYPANEL_PARA_TBI_HALIGN_LEFT;
+                HelpID = HID_PPROPERTYPANEL_PARA_TBI_HALIGN_LEFT ;
                 Text [ en-US ] = "Align Left" ;
             };
             ToolBoxItem
             {
                 Identifier = BT_SUBSTCENTER ;
-                HelpID = HID_PPROPERTYPANEL_PARA_TBI_HALIGN_CENTER;
+                HelpID = HID_PPROPERTYPANEL_PARA_TBI_HALIGN_CENTER ;
                 Text [ en-US ] = "Align Center" ;
             };
             ToolBoxItem
             {
                 Identifier = BT_SUBSTRIGHT ;
-                HelpID = HID_PPROPERTYPANEL_PARA_TBI_HALIGN_RIGHT;
+                HelpID = HID_PPROPERTYPANEL_PARA_TBI_HALIGN_RIGHT ;
                 Text [ en-US ] = "Align Right" ;
             };
             ToolBoxItem
             {
                 Identifier = BT_SUBSTJUSTIFY ;
-                HelpID = HID_PPROPERTYPANEL_PARA_TBI_HALIGN_JUSTIFY;
+                HelpID = HID_PPROPERTYPANEL_PARA_TBI_HALIGN_JUSTIFY ;
                 Text [ en-US ] = "Align Justified" ;
             };
         };
     };
     ToolBox TBX_VERT_ALIGN
     {
-        HelpID = HID_PPROPERTYPANEL_PARA_TBX_VALIGN;
+        HelpID = HID_PPROPERTYPANEL_PARA_TBX_VALIGN ;
         SVLook = TRUE ;
         Border = FALSE ;
-        Pos = MAP_APPFONT ( TBX_VERT_ALIGN_X,  TBX_VERT_ALIGN_Y ) ;
-        Size = MAP_APPFONT ( TOOLBOX_ITEM_WIDTH * 3 ,  TOOLBOX_ITEM_HEIGHT) ;
+        Pos = MAP_APPFONT ( TBX_VERT_ALIGN_X, TBX_VERT_ALIGN_Y ) ;
+        Size = MAP_APPFONT ( TOOLBOX_ITEM_WIDTH * 3, TOOLBOX_ITEM_HEIGHT) ;
         TabStop = TRUE ;
-        Text = "Vertical Alignment";
+        Text = "Vertical Alignment" ;
         ItemList =
         {
             ToolBoxItem
             {
                 Identifier = IID_VERT_TOP ;
-                HelpID = HID_PPROPERTYPANEL_PARA_TBI_VALIGN_TOP;
+                HelpID = HID_PPROPERTYPANEL_PARA_TBI_VALIGN_TOP ;
                 Text [ en-US ] = "Align Top" ;
             };
 
             ToolBoxItem
             {
                 Identifier = IID_VERT_CENTER ;
-                HelpID = HID_PPROPERTYPANEL_PARA_TBI_VALIGN_CENTER;
+                HelpID = HID_PPROPERTYPANEL_PARA_TBI_VALIGN_CENTER ;
                 Text [ en-US ] = "Align Center Vertically" ;
             };
 
             ToolBoxItem
             {
                 Identifier = IID_VERT_BOTTOM ;
-                HelpID = HID_PPROPERTYPANEL_PARA_TBI_VALIGN_BOT;
+                HelpID = HID_PPROPERTYPANEL_PARA_TBI_VALIGN_BOT ;
                 Text [ en-US ] = "Align Bottom" ;
             };
         };
@@ -132,12 +134,12 @@ Control RID_SIDEBAR_PARA_PANEL
 
     ToolBox TBX_NUM_BULLET
     {
-        HelpID = HID_PPROPERTYPANEL_PARA_TBX_NUM_BULLET;
+        HelpID = HID_PPROPERTYPANEL_PARA_TBX_NUM_BULLET ;
         Border = FALSE ;
-        Pos = MAP_APPFONT ( TBX_NUM_BULLET_X , TBX_NUM_BULLET_Y ) ;
-        Size = MAP_APPFONT ( TOOLBOX_ITEM_DD_WIDTH * 2 ,  TOOLBOX_ITEM_HEIGHT) ;
+        Pos = MAP_APPFONT ( TBX_NUM_BULLET_X, TBX_NUM_BULLET_Y ) ;
+        Size = MAP_APPFONT ( TOOLBOX_ITEM_DD_WIDTH * 2, TOOLBOX_ITEM_HEIGHT) ;
         TabStop = TRUE ;
-        Text = "Bullets and Numbering";
+        Text = "Bullets and Numbering" ;
         ItemList =
         {
             ToolBoxItem
@@ -162,14 +164,14 @@ Control RID_SIDEBAR_PARA_PANEL
         Pos = MAP_APPFONT (TBX_BACK_COLOR_X, TBX_BACK_COLOR_Y) ;
         Size = MAP_APPFONT (TOOLBOX_WIDTH,TOOLBOX_HEIGHT ) ;
         TabStop = TRUE ;
-        HelpID = HID_PPROPERTYPANEL_PARA_TBX_BACK_COLOR;
+        HelpID = HID_PPROPERTYPANEL_PARA_TBX_BACK_COLOR ;
         Text = "Paragraph Background Color" ;
         ItemList =
         {
             ToolBoxItem
             {
                 Identifier = TBI_BACK_COLOR ;
-                HelpID = HID_PPROPERTYPANEL_PARA_TBI_BACK_COLOR;
+                HelpID = HID_PPROPERTYPANEL_PARA_TBI_BACK_COLOR ;
                 DropDown = TRUE ;
                 Text [ en-US ] = "Paragraph Background Color" ;
             };
@@ -177,18 +179,18 @@ Control RID_SIDEBAR_PARA_PANEL
     };
     FixedText FT_SPACING
     {
-        Pos = MAP_APPFONT ( FT_PARA_SPACE_X, FT_PARA_SPACE_Y );
+        Pos = MAP_APPFONT ( FT_PARA_SPACE_X, FT_PARA_SPACE_Y ) ;
         Size = MAP_APPFONT ( FT_PARA_INDENT_X - 7 - FT_PARA_SPACE_X, _FIXED_TEXT_HEIGHT) ;
-        Text [ en-US ] = "~Spacing:";
+        Text [ en-US ] = "~Spacing:" ;
     };
     ToolBox TBX_UL_INC_DEC
     {
         Pos = MAP_APPFONT ( TBX_PARA_SPACE_INC_DEC_X,TBX_PARA_SPACE_INC_DEC_Y );
-        Size = MAP_APPFONT (ALIGNMENT_TBX_WIDTH*2,ALIGNMENT_TBX_HEIGHT);
+        Size = MAP_APPFONT (ALIGNMENT_TBX_WIDTH*2,ALIGNMENT_TBX_HEIGHT) ;
         SVLook = TRUE ;
         Border = FALSE ;
         HelpID = HID_PPROPERTYPANEL_PARA_TBX_INC_DEC ;
-        Text = "Spacing";
+        Text = "Spacing" ;
         ItemList =
         {
             ToolBoxItem
@@ -198,12 +200,12 @@ Control RID_SIDEBAR_PARA_PANEL
                 Text [ en-US ] = "Increase Spacing" ;
 
                 /** The next line should be
-                    Command = ".uno:ParaspaceIncrease";
+                    Command = ".uno:ParaspaceIncrease" ;
                 The hack is necessary because the ParaspaceIncrease command is only
-                defined for Draw/Impress.  It has to be defined in
+                defined for Draw/Impress. It has to be defined in
                 GenericCommancs.xcu to be recognized. See issue 122446 for more details.
                 */
-                Command = "private:graphicrepository/res/commandimagelist/sc_paraspaceincrease.png";
+                Command = "private:graphicrepository/res/commandimagelist/sc_paraspaceincrease.png" ;
             };
             ToolBoxItem
             {
@@ -211,64 +213,58 @@ Control RID_SIDEBAR_PARA_PANEL
                 HelpID = HID_PPROPERTYPANEL_PARA_TBI_DEC ;
                 Text [ en-US ] = "Decrease Spacing" ;
                 /** See above or issue 122446 why the following line is not
-                    Command = ".uno:ParaspaceDecrease";
+                    Command = ".uno:ParaspaceDecrease" ;
                 */
-                Command = "private:graphicrepository/res/commandimagelist/sc_paraspacedecrease.png";
+                Command = "private:graphicrepository/res/commandimagelist/sc_paraspacedecrease.png" ;
             };
         };
     };
     MetricField MF_ABOVE_PARASPACING
     {
         HelpID = HID_POPUP_PS_ED_SBINDE_TOPDIST ;
-        Border = TRUE;
-        Pos = MAP_APPFONT ( MBX_TOP_DIST_X, MBX_TOP_DIST_Y );
-            Size = MAP_APPFONT ( CONTROL_WIDTH -10 ,MBOX_HEIGHT ) ;
-            QuickHelpText [ en-US ] = "Above Paragraph Spacing";
-            TabStop = TRUE;
-        Repeat = TRUE;
-        Spin = TRUE;
-        Maximum = 999;
-        Unit = FUNIT_INCH;
-        Last = 999;
-        SpinSize = 1;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MBX_TOP_DIST_X, MBX_TOP_DIST_Y ) ;
+        Size = MAP_APPFONT ( CONTROL_WIDTH -10 ,MBOX_HEIGHT ) ;
+        QuickHelpText [ en-US ] = "Above Paragraph Spacing" ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 999 ;
+        Unit = FUNIT_INCH ;
+        Last = 999 ;
+        SpinSize = 1 ;
 
     };
     MetricField MF_BELOW_PARASPACING
     {
-        Border = TRUE;
-        Pos = MAP_APPFONT ( MBX_BOT_DIST_X, MBX_BOT_DIST_Y );
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MBX_BOT_DIST_X, MBX_BOT_DIST_Y ) ;
         Size = MAP_APPFONT ( CONTROL_WIDTH -10,MBOX_HEIGHT ) ;
-        QuickHelpText [ en-US ] = "Below Paragraph Spacing";
+        QuickHelpText [ en-US ] = "Below Paragraph Spacing" ;
         HelpID = HID_POPUP_PS_ED_SBINDE_BOTTOMDIST ;
-        Repeat = TRUE;
-        Spin = TRUE;
-        Maximum = 999;
-        Unit = FUNIT_INCH;
-        Last = 999;
-        SpinSize = 1;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 999 ;
+        Unit = FUNIT_INCH ;
+        Last = 999 ;
+        SpinSize = 1 ;
     };
     FixedText FT_INDENT
     {
-        Pos = MAP_APPFONT ( FT_PARA_INDENT_X, FT_PARA_INDENT_Y );
+        Pos = MAP_APPFONT ( FT_PARA_INDENT_X, FT_PARA_INDENT_Y ) ;
         Size = MAP_APPFONT ( _FIXED_TEXT_WIDTH + 50, _FIXED_TEXT_HEIGHT) ;
-        Text [ en-US ] = "~Indent:";
+        Text [ en-US ] = "~Indent:" ;
     };
     ToolBox TBX_INDENT_INC_DEC
     {
-        Pos = MAP_APPFONT ( TBX_PARA_INDENT_INC_DEC_X, TBX_PARA_INDENT_INC_DEC_Y );
-        Size = MAP_APPFONT (ALIGNMENT_TBX_WIDTH*2,ALIGNMENT_TBX_HEIGHT);
+        Pos = MAP_APPFONT ( TBX_PARA_INDENT_INC_DEC_X, TBX_PARA_INDENT_INC_DEC_Y ) ;
+        Size = MAP_APPFONT (ALIGNMENT_TBX_WIDTH*2,ALIGNMENT_TBX_HEIGHT) ;
         SVLook = TRUE ;
         Border = FALSE ;
         HelpID = HID_PPROPERTYPANEL_PARA_TBX_INDENT_INC_DEC ;
-        Text = "Indent";
+        Text = "Indent" ;
         ItemList =
         {
-            ToolBoxItem
-            {
-                Identifier = BT_TBX_INDENT_INC ;
-                HelpID = HID_PPROPERTYPANEL_PARA_TBI_INDENT_INC ;
-                Text [ en-US ] = "Increase Indent" ;
-            };
             ToolBoxItem
             {
                 Identifier = BT_TBX_INDENT_DEC ;
@@ -277,24 +273,30 @@ Control RID_SIDEBAR_PARA_PANEL
             };
             ToolBoxItem
             {
+                Identifier = BT_TBX_INDENT_INC ;
+                HelpID = HID_PPROPERTYPANEL_PARA_TBI_INDENT_INC ;
+                Text [ en-US ] = "Increase Indent" ;
+            };
+            ToolBoxItem
+            {
                 Identifier = ID_HANGING_INDENT ;
                 Text [ en-US ] = "Switch to Hanging Indent" ;
                 HelpID = HID_PPROPERTYPANEL_PARA_TBI_INDENT_HANG ;
                 ItemBitmap = Bitmap
                 {
-                    File = "symphony/Indent_Hanging.png";
+                    File = "symphony/Indent_Hanging.png" ;
                 };
             };
         };
     };
     ToolBox TBX_INDENT_PRO_DEMOTE
     {
-        Pos = MAP_APPFONT ( TBX_PARA_INDENT_INC_DEC_X, TBX_PARA_INDENT_INC_DEC_Y );
-        Size = MAP_APPFONT (ALIGNMENT_TBX_WIDTH*2,ALIGNMENT_TBX_HEIGHT);
+        Pos = MAP_APPFONT ( TBX_PARA_INDENT_INC_DEC_X, TBX_PARA_INDENT_INC_DEC_Y ) ;
+        Size = MAP_APPFONT (ALIGNMENT_TBX_WIDTH*2,ALIGNMENT_TBX_HEIGHT) ;
         SVLook = TRUE ;
         Border = FALSE ;
         HelpID = HID_PPROPERTYPANEL_PARA_TBX_INDENTP_INC_DEC ;
-        Text = "Indent";
+        Text = "Indent" ;
         ItemList =
         {
             ToolBoxItem
@@ -316,7 +318,7 @@ Control RID_SIDEBAR_PARA_PANEL
                 HelpID = HID_PPROPERTYPANEL_PARA_TBI_INDENTP_HANG ;
                 ItemBitmap = Bitmap
                 {
-                    File = "symphony/Indent_Hanging.png";
+                    File = "symphony/Indent_Hanging.png" ;
                 };
             };
         };
@@ -324,56 +326,56 @@ Control RID_SIDEBAR_PARA_PANEL
     MetricField MF_BEFORE_INDENT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MBX_LEFT_DIST_X, MBX_LEFT_DIST_Y );
+        Pos = MAP_APPFONT ( MBX_LEFT_DIST_X, MBX_LEFT_DIST_Y ) ;
         Size = MAP_APPFONT ( CONTROL_WIDTH - 10,MBOX_HEIGHT ) ;
-        QuickHelpText [ en-US ] = "Before Text Indent";
+        QuickHelpText [ en-US ] = "Before Text Indent" ;
         HelpID = HID_POPUP_INDENT_ED_INDENT_LEFTINDENT ;
         Repeat = TRUE ;
         Spin = TRUE ;
         Maximum = 9999 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_INCH;
+        Unit = FUNIT_INCH ;
         Last = 9999 ;
         SpinSize = 2 ;
     };
     MetricField MF_AFTER_INDENT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MBX_RIGHT_DIST_X, MBX_RIGHT_DIST_Y );
+        Pos = MAP_APPFONT ( MBX_RIGHT_DIST_X, MBX_RIGHT_DIST_Y ) ;
         Size = MAP_APPFONT ( CONTROL_WIDTH -10 ,MBOX_HEIGHT ) ;
-        QuickHelpText [ en-US ] = "After Text Indent";
+        QuickHelpText [ en-US ] = "After Text Indent" ;
         HelpID = HID_POPUP_INDENT_ED_INDENT_RIGHTINDENT ;
         Repeat = TRUE ;
         Spin = TRUE ;
         Maximum = 9999 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_INCH;
+        Unit = FUNIT_INCH ;
         Last = 9999 ;
         SpinSize = 2 ;
     };
     MetricField MF_FL_INDENT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MBX_FLINE_DIST_X, MBX_FLINE_DIST_Y );
+        Pos = MAP_APPFONT ( MBX_FLINE_DIST_X, MBX_FLINE_DIST_Y ) ;
         Size = MAP_APPFONT ( CONTROL_WIDTH -10 ,MBOX_HEIGHT ) ;
-        QuickHelpText [ en-US ] = "First Line Indent";
+        QuickHelpText [ en-US ] = "First Line Indent" ;
         HelpID = HID_POPUP_INDENT_ED_INDENT_FLINDENT ;
         Repeat = TRUE ;
         Spin = TRUE ;
-        Minimum = -9999;
+        Minimum = -9999 ;
         Maximum = 9999 ;
-        DecimalDigits = 2;
-        Unit = FUNIT_INCH;
-        First = -9999;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_INCH ;
+        First = -9999 ;
         Last = 9999 ;
         SpinSize = 2 ;
     };
     ToolBox TBX_LINESP
     {
-        Pos = MAP_APPFONT ( TBX_LINE_SPACE_X, TBX_LINE_SPACE_Y);
+        Pos = MAP_APPFONT ( TBX_LINE_SPACE_X, TBX_LINE_SPACE_Y) ;
         SVLook = TRUE ;
         Border = FALSE ;
-        Size = MAP_APPFONT (TOOLBOX_WIDTH, TOOLBOX_HEIGHT);
+        Size = MAP_APPFONT (TOOLBOX_WIDTH, TOOLBOX_HEIGHT) ;
         HelpID = HID_PPROPERTYPANEL_PARA_TBX_LINESP ;
         Text = "Line Spacing" ;
         ItemList =
@@ -387,132 +389,132 @@ Control RID_SIDEBAR_PARA_PANEL
                 {
                     File = "symphony/lpsmall-spacing-1.png" ;
                 };
-                DropDown = TRUE;
+                DropDown = TRUE ;
             };
         };
     };
     FixedImage FI_INDENT1
     {
-        Pos = MAP_APPFONT( IMG_SPACE_X, IMG_SPACE1_Y );
-        Size = MAP_APPFONT( IMAGE_SIZE, IMAGE_SIZE );
+        Pos = MAP_APPFONT ( IMG_SPACE_X, IMG_SPACE1_Y ) ;
+        Size = MAP_APPFONT ( IMAGE_SIZE, IMAGE_SIZE ) ;
     };
     FixedImage FI_INDENT2
     {
-        Pos = MAP_APPFONT( IMG_SPACE_X, IMG_SPACE2_Y );
-        Size = MAP_APPFONT( IMAGE_SIZE, IMAGE_SIZE );
+        Pos = MAP_APPFONT ( IMG_SPACE_X, IMG_SPACE2_Y ) ;
+        Size = MAP_APPFONT ( IMAGE_SIZE, IMAGE_SIZE ) ;
     };
     FixedImage FI_INDENT3
     {
-        Pos = MAP_APPFONT( IMG_INDENT_X, IMG_INDENT1_Y );
-        Size = MAP_APPFONT( IMAGE_SIZE, IMAGE_SIZE );
+        Pos = MAP_APPFONT ( IMG_INDENT_X, IMG_INDENT1_Y ) ;
+        Size = MAP_APPFONT ( IMAGE_SIZE, IMAGE_SIZE ) ;
     };
     FixedImage FI_SPACE1
     {
-        Pos = MAP_APPFONT( IMG_INDENT_X, IMG_INDENT2_Y );
-        Size = MAP_APPFONT( IMAGE_SIZE, IMAGE_SIZE );
+        Pos = MAP_APPFONT ( IMG_INDENT_X, IMG_INDENT2_Y ) ;
+        Size = MAP_APPFONT ( IMAGE_SIZE, IMAGE_SIZE ) ;
     };
     FixedImage FI_SPACE2
     {
-        Pos = MAP_APPFONT( IMG_INDENT_X, IMG_INDENT3_Y );
-        Size = MAP_APPFONT( IMAGE_SIZE, IMAGE_SIZE );
+        Pos = MAP_APPFONT ( IMG_INDENT_X, IMG_INDENT3_Y ) ;
+        Size = MAP_APPFONT ( IMAGE_SIZE, IMAGE_SIZE ) ;
     };
 
     ImageList IL_NUM_BULLET
     {
-        Prefix = "symphony/para_numbullet";
+        Prefix = "symphony/para_numbullet" ;
         MaskColor = STD_MASKCOLOR ;
         SVX_PROPERTYPANEL_PARA_NUMBULLET_IDLIST
     };
     ImageList ILH_NUM_BULLET
     {
-        Prefix = "symphony/para_numbulleth";
+        Prefix = "symphony/para_numbulleth" ;
         MaskColor = STD_MASKCOLOR ;
         SVX_PROPERTYPANEL_PARA_NUMBULLET_IDLIST
     };
-    //for sym2_7380
+    // for sym2_7380
     ImageList IL_NUM_BULLET_RTL
     {
-        Prefix = "symphony/para_numbullet_rtl";
+        Prefix = "symphony/para_numbullet_rtl" ;
         MaskColor = STD_MASKCOLOR ;
         SVX_PROPERTYPANEL_PARA_NUMBULLET_IDLIST_RTL
     };
-    //end
+    // end
     Image IMG_BACK_COLOR
     {
-        ImageBitmap = Bitmap{File = "symphony/sc_backgroundcolor.bmp";};
+        ImageBitmap = Bitmap{File = "symphony/sc_backgroundcolor.png" ;} ;
     };
     Image IMG_BACK_COLOR_H
     {
-        ImageBitmap = Bitmap{File = "symphony/sch_backgroundcolor.bmp";};
+        ImageBitmap = Bitmap{File = "symphony/sch_backgroundcolor.png" ;} ;
     };
     Image IMG_SPACE1
     {
-        ImageBitmap = Bitmap{File = "symphony/spacing1.png";};
+        ImageBitmap = Bitmap{File = "symphony/spacing1.png" ;} ;
     };
     Image IMG_SPACE2
     {
-        ImageBitmap = Bitmap{File = "symphony/spacing2.png";};
+        ImageBitmap = Bitmap{File = "symphony/spacing2.png" ;} ;
     };
     Image IMG_SPACE3
     {
-        ImageBitmap = Bitmap{File = "symphony/spacing3.png";};
+        ImageBitmap = Bitmap{File = "symphony/spacing3.png" ;} ;
     };
     Image IMG_INDENT1
     {
-        ImageBitmap = Bitmap{File = "symphony/Indent2.png";};
+        ImageBitmap = Bitmap{File = "symphony/Indent2.png" ;} ;
     };
     Image IMG_INDENT2
     {
-        ImageBitmap = Bitmap{File = "symphony/Indent3.png";};
+        ImageBitmap = Bitmap{File = "symphony/Indent3.png" ;} ;
     };
     Image IMG_INDENT3
     {
-        ImageBitmap = Bitmap{File = "symphony/Indent4.png";};
+        ImageBitmap = Bitmap{File = "symphony/Indent4.png" ;} ;
     };
     Image IMG_INDENT_HANG
     {
-        ImageBitmap = Bitmap{File = "symphony/Indent_Hanging.png";};
+        ImageBitmap = Bitmap{File = "symphony/Indent_Hanging.png" ;} ;
     };
 };
 
-//===========================================Back color page==============================
+// ===========================================Back color page==============================
 Control RID_POPUPPANEL_PARAPAGE_BACK_COLOR
 {
-    OutputSize = TRUE;
-    DialogControl = TRUE;
-    Border = FALSE;
-    Size = MAP_APPFONT(  POPUP_COLOR_PICKER_WIDTH , POPUP_COLOR_PICKER_HEIGHT  );
+    OutputSize = TRUE ;
+    DialogControl = TRUE ;
+    Border = FALSE ;
+    Size = MAP_APPFONT ( POPUP_COLOR_PICKER_WIDTH, POPUP_COLOR_PICKER_HEIGHT ) ;
 
     Control VS_FONT_COLOR
     {
         HelpID = HID_PPROPERTYPANEL_PARA_BACK_COLOR_VS ;
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( OFFSET_X , OFFSET_Y );
-        Size = MAP_APPFONT (  POPUP_COLOR_PICKER_WIDTH - OFFSET_X * 2, POPUP_COLOR_PICKER_HEIGHT - OFFSET_Y * 2);
+        Pos = MAP_APPFONT ( OFFSET_X, OFFSET_Y ) ;
+        Size = MAP_APPFONT ( POPUP_COLOR_PICKER_WIDTH - OFFSET_X * 2, POPUP_COLOR_PICKER_HEIGHT - OFFSET_Y * 2) ;
         TabStop = TRUE ;
-        Text = "Color Picker";
+        Text = "Color Picker" ;
     };
     String STR_NOFILL
     {
-        Text [ en-US ] = "No Color";
+        Text [ en-US ] = "No Color" ;
     };
 };
 
-//===========================================Bullet popup page==============================
+// ===========================================Bullet popup page==============================
 Control RID_POPUPPANEL_PARAPAGE_BULLETS
 {
-    DialogControl = TRUE;
-    OutputSize = TRUE;
-    Border = FALSE;
+    DialogControl = TRUE ;
+    OutputSize = TRUE ;
+    Border = FALSE ;
 
-    Size = MAP_APPFONT ( POPUP_WIDTH_BULLET , POPUP_HEIGHT_BULLET) ;
+    Size = MAP_APPFONT ( POPUP_WIDTH_BULLET, POPUP_HEIGHT_BULLET) ;
     Control VS_VALUES
     {
-        Pos = MAP_APPFONT ( POPUPPANEL_MARGIN_NB , POPUPPANEL_MARGIN_NB ) ;
-        Size = MAP_APPFONT ( VS_WIDTH_BULLET ,  VS_HEIGHT_BULLET) ;
+        Pos = MAP_APPFONT ( POPUPPANEL_MARGIN_NB, POPUPPANEL_MARGIN_NB ) ;
+        Size = MAP_APPFONT ( VS_WIDTH_BULLET, VS_HEIGHT_BULLET) ;
         HelpID = HID_POPUP_BULLET_VS_VALUES ;
         TabStop = TRUE ;
-        Text = "Bullet";
+        Text = "Bullet" ;
     };
     PushButton CB_BULLET_MORE
     {
@@ -520,381 +522,383 @@ Control RID_POPUPPANEL_PARAPAGE_BULLETS
         Size = MAP_APPFONT (POPUP_WIDTH_BULLET - 2*CUST_MORE_BUTTON_X - POPUPPANEL_MARGIN_NB*2, CUST_MORE_BUTTON_HEIGHT ) ;
         HelpID = HID_POPUP_BULLET_CB_BULLET_MORE ;
         TabStop = TRUE ;
-        Text [ en-US ] = "~More Options";
+        Text [ en-US ] = "~More Options" ;
     };
     Bitmap  BMP_BULLET_MORE
     {
-        File = "symphony/__morebutton.bmp";
+        File = "symphony/__morebutton.bmp" ;
     };
     Bitmap  BMP_BULLET_MORE_H
     {
-        File = "symphony/__morebutton_h.bmp";
+        File = "symphony/__morebutton_h.bmp" ;
     };
 };
 
 String RID_SVXSTR_SIDEBAR_BULLET_DESCRIPTIONS_0
 {
-    Text [en-US] = "large square bullets";
+    Text [en-US] = "large square bullets" ;
 };
 
 String RID_SVXSTR_SIDEBAR_BULLET_DESCRIPTIONS_1
 {
-    Text [en-US] = "graphic bullets";
+    Text [en-US] = "graphic bullets" ;
 };
 
 String RID_SVXSTR_SIDEBAR_BULLET_DESCRIPTIONS_2
 {
-    Text [en-US] = "graphic bullets";
+    Text [en-US] = "graphic bullets" ;
 };
 
 String RID_SVXSTR_SIDEBAR_BULLET_DESCRIPTIONS_3
 {
-    Text [en-US] = "graphic bullets";
+    Text [en-US] = "graphic bullets" ;
 };
 
 String RID_SVXSTR_SIDEBAR_BULLET_DESCRIPTIONS_4
 {
-    Text [en-US] = "graphic bullets";
+    Text [en-US] = "graphic bullets" ;
 };
 
-//===========================================Numbering popup page==============================
+// ===========================================Numbering popup page==============================
 Control RID_POPUPPANEL_PARAPAGE_NUMBERING
 {
     SVLook = TRUE ;
-    DialogControl = TRUE;
-    OutputSize = TRUE;
-    Border = FALSE;
+    DialogControl = TRUE ;
+    OutputSize = TRUE ;
+    Border = FALSE ;
 
-    Size = MAP_APPFONT ( POPUP_WIDTH_NUM , POPUP_HEIGHT_NUM) ;
+    Size = MAP_APPFONT ( POPUP_WIDTH_NUM, POPUP_HEIGHT_NUM) ;
     Control VS_NUMBERING
     {
         Pos = MAP_APPFONT ( POPUPPANEL_MARGIN_NB, POPUPPANEL_MARGIN_NB ) ;
-        Size = MAP_APPFONT ( VS_WIDTH_NUM ,  VS_HEIGHT_NUM) ;
+        Size = MAP_APPFONT ( VS_WIDTH_NUM, VS_HEIGHT_NUM) ;
         HelpID = HID_POPUP_NUM_VS_NUMBERING ;
         TabStop = TRUE ;
-        Text = "Numbering";
+        Text = "Numbering" ;
     };
     PushButton CB_NUMBERING_MORE
     {
-        Pos = MAP_APPFONT (CUST_MORE_BUTTON_X + POPUPPANEL_MARGIN_NB,  VS_HEIGHT_NUM + POPUPPANEL_MARGIN_NB * 2 ) ;
+        Pos = MAP_APPFONT (CUST_MORE_BUTTON_X + POPUPPANEL_MARGIN_NB, VS_HEIGHT_NUM + POPUPPANEL_MARGIN_NB * 2 ) ;
         Size = MAP_APPFONT (POPUP_WIDTH_NUM - 2*CUST_MORE_BUTTON_X - POPUPPANEL_MARGIN_NB*2, CUST_MORE_BUTTON_HEIGHT ) ;
         HelpID = HID_POPUP_NUM_CB_NUMBERING_MORE ;
         TabStop = TRUE ;
-        Text [ en-US ] = "~More Options";
+        Text [ en-US ] = "~More Options" ;
     };
     Bitmap  BMP_NUMERING_MORE
     {
-        File = "symphony/__morebutton.bmp";
+        File = "symphony/__morebutton.bmp" ;
     };
     Bitmap  BMP_NUMERING_MORE_H
     {
-        File = "symphony/__morebutton_h.bmp";
+        File = "symphony/__morebutton_h.bmp" ;
     };
 };
 
-//===========================================Line Space popup page==============================
+// ===========================================Line Space popup page==============================
 Control RID_POPUPPANEL_PARAPAGE_LINESPACING
 {
-    OutputSize = TRUE;
-    DialogControl = TRUE;
-    Border = FALSE;
+    OutputSize = TRUE ;
+    DialogControl = TRUE ;
+    Border = FALSE ;
 
-    Size = MAP_APPFONT( POPUPPANEL_MARGIN_SMALL * 2 + POPUP_BORDER_WIDTH + VS_SPACING_WIDTH, POPUP_PAGE_HEIGHT );
+    Size = MAP_APPFONT ( POPUPPANEL_MARGIN_SMALL * 2 + POPUP_BORDER_WIDTH + VS_SPACING_WIDTH, POPUP_PAGE_HEIGHT ) ;
 
     Control LINE_SPACING
     {
-        Pos = MAP_APPFONT(  POPUPPANEL_MARGIN_SMALL + OFFSET_X , POPUPPANEL_MARGIN_SMALL + OFFSET_Y );
-        Size = MAP_APPFONT ( VS_SPACING_WIDTH  , 17 * 5);
+        Pos = MAP_APPFONT ( POPUPPANEL_MARGIN_SMALL + OFFSET_X, POPUPPANEL_MARGIN_SMALL + OFFSET_Y ) ;
+        Size = MAP_APPFONT ( VS_SPACING_WIDTH , 17 * 5) ;
         TabStop = TRUE ;
-        Text = "Line Spacing";
+        Text = "Line Spacing" ;
     };
 
     FixedText FT_CUSTOM
     {
-        Pos = MAP_APPFONT ( POP_FT_CUSTOM_X, POP_FT_CUSTOM_Y );
-        Size = MAP_APPFONT ( _FIXED_TEXT_WIDTH + 50 , _FIXED_TEXT_HEIGHT) ;
-        Text [ en-US ] = "Custom:";
+        Pos = MAP_APPFONT ( POP_FT_CUSTOM_X, POP_FT_CUSTOM_Y ) ;
+        Size = MAP_APPFONT ( _FIXED_TEXT_WIDTH + 50, _FIXED_TEXT_HEIGHT) ;
+        Text [ en-US ] = "Custom:" ;
     };
     FixedText FT_LINE_SPACING
     {
-        Pos = MAP_APPFONT ( FT_1_X, FT_1_Y );
+        Pos = MAP_APPFONT ( FT_1_X, FT_1_Y ) ;
         Size = MAP_APPFONT ( _FIXED_TEXT_WIDTH + 10, _FIXED_TEXT_HEIGHT) ;
-        Text [ en-US ] = "~Line Spacing:";
+        Text [ en-US ] = "~Line Spacing:" ;
     };
 
     FixedText FT_OF
     {
-        Pos = MAP_APPFONT ( FT_2_X, FT_2_Y );
-        Size = MAP_APPFONT ( _FIXED_TEXT_WIDTH , _FIXED_TEXT_HEIGHT) ;
-        Text [ en-US ] = "~Of:";
+        Pos = MAP_APPFONT ( FT_2_X, FT_2_Y ) ;
+        Size = MAP_APPFONT ( _FIXED_TEXT_WIDTH, _FIXED_TEXT_HEIGHT) ;
+        Text [ en-US ] = "~Of:" ;
     };
 
     ListBox LB_LINE_SPACING
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( EDIT_1_X, EDIT_1_Y );
+        Pos = MAP_APPFONT ( EDIT_1_X, EDIT_1_Y ) ;
         Size = MAP_APPFONT ( BD_WIDTH - POPUPPANEL_MARGIN_LARGE * 2,LISTBOX_HEIGHT ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         HelpID = HID_POPUP_LS_LB_LINE_SPACING ;
         StringList [ en-US ] =
         {
-            < "Single" ; Default ; > ;
-            < "1.5 Lines" ; Default ; > ;
-            < "Double" ; Default ; > ;
-            < "Proportional" ; Default ; > ;
-            < "At least" ; Default ; > ;
-            < "Leading" ; Default ; > ;
-            < "Fixed" ; Default ; > ;
+            < "Single" ; Default ;          > ;
+            < "1.5 Lines" ; Default ;       > ;
+            < "Double" ; Default ;          > ;
+            < "Proportional" ; Default ;    > ;
+            < "At least" ; Default ;        > ;
+            < "Leading" ; Default ;         > ;
+            < "Fixed" ; Default ;           > ;
         };
     };
     MetricField ED_SBINDE_LINEDISTPERCENT
     {
-        Disable = TRUE;
-        Border = TRUE;
-        Pos = MAP_APPFONT ( EDIT_2_X, EDIT_2_Y );
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( EDIT_2_X, EDIT_2_Y ) ;
         Size = MAP_APPFONT ( BD_WIDTH - POPUPPANEL_MARGIN_LARGE * 2,MBOX_HEIGHT ) ;
         HelpID = HID_POPUP_LS_ED_SBINDE_LINEDISTPERCENT ;
-        Repeat = TRUE;
-        Spin = TRUE;
-        Minimum = 50;
-        Maximum = 200;
-        Value = 100;
-        StrictFormat = TRUE;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 50 ;
+        Maximum = 200 ;
+        Value = 100 ;
+        StrictFormat = TRUE ;
         Unit = FUNIT_PERCENT ;
-        First = 50;
-        Last = 200;
-        SpinSize = 1;
+        First = 50 ;
+        Last = 200 ;
+        SpinSize = 1 ;
     };
     MetricField ED_SBINDE_LINEDISTPOINT
     {
-        Disable = TRUE;
-        Border = TRUE;
-        Pos = MAP_APPFONT ( EDIT_2_X, EDIT_2_Y );
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( EDIT_2_X, EDIT_2_Y ) ;
         Size = MAP_APPFONT ( BD_WIDTH - POPUPPANEL_MARGIN_LARGE * 2, MBOX_HEIGHT ) ;
         HelpID = HID_POPUP_LS_ED_SBINDE_LINEDISTPOINT ;
-        Repeat = TRUE;
-        Spin = TRUE;
-        Maximum = 9999;
-        DecimalDigits = 2;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_INCH;
-        Last = 9999;
-        SpinSize = 2;
+        Unit = FUNIT_INCH ;
+        Last = 9999 ;
+        SpinSize = 2 ;
     };
     Image IMG_SPACING1
     {
-        ImageBitmap = Bitmap{File = "symphony/lpspacing-1.png";};
+        ImageBitmap = Bitmap{File = "symphony/lpspacing-1.png" ;} ;
     };
     Image IMG_SPACING115
     {
-        ImageBitmap = Bitmap{File = "symphony/lpspacing-1_15.png";};
+        ImageBitmap = Bitmap{File = "symphony/lpspacing-1_15.png" ;} ;
     };
     Image IMG_SPACING15
     {
-        ImageBitmap = Bitmap{File = "symphony/lpspacing-1_5.png";};
+        ImageBitmap = Bitmap{File = "symphony/lpspacing-1_5.png" ;} ;
     };
     Image IMG_SPACING2
     {
-        ImageBitmap = Bitmap{File = "symphony/lpspacing-2.png";};
+        ImageBitmap = Bitmap{File = "symphony/lpspacing-2.png" ;} ;
     };
     Image IMG_SEL_SPACING1
     {
-        ImageBitmap = Bitmap{File = "symphony/lpselected-spacing-1.png";};
+        ImageBitmap = Bitmap{File = "symphony/lpselected-spacing-1.png" ;} ;
     };
     Image IMG_SEL_SPACING115
     {
-        ImageBitmap = Bitmap{File = "symphony/lpselected-spacing-1_15.png";};
+        ImageBitmap = Bitmap{File = "symphony/lpselected-spacing-1_15.png" ;} ;
     };
     Image IMG_SEL_SPACING15
     {
-        ImageBitmap = Bitmap{File = "symphony/lpselected-spacing-1_5.png";};
+        ImageBitmap = Bitmap{File = "symphony/lpselected-spacing-1_5.png" ;} ;
     };
     Image IMG_SEL_SPACING2
     {
-        ImageBitmap = Bitmap{File = "symphony/lpselected-spacing-2.png";};
+        ImageBitmap = Bitmap{File = "symphony/lpselected-spacing-2.png" ;} ;
     };
     Image IMG_CUSTOM
     {
-        ImageBitmap = Bitmap{File = "symphony/last_custom_common.png";};
+        ImageBitmap = Bitmap{File = "symphony/last_custom_common.png" ;} ;
     };
     Image IMG_CUSTOM_GRAY
     {
-        ImageBitmap = Bitmap{File = "symphony/last_custom_common_grey.png";};
+        ImageBitmap = Bitmap{File = "symphony/last_custom_common_grey.png" ;} ;
     };
     String STR_LS_SINGLE
     {
-        Text [ en-US ] = "Line spacing: Single";
+        Text [ en-US ] = "Line spacing: Single" ;
     };
     String STR_LS_115
     {
-        Text [ en-US ] = "Line spacing: 1.15 Lines";
+        Text [ en-US ] = "Line spacing: 1.15 Lines" ;
     };
     String STR_LS_15
     {
-        Text [ en-US ] = "Line spacing: 1.5 Lines";
+        Text [ en-US ] = "Line spacing: 1.5 Lines" ;
     };
     String STR_LS_DOUBLE
     {
-        Text [ en-US ] = "Line spacing: Double";
+        Text [ en-US ] = "Line spacing: Double" ;
     };
     String STR_LSPACING
     {
-        Text [ en-US ] = "Line spacing:";
+        Text [ en-US ] = "Line spacing:" ;
     };
     String STR_LS_OF
     {
-        Text [ en-US ] = "of:";
+        Text [ en-US ] = "of:" ;
     };
     String STR_SPACING1
     {
-        Text [ en-US ] = "Spacing: 1";
+        Text [ en-US ] = "Spacing: 1" ;
     };
     String STR_SPACING115
     {
-        Text [ en-US ] = "Spacing: 1.15";
+        Text [ en-US ] = "Spacing: 1.15" ;
     };
     String STR_SPACING15
     {
-        Text [ en-US ] = "Spacing: 1.5";
+        Text [ en-US ] = "Spacing: 1.5" ;
     };
     String STR_SPACING2
     {
-        Text [ en-US ] = "Spacing: 2";
+        Text [ en-US ] = "Spacing: 2" ;
     };
     String STR_LCVALUE
     {
-        Text [ en-US ] = "Last Custom Value";
+        Text [ en-US ] = "Last Custom Value" ;
     };
 
 };
 
 String RID_SVXSTR_NUMBULLET_NONE
 {
-    Text [en-US] = "None";
+    Text [en-US] = "None" ;
 };
 
-//i122118, Seems the bullets graphic order and count is changed in the gallary,
-//Following descriptions should be changed accordingly.
+// i122118, Seems the bullets graphic order and count is changed in the gallery,
+// Following descriptions should be changed accordingly.
 
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_0
 {
-    Text [en-US] = "Black Pearl";
+    Text [en-US] = "Black Pearl" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_1
 {
-    Text [en-US] = "Blue Arrow 1";
+    Text [en-US] = "Blue Arrow 1" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_2
 {
-    Text [en-US] = "Blue Ball";
+    Text [en-US] = "Blue Ball" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_3
 {
-    Text [en-US] = "Blue Diamond";
+    Text [en-US] = "Blue Diamond" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_4
 {
-    Text [en-US] = "Blue Red";
+    Text [en-US] = "Blue Red" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_5
 {
-    Text [en-US] = "Blue Square";
+    Text [en-US] = "Blue Square" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_6
 {
-    Text [en-US] = "Blue Star";
+    Text [en-US] = "Blue Star" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_7
 {
-    Text [en-US] = "Dark Red Circle";
+    Text [en-US] = "Dark Red Circle" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_8
 {
-    Text [en-US] = "Blue Circle";
+    Text [en-US] = "Blue Circle" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_9
 {
-    Text [en-US] = "Green Circle";
+    Text [en-US] = "Green Circle" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_10
 {
-    Text [en-US] = "Black Square";
+    Text [en-US] = "Black Square" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_11
 {
-    Text [en-US] = "Orange Square";
+    Text [en-US] = "Orange Square" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_12
 {
-    Text [en-US] = "Purple Square";
+    Text [en-US] = "Purple Square" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_13
 {
-    Text [en-US] = "Blue Diamond";
+    Text [en-US] = "Blue Diamond" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_14
 {
-    Text [en-US] = "Light Blue Diamond";
+    Text [en-US] = "Light Blue Diamond" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_15
 {
-    Text [en-US] = "Red Diamond";
+    Text [en-US] = "Red Diamond" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_16
 {
-    Text [en-US] = "Yellow Star";
+    Text [en-US] = "Yellow Star" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_17
 {
-    Text [en-US] = "Blue Star";
+    Text [en-US] = "Blue Star" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_18
 {
-    Text [en-US] = "Blue Triangle";
+    Text [en-US] = "Blue Triangle" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_19
 {
-    Text [en-US] = "Dark Green Triangle";
+    Text [en-US] = "Dark Green Triangle" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_20
 {
-    Text [en-US] = "Red Arrow";
+    Text [en-US] = "Red Arrow" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_21
 {
-    Text [en-US] = "Blue Arrow 2";
+    Text [en-US] = "Blue Arrow 2" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_22
 {
-    Text [en-US] = "Blue Box";
+    Text [en-US] = "Blue Box" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_23
 {
-    Text [en-US] = "Red Box";
+    Text [en-US] = "Red Box" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_24
 {
-    Text [en-US] = "Light Blue Asterisk";
+    Text [en-US] = "Light Blue Asterisk" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_25
 {
-    Text [en-US] = "Red Leaves";
+    Text [en-US] = "Red Leaves" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_26
 {
-    Text [en-US] = "Blue Target";
+    Text [en-US] = "Blue Target" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_27
 {
-    Text [en-US] = "Blue Arrow 3";
+    Text [en-US] = "Blue Arrow 3" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_28
 {
-    Text [en-US] = "Dark Blue Arrow";
+    Text [en-US] = "Dark Blue Arrow" ;
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_29
 {
-    Text [en-US] = "Brown Arrow";
+    Text [en-US] = "Brown Arrow" ;
 };
-//i122118
+// i122118
+
+// ********************************************************************** EOF
