@@ -194,11 +194,12 @@ namespace dbaui
     {
     public:
         MySQLNativePage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
+        virtual void dispose() override;
         virtual ~MySQLNativePage() override;
 
     private:
         std::unique_ptr<weld::Widget> m_xMySQLSettingsContainer;
-        MySQLNativeSettings m_aMySQLSettings;
+        std::unique_ptr<MySQLNativeSettings> m_xMySQLSettings;
         std::unique_ptr<weld::Label> m_xSeparator1;
         std::unique_ptr<weld::Label> m_xSeparator2;
         std::unique_ptr<weld::Label> m_xUserNameLabel;

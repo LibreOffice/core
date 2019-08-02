@@ -502,7 +502,7 @@ namespace dbaui
     MySQLNativePage::MySQLNativePage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
         : OCommonBehaviourTabPage(pParent, "dbaccess/ui/mysqlnativepage.ui", "MysqlNativePage", rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
         , m_xMySQLSettingsContainer(m_xBuilder->weld_widget("MySQLSettingsContainer"))
-        , m_aMySQLSettings(m_xMySQLSettingsContainer.get(), LINK(this,OGenericAdministrationPage,OnControlModified))
+        , m_xMySQLSettings(new MySQLNativeSettings(m_xMySQLSettingsContainer.get(), LINK(this,OGenericAdministrationPage,OnControlModified)))
         , m_xSeparator1(m_xBuilder->weld_label("connectionheader"))
         , m_xSeparator2(m_xBuilder->weld_label("userheader"))
         , m_xUserNameLabel(m_xBuilder->weld_label("usernamelabel"))
@@ -510,6 +510,12 @@ namespace dbaui
         , m_xPasswordRequired(m_xBuilder->weld_check_button("passwordrequired"))
     {
         m_xUserName->connect_changed(LINK(this,OGenericAdministrationPage,OnControlEntryModifyHdl));
+    }
+
+    void MySQLNativePage::dispose()
+    {
+        m_xMySQLSettings.reset();
+        OCommonBehaviourTabPage::dispose();
     }
 
     MySQLNativePage::~MySQLNativePage()
@@ -520,7 +526,7 @@ namespace dbaui
     void MySQLNativePage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls( _rControlList );
-        m_aMySQLSettings.fillControls( _rControlList );
+        m_xMySQLSettings->fillControls( _rControlList );
 
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xUserName.get()));
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xPasswordRequired.get()));
@@ -529,7 +535,7 @@ namespace dbaui
     void MySQLNativePage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows( _rControlList );
-        m_aMySQLSettings.fillWindows( _rControlList);
+        m_xMySQLSettings->fillWindows( _rControlList);
 
         _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xSeparator1.get()));
         _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xSeparator2.get()));
@@ -540,7 +546,7 @@ namespace dbaui
     {
         bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet( _rSet );
 
-        bChangedSomething |= m_aMySQLSettings.FillItemSet( _rSet );
+        bChangedSomething |= m_xMySQLSettings->FillItemSet( _rSet );
 
         if (m_xUserName->get_value_changed_from_saved())
         {
@@ -558,7 +564,7 @@ namespace dbaui
         bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        m_aMySQLSettings.implInitControls( _rSet );
+        m_xMySQLSettings->implInitControls( _rSet );
 
         const SfxStringItem* pUidItem = _rSet.GetItem<SfxStringItem>(DSID_USER);
         const SfxBoolItem* pAllowEmptyPwd = _rSet.GetItem<SfxBoolItem>(DSID_PASSWORDREQUIRED);
