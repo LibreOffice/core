@@ -913,6 +913,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                 if( pEntry->nStyleTypeCode == STYLE_TYPE_CHAR || pEntry->nStyleTypeCode == STYLE_TYPE_PARA || pEntry->nStyleTypeCode == STYLE_TYPE_LIST )
                 {
                     bool bParaStyle = pEntry->nStyleTypeCode == STYLE_TYPE_PARA;
+                    bool bCharStyle = pEntry->nStyleTypeCode == STYLE_TYPE_CHAR;
                     bool bListStyle = pEntry->nStyleTypeCode == STYLE_TYPE_LIST;
                     bool bInsert = false;
                     uno::Reference< container::XNameContainer > xStyles = bParaStyle ? xParaStyles : (bListStyle ? xNumberingStyles : xCharStyles);
@@ -1098,7 +1099,8 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                             // Don't add the style name properties
                             bool bIsParaStyleName = rValue.Name == "ParaStyleName";
                             bool bIsCharStyleName = rValue.Name == "CharStyleName";
-                            if ( !bIsParaStyleName && !bIsCharStyleName )
+                            bool bDirectFormattingOnly = bCharStyle && rValue.Name == "CharShadingValue";
+                            if ( !bIsParaStyleName && !bIsCharStyleName && !bDirectFormattingOnly )
                             {
                                 aSortedPropVals.Insert(rValue);
                             }
@@ -1133,6 +1135,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                                 aMessage += ": " + aUnknownPropertyException.Message;
 
                             SAL_WARN("writerfilter", aMessage);
+                            assert (false && "SERIOUS: remaining alphabetically sorted properties were lost");
 #else
                             (void) rWrapped;
 #endif

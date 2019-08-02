@@ -332,6 +332,11 @@ DECLARE_OOXMLEXPORT_TEST(testTcBorders, "testTcBorders.docx")
     assertXPath(pXmlDocument, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tcPr[1]/w:tcBorders[1]/w:bottom[1][@w:sz = 4]", 1);
     assertXPath(pXmlDocument, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tcPr[1]/w:tcBorders[1]/w:bottom[1][@w:space = 0]", 1);
     assertXPath(pXmlDocument, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tcPr[1]/w:tcBorders[1]/w:bottom[1][@w:color = 808080]", 1);
+
+    uno::Reference<beans::XPropertySet> xStyle(
+        getStyles("CharacterStyles")->getByName("Code Featured Element"),
+        uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bold", float(150), getProperty<float>(xStyle, "CharWeight"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testQuicktables, "quicktables.docx")
