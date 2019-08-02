@@ -298,7 +298,7 @@ using namespace ::com::sun::star;
         : OGenericAdministrationPage(pParent, "dbaccess/ui/dbwizmysqlnativepage.ui", "DBWizMysqlNativePage", rCoreAttrs)
         , m_xHelpText(m_xBuilder->weld_label("helptext"))
         , m_xSettingsContainer(m_xBuilder->weld_container("MySQLSettingsContainer"))
-        , m_xMySQLSettings(new DBMySQLNativeSettings(m_xSettingsContainer.get(), LINK(this, OGenericAdministrationPage, OnControlModified)))
+        , m_xMySQLSettings(new MySQLNativeSettings(m_xSettingsContainer.get(), LINK(this, OGenericAdministrationPage, OnControlModified)))
     {
         SetRoadmapStateValue(false);
     }
