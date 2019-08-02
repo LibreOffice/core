@@ -257,12 +257,9 @@ namespace dbaui
             is modified. The implementation just calls callModifiedHdl.
         */
         DECL_LINK(OnControlModified, void*, void);
-        DECL_LINK(OnControlEditModifyHdl, Edit&, void);
         DECL_LINK(OnControlEntryModifyHdl, weld::Entry&, void);
         DECL_LINK(OnControlSpinButtonModifyHdl, weld::SpinButton&, void);
         DECL_LINK(OnControlModifiedButtonClick, weld::ToggleButton&, void);
-        DECL_LINK(ControlModifiedCheckBoxHdl, CheckBox&, void);
-
         DECL_LINK(OnTestConnectionButtonClickHdl, weld::Button&, void);
     };
 

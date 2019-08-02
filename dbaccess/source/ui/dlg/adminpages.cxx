@@ -124,16 +124,6 @@ namespace dbaui
         callModifiedHdl(&rCtrl);
     }
 
-    IMPL_LINK(OGenericAdministrationPage, ControlModifiedCheckBoxHdl, CheckBox&, rCtrl, void)
-    {
-        callModifiedHdl(&rCtrl);
-    }
-
-    IMPL_LINK(OGenericAdministrationPage, OnControlEditModifyHdl, Edit&, rCtrl, void)
-    {
-        callModifiedHdl(&rCtrl);
-    }
-
     IMPL_LINK(OGenericAdministrationPage, OnControlEntryModifyHdl, weld::Entry&, rCtrl, void)
     {
         callModifiedHdl(&rCtrl);

@@ -132,59 +132,42 @@ using namespace ::com::sun::star;
         return m_xTextConnectionHelper->prepareLeave();
     }
 
-    VclPtr<OGenericAdministrationPage> OLDAPConnectionPageSetup::CreateLDAPTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    VclPtr<OGenericAdministrationPage> OLDAPConnectionPageSetup::CreateLDAPTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet )
     {
         return VclPtr<OLDAPConnectionPageSetup>::Create( pParent, _rAttrSet );
     }
 
     // OLDAPPageSetup
-    OLDAPConnectionPageSetup::OLDAPConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OGenericAdministrationPage(pParent, "LDAPConnectionPage", "dbaccess/ui/ldapconnectionpage.ui",_rCoreAttrs)
+    OLDAPConnectionPageSetup::OLDAPConnectionPageSetup( TabPageParent pParent, const SfxItemSet& _rCoreAttrs )
+        : OGenericAdministrationPage(pParent, "dbaccess/ui/ldapconnectionpage.ui", "LDAPConnectionPage", _rCoreAttrs)
+        , m_xFTHelpText(m_xBuilder->weld_label("helpLabel"))
+        , m_xFTHostServer(m_xBuilder->weld_label("hostNameLabel"))
+        , m_xETHostServer(m_xBuilder->weld_entry("hostNameEntry"))
+        , m_xFTBaseDN(m_xBuilder->weld_label("baseDNLabel"))
+        , m_xETBaseDN(m_xBuilder->weld_entry("baseDNEntry"))
+        , m_xFTPortNumber(m_xBuilder->weld_label("portNumLabel"))
+        , m_xNFPortNumber(m_xBuilder->weld_spin_button("portNumEntry"))
+        , m_xFTDefaultPortNumber(m_xBuilder->weld_label("portNumDefLabel"))
+        , m_xCBUseSSL(m_xBuilder->weld_check_button("useSSLCheckbutton"))
     {
-        get(m_pFTHelpText, "helpLabel");
-        get(m_pFTHostServer, "hostNameLabel");
-        get(m_pETHostServer, "hostNameEntry");
-        get(m_pFTBaseDN, "baseDNLabel");
-        get(m_pETBaseDN, "baseDNEntry");
-        get(m_pFTPortNumber, "portNumLabel");
-        get(m_pNFPortNumber, "portNumEntry");
-        m_pNFPortNumber->SetUseThousandSep(false);
-        get(m_pFTDefaultPortNumber, "portNumDefLabel");
-        get(m_pCBUseSSL, "useSSLCheckbutton");
-
-        m_pETHostServer->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
-        m_pETBaseDN->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
-        m_pNFPortNumber->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
-        m_pCBUseSSL->SetToggleHdl( LINK(this, OGenericAdministrationPage, ControlModifiedCheckBoxHdl) );
+        m_xETHostServer->connect_changed(LINK(this, OGenericAdministrationPage, OnControlEntryModifyHdl));
+        m_xETBaseDN->connect_changed(LINK(this, OGenericAdministrationPage, OnControlEntryModifyHdl));
+        m_xNFPortNumber->connect_value_changed(LINK(this, OGenericAdministrationPage, OnControlSpinButtonModifyHdl));
+        m_xCBUseSSL->connect_toggled( LINK(this, OGenericAdministrationPage, OnControlModifiedButtonClick) );
         SetRoadmapStateValue(false);
     }
 
     OLDAPConnectionPageSetup::~OLDAPConnectionPageSetup()
     {
-        disposeOnce();
-    }
-
-    void OLDAPConnectionPageSetup::dispose()
-    {
-        m_pFTHelpText.clear();
-        m_pFTHostServer.clear();
-        m_pETHostServer.clear();
-        m_pFTBaseDN.clear();
-        m_pETBaseDN.clear();
-        m_pFTPortNumber.clear();
-        m_pNFPortNumber.clear();
-        m_pFTDefaultPortNumber.clear();
-        m_pCBUseSSL.clear();
-        OGenericAdministrationPage::dispose();
     }
 
     bool OLDAPConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = false;
-        fillString(*_rSet,m_pETBaseDN,DSID_CONN_LDAP_BASEDN, bChangedSomething);
-        fillInt32(*_rSet,m_pNFPortNumber,DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
+        fillString(*_rSet,m_xETBaseDN.get(),DSID_CONN_LDAP_BASEDN, bChangedSomething);
+        fillInt32(*_rSet,m_xNFPortNumber.get(),DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
 
-        if ( m_pETHostServer->IsValueChangedFromSaved() )
+        if ( m_xETHostServer->get_value_changed_from_saved() )
         {
             const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>( _rSet->GetItem(DSID_TYPECOLLECTION) );
             ::dbaccess::ODsnTypeCollection* pCollection = nullptr;
@@ -193,29 +176,29 @@ using namespace ::com::sun::star;
             OSL_ENSURE(pCollection, "OLDAPConnectionPageSetup::FillItemSet : really need a DSN type collection !");
             if (pCollection)
             {
-                OUString sUrl = pCollection->getPrefix( "sdbc:address:ldap:") + m_pETHostServer->GetText();
+                OUString sUrl = pCollection->getPrefix( "sdbc:address:ldap:") + m_xETHostServer->get_text();
                 _rSet->Put(SfxStringItem(DSID_CONNECTURL, sUrl));
                 bChangedSomething = true;
             }
         }
 
-        fillBool(*_rSet,m_pCBUseSSL,DSID_CONN_LDAP_USESSL,bChangedSomething);
+        fillBool(*_rSet,m_xCBUseSSL.get(),DSID_CONN_LDAP_USESSL,false,bChangedSomething);
         return bChangedSomething;
     }
     void OLDAPConnectionPageSetup::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        _rControlList.emplace_back(new OSaveValueWrapper<Edit>(m_pETHostServer));
-        _rControlList.emplace_back(new OSaveValueWrapper<Edit>(m_pETBaseDN));
-        _rControlList.emplace_back(new OSaveValueWrapper<NumericField>(m_pNFPortNumber));
-        _rControlList.emplace_back(new OSaveValueWrapper<CheckBox>(m_pCBUseSSL));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xETHostServer.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xETBaseDN.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::SpinButton>(m_xNFPortNumber.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ToggleButton>(m_xCBUseSSL.get()));
     }
     void OLDAPConnectionPageSetup::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pFTHelpText));
-        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pFTHostServer));
-        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pFTBaseDN));
-        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pFTPortNumber));
-        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pFTDefaultPortNumber));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTHelpText.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTHostServer.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTBaseDN.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTPortNumber.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTDefaultPortNumber.get()));
     }
     void OLDAPConnectionPageSetup::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
@@ -228,8 +211,8 @@ using namespace ::com::sun::star;
 
         if ( bValid )
         {
-            m_pETBaseDN->SetText(pBaseDN->GetValue());
-            m_pNFPortNumber->SetValue(pPortNumber->GetValue());
+            m_xETBaseDN->set_text(pBaseDN->GetValue());
+            m_xNFPortNumber->set_value(pPortNumber->GetValue());
         }
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
         callModifiedHdl();
@@ -237,7 +220,7 @@ using namespace ::com::sun::star;
 
     void OLDAPConnectionPageSetup::callModifiedHdl(void *)
     {
-        bool bRoadmapState = ((!m_pETHostServer->GetText().isEmpty() ) && ( !m_pETBaseDN->GetText().isEmpty() ) && (!m_pFTPortNumber->GetText().isEmpty() ));
+        bool bRoadmapState = ((!m_xETHostServer->get_text().isEmpty() ) && ( !m_xETBaseDN->get_text().isEmpty() ) && (!m_xFTPortNumber->get_label().isEmpty() ));
         SetRoadmapStateValue(bRoadmapState);
         OGenericAdministrationPage::callModifiedHdl();
     }
