@@ -52,6 +52,24 @@
       "revId": "4b4c7e76e6c2ea0d47a42a5107352d3ad7341fbf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_66d1c2cd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-08-02T08:49:15Z",
+      "side": 1,
+      "message": "\u003e In which case exactly?\n\nin the \"building for deb or rpm PKGFORMAT\" case",
+      "parentUuid": "bf659307_26a3caa0",
+      "revId": "4b4c7e76e6c2ea0d47a42a5107352d3ad7341fbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
