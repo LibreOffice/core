@@ -217,6 +217,9 @@ LibPage::LibPage(weld::Container* pParent, OrganizeDialog* pDialog)
                m_xLibBox->get_height_rows(10));
     m_xLibBox->set_size_request(aSize.Width(), aSize.Height());
 
+    // tdf#93476 The libraries should be listed alphabetically
+    m_xLibBox->make_sorted();
+
     m_xEditButton->connect_clicked( LINK( this, LibPage, ButtonHdl ) );
     m_xNewLibButton->connect_clicked( LINK( this, LibPage, ButtonHdl ) );
     m_xPasswordButton->connect_clicked( LINK( this, LibPage, ButtonHdl ) );
@@ -648,7 +651,6 @@ void LibPage::InsertLib()
             const int nRow = rView.n_children() - 1;
             rView.set_toggle(nRow, TRISTATE_TRUE, 0);
             rView.set_text(nRow, aLibName, 1);
-            rView.make_sorted();
             rView.set_cursor(rView.find_text(aLibName));
         }
     }
@@ -1323,7 +1325,6 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                 if( pLibBox )
                 {
                     pLibBox->append_text(aLibName);
-                    pLibBox->make_sorted();
                     pLibBox->set_cursor(pLibBox->find_text(aLibName));
                 }
 
