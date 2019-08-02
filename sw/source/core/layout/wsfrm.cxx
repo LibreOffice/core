@@ -18,6 +18,7 @@
  */
 
 #include <hints.hxx>
+#include <o3tl/safeint.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/brushitem.hxx>
 #include <fmtornt.hxx>
@@ -2656,7 +2657,7 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
                 }
 
                 if( SwNeighbourAdjust::GrowAdjust == nAdjust && nGrow < nReal )
-                    nReal += AdjustNeighbourhood( nReal - nGrow, bTst );
+                    nReal = o3tl::saturating_add(nReal, AdjustNeighbourhood( nReal - nGrow, bTst ));
 
                 if ( IsFootnoteFrame() && (nGrow != nReal) && GetNext() )
                 {
