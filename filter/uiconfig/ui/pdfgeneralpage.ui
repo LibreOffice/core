@@ -729,7 +729,7 @@
                         <property name="column_spacing">14</property>
                         <child>
                           <object class="GtkRadioButton" id="pdfa2">
-                            <property name="label" translatable="yes" context="pdfgeneralpage|pdfa">PDF/A-2b</property>
+                            <property name="label" translatable="no" context="pdfgeneralpage|pdfa">PDF/A-2b</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -743,7 +743,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="pdfa1">
-                            <property name="label" translatable="yes" context="pdfgeneralpage|pdfa">PDF/A-1b</property>
+                            <property name="label" translatable="no" context="pdfgeneralpage|pdfa">PDF/A-1b</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
