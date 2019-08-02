@@ -3611,6 +3611,8 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
 
 static int doc_getSelectionType(LibreOfficeKitDocument* pThis)
 {
+    comphelper::ProfileZone aZone("doc_getSelectionType");
+
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
@@ -3649,6 +3651,8 @@ static int doc_getClipboard(LibreOfficeKitDocument* pThis,
                             size_t     **pOutSizes,
                             char      ***pOutStreams)
 {
+    comphelper::ProfileZone aZone("doc_getClipboard");
+
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
@@ -3731,7 +3735,7 @@ static int doc_setClipboard(LibreOfficeKitDocument* pThis,
                             const size_t  *pInSizes,
                             const char   **pInStreams)
 {
-    comphelper::ProfileZone aZone("doc_paste");
+    comphelper::ProfileZone aZone("doc_setClipboard");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -3761,6 +3765,8 @@ static int doc_setClipboard(LibreOfficeKitDocument* pThis,
 
 static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, const char* pData, size_t nSize)
 {
+    comphelper::ProfileZone aZone("doc_paste");
+
     SolarMutexGuard aGuard;
 
     const char *pInMimeTypes[1];
