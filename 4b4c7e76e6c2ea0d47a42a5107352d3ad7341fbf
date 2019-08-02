@@ -34,6 +34,24 @@
       "revId": "4b4c7e76e6c2ea0d47a42a5107352d3ad7341fbf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_26faea74",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-02T07:13:38Z",
+      "side": 1,
+      "message": "\u003e Indeed, this breaks building the Fedora RPM, so some better fix is\n \u003e needed.\n\nsee \u003chttps://gerrit.libreoffice.org/#/c/76833/\u003e \"Fix generation of LOKDocView-0.1.{git,typelib} for Fedora\"",
+      "parentUuid": "bf659307_26a3caa0",
+      "revId": "4b4c7e76e6c2ea0d47a42a5107352d3ad7341fbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
