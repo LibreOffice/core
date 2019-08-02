@@ -262,22 +262,6 @@ namespace dbaui
         DECL_LINK(OnControlModifiedButtonClick, weld::ToggleButton&, void);
         DECL_LINK(OnTestConnectionButtonClickHdl, weld::Button&, void);
     };
-
-    // LayoutHelper
-    class LayoutHelper
-    {
-    public:
-        static void     positionBelow(
-                            const Control& _rReference,
-                            Control& _rControl,
-                            const long _nIndentAppFont
-                        );
-        /** fits the button size to be large enough to contain the buttons text
-        */
-        static void fitSizeRightAligned( PushButton& io_button );
-            // why is CalcMinimumSize not a virtual method of vcl::Window?
-    };
-
 }   // namespace dbaui
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_ADMINPAGES_HXX

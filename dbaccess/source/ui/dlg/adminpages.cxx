@@ -326,38 +326,6 @@ namespace dbaui
                 m_pAdminDialog->clearPassword();
         }
     }
-
-    // LayoutHelper
-    void LayoutHelper::positionBelow( const Control& _rReference, Control& _rControl,
-        const long _nIndentAppFont )
-    {
-        Point aReference = _rReference.GetPosPixel();
-        aReference.AdjustY(_rReference.GetSizePixel().Height() );
-
-        const vcl::Window* pConverter = _rControl.GetParent();
-        Size aOffset = pConverter->LogicToPixel(Size(_nIndentAppFont, 3), MapMode(MapUnit::MapAppFont));
-
-        Point aControlPos( aReference.X() + aOffset.Width(), aReference.Y() + aOffset.Height() );
-        _rControl.SetPosPixel( aControlPos );
-    }
-
-    void LayoutHelper::fitSizeRightAligned( PushButton& io_button )
-    {
-        const Point aOldPos = io_button.GetPosPixel();
-        const Size aOldSize = io_button.GetSizePixel();
-        const Size aMinSize( io_button.CalcMinimumSize() );
-        if ( aMinSize.Width() > aOldSize.Width() )
-        {
-            io_button.setPosSizePixel(
-                aOldPos.X() + aOldSize.Width() - aMinSize.Width(),
-                0,
-                aMinSize.Width(),
-                0,
-                PosSizeFlags::X | PosSizeFlags::Width
-            );
-        }
-    }
-
 }   // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
