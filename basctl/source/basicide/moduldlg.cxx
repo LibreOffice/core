@@ -537,6 +537,9 @@ ObjectPage::ObjectPage(weld::Container* pParent, const OString &rName, BrowseMod
                m_xBasicBox->get_height_rows(14));
     m_xBasicBox->set_size_request(aSize.Width(), aSize.Height());
 
+    // tdf#93476 The dialogs should be listed alphabetically
+    m_xBasicBox->make_sorted();
+
     m_xEditButton->connect_clicked( LINK( this, ObjectPage, ButtonHdl ) );
     m_xDelButton->connect_clicked( LINK( this, ObjectPage, ButtonHdl ) );
     m_xBasicBox->connect_changed( LINK( this, ObjectPage, BasicBoxHighlightHdl ) );
@@ -817,7 +820,6 @@ void ObjectPage::NewDialog()
                             m_xBasicBox->AddEntry(aDlgName, RID_BMP_DIALOG, xSubRootEntry.get(), false,
                                                std::make_unique<Entry>(OBJ_TYPE_DIALOG), xIter.get());
                             assert(xIter.get() && "Insert entry failed!");
-                            m_xBasicBox->make_sorted();
                         }
                         m_xBasicBox->set_cursor(*xIter);
                         m_xBasicBox->select(*xIter);
@@ -888,6 +890,8 @@ LibDialog::LibDialog(weld::Window* pParent)
 {
     m_xLibBox->set_size_request(m_xLibBox->get_approximate_digit_width() * 28,
                                 m_xLibBox->get_height_rows(8));
+    // tdf#93476 The libraries should be listed alphabetically
+    m_xLibBox->make_sorted();
 }
 
 LibDialog::~LibDialog()
@@ -976,7 +980,6 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                     {
                         rBasicBox.AddEntry(aModName, RID_BMP_MODULE, xSubRootEntry.get(), false,
                                            std::make_unique<Entry>(OBJ_TYPE_MODULE), xEntry.get());
-                        rBasicBox.make_sorted();
                     }
                     rBasicBox.set_cursor(*xEntry);
                     rBasicBox.select(*xEntry);
