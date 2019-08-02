@@ -51,7 +51,7 @@ published enum NavigationBarMode
     /** a navigation bar is provided and navigation will be performed
         on the parent of the current/active form.
 
-        <p>This options is usually used for forms containing an grid control only.
+        <p>This options is usually used for forms containing a grid control only.
         In such a form, the control has its own navigation elements, so there is
         no need to use the navigation bar for the form, but rather for its parent.
         </p>
