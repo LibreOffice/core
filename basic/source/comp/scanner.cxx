@@ -543,7 +543,7 @@ bool SbiScanner::NextSym()
             case '>': if( *pLine == '=' ) n = 2; break;
             case ':': if( *pLine == '=' ) n = 2; break;
         }
-        aSym = aLine.copy( nCol, n );
+        aSym = aLine.copy(nCol, std::min(n, aLine.getLength() - nCol));
         pLine += n-1; nCol = nCol + n;
     }
 

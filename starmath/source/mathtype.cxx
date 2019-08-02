@@ -2841,7 +2841,7 @@ void MathType::HandleSetSize()
 bool MathType::HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
     sal_uInt8 nTag, sal_uInt8 nSelector, sal_uInt8 nVariation, bool bSilent)
 {
-    sal_Unicode nChar;
+    sal_Unicode nChar(0);
     bool bRet = true;
 
     if (xfAUTO(nTag))
@@ -2854,7 +2854,7 @@ bool MathType::HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
     pS->ReadUChar( nTypeFace );
     if (nVersion < 3)
     {
-        sal_uInt8 nChar8;
+        sal_uInt8 nChar8(0);
         pS->ReadUChar( nChar8 );
         nChar = nChar8;
     }
