@@ -57,10 +57,10 @@ static AccessibleShape* CreateSvxAccessibleShape (
         case DRAWING_POLY_LINE_PATH:
         case DRAWING_RECTANGLE:
         case DRAWING_TEXT:
-        // Default accessiblility shape for
+        // Default accessibility shape for
         // css::drawing::CustomShape (#i37790#)
         case DRAWING_CUSTOM:
-        // Default accessiblility shape for
+        // Default accessibility shape for
         // css::drawing::MediaShape (#i85429#)
         case DRAWING_MEDIA:
             return new AccessibleShape (rShapeInfo, rShapeTreeInfo);

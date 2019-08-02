@@ -531,7 +531,7 @@ bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene const * pSrcScene, E3dSce
                     basegfx::B3DRange aObjectRange(pNewCompoundObj->GetBoundVolume());
                     aObjectRange.transform(aObjectToWorldTrans);
 
-                    // get scale adaption
+                    // get scale adaptation
                     const basegfx::B3DVector aSceneScale(aSceneRange.getRange());
                     const basegfx::B3DVector aObjectScale(aObjectRange.getRange());
                     double fScale(1.0);
@@ -561,7 +561,7 @@ bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene const * pSrcScene, E3dSce
                         fScale *= fFactor;
                     }
 
-                    // get translation adaption
+                    // get translation adaptation
                     const basegfx::B3DPoint aSceneCenter(aSceneRange.getCenter());
                     const basegfx::B3DPoint aObjectCenter(aObjectRange.getCenter());
 

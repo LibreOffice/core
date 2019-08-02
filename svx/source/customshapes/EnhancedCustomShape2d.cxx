@@ -2205,7 +2205,7 @@ void EnhancedCustomShape2d::CreateSubPath(
                             // MS shapes and independent of the meaning of commands U and T in ODF specification.
 
                             // The WordArt shape 'RingOutside' has already angles in degree, all other need
-                            // convertion from fixed-point number.
+                            // conversion from fixed-point number.
                             double fSwingAngle = fEndAngle;
                             if (sShpType != "mso-spt143")
                             {
@@ -2268,7 +2268,7 @@ void EnhancedCustomShape2d::CreateSubPath(
                         {
                             // draw full ellipse
                             // Because createPolygonFromEllipseSegment cannot create full ellipse and
-                            // createPolygonFromEllipse has no variing starts, we use two half ellipses.
+                            // createPolygonFromEllipse has no varying starts, we use two half ellipses.
                             const double fS(lcl_getNormalizedCircleAngleRad(fWR, fHR, fStartAngle));
                             const double fH(lcl_getNormalizedCircleAngleRad(fWR, fHR, fStartAngle + 180.0));
                             const double fE(lcl_getNormalizedCircleAngleRad(fWR, fHR, fEndAngle));

@@ -1518,7 +1518,7 @@ void FmFilterNavigator::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
 {
     EndSelection();
 
-    // be sure that the data is only used within a only one form!
+    // be sure that the data is only used within an only one form!
     m_aControlExchange.prepareDrag();
 
     ::std::vector<FmFilterItem*> aItemList;
