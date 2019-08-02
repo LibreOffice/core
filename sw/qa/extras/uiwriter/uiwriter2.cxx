@@ -382,7 +382,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819_keep_numbering_with_Undo)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Undo)
 {
-    // as the previous test, but with partial paragraph deletion
+    // as the previous test, but with partial paragraph deletion:
+    // all deleted paragraphs get the formatting of the first (the partially deleted) one
     load(DATA_DIRECTORY, "tdf54819b.odt");
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -403,6 +404,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Undo)
     CPPUNIT_ASSERT_MESSAGE("Missing numbering style", !sNumName.isEmpty());
     CPPUNIT_ASSERT_MESSAGE("Not a bulleted list item", sNumName != "Outline");
 
+    // third paragraph: normal text without numbering
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
+                         getProperty<OUString>(getParagraph(4), "ParaStyleName"));
+    sNumName = getProperty<OUString>(getParagraph(4), "NumberingStyleName");
+    CPPUNIT_ASSERT_MESSAGE("Bad numbering", sNumName.isEmpty());
+
     //turn on red-lining and show changes
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -414,7 +422,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Undo)
                            !IDocumentRedlineAccess::IsShowChanges(
                                pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
-    // remove only end part of the heading with paragraph break
+    // remove only end part of the heading and the next numbered paragraph with paragraph break
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
 
     pWrtShell->Down(/*bSelect=*/false);
@@ -422,7 +430,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Undo)
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 6, /*bBasicCall=*/false);
+    pWrtShell->EndPara(/*bSelect=*/true);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 2, /*bBasicCall=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
@@ -436,10 +446,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Undo)
     CPPUNIT_ASSERT_EQUAL(OUString("Outline"),
                          getProperty<OUString>(getParagraph(2), "NumberingStyleName"));
 
-    // accept deletion, remaining (now second) paragraph: it is still heading
+    // accept deletion
     IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
     rIDRA.AcceptAllRedline(true);
 
+    // Joined paragraph 2 and paragraph 4: Fusce...nunc.
+    CPPUNIT_ASSERT(getParagraph(2)->getString().startsWith("Fusce"));
+    CPPUNIT_ASSERT(getParagraph(2)->getString().endsWith("nunc."));
+    // Remaining (now second) paragraph: it is still heading
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
                          getProperty<OUString>(getParagraph(2), "ParaStyleName"));
     CPPUNIT_ASSERT_EQUAL(OUString("Outline"),
@@ -464,6 +478,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Undo)
     sNumName = getProperty<OUString>(getParagraph(3), "NumberingStyleName");
     CPPUNIT_ASSERT_MESSAGE("Missing numbering style", !sNumName.isEmpty());
     CPPUNIT_ASSERT_MESSAGE("Not a bulleted list item", sNumName != "Outline");
+
+    // third paragraph: normal text without numbering
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
+                         getProperty<OUString>(getParagraph(4), "ParaStyleName"));
+    sNumName = getProperty<OUString>(getParagraph(4), "NumberingStyleName");
+    CPPUNIT_ASSERT_MESSAGE("Bad numbering", sNumName.isEmpty());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376_redline)
