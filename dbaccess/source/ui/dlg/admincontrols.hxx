@@ -22,48 +22,12 @@
 
 #include "adminpages.hxx"
 
-#include <vcl/edit.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 
 namespace dbaui
 {
 
     // MySQLNativeSettings
-    class MySQLNativeSettings : public TabPage
-    {
-    private:
-        VclPtr<FixedText>           m_pDatabaseNameLabel;
-        VclPtr<Edit>                m_pDatabaseName;
-        VclPtr<RadioButton>         m_pHostPortRadio;
-        VclPtr<RadioButton>         m_pSocketRadio;
-        VclPtr<RadioButton>         m_pNamedPipeRadio;
-        VclPtr<FixedText>           m_pHostNameLabel;
-        VclPtr<Edit>                m_pHostName;
-        VclPtr<FixedText>           m_pPortLabel;
-        VclPtr<NumericField>        m_pPort;
-        VclPtr<FixedText>           m_pDefaultPort;
-        VclPtr<Edit>                m_pSocket;
-        VclPtr<Edit>                m_pNamedPipe;
-        Link<void*,void>            m_aControlModificationLink;
-        OUString                    m_sHostNameUserText;
-
-        DECL_LINK(RadioToggleHdl, RadioButton&, void);
-        DECL_LINK(EditModifyHdl, Edit&, void);
-
-    public:
-        MySQLNativeSettings( vcl::Window& _rParent, const Link<void*,void>& _rControlModificationLink );
-        virtual ~MySQLNativeSettings() override;
-        virtual void dispose() override;
-        void fillControls( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList );
-        void fillWindows( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList );
-
-        bool FillItemSet( SfxItemSet* _rCoreAttrs );
-        void implInitControls( const SfxItemSet& _rSet );
-
-        bool canAdvance() const;
-    };
-
     class DBMySQLNativeSettings
     {
     private:
