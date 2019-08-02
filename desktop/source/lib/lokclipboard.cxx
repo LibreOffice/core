@@ -79,10 +79,7 @@ Sequence<OUString> LOKClipboard::getSupportedServiceNames_static()
     return aRet;
 }
 
-OUString LOKClipboard::getImplementationName()
-{
-    return OUString("com.sun.star.datatransfer.LOKClipboard");
-}
+OUString LOKClipboard::getImplementationName() { return "com.sun.star.datatransfer.LOKClipboard"; }
 
 Sequence<OUString> LOKClipboard::getSupportedServiceNames()
 {
