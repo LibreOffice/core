@@ -32,6 +32,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <svl/urihelper.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <svx/svdogrp.hxx>
@@ -91,6 +92,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svdobjplusdata.hxx>
+#include "presetooxhandleadjustmentrelations.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1051,6 +1053,44 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
         aPropVal.Value <<= seqHandles;
         aGeometryItem.SetPropertyValue( aPropVal );
     }
+    else if (pAny && sShapeType.startsWith("ooxml-") && sShapeType != "ooxml-non-primitive")
+    {
+        // ODF is not able to store the ooxml way of connecting handle to an adjustment
+        // value by name, e.g. attribute RefX="adj". So the information is lost, when exporting
+        // a pptx to odp, for example. This part reconstructs this information for the
+        // ooxml preset shapes from their definition.
+        css::uno::Sequence<css::beans::PropertyValues> seqHandles;
+        *pAny >>= seqHandles;
+        bool bChanged(false);
+        for (sal_Int32 i = 0; i < seqHandles.getLength(); i++)
+        {
+            comphelper::SequenceAsHashMap aHandleProps(seqHandles[i]);
+            OUString sFirstRefType;
+            sal_Int32 nFirstAdjRef;
+            OUString sSecondRefType;
+            sal_Int32 nSecondAdjRef;
+            PresetOOXHandleAdj::GetOOXHandleAdjRelation(sShapeType, i, sFirstRefType, nFirstAdjRef,
+                                                        sSecondRefType, nSecondAdjRef);
+            if (sFirstRefType != "na" && 0 <= nFirstAdjRef
+                && nFirstAdjRef < seqAdjustmentValues.getLength())
+            {
+                bChanged |= aHandleProps.createItemIfMissing(sFirstRefType, nFirstAdjRef);
+            }
+            if (sSecondRefType != "na" && 0 <= nSecondAdjRef
+                && nSecondAdjRef < seqAdjustmentValues.getLength())
+            {
+                bChanged |= aHandleProps.createItemIfMissing(sSecondRefType, nSecondAdjRef);
+            }
+            aHandleProps >> seqHandles[i];
+        }
+        if (bChanged)
+        {
+            aPropVal.Name = sHandles;
+            aPropVal.Value <<= seqHandles;
+            aGeometryItem.SetPropertyValue(aPropVal);
+        }
+    }
+
     SetMergedItem( aGeometryItem );
 }
 
