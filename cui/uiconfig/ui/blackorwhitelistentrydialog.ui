@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.18.3 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkListStore" id="os-liststore">
@@ -31,11 +31,8 @@
   <object class="GtkDialog" id="BlackOrWhiteListEntryDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title">dummy</property>
+    <property name="title" translatable="no">dummy</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -129,9 +126,6 @@
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="model">os-liststore</property>
-                            <accessibility>
-                              <relation type="labelled-by" target="label4"/>
-                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -144,9 +138,6 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="width_chars">22</property>
-                            <accessibility>
-                              <relation type="labelled-by" target="label5"/>
-                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -159,9 +150,6 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="width_chars">12</property>
-                            <accessibility>
-                              <relation type="labelled-by" target="label6"/>
-                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -174,9 +162,6 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="width_chars">22</property>
-                            <accessibility>
-                              <relation type="labelled-by" target="label7"/>
-                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -189,9 +174,6 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="width_chars">22</property>
-                            <accessibility>
-                              <relation type="labelled-by" target="label8"/>
-                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -205,9 +187,6 @@
                             <property name="halign">end</property>
                             <property name="label" translatable="yes" context="blackorwhitelistentrydialog|label4">Operating system:</property>
                             <property name="use_underline">True</property>
-                            <accessibility>
-                              <relation type="label-for" target="os"/>
-                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -221,9 +200,6 @@
                             <property name="halign">end</property>
                             <property name="label" translatable="yes" context="blackorwhitelistentrydialog|label5">Version:</property>
                             <property name="use_underline">True</property>
-                            <accessibility>
-                              <relation type="label-for" target="osversion"/>
-                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -237,9 +213,6 @@
                             <property name="halign">end</property>
                             <property name="label" translatable="yes" context="blackorwhitelistentrydialog|label6">OpenCL vendor:</property>
                             <property name="use_underline">True</property>
-                            <accessibility>
-                              <relation type="label-for" target="platformvendor"/>
-                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -253,9 +226,6 @@
                             <property name="halign">end</property>
                             <property name="label" translatable="yes" context="blackorwhitelistentrydialog|label7">Device:</property>
                             <property name="use_underline">True</property>
-                            <accessibility>
-                              <relation type="label-for" target="device"/>
-                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -269,9 +239,6 @@
                             <property name="halign">end</property>
                             <property name="label" translatable="yes" context="blackorwhitelistentrydialog|label8">Driver version:</property>
                             <property name="use_underline">True</property>
-                            <accessibility>
-                              <relation type="label-for" target="driverversion"/>
-                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>

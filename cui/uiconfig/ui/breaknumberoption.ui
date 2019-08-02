@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -17,9 +17,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -91,9 +88,6 @@
                         <property name="halign">start</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="beforelabel"/>
-                        </accessibility>
                       </object>
                     </child>
                   </object>
@@ -106,9 +100,6 @@
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
-                    <accessibility>
-                      <relation type="label-for" target="beforebreak"/>
-                    </accessibility>
                   </object>
                 </child>
               </object>
@@ -136,9 +127,6 @@
                         <property name="halign">start</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="afterlabel"/>
-                        </accessibility>
                       </object>
                     </child>
                   </object>
@@ -151,9 +139,6 @@
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
-                    <accessibility>
-                      <relation type="label-for" target="afterbreak"/>
-                    </accessibility>
                   </object>
                 </child>
               </object>
@@ -181,9 +166,6 @@
                         <property name="halign">start</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="minimallabel"/>
-                        </accessibility>
                       </object>
                     </child>
                   </object>
@@ -196,9 +178,6 @@
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
-                    <accessibility>
-                      <relation type="label-for" target="wordlength"/>
-                    </accessibility>
                   </object>
                 </child>
               </object>
@@ -220,5 +199,8 @@
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>
