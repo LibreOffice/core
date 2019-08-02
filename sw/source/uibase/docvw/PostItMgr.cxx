@@ -154,10 +154,17 @@ namespace {
 
             const SwPostItField* pField = pWin->GetPostItField();
             const SwRect& aRect = pWin->GetAnchorRect();
-            const tools::Rectangle aSVRect(aRect.Pos().getX(),
+            tools::Rectangle aSVRect(aRect.Pos().getX(),
                                     aRect.Pos().getY(),
                                     aRect.Pos().getX() + aRect.SSize().Width(),
                                     aRect.Pos().getY() + aRect.SSize().Height());
+
+            if (!pItem->maLayoutInfo.mPositionFromCommentAnchor)
+            {
+                // Comments on frames: anchor position is the corner position, not the whole frame.
+                aSVRect.SetSize(Size(0, 0));
+            }
+
             std::vector<OString> aRects;
             for (const basegfx::B2DRange& aRange : pWin->GetAnnotationTextRanges())
             {
@@ -171,7 +178,18 @@ namespace {
             aAnnotation.put("author", pField->GetPar1().toUtf8().getStr());
             aAnnotation.put("text", pField->GetPar2().toUtf8().getStr());
             aAnnotation.put("dateTime", utl::toISO8601(pField->GetDateTime().GetUNODateTime()));
-            aAnnotation.put("anchorPos", aSVRect.toString());
+            {
+                std::stringstream ss;
+                if (aSVRect.IsEmpty())
+                {
+                    ss << aSVRect.getX() << ", " << aSVRect.getY() << ", 0, 0";
+                }
+                else
+                {
+                    ss << aSVRect.getX() << ", " << aSVRect.getY() << ", " << aSVRect.getWidth() << ", " << aSVRect.getHeight();
+                }
+                aAnnotation.put("anchorPos", ss.str());
+            }
             aAnnotation.put("textRange", sRects.getStr());
         }
 
