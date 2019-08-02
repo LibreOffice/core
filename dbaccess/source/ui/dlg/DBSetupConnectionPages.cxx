@@ -311,13 +311,12 @@ using namespace ::com::sun::star;
     }
 
     // MySQLNativeSetupPage
-    MySQLNativeSetupPage::MySQLNativeSetupPage( vcl::Window* _pParent, const SfxItemSet& _rCoreAttrs )
-        :OGenericAdministrationPage( _pParent, "DBWizMysqlNativePage", "dbaccess/ui/dbwizmysqlnativepage.ui", _rCoreAttrs )
-        ,m_aMySQLSettings       ( VclPtr<MySQLNativeSettings>::Create(*get<VclVBox>("MySQLSettingsContainer"), LINK(this, OGenericAdministrationPage, OnControlModified)) )
+    MySQLNativeSetupPage::MySQLNativeSetupPage( TabPageParent pParent, const SfxItemSet& rCoreAttrs )
+        : OGenericAdministrationPage(pParent, "dbaccess/ui/dbwizmysqlnativepage.ui", "DBWizMysqlNativePage", rCoreAttrs)
+        , m_xHelpText(m_xBuilder->weld_label("helptext"))
+        , m_xSettingsContainer(m_xBuilder->weld_container("MySQLSettingsContainer"))
+        , m_xMySQLSettings(new DBMySQLNativeSettings(m_xSettingsContainer.get(), LINK(this, OGenericAdministrationPage, OnControlModified)))
     {
-        get(m_pHelpText, "helptext");
-        m_aMySQLSettings->Show();
-
         SetRoadmapStateValue(false);
     }
 
@@ -328,35 +327,34 @@ using namespace ::com::sun::star;
 
     void MySQLNativeSetupPage::dispose()
     {
-        m_aMySQLSettings.disposeAndClear();
-        m_pHelpText.clear();
+        m_xMySQLSettings.reset();
         OGenericAdministrationPage::dispose();
-    }
+     }
 
-    VclPtr<OGenericAdministrationPage> MySQLNativeSetupPage::Create( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    VclPtr<OGenericAdministrationPage> MySQLNativeSetupPage::Create(TabPageParent pParent, const SfxItemSet& rAttrSet)
     {
-        return VclPtr<MySQLNativeSetupPage>::Create( pParent, _rAttrSet );
+        return VclPtr<MySQLNativeSetupPage>::Create(pParent, rAttrSet);
     }
 
     void MySQLNativeSetupPage::fillControls( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList )
     {
-        m_aMySQLSettings->fillControls( _rControlList );
+        m_xMySQLSettings->fillControls( _rControlList );
     }
 
-    void MySQLNativeSetupPage::fillWindows( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList )
+    void MySQLNativeSetupPage::fillWindows(std::vector<std::unique_ptr<ISaveValueWrapper>>& rControlList)
     {
-        _rControlList.emplace_back( new ODisableWrapper< FixedText >( m_pHelpText ) );
-        m_aMySQLSettings->fillWindows( _rControlList );
+        rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xHelpText.get()));
+        m_xMySQLSettings->fillWindows(rControlList);
     }
 
     bool MySQLNativeSetupPage::FillItemSet( SfxItemSet* _rSet )
     {
-        return m_aMySQLSettings->FillItemSet( _rSet );
+        return m_xMySQLSettings->FillItemSet( _rSet );
     }
 
     void MySQLNativeSetupPage::implInitControls( const SfxItemSet& _rSet, bool _bSaveValue )
     {
-        m_aMySQLSettings->implInitControls( _rSet );
+        m_xMySQLSettings->implInitControls( _rSet );
 
         OGenericAdministrationPage::implInitControls( _rSet, _bSaveValue );
 
@@ -365,7 +363,7 @@ using namespace ::com::sun::star;
 
     void MySQLNativeSetupPage::callModifiedHdl(void*)
     {
-        SetRoadmapStateValue( m_aMySQLSettings->canAdvance() );
+        SetRoadmapStateValue( m_xMySQLSettings->canAdvance() );
 
         OGenericAdministrationPage::callModifiedHdl();
     }

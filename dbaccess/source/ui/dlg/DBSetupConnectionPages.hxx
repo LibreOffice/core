@@ -104,15 +104,16 @@ namespace dbaui
     class MySQLNativeSetupPage : public OGenericAdministrationPage
     {
     private:
-        VclPtr<FixedText>          m_pHelpText;
-        VclPtr<MySQLNativeSettings> m_aMySQLSettings;
+        std::unique_ptr<weld::Label> m_xHelpText;
+        std::unique_ptr<weld::Container> m_xSettingsContainer;
+        std::unique_ptr<DBMySQLNativeSettings> m_xMySQLSettings;
 
     public:
-        MySQLNativeSetupPage( vcl::Window* _pParent, const SfxItemSet& _rCoreAttrs );
-        virtual ~MySQLNativeSetupPage() override;
+        MySQLNativeSetupPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
         virtual void dispose() override;
+        virtual ~MySQLNativeSetupPage() override;
 
-        static VclPtr<OGenericAdministrationPage> Create( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static VclPtr<OGenericAdministrationPage> Create(TabPageParent pParent, const SfxItemSet& rAttrSet);
 
     protected:
         virtual void fillControls( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList ) override;
