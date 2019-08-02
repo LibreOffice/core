@@ -222,7 +222,6 @@ namespace dbaui
             @param _bRevertValue
                 set to <TRUE/> if the display value should be reverted before putting it into the set
         */
-        static void fillBool(SfxItemSet& _rSet, CheckBox const * _pCheckBox, sal_uInt16 _nID, bool& _bChangedSomething, bool _bRevertValue = false);
         static void fillBool(SfxItemSet& _rSet, const weld::CheckButton* pCheckBox, sal_uInt16 _nID, bool bOptionalBool, bool& _bChangedSomething, bool _bRevertValue = false);
 
         /** fills the int value into the item set when the value changed.
@@ -235,7 +234,6 @@ namespace dbaui
             @param  _bChangedSomething
                 <TRUE/> if something changed otherwise <FALSE/>
         */
-        static void fillInt32(SfxItemSet& _rSet,NumericField const * _pEdit,sal_uInt16 _nID, bool& _bChangedSomething);
         static void fillInt32(SfxItemSet& _rSet,const weld::SpinButton* pEdit,sal_uInt16 _nID, bool& _bChangedSomething);
 
         /** fills the String value into the item set when the value changed.
@@ -248,7 +246,6 @@ namespace dbaui
             @param  _bChangedSomething
                 <TRUE/> if something changed otherwise <FALSE/>
         */
-        static void fillString(SfxItemSet& _rSet,Edit const * _pEdit,sal_uInt16 _nID, bool& _bChangedSomething);
         static void fillString(SfxItemSet& _rSet,const weld::Entry* pEdit,sal_uInt16 _nID, bool& _bChangedSomething);
         static void fillString(SfxItemSet& _rSet,const dbaui::OConnectionURLEdit* pEdit,sal_uInt16 _nID, bool& _bChangedSomething);
 
