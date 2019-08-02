@@ -121,8 +121,8 @@ static bool IsValidFilePathComponent(
             cLast = *lpCurrent++;
         }
 
-        /*  If we don't reached the end of the component the length of the component was to long
-            ( See condition of while loop ) */
+        /*  If we don't reached the end of the component the length of the component was too long
+            (See condition of while loop) */
         if ( !lpComponentEnd )
         {
             bValid = false;

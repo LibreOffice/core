@@ -389,7 +389,7 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
             /* 8E + A1-DF */
             if ( c == 0x8E )
             {
-                /* Source buffer to small */
+                /* Source buffer too small */
                 if ( pSrcBuf + 1 == pEndSrcBuf )
                 {
                     *pInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL;
@@ -413,7 +413,7 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
                 /* 8F + A1-FE + A1-FE */
                 if ( c == 0x8F )
                 {
-                    /* Source buffer to small */
+                    /* Source buffer too small */
                     if (pEndSrcBuf - pSrcBuf < 3)
                     {
                         *pInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL;
@@ -430,7 +430,7 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
                 /* A1-FE + A1-FE */
                 else
                 {
-                    /* Source buffer to small */
+                    /* Source buffer too small */
                     if ( pSrcBuf + 1 == pEndSrcBuf )
                     {
                         *pInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL;

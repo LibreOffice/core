@@ -23,10 +23,10 @@
 
 /* ======================================================================= */
 
-/* 0x00A2 --> 0x8191 - APPLE_JAPANESE, but I think, this extension is better than the replacment char */
-/* 0x00A3 --> 0x8192 - APPLE_JAPANESE, but I think, this extension is better than the replacment char */
-/* 0x00A5 --> 0x005C - APPLE_JAPANESE, but I think, this extension is better than the replacment char */
-/* 0x00AC --> 0x81CA - APPLE_JAPANESE/SJIS, but I think, this extension is better than the replacment char */
+/* 0x00A2 --> 0x8191 - APPLE_JAPANESE, but I think, this extension is better than the replacement char */
+/* 0x00A3 --> 0x8192 - APPLE_JAPANESE, but I think, this extension is better than the replacement char */
+/* 0x00A5 --> 0x005C - APPLE_JAPANESE, but I think, this extension is better than the replacement char */
+/* 0x00AC --> 0x81CA - APPLE_JAPANESE/SJIS, but I think, this extension is better than the replacement char */
 
 static sal_uInt16 const aImplUniToDBCSTab_SJIS_00[] =
 {
@@ -141,12 +141,12 @@ static sal_uInt16 const aImplUniToDBCSTab_SJIS_04[] =
 
 /* ----------------------------------------------------------------------- */
 
-/* 0x2014 --> 0x815C - APPLE_JAPANESE/SJIS, but I think, this extension is better than the replacment char */
-/* 0x2015 --> 0x815C - MS932, but I think, this extension is better than the replacment char */
-/* 0x2016 --> 0x8161 - APPLE_JAPANESE/SJIS, but I think, this extension is better than the replacment char */
+/* 0x2014 --> 0x815C - APPLE_JAPANESE/SJIS, but I think, this extension is better than the replacement char */
+/* 0x2015 --> 0x815C - MS932, but I think, this extension is better than the replacement char */
+/* 0x2016 --> 0x8161 - APPLE_JAPANESE/SJIS, but I think, this extension is better than the replacement char */
 /* 0x2026 --> 0x8163 - APPLE_JAPANESE is normally 0x00FF (HORIZONTAL ELLIPSIS), because in the APPLE import table 0x8183 is this 0x22EF (MIDLINE HORIZONTAL ELLIPSIS) */
 /*                     but we import this code as 0x2026 */
-/* 0x203E --> 0x8150 - APPLE_JAPANESE, but I think, this extension is better than the replacment char */
+/* 0x203E --> 0x8150 - APPLE_JAPANESE, but I think, this extension is better than the replacement char */
 /*                     in SJIS this is 0x7E, but we import 0x7E as 0x7E, so this would be the better way */
 
 static sal_uInt16 const aImplUniToDBCSTab_SJIS_20[] =
@@ -446,8 +446,8 @@ static sal_uInt16 const aImplUniToDBCSTab_APPLEJAPANESE_27[] =
 /* ----------------------------------------------------------------------- */
 
 /* 0x3014 --> 0x8160 - come from SJIS */
-/* 0x301D --> 0x8780 - MS932, but I think, this extension is better than the replacment char */
-/* 0x301F --> 0x8781 - MS932, but I think, this extension is better than the replacment char */
+/* 0x301D --> 0x8780 - MS932, but I think, this extension is better than the replacement char */
+/* 0x301F --> 0x8781 - MS932, but I think, this extension is better than the replacement char */
 
 static sal_uInt16 const aImplUniToDBCSTab_SJIS_30[] =
 {

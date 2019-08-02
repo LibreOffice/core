@@ -205,7 +205,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
 
     /* All Identifiers in the tables are lower case The function search */
     /* for the first matching string in the tables. */
-    /* Sort order: unique (first 14, than 1), important */
+    /* Sort order: unique (first 14, then 1), important */
 
     static ImplStrCharsetDef const aUnixCharsetISOTab[] =
     {
@@ -522,7 +522,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pM
     /* All Identifiers are in lower case and contain only alphanumeric */
     /* characters. The function search for the first matching string in */
     /* the table. */
-    /* Sort order: unique (first iso885914, than iso88591), important */
+    /* Sort order: unique (first iso885914, then iso88591), important */
     static ImplStrCharsetDef const aMimeCharsetTab[] =
     {
         { "unicode11utf7", RTL_TEXTENCODING_UTF7 },

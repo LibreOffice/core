@@ -1556,7 +1556,7 @@ namespace osl_Thread
                 // resumeAndWaitThread(aThread);
                 t_print("      value = %d\n", static_cast<int>(nValue));
                 t_print("later value = %d\n", static_cast<int>(nLaterValue));
-                // if value and latervalue not equal, than the thread would not suspended
+                // if value and latervalue not equal, then the thread would not suspended
 
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(
                     "Schedule: suspend works.",
