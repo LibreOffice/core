@@ -248,7 +248,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void EndOfPrevColumn    ();
 
     // set the cursor to page "nPage" at the beginning
-    // additionally to a identically named implementation in crsrsh.hxx
+    // additionally to an identically named implementation in crsrsh.hxx
     // here all existing selections are being reset before setting the
     // cursor
     bool    GotoPage( sal_uInt16 nPage, bool bRecord );
@@ -426,7 +426,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     const SwView&       GetView() const { return m_rView; }
     SwView&             GetView() { return m_rView; }
 
-    // Because nobody else is doing it, here is a ExecMacro()
+    // Because nobody else is doing it, here is an ExecMacro()
     void ExecMacro( const SvxMacro& rMacro, OUString* pRet = nullptr, SbxArray* pArgs = nullptr );
     // call into the dark Basic/JavaScript
     sal_uInt16 CallEvent( SvMacroItemId nEvent, const SwCallMouseEvent& rCallEvent,

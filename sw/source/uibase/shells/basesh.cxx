@@ -1219,7 +1219,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 {
                     bool bDesignMode = pBoolItem->GetValue();
 
-                    // set form design mode
+                    // set from design mode
                     OSL_ENSURE( GetView().GetFormShell() != nullptr, "form shell?" );
                     SfxRequest aReq( GetView().GetViewFrame(), SID_FM_DESIGN_MODE );
                     aReq.AppendItem( SfxBoolItem( SID_FM_DESIGN_MODE, bDesignMode ) );
@@ -1308,7 +1308,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
     }
 }
 
-// Here the state fpr SID_IMAP / SID_CONTOUR will be handled
+// Here the state for SID_IMAP / SID_CONTOUR will be handled
 // until the swapping of the graphic is finished.
 
 IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
