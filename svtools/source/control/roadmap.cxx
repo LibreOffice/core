@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <tools/color.hxx>
 #include <rtl/ustring.hxx>
 
@@ -249,7 +250,20 @@ RoadmapTypes::ItemId ORoadmap::GetCurrentRoadmapItemID() const
     return m_pImpl->getCurItemID();
 }
 
+RoadmapTypes::ItemId OSvtRoadmap::GetCurrentRoadmapItemID() const
+{
+    return m_pImpl->getCurItemID();
+}
+
 RoadmapItem* ORoadmap::GetPreviousHyperLabel(ItemIndex Index)
+{
+    RoadmapItem* pOldItem = nullptr;
+    if ( Index > 0 )
+        pOldItem = m_pImpl->getHyperLabels().at( Index - 1 );
+    return pOldItem;
+}
+
+RoadmapItem* OSvtRoadmap::GetPreviousHyperLabel(ItemIndex Index)
 {
     RoadmapItem* pOldItem = nullptr;
     if ( Index > 0 )
@@ -323,7 +337,48 @@ void ORoadmap::SetRoadmapComplete(bool _bComplete)
         m_pImpl->InCompleteHyperLabel = InsertHyperLabel(m_pImpl->getItemCount(), "...", -1, true/*bEnabled*/, true/*bIncomplete*/ );
 }
 
+void OSvtRoadmap::SetRoadmapComplete(bool _bComplete)
+{
+    bool bWasComplete = m_pImpl->isComplete();
+    m_pImpl->setComplete( _bComplete );
+    if (_bComplete)
+    {
+        if (m_pImpl->InCompleteHyperLabel != nullptr)
+        {
+            delete m_pImpl->InCompleteHyperLabel;
+            m_pImpl->InCompleteHyperLabel = nullptr;
+        }
+    }
+    else if (bWasComplete)
+        m_pImpl->InCompleteHyperLabel = InsertHyperLabel(m_pImpl->getItemCount(), "...", -1, true/*bEnabled*/, true/*bIncomplete*/ );
+}
+
 void ORoadmap::UpdatefollowingHyperLabels(ItemIndex _nIndex)
+{
+    const HL_Vector& rItems = m_pImpl->getHyperLabels();
+    if ( _nIndex < static_cast<ItemIndex>(rItems.size()) )
+    {
+        for ( HL_Vector::const_iterator i = rItems.begin() + _nIndex;
+              i != rItems.end();
+              ++i, ++_nIndex
+            )
+        {
+            RoadmapItem* pItem = *i;
+
+            pItem->SetIndex( _nIndex );
+            pItem->SetPosition( GetPreviousHyperLabel( _nIndex ) );
+        }
+
+    }
+    if ( ! m_pImpl->isComplete() )
+    {
+        RoadmapItem* pOldItem = GetPreviousHyperLabel( m_pImpl->getItemCount() );
+        m_pImpl->InCompleteHyperLabel->SetPosition( pOldItem );
+        m_pImpl->InCompleteHyperLabel->Update( m_pImpl->getItemCount(), "..." );
+    }
+}
+
+void OSvtRoadmap::UpdatefollowingHyperLabels(ItemIndex _nIndex)
 {
     const HL_Vector& rItems = m_pImpl->getHyperLabels();
     if ( _nIndex < static_cast<ItemIndex>(rItems.size()) )
@@ -364,6 +419,11 @@ RoadmapTypes::ItemIndex ORoadmap::GetItemCount() const
     return m_pImpl->getItemCount();
 }
 
+RoadmapTypes::ItemIndex OSvtRoadmap::GetItemCount() const
+{
+    return m_pImpl->getItemCount();
+}
+
 RoadmapTypes::ItemId ORoadmap::GetItemID(ItemIndex _nIndex) const
 {
     const RoadmapItem* pHyperLabel = GetByIndex( _nIndex );
@@ -379,7 +439,23 @@ void ORoadmap::InsertRoadmapItem(ItemIndex Index, const OUString& RoadmapItem, I
     UpdatefollowingHyperLabels( Index + 1 );
 }
 
+void OSvtRoadmap::InsertRoadmapItem(ItemIndex Index, const OUString& RoadmapItem, ItemId _nUniqueId, bool _bEnabled)
+{
+    InsertHyperLabel( Index, RoadmapItem, _nUniqueId, _bEnabled, false/*bIncomplete*/ );
+    // TODO YPos is superfluous, if items are always appended
+    UpdatefollowingHyperLabels( Index + 1 );
+}
+
 void ORoadmap::DeleteRoadmapItem(ItemIndex Index)
+{
+    if ( m_pImpl->getItemCount() > 0 && ( Index > -1)  &&  ( Index < m_pImpl->getItemCount() ) )
+    {
+        m_pImpl->removeHyperLabel( Index );
+        UpdatefollowingHyperLabels( Index );
+    }
+}
+
+void OSvtRoadmap::DeleteRoadmapItem(ItemIndex Index)
 {
     if ( m_pImpl->getItemCount() > 0 && ( Index > -1)  &&  ( Index < m_pImpl->getItemCount() ) )
     {
@@ -394,6 +470,13 @@ bool ORoadmap::IsRoadmapComplete() const
 }
 
 void ORoadmap::EnableRoadmapItem( ItemId _nItemId, bool _bEnable )
+{
+    RoadmapItem* pItem = GetByID( _nItemId );
+    if ( pItem != nullptr )
+        pItem->Enable( _bEnable );
+}
+
+void OSvtRoadmap::EnableRoadmapItem( ItemId _nItemId, bool _bEnable )
 {
     RoadmapItem* pItem = GetByID( _nItemId );
     if ( pItem != nullptr )
@@ -437,9 +520,27 @@ RoadmapItem* ORoadmap::GetByID(ItemId _nID)
     return nullptr;
 }
 
+RoadmapItem* OSvtRoadmap::GetByID(ItemId _nID)
+{
+    ItemId nLocID = 0;
+    const HL_Vector& rItems = m_pImpl->getHyperLabels();
+    for (auto const& item : rItems)
+    {
+        nLocID = item->GetID();
+        if ( nLocID == _nID )
+            return item;
+    }
+    return nullptr;
+}
+
 const RoadmapItem* ORoadmap::GetByID(ItemId _nID) const
 {
     return const_cast< ORoadmap* >( this )->GetByID( _nID );
+}
+
+const RoadmapItem* OSvtRoadmap::GetByID(ItemId _nID) const
+{
+    return const_cast< OSvtRoadmap* >( this )->GetByID( _nID );
 }
 
 RoadmapItem* ORoadmap::GetByIndex(ItemIndex _nItemIndex)
@@ -499,12 +600,23 @@ void ORoadmap::SetItemSelectHdl(const Link<LinkParamNone*,void>& _rHdl)
     m_pImpl->setSelectHdl(_rHdl);
 }
 
+void OSvtRoadmap::SetItemSelectHdl(const Link<LinkParamNone*,void>& _rHdl)
+{
+    m_pImpl->setSelectHdl(_rHdl);
+}
+
 Link<LinkParamNone*,void> const & ORoadmap::GetItemSelectHdl() const
 {
     return m_pImpl->getSelectHdl();
 }
 
 void ORoadmap::Select()
+{
+    GetItemSelectHdl().Call( nullptr );
+    CallEventListeners( VclEventId::RoadmapItemSelected );
+}
+
+void OSvtRoadmap::Select()
 {
     GetItemSelectHdl().Call( nullptr );
     CallEventListeners( VclEventId::RoadmapItemSelected );
@@ -526,6 +638,27 @@ bool ORoadmap::SelectRoadmapItemByID( ItemId _nNewID )
         if ( pItem->IsEnabled() )
         {
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+            pItem->ToggleBackgroundColor( rStyleSettings.GetHighlightColor() ); //HighlightColor
+
+            pItem->GrabFocus();
+            m_pImpl->setCurItemID(_nNewID);
+
+            Select();
+            return true;
+        }
+    }
+    return false;
+}
+
+bool OSvtRoadmap::SelectRoadmapItemByID( ItemId _nNewID )
+{
+    DeselectOldRoadmapItems();
+    RoadmapItem* pItem = GetByID( _nNewID );
+    if ( pItem != nullptr )
+    {
+        if ( pItem->IsEnabled() )
+        {
+            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
             pItem->ToggleBackgroundColor( rStyleSettings.GetHighlightColor() ); //HighlightColor
 
             pItem->GrabFocus();

@@ -21,6 +21,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <vcl/ctrl.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/imgctrl.hxx>
 
 #include <svtools/hyperlabel.hxx>
@@ -106,6 +107,72 @@ private:
 
     std::unique_ptr<RoadmapImpl>    m_pImpl;
 };
+
+
+class SVT_DLLPUBLIC OSvtRoadmap final : public weld::CustomWidgetController, public RoadmapTypes
+{
+public:
+    OSvtRoadmap();
+    virtual ~OSvtRoadmap( ) override;
+
+    void            SetRoadmapBitmap( const BitmapEx& maBitmap );
+
+    void            EnableRoadmapItem( ItemId _nItemId, bool _bEnable );
+
+    void            ChangeRoadmapItemLabel( ItemId _nID, const OUString& sLabel );
+    void            ChangeRoadmapItemID( ItemId _nID, ItemId NewID  );
+
+    void            SetRoadmapInteractive( bool _bInteractive );
+    bool            IsRoadmapInteractive();
+
+    void            SetRoadmapComplete( bool _bComplete );
+    bool            IsRoadmapComplete() const;
+
+    ItemIndex       GetItemCount() const;
+    ItemId          GetItemID( ItemIndex _nIndex ) const;
+
+    void            InsertRoadmapItem( ItemIndex Index, const OUString& RoadmapItem, ItemId _nUniqueId, bool _bEnabled );
+    void            ReplaceRoadmapItem( ItemIndex Index, const OUString& RoadmapItem, ItemId _nUniqueId, bool _bEnabled );
+    void            DeleteRoadmapItem( ItemIndex _nIndex );
+
+    ItemId          GetCurrentRoadmapItemID() const;
+    bool            SelectRoadmapItemByID( ItemId _nItemID );
+
+    void            SetItemSelectHdl( const Link<LinkParamNone*,void>& _rHdl );
+    Link<LinkParamNone*,void> const & GetItemSelectHdl( ) const;
+    virtual void    GetFocus() override;
+    void            SetText(const OUString& rTitle);
+
+private:
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
+
+    /// called when an item has been selected by any means
+    void            Select();
+
+    DECL_LINK(ImplClickHdl, HyperLabel*, void);
+
+    RoadmapItem*         GetByIndex( ItemIndex _nItemIndex );
+    const RoadmapItem*   GetByIndex( ItemIndex _nItemIndex ) const;
+
+    RoadmapItem*         GetByID( ItemId _nID  );
+    const RoadmapItem*   GetByID( ItemId _nID  ) const;
+    RoadmapItem*         GetPreviousHyperLabel( ItemIndex Index);
+
+    void                 DrawHeadline(vcl::RenderContext& rRenderContext);
+    void                 DeselectOldRoadmapItems();
+    ItemId               GetNextAvailableItemId( ItemIndex NewIndex );
+    ItemId               GetPreviousAvailableItemId( ItemIndex NewIndex );
+    RoadmapItem*         GetByPointer(vcl::Window const * pWindow);
+    RoadmapItem*         InsertHyperLabel( ItemIndex Index, const OUString& _aStr, ItemId RMID, bool _bEnabled, bool _bIncomplete  );
+    void                 UpdatefollowingHyperLabels( ItemIndex Index );
+
+    // Window overridables
+    void            Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect) override;
+    void            implInit(vcl::RenderContext& rRenderContext);
+
+    std::unique_ptr<RoadmapImpl>    m_pImpl;
+};
+
 
 }   // namespace svt
 

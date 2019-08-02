@@ -21,8 +21,8 @@
 
 #define PAGE_X              281
 #define PAGE_Y              215
-#define WIZARD_PAGE_X       225
-#define WIZARD_PAGE_Y       240
+#define WIZARD_PAGE_X_DIGITS 50
+#define WIZARD_PAGE_Y_LINES  60
 
 //constants for the wizards
 #define INDENT_BELOW_RADIO   10

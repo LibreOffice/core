@@ -25,10 +25,12 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld.hxx>
 
 class TabPage;
 struct ImplWizPageData;
 struct ImplWizButtonData;
+struct ImplWizControllerButtonData;
 
 /*
 
@@ -254,6 +256,70 @@ public:
     const Size&         GetPageSizePixel() const { return maPageSize; }
 
     void                SetActivatePageHdl( const Link<WizardDialog*,void>& rLink ) { maActivateHdl = rLink; }
+};
+
+class SVT_DLLPUBLIC WizardDialogController : public weld::GenericDialogController
+{
+private:
+#if 0
+    Idle                    maWizardLayoutIdle;
+#endif
+    Size                    maPageSize;
+    ImplWizPageData*        mpFirstPage;
+    ImplWizControllerButtonData*      mpFirstBtn;
+    VclPtr<TabPage>         mpCurTabPage;
+    weld::Button*           mpPrevBtn;
+    weld::Button*           mpNextBtn;
+    sal_uInt16              mnCurLevel;
+    Link<WizardDialogController*,void>  maActivateHdl;
+#if 0
+    DECL_DLLPRIVATE_LINK( ImplHandleWizardLayoutTimerHdl, Timer*, void );
+#endif
+
+private:
+    SVT_DLLPRIVATE void             ImplInitData();
+    SVT_DLLPRIVATE void             ImplShowTabPage( TabPage* pPage );
+    SVT_DLLPRIVATE TabPage*         ImplGetPage( sal_uInt16 nLevel ) const;
+protected:
+    weld::Container* get_content_area();
+
+public:
+    WizardDialogController(weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rId);
+    virtual ~WizardDialogController() override;
+
+#if 0
+    virtual void        Resize() override;
+    virtual void        StateChanged( StateChangedType nStateChange ) override;
+    virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
+#endif
+
+    virtual void        ActivatePage();
+    virtual bool        DeactivatePage();
+
+#if 0
+    virtual void        queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
+
+    bool                ShowPrevPage();
+    bool                ShowNextPage();
+#endif
+    bool                ShowPage( sal_uInt16 nLevel );
+    bool                Finish( short nResult = RET_CANCEL );
+    sal_uInt16          GetCurLevel() const { return mnCurLevel; }
+    void                AddPage( TabPage* pPage );
+#if 0
+    void                RemovePage( TabPage* pPage );
+#endif
+    void                SetPage( sal_uInt16 nLevel, TabPage* pPage );
+    TabPage*            GetPage( sal_uInt16 nLevel ) const;
+    void                AddButton(weld::Button* pButton);
+#if 0
+    void                RemoveButton( Button* pButton );
+#endif
+    void                SetPrevButton(weld::Button* pButton) { mpPrevBtn = pButton; }
+    void                SetNextButton(weld::Button* pButton) { mpNextBtn = pButton; }
+    void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
+    const Size&         GetPageSizePixel() const { return maPageSize; }
+    void                SetActivatePageHdl( const Link<WizardDialogController*,void>& rLink ) { maActivateHdl = rLink; }
 };
 
 #endif // INCLUDED_SVTOOLS_WIZDLG_HXX
