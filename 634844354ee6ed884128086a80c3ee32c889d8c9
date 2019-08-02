@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_e6acf28d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-02T06:20:46Z",
+      "side": 1,
+      "message": "Do you consider that a valid use case?  Incremental builds apparently fail in general after doing configuration changes.\n\nAnd this change started to cause other problems, see \u003chttps://gerrit.libreoffice.org/#/c/76769/\u003e \"Only build LOKDocView-0.1.gir when necessary\".",
+      "range": {
+        "startLine": 15,
+        "startChar": 40,
+        "endLine": 16,
+        "endChar": 52
+      },
+      "revId": "634844354ee6ed884128086a80c3ee32c889d8c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
