@@ -2009,9 +2009,27 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     {
                         // tdf#119571 update the style of the joined paragraph
                         // after a partially deleted paragraph to show its correct style
-                        // in "Show changes" mode, too. The paragraph after the deletion
-                        // gets the style of the first (partially deleted) paragraph.
-                        lcl_CopyStyle(*pStt, *pEnd); // TODO: do for all paragraphs of the deletion
+                        // in "Show changes" mode, too. All removed paragraphs
+                        // get the style of the first (partially deleted) paragraph
+                        // to avoid text insertion with bad style in the deleted
+                        // area later.
+
+                        SwContentNode* pDelNd = pStt->nNode.GetNode().GetContentNode();
+                        SwContentNode* pTextNd = pEnd->nNode.GetNode().GetContentNode();
+                        SwTextNode* pDelNode = pStt->nNode.GetNode().GetTextNode();
+                        SwTextNode* pTextNode;
+                        SwNodeIndex aIdx( pEnd->nNode.GetNode() );
+
+                        while (pDelNode != nullptr && pTextNd != nullptr && pDelNd->GetIndex() < pTextNd->GetIndex())
+                        {
+                            pTextNode = pTextNd->GetTextNode();
+                            if (pTextNode && pDelNode != pTextNode )
+                            {
+                                SwPosition aPos(aIdx);
+                                lcl_CopyStyle(*pStt, aPos);
+                            }
+                            pTextNd = SwNodes::GoPrevious( &aIdx );
+                        }
                     }
                 }
                 bool const ret = mpRedlineTable->Insert( pNewRedl );
