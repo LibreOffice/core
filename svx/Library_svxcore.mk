@@ -279,6 +279,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/charthelper \
     svx/source/svdraw/gradtrns \
     svx/source/svdraw/polypolygoneditor \
+    svx/source/svdraw/presetooxhandleadjustmentrelations \
     svx/source/svdraw/sdrhittesthelper \
     svx/source/svdraw/sdrmasterpagedescriptor \
     svx/source/svdraw/sdrpagewindow \
