@@ -299,7 +299,7 @@ void SwCache::DeleteObj( SwCacheObj *pObj )
         pObj->GetNext()->SetPrev( pObj->GetPrev() );
 
     m_aFreePositions.push_back( pObj->GetCachePos() );
-    assert(m_aCacheObjects[pObj->GetCachePos()].get() == pObj);
+    assert(m_aCacheObjects[pObj->GetCachePos()] == pObj);
     m_aCacheObjects[pObj->GetCachePos()] = nullptr;
     delete pObj;
 
