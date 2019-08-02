@@ -174,31 +174,6 @@ $(share_WORKDIR)/%/create_tree.sh: $(share_SRCDIR)/share/create_tree.sh \
 	cat $< >> $@
 	chmod 774 $@
 
-# Generate gobject-introspection files
-# These are *not* packaged in rpms because there's no good place to put them
-# where the system will actually find them and where it won't conflict with a
-# distro packaged LO; on Fedora 30 at least there's no /opt path in
-# $XDG_DATA_DIRS
-ifneq ($(INTROSPECTION_SCANNER),)
-
-$(share_WORKDIR)/%/LOKDocView-0.1.gir: \
-		$(call gb_Library_get_target,libreofficekitgtk)
-	mkdir -p $(dir $@)
-	g-ir-scanner "${SRCDIR}/include/LibreOfficeKit/LibreOfficeKitGtk.h" \
-				 "${SRCDIR}/libreofficekit/source/gtk/lokdocview.cxx" \
-                 `${PKG_CONFIG} --cflags gobject-introspection-1.0 gtk+-3.0` \
-				 -I"${SRCDIR}/include/" \
-                 --include=GLib-2.0 --include=GObject-2.0 --include=Gio-2.0 \
-                 --library=libreofficekitgtk --library-path="${INSTDIR}/program" \
-                 --include=Gdk-3.0 --include=GdkPixbuf-2.0 --include=Gtk-3.0 \
-                 --namespace=LOKDocView --nsversion=0.1 --identifier-prefix=LOKDoc --symbol-prefix=lok_doc \
-				 --output="$@" --warn-all --no-libtool
-
-$(share_WORKDIR)/%/LOKDocView-0.1.typelib: $(share_WORKDIR)/%/LOKDocView-0.1.gir
-	g-ir-compiler "$<" --output="$@"
-
-endif
-
 $(share_WORKDIR)/%/launcherlist: $(LAUNCHERS)
 	mkdir -p $(dir $@)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
