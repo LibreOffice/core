@@ -413,6 +413,53 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testQuadraticCurveTo)
     //Add some tolerance
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("bad height of quadraticcurveto", 3004, fHeight, 10.0);
 }
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126512_OOXML_handle_in_ODP)
+{
+    // The test covers all preset shapes with handles. Connectors are included as ordinary
+    // shapes to prevent converting. The file was created in PowerPoint 365 and then
+    // opened and exported to ODF format by LibreOffice.
+    // Error was, that for shapes, which were originally imported from OOXML, the handles
+    // could not be moved at all.
+    const OUString sFileName("tdf126512_OOXMLHandleMovementInODF.odp");
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+
+    OUString sErrors; // sErrors collects shape type and handle index for failing cases
+    for (sal_uInt8 i = 0; i < countShapes(); i++)
+    {
+        uno::Reference<drawing::XShape> xShape(getShape(i));
+        SdrObjCustomShape& rSdrObjCustomShape(
+            static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+        OUString sShapeType("non-primitive"); // only to initialize, value not used here
+        const SdrCustomShapeGeometryItem& rGeometryItem(
+            rSdrObjCustomShape.GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
+        const uno::Any* pAny = rGeometryItem.GetPropertyValueByName("Type");
+        if (pAny)
+            *pAny >>= sShapeType;
+
+        sal_uInt8 nHandlesCount = rSdrObjCustomShape.GetInteractionHandles().size();
+        for (sal_uInt8 j = 0; j < nHandlesCount; j++)
+        {
+            css::awt::Point aInitialPosition(
+                rSdrObjCustomShape.GetInteractionHandles()[j].aPosition);
+            // The handles are initialized in the test document, so that if the handle is moveable
+            // in that direction at all, then it can move at least with an amount of 100.
+            Point aDesiredPosition(aInitialPosition.X + 100, aInitialPosition.Y + 100);
+            rSdrObjCustomShape.DragMoveCustomShapeHdl(aDesiredPosition, j, false);
+            css::awt::Point aObservedPosition(
+                rSdrObjCustomShape.GetInteractionHandles()[j].aPosition);
+            if (aInitialPosition.X == aObservedPosition.X
+                && aInitialPosition.Y == aObservedPosition.Y)
+            {
+                sErrors += "\n";
+                sErrors += OUString::number(i) + " " + sShapeType + "  " + OUString::number(j);
+            }
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
