@@ -32,6 +32,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <svl/urihelper.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <svx/svdogrp.hxx>
@@ -91,6 +92,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svdobjplusdata.hxx>
+#include "presetooxhandleadjustmentrelations.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1032,10 +1034,9 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     // Handles
     const OUString sHandles(  "Handles"  );
     pAny = aGeometryItem.GetPropertyValueByName( sHandles );
+    css::uno::Sequence< css::beans::PropertyValues > seqHandles;
     if ( !pAny && pDefCustomShape && pDefCustomShape->nHandles && pDefCustomShape->pHandles )
     {
-        css::uno::Sequence< css::beans::PropertyValues > seqHandles;
-
         sal_Int32 i, nCount = pDefCustomShape->nHandles;
         const SvxMSDffHandle* pData = pDefCustomShape->pHandles;
         seqHandles.realloc( nCount );
@@ -1051,6 +1052,40 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
         aPropVal.Value <<= seqHandles;
         aGeometryItem.SetPropertyValue( aPropVal );
     }
+    else if (pAny && sShapeType.startsWith("ooxml-") && sShapeType != "ooxml-non-primitive")
+    {
+        // ODF is not able to store the ooxml way of connecting handle to an adjustment
+        // value by name, e.g. attribute RefX="adj". So the information is lost, when exporting
+        // an pptx to odp, for example. This part reconstructs this information for the
+        // ooxml preset shapes from their definition.
+        *pAny >>= seqHandles;
+        for (sal_Int32 i = 0; i < seqHandles.getLength(); i++)
+        {
+            OUString sFirstRefType;
+            sal_Int32 nFirstAdjRef;
+            OUString sSecondRefType;
+            sal_Int32 nSecondAdjRef;
+            PresetOOXHandleAdj::GetOOXHandleAdjRelation(sShapeType, i, sFirstRefType, nFirstAdjRef,
+                                                        sSecondRefType, nSecondAdjRef);
+            // check validity in regard to AdjRef values
+            bool bFirstValid(sFirstRefType != "na" && 0 <= nFirstAdjRef
+                             && nFirstAdjRef < seqAdjustmentValues.getLength());
+            bool bSecondValid(sSecondRefType != "na" && 0 <= nSecondAdjRef
+                              && nSecondAdjRef < seqAdjustmentValues.getLength());
+
+            // add properties
+            comphelper::SequenceAsHashMap aHandleProps(seqHandles[i]);
+            if (bFirstValid)
+                aHandleProps.createItemIfMissing(sFirstRefType, nFirstAdjRef);
+            if (bSecondValid)
+                aHandleProps.createItemIfMissing(sSecondRefType, nSecondAdjRef);
+            aHandleProps >> seqHandles[i];
+        }
+        aPropVal.Name = sHandles;
+        aPropVal.Value <<= seqHandles;
+        aGeometryItem.SetPropertyValue( aPropVal );
+    }
+
     SetMergedItem( aGeometryItem );
 }
 
