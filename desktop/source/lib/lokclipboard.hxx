@@ -107,7 +107,7 @@ public:
     css::uno::Reference<css::uno::XInterface> SAL_CALL
     createInstanceWithArguments(const css::uno::Sequence<css::uno::Any>& /* rArgs */) override;
 
-    /// Fetch clipboard from the gobal pool.
+    /// Fetch clipboard from the global pool.
     static rtl::Reference<LOKClipboard> getClipboardForCurView();
 
     /// Release a clipboard before its document dies, nViewId of -1 clears all.

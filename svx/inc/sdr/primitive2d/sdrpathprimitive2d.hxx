@@ -48,7 +48,7 @@ namespace drawinglayer
             // all filled stuff using it will fit seamlessly together.
             // 'same' is in quotes since it is a UnitPolygon, so being relative to the
             // unit polygon of the local geometry (UnitPolyPolygon). The definition is complete
-            // when applying the also given transfomation (maTransform)
+            // when applying the also given transformation (maTransform)
             basegfx::B2DPolyPolygon const                     maUnitDefinitionPolyPolygon;
 
         protected:

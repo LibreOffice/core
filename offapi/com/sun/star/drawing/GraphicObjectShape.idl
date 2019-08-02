@@ -112,7 +112,7 @@ published service GraphicObjectShape
     */
     [property] ColorMode GraphicColorMode;
 
-    /** This property contains a image map for this graphic.
+    /** This property contains an image map for this graphic.
         @see com::sun::star::image::ImageMap
     */
     [optional, property] com::sun::star::container::XIndexContainer ImageMap;

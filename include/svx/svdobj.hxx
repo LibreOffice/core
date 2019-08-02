@@ -470,7 +470,7 @@ public:
     // set modified-flag in the model
     virtual void SetChanged();
 
-    // Tooling for painting a single object to a OutputDevice. This will be needed as long
+    // Tooling for painting a single object to an OutputDevice. This will be needed as long
     // as not all painting is changed to use DrawContact objects.
     void SingleObjectPainter(OutputDevice& rOut) const;
     bool LineGeometryUsageIsNecessary() const;
@@ -627,7 +627,7 @@ public:
     // (e.g. polygons, polylines, lines)
     // The points of those objects are selected (if necessary multiselection),
     // deleted, inserted, or as a multiselection moved or rotated...
-    // Only such objects can have PlusHandles (e.g. the weights of an Bezier curve).
+    // Only such objects can have PlusHandles (e.g. the weights of a Bezier curve).
     virtual bool IsPolyObj() const;
     virtual sal_uInt32 GetPointCount() const;
     virtual Point GetPoint(sal_uInt32 i) const;

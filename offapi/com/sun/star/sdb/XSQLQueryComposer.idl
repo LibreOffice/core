@@ -111,7 +111,7 @@ published interface XSQLQueryComposer: com::sun::star::uno::XInterface
     /** appends an additional part to the sort order criteria of the select
         statement.
         @param column
-            the column which is used to create a order part
+            the column which is used to create an order part
         @param  ascending
             `TRUE` when the order should be ascending, otherwise `FALSE`
         @throws com::sun::star::sdbc::SQLException
