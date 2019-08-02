@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_e64f12bb",
+        "filename": "instsetoo_native/CustomTarget_setup.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-08-02T08:46:47Z",
+      "side": 1,
+      "message": "i guess deb and rpm aren\u0027t necessary because its not packaged anyway? but shouldn\u0027t make much of a difference...",
+      "revId": "260e3bc69ef9c79e9d175819640514ebb95280e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
