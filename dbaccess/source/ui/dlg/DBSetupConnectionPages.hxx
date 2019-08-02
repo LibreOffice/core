@@ -80,7 +80,7 @@ namespace dbaui
         static VclPtr<OGenericAdministrationPage> CreateLDAPTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet );
         OLDAPConnectionPageSetup( TabPageParent pParent, const SfxItemSet& _rCoreAttrs );
         virtual ~OLDAPConnectionPageSetup() override;
-        virtual void callModifiedHdl(void* pControl = nullptr) override;
+        virtual void callModifiedHdl(weld::Widget* pControl = nullptr) override;
 
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
@@ -121,7 +121,7 @@ namespace dbaui
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
 
-        virtual void callModifiedHdl(void* pControl = nullptr) override;
+        virtual void callModifiedHdl(weld::Widget* pControl = nullptr) override;
     };
 
     // OGeneralSpecialJDBCConnectionPageSetup
@@ -144,7 +144,7 @@ namespace dbaui
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
         virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
         virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
-        virtual void callModifiedHdl(void* pControl = nullptr) override;
+        virtual void callModifiedHdl(weld::Widget* pControl = nullptr) override;
 
         DECL_LINK(OnTestJavaClickHdl, weld::Button&, void);
 

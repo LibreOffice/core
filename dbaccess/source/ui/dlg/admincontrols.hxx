@@ -45,13 +45,13 @@ namespace dbaui
         std::unique_ptr<weld::Label> m_xDefaultPort;
         std::unique_ptr<weld::Entry> m_xSocket;
         std::unique_ptr<weld::Entry> m_xNamedPipe;
-        Link<void*,void> m_aControlModificationLink;
+        Link<weld::Widget*,void> m_aControlModificationLink;
         DECL_LINK(RadioToggleHdl, weld::ToggleButton&, void);
         DECL_LINK(SpinModifyHdl, weld::SpinButton&, void);
         DECL_LINK(EditModifyHdl, weld::Entry&, void);
 
     public:
-        MySQLNativeSettings(weld::Widget* pParent, const Link<void*,void>& rControlModificationLink);
+        MySQLNativeSettings(weld::Widget* pParent, const Link<weld::Widget*,void>& rControlModificationLink);
         void fillControls( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList );
         void fillWindows( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList );
 

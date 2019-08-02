@@ -114,7 +114,7 @@ namespace dbaui
         _rReadonly = !_rValid || (pReadonly && pReadonly->GetValue());
     }
 
-    IMPL_LINK(OGenericAdministrationPage, OnControlModified, void*, pCtrl, void)
+    IMPL_LINK(OGenericAdministrationPage, OnControlModified, weld::Widget*, pCtrl, void)
     {
         callModifiedHdl(pCtrl);
     }

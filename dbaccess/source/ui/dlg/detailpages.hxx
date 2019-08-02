@@ -172,7 +172,7 @@ namespace dbaui
 
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
-        virtual void callModifiedHdl(void* pControl = nullptr) override;
+        virtual void callModifiedHdl(weld::Widget* pControl = nullptr) override;
 
         DECL_LINK(OnTestJavaClickHdl, weld::Button&, void);
 
