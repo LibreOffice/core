@@ -233,7 +233,7 @@ $rc = system "./testbootstrap",
     "AAABBBCCC000",
     '-env:MYBOOTSTRAPTESTVALUE=\u0041\u0041\u0041\u0042\u0042\u0042\u0043\u0043\u0043\u0030\u0030\u0030';
 if (!$rc) {
-    $comment = $comment . "uncode not passed\n";
+    $comment = $comment . "unicode not passed\n";
     $state = 0;
 }
 
