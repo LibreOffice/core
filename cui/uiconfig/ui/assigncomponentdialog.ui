@@ -93,9 +93,6 @@
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="label" translatable="yes" context="assigncomponentdialog|label1">Component method name:</property>
-                <accessibility>
-                  <relation type="label-for" target="methodEntry"/>
-                </accessibility>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -109,9 +106,6 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
-                <accessibility>
-                  <relation type="labelled-by" target="label1"/>
-                </accessibility>
               </object>
               <packing>
                 <property name="expand">False</property>
