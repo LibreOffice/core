@@ -198,7 +198,7 @@ namespace dbaui
 
     private:
         std::unique_ptr<weld::Widget> m_xMySQLSettingsContainer;
-        DBMySQLNativeSettings m_aMySQLSettings;
+        MySQLNativeSettings m_aMySQLSettings;
         std::unique_ptr<weld::Label> m_xSeparator1;
         std::unique_ptr<weld::Label> m_xSeparator2;
         std::unique_ptr<weld::Label> m_xUserNameLabel;

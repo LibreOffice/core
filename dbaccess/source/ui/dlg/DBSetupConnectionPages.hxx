@@ -105,7 +105,7 @@ namespace dbaui
     private:
         std::unique_ptr<weld::Label> m_xHelpText;
         std::unique_ptr<weld::Container> m_xSettingsContainer;
-        std::unique_ptr<DBMySQLNativeSettings> m_xMySQLSettings;
+        std::unique_ptr<MySQLNativeSettings> m_xMySQLSettings;
 
     public:
         MySQLNativeSetupPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);

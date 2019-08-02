@@ -28,7 +28,7 @@ namespace dbaui
 {
 
     // MySQLNativeSettings
-    class DBMySQLNativeSettings
+    class MySQLNativeSettings
     {
     private:
         std::unique_ptr<weld::Builder> m_xBuilder;
@@ -51,7 +51,7 @@ namespace dbaui
         DECL_LINK(EditModifyHdl, weld::Entry&, void);
 
     public:
-        DBMySQLNativeSettings(weld::Widget* pParent, const Link<void*,void>& rControlModificationLink);
+        MySQLNativeSettings(weld::Widget* pParent, const Link<void*,void>& rControlModificationLink);
         void fillControls( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList );
         void fillWindows( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList );
 
