@@ -50,7 +50,7 @@
 #include "finteraction.hxx"
 #include "DBSetupConnectionPages.hxx"
 #include <unotools/pathoptions.hxx>
-#include <svtools/roadmapwizard.hxx>
+#include <vcl/roadmapwizard.hxx>
 
 namespace
 {

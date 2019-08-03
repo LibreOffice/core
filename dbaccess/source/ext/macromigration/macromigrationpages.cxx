@@ -69,7 +69,7 @@ namespace dbmm
         m_pCloseDocError->Show( _bShow );
     }
 
-    VclPtr<TabPage> PreparationPage::Create( ::svt::RoadmapWizard& _rParentDialog )
+    VclPtr<TabPage> PreparationPage::Create( ::vcl::RoadmapWizard& _rParentDialog )
     {
         return VclPtr<PreparationPage>::Create(&_rParentDialog);
     }
@@ -161,7 +161,7 @@ namespace dbmm
         return true;
     }
 
-    VclPtr<TabPage> SaveDBDocPage::Create( ::svt::RoadmapWizard& _rParentDialog )
+    VclPtr<TabPage> SaveDBDocPage::Create( ::vcl::RoadmapWizard& _rParentDialog )
     {
         return VclPtr<SaveDBDocPage>::Create( dynamic_cast< MacroMigrationDialog& >( _rParentDialog ) );
     }
@@ -194,7 +194,7 @@ namespace dbmm
         MacroMigrationPage::dispose();
     }
 
-    VclPtr<TabPage> ProgressPage::Create(::svt::RoadmapWizard& _rParentDialog)
+    VclPtr<TabPage> ProgressPage::Create(::vcl::RoadmapWizard& _rParentDialog)
     {
         return VclPtr<ProgressPage>::Create(&_rParentDialog);
     }
@@ -289,7 +289,7 @@ namespace dbmm
         MacroMigrationPage::dispose();
     }
 
-    VclPtr<TabPage> ResultPage::Create(::svt::RoadmapWizard& _rParentDialog)
+    VclPtr<TabPage> ResultPage::Create(::vcl::RoadmapWizard& _rParentDialog)
     {
         return VclPtr<ResultPage>::Create(&_rParentDialog);
     }

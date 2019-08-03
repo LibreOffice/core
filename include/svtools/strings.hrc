@@ -241,8 +241,6 @@
 #define STR_SVT_PRNDLG_DEFPRINTER               NC_("STR_SVT_PRNDLG_DEFPRINTER", "Default printer")
 #define STR_SVT_PRNDLG_JOBCOUNT                 NC_("STR_SVT_PRNDLG_JOBCOUNT", "%d documents")
 
-#define STR_WIZDLG_ROADMAP_TITLE                NC_("STR_WIZDLG_ROADMAP_TITLE", "Steps")
-
 #define STR_NO_FIELD_SELECTION                  NC_("STR_NO_FIELD_SELECTION", "<none>")
 #define STR_FIELD_COMPANY                       NC_("STR_FIELD_COMPANY", "Company")
 #define STR_FIELD_DEPARTMENT                    NC_("STR_FIELD_DEPARTMENT", "Department")

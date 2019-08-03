@@ -80,7 +80,7 @@
 namespace dbaui
 {
 using namespace dbtools;
-using namespace svt;
+using namespace vcl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::sdbc;
@@ -104,7 +104,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(vcl::Window* _pParent
                                ,const Reference< XComponentContext >& _rxORB
                                ,const css::uno::Any& _aDataSourceName
                                )
-    :svt::RoadmapWizard( _pParent )
+    :vcl::RoadmapWizard( _pParent )
 
     , m_bIsConnectable( false)
     , m_sRM_IntroText( DBA_RES( STR_PAGETITLE_INTROPAGE ) )
@@ -152,7 +152,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(vcl::Window* _pParent
     for(PathId i = 1;aIter != aEnd;++aIter,++i)
     {
         const OUString& sURLPrefix = aIter.getURLPrefix();
-        svt::RoadmapWizardTypes::WizardPath aPath;
+        vcl::RoadmapWizardTypes::WizardPath aPath;
         aPath.push_back(PAGE_DBSETUPWIZARD_INTRO);
         m_pCollection->fillPageIds(sURLPrefix,aPath);
         aPath.push_back(PAGE_DBSETUPWIZARD_AUTHENTIFICATION);
@@ -161,7 +161,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(vcl::Window* _pParent
         declareAuthDepPath(sURLPrefix,i,aPath);
     }
 
-    svt::RoadmapWizardTypes::WizardPath aPath;
+    vcl::RoadmapWizardTypes::WizardPath aPath;
     aPath.push_back(PAGE_DBSETUPWIZARD_INTRO);
     declarePath( static_cast<PathId>(m_pCollection->size()+1), aPath);
 
@@ -174,7 +174,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(vcl::Window* _pParent
     setTitleBase(DBA_RES(STR_DBWIZARDTITLE));
 }
 
-void ODbTypeWizDialogSetup::declareAuthDepPath( const OUString& _sURL, PathId _nPathId, const svt::RoadmapWizardTypes::WizardPath& _rPaths)
+void ODbTypeWizDialogSetup::declareAuthDepPath( const OUString& _sURL, PathId _nPathId, const vcl::RoadmapWizardTypes::WizardPath& _rPaths)
 {
     bool bHasAuthentication = DataSourceMetaData::getAuthentication( _sURL ) != AuthNone;
 
@@ -188,7 +188,7 @@ void ODbTypeWizDialogSetup::declareAuthDepPath( const OUString& _sURL, PathId _n
     }
 
     // call base method
-    ::svt::RoadmapWizard::declarePath( _nPathId, aPath );
+    ::vcl::RoadmapWizard::declarePath( _nPathId, aPath );
 }
 
 OUString ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
@@ -265,7 +265,7 @@ void ODbTypeWizDialogSetup::dispose()
     m_pGeneralPage.clear();
     m_pMySQLIntroPage.clear();
     m_pFinalPage.clear();
-    svt::RoadmapWizard::dispose();
+    vcl::RoadmapWizard::dispose();
 }
 
 IMPL_LINK_NOARG(ODbTypeWizDialogSetup, OnTypeSelected, OGeneralPage&, void)

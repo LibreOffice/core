@@ -23,7 +23,7 @@
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <svtools/roadmapwizard.hxx>
+#include <vcl/roadmapwizard.hxx>
 
 #include <memory>
 
@@ -32,7 +32,7 @@ namespace dbmm
 
     // MacroMigrationDialog
     struct MacroMigrationDialog_Data;
-    typedef ::svt::RoadmapWizard    MacroMigrationDialog_Base;
+    typedef ::vcl::RoadmapWizard    MacroMigrationDialog_Base;
     class MacroMigrationDialog : public MacroMigrationDialog_Base
     {
     public:

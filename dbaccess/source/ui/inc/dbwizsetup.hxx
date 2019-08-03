@@ -25,7 +25,7 @@
 #include "IItemSetHelper.hxx"
 #include <tools/urlobj.hxx>
 #include <memory>
-#include <svtools/roadmapwizard.hxx>
+#include <vcl/roadmapwizard.hxx>
 #include <connectivity/dbtools.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -54,7 +54,7 @@ class ODbDataSourceAdministrationHelper;
 class OMySQLIntroPageSetup;
 class OFinalDBPageSetup;
 
-class ODbTypeWizDialogSetup final : public svt::RoadmapWizard , public IItemSetHelper, public IDatabaseSettingsDialog
+class ODbTypeWizDialogSetup final : public vcl::RoadmapWizard , public IItemSetHelper, public IDatabaseSettingsDialog
 {
 private:
     std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
@@ -141,7 +141,7 @@ private:
             the first state in this path, following by an arbitrary number of others, as in
             RoadmapWizard::declarePath.
     */
-    void declareAuthDepPath( const OUString& _sURL, PathId _nPathId, const svt::RoadmapWizardTypes::WizardPath& _rPaths);
+    void declareAuthDepPath( const OUString& _sURL, PathId _nPathId, const vcl::RoadmapWizardTypes::WizardPath& _rPaths);
 
     void RegisterDataSourceByLocation(const OUString& sPath);
     bool SaveDatabaseDocument();
