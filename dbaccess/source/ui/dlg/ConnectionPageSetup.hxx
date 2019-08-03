@@ -55,7 +55,7 @@ namespace dbaui
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
 
         virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
+        virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
 
     protected:
         OConnectionTabPageSetup(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId);

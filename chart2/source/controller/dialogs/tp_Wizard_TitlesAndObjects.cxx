@@ -91,7 +91,7 @@ void TitlesAndObjectsTabPage::initializePage()
     m_bCommitToModel = true;
 }
 
-bool TitlesAndObjectsTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
+bool TitlesAndObjectsTabPage::commitPage( ::vcl::WizardTypes::CommitPageReason /*eReason*/ )
 {
     if( m_xTitleResources->get_value_changed_from_saved() ) //titles may have changed in the meanwhile
         commitToModel();

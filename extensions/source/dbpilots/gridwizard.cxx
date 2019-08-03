@@ -218,7 +218,6 @@ namespace dbp
         }
     }
 
-
     VclPtr<TabPage> OGridWizard::createPage(WizardState _nState)
     {
         switch (_nState)
@@ -231,8 +230,7 @@ namespace dbp
         return VclPtr<TabPage>();
     }
 
-
-    WizardTypes::WizardState OGridWizard::determineNextState( WizardState _nCurrentState ) const
+    vcl::WizardTypes::WizardState OGridWizard::determineNextState( WizardState _nCurrentState ) const
     {
         switch (_nCurrentState)
         {
@@ -244,7 +242,6 @@ namespace dbp
 
         return WZS_INVALID_STATE;
     }
-
 
     void OGridWizard::enterState(WizardState _nState)
     {
@@ -356,7 +353,7 @@ namespace dbp
     }
 
 
-    bool OGridFieldsSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool OGridFieldsSelection::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {
         if (!OGridPage::commitPage(_eReason))
             return false;

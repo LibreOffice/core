@@ -91,7 +91,7 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void        initializePage() override;
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
+        virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
         virtual bool        canAdvance() const override;
 
         DECL_LINK( OnMoveEntry, Button*, void );
@@ -115,7 +115,7 @@ namespace dbp
     private:
         // OWizardPage overridables
         virtual void        initializePage() override;
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
+        virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
 
         OOptionGroupSettings& getSettings() { return static_cast<OGroupBoxWizard*>(getDialog())->getSettings(); }
     };
@@ -126,7 +126,7 @@ namespace dbp
         VclPtr<ListBox>         m_pOptions;
 
         std::vector<OUString>   m_aUncommittedValues;
-        ::svt::WizardTypes::WizardState
+        ::vcl::WizardTypes::WizardState
                         m_nLastSelection;
 
     public:
@@ -140,7 +140,7 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void        initializePage() override;
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
+        virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
 
         void implTraveledOptions();
 
@@ -172,7 +172,7 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void        initializePage() override;
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
+        virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
         virtual bool        canAdvance() const override;
     };
 

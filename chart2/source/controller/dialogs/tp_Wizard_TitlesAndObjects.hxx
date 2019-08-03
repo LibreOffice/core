@@ -22,7 +22,7 @@
 
 #include <TimerTriggeredControllerLock.hxx>
 
-#include <svtools/wizardmachine.hxx>
+#include <vcl/wizardmachine.hxx>
 
 #include <memory>
 
@@ -34,7 +34,7 @@ namespace com { namespace sun { namespace star { namespace uno { class XComponen
 namespace chart
 {
 
-class TitlesAndObjectsTabPage final : public svt::OWizardPage
+class TitlesAndObjectsTabPage final : public vcl::OWizardPage
 {
 public:
     TitlesAndObjectsTabPage(TabPageParent pParent,
@@ -43,7 +43,7 @@ public:
     virtual ~TitlesAndObjectsTabPage() override;
 
     virtual void        initializePage() override;
-    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason eReason ) override;
+    virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason eReason ) override;
     virtual bool        canAdvance() const override;
 
 private:

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UI_DBUI_MMGREETINGSPAGE_HXX
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMGREETINGSPAGE_HXX
 
-#include <svtools/wizardmachine.hxx>
+#include <vcl/wizardmachine.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <mailmergehelper.hxx>
 #include <vcl/weld.hxx>
@@ -82,7 +82,7 @@ protected:
     virtual void    UpdatePreview();
 };
 
-class SwMailMergeGreetingsPage : public svt::OWizardPage
+class SwMailMergeGreetingsPage : public vcl::OWizardPage
                                , public SwGreetingsHandler
 {
     std::unique_ptr<AddressPreview> m_xPreview;
@@ -103,7 +103,7 @@ class SwMailMergeGreetingsPage : public svt::OWizardPage
 
     virtual void        UpdatePreview() override;
     virtual void        ActivatePage() override;
-    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
+    virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
 public:
     SwMailMergeGreetingsPage(SwMailMergeWizard* pWizard, TabPageParent pParent);
     virtual ~SwMailMergeGreetingsPage() override;

@@ -149,7 +149,7 @@ namespace dbaui
         callModifiedHdl();
     }
 
-    bool OConnectionTabPageSetup::commitPage( ::svt::WizardTypes::CommitPageReason /*_eReason*/ )
+    bool OConnectionTabPageSetup::commitPage( ::vcl::WizardTypes::CommitPageReason /*_eReason*/ )
     {
         return commitURL();
     }

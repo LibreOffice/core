@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_UNO_WIZARD_WIZARDPAGECONTROLLER_HXX
 #define INCLUDED_SVTOOLS_SOURCE_UNO_WIZARD_WIZARDPAGECONTROLLER_HXX
 
-#include <svtools/wizardmachine.hxx>
+#include <vcl/wizardmachine.hxx>
 
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
 
@@ -34,7 +34,7 @@ namespace svt { namespace uno
 
     //= WizardPageController
 
-    class WizardPageController : public IWizardPageController
+    class WizardPageController : public vcl::IWizardPageController
     {
     public:
         WizardPageController(
@@ -46,7 +46,7 @@ namespace svt { namespace uno
 
         // IWizardPageController overridables
         virtual void        initializePage() override;
-        virtual bool        commitPage( WizardTypes::CommitPageReason _eReason ) override;
+        virtual bool        commitPage( vcl::WizardTypes::CommitPageReason _eReason ) override;
         virtual bool        canAdvance() const override;
 
         const css::uno::Reference< css::ui::dialogs::XWizardPage >&

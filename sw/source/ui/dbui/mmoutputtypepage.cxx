@@ -41,7 +41,7 @@
 using namespace ::com::sun::star;
 
 SwMailMergeOutputTypePage::SwMailMergeOutputTypePage(SwMailMergeWizard* pWizard, TabPageParent pParent)
-    : svt::OWizardPage(pParent, "modules/swriter/ui/mmoutputtypepage.ui", "MMOutputTypePage")
+    : vcl::OWizardPage(pParent, "modules/swriter/ui/mmoutputtypepage.ui", "MMOutputTypePage")
     , m_pWizard(pWizard)
     , m_xLetterRB(m_xBuilder->weld_radio_button("letter"))
     , m_xMailRB(m_xBuilder->weld_radio_button("email"))
@@ -68,7 +68,7 @@ SwMailMergeOutputTypePage::~SwMailMergeOutputTypePage()
 void SwMailMergeOutputTypePage::dispose()
 {
     m_pWizard.clear();
-    svt::OWizardPage::dispose();
+    vcl::OWizardPage::dispose();
 }
 
 IMPL_LINK_NOARG(SwMailMergeOutputTypePage, TypeHdl_Impl, weld::ToggleButton&, void)

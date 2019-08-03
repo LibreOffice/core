@@ -19,12 +19,12 @@
 #ifndef INCLUDED_SW_SOURCE_UI_DBUI_MMDOCSELECTPAGE_HXX
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMDOCSELECTPAGE_HXX
 
-#include <svtools/wizardmachine.hxx>
+#include <vcl/wizardmachine.hxx>
 #include <vcl/weld.hxx>
 
 class SwMailMergeWizard;
 
-class SwMailMergeDocSelectPage : public svt::OWizardPage
+class SwMailMergeDocSelectPage : public vcl::OWizardPage
 {
     OUString            m_sLoadFileName;
     OUString            m_sLoadTemplateName;
@@ -43,7 +43,7 @@ class SwMailMergeDocSelectPage : public svt::OWizardPage
     DECL_LINK(DocSelectHdl, weld::ToggleButton&, void);
     DECL_LINK(FileSelectHdl, weld::Button&, void);
 
-    virtual bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
+    virtual bool    commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
 
 public:
     SwMailMergeDocSelectPage(SwMailMergeWizard* pWizard, TabPageParent pParent);

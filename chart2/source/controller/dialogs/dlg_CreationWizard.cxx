@@ -90,7 +90,7 @@ CreationWizard::~CreationWizard() = default;
 
 VclPtr<TabPage> CreationWizard::createPage(WizardState nState)
 {
-    VclPtr<svt::OWizardPage> pRet;
+    VclPtr<vcl::OWizardPage> pRet;
     switch( nState )
     {
     case STATE_CHARTTYPE:
@@ -136,13 +136,13 @@ bool CreationWizard::leaveState( WizardState /*_nState*/ )
     return m_bCanTravel;
 }
 
-svt::WizardTypes::WizardState CreationWizard::determineNextState( WizardState nCurrentState ) const
+vcl::WizardTypes::WizardState CreationWizard::determineNextState( WizardState nCurrentState ) const
 {
     if( !m_bCanTravel )
         return WZS_INVALID_STATE;
     if( nCurrentState == STATE_LAST )
         return WZS_INVALID_STATE;
-    svt::WizardTypes::WizardState nNextState = nCurrentState + 1;
+    vcl::WizardTypes::WizardState nNextState = nCurrentState + 1;
     while( !isStateEnabled( nNextState ) && nNextState <= STATE_LAST )
         ++nNextState;
     return (nNextState==STATE_LAST+1) ? WZS_INVALID_STATE : nNextState;

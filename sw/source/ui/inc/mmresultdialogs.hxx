@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UI_DBUI_MMOUTPUTPAGE_HXX
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMOUTPUTPAGE_HXX
 
+#include <vcl/wizardmachine.hxx>
 #include <vcl/button.hxx>
 #include <vcl/prgsbar.hxx>
 #include <vcl/weld.hxx>
