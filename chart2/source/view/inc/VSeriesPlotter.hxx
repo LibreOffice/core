@@ -438,6 +438,7 @@ protected:
     bool m_bPointsWereSkipped;
 
 private:
+    css::uno::Reference< css::chart2::XChartDocument > m_rxModel;
     typedef std::map< sal_Int32 , ExplicitScaleData > tSecondaryValueScales;
     tSecondaryValueScales   m_aSecondaryValueScales;
 

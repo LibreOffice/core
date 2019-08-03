@@ -117,11 +117,11 @@ void CandleStickChart::createShapes()
             m_xChartTypeModelProps->getPropertyValue( "BlackDay" ) >>= xBlackDayProps;
 
             tPropertyNameValueMap aWhiteBox_Map;
-            PropertyMapper::getValueMap( aWhiteBox_Map, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xWhiteDayProps );
+            PropertyMapper::getValueMapWithoutModel( aWhiteBox_Map, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xWhiteDayProps );
             PropertyMapper::getMultiPropertyListsFromValueMap( aWhiteBox_Names, aWhiteBox_Values, aWhiteBox_Map );
 
             tPropertyNameValueMap aBlackBox_Map;
-            PropertyMapper::getValueMap( aBlackBox_Map, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xBlackDayProps );
+            PropertyMapper::getValueMapWithoutModel( aBlackBox_Map, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xBlackDayProps );
             PropertyMapper::getMultiPropertyListsFromValueMap( aBlackBox_Names, aBlackBox_Values, aBlackBox_Map );
         }
     }

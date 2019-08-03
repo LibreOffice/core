@@ -385,7 +385,7 @@ uno::Reference<drawing::XShape>
     uno::Reference<drawing::XShape> xShape = impl_createCube( xTarget, rPosition, rSize, nRotateZAngleHundredthDegree, bRounded );
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
     if( xSourceProp.is())
-        PropertyMapper::setMappedProperties( xProp, xSourceProp, rPropertyNameMap );
+        PropertyMapper::setMappedPropertiesWithoutModel( xProp, xSourceProp, rPropertyNameMap );
     return xShape;
 }
 
@@ -1044,7 +1044,7 @@ uno::Reference< drawing::XShape >
             uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
             if (xSourceProp.is() && xPropertySet.is())
             {
-                PropertyMapper::setMappedProperties(xPropertySet, xSourceProp, rPropertyNameMap);
+                PropertyMapper::setMappedPropertiesWithoutModel(xPropertySet, xSourceProp, rPropertyNameMap);
             }
         }
         catch( const uno::Exception& )
@@ -2328,7 +2328,7 @@ uno::Reference< drawing::XShape >
                         bNotEmpty = true;
                         xSelectionCursor->gotoEnd( true ); // select current paragraph
                         uno::Reference< beans::XPropertySet > xStringProperties( xFormattedString[nN], uno::UNO_QUERY );
-                        PropertyMapper::setMappedProperties( xSelectionProp, xStringProperties,
+                        PropertyMapper::setMappedPropertiesWithoutModel( xSelectionProp, xStringProperties,
                             PropertyMapper::getPropertyNameMapForTextShapeProperties() );
                     }
                 }
@@ -2394,7 +2394,7 @@ uno::Reference< drawing::XShape >
             auto const & add = PropertyMapper::getPropertyNameMapForFillAndLineProperties();
             aNameMap.insert(add.begin(), add.end());
 
-            PropertyMapper::getValueMap( aValueMap, aNameMap, xTextProperties );
+            PropertyMapper::getValueMapWithoutModel( aValueMap, aNameMap, xTextProperties );
         }
 
         //fill some more shape properties into the ValueMap
@@ -2444,7 +2444,7 @@ uno::Reference< drawing::XShape >
                 uno::Reference< beans::XPropertySet > xTargetProps( xShape, uno::UNO_QUERY );
                 uno::Reference< beans::XPropertySet > xSourceProps( xFormattedString[0], uno::UNO_QUERY );
 
-                PropertyMapper::setMappedProperties( xTargetProps, xSourceProps
+                PropertyMapper::setMappedPropertiesWithoutModel( xTargetProps, xSourceProps
                         , PropertyMapper::getPropertyNameMapForCharacterProperties() );
 
                 // adapt font size according to page size
@@ -2472,7 +2472,7 @@ uno::Reference< drawing::XShape >
             {
                 uno::Reference< beans::XPropertySet > xTargetProps( xShape, uno::UNO_QUERY );
                 uno::Reference< beans::XPropertySet > xSourceProps( xFormattedString[0], uno::UNO_QUERY );
-                PropertyMapper::setMappedProperties( xTargetProps, xSourceProps, PropertyMapper::getPropertyNameMapForCharacterProperties() );
+                PropertyMapper::setMappedPropertiesWithoutModel( xTargetProps, xSourceProps, PropertyMapper::getPropertyNameMapForCharacterProperties() );
 
                 // adapt font size according to page size
                 if( bHasRefPageSize )

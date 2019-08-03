@@ -1592,7 +1592,7 @@ void VSeriesPlotter::setMappedProperties(
         , tPropertyNameValueMap const * pOverwriteMap )
 {
     uno::Reference< beans::XPropertySet > xTargetProp( xTargetShape, uno::UNO_QUERY );
-    PropertyMapper::setMappedProperties(xTargetProp,xSource,rMap,pOverwriteMap);
+    PropertyMapper::setMappedPropertiesWithoutModel(xTargetProp,xSource,rMap,pOverwriteMap);
 }
 
 void VSeriesPlotter::setTimeResolutionOnXAxis( long TimeResolution, const Date& rNullDate )

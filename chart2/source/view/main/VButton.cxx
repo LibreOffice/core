@@ -18,6 +18,7 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <memory>
 
@@ -94,6 +95,7 @@ void VButton::createShapes(const uno::Reference<beans::XPropertySet>& xTextProp)
 {
     ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
 
+    uno::Reference< chart2::XChartDocument > rxModel( xTextProp, uno::UNO_QUERY );
     std::unique_ptr<tNameSequence> pPropNames(new tNameSequence);
     std::unique_ptr<tAnySequence> pPropValues(new tAnySequence);
 

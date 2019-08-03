@@ -26,6 +26,7 @@
 #include <RegressionCurveHelper.hxx>
 #include <unonames.hxx>
 
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
@@ -970,6 +971,7 @@ bool VDataSeries::getTextLabelMultiPropertyLists( sal_Int32 index
     , tAnySequence*& pPropValues ) const
 {
     pPropNames = nullptr; pPropValues = nullptr;
+    uno::Reference< chart2::XChartDocument > rxModel( getModel(), uno::UNO_QUERY );
     uno::Reference< beans::XPropertySet > xTextProp;
     bool bDoDynamicFontResize = false;
     if( isAttributedDataPoint( index ) )
