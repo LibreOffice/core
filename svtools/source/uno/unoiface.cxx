@@ -26,7 +26,7 @@
 #include <svtools/svmedit.hxx>
 #include <unoiface.hxx>
 #include <svtools/filectrl.hxx>
-#include <roadmap.hxx>
+#include <vcl/roadmap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
@@ -118,7 +118,7 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const cs
     }
     else if (aServiceName.equalsIgnoreAsciiCase("roadmap") )
     {
-        pWindow = VclPtr< ::svt::ORoadmap>::Create( pParent, WB_TABSTOP );
+        pWindow = VclPtr< ::vcl::ORoadmap>::Create( pParent, WB_TABSTOP );
         *ppNewComp = new SVTXRoadmap;
     }
     else if ( aServiceName.equalsIgnoreAsciiCase( "ProgressBar" ) )
@@ -1416,7 +1416,7 @@ void SVTXRoadmap::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         case VclEventId::RoadmapItemSelected:
         {
             SolarMutexGuard aGuard;
-            VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
+            VclPtr<::vcl::ORoadmap> pField = GetAs< vcl::ORoadmap >();
             if ( pField )
             {
                 sal_Int16 CurItemID = pField->GetCurrentRoadmapItemID();
@@ -1438,7 +1438,7 @@ void SVTXRoadmap::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 void SVTXRoadmap::propertyChange( const css::beans::PropertyChangeEvent& evt )
 {
     SolarMutexGuard aGuard;
-    VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
+    VclPtr<::vcl::ORoadmap> pField = GetAs< vcl::ORoadmap >();
     if ( !pField )
         return;
 
@@ -1453,20 +1453,20 @@ void SVTXRoadmap::propertyChange( const css::beans::PropertyChangeEvent& evt )
     {
         bool bEnable = false;
         evt.NewValue >>= bEnable;
-        pField->EnableRoadmapItem( static_cast<RoadmapTypes::ItemId>(nID) , bEnable );
+        pField->EnableRoadmapItem( static_cast<vcl::RoadmapTypes::ItemId>(nID) , bEnable );
     }
     else if ( sPropertyName == "Label" )
     {
         OUString sLabel;
         evt.NewValue >>= sLabel;
-        pField->ChangeRoadmapItemLabel( static_cast<RoadmapTypes::ItemId>(nID) , sLabel );
+        pField->ChangeRoadmapItemLabel( static_cast<vcl::RoadmapTypes::ItemId>(nID) , sLabel );
     }
     else if  ( sPropertyName == "ID" )
     {
         sal_Int32 nNewID = 0;
         evt.NewValue >>= nNewID;
         evt.OldValue >>= nID;
-        pField->ChangeRoadmapItemID( static_cast<RoadmapTypes::ItemId>(nID), static_cast<RoadmapTypes::ItemId>(nNewID) );
+        pField->ChangeRoadmapItemID( static_cast<vcl::RoadmapTypes::ItemId>(nID), static_cast<vcl::RoadmapTypes::ItemId>(nNewID) );
     }
 //    else
         // TODO handle Interactive appropriately
@@ -1509,20 +1509,20 @@ RMItemData SVTXRoadmap::GetRMItemData( const css::container::ContainerEvent& _rE
 void SVTXRoadmap::elementInserted( const css::container::ContainerEvent& _rEvent )
 {
     SolarMutexGuard aGuard;
-    VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
+    VclPtr<::vcl::ORoadmap> pField = GetAs< vcl::ORoadmap >();
     if ( pField )
     {
         RMItemData CurItemData = GetRMItemData(  _rEvent );
         sal_Int32 InsertIndex = 0;
         _rEvent.Accessor >>= InsertIndex;
-        pField->InsertRoadmapItem( InsertIndex, CurItemData.Label, static_cast<RoadmapTypes::ItemId>(CurItemData.n_ID), CurItemData.b_Enabled );
+        pField->InsertRoadmapItem( InsertIndex, CurItemData.Label, static_cast<vcl::RoadmapTypes::ItemId>(CurItemData.n_ID), CurItemData.b_Enabled );
     }
 }
 
 void SVTXRoadmap::elementRemoved( const css::container::ContainerEvent& _rEvent )
 {
     SolarMutexGuard aGuard;
-    VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
+    VclPtr<::vcl::ORoadmap> pField = GetAs< vcl::ORoadmap >();
     if ( pField )
     {
         sal_Int32 DelIndex = 0;
@@ -1534,13 +1534,13 @@ void SVTXRoadmap::elementRemoved( const css::container::ContainerEvent& _rEvent 
 void SVTXRoadmap::elementReplaced( const css::container::ContainerEvent& _rEvent )
 {
     SolarMutexGuard aGuard;
-    VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
+    VclPtr<::vcl::ORoadmap> pField = GetAs< vcl::ORoadmap >();
     if ( pField )
     {
         RMItemData CurItemData = GetRMItemData(  _rEvent );
         sal_Int32 ReplaceIndex = 0;
         _rEvent.Accessor >>= ReplaceIndex;
-        pField->ReplaceRoadmapItem( ReplaceIndex, CurItemData.Label, static_cast<RoadmapTypes::ItemId>(CurItemData.n_ID), CurItemData.b_Enabled );
+        pField->ReplaceRoadmapItem( ReplaceIndex, CurItemData.Label, static_cast<vcl::RoadmapTypes::ItemId>(CurItemData.n_ID), CurItemData.b_Enabled );
     }
 }
 
@@ -1549,7 +1549,7 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const css::uno::Any
 {
     SolarMutexGuard aGuard;
 
-    VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
+    VclPtr<::vcl::ORoadmap> pField = GetAs< vcl::ORoadmap >();
     if ( pField )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -1575,7 +1575,7 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const css::uno::Any
             {
                 sal_Int32 nId = 0;
                 Value >>= nId;
-                pField->SelectRoadmapItemByID( static_cast<RoadmapTypes::ItemId>(nId) );
+                pField->SelectRoadmapItemByID( static_cast<vcl::RoadmapTypes::ItemId>(nId) );
             }
             break;
 
@@ -1605,7 +1605,7 @@ css::uno::Any SVTXRoadmap::getProperty( const OUString& PropertyName )
 
     css::uno::Any aReturn;
 
-    VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
+    VclPtr<::vcl::ORoadmap> pField = GetAs< vcl::ORoadmap >();
     if ( pField )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -1631,7 +1631,7 @@ css::uno::Any SVTXRoadmap::getProperty( const OUString& PropertyName )
 void SVTXRoadmap::ImplSetNewImage()
 {
     OSL_PRECOND( GetWindow(), "SVTXRoadmap::ImplSetNewImage: window is required to be not-NULL!" );
-    VclPtr< ::svt::ORoadmap > pButton = GetAs< ::svt::ORoadmap >();
+    VclPtr< ::vcl::ORoadmap > pButton = GetAs< ::vcl::ORoadmap >();
     pButton->SetRoadmapBitmap( GetImage().GetBitmapEx() );
 }
 

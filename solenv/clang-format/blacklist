@@ -7905,6 +7905,7 @@ include/vcl/prntypes.hxx
 include/vcl/ptrstyle.hxx
 include/vcl/quickselectionengine.hxx
 include/vcl/region.hxx
+include/vcl/roadmap.hxx
 include/vcl/salctype.hxx
 include/vcl/salgtype.hxx
 include/vcl/salnativewidgets.hxx
@@ -13676,7 +13677,6 @@ svl/source/uno/pathservice.cxx
 svl/unx/source/svdde/ddedummy.cxx
 svtools/inc/pch/precompiled_svt.cxx
 svtools/inc/pch/precompiled_svt.hxx
-svtools/inc/roadmap.hxx
 svtools/inc/strings.hxx
 svtools/inc/table/defaultinputhandler.hxx
 svtools/inc/table/gridtablerenderer.hxx
@@ -13736,7 +13736,6 @@ svtools/source/control/fileurlbox.cxx
 svtools/source/control/indexentryres.cxx
 svtools/source/control/inettbc.cxx
 svtools/source/control/managedmenubutton.cxx
-svtools/source/control/roadmap.cxx
 svtools/source/control/ruler.cxx
 svtools/source/control/scriptedtext.cxx
 svtools/source/control/scrwin.cxx
@@ -17793,6 +17792,7 @@ vcl/source/control/menubtn.cxx
 vcl/source/control/notebookbar.cxx
 vcl/source/control/prgsbar.cxx
 vcl/source/control/quickselectionengine.cxx
+vcl/source/control/roadmap.cxx
 vcl/source/control/scrbar.cxx
 vcl/source/control/slider.cxx
 vcl/source/control/spinbtn.cxx
