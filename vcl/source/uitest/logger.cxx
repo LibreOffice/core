@@ -379,6 +379,27 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
                 aLogLine = "Insert New Page at Position " + GetValueInMapWithIndex(rDescription.aParameters,0);
             }
         }
+        else if(rDescription.aAction=="Delete_Slide_or_Page"){
+            if(UITestLogger::getInstance().getAppName()=="impress"){
+            aLogLine = "Delete Slide number "+ GetValueInMapWithIndex(rDescription.aParameters,0);
+            }
+            else if(UITestLogger::getInstance().getAppName()=="draw"){
+            aLogLine = "Delete Page number "+ GetValueInMapWithIndex(rDescription.aParameters,0);
+            }
+        }
+        else if(rDescription.aAction=="Duplicate"){
+            aLogLine = "Duplicate The Selected Slide ";
+        }
+        else if(rDescription.aAction=="RENAME"){
+            if(UITestLogger::getInstance().getAppName()=="impress"){
+                aLogLine = "Rename The Selected Slide from \""+ GetValueInMapWithIndex(rDescription.aParameters,1)+\
+                 "\" to \"" + GetValueInMapWithIndex(rDescription.aParameters,0)+"\"";
+            }
+            else if(UITestLogger::getInstance().getAppName()=="draw"){
+                aLogLine = "Rename The Selected Page from \""+ GetValueInMapWithIndex(rDescription.aParameters,1)+\
+                 "\" to \"" + GetValueInMapWithIndex(rDescription.aParameters,0)+"\"";
+            }
+        }
     }
     else if(rDescription.aParent=="element_selector"){
         aLogLine ="Select element no " + rDescription.aID +
