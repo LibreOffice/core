@@ -1030,7 +1030,6 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
 
                     auto aPropValues = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(pEntry->pProperties->GetPropertyValues());
 
-                    // remove Left/RightMargin values from TOX heading styles
                     if( bParaStyle )
                     {
                         // delay adding FollowStyle property: all styles need to be created first
@@ -1056,6 +1055,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                             sConvertedStyleName == "User Index Heading" ||
                             sConvertedStyleName == "Index Heading" )
                         {
+                            // remove Left/RightMargin values from TOX heading styles
                             //left margin is set to NULL by default
                             uno::Reference< beans::XPropertyState >xState1( xStyle, uno::UNO_QUERY_THROW );
                             xState1->setPropertyToDefault(getPropertyName( PROP_PARA_LEFT_MARGIN ));
