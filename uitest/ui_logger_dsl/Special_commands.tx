@@ -128,18 +128,22 @@ select_options:
   This part for all the impress log statments:
    
     1)  Type 
-    2)  Insert New Page
+    2)  Insert New Slide
+    3)  Delete Slide
 
   then we can add whatever we need in the future
 */
 impress_command:
-    impress_Type_command | impress_Insert_Slide 
+    impress_Type_command | impress_Insert_Slide | impress_Delete_Page
 ;
 impress_Type_command:
     'Type on impress ' what_to_type=Type_options
 ;
 impress_Insert_Slide:
     'Insert New Slide at Position ' position_num=INT
+;
+impress_Delete_Page:
+    'Delete Slide number ' position_num=INT
 ;
 //=================================================================//
 /*
@@ -166,15 +170,19 @@ math_Type_command:
    
     1) Type
     2) Insert New Page
+    3) Delete Page
 
   then we can add whatever we need in the future
 */
 draw_command:
-    draw_Type_command | draw_Insert_Page
+    draw_Type_command | draw_Insert_Page | draw_Delete_Page
 ;
 draw_Type_command:
     'Type on draw ' what_to_type=Type_options
 ;
 draw_Insert_Page:
     'Insert New Page at Position ' position_num=INT
+;
+draw_Delete_Page:
+    'Delete Page number ' position_num=INT
 ;
