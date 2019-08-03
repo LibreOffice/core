@@ -103,7 +103,7 @@ ODbTypeWizDialog::~ODbTypeWizDialog()
 void ODbTypeWizDialog::dispose()
 {
     m_pOutSet.reset();
-    svt::OWizardMachine::dispose();
+    vcl::OWizardMachine::dispose();
 }
 
 IMPL_LINK(ODbTypeWizDialog, OnTypeSelected, OGeneralPage&, _rTabPage, void)
@@ -114,7 +114,7 @@ IMPL_LINK(ODbTypeWizDialog, OnTypeSelected, OGeneralPage&, _rTabPage, void)
     enableButtons(WizardButtonFlags::FINISH,!bURLRequired);
 }
 
-WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCurrentState ) const
+vcl::WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCurrentState ) const
 {
     WizardTypes::WizardState nNextState = WZS_INVALID_STATE;
     switch(_nCurrentState)
@@ -331,7 +331,7 @@ void ODbTypeWizDialog::saveDatasource()
     DataSourceInfoConverter::convert( getORB(), m_pCollection,sOldURL,m_eType,m_pImpl->getCurrentDataSource());
 }
 
-IWizardPageController* ODbTypeWizDialog::getPageController( TabPage* _pCurrentPage ) const
+vcl::IWizardPageController* ODbTypeWizDialog::getPageController( TabPage* _pCurrentPage ) const
 {
     OGenericAdministrationPage* pPage = static_cast<OGenericAdministrationPage*>(_pCurrentPage);
     return pPage;

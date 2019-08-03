@@ -141,7 +141,7 @@ namespace dbp
         _rList.Clear();
         const OUString* pItems = _rItems.getConstArray();
         const OUString* pEnd = pItems + _rItems.getLength();
-        ::svt::WizardTypes::WizardState nPos;
+        ::vcl::WizardTypes::WizardState nPos;
         sal_Int32 nIndex = 0;
         for (;pItems < pEnd; ++pItems, ++nIndex)
         {
@@ -156,7 +156,7 @@ namespace dbp
         _rList.Clear();
         const OUString* pItems = _rItems.getConstArray();
         const OUString* pEnd = pItems + _rItems.getLength();
-        ::svt::WizardTypes::WizardState nPos;
+        ::vcl::WizardTypes::WizardState nPos;
         for (;pItems < pEnd; ++pItems)
         {
             nPos = _rList.InsertEntry(*pItems);

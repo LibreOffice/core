@@ -20,7 +20,7 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_ABPILOT_ABSPAGE_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_ABPILOT_ABSPAGE_HXX
 
-#include <svtools/wizardmachine.hxx>
+#include <vcl/wizardmachine.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <strings.hrc>
 #include <componentmodule.hxx>
@@ -34,7 +34,7 @@ namespace abp
     class OAddressBookSourcePilot;
     struct AddressSettings;
 
-    typedef ::svt::OWizardPage AddressBookSourcePage_Base;
+    typedef ::vcl::OWizardPage AddressBookSourcePage_Base;
     /// the base class for all tab pages in the address book source wizard
     class AddressBookSourcePage : public AddressBookSourcePage_Base
     {

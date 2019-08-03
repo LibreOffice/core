@@ -22,7 +22,7 @@
 
 #include <memory>
 #include <svtools/svtdllapi.h>
-#include <svtools/wizardmachine.hxx>
+#include <vcl/wizardmachine.hxx>
 
 
 namespace svt
@@ -34,7 +34,7 @@ namespace svt
     {
     public:
         typedef sal_Int16                                   PathId;
-        typedef ::std::vector< WizardTypes::WizardState >   WizardPath;
+        typedef ::std::vector< vcl::WizardTypes::WizardState >   WizardPath;
         typedef VclPtr<TabPage> (* RoadmapPageFactory)( RoadmapWizard& );
     };
 
@@ -60,7 +60,7 @@ namespace svt
         <code>n2</code>, which share at least the first <code>k</code> states (where <code>k</code>
         is at least 1), and an arbitrary number of other states.
     */
-    class SVT_DLLPUBLIC RoadmapWizard : public OWizardMachine, public RoadmapWizardTypes
+    class SVT_DLLPUBLIC RoadmapWizard : public vcl::OWizardMachine, public RoadmapWizardTypes
     {
     private:
         std::unique_ptr<RoadmapWizardImpl>  m_pImpl;

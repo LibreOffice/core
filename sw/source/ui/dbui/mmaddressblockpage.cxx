@@ -58,7 +58,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 
 SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage( SwMailMergeWizard* _pParent) :
-    svt::OWizardPage(_pParent, "MMAddressBlockPage",
+    vcl::OWizardPage(_pParent, "MMAddressBlockPage",
         "modules/swriter/ui/mmaddressblockpage.ui")
     , m_pWizard(_pParent)
 {
@@ -122,7 +122,7 @@ void SwMailMergeAddressBlockPage::dispose()
     m_pPrevSetIB.clear();
     m_pNextSetIB.clear();
     m_pWizard.clear();
-    svt::OWizardPage::dispose();
+    vcl::OWizardPage::dispose();
 }
 
 bool SwMailMergeAddressBlockPage::canAdvance() const
@@ -158,9 +158,9 @@ void SwMailMergeAddressBlockPage::ActivatePage()
     }
 }
 
-bool SwMailMergeAddressBlockPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+bool SwMailMergeAddressBlockPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
 {
-    return ::svt::WizardTypes::eTravelForward != _eReason || m_pWizard->GetConfigItem().GetResultSet().is();
+    return ::vcl::WizardTypes::eTravelForward != _eReason || m_pWizard->GetConfigItem().GetResultSet().is();
 }
 
 IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl, Button*, void)

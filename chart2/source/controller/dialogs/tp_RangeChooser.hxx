@@ -22,7 +22,7 @@
 
 #include <RangeSelectionListener.hxx>
 
-#include <svtools/wizardmachine.hxx>
+#include <vcl/wizardmachine.hxx>
 
 namespace chart { class TabPageNotifiable; }
 namespace com { namespace sun { namespace star { namespace chart2 { class XChartTypeTemplate; } } } }
@@ -33,7 +33,7 @@ namespace chart
 class ChartTypeTemplateProvider;
 class DialogModel;
 
-class RangeChooserTabPage final : public svt::OWizardPage, public RangeSelectionListenerParent
+class RangeChooserTabPage final : public vcl::OWizardPage, public RangeSelectionListenerParent
 {
 public:
 
@@ -54,7 +54,7 @@ public:
 private:
 
     //OWizardPage
-    virtual bool commitPage( ::svt::WizardTypes::CommitPageReason eReason ) override;
+    virtual bool commitPage( ::vcl::WizardTypes::CommitPageReason eReason ) override;
 
     //TabPage
     virtual void DeactivatePage() override;

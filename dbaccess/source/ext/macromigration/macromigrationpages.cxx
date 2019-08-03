@@ -147,12 +147,12 @@ namespace dbmm
         return !m_pSaveAsLocation->GetText().isEmpty();
     }
 
-    bool SaveDBDocPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool SaveDBDocPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {
         if ( !MacroMigrationPage::commitPage( _eReason ) )
             return false;
 
-        if ( ::svt::WizardTypes::eTravelBackward == _eReason )
+        if ( ::vcl::WizardTypes::eTravelBackward == _eReason )
             return true;
 
         if ( !m_pLocationController->prepareCommit() )

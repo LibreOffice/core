@@ -124,7 +124,7 @@ private:
     virtual VclPtr<TabPage> createPage(WizardState _nState) override;
     virtual bool        leaveState(WizardState _nState) override;
     virtual void        enterState(WizardState _nState) override;
-    virtual ::svt::IWizardPageController* getPageController( TabPage* _pCurrentPage ) const override;
+    virtual ::vcl::IWizardPageController* getPageController( TabPage* _pCurrentPage ) const override;
     virtual bool        onFinish() override;
 
     void resetPages(const css::uno::Reference< css::beans::XPropertySet >& _rxDatasource);

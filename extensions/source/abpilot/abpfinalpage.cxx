@@ -143,12 +143,12 @@ namespace abp
     }
 
 
-    bool FinalPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool FinalPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {
         if (!AddressBookSourcePage::commitPage(_eReason))
             return false;
 
-        if  (   ( ::svt::WizardTypes::eTravelBackward != _eReason )
+        if  (   ( ::vcl::WizardTypes::eTravelBackward != _eReason )
             &&  ( !m_pLocationController->prepareCommit() )
             )
             return false;

@@ -87,7 +87,7 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void        initializePage() override;
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
+        virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
         virtual bool        canAdvance() const override;
 
         DECL_LINK(OnMoveOneEntry, Button*, void);

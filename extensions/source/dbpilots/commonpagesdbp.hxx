@@ -50,7 +50,7 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void        initializePage() override;
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
+        virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
 
         DECL_LINK( OnListboxSelection, ListBox&, void );
         DECL_LINK( OnListboxDoubleClicked, ListBox&, void );
@@ -127,7 +127,7 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void initializePage() override;
-        virtual bool commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
+        virtual bool commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
 
         // own overridables
         virtual OUString& getDBFieldSetting() = 0;

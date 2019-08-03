@@ -34,7 +34,7 @@ namespace svt
 {
     namespace
     {
-        typedef ::std::set< WizardTypes::WizardState > StateSet;
+        typedef ::std::set< vcl::WizardTypes::WizardState > StateSet;
 
         typedef ::std::map<
                     RoadmapWizardTypes::PathId,
@@ -42,7 +42,7 @@ namespace svt
                 > Paths;
 
         typedef ::std::map<
-                    WizardTypes::WizardState,
+                    vcl::WizardTypes::WizardState,
                     ::std::pair<
                         OUString,
                         RoadmapWizardTypes::RoadmapPageFactory
@@ -67,15 +67,15 @@ namespace svt
         }
 
         /// returns the index of the current state in given path, or -1
-        static sal_Int32 getStateIndexInPath( WizardTypes::WizardState _nState, const WizardPath& _rPath );
+        static sal_Int32 getStateIndexInPath( vcl::WizardTypes::WizardState _nState, const WizardPath& _rPath );
         /// returns the index of the current state in the path with the given id, or -1
-        sal_Int32 getStateIndexInPath( WizardTypes::WizardState _nState, PathId _nPathId );
+        sal_Int32 getStateIndexInPath( vcl::WizardTypes::WizardState _nState, PathId _nPathId );
         /// returns the index of the first state in which the two given paths differ
         static sal_Int32 getFirstDifferentIndex( const WizardPath& _rLHS, const WizardPath& _rRHS );
     };
 
 
-    sal_Int32 RoadmapWizardImpl::getStateIndexInPath( WizardTypes::WizardState _nState, const WizardPath& _rPath )
+    sal_Int32 RoadmapWizardImpl::getStateIndexInPath( vcl::WizardTypes::WizardState _nState, const WizardPath& _rPath )
     {
         sal_Int32 nStateIndexInPath = 0;
         bool bFound = false;
@@ -94,7 +94,7 @@ namespace svt
     }
 
 
-    sal_Int32 RoadmapWizardImpl::getStateIndexInPath( WizardTypes::WizardState _nState, PathId _nPathId )
+    sal_Int32 RoadmapWizardImpl::getStateIndexInPath( vcl::WizardTypes::WizardState _nState, PathId _nPathId )
     {
         sal_Int32 nStateIndexInPath = -1;
         Paths::const_iterator aPathPos = aPaths.find( _nPathId );
@@ -271,7 +271,7 @@ namespace svt
         TabPage* pCurrentPage = GetPage( getCurrentState() );
         if ( pCurrentPage )
         {
-            const IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
+            const vcl::IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
             OSL_ENSURE( pController != nullptr, "RoadmapWizard::implUpdateRoadmap: no controller for the current page!" );
             bCurrentPageCanAdvance = !pController || pController->canAdvance();
         }
@@ -337,7 +337,7 @@ namespace svt
     }
 
 
-    WizardTypes::WizardState RoadmapWizard::determineNextState( WizardState _nCurrentState ) const
+    vcl::WizardTypes::WizardState RoadmapWizard::determineNextState( WizardState _nCurrentState ) const
     {
 
         sal_Int32 nCurrentStatePathIndex = -1;
@@ -432,7 +432,7 @@ namespace svt
         if ( isTravelingSuspended() )
             return;
 
-        WizardTravelSuspension aTravelGuard( *this );
+        vcl::WizardTravelSuspension aTravelGuard( *this );
 
         sal_Int32 nCurrentIndex = m_pImpl->getStateIndexInPath( getCurrentState(), m_pImpl->nActivePath );
         sal_Int32 nNewIndex     = m_pImpl->getStateIndexInPath( nCurItemId, m_pImpl->nActivePath );

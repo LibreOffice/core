@@ -26,7 +26,7 @@
 #include "ChartTypeTemplateProvider.hxx"
 #include <TimerTriggeredControllerLock.hxx>
 
-#include <svtools/wizardmachine.hxx>
+#include <vcl/wizardmachine.hxx>
 
 namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
 namespace weld { class CustomWeld; }
@@ -42,7 +42,7 @@ class SplineResourceGroup;
 class GeometryResourceGroup;
 class SortByXValuesResourceGroup;
 
-class ChartTypeTabPage final : public ResourceChangeListener, public svt::OWizardPage, public ChartTypeTemplateProvider
+class ChartTypeTabPage final : public ResourceChangeListener, public vcl::OWizardPage, public ChartTypeTemplateProvider
 {
 public:
     ChartTypeTabPage( TabPageParent pParent
@@ -52,7 +52,7 @@ public:
     virtual void        dispose() override;
 
     virtual void        initializePage() override;
-    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason eReason ) override;
+    virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason eReason ) override;
 
     virtual css::uno::Reference< css::chart2::XChartTypeTemplate > getCurrentTemplate() const override;
 

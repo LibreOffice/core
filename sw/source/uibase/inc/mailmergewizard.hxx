@@ -48,7 +48,7 @@ class SwMailMergeWizard : public ::svt::RoadmapWizard
 
     sal_uInt16              m_nRestartPage;
 
-    using svt::OWizardMachine::skipUntil;
+    using vcl::OWizardMachine::skipUntil;
 
 protected:
     virtual VclPtr<TabPage>         createPage( WizardState _nState ) override;

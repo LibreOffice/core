@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_DATASOURCE_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_DATASOURCE_HXX
 
-#include <svtools/wizardmachine.hxx>
+#include <vcl/wizardmachine.hxx>
 
 #include <RangeSelectionListener.hxx>
 
@@ -47,7 +47,7 @@ public:
 };
 
 class DataSourceTabPage final :
-        public ::svt::OWizardPage,
+        public ::vcl::OWizardPage,
         public RangeSelectionListenerParent
 {
 public:
@@ -65,7 +65,7 @@ public:
 private:
     // OWizardPage
     virtual void dispose() override;
-    virtual bool commitPage( ::svt::WizardTypes::CommitPageReason eReason ) override;
+    virtual bool commitPage( ::vcl::WizardTypes::CommitPageReason eReason ) override;
 
     //TabPage
     virtual void DeactivatePage() override;

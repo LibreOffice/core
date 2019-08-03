@@ -185,7 +185,7 @@ namespace dbaui
         if ( m_pItemSetHelper )
             Reset(m_pItemSetHelper->getOutputSet());
     }
-    bool OGenericAdministrationPage::commitPage( ::svt::WizardTypes::CommitPageReason )
+    bool OGenericAdministrationPage::commitPage( ::vcl::WizardTypes::CommitPageReason )
     {
         return true;
     }

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UI_DBUI_MMLAYOUTPAGE_HXX
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMLAYOUTPAGE_HXX
 
-#include <svtools/wizardmachine.hxx>
+#include <vcl/wizardmachine.hxx>
 #include <mailmergehelper.hxx>
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
@@ -35,7 +35,7 @@ class SwView;
 
 namespace com{ namespace sun{ namespace star{ namespace beans{ class XPropertySet;}}}}
 
-class SwMailMergeLayoutPage : public svt::OWizardPage
+class SwMailMergeLayoutPage : public vcl::OWizardPage
 {
     SwWrtShell*         m_pExampleWrtShell;
 
@@ -75,7 +75,7 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
     static void             InsertGreeting(SwWrtShell& rShell, SwMailMergeConfigItem const & rConfigItem, bool bExample);
 
     virtual void        ActivatePage() override;
-    virtual bool        commitPage(::svt::WizardTypes::CommitPageReason _eReason) override;
+    virtual bool        commitPage(::vcl::WizardTypes::CommitPageReason _eReason) override;
 public:
     SwMailMergeLayoutPage(SwMailMergeWizard* pWizard, TabPageParent pParent);
     virtual ~SwMailMergeLayoutPage() override;

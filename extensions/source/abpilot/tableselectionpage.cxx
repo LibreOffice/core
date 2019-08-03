@@ -90,7 +90,7 @@ namespace abp
     }
 
 
-    bool TableSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool TableSelectionPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {
         if (!AddressBookSourcePage::commitPage(_eReason))
             return false;

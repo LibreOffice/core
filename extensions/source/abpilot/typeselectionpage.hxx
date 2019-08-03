@@ -67,7 +67,7 @@ namespace abp
     private:
         // OWizardPage overridables
         virtual void        initializePage() override;
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
+        virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
 
         // TabDialog overridables
         virtual void        ActivatePage() override;

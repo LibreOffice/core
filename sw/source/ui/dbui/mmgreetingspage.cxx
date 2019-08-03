@@ -197,7 +197,7 @@ void SwGreetingsHandler::Contains(bool bContainsGreeting)
 }
 
 SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* pWizard, TabPageParent pParent)
-    : svt::OWizardPage(pParent, "modules/swriter/ui/mmsalutationpage.ui", "MMSalutationPage")
+    : vcl::OWizardPage(pParent, "modules/swriter/ui/mmsalutationpage.ui", "MMSalutationPage")
     , SwGreetingsHandler(pWizard->GetConfigItem(), *m_xBuilder)
     , m_xPreview(new AddressPreview(m_xBuilder->weld_scrolled_window("previewwin")))
     , m_xPreviewFI(m_xBuilder->weld_label("previewft"))
@@ -254,7 +254,7 @@ void SwMailMergeGreetingsPage::dispose()
 {
     m_xPreviewWIN.reset();
     m_xPreview.reset();
-    svt::OWizardPage::dispose();
+    vcl::OWizardPage::dispose();
 }
 
 void SwMailMergeGreetingsPage::ActivatePage()
@@ -280,7 +280,7 @@ void SwMailMergeGreetingsPage::ActivatePage()
     m_pWizard->enableButtons(WizardButtonFlags::NEXT, m_pWizard->isStateEnabled(MM_LAYOUTPAGE));
 }
 
-bool SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPageReason )
+bool SwMailMergeGreetingsPage::commitPage( ::vcl::WizardTypes::CommitPageReason )
 {
     if (m_xFemaleColumnLB->get_value_changed_from_saved())
     {
