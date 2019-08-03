@@ -49,7 +49,7 @@ class RoadmapItem : public RoadmapTypes
 {
 private:
     VclPtr<IDLabel>         mpID;
-    VclPtr<HyperLabel>      mpDescription;
+    VclPtr<vcl::HyperLabel>      mpDescription;
     const Size              m_aItemPlayground;
 
 public:
@@ -69,7 +69,7 @@ public:
     void                    ToggleBackgroundColor( const Color& _rGBColor );
     void                    SetInteractive( bool _bInteractive );
 
-    void                    SetClickHdl( const Link<HyperLabel*,void>& rLink );
+    void                    SetClickHdl( const Link<vcl::HyperLabel*,void>& rLink );
     void                    Enable( bool bEnable );
     bool                    IsEnabled() const;
     void                    GrabFocus();
@@ -622,7 +622,7 @@ bool ORoadmap::PreNotify(NotifyEvent& _rNEvt)
     return Window::PreNotify( _rNEvt );
 }
 
-IMPL_LINK(ORoadmap, ImplClickHdl, HyperLabel*, CurHyperLabel, void)
+IMPL_LINK(ORoadmap, ImplClickHdl, vcl::HyperLabel*, CurHyperLabel, void)
 {
    SelectRoadmapItemByID( CurHyperLabel->GetID() );
 }
@@ -666,7 +666,7 @@ RoadmapItem::RoadmapItem(ORoadmap& _rParent, const Size& _rItemPlayground)
 {
     mpID = VclPtr<IDLabel>::Create( &_rParent, WB_WORDBREAK );
     mpID->Show();
-    mpDescription = VclPtr<HyperLabel>::Create( &_rParent, WB_NOTABSTOP | WB_WORDBREAK );
+    mpDescription = VclPtr<vcl::HyperLabel>::Create( &_rParent, WB_NOTABSTOP | WB_WORDBREAK );
     mpDescription->Show();
 }
 
@@ -794,7 +794,7 @@ void RoadmapItem::Update(ItemIndex RMIndex, const OUString& _rText)
     ImplUpdateIndex( RMIndex );
 }
 
-void RoadmapItem::SetClickHdl(const Link<HyperLabel*,void>& rLink)
+void RoadmapItem::SetClickHdl(const Link<vcl::HyperLabel*,void>& rLink)
 {
     if ( mpDescription )
         mpDescription->SetClickHdl( rLink);
