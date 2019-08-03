@@ -942,12 +942,12 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     sal_Int32 nVarCount = aVariables.getLength();
     uno::Sequence<double> aOldValues;
     aOldValues.realloc( nVarCount );
-    for (nVarPos=0; nVarPos<nVarCount; ++nVarPos)
-    {
-        ScAddress aCellPos;
-        ScUnoConversion::FillScAddress( aCellPos, aVariables[nVarPos] );
-        aOldValues[nVarPos] = mrDoc.GetValue( aCellPos );
-    }
+    std::transform(aVariables.begin(), aVariables.end(), aOldValues.begin(),
+        [this](const table::CellAddress& rVariable) -> double {
+            ScAddress aCellPos;
+            ScUnoConversion::FillScAddress( aCellPos, rVariable );
+            return mrDoc.GetValue( aCellPos );
+        });
 
     // create and initialize solver
 
@@ -966,10 +966,8 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     uno::Reference<beans::XPropertySet> xOptProp(xSolver, uno::UNO_QUERY);
     if ( xOptProp.is() )
     {
-        sal_Int32 nPropCount = maProperties.getLength();
-        for (sal_Int32 nProp=0; nProp<nPropCount; ++nProp)
+        for (const beans::PropertyValue& rValue : maProperties)
         {
-            const beans::PropertyValue& rValue = maProperties[nProp];
             try
             {
                 xOptProp->setPropertyValue( rValue.Name, rValue.Value );

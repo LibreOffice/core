@@ -158,16 +158,11 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
     }
 
     ScRangeList* pList = new ScRangeList;
-    sal_Int32 nRangeCount = aRanges.getLength();
-    if (nRangeCount)
+    for (const table::CellRangeAddress& rRange : aRanges)
     {
-        const table::CellRangeAddress* pAry = aRanges.getConstArray();
-        for (sal_Int32 i=0; i<nRangeCount; i++)
-        {
-            ScRange aRange( static_cast<SCCOL>(pAry[i].StartColumn), pAry[i].StartRow, pAry[i].Sheet,
-                            static_cast<SCCOL>(pAry[i].EndColumn),   pAry[i].EndRow,   pAry[i].Sheet );
-            pList->push_back( aRange );
-        }
+        ScRange aRange( static_cast<SCCOL>(rRange.StartColumn), rRange.StartRow, rRange.Sheet,
+                        static_cast<SCCOL>(rRange.EndColumn),   rRange.EndRow,   rRange.Sheet );
+        pList->push_back( aRange );
     }
     ScRangeListRef xNewRanges( pList );
 
@@ -457,11 +452,8 @@ void ScChartObj::GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool&
                 chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
                 bool bHasCategories=false;
                 bool bFirstCellAsLabel=false;
-                const beans::PropertyValue* pPropArray = aArgs.getConstArray();
-                long nPropCount = aArgs.getLength();
-                for (long i = 0; i < nPropCount; i++)
+                for (const beans::PropertyValue& rProp : aArgs)
                 {
-                    const beans::PropertyValue& rProp = pPropArray[i];
                     OUString aPropName(rProp.Name);
 
                     if (aPropName == "CellRangeRepresentation")
@@ -689,16 +681,11 @@ void SAL_CALL ScChartObj::setRanges( const uno::Sequence<table::CellRangeAddress
     GetData_Impl( xOldRanges, bColHeaders, bRowHeaders );
 
     ScRangeList* pList = new ScRangeList;
-    sal_uInt16 nRangeCount = static_cast<sal_uInt16>(aRanges.getLength());
-    if (nRangeCount)
+    for (const table::CellRangeAddress& rRange : aRanges)
     {
-        const table::CellRangeAddress* pAry = aRanges.getConstArray();
-        for (sal_uInt16 i=0; i<nRangeCount; i++)
-        {
-            ScRange aRange( static_cast<SCCOL>(pAry[i].StartColumn), pAry[i].StartRow, pAry[i].Sheet,
-                            static_cast<SCCOL>(pAry[i].EndColumn),   pAry[i].EndRow,   pAry[i].Sheet );
-            pList->push_back( aRange );
-        }
+        ScRange aRange( static_cast<SCCOL>(rRange.StartColumn), rRange.StartRow, rRange.Sheet,
+                        static_cast<SCCOL>(rRange.EndColumn),   rRange.EndRow,   rRange.Sheet );
+        pList->push_back( aRange );
     }
     ScRangeListRef xNewRanges( pList );
 

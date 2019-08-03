@@ -520,19 +520,14 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScAccessibleCell::getCharacterAtt
     SolarMutexGuard aGuard;
 
     uno::Sequence< beans::PropertyValue > aAttribs = AccessibleStaticTextBase::getCharacterAttributes( nIndex, aRequestedAttributes );
-    beans::PropertyValue *pAttribs = aAttribs.getArray();
 
     sal_uInt16 nParaIndent = mpDoc->GetAttr( maCellAddress, ATTR_INDENT )->GetValue();
     if (nParaIndent > 0)
     {
-        for (int i = 0; i < aAttribs.getLength(); ++i)
-        {
-            if ("ParaLeftMargin" == pAttribs[i].Name)
-            {
-                pAttribs[i].Value <<= nParaIndent;
-                break;
-            }
-        }
+        auto pAttrib = std::find_if(aAttribs.begin(), aAttribs.end(),
+            [](const beans::PropertyValue& rAttrib) { return "ParaLeftMargin" == rAttrib.Name; });
+        if (pAttrib != aAttribs.end())
+            pAttrib->Value <<= nParaIndent;
     }
     return aAttribs;
 }

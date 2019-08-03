@@ -186,9 +186,9 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
         if( aRet.has< AnySeqSeq >() )
         {
             AnySeqSeq aAnySeqSeq = aRet.get< AnySeqSeq >();
-            for( sal_Int32 nRow = 0; nRow < aAnySeqSeq.getLength(); ++nRow )
-                for( sal_Int32 nCol = 0; nCol < aAnySeqSeq[ nRow ].getLength(); ++nCol )
-                    lclConvertDoubleToBoolean( aAnySeqSeq[ nRow ][ nCol ] );
+            for( auto& rAnySeq : aAnySeqSeq )
+                for( auto& rAny : rAnySeq )
+                    lclConvertDoubleToBoolean( rAny );
             aRet <<= aAnySeqSeq;
         }
         else

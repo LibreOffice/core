@@ -194,9 +194,9 @@ bool IsValidObject( const XclObj& rObj )
         if (!xCooSysSeq.hasElements())
             return false;
 
-        for (sal_Int32 nCooSys = 0; nCooSys < xCooSysSeq.getLength(); ++nCooSys)
+        for (const auto& rCooSys : xCooSysSeq)
         {
-            Reference<chart2::XChartTypeContainer> xChartTypeCont(xCooSysSeq[nCooSys], uno::UNO_QUERY);
+            Reference<chart2::XChartTypeContainer> xChartTypeCont(rCooSys, uno::UNO_QUERY);
             if (!xChartTypeCont.is())
                 return false;
 

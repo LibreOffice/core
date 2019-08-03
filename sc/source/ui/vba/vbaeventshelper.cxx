@@ -376,12 +376,11 @@ void SAL_CALL ScVbaEventListener::changesOccurred( const util::ChangesEvent& rEv
     }
 
     ScRangeList aRangeList;
-    for( sal_Int32 nIndex = 0; nIndex < nCount; ++nIndex )
+    for( const util::ElementChange& rChange : rEvent.Changes )
     {
-        aChange = rEvent.Changes[ nIndex ];
-        aChange.Accessor >>= sOperation;
+        rChange.Accessor >>= sOperation;
         uno::Reference< table::XCellRange > xRangeObj;
-        aChange.ReplacedElement >>= xRangeObj;
+        rChange.ReplacedElement >>= xRangeObj;
         if( xRangeObj.is() && sOperation.equalsIgnoreAsciiCase("cell-change") )
         {
             uno::Reference< sheet::XCellRangeAddressable > xCellRangeAddressable( xRangeObj, uno::UNO_QUERY );
@@ -773,8 +772,7 @@ uno::Sequence< uno::Any > ScVbaEventsHelper::implBuildArgumentList( const EventH
         sal_Int32 nLength = aVbaArgs.getLength();
         uno::Sequence< uno::Any > aVbaArgs2( nLength + 1 );
         aVbaArgs2[ 0 ] = createWorksheet( rArgs, 0 );
-        for( sal_Int32 nIndex = 0; nIndex < nLength; ++nIndex )
-            aVbaArgs2[ nIndex + 1 ] = aVbaArgs[ nIndex ];
+        std::copy_n(aVbaArgs.begin(), nLength, std::next(aVbaArgs2.begin()));
         aVbaArgs = aVbaArgs2;
     }
 

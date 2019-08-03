@@ -557,7 +557,6 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
 {
     rHasZoom = false;
 
-    sal_Int32 nCount(aSettings.getLength());
     sal_Int32 nTemp32(0);
     sal_Int16 nTemp16(0);
     sal_Int32 nTempPosV(0);
@@ -566,109 +565,109 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
     sal_Int32 nTempPosHTw(0);
     bool bHasVSplitInTwips = false;
     bool bHasHSplitInTwips = false;
-    for (sal_Int32 i = 0; i < nCount; i++)
+    for (const auto& rSetting : aSettings)
     {
-        OUString sName(aSettings[i].Name);
+        OUString sName(rSetting.Name);
         if (sName == SC_CURSORPOSITIONX)
         {
-            aSettings[i].Value >>= nTemp32;
+            rSetting.Value >>= nTemp32;
             nCurX = SanitizeCol( static_cast<SCCOL>(nTemp32));
         }
         else if (sName == SC_CURSORPOSITIONY)
         {
-            aSettings[i].Value >>= nTemp32;
+            rSetting.Value >>= nTemp32;
             nCurY = SanitizeRow( static_cast<SCROW>(nTemp32));
         }
         else if (sName == SC_HORIZONTALSPLITMODE)
         {
-            if ((aSettings[i].Value >>= nTemp16) && nTemp16 <= ScSplitMode::SC_SPLIT_MODE_MAX_ENUM)
+            if ((rSetting.Value >>= nTemp16) && nTemp16 <= ScSplitMode::SC_SPLIT_MODE_MAX_ENUM)
                 eHSplitMode = static_cast<ScSplitMode>(nTemp16);
         }
         else if (sName == SC_VERTICALSPLITMODE)
         {
-            if ((aSettings[i].Value >>= nTemp16) && nTemp16 <= ScSplitMode::SC_SPLIT_MODE_MAX_ENUM)
+            if ((rSetting.Value >>= nTemp16) && nTemp16 <= ScSplitMode::SC_SPLIT_MODE_MAX_ENUM)
                 eVSplitMode = static_cast<ScSplitMode>(nTemp16);
         }
         else if (sName == SC_HORIZONTALSPLITPOSITION)
         {
-            aSettings[i].Value >>= nTempPosH;
+            rSetting.Value >>= nTempPosH;
             bHasHSplitInTwips = false;
         }
         else if (sName == SC_VERTICALSPLITPOSITION)
         {
-            aSettings[i].Value >>= nTempPosV;
+            rSetting.Value >>= nTempPosV;
             bHasVSplitInTwips = false;
         }
         else if (sName == SC_HORIZONTALSPLITPOSITION_TWIPS)
         {
-            aSettings[i].Value >>= nTempPosHTw;
+            rSetting.Value >>= nTempPosHTw;
             bHasHSplitInTwips = true;
         }
         else if (sName == SC_VERTICALSPLITPOSITION_TWIPS)
         {
-            aSettings[i].Value >>= nTempPosVTw;
+            rSetting.Value >>= nTempPosVTw;
             bHasVSplitInTwips = true;
         }
         else if (sName == SC_ACTIVESPLITRANGE)
         {
-            if ((aSettings[i].Value >>= nTemp16) && nTemp16 <= ScSplitPos::SC_SPLIT_POS_MAX_ENUM)
+            if ((rSetting.Value >>= nTemp16) && nTemp16 <= ScSplitPos::SC_SPLIT_POS_MAX_ENUM)
                 eWhichActive = static_cast<ScSplitPos>(nTemp16);
         }
         else if (sName == SC_POSITIONLEFT)
         {
-            aSettings[i].Value >>= nTemp32;
+            rSetting.Value >>= nTemp32;
             nPosX[SC_SPLIT_LEFT] = SanitizeCol( static_cast<SCCOL>(nTemp32));
         }
         else if (sName == SC_POSITIONRIGHT)
         {
-            aSettings[i].Value >>= nTemp32;
+            rSetting.Value >>= nTemp32;
             nPosX[SC_SPLIT_RIGHT] = SanitizeCol( static_cast<SCCOL>(nTemp32));
         }
         else if (sName == SC_POSITIONTOP)
         {
-            aSettings[i].Value >>= nTemp32;
+            rSetting.Value >>= nTemp32;
             nPosY[SC_SPLIT_TOP] = SanitizeRow( static_cast<SCROW>(nTemp32));
         }
         else if (sName == SC_POSITIONBOTTOM)
         {
-            aSettings[i].Value >>= nTemp32;
+            rSetting.Value >>= nTemp32;
             nPosY[SC_SPLIT_BOTTOM] = SanitizeRow( static_cast<SCROW>(nTemp32));
         }
         else if (sName == SC_ZOOMTYPE)
         {
-            aSettings[i].Value >>= nTemp16;
+            rSetting.Value >>= nTemp16;
             eZoomType = SvxZoomType(nTemp16);
             rHasZoom = true;        // set if there is any zoom information
         }
         else if (sName == SC_ZOOMVALUE)
         {
-            aSettings[i].Value >>= nTemp32;
+            rSetting.Value >>= nTemp32;
             Fraction aZoom(nTemp32, 100);
             aZoomX = aZoomY = aZoom;
             rHasZoom = true;
         }
         else if (sName == SC_PAGEVIEWZOOMVALUE)
         {
-            aSettings[i].Value >>= nTemp32;
+            rSetting.Value >>= nTemp32;
             Fraction aZoom(nTemp32, 100);
             aPageZoomX = aPageZoomY = aZoom;
             rHasZoom = true;
         }
         else if (sName == SC_UNO_SHOWGRID)
         {
-            aSettings[i].Value >>= bShowGrid;
+            rSetting.Value >>= bShowGrid;
         }
         else if (sName == SC_TABLESELECTED)
         {
             bool bSelected = false;
-            aSettings[i].Value >>= bSelected;
+            rSetting.Value >>= bSelected;
             rViewData.GetMarkData().SelectTable( nTab, bSelected );
         }
         else if (sName == SC_UNONAME_TABCOLOR)
         {
             // There are documents out there that have their tab color defined as a view setting.
             Color aColor = COL_AUTO;
-            aSettings[i].Value >>= aColor;
+            rSetting.Value >>= aColor;
             if (aColor != COL_AUTO)
             {
                 ScDocument* pDoc = rViewData.GetDocument();
@@ -676,7 +675,7 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
             }
         }
         // Fallback to common SdrModel processing
-        else rViewData.GetDocument()->GetDrawLayer()->ReadUserDataSequenceValue(&aSettings[i]);
+        else rViewData.GetDocument()->GetDrawLayer()->ReadUserDataSequenceValue(&rSetting);
     }
 
     if (eHSplitMode == SC_SPLIT_FIX)
@@ -3304,30 +3303,28 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
 {
     std::vector<bool> aHasZoomVect( GetDocument()->GetTableCount(), false );
 
-    sal_Int32 nCount(rSettings.getLength());
     sal_Int32 nTemp32(0);
     sal_Int16 nTemp16(0);
     bool bPageMode(false);
 
     EnsureTabDataSize(GetDocument()->GetTableCount());
 
-    for (sal_Int32 i = 0; i < nCount; i++)
+    for (const auto& rSetting : rSettings)
     {
         // SC_VIEWID has to parse and use by mba
-        OUString sName(rSettings[i].Name);
+        OUString sName(rSetting.Name);
         if (sName == SC_TABLES)
         {
             uno::Reference<container::XNameContainer> xNameContainer;
-            if ((rSettings[i].Value >>= xNameContainer) && xNameContainer->hasElements())
+            if ((rSetting.Value >>= xNameContainer) && xNameContainer->hasElements())
             {
                 uno::Sequence< OUString > aNames(xNameContainer->getElementNames());
-                for (sal_Int32 nTabPos = 0; nTabPos < aNames.getLength(); nTabPos++)
+                for (const OUString& sTabName : aNames)
                 {
-                    OUString sTabName(aNames[nTabPos]);
                     SCTAB nTab(0);
                     if (GetDocument()->GetTable(sTabName, nTab))
                     {
-                        uno::Any aAny = xNameContainer->getByName(aNames[nTabPos]);
+                        uno::Any aAny = xNameContainer->getByName(sTabName);
                         uno::Sequence<beans::PropertyValue> aTabSettings;
                         if (aAny >>= aTabSettings)
                         {
@@ -3346,7 +3343,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
         else if (sName == SC_ACTIVETABLE)
         {
             OUString sTabName;
-            if(rSettings[i].Value >>= sTabName)
+            if(rSetting.Value >>= sTabName)
             {
                 SCTAB nTab(0);
                 if (GetDocument()->GetTable(sTabName, nTab))
@@ -3355,23 +3352,23 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
         }
         else if (sName == SC_HORIZONTALSCROLLBARWIDTH)
         {
-            if (rSettings[i].Value >>= nTemp32)
+            if (rSetting.Value >>= nTemp32)
                 pView->SetTabBarWidth(nTemp32);
         }
         else if (sName == SC_RELHORIZONTALTABBARWIDTH)
         {
             double fWidth = 0.0;
-            if (rSettings[i].Value >>= fWidth)
+            if (rSetting.Value >>= fWidth)
                 pView->SetPendingRelTabBarWidth( fWidth );
         }
         else if (sName == SC_ZOOMTYPE)
         {
-            if (rSettings[i].Value >>= nTemp16)
+            if (rSetting.Value >>= nTemp16)
                 eDefZoomType = SvxZoomType(nTemp16);
         }
         else if (sName == SC_ZOOMVALUE)
         {
-            if (rSettings[i].Value >>= nTemp32)
+            if (rSetting.Value >>= nTemp32)
             {
                 Fraction aZoom(nTemp32, 100);
                 aDefZoomX = aDefZoomY = aZoom;
@@ -3379,24 +3376,24 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
         }
         else if (sName == SC_PAGEVIEWZOOMVALUE)
         {
-            if (rSettings[i].Value >>= nTemp32)
+            if (rSetting.Value >>= nTemp32)
             {
                 Fraction aZoom(nTemp32, 100);
                 aDefPageZoomX = aDefPageZoomY = aZoom;
             }
         }
         else if (sName == SC_SHOWPAGEBREAKPREVIEW)
-            bPageMode = ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value );
+            bPageMode = ScUnoHelpFunctions::GetBoolFromAny( rSetting.Value );
         else if ( sName == SC_UNO_SHOWZERO )
-            pOptions->SetOption(VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+            pOptions->SetOption(VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( rSetting.Value ) );
         else if ( sName == SC_UNO_SHOWNOTES )
-            pOptions->SetOption(VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+            pOptions->SetOption(VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( rSetting.Value ) );
         else if ( sName == SC_UNO_SHOWGRID )
-            pOptions->SetOption(VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+            pOptions->SetOption(VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( rSetting.Value ) );
         else if ( sName == SC_UNO_GRIDCOLOR )
         {
             Color aColor;
-            if (rSettings[i].Value >>= aColor)
+            if (rSetting.Value >>= aColor)
             {
                 // #i47435# set automatic grid color explicitly
                 if( aColor == COL_AUTO )
@@ -3405,52 +3402,52 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             }
         }
         else if ( sName == SC_UNO_SHOWPAGEBR )
-            pOptions->SetOption(VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+            pOptions->SetOption(VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( rSetting.Value ) );
         else if ( sName == SC_UNO_COLROWHDR )
-            pOptions->SetOption(VOPT_HEADER, ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+            pOptions->SetOption(VOPT_HEADER, ScUnoHelpFunctions::GetBoolFromAny( rSetting.Value ) );
         else if ( sName == SC_UNO_SHEETTABS )
-            pOptions->SetOption(VOPT_TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+            pOptions->SetOption(VOPT_TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny( rSetting.Value ) );
         else if ( sName == SC_UNO_OUTLSYMB )
-            pOptions->SetOption(VOPT_OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+            pOptions->SetOption(VOPT_OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( rSetting.Value ) );
         else if ( sName == SC_UNO_SHOWOBJ )
         {
             // #i80528# placeholders not supported anymore
-            if ( rSettings[i].Value >>= nTemp16 )
+            if ( rSetting.Value >>= nTemp16 )
                 pOptions->SetObjMode( VOBJ_TYPE_OLE, (nTemp16 == 1) ? VOBJ_MODE_HIDE : VOBJ_MODE_SHOW );
         }
         else if ( sName == SC_UNO_SHOWCHARTS )
         {
             // #i80528# placeholders not supported anymore
-            if ( rSettings[i].Value >>= nTemp16 )
+            if ( rSetting.Value >>= nTemp16 )
                 pOptions->SetObjMode( VOBJ_TYPE_CHART, (nTemp16 == 1) ? VOBJ_MODE_HIDE : VOBJ_MODE_SHOW );
         }
         else if ( sName == SC_UNO_SHOWDRAW )
         {
             // #i80528# placeholders not supported anymore
-            if ( rSettings[i].Value >>= nTemp16 )
+            if ( rSetting.Value >>= nTemp16 )
                 pOptions->SetObjMode( VOBJ_TYPE_DRAW, (nTemp16 == 1) ? VOBJ_MODE_HIDE : VOBJ_MODE_SHOW );
         }
         else if ( sName.compareToAscii( SC_UNO_VALUEHIGH ) == 0 )
-            pOptions->SetOption( VOPT_SYNTAX, ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+            pOptions->SetOption( VOPT_SYNTAX, ScUnoHelpFunctions::GetBoolFromAny( rSetting.Value ) );
         else
         {
             ScGridOptions aGridOpt(pOptions->GetGridOptions());
             if ( sName == SC_UNO_SNAPTORASTER )
-                aGridOpt.SetUseGridSnap( ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+                aGridOpt.SetUseGridSnap( ScUnoHelpFunctions::GetBoolFromAny( rSetting.Value ) );
             else if ( sName == SC_UNO_RASTERVIS )
-                aGridOpt.SetGridVisible( ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+                aGridOpt.SetGridVisible( ScUnoHelpFunctions::GetBoolFromAny( rSetting.Value ) );
             else if ( sName == SC_UNO_RASTERRESX )
-                aGridOpt.SetFieldDrawX( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( rSettings[i].Value ) ) );
+                aGridOpt.SetFieldDrawX( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( rSetting.Value ) ) );
             else if ( sName == SC_UNO_RASTERRESY )
-                aGridOpt.SetFieldDrawY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( rSettings[i].Value ) ) );
+                aGridOpt.SetFieldDrawY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( rSetting.Value ) ) );
             else if ( sName == SC_UNO_RASTERSUBX )
-                aGridOpt.SetFieldDivisionX( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( rSettings[i].Value ) ) );
+                aGridOpt.SetFieldDivisionX( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( rSetting.Value ) ) );
             else if ( sName == SC_UNO_RASTERSUBY )
-                aGridOpt.SetFieldDivisionY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( rSettings[i].Value ) ) );
+                aGridOpt.SetFieldDivisionY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( rSetting.Value ) ) );
             else if ( sName == SC_UNO_RASTERSYNC )
-                aGridOpt.SetSynchronize( ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+                aGridOpt.SetSynchronize( ScUnoHelpFunctions::GetBoolFromAny( rSetting.Value ) );
             // Fallback to common SdrModel processing
-            else GetDocument()->GetDrawLayer()->ReadUserDataSequenceValue(&rSettings[i]);
+            else GetDocument()->GetDrawLayer()->ReadUserDataSequenceValue(&rSetting);
 
             pOptions->SetGridOptions(aGridOpt);
         }
@@ -3467,7 +3464,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             maTabData[nZoomTab]->aPageZoomY = aDefPageZoomY;
         }
 
-    if (nCount)
+    if (rSettings.hasElements())
         SetPagebreakMode( bPageMode );
 
     // #i47426# write view options to document, needed e.g. for Excel export

@@ -217,12 +217,9 @@ void ScfPropertySet::GetProperties( Sequence< Any >& rValues, const Sequence< OU
         else if( mxPropSet.is() )
         {
             sal_Int32 nLen = rPropNames.getLength();
-            const OUString* pPropName = rPropNames.getConstArray();
-            const OUString* pPropNameEnd = pPropName + nLen;
             rValues.realloc( nLen );
-            Any* pValue = rValues.getArray();
-            for( ; pPropName != pPropNameEnd; ++pPropName, ++pValue )
-                *pValue = mxPropSet->getPropertyValue( *pPropName );
+            std::transform(rPropNames.begin(), rPropNames.end(), rValues.begin(),
+                [this](const OUString& rPropName) -> Any { return mxPropSet->getPropertyValue(rPropName); });
         }
     }
     catch( Exception& )

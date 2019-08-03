@@ -1817,12 +1817,9 @@ bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
 
                 bool bInserted = false;
 
-                sal_Int32 nMemberCount = aMemberNames.getLength();
-                for (sal_Int32 nMemberPos=0; nMemberPos<nMemberCount; ++nMemberPos)
+                for (const OUString& aMemberStr : aMemberNames)
                 {
-                    OUString aMemberStr( aMemberNames[nMemberPos] );
-
-                    if ( !bInserted && aMemberNames[nMemberPos] == aDestData.MemberName )
+                    if ( !bInserted && aMemberStr == aDestData.MemberName )
                     {
                         // insert dragged items before this item
                         for ( const auto& rMember : aMembersVector )

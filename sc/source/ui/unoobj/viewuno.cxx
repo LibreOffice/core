@@ -1933,11 +1933,8 @@ void SAL_CALL ScTabViewObj::startRangeSelection(
         bool bMultiSelection = false;
 
         OUString aStrVal;
-        const beans::PropertyValue* pPropArray = aArguments.getConstArray();
-        long nPropCount = aArguments.getLength();
-        for (long i = 0; i < nPropCount; i++)
+        for (const beans::PropertyValue& rProp : aArguments)
         {
-            const beans::PropertyValue& rProp = pPropArray[i];
             OUString aPropName(rProp.Name);
 
             if (aPropName == SC_UNONAME_CLOSEONUP )

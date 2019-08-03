@@ -1175,10 +1175,8 @@ bool ScDPObject::IsDimNameInUse(const OUString& rName) const
 
     Reference<container::XNameAccess> xDims = xSource->getDimensions();
     Sequence<OUString> aDimNames = xDims->getElementNames();
-    sal_Int32 n = aDimNames.getLength();
-    for (sal_Int32 i = 0; i < n; ++i)
+    for (const OUString& rDimName : aDimNames)
     {
-        const OUString& rDimName = aDimNames[i];
         if (rDimName.equalsIgnoreAsciiCase(rName))
             return true;
 
@@ -2121,10 +2119,8 @@ static PivotFunc lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& x
                 if ( aSubAny >>= aSeq )
                 {
                     PivotFunc nMask = PivotFunc::NONE;
-                    const sal_Int16* pArray = aSeq.getConstArray();
-                    long nCount = aSeq.getLength();
-                    for (long i=0; i<nCount; i++)
-                        nMask |= ScDataPilotConversion::FunctionBit(pArray[i]);
+                    for (const sal_Int16 nElem : aSeq)
+                        nMask |= ScDataPilotConversion::FunctionBit(nElem);
                     return nMask;
                 }
             }

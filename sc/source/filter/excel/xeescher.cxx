@@ -62,6 +62,7 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 
+#include <comphelper/sequence.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/relationship.hxx>
 #include <oox/export/drawingml.hxx>
@@ -811,13 +812,10 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
             Sequence< sal_Int16 > aSelection;
             if( aCtrlProp.GetProperty( aSelection, "SelectedItems" ) )
             {
-                sal_Int32 nLen = aSelection.getLength();
-                if( nLen > 0 )
+                if( aSelection.hasElements() )
                 {
                     mnSelEntry = aSelection[ 0 ] + 1;
-                    maMultiSel.resize( nLen );
-                    const sal_Int16* pnBegin = aSelection.getConstArray();
-                    ::std::copy( pnBegin, pnBegin + nLen, maMultiSel.begin() );
+                    comphelper::sequenceToContainer(maMultiSel, aSelection);
                 }
             }
 
@@ -835,11 +833,9 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
                 aCtrlProp.GetProperty( aDefText, "Text" ) &&
                 aStringList.hasElements() && !aDefText.isEmpty() )
             {
-                const OUString* pBegin = aStringList.getConstArray();
-                const OUString* pEnd = pBegin + aStringList.getLength();
-                const OUString* pString = ::std::find( pBegin, pEnd, aDefText );
-                if( pString != pEnd )
-                    mnSelEntry = static_cast< sal_Int16 >( pString - pBegin + 1 );  // 1-based
+                auto nIndex = comphelper::findValue(aStringList, aDefText);
+                if( nIndex != -1 )
+                    mnSelEntry = static_cast< sal_Int16 >( nIndex + 1 );  // 1-based
                 if( mnSelEntry > 0 )
                     maMultiSel.resize( 1, mnSelEntry - 1 );
             }

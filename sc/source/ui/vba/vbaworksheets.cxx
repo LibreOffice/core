@@ -427,10 +427,9 @@ ScVbaWorksheets::Item(const uno::Any& Index, const uno::Any& Index2)
         SheetMap aSheets;
         uno::Sequence< uno::Any > sIndices;
         aConverted >>= sIndices;
-        sal_Int32 nElems = sIndices.getLength();
-        for( sal_Int32 index = 0; index < nElems; ++index )
+        for( const auto& rIndex : sIndices )
         {
-            uno::Reference< excel::XWorksheet > xWorkSheet( ScVbaWorksheets_BASE::Item( sIndices[ index ], Index2 ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XWorksheet > xWorkSheet( ScVbaWorksheets_BASE::Item( rIndex, Index2 ), uno::UNO_QUERY_THROW );
             ScVbaWorksheet* pWorkSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xWorkSheet );
             uno::Reference< sheet::XSpreadsheet > xSheet( pWorkSheet->getSheet() , uno::UNO_SET_THROW );
             uno::Reference< container::XNamed > xName( xSheet, uno::UNO_QUERY_THROW );

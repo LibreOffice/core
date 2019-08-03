@@ -404,13 +404,12 @@ public:
         long nStartRow = mrDocRow;
         long nRowCount = maSeq.getLength();
         long nMaxColCount = 0;
-        const uno::Sequence< seq >* pRowArr = maSeq.getConstArray();
-        for ( long nRow=0; nRow<nRowCount; nRow++ )
+        for ( const uno::Sequence< seq >& rRow : maSeq )
         {
-            long nColCount = pRowArr[nRow].getLength();
+            long nColCount = rRow.getLength();
             if ( nColCount > nMaxColCount )
                 nMaxColCount = nColCount;
-            const seq* pColArr = pRowArr[nRow].getConstArray();
+            const seq* pColArr = rRow.getConstArray();
             for (long nCol=0; nCol<nColCount; nCol++)
                 if ( nCol <= MAXCOL && mrDocRow <= MAXROW )
                     aVisitor.visitElem( nCol, mrDocRow, pColArr[ nCol ] );

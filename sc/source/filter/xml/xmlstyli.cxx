@@ -478,10 +478,8 @@ void XMLTableStyleContext::ApplyCondFormat( const uno::Sequence<table::CellRange
         return;
 
     ScRangeList aRangeList;
-    sal_Int32 nRanges = xCellRanges.getLength();
-    for(sal_Int32 i = 0; i < nRanges; ++i)
+    for(const table::CellRangeAddress& aAddress : xCellRanges)
     {
-        table::CellRangeAddress aAddress = xCellRanges[i];
         ScRange aRange( aAddress.StartColumn, aAddress.StartRow, aAddress.Sheet, aAddress.EndColumn, aAddress.EndRow, aAddress.Sheet );
         aRangeList.Join( aRange );
     }

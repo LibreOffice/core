@@ -352,17 +352,18 @@ namespace calc
         CellRangeAddress aRangeAddress;
         bool bFoundAddress = false;
 
-        const Any* pLoop = _rArguments.getConstArray();
-        const Any* pLoopEnd = _rArguments.getConstArray() + _rArguments.getLength();
-        for ( ; ( pLoop != pLoopEnd ) && !bFoundAddress; ++pLoop )
+        for ( const Any& rArg : _rArguments )
         {
             NamedValue aValue;
-            if ( *pLoop >>= aValue )
+            if ( rArg >>= aValue )
             {
                 if ( aValue.Name == "CellRange" )
                 {
                     if ( aValue.Value >>= aRangeAddress )
+                    {
                         bFoundAddress = true;
+                        break;
+                    }
                 }
             }
         }

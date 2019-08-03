@@ -108,14 +108,11 @@ ScVbaChartObjects::getChartObjectNames()
         std::vector< OUString > aChartNamesVector;
 
         uno::Sequence< OUString > sSheetNames = xSpreadsheets->getElementNames();
-        sal_Int32 nItems = sSheetNames.getLength();
-        for (sal_Int32 i = 0; i < nItems; i++)
+        for (const auto& rSheetName : sSheetNames)
         {
-            uno::Reference< table::XTableChartsSupplier > xLocTableChartsSupplier( xSpreadsheets->getByName(sSheetNames[i]), uno::UNO_QUERY_THROW );
+            uno::Reference< table::XTableChartsSupplier > xLocTableChartsSupplier( xSpreadsheets->getByName(rSheetName), uno::UNO_QUERY_THROW );
             uno::Sequence< OUString > scurchartnames = xLocTableChartsSupplier->getCharts()->getElementNames();
-            sal_Int32 nChartNames = scurchartnames.getLength();
-            for (sal_Int32 n = 0; n < nChartNames; n++ )
-                aChartNamesVector.push_back(scurchartnames[n]);
+            std::copy(scurchartnames.begin(), scurchartnames.end(), std::back_inserter(aChartNamesVector));
         }
         sChartNames = comphelper::containerToSequence( aChartNamesVector );
     }
@@ -154,9 +151,8 @@ ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight 
 void SAL_CALL ScVbaChartObjects::Delete(  )
 {
     uno::Sequence< OUString > sChartNames = xTableCharts->getElementNames();
-    sal_Int32 ncount = sChartNames.getLength();
-    for (sal_Int32 i = 0; i < ncount ; i++)
-        removeByName(sChartNames[i]);
+    for (const auto& rChartName : sChartNames)
+        removeByName(rChartName);
 }
 
 // XEnumerationAccess

@@ -48,15 +48,8 @@ sal_Bool SAL_CALL ScAccessibleStateSet::contains(sal_Int16 nState)
 sal_Bool SAL_CALL ScAccessibleStateSet::containsAll(
     const Sequence<sal_Int16>& aStateSet)
 {
-    sal_Int32 n = aStateSet.getLength();
-    for (sal_Int32 i = 0; i < n; ++i)
-    {
-        if (!maStates.count(aStateSet[i]))
-            // This state is not set.
-            return false;
-    }
-    // All specified states are set.
-    return true;
+    return std::all_of(aStateSet.begin(), aStateSet.end(),
+        [this](const sal_Int16 nState) { return maStates.count(nState) != 0; });
 }
 
 Sequence<sal_Int16> SAL_CALL ScAccessibleStateSet::getStates()

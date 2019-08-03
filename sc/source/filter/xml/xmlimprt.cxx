@@ -811,8 +811,7 @@ SvXMLImportContext *ScXMLImport::CreateScriptContext(
     return pContext;
 }
 
-void ScXMLImport::SetStatistics(
-                                const uno::Sequence<beans::NamedValue> & i_rStats)
+void ScXMLImport::SetStatistics(const uno::Sequence<beans::NamedValue> & i_rStats)
 {
     static const char* s_stats[] =
     { "TableCount", "CellCount", "ObjectCount", nullptr };
@@ -820,11 +819,11 @@ void ScXMLImport::SetStatistics(
     SvXMLImport::SetStatistics(i_rStats);
 
     sal_uInt32 nCount(0);
-    for (sal_Int32 i = 0; i < i_rStats.getLength(); ++i) {
+    for (const auto& rStat : i_rStats) {
         for (const char** pStat = s_stats; *pStat != nullptr; ++pStat) {
-            if (i_rStats[i].Name.equalsAscii(*pStat)) {
+            if (rStat.Name.equalsAscii(*pStat)) {
                 sal_Int32 val = 0;
-                if (i_rStats[i].Value >>= val) {
+                if (rStat.Value >>= val) {
                     nCount += val;
                 } else {
                     OSL_FAIL("ScXMLImport::SetStatistics: invalid entry");
@@ -960,32 +959,31 @@ void ScXMLImport::SetChangeTrackingViewSettings(const css::uno::Sequence<css::be
 {
     if (pDoc)
     {
-        sal_Int32 nCount(rChangeProps.getLength());
-        if (nCount)
+        if (rChangeProps.hasElements())
         {
             ScXMLImport::MutexGuard aGuard(*this);
             sal_Int16 nTemp16(0);
             std::unique_ptr<ScChangeViewSettings> pViewSettings(new ScChangeViewSettings());
-            for (sal_Int32 i = 0; i < nCount; ++i)
+            for (const auto& rChangeProp : rChangeProps)
             {
-                OUString sName(rChangeProps[i].Name);
+                OUString sName(rChangeProp.Name);
                 if (sName == "ShowChanges")
-                    pViewSettings->SetShowChanges(::cppu::any2bool(rChangeProps[i].Value));
+                    pViewSettings->SetShowChanges(::cppu::any2bool(rChangeProp.Value));
                 else if (sName == "ShowAcceptedChanges")
-                    pViewSettings->SetShowAccepted(::cppu::any2bool(rChangeProps[i].Value));
+                    pViewSettings->SetShowAccepted(::cppu::any2bool(rChangeProp.Value));
                 else if (sName == "ShowRejectedChanges")
-                    pViewSettings->SetShowRejected(::cppu::any2bool(rChangeProps[i].Value));
+                    pViewSettings->SetShowRejected(::cppu::any2bool(rChangeProp.Value));
                 else if (sName == "ShowChangesByDatetime")
-                    pViewSettings->SetHasDate(::cppu::any2bool(rChangeProps[i].Value));
+                    pViewSettings->SetHasDate(::cppu::any2bool(rChangeProp.Value));
                 else if (sName == "ShowChangesByDatetimeMode")
                 {
-                    if (rChangeProps[i].Value >>= nTemp16)
+                    if (rChangeProp.Value >>= nTemp16)
                         pViewSettings->SetTheDateMode(static_cast<SvxRedlinDateMode>(nTemp16));
                 }
                 else if (sName == "ShowChangesByDatetimeFirstDatetime")
                 {
                     util::DateTime aDateTime;
-                    if (rChangeProps[i].Value >>= aDateTime)
+                    if (rChangeProp.Value >>= aDateTime)
                     {
                         pViewSettings->SetTheFirstDateTime(::DateTime(aDateTime));
                     }
@@ -993,37 +991,37 @@ void ScXMLImport::SetChangeTrackingViewSettings(const css::uno::Sequence<css::be
                 else if (sName == "ShowChangesByDatetimeSecondDatetime")
                 {
                     util::DateTime aDateTime;
-                    if (rChangeProps[i].Value >>= aDateTime)
+                    if (rChangeProp.Value >>= aDateTime)
                     {
                         pViewSettings->SetTheLastDateTime(::DateTime(aDateTime));
                     }
                 }
                 else if (sName == "ShowChangesByAuthor")
-                    pViewSettings->SetHasAuthor(::cppu::any2bool(rChangeProps[i].Value));
+                    pViewSettings->SetHasAuthor(::cppu::any2bool(rChangeProp.Value));
                 else if (sName == "ShowChangesByAuthorName")
                 {
                     OUString sOUName;
-                    if (rChangeProps[i].Value >>= sOUName)
+                    if (rChangeProp.Value >>= sOUName)
                     {
                         pViewSettings->SetTheAuthorToShow(sOUName);
                     }
                 }
                 else if (sName == "ShowChangesByComment")
-                    pViewSettings->SetHasComment(::cppu::any2bool(rChangeProps[i].Value));
+                    pViewSettings->SetHasComment(::cppu::any2bool(rChangeProp.Value));
                 else if (sName == "ShowChangesByCommentText")
                 {
                     OUString sOUComment;
-                    if (rChangeProps[i].Value >>= sOUComment)
+                    if (rChangeProp.Value >>= sOUComment)
                     {
                         pViewSettings->SetTheComment(sOUComment);
                     }
                 }
                 else if (sName == "ShowChangesByRanges")
-                    pViewSettings->SetHasRange(::cppu::any2bool(rChangeProps[i].Value));
+                    pViewSettings->SetHasRange(::cppu::any2bool(rChangeProp.Value));
                 else if (sName == "ShowChangesByRangesList")
                 {
                     OUString sRanges;
-                    if ((rChangeProps[i].Value >>= sRanges) && !sRanges.isEmpty())
+                    if ((rChangeProp.Value >>= sRanges) && !sRanges.isEmpty())
                     {
                         ScRangeList aRangeList;
                         ScRangeStringConverter::GetRangeListFromString(
@@ -1039,26 +1037,25 @@ void ScXMLImport::SetChangeTrackingViewSettings(const css::uno::Sequence<css::be
 
 void ScXMLImport::SetViewSettings(const uno::Sequence<beans::PropertyValue>& aViewProps)
 {
-    sal_Int32 nCount(aViewProps.getLength());
     sal_Int32 nHeight(0);
     sal_Int32 nLeft(0);
     sal_Int32 nTop(0);
     sal_Int32 nWidth(0);
-    for (sal_Int32 i = 0; i < nCount; ++i)
+    for (const auto& rViewProp : aViewProps)
     {
-        OUString sName(aViewProps[i].Name);
+        OUString sName(rViewProp.Name);
         if (sName == "VisibleAreaHeight")
-            aViewProps[i].Value >>= nHeight;
+            rViewProp.Value >>= nHeight;
         else if (sName == "VisibleAreaLeft")
-            aViewProps[i].Value >>= nLeft;
+            rViewProp.Value >>= nLeft;
         else if (sName == "VisibleAreaTop")
-            aViewProps[i].Value >>= nTop;
+            rViewProp.Value >>= nTop;
         else if (sName == "VisibleAreaWidth")
-            aViewProps[i].Value >>= nWidth;
+            rViewProp.Value >>= nWidth;
         else if (sName == "TrackedChangesViewSettings")
         {
             uno::Sequence<beans::PropertyValue> aChangeProps;
-            if(aViewProps[i].Value >>= aChangeProps)
+            if(rViewProp.Value >>= aChangeProps)
                 SetChangeTrackingViewSettings(aChangeProps);
         }
     }
@@ -1089,8 +1086,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
         if (xMultiServiceFactory.is())
         {
             sal_Int32 nCount(aConfigProps.getLength());
-            css::uno::Sequence<css::beans::PropertyValue> aFilteredProps(
-                aConfigProps.getLength());
+            css::uno::Sequence<css::beans::PropertyValue> aFilteredProps(nCount);
             sal_Int32 nFilteredPropsLen = 0;
             for (sal_Int32 i = nCount - 1; i >= 0; --i)
             {
@@ -1721,20 +1717,19 @@ void SAL_CALL ScXMLImport::endDocument()
                     uno::Sequence< beans::PropertyValue > aSeq;
                     if (xIndexAccess->getByIndex(0) >>= aSeq)
                     {
-                        sal_Int32 nCount (aSeq.getLength());
-                        for (sal_Int32 i = 0; i < nCount; ++i)
+                        for (const auto& rProp : aSeq)
                         {
-                            OUString sName(aSeq[i].Name);
+                            OUString sName(rProp.Name);
                             if (sName == SC_ACTIVETABLE)
                             {
                                 OUString sTabName;
-                                if(aSeq[i].Value >>= sTabName)
+                                if(rProp.Value >>= sTabName)
                                 {
                                     SCTAB nTab(0);
                                     if (pDoc->GetTable(sTabName, nTab))
                                     {
                                         pDoc->SetVisibleTab(nTab);
-                                        i = nCount;
+                                        break;
                                     }
                                 }
                             }

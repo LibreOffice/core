@@ -147,11 +147,8 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScFilterOptionsObj::getPropertyValu
 
 void SAL_CALL ScFilterOptionsObj::setPropertyValues( const uno::Sequence<beans::PropertyValue>& aProps )
 {
-    const beans::PropertyValue* pPropArray = aProps.getConstArray();
-    long nPropCount = aProps.getLength();
-    for (long i = 0; i < nPropCount; i++)
+    for (const beans::PropertyValue& rProp : aProps)
     {
-        const beans::PropertyValue& rProp = pPropArray[i];
         OUString aPropName(rProp.Name);
 
         if ( aPropName == SC_UNONAME_FILENAME )

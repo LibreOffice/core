@@ -110,9 +110,8 @@ namespace {
 void getRangeFromDataSource( uno::Reference< chart2::data::XDataSource > const & xDataSource, std::vector<OUString>& rRangeRep)
 {
     uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence> > xSeqs = xDataSource->getDataSequences();
-    for (sal_Int32 i = 0, n = xSeqs.getLength(); i < n; ++i)
+    for (const uno::Reference<chart2::data::XLabeledDataSequence>& xLS : xSeqs)
     {
-        uno::Reference<chart2::data::XLabeledDataSequence> xLS = xSeqs[i];
         uno::Reference<chart2::data::XDataSequence> xSeq = xLS->getValues();
         if (xSeq.is())
         {
@@ -139,23 +138,22 @@ void getRangeFromErrorBar(const uno::Reference< chart2::XChartDocument >& rChart
         return;
 
     uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > xCooSysSequence( xCooSysContainer->getCoordinateSystems());
-    for(sal_Int32 i = 0; i < xCooSysSequence.getLength(); ++i)
+    for(const auto& rCooSys : xCooSysSequence)
     {
-        uno::Reference< chart2::XChartTypeContainer > xChartTypeContainer( xCooSysSequence[i], uno::UNO_QUERY);
+        uno::Reference< chart2::XChartTypeContainer > xChartTypeContainer( rCooSys, uno::UNO_QUERY);
         if(!xChartTypeContainer.is())
             continue;
 
         uno::Sequence< uno::Reference< chart2::XChartType > > xChartTypeSequence( xChartTypeContainer->getChartTypes() );
-        for(sal_Int32 nChartType = 0; nChartType < xChartTypeSequence.getLength(); ++nChartType)
+        for(const auto& rChartType : xChartTypeSequence)
         {
-            uno::Reference< chart2::XDataSeriesContainer > xDataSequenceContainer( xChartTypeSequence[nChartType], uno::UNO_QUERY);
+            uno::Reference< chart2::XDataSeriesContainer > xDataSequenceContainer( rChartType, uno::UNO_QUERY);
             if(!xDataSequenceContainer.is())
                 continue;
 
             uno::Sequence< uno::Reference< chart2::XDataSeries > > xSeriesSequence( xDataSequenceContainer->getDataSeries() );
-            for(sal_Int32 nDataSeries = 0; nDataSeries < xSeriesSequence.getLength(); ++nDataSeries)
+            for(const uno::Reference<chart2::XDataSeries>& xSeries : xSeriesSequence)
             {
-                uno::Reference< chart2::XDataSeries > xSeries = xSeriesSequence[nDataSeries];
                 uno::Reference< beans::XPropertySet > xPropSet( xSeries, uno::UNO_QUERY);
                 uno::Reference< chart2::data::XDataSource > xErrorBarY;
                 xPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarY;

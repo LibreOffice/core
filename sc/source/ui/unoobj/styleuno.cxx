@@ -574,11 +574,8 @@ void ScStyleFamiliesObj::loadStylesFromDocShell( ScDocShell* pSource,
         bool bLoadCellStyles = true;
         bool bLoadPageStyles = true;
 
-        const beans::PropertyValue* pPropArray = aOptions.getConstArray();
-        sal_Int32 nPropCount = aOptions.getLength();
-        for (sal_Int32 i = 0; i < nPropCount; i++)
+        for (const beans::PropertyValue& rProp : aOptions)
         {
-            const beans::PropertyValue& rProp = pPropArray[i];
             OUString aPropName(rProp.Name);
 
             if (aPropName == SC_UNONAME_OVERWSTL)
@@ -1191,11 +1188,9 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScStyleObj::getPropertyStates( cons
     SolarMutexGuard aGuard;
     GetStyle_Impl();
 
-    const OUString* pNames = aPropertyNames.getConstArray();
     uno::Sequence<beans::PropertyState> aRet( aPropertyNames.getLength() );
-    beans::PropertyState* pStates = aRet.getArray();
-    for ( sal_Int32 i = 0; i < aPropertyNames.getLength(); i++ )
-        pStates[i] = getPropertyState_Impl( pNames[i] );
+    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aRet.begin(),
+        [this](const OUString& rName) -> beans::PropertyState { return getPropertyState_Impl(rName); });
     return aRet;
 }
 
@@ -1308,9 +1303,8 @@ uno::Sequence<uno::Any> SAL_CALL ScStyleObj::getPropertyDefaults( const uno::Seq
     GetStyle_Impl();
 
     uno::Sequence<uno::Any> aSequence( aPropertyNames.getLength() );
-    uno::Any* pValues = aSequence.getArray();
-    for ( sal_Int32 i = 0; i < aPropertyNames.getLength(); i++ )
-        pValues[i] = getPropertyDefault_Impl( aPropertyNames[i] );
+    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aSequence.begin(),
+        [this](const OUString& rName) -> uno::Any { return getPropertyDefault_Impl(rName); });
     return aSequence;
 }
 
@@ -1341,9 +1335,8 @@ uno::Sequence<uno::Any> SAL_CALL ScStyleObj::getPropertyValues( const uno::Seque
     GetStyle_Impl();
 
     uno::Sequence<uno::Any> aSequence( aPropertyNames.getLength() );
-    uno::Any* pValues = aSequence.getArray();
-    for ( sal_Int32 i = 0; i < aPropertyNames.getLength(); i++ )
-        pValues[i] = getPropertyValue_Impl( aPropertyNames[i] );
+    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aSequence.begin(),
+        [this](const OUString& rName) -> uno::Any { return getPropertyValue_Impl(rName); });
     return aSequence;
 }
 
@@ -1422,12 +1415,11 @@ void SAL_CALL ScStyleObj::setPropertiesToDefault( const uno::Sequence<OUString>&
     SolarMutexGuard aGuard;
     GetStyle_Impl();
 
-    const OUString* pNames = aPropertyNames.getConstArray();
     const SfxItemPropertyMap& rPropertyMap = pPropSet->getPropertyMap();
-    for ( sal_Int32 i = 0; i < aPropertyNames.getLength(); i++ )
+    for ( const OUString& rName : aPropertyNames )
     {
-        const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( pNames[i] );
-        setPropertyValue_Impl( pNames[i], pEntry, nullptr );
+        const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( rName );
+        setPropertyValue_Impl( rName, pEntry, nullptr );
     }
 }
 

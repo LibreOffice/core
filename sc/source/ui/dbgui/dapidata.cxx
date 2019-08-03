@@ -55,11 +55,8 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg(weld::Window* pParent)
         uno::Reference<sdb::XDatabaseContext> xContext = sdb::DatabaseContext::create(
                 comphelper::getProcessComponentContext() );
         uno::Sequence<OUString> aNames = xContext->getElementNames();
-        long nCount = aNames.getLength();
-        const OUString* pArray = aNames.getConstArray();
-        for (long nPos = 0; nPos < nCount; nPos++)
+        for( const OUString& aName : aNames )
         {
-            OUString aName = pArray[nPos];
             m_xLbDatabase->append_text(aName);
         }
     }
@@ -162,11 +159,8 @@ void ScDataPilotDatabaseDlg::FillObjects()
 
         //  fill list
 
-        long nCount = aNames.getLength();
-        const OUString* pArray = aNames.getConstArray();
-        for( long nPos=0; nPos<nCount; nPos++ )
+        for( const OUString& aName : aNames )
         {
-            OUString aName = pArray[nPos];
             m_xCbObject->append_text(aName);
         }
     }

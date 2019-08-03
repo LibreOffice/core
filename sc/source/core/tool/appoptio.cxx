@@ -176,9 +176,9 @@ static void lcl_SetSortList( const Any& rValue )
         {
             aList.clear();
 
-            for (long i=0; i<nCount; i++)
+            for (const auto& rStr : aSeq)
             {
-                ScUserListData* pNew = new ScUserListData( pArray[i] );
+                ScUserListData* pNew = new ScUserListData( rStr );
                 aList.push_back(pNew);
             }
         }

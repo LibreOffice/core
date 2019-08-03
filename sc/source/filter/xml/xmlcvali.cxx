@@ -387,17 +387,11 @@ void SAL_CALL ScXMLContentValidationContext::endFastElement( sal_Int32 /*nElemen
         uno::Sequence<beans::PropertyValue> aValues;
         pEvents->GetEventSequence( "OnError", aValues );
 
-        sal_Int32 nLength = aValues.getLength();
-        for( sal_Int32 i = 0; i < nLength; i++ )
-        {
-            // #i47525# must allow "MacroName" or "Script"
-            if ( aValues[i].Name == "MacroName" ||
-                 aValues[i].Name == "Script" )
-            {
-                aValues[i].Value >>= sErrorTitle;
-                break;
-            }
-        }
+        auto pValue = std::find_if(aValues.begin(), aValues.end(),
+            [](const beans::PropertyValue& rValue) {
+                return rValue.Name == "MacroName" || rValue.Name == "Script"; });
+        if (pValue != aValues.end())
+            pValue->Value >>= sErrorTitle;
     }
 
     ScMyImportValidation aValidation;
