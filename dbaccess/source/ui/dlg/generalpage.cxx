@@ -443,7 +443,7 @@ namespace dbaui
     }
 
     // OGeneralPageWizard
-    OGeneralPageWizard::OGeneralPageWizard( vcl::Window* pParent, const SfxItemSet& _rItems )
+    OGeneralPageWizard::OGeneralPageWizard(TabPageParent pParent, const SfxItemSet& _rItems)
         : OGeneralPage( pParent, "dbaccess/ui/generalpagewizard.ui", _rItems )
         , m_xRB_CreateDatabase(m_xBuilder->weld_radio_button("createDatabase"))
         , m_xRB_OpenExistingDatabase(m_xBuilder->weld_radio_button("openExistingDatabase"))
