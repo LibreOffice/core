@@ -1463,6 +1463,18 @@ void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<uno::Any>& rCallArgs)
     }
 }
 
+template <typename T>
+static long lcl_GetMaxColCount(const uno::Sequence< uno::Sequence<T> >* pRowSeq)
+{
+    if (!pRowSeq->hasElements())
+        return 0;
+
+    auto pRow = std::max_element(pRowSeq->begin(), pRowSeq->end(),
+        [](const uno::Sequence<T>& a, const uno::Sequence<T>& b) {
+            return a.getLength() < b.getLength(); });
+    return pRow->getLength();
+}
+
 void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
 {
     nErrCode = FormulaError::NONE;
@@ -1528,16 +1540,10 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                 if ( pRowSeq )
                 {
                     long nRowCount = pRowSeq->getLength();
-                    const uno::Sequence<sal_Int32>* pRowArr = pRowSeq->getConstArray();
-                    long nMaxColCount = 0;
-                    for (long nRow=0; nRow<nRowCount; nRow++)
-                    {
-                        long nTmp = pRowArr[nRow].getLength();
-                        if ( nTmp > nMaxColCount )
-                            nMaxColCount = nTmp;
-                    }
+                    long nMaxColCount = lcl_GetMaxColCount(pRowSeq);
                     if ( nMaxColCount && nRowCount )
                     {
+                        const uno::Sequence<sal_Int32>* pRowArr = pRowSeq->getConstArray();
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount), 0.0);
@@ -1569,16 +1575,10 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                 if ( pRowSeq )
                 {
                     long nRowCount = pRowSeq->getLength();
-                    const uno::Sequence<double>* pRowArr = pRowSeq->getConstArray();
-                    long nMaxColCount = 0;
-                    for (long nRow=0; nRow<nRowCount; nRow++)
-                    {
-                        long nTmp = pRowArr[nRow].getLength();
-                        if ( nTmp > nMaxColCount )
-                            nMaxColCount = nTmp;
-                    }
+                    long nMaxColCount = lcl_GetMaxColCount(pRowSeq);
                     if ( nMaxColCount && nRowCount )
                     {
+                        const uno::Sequence<double>* pRowArr = pRowSeq->getConstArray();
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount), 0.0);
@@ -1610,16 +1610,10 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                 if ( pRowSeq )
                 {
                     long nRowCount = pRowSeq->getLength();
-                    const uno::Sequence<OUString>* pRowArr = pRowSeq->getConstArray();
-                    long nMaxColCount = 0;
-                    for (long nRow=0; nRow<nRowCount; nRow++)
-                    {
-                        long nTmp = pRowArr[nRow].getLength();
-                        if ( nTmp > nMaxColCount )
-                            nMaxColCount = nTmp;
-                    }
+                    long nMaxColCount = lcl_GetMaxColCount(pRowSeq);
                     if ( nMaxColCount && nRowCount )
                     {
+                        const uno::Sequence<OUString>* pRowArr = pRowSeq->getConstArray();
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount), 0.0);
