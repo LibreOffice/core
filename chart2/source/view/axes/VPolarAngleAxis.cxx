@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <basegfx/numeric/ftools.hxx>
 
 #include "VPolarAngleAxis.hxx"
@@ -62,6 +63,7 @@ void VPolarAngleAxis::createTextShapes_ForAngleAxis(
     tNameSequence aPropNames;
     tAnySequence aPropValues;
 
+    uno::Reference< chart2::XChartDocument > rxModel( m_aAxisProperties.m_xAxisModel, uno::UNO_QUERY );
     uno::Reference< beans::XPropertySet > xProps( m_aAxisProperties.m_xAxisModel, uno::UNO_QUERY );
     PropertyMapper::getTextLabelMultiPropertyLists( xProps, aPropNames, aPropValues, false, -1, false, false );
     LabelPositionHelper::doDynamicFontResize( aPropValues, aPropNames, xProps

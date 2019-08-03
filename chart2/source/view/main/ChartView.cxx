@@ -423,6 +423,7 @@ VCoordinateSystem* addCooSysToList( std::vector< std::unique_ptr<VCoordinateSyst
 void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
               ChartModel& rChartModel )
 {
+    uno::Reference< XChartDocument > rxModel( rChartModel, uno::UNO_QUERY );
     uno::Reference< XDiagram > xDiagram( rChartModel.getFirstDiagram() );
     if( !xDiagram.is())
         return;
@@ -530,7 +531,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
 
             m_aSeriesPlotterList.push_back( std::unique_ptr<VSeriesPlotter>(pPlotter) );
             pPlotter->setNumberFormatsSupplier( xNumberFormatsSupplier );
-            pPlotter->setColorScheme( xColorScheme );
+            pPlotter->setColorScheme( rxModel, xColorScheme );
             if(pVCooSys)
                 pPlotter->setExplicitCategoriesProvider( pVCooSys->getExplicitCategoriesProvider() );
             sal_Int32 nMissingValueTreatment = DiagramHelper::getCorrectedMissingValueTreatment( xDiagram, xChartType );
@@ -2364,6 +2365,7 @@ void formatPage(
 {
     try
     {
+        uno::Reference< chart2::XChartDocument > rxModel( rChartModel, uno::UNO_QUERY );
         uno::Reference< beans::XPropertySet > xModelPage( rChartModel.getPageBackground());
         if( ! xModelPage.is())
             return;
@@ -2373,7 +2375,7 @@ void formatPage(
 
         //format page
         tPropertyNameValueMap aNameValueMap;
-        PropertyMapper::getValueMap( aNameValueMap, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xModelPage );
+        PropertyMapper::getValueMap( rxModel, 1, aNameValueMap, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xModelPage );
 
         OUString aCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) );
         aNameValueMap.emplace( "Name", uno::Any( aCID ) ); //CID OUString

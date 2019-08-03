@@ -48,13 +48,13 @@ void getPropNamesAndValues( const Reference< beans::XPropertySet >& xProp,
     switch( ePropertyType )
     {
         case ::chart::VLegendSymbolFactory::PropertyType::FilledSeries:
-            ::chart::PropertyMapper::getValueMap( aValueMap, aFilledSeriesNameMap, xProp );
+            ::chart::PropertyMapper::getValueMapWithoutModel( aValueMap, aFilledSeriesNameMap, xProp );
             break;
         case ::chart::VLegendSymbolFactory::PropertyType::LineSeries:
-            ::chart::PropertyMapper::getValueMap( aValueMap, aLineSeriesNameMap, xProp );
+            ::chart::PropertyMapper::getValueMapWithoutModel( aValueMap, aLineSeriesNameMap, xProp );
             break;
         case ::chart::VLegendSymbolFactory::PropertyType::Line:
-            ::chart::PropertyMapper::getValueMap( aValueMap, aLineNameMap, xProp );
+            ::chart::PropertyMapper::getValueMapWithoutModel( aValueMap, aLineNameMap, xProp );
             break;
     }
 
