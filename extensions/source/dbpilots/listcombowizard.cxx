@@ -104,8 +104,7 @@ namespace dbp
         return VclPtr<TabPage>();
     }
 
-
-    WizardTypes::WizardState OListComboWizard::determineNextState( WizardState _nCurrentState ) const
+    vcl::WizardTypes::WizardState OListComboWizard::determineNextState( WizardState _nCurrentState ) const
     {
         switch (_nCurrentState)
         {
@@ -119,7 +118,6 @@ namespace dbp
 
         return WZS_INVALID_STATE;
     }
-
 
     void OListComboWizard::enterState(WizardState _nState)
     {
@@ -336,14 +334,14 @@ namespace dbp
     }
 
 
-    bool OContentTableSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool OContentTableSelection::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
             return false;
 
         OListComboSettings& rSettings = getSettings();
         rSettings.sListContentTable = m_pSelectTable->GetSelectedEntry();
-        if (rSettings.sListContentTable.isEmpty() && (::svt::WizardTypes::eTravelBackward != _eReason))
+        if (rSettings.sListContentTable.isEmpty() && (::vcl::WizardTypes::eTravelBackward != _eReason))
             // need to select a table
             return false;
 
@@ -410,7 +408,7 @@ namespace dbp
     }
 
 
-    bool OContentFieldSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool OContentFieldSelection::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
             return false;
@@ -493,7 +491,7 @@ namespace dbp
         implCheckFinish();
     }
 
-    bool OLinkFieldsPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool OLinkFieldsPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
             return false;

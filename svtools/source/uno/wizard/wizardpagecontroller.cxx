@@ -128,8 +128,7 @@ namespace svt { namespace uno
         }
     }
 
-
-    bool WizardPageController::commitPage( WizardTypes::CommitPageReason i_eReason )
+    bool WizardPageController::commitPage( vcl::WizardTypes::CommitPageReason i_eReason )
     {
         if ( !m_xWizardPage.is() )
             return true;
@@ -145,7 +144,6 @@ namespace svt { namespace uno
 
         return true;
     }
-
 
     bool WizardPageController::canAdvance() const
     {

@@ -23,7 +23,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <dsntypes.hxx>
 #include "IItemSetHelper.hxx"
-#include <svtools/wizardmachine.hxx>
+#include <vcl/wizardmachine.hxx>
 #include <memory>
 
 namespace com { namespace sun { namespace star {
@@ -50,7 +50,7 @@ class OGeneralPage;
 class ODbDataSourceAdministrationHelper;
 /** tab dialog for administrating the office wide registered data sources
 */
-class ODbTypeWizDialog : public svt::OWizardMachine , public IItemSetHelper, public IDatabaseSettingsDialog
+class ODbTypeWizDialog : public vcl::OWizardMachine , public IItemSetHelper, public IDatabaseSettingsDialog
 {
 private:
     std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
@@ -89,7 +89,7 @@ protected:
     virtual VclPtr<TabPage> createPage(WizardState _nState) override;
     virtual WizardState determineNextState(WizardState _nCurrentState) const override;
     virtual bool        leaveState(WizardState _nState) override;
-    virtual ::svt::IWizardPageController*
+    virtual ::vcl::IWizardPageController*
                         getPageController( TabPage* _pCurrentPage ) const override;
     virtual bool        onFinish() override;
 

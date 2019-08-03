@@ -19,12 +19,12 @@
 #ifndef INCLUDED_SW_SOURCE_UI_DBUI_MMOUTPUTTYPEPAGE_HXX
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMOUTPUTTYPEPAGE_HXX
 
-#include <svtools/wizardmachine.hxx>
+#include <vcl/wizardmachine.hxx>
 #include <vcl/weld.hxx>
 #include <mailmergehelper.hxx>
 class SwMailMergeWizard;
 
-class SwMailMergeOutputTypePage : public svt::OWizardPage
+class SwMailMergeOutputTypePage : public vcl::OWizardPage
 {
     VclPtr<SwMailMergeWizard>  m_pWizard;
 

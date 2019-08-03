@@ -707,7 +707,7 @@ void ChartTypeTabPage::dispose()
     m_pSortByXValuesResourceGroup.reset();
     m_xSubTypeListWin.reset();
     m_xSubTypeList.reset();
-    svt::OWizardPage::dispose();
+    vcl::OWizardPage::dispose();
 }
 
 ChartTypeParameter ChartTypeTabPage::getCurrentParamter() const
@@ -921,7 +921,7 @@ void ChartTypeTabPage::initializePage()
     }
 }
 
-bool ChartTypeTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
+bool ChartTypeTabPage::commitPage( ::vcl::WizardTypes::CommitPageReason /*eReason*/ )
 {
     return true; // return false if this page should not be left
 }

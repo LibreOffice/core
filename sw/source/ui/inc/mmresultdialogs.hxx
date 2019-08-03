@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UI_DBUI_MMOUTPUTPAGE_HXX
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMOUTPUTPAGE_HXX
-#include <svtools/wizardmachine.hxx>
+#include <vcl/wizardmachine.hxx>
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/field.hxx>

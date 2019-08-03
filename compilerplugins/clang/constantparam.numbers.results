@@ -986,10 +986,6 @@ include/svtools/unitconv.hxx:45
     long ControlToItem(long,enum FieldUnit,enum MapUnit)
     enum FieldUnit eCtrl
     5
-include/svtools/wizdlg.hxx:198
-    long WizardDialog::LogicalCoordinateToPixel(int)
-    int iCoordinate
-    6
 include/svx/AccessibleShape.hxx:207
     _Bool accessibility::AccessibleShape::GetState(short)
     short aState
@@ -1614,6 +1610,10 @@ include/vcl/window.hxx:1572
     void vcl::Window::SimulateKeyPress(unsigned short) const
     unsigned short nKeyCode
     1312
+include/vcl/wizdlg.hxx:198
+    long WizardDialog::LogicalCoordinateToPixel(int)
+    int iCoordinate
+    6
 include/vcl/wrkwin.hxx:61
     void WorkWindow::WorkWindow(enum WindowType)
     enum WindowType nType

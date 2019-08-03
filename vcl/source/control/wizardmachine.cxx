@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/wizardmachine.hxx>
+#include <vcl/wizardmachine.hxx>
 #include <svtools/helpids.h>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <svtools/svtresid.hxx>
-#include <svtools/strings.hrc>
 #include <vcl/svapp.hxx>
+#include <strings.hrc>
+#include <svdata.hxx>
 #include <stack>
 
-namespace svt
+namespace vcl
 {
     //= WizardPageImplData
     OWizardPage::OWizardPage(vcl::Window *pParent, const OString& rID,
@@ -135,7 +135,7 @@ namespace svt
             m_pPrevPage = VclPtr<PushButton>::Create(this, WB_TABSTOP);
             m_pPrevPage->SetHelpId( HID_WIZARD_PREVIOUS );
             m_pPrevPage->SetSizePixel(LogicToPixel(Size(50, 14), MapMode(MapUnit::MapAppFont)));
-            m_pPrevPage->SetText(SvtResId(STR_WIZDLG_PREVIOUS));
+            m_pPrevPage->SetText(VclResId(STR_WIZDLG_PREVIOUS));
             m_pPrevPage->Show();
             m_pPrevPage->set_id("previous");
 
@@ -153,7 +153,7 @@ namespace svt
             m_pNextPage = VclPtr<PushButton>::Create(this, WB_TABSTOP);
             m_pNextPage->SetHelpId( HID_WIZARD_NEXT );
             m_pNextPage->SetSizePixel(LogicToPixel(Size(50, 14), MapMode(MapUnit::MapAppFont)));
-            m_pNextPage->SetText(SvtResId(STR_WIZDLG_NEXT));
+            m_pNextPage->SetText(VclResId(STR_WIZDLG_NEXT));
             m_pNextPage->Show();
             m_pNextPage->set_id("next");
 
@@ -167,7 +167,7 @@ namespace svt
         {
             m_pFinish = VclPtr<OKButton>::Create(this, WB_TABSTOP);
             m_pFinish->SetSizePixel(LogicToPixel(Size(50, 14), MapMode(MapUnit::MapAppFont)));
-            m_pFinish->SetText(SvtResId(STR_WIZDLG_FINISH));
+            m_pFinish->SetText(VclResId(STR_WIZDLG_FINISH));
             m_pFinish->Show();
             m_pFinish->set_id("finish");
 

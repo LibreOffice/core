@@ -184,15 +184,15 @@ void RangeChooserTabPage::initControlsFromModel()
 void RangeChooserTabPage::DeactivatePage()
 {
     commitPage();
-    svt::OWizardPage::DeactivatePage();
+    vcl::OWizardPage::DeactivatePage();
 }
 
 void RangeChooserTabPage::commitPage()
 {
-    commitPage(::svt::WizardTypes::eFinish);
+    commitPage(::vcl::WizardTypes::eFinish);
 }
 
-bool RangeChooserTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
+bool RangeChooserTabPage::commitPage( ::vcl::WizardTypes::CommitPageReason /*eReason*/ )
 {
     //ranges may have been edited in the meanwhile (dirty is true in that case here)
     if( isValid() )

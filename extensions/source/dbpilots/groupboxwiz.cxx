@@ -65,7 +65,7 @@ namespace dbp
     }
 
 
-    VclPtr<TabPage> OGroupBoxWizard::createPage(::svt::WizardTypes::WizardState _nState)
+    VclPtr<TabPage> OGroupBoxWizard::createPage(::vcl::WizardTypes::WizardState _nState)
     {
         switch (_nState)
         {
@@ -89,7 +89,7 @@ namespace dbp
     }
 
 
-    WizardTypes::WizardState OGroupBoxWizard::determineNextState( ::svt::WizardTypes::WizardState _nCurrentState ) const
+    vcl::WizardTypes::WizardState OGroupBoxWizard::determineNextState( ::vcl::WizardTypes::WizardState _nCurrentState ) const
     {
         switch (_nCurrentState)
         {
@@ -113,7 +113,7 @@ namespace dbp
     }
 
 
-    void OGroupBoxWizard::enterState(::svt::WizardTypes::WizardState _nState)
+    void OGroupBoxWizard::enterState(::vcl::WizardTypes::WizardState _nState)
     {
         // some stuff to do before calling the base class (modifying our settings)
         switch (_nState)
@@ -231,7 +231,7 @@ namespace dbp
     }
 
 
-    bool ORadioSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool ORadioSelectionPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {
         if (!OGBWPage::commitPage(_eReason))
             return false;
@@ -359,7 +359,7 @@ namespace dbp
     }
 
 
-    bool ODefaultFieldSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool ODefaultFieldSelectionPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {
         if (!OMaybeListSelectionPage::commitPage(_eReason))
             return false;
@@ -372,7 +372,7 @@ namespace dbp
 
     OOptionValuesPage::OOptionValuesPage( OControlWizard* _pParent )
         :OGBWPage(_pParent, "OptionValuesPage", "modules/sabpilot/ui/optionvaluespage.ui")
-        ,m_nLastSelection(::svt::WizardTypes::WizardState(-1))
+        ,m_nLastSelection(::vcl::WizardTypes::WizardState(-1))
     {
         get(m_pValue, "optionvalue");
         get(m_pOptions, "radiobuttons");
@@ -407,7 +407,7 @@ namespace dbp
 
     void OOptionValuesPage::implTraveledOptions()
     {
-        if (::svt::WizardTypes::WizardState(-1) != m_nLastSelection)
+        if (::vcl::WizardTypes::WizardState(-1) != m_nLastSelection)
         {
             // save the value for the last option
             DBG_ASSERT(static_cast<size_t>(m_nLastSelection) < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid previous selection index!");
@@ -444,7 +444,7 @@ namespace dbp
     }
 
 
-    bool OOptionValuesPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool OOptionValuesPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {
         if (!OGBWPage::commitPage(_eReason))
             return false;
@@ -510,7 +510,7 @@ namespace dbp
     }
 
 
-    bool OFinalizeGBWPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool OFinalizeGBWPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {
         if (!OGBWPage::commitPage(_eReason))
             return false;

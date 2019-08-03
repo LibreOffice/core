@@ -89,13 +89,13 @@ namespace svt { namespace uno
     {
         switch ( i_eReason )
         {
-        case WizardTypes::eTravelForward:
+        case vcl::WizardTypes::eTravelForward:
             return WizardTravelType::FORWARD;
 
-        case WizardTypes::eTravelBackward:
+        case vcl::WizardTypes::eTravelBackward:
             return WizardTravelType::BACKWARD;
 
-        case WizardTypes::eFinish:
+        case vcl::WizardTypes::eFinish:
             return WizardTravelType::FINISH;
 
         default:
@@ -188,7 +188,7 @@ namespace svt { namespace uno
         return pPage;
     }
 
-    IWizardPageController* WizardShell::getPageController( TabPage* i_pCurrentPage ) const
+    vcl::IWizardPageController* WizardShell::getPageController( TabPage* i_pCurrentPage ) const
     {
         return impl_getController( i_pCurrentPage ).get();
     }

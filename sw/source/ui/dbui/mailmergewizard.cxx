@@ -89,7 +89,7 @@ SwMailMergeWizard::~SwMailMergeWizard()
 
 VclPtr<TabPage> SwMailMergeWizard::createPage(WizardState _nState)
 {
-    VclPtr<OWizardPage> pRet;
+    VclPtr<vcl::OWizardPage> pRet;
     switch(_nState)
     {
         case MM_DOCUMENTSELECTPAGE :
@@ -202,7 +202,7 @@ void SwMailMergeWizard::UpdateRoadmap()
     //#i97436# if a document has to be loaded then enable output type page only
     m_bDocumentLoad = false;
     bool bEnableOutputTypePage = (nCurPage != MM_DOCUMENTSELECTPAGE) ||
-        static_cast<svt::OWizardPage*>(pCurPage)->commitPage( ::svt::WizardTypes::eValidate );
+        static_cast<vcl::OWizardPage*>(pCurPage)->commitPage( ::vcl::WizardTypes::eValidate );
 
     // handle the Finish button
     bool bCanFinish = !m_bDocumentLoad && bEnableOutputTypePage &&

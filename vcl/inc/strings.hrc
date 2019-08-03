@@ -148,6 +148,10 @@
 #define STR_SVT_CALENDAR_WEEK                        NC_("STR_SVT_CALENDAR_WEEK", "Week")
 #define STR_SVT_CALENDAR_TODAY                       NC_("STR_SVT_CALENDAR_TODAY", "Today")
 
+#define STR_WIZDLG_FINISH                            NC_("STR_WIZDLG_FINISH", "~Finish")
+#define STR_WIZDLG_NEXT                              NC_("STR_WIZDLG_NEXT", "~Next >")
+#define STR_WIZDLG_PREVIOUS                          NC_("STR_WIZDLG_PREVIOUS", "< Bac~k")
+
 #endif // INCLUDED_VCL_INC_STRINGS_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

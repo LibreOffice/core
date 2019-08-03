@@ -23,7 +23,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <dsntypes.hxx>
 #include <commontypes.hxx>
-#include <svtools/wizardmachine.hxx>
+#include <vcl/wizardmachine.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <curledit.hxx>
@@ -111,7 +111,7 @@ namespace dbaui
     class IDatabaseSettingsDialog;
     class IItemSetHelper;
     class OGenericAdministrationPage    :public SfxTabPage
-                                        ,public ::svt::IWizardPageController
+                                        ,public ::vcl::IWizardPageController
     {
     private:
         Link<OGenericAdministrationPage const *, void> m_aModifiedHandler; /// to be called if something on the page has been modified
@@ -162,7 +162,7 @@ namespace dbaui
 
         // svt::IWizardPageController
         virtual void initializePage() override;
-        virtual bool commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
+        virtual bool commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
         virtual bool canAdvance() const override;
 
         void                SetRoadmapStateValue( bool _bDoEnable ) { m_abEnableRoadmap = _bDoEnable; }

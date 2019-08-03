@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMADDRESSBLOCKPAGE_HXX
 
 #include <editeng/weldeditview.hxx>
-#include <svtools/wizardmachine.hxx>
+#include <vcl/wizardmachine.hxx>
 #include <vcl/button.hxx>
 #include <mailmergehelper.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -37,7 +37,7 @@
 class SwMailMergeWizard;
 class SwMailMergeConfigItem;
 
-class SwMailMergeAddressBlockPage : public svt::OWizardPage
+class SwMailMergeAddressBlockPage : public vcl::OWizardPage
 {
     VclPtr<PushButton>         m_pAddressListPB;
     VclPtr<FixedText>          m_pCurrentAddressFI;
@@ -76,7 +76,7 @@ class SwMailMergeAddressBlockPage : public svt::OWizardPage
     void                EnableAddressBlock(bool bAll, bool bSelective);
 
     virtual void        ActivatePage() override;
-    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
+    virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
     virtual bool        canAdvance() const override;
 
 public:

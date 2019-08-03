@@ -20,7 +20,7 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_CONTROLWIZARD_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_CONTROLWIZARD_HXX
 
-#include <svtools/wizardmachine.hxx>
+#include <vcl/wizardmachine.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -46,7 +46,7 @@ namespace dbp
     };
 
     class OControlWizard;
-    typedef ::svt::OWizardPage OControlWizardPage_Base;
+    typedef ::vcl::OWizardPage OControlWizardPage_Base;
     class OControlWizardPage : public OControlWizardPage_Base
     {
         VclPtr<FixedText>      m_pFormDatasourceLabel;
@@ -87,7 +87,7 @@ namespace dbp
 
     struct OAccessRegulator;
 
-    typedef ::svt::OWizardMachine OControlWizard_Base;
+    typedef ::vcl::OWizardMachine OControlWizard_Base;
     class OControlWizard : public OControlWizard_Base
     {
     private:
