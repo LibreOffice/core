@@ -38,6 +38,7 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/prgsbar.hxx>
+#include <vcl/roadmapwizard.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/svtabbx.hxx>
@@ -1631,7 +1632,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                     pParent->GetType() == WindowType::VERTICALTABCONTROL))
     {
         bool bTopLevel(name == "GtkDialog" || name == "GtkMessageDialog" ||
-                       name == "GtkWindow" || name == "GtkPopover");
+                       name == "GtkWindow" || name == "GtkPopover" || name == "GtkAssistant");
         if (!bTopLevel)
         {
             if (pParent->GetType() == WindowType::TABCONTROL)
@@ -1677,12 +1678,17 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     extractButtonImage(id, rMap, name == "GtkRadioButton");
 
     VclPtr<vcl::Window> xWindow;
-    if (name == "GtkDialog" || name == "GtkAboutDialog")
+    if (name == "GtkDialog" || name == "GtkAboutDialog" || name == "GtkAssistant")
     {
         WinBits nBits = WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
-        if (name == "GtkAboutDialog")
+        if (name == "GtkAssistant")
+        {
+            //TODO when no bare OWizardMachine pass nBits down instead of using empty .ui
+            xWindow = VclPtr<vcl::RoadmapWizard>::Create(pParent);
+        }
+        else if (name == "GtkAboutDialog")
             xWindow = VclPtr<vcl::AboutDialog>::Create(pParent, nBits, !pParent ? Dialog::InitFlag::NoParent : Dialog::InitFlag::Default);
         else
             xWindow = VclPtr<Dialog>::Create(pParent, nBits, !pParent ? Dialog::InitFlag::NoParent : Dialog::InitFlag::Default);
