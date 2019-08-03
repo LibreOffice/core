@@ -108,7 +108,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/control/indexentryres \
     svtools/source/control/inettbc \
     svtools/source/control/managedmenubutton \
-    svtools/source/control/roadmap \
     svtools/source/control/ruler \
     svtools/source/control/scriptedtext \
     svtools/source/control/scrwin \
