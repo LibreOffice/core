@@ -1133,6 +1133,8 @@ void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
     {
         rSelector.SelectPage(it);
     }
+    collectUIInformation(OUString::number(nInsertionIndex+2),"Duplicate");
+
 }
 
 void SlotManager::ChangeSlideExclusionState (
