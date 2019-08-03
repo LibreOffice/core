@@ -171,7 +171,7 @@ DataSourceTabPage::DataSourceTabPage(TabPageParent pParent, DialogModel & rDialo
                                      ChartTypeTemplateProvider* pTemplateProvider,
                                      Dialog * pParentDialog,
                                      bool bHideDescription /* = false */)
-    : ::svt::OWizardPage(pParent, "modules/schart/ui/tp_DataSource.ui", "tp_DataSource")
+    : ::vcl::OWizardPage(pParent, "modules/schart/ui/tp_DataSource.ui", "tp_DataSource")
     , m_pTemplateProvider(pTemplateProvider)
     , m_rDialogModel(rDialogModel)
     , m_pCurrentRangeChoosingField( nullptr )
@@ -253,7 +253,7 @@ DataSourceTabPage::~DataSourceTabPage()
 void DataSourceTabPage::dispose()
 {
     m_pParentDialog.clear();
-    ::svt::OWizardPage::dispose();
+    ::vcl::OWizardPage::dispose();
 }
 
 void DataSourceTabPage::ActivatePage()
@@ -270,15 +270,15 @@ void DataSourceTabPage::initializePage()
 void DataSourceTabPage::DeactivatePage()
 {
     commitPage();
-    svt::OWizardPage::DeactivatePage();
+    vcl::OWizardPage::DeactivatePage();
 }
 
 void DataSourceTabPage::commitPage()
 {
-    commitPage(::svt::WizardTypes::eFinish);
+    commitPage(::vcl::WizardTypes::eFinish);
 }
 
-bool DataSourceTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
+bool DataSourceTabPage::commitPage( ::vcl::WizardTypes::CommitPageReason /*eReason*/ )
 {
     //ranges may have been edited in the meanwhile (dirty is true in that case here)
     if( isValid() )

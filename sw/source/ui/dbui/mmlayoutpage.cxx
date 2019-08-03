@@ -76,7 +76,7 @@ using namespace ::com::sun::star::view;
 #define DEFAULT_ADDRESS_HEIGHT (MM50*7) // 3,5cm
 
 SwMailMergeLayoutPage::SwMailMergeLayoutPage(SwMailMergeWizard* pWizard, TabPageParent pParent)
-    : svt::OWizardPage(pParent, "modules/swriter/ui/mmlayoutpage.ui", "MMLayoutPage")
+    : vcl::OWizardPage(pParent, "modules/swriter/ui/mmlayoutpage.ui", "MMLayoutPage")
     , m_pExampleWrtShell(nullptr)
     , m_pAddressBlockFormat(nullptr)
     , m_bIsGreetingInserted(false)
@@ -160,7 +160,7 @@ void SwMailMergeLayoutPage::dispose()
 {
     File::remove( m_sExampleURL );
     m_pWizard.clear();
-    svt::OWizardPage::dispose();
+    vcl::OWizardPage::dispose();
 }
 
 void SwMailMergeLayoutPage::ActivatePage()
@@ -216,11 +216,11 @@ void SwMailMergeLayoutPage::ActivatePage()
     }
 }
 
-bool SwMailMergeLayoutPage::commitPage(::svt::WizardTypes::CommitPageReason eReason)
+bool SwMailMergeLayoutPage::commitPage(::vcl::WizardTypes::CommitPageReason eReason)
 {
     //now insert the frame and the greeting
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
-    if (eReason == ::svt::WizardTypes::eTravelForward || eReason == ::svt::WizardTypes::eFinish)
+    if (eReason == ::vcl::WizardTypes::eTravelForward || eReason == ::vcl::WizardTypes::eFinish)
     {
         long nLeft = static_cast< long >(m_xLeftMF->denormalize(m_xLeftMF->get_value(FieldUnit::TWIP)));
         long nTop  = static_cast< long >(m_xTopMF->denormalize(m_xTopMF->get_value(FieldUnit::TWIP)));

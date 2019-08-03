@@ -57,7 +57,7 @@ namespace svt { namespace uno
         virtual OUString    getStateDisplayName( WizardState i_nState ) const override;
         virtual bool        canAdvance() const override;
         virtual bool        onFinish() override;
-        virtual IWizardPageController*
+        virtual vcl::IWizardPageController*
                             getPageController( TabPage* _pCurrentPage ) const override;
 
         static sal_Int16 convertCommitReasonToTravelType( const CommitPageReason i_eReason );

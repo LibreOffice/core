@@ -20,7 +20,7 @@
 #define INCLUDED_SVTOOLS_WIZARDMACHINE_HXX
 
 #include <memory>
-#include <svtools/svtdllapi.h>
+#include <vcl/dllapi.h>
 #include <vcl/wizdlg.hxx>
 #include <vcl/button.hxx>
 #include <vcl/tabpage.hxx>
@@ -45,7 +45,7 @@ namespace o3tl
     template<> struct typed_flags<WizardButtonFlags> : is_typed_flags<WizardButtonFlags, 0x001f> {};
 }
 
-namespace svt
+namespace vcl
 {
 
 
@@ -96,7 +96,7 @@ namespace svt
 
     //= OWizardPage
 
-    class SVT_DLLPUBLIC OWizardPage : public TabPage, public IWizardPageController
+    class VCL_DLLPUBLIC OWizardPage : public TabPage, public IWizardPageController
     {
 
     public:
@@ -149,7 +149,7 @@ namespace svt
         they can implement non-linear traveling this way.
     */
 
-    class SVT_DLLPUBLIC OWizardMachine : public WizardDialog, public WizardTypes
+    class VCL_DLLPUBLIC OWizardMachine : public WizardDialog, public WizardTypes
     {
     private:
         // restrict access to some aspects of our base class
@@ -353,9 +353,9 @@ namespace svt
         DECL_DLLPRIVATE_LINK(OnPrevPage, Button*, void);
         DECL_DLLPRIVATE_LINK(OnFinish, Button*, void);
 
-        SVT_DLLPRIVATE void     implResetDefault(vcl::Window const * _pWindow);
-        SVT_DLLPRIVATE void     implUpdateTitle();
-        SVT_DLLPRIVATE void     implConstruct( const WizardButtonFlags _nButtonFlags );
+        VCL_DLLPRIVATE void     implResetDefault(vcl::Window const * _pWindow);
+        VCL_DLLPRIVATE void     implUpdateTitle();
+        VCL_DLLPRIVATE void     implConstruct( const WizardButtonFlags _nButtonFlags );
     };
 
     /// helper class to temporarily suspend any traveling in the wizard
@@ -378,7 +378,7 @@ namespace svt
     };
 
 
-}   // namespace svt
+}   // namespace vcl
 
 
 #endif // INCLUDED_SVTOOLS_WIZARDMACHINE_HXX

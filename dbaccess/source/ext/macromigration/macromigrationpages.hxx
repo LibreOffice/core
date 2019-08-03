@@ -24,7 +24,7 @@
 #include "rangeprogressbar.hxx"
 
 #include <svtools/urlcontrol.hxx>
-#include <svtools/wizardmachine.hxx>
+#include <vcl/wizardmachine.hxx>
 #include <svx/databaselocationinput.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
@@ -41,7 +41,7 @@ namespace dbmm
     class MacroMigrationDialog;
 
     // MacroMigrationPage
-    typedef ::svt::OWizardPage  MacroMigrationPage_Base;
+    typedef ::vcl::OWizardPage  MacroMigrationPage_Base;
     class MacroMigrationPage : public MacroMigrationPage_Base
     {
     public:
@@ -87,7 +87,7 @@ namespace dbmm
 
         // IWizardPageController overridables
         virtual void        initializePage() override;
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
+        virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
         virtual bool        canAdvance() const override;
 
         DECL_LINK( OnLocationModified, Edit&, void );

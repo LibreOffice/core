@@ -166,7 +166,7 @@ namespace dbp
     }
 
 
-    bool OTableSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool OTableSelectionPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {
         if (!OControlWizardPage::commitPage(_eReason))
             return false;
@@ -481,7 +481,7 @@ namespace dbp
     }
 
 
-    bool ODBFieldPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool ODBFieldPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {
         if (!OMaybeListSelectionPage::commitPage(_eReason))
             return false;
