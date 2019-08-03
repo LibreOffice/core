@@ -23,7 +23,7 @@
 #include "TimerTriggeredControllerLock.hxx"
 #include "TabPageNotifiable.hxx"
 
-#include <svtools/roadmapwizard.hxx>
+#include <vcl/roadmapwizard.hxx>
 
 #include <memory>
 
@@ -36,7 +36,7 @@ namespace chart
 class DialogModel;
 class ChartTypeTemplateProvider;
 
-class CreationWizard : public svt::RoadmapWizard, public TabPageNotifiable
+class CreationWizard : public vcl::RoadmapWizard, public TabPageNotifiable
 {
 public:
     CreationWizard(vcl::Window* pParent,
