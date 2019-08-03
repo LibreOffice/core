@@ -20,7 +20,7 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_ABPILOT_ABSPILOT_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_ABPILOT_ABSPILOT_HXX
 
-#include <svtools/roadmapwizard.hxx>
+#include <vcl/roadmapwizard.hxx>
 #include "addresssettings.hxx"
 #include <vcl/fixed.hxx>
 #include "datasourcehandling.hxx"
@@ -29,7 +29,7 @@
 namespace abp
 {
 
-    typedef ::svt::RoadmapWizard OAddressBookSourcePilot_Base;
+    typedef ::vcl::RoadmapWizard OAddressBookSourcePilot_Base;
     class OAddressBookSourcePilot final : public OAddressBookSourcePilot_Base
     {
         css::uno::Reference< css::uno::XComponentContext >

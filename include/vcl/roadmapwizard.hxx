@@ -17,15 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_ROADMAPWIZARD_HXX
-#define INCLUDED_SVTOOLS_ROADMAPWIZARD_HXX
+#ifndef INCLUDED_VCL_ROADMAPWIZARD_HXX
+#define INCLUDED_VCL_ROADMAPWIZARD_HXX
 
 #include <memory>
-#include <svtools/svtdllapi.h>
+#include <vcl/dllapi.h>
 #include <vcl/wizardmachine.hxx>
 
-
-namespace svt
+namespace vcl
 {
     struct RoadmapWizardImpl;
     class RoadmapWizard;
@@ -60,7 +59,7 @@ namespace svt
         <code>n2</code>, which share at least the first <code>k</code> states (where <code>k</code>
         is at least 1), and an arbitrary number of other states.
     */
-    class SVT_DLLPUBLIC RoadmapWizard : public vcl::OWizardMachine, public RoadmapWizardTypes
+    class VCL_DLLPUBLIC RoadmapWizard : public vcl::OWizardMachine, public RoadmapWizardTypes
     {
     private:
         std::unique_ptr<RoadmapWizardImpl>  m_pImpl;
@@ -208,16 +207,16 @@ namespace svt
         /** updates the roadmap control to show the given path, as far as possible
             (modulo conflicts with other paths)
         */
-        SVT_DLLPRIVATE void implUpdateRoadmap( );
+        VCL_DLLPRIVATE void implUpdateRoadmap( );
 
     private:
-        SVT_DLLPRIVATE void impl_construct();
+        VCL_DLLPRIVATE void impl_construct();
     };
 
 
-} // namespace svt
+} // namespace vcl
 
 
-#endif // OOO_ INCLUDED_SVTOOLS_ROADMAPWIZARD_HXX
+#endif // OOO_ INCLUDED_VCL_ROADMAPWIZARD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

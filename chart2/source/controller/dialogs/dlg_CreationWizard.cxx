@@ -47,7 +47,7 @@ namespace chart
 
 CreationWizard::CreationWizard(vcl::Window* pParent, const uno::Reference<frame::XModel>& xChartModel,
                                const uno::Reference<uno::XComponentContext>& xContext)
-                : svt::RoadmapWizard(pParent)
+                : vcl::RoadmapWizard(pParent)
                 , m_xChartModel(xChartModel,uno::UNO_QUERY)
                 , m_xComponentContext(xContext)
                 , m_pTemplateProvider(nullptr)
@@ -153,7 +153,7 @@ void CreationWizard::enterState(WizardState nState)
     enableButtons( WizardButtonFlags::PREVIOUS, nState > STATE_FIRST );
     enableButtons( WizardButtonFlags::NEXT, nState < STATE_LAST );
     if( isStateEnabled( nState ))
-        svt::RoadmapWizard::enterState(nState);
+        vcl::RoadmapWizard::enterState(nState);
 }
 
 void CreationWizard::setInvalidPage( TabPage * /* pTabPage */ )

@@ -22,7 +22,7 @@
 
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
 #include <com/sun/star/ui/dialogs/XWizard.hpp>
-#include <svtools/roadmapwizard.hxx>
+#include <vcl/roadmapwizard.hxx>
 #include <map>
 #include <memory>
 
@@ -37,7 +37,7 @@ namespace svt { namespace uno
 
     //= WizardShell
 
-    typedef ::svt::RoadmapWizard    WizardShell_Base;
+    typedef ::vcl::RoadmapWizard    WizardShell_Base;
     class WizardShell : public WizardShell_Base
     {
     public:

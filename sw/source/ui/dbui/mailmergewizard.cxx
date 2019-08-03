@@ -124,7 +124,7 @@ VclPtr<TabPage> SwMailMergeWizard::createPage(WizardState _nState)
 
 void SwMailMergeWizard::enterState( WizardState _nState )
 {
-    ::svt::RoadmapWizard::enterState( _nState );
+    ::vcl::RoadmapWizard::enterState( _nState );
 
     if (m_xConfigItem->GetTargetView())
     {

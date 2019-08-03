@@ -30,7 +30,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/vclmedit.hxx>
 
-namespace svt
+namespace vcl
 {
     class RoadmapWizard;
 }
@@ -59,7 +59,7 @@ namespace dbmm
         virtual ~PreparationPage() override;
         virtual void dispose() override;
 
-        static VclPtr<TabPage> Create( ::svt::RoadmapWizard& _rParentDialog );
+        static VclPtr<TabPage> Create( ::vcl::RoadmapWizard& _rParentDialog );
 
         void    showCloseDocsError(bool _bShow);
 
@@ -74,7 +74,7 @@ namespace dbmm
         explicit SaveDBDocPage(MacroMigrationDialog& _rParentDialog);
         virtual ~SaveDBDocPage() override;
         virtual void dispose() override;
-        static VclPtr<TabPage> Create( ::svt::RoadmapWizard& _rParentDialog );
+        static VclPtr<TabPage> Create( ::vcl::RoadmapWizard& _rParentDialog );
 
         OUString getBackupLocation() const { return m_pLocationController->getURL(); }
         void            grabLocationFocus() { m_pSaveAsLocation->GrabFocus(); }
@@ -102,7 +102,7 @@ namespace dbmm
         virtual ~ProgressPage() override;
         virtual void dispose() override;
 
-        static VclPtr<TabPage> Create( ::svt::RoadmapWizard& _rParentDialog );
+        static VclPtr<TabPage> Create( ::vcl::RoadmapWizard& _rParentDialog );
 
         void    setDocumentCounts( const sal_Int32 _nForms, const sal_Int32 _nReports );
         void    onFinishedSuccessfully();
@@ -135,7 +135,7 @@ namespace dbmm
         virtual ~ResultPage() override;
         virtual void dispose() override;
 
-        static VclPtr<TabPage> Create( ::svt::RoadmapWizard& _rParentDialog );
+        static VclPtr<TabPage> Create( ::vcl::RoadmapWizard& _rParentDialog );
 
         void            displayMigrationLog( const bool _bSuccessful, const OUString& _rLog );
 
