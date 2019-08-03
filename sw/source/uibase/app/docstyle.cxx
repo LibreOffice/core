@@ -57,6 +57,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
+#include <svl/grabbagitem.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <numrule.hxx>
@@ -1333,12 +1334,20 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
 
                 if( nFamily == SfxStyleFamily::Char )
                 {
+                    std::unique_ptr<SfxGrabBagItem> pGrabBag;
+                    const SfxPoolItem *pTmpItem;
+                    if (SfxItemState::SET == aCoreSet.GetItemState(RES_CHRATR_GRABBAG, false, &pTmpItem))
+                        pGrabBag.reset(static_cast<SfxGrabBagItem*>(pTmpItem->Clone()));
+                    //.reset(static_cast<SfxGrabBagItem*>(pTmpItem->Clone()));
                     SAL_WARN_IF(!pCharFormat, "sw.ui", "Where's SwCharFormat");
                     aCoreSet.Put(pCharFormat->GetAttrSet());
                     aCoreSet.Put( aBoxInfo );
 
                     if(pCharFormat->DerivedFrom())
                         aCoreSet.SetParent(&pCharFormat->DerivedFrom()->GetAttrSet());
+
+                    if ( pGrabBag )
+                        aCoreSet.Put( std::move(pGrabBag) );
                 }
                 else if ( nFamily == SfxStyleFamily::Para )
                 {
