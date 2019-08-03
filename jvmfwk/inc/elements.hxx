@@ -90,7 +90,7 @@ public:
 
     /** reads the node /java/javaInfo.
         If javaInfo@xsi:nil = true then member bNil is set to true
-        an no further elements are read.
+        and no further elements are read.
      */
     void loadFromNode(xmlDoc * pDoc,xmlNode * pJavaInfo);
     /** The attribute nil will be set to false. The function gets the value

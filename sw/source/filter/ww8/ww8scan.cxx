@@ -7058,7 +7058,7 @@ static void lcl_checkFontname( OUString& sString )
     // for efficiency, we'd like to use String methods as far as possible.
     // Hence, we will:
     // 1) convert all invalid chars to \u0001
-    // 2) then erase all \u0001 chars (if anywere found), and
+    // 2) then erase all \u0001 chars (if anywhere found), and
     // 3) erase leading/trailing ';', in case a font name was
     //    completely removed
 
