@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_5479c42c",
+        "filename": "basctl/source/basicide/basobj2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-08-03T18:23:02Z",
+      "side": 1,
+      "message": "as a further enhancement you could only have one list, then we only need to sort once, at the end.",
+      "revId": "86ef09ac5f49432606a216ab272286efef5115c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_7499686c",
+        "filename": "basctl/source/basicide/basobj2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-08-03T18:23:02Z",
+      "side": 1,
+      "message": "and this loop can be converted to \n   comphelper::containerToSequence",
+      "revId": "86ef09ac5f49432606a216ab272286efef5115c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
