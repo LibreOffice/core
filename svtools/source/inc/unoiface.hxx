@@ -215,7 +215,7 @@ protected:
 //  class SVTXRoadmap
 
 
-namespace svt
+namespace vcl
 {
     class ORoadmap;
 }

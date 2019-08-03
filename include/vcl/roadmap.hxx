@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_INC_ROADMAP_HXX
-#define INCLUDED_SVTOOLS_INC_ROADMAP_HXX
+#ifndef INCLUDED_VCL_INC_ROADMAP_HXX
+#define INCLUDED_VCL_INC_ROADMAP_HXX
 
-#include <svtools/svtdllapi.h>
+#include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 #include <vcl/hyperlabel.hxx>
 #include <vcl/imgctrl.hxx>
@@ -27,7 +27,7 @@
 
 class Bitmap;
 
-namespace svt
+namespace vcl
 {
 
 struct RoadmapTypes
@@ -40,7 +40,7 @@ public:
 class RoadmapImpl;
 class RoadmapItem;
 
-class SVT_DLLPUBLIC ORoadmap final : public Control, public RoadmapTypes
+class VCL_DLLPUBLIC ORoadmap final : public Control, public RoadmapTypes
 {
 public:
     ORoadmap( vcl::Window* _pParent, WinBits _nWinStyle );
@@ -82,7 +82,7 @@ private:
     /// called when an item has been selected by any means
     void            Select();
 
-    DECL_LINK(ImplClickHdl, vcl::HyperLabel*, void);
+    DECL_LINK(ImplClickHdl, HyperLabel*, void);
 
     RoadmapItem*         GetByIndex( ItemIndex _nItemIndex );
     const RoadmapItem*   GetByIndex( ItemIndex _nItemIndex ) const;
@@ -106,7 +106,7 @@ private:
     std::unique_ptr<RoadmapImpl>    m_pImpl;
 };
 
-}   // namespace svt
+}   // namespace vcl
 
 #endif
 

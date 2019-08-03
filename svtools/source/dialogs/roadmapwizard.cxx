@@ -21,7 +21,7 @@
 #include <svtools/roadmapwizard.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
-#include <roadmap.hxx>
+#include <vcl/roadmap.hxx>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
@@ -52,7 +52,7 @@ namespace svt
 
     struct RoadmapWizardImpl : public RoadmapWizardTypes
     {
-        ScopedVclPtr<ORoadmap> pRoadmap;
+        ScopedVclPtr<vcl::ORoadmap> pRoadmap;
         Paths               aPaths;
         PathId              nActivePath;
         StateDescriptions   aStateDescriptors;
@@ -128,7 +128,7 @@ namespace svt
         SetLeftAlignedButtonCount( 1 );
         SetEmptyViewMargin();
 
-        m_pImpl->pRoadmap.disposeAndReset( VclPtr<ORoadmap>::Create( this, WB_TABSTOP ) );
+        m_pImpl->pRoadmap.disposeAndReset( VclPtr<vcl::ORoadmap>::Create( this, WB_TABSTOP ) );
         m_pImpl->pRoadmap->SetText( SvtResId( STR_WIZDLG_ROADMAP_TITLE ) );
         m_pImpl->pRoadmap->SetPosPixel( Point( 0, 0 ) );
         m_pImpl->pRoadmap->SetItemSelectHdl( LINK( this, RoadmapWizard, OnRoadmapItemSelected ) );
@@ -243,7 +243,7 @@ namespace svt
             return;
 
         // determine up to which index (in the new path) we have to display the items
-        RoadmapTypes::ItemIndex nUpperStepBoundary = static_cast<RoadmapTypes::ItemIndex>(rActivePath.size());
+        vcl::RoadmapTypes::ItemIndex nUpperStepBoundary = static_cast<vcl::RoadmapTypes::ItemIndex>(rActivePath.size());
         bool bIncompletePath = false;
         if ( !m_pImpl->bActivePathIsDefinite )
         {
@@ -278,8 +278,8 @@ namespace svt
 
         // now, we have to remove all items after nCurrentStatePathIndex, and insert the items from the active
         // path, up to (excluding) nUpperStepBoundary
-        RoadmapTypes::ItemIndex nLoopUntil = ::std::max( nUpperStepBoundary, m_pImpl->pRoadmap->GetItemCount() );
-        for ( RoadmapTypes::ItemIndex nItemIndex = nCurrentStatePathIndex; nItemIndex < nLoopUntil; ++nItemIndex )
+        vcl::RoadmapTypes::ItemIndex nLoopUntil = ::std::max( nUpperStepBoundary, m_pImpl->pRoadmap->GetItemCount() );
+        for ( vcl::RoadmapTypes::ItemIndex nItemIndex = nCurrentStatePathIndex; nItemIndex < nLoopUntil; ++nItemIndex )
         {
             bool bExistentItem = ( nItemIndex < m_pImpl->pRoadmap->GetItemCount() );
             bool bNeedItem = ( nItemIndex < nUpperStepBoundary );
@@ -297,7 +297,7 @@ namespace svt
                 {
                     // there is an item with this index in the roadmap - does it match what is requested by
                     // the respective state in the active path?
-                    RoadmapTypes::ItemId nPresentItemId = m_pImpl->pRoadmap->GetItemID( nItemIndex );
+                    vcl::RoadmapTypes::ItemId nPresentItemId = m_pImpl->pRoadmap->GetItemID( nItemIndex );
                     WizardState nRequiredState = rActivePath[ nItemIndex ];
                     if ( nPresentItemId != nRequiredState )
                     {
@@ -424,7 +424,7 @@ namespace svt
     IMPL_LINK_NOARG(RoadmapWizard, OnRoadmapItemSelected, LinkParamNone*, void)
     {
 
-        RoadmapTypes::ItemId nCurItemId = m_pImpl->pRoadmap->GetCurrentRoadmapItemID();
+        vcl::RoadmapTypes::ItemId nCurItemId = m_pImpl->pRoadmap->GetCurrentRoadmapItemID();
         if ( nCurItemId == getCurrentState() )
             // nothing to do
             return;
@@ -518,7 +518,7 @@ namespace svt
         }
 
         // if the state is currently in the roadmap, reflect it's new status
-        m_pImpl->pRoadmap->EnableRoadmapItem( static_cast<RoadmapTypes::ItemId>(_nState), _bEnable );
+        m_pImpl->pRoadmap->EnableRoadmapItem( static_cast<vcl::RoadmapTypes::ItemId>(_nState), _bEnable );
     }
 
 
@@ -543,21 +543,21 @@ namespace svt
     void RoadmapWizard::updateRoadmapItemLabel( WizardState _nState )
     {
         const WizardPath& rActivePath( m_pImpl->aPaths[ m_pImpl->nActivePath ] );
-        RoadmapTypes::ItemIndex nUpperStepBoundary = static_cast<RoadmapTypes::ItemIndex>(rActivePath.size());
-        RoadmapTypes::ItemIndex nLoopUntil = ::std::max( nUpperStepBoundary, m_pImpl->pRoadmap->GetItemCount() );
+        vcl::RoadmapTypes::ItemIndex nUpperStepBoundary = static_cast<vcl::RoadmapTypes::ItemIndex>(rActivePath.size());
+        vcl::RoadmapTypes::ItemIndex nLoopUntil = ::std::max( nUpperStepBoundary, m_pImpl->pRoadmap->GetItemCount() );
         sal_Int32 nCurrentStatePathIndex = -1;
         if ( m_pImpl->nActivePath != -1 )
             nCurrentStatePathIndex = m_pImpl->getStateIndexInPath( getCurrentState(), m_pImpl->nActivePath );
         if (nCurrentStatePathIndex < 0)
             return;
-        for ( RoadmapTypes::ItemIndex nItemIndex = nCurrentStatePathIndex; nItemIndex < nLoopUntil; ++nItemIndex )
+        for ( vcl::RoadmapTypes::ItemIndex nItemIndex = nCurrentStatePathIndex; nItemIndex < nLoopUntil; ++nItemIndex )
         {
             bool bExistentItem = ( nItemIndex < m_pImpl->pRoadmap->GetItemCount() );
             if ( bExistentItem )
             {
                 // there is an item with this index in the roadmap - does it match what is requested by
                 // the respective state in the active path?
-                RoadmapTypes::ItemId nPresentItemId = m_pImpl->pRoadmap->GetItemID( nItemIndex );
+                vcl::RoadmapTypes::ItemId nPresentItemId = m_pImpl->pRoadmap->GetItemID( nItemIndex );
                 WizardState nRequiredState = rActivePath[ nItemIndex ];
                 if ( _nState == nRequiredState )
                 {
