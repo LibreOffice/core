@@ -19,6 +19,8 @@
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/vclmedit.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 
 #include <comphelper/string.hxx>
 
@@ -586,26 +588,32 @@ OUString ButtonUIObject::get_action(VclEventId nEvent) const
     {
         if(mxButton->get_id()=="writer_all")
         {
+            UITestLogger::getInstance().setAppName("writer");
             return "Start writer" ;
         }
         else if(mxButton->get_id()=="calc_all")
         {
+            UITestLogger::getInstance().setAppName("calc");
             return "Start calc" ;
         }
         else if(mxButton->get_id()=="impress_all")
         {
+            UITestLogger::getInstance().setAppName("impress");
             return "Start impress" ;
         }
         else if(mxButton->get_id()=="draw_all")
         {
+            UITestLogger::getInstance().setAppName("draw");
             return "Start draw" ;
         }
         else if(mxButton->get_id()=="math_all")
         {
+            UITestLogger::getInstance().setAppName("math");
             return "Start math" ;
         }
         else if(mxButton->get_id()=="database_all")
         {
+            UITestLogger::getInstance().setAppName("database");
             return "Start database" ;
         }
         else{

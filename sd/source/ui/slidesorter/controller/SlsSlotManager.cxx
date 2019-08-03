@@ -67,6 +67,9 @@
 #include <sdabstdlg.hxx>
 #include <sdmod.hxx>
 
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
+
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -83,6 +86,7 @@
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <vcl/svapp.hxx>
+
 
 #include <memory>
 
@@ -105,6 +109,23 @@ enum SlideExclusionState {UNDEFINED, EXCLUDED, INCLUDED, MIXED};
 SlideExclusionState GetSlideExclusionState (model::PageEnumeration& rPageSet);
 
 } // end of anonymous namespace
+
+
+namespace {
+
+void collectUIInformation(const OUString& num,const OUString& action)
+{
+    EventDescription aDescription;
+    aDescription.aID = "impress_win_or_draw_win";
+    aDescription.aParameters = {{"POS", num}};
+    aDescription.aAction = action;
+    aDescription.aKeyWord = "ImpressWindowUIObject";
+    aDescription.aParent = "MainWindow";
+
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+
+}
 
 SlotManager::SlotManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter)
@@ -1065,6 +1086,7 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
     PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
     mrSlideSorter.GetController().GetPageSelector().DeselectAllPages();
     mrSlideSorter.GetController().GetPageSelector().SelectPage(pNewPage);
+    collectUIInformation(OUString::number(nInsertionIndex+2),"Insert_New_Page_or_Slide");
 }
 
 void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
