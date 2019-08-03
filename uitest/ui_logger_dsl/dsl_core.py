@@ -102,7 +102,12 @@ class ul_Compiler:
             'calc_Merge_Cells':self.do_nothing,
             'calc_UNMerge_Cells':self.do_nothing,
             'impress_Insert_Slide':self.do_nothing,
+            'impress_Delete_Page':self.do_nothing,
+            'impress_Duplicate_Slide':self.do_nothing,
+            'impress_Rename_Slide':self.do_nothing,
             'draw_Insert_Page':self.do_nothing,
+            'draw_Delete_Page':self.do_nothing,
+            'draw_Rename_Page':self.do_nothing,
             })
 
         self.log_lines=self.get_log_file(self.input_address)

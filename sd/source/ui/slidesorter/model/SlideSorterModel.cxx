@@ -35,6 +35,9 @@
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/frame/XController.hpp>
 
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
+
 #include <ViewShellBase.hxx>
 #include <DrawViewShell.hxx>
 #include <DrawDocShell.hxx>
@@ -99,6 +102,22 @@ namespace {
 
         return true;
     }
+}
+
+namespace {
+
+void collectUIInformation(const OUString& num,const OUString& action)
+{
+    EventDescription aDescription;
+    aDescription.aID = "impress_win_or_draw_win";
+    aDescription.aParameters = {{"POS", num}};
+    aDescription.aAction = action;
+    aDescription.aKeyWord = "ImpressWindowUIObject";
+    aDescription.aParent = "MainWindow";
+
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+
 }
 
 SlideSorterModel::SlideSorterModel (SlideSorter& rSlideSorter)
@@ -614,7 +633,9 @@ bool SlideSorterModel::DeleteSlide (const SdPage* pPage)
         maPageDescriptors.erase(iter);
         UpdateIndices(nIndex);
     }
-
+    if(nIndex>=0){
+        collectUIInformation(OUString::number(nIndex+1),"Delete_Slide_or_Page");
+    }
     return bMarkedSelected;
 }
 
