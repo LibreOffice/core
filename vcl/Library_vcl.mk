@@ -210,6 +210,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/spinfld \
     vcl/source/control/tabctrl \
     vcl/source/control/throbber \
+    vcl/source/control/wizdlg \
     vcl/source/edit/vclmedit \
     vcl/source/edit/textdata \
     vcl/source/edit/textdoc \

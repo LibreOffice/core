@@ -126,7 +126,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/dialogs/roadmapwizard \
     svtools/source/dialogs/ServerDetailsControls \
     svtools/source/dialogs/wizardmachine \
-    svtools/source/dialogs/wizdlg \
     svtools/source/edit/editsyntaxhighlighter \
     svtools/source/edit/svmedit \
     svtools/source/edit/svmedit2 \
