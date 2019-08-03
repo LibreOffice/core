@@ -24,6 +24,7 @@
 #include <unordered_set>
 #include <vector>
 
+#include <comphelper/sequence.hxx>
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
@@ -589,17 +590,6 @@ static long lcl_CountMinMembers(const vector<ScDPDimension*>& ppDim, const vecto
     return nTotal;
 }
 
-static long lcl_GetIndexFromName( const OUString& rName, const uno::Sequence<OUString>& rElements )
-{
-    long nCount = rElements.getLength();
-    const OUString* pArray = rElements.getConstArray();
-    for (long nPos=0; nPos<nCount; nPos++)
-        if (pArray[nPos] == rName)
-            return nPos;
-
-    return -1;  // not found
-}
-
 void ScDPSource::FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool &rHasAutoShow)
 {
     const std::vector<long>& rDims = bIsRow ? maRowDims : maColDims;
@@ -796,8 +786,8 @@ void ScDPSource::CreateRes_Impl()
              eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE ||
              eRefType == sheet::DataPilotFieldReferenceType::RUNNING_TOTAL )
         {
-            long nColumn = lcl_GetIndexFromName(
-                aDataRefValues.back().ReferenceField, GetDimensionsObject()->getElementNames());
+            long nColumn = comphelper::findValue(
+                GetDimensionsObject()->getElementNames(), aDataRefValues.back().ReferenceField);
             if ( nColumn >= 0 )
             {
                 nDataRefOrient = GetOrientation(nColumn);
