@@ -128,17 +128,19 @@ select_options:
   This part for all the impress log statments:
    
     1)  Type 
-    2)  Set zoom
+    2)  Insert New Page
 
   then we can add whatever we need in the future
 */
 impress_command:
-    impress_Type_command 
+    impress_Type_command | impress_Insert_Slide 
 ;
 impress_Type_command:
     'Type on impress ' what_to_type=Type_options
 ;
-
+impress_Insert_Slide:
+    'Insert New Slide at Position ' position_num=INT
+;
 //=================================================================//
 /*
   This part for all the math log statments:
@@ -163,12 +165,16 @@ math_Type_command:
   This part for all the draw log statments:
    
     1) Type
+    2) Insert New Page
 
   then we can add whatever we need in the future
 */
 draw_command:
-    draw_Type_command
+    draw_Type_command | draw_Insert_Page
 ;
 draw_Type_command:
     'Type on draw ' what_to_type=Type_options
+;
+draw_Insert_Page:
+    'Insert New Page at Position ' position_num=INT
 ;

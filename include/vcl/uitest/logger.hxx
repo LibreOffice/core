@@ -32,6 +32,8 @@ private:
 
     bool mbValid;
 
+    OUString app_name;
+
 public:
 
     UITestLogger();
@@ -47,6 +49,14 @@ public:
     void logEvent(const EventDescription& rDescription);
 
     static UITestLogger& getInstance();
+
+    void setAppName(OUString name){
+        app_name=name;
+    }
+
+    OUString getAppName(){
+        return app_name;
+    }
 
 };
 

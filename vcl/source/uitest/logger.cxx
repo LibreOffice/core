@@ -370,6 +370,16 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
             aLogLine = "Delete the merged " + aParameterString;
         }
     }
+    else if(rDescription.aID=="impress_win_or_draw_win"){
+        if(rDescription.aAction=="Insert_New_Page_or_Slide"){
+            if(UITestLogger::getInstance().getAppName()=="impress"){
+                aLogLine = "Insert New Slide at Position " + GetValueInMapWithIndex(rDescription.aParameters,0);
+            }
+            else if(UITestLogger::getInstance().getAppName()=="draw"){
+                aLogLine = "Insert New Page at Position " + GetValueInMapWithIndex(rDescription.aParameters,0);
+            }
+        }
+    }
     else if(rDescription.aParent=="element_selector"){
         aLogLine ="Select element no " + rDescription.aID +
             " From " + rDescription.aParent;
@@ -394,5 +404,6 @@ UITestLogger& UITestLogger::getInstance()
 
     return *pSVData->maWinData.m_pUITestLogger;
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
