@@ -117,7 +117,7 @@ namespace dbaui
     class OGeneralPageWizard final : public OGeneralPage
     {
     public:
-        OGeneralPageWizard( vcl::Window* pParent, const SfxItemSet& _rItems );
+        OGeneralPageWizard( TabPageParent pParent, const SfxItemSet& _rItems );
         virtual ~OGeneralPageWizard() override;
 
         enum CreationMode
