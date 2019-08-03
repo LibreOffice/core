@@ -17,15 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/hyperlabel.hxx>
+#include <vcl/hyperlabel.hxx>
 #include <tools/color.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/ptrstyle.hxx>
 
-
-namespace svt
+namespace vcl
 {
     class HyperLabelImpl
     {
@@ -197,7 +196,6 @@ namespace svt
         }
     }
 
-}   // namespace svt
-
+}   // namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

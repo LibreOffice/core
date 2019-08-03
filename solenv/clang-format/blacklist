@@ -6963,7 +6963,6 @@ include/svtools/htmlcfg.hxx
 include/svtools/htmlkywd.hxx
 include/svtools/htmlout.hxx
 include/svtools/htmltokn.h
-include/svtools/hyperlabel.hxx
 include/svtools/iconview.hxx
 include/svtools/imagemgr.hxx
 include/svtools/imageresourceaccess.hxx
@@ -7849,6 +7848,7 @@ include/vcl/graphictools.hxx
 include/vcl/hatch.hxx
 include/vcl/headbar.hxx
 include/vcl/help.hxx
+include/vcl/hyperlabel.hxx
 include/vcl/i18nhelp.hxx
 include/vcl/idle.hxx
 include/vcl/image.hxx
@@ -13733,7 +13733,6 @@ svtools/source/control/ctrlbox.cxx
 svtools/source/control/ctrltool.cxx
 svtools/source/control/filectrl.cxx
 svtools/source/control/fileurlbox.cxx
-svtools/source/control/hyperlabel.cxx
 svtools/source/control/indexentryres.cxx
 svtools/source/control/inettbc.cxx
 svtools/source/control/managedmenubutton.cxx
@@ -17780,6 +17779,7 @@ vcl/source/control/field2.cxx
 vcl/source/control/fixed.cxx
 vcl/source/control/fixedhyper.cxx
 vcl/source/control/fmtfield.cxx
+vcl/source/control/hyperlabel.cxx
 vcl/source/control/imgctrl.cxx
 vcl/source/control/imivctl.hxx
 vcl/source/control/imivctl1.cxx

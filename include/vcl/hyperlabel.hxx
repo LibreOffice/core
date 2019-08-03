@@ -16,22 +16,20 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_HYPERLABEL_HXX
-#define INCLUDED_SVTOOLS_HYPERLABEL_HXX
+#ifndef INCLUDED_VCL_HYPERLABEL_HXX
+#define INCLUDED_VCL_HYPERLABEL_HXX
 
 #include <memory>
-
 
 #include <vcl/fixed.hxx>
 
 #define LABELBASEMAPHEIGHT      8
 
-
-namespace svt
+namespace vcl
 {
     class HyperLabelImpl;
 
-    class HyperLabel final : public FixedText
+    class VCL_DLLPUBLIC HyperLabel final : public FixedText
     {
         std::unique_ptr<HyperLabelImpl>     m_pImpl;
         Link<HyperLabel*,void>  maClickHdl;

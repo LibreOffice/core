@@ -21,9 +21,8 @@
 
 #include <svtools/svtdllapi.h>
 #include <vcl/ctrl.hxx>
+#include <vcl/hyperlabel.hxx>
 #include <vcl/imgctrl.hxx>
-
-#include <svtools/hyperlabel.hxx>
 #include <memory>
 
 class Bitmap;
@@ -83,7 +82,7 @@ private:
     /// called when an item has been selected by any means
     void            Select();
 
-    DECL_LINK(ImplClickHdl, HyperLabel*, void);
+    DECL_LINK(ImplClickHdl, vcl::HyperLabel*, void);
 
     RoadmapItem*         GetByIndex( ItemIndex _nItemIndex );
     const RoadmapItem*   GetByIndex( ItemIndex _nItemIndex ) const;
