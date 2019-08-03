@@ -696,10 +696,8 @@ void ScRangeStringConverter::GetStringFromRangeList(
         sal_Unicode cSeparator )
 {
     OUString sRangeListStr;
-    sal_Int32 nCount = rRangeSeq.getLength();
-    for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+    for( const table::CellRangeAddress& rRange : rRangeSeq )
     {
-        const table::CellRangeAddress& rRange = rRangeSeq[ nIndex ];
         GetStringFromRange( sRangeListStr, rRange, pDocument, eConv, cSeparator, true );
     }
     rString = sRangeListStr;

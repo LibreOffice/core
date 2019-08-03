@@ -339,23 +339,23 @@ void ScPrintUIOptions::SetDefaults()
         uno::Sequence<beans::PropertyValue> aUIProp;
         if ( rPropValue.Value >>= aUIProp )
         {
-            for (sal_Int32 nPropPos=0; nPropPos<aUIProp.getLength(); ++nPropPos)
+            for (auto& rProp : aUIProp)
             {
-                OUString aName = aUIProp[nPropPos].Name;
+                OUString aName = rProp.Name;
                 if ( aName == "Property" )
                 {
                     beans::PropertyValue aPropertyValue;
-                    if ( aUIProp[nPropPos].Value >>= aPropertyValue )
+                    if ( rProp.Value >>= aPropertyValue )
                     {
                         if ( aPropertyValue.Name == "PrintContent" )
                         {
                             aPropertyValue.Value <<= nContent;
-                            aUIProp[nPropPos].Value <<= aPropertyValue;
+                            rProp.Value <<= aPropertyValue;
                         }
                         else if ( aPropertyValue.Name == "IsSuppressEmptyPages" )
                         {
                             aPropertyValue.Value <<= bSuppress;
-                            aUIProp[nPropPos].Value <<= aPropertyValue;
+                            rProp.Value <<= aPropertyValue;
                         }
                     }
                 }
@@ -1290,11 +1290,8 @@ uno::Reference<container::XNameAccess> SAL_CALL ScModelObj::getStyleFamilies()
 static OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyValue>& rOptions )
 {
     OutputDevice* pRet = nullptr;
-    const beans::PropertyValue* pPropArray = rOptions.getConstArray();
-    const long nPropCount = rOptions.getLength();
-    for (long i = 0; i < nPropCount; i++)
+    for (const beans::PropertyValue& rProp : rOptions)
     {
-        const beans::PropertyValue& rProp = pPropArray[i];
         const OUString & rPropName = rProp.Name;
 
         if (rPropName == SC_UNONAME_RENDERDEV)
@@ -1417,36 +1414,36 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     sal_Int32 nPrintRange = 0;          // all pages / pages / even pages / odd pages
     OUString aPageRange;           // "pages" edit value
 
-    for( sal_Int32 i = 0, nLen = rOptions.getLength(); i < nLen; i++ )
+    for( const auto& rOption : rOptions )
     {
-        if ( rOptions[i].Name == "IsOnlySelectedSheets" )
+        if ( rOption.Name == "IsOnlySelectedSheets" )
         {
-            rOptions[i].Value >>= bSelectedSheetsOnly;
+            rOption.Value >>= bSelectedSheetsOnly;
         }
-        else if ( rOptions[i].Name == "IsSuppressEmptyPages" )
+        else if ( rOption.Name == "IsSuppressEmptyPages" )
         {
-            rOptions[i].Value >>= bSuppressEmptyPages;
+            rOption.Value >>= bSuppressEmptyPages;
         }
-        else if ( rOptions[i].Name == "PageRange" )
+        else if ( rOption.Name == "PageRange" )
         {
-            rOptions[i].Value >>= aPageRange;
+            rOption.Value >>= aPageRange;
         }
-        else if ( rOptions[i].Name == "PrintRange" )
+        else if ( rOption.Name == "PrintRange" )
         {
-            rOptions[i].Value >>= nPrintRange;
+            rOption.Value >>= nPrintRange;
         }
-        else if ( rOptions[i].Name == "PrintContent" )
+        else if ( rOption.Name == "PrintContent" )
         {
             bHasPrintContent = true;
-            rOptions[i].Value >>= nPrintContent;
+            rOption.Value >>= nPrintContent;
         }
-        else if ( rOptions[i].Name == "View" )
+        else if ( rOption.Name == "View" )
         {
-            rOptions[i].Value >>= xView;
+            rOption.Value >>= xView;
         }
-        else if ( rOptions[i].Name == "RenderToGraphic" )
+        else if ( rOption.Name == "RenderToGraphic" )
         {
-            rOptions[i].Value >>= rbRenderToGraphic;
+            rOption.Value >>= rbRenderToGraphic;
         }
     }
 
@@ -1544,11 +1541,11 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
         uno::Sequence<sal_Int32> aSelected = xSelectedSheets->getSelectedSheets();
         ScMarkData::MarkedTabsType aSelectedTabs;
         SCTAB nMaxTab = pDocShell->GetDocument().GetTableCount() -1;
-        for (sal_Int32 i = 0, n = aSelected.getLength(); i < n; ++i)
+        for (const auto& rSelected : aSelected)
         {
-            SCTAB nSelected = static_cast<SCTAB>(aSelected[i]);
+            SCTAB nSelected = static_cast<SCTAB>(rSelected);
             if (ValidTab(nSelected, nMaxTab))
-                aSelectedTabs.insert(static_cast<SCTAB>(aSelected[i]));
+                aSelectedTabs.insert(nSelected);
         }
         rMark.SetSelectedTabs(aSelectedTabs);
     }
@@ -4463,18 +4460,13 @@ void SAL_CALL ScScenariosObj::addNewByName( const OUString& aName,
         ScMarkData aMarkData;
         aMarkData.SelectTable( nTab, true );
 
-        sal_uInt16 nRangeCount = static_cast<sal_uInt16>(aRanges.getLength());
-        if (nRangeCount)
+        for (const table::CellRangeAddress& rRange : aRanges)
         {
-            const table::CellRangeAddress* pAry = aRanges.getConstArray();
-            for (sal_uInt16 i=0; i<nRangeCount; i++)
-            {
-                OSL_ENSURE( pAry[i].Sheet == nTab, "addScenario with a wrong Tab" );
-                ScRange aRange( static_cast<SCCOL>(pAry[i].StartColumn), static_cast<SCROW>(pAry[i].StartRow), nTab,
-                                static_cast<SCCOL>(pAry[i].EndColumn),   static_cast<SCROW>(pAry[i].EndRow),   nTab );
+            OSL_ENSURE( rRange.Sheet == nTab, "addScenario with a wrong Tab" );
+            ScRange aRange( static_cast<SCCOL>(rRange.StartColumn), static_cast<SCROW>(rRange.StartRow), nTab,
+                            static_cast<SCCOL>(rRange.EndColumn),   static_cast<SCROW>(rRange.EndRow),   nTab );
 
-                aMarkData.SetMultiMarkArea( aRange );
-            }
+            aMarkData.SetMultiMarkArea( aRange );
         }
 
         ScScenarioFlags const nFlags = ScScenarioFlags::ShowFrame | ScScenarioFlags::PrintFrame

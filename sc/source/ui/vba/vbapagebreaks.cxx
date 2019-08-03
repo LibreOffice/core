@@ -109,23 +109,16 @@ public:
 */
 sal_Int32 SAL_CALL RangePageBreaks::getCount(  )
 {
-    sal_Int32 nCount = 0;
     uno::Reference< excel::XWorksheet > xWorksheet( mxParent, uno::UNO_QUERY_THROW );
     uno::Reference< excel::XRange > xRange = xWorksheet->getUsedRange();
     sal_Int32 nUsedStart = getAPIStartofRange( xRange );
     sal_Int32 nUsedEnd = getAPIEndIndexofRange( xRange, nUsedStart );
     uno::Sequence<sheet::TablePageBreakData> aTablePageBreakData = getAllPageBreaks();
 
-    sal_Int32 nLength = aTablePageBreakData.getLength();
-    for( sal_Int32 i=0; i<nLength; i++ )
-    {
-        sal_Int32 nPos = aTablePageBreakData[i].Position;
-        if( nPos > nUsedEnd + 1)
-            return nCount;
-        nCount++;
-    }
+    auto pPageBreak = std::find_if(aTablePageBreakData.begin(), aTablePageBreakData.end(),
+        [nUsedEnd](const sheet::TablePageBreakData& rPageBreak) { return rPageBreak.Position > nUsedEnd + 1; });
 
-    return nCount;
+    return static_cast<sal_Int32>(std::distance(aTablePageBreakData.begin(), pPageBreak));
 }
 
 uno::Any SAL_CALL RangePageBreaks::getByIndex( sal_Int32 Index )
@@ -156,10 +149,9 @@ sheet::TablePageBreakData RangePageBreaks::getTablePageBreakData( sal_Int32 nAPI
     sal_Int32 nUsedEnd = getAPIEndIndexofRange( xRange, nUsedStart );
     uno::Sequence<sheet::TablePageBreakData> aTablePageBreakDataList = getAllPageBreaks();
 
-    sal_Int32 nLength = aTablePageBreakDataList.getLength();
-    for( sal_Int32 i=0; i<nLength; i++ )
+    for( const auto& rTablePageBreakData : aTablePageBreakDataList )
     {
-        aTablePageBreakData = aTablePageBreakDataList[i];
+        aTablePageBreakData = rTablePageBreakData;
         sal_Int32 nPos = aTablePageBreakData.Position;
         if( nPos > nUsedEnd + 1 )
             DebugHelper::runtimeexception(ERRCODE_BASIC_METHOD_FAILED);

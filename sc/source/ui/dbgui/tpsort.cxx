@@ -890,10 +890,8 @@ void ScTabPageSortOptions::FillAlgor()
         uno::Sequence<OUString> aAlgos = m_xColWrap->listCollatorAlgorithms( aLocale );
 
         long nCount = aAlgos.getLength();
-        const OUString* pArray = aAlgos.getConstArray();
-        for (long i=0; i<nCount; i++)
+        for (const OUString& sAlg : aAlgos)
         {
-            OUString sAlg = pArray[i];
             OUString sUser = m_xColRes->GetTranslation( sAlg );
             m_xLbAlgorithm->append_text(sUser);
         }

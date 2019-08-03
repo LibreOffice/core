@@ -156,9 +156,8 @@ uno::Sequence<beans::PropertyValue> ScSolverUtil::GetDefaults( const OUString& r
     const sal_Int32 nSize = aPropSeq.getLength();
     aDefaults.realloc(nSize);
     sal_Int32 nValid = 0;
-    for (sal_Int32 nPos=0; nPos<nSize; ++nPos)
+    for (const beans::Property& rProp : aPropSeq)
     {
-        const beans::Property& rProp = aPropSeq[nPos];
         uno::Any aValue = xPropSet->getPropertyValue( rProp.Name );
         uno::TypeClass eClass = aValue.getValueTypeClass();
         // only use properties of supported types

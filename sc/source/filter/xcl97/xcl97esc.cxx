@@ -482,12 +482,11 @@ void XclEscherEx::ConvertTbxMacro( XclExpTbxControlObj& rTbxCtrlObj, Reference< 
             Reference< XEventAttacherManager > xEventMgr( xFormIA, UNO_QUERY_THROW );
             // loop over all events attached to the found control
             const Sequence< ScriptEventDescriptor > aEventSeq( xEventMgr->getScriptEvents( nFoundIdx ) );
-            bool bFound = false;
-            for( sal_Int32 nEventIdx = 0, nEventCount = aEventSeq.getLength();
-                    !bFound && (nEventIdx < nEventCount); ++nEventIdx )
+            for( const auto& rEvent : aEventSeq )
             {
                 // try to set the event data at the Excel control object, returns true on success
-                bFound = rTbxCtrlObj.SetMacroLink( aEventSeq[ nEventIdx ] );
+                if (rTbxCtrlObj.SetMacroLink( rEvent ))
+                    break;
             }
         }
     }

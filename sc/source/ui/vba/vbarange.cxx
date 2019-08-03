@@ -206,13 +206,12 @@ static uno::Reference< excel::XRange > lcl_makeXRangeFromSheetCellRanges( const 
     uno::Reference< excel::XRange > xRange;
     uno::Sequence< table::CellRangeAddress  > sAddresses = xLocSheetCellRanges->getRangeAddresses();
     ScRangeList aCellRanges;
-    sal_Int32 nLen = sAddresses.getLength();
-    if ( nLen )
+    if ( sAddresses.hasElements() )
            {
-    for ( sal_Int32 index = 0; index < nLen; ++index )
+    for ( const auto& rAddress : sAddresses )
     {
         ScRange refRange;
-        ScUnoConversion::FillScRange( refRange, sAddresses[ index ] );
+        ScUnoConversion::FillScRange( refRange, rAddress );
         aCellRanges.push_back( refRange );
     }
     // Single range
@@ -2288,9 +2287,9 @@ ScVbaRange::Activate()
     if ( xRanges.is() )
     {
         uno::Sequence< table::CellRangeAddress > nAddrs = xRanges->getRangeAddresses();
-        for ( sal_Int32 index = 0; index < nAddrs.getLength(); ++index )
+        for ( const auto& rAddr : nAddrs )
         {
-            if ( cellInRange( nAddrs[index], thisRangeAddress.StartColumn, thisRangeAddress.StartRow ) )
+            if ( cellInRange( rAddr, thisRangeAddress.StartColumn, thisRangeAddress.StartRow ) )
             {
                 setCursor( static_cast< SCCOL >( thisRangeAddress.StartColumn ), static_cast< SCROW >( thisRangeAddress.StartRow ), xModel );
                 return;
@@ -3282,16 +3281,12 @@ static uno::Reference< table::XCellRange > processKey( const uno::Any& Key, cons
 static sal_Int32 findSortPropertyIndex( const uno::Sequence< beans::PropertyValue >& props,
 const OUString& sPropName )
 {
-    const beans::PropertyValue* pProp = props.getConstArray();
-    sal_Int32 nItems = props.getLength();
+    const beans::PropertyValue* pProp = std::find_if(props.begin(), props.end(),
+        [&sPropName](const beans::PropertyValue& rProp) { return rProp.Name == sPropName; });
 
-    sal_Int32 count=0;
-    for ( ; count < nItems; ++count, ++pProp )
-        if ( pProp->Name == sPropName )
-            return count;
-    if ( count == nItems )
+    if ( pProp == props.end() )
         throw uno::RuntimeException("Range::Sort unknown sort property" );
-    return -1; //should never reach here ( satisfy compiler )
+    return static_cast<sal_Int32>(std::distance(props.begin(), pProp));
 }
 
 // helper method for Sort
@@ -4084,9 +4079,9 @@ static uno::Reference< sheet::XCellRangeReferrer > getNamedRange( const uno::Ref
     uno::Sequence< OUString > sNames = xNameAccess->getElementNames();
 //    uno::Reference< table::XCellRange > thisRange( getCellRange(), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XCellRangeReferrer > xNamedRange;
-    for ( sal_Int32 i=0; i < sNames.getLength(); ++i )
+    for ( const auto& rName : sNames )
     {
-        uno::Reference< sheet::XCellRangeReferrer > xName( xNameAccess->getByName( sNames[ i ] ), uno::UNO_QUERY );
+        uno::Reference< sheet::XCellRangeReferrer > xName( xNameAccess->getByName( rName ), uno::UNO_QUERY );
         if ( xName.is() )
         {
             if ( thisRange == xName->getReferredCells() )

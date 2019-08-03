@@ -30,13 +30,12 @@ bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, OUString& rCodeNam
     if( !(aAny >>= aProps) )
         return false;
 
-    sal_Int32 nPropCount = aProps.getLength();
-    for( sal_Int32 i=0; i<nPropCount; i++ )
+    for( const auto& rProp : aProps )
     {
-        if( aProps[i].Name == "CodeName" )
+        if( rProp.Name == "CodeName" )
         {
             OUString sCodeName;
-            if( aProps[i].Value >>= sCodeName )
+            if( rProp.Value >>= sCodeName )
             {
                 rCodeName = sCodeName;
                 return true;

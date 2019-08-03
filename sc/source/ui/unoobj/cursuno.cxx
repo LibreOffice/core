@@ -442,7 +442,6 @@ uno::Sequence<OUString> SAL_CALL ScCellCursorObj::getSupportedServiceNames()
     //  get all service names from cell range
     uno::Sequence<OUString> aParentSeq(ScCellRangeObj::getSupportedServiceNames());
     sal_Int32 nParentLen = aParentSeq.getLength();
-    const OUString* pParentArr = aParentSeq.getConstArray();
 
     //  SheetCellCursor should be first (?)
     uno::Sequence<OUString> aTotalSeq( nParentLen + 2 );
@@ -451,8 +450,7 @@ uno::Sequence<OUString> SAL_CALL ScCellCursorObj::getSupportedServiceNames()
     pTotalArr[1] = SCCELLCURSOR_SERVICE;
 
     //  append cell range services
-    for (long i=0; i<nParentLen; i++)
-        pTotalArr[i+2] = pParentArr[i];
+    std::copy_n(aParentSeq.begin(), nParentLen, std::next(aTotalSeq.begin(), 2));
 
     return aTotalSeq;
 }

@@ -204,11 +204,8 @@ void ScImportDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rS
 void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequence<beans::PropertyValue>& rSeq )
 {
     OUString aStrVal;
-    const beans::PropertyValue* pPropArray = rSeq.getConstArray();
-    long nPropCount = rSeq.getLength();
-    for (long i = 0; i < nPropCount; i++)
+    for (const beans::PropertyValue& rProp : rSeq)
     {
-        const beans::PropertyValue& rProp = pPropArray[i];
         OUString aPropName(rProp.Name);
 
         if (aPropName == SC_UNONAME_ISNATIVE)
@@ -323,13 +320,10 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
 
 void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<beans::PropertyValue>& rSeq )
 {
-    const beans::PropertyValue* pPropArray = rSeq.getConstArray();
-    long nPropCount = rSeq.getLength();
     sal_Int16 nSortSize = rParam.GetSortKeyCount();
 
-    for (long nProp = 0; nProp < nPropCount; nProp++)
+    for (const beans::PropertyValue& rProp : rSeq)
     {
-        const beans::PropertyValue& rProp = pPropArray[nProp];
         OUString aPropName(rProp.Name);
 
         if (aPropName == SC_UNONAME_ORIENT)
@@ -1125,12 +1119,12 @@ void fillQueryParam(
             ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
             rItems.clear();
             const uno::Sequence<sheet::FilterFieldValue>& rVals = pAry[i].Values;
-            for (sal_Int32 j = 0, n = rVals.getLength(); j < n; ++j)
+            for (const auto& rVal : rVals)
             {
                 ScQueryEntry::Item aItem;
-                aItem.meType   = rVals[j].IsNumeric ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
-                aItem.mfVal    = rVals[j].NumericValue;
-                aItem.maString = rPool.intern(rVals[j].StringValue);
+                aItem.meType   = rVal.IsNumeric ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+                aItem.mfVal    = rVal.NumericValue;
+                aItem.maString = rPool.intern(rVal.StringValue);
 
                 if (aItem.meType == ScQueryEntry::ByValue)
                 {

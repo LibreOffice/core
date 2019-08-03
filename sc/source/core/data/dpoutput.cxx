@@ -443,13 +443,9 @@ bool lcl_MemberEmpty( const uno::Sequence<sheet::MemberResult>& rSeq )
 {
     //  used to skip levels that have no members
 
-    long nLen = rSeq.getLength();
-    const sheet::MemberResult* pArray = rSeq.getConstArray();
-    for (long i=0; i<nLen; i++)
-        if (pArray[i].Flags & sheet::MemberResultFlags::HASMEMBER)
-            return false;
-
-    return true;    // no member data -> empty
+    return std::none_of(rSeq.begin(), rSeq.end(),
+        [](const sheet::MemberResult& rMem) {
+            return rMem.Flags & sheet::MemberResultFlags::HASMEMBER; });
 }
 
 /**
@@ -471,9 +467,8 @@ uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Re
 
     std::vector<sheet::MemberResult> aRes;
     uno::Sequence<OUString> aNames = xNA->getElementNames();
-    for (sal_Int32 i = 0; i < aNames.getLength(); ++i)
+    for (const OUString& rName : aNames)
     {
-        const OUString& rName = aNames[i];
         xNA->getByName(rName);
 
         uno::Reference<beans::XPropertySet> xMemPS(xNA->getByName(rName), UNO_QUERY);
@@ -1188,13 +1183,10 @@ void ScDPOutput::GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimensi
 
     if ( bFound )
     {
-        const sheet::MemberResult* pArray = aMemberResults.getConstArray();
-        long nResultCount = aMemberResults.getLength();
-
-        for (long nItem=0; nItem<nResultCount; nItem++)
+        for (const sheet::MemberResult& rMemberResult : aMemberResults)
         {
-            if ( pArray[nItem].Flags & sheet::MemberResultFlags::HASMEMBER )
-                rNames.insert(pArray[nItem].Name);
+            if ( rMemberResult.Flags & sheet::MemberResultFlags::HASMEMBER )
+                rNames.insert(rMemberResult.Name);
         }
     }
 }

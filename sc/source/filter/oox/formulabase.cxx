@@ -1238,10 +1238,8 @@ bool OpCodeProviderImpl::fillTokenMap( ApiTokenMap& orTokenMap, OpCodeEntrySeque
     orTokenMap.clear();
     if( fillEntrySeq( orEntrySeq, rxMapper, nMapGroup ) )
     {
-        const FormulaOpCodeMapEntry* pEntry = orEntrySeq.getConstArray();
-        const FormulaOpCodeMapEntry* pEntryEnd = pEntry + orEntrySeq.getLength();
-        for( ; pEntry != pEntryEnd; ++pEntry )
-            orTokenMap[ pEntry->Name ] = pEntry->Token;
+        for( const FormulaOpCodeMapEntry& rEntry : orEntrySeq )
+            orTokenMap[ rEntry.Name ] = rEntry.Token;
     }
     return orEntrySeq.hasElements();
 }
@@ -1252,10 +1250,8 @@ bool OpCodeProviderImpl::fillFuncTokenMaps( ApiTokenMap& orIntFuncTokenMap, ApiT
     orExtFuncTokenMap.clear();
     if( fillEntrySeq( orEntrySeq, rxMapper, css::sheet::FormulaMapGroup::FUNCTIONS ) )
     {
-        const FormulaOpCodeMapEntry* pEntry = orEntrySeq.getConstArray();
-        const FormulaOpCodeMapEntry* pEntryEnd = pEntry + orEntrySeq.getLength();
-        for( ; pEntry != pEntryEnd; ++pEntry )
-            ((pEntry->Token.OpCode == OPCODE_EXTERNAL) ? orExtFuncTokenMap : orIntFuncTokenMap)[ pEntry->Name ] = pEntry->Token;
+        for( const FormulaOpCodeMapEntry& rEntry : orEntrySeq )
+            ((rEntry.Token.OpCode == OPCODE_EXTERNAL) ? orExtFuncTokenMap : orIntFuncTokenMap)[ rEntry.Name ] = rEntry.Token;
     }
     return orEntrySeq.hasElements();
 }

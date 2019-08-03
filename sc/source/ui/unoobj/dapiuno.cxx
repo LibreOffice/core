@@ -836,10 +836,8 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
                         aServiceDesc = *pOldDesc;
 
                     OUString aStrVal;
-                    sal_Int32 nArgs = aArgSeq.getLength();
-                    for (sal_Int32 nArgPos=0; nArgPos<nArgs; ++nArgPos)
+                    for (const beans::PropertyValue& rProp : aArgSeq)
                     {
-                        const beans::PropertyValue& rProp = aArgSeq[nArgPos];
                         OUString aPropName(rProp.Name);
 
                         if (aPropName == SC_UNO_DP_SOURCENAME)
@@ -1778,11 +1776,11 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
         if( aValue >>= aSeq)
         {
             std::vector< ScGeneralFunction > aSubTotals(aSeq.getLength());
-            for (sal_Int32 nIndex = 0; nIndex < aSeq.getLength(); nIndex++)
-            {
-                const int nValAsInt = static_cast<int>(aSeq[nIndex]);
-                aSubTotals[nIndex] = static_cast<ScGeneralFunction>(nValAsInt);
-            }
+            std::transform(aSeq.begin(), aSeq.end(), aSubTotals.begin(),
+                [](const sheet::GeneralFunction& rValue) -> ScGeneralFunction {
+                    const int nValAsInt = static_cast<int>(rValue);
+                    return static_cast<ScGeneralFunction>(nValAsInt);
+                });
             setSubtotals( aSubTotals );
         }
     }
@@ -1792,10 +1790,8 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
         if( aValue >>= aSeq )
         {
             std::vector< ScGeneralFunction > aSubTotals(aSeq.getLength());
-            for (sal_Int32 nIndex = 0; nIndex < aSeq.getLength(); nIndex++)
-            {
-                aSubTotals[nIndex] = static_cast<ScGeneralFunction>(aSeq[nIndex]);
-            }
+            std::transform(aSeq.begin(), aSeq.end(), aSubTotals.begin(),
+                [](sal_Int16 nValue) -> ScGeneralFunction { return static_cast<ScGeneralFunction>(nValue); });
             setSubtotals( aSubTotals );
         }
     }
@@ -1912,13 +1908,12 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
         uno::Sequence<sal_Int16> aSeq = getSubtotals();
         uno::Sequence<sheet::GeneralFunction>  aNewSeq;
         aNewSeq.realloc(aSeq.getLength());
-        for (sal_Int32 nIndex = 0; nIndex < aSeq.getLength(); nIndex++)
-        {
-            if (aSeq[nIndex] == sheet::GeneralFunction2::MEDIAN)
-                aNewSeq[nIndex] = sheet::GeneralFunction_NONE;
-            else
-                aNewSeq[nIndex] = static_cast<sheet::GeneralFunction>(aSeq[nIndex]);
-        }
+        std::transform(aSeq.begin(), aSeq.end(), aNewSeq.begin(),
+            [](sal_Int16 nFunc) -> sheet::GeneralFunction {
+                if (nFunc == sheet::GeneralFunction2::MEDIAN)
+                    return sheet::GeneralFunction_NONE;
+                return static_cast<sheet::GeneralFunction>(nFunc);
+            });
         aRet <<= aNewSeq;
     }
     else if ( aPropertyName == SC_UNONAME_SUBTOTALS2 )
@@ -2509,9 +2504,8 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         // (empty groups are removed, too)
         if ( pGroupDimension )
         {
-            for (sal_Int32 nEntry = 0; nEntry < rItems.getLength(); nEntry++)
+            for (const OUString& aEntryName : rItems)
             {
-                const OUString& aEntryName = rItems[nEntry];
                 if ( pBaseGroupDim )
                 {
                     // for each selected (intermediate) group, remove all its items
@@ -2564,9 +2558,8 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
 
         OUString aGroupName = pGroupDimension->CreateGroupName( ScResId(STR_PIVOT_GROUP) );
         ScDPSaveGroupItem aGroup( aGroupName );
-        for (sal_Int32 nEntry = 0; nEntry < rItems.getLength(); nEntry++)
+        for (const OUString& aEntryName : rItems)
         {
-            OUString aEntryName(rItems[nEntry]);
             if ( pBaseGroupDim )
             {
                 // for each selected (intermediate) group, add all its items

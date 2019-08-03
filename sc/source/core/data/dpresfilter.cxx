@@ -199,13 +199,11 @@ void ScDPResultTree::clear()
 const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
     const uno::Sequence<sheet::DataPilotFieldFilter>& rFilters) const
 {
-    const sheet::DataPilotFieldFilter* p = rFilters.getConstArray();
-    const sheet::DataPilotFieldFilter* pEnd = p + static_cast<size_t>(rFilters.getLength());
     const MemberNode* pMember = mpRoot.get();
-    for (; p != pEnd; ++p)
+    for (const sheet::DataPilotFieldFilter& rFilter : rFilters)
     {
         auto itDim = pMember->maChildDimensions.find(
-            ScGlobal::pCharClass->uppercase(p->FieldName));
+            ScGlobal::pCharClass->uppercase(rFilter.FieldName));
 
         if (itDim == pMember->maChildDimensions.end())
             // Specified dimension not found.
@@ -213,12 +211,12 @@ const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
 
         const DimensionNode* pDim = itDim->second.get();
         MembersType::const_iterator itMem( pDim->maChildMembersValueNames.find(
-                    ScGlobal::pCharClass->uppercase( p->MatchValueName)));
+                    ScGlobal::pCharClass->uppercase( rFilter.MatchValueName)));
 
         if (itMem == pDim->maChildMembersValueNames.end())
         {
             // Specified member name not found, try locale independent value.
-            itMem = pDim->maChildMembersValues.find( ScGlobal::pCharClass->uppercase( p->MatchValue));
+            itMem = pDim->maChildMembersValues.find( ScGlobal::pCharClass->uppercase( rFilter.MatchValue));
 
             if (itMem == pDim->maChildMembersValues.end())
                 // Specified member not found.

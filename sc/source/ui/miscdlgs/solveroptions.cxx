@@ -163,8 +163,8 @@ void ScSolverOptionsDialog::FillListBox()
 
     uno::Sequence<beans::PropertyValue> aNewSeq;
     aNewSeq.realloc( nCount );
-    for (sal_Int32 nPos=0; nPos<nCount; nPos++)
-        aNewSeq[nPos] = maProperties[ aDescriptions[nPos].nPosition ];
+    std::transform(aDescriptions.begin(), aDescriptions.end(), aNewSeq.begin(),
+        [this](const ScSolverOptionsEntry& rDescr) -> beans::PropertyValue { return maProperties[ rDescr.nPosition ]; });
     maProperties = aNewSeq;
 
     // fill the list box

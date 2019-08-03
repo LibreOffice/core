@@ -988,11 +988,11 @@ sal_Bool SAL_CALL ScChart2DataProvider::createDataSourcePossible( const uno::Seq
         return false;
 
     OUString aRangeRepresentation;
-    for(sal_Int32 i = 0; i < aArguments.getLength(); ++i)
+    for(const auto& rArgument : aArguments)
     {
-        if ( aArguments[i].Name == "CellRangeRepresentation" )
+        if ( rArgument.Name == "CellRangeRepresentation" )
         {
-            aArguments[i].Value >>= aRangeRepresentation;
+            rArgument.Value >>= aRangeRepresentation;
         }
     }
 
@@ -1392,38 +1392,38 @@ ScChart2DataProvider::createDataSource(
     OUString aRangeRepresentation;
     uno::Sequence< sal_Int32 > aSequenceMapping;
     bool bTimeBased = false;
-    for(sal_Int32 i = 0; i < aArguments.getLength(); ++i)
+    for(const auto& rArgument : aArguments)
     {
-        if ( aArguments[i].Name == "DataRowSource" )
+        if ( rArgument.Name == "DataRowSource" )
         {
             chart::ChartDataRowSource eSource = chart::ChartDataRowSource_COLUMNS;
-            if( ! (aArguments[i].Value >>= eSource))
+            if( ! (rArgument.Value >>= eSource))
             {
                 sal_Int32 nSource(0);
-                if( aArguments[i].Value >>= nSource )
+                if( rArgument.Value >>= nSource )
                     eSource = static_cast< chart::ChartDataRowSource >( nSource );
             }
             bOrientCol = (eSource == chart::ChartDataRowSource_COLUMNS);
         }
-        else if ( aArguments[i].Name == "FirstCellAsLabel" )
+        else if ( rArgument.Name == "FirstCellAsLabel" )
         {
-            bLabel = ::cppu::any2bool(aArguments[i].Value);
+            bLabel = ::cppu::any2bool(rArgument.Value);
         }
-        else if ( aArguments[i].Name == "HasCategories" )
+        else if ( rArgument.Name == "HasCategories" )
         {
-            bCategories = ::cppu::any2bool(aArguments[i].Value);
+            bCategories = ::cppu::any2bool(rArgument.Value);
         }
-        else if ( aArguments[i].Name == "CellRangeRepresentation" )
+        else if ( rArgument.Name == "CellRangeRepresentation" )
         {
-            aArguments[i].Value >>= aRangeRepresentation;
+            rArgument.Value >>= aRangeRepresentation;
         }
-        else if ( aArguments[i].Name == "SequenceMapping" )
+        else if ( rArgument.Name == "SequenceMapping" )
         {
-            aArguments[i].Value >>= aSequenceMapping;
+            rArgument.Value >>= aSequenceMapping;
         }
-        else if ( aArguments[i].Name == "TimeBased" )
+        else if ( rArgument.Name == "TimeBased" )
         {
-            aArguments[i].Value >>= bTimeBased;
+            rArgument.Value >>= bTimeBased;
         }
     }
 
@@ -1531,10 +1531,10 @@ ScChart2DataProvider::createDataSource(
         aSeqVector.push_back(aSeq);
     }
 
-    for( sal_Int32 nNewIndex = 0; nNewIndex < aSequenceMapping.getLength(); nNewIndex++ )
+    for( const sal_Int32 nNewIndex : aSequenceMapping )
     {
         // note: assuming that the values in the sequence mapping are always non-negative
-        ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > >::size_type nOldIndex( static_cast< sal_uInt32 >( aSequenceMapping[nNewIndex] ) );
+        ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > >::size_type nOldIndex( static_cast< sal_uInt32 >( nNewIndex ) );
         if( nOldIndex < aSeqVector.size() )
         {
             pDS->AddLabeledSequence( aSeqVector[nOldIndex] );
@@ -1749,9 +1749,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences());
         const sal_Int32 nCount( aSequences.getLength());
         RangeAnalyzer aPrevLabel,aPrevValues;
-        for( sal_Int32 nIdx=0; nIdx<nCount; ++nIdx )
+        for( const uno::Reference< chart2::data::XLabeledDataSequence >& xLS : aSequences )
         {
-            uno::Reference< chart2::data::XLabeledDataSequence > xLS(aSequences[nIdx]);
             if( xLS.is() )
             {
                 bool bThisIsCategories = false;

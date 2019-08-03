@@ -254,12 +254,8 @@ void SAL_CALL ScTableConditionalFormat::addNew(
     ScCondFormatEntryItem aEntry;
     aEntry.meMode = ScConditionMode::NONE;
 
-    const beans::PropertyValue* pPropArray = aConditionalEntry.getConstArray();
-    long nPropCount = aConditionalEntry.getLength();
-    for (long i = 0; i < nPropCount; i++)
+    for (const beans::PropertyValue& rProp : aConditionalEntry)
     {
-        const beans::PropertyValue& rProp = pPropArray[i];
-
         if ( rProp.Name == SC_UNONAME_OPERATOR )
         {
             sal_Int32 eOper = ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );

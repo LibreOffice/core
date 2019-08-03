@@ -905,11 +905,9 @@ static void lcl_CopyProperties( beans::XPropertySet& rDest, beans::XPropertySet&
     if (xInfo.is())
     {
         uno::Sequence<beans::Property> aSeq(xInfo->getProperties());
-        const beans::Property* pAry = aSeq.getConstArray();
-        sal_uLong nCount = aSeq.getLength();
-        for (sal_uLong i=0; i<nCount; i++)
+        for (const beans::Property& rProp : aSeq)
         {
-            OUString aName(pAry[i].Name);
+            OUString aName(rProp.Name);
             rDest.setPropertyValue( aName, rSource.getPropertyValue( aName ) );
         }
     }
@@ -1136,18 +1134,15 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
 
     bool bError = false;
     SCROW nDocRow = nStartRow;
-    for (long nRow=0; nRow<nRows; nRow++)
+    for (const uno::Sequence<uno::Any>& rColSeq : aData)
     {
-        const uno::Sequence<uno::Any>& rColSeq = pArray[nRow];
         if ( rColSeq.getLength() == nCols )
         {
             SCCOL nDocCol = nStartCol;
-            const uno::Any* pColArr = rColSeq.getConstArray();
-            for (long nCol=0; nCol<nCols; nCol++)
+            for (const uno::Any& rElement : rColSeq)
             {
                 ScAddress aPos(nDocCol, nDocRow, nTab);
 
-                const uno::Any& rElement = pColArr[nCol];
                 switch( rElement.getValueTypeClass() )
                 {
                     case uno::TypeClass_VOID:
@@ -1275,16 +1270,13 @@ static bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
 
     bool bError = false;
     SCROW nDocRow = nStartRow;
-    for (long nRow=0; nRow<nRows; nRow++)
+    for (const uno::Sequence<OUString>& rColSeq : aData)
     {
-        const uno::Sequence<OUString>& rColSeq = pArray[nRow];
         if ( rColSeq.getLength() == nCols )
         {
             SCCOL nDocCol = nStartCol;
-            const OUString* pColArr = rColSeq.getConstArray();
-            for (long nCol=0; nCol<nCols; nCol++)
+            for (const OUString& aText : rColSeq)
             {
-                OUString aText(pColArr[nCol]);
                 ScAddress aPos( nDocCol, nDocRow, nTab );
 
                 ScInputStringType aRes =
@@ -1941,14 +1933,13 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScCellRangesBase::getPropertyStates
     const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
 
     uno::Sequence<beans::PropertyState> aRet(aPropertyNames.getLength());
-    beans::PropertyState* pStates = aRet.getArray();
-    for(sal_Int32 i = 0; i < aPropertyNames.getLength(); i++)
-    {
-        sal_uInt16 nItemWhich = 0;
-        const SfxItemPropertySimpleEntry* pEntry  = rPropertyMap.getByName( aPropertyNames[i] );
-        lcl_GetPropertyWhich( pEntry, nItemWhich );
-        pStates[i] = GetOnePropertyState(nItemWhich, pEntry);
-    }
+    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aRet.begin(),
+        [this, &rPropertyMap](const auto& rName) -> beans::PropertyState {
+            sal_uInt16 nItemWhich = 0;
+            const SfxItemPropertySimpleEntry* pEntry  = rPropertyMap.getByName( rName );
+            lcl_GetPropertyWhich( pEntry, nItemWhich );
+            return GetOnePropertyState(nItemWhich, pEntry);
+        });
     return aRet;
 }
 
@@ -4266,34 +4257,24 @@ void SAL_CALL ScCellRangesObj::addRangeAddresses( const uno::Sequence<table::Cel
                                     sal_Bool bMergeRanges )
 {
     SolarMutexGuard aGuard;
-    sal_Int32 nCount(rRanges.getLength());
-    if (nCount)
+    for (const table::CellRangeAddress& rRange : rRanges)
     {
-        const table::CellRangeAddress* pRanges = rRanges.getConstArray();
-        for (sal_Int32 i = 0; i < rRanges.getLength(); i++, pRanges++)
-        {
-            ScRange aRange(static_cast<SCCOL>(pRanges->StartColumn),
-                    static_cast<SCROW>(pRanges->StartRow),
-                    static_cast<SCTAB>(pRanges->Sheet),
-                    static_cast<SCCOL>(pRanges->EndColumn),
-                    static_cast<SCROW>(pRanges->EndRow),
-                    static_cast<SCTAB>(pRanges->Sheet));
-            AddRange(aRange, bMergeRanges);
-        }
+        ScRange aRange(static_cast<SCCOL>(rRange.StartColumn),
+                static_cast<SCROW>(rRange.StartRow),
+                static_cast<SCTAB>(rRange.Sheet),
+                static_cast<SCCOL>(rRange.EndColumn),
+                static_cast<SCROW>(rRange.EndRow),
+                static_cast<SCTAB>(rRange.Sheet));
+        AddRange(aRange, bMergeRanges);
     }
 }
 
 void SAL_CALL ScCellRangesObj::removeRangeAddresses( const uno::Sequence<table::CellRangeAddress >& rRangeSeq )
 {
     // use sometimes a better/faster implementation
-    sal_uInt32 nCount(rRangeSeq.getLength());
-    if (nCount)
+    for (const table::CellRangeAddress& rRange : rRangeSeq)
     {
-        const table::CellRangeAddress* pRanges = rRangeSeq.getConstArray();
-        for (sal_uInt32 i=0; i < nCount; ++i, ++pRanges)
-        {
-            removeRangeAddress(*pRanges);
-        }
+        removeRangeAddress(rRange);
     }
 }
 
@@ -7177,10 +7158,9 @@ void SAL_CALL ScTableSheetObj::setPrintAreas(
         if (nCount)
         {
             ScRange aPrintRange;
-            const table::CellRangeAddress* pAry = aPrintAreas.getConstArray();
-            for (sal_uInt16 i=0; i<nCount; i++)
+            for (const table::CellRangeAddress& rPrintArea : aPrintAreas)
             {
-                ScUnoConversion::FillScRange( aPrintRange, pAry[i] );
+                ScUnoConversion::FillScRange( aPrintRange, rPrintArea );
                 rDoc.AddPrintRange( nTab, aPrintRange );
             }
         }
@@ -7768,18 +7748,13 @@ void SAL_CALL ScTableSheetObj::addRanges( const uno::Sequence<table::CellRangeAd
             ScMarkData aMarkData;
             aMarkData.SelectTable( nTab, true );
 
-            sal_uInt16 nRangeCount = static_cast<sal_uInt16>(rScenRanges.getLength());
-            if (nRangeCount)
+            for (const table::CellRangeAddress& rRange : rScenRanges)
             {
-                const table::CellRangeAddress* pAry = rScenRanges.getConstArray();
-                for (sal_uInt16 i=0; i<nRangeCount; i++)
-                {
-                    OSL_ENSURE( pAry[i].Sheet == nTab, "addRanges with wrong Tab" );
-                    ScRange aOneRange( static_cast<SCCOL>(pAry[i].StartColumn), static_cast<SCROW>(pAry[i].StartRow), nTab,
-                                       static_cast<SCCOL>(pAry[i].EndColumn),   static_cast<SCROW>(pAry[i].EndRow),   nTab );
+                OSL_ENSURE( rRange.Sheet == nTab, "addRanges with wrong Tab" );
+                ScRange aOneRange( static_cast<SCCOL>(rRange.StartColumn), static_cast<SCROW>(rRange.StartRow), nTab,
+                                   static_cast<SCCOL>(rRange.EndColumn),   static_cast<SCROW>(rRange.EndRow),   nTab );
 
-                    aMarkData.SetMultiMarkArea( aOneRange );
-                }
+                aMarkData.SetMultiMarkArea( aOneRange );
             }
 
             //  Scenario ranges are tagged with attribute

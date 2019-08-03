@@ -52,11 +52,7 @@ uno::Sequence< sal_Int32 > ScVbaWorkbook::ColorData;
 
 void ScVbaWorkbook::initColorData( const uno::Sequence< sal_Int32 >& sColors )
 {
-        const sal_Int32* pSource = sColors.getConstArray();
-        sal_Int32* pDest = ColorData.getArray();
-        const sal_Int32* pEnd = pSource + sColors.getLength();
-        for ( ; pSource != pEnd; ++pSource, ++pDest )
-            *pDest = *pSource;
+    std::copy(sColors.begin(), sColors.end(), ColorData.begin());
 }
 
 void SAL_CALL
@@ -90,41 +86,38 @@ ScVbaWorkbook::Colors( const ::uno::Any& Index )
 
 bool ScVbaWorkbook::setFilterPropsFromFormat( sal_Int32 nFormat, uno::Sequence< beans::PropertyValue >& rProps )
 {
-    bool bRes = false;
-    for ( sal_Int32 index = 0; index < rProps.getLength(); ++index )
+    auto pProp = std::find_if(rProps.begin(), rProps.end(),
+        [](const beans::PropertyValue& rProp) { return rProp.Name == "FilterName"; });
+    bool bRes = pProp != rProps.end();
+    if (bRes)
     {
-        if ( rProps[ index ].Name == "FilterName" )
+        switch( nFormat )
         {
-            switch( nFormat )
-            {
-                case excel::XlFileFormat::xlCSV:
-                    rProps[ index ].Value <<= OUString(SC_TEXT_CSV_FILTER_NAME);
-                    break;
-                case excel::XlFileFormat::xlDBF4:
-                    rProps[ index ].Value <<= OUString("DBF");
-                    break;
-                case excel::XlFileFormat::xlDIF:
-                    rProps[ index ].Value <<= OUString("DIF");
-                    break;
-                case excel::XlFileFormat::xlWK3:
-                    rProps[ index ].Value <<= OUString("Lotus");
-                    break;
-                case excel::XlFileFormat::xlExcel4Workbook:
-                    rProps[ index ].Value <<= OUString("MS Excel 4.0");
-                    break;
-                case excel::XlFileFormat::xlExcel5:
-                    rProps[ index ].Value <<= OUString("MS Excel 5.0/95");
-                    break;
-                case excel::XlFileFormat::xlHtml:
-                    rProps[ index ].Value <<= OUString("HTML (StarCalc)");
-                    break;
-                case excel::XlFileFormat::xlExcel9795:
-                default:
-                    rProps[ index ].Value <<= OUString("MS Excel 97");
-                    break;
-            }
-            bRes = true;
-            break;
+            case excel::XlFileFormat::xlCSV:
+                pProp->Value <<= OUString(SC_TEXT_CSV_FILTER_NAME);
+                break;
+            case excel::XlFileFormat::xlDBF4:
+                pProp->Value <<= OUString("DBF");
+                break;
+            case excel::XlFileFormat::xlDIF:
+                pProp->Value <<= OUString("DIF");
+                break;
+            case excel::XlFileFormat::xlWK3:
+                pProp->Value <<= OUString("Lotus");
+                break;
+            case excel::XlFileFormat::xlExcel4Workbook:
+                pProp->Value <<= OUString("MS Excel 4.0");
+                break;
+            case excel::XlFileFormat::xlExcel5:
+                pProp->Value <<= OUString("MS Excel 5.0/95");
+                break;
+            case excel::XlFileFormat::xlHtml:
+                pProp->Value <<= OUString("HTML (StarCalc)");
+                break;
+            case excel::XlFileFormat::xlExcel9795:
+            default:
+                pProp->Value <<= OUString("MS Excel 97");
+                break;
         }
     }
     return bRes;

@@ -349,11 +349,8 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
             //  ScGlobal::SetUseTabCol does not do much else
 
             pUserList->clear();
-            sal_uInt16 nCount = static_cast<sal_uInt16>(aSeq.getLength());
-            const OUString* pAry = aSeq.getConstArray();
-            for (sal_uInt16 i=0; i<nCount; i++)
+            for (const OUString& aEntry : aSeq)
             {
-                OUString aEntry = pAry[i];
                 ScUserListData* pData = new ScUserListData(aEntry);
                 pUserList->push_back(pData);
             }

@@ -344,10 +344,10 @@ sal_Int32 ScCondFormatsObj::createByRange(const uno::Reference< sheet::XSheetCel
         xRanges->getRangeAddresses();
 
     ScRangeList aCoreRange;
-    for (sal_Int32 i = 0, n = aRanges.getLength(); i < n; ++i)
+    for (const auto& rRange : aRanges)
     {
         ScRange aRange;
-        ScUnoConversion::FillScRange(aRange, aRanges[i]);
+        ScUnoConversion::FillScRange(aRange, rRange);
         aCoreRange.Join(aRange);
     }
 
@@ -579,10 +579,10 @@ void SAL_CALL ScCondFormatObj::setPropertyValue(
                 uno::Sequence<table::CellRangeAddress> aRanges =
                     xRange->getRangeAddresses();
                 ScRangeList aTargetRange;
-                for (size_t i = 0, n = aRanges.getLength(); i < n; ++i)
+                for (const auto& rRange : aRanges)
                 {
                     ScRange aRange;
-                    ScUnoConversion::FillScRange(aRange, aRanges[i]);
+                    ScUnoConversion::FillScRange(aRange, rRange);
                     aTargetRange.Join(aRange);
                 }
                 pFormat->SetRange(aTargetRange);

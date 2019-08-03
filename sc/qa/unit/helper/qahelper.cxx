@@ -11,6 +11,7 @@
 #include "csv_handler.hxx"
 #include "debughelper.hxx"
 #include <drwlayer.hxx>
+#include <comphelper/sequence.hxx>
 #include <compiler.hxx>
 #include <conditio.hxx>
 #include <stlsheet.hxx>
@@ -375,8 +376,7 @@ std::vector<OUString> getChartRangeRepresentations(const SdrOle2Obj& rChartObj)
     }
 
     Sequence<OUString> aRangeRepSeqs = xDataRec->getUsedRangeRepresentations();
-    for (sal_Int32 i = 0, n = aRangeRepSeqs.getLength(); i < n; ++i)
-        aRangeReps.push_back(aRangeRepSeqs[i]);
+    comphelper::sequenceToContainer(aRangeReps, aRangeRepSeqs);
 
     return aRangeReps;
 }

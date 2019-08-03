@@ -67,15 +67,14 @@ OUString SAL_CALL ScVbaPageSetup::getPrintArea()
     OUString aPrintArea;
     uno::Reference< sheet::XPrintAreas > xPrintAreas( mxSheet, uno::UNO_QUERY_THROW );
     uno::Sequence< table::CellRangeAddress > aSeq = xPrintAreas->getPrintAreas();
-    sal_Int32 nCount = aSeq.getLength();
-    if( nCount )
+    if( aSeq.hasElements() )
     {
         ScAddress::Details aDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
         ScRangeList aRangeList;
-        for( sal_Int32 i=0; i<nCount; i++ )
+        for( const auto& rRange : aSeq )
         {
             ScRange aRange;
-            ScUnoConversion::FillScRange( aRange, aSeq[i] );
+            ScUnoConversion::FillScRange( aRange, rRange );
             aRangeList.push_back( aRange );
         }
         ScDocument& rDoc = excel::getDocShell( mxModel )->GetDocument();

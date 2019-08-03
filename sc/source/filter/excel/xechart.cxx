@@ -961,17 +961,15 @@ sal_uInt16 XclExpChSourceLink::ConvertStringSequence( const Sequence< Reference<
         namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 
         // convert all formatted string entries from the sequence
-        const Reference< XFormattedString >* pBeg = rStringSeq.getConstArray();
-        const Reference< XFormattedString >* pEnd = pBeg + rStringSeq.getLength();
-        for( const Reference< XFormattedString >* pIt = pBeg; pIt != pEnd; ++pIt )
+        for( const Reference< XFormattedString >& rString : rStringSeq )
         {
-            if( pIt->is() )
+            if( rString.is() )
             {
                 sal_uInt16 nWstrnFontIdx = EXC_FONT_NOTFOUND;
                 sal_uInt16 nAsianFontIdx = EXC_FONT_NOTFOUND;
                 sal_uInt16 nCmplxFontIdx = EXC_FONT_NOTFOUND;
-                OUString aText = (*pIt)->getString();
-                ScfPropertySet aStrProp( *pIt );
+                OUString aText = rString->getString();
+                ScfPropertySet aStrProp( rString );
 
                 // #i63255# get script type for leading weak characters
                 sal_Int16 nLastScript = XclExpStringHelper::GetLeadingScriptType( GetRoot(), aText );
@@ -1766,15 +1764,16 @@ bool XclExpChSerErrorBar::Convert( XclExpChSourceLink& rValueLink, sal_uInt16& r
                     Reference< XDataSequence > xValueSeq;
 
                     Sequence< Reference< XLabeledDataSequence > > aLabeledSeqVec = xDataSource->getDataSequences();
-                    const Reference< XLabeledDataSequence >* pBeg = aLabeledSeqVec.getConstArray();
-                    const Reference< XLabeledDataSequence >* pEnd = pBeg + aLabeledSeqVec.getLength();
-                    for( const Reference< XLabeledDataSequence >* pIt = pBeg; !xValueSeq.is() && (pIt != pEnd); ++pIt )
+                    for( const Reference< XLabeledDataSequence >& rLabeledSeq : aLabeledSeqVec )
                     {
-                        Reference< XDataSequence > xTmpValueSeq = (*pIt)->getValues();
+                        Reference< XDataSequence > xTmpValueSeq = rLabeledSeq->getValues();
                         ScfPropertySet aValueProp( xTmpValueSeq );
                         OUString aCurrRole;
                         if( aValueProp.GetProperty( aCurrRole, EXC_CHPROP_ROLE ) && (aCurrRole == aRole) )
+                        {
                             xValueSeq = xTmpValueSeq;
+                            break;
+                        }
                     }
                     if( xValueSeq.is() )
                     {
@@ -1847,11 +1846,9 @@ bool XclExpChSeries::ConvertDataSeries(
 
         // find first sequence with role 'values-y'
         Sequence< Reference< XLabeledDataSequence > > aLabeledSeqVec = xDataSource->getDataSequences();
-        const Reference< XLabeledDataSequence >* pBeg = aLabeledSeqVec.getConstArray();
-        const Reference< XLabeledDataSequence >* pEnd = pBeg + aLabeledSeqVec.getLength();
-        for( const Reference< XLabeledDataSequence >* pIt = pBeg; pIt != pEnd; ++pIt )
+        for( const Reference< XLabeledDataSequence >& rLabeledSeq : aLabeledSeqVec )
         {
-            Reference< XDataSequence > xTmpValueSeq = (*pIt)->getValues();
+            Reference< XDataSequence > xTmpValueSeq = rLabeledSeq->getValues();
             ScfPropertySet aValueProp( xTmpValueSeq );
             OUString aRole;
             if( aValueProp.GetProperty( aRole, EXC_CHPROP_ROLE ) )
@@ -1860,7 +1857,7 @@ bool XclExpChSeries::ConvertDataSeries(
                 {
                     xYValueSeq = xTmpValueSeq;
                     if( !xTitleSeq.is() )
-                        xTitleSeq = (*pIt)->getLabel(); // ignore role of label sequence
+                        xTitleSeq = rLabeledSeq->getLabel(); // ignore role of label sequence
                 }
                 else if( !xXValueSeq.is() && !rTypeInfo.mbCategoryAxis && (aRole == EXC_CHPROP_ROLE_XVALUES) )
                 {
@@ -1869,7 +1866,7 @@ bool XclExpChSeries::ConvertDataSeries(
                 else if( !xBubbleSeq.is() && (rTypeInfo.meTypeId == EXC_CHTYPEID_BUBBLES) && (aRole == EXC_CHPROP_ROLE_SIZEVALUES) )
                 {
                     xBubbleSeq = xTmpValueSeq;
-                    xTitleSeq = (*pIt)->getLabel();     // ignore role of label sequence
+                    xTitleSeq = rLabeledSeq->getLabel();     // ignore role of label sequence
                 }
             }
         }
@@ -1939,12 +1936,12 @@ bool XclExpChSeries::ConvertDataSeries(
                 Sequence< sal_Int32 > aPointIndexes;
                 if( aSeriesProp.GetProperty( aPointIndexes, EXC_CHPROP_ATTRIBDATAPOINTS ) && aPointIndexes.hasElements() )
                 {
-                    const sal_Int32* pnBeg = aPointIndexes.getConstArray();
-                    const sal_Int32* pnEnd = pnBeg + aPointIndexes.getLength();
-                    for( const sal_Int32* pnIt = pnBeg; (pnIt != pnEnd) && (*pnIt < nMaxPointCount); ++pnIt )
+                    for( const sal_Int32 nPointIndex : aPointIndexes )
                     {
-                        aPointPos.mnPointIdx = static_cast< sal_uInt16 >( *pnIt );
-                        ScfPropertySet aPointProp = lclGetPointPropSet( xDataSeries, *pnIt );
+                        if (nPointIndex >= nMaxPointCount)
+                            break;
+                        aPointPos.mnPointIdx = static_cast< sal_uInt16 >( nPointIndex );
+                        ScfPropertySet aPointProp = lclGetPointPropSet( xDataSeries, nPointIndex );
                         XclExpChDataFormatRef xPointFmt( new XclExpChDataFormat( GetChRoot(), aPointPos, nFormatIdx ) );
                         xPointFmt->ConvertDataSeries( aPointProp, rTypeInfo );
                         maPointFmts.AppendRecord( xPointFmt );
@@ -1967,17 +1964,16 @@ bool XclExpChSeries::ConvertStockSeries( css::uno::Reference< css::chart2::XData
 
         // find first sequence with passed role
         Sequence< Reference< XLabeledDataSequence > > aLabeledSeqVec = xDataSource->getDataSequences();
-        const Reference< XLabeledDataSequence >* pBeg = aLabeledSeqVec.getConstArray();
-        const Reference< XLabeledDataSequence >* pEnd = pBeg + aLabeledSeqVec.getLength();
-        for( const Reference< XLabeledDataSequence >* pIt = pBeg; !xYValueSeq.is() && (pIt != pEnd); ++pIt )
+        for( const Reference< XLabeledDataSequence >& rLabeledSeq : aLabeledSeqVec )
         {
-            Reference< XDataSequence > xTmpValueSeq = (*pIt)->getValues();
+            Reference< XDataSequence > xTmpValueSeq = rLabeledSeq->getValues();
             ScfPropertySet aValueProp( xTmpValueSeq );
             OUString aRole;
             if( aValueProp.GetProperty( aRole, EXC_CHPROP_ROLE ) && (aRole == rValueRole) )
             {
                 xYValueSeq = xTmpValueSeq;
-                xTitleSeq = (*pIt)->getLabel();     // ignore role of label sequence
+                xTitleSeq = rLabeledSeq->getLabel();     // ignore role of label sequence
+                break;
             }
         }
 
@@ -2070,12 +2066,10 @@ void XclExpChSeries::CreateTrendLines( css::uno::Reference< css::chart2::XDataSe
     if( xRegCurveCont.is() )
     {
         Sequence< Reference< XRegressionCurve > > aRegCurveSeq = xRegCurveCont->getRegressionCurves();
-        const Reference< XRegressionCurve >* pBeg = aRegCurveSeq.getConstArray();
-        const Reference< XRegressionCurve >* pEnd = pBeg + aRegCurveSeq.getLength();
-        for( const Reference< XRegressionCurve >* pIt = pBeg; pIt != pEnd; ++pIt )
+        for( const Reference< XRegressionCurve >& rRegCurve : aRegCurveSeq )
         {
             XclExpChSeriesRef xSeries = GetChartData().CreateSeries();
-            if( xSeries && !xSeries->ConvertTrendLine( *this, *pIt ) )
+            if( xSeries && !xSeries->ConvertTrendLine( *this, rRegCurve ) )
                 GetChartData().RemoveLastSeries();
         }
     }
@@ -2434,14 +2428,12 @@ void XclExpChTypeGroup::ConvertSeries(
 
         // copy data series attached to the current axes set to the vector
         Sequence< Reference< XDataSeries > > aSeriesSeq = xSeriesCont->getDataSeries();
-        const Reference< XDataSeries >* pBeg = aSeriesSeq.getConstArray();
-        const Reference< XDataSeries >* pEnd = pBeg + aSeriesSeq.getLength();
-        for( const Reference< XDataSeries >* pIt = pBeg; pIt != pEnd; ++pIt )
+        for( const Reference< XDataSeries >& rSeries : aSeriesSeq )
         {
-            ScfPropertySet aSeriesProp( *pIt );
+            ScfPropertySet aSeriesProp( rSeries );
             sal_Int32 nSeriesAxesSetIdx(0);
             if( aSeriesProp.GetProperty( nSeriesAxesSetIdx, EXC_CHPROP_ATTAXISINDEX ) && (nSeriesAxesSetIdx == nGroupAxesSetIdx) )
-                aSeriesVec.push_back( *pIt );
+                aSeriesVec.push_back( rSeries );
         }
 
         // Are there any series in the current axes set?
@@ -3124,23 +3116,21 @@ sal_uInt16 XclExpChAxesSet::Convert( Reference< XDiagram > const & xDiagram, sal
             if( xChartTypeCont.is() )
             {
                 Sequence< Reference< XChartType > > aChartTypeSeq = xChartTypeCont->getChartTypes();
-                const Reference< XChartType >* pBeg = aChartTypeSeq.getConstArray();
-                const Reference< XChartType >* pEnd = pBeg + aChartTypeSeq.getLength();
-                for( const Reference< XChartType >* pIt = pBeg; pIt != pEnd; ++pIt )
+                for( const Reference< XChartType >& rChartType : aChartTypeSeq )
                 {
                     XclExpChTypeGroupRef xTypeGroup( new XclExpChTypeGroup( GetChRoot(), nGroupIdx ) );
-                    xTypeGroup->ConvertType( xDiagram, *pIt, nApiAxesSetIdx, b3dChart, bSwappedAxesSet, bHasXLabels );
+                    xTypeGroup->ConvertType( xDiagram, rChartType, nApiAxesSetIdx, b3dChart, bSwappedAxesSet, bHasXLabels );
                     /*  If new chart type group cannot be inserted into a combination
                         chart with existing type groups, insert all series into last
                         contained chart type group instead of creating a new group. */
                     XclExpChTypeGroupRef xLastGroup = GetLastTypeGroup();
                     if( xLastGroup && !(xTypeGroup->IsCombinable2d() && xLastGroup->IsCombinable2d()) )
                     {
-                        xLastGroup->ConvertSeries( xDiagram, *pIt, nApiAxesSetIdx, bPercent, bConnectBars );
+                        xLastGroup->ConvertSeries( xDiagram, rChartType, nApiAxesSetIdx, bPercent, bConnectBars );
                     }
                     else
                     {
-                        xTypeGroup->ConvertSeries( xDiagram, *pIt, nApiAxesSetIdx, bPercent, bConnectBars );
+                        xTypeGroup->ConvertSeries( xDiagram, rChartType, nApiAxesSetIdx, bPercent, bConnectBars );
                         if( xTypeGroup->IsValidGroup() )
                         {
                             maTypeGroups.AppendRecord( xTypeGroup );

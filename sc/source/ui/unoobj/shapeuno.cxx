@@ -933,11 +933,9 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScShapeObj::getPropertyStates(
 
     //  simple loop to get own and aggregated states
 
-    const OUString* pNames = aPropertyNames.getConstArray();
     uno::Sequence<beans::PropertyState> aRet(aPropertyNames.getLength());
-    beans::PropertyState* pStates = aRet.getArray();
-    for(sal_Int32 i = 0; i < aPropertyNames.getLength(); i++)
-        pStates[i] = getPropertyState(pNames[i]);
+    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aRet.begin(),
+        [this](const OUString& rName) -> beans::PropertyState { return getPropertyState(rName); });
     return aRet;
 }
 
@@ -1343,27 +1341,24 @@ public:
             throw container::NoSuchElementException();
         uno::Sequence< beans::PropertyValue > aProperties;
         aElement >>= aProperties;
-        const beans::PropertyValue* pProperties = aProperties.getConstArray();
-        const sal_Int32 nCount = aProperties.getLength();
-        sal_Int32 nIndex;
         bool isEventType = false;
-        for( nIndex = 0; nIndex < nCount; nIndex++, pProperties++ )
+        for( const beans::PropertyValue& rProperty : aProperties )
         {
-            if ( pProperties->Name == SC_EVENTACC_EVENTTYPE )
+            if ( rProperty.Name == SC_EVENTACC_EVENTTYPE )
             {
                 isEventType = true;
                 continue;
             }
-            if ( isEventType && (pProperties->Name == SC_EVENTACC_SCRIPT) )
+            if ( isEventType && (rProperty.Name == SC_EVENTACC_SCRIPT) )
             {
                 OUString sValue;
-                if ( pProperties->Value >>= sValue )
+                if ( rProperty.Value >>= sValue )
                 {
                     ScMacroInfo* pInfo = getInfo( true );
                     OSL_ENSURE( pInfo, "shape macro info could not be created!" );
                     if ( !pInfo )
                         break;
-                    if ( pProperties->Name == SC_EVENTACC_SCRIPT )
+                    if ( rProperty.Name == SC_EVENTACC_SCRIPT )
                         pInfo->SetMacro( sValue );
                     else
                         pInfo->SetHlink( sValue );
