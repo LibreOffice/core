@@ -219,7 +219,9 @@ class MyUriHelper:
 
             # path to the .py file + "$functionname, arguments, etc
             xStorageUri = self.m_uriRefFac.parse(scriptURI)
-            sStorageUri = xStorageUri.getName().replace( "|", "/" );
+            # getName will apply url-decoding to the name, so encode back
+            sStorageUri = xStorageUri.getName().replace("%", "%25")
+            sStorageUri = sStorageUri.replace( "|", "/" )
 
             # path to the .py file, relative to the base
             sFileUri = sStorageUri[0:sStorageUri.find("$")]
