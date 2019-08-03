@@ -78,6 +78,10 @@ public:
 
     static ShapeFactory* getOrCreateShapeFactory(const css::uno::Reference< css::lang::XMultiServiceFactory>& xFactory);
 
+    std::unique_ptr<ShapeFactory> getOrCreateShapeFactory(
+        const css::uno::Reference< css::chart2::XChartDocument >& rxModel,
+        const css::uno::Reference< css::lang::XMultiServiceFactory>& xFactory);
+
     ShapeFactory() = delete;
     css::uno::Reference< css::drawing::XShapes >
         createGroup2D(

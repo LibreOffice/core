@@ -89,6 +89,7 @@ double lcl_CalcViewFontSize(
 }
 
 void lcl_getProperties(
+    const Reference< chart2::XChartDocument > & rxModel,
     const Reference< beans::XPropertySet > & xLegendProp,
     tPropertyValues & rOutLineFillProperties,
     tPropertyValues & rOutTextProperties,
@@ -99,7 +100,7 @@ void lcl_getProperties(
     {
         // set rOutLineFillProperties
         ::chart::tPropertyNameValueMap aLineFillValueMap;
-        ::chart::PropertyMapper::getValueMap( aLineFillValueMap, ::chart::PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xLegendProp );
+        ::chart::PropertyMapper::getValueMap( rxModel, 1 , aLineFillValueMap, ::chart::PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xLegendProp );
 
         aLineFillValueMap[ "LineJoint" ] <<= drawing::LineJoint_ROUND;
 
@@ -108,7 +109,7 @@ void lcl_getProperties(
 
         // set rOutTextProperties
         ::chart::tPropertyNameValueMap aTextValueMap;
-        ::chart::PropertyMapper::getValueMap( aTextValueMap, ::chart::PropertyMapper::getPropertyNameMapForCharacterProperties(), xLegendProp );
+        ::chart::PropertyMapper::getValueMap( rxModel, 1 , aTextValueMap, ::chart::PropertyMapper::getPropertyNameMapForCharacterProperties(), xLegendProp );
 
         aTextValueMap[ "TextAutoGrowHeight" ] <<= true;
         aTextValueMap[ "TextAutoGrowWidth" ] <<= true;
@@ -868,6 +869,7 @@ bool VLegend::isVisible( const Reference< XLegend > & xLegend )
 }
 
 void VLegend::createShapes(
+    const Reference< XChartDocument >& rxModel,
     const awt::Size & rAvailableSpace,
     const awt::Size & rPageSize )
 {
@@ -918,7 +920,7 @@ void VLegend::createShapes(
                     }
                 }
                 xLegendProp->getPropertyValue("AnchorPosition") >>= eLegendPosition;
-                lcl_getProperties( xLegendProp, aLineFillProperties, aTextProperties, rPageSize );
+                lcl_getProperties( rxModel, xLegendProp, aLineFillProperties, aTextProperties, rPageSize );
             }
 
             // create entries

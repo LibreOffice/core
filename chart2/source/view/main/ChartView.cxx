@@ -423,6 +423,7 @@ VCoordinateSystem* addCooSysToList( std::vector< std::unique_ptr<VCoordinateSyst
 void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
               ChartModel& rChartModel )
 {
+    uno::Reference< XChartDocument > rxModel( rChartModel, uno::UNO_QUERY );
     uno::Reference< XDiagram > xDiagram( rChartModel.getFirstDiagram() );
     if( !xDiagram.is())
         return;
@@ -530,7 +531,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
 
             m_aSeriesPlotterList.push_back( std::unique_ptr<VSeriesPlotter>(pPlotter) );
             pPlotter->setNumberFormatsSupplier( xNumberFormatsSupplier );
-            pPlotter->setColorScheme( xColorScheme );
+            pPlotter->setColorScheme( rxModel, xColorScheme );
             if(pVCooSys)
                 pPlotter->setExplicitCategoriesProvider( pVCooSys->getExplicitCategoriesProvider() );
             sal_Int32 nMissingValueTreatment = DiagramHelper::getCorrectedMissingValueTreatment( xDiagram, xChartType );
@@ -2263,7 +2264,8 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
     return apVTitle;
 }
 
-bool lcl_createLegend( const uno::Reference< XLegend > & xLegend
+bool lcl_createLegend( const uno::Reference< XChartDocument > & xModel
+                   , const uno::Reference< XLegend > & xLegend
                    , const uno::Reference< drawing::XShapes>& xPageShapes
                    , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
                    , const uno::Reference< uno::XComponentContext > & xContext
@@ -2279,7 +2281,7 @@ bool lcl_createLegend( const uno::Reference< XLegend > & xLegend
     VLegend aVLegend( xLegend, xContext, rLegendEntryProviderList,
             xPageShapes, xShapeFactory, rModel);
     aVLegend.setDefaultWritingMode( nDefaultWritingMode );
-    aVLegend.createShapes( awt::Size( rRemainingSpace.Width, rRemainingSpace.Height ),
+    aVLegend.createShapes( xModel, awt::Size( rRemainingSpace.Width, rRemainingSpace.Height ),
                            rPageSize );
     aVLegend.changePosition( rRemainingSpace, rPageSize );
     return true;
@@ -2364,6 +2366,7 @@ void formatPage(
 {
     try
     {
+        uno::Reference< chart2::XChartDocument > rxModel( rChartModel, uno::UNO_QUERY );
         uno::Reference< beans::XPropertySet > xModelPage( rChartModel.getPageBackground());
         if( ! xModelPage.is())
             return;
@@ -2373,7 +2376,7 @@ void formatPage(
 
         //format page
         tPropertyNameValueMap aNameValueMap;
-        PropertyMapper::getValueMap( aNameValueMap, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xModelPage );
+        PropertyMapper::getValueMap( rxModel, 1, aNameValueMap, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xModelPage );
 
         OUString aCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) );
         aNameValueMap.emplace( "Name", uno::Any( aCID ) ); //CID OUString
@@ -2953,6 +2956,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     aParam.maRemainingSpace.Height = rPageSize.Height;
 
     //create the group shape for diagram and axes first to have title and legends on top of it
+    uno::Reference< XChartDocument > rxModel( mrChartModel, uno::UNO_QUERY );
     uno::Reference< XDiagram > xDiagram( mrChartModel.getFirstDiagram() );
     OUString aDiagramCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, OUString::number( 0 ) ) );//todo: other index if more than one diagram is possible
     uno::Reference< drawing::XShapes > xDiagramPlusAxesPlusMarkHandlesGroup_Shapes(
@@ -3006,7 +3010,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     }
 
     lcl_createLegend(
-        LegendHelper::getLegend( mrChartModel ), mxRootShape, m_xShapeFactory, m_xCC,
+        rxModel, LegendHelper::getLegend( mrChartModel ), mxRootShape, m_xShapeFactory, m_xCC,
         aParam.maRemainingSpace, rPageSize, mrChartModel, aParam.mpSeriesPlotterContainer->getLegendEntryProviderList(),
         lcl_getDefaultWritingModeFromPool( m_pDrawModelWrapper ) );
     if (aParam.maRemainingSpace.Width <= 0 || aParam.maRemainingSpace.Height <= 0)

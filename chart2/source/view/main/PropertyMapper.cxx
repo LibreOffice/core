@@ -21,6 +21,8 @@
 #include <unonames.hxx>
 #include <sal/log.hxx>
 
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/ChartObjectType.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
@@ -46,7 +48,9 @@ void lcl_overwriteOrAppendValues(
 } // anonymous namespace
 
 void PropertyMapper::setMappedProperties(
-          const uno::Reference< beans::XPropertySet >& xTarget
+          const css::uno::Reference< css::chart2::XChartDocument >& rxModel
+        , const sal_Int16 nType
+        , const uno::Reference< beans::XPropertySet >& xTarget
         , const uno::Reference< beans::XPropertySet >& xSource
         , const tPropertyNameMap& rMap
         , tPropertyNameValueMap const * pOverwriteMap )
@@ -56,7 +60,7 @@ void PropertyMapper::setMappedProperties(
 
     tNameSequence aNames;
     tAnySequence  aValues;
-    getMultiPropertyLists(aNames, aValues, xSource, rMap );
+    getMultiPropertyLists(rxModel, nType, aNames, aValues, xSource, rMap );
     if(pOverwriteMap && (aNames.getLength() == aValues.getLength()))
     {
         tPropertyNameValueMap aNewMap;
@@ -71,7 +75,9 @@ void PropertyMapper::setMappedProperties(
 }
 
 void PropertyMapper::getValueMap(
-                  tPropertyNameValueMap& rValueMap
+                  const css::uno::Reference< css::chart2::XChartDocument >& rxModel
+                , const sal_Int16 nType
+                , tPropertyNameValueMap& rValueMap
                 , const tPropertyNameMap& rNameMap
                 , const uno::Reference< beans::XPropertySet >& xSourceProp
                 )
@@ -118,14 +124,16 @@ void PropertyMapper::getValueMap(
 }
 
 void PropertyMapper::getMultiPropertyLists(
-                  tNameSequence& rNames
+                  const css::uno::Reference< css::chart2::XChartDocument >& rxModel
+                , const sal_Int16 nType
+                , tNameSequence& rNames
                 , tAnySequence&  rValues
                 , const uno::Reference< beans::XPropertySet >& xSourceProp
                 , const tPropertyNameMap& rNameMap
                 )
 {
     tPropertyNameValueMap aValueMap;
-    getValueMap( aValueMap, rNameMap, xSourceProp );
+    getValueMap( rxModel, nType, aValueMap, rNameMap, xSourceProp );
     getMultiPropertyListsFromValueMap( rNames, rValues, aValueMap );
 }
 
@@ -155,6 +163,90 @@ void PropertyMapper::getMultiPropertyListsFromValueMap(
     //reduce to real property count
     rNames.realloc(nN);
     rValues.realloc(nN);
+}
+
+void PropertyMapper::setMappedPropertiesWithoutModel(
+          const uno::Reference< beans::XPropertySet >& xTarget
+        , const uno::Reference< beans::XPropertySet >& xSource
+        , const tPropertyNameMap& rMap
+        , tPropertyNameValueMap const * pOverwriteMap )
+{
+    if( !xTarget.is() || !xSource.is() )
+        return;
+
+    tNameSequence aNames;
+    tAnySequence  aValues;
+    getMultiPropertyListsWithoutModel( aNames, aValues, xSource, rMap );
+    if(pOverwriteMap && (aNames.getLength() == aValues.getLength()))
+    {
+        tPropertyNameValueMap aNewMap;
+        for( sal_Int32 nI=0; nI<aNames.getLength(); ++nI )
+            aNewMap[ aNames[nI] ] = aValues[nI];
+        lcl_overwriteOrAppendValues( aNewMap, *pOverwriteMap );
+        aNames = comphelper::mapKeysToSequence( aNewMap );
+        aValues = comphelper::mapValuesToSequence( aNewMap );
+    }
+
+    PropertyMapper::setMultiProperties( aNames, aValues, xTarget );
+}
+
+void PropertyMapper::getValueMapWithoutModel(
+                  tPropertyNameValueMap& rValueMap
+                , const tPropertyNameMap& rNameMap
+                , const uno::Reference< beans::XPropertySet >& xSourceProp
+                )
+{
+    uno::Reference< beans::XMultiPropertySet > xMultiPropSet(xSourceProp, uno::UNO_QUERY);
+    if((false) && xMultiPropSet.is())
+    {
+        uno::Sequence< OUString > aPropSourceNames(rNameMap.size());
+        uno::Sequence< OUString > aPropTargetNames(rNameMap.size());
+        sal_Int32 i = 0;
+        for (auto const& elem : rNameMap)
+        {
+            aPropTargetNames[i] = elem.first;
+            aPropSourceNames[i] = elem.second;
+            ++i;
+        }
+
+        uno::Sequence< uno::Any > xValues = xMultiPropSet->getPropertyValues(aPropSourceNames);
+        sal_Int32 n = rNameMap.size();
+        for(i = 0;i < n; ++i)
+        {
+            if( xValues[i].hasValue() )
+                rValueMap.emplace(  aPropTargetNames[i], xValues[i] );
+        }
+    }
+    else
+    {
+        for (auto const& elem : rNameMap)
+        {
+            OUString aTarget = elem.first;
+            OUString aSource = elem.second;
+            try
+            {
+                uno::Any aAny( xSourceProp->getPropertyValue(aSource) );
+                if( aAny.hasValue() )
+                    rValueMap.emplace(  aTarget, aAny );
+            }
+            catch( const uno::Exception& )
+            {
+                TOOLS_WARN_EXCEPTION("chart2", "" );
+            }
+        }
+    }
+}
+
+void PropertyMapper::getMultiPropertyListsWithoutModel(
+                  tNameSequence& rNames
+                , tAnySequence&  rValues
+                , const uno::Reference< beans::XPropertySet >& xSourceProp
+                , const tPropertyNameMap& rNameMap
+                )
+{
+    tPropertyNameValueMap aValueMap;
+    getValueMapWithoutModel( aValueMap, rNameMap, xSourceProp );
+    getMultiPropertyListsFromValueMap( rNames, rValues, aValueMap );
 }
 
 uno::Any* PropertyMapper::getValuePointer( tAnySequence& rPropValues
@@ -444,7 +536,7 @@ void PropertyMapper::getTextLabelMultiPropertyLists(
     tPropertyNameValueMap aValueMap;
     tPropertyNameMap const & aNameMap = bSupportsLabelBorder ? PropertyMapper::getPropertyNameMapForTextLabelProperties() : getPropertyNameMapForCharacterProperties();
 
-    PropertyMapper::getValueMap(aValueMap, aNameMap, xSourceProp);
+    PropertyMapper::getValueMapWithoutModel(aValueMap, aNameMap, xSourceProp);
 
     //some more shape properties apart from character properties, position-matrix and label string
     aValueMap.emplace( "TextHorizontalAdjust", uno::Any(drawing::TextHorizontalAdjust_CENTER) ); // drawing::TextHorizontalAdjust - needs to be overwritten
@@ -472,8 +564,7 @@ void PropertyMapper::getPreparedTextShapePropertyLists(
 {
     //fill character, line and fill properties into the ValueMap
     tPropertyNameValueMap aValueMap;
-    PropertyMapper::getValueMap( aValueMap
-            , PropertyMapper::getPropertyNameMapForTextShapeProperties()
+    PropertyMapper::getValueMapWithoutModel( aValueMap, PropertyMapper::getPropertyNameMapForTextShapeProperties()
             , xSourceProp );
 
     // auto-grow makes sure the shape has the correct size after setting text

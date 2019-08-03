@@ -243,7 +243,8 @@ public:
     void setNumberFormatsSupplier( const css::uno::Reference< css::util::XNumberFormatsSupplier > & xNumFmtSupplier );
     void setAxesNumberFormats( const AxesNumberFormats& rAxesNumberFormats ) { m_aAxesNumberFormats = rAxesNumberFormats; };
 
-    void setColorScheme( const css::uno::Reference< css::chart2::XColorScheme >& xColorScheme );
+    void setColorScheme( const css::uno::Reference< css::chart2::XChartDocument >& rxModel
+                       , const css::uno::Reference< css::chart2::XColorScheme >& xColorScheme );
 
     void setExplicitCategoriesProvider( ExplicitCategoriesProvider* pExplicitCategoriesProvider );
 
@@ -438,6 +439,7 @@ protected:
     bool m_bPointsWereSkipped;
 
 private:
+    css::uno::Reference< css::chart2::XChartDocument > m_rxModel;
     typedef std::map< sal_Int32 , ExplicitScaleData > tSecondaryValueScales;
     tSecondaryValueScales   m_aSecondaryValueScales;
 

@@ -26,6 +26,7 @@
 namespace chart { class ChartModel; }
 namespace com { namespace sun { namespace star { namespace awt { struct Rectangle; } } } }
 namespace com { namespace sun { namespace star { namespace awt { struct Size; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
 namespace com { namespace sun { namespace star { namespace chart2 { class XLegend; } } } }
 namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
 namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
@@ -49,7 +50,8 @@ public:
 
     void setDefaultWritingMode( sal_Int16 nDefaultWritingMode );
 
-    void createShapes( const css::awt::Size & rAvailableSpace,
+    void createShapes( const css::uno::Reference< css::chart2::XChartDocument >& rxModel,
+                       const css::awt::Size & rAvailableSpace,
                        const css::awt::Size & rPageSize );
 
     /** Sets the position according to its internal anchor.

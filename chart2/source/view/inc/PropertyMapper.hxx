@@ -25,6 +25,7 @@
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <charttoolsdllapi.hxx>
 
@@ -48,7 +49,9 @@ class OOO_DLLPUBLIC_CHARTTOOLS PropertyMapper
 {
 public:
     static void setMappedProperties(
-          const css::uno::Reference< css::beans::XPropertySet >& xTarget
+          const css::uno::Reference< css::chart2::XChartDocument >& rxModel
+        , const sal_Int16 nType
+        , const css::uno::Reference< css::beans::XPropertySet >& xTarget
         , const css::uno::Reference< css::beans::XPropertySet >& xSource
         , const tPropertyNameMap& rMap
         , tPropertyNameValueMap const * pOverwriteMap=nullptr );
@@ -64,13 +67,17 @@ public:
      *                    pulled.
      */
     static void getValueMap(
-          tPropertyNameValueMap& rValueMap
+          const css::uno::Reference< css::chart2::XChartDocument >& rxModel
+        , const sal_Int16 nType
+        , tPropertyNameValueMap& rValueMap
         , const tPropertyNameMap& rNameMap
         , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
         );
 
     static void getMultiPropertyLists(
-                  tNameSequence& rNames
+                  const css::uno::Reference< css::chart2::XChartDocument >& rxModel
+                , const sal_Int16 nType
+                , tNameSequence& rNames
                 , tAnySequence&  rValues
                 , const css::uno::Reference< css::beans::XPropertySet >& xProp
                 , const tPropertyNameMap& rMap
@@ -80,6 +87,25 @@ public:
                   tNameSequence& rNames
                 , tAnySequence&  rValues
                 , const tPropertyNameValueMap& rValueMap
+                );
+
+    static void setMappedPropertiesWithoutModel(
+                  const css::uno::Reference< css::beans::XPropertySet >& xTarget
+                , const css::uno::Reference< css::beans::XPropertySet >& xSource
+                , const tPropertyNameMap& rMap
+                , tPropertyNameValueMap const * pOverwriteMap=nullptr );
+
+    static void getValueMapWithoutModel(
+                  tPropertyNameValueMap& rValueMap
+                , const tPropertyNameMap& rNameMap
+                , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
+                );
+
+    static void getMultiPropertyListsWithoutModel(
+                  tNameSequence& rNames
+                , tAnySequence&  rValues
+                , const css::uno::Reference< css::beans::XPropertySet >& xProp
+                , const tPropertyNameMap& rMap
                 );
 
     static css::uno::Any*
