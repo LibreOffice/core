@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_d43154a4",
+        "filename": "svx/source/svdraw/presetooxhandleadjustmentrelations.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-08-03T13:10:57Z",
+      "side": 1,
+      "message": "pass by const \u0026",
+      "revId": "7d13bec1f53ba6ca11dde0134f8bb168999d7a89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
