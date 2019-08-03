@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_WIZDLG_HXX
-#define INCLUDED_SVTOOLS_WIZDLG_HXX
+#ifndef INCLUDED_VCL_WIZDLG_HXX
+#define INCLUDED_VCL_WIZDLG_HXX
 
-#include <svtools/svtdllapi.h>
-
+#include <vcl/dllapi.h>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/idle.hxx>
@@ -175,7 +174,7 @@ IMPL_LINK( MyWizardDlg, ImplNextHdl, PushButton*, pBtn, void )
 #define WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X    3
 
 
-class SVT_DLLPUBLIC WizardDialog : public ModalDialog
+class VCL_DLLPUBLIC WizardDialog : public ModalDialog
 {
 private:
     Idle                    maWizardLayoutIdle;
@@ -209,12 +208,12 @@ protected:
     void                SetEmptyViewMargin();
 
 private:
-    SVT_DLLPRIVATE void             ImplInitData();
-    SVT_DLLPRIVATE void             ImplCalcSize( Size& rSize );
-    SVT_DLLPRIVATE void             ImplPosCtrls();
-    SVT_DLLPRIVATE void             ImplPosTabPage();
-    SVT_DLLPRIVATE void             ImplShowTabPage( TabPage* pPage );
-    SVT_DLLPRIVATE TabPage*         ImplGetPage( sal_uInt16 nLevel ) const;
+    VCL_DLLPRIVATE void             ImplInitData();
+    VCL_DLLPRIVATE void             ImplCalcSize( Size& rSize );
+    VCL_DLLPRIVATE void             ImplPosCtrls();
+    VCL_DLLPRIVATE void             ImplPosTabPage();
+    VCL_DLLPRIVATE void             ImplShowTabPage( TabPage* pPage );
+    VCL_DLLPRIVATE TabPage*         ImplGetPage( sal_uInt16 nLevel ) const;
 
 public:
     WizardDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
@@ -256,6 +255,6 @@ public:
     void                SetActivatePageHdl( const Link<WizardDialog*,void>& rLink ) { maActivateHdl = rLink; }
 };
 
-#endif // INCLUDED_SVTOOLS_WIZDLG_HXX
+#endif // INCLUDED_VCL_WIZDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

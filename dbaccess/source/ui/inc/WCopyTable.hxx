@@ -30,7 +30,7 @@
 #include <comphelper/stl_types.hxx>
 #include "TypeInfo.hxx"
 #include <vcl/button.hxx>
-#include <svtools/wizdlg.hxx>
+#include <vcl/wizdlg.hxx>
 #include "DExport.hxx"
 #include "WTabPage.hxx"
 #include "FieldDescriptions.hxx"

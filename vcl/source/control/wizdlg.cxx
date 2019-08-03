@@ -22,7 +22,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/tabpage.hxx>
-#include <svtools/wizdlg.hxx>
+#include <vcl/wizdlg.hxx>
 
 
 #define WIZARDDIALOG_BUTTON_OFFSET_Y        6

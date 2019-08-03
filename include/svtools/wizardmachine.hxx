@@ -21,7 +21,7 @@
 
 #include <memory>
 #include <svtools/svtdllapi.h>
-#include <svtools/wizdlg.hxx>
+#include <vcl/wizdlg.hxx>
 #include <vcl/button.hxx>
 #include <vcl/tabpage.hxx>
 #include <o3tl/typed_flags_set.hxx>
