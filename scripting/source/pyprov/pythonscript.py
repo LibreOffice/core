@@ -219,6 +219,7 @@ class MyUriHelper:
 
             # path to the .py file + "$functionname, arguments, etc
             xStorageUri = self.m_uriRefFac.parse(scriptURI)
+            # getName will apply url-decoding to the name
             sStorageUri = xStorageUri.getName().replace( "|", "/" );
 
             # path to the .py file, relative to the base
@@ -239,7 +240,11 @@ class MyUriHelper:
                 log.debug( message )
                 raise RuntimeException( message )
 
+            # uri-encode any remaining %
+            sStorageUri = sStorageUri.replace("%", "%25")
+
             ret = sBaseUri + sStorageUri
+
             log.debug( "converting scriptURI="+scriptURI + " to storageURI=" + ret )
             return ret
         except UnoException as e:
