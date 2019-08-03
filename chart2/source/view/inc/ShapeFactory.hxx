@@ -69,14 +69,28 @@ enum SymbolEnum { Symbol_Square=0
 class ShapeFactory
 {
     css::uno::Reference< css::lang::XMultiServiceFactory>   m_xShapeFactory;
+    css::uno::Reference< css::chart2::XChartDocument >      m_xModel;
 
     ShapeFactory(css::uno::Reference< css::lang::XMultiServiceFactory> const & xFactory)
-        {m_xShapeFactory = xFactory;}
+        {
+            m_xShapeFactory = xFactory;
+            m_xModel = NULL;
+        }
 
+    ShapeFactory(css::uno::Reference< css::chart2::XChartDocument > const & rxModel
+               , css::uno::Reference< css::lang::XMultiServiceFactory> const & xFactory)
+        {
+            m_xShapeFactory = xFactory;
+            m_xModel = rxModel;
+        }
 public:
     enum class StackPosition { Top, Bottom };
 
     static ShapeFactory* getOrCreateShapeFactory(const css::uno::Reference< css::lang::XMultiServiceFactory>& xFactory);
+
+    std::unique_ptr<ShapeFactory> getOrCreateShapeFactory(
+        const css::uno::Reference< css::chart2::XChartDocument >& rxModel,
+        const css::uno::Reference< css::lang::XMultiServiceFactory>& xFactory);
 
     ShapeFactory() = delete;
     css::uno::Reference< css::drawing::XShapes >

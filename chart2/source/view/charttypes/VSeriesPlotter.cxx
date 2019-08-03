@@ -1592,7 +1592,7 @@ void VSeriesPlotter::setMappedProperties(
         , tPropertyNameValueMap const * pOverwriteMap )
 {
     uno::Reference< beans::XPropertySet > xTargetProp( xTargetShape, uno::UNO_QUERY );
-    PropertyMapper::setMappedProperties(xTargetProp,xSource,rMap,pOverwriteMap);
+    PropertyMapper::setMappedPropertiesWithoutModel(xTargetProp,xSource,rMap,pOverwriteMap);
 }
 
 void VSeriesPlotter::setTimeResolutionOnXAxis( long TimeResolution, const Date& rNullDate )
@@ -1841,7 +1841,8 @@ void VSeriesPlotter::setNumberFormatsSupplier(
     m_apNumberFormatterWrapper.reset( new NumberFormatterWrapper( xNumFmtSupplier ));
 }
 
-void VSeriesPlotter::setColorScheme( const uno::Reference< XColorScheme >& xColorScheme )
+void VSeriesPlotter::setColorScheme( const uno::Reference< XChartDocument >& rxModel
+                                   , const uno::Reference< XColorScheme >& xColorScheme )
 {
     m_xColorScheme = xColorScheme;
 }

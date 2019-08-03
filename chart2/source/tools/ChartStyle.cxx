@@ -43,6 +43,9 @@ css::uno::Reference< css::beans::XPropertySet> ChartStyle::getStyleForObject( co
         throw css::lang::IllegalArgumentException( "Unknown Chart Object Style requested", nullptr, 0 );
 }
 
+css::uno::Reference< css::chart2::XColorScheme > ChartStyle::getColorScheme()
+{}
+
 // _____ XServiceInfo _____
 OUString SAL_CALL ChartStyle::getImplementationName()
 {

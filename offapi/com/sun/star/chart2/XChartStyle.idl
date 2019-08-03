@@ -13,12 +13,15 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/chart2/ChartObjectType.idl>
+#include <com/sun/star/chart2/XColorScheme.idl>
 
 module com { module sun { module star { module chart2 {
 
 interface XChartStyle : ::com::sun::star::uno::XInterface
 {
     com::sun::star::beans::XPropertySet getStyleForObject([in] short chartObjectType);
+
+    com::sun::star::chart2::XColorScheme getColorScheme();
 };
 
 }; }; }; };
