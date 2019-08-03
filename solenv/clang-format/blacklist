@@ -7021,7 +7021,6 @@ include/svtools/unoimap.hxx
 include/svtools/urlcontrol.hxx
 include/svtools/valueset.hxx
 include/svtools/wizardmachine.hxx
-include/svtools/wizdlg.hxx
 include/svx/AccessibleControlShape.hxx
 include/svx/AccessibleGraphicShape.hxx
 include/svx/AccessibleOLEShape.hxx
@@ -7974,6 +7973,7 @@ include/vcl/virdev.hxx
 include/vcl/waitobj.hxx
 include/vcl/wall.hxx
 include/vcl/window.hxx
+include/vcl/wizdlg.hxx
 include/vcl/wmf.hxx
 include/vcl/wmfexternal.hxx
 include/vcl/wrkwin.hxx
@@ -13756,7 +13756,6 @@ svtools/source/dialogs/prnsetup.cxx
 svtools/source/dialogs/restartdialog.cxx
 svtools/source/dialogs/roadmapwizard.cxx
 svtools/source/dialogs/wizardmachine.cxx
-svtools/source/dialogs/wizdlg.cxx
 svtools/source/edit/editsyntaxhighlighter.cxx
 svtools/source/edit/svmedit.cxx
 svtools/source/edit/svmedit2.cxx
@@ -17800,6 +17799,7 @@ vcl/source/control/spinfld.cxx
 vcl/source/control/tabctrl.cxx
 vcl/source/control/throbber.cxx
 vcl/source/control/thumbpos.hxx
+vcl/source/control/wizdlg.cxx
 vcl/source/edit/textdat2.hxx
 vcl/source/edit/textdata.cxx
 vcl/source/edit/textdoc.cxx
