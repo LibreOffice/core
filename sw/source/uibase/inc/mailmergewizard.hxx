@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_MAILMERGEWIZARD_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_MAILMERGEWIZARD_HXX
 
-#include <svtools/roadmapwizard.hxx>
+#include <vcl/roadmapwizard.hxx>
 #include <rtl/ustring.hxx>
 
 class SwView;
@@ -31,7 +31,7 @@ class SwMailMergeConfigItem;
 #define MM_GREETINGSPAGE        3
 #define MM_LAYOUTPAGE           4
 
-class SwMailMergeWizard : public ::svt::RoadmapWizard
+class SwMailMergeWizard : public ::vcl::RoadmapWizard
 {
     SwView* const           m_pSwView;
     OUString                sDocumentURL;
@@ -77,9 +77,9 @@ public:
     void                    SetRestartPage(sal_uInt16 nPage) { m_nRestartPage = nPage;}
 
     bool                skipUntil( sal_uInt16 nPage)
-                                {return ::svt::RoadmapWizard::skipUntil(WizardState(nPage));}
+                                {return ::vcl::RoadmapWizard::skipUntil(WizardState(nPage));}
 
-    using svt::RoadmapWizard::updateRoadmapItemLabel;
+    using vcl::RoadmapWizard::updateRoadmapItemLabel;
 
     virtual short           Execute() override;
 };

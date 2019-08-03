@@ -52,7 +52,7 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include "finteraction.hxx"
 #include <unotools/pathoptions.hxx>
-#include <svtools/roadmapwizard.hxx>
+#include <vcl/roadmapwizard.hxx>
 #include "TextConnectionHelper.hxx"
 #include <osl/diagnose.h>
 

@@ -6986,7 +6986,6 @@ include/svtools/popupwindowcontroller.hxx
 include/svtools/printoptions.hxx
 include/svtools/prnsetup.hxx
 include/svtools/restartdialog.hxx
-include/svtools/roadmapwizard.hxx
 include/svtools/rtfkeywd.hxx
 include/svtools/rtfout.hxx
 include/svtools/rtftoken.h
@@ -7904,6 +7903,7 @@ include/vcl/ptrstyle.hxx
 include/vcl/quickselectionengine.hxx
 include/vcl/region.hxx
 include/vcl/roadmap.hxx
+include/vcl/roadmapwizard.hxx
 include/vcl/salctype.hxx
 include/vcl/salgtype.hxx
 include/vcl/salnativewidgets.hxx
@@ -13754,7 +13754,6 @@ svtools/source/dialogs/colrdlg.cxx
 svtools/source/dialogs/insdlg.cxx
 svtools/source/dialogs/prnsetup.cxx
 svtools/source/dialogs/restartdialog.cxx
-svtools/source/dialogs/roadmapwizard.cxx
 svtools/source/edit/editsyntaxhighlighter.cxx
 svtools/source/edit/svmedit.cxx
 svtools/source/edit/svmedit2.cxx
@@ -17791,6 +17790,7 @@ vcl/source/control/notebookbar.cxx
 vcl/source/control/prgsbar.cxx
 vcl/source/control/quickselectionengine.cxx
 vcl/source/control/roadmap.cxx
+vcl/source/control/roadmapwizard.cxx
 vcl/source/control/scrbar.cxx
 vcl/source/control/slider.cxx
 vcl/source/control/spinbtn.cxx

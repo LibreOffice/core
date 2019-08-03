@@ -148,6 +148,7 @@
 #define STR_SVT_CALENDAR_WEEK                        NC_("STR_SVT_CALENDAR_WEEK", "Week")
 #define STR_SVT_CALENDAR_TODAY                       NC_("STR_SVT_CALENDAR_TODAY", "Today")
 
+#define STR_WIZDLG_ROADMAP_TITLE                     NC_("STR_WIZDLG_ROADMAP_TITLE", "Steps")
 #define STR_WIZDLG_FINISH                            NC_("STR_WIZDLG_FINISH", "~Finish")
 #define STR_WIZDLG_NEXT                              NC_("STR_WIZDLG_NEXT", "~Next >")
 #define STR_WIZDLG_PREVIOUS                          NC_("STR_WIZDLG_PREVIOUS", "< Bac~k")

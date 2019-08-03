@@ -27,7 +27,7 @@
 #include <curledit.hxx>
 #include "TextConnectionHelper.hxx"
 
-#include <svtools/roadmapwizard.hxx>
+#include <vcl/roadmapwizard.hxx>
 #include <ucbhelper/content.hxx>
 #include <vcl/field.hxx>
 
