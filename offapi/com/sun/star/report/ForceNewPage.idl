@@ -24,7 +24,7 @@
  module com {  module sun {  module star {  module report {
 
 
-/** Specifies if the section will be printed on an separate page.
+/** Specifies if the section will be printed on a separate page.
     <p>This does not apply to page header or page footer.</p>
     @see XSection
  */

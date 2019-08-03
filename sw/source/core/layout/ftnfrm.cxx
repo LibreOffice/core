@@ -2757,7 +2757,7 @@ bool SwContentFrame::MoveFootnoteCntFwd( bool bMakePage, SwFootnoteBossFrame *pO
         // then move the content inside of it.
         // If it is a container or the reference differs, create a new footnote and add
         // it into the container.
-        // Create also a SectionFrame if currently in a area inside a footnote.
+        // Create also a SectionFrame if currently in an area inside a footnote.
         SwFootnoteFrame* pTmpFootnote = pNewUpper->IsFootnoteFrame() ? static_cast<SwFootnoteFrame*>(pNewUpper) : nullptr;
         if( !pTmpFootnote )
         {

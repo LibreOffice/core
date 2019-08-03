@@ -585,7 +585,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * The <code>ServiceEnumerationImpl</code> class provides an
      * implementation of the @see com.sun.star.container.XEnumeration interface.
      *
-     * <p>It is a inner wrapper for a java.util.Enumeration object.</p>
+     * <p>It is an inner wrapper for a java.util.Enumeration object.</p>
      *
      * @see         com.sun.star.lang.XSingleServiceFactory
      * @see         com.sun.star.lang.XServiceInfo
