@@ -2,6 +2,13 @@
 <!-- Generated with glade 3.22.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkAdjustment" id="border_value">
+    <property name="lower">1</property>
+    <property name="upper">75</property>
+    <property name="value">5</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkDialog" id="QrCodeGenDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -160,6 +167,11 @@
                           <object class="GtkSpinButton" id="edit_border">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">border_value</property>
+                            <property name="climb_rate">1</property>
+                            <property name="snap_to_ticks">True</property>
+                            <property name="numeric">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
