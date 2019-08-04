@@ -398,7 +398,7 @@ void SdGenericDrawPage::UpdateModel()
     mbIsImpressDocument = mpDocModel && mpDocModel->IsImpressDocument();
 }
 
-// this is called whenever a SdrObject must be created for a empty api shape wrapper
+// this is called whenever a SdrObject must be created for an empty api shape wrapper
 SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShape >& xShape )
 {
     if( nullptr == SvxFmDrawPage::mpPage || !xShape.is() )
@@ -1382,7 +1382,7 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
                 pShape = new SvxShapeText( pObj );
                 if( GetPage()->GetPageKind() == PageKind::Notes && GetPage()->IsMasterPage() )
                 {
-                    // fake a empty PageShape if it's a title shape on the master page
+                    // fake an empty PageShape if it's a title shape on the master page
                     pShape->SetShapeType("com.sun.star.presentation.PageShape");
                 }
                 else
@@ -2777,7 +2777,7 @@ Any SAL_CALL SdMasterPage::getByIndex( sal_Int32 Index )
 // intern
 void SdMasterPage::setBackground( const Any& rValue )
 {
-    // we need at least an beans::XPropertySet
+    // we need at least a beans::XPropertySet
     Reference< beans::XPropertySet > xInputSet( rValue, UNO_QUERY );
     if( !xInputSet.is() )
         throw lang::IllegalArgumentException();

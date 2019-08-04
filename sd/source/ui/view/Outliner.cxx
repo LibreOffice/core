@@ -1002,7 +1002,7 @@ void SdOutliner::RememberStartPosition()
 void SdOutliner::RestoreStartPosition()
 {
     bool bRestore = true;
-    // Take a negative start page index as inidicator that restoring the
+    // Take a negative start page index as indicator that restoring the
     // start position is not requested.
     if (mnStartPageIndex == sal_uInt16(-1) )
         bRestore = false;
