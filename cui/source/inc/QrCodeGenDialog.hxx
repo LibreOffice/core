@@ -16,9 +16,6 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-// cuitabarea included to use Button Box class for group of Radio Buttons
-#include "cuitabarea.hxx"
-
 class QrCodeGenDialog : public weld::GenericDialogController
 {
 public:
@@ -41,15 +38,12 @@ private:
 
     css::uno::Reference<css::beans::XPropertySet> m_xExistingShapeProperties;
 
-    /* maBox - holds radioButton, helped in writing code. */
-    ButtonBox maBox;
     /* Stores which error correction is selected. */
     long m_aECCSelect;
-    void SelectErrorCorrection(weld::ToggleButton&);
     void GetErrorCorrection(long);
-    static OUString GenerateQrCode(OUString aQrText, int aQrECC, int aQrBorder);
+    static OUString GenerateQRCode(OUString aQrText, int aQrECC, int aQrBorder);
 
-    DECL_LINK(SelectRadio_Impl, weld::ToggleButton&, void);
+    DECL_LINK(SelectErrorCorrection_Impl, weld::ToggleButton&, void);
 };
 
 #endif
