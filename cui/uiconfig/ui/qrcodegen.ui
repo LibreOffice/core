@@ -182,14 +182,19 @@
                           <object class="GtkGrid">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="row_spacing">6</property>
+                            <property name="column_spacing">4</property>
                             <child>
                               <object class="GtkRadioButton" id="button_low">
-                                <property name="label" translatable="yes" context="qrcodegen|ErrorCorrection" >Low</property>
+                                <property name="label" translatable="yes" context="qrcodegen|ErrorCorrection">Low</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <property name="use_underline">True</property>
+                                <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
+                                <property name="group">button_medium</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -198,12 +203,15 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="button_medium">
-                                <property name="label" translatable="yes" context="qrcodegen|ErrorCorrection" >Medium</property>
+                                <property name="label" translatable="yes" context="qrcodegen|ErrorCorrection">Medium</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <property name="use_underline">True</property>
+                                <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
+                                <property name="group">button_low</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -212,12 +220,15 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="button_quartile">
-                                <property name="label" translatable="yes" context="qrcodegen|ErrorCorrection" >Quartile</property>
+                                <property name="label" translatable="yes" context="qrcodegen|ErrorCorrection">Quartile</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <property name="use_underline">True</property>
+                                <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
+                                <property name="group">button_low</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -226,12 +237,15 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="button_high">
-                                <property name="label" translatable="yes" context="qrcodegen|ErrorCorrection" >High</property>
+                                <property name="label" translatable="yes" context="qrcodegen|ErrorCorrection">High</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <property name="use_underline">True</property>
+                                <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
+                                <property name="group">button_low</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
