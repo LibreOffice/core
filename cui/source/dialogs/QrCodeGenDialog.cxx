@@ -152,8 +152,8 @@ void QrCodeGenDialog::Apply()
         // Default size
         Reference<XShape> xShape(xShapeProps, UNO_QUERY);
         awt::Size aShapeSize;
-        aShapeSize.Height = 3000;
-        aShapeSize.Width = 6000;
+        aShapeSize.Height = 4000;
+        aShapeSize.Width = 4000;
         xShape->setSize(aShapeSize);
 
         // Default anchoring
