@@ -4567,7 +4567,6 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         double fEndAngle(0.0);
                         css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > seqAdjustmentValues;
                         const uno::Any* pAny = aGeometryItem.GetPropertyValueByName(sAdjustmentValues);
-                        pAny = aGeometryItem.GetPropertyValueByName(sAdjustmentValues);
                         if (pAny && (*pAny >>= seqAdjustmentValues) && seqAdjustmentValues.getLength() > 1)
                         {
                             if (seqAdjustmentValues[0].State == css::beans::PropertyState_DEFAULT_VALUE)
