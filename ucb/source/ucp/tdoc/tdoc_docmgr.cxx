@@ -444,7 +444,7 @@ void OfficeDocumentsManager::buildDocumentsList()
 
                         uno::Reference< embed::XStorage > xStorage
                             = xDoc->getDocumentStorage();
-                        OSL_ENSURE( xDoc.is(), "Got no document storage!" );
+                        OSL_ENSURE( xStorage.is(), "Got no document storage!" );
 
                         {
                             osl::MutexGuard aGuard( m_aMtx );
