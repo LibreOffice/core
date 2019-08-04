@@ -98,7 +98,7 @@ sub get_maximum_filenumber
 
     $maxfile = $allfiles / $maxcabfilenumber;
 
-    $maxfile++;                 # for securitry
+    $maxfile++;                 # for security
 
     return $maxfile;
 }

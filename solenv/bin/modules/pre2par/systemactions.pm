@@ -24,7 +24,7 @@ use pre2par::exiter;
 use pre2par::globals;
 
 ######################################################
-# Creating a new direcotory
+# Creating a new directory
 ######################################################
 
 sub create_directory

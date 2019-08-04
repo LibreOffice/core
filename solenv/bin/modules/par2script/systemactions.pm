@@ -24,7 +24,7 @@ use par2script::exiter;
 use par2script::globals;
 
 ######################################################
-# Creating a new direcotory
+# Creating a new directory
 ######################################################
 
 sub create_directory

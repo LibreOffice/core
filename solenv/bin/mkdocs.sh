@@ -150,7 +150,7 @@ if test ! -f "$DOXYGEN_CFG"; then
     exit 1
 fi
 
-# strip -I. and bin -I prefix; exlude system headers
+# strip -I. and bin -I prefix; exclude system headers
 DOXYGEN_INCLUDE_PATH=`echo $SOLARINC | sed -e 's/-I\.//g' -e 's/ -I/ /'g -e 's/ -isystem/ /g' -e 's|/usr/[^ ]*| |g'`
 
 # setup version string
