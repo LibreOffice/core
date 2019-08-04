@@ -94,6 +94,9 @@
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
+
 #include <mtvelements.hxx>
 
 using ::editeng::SvxBorderLine;
@@ -103,6 +106,21 @@ namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::sheet::TablePageBreakData;
 using ::std::set;
+
+namespace {
+
+void collectUIInformation(const std::map<OUString, OUString>& aParameters,const OUString action)
+{
+    EventDescription aDescription;
+    aDescription.aID = "grid_window";
+    aDescription.aAction = action;
+    aDescription.aParameters = aParameters;
+    aDescription.aParent = "MainWindow";
+    aDescription.aKeyWord = "ScGridWinUIObject";
+
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+}
 
 namespace {
 
@@ -895,6 +913,7 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDoc
             }
         }
     }
+    collectUIInformation({{"NewName",rName}},"Rename_Sheet");
     return bValid;
 }
 

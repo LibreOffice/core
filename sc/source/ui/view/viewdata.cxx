@@ -66,6 +66,9 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
+
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
 
@@ -91,6 +94,21 @@ void lcl_LOKRemoveWindow(ScTabViewShell* pTabViewShell, ScSplitPos eWhich)
 }
 
 } // anonymous namespace
+
+namespace {
+
+void collectUIInformation(const std::map<OUString, OUString>& aParameters,const OUString action)
+{
+    EventDescription aDescription;
+    aDescription.aID = "grid_window";
+    aDescription.aAction = action;
+    aDescription.aParameters = aParameters;
+    aDescription.aParent = "MainWindow";
+    aDescription.aKeyWord = "ScGridWinUIObject";
+
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+}
 
 const ScPositionHelper::index_type ScPositionHelper::null; // definition
 
@@ -846,6 +864,7 @@ void ScViewData::InsertTab( SCTAB nTab )
 
     UpdateCurrentTab();
     mpMarkData->InsertTab( nTab );
+    collectUIInformation({{}},"InsertTab");
 }
 
 void ScViewData::InsertTabs( SCTAB nTab, SCTAB nNewSheets )
