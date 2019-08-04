@@ -369,6 +369,10 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
         else if(rDescription.aAction=="UNMERGE_CELL"){
             aLogLine = "Delete the merged " + aParameterString;
         }
+        else if(rDescription.aAction=="Rename_Sheet"){
+            aLogLine = "Rename The Selected Sheet to \""+\
+            GetValueInMapWithIndex(rDescription.aParameters,0)+"\"";
+        }
     }
     else if(rDescription.aID=="impress_win_or_draw_win"){
         if(rDescription.aAction=="Insert_New_Page_or_Slide"){
