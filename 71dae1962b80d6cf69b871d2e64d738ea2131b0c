@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_cf3a2197",
+        "filename": "chart2/source/view/main/VButton.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-08-04T18:42:35Z",
+      "side": 1,
+      "message": "xTextProp is most likely not a ChartModel.",
+      "revId": "71dae1962b80d6cf69b871d2e64d738ea2131b0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_af37adb0",
+        "filename": "chart2/source/view/main/VDataSeries.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 973,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-08-04T18:42:35Z",
+      "side": 1,
+      "message": "getModel returns a css::chart2::XDataSeries which is not a ChartModel.",
+      "revId": "71dae1962b80d6cf69b871d2e64d738ea2131b0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_0fbb390e",
+        "filename": "chart2/source/view/main/VLegend.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-08-04T18:42:35Z",
+      "side": 1,
+      "message": "I don\u0027t think that a legend is also a chart model.",
+      "revId": "71dae1962b80d6cf69b871d2e64d738ea2131b0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
