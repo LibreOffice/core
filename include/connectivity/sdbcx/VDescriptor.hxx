@@ -72,9 +72,8 @@ namespace connectivity
 
             // css::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-            static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
 
-            static ODescriptor* getImplementation( const css::uno::Reference< css::uno::XInterface >& _rxSomeComp );
             // retrieves the ODescriptor implementation of a given UNO component, and returns its ->isNew flag
             static bool isNew( const css::uno::Reference< css::uno::XInterface >& _rxDescriptor );
         };
