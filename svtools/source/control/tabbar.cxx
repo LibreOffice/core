@@ -2130,7 +2130,7 @@ void TabBar::EndEditMode(bool bCancel)
             mbEditCanceled = true;
     }
 
-    // renaming not allowed, than reset edit data
+    // renaming not allowed, then reset edit data
     if (!bEnd)
     {
         mpImpl->mpEdit->ResetPostEvent();

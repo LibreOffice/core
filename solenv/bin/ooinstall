@@ -78,7 +78,7 @@ if ($is_windows) {
 }
 
 # FIXME: a better solution would be to fix installer to deal with broken symlinks
-# make distro-pack-install shufle with the SDK installation to make it LSB compliant
+# make distro-pack-install shuffle with the SDK installation to make it LSB compliant
 # it creates symlinks from the original path to /usr/share; they are not valid with $DESTDIR
 # and potential second ooinstall call fails with strange error messages if the old tree is still there
 if ($destdir && "$ENV{DESTDIR}" ne "/" && -d "$ENV{DESTDIR}") {

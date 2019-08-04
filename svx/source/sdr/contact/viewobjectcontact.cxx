@@ -389,7 +389,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
                 // started doing so, but it just makes the code more complicated. For now,
                 // just allow re-creation of the PrimitiveSequence (and removing buffered
                 // decomposed content of it). May be optimized, though. OTOH it only happens
-                // in calc which traditionally does not have a huge amout of DrawObjects anyways.
+                // in calc which traditionally does not have a huge amount of DrawObjects anyways.
                 const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
                 const_cast< ViewObjectContact* >(this)->maObjectRange.transform(aTranslateGridOffset);
             }

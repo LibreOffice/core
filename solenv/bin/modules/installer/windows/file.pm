@@ -248,8 +248,8 @@ sub get_file_component_name
         $componentname =~ s/\./\_/g;            # converting "-" to "_"
 
         # Attention: Maximum length for the componentname is 72
-        # %installer::globals::allcomponents_in_this_database : resetted for each database
-        # %installer::globals::allcomponents : not resetted for each database
+        # %installer::globals::allcomponents_in_this_database : reset for each database
+        # %installer::globals::allcomponents : not reset for each database
         # Component strings must be unique for the complete product, because they are used for
         # the creation of the globally unique identifier.
 

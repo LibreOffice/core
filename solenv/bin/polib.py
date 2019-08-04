@@ -604,7 +604,7 @@ class _BaseFile(list):
     def _encode(self, mixed):
         """
         Encodes the given ``mixed`` argument with the file encoding if and
-        only if it's an unicode string and returns the encoded string.
+        only if it's a unicode string and returns the encoded string.
         """
         if isinstance(mixed, text_type):
             mixed = mixed.encode(self.encoding)
@@ -1334,7 +1334,7 @@ class _POFileParser(object):
             if tokens[0] == '#:':
                 if nb_tokens <= 1:
                     continue
-                # we are on a occurrences line
+                # we are on an occurrences line
                 self.process('oc')
 
             elif line[:1] == '"':

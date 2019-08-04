@@ -819,7 +819,7 @@ sub get_Directoryname_From_Directorygid
 }
 
 ##################################################################
-# Getting destination direcotory for links, files and profiles
+# Getting destination directory for links, files and profiles
 ##################################################################
 
 sub get_Destination_Directory_For_Item_From_Directorylist       # this is used for Files, Profiles and Links

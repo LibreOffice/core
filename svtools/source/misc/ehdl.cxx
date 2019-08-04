@@ -265,7 +265,7 @@ bool SfxErrorContext::GetString(ErrCode nErrId, OUString &rStr)
 
 /*  [Description]
 
-    Constructs the description of a error context
+    Constructs the description of an error context
     */
 
 {
