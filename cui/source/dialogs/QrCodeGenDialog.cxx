@@ -14,6 +14,7 @@
 #include <unotools/streamwrap.hxx>
 #include <utility>
 #include <vcl/weld.hxx>
+#include <sal/log.hxx>
 
 #if defined(SYSTEM_QRCODEGEN)
 #include <qrcodegen/QrCode.hpp>
@@ -61,23 +62,14 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
     : GenericDialogController(pParent, "cui/ui/qrcodegen.ui", "QrCodeGenDialog")
     , m_xModel(std::move(xModel))
     , m_xEdittext(m_xBuilder->weld_entry("edit_text"))
-    , m_xRadioLow(m_xBuilder->weld_radio_button("button_low"))
-    , m_xRadioMedium(m_xBuilder->weld_radio_button("button_medium"))
-    , m_xRadioQuartile(m_xBuilder->weld_radio_button("button_quartile"))
-    , m_xRadioHigh(m_xBuilder->weld_radio_button("button_high"))
+    , m_xECC{ m_xBuilder->weld_radio_button("button_low"),
+              m_xBuilder->weld_radio_button("button_medium"),
+              m_xBuilder->weld_radio_button("button_quartile"),
+              m_xBuilder->weld_radio_button("button_high") }
     , m_xSpinBorder(m_xBuilder->weld_spin_button("edit_border"))
 {
-    maBox.AddButton(m_xRadioLow.get());
-    maBox.AddButton(m_xRadioMedium.get());
-    maBox.AddButton(m_xRadioQuartile.get());
-    maBox.AddButton(m_xRadioHigh.get());
-
-    // Set ECC to Low by Default.
     if (!bEditExisting)
     {
-        // ECC::Low     0
-        m_aECCSelect = css::drawing::QRCodeErrorCorrection::LOW;
-        m_xRadioLow->set_active(true);
         return;
     }
 
@@ -85,20 +77,16 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
                                                     UNO_QUERY_THROW);
     Reference<XPropertySet> xProps(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
 
-    // Read properties from selected qr code
-    css::drawing::QRCode aQrCode;
-    xProps->getPropertyValue("QRCodeProperties") >>= aQrCode;
+    // Read properties from selected QR Code
+    css::drawing::QRCode aQRCode;
+    xProps->getPropertyValue("QRCodeProperties") >>= aQRCode;
 
-    m_xEdittext->set_text(aQrCode.Payload);
-    GetErrorCorrection(aQrCode.ErrorCorrection);
+    m_xEdittext->set_text(aQRCode.Payload);
 
-    Link<weld::ToggleButton&, void> aLink = LINK(this, QrCodeGenDialog, SelectRadio_Impl);
-    m_xRadioLow->connect_toggled(aLink);
-    m_xRadioMedium->connect_toggled(aLink);
-    m_xRadioQuartile->connect_toggled(aLink);
-    m_xRadioHigh->connect_toggled(aLink);
+    //Get Error Correction Constant from selected QR Code
+    GetErrorCorrection(aQRCode.ErrorCorrection);
 
-    m_xSpinBorder->set_value(aQrCode.Border);
+    m_xSpinBorder->set_value(aQRCode.Border);
 
     // Mark this as existing shape
     m_xExistingShapeProperties = xProps;
@@ -114,13 +102,34 @@ short QrCodeGenDialog::run()
 
 void QrCodeGenDialog::Apply()
 {
-    css::drawing::QRCode aQrCode;
-    aQrCode.Payload = m_xEdittext->get_text();
-    aQrCode.ErrorCorrection = m_aECCSelect;
-    aQrCode.Border = m_xSpinBorder->get_value();
+    css::drawing::QRCode aQRCode;
+    aQRCode.Payload = m_xEdittext->get_text();
+
+    bool bLowECCActive(m_xECC[0]->get_active());
+    bool bMediumECCActive(m_xECC[1]->get_active());
+    bool bQuartileECCActive(m_xECC[2]->get_active());
+
+    if (bLowECCActive)
+    {
+        aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::LOW;
+    }
+    else if (bMediumECCActive)
+    {
+        aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::MEDIUM;
+    }
+    else if (bQuartileECCActive)
+    {
+        aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::QUARTILE;
+    }
+    else
+    {
+        aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::HIGH;
+    }
+
+    aQRCode.Border = m_xSpinBorder->get_value();
 
     // Read svg and replace placeholder texts
-    OUString aSvgImage = GenerateQrCode(aQrCode.Payload, aQrCode.ErrorCorrection, aQrCode.Border);
+    OUString aSvgImage = GenerateQRCode(aQRCode.Payload, aQRCode.ErrorCorrection, aQRCode.Border);
 
     // Insert/Update graphic
     SvMemoryStream aSvgStream(4096, 4096);
@@ -134,9 +143,9 @@ void QrCodeGenDialog::Apply()
     aMediaProperties[0].Value <<= xInputStream;
     Reference<XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
 
-    bool bIsExistingQrCode = m_xExistingShapeProperties.is();
+    bool bIsExistingQRCode = m_xExistingShapeProperties.is();
     Reference<XPropertySet> xShapeProps;
-    if (bIsExistingQrCode)
+    if (bIsExistingQRCode)
         xShapeProps = m_xExistingShapeProperties;
     else
         xShapeProps.set(Reference<lang::XMultiServiceFactory>(m_xModel, UNO_QUERY_THROW)
@@ -145,10 +154,10 @@ void QrCodeGenDialog::Apply()
 
     xShapeProps->setPropertyValue("Graphic", Any(xGraphic));
 
-    // Set qrcode properties
-    xShapeProps->setPropertyValue("QRCodeProperties", Any(aQrCode));
+    // Set QRCode properties
+    xShapeProps->setPropertyValue("QRCodeProperties", Any(aQRCode));
 
-    if (!bIsExistingQrCode)
+    if (!bIsExistingQRCode)
     {
         // Default size
         Reference<XShape> xShape(xShapeProps, UNO_QUERY);
@@ -198,26 +207,7 @@ void QrCodeGenDialog::Apply()
     }
 }
 
-IMPL_LINK(QrCodeGenDialog, SelectRadio_Impl, weld::ToggleButton&, rButton, void)
-{
-    // If the button is already active do not toggle it back.
-    if (!rButton.get_active())
-        rButton.set_active(true);
-
-    SelectErrorCorrection(rButton);
-}
-
-void QrCodeGenDialog::SelectErrorCorrection(weld::ToggleButton& rButton)
-{
-    sal_Int32 nPos = maBox.GetButtonPos(&rButton);
-    if (nPos != -1 && nPos != maBox.GetCurrentButtonPos())
-    {
-        maBox.SelectButton(&rButton);
-        m_aECCSelect = static_cast<int>(maBox.GetCurrentButtonPos()) + 1;
-    }
-}
-
-OUString QrCodeGenDialog::GenerateQrCode(OUString aQrText, int aQrECC, int aQrBorder)
+OUString QrCodeGenDialog::GenerateQRCode(OUString aQRText, long aQRECC, int aQRBorder)
 {
 #if ENABLE_FUZZERS
     return OUString();
@@ -225,8 +215,13 @@ OUString QrCodeGenDialog::GenerateQrCode(OUString aQrText, int aQrECC, int aQrBo
     //Select ECC:: value from aQrECC
     qrcodegen::QrCode::Ecc bqrEcc = qrcodegen::QrCode::Ecc::LOW;
 
-    switch (aQrECC)
+    switch (aQRECC)
     {
+        case 1:
+        {
+            bqrEcc = qrcodegen::QrCode::Ecc::LOW;
+            break;
+        }
         case 2:
         {
             bqrEcc = qrcodegen::QrCode::Ecc::MEDIUM;
@@ -242,20 +237,15 @@ OUString QrCodeGenDialog::GenerateQrCode(OUString aQrText, int aQrECC, int aQrBo
             bqrEcc = qrcodegen::QrCode::Ecc::HIGH;
             break;
         }
-        default:
-        {
-            bqrEcc = qrcodegen::QrCode::Ecc::LOW;
-            break;
-        }
     }
 
     //OuString to char* qrtext
-    OString o = OUStringToOString(aQrText, RTL_TEXTENCODING_ASCII_US);
+    OString o = OUStringToOString(aQRText, RTL_TEXTENCODING_ASCII_US);
     const char* qrtext = o.pData->buffer;
 
     //From Qr Code library.
     qrcodegen::QrCode qr0 = qrcodegen::QrCode::encodeText(qrtext, bqrEcc);
-    std::string svg = qr0.toSvgString(aQrBorder);
+    std::string svg = qr0.toSvgString(aQRBorder);
     //cstring to OUString
     char* cstr = &svg[0];
     return OUString::createFromAscii(cstr);
@@ -266,28 +256,24 @@ void QrCodeGenDialog::GetErrorCorrection(long ErrorCorrection)
 {
     switch (ErrorCorrection)
     {
+        case css::drawing::QRCodeErrorCorrection::LOW:
+        {
+            m_xECC[0]->set_active(true);
+            break;
+        }
         case css::drawing::QRCodeErrorCorrection::MEDIUM:
         {
-            m_xRadioMedium->set_active(true);
-            m_aECCSelect = ErrorCorrection;
+            m_xECC[1]->set_active(true);
             break;
         }
         case css::drawing::QRCodeErrorCorrection::QUARTILE:
         {
-            m_xRadioQuartile->set_active(true);
-            m_aECCSelect = ErrorCorrection;
+            m_xECC[2]->set_active(true);
             break;
         }
         case css::drawing::QRCodeErrorCorrection::HIGH:
         {
-            m_xRadioHigh->set_active(true);
-            m_aECCSelect = ErrorCorrection;
-            break;
-        }
-        default:
-        {
-            m_xRadioLow->set_active(true);
-            m_aECCSelect = css::drawing::QRCodeErrorCorrection::LOW;
+            m_xECC[3]->set_active(true);
             break;
         }
     }
