@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_ef0285b4",
+        "filename": "sw/uiconfig/swriter/ui/selectaddressdialog.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2019-08-04T20:19:57Z",
+      "side": 0,
+      "message": "This made the buttons equal width for me on Linux/GTK3",
+      "range": {
+        "startLine": 135,
+        "startChar": 17,
+        "endLine": 135,
+        "endChar": 66
+      },
+      "revId": "f00ad321cec3923b60604e7417b3661de9c314bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
