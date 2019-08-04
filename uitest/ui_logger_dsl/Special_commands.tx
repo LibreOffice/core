@@ -74,7 +74,8 @@ writer_Insert_BreakPage:
 calc_command:
   calc_Type_command | calc_switch_sheet | calc_Select_cell | calc_AutoFill_filter |
   calc_Delete_Cells | calc_Remove_Content | calc_insert_cells | calc_Cut_Cells | 
-  calc_Copy_Cells | calc_Paste_Cells | calc_UNMerge_Cells | calc_Merge_Cells
+  calc_Copy_Cells | calc_Paste_Cells | calc_UNMerge_Cells | calc_Merge_Cells |
+  calc_Rename_Sheet | calc_Insert_sheet
 ;
 calc_Type_command:
   'Type on current cell' what_to_type=Type_options
@@ -117,6 +118,12 @@ calc_Merge_Cells:
 ;
 calc_UNMerge_Cells:
     'Delete the merge between' '{' '"CELL":' input_range=STRING '}'
+;
+calc_Rename_Sheet:
+    'Rename The Selected Tab to ' new_name=STRING
+;
+calc_Insert_sheet:
+    'Insert New Tab '
 ;
 //this is the select options
 select_options:
