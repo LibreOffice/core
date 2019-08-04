@@ -16,9 +16,6 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-// cuitabarea included to use Button Box class for group of Radio Buttons
-#include "cuitabarea.hxx"
-
 class QrCodeGenDialog : public weld::GenericDialogController
 {
 public:
@@ -33,23 +30,14 @@ protected:
 
 private:
     std::unique_ptr<weld::Entry> m_xEdittext;
-    std::unique_ptr<weld::RadioButton> m_xRadioLow;
-    std::unique_ptr<weld::RadioButton> m_xRadioMedium;
-    std::unique_ptr<weld::RadioButton> m_xRadioQuartile;
-    std::unique_ptr<weld::RadioButton> m_xRadioHigh;
+    std::unique_ptr<weld::RadioButton> m_xECC[4];
     std::unique_ptr<weld::SpinButton> m_xSpinBorder;
 
     css::uno::Reference<css::beans::XPropertySet> m_xExistingShapeProperties;
 
-    /* maBox - holds radioButton, helped in writing code. */
-    ButtonBox maBox;
-    /* Stores which error correction is selected. */
-    long m_aECCSelect;
-    void SelectErrorCorrection(weld::ToggleButton&);
     void GetErrorCorrection(long);
-    static OUString GenerateQrCode(OUString aQrText, int aQrECC, int aQrBorder);
-
-    DECL_LINK(SelectRadio_Impl, weld::ToggleButton&, void);
+    //Function contains QR Code Generating Library Calls
+    static OUString GenerateQRCode(OUString aQrText, long aQrECC, int aQrBorder);
 };
 
 #endif
