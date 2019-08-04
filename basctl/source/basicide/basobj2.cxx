@@ -29,6 +29,7 @@
 #include <basic/sbmeth.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/sequence.hxx>
 #include <framework/documentundoguard.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
@@ -93,55 +94,40 @@ bool IsValidSbxName( const OUString& rName )
 
 Sequence< OUString > GetMergedLibraryNames( const Reference< script::XLibraryContainer >& xModLibContainer, const Reference< script::XLibraryContainer >& xDlgLibContainer )
 {
-    // create a sorted list of module library names
-    auto const sort = comphelper::string::NaturalStringSorter(
-        comphelper::getProcessComponentContext(),
-        Application::GetSettings().GetUILanguageTag().getLocale());
-    std::vector<OUString> aModLibList;
+    // create a list of module library names
+    std::vector<OUString> aLibList;
     if ( xModLibContainer.is() )
     {
         Sequence< OUString > aModLibNames = xModLibContainer->getElementNames();
         sal_Int32 nModLibCount = aModLibNames.getLength();
         const OUString* pModLibNames = aModLibNames.getConstArray();
         for ( sal_Int32 i = 0 ; i < nModLibCount ; i++ )
-            aModLibList.push_back( pModLibNames[ i ] );
-        std::sort(aModLibList.begin(), aModLibList.end(),
-                  [&sort](const OUString& rLHS, const OUString& rRHS) {
-                      return sort.compare(rLHS, rRHS) < 0;
-                  });
+            aLibList.push_back( pModLibNames[ i ] );
     }
 
-    // create a sorted list of dialog library names
-    std::vector<OUString> aDlgLibList;
+    // create a list of dialog library names
     if ( xDlgLibContainer.is() )
     {
         Sequence< OUString > aDlgLibNames = xDlgLibContainer->getElementNames();
         sal_Int32 nDlgLibCount = aDlgLibNames.getLength();
         const OUString* pDlgLibNames = aDlgLibNames.getConstArray();
         for ( sal_Int32 i = 0 ; i < nDlgLibCount ; i++ )
-            aDlgLibList.push_back( pDlgLibNames[ i ] );
-        std::sort(aDlgLibList.begin(), aDlgLibList.end(),
-                  [&sort](const OUString& rLHS, const OUString& rRHS) {
-                      return sort.compare(rLHS, rRHS) < 0;
-                  });
+            aLibList.push_back( pDlgLibNames[ i ] );
     }
 
-    // merge both lists
-    std::vector<OUString> aLibList( aModLibList.size() + aDlgLibList.size() );
-    std::merge(aModLibList.begin(), aModLibList.end(), aDlgLibList.begin(), aDlgLibList.end(),
-               aLibList.begin(), [&sort](const OUString& rLHS, const OUString& rRHS) {
-                   return sort.compare(rLHS, rRHS) < 0;
-               });
-    std::vector<OUString>::iterator aIterEnd = std::unique( aLibList.begin(), aLibList.end() );  // move unique elements to the front
-    aLibList.erase( aIterEnd, aLibList.end() ); // remove duplicates
+    // sort list
+    auto const sort = comphelper::string::NaturalStringSorter(
+        comphelper::getProcessComponentContext(),
+        Application::GetSettings().GetUILanguageTag().getLocale());
+    std::sort(aLibList.begin(), aLibList.end(),
+              [&sort](const OUString& rLHS, const OUString& rRHS) {
+                  return sort.compare(rLHS, rRHS) < 0;
+              });
+    // remove duplicates
+    std::vector<OUString>::iterator aIterEnd = std::unique( aLibList.begin(), aLibList.end() );
+    aLibList.erase( aIterEnd, aLibList.end() );
 
-    // copy to sequence
-    sal_Int32 nLibCount = aLibList.size();
-    Sequence< OUString > aSeqLibNames( nLibCount );
-    for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
-        aSeqLibNames.getArray()[ i ] = aLibList[ i ];
-
-    return aSeqLibNames;
+    return comphelper::containerToSequence(aLibList);
 }
 
 bool RenameModule (
