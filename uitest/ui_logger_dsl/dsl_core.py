@@ -101,6 +101,8 @@ class ul_Compiler:
             'calc_Copy_Cells':self.do_nothing,
             'calc_Merge_Cells':self.do_nothing,
             'calc_UNMerge_Cells':self.do_nothing,
+            'calc_Rename_Sheet':self.do_nothing,
+            'calc_Insert_sheet':self.do_nothing,
             'impress_Insert_Slide':self.do_nothing,
             'impress_Delete_Page':self.do_nothing,
             'impress_Duplicate_Slide':self.do_nothing,
