@@ -28,6 +28,7 @@
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <TConnection.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -373,7 +374,7 @@ void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& 
     if ( !xNewlyCreated.is() )
         throw RuntimeException();
 
-    ODescriptor* pDescriptor = ODescriptor::getImplementation( xNewlyCreated );
+    ODescriptor* pDescriptor = comphelper::getUnoTunnelImplementation<ODescriptor>( xNewlyCreated );
     if ( pDescriptor )
         pDescriptor->setNew( false );
 
