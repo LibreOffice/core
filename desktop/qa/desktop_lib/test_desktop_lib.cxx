@@ -47,7 +47,6 @@
 #include <cairo.h>
 #include <ostream>
 #include <config_features.h>
-#include <config_mpl.h>
 
 #include <lib/init.hxx>
 
@@ -182,12 +181,10 @@ public:
     CPPUNIT_TEST(testExtractParameter);
     CPPUNIT_TEST(testGetSignatureState_Signed);
     CPPUNIT_TEST(testGetSignatureState_NonSigned);
-#if !MPL_HAVE_SUBSET
     CPPUNIT_TEST(testInsertCertificate_DER_ODT);
     CPPUNIT_TEST(testInsertCertificate_PEM_ODT);
     CPPUNIT_TEST(testInsertCertificate_PEM_DOCX);
     CPPUNIT_TEST(testSignDocument_PEM_PDF);
-#endif
     CPPUNIT_TEST(testTextSelectionHandles);
     CPPUNIT_TEST(testDialogPaste);
     CPPUNIT_TEST(testABI);
