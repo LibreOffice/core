@@ -136,8 +136,8 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
     m_sConnecting = m_xConnecting->get_label();
 
     const OUString sTemp(m_xDescriptionFI->get_label()
-        .replaceFirst("%1", m_xLoadListPB->get_label())
-        .replaceFirst("%2", m_xCreateListPB->get_label()));
+        .replaceFirst("%1", m_xLoadListPB->strip_mnemonic(m_xLoadListPB->get_label()))
+        .replaceFirst("%2", m_xCreateListPB->strip_mnemonic(m_xCreateListPB->get_label())));
     m_xDescriptionFI->set_label(sTemp);
     m_xFilterPB->connect_clicked( LINK( this, SwAddressListDialog,    FilterHdl_Impl ));
     m_xLoadListPB->connect_clicked( LINK( this, SwAddressListDialog,  LoadHdl_Impl ));
