@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_6fcc35bc",
+        "filename": "chart2/source/chartcore.component",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-08-04T18:33:18Z",
+      "side": 1,
+      "message": "Not sure if we need that yet.",
+      "revId": "f7b834df4a565499560ee3538a5557134b11d68c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_8fcf49af",
+        "filename": "chart2/source/model/main/ChartModel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-08-04T18:33:18Z",
+      "side": 1,
+      "message": "Most likely we don\u0027t want to create chart styles like this but for now it is good enough.",
+      "revId": "f7b834df4a565499560ee3538a5557134b11d68c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
