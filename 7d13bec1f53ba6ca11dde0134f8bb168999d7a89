@@ -16,6 +16,24 @@
       "revId": "7d13bec1f53ba6ca11dde0134f8bb168999d7a89",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_749f2803",
+        "filename": "svx/source/svdraw/presetooxhandleadjustmentrelations.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2019-08-04T11:07:33Z",
+      "side": 1,
+      "message": "Done. It\u0027s nice to see someone interested in what I do.",
+      "parentUuid": "bf659307_d43154a4",
+      "revId": "7d13bec1f53ba6ca11dde0134f8bb168999d7a89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
