@@ -48,7 +48,7 @@ public:
     ~QueueProcessor();
 
     /** Start the processor.  This implementation is timer based and waits
-        an defined amount of time that depends on the given argument before
+        a defined amount of time that depends on the given argument before
         the next entry in the queue is processed.
         @param nPriorityClass
             A priority class of 0 tells the processor that a high priority

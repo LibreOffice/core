@@ -565,7 +565,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
                     }
                     else
                     {
-                        // check if the object is in edit, than its temporarily not empty
+                        // check if the object is in edit, then if it's temporarily not empty
                         SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
                         if( pTextObj )
                         {

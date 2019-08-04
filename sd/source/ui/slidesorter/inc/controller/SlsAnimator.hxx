@@ -104,7 +104,7 @@ private:
 
     /** Execute one step of every active animation.
         @param nTime
-            Time measured in milli seconds with some arbitrary reference point.
+            Time measured in milliseconds with some arbitrary reference point.
         @return
             When one or more animation has finished then <TRUE/> is
             returned.  Call CleanUpAnimationList() in this case.

@@ -126,7 +126,7 @@ public:
 
     void SetFocusedPageToCurrentPage();
 
-    /** Return <TRUE/> when the focus inidcator is currently shown.  A
+    /** Return <TRUE/> when the focus indicator is currently shown.  A
         prerequisite is that the window managed by this focus manager has
         the input focus as indicated by a <TRUE/> return value of
         HasFocus().  It is not necessary that the focus indicator is

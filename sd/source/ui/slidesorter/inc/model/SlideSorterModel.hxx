@@ -137,7 +137,7 @@ public:
 
     /** Call this method after the document has changed its structure.  This
         will get the model in sync with the SdDrawDocument.  This method
-        tries not to throw away to much information already gathered.  This
+        tries not to throw away too much information already gathered.  This
         is especially important for previews of complex pages that take some
         time to create.
     */

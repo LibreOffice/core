@@ -63,7 +63,7 @@ public:
         be called directly.
 
         @returns
-            true if a active function was aborted
+            true if an active function was aborted
     */
     virtual bool cancel() override;
 

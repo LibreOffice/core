@@ -54,7 +54,7 @@ public:
     virtual bool IsIdle() = 0;
 
     /** This method is used to determine whether a page is currently visible
-        or not.  It is called when the cache becomes to large and some
+        or not.  It is called when the cache becomes too large and some
         previews have to be released or scaled down.
     */
     virtual bool IsVisible (CacheKey aKey) = 0;

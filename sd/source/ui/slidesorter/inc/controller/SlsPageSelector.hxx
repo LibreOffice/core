@@ -199,7 +199,7 @@ private:
         SlideSorterController::SelectionHasChanged() method to do the actual
         work.  When EnableBroadcasting has been called as many times as
         DisableBroadcasting() was called before and the selection has been
-        changed in the mean time, this change will be broadcasted.
+        changed in the meantime, this change will be broadcasted.
     */
     void EnableBroadcasting();
 

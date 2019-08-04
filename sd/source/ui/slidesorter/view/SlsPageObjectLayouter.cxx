@@ -247,7 +247,7 @@ Size PageObjectLayouter::GetPageNumberAreaSize (const int nPageCount)
         sPageNumberTemplate = "999";
     else
         sPageNumberTemplate = "9999";
-    // More then 9999 pages are not handled.
+    // More than 9999 pages are not handled.
 
     const Size aSize (
         mpWindow->GetTextWidth(sPageNumberTemplate),
