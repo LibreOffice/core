@@ -21,7 +21,6 @@ class tdf106746(UITestCase):
         writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf106746.docx"))
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
         self.xUITest.executeCommand(".uno:SelectAll")
         self.xUITest.executeCommand(".uno:Copy")
         self.xUITest.executeCommand(".uno:Delete")

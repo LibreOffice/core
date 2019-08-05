@@ -24,7 +24,6 @@ class tdf124586(UITestCase):
         writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf124586.odt"))
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
 
         #Goto Tools > Chapter Numbering.
         self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog")

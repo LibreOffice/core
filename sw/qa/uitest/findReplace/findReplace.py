@@ -147,7 +147,6 @@ class findReplace(UITestCase):
         writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf116242.odt"))
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
 
         self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
         xDialog = self.xUITest.getTopFocusWindow()

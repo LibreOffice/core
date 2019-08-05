@@ -19,7 +19,6 @@ class formatBulletsNumbering(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
 
         self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
         xDialog = self.xUITest.getTopFocusWindow()
@@ -77,7 +76,6 @@ class formatBulletsNumbering(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
 
         self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog")
         xDialog = self.xUITest.getTopFocusWindow()
@@ -107,7 +105,6 @@ class formatBulletsNumbering(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
 
         self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog")
         xDialog = self.xUITest.getTopFocusWindow()
@@ -245,7 +242,6 @@ class formatBulletsNumbering(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
 
         self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
         xDialog = self.xUITest.getTopFocusWindow()

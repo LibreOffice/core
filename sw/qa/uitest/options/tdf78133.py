@@ -18,7 +18,6 @@ class tdf78133(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
         document = self.ui_test.get_component()
         #New text document
         #open option, go to App colors

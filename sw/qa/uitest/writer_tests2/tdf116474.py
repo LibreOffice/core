@@ -20,7 +20,6 @@ class tdf116474(UITestCase):
    def test_tdf116474_insert_caption_undo(self):
         writer_doc = self.ui_test.create_doc_in_start_center("writer")
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
         document = self.ui_test.get_component()
         text = document.getText()
         cursor = text.createTextCursor()

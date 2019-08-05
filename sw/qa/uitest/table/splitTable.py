@@ -24,7 +24,6 @@ class splitTable(UITestCase):
         writer_doc = self.ui_test.load_file(get_url_for_data_file("splitTable.odt"))
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
         #go to row 2
         self.xUITest.executeCommand(".uno:GoDown")
         self.xUITest.executeCommand(".uno:GoDown")
@@ -50,7 +49,6 @@ class splitTable(UITestCase):
         writer_doc = self.ui_test.load_file(get_url_for_data_file("splitTable.odt"))
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
         #go to row 2
         self.xUITest.executeCommand(".uno:GoDown")
         self.xUITest.executeCommand(".uno:GoDown")
@@ -74,7 +72,6 @@ class splitTable(UITestCase):
         writer_doc = self.ui_test.load_file(get_url_for_data_file("splitTable.odt"))
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
         #go to row 2
         self.xUITest.executeCommand(".uno:GoDown")
         self.xUITest.executeCommand(".uno:GoDown")
