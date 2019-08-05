@@ -33,7 +33,8 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="jdbcconnectionpage|helptext">Please enter the required information to connect to a JDBC database. Please contact your system administrator if you are unsure about the following settings.</property>
         <property name="wrap">True</property>
-        <property name="max_width_chars">60</property>
+        <property name="width_chars">72</property>
+        <property name="max_width_chars">72</property>
         <property name="xalign">0</property>
       </object>
       <packing>

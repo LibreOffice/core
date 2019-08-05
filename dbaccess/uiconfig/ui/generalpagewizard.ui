@@ -2,34 +2,35 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="dba">
   <requires lib="gtk+" version="3.18"/>
-  <object class="GtkBox" id="PageGeneral">
-    <property name="width_request">400</property>
+  <object class="GtkGrid" id="PageGeneral">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="border_width">8</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
+    <property name="border_width">6</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">6</property>
+    <property name="row_spacing">6</property>
     <child>
       <object class="GtkLabel" id="headerText">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="generalpagewizard|headerText">Welcome to the %PRODUCTNAME Database Wizard</property>
-        <property name="wrap">True</property>
+        <property name="single_line_mode">True</property>
         <property name="xalign">0</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="helpText">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
         <property name="label" translatable="yes" context="generalpagewizard|helpText">Use the Database Wizard to create a new database, open an existing database file, or connect to a database stored on a server.</property>
         <property name="wrap">True</property>
         <property name="width_chars">72</property>
@@ -37,9 +38,8 @@
         <property name="xalign">0</property>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
       </packing>
     </child>
     <child>
@@ -51,9 +51,8 @@
         <property name="xalign">0</property>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">2</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
       </packing>
     </child>
     <child>
@@ -69,9 +68,8 @@
         <property name="draw_indicator">True</property>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">3</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">3</property>
       </packing>
     </child>
     <child>
@@ -108,9 +106,8 @@
         </child>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">4</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">4</property>
       </packing>
     </child>
     <child>
@@ -127,9 +124,8 @@
         <property name="group">createDatabase</property>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">5</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">5</property>
       </packing>
     </child>
     <child>
@@ -167,9 +163,8 @@
         </child>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">6</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">6</property>
       </packing>
     </child>
     <child>
@@ -183,9 +178,8 @@
         <property name="always_show_image">True</property>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">7</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">7</property>
       </packing>
     </child>
     <child>
@@ -202,9 +196,8 @@
         <property name="group">createDatabase</property>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">8</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">8</property>
       </packing>
     </child>
     <child>
@@ -215,9 +208,8 @@
         <property name="margin_left">24</property>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">9</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">9</property>
       </packing>
     </child>
     <child>
@@ -226,9 +218,8 @@
         <property name="xalign">0</property>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">10</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">10</property>
       </packing>
     </child>
   </object>

@@ -54,7 +54,7 @@ class ODbDataSourceAdministrationHelper;
 class OMySQLIntroPageSetup;
 class OFinalDBPageSetup;
 
-class ODbTypeWizDialogSetup final : public vcl::RoadmapWizard , public IItemSetHelper, public IDatabaseSettingsDialog
+class ODbTypeWizDialogSetup final : public vcl::RoadmapWizardMachine, public IItemSetHelper, public IDatabaseSettingsDialog
 {
 private:
     std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
@@ -89,13 +89,12 @@ public:
     /** ctor. The itemset given should have been created by <method>createItemSet</method> and should be destroyed
         after the dialog has been destroyed
     */
-    ODbTypeWizDialogSetup(vcl::Window* pParent
+    ODbTypeWizDialogSetup(weld::Window* pParent
         ,SfxItemSet const * _pItems
         ,const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         ,const css::uno::Any& _aDataSourceName
         );
     virtual ~ODbTypeWizDialogSetup() override;
-    virtual void dispose() override;
 
     virtual const SfxItemSet* getOutputSet() const override;
     virtual SfxItemSet* getWriteOutputSet() override;

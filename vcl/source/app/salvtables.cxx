@@ -50,6 +50,7 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/prgsbar.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/roadmapwizard.hxx>
 #include <vcl/slider.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svimpbox.hxx>
@@ -966,6 +967,35 @@ class SalInstanceContainer : public SalInstanceWidget, public virtual weld::Cont
 {
 private:
     VclPtr<vcl::Window> m_xContainer;
+
+    void implResetDefault(const vcl::Window* _pWindow)
+    {
+        vcl::Window* pChildLoop = _pWindow->GetWindow(GetWindowType::FirstChild);
+        while (pChildLoop)
+        {
+            // does the window participate in the tabbing order?
+            if (pChildLoop->GetStyle() & WB_DIALOGCONTROL)
+                implResetDefault(pChildLoop);
+
+            // is it a button?
+            WindowType eType = pChildLoop->GetType();
+            if  (   (WindowType::PUSHBUTTON == eType)
+                ||  (WindowType::OKBUTTON == eType)
+                ||  (WindowType::CANCELBUTTON == eType)
+                ||  (WindowType::HELPBUTTON == eType)
+                ||  (WindowType::IMAGEBUTTON == eType)
+                ||  (WindowType::MENUBUTTON == eType)
+                ||  (WindowType::MOREBUTTON == eType)
+                )
+            {
+                pChildLoop->SetStyle(pChildLoop->GetStyle() & ~WB_DEFBUTTON);
+            }
+
+            // the next one ...
+            pChildLoop = pChildLoop->GetWindow(GetWindowType::Next);
+        }
+    }
+
 public:
     SalInstanceContainer(vcl::Window* pContainer, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : SalInstanceWidget(pContainer, pBuilder, bTakeOwnership)
@@ -979,6 +1009,10 @@ public:
         SalInstanceContainer* pNewVclParent = dynamic_cast<SalInstanceContainer*>(pNewParent);
         assert(!pNewParent || pNewVclParent);
         pVclWidget->getWidget()->SetParent(pNewVclParent ? pNewVclParent->getWidget() : nullptr);
+    }
+    virtual void recursively_unset_default_buttons() override
+    {
+        implResetDefault(m_xContainer.get());
     }
 };
 
@@ -1358,7 +1392,7 @@ public:
         return m_xDialog->IsModalInputMode();
     }
 
-    virtual weld::Button* get_widget_for_response(int nResponse) override;
+    virtual weld::Button* weld_widget_for_response(int nResponse) override;
 
     virtual void set_default_response(int nResponse) override
     {
@@ -1447,6 +1481,186 @@ public:
         m_xAboutDialog->SetBackground(Image(rImage));
     }
 };
+
+class SalInstanceAssistant : public SalInstanceDialog, public virtual weld::Assistant
+{
+private:
+    VclPtr<vcl::RoadmapWizard> m_xWizard;
+    std::vector<std::unique_ptr<SalInstanceContainer>> m_aPages;
+    std::vector<VclPtr<TabPage>> m_aAddedPages;
+    std::vector<int> m_aIds;
+    std::vector<VclPtr<VclGrid>> m_aAddedGrids;
+
+    int find_page(const OString& rIdent) const
+    {
+        for (size_t i = 0; i < m_aAddedPages.size(); ++i)
+        {
+            if (m_aAddedPages[i]->get_id().toUtf8() == rIdent)
+                return i;
+        }
+        return -1;
+    }
+
+    int find_id(int nId) const
+    {
+        for (size_t i = 0; i < m_aIds.size(); ++i)
+        {
+            if (nId == m_aIds[i])
+                return i;
+        }
+        return -1;
+    }
+
+    DECL_LINK(OnRoadmapItemSelected, LinkParamNone*, void);
+
+public:
+    SalInstanceAssistant(vcl::RoadmapWizard* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceDialog(pDialog, pBuilder, bTakeOwnership)
+        , m_xWizard(pDialog)
+    {
+        m_xWizard->SetItemSelectHdl(LINK(this, SalInstanceAssistant, OnRoadmapItemSelected));
+    }
+
+    virtual int get_current_page() const override
+    {
+        return find_id(m_xWizard->GetCurLevel());
+    }
+
+    virtual int get_n_pages() const override
+    {
+        return m_aAddedPages.size();
+    }
+
+    virtual OString get_page_ident(int nPage) const override
+    {
+        return m_aAddedPages[nPage]->get_id().toUtf8();
+    }
+
+    virtual OString get_current_page_ident() const override
+    {
+        return get_page_ident(get_current_page());
+    }
+
+    virtual void set_current_page(int nPage) override
+    {
+        disable_notify_events();
+
+        // take the first shown page as the size for all pages
+        if (m_xWizard->GetPageSizePixel().Width() == 0)
+        {
+            TabPage* pPage = m_xWizard->GetPage(m_aIds[nPage]);
+            assert(pPage);
+            Size aPageSize(pPage->get_preferred_size());
+            m_xWizard->SetPageSizePixel(aPageSize);
+        }
+
+        m_xWizard->ShowPage(m_aIds[nPage]);
+        enable_notify_events();
+    }
+
+    virtual void set_current_page(const OString& rIdent) override
+    {
+        int nIndex = find_page(rIdent);
+        if (nIndex == -1)
+            return;
+        set_current_page(nIndex);
+    }
+
+    virtual void set_page_index(const OString& rIdent, int nNewIndex) override
+    {
+        int nOldIndex = find_page(rIdent);
+
+        if (nOldIndex == -1)
+            return;
+
+        if (nOldIndex == nNewIndex)
+            return;
+
+        disable_notify_events();
+
+        auto entry = std::move(m_aAddedPages[nOldIndex]);
+        m_aAddedPages.erase(m_aAddedPages.begin() + nOldIndex);
+        m_aAddedPages.insert(m_aAddedPages.begin() + nNewIndex, std::move(entry));
+
+        int nId = m_aIds[nOldIndex];
+        m_aIds.erase(m_aIds.begin() + nOldIndex);
+        m_aIds.insert(m_aIds.begin() + nNewIndex, nId);
+
+        m_xWizard->DeleteRoadmapItem(nOldIndex);
+        m_xWizard->InsertRoadmapItem(nNewIndex, m_aAddedPages[nNewIndex]->GetText(), nId, true);
+
+        enable_notify_events();
+    }
+
+    virtual weld::Container* append_page(const OString& rIdent) override
+    {
+        VclPtrInstance<TabPage> xPage(m_xWizard);
+        VclPtrInstance<VclGrid> xGrid(xPage);
+        xPage->set_id(OUString::fromUtf8(rIdent));
+        xPage->Show();
+        xGrid->set_hexpand(true);
+        xGrid->set_vexpand(true);
+        xGrid->Show();
+        m_xWizard->AddPage(xPage);
+        m_aIds.push_back(m_aAddedPages.size());
+        m_xWizard->SetPage(m_aIds.back(), xPage);
+        m_aAddedPages.push_back(xPage);
+        m_aAddedGrids.push_back(xGrid);
+
+        m_xWizard->InsertRoadmapItem(m_aPages.size(), OUString::fromUtf8(rIdent), m_aIds.back(), true);
+
+        m_aPages.emplace_back(new SalInstanceContainer(xGrid, m_pBuilder, false));
+        return m_aPages.back().get();
+    }
+
+    virtual OUString get_page_title(const OString& rIdent) const override
+    {
+        int nIndex = find_page(rIdent);
+        if (nIndex == -1)
+            return OUString();
+        return m_aAddedPages[nIndex]->GetText();
+    }
+
+    virtual void set_page_title(const OString& rIdent, const OUString& rTitle) override
+    {
+        int nIndex = find_page(rIdent);
+        if (nIndex == -1)
+            return;
+        disable_notify_events();
+        m_aAddedPages[nIndex]->SetText(rTitle);
+        m_xWizard->ChangeRoadmapItemLabel(m_aIds[nIndex], rTitle);
+        enable_notify_events();
+    }
+
+    virtual void set_page_sensitive(const OString& rIdent, bool bSensitive) override
+    {
+        int nIndex = find_page(rIdent);
+        if (nIndex == -1)
+            return;
+        disable_notify_events();
+        m_xWizard->EnableRoadmapItem(m_aIds[nIndex], bSensitive);
+        enable_notify_events();
+    }
+
+    weld::Button* weld_widget_for_response(int nResponse) override;
+
+    virtual ~SalInstanceAssistant() override
+    {
+        for (auto &rGrid : m_aAddedGrids)
+            rGrid.disposeAndClear();
+        for (auto &rPage : m_aAddedPages)
+            rPage.disposeAndClear();
+    }
+};
+
+IMPL_LINK_NOARG(SalInstanceAssistant, OnRoadmapItemSelected, LinkParamNone*, void)
+{
+    if (notify_events_disabled())
+        return;
+    int nPageIndex(find_id(m_xWizard->GetCurrentRoadmapItemID()));
+    if (!signal_jump_page(get_page_ident(nPageIndex)))
+        m_xWizard->SelectRoadmapItemByID(m_xWizard->GetCurLevel());
+}
 
 class SalInstanceFrame : public SalInstanceContainer, public virtual weld::Frame
 {
@@ -1978,10 +2192,28 @@ IMPL_LINK(SalInstanceButton, ClickHdl, ::Button*, pButton, void)
     signal_clicked();
 }
 
-weld::Button* SalInstanceDialog::get_widget_for_response(int nResponse)
+weld::Button* SalInstanceDialog::weld_widget_for_response(int nResponse)
 {
     PushButton* pButton = dynamic_cast<PushButton*>(m_xDialog->get_widget_for_response(nResponse));
     return pButton ? new SalInstanceButton(pButton, nullptr, false) : nullptr;
+}
+
+weld::Button* SalInstanceAssistant::weld_widget_for_response(int nResponse)
+{
+    PushButton* pButton = nullptr;
+    if (nResponse == static_cast<int>(WizardButtonFlags::NEXT))
+        pButton = m_xWizard->m_pNextPage;
+    else if (nResponse == static_cast<int>(WizardButtonFlags::PREVIOUS))
+        pButton = m_xWizard->m_pPrevPage;
+    else if (nResponse == static_cast<int>(WizardButtonFlags::FINISH))
+        pButton = m_xWizard->m_pFinish;
+    else if (nResponse == static_cast<int>(WizardButtonFlags::CANCEL))
+        pButton = m_xWizard->m_pCancel;
+    else if (nResponse == static_cast<int>(WizardButtonFlags::HELP))
+        pButton = m_xWizard->m_pHelp;
+    if (pButton)
+        return new SalInstanceButton(pButton, nullptr, false);
+    return nullptr;
 }
 
 class SalInstanceMenuButton : public SalInstanceButton, public virtual weld::MenuButton
@@ -5286,6 +5518,19 @@ public:
         return pRet;
     }
 
+    virtual std::unique_ptr<weld::Assistant> weld_assistant(const OString &id, bool bTakeOwnership) override
+    {
+        vcl::RoadmapWizard* pDialog = m_xBuilder->get<vcl::RoadmapWizard>(id);
+        std::unique_ptr<weld::Assistant> pRet(pDialog ? new SalInstanceAssistant(pDialog, this, false) : nullptr);
+        if (bTakeOwnership && pDialog)
+        {
+            assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
+            m_aOwnedToplevel.set(pDialog);
+            m_xBuilder->drop_ownership(pDialog);
+        }
+        return pRet;
+    }
+
     virtual std::unique_ptr<weld::Window> weld_window(const OString &id, bool bTakeOwnership) override
     {
         SystemWindow* pWindow = m_xBuilder->get<SystemWindow>(id);
@@ -5674,6 +5919,18 @@ namespace weld
         {
             m_xContentArea->move(m_xRelocate.get(), m_xOrigParent.get());
         }
+    }
+
+    AssistantController::AssistantController(weld::Widget* pParent, const OUString &rUIFile, const OString& rDialogId)
+        : m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
+        , m_xAssistant(m_xBuilder->weld_assistant(rDialogId))
+    {
+    }
+
+    Dialog* AssistantController::getDialog() { return m_xAssistant.get(); }
+
+    AssistantController::~AssistantController()
+    {
     }
 
     void TriStateEnabled::ButtonToggled(weld::ToggleButton& rToggle)
