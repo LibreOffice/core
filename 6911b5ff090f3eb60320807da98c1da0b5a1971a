@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_bad36938",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-08-05T12:29:24Z",
+      "side": 1,
+      "message": "RES_PARATR_GRABGAB you mean.",
+      "range": {
+        "startLine": 11,
+        "startChar": 6,
+        "endLine": 11,
+        "endChar": 24
+      },
+      "revId": "6911b5ff090f3eb60320807da98c1da0b5a1971a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
