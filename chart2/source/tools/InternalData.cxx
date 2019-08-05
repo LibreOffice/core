@@ -221,7 +221,7 @@ void InternalData::setComplexRowLabel( sal_Int32 nRowIndex, const vector< uno::A
         enlargeData( 0, nRowIndex+1 );
     }
     sal_Int32 nSize = static_cast<sal_Int32>( m_aRowLabels[nRowIndex].size() );
-    if( nSize >= 1 )
+    if( nSize >= 1 && !rComplexLabel.empty() )
     {
         m_aRowLabels[nRowIndex].resize(nSize+1);
         m_aRowLabels[nRowIndex][nSize] = rComplexLabel[0];
