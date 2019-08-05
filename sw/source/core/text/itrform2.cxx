@@ -692,7 +692,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             SwLinePortion *pPrev = rInf.GetLast() ? rInf.GetLast()->FindLastPortion() : nullptr;
             for ( SwLinePortion *pNext = pPor ; pNext!= nullptr ; pNext=pNext->GetNextPortion())
             {
-                if ( !pNext->IsParaPortion() )
+                if ( pNext == pPor || !pNext->IsParaPortion() )
                     MergeCharacterBorder(*pNext, pPrev, rInf);
                 pPrev = pNext ;
             }
