@@ -3093,7 +3093,7 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
                         pContext->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_COLUMN_BEFORE));
                         m_pImpl->clearDeferredBreak(COLUMN_BREAK);
                     }
-                    m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH));
+                    finishParagraph();
                     return;
                 }
                 case cFieldStart:
@@ -3286,15 +3286,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             m_pImpl->m_pSdtHelper->getLocale().truncate();
             return;
         }
-        bool bIsInTable = (m_pImpl->hasTableManager() && m_pImpl->getTableManager().isInTable()) ||
-                          (m_pImpl->m_nTableDepth > 0);
-        if(bIsInTable || m_pImpl->IsInShape())
-        {
-            // Inside an object we need to import date field earlier
-            m_pImpl->m_pSdtHelper->createDateContentControl(bIsInTable);
-        }
     }
-
     if (!m_pImpl->hasTableManager())
         return;
 
@@ -3321,9 +3313,10 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                         if ( m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun() )
                         {
                             m_pImpl->m_bIsSplitPara = true;
-                            m_pImpl->finishParagraph( m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) );
+                            finishParagraph();
                             lcl_startParagraphGroup();
                         }
+
 
                         pContext->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
                         m_pImpl->clearDeferredBreaks();
@@ -3334,7 +3327,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                     if ( m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun() )
                     {
                         mbIsSplitPara = true;
-                        m_pImpl->finishParagraph( m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) );
+                        finishParagraph();
                         lcl_startParagraphGroup();
                     }
 
@@ -3364,7 +3357,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 xContext->Erase(PROP_NUMBERING_LEVEL);
             }
             m_pImpl->SetParaSectpr(false);
-            m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH), bRemove);
+            finishParagraph(bRemove);
             if (bRemove)
                 m_pImpl->RemoveLastParagraph();
         }
@@ -3383,7 +3376,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                     if (m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun())
                     {
                         m_pImpl->m_bIsSplitPara = true;
-                        m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH));
+                        finishParagraph();
                         lcl_startParagraphGroup();
                     }
                     m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
@@ -3393,7 +3386,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                     if (m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun())
                     {
                         mbIsSplitPara = true;
-                        m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH));
+                        finishParagraph();
                         lcl_startParagraphGroup();
                     }
                     m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_COLUMN_BEFORE));
@@ -3836,6 +3829,13 @@ void DomainMapper::HandleRedline( Sprm& rSprm )
     }
     m_pImpl->EndParaMarkerChange( );
     m_pImpl->SetCurrentRedlineIsRead();
+}
+
+void DomainMapper::finishParagraph(const bool bRemove)
+{
+    if (m_pImpl->m_pSdtHelper->validateDateFormat())
+        m_pImpl->m_pSdtHelper->createDateContentControl();
+    m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH), bRemove);
 }
 
 } //namespace dmapper
