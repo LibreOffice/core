@@ -21,6 +21,10 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/toolbox.hxx>
+#include <osl/module.hxx>
+#include <vcl/OptionalBox.hxx>
+#include <sfx2/sidebar/SidebarToolBox.hxx>
+#include <vcl/IPrioritable.hxx>
 
 static const char STYLE_TEXT[] = "Text";
 static const char STYLE_ICON[] = "Icon";
@@ -58,16 +62,61 @@ static void GetAddonNotebookBarItem(const css::uno::Sequence<css::beans::Propert
     }
 }
 
+static void CreateNotebookBarToolBox(vcl::Window* pNotebookbarToolBox,
+                                     const css::uno::Reference<css::frame::XFrame>& m_xFrame,
+                                     const AddonNotebookBarItem& aAddonNotebookBarItem,
+                                     const std::vector<Image>& aImageVec,
+                                     const unsigned long& nIter)
+{
+    sal_uInt16 nItemId = 0;
+    ToolBox* pToolbox = dynamic_cast<ToolBox*>(pNotebookbarToolBox);
+    if (pToolbox)
+    {
+        pToolbox->InsertSeparator();
+        pToolbox->Show();
+        Size aSize(0, 0);
+        Image sImage;
+        pToolbox->InsertItem(aAddonNotebookBarItem.sCommandURL, m_xFrame, ToolBoxItemBits::NONE,
+                             aSize);
+        nItemId = pToolbox->GetItemId(aAddonNotebookBarItem.sCommandURL);
+        pToolbox->SetItemCommand(nItemId, aAddonNotebookBarItem.sCommandURL);
+        pToolbox->SetQuickHelpText(nItemId, aAddonNotebookBarItem.sLabel);
+
+        if (nIter < aImageVec.size())
+        {
+            sImage = aImageVec[nIter];
+            if (!sImage)
+            {
+                sImage = vcl::CommandInfoProvider::GetImageForCommand(
+                    aAddonNotebookBarItem.sImageIdentifier, m_xFrame);
+            }
+        }
+
+        if (aAddonNotebookBarItem.sStyle == STYLE_TEXT)
+            pToolbox->SetItemText(nItemId, aAddonNotebookBarItem.sLabel);
+        else if (aAddonNotebookBarItem.sStyle == STYLE_ICON)
+            pToolbox->SetItemImage(nItemId, sImage);
+        else
+        {
+            pToolbox->SetItemText(nItemId, aAddonNotebookBarItem.sLabel);
+            pToolbox->SetItemImage(nItemId, sImage);
+        }
+        pToolbox->Show();
+    }
+}
+
 NotebookBarAddonsMerger::NotebookBarAddonsMerger() {}
 
 NotebookBarAddonsMerger::~NotebookBarAddonsMerger() {}
 
 void NotebookBarAddonsMerger::MergeNotebookBarAddons(
-    vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& m_xFrame,
-    const NotebookBarAddonsItem& aNotebookBarAddonsItem)
+    vcl::Window* pParent, const customMakeWidget& pFunction,
+    const css::uno::Reference<css::frame::XFrame>& m_xFrame,
+    const NotebookBarAddonsItem& aNotebookBarAddonsItem, NotebookBarAddonsMerger::stringmap rMap)
 {
     std::vector<Image> aImageVec = aNotebookBarAddonsItem.aImageValues;
     unsigned long nIter = 0;
+    sal_uInt16 nPriorityIdx = aImageVec.size();
     css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> aExtension;
     for (unsigned long nIdx = 0; nIdx < aNotebookBarAddonsItem.aAddonValues.size(); nIdx++)
     {
@@ -75,44 +124,25 @@ void NotebookBarAddonsMerger::MergeNotebookBarAddons(
 
         for (int nSecIdx = 0; nSecIdx < aExtension.getLength(); nSecIdx++)
         {
-            sal_uInt16 nItemId = 0;
+            VclPtr<vcl::Window> pOptionalParent;
+            pOptionalParent = VclPtr<OptionalBox>::Create(pParent);
+            pOptionalParent->Show();
+
+            vcl::IPrioritable* pPrioritable
+                = dynamic_cast<vcl::IPrioritable*>(pOptionalParent.get());
+            if (pPrioritable)
+                pPrioritable->SetPriority(nPriorityIdx - nIter);
+
+            VclPtr<vcl::Window> pNotebookbarToolBox;
+            pFunction(pNotebookbarToolBox, pOptionalParent, rMap);
+
             AddonNotebookBarItem aAddonNotebookBarItem;
             const css::uno::Sequence<css::beans::PropertyValue> pExtension = aExtension[nSecIdx];
             GetAddonNotebookBarItem(pExtension, aAddonNotebookBarItem);
-            ToolBox* pToolbox = dynamic_cast<ToolBox*>(pParent);
-            if (pToolbox)
-            {
-                Size aSize(0, 0);
-                Image sImage;
-                pToolbox->InsertItem(aAddonNotebookBarItem.sCommandURL, m_xFrame,
-                                     ToolBoxItemBits::NONE, aSize);
-                nItemId = pToolbox->GetItemId(aAddonNotebookBarItem.sCommandURL);
-                pToolbox->SetItemCommand(nItemId, aAddonNotebookBarItem.sCommandURL);
-                pToolbox->SetQuickHelpText(nItemId, aAddonNotebookBarItem.sLabel);
 
-                if (nIter < aImageVec.size())
-                {
-                    sImage = aImageVec[nIter];
-                    if (!sImage)
-                    {
-                        sImage = vcl::CommandInfoProvider::GetImageForCommand(
-                            aAddonNotebookBarItem.sImageIdentifier, m_xFrame);
-                    }
-                    nIter++;
-                }
-
-                if (aAddonNotebookBarItem.sStyle == STYLE_TEXT)
-                    pToolbox->SetItemText(nItemId, aAddonNotebookBarItem.sLabel);
-                else if (aAddonNotebookBarItem.sStyle == STYLE_ICON)
-                    pToolbox->SetItemImage(nItemId, sImage);
-                else
-                {
-                    pToolbox->SetItemText(nItemId, aAddonNotebookBarItem.sLabel);
-                    pToolbox->SetItemImage(nItemId, sImage);
-                }
-            }
-            if (nSecIdx == aExtension.getLength() - 1)
-                pToolbox->InsertSeparator();
+            CreateNotebookBarToolBox(pNotebookbarToolBox, m_xFrame, aAddonNotebookBarItem,
+                                     aImageVec, nIter);
+            nIter++;
         }
     }
 }

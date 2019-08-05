@@ -17,52 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_VCL_OPTIONALBOX_HXX
+#define INCLUDED_VCL_OPTIONALBOX_HXX
+
 #include <vcl/builderfactory.hxx>
+#include <vcl/IPrioritable.hxx>
 #include <vcl/layout.hxx>
-#include <sfx2/dllapi.h>
-#include <sfx2/viewfrm.hxx>
-#include "OptionalBox.hxx"
+#include <vcl/floatwin.hxx>
+#include <vcl/toolbox.hxx>
 
-/*
- * OptionalBox - shows or hides the content. To use with PriorityHBox
- * or PriorityMergedHBox
- */
-
-OptionalBox::OptionalBox(vcl::Window* pParent)
-    : VclHBox(pParent)
-    , IPrioritable()
-    , m_bInFullView(true)
+class OptionalBox : public VclHBox, public vcl::IPrioritable
 {
-}
+private:
+    bool m_bInFullView;
 
-OptionalBox::~OptionalBox() { disposeOnce(); }
+public:
+    explicit OptionalBox(vcl::Window* pParent);
+    virtual ~OptionalBox() override;
 
-void OptionalBox::HideContent()
-{
-    if (m_bInFullView)
-    {
-        m_bInFullView = false;
+    void HideContent() override;
+    void ShowContent() override;
+    bool IsHidden() override;
+};
 
-        for (int i = 0; i < GetChildCount(); i++)
-            GetChild(i)->Hide();
-
-        SetOutputSizePixel(Size(10, GetSizePixel().Height()));
-    }
-}
-
-void OptionalBox::ShowContent()
-{
-    if (!m_bInFullView)
-    {
-        m_bInFullView = true;
-
-        for (int i = 0; i < GetChildCount(); i++)
-            GetChild(i)->Show();
-    }
-}
-
-bool OptionalBox::IsHidden() { return !m_bInFullView; }
-
-VCL_BUILDER_FACTORY(OptionalBox)
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,6 +30,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <memory>
 #include <vector>
+#include <map>
 
 class PopupMenu;
 
@@ -62,11 +63,15 @@ struct AddonNotebookBarItem
 class NotebookBarAddonsMerger
 {
 public:
+    typedef std::map<OString, OUString> stringmap;
+    typedef void (*customMakeWidget)(VclPtr<vcl::Window>& rRet, VclPtr<vcl::Window>& pParent,
+                                     stringmap& rVec);
     NotebookBarAddonsMerger();
     ~NotebookBarAddonsMerger();
-    static void MergeNotebookBarAddons(vcl::Window* pParent,
+    static void MergeNotebookBarAddons(vcl::Window* pParent, const customMakeWidget& pFunction,
                                        const css::uno::Reference<css::frame::XFrame>& rFrame,
-                                       const NotebookBarAddonsItem& aNotebookBarAddonsItem);
+                                       const NotebookBarAddonsItem& aNotebookBarAddonsItem,
+                                       stringmap rVec);
     static void MergeNotebookBarMenuAddons(PopupMenu* pPopupMenu, sal_Int16 nItemId,
                                            const OString& sItemIdName,
                                            NotebookBarAddonsItem& aNotebookBarAddonsItem);
