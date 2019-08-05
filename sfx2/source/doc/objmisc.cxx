@@ -1411,6 +1411,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
         ::framework::DocumentUndoGuard aUndoGuard( _rxScriptContext.get() );
 
         // obtain the script, and execute it
+        fprintf(stderr, "_rScriptURL is %s\n", _rScriptURL.toUtf8().getStr());
         Reference< provider::XScript > xScript( xScriptProvider->getScript( _rScriptURL ), UNO_SET_THROW );
         if ( pCaller && pCaller->hasValue() )
         {

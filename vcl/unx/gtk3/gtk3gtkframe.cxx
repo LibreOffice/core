@@ -581,6 +581,8 @@ void on_registrar_available( GDBusConnection * /*connection*/,
                              const gchar     * /*name_owner*/,
                              gpointer         user_data )
 {
+    fprintf(stderr, "on_registrar_available\n");
+
     SolarMutexGuard aGuard;
 
     GtkSalFrame* pSalFrame = static_cast< GtkSalFrame* >( user_data );
@@ -599,6 +601,8 @@ void on_registrar_unavailable( GDBusConnection * /*connection*/,
                                const gchar     * /*name*/,
                                gpointer         user_data )
 {
+    fprintf(stderr, "on_registrar_unavailable\n");
+
     SolarMutexGuard aGuard;
 
     SAL_INFO("vcl.unity", "on_registrar_unavailable");

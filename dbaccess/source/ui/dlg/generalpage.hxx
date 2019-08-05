@@ -137,6 +137,7 @@ namespace dbaui
         std::unique_ptr<weld::ComboBox> m_xEmbeddedDBType;
 
         std::unique_ptr<weld::Label> m_xFT_DocListLabel;
+        std::unique_ptr<weld::Label> m_xFT_HelpText;
         std::unique_ptr<OpenDocumentListBox> m_xLB_DocumentList;
         std::unique_ptr<OpenDocumentButton> m_xPB_OpenDatabase;
 
@@ -150,6 +151,8 @@ namespace dbaui
 
         bool                    m_bInitEmbeddedDBList : 1;
         void                    insertEmbeddedDBTypeEntryData( const OUString& _sType, const OUString& sDisplayName );
+
+        void                    EnableControls();
 
     public:
         void                    SetCreationModeHandler( const Link<OGeneralPageWizard&,void>& _rHandler ) { m_aCreationModeHandler = _rHandler; }
@@ -174,8 +177,9 @@ namespace dbaui
         OUString getEmbeddedDBName( const SfxItemSet& _rSet );
         void initializeEmbeddedDBList();
 
+        void SetupModeSelected();
+
         DECL_LINK( OnEmbeddedDBTypeSelected, weld::ComboBox&, void );
-        DECL_LINK( OnCreateDatabaseModeSelected, weld::Button&, void );
         DECL_LINK( OnSetupModeSelected, weld::Button&, void );
         DECL_LINK( OnDocumentSelected, weld::ComboBox&, void );
         DECL_LINK( OnOpenDocument, weld::Button&, void );

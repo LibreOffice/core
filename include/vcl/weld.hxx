@@ -423,7 +423,7 @@ public:
     virtual void add_button(const OUString& rText, int response, const OString& rHelpId = OString())
         = 0;
     virtual void set_default_response(int response) = 0;
-    virtual Button* get_widget_for_response(int response) = 0;
+    virtual Button* weld_widget_for_response(int response) = 0;
     virtual Container* weld_content_area() = 0;
 
     // shrink the dialog down to shown just these widgets
@@ -455,6 +455,20 @@ public:
     virtual OUString get_website_label() const = 0;
     virtual void set_logo(VirtualDevice* pDevice) = 0;
     virtual void set_background(VirtualDevice* pDevice) = 0;
+};
+
+class VCL_DLLPUBLIC Assistant : virtual public Dialog
+{
+public:
+    virtual int get_current_page() const = 0;
+    virtual int get_n_pages() const = 0;
+    virtual OString get_page_ident(int nPage) const = 0;
+    virtual OString get_current_page_ident() const = 0;
+    virtual void set_current_page(int nPage) = 0;
+    virtual void set_current_page(const OString& rIdent) = 0;
+    virtual void set_page_title(const OString& rIdent, const OUString& rTitle) = 0;
+    virtual weld::Container* append_page(const OString& rIdent) = 0;
+    virtual void remove_page(int nPage) = 0;
 };
 
 struct VCL_DLLPUBLIC ComboBoxEntry
@@ -1785,6 +1799,8 @@ public:
     virtual std::unique_ptr<AboutDialog> weld_about_dialog(const OString& id,
                                                            bool bTakeOwnership = true)
         = 0;
+    virtual std::unique_ptr<Assistant> weld_assistant(const OString& id, bool bTakeOwnership = true)
+        = 0;
     virtual std::unique_ptr<Window> weld_window(const OString& id, bool bTakeOwnership = true) = 0;
     virtual std::unique_ptr<Widget> weld_widget(const OString& id, bool bTakeOwnership = false) = 0;
     virtual std::unique_ptr<Container> weld_container(const OString& id,
@@ -1906,6 +1922,18 @@ public:
     void set_primary_text(const OUString& rText) { m_xDialog->set_primary_text(rText); }
     OUString get_primary_text() const { return m_xDialog->get_primary_text(); }
     void set_default_response(int nResponse) { m_xDialog->set_default_response(nResponse); }
+};
+
+class VCL_DLLPUBLIC AssistantController : public DialogController
+{
+protected:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Assistant> m_xAssistant;
+
+public:
+    AssistantController(weld::Widget* pParent, const OUString& rUIFile, const OString& rDialogId);
+    virtual Dialog* getDialog() override;
+    virtual ~AssistantController() override;
 };
 }
 #endif

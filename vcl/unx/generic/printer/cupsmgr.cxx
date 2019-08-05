@@ -331,12 +331,16 @@ void CUPSManager::initialize()
 
         for( int k = 0; k < pDest->num_options; k++ )
         {
+            fprintf(stderr, "look at %s :: %s\n", pDest->options[k].name, pDest->options[k].value);
             if(!strcmp(pDest->options[k].name, "printer-info"))
                 aPrinter.m_aInfo.m_aComment=OStringToOUString(pDest->options[k].value, aEncoding);
             if(!strcmp(pDest->options[k].name, "printer-location"))
                 aPrinter.m_aInfo.m_aLocation=OStringToOUString(pDest->options[k].value, aEncoding);
             if(!strcmp(pDest->options[k].name, "auth-info-required"))
+            {
                 aPrinter.m_aInfo.m_aAuthInfoRequired=OStringToOUString(pDest->options[k].value, aEncoding);
+                fprintf(stderr, "found %s\n", aPrinter.m_aInfo.m_aAuthInfoRequired.toUtf8().getStr());
+            }
         }
 
         OUStringBuffer aBuf( 256 );

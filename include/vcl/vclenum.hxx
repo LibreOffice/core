@@ -273,6 +273,21 @@ enum class VclPolicyType
     NEVER
 };
 
+enum class WizardButtonFlags : sal_Int16
+{
+    NONE                = 0x0000,
+    NEXT                = 0x0001,
+    PREVIOUS            = 0x0002,
+    FINISH              = 0x0004,
+    CANCEL              = 0x0008,
+    HELP                = 0x0010,
+};
+
+namespace o3tl
+{
+    template<> struct typed_flags<WizardButtonFlags> : is_typed_flags<WizardButtonFlags, 0x001f> {};
+}
+
 #endif // INCLUDED_VCL_VCLENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

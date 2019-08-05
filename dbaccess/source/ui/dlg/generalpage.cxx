@@ -239,6 +239,7 @@ namespace dbaui
         {
             implSetCurrentType( dbaccess::ODsnTypeCollection::getEmbeddedDatabase() );
             sDisplayName = m_pCollection->getTypeDisplayName( m_eCurrentSelection );
+            onTypeSelected(m_eCurrentSelection);
         }
 
         // select the correct datasource type
@@ -423,6 +424,7 @@ namespace dbaui
         bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly );
 
+        fprintf(stderr, "set sen 1 %d\n", bValid);
         m_xDatasourceType->set_sensitive( bValid );
     }
 
@@ -451,11 +453,15 @@ namespace dbaui
         , m_xFT_EmbeddedDBLabel(m_xBuilder->weld_label("embeddeddbLabel"))
         , m_xEmbeddedDBType(m_xBuilder->weld_combo_box("embeddeddbList"))
         , m_xFT_DocListLabel(m_xBuilder->weld_label("docListLabel"))
+        , m_xFT_HelpText(m_xBuilder->weld_label("helpText"))
         , m_xLB_DocumentList(new OpenDocumentListBox(m_xBuilder->weld_combo_box("documentList"), "com.sun.star.sdb.OfficeDatabaseDocument"))
         , m_xPB_OpenDatabase(new OpenDocumentButton(m_xBuilder->weld_button("openDatabase"), "com.sun.star.sdb.OfficeDatabaseDocument"))
         , m_eOriginalCreationMode(eCreateNew)
         , m_bInitEmbeddedDBList(true)
     {
+        Size aPrefSize(m_xFT_HelpText->get_preferred_size());
+        m_xFT_HelpText->set_size_request(10, -1);
+
         // If no driver for embedded DBs is installed, and no dBase driver, then hide the "Create new database" option
         sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( dbaccess::ODsnTypeCollection::getEmbeddedDatabase() );
         if ( nCreateNewDBIndex == -1 )
@@ -482,7 +488,7 @@ namespace dbaui
 
         // do some knittings
         m_xEmbeddedDBType->connect_changed(LINK(this, OGeneralPageWizard, OnEmbeddedDBTypeSelected));
-        m_xRB_CreateDatabase->connect_clicked( LINK( this, OGeneralPageWizard, OnCreateDatabaseModeSelected ) );
+        m_xRB_CreateDatabase->connect_clicked( LINK( this, OGeneralPageWizard, OnSetupModeSelected ) );
         m_xRB_ConnectDatabase->connect_clicked( LINK( this, OGeneralPageWizard, OnSetupModeSelected ) );
         m_xRB_OpenExistingDatabase->connect_clicked( LINK( this, OGeneralPageWizard, OnSetupModeSelected ) );
         m_xLB_DocumentList->connect_changed( LINK( this, OGeneralPageWizard, OnDocumentSelected ) );
@@ -527,13 +533,7 @@ namespace dbaui
         if ( !bValid || bReadonly )
         {
             m_xFT_EmbeddedDBLabel->set_sensitive( false );
-            m_xDatasourceType->set_sensitive( false );
-            m_xPB_OpenDatabase->set_sensitive( false );
-            m_xFT_DocListLabel->set_sensitive( false );
-            m_xLB_DocumentList->set_sensitive( false );
-        }
-        else
-        {
+            fprintf(stderr, "set sen 2 %d\n", false);
             m_xDatasourceType->set_sensitive( false );
             m_xPB_OpenDatabase->set_sensitive( false );
             m_xFT_DocListLabel->set_sensitive( false );
@@ -544,6 +544,8 @@ namespace dbaui
             m_xLB_DocumentList->set_active(0);
 
         m_eOriginalCreationMode = GetDatabaseCreationMode();
+
+        SetupModeSelected();
     }
 
     OUString OGeneralPageWizard::getDatasourceName(const SfxItemSet& _rSet)
@@ -620,12 +622,8 @@ namespace dbaui
             return m_xLB_DocumentList->GetSelectedDocumentURL();
     }
 
-    IMPL_LINK_NOARG( OGeneralPageWizard, OnCreateDatabaseModeSelected, weld::Button&, void )
+    void OGeneralPageWizard::EnableControls()
     {
-        m_aCreationModeHandler.Call( *this );
-
-        OnEmbeddedDBTypeSelected( *m_xEmbeddedDBType );
-
         bool bValid, bReadonly;
         getFlags( GetItemSet(), bValid, bReadonly );
         if ( bValid && !bReadonly )
@@ -639,22 +637,21 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK_NOARG( OGeneralPageWizard, OnSetupModeSelected, weld::Button&, void )
+    void OGeneralPageWizard::SetupModeSelected()
     {
         m_aCreationModeHandler.Call( *this );
-        OnDatasourceTypeSelected(*m_xDatasourceType);
 
-        bool bValid, bReadonly;
-        getFlags( GetItemSet(), bValid, bReadonly );
-        if ( bValid && !bReadonly )
-        {
-            m_xEmbeddedDBType->set_sensitive(m_xRB_CreateDatabase->get_active());
-            m_xFT_EmbeddedDBLabel->set_sensitive(m_xRB_CreateDatabase->get_active());
-            m_xDatasourceType->set_sensitive(m_xRB_ConnectDatabase->get_active());
-            m_xPB_OpenDatabase->set_sensitive(m_xRB_OpenExistingDatabase->get_active());
-            m_xFT_DocListLabel->set_sensitive(m_xRB_OpenExistingDatabase->get_active());
-            m_xLB_DocumentList->set_sensitive(m_xRB_OpenExistingDatabase->get_active());
-        }
+        if (m_xRB_CreateDatabase->get_active())
+            OnEmbeddedDBTypeSelected(*m_xEmbeddedDBType);
+        else
+            OnDatasourceTypeSelected(*m_xDatasourceType);
+
+        EnableControls();
+    }
+
+    IMPL_LINK_NOARG( OGeneralPageWizard, OnSetupModeSelected, weld::Button&, void )
+    {
+        SetupModeSelected();
     }
 
     IMPL_LINK_NOARG( OGeneralPageWizard, OnDocumentSelected, weld::ComboBox&, void )

@@ -145,6 +145,9 @@ OUString Button::GetStandardText(StandardButtonType eButton)
         SV_BUTTONTEXT_IGNORE,
         SV_BUTTONTEXT_ABORT,
         SV_BUTTONTEXT_LESS,
+        STR_WIZDLG_PREVIOUS,
+        STR_WIZDLG_NEXT,
+        STR_WIZDLG_FINISH,
     };
 
     return VclResId(aResIdAry[static_cast<sal_uInt16>(eButton)]);
