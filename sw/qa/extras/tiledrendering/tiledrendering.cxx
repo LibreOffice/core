@@ -220,6 +220,7 @@ void SwTiledRenderingTest::tearDown()
         mxComponent->dispose();
         mxComponent.clear();
     }
+
     comphelper::LibreOfficeKit::setActive(false);
 
     test::BootstrapFixture::tearDown();
@@ -2194,10 +2195,6 @@ void SwTiledRenderingTest::testTdf115088()
 
     // Check the resulting text in the document. (it was 1Text\n1\n1\n1)
     CPPUNIT_ASSERT_EQUAL(OUString("1\n1Text\n1\n1"), pXTextDocument->getText()->getString());
-
-    mxComponent->dispose();
-    mxComponent.clear();
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SwTiledRenderingTest::testRedlineField()
@@ -2479,8 +2476,6 @@ void SwTiledRenderingTest::testSemiTransparent()
     CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.GetRed()));
     CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.GetGreen()));
     CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.GetBlue()));
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SwTiledRenderingTest::testAnchorTypes()
