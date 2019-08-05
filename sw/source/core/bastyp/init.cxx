@@ -359,7 +359,7 @@ SfxItemInfo aSlotTab[] =
 
     { SID_ATTR_PARA_OUTLINE_LEVEL, true }, // RES_PARATR_OUTLINELEVEL //#outline level
     { 0, true },                           // RES_PARATR_RSID
-    { 0, true },                           // RES_PARATR_GRABBAG
+    { SID_ATTR_PARA_GRABBAG, true },       // RES_PARATR_GRABBAG
     { 0, true },                           // RES_PARATR_LIST_ID
     { 0, true },                           // RES_PARATR_LIST_LEVEL
     { 0, true },                           // RES_PARATR_LIST_ISRESTART
