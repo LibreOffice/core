@@ -50,6 +50,7 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/prgsbar.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/roadmapwizard.hxx>
 #include <vcl/slider.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svimpbox.hxx>
@@ -1358,7 +1359,7 @@ public:
         return m_xDialog->IsModalInputMode();
     }
 
-    virtual weld::Button* get_widget_for_response(int nResponse) override;
+    virtual weld::Button* weld_widget_for_response(int nResponse) override;
 
     virtual void set_default_response(int nResponse) override
     {
@@ -1445,6 +1446,131 @@ public:
     virtual void set_background(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
     {
         m_xAboutDialog->SetBackground(Image(rImage));
+    }
+};
+
+#define WIZARD_PAGE_X       225
+#define WIZARD_PAGE_Y       240
+
+class SalInstanceAssistant : public SalInstanceDialog, public virtual weld::Assistant
+{
+private:
+    VclPtr<vcl::RoadmapWizard> m_xWizard;
+    std::vector<std::unique_ptr<SalInstanceContainer>> m_aPages;
+    std::vector<VclPtr<TabPage>> m_aAddedPages;
+    std::vector<VclPtr<VclGrid>> m_aAddedGrids;
+
+    int find_page(const OString& rIdent) const
+    {
+        for (size_t i = 0; i < m_aAddedPages.size(); ++i)
+        {
+            if (m_aAddedPages[i]->get_id().toUtf8() == rIdent)
+                return i;
+        }
+        return -1;
+    }
+
+public:
+    SalInstanceAssistant(vcl::RoadmapWizard* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceDialog(pDialog, pBuilder, bTakeOwnership)
+        , m_xWizard(pDialog)
+    {
+        m_xWizard->SetPageSizePixel(m_xWizard->LogicToPixel(Size(WIZARD_PAGE_X, WIZARD_PAGE_Y), MapMode(MapUnit::MapAppFont)));
+    }
+
+    virtual int get_current_page() const override
+    {
+        return m_xWizard->GetCurLevel();
+    }
+
+    virtual int get_n_pages() const override
+    {
+        return m_aAddedPages.size();
+    }
+
+    virtual OString get_page_ident(int nPage) const override
+    {
+        return m_aAddedPages[nPage]->get_id().toUtf8();
+    }
+
+    virtual OString get_current_page_ident() const override
+    {
+        return get_page_ident(get_current_page());
+    }
+
+    virtual void set_current_page(int nPage) override
+    {
+        m_xWizard->ShowPage(nPage);
+    }
+
+    virtual void set_current_page(const OString& rIdent) override
+    {
+        int nIndex = find_page(rIdent);
+        if (nIndex == -1)
+            return;
+        m_xWizard->ShowPage(nIndex);
+    }
+
+    virtual void set_page_index(const OString& rIdent, int nNewIndex) override
+    {
+        int nOldIndex = find_page(rIdent);
+        if (nOldIndex == -1)
+            return;
+        auto entry = std::move(m_aAddedPages[nOldIndex]);
+        m_aAddedPages.erase(m_aAddedPages.begin() + nOldIndex);
+        m_aAddedPages.insert(m_aAddedPages.begin() + nNewIndex, std::move(entry));
+    }
+
+    virtual weld::Container* append_page(const OString& rIdent) override
+    {
+        VclPtrInstance<TabPage> xPage(m_xWizard);
+        VclPtrInstance<VclGrid> xGrid(xPage);
+        xPage->set_id(OUString::fromUtf8(rIdent));
+        xPage->Show();
+        xGrid->set_hexpand(true);
+        xGrid->set_vexpand(true);
+        xGrid->Show();
+        m_xWizard->AddPage(xPage);
+        m_xWizard->SetPage(m_aAddedPages.size(), xPage);
+        m_aAddedPages.push_back(xPage);
+        m_aAddedGrids.push_back(xGrid);
+
+        m_aPages.emplace_back(new SalInstanceContainer(xGrid, m_pBuilder, false));
+        return m_aPages.back().get();
+    }
+
+    virtual OUString get_page_title(const OString& rIdent) const override
+    {
+        int nIndex = find_page(rIdent);
+        if (nIndex == -1)
+            return OUString();
+        return m_aAddedPages[nIndex]->GetText();
+    }
+
+    virtual void set_page_title(const OString& rIdent, const OUString& rTitle) override
+    {
+        int nIndex = find_page(rIdent);
+        if (nIndex == -1)
+            return;
+        m_aAddedPages[nIndex]->SetText(rTitle);
+    }
+
+    virtual void set_page_sensitive(const OString& rIdent, bool bSensitive) override
+    {
+        int nIndex = find_page(rIdent);
+        if (nIndex == -1)
+            return;
+        m_xWizard->EnableRoadmapItem(nIndex, bSensitive);
+    }
+
+    weld::Button* weld_widget_for_response(int nResponse) override;
+
+    virtual ~SalInstanceAssistant() override
+    {
+        for (auto &rGrid : m_aAddedGrids)
+            rGrid.disposeAndClear();
+        for (auto &rPage : m_aAddedPages)
+            rPage.disposeAndClear();
     }
 };
 
@@ -1978,10 +2104,28 @@ IMPL_LINK(SalInstanceButton, ClickHdl, ::Button*, pButton, void)
     signal_clicked();
 }
 
-weld::Button* SalInstanceDialog::get_widget_for_response(int nResponse)
+weld::Button* SalInstanceDialog::weld_widget_for_response(int nResponse)
 {
     PushButton* pButton = dynamic_cast<PushButton*>(m_xDialog->get_widget_for_response(nResponse));
     return pButton ? new SalInstanceButton(pButton, nullptr, false) : nullptr;
+}
+
+weld::Button* SalInstanceAssistant::weld_widget_for_response(int nResponse)
+{
+    PushButton* pButton = nullptr;
+    if (nResponse == static_cast<int>(WizardButtonFlags::NEXT))
+        pButton = m_xWizard->m_pNextPage;
+    else if (nResponse == static_cast<int>(WizardButtonFlags::PREVIOUS))
+        pButton = m_xWizard->m_pPrevPage;
+    else if (nResponse == static_cast<int>(WizardButtonFlags::FINISH))
+        pButton = m_xWizard->m_pFinish;
+    else if (nResponse == static_cast<int>(WizardButtonFlags::CANCEL))
+        pButton = m_xWizard->m_pCancel;
+    else if (nResponse == static_cast<int>(WizardButtonFlags::HELP))
+        pButton = m_xWizard->m_pHelp;
+    if (pButton)
+        return new SalInstanceButton(pButton, nullptr, false);
+    return nullptr;
 }
 
 class SalInstanceMenuButton : public SalInstanceButton, public virtual weld::MenuButton
@@ -5286,6 +5430,19 @@ public:
         return pRet;
     }
 
+    virtual std::unique_ptr<weld::Assistant> weld_assistant(const OString &id, bool bTakeOwnership) override
+    {
+        vcl::RoadmapWizard* pDialog = m_xBuilder->get<vcl::RoadmapWizard>(id);
+        std::unique_ptr<weld::Assistant> pRet(pDialog ? new SalInstanceAssistant(pDialog, this, false) : nullptr);
+        if (bTakeOwnership && pDialog)
+        {
+            assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
+            m_aOwnedToplevel.set(pDialog);
+            m_xBuilder->drop_ownership(pDialog);
+        }
+        return pRet;
+    }
+
     virtual std::unique_ptr<weld::Window> weld_window(const OString &id, bool bTakeOwnership) override
     {
         SystemWindow* pWindow = m_xBuilder->get<SystemWindow>(id);
@@ -5674,6 +5831,18 @@ namespace weld
         {
             m_xContentArea->move(m_xRelocate.get(), m_xOrigParent.get());
         }
+    }
+
+    AssistantController::AssistantController(weld::Widget* pParent, const OUString &rUIFile, const OString& rDialogId)
+        : m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
+        , m_xAssistant(m_xBuilder->weld_assistant(rDialogId))
+    {
+    }
+
+    Dialog* AssistantController::getDialog() { return m_xAssistant.get(); }
+
+    AssistantController::~AssistantController()
+    {
     }
 
     void TriStateEnabled::ButtonToggled(weld::ToggleButton& rToggle)
