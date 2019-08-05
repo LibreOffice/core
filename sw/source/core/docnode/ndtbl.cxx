@@ -2814,7 +2814,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
                                     pLine = pBox->GetUpper();
                                 if( pLine && pTextFrame ) // always for old table model
                                 {
-                                    // The new row height must not to be calculated from a overlapping box
+                                    // The new row height must not to be calculated from an overlapping box
                                     SwFormatFrameSize aNew( pLine->GetFrameFormat()->GetFrameSize() );
                                     const long nNewSize = aRectFnSet.GetHeight(pFrame->getFrameArea()) + nDiff;
                                     if( nNewSize != aNew.GetHeight() )

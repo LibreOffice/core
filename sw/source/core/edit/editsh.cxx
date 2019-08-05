@@ -726,7 +726,7 @@ void SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
     }
 }
 
-/// If the cursor is in a INetAttribute then it will be deleted completely (incl. hint text, the
+/// If the cursor is in an INetAttribute then it will be deleted completely (incl. hint text, the
 /// latter is needed for drag & drop)
 void SwEditShell::DelINetAttrWithText()
 {
@@ -820,7 +820,7 @@ void SwEditShell::SetNumberingRestart()
                             }
                             if (bIsNodeNum)
                             {
-                                // now set a the start value as attribute
+                                // now set the start value as attribute
                                 SwPosition aCurrentNode(*pNd);
                                 GetDoc()->SetNumRuleStart( aCurrentNode );
                             }
