@@ -159,6 +159,8 @@ private:
     // Table
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) override;
 
+    void finishParagraph(const bool bRemove = false);
+
     static void handleUnderlineType(const Id nId, const ::tools::SvRef<PropertyMap>& rContext);
     void handleParaJustification(const sal_Int32 nIntValue, const ::tools::SvRef<PropertyMap>& rContext, const bool bExchangeLeftRight);
     static bool getColorFromId(const Id, sal_Int32 &nColor);
