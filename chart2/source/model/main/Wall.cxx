@@ -23,7 +23,6 @@
 #include <UserDefinedProperties.hxx>
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
-#include <StyleHandler.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <tools/diagnose_ex.h>
 
@@ -102,19 +101,6 @@ struct StaticWallInfo : public rtl::StaticAggregate< uno::Reference< beans::XPro
 {
 };
 
-struct StaticStyles_Initializer
-{
-    ::chart::StyleHandler* operator()()
-    {
-        ::chart::StyleHandler Styles( ::chart::StyleType::STYLETYPE_WALL );
-        return &Styles;
-    }
-};
-
-struct StaticStyles : public rtl::StaticAggregate< ::chart::StyleHandler, StaticStyles_Initializer >
-{
-};
-
 } // anonymous namespace
 
 namespace chart
@@ -143,9 +129,6 @@ uno::Reference< util::XCloneable > SAL_CALL Wall::createClone()
 // ____ OPropertySet ____
 uno::Any Wall::GetDefaultValue( sal_Int32 nHandle ) const
 {
-
-    StyleHandler& rChartStyles = *StaticStyles::get();
-
     const tPropertyValueMap& rStaticDefaults = *StaticWallDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
@@ -207,20 +190,6 @@ void SAL_CALL Wall::disposing( const lang::EventObject& /* Source */ )
 void Wall::firePropertyChangeEvent()
 {
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
-}
-
-// ____ XChartStyles ____
-void Wall::setChartStyle( const sal_Int16 nValue )
-{
-    StyleHandler& rChartStyles = *StaticStyles::get();
-    rChartStyles.setLocalStyle( nValue );
-    setAllPropertiesToDefault();
-}
-
-void Wall::createStyle()
-{
-    StyleHandler& rChartStyles = *StaticStyles::get();
-    rChartStyles.createStyle( getAllDirectProperties(), STYLETYPE_WALL );
 }
 
 using impl::Wall_Base;

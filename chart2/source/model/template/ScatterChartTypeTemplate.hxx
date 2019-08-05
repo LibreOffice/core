@@ -76,10 +76,6 @@ protected:
     virtual sal_Int32 getDimension() const override;
     virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const override;
 
-    // ____ XChartStyles ____
-    virtual void setChartStyle( const sal_Int16 nValue ) override{};
-    virtual void createStyle() override{};
-
 private:
     bool               m_bHasSymbols;
     bool               m_bHasLines;

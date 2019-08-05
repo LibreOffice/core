@@ -23,7 +23,6 @@
 #include <UserDefinedProperties.hxx>
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
-#include <StyleHandler.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -104,19 +103,6 @@ struct StaticStockBarDefaults : public rtl::StaticAggregate< ::chart::tPropertyV
 {
 };
 
-struct StaticStyles_Initializer
-{
-    ::chart::StyleHandler* operator()()
-    {
-        ::chart::StyleHandler Styles( ::chart::StyleType::STYLETYPE_STOCK );
-        return &Styles;
-    }
-};
-
-struct StaticStyles : public rtl::StaticAggregate< ::chart::StyleHandler, StaticStyles_Initializer >
-{
-};
-
 } // anonymous namespace
 
 namespace chart
@@ -155,9 +141,6 @@ uno::Reference< util::XCloneable > SAL_CALL StockBar::createClone()
 // ____ OPropertySet ____
 uno::Any StockBar::GetDefaultValue( sal_Int32 nHandle ) const
 {
-
-    StyleHandler& rChartStyles = *StaticStyles::get();
-
     const tPropertyValueMap& rStaticDefaults = *StaticStockBarDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
@@ -219,20 +202,6 @@ void SAL_CALL StockBar::disposing( const lang::EventObject& /* Source */ )
 void StockBar::firePropertyChangeEvent()
 {
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
-}
-
-// ____ XChartStyles ____
-void StockBar::setChartStyle( const sal_Int16 nValue )
-{
-    StyleHandler& rChartStyles = *StaticStyles::get();
-    rChartStyles.setLocalStyle( nValue );
-    setAllPropertiesToDefault();
-}
-
-void StockBar::createStyle()
-{
-    StyleHandler& rChartStyles = *StaticStyles::get();
-    rChartStyles.createStyle( getAllDirectProperties(), STYLETYPE_STOCK );
 }
 
 using impl::StockBar_Base;

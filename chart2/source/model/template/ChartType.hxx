@@ -104,10 +104,6 @@ protected:
     virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const override;
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
-    // ____ XChartStyles ____
-    virtual void setChartStyle( const sal_Int16 nValue ) override{};
-    virtual void createStyle() override{};
-
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 

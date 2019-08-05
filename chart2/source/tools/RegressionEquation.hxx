@@ -110,10 +110,6 @@ private:
 
     void fireModifyEvent();
 
-    // ____ XChartStyles ____
-    virtual void setChartStyle( const sal_Int16 nValue ) override{};
-    virtual void createStyle() override{};
-
     css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > > m_aStrings;
 
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;

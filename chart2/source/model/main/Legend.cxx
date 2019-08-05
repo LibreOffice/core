@@ -24,7 +24,6 @@
 #include <UserDefinedProperties.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <PropertyHelper.hxx>
-#include <StyleHandler.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
@@ -172,19 +171,6 @@ struct StaticLegendInfo : public rtl::StaticAggregate< uno::Reference< beans::XP
 {
 };
 
-struct StaticStyles_Initializer
-{
-    ::chart::StyleHandler* operator()()
-    {
-        ::chart::StyleHandler Styles( ::chart::StyleType::STYLETYPE_LEGEND );
-        return &Styles;
-    }
-};
-
-struct StaticStyles : public rtl::StaticAggregate< ::chart::StyleHandler, StaticStyles_Initializer >
-{
-};
-
 } // anonymous namespace
 
 namespace chart
@@ -261,9 +247,6 @@ void Legend::firePropertyChangeEvent()
 // ____ OPropertySet ____
 Any Legend::GetDefaultValue( sal_Int32 nHandle ) const
 {
-
-    StyleHandler& rChartStyles = *StaticStyles::get();
-
     const tPropertyValueMap& rStaticDefaults = *StaticLegendDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
@@ -280,20 +263,6 @@ Any Legend::GetDefaultValue( sal_Int32 nHandle ) const
 Reference< beans::XPropertySetInfo > SAL_CALL Legend::getPropertySetInfo()
 {
     return *StaticLegendInfo::get();
-}
-
-// ____ XChartStyles ____
-void Legend::setChartStyle( const sal_Int16 nValue )
-{
-    StyleHandler& rChartStyles = *StaticStyles::get();
-    rChartStyles.setLocalStyle( nValue );
-    setAllPropertiesToDefault();
-}
-
-void Legend::createStyle()
-{
-    StyleHandler& rChartStyles = *StaticStyles::get();
-    rChartStyles.createStyle( getAllDirectProperties(), STYLETYPE_LEGEND );
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static

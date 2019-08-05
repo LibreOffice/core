@@ -23,7 +23,6 @@
 #include <UserDefinedProperties.hxx>
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
-#include <StyleHandler.hxx>
 
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -107,19 +106,6 @@ struct StaticPageBackgroundInfo : public rtl::StaticAggregate< uno::Reference< b
 {
 };
 
-struct StaticStyles_Initializer
-{
-    ::chart::StyleHandler* operator()()
-    {
-        ::chart::StyleHandler Styles( ::chart::StyleType::STYLETYPE_PAGE );
-        return &Styles;
-    }
-};
-
-struct StaticStyles : public rtl::StaticAggregate< ::chart::StyleHandler, StaticStyles_Initializer >
-{
-};
-
 } // anonymous namespace
 
 namespace chart
@@ -148,9 +134,6 @@ uno::Reference< util::XCloneable > SAL_CALL PageBackground::createClone()
 // ____ OPropertySet ____
 uno::Any PageBackground::GetDefaultValue( sal_Int32 nHandle ) const
 {
-
-    StyleHandler& rChartStyles = *StaticStyles::get();
-
     const tPropertyValueMap& rStaticDefaults = *StaticPageBackgroundDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
@@ -212,20 +195,6 @@ void SAL_CALL PageBackground::disposing( const lang::EventObject& /* Source */ )
 void PageBackground::firePropertyChangeEvent()
 {
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
-}
-
-// ____ XChartStyles ____
-void PageBackground::setChartStyle( const sal_Int16 nValue )
-{
-    StyleHandler& rChartStyles = *StaticStyles::get();
-    rChartStyles.setLocalStyle( nValue );
-    setAllPropertiesToDefault();
-}
-
-void PageBackground::createStyle()
-{
-    StyleHandler& rChartStyles = *StaticStyles::get();
-    rChartStyles.createStyle( getAllDirectProperties(), STYLETYPE_PAGE );
 }
 
 OUString SAL_CALL PageBackground::getImplementationName()

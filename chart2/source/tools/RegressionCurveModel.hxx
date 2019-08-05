@@ -115,10 +115,6 @@ protected:
 
     void fireModifyEvent();
 
-    // ____ XChartStyles ____
-    virtual void setChartStyle( const sal_Int16 nValue ) override{};
-    virtual void createStyle() override{};
-
 private:
     const tCurveType    m_eRegressionCurveType;
 

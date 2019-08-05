@@ -86,10 +86,6 @@ private:
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 
-    // ____ XChartStyles ____
-    virtual void setChartStyle( const sal_Int16 nValue ) override;
-    virtual void createStyle() override;
-
 private:
 
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;

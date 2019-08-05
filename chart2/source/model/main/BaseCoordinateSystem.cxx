@@ -23,7 +23,6 @@
 #include <CloneHelper.hxx>
 #include <ModifyListenerHelper.hxx>
 #include "Axis.hxx"
-#include <StyleHandler.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -106,19 +105,6 @@ struct StaticCooSysInfo_Initializer
 };
 
 struct StaticCooSysInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticCooSysInfo_Initializer >
-{
-};
-
-struct StaticStyles_Initializer
-{
-    ::chart::StyleHandler* operator()()
-    {
-        ::chart::StyleHandler Styles( ::chart::StyleType::STYLETYPE_BASE_COORD );
-        return &Styles;
-    }
-};
-
-struct StaticStyles : public rtl::StaticAggregate< ::chart::StyleHandler, StaticStyles_Initializer >
 {
 };
 
@@ -345,9 +331,6 @@ void BaseCoordinateSystem::fireModifyEvent()
 // ____ OPropertySet ____
 uno::Any BaseCoordinateSystem::GetDefaultValue( sal_Int32 nHandle ) const
 {
-
-    StyleHandler& rChartStyles = *StaticStyles::get();
-
     const tPropertyValueMap& rStaticDefaults = *StaticCooSysDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
@@ -365,20 +348,6 @@ uno::Any BaseCoordinateSystem::GetDefaultValue( sal_Int32 nHandle ) const
 Reference< beans::XPropertySetInfo > SAL_CALL BaseCoordinateSystem::getPropertySetInfo()
 {
     return *StaticCooSysInfo::get();
-}
-
-// ____ XChartStyles ____
-void BaseCoordinateSystem::setChartStyle( const sal_Int16 nValue )
-{
-    StyleHandler& rChartStyles = *StaticStyles::get();
-    rChartStyles.setLocalStyle( nValue );
-    setAllPropertiesToDefault();
-}
-
-void BaseCoordinateSystem::createStyle()
-{
-    StyleHandler& rChartStyles = *StaticStyles::get();
-    rChartStyles.createStyle( getAllDirectProperties(), STYLETYPE_BASE_COORD );
 }
 
 using impl::BaseCoordinateSystem_Base;

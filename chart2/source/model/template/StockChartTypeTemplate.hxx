@@ -107,10 +107,6 @@ protected:
     virtual css::uno::Reference< css::chart2::XChartType >
                 getChartTypeForIndex( sal_Int32 nChartTypeIndex ) override;
 
-    // ____ XChartStyles ____
-    virtual void setChartStyle( const sal_Int16 nValue ) override{};
-    virtual void createStyle() override{};
-
 private:
     // todo: deprecate this variable
     StockVariant  m_eStockVariant;

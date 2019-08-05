@@ -23,7 +23,6 @@
 #include <CloneHelper.hxx>
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
-#include <StyleHandler.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -223,19 +222,6 @@ struct StaticTitleInfo : public rtl::StaticAggregate< uno::Reference< beans::XPr
 {
 };
 
-struct StaticStyles_Initializer
-{
-    ::chart::StyleHandler* operator()()
-    {
-        ::chart::StyleHandler Styles( ::chart::StyleType::STYLETYPE_TITLE );
-        return &Styles;
-    }
-};
-
-struct StaticStyles : public rtl::StaticAggregate< ::chart::StyleHandler, StaticStyles_Initializer >
-{
-};
-
 } // anonymous namespace
 
 namespace chart
@@ -299,9 +285,6 @@ void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XForm
 // ____ OPropertySet ____
 uno::Any Title::GetDefaultValue( sal_Int32 nHandle ) const
 {
-
-    StyleHandler& rChartStyles = *StaticStyles::get();
-
     const tPropertyValueMap& rStaticDefaults = *StaticTitleDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
@@ -363,20 +346,6 @@ void SAL_CALL Title::disposing( const lang::EventObject& /* Source */ )
 void Title::firePropertyChangeEvent()
 {
     fireModifyEvent();
-}
-
-// ____ XChartStyles ____
-void Title::setChartStyle( const sal_Int16 nValue )
-{
-    StyleHandler& rChartStyles = *StaticStyles::get();
-    rChartStyles.setLocalStyle( nValue );
-    setAllPropertiesToDefault();
-}
-
-void Title::createStyle()
-{
-    StyleHandler& rChartStyles = *StaticStyles::get();
-    rChartStyles.createStyle( getAllDirectProperties(), STYLETYPE_TITLE );
 }
 
 void Title::fireModifyEvent()
