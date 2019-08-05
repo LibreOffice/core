@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_5acc8d60",
+        "filename": "vcl/source/window/NotebookBarAddonsMerger.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-08-05T15:38:32Z",
+      "side": 1,
+      "message": "@Szymon , Can you please look at the structure . I am unable to replicate it and facing crash.\nReplica of OptionalBox.",
+      "range": {
+        "startLine": 100,
+        "startChar": 7,
+        "endLine": 101,
+        "endChar": 65
+      },
+      "revId": "0f58bf0c559427b141074539c7e15f9f641d48c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_fada4115",
+        "filename": "vcl/source/window/NotebookBarAddonsMerger.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-08-05T15:38:32Z",
+      "side": 1,
+      "message": "This one is the replica of NotebookbarToolbox",
+      "range": {
+        "startLine": 114,
+        "startChar": 8,
+        "endLine": 116,
+        "endChar": 52
+      },
+      "revId": "0f58bf0c559427b141074539c7e15f9f641d48c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
