@@ -702,6 +702,20 @@ DECLARE_HTMLEXPORT_TEST(testFieldShade, "field-shade.odt")
     assertXPath(pDoc, "/html/body/p[2]/span/span", 0);
 }
 
+DECLARE_HTMLEXPORT_TEST(testFieldShadeReqIf, "field-shade-reqif.odt")
+{
+    htmlDocPtr pDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 2
+    // i.e. the ReqIF subset of xhtml had a background color and a page number field, resulting in
+    // an invalid ReqIF-XHTML.
+    assertXPath(pDoc, "/html/body/div/p[1]/span", 0);
+    assertXPath(pDoc, "/html/body/div/p[1]/sdfield", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
