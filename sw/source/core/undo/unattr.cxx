@@ -567,8 +567,8 @@ SwUndoResetAttr::SwUndoResetAttr( const SwPosition& rPos, sal_uInt16 nFormatId )
     , m_pHistory( new SwHistory )
     , m_nFormatId( nFormatId )
 {
-    nSttNode = nEndNode = rPos.nNode.GetIndex();
-    nSttContent = nEndContent = rPos.nContent.GetIndex();
+    m_nSttNode = m_nEndNode = rPos.nNode.GetIndex();
+    m_nSttContent = m_nEndContent = rPos.nContent.GetIndex();
 }
 
 SwUndoResetAttr::~SwUndoResetAttr()
@@ -583,10 +583,10 @@ void SwUndoResetAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     m_pHistory->SetTmpEnd( m_pHistory->Count() );
 
     if ((RES_CONDTXTFMTCOLL == m_nFormatId) &&
-        (nSttNode == nEndNode) && (nSttContent == nEndContent)) {
-        SwTextNode* pTNd = rDoc.GetNodes()[ nSttNode ]->GetTextNode();
+        (m_nSttNode == m_nEndNode) && (m_nSttContent == m_nEndContent)) {
+        SwTextNode* pTNd = rDoc.GetNodes()[ m_nSttNode ]->GetTextNode();
         if( pTNd ) {
-            SwIndex aIdx( pTNd, nSttContent );
+            SwIndex aIdx( pTNd, m_nSttContent );
             pTNd->DontExpandFormat( aIdx, false );
         }
     }
@@ -614,9 +614,9 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
         // special treatment for TOXMarks
     {
         SwTOXMarks aArr;
-        SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode );
+        SwNodeIndex aIdx( rDoc.GetNodes(), m_nSttNode );
         SwPosition aPos( aIdx, SwIndex( aIdx.GetNode().GetContentNode(),
-                                        nSttContent ));
+                                        m_nSttContent ));
 
         sal_uInt16 nCnt = SwDoc::GetCurTOXMark( aPos, aArr );
         if( nCnt ) {
@@ -725,7 +725,7 @@ void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
         if ( ULONG_MAX != m_nNodeIndex ) {
             aPam.DeleteMark();
             aPam.GetPoint()->nNode = m_nNodeIndex;
-            aPam.GetPoint()->nContent.Assign( aPam.GetContentNode(), nSttContent );
+            aPam.GetPoint()->nContent.Assign( aPam.GetContentNode(), m_nSttContent );
             aPam.SetMark();
             ++aPam.GetPoint()->nContent;
             pDoc->getIDocumentRedlineAccess().DeleteRedline(aPam, false, RedlineType::Any);

@@ -75,7 +75,7 @@ public:
                         const SwNodeIndex& rInsPos );
 
     bool IsMoveRange() const        { return m_bMoveRange; }
-    sal_uLong GetEndNode() const        { return nEndNode; }
+    sal_uLong GetEndNode() const        { return m_nEndNode; }
     sal_uLong GetDestSttNode() const    { return m_nDestStartNode; }
     sal_Int32 GetDestSttContent() const  { return m_nDestStartContent; }
 

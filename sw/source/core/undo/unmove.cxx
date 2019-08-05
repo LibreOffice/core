@@ -45,32 +45,32 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
 {
     // get StartNode from footnotes before delete!
     SwDoc* pDoc = rRange.GetDoc();
-    SwTextNode* pTextNd = pDoc->GetNodes()[ nSttNode ]->GetTextNode();
-    SwTextNode* pEndTextNd = pDoc->GetNodes()[ nEndNode ]->GetTextNode();
+    SwTextNode* pTextNd = pDoc->GetNodes()[ m_nSttNode ]->GetTextNode();
+    SwTextNode* pEndTextNd = pDoc->GetNodes()[ m_nEndNode ]->GetTextNode();
 
     pHistory.reset( new SwHistory );
 
     if( pTextNd )
     {
-        pHistory->Add( pTextNd->GetTextColl(), nSttNode, SwNodeType::Text );
+        pHistory->Add( pTextNd->GetTextColl(), m_nSttNode, SwNodeType::Text );
         if ( pTextNd->GetpSwpHints() )
         {
-            pHistory->CopyAttr( pTextNd->GetpSwpHints(), nSttNode,
+            pHistory->CopyAttr( pTextNd->GetpSwpHints(), m_nSttNode,
                                 0, pTextNd->GetText().getLength(), false );
         }
         if( pTextNd->HasSwAttrSet() )
-            pHistory->CopyFormatAttr( *pTextNd->GetpSwAttrSet(), nSttNode );
+            pHistory->CopyFormatAttr( *pTextNd->GetpSwAttrSet(), m_nSttNode );
     }
     if( pEndTextNd && pEndTextNd != pTextNd )
     {
-        pHistory->Add( pEndTextNd->GetTextColl(), nEndNode, SwNodeType::Text );
+        pHistory->Add( pEndTextNd->GetTextColl(), m_nEndNode, SwNodeType::Text );
         if ( pEndTextNd->GetpSwpHints() )
         {
-            pHistory->CopyAttr( pEndTextNd->GetpSwpHints(), nEndNode,
+            pHistory->CopyAttr( pEndTextNd->GetpSwpHints(), m_nEndNode,
                                 0, pEndTextNd->GetText().getLength(), false );
         }
         if( pEndTextNd->HasSwAttrSet() )
-            pHistory->CopyFormatAttr( *pEndTextNd->GetpSwAttrSet(), nEndNode );
+            pHistory->CopyFormatAttr( *pEndTextNd->GetpSwAttrSet(), m_nEndNode );
     }
 
     pTextNd = rMvPos.nNode.GetNode().GetTextNode();
@@ -108,10 +108,10 @@ SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
     m_bMoveRange = true;
     m_bJoinNext = m_bJoinPrev = false;
 
-    nSttContent = nEndContent = m_nMoveDestContent = COMPLETE_STRING;
+    m_nSttContent = m_nEndContent = m_nMoveDestContent = COMPLETE_STRING;
 
-    nSttNode = rRg.aStart.GetIndex();
-    nEndNode = rRg.aEnd.GetIndex();
+    m_nSttNode = rRg.aStart.GetIndex();
+    m_nEndNode = rRg.aEnd.GetIndex();
 
 //  DelFootnote( rRange );
 // FIXME: duplication of the method body of DelFootnote below
@@ -287,7 +287,7 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
     if( m_bMoveRange )
     {
         // only a move with SwRange
-        SwNodeRange aRg( rNds, nSttNode, rNds, nEndNode );
+        SwNodeRange aRg( rNds, m_nSttNode, rNds, m_nEndNode );
         rDoc.getIDocumentContentOperations().MoveNodeRange( aRg, aIdx, m_bMoveRedlines
                 ? SwMoveFlags::REDLINES
                 : SwMoveFlags::DEFAULT );
@@ -309,7 +309,7 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
         rDoc.getIDocumentContentOperations().MoveRange( aPam, aMvPos,
             SwMoveFlags::DEFAULT );
 
-        if( nSttNode != nEndNode && bJoinText )
+        if( m_nSttNode != m_nEndNode && bJoinText )
         {
             ++aIdx;
             SwTextNode * pTextNd = aIdx.GetNode().GetTextNode();

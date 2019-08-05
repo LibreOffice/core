@@ -69,8 +69,8 @@ SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
         if( mbHiddenRedlines )           // then the NodeIndices of SwUndRng need to be corrected
         {
             nEndExtra -= rDoc.GetNodes().GetEndOfExtras().GetIndex();
-            nSttNode -= nEndExtra;
-            nEndNode -= nEndExtra;
+            m_nSttNode -= nEndExtra;
+            m_nEndNode -= nEndExtra;
         }
     }
 }
@@ -102,8 +102,8 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
             mpRedlSaveData->clear();
 
             nEndExtra = rDoc.GetNodes().GetEndOfExtras().GetIndex() - nEndExtra;
-            nSttNode += nEndExtra;
-            nEndNode += nEndExtra;
+            m_nSttNode += nEndExtra;
+            m_nEndNode += nEndExtra;
         }
         SetPaM(rPam, true);
     }
@@ -133,8 +133,8 @@ void SwUndoRedline::RedoImpl(::sw::UndoRedoContext & rContext)
         FillSaveData(rPam, *mpRedlSaveData, false, SwUndoId::REJECT_REDLINE != mnUserId );
 
         nEndExtra -= rDoc.GetNodes().GetEndOfExtras().GetIndex();
-        nSttNode -= nEndExtra;
-        nEndNode -= nEndExtra;
+        m_nSttNode -= nEndExtra;
+        m_nEndNode -= nEndExtra;
     }
 
     RedoRedlineImpl(rDoc, rPam);
@@ -160,16 +160,16 @@ SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
     const SwTextNode* pTNd;
     SetRedlineText(rRange.GetText());
     if( SwUndoId::DELETE == mnUserId &&
-        nSttNode == nEndNode && nSttContent + 1 == nEndContent &&
+        m_nSttNode == m_nEndNode && m_nSttContent + 1 == m_nEndContent &&
         nullptr != (pTNd = rRange.GetNode().GetTextNode()) )
     {
-        sal_Unicode const cCh = pTNd->GetText()[nSttContent];
+        sal_Unicode const cCh = pTNd->GetText()[m_nSttContent];
         if( CH_TXTATR_BREAKWORD != cCh && CH_TXTATR_INWORD != cCh )
         {
             bCanGroup = true;
             bIsDelim = !GetAppCharClass().isLetterNumeric( pTNd->GetText(),
-                                                            nSttContent );
-            bIsBackspace = nSttContent == rRange.GetPoint()->nContent.GetIndex();
+                                                            m_nSttContent );
+            bIsBackspace = m_nSttContent == rRange.GetPoint()->nContent.GetIndex();
         }
     }
 
@@ -215,14 +215,14 @@ bool SwUndoRedlineDelete::CanGrouping( const SwUndoRedlineDelete& rNext )
         bCanGroup == rNext.bCanGroup &&
         bIsDelim == rNext.bIsDelim &&
         bIsBackspace == rNext.bIsBackspace &&
-        nSttNode == nEndNode &&
-        rNext.nSttNode == nSttNode &&
-        rNext.nEndNode == nEndNode )
+        m_nSttNode == m_nEndNode &&
+        rNext.m_nSttNode == m_nSttNode &&
+        rNext.m_nEndNode == m_nEndNode )
     {
         int bIsEnd = 0;
-        if( rNext.nSttContent == nEndContent )
+        if( rNext.m_nSttContent == m_nEndContent )
             bIsEnd = 1;
-        else if( rNext.nEndContent == nSttContent )
+        else if( rNext.m_nEndContent == m_nSttContent )
             bIsEnd = -1;
 
         if( bIsEnd &&
@@ -233,9 +233,9 @@ bool SwUndoRedlineDelete::CanGrouping( const SwUndoRedlineDelete& rNext )
              )))
         {
             if( 1 == bIsEnd )
-                nEndContent = rNext.nEndContent;
+                m_nEndContent = rNext.m_nEndContent;
             else
-                nSttContent = rNext.nSttContent;
+                m_nSttContent = rNext.m_nSttContent;
             bRet = true;
         }
     }
@@ -246,7 +246,7 @@ SwUndoRedlineSort::SwUndoRedlineSort( const SwPaM& rRange,
                                     const SwSortOptions& rOpt )
     : SwUndoRedline( SwUndoId::SORT_TXT, rRange ),
     pOpt( new SwSortOptions( rOpt ) ),
-    nSaveEndNode( nEndNode ), nSaveEndContent( nEndContent )
+    nSaveEndNode( m_nEndNode ), nSaveEndContent( m_nEndContent )
 {
 }
 
@@ -271,7 +271,7 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
         // consistent again. The 'delete' one is hidden, thus search for the
         // 'insert' Redline object. The former is located directly after the latter.
         SwRedlineTable::size_type nFnd = rDoc.getIDocumentRedlineAccess().GetRedlinePos(
-                            *rDoc.GetNodes()[ nSttNode + 1 ],
+                            *rDoc.GetNodes()[ m_nSttNode + 1 ],
                             RedlineType::Insert );
         OSL_ENSURE( SwRedlineTable::npos != nFnd && nFnd+1 < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(),
                     "could not find an Insert object" );
@@ -443,7 +443,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
         // complete nodes into the current doc. And then the selection
         // must be from end to start, so the delete join into the right
         // direction.
-        if( !nSttContent && !nEndContent )
+        if( !m_nSttContent && !m_nEndContent )
             rPam.Exchange();
 
         bool bJoinText, bJoinPrev;

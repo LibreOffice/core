@@ -44,7 +44,7 @@
 
 // This class saves the Pam as integers and can recompose those into a PaM
 SwUndRng::SwUndRng()
-    : nSttNode( 0 ), nEndNode( 0 ), nSttContent( 0 ), nEndContent( 0 )
+    : m_nSttNode( 0 ), m_nEndNode( 0 ), m_nSttContent( 0 ), m_nEndContent( 0 )
 {
 }
 
@@ -61,42 +61,42 @@ void SwUndRng::SetValues( const SwPaM& rPam )
         const SwPosition *pEnd = rPam.GetPoint() == pStt
                         ? rPam.GetMark()
                         : rPam.GetPoint();
-        nEndNode = pEnd->nNode.GetIndex();
-        nEndContent = pEnd->nContent.GetIndex();
+        m_nEndNode = pEnd->nNode.GetIndex();
+        m_nEndContent = pEnd->nContent.GetIndex();
     }
     else
     {
         // no selection !!
-        nEndNode = 0;
-        nEndContent = COMPLETE_STRING;
+        m_nEndNode = 0;
+        m_nEndContent = COMPLETE_STRING;
     }
 
-    nSttNode = pStt->nNode.GetIndex();
-    nSttContent = pStt->nContent.GetIndex();
+    m_nSttNode = pStt->nNode.GetIndex();
+    m_nSttContent = pStt->nContent.GetIndex();
 }
 
 void SwUndRng::SetPaM( SwPaM & rPam, bool bCorrToContent ) const
 {
     rPam.DeleteMark();
-    rPam.GetPoint()->nNode = nSttNode;
+    rPam.GetPoint()->nNode = m_nSttNode;
     SwNode& rNd = rPam.GetNode();
     if( rNd.IsContentNode() )
-        rPam.GetPoint()->nContent.Assign( rNd.GetContentNode(), nSttContent );
+        rPam.GetPoint()->nContent.Assign( rNd.GetContentNode(), m_nSttContent );
     else if( bCorrToContent )
         rPam.Move( fnMoveForward, GoInContent );
     else
         rPam.GetPoint()->nContent.Assign( nullptr, 0 );
 
-    if( !nEndNode && COMPLETE_STRING == nEndContent )       // no selection
+    if( !m_nEndNode && COMPLETE_STRING == m_nEndContent )       // no selection
         return ;
 
     rPam.SetMark();
-    if( nSttNode == nEndNode && nSttContent == nEndContent )
+    if( m_nSttNode == m_nEndNode && m_nSttContent == m_nEndContent )
         return;                             // nothing left to do
 
-    rPam.GetPoint()->nNode = nEndNode;
+    rPam.GetPoint()->nNode = m_nEndNode;
     if( rPam.GetNode().IsContentNode() )
-        rPam.GetPoint()->nContent.Assign( rPam.GetNode().GetContentNode(), nEndContent );
+        rPam.GetPoint()->nContent.Assign( rPam.GetNode().GetContentNode(), m_nEndContent );
     else if( bCorrToContent )
         rPam.Move( fnMoveBackward, GoInContent );
     else
@@ -1308,20 +1308,20 @@ SwRedlineSaveData::SwRedlineSaveData(
     switch (eCmpPos)
     {
     case SwComparePosition::OverlapBefore:        // Pos1 overlaps Pos2 at the beginning
-        nEndNode = rEndPos.nNode.GetIndex();
-        nEndContent = rEndPos.nContent.GetIndex();
+        m_nEndNode = rEndPos.nNode.GetIndex();
+        m_nEndContent = rEndPos.nContent.GetIndex();
         break;
 
     case SwComparePosition::OverlapBehind:        // Pos1 overlaps Pos2 at the end
-        nSttNode = rSttPos.nNode.GetIndex();
-        nSttContent = rSttPos.nContent.GetIndex();
+        m_nSttNode = rSttPos.nNode.GetIndex();
+        m_nSttContent = rSttPos.nContent.GetIndex();
         break;
 
     case SwComparePosition::Inside:                // Pos1 lays completely in Pos2
-        nSttNode = rSttPos.nNode.GetIndex();
-        nSttContent = rSttPos.nContent.GetIndex();
-        nEndNode = rEndPos.nNode.GetIndex();
-        nEndContent = rEndPos.nContent.GetIndex();
+        m_nSttNode = rSttPos.nNode.GetIndex();
+        m_nSttContent = rSttPos.nContent.GetIndex();
+        m_nEndNode = rEndPos.nNode.GetIndex();
+        m_nEndContent = rEndPos.nContent.GetIndex();
         break;
 
     case SwComparePosition::Outside:               // Pos2 lays completely in Pos1
@@ -1482,10 +1482,10 @@ bool SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
     {
         const SwRedlineSaveData& rSet = rCurr[ n ];
         const SwRedlineSaveData& rGet = rCheck[ n ];
-        if( rSet.nSttNode != rGet.nSttNode ||
+        if( rSet.m_nSttNode != rGet.m_nSttNode ||
             rSet.GetMvSttIdx() || rGet.GetMvSttIdx() ||
-            ( bCurrIsEnd ? rSet.nSttContent != rGet.nEndContent
-                            : rSet.nEndContent != rGet.nSttContent ) ||
+            ( bCurrIsEnd ? rSet.m_nSttContent != rGet.m_nEndContent
+                            : rSet.m_nEndContent != rGet.m_nSttContent ) ||
             !rGet.CanCombine( rSet ) )
         {
             return false;
@@ -1497,9 +1497,9 @@ bool SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
         SwRedlineSaveData& rSet = rCurr[ n ];
         const SwRedlineSaveData& rGet = rCheck[ n ];
         if( bCurrIsEnd )
-            rSet.nSttContent = rGet.nSttContent;
+            rSet.m_nSttContent = rGet.m_nSttContent;
         else
-            rSet.nEndContent = rGet.nEndContent;
+            rSet.m_nEndContent = rGet.m_nEndContent;
     }
     return true;
 }
