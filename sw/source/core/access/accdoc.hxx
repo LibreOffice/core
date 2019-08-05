@@ -165,7 +165,7 @@ public:
 
     // thread safe C++ interface
 
-    // The object is not visible an longer and should be destroyed
+    // The object is not visible any longer and should be destroyed
     virtual void Dispose(bool bRecursive, bool bCanSkipInvisible = true) override;
 
     // XAccessibleComponent

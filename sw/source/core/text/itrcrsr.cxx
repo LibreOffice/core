@@ -462,7 +462,7 @@ void SwTextCursor::GetEndCharRect(SwRect* pOrig, const TextFrameIndex nOfst,
 
 // internal function, called by SwTextCursor::GetCharRect() to calculate
 // the relative character position in the current line.
-// pOrig referes to x and y coordinates, width and height of the cursor
+// pOrig refers to x and y coordinates, width and height of the cursor
 // pCMS is used for restricting the cursor, if there are different font
 // heights in one line ( first value = offset to y of pOrig, second
 // value = real height of (shortened) cursor
