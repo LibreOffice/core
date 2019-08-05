@@ -78,6 +78,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,CURL,CURL_TARBALL) \
 		$(call fetch_Optional,EXPAT,EXPAT_TARBALL) \
 		$(call fetch_Optional,GRAPHITE,GRAPHITE_TARBALL) \
+		$(call fetch_Optional,LIBPNG,PNG_TARBALL) \
 		$(call fetch_Optional,MSPUB,MSPUB_TARBALL) \
 		$(call fetch_Optional,MWAW,MWAW_TARBALL) \
 		$(call fetch_Optional,NSS,NSS_TARBALL) \
@@ -151,7 +152,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,OPENLDAP,$(OPENLDAP_TARBALL)) \
 		$(call fetch_Optional,ORCUS,$(ORCUS_TARBALL)) \
 		$(call fetch_Optional,CAIRO,$(PIXMAN_TARBALL)) \
-		$(call fetch_Optional,LIBPNG,$(PNG_TARBALL)) \
 		$(call fetch_Optional,POSTGRESQL,$(POSTGRESQL_TARBALL)) \
 		$(call fetch_Optional,REDLAND,$(RAPTOR_TARBALL)) \
 		$(call fetch_Optional,REDLAND,$(RASQAL_TARBALL)) \
