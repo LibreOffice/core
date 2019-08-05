@@ -489,7 +489,7 @@ SvxBorderTabPage::SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCor
     FillLineListBox_Impl();
 
     // connections
-    if (rCoreAttrs.HasItem(GetWhich(SID_ATTR_CHAR_GRABBAG), &pItem))
+    if (rCoreAttrs.HasItem(GetWhich(SID_ATTR_PARA_GRABBAG), &pItem))
     {
         const SfxGrabBagItem* pGrabBag = static_cast<const SfxGrabBagItem*>(pItem);
         auto it = pGrabBag->GetGrabBag().find("DialogUseCharAttr");
