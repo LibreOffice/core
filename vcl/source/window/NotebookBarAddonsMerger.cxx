@@ -21,6 +21,10 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/toolbox.hxx>
+#include <osl/module.hxx>
+#include <vcl/OptionalBox.hxx>
+#include <sfx2/sidebar/SidebarToolBox.hxx>
+#include <vcl/IPrioritable.hxx>
 
 static const char STYLE_TEXT[] = "Text";
 static const char STYLE_ICON[] = "Icon";
@@ -33,6 +37,15 @@ static const char MERGE_NOTEBOOKBAR_TARGET[] = "Target";
 static const char MERGE_NOTEBOOKBAR_CONTROLTYPE[] = "ControlType";
 static const char MERGE_NOTEBOOKBAR_WIDTH[] = "Width";
 static const char MERGE_NOTEBOOKBAR_STYLE[] = "Style";
+
+ToolBox* SetToolBarProperty(ToolBox* pParent)
+{
+    ToolBox* pToolbox = dynamic_cast<ToolBox*>(pParent);
+    pToolbox->SetButtonType(ButtonType::SYMBOLTEXT);
+    pToolbox->SetToolBoxTextPosition(ToolBoxTextPosition::Bottom);
+    pToolbox->SetToolboxButtonSize(ToolBoxButtonSize::Large);
+    return pToolbox;
+}
 
 static void GetAddonNotebookBarItem(const css::uno::Sequence<css::beans::PropertyValue>& pExtension,
                                     AddonNotebookBarItem& aAddonNotebookBarItem)
@@ -68,18 +81,23 @@ void NotebookBarAddonsMerger::MergeNotebookBarAddons(
 {
     std::vector<Image> aImageVec = aNotebookBarAddonsItem.aImageValues;
     unsigned long nIter = 0;
+    sal_uInt16 nItemId = 0;
     css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> aExtension;
     for (unsigned long nIdx = 0; nIdx < aNotebookBarAddonsItem.aAddonValues.size(); nIdx++)
     {
         aExtension = aNotebookBarAddonsItem.aAddonValues[nIdx];
-
+        VclPtr<vcl::Window> newOptionalParent;
+        newOptionalParent = VclPtr<OptionalBox>::Create(pParent);
+        newOptionalParent->Show();
+        VclPtr<ToolBox> pToolbox;
+        pToolbox = VclPtr<ToolBox>::Create(newOptionalParent);
         for (int nSecIdx = 0; nSecIdx < aExtension.getLength(); nSecIdx++)
         {
-            sal_uInt16 nItemId = 0;
             AddonNotebookBarItem aAddonNotebookBarItem;
             const css::uno::Sequence<css::beans::PropertyValue> pExtension = aExtension[nSecIdx];
             GetAddonNotebookBarItem(pExtension, aAddonNotebookBarItem);
-            ToolBox* pToolbox = dynamic_cast<ToolBox*>(pParent);
+            pToolbox = SetToolBarProperty(pToolbox);
+
             if (pToolbox)
             {
                 Size aSize(0, 0);
@@ -113,7 +131,11 @@ void NotebookBarAddonsMerger::MergeNotebookBarAddons(
             }
             if (nSecIdx == aExtension.getLength() - 1)
                 pToolbox->InsertSeparator();
+            pToolbox->Show();
         }
+        vcl::IPrioritable* pPrioritable = dynamic_cast<vcl::IPrioritable*>(newOptionalParent.get());
+        if (pPrioritable)
+            pPrioritable->SetPriority(aNotebookBarAddonsItem.aAddonValues.size() - nIdx);
     }
 }
 

@@ -238,7 +238,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/inet/inettbc \
     sfx2/source/notebookbar/ContextVBox \
     sfx2/source/notebookbar/DropdownBox \
-    sfx2/source/notebookbar/OptionalBox \
     sfx2/source/notebookbar/PriorityHBox \
     sfx2/source/notebookbar/PriorityMergedHBox \
     sfx2/source/notebookbar/SfxNotebookBar \

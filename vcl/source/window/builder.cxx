@@ -2172,7 +2172,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "NotebookBarAddonsToolMergePoint")
     {
-        NotebookBarAddonsMerger::MergeNotebookBarAddons(pParent, m_xFrame, m_pNotebookBarAddonsItem);
+        NotebookBarAddonsMerger::MergeNotebookBarAddons( pParent, m_xFrame, m_pNotebookBarAddonsItem);
         return nullptr;
     }
     else if (name == "GtkToolButton" || name == "GtkMenuToolButton" ||
