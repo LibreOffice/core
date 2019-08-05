@@ -137,8 +137,8 @@ void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
 
     // no selection?
     SwNodeIndex aIdx( *pNd );
-    if( ( !nEndNode && COMPLETE_STRING == nEndContent ) ||
-        ( nSttNode == nEndNode && nSttContent == nEndContent ))
+    if( ( !m_nEndNode && COMPLETE_STRING == m_nEndContent ) ||
+        ( m_nSttNode == m_nEndNode && m_nSttContent == m_nEndContent ))
         // delete simply all nodes
         rDoc.GetNodes().Delete( aIdx, pNd->EndOfSectionIndex() -
                                         aIdx.GetIndex() );
@@ -149,12 +149,12 @@ void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
     // do we need to consolidate?
     if (m_bSplitAtStart)
     {
-        Join( rDoc, nSttNode );
+        Join( rDoc, m_nSttNode );
     }
 
     if (m_bSplitAtEnd)
     {
-        Join( rDoc, nEndNode );
+        Join( rDoc, m_nEndNode );
     }
 
     if (m_pHistory)

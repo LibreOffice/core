@@ -215,8 +215,8 @@ public:
 class SwUndRng
 {
 public:
-    sal_uLong nSttNode, nEndNode;
-    sal_Int32 nSttContent, nEndContent;
+    sal_uLong m_nSttNode, m_nEndNode;
+    sal_Int32 m_nSttContent, m_nEndContent;
 
     SwUndRng();
     SwUndRng( const SwPaM& );

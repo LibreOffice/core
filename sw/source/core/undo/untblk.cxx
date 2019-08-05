@@ -72,16 +72,16 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     if( pTextNd )
     {
         pTextFormatColl = pTextNd->GetTextColl();
-        pHistory->CopyAttr( pTextNd->GetpSwpHints(), nSttNode,
+        pHistory->CopyAttr( pTextNd->GetpSwpHints(), m_nSttNode,
                             0, pTextNd->GetText().getLength(), false );
         if( pTextNd->HasSwAttrSet() )
-            pHistory->CopyFormatAttr( *pTextNd->GetpSwAttrSet(), nSttNode );
+            pHistory->CopyFormatAttr( *pTextNd->GetpSwAttrSet(), m_nSttNode );
 
         // We may have some flys anchored to paragraph where we inserting.
         // These flys will be saved in pFrameFormats array (only flys which exist BEFORE insertion!)
         // Then in SwUndoInserts::SetInsertRange the flys saved in pFrameFormats will NOT create Undos.
         // m_FlyUndos will only be filled with newly inserted flys.
-        pFrameFormats = sw::GetFlysAnchoredAt(*pDoc, nSttNode);
+        pFrameFormats = sw::GetFlysAnchoredAt(*pDoc, m_nSttNode);
     }
     // consider Redline
     if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
@@ -107,8 +107,8 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
                                     bool bSttIsTextNd )
 {
     const SwPosition* pTmpPos = rPam.End();
-    nEndNode = pTmpPos->nNode.GetIndex();
-    nEndContent = pTmpPos->nContent.GetIndex();
+    m_nEndNode = pTmpPos->nNode.GetIndex();
+    m_nEndContent = pTmpPos->nContent.GetIndex();
     if( rPam.HasMark() )
     {
         if( pTmpPos == rPam.GetPoint() )
@@ -116,12 +116,12 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
         else
             pTmpPos = rPam.GetPoint();
 
-        nSttNode = pTmpPos->nNode.GetIndex();
-        nSttContent = pTmpPos->nContent.GetIndex();
+        m_nSttNode = pTmpPos->nNode.GetIndex();
+        m_nSttContent = pTmpPos->nContent.GetIndex();
 
         if( !bSttIsTextNd )      // if a table selection is added...
         {
-            ++nSttNode;         // ... then the CopyPam is not fully correct
+            ++m_nSttNode;         // ... then the CopyPam is not fully correct
             bSttWasTextNd = false;
         }
     }
@@ -137,7 +137,7 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
         {
             SwFrameFormat* pFormat = (*pDoc->GetSpzFrameFormats())[n];
             SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
-            if (IsCreateUndoForNewFly(*pAnchor, nSttNode, nEndNode))
+            if (IsCreateUndoForNewFly(*pAnchor, m_nSttNode, m_nEndNode))
             {
                 std::vector<SwFrameFormat*>::iterator it;
                 if( !pFrameFormats ||
@@ -224,17 +224,17 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, RedlineType::Any);
 
     // if Point and Mark are different text nodes so a JoinNext has to be done
-    bool bJoinNext = nSttNode != nEndNode &&
+    bool bJoinNext = m_nSttNode != m_nEndNode &&
                 rPam.GetMark()->nNode.GetNode().GetTextNode() &&
                 rPam.GetPoint()->nNode.GetNode().GetTextNode();
 
     // Is there any content? (loading from template does not have content)
-    if( nSttNode != nEndNode || nSttContent != nEndContent )
+    if( m_nSttNode != m_nEndNode || m_nSttContent != m_nEndContent )
     {
-        if( nSttNode != nEndNode )
+        if( m_nSttNode != m_nEndNode )
         {
-            SwTextNode* pTextNd = rDoc.GetNodes()[ nEndNode ]->GetTextNode();
-            if (pTextNd && pTextNd->GetText().getLength() == nEndContent)
+            SwTextNode* pTextNd = rDoc.GetNodes()[ m_nEndNode ]->GetTextNode();
+            if (pTextNd && pTextNd->GetText().getLength() == m_nEndContent)
                 pLastNdColl = pTextNd->GetTextColl();
         }
 
@@ -260,7 +260,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         nNdDiff += nTmp - rPam.GetPoint()->nNode.GetIndex();
     }
 
-    if (nSttNode != nEndNode || nSttContent != nEndContent)
+    if (m_nSttNode != m_nEndNode || m_nSttContent != m_nEndContent)
     {
         // are there Footnotes or ContentFlyFrames in text?
         nSetPos = pHistory->Count();
@@ -329,9 +329,9 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
     SwPaM& rPam(rContext.GetCursorSupplier().CreateNewShellCursor());
     SwDoc* pDoc = rPam.GetDoc();
     rPam.DeleteMark();
-    rPam.GetPoint()->nNode = nSttNode - nNdDiff;
+    rPam.GetPoint()->nNode = m_nSttNode - nNdDiff;
     SwContentNode* pCNd = rPam.GetContentNode();
-    rPam.GetPoint()->nContent.Assign( pCNd, nSttContent );
+    rPam.GetPoint()->nContent.Assign( pCNd, m_nSttContent );
 
     SwTextFormatColl* pSavTextFormatColl = pTextFormatColl;
     if( pTextFormatColl && pCNd && pCNd->IsTextNode() )
@@ -340,7 +340,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
     pHistory->SetTmpEnd( nSetPos );
 
     // retrieve start position for rollback
-    if( ( nSttNode != nEndNode || nSttContent != nEndContent ) && m_pUndoNodeIndex)
+    if( ( m_nSttNode != m_nEndNode || m_nSttContent != m_nEndContent ) && m_pUndoNodeIndex)
     {
         auto const pFlysAtInsPos(sw::GetFlysAnchoredAt(*pDoc,
             rPam.GetPoint()->nNode.GetIndex()));

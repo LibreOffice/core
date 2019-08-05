@@ -54,8 +54,8 @@ SwUndoSort::SwUndoSort( sal_uLong nStt, sal_uLong nEnd, const SwTableNode& rTabl
                         const SwSortOptions& rOpt, bool bSaveTable )
     : SwUndo(SwUndoId::SORT_TBL, rTableNd.GetDoc())
 {
-    nSttNode = nStt;
-    nEndNode = nEnd;
+    m_nSttNode = nStt;
+    m_nEndNode = nEnd;
     nTableNd   = rTableNd.GetIndex();
 
     pSortOpt.reset( new SwSortOptions(rOpt) );
@@ -75,7 +75,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
     if(pSortOpt->bTable)
     {
         // Undo for Table
-        RemoveIdxFromSection( rDoc, nSttNode, &nEndNode );
+        RemoveIdxFromSection( rDoc, m_nSttNode, &m_nEndNode );
 
         if( pUndoTableAttr )
         {
@@ -128,7 +128,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             for (std::unique_ptr<SwSortUndoElement> & j : m_SortList)
             {
-                if (j->SORT_TXT_TBL.TXT.nSource == nSttNode + i)
+                if (j->SORT_TXT_TBL.TXT.nSource == m_nSttNode + i)
                 {
                     aIdxList.push_back( SwNodeIndex( rDoc.GetNodes(),
                                             j->SORT_TXT_TBL.TXT.nTarget ) );
@@ -139,7 +139,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
 
         for (size_t i = 0; i < m_SortList.size(); ++i)
         {
-            SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode + i );
+            SwNodeIndex aIdx( rDoc.GetNodes(), m_nSttNode + i );
             SwNodeRange aRg( aIdxList[i], 0, aIdxList[i], 1 );
             rDoc.getIDocumentContentOperations().MoveNodeRange(aRg, aIdx,
                 SwMoveFlags::DEFAULT);
@@ -157,7 +157,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
     if(pSortOpt->bTable)
     {
         // Redo for Table
-        RemoveIdxFromSection( rDoc, nSttNode, &nEndNode );
+        RemoveIdxFromSection( rDoc, m_nSttNode, &m_nEndNode );
 
         SwTableNode* pTableNd = rDoc.GetNodes()[ nTableNd ]->GetTableNode();
 
@@ -212,7 +212,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
 
         for (size_t i = 0; i < m_SortList.size(); ++i)
         {
-            SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode + i);
+            SwNodeIndex aIdx( rDoc.GetNodes(), m_nSttNode + i);
             SwNodeRange aRg( aIdxList[i], 0, aIdxList[i], 1 );
             rDoc.getIDocumentContentOperations().MoveNodeRange(aRg, aIdx,
                 SwMoveFlags::DEFAULT);

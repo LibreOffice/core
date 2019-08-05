@@ -53,10 +53,10 @@ SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
     sReplaceRule( rReplaceRule ), nLRSavePos( 0 )
 {
     // No selection!
-    nEndNode = 0;
-    nEndContent = COMPLETE_STRING;
-    nSttNode = rPos.nNode.GetIndex();
-    nSttContent = rPos.nContent.GetIndex();
+    m_nEndNode = 0;
+    m_nEndContent = COMPLETE_STRING;
+    m_nSttNode = rPos.nNode.GetIndex();
+    m_nSttContent = rPos.nContent.GetIndex();
 }
 
 SwUndoInsNum::~SwUndoInsNum()
@@ -92,7 +92,7 @@ void SwUndoInsNum::UndoImpl(::sw::UndoRedoContext & rContext)
         pHistory->SetTmpEnd( pHistory->Count() );
     }
 
-    if (nSttNode)
+    if (m_nSttNode)
     {
         AddUndoRedoPaM(rContext);
     }
@@ -128,7 +128,7 @@ void SwUndoInsNum::SetLRSpaceEndPos()
 void SwUndoInsNum::RepeatImpl(::sw::RepeatContext & rContext)
 {
     SwDoc & rDoc( rContext.GetDoc() );
-    if ( nSttNode )
+    if ( m_nSttNode )
     {
         if( sReplaceRule.isEmpty() )
         {
@@ -158,7 +158,7 @@ void SwUndoInsNum::SaveOldNumRule( const SwNumRule& rOld )
 SwUndoDelNum::SwUndoDelNum( const SwPaM& rPam )
     : SwUndo( SwUndoId::DELNUM, rPam.GetDoc() ), SwUndRng( rPam )
 {
-    aNodes.reserve( std::min<sal_uLong>(nEndNode - nSttNode, 255) );
+    aNodes.reserve( std::min<sal_uLong>(m_nEndNode - m_nSttNode, 255) );
     pHistory.reset( new SwHistory );
 }
 
@@ -216,22 +216,22 @@ SwUndoMoveNum::SwUndoMoveNum( const SwPaM& rPam, long nOff, bool bIsOutlMv )
 
 void SwUndoMoveNum::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    sal_uLong nTmpStt = nSttNode, nTmpEnd = nEndNode;
+    sal_uLong nTmpStt = m_nSttNode, nTmpEnd = m_nEndNode;
 
-    if (nEndNode || nEndContent != COMPLETE_STRING)        // section?
+    if (m_nEndNode || m_nEndContent != COMPLETE_STRING)        // section?
     {
-        if( nNewStt < nSttNode )        // moved forwards
-            nEndNode = nEndNode - ( nSttNode - nNewStt );
+        if( nNewStt < m_nSttNode )        // moved forwards
+            m_nEndNode = m_nEndNode - ( m_nSttNode - nNewStt );
         else
-            nEndNode = nEndNode + ( nNewStt - nSttNode );
+            m_nEndNode = m_nEndNode + ( nNewStt - m_nSttNode );
     }
-    nSttNode = nNewStt;
+    m_nSttNode = nNewStt;
 
     SwPaM & rPam( AddUndoRedoPaM(rContext) );
     rContext.GetDoc().MoveParagraph( rPam, -nOffset,
                                         SwUndoId::OUTLINE_UD == GetId() );
-    nSttNode = nTmpStt;
-    nEndNode = nTmpEnd;
+    m_nSttNode = nTmpStt;
+    m_nEndNode = nTmpEnd;
 }
 
 void SwUndoMoveNum::RedoImpl(::sw::UndoRedoContext & rContext)
