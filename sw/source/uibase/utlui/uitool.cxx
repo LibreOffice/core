@@ -143,12 +143,14 @@ void ConvertAttrCharToGen(SfxItemSet& rSet)
     }
 
     // Tell dialogs to use character-specific slots/whichIds
+    // tdf#126684: We use RES_PARATR_GRABBAG, because RES_CHRATR_GRABBAG may be overwritten later in
+    // SwDocStyleSheet::GetItemSet when applying attributes from char format
     std::unique_ptr<SfxGrabBagItem> pGrabBag;
     const SfxPoolItem *pTmpItem;
-    if (SfxItemState::SET == rSet.GetItemState(RES_CHRATR_GRABBAG, false, &pTmpItem))
+    if (SfxItemState::SET == rSet.GetItemState(RES_PARATR_GRABBAG, false, &pTmpItem))
         pGrabBag.reset(static_cast<SfxGrabBagItem*>(pTmpItem->Clone()));
     else
-        pGrabBag.reset(new SfxGrabBagItem(RES_CHRATR_GRABBAG));
+        pGrabBag.reset(new SfxGrabBagItem(RES_PARATR_GRABBAG));
     pGrabBag->GetGrabBag()["DialogUseCharAttr"] <<= true;
     rSet.Put(std::move(pGrabBag));
 }
@@ -164,7 +166,7 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet)
         rSet.Put( SvxBrushItem(RES_CHRATR_HIGHLIGHT) );
 
         // Remove shading marker
-        if( SfxItemState::SET == rOrigSet.GetItemState( RES_CHRATR_GRABBAG, false, &pTmpItem ) )
+        if (SfxItemState::SET == rOrigSet.GetItemState(RES_CHRATR_GRABBAG, false, &pTmpItem))
         {
             SfxGrabBagItem aGrabBag(*static_cast<const SfxGrabBagItem*>(pTmpItem));
             std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
@@ -173,9 +175,18 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet)
             {
                 aIterator->second <<= false;
             }
-            // Remove temporary GrabBag entry before writing to destination set
-            rMap.erase("DialogUseCharAttr");
             rSet.Put( aGrabBag );
+        }
+        if (SfxItemState::SET == rOrigSet.GetItemState(RES_PARATR_GRABBAG, false, &pTmpItem))
+        {
+            SfxGrabBagItem aGrabBag(*static_cast<const SfxGrabBagItem*>(pTmpItem));
+            std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
+            // Remove temporary GrabBag entry
+            rMap.erase("DialogUseCharAttr");
+            if (rMap.empty())
+                rSet.ClearItem(RES_PARATR_GRABBAG);
+            else
+                rSet.Put(aGrabBag);
         }
     }
     rSet.ClearItem( RES_BACKGROUND );
