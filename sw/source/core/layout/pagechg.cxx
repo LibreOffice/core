@@ -1161,6 +1161,8 @@ namespace
 {
     bool isDeleteForbidden(const SwPageFrame *pDel)
     {
+        if (pDel->IsDeleteForbidden())
+            return true;
         const SwLayoutFrame* pBody = pDel->FindBodyCont();
         const SwFrame* pBodyContent = pBody ? pBody->Lower() : nullptr;
         return pBodyContent && pBodyContent->IsDeleteForbidden();

@@ -256,6 +256,8 @@ void SwFlyFrame::DestroyImpl()
 
     if( GetFormat() && !GetFormat()->GetDoc()->IsInDtor() )
     {
+        ClearTmpConsiderWrapInfluence(); // remove this from SwLayouter
+
         // OD 2004-01-19 #110582#
         Unchain();
 
@@ -1460,6 +1462,7 @@ void CalcContent( SwLayoutFrame *pLay,
                 static_cast<SwTextFrame*>(pFrame)->ForbidFollowFormat();
 
             {
+                SwFrameDeleteGuard aDeletePageGuard(pSect->FindPageFrame());
                 SwFrameDeleteGuard aDeleteGuard(pSect);
                 pFrame->Calc(pRenderContext);
             }

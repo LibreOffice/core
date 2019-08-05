@@ -424,21 +424,25 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embe
                 if (!bCacheLastSignature && i == aRelationsInfo.getLength() - 1)
                     bCache = false;
 
-                if (bCache)
+                if (!bCache)
+                    continue;
+                // Store the contents of the stream as is, in case we need to write it back later.
+                xInputStream.clear();
+                xInputStream.set(xStorage->openStreamElement(it->Second, nOpenMode), uno::UNO_QUERY);
+                uno::Reference<beans::XPropertySet> xPropertySet(xInputStream, uno::UNO_QUERY);
+                if (!xPropertySet.is())
+                    continue;
+
+                sal_Int64 nSize = 0;
+                xPropertySet->getPropertyValue("Size") >>= nSize;
+                if (nSize < 0 || nSize > SAL_MAX_INT32)
                 {
-                    // Store the contents of the stream as is, in case we need to write it back later.
-                    xInputStream.clear();
-                    xInputStream.set(xStorage->openStreamElement(it->Second, nOpenMode), uno::UNO_QUERY);
-                    uno::Reference<beans::XPropertySet> xPropertySet(xInputStream, uno::UNO_QUERY);
-                    if (xPropertySet.is())
-                    {
-                        sal_Int64 nSize = 0;
-                        xPropertySet->getPropertyValue("Size") >>= nSize;
-                        uno::Sequence<sal_Int8> aData;
-                        xInputStream->readBytes(aData, nSize);
-                        mpXSecController->setSignatureBytes(aData);
-                    }
+                    SAL_WARN("xmlsecurity.helper", "bogus signature size: " << nSize);
+                    continue;
                 }
+                uno::Sequence<sal_Int8> aData;
+                xInputStream->readBytes(aData, nSize);
+                mpXSecController->setSignatureBytes(aData);
             }
         }
     }

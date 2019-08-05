@@ -1400,8 +1400,9 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const OLEHandler
         if (!m_aAnchoredStack.empty())
             m_aAnchoredStack.top( ).bToRemove = true;
         RemoveLastParagraph();
-        m_aTextAppendStack.pop();
-
+        SAL_WARN_IF(m_aTextAppendStack.empty(), "writerfilter.dmapper", "no text stack");
+        if (!m_aTextAppendStack.empty())
+            m_aTextAppendStack.pop();
 
         appendTextContent( xOLE, uno::Sequence< beans::PropertyValue >() );
 
@@ -2676,15 +2677,17 @@ void DomainMapper_Impl::PushFieldContext()
     TagLogger::getInstance().element("pushFieldContext");
 #endif
 
-    uno::Reference< text::XTextAppend >  xTextAppend;
+    uno::Reference<text::XTextCursor> xCrsr;
     if (!m_aTextAppendStack.empty())
-        xTextAppend = m_aTextAppendStack.top().xTextAppend;
-    uno::Reference< text::XTextRange > xStart;
-    if (xTextAppend.is())
     {
-        uno::Reference< text::XTextCursor > xCrsr = xTextAppend->createTextCursorByRange( xTextAppend->getEnd() );
-        xStart = xCrsr->getStart();
+        uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
+        if (xTextAppend.is())
+            xCrsr = xTextAppend->createTextCursorByRange(xTextAppend->getEnd());
     }
+
+    uno::Reference< text::XTextRange > xStart;
+    if (xCrsr.is())
+        xStart = xCrsr->getStart();
     m_aFieldStack.push( std::make_shared<FieldContext>( xStart ) );
 }
 /*-------------------------------------------------------------------------
@@ -4562,7 +4565,7 @@ void DomainMapper_Impl::PopFieldContext()
                     else
                     {
                         FormControlHelper::Pointer_t pFormControlHelper(pContext->getFormControlHelper());
-                        if (pFormControlHelper.get() != nullptr && pFormControlHelper->hasFFDataHandler() )
+                        if (pFormControlHelper.get() != nullptr && pFormControlHelper->hasFFDataHandler() && xCrsr.is())
                         {
                             uno::Reference< text::XFormField > xFormField( pContext->GetFormField() );
                             xToInsert.set(xFormField, uno::UNO_QUERY);
@@ -4578,7 +4581,7 @@ void DomainMapper_Impl::PopFieldContext()
                                 pFormControlHelper->insertControl(xTxtRange);
                             }
                         }
-                        else if(!pContext->GetHyperlinkURL().isEmpty())
+                        else if (!pContext->GetHyperlinkURL().isEmpty() && xCrsr.is())
                         {
                             xCrsr->gotoEnd( true );
 

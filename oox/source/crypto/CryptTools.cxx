@@ -141,6 +141,8 @@ sal_uInt32 Decrypt::update(vector<sal_uInt8>& output, vector<sal_uInt8>& input, 
 #endif // USE_TLS_OPENSSL
 
 #if USE_TLS_NSS
+    if (!mContext)
+        return 0;
     (void)PK11_CipherOp( mContext, &output[0], &outputLength, actualInputLength, &input[0], actualInputLength );
 #endif // USE_TLS_NSS
 

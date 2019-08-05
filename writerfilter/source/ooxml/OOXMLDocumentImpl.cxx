@@ -634,6 +634,12 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
               OOXMLStream::Pointer_t gStream;
               uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
               //Follows following aSeq[0] is Id, aSeq[1] is Type, aSeq[2] is Target
+              if (aSeq.getLength() < 3)
+              {
+                  SAL_WARN("writerfilter.ooxml", "too short sequence");
+                  continue;
+              }
+
               OUString gId(aSeq[0].Second);
               OUString gType(aSeq[1].Second);
               OUString gTarget(aSeq[2].Second);

@@ -203,7 +203,7 @@ void XMLTableShapeImportHelper::finishShape(
             // the group
             Point aStartPoint( rShape->getPosition().X,rShape->getPosition().Y );
             uno::Reference< drawing::XShape > xChild( rShapes, uno::UNO_QUERY );
-            if (SvxShape* pGroupShapeImp = SvxShape::getImplementation( lcl_getTopLevelParent( xChild ) ))
+            if (SvxShape* pGroupShapeImp = xChild.is() ? SvxShape::getImplementation(lcl_getTopLevelParent(xChild)) : nullptr)
             {
                 if (SdrObject *pSdrObj = pGroupShapeImp->GetSdrObject())
                 {

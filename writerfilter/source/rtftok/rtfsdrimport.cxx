@@ -1004,6 +1004,8 @@ void RTFSdrImport::append(const OUString& aKey, const OUString& aValue)
 
 void RTFSdrImport::appendGroupProperty(const OUString& aKey, const OUString& aValue)
 {
+    if (m_aParents.empty())
+        return;
     uno::Reference<drawing::XShape> xShape(m_aParents.top(), uno::UNO_QUERY);
     if (xShape.is())
         applyProperty(xShape, aKey, aValue);

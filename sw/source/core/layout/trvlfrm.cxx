@@ -2029,13 +2029,15 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
 
     //First obtain the ContentFrames for the start and the end - those are needed
     //anyway.
-    SwContentFrame const* pStartFrame = pStartPos->nNode.GetNode().
+    SwContentFrame* pStartFrame = pStartPos->nNode.GetNode().
         GetContentNode()->getLayoutFrame( this, &rCursor.GetSttPos(), pStartPos );
 
-    SwContentFrame const* pEndFrame   = pEndPos->nNode.GetNode().
+    SwContentFrame* pEndFrame   = pEndPos->nNode.GetNode().
         GetContentNode()->getLayoutFrame( this, &rCursor.GetEndPos(), pEndPos );
 
-    OSL_ENSURE( (pStartFrame && pEndFrame), "Keine ContentFrames gefunden." );
+    assert(pStartFrame && pEndFrame && "No ContentFrames found.");
+    //tdf#119224 start and end are expected to exist for the scope of this function
+    SwFrameDeleteGuard aStartFrameGuard(pStartFrame), aEndFrameGuard(pEndFrame);
 
     //Do not subtract the FlyFrames in which selected Frames lie.
     SwSortedObjs aSortObjs;

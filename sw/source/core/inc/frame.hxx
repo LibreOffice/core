@@ -709,7 +709,7 @@ public:
     bool IsProtected() const;
 
     bool IsColLocked()  const { return mbColLocked; }
-    bool IsDeleteForbidden()  const { return mbForbidDelete; }
+    virtual bool IsDeleteForbidden() const { return mbForbidDelete; }
 
     /// this is the only way to delete a SwFrame instance
     static void DestroyFrame(SwFrame *const pFrame);
