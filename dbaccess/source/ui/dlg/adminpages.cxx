@@ -64,8 +64,10 @@ namespace dbaui
         , m_pAdminDialog(nullptr)
         , m_pItemSetHelper(nullptr)
     {
-
         SetExchangeSupport();
+
+        Size aSize(LogicToPixel(::Size(WIZARD_PAGE_X, WIZARD_PAGE_Y), MapMode(MapUnit::MapAppFont)));
+        m_xContainer->set_size_request(aSize.Width(), aSize.Height());
     }
 
     DeactivateRC OGenericAdministrationPage::DeactivatePage(SfxItemSet* _pSet)

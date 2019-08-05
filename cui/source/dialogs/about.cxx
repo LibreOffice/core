@@ -68,13 +68,13 @@ AboutDialog::AboutDialog(weld::Window* pParent)
     m_xDialog->add_button(CuiResId(RID_SVXSTR_ABOUT_WEBSITE), 102);
     m_xDialog->add_button(CuiResId(RID_SVXSTR_ABOUT_RELEASE_NOTES), 103);
 
-    m_pCreditsButton = m_xDialog->get_widget_for_response(101);
-    m_pCreditsButton->set_secondary(true);
-    m_pWebsiteButton = m_xDialog->get_widget_for_response(102);
-    m_pWebsiteButton->set_secondary(true);
-    m_pReleaseNotesButton = m_xDialog->get_widget_for_response(103);
-    m_pReleaseNotesButton->set_secondary(true);
-    m_pCloseButton = m_xDialog->get_widget_for_response(RET_CLOSE);
+    m_xCreditsButton.reset(m_xDialog->weld_widget_for_response(101));
+    m_xCreditsButton->set_secondary(true);
+    m_xWebsiteButton.reset(m_xDialog->weld_widget_for_response(102));
+    m_xWebsiteButton->set_secondary(true);
+    m_xReleaseNotesButton.reset(m_xDialog->weld_widget_for_response(103));
+    m_xReleaseNotesButton->set_secondary(true);
+    m_xCloseButton.reset(m_xDialog->weld_widget_for_response(RET_CLOSE));
 
     m_buildIdLinkString = m_xDialog->get_website_label();
 
@@ -88,10 +88,10 @@ AboutDialog::AboutDialog(weld::Window* pParent)
     m_xDialog->connect_size_allocate(LINK(this, AboutDialog, SizeAllocHdl));
 
     // Connect all handlers
-    m_pCreditsButton->connect_clicked( LINK( this, AboutDialog, HandleClick ) );
-    m_pWebsiteButton->connect_clicked( LINK( this, AboutDialog, HandleClick ) );
-    m_pReleaseNotesButton->connect_clicked( LINK( this, AboutDialog, HandleClick ) );
-    m_pCloseButton->grab_focus();
+    m_xCreditsButton->connect_clicked( LINK( this, AboutDialog, HandleClick ) );
+    m_xWebsiteButton->connect_clicked( LINK( this, AboutDialog, HandleClick ) );
+    m_xReleaseNotesButton->connect_clicked( LINK( this, AboutDialog, HandleClick ) );
+    m_xCloseButton->grab_focus();
 }
 
 AboutDialog::~AboutDialog()
@@ -103,14 +103,14 @@ IMPL_LINK(AboutDialog, HandleClick, weld::Button&, rButton, void)
     OUString sURL = "";
 
     // Find which button was pressed and from this, get the URL to be opened
-    if (&rButton == m_pCreditsButton)
+    if (&rButton == m_xCreditsButton.get())
         sURL = CuiResId(RID_SVXSTR_ABOUT_CREDITS_URL);
-    else if (&rButton == m_pWebsiteButton)
+    else if (&rButton == m_xWebsiteButton.get())
     {
         sURL = officecfg::Office::Common::Help::StartCenter::InfoURL::get();
         localizeWebserviceURI(sURL);
     }
-    else if (&rButton == m_pReleaseNotesButton)
+    else if (&rButton == m_xReleaseNotesButton.get())
     {
         sURL = officecfg::Office::Common::Menus::ReleaseNotesURL::get() +
                "?LOvers=" + utl::ConfigManager::getProductVersion() +
