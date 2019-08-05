@@ -428,7 +428,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
             // calculate difference between portion width and max. width
             nKanaDiffSum += nMaxWidthDiff;
 
-            // we store the beginning of the first compressable portion
+            // we store the beginning of the first compressible portion
             // for repaint
             if ( nMaxWidthDiff && !nRepaintOfst )
                 nRepaintOfst = nX + GetLeftMargin();

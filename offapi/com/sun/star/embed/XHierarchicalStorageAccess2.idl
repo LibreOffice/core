@@ -51,7 +51,7 @@ interface XHierarchicalStorageAccess2 : XHierarchicalStorageAccess
             can be a combination of ElementModes values
 
         @param aEncryptionData
-            this parameter allowes to specify an encryption data for the
+            this parameter allows to specify an encryption data for the
             stream, the data must be correct, otherwise an
             exception will be thrown
 

@@ -296,7 +296,7 @@ public:
     // If Kana Compression is enabled, a minimum and maximum portion width
     // is calculated. We format lines with minimal size and share remaining
     // space among compressed kanas.
-    // During formatting, the maximum values of compressable portions are
+    // During formatting, the maximum values of compressible portions are
     // stored in m_aMaxWidth and discarded after a line has been formatted.
     void SetMaxWidthDiff( const SwLinePortion *nKey, sal_uInt16 nVal )
     {
