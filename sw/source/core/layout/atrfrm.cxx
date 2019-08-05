@@ -3156,7 +3156,7 @@ OUString SwFlyFrameFormat::GetObjDescription() const
     Method determines, if background of fly frame is transparent.
 
     @return true, if background color is transparent, but not "no fill"
-    or the transparency of a existing background graphic is set.
+    or the transparency of an existing background graphic is set.
 */
 bool SwFlyFrameFormat::IsBackgroundTransparent() const
 {

@@ -169,7 +169,7 @@ void SwRegionRects::Compress()
                 // For combining as much as possible (and for having less single
                 // paints), the area of the union can be a little bit larger:
                 // ( 9622 * 141.5 = 1361513 ~= a quarter (1/4) centimeter wider
-                // than the width of a A4 page
+                // than the width of an A4 page
                 const long nFuzzy = 1361513;
                 SwRect aUnion( (*this)[i] );
                 aUnion.Union( (*this)[j] );

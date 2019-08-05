@@ -874,7 +874,7 @@ void GoEndSection( SwPosition * pPos )
         nLevel--;
     do { SwNodes::GoEndOfSection( &pPos->nNode ); } while( nLevel-- );
 
-    // now on a EndNode, thus to the previous ContentNode
+    // now on an EndNode, thus to the previous ContentNode
     if( GoPreviousNds( &pPos->nNode, true ) )
         pPos->nNode.GetNode().GetContentNode()->MakeEndIndex( &pPos->nContent );
 }
