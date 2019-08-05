@@ -143,7 +143,7 @@ published interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
     /** returns information about all possible hyphenation positions of a word.
 
         @returns
-            an com::sun::star::linguistic2::XPossibleHyphens
+            a com::sun::star::linguistic2::XPossibleHyphens
             for the given word and language if there are any hyphenation
             positions. `NULL` otherwise.
 

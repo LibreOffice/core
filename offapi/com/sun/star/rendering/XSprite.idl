@@ -64,7 +64,7 @@ interface XSprite : ::com::sun::star::uno::XInterface
         coordinates) of the rendered sprite content.<p>
 
         Please note that if this sprite is not animated, the
-        associated XSpriteCanva does not update changed sprites
+        associated XSpriteCanvas does not update changed sprites
         automatically, but has to be told to do so via
         XSpriteCanvas::updateScreen().<p>
 

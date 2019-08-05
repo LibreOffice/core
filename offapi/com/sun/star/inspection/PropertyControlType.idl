@@ -23,7 +23,7 @@
 module com {  module sun {  module star {  module inspection {
 
 /** describes pre-defined possible control types to be used to display and enter
-    property values within a ObjectInspector.
+    property values within an ObjectInspector.
 
     <p>The type of a control determines its visual appearance, its behavior, and - important
     for property handlers using a control - the expected type when reading and writing the

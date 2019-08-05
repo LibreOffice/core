@@ -71,7 +71,7 @@ published interface XOptimizedStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    /** allows to copy storage element directly, not guarantied to work.
+    /** allows to copy storage element directly, not guaranteed to work.
      */
     void copyElementDirectlyTo(
             [in] string sSourceName,

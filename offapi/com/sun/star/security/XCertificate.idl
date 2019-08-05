@@ -117,7 +117,7 @@ interface XCertificate : com::sun::star::uno::XInterface
     [attribute, readonly] com::sun::star::security::CertificateKind CertificateKind;
 
     /**
-     * Find a extension with a object identifier.
+     * Find an extension with an object identifier.
      */
     XCertificateExtension findCertificateExtension( [in]sequence< byte > oid ) ;
 

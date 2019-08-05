@@ -67,7 +67,7 @@
 
 #include <xfilter/xfcell.hxx>
 
-// temporily added for compile
+// temporarily added for compile
 class LwpObject;
 
 class LwpContent;
