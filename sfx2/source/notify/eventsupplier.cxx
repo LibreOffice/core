@@ -198,6 +198,8 @@ void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::Docum
             xTrans->parseStrict( aURL );
 
             bAllowed = !SfxObjectShell::UnTrustedScript(aURL.Complete);
+
+            fprintf(stderr, "bAllowed %d\n", bAllowed);
         }
 
         if (bAllowed)

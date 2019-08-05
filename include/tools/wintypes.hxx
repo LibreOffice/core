@@ -257,7 +257,10 @@ enum class StandardButtonType
     Ignore       = 8,
     Abort        = 9,
     Less         = 10,
-    Count        = 11,
+    Back         = 11,
+    Next         = 12,
+    Finish       = 13,
+    Count        = 14,
 };
 
 // prominent place for ListBox window types
