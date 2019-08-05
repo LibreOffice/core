@@ -30,7 +30,7 @@
  */
 published service ImageMap
 {
-    /** a ImageMap can, optionally, have a name. */
+    /** an ImageMap can, optionally, have a name. */
     interface ::com::sun::star::container::XNamed;
 
     /** this container interface gives access to

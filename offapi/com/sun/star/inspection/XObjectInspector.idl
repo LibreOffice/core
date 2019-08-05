@@ -37,7 +37,7 @@ interface XObjectInspectorUI;
 */
 interface XObjectInspector
 {
-    /** allows to plug the inspector into an com::sun::star::frame::XFrame
+    /** allows to plug the inspector into a com::sun::star::frame::XFrame
 
         <p>The com::sun::star::frame::XController::setModel() method
         accepts only XObjectInspectorModels, and will return `FALSE` if the

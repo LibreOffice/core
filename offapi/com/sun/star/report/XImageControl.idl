@@ -29,7 +29,7 @@ interface XImageControl
 {
     interface XReportControlModel;
 
-    /** supplies the caller with an com::sun::star::awt::XImageProducer.
+    /** supplies the caller with a com::sun::star::awt::XImageProducer.
 
         <p>Other components can register as com::sun::star::awt::XImageConsumer
         at this producer. Then they will be notified of any change in the image to be displayed.</p>

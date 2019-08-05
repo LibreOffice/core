@@ -58,7 +58,7 @@ service AccessiblePageHeaderFooterAreasView
         </ul>
         <p>The following rules apply to the children order.</p>
         <ul>
-            <li>The first is the left area, than the center area and the last
+            <li>The first is the left area, then the center area and the last
             is the right area.</li>
         </ul>
         <li>The description is ???.</li>
