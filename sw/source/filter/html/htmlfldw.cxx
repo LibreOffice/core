@@ -259,11 +259,18 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
         default: break;
     }
 
-    // <SDFIELD>-Tag ausgeben
+    // ReqIF-XHTML doesn't allow <sdfield>.
+    if (rHTMLWrt.mbReqIF && pTypeStr)
+    {
+        pTypeStr = nullptr;
+    }
+
+    // Output the <sdfield> tag.
     if( pTypeStr )
     {
         OStringBuffer sOut;
         sOut.append('<');
+        sOut.append(rHTMLWrt.GetNamespace());
         sOut.append(OOO_STRING_SVTOOLS_HTML_sdfield).append(' ').
             append(OOO_STRING_SVTOOLS_HTML_O_type).append('=').
             append(pTypeStr);
@@ -428,7 +435,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
               rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
     }
 
-    // Off-Tag ausgeben
+    // Output the closing tag.
     if( pTypeStr )
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_sdfield, false );
 
@@ -539,7 +546,8 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
         if( pTextField )
         {
             SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-            bool bFieldShadings = SwViewOption::IsFieldShadings();
+            // ReqIF-XHTML doesn't allow specifying a background color.
+            bool bFieldShadings = SwViewOption::IsFieldShadings() && !rHTMLWrt.mbReqIF;
             if (bFieldShadings)
             {
                 // If there is a text portion background started already, that should have priority.
