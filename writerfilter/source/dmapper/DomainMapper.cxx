@@ -1208,8 +1208,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     switch(nSprmId)
     {
     case NS_ooxml::LN_CT_PPrBase_jc:
-        handleParaJustification(nIntValue, rContext, ExchangeLeftRight( rContext, *m_pImpl ));
+    {
+        bool bExchangeLeftRight = !IsRTFImport() && ExchangeLeftRight(rContext, *m_pImpl);
+        handleParaJustification(nIntValue, rContext, bExchangeLeftRight);
         break;
+    }
     case NS_ooxml::LN_CT_PPrBase_keepLines:
         rContext->Insert(PROP_PARA_SPLIT, uno::makeAny(nIntValue == 0));
         break;

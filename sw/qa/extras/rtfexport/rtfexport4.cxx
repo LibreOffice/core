@@ -180,6 +180,15 @@ DECLARE_RTFIMPORT_TEST(testPageBorder, "page-border.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(71), aRightBorder.LineWidth);
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf126309, "tdf126309.rtf")
+{
+    // Without the accompanying fix in place, this test would have failed, as
+    // the paragraph was aligned to left, not right.
+    CPPUNIT_ASSERT_EQUAL(
+        style::ParagraphAdjust_RIGHT,
+        static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
