@@ -239,6 +239,7 @@ namespace dbaui
         {
             implSetCurrentType( dbaccess::ODsnTypeCollection::getEmbeddedDatabase() );
             sDisplayName = m_pCollection->getTypeDisplayName( m_eCurrentSelection );
+            onTypeSelected(m_eCurrentSelection);
         }
 
         // select the correct datasource type

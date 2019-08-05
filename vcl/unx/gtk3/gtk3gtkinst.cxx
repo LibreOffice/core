@@ -38,6 +38,7 @@
 #include <unotools/resmgr.hxx>
 #include <unx/gstsink.hxx>
 #include <vcl/ImageTree.hxx>
+#include <vcl/button.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/mnemonic.hxx>
@@ -2964,21 +2965,21 @@ class GtkInstanceDialog;
 
 struct DialogRunner
 {
-    GtkDialog *m_pDialog;
+    GtkWindow* m_pDialog;
     GtkInstanceDialog *m_pInstance;
     gint m_nResponseId;
     GMainLoop *m_pLoop;
     VclPtr<vcl::Window> m_xFrameWindow;
     int m_nModalDepth;
 
-    DialogRunner(GtkDialog* pDialog, GtkInstanceDialog* pInstance)
+    DialogRunner(GtkWindow* pDialog, GtkInstanceDialog* pInstance)
        : m_pDialog(pDialog)
        , m_pInstance(pInstance)
        , m_nResponseId(GTK_RESPONSE_NONE)
        , m_pLoop(nullptr)
        , m_nModalDepth(0)
     {
-        GtkWindow* pParent = gtk_window_get_transient_for(GTK_WINDOW(m_pDialog));
+        GtkWindow* pParent = gtk_window_get_transient_for(m_pDialog);
         GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(pParent) : nullptr;
         m_xFrameWindow = pFrame ? pFrame->GetWindow() : nullptr;
     }
@@ -3038,14 +3039,14 @@ struct DialogRunner
 
         inc_modal_count();
 
-        bool bWasModal = gtk_window_get_modal(GTK_WINDOW(m_pDialog));
+        bool bWasModal = gtk_window_get_modal(m_pDialog);
         if (!bWasModal)
-            gtk_window_set_modal(GTK_WINDOW(m_pDialog), true);
+            gtk_window_set_modal(m_pDialog, true);
 
         if (!gtk_widget_get_visible(GTK_WIDGET(m_pDialog)))
             gtk_widget_show(GTK_WIDGET(m_pDialog));
 
-        gulong nSignalResponseId = g_signal_connect(m_pDialog, "response", G_CALLBACK(signal_response), this);
+        gulong nSignalResponseId = GTK_IS_DIALOG(m_pDialog) ? g_signal_connect(m_pDialog, "response", G_CALLBACK(signal_response), this) : 0;
         gulong nSignalDeleteId = g_signal_connect(m_pDialog, "delete-event", G_CALLBACK(signal_delete), this);
         gulong nSignalDestroyId = g_signal_connect(m_pDialog, "destroy", G_CALLBACK(signal_destroy), this);
 
@@ -3061,9 +3062,10 @@ struct DialogRunner
         m_pLoop = nullptr;
 
         if (!bWasModal)
-            gtk_window_set_modal(GTK_WINDOW(m_pDialog), false);
+            gtk_window_set_modal(m_pDialog, false);
 
-        g_signal_handler_disconnect(m_pDialog, nSignalResponseId);
+        if (nSignalResponseId)
+            g_signal_handler_disconnect(m_pDialog, nSignalResponseId);
         g_signal_handler_disconnect(m_pDialog, nSignalDeleteId);
         g_signal_handler_disconnect(m_pDialog, nSignalDestroyId);
 
@@ -3125,7 +3127,7 @@ class GtkInstanceButton;
 class GtkInstanceDialog : public GtkInstanceWindow, public virtual weld::Dialog
 {
 private:
-    GtkDialog* m_pDialog;
+    GtkWindow* m_pDialog;
     DialogRunner m_aDialogRun;
     std::shared_ptr<weld::DialogController> m_xDialogController;
     // Used to keep ourself alive during a runAsync(when doing runAsync without a DialogController)
@@ -3184,8 +3186,8 @@ private:
     void asyncresponse(gint ret);
 
 public:
-    GtkInstanceDialog(GtkDialog* pDialog, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceWindow(GTK_WINDOW(pDialog), pBuilder, bTakeOwnership)
+    GtkInstanceDialog(GtkWindow* pDialog, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceWindow(pDialog, pBuilder, bTakeOwnership)
         , m_pDialog(pDialog)
         , m_aDialogRun(pDialog, this)
         , m_nCloseSignalId(g_signal_connect(m_pDialog, "close", G_CALLBACK(signalClose), this))
@@ -3243,7 +3245,8 @@ public:
     {
         if (gtk_widget_get_visible(m_pWidget))
             return;
-        sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
+        if (GTK_IS_DIALOG(m_pDialog))
+            sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(GTK_DIALOG(m_pDialog))));
         gtk_widget_show(m_pWidget);
     }
 
@@ -3293,21 +3296,21 @@ public:
 
     virtual void add_button(const OUString& rText, int nResponse, const OString& rHelpId) override
     {
-        GtkWidget* pWidget = gtk_dialog_add_button(m_pDialog, MapToGtkAccelerator(rText).getStr(), VclToGtk(nResponse));
+        GtkWidget* pWidget = gtk_dialog_add_button(GTK_DIALOG(m_pDialog), MapToGtkAccelerator(rText).getStr(), VclToGtk(nResponse));
         if (!rHelpId.isEmpty())
             ::set_help_id(pWidget, rHelpId);
     }
 
     virtual void set_default_response(int nResponse) override
     {
-        gtk_dialog_set_default_response(m_pDialog, VclToGtk(nResponse));
+        gtk_dialog_set_default_response(GTK_DIALOG(m_pDialog), VclToGtk(nResponse));
     }
 
     virtual weld::Button* get_widget_for_response(int nResponse) override;
 
     virtual Container* weld_content_area() override
     {
-        return new GtkInstanceContainer(GTK_CONTAINER(gtk_dialog_get_content_area(m_pDialog)), m_pBuilder, false);
+        return new GtkInstanceContainer(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(m_pDialog))), m_pBuilder, false);
     }
 
     virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) override
@@ -3327,7 +3330,7 @@ public:
         //mark widgets we want to be visible, starting with pRefEdit
         //and all its direct parents.
         winset aVisibleWidgets;
-        GtkWidget *pContentArea = gtk_dialog_get_content_area(m_pDialog);
+        GtkWidget *pContentArea = gtk_dialog_get_content_area(GTK_DIALOG(m_pDialog));
         for (GtkWidget *pCandidate = pRefEdit;
             pCandidate && pCandidate != pContentArea && gtk_widget_get_visible(pCandidate);
             pCandidate = gtk_widget_get_parent(pCandidate))
@@ -3350,7 +3353,7 @@ public:
         gtk_widget_set_size_request(pRefEdit, m_nOldEditWidth, -1);
         m_nOldBorderWidth = gtk_container_get_border_width(GTK_CONTAINER(m_pDialog));
         gtk_container_set_border_width(GTK_CONTAINER(m_pDialog), 0);
-        if (GtkWidget* pActionArea = gtk_dialog_get_action_area(m_pDialog))
+        if (GtkWidget* pActionArea = gtk_dialog_get_action_area(GTK_DIALOG(m_pDialog)))
             gtk_widget_hide(pActionArea);
 
         // calc's insert->function is springing back to its original size if the ref-button
@@ -3385,7 +3388,7 @@ public:
         gtk_widget_set_size_request(m_pRefEdit, m_nOldEditWidthReq, -1);
         m_pRefEdit = nullptr;
         gtk_container_set_border_width(GTK_CONTAINER(m_pDialog), m_nOldBorderWidth);
-        if (GtkWidget* pActionArea = gtk_dialog_get_action_area(m_pDialog))
+        if (GtkWidget* pActionArea = gtk_dialog_get_action_area(GTK_DIALOG(m_pDialog)))
             gtk_widget_show(pActionArea);
         resize_to_request();
         present();
@@ -3436,7 +3439,7 @@ private:
     GtkMessageDialog* m_pMessageDialog;
 public:
     GtkInstanceMessageDialog(GtkMessageDialog* pMessageDialog, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceDialog(GTK_DIALOG(pMessageDialog), pBuilder, bTakeOwnership)
+        : GtkInstanceDialog(GTK_WINDOW(pMessageDialog), pBuilder, bTakeOwnership)
         , m_pMessageDialog(pMessageDialog)
     {
     }
@@ -3475,7 +3478,7 @@ private:
     std::unique_ptr<utl::TempFile>  mxBackgroundImage;
 public:
     GtkInstanceAboutDialog(GtkAboutDialog* pAboutDialog, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceDialog(GTK_DIALOG(pAboutDialog), pBuilder, bTakeOwnership)
+        : GtkInstanceDialog(GTK_WINDOW(pAboutDialog), pBuilder, bTakeOwnership)
         , m_pAboutDialog(pAboutDialog)
         , m_pCssProvider(nullptr)
     {
@@ -3582,6 +3585,129 @@ public:
     {
         set_background(nullptr);
     }
+};
+
+class GtkInstanceAssistant : public GtkInstanceDialog, public virtual weld::Assistant
+{
+private:
+    GtkAssistant* m_pAssistant;
+    GtkButtonBox* m_pButtonBox;
+    GtkButton* m_pHelp;
+    GtkButton* m_pBack;
+    GtkButton* m_pNext;
+    GtkButton* m_pFinish;
+    GtkButton* m_pCancel;
+    std::vector<std::unique_ptr<GtkInstanceContainer>> m_aPages;
+
+    static OString get_page_ident(GtkAssistant* pAssistant, guint nPage)
+    {
+        const GtkWidget* pWidget = gtk_assistant_get_nth_page(pAssistant, nPage);
+        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pWidget));
+        return OString(pStr, pStr ? strlen(pStr) : 0);
+    }
+
+    int find_page(const OString& rIdent)
+    {
+        for (size_t i = 0; i < m_aPages.size(); ++i)
+        {
+            const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(m_aPages[i]->getContainer()));
+            OString aName(pStr, pStr ? strlen(pStr) : 0);
+            if (aName == rIdent)
+                return i;
+        }
+        return -1;
+    }
+
+public:
+    GtkInstanceAssistant(GtkAssistant* pAssistant, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceDialog(GTK_WINDOW(pAssistant), pBuilder, bTakeOwnership)
+        , m_pAssistant(pAssistant)
+    {
+        m_pButtonBox = GTK_BUTTON_BOX(gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL));
+        gtk_button_box_set_layout(m_pButtonBox, GTK_BUTTONBOX_END);
+        gtk_box_set_spacing(GTK_BOX(m_pButtonBox), 6);
+
+        m_pBack = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(Button::GetStandardText(StandardButtonType::Back)).getStr()));
+        gtk_widget_set_can_default(GTK_WIDGET(m_pBack), true);
+        gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pBack), false, false, 0);
+
+        m_pNext = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(Button::GetStandardText(StandardButtonType::Next)).getStr()));
+        gtk_widget_set_can_default(GTK_WIDGET(m_pNext), true);
+        gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pNext), false, false, 0);
+
+        m_pFinish = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(Button::GetStandardText(StandardButtonType::Finish)).getStr()));
+        gtk_widget_set_can_default(GTK_WIDGET(m_pFinish), true);
+        gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pFinish), false, false, 0);
+
+        m_pCancel = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(Button::GetStandardText(StandardButtonType::Cancel)).getStr()));
+        gtk_widget_set_can_default(GTK_WIDGET(m_pCancel), true);
+        gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pCancel), false, false, 0);
+
+        m_pHelp = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(Button::GetStandardText(StandardButtonType::Help)).getStr()));
+        gtk_widget_set_can_default(GTK_WIDGET(m_pHelp), true);
+        gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pHelp), false, false, 0);
+
+        gtk_assistant_add_action_widget(pAssistant, GTK_WIDGET(m_pButtonBox));
+        gtk_button_box_set_child_secondary(m_pButtonBox, GTK_WIDGET(m_pHelp), true);
+        gtk_widget_set_hexpand(GTK_WIDGET(m_pButtonBox), true);
+
+        GtkWidget* pParent = gtk_widget_get_parent(GTK_WIDGET(m_pButtonBox));
+        gtk_container_child_set(GTK_CONTAINER(pParent), GTK_WIDGET(m_pButtonBox), "expand", true, "fill", true, nullptr);
+        gtk_widget_set_halign(pParent, GTK_ALIGN_FILL);
+
+        gtk_widget_show(GTK_WIDGET(m_pButtonBox));
+    }
+
+    virtual int get_current_page() const override
+    {
+        return gtk_assistant_get_current_page(m_pAssistant);
+    }
+
+    virtual OString get_current_page_ident() const override
+    {
+        return get_page_ident(m_pAssistant, get_current_page());
+    }
+
+    virtual void set_current_page(int nPage) override
+    {
+        gtk_assistant_set_current_page(m_pAssistant, nPage);
+    }
+
+    virtual void set_current_page(const OString& rIdent) override
+    {
+        int nIndex = find_page(rIdent);
+        if (nIndex == -1)
+            return;
+        gtk_assistant_set_current_page(m_pAssistant, nIndex);
+    }
+
+    virtual void set_page_title(const OString& rIdent, const OUString& rTitle) override
+    {
+        int nIndex = find_page(rIdent);
+        if (nIndex == -1)
+            return;
+        gtk_assistant_set_page_title(m_pAssistant, gtk_assistant_get_nth_page(m_pAssistant, nIndex),
+                                     OUStringToOString(rTitle, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    virtual weld::Container* append_page(const OString& rIdent) override
+    {
+        disable_notify_events();
+
+        GtkWidget *pChild = gtk_grid_new();
+        gtk_buildable_set_name(GTK_BUILDABLE(pChild), rIdent.getStr());
+        gtk_assistant_append_page(m_pAssistant, pChild);
+        gtk_assistant_set_page_type(m_pAssistant, pChild, GTK_ASSISTANT_PAGE_CUSTOM);
+        gtk_widget_show(pChild);
+
+        enable_notify_events();
+
+        m_aPages.emplace_back(new GtkInstanceContainer(GTK_CONTAINER(pChild), m_pBuilder, false));
+
+        return m_aPages.back().get();
+    }
+
+    virtual weld::Button* get_widget_for_response(int nResponse) override;
 };
 
 class GtkInstanceFrame : public GtkInstanceContainer, public virtual weld::Frame
@@ -4889,7 +5015,8 @@ void GtkInstanceDialog::asyncresponse(gint ret)
 
 int GtkInstanceDialog::run()
 {
-    sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
+    if (GTK_IS_DIALOG(m_pDialog))
+        sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(GTK_DIALOG(m_pDialog))));
     int ret;
     while (true)
     {
@@ -4909,23 +5036,41 @@ int GtkInstanceDialog::run()
 
 weld::Button* GtkInstanceDialog::get_widget_for_response(int nResponse)
 {
-    GtkButton* pButton = GTK_BUTTON(gtk_dialog_get_widget_for_response(m_pDialog, VclToGtk(nResponse)));
+    GtkButton* pButton = GTK_BUTTON(gtk_dialog_get_widget_for_response(GTK_DIALOG(m_pDialog), VclToGtk(nResponse)));
     if (!pButton)
         return nullptr;
     return new GtkInstanceButton(pButton, m_pBuilder, false);
 }
 
+weld::Button* GtkInstanceAssistant::get_widget_for_response(int nResponse)
+{
+    GtkButton* pButton = nullptr;
+    if (nResponse == static_cast<int>(WizardButtonFlags::NEXT))
+        pButton = m_pNext;
+    else if (nResponse == static_cast<int>(WizardButtonFlags::PREVIOUS))
+        pButton = m_pBack;
+    else if (nResponse == static_cast<int>(WizardButtonFlags::FINISH))
+        pButton = m_pFinish;
+    else if (nResponse == static_cast<int>(WizardButtonFlags::CANCEL))
+        pButton = m_pCancel;
+    else if (nResponse == static_cast<int>(WizardButtonFlags::HELP))
+        pButton = m_pHelp;
+    if (pButton)
+        return new GtkInstanceButton(pButton, m_pBuilder, false);
+    return nullptr;
+}
+
 void GtkInstanceDialog::response(int nResponse)
 {
     //unblock this response now when activated through code
-    if (GtkWidget* pWidget = gtk_dialog_get_widget_for_response(m_pDialog, VclToGtk(nResponse)))
+    if (GtkWidget* pWidget = gtk_dialog_get_widget_for_response(GTK_DIALOG(m_pDialog), VclToGtk(nResponse)))
     {
         void* pData = g_object_get_data(G_OBJECT(pWidget), "g-lo-GtkInstanceButton");
         GtkInstanceButton* pButton = static_cast<GtkInstanceButton*>(pData);
         if (pButton)
             pButton->clear_click_handler();
     }
-    gtk_dialog_response(m_pDialog, VclToGtk(nResponse));
+    gtk_dialog_response(GTK_DIALOG(m_pDialog), VclToGtk(nResponse));
 }
 
 void GtkInstanceDialog::close(bool bCloseSignal)
@@ -4948,7 +5093,7 @@ GtkInstanceButton* GtkInstanceDialog::has_click_handler(int nResponse)
     GtkInstanceButton* pButton = nullptr;
     // e.g. map GTK_RESPONSE_DELETE_EVENT to GTK_RESPONSE_CANCEL
     nResponse = VclToGtk(GtkToVcl(nResponse));
-    if (GtkWidget* pWidget = gtk_dialog_get_widget_for_response(m_pDialog, nResponse))
+    if (GtkWidget* pWidget = gtk_dialog_get_widget_for_response(GTK_DIALOG(m_pDialog), nResponse))
     {
         void* pData = g_object_get_data(G_OBJECT(pWidget), "g-lo-GtkInstanceButton");
         pButton = static_cast<GtkInstanceButton*>(pData);
@@ -10564,6 +10709,15 @@ public:
         return std::make_unique<GtkInstanceAboutDialog>(pAboutDialog, this, bTakeOwnership);
     }
 
+    virtual std::unique_ptr<weld::Assistant> weld_assistant(const OString &id, bool bTakeOwnership) override
+    {
+        GtkAssistant* pAssistant = GTK_ASSISTANT(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pAssistant)
+            return nullptr;
+        gtk_window_set_transient_for(GTK_WINDOW(pAssistant), GTK_WINDOW(gtk_widget_get_toplevel(m_pParentWidget)));
+        return std::make_unique<GtkInstanceAssistant>(pAssistant, this, bTakeOwnership);
+    }
+
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString &id, bool bTakeOwnership) override
     {
         GtkDialog* pDialog = GTK_DIALOG(gtk_builder_get_object(m_pBuilder, id.getStr()));
@@ -10571,7 +10725,7 @@ public:
             return nullptr;
         if (m_pParentWidget)
             gtk_window_set_transient_for(GTK_WINDOW(pDialog), GTK_WINDOW(gtk_widget_get_toplevel(m_pParentWidget)));
-        return std::make_unique<GtkInstanceDialog>(pDialog, this, bTakeOwnership);
+        return std::make_unique<GtkInstanceDialog>(GTK_WINDOW(pDialog), this, bTakeOwnership);
     }
 
     virtual std::unique_ptr<weld::Window> weld_window(const OString &id, bool bTakeOwnership) override
