@@ -250,6 +250,8 @@ class VCL_DLLPUBLIC Container : virtual public Widget
 public:
     //remove and add in one go
     virtual void move(weld::Widget* pWidget, weld::Container* pNewParent) = 0;
+    //recursively unset has-default on any buttons in the widget hierarchy
+    virtual void recursively_unset_default_buttons() = 0;
 };
 
 class VCL_DLLPUBLIC ScrolledWindow : virtual public Container
@@ -423,7 +425,7 @@ public:
     virtual void add_button(const OUString& rText, int response, const OString& rHelpId = OString())
         = 0;
     virtual void set_default_response(int response) = 0;
-    virtual Button* get_widget_for_response(int response) = 0;
+    virtual Button* weld_widget_for_response(int response) = 0;
     virtual Container* weld_content_area() = 0;
 
     // shrink the dialog down to shown just these widgets
@@ -455,6 +457,30 @@ public:
     virtual OUString get_website_label() const = 0;
     virtual void set_logo(const css::uno::Reference<css::graphic::XGraphic>& rImage) = 0;
     virtual void set_background(const css::uno::Reference<css::graphic::XGraphic>& rImage) = 0;
+};
+
+class VCL_DLLPUBLIC Assistant : virtual public Dialog
+{
+protected:
+    Link<const OString&, bool> m_aJumpPageHdl;
+
+    bool signal_jump_page(const OString& rIdent) { return m_aJumpPageHdl.Call(rIdent); }
+
+public:
+    virtual int get_current_page() const = 0;
+    virtual int get_n_pages() const = 0;
+    virtual OString get_page_ident(int nPage) const = 0;
+    virtual OString get_current_page_ident() const = 0;
+    virtual void set_current_page(int nPage) = 0;
+    virtual void set_current_page(const OString& rIdent) = 0;
+    // move the page rIdent to position nIndex
+    virtual void set_page_index(const OString& rIdent, int nIndex) = 0;
+    virtual void set_page_title(const OString& rIdent, const OUString& rTitle) = 0;
+    virtual OUString get_page_title(const OString& rIdent) const = 0;
+    virtual void set_page_sensitive(const OString& rIdent, bool bSensitive) = 0;
+    virtual weld::Container* append_page(const OString& rIdent) = 0;
+
+    void connect_jump_page(const Link<const OString&, bool>& rLink) { m_aJumpPageHdl = rLink; }
 };
 
 struct VCL_DLLPUBLIC ComboBoxEntry
@@ -1785,6 +1811,8 @@ public:
     virtual std::unique_ptr<AboutDialog> weld_about_dialog(const OString& id,
                                                            bool bTakeOwnership = true)
         = 0;
+    virtual std::unique_ptr<Assistant> weld_assistant(const OString& id, bool bTakeOwnership = true)
+        = 0;
     virtual std::unique_ptr<Window> weld_window(const OString& id, bool bTakeOwnership = true) = 0;
     virtual std::unique_ptr<Widget> weld_widget(const OString& id, bool bTakeOwnership = false) = 0;
     virtual std::unique_ptr<Container> weld_container(const OString& id,
@@ -1906,6 +1934,18 @@ public:
     void set_primary_text(const OUString& rText) { m_xDialog->set_primary_text(rText); }
     OUString get_primary_text() const { return m_xDialog->get_primary_text(); }
     void set_default_response(int nResponse) { m_xDialog->set_default_response(nResponse); }
+};
+
+class VCL_DLLPUBLIC AssistantController : public DialogController
+{
+protected:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Assistant> m_xAssistant;
+
+public:
+    AssistantController(weld::Widget* pParent, const OUString& rUIFile, const OString& rDialogId);
+    virtual Dialog* getDialog() override;
+    virtual ~AssistantController() override;
 };
 }
 #endif

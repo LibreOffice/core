@@ -33,7 +33,8 @@
         <property name="margin_bottom">6</property>
         <property name="label" translatable="yes" context="dbwizconnectionpage|helptext">label</property>
         <property name="wrap">True</property>
-        <property name="max_width_chars">60</property>
+        <property name="width_chars">72</property>
+        <property name="max_width_chars">72</property>
         <property name="xalign">0</property>
       </object>
       <packing>
@@ -46,6 +47,7 @@
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
         <property name="row_spacing">6</property>
         <property name="column_spacing">12</property>
         <child>
@@ -92,6 +94,7 @@
           <object class="GtkGrid">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <child>
               <object class="GtkEntry" id="browseurl">
                 <property name="visible">True</property>
