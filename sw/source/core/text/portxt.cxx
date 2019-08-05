@@ -83,8 +83,8 @@ static TextFrameIndex lcl_AddSpace(const SwTextSizeInfo &rInf,
             g_pBreakIt->GetBreakIter()->getScriptType(*pStr, sal_Int32(nPos)));
 
     // Note: rInf.GetIdx() can differ from nPos,
-    // e.g., when rPor is a field portion. nPos referes to the string passed
-    // to the function, rInf.GetIdx() referes to the original string.
+    // e.g., when rPor is a field portion. nPos refers to the string passed
+    // to the function, rInf.GetIdx() refers to the original string.
 
     // We try to find out which justification mode is required. This is done by
     // evaluating the script type and the language attribute set for this portion
@@ -171,7 +171,7 @@ static TextFrameIndex lcl_AddSpace(const SwTextSizeInfo &rInf,
     // We still have to examine the next character:
     // If the next character is ASIAN and not KOREAN we have
     // to add an extra space
-    // nPos referes to the original string, even if a field string has
+    // nPos refers to the original string, even if a field string has
     // been passed to this function
     nPos = rInf.GetIdx() + rPor.GetLen();
     if (nPos < TextFrameIndex(rInf.GetText().getLength()))
