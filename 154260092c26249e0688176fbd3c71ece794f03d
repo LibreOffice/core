@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_5a656de0",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1096,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-08-05T09:48:55Z",
+      "side": 1,
+      "message": "I\u0027m fine with this (though expect that crashtesting may find more properties here, and if you assert(), not SAL_WARN(), you\u0027ll have to fix all that).\n\nBut wouldn\u0027t it be cleaner to have a list of properties which can be used only as a direct formatting (and that list would be the above 3 as a start)? That\u0027s the point here (it can\u0027t be a style), not how error handling for garbage input is implemented in sw core (silent ignore, exception, etc).",
+      "revId": "154260092c26249e0688176fbd3c71ece794f03d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
