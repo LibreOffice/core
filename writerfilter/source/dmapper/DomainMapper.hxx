@@ -156,6 +156,8 @@ private:
     // Table
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) override;
 
+    void finishParagraph();
+
     static void handleUnderlineType(const Id nId, const ::std::shared_ptr<PropertyMap>& rContext);
     void handleParaJustification(const sal_Int32 nIntValue, const ::std::shared_ptr<PropertyMap>& rContext, const bool bExchangeLeftRight);
     static bool getColorFromId(const Id, sal_Int32 &nColor);
