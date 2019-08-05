@@ -21,7 +21,7 @@
 #include <vcl/layout.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/viewfrm.hxx>
-#include "OptionalBox.hxx"
+#include <vcl/OptionalBox.hxx>
 
 /*
  * OptionalBox - shows or hides the content. To use with PriorityHBox

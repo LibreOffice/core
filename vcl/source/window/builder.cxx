@@ -2170,9 +2170,17 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     {
         xWindow = VclPtr<ToolBox>::Create(pParent, WB_3DLOOK | WB_TABSTOP);
     }
-    else if (name == "NotebookBarAddonsToolMergePoint")
+    else if (name == "sfxlo-PriorityMergedExtensionHBox")
     {
-        NotebookBarAddonsMerger::MergeNotebookBarAddons(pParent, m_xFrame, m_pNotebookBarAddonsItem);
+        std::vector<ExtensionWinAndId> aExtensionVec = NotebookBarAddonsMerger::MergeNotebookBarAddons( pParent, m_xFrame, m_pNotebookBarAddonsItem);
+        for(unsigned int nIdx = 0 ;  nIdx = aExtensionVec.size() ; nIdx++ )
+        {
+            ExtensionWinAndId *aExtensionWinAndId = &aExtensionVec[nIdx];
+            VclBuilder::WinAndId *aWinAndId;
+            aWinAndId = reinterpret_cast<VclBuilder::WinAndId*>(aExtensionWinAndId);
+            m_aChildren.emplace_back(*aWinAndId);
+        }
+
         return nullptr;
     }
     else if (name == "GtkToolButton" || name == "GtkMenuToolButton" ||

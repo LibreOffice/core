@@ -22,7 +22,7 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/viewfrm.hxx>
 #include <bitmaps.hlst>
-#include "OptionalBox.hxx"
+#include <vcl/OptionalBox.hxx>
 #include "PriorityHBox.hxx"
 #include "NotebookbarPopup.hxx"
 

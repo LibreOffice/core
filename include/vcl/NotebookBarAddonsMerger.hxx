@@ -33,6 +33,30 @@
 
 class PopupMenu;
 
+struct ExtensionPackingData
+{
+    bool m_bVerticalOrient;
+    sal_Int32 m_nPosition;
+    ExtensionPackingData(bool bVerticalOrient = false)
+        : m_bVerticalOrient(bVerticalOrient)
+        , m_nPosition(-1)
+    {
+    }
+};
+
+struct ExtensionWinAndId
+{
+    OString m_sID;
+    VclPtr<vcl::Window> m_pWindow;
+    ExtensionPackingData m_aPackingData;
+    ExtensionWinAndId(const OString& rId, vcl::Window* pWindow, bool bVertical)
+        : m_sID(rId)
+        , m_pWindow(pWindow)
+        , m_aPackingData(bVertical)
+    {
+    }
+};
+
 struct NotebookBarAddonsItem
 {
     Image aImage;
@@ -64,9 +88,10 @@ class NotebookBarAddonsMerger
 public:
     NotebookBarAddonsMerger();
     ~NotebookBarAddonsMerger();
-    static void MergeNotebookBarAddons(vcl::Window* pParent,
-                                       const css::uno::Reference<css::frame::XFrame>& rFrame,
-                                       const NotebookBarAddonsItem& aNotebookBarAddonsItem);
+    static std::vector<ExtensionWinAndId>
+    MergeNotebookBarAddons(vcl::Window* pParent,
+                           const css::uno::Reference<css::frame::XFrame>& rFrame,
+                           const NotebookBarAddonsItem& aNotebookBarAddonsItem);
     static void MergeNotebookBarMenuAddons(PopupMenu* pPopupMenu, sal_Int16 nItemId,
                                            const OString& sItemIdName,
                                            NotebookBarAddonsItem& aNotebookBarAddonsItem);
