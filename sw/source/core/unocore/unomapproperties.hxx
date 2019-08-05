@@ -104,7 +104,7 @@
         { OUString(UNO_NAME_UNVISITED_CHAR_STYLE_NAME), RES_TXTATR_INETFMT, cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID ,MID_URL_UNVISITED_FMT   },   \
         { OUString(UNO_NAME_VISITED_CHAR_STYLE_NAME), RES_TXTATR_INETFMT,   cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID ,MID_URL_VISITED_FMT  },
 
-// same as COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN_01 but without
+// same as COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN but without
 // OUString(UNO_NAME_BREAK_TYPE) and OUString(UNO_NAME_PAGE_DESC_NAME) which can not be used
 // by the SwXTextTableCursor
 #define COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN_01 \
