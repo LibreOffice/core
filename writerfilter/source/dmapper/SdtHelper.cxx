@@ -91,7 +91,7 @@ bool SdtHelper::validateDateFormat() const
     return !m_sDateFormat.toString().isEmpty() && !m_sLocale.toString().isEmpty();
 }
 
-void SdtHelper::createDateContentControl(bool bInsideTable)
+void SdtHelper::createDateContentControl()
 {
     if(!m_xDateFieldStartRange.is())
         return;
@@ -110,7 +110,10 @@ void SdtHelper::createDateContentControl(bool bInsideTable)
         try
         {
             xCrsr->gotoRange(m_xDateFieldStartRange, false);
-            if(bInsideTable)
+            bool bIsInTable
+                = (m_rDM_Impl.hasTableManager() && m_rDM_Impl.getTableManager().isInTable())
+                  || (m_rDM_Impl.m_nTableDepth > 0);
+            if (bIsInTable)
                 xCrsr->goRight(1, false);
             xCrsr->gotoEnd(true);
         }
