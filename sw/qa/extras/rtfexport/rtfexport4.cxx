@@ -129,6 +129,15 @@ DECLARE_RTFEXPORT_TEST(testBtlrCell, "btlr-cell.rtf")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, getProperty<sal_Int16>(xC1, "WritingMode"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf126309, "tdf126309.rtf")
+{
+    // Without the accompanying fix in place, this test would have failed, as
+    // the paragraph was aligned to left, not right.
+    CPPUNIT_ASSERT_EQUAL(
+        style::ParagraphAdjust_RIGHT,
+        static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
