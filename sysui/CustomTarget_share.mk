@@ -127,9 +127,9 @@ $(eval $(call gb_CustomTarget_register_targets,sysui/share,\
 		$(product)/openoffice.keys \
 		$(product)/openoffice.sh \
 		$(product)/create_tree.sh \
-		$(if $(filter deb rpm,$(PKGFORMAT)),$(if $(INTROSPECTION_SCANNER),\
+		$(if $(INTROSPECTION_SCANNER),\
 			$(product)/LOKDocView-0.1.gir \
-			$(product)/LOKDocView-0.1.typelib)) \
+			$(product)/LOKDocView-0.1.typelib) \
 		$(product)/launcherlist) \
 ))
 
