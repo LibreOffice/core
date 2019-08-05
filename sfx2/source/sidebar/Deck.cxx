@@ -269,11 +269,31 @@ void Deck::RequestLayoutInternal()
 void Deck::RequestLayout()
 {
     RequestLayoutInternal();
-    if (comphelper::LibreOfficeKit::isActive() && mnMinimalHeight > 0)
+
+    if (comphelper::LibreOfficeKit::isActive())
     {
-        const Size aParentSize(GetParent()->GetSizePixel().Width(), mnMinimalHeight);
-        GetParent()->SetSizePixel(aParentSize);
-        setPosSizePixel(0, 0, aParentSize.Width(), aParentSize.Height());
+        bool bChangeNeeded = false;
+        Size aParentSize = GetParent()->GetSizePixel();
+
+        if (mnMinimalHeight > 0 && (mnMinimalHeight != aParentSize.Height() || GetSizePixel().Height() != mnMinimalHeight))
+        {
+            aParentSize.setHeight(mnMinimalHeight);
+            bChangeNeeded = true;
+        }
+        if (mnMinimalWidth > 0 && (mnMinimalWidth != aParentSize.Width() || GetSizePixel().Width() != mnMinimalWidth)
+                && comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+        {
+            aParentSize.setWidth(mnMinimalWidth);
+            bChangeNeeded = true;
+        }
+
+        if (bChangeNeeded)
+        {
+            GetParent()->SetSizePixel(aParentSize);
+            setPosSizePixel(0, 0, aParentSize.Width(), aParentSize.Height());
+        }
+        else if (aParentSize != GetSizePixel()) //Sync parent & child sizes
+            setPosSizePixel(0, 0, aParentSize.Width(), aParentSize.Height());
     }
 }
 
