@@ -21,12 +21,47 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
+#include <cppuhelper/propshlp.hxx>
 #include <com/sun/star/chart2/XChartStyle.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/style/XStyle.hpp>
 #include <vector>
+
+#include "PropertyHelper.hxx"
+#include "OPropertySet.hxx"
+#include "MutexContainer.hxx"
 
 namespace chart2
 {
+
+class ChartObjectStyle : public chart::MutexContainer, public property::OPropertySet, public css::style::XStyle
+{
+public:
+    ChartObjectStyle(::cppu::IPropertyArrayHelper& rArrayHelper, const chart::tPropertyValueMap& rPropertyMap);
+    virtual ~ChartObjectStyle();
+
+    virtual sal_Bool SAL_CALL isUserDefined() override;
+    virtual sal_Bool SAL_CALL isInUse() override;
+
+    virtual OUString SAL_CALL getParentStyle() override;
+    virtual void SAL_CALL setParentStyle(const OUString&) override;
+
+    // ____ OPropertySet ____
+    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const override;
+
+    // ____ OPropertySet ____
+    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+
+    // ____ XPropertySet ____
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+        getPropertySetInfo() override;
+
+private:
+
+    ::cppu::IPropertyArrayHelper& mrArrayHelper;
+    const chart::tPropertyValueMap& mrPropertyMap;
+};
+
 class ChartStyle : public cppu::WeakImplHelper<
                       css::chart2::XChartStyle
                     , css::lang::XServiceInfo >

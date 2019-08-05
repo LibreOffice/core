@@ -27,6 +27,57 @@ namespace com { namespace sun { namespace star { namespace uno { class XComponen
 namespace chart2
 {
 
+ChartObjectStyle::ChartObjectStyle(::cppu::IPropertyArrayHelper& rArrayHelper, const chart::tPropertyValueMap& rPropertyMap):
+    OPropertySet( m_aMutex ),
+    mrArrayHelper(rArrayHelper),
+    mrPropertyMap(rPropertyMap)
+{
+}
+
+ChartObjectStyle::~ChartObjectStyle()
+{
+}
+
+sal_Bool SAL_CALL ChartObjectStyle::isInUse()
+{
+    return true;
+}
+
+sal_Bool SAL_CALL ChartObjectStyle::isUserDefined()
+{
+    return true;
+}
+
+OUString SAL_CALL ChartObjectStyle::getParentStyle()
+{
+    return "";
+}
+
+void SAL_CALL ChartObjectStyle::setParentStyle(const OUString&)
+{
+}
+
+// ____ OPropertySet ____
+css::uno::Any ChartObjectStyle::GetDefaultValue( sal_Int32 nHandle ) const
+{
+    chart::tPropertyValueMap::const_iterator aFound( mrPropertyMap.find( nHandle ) );
+    if( aFound == mrPropertyMap.end() )
+        return css::uno::Any();
+    return (*aFound).second;
+}
+
+::cppu::IPropertyArrayHelper & SAL_CALL ChartObjectStyle::getInfoHelper()
+{
+    return mrArrayHelper;
+}
+
+// ____ XPropertySet ____
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL ChartObjectStyle::getPropertySetInfo()
+{
+    //return *mrArrayHelper;
+    return css::uno::Reference<css::beans::XPropertySetInfo>();
+}
+
 ChartStyle::ChartStyle()
     : m_nNumObjects( css::chart2::ChartObjectType::UNKNOWN )
     , m_xChartStyle( std::vector< css::uno::Reference < css::beans::XPropertySet > >( m_nNumObjects, css::uno::Reference < css::beans::XPropertySet > ()))
