@@ -10,6 +10,7 @@
 #include <editeng/urlfieldhelper.hxx>
 
 #include <editeng/flditem.hxx>
+#include <editeng/editview.hxx>
 
 void URLFieldHelper::RemoveURLField(Outliner* pOutl, OutlinerView* pOLV)
 {
@@ -21,6 +22,7 @@ void URLFieldHelper::RemoveURLField(Outliner* pOutl, OutlinerView* pOLV)
     {
         ESelection aSel = pOLV->GetSelection();
         pOutl->QuickInsertText(pUrlField->GetRepresentation(), aSel);
+        pOLV->GetEditView().Invalidate();
     }
 }
 
