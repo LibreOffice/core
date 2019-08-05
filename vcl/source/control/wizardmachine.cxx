@@ -18,13 +18,21 @@
  */
 
 #include <vcl/wizardmachine.hxx>
-#include <svtools/helpids.h>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <strings.hrc>
 #include <svdata.hxx>
 #include <stack>
+
+#define HID_WIZARD_NEXT                                        "SVT_HID_WIZARD_NEXT"
+#define HID_WIZARD_PREVIOUS                                    "SVT_HID_WIZARD_PREVIOUS"
+
+struct ImplWizPageData
+{
+    ImplWizPageData*    mpNext;
+    VclPtr<TabPage>     mpPage;
+};
 
 namespace vcl
 {
@@ -360,14 +368,13 @@ namespace vcl
             m_pCancel->Enable(_bEnable);
     }
 
-
     void OWizardMachine::enterState(WizardState _nState)
     {
         // tell the page
         IWizardPageController* pController = getPageController( GetPage( _nState ) );
-        OSL_ENSURE( pController, "OWizardMachine::enterState: no controller for the given page!" );
-        if ( pController )
-            pController->initializePage();
+        if (!pController)
+            return;
+        pController->initializePage();
 
         if ( isAutomaticNextButtonStateEnabled() )
             enableButtons( WizardButtonFlags::NEXT, canAdvance() );
@@ -377,7 +384,6 @@ namespace vcl
         // set the new title - it depends on the current page (i.e. state)
         implUpdateTitle();
     }
-
 
     bool OWizardMachine::leaveState(WizardState)
     {
@@ -521,7 +527,6 @@ namespace vcl
 
         // all fine
     }
-
 
     bool OWizardMachine::travelNext()
     {
@@ -679,7 +684,586 @@ namespace vcl
         m_pImpl->m_bTravelingSuspended = false;
     }
 
+    WizardMachine::WizardMachine(weld::Window* pParent, WizardButtonFlags nButtonFlags)
+        : AssistantController(pParent, "dbaccess/ui/databasewizard.ui", "DatabaseWizard")
+        , m_nCurState(0)
+        , m_pFirstPage(nullptr)
+        , m_xFinish(m_xAssistant->weld_widget_for_response(static_cast<int>(WizardButtonFlags::FINISH)))
+        , m_xCancel(m_xAssistant->weld_widget_for_response(static_cast<int>(WizardButtonFlags::CANCEL)))
+        , m_xNextPage(m_xAssistant->weld_widget_for_response(static_cast<int>(WizardButtonFlags::NEXT)))
+        , m_xPrevPage(m_xAssistant->weld_widget_for_response(static_cast<int>(WizardButtonFlags::PREVIOUS)))
+        , m_xHelp(m_xAssistant->weld_widget_for_response(static_cast<int>(WizardButtonFlags::HELP)))
+        , m_pImpl(new WizardMachineImplData)
+    {
+        implConstruct(nButtonFlags);
+    }
 
+    void WizardMachine::implConstruct(const WizardButtonFlags nButtonFlags)
+    {
+        m_pImpl->sTitleBase = m_xAssistant->get_title();
+
+        // create the buttons according to the wizard button flags
+        // the help button
+        if (nButtonFlags & WizardButtonFlags::HELP)
+        {
+            m_xHelp->show();
+        }
+
+        // the previous button
+        if (nButtonFlags & WizardButtonFlags::PREVIOUS)
+        {
+            m_xPrevPage->set_help_id( HID_WIZARD_PREVIOUS );
+            m_xPrevPage->show();
+
+            m_xPrevPage->connect_clicked( LINK( this, WizardMachine, OnPrevPage ) );
+        }
+
+        // the next button
+        if (nButtonFlags & WizardButtonFlags::NEXT)
+        {
+            m_xNextPage->set_help_id( HID_WIZARD_NEXT );
+            m_xNextPage->show();
+
+            m_xNextPage->connect_clicked( LINK( this, WizardMachine, OnNextPage ) );
+        }
+
+        // the finish button
+        if (nButtonFlags & WizardButtonFlags::FINISH)
+        {
+            m_xFinish->show();
+
+            m_xFinish->connect_clicked( LINK( this, WizardMachine, OnFinish ) );
+        }
+
+        // the cancel button
+        if (nButtonFlags & WizardButtonFlags::CANCEL)
+        {
+            m_xCancel->show();
+            m_xCancel->connect_clicked( LINK( this, WizardMachine, OnCancel ) );
+        }
+    }
+
+    WizardMachine::~WizardMachine()
+    {
+        if (m_pImpl)
+        {
+            for (WizardState i = 0; i < m_pImpl->nFirstUnknownPage; ++i)
+            {
+                TabPage *pPage = GetPage(i);
+                if (pPage)
+                    pPage->disposeOnce();
+            }
+            m_pImpl.reset();
+        }
+    }
+
+    void WizardMachine::implUpdateTitle()
+    {
+        OUString sCompleteTitle(m_pImpl->sTitleBase);
+
+        // append the page title
+        TabPage* pCurrentPage = GetPage(getCurrentState());
+        if ( pCurrentPage && !pCurrentPage->GetText().isEmpty() )
+        {
+            sCompleteTitle += " - " + pCurrentPage->GetText();
+        }
+
+        m_xAssistant->set_title(sCompleteTitle);
+    }
+
+    void WizardMachine::setTitleBase(const OUString& _rTitleBase)
+    {
+        m_pImpl->sTitleBase = _rTitleBase;
+        implUpdateTitle();
+    }
+
+    TabPage* WizardMachine::GetOrCreatePage( const WizardState i_nState )
+    {
+        if ( nullptr == GetPage( i_nState ) )
+        {
+            VclPtr<TabPage> pNewPage = createPage( i_nState );
+            DBG_ASSERT( pNewPage, "WizardMachine::GetOrCreatePage: invalid new page (NULL)!" );
+
+            // fill up the page sequence of our base class (with dummies)
+            while ( m_pImpl->nFirstUnknownPage < i_nState )
+            {
+                AddPage( nullptr );
+                ++m_pImpl->nFirstUnknownPage;
+            }
+
+            if ( m_pImpl->nFirstUnknownPage == i_nState )
+            {
+                // encountered this page number the first time
+                AddPage( pNewPage );
+                ++m_pImpl->nFirstUnknownPage;
+            }
+            else
+                // already had this page - just change it
+                SetPage( i_nState, pNewPage );
+        }
+        return GetPage( i_nState );
+    }
+
+    void WizardMachine::ActivatePage()
+    {
+        WizardState nCurrentLevel = m_nCurState;
+        GetOrCreatePage( nCurrentLevel );
+
+        enterState( nCurrentLevel );
+    }
+
+    bool WizardMachine::DeactivatePage()
+    {
+        WizardState nCurrentState = getCurrentState();
+        return leaveState(nCurrentState);
+    }
+
+    void WizardMachine::defaultButton(WizardButtonFlags _nWizardButtonFlags)
+    {
+        // the new default button
+        weld::Button* pNewDefButton = nullptr;
+        if (_nWizardButtonFlags & WizardButtonFlags::FINISH)
+            pNewDefButton = m_xFinish.get();
+        if (_nWizardButtonFlags & WizardButtonFlags::NEXT)
+            pNewDefButton = m_xNextPage.get();
+        if (_nWizardButtonFlags & WizardButtonFlags::PREVIOUS)
+            pNewDefButton = m_xPrevPage.get();
+        if (_nWizardButtonFlags & WizardButtonFlags::HELP)
+            pNewDefButton = m_xHelp.get();
+        if (_nWizardButtonFlags & WizardButtonFlags::CANCEL)
+            pNewDefButton = m_xCancel.get();
+
+        if ( pNewDefButton )
+            defaultButton( pNewDefButton );
+        else
+            m_xAssistant->recursively_unset_default_buttons();
+    }
+
+    void WizardMachine::defaultButton(weld::Button* _pNewDefButton)
+    {
+        // loop through all (direct and indirect) descendants which participate in our tabbing order, and
+        // reset the WB_DEFBUTTON for every window which is a button
+        m_xAssistant->recursively_unset_default_buttons();
+
+        // set its new style
+        if (_pNewDefButton)
+            _pNewDefButton->set_has_default(true);
+    }
+
+    void WizardMachine::enableButtons(WizardButtonFlags _nWizardButtonFlags, bool _bEnable)
+    {
+        if (_nWizardButtonFlags & WizardButtonFlags::FINISH)
+            m_xFinish->set_sensitive(_bEnable);
+        if (_nWizardButtonFlags & WizardButtonFlags::NEXT)
+            m_xNextPage->set_sensitive(_bEnable);
+        if (_nWizardButtonFlags & WizardButtonFlags::PREVIOUS)
+            m_xPrevPage->set_sensitive(_bEnable);
+        if (_nWizardButtonFlags & WizardButtonFlags::HELP)
+            m_xHelp->set_sensitive(_bEnable);
+        if (_nWizardButtonFlags & WizardButtonFlags::CANCEL)
+            m_xCancel->set_sensitive(_bEnable);
+    }
+
+    void WizardMachine::enterState(WizardState _nState)
+    {
+        // tell the page
+        IWizardPageController* pController = getPageController( GetPage( _nState ) );
+        OSL_ENSURE( pController, "WizardMachine::enterState: no controller for the given page!" );
+        if ( pController )
+            pController->initializePage();
+
+        if ( isAutomaticNextButtonStateEnabled() )
+            enableButtons( WizardButtonFlags::NEXT, canAdvance() );
+
+        enableButtons( WizardButtonFlags::PREVIOUS, !m_pImpl->aStateHistory.empty() );
+
+        // set the new title - it depends on the current page (i.e. state)
+        implUpdateTitle();
+    }
+
+    bool WizardMachine::leaveState(WizardState)
+    {
+        // no need to ask the page here.
+        // If we reach this point, we already gave the current page the chance to commit it's data,
+        // and it was allowed to commit it's data
+
+        return true;
+    }
+
+    bool WizardMachine::onFinish()
+    {
+        return Finish( RET_OK );
+    }
+
+    IMPL_LINK_NOARG(WizardMachine, OnFinish, weld::Button&, void)
+    {
+        if ( isTravelingSuspended() )
+            return;
+        WizardTravelSuspension aTravelGuard( *this );
+        if ( !prepareLeaveCurrentState( eFinish ) )
+        {
+            return;
+        }
+        onFinish();
+    }
+
+    IMPL_LINK_NOARG(WizardMachine, OnCancel, weld::Button&, void)
+    {
+        m_xAssistant->response(static_cast<int>(WizardButtonFlags::CANCEL));
+    }
+
+    WizardMachine::WizardState WizardMachine::determineNextState( WizardState _nCurrentState ) const
+    {
+        return _nCurrentState + 1;
+    }
+
+    bool WizardMachine::prepareLeaveCurrentState( CommitPageReason _eReason )
+    {
+        IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
+        ENSURE_OR_RETURN( pController != nullptr, "WizardMachine::prepareLeaveCurrentState: no controller for the current page!", true );
+        return pController->commitPage( _eReason );
+    }
+
+
+    bool WizardMachine::skipBackwardUntil( WizardState _nTargetState )
+    {
+        // allowed to leave the current page?
+        if ( !prepareLeaveCurrentState( eTravelBackward ) )
+            return false;
+
+        // don't travel directly on m_pImpl->aStateHistory, in case something goes wrong
+        ::std::stack< WizardState > aTravelVirtually = m_pImpl->aStateHistory;
+        ::std::stack< WizardState > aOldStateHistory = m_pImpl->aStateHistory;
+
+        WizardState nCurrentRollbackState = getCurrentState();
+        while ( nCurrentRollbackState != _nTargetState )
+        {
+            DBG_ASSERT( !aTravelVirtually.empty(), "WizardMachine::skipBackwardUntil: this target state does not exist in the history!" );
+            nCurrentRollbackState = aTravelVirtually.top();
+            aTravelVirtually.pop();
+        }
+        m_pImpl->aStateHistory = aTravelVirtually;
+        if ( !ShowPage( _nTargetState ) )
+        {
+            m_pImpl->aStateHistory = aOldStateHistory;
+            return false;
+        }
+        return true;
+    }
+
+
+    bool WizardMachine::skipUntil( WizardState _nTargetState )
+    {
+        WizardState nCurrentState = getCurrentState();
+
+        // allowed to leave the current page?
+        if ( !prepareLeaveCurrentState( nCurrentState < _nTargetState ? eTravelForward : eTravelBackward ) )
+            return false;
+
+        // don't travel directly on m_pImpl->aStateHistory, in case something goes wrong
+        ::std::stack< WizardState > aTravelVirtually = m_pImpl->aStateHistory;
+        ::std::stack< WizardState > aOldStateHistory = m_pImpl->aStateHistory;
+        while ( nCurrentState != _nTargetState )
+        {
+            WizardState nNextState = determineNextState( nCurrentState );
+            if ( WZS_INVALID_STATE == nNextState )
+            {
+                OSL_FAIL( "WizardMachine::skipUntil: the given target state does not exist!" );
+                return false;
+            }
+
+            // remember the skipped state in the history
+            aTravelVirtually.push( nCurrentState );
+
+            // get the next state
+            nCurrentState = nNextState;
+        }
+        m_pImpl->aStateHistory = aTravelVirtually;
+        // show the target page
+        if ( !ShowPage( nCurrentState ) )
+        {
+            // argh! prepareLeaveCurrentPage succeeded, determineNextState succeeded,
+            // but ShowPage doesn't? Somebody behaves very strange here ....
+            OSL_FAIL( "WizardMachine::skipUntil: very unpolite ...." );
+            m_pImpl->aStateHistory = aOldStateHistory;
+            return false;
+        }
+        return true;
+    }
+
+
+    void WizardMachine::skip()
+    {
+        // allowed to leave the current page?
+        if ( !prepareLeaveCurrentState( eTravelForward ) )
+            return;
+
+        WizardState nCurrentState = getCurrentState();
+        WizardState nNextState = determineNextState(nCurrentState);
+
+        if (WZS_INVALID_STATE == nNextState)
+            return;
+
+        // remember the skipped state in the history
+        m_pImpl->aStateHistory.push(nCurrentState);
+
+        // get the next state
+        nCurrentState = nNextState;
+
+        // show the (n+1)th page
+        if (!ShowPage(nCurrentState))
+        {
+            // TODO: this leaves us in a state where we have no current page and an inconsistent state history.
+            // Perhaps we should rollback the skipping here ....
+            OSL_FAIL("WizardMachine::skip: very unpolite ....");
+                // if somebody does a skip and then does not allow to leave ...
+                // (can't be a commit error, as we've already committed the current page. So if ShowPage fails here,
+                // somebody behaves really strange ...)
+            return;
+        }
+
+        // all fine
+    }
+
+    bool WizardMachine::travelNext()
+    {
+        // allowed to leave the current page?
+        if ( !prepareLeaveCurrentState( eTravelForward ) )
+            return false;
+
+        // determine the next state to travel to
+        WizardState nCurrentState = getCurrentState();
+        WizardState nNextState = determineNextState(nCurrentState);
+        if (WZS_INVALID_STATE == nNextState)
+            return false;
+
+        // the state history is used by the enterState method
+        // all fine
+        m_pImpl->aStateHistory.push(nCurrentState);
+        if (!ShowPage(nNextState))
+        {
+            m_pImpl->aStateHistory.pop();
+            return false;
+        }
+
+        return true;
+    }
+
+    bool WizardMachine::ShowPage(WizardState nState)
+    {
+        if (DeactivatePage())
+        {
+            TabPage* pOldTabPage = m_xCurTabPage;
+
+            m_nCurState = nState;
+            ActivatePage();
+
+            if (pOldTabPage)
+                pOldTabPage->DeactivatePage();
+
+            m_xAssistant->set_current_page(OString::number(nState));
+
+            m_xCurTabPage = GetPage(m_nCurState);
+            m_xCurTabPage->ActivatePage();
+
+            return true;
+        }
+        return false;
+    }
+
+    bool WizardMachine::travelPrevious()
+    {
+        DBG_ASSERT(!m_pImpl->aStateHistory.empty(), "WizardMachine::travelPrevious: have no previous page!");
+
+        // allowed to leave the current page?
+        if ( !prepareLeaveCurrentState( eTravelBackward ) )
+            return false;
+
+        // the next state to switch to
+        WizardState nPreviousState = m_pImpl->aStateHistory.top();
+
+        // the state history is used by the enterState method
+        m_pImpl->aStateHistory.pop();
+        // show this page
+        if (!ShowPage(nPreviousState))
+        {
+            m_pImpl->aStateHistory.push(nPreviousState);
+            return false;
+        }
+
+        // all fine
+        return true;
+    }
+
+
+    void  WizardMachine::removePageFromHistory( WizardState nToRemove )
+    {
+
+        ::std::stack< WizardState > aTemp;
+        while(!m_pImpl->aStateHistory.empty())
+        {
+            WizardState nPreviousState = m_pImpl->aStateHistory.top();
+            m_pImpl->aStateHistory.pop();
+            if(nPreviousState != nToRemove)
+                aTemp.push( nPreviousState );
+            else
+                break;
+        }
+        while(!aTemp.empty())
+        {
+            m_pImpl->aStateHistory.push( aTemp.top() );
+            aTemp.pop();
+        }
+    }
+
+
+    void WizardMachine::enableAutomaticNextButtonState()
+    {
+        m_pImpl->m_bAutoNextButtonState = true;
+    }
+
+
+    bool WizardMachine::isAutomaticNextButtonStateEnabled() const
+    {
+        return m_pImpl->m_bAutoNextButtonState;
+    }
+
+    IMPL_LINK_NOARG(WizardMachine, OnPrevPage, weld::Button&, void)
+    {
+        if ( isTravelingSuspended() )
+            return;
+        WizardTravelSuspension aTravelGuard( *this );
+        travelPrevious();
+    }
+
+    IMPL_LINK_NOARG(WizardMachine, OnNextPage, weld::Button&, void)
+    {
+        if ( isTravelingSuspended() )
+            return;
+        WizardTravelSuspension aTravelGuard( *this );
+        travelNext();
+    }
+
+    IWizardPageController* WizardMachine::getPageController( TabPage* _pCurrentPage ) const
+    {
+        IWizardPageController* pController = dynamic_cast< IWizardPageController* >( _pCurrentPage );
+        return pController;
+    }
+
+
+    void WizardMachine::getStateHistory( ::std::vector< WizardState >& _out_rHistory )
+    {
+        ::std::stack< WizardState > aHistoryCopy( m_pImpl->aStateHistory );
+        while ( !aHistoryCopy.empty() )
+        {
+            _out_rHistory.push_back( aHistoryCopy.top() );
+            aHistoryCopy.pop();
+        }
+    }
+
+
+    bool WizardMachine::canAdvance() const
+    {
+        return WZS_INVALID_STATE != determineNextState( getCurrentState() );
+    }
+
+
+    void WizardMachine::updateTravelUI()
+    {
+        const IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
+        OSL_ENSURE( pController != nullptr, "RoadmapWizard::updateTravelUI: no controller for the current page!" );
+
+        bool bCanAdvance =
+                ( !pController || pController->canAdvance() )   // the current page allows to advance
+            &&  canAdvance();                                   // the dialog as a whole allows to advance
+        enableButtons( WizardButtonFlags::NEXT, bCanAdvance );
+    }
+
+
+    bool WizardMachine::isTravelingSuspended() const
+    {
+        return m_pImpl->m_bTravelingSuspended;
+    }
+
+
+    void WizardMachine::suspendTraveling( AccessGuard )
+    {
+        DBG_ASSERT( !m_pImpl->m_bTravelingSuspended, "WizardMachine::suspendTraveling: already suspended!" );
+        m_pImpl->m_bTravelingSuspended = true;
+    }
+
+    void WizardMachine::resumeTraveling( AccessGuard )
+    {
+        DBG_ASSERT( m_pImpl->m_bTravelingSuspended, "WizardMachine::resumeTraveling: nothing to resume!" );
+        m_pImpl->m_bTravelingSuspended = false;
+    }
+
+    bool WizardMachine::Finish(short nResult)
+    {
+        if ( DeactivatePage() )
+        {
+            if (m_xCurTabPage)
+                m_xCurTabPage->DeactivatePage();
+
+            m_xAssistant->response(nResult);
+            return true;
+        }
+        else
+            return false;
+    }
+
+    void WizardMachine::AddPage( TabPage* pPage )
+    {
+        ImplWizPageData* pNewPageData = new ImplWizPageData;
+        pNewPageData->mpNext    = nullptr;
+        pNewPageData->mpPage    = pPage;
+
+        if ( !m_pFirstPage )
+            m_pFirstPage = pNewPageData;
+        else
+        {
+            ImplWizPageData* pPageData = m_pFirstPage;
+            while ( pPageData->mpNext )
+                pPageData = pPageData->mpNext;
+            pPageData->mpNext = pNewPageData;
+        }
+    }
+
+    void WizardMachine::SetPage(WizardState nLevel, TabPage* pPage)
+    {
+        sal_uInt16              nTempLevel = 0;
+        ImplWizPageData*    pPageData = m_pFirstPage;
+        while ( pPageData )
+        {
+            if ( (nTempLevel == nLevel) || !pPageData->mpNext )
+                break;
+
+            nTempLevel++;
+            pPageData = pPageData->mpNext;
+        }
+
+        if ( pPageData )
+        {
+            if ( pPageData->mpPage == m_xCurTabPage )
+                m_xCurTabPage = nullptr;
+            pPageData->mpPage = pPage;
+        }
+    }
+
+    TabPage* WizardMachine::GetPage(WizardState nLevel) const
+    {
+        sal_uInt16 nTempLevel = 0;
+
+        for (ImplWizPageData* pPageData = m_pFirstPage; pPageData;
+             pPageData = pPageData->mpNext)
+        {
+            if ( nTempLevel == nLevel )
+                return pPageData->mpPage;
+            nTempLevel++;
+        }
+
+        return nullptr;
+    }
 }   // namespace svt
 
 
