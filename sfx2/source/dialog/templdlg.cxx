@@ -1184,13 +1184,13 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
 
     while( pStyle )
     {
-        //Bubblesort
-        size_t nPos;
-        for(nPos = aStrings.size(); nPos && aSorter.compare(aStrings[nPos-1], pStyle->GetName()) > 0; --nPos)
-        {};
-        aStrings.insert(aStrings.begin() + nPos, pStyle->GetName());
+        aStrings.push_back(pStyle->GetName());
         pStyle = pStyleSheetPool->Next();
     }
+    std::sort(aStrings.begin(), aStrings.end(),
+       [&aSorter](const OUString& rLHS, const OUString& rRHS) {
+       return aSorter.compare(rLHS, rRHS) < 0;
+       });
 
     size_t nCount = aStrings.size();
     size_t nPos = 0;
