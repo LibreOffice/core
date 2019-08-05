@@ -1019,7 +1019,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
                            : rFrameBreak.IsBreakNow( rLine ) ) ) )
                      ? 1 : 0;
     // i#84870
-    // no split of text frame, which only contains a as-character anchored object
+    // no split of text frame, which only contains an as-character anchored object
     bool bOnlyContainsAsCharAnchoredObj =
             !IsFollow() && nStrLen == TextFrameIndex(1) &&
             GetDrawObjs() && GetDrawObjs()->size() == 1 &&
@@ -1145,7 +1145,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
     }
 
     // Vertical Formatting:
-    // The (rotated) repaint rectangle's x coordinate referes to the frame.
+    // The (rotated) repaint rectangle's x coordinate refers to the frame.
     // If the frame grows (or shirks) the repaint rectangle cannot simply
     // be rotated back after formatting, because we use the upper left point
     // of the frame for rotation. This point changes when growing/shrinking.

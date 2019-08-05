@@ -129,7 +129,7 @@ const sal_uInt8 StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] =
 namespace CharFormat
 {
 
-/// Returns the item set associated with an character/inet/auto style
+/// Returns the item set associated with a character/inet/auto style
 const SfxItemSet* GetItemSet( const SfxPoolItem& rAttr )
 {
     const SfxItemSet* pSet = nullptr;

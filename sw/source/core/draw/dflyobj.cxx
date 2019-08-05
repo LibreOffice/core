@@ -650,7 +650,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
     const Point aNewPos( aOutRect.TopLeft() );
     const SwRect aFlyRect( aOutRect );
 
-    //If the Fly has a automatic align (right or top),
+    //If the Fly has an automatic align (right or top),
     //so preserve the automatic.
     SwFrameFormat *pFormat = GetFlyFrame()->GetFormat();
     const sal_Int16 eHori = pFormat->GetHoriOrient().GetHoriOrient();
