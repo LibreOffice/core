@@ -25,7 +25,6 @@ class tdf126017(UITestCase):
         writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf126017.odt"))
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
 
         #go to TOC
         self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")

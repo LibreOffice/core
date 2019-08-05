@@ -15,7 +15,6 @@ class tdf93068(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
 
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
 
         self.ui_test.execute_dialog_through_command(".uno:FontDialog")
         xFontDlg = self.xUITest.getTopFocusWindow()

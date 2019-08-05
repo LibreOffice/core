@@ -17,7 +17,6 @@ class titlePage(UITestCase):
         writer_doc = self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
         #dialog Title Page
         self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog")
         xDialog = self.xUITest.getTopFocusWindow()

@@ -17,7 +17,6 @@ class insertFootEndnote(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
 
 #Automatic - Footnote
         self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog")

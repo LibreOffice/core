@@ -20,7 +20,6 @@ class tdf119462(UITestCase):
         writer_doc = self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
         #1. Choose Edit > Find & Replace
         self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
         xDialog = self.xUITest.getTopFocusWindow()

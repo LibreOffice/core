@@ -28,7 +28,6 @@ class tdf118208(UITestCase):
         writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf118208.odt"))
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
         # 1. Open the attached file.
         # 2. Press ctrl-H to show the search and replace dialog.
         # 3. Press the "Format..."  button.

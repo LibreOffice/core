@@ -23,7 +23,6 @@ class tdf107494(UITestCase):
         writer_doc = self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
         #insert header
         self.assertEqual(document.StyleFamilies.PageStyles.Standard.HeaderIsOn, False)
         self.xUITest.executeCommand(".uno:InsertPageHeader?PageStyle:string=Default%20Style&On:bool=true")
@@ -60,7 +59,6 @@ class tdf107494(UITestCase):
         writer_doc = self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
         #insert footer
         self.assertEqual(document.StyleFamilies.PageStyles.Standard.FooterIsOn, False)
         self.xUITest.executeCommand(".uno:InsertPageFooter?PageStyle:string=Default%20Style&On:bool=true")

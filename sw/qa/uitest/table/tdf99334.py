@@ -23,7 +23,6 @@ class tdf99334(UITestCase):
         writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf99334.odt"))
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
         #select whole table
         self.xUITest.executeCommand(".uno:SelectTable")
         #Tools - Sort

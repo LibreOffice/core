@@ -20,7 +20,6 @@ class specialCharacter(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
 
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
 
         document = self.ui_test.get_component()
 
@@ -61,7 +60,7 @@ class specialCharacter(UITestCase):
 
 # works locally and linux_gcc_release_64, but fails at linux_clang_dbgutil_64.
 #Markus: Actually after a round of debugging I think the problem is actually that the test depends on the used font.
-#Therefore, if the font is not available or not selected by default the test fails. 
+#Therefore, if the font is not available or not selected by default the test fails.
 #        xCharSet = xDialog.getChild("searchcharset")    #another charset -> search charset
 #        xCharSet.executeAction("SELECT", mkPropertyValues({"COLUMN": "0", "ROW": "0"}))   #digit 4 selected, we have only one result;
 #        sleep(1)                                                  #try sleep here
