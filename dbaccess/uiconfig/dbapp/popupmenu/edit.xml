@@ -17,6 +17,10 @@
   <menu:menuitem menu:id=".uno:DBDelete"/>
   <menu:menuitem menu:id=".uno:DBRename"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:DBConvertToView"/>
+  <menu:menuitem menu:id=".uno:DBNewFormAutoPilotWithPreSelection"/>
+  <menu:menuitem menu:id=".uno:DBNewReportAutoPilotWithPreSelection"/>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:DBOpen"/>
   <menu:menuitem menu:id=".uno:DBEdit"/>
   <menu:menuitem menu:id=".uno:DBEditSqlView"/>
