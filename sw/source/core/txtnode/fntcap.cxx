@@ -54,7 +54,7 @@ public:
 // rOrigString: The original string
 // nOfst: Position of the substring in rOrigString
 // nLen: Length if the substring in rOrigString
-// nIdx: Referes to a position in the display string and should be mapped
+// nIdx: Refers to a position in the display string and should be mapped
 //       to a position in rOrigString
 TextFrameIndex sw_CalcCaseMap(const SwFont& rFnt,
                             const OUString& rOrigString,
@@ -92,7 +92,7 @@ class SwDoCapitals
 {
 protected:
     SwDrawTextInfo &rInf;
-    SwCapitalInfo* pCapInf; // referes to additional information
+    SwCapitalInfo* pCapInf; // refers to additional information
                            // required by the ::Do function
     explicit SwDoCapitals ( SwDrawTextInfo &rInfo ) : rInf( rInfo ), pCapInf( nullptr ) { }
     ~SwDoCapitals() {}

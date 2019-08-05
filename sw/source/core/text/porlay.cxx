@@ -1036,7 +1036,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
         }
         ++nCnt;
 
-        // if current script is asian, we search for compressable characters
+        // if current script is asian, we search for compressible characters
         // in this range
         if ( CharCompressType::NONE != aCompEnum &&
              i18n::ScriptType::ASIAN == nScript )
@@ -1072,7 +1072,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                     eState = ( 0x3040 <= cChar && 0x3100 > cChar ) ? KANA : NONE;
                 }
 
-                // insert range of compressable characters
+                // insert range of compressible characters
                 if( ePrevState != eState )
                 {
                     if ( ePrevState != NONE )
@@ -1684,7 +1684,7 @@ SwScriptInfo::CompType SwScriptInfo::DbgCompType(const TextFrameIndex nPos) cons
 }
 #endif
 
-// returns, if there are compressable kanas or specials
+// returns, if there are compressible kanas or specials
 // between nStart and nEnd
 size_t SwScriptInfo::HasKana(TextFrameIndex const nStart, TextFrameIndex const nLen) const
 {
