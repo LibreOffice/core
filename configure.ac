@@ -1228,6 +1228,11 @@ libo_FUZZ_ARG_ENABLE(gtk3,
         [Determines whether to use Gtk+ 3.0 vclplug on platforms where Gtk+ 3.0 is available.]),
 ,test "${enable_gtk3+set}" = set || enable_gtk3=yes)
 
+AC_ARG_ENABLE(introspection,
+    AS_HELP_STRING([--enable-introspection],
+        [Generate files for GObject introspection.  Requires --enable-gtk3.  (Typically used by
+         Linux distributions.)]))
+
 AC_ARG_ENABLE(split-app-modules,
     AS_HELP_STRING([--enable-split-app-modules],
         [Split file lists for app modules, e.g. base, calc.
@@ -10431,7 +10436,6 @@ if test "x$enable_gtk3" = "xyes"; then
     if test "x$ENABLE_GTK3" = "xTRUE"; then
         AC_DEFINE(ENABLE_GTK3)
         R="gtk3"
-        GOBJECT_INTROSPECTION_CHECK(INTROSPECTION_REQUIRED_VERSION)
     else
         AC_MSG_ERROR([gtk3 or dependent libraries of the correct versions, not found])
     fi
@@ -10449,6 +10453,14 @@ fi
 AC_SUBST(GTK3_LIBS)
 AC_SUBST(GTK3_CFLAGS)
 AC_SUBST(ENABLE_GTK3)
+
+if test "$enable_introspection" = yes; then
+    if test "$ENABLE_GTK3" = TRUE; then
+        GOBJECT_INTROSPECTION_REQUIRE(INTROSPECTION_REQUIRED_VERSION)
+    else
+        AC_MSG_ERROR([--enable-gtk3-introspection requires --enable-gtk3])
+    fi
+fi
 
 ENABLE_GTK=""
 if test "x$enable_gtk" = "xyes"; then
