@@ -34,8 +34,8 @@
         <property name="margin_bottom">6</property>
         <property name="label" translatable="yes" context="authentificationpage|helptext">Some databases require you to enter a user name.</property>
         <property name="wrap">True</property>
-        <property name="width_chars">60</property>
-        <property name="max_width_chars">60</property>
+        <property name="width_chars">72</property>
+        <property name="max_width_chars">72</property>
         <property name="xalign">0</property>
       </object>
       <packing>

@@ -45,9 +45,6 @@
 #define HID_FILEOPEN_IMAGE_TEMPLATE                            "SVT_HID_FILEOPEN_IMAGE_TEMPLATE"
 #define HID_FILEOPEN_IMAGE_ANCHOR                              "SVT_HID_FILEOPEN_IMAGE_ANCHOR"
 
-#define HID_WIZARD_NEXT                                        "SVT_HID_WIZARD_NEXT"
-#define HID_WIZARD_PREVIOUS                                    "SVT_HID_WIZARD_PREVIOUS"
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

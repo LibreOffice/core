@@ -27,17 +27,16 @@ class AboutDialog : public weld::DialogController
 private:
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::shared_ptr<weld::AboutDialog> m_xDialog;
-    std::shared_ptr<weld::Container> m_xContentArea;
+    std::unique_ptr<weld::Container> m_xContentArea;
+    std::unique_ptr<weld::Button> m_xCreditsButton;
+    std::unique_ptr<weld::Button> m_xWebsiteButton;
+    std::unique_ptr<weld::Button> m_xReleaseNotesButton;
+    std::unique_ptr<weld::Button> m_xCloseButton;
 
     BitmapEx           aLogoBitmap;
     BitmapEx           aBackgroundBitmap;
 
     OUString m_buildIdLinkString;
-
-    weld::Button* m_pCreditsButton;
-    weld::Button* m_pWebsiteButton;
-    weld::Button* m_pReleaseNotesButton;
-    weld::Button* m_pCloseButton;
 
     void SetBuildIdLink();
     void SetLogo();

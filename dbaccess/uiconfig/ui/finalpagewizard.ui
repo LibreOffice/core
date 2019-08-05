@@ -2,28 +2,28 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="dba">
   <requires lib="gtk+" version="3.18"/>
-  <object class="GtkBox" id="PageFinal">
-    <property name="width_request">400</property>
+  <object class="GtkGrid" id="PageFinal">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="border_width">8</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
+    <property name="border_width">6</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">12</property>
+    <property name="row_spacing">12</property>
     <child>
       <object class="GtkLabel" id="headerText">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="finalpagewizard|headerText">Decide How to Proceed After Saving the Database</property>
-        <property name="wrap">True</property>
+        <property name="single_line_mode">True</property>
         <property name="xalign">0</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
       </packing>
     </child>
     <child>
@@ -42,7 +42,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="finalpagewizard|helpText">Do you want the wizard to register the database in %PRODUCTNAME?</property>
                 <property name="wrap">True</property>
-                <property name="wrap_mode">word-char</property>
                 <property name="width_chars">72</property>
                 <property name="max_width_chars">72</property>
                 <property name="xalign">0</property>
@@ -103,6 +102,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="finalpagewizard|additionalText">After the database file has been saved, what do you want to do?</property>
                 <property name="wrap">True</property>
+                <property name="width_chars">72</property>
                 <property name="max_width_chars">72</property>
                 <property name="xalign">0</property>
               </object>
@@ -163,9 +163,8 @@
         </child>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
       </packing>
     </child>
   </object>

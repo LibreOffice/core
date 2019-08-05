@@ -124,6 +124,13 @@ namespace vcl
         impl_construct();
     }
 
+    RoadmapWizardMachine::RoadmapWizardMachine(weld::Window* pParent)
+        : WizardMachine(pParent, WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP)
+        , m_pImpl( new RoadmapWizardImpl )
+    {
+        m_xAssistant->connect_jump_page(LINK(this, RoadmapWizardMachine, OnRoadmapItemSelected));
+    }
+
     void RoadmapWizard::impl_construct()
     {
         SetLeftAlignedButtonCount( 1 );
@@ -143,10 +150,13 @@ namespace vcl
         m_pImpl->pRoadmap->Show();
     }
 
-
     RoadmapWizard::~RoadmapWizard()
     {
         disposeOnce();
+    }
+
+    RoadmapWizardMachine::~RoadmapWizardMachine()
+    {
     }
 
     void RoadmapWizard::dispose()
@@ -160,12 +170,15 @@ namespace vcl
         m_pImpl->pRoadmap->SetHelpId( _rId );
     }
 
-
     void RoadmapWizard::SetRoadmapInteractive( bool _bInteractive )
     {
         m_pImpl->pRoadmap->SetRoadmapInteractive( _bInteractive );
     }
 
+    void RoadmapWizardMachine::SetRoadmapInteractive( bool _bInteractive )
+    {
+        m_pImpl->pRoadmap->SetRoadmapInteractive( _bInteractive );
+    }
 
     void RoadmapWizard::declarePath( PathId _nPathId, const WizardPath& _lWizardStates)
     {
@@ -179,6 +192,17 @@ namespace vcl
             implUpdateRoadmap( );
     }
 
+    void RoadmapWizardMachine::declarePath( PathId _nPathId, const WizardPath& _lWizardStates)
+    {
+
+        m_pImpl->aPaths.emplace( _nPathId, _lWizardStates );
+
+        if ( m_pImpl->aPaths.size() == 1 )
+            // the very first path -> activate it
+            activatePath( _nPathId );
+        else
+            implUpdateRoadmap( );
+    }
 
     void RoadmapWizard::describeState( WizardState _nState, const OUString& _rStateDisplayName, RoadmapPageFactory _pPageFactory )
     {
@@ -186,7 +210,6 @@ namespace vcl
             "RoadmapWizard::describeState: there already is a descriptor for this state!" );
         m_pImpl->aStateDescriptors[ _nState ] = StateDescriptions::mapped_type( _rStateDisplayName, _pPageFactory );
     }
-
 
     void RoadmapWizard::activatePath( PathId _nPathId, bool _bDecideForIt )
     {
@@ -231,6 +254,47 @@ namespace vcl
         implUpdateRoadmap( );
     }
 
+    void RoadmapWizardMachine::activatePath( PathId _nPathId, bool _bDecideForIt )
+    {
+        if ( ( _nPathId == m_pImpl->nActivePath ) && ( _bDecideForIt == m_pImpl->bActivePathIsDefinite ) )
+            // nothing to do
+            return;
+
+        // does the given path exist?
+        Paths::const_iterator aNewPathPos = m_pImpl->aPaths.find( _nPathId );
+        DBG_ASSERT( aNewPathPos != m_pImpl->aPaths.end(), "RoadmapWizard::activate: there is no such path!" );
+        if ( aNewPathPos == m_pImpl->aPaths.end() )
+            return;
+
+        // determine the index of the current state in the current path
+        sal_Int32 nCurrentStatePathIndex = -1;
+        if ( m_pImpl->nActivePath != -1 )
+            nCurrentStatePathIndex = m_pImpl->getStateIndexInPath( getCurrentState(), m_pImpl->nActivePath );
+
+        DBG_ASSERT( static_cast<sal_Int32>(aNewPathPos->second.size()) > nCurrentStatePathIndex,
+            "RoadmapWizard::activate: you cannot activate a path which has less states than we've already advanced!" );
+            // If this asserts, this for instance means that we are already in state number, say, 5
+            // of our current path, and the caller tries to activate a path which has less than 5
+            // states
+        if ( static_cast<sal_Int32>(aNewPathPos->second.size()) <= nCurrentStatePathIndex )
+            return;
+
+        // assert that the current and the new path are equal, up to nCurrentStatePathIndex
+        Paths::const_iterator aActivePathPos = m_pImpl->aPaths.find( m_pImpl->nActivePath );
+        if ( aActivePathPos != m_pImpl->aPaths.end() )
+        {
+            if ( RoadmapWizardImpl::getFirstDifferentIndex( aActivePathPos->second, aNewPathPos->second ) <= nCurrentStatePathIndex )
+            {
+                OSL_FAIL( "RoadmapWizard::activate: you cannot activate a path which conflicts with the current one *before* the current state!" );
+                return;
+            }
+        }
+
+        m_pImpl->nActivePath = _nPathId;
+        m_pImpl->bActivePathIsDefinite = _bDecideForIt;
+
+        implUpdateRoadmap( );
+    }
 
     void RoadmapWizard::implUpdateRoadmap( )
     {
@@ -337,6 +401,110 @@ namespace vcl
         m_pImpl->pRoadmap->SetRoadmapComplete( !bIncompletePath );
     }
 
+    void RoadmapWizardMachine::implUpdateRoadmap( )
+    {
+
+        DBG_ASSERT( m_pImpl->aPaths.find( m_pImpl->nActivePath ) != m_pImpl->aPaths.end(),
+            "RoadmapWizard::implUpdateRoadmap: there is no such path!" );
+        const WizardPath& rActivePath( m_pImpl->aPaths[ m_pImpl->nActivePath ] );
+
+        sal_Int32 nCurrentStatePathIndex = RoadmapWizardImpl::getStateIndexInPath( getCurrentState(), rActivePath );
+        if (nCurrentStatePathIndex < 0)
+            return;
+
+        // determine up to which index (in the new path) we have to display the items
+        RoadmapTypes::ItemIndex nUpperStepBoundary = static_cast<RoadmapTypes::ItemIndex>(rActivePath.size());
+        if ( !m_pImpl->bActivePathIsDefinite )
+        {
+            for (auto const& path : m_pImpl->aPaths)
+            {
+                if ( path.first == m_pImpl->nActivePath )
+                    // it's the path we are just activating -> no need to check anything
+                    continue;
+                // the index from which on both paths differ
+                sal_Int32 nDivergenceIndex = RoadmapWizardImpl::getFirstDifferentIndex( rActivePath, path.second );
+                if ( nDivergenceIndex <= nCurrentStatePathIndex )
+                    // they differ in an index which we have already left behind us
+                    // -> this is no conflict anymore
+                    continue;
+
+                // the path conflicts with our new path -> don't activate the
+                // *complete* new path, but only up to the step which is unambiguous
+                nUpperStepBoundary = nDivergenceIndex;
+            }
+        }
+
+        // can we advance from the current page?
+        bool bCurrentPageCanAdvance = true;
+        TabPage* pCurrentPage = GetPage( getCurrentState() );
+        if ( pCurrentPage )
+        {
+            const IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
+            OSL_ENSURE( pController != nullptr, "RoadmapWizard::implUpdateRoadmap: no controller for the current page!" );
+            bCurrentPageCanAdvance = !pController || pController->canAdvance();
+        }
+
+        // now, we have to remove all items after nCurrentStatePathIndex, and insert the items from the active
+        // path, up to (excluding) nUpperStepBoundary
+        int nRoadmapItems = m_xAssistant->get_n_pages();
+        RoadmapTypes::ItemIndex nLoopUntil = ::std::max( nUpperStepBoundary, nRoadmapItems );
+        for ( RoadmapTypes::ItemIndex nItemIndex = nCurrentStatePathIndex; nItemIndex < nLoopUntil; ++nItemIndex )
+        {
+            bool bExistentItem = ( nItemIndex < nRoadmapItems );
+            bool bNeedItem = ( nItemIndex < nUpperStepBoundary );
+
+            bool bInsertItem = false;
+            if ( bExistentItem )
+            {
+                if ( !bNeedItem )
+                {
+                    int nPages = nRoadmapItems;
+                    for (int i = nPages - 1; i >= nItemIndex; --i)
+                    {
+                        m_xAssistant->set_page_title(m_xAssistant->get_page_ident(i), "");
+                        --nRoadmapItems;
+                    }
+                    break;
+                }
+                else
+                {
+                    // there is an item with this index in the roadmap - does it match what is requested by
+                    // the respective state in the active path?
+                    RoadmapTypes::ItemId nPresentItemId = m_xAssistant->get_page_ident(nItemIndex).toInt32();
+                    WizardState nRequiredState = rActivePath[ nItemIndex ];
+                    if ( nPresentItemId != nRequiredState )
+                    {
+                        m_xAssistant->set_page_title(OString::number(nPresentItemId), "");
+                        bInsertItem = true;
+                    }
+                }
+            }
+            else
+            {
+                DBG_ASSERT( bNeedItem, "RoadmapWizard::implUpdateRoadmap: ehm - none needed, none present - why did the loop not terminate?" );
+                bInsertItem = bNeedItem;
+            }
+
+            WizardState nState( rActivePath[ nItemIndex ] );
+
+            if ( bInsertItem )
+            {
+                GetOrCreatePage(nState);
+            }
+
+            OString sIdent(OString::number(nState));
+            m_xAssistant->set_page_index(sIdent, nItemIndex);
+            m_xAssistant->set_page_title(sIdent, getStateDisplayName(nState));
+
+            // if the item is *after* the current state, but the current page does not
+            // allow advancing, the disable the state. This relieves derived classes
+            // from disabling all future states just because the current state does not
+            // (yet) allow advancing.
+            const bool bUnconditionedDisable = !bCurrentPageCanAdvance && ( nItemIndex > nCurrentStatePathIndex );
+            const bool bEnable = !bUnconditionedDisable && ( m_pImpl->aDisabledStates.find( nState ) == m_pImpl->aDisabledStates.end() );
+            m_xAssistant->set_page_sensitive(sIdent, bEnable);
+        }
+    }
 
     WizardTypes::WizardState RoadmapWizard::determineNextState( WizardState _nCurrentState ) const
     {
@@ -367,6 +535,33 @@ namespace vcl
         return aActivePathPos->second[ nNextStateIndex ];
     }
 
+    WizardTypes::WizardState RoadmapWizardMachine::determineNextState( WizardState _nCurrentState ) const
+    {
+        sal_Int32 nCurrentStatePathIndex = -1;
+
+        Paths::const_iterator aActivePathPos = m_pImpl->aPaths.find( m_pImpl->nActivePath );
+        if ( aActivePathPos != m_pImpl->aPaths.end() )
+            nCurrentStatePathIndex = RoadmapWizardImpl::getStateIndexInPath( _nCurrentState, aActivePathPos->second );
+
+        DBG_ASSERT( nCurrentStatePathIndex != -1, "RoadmapWizard::determineNextState: ehm - how can we travel if there is no (valid) active path?" );
+        if ( nCurrentStatePathIndex == -1 )
+            return WZS_INVALID_STATE;
+
+        sal_Int32 nNextStateIndex = nCurrentStatePathIndex + 1;
+
+        while   (   ( nNextStateIndex < static_cast<sal_Int32>(aActivePathPos->second.size()) )
+                &&  ( m_pImpl->aDisabledStates.find( aActivePathPos->second[ nNextStateIndex ] ) != m_pImpl->aDisabledStates.end() )
+                )
+        {
+            ++nNextStateIndex;
+        }
+
+        if ( nNextStateIndex >= static_cast<sal_Int32>(aActivePathPos->second.size()) )
+            // there is no next state in the current path (at least none which is enabled)
+            return WZS_INVALID_STATE;
+
+        return aActivePathPos->second[ nNextStateIndex ];
+    }
 
     bool RoadmapWizard::canAdvance() const
     {
@@ -398,6 +593,35 @@ namespace vcl
         return *rPath.rbegin() != getCurrentState();
     }
 
+    bool RoadmapWizardMachine::canAdvance() const
+    {
+        if ( !m_pImpl->bActivePathIsDefinite )
+        {
+            // check how many paths are still allowed
+            const WizardPath& rActivePath( m_pImpl->aPaths[ m_pImpl->nActivePath ] );
+            sal_Int32 nCurrentStatePathIndex = RoadmapWizardImpl::getStateIndexInPath( getCurrentState(), rActivePath );
+
+            size_t nPossiblePaths(0);
+            for (auto const& path : m_pImpl->aPaths)
+            {
+                // the index from which on both paths differ
+                sal_Int32 nDivergenceIndex = RoadmapWizardImpl::getFirstDifferentIndex( rActivePath, path.second );
+
+                if ( nDivergenceIndex > nCurrentStatePathIndex )
+                    // this path is still a possible path
+                    nPossiblePaths += 1;
+            }
+
+            // if we have more than one path which is still possible, then we assume
+            // to always have a next state. Though there might be scenarios where this
+            // is not true, but this is too sophisticated (means not really needed) right now.
+            if ( nPossiblePaths > 1 )
+                return true;
+        }
+
+        const WizardPath& rPath = m_pImpl->aPaths[ m_pImpl->nActivePath ];
+        return *rPath.rbegin() != getCurrentState();
+    }
 
     void RoadmapWizard::updateTravelUI()
     {
@@ -421,6 +645,27 @@ namespace vcl
         implUpdateRoadmap();
     }
 
+    void RoadmapWizardMachine::updateTravelUI()
+    {
+        WizardMachine::updateTravelUI();
+
+        // disable the "Previous" button if all states in our history are disabled
+        ::std::vector< WizardState > aHistory;
+        getStateHistory( aHistory );
+        bool bHaveEnabledState = false;
+        for (auto const& state : aHistory)
+        {
+            if ( isStateEnabled(state) )
+            {
+                bHaveEnabledState = true;
+                break;
+            }
+        }
+
+        enableButtons( WizardButtonFlags::PREVIOUS, bHaveEnabledState );
+
+        implUpdateRoadmap();
+    }
 
     IMPL_LINK_NOARG(RoadmapWizard, OnRoadmapItemSelected, LinkParamNone*, void)
     {
@@ -463,10 +708,48 @@ namespace vcl
             m_pImpl->pRoadmap->SelectRoadmapItemByID( getCurrentState() );
     }
 
+    IMPL_LINK(RoadmapWizardMachine, OnRoadmapItemSelected, const OString&, rCurItemId, bool)
+    {
+        int nCurItemId = rCurItemId.toInt32();
+
+        if ( nCurItemId == getCurrentState() )
+            // nothing to do
+            return false;
+
+        if ( isTravelingSuspended() )
+            return false;
+
+        WizardTravelSuspension aTravelGuard( *this );
+
+        sal_Int32 nCurrentIndex = m_pImpl->getStateIndexInPath( getCurrentState(), m_pImpl->nActivePath );
+        sal_Int32 nNewIndex     = m_pImpl->getStateIndexInPath( nCurItemId, m_pImpl->nActivePath );
+
+        DBG_ASSERT( ( nCurrentIndex != -1 ) && ( nNewIndex != -1 ),
+            "RoadmapWizard::OnRoadmapItemSelected: something's wrong here!" );
+        if ( ( nCurrentIndex == -1 ) || ( nNewIndex == -1 ) )
+        {
+            return false;
+        }
+
+        bool bResult = true;
+        if ( nNewIndex > nCurrentIndex )
+        {
+            bResult = skipUntil( static_cast<WizardState>(nCurItemId) );
+            WizardState nTemp = static_cast<WizardState>(nCurItemId);
+            while( nTemp )
+            {
+                if( m_pImpl->aDisabledStates.find( --nTemp ) != m_pImpl->aDisabledStates.end() )
+                    removePageFromHistory( nTemp );
+            }
+        }
+        else
+            bResult = skipBackwardUntil( static_cast<WizardState>(nCurItemId) );
+
+        return bResult;
+    }
 
     void RoadmapWizard::enterState( WizardState _nState )
     {
-
         OWizardMachine::enterState( _nState );
 
         // synchronize the roadmap
@@ -474,6 +757,13 @@ namespace vcl
         m_pImpl->pRoadmap->SelectRoadmapItemByID( getCurrentState() );
     }
 
+    void RoadmapWizardMachine::enterState( WizardState _nState )
+    {
+        WizardMachine::enterState( _nState );
+
+        // synchronize the roadmap
+        implUpdateRoadmap();
+    }
 
     OUString RoadmapWizard::getStateDisplayName( WizardState _nState ) const
     {
@@ -488,6 +778,18 @@ namespace vcl
         return sDisplayName;
     }
 
+    OUString RoadmapWizardMachine::getStateDisplayName( WizardState _nState ) const
+    {
+        OUString sDisplayName;
+
+        StateDescriptions::const_iterator pos = m_pImpl->aStateDescriptors.find( _nState );
+        OSL_ENSURE( pos != m_pImpl->aStateDescriptors.end(),
+            "RoadmapWizard::getStateDisplayName: no default implementation available for this state!" );
+        if ( pos != m_pImpl->aStateDescriptors.end() )
+            sDisplayName = pos->second.first;
+
+        return sDisplayName;
+    }
 
     VclPtr<TabPage> RoadmapWizard::createPage( WizardState _nState )
     {
@@ -505,7 +807,6 @@ namespace vcl
         return pPage;
     }
 
-
     void RoadmapWizard::enableState( WizardState _nState, bool _bEnable )
     {
 
@@ -522,6 +823,20 @@ namespace vcl
         m_pImpl->pRoadmap->EnableRoadmapItem( static_cast<RoadmapTypes::ItemId>(_nState), _bEnable );
     }
 
+    void RoadmapWizardMachine::enableState( WizardState _nState, bool _bEnable )
+    {
+        // remember this (in case the state appears in the roadmap later on)
+        if ( _bEnable )
+            m_pImpl->aDisabledStates.erase( _nState );
+        else
+        {
+            m_pImpl->aDisabledStates.insert( _nState );
+            removePageFromHistory( _nState );
+        }
+
+        // if the state is currently in the roadmap, reflect it's new status
+        m_xAssistant->set_page_sensitive(OString::number(_nState), _bEnable);
+    }
 
     bool RoadmapWizard::knowsState( WizardState i_nState ) const
     {
@@ -537,6 +852,11 @@ namespace vcl
     }
 
     bool RoadmapWizard::isStateEnabled( WizardState _nState ) const
+    {
+        return m_pImpl->aDisabledStates.find( _nState ) == m_pImpl->aDisabledStates.end();
+    }
+
+    bool RoadmapWizardMachine::isStateEnabled( WizardState _nState ) const
     {
         return m_pImpl->aDisabledStates.find( _nState ) == m_pImpl->aDisabledStates.end();
     }
@@ -567,6 +887,41 @@ namespace vcl
                 }
             }
         }
+    }
+
+    void RoadmapWizard::EnableRoadmapItem(int nItemId, bool bEnable)
+    {
+        m_pImpl->pRoadmap->EnableRoadmapItem(nItemId, bEnable);
+    }
+
+    void RoadmapWizard::InsertRoadmapItem(int nItemIndex, const OUString& rText, int nItemId, bool bEnable)
+    {
+        m_pImpl->pRoadmap->InsertRoadmapItem(nItemIndex, rText, nItemId, bEnable);
+    }
+
+    void RoadmapWizard::DeleteRoadmapItem(int nItemIndex)
+    {
+        m_pImpl->pRoadmap->DeleteRoadmapItem(nItemIndex);
+    }
+
+    void RoadmapWizard::ChangeRoadmapItemLabel(int nItemId, const OUString& rText)
+    {
+        m_pImpl->pRoadmap->ChangeRoadmapItemLabel(nItemId, rText);
+    }
+
+    void RoadmapWizard::SelectRoadmapItemByID(int nItemId)
+    {
+        m_pImpl->pRoadmap->SelectRoadmapItemByID(nItemId);
+    }
+
+    void RoadmapWizard::SetItemSelectHdl( const Link<LinkParamNone*,void>& _rHdl )
+    {
+        m_pImpl->pRoadmap->SetItemSelectHdl(_rHdl);
+    }
+
+    int RoadmapWizard::GetCurrentRoadmapItemID() const
+    {
+        return m_pImpl->pRoadmap->GetCurrentRoadmapItemID();
     }
 
 }   // namespace vcl
