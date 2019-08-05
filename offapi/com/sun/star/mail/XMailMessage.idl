@@ -54,7 +54,7 @@ interface XMailMessage: ::com::sun::star::uno::XInterface {
     [attribute] string ReplyToAddress;
 
     /**
-        Add an recipients e-mail address to the list of recipients of this mail message.
+        Add a recipients e-mail address to the list of recipients of this mail message.
         If the e-mail address doesn't conform to <a href="http://www.ietf.org/rfc/rfc822.txt">RFC&nbsp;822</a>
         sending the mail message will fail.
 
@@ -64,7 +64,7 @@ interface XMailMessage: ::com::sun::star::uno::XInterface {
     void addRecipient([in] string sRecipientAddress);
 
     /**
-        Add an Cc recipients e-mail address to the list of recipients of this mail message.
+        Add a Cc recipients e-mail address to the list of recipients of this mail message.
         If the e-mail address doesn't conform to <a href="http://www.ietf.org/rfc/rfc822.txt">RFC&nbsp;822</a>
         sending the mail message will fail.
 
@@ -74,7 +74,7 @@ interface XMailMessage: ::com::sun::star::uno::XInterface {
     void addCcRecipient([in] string sRecipientAddress);
 
     /**
-        Add an BCC recipients e-mail address to the list of recipients of this mail message.
+        Add a BCC recipients e-mail address to the list of recipients of this mail message.
         If the e-mail address doesn't conform to <a href="http://www.ietf.org/rfc/rfc822.txt">RFC&nbsp;822</a>
         sending the mail message will fail.
 

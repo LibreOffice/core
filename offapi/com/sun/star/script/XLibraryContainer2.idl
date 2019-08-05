@@ -45,7 +45,7 @@ published interface XLibraryContainer2: com::sun::star::script::XLibraryContaine
         createLibraryLink in the StorageURL parameter.
 
         If the accessed library item exists but isn't a
-        link, a IllegalArgumentException is thrown
+        link, an IllegalArgumentException is thrown
      */
     string getLibraryLinkURL( [in] string Name )
             raises( com::sun::star::lang::IllegalArgumentException,

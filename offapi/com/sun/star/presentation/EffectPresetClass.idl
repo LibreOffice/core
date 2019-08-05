@@ -23,7 +23,7 @@
  module com {  module sun {  module star {  module presentation {
 
 
-/** This constants defines a the class for a preset animation effect.
+/** This constants defines the class for a preset animation effect.
     <br>
     This is stored with the name <i>preset-class</i> inside the
     ::com::sun::star::animations::XAnimationNode::UserData sequence.

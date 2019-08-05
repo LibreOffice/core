@@ -38,7 +38,7 @@ interface XDocumentRecovery
         <p>If <code>storeToRecoveryFile</code> has not been called before, this method returns whether the document
         has been modified since it has been loaded respectively created.</p>
 
-        <p>When saving a session, either in case of a emergency (when OpenOffice.org crashed), or during a
+        <p>When saving a session, either in case of an emergency (when OpenOffice.org crashed), or during a
         periodic session save as configured by the user, storeToRecoveryFile() is called for every
         document where <code>wasModifiedSinceLastSave</code> returns `TRUE`.</p>
 
@@ -62,7 +62,7 @@ interface XDocumentRecovery
             specifies the URL of the location to which the document should be emergency-saved.
 
         @param MediaDescriptor
-            contains additional arguments for the save process, for instance an StatusIndicator.
+            contains additional arguments for the save process, for instance a StatusIndicator.
 
         @see MediaDescriptor
     */
@@ -96,7 +96,7 @@ interface XDocumentRecovery
             then the file should be recovered from its original location.
 
         @param MediaDescriptor
-            contains additional arguments for the load process, for instance an StatusIndicator.
+            contains additional arguments for the load process, for instance a StatusIndicator.
 
         @see MediaDescriptor
     */

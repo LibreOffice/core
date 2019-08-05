@@ -64,7 +64,7 @@ module com {  module sun {  module star {  module sdb {
     initialization time:
     <ul>
         <li><b>Frame</b><br/>
-        has to be an com::sun::star::frame::XFrame interface specifying the frame to plug the
+        has to be a com::sun::star::frame::XFrame interface specifying the frame to plug the
         QueryDesign component into.<br/>
         This parameter is mandatory.
         </li>
