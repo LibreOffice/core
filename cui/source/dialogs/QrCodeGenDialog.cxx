@@ -40,6 +40,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <config_fuzzers.h>
 
 using namespace css;
 using namespace css::uno;
@@ -218,6 +219,9 @@ void QrCodeGenDialog::SelectErrorCorrection(weld::ToggleButton& rButton)
 
 OUString QrCodeGenDialog::GenerateQrCode(OUString aQrText, int aQrECC, int aQrBorder)
 {
+#if ENABLE_FUZZERS
+    return OUString();
+#else
     //Select ECC:: value from aQrECC
     qrcodegen::QrCode::Ecc bqrEcc = qrcodegen::QrCode::Ecc::LOW;
 
@@ -255,6 +259,7 @@ OUString QrCodeGenDialog::GenerateQrCode(OUString aQrText, int aQrECC, int aQrBo
     //cstring to OUString
     char* cstr = &svg[0];
     return OUString::createFromAscii(cstr);
+#endif
 }
 
 void QrCodeGenDialog::GetErrorCorrection(long ErrorCorrection)
