@@ -10,7 +10,6 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEPOSITIONHANDLER_HXX
 
 #include "LoggedResources.hxx"
-#include <memory>
 
 namespace com
 {

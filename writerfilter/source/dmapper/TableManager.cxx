@@ -22,7 +22,6 @@
 #include "DomainMapper_Impl.hxx"
 #include "util.hxx"
 
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace writerfilter
@@ -461,6 +460,10 @@ TableManager::TableManager()
     setInCell(false);
     setCellEnd(false);
     m_bCellLastParaAfterAutospacing = false;
+}
+
+TableManager::~TableManager()
+{
 }
 
 }

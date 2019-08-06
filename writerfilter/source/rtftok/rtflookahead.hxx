@@ -10,7 +10,6 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFLOOKAHEAD_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFLOOKAHEAD_HXX
 
-#include <memory>
 #include <sal/types.h>
 #include <tools/ref.hxx>
 #include "rtflistener.hxx"

@@ -9,7 +9,6 @@
 
 #include "rtfcontrolwords.hxx"
 #include <oox/token/namespaces.hxx>
-#include <cstring>
 
 namespace writerfilter
 {
