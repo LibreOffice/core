@@ -46,6 +46,7 @@ public:
     void testODTChartSeries();
     void testDOCChartSeries();
     void testDOCXChartSeries();
+    void testDOCXChartEmptySeries();
     void testDOCXChartValuesSize();
     void testPPTXChartSeries();
     void testPPTXSparseChartSeries();
@@ -146,6 +147,7 @@ public:
     CPPUNIT_TEST(testODTChartSeries);
     CPPUNIT_TEST(testDOCChartSeries);
     CPPUNIT_TEST(testDOCXChartSeries);
+    CPPUNIT_TEST(testDOCXChartEmptySeries);
     CPPUNIT_TEST(testDOCXChartValuesSize);
     CPPUNIT_TEST(testPPTChartSeries);
     CPPUNIT_TEST(testPPTXChartSeries);
@@ -467,6 +469,32 @@ void Chart2ImportTest::testDOCXChartSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Series 1"), aLabels[0][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(OUString("Series 2"), aLabels[1][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(OUString("Series 3"), aLabels[2][0].get<OUString>());
+}
+
+void Chart2ImportTest::testDOCXChartEmptySeries()
+{
+    load("/chart2/qa/extras/data/docx/", "tdf125337.docx");
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT(xCT.is());
+
+    std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aLabels.size());
+    CPPUNIT_ASSERT_EQUAL(OUString("1. dataseries"), aLabels[0][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("2. dataseries"), aLabels[1][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), aLabels[2][0].get<OUString>());
+
+    //test chart series sparse data for docx
+    std::vector<std::vector<double> > aValues = getDataSeriesYValuesFromChartType(xCT);
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aValues.size());
+    //test the second series values
+    CPPUNIT_ASSERT_EQUAL(2.4, aValues[1][0]);
+    CPPUNIT_ASSERT_EQUAL(4.4, aValues[1][1]);
+    //test the third series (empty) values
+    CPPUNIT_ASSERT(rtl::math::isNan(aValues[2][0]));
+    CPPUNIT_ASSERT(rtl::math::isNan(aValues[2][1]));
 }
 
 void Chart2ImportTest::testDOCXChartValuesSize()

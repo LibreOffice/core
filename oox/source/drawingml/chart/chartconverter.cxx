@@ -124,7 +124,7 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
     if( rxDataProvider.is() )
     {
         OUString aRangeRep;
-        if( !rDataSeq.maData.empty() ) try
+        if( !rDataSeq.maData.empty() || (rRole == "values-y" && rDataSeq.mnPointCount > 0) ) try
         {
             // create a single-row array from constant source data
             // (multiple levels in the case of complex categories)
