@@ -22,6 +22,74 @@
       "revId": "fd9ff985fdae18562247c84d42b239b195759b93",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_550e9e32",
+        "filename": "sw/source/uibase/docvw/AnnotationWin.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-08-06T07:19:05Z",
+      "side": 1,
+      "message": "Nit: always break the opening brace to its own line (follow style of surrounding code).",
+      "revId": "fd9ff985fdae18562247c84d42b239b195759b93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_b5285a86",
+        "filename": "sw/source/uibase/docvw/AnnotationWin2.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-08-06T07:19:05Z",
+      "side": 1,
+      "message": "I think you need to extract this to a translated STR_ACCESS_ANNOTATION_FOO string as well, so l10n can pick it up.",
+      "revId": "fd9ff985fdae18562247c84d42b239b195759b93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_d52b8e7f",
+        "filename": "sw/source/uibase/docvw/AnnotationWin2.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-08-06T07:19:05Z",
+      "side": 1,
+      "message": "This is copy\u0026pasted below...",
+      "revId": "fd9ff985fdae18562247c84d42b239b195759b93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_7522c2a6",
+        "filename": "sw/source/uibase/docvw/AnnotationWin2.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1363,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-08-06T07:19:05Z",
+      "side": 1,
+      "message": "... copy\u0026pasted here. Extract to a function to avoid duplication?",
+      "revId": "fd9ff985fdae18562247c84d42b239b195759b93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
