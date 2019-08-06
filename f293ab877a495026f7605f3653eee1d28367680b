@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_35dbeaed",
+        "filename": "xmloff/source/draw/QRCodeContext.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-08-06T13:23:33Z",
+      "side": 1,
+      "message": "this struct is filled with values but at the end it isn\u0027t actually set on the xPropSet?  that won\u0027t import anything...",
+      "revId": "f293ab877a495026f7605f3653eee1d28367680b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
