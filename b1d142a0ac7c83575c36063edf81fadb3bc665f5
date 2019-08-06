@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_7a14f14e",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 16
+      },
+      "lineNbr": 6352,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-08-06T06:41:16Z",
+      "side": 1,
+      "message": "not sure if that\u0027s the best wording.\nMaybe just \"Resolved\" with a checkmark when it\u0027s resolved?\n\nOr separate commands for resolve/unresolve?",
+      "range": {
+        "startLine": 6352,
+        "startChar": 34,
+        "endLine": 6352,
+        "endChar": 49
+      },
+      "revId": "b1d142a0ac7c83575c36063edf81fadb3bc665f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
