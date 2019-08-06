@@ -423,9 +423,9 @@ void BookmarkTable::InsertBookmark(sw::mark::IMark* pMark)
     else if (bPulling && !bPulledAll)
         sBookmarkNodeText = "..." + sBookmarkNodeText;
 
-    OUString sHidden = "No";
+    OUString sHidden = SwResId(STR_BOOKMARK_NO);
     if (pBookmark->IsHidden())
-        sHidden = "Yes";
+        sHidden = SwResId(STR_BOOKMARK_YES);
     const OUString& sHideCondition = pBookmark->GetHideCondition();
     OUString sPageNum = OUString::number(SwPaM(pMark->GetMarkStart()).GetPageNum());
     int nRow = m_xControl->n_children();
