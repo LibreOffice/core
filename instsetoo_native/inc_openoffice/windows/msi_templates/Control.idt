@@ -83,7 +83,7 @@ CustomSetupTips	DontInstallText	Text	60	167	400	20	3		OOO_CONTROL_66
 CustomSetupTips	Install	Icon	21	105	24	24	5242881		InstallIco		
 CustomSetupTips	InstallPartial	Icon	21	136	24	24	5242881		InstallPartialIco		
 CustomSetupTips	InstallStateMenu	Icon	21	52	24	24	5242881		InstallStateMenuIco		
-CustomSetupTips	InstallStateText	Text	21	88	400	10	3		OOO_CONTROL_68		
+CustomSetupTips	InstallStateText	Text	21	88	400	15	3		OOO_CONTROL_68		
 CustomSetupTips	InstallText	Text	60	105	400	20	3		OOO_CONTROL_69		
 CustomSetupTips	MenuText	Text	50	52	400	36	3		OOO_CONTROL_70		
 CustomSetupTips	OK	PushButton	401	243	66	17	3		OOO_CONTROL_72		
@@ -312,7 +312,7 @@ SetupType	CustomIco	Icon	34	154	24	24	5242881		SetupPartialIco
 SetupType	CustText	Text	80	154	346	40	3		OOO_CONTROL_256		
 SetupType	DlgDesc	Text	21	23	372	25	65539		OOO_CONTROL_257		
 SetupType	DlgLine	Line	0	234	474	0	1				
-SetupType	DlgText	Text	21	51	426	10	3		OOO_CONTROL_258		
+SetupType	DlgText	Text	21	51	426	15	3		OOO_CONTROL_258		
 SetupType	DlgTitle	Text	13	6	380	25	65539		OOO_CONTROL_259		
 SetupType	Next	PushButton	330	243	66	17	3		OOO_CONTROL_260	Cancel	
 SetupType	RadioGroup	RadioButtonGroup	21	79	364	120	3	_IsSetupTypeMin		Back	
