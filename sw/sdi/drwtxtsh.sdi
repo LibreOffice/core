@@ -546,6 +546,12 @@ interface TextDrawText
     [
         StateMethod = StateInsert ;
     ]
+    SID_OPEN_HYPERLINK
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
     SID_EDIT_HYPERLINK
     [
         ExecMethod = Execute ;
@@ -553,6 +559,12 @@ interface TextDrawText
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_REMOVE_HYPERLINK
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    FN_COPY_HYPERLINK_LOCATION
     [
         ExecMethod = Execute ;
         StateMethod = GetState;
