@@ -49,6 +49,7 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
+#include <com/sun/star/uri/XVndSunStarScriptUrlReference.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 
 #include <memory>
@@ -131,8 +132,12 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     {
         try
         {
-            bool bIsDocumentScript = ( aURL.Complete.indexOf( "document" ) !=-1 );
-                // TODO: isn't this somewhat strange? This should be a test for a location=document parameter, shouldn't it?
+            css::uno::Reference<css::uri::XUriReferenceFactory> urifac(
+                css::uri::UriReferenceFactory::create(m_xContext));
+            css::uno::Reference<css::uri::XVndSunStarScriptUrlReference> uri(
+                urifac->parse(aURL.Complete), css::uno::UNO_QUERY_THROW);
+            auto const loc = uri->getParameter("location");
+            bool bIsDocumentScript = loc == "document";
 
             if ( bIsDocumentScript )
             {
