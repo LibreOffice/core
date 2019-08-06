@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_3a2519c3",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 15
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-08-06T06:37:52Z",
+      "side": 1,
+      "message": "where does this string appear?",
+      "range": {
+        "startLine": 566,
+        "startChar": 92,
+        "endLine": 566,
+        "endChar": 105
+      },
+      "revId": "fd9ff985fdae18562247c84d42b239b195759b93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
