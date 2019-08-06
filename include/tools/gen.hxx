@@ -391,6 +391,11 @@ public:
     void                SetSize( const Size& rSize );
     inline Size         GetSize() const;
 
+    void                SetLeft(long v)    { nLeft = v;   }
+    void                SetRight(long v)   { nRight = v;  }
+    void                SetTop(long v)     { nTop = v;    }
+    void                SetBottom(long v)  { nBottom = v; }
+
     /// Returns the difference between right and left, assuming the range is inclusive.
     inline long         GetWidth() const;
     /// Returns the difference between bottom and top, assuming the range is inclusive.
