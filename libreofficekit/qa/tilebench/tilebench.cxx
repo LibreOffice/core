@@ -140,10 +140,10 @@ static void testTile( Document *pDocument, int max_parts,
     aTimes.emplace_back();
 
     // Use realistic dimensions, similar to the Online client.
-    long nTilePixelWidth = 512;
-    long nTilePixelHeight = 512;
-    long nTileTwipWidth = 3840;
-    long nTileTwipHeight = 3840;
+    long const nTilePixelWidth = 512;
+    long const nTilePixelHeight = 512;
+    long const nTileTwipWidth = 3840;
+    long const nTileTwipHeight = 3840;
 
     // Estimate the maximum tiles based on the number of parts requested, if Writer.
     if (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT)
