@@ -526,7 +526,7 @@ LanguageType SwAutoCorrDoc::GetLanguage( sal_Int32 nPos ) const
 
 void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
 {
-    // test only if this is a improvement.
+    // test only if this is an improvement.
     // If yes, then add the word to the list.
     if (m_cChar == cChr && rPos.nNode.GetIndex() == m_nNode && rPos.nContent.GetIndex() == m_nContent)
     {
