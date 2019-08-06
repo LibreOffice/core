@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_b5a13aac",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-08-06T09:49:58Z",
+      "side": 1,
+      "message": "All the four buttons are initially set as active.\nEven the lines\nm_xECC[i]-\u003eset_active(false); here\nshows no effect. Why ?",
+      "revId": "ac71a86c55987a830f656308cf1aa4a7d459493f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
