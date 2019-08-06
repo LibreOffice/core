@@ -218,7 +218,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 }
 
                 // open hyperlink, if found at object or in object's text
-                if ( !sURL.isEmpty() )
+                if ( !sURL.isEmpty() && ScGlobal::ShouldOpenURL() )
                 {
                     ScGlobal::OpenURL( sURL, sTarget );
                     rViewShell.FakeButtonUp( rViewShell.GetViewData().GetActivePart() );
