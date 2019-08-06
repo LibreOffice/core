@@ -161,7 +161,7 @@ $(share_WORKDIR)/%/openoffice.sh: $(share_SRCDIR)/share/openoffice.sh
 
 $(share_WORKDIR)/%/create_tree.sh: $(share_SRCDIR)/share/create_tree.sh \
 	$(share_WORKDIR)/%/openoffice.org.xml $(share_WORKDIR)/%/openoffice.applications $(share_WORKDIR)/%/openoffice.mime \
-	$(share_WORKDIR)/%/openoffice.keys $(share_WORKDIR)/%/launcherlist $(if $(INTROSPECTION_SCANNER),$(call gb_Library_get_target,libreofficekitgtk))
+	$(share_WORKDIR)/%/openoffice.keys $(share_WORKDIR)/%/launcherlist
 	mkdir -p $(dir $@)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CAT,1)
 	echo "#!/bin/sh" > $@
@@ -170,7 +170,6 @@ $(share_WORKDIR)/%/create_tree.sh: $(share_SRCDIR)/share/create_tree.sh \
 	echo "ICON_SOURCE_DIR=$(SRCDIR)/sysui/desktop/icons" >> $@
 	echo "APPDATA_SOURCE_DIR=$(SRCDIR)/sysui/desktop/appstream-appdata" >> $@
 	echo "PRODUCTVERSION=$(PRODUCTVERSION)" >> $@
-	echo "INTROSPECTION_SCANNER=$(INTROSPECTION_SCANNER)" >> $@
 	cat $< >> $@
 	chmod 774 $@
 
