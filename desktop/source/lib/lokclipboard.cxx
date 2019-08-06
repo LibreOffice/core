@@ -8,6 +8,7 @@
  */
 
 #include "lokclipboard.hxx"
+#include <unordered_map>
 #include <vcl/lazydelete.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <cppuhelper/supportsservice.hxx>

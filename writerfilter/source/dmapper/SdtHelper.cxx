@@ -10,16 +10,10 @@
 #include "SdtHelper.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
-#include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/util/Date.hpp>
-#include <sal/log.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <editeng/unoprnms.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
-#include <unotools/datetime.hxx>
 #include <comphelper/sequence.hxx>
 #include <xmloff/odffields.hxx>
 

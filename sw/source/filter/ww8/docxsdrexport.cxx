@@ -10,7 +10,6 @@
 #include "docxsdrexport.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#include <editeng/charrotateitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/shaditem.hxx>
@@ -23,8 +22,6 @@
 #include <fmtsrnd.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtornt.hxx>
-#include <ndtxt.hxx>
-#include <txatbase.hxx>
 #include <fmtfsize.hxx>
 #include <frmatr.hxx>
 #include "docxattributeoutput.hxx"

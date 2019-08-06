@@ -15,6 +15,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -25,10 +26,6 @@ namespace sun
 {
 namespace star
 {
-namespace awt
-{
-class XWindow;
-}
 namespace uno
 {
 class XComponentContext;
