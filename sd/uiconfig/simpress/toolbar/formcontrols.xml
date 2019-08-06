@@ -48,6 +48,7 @@
  <toolbar:toolbaritem xlink:href=".uno:CurrencyField"/>
  <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:PatternField"/>
+ <toolbar:toolbaritem xlink:href=".uno:Grid"/>
  <toolbar:toolbaritem xlink:href=".uno:NavigationBar"/>
  <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:ImageControl"/>
