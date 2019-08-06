@@ -67,7 +67,7 @@ bool SwRootFrame::HasSameRect( const SwRect& rRect )
     the virtual output device
 */
 // define to control, if old or new solution for setting the mapping for
-// an virtual output device is used.
+// a virtual output device is used.
 static void SetMappingForVirtDev(  const Point&    _rNewOrigin,
                             const vcl::RenderContext* _pOrgOutDev,
                             vcl::RenderContext*  _pVirDev )

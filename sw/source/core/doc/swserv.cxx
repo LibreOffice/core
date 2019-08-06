@@ -274,7 +274,7 @@ void SwServerObject::SetDdeBookmark( ::sw::mark::IMark& rBookmark)
     }
     else
         OSL_FAIL("SwServerObject::SetNoServer(..)"
-            " - setting an bookmark that is not DDE-capable");
+            " - setting a bookmark that is not DDE-capable");
 }
 
 SwDataChanged::SwDataChanged( const SwPaM& rPam )
@@ -300,7 +300,7 @@ SwDataChanged::~SwDataChanged()
         for( const auto& rpLinkSrc : aTemp )
         {
             ::sfx2::SvLinkSourceRef refObj( rpLinkSrc );
-            // Any one else interested in the Object?
+            // Anyone else interested in the Object?
             if( refObj->HasDataLinks() && dynamic_cast<const SwServerObject*>( refObj.get() ) !=  nullptr)
             {
                 SwServerObject& rObj = *static_cast<SwServerObject*>( refObj.get() );

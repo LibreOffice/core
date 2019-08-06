@@ -715,7 +715,7 @@ void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
 
     sal_uLong nTableNd = m_nSttNode;
     if( m_nSttContent )
-        ++nTableNd;       // Node was splitted previously
+        ++nTableNd;       // Node was split previously
     SwNodeIndex aIdx( rDoc.GetNodes(), nTableNd );
     SwTableNode *const pTNd = aIdx.GetNode().GetTableNode();
     OSL_ENSURE( pTNd, "Could not find a TableNode" );
@@ -1578,7 +1578,7 @@ void SwUndoTableNdsChg::SaveNewBoxes( const SwTableNode& rTableNd,
 
             // find the source box. It must be one in rBoxes.
             // We found the right one if it's in the same column as pBox.
-            // No, if more than one selected cell in the same column has been splitted,
+            // No, if more than one selected cell in the same column has been split,
             // we have to look for the nearest one (i65201)!
             const SwTableBox* pSourceBox = nullptr;
             const SwTableBox* pCheckBox = nullptr;
@@ -1604,7 +1604,7 @@ void SwUndoTableNdsChg::SaveNewBoxes( const SwTableNode& rTableNd,
             // find the line number difference
             // (to help determine bNodesMoved flag below)
             nLineDiff = nLineDiff - nLineNo;
-            OSL_ENSURE( pSourceBox, "Splitted source box not found!" );
+            OSL_ENSURE( pSourceBox, "Split source box not found!" );
             // find out how many nodes the source box used to have
             // (to help determine bNodesMoved flag below)
             size_t nNdsPos = 0;
