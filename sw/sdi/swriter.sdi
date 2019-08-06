@@ -7328,24 +7328,6 @@ SfxVoidItem PreviousTrackedChange FN_REDLINE_PREV_CHANGE
     GroupId = SfxGroupId::Edit;
 ]
 
-SfxVoidItem CopyHyperlinkLocation FN_COPY_HYPERLINK_LOCATION
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Edit;
-]
-
 SfxVoidItem NavigateBack FN_NAVIGATION_BACK
 [
     AutoUpdate = TRUE,
