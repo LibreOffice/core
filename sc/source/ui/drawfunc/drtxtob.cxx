@@ -58,6 +58,7 @@
 
 #include <svx/svxdlg.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/unohelp2.hxx>
 
 #include <sc.hrc>
 #include <globstr.hrc>
@@ -310,6 +311,18 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             }
             break;
 
+        case SID_COPY_HYPERLINK_LOCATION:
+            {
+                const SvxFieldData* pField = pOutView->GetFieldAtCursor();
+                if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
+                {
+                    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard
+                        = pOutView->GetWindow()->GetClipboard();
+                    vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard);
+                }
+            }
+            break;
+
         case SID_REMOVE_HYPERLINK:
             {
                 URLFieldHelper::RemoveURLField(pOutliner, pOutView);
@@ -393,6 +406,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
 
     if (rSet.GetItemState(SID_OPEN_HYPERLINK) != SfxItemState::UNKNOWN
         || rSet.GetItemState(SID_EDIT_HYPERLINK) != SfxItemState::UNKNOWN
+        || rSet.GetItemState(SID_COPY_HYPERLINK_LOCATION) != SfxItemState::UNKNOWN
         || rSet.GetItemState(SID_REMOVE_HYPERLINK) != SfxItemState::UNKNOWN)
     {
         SdrView* pView = pViewData->GetScDrawView();
@@ -401,6 +415,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         {
             rSet.DisableItem( SID_OPEN_HYPERLINK );
             rSet.DisableItem( SID_EDIT_HYPERLINK );
+            rSet.DisableItem( SID_COPY_HYPERLINK_LOCATION );
             rSet.DisableItem( SID_REMOVE_HYPERLINK );
         }
     }

@@ -131,6 +131,7 @@ interface TableDrawText
     SID_HYPERLINK_GETLINK   [ StateMethod = GetState; Export = FALSE; ]
     SID_OPEN_HYPERLINK      [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_EDIT_HYPERLINK      [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_COPY_HYPERLINK_LOCATION [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_REMOVE_HYPERLINK    [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_ENABLE_HYPHENATION  [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
 
