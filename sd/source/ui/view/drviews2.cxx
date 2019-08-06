@@ -2116,6 +2116,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_EDIT_HYPERLINK :
         {
+            // Ensure the field is selected first
+            OutlinerView* pOutView = mpDrawView->GetTextEditOutlinerView();
+            if (pOutView)
+                pOutView->GetFieldAtCursor();
+
             GetViewFrame()->GetDispatcher()->Execute( SID_HYPERLINK_DIALOG );
 
             Cancel();
@@ -2128,35 +2133,31 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             OutlinerView* pOutView = mpDrawView->GetTextEditOutlinerView();
             if ( pOutView )
             {
-                const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
-                if ( pFieldItem )
+                const SvxFieldData* pField = pOutView->GetFieldAtCursor();
+                if( auto pURLField = dynamic_cast< const SvxURLField *>( pField ) )
                 {
-                    const SvxFieldData* pField = pFieldItem->GetField();
-                    if( auto pURLField = dynamic_cast< const SvxURLField *>( pField ) )
+                    SfxStringItem aUrl( SID_FILE_NAME, pURLField->GetURL() );
+                    SfxStringItem aTarget( SID_TARGETNAME, pURLField->GetTargetFrame() );
+
+                    OUString aReferName;
+                    SfxViewFrame* pFrame = GetViewFrame();
+                    SfxMedium* pMed = pFrame->GetObjectShell()->GetMedium();
+                    if (pMed)
+                        aReferName = pMed->GetName();
+
+                    SfxFrameItem aFrm( SID_DOCFRAME, pFrame );
+                    SfxStringItem aReferer( SID_REFERER, aReferName );
+
+                    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, false );
+                    SfxBoolItem aBrowsing( SID_BROWSE, true );
+
+                    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+                    if (pViewFrm)
                     {
-                        SfxStringItem aUrl( SID_FILE_NAME, pURLField->GetURL() );
-                        SfxStringItem aTarget( SID_TARGETNAME, pURLField->GetTargetFrame() );
-
-                        OUString aReferName;
-                        SfxViewFrame* pFrame = GetViewFrame();
-                        SfxMedium* pMed = pFrame->GetObjectShell()->GetMedium();
-                        if (pMed)
-                            aReferName = pMed->GetName();
-
-                        SfxFrameItem aFrm( SID_DOCFRAME, pFrame );
-                        SfxStringItem aReferer( SID_REFERER, aReferName );
-
-                        SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, false );
-                        SfxBoolItem aBrowsing( SID_BROWSE, true );
-
-                        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                        if (pViewFrm)
-                        {
-                            pViewFrm->GetDispatcher()->ExecuteList(SID_OPENDOC,
-                                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
-                                { &aUrl, &aTarget, &aFrm, &aReferer,
-                                  &aNewView, &aBrowsing });
-                        }
+                        pViewFrm->GetDispatcher()->ExecuteList(SID_OPENDOC,
+                            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                            { &aUrl, &aTarget, &aFrm, &aReferer,
+                                &aNewView, &aBrowsing });
                     }
                 }
             }
