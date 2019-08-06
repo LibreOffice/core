@@ -774,8 +774,8 @@ void ScColorScale2FrmtEntry::Init()
 {
     mxLbEntryTypeMin->connect_changed( LINK( this, ScColorScale2FrmtEntry, EntryTypeHdl ) );
     mxLbEntryTypeMax->connect_changed( LINK( this, ScColorScale2FrmtEntry, EntryTypeHdl ) );
-    mxLbColMin->SelectEntry(Color(0xFFF685)); // Light Yellow 2
-    mxLbColMax->SelectEntry(Color(0x65C295)); // Light Green 2
+    mxLbColMin->SelectEntry(Color(0xffff6d)); // Light Yellow 2
+    mxLbColMax->SelectEntry(Color(0x77bc65)); // Light Green 2
 }
 
 ScFormatEntry* ScColorScale2FrmtEntry::createColorscaleEntry() const
@@ -920,7 +920,7 @@ void ScColorScale3FrmtEntry::Init()
     mxLbEntryTypeMiddle->connect_changed( LINK( this, ScColorScale3FrmtEntry, EntryTypeHdl ) );
     mxLbColMin->SelectEntry(COL_LIGHTRED);
     mxLbColMiddle->SelectEntry(COL_YELLOW);
-    mxLbColMax->SelectEntry(Color(0x00CC00));
+    mxLbColMax->SelectEntry(Color(0x00a933));
 }
 
 ScFormatEntry* ScColorScale3FrmtEntry::createColorscaleEntry() const
