@@ -56,6 +56,7 @@
 #include <svl/whiter.hxx>
 #include <sot/formats.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/unohelp2.hxx>
 #include <svl/stritem.hxx>
 
 #include <editsh.hxx>
@@ -636,6 +637,17 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     SID_HYPERLINK_DIALOG);
             }
         break;
+        case SID_COPY_HYPERLINK_LOCATION:
+            {
+                const SvxFieldData* pField = pEditView->GetFieldAtCursor();
+                if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
+                {
+                    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard
+                        = pEditView->GetWindow()->GetClipboard();
+                    vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard);
+                }
+            }
+        break;
         case SID_REMOVE_HYPERLINK:
             {
                 // Ensure the field is selected first
@@ -775,6 +787,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
 
             case SID_OPEN_HYPERLINK:
             case SID_EDIT_HYPERLINK:
+            case SID_COPY_HYPERLINK_LOCATION:
             case SID_REMOVE_HYPERLINK:
                 {
                     if ( !GetURLField() )
