@@ -1584,16 +1584,6 @@ void SwBasicEscherEx::WriteGrfBullet(const Graphic& rGrf)
     OString aUniqueId = aGraphicObject.GetUniqueID();
     if ( !aUniqueId.isEmpty() )
     {
-        const MapMode aMap100mm( MapUnit::Map100thMM );
-        Size    aSize( rGrf.GetPrefSize() );
-        if ( MapUnit::MapPixel == rGrf.GetPrefMapMode().GetMapUnit() )
-        {
-            aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMap100mm );
-        }
-        else
-        {
-            aSize = OutputDevice::LogicToLogic( aSize,rGrf.GetPrefMapMode(), aMap100mm );
-        }
         sal_uInt32 nBlibId = mxGlobal->GetBlibID( *(mxGlobal->QueryPictureStream()), aGraphicObject );
         if (nBlibId)
             aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, true);
@@ -1663,20 +1653,6 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrameFormat& rFormat, sal_uI
 
         if (!aUniqueId.isEmpty())
         {
-            const   MapMode aMap100mm( MapUnit::Map100thMM );
-            Size    aSize( aGraphic.GetPrefSize() );
-
-            if ( MapUnit::MapPixel == aGraphic.GetPrefMapMode().GetMapUnit() )
-            {
-                aSize = Application::GetDefaultDevice()->PixelToLogic(
-                    aSize, aMap100mm );
-            }
-            else
-            {
-                aSize = OutputDevice::LogicToLogic( aSize,
-                    aGraphic.GetPrefMapMode(), aMap100mm );
-            }
-
             sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(), aGraphicObject);
             if (nBlibId)
                 aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, true);
@@ -1886,20 +1862,6 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
         OString aUniqueId = pGraphicObject->GetUniqueID();
         if (!aUniqueId.isEmpty())
         {
-            const Graphic &rGraphic = pGraphicObject->GetGraphic();
-            Size aSize(rGraphic.GetPrefSize());
-            const MapMode aMap100mm(MapUnit::Map100thMM);
-            if (MapUnit::MapPixel == rGraphic.GetPrefMapMode().GetMapUnit())
-            {
-                aSize = Application::GetDefaultDevice()->PixelToLogic(
-                    aSize, aMap100mm);
-            }
-            else
-            {
-                aSize = OutputDevice::LogicToLogic(aSize,
-                    rGraphic.GetPrefMapMode(), aMap100mm);
-            }
-
             sal_uInt32 nBlibId = mxGlobal->GetBlibID(*QueryPictureStream(), *pGraphicObject);
             if (nBlibId)
                 rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,true);
@@ -2945,7 +2907,7 @@ void SwBasicEscherEx::WriteOLEPicture(EscherPropertyContainer &rPropOpt,
     OString aId = aGraphicObject.GetUniqueID();
     if (!aId.isEmpty())
     {
-        // SJ: the fourth parameter (VisArea) should be set..
+        // SJ: the third parameter (pVisArea) should be set..
         sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(), aGraphicObject, pVisArea);
         if (nBlibId)
             rPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, true);
