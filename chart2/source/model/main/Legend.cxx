@@ -98,83 +98,67 @@ void lcl_AddPropertiesToVector(
 
 }
 
-struct StaticLegendDefaults_Initializer
+static Sequence< Property > lcl_GetPropertySequence()
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
-        ::chart::FillProperties::AddDefaultsToMap( rOutMap );
-        ::chart::CharacterProperties::AddDefaultsToMap( rOutMap );
+    std::vector< css::beans::Property > aProperties;
+    lcl_AddPropertiesToVector( aProperties );
+    ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
+    ::chart::FillProperties::AddPropertiesToVector( aProperties );
+    ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
+    ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_ANCHOR_POSITION, chart2::LegendPosition_LINE_END );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_EXPANSION, css::chart::ChartLegendExpansion_HIGH );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_SHOW, true );
+    std::sort( aProperties.begin(), aProperties.end(),
+                 ::chart::PropertyNameLess() );
 
-        float fDefaultCharHeight = 10.0;
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
-    }
-};
+    return comphelper::containerToSequence( aProperties );
+}
 
-struct StaticLegendDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticLegendDefaults_Initializer >
+void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
 {
-};
+    ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
+    ::chart::FillProperties::AddDefaultsToMap( rOutMap );
+    ::chart::CharacterProperties::AddDefaultsToMap( rOutMap );
 
-struct StaticLegendInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_ANCHOR_POSITION, chart2::LegendPosition_LINE_END );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_EXPANSION, css::chart::ChartLegendExpansion_HIGH );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_SHOW, true );
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
-        ::chart::FillProperties::AddPropertiesToVector( aProperties );
-        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-};
-
-struct StaticLegendInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticLegendInfoHelper_Initializer >
-{
-};
-
-struct StaticLegendInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticLegendInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticLegendInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticLegendInfo_Initializer >
-{
-};
+    float fDefaultCharHeight = 10.0;
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
+}
 
 } // anonymous namespace
 
 namespace chart
 {
+
+namespace legend
+{
+
+::cppu::OPropertyArrayHelper* StaticLegendInfoHelper_Initializer::operator()()
+{
+    static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+    return &aPropHelper;
+}
+
+
+uno::Reference< beans::XPropertySetInfo >* StaticLegendInfo_Initializer::operator()()
+{
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticLegendInfoHelper::get() ) );
+    return &xPropertySetInfo;
+}
+
+::chart::tPropertyValueMap* StaticLegendDefaults_Initializer::operator()()
+{
+    static ::chart::tPropertyValueMap aStaticDefaults;
+    lcl_AddDefaultsToMap( aStaticDefaults );
+    return &aStaticDefaults;
+}
+
+}
 
 Legend::Legend() :
         ::property::OPropertySet( m_aMutex ),
@@ -247,7 +231,7 @@ void Legend::firePropertyChangeEvent()
 // ____ OPropertySet ____
 Any Legend::GetDefaultValue( sal_Int32 nHandle ) const
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticLegendDefaults::get();
+    const tPropertyValueMap& rStaticDefaults = *legend::StaticLegendDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
         return uno::Any();
@@ -256,13 +240,13 @@ Any Legend::GetDefaultValue( sal_Int32 nHandle ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL Legend::getInfoHelper()
 {
-    return *StaticLegendInfoHelper::get();
+    return *legend::StaticLegendInfoHelper::get();
 }
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL Legend::getPropertySetInfo()
 {
-    return *StaticLegendInfo::get();
+    return *legend::StaticLegendInfo::get();
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static

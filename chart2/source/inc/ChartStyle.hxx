@@ -33,12 +33,23 @@
 
 namespace chart2
 {
+namespace impl
+{
+typedef ::cppu::WeakImplHelper<css::style::XStyle> ChartObjectStyle_Base;
+}
 
-class ChartObjectStyle : public chart::MutexContainer, public property::OPropertySet, public css::style::XStyle
+class ChartObjectStyle : public chart::MutexContainer,
+                         public impl::ChartObjectStyle_Base,
+                         public property::OPropertySet
 {
 public:
-    ChartObjectStyle(::cppu::IPropertyArrayHelper& rArrayHelper, const chart::tPropertyValueMap& rPropertyMap);
+    ChartObjectStyle(css::uno::Reference<css::beans::XPropertySetInfo> xPropertySetInfo,
+                     ::cppu::IPropertyArrayHelper& rArrayHelper,
+                     const chart::tPropertyValueMap& rPropertyMap);
     virtual ~ChartObjectStyle();
+
+    /// merge XInterface implementations
+    DECLARE_XINTERFACE()
 
     virtual sal_Bool SAL_CALL isUserDefined() override;
     virtual sal_Bool SAL_CALL isInUse() override;
@@ -47,32 +58,34 @@ public:
     virtual void SAL_CALL setParentStyle(const OUString&) override;
 
     // ____ OPropertySet ____
-    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const override;
+    virtual css::uno::Any GetDefaultValue(sal_Int32 nHandle) const override;
 
     // ____ OPropertySet ____
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo() override;
+    virtual css::uno::Reference<css::beans::XPropertySetInfo>
+        SAL_CALL getPropertySetInfo() override;
+
+    virtual OUString SAL_CALL getName();
+
+    virtual void SAL_CALL setName(const OUString&);
 
 private:
-
     ::cppu::IPropertyArrayHelper& mrArrayHelper;
     const chart::tPropertyValueMap& mrPropertyMap;
+    css::uno::Reference<css::beans::XPropertySetInfo> mxPropSetInfo;
 };
 
-class ChartStyle : public cppu::WeakImplHelper<
-                      css::chart2::XChartStyle
-                    , css::lang::XServiceInfo >
+class ChartStyle : public cppu::WeakImplHelper<css::chart2::XChartStyle, css::lang::XServiceInfo>
 {
 public:
     explicit ChartStyle();
     virtual ~ChartStyle();
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // _____ XChartStyle _____
     virtual css::uno::Reference<css::beans::XPropertySet>
@@ -82,6 +95,8 @@ private:
     sal_Int16 m_nNumObjects;
 
     std::map<sal_Int16, css::uno::Reference<css::beans::XPropertySet>> m_xChartStyle;
+
+    void register_styles();
 };
 
 } // namespace chart2

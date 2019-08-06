@@ -22,76 +22,88 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+#include <Legend.hxx>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace uno
+{
+class XComponentContext;
+}
+}
+}
+}
 
 namespace chart2
 {
-
-ChartObjectStyle::ChartObjectStyle(::cppu::IPropertyArrayHelper& rArrayHelper, const chart::tPropertyValueMap& rPropertyMap):
-    OPropertySet( m_aMutex ),
-    mrArrayHelper(rArrayHelper),
-    mrPropertyMap(rPropertyMap)
+ChartObjectStyle::ChartObjectStyle(css::uno::Reference<css::beans::XPropertySetInfo> xPropSetInfo,
+                                   ::cppu::IPropertyArrayHelper& rArrayHelper,
+                                   const chart::tPropertyValueMap& rPropertyMap)
+    : OPropertySet(m_aMutex)
+    , mrArrayHelper(rArrayHelper)
+    , mrPropertyMap(rPropertyMap)
+    , mxPropSetInfo(xPropSetInfo)
 {
 }
 
-ChartObjectStyle::~ChartObjectStyle()
+ChartObjectStyle::~ChartObjectStyle() {}
+
+sal_Bool SAL_CALL ChartObjectStyle::isInUse() { return true; }
+
+sal_Bool SAL_CALL ChartObjectStyle::isUserDefined() { return true; }
+
+OUString SAL_CALL ChartObjectStyle::getParentStyle() { return ""; }
+
+void SAL_CALL ChartObjectStyle::setParentStyle(const OUString&) {}
+
+css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL ChartObjectStyle::getPropertySetInfo()
 {
+    return mxPropSetInfo;
 }
 
-sal_Bool SAL_CALL ChartObjectStyle::isInUse()
-{
-    return true;
-}
+OUString SAL_CALL ChartObjectStyle::getName() { return OUString(); }
 
-sal_Bool SAL_CALL ChartObjectStyle::isUserDefined()
-{
-    return true;
-}
-
-OUString SAL_CALL ChartObjectStyle::getParentStyle()
-{
-    return "";
-}
-
-void SAL_CALL ChartObjectStyle::setParentStyle(const OUString&)
-{
-}
+void SAL_CALL ChartObjectStyle::setName(const OUString&) {}
 
 // ____ OPropertySet ____
-css::uno::Any ChartObjectStyle::GetDefaultValue( sal_Int32 nHandle ) const
+css::uno::Any ChartObjectStyle::GetDefaultValue(sal_Int32 nHandle) const
 {
-    chart::tPropertyValueMap::const_iterator aFound( mrPropertyMap.find( nHandle ) );
-    if( aFound == mrPropertyMap.end() )
+    chart::tPropertyValueMap::const_iterator aFound(mrPropertyMap.find(nHandle));
+    if (aFound == mrPropertyMap.end())
         return css::uno::Any();
     return (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL ChartObjectStyle::getInfoHelper()
-{
-    return mrArrayHelper;
-}
-
-// ____ XPropertySet ____
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL ChartObjectStyle::getPropertySetInfo()
-{
-    //return *mrArrayHelper;
-    return css::uno::Reference<css::beans::XPropertySetInfo>();
-}
+::cppu::IPropertyArrayHelper& SAL_CALL ChartObjectStyle::getInfoHelper() { return mrArrayHelper; }
 
 ChartStyle::ChartStyle()
-    : m_nNumObjects( css::chart2::ChartObjectType::UNKNOWN )
+    : m_nNumObjects(css::chart2::ChartObjectType::UNKNOWN)
 {
+    register_styles();
 }
 
 ChartStyle::~ChartStyle() {}
 
-css::uno::Reference< css::beans::XPropertySet> ChartStyle::getStyleForObject( const sal_Int16 nChartObjectType )
+css::uno::Reference<css::beans::XPropertySet>
+ChartStyle::getStyleForObject(const sal_Int16 nChartObjectType)
 {
     auto itr = m_xChartStyle.find(nChartObjectType);
     if (itr == m_xChartStyle.end())
-        throw css::lang::IllegalArgumentException( "Unknown Chart Object Style requested", nullptr, 0 );
+        throw css::lang::IllegalArgumentException("Unknown Chart Object Style requested", nullptr,
+                                                  0);
 
     return itr->second;
+}
+
+void ChartStyle::register_styles()
+{
+    m_xChartStyle[css::chart2::ChartObjectType::LEGEND] = new ChartObjectStyle(
+        *chart::legend::StaticLegendInfo::get(), *chart::legend::StaticLegendInfoHelper::get(),
+        *chart::legend::StaticLegendDefaults::get());
 }
 
 // _____ XServiceInfo _____
@@ -100,21 +112,26 @@ OUString SAL_CALL ChartStyle::getImplementationName()
     return OUString("com.sun.star.comp.chart2.ChartStyle");
 }
 
-sal_Bool SAL_CALL ChartStyle::supportsService( const OUString& rServiceName )
+sal_Bool SAL_CALL ChartStyle::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ChartStyle::getSupportedServiceNames()
+css::uno::Sequence<OUString> SAL_CALL ChartStyle::getSupportedServiceNames()
 {
     return { "com.sun.star.chart2.ChartStyle" };
 }
+//
+// needed by MSC compiler
+using impl::ChartObjectStyle_Base;
+
+IMPLEMENT_FORWARD_XINTERFACE2(ChartObjectStyle, ChartObjectStyle_Base, ::property::OPropertySet)
 
 } //  namespace chart2
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart2_ChartStyle_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_chart2_ChartStyle_get_implementation(css::uno::XComponentContext*,
+                                                       css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new chart2::ChartStyle);
 }
