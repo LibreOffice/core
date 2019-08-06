@@ -1301,7 +1301,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     }
     break;
     case SID_OPEN_HYPERLINK:
-    case FN_COPY_HYPERLINK_LOCATION:
+    case SID_COPY_HYPERLINK_LOCATION:
     {
         SfxItemSet aSet(GetPool(),
                         svl::Items<RES_TXTATR_INETFMT,
@@ -1310,7 +1310,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT ))
         {
             const SwFormatINetFormat& rINetFormat = dynamic_cast<const SwFormatINetFormat&>( aSet.Get(RES_TXTATR_INETFMT) );
-            if( nSlot == FN_COPY_HYPERLINK_LOCATION )
+            if( nSlot == SID_COPY_HYPERLINK_LOCATION )
             {
                 ::uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetView().GetEditWin().GetClipboard();
                 vcl::unohelper::TextDataObject::CopyStringTo(
@@ -1748,7 +1748,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 break;
 
             case SID_EDIT_HYPERLINK:
-            case FN_COPY_HYPERLINK_LOCATION:
+            case SID_COPY_HYPERLINK_LOCATION:
                 {
                     SfxItemSet aSet(GetPool(),
                         svl::Items<RES_TXTATR_INETFMT,

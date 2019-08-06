@@ -517,7 +517,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         }
         break;
 
-        case FN_COPY_HYPERLINK_LOCATION:
+        case SID_COPY_HYPERLINK_LOCATION:
         {
             const SvxFieldData* pField = pOLV->GetFieldAtCursor();
             if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
@@ -931,7 +931,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
             case SID_REMOVE_HYPERLINK:
             case SID_EDIT_HYPERLINK:
             case SID_OPEN_HYPERLINK:
-            case FN_COPY_HYPERLINK_LOCATION:
+            case SID_COPY_HYPERLINK_LOCATION:
             {
                 if (!URLFieldHelper::IsCursorAtURLField(pOLV))
                     rSet.DisableItem(nWhich);

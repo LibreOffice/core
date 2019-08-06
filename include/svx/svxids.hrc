@@ -984,9 +984,10 @@ class SvxSetItem;
 
 #define SID_INSERT_QRCODE                               ( SID_SVX_START + 1191 )
 #define SID_EDIT_QRCODE                                 ( SID_SVX_START + 1192 )
+#define SID_COPY_HYPERLINK_LOCATION                     ( SID_SVX_START + 1193 )
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1192 + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1193 + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END

@@ -353,7 +353,7 @@ interface BaseText
         StateMethod = GetState;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
-    FN_COPY_HYPERLINK_LOCATION
+    SID_COPY_HYPERLINK_LOCATION
     [
         ExecMethod = Execute ;
         StateMethod = GetState;
