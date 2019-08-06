@@ -102,6 +102,7 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp2.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/weld.hxx>
 
@@ -2159,6 +2160,25 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     }
                 }
             }
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_COPY_HYPERLINK_LOCATION:
+        {
+            OutlinerView* pOutView = mpDrawView->GetTextEditOutlinerView();
+            if ( pOutView )
+            {
+                const SvxFieldData* pField = pOutView->GetFieldAtCursor();
+                if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
+                {
+                    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard
+                        = pOutView->GetWindow()->GetClipboard();
+                    vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard);
+                }
+            }
+
             Cancel();
             rReq.Done ();
         }
