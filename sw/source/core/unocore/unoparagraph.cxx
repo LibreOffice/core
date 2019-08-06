@@ -750,7 +750,7 @@ SwXParagraph::Impl::GetPropertyValuesTolerant_Impl(
 
     for (const OUString& rProp : rPropertyNames)
     {
-        OSL_ENSURE( nIdx < nProps, "index out ouf bounds" );
+        OSL_ENSURE( nIdx < nProps, "index out of bounds" );
         beans::GetDirectPropertyTolerantResult &rResult = pResult[nIdx];
 
         try

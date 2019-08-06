@@ -934,7 +934,7 @@ void SwNodes::SectionDown(SwNodeRange *pRange, SwStartNodeType eSttNdTyp )
 /** increase level of the given range
  *
  * The range contained in pRange will be lifted to the next higher level.
- * This is done by adding a end node at pRange.start and a start node at
+ * This is done by adding an end node at pRange.start and a start node at
  * pRange.end. Furthermore all indices for this range will be updated.
  *
  * After this method call, the start node of pRange will be pointing to the
@@ -1161,7 +1161,7 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
                 nLevel--;
             }
 
-            // after deletion, aEnd might point to a EndNode...
+            // after deletion, aEnd might point to an EndNode...
             // delete all empty start/end node pairs
             SwNode* pTmpNode = aRg.aEnd.GetNode().GetEndNode();
             --aRg.aEnd;
@@ -1712,7 +1712,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
 
     // when inserting into the source range, nothing need to be done
     OSL_ENSURE( &aRg.aStart.GetNodes() == this,
-                "aRg should use thisnodes array" );
+                "aRg should use this node array" );
     OSL_ENSURE( &aRg.aStart.GetNodes() == &aRg.aEnd.GetNodes(),
                "Range across different nodes arrays? You deserve punishment!");
     if( &rIndex.GetNodes() == &aRg.aStart.GetNodes() &&

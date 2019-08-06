@@ -1471,7 +1471,7 @@ namespace sw { namespace mark
         OUString sTmp;
 
         // try the name "<rName>XXX" (where XXX is a number starting from 1) unless there is
-        // a unused name. Due to performance-reasons (especially in mailmerge-scenarios) there
+        // an unused name. Due to performance-reasons (especially in mailmerge-scenarios) there
         // is a map m_aMarkBasenameMapUniqueOffset which holds the next possible offset (XXX) for
         // rName (so there is no need to test for nCnt-values smaller than the offset).
         sal_Int32 nCnt = 1;

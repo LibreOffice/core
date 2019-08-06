@@ -831,7 +831,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
     // box of the selection and because the new master cell _is_ the top-left
     // box, the left and right border does not need to be changed.
     // The right and bottom border instead has to be derived from the right-
-    // bottom box of the selection. If this is a overlapped cell,
+    // bottom box of the selection. If this is an overlapped cell,
     // the appropriate master box.
     SwTableBox* pLastBox = nullptr; // the right-bottom (master) cell
     SwDoc* pDoc = GetFrameFormat()->GetDoc();

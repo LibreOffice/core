@@ -2339,7 +2339,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         // First try to split the table. Condition:
         // 1. We have at least one non headline row
         // 2. If this row wants to keep, we need an additional row
-        // 3. The table is allowed to split or we do not have an pIndPrev:
+        // 3. The table is allowed to split or we do not have a pIndPrev:
         SwFrame* pIndPrev = GetIndPrev();
         const SwRowFrame* pFirstNonHeadlineRow = GetFirstNonHeadlineRow();
         // #i120016# if this row wants to keep, allow split in case that all rows want to keep with next,
@@ -2709,8 +2709,8 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                 //   fly frame rectangle overlaps with <aRect>
                 // - no check, if bottom of anchor frame is prior the top of
                 //   the table, because Writer fly frames can be negative positioned.
-                // - correct check, if the Writer fly frame is an lower of the
-                //   table, because table lines/rows can split and a at-character
+                // - correct check, if the Writer fly frame is a lower of the
+                //   table, because table lines/rows can split and an at-character
                 //   anchored Writer fly frame could be positioned in the follow
                 //   flow line.
                 // - add condition, that an existing anchor character text frame
@@ -3365,7 +3365,7 @@ SwFrame *SwTabFrame::FindLastContentOrTable()
 #if OSL_DEBUG_LEVEL > 0
                 SwSectionFrame* pSect = pRet->FindSctFrame();
                 OSL_ENSURE( pSect, "Where does this column come from?");
-                OSL_ENSURE( IsAnLower( pSect ), "Splitted cell?" );
+                OSL_ENSURE( IsAnLower( pSect ), "Split cell?" );
 #endif
                 return pRet->FindSctFrame()->FindLastContent();
             }

@@ -1239,7 +1239,7 @@ void SwFEShell::EndTextEdit()
     // is deleted. All other objects marked are preserved.
 
     OSL_ENSURE( Imp()->HasDrawView() && Imp()->GetDrawView()->IsTextEdit(),
-            "EndTextEdit an no Object" );
+            "EndTextEdit a no Object" );
 
     StartAllAction();
     SdrView *pView = Imp()->GetDrawView();
@@ -1331,7 +1331,7 @@ SdrObject* SwFEShell::GetObjAt( const Point& rPt )
     return pRet;
 }
 
-// Test if there is a object at that position and if it should be selected.
+// Test if there is an object at that position and if it should be selected.
 bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
 {
     SET_CURR_SHELL(this);

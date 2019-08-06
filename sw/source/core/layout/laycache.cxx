@@ -1110,7 +1110,7 @@ void SwLayCacheIoImpl::CloseRec()
         else
         {
             sal_uInt32 n = aRecords.back().size;
-            OSL_ENSURE( n >= nPos, "CloseRec: to much data read" );
+            OSL_ENSURE( n >= nPos, "CloseRec: too much data read" );
             if( n != nPos )
             {
                 pStream->Seek( n );

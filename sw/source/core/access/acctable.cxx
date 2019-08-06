@@ -552,9 +552,9 @@ void SwAccAllTableSelHander_Impl::Unselect( sal_Int32 nRowOrCol,
                                             sal_Int32 nExt )
 {
     OSL_ENSURE( static_cast< size_t >( nRowOrCol ) < m_aSelected.size(),
-             "index to large" );
+             "index too large" );
     OSL_ENSURE( static_cast< size_t >( nRowOrCol+nExt ) <= m_aSelected.size(),
-             "extent to large" );
+             "extent too large" );
     while( nExt )
     {
         if( m_aSelected[static_cast< size_t >( nRowOrCol )] )
