@@ -13,6 +13,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -257,6 +258,23 @@ DECLARE_WW8EXPORT_TEST(testTdf118375export, "tdf118375_240degClockwise.doc")
     // in rotation.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5200.0, static_cast<double>(nPosX), 1.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1152.0, static_cast<double>(nPosY), 1.0);
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf126708emf, "tdf126708_containsemf.odt")
+{
+    auto xShape = getShape(1);
+    // First check the size of the EMF graphic contained in the shape.
+    auto xGraphic = getProperty< uno::Reference<graphic::XGraphic> >(
+        xShape, "Graphic");
+    auto xSize = getProperty<awt::Size>(xGraphic, "Size100thMM");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8501), xSize.Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(18939), xSize.Width);
+
+    // Now check that the shape itself has a decent size.
+    // This size varies slightly when round tripping through doc format.
+    xSize = getProperty<awt::Size>(xShape, "Size");
+    CPPUNIT_ASSERT(abs(xSize.Height - 7629) <= 6);
+    CPPUNIT_ASSERT(abs(xSize.Width - 17000) <= 6);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
