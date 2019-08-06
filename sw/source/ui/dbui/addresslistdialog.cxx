@@ -211,6 +211,8 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
     m_xOK->set_sensitive(m_xListLB->n_children() > 0 && bEnableOK);
     m_xEditPB->set_sensitive(bEnableEdit);
     m_xRemovePB->set_sensitive(m_xListLB->n_children() > 0);
+    m_xFilterPB->set_sensitive(m_xListLB->n_children() > 0);
+    m_xTablePB->set_sensitive(m_xListLB->n_children() > 0);
     m_xListLB->connect_changed(LINK(this, SwAddressListDialog, ListBoxSelectHdl_Impl));
     TableSelectHdl(nullptr);
 }
@@ -307,6 +309,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, RemoveHdl_Impl, weld::Button&, void)
                 {
                 m_xRemovePB->set_sensitive(false);
                 m_xEditPB->set_sensitive(false);
+                m_xFilterPB->set_sensitive(false);
                 m_xCreateListPB->set_sensitive(true);
                 }
         }
