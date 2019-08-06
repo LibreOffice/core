@@ -172,7 +172,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     if ( !bOutline) {
         if( pSplitColl )
         {
-            // If it isn't a OutlineNumbering, then use an own array and collect the Nodes.
+            // If it isn't an OutlineNumbering, then use an own array and collect the Nodes.
             if( pSplitColl->GetAttrOutlineLevel() == 0 )
             {
                 xTmpOutlNds.reset(new SwOutlineNodes);

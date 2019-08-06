@@ -56,7 +56,7 @@ public:
 
     static SwNodeType GetNodeType( const SwFlyFrame *pFlyFrame );
 
-    // The object is not visible an longer and should be destroyed
+    // The object is not visible any longer and should be destroyed
     virtual void Dispose(bool bRecursive, bool bCanSkipInvisible = true) override;
     virtual bool SetSelectedState( bool bSeleted ) override;
 };

@@ -2015,7 +2015,7 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
             // This is going to get a bit insidious now. If you're faint of heart,
             // you'd better look away here. If a Fly contains columns, then the Contents
             // are movable, except ones in the last column (see SwFrame::IsMoveable()).
-            // Of course they're allowed to float back. WouldFit() only returns a usable
+            // Of course they're allowed to float back. WouldFit() only returns an usable
             // value if the Frame is movable. To fool WouldFit() into believing there's
             // a movable Frame, I'm just going to hang it somewhere else for the time.
             // The same procedure applies for column sections to make SwSectionFrame::Growable()

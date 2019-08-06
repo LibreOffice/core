@@ -79,7 +79,7 @@ void SwTextNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
                         pFirst2 = static_cast<const SwLayoutFrame*>(pCell)->ContainsContent();
                         if( pFirst2 == pFrame )
                         {   // Here we are: a first content inside a cell
-                            // inside the splitted row => soft page break
+                            // inside the split row => soft page break
                             auto const pos(pFrame->MapViewToModel(pFrame->GetOfst()));
                             if (pos.first == this)
                             {

@@ -1435,7 +1435,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             // for e.g. while inserting a table
     {
         SwSectionFrame* pSct = pLay->FindSctFrame();
-        // If content will be inserted in a footnote, which in an column area,
+        // If content will be inserted in a footnote, which in a column area,
         // the column area it is not allowed to be broken up.
         // Only if in the inner of the footnote lies an area, is this a candidate
         // for pActualSection.

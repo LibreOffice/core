@@ -52,7 +52,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-//Added for bug #i119954# Application crashed if undo/redo covert nest table to text
+//Added for bug #i119954# Application crashed if undo/redo convert nest table to text
 static bool ConvertTableToText( const SwTableNode *pTableNode, sal_Unicode cCh );
 
 static void    ConvertNestedTablesToText( const SwTableLines &rTableLines, sal_Unicode cCh )
@@ -163,7 +163,7 @@ bool SwEditShell::TableToText( sal_Unicode cCh )
     pCursor->SetMark();
     pCursor->DeleteMark();
 
-    //Modified for bug #i119954# Application crashed if undo/redo covert nest table to text
+    //Modified for bug #i119954# Application crashed if undo/redo convert nest table to text
     StartUndo();
     bRet = ConvertTableToText( pTableNd, cCh );
     EndUndo();
