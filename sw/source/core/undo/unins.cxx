@@ -159,7 +159,7 @@ bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
         {
             bRet = true;
 
-            // than there is or was still an active Redline:
+            // then there is or was still an active Redline:
             // Check if there is another Redline at the InsPosition. If the
             // same exists only once, it can be combined.
             const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
