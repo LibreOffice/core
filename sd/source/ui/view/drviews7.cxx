@@ -1513,7 +1513,10 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_EDIT_HYPERLINK );
 
     if ( bDisableEditHyperlink )
+    {
         rSet.DisableItem( SID_OPEN_HYPERLINK );
+        rSet.DisableItem( SID_COPY_HYPERLINK_LOCATION );
+    }
 
     //fdo#78151 enable show next level/hide last level if editing a master page
     //PRESOBJ_OUTLINE object and the current selection allow that to happen

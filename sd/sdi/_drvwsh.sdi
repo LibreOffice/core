@@ -2267,6 +2267,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_COPY_HYPERLINK_LOCATION // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_HIDE_LAST_LEVEL // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
