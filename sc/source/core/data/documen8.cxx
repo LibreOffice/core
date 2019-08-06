@@ -42,6 +42,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/TaskStopwatch.hxx>
 
 #include <inputopt.hxx>
 #include <global.hxx>
@@ -467,12 +468,11 @@ void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress
 
 namespace {
 
-class IdleCalcTextWidthScope
+class IdleCalcTextWidthScope : public TaskStopwatch
 {
     ScDocument& mrDoc;
     ScAddress& mrCalcPos;
     MapMode maOldMapMode;
-    sal_uInt64 const mnStartTime;
     ScStyleSheetPool* mpStylePool;
     SfxStyleSearchBits const mnOldSearchMask;
     SfxStyleFamily const meOldFamily;
@@ -483,7 +483,6 @@ public:
     IdleCalcTextWidthScope(ScDocument& rDoc, ScAddress& rCalcPos) :
         mrDoc(rDoc),
         mrCalcPos(rCalcPos),
-        mnStartTime(tools::Time::GetSystemTicks()),
         mpStylePool(rDoc.GetStyleSheetPool()),
         mnOldSearchMask(mpStylePool->GetSearchMask()),
         meOldFamily(mpStylePool->GetSearchFamily()),
@@ -526,8 +525,6 @@ public:
 
     void setNeedMore(bool b) { mbNeedMore = b; }
     bool getNeedMore() const { return mbNeedMore; }
-
-    sal_uInt64 getStartTime() const { return mnStartTime; }
 
     void createProgressBar()
     {
@@ -692,13 +689,8 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
 
         ++nCount;
 
-        // Quit if either 1) its duration exceeds 50 ms, or 2) there is any
-        // pending event after processing 32 cells.
-        VclInputFlags ABORT_EVENTS = VCL_INPUT_ANY;
-        ABORT_EVENTS &= ~VclInputFlags::TIMER;
-        ABORT_EVENTS &= ~VclInputFlags::OTHER;
-        if ((50L < tools::Time::GetSystemTicks() - aScope.getStartTime()) || (nCount > 31 && Application::AnyInput(ABORT_EVENTS)))
-            nCount = CALCMAX;
+        if (!aScope.continueIter())
+            break;
     }
 
     return aScope.getNeedMore();
