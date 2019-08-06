@@ -74,6 +74,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/editview.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/unohelp2.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -501,6 +502,33 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         }
         break;
 
+        case SID_OPEN_HYPERLINK:
+        {
+            const SvxFieldData* pField = pOLV->GetFieldAtCursor();
+            if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
+            {
+                SfxStringItem aUrl(SID_FILE_NAME, pURLField->GetURL());
+                SfxStringItem aTarget(SID_TARGETNAME, pURLField->GetTargetFrame());
+                SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, false);
+                SfxBoolItem aBrowsing(SID_BROWSE, true);
+                GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
+                    SID_OPENDOC, SfxCallMode::SYNCHRON, { &aUrl, &aTarget, &aNewView, &aBrowsing });
+            }
+        }
+        break;
+
+        case FN_COPY_HYPERLINK_LOCATION:
+        {
+            const SvxFieldData* pField = pOLV->GetFieldAtCursor();
+            if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
+            {
+                uno::Reference<datatransfer::clipboard::XClipboard> xClipboard
+                    = GetView().GetEditWin().GetClipboard();
+                vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard);
+            }
+        }
+        break;
+
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
             // Shell switch!
@@ -902,6 +930,8 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
             break;
             case SID_REMOVE_HYPERLINK:
             case SID_EDIT_HYPERLINK:
+            case SID_OPEN_HYPERLINK:
+            case FN_COPY_HYPERLINK_LOCATION:
             {
                 if (!URLFieldHelper::IsCursorAtURLField(pOLV))
                     rSet.DisableItem(nWhich);
