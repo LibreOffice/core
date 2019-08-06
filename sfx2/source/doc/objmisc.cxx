@@ -1383,19 +1383,22 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
     SAL_INFO("sfx", "in CallXScript" );
     ErrCode nErr = ERRCODE_NONE;
 
-    bool bIsDocumentScript = ( _rScriptURL.indexOf( "location=document" ) >= 0 );
-        // TODO: we should parse the URL, and check whether there is a parameter with this name.
-        // Otherwise, we might find too much.
-    if ( bIsDocumentScript && !lcl_isScriptAccessAllowed_nothrow( _rxScriptContext ) )
-        return ERRCODE_IO_ACCESSDENIED;
-
-    if ( UnTrustedScript(_rScriptURL) )
-        return ERRCODE_IO_ACCESSDENIED;
-
     bool bCaughtException = false;
     Any aException;
     try
     {
+        css::uno::Reference<css::uri::XUriReferenceFactory> urifac(
+            css::uri::UriReferenceFactory::create(comphelper::getProcessComponentContext()));
+        css::uno::Reference<css::uri::XVndSunStarScriptUrlReference> uri(
+            urifac->parse(_rScriptURL), css::uno::UNO_QUERY_THROW);
+        auto const loc = uri->getParameter("location");
+        bool bIsDocumentScript = loc == "document";
+        if ( bIsDocumentScript && !lcl_isScriptAccessAllowed_nothrow( _rxScriptContext ) )
+            return ERRCODE_IO_ACCESSDENIED;
+
+        if ( UnTrustedScript(_rScriptURL) )
+            return ERRCODE_IO_ACCESSDENIED;
+
         // obtain/create a script provider
         Reference< provider::XScriptProvider > xScriptProvider;
         Reference< provider::XScriptProviderSupplier > xSPS( _rxScriptContext, UNO_QUERY );
