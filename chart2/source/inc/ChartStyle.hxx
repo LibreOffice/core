@@ -25,7 +25,7 @@
 #include <com/sun/star/chart2/XChartStyle.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyle.hpp>
-#include <vector>
+#include <map>
 
 #include "PropertyHelper.hxx"
 #include "OPropertySet.hxx"
@@ -81,7 +81,7 @@ public:
 private:
     sal_Int16 m_nNumObjects;
 
-    std::vector<css::uno::Reference<css::beans::XPropertySet>> m_xChartStyle;
+    std::map<sal_Int16, css::uno::Reference<css::beans::XPropertySet>> m_xChartStyle;
 };
 
 } // namespace chart2

@@ -80,7 +80,6 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL ChartObjectStyle::g
 
 ChartStyle::ChartStyle()
     : m_nNumObjects( css::chart2::ChartObjectType::UNKNOWN )
-    , m_xChartStyle( std::vector< css::uno::Reference < css::beans::XPropertySet > >( m_nNumObjects, css::uno::Reference < css::beans::XPropertySet > ()))
 {
 }
 
@@ -88,10 +87,11 @@ ChartStyle::~ChartStyle() {}
 
 css::uno::Reference< css::beans::XPropertySet> ChartStyle::getStyleForObject( const sal_Int16 nChartObjectType )
 {
-    if ( nChartObjectType >= 0 && nChartObjectType < m_nNumObjects )
-        return m_xChartStyle[nChartObjectType];
-    else
+    auto itr = m_xChartStyle.find(nChartObjectType);
+    if (itr == m_xChartStyle.end())
         throw css::lang::IllegalArgumentException( "Unknown Chart Object Style requested", nullptr, 0 );
+
+    return itr->second;
 }
 
 // _____ XServiceInfo _____
