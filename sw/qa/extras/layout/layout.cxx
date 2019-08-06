@@ -12,7 +12,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
-#include <officecfg/Office/Common.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <i18nlangtag/languagetag.hxx>

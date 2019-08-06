@@ -11,12 +11,10 @@
 #define INCLUDED_DESKTOP_SOURCE_LIB_LOKCLIPBOARD_HXX
 
 #include <vector>
-#include <unordered_map>
 
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>

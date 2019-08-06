@@ -25,7 +25,6 @@
 
 #include "PropertyMap.hxx"
 #include "TableData.hxx"
-#include "DomainMapperTableHandler.hxx"
 
 namespace writerfilter
 {
@@ -355,6 +354,7 @@ protected:
 
 public:
     TableManager();
+    ~TableManager();
 
     /**
        Set handler for resolveCurrentTable.
