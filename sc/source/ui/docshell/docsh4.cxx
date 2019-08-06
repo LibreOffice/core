@@ -2092,7 +2092,7 @@ tools::Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
         SnapVisArea( aArea );
         return aArea;
     }
-    else if( nAspect == ASPECT_CONTENT && eShellMode != SfxObjectCreateMode::EMBEDDED )
+    else if( nAspect == ASPECT_CONTENT )
     {
         //  fetch visarea like after loading
 
