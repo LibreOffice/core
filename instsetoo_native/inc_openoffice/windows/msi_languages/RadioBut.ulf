@@ -17,19 +17,19 @@
  */
 
 [OOO_RADIOBUTTON_1]
-en-US = "{&MSSansBold8}&Modify"
+en-US = "{&DialogDefaultBold}&Modify"
 
 [OOO_RADIOBUTTON_2]
-en-US = "{&MSSansBold8}Re&pair"
+en-US = "{&DialogDefaultBold}Re&pair"
 
 [OOO_RADIOBUTTON_3]
-en-US = "{&MSSansBold8}&Remove"
+en-US = "{&DialogDefaultBold}&Remove"
 
 [OOO_RADIOBUTTON_4]
-en-US = "{&MSSansBold8}&Typical"
+en-US = "{&DialogDefaultBold}&Typical"
 
 [OOO_RADIOBUTTON_5]
-en-US = "{&MSSansBold8}Cu&stom"
+en-US = "{&DialogDefaultBold}Cu&stom"
 
 [OOO_RADIOBUTTON_6]
 en-US = "I &do not accept the terms in the license agreement"
