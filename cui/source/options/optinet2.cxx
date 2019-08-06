@@ -332,14 +332,14 @@ void SvxProxyTabPage::ReadConfigDefaults_Impl()
     }
     catch (const beans::UnknownPropertyException &)
     {
-        SAL_WARN("cui.options", "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::ReadConfigDefaults_Impl: UnknownPropertyException caught" );
     }
     catch (const css::lang::WrappedTargetException &) {
-        SAL_WARN("cui.options", "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::ReadConfigDefaults_Impl: WrappedTargetException caught" );
     }
     catch (const RuntimeException &)
     {
-        SAL_WARN("cui.options", "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::ReadConfigDefaults_Impl: RuntimeException caught" );
     }
 }
 
