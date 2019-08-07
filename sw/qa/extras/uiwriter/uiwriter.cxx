@@ -220,6 +220,7 @@ public:
     void testLinesInSectionInTable();
     void testParagraphOfTextRange();
     void testLinesMoveBackwardsInSectionInTable();
+    void testViewCursorPageStyle();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -343,6 +344,7 @@ public:
 #endif
     CPPUNIT_TEST(testLinesInSectionInTable);
     CPPUNIT_TEST(testParagraphOfTextRange);
+    CPPUNIT_TEST(testViewCursorPageStyle);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4085,6 +4087,35 @@ void SwUiWriterTest::testTdf112160()
     sal_uInt32 nD2CellNode = getXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[last()]/section/txt[last()]", "txtNodeIndex").toUInt32();
     // This was Table1.C2, Table1.D2 was moved to the next page, unexpected.
     CPPUNIT_ASSERT_EQUAL(OUString("Table1.D2"), pDoc->GetNodes()[nD2CellNode]->GetTextNode()->GetText());
+}
+
+void SwUiWriterTest::testViewCursorPageStyle()
+{
+    // Load a document with 2 pages, but a single paragraph.
+    createDoc("view-cursor-page-style.fodt");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel.is());
+    uno::Reference<text::XTextViewCursorSupplier> xController(xModel->getCurrentController(),
+                                                              uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xController.is());
+    uno::Reference<text::XPageCursor> xViewCursor(xController->getViewCursor(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xViewCursor.is());
+
+    // Go to the first page, which has an explicit page style.
+    xViewCursor->jumpToPage(1);
+    OUString aActualPageStyleName = getProperty<OUString>(xViewCursor, "PageStyleName");
+    CPPUNIT_ASSERT_EQUAL(OUString("First Page"), aActualPageStyleName);
+
+    // Go to the second page, which is still the first paragraph, but the page style is different,
+    // as the explicit 'First Page' page style has a next style defined (Standard).
+    xViewCursor->jumpToPage(2);
+    aActualPageStyleName = getProperty<OUString>(xViewCursor, "PageStyleName");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Standard
+    // - Actual  : First Page
+    // i.e. the cursor position was determined only based on the node index, ignoring the content
+    // index.
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), aActualPageStyleName);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
