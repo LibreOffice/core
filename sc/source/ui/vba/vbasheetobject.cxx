@@ -25,6 +25,7 @@
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
+#include <comphelper/documentinfo.hxx>
 #include <ooo/vba/excel/Constants.hpp>
 #include <ooo/vba/excel/XlOrientation.hpp>
 #include <ooo/vba/excel/XlPlacement.hpp>
@@ -300,7 +301,8 @@ ScVbaControlObjectBase::ScVbaControlObjectBase(
         const uno::Reference< drawing::XControlShape >& rxControlShape ) :
     ScVbaControlObject_BASE( rxParent, rxContext, rxModel, uno::Reference< drawing::XShape >( rxControlShape, uno::UNO_QUERY_THROW ) ),
     mxFormIC( rxFormIC, uno::UNO_SET_THROW ),
-    mxControlProps( rxControlShape->getControl(), uno::UNO_QUERY_THROW )
+    mxControlProps( rxControlShape->getControl(), uno::UNO_QUERY_THROW ),
+    mbNotifyMacroEventRead(false)
 {
 }
 
@@ -333,6 +335,14 @@ OUString SAL_CALL ScVbaControlObjectBase::getOnAction()
     return OUString();
 }
 
+void ScVbaControlObjectBase::NotifyMacroEventRead()
+{
+    if (mbNotifyMacroEventRead)
+        return;
+    comphelper::DocumentInfo::notifyMacroEventRead(mxModel);
+    mbNotifyMacroEventRead = true;
+}
+
 void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName )
 {
     uno::Reference< script::XEventAttacherManager > xEventMgr( mxFormIC, uno::UNO_QUERY_THROW );
@@ -352,6 +362,7 @@ void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName )
         aDescriptor.EventMethod = gaEventMethod;
         aDescriptor.ScriptType = "Script";
         aDescriptor.ScriptCode = makeMacroURL( aResolvedMacro.msResolvedMacro );
+        NotifyMacroEventRead();
         xEventMgr->registerScriptEvent( nIndex, aDescriptor );
     }
 }
