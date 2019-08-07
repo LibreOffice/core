@@ -2501,7 +2501,7 @@ void VclVPaned::dispose()
 
 IMPL_LINK(VclVPaned, SplitHdl, Splitter*, pSplitter, void)
 {
-    double nSize = pSplitter->GetSplitPosPixel();
+    long nSize = pSplitter->GetSplitPosPixel();
     Size aSplitterSize(m_pSplitter->GetSizePixel());
     Size aAllocation(GetSizePixel());
     arrange(aAllocation, nSize, aAllocation.Height() - nSize - aSplitterSize.Height());
