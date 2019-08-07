@@ -71,7 +71,7 @@ namespace drawinglayer
             // Get transformed graphic. Suppress rotation and cropping, only filtering is needed
             // here (and may be replaced later on). Cropping is handled below as mask primitive (if set).
             // Also need to suppress mirroring, it is part of the transformation now (see above).
-            // Also move transparency handling to embedding to an UnifiedTransparencePrimitive2D; do
+            // Also move transparency handling to embedding to a UnifiedTransparencePrimitive2D; do
             // that by remembering original transparency and applying that later if needed
             GraphicAttr aSuppressGraphicAttr(getGraphicAttr());
 
