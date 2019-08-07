@@ -38,6 +38,7 @@
 #include <unotools/tempfile.hxx>
 
 #include <comphelper/docpasswordrequest.hxx>
+#include <comphelper/documentinfo.hxx>
 #include <comphelper/string.hxx>
 
 #include <editeng/brushitem.hxx>
@@ -4299,6 +4300,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_aTOXEndCps()
     , m_aCurrAttrCP(-1)
     , m_bOnLoadingMain(false)
+    , m_bNotifyMacroEventRead(false)
 {
     m_pStrm->SetEndian( SvStreamEndian::LITTLE );
     m_aApos.push_back(false);
@@ -6557,6 +6559,15 @@ SwMacroInfo::~SwMacroInfo()
 SdrObjUserData* SwMacroInfo::Clone( SdrObject* /*pObj*/ ) const
 {
    return new SwMacroInfo( *this );
+}
+
+void SwWW8ImplReader::NotifyMacroEventRead()
+{
+    if (m_bNotifyMacroEventRead)
+        return;
+    uno::Reference<frame::XModel> const xModel(m_rDoc.GetDocShell()->GetBaseModel());
+    comphelper::DocumentInfo::notifyMacroEventRead(xModel);
+    m_bNotifyMacroEventRead = true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

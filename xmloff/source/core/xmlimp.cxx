@@ -55,6 +55,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/documentinfo.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/fontcvt.hxx>
 #include <o3tl/make_unique.hxx>
@@ -386,7 +387,8 @@ SvXMLImport::SvXMLImport(
     mxTokenHandler( new FastTokenHandler() ),
     mbIsFormsSupported( true ),
     mbIsTableShapeSupported( false ),
-    mbIsGraphicLoadOnDemandSupported( true )
+    mbIsGraphicLoadOnDemandSupported( true ),
+    mbNotifyMacroEventRead( false )
 {
     SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
     InitCtor_();
@@ -2068,6 +2070,16 @@ void SvXMLImport::registerNSHelper(sal_Int32 nToken, sal_Int32 nPrefix, sal_Int3
         maNamespaceMap[ nToken ] = GetXMLToken( static_cast<XMLTokenEnum>( nPrefix ) );
         registerNamespace( GetXMLToken( static_cast<XMLTokenEnum>( nNamespace ) ), nToken << NMSP_SHIFT );
     }
+}
+
+void SvXMLImport::NotifyMacroEventRead()
+{
+    if (mbNotifyMacroEventRead)
+        return;
+
+    comphelper::DocumentInfo::notifyMacroEventRead(mxModel);
+
+    mbNotifyMacroEventRead = true;
 }
 
 SvXMLImportFastNamespaceHandler::SvXMLImportFastNamespaceHandler()

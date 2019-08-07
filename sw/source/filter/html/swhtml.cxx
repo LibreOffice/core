@@ -298,6 +298,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_bInFootEndNoteSymbol( false ),
     m_bIgnoreHTMLComments( bNoHTMLComments ),
     m_bRemoveHidden( false ),
+    m_bNotifyMacroEventRead( false ),
     m_isInTableStructure(false),
     m_pTempViewFrame(nullptr)
 {

@@ -243,6 +243,7 @@ protected:
     bool                        mbIsFormsSupported;
     bool                        mbIsTableShapeSupported;
     bool                        mbIsGraphicLoadOnDemandSupported;
+    bool                        mbNotifyMacroEventRead;
 
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
@@ -575,6 +576,8 @@ public:
     bool embeddedFontAlreadyProcessed( const OUString& url );
 
     virtual void NotifyEmbeddedFontRead() {};
+    // something referencing a macro/script was imported
+    void NotifyMacroEventRead();
 
     bool needFixPositionAfterZ() const;
 };

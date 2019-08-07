@@ -411,6 +411,7 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _r
             ,m_bSuppressVersionColumns(true)
             ,m_bModified(false)
             ,m_bDocumentReadOnly(false)
+            ,m_bMacroCallsSeenWhileLoading(false)
             ,m_pSharedConnectionManager(nullptr)
             ,m_nControllerLockCount(0)
 {
@@ -446,6 +447,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_bSuppressVersionColumns(true)
             ,m_bModified(false)
             ,m_bDocumentReadOnly(false)
+            ,m_bMacroCallsSeenWhileLoading(false)
             ,m_pSharedConnectionManager(nullptr)
             ,m_nControllerLockCount(0)
 {
@@ -1315,6 +1317,11 @@ bool ODatabaseModelImpl::documentStorageHasMacros() const
 {
     const_cast< ODatabaseModelImpl* >( this )->determineEmbeddedMacros();
     return ( *m_aEmbeddedMacros != eNoMacros );
+}
+
+bool ODatabaseModelImpl::macroCallsSeenWhileLoading() const
+{
+    return m_bMacroCallsSeenWhileLoading;
 }
 
 Reference< XEmbeddedScripts > ODatabaseModelImpl::getEmbeddedDocumentScripts() const

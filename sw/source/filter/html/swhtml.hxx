@@ -477,6 +477,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     bool m_bIgnoreHTMLComments : 1;
     bool m_bRemoveHidden : 1; // the filter implementation might set the hidden flag
 
+    bool m_bNotifyMacroEventRead : 1;
     bool m_isInTableStructure;
 
     /// the names corresponding to the DOCINFO field subtypes INFO[1-4]
@@ -912,6 +913,8 @@ public:
     {
         m_aTables.erase(std::remove(m_aTables.begin(), m_aTables.end(), pOld));
     }
+
+    void NotifyMacroEventRead();
 
 };
 
