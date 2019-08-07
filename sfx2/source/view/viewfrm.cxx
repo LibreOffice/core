@@ -2635,12 +2635,12 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         }
 
         BasicManager* pBasMgr = nullptr;
-        if ( aLocation.equalsIgnoreAsciiCase( "application" ) )
+        if ( aLocation == "application" )
         {
             // application basic
             pBasMgr = SfxApplication::GetBasicManager();
         }
-        else if ( aLocation.equalsIgnoreAsciiCase( "document" ) )
+        else if ( aLocation == "document" )
         {
             pBasMgr = GetObjectShell()->GetBasicManager();
         }
@@ -2667,11 +2667,11 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
 
         // open lib container and break operation if it couldn't be opened
         css::uno::Reference< css::script::XLibraryContainer > xLibCont;
-        if ( aLocation.equalsIgnoreAsciiCase( "application" ) )
+        if ( aLocation == "application" )
         {
             xLibCont = SfxGetpApp()->GetBasicContainer();
         }
-        else if ( aLocation.equalsIgnoreAsciiCase( "document" ) )
+        else if ( aLocation == "document" )
         {
             xLibCont = GetObjectShell()->GetBasicContainer();
         }
