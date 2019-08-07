@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_aad478be",
+        "filename": "sw/source/core/text/itrform2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2019-08-07T14:09:20Z",
+      "side": 1,
+      "message": "I think MergeCharacterBorder expect pNext to be a valid text portion, or at least not a para portion. pNext \u003d\u003d pPor ignores the test. I wonder why this works for tdf#126353. I forgot the exact test cases, but if you insert tabs after the subscripts in the test document of tdf#126353, you get broken brders , another regression.",
+      "range": {
+        "startLine": 695,
+        "startChar": 20,
+        "endLine": 695,
+        "endChar": 34
+      },
+      "revId": "2284494191e3fb9f6d00afaf02cf526352e4e4fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
