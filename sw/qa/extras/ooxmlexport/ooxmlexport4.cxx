@@ -14,6 +14,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
@@ -811,9 +812,16 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphWithComments, "paragraphWithComments.docx"
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104707_urlComment, "tdf104707_urlComment.odt")
 {
-    xmlDocPtr pXmlComm = parseExport("word/comments.xml");
-    CPPUNIT_ASSERT(pXmlComm);
-    CPPUNIT_ASSERT_EQUAL( OUString("https://bugs.documentfoundation.org/show_bug.cgi?id=104707"), getXPathContent(pXmlComm,"/w:comments/w:comment/w:p/w:hyperlink/w:r/w:t") );
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    auto aField1 = xFields->nextElement();
+    // the comment/annotation/postit text
+    auto xText = getProperty< uno::Reference<text::XText> >(aField1, "TextRange");
+    // the hyperlink within the comment text
+    auto xURLField = getProperty< uno::Reference<text::XTextField> >(xText, "TextField");
+    auto aURL = getProperty< OUString >(xURLField, "URL");
+    CPPUNIT_ASSERT_EQUAL(OUString("https://bugs.documentfoundation.org/show_bug.cgi?id=104707"), aURL);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testOLEObjectinHeader, "2129393649.docx")

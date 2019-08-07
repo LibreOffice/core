@@ -71,6 +71,8 @@
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <editeng/flditem.hxx>
+#include <editeng/unotext.hxx>
 #include <o3tl/temporary.hxx>
 #include <oox/mathml/import.hxx>
 #include <rtl/uri.hxx>
@@ -5247,24 +5249,31 @@ void DomainMapper_Impl::PopFieldContext()
                         {
                             xCrsr->gotoEnd( true );
 
-                            uno::Reference< beans::XPropertySet > xCrsrProperties( xCrsr, uno::UNO_QUERY_THROW );
-                            xCrsrProperties->setPropertyValue(getPropertyName(PROP_HYPER_LINK_U_R_L), uno::
-                                                              makeAny(pContext->GetHyperlinkURL()));
-
-                            if (!pContext->GetHyperlinkTarget().isEmpty())
-                                xCrsrProperties->setPropertyValue("HyperLinkTarget", uno::makeAny(pContext->GetHyperlinkTarget()));
-
-                            if (m_bStartTOC) {
-                                OUString sDisplayName("Index Link");
-                                xCrsrProperties->setPropertyValue("VisitedCharStyleName",uno::makeAny(sDisplayName));
-                                xCrsrProperties->setPropertyValue("UnvisitedCharStyleName",uno::makeAny(sDisplayName));
-                            }
+                            // Draw components (like comments) need hyperlinks set differently
+                            SvxUnoTextRangeBase* pDrawText = dynamic_cast<SvxUnoTextRangeBase*>(xCrsr.get());
+                            if ( pDrawText )
+                                pDrawText->attachField( std::make_unique<SvxURLField>(pContext->GetHyperlinkURL(), xCrsr->getString(), SvxURLFormat::AppDefault) );
                             else
                             {
-                                if (!pContext->GetHyperlinkStyle().isEmpty())
+                                uno::Reference< beans::XPropertySet > xCrsrProperties( xCrsr, uno::UNO_QUERY_THROW );
+                                xCrsrProperties->setPropertyValue(getPropertyName(PROP_HYPER_LINK_U_R_L), uno::
+                                                                  makeAny(pContext->GetHyperlinkURL()));
+
+                                if (!pContext->GetHyperlinkTarget().isEmpty())
+                                    xCrsrProperties->setPropertyValue("HyperLinkTarget", uno::makeAny(pContext->GetHyperlinkTarget()));
+
+                                if (m_bStartTOC) {
+                                    OUString sDisplayName("Index Link");
+                                    xCrsrProperties->setPropertyValue("VisitedCharStyleName",uno::makeAny(sDisplayName));
+                                    xCrsrProperties->setPropertyValue("UnvisitedCharStyleName",uno::makeAny(sDisplayName));
+                                }
+                                else
                                 {
-                                    xCrsrProperties->setPropertyValue("VisitedCharStyleName", uno::makeAny(pContext->GetHyperlinkStyle()));
-                                    xCrsrProperties->setPropertyValue("UnvisitedCharStyleName", uno::makeAny(pContext->GetHyperlinkStyle()));
+                                    if (!pContext->GetHyperlinkStyle().isEmpty())
+                                    {
+                                        xCrsrProperties->setPropertyValue("VisitedCharStyleName", uno::makeAny(pContext->GetHyperlinkStyle()));
+                                        xCrsrProperties->setPropertyValue("UnvisitedCharStyleName", uno::makeAny(pContext->GetHyperlinkStyle()));
+                                    }
                                 }
                             }
                         }
