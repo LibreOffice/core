@@ -592,6 +592,35 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testImageCommentAtChar)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testViewCursorPageStyle)
+{
+    // Load a document with 2 pages, but a single paragraph.
+    load(mpTestDocumentPath, "view-cursor-page-style.fodt");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel.is());
+    uno::Reference<text::XTextViewCursorSupplier> xController(xModel->getCurrentController(),
+                                                              uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xController.is());
+    uno::Reference<text::XPageCursor> xViewCursor(xController->getViewCursor(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xViewCursor.is());
+
+    // Go to the first page, which has an explicit page style.
+    xViewCursor->jumpToPage(1);
+    OUString aActualPageStyleName = getProperty<OUString>(xViewCursor, "PageStyleName");
+    CPPUNIT_ASSERT_EQUAL(OUString("First Page"), aActualPageStyleName);
+
+    // Go to the second page, which is still the first paragraph, but the page style is different,
+    // as the explicit 'First Page' page style has a next style defined (Standard).
+    xViewCursor->jumpToPage(2);
+    aActualPageStyleName = getProperty<OUString>(xViewCursor, "PageStyleName");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Standard
+    // - Actual  : First Page
+    // i.e. the cursor position was determined only based on the node index, ignoring the content
+    // index.
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), aActualPageStyleName);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

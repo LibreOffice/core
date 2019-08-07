@@ -918,7 +918,10 @@ void GetCurPageStyle(SwPaM const & rPaM, OUString &rString)
 {
     if (!rPaM.GetContentNode())
         return; // TODO: is there an easy way to get it for tables/sections?
-    SwContentFrame* pFrame = rPaM.GetContentNode()->getLayoutFrame(rPaM.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout());
+    SwRootFrame* pLayout = rPaM.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout();
+    // Consider the position inside the content node, since the node may span over multiple pages
+    // with different page styles.
+    SwContentFrame* pFrame = rPaM.GetContentNode()->getLayoutFrame(pLayout, rPaM.GetPoint());
     if(pFrame)
     {
         const SwPageFrame* pPage = pFrame->FindPageFrame();
