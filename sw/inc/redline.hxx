@@ -55,9 +55,10 @@ class SW_DLLPUBLIC SwRedlineExtraData_FormatColl : public SwRedlineExtraData
     OUString m_sFormatNm;
     std::unique_ptr<SfxItemSet> m_pSet;
     sal_uInt16 m_nPoolId;
+    bool m_bFormatAll; // don't strip the last paragraph mark
 public:
     SwRedlineExtraData_FormatColl( const OUString& rColl, sal_uInt16 nPoolFormatId,
-                                const SfxItemSet* pSet = nullptr );
+                                const SfxItemSet* pSet = nullptr, bool bFormatAll = true );
     virtual ~SwRedlineExtraData_FormatColl() override;
     virtual SwRedlineExtraData* CreateNew() const override;
     virtual void Reject( SwPaM& rPam ) const override;
@@ -66,6 +67,7 @@ public:
     const OUString& GetFormatName() const        { return m_sFormatNm; }
     void SetItemSet( const SfxItemSet& rSet );
     SfxItemSet* GetItemSet( ) const { return m_pSet.get(); }
+    void SetFormatAll( bool bAll )               { m_bFormatAll = bAll; }
 };
 
 class SwRedlineExtraData_Format : public SwRedlineExtraData
