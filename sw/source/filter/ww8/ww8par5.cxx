@@ -2272,6 +2272,8 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
     if( aName.isEmpty() )
         return eF_ResT::TAGIGN;  // makes no sense without Macro-Name
 
+    NotifyMacroEventRead();
+
     //try converting macro symbol according to macro name
     bool bApplyWingdings = ConvertMacroSymbol( aName, aVText );
     aName = "StarOffice.Standard.Modul1." + aName;

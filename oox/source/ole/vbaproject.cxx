@@ -31,6 +31,7 @@
 #include <com/sun/star/script/vba/XVBAMacroResolver.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/configurationhelper.hxx>
+#include <comphelper/documentinfo.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
@@ -515,6 +516,8 @@ void VbaProject::attachMacros()
 {
     if( !maMacroAttachers.empty() && mxContext.is() ) try
     {
+        comphelper::DocumentInfo::notifyMacroEventRead(mxDocModel);
+
         Reference< XMultiComponentFactory > xFactory( mxContext->getServiceManager(), UNO_SET_THROW );
         Sequence< Any > aArgs( 2 );
         aArgs[ 0 ] <<= mxDocModel;
@@ -522,6 +525,7 @@ void VbaProject::attachMacros()
         Reference< XVBAMacroResolver > xResolver( xFactory->createInstanceWithArgumentsAndContext(
             "com.sun.star.script.vba.VBAMacroResolver", aArgs, mxContext ), UNO_QUERY_THROW );
         maMacroAttachers.forEachMem( &VbaMacroAttacherBase::resolveAndAttachMacro, ::std::cref( xResolver ) );
+
     }
     catch(const Exception& )
     {

@@ -164,6 +164,9 @@ public:
     virtual sal_Bool SAL_CALL getAutoSize() override;
     virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) override;
 
+    /// Notify that the document contains a macro event handler
+    void NotifyMacroEventRead();
+
 protected:
     /// @throws css::uno::RuntimeException
     sal_Int32 getModelIndexInForm() const;
@@ -173,6 +176,7 @@ protected:
     css::uno::Reference< css::beans::XPropertySet > mxControlProps;
     OUString maListenerType;
     OUString maEventMethod;
+    bool mbNotifyMacroEventRead;
 };
 
 typedef ::cppu::ImplInheritanceHelper< ScVbaControlObjectBase, ov::excel::XButton > ScVbaButton_BASE;
