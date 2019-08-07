@@ -392,7 +392,7 @@ public class FunctionHelper
                 // It's possible to do that here - because frame has no component inside yet.
                 // So nobody can disagree with that.
                 // After the dispose() call forget all references to this frame and let him die.
-                // If a new exception will occur ... no generell solution exist then.
+                // If a new exception will occur ... no general solution exist then.
                 // Nobody can guarantee if next call will work or not.
                 com.sun.star.lang.XComponent xComponent = UnoRuntime.queryInterface(
                     com.sun.star.lang.XComponent.class,
