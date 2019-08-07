@@ -1489,8 +1489,8 @@ void Shape::keepDiagramCompatibilityInfo()
 
         if (mpDiagramData)
         {
-            SdrObject* pObj = GetSdrObjectFromXShape(mxShape);
-            pObj->SetDiagramData(mpDiagramData);
+            if (SdrObject* pObj = GetSdrObjectFromXShape(mxShape))
+                pObj->SetDiagramData(mpDiagramData);
         }
 
         const OUString aGrabBagPropName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
