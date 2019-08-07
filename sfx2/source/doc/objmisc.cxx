@@ -1388,13 +1388,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
     Any aException;
     try
     {
-        css::uno::Reference<css::uri::XUriReferenceFactory> urifac(
-            css::uri::UriReferenceFactory::create(comphelper::getProcessComponentContext()));
-        css::uno::Reference<css::uri::XVndSunStarScriptUrlReference> uri(
-            urifac->parse(_rScriptURL), css::uno::UNO_QUERY_THROW);
-        auto const loc = uri->getParameter("location");
-        bool bIsDocumentScript = loc == "document";
-        if ( bIsDocumentScript && !lcl_isScriptAccessAllowed_nothrow( _rxScriptContext ) )
+        if ( !lcl_isScriptAccessAllowed_nothrow( _rxScriptContext ) )
             return ERRCODE_IO_ACCESSDENIED;
 
         if ( UnTrustedScript(_rScriptURL) )
@@ -1754,6 +1748,11 @@ OUString SfxObjectShell_Impl::getDocumentLocation() const
 bool SfxObjectShell_Impl::documentStorageHasMacros() const
 {
     return ::sfx2::DocumentMacroMode::storageHasMacros( m_xDocStorage );
+}
+
+bool SfxObjectShell_Impl::macroCallsSeenWhileLoading() const
+{
+    return rDocShell.GetMacroCallsSeenWhileLoading();
 }
 
 Reference< XEmbeddedScripts > SfxObjectShell_Impl::getEmbeddedDocumentScripts() const

@@ -90,7 +90,8 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         bSaveVersionOnClose:1,
                         m_bSharedXMLFlag:1, // whether the document should be edited in shared mode
                         m_bAllowShareControlFileClean:1, // whether the flag should be stored in xml file
-                        m_bConfigOptionsChecked:1; // whether or not the user options are checked after the Options dialog is closed.
+                        m_bConfigOptionsChecked:1, // whether or not the user options are checked after the Options dialog is closed.
+                        m_bMacroCallsSeenWhileLoading:1; // whether or not the user options are checked after the Options dialog is closed.
 
     IndexBitSet         aBitSet;
     ErrCode             lErr;
@@ -138,6 +139,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     virtual void setCurrentMacroExecMode( sal_uInt16 nMacroMode ) override;
     virtual OUString getDocumentLocation() const override;
     virtual bool documentStorageHasMacros() const override;
+    virtual bool macroCallsSeenWhileLoading() const override;
     virtual css::uno::Reference< css::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const override;
     virtual SignatureState getScriptingSignatureState() override;
 
