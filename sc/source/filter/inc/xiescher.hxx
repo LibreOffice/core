@@ -126,7 +126,7 @@ public:
     SdrObjectPtr        CreateSdrObject( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect, bool bIsDff ) const;
     /** Additional processing for the passed SdrObject before insertion into
         the drawing page (calls virtual DoPreProcessSdrObj() function). */
-    void                PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
+    void                PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrObject& rSdrObj );
     /** Additional processing for the passed SdrObject after insertion into the
         drawing page (calls virtual DoPostProcessSdrObj() function). */
     void                PostProcessSdrObject( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
@@ -173,6 +173,9 @@ protected:
     virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
     /** Derived classes may perform additional processing for the passed SdrObject after insertion. */
     virtual void        DoPostProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
+
+    /** Notify that the document contains a macro event handler */
+    void NotifyMacroEventRead();
 private:
     /** Reads the contents of a BIFF3 OBJ record. */
     void                ImplReadObj3( XclImpStream& rStrm );
@@ -203,6 +206,7 @@ private:
     bool                mbProcessSdr;   /// true = Object is valid, do processing and insertion.
     bool                mbInsertSdr;    /// true = Insert the SdrObject into draw page.
     bool                mbCustomDff;    /// true = Recreate SdrObject in DFF import.
+    bool                mbNotifyMacroEventRead; /// true == If we have already seen a macro event
 };
 
 class XclImpDrawObjVector
@@ -929,7 +933,7 @@ public:
     /** Initially called before the objects of the passed drawing manager are converted. */
     void                InitializeDrawing( XclImpDrawing& rDrawing, SdrModel& rSdrModel, SdrPage& rSdrPage );
     /** Processes BIFF5 drawing objects without DFF data, inserts into the passed object list. */
-    void                ProcessObject( SdrObjList& rObjList, const XclImpDrawObjBase& rDrawObj );
+    void                ProcessObject( SdrObjList& rObjList, XclImpDrawObjBase& rDrawObj );
     /** Processes all objects in the passed list. */
     void                ProcessDrawing( const XclImpDrawObjVector& rDrawObjs );
     /** Processes a drawing container in the passed DFF stream, converts all objects. */
@@ -1018,6 +1022,8 @@ private:
     void                InsertSdrObject( SdrObjList& rObjList, const XclImpDrawObjBase& rDrawObj, SdrObject* pSdrObj );
     /** Initializes the mxCtrlForm referring to the standard controls form. */
     void                InitControlForm();
+    /** Notify that this document contains a macro event handler */
+    void                NotifyMacroEventRead();
 
 private:
     typedef std::shared_ptr< ScfProgressBar >     ScfProgressBarRef;
@@ -1030,6 +1036,7 @@ private:
     XclImpDffConvDataStack maDataStack;     /// Stack for registered drawing managers.
     sal_uInt32          mnOleImpFlags;      /// Application OLE import settings.
     sal_Int32           mnDefTextMargin;    /// Default margin in text boxes.
+    bool mbNotifyMacroEventRead;            /// If we have already seen a macro event
 };
 
 // Drawing manager ============================================================

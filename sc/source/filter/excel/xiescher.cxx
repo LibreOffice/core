@@ -48,6 +48,7 @@
 #include <vcl/wmf.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/documentinfo.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -161,7 +162,8 @@ XclImpDrawObjBase::XclImpDrawObjBase( const XclImpRoot& rRoot ) :
     mbSimpleMacro( true ),
     mbProcessSdr( true ),
     mbInsertSdr( true ),
-    mbCustomDff( false )
+    mbCustomDff( false ),
+    mbNotifyMacroEventRead( false )
 {
 }
 
@@ -497,7 +499,18 @@ SdrObjectPtr XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffConv, c
     return xSdrObj;
 }
 
-void XclImpDrawObjBase::PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const
+void XclImpDrawObjBase::NotifyMacroEventRead()
+{
+    if (mbNotifyMacroEventRead)
+        return;
+    SfxObjectShell* pDocShell = GetDocShell();
+    if (!pDocShell)
+        return;
+    comphelper::DocumentInfo::notifyMacroEventRead(pDocShell->GetModel());
+    mbNotifyMacroEventRead = true;
+}
+
+void XclImpDrawObjBase::PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrObject& rSdrObj )
 {
     // default: front layer, derived classes may have to set other layer in DoPreProcessSdrObj()
     rSdrObj.NbcSetLayer( SC_LAYER_FRONT );
@@ -524,7 +537,10 @@ void XclImpDrawObjBase::PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrOb
     {
         if( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( &rSdrObj, true ) )
         {
-            pInfo->SetMacro( XclTools::GetSbMacroUrl( maMacroName, GetDocShell() ) );
+            OUString sMacro = XclTools::GetSbMacroUrl(maMacroName, GetDocShell());
+            if (!sMacro.isEmpty())
+                NotifyMacroEventRead();
+            pInfo->SetMacro(sMacro);
             pInfo->SetHlink( maHyperlink );
         }
     }
@@ -3271,7 +3287,8 @@ XclImpDffConverter::XclImpDffConverter( const XclImpRoot& rRoot, SvStream& rDffS
     XclImpSimpleDffConverter( rRoot, rDffStrm ),
     oox::ole::MSConvertOCXControls( rRoot.GetDocShell()->GetModel() ),
     maStdFormName( "Standard" ),
-    mnOleImpFlags( 0 )
+    mnOleImpFlags( 0 ),
+    mbNotifyMacroEventRead(false)
 {
     const SvtFilterOptions& rFilterOpt = SvtFilterOptions::Get();
     if( rFilterOpt.IsMathType2Math() )
@@ -3328,7 +3345,7 @@ void XclImpDffConverter::InitializeDrawing( XclImpDrawing& rDrawing, SdrModel& r
     SetModel( &xConvData->mrSdrModel, 1440 );
 }
 
-void XclImpDffConverter::ProcessObject( SdrObjList& rObjList, const XclImpDrawObjBase& rDrawObj )
+void XclImpDffConverter::ProcessObject( SdrObjList& rObjList, XclImpDrawObjBase& rDrawObj )
 {
     if( rDrawObj.IsProcessSdrObj() )
     {
@@ -3378,6 +3395,14 @@ void XclImpDffConverter::FinalizeDrawing()
         SetModel( &maDataStack.back()->mrSdrModel, 1440 );
 }
 
+void XclImpDffConverter::NotifyMacroEventRead()
+{
+    if (mbNotifyMacroEventRead)
+        return;
+    comphelper::DocumentInfo::notifyMacroEventRead(mxModel);
+    mbNotifyMacroEventRead = true;
+}
+
 SdrObjectPtr XclImpDffConverter::CreateSdrObject( const XclImpTbxObjBase& rTbxObj, const tools::Rectangle& rAnchorRect )
 {
     SdrObjectPtr xSdrObj;
@@ -3400,6 +3425,7 @@ SdrObjectPtr XclImpDffConverter::CreateSdrObject( const XclImpTbxObjBase& rTbxOb
             ScriptEventDescriptor aDescriptor;
             if( (rConvData.mnLastCtrlIndex >= 0) && rTbxObj.FillMacroDescriptor( aDescriptor ) )
             {
+                NotifyMacroEventRead();
                 Reference< XEventAttacherManager > xEventMgr( rConvData.mxCtrlForm, UNO_QUERY_THROW );
                 xEventMgr->registerScriptEvent( rConvData.mnLastCtrlIndex, aDescriptor );
             }
