@@ -572,6 +572,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Reject)
     sNumName = getProperty<OUString>(getParagraph(3), "NumberingStyleName");
     CPPUNIT_ASSERT_MESSAGE("Missing numbering style", !sNumName.isEmpty());
     CPPUNIT_ASSERT_MESSAGE("Not a bulleted list item", sNumName != "Outline");
+
+    // third paragraph: normal text without numbering
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
+                         getProperty<OUString>(getParagraph(4), "ParaStyleName"));
+    sNumName = getProperty<OUString>(getParagraph(4), "NumberingStyleName");
+    CPPUNIT_ASSERT_MESSAGE("Bad numbering", sNumName.isEmpty());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376_redline)
