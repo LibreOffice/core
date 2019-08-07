@@ -649,13 +649,12 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
                 bNewTab = true;
             }
 
-            aScope.setCol(pTab->ClampToAllocatedColumns(aScope.Col()));
-
             if ( nRestart < 2 )
             {
                 if ( bNewTab )
                 {
                     pTab = maTabs[aScope.Tab()].get();
+                    aScope.setCol(pTab->ClampToAllocatedColumns(aScope.Col()));
                     pStyle = static_cast<ScStyleSheet*>(aScope.getStylePool()->Find(
                         pTab->aPageStyle, SfxStyleFamily::Page));
 
