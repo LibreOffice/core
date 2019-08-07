@@ -37,8 +37,11 @@ namespace comphelper {
         /** retrieves the UI title of the given document
         */
         COMPHELPER_DLLPUBLIC OUString  getDocumentTitle( const css::uno::Reference< css::frame::XModel >& _rxDocument );
-    }
 
+        /** notify that this document contains a macro event handler
+        */
+        COMPHELPER_DLLPUBLIC void notifyMacroEventRead( const css::uno::Reference< css::frame::XModel >& _rxDocument );
+    }
 
 }   // namespace comphelper
 
