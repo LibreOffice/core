@@ -381,7 +381,7 @@
         <xsl:param name="inheritedStyleProperties" />
         <xsl:param name="searchOnlyInAutomaticStyles" />
 
-           <!--** create an absolute style by inherting properties from the given parent properties **-->
+           <!--** create an absolute style by inheriting properties from the given parent properties **-->
         <xsl:variable name="newStyleProperties-RTF">
             <xsl:call-template name="create-inherited-style-properties">
                 <xsl:with-param name="inheritedStyleProperties" select="$inheritedStyleProperties" />

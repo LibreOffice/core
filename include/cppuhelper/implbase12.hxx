@@ -172,7 +172,7 @@ namespace cppu
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
     /** Implementation helper implementing interfaces css::lang::XTypeProvider and
-        css::uno::XInterface inherting from a BaseClass.
+        css::uno::XInterface inheriting from a BaseClass.
         All acquire() and release() calls are delegated to the BaseClass. Upon queryInterface(),
         if a demanded interface is not supported by this class directly, the request is
         delegated to the BaseClass.
@@ -239,7 +239,7 @@ namespace cppu
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
     /** Implementation helper implementing interfaces css::lang::XTypeProvider and
-        css::uno::XInterface inherting from a BaseClass.
+        css::uno::XInterface inheriting from a BaseClass.
         All acquire(),  release() and queryInterface() calls are delegated to the BaseClass.
         Upon queryAggregation(), if a demanded interface is not supported by this class directly,
         the request is delegated to the BaseClass.
