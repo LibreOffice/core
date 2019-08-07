@@ -111,6 +111,12 @@ namespace sfx2
         virtual bool
                     documentStorageHasMacros() const = 0;
 
+        /** checks whether the document's contained calls to macros or scripts after loading
+
+        */
+        virtual bool
+                    macroCallsSeenWhileLoading() const = 0;
+
         /** provides access to the XEmbeddedScripts interface of the document
 
             Implementations are allowed to return <NULL/> here if and only if they
@@ -272,6 +278,7 @@ namespace sfx2
 
             @see isMacroExecutionDisallowed
             @see IMacroDocumentAccess::documentStorageHasMacros
+            @see IMacroDocumentAccess::macroCallsSeenWhileLoading
             @see hasMacroLibrary
             @see IMacroDocumentAccess::checkForBrokenScriptingSignatures
         */
