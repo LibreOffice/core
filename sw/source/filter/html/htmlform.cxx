@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <comphelper/documentinfo.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -735,7 +736,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
     rShape->setSize( aSz );
 }
 
-static void lcl_html_setEvents(
+static bool lcl_html_setEvents(
         const uno::Reference< script::XEventAttacherManager > & rEvtMn,
         sal_uInt32 nPos, const SvxMacroTableDtor& rMacroTable,
         const std::vector<OUString>& rUnoMacroTable,
@@ -764,7 +765,7 @@ static void lcl_html_setEvents(
     }
 
     if( 0==nEvents )
-        return;
+        return false;
 
     Sequence<script::ScriptEventDescriptor> aDescs( nEvents );
     script::ScriptEventDescriptor* pDescs = aDescs.getArray();
@@ -822,6 +823,7 @@ static void lcl_html_setEvents(
         }
     }
     rEvtMn->registerScriptEvents( nPos, aDescs );
+    return true;
 }
 
 static void lcl_html_getEvents( const OUString& rOption, const OUString& rValue,
@@ -1190,10 +1192,12 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
     // To prevent previous JavaScript-Events from being called, these events will only be set retroactively
     if( !rMacroTable.empty() || !rUnoMacroTable.empty() )
     {
-        lcl_html_setEvents( m_pFormImpl->GetControlEventManager(),
+        bool bHasEvents = lcl_html_setEvents( m_pFormImpl->GetControlEventManager(),
                             rFormComps->getCount() - 1,
                             rMacroTable, rUnoMacroTable, rUnoMacroParamTable,
                             GetScriptTypeString(m_pFormImpl->GetHeaderAttrs()) );
+        if (bHasEvents)
+            NotifyMacroEventRead();
     }
 
     if( bSetFCompPropSet )
@@ -1355,10 +1359,14 @@ void SwHTMLParser::NewForm( bool bAppend )
     Any aAny( &xForm, cppu::UnoType<XForm>::get());
     rForms->insertByIndex( rForms->getCount(), aAny );
     if( !aMacroTable.empty() )
-        lcl_html_setEvents( m_pFormImpl->GetFormEventManager(),
+    {
+        bool bHasEvents = lcl_html_setEvents( m_pFormImpl->GetFormEventManager(),
                             rForms->getCount() - 1,
                             aMacroTable, aUnoMacroTable, aUnoMacroParamTable,
                             rDfltScriptType );
+        if (bHasEvents)
+            NotifyMacroEventRead();
+    }
 }
 
 void SwHTMLParser::EndForm( bool bAppend )
