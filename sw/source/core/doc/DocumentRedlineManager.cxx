@@ -294,7 +294,8 @@ namespace
                rPos1.nContent.GetIndex() == pCNd->Len();
     }
 
-    void lcl_CopyStyle( const SwPosition & rFrom, const SwPosition & rTo )
+    // copy style or return with SwRedlineExtra_FormatColl with reject data of the upcoming copy
+    SwRedlineExtraData_FormatColl* lcl_CopyStyle( const SwPosition & rFrom, const SwPosition & rTo, bool bCopy = true )
     {
         SwTextNode* pToNode = rTo.nNode.GetNode().GetTextNode();
         SwTextNode* pFromNode = rFrom.nNode.GetNode().GetTextNode();
@@ -303,7 +304,10 @@ namespace
             const SwPaM aPam(*pToNode);
             SwDoc* pDoc = aPam.GetDoc();
             // using Undo, copy paragraph style
-            pDoc->SetTextFormatColl(aPam, pFromNode->GetTextColl());
+            SwTextFormatColl* pFromColl = pFromNode->GetTextColl();
+            SwTextFormatColl* pToColl = pToNode->GetTextColl();
+            if (bCopy && pFromColl != pToColl)
+                pDoc->SetTextFormatColl(aPam, pFromColl);
 
             // using Undo, remove direct paragraph formatting of the "To" paragraph,
             // and apply here direct paragraph formatting of the "From" paragraph
@@ -313,30 +317,30 @@ namespace
                     RES_PARATR_BEGIN, RES_PARATR_END - 3, // skip RSID and GRABBAG
                     RES_PARATR_LIST_BEGIN, RES_UL_SPACE,  // skip PAGEDESC and BREAK
                     RES_CNTNT, RES_FRMATR_END - 1>{});
-
-            SfxItemSet aTmp2(
-                pDoc->GetAttrPool(),
-                svl::Items<
-                    RES_PARATR_BEGIN, RES_PARATR_END - 3, // skip RSID and GRABBAG
-                    RES_PARATR_LIST_BEGIN, RES_UL_SPACE,  // skip PAGEDESC and BREAK
-                    RES_CNTNT, RES_FRMATR_END - 1>{});
+            SfxItemSet aTmp2(aTmp);
 
             pToNode->GetParaAttr(aTmp, 0, 0);
             pFromNode->GetParaAttr(aTmp2, 0, 0);
 
-            for( sal_uInt16 nItem = 0; nItem < aTmp.TotalCount(); ++nItem)
+            bool bSameSet = aTmp == aTmp2;
+
+            if (!bSameSet)
             {
-                sal_uInt16 nWhich = aTmp.GetWhichByPos(nItem);
-                if( SfxItemState::SET == aTmp.GetItemState( nWhich, false ) &&
-                    SfxItemState::SET != aTmp2.GetItemState( nWhich, false ) )
-                        aTmp2.Put( aTmp.GetPool()->GetDefaultItem(nWhich), nWhich );
+                for( sal_uInt16 nItem = 0; nItem < aTmp.TotalCount(); ++nItem)
+                {
+                    sal_uInt16 nWhich = aTmp.GetWhichByPos(nItem);
+                    if( SfxItemState::SET == aTmp.GetItemState( nWhich, false ) &&
+                        SfxItemState::SET != aTmp2.GetItemState( nWhich, false ) )
+                            aTmp2.Put( aTmp.GetPool()->GetDefaultItem(nWhich), nWhich );
+                }
             }
 
-            if (aTmp2.Count())
+            if (bCopy && !bSameSet)
                 pDoc->getIDocumentContentOperations().InsertItemSet(aPam, aTmp2);
-
-            // TODO: store the original paragraph style as ExtraData
+            else if (!bCopy && (!bSameSet || pFromColl != pToColl))
+                return new SwRedlineExtraData_FormatColl( pFromColl->GetName(), USHRT_MAX, &aTmp2 );
         }
+        return nullptr;
     }
 
     bool lcl_AcceptRedline( SwRedlineTable& rArr, SwRedlineTable::size_type& rPos,
@@ -609,6 +613,9 @@ namespace
                 bool bCheck = false, bReplace = false;
                 SwPaM const updatePaM(pSttRng ? *pSttRng : *pRedl->Start(),
                                       pEndRng ? *pEndRng : *pRedl->End());
+
+                if( pRedl->GetExtraData() )
+                    pRedl->GetExtraData()->Reject( *pRedl );
 
                 switch( eCmp )
                 {
@@ -2025,7 +2032,25 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                             pTextNode = pTextNd->GetTextNode();
                             if (pTextNode && pDelNode != pTextNode )
                             {
+                                bCompress = true;
+
+                                // split redline to store ExtraData per paragraphs
                                 SwPosition aPos(aIdx);
+                                SwRangeRedline* pPar = new SwRangeRedline( *pNewRedl );
+                                pPar->SetStart( aPos );
+                                pNewRedl->SetEnd( aPos );
+
+                                // get extradata for reset formatting of the modified paragraph
+                                SwRedlineExtraData_FormatColl* pExtraData = lcl_CopyStyle(aPos, *pStt, false);
+                                if (pExtraData)
+                                {
+                                    std::unique_ptr<SwRedlineExtraData_FormatColl> xRedlineExtraData;
+                                    xRedlineExtraData.reset(pExtraData);
+                                    pPar->SetExtraData( xRedlineExtraData.get() );
+                                }
+                                mpRedlineTable->Insert( pPar );
+
+                                // modify paragraph formatting
                                 lcl_CopyStyle(*pStt, aPos);
                             }
                             pTextNd = SwNodes::GoPrevious( &aIdx );
