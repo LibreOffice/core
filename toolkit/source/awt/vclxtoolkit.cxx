@@ -1492,6 +1492,9 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
         }
     }
 
+    // tdf#126717 default that formcontrols show accelerators
+    if (Control* pControl = dynamic_cast<Control*>(pNewWindow.get()))
+        pControl->SetShowAccelerator(true);
     return pNewWindow;
 }
 
