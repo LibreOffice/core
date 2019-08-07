@@ -1138,6 +1138,9 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(TabPageParent pParent, const SfxItemSet
     m_xUserInterfaceLB->make_sorted();
     m_xCurrencyLB->make_sorted();
 
+    // tdf#125483 save original default label
+    m_sDecimalSeparatorLabel = m_xDecimalSeparatorCB->get_label();
+
     // initialize user interface language selection
     m_sSystemDefaultString = SvtLanguageTable::GetLanguageString( LANGUAGE_SYSTEM );
 
@@ -1737,7 +1740,7 @@ IMPL_LINK_NOARG(OfaLanguagesTabPage, LocaleSettingHdl, weld::ComboBox&, void)
     LocaleDataWrapper aLocaleWrapper( aLanguageTag );
 
     // update the decimal separator key of the related CheckBox
-    OUString sTempLabel(m_xDecimalSeparatorCB->get_label());
+    OUString sTempLabel(m_sDecimalSeparatorLabel);
     sTempLabel = sTempLabel.replaceFirst("%1", aLocaleWrapper.getNumDecimalSep() );
     m_xDecimalSeparatorCB->set_label(sTempLabel);
 
