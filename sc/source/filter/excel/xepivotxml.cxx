@@ -511,6 +511,16 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
     for (size_t i = nCount; pDPObject && i < nCount + nGroupFieldCount; ++i)
     {
         const OUString aName = pDPObject->GetDimName(i, o3tl::temporary(bool()));
+        // tdf#126748: DPObject might not reference all group fields, when there are several
+        // DPObjects referencing this cache. Trying to get a dimension data for a field not used
+        // in a given DPObject will give nullptr, and dereferencing it then will crash. To avoid
+        // the crash, until there's a correct method to find the names of group fields in cache,
+        // just skip the fields, creating bad cache data, which is of course a temporary hack.
+        // TODO: reimplement the whole block to get the names from another source, not from first
+        // cache reference.
+        if (aName.isEmpty())
+            break;
+
         ScDPSaveData* pSaveData = pDPObject->GetSaveData();
         assert(pSaveData);
         const ScDPSaveGroupDimension* pDim = pSaveData->GetDimensionData()->GetNamedGroupDim(aName);
