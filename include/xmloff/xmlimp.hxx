@@ -235,6 +235,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
 protected:
     bool                        mbIsFormsSupported;
     bool                        mbIsTableShapeSupported;
+    bool                        mbNotifyMacroEventRead;
 
     // Create top-level element context.
     // This method is called after the namespace map has been updated, but
@@ -571,6 +572,8 @@ public:
     bool embeddedFontAlreadyProcessed( const OUString& url );
 
     virtual void NotifyEmbeddedFontRead() {};
+    // something referencing a macro/script was imported
+    void NotifyMacroEventRead();
 
     bool needFixPositionAfterZ() const;
 };

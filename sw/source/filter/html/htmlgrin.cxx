@@ -20,6 +20,7 @@
 #include <memory>
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/documentinfo.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/svxids.hrc>
@@ -871,7 +872,10 @@ IMAGE_SETEVENT:
     }
 
     if( !aMacroItem.GetMacroTable().empty() )
+    {
+        NotifyMacroEventRead();
         pFlyFormat->SetFormatAttr( aMacroItem );
+    }
 
     // tdf#87083 If the graphic has not been loaded yet, then load it now.
     // Otherwise it may be loaded during the first paint of the object and it
@@ -1304,7 +1308,10 @@ ANCHOR_SETEVENT:
         aINetFormat.SetName( aName );
 
         if( !aMacroTable.empty() )
+        {
+            NotifyMacroEventRead();
             aINetFormat.SetMacroTable( &aMacroTable );
+        }
 
         // set the default attribute
         InsertAttr(&m_xAttrTab->pINetFormat, aINetFormat, xCntxt.get());
@@ -1514,6 +1521,18 @@ void SwHTMLParser::StripTrailingPara()
         SvxFontHeightItem aFontHeightCTL( 40, 100, RES_CHRATR_CTL_FONTSIZE );
         pCNd->SetAttr( aFontHeightCTL );
     }
+}
+
+void SwHTMLParser::NotifyMacroEventRead()
+{
+    if (m_bNotifyMacroEventRead)
+        return;
+    SwDocShell *pDocSh = m_xDoc->GetDocShell();
+    if (!pDocSh)
+        return;
+    uno::Reference<frame::XModel> const xModel(pDocSh->GetBaseModel());
+    comphelper::DocumentInfo::notifyMacroEventRead(xModel);
+    m_bNotifyMacroEventRead = true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

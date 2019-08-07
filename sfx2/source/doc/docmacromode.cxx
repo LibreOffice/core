@@ -394,7 +394,7 @@ namespace sfx2
         }
         else
         {
-            if ( m_xData->m_rDocumentAccess.documentStorageHasMacros() || hasMacroLibrary() )
+            if (m_xData->m_rDocumentAccess.documentStorageHasMacros() || hasMacroLibrary() || m_xData->m_rDocumentAccess.macroCallsSeenWhileLoading())
             {
                 bAllow = adjustMacroMode( rxInteraction );
             }

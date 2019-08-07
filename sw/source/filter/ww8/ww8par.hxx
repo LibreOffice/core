@@ -1376,6 +1376,7 @@ private:
     cp_vector m_aEndParaPos;
     WW8_CP m_aCurrAttrCP;
     bool m_bOnLoadingMain:1;
+    bool m_bNotifyMacroEventRead:1;
 
     const SprmReadInfo& GetSprmReadInfo(sal_uInt16 nId) const;
 
@@ -1911,6 +1912,7 @@ public:     // really private, but can only be done public
 
     void PostProcessAttrs();
     void ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocShell, struct HyperLinksTable& hlStr);
+    void NotifyMacroEventRead();
 };
 
 bool CanUseRemoteLink(const OUString &rGrfName);
