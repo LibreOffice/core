@@ -126,7 +126,8 @@ std::unique_ptr<sdr::contact::ViewContact> SwFlyDrawObj::CreateObjectSpecificVie
 }
 
 SwFlyDrawObj::SwFlyDrawObj(SdrModel& rSdrModel)
-:   SdrObject(rSdrModel)
+:   SdrObject(rSdrModel),
+    mbIsTextBox(false)
 {
 }
 
@@ -143,12 +144,6 @@ SdrInventor SwFlyDrawObj::GetObjInventor() const
 sal_uInt16 SwFlyDrawObj::GetObjIdentifier() const
 {
     return SwFlyDrawObjIdentifier;
-}
-
-bool SwFlyDrawObj::IsTextBox() const
-{
-    const SwFrameFormat* pFrameFormat = FindFrameFormat(this);
-    return SwTextBoxHelper::isTextBox(pFrameFormat, RES_FLYFRMFMT);
 }
 
 // TODO: Need own primitive to get the FlyFrame paint working
