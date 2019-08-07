@@ -143,11 +143,11 @@ sal_Int32 getTokenCount(const OUString &rIn, sal_Unicode cTok)
     return tmpl_getTokenCount<OUString, sal_Unicode>(rIn, cTok);
 }
 
-sal_uInt32 decimalStringToNumber(
-    OUString const & str )
+static sal_uInt32 decimalStringToNumber(
+    OUString const & str, sal_Int32 nStart, sal_Int32 nLength )
 {
     sal_uInt32 result = 0;
-    for( sal_Int32 i = 0 ; i < str.getLength() ; )
+    for( sal_Int32 i = nStart; i < nStart + nLength; )
     {
         sal_uInt32 c = str.iterateCodePoints(&i);
         sal_uInt32 value = 0;
@@ -238,6 +238,12 @@ sal_uInt32 decimalStringToNumber(
         result = result * 10 + value;
     }
     return result;
+}
+
+sal_uInt32 decimalStringToNumber(
+    OUString const & str )
+{
+    return decimalStringToNumber(str, 0, str.getLength());
 }
 
 using namespace ::com::sun::star;
@@ -342,8 +348,8 @@ sal_Int32 compareNatural( const OUString & rLHS, const OUString & rRHS,
         //numbers outside of the normal 0-9 range, e.g. see GetLocalizedChar in
         //vcl
 
-        sal_uInt32 nLHS = comphelper::string::decimalStringToNumber(rLHS.copy(nLHSFirstDigitPos, nLHSChunkLen));
-        sal_uInt32 nRHS = comphelper::string::decimalStringToNumber(rRHS.copy(nRHSFirstDigitPos, nRHSChunkLen));
+        sal_uInt32 nLHS = comphelper::string::decimalStringToNumber(rLHS, nLHSFirstDigitPos, nLHSChunkLen);
+        sal_uInt32 nRHS = comphelper::string::decimalStringToNumber(rRHS, nRHSFirstDigitPos, nRHSChunkLen);
 
         if (nLHS != nRHS)
         {
