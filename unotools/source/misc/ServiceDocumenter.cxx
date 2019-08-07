@@ -9,6 +9,7 @@
 #include "ServiceDocumenter.hxx"
 #include <unotoolsservices.hxx>
 #include <comphelper/servicedecl.hxx>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 using namespace com::sun::star;
 using uno::Reference;
@@ -21,7 +22,9 @@ void unotools::misc::ServiceDocumenter::showCoreDocs(const Reference<XServiceInf
         return;
     auto xMSF(m_xContext->getServiceManager());
     Reference<system::XSystemShellExecute> xShell(xMSF->createInstanceWithContext("com.sun.star.system.SystemShellExecute", m_xContext), uno::UNO_QUERY);
-    xShell->execute(m_sCoreBaseUrl + xService->getImplementationName() + ".html", "", 0);
+    xShell->execute(
+        m_sCoreBaseUrl + xService->getImplementationName() + ".html", "",
+        css::system::SystemShellExecuteFlags::URIS_ONLY);
 }
 
 void unotools::misc::ServiceDocumenter::showInterfaceDocs(const Reference<XTypeProvider>& xTypeProvider)
@@ -36,7 +39,9 @@ void unotools::misc::ServiceDocumenter::showInterfaceDocs(const Reference<XTypeP
         sal_Int32 nIdx = 0;
         while(nIdx != -1)
             sUrl = sUrl.replaceFirst(".", "_1_1", &nIdx);
-        xShell->execute(m_sServiceBaseUrl + "/interface" + sUrl + ".html", "", 0);
+        xShell->execute(
+            m_sServiceBaseUrl + "/interface" + sUrl + ".html", "",
+            css::system::SystemShellExecuteFlags::URIS_ONLY);
     }
 }
 
@@ -52,7 +57,9 @@ void unotools::misc::ServiceDocumenter::showServiceDocs(const Reference<XService
         sal_Int32 nIdx = 0;
         while(nIdx != -1)
             sUrl = sUrl.replaceFirst(".", "_1_1", &nIdx);
-        xShell->execute(m_sServiceBaseUrl + "/service" + sUrl + ".html", "", 0);
+        xShell->execute(
+            m_sServiceBaseUrl + "/service" + sUrl + ".html", "",
+            css::system::SystemShellExecuteFlags::URIS_ONLY);
     }
 }
 
