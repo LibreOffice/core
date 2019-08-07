@@ -124,7 +124,6 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     const URL& aURL, const Sequence < PropertyValue >& lArgs,
     const Reference< XDispatchResultListener >& xListener )
 {
-
     bool bSuccess = false;
     Any invokeResult;
     bool bCaughtException = false;
@@ -161,12 +160,11 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                         {
                             xListener->dispatchFinished( aEvent ) ;
                         }
-                        catch(RuntimeException & e)
+                        catch(const RuntimeException &e)
                         {
                             SAL_WARN("scripting",
                                 "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
-                                "while dispatchFinished with failure of the execution "
-                                << e );
+                                "while dispatchFinished with failure of the execution" << e);
                         }
                     }
                     return;

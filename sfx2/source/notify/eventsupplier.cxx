@@ -19,11 +19,13 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/util/URL.hpp>
-
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <svl/macitem.hxx>
@@ -46,6 +48,8 @@
 #include <macroloader.hxx>
 
 using namespace css;
+using namespace ::com::sun::star;
+
 
 
     //  --- XNameReplace ---
@@ -167,101 +171,128 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasElements()
         return false;
 }
 
+namespace
+{
+    bool lcl_isScriptAccessAllowed_nothrow(const uno::Reference<uno::XInterface>& rxScriptContext)
+    {
+        try
+        {
+            uno::Reference<document::XEmbeddedScripts> xScripts(rxScriptContext, uno::UNO_QUERY);
+            if (!xScripts.is())
+            {
+                uno::Reference<document::XScriptInvocationContext> xContext(rxScriptContext, uno::UNO_QUERY_THROW);
+                xScripts.set(xContext->getScriptContainer(), uno::UNO_SET_THROW);
+            }
+
+            return xScripts->getAllowMacroExecution();
+        }
+        catch( const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("sfx.doc");
+        }
+        return false;
+    }
+}
+
 void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::DocumentEvent& aTrigger, SfxObjectShell* pDoc )
 {
     uno::Sequence < beans::PropertyValue > aProperties;
-    if ( aEventData >>= aProperties )
+    if ( !(aEventData >>= aProperties) )
+        return;
+
+    OUString aType;
+    OUString aScript;
+    OUString aLibrary;
+    OUString aMacroName;
+
+    sal_Int32 nCount = aProperties.getLength();
+
+    if ( !nCount )
+        return;
+
+    sal_Int32 nIndex = 0;
+    while ( nIndex < nCount )
     {
-        OUString aType;
-        OUString aScript;
-        OUString aLibrary;
-        OUString aMacroName;
-
-        sal_Int32 nCount = aProperties.getLength();
-
-        if ( !nCount )
-            return;
-
-        sal_Int32 nIndex = 0;
-        while ( nIndex < nCount )
-        {
-            if ( aProperties[ nIndex ].Name == PROP_EVENT_TYPE )
-                aProperties[ nIndex ].Value >>= aType;
-            else if ( aProperties[ nIndex ].Name == PROP_SCRIPT )
-                aProperties[ nIndex ].Value >>= aScript;
-            else if ( aProperties[ nIndex ].Name == PROP_LIBRARY )
-                aProperties[ nIndex ].Value >>= aLibrary;
-            else if ( aProperties[ nIndex ].Name == PROP_MACRO_NAME )
-                aProperties[ nIndex ].Value >>= aMacroName;
-            else {
-                OSL_FAIL("Unknown property value!");
-            }
-            nIndex += 1;
+        if ( aProperties[ nIndex ].Name == PROP_EVENT_TYPE )
+            aProperties[ nIndex ].Value >>= aType;
+        else if ( aProperties[ nIndex ].Name == PROP_SCRIPT )
+            aProperties[ nIndex ].Value >>= aScript;
+        else if ( aProperties[ nIndex ].Name == PROP_LIBRARY )
+            aProperties[ nIndex ].Value >>= aLibrary;
+        else if ( aProperties[ nIndex ].Name == PROP_MACRO_NAME )
+            aProperties[ nIndex ].Value >>= aMacroName;
+        else {
+            OSL_FAIL("Unknown property value!");
         }
+        nIndex += 1;
+    }
 
-        if (aType == STAR_BASIC && !aScript.isEmpty())
+    if (aType.isEmpty())
+    {
+        // Empty type means no active binding for the event. Just ignore do nothing.
+        return;
+    }
+
+    if (aScript.isEmpty())
+        return;
+
+    if (!pDoc)
+        pDoc = SfxObjectShell::Current();
+
+    if (pDoc && !lcl_isScriptAccessAllowed_nothrow(pDoc->GetModel()))
+        return;
+
+    if (aType == STAR_BASIC)
+    {
+        uno::Any aAny;
+        SfxMacroLoader::loadMacro( aScript, aAny, pDoc );
+    }
+    else if (aType == "Service" || aType == "Script")
+    {
+        util::URL aURL;
+        uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
+
+        aURL.Complete = aScript;
+        xTrans->parseStrict( aURL );
+
+        bool bAllowed = !SfxObjectShell::UnTrustedScript(aURL.Complete);
+
+        if (bAllowed)
         {
-            uno::Any aAny;
-            SfxMacroLoader::loadMacro( aScript, aAny, pDoc );
-        }
-        else if (aType == "Service" ||
-                  aType == "Script")
-        {
-            bool bAllowed = false;
-            util::URL aURL;
-            if (!aScript.isEmpty())
+            SfxViewFrame* pView = SfxViewFrame::GetFirst(pDoc);
+
+            uno::Reference
+                < frame::XDispatchProvider > xProv;
+
+            if ( pView != nullptr )
             {
-                uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
-
-                aURL.Complete = aScript;
-                xTrans->parseStrict( aURL );
-
-                bAllowed = !SfxObjectShell::UnTrustedScript(aURL.Complete);
+                xProv = uno::Reference
+                    < frame::XDispatchProvider > (
+                        pView->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
             }
-
-            if (bAllowed)
+            else
             {
-                SfxViewFrame* pView = pDoc ?
-                    SfxViewFrame::GetFirst( pDoc ) :
-                    SfxViewFrame::Current();
+                xProv.set( frame::Desktop::create( ::comphelper::getProcessComponentContext() ),
+                           uno::UNO_QUERY );
+            }
 
-                uno::Reference
-                    < frame::XDispatchProvider > xProv;
+            uno::Reference < frame::XDispatch > xDisp;
+            if ( xProv.is() )
+                xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
 
-                if ( pView != nullptr )
-                {
-                    xProv = uno::Reference
-                        < frame::XDispatchProvider > (
-                            pView->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
-                }
-                else
-                {
-                    xProv.set( frame::Desktop::create( ::comphelper::getProcessComponentContext() ),
-                               uno::UNO_QUERY );
-                }
+            if ( xDisp.is() )
+            {
 
-                uno::Reference < frame::XDispatch > xDisp;
-                if ( xProv.is() )
-                    xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
-
-                if ( xDisp.is() )
-                {
-
-                    beans::PropertyValue aEventParam;
-                    aEventParam.Value <<= aTrigger;
-                    uno::Sequence< beans::PropertyValue > aDispatchArgs( &aEventParam, 1 );
-                    xDisp->dispatch( aURL, aDispatchArgs );
-                }
+                beans::PropertyValue aEventParam;
+                aEventParam.Value <<= aTrigger;
+                uno::Sequence< beans::PropertyValue > aDispatchArgs( &aEventParam, 1 );
+                xDisp->dispatch( aURL, aDispatchArgs );
             }
         }
-        else if ( aType.isEmpty() )
-        {
-            // Empty type means no active binding for the event. Just ignore do nothing.
-        }
-        else
-        {
-            SAL_WARN( "sfx.notify", "notifyEvent(): Unsupported event type" );
-        }
+    }
+    else
+    {
+        SAL_WARN( "sfx.notify", "notifyEvent(): Unsupported event type" );
     }
 }
 
