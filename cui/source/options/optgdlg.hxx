@@ -142,6 +142,7 @@ class OfaLanguagesTabPage : public SfxTabPage
 
     OUString        m_sUserLocaleValue;
     OUString        m_sSystemDefaultString;
+    OUString        m_sDecimalSeparatorLabel;
 
     bool            m_bDatePatternsValid;
 
