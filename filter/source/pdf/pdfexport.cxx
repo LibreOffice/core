@@ -575,6 +575,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             case 2:
                 aContext.Version    = vcl::PDFWriter::PDFVersion::PDF_A_2;
                 mbUseTaggedPDF = true;          // force the tagged PDF as well
+                mbExportFormFields = false;     // force disabling of form conversion
                 mbRemoveTransparencies = false; // PDF/A-2 does allow transparencies
                 mbEncrypt = false;              // no encryption
                 xEnc.clear();
