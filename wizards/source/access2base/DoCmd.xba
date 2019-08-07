@@ -1500,27 +1500,6 @@ Error_NotApplicable:
 End Function		&apos;	Quit	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Sub RunApp(Optional ByVal pvCommandLine As Variant)
-&apos;	Convert to URL and execute the Command Line
-
-	If _ErrorHandler() Then On Local Error Goto Error_Sub
-
-	Utils._SetCalledSub(&quot;RunApp&quot;)
-	
-	If IsMissing(pvCommandLine) Then Call _TraceArguments()
-	If Not Utils._CheckArgument(pvCommandLine, 1, vbString) Then Goto Exit_Sub
-
-	_ShellExecute(ConvertToURL(pvCommandLine))
-
-Exit_Sub:
-	Utils._ResetCalledSub(&quot;RunApp&quot;)
-	Exit Sub
-Error_Sub:
-	TraceError(TRACEABORT, Err, &quot;RunApp&quot;, Erl)
-	GoTo Exit_Sub
-End Sub				&apos;	RunApp		V0.8.5
-
-REM -----------------------------------------------------------------------------------------------------------------------
 Public Function RunCommand(Optional pvCommand As Variant, Optional pbReturnCommand As Boolean) As Variant
 &apos;	Execute command via DispatchHelper
 &apos;	pbReturnCommand = internal parameter to only return the exact command string (always absent if uno prefix present in pvCommand)
