@@ -92,7 +92,8 @@
   <implementation name="XMLImpressClipboardExport">
     <service name="com.sun.star.comp.Impress.XMLClipboardExporter"/>
   </implementation>
-  <implementation name="XMLImpressContentExportOOO">
+  <implementation name="XMLImpressContentExportOOO"
+    constructor="com_sun_star_comp_Impress_XMLContentExporter_get_implementation">
     <service name="com.sun.star.comp.Impress.XMLContentExporter"/>
   </implementation>
   <implementation name="XMLImpressContentExportOasis"
