@@ -125,7 +125,8 @@ std::unique_ptr<sdr::contact::ViewContact> SwFlyDrawObj::CreateObjectSpecificVie
 }
 
 SwFlyDrawObj::SwFlyDrawObj(SdrModel& rSdrModel)
-:   SdrObject(rSdrModel)
+:   SdrObject(rSdrModel),
+    mbIsTextBox(false)
 {
 }
 
