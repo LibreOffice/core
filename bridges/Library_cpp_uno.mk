@@ -88,7 +88,7 @@ endif
 
 else ifeq ($(CPUNAME),GODSON)
 
-ifneq ($(filter ANDROID LINUX,$(OS)),)
+ifneq ($(filter LINUX,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_mips
 bridge_noopt_objects := cpp2uno uno2cpp
 bridge_exception_objects := except
@@ -96,7 +96,7 @@ endif
 
 else ifeq ($(CPUNAME),GODSON64)
 
-ifneq ($(filter ANDROID LINUX,$(OS)),)
+ifneq ($(filter LINUX,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_mips64
 bridge_asm_objects := call
 bridge_noopt_objects := cpp2uno uno2cpp

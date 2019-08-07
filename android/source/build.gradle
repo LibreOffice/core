@@ -61,7 +61,7 @@ android {
         strippedUIEditing.assets.srcDirs 'assets_strippedUI'
     }
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 26
         vectorDrawables.useSupportLibrary = true
     }
@@ -91,6 +91,10 @@ android {
             versionNameSuffix "-editing"
         }
         fullUI.dimension "default"
+    }
+    lintOptions {
+        // don't error-out on missing translations
+        warning 'MissingTranslation'
     }
 }
 

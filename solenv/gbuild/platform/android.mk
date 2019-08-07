@@ -9,14 +9,7 @@
 
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 
-gb_STDLIBS := \
-	-lc++_static \
-	-lc++abi \
-	-landroid_support \
-
-else
-
-gb_STDLIBS := -lc++_shared
+gb_STDLIBS := -static-libstdc++
 
 endif
 
