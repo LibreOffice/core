@@ -1360,7 +1360,8 @@ bool SfxObjectShell::UnTrustedScript(const OUString& rScriptURL)
     if (!sfUri.is())
         return false;
 
-    OUString sScript = sfUri->getName();
+    // pyuno encodes path separator as |
+    OUString sScript = sfUri->getName().replace('|', '/');
 
     // check if any path portion matches LibreLogo and ban it if it does
     sal_Int32 nIndex = 0;
