@@ -753,8 +753,9 @@ bool SwRedlineExtraData::operator == ( const SwRedlineExtraData& ) const
 
 SwRedlineExtraData_FormatColl::SwRedlineExtraData_FormatColl( const OUString& rColl,
                                                 sal_uInt16 nPoolFormatId,
-                                                const SfxItemSet* pItemSet )
-    : m_sFormatNm(rColl), m_nPoolId(nPoolFormatId)
+                                                const SfxItemSet* pItemSet,
+                                                bool bFormatAll )
+    : m_sFormatNm(rColl), m_nPoolId(nPoolFormatId), m_bFormatAll(bFormatAll)
 {
     if( pItemSet && pItemSet->Count() )
         m_pSet.reset( new SfxItemSet( *pItemSet ) );
@@ -766,7 +767,7 @@ SwRedlineExtraData_FormatColl::~SwRedlineExtraData_FormatColl()
 
 SwRedlineExtraData* SwRedlineExtraData_FormatColl::CreateNew() const
 {
-    return new SwRedlineExtraData_FormatColl( m_sFormatNm, m_nPoolId, m_pSet.get() );
+    return new SwRedlineExtraData_FormatColl( m_sFormatNm, m_nPoolId, m_pSet.get(), m_bFormatAll );
 }
 
 void SwRedlineExtraData_FormatColl::Reject( SwPaM& rPam ) const
@@ -781,11 +782,21 @@ void SwRedlineExtraData_FormatColl::Reject( SwPaM& rPam ) const
     RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld & ~RedlineFlags(RedlineFlags::On | RedlineFlags::Ignore));
 
+    SwPaM aPam( *rPam.GetMark(), *rPam.GetPoint() );
+
+    if ( !m_bFormatAll )
+    {
+        // don't reject the format of the next paragraph (that is handled by the next redline)
+        aPam.GetPoint()->nNode--;
+        SwContentNode* pNode = aPam.GetPoint()->nNode.GetNode().GetContentNode();
+        aPam.GetPoint()->nContent.Assign( pNode, pNode->Len() );
+    }
+
     if( pColl )
-        pDoc->SetTextFormatColl( rPam, pColl, false );
+        pDoc->SetTextFormatColl( aPam, pColl, false );
 
     if( m_pSet )
-        pDoc->getIDocumentContentOperations().InsertItemSet( rPam, *m_pSet );
+        pDoc->getIDocumentContentOperations().InsertItemSet( aPam, *m_pSet );
 
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 }
@@ -794,6 +805,7 @@ bool SwRedlineExtraData_FormatColl::operator == ( const SwRedlineExtraData& r) c
 {
     const SwRedlineExtraData_FormatColl& rCmp = static_cast<const SwRedlineExtraData_FormatColl&>(r);
     return m_sFormatNm == rCmp.m_sFormatNm && m_nPoolId == rCmp.m_nPoolId &&
+            m_bFormatAll == rCmp.m_bFormatAll &&
             ( ( !m_pSet && !rCmp.m_pSet ) ||
                ( m_pSet && rCmp.m_pSet && *m_pSet == *rCmp.m_pSet ) );
 }

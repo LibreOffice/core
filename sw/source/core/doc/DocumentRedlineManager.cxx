@@ -2026,6 +2026,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         SwTextNode* pDelNode = pStt->nNode.GetNode().GetTextNode();
                         SwTextNode* pTextNode;
                         SwNodeIndex aIdx( pEnd->nNode.GetNode() );
+                        bool bFirst = true;
 
                         while (pDelNode != nullptr && pTextNd != nullptr && pDelNd->GetIndex() < pTextNd->GetIndex())
                         {
@@ -2045,6 +2046,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                 if (pExtraData)
                                 {
                                     std::unique_ptr<SwRedlineExtraData_FormatColl> xRedlineExtraData;
+                                    if (!bFirst)
+                                        pExtraData->SetFormatAll(false);
                                     xRedlineExtraData.reset(pExtraData);
                                     pPar->SetExtraData( xRedlineExtraData.get() );
                                 }
@@ -2054,6 +2057,9 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                 lcl_CopyStyle(*pStt, aPos);
                             }
                             pTextNd = SwNodes::GoPrevious( &aIdx );
+
+                            if (bFirst)
+                                bFirst = false;
                         }
                     }
                 }
