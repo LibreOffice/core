@@ -3615,14 +3615,19 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                         }
                                     }
 
-                                    const WrongList* const pWrongList = pPortion->GetNode()->GetWrongList();
-                                    if ( GetStatus().DoOnlineSpelling() && pWrongList && !pWrongList->empty() && rTextPortion.GetLen() )
+                                    if (GetStatus().DoOnlineSpelling() && rTextPortion.GetLen())
                                     {
+                                        const WrongList* pWrongList
+                                            = pPortion->GetNode()->GetWrongList();
+
+                                        if (pWrongList && !pWrongList->empty())
                                         {//#105750# adjust LinePos for superscript or subscript text
-                                            short _nEsc = aTmpFont.GetEscapement();
-                                            if( _nEsc )
+                                            const short nEsc = aTmpFont.GetEscapement();
+                                            if (nEsc)
                                             {
-                                                long nShift = (_nEsc * aTmpFont.GetFontSize().Height()) / 100L;
+                                                const long nShift
+                                                    = (nEsc * aTmpFont.GetFontSize().Height())
+                                                      / 100L;
                                                 if( !IsVertical() )
                                                     aRedLineTmpPos.AdjustY( -nShift );
                                                 else
@@ -3632,7 +3637,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                                         aRedLineTmpPos.AdjustX( -nShift );
                                             }
                                         }
-                                        Color aOldColor( pOutDev->GetLineColor() );
+
+                                        const Color aOldColor( pOutDev->GetLineColor() );
                                         pOutDev->SetLineColor( GetColorConfig().GetColorValue( svtools::SPELL ).nColor );
                                         lcl_DrawRedLines( pOutDev, aTmpFont.GetFontSize().Height(), aRedLineTmpPos, static_cast<size_t>(nIndex), static_cast<size_t>(nIndex) + rTextPortion.GetLen(), pDXArray, pPortion->GetNode()->GetWrongList(), nOrientation, aOrigin, IsVertical(), rTextPortion.IsRightToLeft() );
                                         pOutDev->SetLineColor( aOldColor );
