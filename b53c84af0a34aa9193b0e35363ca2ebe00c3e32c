@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_ea87d060",
+        "filename": "vcl/source/window/window2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-07T08:57:23Z",
+      "side": 1,
+      "message": "Was it by design or by accident that deltaXInLogic, passed into now-double lcl_HandleScrollHelper nN param, was left as long, instead of being converted to double too?  (And same for deltaYInLogic further below.)",
+      "revId": "b53c84af0a34aa9193b0e35363ca2ebe00c3e32c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
