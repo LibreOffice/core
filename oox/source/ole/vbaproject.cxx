@@ -31,6 +31,7 @@
 #include <com/sun/star/script/vba/XVBAMacroResolver.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/configurationhelper.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <osl/diagnose.h>
