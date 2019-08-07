@@ -2490,6 +2490,16 @@ void SwFrameFormat::SetOtherTextBoxFormat( SwFrameFormat *pFormat )
         assert( nullptr != m_pOtherTextBoxFormat );
     }
     m_pOtherTextBoxFormat = pFormat;
+
+    SdrObject* pObj = FindSdrObject();
+
+    if (pObj)
+    {
+        SwFlyDrawObj* pSwFlyDraw = dynamic_cast<SwFlyDrawObj*>(pObj);
+
+        if (pSwFlyDraw)
+            pSwFlyDraw->SetTextBox(true);
+    }
 }
 
 bool SwFrameFormat::supportsFullDrawingLayerFillAttributeSet() const
