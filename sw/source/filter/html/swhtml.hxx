@@ -453,6 +453,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     bool m_bBodySeen : 1;
     bool m_bReadingHeaderOrFooter : 1;
+    bool m_bNotifyMacroEventRead : 1;
     bool m_isInTableStructure;
 
     sal_Int32 m_nTableDepth;
@@ -923,6 +924,8 @@ public:
     SwDoc* GetDoc() const;
 
     bool IsReqIF() const;
+
+    void NotifyMacroEventRead();
 
     /// Strips query and fragment from a URL path if base URL is a file:// one.
     static OUString StripQueryFromPath(const OUString& rBase, const OUString& rPath);

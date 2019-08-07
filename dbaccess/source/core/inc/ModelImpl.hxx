@@ -207,6 +207,7 @@ public:
     bool                                            m_bSuppressVersionColumns : 1;
     bool                                            m_bModified : 1;
     bool                                            m_bDocumentReadOnly : 1;
+    bool                                            m_bMacroCallsSeenWhileLoading : 1;
     css::uno::Reference< css::beans::XPropertyBag >
                                                         m_xSettings;
     css::uno::Sequence< OUString >                      m_aTableFilter;
@@ -435,6 +436,7 @@ public:
     virtual void setCurrentMacroExecMode( sal_uInt16 ) override;
     virtual OUString getDocumentLocation() const override;
     virtual bool documentStorageHasMacros() const override;
+    virtual bool macroCallsSeenWhileLoading() const override;
     virtual css::uno::Reference< css::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const override;
     virtual SignatureState getScriptingSignatureState() override;
     virtual bool hasTrustedScriptingSignature( bool bAllowUIToAddAuthor ) override;

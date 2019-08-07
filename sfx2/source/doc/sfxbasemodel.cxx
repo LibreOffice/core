@@ -889,8 +889,15 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
             pObjectShell->BreakMacroSign_Impl( bBreakMacroSign );
         }
 
+        bool bMacroEventRead = false;
+        if ((aArgs.get("MacroEventRead") >>= bMacroEventRead) && bMacroEventRead)
+        {
+            pObjectShell->SetMacroCallsSeenWhileLoading();
+        }
+
         aArgs.remove( "WinExtent" );
         aArgs.remove( "BreakMacroSignature" );
+        aArgs.remove( "MacroEventRead" );
         aArgs.remove( "Stream" );
         aArgs.remove( "InputStream" );
         aArgs.remove( "URL" );

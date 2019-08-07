@@ -19,11 +19,13 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/util/URL.hpp>
-
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <svl/macitem.hxx>
@@ -47,6 +49,8 @@
 #include <macroloader.hxx>
 
 using namespace css;
+using namespace ::com::sun::star;
+
 
 
     //  --- XNameReplace ---
@@ -165,6 +169,29 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasElements()
     return maEventNames.hasElements();
 }
 
+namespace
+{
+    bool lcl_isScriptAccessAllowed_nothrow(const uno::Reference<uno::XInterface>& rxScriptContext)
+    {
+        try
+        {
+            uno::Reference<document::XEmbeddedScripts> xScripts(rxScriptContext, uno::UNO_QUERY);
+            if (!xScripts.is())
+            {
+                uno::Reference<document::XScriptInvocationContext> xContext(rxScriptContext, uno::UNO_QUERY_THROW);
+                xScripts.set(xContext->getScriptContainer(), uno::UNO_SET_THROW);
+            }
+
+            return xScripts->getAllowMacroExecution();
+        }
+        catch( const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("sfx.doc");
+        }
+        return false;
+    }
+}
+
 void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::DocumentEvent& aTrigger, SfxObjectShell* pDoc )
 {
     uno::Sequence < beans::PropertyValue > aProperties;
@@ -198,31 +225,39 @@ void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::Docum
         nIndex += 1;
     }
 
-    if (aType == STAR_BASIC && !aScript.isEmpty())
+    if (aType.isEmpty())
+    {
+        // Empty type means no active binding for the event. Just ignore do nothing.
+        return;
+    }
+
+    if (aScript.isEmpty())
+        return;
+
+    if (!pDoc)
+        pDoc = SfxObjectShell::Current();
+
+    if (pDoc && !lcl_isScriptAccessAllowed_nothrow(pDoc->GetModel()))
+        return;
+
+    if (aType == STAR_BASIC)
     {
         uno::Any aAny;
         SfxMacroLoader::loadMacro( aScript, aAny, pDoc );
     }
-    else if (aType == "Service" ||
-              aType == "Script")
+    else if (aType == "Service" || aType == "Script")
     {
-        bool bAllowed = false;
         util::URL aURL;
-        if (!aScript.isEmpty())
-        {
-            uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
+        uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
 
-            aURL.Complete = aScript;
-            xTrans->parseStrict( aURL );
+        aURL.Complete = aScript;
+        xTrans->parseStrict( aURL );
 
-            bAllowed = !SfxObjectShell::UnTrustedScript(aURL.Complete);
-        }
+        bool bAllowed = !SfxObjectShell::UnTrustedScript(aURL.Complete);
 
         if (bAllowed)
         {
-            SfxViewFrame* pView = pDoc ?
-                SfxViewFrame::GetFirst( pDoc ) :
-                SfxViewFrame::Current();
+            SfxViewFrame* pView = SfxViewFrame::GetFirst(pDoc);
 
             uno::Reference
                 < frame::XDispatchProvider > xProv;
@@ -245,17 +280,12 @@ void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::Docum
 
             if ( xDisp.is() )
             {
-
                 beans::PropertyValue aEventParam;
                 aEventParam.Value <<= aTrigger;
                 uno::Sequence< beans::PropertyValue > aDispatchArgs( &aEventParam, 1 );
                 xDisp->dispatch( aURL, aDispatchArgs );
             }
         }
-    }
-    else if ( aType.isEmpty() )
-    {
-        // Empty type means no active binding for the event. Just ignore do nothing.
     }
     else
     {
