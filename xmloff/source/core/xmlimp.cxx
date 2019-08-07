@@ -58,6 +58,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/documentinfo.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/fontcvt.hxx>
 #include <o3tl/make_unique.hxx>
@@ -398,7 +399,8 @@ SvXMLImport::SvXMLImport(
     isFastContext( false ),
     maNamespaceHandler( new SvXMLImportFastNamespaceHandler() ),
     mbIsFormsSupported( true ),
-    mbIsTableShapeSupported( false )
+    mbIsTableShapeSupported( false ),
+    mbNotifyMacroEventRead( false )
 {
     SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
     InitCtor_();
@@ -2161,6 +2163,16 @@ void SvXMLImport::registerNamespaces()
         // aNamespaceMap = { Token : ( NamespacePrefix, NamespaceURI ) }
         registerNamespace( aNamespaceEntry.second.second, aNamespaceEntry.first << NMSP_SHIFT );
     }
+}
+
+void SvXMLImport::NotifyMacroEventRead()
+{
+    if (mbNotifyMacroEventRead)
+        return;
+
+    comphelper::DocumentInfo::notifyMacroEventRead(mxModel);
+
+    mbNotifyMacroEventRead = true;
 }
 
 SvXMLImportFastNamespaceHandler::SvXMLImportFastNamespaceHandler()
