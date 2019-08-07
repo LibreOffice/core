@@ -132,42 +132,32 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     {
         try
         {
-            css::uno::Reference<css::uri::XUriReferenceFactory> urifac(
-                css::uri::UriReferenceFactory::create(m_xContext));
-            css::uno::Reference<css::uri::XVndSunStarScriptUrlReference> uri(
-                urifac->parse(aURL.Complete), css::uno::UNO_QUERY_THROW);
-            auto const loc = uri->getParameter("location");
-            bool bIsDocumentScript = loc == "document";
+            // obtain the component for our security check
+            Reference< XEmbeddedScripts > xDocumentScripts;
+            if ( getScriptInvocation() )
+                xDocumentScripts.set( m_xScriptInvocation->getScriptContainer(), UNO_SET_THROW );
 
-            if ( bIsDocumentScript )
+            OSL_ENSURE( xDocumentScripts.is(), "ScriptProtocolHandler::dispatchWithNotification: can't do the security check!" );
+            if ( !xDocumentScripts.is() || !xDocumentScripts->getAllowMacroExecution() )
             {
-                // obtain the component for our security check
-                Reference< XEmbeddedScripts > xDocumentScripts;
-                if ( getScriptInvocation() )
-                    xDocumentScripts.set( m_xScriptInvocation->getScriptContainer(), UNO_SET_THROW );
-
-                OSL_ENSURE( xDocumentScripts.is(), "ScriptProtocolHandler::dispatchWithNotification: can't do the security check!" );
-                if ( !xDocumentScripts.is() || !xDocumentScripts->getAllowMacroExecution() )
+                if ( xListener.is() )
                 {
-                    if ( xListener.is() )
+                    css::frame::DispatchResultEvent aEvent(
+                            static_cast< ::cppu::OWeakObject* >( this ),
+                            css::frame::DispatchResultState::FAILURE,
+                            invokeResult );
+                    try
                     {
-                        css::frame::DispatchResultEvent aEvent(
-                                static_cast< ::cppu::OWeakObject* >( this ),
-                                css::frame::DispatchResultState::FAILURE,
-                                invokeResult );
-                        try
-                        {
-                            xListener->dispatchFinished( aEvent ) ;
-                        }
-                        catch(const RuntimeException &)
-                        {
-                            TOOLS_WARN_EXCEPTION("scripting",
-                                "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
-                                "while dispatchFinished with failure of the execution");
-                        }
+                        xListener->dispatchFinished( aEvent ) ;
                     }
-                    return;
+                    catch(const RuntimeException &)
+                    {
+                        TOOLS_WARN_EXCEPTION("scripting",
+                            "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
+                            "while dispatchFinished with failure of the execution");
+                    }
                 }
+                return;
             }
 
             // Creates a ScriptProvider ( if one is not created already )
@@ -204,8 +194,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
             // attempt to protect the document against the script tampering with its Undo Context
             std::unique_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
-            if ( bIsDocumentScript )
-                pUndoGuard.reset( new ::framework::DocumentUndoGuard( m_xScriptInvocation ) );
+            pUndoGuard.reset( new ::framework::DocumentUndoGuard( m_xScriptInvocation ) );
 
             bSuccess = false;
             while ( !bSuccess )

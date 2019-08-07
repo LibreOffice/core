@@ -400,7 +400,8 @@ SvXMLImport::SvXMLImport(
     isFastContext( false ),
     maNamespaceHandler( new SvXMLImportFastNamespaceHandler() ),
     mbIsFormsSupported( true ),
-    mbIsTableShapeSupported( false )
+    mbIsTableShapeSupported( false ),
+    mbNotifyMacroEventRead( false )
 {
     SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
     InitCtor_();
@@ -2153,6 +2154,26 @@ void SvXMLImport::registerNamespaces()
         // aNamespaceMap = { Token : ( NamespacePrefix, NamespaceURI ) }
         registerNamespace( aNamespaceEntry.second.second, aNamespaceEntry.first << NMSP_SHIFT );
     }
+}
+
+void SvXMLImport::NotifyMacroEventRead()
+{
+    if (mbNotifyMacroEventRead)
+        return;
+
+    if (!mxModel.is())
+        return;
+
+    // like BreakMacroSignature of XMLScriptContext use XModel::attachResource
+    // to propogate this notification
+    uno::Sequence<beans::PropertyValue> aMedDescr = mxModel->getArgs();
+    sal_Int32 nNewLen = aMedDescr.getLength() + 1;
+    aMedDescr.realloc(nNewLen);
+    aMedDescr[nNewLen-1].Name = "MacroEventRead";
+    aMedDescr[nNewLen-1].Value <<= true;
+    mxModel->attachResource(mxModel->getURL(), aMedDescr);
+
+    mbNotifyMacroEventRead = true;
 }
 
 SvXMLImportFastNamespaceHandler::SvXMLImportFastNamespaceHandler()

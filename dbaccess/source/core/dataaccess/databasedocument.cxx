@@ -748,15 +748,24 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const OUString& _rURL, cons
 bool ODatabaseDocument::impl_attachResource( const OUString& i_rLogicalDocumentURL,
             const Sequence< PropertyValue >& i_rMediaDescriptor, DocumentGuard& _rDocGuard )
 {
-    if  (   ( i_rLogicalDocumentURL == getURL() )
-        &&  ( i_rMediaDescriptor.getLength() == 1 )
-        &&  ( i_rMediaDescriptor[0].Name == "BreakMacroSignature" )
-        )
+    if  (i_rLogicalDocumentURL == getURL())
     {
-        // this is a BAD hack of the Basic importer code ... there should be a dedicated API for this,
-        // not this bad mis-using of existing interfaces
-        return false;
-            // (we do not support macro signatures, so we can ignore this call)
+        ::comphelper::NamedValueCollection aArgs(i_rMediaDescriptor);
+
+        // this misuse of attachresource is a hack of the Basic importer code
+        // repurposing existing interfaces for uses it probably wasn't intended
+        // for
+
+        // we do not support macro signatures, so we can ignore that request
+        aArgs.remove("BreakMacroSignature");
+
+        bool bMacroEventRead = false;
+        if ((aArgs.get( "MacroEventRead" ) >>= bMacroEventRead) && bMacroEventRead)
+            m_pImpl->m_bMacroCallsSeenWhileLoading = true;
+        aArgs.remove( "MacroEventRead" );
+
+        if (aArgs.empty())
+            return false;
     }
 
     // if no URL has been provided, the caller was lazy enough to not call our getURL - which is not allowed anymore,
