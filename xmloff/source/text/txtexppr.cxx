@@ -1129,9 +1129,8 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         pClip11State->mnIndex = -1;
 
     // When both background attributes are available export the visible one
-    if( pCharHighlight && pCharBackground )
+    if (pCharHighlight)
     {
-        assert(pCharBackgroundTransparency); // always together
         Color nColor = COL_TRANSPARENT;
         pCharHighlight->maValue >>= nColor;
         if( nColor == COL_TRANSPARENT )
@@ -1140,8 +1139,10 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             // and we'd need another property CharHighlightTransparent for that
             pCharHighlight->mnIndex = -1;
         }
-        else
+        // When both background attributes are available export the visible one
+        else if(pCharBackground)
         {
+            assert(pCharBackgroundTransparency); // always together
             pCharBackground->mnIndex = -1;
             pCharBackgroundTransparency->mnIndex = -1;
         }
