@@ -35,6 +35,7 @@ class SwFlyDrawObj : public SdrObject
 {
 private:
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
+    bool mbIsTextBox;
 
 protected:
     // #i95264# SwFlyDrawObj needs an own VC since createViewIndependentPrimitive2DSequence()
@@ -50,7 +51,8 @@ public:
     // for instantiation of this class while loading (via factory)
     virtual SdrInventor GetObjInventor()     const override;
     virtual sal_uInt16  GetObjIdentifier()   const override;
-    bool IsTextBox() const override;
+    virtual bool IsTextBox() const override { return mbIsTextBox; }
+    virtual void SetTextBox(bool bIsTextBox) { mbIsTextBox = bIsTextBox; }
 };
 
 // virtual objects for Flys
