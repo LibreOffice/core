@@ -1011,7 +1011,7 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
         if ( pDocShell )
         {
             ScDocument& rDoc = pDocShell->GetDocument();
-            pEditEngine = rDoc.CreateFieldEditEngine(/*bUpdateMode*/true);
+            pEditEngine = rDoc.CreateFieldEditEngine();
         }
         else
         {
@@ -1228,7 +1228,7 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
         if ( mpDocSh )
         {
             ScDocument& rDoc = mpDocSh->GetDocument();
-            mpEditEngine = rDoc.CreateFieldEditEngine(/*bUpdateMode*/true);
+            mpEditEngine = rDoc.CreateFieldEditEngine();
         }
         else
         {

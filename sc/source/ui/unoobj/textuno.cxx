@@ -802,7 +802,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         if ( pDocShell )
         {
             ScDocument& rDoc = pDocShell->GetDocument();
-            pEditEngine = rDoc.CreateFieldEditEngine(/*bUpdateMode*/true);
+            pEditEngine = rDoc.CreateFieldEditEngine();
         }
         else
         {
