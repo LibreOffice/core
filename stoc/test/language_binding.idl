@@ -132,7 +132,7 @@ interface XLBTestBase : com::sun::star::uno::XInterface
 };
 
 
-/** Inherting from monster; adds raiseException(). */
+/** Inheriting from monster; adds raiseException(). */
 interface XLanguageBindingTest : test::XLBTestBase
 {
     /**

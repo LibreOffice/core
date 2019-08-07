@@ -120,7 +120,7 @@
                         </xsl:choose>
                     </xsl:when>
                     <xsl:otherwise>
-                        <!-- automatic styles are implicit inherting from a style called 'Default',
+                        <!-- automatic styles are implicit inheriting from a style called 'Default',
                         furthermore nor in spreadsheetml nor in OpenDocument automatic styles are able to inherit from each other -->
                         <xsl:choose>
                             <xsl:when test="@style:parent-style-name and not(@style:parent-style-name = 'Default')">

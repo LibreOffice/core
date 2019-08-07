@@ -123,7 +123,7 @@ public:
 
 /** Implementation helper implementing interfaces
     css::uno::XInterface and css::lang::XTypeProvider
-    inherting from a BaseClass.
+    inheriting from a BaseClass.
 
     All acquire() and release() calls are delegated to the BaseClass.  Upon
     queryInterface(), if a demanded interface is not supported by this class
