@@ -3579,6 +3579,16 @@ void SfxObjectShell::SetConfigOptionsChecked( bool bChecked )
     pImpl->m_bConfigOptionsChecked = bChecked;
 }
 
+void SfxObjectShell::SetMacroCallsSeenWhileLoading()
+{
+    pImpl->m_bMacroCallsSeenWhileLoading = true;
+}
+
+bool SfxObjectShell::GetMacroCallsSeenWhileLoading() const
+{
+    return pImpl->m_bMacroCallsSeenWhileLoading;
+}
+
 bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )
 {
 #if !HAVE_FEATURE_SCRIPTING
