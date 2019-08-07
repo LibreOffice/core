@@ -413,63 +413,46 @@ if test -n "$with_android_ndk"; then
     11.1.*|12.1.*|13.1.*|14.1.*)
         AC_MSG_ERROR([Building for Android is only supported with NDK versions above 16.x.*])
         ;;
-    16.*)
+    16.*|17.*|18.*|19.*|20.*)
         ;;
     *)
-        AC_MSG_WARN([Untested Android NDK version $ANDROID_NDK_VERSION, only version 16.* have been used successfully. Proceed at your own risk.])
-        add_warning "Untested Android NDK version $ANDROID_NDK_VERSION, only version 16.* have been used successfully. Proceed at your own risk."
+        AC_MSG_WARN([Untested Android NDK version $ANDROID_NDK_VERSION, only versions 16.* til 20.* have been used successfully. Proceed at your own risk.])
+        add_warning "Untested Android NDK version $ANDROID_NDK_VERSION, only versions 16.* til 20.* have been used successfully. Proceed at your own risk."
         ;;
     esac
 
-    ANDROID_API_LEVEL=14
+    ANDROID_API_LEVEL=16
     android_cpu=$host_cpu
-    ANDROID_ARCH=$android_cpu
     if test $host_cpu = arm; then
-        android_platform_prefix=$android_cpu-linux-androideabi
+        android_platform_prefix=arm-linux-androideabi
         android_gnu_prefix=$android_platform_prefix
-        LLVM_TRIPLE=armv7-none-linux-androideabi
+        LLVM_TRIPLE=armv7a-linux-androideabi
         ANDROID_APP_ABI=armeabi-v7a
         ANDROIDCFLAGS="-mthumb -march=armv7-a -mfloat-abi=softfp -mfpu=neon -Wl,--fix-cortex-a8"
     elif test $host_cpu = aarch64; then
-        android_platform_prefix=$android_cpu-linux-android
+        android_platform_prefix=aarch64-linux-android
         android_gnu_prefix=$android_platform_prefix
-        LLVM_TRIPLE=aarch64-none-linux-android
+        LLVM_TRIPLE=$android_platform_prefix
         # minimum android version that supports aarch64
         ANDROID_API_LEVEL=21
         ANDROID_APP_ABI=arm64-v8a
-        ANDROID_ARCH=arm64
-    elif test $host_cpu = mips; then
-        android_platform_prefix=mipsel-linux-android
-        android_gnu_prefix=$android_platform_prefix
-        LLVM_TRIPLE=mipsel-none-linux-android
-        ANDROID_APP_ABI=mips
     else
         # host_cpu is something like "i386" or "i686" I guess, NDK uses
         # "x86" in some contexts
         android_cpu=x86
         android_platform_prefix=$android_cpu
         android_gnu_prefix=i686-linux-android
-        LLVM_TRIPLE=i686-none-linux-android
+        LLVM_TRIPLE=$android_gnu_prefix
         ANDROID_APP_ABI=x86
-        ANDROID_ARCH=$android_cpu
-        ANDROIDCFLAGS="-march=atom"
     fi
 
     case "$with_android_ndk_toolchain_version" in
     clang5.0)
         ANDROID_GCC_TOOLCHAIN_VERSION=4.9
-        ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-$ANDROID_GCC_TOOLCHAIN_VERSION
-        ANDROID_COMPILER_DIR=$ANDROID_NDK_HOME/toolchains/llvm
         ;;
     *)
         AC_MSG_ERROR([Unrecognized value for the --with-android-ndk-toolchain-version option. Building for Android is only supported with Clang 5.*])
     esac
-
-    if test ! -d $ANDROID_BINUTILS_DIR; then
-        AC_MSG_ERROR([No directory $ANDROID_BINUTILS_DIR])
-    elif test ! -d $ANDROID_COMPILER_DIR; then
-        AC_MSG_ERROR([No directory $ANDROID_COMPILER_DIR])
-    fi
 
     # NDK 15 or later toolchain is 64bit-only, except for Windows that we don't support. Using a 64-bit
     # linker is required if you compile large parts of the code with -g. A 32-bit linker just won't
@@ -479,41 +462,37 @@ if test -n "$with_android_ndk"; then
     # all objects have been built with debug information.)
     case $build_os in
     linux-gnu*)
-        ndk_build_os=linux
+        android_HOST_TAG=linux-x86_64
         ;;
     darwin*)
-        ndk_build_os=darwin
+        android_HOST_TAG=darwin-x86_64
         ;;
     *)
         AC_MSG_ERROR([We only support building for Android from Linux or macOS])
+        # ndk would also support windows and windows-x86_64
         ;;
     esac
-    ANDROID_COMPILER_BIN=$ANDROID_COMPILER_DIR/prebuilt/$ndk_build_os-x86_64/bin
-    ANDROID_BINUTILS_PREBUILT_ROOT=$ANDROID_BINUTILS_DIR/prebuilt/$ndk_build_os-x86_64
+    android_TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/$android_HOST_TAG
+    ANDROID_COMPILER_BIN=$android_TOOLCHAIN/bin
+    dnl TODO: NSS build uses it...
+    ANDROID_BINUTILS_PREBUILT_ROOT=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-$ANDROID_GCC_TOOLCHAIN_VERSION/prebuilt/$android_HOST_TAG
     AC_SUBST(ANDROID_BINUTILS_PREBUILT_ROOT)
 
-    test -z "$SYSBASE" && SYSBASE=$ANDROID_NDK_HOME/platforms/android-${ANDROID_API_LEVEL}/arch-${ANDROID_ARCH}
-    test -z "$AR" && AR=$ANDROID_BINUTILS_PREBUILT_ROOT/bin/$android_gnu_prefix-ar
-    test -z "$NM" && NM=$ANDROID_BINUTILS_PREBUILT_ROOT/bin/$android_gnu_prefix-nm
-    test -z "$OBJDUMP" && OBJDUMP=$ANDROID_BINUTILS_PREBUILT_ROOT/bin/$android_gnu_prefix-objdump
-    test -z "$RANLIB" && RANLIB=$ANDROID_BINUTILS_PREBUILT_ROOT/bin/$android_gnu_prefix-ranlib
-    test -z "$STRIP" && STRIP=$ANDROID_BINUTILS_PREBUILT_ROOT/bin/$android_gnu_prefix-strip
+    test -z "$AR" && AR=$ANDROID_COMPILER_BIN/$android_gnu_prefix-ar
+    test -z "$NM" && NM=$ANDROID_COMPILER_BIN/$android_gnu_prefix-nm
+    test -z "$OBJDUMP" && OBJDUMP=$ANDROID_COMPILER_BIN/$android_gnu_prefix-objdump
+    test -z "$RANLIB" && RANLIB=$ANDROID_COMPILER_BIN/$android_gnu_prefix-ranlib
+    test -z "$STRIP" && STRIP=$ANDROID_COMPILER_BIN/$android_gnu_prefix-strip
 
-    ANDROIDCFLAGS="$ANDROIDCFLAGS -gcc-toolchain $ANDROID_BINUTILS_PREBUILT_ROOT -target $LLVM_TRIPLE$ANDROID_API_LEVEL -no-canonical-prefixes"
-    # android is using different sysroots for compilation and linking, but as
-    # there is no full separation in configure and elsewhere, use isystem for
-    # compilation stuff and sysroot for linking
-    ANDROIDCFLAGS="$ANDROIDCFLAGS -D__ANDROID_API__=$ANDROID_API_LEVEL -isystem $ANDROID_NDK_HOME/sysroot/usr/include"
-    ANDROIDCFLAGS="$ANDROIDCFLAGS -isystem $ANDROID_NDK_HOME/sysroot/usr/include/$android_gnu_prefix"
-    ANDROIDCFLAGS="$ANDROIDCFLAGS --sysroot=$SYSBASE -ffunction-sections -fdata-sections -Qunused-arguments"
-    ANDROIDCFLAGS="$ANDROIDCFLAGS -L$ANDROID_NDK_HOME/sources/cxx-stl/llvm-libc++/libs/$ANDROID_APP_ABI"
+    ANDROIDCFLAGS="$ANDROIDCFLAGS -target ${LLVM_TRIPLE}${ANDROID_API_LEVEL}"
+    ANDROIDCFLAGS="$ANDROIDCFLAGS -no-canonical-prefixes -ffunction-sections -fdata-sections -Qunused-arguments"
     if test "$ENABLE_LTO" = TRUE; then
         # -flto comes from com_GCC_defs.mk, too, but we need to make sure it gets passed as part of
         # $CC and $CXX when building external libraries
         ANDROIDCFLAGS="$ANDROIDCFLAGS -flto -fuse-linker-plugin -O2"
     fi
 
-    ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I$ANDROID_NDK_HOME/sources/cxx-stl/llvm-libc++/include -I$ANDROID_NDK_HOME/sources/cxx-stl/llvm-libc++abi/include -I$ANDROID_NDK_HOME/sources/android/support/include -std=c++11"
+    ANDROIDCXXFLAGS="$ANDROIDCFLAGS -stdlib=libc++"
 
     if test -z "$CC"; then
         CC="$ANDROID_COMPILER_BIN/clang $ANDROIDCFLAGS"
@@ -822,7 +801,7 @@ if test "$_os" = "Android" ; then
     # Verify that the NDK and SDK options are proper
     if test -z "$with_android_ndk"; then
         AC_MSG_ERROR([the --with-android-ndk option is mandatory, unless it is available at external/android-ndk/.])
-    elif test ! -f "$ANDROID_NDK_HOME/platforms/android-${ANDROID_API_LEVEL}/arch-${ANDROID_ARCH}/usr/lib/libc.a"; then
+    elif test ! -f "$ANDROID_NDK_HOME/meta/abis.json"; then
         AC_MSG_ERROR([the --with-android-ndk option does not point to an Android NDK])
     fi
 
@@ -4535,11 +4514,6 @@ linux-android*)
         CPUNAME=AARCH64
         RTL_ARCH=AARCH64
         PLATFORMID=android_aarch64
-        ;;
-    mips|mipsel)
-        CPUNAME=GODSON # Weird, but maybe that's the LO convention?
-        RTL_ARCH=MIPS_EL
-        PLATFORMID=android_mips_el
         ;;
     i*86)
         CPUNAME=INTEL
