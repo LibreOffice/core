@@ -634,7 +634,7 @@ public:
 
     void                        Clear( bool bFromDestructor = false );
 
-    std::unique_ptr<ScFieldEditEngine> CreateFieldEditEngine(bool bUpdateMode);
+    std::unique_ptr<ScFieldEditEngine> CreateFieldEditEngine();
     void                        DisposeFieldEditEngine(std::unique_ptr<ScFieldEditEngine>& rpEditEngine);
 
     /**
