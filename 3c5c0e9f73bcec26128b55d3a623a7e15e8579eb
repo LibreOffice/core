@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_072f9da1",
+        "filename": "sw/inc/viewopt.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-08-07T07:49:14Z",
+      "side": 1,
+      "message": "You need to update the new sum of the above enumerators here, I think that\u0027s why the assertion failure happens that was mentioned by Samuel.",
+      "revId": "3c5c0e9f73bcec26128b55d3a623a7e15e8579eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
