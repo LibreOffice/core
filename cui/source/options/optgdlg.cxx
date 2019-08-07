@@ -1170,6 +1170,9 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
     get(m_pCTLSupportCB, "ctlsupport");
     get(m_pIgnoreLanguageChangeCB, "ignorelanguagechange");
 
+    // tdf#125483 save original default label
+    m_sDecimalSeparatorLabel = m_pDecimalSeparatorCB->GetText();
+
     // initialize user interface language selection
     m_sSystemDefaultString = SvtLanguageTable::GetLanguageString( LANGUAGE_SYSTEM );
 
@@ -1801,7 +1804,7 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, ListBox&, rListBox, void )
     LocaleDataWrapper aLocaleWrapper( aLanguageTag );
 
     // update the decimal separator key of the related CheckBox
-    OUString sTempLabel(m_pDecimalSeparatorCB->GetText());
+    OUString sTempLabel(m_sDecimalSeparatorLabel);
     sTempLabel = sTempLabel.replaceFirst("%1", aLocaleWrapper.getNumDecimalSep() );
     m_pDecimalSeparatorCB->SetText(sTempLabel);
 
