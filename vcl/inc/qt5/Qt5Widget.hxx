@@ -57,6 +57,7 @@ class Qt5Widget : public QWidget
     virtual void mousePressEvent(QMouseEvent*) override;
     virtual void mouseReleaseEvent(QMouseEvent*) override;
     virtual void dragEnterEvent(QDragEnterEvent*) override;
+    virtual void dragLeaveEvent(QDragLeaveEvent*) override;
     virtual void dragMoveEvent(QDragMoveEvent*) override;
     virtual void dropEvent(QDropEvent*) override;
     virtual void moveEvent(QMoveEvent*) override;
@@ -74,7 +75,6 @@ public:
     Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f = Qt::WindowFlags());
 
     Qt5Frame& getFrame() const { return m_rFrame; }
-    void startDrag(sal_Int8 nSourceActions);
     void endExtTextInput();
 
     static bool handleEvent(Qt5Frame&, const QWidget&, QEvent*);

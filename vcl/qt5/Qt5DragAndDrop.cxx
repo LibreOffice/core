@@ -16,13 +16,12 @@
 
 #include <Qt5DragAndDrop.hxx>
 #include <Qt5Frame.hxx>
+#include <Qt5Transferable.hxx>
 #include <Qt5Widget.hxx>
 
-using namespace com::sun::star;
+#include <QtGui/QDrag>
 
-bool Qt5DragSource::m_bDropSuccessSet = false;
-bool Qt5DragSource::m_bDropSuccess = false;
-Qt5DragSource* Qt5DragSource::m_ActiveDragSource = nullptr;
+using namespace com::sun::star;
 
 Qt5DragSource::~Qt5DragSource() {}
 
@@ -60,52 +59,35 @@ void Qt5DragSource::startDrag(
     const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener)
 {
     m_xListener = rListener;
-    m_xTrans = rTrans;
 
     if (m_pFrame)
     {
-        Qt5Widget* qw = static_cast<Qt5Widget*>(m_pFrame->GetQWidget());
-        m_ActiveDragSource = this;
-        m_bDropSuccessSet = false;
-        m_bDropSuccess = false;
-        qw->startDrag(sourceActions);
+        QDrag* drag = new QDrag(m_pFrame->GetQWidget());
+        drag->setMimeData(new Qt5MimeData(rTrans));
+        // just a reminder that exec starts a nested event loop, so everything after
+        // this call is just executed, after D'n'D has finished!
+        drag->exec(toQtDropActions(sourceActions), getPreferredDropAction(sourceActions));
     }
-    else
-        dragFailed();
+
+    // the drop will eventually call fire_dragEnd, which will clear the listener.
+    // if D'n'D ends without success, we just get a leave event without any indicator,
+    // but the event loop will be terminated, so we have to try to inform the source of
+    // a failure in any way.
+    fire_dragEnd(datatransfer::dnd::DNDConstants::ACTION_NONE, false);
 }
 
-void Qt5DragSource::dragFailed()
-{
-    if (m_xListener.is())
-    {
-        datatransfer::dnd::DragSourceDropEvent aEv;
-        aEv.DropAction = datatransfer::dnd::DNDConstants::ACTION_NONE;
-        aEv.DropSuccess = false;
-        auto xListener = m_xListener;
-        m_xListener.clear();
-        xListener->dragDropEnd(aEv);
-    }
-}
-
-void Qt5DragSource::fire_dragEnd(sal_Int8 nAction)
+void Qt5DragSource::fire_dragEnd(sal_Int8 nAction, bool bDropSuccessful)
 {
     if (m_xListener.is())
     {
         datatransfer::dnd::DragSourceDropEvent aEv;
         aEv.DropAction = nAction;
-
-        // internal DnD can accept the drop
-        // but still fail in Qt5DropTarget::dropComplete
-        if (m_bDropSuccessSet)
-            aEv.DropSuccess = m_bDropSuccess;
-        else
-            aEv.DropSuccess = true;
+        aEv.DropSuccess = bDropSuccessful;
 
         auto xListener = m_xListener;
         m_xListener.clear();
         xListener->dragDropEnd(aEv);
     }
-    m_ActiveDragSource = nullptr;
 }
 
 OUString SAL_CALL Qt5DragSource::getImplementationName()
@@ -177,8 +159,7 @@ void Qt5DropTarget::initialize(const uno::Sequence<uno::Any>& rArguments)
                                     static_cast<OWeakObject*>(this));
     }
 
-    mnDragAction = datatransfer::dnd::DNDConstants::ACTION_NONE;
-    mnDropAction = datatransfer::dnd::DNDConstants::ACTION_NONE;
+    m_nDropAction = datatransfer::dnd::DNDConstants::ACTION_NONE;
 
     m_pFrame = reinterpret_cast<Qt5Frame*>(nFrame);
     m_pFrame->registerDropTarget(this);
@@ -241,6 +222,8 @@ void Qt5DropTarget::fire_dragOver(const css::datatransfer::dnd::DropTargetDragEn
 
 void Qt5DropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
 {
+    m_bDropSuccessful = true;
+
     osl::ClearableGuard<osl::Mutex> aGuard(m_aMutex);
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
         m_aListeners);
@@ -252,40 +235,28 @@ void Qt5DropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent&
     }
 }
 
-void Qt5DropTarget::acceptDrag(sal_Int8 dragOperation)
+void Qt5DropTarget::fire_dragExit(const css::datatransfer::dnd::DropTargetEvent& dte)
 {
-    mnDragAction = dragOperation;
-    return;
+    osl::ClearableGuard<::osl::Mutex> aGuard(m_aMutex);
+    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
+        m_aListeners);
+    aGuard.clear();
+
+    for (auto const& listener : aListeners)
+        listener->dragExit(dte);
 }
 
-void Qt5DropTarget::rejectDrag()
-{
-    mnDragAction = 0;
-    return;
-}
+void Qt5DropTarget::acceptDrag(sal_Int8 dragOperation) { m_nDropAction = dragOperation; }
 
-void Qt5DropTarget::acceptDrop(sal_Int8 dropOperation)
-{
-    mnDropAction = dropOperation;
-    return;
-}
+void Qt5DropTarget::rejectDrag() { m_nDropAction = 0; }
 
-void Qt5DropTarget::rejectDrop()
-{
-    mnDropAction = 0;
-    return;
-}
+void Qt5DropTarget::acceptDrop(sal_Int8 dropOperation) { m_nDropAction = dropOperation; }
+
+void Qt5DropTarget::rejectDrop() { m_nDropAction = 0; }
 
 void Qt5DropTarget::dropComplete(sal_Bool success)
 {
-    // internal DnD
-    if (Qt5DragSource::m_ActiveDragSource)
-    {
-        Qt5DragSource::m_bDropSuccessSet = true;
-        Qt5DragSource::m_bDropSuccess = success;
-    }
-
-    return;
+    m_bDropSuccessful = (m_bDropSuccessful && success);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
