@@ -24,71 +24,97 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <MutexContainer.hxx>
 #include <OPropertySet.hxx>
+#include <PropertyHelper.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
 namespace chart
 {
-
 namespace impl
 {
-typedef ::cppu::WeakImplHelper<
-        css::util::XCloneable,
-        css::util::XModifyBroadcaster,
-        css::util::XModifyListener >
+typedef ::cppu::WeakImplHelper<css::util::XCloneable, css::util::XModifyBroadcaster,
+                               css::util::XModifyListener>
     Wall_Base;
 }
 
-class Wall final :
-    public MutexContainer,
-    public impl::Wall_Base,
-    public ::property::OPropertySet
+namespace wall
+{
+struct StaticWallInfo_Initializer
+{
+    css::uno::Reference<css::beans::XPropertySetInfo>* operator()();
+};
+
+struct StaticWallInfo
+    : public rtl::StaticAggregate<css::uno::Reference<css::beans::XPropertySetInfo>,
+                                  StaticWallInfo_Initializer>
+{
+};
+
+struct StaticWallDefaults_Initializer
+{
+    ::chart::tPropertyValueMap* operator()();
+};
+
+struct StaticWallDefaults
+    : public rtl::StaticAggregate<::chart::tPropertyValueMap, StaticWallDefaults_Initializer>
+{
+};
+
+struct StaticWallInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()();
+};
+
+struct StaticWallInfoHelper
+    : public rtl::StaticAggregate<::cppu::OPropertyArrayHelper, StaticWallInfoHelper_Initializer>
+{
+};
+}
+
+class Wall final : public MutexContainer, public impl::Wall_Base, public ::property::OPropertySet
 {
 public:
     Wall();
     virtual ~Wall() override;
 
     /// merge XInterface implementations
-     DECLARE_XINTERFACE()
+    DECLARE_XINTERFACE()
 
 private:
-    explicit Wall( const Wall & rOther );
+    explicit Wall(const Wall& rOther);
 
     // ____ OPropertySet ____
-    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const override;
+    virtual css::uno::Any GetDefaultValue(sal_Int32 nHandle) const override;
 
     // ____ OPropertySet ____
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo() override;
+    virtual css::uno::Reference<css::beans::XPropertySetInfo>
+        SAL_CALL getPropertySetInfo() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference<css::util::XCloneable> SAL_CALL createClone() override;
 
     // ____ XModifyBroadcaster ____
-    virtual void SAL_CALL addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void SAL_CALL
+    addModifyListener(const css::uno::Reference<css::util::XModifyListener>& aListener) override;
+    virtual void SAL_CALL
+    removeModifyListener(const css::uno::Reference<css::util::XModifyListener>& aListener) override;
 
     // ____ XModifyListener ____
-    virtual void SAL_CALL modified(
-        const css::lang::EventObject& aEvent ) override;
+    virtual void SAL_CALL modified(const css::lang::EventObject& aEvent) override;
 
     // ____ XEventListener (base of XModifyListener) ____
-    virtual void SAL_CALL disposing(
-        const css::lang::EventObject& Source ) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
     // ____ OPropertySet ____
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 
 private:
-
-    css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
+    css::uno::Reference<css::util::XModifyListener> m_xModifyEventForwarder;
 };
 
 } //  namespace chart

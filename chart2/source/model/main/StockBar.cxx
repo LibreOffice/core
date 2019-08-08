@@ -38,75 +38,58 @@ using ::com::sun::star::beans::Property;
 namespace
 {
 
-struct StaticStockBarInfoHelper_Initializer
+static uno::Sequence< Property > lcl_GetPropertySequence()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+    std::vector< css::beans::Property > aProperties;
+    ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
+    ::chart::FillProperties::AddPropertiesToVector( aProperties );
+    ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-private:
-    static uno::Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
-        ::chart::FillProperties::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+    std::sort( aProperties.begin(), aProperties.end(),
+                 ::chart::PropertyNameLess() );
 
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
+    return comphelper::containerToSequence( aProperties );
+}
 
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticStockBarInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticStockBarInfoHelper_Initializer >
+static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
 {
-};
+    ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
+    ::chart::FillProperties::AddDefaultsToMap( rOutMap );
 
-struct StaticStockBarInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticStockBarInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticStockBarInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticStockBarInfo_Initializer >
-{
-};
-
-struct StaticStockBarDefaults_Initializer
-{
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
-        ::chart::FillProperties::AddDefaultsToMap( rOutMap );
-
-        // override other defaults
-        ::chart::PropertyHelper::setPropertyValue< sal_Int32 >( rOutMap, ::chart::FillProperties::PROP_FILL_COLOR, 0xffffff ); // white
-    }
-};
-
-struct StaticStockBarDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticStockBarDefaults_Initializer >
-{
-};
+    // override other defaults
+    ::chart::PropertyHelper::setPropertyValue< sal_Int32 >( rOutMap, ::chart::FillProperties::PROP_FILL_COLOR, 0xffffff ); // white
+}
 
 } // anonymous namespace
 
 namespace chart
 {
+
+namespace stock
+{
+
+::cppu::OPropertyArrayHelper* StaticStockBarInfoHelper_Initializer::operator()()
+{
+    static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+    return &aPropHelper;
+}
+
+
+uno::Reference< beans::XPropertySetInfo >* StaticStockBarInfo_Initializer::operator()()
+{
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticStockBarInfoHelper::get() ) );
+    return &xPropertySetInfo;
+}
+
+::chart::tPropertyValueMap* StaticStockBarDefaults_Initializer::operator()()
+{
+    static ::chart::tPropertyValueMap aStaticDefaults;
+    lcl_AddDefaultsToMap( aStaticDefaults );
+    return &aStaticDefaults;
+}
+
+}
 
 StockBar::StockBar( bool bRisingCourse ) :
         ::property::OPropertySet( m_aMutex ),
@@ -141,7 +124,7 @@ uno::Reference< util::XCloneable > SAL_CALL StockBar::createClone()
 // ____ OPropertySet ____
 uno::Any StockBar::GetDefaultValue( sal_Int32 nHandle ) const
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticStockBarDefaults::get();
+    const tPropertyValueMap& rStaticDefaults = *stock::StaticStockBarDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
         return uno::Any();
@@ -150,13 +133,13 @@ uno::Any StockBar::GetDefaultValue( sal_Int32 nHandle ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL StockBar::getInfoHelper()
 {
-    return *StaticStockBarInfoHelper::get();
+    return *stock::StaticStockBarInfoHelper::get();
 }
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL StockBar::getPropertySetInfo()
 {
-    return *StaticStockBarInfo::get();
+    return *stock::StaticStockBarInfo::get();
 }
 
 // ____ XModifyBroadcaster ____
