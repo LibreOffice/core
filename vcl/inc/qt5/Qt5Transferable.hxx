@@ -117,6 +117,11 @@ public:
     QStringList formats() const override;
 
     bool deepCopy(QMimeData** const) const;
+
+    const css::uno::Reference<css::datatransfer::XTransferable> xTransferable() const
+    {
+        return m_aContents;
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

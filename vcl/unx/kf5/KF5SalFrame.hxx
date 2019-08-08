@@ -38,10 +38,6 @@ public:
     virtual SalGraphics* AcquireGraphics() override;
     virtual void ReleaseGraphics(SalGraphics* pGraphics) override;
     virtual void UpdateSettings(AllSettings& rSettings) override;
-
-    virtual LanguageType GetInputLanguage() override { return LANGUAGE_SYSTEM; }
-    virtual SalPointerState GetPointerState() override { return SalPointerState(); }
-    virtual KeyIndicatorState GetIndicatorState() override { return KeyIndicatorState(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
