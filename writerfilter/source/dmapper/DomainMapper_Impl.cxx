@@ -1718,7 +1718,21 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                         GetTopFieldContext()->SetHyperlinkStyle(sHyperlinkStyleName);
                     }
 
-                    xTextRange = xTextAppend->appendTextPortion(rString, aValues);
+#if !defined(MACOSX) // TODO: check layout differences and support all platforms, if needed
+                    sal_Int32 nPos;
+                    OUString sDoubleSpace("  ");
+                    if (IsRTFImport() && (nPos = rString.indexOf(sDoubleSpace)) > -1)
+                    {
+                        // tdf#123703 an RTF space character is longer by an extra six-em-space in a space sequence,
+                        // insert them to keep RTF document layout formatted by consecutive spaces
+                        const sal_Unicode aExtraSpace[5] = { 0x2006, 0x20, 0x2006, 0x20, 0 };
+                        const sal_Unicode aExtraSpace2[4] = { 0x20, 0x2006, 0x20, 0 };
+                        xTextRange = xTextAppend->appendTextPortion(rString.replaceAll(sDoubleSpace, aExtraSpace, nPos)
+                                                                           .replaceAll(sDoubleSpace, aExtraSpace2, nPos), aValues);
+                    }
+                    else
+#endif
+                        xTextRange = xTextAppend->appendTextPortion(rString, aValues);
                 }
             }
 
