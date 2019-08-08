@@ -190,6 +190,7 @@ SwViewOption::SwViewOption() :
     m_nUIOptions =
         ViewOptFlags2::Modified |
         ViewOptFlags2::GrfKeepZoom |
+        ViewOptFlags2::ResolvedPostits |
         ViewOptFlags2::AnyRuler;
 
     if (!utl::ConfigManager::IsFuzzing() && MeasurementSystem::Metric != SvtSysLocale().GetLocaleData().getMeasurementSystemEnum())
