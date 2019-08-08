@@ -3199,7 +3199,7 @@ sal_Int32 DrawingML::GetCustomGeometryPointValue(
     return nValue;
 }
 
-void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
+void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon, const bool bClosed )
 {
     // In case of Writer, the parent element is <wps:spPr>, and there the
     // <a:custGeom> element is not optional.
@@ -3213,6 +3213,7 @@ void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
     mpFS->singleElementNS(XML_a, XML_rect, XML_l, "0", XML_t, "0", XML_r, "r", XML_b, "b");
 
     mpFS->startElementNS( XML_a, XML_pathLst );
+
 
     const tools::Rectangle aRect( rPolyPolygon.GetBoundRect() );
 
@@ -3238,7 +3239,7 @@ void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
             mpFS->endElementNS( XML_a, XML_moveTo );
         }
 
-        for( sal_uInt16 j = 1; j < rPoly.GetSize(); j ++ )
+        for( sal_uInt16 j = 1; j < rPoly.GetSize(); j++ )
         {
             PolyFlags flags = rPoly.GetFlags(j);
             if( flags == PolyFlags::Control )
@@ -3269,6 +3270,8 @@ void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
             }
         }
     }
+    if (bClosed)
+        mpFS->singleElementNS( XML_a, XML_close);
     mpFS->endElementNS( XML_a, XML_path );
 
     mpFS->endElementNS( XML_a, XML_pathLst );
