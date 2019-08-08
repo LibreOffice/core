@@ -525,6 +525,7 @@
 #define STR_UNDO_INDEX_ENTRY_INSERT             NC_("STR_UNDO_INDEX_ENTRY_INSERT", "Insert index entry")
 #define STR_UNDO_INDEX_ENTRY_DELETE             NC_("STR_UNDO_INDEX_ENTRY_DELETE", "Delete index entry")
 #define STR_FIELD                               NC_("STR_FIELD", "field")
+#define STR_UNDO_INSERT_TEXTBOX                 NC_("STR_UNDO_INSERT_TEXTBOX", "text box")
 /*undo: STR_PARAGRAPHS, string.text*/
 #define STR_PARAGRAPHS                          NC_("STR_PARAGRAPHS", "Paragraphs")
 #define STR_FRAME                               NC_("STR_FRAME", "frame")
