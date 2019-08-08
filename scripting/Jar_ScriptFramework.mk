@@ -46,7 +46,6 @@ $(eval $(call gb_Jar_add_sourcefiles,ScriptFramework,\
 	scripting/java/com/sun/star/script/framework/log/LogUtils \
 	scripting/java/com/sun/star/script/framework/provider/ClassLoaderFactory \
 	scripting/java/com/sun/star/script/framework/provider/EditorScriptContext \
-	scripting/java/com/sun/star/script/framework/provider/NoSuitableClassLoaderException \
 	scripting/java/com/sun/star/script/framework/provider/PathUtils \
 	scripting/java/com/sun/star/script/framework/provider/ScriptContext \
 	scripting/java/com/sun/star/script/framework/provider/ScriptEditor \
