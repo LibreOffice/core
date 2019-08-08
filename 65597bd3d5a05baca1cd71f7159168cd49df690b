@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_208de77a",
+        "filename": "sal/osl/w32/file_url.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-08T13:32:51Z",
+      "side": 1,
+      "message": "pDecodedURL[17/18] could be out of bounds; also, probably better to check that the full path segment is alpha+\":\"",
+      "revId": "65597bd3d5a05baca1cd71f7159168cd49df690b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_c0d2eb5c",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1351,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-08T13:32:51Z",
+      "side": 1,
+      "message": "this shouldn\u0027t be deref\u0027ed if pHostPortEnd \u003d\u003d pEnd",
+      "range": {
+        "startLine": 1351,
+        "startChar": 28,
+        "endLine": 1351,
+        "endChar": 43
+      },
+      "revId": "65597bd3d5a05baca1cd71f7159168cd49df690b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_e0d5af44",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1353,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-08T13:32:51Z",
+      "side": 1,
+      "message": "again: potential out-of-bounds access, and better check the full segment\n\nisAsciiDigit -\u003e isAsciiLetter\n\nalso, the drive letter could be percent-encoded here, I guess\n\n(and is a potential \"|\" instead of \":\" already normalized here?)",
+      "revId": "65597bd3d5a05baca1cd71f7159168cd49df690b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_60d8bf7e",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2843,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-08T13:32:51Z",
+      "side": 1,
+      "message": "but this should be done after all on _WIN32 if m_aPath starts off with a drive letter segment, no?\n\n(And so functions that modify the path would need to check that if the path goes from \"doesn\u0027t start with drive letter segment\" to \"starts with drive letter segment\", a potential host of \"localhost\" will need to be canonicalized away.)",
+      "revId": "65597bd3d5a05baca1cd71f7159168cd49df690b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_80ccf3bc",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3761,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-08T13:32:51Z",
+      "side": 1,
+      "message": "is rThePath lacking an initial \"/\"?",
+      "revId": "65597bd3d5a05baca1cd71f7159168cd49df690b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_a0cfb7ae",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3762,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-08T13:32:51Z",
+      "side": 1,
+      "message": "again: probably better to check the full segment\n\nisAsciiDigit -\u003e isAsciiLetter\n\nis a potential \"|\" instead of \":\" normalized here? (and could any part of the segment be percent-encoded here?)",
+      "revId": "65597bd3d5a05baca1cd71f7159168cd49df690b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
