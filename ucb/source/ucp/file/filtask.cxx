@@ -1958,7 +1958,11 @@ void TaskManager::insertDefaultProperties( const OUString& aUnqPath )
 
 bool TaskManager::getUnqFromUrl( const OUString& Url, OUString& Unq )
 {
-    if ( Url == "file:///" || Url == "file://localhost/" || Url == "file://127.0.0.1/" )
+    if (Url == "file:///"
+#if !defined _WIN32
+        || Url == "file://localhost/" || Url == "file://127.0.0.1/"
+#endif
+        )
     {
         Unq = "file:///";
         return false;
