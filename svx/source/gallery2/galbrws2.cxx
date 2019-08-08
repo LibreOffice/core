@@ -48,8 +48,6 @@
 #include <svx/strings.hrc>
 #include <GalleryControl.hxx>
 #include <bitmaps.hlst>
-
-#include <svx/svxcommands.h>
 #include <svx/galleryitem.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -157,15 +155,15 @@ GalleryThemePopup::GalleryThemePopup(
     // SID_GALLERY_ENABLE_ADDCOPY
     m_aCommandInfo.emplace(
             SID_GALLERY_ENABLE_ADDCOPY,
-            CommandInfo( CMD_SID_GALLERY_ENABLE_ADDCOPY ));
+            CommandInfo( ".uno:GalleryEnableAddCopy" ));
     // SID_GALLERY_BG_BRUSH
     m_aCommandInfo.emplace(
             SID_GALLERY_BG_BRUSH,
-            CommandInfo( CMD_SID_GALLERY_BG_BRUSH ));
+            CommandInfo( ".uno:BackgroundImage" ));
     // SID_GALLERY_FORMATS
     m_aCommandInfo.emplace(
             SID_GALLERY_FORMATS,
-            CommandInfo( CMD_SID_GALLERY_FORMATS ));
+            CommandInfo( ".uno:InsertGalleryPic" ));
 
 }
 
@@ -173,14 +171,14 @@ void SAL_CALL GalleryThemePopup::statusChanged(
     const css::frame::FeatureStateEvent &rEvent )
 {
     const OUString &rURL = rEvent.FeatureURL.Complete;
-    if ( rURL == CMD_SID_GALLERY_ENABLE_ADDCOPY )
+    if ( rURL == ".uno:GalleryEnableAddCopy" )
     {
         if ( !rEvent.IsEnabled )
         {
             mpPopupMenu->EnableItem(mpPopupMenu->GetItemId("add"), false);
         }
     }
-    else if ( rURL == CMD_SID_GALLERY_BG_BRUSH )
+    else if ( rURL == ".uno:BackgroundImage" )
     {
         mpBackgroundPopup->Clear();
         if ( rEvent.IsEnabled )
@@ -1017,7 +1015,7 @@ void GalleryBrowser2::DispatchAdd(
         if ( !xDispatchProvider.is() || !m_xTransformer.is() )
             return;
 
-        aURL.Complete = CMD_SID_GALLERY_FORMATS;
+        aURL.Complete = ".uno:InsertGalleryPic";
         m_xTransformer->parseStrict( aURL );
         xDispatch = xDispatchProvider->queryDispatch(
             aURL,

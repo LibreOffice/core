@@ -7347,7 +7347,6 @@ include/svx/svdview.hxx
 include/svx/svdviter.hxx
 include/svx/svdxcgv.hxx
 include/svx/svx3ditems.hxx
-include/svx/svxcommands.h
 include/svx/svxdlg.hxx
 include/svx/svxdllapi.h
 include/svx/svxerr.hxx
