@@ -1399,7 +1399,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
     //We'd like to think that 20 Paragraphs fit on one page.
     //So that it does not become in extreme situations so violent we calculate depending
     //on the node something to it.
-    //If in the DocStatistic an usable given pagenumber
+    //If in the DocStatistic a usable given pagenumber
     //(Will be cared for while writing), so it will be presumed that this will be
     //number of pages.
     const bool bStartPercent = bPages && !nEndIndex;
