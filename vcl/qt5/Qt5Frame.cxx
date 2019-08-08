@@ -36,6 +36,8 @@
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
 #include <QtCore/QThread>
+#include <QtGui/QDragMoveEvent>
+#include <QtGui/QDropEvent>
 #include <QtGui/QIcon>
 #include <QtGui/QWindow>
 #include <QtGui/QScreen>
@@ -1187,84 +1189,145 @@ void Qt5Frame::deregisterDropTarget(Qt5DropTarget const* pDropTarget)
     m_pDropTarget = nullptr;
 }
 
-void Qt5Frame::draggingStarted(const int x, const int y, Qt::DropActions eActions,
-                               Qt::KeyboardModifiers eKeyMod, const QMimeData* pQMimeData)
+static css::uno::Reference<css::datatransfer::XTransferable>
+lcl_getXTransferable(const QMimeData* pMimeData)
 {
-    assert(m_pDropTarget);
+    css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
+    const Qt5MimeData* pQt5MimeData = dynamic_cast<const Qt5MimeData*>(pMimeData);
+    if (!pQt5MimeData)
+        xTransferable = new Qt5DnDTransferable(pMimeData);
+    else
+        xTransferable = pQt5MimeData->xTransferable();
+    return xTransferable;
+}
 
-    sal_Int8 nUserDropAction = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
+static sal_Int8 lcl_getUserDropAction(const QDropEvent* pEvent, const sal_Int8 nSourceActions,
+                                      const QMimeData* pMimeData)
+{
+    // we completely ignore all proposals by the Qt event, as they don't
+    // match at all with the preferred LO DnD actions.
+    const sal_Int8 nFilterActions
+        = nSourceActions | css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT;
+
+    // check the key modifiers to detect a user-overridden DnD action
+    const Qt::KeyboardModifiers eKeyMod = pEvent->keyboardModifiers();
+    sal_Int8 nUserDropAction = 0;
     if ((eKeyMod & Qt::ShiftModifier) && !(eKeyMod & Qt::ControlModifier))
         nUserDropAction = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
     else if ((eKeyMod & Qt::ControlModifier) && !(eKeyMod & Qt::ShiftModifier))
         nUserDropAction = css::datatransfer::dnd::DNDConstants::ACTION_COPY;
     else if ((eKeyMod & Qt::ShiftModifier) && (eKeyMod & Qt::ControlModifier))
         nUserDropAction = css::datatransfer::dnd::DNDConstants::ACTION_LINK;
+    nUserDropAction &= nFilterActions;
+
+    // select the default DnD action, if there isn't a user preference
+    if (0 == nUserDropAction)
+    {
+        // default LO internal action is move, but default external action is copy
+        nUserDropAction = dynamic_cast<const Qt5MimeData*>(pMimeData)
+                              ? css::datatransfer::dnd::DNDConstants::ACTION_MOVE
+                              : css::datatransfer::dnd::DNDConstants::ACTION_COPY;
+        nUserDropAction &= nFilterActions;
+
+        // if the default doesn't match any allowed source action, fall back to the
+        // preferred of all allowed source actions
+        if (0 == nUserDropAction)
+            nUserDropAction = toVclDropAction(getPreferredDropAction(nSourceActions));
+
+        // this is "our" preference, but actually we would even prefer any default,
+        // if there is any
+        nUserDropAction |= css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT;
+    }
+    return nUserDropAction;
+}
+
+void Qt5Frame::handleDragMove(QDragMoveEvent* pEvent)
+{
+    assert(m_pDropTarget);
+
+    // prepare our suggested drop action for the drop target
+    const sal_Int8 nSourceActions = toVclDropActions(pEvent->possibleActions());
+    const QMimeData* pMimeData = pEvent->mimeData();
+    const sal_Int8 nUserDropAction = lcl_getUserDropAction(pEvent, nSourceActions, pMimeData);
 
     css::datatransfer::dnd::DropTargetDragEnterEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
     aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDragContext*>(m_pDropTarget);
-    aEvent.LocationX = x;
-    aEvent.LocationY = y;
+    aEvent.LocationX = pEvent->pos().x();
+    aEvent.LocationY = pEvent->pos().y();
+    aEvent.DropAction = nUserDropAction;
+    aEvent.SourceActions = nSourceActions;
 
-    // system drop action if neither Shift nor Control is held
-    if (!(eKeyMod & (Qt::ShiftModifier | Qt::ControlModifier)))
-        aEvent.DropAction = getPreferredDropAction(eActions);
-    // otherwise user-preferred action
-    else
-        aEvent.DropAction = nUserDropAction;
-    aEvent.SourceActions = toVclDropActions(eActions);
-
-    css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
-    if (!pQMimeData->hasFormat(sInternalMimeType))
-        xTransferable = new Qt5DnDTransferable(pQMimeData);
-    else
-        xTransferable = Qt5DragSource::m_ActiveDragSource->GetTransferable();
-
-    if (!m_bInDrag && xTransferable.is())
+    // ask the drop target to accept our drop action
+    if (!m_bInDrag)
     {
-        css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
-            = xTransferable->getTransferDataFlavors();
-        aEvent.SupportedDataFlavors = aFormats;
-
+        aEvent.SupportedDataFlavors = lcl_getXTransferable(pMimeData)->getTransferDataFlavors();
         m_pDropTarget->fire_dragEnter(aEvent);
         m_bInDrag = true;
     }
     else
         m_pDropTarget->fire_dragOver(aEvent);
+
+    // the drop target accepted our drop action => inform Qt
+    if (m_pDropTarget->proposedDropAction() != 0)
+    {
+        pEvent->setDropAction(getPreferredDropAction(m_pDropTarget->proposedDropAction()));
+        pEvent->accept();
+    }
+    else // or maybe someone else likes it?
+        pEvent->ignore();
 }
 
-void Qt5Frame::dropping(const int x, const int y, Qt::KeyboardModifiers eKeyMod,
-                        const QMimeData* pQMimeData)
+void Qt5Frame::handleDrop(QDropEvent* pEvent)
 {
     assert(m_pDropTarget);
+
+    // prepare our suggested drop action for the drop target
+    const sal_Int8 nSourceActions = toVclDropActions(pEvent->possibleActions());
+    const sal_Int8 nUserDropAction
+        = lcl_getUserDropAction(pEvent, nSourceActions, pEvent->mimeData());
 
     css::datatransfer::dnd::DropTargetDropEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
     aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDropContext*>(m_pDropTarget);
-    aEvent.LocationX = x;
-    aEvent.LocationY = y;
+    aEvent.LocationX = pEvent->pos().x();
+    aEvent.LocationY = pEvent->pos().y();
+    aEvent.SourceActions = nSourceActions;
+    aEvent.DropAction = nUserDropAction;
+    aEvent.Transferable = lcl_getXTransferable(pEvent->mimeData());
 
-    if (!(eKeyMod & (Qt::ShiftModifier | Qt::ControlModifier)))
-        aEvent.DropAction = m_pDropTarget->proposedDragAction()
-                            | css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT;
-    else
-        aEvent.DropAction = m_pDropTarget->proposedDragAction();
-    aEvent.SourceActions = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
-
-    css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
-    if (!pQMimeData->hasFormat(sInternalMimeType))
-        xTransferable = new Qt5DnDTransferable(pQMimeData);
-    else
-        xTransferable = Qt5DragSource::m_ActiveDragSource->GetTransferable();
-    aEvent.Transferable = xTransferable;
-
+    // ask the drop target to accept our drop action
     m_pDropTarget->fire_drop(aEvent);
     m_bInDrag = false;
 
-    if (m_pDragSource)
+    const bool bDropSuccessful = m_pDropTarget->dropSuccessful();
+    const sal_Int8 nDropAction = m_pDropTarget->proposedDropAction();
+
+    // inform the drag source of the drag-origin frame of the drop result
+    if (pEvent->source())
     {
-        m_pDragSource->fire_dragEnd(m_pDropTarget->proposedDragAction());
+        Qt5Widget* pWidget = dynamic_cast<Qt5Widget*>(pEvent->source());
+        assert(pWidget); // AFAIK there shouldn't be any non-Qt5Widget as source in LO itself
+        if (pWidget)
+            pWidget->getFrame().m_pDragSource->fire_dragEnd(nDropAction, bDropSuccessful);
     }
+
+    // the drop target accepted our drop action => inform Qt
+    if (bDropSuccessful)
+    {
+        pEvent->setDropAction(getPreferredDropAction(nDropAction));
+        pEvent->accept();
+    }
+    else // or maybe someone else likes it?
+        pEvent->ignore();
+}
+
+void Qt5Frame::handleDragLeave()
+{
+    css::datatransfer::dnd::DropTargetEvent aEvent;
+    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
+    m_pDropTarget->fire_dragExit(aEvent);
+    m_bInDrag = false;
 }
 
 cairo_t* Qt5Frame::getCairoContext() const
