@@ -3728,6 +3728,75 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         Window::MouseButtonDown(rMEvt);
 }
 
+bool SwEditWin::changeMousePointer(Point const & rDocPoint)
+{
+    SwWrtShell & rShell = m_rView.GetWrtShell();
+
+    SwTab nMouseTabCol;
+    if ( SwTab::COL_NONE != (nMouseTabCol = rShell.WhichMouseTabCol( rDocPoint ) ) &&
+         !rShell.IsObjSelectable( rDocPoint ) )
+    {
+        PointerStyle nPointer = PointerStyle::Null;
+        bool bChkTableSel = false;
+
+        switch ( nMouseTabCol )
+        {
+            case SwTab::COL_VERT :
+            case SwTab::ROW_HORI :
+                nPointer = PointerStyle::VSizeBar;
+                bChkTableSel = true;
+                break;
+            case SwTab::ROW_VERT :
+            case SwTab::COL_HORI :
+                nPointer = PointerStyle::HSizeBar;
+                bChkTableSel = true;
+                break;
+            // Enhanced table selection
+            case SwTab::SEL_HORI :
+                nPointer = PointerStyle::TabSelectSE;
+                break;
+            case SwTab::SEL_HORI_RTL :
+            case SwTab::SEL_VERT :
+                nPointer = PointerStyle::TabSelectSW;
+                break;
+            case SwTab::COLSEL_HORI :
+            case SwTab::ROWSEL_VERT :
+                nPointer = PointerStyle::TabSelectS;
+                break;
+            case SwTab::ROWSEL_HORI :
+                nPointer = PointerStyle::TabSelectE;
+                break;
+            case SwTab::ROWSEL_HORI_RTL :
+            case SwTab::COLSEL_VERT :
+                nPointer = PointerStyle::TabSelectW;
+                break;
+            default: break; // prevent compiler warning
+        }
+
+        if ( PointerStyle::Null != nPointer &&
+            // i#35543 - Enhanced table selection is explicitly allowed in table mode
+            ( !bChkTableSel || !rShell.IsTableMode() ) )
+        {
+            SetPointer( nPointer );
+        }
+
+        return true;
+    }
+    else if (rShell.IsNumLabel(rDocPoint, RULER_MOUSE_MARGINWIDTH))
+    {
+        // i#42921 - consider vertical mode
+        SwTextNode* pNodeAtPos = rShell.GetNumRuleNodeAtPos( rDocPoint );
+        const PointerStyle nPointer =
+                SwFEShell::IsVerticalModeAtNdAndPos( *pNodeAtPos, rDocPoint )
+                ? PointerStyle::VSizeBar
+                : PointerStyle::HSizeBar;
+        SetPointer( nPointer );
+
+        return true;
+    }
+    return false;
+}
+
 void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 {
     MouseEvent rMEvt(_rMEvt);
@@ -3850,70 +3919,10 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         }
     }
 
-    SwTab nMouseTabCol;
-    if( !bIsDocReadOnly && bInsWin && !m_pApplyTempl && !rSh.IsInSelect() )
+    // determine if we only change the mouse pointer and return
+    if (!bIsDocReadOnly && bInsWin && !m_pApplyTempl && !rSh.IsInSelect() && changeMousePointer(aDocPt))
     {
-        if ( SwTab::COL_NONE != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPt ) ) &&
-             !rSh.IsObjSelectable( aDocPt ) )
-        {
-            PointerStyle nPointer = PointerStyle::Null;
-            bool bChkTableSel = false;
-
-            switch ( nMouseTabCol )
-            {
-                case SwTab::COL_VERT :
-                case SwTab::ROW_HORI :
-                    nPointer = PointerStyle::VSizeBar;
-                    bChkTableSel = true;
-                    break;
-                case SwTab::ROW_VERT :
-                case SwTab::COL_HORI :
-                    nPointer = PointerStyle::HSizeBar;
-                    bChkTableSel = true;
-                    break;
-                // Enhanced table selection
-                case SwTab::SEL_HORI :
-                    nPointer = PointerStyle::TabSelectSE;
-                    break;
-                case SwTab::SEL_HORI_RTL :
-                case SwTab::SEL_VERT :
-                    nPointer = PointerStyle::TabSelectSW;
-                    break;
-                case SwTab::COLSEL_HORI :
-                case SwTab::ROWSEL_VERT :
-                    nPointer = PointerStyle::TabSelectS;
-                    break;
-                case SwTab::ROWSEL_HORI :
-                    nPointer = PointerStyle::TabSelectE;
-                    break;
-                case SwTab::ROWSEL_HORI_RTL :
-                case SwTab::COLSEL_VERT :
-                    nPointer = PointerStyle::TabSelectW;
-                    break;
-                default: break; // prevent compiler warning
-            }
-
-            if ( PointerStyle::Null != nPointer &&
-                // i#35543 - Enhanced table selection is explicitly allowed in table mode
-                ( !bChkTableSel || !rSh.IsTableMode() ) )
-            {
-                SetPointer( nPointer );
-            }
-
-            return;
-        }
-        else if (rSh.IsNumLabel(aDocPt, RULER_MOUSE_MARGINWIDTH))
-        {
-            // i#42921 - consider vertical mode
-            SwTextNode* pNodeAtPos = rSh.GetNumRuleNodeAtPos( aDocPt );
-            const PointerStyle nPointer =
-                    SwFEShell::IsVerticalModeAtNdAndPos( *pNodeAtPos, aDocPt )
-                    ? PointerStyle::VSizeBar
-                    : PointerStyle::HSizeBar;
-            SetPointer( nPointer );
-
-            return;
-        }
+        return;
     }
 
     bool bDelShadCursor = true;

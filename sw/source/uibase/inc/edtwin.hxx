@@ -174,6 +174,8 @@ class SW_DLLPUBLIC SwEditWin final : public vcl::Window,
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
 
+    bool changeMousePointer(Point const & rDocPoint);
+
     virtual void    MouseMove(const MouseEvent& rMEvt) override;
     virtual void    MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual void    MouseButtonUp(const MouseEvent& rMEvt) override;
