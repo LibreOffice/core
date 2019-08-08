@@ -23,6 +23,15 @@
 #include <vector>
 
 #include <Legend.hxx>
+#include <Axis.hxx>
+#include <DataPoint.hxx>
+#include <DataSeries.hxx>
+#include <Diagram.hxx>
+#include <GridProperties.hxx>
+#include <PageBackground.hxx>
+#include <StockBar.hxx>
+#include <Title.hxx>
+#include <Wall.hxx>
 
 namespace com
 {
@@ -104,6 +113,39 @@ void ChartStyle::register_styles()
     m_xChartStyle[css::chart2::ChartObjectType::LEGEND] = new ChartObjectStyle(
         *chart::legend::StaticLegendInfo::get(), *chart::legend::StaticLegendInfoHelper::get(),
         *chart::legend::StaticLegendDefaults::get());
+
+    m_xChartStyle[css::chart2::ChartObjectType::AXIS] = new ChartObjectStyle(
+        *chart::axis::StaticAxisInfo::get(), *chart::axis::StaticAxisInfoHelper::get(),
+        *chart::axis::StaticAxisDefaults::get());
+
+    m_xChartStyle[css::chart2::ChartObjectType::DATA_SERIES] = new ChartObjectStyle(
+        *chart::dataSeries::StaticDataSeriesInfo::get(), *chart::dataSeries::StaticDataSeriesInfoHelper::get(),
+        *chart::dataSeries::StaticDataSeriesDefaults::get());
+
+    m_xChartStyle[css::chart2::ChartObjectType::TITLE] = new ChartObjectStyle(
+        *chart::title::StaticTitleInfo::get(), *chart::title::StaticTitleInfoHelper::get(),
+        *chart::title::StaticTitleDefaults::get());
+
+    m_xChartStyle[css::chart2::ChartObjectType::WALL] = new ChartObjectStyle(
+        *chart::wall::StaticWallInfo::get(), *chart::wall::StaticWallInfoHelper::get(),
+        *chart::wall::StaticWallDefaults::get());
+
+    m_xChartStyle[css::chart2::ChartObjectType::GRID] = new ChartObjectStyle(
+        *chart::grid::StaticGridInfo::get(), *chart::grid::StaticGridInfoHelper::get(),
+        *chart::grid::StaticGridDefaults::get());
+
+    m_xChartStyle[css::chart2::ChartObjectType::PAGE] = new ChartObjectStyle(
+        *chart::page::StaticPageBackgroundInfo::get(), *chart::page::StaticPageBackgroundInfoHelper::get(),
+        *chart::page::StaticPageBackgroundDefaults::get());
+
+    m_xChartStyle[css::chart2::ChartObjectType::DIAGRAM] = new ChartObjectStyle(
+        *chart::diagram::StaticDiagramInfo::get(), *chart::diagram::StaticDiagramInfoHelper::get(),
+        *chart::diagram::StaticDiagramDefaults::get());
+
+    m_xChartStyle[css::chart2::ChartObjectType::STOCK] = new ChartObjectStyle(
+        *chart::stock::StaticStockBarInfo::get(), *chart::stock::StaticStockBarInfoHelper::get(),
+        *chart::stock::StaticStockBarDefaults::get());
+
 }
 
 // _____ XServiceInfo _____

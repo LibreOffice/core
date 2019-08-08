@@ -36,75 +36,58 @@ using ::com::sun::star::beans::Property;
 namespace
 {
 
-struct StaticWallDefaults_Initializer
+static uno::Sequence< Property > lcl_GetPropertySequence()
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
-        ::chart::FillProperties::AddDefaultsToMap( rOutMap );
+    std::vector< css::beans::Property > aProperties;
+    ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
+    ::chart::FillProperties::AddPropertiesToVector( aProperties );
+    ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // override other defaults
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
-    }
-};
+    std::sort( aProperties.begin(), aProperties.end(),
+                 ::chart::PropertyNameLess() );
 
-struct StaticWallDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticWallDefaults_Initializer >
+    return comphelper::containerToSequence( aProperties );
+}
+
+static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
 {
-};
+    ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
+    ::chart::FillProperties::AddDefaultsToMap( rOutMap );
 
-struct StaticWallInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    static uno::Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
-        ::chart::FillProperties::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticWallInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticWallInfoHelper_Initializer >
-{
-};
-
-struct StaticWallInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticWallInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticWallInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticWallInfo_Initializer >
-{
-};
+    // override other defaults
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
+}
 
 } // anonymous namespace
 
 namespace chart
 {
+
+namespace wall
+{
+
+::cppu::OPropertyArrayHelper* StaticWallInfoHelper_Initializer::operator()()
+{
+    static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+    return &aPropHelper;
+}
+
+
+uno::Reference< beans::XPropertySetInfo >* StaticWallInfo_Initializer::operator()()
+{
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticWallInfoHelper::get() ) );
+    return &xPropertySetInfo;
+}
+
+::chart::tPropertyValueMap* StaticWallDefaults_Initializer::operator()()
+{
+    static ::chart::tPropertyValueMap aStaticDefaults;
+    lcl_AddDefaultsToMap( aStaticDefaults );
+    return &aStaticDefaults;
+}
+
+}
 
 Wall::Wall() :
         ::property::OPropertySet( m_aMutex ),
@@ -129,7 +112,7 @@ uno::Reference< util::XCloneable > SAL_CALL Wall::createClone()
 // ____ OPropertySet ____
 uno::Any Wall::GetDefaultValue( sal_Int32 nHandle ) const
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticWallDefaults::get();
+    const tPropertyValueMap& rStaticDefaults = *wall::StaticWallDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
         return uno::Any();
@@ -138,13 +121,13 @@ uno::Any Wall::GetDefaultValue( sal_Int32 nHandle ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL Wall::getInfoHelper()
 {
-    return *StaticWallInfoHelper::get();
+    return *wall::StaticWallInfoHelper::get();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL Wall::getPropertySetInfo()
 {
-    return *StaticWallInfo::get();
+    return *wall::StaticWallInfo::get();
 }
 
 // ____ XModifyBroadcaster ____

@@ -21,6 +21,7 @@
 
 #include <OPropertySet.hxx>
 #include <MutexContainer.hxx>
+#include <PropertyHelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -53,6 +54,40 @@ typedef ::cppu::WeakImplHelper<
     css::util::XModifyListener,
     css::util::XCloneable >
     Diagram_Base;
+}
+
+namespace diagram
+{
+struct StaticDiagramInfo_Initializer
+{
+    css::uno::Reference<css::beans::XPropertySetInfo>* operator()();
+};
+
+struct StaticDiagramInfo
+    : public rtl::StaticAggregate<css::uno::Reference<css::beans::XPropertySetInfo>,
+                                  StaticDiagramInfo_Initializer>
+{
+};
+
+struct StaticDiagramDefaults_Initializer
+{
+    ::chart::tPropertyValueMap* operator()();
+};
+
+struct StaticDiagramDefaults
+    : public rtl::StaticAggregate<::chart::tPropertyValueMap, StaticDiagramDefaults_Initializer>
+{
+};
+
+struct StaticDiagramInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()();
+};
+
+struct StaticDiagramInfoHelper
+    : public rtl::StaticAggregate<::cppu::OPropertyArrayHelper, StaticDiagramInfoHelper_Initializer>
+{
+};
 }
 
 class Diagram final :

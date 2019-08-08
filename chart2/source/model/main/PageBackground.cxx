@@ -40,76 +40,59 @@ using ::com::sun::star::beans::Property;
 namespace
 {
 
-struct StaticPageBackgroundDefaults_Initializer
+static uno::Sequence< Property > lcl_GetPropertySequence()
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
-        ::chart::FillProperties::AddDefaultsToMap( rOutMap );
+    std::vector< css::beans::Property > aProperties;
+    ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
+    ::chart::FillProperties::AddPropertiesToVector( aProperties );
+    ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // override other defaults
-        ::chart::PropertyHelper::setPropertyValue< sal_Int32 >( rOutMap, ::chart::FillProperties::PROP_FILL_COLOR, 0xffffff );
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
-    }
-};
+    std::sort( aProperties.begin(), aProperties.end(),
+                 ::chart::PropertyNameLess() );
 
-struct StaticPageBackgroundDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticPageBackgroundDefaults_Initializer >
+    return comphelper::containerToSequence( aProperties );
+}
+
+static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
 {
-};
+    ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
+    ::chart::FillProperties::AddDefaultsToMap( rOutMap );
 
-struct StaticPageBackgroundInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    static uno::Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
-        ::chart::FillProperties::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticPageBackgroundInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticPageBackgroundInfoHelper_Initializer >
-{
-};
-
-struct StaticPageBackgroundInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticPageBackgroundInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticPageBackgroundInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticPageBackgroundInfo_Initializer >
-{
-};
+    // override other defaults
+    ::chart::PropertyHelper::setPropertyValue< sal_Int32 >( rOutMap, ::chart::FillProperties::PROP_FILL_COLOR, 0xffffff );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
+}
 
 } // anonymous namespace
 
 namespace chart
 {
+
+namespace page
+{
+
+::cppu::OPropertyArrayHelper* StaticPageBackgroundInfoHelper_Initializer::operator()()
+{
+    static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+    return &aPropHelper;
+}
+
+
+uno::Reference< beans::XPropertySetInfo >* StaticPageBackgroundInfo_Initializer::operator()()
+{
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticPageBackgroundInfoHelper::get() ) );
+    return &xPropertySetInfo;
+}
+
+::chart::tPropertyValueMap* StaticPageBackgroundDefaults_Initializer::operator()()
+{
+    static ::chart::tPropertyValueMap aStaticDefaults;
+    lcl_AddDefaultsToMap( aStaticDefaults );
+    return &aStaticDefaults;
+}
+
+}
 
 PageBackground::PageBackground() :
     ::property::OPropertySet( m_aMutex ),
@@ -134,7 +117,7 @@ uno::Reference< util::XCloneable > SAL_CALL PageBackground::createClone()
 // ____ OPropertySet ____
 uno::Any PageBackground::GetDefaultValue( sal_Int32 nHandle ) const
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticPageBackgroundDefaults::get();
+    const tPropertyValueMap& rStaticDefaults = *page::StaticPageBackgroundDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
         return uno::Any();
@@ -143,13 +126,13 @@ uno::Any PageBackground::GetDefaultValue( sal_Int32 nHandle ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL PageBackground::getInfoHelper()
 {
-    return *StaticPageBackgroundInfoHelper::get();
+    return *page::StaticPageBackgroundInfoHelper::get();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL PageBackground::getPropertySetInfo()
 {
-    return *StaticPageBackgroundInfo::get();
+    return *page::StaticPageBackgroundInfo::get();
 }
 
 // ____ XModifyBroadcaster ____

@@ -91,6 +91,8 @@ public:
     virtual css::uno::Reference<css::beans::XPropertySet>
         SAL_CALL getStyleForObject(const sal_Int16 nChartObjectType) override;
 
+    css::uno::Reference< css::chart2::XColorScheme > getColorScheme();
+
 private:
     sal_Int16 m_nNumObjects;
 
