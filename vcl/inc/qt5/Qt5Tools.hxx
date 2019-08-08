@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <QtCore/QPoint>
 #include <QtCore/QRect>
 #include <QtCore/QSize>
 #include <QtCore/QString>
@@ -62,6 +63,8 @@ inline QSize toQSize(const Size& rSize) { return QSize(rSize.Width(), rSize.Heig
 
 inline Size toSize(const QSize& rSize) { return Size(rSize.width(), rSize.height()); }
 
+inline Point toPoint(const QPoint& rPoint) { return Point(rPoint.x(), rPoint.y()); }
+
 inline QColor toQColor(const Color& rColor)
 {
     return QColor(rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue(),
@@ -70,6 +73,7 @@ inline QColor toQColor(const Color& rColor)
 
 Qt::DropActions toQtDropActions(sal_Int8 dragOperation);
 sal_Int8 toVclDropActions(Qt::DropActions dragOperation);
+sal_Int8 toVclDropAction(Qt::DropAction dragOperation);
 Qt::DropAction getPreferredDropAction(sal_Int8 dragOperation);
 
 inline QList<int> toQList(const css::uno::Sequence<sal_Int32>& aSequence)
