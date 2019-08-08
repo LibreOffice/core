@@ -49,6 +49,7 @@ private:
     CPPUNIT_TEST(testLocalhost1Authority);
     CPPUNIT_TEST(testLocalhost2Authority);
     CPPUNIT_TEST(testLocalhost3Authority);
+    CPPUNIT_TEST(testLocalhost4Authority);
     CPPUNIT_TEST(testNoAuthority);
     CPPUNIT_TEST(testEmptyPath);
     CPPUNIT_TEST(testHomeAbbreviation);
@@ -69,6 +70,7 @@ private:
     void testLocalhost1Authority();
     void testLocalhost2Authority();
     void testLocalhost3Authority();
+    void testLocalhost4Authority();
     void testNoAuthority();
     void testEmptyPath();
     void testHomeAbbreviation();
@@ -131,6 +133,26 @@ void Test::testLocalhost3Authority() {
         "file://127.0.0.1" MY_PATH_IN, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
     CPPUNIT_ASSERT_EQUAL(OUString(MY_PATH_OUT), p);
+}
+
+void Test::testLocalhost4Authority()
+{
+#if defined(_WIN32)
+    // On Windows, localhost should not be canonicalized when not followed by a drive letter
+    // Such paths should be converted to UNC paths
+    OUString p;
+    auto e = osl::FileBase::getSystemPathFromFileURL("file://localhost/foo/bar", p);
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
+    CPPUNIT_ASSERT_EQUAL(OUString("\\\\localhost\\foo\\bar"), p);
+
+    e = osl::FileBase::getSystemPathFromFileURL("file://LOCALHOST/foo/bar", p);
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
+    CPPUNIT_ASSERT_EQUAL(OUString("\\\\LOCALHOST\\foo\\bar"), p);
+
+    e = osl::FileBase::getSystemPathFromFileURL("file://127.0.0.1/foo/bar", p);
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
+    CPPUNIT_ASSERT_EQUAL(OUString("\\\\127.0.0.1\\foo\\bar"), p);
+#endif
 }
 
 void Test::testNoAuthority() {
