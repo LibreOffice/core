@@ -683,6 +683,28 @@ OUString parseScheme(
     return OUString();
 }
 
+#if defined _WIN32
+bool isLeadingDriveLetter(sal_Unicode const* p, sal_Unicode const* pEnd,
+                          INetURLObject::EncodeMechanism eMechanism, rtl_TextEncoding eCharset,
+                          sal_uInt32 nSegmentDelimiter, sal_uInt32 nAltSegmentDelimiter)
+{
+    if (!(p < pEnd))
+        return false;
+    if (*p != nSegmentDelimiter && *p != nAltSegmentDelimiter)
+        return false;
+    if (!(++p < pEnd))
+        return false;
+    INetURLObject::EscapeType eEscapeType;
+    sal_uInt32 ch = INetURLObject::getUTF32(p, pEnd, eMechanism, eCharset, eEscapeType);
+    if (!rtl::isAsciiAlpha(ch))
+        return false;
+    if (!(p < pEnd))
+        return false;
+    ch = INetURLObject::getUTF32(p, pEnd, eMechanism, eCharset, eEscapeType);
+    return (ch == ':' || ch == '|');
+}
+#endif
+
 }
 
 bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
@@ -1344,8 +1366,14 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 case INetProtocol::File:
                     // If the host equals "LOCALHOST" (unencoded and ignoring
                     // case), turn it into an empty host:
-                    if (INetMIME::equalIgnoreCase(pHostPortBegin, pPort,
-                                                  "localhost"))
+                    if (INetMIME::equalIgnoreCase(pHostPortBegin, pPort, "localhost")
+#if defined _WIN32
+                        // Only canonicalize localhost if it's followed by a drive letter
+                        && pHostPortBegin < pHostPortEnd
+                        && isLeadingDriveLetter(pHostPortEnd, pEnd, eMechanism, eCharset,
+                                                nSegmentDelimiter, nAltSegmentDelimiter)
+#endif
+                    )
                         pHostPortBegin = pPort;
                     bNetBiosName = true;
                     break;
@@ -2829,11 +2857,13 @@ bool INetURLObject::setHost(OUString const & rTheHost,
     {
         case INetProtocol::File:
             {
+#if !defined _WIN32
                 OUString sTemp(aSynHost.toString());
                 if (sTemp.equalsIgnoreAsciiCase("localhost"))
                 {
                     aSynHost.setLength(0);
                 }
+#endif
                 bNetBiosName = true;
             }
             break;
@@ -3747,7 +3777,13 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                         OUString sTemp(aSynHost.toString());
                         if (sTemp.equalsIgnoreAsciiCase( "localhost" ))
                         {
-                            aSynHost.setLength(0);
+#if defined _WIN32
+                            // Only canonicalize localhost if it's followed by a drive letter
+                            if (auto p = rThePath.getStr(); isLeadingDriveLetter(
+                                    p, p + rThePath.getLength(), EncodeMechanism::WasEncoded,
+                                    RTL_TEXTENCODING_UTF8, '/', 0x80000000))
+#endif
+                                aSynHost.setLength(0);
                         }
                         bNetBiosName = true;
                     }

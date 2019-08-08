@@ -703,8 +703,10 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
             if ( 0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL, nDecodedLen, "file:\\\\\\", 8 ) )
                 nSkip = 8;
             else if (
-                0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL, nDecodedLen, "file:\\\\localhost\\", 17 ) ||
-                0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL, nDecodedLen, "file:\\\\127.0.0.1\\", 17 )
+                nDecodedLen > 18
+                && (0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(pDecodedURL, nDecodedLen, "file:\\\\localhost\\", 17) ||
+                    0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(pDecodedURL, nDecodedLen, "file:\\\\127.0.0.1\\", 17))
+                && iswalpha(pDecodedURL[17]) && pDecodedURL[18] == ':' // Only canonicalize localhost if it's followed by a drive letter
                       )
                 nSkip = 17;
             else
