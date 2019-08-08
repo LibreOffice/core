@@ -19,26 +19,7 @@
 #include <vcl/idle.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-namespace weld
-{
-class Button;
-}
-namespace weld
-{
-class ComboBox;
-}
-namespace weld
-{
-class Label;
-}
-namespace weld
-{
-class Window;
-}
-namespace weld
-{
-class TreeView;
-}
+#include <svtools/simptabl.hxx>
 
 enum RedactionTargetType
 {
@@ -60,34 +41,23 @@ struct RedactionTarget
 };
 
 /// Used to display the targets list
-class TargetsTable
+/*class TargetsTable : public SvSimpleTable
 {
-    std::unique_ptr<weld::TreeView> m_xControl;
-    int GetRowByTargetName(const OUString& sName);
+    SvTreeListEntry* GetRowByTargetName(const OUString& sName);
 
 public:
-    TargetsTable(std::unique_ptr<weld::TreeView> xControl);
+    TargetsTable(SvSimpleTableContainer& rParent);
     void InsertTarget(RedactionTarget* pTarget);
     void SelectByName(const OUString& sName);
     RedactionTarget* GetTargetByName(const OUString& sName);
     OUString GetNameProposal();
 
-    void unselect_all() { m_xControl->unselect_all(); }
-    bool has_focus() const { return m_xControl->has_focus(); }
-    int n_children() const { return m_xControl->n_children(); }
-    int get_selected_index() const { return m_xControl->get_selected_index(); }
-    std::vector<int> get_selected_rows() const { return m_xControl->get_selected_rows(); }
-    void clear() { m_xControl->clear(); }
-    void remove(int nRow) { m_xControl->remove(nRow); }
-    void select(int nRow) { m_xControl->select(nRow); }
-    OUString get_id(int nRow) const { return m_xControl->get_id(nRow); }
-
     // Sync data on the targets box with the data on the target
-    void setRowData(const int& nRowIndex, const RedactionTarget* pTarget);
+    void setRowData(SvTreeListEntry* pRow, const RedactionTarget* pTarget);
 
     //void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_changed(rLink); }
     //void connect_row_activated(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_row_activated(rLink); }
-};
+};*/
 
 namespace sfx2
 {
@@ -100,7 +70,7 @@ enum class StartFileDialogType
     SaveAs
 };
 
-class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxDialogController
+class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxModalDialog
 {
     SfxObjectShellLock m_xDocShell;
     std::vector<std::pair<RedactionTarget*, OUString>> m_aTableTargets;
@@ -108,19 +78,20 @@ class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxDialogController
     bool m_bIsValidState;
     bool m_bTargetsCopied;
 
-    std::unique_ptr<weld::Label> m_xRedactionTargetsLabel;
-    std::unique_ptr<TargetsTable> m_xTargetsBox;
-    std::unique_ptr<weld::Button> m_xLoadBtn;
-    std::unique_ptr<weld::Button> m_xSaveBtn;
-    std::unique_ptr<weld::Button> m_xAddBtn;
-    std::unique_ptr<weld::Button> m_xEditBtn;
-    std::unique_ptr<weld::Button> m_xDeleteBtn;
+    //VclPtr<SvSimpleTableContainer>      m_pTargetsContainer;
+    //VclPtr<TargetsTable>                m_pTargetsBox;
+    VclPtr<FixedText> m_pRedactionTargetsLabel;
+    VclPtr<PushButton> m_pLoadBtn;
+    VclPtr<PushButton> m_pSaveBtn;
+    VclPtr<PushButton> m_pAddBtn;
+    VclPtr<PushButton> m_pEditBtn;
+    VclPtr<PushButton> m_pDeleteBtn;
 
-    DECL_LINK(Load, weld::Button&, void);
-    DECL_LINK(Save, weld::Button&, void);
-    DECL_LINK(AddHdl, weld::Button&, void);
-    DECL_LINK(EditHdl, weld::Button&, void);
-    DECL_LINK(DeleteHdl, weld::Button&, void);
+    /*DECL_LINK(Load, Button*, void);
+    DECL_LINK(Save, Button*, void);
+    DECL_LINK(AddHdl, Button*, void);
+    DECL_LINK(EditHdl, Button*, void);
+    DECL_LINK(DeleteHdl, Button*, void);
 
     DECL_LINK(LoadHdl, sfx2::FileDialogHelper*, void);
     DECL_LINK(SaveHdl, sfx2::FileDialogHelper*, void);
@@ -129,25 +100,26 @@ class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxDialogController
     /// Carry out proper addition both to the targets box, and to the tabletargets vector.
     void addTarget(RedactionTarget* pTarget);
     /// Clear all targets both visually and from the targets vector
-    void clearTargets();
+    void clearTargets();*/
 
 public:
-    SfxAutoRedactDialog(weld::Window* pParent);
+    SfxAutoRedactDialog(vcl::Window* pParent);
     virtual ~SfxAutoRedactDialog() override;
+    virtual void dispose() override;
 
     /// Check if the dialog has any valid redaction targets.
-    bool hasTargets() const;
+    //bool hasTargets() const;
     /// Check if the dialog is in a valid state.
-    bool isValidState() const { return m_bIsValidState; }
+    //bool isValidState() const { return m_bIsValidState; }
 
     /** Copies targets vector
      *  Does a shallow copy.
      *  Returns true if successful.
      */
-    bool getTargets(std::vector<std::pair<RedactionTarget*, OUString>>& r_aTargets);
+    //bool getTargets(std::vector<std::pair<RedactionTarget*, OUString>>& r_aTargets);
 };
 
-class SfxAddTargetDialog : public weld::GenericDialogController
+/*class SfxAddTargetDialog : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::Entry> m_xName;
@@ -175,7 +147,7 @@ public:
         return m_xCaseSensitive->get_state() == TriState::TRISTATE_TRUE;
     }
     bool isWholeWords() const { return m_xWholeWords->get_state() == TriState::TRISTATE_TRUE; }
-};
+};*/
 
 #endif
 
