@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SVX_INC_HELPIDS_H
 #define INCLUDED_SVX_INC_HELPIDS_H
 
-#include <svx/svxcommands.h>
-
 #define HID_BMPMASK_CTL_QCOL_1                                "SVX_HID_BMPMASK_CTL_QCOL_1"
 #define HID_COLOR_CTL_COLORS                                  "SVX_HID_COLOR_CTL_COLORS"
 #define HID_CTRL3D_HSCROLL                                    "SVX_HID_CTRL3D_HSCROLL"
