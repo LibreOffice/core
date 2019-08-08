@@ -63,7 +63,7 @@ public class _XIndexAccess extends MultiMethodTest {
     * Exceptions which throws by a not available index. <p>
     * Has <b> OK </b> status if first, middle and last elements
     * successfully returned and has non null value; and if on
-    * invalid index parameter <code>IndexOutOfBoundException</code>
+    * invalid index parameter <code>IndexOutOfBoundsException</code>
     * is thrown.<p>
     * The following method tests are to be completed successfully before :
     * <ul>

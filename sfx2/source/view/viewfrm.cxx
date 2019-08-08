@@ -2368,7 +2368,7 @@ static bool impl_maxOpenDocCountReached()
             ++nOpenDocs;
         }
         catch(const css::uno::Exception&)
-            // A IndexOutOfBoundException can happen in multithreaded
+            // An IndexOutOfBoundsException can happen in multithreaded
             // environments, where any other thread can change this
             // container !
             { continue; }
