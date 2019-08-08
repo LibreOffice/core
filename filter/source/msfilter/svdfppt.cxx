@@ -7018,6 +7018,10 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             pCurrent->mnHylinkOrigColor = pCurrent->mpImplPPTCharPropSet->mnColor;
                                                             pCurrent->mbHardHylinkOrigColor = ( ( pCurrent->mpImplPPTCharPropSet->mnAttrSet >>PPT_CharAttr_FontColor ) & 1)>0;
 
+                                                            // add missing attribute to show underline property
+                                                            pCurrent->mpImplPPTCharPropSet->mnAttrSet |= 1 << PPT_CharAttr_Underline;
+                                                            pCurrent->mpImplPPTCharPropSet->mnFlags = 1 << PPT_CharAttr_Underline;
+
                                                             if ( pCurrent->mpFieldItem )
                                                             {
                                                                 pCurrent->SetColor( PPT_COLSCHEME_A_UND_HYPERLINK );
