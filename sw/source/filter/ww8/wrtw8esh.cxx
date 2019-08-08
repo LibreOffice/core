@@ -2882,6 +2882,9 @@ sal_Int32 SwEscherEx::WriteTextFlyFrame(const DrawObj &rObj, sal_uInt32 nShapeId
         case SvxFrameDirection::Vertical_RL_TB:
             nFlow=mso_txflTtoBA;
         break;
+        case SvxFrameDirection::Vertical_LR_BT:
+            nFlow = mso_txflBtoT;
+        break;
     }
     aPropOpt.AddOpt( ESCHER_Prop_txflTextFlow, nFlow );
 
