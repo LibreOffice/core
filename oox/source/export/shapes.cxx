@@ -432,7 +432,7 @@ bool ShapeExport::NonEmptyText( const Reference< XInterface >& xIface )
     return false;
 }
 
-ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xShape, bool bClosed )
+ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xShape, const bool bClosed )
 {
     SAL_INFO("oox.shape", "write polypolygon shape");
 
@@ -467,7 +467,7 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
     WriteTransformation( aRect, XML_a );
-    WritePolyPolygon( aPolyPolygon );
+    WritePolyPolygon( aPolyPolygon, bClosed );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() ) {
         if( bClosed )
@@ -865,7 +865,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         bool bInvertRotation = bFlipH != bFlipV;
         if (nRotation != 0)
             aPolyPolygon.Rotate(Point(0,0), static_cast<sal_uInt16>(bInvertRotation ? nRotation/10 : 3600-nRotation/10));
-        WritePolyPolygon( aPolyPolygon );
+        WritePolyPolygon( aPolyPolygon, false );
     }
     else if (bCustGeom)
     {
@@ -1464,7 +1464,7 @@ static const NameToConvertMapType& lcl_GetConverters()
     shape_converters[ "com.sun.star.drawing.LineShape" ]                = &ShapeExport::WriteLineShape;
     shape_converters[ "com.sun.star.drawing.OpenBezierShape" ]          = &ShapeExport::WriteOpenPolyPolygonShape;
     shape_converters[ "com.sun.star.drawing.PolyPolygonShape" ]         = &ShapeExport::WriteClosedPolyPolygonShape;
-    shape_converters[ "com.sun.star.drawing.PolyLineShape" ]            = &ShapeExport::WriteClosedPolyPolygonShape;
+    shape_converters[ "com.sun.star.drawing.PolyLineShape" ]            = &ShapeExport::WriteOpenPolyPolygonShape;
     shape_converters[ "com.sun.star.drawing.RectangleShape" ]           = &ShapeExport::WriteRectangleShape;
     shape_converters[ "com.sun.star.drawing.OLE2Shape" ]                = &ShapeExport::WriteOLE2Shape;
     shape_converters[ "com.sun.star.drawing.TableShape" ]               = &ShapeExport::WriteTableShape;
