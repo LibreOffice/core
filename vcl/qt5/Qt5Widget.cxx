@@ -24,6 +24,7 @@
 #include <Qt5Graphics.hxx>
 #include <Qt5Instance.hxx>
 #include <Qt5SvpGraphics.hxx>
+#include <Qt5Transferable.hxx>
 #include <Qt5Tools.hxx>
 
 #include <QtCore/QMimeData>
@@ -214,40 +215,24 @@ void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
     pEvent->accept();
 }
 
-void Qt5Widget::startDrag(sal_Int8 nSourceActions)
-{
-    // internal drag source
-    QMimeData* mimeData = new QMimeData;
-    mimeData->setData(sInternalMimeType, nullptr);
-
-    QDrag* drag = new QDrag(this);
-    drag->setMimeData(mimeData);
-    drag->exec(toQtDropActions(nSourceActions), Qt::MoveAction);
-}
-
 void Qt5Widget::dragEnterEvent(QDragEnterEvent* event)
 {
-    if (event->mimeData()->hasFormat(sInternalMimeType))
+    if (dynamic_cast<const Qt5MimeData*>(event->mimeData()))
         event->accept();
     else
         event->acceptProposedAction();
 }
 
-void Qt5Widget::dragMoveEvent(QDragMoveEvent* event)
+void Qt5Widget::dragMoveEvent(QDragMoveEvent* pEvent)
 {
-    QPoint point = event->pos();
-
-    m_rFrame.draggingStarted(point.x(), point.y(), event->possibleActions(),
-                             event->keyboardModifiers(), event->mimeData());
-    QWidget::dragMoveEvent(event);
+    m_rFrame.draggingStarted(pEvent);
+    QWidget::dragMoveEvent(pEvent);
 }
 
-void Qt5Widget::dropEvent(QDropEvent* event)
+void Qt5Widget::dropEvent(QDropEvent* pEvent)
 {
-    QPoint point = event->pos();
-
-    m_rFrame.dropping(point.x(), point.y(), event->keyboardModifiers(), event->mimeData());
-    QWidget::dropEvent(event);
+    m_rFrame.dropping(pEvent);
+    QWidget::dropEvent(pEvent);
 }
 
 void Qt5Widget::moveEvent(QMoveEvent* event)

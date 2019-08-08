@@ -36,6 +36,8 @@
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
 #include <QtCore/QThread>
+#include <QtGui/QDragMoveEvent>
+#include <QtGui/QDropEvent>
 #include <QtGui/QIcon>
 #include <QtGui/QWindow>
 #include <QtGui/QScreen>
@@ -1187,84 +1189,84 @@ void Qt5Frame::deregisterDropTarget(Qt5DropTarget const* pDropTarget)
     m_pDropTarget = nullptr;
 }
 
-void Qt5Frame::draggingStarted(const int x, const int y, Qt::DropActions eActions,
-                               Qt::KeyboardModifiers eKeyMod, const QMimeData* pQMimeData)
+static css::uno::Reference<css::datatransfer::XTransferable>
+lcl_getXTransferable(const QMimeData* pMimeData)
+{
+    css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
+    const Qt5MimeData* pQt5MimeData = dynamic_cast<const Qt5MimeData*>(pMimeData);
+    if (!pQt5MimeData)
+        xTransferable = new Qt5DnDTransferable(pMimeData);
+    else
+        xTransferable = pQt5MimeData->xTransferable();
+    return xTransferable;
+}
+
+void Qt5Frame::draggingStarted(QDragMoveEvent* pEvent)
 {
     assert(m_pDropTarget);
 
+    sal_Int8 nSourceActions = toVclDropActions(pEvent->possibleActions());
     sal_Int8 nUserDropAction = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
+    Qt::KeyboardModifiers eKeyMod = pEvent->keyboardModifiers();
     if ((eKeyMod & Qt::ShiftModifier) && !(eKeyMod & Qt::ControlModifier))
         nUserDropAction = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
     else if ((eKeyMod & Qt::ControlModifier) && !(eKeyMod & Qt::ShiftModifier))
         nUserDropAction = css::datatransfer::dnd::DNDConstants::ACTION_COPY;
     else if ((eKeyMod & Qt::ShiftModifier) && (eKeyMod & Qt::ControlModifier))
         nUserDropAction = css::datatransfer::dnd::DNDConstants::ACTION_LINK;
+    nUserDropAction &= nSourceActions;
 
     css::datatransfer::dnd::DropTargetDragEnterEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
     aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDragContext*>(m_pDropTarget);
-    aEvent.LocationX = x;
-    aEvent.LocationY = y;
+    aEvent.LocationX = pEvent->pos().x();
+    aEvent.LocationY = pEvent->pos().y();
 
     // system drop action if neither Shift nor Control is held
-    if (!(eKeyMod & (Qt::ShiftModifier | Qt::ControlModifier)))
-        aEvent.DropAction = getPreferredDropAction(eActions);
-    // otherwise user-preferred action
-    else
-        aEvent.DropAction = nUserDropAction;
-    aEvent.SourceActions = toVclDropActions(eActions);
+    Qt::DropAction eAction;
+    if (!(eKeyMod & (Qt::ShiftModifier | Qt::ControlModifier)) && !nUserDropAction)
+        eAction = getPreferredDropAction(pEvent->possibleActions());
+    else // otherwise user-preferred action
+        eAction = getPreferredDropAction(nUserDropAction);
+    pEvent->setDropAction(eAction);
+    aEvent.DropAction = toVclDropAction(eAction);
+    aEvent.SourceActions = toVclDropActions(pEvent->possibleActions());
 
-    css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
-    if (!pQMimeData->hasFormat(sInternalMimeType))
-        xTransferable = new Qt5DnDTransferable(pQMimeData);
-    else
-        xTransferable = Qt5DragSource::m_ActiveDragSource->GetTransferable();
-
-    if (!m_bInDrag && xTransferable.is())
+    if (!m_bInDrag)
     {
-        css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
-            = xTransferable->getTransferDataFlavors();
-        aEvent.SupportedDataFlavors = aFormats;
-
+        aEvent.SupportedDataFlavors
+            = lcl_getXTransferable(pEvent->mimeData())->getTransferDataFlavors();
         m_pDropTarget->fire_dragEnter(aEvent);
         m_bInDrag = true;
     }
     else
         m_pDropTarget->fire_dragOver(aEvent);
+
+    pEvent->setDropAction(getPreferredDropAction(m_pDropTarget->proposedDropAction()));
 }
 
-void Qt5Frame::dropping(const int x, const int y, Qt::KeyboardModifiers eKeyMod,
-                        const QMimeData* pQMimeData)
+void Qt5Frame::dropping(QDropEvent* pEvent)
 {
     assert(m_pDropTarget);
 
     css::datatransfer::dnd::DropTargetDropEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
     aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDropContext*>(m_pDropTarget);
-    aEvent.LocationX = x;
-    aEvent.LocationY = y;
+    aEvent.LocationX = pEvent->pos().x();
+    aEvent.LocationY = pEvent->pos().y();
 
+    Qt::KeyboardModifiers eKeyMod = pEvent->keyboardModifiers();
+    aEvent.DropAction = toVclDropAction(pEvent->dropAction());
     if (!(eKeyMod & (Qt::ShiftModifier | Qt::ControlModifier)))
-        aEvent.DropAction = m_pDropTarget->proposedDragAction()
-                            | css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT;
-    else
-        aEvent.DropAction = m_pDropTarget->proposedDragAction();
-    aEvent.SourceActions = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
-
-    css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
-    if (!pQMimeData->hasFormat(sInternalMimeType))
-        xTransferable = new Qt5DnDTransferable(pQMimeData);
-    else
-        xTransferable = Qt5DragSource::m_ActiveDragSource->GetTransferable();
-    aEvent.Transferable = xTransferable;
+        aEvent.DropAction |= css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT;
+    aEvent.SourceActions = toVclDropActions(pEvent->possibleActions());
+    aEvent.Transferable = lcl_getXTransferable(pEvent->mimeData());
 
     m_pDropTarget->fire_drop(aEvent);
     m_bInDrag = false;
 
     if (m_pDragSource)
-    {
-        m_pDragSource->fire_dragEnd(m_pDropTarget->proposedDragAction());
-    }
+        m_pDragSource->fire_dragEnd(aEvent.DropAction, m_pDropTarget->dropSuccessful());
 }
 
 cairo_t* Qt5Frame::getCairoContext() const
