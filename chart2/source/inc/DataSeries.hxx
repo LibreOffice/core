@@ -39,6 +39,7 @@
 
 #include <MutexContainer.hxx>
 #include <OPropertySet.hxx>
+#include <PropertyHelper.hxx>
 
 namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
 
@@ -57,6 +58,40 @@ typedef ::cppu::WeakImplHelper<
         css::util::XModifyBroadcaster,
         css::util::XModifyListener >
     DataSeries_Base;
+}
+
+namespace dataSeries
+{
+struct StaticDataSeriesInfo_Initializer
+{
+    css::uno::Reference<css::beans::XPropertySetInfo>* operator()();
+};
+
+struct StaticDataSeriesInfo
+    : public rtl::StaticAggregate<css::uno::Reference<css::beans::XPropertySetInfo>,
+                                  StaticDataSeriesInfo_Initializer>
+{
+};
+
+struct StaticDataSeriesDefaults_Initializer
+{
+    ::chart::tPropertyValueMap* operator()();
+};
+
+struct StaticDataSeriesDefaults
+    : public rtl::StaticAggregate<::chart::tPropertyValueMap, StaticDataSeriesDefaults_Initializer>
+{
+};
+
+struct StaticDataSeriesInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()();
+};
+
+struct StaticDataSeriesInfoHelper
+    : public rtl::StaticAggregate<::cppu::OPropertyArrayHelper, StaticDataSeriesInfoHelper_Initializer>
+{
+};
 }
 
 class DataSeries final :

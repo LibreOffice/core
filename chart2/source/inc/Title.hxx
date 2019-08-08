@@ -21,6 +21,7 @@
 
 #include <OPropertySet.hxx>
 #include <MutexContainer.hxx>
+#include <PropertyHelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/chart2/XTitle.hpp>
@@ -41,6 +42,40 @@ typedef ::cppu::WeakImplHelper<
     css::util::XModifyBroadcaster,
     css::util::XModifyListener >
     Title_Base;
+}
+
+namespace title
+{
+struct StaticTitleInfo_Initializer
+{
+    css::uno::Reference<css::beans::XPropertySetInfo>* operator()();
+};
+
+struct StaticTitleInfo
+    : public rtl::StaticAggregate<css::uno::Reference<css::beans::XPropertySetInfo>,
+                                  StaticTitleInfo_Initializer>
+{
+};
+
+struct StaticTitleDefaults_Initializer
+{
+    ::chart::tPropertyValueMap* operator()();
+};
+
+struct StaticTitleDefaults
+    : public rtl::StaticAggregate<::chart::tPropertyValueMap, StaticTitleDefaults_Initializer>
+{
+};
+
+struct StaticTitleInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()();
+};
+
+struct StaticTitleInfoHelper
+    : public rtl::StaticAggregate<::cppu::OPropertyArrayHelper, StaticTitleInfoHelper_Initializer>
+{
+};
 }
 
 class Title final :

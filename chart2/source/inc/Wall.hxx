@@ -16,20 +16,18 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CHART2_SOURCE_MODEL_MAIN_AXIS_HXX
-#define INCLUDED_CHART2_SOURCE_MODEL_MAIN_AXIS_HXX
+#ifndef INCLUDED_CHART2_SOURCE_MODEL_MAIN_WALL_HXX
+#define INCLUDED_CHART2_SOURCE_MODEL_MAIN_WALL_HXX
 
-#include <MutexContainer.hxx>
-#include <OPropertySet.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <comphelper/uno3.hxx>
-
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/chart2/XAxis.hpp>
-#include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
+#include <MutexContainer.hxx>
+#include <OPropertySet.hxx>
+#include <PropertyHelper.hxx>
+
+#include <cppuhelper/implbase.hxx>
+#include <comphelper/uno3.hxx>
 
 namespace chart
 {
@@ -37,39 +35,60 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakImplHelper<
-        css::chart2::XAxis,
-        css::chart2::XTitled,
-        css::lang::XServiceInfo,
         css::util::XCloneable,
         css::util::XModifyBroadcaster,
         css::util::XModifyListener >
-    Axis_Base;
+    Wall_Base;
 }
 
-class Axis final :
+namespace wall
+{
+struct StaticWallInfo_Initializer
+{
+    css::uno::Reference<css::beans::XPropertySetInfo>* operator()();
+};
+
+struct StaticWallInfo
+    : public rtl::StaticAggregate<css::uno::Reference<css::beans::XPropertySetInfo>,
+                                  StaticWallInfo_Initializer>
+{
+};
+
+struct StaticWallDefaults_Initializer
+{
+    ::chart::tPropertyValueMap* operator()();
+};
+
+struct StaticWallDefaults
+    : public rtl::StaticAggregate<::chart::tPropertyValueMap, StaticWallDefaults_Initializer>
+{
+};
+
+struct StaticWallInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()();
+};
+
+struct StaticWallInfoHelper
+    : public rtl::StaticAggregate<::cppu::OPropertyArrayHelper, StaticWallInfoHelper_Initializer>
+{
+};
+}
+
+class Wall final :
     public MutexContainer,
-    public impl::Axis_Base,
+    public impl::Wall_Base,
     public ::property::OPropertySet
 {
 public:
-    explicit Axis();
-    virtual ~Axis() override;
-
-    /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    Wall();
+    virtual ~Wall() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
-    /// merge XTypeProvider implementations
-     DECLARE_XTYPEPROVIDER()
 
 private:
-    explicit Axis( const Axis & rOther );
-
-    // late initialization to call after copy-constructing
-    void Init();
+    explicit Wall( const Wall & rOther );
 
     // ____ OPropertySet ____
     virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const override;
@@ -81,20 +100,7 @@ private:
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() override;
 
-    // ____ XAxis ____
-    virtual void SAL_CALL setScaleData( const css::chart2::ScaleData& rScaleData ) override;
-    virtual css::chart2::ScaleData SAL_CALL getScaleData() override;
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getGridProperties() override;
-    virtual css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > > SAL_CALL getSubGridProperties() override;
-    virtual css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > > SAL_CALL getSubTickProperties() override;
-
-    // ____ XTitled ____
-    virtual css::uno::Reference< css::chart2::XTitle > SAL_CALL getTitleObject() override;
-    virtual void SAL_CALL setTitleObject(
-        const css::uno::Reference< css::chart2::XTitle >& Title ) override;
-
     // ____ XCloneable ____
-    // Note: the coordinate systems are not cloned!
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
 
     // ____ XModifyBroadcaster ____
@@ -115,24 +121,14 @@ private:
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 
-    void fireModifyEvent();
+private:
 
-    void AllocateSubGrids();
-
-    css::uno::Reference< css::util::XModifyListener >   m_xModifyEventForwarder;
-
-    css::chart2::ScaleData             m_aScaleData;
-
-    css::uno::Reference< css::beans::XPropertySet >     m_xGrid;
-
-    css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > >     m_aSubGridProperties;
-
-    css::uno::Reference< css::chart2::XTitle >          m_xTitle;
+    css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
 };
 
 } //  namespace chart
 
-// INCLUDED_CHART2_SOURCE_MODEL_MAIN_AXIS_HXX
+// INCLUDED_CHART2_SOURCE_MODEL_MAIN_WALL_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

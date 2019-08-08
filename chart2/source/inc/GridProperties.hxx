@@ -16,18 +16,19 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CHART2_SOURCE_MODEL_MAIN_PAGEBACKGROUND_HXX
-#define INCLUDED_CHART2_SOURCE_MODEL_MAIN_PAGEBACKGROUND_HXX
+#ifndef INCLUDED_CHART2_SOURCE_MODEL_MAIN_GRIDPROPERTIES_HXX
+#define INCLUDED_CHART2_SOURCE_MODEL_MAIN_GRIDPROPERTIES_HXX
 
+#include <cppuhelper/implbase.hxx>
+#include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
-#include <MutexContainer.hxx>
-#include <OPropertySet.hxx>
-#include <cppuhelper/implbase.hxx>
 
-#include <comphelper/uno3.hxx>
+#include <OPropertySet.hxx>
+#include <MutexContainer.hxx>
+#include <PropertyHelper.hxx>
 
 namespace chart
 {
@@ -35,21 +36,55 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakImplHelper<
+        css::lang::XServiceInfo,
         css::util::XCloneable,
         css::util::XModifyBroadcaster,
-        css::util::XModifyListener,
-        css::lang::XServiceInfo >
-    PageBackground_Base;
+        css::util::XModifyListener >
+    GridProperties_Base;
 }
 
-class PageBackground final :
-    public MutexContainer,
-    public impl::PageBackground_Base,
-    public ::property::OPropertySet
+namespace grid
+{
+struct StaticGridInfo_Initializer
+{
+    css::uno::Reference<css::beans::XPropertySetInfo>* operator()();
+};
+
+struct StaticGridInfo
+    : public rtl::StaticAggregate<css::uno::Reference<css::beans::XPropertySetInfo>,
+                                  StaticGridInfo_Initializer>
+{
+};
+
+struct StaticGridDefaults_Initializer
+{
+    ::chart::tPropertyValueMap* operator()();
+};
+
+struct StaticGridDefaults
+    : public rtl::StaticAggregate<::chart::tPropertyValueMap, StaticGridDefaults_Initializer>
+{
+};
+
+struct StaticGridInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()();
+};
+
+struct StaticGridInfoHelper
+    : public rtl::StaticAggregate<::cppu::OPropertyArrayHelper, StaticGridInfoHelper_Initializer>
+{
+};
+}
+
+class GridProperties final :
+        public MutexContainer,
+        public impl::GridProperties_Base,
+        public ::property::OPropertySet
 {
 public:
-    explicit PageBackground();
-    virtual ~PageBackground() override;
+    explicit GridProperties();
+    virtual ~GridProperties() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName() override;
@@ -58,14 +93,15 @@ public:
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
+    /// merge XTypeProvider implementations
+     DECLARE_XTYPEPROVIDER()
 
 private:
-    explicit PageBackground( const PageBackground & rOther );
+    explicit GridProperties( const GridProperties & rOther );
 
     // ____ OPropertySet ____
     virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const override;
 
-    // ____ OPropertySet ____
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
     // ____ XPropertySet ____
@@ -98,7 +134,7 @@ private:
 
 } //  namespace chart
 
-// INCLUDED_CHART2_SOURCE_MODEL_MAIN_PAGEBACKGROUND_HXX
+// INCLUDED_CHART2_SOURCE_MODEL_MAIN_GRIDPROPERTIES_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

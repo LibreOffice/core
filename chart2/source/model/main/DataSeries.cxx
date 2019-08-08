@@ -46,44 +46,28 @@ using ::osl::MutexGuard;
 namespace
 {
 
-struct StaticDataSeriesDefaults : public rtl::StaticWithInit< ::chart::tPropertyValueMap, StaticDataSeriesDefaults >
+static Sequence< Property > lcl_GetPropertySequence()
 {
-    ::chart::tPropertyValueMap operator()()
-    {
-        ::chart::tPropertyValueMap aStaticDefaults;
-        ::chart::DataSeriesProperties::AddDefaultsToMap( aStaticDefaults );
-        ::chart::CharacterProperties::AddDefaultsToMap( aStaticDefaults );
-        float fDefaultCharHeight = 10.0;
-        ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
-        ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
-        ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
-        return aStaticDefaults;
-    }
-};
+    std::vector< css::beans::Property > aProperties;
+    ::chart::DataSeriesProperties::AddPropertiesToVector( aProperties );
+    ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
+    ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-struct StaticDataSeriesInfoHelper : public rtl::StaticWithInit< ::cppu::OPropertyArrayHelper, StaticDataSeriesInfoHelper, StaticDataSeriesInfoHelper, uno::Sequence< Property > >
+    std::sort( aProperties.begin(), aProperties.end(),
+                 ::chart::PropertyNameLess() );
+
+    return comphelper::containerToSequence( aProperties );
+}
+
+void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
 {
-    uno::Sequence< Property > operator()()
-    {
-        std::vector< css::beans::Property > aProperties;
-        ::chart::DataSeriesProperties::AddPropertiesToVector( aProperties );
-        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-};
-
-struct StaticDataSeriesInfo : public rtl::StaticWithInit< uno::Reference< beans::XPropertySetInfo >, StaticDataSeriesInfo >
-{
-    uno::Reference< beans::XPropertySetInfo > operator()()
-    {
-        return ::cppu::OPropertySetHelper::createPropertySetInfo(StaticDataSeriesInfoHelper::get() );
-    }
-};
+    ::chart::DataSeriesProperties::AddDefaultsToMap( rOutMap );
+    ::chart::CharacterProperties::AddDefaultsToMap( rOutMap );
+    float fDefaultCharHeight = 10.0;
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
+}
 
 void lcl_SetParent(
     const uno::Reference< uno::XInterface > & xChildInterface,
@@ -124,6 +108,32 @@ void lcl_CloneAttributedDataPoints(
 
 namespace chart
 {
+
+namespace dataSeries
+{
+
+::cppu::OPropertyArrayHelper* StaticDataSeriesInfoHelper_Initializer::operator()()
+{
+    static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+    return &aPropHelper;
+}
+
+
+uno::Reference< beans::XPropertySetInfo >* StaticDataSeriesInfo_Initializer::operator()()
+{
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticDataSeriesInfoHelper::get() ) );
+    return &xPropertySetInfo;
+}
+
+::chart::tPropertyValueMap* StaticDataSeriesDefaults_Initializer::operator()()
+{
+    static ::chart::tPropertyValueMap aStaticDefaults;
+    lcl_AddDefaultsToMap( aStaticDefaults );
+    return &aStaticDefaults;
+}
+
+}
 
 DataSeries::DataSeries() :
         ::property::OPropertySet( m_aMutex ),
@@ -233,7 +243,7 @@ uno::Reference< util::XCloneable > SAL_CALL DataSeries::createClone()
 // ____ OPropertySet ____
 uno::Any DataSeries::GetDefaultValue( sal_Int32 nHandle ) const
 {
-    const tPropertyValueMap& rStaticDefaults = StaticDataSeriesDefaults::get();
+    const tPropertyValueMap& rStaticDefaults = *dataSeries::StaticDataSeriesDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
         return uno::Any();
@@ -243,13 +253,13 @@ uno::Any DataSeries::GetDefaultValue( sal_Int32 nHandle ) const
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL DataSeries::getInfoHelper()
 {
-    return StaticDataSeriesInfoHelper::get();
+    return *dataSeries::StaticDataSeriesInfoHelper::get();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL DataSeries::getPropertySetInfo()
 {
-    return StaticDataSeriesInfo::get();
+    return *dataSeries::StaticDataSeriesInfo::get();
 }
 
 void SAL_CALL DataSeries::getFastPropertyValue

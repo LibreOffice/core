@@ -16,14 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CHART2_SOURCE_MODEL_MAIN_WALL_HXX
-#define INCLUDED_CHART2_SOURCE_MODEL_MAIN_WALL_HXX
+#ifndef INCLUDED_CHART2_SOURCE_MODEL_INC_STOCKBAR_HXX
+#define INCLUDED_CHART2_SOURCE_MODEL_INC_STOCKBAR_HXX
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <MutexContainer.hxx>
 #include <OPropertySet.hxx>
+#include <PropertyHelper.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
@@ -37,28 +38,61 @@ typedef ::cppu::WeakImplHelper<
         css::util::XCloneable,
         css::util::XModifyBroadcaster,
         css::util::XModifyListener >
-    Wall_Base;
+    StockBar_Base;
 }
 
-class Wall final :
-    public MutexContainer,
-    public impl::Wall_Base,
-    public ::property::OPropertySet
+namespace stock
+{
+struct StaticStockBarInfo_Initializer
+{
+    css::uno::Reference<css::beans::XPropertySetInfo>* operator()();
+};
+
+struct StaticStockBarInfo
+    : public rtl::StaticAggregate<css::uno::Reference<css::beans::XPropertySetInfo>,
+                                  StaticStockBarInfo_Initializer>
+{
+};
+
+struct StaticStockBarDefaults_Initializer
+{
+    ::chart::tPropertyValueMap* operator()();
+};
+
+struct StaticStockBarDefaults
+    : public rtl::StaticAggregate<::chart::tPropertyValueMap, StaticStockBarDefaults_Initializer>
+{
+};
+
+struct StaticStockBarInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()();
+};
+
+struct StaticStockBarInfoHelper
+    : public rtl::StaticAggregate<::cppu::OPropertyArrayHelper, StaticStockBarInfoHelper_Initializer>
+{
+};
+}
+
+class StockBar final :
+        public MutexContainer,
+        public impl::StockBar_Base,
+        public ::property::OPropertySet
 {
 public:
-    Wall();
-    virtual ~Wall() override;
+    explicit StockBar( bool bRisingCourse );
+    virtual ~StockBar() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
 
 private:
-    explicit Wall( const Wall & rOther );
+    explicit StockBar( const StockBar & rOther );
 
     // ____ OPropertySet ____
     virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const override;
 
-    // ____ OPropertySet ____
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
     // ____ XPropertySet ____
@@ -86,14 +120,12 @@ private:
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 
-private:
-
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
 };
 
 } //  namespace chart
 
-// INCLUDED_CHART2_SOURCE_MODEL_MAIN_WALL_HXX
+// INCLUDED_CHART2_SOURCE_MODEL_INC_STOCKBAR_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
