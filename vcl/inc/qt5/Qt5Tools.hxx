@@ -70,6 +70,7 @@ inline QColor toQColor(const Color& rColor)
 
 Qt::DropActions toQtDropActions(sal_Int8 dragOperation);
 sal_Int8 toVclDropActions(Qt::DropActions dragOperation);
+sal_Int8 toVclDropAction(Qt::DropAction dragOperation);
 Qt::DropAction getPreferredDropAction(sal_Int8 dragOperation);
 
 inline QList<int> toQList(const css::uno::Sequence<sal_Int32>& aSequence)
@@ -125,8 +126,6 @@ inline sal_uInt16 getFormatBits(QImage::Format eFormat)
             return 0;
     }
 }
-
-static const QString sInternalMimeType = "application/x-libreoffice-dnditem";
 
 typedef struct _cairo_surface cairo_surface_t;
 struct CairoDeleter

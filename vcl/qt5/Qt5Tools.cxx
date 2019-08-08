@@ -80,6 +80,18 @@ sal_Int8 toVclDropActions(Qt::DropActions dragOperation)
     return nRet;
 }
 
+sal_Int8 toVclDropAction(Qt::DropAction dragOperation)
+{
+    sal_Int8 nRet(0);
+    if (dragOperation == Qt::CopyAction)
+        nRet = css::datatransfer::dnd::DNDConstants::ACTION_COPY;
+    else if (dragOperation == Qt::MoveAction)
+        nRet = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
+    else if (dragOperation == Qt::LinkAction)
+        nRet = css::datatransfer::dnd::DNDConstants::ACTION_LINK;
+    return nRet;
+}
+
 Qt::DropAction getPreferredDropAction(sal_Int8 dragOperation)
 {
     Qt::DropAction eAct = Qt::IgnoreAction;

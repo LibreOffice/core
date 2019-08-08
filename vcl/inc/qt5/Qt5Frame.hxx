@@ -56,6 +56,8 @@ class Qt5MainWindow;
 class Qt5Menu;
 class Qt5SvpGraphics;
 
+class QDragMoveEvent;
+class QDropEvent;
 class QImage;
 class QMimeData;
 class QPaintDevice;
@@ -159,10 +161,10 @@ public:
     virtual void deregisterDragSource(Qt5DragSource const* pDragSource);
     virtual void registerDropTarget(Qt5DropTarget* pDropTarget);
     virtual void deregisterDropTarget(Qt5DropTarget const* pDropTarget);
-    void draggingStarted(const int x, const int y, Qt::DropActions eActions,
-                         Qt::KeyboardModifiers eKeyMod, const QMimeData* pQMimeData);
-    void dropping(const int x, const int y, Qt::KeyboardModifiers eKeyMod,
-                  const QMimeData* pQMimeData);
+
+    void handleDragLeave();
+    void handleDragMove(QDragMoveEvent* pEvent);
+    void handleDrop(QDropEvent* pEvent);
 
     virtual void SetExtendedFrameStyle(SalExtStyle nExtStyle) override;
     virtual void Show(bool bVisible, bool bNoActivate = false) override;

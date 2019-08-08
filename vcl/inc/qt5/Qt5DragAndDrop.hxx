@@ -25,7 +25,6 @@ class Qt5DragSource
     osl::Mutex m_aMutex;
     Qt5Frame* m_pFrame;
     css::uno::Reference<css::datatransfer::dnd::XDragSourceListener> m_xListener;
-    css::uno::Reference<css::datatransfer::XTransferable> m_xTrans;
 
 public:
     Qt5DragSource()
@@ -55,17 +54,7 @@ public:
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-    void dragFailed();
-    void fire_dragEnd(sal_Int8 nAction);
-
-    static Qt5DragSource* m_ActiveDragSource;
-    static bool m_bDropSuccessSet;
-    static bool m_bDropSuccess;
-
-    css::uno::Reference<css::datatransfer::XTransferable> const& GetTransferable() const
-    {
-        return m_xTrans;
-    }
+    void fire_dragEnd(sal_Int8 nAction, bool bSuccessful);
 };
 
 class Qt5DropTarget
@@ -76,11 +65,11 @@ class Qt5DropTarget
 {
     osl::Mutex m_aMutex;
     Qt5Frame* m_pFrame;
-    sal_Int8 mnDragAction;
-    sal_Int8 mnDropAction;
+    sal_Int8 m_nDropAction;
     bool m_bActive;
     sal_Int8 m_nDefaultActions;
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
+    bool m_bDropSuccessful;
 
 public:
     Qt5DropTarget();
@@ -115,10 +104,12 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     void fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde);
+    void fire_dragExit(const css::datatransfer::dnd::DropTargetEvent& dte);
     void fire_dragOver(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde);
     void fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde);
 
-    sal_Int8 proposedDragAction() const { return mnDragAction; }
+    sal_Int8 proposedDropAction() const { return m_nDropAction; }
+    bool dropSuccessful() const { return m_bDropSuccessful; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

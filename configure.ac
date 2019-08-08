@@ -11296,6 +11296,11 @@ then
             AC_MSG_ERROR([The minimal supported Qt5 version is 5.${qt5_minimal_minor}, but your 'qmake -v' reports Qt5 version $qmake5_test_ver.])
         else
             AC_MSG_NOTICE([Detected Qt5 version: $qmake5_test_ver])
+            if test "$qmake5_minor_version" -lt 12; then
+                AC_MSG_WARN([Qt5 version < 5.12 detected, which might have a D'n'D bug, so key modifiers won't update the cursor until the mouse is moved.])
+                add_warning "Qt5 version < 5.12 detected, which might have a D'n'D bug, so key modifiers won't update the cursor until the mouse is moved."
+                add_warning "  https://bugreports.qt.io/browse/QTBUG-56218 (recommended)"
+            fi
         fi
     fi
 
