@@ -1344,8 +1344,15 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 case INetProtocol::File:
                     // If the host equals "LOCALHOST" (unencoded and ignoring
                     // case), turn it into an empty host:
-                    if (INetMIME::equalIgnoreCase(pHostPortBegin, pPort,
-                                                  "localhost"))
+                    if (INetMIME::equalIgnoreCase(pHostPortBegin, pPort, "localhost")
+#if defined _WIN32
+                        // Only canonicalize localhost if it's followed by a drive letter
+                        && pHostPortBegin < pHostPortEnd
+                        && (pHostPortEnd[0] == nSegmentDelimiter
+                            || pHostPortEnd[0] == nAltSegmentDelimiter)
+                        && rtl::isAsciiDigit(pHostPortEnd[1]) && pHostPortEnd[2] == ':'
+#endif
+                    )
                         pHostPortBegin = pPort;
                     bNetBiosName = true;
                     break;
@@ -2829,11 +2836,13 @@ bool INetURLObject::setHost(OUString const & rTheHost,
     {
         case INetProtocol::File:
             {
+#if !defined _WIN32
                 OUString sTemp(aSynHost.toString());
                 if (sTemp.equalsIgnoreAsciiCase("localhost"))
                 {
                     aSynHost.setLength(0);
                 }
+#endif
                 bNetBiosName = true;
             }
             break;
@@ -3747,7 +3756,12 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                         OUString sTemp(aSynHost.toString());
                         if (sTemp.equalsIgnoreAsciiCase( "localhost" ))
                         {
-                            aSynHost.setLength(0);
+#if defined _WIN32
+                            // Only canonicalize localhost if it's followed by a drive letter
+                            if (rThePath.getLength() > 1 && rtl::isAsciiDigit(rThePath[0])
+                                && (rThePath[1] == ':'))
+#endif
+                                aSynHost.setLength(0);
                         }
                         bNetBiosName = true;
                     }
