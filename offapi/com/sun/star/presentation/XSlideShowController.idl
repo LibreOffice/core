@@ -66,7 +66,7 @@ interface XSlideShowController
             specifies the position in the list of slides that are displayed
             in this slide show. The first index is 0.
 
-        @throws com::sun::star::lang::IndexOutOfBoundException
+        @throws com::sun::star::lang::IndexOutOfBoundsException
             if the index is not valid.
 
      */

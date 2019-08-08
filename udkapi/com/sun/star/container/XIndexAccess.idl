@@ -50,7 +50,7 @@ published interface XIndexAccess: com::sun::star::container::XElementAccess
         @param Index
             specifies the position in the array. The first index is 0.
 
-        @throws com::sun::star::lang::IndexOutOfBoundException
+        @throws com::sun::star::lang::IndexOutOfBoundsException
             if the index is not valid.
 
         @throws  com::sun::star::lang::WrappedTargetException
