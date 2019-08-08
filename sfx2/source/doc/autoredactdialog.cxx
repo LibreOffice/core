@@ -27,7 +27,6 @@
 #include <vcl/idle.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/waitobj.hxx>
-#include <vcl/weld.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/viewoptions.hxx>
@@ -36,7 +35,7 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
-int TargetsTable::GetRowByTargetName(const OUString& sName)
+/*int TargetsTable::GetRowByTargetName(const OUString& sName)
 {
     for (int i = 0, nCount = m_xControl->n_children(); i < nCount; ++i)
     {
@@ -199,20 +198,20 @@ void TargetsTable::setRowData(const int& nRowIndex, const RedactionTarget* pTarg
     m_xControl->set_text(nRowIndex, pTarget->bWholeWords ? OUString("Yes") : OUString("No"), 4);
 }
 
-IMPL_LINK_NOARG(SfxAutoRedactDialog, Load, weld::Button&, void)
+IMPL_LINK_NOARG(SfxAutoRedactDialog, Load, Button*, void)
 {
     //Load a targets list from a previously saved file (a json file?)
     // ask for filename, where we should load the new config data from
     StartFileDialog(StartFileDialogType::Open, "Load Targets");
 }
 
-IMPL_LINK_NOARG(SfxAutoRedactDialog, Save, weld::Button&, void)
+IMPL_LINK_NOARG(SfxAutoRedactDialog, Save, Button*, void)
 {
     //Allow saving the targets into a file
     StartFileDialog(StartFileDialogType::SaveAs, "Save Targets");
 }
 
-IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, Button*, void)
 {
     // Open the Add Target dialog, craete a new target and insert into the targets vector and the listbox
     SfxAddTargetDialog aAddTargetDialog(getDialog(), m_xTargetsBox->GetNameProposal());
@@ -267,7 +266,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, weld::Button&, void)
     }
 }
 
-IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, Button*, void)
 {
     sal_Int32 nSelectedRow = m_xTargetsBox->get_selected_index();
 
@@ -337,7 +336,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, weld::Button&, void)
     m_xTargetsBox->setRowData(nSelectedRow, pTarget);
 }
 
-IMPL_LINK_NOARG(SfxAutoRedactDialog, DeleteHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SfxAutoRedactDialog, DeleteHdl, Button*, void)
 {
     std::vector<int> aSelectedRows = m_xTargetsBox->get_selected_rows();
 
@@ -540,22 +539,21 @@ void SfxAutoRedactDialog::clearTargets()
     std::for_each(m_aTableTargets.begin(), m_aTableTargets.end(), delTarget);
 
     m_aTableTargets.clear();
-}
+}*/
 
-SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
-    : SfxDialogController(pParent, "sfx/ui/autoredactdialog.ui", "AutoRedactDialog")
+SfxAutoRedactDialog::SfxAutoRedactDialog(vcl::Window* pParent)
+    : SfxModalDialog(pParent, "AutoRedactDialog", "sfx/ui/autoredactdialog.ui")
     , m_bIsValidState(true)
     , m_bTargetsCopied(false)
-    , m_xRedactionTargetsLabel(m_xBuilder->weld_label("labelRedactionTargets"))
-    , m_xTargetsBox(new TargetsTable(m_xBuilder->weld_tree_view("targets")))
-    , m_xLoadBtn(m_xBuilder->weld_button("btnLoadTargets"))
-    , m_xSaveBtn(m_xBuilder->weld_button("btnSaveTargets"))
-    , m_xAddBtn(m_xBuilder->weld_button("add"))
-    , m_xEditBtn(m_xBuilder->weld_button("edit"))
-    , m_xDeleteBtn(m_xBuilder->weld_button("delete"))
 {
+    get(m_pRedactionTargetsLabel, "labelRedactionTargets");
+    get(m_pLoadBtn, "btnLoadTargets");
+    get(m_pSaveBtn, "btnSaveTargets");
+    get(m_pAddBtn, "add");
+    get(m_pEditBtn, "edit");
+    get(m_pDeleteBtn, "delete");
     // Can be used to remmeber the last set of redaction targets?
-    OUString sExtraData;
+    /*OUString sExtraData;
     SvtViewOptions aDlgOpt(EViewType::Dialog,
                            OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
 
@@ -593,19 +591,19 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
             return;
             //TODO: Warn the user with a message box
         }
-    }
+    }*/
 
     // Handler connections
-    m_xLoadBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, Load));
+    /*m_xLoadBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, Load));
     m_xSaveBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, Save));
     m_xAddBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, AddHdl));
     m_xEditBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, EditHdl));
-    m_xDeleteBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, DeleteHdl));
+    m_xDeleteBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, DeleteHdl));*/
 }
 
 SfxAutoRedactDialog::~SfxAutoRedactDialog()
 {
-    if (m_aTableTargets.empty())
+    /*if (m_aTableTargets.empty())
     {
         // Clear the dialog data
         SvtViewOptions aDlgOpt(EViewType::Dialog,
@@ -646,10 +644,22 @@ SfxAutoRedactDialog::~SfxAutoRedactDialog()
                  "Exception caught while trying to store the dialog state: " << e.Message);
         return;
         //TODO: Warn the user with a message box
-    }
+    }*/
+    disposeOnce();
 }
 
-bool SfxAutoRedactDialog::hasTargets() const
+void SfxAutoRedactDialog::dispose()
+{
+    m_pRedactionTargetsLabel.clear();
+    m_pLoadBtn.clear();
+    m_pSaveBtn.clear();
+    m_pAddBtn.clear();
+    m_pEditBtn.clear();
+    m_pDeleteBtn.clear();
+    SfxModalDialog::dispose();
+}
+
+/*bool SfxAutoRedactDialog::hasTargets() const
 {
     //TODO: Add also some validity checks?
     if (m_aTableTargets.empty())
@@ -783,6 +793,6 @@ OUString SfxAddTargetDialog::getContent() const
     }
 
     return m_xContent->get_text();
-}
+}*/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

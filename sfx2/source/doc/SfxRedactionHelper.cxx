@@ -60,7 +60,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-constexpr OUStringLiteral SfxRedactionHelper::m_aPredefinedTargets[6];
+//constexpr OUStringLiteral SfxRedactionHelper::m_aPredefinedTargets[6];
 
 bool SfxRedactionHelper::isRedactMode(const SfxRequest& rReq)
 {
@@ -526,6 +526,19 @@ const LanguageTag& GetAppLanguageTag() { return Application::GetSettings().GetLa
 void SfxRedactionHelper::fillSearchOptions(i18nutil::SearchOptions2& rSearchOpt,
                                            const RedactionTarget* pTarget)
 {
+    static const OUStringLiteral m_aPredefinedTargets[6] = {
+        "\\b(?:\\d[ -]*?){13,16}\\b", //Credit card numbers
+        "\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b", //Email addresses
+        "\\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
+        "\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
+        "\\b", //IP addresses
+        "([12]\\d{3}[./-](0[1-9]|1[0-2])[./"
+        "-](0[1-9]|[12]\\d|3[01]))|((0[1-9]|[12]\\d|3[01])[./-](0[1-9]|1[0-2])[./"
+        "-][12]\\d{3})", //Dates (numerical)
+        "\\s*[a-zA-Z]{2}(?:\\s*\\d\\s*){6}[a-zA-Z]?\\s*", //National Insurance Number (UK)
+        "([1-9])(?!\\1{2}-\\1{2}-\\1{4})[1-9]{2}-[1-9]{2}-[1-9]{4}" //Social Security Number (US)
+    };
+
     if (!pTarget)
     {
         SAL_WARN("sfx.doc",
