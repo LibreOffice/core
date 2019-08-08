@@ -21,7 +21,7 @@ def get_cell_by_position(document, tab, column, row):
     document -- The document that should be used
     tab -- The 0-based sheet number
     column -- The 0-based column number
-    row -- THe 0-based row number
+    row -- The 0-based row number
     """
     sheet = get_sheet_from_doc(document, tab)
     return sheet.getCellByPosition(column, row)

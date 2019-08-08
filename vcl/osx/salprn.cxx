@@ -513,7 +513,7 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
 
     // inform application that it can release its data
     // this is awkward, but the XRenderable interface has no method for this,
-    // so we need to call XRenderadble::render one last time with IsLastPage = true
+    // so we need to call XRenderable::render one last time with IsLastPage = true
     i_rController.setLastPage( true );
     GDIMetaFile aPageFile;
     if( mrContext )

@@ -122,7 +122,7 @@ namespace chelp {
 
         OUString get_tag();
 
-        //  Not called for an directory
+        //  Not called for a directory
 
         OUString const & get_path();
 

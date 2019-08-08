@@ -40,7 +40,7 @@ public:
     }
 
         // We need to enable tests ONE BY ONE as they fail because of backend bugs
-        // it is still improtant to have the test defined so we know the issues
+        // it is still important to have the test defined so we know the issues
         // exist and we need to fix them. Consistent behaviour of our backends
         // is of highest priority.
 

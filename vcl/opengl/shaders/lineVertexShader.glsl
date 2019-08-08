@@ -28,7 +28,7 @@ void main()
 
    float rendered_thickness = (line_width + feather * 2.0) * miter_factor;
 
-   // lengthen the vertex in directon of the extrusion vector by line width.
+   // lengthen the vertex in direction of the extrusion vector by line width.
    vec4 position = vec4(position + (extrusion_vector * (rendered_thickness / 2.0) ), 0.0, 1.0);
 
    gl_Position = mvp * position;

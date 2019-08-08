@@ -61,7 +61,7 @@ namespace svx
 
     //= PropertyValueProvider
 
-    /** default implementation of a IPropertyValueProvider
+    /** default implementation of an IPropertyValueProvider
 
         This default implementation queries the object which it is constructed with for the XPropertySet interface,
         and calls the getPropertyValue method.
@@ -113,7 +113,7 @@ namespace svx
         void addPropertyChangeListener( const OUString& _rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener );
         void removePropertyChangeListener( const OUString& _rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener );
 
-        /** registers a IPropertyValueProvider
+        /** registers an IPropertyValueProvider
         */
         void    registerProvider( const ShapeProperty _eProperty, const std::shared_ptr<IPropertyValueProvider>& _rProvider );
 

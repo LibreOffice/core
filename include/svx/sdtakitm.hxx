@@ -64,7 +64,7 @@ enum class SdrTextAniKind {
 //   Direction = the starting direction.
 //   All Other Parameters: just like SdrTextAniKind::Scroll
 // - SdrTextAniKind::Slide:
-//   Text will slide in to the original position.
+//   Text will slide into the original position.
 //   -> same as SCROLL with StartInside = sal_False, StopInside = sal_True
 //   and Count = 1 (Count = 0 is interpreted as count = 1).
 //   For each count > 1, the text, will be slid out backwards
