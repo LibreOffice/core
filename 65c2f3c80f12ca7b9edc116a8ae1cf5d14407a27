@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_e065af46",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-08-08T19:37:10Z",
+      "side": 1,
+      "message": "Maybe native menubar eats Alt key pressed event? (because of showing kbd accelerators or somesuch)",
+      "revId": "65c2f3c80f12ca7b9edc116a8ae1cf5d14407a27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
