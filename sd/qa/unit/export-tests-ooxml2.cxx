@@ -152,6 +152,7 @@ public:
     void testTdf111863();
     void testTdf111518();
     void testTdf100387();
+    void testClosingShapes();
     void testRotateFlip();
     void testTdf106867();
     void testTdf112280();
@@ -245,6 +246,7 @@ public:
     CPPUNIT_TEST(testTdf111863);
     CPPUNIT_TEST(testTdf111518);
     CPPUNIT_TEST(testTdf100387);
+    CPPUNIT_TEST(testClosingShapes);
     CPPUNIT_TEST(testRotateFlip);
     CPPUNIT_TEST(testTdf106867);
     CPPUNIT_TEST(testTdf112280);
@@ -1133,6 +1135,17 @@ void SdOOXMLExportTest2::testTdf100387()
                              "/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:set/p:cBhvr/p:tgtEl/p:spTgt/p:txEl/p:pRg", "end", "2");
 }
 
+void SdOOXMLExportTest2::testClosingShapes()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/closed-shapes.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:close", 1);
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:close", 0);
+}
+
 void SdOOXMLExportTest2::testRotateFlip()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/rotate_flip.odp"), ODP);
@@ -1175,6 +1188,7 @@ void SdOOXMLExportTest2::testRotateFlip()
             assertXPath(pXmlDocContent, sPt, "x", points[nPointIndex][0]);
             assertXPath(pXmlDocContent, sPt, "y", points[nPointIndex][1]);
         }
+        assertXPath(pXmlDocContent, sSpPr + "/a:custGeom/a:pathLst/a:path/a:close", 1);
     }
 }
 

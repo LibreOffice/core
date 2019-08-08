@@ -265,7 +265,7 @@ public:
     static sal_Int32 GetCustomGeometryPointValue(
         const css::drawing::EnhancedCustomShapeParameter& rParam,
         const SdrObjCustomShape& rSdrObjCustomShape);
-    void WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon );
+    void WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon, const bool bClosed );
     void WriteFill( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
     void WriteShapeStyle( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteShapeEffects( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
