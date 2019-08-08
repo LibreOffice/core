@@ -105,6 +105,7 @@ public:
     void testTdf119629();
     void testTdf123557();
     void testTdf113822();
+    void testTdf126761();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -135,6 +136,7 @@ public:
     CPPUNIT_TEST(testTdf119629);
     CPPUNIT_TEST(testTdf123557);
     CPPUNIT_TEST(testTdf113822);
+    CPPUNIT_TEST(testTdf126761);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1181,6 +1183,27 @@ void SdExportTest::testTdf123557()
             "/anim:par[@presentation:node-type='timing-root']"
             "/anim:seq[@presentation:node-type='interactive-sequence']"
             "/anim:par[@smil:begin]",3);
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testTdf126761()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/ppt/tdf126761.ppt"), PPT);
+    xDocShRef = saveAndReload( xDocShRef.get(), ODP );
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+
+    // Get first paragraph of the text
+    uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
+
+    // Get first run of the paragraph
+    uno::Reference<text::XTextRange> xRun( getRunFromParagraph (0, xParagraph ) );
+    uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
+
+    // Check character underline, to make sure it has been set correctly
+    sal_uInt32 nCharUnderline;
+    xPropSet->getPropertyValue( "CharUnderline" ) >>= nCharUnderline;
+    CPPUNIT_ASSERT_EQUAL( sal_uInt32(1), nCharUnderline );
+
     xDocShRef->DoClose();
 }
 
