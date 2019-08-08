@@ -22,6 +22,30 @@
       "revId": "2284494191e3fb9f6d00afaf02cf526352e4e4fa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_7de708e6",
+        "filename": "sw/source/core/text/itrform2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-08-08T07:10:41Z",
+      "side": 1,
+      "message": "pNext is pFirst when pNext\u003d\u003dpPor. So the rule probably changes in the case of the very first portion.\n\nPerhaps you need to add something like\npPrev \u003d (rInf.GetLast() \u0026\u0026 !pPor-\u003eIsParaPortion()) : ...\n\nor could you simply say if ( !pPrev || !pNext-\u003eIsParaPortion() )\n\nto prevent merging borders between two paragraphs?\nUnfortunately there were no test documents attached to tdf#8722, so I can\u0027t really do any test scenarios, and I don\u0027t really understand what your original patch was trying to do anyway. Hopefully this gives you a good head-start on a fix though.",
+      "parentUuid": "bf659307_aad478be",
+      "range": {
+        "startLine": 695,
+        "startChar": 20,
+        "endLine": 695,
+        "endChar": 34
+      },
+      "revId": "2284494191e3fb9f6d00afaf02cf526352e4e4fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
