@@ -34,7 +34,6 @@ class SvdProgressInfo;
 class SfxProgress;
 
 namespace sd {
-
 class DrawDocShell;
 class DrawView;
 
