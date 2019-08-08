@@ -1242,7 +1242,7 @@ const SvxFieldData* EditView::GetFieldAtCursor()
     {
         // Cursor probably behind the field - extend selection to select the field
         ESelection aSel = GetSelection();
-        if (aSel.nStartPos == aSel.nEndPos)
+        if (aSel.nStartPos > 0 && aSel.nStartPos == aSel.nEndPos)
         {
             aSel.nStartPos--;
             SetSelection(aSel);
