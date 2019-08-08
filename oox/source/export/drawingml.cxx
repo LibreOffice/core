@@ -3199,7 +3199,7 @@ sal_Int32 DrawingML::GetCustomGeometryPointValue(
     return nValue;
 }
 
-void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
+void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon, const bool bClosed )
 {
     // In case of Writer, the parent element is <wps:spPr>, and there the
     // <a:custGeom> element is not optional.
@@ -3269,6 +3269,8 @@ void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
             }
         }
     }
+    if (bClosed)
+        mpFS->singleElementNS( XML_a, XML_close);
     mpFS->endElementNS( XML_a, XML_path );
 
     mpFS->endElementNS( XML_a, XML_pathLst );
