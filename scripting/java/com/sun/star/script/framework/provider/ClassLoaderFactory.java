@@ -33,7 +33,7 @@ public class ClassLoaderFactory {
 
     private ClassLoaderFactory() {}
 
-    public static ClassLoader getURLClassLoader(ScriptMetaData scriptData) {
+    public static URLClassLoader getURLClassLoader(ScriptMetaData scriptData) {
         ClassLoader parent = scriptData.getClass().getClassLoader();
         URL[] classPath = scriptData.getClassPath();
         LogUtils.DEBUG("Classpath has length " + classPath.length);
@@ -45,7 +45,7 @@ public class ClassLoaderFactory {
         return getURLClassLoader(parent, classPath);
     }
 
-    public static ClassLoader getURLClassLoader(final ClassLoader parent,
+    public static URLClassLoader getURLClassLoader(final ClassLoader parent,
             final URL[] classpath) {
         return AccessController.doPrivileged(
             new PrivilegedAction<URLClassLoader>() {
