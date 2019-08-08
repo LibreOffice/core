@@ -184,7 +184,7 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
 
     /**
     * Method <code>getGroupColumns</code> returns a <code>XIndexAccess</code>
-    * Test has ok status if returned value is an usable <code>XIndexAccess</code>
+    * Test has ok status if returned value is a usable <code>XIndexAccess</code>
     */
     public void _getGroupColumns() {
         try{
@@ -268,7 +268,7 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
 
     /**
     * Method <code>getGroupColumns</code> returns a <code>XIndexAccess</code>
-    * Test has ok status if returned value is an usable <code>XIndexAccess</code>
+    * Test has ok status if returned value is a usable <code>XIndexAccess</code>
     */
     public void _getOrderColumns() {
         try{

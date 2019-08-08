@@ -248,7 +248,7 @@ OUString SubstitutePathVariables::GetWorkPath() const
     OUString aWorkPath;
     css::uno::Reference< css::container::XHierarchicalNameAccess > xPaths(officecfg::Office::Paths::Paths::get(m_xContext), css::uno::UNO_QUERY_THROW);
     if (!(xPaths->getByHierarchicalName("['Work']/WritePath") >>= aWorkPath))
-        // fallback in case config layer does not return an usable work dir value.
+        // fallback in case config layer does not return a usable work dir value.
         aWorkPath = GetWorkVariableValue();
 
     return aWorkPath;
@@ -261,7 +261,7 @@ OUString SubstitutePathVariables::GetWorkVariableValue() const
     if (!x)
     {
         // fallback to $HOME in case platform dependent config layer does not return
-        // an usable work dir value.
+        // a usable work dir value.
         osl::Security aSecurity;
         aSecurity.getHomeDir( aWorkPath );
     }
