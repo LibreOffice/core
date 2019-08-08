@@ -254,6 +254,17 @@ DECLARE_RTFEXPORT_TEST(testTabs, "tabs.rtf")
     CPPUNIT_ASSERT_EQUAL(style::TabAlign_DECIMAL, rTabStop.Alignment);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf123703, "tdf123703.rtf")
+{
+#if !defined(MACOSX)
+    // This was 1, because of normal space character width in consecutive spaces
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+#else
+    // still 1 here
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+#endif
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
