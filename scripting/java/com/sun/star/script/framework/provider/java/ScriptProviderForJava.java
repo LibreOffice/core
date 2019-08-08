@@ -182,25 +182,12 @@ class ScriptImpl implements XScript {
         ScriptDescriptor scriptDesc =
             new ScriptDescriptor(metaData.getLanguageName());
 
-        ClassLoader scriptLoader = null;
+        LogUtils.DEBUG("Classloader starting...");
 
-        try {
-            LogUtils.DEBUG("Classloader starting...");
+        ClassLoader scriptLoader =
+            ClassLoaderFactory.getURLClassLoader(metaData);
 
-            scriptLoader =
-                ClassLoaderFactory.getURLClassLoader(metaData);
-
-            LogUtils.DEBUG("Classloader finished...");
-        } catch (ArrayStoreException e) {
-            // Framework error
-            ScriptFrameworkErrorException e2 =
-                new ScriptFrameworkErrorException(
-                e.toString(), null,
-                metaData.getLanguageName(), metaData.getLanguage(),
-                ScriptFrameworkErrorType.UNKNOWN);
-            e2.initCause(e);
-            throw e2;
-        }
+        LogUtils.DEBUG("Classloader finished...");
 
         ArrayList<Object> invocationArgList = new ArrayList<Object>();
         Object[] invocationArgs = null;
