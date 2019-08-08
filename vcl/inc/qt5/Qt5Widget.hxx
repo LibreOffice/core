@@ -74,7 +74,6 @@ public:
     Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f = Qt::WindowFlags());
 
     Qt5Frame& getFrame() const { return m_rFrame; }
-    void startDrag(sal_Int8 nSourceActions);
     void endExtTextInput();
 
     static bool handleEvent(Qt5Frame&, const QWidget&, QEvent*);
