@@ -209,6 +209,7 @@ public:
     void testTdf122899();
     void testOOXTheme();
     void testCropToShape();
+    void testTdf126761();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -300,6 +301,7 @@ public:
     CPPUNIT_TEST(testTdf122899);
     CPPUNIT_TEST(testOOXTheme);
     CPPUNIT_TEST(testCropToShape);
+    CPPUNIT_TEST(testTdf126761);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2752,6 +2754,27 @@ void SdImportTest::testTdf122899()
     xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRect;
     // original width is 9cm, add some tolerance
     CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(9020), aFrameRect.Width);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf126761()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/ppt/tdf126761.ppt"), PPT);
+    xDocShRef = saveAndReload( xDocShRef.get(), ODP );
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+
+    // Get first paragraph of the text
+    uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
+
+    // Get first run of the paragraph
+    uno::Reference<text::XTextRange> xRun( getRunFromParagraph (0, xParagraph ) );
+    uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
+
+    // Check character underline, to make sure it has been set correctly
+    sal_uInt32 nCharUnderline;
+    xPropSet->getPropertyValue( "CharUnderline" ) >>= nCharUnderline;
+    CPPUNIT_ASSERT_EQUAL( sal_uInt32(1), nCharUnderline );
 
     xDocShRef->DoClose();
 }
