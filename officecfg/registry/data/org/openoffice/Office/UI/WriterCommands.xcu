@@ -1175,11 +1175,8 @@
         </prop>
       </node>
       <node oor:name=".uno:PageDialog" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Page Settings</value>
-        </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Page...</value>
+          <value xml:lang="en-US">~Page Style...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

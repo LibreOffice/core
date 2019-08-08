@@ -440,8 +440,8 @@
       <menu:menuitem menu:id=".uno:FontDialog"/>
       <menu:menuitem menu:id=".uno:ParagraphDialog"/>
       <menu:menuitem menu:id=".uno:BulletsAndNumberingDialog"/>
-      <menu:menuitem menu:id=".uno:PageDialog"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:PageDialog"/>
       <menu:menuitem menu:id=".uno:TitlePageDialog" menu:style="text"/>
       <menu:menuitem menu:id=".uno:FormatAllNotes" menu:style="text"/>
       <menu:menuitem menu:id=".uno:RubyDialog" menu:style="text"/>
