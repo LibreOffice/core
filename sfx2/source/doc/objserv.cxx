@@ -537,10 +537,18 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
         case SID_AUTOREDACTDOC:
         {
-            SfxAutoRedactDialog aDlg(pDialogParent);
-            sal_Int16 nResult = aDlg.run();
+            SfxViewFrame* pFrame = GetFrame();
+            if ( !pFrame )
+                pFrame = SfxViewFrame::GetFirst( this );
+            if ( !pFrame )
+                return;
 
-            if (nResult != RET_OK || !aDlg.hasTargets() || !aDlg.isValidState())
+
+
+            SfxAutoRedactDialog aDlg(&pFrame->GetWindow());
+            sal_Int16 nResult = aDlg.Execute();
+
+            if (nResult != RET_OK /*|| !aDlg.hasTargets() || !aDlg.isValidState()*/)
             {
                 //Do nothing
                 return;
@@ -548,7 +556,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             // else continue with normal redaction
             bIsAutoRedact = true;
-            aDlg.getTargets(aRedactionTargets);
+            //aDlg.getTargets(aRedactionTargets);
 
             [[fallthrough]];
         }
