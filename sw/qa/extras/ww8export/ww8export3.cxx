@@ -240,6 +240,20 @@ DECLARE_WW8EXPORT_TEST(testImageCommentAtChar, "image-comment-at-char.doc")
                          getProperty<OUString>(getRun(xPara, 5), "TextPortionType"));
 }
 
+DECLARE_WW8EXPORT_TEST(testBtlrFrame, "btlr-frame.odt")
+{
+    if (!mbExported)
+    {
+        return;
+    }
+
+    // Without the accompanying fix in place, this test would have failed with a
+    // beans.UnknownPropertyException, as the writing direction was lost, so the default direction
+    // resulted in a conversion to a Writer text frame.
+    uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9000), getProperty<sal_Int32>(xFrame, "RotateAngle"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
