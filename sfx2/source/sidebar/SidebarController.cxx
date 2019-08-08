@@ -468,7 +468,8 @@ void SidebarController::ProcessNewWidth (const sal_Int32 nNewWidth)
     {
         // Deck became large enough to be shown.  Show it.
         mnSavedSidebarWidth = nNewWidth;
-        RequestOpenDeck();
+        if (!mbIsDeckOpen.get())
+            RequestOpenDeck();
     }
     else
     {
