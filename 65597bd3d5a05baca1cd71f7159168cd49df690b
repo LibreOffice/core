@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_e0636fb0",
+        "filename": "sal/osl/w32/file_url.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-08T13:59:29Z",
+      "side": 1,
+      "message": "\u003e probably better to check that the full path segment is alpha+\":\"\n\nWhy? Maybe I miss something - but this check is IMO enough for all correct cases, and all incorrect cases would end up incorrect (returning error) anyway...",
+      "parentUuid": "bf659307_208de77a",
+      "revId": "65597bd3d5a05baca1cd71f7159168cd49df690b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_c0d2eb5c",
         "filename": "tools/source/fsys/urlobj.cxx",
         "patchSetId": 3
@@ -59,6 +77,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_a05d77ea",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1353,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-08T13:59:29Z",
+      "side": 1,
+      "message": "\u003e also, the drive letter could be percent-encoded here, I guess\n\nHow so? I have never seen such URLs, so cannot understand how could that be possible...",
+      "parentUuid": "bf659307_e0d5af44",
+      "revId": "65597bd3d5a05baca1cd71f7159168cd49df690b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_60d8bf7e",
         "filename": "tools/source/fsys/urlobj.cxx",
         "patchSetId": 3
@@ -70,6 +106,24 @@
       "writtenOn": "2019-08-08T13:32:51Z",
       "side": 1,
       "message": "but this should be done after all on _WIN32 if m_aPath starts off with a drive letter segment, no?\n\n(And so functions that modify the path would need to check that if the path goes from \"doesn\u0027t start with drive letter segment\" to \"starts with drive letter segment\", a potential host of \"localhost\" will need to be canonicalized away.)",
+      "revId": "65597bd3d5a05baca1cd71f7159168cd49df690b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_606f5f92",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2843,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-08T13:59:29Z",
+      "side": 1,
+      "message": "Yes :-( ... and that is a bigger endeavor - which possibly could be done later if the need arises...",
+      "parentUuid": "bf659307_60d8bf7e",
       "revId": "65597bd3d5a05baca1cd71f7159168cd49df690b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
