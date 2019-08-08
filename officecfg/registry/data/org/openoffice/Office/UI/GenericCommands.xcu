@@ -2456,6 +2456,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Comme~nt</value>
         </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Comment</value>
+        </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Insert Comment</value>
         </prop>
