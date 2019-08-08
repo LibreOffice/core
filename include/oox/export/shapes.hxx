@@ -115,7 +115,7 @@ public:
     static bool         NonEmptyText( const css::uno::Reference< css::uno::XInterface >& xIface );
 
     ShapeExport&
-                        WritePolyPolygonShape( const css::uno::Reference< css::drawing::XShape >& xShape, bool bClosed );
+                        WritePolyPolygonShape( const css::uno::Reference< css::drawing::XShape >& xShape, const bool bClosed );
     ShapeExport&
                         WriteClosedPolyPolygonShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&
