@@ -160,9 +160,9 @@ public:
 
     /**
      * @descr   The borders is complex, so you have to create one before use.
-                Very few paragraphs will readly have borders property,this way
+                Very few paragraphs will already have borders property, this way
                 we can save much memory.
-     * @param   pBorders borders of the paragraph,please reference the XFBorders.
+     * @param   pBorders borders of the paragraph, please reference the XFBorders.
      */
     void    SetBorders(XFBorders *pBorders);
 

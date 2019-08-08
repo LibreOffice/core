@@ -2197,7 +2197,7 @@ public:
 
     virtual VclPtr<VirtualDevice> create_virtual_device() const override
     {
-        // create with no seperate alpha layer like everything sane does
+        // create with no separate alpha layer like everything sane does
         auto xRet = VclPtr<VirtualDevice>::Create();
         xRet->SetBackground(COL_TRANSPARENT);
         return xRet;
@@ -8515,7 +8515,7 @@ private:
                 SvNumFormatType::NUMBER == m_pFormatter->GetType(nTempFormat))
                 // the string is equivalent to a number formatted one (has no % sign) -> append it
                 sText += "%";
-            // (with this, a input of '3' becomes '3%', which then by the formatter is translated
+            // (with this, an input of '3' becomes '3%', which then by the formatter is translated
             // into 0.03. Without this, the formatter would give us the double 3 for an input '3',
             // which equals 300 percent.
         }

@@ -193,7 +193,7 @@ NSDragOperation DropTarget::draggingEntered(id sender)
     // a modifier key will be pressed
     mDragSourceSupportedActions = SystemToOfficeDragActions([sender draggingSourceOperationMask]);
 
-    // Only if the drop target is really interessted in the drag actions
+    // Only if the drop target is really interested in the drag actions
     // supported by the source
     if (mDragSourceSupportedActions & mDefaultActions)
     {
