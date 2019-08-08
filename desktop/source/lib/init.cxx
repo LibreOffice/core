@@ -171,7 +171,7 @@ static std::weak_ptr< LibreOfficeKitDocumentClass > gDocumentClass;
 
 static void SetLastExceptionMsg(const OUString& s = OUString())
 {
-    SAL_WARN("lok", "lok exception " + s);
+    SAL_WARN_IF(!s.isEmpty(), "lok", "lok exception '" + s + "'");
     if (gImpl)
         gImpl->maLastExceptionMsg = s;
 }
