@@ -554,18 +554,18 @@ double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double 
         }
     }
 
-    for (a = 0; a < GetDashes(); a++)
-    {
-        rDotDashArray[nIns++] = fSingleDashLen;
-        fFullDotDashLen += fSingleDashLen;
-        rDotDashArray[nIns++] = fDashDotDistance;
-        fFullDotDashLen += fDashDotDistance;
-    }
-
     for(a=0;a<GetDots();a++)
     {
         rDotDashArray[nIns++] = fSingleDotLen;
         fFullDotDashLen += fSingleDotLen;
+        rDotDashArray[nIns++] = fDashDotDistance;
+        fFullDotDashLen += fDashDotDistance;
+    }
+
+    for(a=0;a<GetDashes();a++)
+    {
+        rDotDashArray[nIns++] = fSingleDashLen;
+        fFullDotDashLen += fSingleDashLen;
         rDotDashArray[nIns++] = fDashDotDistance;
         fFullDotDashLen += fDashDotDistance;
     }
