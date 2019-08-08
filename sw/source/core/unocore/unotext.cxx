@@ -71,6 +71,8 @@
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
 #include <ndtxt.hxx>
+#include <SwRewriter.hxx>
+#include <strings.hrc>
 
 using namespace ::com::sun::star;
 
@@ -1437,7 +1439,10 @@ SwXText::insertTextContentWithProperties(
         throw  uno::RuntimeException();
     }
 
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UndoArg1, SwResId(STR_UNDO_INSERT_TEXTBOX));
+
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, &aRewriter);
 
     // now attach the text content here
     insertTextContent( xInsertPosition, xTextContent, false );
@@ -1459,12 +1464,12 @@ SwXText::insertTextContentWithProperties(
         catch (const uno::Exception& e)
         {
             css::uno::Any anyEx = cppu::getCaughtException();
-            m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
+            m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, &aRewriter);
             throw lang::WrappedTargetRuntimeException( e.Message,
                             uno::Reference< uno::XInterface >(), anyEx );
         }
     }
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, &aRewriter);
     return xInsertPosition;
 }
 
