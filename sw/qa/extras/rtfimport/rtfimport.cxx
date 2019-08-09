@@ -313,7 +313,7 @@ DECLARE_RTFIMPORT_TEST(testFdo45190, "fdo45190.rtf")
                          getProperty<sal_Int32>(getParagraph(2), "ParaFirstLineIndent"));
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf59699, "tdf59699.rtf")
+DECLARE_RTFIMPORT_TEST(testTdf59699, "tdf59699.rtf")
 {
     // This resulted in a lang.IndexOutOfBoundsException: the referenced graphic data wasn't imported.
     uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
