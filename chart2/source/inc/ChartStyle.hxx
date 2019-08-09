@@ -91,6 +91,9 @@ public:
     virtual css::uno::Reference<css::beans::XPropertySet>
         SAL_CALL getStyleForObject(const sal_Int16 nChartObjectType) override;
 
+    virtual void SAL_CALL
+    applyStyleToDiagram(const css::uno::Reference<css::chart2::XDiagram>& xDiagram);
+
 private:
     sal_Int16 m_nNumObjects;
 

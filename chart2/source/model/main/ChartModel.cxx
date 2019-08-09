@@ -687,6 +687,8 @@ void SAL_CALL ChartModel::setFirstDiagram( const uno::Reference< chart2::XDiagra
     ModifyListenerHelper::removeListener( xOldDiagram, xListener );
     ModifyListenerHelper::addListener( xDiagram, xListener );
     setModified( true );
+
+    m_xChartStyle->applyStyleToDiagram(xDiagram);
 }
 
 Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()

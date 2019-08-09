@@ -121,6 +121,20 @@ css::uno::Sequence<OUString> SAL_CALL ChartStyle::getSupportedServiceNames()
 {
     return { "com.sun.star.chart2.ChartStyle" };
 }
+
+void SAL_CALL
+ChartStyle::applyStyleToDiagram(const css::uno::Reference<css::chart2::XDiagram>& xDiagram)
+{
+    css::uno::Reference<css::style::XStyleSupplier> xLegendStyle(xDiagram->getLegend(),
+                                                                 css::uno::UNO_QUERY);
+    if (xLegendStyle.is())
+    {
+        xLegendStyle->setStyle(css::uno::Reference<css::style::XStyle>(
+            m_xChartStyle.find(css::chart2::ChartObjectType::LEGEND)->second,
+            css::uno::UNO_QUERY_THROW));
+    }
+}
+
 //
 // needed by MSC compiler
 using impl::ChartObjectStyle_Base;

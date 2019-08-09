@@ -732,6 +732,12 @@ void SAL_CALL ChartModel::modified( const lang::EventObject& rEvenObject)
         }
         unlockControllers();
     }
+    uno::Reference<chart2::XDiagram> xDiagram(rEvenObject.Source, uno::UNO_QUERY);
+    if (xDiagram.is())
+    {
+        if (m_xChartStyle.is())
+            m_xChartStyle->applyStyleToDiagram(xDiagram);
+    }
 
     if (m_nInLoad == 0)
         setModified(true);
