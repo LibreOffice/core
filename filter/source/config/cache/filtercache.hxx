@@ -423,7 +423,7 @@ class FilterCache : public BaseLock
             @attention  This method exists to supports some UNO container interfaces
                         only. (e.g. XNameAccess.hasByName()). But inside multithreaded
                         environments there is no guarantee, that this item still exists, if
-                        its really requested e.g. by calling getItem()!
+                        it's really requested e.g. by calling getItem()!
                         Be aware of some NoSuchElementExistExceptions ...
 
             @param      eType

@@ -372,7 +372,7 @@ void SdXMLEventContext::EndElement()
             pProperties++;
 
             // ClickAction_BOOKMARK and ClickAction_DOCUMENT share the same xml event
-            // so check here if its really a bookmark or maybe a document
+            // so check here if it's really a bookmark or maybe a document
             if( meClickAction == ClickAction_BOOKMARK )
             {
                 if( !msBookmark.startsWith( "#" ) )
