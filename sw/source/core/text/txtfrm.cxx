@@ -1014,8 +1014,9 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
         rMerged.extents.emplace(itInsert, const_cast<SwTextNode*>(&rNode), nIndex, nIndex + nLen);
         text.insert(nTFIndex, rNode.GetText().copy(nIndex, nLen));
         nInserted = nLen;
-        if (rNode.GetIndex() < rMerged.pParaPropsNode->GetIndex())
-        {   // text inserted before current para-props node
+        if (rMerged.extents.size() == 1 // also if it was empty!
+            || rMerged.pParaPropsNode->GetIndex() < rNode.GetIndex())
+        {   // text inserted after current para-props node
             rMerged.pParaPropsNode->RemoveFromListRLHidden();
             rMerged.pParaPropsNode = &const_cast<SwTextNode&>(rNode);
             rMerged.pParaPropsNode->AddToListRLHidden();
@@ -1147,7 +1148,7 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
         {
             rMerged.pParaPropsNode->RemoveFromListRLHidden();
             rMerged.pParaPropsNode = rMerged.extents.empty()
-                ? rMerged.pFirstNode
+                ? const_cast<SwTextNode*>(rMerged.pLastNode)
                 : rMerged.extents.front().pNode;
             rMerged.pParaPropsNode->AddToListRLHidden();
         }
