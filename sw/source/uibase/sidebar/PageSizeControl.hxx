@@ -23,8 +23,7 @@
 
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
-#include <svtools/unitconv.hxx>
-#include <svx/tbxctl.hxx>
+#include <sfx2/tbxctrl.hxx>
 #include <vcl/layout.hxx>
 
 #include <vector>

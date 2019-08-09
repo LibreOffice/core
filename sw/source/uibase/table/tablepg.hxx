@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_TABLE_TABLEPG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_TABLE_TABLEPG_HXX
 #include <sfx2/tabdlg.hxx>
-#include <actctrl.hxx>
 #include <prcntfld.hxx>
 #include <swtypes.hxx>
 #include <svx/frmdirlbox.hxx>

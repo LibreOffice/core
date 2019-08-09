@@ -21,7 +21,6 @@
 
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/button.hxx>
-#include <vcl/image.hxx>
 #include <vcl/fixed.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <com/sun/star/frame/XFrame.hpp>

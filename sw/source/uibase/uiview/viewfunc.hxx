@@ -18,7 +18,10 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UIBASE_UIVIEW_VIEWFUNC_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_UIVIEW_VIEWFUNC_HXX
-#include <tools/solar.h>
+
+#include <vcl/outdev.hxx>
+
+#include <IDocumentDeviceAccess.hxx>
 
 class ImageButton;
 class Point;

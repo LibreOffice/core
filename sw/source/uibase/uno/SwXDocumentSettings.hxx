@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_UNO_SWXDOCUMENTSETTINGS_HXX
 
 #include <comphelper/MasterPropertySet.hxx>
-#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/weak.hxx>
