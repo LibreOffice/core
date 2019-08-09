@@ -36,7 +36,7 @@
 published interface XRename: com::sun::star::uno::XInterface
 {
 
-    /** is intended to alter the name of a object.
+    /** is intended to alter the name of an object.
         @param newName
             the new name
         @throws com::sun::star::sdbc::SQLException

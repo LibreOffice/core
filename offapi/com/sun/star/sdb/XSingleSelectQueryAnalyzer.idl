@@ -97,7 +97,7 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
 
     /** returns the currently used group.
         <p>
-        The columns returned form the GROUP BY clause.
+        The columns returned from the GROUP BY clause.
         </p>
         @returns
             a collection of com::sun::star::sdb::GroupColumn which form the GROUP BY.

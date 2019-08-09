@@ -25,7 +25,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** is thrown to indicate that the a command is not known by the
+/** is thrown to indicate that a command is not known by the
     implementation of an interface.
 
     @version    1.0

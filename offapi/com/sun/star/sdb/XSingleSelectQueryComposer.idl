@@ -170,7 +170,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
     /** appends an additional part to the sort order criteria of the select
         statement. The column must be a com::sun::star::sdbcx::Column.
         @param column
-            the column which is used to create a order part
+            the column which is used to create an order part
         @param  ascending
             `TRUE` when the order should be ascending, otherwise if `FALSE` descending.
         @throws com::sun::star::sdbc::SQLException
