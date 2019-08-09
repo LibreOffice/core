@@ -16,6 +16,24 @@
       "revId": "65c2f3c80f12ca7b9edc116a8ae1cf5d14407a27",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_1b4b7459",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-08-09T09:55:49Z",
+      "side": 1,
+      "message": "Just checked. The menu bar isn\u0027t affected by the Alt key during D\u0027n\u0027D (doesn\u0027t show the accelerator underlines). If it were, that would be an other, probably hard to fix bug.",
+      "parentUuid": "bf659307_e065af46",
+      "revId": "65c2f3c80f12ca7b9edc116a8ae1cf5d14407a27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
