@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_db4c1ca0",
+        "filename": "sc/source/core/data/documen5.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-09T15:27:45Z",
+      "side": 1,
+      "message": "Marking Sequence const ensures that const methods begin()/end() will be called in range-based for loop, removing any overhead - so I suppose it\u0027s worth doing ;-)",
+      "range": {
+        "startLine": 58,
+        "startChar": 8,
+        "endLine": 58,
+        "endChar": 51
+      },
+      "revId": "fca94779872b8ba0b0583d0b7068f1a46beb88c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
