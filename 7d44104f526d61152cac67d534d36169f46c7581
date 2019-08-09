@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_566a21b3",
+        "filename": "vcl/qt5/Qt5DragAndDrop.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-08-09T17:44:42Z",
+      "side": 0,
+      "message": "They are replaced by dynamic_cast\u003cQt5MimeType*\u003e, encapsulating the XTransferable in the Qt5MimeType and the local variable m_bDropSuccessful in the drop target.\n\nBut I just tested that dropping a document on the start center still works. Will test the other bugs later or next week. Have some other stuff to do on the WE.",
+      "parentUuid": "bf659307_f62b357f",
+      "revId": "7d44104f526d61152cac67d534d36169f46c7581",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_b625bdad",
         "filename": "vcl/qt5/Qt5Widget.cxx",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2019-08-09T16:25:12Z",
       "side": 0,
       "message": "So while you\u0027re at bulldozering this code, no prisoners taken, you can as well drop sInternalMimeType bc it became effectively unused",
+      "revId": "7d44104f526d61152cac67d534d36169f46c7581",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_96cc39bd",
+        "filename": "vcl/qt5/Qt5Widget.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-08-09T17:44:42Z",
+      "side": 0,
+      "message": "I forgot to drop sInternalMimeType from Qt5Tools.hxx. It should be fine to test for Qt5MimeData instead, which encapsulates the internal XTransferable.\n\n\u003e So while you\u0027re at bulldozering this code, no prisoners taken…\n\nI looked at the gtk3, the osx and the qt5 code and didn\u0027t much understand it. You told me that it was quite hard to understand and yup, I had the same impression reading all of it and trying to make sense of it.\n\nAnd actually I\u0027m not sure if the dragEnterEvent is correct, but currently it works for me. I also had a look at all the examples from https://doc.qt.io/qt-5/dnd.html, but these rely on the proposed action from QDrag, which didn\u0027t work correctly for me. For the Calc Alt key Qt always used the link action, which I found that Calc itself didn\u0027t see the Alt-key at all.\n\nAnd it\u0027s not that I sat down and thought: \"let\u0027s rewrite all this code\". Just like the Qt5Clipboard code it was very iterative. Testing by moving cells and text with the mouse and key-modifiers was relatively fast and most of the time it instantly showed bugs.\n\nInterestingly, in the end it turned out that the drag and the drop handling is almost the same and it\u0027s now reflected in the code. You ask the drop target, if it accepts your drag data. Constructing the correct drop action is a bit tricky and there is this strange DEFAULT value. And relying on the Qt events actions turned out to be broken for LO, so this always manually reconstructs the state based on the modifiers.\n\nFor LO you prepare an event, which will tell you the event\u0027s result via functions from Qt5DropTarget implemented as the XDropTargetDragContext and XDropTargetDropContext. That\u0027s why the Qt event is updated with setDropAction after LO has processed its DnD event.\n\nI had quite a few non-working variants of this patch, where Calc was working and Writer wasn\u0027t, mainly because of the needed dragLeaveEvent handling and the wrong actions proposed by the Qt events.",
+      "parentUuid": "bf659307_b625bdad",
       "revId": "7d44104f526d61152cac67d534d36169f46c7581",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false

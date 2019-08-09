@@ -16,6 +16,24 @@
       "revId": "e4b5dd8c2e9f104c0e8b38809aa2d1731f43584f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_36468d51",
+        "filename": "configure.ac",
+        "patchSetId": 4
+      },
+      "lineNbr": 11299,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-08-09T17:44:42Z",
+      "side": 1,
+      "message": "TMI \u003d Too Much Information?\n\nI didn\u0027t came up with anything better. Maybe something like: \"Qt 5.12 detected. You might be affected by a D\u0027n\u0027D mouse cursor bug (see QTBUG-56218)\"?",
+      "parentUuid": "bf659307_563c61c7",
+      "revId": "e4b5dd8c2e9f104c0e8b38809aa2d1731f43584f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
