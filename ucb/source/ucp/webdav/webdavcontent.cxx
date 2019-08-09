@@ -221,7 +221,7 @@ Content::Content(
 }
 
 
-// ctr for content on an non-existing webdav resource
+// ctr for content on a non-existing webdav resource
 Content::Content(
             const uno::Reference< uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
@@ -1843,7 +1843,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             for ( const auto& rProppatchValue : aProppatchValues )
             {
                 aEvent.PropertyName = rProppatchValue.name;
-                aEvent.OldValue     = uno::Any(); // @@@ to expensive to obtain!
+                aEvent.OldValue     = uno::Any(); // @@@ too expensive to obtain!
                 aEvent.NewValue     = rProppatchValue.value;
 
                 aChanges.getArray()[ nChanged ] = aEvent;

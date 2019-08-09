@@ -233,7 +233,7 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
             // Document has been closed (unloaded)
 
             // Official event "OnUnload" does not work here. Event
-            // gets fired to early. Other OnUnload listeners called after this
+            // gets fired too early. Other OnUnload listeners called after this
             // listener may still need TDOC access to the document. Remove the
             // document from TDOC docs list on XCloseListener::notifyClosing.
             // See OfficeDocumentsManager::OfficeDocumentsListener::notifyClosing.
