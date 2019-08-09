@@ -1575,7 +1575,8 @@ void DocxExport::SetFS( ::sax_fastparser::FSHelperPtr const & pFS )
     mpFS = pFS;
 }
 
-DocxExport::DocxExport(DocxExportFilter* pFilter, SwDoc* pDocument, SwPaM* pCurrentPam,
+DocxExport::DocxExport(DocxExportFilter* pFilter, SwDoc* pDocument,
+        std::shared_ptr<SwUnoCursor> & pCurrentPam,
                        SwPaM* pOriginalPam, bool bDocm, bool bTemplate)
     : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam ),
       m_pFilter( pFilter ),

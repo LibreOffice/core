@@ -434,7 +434,8 @@ struct MSWordSaveData
     Point* pOldFlyOffset;
     RndStdIds eOldAnchorType;
     std::unique_ptr<ww::bytes> pOOld; ///< WW8Export only
-    SwPaM* pOldPam, *pOldEnd;
+    std::shared_ptr<SwUnoCursor> pOldPam;
+    SwPaM* pOldEnd;
     sal_uLong nOldStart, nOldEnd;
     const ww8::Frame* pOldFlyFormat;
     const SwPageDesc* pOldPageDesc;
@@ -566,7 +567,8 @@ public:
 
     SwDoc *m_pDoc;
     sal_uLong m_nCurStart, m_nCurEnd;
-    SwPaM *m_pCurPam, *m_pOrigPam;
+    std::shared_ptr<SwUnoCursor> & m_pCurPam;
+    SwPaM *m_pOrigPam;
 
     /// Stack to remember the nesting (see MSWordSaveData for more)
     std::stack< MSWordSaveData > m_aSaveData;
@@ -890,7 +892,7 @@ protected:
     std::vector<const Graphic*> m_vecBulletPic; ///< Vector to record all the graphics of bullets
 
 public:
-    MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam );
+    MSWordExportBase( SwDoc *pDocument, std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM *pOriginalPam );
     virtual ~MSWordExportBase();
 
     // TODO move as much as possible here from WW8Export! ;-)
@@ -1131,7 +1133,7 @@ public:
 
     /// Setup the exporter.
     WW8Export( SwWW8Writer *pWriter,
-            SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam,
+            SwDoc *pDocument, std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM *pOriginalPam,
             bool bDot );
     virtual ~WW8Export() override;
 

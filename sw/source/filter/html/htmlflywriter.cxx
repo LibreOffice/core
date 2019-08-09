@@ -298,7 +298,8 @@ void SwHTMLWriter::CollectFlyFrames()
     OSL_ENSURE( HTML_CFG_MAX+1 == MAX_BROWSERS,
             "number of browser configurations has changed" );
 
-    SwPosFlyFrames aFlyPos(m_pDoc->GetAllFlyFormats(m_bWriteAll ? nullptr : m_pCurrentPam, true));
+    SwPosFlyFrames aFlyPos(
+        m_pDoc->GetAllFlyFormats(m_bWriteAll ? nullptr : m_pCurrentPam.get(), true));
 
     for(const auto& rpItem : aFlyPos)
     {
@@ -1639,7 +1640,7 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
                                 pSttNd->EndOfSectionIndex(),
                                    true, &rFrameFormat );
         rHTMLWrt.m_bOutFlyFrame = true;
-        rHTMLWrt.Out_SwDoc( rWrt.m_pCurrentPam );
+        rHTMLWrt.Out_SwDoc( rWrt.m_pCurrentPam.get() );
     }
 
     rHTMLWrt.DecIndentLevel();  // indent the content of Multicol;
@@ -1726,7 +1727,7 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
                                 pSttNd->EndOfSectionIndex(),
                                    true, &rFrameFormat );
         rHTMLWrt.m_bOutFlyFrame = true;
-        rHTMLWrt.Out_SwDoc( rWrt.m_pCurrentPam );
+        rHTMLWrt.Out_SwDoc( rWrt.m_pCurrentPam.get() );
     }
 
     rHTMLWrt.DecIndentLevel();  // indent the content of Multicol;
@@ -2000,7 +2001,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
         else
             rHTMLWrt.m_bOutFooter = true;
 
-        rHTMLWrt.Out_SwDoc( rWrt.m_pCurrentPam );
+        rHTMLWrt.Out_SwDoc( rWrt.m_pCurrentPam.get() );
     }
 
     if( bHeader && !aSpacer.isEmpty() )

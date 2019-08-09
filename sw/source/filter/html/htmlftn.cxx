@@ -351,7 +351,7 @@ void SwHTMLWriter::OutFootEndNotes()
         {
             HTMLSaveData aSaveData( *this, pSttNdIdx->GetIndex()+1,
                 pSttNdIdx->GetNode().EndOfSectionIndex(), false );
-            Out_SwDoc( m_pCurrentPam );
+            Out_SwDoc( m_pCurrentPam.get() );
         }
 
         DecIndentLevel();   // indent content of <DIV>

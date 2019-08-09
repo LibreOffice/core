@@ -1036,8 +1036,9 @@ void RtfExport::AppendSection(const SwPageDesc* pPageDesc, const SwSectionFormat
     AttrOutput().SectionBreak(msword::PageBreak, m_pSections->CurrentSectionInfo());
 }
 
-RtfExport::RtfExport(RtfExportFilter* pFilter, SwDoc* pDocument, SwPaM* pCurrentPam,
-                     SwPaM* pOriginalPam, Writer* pWriter, bool bOutOutlineOnly)
+RtfExport::RtfExport(RtfExportFilter* pFilter, SwDoc* pDocument,
+                     std::shared_ptr<SwUnoCursor>& pCurrentPam, SwPaM* pOriginalPam,
+                     Writer* pWriter, bool bOutOutlineOnly)
     : MSWordExportBase(pDocument, pCurrentPam, pOriginalPam)
     , m_pFilter(pFilter)
     , m_pWriter(pWriter)
@@ -1460,8 +1461,10 @@ SwRTFWriter::SwRTFWriter(const OUString& rFilterName, const OUString& rBaseURL)
 
 ErrCode SwRTFWriter::WriteStream()
 {
-    SwPaM aPam(*m_pCurrentPam->End(), *m_pCurrentPam->Start());
-    RtfExport aExport(nullptr, m_pDoc, &aPam, m_pCurrentPam, this, m_bOutOutlineOnly);
+    std::shared_ptr<SwUnoCursor> pCurPam(m_pDoc->CreateUnoCursor(*m_pCurrentPam->End(), false));
+    pCurPam->SetMark();
+    *pCurPam->GetPoint() = *m_pCurrentPam->Start();
+    RtfExport aExport(nullptr, m_pDoc, pCurPam, m_pCurrentPam.get(), this, m_bOutOutlineOnly);
     aExport.ExportDocument(true);
     return ERRCODE_NONE;
 }

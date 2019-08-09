@@ -33,6 +33,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include "swdllapi.h"
 #include "docfac.hxx"
+#include "unocrsr.hxx"
 
 class SfxItemPool;
 class SfxItemSet;
@@ -401,7 +402,7 @@ protected:
 public:
     SwDoc* m_pDoc;
     SwPaM* m_pOrigPam;            // Last Pam that has to be processed.
-    SwPaM* m_pCurrentPam;
+    std::shared_ptr<SwUnoCursor> m_pCurrentPam;
     bool m_bWriteAll : 1;
     bool m_bShowProgress : 1;
     bool m_bWriteClipboardDoc : 1;
@@ -448,7 +449,7 @@ public:
                         std::vector< const ::sw::mark::IMark* >& rArr );
 
     // Create new PaM at position.
-    static SwPaM * NewSwPaM(SwDoc & rDoc,
+    static std::shared_ptr<SwUnoCursor> NewUnoCursor(SwDoc & rDoc,
                             sal_uLong const nStartIdx, sal_uLong const nEndIdx);
 
     // If applicable copy a local file into internet.

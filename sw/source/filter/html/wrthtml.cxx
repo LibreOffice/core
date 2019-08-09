@@ -769,7 +769,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
             rHTMLWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex()+1,
             rSectNd.EndOfSectionIndex(),
             false, pFormat );
-        rHTMLWrt.Out_SwDoc( rHTMLWrt.m_pCurrentPam );
+        rHTMLWrt.Out_SwDoc( rHTMLWrt.m_pCurrentPam.get() );
     }
 
     rHTMLWrt.m_pCurrentPam->GetPoint()->nNode = *rSectNd.EndOfSectionNode();
@@ -1490,7 +1490,7 @@ HTMLSaveData::HTMLSaveData(SwHTMLWriter& rWriter, sal_uLong nStt,
 {
     bOldWriteAll = rWrt.m_bWriteAll;
 
-    rWrt.m_pCurrentPam = Writer::NewSwPaM( *rWrt.m_pDoc, nStt, nEnd );
+    rWrt.m_pCurrentPam = Writer::NewUnoCursor(*rWrt.m_pDoc, nStt, nEnd);
 
     // recognize table in special areas
     if( nStt != rWrt.m_pCurrentPam->GetMark()->nNode.GetIndex() )
@@ -1500,7 +1500,7 @@ HTMLSaveData::HTMLSaveData(SwHTMLWriter& rWriter, sal_uLong nStt,
             rWrt.m_pCurrentPam->GetMark()->nNode = nStt;
     }
 
-    rWrt.SetEndPaM( rWrt.m_pCurrentPam );
+    rWrt.SetEndPaM( rWrt.m_pCurrentPam.get() );
     rWrt.m_pCurrentPam->Exchange( );
     rWrt.m_bWriteAll = true;
     rWrt.m_nDefListLvl = 0;
@@ -1527,7 +1527,7 @@ HTMLSaveData::HTMLSaveData(SwHTMLWriter& rWriter, sal_uLong nStt,
 
 HTMLSaveData::~HTMLSaveData()
 {
-    delete rWrt.m_pCurrentPam;                    // delete PaM again
+    rWrt.m_pCurrentPam.reset(); // delete PaM again
 
     rWrt.m_pCurrentPam = pOldPam;
     rWrt.SetEndPaM( pOldEnd );

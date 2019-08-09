@@ -625,7 +625,8 @@ inline void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
 struct HTMLSaveData
 {
     SwHTMLWriter& rWrt;
-    SwPaM* pOldPam, *pOldEnd;
+    std::shared_ptr<SwUnoCursor> pOldPam;
+    SwPaM *pOldEnd;
     std::unique_ptr<SwHTMLNumRuleInfo> pOldNumRuleInfo;     // Owner = this
     std::unique_ptr<SwHTMLNumRuleInfo> pOldNextNumRuleInfo;
     sal_uInt16 const nOldDefListLvl;
