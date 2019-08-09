@@ -1063,8 +1063,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         {
                             // remove Left/RightMargin values from TOX heading styles
                             //left margin is set to NULL by default
-                            uno::Reference< beans::XPropertyState >xState1( xStyle, uno::UNO_QUERY_THROW );
-                            xState1->setPropertyToDefault(getPropertyName( PROP_PARA_LEFT_MARGIN ));
+                            xState->setPropertyToDefault(getPropertyName( PROP_PARA_LEFT_MARGIN ));
                         }
                         else if ( sConvertedStyleName == "Text body" )
                             xState->setPropertyToDefault(getPropertyName( PROP_PARA_BOTTOM_MARGIN ));
