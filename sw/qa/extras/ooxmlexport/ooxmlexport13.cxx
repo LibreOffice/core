@@ -52,6 +52,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121374_sectionHF2, "tdf121374_sectionHF2.doc")
     CPPUNIT_ASSERT( xHeaderText->getString().startsWith("virkamatka-anomus") );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf126723, "tdf126723.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraph(2), "ParaLeftMargin"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testendingSectionProps, "endingSectionProps.docx")
 {
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
