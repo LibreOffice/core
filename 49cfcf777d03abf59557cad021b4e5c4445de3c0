@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_a03ed7d7",
+        "filename": "filter/uiconfig/ui/pdfgeneralpage.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-09T06:41:43Z",
+      "side": 1,
+      "message": "Ah, I should have made my comment here, regarding removal of \"-2\" :-)",
+      "range": {
+        "startLine": 714,
+        "startChar": 136,
+        "endLine": 714,
+        "endChar": 138
+      },
+      "revId": "49cfcf777d03abf59557cad021b4e5c4445de3c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
