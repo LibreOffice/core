@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_c063cb19",
+        "filename": "include/oox/export/drawingml.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-09T03:53:34Z",
+      "side": 1,
+      "message": "const with by-value arguments is an implementation detail, and iirc, may be omitted in function declaration (and be only present in definition if needed)",
+      "range": {
+        "startLine": 268,
+        "startChar": 67,
+        "endLine": 268,
+        "endChar": 73
+      },
+      "revId": "596c3989262fbb0e2ec1adac28e0041bcc858e9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_e0660f2a",
+        "filename": "include/oox/export/shapes.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-09T03:53:34Z",
+      "side": 1,
+      "message": "same here, but in this case, it looks like just a stylistic change unrelated to the problem?",
+      "range": {
+        "startLine": 118,
+        "startChar": 106,
+        "endLine": 118,
+        "endChar": 112
+      },
+      "revId": "596c3989262fbb0e2ec1adac28e0041bcc858e9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_a07017de",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3216,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-09T03:53:34Z",
+      "side": 1,
+      "message": "strange new empty line",
+      "revId": "596c3989262fbb0e2ec1adac28e0041bcc858e9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_806dd305",
+        "filename": "sd/qa/unit/export-tests-ooxml2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1191,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-09T03:53:34Z",
+      "side": 1,
+      "message": "omitted namespace \u0027a\u0027",
+      "range": {
+        "startLine": 1191,
+        "startChar": 74,
+        "endLine": 1191,
+        "endChar": 75
+      },
+      "revId": "596c3989262fbb0e2ec1adac28e0041bcc858e9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

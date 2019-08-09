@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_4077bbd5",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3241,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-09T03:53:34Z",
+      "side": 0,
+      "message": "unrelated whitespace change in a line not modified for the commit sake",
+      "range": {
+        "startLine": 3241,
+        "startChar": 53,
+        "endLine": 3241,
+        "endChar": 54
+      },
+      "revId": "8387a6db641b29e6ff3c2f4cdc4688f538cbe35f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
