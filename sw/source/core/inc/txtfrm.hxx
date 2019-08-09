@@ -23,8 +23,6 @@
 #include "cntfrm.hxx"
 #include "TextFrameIndex.hxx"
 
-#include <boost/version.hpp>
-
 #include <set>
 
 namespace com { namespace sun { namespace star { namespace linguistic2 { class XHyphenatedWord; } } } }
