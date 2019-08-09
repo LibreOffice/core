@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_7b3ab034",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4519,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-09T14:08:37Z",
+      "side": 1,
+      "message": "Possibly better at this stage just keep replacing double backslashes with single *back*slashes until there\u0027s no more changes, to be replaced by forward slashes in line 4523 below - because Windows allows indefinite number of backslashes...",
+      "range": {
+        "startLine": 4519,
+        "startChar": 32,
+        "endLine": 4519,
+        "endChar": 68
+      },
+      "revId": "a81ef7f4ae8021e3f6ce782ebc526e798a814a5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
