@@ -23,6 +23,7 @@
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <fmtfld.hxx>
+#include <frmtool.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>

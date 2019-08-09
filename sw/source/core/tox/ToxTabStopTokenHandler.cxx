@@ -11,11 +11,13 @@
 
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
 
 #include <cntfrm.hxx>
 #include <fmtfsize.hxx>
 #include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
+#include <frmatr.hxx>
 #include <ndtxt.hxx>
 #include <pagedesc.hxx>
 #include <pagefrm.hxx>

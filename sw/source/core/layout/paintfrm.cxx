@@ -39,6 +39,8 @@
 #include <viewimp.hxx>
 #include <dflyobj.hxx>
 #include <flyfrm.hxx>
+#include <frmatr.hxx>
+#include <frmtool.hxx>
 #include <viewopt.hxx>
 #include <dview.hxx>
 #include <dcontact.hxx>

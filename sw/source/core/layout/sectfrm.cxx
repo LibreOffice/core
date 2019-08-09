@@ -45,6 +45,8 @@
 #include <flyfrms.hxx>
 #include <sortedobjs.hxx>
 #include <hints.hxx>
+#include <frmatr.hxx>
+#include <frmtool.hxx>
 
 namespace
 {

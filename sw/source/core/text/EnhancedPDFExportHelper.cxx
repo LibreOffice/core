@@ -74,6 +74,7 @@
 #include <SwNodeNum.hxx>
 #include <calbck.hxx>
 #include <stack>
+#include <frmtool.hxx>
 
 #include <tools/globname.hxx>
 #include <svx/svdobj.hxx>
