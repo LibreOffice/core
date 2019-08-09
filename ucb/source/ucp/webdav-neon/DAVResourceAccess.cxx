@@ -1115,7 +1115,7 @@ bool DAVResourceAccess::detectRedirectCycle(
 
     // Check for maximum number of redirections
     // according to <https://tools.ietf.org/html/rfc7231#section-6.4>.
-    // A pratical limit may be 5, due to earlier specifications:
+    // A practical limit may be 5, due to earlier specifications:
     // <https://tools.ietf.org/html/rfc2068#section-10.3>
     // it can be raised keeping in mind the added net activity.
     if( static_cast< size_t >( g_nRedirectLimit ) <= m_aRedirectURIs.size() )

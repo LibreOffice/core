@@ -282,7 +282,7 @@ public:
 
     virtual weld::Window*   GetFrameWeld() const;
 
-    // Callbacks (indepent part in vcl/source/window/winproc.cxx)
+    // Callbacks (independent part in vcl/source/window/winproc.cxx)
     // for default message handling return 0
     void                    SetCallback( vcl::Window* pWindow, SALFRAMEPROC pProc );
 

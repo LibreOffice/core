@@ -110,7 +110,7 @@ emf/wmf is translated to GDIMetafile in import filter
 vcl/source/filter/wmf and so special handling ends here
 
 emf+ is encapsulated into GDIMetafile inside comment records and
-parsed/rendered later, when it reaches cppcanvas. it is parsed and
+parsed/rendered later, when it reaches cppcanvas. It is parsed and
 rendered in cppcanvas/source/mtfrenderer. also note that there are
 emf+-only and emf+-dual files. dual files contains both types of
 records (emf and emf+) for rendering the images. these can used also
@@ -196,7 +196,7 @@ compression is disabled (so the PDF file is directly readable) and
 the MARK function puts comments into the PDF file about which method
 generated the following PDF content.
 
-The compression can be disabled even using a env. var:
+The compression can be disabled even using an env. var:
 
 export VCL_DEBUG_DISABLE_PDFCOMPRESSION=1
 

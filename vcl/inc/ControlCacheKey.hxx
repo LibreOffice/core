@@ -57,7 +57,7 @@ public:
             case ControlType::Slider:
             case ControlType::Progress:
             // FIXME: these guys have complex state hidden in ImplControlValue
-            // structs which affects rendering, needs to be a and needs to be
+            // structs which affects rendering, needs to be A and needs to be
             // part of the key to our cache.
             case ControlType::Spinbox:
             case ControlType::SpinButtons:

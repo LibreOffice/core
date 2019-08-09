@@ -189,11 +189,11 @@ OUString FilterDialog::impl_buildUIFileName( const OUString& sName )
     if (osl::FileBase::getSystemPathFromFileURL(sName, sShortName) == osl::FileBase::E_None)
 
     {
-        // it's a system file ... build short name by using osl functionality
+        // it's a system file... build short name by using osl functionality
     }
     else
     {
-        // otherwise its really a url ... build short name by using INetURLObject
+        // otherwise it's really a URL... build short name by using INetURLObject
         css::uno::Reference< css::util::XStringWidth > xStringCalculator(new StringCalculator(m_xFtURL.get()));
         if( xStringCalculator.is() )
         {
