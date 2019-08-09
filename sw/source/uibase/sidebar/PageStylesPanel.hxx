@@ -26,24 +26,13 @@
 
 #include <sfx2/sidebar/ControllerItem.hxx>
 
-#include <i18nutil/paper.hxx>
-
 #include <svx/pageitem.hxx>
-#include <svx/rulritem.hxx>
-#include <editeng/sizeitem.hxx>
 
-#include <vcl/ctrl.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/field.hxx>
 #include <svl/intitem.hxx>
-#include <tools/fldunit.hxx>
 #include <svl/poolitem.hxx>
-#include <svx/dlgctrl.hxx>
 #include <svx/xbtmpit.hxx>
-#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>

@@ -12,6 +12,8 @@
 
 #include <sal/config.h>
 
+#include <sal/types.h>
+
 #include <memory>
 
 namespace sw { class Filters; }

@@ -450,3 +450,6 @@ blacklist:
     - comphelper/scopeguard.hxx
     sw/source/filter/html/htmlreqifreader.cxx:
     - comphelper/scopeguard.hxx
+    sw/source/uibase/sidebar/PageMarginUtils.hxx:
+    # Needed for std::abs
+    - cmath

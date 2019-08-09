@@ -32,8 +32,11 @@
 #include <sfx2/viewfrm.hxx>
 #include <svx/svxids.hrc>
 #include <svx/pageitem.hxx>
+#include <svx/rulritem.hxx>
 #include <svl/itempool.hxx>
 #include <svl/intitem.hxx>
+#include <svtools/unitconv.hxx>
+#include <unotools/viewoptions.hxx>
 
 #include <swtypes.hxx>
 #include <cmdid.h>

@@ -19,11 +19,8 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGECOLUMNCONTROL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGECOLUMNCONTROL_HXX
 
-#include <svx/tbxctl.hxx>
+#include <sfx2/tbxctrl.hxx>
 #include <vcl/button.hxx>
-#include <svx/pageitem.hxx>
-#include <editeng/sizeitem.hxx>
-#include <svl/intitem.hxx>
 
 namespace sw { namespace sidebar {
 

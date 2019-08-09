@@ -35,6 +35,7 @@
 #include <vcl/virdev.hxx>
 #include <charatr.hxx>
 #include <charfmt.hxx>
+#include <docsh.hxx>
 #include <docstyle.hxx>
 #include <fmtcol.hxx>
 #include <format.hxx>

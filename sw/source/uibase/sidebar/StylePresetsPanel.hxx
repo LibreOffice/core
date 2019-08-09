@@ -18,25 +18,7 @@
 
 #include <sfx2/sidebar/ControllerItem.hxx>
 
-#include <sfx2/objsh.hxx>
-
-#include <svx/pageitem.hxx>
-#include <svx/rulritem.hxx>
-#include <editeng/sizeitem.hxx>
-
-#include <vcl/ctrl.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/field.hxx>
-#include <svl/intitem.hxx>
-#include <svl/lstner.hxx>
-
 #include <svtools/valueset.hxx>
-
-#include <svx/fntctrl.hxx>
-
-#include <docstyle.hxx>
 
 namespace sw { namespace sidebar {
 

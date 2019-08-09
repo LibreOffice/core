@@ -38,6 +38,7 @@
 #include <vcl/settings.hxx>
 #include <svl/itempool.hxx>
 #include <svl/intitem.hxx>
+#include <svtools/unitconv.hxx>
 #include <editeng/sizeitem.hxx>
 
 namespace
