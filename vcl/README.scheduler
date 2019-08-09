@@ -162,7 +162,7 @@ loop.
 == General: invalidation of elapsed timer event messages ==
 
 Since the system timer to run the scheduler is single-shot, there should never
-be more then one elapsed timer event in system event queue. When stopping or
+be more than one elapsed timer event in system event queue. When stopping or
 restarting the timer, we eventually have to remove the now invalid event from
 the queue.
 
