@@ -4514,6 +4514,10 @@ void DomainMapper_Impl::CloseFieldCommand()
                         {
                             if (sURL.startsWith("file:///"))
                             {
+                                // file:///absolute\\path\\to\\file => invalid file URI (Writer cannot open)
+                                // convert all double backslashes to slashes:
+                                sURL = sURL.replaceAll("\\\\", "/");
+
                                 // file:///absolute\path\to\file => invalid file URI (Writer cannot open)
                                 // convert all backslashes to slashes:
                                 sURL = sURL.replace('\\', '/');
