@@ -1417,39 +1417,40 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                     }
                 }
 
+                css::uno::Reference<css::beans::XPropertySet> xParaProps(xTextRange, uno::UNO_QUERY);
                 // tdf#118521 set paragraph top or bottom margin based on the paragraph style
                 // if we already set the other margin with direct formatting
-                if ( pParaContext && m_xPreviousParagraph.is() )
+                if (xParaProps)
                 {
                     const bool bTopSet = pParaContext->isSet(PROP_PARA_TOP_MARGIN);
                     const bool bBottomSet = pParaContext->isSet(PROP_PARA_BOTTOM_MARGIN);
                     const bool bContextSet = pParaContext->isSet(PROP_PARA_CONTEXT_MARGIN);
                     if ( !(bTopSet == bBottomSet && bBottomSet == bContextSet) )
                     {
+
                         if ( !bTopSet )
                         {
                             uno::Any aMargin = GetPropertyFromStyleSheet(PROP_PARA_TOP_MARGIN);
                             if ( aMargin != uno::Any() )
-                                m_xPreviousParagraph->setPropertyValue("ParaTopMargin", aMargin);
+                                xParaProps->setPropertyValue("ParaTopMargin", aMargin);
                         }
                         if ( !bBottomSet )
                         {
                             uno::Any aMargin = GetPropertyFromStyleSheet(PROP_PARA_BOTTOM_MARGIN);
                             if ( aMargin != uno::Any() )
-                                m_xPreviousParagraph->setPropertyValue("ParaBottomMargin", aMargin);
+                                xParaProps->setPropertyValue("ParaBottomMargin", aMargin);
                         }
                         if ( !bContextSet )
                         {
                             uno::Any aMargin = GetPropertyFromStyleSheet(PROP_PARA_CONTEXT_MARGIN);
                             if ( aMargin != uno::Any() )
-                                m_xPreviousParagraph->setPropertyValue("ParaContextMargin", aMargin);
+                                xParaProps->setPropertyValue("ParaContextMargin", aMargin);
                         }
                     }
                 }
 
                 // Left, Right, and Hanging settings are also grouped. Ensure that all or none are set.
-                // m_xPreviousParagraph was set earlier, so really it still is the current paragraph...
-                if ( pParaContext && m_xPreviousParagraph.is() )
+                if (xParaProps)
                 {
                     const bool bLeftSet  = pParaContext->isSet(PROP_PARA_LEFT_MARGIN);
                     const bool bRightSet = pParaContext->isSet(PROP_PARA_RIGHT_MARGIN);
@@ -1460,19 +1461,19 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                         {
                             uno::Any aMargin = GetPropertyFromStyleSheet(PROP_PARA_LEFT_MARGIN);
                             if ( aMargin != uno::Any() )
-                                m_xPreviousParagraph->setPropertyValue("ParaLeftMargin", aMargin);
+                                xParaProps->setPropertyValue("ParaLeftMargin", aMargin);
                         }
                         if ( !bRightSet )
                         {
                             uno::Any aMargin = GetPropertyFromStyleSheet(PROP_PARA_RIGHT_MARGIN);
                             if ( aMargin != uno::Any() )
-                                m_xPreviousParagraph->setPropertyValue("ParaRightMargin", aMargin);
+                                xParaProps->setPropertyValue("ParaRightMargin", aMargin);
                         }
                         if ( !bFirstSet )
                         {
                             uno::Any aMargin = GetPropertyFromStyleSheet(PROP_PARA_FIRST_LINE_INDENT);
                             if ( aMargin != uno::Any() )
-                                m_xPreviousParagraph->setPropertyValue("ParaFirstLineIndent", aMargin);
+                                xParaProps->setPropertyValue("ParaFirstLineIndent", aMargin);
                         }
                     }
                 }
