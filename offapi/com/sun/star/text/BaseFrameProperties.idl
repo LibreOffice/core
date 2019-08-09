@@ -300,7 +300,7 @@ published service BaseFrameProperties
 
         /** contains description for the object
 
-            <p>The long description text can be entered to describe a object in
+            <p>The long description text can be entered to describe an object in
             more detail to users with screen reader software. The description is
             visible as an alternative tag for accessibility tools.</p>
 

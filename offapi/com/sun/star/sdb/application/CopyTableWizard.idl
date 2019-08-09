@@ -118,7 +118,7 @@ service CopyTableWizard : XCopyTableWizard
                 com::sun::star::sdb::CommandType::QUERY are supported.</li>
 
                 <li>If you specify a <code>ConnectionResource</code>, or an
-                <code>ActiveConnection</code> which implements an com::sun::star::sdbc::Connection only
+                <code>ActiveConnection</code> which implements a com::sun::star::sdbc::Connection only
                 (as opposed to a com::sun::star::sdb::Connection), then the resulting connection is
                 not able to provide queries, thus a command type <code>QUERY</code> will be rejected.</li>
 
@@ -158,7 +158,7 @@ service CopyTableWizard : XCopyTableWizard
         @throws ::com::sun::star::lang::WrappedTargetException
             if an error other than the ones mentioned above occurs while extracting the necessary
             information from any of the data access descriptors. For instance, this might
-            be an com::sun::star::sdbc::SQLException thrown upon connecting
+            be a com::sun::star::sdbc::SQLException thrown upon connecting
             to a data source described by the descriptor's <code>DataSourceName</code> member.
 
         @see ::com::sun::star::sdb::DataAccessDescriptor

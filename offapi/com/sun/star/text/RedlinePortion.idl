@@ -43,7 +43,7 @@ published service RedlinePortion
     <p> Valid type names are:</p>
     <UL>
         <LI><P>Insert - marks an insertion</P>
-        <LI><P>Delete - marks an deletion</P>
+        <LI><P>Delete - marks a deletion</P>
         <LI><P>Format - marks an attribute change</P>
         <LI><P>TextTable - marks a text table</P>
         <LI><P>Style - marks an applied style</P>

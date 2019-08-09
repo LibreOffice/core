@@ -103,7 +103,7 @@ published service DocumentSettings
         If `TRUE`, the formatting till OpenOffice.org 1.1 is
         applied. This means, that a proportional line spacing is applied
         above and below a text line and that the maximum of the line spacing
-        value between two paragraph is added respectively reckoned up with the
+        value between two paragraphs is added respectively reckoned up with the
         paragraph spacing (adding or reckoning up is controlled by document
         option AddParaTableSpacing).
         If `FALSE` (default for documents since OpenOffice.org 2.0),

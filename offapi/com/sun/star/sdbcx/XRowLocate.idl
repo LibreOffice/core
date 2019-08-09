@@ -47,7 +47,7 @@ published interface XRowLocate: com::sun::star::uno::XInterface
      */
     any getBookmark() raises (com::sun::star::sdbc::SQLException);
 
-    /** moves the cursor to the row identified by an valid bookmark.
+    /** moves the cursor to the row identified by a valid bookmark.
 
         <p>
         If the bookmark could not be located, a result set will be positioned
