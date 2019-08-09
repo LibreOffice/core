@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_7b687020",
+        "filename": "vcl/inc/ControlCacheKey.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-08-09T14:20:32Z",
+      "side": 1,
+      "message": "I think a word is missing here but don\u0027t which one.\nWe should ping the author of the FIXME but since the file has been renamed, I don\u0027t know how to find git history before the renaming.",
+      "range": {
+        "startLine": 60,
+        "startChar": 60,
+        "endLine": 60,
+        "endChar": 61
+      },
+      "revId": "18597758866f7ebe66ef1303e24d0d9ebd29d98f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
