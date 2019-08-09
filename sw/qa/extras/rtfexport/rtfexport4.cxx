@@ -152,7 +152,7 @@ DECLARE_RTFEXPORT_TEST(testBtlrCell, "btlr-cell.rtf")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, getProperty<sal_Int16>(xC1, "WritingMode"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTbrlFrame, "tbrl-frame.odt")
+DECLARE_RTFEXPORT_TEST(testTbrlFrame, "tbrl-frame.odt")
 {
     uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
     auto nActual = getProperty<sal_Int16>(xShape, "WritingMode");
