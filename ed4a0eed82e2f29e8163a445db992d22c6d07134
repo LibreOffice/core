@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_e034cffd",
+        "filename": "filter/uiconfig/ui/pdfgeneralpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-09T06:40:22Z",
+      "side": 1,
+      "message": "This (-2) needs to be removed from here, since different standards are selectable now since https://gerrit.libreoffice.org/74941",
+      "range": {
+        "startLine": 470,
+        "startChar": 132,
+        "endLine": 470,
+        "endChar": 134
+      },
+      "revId": "ed4a0eed82e2f29e8163a445db992d22c6d07134",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
