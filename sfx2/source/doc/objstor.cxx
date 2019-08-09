@@ -2289,6 +2289,11 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
                     e.Message, DialogMask::ButtonsOk | DialogMask::MessageError ));
             }
         }
+        catch (const css::io::IOException& e)
+        {
+            SetError(*new StringErrorInfo(ERRCODE_SFX_FORMAT_ROWCOL,
+                e.Message, DialogMask::ButtonsOk | DialogMask::MessageError ));
+        }
         catch (const std::exception& e)
         {
             const char *msg = e.what();
