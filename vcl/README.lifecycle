@@ -30,7 +30,7 @@ between calls:
 		Update();
 
 	Unfortunately use of such protection is/was ad-hoc, and far
-from uniform, despite the prevelance of such potential problems.
+from uniform, despite the prevalence of such potential problems.
 
 	When a lifecycle problem was hit, typically it would take the
 form of accessing memory that had been freed, and contained garbage due

@@ -110,7 +110,7 @@ public:
                                     std::vector< OUString > & resources );
 
     // return true, if all properties contained in rProps are contained in
-    // this ContentProperties instance. Otherwiese, false will be returned.
+    // this ContentProperties instance. Otherwise, false will be returned.
     // rNamesNotContained contain the missing names.
     bool containsAllNames(
                     const css::uno::Sequence< css::beans::Property >& rProps,
