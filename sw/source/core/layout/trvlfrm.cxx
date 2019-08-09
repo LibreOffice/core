@@ -45,6 +45,8 @@
 #include <txatbase.hxx>
 #include <fmtfld.hxx>
 #include <fldbas.hxx>
+#include <frmatr.hxx>
+#include <frmtool.hxx>
 
 #include <cfloat>
 #include <swselectionlist.hxx>

@@ -32,6 +32,7 @@
 #include <viewimp.hxx>
 #include <sortedobjs.hxx>
 #include <hints.hxx>
+#include <frmtool.hxx>
 
     // No inline cause we need the function pointers
 long SwFrame::GetTopMargin() const
