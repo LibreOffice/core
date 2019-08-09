@@ -4614,6 +4614,8 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
                     // copy at-char flys in rPam
                     aInsPos = *pDestTextNd; // update to new (start) node for flys
+                    // tdf#126626 prevent duplicate Undos
+                    ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                     CopyFlyInFlyImpl(aRg, &rPam, aInsPos, false);
 
                     break;
