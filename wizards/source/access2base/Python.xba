@@ -80,7 +80,7 @@ Public Function PythonWrapper(ByVal pvCallType As Variant _
 								) As Variant
 &apos;		 Called from Python to apply
 &apos;			- on object with entry pvObject in PythonCache
-&apos;				Conventionnally:	-1 = Application
+&apos;				Conventionally:	-1 = Application
 &apos;									-2 = DoCmd
 &apos;			- a script pvScript which type is described by pvCallType
 &apos;			- with arguments pvArgs(0)... (max. 8 for object methods)
@@ -110,7 +110,7 @@ Const vbGet = 2, vbLet = 4, vbMethod = 1, vbSet = 8, vbUNO = 16
 	If _ErrorHandler() Then On Local Error GoTo Error_Function
 	PythonWrapper = Null
 
-	&apos;Reinterprete arguments one by one into vArgs, examine iso-dates and conventional NoArgs/Empty/Null values
+	&apos;Reinterpret arguments one by one into vArgs, examine iso-dates and conventional NoArgs/Empty/Null values
 	iNbArgs = -1
 	vArgs = Array()
 	If UBound(pvArgs) &gt;= 0 Then
