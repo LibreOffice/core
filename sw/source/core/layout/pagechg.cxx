@@ -28,6 +28,7 @@
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
 #include <ftninfo.hxx>
+#include <frmtool.hxx>
 #include <tgrditem.hxx>
 #include <viewopt.hxx>
 #include <docsh.hxx>

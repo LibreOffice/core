@@ -23,6 +23,7 @@
 #include <swtypes.hxx>
 #include "layfrm.hxx"
 #include <frmatr.hxx>
+#include "txtfrm.hxx"
 #include "swcache.hxx"
 #include <editeng/lrspitem.hxx>
 #include "swfont.hxx"
@@ -126,7 +127,7 @@ void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling );
 // Get ContentNodes, create ContentFrames, and add them to LayFrame.
 void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc, sal_uLong nIndex,
                  bool bPages = false, sal_uLong nEndIndex = 0,
-                 SwFrame *pPrv = nullptr );
+                 SwFrame *pPrv = nullptr, sw::FrameMode eMode = sw::FrameMode::New);
 
 // Creation of frames for a specific section (uses InsertCnt_)
 void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,

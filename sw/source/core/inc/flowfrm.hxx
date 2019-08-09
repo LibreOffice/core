@@ -20,7 +20,9 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_FLOWFRM_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_FLOWFRM_HXX
 
-#include "frmtool.hxx"
+#include "frame.hxx"
+#include "layfrm.hxx"
+#include <swtypes.hxx>
 
 class SvxFormatKeepItem;
 class SvxFormatBreakItem;
