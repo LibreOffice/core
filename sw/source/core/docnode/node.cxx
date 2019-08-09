@@ -1371,8 +1371,24 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
                     // because that would access deleted wrong-lists
                     sw::UpdateMergedParaForDelete(*pMerged, true,
                             *static_cast<SwTextNode*>(this), 0, Len());
-                    // pointer should have been updated to a different node
-                    assert(this != pMerged->pParaPropsNode);
+                    if (this == pMerged->pParaPropsNode)
+                    {
+                        // otherwise pointer should have been updated to a different node
+                        assert(this == pMerged->pLastNode);
+                        assert(pMerged->extents.empty());
+                        for (sal_uLong i = pMerged->pLastNode->GetIndex() - 1;;
+                                --i)
+                        {
+                            assert(pMerged->pFirstNode->GetIndex() <= i);
+                            SwNode *const pNode(GetNodes()[i]);
+                            if (pNode->IsTextNode()
+                                && pNode->GetRedlineMergeFlag() != Merge::Hidden)
+                            {
+                                pMerged->pParaPropsNode = pNode->GetTextNode();
+                                break;
+                            }
+                        }
+                    }
                     if (this == pMerged->pLastNode)
                     {
                         pMerged->pLastNode = GetNodes()[GetIndex()-1]->GetTextNode();
