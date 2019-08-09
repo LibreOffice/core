@@ -54,6 +54,8 @@
 #include <dbg_lay.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <sortedobjs.hxx>
+#include <frmatr.hxx>
+#include <frmtool.hxx>
 
 // RotateFlyFrame3
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include <txtfrm.hxx>
+#include <frmatr.hxx>
 #include <fmtornt.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>

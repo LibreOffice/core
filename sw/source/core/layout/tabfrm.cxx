@@ -59,6 +59,9 @@
 #include <DocumentSettingManager.hxx>
 #include <docary.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
+#include <frmatr.hxx>
+#include <frmtool.hxx>
 
 using namespace ::com::sun::star;
 
