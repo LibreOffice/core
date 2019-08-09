@@ -19,6 +19,8 @@
 
 #include <ChartStyle.hxx>
 #include <com/sun/star/chart2/ChartObjectType.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <vector>
 
@@ -104,6 +106,15 @@ void ChartStyle::register_styles()
     m_xChartStyle[css::chart2::ChartObjectType::LEGEND] = new ChartObjectStyle(
         *chart::legend::StaticLegendInfo::get(), *chart::legend::StaticLegendInfoHelper::get(),
         *chart::legend::StaticLegendDefaults::get());
+
+    css::uno::Reference<css::beans::XPropertySet> xLegendStyle
+        = m_xChartStyle[css::chart2::ChartObjectType::LEGEND];
+    xLegendStyle->setPropertyValue("FillStyle", css::uno::Any(css::drawing::FillStyle_NONE));
+    xLegendStyle->setPropertyValue("LineStyle", css::uno::Any(css::drawing::LineStyle_NONE));
+    xLegendStyle->setPropertyValue("LineColor",
+                                   css::uno::Any(static_cast<sal_Int32>(0xb3b3b3))); // gray30
+    xLegendStyle->setPropertyValue("FillColor",
+                                   css::uno::Any(static_cast<sal_Int32>(0xe6e6e6))); // gray10
 }
 
 // _____ XServiceInfo _____

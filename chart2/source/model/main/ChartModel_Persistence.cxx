@@ -416,11 +416,6 @@ void ChartModel::insertDefaultChart()
                 Reference< beans::XPropertySet > xLegendProperties( xLegend, uno::UNO_QUERY );
                 if( xLegendProperties.is() )
                 {
-                    xLegendProperties->setPropertyValue( "FillStyle", uno::Any( drawing::FillStyle_NONE ));
-                    xLegendProperties->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_NONE ));
-                    xLegendProperties->setPropertyValue( "LineColor", uno::Any( static_cast< sal_Int32 >( 0xb3b3b3 ) ));  // gray30
-                    xLegendProperties->setPropertyValue( "FillColor", uno::Any( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
-
                     if( bIsRTL )
                         xLegendProperties->setPropertyValue( "AnchorPosition", uno::Any( chart2::LegendPosition_LINE_START ));
                 }
