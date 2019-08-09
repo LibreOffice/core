@@ -36,11 +36,13 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2ibox.hxx>
+#include <basegfx/range/b2irange.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <comphelper/lok.hxx>
@@ -579,7 +581,9 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
         applyColor(cr, m_aLineColor, fTransparency);
 
         // expand with possible StrokeDamage
-        extents.expand(getClippedStrokeDamage(cr));
+        basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
+        stroke_extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
+        extents.expand(stroke_extents);
 
         cairo_stroke(cr);
     }
@@ -1032,6 +1036,7 @@ void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
     applyColor(cr, m_aLineColor);
 
     basegfx::B2DRange extents = getClippedStrokeDamage(cr);
+    extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
 
     cairo_stroke(cr);
 
@@ -1142,9 +1147,6 @@ bool SvpSalGraphics::drawPolyLine(
             fMiterMinimumAngle,
             bPixelSnapHairline));
 
-    // if transformation has been applied, transform also extents (ranges)
-    // of damage so they can be correctly redrawn
-    aExtents.transform(rObjectToDevice);
     releaseCairoContext(cr, false, aExtents);
 
     return bRetval;
@@ -1194,7 +1196,9 @@ bool SvpSalGraphics::drawPolyLine(
     // PixelOffset used: Need to reflect in linear transformation
     cairo_matrix_t aMatrix;
 
-    if(bObjectToDeviceIsIdentity)
+    basegfx::B2DHomMatrix aDamageMatrix(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
+
+    if (bObjectToDeviceIsIdentity)
     {
         // Set PixelOffset as requested
         cairo_matrix_init_translate(&aMatrix, 0.5, 0.5);
@@ -1203,16 +1207,15 @@ bool SvpSalGraphics::drawPolyLine(
     {
         // Prepare ObjectToDevice transformation. Take PixelOffset for Lines into
         // account: Multiply from left to act in DeviceCoordinates
-        const basegfx::B2DHomMatrix aCombined(
-            basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5) * rObjectToDevice);
+        aDamageMatrix = aDamageMatrix * rObjectToDevice;
         cairo_matrix_init(
             &aMatrix,
-            aCombined.get( 0, 0 ),
-            aCombined.get( 1, 0 ),
-            aCombined.get( 0, 1 ),
-            aCombined.get( 1, 1 ),
-            aCombined.get( 0, 2 ),
-            aCombined.get( 1, 2 ));
+            aDamageMatrix.get( 0, 0 ),
+            aDamageMatrix.get( 1, 0 ),
+            aDamageMatrix.get( 0, 1 ),
+            aDamageMatrix.get( 1, 1 ),
+            aDamageMatrix.get( 0, 2 ),
+            aDamageMatrix.get( 1, 2 ));
     }
 
     // set linear transformation
@@ -1346,7 +1349,11 @@ bool SvpSalGraphics::drawPolyLine(
 
     // extract extents
     if (pExtents)
+    {
         *pExtents = getClippedStrokeDamage(cr);
+        // transform also extents (ranges) of damage so they can be correctly redrawn
+        pExtents->transform(aDamageMatrix);
+    }
 
     // draw and consume
     cairo_stroke(cr);
@@ -1477,10 +1484,7 @@ bool SvpSalGraphics::drawPolyPolygon(
 
         // expand with possible StrokeDamage
         basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
-        // tdf#122358 for a simple fix, just expand damage extents by 1 for now
-        // just results in expanding by one pixel the area to copy to the final
-        // surface
-        stroke_extents.grow(1);
+        stroke_extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
         extents.expand(stroke_extents);
 
         cairo_stroke(cr);
@@ -1980,8 +1984,9 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
         return;
     }
 
-    sal_Int32 nExtentsLeft(rExtents.getMinX()), nExtentsTop(rExtents.getMinY());
-    sal_Int32 nExtentsRight(rExtents.getMaxX()), nExtentsBottom(rExtents.getMaxY());
+    basegfx::B2IRange aIntExtents(basegfx::unotools::b2ISurroundingRangeFromB2DRange(rExtents));
+    sal_Int32 nExtentsLeft(aIntExtents.getMinX()), nExtentsTop(aIntExtents.getMinY());
+    sal_Int32 nExtentsRight(aIntExtents.getMaxX()), nExtentsBottom(aIntExtents.getMaxY());
     sal_Int32 nWidth = m_aFrameSize.getX();
     sal_Int32 nHeight = m_aFrameSize.getY();
     nExtentsLeft = std::max<sal_Int32>(nExtentsLeft, 0);
