@@ -103,7 +103,7 @@ Const cstScalar = 0, cstObject = 1, cstNull = 2, cstUNO = 3
 &apos;Conventional special values
 Const cstNoArgs = &quot;+++NOARGS+++&quot;, cstSymEmpty = &quot;+++EMPTY+++&quot;, cstSymNull = &quot;+++NULL+++&quot;
 
-&apos;https://support.office.com/fr-fr/article/CallByName-fonction-49ce9475-c315-4f13-8d35-e98cfe98729a
+&apos;https://support.office.com/en-us/article/callbyname-function-49ce9475-c315-4f13-8d35-e98cfe98729a
 &apos;Determines the pvCallType
 Const vbGet = 2, vbLet = 4, vbMethod = 1, vbSet = 8, vbUNO = 16
 
