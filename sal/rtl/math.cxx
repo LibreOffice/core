@@ -546,9 +546,13 @@ void doubleToString(typename T::String ** pResult,
                 if (nDigit >= 10)
                 {   // after-treatment of up-rounding to the next decade
                     sal_Int32 sLen = static_cast< long >(p-pBuf)-1;
-                    if (sLen == -1)
+                    if (sLen == -1 || (sLen == 0 && bSign))
                     {
+                        // Assert that no one changed the logic we rely on.
+                        assert(!bSign || *pBuf == static_cast< typename T::Char >('-'));
                         p = pBuf;
+                        if (bSign)
+                            ++p;
                         if (eFormat == rtl_math_StringFormat_F)
                         {
                             *p++ = static_cast< typename T::Char >('1');
@@ -568,6 +572,12 @@ void doubleToString(typename T::String ** pResult,
                         for (sal_Int32 j = sLen; j >= 0; j--)
                         {
                             typename T::Char cS = pBuf[j];
+                            if (j == 0 && bSign)
+                            {
+                                // Do not touch leading minus sign put earlier.
+                                assert(cS == static_cast< typename T::Char >('-'));
+                                break;  // for, this is the last character backwards.
+                            }
                             if (cS != cDecSeparator)
                             {
                                 if (cS != static_cast< typename T::Char >('9'))
@@ -578,7 +588,7 @@ void doubleToString(typename T::String ** pResult,
                                 else
                                 {
                                     pBuf[j] = static_cast< typename T::Char >('0');
-                                    if (j == 0)
+                                    if (j == 0 || (j == 1 && bSign))
                                     {
                                         if (eFormat == rtl_math_StringFormat_F)
                                         {   // insert '1'
