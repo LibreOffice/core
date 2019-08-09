@@ -1476,7 +1476,12 @@ bool SvpSalGraphics::drawPolyPolygon(
         applyColor(cr, m_aLineColor, fTransparency);
 
         // expand with possible StrokeDamage
-        extents.expand(getClippedStrokeDamage(cr));
+        basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
+        // tdf#122358 for a simple fix, just expand damage extents by 1 for now
+        // just results in expanding by one pixel the area to copy to the final
+        // surface
+        stroke_extents.grow(1);
+        extents.expand(stroke_extents);
 
         cairo_stroke(cr);
     }
