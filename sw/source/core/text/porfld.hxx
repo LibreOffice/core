@@ -20,8 +20,10 @@
 #define INCLUDED_SW_SOURCE_CORE_TEXT_PORFLD_HXX
 
 #include <swtypes.hxx>
+#include <swfont.hxx>
 #include "porexp.hxx"
 #include <fmtornt.hxx>
+#include <o3tl/enumarray.hxx>
 
 class SwFont;
 class SvxBrushItem;
