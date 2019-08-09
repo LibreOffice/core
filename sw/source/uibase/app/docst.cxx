@@ -1221,8 +1221,16 @@ void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
         else
             nMask |= SfxStyleSearchBits::UserDefined;
 
-        pStyle = static_cast<SwDocStyleSheet*>( &m_xBasePool->Make(rName,
-                                nFamily, nMask ) );
+        if (nFamily == SfxStyleFamily::Para || nFamily == SfxStyleFamily::Char || nFamily == SfxStyleFamily::Frame)
+        {
+            // Prevent undo append from being done during paragraph, character, and frame style Make. Do it later
+            ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
+            pStyle = static_cast<SwDocStyleSheet*>(&m_xBasePool->Make(rName, nFamily, nMask));
+        }
+        else
+        {
+            pStyle = static_cast<SwDocStyleSheet*>(&m_xBasePool->Make(rName, nFamily, nMask));
+        }
     }
 
     switch(nFamily)
@@ -1235,7 +1243,8 @@ void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
                 pCurrWrtShell->StartAllAction();
                 pCurrWrtShell->FillByEx(pColl);
                     // also apply template to remove hard set attributes
-                pColl->SetDerivedFrom(pCurrWrtShell->GetCurTextFormatColl());
+                SwTextFormatColl * pDerivedFrom = pCurrWrtShell->GetCurTextFormatColl();
+                pColl->SetDerivedFrom(pDerivedFrom);
 
                     // set the mask at the Collection:
                 sal_uInt16 nId = pColl->GetPoolFormatId() & 0x87ff;
@@ -1263,6 +1272,11 @@ void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
                 }
                 pColl->SetPoolFormatId(nId);
 
+                if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
+                {
+                    GetDoc()->GetIDocumentUndoRedo().AppendUndo(
+                        std::make_unique<SwUndoTextFormatCollCreate>(pColl, pDerivedFrom, GetDoc()));
+                }
                 pCurrWrtShell->SetTextFormatColl(pColl);
                 pCurrWrtShell->EndAllAction();
             }
@@ -1281,10 +1295,14 @@ void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
 
                 SwFrameFormat* pFFormat = pCurrWrtShell->GetSelectedFrameFormat();
                 pFrame->SetDerivedFrom( pFFormat );
-
                 pFrame->SetFormatAttr( aSet );
-                    // also apply template to remove hard set attributes
-                pCurrWrtShell->SetFrameFormat( pFrame );
+                if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
+                {
+                    GetDoc()->GetIDocumentUndoRedo().AppendUndo(
+                        std::make_unique<SwUndoFrameFormatCreate>(pFrame, pFFormat, GetDoc()));
+                }
+                // also apply template to remove hard set attributes
+                pCurrWrtShell->SetFrameFormat(pFrame);
                 pCurrWrtShell->EndAllAction();
             }
         }
@@ -1296,9 +1314,20 @@ void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
             {
                 pCurrWrtShell->StartAllAction();
                 pCurrWrtShell->FillByEx( pChar );
-                pChar->SetDerivedFrom( pCurrWrtShell->GetCurCharFormat() );
+                SwCharFormat * pDerivedFrom = pCurrWrtShell->GetCurCharFormat();
+                pChar->SetDerivedFrom( pDerivedFrom );
                 SwFormatCharFormat aFormat( pChar );
-                pCurrWrtShell->SetAttrItem( aFormat );
+
+                if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
+                {
+                    // Looks like sometimes pDerivedFrom can be null and this is not supported by redo code
+                    // So use default format as a derived from in such situations
+                    GetDoc()->GetIDocumentUndoRedo().AppendUndo(
+                        std::make_unique<SwUndoCharFormatCreate>(
+                            pChar, pDerivedFrom ? pDerivedFrom : GetDoc()->GetDfltCharFormat(),
+                            GetDoc()));
+                }
+                pCurrWrtShell->SetAttrItem(aFormat);
                 pCurrWrtShell->EndAllAction();
             }
         }
