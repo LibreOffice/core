@@ -414,6 +414,11 @@ void SvxLineDefTabPage::ChangeMetricHdl_Impl(const weld::ToggleButton* p)
         m_xMtrLength2->set_unit(eFUnit);
         m_xMtrDistance->set_unit(eFUnit);
 
+        // tdf#126736 max 5cm
+        m_xMtrLength1->set_range(0, 500, FieldUnit::CM);
+        m_xMtrLength2->set_range(0, 500, FieldUnit::CM);
+        m_xMtrDistance->set_range(0, 500, FieldUnit::CM);
+
         SetMetricValue( *m_xMtrLength1, nTmp1, ePoolUnit );
         SetMetricValue( *m_xMtrLength2, nTmp2, ePoolUnit );
         SetMetricValue( *m_xMtrDistance, nTmp3, ePoolUnit );
@@ -444,10 +449,14 @@ void SvxLineDefTabPage::ChangeMetricHdl_Impl(const weld::ToggleButton* p)
         m_xMtrLength2->set_unit(FieldUnit::PERCENT);
         m_xMtrDistance->set_unit(FieldUnit::PERCENT);
 
-        SetMetricValue( *m_xMtrLength1, nTmp1, ePoolUnit );
-        SetMetricValue( *m_xMtrLength2, nTmp2, ePoolUnit );
-        SetMetricValue( *m_xMtrDistance, nTmp3, ePoolUnit );
+        // tdf#126736 800%
+        m_xMtrLength1->set_range(0, 800, FieldUnit::PERCENT);
+        m_xMtrLength2->set_range(0, 800, FieldUnit::PERCENT);
+        m_xMtrDistance->set_range(0, 800, FieldUnit::PERCENT);
 
+        m_xMtrLength1->set_value(nTmp1, FieldUnit::PERCENT);
+        m_xMtrLength2->set_value(nTmp2, FieldUnit::PERCENT);
+        m_xMtrDistance->set_value(nTmp3, FieldUnit::PERCENT);
     }
     SelectTypeHdl_Impl( nullptr );
 }
