@@ -277,7 +277,7 @@ void SwTextNode::FileLoadedInitHints()
 
 SwContentFrame *SwTextNode::MakeFrame( SwFrame* pSib )
 {
-    SwContentFrame *pFrame = new SwTextFrame( this, pSib );
+    SwContentFrame *pFrame = sw::MakeTextFrame(*this, pSib, sw::FrameMode::New);
     return pFrame;
 }
 

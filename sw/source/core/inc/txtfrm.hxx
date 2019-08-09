@@ -100,8 +100,10 @@ struct MergedPara;
 std::pair<SwTextNode*, sal_Int32> MapViewToModel(MergedPara const&, TextFrameIndex nIndex);
 TextFrameIndex MapModelToView(MergedPara const&, SwTextNode const* pNode, sal_Int32 nIndex);
 
+// warning: Existing must be used only once; a second use would delete the frame created by the first one...
 enum class FrameMode { New, Existing };
 std::unique_ptr<sw::MergedPara> CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode, FrameMode eMode);
+SwTextFrame * MakeTextFrame(SwTextNode & rNode, SwFrame *, sw::FrameMode eMode);
 
 bool FrameContainsNode(SwContentFrame const& rFrame, sal_uLong nNodeIndex);
 bool IsParaPropsNode(SwRootFrame const& rLayout, SwTextNode const& rNode);
@@ -449,7 +451,7 @@ public:
         { return const_cast<SwDoc &>(const_cast<SwTextFrame const*>(this)->GetDoc()); }
     SwDoc const& GetDoc() const;
 
-    SwTextFrame(SwTextNode * const, SwFrame* );
+    SwTextFrame(SwTextNode * const, SwFrame*, sw::FrameMode eMode);
 
     /**
      * SwContentFrame: the shortcut for the Frames

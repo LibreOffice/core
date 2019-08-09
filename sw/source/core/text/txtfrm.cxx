@@ -771,7 +771,8 @@ void SwTextFrame::Init()
     }
 }
 
-SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib )
+SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib,
+        sw::FrameMode const eMode)
     : SwContentFrame( pNode, pSib )
     , mnAllLines( 0 )
     , mnThisLines( 0 )
@@ -799,10 +800,16 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib )
     mnFrameType = SwFrameType::Txt;
     // note: this may call SwClientNotify if it's in a list so do it last
     // note: this may change this->pRegisteredIn to m_pMergedPara->listeners
-    m_pMergedPara = CheckParaRedlineMerge(*this, *pNode, sw::FrameMode::New);
+    m_pMergedPara = CheckParaRedlineMerge(*this, *pNode, eMode);
 }
 
 namespace sw {
+
+SwTextFrame * MakeTextFrame(SwTextNode & rNode, SwFrame *const pSibling,
+        sw::FrameMode const eMode)
+{
+    return new SwTextFrame(&rNode, pSibling, eMode);
+}
 
 void RemoveFootnotesForNode(
         SwRootFrame const& rLayout, SwTextNode const& rTextNode,
