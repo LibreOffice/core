@@ -666,7 +666,7 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                         if ( nLines )
                         {
                             ImplHandleScroll(nullptr, 0L, pData->IsHorz() ? pHScrl : pVScrl,
-                                pData->IsHorz() && pHScrl && (AllSettings::GetLayoutRTL() == pHScrl->IsRTLEnabled())
+                                pData->IsHorz() && pHScrl && (AllSettings::GetLayoutRTL() != pHScrl->IsRTLEnabled())
                                     ? -nLines : nLines);
                             bRet = true;
                         }
