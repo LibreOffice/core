@@ -8332,7 +8332,7 @@ LanguageType WW8DopTypography::GetConvertedLang() const
             nLang = LANGUAGE_CHINESE_SIMPLIFIED_LEGACY;
             break;
         case 0:
-            //And here we have the possibility that it says 2, but its really
+            //And here we have the possibility that it says 2, but it's really
             //a bug and only japanese level 2 has been selected after a custom
             //version was chosen on last save!
             nLang = LANGUAGE_JAPANESE;

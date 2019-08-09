@@ -1419,7 +1419,7 @@ SFErrCodes OpenTTFontFile( const char* fname, sal_uInt32 facenum, TrueTypeFont**
     (*ttf)->fsize = st.st_size;
 
     /* On Mac OS, most likely will happen if a Mac user renames a font file
-     * to be .ttf when its really a Mac resource-based font.
+     * to be .ttf when it's really a Mac resource-based font.
      * Size will be 0, but fonts smaller than 4 bytes would be broken anyway.
      */
     if ((*ttf)->fsize == 0) {

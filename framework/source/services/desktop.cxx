@@ -441,7 +441,7 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
         }
     }
 
-    // No lock required ... container is threadsafe by itself.
+    // No lock required... container is threadsafe by itself.
     m_aListenerContainer.addInterface( cppu::UnoType<css::frame::XTerminateListener>::get(), xListener );
 }
 
@@ -731,7 +731,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Desk
     @short      supports registration/deregistration of interception objects, which
                 are interested on special dispatches.
 
-    @descr      Its really provided by an internal helper, which is used inside the dispatch api too.
+    @descr      It's really provided by an internal helper, which is used inside the dispatch API too.
     @param      xInterceptor
                 the interceptor object, which wish to be (de)registered.
 

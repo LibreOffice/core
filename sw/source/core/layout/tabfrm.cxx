@@ -2388,7 +2388,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 m_bLowersFormatted = true;
                 aNotify.SetLowersComplete( true );
 
-                // One more check if its really necessary to split the table.
+                // One more check if it's really necessary to split the table.
                 // 1. The table either has to exceed the deadline or
                 // 2. We explicitly want to cut off the last row.
                 if( aRectFnSet.BottomDist( getFrameArea(), nDeadLine ) > 0 && !bLastRowHasToMoveToFollow )

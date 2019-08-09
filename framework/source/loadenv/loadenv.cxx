@@ -252,7 +252,7 @@ void LoadEnv::initializeLoading(const OUString& sURL, const uno::Sequence<beans:
     if (!tools::IsMappedWebDAVPath(sURL, &aRealURL))
         aRealURL = sURL;
 
-    // try to find out, if its really a content, which can be loaded or must be "handled"
+    // try to find out, if it's really a content, which can be loaded or must be "handled"
     // We use a default value for this in-parameter. Then we have to start a complex check method
     // internally. But if this check was already done outside it can be suppressed to perform
     // the load request. We take over the result then!
@@ -1343,7 +1343,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             }
 
             // get the original load arguments from the current document
-            // and decide if its really the same then the one will be.
+            // and decide if it's really the same then the one will be.
             // It must be visible and must use the same file revision ...
             // or must not have any file revision set (-1 == -1!)
             utl::MediaDescriptor lOldDocDescriptor(xModel->getArgs());
