@@ -26,7 +26,6 @@ $(eval $(call gb_Package_add_files,wizards_basicsrvaccess2base,$(LIBO_SHARE_FOLD
 	Collect.xba \
 	CommandBar.xba \
 	CommandBarControl.xba \
-	Compatible.xba \
 	Control.xba \
 	Database.xba \
 	DataDef.xba \
@@ -45,6 +44,7 @@ $(eval $(call gb_Package_add_files,wizards_basicsrvaccess2base,$(LIBO_SHARE_FOLD
 	PropertiesGet.xba \
 	PropertiesSet.xba \
 	Property.xba \
+	Python.xba \
 	Recordset.xba \
 	Root_.xba \
 	script.xlb \
