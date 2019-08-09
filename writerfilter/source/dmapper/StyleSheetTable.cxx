@@ -861,6 +861,7 @@ public:
     void Insert(const beans::PropertyValue& rVal);
     uno::Sequence< uno::Any > getValues();
     uno::Sequence< OUString > getNames();
+    std::vector<beans::PropertyValue> getProperties() { return m_aValues; };
 };
 
 void PropValVector::Insert(const beans::PropertyValue& rVal)
@@ -913,7 +914,6 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                 if( pEntry->nStyleTypeCode == STYLE_TYPE_CHAR || pEntry->nStyleTypeCode == STYLE_TYPE_PARA || pEntry->nStyleTypeCode == STYLE_TYPE_LIST )
                 {
                     bool bParaStyle = pEntry->nStyleTypeCode == STYLE_TYPE_PARA;
-                    bool bCharStyle = pEntry->nStyleTypeCode == STYLE_TYPE_CHAR;
                     bool bListStyle = pEntry->nStyleTypeCode == STYLE_TYPE_LIST;
                     bool bInsert = false;
                     uno::Reference< container::XNameContainer > xStyles = bParaStyle ? xParaStyles : (bListStyle ? xNumberingStyles : xCharStyles);
@@ -1099,8 +1099,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                             // Don't add the style name properties
                             bool bIsParaStyleName = rValue.Name == "ParaStyleName";
                             bool bIsCharStyleName = rValue.Name == "CharStyleName";
-                            bool bDirectFormattingOnly = bCharStyle && rValue.Name == "CharShadingValue";
-                            if ( !bIsParaStyleName && !bIsCharStyleName && !bDirectFormattingOnly )
+                            if ( !bIsParaStyleName && !bIsCharStyleName )
                             {
                                 aSortedPropVals.Insert(rValue);
                             }
@@ -1109,8 +1108,25 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         try
                         {
                             uno::Reference< beans::XMultiPropertySet > xMultiPropertySet( xStyle, uno::UNO_QUERY_THROW);
-                            xMultiPropertySet->setPropertyValues( aSortedPropVals.getNames(), aSortedPropVals.getValues() );
-
+                            try
+                            {
+                                xMultiPropertySet->setPropertyValues( aSortedPropVals.getNames(), aSortedPropVals.getValues() );
+                            }
+                            catch ( const uno::Exception& )
+                            {
+                                uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY_THROW);
+                                for ( const beans::PropertyValue& rValue : aSortedPropVals.getProperties() )
+                                {
+                                    try
+                                    {
+                                       xPropertySet->setPropertyValue( rValue.Name, rValue.Value );
+                                    }
+                                    catch ( const uno::Exception& )
+                                    {
+                                        SAL_WARN( "writerfilter", "StyleSheetTable::ApplyStyleSheets could not set property " << rValue.Name );
+                                    }
+                                }
+                            }
                             // Duplicate MSWord's single footnote reference into Footnote Characters and Footnote anchor
                             if( pEntry->sStyleName.equalsIgnoreAsciiCase("footnote reference")
                                 || pEntry->sStyleName.equalsIgnoreAsciiCase("endnote reference") )
@@ -1135,7 +1151,6 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                                 aMessage += ": " + aUnknownPropertyException.Message;
 
                             SAL_WARN("writerfilter", aMessage);
-                            assert (false && "SERIOUS: remaining alphabetically sorted properties were lost");
 #else
                             (void) rWrapped;
 #endif
