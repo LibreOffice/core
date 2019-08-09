@@ -50,6 +50,8 @@ public:
 
     virtual SwRewriter GetRewriter() const override;
 
+    virtual void SetDerivedFrom(const OUString& rFormatName) { sDerivedFrom = rFormatName; }
+
     virtual SwFormat * Create(SwFormat * pDerivedFrom) = 0;
     virtual void Delete() = 0;
     virtual SwFormat * Find(const OUString & rName) const = 0;

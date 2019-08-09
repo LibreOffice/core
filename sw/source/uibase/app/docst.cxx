@@ -88,6 +88,8 @@
 #include <paratr.hxx>
 #include <tblafmt.hxx>
 #include <sfx2/watermarkitem.hxx>
+#include <UndoManager.hxx>
+#include <SwUndoFmt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1224,6 +1226,16 @@ void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
 
                 SwFrameFormat* pFFormat = pCurrWrtShell->GetSelectedFrameFormat();
                 pFrame->SetDerivedFrom( pFFormat );
+
+                // Update undo action to remember derived from style
+                SwUndo * pLastUndo = pCurrWrtShell->GetDoc()->GetUndoManager().GetLastUndo();
+                SwUndoFormatCreate * pUndoFormatCreate(dynamic_cast<SwUndoFormatCreate*>(pLastUndo));
+                SAL_WARN_IF(!pUndoFormatCreate, "sw.ui", "Unexpected recent undo action!");
+                assert(pUndoFormatCreate);
+                if (pUndoFormatCreate)
+                {
+                    pUndoFormatCreate->SetDerivedFrom(pFFormat->GetName());
+                }
 
                 pFrame->SetFormatAttr( aSet );
                     // also apply template to remove hard set attributes
