@@ -1281,8 +1281,11 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
             SvtHelpOptions aHelpOptions;
             bool bShowOfflineHelpPopUp = aHelpOptions.IsOfflineHelpPopUp();
 
+            TopLevelWindowLocker aBusy;
+
             if(bShowOfflineHelpPopUp)
             {
+                aBusy.incBusy(pWidget);
                 std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWidget, "sfx/ui/helpmanual.ui"));
                 std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("onlinehelpmanual"));
                 std::unique_ptr<weld::CheckButton> m_xHideOfflineHelpCB(xBuilder->weld_check_button("hidedialog"));
@@ -1293,6 +1296,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
                 short OnlineHelpBox = xQueryBox->run();
                 bShowOfflineHelpPopUp = OnlineHelpBox != RET_OK;
                 aHelpOptions.SetOfflineHelpPopUp(!m_xHideOfflineHelpCB->get_state());
+                aBusy.decBusy();
             }
             if(!bShowOfflineHelpPopUp)
             {
@@ -1300,8 +1304,10 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
                     return true;
                 else
                 {
+                    aBusy.incBusy(pWidget);
                     NoHelpErrorBox aErrBox(pWidget);
                     aErrBox.run();
+                    aBusy.decBusy();
                     return false;
                 }
             }
