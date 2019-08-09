@@ -730,6 +730,7 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
     SwPauseThreadStarting aPauseThreadStarting;
 
     bool bHasMark = false;
+    std::shared_ptr<SwUnoCursor> pTempCursor;
     SwPaM * pPam;
 
     rtl::Reference<SwDoc> xDoc;
@@ -796,7 +797,9 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
     {
         // no Shell or write-everything -> create a Pam
         SwDoc* pOutDoc = xDoc.is() ? xDoc.get() : &rDoc;
-        pPam = new SwPaM( pOutDoc->GetNodes().GetEndOfContent() );
+        pTempCursor = pOutDoc->CreateUnoCursor(
+                SwPosition(pOutDoc->GetNodes().GetEndOfContent()), false);
+        pPam = pTempCursor.get();
         if( pOutDoc->IsClipBoard() )
         {
             pPam->Move( fnMoveBackward, GoInDoc );
@@ -877,7 +880,6 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
     }
     else
     {
-        delete pPam;            // delete the created Pam
         // Everything was written successfully? Tell the document!
         if ( !nError.IsError() && !xDoc.is() )
         {

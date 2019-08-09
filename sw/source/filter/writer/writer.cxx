@@ -119,7 +119,7 @@ void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
 
 Writer::Writer()
     : m_pImpl(std::make_unique<Writer_Impl>())
-    , m_pOrigFileName(nullptr), m_pDoc(nullptr), m_pOrigPam(nullptr), m_pCurrentPam(nullptr)
+    , m_pOrigFileName(nullptr), m_pDoc(nullptr), m_pOrigPam(nullptr)
     , m_bHideDeleteRedlines(false)
 {
     m_bWriteAll = m_bShowProgress = m_bUCS2_WithStartChar = true;
@@ -148,9 +148,9 @@ void Writer::ResetWriter()
 
     if( m_pCurrentPam )
     {
-        while( m_pCurrentPam->GetNext() != m_pCurrentPam )
+        while (m_pCurrentPam->GetNext() != m_pCurrentPam.get())
             delete m_pCurrentPam->GetNext();
-        delete m_pCurrentPam;
+        m_pCurrentPam.reset();
     }
     m_pCurrentPam = nullptr;
     m_pOrigFileName = nullptr;
@@ -190,8 +190,8 @@ sal_Int32 Writer::FindPos_Bkmk(const SwPosition& rPos) const
     return -1;
 }
 
-SwPaM *
-Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndIdx)
+std::shared_ptr<SwUnoCursor>
+Writer::NewUnoCursor(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndIdx)
 {
     SwNodes *const pNds = &rDoc.GetNodes();
 
@@ -202,7 +202,7 @@ Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndId
         OSL_FAIL( "No more ContentNode at StartPos" );
     }
 
-    SwPaM* pNew = new SwPaM( aStt );
+    auto const pNew = rDoc.CreateUnoCursor(SwPosition(aStt), false);
     pNew->SetMark();
     aStt = nEndIdx;
     pCNode = aStt.GetNode().GetContentNode();
@@ -264,7 +264,9 @@ ErrCode Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
     m_pImpl->m_pStream = &rStrm;
 
     // Copy PaM, so that it can be modified
-    m_pCurrentPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
+    m_pCurrentPam = m_pDoc->CreateUnoCursor(*rPaM.End(), false);
+    m_pCurrentPam->SetMark();
+    *m_pCurrentPam->GetPoint() = *rPaM.Start();
     // for comparison secure to the current Pam
     m_pOrigPam = &rPaM;
 
@@ -499,7 +501,9 @@ ErrCode StgWriter::Write( SwPaM& rPaM, SotStorage& rStg, const OUString* pFName 
     m_pOrigFileName = pFName;
 
     // Copy PaM, so that it can be modified
-    m_pCurrentPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
+    m_pCurrentPam = m_pDoc->CreateUnoCursor(*rPaM.End(), false);
+    m_pCurrentPam->SetMark();
+    *m_pCurrentPam->GetPoint() = *rPaM.Start();
     // for comparison secure to the current Pam
     m_pOrigPam = &rPaM;
 
@@ -520,7 +524,9 @@ ErrCode StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >&
     m_pOrigFileName = pFName;
 
     // Copy PaM, so that it can be modified
-    m_pCurrentPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
+    m_pCurrentPam = m_pDoc->CreateUnoCursor(*rPaM.End(), false);
+    m_pCurrentPam->SetMark();
+    *m_pCurrentPam->GetPoint() = *rPaM.Start();
     // for comparison secure to the current Pam
     m_pOrigPam = &rPaM;
 

@@ -1825,7 +1825,7 @@ void MSWordExportBase::WriteSpecialText( sal_uLong nStart, sal_uLong nEnd, sal_u
 {
     sal_uInt8 nOldTyp = m_nTextTyp;
     m_nTextTyp = nTTyp;
-    SwPaM* pOldPam = m_pCurPam;       //!! Simply shifting the PaM without restoring should do the job too
+    auto const pOldPam = m_pCurPam;       //!! Simply shifting the PaM without restoring should do the job too
     sal_uLong nOldStart = m_nCurStart;
     sal_uLong nOldEnd = m_nCurEnd;
     SwPaM* pOldEnd = m_pOrigPam;
@@ -1850,8 +1850,7 @@ void MSWordExportBase::WriteSpecialText( sal_uLong nStart, sal_uLong nEnd, sal_u
     m_pTableInfo = pOldTableInfo;
 
     m_bOutPageDescs = bOldPageDescs;
-    delete m_pCurPam;                    // delete Pam
-    m_pCurPam = pOldPam;
+    m_pCurPam = pOldPam; // delete Pam
     m_nCurStart = nOldStart;
     m_nCurEnd = nOldEnd;
     m_pOrigPam = pOldEnd;
@@ -1904,7 +1903,7 @@ void MSWordExportBase::SetCurPam(sal_uLong nStt, sal_uLong nEnd)
 {
     m_nCurStart = nStt;
     m_nCurEnd = nEnd;
-    m_pCurPam = Writer::NewSwPaM( *m_pDoc, nStt, nEnd );
+    m_pCurPam = Writer::NewUnoCursor( *m_pDoc, nStt, nEnd );
 
     // Recognize tables in special cases
     if ( nStt != m_pCurPam->GetMark()->nNode.GetIndex() &&
@@ -1913,7 +1912,7 @@ void MSWordExportBase::SetCurPam(sal_uLong nStt, sal_uLong nEnd)
         m_pCurPam->GetMark()->nNode = nStt;
     }
 
-    m_pOrigPam = m_pCurPam;
+    m_pOrigPam = m_pCurPam.get(); // ???
     m_pCurPam->Exchange();
 }
 
@@ -1953,7 +1952,6 @@ void MSWordExportBase::RestoreData()
 {
     MSWordSaveData &rData = m_aSaveData.top();
 
-    delete m_pCurPam;
     m_pCurPam = rData.pOldPam;
     m_nCurStart = rData.nOldStart;
     m_nCurEnd = rData.nOldEnd;
@@ -2711,7 +2709,7 @@ public:
 
 void MSWordExportBase::WriteText()
 {
-    TrackContentToExport aContentTracking(m_pCurPam, m_nCurStart, m_nCurEnd);
+    TrackContentToExport aContentTracking(m_pCurPam.get(), m_nCurStart, m_nCurEnd);
     while (aContentTracking.contentRemainsToExport(m_pTableInfo.get()))
     {
         SwNode& rNd = m_pCurPam->GetNode();
@@ -3194,7 +3192,7 @@ ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
     }
 
     if ( !m_pOCXExp && m_pDoc->GetDocShell() )
-        m_pOCXExp.reset(new SwMSConvertControls( m_pDoc->GetDocShell(), m_pCurPam ));
+        m_pOCXExp.reset(new SwMSConvertControls(m_pDoc->GetDocShell(), m_pCurPam.get()));
 
     // #i81405# - Collect anchored objects before changing the redline mode.
     m_aFrames = GetFrames( *m_pDoc, bWriteAll? nullptr : m_pOrigPam );
@@ -3234,7 +3232,7 @@ ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
     // park m_pOrigPam as well, as needed for exporting abi9915-1.odt to doc
     m_pOrigPam->DeleteMark();
     *m_pOrigPam->GetPoint() = SwPosition(m_pDoc->GetNodes().GetEndOfContent());
-    *m_pCurPam = *m_pOrigPam;
+    static_cast<SwPaM&>(*m_pCurPam) = *m_pOrigPam;
 
     m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags(m_nOrigRedlineFlags);
 
@@ -3586,7 +3584,7 @@ ErrCode SwWW8Writer::Write( SwPaM& rPaM, SfxMedium& rMed,
     return nRet;
 }
 
-MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam )
+MSWordExportBase::MSWordExportBase( SwDoc *pDocument, std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM *pOriginalPam )
     : m_aMainStg(sMainStream)
     , m_pISet(nullptr)
     , m_pPiece(nullptr)
@@ -3663,7 +3661,7 @@ MSWordExportBase::~MSWordExportBase()
 }
 
 WW8Export::WW8Export( SwWW8Writer *pWriter,
-        SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam,
+        SwDoc *pDocument, std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM *pOriginalPam,
         bool bDot )
     : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam )
     , pTableStrm(nullptr)

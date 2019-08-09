@@ -459,7 +459,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     {
         HTMLSaveData aSaveData( rWrt, pSttNd->GetIndex()+1,
                                 pSttNd->EndOfSectionIndex() );
-        rWrt.Out_SwDoc( rWrt.m_pCurrentPam );
+        rWrt.Out_SwDoc( rWrt.m_pCurrentPam.get() );
     }
     else
     {

@@ -142,8 +142,7 @@ ErrCode SwASCWriter::WriteStream()
                     const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
                     if( pIdx )
                     {
-                        delete m_pCurrentPam;
-                        m_pCurrentPam = NewSwPaM( *m_pDoc, pIdx->GetIndex(),
+                        m_pCurrentPam = NewUnoCursor(*m_pDoc, pIdx->GetIndex(),
                                     pIdx->GetNode().EndOfSectionIndex() );
                         m_pCurrentPam->Exchange();
                         continue;       // reset while loop!

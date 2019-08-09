@@ -271,7 +271,8 @@ public:
     void WriteMainText();
 
     /// Pass the pDocument, pCurrentPam and pOriginalPam to the base class.
-    DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM* pCurrentPam, SwPaM* pOriginalPam,
+    DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument,
+            std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM* pOriginalPam,
                bool bDocm, bool bTemplate);
 
     /// Destructor.
