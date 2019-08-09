@@ -1380,7 +1380,7 @@ static void lcl_SetPos( SwFrame&             _rNewFrame,
 
 void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                              sal_uLong nIndex, bool bPages, sal_uLong nEndIndex,
-                             SwFrame *pPrv )
+                             SwFrame *pPrv, sw::FrameMode const eMode )
 {
     pDoc->getIDocumentTimerAccess().BlockIdling();
     SwRootFrame* pLayout = pLay->getRootFrame();
@@ -1474,7 +1474,9 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 }
                 continue; // skip it
             }
-            pFrame = pNode->MakeFrame(pLay);
+            pFrame = pNode->IsTextNode()
+                        ? sw::MakeTextFrame(*pNode->GetTextNode(), pLay, eMode)
+                        : pNode->MakeFrame(pLay);
             if( pPageMaker )
                 pPageMaker->CheckInsert( nIndex );
 
@@ -1840,6 +1842,7 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
         bool bApres = aTmp < rSttIdx;
         SwNode2Layout aNode2Layout( *pNd, rSttIdx.GetIndex() );
         SwFrame* pFrame;
+        sw::FrameMode eMode = sw::FrameMode::Existing;
         while( nullptr != (pFrame = aNode2Layout.NextFrame()) )
         {
             SwLayoutFrame *pUpper = pFrame->GetUpper();
@@ -1967,7 +1970,7 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                         pTmp->UnlockJoin();
                 }
                 ::InsertCnt_( pUpper, pDoc, rSttIdx.GetIndex(),
-                              pFrame->IsInDocBody(), nEndIdx, pPrev );
+                              pFrame->IsInDocBody(), nEndIdx, pPrev, eMode );
             }
             else
             {
@@ -1987,7 +1990,7 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                     bSplit = false;
 
                 ::InsertCnt_( pUpper, pDoc, rSttIdx.GetIndex(), false,
-                              nEndIdx, pPrv );
+                              nEndIdx, pPrv, eMode );
                 // OD 23.06.2003 #108784# - correction: append objects doesn't
                 // depend on value of <bAllowMove>
                 if( !bDontCreateObjects )
@@ -2023,6 +2026,7 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                     SwFrame::DestroyFrame(pSct);
                 }
             }
+            eMode = sw::FrameMode::New; // use Existing only once!
         }
     }
 
