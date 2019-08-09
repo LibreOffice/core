@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_f62b357f",
+        "filename": "vcl/qt5/Qt5DragAndDrop.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-08-09T16:25:12Z",
+      "side": 0,
+      "message": "Why did you drop these? s. tdf#100097, tdf#124990 and tdf#118302 for distinction between internal vs. external DnD",
+      "revId": "7d44104f526d61152cac67d534d36169f46c7581",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_b625bdad",
+        "filename": "vcl/qt5/Qt5Widget.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-08-09T16:25:12Z",
+      "side": 0,
+      "message": "So while you\u0027re at bulldozering this code, no prisoners taken, you can as well drop sInternalMimeType bc it became effectively unused",
+      "revId": "7d44104f526d61152cac67d534d36169f46c7581",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
