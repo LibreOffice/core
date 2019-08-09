@@ -13,7 +13,7 @@
  <library:element library:name="Collect"/>
  <library:element library:name="PropertiesGet"/>
  <library:element library:name="Form"/>
- <library:element library:name="Compatible"/>
+ <library:element library:name="Python"/>
  <library:element library:name="_License"/>
  <library:element library:name="SubForm"/>
  <library:element library:name="L10N"/>
