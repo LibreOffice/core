@@ -872,59 +872,6 @@ Dim lChar As Long, sByte1 As String, sByte2 As String, sByte3 As String
 End Function	&apos;	_PercentEncode V1.4.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function _PyInputBox(ByVal pvText As Variant _
-									, ByVal pvTitle As Variant _
-									, ByVal pvDefault As Variant _
-									, ByVal pvXPos As Variant _
-									, ByVal pvYPos As Variant _
-									) As Variant
-&apos;	Convenient function to open input box from Python
-
-	On Local Error GoTo Exit_Function
-	_PyInputBox = Null
-
-	If Not Utils._CheckArgument(pvText, 1, vbString) Then Goto Exit_Function
-	If IsEmpty(pvTitle) Then pvTitle = &quot;&quot;
-	If Not Utils._CheckArgument(pvTitle, 2, vbString) Then Goto Exit_Function
-	If IsEmpty(pvDefault) Then pvDefault = &quot;&quot;
-	If Not Utils._CheckArgument(pvDefault, 3, vbString) Then Goto Exit_Function
-	If IsEmpty(pvXPos) Or IsEmpty(pvYPos) Then
-		_PyInputBox = InputBox(pvText, pvTitle, pvDefault)
-	Else
-		If Not Utils._CheckArgument(pvXPos, 4, Utils._AddNumeric()) Then Goto Exit_Function
-		If Not Utils._CheckArgument(pvYPos, 5, Utils._AddNumeric()) Then Goto Exit_Function
-		_PyInputBox = InputBox(pvText, pvTitle, pvDefault, pvXPos, pvYPos)
-	End If
-
-Exit_Function:
-	Exit Function
-End Function	&apos;	PyInputBox V6.4.0
-
-REM -----------------------------------------------------------------------------------------------------------------------
-Public Function _PyMsgBox(ByVal pvText As Variant _
-									, ByVal pvType As Variant _
-									, ByVal pvDialogTitle As Variant _
-									) As Variant
-&apos;	Convenient function to open message box from Python
-
-	On Local Error GoTo Exit_Function
-	_PyMsgBox = Null
-
-	If Not Utils._CheckArgument(pvText, 1, vbString) Then Goto Exit_Function
-	If IsEmpty(pvType) Then pvType = 0
-	If Not Utils._CheckArgument(pvType, 2, Utils._AddNumeric()) Then Goto Exit_Function
-	If IsEmpty(pvDialogTitle) Then
-		_PyMsgBox = MsgBox(pvText, pvType)
-	Else
-		If Not Utils._CheckArgument(pvDialogTitle, 3, vbString) Then Goto Exit_Function
-		_PyMsgBox = MsgBox(pvText, pvType, pvDialogTitle)
-	End If
-
-Exit_Function:
-	Exit Function
-End Function	&apos;	PyMsgBox V6.4.0
-
-REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _ReadFileIntoArray(ByVal psFileName) As Variant
 &apos;	Loads all lines of a text file into a variant array
 &apos;	Any error reduces output to an empty array
