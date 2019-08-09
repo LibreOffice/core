@@ -434,14 +434,6 @@ void ChartModel::insertDefaultChart()
                 //set some new 'defaults' for wall and floor
                 if( xDiagram.is() )
                 {
-                    Reference< beans::XPropertySet > xWall( xDiagram->getWall() );
-                    if( xWall.is() )
-                    {
-                        xWall->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_SOLID ) );
-                        xWall->setPropertyValue( "FillStyle", uno::Any( drawing::FillStyle_NONE ) );
-                        xWall->setPropertyValue( "LineColor", uno::Any( static_cast< sal_Int32 >( 0xb3b3b3 ) ) ); // gray30
-                        xWall->setPropertyValue( "FillColor", uno::Any( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
-                    }
                     Reference< beans::XPropertySet > xFloor( xDiagram->getFloor() );
                     if( xFloor.is() )
                     {

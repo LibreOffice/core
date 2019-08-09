@@ -142,6 +142,16 @@ void ChartStyle::register_styles()
         *chart::wall::StaticWallInfo::get(), *chart::wall::StaticWallInfoHelper::get(),
         *chart::wall::StaticWallDefaults::get());
 
+    css::uno::Reference<css::beans::XPropertySet> xWallStyle
+        = m_xChartStyle[css::chart2::ChartObjectType::WALL];
+
+    xWallStyle->setPropertyValue("LineStyle", css::uno::Any(css::drawing::LineStyle_SOLID));
+    xWallStyle->setPropertyValue("FillStyle", css::uno::Any(css::drawing::FillStyle_NONE));
+    xWallStyle->setPropertyValue("LineColor",
+                                 css::uno::Any(static_cast<sal_Int32>(0xb3b3b3))); // gray30
+    xWallStyle->setPropertyValue("FillColor",
+                                 css::uno::Any(static_cast<sal_Int32>(0xe6e6e6))); // gray10
+
     m_xChartStyle[css::chart2::ChartObjectType::GRID] = new ChartObjectStyle(
         *chart::grid::StaticGridInfo::get(), *chart::grid::StaticGridInfoHelper::get(),
         *chart::grid::StaticGridDefaults::get());
@@ -185,6 +195,15 @@ ChartStyle::applyStyleToDiagram(const css::uno::Reference<css::chart2::XDiagram>
     {
         xLegendStyle->setStyle(css::uno::Reference<css::style::XStyle>(
             m_xChartStyle.find(css::chart2::ChartObjectType::LEGEND)->second,
+            css::uno::UNO_QUERY_THROW));
+    }
+
+    css::uno::Reference<css::style::XStyleSupplier> xWallStyle(xDiagram->getWall(),
+                                                               css::uno::UNO_QUERY);
+    if (xWallStyle.is())
+    {
+        xWallStyle->setStyle(css::uno::Reference<css::style::XStyle>(
+            m_xChartStyle.find(css::chart2::ChartObjectType::WALL)->second,
             css::uno::UNO_QUERY_THROW));
     }
 }
