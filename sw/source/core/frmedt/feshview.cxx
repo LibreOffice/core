@@ -54,6 +54,7 @@
 #include <textboxhelper.hxx>
 #include <frmfmt.hxx>
 #include <frmatr.hxx>
+#include <frmtool.hxx>
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
