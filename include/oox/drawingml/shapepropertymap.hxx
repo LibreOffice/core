@@ -49,6 +49,7 @@ enum class ShapeProperty
     LineColor,
     LineTransparency,
     LineDash,                     ///< Explicit line dash or name of a line dash stored in a global container.
+    LineCap,
     LineJoint,
     LineStart,                    ///< Explicit line start marker or name of a line marker stored in a global container.
     LineStartWidth,

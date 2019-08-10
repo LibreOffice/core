@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -124,6 +125,18 @@ DashStyle lclGetDashStyle( sal_Int32 nToken )
         case XML_flat:  return DashStyle_RECT;
     }
     return DashStyle_ROUNDRELATIVE;
+}
+
+LineCap lclGetLineCap( sal_Int32 nToken )
+{
+    OSL_ASSERT((nToken & sal_Int32(0xFFFF0000))==0);
+    switch( nToken )
+    {
+        case XML_rnd:   return LineCap_ROUND;
+        case XML_sq:    return LineCap_SQUARE;
+        case XML_flat:  return LineCap_BUTT;
+    }
+    return LineCap_BUTT;
 }
 
 LineJoint lclGetLineJoint( sal_Int32 nToken )
@@ -381,6 +394,12 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
             if( rPropMap.setProperty( ShapeProperty::LineDash, aLineDash ) )
                 eLineStyle = drawing::LineStyle_DASH;
+        }
+        else
+        {
+            // line cap type
+            if( moLineCap.has() )
+                rPropMap.setProperty( ShapeProperty::LineCap, lclGetLineCap( moLineCap.get() ) );
         }
 
         // set final line style property
