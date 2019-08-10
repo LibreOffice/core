@@ -173,7 +173,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         */
         virtual void RegisterAtCorrectPage() = 0;
 
-        /** method to indicate, that anchored object is attached to a anchor frame */
+        /** method to indicate, that anchored object is attached to an anchor frame */
         virtual void ObjectAttachedToAnchorFrame();
 
         /** method to determine, if other anchored objects, also attached at

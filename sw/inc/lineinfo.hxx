@@ -48,7 +48,7 @@ class SW_DLLPUBLIC SwLineNumberInfo : public SwClient /**< purpose of derivation
     bool                bCountBlankLines;       ///< Count empty lines?
     bool                bCountInFlys;           ///< Count also within FlyFrames?
     bool                bRestartEachPage;       /**< Restart counting at the first paragraph of each page
-                                                       (even on follows when paragraphs are splitted) */
+                                                       (even on follows when paragraphs are split) */
 protected:
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 

@@ -485,7 +485,7 @@ public:
     void        SetChgLnk( const Link<SwCursorShell*,void> &rLnk ) { m_aChgLnk = rLnk; }
     const Link<SwCursorShell*,void>& GetChgLnk() const           { return m_aChgLnk; }
 
-    // Methods returning/altering ling for "graphic completely loaded".
+    // Methods returning/altering link for "graphic completely loaded".
     void        SetGrfArrivedLnk( const Link<SwCursorShell&,void> &rLnk ) { m_aGrfArrivedLnk = rLnk; }
     const Link<SwCursorShell&,void>& GetGrfArrivedLnk() const           { return m_aGrfArrivedLnk; }
 
@@ -573,7 +573,7 @@ public:
     // cursor was set to a random position e.g. when deleting frames
     void UpdateCursorPos();
 
-    // get the selected text at the current cursor. it will be filled with
+    // get the selected text at the current cursor. It will be filled with
     // fields etc.
     OUString GetSelText() const;
 

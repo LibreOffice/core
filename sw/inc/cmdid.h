@@ -705,7 +705,7 @@
 #define FN_SELECT_SENTENCE          (FN_SELECTION + 94)   /* select paragraph*/
 
 // QUERY-Block
-#define FN_TXTATR_INET              (FN_QUERY +29)      /* INet-Attribut */
+#define FN_TXTATR_INET              (FN_QUERY +29)      /* INet-Attribute */
 
 #define FN_GET_PRINT_AREA           (FN_QUERY +32)      /* Get attribute for printable area of page */
 #define FN_DB_CONNECTION_ANY            (FN_QUERY2 + 3)

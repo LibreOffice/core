@@ -53,7 +53,7 @@ public:
     ~SwHandleAnchorNodeChg() COVERITY_NOEXCEPT_FALSE;
 
 private:
-    // fly frame format, which is tracked for a anchor node change.
+    // fly frame format, which is tracked for an anchor node change.
     SwFlyFrameFormat& mrFlyFrameFormat;
     // internal flag, which indicates that the certain anchor node change occurs
     // and that re-creation of fly frames is necessary.

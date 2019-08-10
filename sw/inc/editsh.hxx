@@ -208,7 +208,7 @@ public:
     bool AppendTextNode();
     void AutoFormatBySplitNode();
 
-    /** If cursor is in a INetAttribute it will be deleted completely
+    /** If cursor is in an INetAttribute it will be deleted completely
      including the descriptive text (needed at drag & drop). */
     void DelINetAttrWithText();
 
