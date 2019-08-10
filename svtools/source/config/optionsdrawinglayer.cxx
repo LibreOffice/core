@@ -671,7 +671,7 @@ bool SvtOptionsDrawinglayer_Impl::IsAAPossibleOnThisSystem() const
 
 #ifdef _WIN32
         // WIN32 uses GDIPlus with VCL for the first incarnation; this will be enhanced
-        // in the future to use canvases and the canvas renderer, thus a AA-abled
+        // in the future to use canvases and the canvas renderer, thus an AA-abled
         // canvas needs to be checked here in the future.
         // Currently, just allow AA for WIN32
 #endif

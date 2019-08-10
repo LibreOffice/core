@@ -1400,7 +1400,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
         // string resources (and our resource system relies on the SolarMutex :()
         SolarMutexReleaser aSolarRelease;
 
-        // now wait. Note that if we didn't get an pAsyncDescriptor, then this is an infinite wait.
+        // now wait. Note that if we didn't get a pAsyncDescriptor, then this is an infinite wait.
         eResult = m_aAsyncActionFinished.wait( pTimeout.get() );
     }
 

@@ -842,7 +842,7 @@ namespace svt { namespace table
                             continue;
 
                         OSL_ENSURE( o_newColWidthsPixel[i] <= effectiveColumnLimits[i].second,
-                            "TableControl_Impl::impl_ni_calculateColumnWidths: inconsitency!" );
+                            "TableControl_Impl::impl_ni_calculateColumnWidths: inconsistency!" );
                         if ( o_newColWidthsPixel[i] >= effectiveColumnLimits[i].first )
                         {
                             columnFlexibilities[i] = 0;
@@ -917,7 +917,7 @@ namespace svt { namespace table
                             continue;
 
                         OSL_ENSURE( o_newColWidthsPixel[i] >= effectiveColumnLimits[i].first,
-                            "TableControl_Impl::impl_ni_calculateColumnWidths: inconsitency!" );
+                            "TableControl_Impl::impl_ni_calculateColumnWidths: inconsistency!" );
                         if ( o_newColWidthsPixel[i] <= effectiveColumnLimits[i].first )
                         {
                             columnFlexibilities[i] = 0;
@@ -2028,7 +2028,7 @@ namespace svt { namespace table
         if ( m_nTopRow != nOldTopRow )
         {
             SuppressCursor aHideCursor( *this );
-            // TODO: call a onStartScroll at our listener (or better an own onStartScroll,
+            // TODO: call an onStartScroll at our listener (or better an own onStartScroll,
             // which hides the cursor and then calls the listener)
             // Same for onEndScroll
 
@@ -2092,7 +2092,7 @@ namespace svt { namespace table
         if ( m_nLeftColumn != nOldLeftColumn )
         {
             SuppressCursor aHideCursor( *this );
-            // TODO: call a onStartScroll at our listener (or better an own onStartScroll,
+            // TODO: call an onStartScroll at our listener (or better an own onStartScroll,
             // which hides the cursor and then calls the listener)
             // Same for onEndScroll
 

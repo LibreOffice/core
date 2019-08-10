@@ -130,7 +130,7 @@ SvStream* getImageStream(uno::Reference<uno::XComponentContext> const & rxContex
         if (!xGraphic.is())
             return pReturn;
 
-        // copy the graphic to a in-memory buffer
+        // copy the graphic to an in-memory buffer
         SvMemoryStream* pMemBuffer = new SvMemoryStream;
         uno::Reference<io::XStream> xBufferAccess = new StreamSupplier(
             new OSeekableInputStreamWrapper(*pMemBuffer),

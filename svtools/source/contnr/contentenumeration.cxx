@@ -281,7 +281,7 @@ namespace svt
                 }
                 catch( CommandAbortedException& )
                 {
-                    SAL_WARN( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught an CommandAbortedException while enumerating!" );
+                    SAL_WARN( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught a CommandAbortedException while enumerating!" );
                 }
                 catch( Exception const & )
                 {
@@ -292,7 +292,7 @@ namespace svt
         }
         catch( CommandAbortedException& )
         {
-            SAL_WARN( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught an CommandAbortedException!" );
+            SAL_WARN( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught a CommandAbortedException!" );
         }
         catch( Exception const & )
         {
