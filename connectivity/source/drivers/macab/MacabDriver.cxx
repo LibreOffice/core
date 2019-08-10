@@ -218,7 +218,7 @@ void MacabDriver::disposing()
 
 OUString MacabDriver::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.sdbc.macab.Driver");
+    return "com.sun.star.comp.sdbc.macab.Driver";
 }
 
 Sequence< OUString > MacabDriver::getSupportedServiceNames_Static(  )

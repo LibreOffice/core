@@ -151,7 +151,7 @@ static OString macxp_resolveAliasAndConvert(OString const & p)
     {
         strcpy(path, p.getStr());
         macxp_resolveAlias(path, PATH_MAX);
-        return OString(path);
+        return path;
     }
     return p;
 }

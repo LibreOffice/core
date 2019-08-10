@@ -46,7 +46,7 @@ using namespace comphelper;
 
 static OUString dropTarget_getImplementationName()
 {
-    return OUString("com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1");
+    return "com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1";
 }
 
 static Sequence<OUString> dropTarget_getSupportedServiceNames()
