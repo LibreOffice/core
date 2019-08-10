@@ -86,11 +86,9 @@ void ODateTimeDialog::InsertEntry(sal_Int16 _nNumberFormatId)
     const uno::Reference< util::XNumberFormatter> xNumberFormatter = m_pController->getReportNumberFormatter();
     const uno::Reference< util::XNumberFormats> xFormats = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats();
     const uno::Sequence<sal_Int32> aFormatKeys = xFormats->queryKeys(_nNumberFormatId,m_nLocale,true);
-    const sal_Int32* pIter = aFormatKeys.getConstArray();
-    const sal_Int32* pEnd  = pIter + aFormatKeys.getLength();
-    for (;pIter != pEnd; ++pIter)
+    for (const sal_Int32 nFormatKey : aFormatKeys)
     {
-        pListBox->append(OUString::number(*pIter), getFormatStringByKey(*pIter,xFormats,bTime));
+        pListBox->append(OUString::number(nFormatKey), getFormatStringByKey(nFormatKey,xFormats,bTime));
     }
 }
 

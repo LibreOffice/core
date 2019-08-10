@@ -397,28 +397,24 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     uno::Reference< embed::XStorage >   xStorage;
     uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier;
 
-    const PropertyValue* pIter = rDescriptor.getConstArray();
-    const PropertyValue* pEnd   = pIter + rDescriptor.getLength();
-    for(;pIter != pEnd;++pIter)
+    for(const PropertyValue& rProp : rDescriptor)
     {
-        if ( pIter->Name == "FileName" )
-            pIter->Value >>= sFileName;
-        else if ( pIter->Name == "Storage" )
-            pIter->Value >>= xStorage;
-        else if ( pIter->Name == "ComponentData" )
+        if ( rProp.Name == "FileName" )
+            rProp.Value >>= sFileName;
+        else if ( rProp.Name == "Storage" )
+            rProp.Value >>= xStorage;
+        else if ( rProp.Name == "ComponentData" )
         {
             Sequence< PropertyValue > aComponent;
-            pIter->Value >>= aComponent;
+            rProp.Value >>= aComponent;
             const PropertyValue* pComponentIter = aComponent.getConstArray();
             const PropertyValue* pComponentEnd  = pComponentIter + aComponent.getLength();
-            for(;pComponentIter != pComponentEnd;++pComponentIter)
+            pComponentIter = std::find_if(pComponentIter, pComponentEnd,
+                [](const PropertyValue& rComponent) { return rComponent.Name == "ActiveConnection"; });
+            if (pComponentIter != pComponentEnd)
             {
-                if ( pComponentIter->Name == "ActiveConnection" )
-                {
-                    uno::Reference<sdbc::XConnection> xCon(pComponentIter->Value,uno::UNO_QUERY);
-                    xNumberFormatsSupplier = ::dbtools::getNumberFormats(xCon);
-                    break;
-                }
+                uno::Reference<sdbc::XConnection> xCon(pComponentIter->Value, uno::UNO_QUERY);
+                xNumberFormatsSupplier = ::dbtools::getNumberFormats(xCon);
             }
         }
     }
