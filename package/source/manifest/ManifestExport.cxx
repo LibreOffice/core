@@ -111,33 +111,30 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     const OUString  sPGP_Name            ( PGP_NAME );
 
     ::comphelper::AttributeList * pRootAttrList = new ::comphelper::AttributeList;
-    const uno::Sequence < beans::PropertyValue > *pSequence = rManList.getConstArray();
-    const sal_uInt32 nManLength = rManList.getLength();
 
     // find the mediatype of the document if any
     OUString aDocMediaType;
     OUString aDocVersion;
-    sal_Int32 nRootFolderPropIndex=-1;
-    for (sal_uInt32 nInd = 0; nInd < nManLength ; nInd++ )
+    const uno::Sequence<beans::PropertyValue>* pRootFolderPropSeq = nullptr;
+    for (const uno::Sequence < beans::PropertyValue >& rSequence : rManList)
     {
         OUString aMediaType;
         OUString aPath;
         OUString aVersion;
 
-        const beans::PropertyValue *pValue = pSequence[nInd].getConstArray();
-        for (sal_uInt32 j = 0, nNum = pSequence[nInd].getLength(); j < nNum; j++, pValue++)
+        for (const beans::PropertyValue& rValue : rSequence)
         {
-            if (pValue->Name == sMediaTypeProperty )
+            if (rValue.Name == sMediaTypeProperty )
             {
-                pValue->Value >>= aMediaType;
+                rValue.Value >>= aMediaType;
             }
-            else if (pValue->Name == sFullPathProperty )
+            else if (rValue.Name == sFullPathProperty )
             {
-                pValue->Value >>= aPath;
+                rValue.Value >>= aPath;
             }
-            else if (pValue->Name == sVersionProperty )
+            else if (rValue.Name == sVersionProperty )
             {
-                pValue->Value >>= aVersion;
+                rValue.Value >>= aVersion;
             }
 
             if ( !aPath.isEmpty() && !aMediaType.isEmpty() && !aVersion.isEmpty() )
@@ -148,7 +145,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
         {
             aDocMediaType = aMediaType;
             aDocVersion = aVersion;
-            nRootFolderPropIndex = nInd;
+            pRootFolderPropSeq = &rSequence;
             break;
         }
     }
@@ -217,15 +214,13 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     xHandler->startElement( sManifestElement, xRootAttrList );
 
     const uno::Any *pKeyInfoProperty = nullptr;
-    if ( nRootFolderPropIndex >= 0 )
+    if ( pRootFolderPropSeq )
     {
         // do we have package-wide encryption info?
-        const beans::PropertyValue *pValue =
-            pSequence[nRootFolderPropIndex].getConstArray();
-        for (sal_uInt32 j = 0, nNum = pSequence[nRootFolderPropIndex].getLength(); j < nNum; j++, pValue++)
+        for (const beans::PropertyValue& rValue : *pRootFolderPropSeq)
         {
-            if (pValue->Name == sKeyInfo )
-                pKeyInfoProperty = &pValue->Value;
+            if (rValue.Name == sKeyInfo )
+                pKeyInfoProperty = &rValue.Value;
         }
 
         if ( pKeyInfoProperty )
@@ -242,22 +237,19 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
 
             uno::Sequence< uno::Sequence < beans::NamedValue > > aKeyInfoSequence;
             *pKeyInfoProperty >>= aKeyInfoSequence;
-            const uno::Sequence < beans::NamedValue > *pKeyInfoSequence = aKeyInfoSequence.getConstArray();
-            const sal_uInt32 nKeyInfoLength = aKeyInfoSequence.getLength();
-            for (sal_uInt32 nInd = 0; nInd < nKeyInfoLength ; nInd++ )
+            for (const uno::Sequence<beans::NamedValue>& rKeyInfoSequence : std::as_const(aKeyInfoSequence))
             {
                 uno::Sequence < sal_Int8 > aPgpKeyID;
                 uno::Sequence < sal_Int8 > aPgpKeyPacket;
                 uno::Sequence < sal_Int8 > aCipherValue;
-                const beans::NamedValue *pNValue = pKeyInfoSequence[nInd].getConstArray();
-                for (sal_uInt32 j = 0, nNum = pKeyInfoSequence[nInd].getLength(); j < nNum; j++, pNValue++)
+                for (const beans::NamedValue& rNValue : rKeyInfoSequence)
                 {
-                    if (pNValue->Name == sPgpKeyIDProperty )
-                        pNValue->Value >>= aPgpKeyID;
-                    else if (pNValue->Name == sPgpKeyPacketProperty )
-                        pNValue->Value >>= aPgpKeyPacket;
-                    else if (pNValue->Name == sCipherValueProperty )
-                        pNValue->Value >>= aCipherValue;
+                    if (rNValue.Name == sPgpKeyIDProperty )
+                        rNValue.Value >>= aPgpKeyID;
+                    else if (rNValue.Name == sPgpKeyPacketProperty )
+                        rNValue.Value >>= aPgpKeyPacket;
+                    else if (rNValue.Name == sCipherValueProperty )
+                        rNValue.Value >>= aCipherValue;
                 }
 
                 if (aPgpKeyID.hasElements() && aCipherValue.hasElements() )
@@ -326,55 +318,54 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     }
 
     // now write individual file entries
-    for (sal_uInt32 i = 0 ; i < nManLength ; i++)
+    for (const uno::Sequence<beans::PropertyValue>& rSequence : rManList)
     {
         ::comphelper::AttributeList *pAttrList = new ::comphelper::AttributeList;
-        const beans::PropertyValue *pValue = pSequence[i].getConstArray();
         OUString aString;
         const uno::Any *pVector = nullptr, *pSalt = nullptr, *pIterationCount = nullptr, *pDigest = nullptr, *pDigestAlg = nullptr, *pEncryptAlg = nullptr, *pStartKeyAlg = nullptr, *pDerivedKeySize = nullptr;
-        for (sal_uInt32 j = 0, nNum = pSequence[i].getLength(); j < nNum; j++, pValue++)
+        for (const beans::PropertyValue& rValue : rSequence)
         {
-            if (pValue->Name == sMediaTypeProperty )
+            if (rValue.Name == sMediaTypeProperty )
             {
-                pValue->Value >>= aString;
+                rValue.Value >>= aString;
                 pAttrList->AddAttribute ( sMediaTypeAttribute, sCdataAttribute, aString );
             }
-            else if (pValue->Name == sVersionProperty )
+            else if (rValue.Name == sVersionProperty )
             {
-                pValue->Value >>= aString;
+                rValue.Value >>= aString;
                 // the version is stored only if it is not empty
                 if ( bAcceptNonemptyVersion && !aString.isEmpty() )
                     pAttrList->AddAttribute ( sVersionAttribute, sCdataAttribute, aString );
             }
-            else if (pValue->Name == sFullPathProperty )
+            else if (rValue.Name == sFullPathProperty )
             {
-                pValue->Value >>= aString;
+                rValue.Value >>= aString;
                 pAttrList->AddAttribute ( sFullPathAttribute, sCdataAttribute, aString );
             }
-            else if (pValue->Name == sSizeProperty )
+            else if (rValue.Name == sSizeProperty )
             {
                 sal_Int64 nSize = 0;
-                pValue->Value >>= nSize;
+                rValue.Value >>= nSize;
                 OUStringBuffer aBuffer;
                 aBuffer.append ( nSize );
                 pAttrList->AddAttribute ( sSizeAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
             }
-            else if (pValue->Name == sInitialisationVectorProperty )
-                pVector = &pValue->Value;
-            else if (pValue->Name == sSaltProperty )
-                pSalt = &pValue->Value;
-            else if (pValue->Name == sIterationCountProperty )
-                pIterationCount = &pValue->Value;
-            else if (pValue->Name == sDigestProperty )
-                pDigest = &pValue->Value;
-            else if (pValue->Name == sDigestAlgProperty )
-                pDigestAlg = &pValue->Value;
-            else if (pValue->Name == sEncryptionAlgProperty )
-                pEncryptAlg = &pValue->Value;
-            else if (pValue->Name == sStartKeyAlgProperty )
-                pStartKeyAlg = &pValue->Value;
-            else if (pValue->Name == sDerivedKeySizeProperty )
-                pDerivedKeySize = &pValue->Value;
+            else if (rValue.Name == sInitialisationVectorProperty )
+                pVector = &rValue.Value;
+            else if (rValue.Name == sSaltProperty )
+                pSalt = &rValue.Value;
+            else if (rValue.Name == sIterationCountProperty )
+                pIterationCount = &rValue.Value;
+            else if (rValue.Name == sDigestProperty )
+                pDigest = &rValue.Value;
+            else if (rValue.Name == sDigestAlgProperty )
+                pDigestAlg = &rValue.Value;
+            else if (rValue.Name == sEncryptionAlgProperty )
+                pEncryptAlg = &rValue.Value;
+            else if (rValue.Name == sStartKeyAlgProperty )
+                pStartKeyAlg = &rValue.Value;
+            else if (rValue.Name == sDerivedKeySizeProperty )
+                pDerivedKeySize = &rValue.Value;
         }
 
         xHandler->ignorableWhitespace ( sWhiteSpace );
