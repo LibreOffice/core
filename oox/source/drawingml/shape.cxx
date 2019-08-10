@@ -974,6 +974,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     {"Idx", uno::makeAny(pLineRef->mnThemedIdx)},
                     {"Color", uno::makeAny(nLinePhClr)},
                     {"LineStyle", uno::makeAny(aLineProperties.getLineStyle())},
+                    {"LineCap", uno::makeAny(aLineProperties.getLineCap())},
                     {"LineJoint", uno::makeAny(aLineProperties.getLineJoint())},
                     {"LineWidth", uno::makeAny(aLineProperties.getLineWidth())},
                     {"Transformations", uno::makeAny(pLineRef->maPhClr.getTransformations())}
