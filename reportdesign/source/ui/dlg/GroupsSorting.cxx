@@ -58,20 +58,18 @@ using namespace ::comphelper;
 
     static void lcl_addToList_throw( ComboBoxControl& _rListBox, ::std::vector<ColumnInfo>& o_aColumnList,const uno::Reference< container::XNameAccess>& i_xColumns )
     {
-        uno::Sequence< OUString > aEntries = i_xColumns->getElementNames();
-        const OUString* pEntries = aEntries.getConstArray();
-        sal_Int32 nEntries = aEntries.getLength();
-        for ( sal_Int32 i = 0; i < nEntries; ++i, ++pEntries )
+        const uno::Sequence< OUString > aEntries = i_xColumns->getElementNames();
+        for ( const OUString& rEntry : aEntries )
         {
-            uno::Reference< beans::XPropertySet> xColumn(i_xColumns->getByName(*pEntries),uno::UNO_QUERY_THROW);
+            uno::Reference< beans::XPropertySet> xColumn(i_xColumns->getByName(rEntry),uno::UNO_QUERY_THROW);
             OUString sLabel;
             if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
-            o_aColumnList.emplace_back(*pEntries,sLabel );
+            o_aColumnList.emplace_back(rEntry,sLabel );
             if ( !sLabel.isEmpty() )
                 _rListBox.InsertEntry( sLabel );
             else
-                _rListBox.InsertEntry( *pEntries );
+                _rListBox.InsertEntry( rEntry );
         }
     }
 
@@ -317,11 +315,9 @@ void OFieldExpressionControl::moveGroups(const uno::Sequence<uno::Any>& _aGroups
             const UndoContext aUndoContext( m_pParent->m_pController->getUndoManager(), sUndoAction );
 
             uno::Reference< report::XGroups> xGroups = m_pParent->getGroups();
-            const uno::Any* pIter = _aGroups.getConstArray();
-            const uno::Any* pEnd  = pIter + _aGroups.getLength();
-            for(;pIter != pEnd;++pIter)
+            for(const uno::Any& rGroup : _aGroups)
             {
-                uno::Reference< report::XGroup> xGroup(*pIter,uno::UNO_QUERY);
+                uno::Reference< report::XGroup> xGroup(rGroup,uno::UNO_QUERY);
                 if ( xGroup.is() )
                 {
                     uno::Sequence< beans::PropertyValue > aArgs(1);

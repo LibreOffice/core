@@ -155,13 +155,11 @@ void OSectionUndo::collectControls(const uno::Reference< report::XSection >& _xS
     {
         // copy all properties for restoring
         uno::Reference< beans::XPropertySetInfo> xInfo = _xSection->getPropertySetInfo();
-        uno::Sequence< beans::Property> aSeq = xInfo->getProperties();
-        const beans::Property* pIter = aSeq.getConstArray();
-        const beans::Property* pEnd  = pIter + aSeq.getLength();
-        for(;pIter != pEnd;++pIter)
+        const uno::Sequence< beans::Property> aSeq = xInfo->getProperties();
+        for(const beans::Property& rProp : aSeq)
         {
-            if ( 0 == (pIter->Attributes & beans::PropertyAttribute::READONLY) )
-                m_aValues.emplace_back(pIter->Name,_xSection->getPropertyValue(pIter->Name));
+            if ( 0 == (rProp.Attributes & beans::PropertyAttribute::READONLY) )
+                m_aValues.emplace_back(rProp.Name,_xSection->getPropertyValue(rProp.Name));
         }
         lcl_collectElements(_xSection,m_aControls);
     }
