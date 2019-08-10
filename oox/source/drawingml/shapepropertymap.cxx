@@ -41,7 +41,7 @@ namespace {
 
 static const ShapePropertyIds spnDefaultShapeIds =
 {
-    PROP_LineStyle, PROP_LineWidth, PROP_LineColor, PROP_LineTransparence, PROP_LineDash, PROP_LineJoint,
+    PROP_LineStyle, PROP_LineWidth, PROP_LineColor, PROP_LineTransparence, PROP_LineDash, PROP_LineCap, PROP_LineJoint,
     PROP_LineStartName, PROP_LineStartWidth, PROP_LineStartCenter, PROP_LineEndName, PROP_LineEndWidth, PROP_LineEndCenter,
     PROP_FillStyle, PROP_FillColor, PROP_FillTransparence, PROP_FillTransparenceGradientName, PROP_FillGradient,
     PROP_FillBitmap, PROP_FillBitmapMode, PROP_FillBitmapSizeX, PROP_FillBitmapSizeY,

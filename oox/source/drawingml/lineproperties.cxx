@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -126,6 +127,18 @@ DashStyle lclGetDashStyle( sal_Int32 nToken )
     return DashStyle_ROUNDRELATIVE;
 }
 
+LineCap lclGetLineCap( sal_Int32 nToken )
+{
+    OSL_ASSERT((nToken & sal_Int32(0xFFFF0000))==0);
+    switch( nToken )
+    {
+        case XML_rnd:   return LineCap_ROUND;
+        case XML_sq:    return LineCap_SQUARE;
+        case XML_flat:  return LineCap_BUTT;
+    }
+    return LineCap_BUTT;
+}
+
 LineJoint lclGetLineJoint( sal_Int32 nToken )
 {
     OSL_ASSERT((nToken & sal_Int32(0xFFFF0000))==0);
@@ -135,7 +148,8 @@ LineJoint lclGetLineJoint( sal_Int32 nToken )
         case XML_bevel: return LineJoint_BEVEL;
         case XML_miter: return LineJoint_MITER;
     }
-    return LineJoint_ROUND;
+    // Default Line Join Type for MS Excel is miter
+    return LineJoint_MITER;
 }
 
 const sal_Int32 OOX_ARROWSIZE_SMALL     = 0;
@@ -382,6 +396,9 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
             if( rPropMap.setProperty( ShapeProperty::LineDash, aLineDash ) )
                 eLineStyle = drawing::LineStyle_DASH;
         }
+        // line cap type
+        if( moLineCap.has() )
+            rPropMap.setProperty( ShapeProperty::LineCap, lclGetLineCap( moLineCap.get() ) );
 
         // set final line style property
         rPropMap.setProperty( ShapeProperty::LineStyle, eLineStyle );
@@ -416,6 +433,14 @@ drawing::LineStyle LineProperties::getLineStyle() const
             (moPresetDash.differsFrom( XML_solid ) || (!moPresetDash && !maCustomDash.empty())) ?
                     drawing::LineStyle_DASH :
                     drawing::LineStyle_SOLID;
+}
+
+drawing::LineCap LineProperties::getLineCap() const
+{
+    if( moLineCap.has() )
+        return lclGetLineCap( moLineCap.get() );
+
+    return drawing::LineCap_BUTT;
 }
 
 drawing::LineJoint LineProperties::getLineJoint() const
