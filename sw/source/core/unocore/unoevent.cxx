@@ -157,7 +157,6 @@ void SwHyperlinkEventDescriptor::copyMacrosFromNameReplace(
 SwFrameEventDescriptor::SwFrameEventDescriptor(
     SwXTextFrame& rFrameRef ) :
         SvEventDescriptor(static_cast<text::XTextFrame&>(rFrameRef), aFrameEvents),
-        sSwFrameEventDescriptor("SwFrameEventDescriptor"),
         rFrame(rFrameRef)
 {
 }
@@ -197,7 +196,7 @@ sal_uInt16 SwFrameEventDescriptor::getMacroItemWhich() const
 
 OUString SwFrameEventDescriptor::getImplementationName()
 {
-    return sSwFrameEventDescriptor;
+    return "SwFrameEventDescriptor";
 }
 
 SwFrameStyleEventDescriptor::SwFrameStyleEventDescriptor(
