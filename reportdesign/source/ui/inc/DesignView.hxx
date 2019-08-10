@@ -213,7 +213,7 @@ namespace rptui
         */
         void fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedPositions) const;
 
-        /** collpase all sections given by their position
+        /** collapse all sections given by their position
         *
         * \param _aCollpasedSections The position of the sections which should be collapsed.
         */

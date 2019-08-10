@@ -91,7 +91,7 @@ namespace rptui
             or the undecorated expression if the formula denotes an expression.
 
             Effectively, this means the method returns the complete formula, stripped by the prefix
-            which indicates a field or a expression.
+            which indicates a field or an expression.
         */
         OUString getBracketedFieldOrExpression() const;
 

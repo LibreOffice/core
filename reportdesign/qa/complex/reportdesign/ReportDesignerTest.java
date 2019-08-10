@@ -95,11 +95,11 @@ class PropertySetHelper
 class PropertyHelper
 {
     /**
-       Create a PropertyValue[] from a ArrayList
+       Create a PropertyValue[] from an ArrayList
     */
     public static PropertyValue[] createPropertyValueArrayFormArrayList(ArrayList<PropertyValue> _aPropertyList)
         {
-            // copy the whole PropertyValue List to an PropertyValue Array
+            // copy the whole PropertyValue List to a PropertyValue Array
             PropertyValue[] aSaveProperties = null;
 
             if (_aPropertyList == null)

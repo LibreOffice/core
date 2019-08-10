@@ -61,7 +61,7 @@ protected:
     */
     void    checkMovementAllowed(const MouseEvent& rMEvt);
 
-    /** sets the correct mouse pointer when moving a object
+    /** sets the correct mouse pointer when moving an object
     *
     * \param rMEvt
     * \return <TRUE/> when the pointer was already set.

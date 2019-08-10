@@ -147,7 +147,7 @@ namespace rptui
         /** append a new group or remove it with undo.
         *
         * \param _bAppend
-        * \param _aArgs The args which contains a element named PROPERTY_GROUP of type report::XGroup.
+        * \param _aArgs The args which contains an element named PROPERTY_GROUP of type report::XGroup.
         */
         void modifyGroup(const bool _bAppend, const css::uno::Sequence< css::beans::PropertyValue >& _aArgs);
 
@@ -155,7 +155,7 @@ namespace rptui
         *
         * \param _bUndo true when undo action should be created
         * \param _bHeader true when it is a header otherwise it is a footer
-        * \param _aArgs The args which contains a element named PROPERTY_GROUP of type report::XGroup.
+        * \param _aArgs The args which contains an element named PROPERTY_GROUP of type report::XGroup.
         */
         void createGroupSection(const bool _bUndo,const bool _bHeader,const css::uno::Sequence< css::beans::PropertyValue >&_aArgs);
 
@@ -214,7 +214,7 @@ namespace rptui
     public:
         void shrinkSection(const char* pUndoStrId, const css::uno::Reference< css::report::XSection >& _xSection, sal_Int32 _nShrinkId);
 
-        /** opens the file open dialog to allow the user to select a image which will be
+        /** opens the file open dialog to allow the user to select an image which will be
         * bound to a newly created image button.
         */
         void insertGraphic();
@@ -237,7 +237,7 @@ namespace rptui
         */
         void createPageNumber(const css::uno::Sequence< css::beans::PropertyValue >& _aArgs);
 
-        /** creates a formatted field with TODAY() function and if set also an NOW() function
+        /** creates a formatted field with TODAY() function and if set also a NOW() function
         *
         * \param _aArgs
         */
@@ -283,7 +283,7 @@ namespace rptui
         bool isUiVisible() const;
 
         /** creates a new default control for the currently set type when the modifier KEY_MOD1 was pressed
-        * \param _aArgs must contain a properyvalue with name "KeyModifier" and value KEY_MOD1 when control should be created.
+        * \param _aArgs must contain a propertyvalue with name "KeyModifier" and value KEY_MOD1 when control should be created.
         */
         void createDefaultControl(const css::uno::Sequence< css::beans::PropertyValue>& _aArgs);
 
