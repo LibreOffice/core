@@ -19,31 +19,29 @@ UIObjectCommand:
 ;
 
 ButtonUIObject:
-  'Click on' ui_button=STRING 'from' parent_id=ID 
+  'Click on' ui_button=STRING  ('from' parent_id=ID)?
 ;	
 CheckBoxUIObject:
-  'Toggle' Check_box_id=STRING 'CheckBox' 'from' parent_id=ID   
+  'Toggle' Check_box_id=STRING 'CheckBox' ('from' parent_id=ID)?   
 ;	
 RadioButtonUIObject:
-  'Select' Radio_button_id=STRING 'RadioButton' 'from' parent_id=ID 
+  'Select' Radio_button_id=STRING 'RadioButton' ('from' parent_id=ID)? 
 ;	
 ComboBoxUIObject:
-   'Select in' Combo_box_id=STRING 'ComboBox' 'item number' item_num=INT 'from' parent_id=ID  
+   'Select in' Combo_box_id=STRING 'ComboBox' 'item number' item_num=INT ('from' parent_id=ID)?  
 ;
 TabControlUIObject:
-   'Choose Tab number' tab_page_number=INT 'in' tab_id=STRING 'from' parent_id=ID 
+   'Choose Tab number' tab_page_number=INT 'in' tab_id=STRING ('from' parent_id=ID)? 
 ;
-
 EditUIObject:
-   action=action_on_UIObject 'from' parent_id=ID  
+   action=action_on_UIObject ('from' parent_id=ID)?
 ;
 SpinFieldUIObject:
-   change=increase_or_ecrease Spin_id=STRING 'from' parent_id=ID 
+   change=increase_or_ecrease Spin_id=STRING ('from' parent_id=ID)? 
 ;
 ListBoxUIObject:
-   'Select element with position ' POS=INT 'in' list_id=STRING 'from' parent_id=ID 
+   'Select element with position ' POS=INT 'in' list_id=STRING ('from' parent_id=ID)?
 ;
-
 //=============================================================
 //hellper grammer for EditUIObject
 action_on_UIObject:
