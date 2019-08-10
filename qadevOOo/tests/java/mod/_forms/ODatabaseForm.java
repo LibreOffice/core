@@ -526,10 +526,6 @@ public class ODatabaseForm extends TestCase {
         // adding relation for XPersistObject
         tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component.Form");
 
-        if (the_set != null) {
-            log.println("The Form has a not empty ResultSet");
-        }
-
         // Adding obj relation for XRowSetApproveBroadcaster test
         final XResultSet xResSet = UnoRuntime.queryInterface(
                                            XResultSet.class, oObj);
