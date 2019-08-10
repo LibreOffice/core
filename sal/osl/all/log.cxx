@@ -218,8 +218,10 @@ void maybeOutputTimestamp(std::ostringstream &s) {
         tm.tm_min = dateTime.Minutes;
         tm.tm_hour = dateTime.Hours;
         tm.tm_mday = dateTime.Day;
+        tm.tm_wday = dateTime.DayOfWeek;
         tm.tm_mon = dateTime.Month - 1;
         tm.tm_year = dateTime.Year - 1900;
+        tm.tm_yday = 0;
         strftime(ts, sizeof(ts), "%Y-%m-%d:%H:%M:%S", &tm);
         char milliSecs[11];
         snprintf(milliSecs, sizeof(milliSecs), "%03u",
