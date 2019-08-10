@@ -129,7 +129,7 @@ class SwTextFormatter : public SwTextPainter
     bool ChkFlyUnderflow( SwTextFormatInfo &rInf ) const;
 
     // Insert portion
-    void InsertPortion( SwTextFormatInfo &rInf, SwLinePortion *pPor ) const;
+    void InsertPortion( SwTextFormatInfo &rInf, SwLinePortion *pPor );
 
     // Guess height for the DropPortion
     void GuessDropHeight( const sal_uInt16 nLines );
