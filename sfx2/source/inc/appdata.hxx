@@ -101,8 +101,6 @@ public:
     sal_uInt16                              nDocModalMode;              // counts documents in modal mode
     sal_uInt16                              nRescheduleLocks;
 
-    rtl::Reference< sfx2::appl::ImeStatusWindow > m_xImeStatusWindow;
-
     SfxTbxCtrlFactArr_Impl*     pTbxCtrlFac;
     SfxStbCtrlFactArr_Impl*     pStbCtrlFac;
     SfxViewFrameArr_Impl*       pViewFrames;
