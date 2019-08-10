@@ -124,7 +124,7 @@ public:
 
 inline OUString MacSpellChecker::getImplementationName_Static() throw()
 {
-    return OUString( "org.openoffice.lingu.MacOSXSpellChecker" );
+    return "org.openoffice.lingu.MacOSXSpellChecker";
 }
 
 #endif

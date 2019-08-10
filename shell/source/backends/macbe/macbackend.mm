@@ -376,7 +376,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
 
 OUString MacOSXBackend::getBackendName(void)
 {
-    return OUString("com.sun.star.comp.configuration.backend.MacOSXBackend");
+    return "com.sun.star.comp.configuration.backend.MacOSXBackend";
 }
 
 OUString SAL_CALL MacOSXBackend::getImplementationName(void)

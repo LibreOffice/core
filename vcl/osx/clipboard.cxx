@@ -61,7 +61,7 @@ using namespace css;
 
 static OUString clipboard_getImplementationName()
 {
-  return OUString("com.sun.star.datatransfer.clipboard.AquaClipboard");
+  return "com.sun.star.datatransfer.clipboard.AquaClipboard";
 }
 
 static uno::Sequence<OUString> clipboard_getSupportedServiceNames()

@@ -56,7 +56,7 @@ bool DragSource::g_DropSuccess = false;
 
 static OUString dragSource_getImplementationName()
 {
-  return OUString("com.sun.star.comp.datatransfer.dnd.OleDragSource_V1");
+  return "com.sun.star.comp.datatransfer.dnd.OleDragSource_V1";
 }
 
 static Sequence<OUString> dragSource_getSupportedServiceNames()

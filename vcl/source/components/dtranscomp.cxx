@@ -315,7 +315,7 @@ Sequence< OUString > DragSource_getSupportedServiceNames()
 OUString DragSource_getImplementationName()
 {
 #if defined MACOSX
-    return OUString("com.sun.star.comp.datatransfer.dnd.OleDragSource_V1");
+    return "com.sun.star.comp.datatransfer.dnd.OleDragSource_V1";
 #elif defined UNX
     return "com.sun.star.datatransfer.dnd.XdndSupport";
 #else

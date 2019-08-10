@@ -241,7 +241,7 @@ void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventLis
 
 OUString SAL_CALL Window::getImplementationName(  )
 {
-    return OUString( AVMEDIA_MACAVF_WINDOW_IMPLEMENTATIONNAME );
+    return AVMEDIA_MACAVF_WINDOW_IMPLEMENTATIONNAME;
 }
 
 
