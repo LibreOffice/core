@@ -1307,8 +1307,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
     {
         ScPrintOptions aOptions = SC_MOD()->GetPrintOptions();
 
-        std::unique_ptr<ScPrintFunc> pPrintFunc;
-
+        std::unique_ptr<ScPrintFunc, o3tl::default_delete<ScPrintFunc>> pPrintFunc;
         if (bStateValid)
             pPrintFunc.reset(new ScPrintFunc( this, pDocShell, aState, &aOptions ));
         else
