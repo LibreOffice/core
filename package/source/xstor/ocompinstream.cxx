@@ -285,6 +285,17 @@ sal_Bool SAL_CALL OInputCompStream::hasByID(  const OUString& sID )
     return false;
 }
 
+namespace
+{
+
+const beans::StringPair* lcl_findPairByName(const uno::Sequence<beans::StringPair>& rSeq, const OUString& rName)
+{
+    return std::find_if(rSeq.begin(), rSeq.end(),
+        [&rName](const beans::StringPair& rPair) { return rPair.First == rName; });
+}
+
+}
+
 OUString SAL_CALL OInputCompStream::getTargetByID(  const OUString& sID  )
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
@@ -298,10 +309,10 @@ OUString SAL_CALL OInputCompStream::getTargetByID(  const OUString& sID  )
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
-    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( aSeq[nInd].First == "Target" )
-            return aSeq[nInd].Second;
+    const uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
+    auto pSeq = lcl_findPairByName(aSeq, "Target");
+    if (pSeq != aSeq.end())
+        return pSeq->Second;
 
     return OUString();
 }
@@ -319,10 +330,10 @@ OUString SAL_CALL OInputCompStream::getTypeByID(  const OUString& sID  )
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
-    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( aSeq[nInd].First == "Type" )
-            return aSeq[nInd].Second;
+    const uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
+    auto pSeq = lcl_findPairByName(aSeq, "Type");
+    if (pSeq != aSeq.end())
+        return pSeq->Second;
 
     return OUString();
 }
@@ -341,15 +352,14 @@ uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationshipByI
         throw uno::RuntimeException();
 
     // TODO/LATER: in future the unification of the ID could be checked
-    uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
-    for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
-        for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
-            if ( aSeq[nInd1][nInd2].First == "Id" )
-            {
-                if ( aSeq[nInd1][nInd2].Second == sID )
-                    return aSeq[nInd1];
-                break;
-            }
+    const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    auto pSeq = std::find_if(aSeq.begin(), aSeq.end(),
+        [&sID](const uno::Sequence<beans::StringPair>& rSeq){
+            auto pPair = lcl_findPairByName(rSeq, "Id");
+            return pPair != rSeq.end() && pPair->Second == sID;
+        });
+    if (pSeq != aSeq.end())
+        return *pSeq;
 
     throw container::NoSuchElementException();
 }
@@ -367,22 +377,19 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    uno::Sequence< uno::Sequence< beans::StringPair > > aResult;
-    sal_Int32 nEntriesNum = 0;
-
     // TODO/LATER: in future the unification of the ID could be checked
-    uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
-    for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
-        for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
-            if ( aSeq[nInd1][nInd2].First == "Type" )
-            {
-                if ( aSeq[nInd1][nInd2].Second == sType )
-                {
-                    aResult.realloc( nEntriesNum );
-                    aResult[nEntriesNum-1] = aSeq[nInd1];
-                }
-                break;
-            }
+    const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    uno::Sequence< uno::Sequence< beans::StringPair > > aResult(aSeq.getLength());
+
+    auto pResult = std::copy_if(aSeq.begin(), aSeq.end(), aResult.begin(),
+        [&sType](const uno::Sequence<beans::StringPair>& rSeq) {
+            auto pPair = std::find_if(rSeq.begin(), rSeq.end(),
+                [](const beans::StringPair& rPair) { return rPair.First == "Type"; });
+            return pPair != rSeq.end() && pPair->Second == sType;
+        });
+
+    auto nEntriesNum = static_cast<sal_Int32>(std::distance(aResult.begin(), pResult));
+    aResult.realloc(nEntriesNum);
 
     return aResult;
 }
@@ -401,15 +408,14 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
         throw uno::RuntimeException();
 
     // TODO/LATER: in future the information could be taken directly from m_pImpl when possible
-    uno::Sequence< uno::Sequence< beans::StringPair > > aResult;
-    for ( sal_Int32 aInd = 0; aInd < m_aProperties.getLength(); aInd++ )
-        if ( m_aProperties[aInd].Name == "RelationsInfo" )
-        {
-            if ( m_aProperties[aInd].Value >>= aResult )
-                return aResult;
-
-            break;
-        }
+    auto pProp = std::find_if(m_aProperties.begin(), m_aProperties.end(),
+        [](const beans::PropertyValue& rProp) { return rProp.Name == "RelationsInfo"; });
+    if (pProp != m_aProperties.end())
+    {
+        uno::Sequence< uno::Sequence< beans::StringPair > > aResult;
+        if (pProp->Value >>= aResult)
+            return aResult;
+    }
 
     throw io::IOException(); // the relations info could not be read
 }
@@ -503,13 +509,9 @@ void SAL_CALL OInputCompStream::setPropertyValue( const OUString& aPropertyName,
     }
 
     // all the provided properties are accessible
-    for ( sal_Int32 aInd = 0; aInd < m_aProperties.getLength(); aInd++ )
-    {
-        if ( m_aProperties[aInd].Name == aPropertyName )
-        {
-            throw beans::PropertyVetoException(); // TODO
-        }
-    }
+    if (std::any_of(m_aProperties.begin(), m_aProperties.end(),
+            [&aPropertyName](const beans::PropertyValue& rProp) { return rProp.Name == aPropertyName; }))
+        throw beans::PropertyVetoException(); // TODO
 
     throw beans::UnknownPropertyException(); // TODO
 }
@@ -534,13 +536,10 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const OUString& aProp )
         throw beans::UnknownPropertyException(); // TODO
 
     // all the provided properties are accessible
-    for ( sal_Int32 aInd = 0; aInd < m_aProperties.getLength(); aInd++ )
-    {
-        if ( m_aProperties[aInd].Name == aPropertyName )
-        {
-            return m_aProperties[aInd].Value;
-        }
-    }
+    auto pProp = std::find_if(m_aProperties.begin(), m_aProperties.end(),
+        [&aPropertyName](const beans::PropertyValue& rProp) { return rProp.Name == aPropertyName; });
+    if (pProp != m_aProperties.end())
+        return pProp->Value;
 
     throw beans::UnknownPropertyException(); // TODO
 }
