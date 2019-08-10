@@ -585,9 +585,9 @@ static void lcl_HandleScrollHelper( ScrollBar* pScrl, double nN, bool isMultiply
     {
         long nNewPos = pScrl->GetThumbPos();
 
-        if ( nN == -LONG_MAX )
+        if ( nN == double(-LONG_MAX) )
             nNewPos += pScrl->GetPageSize();
-        else if ( nN == LONG_MAX )
+        else if ( nN == double(LONG_MAX) )
             nNewPos -= pScrl->GetPageSize();
         else
         {
@@ -657,9 +657,9 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                         if ( nScrollLines == COMMAND_WHEEL_PAGESCROLL )
                         {
                             if ( pData->GetDelta() < 0 )
-                                nLines = -LONG_MAX;
+                                nLines = double(-LONG_MAX);
                             else
-                                nLines = LONG_MAX;
+                                nLines = double(LONG_MAX);
                         }
                         else
                             nLines = pData->GetNotchDelta() * nScrollLines;
