@@ -720,8 +720,4 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
     return bDrawn;
 }
 
-void OutputDevice::ReleaseFontCache() { mxFontCache.reset(); }
-
-void OutputDevice::ReleaseFontCollection() { mxFontCollection.reset(); }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

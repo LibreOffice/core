@@ -1465,6 +1465,10 @@ sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, const OUString& r
     return -1;
 }
 
+void OutputDevice::ReleaseFontCache() { mxFontCache.reset(); }
+
+void OutputDevice::ReleaseFontCollection() { mxFontCollection.reset(); }
+
 void OutputDevice::SetFontCollectionFromSVData()
 {
     mxFontCollection = ImplGetSVData()->maGDIData.mxScreenFontList->Clone();
