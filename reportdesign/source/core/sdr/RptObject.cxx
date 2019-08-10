@@ -1218,14 +1218,15 @@ uno::Reference< style::XStyle> getUsedStyle(const uno::Reference< report::XRepor
     uno::Reference<container::XNameAccess> xPageStyles(xStyles->getByName("PageStyles"),uno::UNO_QUERY);
 
     uno::Reference< style::XStyle> xReturn;
-    uno::Sequence< OUString> aSeq = xPageStyles->getElementNames();
-    const OUString* pIter = aSeq.getConstArray();
-    const OUString* pEnd   = pIter + aSeq.getLength();
-    for(;pIter != pEnd && !xReturn.is() ;++pIter)
+    const uno::Sequence< OUString> aSeq = xPageStyles->getElementNames();
+    for(const OUString& rName : aSeq)
     {
-        uno::Reference< style::XStyle> xStyle(xPageStyles->getByName(*pIter),uno::UNO_QUERY);
+        uno::Reference< style::XStyle> xStyle(xPageStyles->getByName(rName),uno::UNO_QUERY);
         if ( xStyle->isInUse() )
+        {
             xReturn = xStyle;
+            break;
+        }
     }
     return xReturn;
 }
