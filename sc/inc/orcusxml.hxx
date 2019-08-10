@@ -48,7 +48,7 @@ struct ScOrcusXMLTreeParam
 
     /**
      * Store all custom data instances since the tree control doesn't manage
-     * the life cycle of user datas.
+     * the life cycle of user data.
      */
     UserDataStoreType m_UserDataStore;
 

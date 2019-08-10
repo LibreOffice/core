@@ -75,7 +75,7 @@ ReadMaintenanceServiceStrings(LPCWSTR path,
 {
     // Read in the maintenance service description string if specified.
     const unsigned int kNumStrings = 1;
-    // TODO: moggi: needs adaption for LibreOffice
+    // TODO: moggi: needs adaptation for LibreOffice
     const char *kServiceKeys = "MozillaMaintenanceDescription\0";
     char serviceStrings[kNumStrings][MAX_TEXT_LEN];
     int result = ReadStrings(path, kServiceKeys,

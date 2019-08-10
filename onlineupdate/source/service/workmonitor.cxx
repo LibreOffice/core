@@ -702,7 +702,7 @@ ExecuteServiceCommand(int argc, LPWSTR *argv)
     {
 
         // Use the passed in command line arguments for the update, except for the
-        // path to updater.exe.  We copy updater.exe to a the directory of the
+        // path to updater.exe. We copy updater.exe to the directory of the
         // MozillaMaintenance service so that a low integrity process cannot
         // replace the updater.exe at any point and use that for the update.
         // It also makes DLL injection attacks harder.

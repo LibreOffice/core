@@ -301,7 +301,7 @@ EnvHasValue(const char *name)
 #endif
 
 /**
- * Coverts a relative update path to a absolute path related to the working
+ * Converts a relative update path to an absolute path related to the working
  * or install directory. Allocates a new NS_tchar[] based path!
  *
  * @param  relpath
@@ -2011,7 +2011,7 @@ LaunchWinPostProcess(const WCHAR *installationDir,
     WCHAR workingDirectory[MAX_PATH + 1] = { L'\0' };
     wcsncpy(workingDirectory, installationDir, MAX_PATH);
 
-    // TODO: moggi: needs adaption for LibreOffice
+    // TODO: moggi: needs adaptation for LibreOffice
     // Most likely we don't have the helper method yet. Check if we really need it.
 
     // Launch helper.exe to perform post processing (e.g. registry and log file
@@ -2561,7 +2561,7 @@ WaitForServiceFinishThread(void* /*param*/)
 static int
 ReadMARChannelIDs(const NS_tchar *path, MARChannelStringTable *results)
 {
-    // TODO: moggi: needs adaption for LibreOffice
+    // TODO: moggi: needs adaptation for LibreOffice
     // Check where this function gets its parameters from
     const unsigned int kNumStrings = 1;
     const char *kUpdaterKeys = "ACCEPTED_MAR_CHANNEL_IDS\0";
@@ -2672,7 +2672,7 @@ CheckSignature(ArchiveReader& archiveReader)
         {
             NS_tchar updateSettingsPath[MAX_TEXT_LEN];
 
-            // TODO: moggi: needs adaption for LibreOffice
+            // TODO: moggi: needs adaptation for LibreOffice
             // These paths need to be adapted for us.
             int nWrittenBytes = NS_tsnprintf(updateSettingsPath,
                          sizeof(updateSettingsPath) / sizeof(updateSettingsPath[0]),
@@ -2899,7 +2899,7 @@ int NS_main(int argc, NS_tchar **argv)
     const int callbackIndex = 6;
 
 #ifdef MACOSX
-    // TODO: moggi: needs adaption for LibreOffice
+    // TODO: moggi: needs adaptation for LibreOffice
     bool isElevated =
         strstr(argv[0], "/Library/PrivilegedHelperTools/org.mozilla.updater") != 0;
     if (isElevated)
@@ -2995,7 +2995,7 @@ int NS_main(int argc, NS_tchar **argv)
 
     // Remove everything except close window from the context menu
     {
-        // TODO: moggi: needs adaption for LibreOffice
+        // TODO: moggi: needs adaptation for LibreOffice
         HKEY hkApp = nullptr;
         RegCreateKeyExW(HKEY_CURRENT_USER, L"Software\\Classes\\Applications",
                         0, nullptr, REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, nullptr,
@@ -3318,7 +3318,7 @@ int NS_main(int argc, NS_tchar **argv)
             if (useService)
             {
                 WCHAR maintenanceServiceKey[MAX_PATH + 1];
-                // TODO: moggi: needs adaption for LibreOffice
+                // TODO: moggi: needs adaptation for LibreOffice
                 // Most likely the registry part is not correct yet
                 if (CalculateRegistryPathFromFilePath(gInstallDirPath,
                                                       maintenanceServiceKey))
@@ -4462,7 +4462,7 @@ int DoUpdate(ArchiveReader& archiveReader)
     ensure_parent_dir(manifest);
 
     // extract the manifest
-    // TODO: moggi: needs adaption for LibreOffice
+    // TODO: moggi: needs adaptation for LibreOffice
     // Why would we need the manifest? Even if we need it why would we need 2?
     int rv = archiveReader.ExtractFile("updatev3.manifest", manifest);
     if (rv)

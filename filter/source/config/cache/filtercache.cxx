@@ -2049,8 +2049,8 @@ void FilterCache::impl_interpretDataVal4Filter(const OUString& sValue,
 void FilterCache::impl_readOldFormat()
 {
     // Attention: Opening/Reading of this old configuration format has to be handled gracefully.
-    // Its optional and should not disturb our normal work!
-    // E.g. we must check, if the package exists ...
+    // It's optional and should not disturb our normal work!
+    // E.g. we must check, if the package exists...
     try
     {
         css::uno::Reference< css::uno::XInterface > xInt = impl_openConfig(E_PROVIDER_OLD);

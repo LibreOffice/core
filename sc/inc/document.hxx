@@ -723,7 +723,7 @@ public:
 
         @param  rpRangeData
                 On entry, the pointer to the original named expression/range.
-                On return TRUE, the pointer to the new copied name, or nullptr if hit shappened.
+                On return TRUE, the pointer to the new copied name, or nullptr if hits happened.
 
         @param  rNewPos
                 New position of formula cell if called for that, else new base

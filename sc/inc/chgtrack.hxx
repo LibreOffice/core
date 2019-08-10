@@ -920,7 +920,7 @@ class SAL_DLLPUBLIC_RTTI ScChangeTrack : public utl::ConfigurationListener
     void                Remove( ScChangeAction* );
     void                MasterLinks( ScChangeAction* );
 
-                                // Content on top an Position
+                                // Content on top at Position
     ScChangeActionContent*  SearchContentAt( const ScBigAddress&,
                                     const ScChangeAction* pButNotThis ) const;
     void                DeleteGeneratedDelContent(
