@@ -1174,7 +1174,7 @@ bool ScDPObject::IsDimNameInUse(const OUString& rName) const
         return false;
 
     Reference<container::XNameAccess> xDims = xSource->getDimensions();
-    Sequence<OUString> aDimNames = xDims->getElementNames();
+    const Sequence<OUString> aDimNames = xDims->getElementNames();
     for (const OUString& rDimName : aDimNames)
     {
         if (rDimName.equalsIgnoreAsciiCase(rName))

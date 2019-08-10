@@ -1538,7 +1538,7 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     uno::Reference<sheet::XSelectedSheetsSupplier> xSelectedSheets(xView, uno::UNO_QUERY);
     if (bSelectedSheetsOnly && xSelectedSheets.is())
     {
-        uno::Sequence<sal_Int32> aSelected = xSelectedSheets->getSelectedSheets();
+        const uno::Sequence<sal_Int32> aSelected = xSelectedSheets->getSelectedSheets();
         ScMarkData::MarkedTabsType aSelectedTabs;
         SCTAB nMaxTab = pDocShell->GetDocument().GetTableCount() -1;
         for (const auto& rSelected : aSelected)

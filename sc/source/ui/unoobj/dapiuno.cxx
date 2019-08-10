@@ -1905,7 +1905,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
         aRet <<= getFunction();
     else if ( aPropertyName == SC_UNONAME_SUBTOTALS )
     {
-        uno::Sequence<sal_Int16> aSeq = getSubtotals();
+        const uno::Sequence<sal_Int16> aSeq = getSubtotals();
         uno::Sequence<sheet::GeneralFunction>  aNewSeq;
         aNewSeq.realloc(aSeq.getLength());
         std::transform(aSeq.begin(), aSeq.end(), aNewSeq.begin(),

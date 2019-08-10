@@ -123,7 +123,7 @@ void ScDocShell::InitItems()
         if (!m_aDocument.GetForbiddenCharacters())
         {
             // set forbidden characters if necessary
-            uno::Sequence<lang::Locale> aLocales = aAsian.GetStartEndCharLocales();
+            const uno::Sequence<lang::Locale> aLocales = aAsian.GetStartEndCharLocales();
             if (aLocales.hasElements())
             {
                 std::shared_ptr<SvxForbiddenCharactersTable> xForbiddenTable(

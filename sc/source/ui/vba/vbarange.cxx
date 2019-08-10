@@ -204,7 +204,7 @@ static uno::Any lcl_makeRange( const uno::Reference< XHelperInterface >& rParent
 static uno::Reference< excel::XRange > lcl_makeXRangeFromSheetCellRanges( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< sheet::XSheetCellRanges >& xLocSheetCellRanges, ScDocShell* pDoc )
 {
     uno::Reference< excel::XRange > xRange;
-    uno::Sequence< table::CellRangeAddress  > sAddresses = xLocSheetCellRanges->getRangeAddresses();
+    const uno::Sequence< table::CellRangeAddress  > sAddresses = xLocSheetCellRanges->getRangeAddresses();
     ScRangeList aCellRanges;
     if ( sAddresses.hasElements() )
            {
@@ -2286,7 +2286,7 @@ ScVbaRange::Activate()
 
     if ( xRanges.is() )
     {
-        uno::Sequence< table::CellRangeAddress > nAddrs = xRanges->getRangeAddresses();
+        const uno::Sequence< table::CellRangeAddress > nAddrs = xRanges->getRangeAddresses();
         for ( const auto& rAddr : nAddrs )
         {
             if ( cellInRange( rAddr, thisRangeAddress.StartColumn, thisRangeAddress.StartRow ) )
@@ -4076,7 +4076,7 @@ static uno::Reference< sheet::XCellRangeReferrer > getNamedRange( const uno::Ref
     uno::Reference< beans::XPropertySet > xProps( xIf, uno::UNO_QUERY_THROW );
     uno::Reference< container::XNameAccess > xNameAccess( xProps->getPropertyValue( "NamedRanges" ), uno::UNO_QUERY_THROW );
 
-    uno::Sequence< OUString > sNames = xNameAccess->getElementNames();
+    const uno::Sequence< OUString > sNames = xNameAccess->getElementNames();
 //    uno::Reference< table::XCellRange > thisRange( getCellRange(), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XCellRangeReferrer > xNamedRange;
     for ( const auto& rName : sNames )

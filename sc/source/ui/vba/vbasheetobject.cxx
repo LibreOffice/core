@@ -318,7 +318,7 @@ OUString SAL_CALL ScVbaControlObjectBase::getOnAction()
 {
     uno::Reference< script::XEventAttacherManager > xEventMgr( mxFormIC, uno::UNO_QUERY_THROW );
     sal_Int32 nIndex = getModelIndexInForm();
-    uno::Sequence< script::ScriptEventDescriptor > aEvents = xEventMgr->getScriptEvents( nIndex );
+    const uno::Sequence< script::ScriptEventDescriptor > aEvents = xEventMgr->getScriptEvents( nIndex );
     if( aEvents.hasElements() )
     {
         const OUString aScriptType = "Script";

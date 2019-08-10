@@ -55,7 +55,7 @@ static void lcl_GetChartParameters( const uno::Reference< chart2::XChartDocument
 
     if ( xProvider.is() )
     {
-        uno::Sequence< beans::PropertyValue > aArgs( xProvider->detectArguments( xDataSource ) );
+        const uno::Sequence< beans::PropertyValue > aArgs( xProvider->detectArguments( xDataSource ) );
 
         for (const beans::PropertyValue& rProp : aArgs)
         {
@@ -372,7 +372,7 @@ void ScDocument::RestoreChartListener( const OUString& rName )
         uno::Reference< chart2::data::XDataReceiver > xReceiver( xComponent, uno::UNO_QUERY );
         if ( xChartDoc.is() && xReceiver.is() && !xChartDoc->hasInternalDataProvider())
         {
-            uno::Sequence<OUString> aRepresentations( xReceiver->getUsedRangeRepresentations() );
+            const uno::Sequence<OUString> aRepresentations( xReceiver->getUsedRangeRepresentations() );
             ScRangeListRef aRanges = new ScRangeList;
             for ( const auto& rRepresentation : aRepresentations )
             {

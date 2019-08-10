@@ -141,7 +141,7 @@ ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRang
             rExport.CheckAttrList();
             if (xDatabaseRanges.is())
             {
-                uno::Sequence <OUString> aRanges(xDatabaseRanges->getElementNames());
+                const uno::Sequence <OUString> aRanges(xDatabaseRanges->getElementNames());
                 for (const OUString& sDatabaseRangeName : aRanges)
                 {
                     uno::Reference <sheet::XDatabaseRange> xDatabaseRange(xDatabaseRanges->getByName(sDatabaseRangeName), uno::UNO_QUERY);
@@ -151,7 +151,7 @@ ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRang
                         if (xDatabaseRangePropertySet.is() &&
                             ::cppu::any2bool(xDatabaseRangePropertySet->getPropertyValue(SC_UNONAME_STRIPDAT)))
                         {
-                            uno::Sequence <beans::PropertyValue> aImportProperties(xDatabaseRange->getImportDescriptor());
+                            const uno::Sequence <beans::PropertyValue> aImportProperties(xDatabaseRange->getImportDescriptor());
                             sheet::DataImportMode nSourceType = sheet::DataImportMode_NONE;
                             for (const auto& rProp : aImportProperties)
                                 if ( rProp.Name == SC_UNONAME_SRCTYPE )

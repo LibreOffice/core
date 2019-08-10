@@ -113,7 +113,7 @@ const ::std::vector<ScUnoAddInFuncData::LocalizedName>& ScUnoAddInFuncData::GetC
             if ( xComp.is() && xFunction.is() )
             {
                 OUString aMethodName = xFunction->getName();
-                uno::Sequence< sheet::LocalizedName> aCompNames( xComp->getCompatibilityNames( aMethodName ));
+                const uno::Sequence< sheet::LocalizedName> aCompNames( xComp->getCompatibilityNames( aMethodName ));
                 maCompNames.clear();
                 for (const sheet::LocalizedName& rCompName : aCompNames)
                 {
@@ -348,7 +348,7 @@ void ScUnoAddInCollection::ReadConfiguration()
     const OUString sSlash('/');
 
     // get the list of add-ins (services)
-    uno::Sequence<OUString> aServiceNames = rAddInConfig.GetNodeNames( "" );
+    const uno::Sequence<OUString> aServiceNames = rAddInConfig.GetNodeNames( "" );
 
     for ( const OUString& aServiceName : aServiceNames )
     {
@@ -459,7 +459,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 
                 OUString aArgumentsPath(aFuncPropPath + CFGSTR_PARAMETERS);
 
-                uno::Sequence<OUString> aArgumentNames = rAddInConfig.GetNodeNames( aArgumentsPath );
+                const uno::Sequence<OUString> aArgumentNames = rAddInConfig.GetNodeNames( aArgumentsPath );
                 sal_Int32 nArgumentCount = aArgumentNames.getLength();
                 if ( nArgumentCount )
                 {
@@ -985,7 +985,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
     uno::Reference<beans::XIntrospectionAccess> xAcc = xIntro->inspect(aObject);
     if (xAcc.is())
     {
-        uno::Sequence< uno::Reference<reflection::XIdlMethod> > aMethods =
+        const uno::Sequence< uno::Reference<reflection::XIdlMethod> > aMethods =
                 xAcc->getMethods( beans::MethodConcept::ALL );
         for (const uno::Reference<reflection::XIdlMethod>& xFunc : aMethods)
         {
@@ -1013,7 +1013,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                     long nVisibleCount = 0;
                     long nCallerPos = SC_CALLERPOS_NONE;
 
-                    uno::Sequence<reflection::ParamInfo> aParams =
+                    const uno::Sequence<reflection::ParamInfo> aParams =
                             xFunc->getParameterInfos();
                     long nParamCount = aParams.getLength();
                     const reflection::ParamInfo* pParArr = aParams.getConstArray();

@@ -113,7 +113,7 @@ sal_Int32 SAL_CALL RangePageBreaks::getCount(  )
     uno::Reference< excel::XRange > xRange = xWorksheet->getUsedRange();
     sal_Int32 nUsedStart = getAPIStartofRange( xRange );
     sal_Int32 nUsedEnd = getAPIEndIndexofRange( xRange, nUsedStart );
-    uno::Sequence<sheet::TablePageBreakData> aTablePageBreakData = getAllPageBreaks();
+    const uno::Sequence<sheet::TablePageBreakData> aTablePageBreakData = getAllPageBreaks();
 
     auto pPageBreak = std::find_if(aTablePageBreakData.begin(), aTablePageBreakData.end(),
         [nUsedEnd](const sheet::TablePageBreakData& rPageBreak) { return rPageBreak.Position > nUsedEnd + 1; });
@@ -147,7 +147,7 @@ sheet::TablePageBreakData RangePageBreaks::getTablePageBreakData( sal_Int32 nAPI
     uno::Reference< excel::XRange > xRange = xWorksheet->getUsedRange();
     sal_Int32 nUsedStart = getAPIStartofRange( xRange );
     sal_Int32 nUsedEnd = getAPIEndIndexofRange( xRange, nUsedStart );
-    uno::Sequence<sheet::TablePageBreakData> aTablePageBreakDataList = getAllPageBreaks();
+    const uno::Sequence<sheet::TablePageBreakData> aTablePageBreakDataList = getAllPageBreaks();
 
     for( const auto& rTablePageBreakData : aTablePageBreakDataList )
     {

@@ -3312,7 +3312,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             uno::Reference<container::XNameContainer> xNameContainer;
             if ((rSetting.Value >>= xNameContainer) && xNameContainer->hasElements())
             {
-                uno::Sequence< OUString > aNames(xNameContainer->getElementNames());
+                const uno::Sequence< OUString > aNames(xNameContainer->getElementNames());
                 for (const OUString& sTabName : aNames)
                 {
                     SCTAB nTab(0);

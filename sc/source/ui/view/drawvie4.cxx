@@ -105,7 +105,7 @@ namespace {
 
 void getRangeFromDataSource( uno::Reference< chart2::data::XDataSource > const & xDataSource, std::vector<OUString>& rRangeRep)
 {
-    uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence> > xSeqs = xDataSource->getDataSequences();
+    const uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence> > xSeqs = xDataSource->getDataSequences();
     for (const uno::Reference<chart2::data::XLabeledDataSequence>& xLS : xSeqs)
     {
         uno::Reference<chart2::data::XDataSequence> xSeq = xLS->getValues();
@@ -133,21 +133,21 @@ void getRangeFromErrorBar(const uno::Reference< chart2::XChartDocument >& rChart
     if(!xCooSysContainer.is())
         return;
 
-    uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > xCooSysSequence( xCooSysContainer->getCoordinateSystems());
+    const uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > xCooSysSequence( xCooSysContainer->getCoordinateSystems());
     for(const auto& rCooSys : xCooSysSequence)
     {
         uno::Reference< chart2::XChartTypeContainer > xChartTypeContainer( rCooSys, uno::UNO_QUERY);
         if(!xChartTypeContainer.is())
             continue;
 
-        uno::Sequence< uno::Reference< chart2::XChartType > > xChartTypeSequence( xChartTypeContainer->getChartTypes() );
+        const uno::Sequence< uno::Reference< chart2::XChartType > > xChartTypeSequence( xChartTypeContainer->getChartTypes() );
         for(const auto& rChartType : xChartTypeSequence)
         {
             uno::Reference< chart2::XDataSeriesContainer > xDataSequenceContainer( rChartType, uno::UNO_QUERY);
             if(!xDataSequenceContainer.is())
                 continue;
 
-            uno::Sequence< uno::Reference< chart2::XDataSeries > > xSeriesSequence( xDataSequenceContainer->getDataSeries() );
+            const uno::Sequence< uno::Reference< chart2::XDataSeries > > xSeriesSequence( xDataSequenceContainer->getDataSeries() );
             for(const uno::Reference<chart2::XDataSeries>& xSeries : xSeriesSequence)
             {
                 uno::Reference< beans::XPropertySet > xPropSet( xSeries, uno::UNO_QUERY);
