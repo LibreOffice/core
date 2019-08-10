@@ -23,6 +23,7 @@
 #include <utility>
 #include <vector>
 
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <oox/dllapi.h>
@@ -74,6 +75,8 @@ struct OOX_DLLPUBLIC LineProperties
 
     /** Calculates the line style attribute from the internal state of the object */
     css::drawing::LineStyle  getLineStyle() const;
+    /** Calculates the line cap attribute from the internal state of the object */
+    css::drawing::LineCap  getLineCap() const;
     /** Calculates the line joint attribute from the internal state of the object */
     css::drawing::LineJoint  getLineJoint() const;
     /** Calculates the line width attribute from the internal state of the object */
