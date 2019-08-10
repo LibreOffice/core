@@ -197,8 +197,8 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     if (bEnableTitleBarUpdate)
         implts_establishTitleBarUpdate(xFrame);
 
-    // Make it visible directly here ...
-    // if its required from outside.
+    // Make it visible directly here...
+    // if it's required from outside.
     if (bVisible)
         xContainerWindow->setVisible(bVisible);
 

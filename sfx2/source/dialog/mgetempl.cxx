@@ -76,7 +76,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(TabPageParent pParent, const Sf
     m_xBaseLb->make_sorted();
     m_xBaseLb->set_size_request(nMaxWidth , -1);
     //note that the code depends on categories not being lexically
-    //sorted, so if its changed to sorted, the code needs to
+    //sorted, so if it's changed to sorted, the code needs to
     //be adapted to be position unaware
     m_xFilterLb->set_size_request(nMaxWidth , -1);
 

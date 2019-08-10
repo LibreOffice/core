@@ -53,7 +53,7 @@
     <p>Each paragraph and each portion of text can be fitted with
     some attributes (technically properties).</p>
 
-    <p>Its declared as generic text document, because its function is
+    <p>It's declared as generic text document, because its function is
     needed by different derived services (TextDocument/WebDocument/GlobalDocument).</p>
 
     <p>In addition, all text objects can be searched.</p>

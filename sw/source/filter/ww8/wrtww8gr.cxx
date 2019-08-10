@@ -844,7 +844,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
             what word does the escher export should contain an anchored to
             character element which is drawn over this dummy and the whole
             shebang surrounded with a SHAPE field. This isn't *my* hack :-),
-            its what word does.
+            it's what word does.
             */
             {
                 WritePICFHeader(rStrm, rFly, 0x64, nWidth, nHeight);

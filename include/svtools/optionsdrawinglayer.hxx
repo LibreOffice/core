@@ -94,7 +94,7 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
         sal_uInt32  GetMaximumPaperTopMargin() const;
         sal_uInt32  GetMaximumPaperBottomMargin() const;
 
-        // #i95644# helper to check if AA is allowed on this system. Currently, for WIN its disabled
+        // #i95644# helper to check if AA is allowed on this system. Currently, for WIN it's disabled
         // and OutDevSupportType::TransparentRect is checked (this  hits XRenderExtension, e.g.
         // currently for SunRay as long as not supported there)
         bool       IsAAPossibleOnThisSystem() const;

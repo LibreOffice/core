@@ -638,7 +638,7 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                 // special case. no exception - but not a valid item => it must be finalized or mandatory!
                 // Reject flush operation by throwing an exception. At least one item couldn't be flushed.
                 if (!xItem.is())
-                    throw css::uno::Exception("Can not change item. Its finalized or mandatory!",
+                    throw css::uno::Exception("Can not change item. It's finalized or mandatory!",
                                               css::uno::Reference< css::uno::XInterface >());
 
                 CacheItemList::const_iterator pItem = rCache.find(item);

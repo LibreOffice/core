@@ -38,7 +38,7 @@ interface XTerminateListener2 : ::com::sun::star::frame::XTerminateListener
         it doesn't know if termination will be real next time.
         Because any other listener can throw those exception too ... and so it can happen
         that after queryTermination() no notifyTermination() will occur. But these listener
-        don't know if its allowed to start new processes then.
+        don't know if it's allowed to start new processes then.
         Using this optional(!) interface will make it possible to be informed about
         canceled termination requests also.
         </p>

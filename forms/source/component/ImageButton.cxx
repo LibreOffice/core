@@ -200,7 +200,7 @@ void OImageButtonControl::mousePressed(const awt::MouseEvent& e)
     else
     {
         // Or else don't; we must not notify the listeners in that case.
-        // Even not if its added later on.
+        // Even not if it's added later on.
         aGuard.clear();
         actionPerformed_Impl( false, e );
     }

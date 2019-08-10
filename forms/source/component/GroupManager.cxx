@@ -157,7 +157,7 @@ void OGroup::RemoveComponent( const Reference<XPropertySet>& rxElement )
 
             /*
              * By removing the GroupComp the insertion position has become invalid.
-             * We do not to change it here, however, because its passed on continuously
+             * We do not to change it here, however, because it's passed on continuously
              * and ascending distinctively.
              */
         }
