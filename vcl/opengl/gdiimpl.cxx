@@ -2234,8 +2234,9 @@ void OpenGLSalGraphicsImpl::doFlush()
     mpWindowContext->state().stencil().disable();
 
 #if OSL_DEBUG_LEVEL > 0 // random background glClear
-    glClearColor(static_cast<float>(rand())/RAND_MAX, static_cast<float>(rand())/RAND_MAX,
-                 static_cast<float>(rand())/RAND_MAX, 1.0);
+    glClearColor(static_cast<float>(double(rand())/RAND_MAX),
+                 static_cast<float>(double(rand())/RAND_MAX),
+                 static_cast<float>(double(rand())/RAND_MAX), 1.0);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
     CHECK_GL_ERROR();
 #endif
