@@ -26,29 +26,29 @@
 
 struct SwTabColsEntry
 {
-    long    nPos;
-    long    nMin;
-    long    nMax;
-    bool    bHidden; // For each entry a flag, hidden or not.
-                         // If the flag bHidden is true column separator
-                         // is not in current line. It must maintained
-                         // but it may not be displayed.
+    long nPos;
+    long nMin;
+    long nMax;
+    bool bHidden; // For each entry a flag, hidden or not.
+                  // If the flag bHidden is true column separator
+                  // is not in current line. It must maintained
+                  // but it may not be displayed.
 };
 
 typedef std::vector< SwTabColsEntry > SwTabColsEntries;
 
 class SW_DLLPUBLIC SwTabCols
 {
-    long m_nLeftMin,      // Leftmost border (reference point) for
-                        // document coordinates.
-                        // All other values are relative to this point!
-            m_nLeft,      // Left border of table.
-           m_nRight,      // Right border of table.
-           m_nRightMax;   // Maximum right border of table.
+    long m_nLeftMin;  // Leftmost border (reference point) for
+                      // document coordinates.
+                      // All other values are relative to this point!
+    long m_nLeft;     // Left border of table.
+    long m_nRight;    // Right border of table.
+    long m_nRightMax; // Maximum right border of table.
 
-    bool m_bLastRowAllowedToChange;       // If the last row of the table frame
-                                        // is split across pages, it may not
-                                        // change its size.
+    bool m_bLastRowAllowedToChange; // If the last row of the table frame
+                                    // is split across pages, it may not
+                                    // change its size.
 
     SwTabColsEntries m_aData;
 
