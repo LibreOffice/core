@@ -1240,6 +1240,10 @@ void ScUndoConversion::DoChange( ScDocument* pRefDoc, const ScAddress& rCursorPo
         pRefDoc->CopyToDocument( 0,      0,      0,
                                  MAXCOL, MAXROW, nTabCount-1,
                                  InsertDeleteFlags::CONTENTS, bMulti, rDoc, &aMarkData );
+
+        // Reset the spell checking results to re-check on paint, otherwise
+        // we show the previous spelling markers (or lack thereof on misspellings).
+        pDocShell->GetViewData()->GetActiveWin()->ResetAutoSpell();
         pDocShell->PostPaintGridAll();
     }
     else
