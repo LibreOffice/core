@@ -22,6 +22,30 @@
       "revId": "fca94779872b8ba0b0583d0b7068f1a46beb88c5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_f6c1f5e5",
+        "filename": "sc/source/core/data/documen5.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-08-10T16:49:29Z",
+      "side": 1,
+      "message": "Thanks, I didn\u0027t think of that.\nIf you\u0027d like I can add you as reviewer for similar changes.",
+      "parentUuid": "bf659307_db4c1ca0",
+      "range": {
+        "startLine": 58,
+        "startChar": 8,
+        "endLine": 58,
+        "endChar": 51
+      },
+      "revId": "fca94779872b8ba0b0583d0b7068f1a46beb88c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
