@@ -602,11 +602,9 @@ void OViewsWindow::setMarked(const uno::Reference< report::XSection>& _xSection,
 void OViewsWindow::setMarked(const uno::Sequence< uno::Reference< report::XReportComponent> >& _aShapes, bool _bMark)
 {
     bool bFirst = true;
-    const uno::Reference< report::XReportComponent>* pIter = _aShapes.getConstArray();
-    const uno::Reference< report::XReportComponent>* pEnd  = pIter + _aShapes.getLength();
-    for(;pIter != pEnd;++pIter)
+    for(const uno::Reference< report::XReportComponent>& rShape : _aShapes)
     {
-        const uno::Reference< report::XSection> xSection = (*pIter)->getSection();
+        const uno::Reference< report::XSection> xSection = rShape->getSection();
         if ( xSection.is() )
         {
             if ( bFirst )
@@ -617,7 +615,7 @@ void OViewsWindow::setMarked(const uno::Sequence< uno::Reference< report::XRepor
             OSectionWindow* pSectionWindow = getSectionWindow(xSection);
             if ( pSectionWindow )
             {
-                SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( *pIter );
+                SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( rShape );
                 SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
                 OSL_ENSURE( pObject, "OViewsWindow::setMarked: no SdrObject for the shape!" );
                 if ( pObject )
@@ -1607,12 +1605,10 @@ void OViewsWindow::fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedP
 
 void OViewsWindow::collapseSections(const uno::Sequence< beans::PropertyValue>& _aCollpasedSections)
 {
-    const beans::PropertyValue* pIter = _aCollpasedSections.getConstArray();
-    const beans::PropertyValue* pEnd = pIter + _aCollpasedSections.getLength();
-    for (; pIter != pEnd; ++pIter)
+    for (const beans::PropertyValue& rSection : _aCollpasedSections)
     {
         sal_uInt16 nPos = sal_uInt16(-1);
-        if ( (pIter->Value >>= nPos) && nPos < m_aSections.size() )
+        if ( (rSection.Value >>= nPos) && nPos < m_aSections.size() )
         {
             m_aSections[nPos]->setCollapsed(true);
         }

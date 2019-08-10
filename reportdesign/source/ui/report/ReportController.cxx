@@ -3306,12 +3306,12 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
     try
     {
         bool bHandleOnlyOne = false;
-        const PropertyValue* pIter = aArgs.getConstArray();
-        const PropertyValue* pEnd  = pIter + aArgs.getLength();
-        for(;pIter != pEnd && !bHandleOnlyOne;++pIter)
+        for(const PropertyValue& rArg : aArgs)
         {
+            if (bHandleOnlyOne)
+                break;
             Sequence< PropertyValue > aValue;
-            if ( !(pIter->Value >>= aValue) )
+            if ( !(rArg.Value >>= aValue) )
             {   // the sequence has only one element which already contains the descriptor
                 bHandleOnlyOne = true;
                 aValue = aArgs;
@@ -3666,15 +3666,13 @@ void OReportController::listen(const bool _bAdd)
 
     OXUndoEnvironment& rUndoEnv = m_aReportModel->GetUndoEnv();
     uno::Reference< XPropertyChangeListener > xUndo = &rUndoEnv;
-    uno::Sequence< beans::Property> aSeq = m_xReportDefinition->getPropertySetInfo()->getProperties();
-    const beans::Property* pIter = aSeq.getConstArray();
-    const beans::Property* pEnd   = pIter + aSeq.getLength();
+    const uno::Sequence< beans::Property> aSeq = m_xReportDefinition->getPropertySetInfo()->getProperties();
     const OUString* pPropsBegin = &aProps[0];
     const OUString* pPropsEnd   = pPropsBegin + SAL_N_ELEMENTS(aProps) - 3;
-    for(;pIter != pEnd;++pIter)
+    for(const beans::Property& rProp : aSeq)
     {
-        if ( ::std::find(pPropsBegin,pPropsEnd,pIter->Name) == pPropsEnd )
-            (m_xReportDefinition.get()->*pPropertyListenerAction)( pIter->Name, xUndo );
+        if ( ::std::find(pPropsBegin,pPropsEnd,rProp.Name) == pPropsEnd )
+            (m_xReportDefinition.get()->*pPropertyListenerAction)( rProp.Name, xUndo );
     }
 
     // Add Listeners to UndoEnvironment
@@ -4060,14 +4058,7 @@ css::uno::Sequence< OUString > SAL_CALL OReportController::getSupportedModes(  )
 sal_Bool SAL_CALL OReportController::supportsMode( const OUString& aMode )
 {
     uno::Sequence< OUString> aModes = getSupportedModes();
-    const OUString* pIter = aModes.getConstArray();
-    const OUString* pEnd  = pIter + aModes.getLength();
-    for(;pIter != pEnd;++pIter)
-    {
-        if ( *pIter == aMode )
-            break;
-    }
-    return pIter != pEnd;
+    return comphelper::findValue(aModes, aMode) != -1;
 }
 
 bool OReportController::isUiVisible() const
