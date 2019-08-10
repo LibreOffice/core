@@ -1584,18 +1584,21 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
             </a:schemeClr>\
           </a:solidFill>\
           <a:prstDash val=\"solid\"/>\
+          <a:miter/>\
         </a:ln>\
         <a:ln w=\"25400\" cap=\"flat\" cmpd=\"sng\" algn=\"ctr\">\
           <a:solidFill>\
             <a:schemeClr val=\"phClr\"/>\
           </a:solidFill>\
           <a:prstDash val=\"solid\"/>\
+          <a:miter/>\
         </a:ln>\
         <a:ln w=\"38100\" cap=\"flat\" cmpd=\"sng\" algn=\"ctr\">\
           <a:solidFill>\
             <a:schemeClr val=\"phClr\"/>\
           </a:solidFill>\
           <a:prstDash val=\"solid\"/>\
+          <a:miter/>\
         </a:ln>\
       </a:lnStyleLst>\
       <a:effectStyleLst>\
