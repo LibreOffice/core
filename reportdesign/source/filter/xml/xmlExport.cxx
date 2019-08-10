@@ -355,14 +355,13 @@ void ORptExport::exportMasterDetailFields(const Reference<XReportComponent>& _xR
         OSL_ENSURE(aDetailFields.getLength() == aMasterFields.getLength(),"not equal length for master and detail fields!");
 
         const OUString* pDetailFieldsIter = aDetailFields.getConstArray();
-        const OUString* pIter = aMasterFields.getConstArray();
-        const OUString* pEnd   = pIter + aMasterFields.getLength();
-        for(;pIter != pEnd;++pIter,++pDetailFieldsIter)
+        for(const OUString& rMasterField : aMasterFields)
         {
-            AddAttribute( XML_NAMESPACE_REPORT, XML_MASTER , *pIter );
+            AddAttribute( XML_NAMESPACE_REPORT, XML_MASTER , rMasterField );
             if ( !pDetailFieldsIter->isEmpty() )
                 AddAttribute( XML_NAMESPACE_REPORT, XML_DETAIL , *pDetailFieldsIter );
             SvXMLElementExport aPair(*this,XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELD, true, true);
+            ++pDetailFieldsIter;
         }
     }
 }

@@ -434,19 +434,15 @@ void SAL_CALL OStyle::setAllPropertiesToDefault(  )
 
 void SAL_CALL OStyle::setPropertiesToDefault( const uno::Sequence< OUString >& aPropertyNames )
 {
-    const OUString* pIter = aPropertyNames.getConstArray();
-    const OUString* pEnd   = pIter + aPropertyNames.getLength();
-    for(;pIter != pEnd;++pIter)
-        setPropertyToDefault(*pIter);
+    for(const OUString& rName : aPropertyNames)
+        setPropertyToDefault(rName);
 }
 
 uno::Sequence< uno::Any > SAL_CALL OStyle::getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames )
 {
     uno::Sequence< uno::Any > aRet(aPropertyNames.getLength());
-    const OUString* pIter = aPropertyNames.getConstArray();
-    const OUString* pEnd   = pIter + aPropertyNames.getLength();
-    for(sal_Int32 i = 0;pIter != pEnd;++pIter,++i)
-        aRet[i] = getPropertyDefault(*pIter);
+    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aRet.begin(),
+        [this](const OUString& rName) -> uno::Any { return getPropertyDefault(rName); });
     return aRet;
 }
 
@@ -1515,8 +1511,7 @@ bool OReportDefinition::WriteThroughComponent(
     // prepare arguments (prepend doc handler to given arguments)
     uno::Sequence<uno::Any> aArgs( 1 + rArguments.getLength() );
     aArgs[0] <<= xSaxWriter;
-    for(sal_Int32 i = 0; i < rArguments.getLength(); i++)
-        aArgs[i+1] = rArguments[i];
+    std::copy(rArguments.begin(), rArguments.end(), std::next(aArgs.begin()));
 
     // get filter component
     uno::Reference< document::XExporter > xExporter(
@@ -2007,12 +2002,10 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstanceWith
     if ( aServiceSpecifier.startsWith( "com.sun.star.document.ImportEmbeddedObjectResolver") )
     {
         uno::Reference< embed::XStorage > xStorage;
-        const uno::Any* pIter = _aArgs.getConstArray();
-        const uno::Any* pEnd  = pIter + _aArgs.getLength();
-        for(;pIter != pEnd ;++pIter)
+        for(const uno::Any& rArg : _aArgs)
         {
             beans::NamedValue aValue;
-            *pIter >>= aValue;
+            rArg >>= aValue;
             if ( aValue.Name == "Storage" )
                 aValue.Value >>= xStorage;
         }

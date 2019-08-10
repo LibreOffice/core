@@ -408,11 +408,10 @@ void Entity::startElement( Event const *pEvent )
 
         if ( mxNamespaceHandler.is() )
         {
-            Sequence< xml::Attribute > NSDeclAttribs = pEvent->mxDeclAttributes->getUnknownAttributes();
-            sal_uInt16 len = NSDeclAttribs.getLength();
-            for (sal_uInt16 i = 0; i < len; i++)
+            const Sequence< xml::Attribute > NSDeclAttribs = pEvent->mxDeclAttributes->getUnknownAttributes();
+            for (const auto& rNSDeclAttrib : NSDeclAttribs)
             {
-                mxNamespaceHandler->registerNamespace( NSDeclAttribs[i].Name, NSDeclAttribs[i].Value );
+                mxNamespaceHandler->registerNamespace( rNSDeclAttrib.Name, rNSDeclAttrib.Value );
             }
         }
 

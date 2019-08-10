@@ -121,13 +121,12 @@ void SAL_CALL ImportDocumentHandler::endDocument()
         uno::Reference< chart2::data::XDataSource > xDataSource(m_xModel, uno::UNO_QUERY);
         if( xDataSource.is())
         {
-            uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences(xDataSource->getDataSequences());
-            const sal_Int32 nCount( aSequences.getLength());
-            for( sal_Int32 nIdx=0; nIdx<nCount; ++nIdx )
+            const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences(xDataSource->getDataSequences());
+            for( const auto& rSequence : aSequences )
             {
-                if( aSequences[nIdx].is() )
+                if( rSequence.is() )
                 {
-                    uno::Reference< beans::XPropertySet > xSeqProp( aSequences[nIdx]->getValues(), uno::UNO_QUERY );
+                    uno::Reference< beans::XPropertySet > xSeqProp( rSequence->getValues(), uno::UNO_QUERY );
                     OUString aRole;
                     if  (   xSeqProp.is()
                         &&  ( xSeqProp->getPropertyValue( "Role" ) >>= aRole )
