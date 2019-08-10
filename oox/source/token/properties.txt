@@ -288,6 +288,7 @@ LeftMargin
 LeftPageFooterContent
 LeftPageHeaderContent
 LegacyFragment
+LineCap
 LineColor
 LineCount
 LineDash
