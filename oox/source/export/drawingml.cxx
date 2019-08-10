@@ -821,6 +821,14 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
             {
                 nColorAlpha = MAX_PERCENT - (mAny.get<sal_Int16>() * PER_PERCENT);
             }
+            if (GetProperty(rXPropSet, "LineCap"))
+            {
+                const LineCap aLineCap = mAny.get<drawing::LineCap>();
+                if (aLineCap == LineCap_ROUND)
+                    cap = "rnd";
+                else if (aLineCap == LineCap_SQUARE)
+                    cap = "sq";
+            }
             break;
     }
 
