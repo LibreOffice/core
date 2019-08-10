@@ -182,22 +182,23 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                 aPropsToSet[0].Value <<= aURL;
             }
 
-            for ( sal_Int32 nInd = 0, nNumArgs = 1; nInd < aDescr.getLength(); nInd++ )
+            sal_Int32 nNumArgs = 1;
+            for ( const auto& rProp : std::as_const(aDescr) )
             {
-                if ( aDescr[nInd].Name == "InteractionHandler"
-                  || aDescr[nInd].Name == "Password"
-                  || aDescr[nInd].Name == "RepairPackage"
-                  || aDescr[nInd].Name == "StatusIndicator" )
+                if ( rProp.Name == "InteractionHandler"
+                  || rProp.Name == "Password"
+                  || rProp.Name == "RepairPackage"
+                  || rProp.Name == "StatusIndicator" )
                 {
                     aPropsToSet.realloc( ++nNumArgs );
-                    aPropsToSet[nNumArgs-1].Name = aDescr[nInd].Name;
-                    aPropsToSet[nNumArgs-1].Value = aDescr[nInd].Value;
+                    aPropsToSet[nNumArgs-1].Name = rProp.Name;
+                    aPropsToSet[nNumArgs-1].Value = rProp.Value;
                 }
-                else if ( aDescr[nInd].Name == "StorageFormat" )
+                else if ( rProp.Name == "StorageFormat" )
                 {
                     OUString aFormatName;
                     sal_Int32 nFormatID = 0;
-                    if ( aDescr[nInd].Value >>= aFormatName )
+                    if ( rProp.Value >>= aFormatName )
                     {
                         if ( aFormatName == PACKAGE_STORAGE_FORMAT_STRING )
                             nStorageType = embed::StorageFormats::PACKAGE;
@@ -208,7 +209,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                         else
                             throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
                     }
-                    else if ( aDescr[nInd].Value >>= nFormatID )
+                    else if ( rProp.Value >>= nFormatID )
                     {
                         if ( nFormatID != embed::StorageFormats::PACKAGE
                           && nFormatID != embed::StorageFormats::ZIP
@@ -220,12 +221,12 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                     else
                         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
                 }
-                else if (aDescr[nInd].Name == "NoFileSync")
+                else if (rProp.Name == "NoFileSync")
                 {
                     // Forward NoFileSync to the storage.
                     aPropsToSet.realloc(++nNumArgs);
-                    aPropsToSet[nNumArgs - 1].Name = aDescr[nInd].Name;
-                    aPropsToSet[nNumArgs - 1].Value = aDescr[nInd].Value;
+                    aPropsToSet[nNumArgs - 1].Name = rProp.Name;
+                    aPropsToSet[nNumArgs - 1].Value = rProp.Value;
                 }
                 else
                     OSL_FAIL( "Unacceptable property, will be ignored!" );

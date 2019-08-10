@@ -237,9 +237,9 @@ uno::Sequence<sal_Int8> ZipPackageStream::GetEncryptionKey(Bugs const bugs)
         else
             throw uno::RuntimeException(THROW_WHERE "No expected key is provided!" );
 
-        for ( sal_Int32 nInd = 0; nInd < m_aStorageEncryptionKeys.getLength(); nInd++ )
-            if ( m_aStorageEncryptionKeys[nInd].Name == aNameToFind )
-                m_aStorageEncryptionKeys[nInd].Value >>= aResult;
+        for ( const auto& rKey : std::as_const(m_aStorageEncryptionKeys) )
+            if ( rKey.Name == aNameToFind )
+                rKey.Value >>= aResult;
 
         // empty keys are not allowed here
         // so it is not important whether there is no key, or the key is empty, it is an error
