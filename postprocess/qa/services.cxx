@@ -37,6 +37,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/reflection/XServiceConstructorDescription.hpp>
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/strbuf.hxx>
 #include <test/bootstrapfixture.hxx>
@@ -77,12 +78,7 @@ bool unique(css::uno::Sequence<OUString> const & strings) {
 bool contains(
     css::uno::Sequence<OUString> const & strings, OUString const & string)
 {
-    for (sal_Int32 i = 0; i != strings.getLength(); ++i) {
-        if (string == strings[i]) {
-            return true;
-        }
-    }
-    return false;
+    return comphelper::findValue(strings, string) != -1;
 }
 
 bool contains(
@@ -90,12 +86,8 @@ bool contains(
     css::uno::Sequence<OUString> const & strings2)
 {
     // Assumes small sequences for which quadratic algorithm is acceptable:
-    for (sal_Int32 i = 0; i != strings2.getLength(); ++i) {
-        if (!contains(strings1, strings2[i])) {
-            return false;
-        }
-    }
-    return true;
+    return std::all_of(strings2.begin(), strings2.end(),
+        [&strings1](const OUString& rStr) { return contains(strings1, rStr); });
 }
 
 void addService(
@@ -157,7 +149,7 @@ void Test::test() {
         m_xContext->getValueByName(
             "/singletons/com.sun.star.reflection.theTypeDescriptionManager"),
         css::uno::UNO_QUERY_THROW);
-    css::uno::Sequence<OUString> serviceNames(
+    const css::uno::Sequence<OUString> serviceNames(
         m_xContext->getServiceManager()->getAvailableServiceNames());
     struct Constructor {
         Constructor(
@@ -181,9 +173,9 @@ void Test::test() {
         bool accumulationBased;
     };
     std::map<OUString, Implementation> impls;
-    for (sal_Int32 i = 0; i != serviceNames.getLength(); ++i) {
+    for (const auto& rServiceName : serviceNames) {
         css::uno::Reference<css::container::XEnumeration> serviceImpls1(
-            enumAcc->createContentEnumeration(serviceNames[i]),
+            enumAcc->createContentEnumeration(rServiceName),
             css::uno::UNO_SET_THROW);
         std::vector<css::uno::Reference<css::lang::XServiceInfo>> serviceImpls2;
         while (serviceImpls1->hasMoreElements()) {
@@ -191,9 +183,9 @@ void Test::test() {
                     serviceImpls1->nextElement(), css::uno::UNO_QUERY_THROW);
         }
         css::uno::Reference<css::reflection::XServiceTypeDescription2> desc;
-        if (typeMgr->hasByHierarchicalName(serviceNames[i])) {
+        if (typeMgr->hasByHierarchicalName(rServiceName)) {
             desc.set(
-                typeMgr->getByHierarchicalName(serviceNames[i]),
+                typeMgr->getByHierarchicalName(rServiceName),
                 css::uno::UNO_QUERY_THROW);
         }
         if (serviceImpls2.empty()) {
@@ -201,15 +193,15 @@ void Test::test() {
                 CPPUNIT_ASSERT_MESSAGE(
                     (OString(
                         "no implementations of single-interface--based \""
-                        + msg(serviceNames[i]) + "\"")
+                        + msg(rServiceName) + "\"")
                      .getStr()),
                     !desc->isSingleInterfaceBased());
                 std::cout
-                    << "accumulation-based service \"" << serviceNames[i]
+                    << "accumulation-based service \"" << rServiceName
                     << "\" without implementations\n";
             } else {
                 std::cout
-                    << "fantasy service name \"" << serviceNames[i]
+                    << "fantasy service name \"" << rServiceName
                     << "\" without implementations\n";
             }
         } else {
@@ -240,24 +232,22 @@ void Test::test() {
                     (OString(
                         "implementation \"" + msg(name) + "\" supports "
                         + msg(k->second.serviceNames) + " but not \""
-                        + msg(serviceNames[i]) + "\"")
+                        + msg(rServiceName) + "\"")
                      .getStr()),
-                    contains(k->second.serviceNames, serviceNames[i]));
+                    contains(k->second.serviceNames, rServiceName));
                 if (desc.is()) {
                     if (desc->isSingleInterfaceBased()) {
                         if (serviceImpls2.size() == 1) {
-                            css::uno::Sequence<
+                            const css::uno::Sequence<
                                 css::uno::Reference<
                                     css::reflection::XServiceConstructorDescription>>
                                         ctors(desc->getConstructors());
-                            for (sal_Int32 l = 0; l != ctors.getLength(); ++l) {
-                                if (!ctors[l]->getParameters().hasElements()) {
-                                    k->second.constructors.emplace_back(
-                                            serviceNames[i],
-                                            ctors[l]->isDefaultConstructor());
-                                    break;
-                                }
-                            }
+                            auto pCtor = std::find_if(ctors.begin(), ctors.end(),
+                                [](const auto& rCtor) { return !rCtor->getParameters().hasElements(); });
+                            if (pCtor != ctors.end())
+                                k->second.constructors.emplace_back(
+                                        rServiceName,
+                                        (*pCtor)->isDefaultConstructor());
                         }
                     } else {
                         k->second.accumulationBased = true;
@@ -266,7 +256,7 @@ void Test::test() {
                     std::cout
                         << "implementation \"" << name
                         << "\" supports fantasy service name \""
-                        << serviceNames[i] << "\"\n";
+                        << rServiceName << "\"\n";
                 }
             }
         }

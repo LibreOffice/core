@@ -26,6 +26,7 @@
 #include <com/sun/star/script/XInvocationAdapterFactory2.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
 
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
@@ -137,33 +138,18 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
                     "pyuno bridge: Couldn't get reflection for method " + functionName );
             }
 
-            Sequence< ParamInfo > seqInfo = method->getParameterInfos();
-            int i;
-            int nOuts = 0;
-            for( i = 0 ; i < seqInfo.getLength() ; i ++ )
+            const Sequence< ParamInfo > seqInfo = method->getParameterInfos();
+            std::vector<sal_Int16> retVec;
+            for( sal_Int32 i = 0; i < seqInfo.getLength(); ++i )
             {
                 if( seqInfo[i].aMode == css::reflection::ParamMode_OUT ||
                     seqInfo[i].aMode == css::reflection::ParamMode_INOUT )
                 {
-                    // sequence must be interpreted as return value/outparameter tuple !
-                    nOuts ++;
+                    retVec.push_back(static_cast<sal_Int16>(i));
                 }
             }
 
-            if( nOuts )
-            {
-                ret.realloc( nOuts );
-                sal_Int32 nOutsAssigned = 0;
-                for( i = 0 ; i < seqInfo.getLength() ; i ++ )
-                {
-                    if( seqInfo[i].aMode == css::reflection::ParamMode_OUT ||
-                        seqInfo[i].aMode == css::reflection::ParamMode_INOUT )
-                    {
-                        ret[nOutsAssigned] = static_cast<sal_Int16>(i);
-                        nOutsAssigned ++;
-                    }
-                }
-            }
+            ret = comphelper::containerToSequence(retVec);
         }
         // guard active again !
         m_methodOutIndexMap[ functionName ] = ret;
@@ -276,24 +262,22 @@ Any Adapter::invoke( const OUString &aFunctionName,
                             "pyuno bridge: Couldn't extract out parameters for method " + aFunctionName );
                     }
 
-                    if( aOutParamIndex.getLength() +1 != seq.getLength() )
+                    auto nOutLength = aOutParamIndex.getLength();
+                    if( nOutLength + 1 != seq.getLength() )
                     {
                         OUString sMsg = "pyuno bridge: expected for method "
                                       + aFunctionName
                                       + " one return value and "
-                                      + OUString::number(aOutParamIndex.getLength())
+                                      + OUString::number(nOutLength)
                                       + " out parameters, got a sequence of "
                                       + OUString::number(seq.getLength())
                                       + " elements as return value.";
                         throw RuntimeException( sMsg, *this );
                     }
 
-                    aOutParam.realloc( aOutParamIndex.getLength() );
+                    aOutParam.realloc( nOutLength );
                     ret = seq[0];
-                    for( i = 0 ; i < aOutParamIndex.getLength() ; i ++ )
-                    {
-                        aOutParam[i] = seq[1+i];
-                    }
+                    std::copy_n(std::next(seq.begin()), nOutLength, aOutParam.begin());
                 }
                 // else { sequence is a return value !}
             }

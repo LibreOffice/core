@@ -277,26 +277,22 @@ namespace
 {
     void lcl_addToList( OAddFieldWindowListBox& _rListBox, const uno::Sequence< OUString >& _rEntries )
     {
-        const OUString* pEntries = _rEntries.getConstArray();
-        sal_Int32 nEntries = _rEntries.getLength();
-        for ( sal_Int32 i = 0; i < nEntries; ++i, ++pEntries )
-            _rListBox.InsertEntry( *pEntries,nullptr,false,TREELIST_APPEND,new ColumnInfo(*pEntries) );
+        for ( const OUString& rEntry : _rEntries )
+            _rListBox.InsertEntry( rEntry,nullptr,false,TREELIST_APPEND,new ColumnInfo(rEntry) );
     }
     void lcl_addToList( OAddFieldWindowListBox& _rListBox, const uno::Reference< container::XNameAccess>& i_xColumns )
     {
-        uno::Sequence< OUString > aEntries = i_xColumns->getElementNames();
-        const OUString* pEntries = aEntries.getConstArray();
-        sal_Int32 nEntries = aEntries.getLength();
-        for ( sal_Int32 i = 0; i < nEntries; ++i, ++pEntries )
+        const uno::Sequence< OUString > aEntries = i_xColumns->getElementNames();
+        for ( const OUString& rEntry : aEntries )
         {
-            uno::Reference< beans::XPropertySet> xColumn(i_xColumns->getByName(*pEntries),UNO_QUERY_THROW);
+            uno::Reference< beans::XPropertySet> xColumn(i_xColumns->getByName(rEntry),UNO_QUERY_THROW);
             OUString sLabel;
             if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
             if ( !sLabel.isEmpty() )
-                _rListBox.InsertEntry( sLabel,nullptr,false,TREELIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
+                _rListBox.InsertEntry( sLabel,nullptr,false,TREELIST_APPEND,new ColumnInfo(rEntry,sLabel) );
             else
-                _rListBox.InsertEntry( *pEntries,nullptr,false,TREELIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
+                _rListBox.InsertEntry( rEntry,nullptr,false,TREELIST_APPEND,new ColumnInfo(rEntry,sLabel) );
         }
     }
 }
