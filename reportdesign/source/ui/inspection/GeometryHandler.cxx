@@ -1711,12 +1711,10 @@ void GeometryHandler::impl_fillMimeTypes_nothrow(::std::vector< OUString >& _out
         const uno::Reference< report::XReportDefinition> xReportDefinition(m_xReportComponent,uno::UNO_QUERY);
         if ( xReportDefinition.is() )
         {
-            uno::Sequence< OUString > aMimeTypes( xReportDefinition->getAvailableMimeTypes() );
-            const OUString* pIter = aMimeTypes.getConstArray();
-            const OUString* pEnd  = pIter + aMimeTypes.getLength();
-            for(;pIter != pEnd; ++pIter)
+            const uno::Sequence< OUString > aMimeTypes( xReportDefinition->getAvailableMimeTypes() );
+            for(const OUString& rMimeType : aMimeTypes)
             {
-                const OUString sDocName( impl_ConvertMimeTypeToUI_nothrow(*pIter) );
+                const OUString sDocName( impl_ConvertMimeTypeToUI_nothrow(rMimeType) );
                 if ( !sDocName.isEmpty() )
                     _out_rList.push_back(sDocName);
             }

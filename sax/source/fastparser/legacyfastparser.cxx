@@ -227,12 +227,11 @@ void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& /*Na
         rtl::Reference < comphelper::AttributeList > rAttrList = new comphelper::AttributeList;
         m_aNamespaceHandler->addNSDeclAttributes( rAttrList );
 
-        Sequence< xml::FastAttribute > fastAttribs = Attribs->getFastAttributes();
-        sal_uInt16 len = fastAttribs.getLength();
-        for (sal_uInt16 i = 0; i < len; i++)
+        const Sequence< xml::FastAttribute > fastAttribs = Attribs->getFastAttributes();
+        for (const auto& rAttr : fastAttribs)
         {
-            const OUString& rAttrValue = fastAttribs[i].Value;
-            sal_Int32 nToken = fastAttribs[i].Token;
+            const OUString& rAttrValue = rAttr.Value;
+            sal_Int32 nToken = rAttr.Token;
             const OUString& rAttrNamespacePrefix = CallbackDocumentHandler::getNamespacePrefixFromToken( nToken );
             OUString sAttrName = CallbackDocumentHandler::getNameFromToken( nToken );
             if ( !rAttrNamespacePrefix.isEmpty() )
@@ -241,12 +240,11 @@ void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& /*Na
             rAttrList->AddAttribute( sAttrName, "CDATA", rAttrValue );
         }
 
-        Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
-        len = unknownAttribs.getLength();
-        for (sal_uInt16 i = 0; i < len; i++)
+        const Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
+        for (const auto& rAttr : unknownAttribs)
         {
-            const OUString& rAttrValue = unknownAttribs[i].Value;
-            const OUString& rAttrName = unknownAttribs[i].Name;
+            const OUString& rAttrValue = rAttr.Value;
+            const OUString& rAttrName = rAttr.Name;
 
             rAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
         }
