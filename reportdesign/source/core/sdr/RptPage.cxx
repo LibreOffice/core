@@ -76,7 +76,7 @@ void OReportPage::removeSdrObject(const uno::Reference< report::XReportComponent
     if ( nPos < GetObjCount() )
     {
         OObjectBase* pBase = dynamic_cast<OObjectBase*>(GetObj(nPos));
-        OSL_ENSURE(pBase,"Why is this not a OObjectBase?");
+        OSL_ENSURE(pBase,"Why is this not an OObjectBase?");
         if ( pBase )
             pBase->EndListening();
         RemoveObject(nPos);

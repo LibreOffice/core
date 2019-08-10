@@ -178,7 +178,7 @@ namespace rptui
         */
         void SelectAll(const sal_uInt16 _nObjectType);
 
-        /** returns <TRUE/> when a object is marked
+        /** returns <TRUE/> when an object is marked
         */
         bool HasSelection() const;
 
@@ -274,7 +274,7 @@ namespace rptui
         */
         void fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedPositions) const;
 
-        /** collpase all sections given by their position
+        /** collapse all sections given by their position
         *
         * \param _aCollpasedSections The position of the sections which should be collapsed.
         */

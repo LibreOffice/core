@@ -192,7 +192,7 @@ namespace rptui
         }
         catch( const SQLException& )
         {
-            // silence it. This might happen for instance when the user sets an non-existent table,
+            // silence it. This might happen for instance when the user sets a non-existent table,
             // or things like this
         }
         catch( const Exception& )
