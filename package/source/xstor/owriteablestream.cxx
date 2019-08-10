@@ -45,6 +45,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/refcountedmutex.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
@@ -92,10 +93,9 @@ bool PackageEncryptionDatasEqual( const ::comphelper::SequenceAsHashMap& aHash1,
         bResult = ( ( aIter->second >>= aKey1 ) && aKey1.hasElements() );
         if ( bResult )
         {
-            uno::Sequence< sal_Int8 > aKey2 = aHash2.getUnpackedValueOrDefault( aIter->first, uno::Sequence< sal_Int8 >() );
-            bResult = ( aKey1.getLength() == aKey2.getLength() );
-            for ( sal_Int32 nInd = 0; bResult && nInd < aKey1.getLength(); nInd++ )
-                bResult = ( aKey1[nInd] == aKey2[nInd] );
+            const uno::Sequence< sal_Int8 > aKey2 = aHash2.getUnpackedValueOrDefault( aIter->first, uno::Sequence< sal_Int8 >() );
+            bResult = aKey1.getLength() == aKey2.getLength()
+                && std::equal(std::cbegin(aKey1), std::cend(aKey1), aKey2.begin(), aKey2.end());
         }
     }
 
@@ -142,14 +142,8 @@ uno::Any GetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySe
 
 bool SequencesEqual( const uno::Sequence< sal_Int8 >& aSequence1, const uno::Sequence< sal_Int8 >& aSequence2 )
 {
-    if ( aSequence1.getLength() != aSequence2.getLength() )
-        return false;
-
-    for ( sal_Int32 nInd = 0; nInd < aSequence1.getLength(); nInd++ )
-        if ( aSequence1[nInd] != aSequence2[nInd] )
-            return false;
-
-    return true;
+    return aSequence1.getLength() == aSequence2.getLength()
+        && std::equal(aSequence1.begin(), aSequence1.end(), aSequence2.begin(), aSequence2.end());
 }
 
 bool SequencesEqual( const uno::Sequence< beans::NamedValue >& aSequence1, const uno::Sequence< beans::NamedValue >& aSequence2 )
@@ -157,35 +151,35 @@ bool SequencesEqual( const uno::Sequence< beans::NamedValue >& aSequence1, const
     if ( aSequence1.getLength() != aSequence2.getLength() )
         return false;
 
-    for ( sal_Int32 nInd = 0; nInd < aSequence1.getLength(); nInd++ )
+    for ( const auto& rProp1 : aSequence1 )
     {
         bool bHasMember = false;
         uno::Sequence< sal_Int8 > aMember1;
         sal_Int32 nMember1 = 0;
-        if ( aSequence1[nInd].Value >>= aMember1 )
+        if ( rProp1.Value >>= aMember1 )
         {
-            for ( sal_Int32 nInd2 = 0; nInd2 < aSequence2.getLength(); nInd2++ )
+            for ( const auto& rProp2 : aSequence2 )
             {
-                if ( aSequence1[nInd].Name == aSequence2[nInd2].Name )
+                if ( rProp1.Name == rProp2.Name )
                 {
                     bHasMember = true;
 
                     uno::Sequence< sal_Int8 > aMember2;
-                    if ( !( aSequence2[nInd2].Value >>= aMember2 ) || !SequencesEqual( aMember1, aMember2 ) )
+                    if ( !( rProp2.Value >>= aMember2 ) || !SequencesEqual( aMember1, aMember2 ) )
                         return false;
                 }
             }
         }
-        else if ( aSequence1[nInd].Value >>= nMember1 )
+        else if ( rProp1.Value >>= nMember1 )
         {
-            for ( sal_Int32 nInd2 = 0; nInd2 < aSequence2.getLength(); nInd2++ )
+            for ( const auto& rProp2 : aSequence2 )
             {
-                if ( aSequence1[nInd].Name == aSequence2[nInd2].Name )
+                if ( rProp1.Name == rProp2.Name )
                 {
                     bHasMember = true;
 
                     sal_Int32 nMember2 = 0;
-                    if ( !( aSequence2[nInd2].Value >>= nMember2 ) || nMember1 != nMember2 )
+                    if ( !( rProp2.Value >>= nMember2 ) || nMember1 != nMember2 )
                         return false;
                 }
             }
@@ -251,6 +245,12 @@ uno::Reference< io::XStream > CreateMemoryStream( const uno::Reference< uno::XCo
     return uno::Reference< io::XStream >(
         rContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.MemoryStream", rContext),
         uno::UNO_QUERY_THROW);
+}
+
+const beans::StringPair* lcl_findPairByName(const uno::Sequence<beans::StringPair>& rSeq, const OUString& rName)
+{
+    return std::find_if(rSeq.begin(), rSeq.end(),
+        [&rName](const beans::StringPair& rPair) { return rPair.First == rName; });
 }
 
 } // anonymous namespace
@@ -371,11 +371,11 @@ bool OWriteStream_Impl::IsEncrypted()
     }
 
     bool bToBeEncr = false;
-    for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
+    for ( const auto& rProp : std::as_const(m_aProps) )
     {
-        if ( m_aProps[nInd].Name == "Encrypted" )
+        if ( rProp.Name == "Encrypted" )
         {
-            if ( !( m_aProps[nInd].Value >>= bToBeEncr ) )
+            if ( !( rProp.Value >>= bToBeEncr ) )
             {
                 SAL_WARN( "package.xstor", "The property has wrong type!" );
             }
@@ -421,10 +421,10 @@ void OWriteStream_Impl::SetDecrypted()
     m_bHasCachedEncryptionData = false;
     m_aEncryptionData.clear();
 
-    for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
+    for ( auto& rProp : m_aProps )
     {
-        if ( m_aProps[nInd].Name == "Encrypted" )
-            m_aProps[nInd].Value <<= false;
+        if ( rProp.Name == "Encrypted" )
+            rProp.Value <<= false;
     }
 }
 
@@ -444,10 +444,10 @@ void OWriteStream_Impl::SetEncrypted( const ::comphelper::SequenceAsHashMap& aEn
     m_bHasDataToFlush = true;
 
     // introduce encryption info
-    for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
+    for ( auto& rProp : m_aProps )
     {
-        if ( m_aProps[nInd].Name == "Encrypted" )
-            m_aProps[nInd].Value <<= true;
+        if ( rProp.Name == "Encrypted" )
+            rProp.Value <<= true;
     }
 
     m_bUseCommonEncryption = false; // very important to set it to false
@@ -714,29 +714,29 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
     bool bCompressed = false;
     OUString aComprPropName( "Compressed" );
     OUString aMedTypePropName( "MediaType" );
-    for ( sal_Int32 nInd = 0; nInd < aProps.getLength(); nInd++ )
+    for ( const auto& rProp : aProps )
     {
-        if ( aProps[nInd].Name == aComprPropName )
+        if ( rProp.Name == aComprPropName )
         {
             bCompressedIsSet = true;
-            aProps[nInd].Value >>= bCompressed;
+            rProp.Value >>= bCompressed;
         }
         else if ( ( m_nStorageType == embed::StorageFormats::OFOPXML || m_nStorageType == embed::StorageFormats::PACKAGE )
-               && aProps[nInd].Name == aMedTypePropName )
+               && rProp.Name == aMedTypePropName )
         {
-            xPropertySet->setPropertyValue( aProps[nInd].Name, aProps[nInd].Value );
+            xPropertySet->setPropertyValue( rProp.Name, rProp.Value );
         }
-        else if ( m_nStorageType == embed::StorageFormats::PACKAGE && aProps[nInd].Name == "UseCommonStoragePasswordEncryption" )
-            aProps[nInd].Value >>= m_bUseCommonEncryption;
+        else if ( m_nStorageType == embed::StorageFormats::PACKAGE && rProp.Name == "UseCommonStoragePasswordEncryption" )
+            rProp.Value >>= m_bUseCommonEncryption;
         else
             throw lang::IllegalArgumentException();
 
         // if there are cached properties update them
-        if ( aProps[nInd].Name == aMedTypePropName || aProps[nInd].Name == aComprPropName )
-            for ( sal_Int32 nMemInd = 0; nMemInd < m_aProps.getLength(); nMemInd++ )
+        if ( rProp.Name == aMedTypePropName || rProp.Name == aComprPropName )
+            for ( auto& rMemProp : m_aProps )
             {
-                if ( aProps[nInd].Name == m_aProps[nMemInd].Name )
-                    m_aProps[nMemInd].Value = aProps[nInd].Value;
+                if ( rProp.Name == rMemProp.Name )
+                    rMemProp.Value = rProp.Value;
             }
     }
 
@@ -823,18 +823,18 @@ void OWriteStream_Impl::Commit()
     // copy properties to the package stream
     uno::Reference< beans::XPropertySet > xPropertySet( xNewPackageStream, uno::UNO_QUERY_THROW );
 
-    for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
+    for ( auto& rProp : m_aProps )
     {
-        if ( m_aProps[nInd].Name == "Size" )
+        if ( rProp.Name == "Size" )
         {
             if ( m_pAntiImpl && !m_bHasInsertedStreamOptimization && m_pAntiImpl->m_xSeekable.is() )
             {
-                m_aProps[nInd].Value <<= m_pAntiImpl->m_xSeekable->getLength();
-                xPropertySet->setPropertyValue( m_aProps[nInd].Name, m_aProps[nInd].Value );
+                rProp.Value <<= m_pAntiImpl->m_xSeekable->getLength();
+                xPropertySet->setPropertyValue( rProp.Name, rProp.Value );
             }
         }
         else
-            xPropertySet->setPropertyValue( m_aProps[nInd].Name, m_aProps[nInd].Value );
+            xPropertySet->setPropertyValue( rProp.Name, rProp.Value );
     }
 
     if ( m_bUseCommonEncryption )
@@ -934,10 +934,10 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
 
     if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
-        for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
-            if ( aResult[nInd].Name == "UseCommonStoragePasswordEncryption" )
+        for (auto& rProp : aResult)
+            if (rProp.Name == "UseCommonStoragePasswordEncryption")
             {
-                aResult[nInd].Value <<= bUseCommonEncryption;
+                rProp.Value <<= bUseCommonEncryption;
                 return aResult;
             }
 
@@ -957,10 +957,10 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
         else // m_nRelInfoStatus == RELINFO_CHANGED_BROKEN || m_nRelInfoStatus == RELINFO_BROKEN
             throw io::IOException( "Wrong relinfo stream!" );
 
-        for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
-            if ( aResult[nInd].Name == "RelationsInfo" )
+        for (auto& rProp : aResult)
+            if (rProp.Name == "RelationsInfo")
             {
-                aResult[nInd].Value = aValue;
+                rProp.Value = aValue;
                 return aResult;
             }
 
@@ -1060,10 +1060,10 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProper
     // TODO: may be also raw stream should be marked
 
     uno::Reference< beans::XPropertySet > xPropSet( m_xPackageStream, uno::UNO_QUERY_THROW );
-    for ( sal_Int32 nInd = 0; nInd < aResult.getLength(); nInd++ )
+    for ( auto& rProp : aResult )
     {
         try {
-            aResult[nInd].Value = xPropSet->getPropertyValue( aResult[nInd].Name );
+            rProp.Value = xPropSet->getPropertyValue( rProp.Name );
         }
         catch( const uno::Exception& )
         {
@@ -2195,10 +2195,10 @@ void OWriteStream::CloseOutput_Impl()
         if ( !m_xSeekable.is() )
             throw uno::RuntimeException();
 
-        for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
+        for ( auto& rProp : m_pImpl->m_aProps )
         {
-            if ( m_pImpl->m_aProps[nInd].Name == "Size" )
-                m_pImpl->m_aProps[nInd].Value <<= m_xSeekable->getLength();
+            if ( rProp.Name == "Size" )
+                rProp.Value <<= m_xSeekable->getLength();
         }
     }
 }
@@ -2520,10 +2520,10 @@ OUString SAL_CALL OWriteStream::getTargetByID(  const OUString& sID  )
     if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
-    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( aSeq[nInd].First == "Target" )
-            return aSeq[nInd].Second;
+    const uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
+    auto pRel = lcl_findPairByName(aSeq, "Target");
+    if (pRel != aSeq.end())
+        return pRel->Second;
 
     return OUString();
 }
@@ -2541,10 +2541,10 @@ OUString SAL_CALL OWriteStream::getTypeByID(  const OUString& sID  )
     if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
-    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( aSeq[nInd].First == "Type" )
-            return aSeq[nInd].Second;
+    const uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
+    auto pRel = lcl_findPairByName(aSeq, "Type");
+    if (pRel != aSeq.end())
+        return pRel->Second;
 
     return OUString();
 }
@@ -2563,15 +2563,13 @@ uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipByID(  
         throw uno::RuntimeException();
 
     // TODO/LATER: in future the unification of the ID could be checked
-    uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
-    for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
-        for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
-            if ( aSeq[nInd1][nInd2].First == "Id" )
-            {
-                if ( aSeq[nInd1][nInd2].Second == sID )
-                    return aSeq[nInd1];
-                break;
-            }
+    const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    const beans::StringPair aIDRel("Id", sID);
+    auto pRel = std::find_if(aSeq.begin(), aSeq.end(),
+        [&aIDRel](const uno::Sequence<beans::StringPair>& rRel) {
+            return std::find(rRel.begin(), rRel.end(), aIDRel) != rRel.end(); });
+    if (pRel != aSeq.end())
+        return *pRel;
 
     throw container::NoSuchElementException();
 }
@@ -2589,24 +2587,17 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getRe
     if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    uno::Sequence< uno::Sequence< beans::StringPair > > aResult;
-    sal_Int32 nEntriesNum = 0;
-
     // TODO/LATER: in future the unification of the ID could be checked
-    uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
-    for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
-        for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
-            if ( aSeq[nInd1][nInd2].First == "Type" )
-            {
-                if ( aSeq[nInd1][nInd2].Second == sType )
-                {
-                    aResult.realloc( nEntriesNum );
-                    aResult[nEntriesNum-1] = aSeq[nInd1];
-                }
-                break;
-            }
+    const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    const beans::StringPair aTypeRel("Type", sType);
+    std::vector< uno::Sequence<beans::StringPair> > aResult;
+    aResult.reserve(aSeq.getLength());
 
-    return aResult;
+    std::copy_if(aSeq.begin(), aSeq.end(), std::back_inserter(aResult),
+        [&aTypeRel](const uno::Sequence<beans::StringPair>& rRel) {
+            return std::find(rRel.begin(), rRel.end(), aTypeRel) != rRel.end(); });
+
+    return comphelper::containerToSequence(aResult);
 }
 
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getAllRelationships()
@@ -2639,20 +2630,18 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const 
         throw uno::RuntimeException();
 
     OUString aIDTag( "Id" );
+    const beans::StringPair aIDRel(aIDTag, sID);
 
     sal_Int32 nIDInd = -1;
 
     // TODO/LATER: in future the unification of the ID could be checked
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
-    for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
-        for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
-            if ( aSeq[nInd1][nInd2].First == aIDTag )
-            {
-                if ( aSeq[nInd1][nInd2].Second == sID )
-                    nIDInd = nInd1;
-
-                break;
-            }
+    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
+    {
+        const auto& rRel = aSeq[nInd];
+        if (std::find(rRel.begin(), rRel.end(), aIDRel) != rRel.end())
+            nIDInd = nInd;
+    }
 
     if ( nIDInd != -1 && !bReplace )
         throw container::ElementExistException(); // TODO
@@ -2663,20 +2652,14 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const 
         aSeq.realloc( nIDInd + 1 );
     }
 
-    aSeq[nIDInd].realloc( aEntry.getLength() + 1 );
+    std::vector<beans::StringPair> aResult;
+    aResult.reserve(aEntry.getLength() + 1);
 
-    aSeq[nIDInd][0].First = aIDTag;
-    aSeq[nIDInd][0].Second = sID;
-    sal_Int32 nIndTarget = 1;
-    for ( sal_Int32 nIndOrig = 0;
-          nIndOrig < aEntry.getLength();
-          nIndOrig++ )
-    {
-        if ( aEntry[nIndOrig].First != aIDTag )
-            aSeq[nIDInd][nIndTarget++] = aEntry[nIndOrig];
-    }
+    aResult.push_back(aIDRel);
+    std::copy_if(aEntry.begin(), aEntry.end(), std::back_inserter(aResult),
+        [&aIDTag](const beans::StringPair& rRel) { return rRel.First != aIDTag; });
 
-    aSeq[nIDInd].realloc( nIndTarget );
+    aSeq[nIDInd] = comphelper::containerToSequence(aResult);
 
     m_pImpl->m_aNewRelInfo = aSeq;
     m_pImpl->m_xNewRelInfoStream.clear();
@@ -2697,26 +2680,22 @@ void SAL_CALL OWriteStream::removeRelationshipByID(  const OUString& sID  )
         throw uno::RuntimeException();
 
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
-    for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
-        for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
-            if ( aSeq[nInd1][nInd2].First == "Id" )
-            {
-                if ( aSeq[nInd1][nInd2].Second == sID )
-                {
-                    sal_Int32 nLength = aSeq.getLength();
-                    aSeq[nInd1] = aSeq[nLength-1];
-                    aSeq.realloc( nLength - 1 );
+    const beans::StringPair aIDRel("Id", sID);
+    auto pRel = std::find_if(std::cbegin(aSeq), std::cend(aSeq),
+        [&aIDRel](const uno::Sequence< beans::StringPair >& rRel) {
+            return std::find(rRel.begin(), rRel.end(), aIDRel) != rRel.end(); });
+    if (pRel != std::cend(aSeq))
+    {
+        auto nInd = static_cast<sal_Int32>(std::distance(std::cbegin(aSeq), pRel));
+        comphelper::removeElementAt(aSeq, nInd);
 
-                    m_pImpl->m_aNewRelInfo = aSeq;
-                    m_pImpl->m_xNewRelInfoStream.clear();
-                    m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED;
+        m_pImpl->m_aNewRelInfo = aSeq;
+        m_pImpl->m_xNewRelInfoStream.clear();
+        m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED;
 
-                    // TODO/LATER: in future the unification of the ID could be checked
-                    return;
-                }
-
-                break;
-            }
+        // TODO/LATER: in future the unification of the ID could be checked
+        return;
+    }
 
     throw container::NoSuchElementException();
 }
@@ -2735,67 +2714,41 @@ void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequ
         throw uno::RuntimeException();
 
     OUString aIDTag( "Id" );
-    uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
-    uno::Sequence< uno::Sequence< beans::StringPair > > aResultSeq( aSeq.getLength() + aEntries.getLength() );
-    sal_Int32 nResultInd = 0;
+    const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    std::vector< uno::Sequence<beans::StringPair> > aResultVec;
+    aResultVec.reserve(aSeq.getLength() + aEntries.getLength());
 
-    for ( sal_Int32 nIndTarget1 = 0; nIndTarget1 < aSeq.getLength(); nIndTarget1++ )
-        for ( sal_Int32 nIndTarget2 = 0; nIndTarget2 < aSeq[nIndTarget1].getLength(); nIndTarget2++ )
-            if ( aSeq[nIndTarget1][nIndTarget2].First == aIDTag )
-            {
-                sal_Int32 nIndSourceSame = -1;
+    std::copy_if(aSeq.begin(), aSeq.end(), std::back_inserter(aResultVec),
+        [&aIDTag, &aEntries, bReplace](const uno::Sequence<beans::StringPair>& rTargetRel) {
+            auto pTargetPair = lcl_findPairByName(rTargetRel, aIDTag);
+            if (pTargetPair == rTargetRel.end())
+                return false;
 
-                for ( sal_Int32 nIndSource1 = 0; nIndSource1 < aEntries.getLength(); nIndSource1++ )
-                    for ( sal_Int32 nIndSource2 = 0; nIndSource2 < aEntries[nIndSource1].getLength(); nIndSource2++ )
-                    {
-                        if ( aEntries[nIndSource1][nIndSource2].First == aIDTag )
-                        {
-                            if ( aEntries[nIndSource1][nIndSource2].Second == aSeq[nIndTarget1][nIndTarget2].Second )
-                            {
-                                if ( !bReplace )
-                                    throw container::ElementExistException();
+            bool bIsSourceSame = std::any_of(aEntries.begin(), aEntries.end(),
+                [&pTargetPair](const uno::Sequence<beans::StringPair>& rSourceEntry) {
+                    return std::find(rSourceEntry.begin(), rSourceEntry.end(), *pTargetPair) != rSourceEntry.end(); });
 
-                                nIndSourceSame = nIndSource1;
-                            }
+            if ( bIsSourceSame && !bReplace )
+                throw container::ElementExistException();
 
-                            break;
-                        }
-                    }
+            // if no such element in the provided sequence
+            return !bIsSourceSame;
+        });
 
-                if ( nIndSourceSame == -1 )
-                {
-                    // no such element in the provided sequence
-                    aResultSeq[nResultInd++] = aSeq[nIndTarget1];
-                }
-
-                break;
-            }
-
-    for ( sal_Int32 nIndSource1 = 0; nIndSource1 < aEntries.getLength(); nIndSource1++ )
-    {
-        aResultSeq[nResultInd].realloc( aEntries[nIndSource1].getLength() );
-        bool bHasID = false;
-        sal_Int32 nResInd2 = 1;
-
-        for ( sal_Int32 nIndSource2 = 0; nIndSource2 < aEntries[nIndSource1].getLength(); nIndSource2++ )
-            if ( aEntries[nIndSource1][nIndSource2].First == aIDTag )
-            {
-                aResultSeq[nResultInd][0] = aEntries[nIndSource1][nIndSource2];
-                bHasID = true;
-            }
-            else if ( nResInd2 < aResultSeq[nResultInd].getLength() )
-                aResultSeq[nResultInd][nResInd2++] = aEntries[nIndSource1][nIndSource2];
-            else
+    std::transform(aEntries.begin(), aEntries.end(), std::back_inserter(aResultVec),
+        [&aIDTag](const uno::Sequence<beans::StringPair>& rEntry) -> uno::Sequence<beans::StringPair> {
+            auto pPair = lcl_findPairByName(rEntry, aIDTag);
+            if (pPair == rEntry.end())
                 throw io::IOException(); // TODO: illegal relation ( no ID )
 
-        if ( !bHasID )
-            throw io::IOException(); // TODO: illegal relations
+            auto aResult = comphelper::sequenceToContainer<std::vector<beans::StringPair>>(rEntry);
+            auto nIDInd = std::distance(rEntry.begin(), pPair);
+            std::rotate(aResult.begin(), std::next(aResult.begin(), nIDInd), std::next(aResult.begin(), nIDInd + 1));
 
-        nResultInd++;
-    }
+            return comphelper::containerToSequence(aResult);
+        });
 
-    aResultSeq.realloc( nResultInd );
-    m_pImpl->m_aNewRelInfo = aResultSeq;
+    m_pImpl->m_aNewRelInfo = comphelper::containerToSequence(aResultVec);
     m_pImpl->m_xNewRelInfoStream.clear();
     m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED;
 }
@@ -2852,22 +2805,22 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
                 bCompressedValueFromType = false;
         }
 
-        for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
+        for ( auto& rProp : m_pImpl->m_aProps )
         {
-            if ( aPropertyName == m_pImpl->m_aProps[nInd].Name )
-                m_pImpl->m_aProps[nInd].Value = aValue;
-            else if ( !m_pImpl->m_bCompressedSetExplicit && aCompressedString == m_pImpl->m_aProps[nInd].Name )
-                m_pImpl->m_aProps[nInd].Value <<= bCompressedValueFromType;
+            if ( aPropertyName == rProp.Name )
+                rProp.Value = aValue;
+            else if ( !m_pImpl->m_bCompressedSetExplicit && aCompressedString == rProp.Name )
+                rProp.Value <<= bCompressedValueFromType;
         }
     }
     else if ( aPropertyName == aCompressedString )
     {
         // if the "Compressed" property is not set explicitly, the MediaType can change the default value
         m_pImpl->m_bCompressedSetExplicit = true;
-        for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
+        for ( auto& rProp : m_pImpl->m_aProps )
         {
-            if ( aPropertyName == m_pImpl->m_aProps[nInd].Name )
-                m_pImpl->m_aProps[nInd].Value = aValue;
+            if ( aPropertyName == rProp.Name )
+                rProp.Value = aValue;
         }
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
@@ -2895,10 +2848,10 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName == aMediaTypeString )
     {
-        for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
+        for ( auto& rProp : m_pImpl->m_aProps )
         {
-            if ( aPropertyName == m_pImpl->m_aProps[nInd].Name )
-                m_pImpl->m_aProps[nInd].Value = aValue;
+            if ( aPropertyName == rProp.Name )
+                rProp.Value = aValue;
         }
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName == "RelationsInfoStream" )
@@ -2969,11 +2922,10 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
     {
         m_pImpl->GetStreamProperties();
 
-        for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
-        {
-            if ( aPropertyName == m_pImpl->m_aProps[nInd].Name )
-                return m_pImpl->m_aProps[nInd].Value;
-        }
+        auto pProp = std::find_if(std::cbegin(m_pImpl->m_aProps), std::cend(m_pImpl->m_aProps),
+            [&aPropertyName](const css::beans::PropertyValue& rProp){ return aPropertyName == rProp.Name; });
+        if (pProp != std::cend(m_pImpl->m_aProps))
+            return pProp->Value;
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
             && aPropertyName == "UseCommonStoragePasswordEncryption" )

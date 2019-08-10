@@ -200,46 +200,43 @@ void ZipPackage::parseManifest()
                         const OUString sPropStartKeyAlgorithm ("StartKeyAlgorithm");
                         const OUString sKeyInfo ("KeyInfo");
 
-                        uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
-                        sal_Int32 nLength = aManifestSequence.getLength();
-                        const uno::Sequence < PropertyValue > *pSequence = aManifestSequence.getConstArray();
+                        const uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
                         ZipPackageStream *pStream = nullptr;
                         ZipPackageFolder *pFolder = nullptr;
                         const Any *pKeyInfo = nullptr;
 
-                        for ( sal_Int32 i = 0; i < nLength ; i++, pSequence++ )
+                        for ( const uno::Sequence<PropertyValue>& rSequence : aManifestSequence )
                         {
                             OUString sPath, sMediaType, sVersion;
-                            const PropertyValue *pValue = pSequence->getConstArray();
                             const Any *pSalt = nullptr, *pVector = nullptr, *pCount = nullptr, *pSize = nullptr, *pDigest = nullptr, *pDigestAlg = nullptr, *pEncryptionAlg = nullptr, *pStartKeyAlg = nullptr, *pDerivedKeySize = nullptr;
-                            for ( sal_Int32 j = 0, nNum = pSequence->getLength(); j < nNum; j++ )
+                            for ( const PropertyValue& rValue : rSequence )
                             {
-                                if ( pValue[j].Name == sPropFullPath )
-                                    pValue[j].Value >>= sPath;
-                                else if ( pValue[j].Name == sPropVersion )
-                                    pValue[j].Value >>= sVersion;
-                                else if ( pValue[j].Name == sPropMediaType )
-                                    pValue[j].Value >>= sMediaType;
-                                else if ( pValue[j].Name == sPropSalt )
-                                    pSalt = &( pValue[j].Value );
-                                else if ( pValue[j].Name == sPropInitialisationVector )
-                                    pVector = &( pValue[j].Value );
-                                else if ( pValue[j].Name == sPropIterationCount )
-                                    pCount = &( pValue[j].Value );
-                                else if ( pValue[j].Name == sPropSize )
-                                    pSize = &( pValue[j].Value );
-                                else if ( pValue[j].Name == sPropDigest )
-                                    pDigest = &( pValue[j].Value );
-                                else if ( pValue[j].Name == sPropDigestAlgorithm )
-                                    pDigestAlg = &( pValue[j].Value );
-                                else if ( pValue[j].Name == sPropEncryptionAlgorithm )
-                                    pEncryptionAlg = &( pValue[j].Value );
-                                else if ( pValue[j].Name == sPropStartKeyAlgorithm )
-                                    pStartKeyAlg = &( pValue[j].Value );
-                                else if ( pValue[j].Name == sPropDerivedKeySize )
-                                    pDerivedKeySize = &( pValue[j].Value );
-                                else if ( pValue[j].Name == sKeyInfo )
-                                    pKeyInfo = &( pValue[j].Value );
+                                if ( rValue.Name == sPropFullPath )
+                                    rValue.Value >>= sPath;
+                                else if ( rValue.Name == sPropVersion )
+                                    rValue.Value >>= sVersion;
+                                else if ( rValue.Name == sPropMediaType )
+                                    rValue.Value >>= sMediaType;
+                                else if ( rValue.Name == sPropSalt )
+                                    pSalt = &( rValue.Value );
+                                else if ( rValue.Name == sPropInitialisationVector )
+                                    pVector = &( rValue.Value );
+                                else if ( rValue.Name == sPropIterationCount )
+                                    pCount = &( rValue.Value );
+                                else if ( rValue.Name == sPropSize )
+                                    pSize = &( rValue.Value );
+                                else if ( rValue.Name == sPropDigest )
+                                    pDigest = &( rValue.Value );
+                                else if ( rValue.Name == sPropDigestAlgorithm )
+                                    pDigestAlg = &( rValue.Value );
+                                else if ( rValue.Name == sPropEncryptionAlgorithm )
+                                    pEncryptionAlg = &( rValue.Value );
+                                else if ( rValue.Name == sPropStartKeyAlgorithm )
+                                    pStartKeyAlg = &( rValue.Value );
+                                else if ( rValue.Name == sPropDerivedKeySize )
+                                    pDerivedKeySize = &( rValue.Value );
+                                else if ( rValue.Name == sKeyInfo )
+                                    pKeyInfo = &( rValue.Value );
                             }
 
                             if ( !sPath.isEmpty() && hasByHierarchicalName ( sPath ) )
@@ -469,26 +466,25 @@ void ZipPackage::parseContentType()
                 uno::Reference< io::XInputStream > xInStream = xSink->getInputStream();
                 if ( xInStream.is() )
                 {
-                    sal_Int32 nInd = 0;
                     // here aContentTypeInfo[0] - Defaults, and aContentTypeInfo[1] - Overrides
-                    uno::Sequence< uno::Sequence< beans::StringPair > > aContentTypeInfo =
+                    const uno::Sequence< uno::Sequence< beans::StringPair > > aContentTypeInfo =
                         ::comphelper::OFOPXMLHelper::ReadContentTypeSequence( xInStream, m_xContext );
 
                     if ( aContentTypeInfo.getLength() != 2 )
                         throw io::IOException(THROW_WHERE );
 
                     // set the implicit types first
-                    for ( nInd = 0; nInd < aContentTypeInfo[0].getLength(); nInd++ )
-                        m_xRootFolder->setChildStreamsTypeByExtension( aContentTypeInfo[0][nInd] );
+                    for ( const auto& rPair : aContentTypeInfo[0] )
+                        m_xRootFolder->setChildStreamsTypeByExtension( rPair );
 
                     // now set the explicit types
-                    for ( nInd = 0; nInd < aContentTypeInfo[1].getLength(); nInd++ )
+                    for ( const auto& rPair : aContentTypeInfo[1] )
                     {
                         OUString aPath;
-                        if ( aContentTypeInfo[1][nInd].First.toChar() == '/' )
-                            aPath = aContentTypeInfo[1][nInd].First.copy( 1 );
+                        if ( rPair.First.toChar() == '/' )
+                            aPath = rPair.First.copy( 1 );
                         else
-                            aPath = aContentTypeInfo[1][nInd].First;
+                            aPath = rPair.First;
 
                         if ( !aPath.isEmpty() && hasByHierarchicalName( aPath ) )
                         {
@@ -500,7 +496,7 @@ void ZipPackage::parseContentType()
                             {
                                 // this is a package stream, in OFOPXML format only streams can have mediatype
                                 ZipPackageStream *pStream = reinterpret_cast < ZipPackageStream* > ( nTest );
-                                pStream->SetMediaType( aContentTypeInfo[1][nInd].Second );
+                                pStream->SetMediaType( rPair.Second );
                             }
                         }
                     }
@@ -604,10 +600,10 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
     {
         bool bHaveZipFile = true;
 
-        for( int ind = 0; ind < aArguments.getLength(); ind++ )
+        for( const auto& rArgument : aArguments )
         {
             OUString aParamUrl;
-            if ( aArguments[ind] >>= aParamUrl )
+            if ( rArgument >>= aParamUrl )
             {
                 m_eMode = e_IMode_URL;
                 try
@@ -670,17 +666,17 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                     bHaveZipFile = false;
                 }
             }
-            else if ( aArguments[ind] >>= m_xStream )
+            else if ( rArgument >>= m_xStream )
             {
                 // a writable stream can implement both XStream & XInputStream
                 m_eMode = e_IMode_XStream;
                 m_xContentStream = m_xStream->getInputStream();
             }
-            else if ( aArguments[ind] >>= m_xContentStream )
+            else if ( rArgument >>= m_xContentStream )
             {
                 m_eMode = e_IMode_XInputStream;
             }
-            else if ( aArguments[ind] >>= aNamedValue )
+            else if ( rArgument >>= aNamedValue )
             {
                 if ( aNamedValue.Name == "RepairPackage" )
                     aNamedValue.Value >>= m_bForceRecovery;
@@ -1643,9 +1639,9 @@ const uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
         else
             throw uno::RuntimeException(THROW_WHERE "No expected key is provided!" );
 
-        for ( sal_Int32 nInd = 0; nInd < m_aStorageEncryptionKeys.getLength(); nInd++ )
-            if ( m_aStorageEncryptionKeys[nInd].Name == aNameToFind )
-                m_aStorageEncryptionKeys[nInd].Value >>= aResult;
+        for ( const auto& rKey : std::as_const(m_aStorageEncryptionKeys) )
+            if ( rKey.Name == aNameToFind )
+                rKey.Value >>= aResult;
 
         // empty keys are not allowed here
         // so it is not important whether there is no key, or the key is empty, it is an error
@@ -1760,11 +1756,11 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         {
             bool bHasSHA256 = false;
             bool bHasSHA1 = false;
-            for ( sal_Int32 nInd = 0; nInd < aKeys.getLength(); nInd++ )
+            for ( const auto& rKey : std::as_const(aKeys) )
             {
-                if ( aKeys[nInd].Name == PACKAGE_ENCRYPTIONDATA_SHA256UTF8 )
+                if ( rKey.Name == PACKAGE_ENCRYPTIONDATA_SHA256UTF8 )
                     bHasSHA256 = true;
-                if ( aKeys[nInd].Name == PACKAGE_ENCRYPTIONDATA_SHA1UTF8 )
+                if ( rKey.Name == PACKAGE_ENCRYPTIONDATA_SHA1UTF8 )
                     bHasSHA1 = true;
             }
 
@@ -1784,30 +1780,30 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
             throw IllegalArgumentException(THROW_WHERE "unexpected algorithms list is provided.", uno::Reference< uno::XInterface >(), 2 );
         }
 
-        for ( sal_Int32 nInd = 0; nInd < aAlgorithms.getLength(); nInd++ )
+        for ( const auto& rAlgorithm : std::as_const(aAlgorithms) )
         {
-            if ( aAlgorithms[nInd].Name == "StartKeyGenerationAlgorithm" )
+            if ( rAlgorithm.Name == "StartKeyGenerationAlgorithm" )
             {
                 sal_Int32 nID = 0;
-                if ( !( aAlgorithms[nInd].Value >>= nID )
+                if ( !( rAlgorithm.Value >>= nID )
                   || ( nID != xml::crypto::DigestID::SHA256 && nID != xml::crypto::DigestID::SHA1 ) )
                     throw IllegalArgumentException(THROW_WHERE "Unexpected start key generation algorithm is provided!", uno::Reference< uno::XInterface >(), 2 );
 
                 m_nStartKeyGenerationID = nID;
             }
-            else if ( aAlgorithms[nInd].Name == "EncryptionAlgorithm" )
+            else if ( rAlgorithm.Name == "EncryptionAlgorithm" )
             {
                 sal_Int32 nID = 0;
-                if ( !( aAlgorithms[nInd].Value >>= nID )
+                if ( !( rAlgorithm.Value >>= nID )
                   || ( nID != xml::crypto::CipherID::AES_CBC_W3C_PADDING && nID != xml::crypto::CipherID::BLOWFISH_CFB_8 ) )
                     throw IllegalArgumentException(THROW_WHERE "Unexpected start key generation algorithm is provided!", uno::Reference< uno::XInterface >(), 2 );
 
                 m_nCommonEncryptionID = nID;
             }
-            else if ( aAlgorithms[nInd].Name == "ChecksumAlgorithm" )
+            else if ( rAlgorithm.Name == "ChecksumAlgorithm" )
             {
                 sal_Int32 nID = 0;
-                if ( !( aAlgorithms[nInd].Value >>= nID )
+                if ( !( rAlgorithm.Value >>= nID )
                   || ( nID != xml::crypto::DigestID::SHA1_1K && nID != xml::crypto::DigestID::SHA256_1K ) )
                     throw IllegalArgumentException(THROW_WHERE "Unexpected start key generation algorithm is provided!", uno::Reference< uno::XInterface >(), 2 );
 

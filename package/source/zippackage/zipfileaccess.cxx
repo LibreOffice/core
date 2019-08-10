@@ -214,10 +214,8 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
     }
     else if (aArguments[0] >>= aArgs)
     {
-        for (sal_Int32 i = 0; i < aArgs.getLength(); ++i)
+        for (const beans::NamedValue& rArg : std::as_const(aArgs))
         {
-            const beans::NamedValue& rArg = aArgs[i];
-
             if (rArg.Name == "URL")
                 rArg.Value >>= aParamURL;
         }
