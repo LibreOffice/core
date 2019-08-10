@@ -27,6 +27,9 @@ class ul_Compiler:
     variables=[]
     objects = dict()
     current_app=""
+    parent_hierarchy_count=0
+    last_parent=[]
+
     def __init__(self , input_address , output_address):
         self.ui_dsl_mm = metamodel_from_file('ui_logger_dsl_grammar.tx')
         self.output_stream=self.initiate_test_generation(output_address)
@@ -44,6 +47,7 @@ class ul_Compiler:
         return content
 
     def initiate_test_generation(self,output_address):
+        self.last_parent.append("MainWindow")
         try:
             f = open(output_address,"w")
         except IOError as err:
@@ -195,6 +199,8 @@ class ul_Compiler:
             self.variables.append(old_line)
             line = "\t\t" + DialogCommand.dialog_name + " = self.xUITest.getTopFocusWindow()\n"
             self.variables.append(line)
+            self.last_parent.append(DialogCommand.dialog_name)
+            self.parent_hierarchy_count=self.parent_hierarchy_count+1
 
         elif (DialogCommand.__class__.__name__ == "OpenModelessDialog"):
             old_line = self.variables.pop()
@@ -209,6 +215,8 @@ class ul_Compiler:
             self.variables.append(old_line)
             line = "\t\t" + DialogCommand.dialog_name + "  = self.xUITest.getTopFocusWindow()\n"
             self.variables.append(line)
+            self.last_parent.append(DialogCommand.dialog_name)
+            self.parent_hierarchy_count=self.parent_hierarchy_count+1
 
         elif (DialogCommand.__class__.__name__ == "CloseDialog"):
             if (self.prev_command.__class__.__name__ == "ButtonUIObject"):
@@ -216,12 +224,17 @@ class ul_Compiler:
                 line="\t\tself.ui_test.close_dialog_through_button("+\
                     self.prev_command.ui_button+")\n"
                 self.variables.append(line)
+            self.last_parent.pop()
+            self.parent_hierarchy_count=self.parent_hierarchy_count-1
 
         self.prev_command=DialogCommand
 
     def handle_button(self, ButtonUIObject):
 
-        self.init_Object(ButtonUIObject.ui_button,ButtonUIObject.parent_id)
+        if  ButtonUIObject.parent_id == "" :
+            self.init_Object( ButtonUIObject.ui_button , self.last_parent[self.parent_hierarchy_count] )
+        else:
+            self.init_Object(ButtonUIObject.ui_button,ButtonUIObject.parent_id)
 
         self.write_line_without_parameters(ButtonUIObject.ui_button,"CLICK","tuple")
 
@@ -229,7 +242,10 @@ class ul_Compiler:
 
     def handle_check_box(self, CheckBoxUIObject):
 
-        self.init_Object(CheckBoxUIObject.Check_box_id,CheckBoxUIObject.parent_id)
+        if  CheckBoxUIObject.parent_id == "" :
+            self.init_Object( CheckBoxUIObject.Check_box_id , self.last_parent[self.parent_hierarchy_count] )
+        else:
+            self.init_Object(CheckBoxUIObject.Check_box_id,CheckBoxUIObject.parent_id)
 
         self.write_line_without_parameters(CheckBoxUIObject.Check_box_id,"CLICK","tuple")
 
@@ -237,7 +253,10 @@ class ul_Compiler:
 
     def handle_tab(self, TabControlUIObject):
 
-        self.init_Object(TabControlUIObject.tab_id,TabControlUIObject.parent_id)
+        if  TabControlUIObject.parent_id == "" :
+            self.init_Object( TabControlUIObject.tab_id , self.last_parent[self.parent_hierarchy_count] )
+        else:
+            self.init_Object(TabControlUIObject.tab_id,TabControlUIObject.parent_id)
 
         self.write_line_with_one_parameters(TabControlUIObject.tab_id,"SELECT","POS",TabControlUIObject.tab_page_number)
 
@@ -245,7 +264,10 @@ class ul_Compiler:
 
     def handle_Combo_box(self, ComboBoxUIObject):
 
-        self.init_Object(ComboBoxUIObject.Combo_box_id,ComboBoxUIObject.parent_id)
+        if  ComboBoxUIObject.parent_id == "" :
+            self.init_Object( ComboBoxUIObject.Combo_box_id , self.last_parent[self.parent_hierarchy_count] )
+        else:
+            self.init_Object(ComboBoxUIObject.Combo_box_id,ComboBoxUIObject.parent_id)
 
         self.write_line_with_one_parameters(ComboBoxUIObject.Combo_box_id,"SELECT","POS",ComboBoxUIObject.item_num)
 
@@ -253,7 +275,10 @@ class ul_Compiler:
 
     def handle_Radio_button(self,RadioButtonUIObject):
 
-        self.init_Object(RadioButtonUIObject.Radio_button_id,RadioButtonUIObject.parent_id)
+        if  RadioButtonUIObject.parent_id == "" :
+            self.init_Object( RadioButtonUIObject.Radio_button_id , self.last_parent[self.parent_hierarchy_count] )
+        else:
+            self.init_Object(RadioButtonUIObject.Radio_button_id,RadioButtonUIObject.parent_id)
 
         self.write_line_without_parameters(RadioButtonUIObject.Radio_button_id,"CLICK","tuple")
 
@@ -261,7 +286,10 @@ class ul_Compiler:
 
     def handle_List_box(self, ListBoxUIObject):
 
-        self.init_Object(ListBoxUIObject.list_id,ListBoxUIObject.parent_id)
+        if  ListBoxUIObject.parent_id == "" :
+            self.init_Object(  ListBoxUIObject.list_id , self.last_parent[self.parent_hierarchy_count] )
+        else:
+            self.init_Object(ListBoxUIObject.list_id,ListBoxUIObject.parent_id)
 
         self.write_line_with_one_parameters(ListBoxUIObject.list_id,"SELECT","POS",ListBoxUIObject.POS)
 
@@ -269,7 +297,10 @@ class ul_Compiler:
 
     def handle_spin_field(self,SpinFieldUIObject):
 
-        self.init_Object(SpinFieldUIObject.Spin_id,SpinFieldUIObject.parent_id)
+        if  SpinFieldUIObject.parent_id == "" :
+            self.init_Object( SpinFieldUIObject.Spin_id , self.last_parent[self.parent_hierarchy_count] )
+        else:
+            self.init_Object(SpinFieldUIObject.Spin_id,SpinFieldUIObject.parent_id)
 
         if(SpinFieldUIObject.change=="Increase"):
             self.write_line_without_parameters(SpinFieldUIObject.Spin_id,"UP","tuple")
@@ -279,7 +310,10 @@ class ul_Compiler:
 
     def handle_Edit_uiObject(self,EditUIObject):
 
-        self.init_Object(EditUIObject.action.edit_button,EditUIObject.parent_id)
+        if  EditUIObject.parent_id == "" :
+            self.init_Object( EditUIObject.action.edit_button , self.last_parent[self.parent_hierarchy_count] )
+        else:
+            self.init_Object(EditUIObject.action.edit_button,EditUIObject.parent_id)
 
         if(EditUIObject.action.__class__.__name__ =="Type_action"):
 

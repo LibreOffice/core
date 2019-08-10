@@ -20,6 +20,49 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <memory>
 
+namespace{
+
+bool isDialogWindow(vcl::Window const * pWindow)
+{
+    WindowType nType = pWindow->GetType();
+    // DIALOG to MODALDIALOG
+    if (nType >= WindowType::DIALOG && nType <= WindowType::MODALDIALOG)
+        return true;
+
+    // MESSBOX, INFOBOX, WARNINGBOX, ERRORBOX, QUERYBOX
+    if (nType >= WindowType::MESSBOX && nType <= WindowType::QUERYBOX)
+        return true;
+
+    if (nType == WindowType::TABDIALOG)
+        return true;
+
+    return false;
+}
+
+bool isTopWindow(vcl::Window const * pWindow)
+{
+    WindowType eType = pWindow->GetType();
+    if (eType == WindowType::FLOATINGWINDOW)
+    {
+        return pWindow->GetStyle() & WB_SYSTEMFLOATWIN;
+    }
+    return false;
+}
+
+vcl::Window* get_top_parent(vcl::Window* pWindow)
+{
+    if (isDialogWindow(pWindow) || isTopWindow(pWindow))
+        return pWindow;
+
+    vcl::Window* pParent = pWindow->GetParent();
+    if (!pParent)
+        return pWindow;
+
+    return get_top_parent(pParent);
+}
+
+
+}
 UITestLogger::UITestLogger():
     maStream(),
     mbValid(false)
@@ -216,7 +259,17 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
     OUString aContent;
 
     if(pUIObject->get_type()=="EditUIObject"){
-        aContent =  "Type on '" + rID + "' " + aKeyCode + " from " + aParentID ;
+        if(aParentID=="")
+        {
+            VclPtr <vcl::Window> pParent_top = get_top_parent(xUIElement);
+            aParentID= pParent_top->get_id();
+        }
+        if(aParentID==""){
+            aContent =  aContent+"Type on '" + rID + "' " + aKeyCode;
+        }
+        else{
+            aContent =  aContent+"Type on '" + rID + "' " + aKeyCode + " from " + aParentID ;
+        }
     }
     else if(pUIObject->get_type()=="SwEditWinUIObject" && rID=="writer_edit"){
         aContent = "Type on writer " + aKeyCode ;
@@ -234,7 +287,17 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
         aContent = "Type on draw " + aKeyCode ;
     }
     else{
-        aContent =  "Type on '" + rID + "' " + aKeyCode + " from " + aParentID ;
+        if(aParentID=="")
+        {
+            VclPtr <vcl::Window> pParent_top = get_top_parent(xUIElement);
+            aParentID= pParent_top->get_id();
+        }
+        if(aParentID==""){
+            aContent =  "Type on '" + rID + "' " + aKeyCode ;
+        }
+        else{
+            aContent =  "Type on '" + rID + "' " + aKeyCode + " from " + aParentID ;
+        }
     }
     maStream.WriteLine(OUStringToOString(aContent, RTL_TEXTENCODING_UTF8));
 }
