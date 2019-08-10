@@ -92,7 +92,12 @@ void ScSpellDialogChildWindow::ApplyChangedSentence( const svx::SpellPortions& r
 {
     if( mxEngine.get() && mpViewData )
         if( EditView* pEditView = mpViewData->GetSpellingView() )
+        {
             mxEngine->ApplyChangedSentence( *pEditView, rChanged, bRecheck );
+
+            // Reset the spell checking results to clear the markers.
+            mpViewData->GetActiveWin()->ResetAutoSpell();
+        }
 }
 
 void ScSpellDialogChildWindow::GetFocus()
