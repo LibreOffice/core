@@ -26,7 +26,8 @@ constants ChartObjectType
     const short STOCK = 9;
     const short TITLE = 10;
     const short WALL = 11;
-    const short UNKNOWN = 12;
+    const short FLOOR = 12;
+    const short UNKNOWN = 13;
 };
 
 }; }; }; };
