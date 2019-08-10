@@ -348,7 +348,7 @@ class SwXTextCellStyle : public cppu::WeakImplHelper
     * This function looks for a SwBoxAutoFormat with given name. Parses the name and returns parent name.
     * @param pDocShell pointer to a SwDocShell.
     * @param sName Name of a SwBoxAutoFormat to look for.
-    * @param pParentName Optional output. Pointer to a OUString where parsed parent name will be returned.
+    * @param pParentName Optional output. Pointer to an OUString where parsed parent name will be returned.
     * @return Pointer to a SwBoxAutoFormat, nullptr if not found.
     */
     static SwBoxAutoFormat* GetBoxAutoFormat(SwDocShell* pDocShell, const OUString& sName, OUString* pParentName);

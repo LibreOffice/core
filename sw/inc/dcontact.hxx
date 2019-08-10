@@ -74,7 +74,7 @@ class SW_DLLPUBLIC SwContact : public SdrObjUserCall, public SwClient
 
         Implementation for the public method <MoveObjToVisibleLayer(..)>
         and <MoveObjToInvisibleLayer(..)>
-        If object is in invisble respectively visible layer, its moved to
+        If object is in invisible respectively visible layer, it's moved to
         the corresponding visible respectively invisible layers.
         For group object the members are individually moved to the corresponding
         layer, because <SdrObjGroup::GetLayer()> does return 0, if members

@@ -570,7 +570,7 @@ public:
     }
 
     /** Returns positions of all FlyFrames in the document.
-     If a Pam-Pointer is passed the FlyFrames attached to paragraphes
+     If a Pam-Pointer is passed the FlyFrames attached to paragraphs
      have to be surrounded completely by css::awt::Selection.
      ( Start < Pos < End ) !!!
      (Required for Writers.) */
@@ -1131,7 +1131,7 @@ public:
 
     bool NumUpDown(const SwPaM&, bool bDown, SwRootFrame const* pLayout = nullptr);
 
-    /** Move selected paragraphes (not only numberings)
+    /** Move selected paragraphs (not only numberings)
      according to offsets. (if negative: go to doc start). */
     bool MoveParagraph(SwPaM&, long nOffset, bool bIsOutlMv = false);
     bool MoveParagraphImpl(SwPaM&, long nOffset, bool bIsOutlMv, SwRootFrame const*);

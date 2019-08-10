@@ -563,7 +563,7 @@ public:
        Returns outline level of this text node.
 
        If a text node has an outline number (i.e. it has an SwNodeNum
-       and a outline numbering rule) the outline level is the level of
+       and an outline numbering rule) the outline level is the level of
        this SwNodeNum.
 
        If a text node has no outline number and has a paragraph style

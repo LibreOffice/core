@@ -212,7 +212,7 @@ public:
     void CreateSelection( const SwNode* pStart, const SwNode* pEnd,
         SwSelBoxes& rBoxes, const SearchType eSearchType, bool bProtect ) const;
     void ExpandSelection( SwSelBoxes& rBoxes ) const;
-    // When a table is splitted into two tables, the row spans which overlaps
+    // When a table is split into two tables, the row spans which overlaps
     // the split have to be corrected and stored for undo
     // SwSavRowSpan is the structure needed by Undo to undo the split operation
     // CleanUpRowSpan corrects the (top of the) second table and delivers the structure
@@ -366,7 +366,7 @@ public:
     SwFrameFormat* GetFrameFormat()       { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
     SwFrameFormat* GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
 
-    // Creates a own FrameFormat if more lines depend on it.
+    // Creates an own FrameFormat if more lines depend on it.
     SwFrameFormat* ClaimFrameFormat();
     void ChgFrameFormat( SwTableLineFormat* pNewFormat );
 

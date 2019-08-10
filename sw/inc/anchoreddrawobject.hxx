@@ -36,7 +36,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
         boost::optional<tools::Rectangle> maLastObjRect;
 
         // boolean, indicating that anchored drawing object hasn't been attached
-        // to a anchor frame yet. Once, it is attached to a anchor frame the
+        // to an anchor frame yet. Once, it is attached to an anchor frame the
         // boolean changes its state.
         bool mbNotYetAttachedToAnchorFrame;
 
@@ -51,13 +51,13 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
         // Needed for compatibility option <DoNotCaptureDrawObjsOnPage>
         bool mbCaptureAfterLayoutDirChange;
 
-        /** method for the intrinsic positioning of a at-paragraph|at-character
+        /** method for the intrinsic positioning of an at-paragraph|at-character
             anchored drawing object
 
             helper method for method <MakeObjPos> */
         void MakeObjPosAnchoredAtPara();
 
-        /** method for the intrinsic positioning of a at-page|at-frame anchored
+        /** method for the intrinsic positioning of an at-page|at-frame anchored
             drawing object
 
             helper method for method <MakeObjPos> */

@@ -244,7 +244,7 @@ public:
         With the valid preview layout settings - calculated and set by method
         <Init(..)> - the paint of a specific part of the virtual preview
         document is prepared. The corresponding part is given by either
-        a start page (parameter <_nProposedStartPageNum>) or a absolute position
+        a start page (parameter <_nProposedStartPageNum>) or an absolute position
         (parameter <_aProposedStartPoint>).
         The accessibility preview will also be updated via a corresponding
         method call.

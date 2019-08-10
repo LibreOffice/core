@@ -187,7 +187,7 @@ public:
     SwDocPosUpdate( const SwTwips nDocPos );
 };
 
-/// SwTableFormulaUpdate is sent when the table has to be newly calculated or when a table itself is merged or splitted
+/// SwTableFormulaUpdate is sent when the table has to be newly calculated or when a table itself is merged or split
 enum TableFormulaUpdateFlags { TBL_CALC = 0,
                          TBL_BOXNAME,
                          TBL_BOXPTR,
@@ -204,7 +204,7 @@ public:
         const OUString* pNewTableNm; ///< Split: the name of the new table
     } m_aData;
     SwHistory* m_pHistory;
-    sal_uInt16 m_nSplitLine;       ///< Split: from this BaseLine on will be splitted
+    sal_uInt16 m_nSplitLine;       ///< Split: from this BaseLine on will be split
     TableFormulaUpdateFlags m_eFlags;
     bool m_bModified : 1;
     bool m_bBehindSplitLine : 1;
