@@ -187,15 +187,8 @@ bool XMLFile2UTFConverter::isEncodingRecognizable( const Sequence< sal_Int8 > &s
 
     if( bCheckIfFirstClosingBracketExsists )
     {
-        for( sal_Int32 i = 0; i < seq.getLength() ; i ++ )
-        {
-            // whole <?xml tag is valid
-            if( '>' == pSource[ i ] )
-            {
-                return true;
-            }
-        }
-        return false;
+        // whole <?xml tag is valid
+        return std::find(seq.begin(), seq.end(), '>') != seq.end();
     }
 
     // No <? tag in front, no need for a bigger buffer

@@ -321,14 +321,14 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
     if ( xDataProvider.is() )
     {
         m_aColumns.realloc(1);
-        uno::Sequence< OUString > aColumnNames = xDataProvider->getColumnDescriptions();
-        for(sal_Int32 i = 0 ; i < aColumnNames.getLength();++i)
+        const uno::Sequence< OUString > aColumnNames = xDataProvider->getColumnDescriptions();
+        for(const auto& rColumnName : aColumnNames)
         {
-            if ( !aColumnNames[i].isEmpty() )
+            if ( !rColumnName.isEmpty() )
             {
                 sal_Int32 nCount = m_aColumns.getLength();
                 m_aColumns.realloc(nCount+1);
-                m_aColumns[nCount] = aColumnNames[i];
+                m_aColumns[nCount] = rColumnName;
             }
         }
     }
@@ -388,9 +388,9 @@ void ExportDocumentHandler::exportTableRows()
             m_xDelegatee->endElement(sCell);
         }
     }
-    for(sal_Int32 i = 0; i < nCount ; ++i)
+    for(const auto& rColumn : std::as_const(m_aColumns))
     {
-        OUString sFormula = "field:[" + m_aColumns[i] + "]";
+        OUString sFormula = "field:[" + rColumn + "]";
         SvXMLAttributeList* pList = new SvXMLAttributeList();
         uno::Reference< xml::sax::XAttributeList > xAttribs = pList;
         pList->AddAttribute(sFormulaAttrib,sFormula);

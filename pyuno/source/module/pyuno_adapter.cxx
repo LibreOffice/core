@@ -137,27 +137,20 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
                     "pyuno bridge: Couldn't get reflection for method " + functionName );
             }
 
-            Sequence< ParamInfo > seqInfo = method->getParameterInfos();
-            int i;
-            int nOuts = 0;
-            for( i = 0 ; i < seqInfo.getLength() ; i ++ )
-            {
-                if( seqInfo[i].aMode == css::reflection::ParamMode_OUT ||
-                    seqInfo[i].aMode == css::reflection::ParamMode_INOUT )
-                {
-                    // sequence must be interpreted as return value/outparameter tuple !
-                    nOuts ++;
-                }
-            }
+            const Sequence< ParamInfo > seqInfo = method->getParameterInfos();
+            // sequence must be interpreted as return value/outparameter tuple !
+            auto lIsOut = [](const ParamInfo& rInfo) {
+                return rInfo.aMode == css::reflection::ParamMode_OUT
+                    || rInfo.aMode == css::reflection::ParamMode_INOUT; };
+            int nOuts = static_cast<int>(std::count_if(seqInfo.begin(), seqInfo.end(), lIsOut));
 
             if( nOuts )
             {
                 ret.realloc( nOuts );
                 sal_Int32 nOutsAssigned = 0;
-                for( i = 0 ; i < seqInfo.getLength() ; i ++ )
+                for( int i = 0 ; i < seqInfo.getLength() ; i ++ )
                 {
-                    if( seqInfo[i].aMode == css::reflection::ParamMode_OUT ||
-                        seqInfo[i].aMode == css::reflection::ParamMode_INOUT )
+                    if( lIsOut(seqInfo[i]) )
                     {
                         ret[nOutsAssigned] = static_cast<sal_Int16>(i);
                         nOutsAssigned ++;
@@ -276,24 +269,22 @@ Any Adapter::invoke( const OUString &aFunctionName,
                             "pyuno bridge: Couldn't extract out parameters for method " + aFunctionName );
                     }
 
-                    if( aOutParamIndex.getLength() +1 != seq.getLength() )
+                    auto nOutLength = aOutParamIndex.getLength();
+                    if( nOutLength + 1 != seq.getLength() )
                     {
                         OUString sMsg = "pyuno bridge: expected for method "
                                       + aFunctionName
                                       + " one return value and "
-                                      + OUString::number(aOutParamIndex.getLength())
+                                      + OUString::number(nOutLength)
                                       + " out parameters, got a sequence of "
                                       + OUString::number(seq.getLength())
                                       + " elements as return value.";
                         throw RuntimeException( sMsg, *this );
                     }
 
-                    aOutParam.realloc( aOutParamIndex.getLength() );
+                    aOutParam.realloc( nOutLength );
                     ret = seq[0];
-                    for( i = 0 ; i < aOutParamIndex.getLength() ; i ++ )
-                    {
-                        aOutParam[i] = seq[1+i];
-                    }
+                    std::copy_n(std::next(seq.begin()), nOutLength, aOutParam.begin());
                 }
                 // else { sequence is a return value !}
             }

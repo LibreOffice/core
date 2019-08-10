@@ -18,6 +18,7 @@ $(eval $(call gb_CppunitTest_use_externals,services, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,services, \
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \

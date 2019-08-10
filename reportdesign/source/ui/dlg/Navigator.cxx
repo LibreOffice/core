@@ -502,11 +502,9 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent )
     }
     else
     {
-        const uno::Reference< report::XReportComponent >* pIter = aSelection.getConstArray();
-        const uno::Reference< report::XReportComponent >* pEnd  = pIter + aSelection.getLength();
-        for (; pIter != pEnd; ++pIter)
+        for (const uno::Reference<report::XReportComponent>& rElem : std::as_const(aSelection))
         {
-            SvTreeListEntry* pEntry = find(*pIter);
+            SvTreeListEntry* pEntry = find(rElem);
             if ( pEntry && !IsSelected(pEntry) )
             {
                 Select(pEntry);
