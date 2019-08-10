@@ -297,14 +297,16 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
 }
 
 void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
-                                    SwLinePortion *pPor ) const
+                                    SwLinePortion *pPor )
 {
+    SwLinePortion *pLast = nullptr;
     // The new portion is inserted, but everything's different for
     // LineLayout...
     if( pPor == m_pCurr )
     {
         if ( m_pCurr->GetNextPortion() )
         {
+            pLast = pPor;
             pPor = m_pCurr->GetNextPortion();
         }
 
@@ -314,7 +316,7 @@ void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
     }
     else
     {
-        SwLinePortion *pLast = rInf.GetLast();
+        pLast = rInf.GetLast();
         if( pLast->GetNextPortion() )
         {
             while( pLast->GetNextPortion() )
@@ -336,8 +338,12 @@ void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
     rInf.SetLast( pPor );
     while( pPor )
     {
+        if (!pPor->IsDropPortion())
+            MergeCharacterBorder(*pPor, pLast, rInf);
+
         pPor->Move( rInf );
         rInf.SetLast( pPor );
+        pLast = pPor;
         pPor = pPor->GetNextPortion();
     }
 }
@@ -478,7 +484,6 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                         new SwKernPortion( *rInf.GetLast(), nLstHeight,
                                            pLast->InFieldGrp() && pPor->InFieldGrp() );
                     rInf.GetLast()->SetNextPortion( nullptr );
-                    MergeCharacterBorder(*pKrn, rInf.GetLast()->FindLastPortion(), rInf);
                     InsertPortion( rInf, pKrn );
                 }
             }
@@ -522,11 +527,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             }
 
             if ( pGridKernPortion != pPor )
-            {
-                SwLinePortion *pLast = rInf.GetLast()? rInf.GetLast()->FindLastPortion():nullptr ;
-                MergeCharacterBorder(*pGridKernPortion, pLast , rInf);
                 InsertPortion( rInf, pGridKernPortion );
-            }
         }
 
         if( pPor->IsDropPortion() )
@@ -686,17 +687,6 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
         }
 
         rInf.SetFull( bFull );
-
-        if( !pPor->IsDropPortion() )
-        {
-            SwLinePortion *pPrev = rInf.GetLast() ? rInf.GetLast()->FindLastPortion() : nullptr;
-            for ( SwLinePortion *pNext = pPor ; pNext!= nullptr ; pNext=pNext->GetNextPortion())
-            {
-                if ( !pNext->IsParaPortion() )
-                    MergeCharacterBorder(*pNext, pPrev, rInf);
-                pPrev = pNext ;
-            }
-        }
 
         // Restportions from fields with multiple lines don't yet have the right ascent
         if ( !pPor->GetLen() && !pPor->IsFlyPortion()
