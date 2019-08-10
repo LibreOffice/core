@@ -622,6 +622,10 @@ OUString ButtonUIObject::get_action(VclEventId nEvent) const
             return "Start database" ;
         }
         else{
+            if (get_top_parent(mxButton)->get_id()==""){
+                //This part because if we don't have parent
+                return "Click on '" + mxButton->get_id() ;
+            }
             return "Click on '" + mxButton->get_id() + "' from "+
                 get_top_parent(mxButton)->get_id();
         }
@@ -747,6 +751,14 @@ OUString EditUIObject::get_action(VclEventId nEvent) const
         const Selection& rSelection  = mxEdit->GetSelection();
         long nMin = rSelection.Min();
         long nMax = rSelection.Max();
+        if(get_top_parent(mxEdit)->get_id()==""){
+            //This part because if we don't have parent
+            return  "Select in '" +
+                mxEdit->get_id() +
+                "' {\"FROM\": \"" + OUString::number(nMin) + "\", \"TO\": \"" +
+                OUString::number(nMax) + "\"}"
+                ;
+        }
         return  "Select in '" +
                 mxEdit->get_id() +
                 "' {\"FROM\": \"" + OUString::number(nMin) + "\", \"TO\": \"" +
@@ -868,6 +880,10 @@ OUString CheckBoxUIObject::get_action(VclEventId nEvent) const
 {
     if (nEvent == VclEventId::CheckboxToggle)
     {
+        if(get_top_parent(mxCheckBox)->get_id()==""){
+            //This part because if we don't have parent
+            return "Toggle '" + mxCheckBox->get_id() + "' CheckBox";
+        }
         return "Toggle '" + mxCheckBox->get_id() + "' CheckBox from " +
             get_top_parent(mxCheckBox)->get_id();
     }
@@ -918,6 +934,10 @@ OUString RadioButtonUIObject::get_action(VclEventId nEvent) const
 {
     if (nEvent == VclEventId::RadiobuttonToggle)
     {
+        if(get_top_parent(mxRadioButton)->get_id()==""){
+            //This part because if we don't have parent
+            return "Select '" + mxRadioButton->get_id() + "' RadioButton";
+        }
         return "Select '" + mxRadioButton->get_id() + "' RadioButton from " +
             get_top_parent(mxRadioButton)->get_id();
     }
@@ -1024,11 +1044,21 @@ OUString ListBoxUIObject::get_action(VclEventId nEvent) const
     if (nEvent == VclEventId::ListboxSelect)
     {
         sal_Int32 nPos = mxListBox->GetSelectedEntryPos();
+        if(get_top_parent(mxListBox)->get_id()==""){
+            //This part because if we don't have parent
+            return "Select element with position " + OUString::number(nPos) +
+                 " in '" + mxListBox->get_id();
+        }
         return "Select element with position " + OUString::number(nPos) +
                  " in '" + mxListBox->get_id() +"' from" + get_top_parent(mxListBox)->get_id() ;
     }
     else if (nEvent == VclEventId::ListboxFocus)
     {
+        if(get_top_parent(mxListBox)->get_id()=="")
+        {
+            //This part because if we don't have parent
+            return this->get_type() + " Action:FOCUS Id:" + mxListBox->get_id();
+        }
         return this->get_type() + " Action:FOCUS Id:" + mxListBox->get_id() +
             " Parent:" + get_top_parent(mxListBox)->get_id();
     }
@@ -1099,6 +1129,11 @@ OUString ComboBoxUIObject::get_action(VclEventId nEvent) const
     if (nEvent == VclEventId::ComboboxSelect)
     {
         sal_Int32 nPos = mxComboBox->GetSelectedEntryPos();
+        if (get_top_parent(mxComboBox)->get_id()==""){
+            //This part because if we don't have parent
+            return "Select in '" + mxComboBox->get_id() +
+                "' ComboBox item number " + OUString::number(nPos);
+        }
         return "Select in '" + mxComboBox->get_id() +
                 "' ComboBox item number " + OUString::number(nPos) +
                 " from " + get_top_parent(mxComboBox)->get_id();
@@ -1214,11 +1249,21 @@ OUString SpinFieldUIObject::get_action(VclEventId nEvent) const
 {
     if (nEvent == VclEventId::SpinfieldUp)
     {
+        if(get_top_parent(mxSpinField)->get_id()=="")
+        {
+            //This part because if we don't have parent
+            return "Increase '" + mxSpinField->get_id();
+        }
         return "Increase '" + mxSpinField->get_id() +
             "' from " + get_top_parent(mxSpinField)->get_id();
     }
     else if (nEvent == VclEventId::SpinfieldDown)
     {
+        if(get_top_parent(mxSpinField)->get_id()=="")
+        {
+            //This part because if we don't have parent
+            return "Decrease '" + mxSpinField->get_id();
+        }
         return "Decrease '" + mxSpinField->get_id() +
             "' from " + get_top_parent(mxSpinField)->get_id();
     }
@@ -1282,6 +1327,12 @@ OUString TabControlUIObject::get_action(VclEventId nEvent) const
     if (nEvent == VclEventId::TabpageActivate)
     {
         sal_Int32 nPageId = mxTabControl->GetCurPageId();
+
+        if(get_top_parent(mxTabControl)->get_id()==""){
+            //This part because if we don't have parent
+            return "Choose Tab number " + OUString::number(mxTabControl->GetPagePos(nPageId)) +
+                " in '" + mxTabControl->get_id();
+        }
         return "Choose Tab number " + OUString::number(mxTabControl->GetPagePos(nPageId)) +
                 " in '" + mxTabControl->get_id()+
                 "' from " + get_top_parent(mxTabControl)->get_id() ;
