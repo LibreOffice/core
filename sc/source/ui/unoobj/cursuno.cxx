@@ -440,7 +440,7 @@ sal_Bool SAL_CALL ScCellCursorObj::supportsService( const OUString& rServiceName
 uno::Sequence<OUString> SAL_CALL ScCellCursorObj::getSupportedServiceNames()
 {
     //  get all service names from cell range
-    uno::Sequence<OUString> aParentSeq(ScCellRangeObj::getSupportedServiceNames());
+    const uno::Sequence<OUString> aParentSeq(ScCellRangeObj::getSupportedServiceNames());
     sal_Int32 nParentLen = aParentSeq.getLength();
 
     //  SheetCellCursor should be first (?)
@@ -450,7 +450,7 @@ uno::Sequence<OUString> SAL_CALL ScCellCursorObj::getSupportedServiceNames()
     pTotalArr[1] = SCCELLCURSOR_SERVICE;
 
     //  append cell range services
-    std::copy_n(aParentSeq.begin(), nParentLen, std::next(aTotalSeq.begin(), 2));
+    std::copy_n(aParentSeq.begin(), nParentLen, std::next(pTotalArr, 2));
 
     return aTotalSeq;
 }

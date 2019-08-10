@@ -1746,7 +1746,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         sal_Int32 nDataInCols = 0;
         bool bRowSourceAmbiguous = false;
 
-        Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences());
+        const Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences());
         const sal_Int32 nCount( aSequences.getLength());
         RangeAnalyzer aPrevLabel,aPrevValues;
         for( const uno::Reference< chart2::data::XLabeledDataSequence >& xLS : aSequences )

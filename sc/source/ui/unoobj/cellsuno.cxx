@@ -904,7 +904,7 @@ static void lcl_CopyProperties( beans::XPropertySet& rDest, beans::XPropertySet&
     uno::Reference<beans::XPropertySetInfo> xInfo(rSource.getPropertySetInfo());
     if (xInfo.is())
     {
-        uno::Sequence<beans::Property> aSeq(xInfo->getProperties());
+        const uno::Sequence<beans::Property> aSeq(xInfo->getProperties());
         for (const beans::Property& rProp : aSeq)
         {
             OUString aName(rProp.Name);
@@ -1112,9 +1112,8 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
 
     long nCols = 0;
     long nRows = aData.getLength();
-    const uno::Sequence<uno::Any>* pArray = aData.getConstArray();
     if ( nRows )
-        nCols = pArray[0].getLength();
+        nCols = aData[0].getLength();
 
     if ( nCols != nEndCol-nStartCol+1 || nRows != nEndRow-nStartRow+1 )
     {
@@ -1248,9 +1247,8 @@ static bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
 
     long nCols = 0;
     long nRows = aData.getLength();
-    const uno::Sequence<OUString>* pArray = aData.getConstArray();
     if ( nRows )
-        nCols = pArray[0].getLength();
+        nCols = aData[0].getLength();
 
     if ( nCols != nEndCol-nStartCol+1 || nRows != nEndRow-nStartRow+1 )
     {

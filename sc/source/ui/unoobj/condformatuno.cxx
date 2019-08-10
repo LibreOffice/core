@@ -340,7 +340,7 @@ sal_Int32 ScCondFormatsObj::createByRange(const uno::Reference< sheet::XSheetCel
     if (!xRanges.is())
         throw lang::IllegalArgumentException();
 
-    uno::Sequence<table::CellRangeAddress> aRanges =
+    const uno::Sequence<table::CellRangeAddress> aRanges =
         xRanges->getRangeAddresses();
 
     ScRangeList aCoreRange;
@@ -576,7 +576,7 @@ void SAL_CALL ScCondFormatObj::setPropertyValue(
             if (aValue >>= xRange)
             {
                 ScConditionalFormat* pFormat = getCoreObject();
-                uno::Sequence<table::CellRangeAddress> aRanges =
+                const uno::Sequence<table::CellRangeAddress> aRanges =
                     xRange->getRangeAddresses();
                 ScRangeList aTargetRange;
                 for (const auto& rRange : aRanges)

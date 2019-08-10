@@ -152,7 +152,7 @@ uno::Sequence<beans::PropertyValue> ScSolverUtil::GetDefaults( const OUString& r
     if ( !xInfo.is() )
         return aDefaults;
 
-    uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
+    const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
     const sal_Int32 nSize = aPropSeq.getLength();
     aDefaults.realloc(nSize);
     sal_Int32 nValid = 0;

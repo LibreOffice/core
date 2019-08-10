@@ -446,7 +446,7 @@ void ScChartObj::GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool&
             uno::Reference< chart2::data::XDataProvider > xProvider = xChartDoc->getDataProvider();
             if( xReceiver.is() && xProvider.is() )
             {
-                uno::Sequence< beans::PropertyValue > aArgs( xProvider->detectArguments( xReceiver->getUsedData() ) );
+                const uno::Sequence< beans::PropertyValue > aArgs( xProvider->detectArguments( xReceiver->getUsedData() ) );
 
                 OUString aRanges;
                 chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;

@@ -190,7 +190,7 @@ bool IsValidObject( const XclObj& rObj )
         if (!xCooSysContainer.is())
             return false;
 
-        uno::Sequence<uno::Reference<chart2::XCoordinateSystem> > xCooSysSeq = xCooSysContainer->getCoordinateSystems();
+        const uno::Sequence<uno::Reference<chart2::XCoordinateSystem> > xCooSysSeq = xCooSysContainer->getCoordinateSystems();
         if (!xCooSysSeq.hasElements())
             return false;
 

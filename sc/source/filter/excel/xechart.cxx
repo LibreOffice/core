@@ -1763,7 +1763,7 @@ bool XclExpChSerErrorBar::Convert( XclExpChSourceLink& rValueLink, sal_uInt16& r
                     OUString aRole = XclChartHelper::GetErrorBarValuesRole( maData.mnBarType );
                     Reference< XDataSequence > xValueSeq;
 
-                    Sequence< Reference< XLabeledDataSequence > > aLabeledSeqVec = xDataSource->getDataSequences();
+                    const Sequence< Reference< XLabeledDataSequence > > aLabeledSeqVec = xDataSource->getDataSequences();
                     for( const Reference< XLabeledDataSequence >& rLabeledSeq : aLabeledSeqVec )
                     {
                         Reference< XDataSequence > xTmpValueSeq = rLabeledSeq->getValues();
@@ -1845,7 +1845,7 @@ bool XclExpChSeries::ConvertDataSeries(
         Reference< XDataSequence > xYValueSeq, xTitleSeq, xXValueSeq, xBubbleSeq;
 
         // find first sequence with role 'values-y'
-        Sequence< Reference< XLabeledDataSequence > > aLabeledSeqVec = xDataSource->getDataSequences();
+        const Sequence< Reference< XLabeledDataSequence > > aLabeledSeqVec = xDataSource->getDataSequences();
         for( const Reference< XLabeledDataSequence >& rLabeledSeq : aLabeledSeqVec )
         {
             Reference< XDataSequence > xTmpValueSeq = rLabeledSeq->getValues();
@@ -1963,7 +1963,7 @@ bool XclExpChSeries::ConvertStockSeries( css::uno::Reference< css::chart2::XData
         Reference< XDataSequence > xYValueSeq, xTitleSeq;
 
         // find first sequence with passed role
-        Sequence< Reference< XLabeledDataSequence > > aLabeledSeqVec = xDataSource->getDataSequences();
+        const Sequence< Reference< XLabeledDataSequence > > aLabeledSeqVec = xDataSource->getDataSequences();
         for( const Reference< XLabeledDataSequence >& rLabeledSeq : aLabeledSeqVec )
         {
             Reference< XDataSequence > xTmpValueSeq = rLabeledSeq->getValues();
@@ -2065,7 +2065,7 @@ void XclExpChSeries::CreateTrendLines( css::uno::Reference< css::chart2::XDataSe
     Reference< XRegressionCurveContainer > xRegCurveCont( xDataSeries, UNO_QUERY );
     if( xRegCurveCont.is() )
     {
-        Sequence< Reference< XRegressionCurve > > aRegCurveSeq = xRegCurveCont->getRegressionCurves();
+        const Sequence< Reference< XRegressionCurve > > aRegCurveSeq = xRegCurveCont->getRegressionCurves();
         for( const Reference< XRegressionCurve >& rRegCurve : aRegCurveSeq )
         {
             XclExpChSeriesRef xSeries = GetChartData().CreateSeries();
@@ -2427,7 +2427,7 @@ void XclExpChTypeGroup::ConvertSeries(
         XDataSeriesVec aSeriesVec;
 
         // copy data series attached to the current axes set to the vector
-        Sequence< Reference< XDataSeries > > aSeriesSeq = xSeriesCont->getDataSeries();
+        const Sequence< Reference< XDataSeries > > aSeriesSeq = xSeriesCont->getDataSeries();
         for( const Reference< XDataSeries >& rSeries : aSeriesSeq )
         {
             ScfPropertySet aSeriesProp( rSeries );
@@ -3115,7 +3115,7 @@ sal_uInt16 XclExpChAxesSet::Convert( Reference< XDiagram > const & xDiagram, sal
             Reference< XChartTypeContainer > xChartTypeCont( xCoordSystem, UNO_QUERY );
             if( xChartTypeCont.is() )
             {
-                Sequence< Reference< XChartType > > aChartTypeSeq = xChartTypeCont->getChartTypes();
+                const Sequence< Reference< XChartType > > aChartTypeSeq = xChartTypeCont->getChartTypes();
                 for( const Reference< XChartType >& rChartType : aChartTypeSeq )
                 {
                     XclExpChTypeGroupRef xTypeGroup( new XclExpChTypeGroup( GetChRoot(), nGroupIdx ) );

@@ -201,7 +201,7 @@ void ScChartHelper::GetChartRanges( const uno::Reference< chart2::XChartDocument
     if( !xDataSource.is() )
         return;
 
-    uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
+    const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
     rRanges.reserve(2*aLabeledDataSequences.getLength());
     for(const uno::Reference<chart2::data::XLabeledDataSequence>& xLabeledSequence : aLabeledDataSequences)
     {

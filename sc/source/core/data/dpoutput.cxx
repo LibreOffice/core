@@ -466,7 +466,7 @@ uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Re
         return uno::Sequence<sheet::MemberResult>();
 
     std::vector<sheet::MemberResult> aRes;
-    uno::Sequence<OUString> aNames = xNA->getElementNames();
+    const uno::Sequence<OUString> aNames = xNA->getElementNames();
     for (const OUString& rName : aNames)
     {
         xNA->getByName(rName);
@@ -1158,31 +1158,24 @@ void ScDPOutput::GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimensi
     //  Only the dimension has to be compared because this is only used with table data,
     //  where each dimension occurs only once.
 
-    uno::Sequence<sheet::MemberResult> aMemberResults;
-    bool bFound = false;
+    auto lFindDimension = [nDimension](const ScDPOutLevelData& rField) { return rField.mnDim == nDimension; };
 
     // look in column fields
+    auto it = std::find_if(pColFields.begin(), pColFields.end(), lFindDimension);
+    bool bFound = it != pColFields.end();
 
-    for (size_t nField=0; nField<pColFields.size() && !bFound; nField++)
-        if ( pColFields[nField].mnDim == nDimension )
-        {
-            aMemberResults = pColFields[nField].maResult;
-            bFound = true;
-        }
-
-    // look in row fields
-
-    for (size_t nField=0; nField<pRowFields.size() && !bFound; nField++)
-        if ( pRowFields[nField].mnDim == nDimension )
-        {
-            aMemberResults = pRowFields[nField].maResult;
-            bFound = true;
-        }
+    if (!bFound)
+    {
+        // look in row fields
+        it = std::find_if(pRowFields.begin(), pRowFields.end(), lFindDimension);
+        bFound = it != pRowFields.end();
+    }
 
     // collect the member names
 
     if ( bFound )
     {
+        const uno::Sequence<sheet::MemberResult> aMemberResults = it->maResult;
         for (const sheet::MemberResult& rMemberResult : aMemberResults)
         {
             if ( rMemberResult.Flags & sheet::MemberResultFlags::HASMEMBER )

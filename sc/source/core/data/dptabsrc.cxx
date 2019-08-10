@@ -2116,7 +2116,7 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const OUString& aPropertyName )
         aRet <<= bRepeatItemLabels;
     else if ( aPropertyName == SC_UNO_DP_SUBTOTAL )
     {
-        uno::Sequence<sal_Int16> aSeq = getSubTotals();
+        const uno::Sequence<sal_Int16> aSeq = getSubTotals();
         uno::Sequence<sheet::GeneralFunction> aNewSeq;
         aNewSeq.realloc(aSeq.getLength());
         std::transform(aSeq.begin(), aSeq.end(), aNewSeq.begin(),
