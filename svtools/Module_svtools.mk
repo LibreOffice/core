@@ -54,7 +54,7 @@ $(eval $(call gb_Module_add_screenshot_targets,svtools,\
     CppunitTest_svtools_dialogs_test \
 ))
 
-#todo: javapatchres
+#todo: javapatches
 #todo: jpeg on mac in svtools/util/makefile.mk
 #todo: deliver errtxt.src as ehdl.srs
 #todo: nooptfiles filter, filterconfigitem, FilterConfigCache, SvFilterOptionsDialog

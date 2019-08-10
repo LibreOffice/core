@@ -338,7 +338,7 @@ sal_uInt32 SvParser<T>::GetNextChar()
                                 else if( 0 != nChars || 0 != nInfo )
                                 {
                                     DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL) == 0,
-                                        "source buffer is to small" );
+                                        "source buffer is too small" );
                                     DBG_ASSERT( (nInfo&~(RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL)) == 0,
                                          "there is a conversion error" );
                                     DBG_ASSERT( 0 == nChars,
@@ -382,7 +382,7 @@ sal_uInt32 SvParser<T>::GetNextChar()
                                 else
                                 {
                                     DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL) == 0,
-                                        "source buffer is to small" );
+                                        "source buffer is too small" );
                                     DBG_ASSERT( (nInfo&~(RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL)) == 0,
                                          "there is a conversion error" );
                                     DBG_ASSERT( 0 == nChars,

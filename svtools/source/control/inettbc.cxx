@@ -1704,7 +1704,7 @@ OUString SvtURLBox::GetURL()
     }
 
 #ifdef _WIN32
-    // erase trailing spaces on Windows since thay are invalid on this OS and
+    // erase trailing spaces on Windows since they are invalid on this OS and
     // most of the time they are inserted by accident via copy / paste
     aText = comphelper::string::stripEnd(aText, ' ');
     if ( aText.isEmpty() )
@@ -2132,7 +2132,7 @@ OUString URLBox::GetURL()
     }
 
 #ifdef _WIN32
-    // erase trailing spaces on Windows since thay are invalid on this OS and
+    // erase trailing spaces on Windows since they are invalid on this OS and
     // most of the time they are inserted by accident via copy / paste
     aText = comphelper::string::stripEnd(aText, ' ');
     if ( aText.isEmpty() )

@@ -574,7 +574,7 @@ void AssignmentPersistentData::ImplCommit()
             }
         }
 
-        // force a even number of known fields
+        // force an even number of known fields
         m_pImpl->bOddFieldNumber = (m_pImpl->aFieldLabels.size() % 2) != 0;
         if (m_pImpl->bOddFieldNumber)
             m_pImpl->aFieldLabels.emplace_back();

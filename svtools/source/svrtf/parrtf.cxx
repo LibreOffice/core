@@ -539,7 +539,7 @@ void SvRTFParser::SkipGroup()
     if (_inSkipGroup>0)
         return;
     _inSkipGroup++;
-//#i16185# fecking \bin keyword
+//#i16185# faking \bin keyword
     do
     {
         switch (nNextCh)
@@ -625,7 +625,7 @@ void SvRTFParser::Continue( int nToken )
             break;
 
         case '{':
-            // a unknown group ?
+            // an unknown group ?
             {
                 if( RTF_IGNOREFLAG != GetNextToken() )
                     nToken = SkipToken();

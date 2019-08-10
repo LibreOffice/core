@@ -221,7 +221,7 @@ namespace svt { namespace table
         */
         bool        markRowAsDeselected( RowPos const i_rowIndex );
 
-        /** marks the given row as selectged, by putting it into m_aSelectedRows
+        /** marks the given row as selected, by putting it into m_aSelectedRows
             @return
                 <TRUE/> if and only if the row was previously <em>not</em> marked as selected
         */

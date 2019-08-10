@@ -630,7 +630,7 @@ void ToolboxController::updateStatus( const OUString& aCommandURL )
 
     // Catch exception as we release our mutex, it is possible that someone else
     // has already disposed this instance!
-    // Add/remove status listener to get a update status information from the
+    // Add/remove status listener to get an update status information from the
     // requested command.
     try
     {
