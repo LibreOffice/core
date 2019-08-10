@@ -85,9 +85,11 @@ protected:
     uno::Reference<security::XCertificate>
     getCertificate(DocumentSignatureManager& rSignatureManager,
                    svl::crypto::SignatureMethodAlgorithm eAlgo);
+#if HAVE_FEATURE_GPGVERIFY
     SfxObjectShell* assertDocument(const ::CppUnit::SourceLine aSrcLine,
                                    const OUString& rFilterName, const SignatureState nDocSign,
                                    const SignatureState nMacroSign, const OUString& sVersion);
+#endif
 };
 
 SigningTest::SigningTest() {}
