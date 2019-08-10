@@ -638,7 +638,7 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
         }
 
     // try to open the file in read/write mode
-    // (if its allowed to do so).
+    // (if it's allowed to do so).
     // But handle errors in a "hidden mode". Because
     // we try it readonly later - if read/write is not an option.
     css::uno::Reference< css::io::XStream >      xStream;
@@ -668,7 +668,7 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
             {
                 css::uno::Any ex( cppu::getCaughtException() );
                 // ignore exception, if reason was problem reasoned on
-                // open it in WRITEABLE mode! Then we try it READONLY
+                // open it in WRITABLE mode! Then we try it READONLY
                 // later a second time.
                 // All other errors must be handled as real error an
                 // break this method.
@@ -710,7 +710,7 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
                 bool bRequestReadOnly = bReadOnly;
                 aContent.getPropertyValue("IsReadOnly") >>= bReadOnly;
                 if ( bReadOnly && !bRequestReadOnly && bModeRequestedExplicitly )
-                        return false; // the document is explicitly requested with WRITEABLE mode
+                        return false; // the document is explicitly requested with WRITABLE mode
             }
         }
         catch(const css::uno::RuntimeException&)

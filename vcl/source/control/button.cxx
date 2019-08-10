@@ -2639,7 +2639,7 @@ bool RadioButton::set_property(const OString &rKey, const OUString &rValue)
             nBits &= ~(WB_VCENTER | WB_TOP);
             nBits |= WB_BOTTOM;
         }
-        //Its rather mad to have to set these bits when there is the other
+        //It's rather mad to have to set these bits when there is the other
         //image align. Looks like e.g. the radiobuttons etc weren't converted
         //over to image align fully.
         SetStyle(nBits);

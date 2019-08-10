@@ -144,7 +144,7 @@ namespace sw
         class ParaStyleMapper
         {
         private:
-            //I hate these things stupid pImpl things, but its warranted here
+            //I hate these things stupid pImpl things, but it's warranted here
              std::unique_ptr<::myImplHelpers::StyleMapperImpl<SwTextFormatColl> > mpImpl;
         public:
             explicit ParaStyleMapper(SwDoc &rDoc);
@@ -201,7 +201,7 @@ namespace sw
         class CharStyleMapper
         {
         private:
-            //I hate these things stupid pImpl things, but its warranted here
+            //I hate these things stupid pImpl things, but it's warranted here
             std::unique_ptr<::myImplHelpers::StyleMapperImpl<SwCharFormat>> mpImpl;
         public:
             explicit CharStyleMapper(SwDoc &rDoc);

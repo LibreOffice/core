@@ -142,7 +142,7 @@ void ScTPValidationValue::RefInputStartPreHdl( formula::RefEdit* pEdit, const fo
             // if Edit SetParent but button not, the tab order will be
             // incorrect, so move button anyway, and restore
             // parent later in order to restore the tab order. But
-            // hide it if its moved but unwanted
+            // hide it if it's moved but unwanted.
             m_xRefGrid->move(m_xBtnRef->GetWidget(), pNewParent);
             m_xBtnRef->GetWidget()->set_visible(pButton == m_xBtnRef.get());
             m_pBtnRefParent = pNewParent;

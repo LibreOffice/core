@@ -2785,7 +2785,7 @@ rtl_TextEncoding SwWW8ImplReader::GetCharSetFromLanguage()
 
      This is a bit tentative, more might be required if the concept is correct.
      When later version of word write older 6/95 documents the charset is
-     correctly set in the character runs involved, so its hard to reproduce
+     correctly set in the character runs involved, so it's hard to reproduce
      documents that require this to be sure of the process involved.
     */
     const SvxLanguageItem *pLang = static_cast<const SvxLanguageItem*>(GetFormatAttr(RES_CHRATR_LANGUAGE));
@@ -2803,7 +2803,7 @@ rtl_TextEncoding SwWW8ImplReader::GetCJKCharSetFromLanguage()
 
      This is a bit tentative, more might be required if the concept is correct.
      When later version of word write older 6/95 documents the charset is
-     correctly set in the character runs involved, so its hard to reproduce
+     correctly set in the character runs involved, so it's hard to reproduce
      documents that require this to be sure of the process involved.
     */
     const SvxLanguageItem *pLang = static_cast<const SvxLanguageItem*>(GetFormatAttr(RES_CHRATR_CJK_LANGUAGE));

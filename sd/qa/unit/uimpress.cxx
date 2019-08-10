@@ -61,7 +61,7 @@ Test::Test()
 
     //Without this we're crashing because callees are using
     //getProcessServiceFactory.  In general those should be removed in favour
-    //of retaining references to the root ServiceFactory as its passed around
+    //of retaining references to the root ServiceFactory as it's passed around
     comphelper::setProcessServiceFactory(xSM);
 
     InitVCL();
