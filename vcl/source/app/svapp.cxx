@@ -1561,26 +1561,6 @@ bool Application::CanToggleImeStatusWindow()
     return pSVData->mpImeStatus->canToggle();
 }
 
-void Application::ShowImeStatusWindow(bool bShow)
-{
-    ImplGetSVData()->maAppData.meShowImeStatusWindow = bShow
-        ? ImplSVAppData::ImeStatusWindowMode_SHOW
-        : ImplSVAppData::ImeStatusWindowMode_HIDE;
-
-    ImplSVData* pSVData = ImplGetSVData();
-    if( ! pSVData->mpImeStatus )
-        pSVData->mpImeStatus  = pSVData->mpDefInst->CreateI18NImeStatus();
-    pSVData->mpImeStatus->toggle();
-}
-
-bool Application::GetShowImeStatusWindowDefault()
-{
-    rtl_TextEncodingInfo aInfo;
-    aInfo.StructSize = sizeof aInfo;
-    return rtl_getTextEncodingInfo(osl_getThreadTextEncoding(), &aInfo)
-        && aInfo.MaximumCharSize > 1;
-}
-
 const OUString& Application::GetDesktopEnvironment()
 {
     if (IsHeadlessModeEnabled())
