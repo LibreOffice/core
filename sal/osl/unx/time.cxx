@@ -127,7 +127,6 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, Ti
     aTime.tm_min  = pDateTime->Minutes;
     aTime.tm_hour = pDateTime->Hours;
     aTime.tm_mday = pDateTime->Day;
-    aTime.tm_wday = pDateTime->DayOfWeek;
 
     if ( pDateTime->Month > 0 )
         aTime.tm_mon = pDateTime->Month - 1;
