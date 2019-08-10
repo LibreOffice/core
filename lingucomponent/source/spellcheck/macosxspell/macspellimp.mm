@@ -52,7 +52,6 @@ MacSpellChecker::MacSpellChecker() :
     aDLocs = nullptr;
     aDNames = nullptr;
     bDisposing = false;
-    pPropHelper = nullptr;
     numdict = 0;
 #ifndef IOS
     NSApplicationLoad();
@@ -74,22 +73,21 @@ MacSpellChecker::~MacSpellChecker()
   aDLocs = nullptr;
   if (aDNames) delete[] aDNames;
   aDNames = nullptr;
-  if (pPropHelper)
-     pPropHelper->RemoveAsPropListener();
+  if (xPropHelper.is())
+     xPropHelper->RemoveAsPropListener();
 }
 
 
 PropertyHelper_Spell & MacSpellChecker::GetPropHelper_Impl()
 {
-    if (!pPropHelper)
+    if (!xPropHelper.is())
     {
         Reference< XLinguProperties >   xPropSet( GetLinguProperties() );
 
-        pPropHelper = new PropertyHelper_Spell( static_cast<XSpellChecker *>(this), xPropSet );
-        xPropHelper = pPropHelper;
-        pPropHelper->AddAsPropListener();   //! after a reference is established
+        xPropHelper = new PropertyHelper_Spell( static_cast<XSpellChecker *>(this), xPropSet );
+        xPropHelper->AddAsPropListener();
     }
-    return *pPropHelper;
+    return *xPropHelper.get();
 }
 
 
@@ -570,7 +568,7 @@ void SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (!pPropHelper)
+    if (!xPropHelper.is())
     {
         sal_Int32 nLen = rArguments.getLength();
         if (2 == nLen)
@@ -583,9 +581,8 @@ void SAL_CALL
             //! And the reference to the UNO-functions while increasing
             //! the ref-count and will implicitly free the memory
             //! when the object is no longer used.
-            pPropHelper = new PropertyHelper_Spell( static_cast<XSpellChecker *>(this), xPropSet );
-            xPropHelper = pPropHelper;
-            pPropHelper->AddAsPropListener();   //! after a reference is established
+            xPropHelper = new PropertyHelper_Spell( static_cast<XSpellChecker *>(this), xPropSet );
+            xPropHelper->AddAsPropListener();
         }
         else
             OSL_FAIL( "wrong number of arguments in sequence" );
