@@ -160,13 +160,6 @@ struct ImplSVAppData
     DialogCancelMode meDialogCancel = DialogCancelMode::Off; // true: All Dialog::Execute() calls will be terminated immediately with return false
     bool mbRenderToBitmaps = false; // set via svp / headless plugin
 
-    /** Controls whether showing any IME status window is toggled on or off.
-
-        Only meaningful if showing IME status windows can be toggled on and off
-        externally (see Application::CanToggleImeStatusWindow).
-     */
-    ImeStatusWindowMode meShowImeStatusWindow = ImeStatusWindowMode_UNKNOWN;
-
     SvFileStream*       mpEventTestInput = nullptr;
     Idle*               mpEventTestingIdle = nullptr;
     int                 mnEventTestLimit = 0;
