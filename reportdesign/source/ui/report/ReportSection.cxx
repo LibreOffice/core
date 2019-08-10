@@ -244,29 +244,24 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
         // unmark all objects
         m_pView->UnmarkAll();
         const OUString sSectionName = m_xSection->getName();
-        const sal_Int32 nLength = _aAllreadyCopiedObjects.getLength();
-        const beans::NamedValue* pIter = _aAllreadyCopiedObjects.getConstArray();
-        const beans::NamedValue* pEnd  = pIter + nLength;
-        for(;pIter != pEnd;++pIter)
+        for(const beans::NamedValue& rObject : _aAllreadyCopiedObjects)
         {
-            if ( _bForce || pIter->Name == sSectionName)
+            if ( _bForce || rObject.Name == sSectionName)
             {
                 try
                 {
                     uno::Sequence< uno::Reference<report::XReportComponent> > aCopies;
-                    pIter->Value >>= aCopies;
-                    const uno::Reference<report::XReportComponent>* pCopiesIter = aCopies.getConstArray();
-                    const uno::Reference<report::XReportComponent>* pCopiesEnd = pCopiesIter + aCopies.getLength();
-                    for (;pCopiesIter != pCopiesEnd ; ++pCopiesIter)
+                    rObject.Value >>= aCopies;
+                    for (const uno::Reference<report::XReportComponent>& rCopy : std::as_const(aCopies))
                     {
-                        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( *pCopiesIter );
+                        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( rCopy );
                         SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
                         if ( pObject )
                         {
                             // Clone to target SdrModel
                             SdrObject* pNewObj(pObject->CloneSdrObject(*m_pModel.get()));
                             m_pPage->InsertObject(pNewObj, SAL_MAX_SIZE);
-                            tools::Rectangle aRet(VCLPoint((*pCopiesIter)->getPosition()),VCLSize((*pCopiesIter)->getSize()));
+                            tools::Rectangle aRet(VCLPoint(rCopy->getPosition()),VCLSize(rCopy->getSize()));
                             aRet.setHeight(aRet.getHeight() + 1);
                             aRet.setWidth(aRet.getWidth() + 1);
                             bool bOverlapping = true;
