@@ -193,7 +193,7 @@ public:
     bool HasObjectsAnchoredInRange(const ScRange& rRange);
     void MoveObject(SdrObject* pObj, const ScAddress& rNewPosition);
 
-    // positions for detektive lines
+    // positions for detective lines
     static ScDrawObjData* GetObjData( SdrObject* pObj, bool bCreate=false );
     static ScDrawObjData* GetNonRotatedObjData( SdrObject* pObj, bool bCreate=false );
 

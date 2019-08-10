@@ -27,7 +27,7 @@ namespace boost { template <class T> class optional; }
 
 enum class ScSheetEventId {
     FOCUS, UNFOCUS, SELECT, DOUBLECLICK, RIGHTCLICK, CHANGE, CALCULATE, COUNT,
-    NOTFOUND = -1 // used as a an error return value
+    NOTFOUND = -1 // used as an error return value
 };
 
 class ScSheetEvents

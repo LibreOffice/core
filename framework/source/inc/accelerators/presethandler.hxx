@@ -338,7 +338,7 @@ class PresetHandler
 
             @param  sPath
                     the configuration path, which should be opened.
-                    Its further used as out parameter too, so we can return the localized
+                    It's further used as out parameter too, so we can return the localized
                     path!
 
             @param  eMode
