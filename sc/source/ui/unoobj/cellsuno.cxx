@@ -5464,7 +5464,7 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
 {
     SolarMutexGuard aGuard;
 
-    //  This could be theoretically a unknown object, so only use the
+    //  This could be theoretically an unknown object, so only use the
     //  public XSheetFilterDescriptor interface to copy the data into a
     //  ScFilterDescriptor object:
     //! if it already a ScFilterDescriptor is, direct via getImplementation?

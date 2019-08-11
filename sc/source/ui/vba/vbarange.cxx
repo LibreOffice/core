@@ -360,7 +360,7 @@ ScVbaRangeAreas::createCollectionObject( const uno::Any& aSource )
     return lcl_makeRange( mxParent, mxContext, aSource, mbIsRows, mbIsColumns );
 }
 
-// assume that xIf is infact a ScCellRangesBase
+// assume that xIf is in fact a ScCellRangesBase
 /// @throws uno::RuntimeException
 static ScDocShell*
 getDocShellFromIf( const uno::Reference< uno::XInterface >& xIf )
@@ -3355,7 +3355,7 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
         DataOption3 >>= nDataOption3;
 
     // 1) #TODO #FIXME need to process DataOption[1..3] not used currently
-    // 2) #TODO #FIXME need to refactor this ( below ) into a IsSingleCell() method
+    // 2) #TODO #FIXME need to refactor this ( below ) into an IsSingleCell() method
     uno::Reference< table::XColumnRowRange > xColumnRowRange(mxRange, uno::UNO_QUERY_THROW );
 
     // set up defaults
@@ -4157,9 +4157,9 @@ ScVbaRange::ApplicationRange( const uno::Reference< uno::XComponentContext >& xC
     // wrt to named ranges.
     // If a named range "test" exists { Sheet1!$A1 } and the active sheet
     // is Sheet2 then the following will fail
-    // msgbox ActiveSheet.Range("test").Address ' failes
+    // msgbox ActiveSheet.Range("test").Address ' fails
     // msgbox WorkSheets("Sheet2").Range("test").Address
-    // but !!!
+    // but!!!
     // msgbox Range("test").Address ' works
     // msgbox Application.Range("test").Address ' works
 
@@ -4501,7 +4501,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
             else // no value specified
                 bAll = true;
             // not sure what the relationship between Criteria1 and Operator is,
-            // e.g. can you have a Operator without a Criteria ? in openoffice it
+            // e.g. can you have an Operator without a Criteria? In LibreOffice it
             if ( Operator.hasValue()  && ( Operator >>= nOperator ) )
             {
                 // if it's a bottom/top Ten(Percent/Value) and there
@@ -4565,7 +4565,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
                         sal_uInt16 nLength = aCriteria2.getLength();
                         if ( nLength )
                         {
-                            // For compatibility use only the last value form the sequence
+                            // For compatibility use only the last value from the sequence
                             lcl_setTableFieldsFromCriteria( aCriteria2[nLength - 1], xDescProps, sTabFilts[1] );
                         }
                     }
@@ -4618,7 +4618,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
 void SAL_CALL
 ScVbaRange::Insert( const uno::Any& Shift, const uno::Any& /*CopyOrigin*/ )
 {
-    // It appears ( from the web ) that the undocumented CopyOrigin
+    // It appears (from the web) that the undocumented CopyOrigin
     // param should contain member of enum XlInsertFormatOrigin
     // which can have values xlFormatFromLeftOrAbove or xlFormatFromRightOrBelow
     // #TODO investigate resultant behaviour using these constants

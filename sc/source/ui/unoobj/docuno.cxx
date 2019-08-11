@@ -317,7 +317,7 @@ ScPrintUIOptions::ScPrintUIOptions()
                                                     aChoices,
                                                     0 );
 
-    // create a an Edit dependent on "Pages" selected
+    // create an Edit dependent on "Pages" selected
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, true );
     m_aUIProperties[nIdx++].Value = setEditControlOpt("pagerange", OUString(),
                                                       ".HelpID:vcl:PrintDialog:PageRange:Edit",
