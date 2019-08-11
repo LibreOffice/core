@@ -150,7 +150,7 @@ namespace Translate
         // is problematic, but also the encoding part, "UTF-8". The Microsoft C/C++ library does not
         // support UTF-8 locales. The error message that our own report hook catches says:
         // "f:\dd\vctools\crt\crtw32\stdcpp\xmbtowc.c(89) : Assertion failed: ploc->_Mbcurmax == 1
-        // || ploc->_Mbcurmax == 2". Clearly in a UTF-8 locale (perhaps one that boost internally
+        // || ploc->_Mbcurmax == 2". Clearly in an UTF-8 locale (perhaps one that boost internally
         // constructs?) the maximum bytes per character will be more than 2.
 
         // With a debug C++ runtime, we need to avoid the error dialog, and just ignore the error.
