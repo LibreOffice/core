@@ -34,7 +34,7 @@ class tdf94208(UITestCase):
         #2 - Select rows three though eight.
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A3:A8"}))
         self.xUITest.executeCommand(".uno:SelectRow")
-        #3 - type Control-D/Fill Dow
+        #3 - type Control-D/Fill Down
         self.xUITest.executeCommand(".uno:FillDown")
         #4 - undo.
         self.xUITest.executeCommand(".uno:Undo")

@@ -574,7 +574,7 @@ void ScParallelismTest::testFormulaGroupSpanEval()
 
     m_pDoc->SetAutoCalc(true);
 
-    // EnsureFormulaCellResults should only calculate the sepecified range along with the dependent spans recursively and nothing more.
+    // EnsureFormulaCellResults should only calculate the specified range along with the dependent spans recursively and nothing more.
     // The specified range is A99:A1124, and the dependent range is B99:B1125 (since A99 = SUM(B99:B100) and A1124 = SUM(B1124:B1125) )
     bool bAnyDirty = m_pDoc->EnsureFormulaCellResults(ScRange(0, nSpanStart, 0, 0, nSpanEnd, 0));
     CPPUNIT_ASSERT(bAnyDirty);
