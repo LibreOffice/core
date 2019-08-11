@@ -94,7 +94,7 @@ namespace pdfi
         void updateGeometryWith( const Element* pMergeFrom );
 
 #if OSL_DEBUG_LEVEL > 0
-        // xxx refac TODO: move code to visitor
+        // xxx refact TODO: move code to visitor
         virtual void emitStructure( int nLevel );
 #endif
         /** el must be a valid dereferenceable iterator of el->Parent->Children

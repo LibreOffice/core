@@ -1189,14 +1189,14 @@ SdPage* OutlineView::GetPageForParagraph( Paragraph* pPara )
 Paragraph* OutlineView::GetParagraphForPage( ::Outliner const & rOutl, SdPage const * pPage )
 {
     // get the number of paragraphs with ident 0 we need to skip before
-    // we finde the actual page
+    // we find the actual page
     sal_uInt32 nPagesToSkip = (pPage->GetPageNum() - 1) >> 1;
 
     sal_Int32 nParaPos = 0;
     Paragraph* pPara = rOutl.GetParagraph( 0 );
     while( pPara )
     {
-        // if this paragraph is a page ...
+        // if this paragraph is a page...
         if( ::Outliner::HasParaFlag(pPara,ParaFlag::ISPAGE) )
         {
             // see if we already skipped enough pages

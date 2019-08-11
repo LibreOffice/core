@@ -74,7 +74,7 @@ int main(int argc, char **argv)
     globalParams->setupBaseFonts(nullptr);
 #endif
 
-    // try to read a possible open password form stdin
+    // try to read a possible open password from stdin
     char aPwBuf[129];
     aPwBuf[128] = 0;
     if( ! fgets( aPwBuf, sizeof(aPwBuf)-1, stdin ) )

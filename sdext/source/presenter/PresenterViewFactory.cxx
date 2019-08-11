@@ -257,7 +257,7 @@ void SAL_CALL PresenterViewFactory::releaseResource (const Reference<XResource>&
     }
     else
     {
-        // Put cachable views in the cache.
+        // Put cacheable views in the cache.
         Reference<XResourceId> xViewId (rxView->getResourceId());
         if (xViewId.is())
         {

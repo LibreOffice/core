@@ -81,7 +81,7 @@ Window::Window(vcl::Window* pParent)
     aMap.SetMapUnit(MapUnit::Map100thMM);
     SetMapMode(aMap);
 
-    // whit it, the vcl::WindowColor is used in the slide mode
+    // with it, the vcl::WindowColor is used in the slide mode
     SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetWindowColor() ) );
 
     // adjust contrast mode initially
