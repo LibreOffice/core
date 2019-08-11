@@ -16,7 +16,7 @@ class LoTestResult(unittest.TextTestResult):
         # HACK calling gc.collect() to get rid of as many still existing UNO proxies to
         # SwXTextDocument and friends as possible; those C++ classes' dtors call
         # Application::GetSolarMutex via sw::UnoImplPtrDeleter, so the dtors must be called before
-        # DeInitVCL in the call to pyuno.private_deinitTestEnvironment(); any remainging proxies
+        # DeInitVCL in the call to pyuno.private_deinitTestEnvironment(); any remaining proxies
         # that are still referenced (UnoInProcess' self.xDoc in
         # unotest/source/python/org/libreoffice/unotest.py, or per-class variables in the various
         # PythonTests) need to be individually released (each marked as "HACK" in the code):
