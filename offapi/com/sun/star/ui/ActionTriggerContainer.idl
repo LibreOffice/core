@@ -60,7 +60,7 @@ published service ActionTriggerContainer
 
     /** creates elements to be inserted into the container.
         <p>Usually, the XMultiServiceFactory::getSupportedServiceNames()
-        gives you a ActionTrigger and
+        gives you an ActionTrigger and
         optionally ActionTriggerContainer and
         ActionTriggerSeparator
 

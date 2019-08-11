@@ -53,7 +53,7 @@ published exception NameClashResolveRequest : com::sun::star::task::ClassifiedIn
      */
     string ClashingName;
 
-    /** contains a proposal for a new new, non-clashing name.
+    /** contains a proposal for a new, non-clashing name.
         <p>This field may be left empty if the implementation is not able
         to suggest a new name.
      */

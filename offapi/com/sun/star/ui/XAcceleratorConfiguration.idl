@@ -154,7 +154,7 @@ published interface XAcceleratorConfiguration
         <p>
         It can be used to implement collision handling, if more than one
         key event match to the same command. The returned list contains all
-        possible key events - and the outside code can select an possible one.
+        possible key events - and the outside code can select a possible one.
         Of course - mostly this list will contain only one key event ...
         </p>
 
@@ -216,7 +216,7 @@ published interface XAcceleratorConfiguration
         raises(com::sun::star::lang::IllegalArgumentException,
                com::sun::star::container::NoSuchElementException);
 
-    /** search for an key-command-binding inside this configuration set,
+    /** search for a key-command-binding inside this configuration set,
         where the specified command is used.
 
         <p>

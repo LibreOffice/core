@@ -90,7 +90,7 @@ constants ItemStyle
     */
     const short DRAW_FLAT    = 12;
 
-    /** specifies whether or not a item is displayed using an external function.
+    /** specifies whether or not an item is displayed using an external function.
         <p>This style is only valid if the item describes a statusbar item.</p>
     */
     const short OWNER_DRAW    = 16;
