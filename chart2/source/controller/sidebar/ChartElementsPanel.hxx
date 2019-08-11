@@ -95,6 +95,8 @@ private:
     VclPtr<ListBox> mpLBLegendPosition;
     VclPtr<VclHBox> mpBoxLegend;
 
+    VclPtr<ListBox> mpLBStylesBox;
+
     vcl::EnumContext maContext;
 
     css::uno::Reference<css::frame::XModel> mxModel;

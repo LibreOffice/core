@@ -252,6 +252,9 @@ void ChartStyles::addInitialStyles()
 {
     css::uno::Any aDefaultStyle;
     css::uno::Reference<css::chart2::XChartStyle> xChartStyle = new ChartStyle;
+    css::uno::Reference<css::style::XStyle> xStyle(xChartStyle, css::uno::UNO_QUERY_THROW);
+    xStyle->setName("Default");
+
     aDefaultStyle <<= xChartStyle;
     insertByName("Default", aDefaultStyle);
 }
@@ -301,7 +304,7 @@ css::uno::Any ChartStyles::getByName(const OUString& rName)
 
 css::uno::Sequence<OUString> ChartStyles::getElementNames()
 {
-    return css::uno::Sequence<OUString>();
+    return comphelper::mapKeysToSequence(maChartStyles);
 }
 
 sal_Bool ChartStyles::hasByName(const OUString& rName)

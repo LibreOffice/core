@@ -116,7 +116,7 @@ private:
     void register_styles();
 };
 
-css::uno::Reference<css::container::XNameContainer> getChartStyles();
+OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::container::XNameContainer> getChartStyles();
 
 } // namespace chart
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkGrid" id="ChartElementsPanel">
@@ -9,9 +9,9 @@
       <object class="GtkBox" id="container">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="border_width">6</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
-        <property name="border_width">6</property>
         <child>
           <object class="GtkFrame" id="frame1">
             <property name="visible">True</property>
@@ -99,14 +99,14 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_legend">
-                        <property name="tooltip_text" translatable="yes" context="sidebarelements|checkbutton_legend|tooltip_text">Show Legend</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes" context="sidebarelements|checkbutton_legend|tooltip_text">Show Legend</property>
+                        <property name="margin_right">5</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="margin_right">5</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -491,6 +491,45 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid" id="grid6">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkLabel" id="label_style">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="sidebarelements|label_chart_style">Chart Style:</property>
+                <accessibility>
+                  <relation type="label-for" target="cb_styles"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="cb_styles">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <accessibility>
+                  <relation type="labelled-by" target="label_style"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">5</property>
           </packing>
         </child>
       </object>
