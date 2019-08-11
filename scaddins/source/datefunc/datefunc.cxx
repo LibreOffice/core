@@ -513,7 +513,7 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
  * where 0 means that this week belonged to the year before.
  *
  * If a day in the same or another year is used in this formula this calculates
- * an calendar week offset from a given 4. January
+ * a calendar week offset from a given 4. January
  *
  *  nWeek2 = ( nDays2 - nJan4 + ( (nJan4-1) % 7 ) ) / 7 + 1;
  *

@@ -110,7 +110,7 @@ friend class sd::UndoAttrObject;
     bool    mbSoundOn;                ///< with / without sound.
     bool    mbExcluded;               ///< will (not) be displayed during show.
     OUString    maLayoutName;             ///< Name of the layout
-    OUString    maSoundFile;              ///< Path to sound file (MSDOS notation).
+    OUString    maSoundFile;              ///< Path to sound file (MS-DOS notation).
     bool        mbLoopSound;
     bool        mbStopSound;
     OUString    maCreatedPageName;        ///< generated page name by GetPageName.

@@ -2203,7 +2203,7 @@ void ScViewFunc::UseScenario( const OUString& rName )
 
 bool ScViewFunc::InsertTable( const OUString& rName, SCTAB nTab, bool bRecord )
 {
-    //  Order Tabl/Name is inverted for DocFunc
+    //  Order Table/Name is inverted for DocFunc
     bool bSuccess = GetViewData().GetDocShell()->GetDocFunc().
                         InsertTable( nTab, rName, bRecord, false );
     if (bSuccess)

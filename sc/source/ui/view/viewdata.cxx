@@ -2363,7 +2363,7 @@ void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
         }
     }
 
-    //  cells to big?
+    //  cells too big?
     if ( rPosX == nStartPosX && nClickX > 0 )
     {
          if (pView)

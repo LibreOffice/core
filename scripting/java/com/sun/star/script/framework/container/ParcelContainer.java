@@ -615,7 +615,7 @@ public class ParcelContainer implements XNameAccess {
         com.sun.star.lang.WrappedTargetException {
 
         LogUtils.DEBUG("deleteParcel for containerURL " + containerUrl
-                       + " name = " + name  + " Langueg = " + language);
+                       + " name = " + name  + " Language = " + language);
 
         Parcel p = (Parcel)getByName(name);
 
