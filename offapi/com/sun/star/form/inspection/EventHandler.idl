@@ -26,7 +26,7 @@
 module com {  module sun {  module star {  module form { module inspection {
 
 
-/** implements a property handler for use with an com::sun::star::inspection::ObjectInspector
+/** implements a property handler for use with a com::sun::star::inspection::ObjectInspector
     which, for a com::sun::star::form::FormComponent, provides the script events
     offered by this form component.
 
