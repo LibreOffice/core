@@ -311,7 +311,7 @@ public:
                             const SdrTextObj& rTextObj,
                             XclStrFlags nFlags = XclStrFlags::NONE );
 
-    /** Creates a new formatted string from a edit text string.
+    /** Creates a new formatted string from an edit text string.
         @param rEditObj  The edittext object.
         @param nFlags  Modifiers for string export.
         @return  The new string object. */
