@@ -149,7 +149,7 @@ static bool enabled = false;
            
            FIXME:
            Unfortunately this can increase memory consumption drastically until the non transient parent
-           is destroyed an finally all the transients are released.
+           is destroyed and finally all the transients are released.
         */
         if ( ! rxAccessibleContext -> getAccessibleStateSet() -> contains ( AccessibleStateType::TRANSIENT ) )
         #endif

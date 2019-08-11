@@ -286,7 +286,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     (void)app;
     (void)printSettings;
     (void)bShowPrintPanels;
-    // currently ignores print settings an bShowPrintPanels
+    // currently ignores print settings a bShowPrintPanels
     std::vector<OUString> aFileList;
 
     NSEnumerator* it = [files objectEnumerator];

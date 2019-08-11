@@ -499,7 +499,7 @@ void BitmapTest::testGreyPalette()
         BitmapPalette aPalette = Bitmap::GetGreyPalette(16);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of palette entries", static_cast<sal_uInt16>(16),
                                      aPalette.GetEntryCount());
-        // this is a *reall* specific number of greys, incremented in units of 17 so may
+        // this is a *real* specific number of greys, incremented in units of 17 so may
         // as well test them all...
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 1 wrong", BitmapColor(0, 0, 0), aPalette[0]);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 2 wrong", BitmapColor(17, 17, 17), aPalette[1]);
