@@ -126,7 +126,7 @@ public class AccessibleSlideView extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
                                     Param.getMSF());
 
-        log.println( "creating a impress document" );
+        log.println( "creating an impress document" );
         xImpressDoc = SOF.createImpressDoc(null);
 
         util.utils.waitForEventIdle(Param.getMSF());

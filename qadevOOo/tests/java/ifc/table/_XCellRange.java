@@ -68,7 +68,7 @@ public class _XCellRange extends MultiMethodTest {
             log.println("No Exception occurred while getting cell by position with invalid position");
             result &= false;
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Getting cell by position with a invalid position ... OK");
+            log.println("Getting cell by position with an invalid position ... OK");
             result &= true;
         }
 
@@ -122,7 +122,7 @@ public class _XCellRange extends MultiMethodTest {
             log.println("No Exception occurred while getting cellrange by position with invalid position");
             result &= false;
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Getting cellrange by position with a invalid position ... OK");
+            log.println("Getting cellrange by position with an invalid position ... OK");
             result &= true;
         }
 

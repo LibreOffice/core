@@ -62,7 +62,7 @@ public class _XObjectInspectorModel extends MultiMethodTest {
         int index = 0;
         boolean result = true;
 
-        log.println("try to get index of INvalid property name 'InvalidPropertyName' ...");
+        log.println("try to get index of Invalid property name 'InvalidPropertyName' ...");
         index = oObj.getPropertyOrderIndex("InvalidPropertyName");
         log.println("index is: " + index);
         result = (index == 0);

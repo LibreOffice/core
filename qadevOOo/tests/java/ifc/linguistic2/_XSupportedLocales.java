@@ -68,7 +68,7 @@ public class _XSupportedLocales extends MultiMethodTest {
             res &= oObj.hasLocale(locales[i]);
         }
 
-        // now create a invalid locale
+        // now create an invalid locale
         Locale invalid = new Locale("myLanguage","myCountry","");
         res &= !oObj.hasLocale(invalid);
 
