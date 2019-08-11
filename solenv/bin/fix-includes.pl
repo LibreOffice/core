@@ -36,7 +36,7 @@ sub check_headers
   seek $fh,0,0;
   foreach $line (@content){
     if($line =~ m/#include "(\w*)\//){
-      # If a include is local and it should be global, make it global
+      # If an include is local and it should be global, make it global
       if($1 ~~ @includes){
         print "local header $line\n";
         $line =~ s/"/</;
