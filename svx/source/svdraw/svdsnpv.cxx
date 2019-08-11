@@ -443,7 +443,7 @@ void SdrSnapView::BegSetPageOrg(const Point& rPnt)
 {
     BrkAction();
 
-    DBG_ASSERT(nullptr == mpPageOriginOverlay, "SdrSnapView::BegSetPageOrg: There exists a ImplPageOriginOverlay (!)");
+    DBG_ASSERT(nullptr == mpPageOriginOverlay, "SdrSnapView::BegSetPageOrg: There exists an ImplPageOriginOverlay (!)");
     basegfx::B2DPoint aStartPos(rPnt.X(), rPnt.Y());
     mpPageOriginOverlay = new ImplPageOriginOverlay(*this, aStartPos);
     maDragStat.Reset(GetSnapPos(rPnt,nullptr));
@@ -521,7 +521,7 @@ bool SdrSnapView::BegDragHelpLine(sal_uInt16 nHelpLineNum, SdrPageView* pPV)
         Point aHelpLinePos = rHelpLine.GetPos();
         basegfx::B2DPoint aStartPos(aHelpLinePos.X(), aHelpLinePos.Y());
 
-        DBG_ASSERT(nullptr == mpHelpLineOverlay, "SdrSnapView::BegDragHelpLine: There exists a ImplHelpLineOverlay (!)");
+        DBG_ASSERT(nullptr == mpHelpLineOverlay, "SdrSnapView::BegDragHelpLine: There exists an ImplHelpLineOverlay (!)");
         mpHelpLineOverlay = new ImplHelpLineOverlay(*this, aStartPos, pPV, nHelpLineNum, rHelpLine.GetKind());
 
         maDragStat.Reset(GetSnapPos(aHelpLinePos, pPV));
@@ -540,7 +540,7 @@ void SdrSnapView::BegDragHelpLine(const Point& rPnt, SdrHelpLineKind eNewKind)
 
     if(GetSdrPageView())
     {
-        DBG_ASSERT(nullptr == mpHelpLineOverlay, "SdrSnapView::BegDragHelpLine: There exists a ImplHelpLineOverlay (!)");
+        DBG_ASSERT(nullptr == mpHelpLineOverlay, "SdrSnapView::BegDragHelpLine: There exists an ImplHelpLineOverlay (!)");
         basegfx::B2DPoint aStartPos(rPnt.X(), rPnt.Y());
         mpHelpLineOverlay = new ImplHelpLineOverlay(*this, aStartPos, nullptr, 0, eNewKind);
         maDragStat.Reset(GetSnapPos(rPnt, nullptr));

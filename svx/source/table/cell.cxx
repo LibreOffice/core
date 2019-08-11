@@ -533,7 +533,7 @@ void Cell::replaceContentAndFormating( const CellRef& xSourceCell )
         if(&rSourceTableObj.getSdrModelFromSdrObject() != &rTableObj.getSdrModelFromSdrObject())
         {
             // TTTT should not happen - if, then a clone may be needed
-            // Maybe add a assertion here later
+            // Maybe add an assertion here later
             SetStyleSheet( nullptr, true );
         }
     }
@@ -561,7 +561,7 @@ void Cell::copyFormatFrom( const CellRef& xSourceCell )
         if(&rSourceTableObj.getSdrModelFromSdrObject() != &rTableObj.getSdrModelFromSdrObject())
         {
             // TTTT should not happen - if, then a clone may be needed
-            // Maybe add a assertion here later
+            // Maybe add an assertion here later
             SetStyleSheet( nullptr, true );
         }
 
@@ -1427,7 +1427,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName )
                 break;
             }
 
-            // if a item is set, this doesn't mean we want it :)
+            // if an item is set, this doesn't mean we want it :)
             if( PropertyState_DIRECT_VALUE == eState )
             {
                 switch( pMap->nWID )
