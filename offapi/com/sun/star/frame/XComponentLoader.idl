@@ -47,7 +47,7 @@ published interface XComponentLoader: com::sun::star::uno::XInterface
             <p>
             To create new documents, use "private:factory/scalc", "private:factory/swriter", etc.
             Other special protocols (e.g. "slot:", ".uno") are not allowed and raise
-            an com::sun::star::lang::IllegalArgumentException.
+            a com::sun::star::lang::IllegalArgumentException.
             </p>
 
         @param TargetFrameName

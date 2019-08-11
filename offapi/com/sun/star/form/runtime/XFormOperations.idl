@@ -61,7 +61,7 @@ interface XFeatureInvalidation;
     com::sun::star::form::component::DataForm.</p>
 
     <p>If you agree that this is ugly to do and maintain, then <code>XFormOperations</code>
-    is for you. It provides a execute() method, which will do all of the above
+    is for you. It provides an execute() method, which will do all of the above
     for you; plus some similar convenient wrappers for similar functionality.</p>
 
     @see FormFeature
