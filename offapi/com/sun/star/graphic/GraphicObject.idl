@@ -33,7 +33,7 @@ module com { module sun { module star { module graphic
 
 service GraphicObject : XGraphicObject
 {
-    /** Creates an GraphicObject
+    /** Creates a GraphicObject
     */
     create();
 
