@@ -46,7 +46,7 @@ const sdr::contact::ViewContactOfE3dScene* tryToFindVCOfE3DScene(
 
         if(pSceneParentParent)
         {
-            // the parent scene of rCandidate is a in-between scene, call recursively and collect
+            // the parent scene of rCandidate is an in-between scene, call recursively and collect
             // the in-between scene's object transformation part in o_rInBetweenObjectTransform
             const basegfx::B3DHomMatrix& rSceneParentTransform = pSceneParent->GetE3dScene().GetTransform();
             o_rInBetweenObjectTransform = rSceneParentTransform * o_rInBetweenObjectTransform;

@@ -392,7 +392,7 @@ namespace sdr { namespace contact {
         return m_rPageView.GetVisibleLayers().IsSet( _nLayerID );
     }
 
-    /** is a ->IPageViewAccess implementation which can be used to create an invisble control for
+    /** is a ->IPageViewAccess implementation which can be used to create an invisible control for
         an arbitrary window
      */
     class InvisibleControlViewAccess : public IPageViewAccess
@@ -816,7 +816,7 @@ namespace sdr { namespace contact {
 
     private:
         ::rtl::Reference< ViewObjectContactOfUnoControl_Impl >  m_pVOCImpl;
-        /** The geometry is part of the identity of an primitive, so we cannot calculate it on demand
+        /** The geometry is part of the identity of a primitive, so we cannot calculate it on demand
             (since the data the calculation is based on might have changed then), but need to calc
             it at construction time, and remember it.
         */
@@ -1368,7 +1368,7 @@ namespace sdr { namespace contact {
 
         try
         {
-            // if the control is part of a invisible layer, we need to explicitly hide it in alive mode
+            // if the control is part of an invisible layer, we need to explicitly hide it in alive mode
             impl_adjustControlVisibilityToLayerVisibility_throw();
         }
         catch( const Exception& )

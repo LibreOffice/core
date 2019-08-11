@@ -134,7 +134,7 @@ void createSubPrimitive3DVector(
 
 namespace sdr { namespace contact {
 
-// Create a Object-Specific ViewObjectContact, set ViewContact and
+// Create an Object-Specific ViewObjectContact, set ViewContact and
 // ObjectContact. Always needs to return something.
 ViewObjectContact& ViewContactOfE3dScene::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
 {
