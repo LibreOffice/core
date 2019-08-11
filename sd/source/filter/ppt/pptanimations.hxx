@@ -152,7 +152,7 @@ const sal_Int32 mso_Anim_Fill_REMOVE    = 1;
 const sal_Int32 mso_Anim_Fill_FREEZE    = 2;
 const sal_Int32 mso_Anim_Fill_HOLD      = 3;
 
-/* constants for behaviour entry in PPtAnimationNode */
+/* constants for behaviour entry in PPTAnimationNode */
 const sal_Int32 mso_Anim_Behaviour_FILTER   = 24;
 const sal_Int32 mso_Anim_Behaviour_ANIMATION= 25;
 

@@ -732,7 +732,7 @@ void DrawDocShell::GotoBookmark(const OUString& rBookmark)
 
         if (nPageNumber == SDRPAGE_NOTFOUND)
         {
-            // Is the bookmark a object?
+            // Is the bookmark an object?
             pObj = mpDoc->GetObj(rBookmark);
 
             if (pObj)

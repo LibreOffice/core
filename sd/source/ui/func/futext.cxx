@@ -490,7 +490,7 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
         {
             /* Create Impress text object (rescales to line height)
                We get the correct height during the subsequent creation of the
-               object, otherwise we draw to much */
+               object, otherwise we draw too much */
             SfxItemSet aSet(mpViewShell->GetPool());
             aSet.Put(makeSdrTextMinFrameHeightItem(0));
             aSet.Put(makeSdrTextAutoGrowWidthItem(false));
@@ -1344,7 +1344,7 @@ SdrObjectUniquePtr FuText::CreateDefaultObject(const sal_uInt16 nID, const ::too
     This is used when a function gets a KEY_ESCAPE but can also
     be called directly.
 
-    @returns true if a active function was aborted
+    @returns true if an active function was aborted
 */
 bool FuText::cancel()
 {

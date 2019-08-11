@@ -36,7 +36,7 @@ public:
         OutputDevice* pOutDev);
     virtual ~ClientView() override;
 
-    /* if the view should not do a Invalidate() on the windows, you have to
+    /* if the view should not do an Invalidate() on the windows, you have to
        override the following two methods and do something different */
     virtual void InvalidateOneWin(OutputDevice& rWin) override;
     virtual void InvalidateOneWin(OutputDevice& rWin, const ::tools::Rectangle& rRect) override;

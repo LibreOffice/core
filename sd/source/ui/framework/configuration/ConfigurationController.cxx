@@ -72,7 +72,7 @@ public:
 
     std::shared_ptr<ConfigurationUpdater> mpConfigurationUpdater;
 
-    /** The queue processor ownes the queue of configuration change request
+    /** The queue processor owns the queue of configuration change request
         objects and processes the objects.
     */
     std::unique_ptr<ChangeRequestQueueProcessor> mpQueueProcessor;
