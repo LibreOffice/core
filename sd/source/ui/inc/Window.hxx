@@ -58,7 +58,7 @@ public:
     */
     void    SetZoomIntegral(long nZoom);
 
-    /** This internally used method performs the actual adaption of the
+    /** This internally used method performs the actual adaptation of the
         window's map mode to the specified zoom factor.
         @param nZoom
             The zoom factor is given as integral percent value.

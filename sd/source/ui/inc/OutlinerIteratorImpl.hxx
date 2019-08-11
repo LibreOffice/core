@@ -119,7 +119,7 @@ protected:
     while an iterator is alive.  It is therefore the responsibility of an
     iterator's owner to handle the case of a changed mark list.
 
-    <p>For documentation of the methods please refere to the base class
+    <p>For documentation of the methods please refer to the base class
     <type>IteratorImplBase</type>.</p>
 */
 class SelectionIteratorImpl
@@ -161,7 +161,7 @@ private:
     the view is *not* switched.  Further calls to the
     <member>GotoNextObject()</member> method will be ignored.
 
-    <p>For documentation of the methods please refere to the base class
+    <p>For documentation of the methods please refer to the base class
     <type>IteratorImplBase</type>.</p>
 */
 class ViewIteratorImpl : public IteratorImplBase
@@ -209,7 +209,7 @@ private:
 /** Iterator for iteration over all objects in all views.  It automatically
     switches views when reaching the end/beginning of a view.
 
-    <p>For documentation of the methods please refere to the base class
+    <p>For documentation of the methods please refer to the base class
     <type>IteratorImplBase</type>.</p>
 */
 class DocumentIteratorImpl : public ViewIteratorImpl
