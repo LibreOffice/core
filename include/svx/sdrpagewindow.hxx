@@ -89,7 +89,7 @@ public:
     // #i26631#
     void ResetObjectContact();
 
-    /** sets all elements in the view which support a design and a alive mode into the given mode
+    /** sets all elements in the view which support a design and an alive mode into the given mode
     */
     void    SetDesignMode( bool _bDesignMode ) const;
 };
