@@ -40,6 +40,7 @@ namespace utl
 class SAL_DLLPUBLIC_TEMPLATE OInputStreamWrapper_Base : public cppu::WeakImplHelper< css::io::XInputStream > {};
 
 /// helper class for wrapping an SvStream into a com.sun.star.io::XInputStream
+>>>>>>> Fix typo
 class UNOTOOLS_DLLPUBLIC OInputStreamWrapper : public OInputStreamWrapper_Base
 {
 protected:
@@ -119,6 +120,7 @@ protected:
 
 typedef ::cppu::ImplHelper1 <   css::io::XSeekable
                             >   OSeekableOutputStreamWrapper_Base;
+
 /** helper class for wrapping an SvStream into a com.sun.star.io::XOutputStream
     which is seekable (i.e. supports the com.sun.star.io::XSeekable interface).
 */

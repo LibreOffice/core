@@ -174,7 +174,7 @@ namespace utl
 
     //= OConfigurationTreeRoot
 
-    /** a specialized version of a OConfigurationNode, representing the root
+    /** a specialized version of an OConfigurationNode, representing the root
         of a configuration sub tree<p/>
         Only this class is able to commit any changes made any any OConfigurationNode
         objects.
@@ -253,7 +253,7 @@ namespace utl
 
         /** tolerant version of the <member>createWithServiceFactory</member>
 
-            <p>No assertions are thrown in case of an failure to initialize the configuration service, but once
+            <p>No assertions are thrown in case of a failure to initialize the configuration service, but once
             the configuration could be initialized, errors in the creation of the specific node (e.g. because the
             given node path does not exist) are still asserted.</p>
         */

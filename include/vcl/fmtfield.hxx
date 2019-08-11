@@ -120,7 +120,7 @@ public:
 
     bool    IsEmptyFieldEnabled() const         { return m_bEnableEmptyField; }
     void    EnableEmptyField(bool bEnable);
-    // If disabled, the value will be resetted to the last valid value on leave
+    // If disabled, the value will be reset to the last valid value on leave
 
     void    SetDefaultValue(double dDefault)    { m_dDefaultValue = dDefault; m_ValueState = valueDirty; }
     // If the current String is invalid, GetValue() returns this value

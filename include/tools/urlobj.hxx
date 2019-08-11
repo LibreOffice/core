@@ -398,7 +398,7 @@ public:
      */
     static OUString GetScheme(INetProtocol eTheScheme);
 
-    /** Return the a human-readable name for a given scheme.
+    /** Return the human-readable name for a given scheme.
 
         @param eTheScheme  One of the supported URL schemes.
 
@@ -528,7 +528,7 @@ public:
         slash after it or not.
 
         @param nIndex  The non-negative index of the segment before which
-        to insert the new segment.  LAST_SEGMENT or an nIndex that equals
+        to insert the new segment.  LAST_SEGMENT or a nIndex that equals
         getSegmentCount() inserts the new segment at the end of the
         hierarchical path.
 

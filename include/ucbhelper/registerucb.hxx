@@ -60,7 +60,7 @@ struct ContentProviderData
 
 typedef std::vector< ContentProviderData > ContentProviderDataList;
 
-/** Register a content provider at a Universal Content Broker.
+/** Register a content provider at an Universal Content Broker.
 
     @param rManager  A content provider manager (normally, this would be a
     UCB).  May be null, which is only useful if the content provider is an
