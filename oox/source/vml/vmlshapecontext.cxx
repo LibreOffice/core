@@ -325,7 +325,7 @@ ShapeTypeContext::ShapeTypeContext(ContextHandler2Helper const & rParent,
     mrTypeModel.maFillModel.moFilled = lclDecodeBool( rAttribs, XML_filled );
     mrTypeModel.maFillModel.moColor = rAttribs.getString( XML_fillcolor );
 
-    // For roundrect we may have a arcsize attribute to read
+    // For roundrect we may have an arcsize attribute to read
     mrTypeModel.maArcsize = rAttribs.getString(XML_arcsize, OUString());
     // editas
     mrTypeModel.maEditAs = rAttribs.getString(XML_editas, OUString());

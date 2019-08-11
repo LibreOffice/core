@@ -116,7 +116,7 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
             }
         } catch ( UnknownPropertyException ex ) {
             // do something useful
-            // we used a unknown property
+            // we used an unknown property
         } catch ( IndexOutOfBoundsException ex ) {
             // do something useful
             // we used an invalid index for accessing a container
