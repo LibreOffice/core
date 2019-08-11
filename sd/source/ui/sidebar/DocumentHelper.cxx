@@ -288,7 +288,7 @@ void DocumentHelper::AssignMasterPageToPageList (
     if (pMasterPage == nullptr || !pMasterPage->IsMasterPage())
         return;
 
-    // Make the layout name by stripping ouf the layout postfix from the
+    // Make the layout name by stripping out the layout postfix from the
     // layout name of the given master page.
     OUString sFullLayoutName(pMasterPage->GetLayoutName());
     OUString sBaseLayoutName (sFullLayoutName);

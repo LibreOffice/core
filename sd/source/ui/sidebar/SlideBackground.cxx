@@ -1022,7 +1022,7 @@ IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD,
                                                 { &aSizeItem, mpPageItem.get(), &aFitObjs });
 
-    // Notify LOK clients of the page size chagne.
+    // Notify LOK clients of the page size change.
     if (comphelper::LibreOfficeKit::isActive())
     {
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();

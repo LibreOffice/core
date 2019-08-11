@@ -147,13 +147,13 @@ private:
     static const int SMALL_PREVIEW_WIDTH = 72 + 2;
     static const int LARGE_PREVIEW_WIDTH = 2*72 + 2;
 
-    /** This substition of page preview shows "Preparing preview" and is
+    /** This substitution of page preview shows "Preparing preview" and is
         shown as long as the actual previews are not being present.
     */
     Image maLargePreviewBeingCreated;
     Image maSmallPreviewBeingCreated;
 
-    /** This substition of page preview is shown when a preview can not be
+    /** This substitution of page preview is shown when a preview can not be
         created and thus is not available.
     */
     Image maLargePreviewNotAvailable;

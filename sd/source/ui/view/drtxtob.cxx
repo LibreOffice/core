@@ -282,7 +282,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         pOLV->CreateSelectionList(aSelList);
                         Paragraph* pPara = aSelList.empty() ? nullptr : *(aSelList.begin());
 
-                        // find out if we are a OutlineView
+                        // find out if we are an OutlineView
                         bool bIsOutlineView(OutlinerMode::OutlineView == pOLV->GetOutliner()->GetMode());
 
                         // This is ONLY for OutlineViews
