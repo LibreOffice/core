@@ -901,7 +901,7 @@ enumXFTextDir LwpMiddleLayout::GetTextDirection()
     return eTextDir;
 }
 /**
- * @descr: Get back ground color.
+ * @descr: Get background color.
 */
 LwpColor* LwpMiddleLayout::GetBackColor()
 {
@@ -1976,7 +1976,7 @@ void LwpPlacableLayout::Read()
             sal_uInt16 count = pStrm->QuickReaduInt16();
             if(count)
             {
-                // temporily added by  to avoid assertion
+                // temporarily added by  to avoid assertion
                 while (count)
                 {
                     LwpPoint aPoint;
