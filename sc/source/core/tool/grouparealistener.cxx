@@ -239,7 +239,7 @@ void FormulaGroupAreaListener::collectFormulaCells(
         // least not in the original bug scenario (insert a column before H on
         // sheet w) of tdf#89957 with
         // http://bugs.documentfoundation.org/attachment.cgi?id=114042
-        // Apparently this was fixed in the mean time, let's assume and get the
+        // Apparently this was fixed in the meantime, let's assume and get the
         // assert bat out to hit us if it wasn't.
         assert(!"something is still messing up the formula goup and block size length");
     }

@@ -169,7 +169,7 @@ public:
      */
     static utl::SearchParam::SearchType DetectSearchType( const OUString& rStr, const ScDocument* pDoc );
 
-    /// Fail safe division, returning an FormulaError::DivisionByZero coded into a double
+    /// Fail safe division, returning a FormulaError::DivisionByZero coded into a double
     /// if denominator is 0.0
     static inline double div( const double& fNumerator, const double& fDenominator );
 
@@ -283,7 +283,7 @@ private:
         Increments RefCount of the original token if not substituted.
         ATTENTION! The token had to be allocated with `new' and must not be used
         after this call if no RefCount was set because possibly it gets immediately
-        deleted in case of an FormulaError::StackOverflow or if substituted with formula::FormulaErrorToken! */
+        deleted in case of a FormulaError::StackOverflow or if substituted with formula::FormulaErrorToken! */
     void PushTempToken( formula::FormulaToken* );
 
     /** Pushes the token or substitutes with formula::FormulaErrorToken in case
@@ -296,7 +296,7 @@ private:
         explicit formula::FormulaErrorToken. Increments RefCount.
         ATTENTION! The token had to be allocated with `new' and must not be used
         after this call if no RefCount was set because possibly it gets immediately
-        decremented again and thus deleted in case of an FormulaError::StackOverflow! */
+        decremented again and thus deleted in case of a FormulaError::StackOverflow! */
     void PushTempTokenWithoutError( const formula::FormulaToken* );
 
     /** If nGlobalError is set push formula::FormulaErrorToken.
