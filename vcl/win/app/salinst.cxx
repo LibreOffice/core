@@ -459,7 +459,7 @@ bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
 
     // 0ms timeouts are handled out-of-bounds to prevent busy-locking the
     // event loop with timeout messages.
-    // We ensure we never handle more then one timeout per call.
+    // We ensure we never handle more than one timeout per call.
     // This way we'll always process a normal system message.
     if ( !bWasTimeoutMsg && pTimer && pTimer->IsDirectTimeout() )
     {

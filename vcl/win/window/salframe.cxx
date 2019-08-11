@@ -314,7 +314,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         }
         else
         {
-            // Only with WS_OVRLAPPED we get a useful default position/size
+            // Only with WS_OVERLAPPED we get a useful default position/size
             if ( (nSalFrameStyle & (SalFrameStyleFlags::SIZEABLE | SalFrameStyleFlags::MOVEABLE)) ==
                  (SalFrameStyleFlags::SIZEABLE | SalFrameStyleFlags::MOVEABLE) )
                 nSysStyle |= WS_OVERLAPPED;
@@ -447,8 +447,8 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         return nullptr;
     }
 
-    // If we have a Window with an Caption Bar and without
-    // an MaximizeBox, we change the SystemMenu
+    // If we have a Window with a Caption Bar and without
+    // a MaximizeBox, we change the SystemMenu
     if ( (nSysStyle & (WS_CAPTION | WS_MAXIMIZEBOX)) == (WS_CAPTION) )
     {
         HMENU hSysMenu = GetSystemMenu( hWnd, FALSE );
@@ -3376,7 +3376,7 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             return false;
 
         // only "free flying" WM_CHAR messages arrive here, that are
-        // created by typing a ALT-NUMPAD combination
+        // created by typing an ALT-NUMPAD combination
         SalKeyEvent aKeyEvt;
 
         if ( (wParam >= '0') && (wParam <= '9') )

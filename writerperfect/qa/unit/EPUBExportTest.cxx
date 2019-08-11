@@ -840,7 +840,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTdf115623SplitByChapter)
         xmlFreeDoc(mpXmlDoc);
         mpXmlDoc = nullptr;
     }
-    // Splitted HTML should keep the same writing-mode.
+    // Split HTML should keep the same writing-mode.
     {
         mpXmlDoc = parseExport("OEBPS/sections/section0002.xhtml");
         OUString aClass = getXPath(mpXmlDoc, "//xhtml:body", "class");
