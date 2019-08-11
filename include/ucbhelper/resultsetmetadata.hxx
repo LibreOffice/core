@@ -313,7 +313,7 @@ public:
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      * @return true, if the column is definetely not writable.
+      * @return true, if the column is definitely not writable.
       */
     virtual sal_Bool SAL_CALL
     isReadOnly( sal_Int32 column ) override;
@@ -331,7 +331,7 @@ public:
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      * @return true, if a write on the column will definetely succeed.
+      * @return true, if a write on the column will definitely succeed.
       */
     virtual sal_Bool SAL_CALL
     isDefinitelyWritable( sal_Int32 column ) override;
