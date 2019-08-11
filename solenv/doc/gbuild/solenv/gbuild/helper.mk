@@ -30,7 +30,7 @@ namespace gb
         public:
             /// Abbreviates the common directory roots in a command
             static Command abbreviate_dirs(Command c);
-            /// Announces the start/end of an task.
+            /// Announces the start/end of a task.
             static void announce(String announcement);
             /// Creates the default get_clean_target() function for the type.
             static void make_clean_target(TargetType t);

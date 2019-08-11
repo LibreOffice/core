@@ -230,7 +230,7 @@ $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_FIX_EOL += $(addprefix $(c
 endef
 
 
-# Internal version of set_tarbal, mostly to avoid repeated invocation of $(shel
+# Internal version of set_tarball, mostly to avoid repeated invocation of $(shell
 define gb_UnpackedTarball_set_tarball_internal
 $(call gb_UnpackedTarget_UnpackedTarget,$(2),$(call gb_UnpackedTarball_get_dir,$(1)),$(3),$(4))
 $(call gb_UnpackedTarball_get_target,$(1)) : $(call gb_UnpackedTarget_get_target,$(2))

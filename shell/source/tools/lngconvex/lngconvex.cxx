@@ -169,7 +169,7 @@ private:
     OString maBcp47;
 };
 
-/** Convert a OUString to the MS resource
+/** Convert an OUString to the MS resource
     file format string e.g.
     OUString -> L"\x1A00\x2200\x3400" */
 std::string make_winrc_unicode_string(const OUString& str)

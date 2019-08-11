@@ -1356,7 +1356,7 @@ sal_Bool SlideShowImpl::addView(
                                               slideSize.getY() ) );
     }
 
-    // clear view area (since its newly added,
+    // clear view area (since it's newly added,
     // we need a clean slate)
     pView->clearAll();
 
