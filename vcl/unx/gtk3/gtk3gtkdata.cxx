@@ -536,7 +536,7 @@ bool GtkSalData::Yield( bool bWait, bool bHandleAllCurrentEvents )
         {
             /* #i41693# in case the dispatch thread hangs in join
              * for this thread the condition will never be set
-             * workaround: timeout of 1 second a emergency exit
+             * workaround: timeout of 1 second an emergency exit
              */
             // we are the dispatch thread
             m_aDispatchCondition.reset();

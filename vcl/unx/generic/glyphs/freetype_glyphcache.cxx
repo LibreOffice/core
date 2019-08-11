@@ -851,7 +851,7 @@ void PolyArgs::ClosePolygon()
     tools::Polygon aPoly( mnPoints, mpPointAry.get(), (bHasOffline ? mpFlagAry.get() : nullptr) );
 
     // #i35928#
-    // This may be a invalid polygons, e.g. the last point is a control point.
+    // This may be an invalid polygon, e.g. the last point is a control point.
     // So close the polygon (and add the first point again) if the last point
     // is a control point or different from first.
     // #i48298#
