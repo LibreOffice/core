@@ -575,7 +575,7 @@ const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEnd
             }
             ScDocumentPool* pDocPool = pDocument->GetPool();
             if ( bSplit )
-            {   // duplicate splitted entry in pool
+            {   // duplicate split entry in pool
                 pDocPool->Put( *mvData[ni-1].pPattern );
             }
             if ( ni < nj )

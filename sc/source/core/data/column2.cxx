@@ -1347,7 +1347,7 @@ bool ScColumn::GetPrevDataPos(SCROW& rRow) const
         return true;
     }
 
-    // This is the first cell in an non-empty block. Move back to the previous block.
+    // This is the first cell in a non-empty block. Move back to the previous block.
     if (it == maCells.begin())
         // No more preceding block.
         return false;

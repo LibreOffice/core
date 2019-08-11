@@ -703,7 +703,7 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
                 if (bDone)
                     break;
 
-                // Unequality check using collator.
+                // Inequality check using collator.
                 sal_Int32 nCompare = rCollator.compareString(aMatStr.getString(), aQueryStr.getString());
                 switch (rEntry.eOp)
                 {

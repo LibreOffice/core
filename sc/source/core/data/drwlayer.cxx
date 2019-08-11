@@ -690,7 +690,7 @@ void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData&
                 nCurrentHeight = nLastHeight;
             }
 
-            // get intial ScalingFactors
+            // get initial ScalingFactors
             double fWidthFactor(nCurrentWidth == nLastWidth || 0 == nLastWidth
                 ? 1.0
                 : static_cast<double>(nCurrentWidth) / static_cast<double>(nLastWidth));
@@ -944,7 +944,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         ScDrawObjData& rNoRotatedAnchor = *GetNonRotatedObjData( pObj, true );
         if (rData.getShapeRect().IsEmpty())
         {
-            // Every shape it is saved with an negative offset relative to cell
+            // Every shape it is saved with a negative offset relative to cell
             ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType(*pObj);
             if (aAnchorType == SCA_CELL || aAnchorType == SCA_CELL_RESIZE)
             {
@@ -966,7 +966,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
             // that the initial anchor we get here is in terms of an unrotated shape ( if the shape is rotated )
             // we need to save the old anchor ( for persisting ) and also track any resize or repositions that happen.
 
-            // This is an evil hack, having a anchor that is one minute in terms of untransformed object and then later
+            // This is an evil hack, having an anchor that is one minute in terms of untransformed object and then later
             // in terms of the transformed object is not ideal, similarly having 2 anchors per object is wasteful, can't
             // see another way out of this at the moment though.
             rNoRotatedAnchor.maStart = rData.maStart;
@@ -2144,7 +2144,7 @@ void ScDrawLayer::SetPageAnchored( SdrObject &rObj )
 ScAnchorType ScDrawLayer::GetAnchorType( const SdrObject &rObj )
 {
     //If this object has a cell anchor associated with it
-    //then its cell-anchored, otherwise its page-anchored
+    //then it's cell-anchored, otherwise it's page-anchored
     const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(const_cast<SdrObject*>(&rObj));
 
     // When there is no cell anchor, it is page anchored.

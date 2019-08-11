@@ -366,7 +366,7 @@ void Test::testSortSingleRow()
     m_pDoc->DeleteTab(0);
 }
 
-// regression test fo fdo#53814, sorting doesn't work as expected
+// regression test of fdo#53814, sorting doesn't work as expected
 // if cells in the sort are referenced by formulas
 void Test::testSortWithFormulaRefs()
 {
