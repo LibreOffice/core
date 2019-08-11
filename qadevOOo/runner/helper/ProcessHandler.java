@@ -156,7 +156,7 @@ public class ProcessHandler
      *                      process to exit and return its status.
      *
      *                      timeOut = 0
-     *                      Waits for the process to end regulary
+     *                      Waits for the process to end regularly
      *
      */
     private ProcessHandler(String cmdLine, PrintWriter log, File workDir, String[] envVars) throws UnsupportedEncodingException
@@ -383,7 +383,7 @@ public class ProcessHandler
 
     /**
      *  If the timeout only given by setProcessTimeout(int seconds) function is != 0,
-     *  a extra thread is created and after time has run out, the ProcessKiller string
+     *  an extra thread is created and after time has run out, the ProcessKiller string
      *  given by function setProcessKiller(string) will execute.
      *  So it is possible to kill a running office after a given time of seconds.
      */
