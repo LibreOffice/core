@@ -100,7 +100,7 @@ RefUpdateMoveTabContext::RefUpdateMoveTabContext(ScDocument& rDoc, SCTAB nOldPos
 
 SCTAB RefUpdateMoveTabContext::getNewTab(SCTAB nOldTab) const
 {
-    // Sheets below the lower bound or above the uppper bound will not change.
+    // Sheets below the lower bound or above the upper bound will not change.
     SCTAB nLowerBound = std::min(mnOldPos, mnNewPos);
     SCTAB nUpperBound = std::max(mnOldPos, mnNewPos);
 

@@ -299,7 +299,7 @@ bool handleConditionalFormat(ScConditionalFormatList& rCondFormList, const ScCon
                 pInfo->pConditionSet = &pStyleSheet->GetItemSet();
                 bAnyCondition = true;
 
-                // TODO: moggi: looks like there is a but around bHidden and bHideFormula
+                // TODO: moggi: looks like there is a bug around bHidden and bHideFormula
                 //              They are normally for the whole pattern and not for a single cell
                 // we need to check already here for protected cells
                 const SfxPoolItem* pItem;
