@@ -1781,7 +1781,7 @@ namespace xmloff
 
         // clone the attributes
         Reference< XCloneable > xCloneList(_rxAttrList, UNO_QUERY);
-        OSL_ENSURE(xCloneList.is(), "OColumnWrapperImport::StartElement: AttributeList not cloneable!");
+        OSL_ENSURE(xCloneList.is(), "OColumnWrapperImport::StartElement: AttributeList not clonable!");
         if ( xCloneList.is() )
             m_xOwnAttributes.set(xCloneList->createClone(), UNO_QUERY);
         OSL_ENSURE(m_xOwnAttributes.is(), "OColumnWrapperImport::StartElement: no cloned list!");

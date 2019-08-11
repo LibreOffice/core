@@ -1058,15 +1058,15 @@ void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible
     Any a( _xProps->getPropertyValue( "Name" ) );
 
     // The following is a hack to allow 'form' controls to override the default
-    // control supported by dialogs. This should work well for both vba support and
-    // normal openoffice ( when normal 'Dialogs' decide to support form control models )
+    // control supported by dialogs. This should work well for both VBA support and
+    // normal LibreOffice (when normal 'Dialogs' decide to support form control models)
     // In the future VBA support might require custom models ( and not the just the form
     // variant of a control that we currently use ) In this case the door is still open,
     // we just need to define a new way for the 'ServiceName' to be extracted from the
     // incoming model. E.g. the use of supporting service
     // "com.sun.star.form.FormComponent", 'ServiceName' and XPersistObject
     // is only an implementation detail here, in the future some other
-    // method ( perhaps a custom prop ) could be used instead.
+    // method (perhaps a custom prop) could be used instead.
     Reference< lang::XServiceInfo > xSrvInfo( _xProps, UNO_QUERY );
     if ( xSrvInfo.is() && xSrvInfo->supportsService( "com.sun.star.form.FormComponent" ) )
     {

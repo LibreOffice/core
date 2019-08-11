@@ -89,7 +89,7 @@ public:
     const unsigned char* read(unsigned long, unsigned long&) override { return nullptr; }
     //! returns actual offset position
     long tell() override { return 0; }
-    /*! \brief seeks to a offset position, from actual, beginning or ending position
+    /*! \brief seeks to an offset position, from actual, beginning or ending position
      * \return 0 if ok
      */
     int seek(long, librevenge::RVNG_SEEK_TYPE) override { return 1; }
