@@ -157,7 +157,7 @@ OUString UnoControl::GetComponentServiceName()
 
 Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer()
 {
-    DBG_ASSERT( !mbCreatingCompatiblePeer, "ImplGetCompatiblePeer - rekursive?" );
+    DBG_ASSERT( !mbCreatingCompatiblePeer, "ImplGetCompatiblePeer - recursive?" );
 
     mbCreatingCompatiblePeer = true;
 
@@ -244,7 +244,7 @@ bool UnoControl::ImplCheckLocalize( OUString& _rPossiblyLocalizable )
 
 void UnoControl::ImplSetPeerProperty( const OUString& rPropName, const Any& rVal )
 {
-    // since a change made in propertiesChange, we can't be sure that this is called with an valid getPeer(),
+    // since a change made in propertiesChange, we can't be sure that this is called with a valid getPeer(),
     // this assumption may be false in some (seldom) multi-threading scenarios (cause propertiesChange
     // releases our mutex before calling here in)
     // That's why this additional check
@@ -565,7 +565,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
 
     Reference< XWindow >    xParent = getParentPeer();
     Reference< XControl > xThis( static_cast<XAggregation*>(static_cast<cppu::OWeakAggObject*>(this)), UNO_QUERY );
-    // call createPeer via a interface got from queryInterface, so the aggregating class can intercept it
+    // call createPeer via an interface got from queryInterface, so the aggregating class can intercept it
 
     DBG_ASSERT( !bNeedNewPeer || xParent.is(), "Need new peer, but don't have a parent!" );
 

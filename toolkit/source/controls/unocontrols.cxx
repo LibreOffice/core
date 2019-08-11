@@ -1268,7 +1268,7 @@ void UnoRadioButtonControl::itemStateChanged( const awt::ItemEvent& rEvent )
         if ( maItemListeners.getLength() )
             maItemListeners.itemStateChanged( rEvent );
     }
-        // note that speaking stricly, this is wrong: When in 1.0.x, the user would have de-selected
+        // note that speaking strictly, this is wrong: When in 1.0.x, the user would have de-selected
         // a radio button _without_ selecting another one, this would have caused a notification.
         // With the change done here, this today won't cause a notification anymore.
 

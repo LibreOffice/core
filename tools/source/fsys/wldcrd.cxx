@@ -97,7 +97,7 @@ bool WildCard::Matches( const OUString& rString ) const
     {
         while ( (nSepPos = aTmpWild.indexOf(cSepSymbol)) != -1 )
         {
-            // Check all splitted wildcards
+            // Check all split wildcards
             if ( ImpMatch( aTmpWild.copy( 0, nSepPos ).getStr(), aString.getStr() ) )
                 return true;
             aTmpWild = aTmpWild.copy(nSepPos + 1); // remove separator
