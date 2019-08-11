@@ -398,7 +398,7 @@ public:
      */
     static OUString GetScheme(INetProtocol eTheScheme);
 
-    /** Return the a human-readable name for a given scheme.
+    /** Return the human-readable name for a given scheme.
 
         @param eTheScheme  One of the supported URL schemes.
 

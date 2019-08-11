@@ -39,7 +39,7 @@ namespace utl {
 /** @short  can be used to work with a css::document::MediaDescriptor
             struct.
 
-    @descr  It wraps a unordered_map around the Sequence< css::beans::PropertyValue >, which
+    @descr  It wraps an unordered_map around the Sequence< css::beans::PropertyValue >, which
             represent the MediaDescriptor item.
             Further this helper defines often used functions (as e.g. open of the required streams,
             consistent checks etcpp.) and it defines all usable property names.

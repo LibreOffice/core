@@ -151,7 +151,7 @@
       <xsl:otherwise>string</xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  <!-- An utility to convert a column number (e.g. 27; 1-based) to column name (like AA) -->
+  <!-- A utility to convert a column number (e.g. 27; 1-based) to column name (like AA) -->
   <xsl:template name="ColNum2Name">
     <xsl:param name="num"/>
     <xsl:if test="$num > 0">
@@ -188,7 +188,7 @@
       </xsl:choose>
     </xsl:if>
   </xsl:template>
-  <!-- An utility to convert a cell address (e.g. row 2, column 27) to cell name (like AA2) -->
+  <!-- A utility to convert a cell address (e.g. row 2, column 27) to cell name (like AA2) -->
   <xsl:template name="CellName">
     <xsl:param name="rowNum"/>
     <xsl:param name="colNum"/>
@@ -197,7 +197,7 @@
     </xsl:call-template>
     <xsl:value-of select="$rowNum"/>
   </xsl:template>
-  <!-- An utility to convert a range given in terms of numbers (e.g. row 1, column 1 to row 2, column 27) to range name (like A1:AA2) -->
+  <!-- A utility to convert a range given in terms of numbers (e.g. row 1, column 1 to row 2, column 27) to range name (like A1:AA2) -->
   <xsl:template name="RangeName">
     <xsl:param name="rowStartNum"/>
     <xsl:param name="colStartNum"/>
