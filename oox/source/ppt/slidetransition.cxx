@@ -359,7 +359,7 @@ namespace oox { namespace ppt {
             default:
                 SAL_INFO(
                     "oox.ppt",
-                    "strange number of blades for thw wheel-wipe " << param1);
+                    "strange number of blades for the wheel-wipe " << param1);
                 if( param1 > 8 )
                 {
                     mnTransitionSubType = TransitionSubType::EIGHTBLADE;

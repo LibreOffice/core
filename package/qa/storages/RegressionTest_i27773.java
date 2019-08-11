@@ -199,7 +199,7 @@ public class RegressionTest_i27773 implements StorageTest {
                 return false;
 
 
-            // reopen the storage in readonly mode an check contents
+            // reopen the storage in readonly mode and check contents
 
 
             pArgs[1] = Integer.valueOf( ElementModes.READ );
