@@ -19,7 +19,6 @@
 
 #include <tabsplit.hxx>
 #include <viewdata.hxx>
-#include <dbfunc.hxx>
 
 #include <vcl/settings.hxx>
 

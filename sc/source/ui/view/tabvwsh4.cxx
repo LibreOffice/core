@@ -19,39 +19,27 @@
 
 #include <sal/config.h>
 
-#include <scitems.hxx>
-#include <editeng/eeitem.hxx>
-
 #include <sfx2/app.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <editeng/borderline.hxx>
-#include <editeng/boxitem.hxx>
-#include <svx/fmpage.hxx>
 #include <svx/fmshell.hxx>
-#include <editeng/sizeitem.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/ipclient.hxx>
-#include <svl/whiter.hxx>
-#include <unotools/moduleoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/svborder.hxx>
 
+#include <IAnyRefDialog.hxx>
 #include <tabvwsh.hxx>
 #include <sc.hrc>
 #include <globstr.hrc>
-#include <stlpool.hxx>
-#include <stlsheet.hxx>
 #include <docsh.hxx>
 #include <scmod.hxx>
 #include <appoptio.hxx>
-#include <rangeutl.hxx>
-#include <printfun.hxx>
 #include <drawsh.hxx>
 #include <drformsh.hxx>
 #include <editsh.hxx>
@@ -66,7 +54,6 @@
 #include <reffact.hxx>
 #include <viewuno.hxx>
 #include <dispuno.hxx>
-#include <anyrefdg.hxx>
 #include <chgtrack.hxx>
 #include <cellsh.hxx>
 #include <oleobjsh.hxx>
@@ -76,9 +63,7 @@
 #include <pgbrksh.hxx>
 #include <dpobject.hxx>
 #include <prevwsh.hxx>
-#include <tpprint.hxx>
 #include <scextopt.hxx>
-#include <printopt.hxx>
 #include <drawview.hxx>
 #include <fupoor.hxx>
 #include <navsett.hxx>
@@ -92,10 +77,6 @@
 #include <gridwin.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#include <com/sun/star/chart2/XCoordinateSystem.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/XChartType.hpp>
 #include <sfx2/lokhelper.hxx>
 #include <comphelper/flagguard.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

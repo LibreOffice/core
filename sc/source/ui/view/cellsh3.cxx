@@ -27,7 +27,6 @@
 #include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <sfx2/app.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <scmod.hxx>
@@ -35,11 +34,9 @@
 #include <tabvwsh.hxx>
 #include <document.hxx>
 #include <sc.hrc>
-#include <docsh.hxx>
 #include <reffact.hxx>
 #include <uiitems.hxx>
 #include <autoform.hxx>
-#include <autofmt.hxx>
 #include <cellsh.hxx>
 #include <inputhdl.hxx>
 #include <editable.hxx>

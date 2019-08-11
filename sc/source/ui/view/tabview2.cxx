@@ -18,14 +18,9 @@
  */
 
 #include <scitems.hxx>
-#include <editeng/eeitem.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/childwin.hxx>
 
 #include <attrib.hxx>
 #include <pagedata.hxx>
@@ -35,12 +30,9 @@
 #include <stlpool.hxx>
 #include <docsh.hxx>
 #include <gridwin.hxx>
-#include <olinewin.hxx>
-#include <uiitems.hxx>
 #include <sc.hrc>
 #include <viewutil.hxx>
 #include <colrowba.hxx>
-#include <waitoff.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <scmod.hxx>

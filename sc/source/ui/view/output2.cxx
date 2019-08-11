@@ -33,12 +33,10 @@
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/forbiddenruleitem.hxx>
-#include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svx/rotmodit.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/fontitem.hxx>
@@ -46,6 +44,7 @@
 #include <editeng/shdditem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/wrlmitem.hxx>
+#include <formula/errorcodes.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/svapp.hxx>
@@ -66,10 +65,6 @@
 #include <progress.hxx>
 #include <scmod.hxx>
 #include <fillinfo.hxx>
-#include <viewdata.hxx>
-#include <tabvwsh.hxx>
-#include <docsh.hxx>
-#include <markdata.hxx>
 #include <stlsheet.hxx>
 #include <spellcheckcontext.hxx>
 #include <scopetools.hxx>

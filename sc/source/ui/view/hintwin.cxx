@@ -17,24 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <global.hxx>
 #include <overlayobject.hxx>
-#include <scmod.hxx>
 
-#include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
-#include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
-#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
-#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
-#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <tools/lineend.hxx>
-#include <svtools/colorcfg.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/metric.hxx>
 

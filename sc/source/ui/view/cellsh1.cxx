@@ -30,7 +30,6 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <svl/stritem.hxx>
-#include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <sfx2/dispatch.hxx>
@@ -42,12 +41,8 @@
 #include <svx/postattr.hxx>
 #include <editeng/fontitem.hxx>
 #include <svx/clipfmtitem.hxx>
-#include <sfx2/passwd.hxx>
 #include <svx/hlnkitem.hxx>
 #include <basic/sbxcore.hxx>
-#include <unotools/useroptions.hxx>
-#include <vcl/waitobj.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <editeng/editview.hxx>
 #include <svtools/cliplistener.hxx>
 
@@ -58,8 +53,6 @@
 #include <patattr.hxx>
 #include <scmod.hxx>
 #include <tabvwsh.hxx>
-#include <impex.hxx>
-#include <reffind.hxx>
 #include <uiitems.hxx>
 #include <reffact.hxx>
 #include <inputhdl.hxx>
@@ -69,18 +62,14 @@
 #include <editable.hxx>
 #include <dpobject.hxx>
 #include <dpsave.hxx>
-#include <dpgroup.hxx>
 #include <spellparam.hxx>
 #include <postit.hxx>
-#include <clipparam.hxx>
-#include <pivot.hxx>
 #include <dpsdbtab.hxx>
 #include <dpshttab.hxx>
 #include <dbdata.hxx>
 #include <docsh.hxx>
 #include <cliputil.hxx>
 #include <markdata.hxx>
-#include <docpool.hxx>
 #include <colorscale.hxx>
 #include <condformatdlg.hxx>
 #include <attrib.hxx>
@@ -89,7 +78,6 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <scui_def.hxx>
-#include <svx/dialogs.hrc>
 #include <scabstdlg.hxx>
 #include <tokenstringcontext.hxx>
 #include <cellvalue.hxx>
@@ -100,7 +88,6 @@
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/bootstrap.hxx>

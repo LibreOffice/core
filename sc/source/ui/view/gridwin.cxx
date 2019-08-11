@@ -22,7 +22,6 @@
 #include <memory>
 #include <editeng/adjustitem.hxx>
 #include <sot/storage.hxx>
-#include <svx/algitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editstat.hxx>
@@ -31,38 +30,29 @@
 #include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/misspellrange.hxx>
-#include <svx/svdetc.hxx>
 #include <editeng/editobj.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/ipclient.hxx>
 #include <svl/stritem.hxx>
-#include <svl/urlbmk.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/cursor.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/hatch.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/settings.hxx>
 #include <sot/formats.hxx>
 #include <comphelper/classids.hxx>
-#include <sal/macros.h>
 
 #include <svx/svdview.hxx>
 #include <editeng/outliner.hxx>
-#include <svx/svditer.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>
-#include <com/sun/star/sheet/DataPilotTableResultData.hpp>
-#include <com/sun/star/sheet/DataPilotTablePositionData.hpp>
-#include <com/sun/star/sheet/DataPilotTablePositionType.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
@@ -92,18 +82,14 @@
 #include <scresid.hxx>
 #include <inputhdl.hxx>
 #include <uiitems.hxx>
-#include <filtdlg.hxx>
-#include <impex.hxx>
 #include <formulacell.hxx>
 #include <patattr.hxx>
 #include <notemark.hxx>
 #include <rfindlst.hxx>
-#include <docpool.hxx>
 #include <output.hxx>
 #include <docfunc.hxx>
 #include <dbdocfun.hxx>
 #include <dpobject.hxx>
-#include <dpoutput.hxx>
 #include <transobj.hxx>
 #include <drwtrans.hxx>
 #include <seltrans.hxx>
@@ -114,7 +100,7 @@
 #include <compiler.hxx>
 #include <editable.hxx>
 #include <fillinfo.hxx>
-#include <userdat.hxx>
+#include <filterentries.hxx>
 #include <drwlayer.hxx>
 #include <validat.hxx>
 #include <tabprotection.hxx>
@@ -122,7 +108,6 @@
 #include <dpcontrol.hxx>
 #include <checklistmenu.hxx>
 #include <clipparam.hxx>
-#include <cellsh.hxx>
 #include <overlayobject.hxx>
 #include <cellsuno.hxx>
 #include <drawview.hxx>
@@ -135,7 +120,6 @@
 #include <hints.hxx>
 #include <spellcheckcontext.hxx>
 #include <uiobject.hxx>
-#include <scabstdlg.hxx>
 #include <undoblk.hxx>
 #include <datamapper.hxx>
 

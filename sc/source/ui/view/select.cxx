@@ -18,11 +18,9 @@
  */
 
 #include <tools/urlobj.hxx>
-#include <vcl/svapp.hxx>
 #include <sfx2/docfile.hxx>
 
 #include <select.hxx>
-#include <sc.hrc>
 #include <tabvwsh.hxx>
 #include <scmod.hxx>
 #include <document.hxx>

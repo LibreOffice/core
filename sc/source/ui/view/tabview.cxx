@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/svapp.hxx>
-
 #include <scitems.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -40,16 +38,13 @@
 #include <tabcont.hxx>
 #include <scmod.hxx>
 #include <sc.hrc>
-#include <viewutil.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <drawview.hxx>
 #include <docsh.hxx>
 #include <viewuno.hxx>
-#include <AccessibilityHints.hxx>
 #include <appoptio.hxx>
 #include <attrib.hxx>
-#include <table.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/lokhelper.hxx>

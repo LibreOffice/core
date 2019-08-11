@@ -8,7 +8,6 @@
  */
 
 #include <xmlsourcedlg.hxx>
-#include <sc.hrc>
 #include <bitmaps.hlst>
 #include <document.hxx>
 #include <orcusfilters.hxx>
@@ -20,10 +19,8 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/objsh.hxx>
-#include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ui/dialogs/FilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 

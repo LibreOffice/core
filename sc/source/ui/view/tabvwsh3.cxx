@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <scitems.hxx>
-#include <editeng/eeitem.hxx>
-
-#include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/passwd.hxx>
@@ -42,19 +38,9 @@
 #include <helpids.h>
 #include <inputwin.hxx>
 #include <scresid.hxx>
-#include <printfun.hxx>
 #include <docsh.hxx>
-#include <rangelst.hxx>
-#include <prevwsh.hxx>
 #include <rangeutl.hxx>
 #include <reffact.hxx>
-#include <uiitems.hxx>
-#include <formulacell.hxx>
-#include <inputhdl.hxx>
-#include <autoform.hxx>
-#include <autofmt.hxx>
-#include <dwfunctr.hxx>
-#include <shtabdlg.hxx>
 #include <tabprotection.hxx>
 #include <protectiondlg.hxx>
 #include <markdata.hxx>
@@ -64,11 +50,8 @@
 
 #include <svx/zoomslideritem.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 #include <comphelper/string.hxx>
 #include <scabstdlg.hxx>
-
-#include <memory>
 
 namespace
 {

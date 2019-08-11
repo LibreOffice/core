@@ -21,7 +21,6 @@
 
 #include <memory>
 
-#include <scitems.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -41,7 +40,6 @@
 #include <helpids.h>
 #include <docsh.hxx>
 #include <document.hxx>
-#include <shtabdlg.hxx>
 #include <scresid.hxx>
 #include <globstr.hrc>
 #include <strings.hrc>
@@ -53,7 +51,6 @@
 #include <scabstdlg.hxx>
 
 #include <tabbgcolor.hxx>
-#include <tabbgcolordlg.hxx>
 #include <markdata.hxx>
 
 #include <vector>

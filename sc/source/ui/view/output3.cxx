@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/eeitem.hxx>
-#include <svx/svdograf.hxx>
-#include <svx/svdoole2.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/svapp.hxx>
@@ -31,7 +27,6 @@
 #include <drwlayer.hxx>
 #include <document.hxx>
 #include <tabvwsh.hxx>
-#include <fillinfo.hxx>
 
 #include <svx/fmview.hxx>
 

@@ -23,7 +23,6 @@
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <editeng/adjustitem.hxx>
-#include <svx/algitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <svtools/colorcfg.hxx>
 #include <editeng/editview.hxx>
@@ -36,8 +35,6 @@
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 
-#include <sax/tools/converter.hxx>
-
 #include <viewdata.hxx>
 #include <docoptio.hxx>
 #include <scmod.hxx>
@@ -48,7 +45,6 @@
 #include <tabview.hxx>
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
-#include <sc.hrc>
 #include <patattr.hxx>
 #include <editutil.hxx>
 #include <scextopt.hxx>
@@ -57,10 +53,8 @@
 #include <inputopt.hxx>
 #include <viewutil.hxx>
 #include <markdata.hxx>
-#include <stlalgorithm.hxx>
 #include <ViewSettingsSequenceDefines.hxx>
 #include <gridwin.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <comphelper/flagguard.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>

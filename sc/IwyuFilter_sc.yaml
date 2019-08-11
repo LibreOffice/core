@@ -900,3 +900,9 @@ blacklist:
     sc/source/ui/unoobj/textuno.cxx:
     # Needed for macro defines
     - editeng/unoprnms.hxx
+    sc/source/ui/view/tabview.cxx:
+    # Needed for direct member access
+    - pagedata.hxx
+    sc/source/ui/view/viewfun4.cxx:
+    # Needed for direct member access
+    - refundo.hxx

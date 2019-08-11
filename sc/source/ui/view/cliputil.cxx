@@ -21,7 +21,6 @@
 #include <markdata.hxx>
 #include <gridwin.hxx>
 
-#include <vcl/waitobj.hxx>
 #include <sfx2/classificationhelper.hxx>
 
 namespace

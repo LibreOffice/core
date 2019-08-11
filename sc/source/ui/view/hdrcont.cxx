@@ -21,10 +21,8 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
-#include <tools/poly.hxx>
 #include <svtools/colorcfg.hxx>
 
-#include <sc.hrc>
 #include <tabvwsh.hxx>
 #include <hdrcont.hxx>
 #include <scmod.hxx>

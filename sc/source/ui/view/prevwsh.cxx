@@ -19,14 +19,10 @@
 
 #include <sal/config.h>
 
-#include <cstdlib>
-
 #include <scitems.hxx>
-#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
 #include <editeng/sizeitem.hxx>
-#include <svl/srchitem.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svx/svdview.hxx>
 #include <sfx2/dispatch.hxx>
@@ -48,7 +44,6 @@
 #include <prevwsh.hxx>
 #include <preview.hxx>
 #include <printfun.hxx>
-#include <attrib.hxx>
 #include <scmod.hxx>
 #include <inputhdl.hxx>
 #include <docsh.hxx>
@@ -59,11 +54,7 @@
 #include <scresid.hxx>
 #include <sc.hrc>
 #include <ViewSettingsSequenceDefines.hxx>
-#include <tpprint.hxx>
-#include <printopt.hxx>
 #include <viewuno.hxx>
-#include <sax/tools/converter.hxx>
-#include <rtl/ustrbuf.hxx>
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>

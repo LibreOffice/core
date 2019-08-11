@@ -20,14 +20,12 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svl/languageoptions.hxx>
 #include <sfx2/dispatch.hxx>
 
 #include <tabvwsh.hxx>
-#include <drawsh.hxx>
 #include <drawview.hxx>
 #include <fupoor.hxx>
 #include <fuconrec.hxx>
@@ -37,7 +35,6 @@
 #include <fusel.hxx>
 #include <futext.hxx>
 #include <fuinsert.hxx>
-#include <global.hxx>
 #include <sc.hrc>
 #include <scmod.hxx>
 #include <appoptio.hxx>
@@ -46,7 +43,6 @@
 // Create default drawing objects via keyboard
 #include <svx/svdpagv.hxx>
 #include <svl/stritem.hxx>
-#include <svx/svdpage.hxx>
 #include <fuconcustomshape.hxx>
 
 SdrView* ScTabViewShell::GetDrawView() const

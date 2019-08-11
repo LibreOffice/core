@@ -17,17 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/embed/EmbedMisc.hpp>
-
 #include <scitems.hxx>
-#include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
-#include <editeng/editdata.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/rotmodit.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/svxfont.hxx>
-#include <svx/svdoole2.hxx>
 #include <tools/poly.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
@@ -49,15 +44,12 @@
 #include <formulacell.hxx>
 #include <attrib.hxx>
 #include <patattr.hxx>
-#include <docpool.hxx>
-#include <tabvwsh.hxx>
 #include <progress.hxx>
 #include <pagedata.hxx>
 #include <chgtrack.hxx>
 #include <chgviset.hxx>
 #include <viewutil.hxx>
 #include <gridmerg.hxx>
-#include <invmerge.hxx>
 #include <fillinfo.hxx>
 #include <scmod.hxx>
 #include <appoptio.hxx>
@@ -66,10 +58,7 @@
 #include <colorscale.hxx>
 
 #include <math.h>
-#include <iostream>
-#include <map>
 #include <memory>
-#include <utility>
 
 using namespace com::sun::star;
 

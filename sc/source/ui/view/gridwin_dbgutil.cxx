@@ -15,7 +15,6 @@
 #include <viewdata.hxx>
 #include <document.hxx>
 #include <patattr.hxx>
-#include <svl/poolitem.hxx>
 #include <userdat.hxx>
 #include <dpobject.hxx>
 

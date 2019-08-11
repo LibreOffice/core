@@ -19,9 +19,7 @@
 
 #include <spelldialog.hxx>
 
-#include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/editstat.hxx>
 #include <editeng/editview.hxx>

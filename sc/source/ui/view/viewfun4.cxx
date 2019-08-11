@@ -18,7 +18,6 @@
  */
 
 #include <memory>
-#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <editeng/editobj.hxx>
@@ -27,8 +26,6 @@
 #include <editeng/flditem.hxx>
 #include <sot/storage.hxx>
 #include <svx/hlnkitem.hxx>
-#include <editeng/langitem.hxx>
-#include <svx/svxerr.hxx>
 #include <editeng/unolingu.hxx>
 
 #include <sfx2/bindings.hxx>
@@ -51,7 +48,6 @@
 #include <viewfunc.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
-#include <docpool.hxx>
 #include <globstr.hrc>
 #include <global.hxx>
 #include <scresid.hxx>

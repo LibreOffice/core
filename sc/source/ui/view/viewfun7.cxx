@@ -27,11 +27,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
-#include <svx/xbtmpit.hxx>
-#include <svx/xoutbmp.hxx>
 #include <svtools/embedhlp.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/ipclient.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -45,10 +42,8 @@
 #include <drwtrans.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <chartlis.hxx>
 #include <docuno.hxx>
 #include <docsh.hxx>
-#include <convuno.hxx>
 #include <dragdata.hxx>
 #include <gridwin.hxx>
 

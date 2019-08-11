@@ -19,7 +19,6 @@
 
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <strings.hrc>
@@ -28,7 +27,6 @@
 #include <drwlayer.hxx>
 #include "imapwrap.hxx"
 #include <viewdata.hxx>
-#include <dbfunc.hxx>
 #include <document.hxx>
 #include <userdat.hxx>
 #include <tabvwsh.hxx>

@@ -21,7 +21,6 @@
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 
 #include <scitems.hxx>
-#include <editeng/eeitem.hxx>
 
 #include <editeng/langitem.hxx>
 #include <editeng/editobj.hxx>
@@ -36,9 +35,7 @@
 #include <docsh.hxx>
 #include <cellvalue.hxx>
 #include <cellform.hxx>
-#include <formulacell.hxx>
 #include <patattr.hxx>
-#include <waitoff.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <markdata.hxx>

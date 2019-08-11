@@ -23,7 +23,6 @@
 #include <scitems.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <svl/aeitem.hxx>
@@ -36,24 +35,21 @@
 #include <unotools/moduleoptions.hxx>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
 
 #include <cellsh.hxx>
+#include <dbdata.hxx>
+#include <queryparam.hxx>
 #include <tabvwsh.hxx>
 #include <sc.hrc>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <global.hxx>
-#include <globalnames.hxx>
 #include <scmod.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
 #include <uiitems.hxx>
-#include <dbfunc.hxx>
 #include <dbdocfun.hxx>
-#include <filtdlg.hxx>
-#include <dbnamdlg.hxx>
 #include <reffact.hxx>
 #include <validat.hxx>
 #include <validate.hxx>

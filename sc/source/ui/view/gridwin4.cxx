@@ -25,7 +25,6 @@
 #include <editeng/colritem.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/cursor.hxx>
@@ -33,7 +32,6 @@
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
-#include <comphelper/scopeguard.hxx>
 #include <sfx2/lokhelper.hxx>
 
 #include <svx/svdview.hxx>

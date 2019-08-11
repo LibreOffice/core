@@ -17,32 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <scitems.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/srchdlg.hxx>
-#include <svl/srchitem.hxx>
-#include <sfx2/templdlg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/viewfac.hxx>
 
 #include <cellvalue.hxx>
-#include <docoptio.hxx>
 
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
 #include <reffact.hxx>
-#include <dwfunctr.hxx>
 #include <sc.hrc>
 #include <spelldialog.hxx>
 #include <formulacell.hxx>
 #include <searchresults.hxx>
 
-#include <sfx2/request.hxx>
     // needed for -fsanitize=function visibility of typeinfo for functions of
     // type void(SfxShell*,SfxRequest&) defined in scslots.hxx
 #define ShellClass_ScTabViewShell

@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/awt/XRequestCallback.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
-#include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/drawing/QRCode.hpp>
 #include <vcl/errinf.hxx>
 #include <sfx2/app.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -43,15 +40,12 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/filedlghelper.hxx>
 #include <svtools/soerr.hxx>
 #include <svl/rectitem.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <sot/exchange.hxx>
-#include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 
 #include <tabvwsh.hxx>
 #include <scmod.hxx>
@@ -60,13 +54,10 @@
 #include <client.hxx>
 #include <fuinsert.hxx>
 #include <docsh.hxx>
-#include <chartarr.hxx>
 #include <drawview.hxx>
 #include <ChartRangeSelectionListener.hxx>
 #include <gridwin.hxx>
 
-#include <tools/urlobj.hxx>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <comphelper/lok.hxx>
 
 using namespace com::sun::star;

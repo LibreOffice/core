@@ -20,8 +20,6 @@
 #include <svx/imapdlg.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
-#include <svx/gallery.hxx>
-#include <svx/hlnkitem.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
@@ -34,7 +32,6 @@
 #include "imapwrap.hxx"
 #include <tabvwsh.hxx>
 #include <viewdata.hxx>
-#include <tabview.hxx>
 #include <drwlayer.hxx>
 #include <userdat.hxx>
 #include <docsh.hxx>

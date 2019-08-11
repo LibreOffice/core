@@ -24,7 +24,6 @@
 #include <docsh.hxx>
 #include <preview.hxx>
 #include <hints.hxx>
-#include <sc.hrc>
 
 void ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {

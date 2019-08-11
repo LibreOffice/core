@@ -22,7 +22,6 @@
 #include <tools/urlobj.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/svdpagv.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 
