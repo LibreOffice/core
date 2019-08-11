@@ -81,9 +81,9 @@ published service FilterFactory
 
         <p>
         <strong>How it can be distinguished?</strong><p>
-        The new proposed implementation will throw an com::sun::star::container::NoSuchElementException
+        The new proposed implementation will throw a com::sun::star::container::NoSuchElementException
         if the first parameter of createInstance() or createInstanceWithArguments() does not match to a valid container (means
-        filter) item. Further it will throw an com::sun::star::lang::IllegalArgumentException if the optional
+        filter) item. Further it will throw a com::sun::star::lang::IllegalArgumentException if the optional
         parameter "FilterName" could not be detected inside the argument list of call createInstanceWithArguments().
         </p>
 

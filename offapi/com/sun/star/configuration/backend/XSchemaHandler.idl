@@ -59,7 +59,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
         @throws com::sun::star::configuration::backend::MalformedDataException
             <ul>
             <li>if invalid data is detected in the schema</li>
-            <li>if there is a unfinished component or template in progress</li>
+            <li>if there is an unfinished component or template in progress</li>
             <li>if no schema is started at all</li>
             </ul>
             <p><em>Not every implementation can detect each condition</em></p>
@@ -79,7 +79,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
 
         @throws com::sun::star::configuration::backend::MalformedDataException
             <ul>
-            <li>if there is a unfinished component or template in progress</li>
+            <li>if there is an unfinished component or template in progress</li>
             <li>if no schema is started at all</li>
             <li>if the name is not a valid component name</li>
             <li>if the requested component is not found</li>
@@ -105,7 +105,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
 
         @throws com::sun::star::configuration::backend::MalformedDataException
             <ul>
-            <li>if there is a unfinished component or template in progress </li>
+            <li>if there is an unfinished component or template in progress </li>
             <li>if no schema is started at all </li>
             <li>if there already is a component data tree of this name</li>
             <li>if the name is not a valid component name</li>
@@ -128,7 +128,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
         @throws com::sun::star::configuration::backend::MalformedDataException
             <ul>
             <li>if invalid data is detected in the component<li>
-            <li>if there is a unfinished subnode in progress<li>
+            <li>if there is an unfinished subnode in progress<li>
             <li>if no component has been started at all<li>
             <li>if the instance supports no component schemas (only templates)<li>
             </ul>
@@ -164,7 +164,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
 
         @throws com::sun::star::configuration::backend::MalformedDataException
             <ul>
-            <li>if there is a unfinished component or template in progress</li>
+            <li>if there is an unfinished component or template in progress</li>
             <li>if no schema is started at all </li>
             <li>if there already is a template with that identifier</li>
             <li>if the name is not a valid template identifier </li>
@@ -209,7 +209,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
 
         @throws com::sun::star::configuration::backend::MalformedDataException
             <ul>
-            <li>if there is a unfinished component or template in progress</li>
+            <li>if there is an unfinished component or template in progress</li>
             <li>if no schema is started at all </li>
             <li>if there already is a template with that identifier</li>
             <li>if the item-type template is not found</li>
@@ -239,7 +239,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
         @throws com::sun::star::configuration::backend::MalformedDataException
             <ul>
             <li>if invalid data is detected in the template</li>
-            <li>if there is a unfinished subnode in progress</li>
+            <li>if there is an unfinished subnode in progress</li>
             <li>if no template has been started at all</li>
             <li>if the instance supports no templates (only component schemas)</li>
             </ul>
@@ -344,7 +344,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
 
         @throws com::sun::star::configuration::backend::MalformedDataException
             <ul>
-            <li>if the name is not a the name of the node in progress</li>
+            <li>if the name is not the name of the node in progress</li>
             <li>if invalid data is detected in the node</li>
             <li>if no node has been started at all</li>
             </ul>
