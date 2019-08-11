@@ -27,7 +27,7 @@ namespace jfw_plugin
 {
 
 /* Note: The vendor strings must be UTF-8. For example, if
-   the string contains an a umlaut then it must be expressed
+   the string contains an umlaut then it must be expressed
    by "\xXX\xXX"
  */
 VendorSupportMapEntry const gVendorMap[] ={
