@@ -24,6 +24,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/comphelperdllapi.h>
 
+#include <algorithm>
 #include <vector>
 
 namespace comphelper
@@ -33,25 +34,15 @@ namespace comphelper
     */
     COMPHELPER_DLLPUBLIC sal_Int32 findValue(const css::uno::Sequence< OUString >& _rList, const OUString& _rValue);
 
-    namespace internal
-    {
-        template <class T>
-        inline void implCopySequence(const T* _pSource, T*& _pDest, sal_Int32 _nSourceLen)
-        {
-            for (sal_Int32 i=0; i<_nSourceLen; ++i, ++_pSource, ++_pDest)
-                *_pDest = *_pSource;
-        }
-    }
-
     /// concat several sequences
     template <class T, class... Ss>
     inline css::uno::Sequence<T> concatSequences(const css::uno::Sequence<T>& rS1, const Ss&... rSn)
     {
         // unary fold to disallow empty parameter pack: at least have one sequence in rSn
         css::uno::Sequence<T> aReturn(rS1.getLength() + (... + rSn.getLength()));
-        T* pReturn = aReturn.getArray();
-        (internal::implCopySequence(rS1.getConstArray(), pReturn, rS1.getLength()), ...,
-         internal::implCopySequence(rSn.getConstArray(), pReturn, rSn.getLength()));
+        T* pReturn;
+        ((pReturn = std::copy_n(rS1.getConstArray(), rS1.getLength(), aReturn.getArray())), ...,
+         (pReturn = std::copy_n(rSn.getConstArray(), rSn.getLength(), pReturn)));
         return aReturn;
     }
 
@@ -64,8 +55,7 @@ namespace comphelper
         sal_Int32 n1 = left.getLength();
         css::uno::Sequence<T> ret(n1 + right.getLength());
             //TODO: check for overflow
-        T * p = ret.getArray();
-        internal::implCopySequence(left.getConstArray(), p, n1);
+        std::copy_n(left.getConstArray(), n1, ret.getArray());
         sal_Int32 n2 = n1;
         for (sal_Int32 i = 0; i != right.getLength(); ++i) {
             bool found = false;
@@ -92,7 +82,7 @@ namespace comphelper
         OSL_ENSURE(0 <= _nPos && _nPos < nLength, "invalid index");
 
         T* pPos = _rSeq.getArray() + _nPos;
-        internal::implCopySequence(pPos + 1, pPos, nLength - _nPos - 1);
+        std::move(pPos + 1, pPos + nLength - _nPos, pPos);
 
         _rSeq.realloc(nLength-1);
     }
