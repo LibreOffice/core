@@ -453,7 +453,7 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
                 ++nPos;
             }
         }
-        OSL_ENSURE(nCount == nPos, "something wents wrong");
+        OSL_ENSURE(nCount == nPos, "something went wrong");
         AccessibleRelation aRelation;
         aRelation.RelationType = aRelationType;
         aRelation.TargetSet = aTargetSet;

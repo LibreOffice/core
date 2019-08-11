@@ -1137,7 +1137,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
         // only notify if child exist, otherwise it is not necessary
         if (rHint.GetId() == SfxHintId::ScDataChanged)
         {
-            if (mpTable.is()) // if there is no table there is nothing to notify, because no one recongnizes the change
+            if (mpTable.is()) // if there is no table there is nothing to notify, because no one recognizes the change
             {
                 {
                     uno::Reference<XAccessible> xAcc = mpTable.get();

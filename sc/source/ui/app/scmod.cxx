@@ -1324,7 +1324,7 @@ ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh, bool bUseRef )
     ScInputHandler* pHdl = nullptr;
     if ( !pViewSh )
     {
-        // in case a UIActive embedded object has no ViewShell (UNO component)
+        // in case an UIActive embedded object has no ViewShell (UNO component)
         // the own calc view shell will be set as current, but no handling should happen
         ScTabViewShell* pCurViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
         if ( pCurViewSh && !pCurViewSh->GetUIActiveClient() )
