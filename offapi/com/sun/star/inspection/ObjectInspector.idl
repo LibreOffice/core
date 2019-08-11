@@ -24,10 +24,10 @@
 
 module com {  module sun {  module star {  module inspection {
 
-/** describes an com::sun::star::frame::Controller which can be used to
+/** describes a com::sun::star::frame::Controller which can be used to
     browse and modify properties of components.
 
-    <p>The controller can be plugged into an com::sun::star::frame::XFrame, and will
+    <p>The controller can be plugged into a com::sun::star::frame::XFrame, and will
     provide a visual component for inspecting and modifying component properties.<br>
     Note that "property" here is a generic term - any aspect of a component can be considered a property,
     as long as some property handler is able to describe this aspect in a property-like way.</p>
@@ -47,7 +47,7 @@ module com {  module sun {  module star {  module inspection {
     stay empty.</p>
 
     <p>The property handlers, as well as more information about the layout of the inspector,
-    are provided by a inspector model, which has to be implemented by the user of the inspector.</p>
+    are provided by an inspector model, which has to be implemented by the user of the inspector.</p>
     </p>
 
     <p>Since property handlers might have the need to raise UI, they will be created with a context

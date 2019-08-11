@@ -168,7 +168,7 @@ interface XLayoutManager : com::sun::star::uno::XInterface
         <p>
         If a user interface element should forced to the visible state
         XLayoutManager::showElement() should be used. This function can be
-        used for context dependent elements which should respect a the current visibility
+        used for context dependent elements which should respect the current visibility
         state.
         </p>
     */
