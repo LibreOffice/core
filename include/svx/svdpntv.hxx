@@ -436,10 +436,10 @@ public:
     void SetActiveLayer(const OUString& rName) { maActualLayer=rName; }
     const OUString&  GetActiveLayer() const { return maActualLayer; }
 
-    /// Leave an object group of all visible Pages (like `chdir ..` in MSDOS)
+    /// Leave an object group of all visible Pages (like `chdir ..` in MS-DOS)
     void LeaveOneGroup();
 
-    /// Leave all entered object groups of all visible Pages (like `chdir \` in MSDOS)
+    /// Leave all entered object groups of all visible Pages (like `chdir \` in MS-DOS)
     void LeaveAllGroup();
 
     /// Determine, whether Leave is useful or not

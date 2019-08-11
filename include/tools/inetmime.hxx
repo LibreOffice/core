@@ -81,7 +81,7 @@ public:
 
         @param nChar  Some UCS-4 character.
 
-        @return  True if nChar is a US-ASCII visible character (US-ASCII
+        @return  True if nChar is an US-ASCII visible character (US-ASCII
         0x21--0x7E).
      */
     static inline bool isVisible(sal_uInt32 nChar);
@@ -107,21 +107,21 @@ public:
      */
     static bool isIMAPAtomChar(sal_uInt32 nChar);
 
-    /** Get the digit weight of a US-ASCII character.
+    /** Get the digit weight of an US-ASCII character.
 
         @param nChar  Some UCS-4 character.
 
-        @return  If nChar is a US-ASCII (decimal) digit character (US-ASCII
+        @return  If nChar is an US-ASCII (decimal) digit character (US-ASCII
         '0'--'9'), return the corresponding weight (0--9); otherwise,
         return -1.
      */
     static inline int getWeight(sal_uInt32 nChar);
 
-    /** Get the hexadecimal digit weight of a US-ASCII character.
+    /** Get the hexadecimal digit weight of an US-ASCII character.
 
         @param nChar  Some UCS-4 character.
 
-        @return  If nChar is a US-ASCII hexadecimal digit character (US-ASCII
+        @return  If nChar is an US-ASCII hexadecimal digit character (US-ASCII
         '0'--'9', 'A'--'F', or 'a'--'f'), return the corresponding weight
         (0--15); otherwise, return -1.
      */
