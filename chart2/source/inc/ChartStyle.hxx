@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CHART2_SOURCE_INC_CHARTSTYLE_HXX
 #define INCLUDED_CHART2_SOURCE_INC_CHARTSTYLE_HXX
 
@@ -25,13 +26,14 @@
 #include <com/sun/star/chart2/XChartStyle.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <map>
 
 #include "PropertyHelper.hxx"
 #include "OPropertySet.hxx"
 #include "MutexContainer.hxx"
 
-namespace chart2
+namespace chart
 {
 namespace impl
 {
@@ -77,7 +79,8 @@ private:
     css::uno::Reference<css::beans::XPropertySetInfo> mxPropSetInfo;
 };
 
-class ChartStyle : public cppu::WeakImplHelper<css::chart2::XChartStyle, css::lang::XServiceInfo>
+class ChartStyle : public cppu::WeakImplHelper<css::chart2::XChartStyle, css::lang::XServiceInfo,
+                                               css::style::XStyle>
 {
 public:
     explicit ChartStyle();
@@ -94,15 +97,28 @@ public:
     virtual void SAL_CALL
     applyStyleToDiagram(const css::uno::Reference<css::chart2::XDiagram>& xDiagram);
 
+    // XStyle
+    virtual sal_Bool SAL_CALL isUserDefined() override;
+    virtual sal_Bool SAL_CALL isInUse() override;
+    virtual OUString SAL_CALL getParentStyle() override;
+    virtual void setParentStyle(const OUString& rParentStyle) override;
+
+    // XNamed
+    virtual OUString SAL_CALL getName() override;
+    virtual void SAL_CALL setName(const OUString& rName) override;
+
 private:
     sal_Int16 m_nNumObjects;
+    OUString maName;
 
     std::map<sal_Int16, css::uno::Reference<css::beans::XPropertySet>> m_xChartStyle;
 
     void register_styles();
 };
 
-} // namespace chart2
+css::uno::Reference<css::container::XNameContainer> getChartStyles();
+
+} // namespace chart
 
 // INCLUDED_CHART2_SOURCE_INC_CHARTSTYLE_HXX
 #endif

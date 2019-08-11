@@ -22,6 +22,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/instance.hxx>
 #include <vector>
 
 #include <Legend.hxx>
@@ -49,7 +50,7 @@ class XComponentContext;
 }
 }
 
-namespace chart2
+namespace chart
 {
 ChartObjectStyle::ChartObjectStyle(css::uno::Reference<css::beans::XPropertySetInfo> xPropSetInfo,
                                    ::cppu::IPropertyArrayHelper& rArrayHelper,
@@ -208,19 +209,135 @@ ChartStyle::applyStyleToDiagram(const css::uno::Reference<css::chart2::XDiagram>
     }
 }
 
+sal_Bool ChartStyle::isUserDefined() { return false; }
+
+sal_Bool ChartStyle::isInUse() { return true; }
+
+OUString ChartStyle::getParentStyle() { return ""; }
+
+void ChartStyle::setParentStyle(const OUString&) {}
+
+void ChartStyle::setName(const OUString& rName) { maName = rName; }
+
+OUString ChartStyle::getName() { return maName; }
+
+class ChartStyles : public cppu::WeakImplHelper<css::container::XNameContainer>
+{
+public:
+    ChartStyles();
+    virtual ~ChartStyles();
+
+    // XNameContainer
+    virtual void SAL_CALL insertByName(const OUString& rName, const css::uno::Any& rStyle);
+    virtual void SAL_CALL removeByName(const OUString& rName);
+    virtual void SAL_CALL replaceByName(const OUString& rName, const css::uno::Any& rStyle);
+
+    virtual css::uno::Any SAL_CALL getByName(const OUString& rName);
+    virtual css::uno::Sequence<OUString> SAL_CALL getElementNames();
+    virtual sal_Bool SAL_CALL hasByName(const OUString& rName);
+    virtual sal_Bool SAL_CALL hasElements();
+    virtual css::uno::Type SAL_CALL getElementType();
+
+private:
+    void addInitialStyles();
+
+    std::map<OUString, css::uno::Reference<css::chart2::XChartStyle>> maChartStyles;
+};
+
+ChartStyles::ChartStyles() { addInitialStyles(); }
+
+ChartStyles::~ChartStyles() {}
+
+void ChartStyles::addInitialStyles()
+{
+    css::uno::Any aDefaultStyle;
+    css::uno::Reference<css::chart2::XChartStyle> xChartStyle = new ChartStyle;
+    aDefaultStyle <<= xChartStyle;
+    insertByName("Default", aDefaultStyle);
+}
+
+void ChartStyles::insertByName(const OUString& rName, const css::uno::Any& rStyle)
+{
+    css::uno::Reference<css::chart2::XChartStyle> xChartStyle;
+    if (!(rStyle >>= xChartStyle))
+        throw css::lang::IllegalArgumentException();
+
+    maChartStyles[rName] = xChartStyle;
+}
+
+void ChartStyles::removeByName(const OUString& rName)
+{
+    auto itr = maChartStyles.find(rName);
+    if (itr == maChartStyles.end())
+        throw css::lang::IllegalArgumentException();
+
+    maChartStyles.erase(itr);
+}
+
+void ChartStyles::replaceByName(const OUString& rName, const css::uno::Any& rStyle)
+{
+    css::uno::Reference<css::chart2::XChartStyle> xChartStyle;
+    if (!(rStyle >>= xChartStyle))
+        throw css::lang::IllegalArgumentException();
+
+    auto itr = maChartStyles.find(rName);
+    if (itr == maChartStyles.end())
+        throw css::lang::IllegalArgumentException();
+
+    maChartStyles[rName] = xChartStyle;
+}
+
+css::uno::Any ChartStyles::getByName(const OUString& rName)
+{
+    auto itr = maChartStyles.find(rName);
+    if (itr == maChartStyles.end())
+        throw css::lang::IllegalArgumentException();
+
+    css::uno::Any aRet;
+    aRet <<= itr->second;
+
+    return aRet;
+}
+
+css::uno::Sequence<OUString> ChartStyles::getElementNames()
+{
+    return css::uno::Sequence<OUString>();
+}
+
+sal_Bool ChartStyles::hasByName(const OUString& rName)
+{
+    auto itr = maChartStyles.find(rName);
+    if (itr == maChartStyles.end())
+        return false;
+
+    return true;
+}
+
+sal_Bool ChartStyles::hasElements() { return !maChartStyles.empty(); }
+
+css::uno::Type ChartStyles::getElementType() { return css::uno::Type(); }
+
 //
 // needed by MSC compiler
 using impl::ChartObjectStyle_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2(ChartObjectStyle, ChartObjectStyle_Base, ::property::OPropertySet)
 
-} //  namespace chart2
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_chart2_ChartStyle_get_implementation(css::uno::XComponentContext*,
-                                                       css::uno::Sequence<css::uno::Any> const&)
+namespace
 {
-    return cppu::acquire(new chart2::ChartStyle);
+struct theChartStyles
+    : public rtl::StaticWithInit<css::uno::Reference<css::container::XNameContainer>,
+                                 theChartStyles>
+{
+    css::uno::Reference<css::container::XNameContainer> operator()() { return new ChartStyles; }
+};
 }
+
+css::uno::Reference<css::container::XNameContainer> getChartStyles()
+{
+    return theChartStyles::get();
+}
+
+} //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

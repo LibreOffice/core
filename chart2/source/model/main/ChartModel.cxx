@@ -31,6 +31,7 @@
 #include <ChartView.hxx>
 #include <PopupRequest.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <ChartStyle.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
@@ -110,8 +111,8 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
         ModifyListenerHelper::addListener( m_xPageBackground, this );
         m_xChartTypeManager.set( xContext->getServiceManager()->createInstanceWithContext(
                 "com.sun.star.chart2.ChartTypeManager", m_xContext ), uno::UNO_QUERY );
-        m_xChartStyle.set( xContext->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.chart2.ChartStyle" , m_xContext ), uno::UNO_QUERY );
+
+        ::chart::getChartStyles()->getByName("Default") >>= m_xChartStyle;
     }
     osl_atomic_decrement(&m_refCount);
 }
