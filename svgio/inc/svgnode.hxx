@@ -107,7 +107,7 @@ namespace svgio
             Display                     maDisplay;
 
             // CSS style vector chain, used in decompose phase and built up once per node.
-            // It contains the StyleHierarchy for the local node. INdependent from the
+            // It contains the StyleHierarchy for the local node. Independent from the
             // node hierarchy itself which also needs to be used in style entry solving
             ::std::vector< const SvgStyleAttributes* > maCssStyleVector;
 

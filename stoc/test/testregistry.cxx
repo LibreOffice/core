@@ -215,7 +215,7 @@ void test_SimpleRegistry(
         xSubKey->setAsciiValue(OUString( "I'm an ascii value" ));
 
         xSubKey = xKey->createKey(OUString( "ThirdSubKey" ));
-        xSubKey->setStringValue(OUString( "I'm an Unicode value" ));
+        xSubKey->setStringValue(OUString( "I'm a Unicode value" ));
 
         xSubKey = xKey->createKey(OUString( "FourthSubKey" ));
         Sequence<sal_Int8> aSeq((sal_Int8*)"I'm a binary value", 25);
@@ -242,7 +242,7 @@ void test_SimpleRegistry(
             } else
             if (name == "/FirstKey/ThirdSubKey" )
             {
-                OSL_ENSURE( xSubKey->getStringValue() == "I'm an Unicode value",
+                OSL_ENSURE( xSubKey->getStringValue() == "I'm a Unicode value",
                             "test_SimpleRegistry error 12" );
             } else
             if (name == "/FirstKey/FourthSubKey" )

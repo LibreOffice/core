@@ -263,7 +263,7 @@ can be set:
   VERBOSE=1 buck build api_install
 ----
 
-Once executed, he local Maven respoitory contains the LibreOffice API
+Once executed, the local Maven repository contains the LibreOffice API
 artifacts:
 
 ----
@@ -340,7 +340,7 @@ Once a repository is closed you can find the URL to it in the `Summary`
 section, e.g. https://oss.sonatype.org/content/repositories/orglibreoffice-4711
 
 Use this URL for further testing of the artifacts in this repository,
-e.g. to try building a extension against this API in this repository
+e.g. to try building an extension against this API in this repository
 update the version in the `pom.xml` and configure the repository:
 
 ----

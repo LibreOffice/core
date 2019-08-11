@@ -218,7 +218,7 @@ void
 }
 
 /*
- * Generate a extern C directive
+ * Generate an extern C directive
  */
 void
     genwrap(int end)

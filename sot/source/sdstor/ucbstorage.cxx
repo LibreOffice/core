@@ -896,7 +896,7 @@ sal_uInt64 UCBStorageStream_Impl::SeekPos(sal_uInt64 const nPos)
         if( m_pStream->Tell() > nPos
             || m_pStream->Seek( STREAM_SEEK_TO_END ) > nPos )
         {
-            // no copiing is required
+            // no copying is required
             aResult = m_pStream->Seek( nPos );
         }
         else
@@ -2311,7 +2311,7 @@ void UCBStorage::SetClassId( const ClsId& rClsId )
     if ( pImp->m_aClassId == SvGlobalName() )
         return;
 
-    // in OLE storages the clipboard format an the user name will be transferred when a storage is copied because both are
+    // in OLE storages the clipboard format and the user name will be transferred when a storage is copied because both are
     // stored in one the substreams
     // UCB storages store the content type information as content type in the manifest file and so this information must be
     // kept up to date, and also the other type information that is hold only at runtime because it can be reconstructed from

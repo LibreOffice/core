@@ -1209,7 +1209,7 @@ namespace svgio
             // This is part of the SVG import of self-written SVGs from
             // Draw/Impress containing multiple Slides/Pages. To be able
             // to later 'break' these to multiple Pages if wanted, embed
-            // each Page-Content in a identifiable Primitive Grouping
+            // each Page-Content in an identifiable Primitive Grouping
             // Object.
             // This is the case when the current Node is a GroupNode, has
             // class="Page" set, has a parent that also is a GroupNode
@@ -2505,7 +2505,7 @@ namespace svgio
                 if(!maFontSizeNumber.isPositive())
                     return aDefaultSize;
 
-                // #122524# Handle Unit_percent realtive to parent FontSize (see SVG1.1
+                // #122524# Handle Unit_percent relative to parent FontSize (see SVG1.1
                 // spec 10.10 Font selection properties \91font-size\92, lastline (click 'normative
                 // definition of the property')
                 if(Unit_percent == maFontSizeNumber.getUnit())
@@ -2969,7 +2969,7 @@ namespace svgio
 
         SvgNumber SvgStyleAttributes::getBaselineShiftNumber() const
         {
-            // #122524# Handle Unit_percent realtive to parent BaselineShift
+            // #122524# Handle Unit_percent relative to parent BaselineShift
             if(Unit_percent == maBaselineShiftNumber.getUnit())
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();

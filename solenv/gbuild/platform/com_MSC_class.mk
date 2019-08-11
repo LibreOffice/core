@@ -513,7 +513,7 @@ endef
 
 # ExternalProject class
 
-# Use the gcc wrappers for a autoconf based project
+# Use the gcc wrappers for an autoconf based project
 #
 # gb_ExternalProject_register_targets project state_target
 define gb_ExternalProject_use_autoconf
