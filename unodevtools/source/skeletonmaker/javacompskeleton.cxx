@@ -816,7 +816,7 @@ void generateSkeleton(ProgramOptions const & options,
     }
 
     if (options.componenttype == 3) {
-        // the Protocolhandler service is mandatory for an protocol handler add-on,
+        // the Protocolhandler service is mandatory for a protocol handler add-on,
         // so it is defaulted. The XDispatchProvider provides Dispatch objects for
         // certain functions and the generated impl object implements XDispatch
         // directly for simplicity reasons.
@@ -836,7 +836,7 @@ void generateSkeleton(ProgramOptions const & options,
         // if backwardcompatible==true the AddIn service needs to be added to the
         // supported service list, the necessary intefaces are mapped to the add-in
         // configuration. Since OO.org 2.0.4 this is obsolete and the add-in is
-        // take form the configuration from Calc directly, this simplifies the
+        // taken from the configuration from Calc directly, this simplifies the
         // add-in code
         if (options.backwardcompatible) {
             checkType(manager, "com.sun.star.sheet.AddIn",

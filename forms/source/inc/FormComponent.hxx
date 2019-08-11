@@ -1139,7 +1139,7 @@ private:
 
     /** connects to a value supplier which is a database column.
 
-        The column is take from our parent, which must be a database form respectively row set.
+        The column is taken from our parent, which must be a database form respectively row set.
 
         @precond The control does not have an external value supplier
 
