@@ -148,7 +148,7 @@ private:
     /** Take an outline from a text document and create a new impress
         document according to the structure of the outline.
         @param rRequest
-            This typically is the unmodified request from a execute()
+            This typically is the unmodified request from an execute()
             function from where this function is called.
     */
     static bool OutlineToImpress(SfxRequest const & rRequest);

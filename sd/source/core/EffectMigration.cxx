@@ -458,7 +458,7 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
     {
         bool bEffectCreated = false;
 
-        // check if there is already an text effect for this shape
+        // check if there is already a text effect for this shape
         EffectSequence::iterator aIterOnlyText( ImplFindEffect( pMainSequence, xShape, ShapeAnimationSubType::ONLY_TEXT ) );
         if( aIterOnlyText != aEnd )
         {
