@@ -23,12 +23,10 @@
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
-#include <unotools/moduleoptions.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svtools/insdlg.hxx>
 #include <sot/formats.hxx>
 #include <svx/hlnkitem.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/objface.hxx>
@@ -37,15 +35,12 @@
 #include <vcl/EnumContext.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/clipfmtitem.hxx>
-#include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
-#include <editeng/langitem.hxx>
 
 #include <cellsh.hxx>
 #include <sc.hrc>
 #include <docsh.hxx>
 #include <attrib.hxx>
 #include <tabvwsh.hxx>
-#include <impex.hxx>
 #include <formulacell.hxx>
 #include <scmod.hxx>
 #include <globstr.hrc>
@@ -53,7 +48,6 @@
 #include <transobj.hxx>
 #include <drwtrans.hxx>
 #include <scabstdlg.hxx>
-#include <dociter.hxx>
 #include <postit.hxx>
 #include <cliputil.hxx>
 #include <clipparam.hxx>

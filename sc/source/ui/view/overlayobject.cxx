@@ -18,9 +18,6 @@
  */
 
 #include <overlayobject.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/lineinfo.hxx>
-#include <tools/fract.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

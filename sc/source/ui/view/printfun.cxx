@@ -22,7 +22,6 @@
 
 #include <printfun.hxx>
 
-#include <svx/svxids.hrc>
 #include <editeng/adjustitem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
@@ -37,14 +36,11 @@
 #include <editeng/shaditem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <svx/svdpagv.hxx>
 #include <editeng/ulspitem.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/printer.hxx>
 #include <tools/multisel.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
-#include <svx/xoutbmp.hxx>
 
 #include <editutil.hxx>
 #include <docsh.hxx>
@@ -57,11 +53,8 @@
 #include <patattr.hxx>
 #include <docpool.hxx>
 #include <dociter.hxx>
-#include <formulacell.hxx>
-#include <drawutil.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <sc.hrc>
 #include <pagedata.hxx>
 #include <printopt.hxx>
 #include <prevloc.hxx>
@@ -69,8 +62,6 @@
 #include <drwlayer.hxx>
 #include <fillinfo.hxx>
 #include <postit.hxx>
-
-#include <vcl/lineinfo.hxx>
 
 #include <memory>
 #include <com/sun/star/document/XDocumentProperties.hpp>

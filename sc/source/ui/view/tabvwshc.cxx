@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_mpl.h>
-
 #include <scitems.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
@@ -30,26 +28,19 @@
 #include <scres.hrc>
 #include <global.hxx>
 #include <scmod.hxx>
-#include <docsh.hxx>
 #include <document.hxx>
 #include <uiitems.hxx>
-#include <pivot.hxx>
 #include <namedlg.hxx>
 #include <namedefdlg.hxx>
 #include <solvrdlg.hxx>
 #include <optsolver.hxx>
 #include <tabopdlg.hxx>
-#include <autoform.hxx>
-#include <autofmt.hxx>
 #include <consdlg.hxx>
 #include <filtdlg.hxx>
 #include <dbnamdlg.hxx>
 #include <areasdlg.hxx>
-#include <rangeutl.hxx>
 #include <crnrdlg.hxx>
 #include <formula.hxx>
-#include <formulacell.hxx>
-#include <acredlin.hxx>
 #include <highred.hxx>
 #include <simpref.hxx>
 #include <funcdesc.hxx>
@@ -79,7 +70,6 @@
 
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <sfx2/lokhelper.hxx>
 
 void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
 {

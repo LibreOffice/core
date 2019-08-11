@@ -17,22 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/eeitem.hxx>
-
 #include <editeng/flditem.hxx>
 
-#include <editeng/editview.hxx>
+#include <svx/fmpage.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>
 #include <vcl/imapobj.hxx>
-#include <vcl/cursor.hxx>
 #include <vcl/help.hxx>
-#include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxhelp.hxx>
 
-#include <viewuno.hxx>
 #include <AccessibleDocument.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
@@ -40,18 +34,14 @@
 #include <viewdata.hxx>
 #include <drawview.hxx>
 #include <drwlayer.hxx>
-#include <drawpage.hxx>
 #include <document.hxx>
 #include <notemark.hxx>
 #include <chgtrack.hxx>
 #include <chgviset.hxx>
 #include <dbfunc.hxx>
-#include <tabvwsh.hxx>
 #include <userdat.hxx>
 #include <postit.hxx>
 #include <global.hxx>
-#include <globstr.hrc>
-#include <scresid.hxx>
 
 bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
 {

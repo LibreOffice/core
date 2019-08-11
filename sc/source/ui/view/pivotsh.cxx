@@ -18,8 +18,6 @@
  */
 
 #include <scitems.hxx>
-#include <svl/srchitem.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
@@ -39,7 +37,6 @@
 
 #define ShellClass_ScPivotShell
 #include <scslots.hxx>
-#include <memory>
 
 
 SFX_IMPL_INTERFACE(ScPivotShell, SfxShell)

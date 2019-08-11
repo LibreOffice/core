@@ -19,9 +19,7 @@
 
 #include <rangelst.hxx>
 #include <scitems.hxx>
-#include <editeng/eeitem.hxx>
 
-#include <editeng/brushitem.hxx>
 #include <editeng/editview.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -34,6 +32,7 @@
 #include <vcl/uitest/eventdescription.hxx>
 #include <sal/log.hxx>
 
+#include <IAnyRefDialog.hxx>
 #include <tabview.hxx>
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
@@ -43,7 +42,6 @@
 #include <colrowba.hxx>
 #include <tabcont.hxx>
 #include <scmod.hxx>
-#include <uiitems.hxx>
 #include <sc.hrc>
 #include <viewutil.hxx>
 #include <editutil.hxx>
@@ -54,17 +52,11 @@
 #include <rfindlst.hxx>
 #include <hiranges.hxx>
 #include <viewuno.hxx>
-#include <chartarr.hxx>
-#include <anyrefdg.hxx>
 #include <dpobject.hxx>
-#include <patattr.hxx>
-#include <dociter.hxx>
 #include <seltrans.hxx>
 #include <fillinfo.hxx>
-#include <AccessibilityHints.hxx>
 #include <rangeutl.hxx>
 #include <client.hxx>
-#include <simpref.hxx>
 #include <tabprotection.hxx>
 #include <markdata.hxx>
 #include <formula/FormulaCompiler.hxx>

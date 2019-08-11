@@ -27,9 +27,6 @@
 #include <inputwin.hxx>
 #include <document.hxx>
 #include <sc.hrc>
-#include <scabstdlg.hxx>
-
-#include <vcl/svapp.hxx>
 
 const VclPtr<vcl::Window>& ScCellShell::GetFrameWin()
 {

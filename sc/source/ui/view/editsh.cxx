@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <comphelper/string.hxx>
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
@@ -27,7 +26,6 @@
 #include <svx/svxdlg.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/outliner.hxx>
-#include <editeng/unolingu.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
@@ -40,10 +38,8 @@
 #include <editeng/postitem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/shdditem.hxx>
-#include <svl/srchitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
-#include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/msg.hxx>
@@ -51,7 +47,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sot/exchange.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svl/whiter.hxx>
 #include <sot/formats.hxx>

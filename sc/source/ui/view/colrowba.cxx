@@ -24,7 +24,6 @@
 #include <document.hxx>
 #include <scmod.hxx>
 #include <tabvwsh.hxx>
-#include <docsh.hxx>
 #include <appoptio.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>

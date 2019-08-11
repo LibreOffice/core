@@ -24,7 +24,6 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <o3tl/temporary.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxdlg.hxx>
@@ -36,9 +35,7 @@
 #include <svl/srchdefs.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
-#include <svl/zformat.hxx>
 #include <svx/numinf.hxx>
-#include <svx/unobrushitemhelper.hxx>
 #include <svx/zoomslideritem.hxx>
 
 #include <global.hxx>
@@ -49,7 +46,6 @@
 #include <compiler.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
-#include <dwfunctr.hxx>
 #include <formulacell.hxx>
 #include <globstr.hrc>
 #include <inputhdl.hxx>

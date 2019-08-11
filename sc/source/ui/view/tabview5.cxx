@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <scitems.hxx>
-#include <editeng/eeitem.hxx>
-
 #include <svx/fmshell.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdocapt.hxx>
@@ -46,12 +43,10 @@
 #include <fusel.hxx>
 #include <seltrans.hxx>
 #include <scmod.hxx>
-#include <AccessibilityHints.hxx>
 #include <docsh.hxx>
 #include <viewuno.hxx>
 #include <postit.hxx>
 
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
 #include <comphelper/lok.hxx>

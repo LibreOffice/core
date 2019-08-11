@@ -17,18 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <scitems.hxx>
-#include <svl/srchitem.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/request.hxx>
-#include <svl/whiter.hxx>
 
 #include <pgbrksh.hxx>
 #include <tabvwsh.hxx>
 #include <document.hxx>
-#include <sc.hrc>
 
 #define ShellClass_ScPageBreakShell
 #include <scslots.hxx>

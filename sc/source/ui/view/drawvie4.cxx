@@ -21,7 +21,6 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
@@ -40,15 +39,12 @@
 #include <scmod.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <chartarr.hxx>
 #include <gridwin.hxx>
 #include <userdat.hxx>
-#include <tabvwsh.hxx>
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/embed/XComponentSupplier.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>

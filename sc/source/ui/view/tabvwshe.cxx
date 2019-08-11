@@ -20,7 +20,6 @@
 #include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
 
-#include <scitems.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/hlnkitem.hxx>
@@ -28,7 +27,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/objface.hxx>
 #include <svl/stritem.hxx>
 
 #include <tabvwsh.hxx>

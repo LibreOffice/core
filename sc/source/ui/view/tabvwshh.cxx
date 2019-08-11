@@ -23,7 +23,6 @@
 #include <svx/svdmark.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdview.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <basic/sbxcore.hxx>
@@ -32,9 +31,7 @@
 #include <vcl/svapp.hxx>
 
 #include <tabvwsh.hxx>
-#include <client.hxx>
 #include <document.hxx>
-#include <docsh.hxx>
 #include <sc.hrc>
 #include <drwlayer.hxx>
 #include <retypepassdlg.hxx>

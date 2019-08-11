@@ -28,20 +28,17 @@
 #include <pivot.hxx>
 #include <uiitems.hxx>
 #include <scresid.hxx>
-#include <sc.hrc>
 #include <globstr.hrc>
 #include <strings.hrc>
 #include <pagedata.hxx>
 #include <dpobject.hxx>
 #include <dpsave.hxx>
-#include <dpoutput.hxx>
 #include <dpshttab.hxx>
 #include <dbdocfun.hxx>
 #include <checklistmenu.hxx>
 #include <dpcontrol.hxx>
 #include <userlist.hxx>
 #include <scabstdlg.hxx>
-#include <spellcheckcontext.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 

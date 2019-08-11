@@ -18,10 +18,7 @@
  */
 
 #include <dbfunc.hxx>
-#include <docsh.hxx>
-#include <global.hxx>
 #include <document.hxx>
-#include <sc.hrc>
 #include <globstr.hrc>
 
 void ScDBFunc::UpdateCharts( bool bAllCharts )

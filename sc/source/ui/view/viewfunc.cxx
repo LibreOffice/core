@@ -20,15 +20,12 @@
 #include <config_features.h>
 
 #include <scitems.hxx>
-#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/editobj.hxx>
-#include <editeng/editview.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <sfx2/bindings.hxx>
@@ -38,7 +35,6 @@
 #include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
-#include <vcl/wrkwin.hxx>
 #include <stdlib.h>
 #include <unotools/charclass.hxx>
 
@@ -48,16 +44,12 @@
 #include <attrib.hxx>
 #include <patattr.hxx>
 #include <docpool.hxx>
-#include <uiitems.hxx>
 #include <sc.hrc>
 #include <strings.hrc>
 #include <undocell.hxx>
 #include <undoblk.hxx>
-#include <undotab.hxx>
 #include <refundo.hxx>
-#include <dbdata.hxx>
 #include <olinetab.hxx>
-#include <rangeutl.hxx>
 #include <rangenam.hxx>
 #include <globstr.hrc>
 #include <global.hxx>
@@ -71,7 +63,6 @@
 #include <compiler.hxx>
 #include <docfunc.hxx>
 #include <appoptio.hxx>
-#include <dociter.hxx>
 #include <sizedev.hxx>
 #include <editable.hxx>
 #include <scui_def.hxx>
@@ -80,8 +71,6 @@
 #include <cellsuno.hxx>
 #include <tokenarray.hxx>
 #include <rowheightcontext.hxx>
-#include <docfuncutil.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <comphelper/lok.hxx>
 #include <conditio.hxx>
 #include <columnspanset.hxx>

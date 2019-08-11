@@ -18,27 +18,17 @@
  */
 
 #include <scitems.hxx>
-#include <svx/svdetc.hxx>
-#include <svx/svditer.hxx>
-#include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-#include <svl/stritem.hxx>
-#include <svl/ptitem.hxx>
-#include <svl/urlbmk.hxx>
 #include <comphelper/classids.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 #include <tools/urlobj.hxx>
 #include <sot/exchange.hxx>
 #include <memory>
-
-#include <sfx2/lokhelper.hxx>
 
 #include <attrib.hxx>
 #include <patattr.hxx>
@@ -54,13 +44,9 @@
 #include <global.hxx>
 #include <transobj.hxx>
 #include <drwtrans.hxx>
-#include <rangenam.hxx>
-#include <dbdata.hxx>
-#include <impex.hxx>
 #include <chgtrack.hxx>
 #include <waitoff.hxx>
 #include <scmod.hxx>
-#include <sc.hrc>
 #include <inputopt.hxx>
 #include <warnbox.hxx>
 #include <drwlayer.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <scitems.hxx>
-#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
 #include <editeng/borderline.hxx>
@@ -41,9 +40,6 @@
 #include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 
-#include <basic/sbstar.hxx>
-#include <com/sun/star/container/XNameContainer.hpp>
-
 #include <viewfunc.hxx>
 
 #include <sc.hrc>
@@ -62,22 +58,15 @@
 #include <global.hxx>
 #include <patattr.hxx>
 #include <printfun.hxx>
-#include <rangenam.hxx>
-#include <rangeutl.hxx>
 #include <refundo.hxx>
 #include <table.hxx>
 #include <tablink.hxx>
 #include <tabvwsh.hxx>
 #include <uiitems.hxx>
 #include <undoblk.hxx>
-#include <undocell.hxx>
 #include <undotab.hxx>
 #include <sizedev.hxx>
 #include <editable.hxx>
-#include <scmod.hxx>
-#include <inputhdl.hxx>
-#include <inputwin.hxx>
-#include <funcdesc.hxx>
 #include <docuno.hxx>
 #include <charthelper.hxx>
 #include <tabbgcolor.hxx>

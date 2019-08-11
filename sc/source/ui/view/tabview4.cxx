@@ -18,7 +18,6 @@
  */
 
 #include <vcl/help.hxx>
-#include <vcl/svapp.hxx>
 
 #include <tabview.hxx>
 #include <tabvwsh.hxx>
@@ -28,8 +27,6 @@
 #include <gridwin.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <formulacell.hxx>
-#include <dociter.hxx>
 
 // ---  Referenz-Eingabe / Fill-Cursor
 

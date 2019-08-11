@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <scitems.hxx>
 #include <editeng/borderline.hxx>
-#include <editeng/boxitem.hxx>
 
 #include <tabvwsh.hxx>
 #include <document.hxx>

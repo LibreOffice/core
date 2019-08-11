@@ -52,14 +52,10 @@
 #include <sc.hrc>
 #include <helpids.h>
 #include <AccessibleDocumentPagePreview.hxx>
-#include <vcl/lineinfo.hxx>
-#include <svx/algitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <attrib.hxx>
-#include <pagepar.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <AccessibilityHints.hxx>
 #include <vcl/svapp.hxx>

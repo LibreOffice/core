@@ -25,7 +25,6 @@
 #include <unotools/streamwrap.hxx>
 
 #include <svx/fmmodel.hxx>
-#include <svx/svdetc.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdogrp.hxx>
@@ -38,7 +37,6 @@
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>
 #include <sot/storage.hxx>
-#include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/graph.hxx>
@@ -54,7 +52,6 @@
 #include <docsh.hxx>
 #include <drawview.hxx>
 #include <impex.hxx>
-#include <dbfunc.hxx>
 #include <dbdata.hxx>
 #include <sc.hrc>
 #include <filter.hxx>
@@ -69,7 +66,7 @@
 #include <scabstdlg.hxx>
 #include <clipparam.hxx>
 #include <markdata.hxx>
-#include <sfx2/viewfrm.hxx>
+#include <sfx2/frame.hxx>
 #include <svx/dbaexchange.hxx>
 #include <memory>
 
