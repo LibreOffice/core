@@ -280,7 +280,7 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget,
             }
             else
             {
-                // #i72752# DrawLayer() uses a OutputDevice different from BeginDrawLayer. This happens
+                // #i72752# DrawLayer() uses an OutputDevice different from BeginDrawLayer. This happens
                 // e.g. when SW paints a single text line in text edit mode. Try to use it
                 SdrPageWindow* pPreparedTarget = mpPreparedPageWindow;
 

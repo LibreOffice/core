@@ -1206,7 +1206,7 @@ IMPL_LINK(SvxStyleBox_Impl, CalcOptimalExtraUserWidth, VclWindowEvent&, event, v
 // return is always the Font-Color
 //        when both light or dark, change the Contrast
 //        in other case do not change the origin color
-//        when the color is R=G=B=128 the DecreaseContrast make 128 the need a exception
+//        when the color is R=G=B=128 the DecreaseContrast make 128 the need an exception
 Color SvxStyleBox_Impl::TestColorsVisible(const Color &FontCol, const Color &BackCol)
 {
     const sal_uInt8  ChgVal = 60;       // increase/decrease the Contrast

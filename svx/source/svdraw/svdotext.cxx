@@ -1516,7 +1516,7 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
 
     if( !pOutlinerParaObject && bVertical )
     {
-        // we only need to force a outliner para object if the default of
+        // we only need to force an outliner para object if the default of
         // horizontal text is changed
         ForceOutlinerParaObject();
         pOutlinerParaObject = GetOutlinerParaObject();

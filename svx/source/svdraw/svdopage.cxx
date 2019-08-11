@@ -49,9 +49,9 @@ std::unique_ptr<sdr::contact::ViewContact> SdrPageObj::CreateObjectSpecificViewC
 }
 
 
-// this method is called form the destructor of the referenced page.
+// this method is called from the destructor of the referenced page.
 // do all necessary action to forget the page. It is not necessary to call
-// RemovePageUser(), that is done form the destructor.
+// RemovePageUser(), that is done from the destructor.
 void SdrPageObj::PageInDestruction(const SdrPage& rPage)
 {
     if(mpShownPage && mpShownPage == &rPage)

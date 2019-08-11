@@ -509,7 +509,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
         Size aNewObjSize( long( aNewLogicRect.GetWidth() / m_aScaleWidth ),
                           long( aNewLogicRect.GetHeight() / m_aScaleHeight ) );
 
-        // now remove scaling from new placement and keep this a the new object area
+        // now remove scaling from new placement and keep this at the new object area
         aNewLogicRect.SetSize( aNewObjSize );
         // react to the change if the difference is bigger than one pixel
         Size aPixelDiff =
@@ -1782,7 +1782,7 @@ void SdrOle2Obj::GetObjRef_Impl()
             mpImpl->mbTypeAsked = false;
             CheckFileLink_Impl();
 
-            // If loading of OLE object failed, remember that to not invoke a endless
+            // If loading of OLE object failed, remember that to not invoke an endless
             // loop trying to load it again and again.
             if( mpImpl->mxObjRef.is() )
             {

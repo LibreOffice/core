@@ -314,7 +314,7 @@ void SdrRectObj::AddToHdlList(SdrHdlList& rHdlList) const
     // A text box has an additional (pseudo-)handle for the blinking frame.
     if(IsTextFrame())
     {
-        OSL_ENSURE(!IsTextEditActive(), "Do not use a ImpTextframeHdl for highlighting text in active text edit, this will collide with EditEngine paints (!)");
+        OSL_ENSURE(!IsTextEditActive(), "Do not use an ImpTextframeHdl for highlighting text in active text edit, this will collide with EditEngine paints (!)");
         std::unique_ptr<SdrHdl> pH(new ImpTextframeHdl(maRect));
         pH->SetObj(const_cast<SdrRectObj*>(this));
         pH->SetRotationAngle(aGeo.nRotationAngle);
