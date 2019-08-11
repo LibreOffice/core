@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 
 
 
-    // sent when clicking on a OO document in another app
+    // sent when clicking on an OO document in another app
     // allowing this app to handle the document.
     // remark if the app is not started it will be started first
     func application(_ app: UIApplication,

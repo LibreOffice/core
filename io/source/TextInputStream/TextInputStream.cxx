@@ -184,7 +184,7 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
         }
 
         // Now there should be characters available
-        // (otherwise the loop should have been breaked before)
+        // (otherwise the loop should have been broken before)
         sal_Unicode c = mvBuffer[ nBufferReadPos++ ];
 
         if( bFindLineEnd )
