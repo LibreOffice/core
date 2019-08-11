@@ -25,7 +25,7 @@ class tdf31805(UITestCase):
         document = self.ui_test.get_component()
         #1. open "sample.ods"
         #2. click 'G1'
-        #3. Menu 'edit -> Celete Cell - Delete entire Column'
+        #3. Menu 'edit -> Delete Cell - Delete entire Column'
         #expected: Column with cell containing "g" will be deleted,
         #     a merged cell range will remainlect row 1
 

@@ -247,7 +247,7 @@ void ScPivotTableFiltersTest::testPivotTableBasicODS()
                                  pDPs->GetCount());
 
     const ScDPObject* pDPObj = &(*pDPs)[0];
-    CPPUNIT_ASSERT_MESSAGE("Failed to get an pivot table object.", pDPObj);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a pivot table object.", pDPObj);
     const ScDPSaveData* pSaveData = pDPObj->GetSaveData();
     CPPUNIT_ASSERT_MESSAGE("Failed to get ScDPSaveData instance.", pSaveData);
     std::vector<const ScDPSaveDimension*> aDims;
@@ -716,7 +716,7 @@ void ScPivotTableFiltersTest::testTdf112501()
     // Check first pivot table popup buttons (compact)
     {
         const ScDPObject* pDPObj = &(*pDPs)[0];
-        CPPUNIT_ASSERT_MESSAGE("Failed to get an pivot table object.", pDPObj);
+        CPPUNIT_ASSERT_MESSAGE("Failed to get a pivot table object.", pDPObj);
         // Check whether we have the buttons at the right buttons
         // Row button
         {
@@ -744,7 +744,7 @@ void ScPivotTableFiltersTest::testTdf112501()
     // Check first pivot table popup buttons (not compact)
     {
         const ScDPObject* pDPObj = &(*pDPs)[1];
-        CPPUNIT_ASSERT_MESSAGE("Failed to get an pivot table object.", pDPObj);
+        CPPUNIT_ASSERT_MESSAGE("Failed to get a pivot table object.", pDPObj);
         // Check whether we have the buttons at the right buttons
         // Two row buttons
         {
@@ -1035,7 +1035,7 @@ void ScPivotTableFiltersTest::testPivotCacheExportXLSX()
                 "containsDate", "1");
     assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems",
                 "containsString", "0");
-    //TODO Date generator in tests are one day higher, than during standard xlsx export. It should be: minDate="1899-12-31T00:00:00" maxDate="2009-07-06T10:53:02"
+    //TODO: date generator in tests are one day higher, than during standard xlsx export. It should be: minDate="1899-12-31T00:00:00" maxDate="2009-07-06T10:53:02"
     assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems",
                 "minDate", "1900-01-01T00:00:00");
     assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems",
@@ -1412,7 +1412,7 @@ void ScPivotTableFiltersTest::testPivotTableRowHeaderXLS()
     // First table has extra row header
     {
         const ScDPObject* pDPObj = &(*pDPs)[0];
-        CPPUNIT_ASSERT_MESSAGE("Failed to get an pivot table object.", pDPObj);
+        CPPUNIT_ASSERT_MESSAGE("Failed to get a pivot table object.", pDPObj);
         CPPUNIT_ASSERT(pDPObj->GetHeaderLayout());
         // Check whether the row header has the right popupbutton flag
         const ScPatternAttr* pPattern = rDoc.GetPattern(3, 3, 0);
@@ -1424,7 +1424,7 @@ void ScPivotTableFiltersTest::testPivotTableRowHeaderXLS()
     // Second table has no extra row header
     {
         const ScDPObject* pDPObj = &(*pDPs)[1];
-        CPPUNIT_ASSERT_MESSAGE("Failed to get an pivot table object.", pDPObj);
+        CPPUNIT_ASSERT_MESSAGE("Failed to get a pivot table object.", pDPObj);
         CPPUNIT_ASSERT(!pDPObj->GetHeaderLayout());
         // Check whether the row header has the right popupbutton flag
         const ScPatternAttr* pPattern = rDoc.GetPattern(0, 2, 0);
@@ -1445,7 +1445,7 @@ void ScPivotTableFiltersTest::testPivotTableRowHeaderXLS()
     // First table has extra row header
     {
         const ScDPObject* pDPObj = &(*pDPs)[0];
-        CPPUNIT_ASSERT_MESSAGE("Failed to get an pivot table object.", pDPObj);
+        CPPUNIT_ASSERT_MESSAGE("Failed to get a pivot table object.", pDPObj);
         CPPUNIT_ASSERT(pDPObj->GetHeaderLayout());
         // Check whether the row header has the right popupbutton flag
         const ScPatternAttr* pPattern = rLoadedDoc.GetPattern(3, 3, 0);
@@ -1457,7 +1457,7 @@ void ScPivotTableFiltersTest::testPivotTableRowHeaderXLS()
     // Second table has no extra row header
     {
         const ScDPObject* pDPObj = &(*pDPs)[1];
-        CPPUNIT_ASSERT_MESSAGE("Failed to get an pivot table object.", pDPObj);
+        CPPUNIT_ASSERT_MESSAGE("Failed to get a pivot table object.", pDPObj);
         CPPUNIT_ASSERT(!pDPObj->GetHeaderLayout());
         // Check whether the row header has the right popupbutton flag
         const ScPatternAttr* pPattern = rLoadedDoc.GetPattern(0, 2, 0);

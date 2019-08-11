@@ -130,7 +130,7 @@ public:
     CPPUNIT_TEST(testSetDataArrayOnTableSheet);
 
     // XCellRangeFormula
-#if 0 // disable, because it makes no sense to set an FormulaArray over the whole sheet
+#if 0 // disable, because it makes no sense to set a FormulaArray over the whole sheet
     CPPUNIT_TEST(testGetSetFormulaArray);
 #endif
 

@@ -95,7 +95,7 @@ void ScCellFieldsObj::setUp()
 {
     CalcUnoApiTest::setUp();
     m_xComponent = loadFromDesktop("private:factory/scalc");
-    CPPUNIT_ASSERT_MESSAGE("no compoment", m_xComponent.is());
+    CPPUNIT_ASSERT_MESSAGE("no component", m_xComponent.is());
 }
 
 void ScCellFieldsObj::tearDown()
