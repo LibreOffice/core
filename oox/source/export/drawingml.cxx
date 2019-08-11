@@ -4142,7 +4142,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     if (!dataDom.is() || !layoutDom.is() || !styleDom.is() || !colorDom.is())
         return;
 
-    // generate an unique id
+    // generate a unique id
     sax_fastparser::FastAttributeList* pDocPrAttrList
         = sax_fastparser::FastSerializerHelper::createAttrList();
     pDocPrAttrList->add(XML_id, OString::number(nDiagramId).getStr());

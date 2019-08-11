@@ -3162,8 +3162,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportMML(SvStream &rStream)
     uno::Reference<io::XInputStream> xStream(new utl::OSeekableInputStreamWrapper(rStream));
 
     //SetLoading hack because the document properties will be re-initted
-    //by the xml filter and during the init, while its considered uninitialized,
-    //setting a property will inform the document its modified, which attempts
+    //by the xml filter and during the init, while it's considered uninitialized,
+    //setting a property will inform the document it's modified, which attempts
     //to update the properties, which throws cause the properties are uninitialized
     xDocSh->SetLoading(SfxLoadedFlags::NONE);
 
