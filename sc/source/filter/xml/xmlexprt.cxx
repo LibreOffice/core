@@ -1543,7 +1543,7 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
                 pRowFormatRanges->Clear();
                 pCellStyles->GetFormatRanges(0, pSharedData->GetLastColumn(nSheet), nStartRow + nRows, nSheet, pRowFormatRanges.get());
                 sal_Int32 nMaxRows = pRowFormatRanges->GetMaxRows();
-                OSL_ENSURE(nMaxRows, "something wents wrong");
+                OSL_ENSURE(nMaxRows, "something went wrong");
                 if (nMaxRows >= nTotalRows - nRows)
                 {
                     OpenRow(nSheet, nStartRow + nRows, nTotalRows - nRows, aRowAttr);
@@ -3021,7 +3021,7 @@ void writeContent(
 
     if (pField)
     {
-        // Write an field item.
+        // Write a field item.
         OUString aFieldVal = ScEditUtil::GetCellFieldValue(*pField, rExport.GetDocument(), nullptr);
         switch (pField->GetClassId())
         {

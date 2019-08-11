@@ -442,7 +442,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 }
                 else
                 {
-                    OSL_FAIL("is it a deletion or a insertion?");
+                    OSL_FAIL("is it a deletion or an insertion?");
                 }
 
                 CommitTableModelChange(rRef.GetRange().aStart.Row(),

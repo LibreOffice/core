@@ -430,7 +430,7 @@ void ScEditViewForwarder::SetInvalid()
     mpEditView = nullptr;
 }
 
-//  ScAccessibleCellTextData: shared data between sub objects of a accessible cell text object
+//  ScAccessibleCellTextData: shared data between sub objects of an accessible cell text object
 
 ScAccessibleCellTextData::ScAccessibleCellTextData(ScTabViewShell* pViewShell,
         const ScAddress& rP, ScSplitPos eSplitPos, ScAccessibleCell* pAccCell)
@@ -901,7 +901,7 @@ void ScAccessibleEditLineTextData::EndEdit()
     mpEditView = nullptr;
 }
 
-//  ScAccessiblePreviewCellTextData: shared data between sub objects of a accessible cell text object
+//  ScAccessiblePreviewCellTextData: shared data between sub objects of an accessible cell text object
 
 ScAccessiblePreviewCellTextData::ScAccessiblePreviewCellTextData(ScPreviewShell* pViewShell,
                             const ScAddress& rP)
@@ -969,7 +969,7 @@ ScDocShell* ScAccessiblePreviewCellTextData::GetDocShell(ScPreviewShell* pViewSh
     return pDocSh;
 }
 
-//  ScAccessiblePreviewHeaderCellTextData: shared data between sub objects of a accessible cell text object
+//  ScAccessiblePreviewHeaderCellTextData: shared data between sub objects of an accessible cell text object
 
 ScAccessiblePreviewHeaderCellTextData::ScAccessiblePreviewHeaderCellTextData(ScPreviewShell* pViewShell,
             const OUString& rText, const ScAddress& rP, bool bColHeader, bool bRowHeader)
