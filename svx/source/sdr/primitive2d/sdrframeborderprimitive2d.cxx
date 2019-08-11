@@ -224,7 +224,7 @@ namespace
 
         void sort()
         {
-            // sort inverse fom highest to lowest
+            // sort inverse from highest to lowest
             std::sort(
                 maEntries.begin(),
                 maEntries.end(),

@@ -151,7 +151,7 @@ namespace sdr
                 {
                     const Size aOutputSizePixel(getOutputDevice().GetOutputSizePixel());
 
-                    // only set when we *have* a output size, else let aViewRange
+                    // only set when we *have* an output size, else let aViewRange
                     // stay on empty
                     if(aOutputSizePixel.Width() && aOutputSizePixel.Height())
                     {

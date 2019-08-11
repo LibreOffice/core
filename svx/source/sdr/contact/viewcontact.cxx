@@ -30,7 +30,7 @@
 
 namespace sdr { namespace contact {
 
-// Create a Object-Specific ViewObjectContact, set ViewContact and
+// Create an Object-Specific ViewObjectContact, set ViewContact and
 // ObjectContact. Always needs to return something. Default is to create
 // a standard ViewObjectContact containing the given ObjectContact and *this
 ViewObjectContact& ViewContact::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
@@ -68,7 +68,7 @@ void ViewContact::deleteAllVOCs()
     DBG_ASSERT(maViewObjectContactVector.empty(), "Corrupted ViewObjectContactList in VC (!)");
 }
 
-// get a Object-specific ViewObjectContact for a specific
+// get an Object-specific ViewObjectContact for a specific
 // ObjectContact (->View). Always needs to return something.
 ViewObjectContact& ViewContact::GetViewObjectContact(ObjectContact& rObjectContact)
 {
@@ -171,7 +171,7 @@ ViewContact* ViewContact::GetParentContact() const
 
 void ViewContact::ActionChildInserted(ViewContact& rChild)
 {
-    // propagate change to all exsisting visualisations which
+    // propagate change to all existing visualisations which
     // will force a VOC for the new child and invalidate its range
     const sal_uInt32 nCount(maViewObjectContactVector.size());
 
