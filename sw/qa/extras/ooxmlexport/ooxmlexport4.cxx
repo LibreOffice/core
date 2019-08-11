@@ -963,7 +963,7 @@ DECLARE_OOXMLEXPORT_TEST(test76108, "test76108.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTCTagMisMatch, "TCTagMisMatch.docx")
 {
-   // TCTagMisMatch.docx : This document contains a empty table with borders.
+   // TCTagMisMatch.docx : This document contains an empty table with borders.
    // there was a TC tag mismatch which resulted into a crash.
 
    xmlDocPtr pXmlDoc = parseExport("word/document.xml");

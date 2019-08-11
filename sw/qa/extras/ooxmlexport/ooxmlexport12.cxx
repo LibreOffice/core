@@ -636,7 +636,7 @@ DECLARE_OOXMLEXPORT_TEST(testObjectCrossReference, "object_cross_reference.odt")
                 OUString sValue;
                 xPropertySet->getPropertyValue("CurrentPresentation") >>= sValue;
                 CPPUNIT_ASSERT_EQUAL(OUString("Illustration 1: A picture"),
-                                     sValue.trim()); // failes on MAC without trim
+                                     sValue.trim()); // fails on MAC without trim
                 xPropertySet->getPropertyValue("SourceName") >>= sValue;
                 CPPUNIT_ASSERT_EQUAL(OUString("Ref_Illustration0_full"), sValue);
                 break;

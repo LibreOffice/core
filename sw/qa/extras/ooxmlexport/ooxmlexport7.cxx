@@ -124,7 +124,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo76249, "fdo76249.docx")
 {
     /*
      * The Locked Canvas is imported correctly, but while exporting
-     * the drawing element is exported inside a textbox. However a the drawing has to exported
+     * the drawing element is exported inside a textbox. However the drawing has to exported
      * as a Locked Canvas inside a text-box for the RT file to work in MS Word, as drawing elements
      * are not allowed inside the textboxes.
      */
@@ -947,7 +947,7 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWrapPolygon, "picture-wrap-polygon.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testPictureColormodeGrayscale, "picture_colormode_grayscale.docx")
 {
-    // THe problem was that the grayscale was not exported
+    // The problem was that the grayscale was not exported
     xmlDocPtr pXmlDoc = parseExport ("word/document.xml");
     if (!pXmlDoc)
         return;

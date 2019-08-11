@@ -289,7 +289,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXURI)
     CPPUNIT_ASSERT_EQUAL(OUString("somedata"), xURIcreate->getLocalName());
     CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/url#somedata"), xURIcreate->getStringValue());
 
-    // create() without local name splitted with "/"
+    // create() without local name split with "/"
     uno::Reference<rdf::XURI> xURIcreate2(rdf::URI::create(xContext, "http://example.com/url"),
                                           uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/"), xURIcreate2->getNamespace());
