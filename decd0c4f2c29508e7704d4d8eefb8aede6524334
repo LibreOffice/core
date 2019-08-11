@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_91144350",
+        "filename": "oox/source/drawingml/lineproperties.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2019-08-11T21:19:29Z",
+      "side": 1,
+      "message": "That looks suspicious. It would mean, that you can have either dashes or caps. (I have not tested to change it.)",
+      "range": {
+        "startLine": 398,
+        "startChar": 8,
+        "endLine": 398,
+        "endChar": 12
+      },
+      "revId": "decd0c4f2c29508e7704d4d8eefb8aede6524334",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
