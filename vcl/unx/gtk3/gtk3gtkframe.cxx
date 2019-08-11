@@ -3899,7 +3899,7 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* /*pContext*/, gchar* 
 
         pThis->m_aInputFlags.clear();
 
-        /* necessary HACK: all keyboard input comes in here as soon as a IMContext is set
+        /* necessary HACK: all keyboard input comes in here as soon as an IMContext is set
          *  which is logical and consequent. But since even simple input like
          *  <space> comes through the commit signal instead of signalKey
          *  and all kinds of windows only implement KeyInput (e.g. PushButtons,

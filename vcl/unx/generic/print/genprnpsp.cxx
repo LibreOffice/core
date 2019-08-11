@@ -1050,7 +1050,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
                 if( !comphelper::isFileUrl(aPDFUrl) )
                 {
                     // this is not a file URL, but it should
-                    // form it into a osl friendly file URL
+                    // form it into an osl friendly file URL
                     OUString aTmp;
                     osl_getFileURLFromSystemPath( aPDFUrl.pData, &aTmp.pData );
                     aPDFUrl = aTmp;

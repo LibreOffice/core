@@ -125,7 +125,7 @@ static const XIMStyle g_nSupportedStatusStyle(
                                XIMStatusNone
                                );
 
-// Constructor for a InputContext (IC)
+// Constructor for an InputContext (IC)
 
 SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         mbUseable( True ),
@@ -485,7 +485,7 @@ SalI18N_InputContext::SupportInputMethodStyle( XIMStyles const *pIMStyles )
 
         // check whether the XIM supports one of the desired styles
         // only a single preedit and a single status style must occur
-        // in a input method style. Hideki said so, so i trust him
+        // in an input method style. Hideki said so, so i trust him
         for ( int nStyle = 0; nStyle < pIMStyles->count_styles; nStyle++ )
         {
             XIMStyle nProvidedStyle = pIMStyles->supported_styles[ nStyle ];
