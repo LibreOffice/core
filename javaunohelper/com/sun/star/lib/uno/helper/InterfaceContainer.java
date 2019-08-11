@@ -665,7 +665,7 @@ public class InterfaceContainer implements Cloneable
      * <i>only</i> if the caller knows that the list does not contain any
      * <code>null</code> elements.
      *
-     * @param a the array into which the elements of the list are to
+     * @param the array into which the elements of the list are to
      *      be stored, if it is big enough; otherwise, a new array of the
      *      same runtime type is allocated for this purpose.
      * @return an array containing the elements of the list.

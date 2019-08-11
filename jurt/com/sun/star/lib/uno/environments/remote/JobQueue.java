@@ -106,7 +106,7 @@ public class JobQueue {
 
 
     /**
-     * Constructs a async job queue with the given thread id which belongs to
+     * Constructs an async job queue with the given thread id which belongs to
      * the given sync job queue.
      *
      * @param threadId         the thread id.
@@ -278,13 +278,13 @@ public class JobQueue {
      * @return the result of the final job (reply).
      */
     Object enter(Object disposeId) throws Throwable {
-        return enter(0, disposeId); // wait infinitly
+        return enter(0, disposeId); // wait infinitely
     }
 
     /**
      * Enters the job queue.
      *
-     * @param  waitTime   the maximum amount of time to wait for a job (0 means wait infinitly).
+     * @param  waitTime   the maximum amount of time to wait for a job (0 means wait infinitely).
      * @param  disposeId  a dispose id.
      * @return the result of the final job (reply).
      */

@@ -83,7 +83,7 @@ public class ComponentBase_Test
         assertEquals(obj2.nDisposingCalled, 1);
         assertEquals(obj3.nDisposingCalled, 1);
 
-        logger.log(Level.FINE, "Adding a listener after dispose, causes a immediate call to the listener.");
+        logger.log(Level.FINE, "Adding a listener after dispose, causes an immediate call to the listener.");
         obj1.nDisposingCalled= 0;
         comp.addEventListener(obj1);
         assertEquals(obj1.nDisposingCalled, 1);

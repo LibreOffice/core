@@ -128,7 +128,7 @@ public:
     bool isValidArch() const;
      /* determines if prior to running java something has to be done,
         like setting the LD_LIBRARY_PATH. This implementation checks
-        if an LD_LIBRARY_PATH (getLD_LIBRARY_PATH) needs to be set and
+        if a LD_LIBRARY_PATH (getLD_LIBRARY_PATH) needs to be set and
         if so, needsRestart returns true.
       */
      bool needsRestart() const;

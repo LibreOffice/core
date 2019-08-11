@@ -714,7 +714,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     if (!hasStackSize) {
 #if defined LINUX && (defined X86 || defined X86_64)
         // At least OpenJDK 1.8.0's os::workaround_expand_exec_shield_cs_limit
-        // (hotspot/src/os_cpu/linux_x86/vm/os_linux_x86.cpp) can mmap an rwx
+        // (hotspot/src/os_cpu/linux_x86/vm/os_linux_x86.cpp) can mmap a rwx
         // page into the area that the main stack can grow down to according to
         // "ulimit -s", as os::init_2's (hotspot/src/os/linux/vm/os_linux.cpp)
         // call to
