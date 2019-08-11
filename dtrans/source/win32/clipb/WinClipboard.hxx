@@ -45,7 +45,7 @@ class CWinClipbImpl;
 // class instance
 // watch out: we are using only one static member variable and not a list
 // because we assume to be instantiated only once
-// this will be assured by an OneInstanceFactory of the service and not
+// this will be assured by a OneInstanceFactory of the service and not
 // by this class!
 
 // helper class, so that the mutex is constructed

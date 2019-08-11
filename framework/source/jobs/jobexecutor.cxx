@@ -369,7 +369,7 @@ void SAL_CALL JobExecutor::elementReplaced( const css::container::ContainerEvent
                 this job executor instance was registered from outside code as
                 css.document.XEventListener. So it can be, that this disposing call comes from
                 the global event broadcaster service. But we don't hold any reference to this service
-                which can or must be released. Because this broadcaster itself is an one instance service
+                which can or must be released. Because this broadcaster itself is a one instance service
                 too, we can ignore this request. On the other side we must release our internal CFG
                 reference ... SOLUTION => check the given event source and react only, if it's our internal
                 hold configuration object!
