@@ -563,11 +563,11 @@ OUString FTPURL::net_title() const
             throw curl_exception(err);
 #endif
         else if(try_more && err == CURLE_FTP_ACCESS_DENIED) {
-            // We  were  either denied access when trying to login to
+            // We were either denied access when trying to login to
             //  an FTP server or when trying to change working directory
             //  to the one given in the URL.
             if(!m_aPathSegmentVec.empty())
-                // determine title form url
+                // determine title from URL
                 aNetTitle = decodePathSegment(m_aPathSegmentVec.back());
             else
                 // must be root

@@ -47,10 +47,10 @@ void HierarchyUri::init() const
         m_aService.clear();
         m_aParentUri.clear();
 
-        // URI must match at least: <sheme>:
+        // URI must match at least: <scheme>:
         if ( m_aUri.getLength() < HIERARCHY_URL_SCHEME_LENGTH + 1 )
         {
-            // error, but remember that we did a init().
+            // error, but remember that we did an init().
             m_aPath = "/";
             return;
         }
@@ -110,7 +110,7 @@ void HierarchyUri::init() const
                 // Only <scheme>:// ?
                 if ( nStart == m_aUri.getLength() )
                 {
-                    // error, but remember that we did a init().
+                    // error, but remember that we did an init().
                     m_aPath = "/";
                     return;
                 }
@@ -118,7 +118,7 @@ void HierarchyUri::init() const
                 // Empty path segments?
                 if ( m_aUri.indexOf("//", nStart) != -1 )
                 {
-                    // error, but remember that we did a init().
+                    // error, but remember that we did an init().
                     m_aPath = "/";
                     return;
                 }
@@ -128,7 +128,7 @@ void HierarchyUri::init() const
                 // Only <scheme>:/// ?
                 if ( nEnd == nStart )
                 {
-                    // error, but remember that we did a init().
+                    // error, but remember that we did an init().
                     m_aPath = "/";
                     return;
                 }
@@ -171,7 +171,7 @@ void HierarchyUri::init() const
         }
         else
         {
-            // error, but remember that we did a init().
+            // error, but remember that we did an init().
             m_aPath = "/";
         }
     }

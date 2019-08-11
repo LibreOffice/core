@@ -513,7 +513,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
 
     If the given row number is negative, the cursor moves to an absolute row
     position with respect to the end of the result set. For example, calling
-    absolaute( -1 ) positions the cursor on the last row, absolaute( -2 )
+    absolute( -1 ) positions the cursor on the last row, absolute( -2 )
     indicates the next-to-last row, and so on.
 
     An attempt to position the cursor beyond the first/last row in the result
