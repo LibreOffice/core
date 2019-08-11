@@ -380,7 +380,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                     }
                     else
                     {
-                        // check if the object is in edit, than its temporarely not empty
+                        // check if the object is in edit, then if it's temporarily not empty
                         SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
                         if( pTextObj )
                         {
@@ -700,7 +700,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         // The mpDrawView was not NULL but is now.
         // The reason for this may be that the DrawViewShell has been
-        // destroyed in the mean time.
+        // destroyed in the meantime.
         // We can only return immediately and hope that the deleted
         // DrawViewShell is not called again.
         DBG_ASSERT(mpDrawView!=nullptr, "Please report this assertion to the Impress team.");

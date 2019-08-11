@@ -563,7 +563,7 @@ IMPL_LINK_NOARG(ShowWindow, MouseTimeoutHdl, Timer *, void)
     }
     else
     {
-        // mouse has been idle to long, hide pointer
+        // mouse has been idle too long, hide pointer
         ShowPointer( false );
         mbMouseCursorHidden = true;
     }

@@ -58,7 +58,7 @@ public:
 
     /** Create a new cache for bitmap objects.
         The default value from the configuration is used.
-        When that does not exist then a internal default value is
+        When that does not exist then an internal default value is
         used.
     */
     explicit BitmapCache ();

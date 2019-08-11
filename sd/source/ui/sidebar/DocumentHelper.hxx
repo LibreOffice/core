@@ -86,7 +86,7 @@ private:
             In contrast to AssignMasterPageToPageList() this page is assumed
             to be in the target document, i.e. the same document that pPage
             is in.  The caller will usually call AddMasterPage() to create a
-            clone of a master page in a another document to create it.
+            clone of a master page in another document to create it.
         @param rsBaseLayoutName
             The layout name of the given master page.  It is given so that
             it has not to be created on every call.  It could be generated
