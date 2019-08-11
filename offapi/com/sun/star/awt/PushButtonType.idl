@@ -34,7 +34,7 @@ published enum PushButtonType
     STANDARD,
 
 
-    /** acts like a OK button.
+    /** acts like an OK button.
      */
     OK,
 

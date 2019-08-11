@@ -37,7 +37,7 @@ module com {  module sun {  module star {  module awt { module grid {
  */
 published service UnoControlGridModel
 {
-    /** specifies the standard model of an com::sun::star::awt::UnoControl. */
+    /** specifies the standard model of a com::sun::star::awt::UnoControl. */
     service com::sun::star::awt::UnoControlModel;
 
     /** Specifies whether the grid control should display a special header column.

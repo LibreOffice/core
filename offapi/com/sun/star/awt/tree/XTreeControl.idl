@@ -90,7 +90,7 @@ interface XTreeControl
         @throws ExpandVetoException
             if <var>Node</var>can't be made visible since at least one of the parent nodes are
             collapsed and expanding failed because at least one of the registered
-            XTreeExpansionListener raised a ExpandVetoException.
+            XTreeExpansionListener raised an ExpandVetoException.
     */
     void makeNodeVisible( [in] XTreeNode Node )
         raises( com::sun::star::lang::IllegalArgumentException, ExpandVetoException );
@@ -118,7 +118,7 @@ interface XTreeControl
 
         @throws ExpandVetoException
             if expanding <var>Node</var> failed because at least one of the registered
-            XTreeExpansionListener raised a ExpandVetoException.
+            XTreeExpansionListener raised an ExpandVetoException.
     */
     void expandNode( [in] XTreeNode Node )
         raises( com::sun::star::lang::IllegalArgumentException, ExpandVetoException );
@@ -133,7 +133,7 @@ interface XTreeControl
 
         @throws ExpandVetoException
             if collapsing <var>Node</var> failed because at least one of the registered
-            XTreeExpansionListener raised a ExpandVetoException.
+            XTreeExpansionListener raised an ExpandVetoException.
     */
     void collapseNode( [in] XTreeNode Node )
         raises( com::sun::star::lang::IllegalArgumentException, ExpandVetoException );
