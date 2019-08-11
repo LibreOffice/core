@@ -59,7 +59,7 @@ public class SwXAutoTextContainer extends TestCase {
 
         // creation of testobject here
         // first we write what we are intend to do to log file
-        log.println("creating a AutoTextContainer");
+        log.println("creating an AutoTextContainer");
         XMultiServiceFactory myMSF = Param.getMSF();
         Object oInst = myMSF.createInstance
             ("com.sun.star.text.AutoTextContainer");

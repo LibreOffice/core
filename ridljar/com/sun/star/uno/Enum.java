@@ -24,7 +24,7 @@ package com.sun.star.uno;
  * <p>
  * Each java mapped enum class provides static member of this class
  * which represents the enum values.
- * You cannot create a object of this class or subclass direct, to
+ * You cannot create an object of this class or subclass direct, to
  * avoid enum values with integer values outside the defined range.
  * </p>
  */

@@ -152,7 +152,7 @@ void test_coreReflection()
 
             aReadConst = reader.getFieldConstValue(10);
             OString aConstStr = OUStringToOString(aConst.m_value.aString, RTL_TEXTENCODING_ASCII_US);
-            REG_ENSURE(aConstStr.equals("this is an unicode string"), "testCoreReflection error 9b");
+            REG_ENSURE(aConstStr.equals("this is a unicode string"), "testCoreReflection error 9b");
         }
 
     }

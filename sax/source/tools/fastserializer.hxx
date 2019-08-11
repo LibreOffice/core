@@ -82,7 +82,7 @@ public:
     */
     void startFastElement( ::sal_Int32 Element, FastAttributeList const * pAttrList = nullptr );
 
-    /** receives notification of the end of an known element.
+    /** receives notification of the end of a known element.
         @see startFastElement
      */
     void endFastElement( ::sal_Int32 Element );
