@@ -87,7 +87,7 @@
         {
             m_xAggregate = _pAggregateInstance;
 
-            {   // check if the aggregate is cloneable
+            {   // check if the aggregate is clonable
                 Reference< XCloneable > xCloneAccess(m_xAggregate, UNO_QUERY);
                 m_bCloneable = xCloneAccess.is();
             }

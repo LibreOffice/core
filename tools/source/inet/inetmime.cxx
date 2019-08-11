@@ -175,7 +175,7 @@ std::unique_ptr<sal_Char[]> convertFromUnicode(const sal_Unicode * pBegin,
 
     @param pBuffer  Points to a buffer, must not be null.
 
-    @param nUTF32  An UTF-32 character, must be in the range 0..0x10FFFF.
+    @param nUTF32  A UTF-32 character, must be in the range 0..0x10FFFF.
 
     @return  A pointer past the UTF-16 characters put into the buffer
     (i.e., pBuffer + 1 or pBuffer + 2).

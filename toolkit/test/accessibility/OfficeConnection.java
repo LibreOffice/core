@@ -50,7 +50,7 @@ public class OfficeConnection
         connect (msDefaultHost, mnDefaultPort);
     }
 
-    /** @descr  Connect to a already running LibreOffice application that has
+    /** @descr  Connect to an already running LibreOffice application that has
                 been started with a command line argument like
 		"--accept=socket,host=localhost,port=5678;urp;"
 		*/

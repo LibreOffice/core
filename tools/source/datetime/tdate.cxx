@@ -352,7 +352,7 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
             nWeek = aLastDatePrevYear.GetWeekOfYear( eStartDay, nMinimumNumberOfDaysInWeek );
         }
     }
-    else // ( nMinimumNumberOfDaysInWeek == somehing_else, commentary examples for 4 )
+    else // ( nMinimumNumberOfDaysInWeek == something_else, commentary examples for 4 )
     {
         // x_monday - thursday
         if ( n1WDay < nMinimumNumberOfDaysInWeek )
