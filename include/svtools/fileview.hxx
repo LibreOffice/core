@@ -114,7 +114,7 @@ public:
                                 const css::uno::Sequence< OUString >& rBlackList
                             );
 
-    /** initializes the view with the content of a folder given by an UCB content
+    /** initializes the view with the content of a folder given by a UCB content
     */
     bool                    Initialize( const css::uno::Reference< css::ucb::XContent>& _xContent );
 

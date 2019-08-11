@@ -486,7 +486,7 @@ public:
     /** @short  informs about created/opened documents.
 
         @descr  Every new opened/created document will be saved internally
-                so it can be checked if its modified. This modified state
+                so it can be checked if it's modified. This modified state
                 is used later to decide, if it must be saved or not.
 
         @param  aEvent

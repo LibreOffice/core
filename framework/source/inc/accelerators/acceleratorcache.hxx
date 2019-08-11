@@ -35,7 +35,7 @@ namespace framework
 /**
     @short  implements a cache for any accelerator configuration.
 
-    @descr  Its implemented threadsafe, supports copy-on-write pattern
+    @descr  It's implemented threadsafe, supports copy-on-write pattern
             and a flush mechanism to support concurrent access to the same
             configuration.
 
