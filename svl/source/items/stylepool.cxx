@@ -415,7 +415,7 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
     }
     // Every leaf node represents an inserted item set, but "non-leaf" nodes represents subsets
     // of inserted itemsets.
-    // These nodes could have but does not need to have a shared_ptr to a item set.
+    // These nodes could have but does not need to have a shared_ptr to an item set.
     if( !pCurNode->hasItemSet( false ) )
     {
         pCurNode->setItemSet( rSet );

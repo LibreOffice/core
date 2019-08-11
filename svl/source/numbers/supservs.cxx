@@ -66,7 +66,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
         // maybe you already called a method which needed the formatter
         // you should use XMultiServiceFactory::createInstanceWithArguments to avoid that
     if (m_pOwnFormatter)
-    {   // !!! this is only a emergency handling, normally this should not occur !!!
+    {   // !!! this is only an emergency handling, normally this should not occur !!!
         m_pOwnFormatter.reset();
         SetNumberFormatter(m_pOwnFormatter.get());
     }
