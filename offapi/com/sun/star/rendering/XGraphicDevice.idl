@@ -254,7 +254,7 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         value denotes the success of the operation.
 
         @attention depending on the underlying operating system,
-        fullscreen mode can be left without a enterFullScreenMode(
+        fullscreen mode can be left without an enterFullScreenMode(
         false ) call.
      */
     boolean                         enterFullScreenMode( [in] boolean bEnter );
