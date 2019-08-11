@@ -40,7 +40,7 @@ module com { module sun { module star { module ui { module dialogs {
     <p>If that method returns <code>ExecutableDialogResults::OK</code>,
     the application will retrieve the changed com::sun::star::document::MediaDescriptor
     back using the interface com::sun::star::beans::XPropertyAccess. The filter
-    operation is than continued, using the new com::sun::star::document::MediaDescriptor.</p>
+    operation is then continued, using the new com::sun::star::document::MediaDescriptor.</p>
 
     <p>Otherwise, the filter operation is canceled.</p>
 

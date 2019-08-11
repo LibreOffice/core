@@ -29,7 +29,7 @@ module com { module sun { module star { module ui { module dialogs {
 
 published constants FilePreviewImageFormats
 {
-    /** A OpenOffice bitmap which is similar to the device independent bitmap
+    /** A LibreOffice bitmap which is similar to the device independent bitmap
         (DIB) format on windows.
         The bitmap data should be provided as a sequence of sal_Int8.
     */

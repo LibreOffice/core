@@ -35,7 +35,7 @@ interface XReferenceResolvedListener;
 interface XReferenceResolvedBroadcaster : com::sun::star::uno::XInterface
 {
     /**
-     * Adds a new reference resolved listener for a element collector.
+     * Adds a new reference resolved listener for an element collector.
      * <p>
      * When the element collector has completely collected that element,
      * this listener will receive a notification.
@@ -49,7 +49,7 @@ interface XReferenceResolvedBroadcaster : com::sun::star::uno::XInterface
         [in] XReferenceResolvedListener listener);
 
     /**
-     * Removes a listener from a element collector.
+     * Removes a listener from an element collector.
      * <p>
      * When a listener is removed, it will not receive notification when
      * collection completes.

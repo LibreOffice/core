@@ -28,7 +28,7 @@ module com { module sun { module star { module xml { module crypto { module sax 
 /**
  * Interface of Reference Resolved Listener.
  * <p>
- * This interface is used to receive the collection completion notification for a element
+ * This interface is used to receive the collection completion notification for an element
  * collector.
  */
 interface XReferenceResolvedListener : com::sun::star::uno::XInterface
