@@ -57,7 +57,7 @@ public class _PageProperties  extends MultiPropertyTest {
     /**
      * This property is system dependent and printer dependent.
      * So only reading it does make sense, since it cannot be determined, if
-     * it is set to a allowed value.
+     * it is set to an allowed value.
      */
     public void _PrinterPaperTray() {
         boolean res = false;
