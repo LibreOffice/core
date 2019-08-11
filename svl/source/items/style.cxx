@@ -637,7 +637,7 @@ SfxStyleSheetBase* SfxStyleSheetBasePool::Create( const SfxStyleSheetBase& r )
 
 SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const OUString& rName, SfxStyleFamily eFam, SfxStyleSearchBits mask)
 {
-    OSL_ENSURE( eFam != SfxStyleFamily::All, "svl::SfxStyleSheetBasePool::Make(), FamilyAll is not a allowed Familie" );
+    OSL_ENSURE( eFam != SfxStyleFamily::All, "svl::SfxStyleSheetBasePool::Make(), FamilyAll is not an allowed Family" );
 
     SfxStyleSheetIterator aIter(this, eFam, mask);
     rtl::Reference< SfxStyleSheetBase > xStyle( aIter.Find( rName ) );

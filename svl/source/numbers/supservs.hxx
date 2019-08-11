@@ -28,7 +28,7 @@
 
 /**
  * SvNumberFormatsSupplierServiceObject - a number formats supplier which
- * - can be instantiated as an service
+ * - can be instantiated as a service
  * - works with its own SvNumberFormatter instance
  * - can be initialized (css::lang::XInitialization)
  * with a specific language (i.e. css::lang::Locale)
@@ -70,7 +70,7 @@ public:
     virtual css::uno::Reference< css::util::XNumberFormats > SAL_CALL
                 getNumberFormats() override;
 
-    // XUnoTunnler
+    // XUnoTunneler
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 };
 

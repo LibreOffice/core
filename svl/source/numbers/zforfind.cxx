@@ -2343,7 +2343,7 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
                         if (nPos < rString.getLength() || (nStringsCnt >= 4 && nNumericsCnt >= 2))
                         {
                             nMonth = nTempMonth;
-                            nMonthPos = 1; // month a the beginning
+                            nMonthPos = 1; // month at the beginning
                             if ( nMonth < 0 )
                             {
                                 SkipChar( '.', rString, nPos ); // abbreviated

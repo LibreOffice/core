@@ -809,7 +809,7 @@ bool SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
     const OUString sActionComment = pAction->GetComment();
     try
     {
-        // clear the guard/mutex before calling into the SfxUndoAction - this can be a extension-implemented UNO component
+        // clear the guard/mutex before calling into the SfxUndoAction - this can be an extension-implemented UNO component
         // nowadays ...
         aGuard.clear();
         if ( i_contextOrNull != nullptr )
