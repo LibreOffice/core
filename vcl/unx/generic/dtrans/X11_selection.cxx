@@ -327,7 +327,7 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
          *  FIXME:
          *  finally the clipboard and XDND service is back in the module it belongs
          *  now cleanup and sharing of resources with the normal vcl event loop
-         *  needs to be added. The display used whould be that of the normal event loop
+         *  needs to be added. The display used would be that of the normal event loop
          *  and synchronization should be done via the SolarMutex.
          */
         if( arguments.hasElements() )
@@ -1873,7 +1873,7 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent const & rNotify 
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    // ready for next part of a IncrementalTransfer
+    // ready for next part of an IncrementalTransfer
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "handleSendPropertyNotify for property %s (%s)\n",
              OUStringToOString( getString( rNotify.atom ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
@@ -3195,10 +3195,10 @@ void SelectionManager::startDrag(
                           CurrentTime );
         /* if we could not grab the pointer here, there is a chance
            that the pointer is grabbed by the other vcl display (the main loop)
-           so let's break that grab an reset it later
+           so let's break that grab and reset it later
 
            remark: this whole code should really be molten into normal vcl so only
-           one display is used ....
+           one display is used...
         */
         if( nPointerGrabSuccess != GrabSuccess )
         {
