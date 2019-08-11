@@ -33,6 +33,7 @@
 #include <namebuff.hxx>
 #include <lotattr.hxx>
 #include <stringutil.hxx>
+#include <config_fuzzers.h>
 
 #include <unotools/configmgr.hxx>
 
@@ -327,9 +328,11 @@ void ImportLotus::NamedSheet()
     Read(aName);
 
     SCTAB nLTab(SanitizeTab(static_cast<SCTAB>(nTmpTab)));
+#if ENABLE_FUZZERS
     //ofz#14167 arbitrary sheet limit to make fuzzing useful
-    if (nLTab > 5 && utl::ConfigManager::IsFuzzing())
+    if (nLTab > 5
         nLTab = 5;
+#endif
 
     if (pD->HasTable(nLTab))
         pD->RenameTab(nLTab, aName);
