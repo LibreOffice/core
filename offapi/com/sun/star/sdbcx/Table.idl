@@ -55,7 +55,7 @@
 published service Table
 {
 
-    /** optional, could be used to copy an table.
+    /** optional, could be used to copy a table.
      */
     [optional] interface XDataDescriptorFactory;
 

@@ -33,7 +33,7 @@ published interface XRowSetApproveBroadcaster: com::sun::star::uno::XInterface
 {
 
     /** adds the specified listener to receive the events "approveCursorMove",
-        "approveRowChange", and "appproveRowSetChange".
+        "approveRowChange", and "approveRowSetChange".
      */
     void addRowSetApproveListener(
             [in]XRowSetApproveListener listener );

@@ -225,8 +225,8 @@ interface XDatabaseDocumentUI
             </p>
 
         @return
-            the component which has been loaded. This is either an com::sun::star::frame::XModel,
-            or an com::sun::star::frame::XController if the component does is model-less.
+            the component which has been loaded. This is either a com::sun::star::frame::XModel,
+            or a com::sun::star::frame::XController if the component does is model-less.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             if ObjectType denotes an invalid object type

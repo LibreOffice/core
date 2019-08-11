@@ -94,7 +94,7 @@ published interface XArray: com::sun::star::uno::XInterface
                  is used.
 
              @returns
-                an sequence that contains the ordered elements
+                a sequence that contains the ordered elements
                 of the SQL array designated by this object.
 
              @throws SQLException
