@@ -70,7 +70,7 @@ service TextRangeContentProperties
     /** may contain a footnote. */
     [optional, readonly, property] com::sun::star::text::XFootnote Footnote;
 
-    /** may contain a endnote. */
+    /** may contain an endnote. */
     [optional, readonly, property] com::sun::star::text::XFootnote Endnote;
 
     /** may contain a nested text content.

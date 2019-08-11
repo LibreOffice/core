@@ -29,7 +29,7 @@ module com { module sun { module star { module text {
 
 /** represents a mail merge event.
 
-    <p>This type of event is being send by the mail merge service
+    <p>This type of event is being sent by the mail merge service
     right before the merging of the next document to be processed.
     This allows for example to modify the document specifically
     before it gets merged.</p>

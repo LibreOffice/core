@@ -77,7 +77,7 @@ service AccessibleSpreadsheetPageView
         </ul>
         <p>The following rules apply to the children order. General it
             represents the paint order. The object in the background came
-            first and than all over lying objects. The last painted object
+            first and then all over lying objects. The last painted object
             is also the last child.</p>
         <ul>
             <li>The logical order of paragraph and table fragments is never
