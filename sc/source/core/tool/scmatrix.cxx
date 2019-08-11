@@ -3308,7 +3308,7 @@ struct COp<T, double>
 
 /** A template for operations where operands are supposed to be numeric.
     A non-numeric (string) operand leads to the configured conversion to number
-    method being called if in interpreter context and an FormulaError::NoValue DoubleError
+    method being called if in interpreter context and a FormulaError::NoValue DoubleError
     if conversion was not possible, else to an unconditional FormulaError::NoValue
     DoubleError.
     An empty operand evaluates to 0.
