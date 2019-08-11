@@ -63,7 +63,7 @@ void main()
       multiply = 1.0 / (1.0 - (start / end));
    }
 
-   // lengthen the vertex in directon of the extrusion vector by line width.
+   // lengthen the vertex in direction of the extrusion vector by line width.
    vec4 final_position = vec4(position + (extrusion_vector * (render_thickness / 2.0) ), 0.0, 1.0);
 
    gl_Position = mvp * final_position;
