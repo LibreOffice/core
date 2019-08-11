@@ -2442,7 +2442,7 @@ sal_Int32 XMLTextImportHelper::GetDataStyleKey(const OUString& sStyleName,
 
 
     // first check if it's an Impress and draw only number format
-    // this is needed since its also a SvXMLNumFormatContext,
+    // this is needed since it's also a SvXMLNumFormatContext,
     // that was needed to support them for controls in impress/draw also
     const SdXMLNumberFormatImportContext* pSdNumStyle = dynamic_cast<const SdXMLNumberFormatImportContext*>( pStyle  );
     if( pSdNumStyle )
