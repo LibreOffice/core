@@ -172,7 +172,7 @@ public class _XAccessibleValue extends MultiMethodTest {
                 log.println("If one sets the maximum value of a scroll bar with XScrollBar::setMaximum(),"+
                 "then XScrollBar::getValue() returns the maximum value minus the visible size of"+
                 "the thumb");
-                //using abitrary Value, since we can't determine the resulting value
+                //using arbitrary Value, since we can't determine the resulting value
                 partResult = resVal > 10;
             }
 
@@ -196,7 +196,7 @@ public class _XAccessibleValue extends MultiMethodTest {
                 log.println("If one sets the maximum value of a scroll bar with XScrollBar::setMaximum(),"+
                 "then XScrollBar::getValue() returns the maximum value minus the visible size of"+
                 "the thumb");
-                //using abitrary Value, since we can't determine the resulting value
+                //using arbitrary Value, since we can't determine the resulting value
                 partResult = resVal > 10;
             }
 

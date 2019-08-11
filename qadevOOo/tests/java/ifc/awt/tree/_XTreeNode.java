@@ -117,7 +117,7 @@ public class _XTreeNode extends MultiMethodTest {
         mCount = oObj.getChildCount();
         log.println("got count '" + mCount + "' of children");
         if (mCount < 1 ) {
-            log.println("ERROR: got a count < 1. The test object must be support more then zero children => FAILED");
+            log.println("ERROR: got a count < 1. The test object must support more than zero children => FAILED");
             bOK = false;
         }
         tRes.tested("getChildCount()", bOK);

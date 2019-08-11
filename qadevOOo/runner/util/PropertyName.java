@@ -81,7 +81,7 @@ public interface PropertyName {
     String LOG_WRITER = "LogWriter";
     /**
      * parameter name: "TimeOut"<p>
-     * time out given in milli seconds
+     * time out given in milliseconds
      * This parameter contains the timeout used<br>
      * by the watcher
      */

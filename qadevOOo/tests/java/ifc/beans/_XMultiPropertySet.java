@@ -344,7 +344,7 @@ public class _XMultiPropertySet extends MultiMethodTest {
 
         String bound = sb.toString();
 
-        //get a array of bound properties
+        //get an array of bound properties
         if (bound.equals("")) bound = "none";
         StringTokenizer ST=new StringTokenizer(bound,";");
         int nr = ST.countTokens();
