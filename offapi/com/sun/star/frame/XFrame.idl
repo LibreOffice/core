@@ -203,7 +203,7 @@ published interface XFrame: com::sun::star::lang::XComponent
         <p>
         At first the frame sets itself as the active frame of its
         creator by calling XFramesSupplier::setActiveFrame(),
-        then it broadcasts an FrameActionEvent with
+        then it broadcasts a FrameActionEvent with
         FrameAction::FRAME_ACTIVATED. The component within
         this frame may listen to this event to grab the focus on activation;
         for simple components this can be done by the FrameLoader.

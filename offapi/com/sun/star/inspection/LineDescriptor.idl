@@ -87,7 +87,7 @@ struct LineDescriptor
     /** describes the URL of an image to display on the primary button, if any.
 
         <p>This URL will be used to obtain an actual com::sun::star::graphic::XGraphic
-        object from an com::sun::star::graphic::GraphicProvider.</p>
+        object from a com::sun::star::graphic::GraphicProvider.</p>
 
         <p>The property will be ignored if #HasPrimaryButton is `FALSE`.</p>
 
@@ -132,7 +132,7 @@ struct LineDescriptor
     /** describes the URL of an image to display on the secondary button, if any.
 
         <p>This URL will be used to obtain an actual com::sun::star::graphic::XGraphic
-        object from an com::sun::star::graphic::GraphicProvider.</p>
+        object from a com::sun::star::graphic::GraphicProvider.</p>
 
         <p>The property will be ignored if #HasSecondaryButton is `FALSE`.</p>
 

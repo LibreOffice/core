@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module geometry {
     real numbers onto itself, as is representable by the
     double floating point type. The mapping must be
     bijective, i.e. map a pair of real numbers to exactly one other
-    pair of real numbers an vice versa, to facilitate a working
+    pair of real numbers and vice versa, to facilitate a working
     inverse. Bijectiveness also implies completeness, i.e. for every
     pair of real numbers there must be another pair that is mapped
     upon them.<p>
