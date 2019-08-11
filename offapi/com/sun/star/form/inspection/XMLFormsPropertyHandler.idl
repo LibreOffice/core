@@ -26,10 +26,10 @@
 module com {  module sun {  module star {  module form { module inspection {
 
 
-/** implements a property handler for use with an com::sun::star::inspection::ObjectInspector
+/** implements a property handler for use with a com::sun::star::inspection::ObjectInspector
     which provides properties related to binding form control models to XForm bindings.
 
-    <p>The handler introduces new properties to choose an com::sun::star::xforms::XModel
+    <p>The handler introduces new properties to choose a com::sun::star::xforms::XModel
     and a com::sun::star::xforms::Binding within this model. Additionally,
     it introduces properties which reflect the different facets of the binding (e.g.
     com::sun::star::xforms::Binding::BindingExpression), so they can be changed

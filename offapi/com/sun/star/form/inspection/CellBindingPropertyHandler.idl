@@ -26,7 +26,7 @@
 module com {  module sun {  module star {  module form { module inspection {
 
 
-/** implements a property handler for use with an com::sun::star::inspection::ObjectInspector
+/** implements a property handler for use with a com::sun::star::inspection::ObjectInspector
     which is able to provide properties to bind a form component to a spreadsheet cell.
 
     <p>The handler expects a value named "ContextDocument" in the context in which it is created.

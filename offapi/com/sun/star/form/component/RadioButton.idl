@@ -81,7 +81,7 @@ published service RadioButton
 
         <p>In various situations, the #RefValue is associated with the control
         if and only if it is selected.<br/>
-        #UncheckedRefValue provides a extensions of this concept: If present,
+        #UncheckedRefValue provides an extension of this concept: If present,
         the value should be associated with the control when it is <em>not</em> selected.</p>
     */
     [optional, property] string UncheckedRefValue;

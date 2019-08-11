@@ -27,7 +27,7 @@
  module com {  module sun {  module star {  module form {  module control {
 
 
-/** describes a control which can be used for inputting values with a arbitrary formatting, and
+/** describes a control which can be used for inputting values with an arbitrary formatting, and
     can (but not necessarily has to) be bound to a database field.
 
     <p>The model of the control has to support the com::sun::star::form::component::FormattedField

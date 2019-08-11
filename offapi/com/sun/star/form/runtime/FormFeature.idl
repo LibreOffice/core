@@ -110,7 +110,7 @@ constants FormFeature
     const short InteractiveFilter   = 16;
 
     /** toggles the com::sun::star::sdb::RowSet::ApplyFilter property
-        of a the form.
+        of the form.
     */
     const short ToggleApplyFilter   = 17;
 
