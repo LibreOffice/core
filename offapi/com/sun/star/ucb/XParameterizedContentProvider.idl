@@ -38,7 +38,7 @@ published interface XParameterizedContentProvider: com::sun::star::uno::XInterfa
         arguments.
 
         @param Template  A URL template.  If the input is malformed or too
-        complex, an com::sun::star::lang::IllegalArgumentException may be raised.
+        complex, a com::sun::star::lang::IllegalArgumentException may be raised.
 
         @param Arguments  Any supplementary arguments required by this
         XContentProvider, represented as a single string.  If the

@@ -68,7 +68,7 @@ service UIElementSettings
     /** determine an optional user interface name of the user interface element.
 
         <p>
-        A toolbar can show a its user interface name on the window title, when it is in floating mode.
+        A toolbar can show its user interface name on the window title, when it is in floating mode.
         </p>
     */
     [optional, property] string UIName;

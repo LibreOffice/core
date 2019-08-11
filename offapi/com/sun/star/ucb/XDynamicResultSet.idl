@@ -33,7 +33,7 @@ module com { module sun { module star { module ucb {
 
     <p>
     You can either get a simple static ContentResultSet or you can
-    listen to change-notifications and than swap from the old to a new
+    listen to change-notifications and then swap from the old to a new
     ContentResultSet.
     </p>
 
@@ -85,7 +85,7 @@ module com { module sun { module star { module ucb {
     <ol>
     <li> The listener is allowed to access the new
          ContentResultSet. The new one is first assigned in the
-         WELCOME-event and than the ResultSets are always swapped.</li>
+         WELCOME-event and then the ResultSets are always swapped.</li>
     <li> The listener is not allowed to access the old
          ContentResultSet.</li>
     </ol>
@@ -96,7 +96,7 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
     /** Call this, if you don't care about any changes.
 
         @returns
-        an com::sun::star::sdbc::XResultSet that is
+        a com::sun::star::sdbc::XResultSet that is
         implemented as ContentResultSet. Its content will never
         change.
 
