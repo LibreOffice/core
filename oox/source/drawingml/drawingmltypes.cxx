@@ -70,7 +70,7 @@ double GetPositiveFixedPercentage( const OUString& sValue )
     return fPercent;
 }
 
-/** converts the attributes from an CT_TLPoint into an awt Point with 1/1000% */
+/** converts the attributes from a CT_TLPoint into an awt Point with 1/1000% */
 awt::Point GetPointPercent( const Reference< XFastAttributeList >& xAttribs )
 {
     return awt::Point(GetPercent(xAttribs->getOptionalValue(XML_x)), GetPercent(xAttribs->getOptionalValue(XML_y)));
@@ -384,7 +384,7 @@ IntegerRectangle2D GetRelativeRect( const Reference< XFastAttributeList >& xAttr
     return r;
 }
 
-/** converts the attributes from an CT_Size2D into an awt Size with 1/100thmm */
+/** converts the attributes from a CT_Size2D into an awt Size with 1/100thmm */
 awt::Size GetSize2D( const Reference< XFastAttributeList >& xAttribs )
 {
     return awt::Size( GetCoordinate( xAttribs->getOptionalValue( XML_cx ) ), GetCoordinate( xAttribs->getOptionalValue( XML_cy ) ) );
