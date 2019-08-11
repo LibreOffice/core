@@ -41,6 +41,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -172,6 +173,7 @@ void QrCodeGenDialog::Apply()
 
         // Writer
         const Reference<XTextDocument> xTextDocument(m_xModel, UNO_QUERY);
+        const Reference<XSpreadsheetDocument> xSpreadsheetDocument(m_xModel, UNO_QUERY);
         if (xTextDocument.is())
         {
             Reference<XTextContent> xTextContent(xShape, UNO_QUERY_THROW);
@@ -186,8 +188,8 @@ void QrCodeGenDialog::Apply()
         }
 
         // Calc
-        const Reference<XSpreadsheetDocument> xSpreadsheetDocument(m_xModel, UNO_QUERY);
-        if (xSpreadsheetDocument.is())
+
+        else if (xSpreadsheetDocument.is())
         {
             Reference<XPropertySet> xSheetCell(m_xModel->getCurrentSelection(), UNO_QUERY_THROW);
             awt::Point aCellPosition;
@@ -198,6 +200,17 @@ void QrCodeGenDialog::Apply()
             Reference<XSpreadsheet> xSheet(xView->getActiveSheet(), UNO_SET_THROW);
             Reference<XDrawPageSupplier> xDrawPageSupplier(xSheet, UNO_QUERY_THROW);
             Reference<XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+            Reference<XShapes> xShapes(xDrawPage, UNO_QUERY_THROW);
+
+            xShapes->add(xShape);
+            return;
+        }
+        else
+        {
+            Reference<drawing::XDrawPageSupplier> xDPS(m_xModel, uno::UNO_QUERY);
+            Reference<drawing::XDrawPage> xDrawPage = xDPS->getDrawPage();
+
+            //Reference<XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
             Reference<XShapes> xShapes(xDrawPage, UNO_QUERY_THROW);
 
             xShapes->add(xShape);
