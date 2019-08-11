@@ -129,10 +129,10 @@ public:
 
     // XTypeProvider
 
-    /** @return  A sequence of possible types (received from base classes). */
+    /** @return  a sequence of possible types (received from base classes). */
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
-    /** @return  An unique implementation ID. */
+    /** @return  a unique implementation ID. */
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
 protected:

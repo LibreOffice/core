@@ -173,7 +173,7 @@ public:
 
     // XTypeProvider
 
-    /** @return  An unique implementation ID. */
+    /** @return  a unique implementation ID. */
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // XServiceInfo
@@ -181,7 +181,7 @@ public:
     /** @return  Whether the specified service is supported by this class. */
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
 
-    /** @return  A list of all supported services. */
+    /** @return  a list of all supported services. */
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
