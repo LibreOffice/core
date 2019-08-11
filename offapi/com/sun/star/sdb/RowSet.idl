@@ -194,7 +194,7 @@ published service RowSet
 
     service com::sun::star::sdb::ResultSet;
 
-    /** can be used to allow an interaction handler to supply missing data during a execute process.
+    /** can be used to allow an interaction handler to supply missing data during an execute process.
 
         <p>If you want a row set to be based on a parametrized query, you will usually use
         the com::sun::star::sdbc::XParameters interface.<br>
@@ -329,7 +329,7 @@ published service RowSet
      */
     [optional,property] string GroupBy;
 
-    /** is a additional sort order definition for a row set.
+    /** is an additional sort order definition for a row set.
      */
     [property] string Order;
 
@@ -350,7 +350,7 @@ published service RowSet
     [readonly, property] boolean IsNew;
 
 
-    /** contains the number of rows accessed in a the data source.
+    /** contains the number of rows accessed in the data source.
      */
     [readonly, property] long RowCount;
 
