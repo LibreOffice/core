@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module text {
 service AccessibleEndnoteView
 {
     /** This interface gives access to any paragraph fragment and table
-        fragment that is contained in a endnote and is at least
+        fragment that is contained in an endnote and is at least
         partially visible on the screen.
 
         <ul>

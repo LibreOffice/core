@@ -38,7 +38,7 @@ published service DocumentIndex
      */
     [optional, property] boolean UseAlphabeticalSeparators;
 
-    /** determines if a index entry is generated for each primary/secondary key.
+    /** determines if an index entry is generated for each primary/secondary key.
      */
     [optional, property] boolean UseKeyAsEntry;
 
