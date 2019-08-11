@@ -362,7 +362,7 @@ public:
 
         <p>When this method is not called before a view shell is taken from
         a stack then the Deactivate() call from the SFX as a response to
-        RemoveSubShell() comes to late when the view shell is not on the
+        RemoveSubShell() comes too late when the view shell is not on the
         stack anymore.</p>
     */
     virtual void Shutdown();

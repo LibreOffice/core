@@ -132,7 +132,7 @@ public:
     originally are broadcasted via different channels.
 
     There is usually one EventMultiplexer instance per ViewShellBase().
-    Call the laters GetEventMultiplexer() method to get access to that
+    Call the latters GetEventMultiplexer() method to get access to that
     instance.
 */
 class EventMultiplexer
