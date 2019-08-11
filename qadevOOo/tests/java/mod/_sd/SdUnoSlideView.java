@@ -104,7 +104,7 @@ public class SdUnoSlideView extends TestCase {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
         XDrawPages xDP = null;
-        log.println( "creating a impress document" );
+        log.println( "creating an impress document" );
         xImpressDoc = SOF.createImpressDoc(null);
         util.utils.waitForEventIdle(Param.getMSF());
         xDP = DrawTools.getDrawPages(xImpressDoc);

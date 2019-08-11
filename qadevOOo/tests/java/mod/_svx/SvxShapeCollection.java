@@ -115,7 +115,7 @@ public class SvxShapeCollection extends TestCase {
 
         }
         catch (Exception e) {
-            log.println("Couldn't create insance");
+            log.println("Couldn't create instance");
             e.printStackTrace(log);
         }
 

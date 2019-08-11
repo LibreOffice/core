@@ -57,7 +57,7 @@ public class SimpleRegistry extends TestCase {
     * @param src Source file path.
     * @param dst Destination file path.
     * @param log The log writer.
-    * @throws java.io.IOException If any problems occur during copiing.
+    * @throws java.io.IOException If any problems occur during copying.
     */
     protected void copyFile(String src, String dst, PrintWriter log)
             throws java.io.IOException {

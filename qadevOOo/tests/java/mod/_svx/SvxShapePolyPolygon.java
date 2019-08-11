@@ -210,7 +210,7 @@ public class SvxShapePolyPolygon extends TestCase {
             DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape) ;
         }
         catch (Exception e) {
-            log.println("Couldn't create insance");
+            log.println("Couldn't create instance");
             e.printStackTrace(log);
         }
 
