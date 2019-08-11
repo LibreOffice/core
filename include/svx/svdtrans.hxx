@@ -201,7 +201,7 @@ long GetLen(const Point& rPnt);
  *  - Determining the shear angle from the line 0-3 to the perpendicular line.
  *
  * We need to keep in mind that the polygon can be mirrored when it was
- * transformed in the mean time (e.g. mirror or resize with negative factor).
+ * transformed in the meantime (e.g. mirror or resize with negative factor).
  * In that case, we first need to normalize, by swapping points (0 with 3 and 1
  * with 2), so that it has the right orientation.
  *

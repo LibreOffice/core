@@ -423,11 +423,11 @@ public:
     // separately. The method returns sal_True, if at least one group was entered.
     void EnterMarkedGroup();
 
-    // Rotation center point and start point of the axis of reflextion, respectively
+    // Rotation center point and start point of the axis of reflection, respectively
     const Point& GetRef1() const { return maRef1; }
     void SetRef1(const Point& rPt);
 
-    // End point of the axis of reflextion
+    // End point of the axis of reflection
     const Point& GetRef2() const { return maRef2; }
     void SetRef2(const Point& rPt);
     /// Get access to the view shell owning this draw view, if any.
@@ -435,7 +435,7 @@ public:
 };
 
 
-// - Hit tolarances:
+// - Hit tolerances:
 //   It has to be declared in logical coordinates. So please translate the
 //   wanted pixel value with PixelToLogic in Logical values.
 //   Taking as example a logical value of 100:

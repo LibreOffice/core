@@ -500,7 +500,7 @@ private:
 
     BitmapEx GetBitmapForHandle( const BitmapEx& rBitmap, int nSize );
 
-    // evtl. shear and rotation, equal to the object's one to allow adaption of
+    // evtl. shear and rotation, equal to the object's one to allow adaptation of
     // the visualization handles
     double const          mfShearX;
     double const          mfRotation;
