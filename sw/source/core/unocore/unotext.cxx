@@ -1485,7 +1485,7 @@ SwXText::appendTextContent(
     return insertTextContentWithProperties(xTextContent, rCharacterAndParagraphProperties, xInsertPosition);
 }
 
-// determine wether SwFrameFormat is a graphic node
+// determine whether SwFrameFormat is a graphic node
 static bool isGraphicNode(const SwFrameFormat* pFrameFormat)
 {
     // safety
