@@ -253,7 +253,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         case KEY_TAB:
         {
             // in calc do NOT start draw object selection using TAB/SHIFT-TAB when
-            // there is not yet a object selected
+            // there is not yet an object selected
             if(pView->AreObjectsMarked())
             {
                 vcl::KeyCode aCode = rKEvt.GetKeyCode();
@@ -309,7 +309,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         case KEY_END:
         {
             // in calc do NOT select the last draw object when
-            // there is not yet a object selected
+            // there is not yet an object selected
             if(pView->AreObjectsMarked())
             {
                 vcl::KeyCode aCode = rKEvt.GetKeyCode();
@@ -333,7 +333,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         case KEY_HOME:
         {
             // in calc do NOT select the first draw object when
-            // there is not yet a object selected
+            // there is not yet an object selected
             if(pView->AreObjectsMarked())
             {
                 vcl::KeyCode aCode = rKEvt.GetKeyCode();
@@ -360,7 +360,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         case KEY_RIGHT:
         {
             // in calc do cursor travelling of draw objects only when
-            // there is a object selected yet
+            // there is an object selected yet
             if(pView->AreObjectsMarked())
             {
 
