@@ -64,7 +64,7 @@ public:
 
   /* Map a system data flavor to an OpenOffice data flavor.
      Return an empty string if there is not suitable
-     mapping from a system data flavor to a OpenOffice data
+     mapping from a system data flavor to an LibreOffice data
      flavor.
   */
   css::datatransfer::DataFlavor systemToOpenOfficeFlavor( const NSString* systemDataFlavor) const;
@@ -95,13 +95,13 @@ public:
    */
   static DataProviderPtr_t getDataProvider( const NSString* systemFlavor, NSData* systemData);
 
-  /* Translate a sequence of DataFlavors into a NSArray of system types.
+  /* Translate a sequence of DataFlavors into an NSArray of system types.
      Only those DataFlavors for which a suitable mapping to a system
      type exist will be contained in the returned types array.
    */
   NSArray* flavorSequenceToTypesArray(const css::uno::Sequence<css::datatransfer::DataFlavor>& flavors) const;
 
-  /* Translate a NSArray of system types into a sequence of DataFlavors.
+  /* Translate an NSArray of system types into a sequence of DataFlavors.
      Only those types for which a suitable mapping to a DataFlavor
      exist will be contained in the new DataFlavor Sequence.
   */
