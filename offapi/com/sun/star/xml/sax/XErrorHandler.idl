@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module xml {  module sax {
     method. The parser will then report all errors and warnings through this
     interface.  </p>
 
-    <p>This interface is a slight adaption of the Java interface
+    <p>This interface is a slight adaptation of the Java interface
     <code>org.xml.sax.ErrorHandler</code>. In IDL, no exception can be passed
     as an argument, so an <code>any</code> serves as the container. The type of the
     exception is SAXParseException or an instance of a derived class.</p>

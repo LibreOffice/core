@@ -376,7 +376,7 @@ bool AgileEngine::decryptHmacKey()
 
     std::vector<sal_uInt8> iv = calculateIV(eType, mInfo.keyDataSalt, constBlockHmac1, mInfo.blockSize);
 
-    // Decrypt with out key, calculated iv
+    // Decrypt without key, calculated iv
     Decrypt aDecrypt(mKey, iv, cryptoType(mInfo));
     aDecrypt.update(mInfo.hmacKey, mInfo.hmacEncryptedKey);
 
@@ -401,7 +401,7 @@ bool AgileEngine::decryptHmacValue()
         return false;
     std::vector<sal_uInt8> iv = calculateIV(eType, mInfo.keyDataSalt, constBlockHmac2, mInfo.blockSize);
 
-    // Decrypt with out key, calculated iv
+    // Decrypt without key, calculated iv
     Decrypt aDecrypt(mKey, iv, cryptoType(mInfo));
     aDecrypt.update(mInfo.hmacHash, mInfo.hmacEncryptedValue);
 
@@ -603,7 +603,7 @@ bool AgileEngine::encryptHmacKey()
 
     std::vector<sal_uInt8> iv = calculateIV(eType, mInfo.keyDataSalt, constBlockHmac1, mInfo.blockSize);
 
-    // Encrypt with out key, calculated iv
+    // Encrypt without key, calculated iv
     Encrypt aEncryptor(mKey, iv, cryptoType(mInfo));
     aEncryptor.update(mInfo.hmacEncryptedKey, extendedSalt);
 
@@ -630,7 +630,7 @@ bool AgileEngine::encryptHmacValue()
 
     std::vector<sal_uInt8> iv = calculateIV(eType, mInfo.keyDataSalt, constBlockHmac2, mInfo.blockSize);
 
-    // Encrypt with out key, calculated iv
+    // Encrypt without key, calculated iv
     Encrypt aEncryptor(mKey, iv, cryptoType(mInfo));
     aEncryptor.update(mInfo.hmacEncryptedValue, extendedHash);
 

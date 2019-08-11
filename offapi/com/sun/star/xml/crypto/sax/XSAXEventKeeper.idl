@@ -81,7 +81,7 @@ interface XSAXEventKeeper : com::sun::star::uno::XInterface
     /**
      * Gets the element of an element mark.
      *
-     * @param id   the keeper id of the element mark, it can be a element
+     * @param id   the keeper id of the element mark, it can be an element
      *             collector or a blocker
      */
     com::sun::star::xml::wrapper::XXMLElementWrapper getElement([in] long id);

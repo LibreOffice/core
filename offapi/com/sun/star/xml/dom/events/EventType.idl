@@ -34,7 +34,7 @@ enum EventType
 
     DOMFocusOut,
     /*
-    The DOMFocusOut event occurs when a EventTarget loses focus, for instance via a pointing device being moved out of an element or by tabbing navigation out of the element. Unlike the HTML event blur, DOMFocusOut can be applied to any focusable EventTarget, not just FORM controls.
+    The DOMFocusOut event occurs when an EventTarget loses focus, for instance via a pointing device being moved out of an element or by tabbing navigation out of the element. Unlike the HTML event blur, DOMFocusOut can be applied to any focusable EventTarget, not just FORM controls.
     * Bubbles: Yes
     * Cancelable: No
     * Context Info: None

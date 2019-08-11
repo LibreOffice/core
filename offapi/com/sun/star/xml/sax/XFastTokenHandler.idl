@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module xml {  module sax {
 interface XFastTokenHandler: com::sun::star::uno::XInterface
 {
 
-    /** returns a integer token for the given string
+    /** returns an integer token for the given string
 
         @param Identifier
             the string given as a byte sequence encoded in UTF-8
@@ -50,7 +50,7 @@ interface XFastTokenHandler: com::sun::star::uno::XInterface
     long getTokenFromUTF8( [in] sequence< byte > Identifier );
 
 
-    /** returns a identifier for the given integer token as a byte
+    /** returns an identifier for the given integer token as a byte
           sequence encoded in UTF-8.
     */
     sequence< byte > getUTF8Identifier( [in] long Token );

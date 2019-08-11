@@ -28,7 +28,7 @@ module com { module sun { module star { module xml { module wrapper {
 /**
  * Interface of XML Element Wrapper.
  * <p>
- * This interface is used to wrap a element information, which
+ * This interface is used to wrap an element information, which
  * make it enable to transfer the element information between
  * different languages, such as C++/Java.
  */
