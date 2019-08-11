@@ -86,7 +86,7 @@ public class SwXEndnoteProperties extends TestCase {
 
         log.println( "Creating a test environment" );
         XMultiServiceFactory msf = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
-        log.println("creating a endnote");
+        log.println("creating an endnote");
         oEndnote = UnoRuntime.queryInterface(XInterface.class,
                 msf.createInstance("com.sun.star.text.Endnote"));
 

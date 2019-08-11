@@ -121,7 +121,7 @@ public:
         , nCurrentPos(0)
         , m_bStartElementFinished(true)
     {
-        OSL_ENSURE(SEQUENCESIZE > 50, "Sequence cache size to small");
+        OSL_ENSURE(SEQUENCESIZE > 50, "Sequence cache size too small");
         mp_Sequence = m_Sequence.getArray();
     }
     ~SaxWriterHelper()
@@ -1154,7 +1154,7 @@ void SAXWriter::startElement(const OUString& aName, const Reference< XAttributeL
     if (eRet == SAX_WARNING)
     {
         SAXInvalidCharacterException except;
-        except.Message = "Invalid character during XML-Export in a attribute value";
+        except.Message = "Invalid character during XML-Export in an attribute value";
         throw except;
     }
     else if (eRet == SAX_ERROR)

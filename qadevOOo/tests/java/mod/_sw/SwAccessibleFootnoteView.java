@@ -85,7 +85,7 @@ public class SwAccessibleFootnoteView extends TestCase {
         XPropertySet xPropSet = xViewSetSup.getViewSettings();
 
         //change zoom value to 10%
-        //footer should be in the vissible area of the document
+        //footer should be in the visible area of the document
         xPropSet.setPropertyValue("ZoomValue", Short.valueOf("10"));
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);

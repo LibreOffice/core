@@ -99,7 +99,7 @@ public class UnoRuntime {
      * <p>This method is generally of little use for client code.  It should be
      * considered a mistake that this method is published at all.</p>
      *
-     * @param object any object for which a OID shall be generated; must not be
+     * @param object any object for which an OID shall be generated; must not be
      * <code>null</code>
      * @return the generated OID
      * @see com.sun.star.uno.IQueryInterface#getOid
