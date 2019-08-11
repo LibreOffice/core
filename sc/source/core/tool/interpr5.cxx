@@ -645,7 +645,7 @@ void ScInterpreter::MEMat(const ScMatrixRef& mM, SCSIZE n)
  *
  * Added scaling for numeric stability.
  *
- * Given an n x n nonsingular matrix A, find a permutation matrix P, a unit
+ * Given an n x n nonsingular matrix A, find a permutation matrix P, an unit
  * lower-triangular matrix L, and an upper-triangular matrix U such that PA=LU.
  * Compute L and U "in place" in the matrix A, the original content is
  * destroyed. Note that the diagonal elements of the U triangular matrix

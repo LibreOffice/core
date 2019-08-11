@@ -499,7 +499,7 @@ bool ScValidationData::IsDataValid(
         else
         {
             // For numeric values use the resulting input line string to
-            // determine length, otherwise a once accepted value maybe could
+            // determine length, otherwise an once accepted value maybe could
             // not be edited again, for example abbreviated dates or leading
             // zeros or trailing zeros after decimal separator change length.
             OUString aStr;

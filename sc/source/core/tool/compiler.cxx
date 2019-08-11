@@ -3252,7 +3252,7 @@ bool ScCompiler::IsReference( const OUString& rName, const OUString* pErrRef )
         if ( ch1 == cDecSep )
             return false;
     }
-    // Who was that imbecile introducing '.' as the sheet name separator!?!
+    // Who was that imbecille introducing '.' as the sheet name separator!?!
     if ( rtl::isAsciiDigit( ch1 ) && pConv->getSpecialSymbol( Convention::SHEET_SEPARATOR) == '.' )
     {
         // Numerical sheet name is valid.

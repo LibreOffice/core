@@ -2981,7 +2981,7 @@ void ScInterpreter::ScDecimal()
             while ( *p == ' ' || *p == '\t' )
                 p++;        // strip leading white space
             if ( nBase == 16 )
-            {   // evtl. hex-prefix strippen
+            {   // evtl. hex-prefix stripped
                 if ( *p == 'x' || *p == 'X' )
                     p++;
                 else if ( *p == '0' && (*(p+1) == 'x' || *(p+1) == 'X') )
