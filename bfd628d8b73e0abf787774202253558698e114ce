@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_d14ddb72",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-11T08:21:47Z",
+      "side": 1,
+      "message": "Please at least try compiling your code prior to sending a patch to gerrit; and also do everything possible to make gerrit pass checks before adding others for review, to avoid unnecessary noise and wasting others\u0027 time. Thanks!",
+      "range": {
+        "startLine": 690,
+        "startChar": 80,
+        "endLine": 690,
+        "endChar": 81
+      },
+      "revId": "bfd628d8b73e0abf787774202253558698e114ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
