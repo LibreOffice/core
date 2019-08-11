@@ -202,7 +202,7 @@ interface XFormControllerContext;
 
       <tr style="vertical-align: top;">
         <td><em>sort</em></td>
-        <td>opens an dialog, which allows the user to manipulate the current sorting order of the form. If the dialog
+        <td>opens a dialog, which allows the user to manipulate the current sorting order of the form. If the dialog
         is closed with OK, the form is reloaded after setting the new sorting order.</td>
       </tr>
 
@@ -215,7 +215,7 @@ interface XFormControllerContext;
 
       <tr style="vertical-align: top;">
         <td><em>filter</em></td>
-        <td>opens an dialog, which allows the user to manipulate the current filter of the form. If the dialog
+        <td>opens a dialog, which allows the user to manipulate the current filter of the form. If the dialog
         is closed with OK, the form is reloaded after setting the new filter.</td>
       </tr>
 

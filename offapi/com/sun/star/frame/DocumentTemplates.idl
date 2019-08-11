@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module frame {
 /** is a service for accessing the document templates of the office
     and manipulate them ( add or rename or remove templates )
 
-    It implements a high level interface on top of an ucb content provider which
+    It implements a high level interface on top of a ucb content provider which
     is used for template configuration.
 */
 published service DocumentTemplates : XDocumentTemplates;

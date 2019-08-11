@@ -40,7 +40,7 @@ service ValidatableControlModel
 
         <p>Via this service, validatable control models inherit the
         com::sun::star::util::XCloneable interface.<br/>
-        If an validatable control model, at which a validator has been set (via
+        If a validatable control model, at which a validator has been set (via
         XValidatable::setValidator()), is being cloned, then the
         validator is also set at the clone. Effectively, this means that
         both control model instances share the same validator instance.</p>

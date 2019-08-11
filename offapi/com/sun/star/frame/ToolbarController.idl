@@ -92,7 +92,7 @@ service ToolbarController
         <p>
         Mostly used by a toolbar implementation to forward information to and request
         services from a toolbar controller component. This interface must be usable
-        after com::sun::star::lang::XInitialitation::initialize()
+        after com::sun::star::lang::XInitialization::initialize()
         has been called.  The behavior of the interface is undefined if the controller
         component hasn't been initialized.
         </p>
