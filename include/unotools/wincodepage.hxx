@@ -13,7 +13,7 @@
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/textenc.h>
 
-/** Map from a ISO-639 language code (and optionally ISO-3166 country/region code)
+/** Map from an ISO-639 language code (and optionally ISO-3166 country/region code)
 to a text encoding of corresponding Windows ANSI or OEM codepage.
 
 @param pLanguage
