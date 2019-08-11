@@ -155,10 +155,10 @@
 #define XML_TYPE_HEX                0x00002025          // 00544F1B
 
 // special basic types
-#define XML_TYPE_RECTANGLE_LEFT     0x00000100          // the Left member of a awt::Rectangle as a measure
-#define XML_TYPE_RECTANGLE_TOP      0x00000101          // the Top member of a awt::Rectangle as a measure
-#define XML_TYPE_RECTANGLE_WIDTH    0x00000102          // the Width member of a awt::Rectangle as a measure
-#define XML_TYPE_RECTANGLE_HEIGHT   0x00000103          // the Height member of a awt::Rectangle as a measure
+#define XML_TYPE_RECTANGLE_LEFT     0x00000100          // the Left member of an awt::Rectangle as a measure
+#define XML_TYPE_RECTANGLE_TOP      0x00000101          // the Top member of an awt::Rectangle as a measure
+#define XML_TYPE_RECTANGLE_WIDTH    0x00000102          // the Width member of an awt::Rectangle as a measure
+#define XML_TYPE_RECTANGLE_HEIGHT   0x00000103          // the Height member of an awt::Rectangle as a measure
 
 #define XML_TYPE_TEXT_CROSSEDOUT_STYLE  (XML_TEXT_TYPES_START +   0)
 #define XML_TYPE_TEXT_CASEMAP       (XML_TEXT_TYPES_START +   1)

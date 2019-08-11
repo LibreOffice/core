@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_WINSCHEDULER_HXX
 
 #ifndef _WIN32
-#error This header is just useable on Windows
+#error This header is just usable on Windows
 #else
 
 #include <vcl/dllapi.h>
