@@ -24,7 +24,7 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** defines how a EnhancedCustomShapeParameter has to be interpreted
+/** defines how an EnhancedCustomShapeParameter has to be interpreted
  */
 constants EnhancedCustomShapeParameterType
 {
@@ -32,7 +32,7 @@ constants EnhancedCustomShapeParameterType
      */
     const short NORMAL = 0;
 
-    /** the value of the point component has to be interpreted as index to a Equation
+    /** the value of the point component has to be interpreted as index to an Equation
      */
     const short EQUATION = 1;
 

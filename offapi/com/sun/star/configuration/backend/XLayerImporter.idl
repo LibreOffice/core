@@ -98,7 +98,7 @@ published interface XLayerImporter : ::com::sun::star::uno::XInterface
             a layer whose data will be imported into the backend
 
         @param aEntity
-            a entity into whose data the layer will be imported
+            an entity into whose data the layer will be imported
 
         @throws com::sun::star::lang::NullPointerException
             if the layer passed is `NULL` or no backend is available.
