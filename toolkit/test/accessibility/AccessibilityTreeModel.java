@@ -175,7 +175,7 @@ public class AccessibilityTreeModel
     }
 
 
-    /** Add add a new child to a parent.
+    /** Add a new child to a parent.
         @return
             Returns the new or existing representation of the specified
             accessible object.

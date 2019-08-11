@@ -39,7 +39,7 @@ rtl_TextEncoding getCharsetEncoding(const sal_Char * pBegin,
 
     @param nChar  Some UCS-4 character.
 
-    @return  True if nChar is a US-ASCII white space character (US-ASCII
+    @return  True if nChar is an US-ASCII white space character (US-ASCII
     0x09 or 0x20).
  */
 bool isWhiteSpace(sal_uInt32 nChar)
@@ -47,11 +47,11 @@ bool isWhiteSpace(sal_uInt32 nChar)
     return nChar == '\t' || nChar == ' ';
 }
 
-/** Get the Base 64 digit weight of a US-ASCII character.
+/** Get the Base 64 digit weight of an US-ASCII character.
 
     @param nChar  Some UCS-4 character.
 
-    @return  If nChar is a US-ASCII Base 64 digit character (US-ASCII
+    @return  If nChar is an US-ASCII Base 64 digit character (US-ASCII
     'A'--'F', or 'a'--'f', '0'--'9', '+', or '/'), return the
     corresponding weight (0--63); if nChar is the US-ASCII Base 64 padding
     character (US-ASCII '='), return -1; otherwise, return -2.
@@ -175,7 +175,7 @@ std::unique_ptr<sal_Char[]> convertFromUnicode(const sal_Unicode * pBegin,
 
     @param pBuffer  Points to a buffer, must not be null.
 
-    @param nUTF32  An UTF-32 character, must be in the range 0..0x10FFFF.
+    @param nUTF32  A UTF-32 character, must be in the range 0..0x10FFFF.
 
     @return  A pointer past the UTF-16 characters put into the buffer
     (i.e., pBuffer + 1 or pBuffer + 2).
