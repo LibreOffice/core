@@ -187,7 +187,7 @@ public class AccessibleStatusBarItem {
         }
     }
     /**
-     * Test the interfaces on an calc document
+     * Test the interfaces on a calc document
      */
     public void checkCalcDoc() {
         xMSF = getMSF();

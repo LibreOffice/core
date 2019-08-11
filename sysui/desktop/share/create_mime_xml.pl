@@ -114,8 +114,8 @@ sub getMimedata {
     }
     close DESKTOP_FILE;
     # die if we cannot determine the glob-pattern or mimtetype
-    die "Could not get mime-type fom $desktop_file" if ($mimetype eq "");
-    die "Could not get glob-pattern fom $desktop_file" if ($glob eq "");
+    die "Could not get mime-type from $desktop_file" if ($mimetype eq "");
+    die "Could not get glob-pattern from $desktop_file" if ($glob eq "");
 }
 
 ## END vim: set ts=4:

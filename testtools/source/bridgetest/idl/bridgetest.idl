@@ -361,7 +361,7 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
 
     /***
      * This method returns the parameter value.
-     * Method to extensivly test anys.
+     * Method to extensively test anys.
      ****/
     any transportAny( [in] any value );
 

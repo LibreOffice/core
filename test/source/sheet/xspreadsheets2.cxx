@@ -60,7 +60,7 @@ XSpreadsheets2::~XSpreadsheets2()
 void XSpreadsheets2::testImportedSheetNameAndIndex()
 {
 /**
-    Verfiy that the imported sheet has the correct name and is placed at the right requested index
+    Verify that the imported sheet has the correct name and is placed at the right requested index
 */
 
     importSheetToCopy();
