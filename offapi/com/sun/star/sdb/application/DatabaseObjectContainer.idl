@@ -59,7 +59,7 @@ constants DatabaseObjectContainer
     */
     const long FORMS = 1002;
 
-    /** denotes the virtual folder containing all reports of a database database, in a context where such a
+    /** denotes the virtual folder containing all reports of a database, in a context where such a
         folder is displayed to the user.
     */
     const long REPORTS = 1003;
