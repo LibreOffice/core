@@ -178,7 +178,7 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
     if ( !aUri.isValid() )
         throw ucb::IllegalIdentifierException();
 
-    // Create a new identifier for the mormalized URL returned by
+    // Create a new identifier for the normalized URL returned by
     // PackageUri::getUri().
     uno::Reference< ucb::XContentIdentifier > xId = new ::ucbhelper::ContentIdentifier( aUri.getUri() );
 

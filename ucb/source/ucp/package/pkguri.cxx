@@ -70,10 +70,10 @@ void PackageUri::init() const
     m_aParam.clear();
     m_aScheme.clear();
 
-    // URI must match at least: <sheme>://<non_empty_url_to_file>
+    // URI must match at least: <scheme>://<non_empty_url_to_file>
     if ( m_aUri.getLength() < PACKAGE_URL_SCHEME_LENGTH + 4 )
     {
-        // error, but remember that we did a init().
+        // error, but remember that we did an init().
         m_aPath = "/";
         return;
     }
@@ -85,7 +85,7 @@ void PackageUri::init() const
          ||
          ( m_aUri[ PACKAGE_URL_SCHEME_LENGTH + 2 ] != '/' ) )
     {
-        // error, but remember that we did a init().
+        // error, but remember that we did an init().
         m_aPath = "/";
         return;
     }
@@ -124,7 +124,7 @@ void PackageUri::init() const
         {
             // Only <scheme>:/// - Empty authority
 
-            // error, but remember that we did a init().
+            // error, but remember that we did an init().
             m_aPath = "/";
             return;
         }
@@ -134,7 +134,7 @@ void PackageUri::init() const
             {
                 // Only <scheme>://// or <scheme>://<something>
 
-                // error, but remember that we did a init().
+                // error, but remember that we did an init().
                 m_aPath = "/";
                 return;
             }
@@ -185,7 +185,7 @@ void PackageUri::init() const
               || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, ".." )
               || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, "." ) )
             {
-                // error, but remember that we did a init().
+                // error, but remember that we did an init().
                 m_aPath = "/";
                 return;
             }
@@ -222,7 +222,7 @@ void PackageUri::init() const
     }
     else
     {
-        // error, but remember that we did a init().
+        // error, but remember that we did an init().
         m_aPath = "/";
     }
 

@@ -2371,7 +2371,7 @@ void Content::renameData(
     }
     catch ( embed::InvalidStorageException const & )
     {
-        // this storage is in invalid state for eny reason
+        // this storage is in invalid state for any reason
         OSL_FAIL( "Caught InvalidStorageException!" );
         return;
     }
@@ -2435,7 +2435,7 @@ bool Content::removeData()
     }
     catch ( embed::InvalidStorageException const & )
     {
-        // this storage is in invalid state for eny reason
+        // this storage is in invalid state for any reason
         OSL_FAIL( "Caught InvalidStorageException!" );
         return false;
     }
@@ -2500,7 +2500,7 @@ bool Content::copyData( const Uri & rSourceUri, const OUString & rNewName )
     }
     catch ( embed::InvalidStorageException const & )
     {
-        // this storage is in invalid state for eny reason
+        // this storage is in invalid state for any reason
         OSL_FAIL( "Caught InvalidStorageException!" );
         return false;
     }
