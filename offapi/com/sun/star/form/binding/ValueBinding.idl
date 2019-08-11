@@ -43,7 +43,7 @@ service ValueBinding
         as long as the spreadsheet is locked.</p>
 
         <p>As long as this property is `TRUE`, the value binding should throw
-        a InvalidBindingStateException when its
+        an InvalidBindingStateException when its
         XValueBinding::setValue() method is invoked.</p>
     */
     [optional, property, bound, readonly]  boolean  ReadOnly;

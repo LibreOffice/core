@@ -116,7 +116,7 @@ published service DataForm
     /** is used for subforms and contains the names of columns of the parent form.
 
         <p> These columns are typically the foreign key fields of the parent form.
-        The values of theses columns are used to identify the data for the subform.
+        The values of these columns are used to identify the data for the subform.
         Each time the parent form changes its current row, the subform requeries
         it's data based on the values of the master fields.</p>
 
@@ -156,7 +156,7 @@ published service DataForm
     */
     [property] com::sun::star::form::TabulatorCycle Cycle;
 
-    /** determines how an navigation bar for this form should act.
+    /** determines how a navigation bar for this form should act.
     */
     [property] com::sun::star::form::NavigationBarMode NavigationBarMode;
 
