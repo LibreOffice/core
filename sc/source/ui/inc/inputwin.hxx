@@ -133,7 +133,7 @@ private:
     vcl::Font   aTextFont;
     std::unique_ptr<ScEditEngineDefaulter> mpEditEngine; // only created when needed
     std::unique_ptr<EditView> mpEditView;
-    AccTextDataVector maAccTextDatas;   // #i105267# text datas may be cloned, remember all copies
+    AccTextDataVector maAccTextDatas;   // #i105267# text data may be cloned, remember all copies
     bool        bIsRTL;
     bool        bIsInsertMode;
     bool        bFormulaMode;

@@ -43,7 +43,7 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShel
 
     sNewRecord = m_xFixedText->get_label();
 
-    //read header form current document, and add new controls
+    //read header from current document, and add new controls
     OSL_ENSURE( pTabViewShell, "pTabViewShell is NULL! :-/" );
     ScViewData& rViewData = pTabViewShell->GetViewData();
 
