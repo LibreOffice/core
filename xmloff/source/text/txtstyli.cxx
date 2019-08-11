@@ -548,7 +548,7 @@ void XMLTextStyleContext::FillPropertySet(
                         // This happens for AutoStyles which are already filled in XMLPropStyleContext::CreateAndInsert,
                         // thus the whole mechanism based on _ContextID_Index_Pair will not work
                         // in that case. Thus the slots which need to be converted already get
-                        // converted there (its called first) and not here (see
+                        // converted there (it's called first) and not here (see
                         // translateNameBasedDrawingLayerFillStyleDefinitionsToStyleDisplayNames)
                         // For convenience, still Write back the corrected value to the XMLPropertyState entry
                         rState.maValue <<= sStyleName;

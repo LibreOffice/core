@@ -132,7 +132,7 @@ public:
     /** @return  A sequence of possible types (received from base classes). */
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
-    /** @return  An unique implementation ID. */
+    /** @return  A unique implementation ID. */
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
 protected:

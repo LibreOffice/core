@@ -8424,7 +8424,7 @@ void Test::testMatConcat()
 
 void Test::testMatConcatReplication()
 {
-    // if one of the matrices is an one column or row matrix
+    // if one of the matrices is a one column or row matrix
     // the matrix is replicated across the larger matrix
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
 

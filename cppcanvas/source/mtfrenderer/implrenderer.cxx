@@ -2907,7 +2907,7 @@ namespace cppcanvas
             aStateStack.clearStateStack();
 
             // Setup local state, such that the metafile renders
-            // itself into an one-by-one square at the origin for
+            // itself into a one-by-one square at the origin for
             // identity view and render transformations
             aStateStack.getState().transform.scale( 1.0 / aMtfSizePix.Width(),
                                                      1.0 / aMtfSizePix.Height() );
