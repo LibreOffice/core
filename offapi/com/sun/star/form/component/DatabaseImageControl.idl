@@ -54,9 +54,9 @@
 
     <p>In a usual data form, the scenario will be as follows:
         <ul><li>There is a DatabaseImageControl as part of the document model, which acts as
-                control model for an com::sun::star::form::control::ImageControl.</li>
+                control model for a com::sun::star::form::control::ImageControl.</li>
 
-            <li>The control is an com::sun::star::awt::XImageConsumer for the
+            <li>The control is a com::sun::star::awt::XImageConsumer for the
                 com::sun::star::awt::XImageProducer supplied by the model.</li>
 
             <li>Whenever the form's cursor is positioned on a new record, the column the control
@@ -84,7 +84,7 @@ published service DatabaseImageControl
 
     service com::sun::star::form::DataAwareControlModel;
 
-    /** supplies the caller with an com::sun::star::awt::XImageProducer.
+    /** supplies the caller with a com::sun::star::awt::XImageProducer.
 
         <p>Other components can register as com::sun::star::awt::XImageConsumer
         at this producer. Then they will be notified of any change in the image to be displayed.</p>

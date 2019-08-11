@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module form {  module binding {
     input field) which is data-aware and thus can be bound to a database field,
     and additionally supports binding to arbitrary external values.
 
-    <p>If an com::sun::star::form::binding::ValueBinding instance is
+    <p>If a com::sun::star::form::binding::ValueBinding instance is
     set at the field, it will exchange it's text with the binding as <em>string</em>, thus only
     bindings supporting string exchange will be accepted in
     com::sun::star::form::binding::XValueBinding::setValueBinding().

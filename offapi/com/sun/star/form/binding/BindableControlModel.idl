@@ -35,7 +35,7 @@ service BindableControlModel
 
         <p>Via this service, bindable control models inherit the
         com::sun::star::util::XCloneable interface.<br/>
-        If an bindable control model, at which a binding has been established (via
+        If a bindable control model, at which a binding has been established (via
         XBindableValue::setValueBinding()), is being cloned, then the
         binding is also established at the clone. Effectively, this means that
         both control model instances share the same binding instance.</p>

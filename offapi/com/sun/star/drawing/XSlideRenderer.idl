@@ -39,7 +39,7 @@ interface XSlideRenderer
         The reason for not using the given size directly as preview size and
         thus possibly changing the aspect ratio is that
         a) a different aspect ratio is not used often, and
-        b) leaving the adaption of the actual preview size (according to the
+        b) leaving the adaptation of the actual preview size (according to the
         aspect ratio of the slide) to the slide renderer is more convenient
         to the caller than having to this himself.
 

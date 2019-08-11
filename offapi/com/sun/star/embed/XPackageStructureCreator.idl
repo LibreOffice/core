@@ -25,11 +25,11 @@
 
  module com {  module sun {  module star {  module embed {
 
-/** allows to convert file system folder tree in to a package.
+/** allows to convert filesystem folder tree into a package.
  */
 published interface XPackageStructureCreator: com::sun::star::uno::XInterface
 {
-    /** converts file system folder tree in to a package.
+    /** converts filesystem folder tree into a package.
 
         @param sFolderURL
             the URL of folder that must be converted,
