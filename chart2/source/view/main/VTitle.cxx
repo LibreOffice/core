@@ -113,6 +113,9 @@ void VTitle::createShapes(
     m_nYPos = rPos.Y;
 
     uno::Reference< beans::XPropertySet > xTitleProperties( m_xTitle, uno::UNO_QUERY );
+    sal_Bool bVisible = true;
+    if ((xTitleProperties->getPropertyValue("Visible") >>= bVisible) && !bVisible)
+        return;
 
     try
     {
