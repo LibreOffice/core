@@ -23,7 +23,7 @@
 
 module com {  module sun {  module star {  module sdbc {
 
-/** represents the properties for a ODBC connection (session) with a specific
+/** represents the properties for an ODBC connection (session) with a specific
     database. These properties can be used when calling the method
     com::sun::star::sdbc::XDriver::connect() or
     com::sun::star::sdbc::XDriverManager::getConnectionWithInfo().

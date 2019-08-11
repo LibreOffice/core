@@ -52,7 +52,7 @@ published interface XArray: com::sun::star::uno::XInterface
         this method returns the fully-qualified SQL type name.
         </p>
         @returns
-            a String that is the database-specific name for a built-in base type or the fully-qualified SQL type name for a base type that is a UDT
+            a String that is the database-specific name for a built-in base type or the fully-qualified SQL type name for a base type that is an UDT
 
         @throws SQLException
             if a database access error occurs.
@@ -94,7 +94,7 @@ published interface XArray: com::sun::star::uno::XInterface
                  is used.
 
              @returns
-                an sequence that contains the ordered elements
+                a sequence that contains the ordered elements
                 of the SQL array designated by this object.
 
              @throws SQLException

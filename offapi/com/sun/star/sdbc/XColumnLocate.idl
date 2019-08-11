@@ -49,7 +49,7 @@ published interface XColumnLocate: com::sun::star::uno::XInterface
         <p>
         The specification before LibreOffice 4.2 left unspecified what should
         happen for an invalid column name. As a result some drivers written
-        against the older speification may return a special invalid value, such
+        against the older specification may return a special invalid value, such
         as a negative number, zero, or a number greater than the number of
         columns.
         </p>
