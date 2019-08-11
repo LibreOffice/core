@@ -89,7 +89,7 @@ private:
                 break;
             case XlBordersIndex::xlDiagonalDown:
             case XlBordersIndex::xlDiagonalUp:
-                // #TODO have to ignore at the momement, would be
+                // #TODO have to ignore at the moment, would be
                 // nice to investigate what we can do here
                 break;
             default:
@@ -132,7 +132,7 @@ private:
 
             case XlBordersIndex::xlDiagonalDown:
             case XlBordersIndex::xlDiagonalUp:
-                // #TODO have to ignore at the momement, would be
+                // #TODO have to ignore at the moment, would be
                 // nice to investigate what we can do here
                 break;
             default:

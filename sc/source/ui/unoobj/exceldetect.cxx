@@ -145,7 +145,7 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
 
     if (aType == "calc_MS_Excel_97" || aType == "calc_MS_Excel_97_VorlageTemplate")
     {
-        // See if this stream is a Excel 97/XP/2003 (BIFF8) stream.
+        // See if this stream is an Excel 97/XP/2003 (BIFF8) stream.
         if (!hasStream(xInStream, "Workbook"))
             // BIFF8 is expected to contain a stream named "Workbook".
             return OUString();
@@ -155,7 +155,7 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
 
     else if (aType == "calc_MS_Excel_95" || aType == "calc_MS_Excel_95_VorlageTemplate")
     {
-        // See if this stream is a Excel 95 (BIFF5) stream.
+        // See if this stream is an Excel 95 (BIFF5) stream.
         if (!hasStream(xInStream, "Book"))
             return OUString();
 
@@ -164,7 +164,7 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
 
     else if (aType == "calc_MS_Excel_5095" || aType == "calc_MS_Excel_5095_VorlageTemplate")
     {
-        // See if this stream is a Excel 5.0/95 stream.
+        // See if this stream is an Excel 5.0/95 stream.
         if (!hasStream(xInStream, "Book"))
             return OUString();
 
@@ -173,7 +173,7 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
 
     else if (aType == "calc_MS_Excel_40" || aType == "calc_MS_Excel_40_VorlageTemplate")
     {
-        // See if this stream is a Excel 4.0 stream.
+        // See if this stream is an Excel 4.0 stream.
         if (!isExcel40(xInStream))
             return OUString();
 

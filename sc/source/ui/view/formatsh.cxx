@@ -924,7 +924,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         pStylePool->Remove( pStyleSheet );
                     else
                     {
-                        // If in the mean time something was painted with the
+                        // If in the meantime something was painted with the
                         // temporary changed item set
                         pDocSh->PostPaintGridAll();
                     }

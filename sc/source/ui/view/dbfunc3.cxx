@@ -2147,7 +2147,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
         {
             // sort without subtotals
 
-            aSubTotalParam.bRemoveOnly = true;      // is resetted below
+            aSubTotalParam.bRemoveOnly = true;      // is reset below
             DoSubTotals( aSubTotalParam, false );
         }
 

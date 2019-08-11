@@ -1804,7 +1804,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
 
         //  Options are set on the view and document (for new views),
         //  so that they remain during saving.
-        //! In the app (module) we need a extra options to tune that
+        //! In the app (module) we need an extra options to tune that
         //! (for new documents)
 
         if ( aNewOpt != rOldOpt )
