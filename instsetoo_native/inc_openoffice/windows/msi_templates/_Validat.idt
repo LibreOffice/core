@@ -129,7 +129,7 @@ Directory	Directory	N					Identifier		Unique identifier for directory entry, pri
 Directory	Directory_Parent	Y			Directory	1	Identifier		Reference to the entry in this table specifying the default parent directory. A record parented to itself or with a Null parent represents a root of the install tree.
 DrLocator	Depth	Y	0	32767					The depth below the path to which the Signature_ is recursively searched. If absent, the depth is assumed to be 0.
 DrLocator	Parent	Y					Identifier		The parent file signature. It is also a foreign key in the Signature table. If null and the Path column does not expand to a full path, then all the fixed drives of the user system are searched using the Path.
-DrLocator	Path	Y					AnyPath		The path on the user system. This is a either a subpath below the value of the Parent or a full path. The path may contain properties enclosed within [ ] that will be expanded.
+DrLocator	Path	Y					AnyPath		The path on the user system. This is an either a subpath below the value of the Parent or a full path. The path may contain properties enclosed within [ ] that will be expanded.
 DrLocator	Signature_	N					Identifier		The Signature_ represents a unique file signature and is also the foreign key in the Signature table.
 DuplicateFile	Component_	N			Component	1	Identifier		Foreign key referencing Component that controls the duplicate file.
 DuplicateFile	DestFolder	Y					Identifier		Name of a property whose value is assumed to resolve to the full pathname to a destination folder.
@@ -341,7 +341,7 @@ PublishComponent	AppData	Y					Text		This is localisable Application specific da
 PublishComponent	Component_	N			Component	1	Identifier		Foreign key into the Component table.
 PublishComponent	ComponentId	N					Guid		A string GUID that represents the component id that will be requested by the alien product.
 PublishComponent	Feature_	N			Feature	1	Identifier		Foreign key into the Feature table.
-PublishComponent	Qualifier	N					Text		This is defined only when the ComponentId column is an Qualified Component Id. This is the Qualifier for ProvideComponentIndirect.
+PublishComponent	Qualifier	N					Text		This is defined only when the ComponentId column is a Qualified Component Id. This is the Qualifier for ProvideComponentIndirect.
 RadioButton	Height	N	0	32767					The height of the button.
 RadioButton	Help	Y					Text		The help strings used with the button. The text is optional.
 RadioButton	Order	N	1	32767					A positive integer used to determine the ordering of the items within one list..The integers do not have to be consecutive.
