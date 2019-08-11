@@ -2120,7 +2120,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 
                     // If this is a text object also rescue the OutlinerParaObject since
                     // applying attributes to the object may change text layout when
-                    // multiple portions exist with multiple formats. If a OutlinerParaObject
+                    // multiple portions exist with multiple formats. If an OutlinerParaObject
                     // really exists and needs to be rescued is evaluated in the undo
                     // implementation itself.
                     bool bRescueText = mxTextEditObj.get();

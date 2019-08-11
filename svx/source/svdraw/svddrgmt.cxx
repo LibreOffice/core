@@ -900,7 +900,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragMethod::AddConnectorOverl
                 {
                     // this polygon is a temporary calculated connector path, so it is not possible to fetch
                     // the needed primitives directly from the pEdge object which does not get changed. If full
-                    // drag is on, use the SdrObjects ItemSet to create a adequate representation
+                    // drag is on, use the SdrObjects ItemSet to create an adequate representation
                     bool bUseSolidDragging(getSolidDraggingActive());
 
                     if(bUseSolidDragging)

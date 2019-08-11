@@ -810,7 +810,7 @@ void SdrDragView::ShowDragObj()
         // Changed for the GridOffset stuff: No longer iterate over
         // SdrPaintWindow(s), but now over SdrPageWindow(s), so doing the
         // same as the SdrHdl visualizations (see ::CreateB2dIAObject) do.
-        // This is needed to get access to a ObjectContact which is needed
+        // This is needed to get access to an ObjectContact which is needed
         // to evtl. process that GridOffset in CreateOverlayGeometry
         SdrPageView* pPageView(GetSdrPageView());
 

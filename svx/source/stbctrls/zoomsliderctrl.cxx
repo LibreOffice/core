@@ -67,7 +67,7 @@ const long nSliderXOffset = 20;
 const long nSnappingEpsilon = 5; // snapping epsilon in pixels
 const long nSnappingPointsMinDist = nSnappingEpsilon; // minimum distance of two adjacent snapping points
 
-// nOffset referes to the origin of the control:
+// nOffset refers to the origin of the control:
 // + ----------- -
 sal_uInt16 SvxZoomSliderControl::Offset2Zoom( long nOffset ) const
 {
