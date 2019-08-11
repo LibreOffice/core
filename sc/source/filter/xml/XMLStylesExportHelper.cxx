@@ -606,7 +606,7 @@ void ScRowFormatRanges::AddRange(const ScMyRowFormatRange& rFormatRange)
     sal_uInt32 nEnd = nPrevStartCol + rFormatRange.nRepeatColumns;
     for(sal_uInt32 i = nPrevStartCol + nRepeat; i < nEnd && i < pColDefaults->size(); i += (*pColDefaults)[i].nRepeat)
     {
-        OSL_ENSURE(sal_uInt32(nPrevStartCol + nRepeat) <= nEnd, "something wents wrong");
+        OSL_ENSURE(sal_uInt32(nPrevStartCol + nRepeat) <= nEnd, "something went wrong");
         if ((nPrevIndex != (*pColDefaults)[i].nIndex) ||
             (bPrevAutoStyle != (*pColDefaults)[i].bIsAutoStyle))
         {

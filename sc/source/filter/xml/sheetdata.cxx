@@ -170,7 +170,7 @@ void ScSheetSaveData::UseSaveEntries()
 void ScSheetSaveData::StoreInitialNamespaces( const SvXMLNamespaceMap& rNamespaces )
 {
     // the initial namespaces are just removed from the list of loaded namespaces,
-    // so only a unordered_map of the prefixes is needed.
+    // so only an unordered_map of the prefixes is needed.
 
     const NameSpaceHash& rNameHash = rNamespaces.GetAllEntries();
     for (const auto& rEntry : rNameHash)

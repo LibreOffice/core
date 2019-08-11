@@ -104,7 +104,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
 
 OUString SAL_CALL ScAccessibleTableBase::getAccessibleRowDescription( sal_Int32 nRow )
 {
-    OSL_FAIL("Here should be a implementation to fill the description");
+    OSL_FAIL("Here should be an implementation to fill the description");
 
     if ((nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
         throw lang::IndexOutOfBoundsException();
@@ -115,7 +115,7 @@ OUString SAL_CALL ScAccessibleTableBase::getAccessibleRowDescription( sal_Int32 
 
 OUString SAL_CALL ScAccessibleTableBase::getAccessibleColumnDescription( sal_Int32 nColumn )
 {
-    OSL_FAIL("Here should be a implementation to fill the description");
+    OSL_FAIL("Here should be an implementation to fill the description");
 
     if ((nColumn > (maRange.aEnd.Col() - maRange.aStart.Col())) || (nColumn < 0))
         throw lang::IndexOutOfBoundsException();
@@ -193,7 +193,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32
 uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessibleRowHeaders(  )
 {
     uno::Reference< XAccessibleTable > xAccessibleTable;
-    OSL_FAIL("Here should be a implementation to fill the row headers");
+    OSL_FAIL("Here should be an implementation to fill the row headers");
 
     //CommitChange
     return xAccessibleTable;
@@ -202,7 +202,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessible
 uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessibleColumnHeaders(  )
 {
     uno::Reference< XAccessibleTable > xAccessibleTable;
-    OSL_FAIL("Here should be a implementation to fill the column headers");
+    OSL_FAIL("Here should be an implementation to fill the column headers");
 
     //CommitChange
     return xAccessibleTable;
