@@ -1248,7 +1248,7 @@ ErrCode ImportExcel8::Read()
 
     if( eLastErr == ERRCODE_NONE )
     {
-        // In some strange circumstances a the codename might be missing
+        // In some strange circumstances the codename might be missing
         // # Create any missing Sheet CodeNames
         for ( const auto& rTab : nTabsWithNoCodeName )
         {

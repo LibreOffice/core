@@ -1694,7 +1694,7 @@ void ScHTMLEntry::Strip( const EditEngine& rEditEngine )
 
     Organizes the tables with a unique table key. Stores nested tables inside
     the parent table and forms in this way a tree structure of tables. An
-    instance of this class ownes the contained table objects and deletes them
+    instance of this class owns the contained table objects and deletes them
     on destruction.
  */
 class ScHTMLTableMap final

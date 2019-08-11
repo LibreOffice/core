@@ -664,7 +664,7 @@ struct DataField
     DataField( long nPos, const ScDPSaveDimension* pDim ) : mnPos(nPos), mpDim(pDim) {}
 };
 
-/** Returns a OOXML subtotal function name string. See ECMA-376-1:2016 18.18.43 */
+/** Returns an OOXML subtotal function name string. See ECMA-376-1:2016 18.18.43 */
 OString GetSubtotalFuncName(ScGeneralFunction eFunc)
 {
     switch (eFunc)

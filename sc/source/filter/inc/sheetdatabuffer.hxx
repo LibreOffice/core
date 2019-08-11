@@ -120,7 +120,7 @@ public:
     void                setErrorCell( const CellModel& rModel, sal_uInt8 nErrorCode );
     /** Inserts a formula cell into the sheet. */
     void                setFormulaCell( const CellModel& rModel, const ApiTokenSequence& rTokens );
-    /** Inserts a ISO 8601 date cell into the sheet. */
+    /** Inserts an ISO 8601 date cell into the sheet. */
     void                setDateCell( const CellModel& rModel, const OUString& rDateString );
 
     void                createSharedFormula(

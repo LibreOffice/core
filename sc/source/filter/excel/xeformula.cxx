@@ -69,8 +69,8 @@ struct XclExpScToken
 enum XclExpClassConv
 {
     EXC_CLASSCONV_ORG,          /// Keep original class of the token.
-    EXC_CLASSCONV_VAL,          /// Convert ARR tokens to VAL class (REF remains uncahnged).
-    EXC_CLASSCONV_ARR           /// Convert VAL tokens to ARR class (REF remains uncahnged).
+    EXC_CLASSCONV_VAL,          /// Convert ARR tokens to VAL class (REF remains unchanged).
+    EXC_CLASSCONV_ARR           /// Convert VAL tokens to ARR class (REF remains unchanged).
 };
 
 /** Token class conversion and position of a token in the token array. */

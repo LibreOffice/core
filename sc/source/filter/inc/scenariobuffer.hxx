@@ -59,12 +59,12 @@ public:
 
     /** Imports a scenario definition from a scenario element. */
     void                importScenario( const AttributeList& rAttribs );
-    /** Imports a new cell for this scenario from a inputCells element. */
+    /** Imports a new cell for this scenario from an inputCells element. */
     void                importInputCells( const AttributeList& rAttribs );
 
     /** Imports a scenario definition from a SCENARIO record. */
     void                importScenario( SequenceInputStream& rStrm );
-    /** Imports a new cell for this scenario from a INPUTCELLS record. */
+    /** Imports a new cell for this scenario from an INPUTCELLS record. */
     void                importInputCells( SequenceInputStream& rStrm );
 
     /** Creates the scenario in the Calc document. */

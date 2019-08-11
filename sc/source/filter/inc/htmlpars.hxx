@@ -468,7 +468,7 @@ private:
     /** Tries to insert the entry into the current cell.
         @descr  If insertion is not possible (i.e., currently no cell open), the
         entry will be inserted into the parent table.
-        @return  true = Entry as been pushed into the current cell; false = Entry dropped. */
+        @return  true = Entry has been pushed into the current cell; false = Entry dropped. */
     bool                PushEntry( ScHTMLEntryPtr& rxEntry );
     /** Puts the current entry into the entry list, if it is not empty.
         @param rInfo  The import info struct containing the end position of the current entry.
