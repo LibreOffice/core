@@ -204,6 +204,16 @@ interface ImpressEditView : DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_INSERT_QRCODE // status()
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetState ;
+    ]
+    SID_EDIT_QRCODE // status()
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetState ;
+    ]
 }
 
 shell DrawViewShell
