@@ -331,7 +331,7 @@ sal_Int16 getControlTypeByObject(const Reference< css::lang::XServiceInfo>& _rxO
 {
     // ask for the persistent service name
     Reference< css::io::XPersistObject> xPersistence(_rxObject, UNO_QUERY);
-    DBG_ASSERT(xPersistence.is(), "::getControlTypeByObject : argument shold be an css::io::XPersistObject !");
+    DBG_ASSERT(xPersistence.is(), "::getControlTypeByObject : argument should be a css::io::XPersistObject !");
     if (!xPersistence.is())
         return OBJ_FM_CONTROL;
 

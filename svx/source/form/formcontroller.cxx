@@ -1346,7 +1346,7 @@ void FormController::toggleAutoFields(bool bAutoFields)
                     Reference< XPropertySet >  xField;
                     xSet->getPropertyValue(FM_PROP_BOUNDFIELD) >>= xField;
 
-                    // is it a autofield?
+                    // is it an autofield?
                     if  (   xField.is()
                         &&  ::comphelper::hasProperty( FM_PROP_AUTOINCREMENT, xField )
                         &&  ::comphelper::getBOOL( xField->getPropertyValue( FM_PROP_AUTOINCREMENT ) )
@@ -1374,7 +1374,7 @@ void FormController::toggleAutoFields(bool bAutoFields)
                     Reference< XPropertySet >  xField;
                     xSet->getPropertyValue(FM_PROP_BOUNDFIELD) >>= xField;
 
-                    // is it a autofield?
+                    // is it an autofield?
                     if  (   xField.is()
                         &&  ::comphelper::hasProperty( FM_PROP_AUTOINCREMENT, xField )
                         &&  ::comphelper::getBOOL( xField->getPropertyValue(FM_PROP_AUTOINCREMENT ) )
@@ -3009,7 +3009,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
 
         // ok, we receive the list of filters as sequence of fieldnames, value
         // now we have to transform the fieldname into UI names, that could be a label of the field or
-        // a aliasname or the fieldname itself
+        // an aliasname or the fieldname itself
 
         // first adjust the field names if necessary
         Reference< XNameAccess > xQueryColumns =
@@ -4118,7 +4118,7 @@ Reference< XDispatchProviderInterceptor >  FormController::createInterceptor(con
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
 #ifdef DBG_UTIL
-    // check if we already have a interceptor for the given object
+    // check if we already have an interceptor for the given object
     for ( const auto & it : m_aControlDispatchInterceptors )
     {
         if (it->getIntercepted() == _xInterception)

@@ -88,8 +88,8 @@ public:
 
     /** returns the FmFormObj behind the given SdrObject
 
-        In case the SdrObject *is* an FmFormObject, this is a simple cast. In case the SdrObject
-        is a virtual object whose referenced object is an FmFormObj, then this referenced
+        In case the SdrObject *is* a FmFormObject, this is a simple cast. In case the SdrObject
+        is a virtual object whose referenced object is a FmFormObj, then this referenced
         object is returned. In all other cases, NULL is returned.
     */
     SAL_DLLPRIVATE static       FmFormObj* GetFormObject( SdrObject* _pSdrObject );

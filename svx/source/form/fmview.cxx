@@ -253,7 +253,7 @@ void FmFormView::ChangeDesignMode(bool bDesign)
     // --- 5. base class functionality
     SetDesignMode( bDesign );
 
-    // --- 6. simulate a activation (the shell will handle some things there ...?)
+    // --- 6. simulate an activation (the shell will handle some things there ...?)
     OSL_PRECOND( pFormShell && pFormShell->GetImpl(), "FmFormView::ChangeDesignMode: is this really allowed? No shell?" );
     if ( pFormShell && pFormShell->GetImpl() )
         pFormShell->GetImpl()->viewActivated_Lock(*this);

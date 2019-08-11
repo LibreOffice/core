@@ -776,7 +776,7 @@ namespace svxform
 
         // conditions to disallow the drop
         // 0) the root entry is part of the list (can't DnD the root!)
-        // 1) one of the draged entries is to be dropped onto its own parent
+        // 1) one of the dragged entries is to be dropped onto its own parent
         // 2) -               "       - is to be dropped onto itself
         // 3) -               "       - is a Form and to be dropped onto one of its descendants
         // 4) one of the entries is a control and to be dropped onto the root
@@ -913,7 +913,7 @@ namespace svxform
         DBG_ASSERT(!bForeignCollection || bHasHiddenControlsFormat, "NavigatorTree::implExecuteDataTransfer: invalid format (AcceptDrop shouldn't have let this pass) !");
         DBG_ASSERT(bForeignCollection || !m_bDragDataDirty, "NavigatorTree::implExecuteDataTransfer: invalid state (shell changed since last exchange resync) !");
             // this should be done in AcceptDrop: the list of controls is created in _rData
-            // and m_bDragDataDirty is resetted
+            // and m_bDragDataDirty is reset
 #endif
 
         if ( DND_ACTION_COPY == _nAction )
@@ -1804,7 +1804,7 @@ namespace svxform
                     while (pParentLoop)
                     {
                         // actually i would have to test, if parent is part of m_arr_CurrentSelection ...
-                        // but if it's selected, than it's in m_arrCurrentSelection
+                        // but if it's selected, then it's in m_arrCurrentSelection
                         // or one of its ancestors, which was selected earlier.
                         // In both cases IsSelected is enough
                         if (IsSelected(pParentLoop))
