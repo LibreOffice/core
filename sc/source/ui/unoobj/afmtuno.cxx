@@ -45,7 +45,7 @@
 
 using namespace ::com::sun::star;
 
-//  a AutoFormat has always 16 entries
+//  an AutoFormat has always 16 entries
 #define SC_AF_FIELD_COUNT 16
 
 //  AutoFormat map only for PropertySetInfo without Which-IDs
@@ -339,7 +339,7 @@ ScAutoFormatObj::ScAutoFormatObj(sal_uInt16 nIndex) :
 
 ScAutoFormatObj::~ScAutoFormatObj()
 {
-    //  If a AutoFormat object is released, then eventually changes are saved
+    //  If an AutoFormat object is released, then eventually changes are saved
     //  so that they become visible in e.g Writer
 
     if (IsInserted())

@@ -72,7 +72,7 @@ public:
     virtual void                UpdateData() override { ScCellTextData::UpdateData(); }
 };
 
-//  ScAccessibleCellTextData: shared data between sub objects of a accessible cell text object
+//  ScAccessibleCellTextData: shared data between sub objects of an accessible cell text object
 
 class ScAccessibleCellTextData : public ScAccessibleCellBaseTextData
 {
