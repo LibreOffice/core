@@ -35,7 +35,7 @@ module com { module sun { module star { module deployment {
 interface XPackageRegistry
 {
     /** binds a package URL to a XPackage handle.
-        The returned UNO package handle ought to late-initialize itself,
+        The returned UNO package handle ought too late-initialize itself,
         thus the process of binding must not be an expensive operation, because
         it is not abortable.
 

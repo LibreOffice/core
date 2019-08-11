@@ -38,7 +38,7 @@ module com { module sun { module star { module configuration { module backend {
 published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 {
 
-    /** receives notification that a update or description is started.
+    /** receives notification that an update or description is started.
 
         @throws com::sun::star::configuration::backend::MalformedDataException
             if the update already was started

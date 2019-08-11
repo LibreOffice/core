@@ -126,7 +126,7 @@ published service SetElement
  returns `NULL`).
  </p>
 
- <p>Clients may register an com::sun::star::lang::XEventListener
+ <p>Clients may register a com::sun::star::lang::XEventListener
  to be notified, if the object is removed from its container by an outside source.
  </p>
 */

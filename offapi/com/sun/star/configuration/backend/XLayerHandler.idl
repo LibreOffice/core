@@ -63,7 +63,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
         @throws com::sun::star::configuration::backend::MalformedDataException
             <ul>
             <li>if invalid data is detected in the layer</li>
-            <li>if there is a unfinished subnode in progress</li>
+            <li>if there is an unfinished subnode in progress</li>
             <li>if no layer is started at all</li>
             <li>if the layer tries to override read-only or final data</li>
             </ul>
