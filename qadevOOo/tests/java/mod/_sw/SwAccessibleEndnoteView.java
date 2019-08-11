@@ -67,7 +67,7 @@ public class SwAccessibleEndnoteView extends TestCase {
 
         log.println( "Creating a test environment" );
         XMultiServiceFactory msf = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
-        log.println("creating a endnote");
+        log.println("creating an endnote");
         oEndnote = UnoRuntime.queryInterface(XInterface.class,
                 msf.createInstance("com.sun.star.text.Endnote"));
 
@@ -84,7 +84,7 @@ public class SwAccessibleEndnoteView extends TestCase {
         XPropertySet xPropSet = xViewSetSup.getViewSettings();
 
         //change zoom value to 20%
-        //footer should be in the vissible area of the document
+        //footer should be in the visible area of the document
         xPropSet.setPropertyValue("ZoomValue", Short.valueOf("20"));
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
