@@ -7854,11 +7854,11 @@ void Test::testFuncGCD()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 150.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetString(aPos, "=GCD({-3;6;9})");
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for a array with values less then 0",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for an array with values less then 0",
             OUString("Err:502"), aVal);
     m_pDoc->SetString(aPos, "=GCD({\"a\";6;9})");
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for a array with strings",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for an array with strings",
             OUString("Err:502"), aVal);
 
     //many inline array
@@ -7868,11 +7868,11 @@ void Test::testFuncGCD()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 150.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetString(aPos,"=GCD({3;6;9};{3;-6;9})");
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for a array with values less then 0",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for an array with values less then 0",
             OUString("Err:502"), aVal);
     m_pDoc->SetString(aPos, "=GCD({3;6;9};{\"a\";6;9})");
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for a array with strings",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for an array with strings",
             OUString("Err:502"), aVal);
 
     // inline list of values
@@ -7882,7 +7882,7 @@ void Test::testFuncGCD()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 12.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetString(aPos, "=GCD(\"a\";1)");
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return #VALUE! for a array with strings",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return #VALUE! for an array with strings",
             OUString("#VALUE!"), aVal);
 
     m_pDoc->DeleteTab(0);
@@ -7951,11 +7951,11 @@ void Test::testFuncLCM()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 0.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetString(aPos, "=LCM({-3;6;9})");
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for a array with values less then 0",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for an array with values less then 0",
             OUString("Err:502"), aVal);
     m_pDoc->SetString(aPos, "=LCM({\"a\";6;9})");
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for a array with strings",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for an array with strings",
             OUString("Err:502"), aVal);
 
         //many inline array
@@ -7965,11 +7965,11 @@ void Test::testFuncLCM()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 0.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetString(aPos,"=LCM({3;6;9};{3;-6;9})");
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for a array with values less then 0",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for an array with values less then 0",
             OUString("Err:502"), aVal);
     m_pDoc->SetString(aPos, "=LCM({3;6;9};{\"a\";6;9})");
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for a array with strings",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for an array with strings",
             OUString("Err:502"), aVal);
 
     m_pDoc->SetString(aPos, "=LCM(12;24;36;48;60)");
@@ -7978,7 +7978,7 @@ void Test::testFuncLCM()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 0.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetString(aPos, "=LCM(\"a\";1)");
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return #VALUE! for a array with strings",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return #VALUE! for an array with strings",
             OUString("#VALUE!"), aVal);
 
     m_pDoc->DeleteTab(0);
@@ -8053,7 +8053,7 @@ void Test::testFuncSUMSQ()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 7920.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetString(aPos, "=SUMSQ(\"a\";1;\"d\";-4;2)");
     OUString aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUMSQ should return #VALUE! for a array with strings",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUMSQ should return #VALUE! for an array with strings",
             OUString("#VALUE!"), aVal);
 
     m_pDoc->DeleteTab(0);

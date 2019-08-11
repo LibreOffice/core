@@ -518,7 +518,7 @@ public:
     void testFormulaListenerUpdateDeleteTab();
 
     // Check that the Listeners are correctly updated when we
-    // call a operation
+    // call an operation
     void testCondFormatUpdateMoveTab();
     void testCondFormatUpdateDeleteTab();
     void testCondFormatUpdateInsertTab();

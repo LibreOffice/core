@@ -161,7 +161,7 @@ bool ScBroadcastAreaSlot::StartListeningArea(
     if ( !rpArea )
     {
         // Even if most times the area doesn't exist yet and immediately trying
-        // to new and insert it would save an attempt to find it, on mass
+        // to new and insert it would save an attempt to find it, on massive
         // operations like identical large [HV]LOOKUP() areas the new/delete
         // would add quite some penalty for all but the first formula cell.
         ScBroadcastAreas::const_iterator aIter( FindBroadcastArea( rRange, bGroupListening));

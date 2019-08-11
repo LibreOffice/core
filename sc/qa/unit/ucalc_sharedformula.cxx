@@ -137,7 +137,7 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(12), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(6), pFC->GetSharedLength());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The token is expected to be shared.", pFC->GetCode(), pFC->GetSharedCode());
-    // B20 shold be non-shared.
+    // B20 should be non-shared.
     aPos.SetRow(19); // B20
     pFC = m_pDoc->GetFormulaCell(aPos);
     CPPUNIT_ASSERT_MESSAGE("B20 should be a formula cell.", pFC);

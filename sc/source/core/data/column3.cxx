@@ -1250,7 +1250,7 @@ public:
                     }
                     else if (bNumeric || bDateTime || bString)
                     {
-                        // Always just copy the original row to the Undo Documen;
+                        // Always just copy the original row to the Undo Document;
                         // do not create Value/string cells from formulas
 
                         FormulaError nErr = rSrcCell.GetErrCode();
