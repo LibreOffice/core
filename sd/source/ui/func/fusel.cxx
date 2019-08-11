@@ -784,7 +784,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         {
             if( rMEvt.IsRight() )
             {
-                // In watering-can mode, on press onto right mouse button, a undo is executed
+                // In watering-can mode, on press onto right mouse button, an undo is executed
                 mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_UNDO, SfxCallMode::ASYNCHRON );
             }
             else if (pWaterCanCandidate != nullptr)
@@ -1274,7 +1274,7 @@ bool FuSelection::HandleImageMapClick(SdrObject* pObj, const Point& rPos)
     This is used when a function gets a KEY_ESCAPE but can also
     be called directly.
 
-    @returns true if a active function was aborted
+    @returns true if an active function was aborted
 */
 bool FuSelection::cancel()
 {

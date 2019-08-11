@@ -235,7 +235,7 @@ private:
         ::std::vector< css::beans::Property>& rProperties);
 
     /**
-     * The same as getFastProperyValue, but return the value through
+     * The same as getFastPropertyValue, but return the value through
      * rValue and nHandle is always valid.
      */
     virtual void SAL_CALL getFastPropertyValue(
@@ -251,7 +251,7 @@ private:
         @param rOldValue
             The old value. Only set if return is true.
         @param nHandle
-            The handle of the proberty.
+            The handle of the property.
         @return
             <TRUE/> if the value is converted successfully.
         @throws IllegalArgumentException
@@ -262,7 +262,7 @@ private:
         sal_Int32 nHandle,
         const css::uno::Any& rValue ) override;
 
-    /** The same as setFastProperyValue, but no exception is thrown and nHandle
+    /** The same as setFastPropertyValue, but no exception is thrown and nHandle
         is always valid. You must not broadcast the changes in this method.
      */
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(

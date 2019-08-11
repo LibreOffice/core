@@ -36,7 +36,7 @@ namespace sd { namespace framework {
 
 class ConfigurationUpdater;
 
-/** The ChangeRequestQueueProcessor ownes the ChangeRequestQueue and
+/** The ChangeRequestQueueProcessor owns the ChangeRequestQueue and
     processes the configuration change requests.
 
     When after processing one entry the queue is empty then the
