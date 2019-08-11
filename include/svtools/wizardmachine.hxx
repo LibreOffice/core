@@ -123,7 +123,7 @@ namespace svt
 
         /** updates the travel-related UI elements of the OWizardMachine we live in (if any)
 
-            If the parent of the tab page is a OWizardMachine, then updateTravelUI at this instance
+            If the parent of the tab page is an OWizardMachine, then updateTravelUI at this instance
             is called. Otherwise, nothing happens.
         */
         void                updateDialogTravelUI();

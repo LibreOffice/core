@@ -69,7 +69,7 @@ public:
         @param rFieldDesc
             description of the field. see clipboard format SBA-FIELDFORMAT
         @deprecated
-            This method is deprecated. Use the version with a ODataAccessDescriptor instead.
+            This method is deprecated. Use the version with an ODataAccessDescriptor instead.
     */
     SdrObjectUniquePtr CreateFieldControl(const OUString& rFieldDesc) const;
 
