@@ -317,7 +317,7 @@ void DrawXmlEmitter::visit( PolyPolyElement& elem, const std::list< std::unique_
     PropertyMap aProps;
     // PDFIProcessor transforms geometrical objects, not images and text
     // so we need to tell fillFrameProps here that the transformation for
-    // a PolyPolyElement was already applied (aside form translation)
+    // a PolyPolyElement was already applied (aside from translation)
     fillFrameProps( elem, aProps, m_rEmitContext, true );
     OUStringBuffer aBuf( 64 );
     aBuf.append( "0 0 " );

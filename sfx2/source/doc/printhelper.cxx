@@ -661,7 +661,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             }
             else
             {
-                // it's an ucb target. So we must use a temp. file for vcl
+                // it's a ucb target. So we must use a temp. file for vcl
                 // and move it after printing by using the ucb.
                 // Create a temp file on the heap (because it must delete the
                 // real file on disk automatically if it die - bt we have to share it with

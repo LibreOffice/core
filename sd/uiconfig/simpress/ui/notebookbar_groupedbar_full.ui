@@ -4355,7 +4355,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="prioritiy-4"/>
+                          <class name="priority-4"/>
                         </style>
                       </object>
                       <packing>

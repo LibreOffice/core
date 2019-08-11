@@ -83,7 +83,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     SdrEndTextEdit();
     mnAction = rAction;
 
-    // Is there a object at the position rPos?
+    // Is there an object at the position rPos?
     SdrGrafObj*     pNewGrafObj = nullptr;
     SdrPageView*    pPV = GetSdrPageView();
     SdrObject*      pPickObj = pObj;
