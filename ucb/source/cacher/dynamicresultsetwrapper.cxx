@@ -147,7 +147,7 @@ void SAL_CALL DynamicResultSetWrapper::dispose()
         }
     }
 
-    /* //@todo ?? ( only if java collection needs to long )
+    /* //@todo ?? (only if Java collection needs too long)
     if( xSourceComponent.is() )
         xSourceComponent->dispose();
     */

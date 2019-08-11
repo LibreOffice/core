@@ -442,7 +442,7 @@ namespace ucb { namespace ucp { namespace ext
     {
         ENSURE_OR_RETURN( m_eExtContentType != E_ROOT, "illegal call", OUString() );
 
-        // create an ucb::XContent for the physical file within the deployed extension
+        // create a ucb::XContent for the physical file within the deployed extension
         const Reference< XPackageInformationProvider > xPackageInfo = PackageInformationProvider::get(m_xContext);
         const OUString sPackageLocation( xPackageInfo->getPackageLocation( m_sExtensionId ) );
 
