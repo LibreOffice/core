@@ -114,7 +114,7 @@ public class GridControl
 
         // clone the grid model
         final XCloneable cloneable = UnoRuntime.queryInterface( XCloneable.class, m_gridControlModel );
-        assertNotNull( "all UnoControlModel's are expected to be cloneable", cloneable );
+        assertNotNull( "all UnoControlModel's are expected to be clonable", cloneable );
 
         final XInterface clone = cloneable.createClone();
         final XPropertySet clonedProps = UnoRuntime.queryInterface( XPropertySet.class, clone );

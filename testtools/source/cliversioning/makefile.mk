@@ -116,7 +116,7 @@ RUNINSTRUCTIONS :
     @echo To run the test go to qa\cliversioning, run dmake and follow instructions.
     @echo .
     @echo Or install an office with full system integration and run $(BIN)$/runtests.exe 
-    @echo in a console withouth build environment.
+    @echo in a console without build environment.
     @echo .
     @echo Or install an office with setup /a. Expand PATH with the bin folder of the URE.
     @echo Set UNO_PATH=system_path_to_program_folder

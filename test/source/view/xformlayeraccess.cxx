@@ -27,7 +27,7 @@ void XFormLayerAccess::testGetFormController()
 
     const bool bCurrentMode = xFLA->isFormDesignMode();
 
-    // delibritly don't use UNO_QUERY_THROW, so we can use
+    // deliberately don't use UNO_QUERY_THROW, so we can use
     // uno::XInterface::is() in CPPUNIT_ASSERT()
     xFLA->setFormDesignMode(false);
     uno::Reference<form::runtime::XFormController> xFC = xFLA->getFormController(m_xForm);
