@@ -306,7 +306,7 @@ void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::R
     ScDocument* pDoc = pViewData->GetDocument();
     if ( pDoc->IsInInterpreter() )
     {
-        // Via Reschedule, interpretended cells do not trigger Invalidate again,
+        // Via Reschedule, interpreted cells do not trigger Invalidate again,
         // otherwise for instance an error box would never appear (bug 36381).
         // Later, through bNeedsRepaint everything is painted again.
         if ( bNeedsRepaint )

@@ -2343,7 +2343,7 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
         pDev->SetLineColor( aGridColor );
         pDev->SetFillColor();
         pDev->DrawRect( tools::Rectangle( nLeftX, nTopY, nRightX, nBottomY ) );
-        //  nEndX/Y without frame-adaption
+        //  nEndX/Y without frame-adaptation
     }
 
     if ( pPrinter && bDoPrint )

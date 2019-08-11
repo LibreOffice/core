@@ -192,7 +192,7 @@ void ScSpellDialogChildWindow::Init()
             ScEditableTester aTester( mpDoc, rMarkData );
             if( !aTester.IsEditable() )
             {
-                // #i85751# Don't show a ErrorMessage here, because the vcl
+                // #i85751# Don't show an ErrorMessage here, because the vcl
                 // parent of the InfoBox is not fully initialized yet.
                 // This leads to problems in the modality behaviour of the
                 // ScSpellDialogChildWindow.

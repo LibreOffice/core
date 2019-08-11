@@ -102,7 +102,7 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl, Timer *, void)
                 // This is no longer true - SdrObject::RecalcBoundRect() uses the
                 // GetViewContact().getViewIndependentPrimitive2DContainer()) call
                 // that now by default adds the eventually needed GridOffset. Thus
-                // I have removed that adaption stuff.
+                // I have removed that adaptation stuff.
                 m_aRect = m_xObject->GetCurrentBoundRect();
             }
 

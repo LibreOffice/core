@@ -410,7 +410,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
             {
                 case SC_SPLIT_NONE:
                     nSizeSp = nSplitSizeX;
-                    nSizeLt = nSizeX - nSizeSp; // Covert the corner
+                    nSizeLt = nSizeX - nSizeSp; // Convert the corner
                     break;
                 case SC_SPLIT_NORMAL:
                     nSizeSp = nSplitSizeX;
@@ -2337,7 +2337,7 @@ void lcl_getGroupIndexes(const ScOutlineArray& rArray, SCCOLROW nStart, SCCOLROW
             {
                 if (nIndex > 0)
                 {
-                    // is there a prevoius group not inside the range
+                    // is there a previous group not inside the range
                     // but anyway intersecting it ?
                     const ScOutlineEntry* pPrevEntry = rArray.GetEntry(nLevel, nIndex - 1);
                     if (pPrevEntry && nStart < pPrevEntry->GetEnd())

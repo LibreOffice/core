@@ -761,7 +761,7 @@ long ScPreview::GetFirstPage(SCTAB nTabP)
     {
         CalcPages();
         if (nTabP >= static_cast<SCTAB>(nPages.size()) )
-            OSL_FAIL("nPages out ouf bounds, FIX IT");
+            OSL_FAIL("nPages out of bounds, FIX IT");
         UpdateDrawView();       // The table eventually changes
 
         for (SCTAB i=0; i<nTabP; i++)

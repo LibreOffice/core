@@ -541,7 +541,7 @@ void ScPreviewShell::Activate(bool bMDI)
 
     if (bMDI)
     {
-        // InputHdl is now mostly Null, no moreasssertion!
+        // InputHdl is now mostly Null, no more assertion!
         ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
         if ( pInputHdl )
             pInputHdl->NotifyChange( nullptr );

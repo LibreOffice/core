@@ -1634,7 +1634,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
                                 {
                                     tools::Polygon aPoly(4, aPoints);
 
-                                    // for DrawPolygon, whitout Pen one pixel is left out
+                                    // for DrawPolygon, without Pen one pixel is left out
                                     // to the right and below...
                                     if (rColor.GetTransparency() == 0)
                                         rRenderContext.SetLineColor(rColor);
@@ -1650,7 +1650,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
                             tools::Polygon aPoly(4, aPoints);
                             boost::optional<Color> const & pColor = pInfo->mxColorScale;
 
-                            // for DrawPolygon, whitout Pen one pixel is left out
+                            // for DrawPolygon, without Pen one pixel is left out
                             // to the right and below...
                             if (pColor->GetTransparency() == 0)
                                 rRenderContext.SetLineColor(*pColor);

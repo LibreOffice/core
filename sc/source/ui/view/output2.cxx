@@ -4265,7 +4265,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
             nLastContentCol - mpDoc->GetEmptyLinesInBlock( nX2+1, nY1, nTab, MAXCOL, nY2, nTab, DIR_RIGHT ) );
 
     long nRowPosY = nScrY;
-    for (SCSIZE nArrY=0; nArrY+1<nArrCount; nArrY++)            // 0 fo the rest of the merged
+    for (SCSIZE nArrY=0; nArrY+1<nArrCount; nArrY++)            // 0 of the rest of the merged
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
 

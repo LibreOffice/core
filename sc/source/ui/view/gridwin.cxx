@@ -328,7 +328,7 @@ void ScFilterFloatingWindow::dispose()
 
 static bool lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )
 {
-    // If it is a editable range and if there is a Matrix cell at the bottom right with an
+    // If it is an editable range and if there is a Matrix cell at the bottom right with an
     // origin top left then the range will be set to contain the exact matrix.
     //! Extract the MatrixEdges functions directly from the column ???
     if ( !pDoc->IsBlockEditable( rRange.aStart.Tab(), rRange.aStart.Col(),rRange.aStart.Row(),
