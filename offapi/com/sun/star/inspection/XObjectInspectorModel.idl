@@ -42,7 +42,7 @@ interface XObjectInspectorModel
         <ul>
             <li>A service name:<br>
                 If a sequence element contains a string, this string is interpreted
-                as service name, and an com::sun::star::lang::XMultiComponentFactory
+                as service name, and a com::sun::star::lang::XMultiComponentFactory
                 is asked to create an instance of this service.</li>
             <li>A factory:<br>
                 If a sequence element contains an instance implementing the
