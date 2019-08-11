@@ -691,7 +691,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
             }
             else if (aGraphicObject.GetType() == GraphicType::GdiMetafile)
             {
-                // SJ: first check if this metafile is just a eps file, then we will store the eps instead of svm
+                // SJ: first check if this metafile is just an eps file, then we will store the eps instead of svm
                 GDIMetaFile& rMetafile(const_cast<GDIMetaFile&>(aGraphic.GetGDIMetaFile()));
 
                 if (ImplCheckForEPS(rMetafile))
@@ -811,7 +811,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                     pStream->SetCompressMode(SvStreamCompressFlags::ZBITMAP);
                     rOutSavedMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension("svm");
 
-                    // SJ: first check if this metafile is just a eps file, then we will store the eps instead of svm
+                    // SJ: first check if this metafile is just an eps file, then we will store the eps instead of svm
                     GDIMetaFile& rMtf(const_cast<GDIMetaFile&>(aGraphic.GetGDIMetaFile()));
                     const MetaCommentAction* pComment = ImplCheckForEPS(rMtf);
                     if (pComment)

@@ -207,7 +207,7 @@ void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape
 
     GetSdrObject()->GetSubList()->InsertObject(pSdrShape, nPos);
     // TTTT Was created using mpModel in CreateSdrObject_ above
-    // TTTT may be good to add a assertion here for the future
+    // TTTT may be good to add an assertion here for the future
     // pSdrShape->SetModel(GetSdrObject()->GetModel());
 
     // #85922# It makes no sense to set the layer asked

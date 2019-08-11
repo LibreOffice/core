@@ -152,7 +152,7 @@ void ImpXPolygon::InsertSpace( sal_uInt16 nPos, sal_uInt16 nCount )
     if ( nPos > nPoints )
         nPos = nPoints;
 
-    // if the polygon is too small than enlarge it
+    // if the polygon is too small then enlarge it
     if( (nPoints + nCount) > nSize )
         Resize( nPoints + nCount );
 
@@ -283,7 +283,7 @@ XPolygon::XPolygon(const tools::Rectangle& rRect, long nRx, long nRy)
     pImpXPolygon->nPoints = nPos + 1;
 }
 
-/// create a ellipse (curve) as Bézier polygon
+/// create an ellipse (curve) as Bézier polygon
 XPolygon::XPolygon(const Point& rCenter, long nRx, long nRy,
                    sal_uInt16 nStartAngle, sal_uInt16 nEndAngle, bool bClose)
     : pImpXPolygon( 17 )
@@ -311,7 +311,7 @@ XPolygon::XPolygon(const Point& rCenter, long nRx, long nRy,
 
     } while ( !bLoopEnd );
 
-    // if not a full circle than connect edges with center point if necessary
+    // if not a full circle then connect edges with center point if necessary
     if ( !bFull && bClose )
         pImpXPolygon->pPointAry[++nPos] = rCenter;
 
@@ -619,7 +619,7 @@ bool XPolygon::CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& nA1,
  */
 void XPolygon::CalcSmoothJoin(sal_uInt16 nCenter, sal_uInt16 nDrag, sal_uInt16 nPnt)
 {
-    // If nPoint is no control point, i.e. cannot be moved, than
+    // If nPoint is no control point, i.e. cannot be moved, then
     // move nDrag instead on the line between nCenter and nPnt
     if ( !IsControl(nPnt) )
     {
@@ -787,7 +787,7 @@ void XPolygon::Distort(const tools::Rectangle& rRefRect,
     long    X1, X2, X3, X4;
     long    Y1, Y2, Y3, Y4;
     DBG_ASSERT(rDistortedRect.pImpXPolygon->nPoints >= 4,
-               "Distort: rectangle to small");
+               "Distort: rectangle too small");
 
     X1 = rDistortedRect[0].X();
     Y1 = rDistortedRect[0].Y();

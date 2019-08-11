@@ -1946,7 +1946,7 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet const & aSet, const SfxItemProperty
     }
     default:
     {
-        // get value form ItemSet
+        // get value from ItemSet
         aAny = SvxItemPropertySet_getPropertyValue( pMap, aSet );
 
         if( pMap->aType != aAny.getValueType() )
@@ -2012,7 +2012,7 @@ beans::PropertyState SvxShape::_getPropertyState( const OUString& PropertyName )
             break;
         }
 
-        // if a item is set, this doesn't mean we want it :)
+        // if an item is set, this doesn't mean we want it :)
         if( beans::PropertyState_DIRECT_VALUE == eState )
         {
             switch( pMap->nWID )
@@ -3803,9 +3803,9 @@ sal_Int16 SAL_CALL SvxShape::resetActionLocks(  )
 }
 
 
-/** since polygon shapes can change theire kind during editing, we have
+/** since polygon shapes can change their kind during editing, we have
     to recheck it here.
-    Circle shapes also change theire kind, but theire all treated equal
+    Circle shapes also change their kind, but they are all treated equal
     so no update is necessary.
 */
 void SvxShape::updateShapeKind()
