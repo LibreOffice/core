@@ -132,7 +132,7 @@ published service Content
                         elements corresponds to the first element in the sequence of
                         com::sun::star::beans::PropertyValue passed as
                         command argument, and so on. The exceptions will never be passed to
-                        an com::sun::star::task::InteractionHandler.</p>
+                        a com::sun::star::task::InteractionHandler.</p>
 
                         <p>Every element in the returned sequence is an any containing:</p>
                         <ul>
@@ -152,7 +152,7 @@ published service Content
                             setting an empty title may be illegal.</li>
                             <li>Any other exception derived from com::sun::star::uno::Exception
                             indicates, that the value was not set successfully. For example,
-                            this can be a InteractiveAugmentedIOException
+                            this can be an InteractiveAugmentedIOException
                             transporting the error code IOErrorCode::ACCESS_DENIED.</li>
                         </ul>
 

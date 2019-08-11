@@ -48,7 +48,7 @@ published constants MailMergeType
 
     /** The output is a document shell.
 
-        The successful mail marge returns a XTextDocument based component.
+        The successful mail merge returns a XTextDocument based component.
 
         @since LibreOffice 4.4
      */

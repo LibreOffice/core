@@ -25,7 +25,7 @@
 
 module com { module sun { module star { module text {
 
-/** This service specifies a an endnote in a
+/** This service specifies an endnote in a
     TextDocument.
 */
 published service Endnote
