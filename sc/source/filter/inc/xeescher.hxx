@@ -244,7 +244,7 @@ private:
 
 //#else
 
-/** Represents an OBJ record for an TBX form control. */
+/** Represents an OBJ record for a TBX form control. */
 class XclExpTbxControlObj : public XclObj, public XclMacroHelper
 {
 public:

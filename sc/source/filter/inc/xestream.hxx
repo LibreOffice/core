@@ -58,7 +58,7 @@ typedef std::shared_ptr< XclExpBiff8Encrypter > XclExpEncrypterRef;
     If some data exceeds the record size limit, a CONTINUE record is started automatically
     and the new data will be written to this record.
 
-    If specific data pieces must not be splitted, use SetSliceSize(). For instance:
+    If specific data pieces must not be split, use SetSliceSize(). For instance:
     To write a sequence of 16-bit values, where 4 values form a unit and cannot be
     split, call SetSliceSize( 8 ) first (4*2 bytes == 8).
 

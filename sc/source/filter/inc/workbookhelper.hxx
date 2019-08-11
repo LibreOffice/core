@@ -87,7 +87,7 @@ class FormulaBuffer;
 class WorkbookGlobals;
 typedef std::shared_ptr< WorkbookGlobals > WorkbookGlobalsRef;
 
-/** Helper class to provice access to global workbook data.
+/** Helper class to provide access to global workbook data.
 
     All classes derived from this helper class will have access to a singleton
     object of type WorkbookGlobals containing global workbook settings,

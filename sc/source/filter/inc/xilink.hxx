@@ -54,8 +54,8 @@ Classes for import of different kinds of internal/external references.
 
     The second purpose is to store the creation order of all sheets inside the
     Excel workbook. The creation order list is contained in the TABID record
-    and needed to import the change log. Example: If the list contains 3;1;2
-    this means that the second sheet in the file was created first, than the
+    and needed to import the change log. Example: if the list contains 3;1;2
+    this means that the second sheet in the file was created first, then the
     third sheet in the file was created and finally the first sheet.
  */
 class XclImpTabInfo
