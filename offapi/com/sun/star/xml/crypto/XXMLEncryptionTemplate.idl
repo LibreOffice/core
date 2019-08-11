@@ -50,7 +50,7 @@ module com { module sun { module star { module xml { module crypto {
  * <p>It isn't a good method to set the EncryptedKey here. In general, there is
  * a RetrievalMethod in EncryptedData by which we can get the EncryptedKey.
  *
- * And some times, in the low level, it is hard to determine what the key is
+ * And sometimes, in the low level, it is hard to determine what the key is
  * except that the high level application tell the mechanism and parameters.
  *
  * So I think it will be more simple that the application set the encrypted key

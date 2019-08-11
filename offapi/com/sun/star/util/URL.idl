@@ -24,7 +24,7 @@
 module com {  module sun {  module star {  module util {
 
 
-/** represents the structure of an Uniform Resource Locator.
+/** represents the structure of a Uniform Resource Locator.
 
     <p>
     If the structure represents a valid URL or not depends on prior usage of

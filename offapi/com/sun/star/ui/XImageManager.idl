@@ -37,7 +37,7 @@ module com { module sun { module star { module ui {
 
     <p>
     An image manager controls a number of image sets which are specified
-    by a ImageType.
+    by an ImageType.
     </p>
 */
 
@@ -135,7 +135,7 @@ interface XImageManager
     */
     void removeImages( [in] short nImageType, [in] sequence< string > CommandURLs ) raises ( com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::IllegalAccessException );
 
-    /** inserts new image/command associations to a image manager.
+    /** inserts new image/command associations to an image manager.
 
         @param nImageType
             specifies the image type for this association operation.

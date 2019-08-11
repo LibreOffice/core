@@ -26,7 +26,7 @@ module com { module sun { module star { module xml { module crypto { module sax 
  * Defines types of element mark.
  * <p>
  * the TYPEOFELEMENTMARK type represents a blocker, and the TYPEOFELEMENTCOLLECTOR
- * type represents a element collector.
+ * type represents an element collector.
  */
 enum ElementMarkType
 {
