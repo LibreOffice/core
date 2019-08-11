@@ -129,7 +129,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
 
         // to prefer dictionaries with configuration entries we will only
         // use those old style dictionaries that add a language that
-        // is not yet supported by the list od new style dictionaries
+        // is not yet supported by the list of new style dictionaries
         MergeNewStyleDicsAndOldStyleDics( aDics, aOldStyleDics );
 
         sal_Int32 numthes = aDics.size();

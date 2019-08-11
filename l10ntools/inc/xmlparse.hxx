@@ -190,7 +190,7 @@ private:
     std::vector <OString> m_vOrder;
 };
 
-/// An Utility class for XML
+/// A Utility class for XML
 class XMLUtil
 {
 public:
