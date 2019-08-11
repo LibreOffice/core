@@ -453,7 +453,7 @@ void ScExportTest::test()
 
 void ScExportTest::testTdf111876()
  {
-    // DOcument with relative path hyperlink
+    // Document with relative path hyperlink
 
     ScDocShellRef xShell = loadDoc("tdf111876.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
@@ -1147,7 +1147,7 @@ void ScExportTest::testOutlineExportXLSX()
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[8]", "hidden", "true");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[8]", "outlineLevel", "4");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[8]", "collapsed", "false");
-    // Next rows are the same as the previous one but it needs to bre preserved,
+    // Next rows are the same as the previous one but it needs to be preserved,
     // as they contain information about outlineLevel
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[20]", "r", "21");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[20]", "hidden", "true");

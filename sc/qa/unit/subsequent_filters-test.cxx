@@ -2525,7 +2525,7 @@ void ScFiltersTest::testOrcusODSStyleInterface()
     ScDocument aDoc;
     OUString aFullUrl = m_directories.getURLFromSrc("sc/qa/unit/data/xml/styles.xml");
 
-    /* This loop below trims file:// from the start because orcus doesn't accept such a url */
+    /* This loop below trims file:// from the start because orcus doesn't accept such a URL */
     OUString aValidPath;
     osl::FileBase::getSystemPathFromFileURL(aFullUrl, aValidPath);
 
