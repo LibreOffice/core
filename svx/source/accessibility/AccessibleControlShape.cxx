@@ -648,7 +648,7 @@ void SAL_CALL AccessibleControlShape::disposing()
     {
         // don't listen for mode changes anymore
         Reference< XModeChangeBroadcaster > xControlModes( m_xUnoControl, UNO_QUERY );
-        OSL_ENSURE( xControlModes.is(), "AccessibleControlShape::disposing: don't have an mode broadcaster anymore!" );
+        OSL_ENSURE( xControlModes.is(), "AccessibleControlShape::disposing: don't have a mode broadcaster anymore!" );
         if ( xControlModes.is() )
             xControlModes->removeModeChangeListener( this );
 

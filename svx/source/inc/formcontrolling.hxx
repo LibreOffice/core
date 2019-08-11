@@ -67,7 +67,7 @@ namespace svx
     };
 
     class FormControllerHelper;
-    /** easier access to an FormControllerHelper instance
+    /** easier access to a FormControllerHelper instance
     */
     class ControllerFeatures final
     {

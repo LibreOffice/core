@@ -47,7 +47,7 @@ namespace svx
         bool                            m_bFeatureEnabled;
 
     public:
-        /** constructs an FmTextControlFeature object
+        /** constructs a FmTextControlFeature object
         @param _rxDispatcher
             the dispatcher which the instance should work with
         @param _rFeatureURL
