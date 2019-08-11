@@ -84,7 +84,7 @@ SdrMark::~SdrMark()
 void SdrMark::ObjectInDestruction(const SdrObject& rObject)
 {
     (void) rObject; // avoid warnings
-    OSL_ENSURE(mpSelectedSdrObject && mpSelectedSdrObject == &rObject, "SdrMark::ObjectInDestruction: called form object different from hosted one (!)");
+    OSL_ENSURE(mpSelectedSdrObject && mpSelectedSdrObject == &rObject, "SdrMark::ObjectInDestruction: called from object different from hosted one (!)");
     OSL_ENSURE(mpSelectedSdrObject, "SdrMark::ObjectInDestruction: still selected SdrObject is deleted, deselect first (!)");
     mpSelectedSdrObject = nullptr;
 }
@@ -244,7 +244,7 @@ size_t SdrMarkList::FindObject(const SdrObject* pObj) const
 
     // Problem is that GetOrdNum() which is const, internally casts to non-const and
     // hardly sets the OrdNum member of the object (nOrdNum) to 0 (ZERO) if the object
-    // is not inserted in a object list.
+    // is not inserted in an object list.
     // Since this may be by purpose and necessary somewhere else i decided that it is
     // less dangerous to change this method then changing SdrObject::GetOrdNum().
     if(pObj)

@@ -662,7 +662,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                     // The 2nd a little tricky thing is that this will early-create
                     // a ViewObjectContact for the new SdrObject, but these VOCs
                     // are anyways layouted for being create-on-demand. This will
-                    // be adapted/replaced corretly later on.
+                    // be adapted/replaced correctly later on.
                     // This *should* be the right place for getting all interactively
                     // created objects, see InsertObjectAtView below that calls
                     // CreateUndoNewObject.

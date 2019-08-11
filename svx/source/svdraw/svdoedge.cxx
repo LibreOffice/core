@@ -1944,7 +1944,7 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
             }
         }
 
-        // reset edge info's offsets, this is a end point drag
+        // reset edge info's offsets, this is an end point drag
         aEdgeInfo.aObj1Line2 = Point();
         aEdgeInfo.aObj1Line3 = Point();
         aEdgeInfo.aObj2Line2 = Point();

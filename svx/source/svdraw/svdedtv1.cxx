@@ -1071,7 +1071,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
             // #i8508#
             // If this is a text object also rescue the OutlinerParaObject since
             // applying attributes to the object may change text layout when
-            // multiple portions exist with multiple formats. If a OutlinerParaObject
+            // multiple portions exist with multiple formats. If an OutlinerParaObject
             // really exists and needs to be rescued is evaluated in the undo
             // implementation itself.
             const bool bRescueText = dynamic_cast< SdrTextObj* >(pObj) != nullptr;

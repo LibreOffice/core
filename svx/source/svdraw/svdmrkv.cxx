@@ -2037,7 +2037,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
     SdrObject* pRet=nullptr;
     tools::Rectangle aRect(pObj->GetCurrentBoundRect());
 
-    // add possible GridOffset to up-to-now view-independent BountRect data
+    // add possible GridOffset to up-to-now view-independent BoundRect data
     basegfx::B2DVector aGridOffset(0.0, 0.0);
     if(getPossibleGridOffsetForSdrObject(aGridOffset, pObj, pPV))
     {
