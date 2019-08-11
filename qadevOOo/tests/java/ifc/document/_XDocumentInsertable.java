@@ -127,7 +127,7 @@ public class _XDocumentInsertable extends MultiMethodTest {
     * A Second test uses an invalid URL and checks for correct exceptions.
     *
     * Has <b> OK </b> status if at first insertion was completed successfully
-    * and no exceptions were thrown and as second a expected exception was thrown. <p>
+    * and no exceptions were thrown and as second an expected exception was thrown. <p>
     */
     public void _insertDocumentFromURL() {
         boolean result = true ;

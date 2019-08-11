@@ -44,7 +44,7 @@ public class _XReset extends MultiMethodTest {
     */
     protected boolean approve = true;
     /**
-    * Array of two elements, each of them indicates <code>resetted</code>
+    * Array of two elements, each of them indicates <code>reset</code>
     * call of appropriate listener.
     */
       protected boolean resetted[] = new boolean[2];
@@ -56,7 +56,7 @@ public class _XReset extends MultiMethodTest {
 
     /**
     * The listener which sets flags (in array elements with index 0)
-    * on <code>resetted</code> and
+    * on <code>reset</code> and
     * <code>approveReset</code> events. It approves reset request
     * depending on <code>approve</code> field.
     */
@@ -75,7 +75,7 @@ public class _XReset extends MultiMethodTest {
 
     /**
     * The listener which sets flags (in array elements with index 1)
-    * on <code>resetted</code> and
+    * on <code>reset</code> and
     * <code>approveReset</code> events. It approves reset request
     * depending on <code>approve</code> field.
     */
