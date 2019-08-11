@@ -381,7 +381,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             }
             else if ( rFlavor.DataType.equals( cppu::UnoType<uno::Sequence< sal_Int8 >>::get() ) )
             {
-                //  SetObject converts a stream into a Int8-Sequence
+                //  SetObject converts a stream into an Int8-Sequence
                 bOK = SetObject( &aObj, SCTRANS_TYPE_IMPEX, rFlavor );
             }
             else

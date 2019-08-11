@@ -165,7 +165,7 @@ public:
 
     ///=====  XTypeProvider  ===================================================
 
-    /** Returns a implementation id.
+    /** Returns an implementation id.
     */
     virtual css::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId() override;

@@ -121,7 +121,7 @@ namespace
         const OUString aConnUrl{"sdbc:dbase:" + aPath};
 
         // sdbc:dbase is based on the css.sdbc.FILEConnectionProperties UNOIDL service, so we can
-        // transport the raw rtl_TextEncoding value instead of having to translate it into a IANA
+        // transport the raw rtl_TextEncoding value instead of having to translate it into an IANA
         // character set name string (which might not exist for certain eCharSet values, like
         // RTL_TEXTENCODING_MS_950):
         uno::Sequence<beans::PropertyValue> aProps( comphelper::InitPropertySequence({
