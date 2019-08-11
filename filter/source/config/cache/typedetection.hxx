@@ -338,7 +338,7 @@ public:
 
         @descr  Because this information is used at several places
                 (and mostly an object instance of this class is not possible)
-                its implemented as a static function!
+                it's implemented as a static function!
 
         @return The fix uno implementation name of this class.
      */
@@ -349,7 +349,7 @@ public:
 
         @descr  Because this information is used at several places
                 (and mostly an object instance of this class is not possible)
-                its implemented as a static function!
+                it's implemented as a static function!
 
         @return The fix list of uno services supported by this class.
      */
