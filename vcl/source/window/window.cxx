@@ -554,6 +554,7 @@ void Window::dispose()
         assert (mpWindowImpl->mpFrameData->mnFocusId == nullptr);
         assert (mpWindowImpl->mpFrameData->mnMouseMoveId == nullptr);
 
+        mpWindowImpl->mpFrameData->mpBuffer.disposeAndClear();
         delete mpWindowImpl->mpFrameData;
         mpWindowImpl->mpFrameData = nullptr;
     }
