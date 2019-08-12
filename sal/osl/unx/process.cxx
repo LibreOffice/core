@@ -177,8 +177,7 @@ static void ChildStatusProc(void *pData)
             if (! INIT_GROUPS(data.m_name, data.m_gid) || (setuid(data.m_uid) != 0))
                 SAL_WARN("sal.osl", "Failed to change uid and guid: " << UnixErrnoString(errno));
 
-            const OUString envVar("HOME");
-            osl_clearEnvironment(envVar.pData);
+            unsetenv("HOME");
         }
 
         if (data.m_pszDir)
