@@ -92,7 +92,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     }
     pTextNd->SetIgnoreDontExpand( bOldExpFlg );
 
-    bCacheComment = false;
+    m_bCacheComment = false;
 }
 
 SwUndoOverwrite::~SwUndoOverwrite()

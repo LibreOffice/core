@@ -52,12 +52,12 @@ class SwUndo
     : public SfxUndoAction
 {
     SwUndoId const m_nId;
-    RedlineFlags   nOrigRedlineFlags;
+    RedlineFlags   m_nOrigRedlineFlags;
     ViewShellId const    m_nViewShellId;
     bool m_isRepeatIgnored; ///< for multi-selection, only repeat 1st selection
 
 protected:
-    bool bCacheComment;
+    bool m_bCacheComment;
     mutable boost::optional<OUString> maComment;
 
     static void RemoveIdxFromSection( SwDoc&, sal_uLong nSttIdx, const sal_uLong* pEndIdx = nullptr );
@@ -115,8 +115,8 @@ public:
 
     // UndoObject remembers which mode was turned on.
     // In Undo/Redo/Repeat this remembered mode is switched on.
-    RedlineFlags GetRedlineFlags() const { return nOrigRedlineFlags; }
-    void SetRedlineFlags( RedlineFlags eMode ) { nOrigRedlineFlags = eMode; }
+    RedlineFlags GetRedlineFlags() const { return m_nOrigRedlineFlags; }
+    void SetRedlineFlags( RedlineFlags eMode ) { m_nOrigRedlineFlags = eMode; }
 
     bool IsDelBox() const;
 
