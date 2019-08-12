@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_72372eb2",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2769,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-08-12T11:17:09Z",
+      "side": 1,
+      "message": "why is this zero? Shouldn\u0027t it be 1 after your changes?",
+      "range": {
+        "startLine": 2769,
+        "startChar": 37,
+        "endLine": 2769,
+        "endChar": 38
+      },
+      "revId": "e883341bee86bb69747c9e698aeaedad71b284b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
