@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <cassert>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -21,14 +22,9 @@ bool cppu::supportsService(
     css::lang::XServiceInfo * implementation, OUString const & name)
 {
     assert(implementation != nullptr);
-    css::uno::Sequence< OUString > s(
+    const css::uno::Sequence< OUString > s(
         implementation->getSupportedServiceNames());
-    for (sal_Int32 i = 0; i != s.getLength(); ++i) {
-        if (s[i] == name) {
-            return true;
-        }
-    }
-    return false;
+    return std::find(s.begin(), s.end(), name) != s.end();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
