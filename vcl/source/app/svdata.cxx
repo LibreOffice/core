@@ -41,7 +41,6 @@
 #include <salinst.hxx>
 #include <salgdi.hxx>
 #include <svdata.hxx>
-#include <salimestatus.hxx>
 #include <salsys.hxx>
 #include <units.hrc>
 #include <print.h>

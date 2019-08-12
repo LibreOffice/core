@@ -84,7 +84,6 @@ class UnoWrapperBase;
 class GraphicConverter;
 class ImplWheelWindow;
 class SalTimer;
-class SalI18NImeStatus;
 class DockingManager;
 class VclEventListeners2;
 class SalData;
@@ -129,12 +128,6 @@ typedef std::pair<VclPtr<vcl::Window>, ImplPostEventData *> ImplPostEventPair;
 struct ImplSVAppData
 {
     ~ImplSVAppData();
-    enum ImeStatusWindowMode
-    {
-        ImeStatusWindowMode_UNKNOWN,
-        ImeStatusWindowMode_HIDE,
-        ImeStatusWindowMode_SHOW
-    };
 
     std::unique_ptr<AllSettings> mpSettings;           // Application settings
     LocaleConfigurationListener* mpCfgListener = nullptr;
@@ -159,13 +152,6 @@ struct ImplSVAppData
     bool                    mbSettingsInit = false;         // true: Settings are initialized
     DialogCancelMode meDialogCancel = DialogCancelMode::Off; // true: All Dialog::Execute() calls will be terminated immediately with return false
     bool mbRenderToBitmaps = false; // set via svp / headless plugin
-
-    /** Controls whether showing any IME status window is toggled on or off.
-
-        Only meaningful if showing IME status windows can be toggled on and off
-        externally (see Application::CanToggleImeStatusWindow).
-     */
-    ImeStatusWindowMode meShowImeStatusWindow = ImeStatusWindowMode_UNKNOWN;
 
     SvFileStream*       mpEventTestInput = nullptr;
     Idle*               mpEventTestingIdle = nullptr;
@@ -356,7 +342,6 @@ struct ImplSVData
     Application*            mpApp = nullptr;                // pApp
     VclPtr<WorkWindow>      mpDefaultWin;                   // Default-Window
     bool                    mbDeInit = false;               // Is VCL deinitializing
-    std::unique_ptr<SalI18NImeStatus> mpImeStatus;          // interface to ime status window, only used by the X11 backend
     std::unique_ptr<SalSystem> mpSalSystem;                 // SalSystem interface
     int                     mnFontUpdatesLockCount = 0;     // avoid repeated font updates
     bool                    mbFontUpdatesPending = false;   // need to update font data after unlock

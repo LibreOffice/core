@@ -251,7 +251,6 @@
 #include <salframe.hxx>
 #include <salgdi.hxx>
 #include <salgdiimpl.hxx>
-#include <salimestatus.hxx>
 #include <sallayout.hxx>
 #include <salmenu.hxx>
 #include <salobj.hxx>

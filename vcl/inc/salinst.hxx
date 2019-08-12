@@ -65,7 +65,6 @@ class SalInfoPrinter;
 class SalPrinter;
 class SalTimer;
 class ImplPrnQueueList;
-class SalI18NImeStatus;
 class SalSystem;
 class SalBitmap;
 struct SalItemParams;
@@ -128,9 +127,6 @@ public:
 
     // SalTimer
     virtual SalTimer*       CreateSalTimer() = 0;
-    // interface to ime status window, only used by the X11 backend
-    virtual std::unique_ptr<SalI18NImeStatus>
-                            CreateI18NImeStatus();
     // SalSystem
     virtual SalSystem*      CreateSalSystem() = 0;
     // SalBitmap

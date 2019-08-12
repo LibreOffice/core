@@ -1253,48 +1253,6 @@ public:
 
     ///@}
 
-    /** @name IME Status Window Control
-    */
-    ///@{
-
-    /** Determine application can toggle the IME status window on and off.
-
-      @attention Must only be called with the Solar mutex locked.
-
-      @return true if any IME status window can be toggled on and off
-            externally.
-
-      @see ShowImeStatusWindow, GetShowImeStatusWindowDefault,
-           GetShowImeStatusWindowDefault
-     */
-    static bool                 CanToggleImeStatusWindow();
-
-    /** Toggle any IME status window on and off.
-
-     This only works if CanToggleImeStatusWindow returns true (otherwise,
-     any calls of this method are ignored).
-
-     @remark Can be called without the Solar mutex locked.
-
-     @param      bShow       If true, then show the IME status window
-
-     @see GetShowImeStatusWindowDefault, CanToggleImeStatusWindow,
-          GetShowImeStatusWindow
-    */
-    static void                 ShowImeStatusWindow(bool bShow);
-
-    /** Determines if the IME status window should be turned of by default.
-
-      @return true if any IME status window should be turned on by default
-      (this decision can be locale dependent, for example).
-
-      @see ShowImeStatusWindow, GetShowImeStatusWindowDefault,
-           CanToggleImeStatusWindow
-     */
-    static bool                 GetShowImeStatusWindowDefault();
-
-    ///@}
-
     /** Get the desktop environment the process is currently running in
 
      @returns String representing the desktop environment

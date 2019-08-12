@@ -4867,25 +4867,6 @@ SfxImageItem ImageOrientation SID_IMAGE_ORIENTATION
     GroupId = SfxGroupId::View;
 ]
 
-
-SfxBoolItem ShowImeStatusWindow SID_SHOW_IME_STATUS_WINDOW
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::View;
-]
-
-
 SfxVoidItem SendFeedback SID_SEND_FEEDBACK
 ()
 [
