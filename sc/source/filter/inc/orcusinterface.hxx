@@ -332,6 +332,8 @@ public:
 
     virtual orcus::spreadsheet::range_size_t get_sheet_size() const override;
 
+    virtual void fill_down_cells(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::row_t range_size) override;
+
     SCTAB getIndex() const { return mnTab; }
 
     const sc::SharedFormulaGroups& getSharedFormulaGroups() const;

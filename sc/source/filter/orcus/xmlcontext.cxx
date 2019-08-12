@@ -269,10 +269,17 @@ void ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
 
             std::for_each(rLink.maFieldPaths.begin(), rLink.maFieldPaths.end(), InsertFieldPath(filter));
 
+            std::for_each(rLink.maRowGroups.begin(), rLink.maRowGroups.end(),
+                [&filter] (const OString& rRowGroup)
+                {
+                    filter.set_range_row_group(rRowGroup.getStr());
+                }
+            );
+
             filter.commit_range();
         }
 
-        std::string content = orcus::load_file_content(path);
+        orcus::file_content content(path);
         filter.read_stream(content.data(), content.size());
 
         aFactory.finalize();

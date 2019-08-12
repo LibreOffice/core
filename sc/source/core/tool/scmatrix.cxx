@@ -1935,8 +1935,8 @@ public:
         {
             case mdds::mtm::element_numeric:
             {
-                numeric_element_block::const_iterator it = numeric_element_block::begin(*node.data);
-                numeric_element_block::const_iterator itEnd = numeric_element_block::end(*node.data);
+                double_element_block::const_iterator it = double_element_block::begin(*node.data);
+                double_element_block::const_iterator itEnd = double_element_block::end(*node.data);
                 for (; it != itEnd; ++it, ++miPos)
                     *miPos = *it;
             }
@@ -2012,8 +2012,8 @@ public:
         {
             case mdds::mtm::element_numeric:
             {
-                numeric_element_block::const_iterator it = numeric_element_block::begin(*node.data);
-                numeric_element_block::const_iterator itEnd = numeric_element_block::end(*node.data);
+                double_element_block::const_iterator it = double_element_block::begin(*node.data);
+                double_element_block::const_iterator itEnd = double_element_block::end(*node.data);
                 for (; it != itEnd; ++it, ++miPos)
                 {
                     if (GetDoubleErrorValue(*miPos) == FormulaError::ElementNaN)
