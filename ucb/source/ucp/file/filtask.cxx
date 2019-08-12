@@ -2143,7 +2143,7 @@ bool TaskManager::ensuredir( sal_Int32 CommandId,
 
 
 //  Given a sequence of properties seq, this method determines the mask
-//  used to instantiate a osl::FileStatus, so that a call to
+//  used to instantiate an osl::FileStatus, so that a call to
 //  osl::DirectoryItem::getFileStatus fills the required fields.
 
 

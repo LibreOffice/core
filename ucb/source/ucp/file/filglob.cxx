@@ -380,7 +380,7 @@ namespace fileaccess {
                     ioErrorCode = IOErrorCode_NOT_EXISTING;
                     break;
                 case FileBase::E_NOTDIR:
-                    // the specified path is not an directory
+                    // the specified path is not a directory
                     ioErrorCode = IOErrorCode_NO_DIRECTORY;
                     break;
                 case FileBase::E_NOMEM:

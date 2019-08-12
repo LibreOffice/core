@@ -282,7 +282,7 @@ public class CheckContentProvider {
         assertNotNull("getImplementationId()", xTypeProvider._getImplementationId());
         assertNotNull("getTypes()", xTypeProvider._getTypes());
 
-        // check the XSewrviceInfo interface
+        // check the XServiceInfo interface
         _XServiceInfo xServiceInfo = new _XServiceInfo();
         _XServiceInfo.oObj = UnoRuntime.queryInterface(XServiceInfo.class, xContent);
         // xServiceInfo.log = log;

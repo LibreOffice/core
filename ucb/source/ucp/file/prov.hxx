@@ -104,7 +104,7 @@ namespace fileaccess {
             const css::uno::Reference< css::ucb::XContentIdentifier >& Id1,
             const css::uno::Reference< css::ucb::XContentIdentifier >& Id2 ) override;
 
-        // XProperySet
+        // XPropertySet
 
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo(  ) override;
