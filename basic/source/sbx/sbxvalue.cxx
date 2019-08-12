@@ -1035,7 +1035,7 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                             }
                             // second overflow check: see if unscaled product overflows - if so use doubles
                             dTest = static_cast<double>(aL.nInt64) * static_cast<double>(aR.nInt64);
-                            if( dTest < SAL_MIN_INT64 || SAL_MAX_INT64 < dTest)
+                            if( dTest < SAL_MIN_INT64 || static_cast<double>(SAL_MAX_INT64) < dTest)
                             {
                                 aL.nInt64 = static_cast<sal_Int64>( dTest / double(CURRENCY_FACTOR) );
                                 break;
@@ -1062,7 +1062,7 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                             }
                             // second overflow check: see if scaled dividend overflows - if so use doubles
                             dTest = static_cast<double>(aL.nInt64) * double(CURRENCY_FACTOR);
-                            if( dTest < SAL_MIN_INT64 || SAL_MAX_INT64 < dTest)
+                            if( dTest < SAL_MIN_INT64 || static_cast<double>(SAL_MAX_INT64) < dTest)
                             {
                                 aL.nInt64 = static_cast<sal_Int64>(dTest / static_cast<double>(aR.nInt64));
                                 break;

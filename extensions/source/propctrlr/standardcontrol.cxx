@@ -236,7 +236,7 @@ namespace pcr
         for ( sal_uInt16 d = 0; d < nDigits; ++d )
             n *= 10;
 
-        if ( n > std::numeric_limits< long >::max() )
+        if ( n > static_cast<double>(std::numeric_limits< long >::max()) )
             return std::numeric_limits< long >::max();
         return static_cast<long>(n);
     }

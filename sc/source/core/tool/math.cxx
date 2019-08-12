@@ -30,7 +30,7 @@ double power( const double& fVal1, const double& fVal2 )
     if (fVal1 < 0 && fVal2 != 0.0)
     {
         const double f = 1.0 / fVal2 + ((fVal2 < 0.0) ? -0.5 : 0.5);
-        if (f < SAL_MIN_INT64 || f > SAL_MAX_INT64)
+        if (f < SAL_MIN_INT64 || f > static_cast<double>(SAL_MAX_INT64))
         {
             // Casting to int would be undefined behaviour.
             fPow = err_pow( fVal1, fVal2);

@@ -2886,7 +2886,7 @@ void ScInterpreter::ScBase()
             }
             sal_Unicode* p = pBuf + nBuf - 1;
             *p = 0;
-            if ( fVal <= sal_uLong(~0) )
+            if ( fVal <= static_cast<double>(sal_uLong(~0)) )
             {
                 sal_uLong nVal = static_cast<sal_uLong>(fVal);
                 sal_uLong nBase = static_cast<sal_uLong>(fBase);

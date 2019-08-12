@@ -665,7 +665,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                     else if( sPropertyType == "float")
                     {
                         float nFloat = sNewValue.toFloat();
-                        if( ( nFloat ==0 && sNewValue.getLength()!=1 ) || nFloat >= SAL_MAX_INT32 || nFloat <= SAL_MIN_INT32)
+                        if( ( nFloat ==0 && sNewValue.getLength()!=1 ) || nFloat >= static_cast<float>(SAL_MAX_INT32) || nFloat <= SAL_MIN_INT32)
                             throw uno::Exception("out of range float", nullptr);
                         pProperty->Value <<= nFloat;
                     }

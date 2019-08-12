@@ -277,7 +277,7 @@ start:
         case SbxBYREF | SbxLONG:
         {
             sal_Int32 i;
-            if( n > SbxMAXLNG )
+            if( n > static_cast<float>(SbxMAXLNG) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); i = SbxMAXLNG;
             }
@@ -294,7 +294,7 @@ start:
         case SbxBYREF | SbxULONG:
         {
             sal_uInt32 i;
-            if( n > SbxMAXULNG )
+            if( n > static_cast<float>(SbxMAXULNG) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); i = SbxMAXULNG;
             }

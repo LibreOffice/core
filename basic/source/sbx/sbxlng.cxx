@@ -57,7 +57,7 @@ start:
                 nRes = static_cast<sal_Int32>(p->nULong);
             break;
         case SbxSINGLE:
-            if( p->nSingle > SbxMAXLNG )
+            if( p->nSingle > static_cast<float>(SbxMAXLNG) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXLNG;
             }

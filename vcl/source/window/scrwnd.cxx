@@ -216,14 +216,14 @@ void ImplWheelWindow::ImplRecalcScrollValues()
             double fValX = static_cast<double>(mnActDeltaX) * nMult;
             double fValY = static_cast<double>(mnActDeltaY) * nMult;
 
-            if( fValX > LONG_MAX )
+            if( fValX > static_cast<double>(LONG_MAX) )
                 mnActDeltaX = LONG_MAX;
             else if( fValX < LONG_MIN )
                 mnActDeltaX = LONG_MIN;
             else
                 mnActDeltaX = static_cast<long>(fValX);
 
-            if( fValY > LONG_MAX )
+            if( fValY > static_cast<double>(LONG_MAX) )
                 mnActDeltaY = LONG_MAX;
             else if( fValY < LONG_MIN )
                 mnActDeltaY = LONG_MIN;

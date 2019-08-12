@@ -63,7 +63,7 @@ start:
         case SbxULONG:
             nRes = p->nULong; break;
         case SbxSINGLE:
-            if( p->nSingle > SbxMAXULNG )
+            if( p->nSingle > static_cast<float>(SbxMAXULNG) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXULNG;
             }

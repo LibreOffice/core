@@ -341,7 +341,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     case TypeClass_FLOAT:
     {
         double fVal = round( *o3tl::forceAccess<float>(rAny) );
-        nRet = (fVal > SAL_INT64_MAX ? static_cast<sal_Int64>(static_cast<sal_uInt64>(fVal)) : static_cast<sal_Int64>(fVal));
+        nRet = (fVal > static_cast<double>(SAL_INT64_MAX) ? static_cast<sal_Int64>(static_cast<sal_uInt64>(fVal)) : static_cast<sal_Int64>(fVal));
         if (fVal >= min && fVal <= unsigned_int64_to_double( max ))
         {
             return nRet;
@@ -353,7 +353,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     case TypeClass_DOUBLE:
     {
         double fVal = round( *o3tl::forceAccess<double>(rAny) );
-        nRet = (fVal > SAL_INT64_MAX ? static_cast<sal_Int64>(static_cast<sal_uInt64>(fVal)) : static_cast<sal_Int64>(fVal));
+        nRet = (fVal > static_cast<double>(SAL_INT64_MAX) ? static_cast<sal_Int64>(static_cast<sal_uInt64>(fVal)) : static_cast<sal_Int64>(fVal));
         if (fVal >= min && fVal <= unsigned_int64_to_double( max ))
         {
             return nRet;

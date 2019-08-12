@@ -600,7 +600,7 @@ static void lcl_HandleScrollHelper( ScrollBar* pScrl, double nN, bool isMultiply
 
             if ( fVal < LONG_MIN )
                 nNewPos = LONG_MIN;
-            else if ( fVal > LONG_MAX )
+            else if ( fVal > static_cast<double>(LONG_MAX) )
                 nNewPos = LONG_MAX;
             else
                 nNewPos = static_cast<long>(fVal);

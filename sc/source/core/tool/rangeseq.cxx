@@ -52,7 +52,7 @@ static long lcl_DoubleToLong( double fVal )
 {
     double fInt = (fVal >= 0.0) ? ::rtl::math::approxFloor( fVal ) :
                                   ::rtl::math::approxCeil( fVal );
-    if ( fInt >= LONG_MIN && fInt <= LONG_MAX )
+    if ( fInt >= LONG_MIN && fInt <= static_cast<double>(LONG_MAX) )
         return static_cast<long>(fInt);
     else
         return 0;       // out of range

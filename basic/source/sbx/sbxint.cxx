@@ -339,7 +339,7 @@ start:
 sal_Int64 ImpDoubleToSalInt64( double d )
 {
     sal_Int64 nRes;
-    if( d > SAL_MAX_INT64 )
+    if( d > static_cast<double>(SAL_MAX_INT64) )
     {
         SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MAX_INT64;
     }
@@ -355,7 +355,7 @@ sal_Int64 ImpDoubleToSalInt64( double d )
 sal_uInt64 ImpDoubleToSalUInt64( double d )
 {
     sal_uInt64 nRes;
-    if( d > SAL_MAX_UINT64 )
+    if( d > static_cast<double>(SAL_MAX_UINT64) )
     {
         SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MAX_UINT64;
     }
@@ -703,7 +703,7 @@ start:
                     SbxDataType t;
                     if( ImpScan( *p->pOUString, d, t, nullptr, false ) != ERRCODE_NONE )
                         nRes = 0;
-                    else if( d > SAL_MAX_UINT64 )
+                    else if( d > static_cast<double>(SAL_MAX_UINT64) )
                     {
                         SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MAX_UINT64;
                     }

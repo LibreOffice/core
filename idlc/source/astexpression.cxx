@@ -327,7 +327,7 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_float:
                 {
-                    if (ev->u.fval < SAL_MIN_INT32 || ev->u.fval > SAL_MAX_INT32)
+                    if (ev->u.fval < SAL_MIN_INT32 || ev->u.fval > static_cast<float>(SAL_MAX_INT32))
                         return false;
                     auto tmp = static_cast<sal_Int32>(ev->u.fval);
                     ev->u.lval = tmp;
@@ -411,7 +411,7 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_float:
                 {
-                    if (ev->u.fval < 0.0 || ev->u.fval > SAL_MAX_UINT32)
+                    if (ev->u.fval < 0.0 || ev->u.fval > static_cast<float>(SAL_MAX_UINT32))
                         return false;
                     auto tmp = static_cast<sal_uInt32>(ev->u.fval);
                     ev->u.ulval = tmp;
@@ -489,7 +489,7 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_float:
                 {
-                    if (ev->u.fval < SAL_MIN_INT64 || ev->u.fval > SAL_MAX_INT64)
+                    if (ev->u.fval < SAL_MIN_INT64 || ev->u.fval > static_cast<float>(SAL_MAX_INT64))
                         return false;
                     auto tmp = static_cast<sal_Int64>(ev->u.fval);
                     ev->u.hval = tmp;
@@ -498,7 +498,7 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_double:
                 {
-                    if (ev->u.dval < SAL_MIN_INT64 || ev->u.dval > SAL_MAX_INT64)
+                    if (ev->u.dval < SAL_MIN_INT64 || ev->u.dval > static_cast<float>(SAL_MAX_INT64))
                         return false;
                     auto tmp = static_cast<sal_Int64>(ev->u.dval);
                     ev->u.hval = tmp;
@@ -571,7 +571,7 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_float:
                 {
-                    if (ev->u.fval < 0.0 || ev->u.fval > SAL_MAX_UINT64)
+                    if (ev->u.fval < 0.0 || ev->u.fval > static_cast<float>(SAL_MAX_UINT64))
                         return false;
                     auto tmp = static_cast<sal_uInt64>(ev->u.fval);
                     ev->u.uhval = tmp;
@@ -580,7 +580,7 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_double:
                 {
-                    if (ev->u.dval < 0.0 || ev->u.dval > SAL_MAX_UINT64)
+                    if (ev->u.dval < 0.0 || ev->u.dval > static_cast<double>(SAL_MAX_UINT64))
                         return false;
                     auto tmp = static_cast<sal_uInt64>(ev->u.dval);
                     ev->u.uhval = tmp;
