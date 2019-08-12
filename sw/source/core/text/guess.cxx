@@ -43,10 +43,7 @@ using namespace ::com::sun::star::linguistic2;
 
 namespace{
 
-const sal_Unicode CH_FULL_BLANK = 0x3000;
-const sal_Unicode CH_NB_SPACE = 0xA0;
-
-bool IsBlank(sal_Unicode ch) { return ch == CH_BLANK || ch == CH_FULL_BLANK || ch == CH_NB_SPACE; }
+bool IsBlank(sal_Unicode ch) { return ch == CH_BLANK || ch == CH_FULL_BLANK || ch == CH_NB_SPACE || ch == CH_SIX_PER_EM; }
 
 }
 
@@ -98,7 +95,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                      sal_Int32(rInf.GetIdx()) <= i; --i)
                 {
                     sal_Unicode cChar = rInf.GetText()[i];
-                    if ( cChar != CH_BLANK && cChar != CH_FULL_BLANK )
+                    if ( cChar != CH_BLANK && cChar != CH_FULL_BLANK && cChar != CH_SIX_PER_EM )
                         break;
                     ++nSpaceCnt;
                 }
@@ -473,6 +470,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                 while( nX > rInf.GetLineStart() &&
                        ( CH_TXTATR_BREAKWORD != cFieldChr || nX > rInf.GetIdx() ) &&
                        ( CH_BLANK == rInf.GetChar( --nX ) ||
+                         CH_SIX_PER_EM == rInf.GetChar( nX ) ||
                          CH_FULL_BLANK == rInf.GetChar( nX ) ) )
                     nBreakPos = nX;
             }

@@ -319,7 +319,7 @@ static bool lcl_HasOnlyBlanks(const OUString& rText, TextFrameIndex nStt, TextFr
     while ( nStt < nEnd )
     {
         const sal_Unicode cChar = rText[ sal_Int32(nStt++) ];
-        if ( ' ' != cChar && 0x3000 != cChar )
+        if ( ' ' != cChar && CH_FULL_BLANK != cChar && CH_SIX_PER_EM != cChar )
         {
             bBlankOnly = false;
             break;
