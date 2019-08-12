@@ -192,7 +192,7 @@ SwUndoDelete::SwUndoDelete(
     m_bFromTableCopy( bCalledByTableCpy )
 {
 
-    bCacheComment = false;
+    m_bCacheComment = false;
 
     SwDoc * pDoc = rPam.GetDoc();
 

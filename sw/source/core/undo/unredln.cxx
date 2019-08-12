@@ -173,7 +173,7 @@ SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
         }
     }
 
-    bCacheComment = false;
+    m_bCacheComment = false;
 }
 
 // bit of a hack, replace everything...

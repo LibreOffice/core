@@ -157,10 +157,10 @@ void SwUndo::RemoveIdxRel( sal_uLong nIdx, const SwPosition& rPos )
 }
 
 SwUndo::SwUndo(SwUndoId const nId, const SwDoc* pDoc)
-    : m_nId(nId), nOrigRedlineFlags(RedlineFlags::NONE)
+    : m_nId(nId), m_nOrigRedlineFlags(RedlineFlags::NONE)
     , m_nViewShellId(CreateViewShellId(pDoc))
     , m_isRepeatIgnored(false)
-    , bCacheComment(true)
+    , m_bCacheComment(true)
 {
 }
 
@@ -654,7 +654,7 @@ OUString SwUndo::GetComment() const
 {
     OUString aResult;
 
-    if (bCacheComment)
+    if (m_bCacheComment)
     {
         if (! maComment)
         {

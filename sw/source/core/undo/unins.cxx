@@ -100,7 +100,7 @@ void SwUndoInsert::Init(const SwNodeIndex & rNd)
 
     maUndoText = GetTextFromDoc();
 
-    bCacheComment = false;
+    m_bCacheComment = false;
 }
 
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
