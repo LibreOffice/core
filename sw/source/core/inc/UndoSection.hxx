@@ -77,8 +77,8 @@ class SwUndoUpdateIndex : public SwUndo
 {
 private:
     std::unique_ptr<SwUndoDelSection> m_pTitleSectionUpdated;
-    std::unique_ptr<SwUndoSaveSection> const m_pSaveSectionOriginal;
-    std::unique_ptr<SwUndoSaveSection> const m_pSaveSectionUpdated;
+    std::unique_ptr<SwUndoSaveSection, o3tl::default_delete<SwUndoSaveSection>> const m_pSaveSectionOriginal;
+    std::unique_ptr<SwUndoSaveSection, o3tl::default_delete<SwUndoSaveSection>> const m_pSaveSectionUpdated;
     sal_uLong const m_nStartIndex;
 
 public:
