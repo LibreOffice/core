@@ -53,8 +53,6 @@ public:
 // All these objects are an SwXFrame, so they can use a common implementation
 class SwFrameEventDescriptor : public SvEventDescriptor
 {
-    OUString const sSwFrameEventDescriptor;
-
     SwXFrame& rFrame;
 
 public:
