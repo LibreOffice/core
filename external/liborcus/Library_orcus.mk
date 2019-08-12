@@ -24,6 +24,7 @@ $(eval $(call gb_Library_set_warnings_disabled,orcus))
 
 $(eval $(call gb_Library_set_include,orcus,\
 	-I$(call gb_UnpackedTarball_get_dir,liborcus)/include \
+	-I$(call gb_UnpackedTarball_get_dir,liborcus)/src/include \
 	$$(INCLUDE) \
 ))
 
@@ -68,6 +69,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/info \
 	UnpackedTarball/liborcus/src/liborcus/interface \
 	UnpackedTarball/liborcus/src/liborcus/json_document_tree \
+	UnpackedTarball/liborcus/src/liborcus/json_map_tree \
+	UnpackedTarball/liborcus/src/liborcus/json_structure_mapper \
+	UnpackedTarball/liborcus/src/liborcus/json_structure_tree \
 	UnpackedTarball/liborcus/src/liborcus/json_util \
 	UnpackedTarball/liborcus/src/liborcus/measurement \
 	UnpackedTarball/liborcus/src/liborcus/odf_helper \
@@ -92,12 +96,15 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/orcus_gnumeric \
 	UnpackedTarball/liborcus/src/liborcus/orcus_import_ods \
 	UnpackedTarball/liborcus/src/liborcus/orcus_import_xlsx \
+	UnpackedTarball/liborcus/src/liborcus/orcus_json \
 	UnpackedTarball/liborcus/src/liborcus/orcus_ods \
 	UnpackedTarball/liborcus/src/liborcus/orcus_xls_xml \
 	UnpackedTarball/liborcus/src/liborcus/orcus_xlsx \
 	UnpackedTarball/liborcus/src/liborcus/orcus_xml \
+	UnpackedTarball/liborcus/src/liborcus/orcus_xml_map_def \
 	UnpackedTarball/liborcus/src/liborcus/session_context \
 	UnpackedTarball/liborcus/src/liborcus/spreadsheet_iface_util \
+	UnpackedTarball/liborcus/src/liborcus/spreadsheet_impl_types \
 	UnpackedTarball/liborcus/src/liborcus/spreadsheet_interface \
 	UnpackedTarball/liborcus/src/liborcus/spreadsheet_types \
 	UnpackedTarball/liborcus/src/liborcus/string_helper \

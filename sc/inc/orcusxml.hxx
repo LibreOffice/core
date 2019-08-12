@@ -69,6 +69,7 @@ struct ScOrcusImportXMLParam
     {
         ScAddress maPos;
         std::vector<OString> maFieldPaths;
+        std::vector<OString> maRowGroups;
     };
 
     typedef std::vector<CellLink> CellLinksType;

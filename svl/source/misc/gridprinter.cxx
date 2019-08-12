@@ -29,7 +29,7 @@ typedef mdds::mtv::default_element_block<element_type_string, OUString> string_b
 struct matrix_trait
 {
     typedef string_block string_element_block;
-    typedef mdds::mtv::ushort_element_block integer_element_block;
+    typedef mdds::mtv::uint16_element_block integer_element_block;
 
     typedef mdds::mtv::custom_block_func1<string_block> element_block_func;
 };

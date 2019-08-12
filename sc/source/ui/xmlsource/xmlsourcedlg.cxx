@@ -533,6 +533,12 @@ void ScXMLSourceDlg::OkPressed()
             // Go through all its child elements.
             getFieldLinks(aRangeLink, aParam.maNamespaces, *mxLbTree, *rEntry);
 
+            // Add the anchor node as a grouping node, which will be used as a
+            // row position increment point.
+            OUString aThisEntry = getXPath(*mxLbTree, *rEntry, aParam.maNamespaces);
+            aRangeLink.maRowGroups.push_back(
+                OUStringToOString(aThisEntry, RTL_TEXTENCODING_UTF8));
+
             aParam.maRangeLinks.push_back(aRangeLink);
         }
     }
