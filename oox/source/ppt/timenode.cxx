@@ -144,14 +144,12 @@ namespace oox { namespace ppt {
                         {
                             Reference< XAnimationNode > xEffectNode( xE2->nextElement(), UNO_QUERY_THROW );
                             const Sequence< NamedValue > aUserData( xEffectNode->getUserData() );
-                            const NamedValue* p = aUserData.getConstArray();
-                            sal_Int32 nLength = aUserData.getLength();
-                            while( nLength-- )
+                            for( const NamedValue& rProp : aUserData )
                             {
-                                if ( p->Name == "node-type" )
+                                if ( rProp.Name == "node-type" )
                                 {
                                     sal_Int16 nNodeType = 0;
-                                    p->Value >>= nNodeType;
+                                    rProp.Value >>= nNodeType;
                                     if( nNodeType != css::presentation::EffectNodeType::ON_CLICK )
                                     {
                                         // first effect does not start on click, so correct
@@ -160,7 +158,6 @@ namespace oox { namespace ppt {
                                         break;
                                     }
                                 }
-                                p++;
                             }
                         }
                     }

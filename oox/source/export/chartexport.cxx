@@ -168,11 +168,10 @@ static Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const 
     {
         Reference< chart2::XCoordinateSystemContainer > xCooSysCnt(
             xDiagram, uno::UNO_QUERY_THROW );
-        Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
+        const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
             xCooSysCnt->getCoordinateSystems());
-        for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
+        for( const auto& xCooSys : aCooSysSeq )
         {
-            Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[i] );
             OSL_ASSERT( xCooSys.is());
             for( sal_Int32 nN = xCooSys->getDimension(); nN--; )
             {
@@ -252,13 +251,13 @@ static OUString lcl_flattenStringSequence( const Sequence< OUString > & rSequenc
 {
     OUStringBuffer aResult;
     bool bPrecedeWithSpace = false;
-    for( sal_Int32 nIndex=0; nIndex<rSequence.getLength(); ++nIndex )
+    for( const auto& rString : rSequence )
     {
-        if( !rSequence[nIndex].isEmpty())
+        if( !rString.isEmpty())
         {
             if( bPrecedeWithSpace )
                 aResult.append( ' ' );
-            aResult.append( rSequence[nIndex] );
+            aResult.append( rString );
             bPrecedeWithSpace = true;
         }
     }
@@ -276,7 +275,7 @@ static Sequence< OUString > lcl_getLabelSequence( const Reference< chart2::data:
     }
     else if( xLabelSeq.is())
     {
-        Sequence< uno::Any > aAnies( xLabelSeq->getData());
+        const Sequence< uno::Any > aAnies( xLabelSeq->getData());
         aLabels.realloc( aAnies.getLength());
         for( sal_Int32 i=0; i<aAnies.getLength(); ++i )
             aAnies[i] >>= aLabels[i];
@@ -430,10 +429,10 @@ Reference<chart2::XDataSeries> getPrimaryDataSeries(const Reference<chart2::XCha
     Reference< chart2::XDataSeriesContainer > xDSCnt(xChartType, uno::UNO_QUERY_THROW);
 
     // export dataseries for current chart-type
-    Sequence< Reference< chart2::XDataSeries > > aSeriesSeq(xDSCnt->getDataSeries());
-    for (sal_Int32 nSeriesIdx = 0; nSeriesIdx < aSeriesSeq.getLength(); ++nSeriesIdx)
+    const Sequence< Reference< chart2::XDataSeries > > aSeriesSeq(xDSCnt->getDataSeries());
+    for (const auto& rSeries : aSeriesSeq)
     {
-        Reference<chart2::XDataSeries> xSource(aSeriesSeq[nSeriesIdx], uno::UNO_QUERY);
+        Reference<chart2::XDataSeries> xSource(rSeries, uno::UNO_QUERY);
         if (xSource.is())
             return xSource;
     }
@@ -459,14 +458,14 @@ Sequence< Sequence< OUString > > ChartExport::getSplitCategoriesList( const OUSt
             try
             {
                 Reference< chart2::XCoordinateSystemContainer > xCooSysCnt(xDiagram, uno::UNO_QUERY_THROW);
-                Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(xCooSysCnt->getCoordinateSystems());
-                for (sal_Int32 i = 0; i < aCooSysSeq.getLength(); ++i)
+                const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(xCooSysCnt->getCoordinateSystems());
+                for (const auto& rCooSys : aCooSysSeq)
                 {
-                    const Reference< chart2::XChartTypeContainer > xCTCnt(aCooSysSeq[i], uno::UNO_QUERY_THROW);
+                    const Reference< chart2::XChartTypeContainer > xCTCnt(rCooSys, uno::UNO_QUERY_THROW);
                     const Sequence< Reference< chart2::XChartType > > aChartTypeSeq(xCTCnt->getChartTypes());
-                    for (sal_Int32 j = 0; j < aChartTypeSeq.getLength(); ++j)
+                    for (const auto& rChartType : aChartTypeSeq)
                     {
-                        Reference< chart2::XDataSeries > xDataSeries = getPrimaryDataSeries(aChartTypeSeq[j]);
+                        Reference< chart2::XDataSeries > xDataSeries = getPrimaryDataSeries(rChartType);
                         if (xDataSeries.is())
                         {
                             uno::Reference< chart2::data::XDataSource > xSeriesSource(xDataSeries, uno::UNO_QUERY);
@@ -498,14 +497,14 @@ Sequence< Sequence< OUString > > ChartExport::getSplitCategoriesList( const OUSt
                 {
                     css::uno::Reference< css::chart2::XAnyDescriptionAccess > xDataAccess(xChartDoc->getDataProvider(), uno::UNO_QUERY);
                     const Sequence< Sequence< uno::Any > >aAnyCategories(bSeriesUsesColumns ? xDataAccess->getAnyRowDescriptions() : xDataAccess->getAnyColumnDescriptions());
-                    sal_Int32 nLevelCount = 1;//minimum is 1!
-                    for (auto const& elemLabel : aAnyCategories)
-                    {
-                        nLevelCount = std::max<sal_Int32>(elemLabel.getLength(), nLevelCount);
-                    }
+                    auto pMax = std::max_element(aAnyCategories.begin(), aAnyCategories.end(),
+                        [](const Sequence<uno::Any>& a, const Sequence<uno::Any>& b) {
+                            return a.getLength() < b.getLength(); });
 
-                    if (nLevelCount > 1)
+                    //minimum is 1!
+                    if (pMax != aAnyCategories.end() && pMax->getLength() > 1)
                     {
+                        sal_Int32 nLevelCount = pMax->getLength();
                         //we have complex categories
                         //sort the categories name
                         Sequence<Sequence<OUString>>aFinalSplitSource(nLevelCount);
@@ -540,15 +539,16 @@ Sequence< Sequence< OUString > > ChartExport::getSplitCategoriesList( const OUSt
 
                     if (xCategoriesSource.is())
                     {
-                        Sequence< Reference< chart2::data::XLabeledDataSequence >> aCategories = xCategoriesSource->getDataSequences();
-                        if (aCategories.getLength() > 1)
+                        const Sequence< Reference< chart2::data::XLabeledDataSequence >> aCategories = xCategoriesSource->getDataSequences();
+                        auto nCategories = aCategories.getLength();
+                        if (nCategories > 1)
                         {
                             //we have complex categories
                             //sort the categories name
-                            Sequence<Sequence<OUString>>aFinalSplitSource(aCategories.getLength());
-                            for (sal_Int32 i = 0; i < aFinalSplitSource.getLength(); i++) {
+                            Sequence<Sequence<OUString>> aFinalSplitSource(nCategories);
+                            for (sal_Int32 i = 0; i < nCategories; i++) {
                                 const uno::Reference< chart2::data::XDataSequence > xCategories = aCategories[i]->getValues();
-                                aFinalSplitSource[aFinalSplitSource.getLength() - i - 1] = lcl_getLabelSequence(xCategories);
+                                aFinalSplitSource[nCategories - i - 1] = lcl_getLabelSequence(xCategories);
                             }
                             return aFinalSplitSource;
                         }
@@ -1225,22 +1225,21 @@ void ChartExport::exportPlotArea( const Reference< css::chart::XChartDocument >&
     }
 
     // chart type
-    Sequence< Reference< chart2::XCoordinateSystem > >
+    const Sequence< Reference< chart2::XCoordinateSystem > >
         aCooSysSeq( xBCooSysCnt->getCoordinateSystems());
-    for( sal_Int32 nCSIdx=0; nCSIdx<aCooSysSeq.getLength(); ++nCSIdx )
+    for( const auto& rCS : aCooSysSeq )
     {
-
-        Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCSIdx], uno::UNO_QUERY );
+        Reference< chart2::XChartTypeContainer > xCTCnt( rCS, uno::UNO_QUERY );
         if( ! xCTCnt.is())
             continue;
         mnSeriesCount=0;
-        Sequence< Reference< chart2::XChartType > > aCTSeq( xCTCnt->getChartTypes());
-        for( sal_Int32 nCTIdx=0; nCTIdx<aCTSeq.getLength(); ++nCTIdx )
+        const Sequence< Reference< chart2::XChartType > > aCTSeq( xCTCnt->getChartTypes());
+        for( const auto& rCT : aCTSeq )
         {
-            Reference< chart2::XDataSeriesContainer > xDSCnt( aCTSeq[nCTIdx], uno::UNO_QUERY );
+            Reference< chart2::XDataSeriesContainer > xDSCnt( rCT, uno::UNO_QUERY );
             if( ! xDSCnt.is())
                 return;
-            Reference< chart2::XChartType > xChartType( aCTSeq[nCTIdx], uno::UNO_QUERY );
+            Reference< chart2::XChartType > xChartType( rCT, uno::UNO_QUERY );
             if( ! xChartType.is())
                 continue;
             // note: if xDSCnt.is() then also aCTSeq[nCTIdx]
@@ -1696,10 +1695,9 @@ std::vector<Sequence<Reference<chart2::XDataSeries> > > splitDataSeriesByAxis(co
     if(xDSCnt.is())
     {
         sal_Int32 nAxisIndexOfFirstSeries = -1;
-        Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries());
-        for (sal_Int32 nIndex = 0, nEnd = aSeriesSeq.getLength(); nIndex < nEnd; ++nIndex)
+        const Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries());
+        for (const uno::Reference<chart2::XDataSeries>& xSeries : aSeriesSeq)
         {
-            uno::Reference<chart2::XDataSeries> xSeries = aSeriesSeq[nIndex];
             Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY);
             if (!xPropSet.is())
                 continue;
@@ -2014,10 +2012,10 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
     OUString aChartType( xChartType->getChartType());
     sal_Int32 eChartType = lcl_getChartType( aChartType );
 
-    for( sal_Int32 nSeriesIdx=0; nSeriesIdx<rSeriesSeq.getLength(); ++nSeriesIdx )
+    for( const auto& rSeries : std::as_const(rSeriesSeq) )
     {
         // export series
-        Reference< chart2::data::XDataSource > xSource( rSeriesSeq[nSeriesIdx], uno::UNO_QUERY );
+        Reference< chart2::data::XDataSource > xSource( rSeries, uno::UNO_QUERY );
         if( xSource.is())
         {
             Reference< chart2::XDataSeries > xDataSeries( xSource, uno::UNO_QUERY );
@@ -2079,7 +2077,7 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
 
                     // export shape properties
                     Reference< XPropertySet > xOldPropSet = SchXMLSeriesHelper::createOldAPISeriesPropertySet(
-                        rSeriesSeq[nSeriesIdx], getModel() );
+                        rSeries, getModel() );
                     if( xOldPropSet.is() )
                     {
                         exportShapeProps( xOldPropSet );
@@ -2124,12 +2122,12 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                     }
 
                     // export data points
-                    exportDataPoints( uno::Reference< beans::XPropertySet >( rSeriesSeq[nSeriesIdx], uno::UNO_QUERY ), nSeriesLength, eChartType );
+                    exportDataPoints( uno::Reference< beans::XPropertySet >( rSeries, uno::UNO_QUERY ), nSeriesLength, eChartType );
 
                     // export data labels
-                    exportDataLabels(rSeriesSeq[nSeriesIdx], nSeriesLength, eChartType);
+                    exportDataLabels(rSeries, nSeriesLength, eChartType);
 
-                    exportTrendlines( rSeriesSeq[nSeriesIdx] );
+                    exportTrendlines( rSeries );
 
                     if( eChartType != chart::TYPEID_PIE &&
                             eChartType != chart::TYPEID_RADARLINE )
@@ -2205,9 +2203,8 @@ void ChartExport::exportCandleStickSeries(
     const Sequence< Reference< chart2::XDataSeries > > & aSeriesSeq,
     bool& rPrimaryAxes)
 {
-    for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeriesSeq.getLength(); ++nSeriesIdx )
+    for( const Reference< chart2::XDataSeries >& xSeries : aSeriesSeq )
     {
-        Reference< chart2::XDataSeries > xSeries( aSeriesSeq[nSeriesIdx] );
         rPrimaryAxes = lcl_isSeriesAttachedToFirstAxis(xSeries);
 
         Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
@@ -2293,7 +2290,7 @@ void ChartExport::exportSeriesCategory( const Reference< chart2::data::XDataSequ
     pFS->startElement(FSNS(XML_c, XML_cat));
 
     OUString aCellRange = xValueSeq.is() ? xValueSeq->getSourceRangeRepresentation() : OUString();
-    Sequence< Sequence< OUString >> aFinalSplitSource = getSplitCategoriesList(aCellRange);
+    const Sequence< Sequence< OUString >> aFinalSplitSource = getSplitCategoriesList(aCellRange);
     aCellRange = parseFormula( aCellRange );
 
     if(aFinalSplitSource.getLength() > 1)
@@ -2305,19 +2302,18 @@ void ChartExport::exportSeriesCategory( const Reference< chart2::data::XDataSequ
         pFS->writeEscaped(aCellRange);
         pFS->endElement(FSNS(XML_c, XML_f));
 
-        sal_Int32 ptCount = aFinalSplitSource.getLength();
         pFS->startElement(FSNS(XML_c, XML_multiLvlStrCache));
         pFS->singleElement(FSNS(XML_c, XML_ptCount), XML_val, OString::number(aFinalSplitSource[0].getLength()));
-        for(sal_Int32 i = 0; i < ptCount; i++)
+        for(const auto& rSeq : aFinalSplitSource)
         {
             pFS->startElement(FSNS(XML_c, XML_lvl));
-            for(sal_Int32 j = 0; j < aFinalSplitSource[i].getLength(); j++)
+            for(sal_Int32 j = 0; j < rSeq.getLength(); j++)
             {
-                if(!aFinalSplitSource[i][j].isEmpty())
+                if(!rSeq[j].isEmpty())
                 {
                     pFS->startElement(FSNS(XML_c, XML_pt), XML_idx, OString::number(j));
                     pFS->startElement(FSNS(XML_c, XML_v));
-                    pFS->writeEscaped(aFinalSplitSource[i][j]);
+                    pFS->writeEscaped(rSeq[j]);
                     pFS->endElement(FSNS(XML_c, XML_v));
                     pFS->endElement(FSNS(XML_c, XML_pt));
                 }
@@ -3275,13 +3271,8 @@ void ChartExport::exportDataLabels(
             ;
     }
 
-    const sal_Int32* p = aAttrLabelIndices.getConstArray();
-    const sal_Int32* pEnd = p + aAttrLabelIndices.getLength();
-
-
-    for (; p != pEnd; ++p)
+    for (const sal_Int32 nIdx : std::as_const(aAttrLabelIndices))
     {
-        sal_Int32 nIdx = *p;
         uno::Reference<beans::XPropertySet> xLabelPropSet = xSeries->getDataPointByIndex(nIdx);
 
         if (!xLabelPropSet.is())
@@ -3524,12 +3515,9 @@ void ChartExport::exportTrendlines( const Reference< chart2::XDataSeries >& xSer
     Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer( xSeries, UNO_QUERY );
     if( xRegressionCurveContainer.is() )
     {
-        Sequence< Reference< chart2::XRegressionCurve > > aRegCurveSeq = xRegressionCurveContainer->getRegressionCurves();
-        const Reference< chart2::XRegressionCurve >* pBeg = aRegCurveSeq.getConstArray();
-        const Reference< chart2::XRegressionCurve >* pEnd = pBeg + aRegCurveSeq.getLength();
-        for( const Reference< chart2::XRegressionCurve >* pIt = pBeg; pIt != pEnd; ++pIt )
+        const Sequence< Reference< chart2::XRegressionCurve > > aRegCurveSeq = xRegressionCurveContainer->getRegressionCurves();
+        for( const Reference< chart2::XRegressionCurve >& xRegCurve : aRegCurveSeq )
         {
-            Reference< chart2::XRegressionCurve > xRegCurve = *pIt;
             if (!xRegCurve.is())
                 continue;
 
@@ -3798,11 +3786,11 @@ Reference< chart2::data::XDataSequence>  getLabeledSequence(
     else
         aDirection = "negative";
 
-    for( sal_Int32 nI=0; nI< aSequences.getLength(); ++nI )
+    for( const auto& rSequence : aSequences )
     {
-        if( aSequences[nI].is())
+        if( rSequence.is())
         {
-            uno::Reference< chart2::data::XDataSequence > xSequence( aSequences[nI]->getValues());
+            uno::Reference< chart2::data::XDataSequence > xSequence( rSequence->getValues());
             uno::Reference< beans::XPropertySet > xSeqProp( xSequence, uno::UNO_QUERY_THROW );
             OUString aRole;
             if( ( xSeqProp->getPropertyValue( "Role" ) >>= aRole ) &&

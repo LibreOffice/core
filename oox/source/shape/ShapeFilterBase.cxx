@@ -120,12 +120,12 @@ void ShapeFilterBase::importTheme()
     uno::Sequence<beans::PropertyValue> aGrabBag;
     xPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
 
-    for (int i = 0; i < aGrabBag.getLength(); i++)
+    for (const auto& rProp : std::as_const(aGrabBag))
     {
-        if (aGrabBag[i].Name == "OOXTheme")
+        if (rProp.Name == "OOXTheme")
         {
             uno::Reference<xml::sax::XFastSAXSerializable> xDoc;
-            if (aGrabBag[i].Value >>= xDoc)
+            if (rProp.Value >>= xDoc)
             {
                 rtl::Reference<core::FragmentHandler> xFragmentHandler(
                     new drawingml::ThemeFragmentHandler(*this, OUString(), *pTheme));

@@ -1263,32 +1263,31 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
                     embed::ElementModes::READ);
             SAL_WARN_IF(!xStorage.is(), "oox.vml", "No xStorage!");
 
-            uno::Sequence<security::DocumentSignatureInformation> xSignatureInfo
+            const uno::Sequence<security::DocumentSignatureInformation> xSignatureInfo
                 = xSignatures->verifyScriptingContentSignatures(xStorage,
                                                                 uno::Reference<io::XInputStream>());
 
-            for (int i = 0; i < xSignatureInfo.getLength(); i++)
+            // Try to find matching signature line image - if none exists that is fine,
+            // then the signature line is not digitally signed.
+            auto pSignInfo = std::find_if(xSignatureInfo.begin(), xSignatureInfo.end(),
+                [this](const security::DocumentSignatureInformation& rSigInfo) {
+                    return rSigInfo.SignatureLineId == getShapeModel().maSignatureId; });
+            if (pSignInfo != xSignatureInfo.end())
             {
-                // Try to find matching signature line image - if none exists that is fine,
-                // then the signature line is not digitally signed.
-                if (xSignatureInfo[i].SignatureLineId == getShapeModel().maSignatureId)
+                bIsSigned = true;
+                if (pSignInfo->SignatureIsValid)
                 {
-                    bIsSigned = true;
-                    if (xSignatureInfo[i].SignatureIsValid)
-                    {
-                        // Signature is valid, use the 'valid' image
-                        SAL_WARN_IF(!xSignatureInfo[i].ValidSignatureLineImage.is(), "oox.vml",
-                                    "No ValidSignatureLineImage!");
-                        xGraphic = xSignatureInfo[i].ValidSignatureLineImage;
-                    }
-                    else
-                    {
-                        // Signature is invalid, use the 'invalid' image
-                        SAL_WARN_IF(!xSignatureInfo[i].InvalidSignatureLineImage.is(), "oox.vml",
-                                    "No InvalidSignatureLineImage!");
-                        xGraphic = xSignatureInfo[i].InvalidSignatureLineImage;
-                    }
-                    break;
+                    // Signature is valid, use the 'valid' image
+                    SAL_WARN_IF(!pSignInfo->ValidSignatureLineImage.is(), "oox.vml",
+                                "No ValidSignatureLineImage!");
+                    xGraphic = pSignInfo->ValidSignatureLineImage;
+                }
+                else
+                {
+                    // Signature is invalid, use the 'invalid' image
+                    SAL_WARN_IF(!pSignInfo->InvalidSignatureLineImage.is(), "oox.vml",
+                                "No InvalidSignatureLineImage!");
+                    xGraphic = pSignInfo->InvalidSignatureLineImage;
                 }
             }
         }
@@ -1418,17 +1417,9 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
         beans::PropertyValue aPair;
         aPair.Name = "mso-edit-as";
         aPair.Value <<= maTypeModel.maEditAs;
-        if (aGrabBag.hasElements())
-        {
-            sal_Int32 nLength = aGrabBag.getLength();
-            aGrabBag.realloc(nLength + 1);
-            aGrabBag[nLength] = aPair;
-        }
-        else
-        {
-            aGrabBag.realloc(1);
-            aGrabBag[0] = aPair;
-        }
+        sal_Int32 nLength = aGrabBag.getLength();
+        aGrabBag.realloc(nLength + 1);
+        aGrabBag[nLength] = aPair;
         xPropertySet->setPropertyValue("InteropGrabBag", uno::makeAny(aGrabBag));
     }
     // Make sure group shapes are inline as well, unless there is an explicit different style.

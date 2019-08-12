@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/sequence.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
@@ -430,14 +431,8 @@ void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs )
             {
                 css::uno::Sequence<OUString> aUserDataSeq;
                 rVal.Value >>= aUserDataSeq;
-                sal_Int32 nUserDataSeqLen = aUserDataSeq.getLength();
-                for (sal_Int32 j = 0; j < nUserDataSeqLen; ++j)
-                {
-                    if (aUserDataSeq[j] == "macro-enabled")
-                    {
-                        mxImpl->mbExportVBA = true;
-                    }
-                }
+                if (comphelper::findValue(aUserDataSeq, "macro-enabled") != -1)
+                    mxImpl->mbExportVBA = true;
             }
             else if (rVal.Name == "Flags")
             {

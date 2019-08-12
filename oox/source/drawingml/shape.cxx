@@ -1503,15 +1503,8 @@ void Shape::keepDiagramCompatibilityInfo()
 
         // We keep the previous items, if present
         if ( aGrabBag.hasElements() )
-        {
-            sal_Int32 length = aGrabBag.getLength();
-            aGrabBag.realloc( length+maDiagramDoms.getLength() );
-
-            for( sal_Int32 i = 0; i < maDiagramDoms.getLength(); ++i )
-                aGrabBag[length+i] = maDiagramDoms[i];
-
-            xSet->setPropertyValue( aGrabBagPropName, Any( aGrabBag ) );
-        } else
+            xSet->setPropertyValue( aGrabBagPropName, Any( comphelper::concatSequences(aGrabBag, maDiagramDoms) ) );
+        else
             xSet->setPropertyValue( aGrabBagPropName, Any( maDiagramDoms ) );
     }
     catch( const Exception& )
@@ -1771,20 +1764,23 @@ void Shape::putPropertiesToGrabBag( const Sequence< PropertyValue >& aProperties
         // get existing grab bag
         Sequence< PropertyValue > aGrabBag;
         xSet->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
-        sal_Int32 length = aGrabBag.getLength();
 
-        // update grab bag size to contain the new items
-        aGrabBag.realloc( length + aProperties.getLength() );
+        std::vector<PropertyValue> aVec;
+        aVec.reserve(aProperties.getLength());
 
         // put the new items
-        for( sal_Int32 i=0; i < aProperties.getLength(); ++i )
-        {
-            aGrabBag[length + i].Name = aProperties[i].Name;
-            aGrabBag[length + i].Value = aProperties[i].Value;
-        }
+        std::transform(aProperties.begin(), aProperties.end(), std::back_inserter(aVec),
+            [](const PropertyValue& rProp) {
+                PropertyValue aProp;
+                aProp.Name = rProp.Name;
+                aProp.Value = rProp.Value;
+                return aProp;
+            });
+
+        Sequence<PropertyValue> aSeq = comphelper::containerToSequence(aVec);
 
         // put it back to the shape
-        xSet->setPropertyValue( aGrabBagPropName, Any( aGrabBag ) );
+        xSet->setPropertyValue( aGrabBagPropName, Any( comphelper::concatSequences(aGrabBag, aSeq) ) );
     }
 }
 

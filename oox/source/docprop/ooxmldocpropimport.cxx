@@ -56,33 +56,29 @@ Sequence< InputSource > lclGetRelatedStreams( const Reference< XStorage >& rxSto
     Reference< XRelationshipAccess > xRelation( rxStorage, UNO_QUERY_THROW );
     Reference< XHierarchicalStorageAccess > xHierarchy( rxStorage, UNO_QUERY_THROW );
 
-    Sequence< Sequence< StringPair > > aPropsInfo = xRelation->getRelationshipsByType( rStreamType );
+    const Sequence< Sequence< StringPair > > aPropsInfo = xRelation->getRelationshipsByType( rStreamType );
 
     ::std::vector< InputSource > aResult;
 
-    for( sal_Int32 nIndex = 0, nLength = aPropsInfo.getLength(); nIndex < nLength; ++nIndex )
+    for( const Sequence< StringPair >& rEntries : aPropsInfo )
     {
-        const Sequence< StringPair >& rEntries = aPropsInfo[ nIndex ];
-        for( sal_Int32 nEntryIndex = 0, nEntryLength = rEntries.getLength(); nEntryIndex < nEntryLength; ++nEntryIndex )
+        auto pEntry = std::find_if(rEntries.begin(), rEntries.end(),
+            [](const StringPair& rEntry) { return rEntry.First == "Target"; });
+        if (pEntry != rEntries.end())
         {
-            const StringPair& rEntry = rEntries[ nEntryIndex ];
-            if ( rEntry.First == "Target" )
-            {
-                // The stream path is always a relative one, ignore the leading "/" if it's there.
-                OUString aStreamPath = rEntry.Second;
-                if (aStreamPath.startsWith("/"))
-                    aStreamPath = aStreamPath.copy(1);
+            // The stream path is always a relative one, ignore the leading "/" if it's there.
+            OUString aStreamPath = pEntry->Second;
+            if (aStreamPath.startsWith("/"))
+                aStreamPath = aStreamPath.copy(1);
 
-                Reference< XExtendedStorageStream > xExtStream(
-                    xHierarchy->openStreamElementByHierarchicalName( aStreamPath, ElementModes::READ ), UNO_SET_THROW );
-                Reference< XInputStream > xInStream = xExtStream->getInputStream();
-                if( xInStream.is() )
-                {
-                    aResult.emplace_back();
-                    aResult.back().sSystemId = rEntry.Second;
-                    aResult.back().aInputStream = xExtStream->getInputStream();
-                }
-                break;
+            Reference< XExtendedStorageStream > xExtStream(
+                xHierarchy->openStreamElementByHierarchicalName( aStreamPath, ElementModes::READ ), UNO_SET_THROW );
+            Reference< XInputStream > xInStream = xExtStream->getInputStream();
+            if( xInStream.is() )
+            {
+                aResult.emplace_back();
+                aResult.back().sSystemId = pEntry->Second;
+                aResult.back().aInputStream = xExtStream->getInputStream();
             }
         }
     }
@@ -157,10 +153,10 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
 
         if( aCoreStreams.hasElements() )
             aParser.parseStream( aCoreStreams[ 0 ], true );
-        for( sal_Int32 nIndex = 0; nIndex < aExtStreams.getLength(); ++nIndex )
-            aParser.parseStream( aExtStreams[ nIndex ], true );
-        for( sal_Int32 nIndex = 0; nIndex < aCustomStreams.getLength(); ++nIndex )
-            aParser.parseStream( aCustomStreams[ nIndex ], true );
+        for( const auto& rExtStream : std::as_const(aExtStreams) )
+            aParser.parseStream( rExtStream, true );
+        for( const auto& rCustomStream : std::as_const(aCustomStreams) )
+            aParser.parseStream( rCustomStream, true );
     }
 }
 

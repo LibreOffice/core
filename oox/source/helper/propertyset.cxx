@@ -90,11 +90,12 @@ void PropertySet::setProperties( const Sequence< OUString >& rPropNames, const S
 
     if( mxPropSet.is() )
     {
-        const OUString* pPropName = rPropNames.getConstArray();
-        const OUString* pPropNameEnd = pPropName + rPropNames.getLength();
         const Any* pValue = rValues.getConstArray();
-        for( ; pPropName != pPropNameEnd; ++pPropName, ++pValue )
-            implSetPropertyValue( *pPropName, *pValue );
+        for( const OUString& rPropName : rPropNames )
+        {
+            implSetPropertyValue( rPropName, *pValue );
+            ++pValue;
+        }
     }
 }
 

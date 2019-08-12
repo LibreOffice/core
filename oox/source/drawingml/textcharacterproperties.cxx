@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <comphelper/sequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <editeng/escapementitem.hxx>
 #include <oox/helper/helper.hxx>
@@ -166,16 +167,9 @@ static void pushToGrabBag( PropertySet& rPropSet, const std::vector<PropertyValu
     Any aAnyGrabBag = rPropSet.getAnyProperty(PROP_CharInteropGrabBag);
     aAnyGrabBag >>= aGrabBag;
 
-    sal_Int32 nLength = aGrabBag.getLength();
-    aGrabBag.realloc(nLength + aVectorOfProperyValues.size());
+    Sequence<PropertyValue> aSeq = comphelper::containerToSequence(aVectorOfProperyValues);
 
-    for (size_t i = 0; i < aVectorOfProperyValues.size(); i++)
-    {
-        PropertyValue aPropertyValue = aVectorOfProperyValues[i];
-        aGrabBag[nLength + i] = aPropertyValue;
-    }
-
-    rPropSet.setAnyProperty(PROP_CharInteropGrabBag, makeAny(aGrabBag));
+    rPropSet.setAnyProperty(PROP_CharInteropGrabBag, makeAny(comphelper::concatSequences(aGrabBag, aSeq)));
 }
 
 void TextCharacterProperties::pushToPropSet( PropertySet& rPropSet, const XmlFilterBase& rFilter ) const

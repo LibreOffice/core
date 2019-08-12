@@ -163,8 +163,8 @@ void registerNamespaces( FastParser& rParser )
     // Filter out duplicates: a namespace can have multiple URLs, think of
     // strict vs transitional.
     std::set<sal_Int32> aSet;
-    for (sal_Int32 i = 0; i < ids.getLength(); ++i)
-        aSet.insert(ids[i].Second);
+    for (const auto& rId : ids)
+        aSet.insert(rId.Second);
 
     for (auto const& elem : aSet)
         rParser.registerNamespace(elem);
@@ -878,20 +878,16 @@ Reference< XInputStream > XmlFilterBase::implGetInputStream( MediaDescriptor& rM
 
 Reference<XStream> XmlFilterBase::implGetOutputStream( MediaDescriptor& rMediaDescriptor ) const
 {
-    Sequence< NamedValue > aMediaEncData = rMediaDescriptor.getUnpackedValueOrDefault(
+    const Sequence< NamedValue > aMediaEncData = rMediaDescriptor.getUnpackedValueOrDefault(
                                         MediaDescriptor::PROP_ENCRYPTIONDATA(),
                                         Sequence< NamedValue >() );
 
     OUString aPassword;
-    for (int i=0; i<aMediaEncData.getLength(); i++)
-    {
-        if (aMediaEncData[i].Name == "OOXPassword")
-        {
-            Any& any = aMediaEncData[i].Value;
-            any >>= aPassword;
-            break;
-        }
-    }
+    auto pProp = std::find_if(aMediaEncData.begin(), aMediaEncData.end(),
+        [](const NamedValue& rProp) { return rProp.Name == "OOXPassword"; });
+    if (pProp != aMediaEncData.end())
+        pProp->Value >>= aPassword;
+
     if (aPassword.isEmpty())
     {
         return FilterBase::implGetOutputStream( rMediaDescriptor );
@@ -909,21 +905,16 @@ bool XmlFilterBase::implFinalizeExport( MediaDescriptor& rMediaDescriptor )
 {
     bool bRet = true;
 
-    Sequence< NamedValue > aMediaEncData = rMediaDescriptor.getUnpackedValueOrDefault(
+    const Sequence< NamedValue > aMediaEncData = rMediaDescriptor.getUnpackedValueOrDefault(
                                         MediaDescriptor::PROP_ENCRYPTIONDATA(),
                                         Sequence< NamedValue >() );
 
     OUString aPassword;
 
-    for (int i=0; i<aMediaEncData.getLength(); i++)
-    {
-        if (aMediaEncData[i].Name == "OOXPassword")
-        {
-            Any& any = aMediaEncData[i].Value;
-            any >>= aPassword;
-            break;
-        }
-    }
+    auto pProp = std::find_if(aMediaEncData.begin(), aMediaEncData.end(),
+        [](const NamedValue& rProp) { return rProp.Name == "OOXPassword"; });
+    if (pProp != aMediaEncData.end())
+        pProp->Value >>= aPassword;
 
     if (!aPassword.isEmpty())
     {
@@ -979,19 +970,17 @@ void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStora
     Reference<XRelationshipAccess> xRelations(xDocumentStorage, UNO_QUERY);
     if (xRelations.is())
     {
-        uno::Sequence<uno::Sequence<beans::StringPair>> aSeqs = xRelations->getAllRelationships();
+        const uno::Sequence<uno::Sequence<beans::StringPair>> aSeqs = xRelations->getAllRelationships();
 
         std::vector<StreamDataSequence> aCustomFragments;
         std::vector<OUString> aCustomFragmentTypes;
         std::vector<OUString> aCustomFragmentTargets;
-        for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
+        for (const uno::Sequence<beans::StringPair>& aSeq : aSeqs)
         {
             OUString sType;
             OUString sTarget;
-            const uno::Sequence<beans::StringPair>& aSeq = aSeqs[j];
-            for (sal_Int32 i = 0; i < aSeq.getLength(); i++)
+            for (const beans::StringPair& aPair : aSeq)
             {
-                const beans::StringPair& aPair = aSeq[i];
                 if (aPair.First == "Target")
                     sTarget = aPair.Second;
                 else if (aPair.First == "Type")
@@ -1070,32 +1059,32 @@ void XmlFilterBase::exportCustomFragments()
 
     uno::Sequence<beans::PropertyValue> propList;
     xPropSet->getPropertyValue(aName) >>= propList;
-    for (sal_Int32 nProp = 0; nProp < propList.getLength(); ++nProp)
+    for (const auto& rProp : std::as_const(propList))
     {
-        const OUString propName = propList[nProp].Name;
+        const OUString propName = rProp.Name;
         if (propName == "OOXCustomXml")
         {
-            propList[nProp].Value >>= customXmlDomlist;
+            rProp.Value >>= customXmlDomlist;
         }
         else if (propName == "OOXCustomXmlProps")
         {
-            propList[nProp].Value >>= customXmlDomPropslist;
+            rProp.Value >>= customXmlDomPropslist;
         }
         else if (propName == "OOXCustomFragments")
         {
-            propList[nProp].Value >>= customFragments;
+            rProp.Value >>= customFragments;
         }
         else if (propName == "OOXCustomFragmentTypes")
         {
-            propList[nProp].Value >>= customFragmentTypes;
+            rProp.Value >>= customFragmentTypes;
         }
         else if (propName == "OOXCustomFragmentTargets")
         {
-            propList[nProp].Value >>= customFragmentTargets;
+            rProp.Value >>= customFragmentTargets;
         }
         else if (propName == "OOXContentTypes")
         {
-            propList[nProp].Value >>= aContentTypes;
+            rProp.Value >>= aContentTypes;
         }
     }
 

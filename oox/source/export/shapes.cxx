@@ -659,15 +659,12 @@ static void lcl_AnalyzeHandles( const uno::Sequence<beans::PropertyValues> & rHa
         std::vector< std::pair< sal_Int32, sal_Int32> > &rHandlePositionList,
         Sequence< EnhancedCustomShapeAdjustmentValue > &rSeq)
 {
-    sal_uInt16 k;
-    sal_uInt16 nHandles = rHandles.getLength();
-    for ( k = 0; k < nHandles ; k++ )
+    for ( const Sequence< PropertyValue >& rPropSeq : rHandles )
     {
         const OUString sPosition( "Position"  );
         bool bPosition = false;
         EnhancedCustomShapeParameterPair aPosition;
         EnhancedCustomShapeParameterPair aPolar;
-        const Sequence< PropertyValue >& rPropSeq = rHandles[ k ];
         for ( const PropertyValue& rPropVal: rPropSeq )
         {
             if ( rPropVal.Name == sPosition )
@@ -731,17 +728,15 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         {
             bHasGeometrySeq = true;
             SAL_INFO("oox.shape", "got custom shape geometry sequence");
-            for (int i = 0; i < aGeometrySeq.getLength(); i++)
+            for (const PropertyValue& rProp : std::as_const(aGeometrySeq))
             {
-                const PropertyValue& rProp = aGeometrySeq[i];
                 SAL_INFO("oox.shape", "geometry property: " << rProp.Name);
                 if (rProp.Name == "TextPath")
                 {
                     uno::Sequence<beans::PropertyValue> aTextPathSeq;
                     rProp.Value >>= aTextPathSeq;
-                    for (int k = 0; k < aTextPathSeq.getLength(); k++)
+                    for (const PropertyValue& rTextProp : std::as_const(aTextPathSeq))
                     {
-                        const PropertyValue& rTextProp = aTextPathSeq[k];
                         if (rTextProp.Name == "TextPath")
                         {
                             rTextProp.Value >>= bIsFontworkShape;

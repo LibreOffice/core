@@ -105,21 +105,21 @@ static bool lcl_useWorkaroundForNoGapInOOXML( Reference< chart2::XChartDocument 
     if (!xDSCont.is())
         return false;
 
-    Sequence<uno::Reference<chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
+    const Sequence<uno::Reference<chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
 
     bool bHasNoGapBlankValue = false;
     bool bHasEmptyCell = false;
 
-    for (sal_Int32 i = 0; i < aDataSeriesSeq.getLength(); ++i)
+    for (const auto& rDataSeries : aDataSeriesSeq)
     {
-        uno::Reference<chart2::data::XDataSource> xDSrc(aDataSeriesSeq[i], uno::UNO_QUERY);
+        uno::Reference<chart2::data::XDataSource> xDSrc(rDataSeries, uno::UNO_QUERY);
         if (!xDSrc.is())
             return false;
 
-        uno::Sequence<Reference<chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
-        for (sal_Int32 j = 0; j < aDataSeqs.getLength(); ++j)
+        const uno::Sequence<Reference<chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
+        for (const auto& rDataSeq : aDataSeqs)
         {
-            Reference<chart2::data::XDataSequence> xValues = aDataSeqs[j]->getValues();
+            Reference<chart2::data::XDataSequence> xValues = rDataSeq->getValues();
             if(!xValues.is())
                 return false;
             Reference<beans::XPropertySet> xPropSet(xValues, uno::UNO_QUERY);
@@ -130,14 +130,14 @@ static bool lcl_useWorkaroundForNoGapInOOXML( Reference< chart2::XChartDocument 
             xPropSet->getPropertyValue("Role") >>= aRoleName;
             if (aRoleName == "values-y")
             {
-                uno::Sequence<uno::Any> aData = xValues->getData();
-                for (sal_Int32 nVal = 0; nVal < aData.getLength(); ++nVal)
+                const uno::Sequence<uno::Any> aData = xValues->getData();
+                for (const auto& rVal : aData)
                 {
                     double fVal;
                     OUString sStr;
-                    if (aData[nVal] >>= fVal)
+                    if (rVal >>= fVal)
                         continue;
-                    else if (aData[nVal] >>= sStr)
+                    else if (rVal >>= sStr)
                         bHasNoGapBlankValue = true;
                     else
                         bHasEmptyCell = true;
