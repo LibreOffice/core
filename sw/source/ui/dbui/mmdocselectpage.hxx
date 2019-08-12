@@ -20,7 +20,6 @@
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMDOCSELECTPAGE_HXX
 
 #include <svtools/wizardmachine.hxx>
-#include <mailmergehelper.hxx>
 #include <vcl/weld.hxx>
 
 class SwMailMergeWizard;

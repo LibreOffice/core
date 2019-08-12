@@ -21,6 +21,8 @@
 
 #include <sfx2/tabdlg.hxx>
 
+#include <label.hxx>
+
 class SwLabDlg;
 class SwLabItem;
 

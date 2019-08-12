@@ -21,7 +21,6 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XAddins.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 
 typedef CollTestImplHelper< ooo::vba::word::XAddins > SwVbaAddins_BASE;
 

@@ -16,6 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <vbahelper/vbahelper.hxx>
 #include "vbatablehelper.hxx"
 #include <swtable.hxx>
 #include <unotbl.hxx>

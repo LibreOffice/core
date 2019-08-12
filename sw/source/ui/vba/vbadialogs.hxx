@@ -21,8 +21,6 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <ooo/vba/word/XDialogs.hpp>
-#include <ooo/vba/XCollection.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbadialogsbase.hxx>
 #include <cppuhelper/implbase.hxx>
 

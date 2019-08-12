@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbarangehelper.hxx"
+#include <vbahelper/vbahelper.hxx>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>

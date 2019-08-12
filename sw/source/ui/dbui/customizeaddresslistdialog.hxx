@@ -22,6 +22,8 @@
 #include <sfx2/basedlgs.hxx>
 #include <vcl/weld.hxx>
 
+#include "createaddresslistdialog.hxx"
+
 struct SwCSVData;
 
 class SwCustomizeAddressListDialog : public SfxDialogController

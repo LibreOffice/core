@@ -21,10 +21,6 @@
 
 #include <svtools/wizardmachine.hxx>
 #include <mailmergehelper.hxx>
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
 #include <com/sun/star/uno/Reference.h>
 
 class SwMailMergeWizard;

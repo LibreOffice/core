@@ -20,11 +20,6 @@
 #define INCLUDED_SW_SOURCE_UI_FLDUI_FLDVAR_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/edit.hxx>
 
 #include "fldpage.hxx"
 #include <condedit.hxx>

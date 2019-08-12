@@ -21,7 +21,6 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XListLevels.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include "vbalisthelper.hxx"
 
 typedef CollTestImplHelper< ooo::vba::word::XListLevels > SwVbaListLevels_BASE;

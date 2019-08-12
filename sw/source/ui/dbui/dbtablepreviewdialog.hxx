@@ -20,7 +20,6 @@
 #define INCLUDED_SW_SOURCE_UI_DBUI_DBTABLEPREVIEWDIALOG_HXX
 
 #include <sfx2/basedlgs.hxx>
-#include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <com/sun/star/uno/Sequence.h>
 

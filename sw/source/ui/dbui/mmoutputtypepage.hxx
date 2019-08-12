@@ -21,7 +21,6 @@
 
 #include <svtools/wizardmachine.hxx>
 #include <vcl/weld.hxx>
-#include <mailmergehelper.hxx>
 class SwMailMergeWizard;
 
 class SwMailMergeOutputTypePage : public svt::OWizardPage

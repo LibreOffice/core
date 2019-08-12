@@ -21,7 +21,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/word/XDialog.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbadialogbase.hxx>
 
 typedef cppu::ImplInheritanceHelper< VbaDialogBase, ov::word::XDialog > SwVbaDialog_BASE;

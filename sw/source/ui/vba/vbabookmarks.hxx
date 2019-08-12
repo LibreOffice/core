@@ -21,12 +21,9 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XBookmarks.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/text/XText.hpp>
 
 typedef CollTestImplHelper< ooo::vba::word::XBookmarks > SwVbaBookmarks_BASE;
 

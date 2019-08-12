@@ -21,7 +21,6 @@
 
 #include <ooo/vba/word/XParagraphFormat.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 

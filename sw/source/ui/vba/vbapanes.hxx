@@ -21,9 +21,6 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XPanes.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 
 typedef CollTestImplHelper< ooo::vba::word::XPanes > SwVbaPanes_BASE;
 

@@ -20,7 +20,6 @@
 #define INCLUDED_SW_SOURCE_UI_VBA_VBATABLEHELPER_HXX
 
 #include <com/sun/star/text/XTextTable.hpp>
-#include "wordvbahelper.hxx"
 #include <swtable.hxx>
 #include <tabcol.hxx>
 

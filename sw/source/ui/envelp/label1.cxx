@@ -27,6 +27,7 @@
 #include <wrtsh.hxx>
 #include <initui.hxx>
 #include <labimp.hxx>
+#include "swuilabimp.hxx"
 #include "labfmt.hxx"
 #include "labprt.hxx"
 #include <unotools.hxx>

@@ -19,10 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_FLDUI_FLDDB_HXX
 #define INCLUDED_SW_SOURCE_UI_FLDUI_FLDDB_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
-
 #include <condedit.hxx>
 #include <dbtree.hxx>
 #include <numfmtlb.hxx>

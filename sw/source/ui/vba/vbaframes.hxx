@@ -21,7 +21,6 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XFrames.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 
 typedef CollTestImplHelper< ooo::vba::word::XFrames > SwVbaFrames_BASE;

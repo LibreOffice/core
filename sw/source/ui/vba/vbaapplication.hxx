@@ -29,8 +29,6 @@
 #include <ooo/vba/word/XSystem.hpp>
 #include <ooo/vba/word/XOptions.hpp>
 #include <ooo/vba/word/XSelection.hpp>
-#include <ooo/vba/word/XAddins.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbaapplicationbase.hxx>
 #include <cppuhelper/implbase.hxx>
 

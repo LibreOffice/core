@@ -21,6 +21,39 @@
 
 #include <swabstdlg.hxx>
 
+#include <abstract.hxx>
+#include <ascfldlg.hxx>
+#include <break.hxx>
+#include <cnttab.hxx>
+#include <colwd.hxx>
+#include <convert.hxx>
+#include <DateFormFieldDialog.hxx>
+#include <dbinsdlg.hxx>
+#include <DropDownFieldDialog.hxx>
+#include <DropDownFormFieldDialog.hxx>
+#include <fldtdlg.hxx>
+#include <glossary.hxx>
+#include <inpdlg.hxx>
+#include <insfnote.hxx>
+#include <instable.hxx>
+#include <javaedit.hxx>
+#include <label.hxx>
+#include <mailmergewizard.hxx>
+#include <mailmrge.hxx>
+#include <mergetbl.hxx>
+#include <multmrk.hxx>
+#include <regionsw.hxx>
+#include <rowht.hxx>
+#include <selglos.hxx>
+#include <splittbl.hxx>
+#include <srtdlg.hxx>
+#include <swmodalredlineacceptdlg.hxx>
+#include <swrenamexnameddlg.hxx>
+#include <swuicnttab.hxx>
+#include <swuiidxmrk.hxx>
+#include <tautofmt.hxx>
+#include <wordcountdialog.hxx>
+
 class SwInsertAbstractDlg;
 class SwAsciiFilterDlg;
 class Dialog;

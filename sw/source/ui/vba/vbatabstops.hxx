@@ -22,9 +22,6 @@
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XTabStops.hpp>
 #include <ooo/vba/word/XTabStop.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 
 typedef CollTestImplHelper< ooo::vba::word::XTabStops > SwVbaTabStops_BASE;
 

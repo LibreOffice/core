@@ -26,7 +26,6 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <ooo/vba/word/XParagraphFormat.hpp>
 #include <ooo/vba/word/XFind.hpp>
-#include <ooo/vba/word/XStyle.hpp>
 #include <ooo/vba/word/XFont.hpp>
 #include <ooo/vba/word/XHeaderFooter.hpp>
 #include "wordvbahelper.hxx"

@@ -20,11 +20,6 @@
 #define INCLUDED_SW_SOURCE_UI_FLDUI_FLDDOK_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/field.hxx>
 
 #include <numfmtlb.hxx>
 #include "fldpage.hxx"

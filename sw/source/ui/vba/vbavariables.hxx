@@ -21,9 +21,6 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XVariables.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 
 typedef CollTestImplHelper< ooo::vba::word::XVariables > SwVbaVariables_BASE;

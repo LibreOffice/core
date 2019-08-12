@@ -19,6 +19,7 @@
 #include "vbatablesofcontents.hxx"
 #include "vbatableofcontents.hxx"
 #include "vbarange.hxx"
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <cppuhelper/implbase.hxx>

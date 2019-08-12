@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_UI_ENVELP_ENVPRT_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/print.hxx>
 #include <vcl/weld.hxx>
 
 #include <envimg.hxx>

@@ -19,9 +19,8 @@
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBAINFORMATIONHELPER_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBAINFORMATIONHELPER_HXX
 
-#include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/text/XTextViewCursor.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 class SwVbaInformationHelper
 {
