@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_ac49f08b",
+        "filename": "xmlsecurity/source/dialogs/digitalsignaturesdialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2019-08-12T09:33:32Z",
+      "side": 1,
+      "message": "this one is duplicated",
+      "revId": "e1c9f4c7a0fff759da5211ddbd3aea048bfdc258",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
