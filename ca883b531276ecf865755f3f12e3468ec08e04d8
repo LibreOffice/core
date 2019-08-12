@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_125b5254",
+        "filename": "sw/source/uibase/app/docst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1227,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-08-12T15:34:44Z",
+      "side": 1,
+      "message": "there\u0027s a sw::UndoGuard class that can save you 2 lines here",
+      "revId": "ca883b531276ecf865755f3f12e3468ec08e04d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_b207061d",
+        "filename": "sw/source/uibase/app/docst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1229,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-08-12T15:34:44Z",
+      "side": 1,
+      "message": "hmm this is a virtual from svl ... so passing in the parent would be difficult...",
+      "revId": "ca883b531276ecf865755f3f12e3468ec08e04d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
