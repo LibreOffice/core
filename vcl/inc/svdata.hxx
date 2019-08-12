@@ -129,12 +129,6 @@ typedef std::pair<VclPtr<vcl::Window>, ImplPostEventData *> ImplPostEventPair;
 struct ImplSVAppData
 {
     ~ImplSVAppData();
-    enum ImeStatusWindowMode
-    {
-        ImeStatusWindowMode_UNKNOWN,
-        ImeStatusWindowMode_HIDE,
-        ImeStatusWindowMode_SHOW
-    };
 
     std::unique_ptr<AllSettings> mpSettings;           // Application settings
     LocaleConfigurationListener* mpCfgListener = nullptr;
@@ -159,13 +153,6 @@ struct ImplSVAppData
     bool                    mbSettingsInit = false;         // true: Settings are initialized
     DialogCancelMode meDialogCancel = DialogCancelMode::Off; // true: All Dialog::Execute() calls will be terminated immediately with return false
     bool mbRenderToBitmaps = false; // set via svp / headless plugin
-
-    /** Controls whether showing any IME status window is toggled on or off.
-
-        Only meaningful if showing IME status windows can be toggled on and off
-        externally (see Application::CanToggleImeStatusWindow).
-     */
-    ImeStatusWindowMode meShowImeStatusWindow = ImeStatusWindowMode_UNKNOWN;
 
     SvFileStream*       mpEventTestInput = nullptr;
     Idle*               mpEventTestingIdle = nullptr;

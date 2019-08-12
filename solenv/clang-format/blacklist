@@ -12657,8 +12657,6 @@ sfx2/source/appl/helpdispatch.cxx
 sfx2/source/appl/helpdispatch.hxx
 sfx2/source/appl/helpinterceptor.cxx
 sfx2/source/appl/helpinterceptor.hxx
-sfx2/source/appl/imestatuswindow.cxx
-sfx2/source/appl/imestatuswindow.hxx
 sfx2/source/appl/impldde.cxx
 sfx2/source/appl/impldde.hxx
 sfx2/source/appl/linkmgr2.cxx
