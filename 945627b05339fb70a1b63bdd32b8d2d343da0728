@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_0cfedc36",
+        "filename": "svx/uiconfig/ui/crashreportdlg.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-08-12T09:21:45Z",
+      "side": 1,
+      "message": "I think you\u0027re right but I\u0027m not sure",
+      "range": {
+        "startLine": 53,
+        "startChar": 94,
+        "endLine": 53,
+        "endChar": 105
+      },
+      "revId": "945627b05339fb70a1b63bdd32b8d2d343da0728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
