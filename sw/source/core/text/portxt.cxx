@@ -379,7 +379,8 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                     rInf.GetLineStart() + rInf.GetLast()->GetLen() < rInf.GetIdx() &&
                     aGuess.BreakPos() == rInf.GetIdx()  &&
                     CH_BLANK != rInf.GetChar( rInf.GetIdx() ) &&
-                    0x3000 != rInf.GetChar( rInf.GetIdx() ) ) )
+                    CH_FULL_BLANK != rInf.GetChar( rInf.GetIdx() ) &&
+                    CH_SIX_PER_EM != rInf.GetChar( rInf.GetIdx() ) ) )
             BreakUnderflow( rInf );
         // case B2
         else if( rInf.GetIdx() > rInf.GetLineStart() ||
