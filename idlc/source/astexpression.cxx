@@ -23,6 +23,7 @@
 #include <astscope.hxx>
 #include <errorhandler.hxx>
 
+#include <o3tl/float_int_conversion.hxx>
 #include <osl/diagnose.h>
 
 #include <limits.h>
@@ -159,8 +160,11 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_float:
                 {
-                    if (ev->u.fval < SAL_MIN_INT16 || ev->u.fval > SAL_MAX_INT16)
+                    if (!(o3tl::convertsToAtLeast(o3tl::roundAway(ev->u.fval), SAL_MIN_INT16)
+                          && o3tl::convertsToAtMost(o3tl::roundAway(ev->u.fval), SAL_MAX_INT16)))
+                    {
                         return false;
+                    }
                     auto tmp = static_cast<sal_Int16>(ev->u.fval);
                     ev->u.sval = tmp;
                     ev->et = ET_short;
@@ -168,8 +172,11 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_double:
                 {
-                    if (ev->u.dval < SAL_MIN_INT16 || ev->u.dval > SAL_MAX_INT16)
+                    if (!(o3tl::convertsToAtLeast(o3tl::roundAway(ev->u.dval), SAL_MIN_INT16)
+                          && o3tl::convertsToAtMost(o3tl::roundAway(ev->u.dval), SAL_MAX_INT16)))
+                    {
                         return false;
+                    }
                     auto tmp = static_cast<sal_Int16>(ev->u.dval);
                     ev->u.sval = tmp;
                     ev->et = ET_short;
@@ -245,8 +252,11 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_float:
                 {
-                    if (ev->u.fval < 0.0 || ev->u.fval > SAL_MAX_UINT16)
+                    if (ev->u.fval < 0.0
+                        || !o3tl::convertsToAtMost(o3tl::roundAway(ev->u.fval), SAL_MAX_UINT16))
+                    {
                         return false;
+                    }
                     auto tmp = static_cast<sal_uInt16>(ev->u.fval);
                     ev->u.usval = tmp;
                     ev->et = ET_short;
@@ -254,8 +264,11 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_double:
                 {
-                    if (ev->u.dval < 0.0 || ev->u.dval > SAL_MAX_UINT16)
+                    if (ev->u.dval < 0.0
+                        || !o3tl::convertsToAtMost(o3tl::roundAway(ev->u.dval), SAL_MAX_UINT16))
+                    {
                         return false;
+                    }
                     auto tmp = static_cast<sal_uInt16>(ev->u.dval);
                     ev->u.usval = tmp;
                     ev->et = ET_short;
@@ -327,8 +340,11 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_float:
                 {
-                    if (ev->u.fval < SAL_MIN_INT32 || ev->u.fval > SAL_MAX_INT32)
+                    if (!(o3tl::convertsToAtLeast(o3tl::roundAway(ev->u.fval), SAL_MIN_INT32)
+                          && o3tl::convertsToAtMost(o3tl::roundAway(ev->u.fval), SAL_MAX_INT32)))
+                    {
                         return false;
+                    }
                     auto tmp = static_cast<sal_Int32>(ev->u.fval);
                     ev->u.lval = tmp;
                     ev->et = ET_long;
@@ -336,8 +352,11 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_double:
                 {
-                    if (ev->u.dval < SAL_MIN_INT32 || ev->u.dval > SAL_MAX_INT32)
+                    if (!(o3tl::convertsToAtLeast(o3tl::roundAway(ev->u.dval), SAL_MIN_INT32)
+                          && o3tl::convertsToAtMost(o3tl::roundAway(ev->u.dval), SAL_MAX_INT32)))
+                    {
                         return false;
+                    }
                     auto tmp = static_cast<sal_Int32>(ev->u.dval);
                     ev->u.lval = tmp;
                     ev->et = ET_long;
@@ -411,8 +430,11 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_float:
                 {
-                    if (ev->u.fval < 0.0 || ev->u.fval > SAL_MAX_UINT32)
+                    if (ev->u.fval < 0.0
+                        || !o3tl::convertsToAtMost(o3tl::roundAway(ev->u.fval), SAL_MAX_UINT32))
+                    {
                         return false;
+                    }
                     auto tmp = static_cast<sal_uInt32>(ev->u.fval);
                     ev->u.ulval = tmp;
                     ev->et = ET_ulong;
@@ -420,8 +442,11 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_double:
                 {
-                    if (ev->u.dval < 0.0 || ev->u.dval > SAL_MAX_UINT32)
+                    if (ev->u.dval < 0.0
+                        || !o3tl::convertsToAtMost(o3tl::roundAway(ev->u.dval), SAL_MAX_UINT32))
+                    {
                         return false;
+                    }
                     auto tmp = static_cast<sal_uInt32>(ev->u.dval);
                     ev->u.ulval = tmp;
                     ev->et = ET_ulong;
@@ -489,8 +514,11 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_float:
                 {
-                    if (ev->u.fval < SAL_MIN_INT64 || ev->u.fval > SAL_MAX_INT64)
+                    if (!(o3tl::convertsToAtLeast(o3tl::roundAway(ev->u.fval), SAL_MIN_INT64)
+                          && o3tl::convertsToAtMost(o3tl::roundAway(ev->u.fval), SAL_MAX_INT64)))
+                    {
                         return false;
+                    }
                     auto tmp = static_cast<sal_Int64>(ev->u.fval);
                     ev->u.hval = tmp;
                     ev->et = ET_hyper;
@@ -498,8 +526,11 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_double:
                 {
-                    if (ev->u.dval < SAL_MIN_INT64 || ev->u.dval > SAL_MAX_INT64)
+                    if (!(o3tl::convertsToAtLeast(o3tl::roundAway(ev->u.dval), SAL_MIN_INT64)
+                          && o3tl::convertsToAtMost(o3tl::roundAway(ev->u.dval), SAL_MAX_INT64)))
+                    {
                         return false;
+                    }
                     auto tmp = static_cast<sal_Int64>(ev->u.dval);
                     ev->u.hval = tmp;
                     ev->et = ET_hyper;
@@ -571,8 +602,11 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_float:
                 {
-                    if (ev->u.fval < 0.0 || ev->u.fval > SAL_MAX_UINT64)
+                    if (ev->u.fval < 0.0
+                        || !o3tl::convertsToAtMost(o3tl::roundAway(ev->u.fval), SAL_MAX_UINT64))
+                    {
                         return false;
+                    }
                     auto tmp = static_cast<sal_uInt64>(ev->u.fval);
                     ev->u.uhval = tmp;
                     ev->et = ET_uhyper;
@@ -580,8 +614,11 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_double:
                 {
-                    if (ev->u.dval < 0.0 || ev->u.dval > SAL_MAX_UINT64)
+                    if (ev->u.dval < 0.0
+                        || !o3tl::convertsToAtMost(o3tl::roundAway(ev->u.dval), SAL_MAX_UINT64))
+                    {
                         return false;
+                    }
                     auto tmp = static_cast<sal_uInt64>(ev->u.dval);
                     ev->u.uhval = tmp;
                     ev->et = ET_uhyper;
@@ -850,8 +887,11 @@ coerce_value(AstExprValue *ev, ExprType t)
                     return true;
                 case ET_float:
                 {
-                    if (ev->u.fval < SAL_MIN_INT8 || ev->u.fval > SAL_MAX_UINT8)
+                    if (!(o3tl::convertsToAtLeast(o3tl::roundAway(ev->u.fval), SAL_MIN_INT8)
+                          && o3tl::convertsToAtMost(o3tl::roundAway(ev->u.fval), SAL_MAX_UINT8)))
+                    {
                         return false;
+                    }
                     auto tmp = static_cast<unsigned char>(ev->u.fval);
                     ev->u.byval = tmp;
                     ev->et = ET_byte;
@@ -859,8 +899,11 @@ coerce_value(AstExprValue *ev, ExprType t)
                 }
                 case ET_double:
                 {
-                    if (ev->u.dval < SAL_MIN_INT8 || ev->u.dval > SAL_MAX_UINT8)
+                    if (!(o3tl::convertsToAtLeast(o3tl::roundAway(ev->u.dval), SAL_MIN_INT8)
+                          && o3tl::convertsToAtMost(o3tl::roundAway(ev->u.dval), SAL_MAX_UINT8)))
+                    {
                         return false;
+                    }
                     auto tmp = static_cast<unsigned char>(ev->u.dval);
                     ev->u.byval = tmp;
                     ev->et = ET_byte;
