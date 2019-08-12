@@ -279,6 +279,7 @@ public:
     const SvxFieldItem* GetFieldAtSelection() const;
     /// Select and return the field at the current cursor position
     const SvxFieldData* GetFieldAtCursor();
+    void SelectFieldAtCursor();
 
     void            SetInvalidateMore( sal_uInt16 nPixel );
     sal_uInt16      GetInvalidateMore() const;

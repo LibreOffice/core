@@ -1154,6 +1154,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if (mpDrawView->IsTextEdit())
             {
+                // First make sure the field is selected
+                OutlinerView* pOutView = mpDrawView->GetTextEditOutlinerView();
+                if (pOutView)
+                    pOutView->SelectFieldAtCursor();
                 URLFieldHelper::RemoveURLField(mpDrawView->GetTextEditOutliner(),
                                                mpDrawView->GetTextEditOutlinerView());
             }
@@ -2119,7 +2123,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             // Ensure the field is selected first
             OutlinerView* pOutView = mpDrawView->GetTextEditOutlinerView();
             if (pOutView)
-                pOutView->GetFieldAtCursor();
+                pOutView->SelectFieldAtCursor();
 
             GetViewFrame()->GetDispatcher()->Execute( SID_HYPERLINK_DIALOG );
 

@@ -490,13 +490,15 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_EDIT_HYPERLINK:
         {
             // Ensure the field is selected first
-            pOLV->GetFieldAtCursor();
+            pOLV->SelectFieldAtCursor();
             GetView().GetViewFrame()->GetDispatcher()->Execute(SID_HYPERLINK_DIALOG);
         }
         break;
 
         case SID_REMOVE_HYPERLINK:
         {
+            // Ensure the field is selected first
+            pOLV->SelectFieldAtCursor();
             URLFieldHelper::RemoveURLField(pSdrView->GetTextEditOutliner(),
                                            pOLV);
         }

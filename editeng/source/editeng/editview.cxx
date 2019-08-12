@@ -1225,7 +1225,7 @@ const SvxFieldItem* EditView::GetFieldAtSelection() const
     return nullptr;
 }
 
-const SvxFieldData* EditView::GetFieldAtCursor()
+void EditView::SelectFieldAtCursor()
 {
     const SvxFieldItem* pFieldItem = GetFieldAtSelection();
     if (pFieldItem)
@@ -1246,9 +1246,15 @@ const SvxFieldData* EditView::GetFieldAtCursor()
         {
             aSel.nStartPos--;
             SetSelection(aSel);
-            pFieldItem = GetFieldAtSelection();
         }
     }
+}
+
+const SvxFieldData* EditView::GetFieldAtCursor()
+{
+    const SvxFieldItem* pFieldItem = GetFieldUnderMousePointer();
+    if (!pFieldItem)
+        pFieldItem = GetFieldAtSelection();
 
     return pFieldItem ? pFieldItem->GetField() : nullptr;
 }
