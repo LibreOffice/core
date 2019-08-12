@@ -224,10 +224,21 @@ class MyUriHelper:
             sStorageUri = sStorageUri.replace( "|", "/" )
 
             # path to the .py file, relative to the base
-            sFileUri = sStorageUri[0:sStorageUri.find("$")]
+            funcNameStart = sStorageUri.find("$")
+            if funcNameStart != -1:
+                sFileUri = sStorageUri[0:funcNameStart]
+                sFuncName = sStorageUri[funcNameStart+1:]
+            else:
+                sFileUri = sStorageUri
+
             xFileUri = self.m_uriRefFac.parse(sFileUri)
             if not xFileUri:
                 message = "pythonscript: invalid relative uri '" + sFileUri+ "'"
+                log.debug( message )
+                raise RuntimeException( message )
+
+            if not xFileUri.hasRelativePath():
+                message = "pythonscript: an absolute uri is invalid '" + sFileUri+ "'"
                 log.debug( message )
                 raise RuntimeException( message )
 
@@ -241,7 +252,9 @@ class MyUriHelper:
                 log.debug( message )
                 raise RuntimeException( message )
 
-            ret = sBaseUri + sStorageUri
+            ret = sAbsScriptUri
+            if funcNameStart != -1:
+                ret = ret + "$" + sFuncName
             log.debug( "converting scriptURI="+scriptURI + " to storageURI=" + ret )
             return ret
         except UnoException as e:
