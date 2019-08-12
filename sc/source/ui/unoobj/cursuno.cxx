@@ -439,20 +439,10 @@ sal_Bool SAL_CALL ScCellCursorObj::supportsService( const OUString& rServiceName
 
 uno::Sequence<OUString> SAL_CALL ScCellCursorObj::getSupportedServiceNames()
 {
-    //  get all service names from cell range
-    const uno::Sequence<OUString> aParentSeq(ScCellRangeObj::getSupportedServiceNames());
-    sal_Int32 nParentLen = aParentSeq.getLength();
-
     //  SheetCellCursor should be first (?)
-    uno::Sequence<OUString> aTotalSeq( nParentLen + 2 );
-    OUString* pTotalArr = aTotalSeq.getArray();
-    pTotalArr[0] = SCSHEETCELLCURSOR_SERVICE;
-    pTotalArr[1] = SCCELLCURSOR_SERVICE;
-
-    //  append cell range services
-    std::copy_n(aParentSeq.begin(), nParentLen, std::next(pTotalArr, 2));
-
-    return aTotalSeq;
+    return comphelper::concatSequences<OUString>(
+        { SCSHEETCELLCURSOR_SERVICE, SCCELLCURSOR_SERVICE },
+        ScCellRangeObj::getSupportedServiceNames());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
