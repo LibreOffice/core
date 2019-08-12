@@ -728,6 +728,17 @@ public:
         return mpDoc->pClass->resizeWindow(mpDoc, nWindowId, width, height);
     }
 
+    /**
+     * Change current object properties. Properties are send as a JSON string.
+     *
+     * @param pJsonPropertiesString JSON properties in a string
+     */
+    void changeCurrentObjectProperties(const char* pJsonPropertiesString)
+    {
+        mpDoc->pClass->changeCurrentObjectProperties(mpDoc, pJsonPropertiesString);
+    }
+
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

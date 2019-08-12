@@ -457,6 +457,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_CELL_SELECTION_AREA";
     case LOK_CALLBACK_CELL_AUTO_FILL_AREA:
         return "LOK_CALLBACK_CELL_AUTO_FILL_AREA";
+    case LOK_CALLBACK_TABLE_SELECTED:
+        return "LOK_CALLBACK_TABLE_SELECTED";
     }
     g_assert(false);
     return nullptr;

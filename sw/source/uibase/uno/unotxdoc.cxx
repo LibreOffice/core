@@ -91,6 +91,7 @@
 #include <svx/xmleohlp.hxx>
 #include <globals.hrc>
 #include <unomid.h>
+#include <tabcol.hxx>
 #include <unotools/printwarningoptions.hxx>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -2243,7 +2244,7 @@ void SAL_CALL SwXTextDocument::removeRefreshListener(
     m_pImpl->m_RefreshListeners.removeInterface(xListener);
 }
 
-void SwXTextDocument::updateLinks(  )
+void SwXTextDocument::updateLinks()
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -2255,6 +2256,71 @@ void SwXTextDocument::updateLinks(  )
     {
         UnoActionContext aAction(pDoc);
         rLnkMan.UpdateAllLinks( false, true, nullptr );
+    }
+}
+
+void SwXTextDocument::changeCurrentObjectProperties(const char* pJsonPropertiesString)
+{
+    SwWrtShell* pShell = pDocShell->GetWrtShell();
+    SelectionType eType = pShell->GetSelectionType();
+    std::stringstream aStream(pJsonPropertiesString);
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    boost::property_tree::ptree aTableTree = aTree.get_child("table");
+
+    if (!aTableTree.empty())
+    {
+        boost::property_tree::ptree aColumns = aTableTree.get_child("columns");
+        if (!aColumns.empty())
+        {
+            SwTabCols aTabCols;
+            pShell->GetTabCols(aTabCols);
+
+            boost::optional<int> aLeft = aColumns.get_optional<int>("left");
+            if (aLeft)
+            {
+                aTabCols.SetLeft(*aLeft);
+            }
+
+            boost::optional<int> aRight = aColumns.get_optional<int>("right");
+            if (aRight)
+            {
+                aTabCols.SetRight(*aRight);
+            }
+
+            int index = 0;
+            for (const auto& rEntry : aColumns.get_child("entries"))
+            {
+                int nPosition = rEntry.second.get<int>("position");
+                aTabCols.GetEntry(index).nPos = nPosition;
+                index++;
+            }
+
+            pShell->SetTabCols(aTabCols, false);
+        }
+
+        boost::property_tree::ptree aRows = aTableTree.get_child("rows");
+        if (!aRows.empty())
+        {
+            SwTabCols aTabRows;
+            pShell->GetTabRows(aTabRows);
+
+            auto aLeft = aRows.get_optional<int>("left");
+            if (aLeft)
+            {
+                aTabRows.SetLeft(*aLeft);
+            }
+
+            int index = 0;
+            for (const auto& rEntry : aRows.get_child("entries"))
+            {
+                int nPosition = rEntry.second.get<int>("position");
+                aTabRows.GetEntry(index).nPos = nPosition;
+                index++;
+            }
+
+            pShell->SetTabRows(aTabRows, false);
+        }
     }
 }
 

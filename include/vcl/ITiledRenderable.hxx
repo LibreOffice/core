@@ -288,6 +288,9 @@ public:
      * bDuplicate: to copy (true), or to move (false).
      */
     virtual void moveSelectedParts(int /*nPosition*/, bool /*bDuplicate*/) {}
+
+    virtual void changeCurrentObjectProperties(const char* /*pPropertiesJSON*/)
+    {}
 };
 } // namespace vcl
 

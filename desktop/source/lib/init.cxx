@@ -863,6 +863,8 @@ static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOu
 static void doc_resizeWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId,
                              const int nWidth, const int nHeight);
 
+static void doc_changeCurrentObjectProperties(LibreOfficeKitDocument* pThis, const char* pJsonPropertiesString);
+
 } // extern "C"
 
 namespace {
@@ -965,6 +967,8 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->postWindowGestureEvent = doc_postWindowGestureEvent;
 
         m_pDocumentClass->createViewWithOptions = doc_createViewWithOptions;
+
+        m_pDocumentClass->changeCurrentObjectProperties = doc_changeCurrentObjectProperties;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -3433,6 +3437,23 @@ static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int n
     }
 
     pDoc->setTextSelection(nType, nX, nY);
+}
+
+static void doc_changeCurrentObjectProperties(LibreOfficeKitDocument* pThis, const char* pJsonPropertiesString)
+{
+    comphelper::ProfileZone aZone("doc_changeCurrentObjectProperties");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return;
+    }
+
+    pDoc->changeCurrentObjectProperties(pJsonPropertiesString);
 }
 
 static bool getFromTransferrable(
