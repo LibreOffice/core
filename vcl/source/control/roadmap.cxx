@@ -598,7 +598,7 @@ bool ORoadmap::PreNotify(NotifyEvent& _rNEvt)
             switch( nKeyCode )
             {
                 case KEY_UP:
-                    {   // Note: Performancewise this is not optimal, because we search for an ID in the labels
+                    {   // Note: Performance wise this is not optimal, because we search for an ID in the labels
                         //       and afterwards we search again for a label with the appropriate ID ->
                         //       unnecessarily we search twice!!!
                         ItemId nPrevItemID = GetPreviousAvailableItemId( pItem->GetIndex() );
