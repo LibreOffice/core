@@ -448,9 +448,14 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
     // FIXME: call GpgME::dirInfo("bindir") somewhere in
     // SecurityEnvironmentGpg or whatnot
     // FIXME: perhaps poke GpgME for uiserver, and hope it returns something useful?
-    const OUString aGUIServers[] = { OUString("Gpg4win\\kleopatra.exe"), OUString("GNU\\GnuPG\\kleopatra.exe"),
-                                     OUString("GNU\\GnuPG\\launch-gpa.exe"), OUString("GNU\\GnuPG\\gpa.exe"),
-                                     OUString("GNU\\GnuPG\\bin\\kleopatra.exe"), OUString("GNU\\GnuPG\\bin\\launch-gpa.exe"),
+    const OUString aGUIServers[] = { OUString("Gpg4win\\kleopatra.exe"),
+                                     OUString("Gpg4win\\bin\\kleopatra.exe"),
+                                     OUString("GNU\\GnuPG\\kleopatra.exe"),
+                                     OUString("GNU\\GnuPG\\launch-gpa.exe"),
+                                     OUString("GNU\\GnuPG\\gpa.exe"),
+                                     OUString("GnuPG\\bin\\gpa.exe"),
+                                     OUString("GNU\\GnuPG\\bin\\kleopatra.exe"),
+                                     OUString("GNU\\GnuPG\\bin\\launch-gpa.exe"),
                                      OUString("GNU\\GnuPG\\bin\\gpa.exe") };
     const char* const cPath = "C:\\Program Files (x86)";
 #else
