@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_3283f6ce",
+        "filename": "instsetoo_native/inc_ooohelppack/windows/msi_templates/codes_ooodev.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-08-12T14:12:21Z",
+      "side": 1,
+      "message": "Good catch!",
+      "range": {
+        "startLine": 170,
+        "startChar": 0,
+        "endLine": 170,
+        "endChar": 9
+      },
+      "revId": "7c3132575589fc6ae96c9065e3000ea6326c5ef9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
