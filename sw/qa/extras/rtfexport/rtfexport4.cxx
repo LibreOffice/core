@@ -79,6 +79,39 @@ DECLARE_RTFEXPORT_TEST(testCjklist31, "cjklist31.rtf")
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::DI_ZI_ZH, numFormat);
 }
 
+DECLARE_RTFEXPORT_TEST(testRedlineInsdel, "redline-insdel.rtf")
+{
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
+
+    uno::Reference<text::XTextRange> xRun = getRun(xParagraph, 1);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xRun, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("aaa"), xRun->getString());
+
+    xRun = getRun(xParagraph, 2);
+    CPPUNIT_ASSERT_EQUAL(OUString("Redline"), getProperty<OUString>(xRun, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Delete"), getProperty<OUString>(xRun, "RedlineType"));
+    xRun = getRun(xParagraph, 3);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xRun, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), xRun->getString());
+    xRun = getRun(xParagraph, 4);
+    CPPUNIT_ASSERT_EQUAL(OUString("Redline"), getProperty<OUString>(xRun, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Delete"), getProperty<OUString>(xRun, "RedlineType"));
+
+    xRun = getRun(xParagraph, 5);
+    CPPUNIT_ASSERT_EQUAL(OUString("Redline"), getProperty<OUString>(xRun, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"), getProperty<OUString>(xRun, "RedlineType"));
+    xRun = getRun(xParagraph, 6);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xRun, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("BBB"), xRun->getString());
+    xRun = getRun(xParagraph, 7);
+    CPPUNIT_ASSERT_EQUAL(OUString("Redline"), getProperty<OUString>(xRun, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"), getProperty<OUString>(xRun, "RedlineType"));
+
+    xRun = getRun(xParagraph, 8);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xRun, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ccc"), xRun->getString());
+}
+
 DECLARE_RTFEXPORT_TEST(testParaAdjustDistribute, "para-adjust-distribute.rtf")
 {
     // Without the accompanying fix in place, this test would have failed with
