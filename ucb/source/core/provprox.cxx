@@ -131,7 +131,7 @@ UcbContentProviderProxy::queryInterface( const Type & rType )
 
     if ( !aRet.hasValue() )
     {
-        // Get original provider an forward the call...
+        // Get original provider and forward the call...
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         Reference< XContentProvider > xProvider = getContentProvider();
         if ( xProvider.is() )
@@ -150,7 +150,7 @@ XTYPEPROVIDER_COMMON_IMPL( UcbContentProviderProxy );
 
 Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()
 {
-    // Get original provider an forward the call...
+    // Get original provider and forward the call...
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     Reference< XTypeProvider > xProvider( getContentProvider(), UNO_QUERY );
     if ( xProvider.is() )
@@ -195,7 +195,7 @@ css::uno::Sequence< OUString > SAL_CALL UcbContentProviderProxy::getSupportedSer
 Reference< XContent > SAL_CALL UcbContentProviderProxy::queryContent(
                         const Reference< XContentIdentifier >& Identifier )
 {
-    // Get original provider an forward the call...
+    // Get original provider and forward the call...
 
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -212,7 +212,7 @@ sal_Int32 SAL_CALL UcbContentProviderProxy::compareContentIds(
                        const Reference< XContentIdentifier >& Id1,
                        const Reference< XContentIdentifier >& Id2 )
 {
-    // Get original provider an forward the call...
+    // Get original provider and forward the call...
 
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     Reference< XContentProvider > xProvider = getContentProvider();
