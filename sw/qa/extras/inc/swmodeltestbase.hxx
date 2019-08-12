@@ -911,7 +911,7 @@ protected:
     }
 
     /**
-     * Returns an xml stream of a an exported file.
+     * Returns an xml stream of an exported file.
      * To be used when the exporter doesn't create zip archives, but single files
      * (like Flat ODF Export)
      */

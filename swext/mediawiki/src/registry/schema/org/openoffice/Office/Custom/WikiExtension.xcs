@@ -74,7 +74,7 @@
             <info><desc>The list of the MediaWiki servers.</desc></info>
         </set>
 	    <set oor:name="RecentDocs" oor:node-type="Document">
-            <info><desc>The recenly stored documents.</desc></info>
+            <info><desc>The recently stored documents.</desc></info>
         </set>
         <group oor:name="Settings">
             <info><desc>The addon related settings.</desc></info>
