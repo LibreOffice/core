@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBARANGEHELPER_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBARANGEHELPER_HXX
 
-#include <vbahelper/vbahelperinterface.hxx>
-#include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>

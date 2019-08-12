@@ -21,11 +21,8 @@
 
 #include <label.hxx>
 #include <labimg.hxx>
-#include <labimp.hxx>
 #include <labrec.hxx>
-#include <com/sun/star/text/XAutoTextContainer2.hpp>
 #include <sfx2/tabdlg.hxx>
-#include <vcl/layout.hxx>
 
 class SwLabPage : public SfxTabPage
 {

@@ -21,9 +21,6 @@
 
 #include <vbahelper/vbahelper.hxx>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/text/XTextViewCursor.hpp>
-#include <com/sun/star/text/XPageCursor.hpp>
-#include <com/sun/star/style/XStyle.hpp>
 
 class HeaderFooterHelper
 {

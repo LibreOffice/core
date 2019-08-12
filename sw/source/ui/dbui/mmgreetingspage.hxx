@@ -24,6 +24,8 @@
 #include <mailmergehelper.hxx>
 #include <vcl/weld.hxx>
 
+#include <mailmergewizard.hxx>
+
 class SwMailMergeWizard;
 
 class SwGreetingsHandler

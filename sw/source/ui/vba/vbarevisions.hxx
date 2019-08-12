@@ -21,7 +21,6 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XRevisions.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
 
 typedef CollTestImplHelper< ooo::vba::word::XRevisions > SwVbaRevisions_BASE;

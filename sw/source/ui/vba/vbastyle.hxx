@@ -24,10 +24,8 @@
 #include <i18nlangtag/lang.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <ooo/vba/word/XFont.hpp>
-#include <ooo/vba/word/XListTemplate.hpp>
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XStyle > SwVbaStyle_BASE;
 

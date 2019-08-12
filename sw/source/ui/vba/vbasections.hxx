@@ -21,10 +21,7 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XSections.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 
 typedef CollTestImplHelper< ooo::vba::word::XSections > SwVbaSections_BASE;
 

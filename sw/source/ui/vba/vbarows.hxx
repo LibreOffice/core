@@ -22,7 +22,6 @@
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XRows.hpp>
 #include <ooo/vba/word/XColumns.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 

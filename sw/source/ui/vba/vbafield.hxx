@@ -20,7 +20,6 @@
 #define INCLUDED_SW_SOURCE_UI_VBA_VBAFIELD_HXX
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <ooo/vba/word/XField.hpp>
 #include <ooo/vba/word/XFields.hpp>

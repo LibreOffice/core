@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbalisthelper.hxx"
+#include <vbahelper/vbahelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <ooo/vba/word/WdListGalleryType.hpp>

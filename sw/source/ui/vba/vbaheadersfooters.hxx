@@ -21,7 +21,6 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XHeadersFooters.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 
 typedef CollTestImplHelper< ooo::vba::word::XHeadersFooters > SwVbaHeadersFooters_BASE;
 

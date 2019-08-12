@@ -22,9 +22,7 @@
 #include <vbahelper/vbahelper.hxx>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextViewCursor.hpp>
-#include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/style/XStyle.hpp>
-#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 class SwDocShell;

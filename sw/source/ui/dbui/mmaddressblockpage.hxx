@@ -26,11 +26,6 @@
 #include <sfx2/basedlgs.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/vclmedit.hxx>
-#include <vcl/headbar.hxx>
-#include <vcl/transfer.hxx>
-#include <vcl/treelistbox.hxx>
-#include <vcl/combobox.hxx>
 #include <svl/lstner.hxx>
 #include <o3tl/typed_flags_set.hxx>
 

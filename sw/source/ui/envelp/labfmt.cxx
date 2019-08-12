@@ -20,6 +20,7 @@
 #include <svtools/unitconv.hxx>
 #include <tools/poly.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
 

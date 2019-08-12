@@ -22,7 +22,6 @@
 #include <ooo/vba/XSink.hpp>
 #include <ooo/vba/XSinkCaller.hpp>
 #include <ooo/vba/word/XDocument.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbadocumentbase.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <cppuhelper/implbase.hxx>

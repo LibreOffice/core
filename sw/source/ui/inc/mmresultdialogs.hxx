@@ -18,16 +18,12 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UI_DBUI_MMOUTPUTPAGE_HXX
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMOUTPUTPAGE_HXX
-#include <svtools/wizardmachine.hxx>
+
 #include <vcl/button.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/field.hxx>
 #include <vcl/prgsbar.hxx>
 #include <vcl/weld.hxx>
-#include <sfx2/objsh.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svtools/simptabl.hxx>
-#include <vcl/svtabbx.hxx>
 #include <vcl/headbar.hxx>
 #include <mailmergehelper.hxx>
 

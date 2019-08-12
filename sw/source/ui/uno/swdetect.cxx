@@ -22,6 +22,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>
 #include <unotools/mediadescriptor.hxx>

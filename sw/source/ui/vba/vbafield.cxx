@@ -18,6 +18,7 @@
  */
 #include "vbafield.hxx"
 #include "vbarange.hxx"
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>

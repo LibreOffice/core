@@ -19,8 +19,10 @@
 #ifndef INCLUDED_SW_SOURCE_UI_ENVELP_LABFMT_HXX
 #define INCLUDED_SW_SOURCE_UI_ENVELP_LABFMT_HXX
 
-#include "swuilabimp.hxx"
 #include <labimg.hxx>
+#include <label.hxx>
+
+#include <sfx2/tabdlg.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>

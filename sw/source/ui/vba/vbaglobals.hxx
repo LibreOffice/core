@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBAGLOBALS_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBAGLOBALS_HXX
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <ooo/vba/word/XGlobals.hpp>
 #include <ooo/vba/word/XApplication.hpp>
@@ -28,7 +26,6 @@
 #include <ooo/vba/word/XOptions.hpp>
 #include <ooo/vba/word/XSelection.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbaglobalbase.hxx>
 
 typedef ::cppu::ImplInheritanceHelper< VbaGlobalsBase, ov::word::XGlobals > SwVbaGlobals_BASE;

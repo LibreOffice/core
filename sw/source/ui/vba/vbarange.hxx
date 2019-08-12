@@ -25,9 +25,7 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <ooo/vba/word/XStyle.hpp>
 #include <ooo/vba/word/XListFormat.hpp>
-#include "wordvbahelper.hxx"
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XRange > SwVbaRange_BASE;
 
