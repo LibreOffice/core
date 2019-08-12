@@ -692,15 +692,15 @@ void reloadDiagram(SdrObject* pObj, core::XmlFilterBase& rFilter)
     // retrieve the doms from the GrabBag
     uno::Sequence<beans::PropertyValue> propList;
     xPropSet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= propList;
-    for (sal_Int32 nProp = 0; nProp < propList.getLength(); ++nProp)
+    for (const auto& rProp : std::as_const(propList))
     {
-        OUString propName = propList[nProp].Name;
+        OUString propName = rProp.Name;
         if (propName == "OOXLayout")
-            propList[nProp].Value >>= layoutDom;
+            rProp.Value >>= layoutDom;
         else if (propName == "OOXStyle")
-            propList[nProp].Value >>= styleDom;
+            rProp.Value >>= styleDom;
         else if (propName == "OOXColor")
-            propList[nProp].Value >>= colorDom;
+            rProp.Value >>= colorDom;
     }
 
     ShapePtr pShape(new Shape());
