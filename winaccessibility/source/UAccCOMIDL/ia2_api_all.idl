@@ -1182,7 +1182,7 @@ IA2_STATE_VERTICAL =                0x20000,
  state is not required.  However, this state is necessary in those cases where
  an object has a role which is not one of the previously mentioned roles.  An
  example is a table cell which indicates whether or not an email has an attachment,
- whether or not an mail is considered spam, and whether or not an email has been read.
+ whether or not a mail is considered spam, and whether or not an email has been read.
  */
 IA2_STATE_CHECKABLE =               0x40000,
 
@@ -1502,7 +1502,7 @@ IA2_STATE_PINNED =                  0x80000
 
   Regarding switching between any of the IAccessible2 interfaces, applications implementing
   IAccessible2 should implement the IAccessible2 interfaces on a single object since ATs
-  will be using QueryInterface to switch between the IAccessilbe2 interfaces.  Implementing
+  will be using QueryInterface to switch between the IAccessible2 interfaces.  Implementing
   the IAccessible2 interfaces on separate objects would require the use of QueryService.
   There is one exception, IAccessibleApplication can be implemented on a separate object so
   its common code doesn't have to be included in each accessible object.  ATs should use
@@ -2655,7 +2655,7 @@ interface IAccessibleText : IUnknown
    For example, if text type is ::IA2_TEXT_BOUNDARY_WORD, then the complete
     word that is closest to and located before offset is returned.
 
-   If the index is valid, but no text is found, S_FALSE is returned along with out
+   If the index is valid, but no text is found, S_FALSE is returned along without
     values of 0, 0, and a NULL pointer.  This would happen for boundary types other
     than character when the text consists entirely of whitespace.
 
@@ -2700,7 +2700,7 @@ interface IAccessibleText : IUnknown
    For example, if text type is ::IA2_TEXT_BOUNDARY_WORD, then the complete
     word that is closest to and located after offset is returned.
 
-   If the index is valid, but no text is found, S_FALSE is returned along with out
+   If the index is valid, but no text is found, S_FALSE is returned along without
     values of 0, 0, and a NULL pointer.  This would happen for boundary types other
     than character when the text consists entirely of whitespace.
 
@@ -2746,7 +2746,7 @@ interface IAccessibleText : IUnknown
     last characters of a word are considered inside the word.  Boundary types of
     sentence and paragraph should exhibit similar behavior.
 
-   If the index is valid, but no text is found, S_FALSE is returned along with out
+   If the index is valid, but no text is found, S_FALSE is returned along without
     values of 0, 0, and a NULL pointer.  This would happen for boundary types other
     than character when the text consists entirely of whitespace.
 
