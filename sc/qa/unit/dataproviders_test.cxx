@@ -156,6 +156,7 @@ void ScDataProvidersTest::testXMLImport()
     aRangeLink.maPos = ScAddress(0,0,0);
     aRangeLink.maFieldPaths.push_back("/bookstore/book/title");
     aRangeLink.maFieldPaths.push_back("/bookstore/book/author");
+    aRangeLink.maRowGroups.push_back("/bookstore/book");
     aParam.maRangeLinks.push_back(aRangeLink);
 
     createFileURL("test1.", "xml", aFileURL);

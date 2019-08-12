@@ -52,9 +52,9 @@ const mdds::mtv::element_t element_type_formula = mdds::mtv::element_type_user_s
 const mdds::mtv::element_t element_type_cellnote = mdds::mtv::element_type_user_start + 5;
 
 /// Mapped standard element types (for convenience).
-const mdds::mtv::element_t element_type_numeric = mdds::mtv::element_type_numeric;
+const mdds::mtv::element_t element_type_numeric = mdds::mtv::element_type_double;
 const mdds::mtv::element_t element_type_empty = mdds::mtv::element_type_empty;
-const mdds::mtv::element_t element_type_uint16 = mdds::mtv::element_type_ushort;
+const mdds::mtv::element_t element_type_uint16 = mdds::mtv::element_type_uint16;
 
 /// Custom element blocks.
 
@@ -66,8 +66,8 @@ typedef mdds::mtv::noncopyable_managed_element_block<element_type_edittext, Edit
 typedef mdds::mtv::noncopyable_managed_element_block<element_type_formula, ScFormulaCell> formula_block;
 
 /// Mapped standard element blocks (for convenience).
-typedef mdds::mtv::numeric_element_block numeric_block;
-typedef mdds::mtv::ushort_element_block uint16_block;
+typedef mdds::mtv::double_element_block numeric_block;
+typedef mdds::mtv::uint16_element_block uint16_block;
 
 /// This needs to be in the same namespace as CellTextAttr.
 MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(CellTextAttr, element_type_celltextattr, CellTextAttr(), celltextattr_block)

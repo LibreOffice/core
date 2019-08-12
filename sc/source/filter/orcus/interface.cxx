@@ -61,8 +61,7 @@ formula::FormulaGrammar::Grammar getCalcGrammarFromOrcus( os::formula_grammar_t 
         case orcus::spreadsheet::formula_grammar_t::ods:
             eGrammar = formula::FormulaGrammar::GRAM_ODFF;
             break;
-        case orcus::spreadsheet::formula_grammar_t::xlsx_2007:
-        case orcus::spreadsheet::formula_grammar_t::xlsx_2010:
+        case orcus::spreadsheet::formula_grammar_t::xlsx:
             eGrammar = formula::FormulaGrammar::GRAM_OOXML;
             break;
         case orcus::spreadsheet::formula_grammar_t::gnumeric:
@@ -1186,6 +1185,11 @@ orcus::spreadsheet::range_size_t ScOrcusSheet::get_sheet_size() const
     ret.columns = MAXCOLCOUNT;
 
     return ret;
+}
+
+void ScOrcusSheet::fill_down_cells(os::row_t /*row*/, os::col_t /*col*/, os::row_t /*range_size*/)
+{
+    // TODO : implement this.
 }
 
 const sc::SharedFormulaGroups& ScOrcusSheet::getSharedFormulaGroups() const
