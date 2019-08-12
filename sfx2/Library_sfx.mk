@@ -98,7 +98,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/fwkhelper \
     sfx2/source/appl/helpdispatch \
     sfx2/source/appl/helpinterceptor \
-    sfx2/source/appl/imestatuswindow \
     sfx2/source/appl/impldde \
     sfx2/source/appl/linkmgr2 \
     sfx2/source/appl/linksrc \

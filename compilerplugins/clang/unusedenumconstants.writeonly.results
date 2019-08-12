@@ -10414,8 +10414,6 @@ vcl/inc/salframe.hxx:72
     enum SalFrameStyleFlags NOSHADOW
 vcl/inc/salptype.hxx:32
     enum JobSetFlags ALL
-vcl/inc/svdata.hxx:134
-    enum ImplSVAppData::ImeStatusWindowMode ImeStatusWindowMode_UNKNOWN
 vcl/inc/unx/desktops.hxx:29
     enum DesktopType DESKTOP_UNKNOWN
 vcl/inc/unx/i18n_cb.hxx:67

@@ -59,7 +59,6 @@
 #include <osx/runinmain.hxx>
 
 #include <print.h>
-#include <salimestatus.hxx>
 
 #include <comphelper/processfactory.hxx>
 

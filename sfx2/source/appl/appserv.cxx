@@ -118,7 +118,6 @@
 #include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfxpicklist.hxx>
-#include "imestatuswindow.hxx"
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sorgitm.hxx>
@@ -703,21 +702,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
 #endif
 
-        case SID_SHOW_IME_STATUS_WINDOW:
-            if (sfx2::appl::ImeStatusWindow::canToggle())
-            {
-                const SfxBoolItem * pItem = rReq.GetArg<SfxBoolItem>(SID_SHOW_IME_STATUS_WINDOW);
-                bool bShow = pItem == nullptr
-                    ? !pImpl->m_xImeStatusWindow->isShowing()
-                    : pItem->GetValue();
-                pImpl->m_xImeStatusWindow->show(bShow);
-                if (pItem == nullptr)
-                    rReq.AppendItem(SfxBoolItem(SID_SHOW_IME_STATUS_WINDOW,
-                                                bShow));
-            }
-            bDone = true;
-            break;
-
         case SID_ZOOM_50_PERCENT:
         case SID_ZOOM_75_PERCENT:
         case SID_ZOOM_100_PERCENT:
@@ -1149,16 +1133,6 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                         rSet.DisableItem( nWhich );
                     break;
                 }
-
-                case SID_SHOW_IME_STATUS_WINDOW:
-                    if (sfx2::appl::ImeStatusWindow::canToggle())
-                        rSet.Put(SfxBoolItem(
-                                     SID_SHOW_IME_STATUS_WINDOW,
-                                     pImpl->m_xImeStatusWindow->
-                                         isShowing()));
-                    else
-                        rSet.DisableItem(SID_SHOW_IME_STATUS_WINDOW);
-                    break;
 
                 case SID_TEMPLATE_MANAGER:
                     {

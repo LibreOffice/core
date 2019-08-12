@@ -41,7 +41,6 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/unoctitm.hxx>
 #include <objshimp.hxx>
-#include "imestatuswindow.hxx"
 #include <appbaslib.hxx>
 #include <childwinimpl.hxx>
 #include <svl/svdde.hxx>
@@ -94,7 +93,6 @@ SfxAppData_Impl::SfxAppData_Impl()
     , pProgress(nullptr)
     , nDocModalMode(0)
     , nRescheduleLocks(0)
-    , m_xImeStatusWindow(new sfx2::appl::ImeStatusWindow(comphelper::getProcessComponentContext()))
     , pTbxCtrlFac(nullptr)
     , pStbCtrlFac(nullptr)
     , pViewFrames(nullptr)

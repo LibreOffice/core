@@ -24,7 +24,6 @@
 #include <salvd.hxx>
 #include <salprn.hxx>
 #include <saltimer.hxx>
-#include <salimestatus.hxx>
 #include <salsession.hxx>
 #include <salsys.hxx>
 #include <salbmp.hxx>
@@ -144,11 +143,6 @@ bool SalInstance::CallEventCallback( void const * pEvent, int nBytes )
     return m_pEventInst.is() && m_pEventInst->dispatchEvent( pEvent, nBytes );
 }
 
-std::unique_ptr<SalI18NImeStatus> SalInstance::CreateI18NImeStatus()
-{
-    return std::unique_ptr<SalI18NImeStatus>(new SalI18NImeStatus);
-}
-
 SalTimer::~SalTimer() COVERITY_NOEXCEPT_FALSE
 {
 }
@@ -166,10 +160,6 @@ void SalBitmap::DropScaledCache()
 SalBitmap::~SalBitmap()
 {
     DropScaledCache();
-}
-
-SalI18NImeStatus::~SalI18NImeStatus()
-{
 }
 
 SalSystem::~SalSystem()

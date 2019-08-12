@@ -55,7 +55,6 @@
 #include <salframe.hxx>
 #include <salsys.hxx>
 #include <svdata.hxx>
-#include <salimestatus.hxx>
 #include <displayconnectiondispatch.hxx>
 #include <window.h>
 #include <accmgr.hxx>
@@ -1551,34 +1550,6 @@ void Application::ShowNativeErrorBox(const OUString& sTitle  ,
     if (btn != SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK) {
         SAL_WARN( "vcl", "ShowNativeMessageBox returned " << btn);
     }
-}
-
-bool Application::CanToggleImeStatusWindow()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    if( ! pSVData->mpImeStatus )
-        pSVData->mpImeStatus  = pSVData->mpDefInst->CreateI18NImeStatus();
-    return pSVData->mpImeStatus->canToggle();
-}
-
-void Application::ShowImeStatusWindow(bool bShow)
-{
-    ImplGetSVData()->maAppData.meShowImeStatusWindow = bShow
-        ? ImplSVAppData::ImeStatusWindowMode_SHOW
-        : ImplSVAppData::ImeStatusWindowMode_HIDE;
-
-    ImplSVData* pSVData = ImplGetSVData();
-    if( ! pSVData->mpImeStatus )
-        pSVData->mpImeStatus  = pSVData->mpDefInst->CreateI18NImeStatus();
-    pSVData->mpImeStatus->toggle();
-}
-
-bool Application::GetShowImeStatusWindowDefault()
-{
-    rtl_TextEncodingInfo aInfo;
-    aInfo.StructSize = sizeof aInfo;
-    return rtl_getTextEncodingInfo(osl_getThreadTextEncoding(), &aInfo)
-        && aInfo.MaximumCharSize > 1;
 }
 
 const OUString& Application::GetDesktopEnvironment()

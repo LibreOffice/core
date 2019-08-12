@@ -12629,8 +12629,6 @@ sfx2/source/appl/helpdispatch.cxx
 sfx2/source/appl/helpdispatch.hxx
 sfx2/source/appl/helpinterceptor.cxx
 sfx2/source/appl/helpinterceptor.hxx
-sfx2/source/appl/imestatuswindow.cxx
-sfx2/source/appl/imestatuswindow.hxx
 sfx2/source/appl/impldde.cxx
 sfx2/source/appl/impldde.hxx
 sfx2/source/appl/linkmgr2.cxx
@@ -17360,7 +17358,6 @@ vcl/inc/salframe.hxx
 vcl/inc/salgdi.hxx
 vcl/inc/salgdiimpl.hxx
 vcl/inc/salgeom.hxx
-vcl/inc/salimestatus.hxx
 vcl/inc/salinst.hxx
 vcl/inc/sallayout.hxx
 vcl/inc/salmenu.hxx
@@ -17419,7 +17416,6 @@ vcl/inc/unx/i18n_cb.hxx
 vcl/inc/unx/i18n_ic.hxx
 vcl/inc/unx/i18n_im.hxx
 vcl/inc/unx/i18n_keysym.hxx
-vcl/inc/unx/i18n_status.hxx
 vcl/inc/unx/i18n_xkb.hxx
 vcl/inc/unx/nativewindowhandleprovider.hxx
 vcl/inc/unx/pixmap.hxx
@@ -18039,7 +18035,6 @@ vcl/unx/generic/app/i18n_cb.cxx
 vcl/unx/generic/app/i18n_ic.cxx
 vcl/unx/generic/app/i18n_im.cxx
 vcl/unx/generic/app/i18n_keysym.cxx
-vcl/unx/generic/app/i18n_status.cxx
 vcl/unx/generic/app/i18n_xkb.cxx
 vcl/unx/generic/app/keysymnames.cxx
 vcl/unx/generic/app/randrwrapper.cxx

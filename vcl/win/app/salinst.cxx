@@ -47,7 +47,6 @@
 #include <win/salbmp.h>
 #include <win/winlayout.hxx>
 
-#include <salimestatus.hxx>
 #include <salsys.hxx>
 
 #include <desktop/crashreport.hxx>

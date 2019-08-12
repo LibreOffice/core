@@ -54,7 +54,6 @@
 #include <unx/salbmp.h>
 #include <unx/i18n_ic.hxx>
 #include <unx/i18n_keysym.hxx>
-#include <unx/i18n_status.hxx>
 #include <unx/x11/xlimits.hxx>
 #include <opengl/zone.hxx>
 
@@ -915,8 +914,8 @@ X11SalFrame::~X11SalFrame()
 
     if( mpInputContext )
     {
-        mpInputContext->UnsetICFocus( this );
-        mpInputContext->Unmap( this );
+        mpInputContext->UnsetICFocus();
+        mpInputContext->Unmap();
         mpInputContext.reset();
     }
 
@@ -948,19 +947,6 @@ X11SalFrame::~X11SalFrame()
     }
 
     XDestroyWindow( GetXDisplay(), mhWindow );
-
-    /*
-     *  check if there is only the status frame left
-     *  if so, free it
-     */
-    auto &rFrames = GetDisplay()->getFrames();
-    if( ! rFrames.empty() && vcl::I18NStatus::exists() )
-    {
-        SalFrame* pStatusFrame = vcl::I18NStatus::get().getStatusFrame();
-        auto sit = rFrames.begin();
-        if( pStatusFrame && *sit == pStatusFrame && ++sit == rFrames.end() )
-            vcl::I18NStatus::free();
-    }
 }
 
 void X11SalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
@@ -1373,7 +1359,7 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
     else
     {
         if( getInputContext() )
-            getInputContext()->Unmap( this );
+            getInputContext()->Unmap();
 
         if( ! IsChildWindow() )
         {
@@ -2228,8 +2214,6 @@ void X11SalFrame::StartPresentation( bool bStart )
                                     mhWindow,
                                     GetXDisplay() );
 
-    vcl::I18NStatus::get().show( !bStart, vcl::I18NStatus::presentation );
-
     if( ! bStart && hPresentationWindow != None )
         doReparentPresentationDialogues( GetDisplay() );
     hPresentationWindow = (bStart && IsOverrideRedirect() ) ? GetWindow() : None;
@@ -2337,7 +2321,7 @@ void X11SalFrame::SetInputContext( SalInputContext* pContext )
     if (!(pContext->mnOptions & InputContextFlags::Text))
     {
         if( mpInputContext )
-            mpInputContext->Unmap( this );
+            mpInputContext->Unmap();
         return;
     }
 
@@ -2346,8 +2330,6 @@ void X11SalFrame::SetInputContext( SalInputContext* pContext )
 
     if (mpInputContext == nullptr)
     {
-        vcl::I18NStatus& rStatus( vcl::I18NStatus::get() );
-        rStatus.setParent( this );
         mpInputContext.reset( new SalI18N_InputContext( this ) );
         if (mpInputContext->UseContext())
         {
@@ -2457,8 +2439,8 @@ void X11SalFrame::createNewWindow( ::Window aNewParent, SalX11Screen nXScreen )
     updateGraphics(true);
     if( mpInputContext )
     {
-        mpInputContext->UnsetICFocus( this );
-        mpInputContext->Unmap( this );
+        mpInputContext->UnsetICFocus();
+        mpInputContext->Unmap();
     }
     if( GetWindow() == hPresentationWindow )
     {
@@ -3324,15 +3306,6 @@ bool X11SalFrame::HandleFocusEvent( XFocusChangeEvent const *pEvent )
     {
         if( FocusIn == pEvent->type )
             mpInputContext->SetICFocus( this );
-        else
-        {
-            /*
-             *  do not unset the IC focus here because would kill
-             *  a lookup choice windows that might have the focus now
-             *      mpInputContext->UnsetICFocus( this );
-             */
-            vcl::I18NStatus::get().show( false, vcl::I18NStatus::focus );
-        }
     }
 
     if ( pEvent->mode == NotifyNormal || pEvent->mode == NotifyWhileGrabbed ||
@@ -3945,17 +3918,6 @@ bool X11SalFrame::Dispatch( XEvent *pEvent )
                     CallCallback( SalEvent::Resize, nullptr );
 
                     bool bSetFocus = m_bSetFocusOnMap;
-                    /*  another workaround for sawfish: if a transient window for the same parent is shown
-                     *  sawfish does not set the focus to it. Applies only for click to focus mode.
-                     */
-                    if( ! (nStyle_ & SalFrameStyleFlags::FLOAT ) && mbInShow && GetDisplay()->getWMAdaptor()->getWindowManagerName() == "Sawfish" )
-                    {
-                        // don't set the focus into the IME status window
-                        // since this will lead to a parent loss of focus, close status,
-                        // reget focus, open status, .... flicker loop
-                        if ( vcl::I18NStatus::get().getStatusFrame() != this )
-                            bSetFocus = true;
-                    }
 
                     /*
                      *  sometimes a message box/dialogue is brought up when a frame is not mapped
@@ -3999,7 +3961,7 @@ bool X11SalFrame::Dispatch( XEvent *pEvent )
                     bViewable_ = false;
                     nRet = true;
                     if ( mpInputContext != nullptr )
-                        mpInputContext->Unmap( this );
+                        mpInputContext->Unmap();
                     CallCallback( SalEvent::Resize, nullptr );
                 }
                 break;
