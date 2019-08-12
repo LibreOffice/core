@@ -173,7 +173,7 @@ DECLARE_OOXMLEXPORT_TEST(testFDO77890 , "fdo77890.docx")
     /*
     Ensure that the page break is preserved i.e it should not be converted to a section break, in case
     if the different first page is set for the pages in the document.
-    For additional comments pls refer https://www.libreoffice.org/bugzilla/show_bug.cgi?id=77890#c2
+    For additional comments please refer to https://www.libreoffice.org/bugzilla/show_bug.cgi?id=77890#c2
     */
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
