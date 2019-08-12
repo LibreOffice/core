@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_6c9e7855",
+        "filename": "sd/uiconfig/simpress/ui/notebookbar_groupedbar_full.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 4358,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-08-12T08:24:49Z",
+      "side": 1,
+      "message": "Good catch!",
+      "range": {
+        "startLine": 4358,
+        "startChar": 39,
+        "endLine": 4358,
+        "endChar": 49
+      },
+      "revId": "b129a3de19209f8c82208358f8a9db91167b8f63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
