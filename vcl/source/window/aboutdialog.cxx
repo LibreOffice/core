@@ -56,6 +56,8 @@ AboutDialog::AboutDialog(vcl::Window* pParent, WinBits nStyle, Dialog::InitFlag 
     m_xBuilder->get(m_xDescriptionText, "description");
     m_xBuilder->get(m_xCopyrightText, "copyright");
     m_xBuilder->get(m_xBuildIdLink, "buildIdLink");
+
+    m_xVersion->RequestDoubleBuffering(true);
 }
 
 void AboutDialog::set_content_area(VclBox* pBox)

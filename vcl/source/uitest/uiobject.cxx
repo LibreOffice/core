@@ -273,6 +273,11 @@ WindowUIObject::WindowUIObject(const VclPtr<vcl::Window>& xWindow):
 
 StringMap WindowUIObject::get_state()
 {
+    // Double-buffering is not interesting for uitesting, but can result in direct paint for a
+    // double-buffered widget, which is incorrect.
+    if (mxWindow->SupportsDoubleBuffering())
+        mxWindow->RequestDoubleBuffering(false);
+
     StringMap aMap;
     aMap["Visible"] = OUString::boolean(mxWindow->IsVisible());
     aMap["ReallyVisible"] = OUString::boolean(mxWindow->IsReallyVisible());
