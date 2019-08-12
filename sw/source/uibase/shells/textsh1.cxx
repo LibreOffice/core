@@ -1748,6 +1748,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 break;
 
             case SID_EDIT_HYPERLINK:
+            case SID_REMOVE_HYPERLINK:
             case SID_COPY_HYPERLINK_LOCATION:
                 {
                     SfxItemSet aSet(GetPool(),
@@ -1759,22 +1760,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                         rSet.DisableItem(nWhich);
                     }
                 }
-            break;
-            case SID_REMOVE_HYPERLINK:
-            {
-                SfxItemSet aSet(GetPool(),
-                                svl::Items<RES_TXTATR_INETFMT,
-                                RES_TXTATR_INETFMT>{});
-                rSh.GetCurAttr(aSet);
-
-                // If a hyperlink is selected, either alone or along with other text...
-                if ((aSet.GetItemState(RES_TXTATR_INETFMT) < SfxItemState::SET &&
-                    aSet.GetItemState(RES_TXTATR_INETFMT) != SfxItemState::DONTCARE) ||
-                    rSh.HasReadonlySel())
-                {
-                    rSet.DisableItem(nWhich);
-                }
-            }
             break;
             case SID_TRANSLITERATE_HALFWIDTH:
             case SID_TRANSLITERATE_FULLWIDTH:
