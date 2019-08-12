@@ -22,6 +22,30 @@
       "revId": "aeec372c6b54dec1e4ad8292f2725d439fb2c924",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_9263e2b1",
+        "filename": "sw/qa/extras/odfexport/odfexport.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 2103,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-08-12T11:45:15Z",
+      "side": 1,
+      "message": "no... very unintuitively, these indexes are 1-based\n\nthe problem is rather that the shape wasn\u0027t imported/inserted into the document",
+      "parentUuid": "bf659307_3241b60c",
+      "range": {
+        "startLine": 2103,
+        "startChar": 54,
+        "endLine": 2103,
+        "endChar": 55
+      },
+      "revId": "aeec372c6b54dec1e4ad8292f2725d439fb2c924",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
