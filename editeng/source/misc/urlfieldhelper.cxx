@@ -31,15 +31,10 @@ bool URLFieldHelper::IsCursorAtURLField(OutlinerView* pOLV)
     if (!pOLV)
         return false;
 
-    const SvxFieldItem* pFieldItem = pOLV->GetFieldUnderMousePointer();
-    if (!pFieldItem)
-        pFieldItem = pOLV->GetFieldAtSelection();
-    if (pFieldItem)
-    {
-        const SvxFieldData* pField = pFieldItem->GetField();
-        if (dynamic_cast<const SvxURLField*>(pField))
-            return true;
-    }
+    const SvxFieldData* pField = pOLV->GetFieldAtCursor();
+    if (dynamic_cast<const SvxURLField*>(pField))
+        return true;
+
     return false;
 }
 

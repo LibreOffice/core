@@ -627,7 +627,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case SID_EDIT_HYPERLINK:
             {
                 // Ensure the field is selected first
-                pEditView->GetFieldAtCursor();
+                pEditView->SelectFieldAtCursor();
                 pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(
                     SID_HYPERLINK_DIALOG);
             }
@@ -646,7 +646,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case SID_REMOVE_HYPERLINK:
             {
                 // Ensure the field is selected first
-                pEditView->GetFieldAtCursor();
+                pEditView->SelectFieldAtCursor();
                 const SvxURLField* pURLField = GetURLField();
                 if (pURLField)
                 {

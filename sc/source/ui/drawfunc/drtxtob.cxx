@@ -274,7 +274,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     bool bDone = false;
                     if (eMode == HLINK_DEFAULT || eMode == HLINK_FIELD)
                     {
-                        pOutView->GetFieldAtCursor();
+                        pOutView->SelectFieldAtCursor();
 
                         //  insert new field
                         SvxURLField aURLField( rURL, rName, SvxURLFormat::Repr );
@@ -306,7 +306,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
         case SID_EDIT_HYPERLINK:
             {
                 // Ensure the field is selected first
-                pOutView->GetFieldAtCursor();
+                pOutView->SelectFieldAtCursor();
                 pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_HYPERLINK_DIALOG);
             }
             break;
@@ -325,6 +325,8 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_REMOVE_HYPERLINK:
             {
+                // Ensure the field is selected first
+                pOutView->SelectFieldAtCursor();
                 URLFieldHelper::RemoveURLField(pOutliner, pOutView);
             }
             break;
