@@ -1,0 +1,79 @@
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+EXPECT SUCCESS "conversion.tests 1":
+constants C {
+    const byte C1 = -128.0;
+    const byte C2 = -127.9;
+    const byte C3 = 254.9;
+    const byte C4 = 255.0;
+    const short C5 = -32768.0;
+    const short C6 = -32767.9;
+    const short C7 = 32766.9;
+    const short C8 = 32767.0;
+    const unsigned short C9 = 0.0;
+    const unsigned short C10 = 0.1;
+    const unsigned short C11 = 65534.9;
+    const unsigned short C12 = 65535.0;
+    const long C13 = -2147483648.0;
+    const long C14 = -2147483647.9;
+    const long C15 = 2147483646.9;
+    const long C16 = 2147483647.0;
+    const unsigned long C17 = 0.0;
+    const unsigned long C18 = 0.1;
+    const unsigned long C19 = 4294967294.9;
+    const unsigned long C20 = 4294967295.0;
+    const hyper C21 = -9223372036854774784.0; // -0x7FFFFFFFFFFFFC00 = -0x1.FFFFFFFFFFFFFp62
+    const hyper C22 = 9223372036854774784.0; // 0x7FFFFFFFFFFFFC00 = 0x1.FFFFFFFFFFFFFp62
+    const unsigned hyper C23 = 0.0;
+    const unsigned hyper C24 = 0.1;
+    const unsigned hyper C25 = 18446744073709549568.0; // 0xFFFFFFFFFFFFF800 = 0x1.FFFFFFFFFFFFFp63
+};
+
+EXPECT FAILURE "conversion.tests 2":
+constants C { const byte C1 = -128.1; };
+
+EXPECT FAILURE "conversion.tests 3":
+constants C { const byte C1 = 255.1; };
+
+EXPECT FAILURE "conversion.tests 4":
+constants C { const short C1 = -32768.1; };
+
+EXPECT FAILURE "conversion.tests 5":
+constants C { const short C1 = 32767.1; };
+
+EXPECT FAILURE "conversion.tests 6":
+constants C { const unsigned short C1 = -0.1; };
+
+EXPECT FAILURE "conversion.tests 7":
+constants C { const unsigned short C1 = 65535.1; };
+
+EXPECT FAILURE "conversion.tests 8":
+constants C { const long C1 = -2147483648.1; };
+
+EXPECT FAILURE "conversion.tests 9":
+constants C { const long C1 = 2147483647.1; };
+
+EXPECT FAILURE "conversion.tests 10":
+constants C { const unsigned long C1 = -0.1; };
+
+EXPECT FAILURE "conversion.tests 11":
+constants C { const unsigned long C1 = 4294967295.1; };
+
+EXPECT FAILURE "conversion.tests 12":
+constants C { const hyper C1 = -9223372036854775808.0; }; // -0x8000000000000000 = -0x1p63
+
+EXPECT FAILURE "conversion.tests 13":
+constants C { const hyper C1 = 9223372036854775807.0; }; // 0x7FFFFFFFFFFFFFFF rounds up to 0x1p63
+
+EXPECT FAILURE "conversion.tests 14":
+constants C { const unsigned hyper C1 = -0.1; };
+
+EXPECT FAILURE "conversion.tests 15":
+constants C { const unsigned hyper C1 = 18446744073709551615.0; };
+    // 0xFFFFFFFFFFFFFFFF rounds up to 0x1p64
