@@ -46,14 +46,10 @@ AttributeListBuilder::AttributeListBuilder( const uno::Reference< xml::sax::XFas
 {
     if( a.get() == nullptr )
         return;
-    uno::Sequence< xml::FastAttribute > aFastAttrSeq = a->getFastAttributes();
-    const xml::FastAttribute* pFastAttr = aFastAttrSeq.getConstArray();
-    sal_Int32 nFastAttrLength = aFastAttrSeq.getLength();
-    for( int i = 0;
-         i < nFastAttrLength;
-         ++i )
+    const uno::Sequence< xml::FastAttribute > aFastAttrSeq = a->getFastAttributes();
+    for( const xml::FastAttribute& rFastAttr : aFastAttrSeq )
     {
-        attrs[ pFastAttr[ i ].Token ] = pFastAttr[ i ].Value;
+        attrs[ rFastAttr.Token ] = rFastAttr.Value;
     }
 }
 

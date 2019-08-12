@@ -249,22 +249,19 @@ void OOXMLDocPropHandler::UpdateDocStatistic( const OUString& aChars )
 
     if ( !aName.isEmpty() )
     {
-        bool bFound = false;
-        sal_Int32 nLen = aSet.getLength();
-        for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
-            if ( aSet[nInd].Name == aName )
-            {
-                aSet[nInd].Value <<= aChars.toInt32();
-                bFound = true;
+        sal_Int32 nInd = 0;
+        for ( auto pProp = aSet.getConstArray(); nInd < aSet.getLength(); ++nInd )
+            if ( pProp[nInd].Name == aName )
                 break;
-            }
 
-        if ( !bFound )
-        {
-            aSet.realloc( nLen + 1 );
-            aSet[nLen].Name = aName;
-            aSet[nLen].Value <<= aChars.toInt32();
-        }
+        if (nInd == aSet.getLength())
+            aSet.realloc( nInd + 1 );
+
+        beans::NamedValue aProp;
+        aProp.Name = aName;
+        aProp.Value <<= aChars.toInt32();
+
+        aSet[nInd] = aProp;
 
         m_xDocProp->setDocumentStatistics( aSet );
     }
