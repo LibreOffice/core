@@ -402,15 +402,7 @@ void I18NStatus::toggleStatusWindow()
 
 bool I18NStatus::getStatusWindowMode()
 {
-    switch (ImplGetSVData()->maAppData.meShowImeStatusWindow)
-    {
-    default: // ImplSVAppData::ImeStatusWindowMode_UNKNOWN
-        return Application::GetShowImeStatusWindowDefault();
-    case ImplSVAppData::ImeStatusWindowMode_HIDE:
-        return false;
-    case ImplSVAppData::ImeStatusWindowMode_SHOW:
-        return true;
-    }
+    return false;
 }
 
 /*

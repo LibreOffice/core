@@ -66,7 +66,6 @@
 #include <openflag.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/event.hxx>
-#include "imestatuswindow.hxx"
 #include <workwin.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/tbxctrl.hxx>
@@ -173,8 +172,6 @@ SfxApplication::SfxApplication()
     SetName( "StarOffice" );
     if (!utl::ConfigManager::IsFuzzing())
         SvtViewOptions::AcquireOptions();
-
-    pImpl->m_xImeStatusWindow->init();
 
     SAL_INFO( "sfx.appl", "{ initialize DDE" );
 
