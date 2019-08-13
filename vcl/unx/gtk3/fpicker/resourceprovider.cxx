@@ -24,7 +24,7 @@
 
 #include <strings.hrc>
 #include <svdata.hxx>
-#include <gtk/fpicker/SalGtkPicker.hxx>
+#include "SalGtkPicker.hxx"
 
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
