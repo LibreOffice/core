@@ -19,6 +19,7 @@
 
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
+#include <o3tl/float_int_conversion.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/uno/Any.hxx>
@@ -52,7 +53,7 @@ static long lcl_DoubleToLong( double fVal )
 {
     double fInt = (fVal >= 0.0) ? ::rtl::math::approxFloor( fVal ) :
                                   ::rtl::math::approxCeil( fVal );
-    if ( fInt >= LONG_MIN && fInt <= LONG_MAX )
+    if ( o3tl::convertsToAtLeast(fInt, LONG_MIN) && o3tl::convertsToAtMost(fInt, LONG_MAX) )
         return static_cast<long>(fInt);
     else
         return 0;       // out of range

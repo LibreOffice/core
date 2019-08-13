@@ -12,6 +12,8 @@
 #include <cerrno>
 #include <cfenv>
 
+#include <o3tl/float_int_conversion.hxx>
+
 namespace sc {
 
 static double err_pow( const double& fVal1, const double& fVal2 )
@@ -30,7 +32,8 @@ double power( const double& fVal1, const double& fVal2 )
     if (fVal1 < 0 && fVal2 != 0.0)
     {
         const double f = 1.0 / fVal2 + ((fVal2 < 0.0) ? -0.5 : 0.5);
-        if (f < SAL_MIN_INT64 || f > SAL_MAX_INT64)
+        if (!(o3tl::convertsToAtLeast(f, SAL_MIN_INT64)
+              && o3tl::convertsToAtMost(f, SAL_MAX_INT64)))
         {
             // Casting to int would be undefined behaviour.
             fPow = err_pow( fVal1, fVal2);
