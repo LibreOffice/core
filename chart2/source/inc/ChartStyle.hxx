@@ -24,6 +24,7 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <com/sun/star/chart2/XChartStyle.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -95,7 +96,13 @@ public:
         SAL_CALL getStyleForObject(const sal_Int16 nChartObjectType) override;
 
     virtual void SAL_CALL
-    applyStyleToDiagram(const css::uno::Reference<css::chart2::XDiagram>& xDiagram);
+    applyStyleToDiagram(const css::uno::Reference<css::chart2::XDiagram>& xDiagram) override;
+
+    virtual void SAL_CALL
+    applyStyleToTitle(const css::uno::Reference<css::chart2::XTitle>& xTitle) override;
+
+    virtual void SAL_CALL
+    applyStyleToBackground(const css::uno::Reference<css::beans::XPropertySet>& xBackground) override;
 
     // XStyle
     virtual sal_Bool SAL_CALL isUserDefined() override;
@@ -114,6 +121,10 @@ private:
     std::map<sal_Int16, css::uno::Reference<css::beans::XPropertySet>> m_xChartStyle;
 
     void register_styles();
+
+    void applyStyleToAxis(const css::uno::Reference<css::chart2::XAxis>& xAxis);
+
+    void applyStyleToCoordinates(const css::uno::Reference<css::chart2::XCoordinateSystemContainer>& xCooSysCont);
 };
 
 OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::container::XNameContainer> getChartStyles();
