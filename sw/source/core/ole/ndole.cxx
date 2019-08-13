@@ -58,6 +58,7 @@
 #include <comphelper/threadpool.hxx>
 #include <atomic>
 #include <deque>
+#include <libxml/xmlwriter.h>
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -285,6 +286,18 @@ bool SwOLENode::RestorePersistentData()
     }
 
     return true;
+}
+
+void SwOLENode::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwOLENode"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"),
+                                BAD_CAST(OString::number(GetIndex()).getStr()));
+
+    GetOLEObj().dumpAsXml(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 /**
@@ -1102,6 +1115,19 @@ void SwOLEObj::resetBufferedData()
         m_pDeflateData->waitFinished();
         m_pDeflateData.reset();
     }
+}
+
+void SwOLEObj::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwOLEObj"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("m_xOLERef"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"),
+                                BAD_CAST(typeid(*m_xOLERef.GetObject().get()).name()));
+    xmlTextWriterEndElement(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 SwOLELRUCache::SwOLELRUCache()
