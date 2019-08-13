@@ -330,7 +330,7 @@ void ImportLotus::NamedSheet()
     SCTAB nLTab(SanitizeTab(static_cast<SCTAB>(nTmpTab)));
 #if ENABLE_FUZZERS
     //ofz#14167 arbitrary sheet limit to make fuzzing useful
-    if (nLTab > 5
+    if (nLTab > 5)
         nLTab = 5;
 #endif
 
