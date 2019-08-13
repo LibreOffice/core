@@ -22,9 +22,7 @@
 
 #include <atk/atk.h>
 #include <gtk/gtk.h>
-#if GTK_CHECK_VERSION(3,0,0)
 #include <gtk/gtk-a11y.h>
-#endif
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
 extern "C" {
@@ -74,11 +72,7 @@ struct AtkObjectWrapper
 
 struct AtkObjectWrapperClass
 {
-#if GTK_CHECK_VERSION(3,0,0)
     GtkWidgetAccessibleClass aParentClass;
-#else
-    AtkObjectClass const aParentClass;
-#endif
 };
 
 GType                  atk_object_wrapper_get_type() G_GNUC_CONST;

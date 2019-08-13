@@ -66,12 +66,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Package_fontunxpsprint \
 ))
 
-ifneq ($(ENABLE_GTK),)
-$(eval $(call gb_Module_add_targets,vcl,\
-    Executable_xid_fullscreen_on_all_monitors \
-    Library_vclplug_gtk \
-))
-endif
 ifneq ($(ENABLE_GTK3),)
 $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_gtk3 \
