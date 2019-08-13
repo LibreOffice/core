@@ -3,19 +3,19 @@
 
 <office:color-table xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:table="http://openoffice.org/2000/table" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="http://openoffice.org/2000/meta" xmlns:number="http://openoffice.org/2000/datastyle" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="http://openoffice.org/2000/chart" xmlns:dr3d="http://openoffice.org/2000/dr3d" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="http://openoffice.org/2000/form" xmlns:script="http://openoffice.org/2000/script">
 
-  <!-- Grey palette -->
-  <draw:color draw:name="Grey" draw:color="#9E9E9E"/>
-  <draw:color draw:name="Grey 50" draw:color="#FAFAFA"/>
-  <draw:color draw:name="Grey 100" draw:color="#F5F5F5"/>
-  <draw:color draw:name="Grey 200" draw:color="#EEEEEE"/>
-  <draw:color draw:name="Grey 300" draw:color="#E0E0E0"/>
-  <draw:color draw:name="Grey 400" draw:color="#BDBDBD"/>
-  <draw:color draw:name="Grey 600" draw:color="#757575"/>
-  <draw:color draw:name="Grey 700" draw:color="#616161"/>
-  <draw:color draw:name="Grey 800" draw:color="#424242"/>
-  <draw:color draw:name="Grey 900" draw:color="#212121"/>
-  <draw:color draw:name="Grey A200" draw:color="#000000"/>
-  <draw:color draw:name="Grey A400" draw:color="#000000"/>
+  <!-- Gray palette -->
+  <draw:color draw:name="Gray" draw:color="#9E9E9E"/>
+  <draw:color draw:name="Gray 50" draw:color="#FAFAFA"/>
+  <draw:color draw:name="Gray 100" draw:color="#F5F5F5"/>
+  <draw:color draw:name="Gray 200" draw:color="#EEEEEE"/>
+  <draw:color draw:name="Gray 300" draw:color="#E0E0E0"/>
+  <draw:color draw:name="Gray 400" draw:color="#BDBDBD"/>
+  <draw:color draw:name="Gray 600" draw:color="#757575"/>
+  <draw:color draw:name="Gray 700" draw:color="#616161"/>
+  <draw:color draw:name="Gray 800" draw:color="#424242"/>
+  <draw:color draw:name="Gray 900" draw:color="#212121"/>
+  <draw:color draw:name="Gray A200" draw:color="#000000"/>
+  <draw:color draw:name="Gray A400" draw:color="#000000"/>
 
   <!-- Yellow palette -->
   <draw:color draw:name="Yellow" draw:color="#FFEB3B"/>
@@ -255,17 +255,17 @@
   <draw:color draw:name="Brown A200" draw:color="#FFFFFF"/>
   <draw:color draw:name="Brown A400" draw:color="#FFFFFF"/>
 
-  <!-- Blue Grey palette -->
-  <draw:color draw:name="Blue Grey" draw:color="#607D8B"/>
-  <draw:color draw:name="Blue Grey 50" draw:color="#ECEFF1"/>
-  <draw:color draw:name="Blue Grey 100" draw:color="#CFD8DC"/>
-  <draw:color draw:name="Blue Grey 200" draw:color="#B0BEC5"/>
-  <draw:color draw:name="Blue Grey 300" draw:color="#90A4AE"/>
-  <draw:color draw:name="Blue Grey 400" draw:color="#78909C"/>
-  <draw:color draw:name="Blue Grey 600" draw:color="#546E7A"/>
-  <draw:color draw:name="Blue Grey 700" draw:color="#455A64"/>
-  <draw:color draw:name="Blue Grey 800" draw:color="#37474F"/>
-  <draw:color draw:name="Blue Grey 900" draw:color="#263238"/>
-  <draw:color draw:name="Blue Grey A200" draw:color="#FFFFFF"/>
-  <draw:color draw:name="Blue Grey A400" draw:color="#FFFFFF"/>
+  <!-- Blue Gray palette -->
+  <draw:color draw:name="Blue Gray" draw:color="#607D8B"/>
+  <draw:color draw:name="Blue Gray 50" draw:color="#ECEFF1"/>
+  <draw:color draw:name="Blue Gray 100" draw:color="#CFD8DC"/>
+  <draw:color draw:name="Blue Gray 200" draw:color="#B0BEC5"/>
+  <draw:color draw:name="Blue Gray 300" draw:color="#90A4AE"/>
+  <draw:color draw:name="Blue Gray 400" draw:color="#78909C"/>
+  <draw:color draw:name="Blue Gray 600" draw:color="#546E7A"/>
+  <draw:color draw:name="Blue Gray 700" draw:color="#455A64"/>
+  <draw:color draw:name="Blue Gray 800" draw:color="#37474F"/>
+  <draw:color draw:name="Blue Gray 900" draw:color="#263238"/>
+  <draw:color draw:name="Blue Gray A200" draw:color="#FFFFFF"/>
+  <draw:color draw:name="Blue Gray A400" draw:color="#FFFFFF"/>
 </office:color-table>
