@@ -14,6 +14,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/chart2/ChartObjectType.idl>
 #include <com/sun/star/chart2/XDiagram.idl>
+#include <com/sun/star/chart2/XTitle.idl>
+#include <com/sun/star/chart2/XAxis.idl>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 
 module com { module sun { module star { module chart2 {
 
@@ -22,6 +25,12 @@ interface XChartStyle : ::com::sun::star::uno::XInterface
     com::sun::star::beans::XPropertySet getStyleForObject([in] short chartObjectType);
 
     void applyStyleToDiagram([in] XDiagram chartDiagram);
+
+    void applyStyleToTitle([in] XTitle chartTitle);
+
+    void applyStyleToAxis([in] XAxis chartAxis);
+
+    void applyStyleToCoordinates([in] XCoordinateSystemContainer chartCoordinates);
 };
 
 }; }; }; };

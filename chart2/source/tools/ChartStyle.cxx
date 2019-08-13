@@ -188,6 +188,56 @@ css::uno::Sequence<OUString> SAL_CALL ChartStyle::getSupportedServiceNames()
 }
 
 void SAL_CALL
+ChartStyle::applyStyleToTitle(const css::uno::Reference<css::chart2::XTitle>& xTitle)
+{
+    css::uno::Reference<css::style::XStyleSupplier> xTitleStyle(xTitle, css::uno::UNO_QUERY);
+    if (xTitleStyle.is())
+    {
+        xTitleStyle->setStyle(css::uno::Reference<css::style::XStyle>(
+            m_xChartStyle.find(css::chart2::ChartObjectType::TITLE)->second,
+            css::uno::UNO_QUERY_THROW));
+    }
+}
+
+void SAL_CALL
+ChartStyle::applyStyleToAxis(const css::uno::Reference<css::chart2::XAxis>& xAxis)
+{
+    css::uno::Reference<css::style::XStyleSupplier> xAxisStyle(xAxis, css::uno::UNO_QUERY);
+    if (xAxisStyle.is())
+    {
+        xAxisStyle->setStyle(css::uno::Reference<css::style::XStyle>(
+            m_xChartStyle.find(css::chart2::ChartObjectType::AXIS)->second,
+            css::uno::UNO_QUERY_THROW));
+    }
+
+    css::uno::Reference<css::chart2::XTitled> xTitled(xAxis, css::uno::UNO_QUERY);
+    if (xTitled.is())
+    {
+        css::uno::Reference<css::chart2::XTitle> xTitle = xTitled->getTitleObject();
+        if (xTitle.is())
+            applyStyleToTitle(xTitle);
+    }
+}
+
+void SAL_CALL
+ChartStyle::applyStyleToCoordinates(const css::uno::Reference<css::chart2::XCoordinateSystemContainer>& xCooSysCont)
+{
+    css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > aCooSysSeq(xCooSysCont->getCoordinateSystems());
+
+    for( sal_Int32 nCooSysIdx = 0; nCooSysIdx < aCooSysSeq.getLength(); ++nCooSysIdx )
+    {
+        css::uno::Reference<css::chart2::XCoordinateSystem> xCooSys(aCooSysSeq[ nCooSysIdx ], css::uno::UNO_QUERY);
+        sal_Int16 nDimCount = xCooSys->getDimension();
+        for ( sal_Int16 nDimIdx = 0; nDimIdx <= nDimCount; nDimIdx++ )
+        {
+            applyStyleToAxis(xCooSys->getAxisByDimension(nDimIdx, 0));
+            if ( xCooSys->getMaximumAxisIndexByDimension( nDimIdx ) )
+                applyStyleToAxis( xCooSys->getAxisByDimension(nDimIdx, 1));
+        }
+    }
+}
+
+void SAL_CALL
 ChartStyle::applyStyleToDiagram(const css::uno::Reference<css::chart2::XDiagram>& xDiagram)
 {
     css::uno::Reference<css::style::XStyleSupplier> xLegendStyle(xDiagram->getLegend(),
@@ -207,6 +257,20 @@ ChartStyle::applyStyleToDiagram(const css::uno::Reference<css::chart2::XDiagram>
             m_xChartStyle.find(css::chart2::ChartObjectType::WALL)->second,
             css::uno::UNO_QUERY_THROW));
     }
+
+    css::uno::Reference<css::chart2::XTitled> xTitled(xDiagram, css::uno::UNO_QUERY);
+    if (xTitled.is())
+    {
+        css::uno::Reference<css::chart2::XTitle> xTitle = xTitled->getTitleObject();
+        if (xTitle.is())
+            applyStyleToTitle(xTitle);
+    }
+
+    css::uno::Reference<css:chart2::XCoordinateSystemContainer> xCooSysCont(xDiagram,
+                                                                css::uno::UNO_QUERY);
+    if (xCooSysCont.is())
+        applyStyleToCoordinates(xCooSysCont);
+
 }
 
 sal_Bool ChartStyle::isUserDefined() { return false; }
