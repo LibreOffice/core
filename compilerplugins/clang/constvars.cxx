@@ -127,6 +127,7 @@ public:
     bool shouldVisitImplicitCode() const { return true; }
 
     bool VisitVarDecl(const VarDecl*);
+    bool VisitCXXForRangeStmt(const CXXForRangeStmt*);
     bool VisitDeclRefExpr(const DeclRefExpr*);
     bool TraverseCXXConstructorDecl(CXXConstructorDecl*);
     bool TraverseCXXMethodDecl(CXXMethodDecl*);
@@ -167,7 +168,7 @@ void ConstVars::run()
         // Implement a marker that disables this plugins warning at a specific site
         if (sourceString.contains("loplugin:constvars:ignore"))
             continue;
-        report(DiagnosticsEngine::Warning, "static var can be const", compat::getBeginLoc(v));
+        report(DiagnosticsEngine::Warning, "var can be const", compat::getBeginLoc(v));
     }
 }
 
@@ -177,6 +178,8 @@ bool ConstVars::VisitVarDecl(const VarDecl* varDecl)
     if (varDecl->getLocation().isValid() && ignoreLocation(varDecl))
         return true;
     if (!varDecl->hasGlobalStorage())
+        return true;
+    if (isa<ParmVarDecl>(varDecl))
         return true;
     if (varDecl->getLinkageAndVisibility().getLinkage() == ExternalLinkage)
         return true;
@@ -192,7 +195,29 @@ bool ConstVars::VisitVarDecl(const VarDecl* varDecl)
 
     if (!varDecl->getInit())
         return true;
+    if (varDecl->getInit()->isInstantiationDependent())
+        return true;
     if (!varDecl->getInit()->isCXX11ConstantExpr(compiler.getASTContext()))
+        return true;
+
+    definitionSet.insert(varDecl);
+    return true;
+}
+
+bool ConstVars::VisitCXXForRangeStmt(const CXXForRangeStmt* forStmt)
+{
+    if (forStmt->getBeginLoc().isValid() && ignoreLocation(forStmt))
+        return true;
+    const VarDecl* varDecl = forStmt->getLoopVariable();
+    if (!varDecl)
+        return true;
+    // we don't handle structured assignment properly
+    if (isa<DecompositionDecl>(varDecl))
+        return true;
+    auto tc = loplugin::TypeCheck(varDecl->getType());
+    if (!tc.LvalueReference())
+        return true;
+    if (tc.LvalueReference().Const())
         return true;
 
     definitionSet.insert(varDecl);
@@ -276,7 +301,9 @@ void ConstVars::check(const VarDecl* varDecl, const Expr* memberExpr)
     const Stmt* child = memberExpr;
     const Stmt* parent
         = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
+
     // walk up the tree until we find something interesting
+
     bool bCannotBeConst = false;
     bool bDump = false;
     auto walkUp = [&]() {
@@ -295,16 +322,25 @@ void ConstVars::check(const VarDecl* varDecl, const Expr* memberExpr)
             if (parentsRange.begin() != parentsRange.end())
             {
                 auto varDecl = dyn_cast_or_null<VarDecl>(parentsRange.begin()->get<Decl>());
-                // The isImplicit() call is to avoid triggering when we see the vardecl which is part of a for-range statement,
-                // which is of type 'T&&' and also an l-value-ref ?
-                if (varDecl && !varDecl->isImplicit()
-                    && loplugin::TypeCheck(varDecl->getType()).LvalueReference().NonConst())
+                if (varDecl)
                 {
-                    bCannotBeConst = true;
+                    if (varDecl->isImplicit())
+                    {
+                        // so we can walk up from inside a for-range stmt
+                        parentsRange = compiler.getASTContext().getParents(*varDecl);
+                        if (parentsRange.begin() != parentsRange.end())
+                            parent = parentsRange.begin()->get<Stmt>();
+                    }
+                    else if (loplugin::TypeCheck(varDecl->getType()).LvalueReference().NonConst())
+                    {
+                        bCannotBeConst = true;
+                        break;
+                    }
                 }
             }
-            break;
         }
+        if (!parent)
+            break;
         if (isa<CXXReinterpretCastExpr>(parent))
         {
             // once we see one of these, there is not much useful we can know
@@ -422,9 +458,18 @@ void ConstVars::check(const VarDecl* varDecl, const Expr* memberExpr)
             }
             break;
         }
+        else if (auto rangeStmt = dyn_cast<CXXForRangeStmt>(parent))
+        {
+            if (rangeStmt->getRangeStmt() == child)
+            {
+                auto tc = loplugin::TypeCheck(rangeStmt->getLoopVariable()->getType());
+                if (tc.LvalueReference().NonConst())
+                    bCannotBeConst = true;
+            }
+            break;
+        }
         else if (isa<SwitchStmt>(parent) || isa<WhileStmt>(parent) || isa<ForStmt>(parent)
-                 || isa<IfStmt>(parent) || isa<DoStmt>(parent) || isa<CXXForRangeStmt>(parent)
-                 || isa<DefaultStmt>(parent))
+                 || isa<IfStmt>(parent) || isa<DoStmt>(parent) || isa<DefaultStmt>(parent))
         {
             break;
         }
@@ -470,10 +515,11 @@ bool ConstVars::IsPassedByNonConst(const VarDecl* varDecl, const Stmt* child,
     {
         for (unsigned i = 0; i < len; ++i)
             if (callExpr.getArg(i) == child)
-                if (loplugin::TypeCheck(calleeFunctionDecl.getParamType(i))
-                        .LvalueReference()
-                        .NonConst())
+            {
+                auto tc = loplugin::TypeCheck(calleeFunctionDecl.getParamType(i));
+                if (tc.LvalueReference().NonConst() || tc.Pointer().NonConst())
                     return true;
+            }
     }
     return false;
 }
@@ -500,7 +546,7 @@ llvm::Optional<CalleeWrapper> ConstVars::getCallee(CallExpr const* callExpr)
 }
 
 /** off by default because it is very expensive, it walks up the AST a lot */
-loplugin::Plugin::Registration<ConstVars> X("constvars", false);
+loplugin::Plugin::Registration<ConstVars> X("constvars", true);
 }
 
 #endif
