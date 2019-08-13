@@ -16,6 +16,24 @@
       "revId": "16527fdf034a926fce043a4d0259a4a505e19762",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_f87d5f1c",
+        "filename": "scripting/source/protocolhandler/scripthandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-08-13T13:19:40Z",
+      "side": 0,
+      "message": "If I install BasicAddonBuilder then it turns out you are correct. That has Help-\u003eAbout BasicAddonBuilder which is blocked in the case that I attempt to open it from the StartCenter",
+      "parentUuid": "bf659307_7805cfc1",
+      "revId": "16527fdf034a926fce043a4d0259a4a505e19762",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

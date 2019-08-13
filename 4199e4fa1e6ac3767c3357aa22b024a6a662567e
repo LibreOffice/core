@@ -16,6 +16,24 @@
       "revId": "4199e4fa1e6ac3767c3357aa22b024a6a662567e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_f8cf9f7c",
+        "filename": "sc/source/filter/inc/xiescher.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-08-13T13:19:40Z",
+      "side": 1,
+      "message": "yup, admittedly ugly",
+      "parentUuid": "bf659307_3828b732",
+      "revId": "4199e4fa1e6ac3767c3357aa22b024a6a662567e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
