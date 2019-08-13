@@ -324,9 +324,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
             mv_file_between_flists core_list.txt common_list.txt "$INSTALLDIR/$f"
         done
 
-        # Ship ooqstart for gnome in gnome package
-        mv_file_between_flists gnome_list.txt core_list.txt "$INSTALLDIR/program/libqstart_gtk680.*"
-
         # themes are included in other packages
         # don't use remove_file as we don't want them removed from the buildroot.
         mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images_crystal.zip

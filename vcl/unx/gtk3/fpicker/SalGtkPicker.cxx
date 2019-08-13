@@ -36,7 +36,7 @@
 
 #include <vcl/window.hxx>
 #include <unx/gtk/gtkframe.hxx>
-#include <gtk/fpicker/SalGtkPicker.hxx>
+#include "SalGtkPicker.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

@@ -71,7 +71,6 @@ endif
 
 $(eval $(call gb_CppunitTest_use_externals,sd_uimpress,\
     boost_headers \
-    gtk \
     dbus \
 	$(if $(ENABLE_AVAHI), \
 	    avahi \

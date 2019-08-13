@@ -42,44 +42,22 @@ class DocumentFocusListener;
 
 inline GdkWindow * widget_get_window(GtkWidget *widget)
 {
-#if GTK_CHECK_VERSION(3,0,0)
     return gtk_widget_get_window(widget);
-#else
-    return widget->window;
-#endif
 }
 
 inline ::Window widget_get_xid(GtkWidget *widget)
 {
-#if GTK_CHECK_VERSION(3,0,0)
     return GDK_WINDOW_XID(gtk_widget_get_window(widget));
-#else
-    return GDK_WINDOW_XWINDOW(widget->window);
-#endif
 }
 
 inline void widget_set_can_focus(GtkWidget *widget, gboolean can_focus)
 {
-#if GTK_CHECK_VERSION(3,0,0)
     return gtk_widget_set_can_focus(widget, can_focus);
-#else
-    if (can_focus)
-        GTK_WIDGET_SET_FLAGS( widget, GTK_CAN_FOCUS );
-    else
-        GTK_WIDGET_UNSET_FLAGS( widget, GTK_CAN_FOCUS );
-#endif
 }
 
 inline void widget_set_can_default(GtkWidget *widget, gboolean can_default)
 {
-#if GTK_CHECK_VERSION(3,0,0)
     return gtk_widget_set_can_default(widget, can_default);
-#else
-    if (can_default)
-        GTK_WIDGET_SET_FLAGS( widget, GTK_CAN_DEFAULT );
-    else
-        GTK_WIDGET_UNSET_FLAGS( widget, GTK_CAN_DEFAULT );
-#endif
 }
 
 class GtkSalTimer : public SalTimer
@@ -132,11 +110,7 @@ public:
 
 class GtkSalFrame;
 
-#if GTK_CHECK_VERSION(3,0,0)
 class GtkSalDisplay : public SalGenericDisplay
-#else
-class GtkSalDisplay : public SalDisplay
-#endif
 {
     GtkSalSystem*                   m_pSys;
     GdkDisplay* const               m_pGdkDisplay;
@@ -161,20 +135,11 @@ public:
 
     virtual void deregisterFrame( SalFrame* pFrame ) override;
     GdkCursor *getCursor( PointerStyle ePointerStyle );
-#if GTK_CHECK_VERSION(3,0,0)
     virtual int CaptureMouse( SalFrame* pFrame );
-#else
-    virtual int CaptureMouse( SalFrame* pFrame ) override;
-#endif
 
     SalX11Screen GetDefaultXScreen() { return m_pSys->GetDisplayDefaultXScreen(); }
     Size         GetScreenSize( int nDisplayScreen );
     int          GetXScreenCount() { return m_pSys->GetDisplayXScreenCount(); }
-#if GTK_CHECK_VERSION(3,0,0)
-//    int          GetScreenCount() { return m_pSys->GetDisplayScreenCount(); }
-#else
-    virtual ScreenData *initScreen( SalX11Screen nXScreen ) const override;
-#endif
 
     GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event );
     void startupNotificationCompleted() { m_bStartupCompleted = true; }
@@ -185,12 +150,7 @@ public:
     virtual void TriggerUserEventProcessing() override;
     virtual void TriggerAllUserEventsProcessed() override;
 
-#if !GTK_CHECK_VERSION(3,0,0)
-    virtual bool Dispatch( XEvent *pEvent ) override;
-#endif
-#if GTK_CHECK_VERSION(3,0,0)
     void RefreshMenusUnity();
-#endif
 };
 
 inline GtkSalData* GetGtkSalData()

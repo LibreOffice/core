@@ -51,7 +51,6 @@ $(eval $(call gb_Library_use_sdk_api,vclplug_gtk3_kde5))
 
 $(eval $(call gb_Library_add_libs,vclplug_gtk3_kde5,\
 	$(GTK3_LIBS) \
-	$(GTHREAD_LIBS) \
 	-lX11 \
 	-lXext \
 	-lSM \

@@ -93,7 +93,6 @@ x11whitelist="libX11.so.6 libXext.so.6 libSM.so.6 libICE.so.6 libXinerama.so.1 l
 openglwhitelist="libGL.so.1"
 giowhitelist="libgio-2.0.so.0 libgobject-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libglib-2.0.so.0 libdbus-glib-1.so.2 libdbus-1.so.3"
 gstreamerwhitelist="libgstaudio-1.0.so.0 libgstpbutils-1.0.so.0 libgstvideo-1.0.so.0 libgstbase-1.0.so.0 libgstreamer-1.0.so.0"
-gtk2whitelist="libgtk-x11-2.0.so.0 libgdk-x11-2.0.so.0 libpangocairo-1.0.so.0 libfribidi.so.0 libatk-1.0.so.0 libcairo.so.2 libgio-2.0.so.0 libpangoft2-1.0.so.0 libpango-1.0.so.0 libfontconfig.so.1 libfreetype.so.6 libgdk_pixbuf-2.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libdbus-glib-1.so.2 libdbus-1.so.3"
 gtk3whitelist="libgtk-3.so.0 libgdk-3.so.0 libcairo-gobject.so.2 libpangocairo-1.0.so.0 libfribidi.so.0 libatk-1.0.so.0 libcairo.so.2 libgio-2.0.so.0 libpangoft2-1.0.so.0 libpango-1.0.so.0 libfontconfig.so.1 libfreetype.so.6 libgdk_pixbuf-2.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libdbus-glib-1.so.2 libdbus-1.so.3"
 qt5whitelist="libQt5Core.so.5 libQt5Gui.so.5 libQt5Network.so.5 libQt5Widgets.so.5 libQt5X11Extras.so.5 libcairo.so.2 libglib-2.0.so.0 libgobject-2.0.so.0 libxcb.so.1"
 kf5whitelist="libKF5ConfigCore.so.5 libKF5CoreAddons.so.5 libKF5I18n.so.5 libKF5KIOCore.so.5 libKF5KIOFileWidgets.so.5 libKF5KIOWidgets.so.5 libKF5WindowSystem.so.5"
@@ -126,10 +125,7 @@ local file="$1"
                 whitelist="${whitelist} ${qt5whitelist} ${kf5whitelist}"
             fi
         ;;
-        */libvclplug_gtklo.so|*/libqstart_gtklo.so|*/updater)
-            whitelist="${whitelist} ${x11whitelist} ${gtk2whitelist}"
-        ;;
-        */libvclplug_gtk3lo.so)
+        */libvclplug_gtk3lo.so|*/updater)
             whitelist="${whitelist} ${x11whitelist} ${gtk3whitelist}"
         ;;
         */libvclplug_qt5lo.so)
