@@ -7661,6 +7661,12 @@ if test "$with_export_validation" != "no"; then
         else
             AC_MSG_RESULT([no, as Java is too old, need Java 8])
         fi
+    elif ! test -d "${SRC_ROOT}/schema"; then
+        if test "$with_export_validation" = "yes"; then
+            AC_MSG_ERROR([requested, but schema directory is missing (it is excluded from tarballs)])
+        else
+            AC_MSG_RESULT([no, schema directory is missing (it is excluded from tarballs)])
+        fi
     else
         AC_MSG_RESULT([yes])
         AC_DEFINE(HAVE_EXPORT_VALIDATION)
