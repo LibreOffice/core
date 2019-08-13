@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_f8a23f9a",
+        "filename": "cui/source/options/optupdt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-13T13:31:06Z",
+      "side": 1,
+      "message": "Here non-const Sequence::begin()/end() will be called; std::as_const(aHeaders) would ensure that const methods would be called. This is only an issue for copy-on-write containers iiuc...",
+      "range": {
+        "startLine": 164,
+        "startChar": 54,
+        "endLine": 164,
+        "endChar": 62
+      },
+      "revId": "0bec0786baf1599bbe8e4c32c907a031fee8df93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
