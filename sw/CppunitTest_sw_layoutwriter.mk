@@ -15,7 +15,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_layoutwriter, \
     sw/qa/extras/layout/layout \
 ))
 
-# note: this links msword only for the reason to have a order dependency,
+# note: this links msword only for the reason to have an order dependency,
 # because "make sw.check" will not see the dependency through services.rdb
 $(eval $(call gb_CppunitTest_use_libraries,sw_layoutwriter, \
     comphelper \
