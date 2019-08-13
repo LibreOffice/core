@@ -22,6 +22,30 @@
       "revId": "2c922efedf40ad22352761ab5053e83ad6a38aa9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_784dcf70",
+        "filename": "pyuno/source/module/pyuno_adapter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-08-13T10:31:17Z",
+      "side": 1,
+      "message": "I\u0027ll fix this later today.\nBTW it reminds me of your comment about similar two-pass case in one of previous changes. I\u0027ll try to fix that one too.",
+      "parentUuid": "bf659307_d5d5c4e6",
+      "range": {
+        "startLine": 140,
+        "startChar": 12,
+        "endLine": 159,
+        "endChar": 13
+      },
+      "revId": "2c922efedf40ad22352761ab5053e83ad6a38aa9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
