@@ -282,14 +282,16 @@ sal_uInt16 GetPoolParent( sal_uInt16 nId )
             case RES_POOLCOLL_REGISTER_BASE:
                     nRet = RES_POOLCOLL_STANDARD;               break;
 
+            case RES_POOLCOLL_TOX_IDXH:
+                    nRet = RES_POOLCOLL_HEADLINE_BASE;          break;
+
             case RES_POOLCOLL_TOX_USERH:
             case RES_POOLCOLL_TOX_CNTNTH:
-            case RES_POOLCOLL_TOX_IDXH:
             case RES_POOLCOLL_TOX_ILLUSH:
             case RES_POOLCOLL_TOX_OBJECTH:
             case RES_POOLCOLL_TOX_TABLESH:
             case RES_POOLCOLL_TOX_AUTHORITIESH:
-                    nRet = RES_POOLCOLL_HEADLINE_BASE;          break;
+                    nRet = RES_POOLCOLL_TOX_IDXH;               break;
 
             default:
                     nRet = RES_POOLCOLL_REGISTER_BASE;          break;
