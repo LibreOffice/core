@@ -23,27 +23,8 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/idle.hxx>
 
-#if GTK_CHECK_VERSION(3,0,0)
-#  define ENABLE_GMENU_INTEGRATION
-#  include <unx/gtk/glomenu.h>
-#  include <unx/gtk/gloactiongroup.h>
-#elif ENABLE_DBUS && ENABLE_GIO && \
-    (GLIB_MAJOR_VERSION > 2 || GLIB_MINOR_VERSION >= 36)
-#  define ENABLE_GMENU_INTEGRATION
-#  include <unx/gtk/glomenu.h>
-#  include <unx/gtk/gloactiongroup.h>
-#else
-#  if !(GLIB_MAJOR_VERSION > 2 || GLIB_MINOR_VERSION >= 32)
-     typedef void GMenuModel;
-#  endif
-#  if !(GLIB_MAJOR_VERSION > 2 || GLIB_MINOR_VERSION >= 28)
-     typedef void GActionGroup;
-#  endif
-#endif
-
-#if !GTK_CHECK_VERSION(3,0,0)
-typedef void GtkCssProvider;
-#endif
+#include <unx/gtk/glomenu.h>
+#include <unx/gtk/gloactiongroup.h>
 
 class MenuItemList;
 class GtkSalMenuItem;
