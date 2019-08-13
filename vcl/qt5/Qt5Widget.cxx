@@ -191,7 +191,7 @@ void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
     aEvent.mbHorz = nDelta == 0;
     if (aEvent.mbHorz)
     {
-        nDelta = (QGuiApplication::isLeftToRight() ? -1 : 1) * pEvent->angleDelta().x();
+        nDelta = (QGuiApplication::isLeftToRight() ? 1 : -1) * pEvent->angleDelta().x();
         if (!nDelta)
             return;
 
