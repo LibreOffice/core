@@ -95,7 +95,7 @@ SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
                  * So make sure libgtk+ & co are still mapped into memory when
                  * atk-bridge's atexit handler gets called.
                  */
-                if( aUsedModuleBase == "gtk" || aUsedModuleBase == "gtk3" || aUsedModuleBase == "gtk3_kde5" || aUsedModuleBase == "win" )
+                if( aUsedModuleBase == "gtk3" || aUsedModuleBase == "gtk3_kde5" || aUsedModuleBase == "win" )
                 {
                     pCloseModule = nullptr;
                 }
@@ -154,12 +154,12 @@ SalInstance* autodetect_plugin()
 #if ENABLE_GTK3_KDE5
         "gtk3_kde5",
 #endif
-        "gtk3", "gtk", "gen", nullptr
+        "gtk3", "gen", nullptr
     };
 
     static const char* const pStandardFallbackList[] =
     {
-        "gtk3", "gtk", "gen", nullptr
+        "gtk3", "gen", nullptr
     };
 
 #ifdef HEADLESS_VCLPLUG
@@ -259,7 +259,7 @@ SalInstance *CreateSalInstance()
 #ifdef MACOSX
         "osx"
 #else
-        "gtk3", "gtk", "kf5", "gen"
+        "gtk3", "kf5", "gen"
 #endif
 #endif
      };
