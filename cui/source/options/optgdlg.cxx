@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_vclplug.h>
 #include <svl/zforlist.hxx>
 #include <svl/currencytable.hxx>
 #include <vcl/GraphicObject.hxx>
@@ -279,7 +280,7 @@ OfaMiscTabPage::OfaMiscTabPage(TabPageParent pParent, const SfxItemSet& rSet)
         m_xFileDlgCB->set_sensitive(false);
     }
 
-#if ! ENABLE_GTK
+#if !ENABLE_GTK3
     m_xPrintDlgFrame->hide();
 #else
     if (!SvtMiscOptions().IsExperimentalMode())
@@ -291,7 +292,7 @@ OfaMiscTabPage::OfaMiscTabPage(TabPageParent pParent, const SfxItemSet& rSet)
     m_xQuickLaunchCB->show();
 
     //Only available in Win or if building the gtk systray
-#if !defined(_WIN32) && ! ENABLE_GTK
+#if !defined(_WIN32)
     m_xQuickStarterFrame->hide();
 #endif
 
