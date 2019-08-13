@@ -128,6 +128,7 @@ public:
     void testTdf121205();
 
     void testTdf114179();
+    void testTdf124243();
     void testDeletedDataLabel();
     void testDataPointInheritedColorDOCX();
     void testExternalStrRefsXLSX();
@@ -215,6 +216,7 @@ public:
     CPPUNIT_TEST(testTdf121205);
 
     CPPUNIT_TEST(testTdf114179);
+    CPPUNIT_TEST(testTdf124243);
     CPPUNIT_TEST(testDeletedDataLabel);
     CPPUNIT_TEST(testDataPointInheritedColorDOCX);
     CPPUNIT_TEST(testExternalStrRefsXLSX);
@@ -1906,6 +1908,23 @@ void Chart2ImportTest::testTdf114179()
     awt::Size aSize = getSize( xDiagram,aPage );
     CPPUNIT_ASSERT( aSize.Width > 0);
     CPPUNIT_ASSERT( aSize.Height > 0);
+}
+
+void Chart2ImportTest::testTdf124243()
+{
+    load("/chart2/qa/extras/data/docx/", "tdf124243.docx");
+    uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xAxis.is());
+
+    Reference<beans::XPropertySet> xPS(xAxis, uno::UNO_QUERY_THROW);
+    bool bShow = true;
+    // test X Axis is not visible.
+    bool bSuccess = xPS->getPropertyValue("Show") >>= bShow;
+    CPPUNIT_ASSERT(bSuccess);
+    CPPUNIT_ASSERT(!bShow);
 }
 
 namespace {
