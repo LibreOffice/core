@@ -46,6 +46,30 @@
       "revId": "2c922efedf40ad22352761ab5053e83ad6a38aa9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_5b5d65e7",
+        "filename": "pyuno/source/module/pyuno_adapter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-08-13T22:22:08Z",
+      "side": 1,
+      "message": "Looks like can\u0027t use reference as first binary op parameter in gcc-9/c++2a: https://wandbox.org/permlink/5OwcJEGgjcrO5f5i",
+      "parentUuid": "bf659307_d5d5c4e6",
+      "range": {
+        "startLine": 140,
+        "startChar": 12,
+        "endLine": 159,
+        "endChar": 13
+      },
+      "revId": "2c922efedf40ad22352761ab5053e83ad6a38aa9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
