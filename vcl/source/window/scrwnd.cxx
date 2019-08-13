@@ -18,6 +18,8 @@
  */
 
 #include <limits.h>
+
+#include <o3tl/float_int_conversion.hxx>
 #include <tools/time.hxx>
 
 #include <strings.hrc>
@@ -216,16 +218,16 @@ void ImplWheelWindow::ImplRecalcScrollValues()
             double fValX = static_cast<double>(mnActDeltaX) * nMult;
             double fValY = static_cast<double>(mnActDeltaY) * nMult;
 
-            if( fValX > LONG_MAX )
+            if( !o3tl::convertsToAtMost(fValX, LONG_MAX) )
                 mnActDeltaX = LONG_MAX;
-            else if( fValX < LONG_MIN )
+            else if( !o3tl::convertsToAtLeast(fValX, LONG_MIN) )
                 mnActDeltaX = LONG_MIN;
             else
                 mnActDeltaX = static_cast<long>(fValX);
 
-            if( fValY > LONG_MAX )
+            if( !o3tl::convertsToAtMost(fValY, LONG_MAX) )
                 mnActDeltaY = LONG_MAX;
-            else if( fValY < LONG_MIN )
+            else if( !o3tl::convertsToAtLeast(fValY, LONG_MIN) )
                 mnActDeltaY = LONG_MIN;
             else
                 mnActDeltaY = static_cast<long>(fValY);
