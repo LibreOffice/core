@@ -365,7 +365,7 @@ RTFSprms RTFSprms::cloneAndDeduplicate(RTFSprms& rReference, Id const nStyleType
         // addition of direct formatting sprms at the paragraph level.
         if (bImplicitPPr && rSprm.first == NS_ooxml::LN_CT_Style_pPr)
         {
-            for (auto& i : rSprm.second->getSprms())
+            for (const auto& i : rSprm.second->getSprms())
                 cloneAndDeduplicateSprm(i, ret, nStyleType);
         }
         else

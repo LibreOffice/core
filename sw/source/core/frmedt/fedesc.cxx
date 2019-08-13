@@ -191,7 +191,7 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
     const Point aNulPt;
     std::pair<Point, bool> const tmp(aNulPt, false);
 
-    for(SwPaM& rPaM : GetCursor()->GetRingContainer())
+    for(const SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
 
         if( nullptr != (pCNd = rPaM.GetContentNode() ) &&

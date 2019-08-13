@@ -371,7 +371,7 @@ void SalDisplay::doDestruct()
             }
         }
 
-        for( Cursor & aCsr : aPointerCache_ )
+        for( const Cursor & aCsr : aPointerCache_ )
         {
             if( aCsr )
                 XFreeCursor( pDisp_, aCsr );
@@ -1986,7 +1986,7 @@ bool SalX11Display::Dispatch( XEvent *pEvent )
         case PropertyNotify:
             if( pEvent->xproperty.atom == getWMAdaptor()->getAtom( WMAdaptor::VCL_SYSTEM_SETTINGS ) )
             {
-                for(ScreenData & rScreen : m_aScreens)
+                for(const ScreenData & rScreen : m_aScreens)
                 {
                     if( pEvent->xproperty.window == rScreen.m_aRefWindow )
                     {

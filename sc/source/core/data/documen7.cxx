@@ -365,7 +365,7 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
             }
             pCell = pCell->GetNext();
         }
-        for (auto& rpCell : vAlwaysDirty)
+        for (const auto& rpCell : vAlwaysDirty)
         {
             pCell = rpCell;
             if (!pCell->GetDirty())

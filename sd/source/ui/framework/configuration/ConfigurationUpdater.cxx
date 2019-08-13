@@ -201,7 +201,7 @@ void ConfigurationUpdater::CleanRequestedConfiguration()
     {
         Reference<XConfigurationController> xCC (
             mxControllerManager->getConfigurationController());
-        for (auto& rxId : aResourcesToDeactivate)
+        for (const auto& rxId : aResourcesToDeactivate)
             if (rxId.is())
                 xCC->requestResourceDeactivation(rxId);
     }

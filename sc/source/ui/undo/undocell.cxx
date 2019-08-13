@@ -199,7 +199,7 @@ void ScUndoEnterData::SetChangeTrack()
     {
         mnEndChangeAction = pChangeTrack->GetActionMax() + 1;
         ScAddress aPos(maPos);
-        for (Value & rOldValue : maOldValues)
+        for (const Value & rOldValue : maOldValues)
         {
             aPos.SetTab(rOldValue.mnTab);
             sal_uLong nFormat = 0;
@@ -219,7 +219,7 @@ void ScUndoEnterData::Undo()
     BeginUndo();
 
     ScDocument& rDoc = pDocShell->GetDocument();
-    for (Value & rVal : maOldValues)
+    for (const Value & rVal : maOldValues)
     {
         ScCellValue aNewCell;
         aNewCell.assign(rVal.maCell, rDoc, ScCloneFlags::StartListening);
@@ -255,7 +255,7 @@ void ScUndoEnterData::Redo()
     BeginRedo();
 
     ScDocument& rDoc = pDocShell->GetDocument();
-    for (Value & rOldValue : maOldValues)
+    for (const Value & rOldValue : maOldValues)
     {
         SCTAB nTab = rOldValue.mnTab;
         if (mpNewEditData)

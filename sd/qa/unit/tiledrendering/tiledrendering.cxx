@@ -323,7 +323,7 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
         boost::property_tree::ptree aTree;
         std::stringstream aStream(pPayload);
         boost::property_tree::read_json(aStream, aTree);
-        for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("searchResultSelection"))
+        for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("searchResultSelection"))
         {
             m_aSearchResultSelection.emplace_back(rValue.second.get<std::string>("rectangles").c_str());
             m_aSearchResultPart.push_back(std::atoi(rValue.second.get<std::string>("part").c_str()));

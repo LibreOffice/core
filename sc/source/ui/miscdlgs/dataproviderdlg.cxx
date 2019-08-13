@@ -72,7 +72,7 @@ ScDataProviderBaseControl::ScDataProviderBaseControl(vcl::Window* pParent,
     get(maEditID, "ed_id");
 
     auto aDataProvider = sc::DataProviderFactory::getDataProviders();
-    for (auto& rDataProvider : aDataProvider)
+    for (const auto& rDataProvider : aDataProvider)
     {
         maProviderList->InsertEntry(rDataProvider);
     }
@@ -297,7 +297,7 @@ std::shared_ptr<sc::DataTransformation> ScDeleteColumnTransformationControl::get
     OUString aColumnString = maColumnNums->GetText();
     std::vector<OUString> aSplitColumns = comphelper::string::split(aColumnString, ';');
     std::set<SCCOL> ColNums;
-    for (auto& rColStr : aSplitColumns)
+    for (const auto& rColStr : aSplitColumns)
     {
         sal_Int32 nCol = rColStr.toInt32();
         if (nCol <= 0)
@@ -430,7 +430,7 @@ std::shared_ptr<sc::DataTransformation> ScMergeColumnTransformationControl::getT
     OUString aColumnString = mpEdColumns->GetText();
     std::vector<OUString> aSplitColumns = comphelper::string::split(aColumnString, ';');
     std::set<SCCOL> aMergedColumns;
-    for (auto& rColStr : aSplitColumns)
+    for (const auto& rColStr : aSplitColumns)
     {
         sal_Int32 nCol = rColStr.toInt32();
         if (nCol <= 0)
@@ -559,7 +559,7 @@ std::shared_ptr<sc::DataTransformation> ScColumnTextTransformation::getTransform
     OUString aColumnString = maColumnNums->GetText();
     std::vector<OUString> aSplitColumns = comphelper::string::split(aColumnString, ';');
     std::set<SCCOL> aColumns;
-    for (auto& rColStr : aSplitColumns)
+    for (const auto& rColStr : aSplitColumns)
     {
         sal_Int32 nCol = rColStr.toInt32();
         if (nCol <= 0)
@@ -641,7 +641,7 @@ std::shared_ptr<sc::DataTransformation> ScAggregateFunction::getTransformation()
     sal_Int32 nPos = maType->GetSelectedEntryPos();
     std::vector<OUString> aSplitColumns = comphelper::string::split(aColumnString, ';');
     std::set<SCCOL> aColumns;
-    for (auto& rColStr : aSplitColumns)
+    for (const auto& rColStr : aSplitColumns)
     {
         sal_Int32 nCol = rColStr.toInt32();
         if (nCol <= 0)
@@ -721,7 +721,7 @@ std::shared_ptr<sc::DataTransformation> ScNumberTransformation::getTransformatio
     sal_Int32 nPos = maType->GetSelectedEntryPos();
     std::vector<OUString> aSplitColumns = comphelper::string::split(aColumnString, ';');
     std::set<SCCOL> aColumns;
-    for (auto& rColStr : aSplitColumns)
+    for (const auto& rColStr : aSplitColumns)
     {
         sal_Int32 nCol = rColStr.toInt32();
         if (nCol <= 0)
@@ -818,7 +818,7 @@ std::shared_ptr<sc::DataTransformation> ScReplaceNullTransformation::getTransfor
     OUString aReplaceWithString = maReplaceString->GetText();
     std::vector<OUString> aSplitColumns = comphelper::string::split(aColumnString, ';');
     std::set<SCCOL> aColumns;
-    for (auto& rColStr : aSplitColumns)
+    for (const auto& rColStr : aSplitColumns)
     {
         sal_Int32 nCol = rColStr.toInt32();
         if (nCol <= 0)
@@ -884,7 +884,7 @@ std::shared_ptr<sc::DataTransformation> ScDateTimeTransformation::getTransformat
     sal_Int32 nPos = maType->GetSelectedEntryPos();
     std::vector<OUString> aSplitColumns = comphelper::string::split(aColumnString, ';');
     std::set<SCCOL> aColumns;
-    for (auto& rColStr : aSplitColumns)
+    for (const auto& rColStr : aSplitColumns)
     {
         sal_Int32 nCol = rColStr.toInt32();
         if (nCol <= 0)
@@ -991,7 +991,7 @@ void ScDataProviderDlg::InitMenu()
 {
     mpBar->InsertItem(MENU_START, "Start");
     VclPtrInstance<PopupMenu> pPopup;
-    for (auto& itrStartData : aStartData)
+    for (const auto& itrStartData : aStartData)
     {
         pPopup->InsertItem(itrStartData.nMenuID, OUString::createFromAscii(itrStartData.aMenuName));
     }
@@ -1001,7 +1001,7 @@ void ScDataProviderDlg::InitMenu()
 
     mpBar->InsertItem(MENU_COLUMN, "Column");
     VclPtrInstance<PopupMenu> pColumnMenu;
-    for (auto& itrColumnData : aColumnData)
+    for (const auto& itrColumnData : aColumnData)
  {
         pColumnMenu->InsertItem(itrColumnData.nMenuID, OUString::createFromAscii(itrColumnData.aMenuName));
     }

@@ -4403,7 +4403,7 @@ void SwUiWriterTest::testTdf77014()
     {
         printf ("Portions:\n");
 
-        for (auto& rPortionItem : aHandler.mPortionItems)
+        for (const auto& rPortionItem : aHandler.mPortionItems)
         {
             printf ("-- Type: %s length: %" SAL_PRIdINT32 " text type: %d\n",
                         rPortionItem.msItemType.toUtf8().getStr(),

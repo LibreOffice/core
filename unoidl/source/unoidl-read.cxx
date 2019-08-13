@@ -204,7 +204,7 @@ void insertTypeDependency(
     OUString nucl(decomposeType(type, &rank, &args, &entity));
     if (entity) {
         insertEntityDependency(manager, iterator, nucl, true);
-        for (auto & i: args) {
+        for (const auto & i: args) {
             insertTypeDependency(manager, iterator, i);
         }
     }
@@ -1041,7 +1041,7 @@ SAL_IMPLEMENT_MAIN() {
         scanMap(mgr, prov->createRootCursor(), published, "", ents);
         std::vector<OUString> sorted(sort(ents));
         std::vector<OUString> mods;
-        for (auto & i: sorted) {
+        for (const auto & i: sorted) {
             writeEntity(ents, mods, i);
         }
         closeModules(mods, mods.size());

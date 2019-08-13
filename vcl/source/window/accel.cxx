@@ -157,7 +157,7 @@ void Accelerator::ImplCopyData( ImplAccelData& rAccelData )
 void Accelerator::ImplDeleteData()
 {
     // delete accelerator-entries using the id-table
-    for (std::unique_ptr<ImplAccelEntry>& pEntry : mpData->maIdList) {
+    for (const std::unique_ptr<ImplAccelEntry>& pEntry : mpData->maIdList) {
         delete pEntry->mpAutoAccel;
     }
     mpData->maIdList.clear();

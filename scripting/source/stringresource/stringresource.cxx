@@ -272,7 +272,7 @@ Sequence< Locale > StringResourceImpl::getLocales(  )
     Sequence< Locale > aLocalSeq( nSize );
     Locale* pLocales = aLocalSeq.getArray();
     int iTarget = 0;
-    for( auto& pLocaleItem : m_aLocaleItemVector )
+    for( const auto& pLocaleItem : m_aLocaleItemVector )
     {
         pLocales[iTarget] = pLocaleItem->m_locale;
         iTarget++;
@@ -489,7 +489,7 @@ void StringResourceImpl::removeLocale( const Locale& locale )
                 m_pDefaultLocaleItem  == pRemoveItem )
             {
                 LocaleItem* pFallbackItem = nullptr;
-                for( auto& pLocaleItem : m_aLocaleItemVector )
+                for( const auto& pLocaleItem : m_aLocaleItemVector )
                 {
                     if( pLocaleItem.get() != pRemoveItem )
                     {
@@ -610,7 +610,7 @@ LocaleItem* StringResourceImpl::getClosestMatchItemForLocale( const Locale& loca
 
     ::std::vector< Locale > aLocales( m_aLocaleItemVector.size());
     size_t i = 0;
-    for( auto& pLocaleItem : m_aLocaleItemVector )
+    for( const auto& pLocaleItem : m_aLocaleItemVector )
     {
         aLocales[i] = (pLocaleItem ? pLocaleItem->m_locale : Locale());
         ++i;

@@ -141,7 +141,7 @@ rtl::Reference<XMLTransformerContext> XMLChartPlotAreaOOoTContext::CreateChildCo
         bool bFound =false;
 
         // iterate over axis elements
-        for( auto& rChildContext : m_aChildContexts )
+        for( const auto& rChildContext : m_aChildContexts )
         {
             XMLAxisOOoContext * pAxisContext = rChildContext.get();
             if( pAxisContext != nullptr )

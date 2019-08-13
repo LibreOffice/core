@@ -720,7 +720,7 @@ void TPGalleryThemeProperties::FillFilterList()
     ::avmedia::FilterNameVector     aFilters;
     ::avmedia::MediaWindow::getMediaFilters( aFilters );
 
-    for(std::pair<OUString,OUString> & aFilter : aFilters)
+    for(const std::pair<OUString,OUString> & aFilter : aFilters)
     {
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {
@@ -760,7 +760,7 @@ void TPGalleryThemeProperties::FillFilterList()
 
 #if HAVE_FEATURE_AVMEDIA
     // media filters
-    for(std::pair<OUString,OUString> & aFilter : aFilters)
+    for(const std::pair<OUString,OUString> & aFilter : aFilters)
     {
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {

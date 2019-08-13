@@ -3535,7 +3535,7 @@ void SwCursorShell::dumpAsXml(xmlTextWriterPtr pWriter) const
     SwViewShell::dumpAsXml(pWriter);
 
     xmlTextWriterStartElement(pWriter, BAD_CAST("m_pCurrentCursor"));
-    for (SwPaM& rPaM : m_pCurrentCursor->GetRingContainer())
+    for (const SwPaM& rPaM : m_pCurrentCursor->GetRingContainer())
         rPaM.dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 

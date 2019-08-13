@@ -2373,7 +2373,7 @@ void OpSumSQ::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double sum = 0.0f, arg;\n";
-    for(DynamicKernelArgumentRef & rArg : vSubArguments)
+    for(const DynamicKernelArgumentRef & rArg : vSubArguments)
     {
         FormulaToken *tmpCur = rArg->GetFormulaToken();
         assert(tmpCur);

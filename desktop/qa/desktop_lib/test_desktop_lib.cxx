@@ -310,7 +310,7 @@ void DesktopLOKTest::callbackImpl(int nType, const char* pPayload)
         boost::property_tree::ptree aTree;
         std::stringstream aStream(pPayload);
         boost::property_tree::read_json(aStream, aTree);
-        for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("searchResultSelection"))
+        for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("searchResultSelection"))
         {
             m_aSearchResultSelection.emplace_back(rValue.second.get<std::string>("rectangles").c_str());
             m_aSearchResultPart.push_back(std::atoi(rValue.second.get<std::string>("part").c_str()));
@@ -724,7 +724,7 @@ void DesktopLOKTest::testRowColumnHeaders()
     sal_Int32 nPrevious = 0;
     bool bFirstHeader = true;
     bool bNotEnoughHeaders = true;
-    for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
+    for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
     {
         sal_Int32 nSize = OString(rValue.second.get<std::string>("size").c_str()).toInt32();
         OString aText(rValue.second.get<std::string>("text").c_str());
@@ -752,7 +752,7 @@ void DesktopLOKTest::testRowColumnHeaders()
     nPrevious = 0;
     bFirstHeader = true;
     bNotEnoughHeaders = true;
-    for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("columns"))
+    for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("columns"))
     {
         sal_Int32 nSize = OString(rValue.second.get<std::string>("size").c_str()).toInt32();
         OString aText(rValue.second.get<std::string>("text").c_str());
@@ -803,7 +803,7 @@ void DesktopLOKTest::testHiddenRowHeaders()
     boost::property_tree::read_json(aStream, aTree);
     sal_Int32 nPrevious = 0;
     sal_Int32 nIndex = 0;
-    for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
+    for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
     {
         sal_Int32 nSize = OString(rValue.second.get<std::string>("size").c_str()).toInt32();
 
@@ -1767,7 +1767,7 @@ void DesktopLOKTest::testRedlineWriter()
     // Make sure that pressing a key creates exactly one redline.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTree.get_child("redlines").size());
 
-    for (boost::property_tree::ptree::value_type& rRedline : aTree.get_child("redlines"))
+    for (const boost::property_tree::ptree::value_type& rRedline : aTree.get_child("redlines"))
         // This failed with boost::property_tree::ptree_bad_path, as there were no description field.
         CPPUNIT_ASSERT_EQUAL(std::string("Insert \xE2\x80\x9Ct\xE2\x80\x9D"), rRedline.second.get<std::string>("description"));
             // U+201C LEFT DOUBLE QUOTATION MARK, U+201D RIGHT DOUBLE QUOTATION
@@ -1798,7 +1798,7 @@ void DesktopLOKTest::testRedlineCalc()
     // Make sure that pressing a key creates exactly one redline.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTree.get_child("redlines").size());
 
-    for (boost::property_tree::ptree::value_type& rRedline : aTree.get_child("redlines"))
+    for (const boost::property_tree::ptree::value_type& rRedline : aTree.get_child("redlines"))
         // This failed with boost::property_tree::ptree_bad_path, as there were no description field.
         CPPUNIT_ASSERT_EQUAL(std::string("Cell B4 changed from '5' to 't'"), rRedline.second.get<std::string>("description"));
 }

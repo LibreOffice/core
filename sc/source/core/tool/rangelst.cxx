@@ -404,7 +404,7 @@ bool ScRangeList::UpdateReference(
 void ScRangeList::InsertRow( SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW nRowPos, SCSIZE nSize )
 {
     std::vector<ScRange> aNewRanges;
-    for(auto & rRange : maRanges)
+    for(const auto & rRange : maRanges)
     {
         if(rRange.aStart.Tab() <= nTab && rRange.aEnd.Tab() >= nTab)
         {
@@ -422,7 +422,7 @@ void ScRangeList::InsertRow( SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW n
         }
     }
 
-    for(auto & rRange : aNewRanges)
+    for(const auto & rRange : aNewRanges)
     {
         if(!rRange.IsValid())
             continue;
@@ -434,7 +434,7 @@ void ScRangeList::InsertRow( SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW n
 void ScRangeList::InsertCol( SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, SCCOL nColPos, SCSIZE nSize )
 {
     std::vector<ScRange> aNewRanges;
-    for(auto & rRange : maRanges)
+    for(const auto & rRange : maRanges)
     {
         if(rRange.aStart.Tab() <= nTab && rRange.aEnd.Tab() >= nTab)
         {
@@ -450,7 +450,7 @@ void ScRangeList::InsertCol( SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, SCCOL n
         }
     }
 
-    for(auto & rRange : aNewRanges)
+    for(const auto & rRange : aNewRanges)
     {
         if(!rRange.IsValid())
             continue;
@@ -954,7 +954,7 @@ bool ScRangeList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
             continue;
         }
     }
-    for(auto & rRange : aNewRanges)
+    for(const auto & rRange : aNewRanges)
         Join(rRange);
 
     return bChanged;

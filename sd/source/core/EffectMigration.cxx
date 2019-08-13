@@ -1125,7 +1125,7 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
 
     std::vector< CustomAnimationEffectPtr > aEffects;
 
-    for( auto& rIter : aEffectVector[nCurrentPos] )
+    for( const auto& rIter : aEffectVector[nCurrentPos] )
     {
         aEffects.push_back( *rIter );
         rSequence.erase( rIter );
@@ -1164,7 +1164,7 @@ sal_Int32 EffectMigration::GetPresentationOrder( SvxShape* pShape )
     Reference< XShape > xThis( pShape );
     Reference< XShape > xCurrent;
 
-    for( CustomAnimationEffectPtr& pEffect : rSequence )
+    for( const CustomAnimationEffectPtr& pEffect : rSequence )
     {
         if( !xCurrent.is() || pEffect->getTargetShape() != xCurrent )
         {

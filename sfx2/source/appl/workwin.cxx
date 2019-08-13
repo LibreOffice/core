@@ -869,7 +869,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
 
 bool SfxWorkWindow::PrepareClose_Impl()
 {
-    for (std::unique_ptr<SfxChildWin_Impl> &pCW : aChildWins)
+    for (const std::unique_ptr<SfxChildWin_Impl> &pCW : aChildWins)
     {
         SfxChildWindow *pChild = pCW->pWin;
         if ( pChild && !pChild->QueryClose() )
@@ -980,7 +980,7 @@ void SfxWorkWindow::ShowChildren_Impl()
         {
             // We have to find the SfxChildWin_Impl to retrieve the
             // SFX_CHILDWIN flags that can influence visibility.
-            for (std::unique_ptr<SfxChildWin_Impl>& pCWin : aChildWins)
+            for (const std::unique_ptr<SfxChildWin_Impl>& pCWin : aChildWins)
             {
                 SfxChild_Impl*    pChild  = pCWin->pCli;
                 if ( pChild == pCli.get() )
@@ -1503,7 +1503,7 @@ void SfxWorkWindow::HidePopups_Impl(bool bHide, sal_uInt16 nId )
     if (comphelper::LibreOfficeKit::isActive() && bHide)
         return;
 
-    for (std::unique_ptr<SfxChildWin_Impl>& i : aChildWins)
+    for (const std::unique_ptr<SfxChildWin_Impl>& i : aChildWins)
     {
         SfxChildWindow *pCW = i->pWin;
         if (pCW && pCW->GetAlignment() == SfxChildAlignment::NOALIGNMENT && pCW->GetType() != nId)
@@ -1541,7 +1541,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
     SfxChildWin_Impl *pCW = nullptr;
 
     // configure direct childwindow
-    for (std::unique_ptr<SfxChildWin_Impl>& i : aChildWins)
+    for (const std::unique_ptr<SfxChildWin_Impl>& i : aChildWins)
     {
         pCW = i.get();
         SfxChildWindow *pChild = pCW->pWin;
@@ -2257,7 +2257,7 @@ void SfxWorkWindow::MakeChildrenVisible_Impl( bool bVis )
 
 bool SfxWorkWindow::IsAutoHideMode( const SfxSplitWindow *pSplitWin )
 {
-    for (VclPtr<SfxSplitWindow> & pWin : pSplit)
+    for (const VclPtr<SfxSplitWindow> & pWin : pSplit)
     {
         if ( pWin.get() != pSplitWin && pWin->IsAutoHide( true ) )
             return true;

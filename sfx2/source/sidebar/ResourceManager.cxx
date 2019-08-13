@@ -455,7 +455,7 @@ void ResourceManager::ReadLastActive()
 {
     Sequence <OUString> aLastActive (officecfg::Office::UI::Sidebar::Content::LastActiveDeck::get());
 
-    for (auto& rDeckInfo : aLastActive)
+    for (const auto& rDeckInfo : aLastActive)
     {
         sal_Int32 nCharIdx = rDeckInfo.lastIndexOf(',');
         if ( nCharIdx <= 0 || (nCharIdx == rDeckInfo.getLength() - 1) )

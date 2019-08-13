@@ -111,7 +111,7 @@ SwLabDlg::SwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
 
     bool bDouble = false;
 
-    for (std::unique_ptr<SwLabRec> & i : *m_pRecs)
+    for (const std::unique_ptr<SwLabRec> & i : *m_pRecs)
     {
         if (pRec->m_aMake == i->m_aMake &&
             pRec->m_aType == i->m_aType)

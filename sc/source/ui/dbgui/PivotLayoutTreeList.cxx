@@ -69,7 +69,7 @@ void ScPivotLayoutTreeList::FillFields(ScPivotFieldVector& rFieldVector)
     mxControl->clear();
     maItemValues.clear();
 
-    for (ScPivotField& rField : rFieldVector)
+    for (const ScPivotField& rField : rFieldVector)
     {
         OUString aLabel = mpParent->GetItem( rField.nCol )->maName;
         ScItemValue* pItemValue = new ScItemValue( aLabel, rField.nCol, rField.nFuncMask );

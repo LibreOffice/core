@@ -4172,7 +4172,7 @@ Size ToolBox::GetOptimalSize() const
     // If we have any expandable entries, then force them to their
     // optimal sizes, then reset them afterwards
     std::map<vcl::Window*, Size> aExpandables;
-    for (ImplToolItem & rItem : mpData->m_aItems)
+    for (const ImplToolItem & rItem : mpData->m_aItems)
     {
         if (rItem.mbExpand)
         {

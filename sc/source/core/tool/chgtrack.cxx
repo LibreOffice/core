@@ -2131,7 +2131,7 @@ void ScChangeTrack::DtorClear()
         pNext = p->GetNext();
         delete p;
     }
-    for( auto& rEntry : aPasteCutMap )
+    for( const auto& rEntry : aPasteCutMap )
     {
         delete rEntry.second;
     }

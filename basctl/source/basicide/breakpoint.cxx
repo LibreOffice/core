@@ -67,7 +67,7 @@ void BreakPointList::SetBreakPointsInBasic(SbModule* pModule)
 {
     pModule->ClearAllBP();
 
-    for (BreakPoint& rBrk : maBreakPoints)
+    for (const BreakPoint& rBrk : maBreakPoints)
     {
         if ( rBrk.bEnabled )
             pModule->SetBP( rBrk.nLine );

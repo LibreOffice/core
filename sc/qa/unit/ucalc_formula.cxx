@@ -1183,7 +1183,7 @@ void Test::testFormulaCompilerImplicitIntersection2Param()
             }
         };
 
-        for (auto& rCase : aTestCases)
+        for (const auto& rCase : aTestCases)
         {
             m_pDoc->SetString(rCase.aCellAddress, rCase.aFormula);
             const ScFormulaCell* pCell = m_pDoc->GetFormulaCell(rCase.aCellAddress);
@@ -1257,7 +1257,7 @@ void Test::testFormulaCompilerImplicitIntersection1ParamNoChange()
             }
         };
 
-        for (auto& rCase : aCasesNoChange)
+        for (const auto& rCase : aCasesNoChange)
         {
             if (rCase.bMatrixFormula)
             {
@@ -1364,7 +1364,7 @@ void Test::testFormulaCompilerImplicitIntersection1ParamWithChange()
             }
         };
 
-        for (auto& rCase : aCasesWithChange)
+        for (const auto& rCase : aCasesWithChange)
         {
             m_pDoc->SetString(rCase.aCellAddress, rCase.aFormula);
 

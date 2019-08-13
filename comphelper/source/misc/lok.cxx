@@ -186,7 +186,7 @@ bool isWhitelistedLanguage(const OUString& lang)
     if (aWhitelist.empty())
         return false;
 
-    for (auto& entry : aWhitelist)
+    for (const auto& entry : aWhitelist)
     {
         if (lang.startsWith(entry))
             return true;

@@ -596,7 +596,7 @@ void DicList::CreateDicList()
     // look for dictionaries
     const OUString aWriteablePath( GetDictionaryWriteablePath() );
     std::vector< OUString > aPaths( GetDictionaryPaths() );
-    for (OUString & aPath : aPaths)
+    for (const OUString & aPath : aPaths)
     {
         const bool bIsWriteablePath = (aPath == aWriteablePath);
         SearchForDictionaries( aDicList, aPath, bIsWriteablePath );

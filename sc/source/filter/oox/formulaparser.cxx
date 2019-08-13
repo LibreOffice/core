@@ -619,7 +619,7 @@ ApiTokenSequence FormulaParserImpl::finalizeImport()
     if( aTokens.hasElements() )
     {
         ApiToken* pToken = aTokens.getArray();
-        for( auto& tokenIndex : maTokenIndexes )
+        for( const auto& tokenIndex : maTokenIndexes )
         {
             *pToken = maTokenStorage[ tokenIndex ];
             ++pToken;

@@ -212,7 +212,7 @@ void UpdateableResultSet::insertRow(  )
     buf.append( " ) VALUES ( " );
 
     columns = 0;
-    for(UpdateableField & i : m_updateableField)
+    for(const UpdateableField & i : m_updateableField)
     {
         if( i.isTouched )
         {

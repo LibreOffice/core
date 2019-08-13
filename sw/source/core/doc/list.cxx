@@ -153,7 +153,7 @@ void SwListImpl::RemoveListItem( SwNodeNum& rNodeNum )
 
 void SwListImpl::InvalidateListTree()
 {
-    for ( auto& rNumberTree : maListTrees )
+    for ( const auto& rNumberTree : maListTrees )
     {
         rNumberTree.pRoot->InvalidateTree();
         rNumberTree.pRootRLHidden->InvalidateTree();

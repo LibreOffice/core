@@ -363,7 +363,7 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
         boxX = nControlWidth / perLine;
 
     const SmElement* pCurrentElement = current();
-    for (std::unique_ptr<SmElement> & i : maElementList)
+    for (const std::unique_ptr<SmElement> & i : maElementList)
     {
         SmElement* element = i.get();
         if (element->isSeparator())

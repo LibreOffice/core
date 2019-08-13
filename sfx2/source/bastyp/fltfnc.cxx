@@ -219,7 +219,7 @@ std::shared_ptr<const SfxFilter> SfxFilterContainer::GetDefaultFilter_Impl( cons
         if ( bFirstRead )
             ReadFilters_Impl();
 
-        for (std::shared_ptr<const SfxFilter>& pCheckFilter : *pFilterArr)
+        for (const std::shared_ptr<const SfxFilter>& pCheckFilter : *pFilterArr)
         {
             if ( pCheckFilter->GetServiceName().equalsIgnoreAsciiCase(sServiceName) )
             {
@@ -308,7 +308,7 @@ void SfxFilterMatcher_Impl::Update() const
     {
         // this List was already used
         pList->clear();
-        for (std::shared_ptr<const SfxFilter>& pFilter : *pFilterArr)
+        for (const std::shared_ptr<const SfxFilter>& pFilter : *pFilterArr)
         {
             if ( pFilter->GetServiceName() == aName )
                 pList->push_back( pFilter );
@@ -341,7 +341,7 @@ void SfxFilterMatcher_Impl::InitForIterating() const
 std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetAnyFilter( SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     m_rImpl.InitForIterating();
-    for (std::shared_ptr<const SfxFilter>& pFilter : *m_rImpl.pList)
+    for (const std::shared_ptr<const SfxFilter>& pFilter : *m_rImpl.pList)
     {
         SfxFilterFlags nFlags = pFilter->GetFilterFlags();
         if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) )
@@ -651,7 +651,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4Mime( const OUStrin
 {
     if ( m_rImpl.pList )
     {
-        for (std::shared_ptr<const SfxFilter>& pFilter : *m_rImpl.pList)
+        for (const std::shared_ptr<const SfxFilter>& pFilter : *m_rImpl.pList)
         {
             SfxFilterFlags nFlags = pFilter->GetFilterFlags();
             if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) && pFilter->GetMimeType() == rMediaType )
@@ -670,7 +670,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4EA( const OUString&
     if ( m_rImpl.pList )
     {
         std::shared_ptr<const SfxFilter> pFirst;
-        for (std::shared_ptr<const SfxFilter>& pFilter : *m_rImpl.pList)
+        for (const std::shared_ptr<const SfxFilter>& pFilter : *m_rImpl.pList)
         {
             SfxFilterFlags nFlags = pFilter->GetFilterFlags();
             if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) && pFilter->GetTypeName() == rType )
@@ -695,7 +695,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4Extension( const OU
 {
     if ( m_rImpl.pList )
     {
-        for (std::shared_ptr<const SfxFilter>& pFilter : *m_rImpl.pList)
+        for (const std::shared_ptr<const SfxFilter>& pFilter : *m_rImpl.pList)
         {
             SfxFilterFlags nFlags = pFilter->GetFilterFlags();
             if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) )
@@ -742,7 +742,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4UIName( const OUStr
 {
     m_rImpl.InitForIterating();
     std::shared_ptr<const SfxFilter> pFirstFilter;
-    for (std::shared_ptr<const SfxFilter>& pFilter : *m_rImpl.pList)
+    for (const std::shared_ptr<const SfxFilter>& pFilter : *m_rImpl.pList)
     {
         SfxFilterFlags nFlags = pFilter->GetFilterFlags();
         if ( (nFlags & nMust) == nMust &&
@@ -784,7 +784,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4FilterName( const O
                 CreateFilterArr();
             else
             {
-                for (std::shared_ptr<const SfxFilter>& pFilter : *pFilterArr)
+                for (const std::shared_ptr<const SfxFilter>& pFilter : *pFilterArr)
                 {
                     SfxFilterFlags nFlags = pFilter->GetFilterFlags();
                     if ((nFlags & nMust) == nMust && !(nFlags & nDont) && pFilter->GetFilterName().equalsIgnoreAsciiCase(aName))
@@ -800,7 +800,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4FilterName( const O
     if ( !pList )
         pList = pFilterArr;
 
-    for (std::shared_ptr<const SfxFilter>& pFilter : *pList)
+    for (const std::shared_ptr<const SfxFilter>& pFilter : *pList)
     {
         SfxFilterFlags nFlags = pFilter->GetFilterFlags();
         if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) && pFilter->GetFilterName().equalsIgnoreAsciiCase(aName))
@@ -1114,7 +1114,7 @@ void SfxFilterContainer::ReadFilters_Impl( bool bUpdate )
                 if( !rList.empty() )
                 {
                     bUpdate = true;
-                    for (std::shared_ptr<const SfxFilter>& pFilter : rList)
+                    for (const std::shared_ptr<const SfxFilter>& pFilter : rList)
                     {
                         SfxFilter* pNonConstFilter = const_cast<SfxFilter*>(pFilter.get());
                         pNonConstFilter->nFormatType |= SFX_FILTER_NOTINSTALLED;
@@ -1140,7 +1140,7 @@ void SfxFilterContainer::ReadFilters_Impl( bool bUpdate )
     {
         // global filter array was modified, factory specific ones might need an
         // update too
-        for (auto& aImpl : aImplArr)
+        for (const auto& aImpl : aImplArr)
             aImpl->Update();
     }
 }

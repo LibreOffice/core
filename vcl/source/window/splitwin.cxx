@@ -280,7 +280,7 @@ static ImplSplitSet* ImplFindSet( ImplSplitSet* pSet, sal_uInt16 nId )
 
     std::vector< ImplSplitItem >&     rItems = pSet->mvItems;
 
-    for ( auto& rItem : rItems )
+    for ( const auto& rItem : rItems )
     {
         if ( rItem.mnId == nId )
             return rItem.mpSet.get();
@@ -423,7 +423,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
         long nRelPercent    = 0;
         long nAbsSize       = 0;
         long nCurSize       = 0;
-        for ( auto& rItem : rItems )
+        for ( const auto& rItem : rItems )
         {
             if ( rItem.mnBits & SplitWindowItemFlags::RelativeSize )
                 nRelCount += rItem.mnSize;
@@ -485,7 +485,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
             long nSizeWinSize    = 0;
 
             // first resize absolute items relative
-            for ( auto& rItem : rItems )
+            for ( const auto& rItem : rItems )
             {
                 if ( !(rItem.mnBits & (SplitWindowItemFlags::RelativeSize | SplitWindowItemFlags::PercentSize)) )
                 {
@@ -726,7 +726,7 @@ void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool b
 
     if ( pWindow->IsReallyVisible() && pWindow->IsUpdateMode() && pWindow->mbInvalidate )
     {
-        for ( auto& rItem : rItems )
+        for ( const auto& rItem : rItems )
         {
             if ( rItem.mnSplitSize )
             {
@@ -858,7 +858,7 @@ void SplitWindow::ImplDrawBack(vcl::RenderContext& rRenderContext, ImplSplitSet*
 {
     std::vector< ImplSplitItem >& rItems = pSet->mvItems;
 
-    for ( auto& rItem : rItems )
+    for ( const auto& rItem : rItems )
     {
         pSet = rItem.mpSet.get();
         if (pSet && pSet->mpWallpaper)

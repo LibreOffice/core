@@ -424,7 +424,7 @@ namespace basegfx
                     // there were horizontal edges. These can be excluded, but
                     // cuts with other edges need to be solved and added before
                     // ignoring them
-                    for(TrDeSimpleEdge & rHorEdge : rTrDeSimpleEdges)
+                    for(const TrDeSimpleEdge & rHorEdge : rTrDeSimpleEdges)
                     {
                         // get horizontal edge as candidate; prepare its range and fixed Y
                         const B1DRange aRange(rHorEdge.getStart().getX(), rHorEdge.getEnd().getX());

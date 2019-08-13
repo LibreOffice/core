@@ -583,7 +583,7 @@ void XclExpPaletteImpl::RawReducePalette( sal_uInt32 nPass )
     sal_uInt8 nFactor3 = static_cast< sal_uInt8 >( 0x40 >> nPass );
 
     // process each color in the old color list
-    for(std::unique_ptr<XclListColor> & pOldColor : *xOldList)
+    for(const std::unique_ptr<XclListColor> & pOldColor : *xOldList)
     {
         // get the old list entry
         const XclListColor* pOldEntry = pOldColor.get();
@@ -2593,14 +2593,14 @@ void XclExpXFBuffer::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
 
     rStyleSheet->startElement(XML_fills, XML_count, OString::number(maFills.size()));
-    for( auto& rFill : maFills )
+    for( const auto& rFill : maFills )
     {
         rFill.SaveXml( rStrm );
     }
     rStyleSheet->endElement( XML_fills );
 
     rStyleSheet->startElement(XML_borders, XML_count, OString::number(maBorders.size()));
-    for( auto& rBorder : maBorders )
+    for( const auto& rBorder : maBorders )
     {
         rBorder.SaveXml( rStrm );
     }

@@ -109,7 +109,7 @@ bool SwEditShell::RejectRedlinesInSelection()
 bool SwEditShell::SetRedlineComment( const OUString& rS )
 {
     bool bRet = false;
-    for(SwPaM& rPaM : GetCursor()->GetRingContainer())
+    for(const SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
         bRet = bRet || GetDoc()->getIDocumentRedlineAccess().SetRedlineComment( rPaM, rS );
     }

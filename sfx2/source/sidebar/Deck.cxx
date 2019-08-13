@@ -284,7 +284,7 @@ vcl::Window* Deck::GetPanelParentWindow()
 
 Panel* Deck::GetPanel(const OUString & panelId)
 {
-    for (VclPtr<Panel> & pPanel : maPanels)
+    for (const VclPtr<Panel> & pPanel : maPanels)
     {
         if(pPanel->GetId() == panelId)
         {

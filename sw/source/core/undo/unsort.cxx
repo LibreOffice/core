@@ -92,7 +92,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
         const SwTable& rTable = pTableNd->GetTable();
 
         SwMovedBoxes aMovedList;
-        for (std::unique_ptr<SwSortUndoElement> & i : m_SortList)
+        for (const std::unique_ptr<SwSortUndoElement> & i : m_SortList)
         {
             const SwTableBox* pSource = rTable.GetTableBox(
                     *i->SORT_TXT_TBL.TBL.pSource );
@@ -126,7 +126,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
 
         for (size_t i = 0; i < m_SortList.size(); ++i)
         {
-            for (std::unique_ptr<SwSortUndoElement> & j : m_SortList)
+            for (const std::unique_ptr<SwSortUndoElement> & j : m_SortList)
             {
                 if (j->SORT_TXT_TBL.TXT.nSource == m_nSttNode + i)
                 {
@@ -169,7 +169,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         const SwTable& rTable = pTableNd->GetTable();
 
         SwMovedBoxes aMovedList;
-        for (std::unique_ptr<SwSortUndoElement> & i : m_SortList)
+        for (const std::unique_ptr<SwSortUndoElement> & i : m_SortList)
         {
             const SwTableBox* pSource = rTable.GetTableBox(
                     *i->SORT_TXT_TBL.TBL.pSource );

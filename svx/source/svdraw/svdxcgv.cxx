@@ -678,7 +678,7 @@ Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject)
             rObjVector1.push_back( pMark );
     }
 
-    for(std::vector<SdrMark*> & rObjVector : aObjVectors)
+    for(const std::vector<SdrMark*> & rObjVector : aObjVectors)
     {
         for(SdrMark* pMark : rObjVector)
         {

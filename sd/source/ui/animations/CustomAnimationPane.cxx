@@ -715,7 +715,7 @@ void CustomAnimationPane::updateControls()
             MainSequenceRebuildGuard aGuard( mpMainSequence );
 
             EffectSequenceHelper* pSequence = nullptr;
-            for( CustomAnimationEffectPtr& pEffect : maListSelection )
+            for( const CustomAnimationEffectPtr& pEffect : maListSelection )
             {
                 if( pEffect.get() )
                 {
@@ -2040,7 +2040,7 @@ IMPL_LINK_NOARG(CustomAnimationPane, implPropertyHdl, LinkParamNone*, void)
     bool bNeedUpdate = false;
 
     // change selected effect
-    for( CustomAnimationEffectPtr& pEffect : maListSelection )
+    for( const CustomAnimationEffectPtr& pEffect : maListSelection )
     {
         if( setProperty1Value( mnPropertyType, pEffect, aValue ) )
             bNeedUpdate = true;
@@ -2097,7 +2097,7 @@ IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
         std::vector< Any > aTargets;
         MainSequenceRebuildGuard aGuard( mpMainSequence );
 
-        for( CustomAnimationEffectPtr& pEffect : maListSelection )
+        for( const CustomAnimationEffectPtr& pEffect : maListSelection )
         {
             aTargets.push_back( pEffect->getTarget() );
 
@@ -2120,7 +2120,7 @@ IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
     MainSequenceRebuildGuard aGuard( mpMainSequence );
 
     // get selected effect
-    for( CustomAnimationEffectPtr& pEffect : maListSelection )
+    for( const CustomAnimationEffectPtr& pEffect : maListSelection )
     {
         // Dispose the deprecated motion path tag. It will be rebuilt later.
         if (pEffect->getPresetClass() == css::presentation::EffectPresetClass::MOTIONPATH)
@@ -2277,7 +2277,7 @@ void CustomAnimationPane::moveSelection( bool bUp )
 
     if( bUp )
     {
-        for( CustomAnimationEffectPtr& pEffect : maListSelection )
+        for( const CustomAnimationEffectPtr& pEffect : maListSelection )
         {
             EffectSequence::iterator aUpEffectPos( pSequence->find( pEffect ) );
             // coverity[copy_paste_error : FALSE] - this is correct, checking if it exists
@@ -2382,7 +2382,7 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
     {
         MainSequencePtr pSequence( new MainSequence() );
 
-        for( CustomAnimationEffectPtr& pEffect : maListSelection )
+        for( const CustomAnimationEffectPtr& pEffect : maListSelection )
         {
             pSequence->append( pEffect->clone() );
         }

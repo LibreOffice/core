@@ -172,7 +172,7 @@ OUString FontFeaturesDialog::createFontNameWithFeatures()
     OUStringBuffer sNameSuffix;
     bool bFirst = true;
 
-    for (FontFeatureItem& rItem : m_aFeatureItems)
+    for (const FontFeatureItem& rItem : m_aFeatureItems)
     {
         if (rItem.m_xCheck->get_visible())
         {

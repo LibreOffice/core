@@ -37,7 +37,7 @@ static std::vector<std::unique_ptr<SwProgress>> *pProgressContainer = nullptr;
 
 static SwProgress *lcl_SwFindProgress( SwDocShell const *pDocShell )
 {
-    for (auto& pTmp : *pProgressContainer)
+    for (const auto& pTmp : *pProgressContainer)
     {
         if ( pTmp->pDocShell == pDocShell )
             return pTmp.get();

@@ -2133,7 +2133,7 @@ Size ValueSet::GetLargestItemSize()
 {
     Size aLargestItem;
 
-    for (std::unique_ptr<ValueSetItem>& pItem : mItemList)
+    for (const std::unique_ptr<ValueSetItem>& pItem : mItemList)
     {
         if (!pItem->mbVisible)
             continue;
@@ -3872,7 +3872,7 @@ Size SvtValueSet::GetLargestItemSize()
 {
     Size aLargestItem;
 
-    for (std::unique_ptr<SvtValueSetItem>& pItem : mItemList)
+    for (const std::unique_ptr<SvtValueSetItem>& pItem : mItemList)
     {
         if (!pItem->mbVisible)
             continue;

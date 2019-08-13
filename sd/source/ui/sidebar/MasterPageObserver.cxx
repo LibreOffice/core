@@ -278,7 +278,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
         aOldMasterPagesDescriptor->second.begin(),
         aOldMasterPagesDescriptor->second.end(),
         std::back_inserter(aNewMasterPages));
-    for (auto& aNewMasterPage : aNewMasterPages)
+    for (const auto& aNewMasterPage : aNewMasterPages)
     {
         MasterPageObserverEvent aEvent (
             MasterPageObserverEvent::ET_MASTER_PAGE_ADDED,
@@ -293,7 +293,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
         aCurrentMasterPages.begin(),
         aCurrentMasterPages.end(),
         std::back_inserter(aRemovedMasterPages));
-    for (auto& aRemovedMasterPage : aRemovedMasterPages)
+    for (const auto& aRemovedMasterPage : aRemovedMasterPages)
     {
         MasterPageObserverEvent aEvent (
             MasterPageObserverEvent::ET_MASTER_PAGE_REMOVED,
@@ -308,7 +308,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
 void MasterPageObserver::Implementation::SendEvent (
     MasterPageObserverEvent& rEvent)
 {
-    for (auto& aLink : maListeners)
+    for (const auto& aLink : maListeners)
     {
         aLink.Call(rEvent);
     }

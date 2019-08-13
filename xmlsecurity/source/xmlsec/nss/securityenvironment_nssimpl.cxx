@@ -836,7 +836,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() {
     std::unique_ptr<PK11SlotInfo*[]> sarSlots(new PK11SlotInfo*[cSlots]);
     PK11SlotInfo**  slots = sarSlots.get();
     int count = 0;
-    for (auto& slot : m_Slots)
+    for (const auto& slot : m_Slots)
     {
         slots[count] = slot;
         ++count;

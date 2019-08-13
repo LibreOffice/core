@@ -703,7 +703,7 @@ bool Tcg255::processSubStruct( sal_uInt8 nId, SvStream &rS )
 bool Tcg255::ImportCustomToolBar( SfxObjectShell& rDocSh )
 {
     // Find the SwCTBWrapper
-    for ( auto & rSubStruct : rgtcgData )
+    for ( const auto & rSubStruct : rgtcgData )
     {
         if ( rSubStruct->id() == 0x12 )
         {

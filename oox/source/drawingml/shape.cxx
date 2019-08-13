@@ -468,7 +468,7 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
         !aAdjGdList.empty() ? aAdjGdList.size() : 1 );
 
     int nIndex = 0;
-    for (auto& aEntry : aAdjGdList)
+    for (const auto& aEntry : aAdjGdList)
     {
         double fValue = aEntry.maFormula.toDouble();
         // then: polar-handle, else: XY-handle

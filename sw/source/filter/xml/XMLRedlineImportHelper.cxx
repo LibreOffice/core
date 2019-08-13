@@ -287,7 +287,7 @@ XMLRedlineImportHelper::XMLRedlineImportHelper(
 XMLRedlineImportHelper::~XMLRedlineImportHelper()
 {
     // delete all left over (and obviously incomplete) RedlineInfos (and map)
-    for( auto& rEntry : m_aRedlineMap )
+    for( const auto& rEntry : m_aRedlineMap )
     {
         RedlineInfo* pInfo = rEntry.second;
 

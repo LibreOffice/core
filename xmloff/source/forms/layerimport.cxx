@@ -548,13 +548,13 @@ void OFormLayerXMLImport_Impl::documentDone( )
     }
 
     // process XForms-bindings; call registerXFormsValueBinding for each
-    for (auto& aXFormsValueBinding : m_aXFormsValueBindings)
+    for (const auto& aXFormsValueBinding : m_aXFormsValueBindings)
         bindXFormsValueBinding(rImport.GetModel(), aXFormsValueBinding);
     // same for list bindings
-    for (auto& aXFormsListBindings : m_aXFormsListBindings)
+    for (const auto& aXFormsListBindings : m_aXFormsListBindings)
         bindXFormsListBinding(rImport.GetModel(), aXFormsListBindings);
     // same for submissions
-    for (auto& aXFormsSubmission : m_aXFormsSubmissions)
+    for (const auto& aXFormsSubmission : m_aXFormsSubmissions)
         bindXFormsSubmission(rImport.GetModel(), aXFormsSubmission);
 }
 

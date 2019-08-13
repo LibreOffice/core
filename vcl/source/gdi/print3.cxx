@@ -1425,7 +1425,7 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
     css::uno::Sequence< css::beans::PropertyValue > aResult( nResultLen );
     std::copy(i_rMergeList.begin(), i_rMergeList.end(), aResult.begin());
     int nCur = i_rMergeList.getLength();
-    for(css::beans::PropertyValue & rPropVal : mpImplData->maUIProperties)
+    for(const css::beans::PropertyValue & rPropVal : mpImplData->maUIProperties)
     {
         if( aMergeSet.find( rPropVal.Name ) == aMergeSet.end() )
             aResult[nCur++] = rPropVal;

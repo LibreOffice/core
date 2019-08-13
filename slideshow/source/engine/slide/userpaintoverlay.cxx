@@ -213,7 +213,7 @@ namespace slideshow
             //Draw all registered polygons.
             void drawPolygons()
             {
-                for( auto& rxPolygon : maPolygons )
+                for( const auto& rxPolygon : maPolygons )
                 {
                     rxPolygon->draw();
                 }

@@ -3273,7 +3273,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                             // the entry correctly, but I currently have no clue how to obtain
                             // the tab stop position. It is _not_ set at the paragraph style.
                             std::unique_ptr<SwForm> pForm;
-                            for (SwWW8StyInf & rSI : m_vColl)
+                            for (const SwWW8StyInf & rSI : m_vColl)
                             {
                                 if (rSI.IsOutlineNumbered())
                                 {

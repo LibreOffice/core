@@ -433,7 +433,7 @@ void RtfExport::WriteMainText()
         aProperties.push_back(std::make_pair<OString, OString>("shapeType", "1"));
         aProperties.push_back(std::make_pair<OString, OString>(
             "fillColor", OString::number(wwUtility::RGBToBGR(oBrush->GetColor()))));
-        for (std::pair<OString, OString>& rPair : aProperties)
+        for (const std::pair<OString, OString>& rPair : aProperties)
         {
             Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SP "{");
             Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SN " ");

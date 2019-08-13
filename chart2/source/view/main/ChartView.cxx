@@ -372,7 +372,7 @@ std::vector< LegendEntryProvider* > SeriesPlotterContainer::getLegendEntryProvid
 {
     std::vector< LegendEntryProvider* > aRet( m_aSeriesPlotterList.size() );
     sal_Int32 nN = 0;
-    for( std::unique_ptr<VSeriesPlotter>& aPlotter : m_aSeriesPlotterList)
+    for( const std::unique_ptr<VSeriesPlotter>& aPlotter : m_aSeriesPlotterList)
         aRet[nN++] = aPlotter.get();
     return aRet;
 }
@@ -696,7 +696,7 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
 
     // Determine the highest axis index of all dimensions.
     m_nMaxAxisIndex = 0;
-    for (auto & pVCooSys : m_rVCooSysList)
+    for (const auto & pVCooSys : m_rVCooSysList)
     {
         uno::Reference<XCoordinateSystem> xCooSys = pVCooSys->getModel();
         sal_Int32 nDimCount = xCooSys->getDimension();
@@ -716,7 +716,7 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
 void SeriesPlotterContainer::setScalesFromCooSysToPlotter()
 {
     //set scales to plotter to enable them to provide the preferred scene AspectRatio
-    for( std::unique_ptr<VSeriesPlotter>& aPlotter : m_aSeriesPlotterList )
+    for( const std::unique_ptr<VSeriesPlotter>& aPlotter : m_aSeriesPlotterList )
     {
         VSeriesPlotter* pSeriesPlotter = aPlotter.get();
         VCoordinateSystem* pVCooSys = lcl_getCooSysForPlotter( m_rVCooSysList, pSeriesPlotter );
@@ -733,7 +733,7 @@ void SeriesPlotterContainer::setScalesFromCooSysToPlotter()
 void SeriesPlotterContainer::setNumberFormatsFromAxes()
 {
     //set numberformats to plotter to enable them to display the data labels in the numberformat of the axis
-    for( std::unique_ptr<VSeriesPlotter>& aPlotter : m_aSeriesPlotterList )
+    for( const std::unique_ptr<VSeriesPlotter>& aPlotter : m_aSeriesPlotterList )
     {
         VSeriesPlotter* pSeriesPlotter = aPlotter.get();
         VCoordinateSystem* pVCooSys = lcl_getCooSysForPlotter( m_rVCooSysList, pSeriesPlotter );
@@ -971,7 +971,7 @@ drawing::Direction3D SeriesPlotterContainer::getPreferredAspectRatio()
     //first with special demands wins (less or equal zero <-> arbitrary)
     double fx, fy, fz;
     fx = fy = fz = -1.0;
-    for( std::unique_ptr<VSeriesPlotter>& aPlotter : m_aSeriesPlotterList )
+    for( const std::unique_ptr<VSeriesPlotter>& aPlotter : m_aSeriesPlotterList )
     {
         drawing::Direction3D aSingleRatio( aPlotter->getPreferredDiagramAspectRatio() );
         if( fx<0 && aSingleRatio.DirectionX>0 )
@@ -1568,7 +1568,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
 
     // - create data series for all charttypes
     m_bPointsWereSkipped = false;
-    for( std::unique_ptr<VSeriesPlotter>& aPlotter : rSeriesPlotterList )
+    for( const std::unique_ptr<VSeriesPlotter>& aPlotter : rSeriesPlotterList )
     {
         VSeriesPlotter* pSeriesPlotter = aPlotter.get();
         uno::Reference< drawing::XShapes > xSeriesTarget;

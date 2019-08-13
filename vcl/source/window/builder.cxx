@@ -1606,7 +1606,7 @@ void VclBuilder::preload()
         "smlo",   "scuilo",    "basctllo",  "sduilo",
         "scnlo",  "xsltdlglo", "pcrlo" // "dbulo"
     };
-    for (auto & lib : aWidgetLibs)
+    for (const auto & lib : aWidgetLibs)
     {
         std::unique_ptr<NoAutoUnloadModule> pModule(new NoAutoUnloadModule);
         OUString sModule = SAL_DLLPREFIX + OUString::createFromAscii(lib) + SAL_DLLEXTENSION;
@@ -4132,7 +4132,7 @@ void VclBuilder::set_response(const OString& sID, short nResponse)
             break;
     };
 
-    for (auto & child : m_aChildren)
+    for (const auto & child : m_aChildren)
     {
         if (child.m_sID == sID)
         {

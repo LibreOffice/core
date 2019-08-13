@@ -165,7 +165,7 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
         //it may be separated by colon ( e.g. unity:unity7:ubuntu )
         std::vector<OUString> aSplitCurrentDesktop = comphelper::string::split(
                 OStringToOUString( aCurrentDesktop, RTL_TEXTENCODING_UTF8), ':');
-        for (auto& rCurrentDesktopStr : aSplitCurrentDesktop)
+        for (const auto& rCurrentDesktopStr : aSplitCurrentDesktop)
         {
             if ( rCurrentDesktopStr.equalsIgnoreAsciiCase( "unity" ) )
                 return DESKTOP_UNITY;

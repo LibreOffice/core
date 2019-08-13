@@ -1695,7 +1695,7 @@ namespace pcr
 
             // propagate the changes to the min/max/default fields
             OUString aAffectedProps[] = { OUString(PROPERTY_VALUE), OUString(PROPERTY_DEFAULT_VALUE), OUString(PROPERTY_VALUEMIN), OUString(PROPERTY_VALUEMAX) };
-            for (OUString & aAffectedProp : aAffectedProps)
+            for (const OUString & aAffectedProp : aAffectedProps)
             {
                 Reference< XPropertyControl > xControl;
                 try
@@ -1743,7 +1743,7 @@ namespace pcr
                 OUString aFormattedPropertyControls[] = {
                     OUString(PROPERTY_EFFECTIVE_MIN), OUString(PROPERTY_EFFECTIVE_MAX), OUString(PROPERTY_EFFECTIVE_DEFAULT), OUString(PROPERTY_EFFECTIVE_VALUE)
                 };
-                for (OUString & aFormattedPropertyControl : aFormattedPropertyControls)
+                for (const OUString & aFormattedPropertyControl : aFormattedPropertyControls)
                 {
                     Reference< XPropertyControl > xControl;
                     try

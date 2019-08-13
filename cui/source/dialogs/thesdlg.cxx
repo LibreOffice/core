@@ -294,7 +294,7 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     }
     std::sort( aLangVec.begin(), aLangVec.end() );
     m_xLangLB->freeze();
-    for (OUString & i : aLangVec)
+    for (const OUString & i : aLangVec)
         m_xLangLB->append_text(i);
     m_xLangLB->thaw();
 

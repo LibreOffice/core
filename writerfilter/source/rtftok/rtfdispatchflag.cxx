@@ -1028,7 +1028,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             }
             std::vector<beans::PropertyValue>& rPendingProperties
                 = m_aStates.top().getDrawingObject().getPendingProperties();
-            for (auto& rPendingProperty : rPendingProperties)
+            for (const auto& rPendingProperty : rPendingProperties)
                 m_aStates.top().getDrawingObject().getPropertySet()->setPropertyValue(
                     rPendingProperty.Name, rPendingProperty.Value);
             m_pSdrImport->resolveDhgt(m_aStates.top().getDrawingObject().getPropertySet(),

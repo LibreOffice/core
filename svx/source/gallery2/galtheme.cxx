@@ -581,7 +581,7 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
 
     if( pIStm && pTmpStm )
     {
-        for (auto & i : aObjectList)
+        for (const auto & i : aObjectList)
         {
             GalleryObject* pEntry = i.get();
             std::unique_ptr<SgaObject> pObj;

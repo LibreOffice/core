@@ -1347,7 +1347,7 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
     if (!mxActEntry->maImageList.empty())
     {
         long nWidth = 0;
-        for (std::unique_ptr<ScHTMLImage> & pI : mxActEntry->maImageList)
+        for (const std::unique_ptr<ScHTMLImage> & pI : mxActEntry->maImageList)
         {
             if ( pI->nDir & nHorizontal )
                 nWidth += pI->aSize.Width() + 2 * pI->aSpace.X();

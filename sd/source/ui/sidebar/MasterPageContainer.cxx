@@ -672,7 +672,7 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
             // appropriate events to the listeners.
             UpdateDescriptor(*aEntry,false,false, true);
 
-            for (auto& rEventType : *pEventTypes)
+            for (const auto& rEventType : *pEventTypes)
             {
                 FireContainerChange(rEventType, (*aEntry)->maToken);
             }
@@ -922,7 +922,7 @@ void MasterPageContainer::Implementation::FireContainerChange (
     MasterPageContainerChangeEvent aEvent;
     aEvent.meEventType = eType;
     aEvent.maChildToken = aToken;
-    for (auto& rListener : aCopy)
+    for (const auto& rListener : aCopy)
         rListener.Call(aEvent);
 }
 

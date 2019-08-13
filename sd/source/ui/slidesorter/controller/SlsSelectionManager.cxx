@@ -237,7 +237,7 @@ void SelectionManager::SelectionHasChanged ()
         pViewShell->UpdatePreview(pDescriptor->GetPage());
 
     // Tell the selection change listeners that the selection has changed.
-    for (auto& rLink : maSelectionChangeListeners)
+    for (const auto& rLink : maSelectionChangeListeners)
     {
         rLink.Call(nullptr);
     }

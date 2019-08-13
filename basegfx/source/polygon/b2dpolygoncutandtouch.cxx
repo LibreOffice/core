@@ -411,7 +411,7 @@ namespace basegfx
             }
 
             // append remapped tempVector entries for edge to tempPoints for edge
-            for(temporaryPoint & rTempPoint : aTempPointVectorEdge)
+            for(const temporaryPoint & rTempPoint : aTempPointVectorEdge)
             {
                 rTempPointsB.emplace_back(rTempPoint.getPoint(), nIndB, rTempPoint.getCut());
             }

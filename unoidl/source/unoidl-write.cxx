@@ -713,7 +713,7 @@ sal_uInt64 writeMap(
                 write32(file, cmap.size());
                     // overflow from std::map::size_type -> sal_uInt64 is
                     // unrealistic
-                for (auto & j: cmap) {
+                for (const auto & j: cmap) {
                     write32(file, j.second.nameOffset);
                     write32(file, j.second.dataOffset);
                 }
@@ -846,7 +846,7 @@ sal_uInt64 writeMap(
         *rootSize = map.size();
             // overflow from std::map::size_type -> std::size_t is unrealistic
     }
-    for (auto & i: map) {
+    for (const auto & i: map) {
         write32(file, i.second.nameOffset);
         write32(file, i.second.dataOffset);
     }

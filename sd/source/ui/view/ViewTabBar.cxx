@@ -466,7 +466,7 @@ bool ViewTabBar::HasTabBarButton (
 {
     bool bResult (false);
 
-    for (css::drawing::framework::TabBarButton & r : maTabBarButtons)
+    for (const css::drawing::framework::TabBarButton & r : maTabBarButtons)
     {
         if (IsEqual(r, rButton))
         {

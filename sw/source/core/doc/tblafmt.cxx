@@ -981,7 +981,7 @@ std::unique_ptr<SwTableAutoFormat> SwTableAutoFormatTable::ReleaseAutoFormat(con
 
 SwTableAutoFormat* SwTableAutoFormatTable::FindAutoFormat(const OUString& rName) const
 {
-    for (auto &rFormat : m_pImpl->m_AutoFormats)
+    for (const auto &rFormat : m_pImpl->m_AutoFormats)
     {
         if (rFormat->GetName() == rName)
             return rFormat.get();

@@ -41,7 +41,7 @@ SwEditShell::InsertSection(
         StartAllAction();
         GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::INSSECTION, nullptr );
 
-        for(SwPaM& rPaM : GetCursor()->GetRingContainer())
+        for(const SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
             SwSection const*const pNew =
                 GetDoc()->InsertSwSection( rPaM, rNewData, nullptr, pAttr );

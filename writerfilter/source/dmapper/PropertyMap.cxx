@@ -1253,7 +1253,7 @@ void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl&
     sal_Int32 nTextAreaWidth = nPageWidth - GetLeftMargin() - GetRightMargin();
 
     std::vector<AnchoredObjectInfo>& rAnchoredObjectAnchors = rDM_Impl.m_aAnchoredObjectAnchors;
-    for (auto& rAnchor : rAnchoredObjectAnchors)
+    for (const auto& rAnchor : rAnchoredObjectAnchors)
     {
         // Ignore this paragraph when there are not enough shapes to trigger the Word bug we
         // emulate.
@@ -1759,12 +1759,12 @@ void SectionPropertyMap::ApplyProperties_( const uno::Reference< beans::XPropert
                 vValues.push_back( pIter->Value );
             }
         }
-        for ( beans::PropertyValue & v : vCharVals )
+        for ( const beans::PropertyValue & v : vCharVals )
         {
             vNames.push_back( v.Name );
             vValues.push_back( v.Value );
         }
-        for ( beans::PropertyValue & v : vParaVals )
+        for ( const beans::PropertyValue & v : vParaVals )
         {
             vNames.push_back( v.Name );
             vValues.push_back( v.Value );

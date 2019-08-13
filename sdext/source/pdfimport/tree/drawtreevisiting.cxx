@@ -490,7 +490,7 @@ void DrawXmlOptimizer::visit( PageElement& elem, const std::list< std::unique_pt
             // adjust line height and text items
             fCurLineHeight = 0.0;
             nCurLineElements = 0;
-            for( auto& rxChild : pCurPara->Children )
+            for( const auto& rxChild : pCurPara->Children )
             {
                 TextElement* pTestText = dynamic_cast<TextElement*>(rxChild.get());
                 if( pTestText )

@@ -464,7 +464,7 @@ ErrCode DictionaryNeo::saveEntries(const OUString &rURL)
     pStream->WriteLine("---");
     if (ERRCODE_NONE != (nErr = pStream->GetError()))
         return nErr;
-    for (Reference<XDictionaryEntry> & aEntrie : aEntries)
+    for (const Reference<XDictionaryEntry> & aEntrie : aEntries)
     {
         OString aOutStr = formatForSave(aEntrie, eEnc);
         pStream->WriteLine (aOutStr);

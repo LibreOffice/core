@@ -1454,7 +1454,7 @@ void SwXTextTableRow::Notify(const SfxHint& rHint)
 
 SwTableLine* SwXTextTableRow::FindLine(SwTable* pTable, SwTableLine const * pLine)
 {
-    for(auto& pCurrentLine : pTable->GetTabLines())
+    for(const auto& pCurrentLine : pTable->GetTabLines())
         if(pCurrentLine == pLine)
             return pCurrentLine;
     return nullptr;
@@ -1835,7 +1835,7 @@ void SwTableProperties_Impl::AddItemToSet(SfxItemSet& rSet, std::function<Tpooli
     if(!vMemberAndAny.empty())
     {
         Tpoolitem aItem = aItemFactory();
-        for(auto& aMemberAndAny : vMemberAndAny)
+        for(const auto& aMemberAndAny : vMemberAndAny)
             aItem->PutValue(*aMemberAndAny.second, aMemberAndAny.first | (bAddTwips ? CONVERT_TWIPS : 0) );
         rSet.Put(*aItem);
     }

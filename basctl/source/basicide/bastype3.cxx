@@ -295,7 +295,7 @@ SbxVariable* SbTreeListBox::FindVariable(const weld::TreeIter* pEntry)
     {
         std::reverse(aEntries.begin(), aEntries.end());
         bool bDocumentObjects = false;
-        for (auto& pair : aEntries)
+        for (const auto& pair : aEntries)
         {
             Entry* pBE = pair.first;
             assert(pBE && "No data found in entry!");
@@ -497,7 +497,7 @@ EntryDescriptor SbTreeListBox::GetEntryDescriptor(const weld::TreeIter* pEntry)
     if ( !aEntries.empty() )
     {
         std::reverse(aEntries.begin(), aEntries.end());
-        for (auto& pair : aEntries)
+        for (const auto& pair : aEntries)
         {
             Entry* pBE = pair.first;
             assert(pBE && "No data found in entry!");

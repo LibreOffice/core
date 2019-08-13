@@ -2140,7 +2140,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                     m_aNumberFormatter ).GetFormatIndex( NF_NUMBER_SYSTEM );
                 Sequence< double > seqValue( pLine->m_aValues.size( ) );
                 sal_Int32 k = 0;
-                for ( auto& rxValue : pLine->m_aValues )
+                for ( const auto& rxValue : pLine->m_aValues )
                 {
                     double dValue = 0.0;
                     OUString sValue( rxValue->m_xValueEdit->get_text() );
@@ -2158,7 +2158,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                     m_aNumberFormatter ).GetFormatIndex( NF_NUMBER_SYSTEM );
                 Sequence< sal_Int64 > seqValue( pLine->m_aValues.size( ) );
                 sal_Int32 k = 0;
-                for ( auto& rxValue : pLine->m_aValues )
+                for ( const auto& rxValue : pLine->m_aValues )
                 {
                     double dValue = 0;
                     OUString sValue( rxValue->m_xValueEdit->get_text() );
@@ -2174,7 +2174,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
             {
                 Sequence<sal_Bool> seqValue( pLine->m_aYesNos.size( ) );
                 sal_Int32 k = 0;
-                for ( auto& rxYesNo : pLine->m_aYesNos )
+                for ( const auto& rxYesNo : pLine->m_aYesNos )
                 {
                     bool bValue = rxYesNo->m_xYesButton->get_active();
                     seqValue[k] = bValue;
@@ -2187,7 +2187,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
             {
                 Sequence< util::DateTime > seqValue( pLine->m_aDateTimes.size( ) );
                 sal_Int32 k = 0;
-                for ( auto& rxDateTime : pLine->m_aDateTimes )
+                for ( const auto& rxDateTime : pLine->m_aDateTimes )
                 {
                     Date aTmpDate = rxDateTime->m_xDateField->get_date();
                     tools::Time aTmpTime = rxDateTime->m_xTimeField->get_value();
@@ -2204,7 +2204,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
             {
                 Sequence< OUString > seqValue( pLine->m_aValues.size( ) );
                 sal_Int32 k = 0;
-                for ( auto& rxValue : pLine->m_aValues )
+                for ( const auto& rxValue : pLine->m_aValues )
                 {
                     OUString sValue( rxValue->m_xValueEdit->get_text() );
                     seqValue[k] = sValue;

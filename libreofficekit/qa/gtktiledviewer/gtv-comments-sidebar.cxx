@@ -53,7 +53,7 @@ gtv_comments_sidebar_view_annotations(GtvCommentsSidebar* sidebar)
     boost::property_tree::read_json(aStream, aTree);
     try
     {
-        for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))
+        for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))
         {
             GtkWidget* pCommentBox = GtvHelpers::createCommentBox(rValue.second);
             gtk_container_add(GTK_CONTAINER(sidebar->commentsgrid), pCommentBox);

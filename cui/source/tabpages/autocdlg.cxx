@@ -751,13 +751,13 @@ bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet* )
         std::vector<SvxAutocorrWord> aDeleteWords;
         std::vector<SvxAutocorrWord> aNewWords;
 
-        for (DoubleString & deleteEntry : rStringChangeList.aDeletedEntries)
+        for (const DoubleString & deleteEntry : rStringChangeList.aDeletedEntries)
         {
             SvxAutocorrWord aDeleteWord( deleteEntry.sShort, deleteEntry.sLong );
             aDeleteWords.push_back( aDeleteWord );
         }
 
-        for (DoubleString & newEntry : rStringChangeList.aNewEntries)
+        for (const DoubleString & newEntry : rStringChangeList.aNewEntries)
         {
             //fdo#67697 if the user data is set then we want to retain the
             //source formatting of the entry, so don't use the optimized

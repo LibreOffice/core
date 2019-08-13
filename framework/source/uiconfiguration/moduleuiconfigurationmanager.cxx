@@ -1528,9 +1528,9 @@ void SAL_CALL ModuleUIConfigurationManager::reload()
         aGuard.clear();
 
         // Notify our listeners
-        for (ui::ConfigurationEvent & j : aRemoveNotifyContainer)
+        for (const ui::ConfigurationEvent & j : aRemoveNotifyContainer)
             implts_notifyContainerListener( j, NotifyOp_Remove );
-        for (ui::ConfigurationEvent & k : aReplaceNotifyContainer)
+        for (const ui::ConfigurationEvent & k : aReplaceNotifyContainer)
             implts_notifyContainerListener( k, NotifyOp_Replace );
     }
 }

@@ -2894,7 +2894,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
             if ( !pUndo && IsUndoEnabled() && !IsInUndo() )
             {
                 // adjust selection to include all changes
-                for (eeTransliterationChgData & aChange : aChanges)
+                for (const eeTransliterationChgData & aChange : aChanges)
                 {
                     const EditSelection &rSel = aChange.aSelection;
                     if (aSel.Min().GetNode() == rSel.Min().GetNode() &&

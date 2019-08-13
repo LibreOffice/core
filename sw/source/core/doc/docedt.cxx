@@ -59,7 +59,7 @@ void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
                       const SwNodeIndex* pInsertPos )
 {
     SwPosition aPos(rStartPos);
-    for(SaveFly & rSave : rArr)
+    for(const SaveFly & rSave : rArr)
     {
         // create new anchor
         SwFrameFormat* pFormat = rSave.pFrameFormat;

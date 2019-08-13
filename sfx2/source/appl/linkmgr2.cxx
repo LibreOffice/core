@@ -294,7 +294,7 @@ void LinkManager::UpdateAllLinks(
     {
         // search first in the array after the entry
         bool bFound = false;
-        for(tools::SvRef<SvBaseLink> & i : aLinkTbl)
+        for(const tools::SvRef<SvBaseLink> & i : aLinkTbl)
             if( pLink == i.get() )
             {
                 bFound = true;

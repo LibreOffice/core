@@ -127,7 +127,7 @@ xdictionary::xdictionary(const sal_Char *lang) :
 
 xdictionary::~xdictionary()
 {
-    for (WordBreakCache & i : cache) {
+    for (const WordBreakCache & i : cache) {
         if (i.size > 0) {
             delete [] i.contents;
             delete [] i.wordboundary;
@@ -151,7 +151,7 @@ void xdictionary::initDictionaryData(const sal_Char *pLang)
     static std::vector< datacache > aLoadedCache;
 
     osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
-    for(datacache & i : aLoadedCache)
+    for(const datacache & i : aLoadedCache)
     {
         if( i.maLang != pLang )
         {

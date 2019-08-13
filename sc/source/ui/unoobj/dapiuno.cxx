@@ -1319,7 +1319,7 @@ void ScDataPilotTableObj::Refreshed_Impl()
     // the EventObject holds a Ref to this object until after the listener calls
 
     ScDocument& rDoc = GetDocShell()->GetDocument();
-    for (uno::Reference<util::XModifyListener> & xModifyListener : aModifyListeners)
+    for (const uno::Reference<util::XModifyListener> & xModifyListener : aModifyListeners)
         rDoc.AddUnoListenerCall( xModifyListener, aEvent );
 }
 

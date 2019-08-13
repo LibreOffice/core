@@ -697,7 +697,7 @@ void SwViewShell::LayoutIdle()
         return;
 
     //No idle when printing is going on.
-    for(SwViewShell& rSh : GetRingContainer())
+    for(const SwViewShell& rSh : GetRingContainer())
     {
         if ( !rSh.GetWin() )
             return;

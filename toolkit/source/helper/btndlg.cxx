@@ -103,7 +103,7 @@ long ButtonDialog::ImplGetButtonSize()
     long nSepSize = 0;
     maCtrlSize = Size( IMPL_MINSIZE_BUTTON_WIDTH, IMPL_MINSIZE_BUTTON_HEIGHT );
 
-    for (auto & it : m_ItemList)
+    for (const auto & it : m_ItemList)
     {
         nSepSize += nLastSepSize;
 
@@ -203,7 +203,7 @@ void ButtonDialog::ImplPosControls()
 
 IMPL_LINK( ButtonDialog, ImplClickHdl, Button*, pBtn, void )
 {
-    for (auto & it : m_ItemList)
+    for (const auto & it : m_ItemList)
     {
         if ( it->mpPushButton == pBtn )
         {

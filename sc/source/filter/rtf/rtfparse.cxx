@@ -218,7 +218,7 @@ void ScRTFParser::NewCellRow()
             }
         }
         // Build up TwipCols only after nLastWidth comparison!
-        for (std::unique_ptr<ScRTFCellDefault> & pCellDefault : maDefaultList)
+        for (const std::unique_ptr<ScRTFCellDefault> & pCellDefault : maDefaultList)
         {
             const ScRTFCellDefault& rD = *pCellDefault;
             SCCOL nCol;

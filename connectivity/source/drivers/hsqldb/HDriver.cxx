@@ -109,7 +109,7 @@ namespace connectivity
 
         try
         {
-            for (auto& rConnection : m_aConnections)
+            for (const auto& rConnection : m_aConnections)
             {
                 Reference<XInterface > xTemp = rConnection.first.get();
                 ::comphelper::disposeComponent(xTemp);
@@ -583,7 +583,7 @@ namespace connectivity
     void ODriverDelegator::shutdownConnections()
     {
         m_bInShutDownConnections = true;
-        for (auto& rConnection : m_aConnections)
+        for (const auto& rConnection : m_aConnections)
         {
             try
             {
@@ -600,7 +600,7 @@ namespace connectivity
 
     void ODriverDelegator::flushConnections()
     {
-        for (auto& rConnection : m_aConnections)
+        for (const auto& rConnection : m_aConnections)
         {
             try
             {

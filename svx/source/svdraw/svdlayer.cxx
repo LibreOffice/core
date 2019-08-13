@@ -327,7 +327,7 @@ void SdrLayerAdmin::QueryValue(const SdrLayerIDSet& rViewLayerSet, css::uno::Any
     sal_uInt8 nBitpos = 0;
     sal_uInt16 nLayerPos = 0; // Position of the layer in member aLayer and in <draw:layer-set> in file
     sal_uInt16 nLayerIndex = 0;
-    for( auto& pCurrentLayer : maLayers )
+    for( const auto& pCurrentLayer : maLayers )
     {
         SdrLayerID nCurrentID = pCurrentLayer->GetID();
         if ( rViewLayerSet.IsSet(nCurrentID) )

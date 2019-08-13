@@ -2011,7 +2011,7 @@ void SwTable::CopyHeadlineIntoTable( SwTableNode& rTableNd )
     // Copy
     if( IsNewModel() )
         lcl_CalcNewWidths( aFndBox.GetLines(), aPara );
-    for (auto & rpFndLine : aFndBox.GetLines())
+    for (const auto & rpFndLine : aFndBox.GetLines())
     {
          lcl_CopyLineToDoc( *rpFndLine, &aPara );
     }
@@ -2105,7 +2105,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     if( IsNewModel() )
         lcl_CalcNewWidths( aFndBox.GetLines(), aPara );
     // Copy
-    for (auto & rpFndLine : aFndBox.GetLines())
+    for (const auto & rpFndLine : aFndBox.GetLines())
     {
          lcl_CopyLineToDoc( *rpFndLine, &aPara );
     }

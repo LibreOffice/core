@@ -99,7 +99,7 @@ SwTableFormatCmp::~SwTableFormatCmp()
 SwFrameFormat* SwTableFormatCmp::FindNewFormat(std::vector<std::unique_ptr<SwTableFormatCmp>>& rArr,
                                                SwFrameFormat const* pOld, sal_Int16 nType)
 {
-    for (auto& pCmp : rArr)
+    for (const auto& pCmp : rArr)
     {
         if ( pCmp->pOld == pOld && pCmp->nType == nType )
             return pCmp->pNew;

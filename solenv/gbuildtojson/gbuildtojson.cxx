@@ -41,7 +41,7 @@ int main(int argc, char** argv)
     }
     cout << "{";
     bool first(true);
-    for(auto& varandfile : vartofile)
+    for(const auto& varandfile : vartofile)
     {
         if(first)
             first =false;
@@ -57,7 +57,7 @@ int main(int argc, char** argv)
         filestream.close();
         (void)remove(varandfile.second.c_str());
         string escapedcontents;
-        for(auto& c : contents.str())
+        for(const auto& c : contents.str())
         {
             if(c=='\\')
                 escapedcontents += "\\\\";

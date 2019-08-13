@@ -1228,7 +1228,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
 const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByISTD(const OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;
-    for(StyleSheetEntryPtr & rpEntry : m_pImpl->m_aStyleSheetEntries)
+    for(const StyleSheetEntryPtr & rpEntry : m_pImpl->m_aStyleSheetEntries)
     {
         if( rpEntry->sStyleIdentifierD == sIndex)
         {
@@ -1243,7 +1243,7 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByISTD(const OUString& s
 const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByConvertedStyleName(const OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;
-    for(StyleSheetEntryPtr & rpEntry : m_pImpl->m_aStyleSheetEntries)
+    for(const StyleSheetEntryPtr & rpEntry : m_pImpl->m_aStyleSheetEntries)
     {
         if( rpEntry->sConvertedStyleName == sIndex)
         {

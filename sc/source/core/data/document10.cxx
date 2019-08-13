@@ -519,7 +519,7 @@ void ScDocument::StartAllListeners( const ScRange& rRange )
 
 void ScDocument::finalizeOutlineImport()
 {
-    for (auto& rxTab : maTabs)
+    for (const auto& rxTab : maTabs)
     {
         ScTable* p = rxTab.get();
         p->finalizeOutlineImport();

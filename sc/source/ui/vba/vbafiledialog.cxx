@@ -98,7 +98,7 @@ sal_Int32 ScVbaFileDialog::Show()
                     break;
                 }
 
-                for( auto& sURL : xFilePicker->getSelectedFiles() )
+                for( const auto& sURL : xFilePicker->getSelectedFiles() )
                 {
                     OUString sPath;
                     osl::FileBase::getSystemPathFromFileURL(sURL, sPath);

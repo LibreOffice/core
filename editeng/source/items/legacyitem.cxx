@@ -353,7 +353,7 @@ namespace legacy
 
             if( nItemVersion >= BOX_4DISTS_VERSION && (cLine&0x10) != 0 )
             {
-                for(SvxBoxItemLine & i : aLineMap)
+                for(const SvxBoxItemLine & i : aLineMap)
                 {
                     sal_uInt16 nDist;
                     rStrm.ReadUInt16( nDist );

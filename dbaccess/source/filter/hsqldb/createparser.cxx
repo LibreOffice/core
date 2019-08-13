@@ -170,7 +170,7 @@ ColumnTypeParts lcl_getColumnTypeParts(const OUString& sFullTypeName)
         OUString sParamStr
             = sFullTypeName.copy(nParenPos + 1, sFullTypeName.indexOf(")") - nParenPos - 1);
         auto sParams = string::split(sParamStr, sal_Unicode(u','));
-        for (auto& sParam : sParams)
+        for (const auto& sParam : sParams)
         {
             parts.params.push_back(sParam.toInt32());
         }
@@ -197,7 +197,7 @@ void CreateStmtParser::parsePrimaryKeys(const OUString& sPrimaryPart)
         OUString sParamStr
             = sPrimaryPart.copy(nParenPos + 1, sPrimaryPart.lastIndexOf(")") - nParenPos - 1);
         auto sParams = string::split(sParamStr, sal_Unicode(u','));
-        for (auto& sParam : sParams)
+        for (const auto& sParam : sParams)
         {
             m_PrimaryKeys.push_back(sParam);
         }
@@ -207,7 +207,7 @@ void CreateStmtParser::parsePrimaryKeys(const OUString& sPrimaryPart)
 void CreateStmtParser::parseColumnPart(const OUString& sColumnPart)
 {
     auto sColumns = lcl_splitColumnPart(sColumnPart);
-    for (OUString& sColumn : sColumns)
+    for (const OUString& sColumn : sColumns)
     {
         if (sColumn.startsWithIgnoreAsciiCase("PRIMARY KEY"))
         {

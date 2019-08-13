@@ -2068,7 +2068,7 @@ void VCLXToolkit::callTopWindowListeners(
         {
             css::lang::EventObject aAwtEvent(
                 static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()));
-            for (css::uno::Reference<XInterface> & i : aListeners)
+            for (const css::uno::Reference<XInterface> & i : aListeners)
             {
                 css::uno::Reference< css::awt::XTopWindowListener >
                       xListener(i, css::uno::UNO_QUERY);
@@ -2111,7 +2111,7 @@ bool VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
             pKeyEvent->GetKeyCode().GetCode(), pKeyEvent->GetCharCode(),
             sal::static_int_cast< sal_Int16 >(
                 pKeyEvent->GetKeyCode().GetFunction()));
-        for (css::uno::Reference<XInterface> & i : aHandlers)
+        for (const css::uno::Reference<XInterface> & i : aHandlers)
         {
             css::uno::Reference< css::awt::XKeyHandler > xHandler(
                 i, css::uno::UNO_QUERY);
@@ -2158,7 +2158,7 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
                 static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()),
                 static_cast<sal_Int16>(pWindow->GetGetFocusFlags()),
                 xNext, false);
-            for (css::uno::Reference<XInterface> & i : aListeners)
+            for (const css::uno::Reference<XInterface> & i : aListeners)
             {
                 css::uno::Reference< css::awt::XFocusListener > xListener(
                     i, css::uno::UNO_QUERY);

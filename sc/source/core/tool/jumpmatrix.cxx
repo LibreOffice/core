@@ -52,7 +52,7 @@ ScJumpMatrix::ScJumpMatrix( OpCode eOp, SCSIZE nColsP, SCSIZE nRowsP )
 
 ScJumpMatrix::~ScJumpMatrix()
 {
-    for (auto & i : mvParams)
+    for (const auto & i : mvParams)
         i->DecRef();
 }
 

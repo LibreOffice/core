@@ -3278,7 +3278,7 @@ IMPL_LINK(SwTokenWindow, NextItemHdl, SwTOXEdit&, rEdit, void)
 IMPL_LINK(SwTokenWindow, TbxFocusHdl, SwTOXWidget&, rControl, void)
 {
     SwTOXEdit* pEdit = static_cast<SwTOXEdit*>(&rControl);
-    for (auto& aControl : m_aControlList)
+    for (const auto& aControl : m_aControlList)
     {
         SwTOXWidget* pCtrl = aControl.get();
         if (pCtrl && pCtrl->GetType() != WindowType::EDIT)
@@ -3333,7 +3333,7 @@ IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton&, rBtn, void )
 IMPL_LINK(SwTokenWindow, TbxFocusBtnHdl, SwTOXWidget&, rControl, void)
 {
     SwTOXButton* pBtn = static_cast<SwTOXButton*>(&rControl);
-    for (auto& aControl : m_aControlList)
+    for (const auto& aControl : m_aControlList)
     {
         SwTOXWidget* pControl = aControl.get();
 
@@ -3877,7 +3877,7 @@ void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
         GoToColumnId(nCol + (nCol < ITEM_CASE ? 1 : -1 ));
 
     rtl_TextEncoding  eTEnc = osl_getThreadTextEncoding();
-    for(std::unique_ptr<AutoMarkEntry> & rpEntry : m_Entries)
+    for(const std::unique_ptr<AutoMarkEntry> & rpEntry : m_Entries)
     {
         AutoMarkEntry* pEntry = rpEntry.get();
         if(!pEntry->sComment.isEmpty())

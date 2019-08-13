@@ -190,7 +190,7 @@ public:
         Sequence<  Reference< browse::XBrowseNode > > children( m_hBNA->size() );
         sal_Int32 index = 0;
 
-        for ( auto& str : m_vStr )
+        for ( const auto& str : m_vStr )
         {
             children[ index ].set( m_hBNA->find( str )->second );
             ++index;

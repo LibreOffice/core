@@ -522,7 +522,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
              *  The master page are put in an unordered set.
              */
             ObjectSet aMasterPageTargetSet;
-            for(uno::Reference<drawing::XDrawPage> & mSelectedPage : mSelectedPages)
+            for(const uno::Reference<drawing::XDrawPage> & mSelectedPage : mSelectedPages)
             {
                 uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( mSelectedPage, uno::UNO_QUERY );
                 if( xMasterPageTarget.is() )

@@ -738,7 +738,7 @@ void SchXMLSeries2Context::setDefaultsToSeries( SeriesDefaultsAndStyles& rSeries
     // iterate over series
     // call initSeriesPropertySets first
 
-    for (auto & seriesStyle : rSeriesDefaultsAndStyles.maSeriesStyleVector)
+    for (const auto & seriesStyle : rSeriesDefaultsAndStyles.maSeriesStyleVector)
     {
         if( seriesStyle.meType != DataRowPointStyle::DATA_SERIES )
             continue;
@@ -790,7 +790,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
         , tSchXMLLSequencesPerIndex & rInOutLSequencesPerIndex )
 {
     // iterate over series
-    for (auto & seriesStyle : rSeriesDefaultsAndStyles.maSeriesStyleVector)
+    for (const auto & seriesStyle : rSeriesDefaultsAndStyles.maSeriesStyleVector)
     {
         if( seriesStyle.meType == DataRowPointStyle::DATA_SERIES )
         {

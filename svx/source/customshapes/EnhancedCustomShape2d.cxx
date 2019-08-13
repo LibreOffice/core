@@ -2644,7 +2644,7 @@ static void CorrectCalloutArrows(
         {
             sal_uInt32 nLine = 0;
 
-            for ( std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
+            for ( const std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
             {
                 SdrPathObj* pObj(rCandidate.first);
 
@@ -2671,7 +2671,7 @@ static void CorrectCalloutArrows(
         {
             sal_uInt32 nLine = 0;
 
-            for ( std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
+            for ( const std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
             {
                 SdrPathObj* pObj(rCandidate.first);
 
@@ -2699,7 +2699,7 @@ static void CorrectCalloutArrows(
         {
             sal_uInt32 nLine = 0;
 
-            for ( std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
+            for ( const std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
             {
                 SdrPathObj* pObj(rCandidate.first);
 
@@ -2842,7 +2842,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
         // #i37011# remove invisible objects
         std::vector< std::pair< SdrPathObj*, double> > vNewList;
 
-        for ( std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
+        for ( const std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
         {
             SdrPathObj* pObj(rCandidate.first);
             const drawing::LineStyle eLineStyle(pObj->GetMergedItem(XATTR_LINESTYLE).GetValue());
@@ -2878,7 +2878,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
             sal_Int32 nLineObjectCount(0);
 
             // correct some values and collect content data
-            for ( std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
+            for ( const std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
             {
                 SdrPathObj* pObj(rCandidate.first);
 
@@ -2920,7 +2920,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
                 std::vector< std::pair< SdrPathObj*, double> > vTempList;
                 vTempList.reserve(vObjectList.size());
 
-                for ( std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
+                for ( const std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
                 {
                     SdrPathObj* pObj(rCandidate.first);
 
@@ -2930,7 +2930,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
                     }
                 }
 
-                for ( std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
+                for ( const std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
                 {
                     SdrPathObj* pObj(rCandidate.first);
 
@@ -2953,7 +2953,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
         {
             pRet = new SdrObjGroup(mrSdrObjCustomShape.getSdrModelFromSdrObject());
 
-            for ( std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
+            for ( const std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
             {
                 SdrPathObj* pObj(rCandidate.first);
 

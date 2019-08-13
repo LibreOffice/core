@@ -118,7 +118,7 @@ AccessibleDialogWindow::~AccessibleDialogWindow()
 
 void AccessibleDialogWindow::UpdateFocused()
 {
-    for (ChildDescriptor & i : m_aAccessibleChildren)
+    for (const ChildDescriptor & i : m_aAccessibleChildren)
     {
         Reference< XAccessible > xChild( i.rxAccessible );
         if ( xChild.is() )
@@ -135,7 +135,7 @@ void AccessibleDialogWindow::UpdateSelected()
 {
     NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
 
-    for (ChildDescriptor & i : m_aAccessibleChildren)
+    for (const ChildDescriptor & i : m_aAccessibleChildren)
     {
         Reference< XAccessible > xChild( i.rxAccessible );
         if ( xChild.is() )
@@ -150,7 +150,7 @@ void AccessibleDialogWindow::UpdateSelected()
 
 void AccessibleDialogWindow::UpdateBounds()
 {
-    for (ChildDescriptor & i : m_aAccessibleChildren)
+    for (const ChildDescriptor & i : m_aAccessibleChildren)
     {
         Reference< XAccessible > xChild( i.rxAccessible );
         if ( xChild.is() )
@@ -378,7 +378,7 @@ void AccessibleDialogWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindo
                 m_pDlgEdModel = nullptr;
 
                 // dispose all children
-                for (ChildDescriptor & i : m_aAccessibleChildren)
+                for (const ChildDescriptor & i : m_aAccessibleChildren)
                 {
                     Reference< XComponent > xComponent( i.rxAccessible, UNO_QUERY );
                     if ( xComponent.is() )
@@ -523,7 +523,7 @@ void AccessibleDialogWindow::disposing()
         m_pDlgEdModel = nullptr;
 
         // dispose all children
-        for (ChildDescriptor & i : m_aAccessibleChildren)
+        for (const ChildDescriptor & i : m_aAccessibleChildren)
         {
             Reference< XComponent > xComponent( i.rxAccessible, UNO_QUERY );
             if ( xComponent.is() )

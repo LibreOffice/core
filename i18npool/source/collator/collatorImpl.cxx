@@ -164,7 +164,7 @@ CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& servic
 void
 CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rSortAlgorithm)
 {
-    for (auto& i : lookupTable) {
+    for (const auto& i : lookupTable) {
         cachedItem = i.get();
         if (cachedItem->equals(rLocale, rSortAlgorithm)) {
             return;

@@ -4022,7 +4022,7 @@ void ScXMLExport::WriteExternalDataMapping()
     if (!rDataSources.empty())
     {
         SvXMLElementExport aMappings(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_MAPPINGS, true, true);
-        for (auto& itr : rDataSources)
+        for (const auto& itr : rDataSources)
         {
             AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, itr.getURL());
             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_PROVIDER, itr.getProvider());

@@ -704,7 +704,7 @@ SfxTemplateLocalView::getFilteredItems(const std::function<bool (const TemplateI
     {
         TemplateContainerItem *pFolderItem = maRegions[mnCurRegionId-1].get();
 
-        for (TemplateItemProperties & rItemProps : pFolderItem->maTemplates)
+        for (const TemplateItemProperties & rItemProps : pFolderItem->maTemplates)
         {
             if (rFunc(rItemProps))
                 aItems.push_back(rItemProps);
@@ -1301,7 +1301,7 @@ bool SfxTemplateLocalView::IsDefaultTemplate(const OUString& rPath)
 
 void SfxTemplateLocalView::RemoveDefaultTemplateIcon(const OUString& rPath)
 {
-    for (std::unique_ptr<ThumbnailViewItem>& pItem : mItemList)
+    for (const std::unique_ptr<ThumbnailViewItem>& pItem : mItemList)
     {
         TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem.get());
         if (pViewItem && pViewItem->getPath().match(rPath))

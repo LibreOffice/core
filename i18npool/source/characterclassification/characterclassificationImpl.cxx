@@ -155,7 +155,7 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
     if (cachedItem && cachedItem->equals(rLocale))
         return cachedItem->xCI;
     else {
-        for (auto & i : lookupTable) {
+        for (const auto & i : lookupTable) {
             cachedItem = i.get();
             if (cachedItem->equals(rLocale))
                 return cachedItem->xCI;

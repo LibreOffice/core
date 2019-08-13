@@ -161,7 +161,7 @@ void SvxOnlineUpdateTabPage::UpdateUserAgent()
         uno::Sequence< beans::StringPair > aHeaders
             = xDav->getUserRequestHeaders( aPseudoURL, ucb::WebDAVHTTPMethod(0) );
 
-        for (css::beans::StringPair & aHeader : aHeaders)
+        for (const css::beans::StringPair & aHeader : aHeaders)
         {
             if ( aHeader.First == "User-Agent" )
             {

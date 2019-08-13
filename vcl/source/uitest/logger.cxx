@@ -170,7 +170,7 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
     };
 
     OUString aFound;
-    for (auto& itr : aKeyMap)
+    for (const auto& itr : aKeyMap)
     {
         if (itr.second == nKeyCode)
         {

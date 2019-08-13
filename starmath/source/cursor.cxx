@@ -129,7 +129,7 @@ void SmCursor::BuildGraph(){
 
     //Restore anchor and position pointers
     if(_anchor.IsValid() || _position.IsValid()){
-        for(auto &pEntry : *mpGraph)
+        for(const auto &pEntry : *mpGraph)
         {
             if(_anchor == pEntry->CaretPos)
                 mpAnchor = pEntry.get();
@@ -152,7 +152,7 @@ void SmCursor::BuildGraph(){
 }
 
 bool SmCursor::SetCaretPosition(SmCaretPos pos){
-    for(auto &pEntry : *mpGraph)
+    for(const auto &pEntry : *mpGraph)
     {
         if(pEntry->CaretPos == pos)
         {

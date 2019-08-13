@@ -31,7 +31,7 @@ WidgetDefinitionPart::getStates(ControlType eType, ControlPart ePart, ControlSta
 {
     std::vector<std::shared_ptr<WidgetDefinitionState>> aStatesToAdd;
 
-    for (auto& state : maStates)
+    for (const auto& state : maStates)
     {
         bool bAdd = true;
 

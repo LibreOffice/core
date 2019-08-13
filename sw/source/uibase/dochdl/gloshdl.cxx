@@ -411,7 +411,7 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 ScopedVclPtr<AbstractSwSelGlossaryDlg> pDlg(pFact->CreateSwSelGlossaryDlg(pParent, aShortName));
-                for(TextBlockInfo_Impl & i : aFoundArr)
+                for(const TextBlockInfo_Impl & i : aFoundArr)
                 {
                     pDlg->InsertGlos(i.sTitle, i.sLongName);
                 }

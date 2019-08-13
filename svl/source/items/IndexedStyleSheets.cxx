@@ -186,7 +186,7 @@ IndexedStyleSheets::FindStyleSheetPosition(const SfxStyleSheetBase& style) const
 void
 IndexedStyleSheets::Clear(StyleSheetDisposer& disposer)
 {
-    for (auto& rxStyleSheet : mStyleSheets) {
+    for (const auto& rxStyleSheet : mStyleSheets) {
         disposer.Dispose(rxStyleSheet);
     }
     mStyleSheets.clear();

@@ -2533,7 +2533,7 @@ void EffectSequenceHelper::setTextGrouping( const CustomAnimationTextGroupPtr& p
         EffectSequence aEffects( pTextGroup->maEffects );
         pTextGroup->reset();
 
-        for( CustomAnimationEffectPtr& pEffect : aEffects )
+        for( const CustomAnimationEffectPtr& pEffect : aEffects )
         {
             if( pEffect->getTarget().getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
                 remove( pEffect );

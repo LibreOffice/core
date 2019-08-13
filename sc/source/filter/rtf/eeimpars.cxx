@@ -487,7 +487,7 @@ bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, ScEEParseEntry* pE )
     long nWidth, nHeight;
     nWidth = nHeight = 0;
     sal_Char nDir = nHorizontal;
-    for (std::unique_ptr<ScHTMLImage> & pImage : pE->maImageList)
+    for (const std::unique_ptr<ScHTMLImage> & pImage : pE->maImageList)
     {
         ScHTMLImage* pI = pImage.get();
         if ( pI->pGraphic )
@@ -563,7 +563,7 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
     Point aSpace;
     Size aLogicSize;
     sal_Char nDir = nHorizontal;
-    for (std::unique_ptr<ScHTMLImage> & pImage : pE->maImageList)
+    for (const std::unique_ptr<ScHTMLImage> & pImage : pE->maImageList)
     {
         ScHTMLImage* pI = pImage.get();
         if ( nDir & nHorizontal )

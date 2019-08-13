@@ -1643,9 +1643,9 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
             aAny = xPropSet->getPropertyValue(sSortKeys);
             Sequence<Sequence<PropertyValue> > aKeys;
             aAny >>= aKeys;
-            for(Sequence<PropertyValue> & rKey : aKeys)
+            for(const Sequence<PropertyValue> & rKey : aKeys)
             {
-                for(PropertyValue& rValue : rKey)
+                for(const PropertyValue& rValue : rKey)
                 {
                     if (rValue.Name == "SortKey")
                     {
