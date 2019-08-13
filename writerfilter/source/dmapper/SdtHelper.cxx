@@ -200,7 +200,7 @@ sal_Int32 SdtHelper::getInteropGrabBagSize() { return m_aGrabBag.size(); }
 
 bool SdtHelper::containedInInteropGrabBag(const OUString& rValueName)
 {
-    for (beans::PropertyValue& i : m_aGrabBag)
+    for (const beans::PropertyValue& i : m_aGrabBag)
         if (i.Name == rValueName)
             return true;
 

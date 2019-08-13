@@ -692,7 +692,7 @@ void DomainMapper_Impl::IncorporateTabStop( const DeletableTabStop &  rTabStop )
 uno::Sequence< style::TabStop > DomainMapper_Impl::GetCurrentTabStopAndClear()
 {
     std::vector<style::TabStop> aRet;
-    for (DeletableTabStop& rStop : m_aCurrentTabStops)
+    for (const DeletableTabStop& rStop : m_aCurrentTabStops)
     {
         if (!rStop.bDeleted)
             aRet.push_back(rStop);

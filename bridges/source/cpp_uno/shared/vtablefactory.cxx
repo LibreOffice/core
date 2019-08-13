@@ -182,7 +182,7 @@ VtableFactory::VtableFactory(): m_arena(
 VtableFactory::~VtableFactory() {
     {
         osl::MutexGuard guard(m_mutex);
-        for (auto& rEntry : m_map) {
+        for (const auto& rEntry : m_map) {
             for (sal_Int32 j = 0; j < rEntry.second.count; ++j) {
                 freeBlock(rEntry.second.blocks[j]);
             }
