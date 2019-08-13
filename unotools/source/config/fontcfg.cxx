@@ -119,7 +119,7 @@ DefaultFontConfiguration::DefaultFontConfiguration()
         {
             Sequence< OUString > aLocales = m_xConfigAccess->getElementNames();
             // fill config hash with empty interfaces
-            for( const OUString& rLocaleString : aLocales )
+            for( const OUString& rLocaleString : std::as_const(aLocales) )
             {
                 // Feed through LanguageTag for casing.
                 OUString aLoc( LanguageTag( rLocaleString, true).getBcp47( false));
@@ -333,7 +333,7 @@ FontSubstConfiguration::FontSubstConfiguration() :
         {
             Sequence< OUString > aLocales = m_xConfigAccess->getElementNames();
             // fill config hash with empty interfaces
-            for( const OUString& rLocaleString : aLocales )
+            for( const OUString& rLocaleString : std::as_const(aLocales) )
             {
                 // Feed through LanguageTag for casing.
                 OUString aLoc( LanguageTag( rLocaleString, true).getBcp47( false));
@@ -984,7 +984,7 @@ void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
                 OUString const aSubstWeightStr    ( "FontWeight" );
                 OUString const aSubstWidthStr     ( "FontWidth" );
                 OUString const aSubstTypeStr      ( "FontType" );
-                for( const OUString& rFontName : aFonts )
+                for( const OUString& rFontName : std::as_const(aFonts) )
                 {
                     Reference< XNameAccess > xFont;
                     try

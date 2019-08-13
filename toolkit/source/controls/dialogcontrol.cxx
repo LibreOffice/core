@@ -211,7 +211,7 @@ UnoControlDialogModel::UnoControlDialogModel( const UnoControlDialogModel& rMode
     Reference<XNameContainer > xNameCont( new SimpleNamedThingContainer< XControlModel > );
 
     uno::Sequence< OUString > sNames = xSrcNameCont->getElementNames();
-    for ( OUString const & name : sNames )
+    for ( OUString const & name : std::as_const(sNames) )
     {
         if ( xSrcNameCont->hasByName( name ) )
             xNameCont->insertByName( name, xSrcNameCont->getByName( name ) );
@@ -793,7 +793,7 @@ void UnoMultiPageControl::createPeer( const Reference< XToolkit > & rxToolkit, c
     UnoControlContainer::createPeer( rxToolkit, rParentPeer );
 
     uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
-    for( const auto& rCtrl : aCtrls )
+    for( const auto& rCtrl : std::as_const(aCtrls) )
        bindPage( rCtrl );
     sal_Int32 nActiveTab(0);
     Reference< XPropertySet > xMultiProps( getModel(), UNO_QUERY );

@@ -281,7 +281,7 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
                 lOutValues.realloc  ( nDestinationCounter+nPropertiesSize );
             }
 
-            for( const auto& rProperty : lProperties )
+            for( const auto& rProperty : std::as_const(lProperties) )
             {
                 lOutNames [nDestinationCounter] = sNodeName + rProperty.Name;
                 lOutValues[nDestinationCounter] = rProperty.Value;
@@ -643,7 +643,7 @@ bool ConfigItem::ClearNodeSet(const OUString& rNode)
                 return false;
             Sequence< OUString > aNames = xCont->getElementNames();
             Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
-            for(const OUString& rName : aNames)
+            for(const OUString& rName : std::as_const(aNames))
             {
                 try
                 {

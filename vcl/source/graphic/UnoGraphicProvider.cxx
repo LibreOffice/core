@@ -341,7 +341,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     sal_uInt16 nExtWidth = 0;
     sal_uInt16 nExtHeight = 0;
     sal_uInt16 nExtMapMode = 0;
-    for( const auto& rProp : aFilterData )
+    for( const auto& rProp : std::as_const(aFilterData) )
     {
         const OUString   aName( rProp.Name );
         const uno::Any          aValue( rProp.Value );
@@ -576,7 +576,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
     text::GraphicCrop aCropLogic( 0, 0, 0, 0 );
     bool bRemoveCropArea = true;
 
-    for( const auto& rProp : rFilterData )
+    for( const auto& rProp : std::as_const(rFilterData) )
     {
         const OUString   aName(  rProp.Name );
         const uno::Any          aValue( rProp.Value );

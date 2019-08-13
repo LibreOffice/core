@@ -259,7 +259,7 @@ bool SfxObjectShell::IsModified()
     if (pImpl->mpObjectContainer)
     {
         uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
-        for ( const auto& rName : aNames )
+        for ( const auto& rName : std::as_const(aNames) )
         {
             uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( rName );
             OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!" );

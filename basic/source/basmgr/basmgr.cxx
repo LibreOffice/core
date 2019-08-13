@@ -555,7 +555,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
 
         if( aScriptLibNames.hasElements() )
         {
-            for(const auto& rScriptLibName : aScriptLibNames)
+            for(const auto& rScriptLibName : std::as_const(aScriptLibNames))
             {
                 uno::Any aLibAny = xScriptCont->getByName( rScriptLibName );
 
@@ -1420,7 +1420,7 @@ bool BasicManager::LegacyPsswdBinaryLimitExceeded( std::vector< OUString >& _out
         uno::Reference< script::XLibraryContainerPassword > xPassword( GetScriptLibraryContainer(), uno::UNO_QUERY_THROW );
 
         uno::Sequence< OUString > aNames( xScripts->getElementNames() );
-        for ( auto const & scriptElementName : aNames )
+        for ( auto const & scriptElementName : std::as_const(aNames) )
         {
             if( !xPassword->isLibraryPasswordProtected( scriptElementName ) )
                 continue;
@@ -1436,7 +1436,7 @@ bool BasicManager::LegacyPsswdBinaryLimitExceeded( std::vector< OUString >& _out
             std::vector< OUString > aBigModules( nLen );
             sal_Int32 nBigModules = 0;
 
-            for ( auto const & libraryElementName : aElementNames )
+            for ( auto const & libraryElementName : std::as_const(aElementNames) )
             {
                 SbModule* pMod = pBasicLib->FindModule( libraryElementName );
                 if ( pMod && pMod->ExceedsLegacyModuleSize() )

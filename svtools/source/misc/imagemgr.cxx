@@ -232,7 +232,7 @@ static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
         if ( !aInternalType.isEmpty() && xAccess->hasByName( aInternalType ) )
         {
             xAccess->getByName( aInternalType ) >>= aTypeProps;
-            for ( const css::beans::PropertyValue& rProp : aTypeProps )
+            for ( const css::beans::PropertyValue& rProp : std::as_const(aTypeProps) )
             {
                 if (rProp.Name == "Extensions")
                 {

@@ -1754,7 +1754,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                 aClassSeq.realloc( nIfaceCount + 1 );
                 aClassSeq.getArray()[ nIfaceCount ] = xImplClass2;
 
-                for( const Reference<XIdlClass>& rxIfaceClass : aClassSeq )
+                for( const Reference<XIdlClass>& rxIfaceClass : std::as_const(aClassSeq) )
                 {
                     if (!seen.insert(rxIfaceClass->getName()).second) {
                         continue;
@@ -1765,7 +1765,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                     // Get fields
                     Sequence< Reference<XIdlField> > fields = rxIfaceClass->getFields();
 
-                    for( const Reference<XIdlField>& xField : fields )
+                    for( const Reference<XIdlField>& xField : std::as_const(fields) )
                     {
                         Reference<XIdlClass> xPropType = xField->getType();
 
@@ -2357,7 +2357,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         // Get fields
         Sequence< Reference<XIdlField> > fields = xClassRef->getFields();
 
-        for( const Reference<XIdlField>& xField : fields )
+        for( const Reference<XIdlField>& xField : std::as_const(fields) )
         {
             Reference<XIdlClass> xPropType = xField->getType();
             OUString aPropName = xField->getName();

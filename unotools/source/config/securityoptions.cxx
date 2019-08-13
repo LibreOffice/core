@@ -419,7 +419,7 @@ void SvtSecurityOptions_Impl::LoadAuthors()
 
         sal_Int32               i2 = 0;
         OUString                aSep( "/" );
-        for( const auto& rAuthor : lAuthors )
+        for( const auto& rAuthor : std::as_const(lAuthors) )
         {
             lAllAuthors[ i2 ] = PROPERTYNAME_MACRO_TRUSTEDAUTHORS + aSep + rAuthor + aSep + PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME;
             ++i2;

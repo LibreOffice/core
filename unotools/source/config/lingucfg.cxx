@@ -1021,7 +1021,7 @@ std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionari
         const uno::Sequence< OUString > aDisabledDics( GetDisabledDictionaries() );
 
         SvtLinguConfigDictionaryEntry aDicEntry;
-        for (const OUString& rElementName : aElementNames)
+        for (const OUString& rElementName : std::as_const(aElementNames))
         {
             // does dictionary match the format we are looking for?
             if (GetDictionaryEntry( rElementName, aDicEntry ) &&

@@ -2156,7 +2156,7 @@ void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent )
 
     Reference< XItemList > xItemList( i_rEvent.Source, uno::UNO_QUERY_THROW );
     uno::Sequence< beans::Pair< OUString, OUString > > aItems = xItemList->getAllItems();
-    for ( const auto& rItem : aItems )
+    for ( const auto& rItem : std::as_const(aItems) )
     {
         OUString aLocalizationKey( rItem.First );
         if ( xStringResourceResolver.is() && aLocalizationKey.startsWith("&") )
@@ -4616,7 +4616,7 @@ void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent )
 
     Reference< XItemList > xItemList( i_rEvent.Source, uno::UNO_QUERY_THROW );
     uno::Sequence< beans::Pair< OUString, OUString > > aItems = xItemList->getAllItems();
-    for ( const auto& rItem : aItems )
+    for ( const auto& rItem : std::as_const(aItems) )
     {
         OUString aLocalizationKey( rItem.First );
         if ( xStringResourceResolver.is() && !aLocalizationKey.isEmpty() && aLocalizationKey[0] == '&' )

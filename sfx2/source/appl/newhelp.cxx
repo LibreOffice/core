@@ -1121,7 +1121,7 @@ static void GetBookmarkEntry_Impl
     OUString& rURL
 )
 {
-    for ( const PropertyValue& aValue : aBookmarkEntry )
+    for ( const PropertyValue& aValue : std::as_const(aBookmarkEntry) )
     {
         if ( aValue.Name == HISTORY_PROPERTYNAME_URL )
             aValue.Value >>= rURL;

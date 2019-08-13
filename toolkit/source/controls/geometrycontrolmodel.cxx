@@ -403,7 +403,7 @@
             css::uno::Sequence< OUString > aNames =
                 xEventCont->getElementNames();
 
-            for( const OUString& aName : aNames )
+            for( const OUString& aName : std::as_const(aNames) )
             {
                 css::uno::Any aElement = xEventCont->getByName( aName );
                 xCloneEventCont->insertByName( aName, aElement );
@@ -533,7 +533,7 @@
         );
 
         // now loop through our own props
-        for ( const Property& rProp : aProps )
+        for ( const Property& rProp : std::as_const(aProps) )
         {
             // look for the current property in the properties of our aggregate
             const Property* pAggPropPos = ::std::find_if( aAggregateProps.begin(), aAggregateProps.end(), PropertyNameEqual( rProp.Name ) );

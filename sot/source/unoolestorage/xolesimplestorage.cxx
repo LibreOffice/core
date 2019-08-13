@@ -237,7 +237,7 @@ void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, co
     try
     {
         uno::Sequence< OUString > aElements = xNameAccess->getElementNames();
-        for ( const auto& rElement : aElements )
+        for ( const auto& rElement : std::as_const(aElements) )
         {
             uno::Reference< io::XInputStream > xInputStream;
             uno::Reference< container::XNameAccess > xSubNameAccess;

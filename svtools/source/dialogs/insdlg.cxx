@@ -114,7 +114,7 @@ void SvObjectServerList::FillInsertObjects()
             OUString aStringProductVersion( "%PRODUCTVERSION" );
             sal_Int32 nStringProductVersionLength = aStringProductVersion.getLength();
 
-            for( const auto& rName : seqNames )
+            for( const auto& rName : std::as_const(seqNames) )
             {
                 uno::Reference< container::XNameAccess > xEntry ;
                 xNameAccess->getByName( rName ) >>= xEntry;

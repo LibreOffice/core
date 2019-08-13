@@ -115,7 +115,7 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
 
         SolarMutexGuard aGuard;
         StringMap aMap;
-        for (const auto& rPropVal : mPropValues)
+        for (const auto& rPropVal : std::as_const(mPropValues))
         {
             OUString aVal;
             if (!(rPropVal.Value >>= aVal))

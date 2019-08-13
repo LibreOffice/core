@@ -160,7 +160,7 @@ void FilterConfigCache::ImplInit()
     {
         Sequence< OUString > lAllFilter = xFilterAccess->getElementNames();
 
-        for ( const OUString& sInternalFilterName : lAllFilter )
+        for ( const OUString& sInternalFilterName : std::as_const(lAllFilter) )
         {
             Reference< XPropertySet > xFilterSet;
             xFilterAccess->getByName( sInternalFilterName ) >>= xFilterSet;

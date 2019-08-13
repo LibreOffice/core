@@ -1453,7 +1453,7 @@ bool SfxObjectShell::SaveTo_Impl
                         if ( !xNewVerStor.is() || !xOldVerStor.is() )
                             throw uno::RuntimeException();
 
-                        for ( const auto& rVersion : aVersions )
+                        for ( const auto& rVersion : std::as_const(aVersions) )
                         {
                             if ( xOldVerStor->hasByName( rVersion.Identifier ) )
                                 xOldVerStor->copyElementTo( rVersion.Identifier, xNewVerStor, rVersion.Identifier );
@@ -2226,7 +2226,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             // modified flag, so needs to reset the flag to false after loading
             bool bRtn = xLoader->filter( aArgs );
             uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
-            for ( const auto& rName : aNames )
+            for ( const auto& rName : std::as_const(aNames) )
             {
                 uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( rName );
                 OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!" );

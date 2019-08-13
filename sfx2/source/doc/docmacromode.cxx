@@ -311,7 +311,7 @@ namespace sfx2
                     const OUString aStdLibName( "Standard" );
                     const OUString aVBAProject( "VBAProject" );
                     Sequence< OUString > aElements = xContainer->getElementNames();
-                    for( const OUString& aElement : aElements )
+                    for( const OUString& aElement : std::as_const(aElements) )
                     {
                         if( aElement == aStdLibName || aElement == aVBAProject )
                         {

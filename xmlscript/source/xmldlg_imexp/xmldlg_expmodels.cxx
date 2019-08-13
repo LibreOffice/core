@@ -318,7 +318,7 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
     {
         ElementDescriptor * popup = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menupopup", _xDocument );
 
-        for ( const auto& rItemValue : itemValues )
+        for ( const auto& rItemValue : std::as_const(itemValues) )
         {
             ElementDescriptor * item = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menuitem", _xDocument );
             item->addAttribute( XMLNS_DIALOGS_PREFIX ":value", rItemValue );
@@ -365,7 +365,7 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
     {
         ElementDescriptor * popup = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menupopup", _xDocument );
 
-        for ( const auto& rItemValue : itemValues )
+        for ( const auto& rItemValue : std::as_const(itemValues) )
         {
             ElementDescriptor * item = new ElementDescriptor(_xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menuitem", _xDocument );
             item->addAttribute( XMLNS_DIALOGS_PREFIX ":value", rItemValue );
@@ -1090,7 +1090,7 @@ void ElementDescriptor::readBullitinBoard( StyleBag * all_styles )
 
     ElementDescriptor * pRadioGroup = nullptr;
 
-    for ( const auto& rElement : aElements )
+    for ( const auto& rElement : std::as_const(aElements) )
     {
         Any aControlModel( xDialogModel->getByName( rElement ) );
         Reference< beans::XPropertySet > xProps;

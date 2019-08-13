@@ -1134,7 +1134,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                         // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
                         bool bIsGoogleFile = false;
                         bool bCheckedOut = false;
-                        for ( const auto& rCmisProperty : aCmisProperties )
+                        for ( const auto& rCmisProperty : std::as_const(aCmisProperties) )
                         {
                             if ( rCmisProperty.Id == "cmis:isVersionSeriesCheckedOut" )
                             {

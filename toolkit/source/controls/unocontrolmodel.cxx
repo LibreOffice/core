@@ -361,7 +361,7 @@ css::uno::Any UnoControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
                 {
                     bool bLegacy = false;
                     bool bFound = false;
-                    for ( const Currency2& rCurrency : aAllCurrencies )
+                    for ( const Currency2& rCurrency : std::as_const(aAllCurrencies) )
                         if ( rCurrency.BankSymbol == sBankSymbol )
                         {
                             sCurrencySymbol = rCurrency.Symbol;
@@ -670,7 +670,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
                 rValue >>= aSeq;
                 long nEntries = aSeq.getLength();
                 OutStream->writeLong( nEntries );
-                for ( const auto& rVal : aSeq )
+                for ( const auto& rVal : std::as_const(aSeq) )
                     OutStream->writeUTF( rVal );
             }
             else if ( rType == cppu::UnoType< cppu::UnoSequenceType<cppu::UnoUnsignedShortType> >::get() )

@@ -88,7 +88,7 @@ void SettingsConfigItem::getValues()
 
     Sequence< OUString > aNames( GetNodeNames( OUString() ) );
 
-    for( const auto& aKeyName : aNames )
+    for( const auto& aKeyName : std::as_const(aNames) )
     {
 #if OSL_DEBUG_LEVEL > 2
         SAL_INFO( "vcl", "found settings data for " << aKeyName );

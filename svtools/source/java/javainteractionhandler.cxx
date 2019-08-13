@@ -98,14 +98,14 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
     Reference< XInteractionAbort > abort;
     Reference< XInteractionRetry > retry;
 
-    for ( const auto& rCont : aSeqCont )
+    for ( const auto& rCont : std::as_const(aSeqCont) )
     {
         abort.set( rCont, UNO_QUERY );
         if ( abort.is() )
             break;
     }
 
-    for ( const auto& rCont : aSeqCont )
+    for ( const auto& rCont : std::as_const(aSeqCont) )
     {
         retry.set( rCont, UNO_QUERY );
         if ( retry.is() )

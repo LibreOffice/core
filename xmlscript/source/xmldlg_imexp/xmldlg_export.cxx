@@ -1152,7 +1152,7 @@ void ElementDescriptor::readEvents()
         if (xEvents.is())
         {
             Sequence< OUString > aNames( xEvents->getElementNames() );
-            for ( const auto& rName : aNames )
+            for ( const auto& rName : std::as_const(aNames) )
             {
                 script::ScriptEventDescriptor descr;
                 if (xEvents->getByName( rName ) >>= descr)

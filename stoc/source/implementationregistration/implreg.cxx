@@ -103,7 +103,7 @@ void deleteAllLinkReferences(const Reference < XSimpleRegistry >& xReg,
     const sal_Unicode*  pShortName = nullptr;
     sal_Int32           sEnd = 0;
 
-    for (const OUString& rLinkName : linkNames)
+    for (const OUString& rLinkName : std::as_const(linkNames))
     {
         aLinkName = rLinkName;
 
@@ -219,7 +219,7 @@ OUString searchImplForLink(
         Sequence< Reference < XRegistryKey > > subKeys( xKey->openKeys() );
         OUString key_name( slash_UNO + linkName );
 
-        for (const Reference < XRegistryKey >& xImplKey : subKeys)
+        for (const Reference < XRegistryKey >& xImplKey : std::as_const(subKeys))
         {
             try
             {
@@ -532,7 +532,7 @@ void prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
         {
             hasSubKeys = true;
 
-            for (const Reference < XRegistryKey > & rSubKey : subKeys)
+            for (const Reference < XRegistryKey > & rSubKey : std::as_const(subKeys))
             {
                 prepareUserKeys(xDest, xUnoKey, rSubKey, implName, bRegister);
             }
@@ -581,7 +581,7 @@ void deleteAllImplementations(   const Reference < XSimpleRegistry >& xReg,
     {
         bool hasLocationUrl = false;
 
-        for (const Reference < XRegistryKey> & xImplKey : subKeys)
+        for (const Reference < XRegistryKey> & xImplKey : std::as_const(subKeys))
         {
             Reference < XRegistryKey > xKey = xImplKey->openKey(
                 slash_UNO_slash_LOCATION );
@@ -607,7 +607,7 @@ void deleteAllImplementations(   const Reference < XSimpleRegistry >& xReg,
                     {
                         Sequence< Reference < XRegistryKey > > subKeys2 = xKey->openKeys();
 
-                        for (const Reference < XRegistryKey > & rSubKey2 : subKeys2)
+                        for (const Reference < XRegistryKey > & rSubKey2 : std::as_const(subKeys2))
                         {
                             if (rSubKey2->getKeyName() != (xImplKey->getKeyName() + slash_UNO_slash_SERVICES ) &&
                                 rSubKey2->getKeyName() != (xImplKey->getKeyName() + slash_UNO_slash_REGISTRY_LINKS ) &&
@@ -721,7 +721,7 @@ void deleteAllServiceEntries(    const Reference < XSimpleRegistry >& xReg,
     {
         bool hasNoImplementations = false;
 
-        for (const Reference < XRegistryKey > & xServiceKey : subKeys)
+        for (const Reference < XRegistryKey > & xServiceKey : std::as_const(subKeys))
         {
             if (xServiceKey->getValueType() == RegistryValueType_ASCIILIST)
             {
@@ -910,7 +910,7 @@ void prepareRegistry(
             "prepareRegistry(): source registry is empty" );
     }
 
-    for (const Reference < XRegistryKey >& xImplKey : subKeys)
+    for (const Reference < XRegistryKey >& xImplKey : std::as_const(subKeys))
     {
         Reference < XRegistryKey >  xKey = xImplKey->openKey(
             slash_UNO_slash_SERVICES );
@@ -928,7 +928,7 @@ void prepareRegistry(
 
             sal_Int32 offset = xKey->getKeyName().getLength() + 1;
 
-            for (const Reference < XRegistryKey >& rServiceKey : serviceKeys)
+            for (const Reference < XRegistryKey >& rServiceKey : std::as_const(serviceKeys))
             {
                 OUString serviceName = rServiceKey->getKeyName().copy(offset);
 
@@ -943,7 +943,7 @@ void prepareRegistry(
             {
                 Sequence< Reference < XRegistryKey > > subKeys2 = xKey->openKeys();
 
-                for (const Reference < XRegistryKey >& rSubKey2 : subKeys2)
+                for (const Reference < XRegistryKey >& rSubKey2 : std::as_const(subKeys2))
                 {
                     if (rSubKey2->getKeyName() != (xImplKey->getKeyName() + slash_UNO_slash_SERVICES) &&
                         rSubKey2->getKeyName() != (xImplKey->getKeyName() + slash_UNO_slash_REGISTRY_LINKS ) &&
@@ -978,7 +978,7 @@ void prepareRegistry(
             // update link entries in REGISTRY_LINKS section
             Sequence<OUString> linkNames = xKey->getAsciiListValue();
 
-            for (const OUString& rLinkName : linkNames)
+            for (const OUString& rLinkName : std::as_const(linkNames))
             {
                 prepareLink(xDest, xImplKey, rLinkName);
             }
@@ -1022,7 +1022,7 @@ void findImplementations(    const Reference < XRegistryKey > & xSource,
     {
         Sequence< Reference < XRegistryKey > > subKeys = xSource->openKeys();
 
-        for (const Reference < XRegistryKey >& rSubKey : subKeys)
+        for (const Reference < XRegistryKey >& rSubKey : std::as_const(subKeys))
         {
             findImplementations(rSubKey, implNames);
         }

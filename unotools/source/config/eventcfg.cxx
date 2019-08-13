@@ -195,7 +195,7 @@ void GlobalEventConfig_Impl::initBindingInfo()
 
     // Expand all keys
     Sequence< OUString > lMacros(1);
-    for (const auto& rEventName : lEventNames )
+    for (const auto& rEventName : std::as_const(lEventNames) )
     {
         OUStringBuffer aBuffer( 32 );
         aBuffer.append( aSetNode );
@@ -230,7 +230,7 @@ void GlobalEventConfig_Impl::replaceByName( const OUString& aName, const Any& aE
                 Reference< XInterface > (), 2);
     }
     OUString macroURL;
-    for( const auto& rProp : props )
+    for( const auto& rProp : std::as_const(props) )
     {
         if ( rProp.Name == "Script" )
             rProp.Value >>= macroURL;

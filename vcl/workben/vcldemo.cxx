@@ -1222,7 +1222,7 @@ public:
             css::uno::Reference<css::container::XNameAccess> xRef(ImageTree::get().getNameAccess());
             css::uno::Sequence< OUString > aAllIcons = xRef->getElementNames();
 
-            for (const auto& rIcon : aAllIcons)
+            for (const auto& rIcon : std::as_const(aAllIcons))
             {
                 if (rIcon.endsWithIgnoreAsciiCase("svg"))
                     continue; // too slow to load.

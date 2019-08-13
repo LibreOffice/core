@@ -254,7 +254,7 @@ QStringList Qt5MimeData::formats() const
     QStringList aList;
     bool bHaveUTF16 = false;
 
-    for (const auto& rFlavor : aFormats)
+    for (const auto& rFlavor : std::as_const(aFormats))
     {
         aList << toQString(rFlavor.MimeType);
         lcl_textMimeInfo(rFlavor.MimeType, m_bHaveNoCharset, bHaveUTF16, m_bHaveUTF8);

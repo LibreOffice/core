@@ -242,7 +242,7 @@ void RecentDocsView::Reload()
         BitmapEx aThumbnail;
         BitmapEx aModule;
 
-        for ( const auto& rProp : rRecentEntry )
+        for ( const auto& rProp : std::as_const(rRecentEntry) )
         {
             Any a = rProp.Value;
 

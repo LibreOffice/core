@@ -310,7 +310,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
 void ExtendedColorConfig_Impl::FillComponentColors(uno::Sequence < OUString >& _rComponents,const TDisplayNames& _rDisplayNames)
 {
     const OUString sColorEntries("/Entries");
-    for(OUString const & component : _rComponents)
+    for(OUString const & component : std::as_const(_rComponents))
     {
         OUString sComponentName = component.copy(component.lastIndexOf('/')+1);
         if ( m_aConfigValues.find(sComponentName) == m_aConfigValues.end() )

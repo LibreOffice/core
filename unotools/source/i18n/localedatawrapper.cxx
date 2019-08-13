@@ -299,7 +299,7 @@ std::vector< LanguageType > LocaleDataWrapper::getInstalledLanguageTypes()
     sal_Int32 nCount = xLoc.getLength();
     std::vector< LanguageType > xLang;
     xLang.reserve(nCount);
-    for ( const auto& rLoc : xLoc )
+    for ( const auto& rLoc : std::as_const(xLoc) )
     {
         LanguageTag aLanguageTag( rLoc );
         OUString aDebugLocale;

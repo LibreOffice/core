@@ -241,7 +241,7 @@ bool utl::UCBContentHelper::MakeFolder(
     try {
         css::uno::Sequence<css::ucb::ContentInfo> info(
             parent.queryCreatableContentsInfo());
-        for (const auto& rInfo : info) {
+        for (const auto& rInfo : std::as_const(info)) {
             // Simply look for the first KIND_FOLDER:
             if ((rInfo.Attributes
                  & css::ucb::ContentInfoAttribute::KIND_FOLDER)

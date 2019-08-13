@@ -298,7 +298,7 @@ static void implUpdateVisibility
     uno::Sequence< uno::Reference< awt::XControl > >
         aCtrls = xControlContainer->getControls();
     bool bCompleteVisible = (nDialogStep == 0);
-    for( const uno::Reference< awt::XControl >& xControl : aCtrls )
+    for( const uno::Reference< awt::XControl >& xControl : std::as_const(aCtrls) )
     {
         bool bVisible = bCompleteVisible;
         if( !bVisible )
@@ -408,7 +408,7 @@ void UnoControlContainer::dispose(  )
 
     uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
 
-    for( uno::Reference< awt::XControl > const & control : aCtrls )
+    for( uno::Reference< awt::XControl > const & control : std::as_const(aCtrls) )
     {
         removingControl( control );
         // Delete control

@@ -925,7 +925,7 @@ void ControlModelContainerBase::implUpdateGroupStructure()
     sal_Int32   nCurrentGroupStep = -1;                 // the step which all controls of the current group belong to
 
 
-    for ( const Reference< XControlModel >& rControlModel : aControlModels )
+    for ( const Reference< XControlModel >& rControlModel : std::as_const(aControlModels) )
     {
         // we'll need this in every state
         xModelSI.set(rControlModel, css::uno::UNO_QUERY);
@@ -1438,7 +1438,7 @@ sal_Bool ControlContainerBase::setModel( const Reference< XControlModel >& rxMod
     {
         Sequence< Reference< XControl > > aControls = getControls();
 
-        for ( const Reference< XControl >& rCtrl : aControls )
+        for ( const Reference< XControl >& rCtrl : std::as_const(aControls) )
             removeControl( rCtrl );
                 // will implicitly call removingControl, which will remove the PropertyChangeListener
                 // (which we formerly did herein)
@@ -1463,7 +1463,7 @@ sal_Bool ControlContainerBase::setModel( const Reference< XControlModel >& rxMod
             Sequence< OUString > aNames = xNA->getElementNames();
 
             Reference< XControlModel > xCtrlModel;
-            for( const OUString& rName : aNames )
+            for( const OUString& rName : std::as_const(aNames) )
             {
                 xNA->getByName( rName ) >>= xCtrlModel;
                 ImplInsertControl( xCtrlModel, rName );
@@ -1819,7 +1819,7 @@ ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContain
             if ( xProps.is() )
                 xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::makeAny( uno::Reference< XNameContainer >() ) );
             Sequence< OUString > aChildNames = xChildContainer->getElementNames();
-            for ( const auto& rName : aChildNames )
+            for ( const auto& rName : std::as_const(aChildNames) )
                 updateUserFormChildren( xAllChildren, rName, Operation,  Reference< XControlModel > () );
         }
     }
@@ -1835,7 +1835,7 @@ ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContain
             if ( xProps.is() )
                 xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::makeAny( xAllChildren ) );
             Sequence< OUString > aChildNames = xChildContainer->getElementNames();
-            for ( const auto& rName : aChildNames )
+            for ( const auto& rName : std::as_const(aChildNames) )
             {
                 Reference< XControlModel > xChildTarget( xChildContainer->getByName( rName ), UNO_QUERY );
                 updateUserFormChildren( xAllChildren, rName, Operation, xChildTarget );

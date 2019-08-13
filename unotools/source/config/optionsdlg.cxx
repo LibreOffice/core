@@ -85,7 +85,7 @@ SvtOptionsDlgOptions_Impl::SvtOptionsDlgOptions_Impl()
     OUString sRootNode( ROOT_NODE );
     Sequence< OUString > aNodeSeq = GetNodeNames( sRootNode );
     OUString sNode( sRootNode + g_sPathDelimiter );
-    for ( const auto& rNode : aNodeSeq )
+    for ( const auto& rNode : std::as_const(aNodeSeq) )
     {
         OUString sSubNode( sNode + rNode );
         ReadNode( sSubNode, NT_Group );
@@ -144,7 +144,7 @@ void SvtOptionsDlgOptions_Impl::ReadNode( const OUString& _rNode, NodeType _eTyp
     {
         OUString sNodes( sNode + sSet );
         Sequence< OUString > aNodes = GetNodeNames( sNodes );
-        for ( const auto& rNode : aNodes )
+        for ( const auto& rNode : std::as_const(aNodes) )
         {
             OUString sSubNodeName( sNodes + g_sPathDelimiter + rNode );
             ReadNode( sSubNodeName, _eType == NT_Group ? NT_Page : NT_Option );

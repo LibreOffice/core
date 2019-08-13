@@ -75,7 +75,7 @@ DtransX11ConfigItem::DtransX11ConfigItem() :
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "found %" SAL_PRIdINT32 " properties for %s\n", aValues.getLength(), SELECTION_PROPERTY );
 #endif
-    for( Any const & value : aValues )
+    for( Any const & value : std::as_const(aValues) )
     {
         if( auto pLine = o3tl::tryAccess<OUString>(value) )
         {

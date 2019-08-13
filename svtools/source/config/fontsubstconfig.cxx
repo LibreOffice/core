@@ -64,7 +64,7 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
     OUString* pNames = aPropNames.getArray();
     sal_Int32 nName = 0;
     sPropPrefix += "/";
-    for(const OUString& rNodeName : aNodeNames)
+    for(const OUString& rNodeName : std::as_const(aNodeNames))
     {
         OUString sStart = sPropPrefix + rNodeName + "/";
         pNames[nName++] = sStart + cReplaceFont;

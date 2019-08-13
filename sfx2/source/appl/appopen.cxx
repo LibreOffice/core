@@ -867,7 +867,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                     // get registered protocol handlers from configuration
                     Reference < XNameAccess > xAccess(officecfg::Office::ProtocolHandler::HandlerSet::get());
                     Sequence < OUString > aNames = xAccess->getElementNames();
-                    for ( const auto& rName : aNames )
+                    for ( const auto& rName : std::as_const(aNames) )
                     {
                         Reference < XPropertySet > xSet;
                         Any aRet = xAccess->getByName( rName );

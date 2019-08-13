@@ -131,7 +131,7 @@ void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArgument
         if ( xDialogModel.is() )
         {
             Sequence< OUString> aNames = xDialogModel->getElementNames();
-            for(const OUString& rName : aNames)
+            for(const OUString& rName : std::as_const(aNames))
             {
                 try
                 {

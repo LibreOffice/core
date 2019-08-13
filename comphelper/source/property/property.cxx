@@ -70,7 +70,7 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
 
     Sequence< Property > aSourceProps = xSourceProps->getProperties();
     Property aDestProp;
-    for (const Property& rSourceProp : aSourceProps)
+    for (const Property& rSourceProp : std::as_const(aSourceProps))
     {
         if ( xDestProps->hasPropertyByName(rSourceProp.Name) )
         {

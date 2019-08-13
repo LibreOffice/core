@@ -775,7 +775,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
 
     Sequence< Reference< XInterface > > factories(
         queryServiceFactories( rServiceSpecifier, xContext ) );
-    for ( Reference< XInterface > const & xFactory : factories )
+    for ( Reference< XInterface > const & xFactory : std::as_const(factories) )
     {
         try
         {
@@ -827,7 +827,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
 
     Sequence< Reference< XInterface > > factories(
         queryServiceFactories( rServiceSpecifier, xContext ) );
-    for ( Reference< XInterface > const & xFactory : factories )
+    for ( Reference< XInterface > const & xFactory : std::as_const(factories) )
     {
         try
         {
@@ -1039,7 +1039,7 @@ void OServiceManager::insert( const Any & Element )
 
         //put into the service map
         Sequence< OUString > aServiceNames = xInfo->getSupportedServiceNames();
-        for( const OUString& rServiceName : aServiceNames )
+        for( const OUString& rServiceName : std::as_const(aServiceNames) )
         {
             m_ServiceMap.emplace(
                 rServiceName, *o3tl::doAccess<Reference<XInterface>>(Element) );
@@ -1123,7 +1123,7 @@ void OServiceManager::remove( const Any & Element )
         return;
 
     Sequence< OUString > aServiceNames = xSF->getSupportedServiceNames();
-    for( const OUString& rServiceName : aServiceNames )
+    for( const OUString& rServiceName : std::as_const(aServiceNames) )
     {
         pair<HashMultimap_OWString_Interface::iterator, HashMultimap_OWString_Interface::iterator> p =
             m_ServiceMap.equal_range( rServiceName );
@@ -1306,7 +1306,7 @@ Reference<XInterface > ORegistryServiceManager::loadWithServiceName(
     const OUString& serviceName, Reference< XComponentContext > const & xContext )
 {
     Sequence<OUString> implEntries = getFromServiceName( serviceName );
-    for (const auto& rEntry : implEntries)
+    for (const auto& rEntry : std::as_const(implEntries))
     {
         Reference< XInterface > x( loadWithImplementationName( rEntry, xContext ) );
         if (x.is())
@@ -1413,7 +1413,7 @@ Reference<XEnumeration > ORegistryServiceManager::createContentEnumeration(
     // get all implementation names registered under this service name from the registry
     Sequence<OUString> aImpls = getFromServiceName( aServiceName );
     // load and insert all factories specified by the registry
-    for( const OUString& aImplName : aImpls )
+    for( const OUString& aImplName : std::as_const(aImpls) )
     {
         if ( !haveFactoryWithThisImplementation(aImplName) )
         {

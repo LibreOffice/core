@@ -709,7 +709,7 @@ void AssignmentPersistentData::ImplCommit()
         {
             OSL_FAIL("AddressBookSourceDialog::initializeDatasources: caught an exception while asking for the data source names!");
         }
-        for (const OUString& rDatasourceName : aDatasourceNames)
+        for (const OUString& rDatasourceName : std::as_const(aDatasourceNames))
             m_xDatasource->append_text(rDatasourceName);
     }
 
@@ -806,7 +806,7 @@ void AssignmentPersistentData::ImplCommit()
 
         bool bKnowOldTable = false;
         // fill the table list
-        for (const OUString& rTableName : aTableNames)
+        for (const OUString& rTableName : std::as_const(aTableNames))
         {
             m_xTable->append_text(rTableName);
             if (rTableName == sOldTable)
@@ -873,7 +873,7 @@ void AssignmentPersistentData::ImplCommit()
             pListbox->set_id(0, OUString::number(i));
 
             // the field names
-            for (const OUString& rColumnName : aColumnNames)
+            for (const OUString& rColumnName : std::as_const(aColumnNames))
                 pListbox->append_text(rColumnName);
 
             if (!aInitialSelection->isEmpty() && (aColumnNameSet.end() != aColumnNameSet.find(*aInitialSelection)))

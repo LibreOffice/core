@@ -2798,7 +2798,7 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
     // There is no harm though, on first invocation ImpGetDefaultFormat() will
     // use the first default encountered.
     aFormatSeq = rNumberFormatCode->getAllFormatCodes( aLocale );
-    for ( const auto& rFormat : aFormatSeq )
+    for ( const auto& rFormat : std::as_const(aFormatSeq) )
     {
         if ( nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET )
         {
@@ -3849,7 +3849,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     NfCurrencyTable &rLegacyOnlyCurrencyTable = theLegacyOnlyCurrencyTable::get();
     NfInstalledLocales &rInstalledLocales = theInstalledLocales::get();
     sal_uInt16 nLegacyOnlyCurrencyPos = 0;
-    for ( css::lang::Locale const & rLocale : xLoc )
+    for ( css::lang::Locale const & rLocale : std::as_const(xLoc) )
     {
         LanguageType eLang = LanguageTag::convertToLanguageType( rLocale, false);
         rInstalledLocales.insert( eLang);

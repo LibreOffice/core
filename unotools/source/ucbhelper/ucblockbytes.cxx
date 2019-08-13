@@ -507,7 +507,7 @@ void Moderator::handle( const Reference<XInteractionRequest >& Request )
         if(aReplyType == EXIT) {
             Sequence<Reference<XInteractionContinuation> > aSeq(
                 Request->getContinuations());
-            for(const auto& rContinuation : aSeq) {
+            for(const auto& rContinuation : std::as_const(aSeq)) {
                 Reference<XInteractionAbort> aRef(rContinuation,UNO_QUERY);
                 if(aRef.is()) {
                     aRef->select();

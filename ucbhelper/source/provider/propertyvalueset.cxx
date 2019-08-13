@@ -652,7 +652,7 @@ void PropertyValueSet::appendPropertySet(
                 Sequence< css::beans::PropertyValue > aPropValues
                     = xPropertyAccess->getPropertyValues();
 
-                for ( const css::beans::PropertyValue& rPropValue : aPropValues )
+                for ( const css::beans::PropertyValue& rPropValue : std::as_const(aPropValues) )
                 {
                     // Find info for current property value.
                     auto pProp = std::find_if(aProps.begin(), aProps.end(),
@@ -668,7 +668,7 @@ void PropertyValueSet::appendPropertySet(
             {
                 // Get every single prop value with one ( remote) call.
 
-                for ( const Property& rProp : aProps )
+                for ( const Property& rProp : std::as_const(aProps) )
                 {
                     try
                     {

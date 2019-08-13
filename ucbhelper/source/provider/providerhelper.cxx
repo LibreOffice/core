@@ -303,7 +303,7 @@ bool ContentProviderImplHelper::renameAdditionalPropertySet(
                 aOldKeyWithoutSlash
                     = rOldKey.copy( 0, rOldKey.getLength() - 1 );
 
-            for ( const OUString& rKey : aKeys )
+            for ( const OUString& rKey : std::as_const(aKeys) )
             {
                 if ( rKey.startsWith( aOldKeyWithSlash )
                      || rKey == aOldKeyWithoutSlash )
@@ -376,7 +376,7 @@ bool ContentProviderImplHelper::copyAdditionalPropertySet(
                 aSrcKeyWithoutSlash = rSourceKey.copy(
                     0, rSourceKey.getLength() - 1 );
 
-            for ( const OUString& rKey : aKeys )
+            for ( const OUString& rKey : std::as_const(aKeys) )
             {
                 if ( rKey.startsWith(aSrcKeyWithSlash )
                      || rKey == aSrcKeyWithoutSlash )
@@ -435,7 +435,7 @@ bool ContentProviderImplHelper::copyAdditionalPropertySet(
             if ( !xNewPropContainer.is() )
                 return false;
 
-            for ( const beans::PropertyValue& rValue : aValues )
+            for ( const beans::PropertyValue& rValue : std::as_const(aValues) )
             {
                 sal_Int16 nAttribs = 0;
                 auto pProp = std::find_if(aProps.begin(), aProps.end(),
@@ -496,7 +496,7 @@ bool ContentProviderImplHelper::removeAdditionalPropertySet(
                 aKeyWithoutSlash
                     = rKey.copy( 0, rKey.getLength() - 1 );
 
-            for ( const OUString& rCurrKey : aKeys )
+            for ( const OUString& rCurrKey : std::as_const(aKeys) )
             {
                 if ( rCurrKey.startsWith(aKeyWithSlash )
                      || rCurrKey == aKeyWithoutSlash )

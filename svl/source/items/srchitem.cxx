@@ -508,7 +508,7 @@ bool SvxSearchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             if ( ( rVal >>= aSeq ) && ( aSeq.getLength() == SRCH_PARAMS ) )
             {
                 sal_Int16 nConvertedCount( 0 );
-                for ( const auto& rProp : aSeq )
+                for ( const auto& rProp : std::as_const(aSeq) )
                 {
                     if ( rProp.Name == SRCH_PARA_OPTIONS )
                     {

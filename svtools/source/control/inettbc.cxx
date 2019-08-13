@@ -1482,7 +1482,7 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
     Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
     INetURLObject aCurObj;
 
-    for( const Sequence< PropertyValue >& rPropertySet : seqPicklist )
+    for( const Sequence< PropertyValue >& rPropertySet : std::as_const(seqPicklist) )
     {
         auto pProperty = std::find_if(rPropertySet.begin(), rPropertySet.end(),
             [](const PropertyValue& rProperty) { return rProperty.Name == HISTORY_PROPERTYNAME_URL; });
@@ -2048,7 +2048,7 @@ void URLBox::UpdatePicklistForSmartProtocol_Impl()
     Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
     INetURLObject aCurObj;
 
-    for( const Sequence< PropertyValue >& rPropertySet : seqPicklist )
+    for( const Sequence< PropertyValue >& rPropertySet : std::as_const(seqPicklist) )
     {
         auto pProperty = std::find_if(rPropertySet.begin(), rPropertySet.end(),
             [](const PropertyValue& rProperty) { return rProperty.Name == HISTORY_PROPERTYNAME_URL; });

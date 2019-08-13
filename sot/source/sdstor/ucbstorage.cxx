@@ -1945,7 +1945,7 @@ bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
         if ( !aInfo.hasElements() )
             return false;
 
-        for ( const ContentInfo & rCurr : aInfo )
+        for ( const ContentInfo & rCurr : std::as_const(aInfo) )
         {
             // Simply look for the first KIND_FOLDER...
             if ( rCurr.Attributes & ContentInfoAttribute::KIND_FOLDER )

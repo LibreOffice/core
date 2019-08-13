@@ -857,7 +857,7 @@ OUString EmbeddedObjectRef::GetChartType()
                     uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
                     // IA2 CWS. Unused: int nCoordinateCount = aCooSysSeq.getLength();
                     bool bGetChartType = false;
-                    for( const auto& rCooSys : aCooSysSeq )
+                    for( const auto& rCooSys : std::as_const(aCooSysSeq) )
                     {
                         uno::Reference< chart2::XChartTypeContainer > xCTCnt( rCooSys, uno::UNO_QUERY_THROW );
                         uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
@@ -866,7 +866,7 @@ OUString EmbeddedObjectRef::GetChartType()
                             Style += "3D ";
                         else
                             Style += "2D ";
-                        for( const auto& rChartType : aChartTypes )
+                        for( const auto& rChartType : std::as_const(aChartTypes) )
                         {
                             OUString strChartType = rChartType->getChartType();
                             if (strChartType == "com.sun.star.chart2.AreaChartType")

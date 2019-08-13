@@ -1461,7 +1461,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
 
     if ( pFilterData )
     {
-        for ( const auto& rPropVal : *pFilterData )
+        for ( const auto& rPropVal : std::as_const(*pFilterData) )
         {
             if ( rPropVal.Name == "PreviewSizeHint" )
             {
@@ -2077,7 +2077,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                             css::uno::Sequence< css::beans::PropertyValue > aAdditionalChunkSequence;
                             if ( rPropVal.Value >>= aAdditionalChunkSequence )
                             {
-                                for ( const auto& rAdditionalChunk : aAdditionalChunkSequence )
+                                for ( const auto& rAdditionalChunk : std::as_const(aAdditionalChunkSequence) )
                                 {
                                     if ( rAdditionalChunk.Name.getLength() == 4 )
                                     {

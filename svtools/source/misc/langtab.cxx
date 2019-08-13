@@ -173,7 +173,7 @@ SvtLanguageTableImpl::SvtLanguageTableImpl()
 
     auto xNA = officecfg::VCL::ExtraLanguages::get();
     uno::Sequence <OUString> rElementNames = xNA->getElementNames();
-    for (const OUString& rBcp47 : rElementNames)
+    for (const OUString& rBcp47 : std::as_const(rElementNames))
     {
         OUString aName;
         sal_Int32 nType = 0;

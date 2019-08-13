@@ -603,7 +603,7 @@ void SfxShell::VerbExec(SfxRequest& rReq)
     bool bReadOnly = pViewShell->GetObjectShell()->IsReadOnly();
     css::uno::Sequence < css::embed::VerbDescriptor > aList = pViewShell->GetVerbs();
     sal_Int32 nVerb = 0;
-    for (const auto& rVerb : aList)
+    for (const auto& rVerb : std::as_const(aList))
     {
         // check for ReadOnly verbs
         if ( bReadOnly && !(rVerb.VerbAttributes & embed::VerbAttributes::MS_VERBATTR_NEVERDIRTIES) )

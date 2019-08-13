@@ -608,7 +608,7 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
 
                         uno::Sequence< beans::PropertyValue > aPropsFromDialog =
                                                                     xFilterProperties->getPropertyValues();
-                        for ( const auto& rProp : aPropsFromDialog )
+                        for ( const auto& rProp : std::as_const(aPropsFromDialog) )
                             GetMediaDescr()[rProp.Name] = rProp.Value;
                     }
                 }
@@ -1735,7 +1735,7 @@ void SfxStoringHelper::SetDocInfoState(
         uno::Reference< beans::XPropertyContainer > xContainer( xSet, uno::UNO_QUERY );
         uno::Reference< beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
         uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
-        for (const beans::Property& rProp : lProps)
+        for (const beans::Property& rProp : std::as_const(lProps))
         {
             uno::Any aValue = xPropSet->getPropertyValue( rProp.Name );
             if ( rProp.Attributes & css::beans::PropertyAttribute::REMOVABLE )
