@@ -42,6 +42,11 @@ BEGIN_VENDOR_MAP()
     VENDOR_MAP_ENTRY("Sun Microsystems Inc.", SunInfo)
     VENDOR_MAP_ENTRY("Oracle Corporation", SunInfo)
     VENDOR_MAP_ENTRY("AdoptOpenJdk", SunInfo)
+#ifdef LINUX
+    VENDOR_MAP_ENTRY("Ubuntu", SunInfo)
+    VENDOR_MAP_ENTRY("Private Build", SunInfo)
+#endif
+
 #ifndef MACOSX
     VENDOR_MAP_ENTRY("IBM Corporation", OtherInfo)
     VENDOR_MAP_ENTRY("Blackdown Java-Linux Team", OtherInfo)
