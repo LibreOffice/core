@@ -7655,12 +7655,6 @@ if test "$with_export_validation" != "no"; then
         else
             AC_MSG_RESULT([no, as Java is disabled])
         fi
-    elif test "$_jdk_ver" -lt 10800; then
-        if test "$with_export_validation" = "yes"; then
-            AC_MSG_ERROR([requested, but Java is too old, need Java 8])
-        else
-            AC_MSG_RESULT([no, as Java is too old, need Java 8])
-        fi
     elif ! test -d "${SRC_ROOT}/schema"; then
         if test "$with_export_validation" = "yes"; then
             AC_MSG_ERROR([requested, but schema directory is missing (it is excluded from tarballs)])
