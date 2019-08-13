@@ -935,6 +935,8 @@ void SAL_CALL ChartModel::setTitleObject( const uno::Reference< chart2::XTitle >
         ModifyListenerHelper::addListener( m_xTitle, this );
     }
     setModified( true );
+
+    m_xChartStyle->applyStyleToTitle( xTitle );
 }
 
 // _____ XChartStyled _____
