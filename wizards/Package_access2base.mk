@@ -56,4 +56,8 @@ $(eval $(call gb_Package_add_files,wizards_basicsrvaccess2base,$(LIBO_SHARE_FOLD
 	Utils.xba \
 ))
 
+$(eval $(call gb_Package_add_files,wizards_basicsrvaccess2base,$(LIBO_LIB_PYUNO_FOLDER),\
+	access2base.py \
+))
+
 # vim: set noet sw=4 ts=4:
