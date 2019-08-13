@@ -468,6 +468,9 @@ class ul_Compiler:
         line="\t\tself.ui_test.close_doc()"
         self.variables.append(line)
 
+        line="\n\n# vim: set shiftwidth=4 softtabstop=4 expandtab:"
+        self.variables.append(line)
+
         for line in self.variables:
             self.output_stream.write(str(line))
 
