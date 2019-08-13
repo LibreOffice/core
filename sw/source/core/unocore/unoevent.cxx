@@ -153,8 +153,6 @@ void SwHyperlinkEventDescriptor::copyMacrosFromNameReplace(
     }
 }
 
-static const OUString sSwFrameEventDescriptor("SwFrameEventDescriptor");
-
 // use double cast in superclass constructor to avoid ambiguous cast
 SwFrameEventDescriptor::SwFrameEventDescriptor(
     SwXTextFrame& rFrameRef ) :
