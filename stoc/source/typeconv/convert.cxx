@@ -51,27 +51,6 @@ using namespace osl;
 namespace stoc_tcv
 {
 
-/* MS Visual C++ no conversion from unsigned __int64 to double */
-#ifdef _MSC_VER
-static const double DOUBLE_SAL_UINT64_MAX = ((double(SAL_MAX_INT64)) * 2) + 1;
-
-static double unsigned_int64_to_double( sal_uInt64 n )
-{
-    sal_uInt64 n2 = n / 3;
-    n -= (2 * n2);
-    return (static_cast<double>(static_cast<sal_Int64>(n2)) * 2.0) + static_cast<double>(static_cast<sal_Int64>(n));
-}
-#else
-static const double DOUBLE_SAL_UINT64_MAX =
-    double(((sal_uInt64(0xffffffff)) << 32) | sal_uInt64(0xffffffff));
-
-static double unsigned_int64_to_double( sal_uInt64 n )
-{
-    return static_cast<double>(n);
-}
-#endif
-
-
 static double round( double aVal )
 {
     bool bPos   = (aVal >= 0.0);
@@ -221,7 +200,7 @@ static bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
     double fVal;
     if (getNumericValue( fVal, rStr ) &&
         fVal >= double(SAL_MIN_INT64) &&
-        fVal <= DOUBLE_SAL_UINT64_MAX)
+        fVal <= double(SAL_MAX_UINT64))
     {
         rnVal = static_cast<sal_Int64>(round( fVal ));
         return true;
@@ -335,7 +314,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     {
         double fVal = round( *o3tl::forceAccess<float>(rAny) );
         nRet = (fVal > SAL_MAX_INT64 ? static_cast<sal_Int64>(static_cast<sal_uInt64>(fVal)) : static_cast<sal_Int64>(fVal));
-        if (fVal >= min && fVal <= unsigned_int64_to_double( max ))
+        if (fVal >= min && fVal <= max)
         {
             return nRet;
         }
@@ -347,7 +326,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     {
         double fVal = round( *o3tl::forceAccess<double>(rAny) );
         nRet = (fVal > SAL_MAX_INT64 ? static_cast<sal_Int64>(static_cast<sal_uInt64>(fVal)) : static_cast<sal_Int64>(fVal));
-        if (fVal >= min && fVal <= unsigned_int64_to_double( max ))
+        if (fVal >= min && fVal <= max)
         {
             return nRet;
         }
@@ -432,7 +411,7 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max )
         break;
     // UNSIGNED HYPER
     case TypeClass_UNSIGNED_HYPER:
-        fRet = unsigned_int64_to_double( *o3tl::forceAccess<sal_uInt64>(rAny) );
+        fRet = static_cast<double>(*o3tl::forceAccess<sal_uInt64>(rAny));
         break;
     // FLOAT, DOUBLE
     case TypeClass_FLOAT:
