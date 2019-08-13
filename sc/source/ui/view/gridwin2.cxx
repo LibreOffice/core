@@ -466,6 +466,12 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
 
     mpDPFieldPopup.disposeAndClear();
     mpDPFieldPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pViewData->GetDocument()));
+
+    // Avoid flicker when hovering over the menu items.
+    if (!IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus))
+        // If NWF renders the focus rects itself, that breaks double-buffering.
+        mpDPFieldPopup->RequestDoubleBuffering(true);
+
     mpDPFieldPopup->setName("DataPilot field member popup");
     mpDPFieldPopup->setExtendedData(std::move(pDPData));
     mpDPFieldPopup->setOKAction(new DPFieldPopupOKAction(this));
