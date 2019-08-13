@@ -12,11 +12,16 @@
 #else
 
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <map>
+#include <list>
+#include <rtl/ustring.hxx>
 
 namespace test1
 {
 int const aFormalArgs[] = { 1, 2 };
-// expected-error@+1 {{static var can be const [loplugin:constvars]}}
+// expected-error@+1 {{var can be const [loplugin:constvars]}}
 static sal_uInt16 nMediaArgsCount = SAL_N_ELEMENTS(aFormalArgs);
 sal_uInt16 foo()
 {
@@ -42,6 +47,58 @@ namespace test3
 {
 static sal_uInt16 nMediaArgsCount = 1; // loplugin:constvars:ignore
 sal_uInt16 foo() { return nMediaArgsCount; }
+};
+
+// no warning expected, we don't handle these destructuring assignments properly yet
+namespace test4
+{
+void foo()
+{
+    std::map<OUString, OUString> aMap;
+    for (auto & [ rName, rEntry ] : aMap)
+    {
+        rEntry.clear();
+    }
+}
+};
+
+// no warning expected
+namespace test5
+{
+struct Struct1
+{
+};
+void release(Struct1*);
+void foo(std::list<Struct1*> aList)
+{
+    for (Struct1* pItem : aList)
+    {
+        release(pItem);
+    }
+}
+};
+
+namespace test6
+{
+void foo(css::uno::Sequence<css::uno::Reference<css::uno::XInterface>>& aSeq)
+{
+    // expected-error@+1 {{var can be const [loplugin:constvars]}}
+    for (css::uno::Reference<css::uno::XInterface>& x : aSeq)
+    {
+        x.get();
+    }
+}
+};
+
+// no warning expected
+namespace test7
+{
+void foo(std::vector<std::vector<int>> aVecVec)
+{
+    for (auto& rVec : aVecVec)
+        for (auto& rElement : rVec)
+            rElement = 1;
+}
 };
 
 #endif
