@@ -175,7 +175,9 @@ static void ChildStatusProc(void *pData)
             OSL_ASSERT(geteuid() == 0);     /* must be root */
 
             if (! INIT_GROUPS(data.m_name, data.m_gid) || (setuid(data.m_uid) != 0))
-                SAL_WARN("sal.osl", "Failed to change uid and guid: " << UnixErrnoString(errno));
+            {
+                // ignore; can't do much about it here after fork
+            }
 
             unsetenv("HOME");
         }
@@ -234,12 +236,12 @@ static void ChildStatusProc(void *pData)
             execv(data.m_pszArgs[0], const_cast<char **>(data.m_pszArgs));
         }
 
-        SAL_WARN("sal.osl", "ChildStatusProc : Failed to exec <" << data.m_pszArgs[0] << ">: " << UnixErrnoString(errno));
-
         /* if we reach here, something went wrong */
         errno_copy = errno;
         if ( !safeWrite(channel[1], &errno_copy, sizeof(errno_copy)) )
-            SAL_WARN("sal.osl", "sendFdPipe : sending failed:  " << UnixErrnoString(errno));
+        {
+            // ignore; can't do much about it here after fork
+        }
 
         if ( channel[1] != -1 )
             close(channel[1]);
