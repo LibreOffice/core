@@ -22,6 +22,30 @@
       "revId": "0bec0786baf1599bbe8e4c32c907a031fee8df93",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_98bb03c3",
+        "filename": "cui/source/options/optupdt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-13T13:33:18Z",
+      "side": 1,
+      "message": "Or just declaring aHeaders as const above in this case",
+      "parentUuid": "bf659307_f8a23f9a",
+      "range": {
+        "startLine": 164,
+        "startChar": 54,
+        "endLine": 164,
+        "endChar": 62
+      },
+      "revId": "0bec0786baf1599bbe8e4c32c907a031fee8df93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
