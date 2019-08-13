@@ -391,9 +391,7 @@ void SchXMLAxisContext::CreateAxis()
             break;
         case SCH_XML_AXIS_Z:
             if( m_aCurrentAxis.nAxisIndex == 0 )
-                aPropName = "HasXAxis";
-            else
-                aPropName = "HasSecondaryXAxis";
+                aPropName = "HasZAxis";
             break;
         case SCH_XML_AXIS_UNDEF:
             SAL_INFO("xmloff.chart", "Invalid axis" );
