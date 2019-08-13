@@ -29,12 +29,8 @@ class GtkSalObject : public SalObject
 {
     SystemEnvData     m_aSystemData;
     GtkWidget*          m_pSocket;
-#if GTK_CHECK_VERSION(3,0,0)
     GtkSalFrame*        m_pParent;
     cairo_region_t*     m_pRegion;
-#else
-    GdkRegion*          m_pRegion;
-#endif
 
     // signals
     static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );

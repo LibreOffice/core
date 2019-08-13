@@ -224,14 +224,6 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,python, \
 	) \
 ))
 
-ifeq ($(USING_X11), TRUE)
-$(eval $(call gb_Helper_register_executables_for_install,OOO,gnome, \
-	$(if $(ENABLE_GTK),\
-		xid-fullscreen-on-all-monitors \
-	) \
-))
-endif
-
 ifneq ($(ENABLE_POPPLER),)
 $(eval $(call gb_Helper_register_executables_for_install,OOO,pdfimport, \
 	xpdfimport \
@@ -290,7 +282,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,onlineupdate, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,gnome, \
 	$(if $(ENABLE_EVOAB2),evoab) \
-	$(if $(ENABLE_GTK),vclplug_gtk) \
 	$(if $(ENABLE_GTK3),vclplug_gtk3) \
 	$(if $(ENABLE_GIO),losessioninstall) \
 	$(if $(ENABLE_GIO),ucpgio1) \

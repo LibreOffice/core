@@ -25,7 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <gtk/fpicker/SalGtkPicker.hxx>
+#include "SalGtkPicker.hxx"
 
 class SalGtkFolderPicker :
     public SalGtkPicker,

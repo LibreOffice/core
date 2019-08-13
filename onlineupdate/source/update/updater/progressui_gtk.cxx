@@ -14,6 +14,11 @@
 #include <string.h>
 #include "progressui_gtk_icon.h"
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 #define TIMER_INTERVAL 100
 
 static float    sProgressVal;  // between 0 and 100
@@ -133,4 +138,9 @@ UpdateProgressUI(float progress)
 {
     sProgressVal = progress;  // 32-bit writes are atomic
 }
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
+
 #endif  // defined(UNIX) || defined(MACOSX)
