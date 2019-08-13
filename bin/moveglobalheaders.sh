@@ -36,8 +36,7 @@ done
 # we like to be special ...
 sed -ie 's/\/svtools\/inc\/svtools/\/include\/svtools\//' svtools/Library_svt.mk
 sed -ie 's/\/sfx2\/inc\/sfx2/\/include\/sfx2\//' sfx2/Library_sfx.mk
-sed -ie 's/\/sfx2\/inc\/sfx2/\/include\/sfx2\//' sfx2/Library_qstart_gtk.mk
-git add svtools/Library_svt.mk sfx2/Library_sfx.mk sfx2/Library_qstart_gtk.mk
+git add svtools/Library_svt.mk sfx2/Library_sfx.mk
 
 # urgh
 sed -ie 's/\.\.\/svx\//svx\//' svx/source/svdraw/svdoashp.cxx

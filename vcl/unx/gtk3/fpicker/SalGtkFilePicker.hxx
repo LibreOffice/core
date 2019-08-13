@@ -32,7 +32,7 @@
 #include <memory>
 #include <rtl/ustring.hxx>
 
-#include <gtk/fpicker/SalGtkPicker.hxx>
+#include "SalGtkPicker.hxx"
 
 // Implementation class for the XFilePicker Interface
 
