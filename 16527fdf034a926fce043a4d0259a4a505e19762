@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_7805cfc1",
+        "filename": "scripting/source/protocolhandler/scripthandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-08-13T12:29:30Z",
+      "side": 0,
+      "message": "is it possible that this function can be called in a situation where there isn\u0027t a document? let\u0027s say an extension registers a menu item in the main menu/start center, is that possibly dispatched here?",
+      "revId": "16527fdf034a926fce043a4d0259a4a505e19762",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
