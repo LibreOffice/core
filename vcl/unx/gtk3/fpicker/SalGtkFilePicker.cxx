@@ -53,7 +53,7 @@
 #include <set>
 #include <string.h>
 
-#include <gtk/fpicker/SalGtkFilePicker.hxx>
+#include "SalGtkFilePicker.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
@@ -437,15 +437,11 @@ dialog_remove_buttons( GtkDialog *pDialog )
 {
     g_return_if_fail( GTK_IS_DIALOG( pDialog ) );
 
-#if GTK_CHECK_VERSION(3,0,0)
     GtkWidget *pHeaderBar = gtk_dialog_get_header_bar(pDialog);
     if( pHeaderBar != nullptr )
         dialog_remove_buttons( pHeaderBar );
     else
         dialog_remove_buttons(gtk_dialog_get_action_area(pDialog));
-#else
-    dialog_remove_buttons(pDialog->action_area);
-#endif
 }
 
 namespace {
@@ -798,14 +794,10 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
                         }
                         if( bChangeFilter && bExtensionTypedIn )
                         {
-#if GTK_CHECK_VERSION(3,0,0)
                             gchar* pCurrentName = gtk_file_chooser_get_current_name(GTK_FILE_CHOOSER(m_pDialog));
                             setCurrentFilter( aNewFilter );
                             gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_pDialog), pCurrentName);
                             g_free(pCurrentName);
-#else
-                            setCurrentFilter( aNewFilter );
-#endif
                         }
                     }
                 }
@@ -1009,12 +1001,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute()
                             gtk_window_set_title( GTK_WINDOW( dlg ),
                                 OUStringToOString(getResString(FILE_PICKER_TITLE_SAVE ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
-#if GTK_CHECK_VERSION(3,0,0)
                             gtk_window_set_transient_for(GTK_WINDOW(dlg), GTK_WINDOW(m_pDialog));
-#else
-                            if (pParent)
-                                gtk_window_set_transient_for(GTK_WINDOW(dlg), pParent);
-#endif
                             RunDialog* pAnotherDialog = new RunDialog(dlg, xToolkit, xDesktop);
                             uno::Reference < awt::XTopWindowListener > xAnotherLifeCycle(pAnotherDialog);
                             btn = pAnotherDialog->run();

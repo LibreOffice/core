@@ -57,7 +57,6 @@ public:
     void ThreadsLeave();
 };
 
-#if GTK_CHECK_VERSION(3,0,0)
 class GtkSalFrame;
 
 struct VclToGtkHelper
@@ -182,20 +181,10 @@ public:
     css::uno::Reference<css::datatransfer::XTransferable> const & GetTransferrable() const { return m_xTrans; }
 };
 
-#endif
-
 class GtkSalTimer;
-#if GTK_CHECK_VERSION(3,0,0)
 class GtkInstance : public SvpSalInstance
-#else
-class GtkInstance : public X11SalInstance
-#endif
 {
-#if GTK_CHECK_VERSION(3,0,0)
     typedef SvpSalInstance Superclass_t;
-#else
-    typedef X11SalInstance Superclass_t;
-#endif
 public:
             GtkInstance( std::unique_ptr<SalYieldMutex> pMutex );
     virtual ~GtkInstance() override;
@@ -233,7 +222,6 @@ public:
     virtual css::uno::Reference< css::ui::dialogs::XFolderPicker2 >
         createFolderPicker( const css::uno::Reference< css::uno::XComponentContext >& ) override;
 
-#if GTK_CHECK_VERSION(3,0,0)
     virtual css::uno::Reference< css::uno::XInterface > CreateClipboard( const css::uno::Sequence< css::uno::Any >& i_rArguments ) override;
     virtual css::uno::Reference< css::uno::XInterface > CreateDragSource() override;
     virtual css::uno::Reference< css::uno::XInterface > CreateDropTarget() override;
@@ -241,7 +229,6 @@ public:
     virtual weld::Builder* CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile) override;
     virtual weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType, VclButtonsType eButtonType, const OUString &rPrimaryMessage) override;
     virtual weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow) override;
-#endif
 
     virtual const cairo_font_options_t* GetCairoFontOptions() override;
             const cairo_font_options_t* GetLastSeenCairoFontOptions() const;
@@ -251,15 +238,11 @@ public:
 
     std::shared_ptr<vcl::unx::GtkPrintWrapper> const & getPrintWrapper() const;
 
-#if GTK_CHECK_VERSION(3,0,0)
     void* CreateGStreamerSink(const SystemChildWindow*) override;
-#endif
 
 private:
     GtkSalTimer *m_pTimer;
-#if GTK_CHECK_VERSION(3,0,0)
     std::unordered_map< GdkAtom, css::uno::Reference<css::uno::XInterface> > m_aClipboards;
-#endif
     bool                        IsTimerExpired();
     bool                        bNeedsInit;
     cairo_font_options_t*       m_pLastCairoFontOptions;

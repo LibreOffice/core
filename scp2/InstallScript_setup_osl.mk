@@ -33,7 +33,7 @@ $(eval $(call gb_InstallScript_use_modules,setup_osl,\
 	$(if $(WITH_EXTENSION_INTEGRATION),\
 		scp2/extensions \
 	) \
-	$(if $(filter TRUE,$(ENABLE_EVOAB2) $(ENABLE_GIO) $(ENABLE_GTK) $(ENABLE_GTK3)),\
+	$(if $(filter TRUE,$(ENABLE_EVOAB2) $(ENABLE_GIO) $(ENABLE_GTK3)),\
 		scp2/gnome \
 	) \
 	$(if $(filter TRUE,$(ENABLE_QT5) $(ENABLE_KF5) $(ENABLE_GTK3_KDE5)),\
