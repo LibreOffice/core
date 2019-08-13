@@ -75,6 +75,8 @@ public:
         basegfx::B2DRange& rRange,
         bool bSynchron);
     void resetBufferedData();
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 // SwOLENode
@@ -123,6 +125,8 @@ public:
 
     virtual bool SavePersistentData() override;
     virtual bool RestorePersistentData() override;
+
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
     bool IsInGlobalDocSection() const;
     bool IsOLEObjectDeleted() const;

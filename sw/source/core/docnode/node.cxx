@@ -857,15 +857,13 @@ void SwNode::dumpAsXml(xmlTextWriterPtr pWriter) const
         break;
     case SwNodeType::Start:
     case SwNodeType::Text:
+    case SwNodeType::Ole:
         abort(); // overridden
     case SwNodeType::Table:
         pName = "table";
         break;
     case SwNodeType::Grf:
         pName = "grf";
-        break;
-    case SwNodeType::Ole:
-        pName = "ole";
         break;
     default: break;
     }
