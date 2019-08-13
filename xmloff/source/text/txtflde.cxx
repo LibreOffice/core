@@ -1759,18 +1759,20 @@ void XMLTextFieldExport::ExportFieldHelper(
         OUString aName;
         rPropSet->getPropertyValue(gsPropertyName) >>= aName;
         if (!aName.isEmpty())
-            GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, aName);
-        SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
-        if(eVersion > SvtSaveOptions::ODFSVER_012)
         {
-            bool b = GetBoolProperty("Resolved", rPropSet);
-            OUString aResolvedText;
-            OUStringBuffer aResolvedTextBuffer;
-            ::sax::Converter::convertBool(aResolvedTextBuffer, b);
-            aResolvedText = aResolvedTextBuffer.makeStringAndClear();
+            GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, aName);
+            SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
+            if(eVersion > SvtSaveOptions::ODFSVER_012)
+            {
+                bool b = GetBoolProperty("Resolved", rPropSet);
+                OUString aResolvedText;
+                OUStringBuffer aResolvedTextBuffer;
+                ::sax::Converter::convertBool(aResolvedTextBuffer, b);
+                aResolvedText = aResolvedTextBuffer.makeStringAndClear();
 
-            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_RESOLVED,
-                                    aResolvedText);
+                GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_RESOLVED,
+                        aResolvedText);
+            }
         }
         SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_OFFICE,
                                  XML_ANNOTATION, false, true);
