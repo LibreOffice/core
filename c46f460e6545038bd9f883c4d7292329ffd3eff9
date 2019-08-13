@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_d8297b9b",
+        "filename": "chart2/source/tools/ChartStyle.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-08-13T16:08:02Z",
+      "side": 1,
+      "message": "I\u0027m not sure if we want to apply the normal title style to an axis title. I fear we might need an axis title object style.\n\nHowever, this is something we can still fix later.",
+      "revId": "c46f460e6545038bd9f883c4d7292329ffd3eff9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
