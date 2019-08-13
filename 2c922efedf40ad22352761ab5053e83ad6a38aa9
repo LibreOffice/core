@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_d5d5c4e6",
+        "filename": "pyuno/source/module/pyuno_adapter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-13T09:23:15Z",
+      "side": 1,
+      "message": "I\u0027d use std::accumulate here, initialized by an empty *vector* as accumulator, and where the binary op would take the vector reference and the element, and conditionally push_back, and finally convert the vector to sequence...",
+      "range": {
+        "startLine": 140,
+        "startChar": 12,
+        "endLine": 159,
+        "endChar": 13
+      },
+      "revId": "2c922efedf40ad22352761ab5053e83ad6a38aa9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
