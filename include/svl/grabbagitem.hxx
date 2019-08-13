@@ -15,7 +15,7 @@
 #include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
-/// Grab bag item provides a string-any map for interim interop purposes.
+/// Grab bag item provides a string-any map for keys with untyped values.
 class SVL_DLLPUBLIC SfxGrabBagItem : public SfxPoolItem
 {
 private:
