@@ -9121,6 +9121,7 @@ private:
     gulong m_nKeyPressEventSignalId;
     gulong m_nEntryInsertTextSignalId;
     gulong m_nEntryActivateSignalId;
+    gulong m_nEntryFocusInSignalId;
     gulong m_nEntryFocusOutSignalId;
     guint m_nAutoCompleteIdleId;
 
@@ -9243,6 +9244,17 @@ private:
         }
     }
 
+    static void signalEntryFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
+    {
+        GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
+        pThis->signal_entry_focus_in();
+    }
+
+    void signal_entry_focus_in()
+    {
+        signal_focus_in();
+    }
+
     static void signalEntryFocusOut(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
@@ -9260,6 +9272,7 @@ private:
             if (nMin != 0 || nMax != get_active_text().getLength())
                 select_entry_region(0, 0);
         }
+        signal_focus_out();
     }
 
     static void signalEntryActivate(GtkEntry*, gpointer widget)
@@ -9546,6 +9559,7 @@ public:
             m_bAutoComplete = true;
             m_nEntryInsertTextSignalId = g_signal_connect(pEntry, "insert-text", G_CALLBACK(signalEntryInsertText), this);
             m_nEntryActivateSignalId = g_signal_connect(pEntry, "activate", G_CALLBACK(signalEntryActivate), this);
+            m_nEntryFocusInSignalId = g_signal_connect(pEntry, "focus-in-event", G_CALLBACK(signalEntryFocusIn), this);
             m_nEntryFocusOutSignalId = g_signal_connect(pEntry, "focus-out-event", G_CALLBACK(signalEntryFocusOut), this);
             m_nKeyPressEventSignalId = 0;
         }
@@ -9553,6 +9567,7 @@ public:
         {
             m_nEntryInsertTextSignalId = 0;
             m_nEntryActivateSignalId = 0;
+            m_nEntryFocusInSignalId = 0;
             m_nEntryFocusOutSignalId = 0;
             m_nKeyPressEventSignalId = g_signal_connect(m_pWidget, "key-press-event", G_CALLBACK(signalKeyPress), this);
         }
@@ -9844,6 +9859,7 @@ public:
         {
             g_signal_handler_block(pEntry, m_nEntryInsertTextSignalId);
             g_signal_handler_block(pEntry, m_nEntryActivateSignalId);
+            g_signal_handler_block(pEntry, m_nEntryFocusInSignalId);
             g_signal_handler_block(pEntry, m_nEntryFocusOutSignalId);
         }
         else
@@ -9869,6 +9885,7 @@ public:
         if (GtkEntry* pEntry = get_entry())
         {
             g_signal_handler_unblock(pEntry, m_nEntryActivateSignalId);
+            g_signal_handler_unblock(pEntry, m_nEntryFocusInSignalId);
             g_signal_handler_unblock(pEntry, m_nEntryFocusOutSignalId);
             g_signal_handler_unblock(pEntry, m_nEntryInsertTextSignalId);
         }
@@ -9937,6 +9954,7 @@ public:
         {
             g_signal_handler_disconnect(pEntry, m_nEntryInsertTextSignalId);
             g_signal_handler_disconnect(pEntry, m_nEntryActivateSignalId);
+            g_signal_handler_disconnect(pEntry, m_nEntryFocusInSignalId);
             g_signal_handler_disconnect(pEntry, m_nEntryFocusOutSignalId);
         }
         else
