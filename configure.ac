@@ -567,7 +567,6 @@ SDKDIRNAME=sdk
 case "$host_os" in
 
 solaris*)
-    test_gtk=yes
     build_gstreamer_1_0=yes
     test_freetype=yes
     _os=SunOS
@@ -593,7 +592,6 @@ solaris*)
     ;;
 
 linux-gnu*|k*bsd*-gnu*)
-    test_gtk=yes
     build_gstreamer_1_0=yes
     test_kf5=yes
     test_gtk3_kde5=yes
@@ -642,7 +640,6 @@ cygwin*|interix*)
     ;;
 
 darwin*) # macOS or iOS
-    test_gtk=yes
     test_randr=no
     test_xrender=no
     test_freetype=no
@@ -655,7 +652,6 @@ darwin*) # macOS or iOS
     if test "$host_cpu" = "arm64" -o "$enable_ios_simulator" = "yes"; then
         build_for_ios=YES
         _os=iOS
-        test_gtk=no
         test_cups=no
         enable_mpl_subset=yes
         enable_lotuswordpro=no
@@ -687,7 +683,6 @@ darwin*) # macOS or iOS
 ;;
 
 freebsd*)
-    test_gtk=yes
     build_gstreamer_1_0=yes
     test_kf5=yes
     test_gtk3_kde5=yes
@@ -715,7 +710,6 @@ freebsd*)
     ;;
 
 *netbsd*)
-    test_gtk=yes
     build_gstreamer_1_0=yes
     test_kf5=yes
     test_gtk3_kde5=yes
@@ -732,7 +726,6 @@ aix*)
     ;;
 
 openbsd*)
-    test_gtk=yes
     test_freetype=yes
     PTHREAD_CFLAGS="-D_THREAD_SAFE"
     PTHREAD_LIBS="-pthread"
@@ -740,7 +733,6 @@ openbsd*)
     ;;
 
 dragonfly*)
-    test_gtk=yes
     build_gstreamer_1_0=yes
     test_kf5=yes
     test_gtk3_kde5=yes
@@ -763,7 +755,6 @@ linux-android*)
     test_dbus=no
     test_fontconfig=no
     test_freetype=no
-    test_gtk=no
     test_kf5=no
     test_qt5=no
     test_gtk3_kde5=no
@@ -1196,11 +1187,6 @@ AC_ARG_ENABLE(python,
          Also specifies what Python to use. 'auto' is the default.
          'fully-internal' even forces the internal version for uses of Python
          during the build.]))
-
-libo_FUZZ_ARG_ENABLE(gtk,
-    AS_HELP_STRING([--disable-gtk],
-        [Determines whether to use Gtk+ vclplug on platforms where Gtk+ is available.]),
-,test "${enable_gtk+set}" = set || enable_gtk=yes)
 
 libo_FUZZ_ARG_ENABLE(gtk3,
     AS_HELP_STRING([--disable-gtk3],
@@ -1645,12 +1631,12 @@ AC_ARG_WITH(system-jars,
 AC_ARG_WITH(system-cairo,
     AS_HELP_STRING([--with-system-cairo],
         [Use cairo libraries already on system.  Happens automatically for
-         (implicit) --enable-gtk and for --enable-gtk3.]))
+         (implicit) --enable-gtk3.]))
 
 AC_ARG_WITH(system-epoxy,
     AS_HELP_STRING([--with-system-epoxy],
         [Use epoxy libraries already on system.  Happens automatically for
-         --enable-gtk3.]),,
+         (implicit) --enable-gtk3.]),,
        [with_system_epoxy="$with_system_libs"])
 
 AC_ARG_WITH(myspell-dicts,
@@ -4761,7 +4747,6 @@ if test "$cross_compiling" = "yes"; then
     ./configure \
         --disable-cups \
         --disable-gstreamer-1-0 \
-        --disable-gtk \
         --disable-gtk3 \
         --disable-pdfimport \
         --disable-postgresql-sdbc \
@@ -4894,7 +4879,6 @@ if test "$USING_X11" != TRUE; then
     test_xrender=no
     test_cups=no
     test_dbus=no
-    test_gtk=no
     build_gstreamer_1_0=no
     test_kf5=no
     test_qt5=no
@@ -10403,7 +10387,6 @@ dnl Test which vclplugs have to be built.
 dnl ===================================================================
 R=""
 if test "$USING_X11" != TRUE; then
-    enable_gtk=no
     enable_gtk3=no
 fi
 GTK3_CFLAGS=""
@@ -10443,18 +10426,6 @@ if test "$enable_introspection" = yes; then
         AC_MSG_ERROR([--enable-introspection requires --enable-gtk3])
     fi
 fi
-
-ENABLE_GTK=""
-if test "x$enable_gtk" = "xyes"; then
-    if test "$with_system_cairo" = no; then
-        AC_MSG_ERROR([System cairo required for gtk support, do not use --without-system-cairo or use --disable-gtk])
-    fi
-    : ${with_system_cairo:=yes}
-    ENABLE_GTK="TRUE"
-    AC_DEFINE(ENABLE_GTK)
-    R="gtk $R"
-fi
-AC_SUBST(ENABLE_GTK)
 
 ENABLE_QT5=""
 if test "x$enable_qt5" = "xyes"; then
@@ -10606,61 +10577,27 @@ AC_SUBST(ENABLE_SDREMOTE_BLUETOOTH)
 AC_SUBST(SYSTEM_BLUEZ)
 
 dnl ===================================================================
-dnl Check whether the gtk 2.0 libraries are available.
+dnl Check whether to enable GIO support
 dnl ===================================================================
-
-GTK_CFLAGS=""
-GTK_LIBS=""
-if test  "$test_gtk" = "yes"; then
-
-    if test "$ENABLE_GTK" = "TRUE"; then
-        PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.18.0 ,,AC_MSG_ERROR([requirements to build the gtk-plugin not met (gtk+-2.0 >= 2.18.0). Use --disable-gtk or install the missing packages]))
-        PKG_CHECK_MODULES(GTK, gdk-pixbuf-2.0 >= 2.2 ,,AC_MSG_ERROR([requirements to build the gtk-plugin not met (gdk-pixbuf-2.0 >= 2.2). Use --disable-gtk or install the missing packages]))
-        GTK_CFLAGS=$(printf '%s' "$GTK_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-        FilterLibs "${GTK_LIBS}"
-        GTK_LIBS="${filteredlibs}"
-        PKG_CHECK_MODULES(GTHREAD, gthread-2.0,,AC_MSG_ERROR([requirements to build the gtk-plugin not met (gthread-2.0). Use --disable-gtk or install the missing packages]))
-        BUILD_TYPE="$BUILD_TYPE GTK"
-        GTHREAD_CFLAGS=$(printf '%s' "$GTK_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-        FilterLibs "${GTHREAD_LIBS}"
-        GTHREAD_LIBS="${filteredlibs}"
-
-        AC_MSG_CHECKING([whether to enable Gtk print dialog support])
-        PKG_CHECK_MODULES([GTK_PRINT], [gtk+-unix-print-2.0 >= 2.10.0],
-                          [ENABLE_GTK_PRINT="TRUE"],
-                          [ENABLE_GTK_PRINT=""])
-        GTK_PRINT_CFLAGS=$(printf '%s' "$GTK_PRINT_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-        FilterLibs "${GTK_PRINT_LIBS}"
-        GTK_PRINT_LIBS="${filteredlibs}"
-    fi
-
-    if test "$ENABLE_GTK" = "TRUE" || test "$ENABLE_GTK3" = "TRUE"; then
-        AC_MSG_CHECKING([whether to enable GIO support])
-        if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gio" = "yes"; then
-            dnl Need at least 2.26 for the dbus support.
-            PKG_CHECK_MODULES([GIO], [gio-2.0 >= 2.26],
-                              [ENABLE_GIO="TRUE"], [ENABLE_GIO=""])
-            if test "$ENABLE_GIO" = "TRUE"; then
-                AC_DEFINE(ENABLE_GIO)
-                GIO_CFLAGS=$(printf '%s' "$GIO_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-                FilterLibs "${GIO_LIBS}"
-                GIO_LIBS="${filteredlibs}"
-            fi
-        else
-            AC_MSG_RESULT([no])
+if test "$ENABLE_GTK3" = "TRUE"; then
+    AC_MSG_CHECKING([whether to enable GIO support])
+    if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gio" = "yes"; then
+        dnl Need at least 2.26 for the dbus support.
+        PKG_CHECK_MODULES([GIO], [gio-2.0 >= 2.26],
+                          [ENABLE_GIO="TRUE"], [ENABLE_GIO=""])
+        if test "$ENABLE_GIO" = "TRUE"; then
+            AC_DEFINE(ENABLE_GIO)
+            GIO_CFLAGS=$(printf '%s' "$GIO_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+            FilterLibs "${GIO_LIBS}"
+            GIO_LIBS="${filteredlibs}"
         fi
+    else
+        AC_MSG_RESULT([no])
     fi
 fi
 AC_SUBST(ENABLE_GIO)
 AC_SUBST(GIO_CFLAGS)
 AC_SUBST(GIO_LIBS)
-AC_SUBST(GTK_CFLAGS)
-AC_SUBST(GTK_LIBS)
-AC_SUBST(GTHREAD_CFLAGS)
-AC_SUBST(GTHREAD_LIBS)
-AC_SUBST([ENABLE_GTK_PRINT])
-AC_SUBST([GTK_PRINT_CFLAGS])
-AC_SUBST([GTK_PRINT_LIBS])
 
 
 dnl ===================================================================
