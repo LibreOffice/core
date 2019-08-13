@@ -95,7 +95,19 @@ public:
         SAL_CALL getStyleForObject(const sal_Int16 nChartObjectType) override;
 
     virtual void SAL_CALL
-    applyStyleToDiagram(const css::uno::Reference<css::chart2::XDiagram>& xDiagram);
+    applyStyleToDiagram(const css::uno::Reference<css::chart2::XDiagram>& xDiagram) override;
+
+    virtual void SAL_CALL
+    applyStyleToTitle(const css::uno::Reference<css::chart2::XTitle>& xTitle) override;
+
+    virtual void SAL_CALL
+    applyStyleToAxis(const css::uno::Reference<css::chart2::XAxis>& xAxis) override;
+
+    virtual void SAL_CALL
+    applyStyleToCoordinates(const css::uno::Reference<css::chart2::XCoordinateSystemContainer>& xCooSysCont) override;
+
+    virtual void SAL_CALL
+    applyStyleToBackground(const css::uno::Reference<css::beans::XPropertySet>& xBackground) override;
 
     // XStyle
     virtual sal_Bool SAL_CALL isUserDefined() override;
