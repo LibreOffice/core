@@ -18,7 +18,7 @@
 /**
  * Helper class primary used to track time of long running iterating tasks.
  *
- * Normally it should be sufficiant to instanciate the watch object before
+ * Normally it should be sufficient to instantiate the watch object before
  * starting the iteration and query continueIter() at the end of each.
  *
  * Called Stopwatch, because there is already a Timer class in the Scheduler.
@@ -65,13 +65,13 @@ class VCL_DLLPUBLIC TaskStopwatch
 
 public:
     /**
-     * Per default the watch consideres the last iter time when asking for an
+     * Per default the watch considers the last iter time when asking for an
      * other iteration, so considers Scheduler::acceptableTaskTime as a
      * maximum value.
      *
      * If you already know your iter time vary in a large range, consider
      * setting bConciderLastIterTime to false, so Scheduler::acceptableTaskTime
-     * will be used as a mimimum time slot.
+     * will be used as a minimum time slot.
      **/
     TaskStopwatch(bool bConciderLastIterTime = true)
         : m_nStartTicks(tools::Time::GetSystemTicks())
@@ -87,7 +87,7 @@ public:
     bool exceededRuntime() { return !nextIter(true); }
 
     /**
-     * Returns true, if an other iteration will probably pass in the time slot
+     * Returns true, if another iteration will probably pass in the time slot
      **/
     bool continueIter() { return nextIter(false); }
 
