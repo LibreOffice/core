@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_f8031f41",
+        "filename": "extras/source/palettes/material.soc",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-08-13T15:23:21Z",
+      "side": 1,
+      "message": "It\u0027s need separate \"Gray A\", \"Brown A\" to handle these colors, too, but paying attention to the right order, ie. using them before \"Gray\", \"Brown\" etc. in unoprov.cxx.",
+      "range": {
+        "startLine": 17,
+        "startChar": 25,
+        "endLine": 17,
+        "endChar": 31
+      },
+      "revId": "3316e41083a6cf1c04d93100c8266ef491f64640",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_38eaf774",
+        "filename": "svx/inc/strings.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-08-13T15:23:21Z",
+      "side": 1,
+      "message": "fir-\u003efor",
+      "range": {
+        "startLine": 94,
+        "startChar": 22,
+        "endLine": 94,
+        "endChar": 23
+      },
+      "revId": "3316e41083a6cf1c04d93100c8266ef491f64640",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_d8f89b4a",
+        "filename": "svx/source/unodraw/unoprov.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1589,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-08-13T15:23:21Z",
+      "side": 1,
+      "message": "Ie. \"Gray A\" before \"Gray\"",
+      "range": {
+        "startLine": 1588,
+        "startChar": 1,
+        "endLine": 1589,
+        "endChar": 40
+      },
+      "revId": "3316e41083a6cf1c04d93100c8266ef491f64640",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_1884d3b0",
+        "filename": "svx/source/unodraw/unoprov.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1667,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-08-13T15:23:21Z",
+      "side": 1,
+      "message": "Use only missing color names",
+      "range": {
+        "startLine": 1667,
+        "startChar": 2,
+        "endLine": 1667,
+        "endChar": 28
+      },
+      "revId": "3316e41083a6cf1c04d93100c8266ef491f64640",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_b89287f5",
+        "filename": "svx/source/unodraw/unoprov.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1669,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-08-13T15:23:21Z",
+      "side": 1,
+      "message": "RID_SVXSTR_COLOR_MATERIAL (as RID_SVXSTR_COLOR_TANGO)",
+      "range": {
+        "startLine": 1669,
+        "startChar": 4,
+        "endLine": 1669,
+        "endChar": 23
+      },
+      "revId": "3316e41083a6cf1c04d93100c8266ef491f64640",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
