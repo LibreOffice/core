@@ -15,6 +15,7 @@ $(eval $(call gb_Executable_set_include,test_updater_dialog,\
 	-I$(SRCDIR)/onlineupdate/source/update/updater/xpcom/glue \
 	-I$(SRCDIR)/onlineupdate/source/update/updater \
 	$$(INCLUDE) \
+	$(if $(filter-out WNT,$(OS)),$$(GTK3_CFLAGS) ) \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,test_updater_dialog,\
@@ -48,15 +49,10 @@ $(eval $(call gb_Executable_add_defs,test_updater_dialog,\
 
 $(eval $(call gb_Executable_use_externals,test_updater_dialog,\
 	nss3 \
-	gtk \
 ))
 
 $(eval $(call gb_Executable_add_libs,test_updater_dialog,\
-	-lX11 \
-	-lXext \
-	-lXrender \
-	-lSM \
-	-lICE \
+	$(GTK3_LIBS) \
 ))
 endif
 
