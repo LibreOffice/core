@@ -28,6 +28,7 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <comphelper/string.hxx>
+#include <o3tl/float_int_conversion.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/objsh.hxx>
 
@@ -236,7 +237,7 @@ namespace pcr
         for ( sal_uInt16 d = 0; d < nDigits; ++d )
             n *= 10;
 
-        if ( n > std::numeric_limits< long >::max() )
+        if ( !o3tl::convertsToAtMost(n, std::numeric_limits< long >::max()) )
             return std::numeric_limits< long >::max();
         return static_cast<long>(n);
     }
