@@ -253,7 +253,7 @@ bool lcl_extractTableBorderProperty(const PropertyMapPtr& pTableProperties, cons
 void lcl_extractHoriOrient(std::vector<beans::PropertyValue>& rFrameProperties, sal_Int32& nHoriOrient)
 {
     // Shifts the frame left by the given value.
-    for (beans::PropertyValue & rFrameProperty : rFrameProperties)
+    for (const beans::PropertyValue & rFrameProperty : rFrameProperties)
     {
         if (rFrameProperty.Name == "HoriOrient")
         {
@@ -870,7 +870,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 /// Do all cells in this row have a CellHideMark property?
 static bool lcl_hideMarks(PropertyMapVector1& rCellProperties)
 {
-    for (PropertyMapPtr & p : rCellProperties)
+    for (const PropertyMapPtr & p : rCellProperties)
     {
         // if anything is vertically merged, the row must not be set to fixed
         // as Writer's layout doesn't handle that well
