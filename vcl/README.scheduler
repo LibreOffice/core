@@ -176,7 +176,7 @@ versions are processed but simply don't run the scheduler.
 
 == General: track time of long running tasks ==
 
-There is TaskStopwatch class. It'll track the time and report a timout either
+There is TaskStopwatch class. It'll track the time and report a timeout either
 when the tasks time slice is finished or some system event did occur.
 
 Eventually it will be merged into the main scheduler, so each invoked task can
@@ -189,7 +189,7 @@ There were some questions coming up when implementing it:
 and skip the instant timeout? ===
 
 You never know how long a task will run. Currently the scheduler simply asks
-each task when it'll be ready to run, until two runable tasks are found.
+each task when it'll be ready to run, until two runnable tasks are found.
 Normally this is very quick, as LO has a lot of one-shot instant tasks / Idles
 and just a very few long term pending Timers.
 
@@ -207,7 +207,7 @@ term timer list increases AKA for highly loaded LOOL instances.
 
 But the Linux timer wheel mainly relies on the facts that the OS timers are
 expected to not expire, as they are use to catch "error" timeouts, which rarely
-happen, so this definitly not matches LO's usage.
+happen, so this definitely not matches LO's usage.
 
 === Not really usable to find misbehaving tasks ===
 
