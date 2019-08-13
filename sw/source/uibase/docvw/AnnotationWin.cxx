@@ -225,6 +225,7 @@ void SwAnnotationWin::SetPostItText()
 
 void SwAnnotationWin::SetResolved(bool resolved)
 {
+    bool oldState = IsResolved();
     static_cast<SwPostItField*>(mpFormatField->GetField())->SetResolved(resolved);
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
     mrSidebarItem.bShow = !IsResolved() || (pVOpt->IsResolvedPostIts());
@@ -236,7 +237,8 @@ void SwAnnotationWin::SetResolved(bool resolved)
     else
         mpMetadataResolved->Hide();
 
-    mbResolvedStateUpdated = true;
+    if(IsResolved() != oldState)
+        mbResolvedStateUpdated = true;
     UpdateData();
     Invalidate();
 }
@@ -266,7 +268,7 @@ bool SwAnnotationWin::IsThreadResolved()
 
 void SwAnnotationWin::UpdateData()
 {
-    if ( mpOutliner->IsModified() || mbResolvedStateUpdated)
+    if ( mpOutliner->IsModified() || mbResolvedStateUpdated )
     {
         IDocumentUndoRedo & rUndoRedo(
             mrView.GetDocShell()->GetDoc()->GetIDocumentUndoRedo());
@@ -288,7 +290,10 @@ void SwAnnotationWin::UpdateData()
         // so we get a new layout of notes (anchor position is still the same and we would otherwise not get one)
         mrMgr.SetLayout();
         // #i98686# if we have several views, all notes should update their text
-        mpFormatField->Broadcast(SwFormatFieldHint( nullptr, SwFormatFieldHintWhich::CHANGED));
+        if(mbResolvedStateUpdated)
+            mpFormatField->Broadcast(SwFormatFieldHint( nullptr, SwFormatFieldHintWhich::RESOLVED));
+        else
+            mpFormatField->Broadcast(SwFormatFieldHint( nullptr, SwFormatFieldHintWhich::CHANGED));
         mrView.GetDocShell()->SetModified();
     }
     mpOutliner->ClearModifyFlag();

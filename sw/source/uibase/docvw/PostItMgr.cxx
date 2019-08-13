@@ -104,7 +104,7 @@ using namespace sw::annotation;
 
 namespace {
 
-    enum class CommentNotificationType { Add, Remove, Modify };
+    enum class CommentNotificationType { Add, Remove, Modify, Resolve };
 
     bool comp_pos(const std::unique_ptr<SwSidebarItem>& a, const std::unique_ptr<SwSidebarItem>& b)
     {
@@ -147,7 +147,8 @@ namespace {
         boost::property_tree::ptree aAnnotation;
         aAnnotation.put("action", (nType == CommentNotificationType::Add ? "Add" :
                                    (nType == CommentNotificationType::Remove ? "Remove" :
-                                    (nType == CommentNotificationType::Modify ? "Modify" : "???"))));
+                                    (nType == CommentNotificationType::Modify ? "Modify" :
+                                     (nType == CommentNotificationType::Resolve ? "Resolve" : "???")))));
         aAnnotation.put("id", nPostItId);
         if (nType != CommentNotificationType::Remove && pItem != nullptr)
         {
@@ -399,6 +400,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
             }
             case SwFormatFieldHintWhich::CHANGED:
+            case SwFormatFieldHintWhich::RESOLVED:
             {
                 SwFormatField* pFormatField = dynamic_cast<SwFormatField*>(&rBC);
                 for (auto const& postItField : mvPostItFields)
@@ -414,7 +416,10 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         // If LOK has disabled tiled annotations, emit annotation callbacks
                         if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
                         {
-                            lcl_CommentNotification(mpView, CommentNotificationType::Modify, postItField.get(), 0);
+                            if(SwFormatFieldHintWhich::CHANGED == pFormatHint->Which())
+                                lcl_CommentNotification(mpView, CommentNotificationType::Modify, postItField.get(), 0);
+                            else
+                                lcl_CommentNotification(mpView, CommentNotificationType::Resolve, postItField.get(), 0);
                         }
                         break;
                     }
