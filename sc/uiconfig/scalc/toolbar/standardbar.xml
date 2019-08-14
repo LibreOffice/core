@@ -79,7 +79,7 @@
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation"/>
  <toolbar:toolbaritem xlink:href=".uno:DrawText" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:EditHeaderAndFooter"/>
+ <toolbar:toolbaritem xlink:href=".uno:EditHeaderAndFooter" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DefinePrintArea"/>
  <toolbar:toolbaritem xlink:href=".uno:EditPrintArea" toolbar:visible="false"/>

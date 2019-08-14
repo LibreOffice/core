@@ -166,6 +166,20 @@ public class ScAccessiblePageHeader extends TestCase {
         //get the property-set
         final XPropertySet PropSet = UnoRuntime.queryInterface(XPropertySet.class, StdStyle);
 
+        // tdf#99296 - Disable headers/footers by default
+        try {
+            PropSet.setPropertyValue("HeaderIsOn", Boolean.TRUE);
+            PropSet.setPropertyValue("FooterIsOn", Boolean.TRUE);
+        } catch (com.sun.star.beans.UnknownPropertyException upe) {
+            log.println("Don't know the Property 'HeaderIsOn' or 'FooterIsOn'");
+        } catch (com.sun.star.lang.WrappedTargetException wte) {
+            log.println("WrappedTargetException while setting Property 'HeaderIsOn' or 'FooterIsOn'");
+        } catch (com.sun.star.lang.IllegalArgumentException iae) {
+            log.println("IllegalArgumentException while setting Property 'HeaderIsOn' or 'FooterIsOn'");
+        } catch (com.sun.star.beans.PropertyVetoException pve) {
+            log.println("PropertyVetoException while setting Property 'HeaderIsOn' or 'FooterIsOn'");
+        }
+
         XHeaderFooterContent RPHC = null;
         // creation of testobject here
         // first we write what we are intend to do to log file
