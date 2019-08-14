@@ -26,6 +26,7 @@
 #include <frmatr.hxx>
 #include "docxattributeoutput.hxx"
 #include "docxexportfilter.hxx"
+#include <comphelper/flagguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <sal/log.hxx>
@@ -138,7 +139,6 @@ private:
     bool m_bDrawingOpen;
     bool m_bParagraphSdtOpen;
     bool m_bParagraphHasDrawing; ///Flag for checking drawing in a paragraph.
-    bool m_bFlyFrameGraphic;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pFlyFillAttrList;
     sax_fastparser::FastAttributeList* m_pFlyWrapAttrList;
     sax_fastparser::FastAttributeList* m_pBodyPrAttrList;
@@ -149,6 +149,8 @@ private:
     sal_Int32 m_nDMLandVMLTextFrameRotation;
 
 public:
+    bool m_bFlyFrameGraphic = false;
+
     Impl(DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer,
          oox::drawingml::DrawingML* pDrawingML)
         : m_rExport(rExport)
@@ -160,7 +162,6 @@ public:
         , m_bDrawingOpen(false)
         , m_bParagraphSdtOpen(false)
         , m_bParagraphHasDrawing(false)
-        , m_bFlyFrameGraphic(false)
         , m_pFlyWrapAttrList(nullptr)
         , m_pBodyPrAttrList(nullptr)
         , m_bDMLAndVMLDrawingOpen(false)
@@ -260,8 +261,6 @@ public:
     {
         return m_pDashLineStyleAttr;
     }
-
-    void setFlyFrameGraphic(bool bFlyFrameGraphic) { m_bFlyFrameGraphic = bFlyFrameGraphic; }
 
     bool getFlyFrameGraphic() const { return m_bFlyFrameGraphic; }
 
@@ -1112,9 +1111,8 @@ void DocxSdrExport::writeOnlyTextOfFrame(ww8::Frame const* pParentFrame)
     ExportDataSaveRestore aDataGuard(m_pImpl->getExport(), nStt, nEnd, pParentFrame);
 
     m_pImpl->setBodyPrAttrList(sax_fastparser::FastSerializerHelper::createAttrList());
-    m_pImpl->setFlyFrameGraphic(true);
+    ::comphelper::FlagRestorationGuard const g(m_pImpl->m_bFlyFrameGraphic, true);
     m_pImpl->getExport().WriteText();
-    m_pImpl->setFlyFrameGraphic(false);
 }
 
 void DocxSdrExport::writeBoxItemLine(const SvxBoxItem& rBox)
@@ -1367,14 +1365,15 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
         else if (rDirection.GetValue() == SvxFrameDirection::Vertical_LR_BT)
             m_pImpl->getBodyPrAttrList()->add(XML_vert, "vert270");
 
-        m_pImpl->setFlyFrameGraphic(true);
-        m_pImpl->getExport().WriteText();
-        if (m_pImpl->getParagraphSdtOpen())
         {
-            m_pImpl->getExport().DocxAttrOutput().EndParaSdtBlock();
-            m_pImpl->setParagraphSdtOpen(false);
+            ::comphelper::FlagRestorationGuard const g(m_pImpl->m_bFlyFrameGraphic, true);
+            m_pImpl->getExport().WriteText();
+            if (m_pImpl->getParagraphSdtOpen())
+            {
+                m_pImpl->getExport().DocxAttrOutput().EndParaSdtBlock();
+                m_pImpl->setParagraphSdtOpen(false);
+            }
         }
-        m_pImpl->setFlyFrameGraphic(false);
 
         pFS->endElementNS(XML_w, XML_txbxContent);
         pFS->endElementNS(XML_wps, XML_txbx);
@@ -1515,14 +1514,15 @@ void DocxSdrExport::writeVMLTextFrame(ww8::Frame const* pParentFrame, bool bText
         pFS->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
     }
     pFS->startElementNS(XML_w, XML_txbxContent);
-    m_pImpl->setFlyFrameGraphic(true);
-    m_pImpl->getExport().WriteText();
-    if (m_pImpl->getParagraphSdtOpen())
     {
-        m_pImpl->getExport().DocxAttrOutput().EndParaSdtBlock();
-        m_pImpl->setParagraphSdtOpen(false);
+        ::comphelper::FlagRestorationGuard const g(m_pImpl->m_bFlyFrameGraphic, true);
+        m_pImpl->getExport().WriteText();
+        if (m_pImpl->getParagraphSdtOpen())
+        {
+            m_pImpl->getExport().DocxAttrOutput().EndParaSdtBlock();
+            m_pImpl->setParagraphSdtOpen(false);
+        }
     }
-    m_pImpl->setFlyFrameGraphic(false);
     pFS->endElementNS(XML_w, XML_txbxContent);
     if (!bTextBoxOnly)
     {
