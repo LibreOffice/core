@@ -276,7 +276,6 @@
           <menu:menuitem menu:id=".uno:InsertFieldDocTitle"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:EditHeaderAndFooter" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:InsertFormMenu">
         <menu:menupopup>
