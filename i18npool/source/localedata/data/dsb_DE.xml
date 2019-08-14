@@ -144,7 +144,7 @@
       <FormatCode>NNNND. MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="short" usage="DATE" formatindex="31">
-      <FormatCode>MM.DD</FormatCode>
+      <FormatCode>MM-DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="32">
       <FormatCode>YY-MM-DD</FormatCode>
@@ -316,6 +316,68 @@
           <DefaultFullName>december</DefaultFullName>
         </Month>
       </MonthsOfYear>
+      <GenitiveMonths>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>jan.</DefaultAbbrvName>
+          <DefaultFullName>januara</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>feb.</DefaultAbbrvName>
+          <DefaultFullName>februara</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>měr.</DefaultAbbrvName>
+          <DefaultFullName>měrca</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>apr.</DefaultAbbrvName>
+          <DefaultFullName>apryla</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>maj</DefaultAbbrvName>
+          <DefaultFullName>maja</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>jun.</DefaultAbbrvName>
+          <DefaultFullName>junija</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>jul.</DefaultAbbrvName>
+          <DefaultFullName>julija</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>awg.</DefaultAbbrvName>
+          <DefaultFullName>awgusta</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>sep.</DefaultAbbrvName>
+          <DefaultFullName>septembra</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>okt.</DefaultAbbrvName>
+          <DefaultFullName>oktobra</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>now.</DefaultAbbrvName>
+          <DefaultFullName>nowembra</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>dec.</DefaultAbbrvName>
+          <DefaultFullName>decembra</DefaultFullName>
+        </Month>
+      </GenitiveMonths>
       <Eras>
         <Era>
           <EraID>bc</EraID>
