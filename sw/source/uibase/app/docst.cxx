@@ -683,10 +683,8 @@ void SwDocShell::Edit(
         {
             // Prevent undo append from being done during paragraph, character, and frame style Make
             // Do it after ok return from style dialog when derived from style is known
-            const bool bDoesUndo = GetDoc()->GetIDocumentUndoRedo().DoesUndo();
-            GetDoc()->GetIDocumentUndoRedo().DoUndo( false );
+            ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
             pStyle = &m_xBasePool->Make( rName, nFamily, nMask );
-            GetDoc()->GetIDocumentUndoRedo().DoUndo( bDoesUndo );
         }
         else
         {
