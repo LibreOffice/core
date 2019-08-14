@@ -289,6 +289,10 @@ interface BaseTextEditView
         StateMethod = StateTabWin ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    SID_TABLE_CHANGE_CURRENT_BORDER_POSITION
+    [
+        ExecMethod = ExecTabWin;
+    ]
     FN_EDIT_LINK_DLG // status(final|play)
     [
         ExecMethod = Execute ;
