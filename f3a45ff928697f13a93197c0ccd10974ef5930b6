@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "bf659307_c18c2681",
+        "filename": "sw/qa/extras/odfexport/data/qrcode-properties.fodt",
+        "patchSetId": 18
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-08-14T21:02:52Z",
+      "side": 1,
+      "message": "there seems to be a problem either reading or writing FODT. Opening this document in writer imports it as plain text.\n\nThat is probably unrelated to your changes. Can you maybe just replace this FODT with an ODT?\nThen the unit test should hopefully work.",
+      "revId": "f3a45ff928697f13a93197c0ccd10974ef5930b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_db4ad5aa",
         "filename": "sw/qa/extras/odfexport/odfexport.cxx",
         "patchSetId": 18
