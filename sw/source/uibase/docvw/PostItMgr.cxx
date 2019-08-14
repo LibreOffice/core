@@ -751,7 +751,7 @@ void SwPostItMgr::LayoutPostIts()
                             if (mpAnswer)
                             {
                                 if (static_cast<bool>(pPostIt->CalcParent())) //do we really have another note in front of this one
-                                    pPostIt.get()->InitAnswer(mpAnswer);
+                                    pPostIt->InitAnswer(mpAnswer);
                                 delete mpAnswer;
                                 mpAnswer = nullptr;
                             }
@@ -1546,7 +1546,7 @@ void SwPostItMgr::Delete(sal_uInt32 nPostItId)
 {
     mpWrtShell->StartAllAction();
     if (HasActiveSidebarWin() &&
-        mpActivePostIt.get()->GetPostItField()->GetPostItId() == nPostItId)
+        mpActivePostIt->GetPostItField()->GetPostItId() == nPostItId)
     {
         SetActiveSidebarWin(nullptr);
     }

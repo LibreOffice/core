@@ -1044,7 +1044,7 @@ bool SmElementsControl::itemIsSeparator(sal_uInt16 nPos) const
 {
     if (nPos < m_nCurrentOffset || (nPos -= m_nCurrentOffset) >= maElementList.size())
         return true;
-    return maElementList[nPos].get()->isSeparator();
+    return maElementList[nPos]->isSeparator();
 }
 
 css::uno::Reference<css::accessibility::XAccessible> SmElementsControl::CreateAccessible()

@@ -953,8 +953,8 @@ IMPL_STATIC_LINK( Application, PostEventHandler, void*, pCallData, void )
         break;
     };
 
-    if( pData->mpWin && pData->mpWin.get()->mpWindowImpl->mpFrameWindow.get() && pEventData )
-        ImplWindowFrameProc( pData->mpWin.get()->mpWindowImpl->mpFrameWindow.get(), nEvent, pEventData );
+    if( pData->mpWin && pData->mpWin->mpWindowImpl->mpFrameWindow.get() && pEventData )
+        ImplWindowFrameProc( pData->mpWin->mpWindowImpl->mpFrameWindow.get(), nEvent, pEventData );
 
     // remove this event from list of posted events, watch for destruction of internal data
     auto svdata = ImplGetSVData();

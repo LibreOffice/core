@@ -2592,7 +2592,7 @@ void ScInterpreter::ScIsRef()
         {
             FormulaConstTokenRef x = PopToken();
             if ( nGlobalError == FormulaError::NONE )
-                bRes = !x.get()->GetRefList()->empty();
+                bRes = !x->GetRefList()->empty();
         }
         break;
         case svExternalSingleRef:
@@ -8609,7 +8609,7 @@ void ScInterpreter::ScIndex()
                             return;
                         }
                         ScRange aRange( ScAddress::UNINITIALIZED);
-                        DoubleRefToRange( (*(xRef.get()->GetRefList()))[nArea-1], aRange);
+                        DoubleRefToRange( (*(xRef->GetRefList()))[nArea-1], aRange);
                         aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
                         if ( nParamCount == 2 && nRow1 == nRow2 )
                             bRowArray = true;
@@ -8702,8 +8702,8 @@ void ScInterpreter::ScAreas()
             case svRefList:
                 {
                     FormulaConstTokenRef xT = PopToken();
-                    ValidateRef( *(xT.get()->GetRefList()));
-                    nCount += xT.get()->GetRefList()->size();
+                    ValidateRef( *(xT->GetRefList()));
+                    nCount += xT->GetRefList()->size();
                 }
                 break;
             default:
@@ -9695,7 +9695,7 @@ FormulaError ScInterpreter::GetErrorType()
                 nErr = nGlobalError;
             else
             {
-                const ScRefList* pRefList = x.get()->GetRefList();
+                const ScRefList* pRefList = x->GetRefList();
                 size_t n = pRefList->size();
                 if (!n)
                     nErr = FormulaError::NoRef;

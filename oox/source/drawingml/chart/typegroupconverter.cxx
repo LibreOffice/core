@@ -283,7 +283,7 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
         {
             DataSourceModel *pValues = elem->maSources.get( SeriesModel::VALUES ).get();
             if( pValues->mxDataSeq.is() )
-                nMaxValues = pValues->mxDataSeq.get()->maData.size();
+                nMaxValues = pValues->mxDataSeq->maData.size();
         }
     }
     /* n#839727 Create Category Sequence when none are found */

@@ -65,7 +65,7 @@ void SwNavigationMgr::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     if (typeid(rHint) == typeid(sw::UnoCursorHint))
     {
         auto it = std::find_if(m_entries.begin(), m_entries.end(),
-            [&rBC](const sw::UnoCursorPointer& rItem) { return !rItem || &rBC == &rItem.get()->m_aNotifier; });
+            [&rBC](const sw::UnoCursorPointer& rItem) { return !rItem || &rBC == &rItem->m_aNotifier; });
         if (it != m_entries.end())
         {
             EndListening(rBC);

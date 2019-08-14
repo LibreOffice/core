@@ -401,7 +401,7 @@ void FocusManager::HandleKeyEvent (
                 case PC_PanelTitle:
                     // Toggle panel between expanded and collapsed.
                     maPanels[aLocation.mnIndex]->SetExpanded( ! maPanels[aLocation.mnIndex]->IsExpanded());
-                    maPanels[aLocation.mnIndex]->GetTitleBar().get()->Invalidate();
+                    maPanels[aLocation.mnIndex]->GetTitleBar()->Invalidate();
                     break;
 
                 default:
@@ -472,7 +472,7 @@ void FocusManager::HandleKeyEvent (
                     {
                         // Focus the last button.
                         sal_Int32 nIndex(maButtons.size()-1);
-                        while(!maButtons[nIndex].get()->IsVisible() && --nIndex > 0);
+                        while(!maButtons[nIndex]->IsVisible() && --nIndex > 0);
                         FocusButton(nIndex);
                     }
                     break;
@@ -482,7 +482,7 @@ void FocusManager::HandleKeyEvent (
                 {
                     // Focus the last button.
                     sal_Int32 nIndex(maButtons.size()-1);
-                    while(!maButtons[nIndex].get()->IsVisible() && --nIndex > 0);
+                    while(!maButtons[nIndex]->IsVisible() && --nIndex > 0);
                     FocusButton(nIndex);
                     break;
                 }
@@ -494,7 +494,7 @@ void FocusManager::HandleKeyEvent (
                     else
                     {
                         sal_Int32 nIndex((aLocation.mnIndex + maButtons.size() - 1) % maButtons.size());
-                        while(!maButtons[nIndex].get()->IsVisible() && --nIndex > 0);
+                        while(!maButtons[nIndex]->IsVisible() && --nIndex > 0);
                         FocusButton(nIndex);
                     }
                     break;
@@ -532,7 +532,7 @@ void FocusManager::HandleKeyEvent (
                     if (aLocation.mnIndex < static_cast<sal_Int32>(maButtons.size())-1)
                     {
                         sal_Int32 nIndex(aLocation.mnIndex + 1);
-                        while(!maButtons[nIndex].get()->IsVisible() && ++nIndex < static_cast<sal_Int32>(maButtons.size()));
+                        while(!maButtons[nIndex]->IsVisible() && ++nIndex < static_cast<sal_Int32>(maButtons.size()));
                         if (nIndex < static_cast<sal_Int32>(maButtons.size()))
                         {
                             FocusButton(nIndex);

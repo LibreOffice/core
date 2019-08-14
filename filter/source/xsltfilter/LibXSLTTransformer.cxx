@@ -218,7 +218,7 @@ namespace XSLT
             return -1;
         sal_Int32 n;
         css::uno::Reference<XInputStream> xis = m_transformer->getInputStream();
-        n = xis.get()->readBytes(m_readBuf, len);
+        n = xis->readBytes(m_readBuf, len);
         if (n > 0)
             {
                 memcpy(buffer, m_readBuf.getArray(), n);
@@ -244,7 +244,7 @@ namespace XSLT
                 m_writeBuf.realloc(n);
                 memcpy(m_writeBuf.getArray(), memPtr,
                         static_cast<size_t> (n));
-                xos.get()->writeBytes(m_writeBuf);
+                xos->writeBytes(m_writeBuf);
                 memPtr += n;
                 writeLen -= n;
             }
@@ -258,8 +258,8 @@ namespace XSLT
         css::uno::Reference<XOutputStream> xos = m_transformer->getOutputStream();
         if (xos.is())
         {
-            xos.get()->flush();
-            xos.get()->closeOutput();
+            xos->flush();
+            xos->closeOutput();
         }
         m_transformer->done();
     }
@@ -423,7 +423,7 @@ namespace XSLT
     {
         for (const css::uno::Reference<XStreamListener>& xl : m_listeners)
         {
-            xl.get()->started();
+            xl->started();
         }
         OSL_ENSURE(!m_Reader.is(), "Somebody forgot to call terminate *and* holds a reference to this LibXSLTTransformer instance");
         m_Reader = new Reader(this);
@@ -439,7 +439,7 @@ namespace XSLT
         {
             if (xl.is())
             {
-                xl.get()->error(arg);
+                xl->error(arg);
             }
         }
     }
@@ -451,7 +451,7 @@ namespace XSLT
         {
             if (xl.is())
             {
-                xl.get()->closed();
+                xl->closed();
             }
         }
     }

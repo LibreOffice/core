@@ -734,7 +734,7 @@ void TextEffectsHandler::lcl_sprm(Sprm& rSprm)
     if( !pProperties.get())
         return;
 
-    pProperties.get()->resolve( *this );
+    pProperties->resolve( *this );
 
     if (mpGrabBagStack->getCurrentName() == constAttributesSequenceName)
         mpGrabBagStack->pop();

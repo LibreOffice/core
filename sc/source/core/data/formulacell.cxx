@@ -1088,7 +1088,7 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
 
     const ScMatrix* pMat = nullptr;
     if (pCode->GetCodeError() == FormulaError::NONE && aResult.GetType() == svMatrixCell &&
-            ((pMat = aResult.GetToken().get()->GetMatrix()) != nullptr))
+            ((pMat = aResult.GetToken()->GetMatrix()) != nullptr))
         pMat->GetDimensions( rCols, rRows );
     else
     {
