@@ -368,9 +368,21 @@ std::vector<beans::PropertyValue> desktop::jsonToPropertyValuesVector(const char
             else if (rType == "long")
                 aValue.Value <<= OString(rValue.c_str()).toInt32();
             else if (rType == "short")
-                aValue.Value <<= static_cast<sal_Int16>(OString(rValue.c_str()).toInt32());
+                aValue.Value <<= sal_Int16(OString(rValue.c_str()).toInt32());
             else if (rType == "unsigned short")
-                aValue.Value <<= static_cast<sal_uInt16>(OString(rValue.c_str()).toUInt32());
+                aValue.Value <<= sal_uInt16(OString(rValue.c_str()).toUInt32());
+            else if (rType == "int64")
+                aValue.Value <<= OString(rValue.c_str()).toInt64();
+            else if (rType == "int32")
+                aValue.Value <<= OString(rValue.c_str()).toInt32();
+            else if (rType == "int16")
+                aValue.Value <<= sal_Int16(OString(rValue.c_str()).toInt32());
+            else if (rType == "uint64")
+                aValue.Value <<= OString(rValue.c_str()).toUInt64();
+            else if (rType == "uint32")
+                aValue.Value <<= OString(rValue.c_str()).toUInt32();
+            else if (rType == "uint16")
+                aValue.Value <<= sal_uInt16(OString(rValue.c_str()).toUInt32());
             else if (rType == "[]byte")
             {
                 aNodeValue = rPair.second.get_child("value", aNodeNull);
