@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_db1c15c3",
+        "filename": "xmlsecurity/source/dialogs/digitalsignaturesdialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-14T08:36:32Z",
+      "side": 1,
+      "message": "perhaps this should be changed to look for environment variable which depends on platform:\n\n    #ifdef _WIN64\n        const char* cPath \u003d getenv(\"ProgramFiles(x86)\");\n    #else\n        const char* cPath \u003d getenv(\"ProgramFiles\"); // will give 32-bit Program Files directory on both 32-bit and 64-bit Windows\n    #endif",
+      "range": {
+        "startLine": 460,
+        "startChar": 30,
+        "endLine": 460,
+        "endChar": 55
+      },
+      "revId": "536ab2f3ba1e71badaaf98db9419ca7c7ddd7ac4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
