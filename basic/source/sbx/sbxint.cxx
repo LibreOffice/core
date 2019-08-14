@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/float_int_conversion.hxx>
 #include <vcl/errcode.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>
@@ -73,11 +76,11 @@ start:
                 nRes = static_cast<sal_Int16>(p->nULong);
             break;
         case SbxSINGLE:
-            if( p->nSingle > SbxMAXINT )
+            if( !o3tl::convertsToAtMost(o3tl::roundAway(p->nSingle), SbxMAXINT) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXINT;
             }
-            else if( p->nSingle < SbxMININT )
+            else if( !o3tl::convertsToAtLeast(o3tl::roundAway(p->nSingle), SbxMININT) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMININT;
             }
@@ -134,11 +137,11 @@ start:
             else
                 dVal = p->nDouble;
 
-            if( dVal > SbxMAXINT )
+            if( !o3tl::convertsToAtMost(o3tl::roundAway(dVal), SbxMAXINT) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXINT;
             }
-            else if( dVal < SbxMININT )
+            else if( !o3tl::convertsToAtLeast(o3tl::roundAway(dVal), SbxMININT) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMININT;
             }
@@ -157,11 +160,11 @@ start:
                 SbxDataType t;
                 if( ImpScan( *p->pOUString, d, t, nullptr, false ) != ERRCODE_NONE )
                     nRes = 0;
-                else if( d > SbxMAXINT )
+                else if( !o3tl::convertsToAtMost(o3tl::roundAway(d), SbxMAXINT) )
                 {
                     SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXINT;
                 }
-                else if( d < SbxMININT )
+                else if( !o3tl::convertsToAtLeast(o3tl::roundAway(d), SbxMININT) )
                 {
                     SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMININT;
                 }
@@ -339,11 +342,11 @@ start:
 sal_Int64 ImpDoubleToSalInt64( double d )
 {
     sal_Int64 nRes;
-    if( d > SAL_MAX_INT64 )
+    if( !o3tl::convertsToAtMost(o3tl::roundAway(d), SAL_MAX_INT64) )
     {
         SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MAX_INT64;
     }
-    else if( d < SAL_MIN_INT64 )
+    else if( !o3tl::convertsToAtLeast(o3tl::roundAway(d), SAL_MIN_INT64) )
     {
         SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MIN_INT64;
     }
@@ -355,7 +358,7 @@ sal_Int64 ImpDoubleToSalInt64( double d )
 sal_uInt64 ImpDoubleToSalUInt64( double d )
 {
     sal_uInt64 nRes;
-    if( d > SAL_MAX_UINT64 )
+    if( !o3tl::convertsToAtMost(o3tl::roundAway(d), SAL_MAX_UINT64) )
     {
         SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MAX_UINT64;
     }
@@ -703,7 +706,7 @@ start:
                     SbxDataType t;
                     if( ImpScan( *p->pOUString, d, t, nullptr, false ) != ERRCODE_NONE )
                         nRes = 0;
-                    else if( d > SAL_MAX_UINT64 )
+                    else if( !o3tl::convertsToAtMost(o3tl::roundAway(d), SAL_MAX_UINT64) )
                     {
                         SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MAX_UINT64;
                     }

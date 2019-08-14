@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/float_int_conversion.hxx>
 #include <vcl/errcode.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>
@@ -57,11 +60,11 @@ start:
                 nRes = static_cast<sal_Int32>(p->nULong);
             break;
         case SbxSINGLE:
-            if( p->nSingle > SbxMAXLNG )
+            if( !o3tl::convertsToAtMost(o3tl::roundAway(p->nSingle), SbxMAXLNG) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXLNG;
             }
-            else if( p->nSingle < SbxMINLNG )
+            else if( !o3tl::convertsToAtLeast(o3tl::roundAway(p->nSingle), SbxMINLNG) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMINLNG;
             }
@@ -98,11 +101,11 @@ start:
             else
                 dVal = p->nDouble;
 
-            if( dVal > SbxMAXLNG )
+            if( !o3tl::convertsToAtMost(o3tl::roundAway(dVal), SbxMAXLNG) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXLNG;
             }
-            else if( dVal < SbxMINLNG )
+            else if( !o3tl::convertsToAtLeast(o3tl::roundAway(dVal), SbxMINLNG) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMINLNG;
             }
@@ -121,11 +124,11 @@ start:
                 SbxDataType t;
                 if( ImpScan( *p->pOUString, d, t, nullptr, false ) != ERRCODE_NONE )
                     nRes = 0;
-                else if( d > SbxMAXLNG )
+                else if( !o3tl::convertsToAtMost(o3tl::roundAway(d), SbxMAXLNG) )
                 {
                     SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXLNG;
                 }
-                else if( d < SbxMINLNG )
+                else if( !o3tl::convertsToAtLeast(o3tl::roundAway(d), SbxMINLNG) )
                 {
                     SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMINLNG;
                 }
