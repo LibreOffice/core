@@ -48,6 +48,23 @@
     },
     {
       "key": {
+        "uuid": "bf659307_6679b0fa",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2173,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-08-14T15:31:54Z",
+      "side": 1,
+      "message": "please do not change name and attach .ui file update in this patch for easier testing (you can manually remove not needed lines - not using glade which will cause change in many lines)",
+      "revId": "0f58bf0c559427b141074539c7e15f9f641d48c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_06231407",
         "filename": "vcl/source/window/builder.cxx",
         "patchSetId": 1
