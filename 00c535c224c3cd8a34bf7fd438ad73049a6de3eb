@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_66e9b018",
+        "filename": "svtools/source/dialogs/addresstemplate.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-14T12:54:09Z",
+      "side": 1,
+      "message": "Hmm, but shouldn\u0027t it fire here?",
+      "range": {
+        "startLine": 705,
+        "startChar": 51,
+        "endLine": 705,
+        "endChar": 88
+      },
+      "revId": "00c535c224c3cd8a34bf7fd438ad73049a6de3eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
