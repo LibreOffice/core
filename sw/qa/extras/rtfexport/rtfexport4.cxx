@@ -196,6 +196,17 @@ DECLARE_RTFEXPORT_TEST(testTbrlFrame, "tbrl-frame.odt")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, nActual);
 }
 
+DECLARE_RTFEXPORT_TEST(testBtlrFrame, "btlr-frame.odt")
+{
+    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    auto nActual = getProperty<sal_Int16>(xShape, "WritingMode");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 5
+    // - Actual  : 0
+    // i.e. custom writing mode was lost.
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, nActual);
+}
+
 DECLARE_RTFIMPORT_TEST(testPageBorder, "page-border.rtf")
 {
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),

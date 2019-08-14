@@ -25,6 +25,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -367,7 +368,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     uno::Any aLineColor = uno::makeAny(COL_BLACK);
     // Default line width is 0.75 pt (26 mm100) in Word, 0 in Writer.
     uno::Any aLineWidth = uno::makeAny(sal_Int32(26));
-    text::WritingMode eWritingMode = text::WritingMode_LR_TB;
+    sal_Int16 eWritingMode = text::WritingMode2::LR_TB;
     // Groupshape support
     boost::optional<sal_Int32> oGroupLeft;
     boost::optional<sal_Int32> oGroupTop;
@@ -458,7 +459,10 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             {
                 case 1: // Top to bottom ASCII font
                 case 3: // Top to bottom non-ASCII font
-                    eWritingMode = text::WritingMode_TB_RL;
+                    eWritingMode = text::WritingMode2::TB_RL;
+                    break;
+                case 2: // Bottom to top non-ASCII font
+                    eWritingMode = text::WritingMode2::BT_LR;
                     break;
             }
         }
@@ -865,10 +869,11 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             resolveDhgt(xPropertySet, rShape.getZ(), bOldStyle);
         }
         if (m_bTextFrame)
-            // Writer textframes implement text::WritingMode2, which is a different data type.
-            xPropertySet->setPropertyValue("WritingMode", uno::makeAny(sal_Int16(eWritingMode)));
+            xPropertySet->setPropertyValue("WritingMode", uno::makeAny(eWritingMode));
         else
-            xPropertySet->setPropertyValue("TextWritingMode", uno::makeAny(eWritingMode));
+            // Only Writer textframes implement text::WritingMode2.
+            xPropertySet->setPropertyValue("TextWritingMode",
+                                           uno::makeAny(text::WritingMode(eWritingMode)));
     }
 
     if (!m_aParents.empty() && m_aParents.top().is() && !m_bTextFrame)
