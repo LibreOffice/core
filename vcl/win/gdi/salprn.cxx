@@ -50,6 +50,8 @@
 
 #include <malloc.h>
 
+#include <vcl/threadex.hxx>
+
 #include <winspool.h>
 #if defined GetDefaultPrinter
 #  undef GetDefaultPrinter
@@ -1498,7 +1500,11 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
         aInfo.lpszOutput = nullptr;
 
     // start Job
-    int nRet = lcl_StartDocW( hDC, &aInfo, this );
+    // int nRet = lcl_StartDocW( hDC, &aInfo, this );
+
+    int nRet = vcl::solarthread::syncExecute([hDC, this, &aInfo] () -> int { return lcl_StartDocW( hDC, &aInfo, this ); });
+
+
 
     if ( nRet <= 0 )
     {
