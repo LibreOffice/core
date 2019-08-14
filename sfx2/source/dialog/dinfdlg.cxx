@@ -1791,6 +1791,8 @@ void CustomPropertiesControl::Init(weld::Builder& rBuilder)
 
     Link<weld::ScrolledWindow&,void> aScrollLink = LINK( this, CustomPropertiesControl, ScrollHdl );
     m_xVertScroll->connect_vadjustment_changed(aScrollLink);
+
+    ResizeHdl(Size(-1, nHeight));
 }
 
 IMPL_LINK(CustomPropertiesControl, ResizeHdl, const Size&, rSize, void)
