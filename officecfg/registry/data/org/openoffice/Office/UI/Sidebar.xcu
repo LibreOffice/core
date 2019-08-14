@@ -292,26 +292,6 @@
         </prop>
       </node>
 
-      <node oor:name="ChartStylesDeck" oor:op="replace">
-        <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Chart Styles</value>
-        </prop>
-        <prop oor:name="Id" oor:type="xs:string">
-          <value>ChartStylesDeck</value>
-        </prop>
-        <prop oor:name="IconURL" oor:type="xs:string">
-          <value>private:graphicrepository/sfx2/res/symphony/sidebar-style-large.png</value>
-        </prop>
-        <prop oor:name="ContextList">
-          <value oor:separator=";">
-            Chart, any, visible ;
-          </value>
-        </prop>
-        <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>10</value>
-        </prop>
-      </node>
-
     </node>
     <node oor:name="PanelList">
 
@@ -1431,7 +1411,7 @@
           <value>private:resource/toolpanel/ChartPanelFactory/SeriesPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>2</value>
+          <value>3</value>
         </prop>
       </node>
 
@@ -1454,7 +1434,7 @@
           <value>private:resource/toolpanel/ChartPanelFactory/TrendlinePanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>3</value>
+          <value>4</value>
         </prop>
       </node>
 
@@ -1480,7 +1460,7 @@
           <value>private:resource/toolpanel/ChartPanelFactory/ErrorBarPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>4</value>
+          <value>5</value>
         </prop>
       </node>
 
@@ -1506,7 +1486,7 @@
           <value>private:resource/toolpanel/ChartPanelFactory/AxisPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>5</value>
+          <value>6</value>
         </prop>
       </node>
 
@@ -1533,7 +1513,7 @@
           <value>private:resource/toolpanel/ChartPanelFactory/AreaPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>6</value>
+          <value>7</value>
         </prop>
       </node>
 
@@ -1564,7 +1544,7 @@
           <value>private:resource/toolpanel/ChartPanelFactory/LinePanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>7</value>
+          <value>8</value>
         </prop>
       </node>
 
@@ -1587,7 +1567,7 @@
           <value>private:resource/toolpanel/ChartPanelFactory/CharacterPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>8</value>
+          <value>9</value>
         </prop>
       </node>
 
@@ -1602,7 +1582,7 @@
           <value>ChartStylesPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
-          <value>ChartStylesDeck</value>
+          <value>ChartDeck</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
@@ -1613,7 +1593,7 @@
           <value>private:resource/toolpanel/ChartPanelFactory/ChartStylesPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>1</value>
+          <value>2</value>
         </prop>
       </node>
 
