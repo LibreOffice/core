@@ -122,7 +122,6 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     const URL& aURL, const Sequence < PropertyValue >& lArgs,
     const Reference< XDispatchResultListener >& xListener )
 {
-
     bool bSuccess = false;
     Any invokeResult;
     bool bCaughtException = false;
@@ -132,32 +131,42 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     {
         try
         {
-            // obtain the component for our security check
-            Reference< XEmbeddedScripts > xDocumentScripts;
-            if ( getScriptInvocation() )
-                xDocumentScripts.set( m_xScriptInvocation->getScriptContainer(), UNO_SET_THROW );
+            css::uno::Reference<css::uri::XUriReferenceFactory> urifac(
+                css::uri::UriReferenceFactory::create(m_xContext));
+            css::uno::Reference<css::uri::XVndSunStarScriptUrlReference> uri(
+                urifac->parse(aURL.Complete), css::uno::UNO_QUERY_THROW);
+            auto const loc = uri->getParameter("location");
+            bool bIsDocumentScript = loc == "document";
 
-            OSL_ENSURE( xDocumentScripts.is(), "ScriptProtocolHandler::dispatchWithNotification: can't do the security check!" );
-            if ( !xDocumentScripts.is() || !xDocumentScripts->getAllowMacroExecution() )
+            if ( bIsDocumentScript )
             {
-                if ( xListener.is() )
+                // obtain the component for our security check
+                Reference< XEmbeddedScripts > xDocumentScripts;
+                if ( getScriptInvocation() )
+                    xDocumentScripts.set( m_xScriptInvocation->getScriptContainer(), UNO_SET_THROW );
+
+                OSL_ENSURE( xDocumentScripts.is(), "ScriptProtocolHandler::dispatchWithNotification: can't do the security check!" );
+                if ( !xDocumentScripts.is() || !xDocumentScripts->getAllowMacroExecution() )
                 {
-                    css::frame::DispatchResultEvent aEvent(
-                            static_cast< ::cppu::OWeakObject* >( this ),
-                            css::frame::DispatchResultState::FAILURE,
-                            invokeResult );
-                    try
+                    if ( xListener.is() )
                     {
-                        xListener->dispatchFinished( aEvent ) ;
+                        css::frame::DispatchResultEvent aEvent(
+                                static_cast< ::cppu::OWeakObject* >( this ),
+                                css::frame::DispatchResultState::FAILURE,
+                                invokeResult );
+                        try
+                        {
+                            xListener->dispatchFinished( aEvent ) ;
+                        }
+                        catch(const RuntimeException &)
+                        {
+                            TOOLS_WARN_EXCEPTION("scripting",
+                                "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
+                                "while dispatchFinished with failure of the execution");
+                        }
                     }
-                    catch(const RuntimeException &)
-                    {
-                        TOOLS_WARN_EXCEPTION("scripting",
-                            "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
-                            "while dispatchFinished with failure of the execution");
-                    }
+                    return;
                 }
-                return;
             }
 
             // Creates a ScriptProvider ( if one is not created already )
@@ -194,7 +203,8 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
             // attempt to protect the document against the script tampering with its Undo Context
             std::unique_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
-            pUndoGuard.reset( new ::framework::DocumentUndoGuard( m_xScriptInvocation ) );
+            if ( bIsDocumentScript )
+                pUndoGuard.reset( new ::framework::DocumentUndoGuard( m_xScriptInvocation ) );
 
             bSuccess = false;
             while ( !bSuccess )
