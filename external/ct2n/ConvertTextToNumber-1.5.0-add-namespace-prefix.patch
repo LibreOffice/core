@@ -1,0 +1,10 @@
+diff -purN misc/META-INF/manifest.xml misc/build/META-INF/manifest.xml
+--- misc/META-INF/manifest.xml	2019-08-14 20:57:00.000000000 +0900
++++ misc/build/META-INF/manifest.xml	2019-08-14 20:58:00.000000000 +0900
+@@ -1,5 +1,5 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+-<manifest:manifest>
++<manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest">
+  <manifest:file-entry manifest:full-path="CT2N/" manifest:media-type="application/vnd.sun.star.basic-library"/>
+  <manifest:file-entry manifest:full-path="pkg-desc/pkg-description.txt" manifest:media-type="application/vnd.sun.star.package-bundle-description"/>
+  <manifest:file-entry manifest:full-path="Office/UI/BaseWindowState.xcu" manifest:media-type="application/vnd.sun.star.configuration-data"/>
