@@ -39,6 +39,8 @@
 #include <svx/svdomedia.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xlineit0.hxx>
+#include <svx/xlndsit.hxx>
 #include <animations/animationnodehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <rtl/ustring.hxx>
@@ -215,6 +217,7 @@ public:
     void testTdf125360_2();
     void testTdf125551();
     void testTdf126234();
+    void testTdf126741();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -307,6 +310,7 @@ public:
     CPPUNIT_TEST(testTdf125360_2);
     CPPUNIT_TEST(testTdf125551);
     CPPUNIT_TEST(testTdf126234);
+    CPPUNIT_TEST(testTdf126741);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2461,6 +2465,32 @@ void SdOOXMLExportTest2::testTdf126234()
     const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(400), pNumFmt->GetNumRule()->GetLevel(0).GetBulletRelSize());
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf126741()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf126741.pptx"), PPTX );
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    // dash dot dot line style import fix
+    const SdrPage *pPage = GetPage( 1, xDocShRef );
+    SdrObject *const pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pObj);
+
+    const XLineStyleItem& rStyleItem = dynamic_cast<const XLineStyleItem&>(
+        pObj->GetMergedItem(XATTR_LINESTYLE));
+    const XLineDashItem& rDashItem = dynamic_cast<const XLineDashItem&>(
+        pObj->GetMergedItem(XATTR_LINEDASH));
+
+    CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_DASH, rStyleItem.GetValue());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), rDashItem.GetDashValue().GetDots());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(280), rDashItem.GetDashValue().GetDotLen());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), rDashItem.GetDashValue().GetDashes());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(35), rDashItem.GetDashValue().GetDashLen());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(105), rDashItem.GetDashValue().GetDistance());
 
     xDocShRef->DoClose();
 }

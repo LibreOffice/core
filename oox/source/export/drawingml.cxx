@@ -889,7 +889,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         {
             mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "lgDashDot");
         }
-        else if (aLineDash.Dots == 2 && relDotLen == 1 && aLineDash.Dashes == 1 && relDashLen == 8 && relDistance == 3)
+        else if (aLineDash.Dots == 1 && relDotLen == 8 && aLineDash.Dashes == 2 && relDashLen == 1 && relDistance == 3)
         {
             mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "lgDashDotDot");
         }
