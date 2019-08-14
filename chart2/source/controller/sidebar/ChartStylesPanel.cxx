@@ -34,7 +34,6 @@ ChartStylesPanel::ChartStylesPanel(vcl::Window* pParent,
     get(aDefaultButton, "setdefault");
     get(aDeleteButton, "deletestyle");
 
-    aStyleList->set_height_request(45 * aStyleList->GetTextHeight());
     Link<ListBox&, void> aLink = LINK(this, ChartStylesPanel, SelHdl);
     Link<Button*, void> aLink2 = LINK(this, ChartStylesPanel, SetSelectionClickHdl);
 
