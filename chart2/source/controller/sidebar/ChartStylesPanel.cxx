@@ -3,6 +3,8 @@
 #include <vcl/button.hxx>
 
 #include "ChartStylesPanel.hxx"
+#include <ChartStyle.hxx>
+#include <ChartModel.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -11,8 +13,22 @@ namespace chart
 {
 namespace sidebar
 {
+
+namespace
+{
+
+ChartModel* getChartModel(const css::uno::Reference<css::frame::XModel>& xModel)
+{
+    ChartModel* pModel = dynamic_cast<ChartModel*>(xModel.get());
+
+    return pModel;
+}
+
+} // namespace anonymous
+
 VclPtr<vcl::Window> ChartStylesPanel::Create(vcl::Window* pParent,
-                                             const css::uno::Reference<css::frame::XFrame>& rxFrame)
+                                             const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                             const css::uno::Reference<css::frame::XController>& pController)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException("no parent Window given to ChartStylesPanel::Create",
@@ -21,12 +37,15 @@ VclPtr<vcl::Window> ChartStylesPanel::Create(vcl::Window* pParent,
         throw lang::IllegalArgumentException("no XFrame given to ChartStylesPanel::Create", nullptr,
                                              1);
 
-    return VclPtr<ChartStylesPanel>::Create(pParent, rxFrame);
+    return VclPtr<ChartStylesPanel>::Create(pParent, rxFrame, pController);
 }
 
 ChartStylesPanel::ChartStylesPanel(vcl::Window* pParent,
-                                   const css::uno::Reference<css::frame::XFrame>& rxFrame)
+                                   const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                   const css::uno::Reference<css::frame::XController>& pController)
     : PanelLayout(pParent, "ChartStylesPanel", "modules/schart/ui/sidebarstyle.ui", rxFrame)
+    , m_xModel( pController->getModel() )
+    , m_xChartStyles( ::chart::getChartStyles() )
 {
     get(aStyleList, "stylelist");
     get(aApplyButton, "setstyle");
@@ -44,6 +63,8 @@ ChartStylesPanel::ChartStylesPanel(vcl::Window* pParent,
     aNewButton->SetClickHdl(aLink2);
     aDefaultButton->SetClickHdl(aLink2);
     aDeleteButton->SetClickHdl(aLink2);
+
+    Initialize();
 }
 
 ChartStylesPanel::~ChartStylesPanel() { disposeOnce(); }
@@ -58,7 +79,24 @@ void ChartStylesPanel::dispose()
     PanelLayout::dispose();
 }
 
-void ChartStylesPanel::UpdateList() {}
+void ChartStylesPanel::UpdateList()
+{
+    aStyleList->Clear();
+    css::uno::Sequence<OUString> aStyleNames = m_xChartStyles->getElementNames();
+    for ( auto& rStyle : aStyleNames )
+    {
+        aStyleList->InsertEntry( rStyle );
+    }
+    ChartModel* pModel = getChartModel(m_xModel);
+    OUString aCurrentChartStyleName = css::uno::Reference<css::style::XStyle>(pModel->getChartStyle(),
+                                                                css::uno::UNO_QUERY_THROW)->getName();
+    aStyleList->SelectEntry(aCurrentChartStyleName);
+}
+
+void ChartStylesPanel::Initialize()
+{
+    UpdateList();
+}
 
 IMPL_LINK_NOARG(ChartStylesPanel, SelHdl, ListBox&, void) {}
 

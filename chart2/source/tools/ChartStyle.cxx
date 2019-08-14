@@ -266,11 +266,6 @@ ChartStyle::applyStyleToDiagram(const css::uno::Reference<css::chart2::XDiagram>
             applyStyleToTitle(xTitle);
     }
 
-    css::uno::Reference<css:chart2::XCoordinateSystemContainer> xCooSysCont(xDiagram,
-                                                                css::uno::UNO_QUERY);
-    if (xCooSysCont.is())
-        applyStyleToCoordinates(xCooSysCont);
-
 }
 
 void SAL_CALL
