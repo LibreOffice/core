@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_46034c74",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-08-14T14:53:36Z",
+      "side": 1,
+      "message": "no need to do this here (if we are in writer, this is unnecessary code to be executed).",
+      "range": {
+        "startLine": 176,
+        "startChar": 8,
+        "endLine": 176,
+        "endChar": 88
+      },
+      "revId": "d9c19ddd4acec7a71e2d536c89b79e0ef820d2d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_26e738e7",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-08-14T14:53:36Z",
+      "side": 1,
+      "message": "this is unnecessary as the first if() returns.",
+      "range": {
+        "startLine": 192,
+        "startChar": 8,
+        "endLine": 192,
+        "endChar": 12
+      },
+      "revId": "d9c19ddd4acec7a71e2d536c89b79e0ef820d2d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_26009867",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-08-14T14:53:36Z",
+      "side": 1,
+      "message": "you can check for this as we check for xTextDocument/xSpreadsheetDocument above.\nOtherwise your code will crash if casting fails here.",
+      "range": {
+        "startLine": 210,
+        "startChar": 12,
+        "endLine": 210,
+        "endChar": 81
+      },
+      "revId": "d9c19ddd4acec7a71e2d536c89b79e0ef820d2d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
