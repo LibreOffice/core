@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_0620f4af",
+        "filename": "pyuno/source/module/pyuno_adapter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-08-14T17:51:26Z",
+      "side": 1,
+      "message": "Why? I thought it\u0027s related to if condition, i.e. \"output sequence contains indexes of output parameters\".",
+      "parentUuid": "bf659307_9bbf7dcf",
+      "range": {
+        "startLine": 149,
+        "startChar": 20,
+        "endLine": 149,
+        "endChar": 88
+      },
+      "revId": "4788231fede960b62b67d6992a1b43acf2d502e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_dbebb5d9",
         "filename": "pyuno/source/module/pyuno_adapter.cxx",
         "patchSetId": 5
