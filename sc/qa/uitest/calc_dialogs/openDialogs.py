@@ -37,7 +37,8 @@ dialogs = [
     # {"command": ".uno:HyperlinkDialog", "closeButton": "ok"},
         # dialog opens but is not recognised by execute_dialog_through_command
     {"command": ".uno:InsertSymbol", "closeButton": "cancel"},
-    {"command": ".uno:EditHeaderAndFooter", "closeButton": "cancel"},
+    # {"command": ".uno:EditHeaderAndFooter", "closeButton": "cancel"},
+      # tested in qadevOOo/tests/java/mod/_sc/ScAccessiblePageHeader.java
     # {"command": ".uno:InsertSignatureLine", "closeButton": "cancel"},
         # tested in sc/qa/uitest/signatureLine/insertSignatureLine.py
     # {"command": ".uno:FormatCellDialog", "closeButton": "cancel"},
