@@ -1285,7 +1285,8 @@ bool SvpSalGraphics::drawPolyLine(
         // check data validity
         if(nullptr == pSystemDependentData_CairoPath->getCairoPath()
             || pSystemDependentData_CairoPath->getNoJoin() != bNoJoin
-            || pSystemDependentData_CairoPath->getAntiAliasB2DDraw() != bAntiAliasB2DDraw)
+            || pSystemDependentData_CairoPath->getAntiAliasB2DDraw() != bAntiAliasB2DDraw
+            || bPixelSnapHairline /*tdf#124700*/ )
         {
             // data invalid, forget
             pSystemDependentData_CairoPath.reset();
@@ -1340,11 +1341,14 @@ bool SvpSalGraphics::drawPolyLine(
         }
 
         // copy and add to buffering mechanism
-        pSystemDependentData_CairoPath = rPolyLine.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
-            ImplGetSystemDependentDataManager(),
-            cairo_copy_path(cr),
-            bNoJoin,
-            bAntiAliasB2DDraw);
+        if (!bPixelSnapHairline /*tdf#124700*/)
+        {
+            pSystemDependentData_CairoPath = rPolyLine.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
+                ImplGetSystemDependentDataManager(),
+                cairo_copy_path(cr),
+                bNoJoin,
+                bAntiAliasB2DDraw);
+        }
     }
 
     // extract extents
