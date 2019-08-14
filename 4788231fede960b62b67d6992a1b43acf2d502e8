@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "bf659307_9bbf7dcf",
+        "filename": "pyuno/source/module/pyuno_adapter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-14T06:35:10Z",
+      "side": 1,
+      "message": "By the way, this comment looks obsolete here after the refactor ;-)",
+      "range": {
+        "startLine": 149,
+        "startChar": 20,
+        "endLine": 149,
+        "endChar": 88
+      },
+      "revId": "4788231fede960b62b67d6992a1b43acf2d502e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_dbebb5d9",
         "filename": "pyuno/source/module/pyuno_adapter.cxx",
         "patchSetId": 5
