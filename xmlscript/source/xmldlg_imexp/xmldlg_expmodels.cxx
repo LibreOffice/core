@@ -318,7 +318,7 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
     {
         ElementDescriptor * popup = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menupopup", _xDocument );
 
-        for ( const auto& rItemValue : itemValues )
+        for ( const auto& rItemValue : std::as_const(itemValues) )
         {
             ElementDescriptor * item = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menuitem", _xDocument );
             item->addAttribute( XMLNS_DIALOGS_PREFIX ":value", rItemValue );
@@ -365,7 +365,7 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
     {
         ElementDescriptor * popup = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menupopup", _xDocument );
 
-        for ( const auto& rItemValue : itemValues )
+        for ( const auto& rItemValue : std::as_const(itemValues) )
         {
             ElementDescriptor * item = new ElementDescriptor(_xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menuitem", _xDocument );
             item->addAttribute( XMLNS_DIALOGS_PREFIX ":value", rItemValue );
@@ -1086,7 +1086,7 @@ void ElementDescriptor::readBullitinBoard( StyleBag * all_styles )
     Reference<  container::XNameContainer > xDialogModel( _xProps, UNO_QUERY );
     if ( !xDialogModel.is() )
         return; // #TODO throw???
-    Sequence< OUString > aElements( xDialogModel->getElementNames() );
+    const Sequence< OUString > aElements( xDialogModel->getElementNames() );
 
     ElementDescriptor * pRadioGroup = nullptr;
 

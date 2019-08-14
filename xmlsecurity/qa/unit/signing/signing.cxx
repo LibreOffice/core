@@ -190,7 +190,7 @@ SigningTest::getCertificate(DocumentSignatureManager& rSignatureManager,
 {
     uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment
         = rSignatureManager.getSecurityEnvironment();
-    uno::Sequence<uno::Reference<security::XCertificate>> aCertificates
+    const uno::Sequence<uno::Reference<security::XCertificate>> aCertificates
         = xSecurityEnvironment->getPersonalCertificates();
 
     for (const auto& xCertificate : aCertificates)
