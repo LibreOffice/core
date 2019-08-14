@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/float_int_conversion.hxx>
 #include <vcl/errcode.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>
@@ -63,7 +66,7 @@ start:
         case SbxULONG:
             nRes = p->nULong; break;
         case SbxSINGLE:
-            if( p->nSingle > SbxMAXULNG )
+            if( !o3tl::convertsToAtMost(o3tl::roundAway(p->nSingle), SbxMAXULNG) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXULNG;
             }
@@ -98,7 +101,7 @@ start:
             else
                 dVal = p->nDouble;
 
-            if( dVal > SbxMAXULNG )
+            if( !o3tl::convertsToAtMost(o3tl::roundAway(dVal), SbxMAXULNG) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXULNG;
             }
@@ -121,7 +124,7 @@ start:
                 SbxDataType t;
                 if( ImpScan( *p->pOUString, d, t, nullptr, false ) != ERRCODE_NONE )
                     nRes = 0;
-                else if( d > SbxMAXULNG )
+                else if( !o3tl::convertsToAtMost(o3tl::roundAway(d), SbxMAXULNG) )
                 {
                     SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXULNG;
                 }

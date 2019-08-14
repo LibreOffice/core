@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/float_int_conversion.hxx>
 #include <vcl/errcode.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>
@@ -233,17 +236,17 @@ start:
             break;
         }
         case SbxBYREF | SbxCHAR:
-            if( n > SbxMAXCHAR )
+            if( !o3tl::convertsToAtMost(o3tl::roundAway(n), SbxMAXCHAR) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMAXCHAR;
             }
-            else if( n < SbxMINCHAR )
+            else if( !o3tl::convertsToAtLeast(o3tl::roundAway(n), SbxMINCHAR) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMINCHAR;
             }
             *p->pChar = static_cast<sal_Unicode>(n); break;
         case SbxBYREF | SbxBYTE:
-            if( n > SbxMAXBYTE )
+            if( !o3tl::convertsToAtMost(o3tl::roundAway(n), SbxMAXBYTE) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMAXBYTE;
             }
@@ -254,18 +257,18 @@ start:
             *p->pByte = static_cast<sal_uInt8>(n); break;
         case SbxBYREF | SbxINTEGER:
         case SbxBYREF | SbxBOOL:
-            if( n > SbxMAXINT )
+            if( !o3tl::convertsToAtMost(o3tl::roundAway(n), SbxMAXINT) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMAXINT;
             }
-            else if( n < SbxMININT )
+            else if( !o3tl::convertsToAtLeast(o3tl::roundAway(n), SbxMININT) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMININT;
             }
             *p->pInteger = static_cast<sal_Int16>(n); break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
-            if( n > SbxMAXUINT )
+            if( !o3tl::convertsToAtMost(o3tl::roundAway(n), SbxMAXUINT) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMAXUINT;
             }
@@ -277,11 +280,11 @@ start:
         case SbxBYREF | SbxLONG:
         {
             sal_Int32 i;
-            if( n > SbxMAXLNG )
+            if( !o3tl::convertsToAtMost(o3tl::roundAway(n), SbxMAXLNG) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); i = SbxMAXLNG;
             }
-            else if( n < SbxMINLNG )
+            else if( !o3tl::convertsToAtLeast(o3tl::roundAway(n), SbxMINLNG) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); i = SbxMINLNG;
             }
@@ -294,7 +297,7 @@ start:
         case SbxBYREF | SbxULONG:
         {
             sal_uInt32 i;
-            if( n > SbxMAXULNG )
+            if( !o3tl::convertsToAtMost(o3tl::roundAway(n), SbxMAXULNG) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); i = SbxMAXULNG;
             }
