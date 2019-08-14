@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_db4ad5aa",
+        "filename": "sw/qa/extras/odfexport/odfexport.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 2112,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-08-14T09:22:38Z",
+      "side": 1,
+      "message": "you need to write this as \"sal_Int32(5)\", because C++ is a horrible language and it\u0027s too stupid to pick the right operator\u003d\u003d overload otherwise",
+      "revId": "f3a45ff928697f13a93197c0ccd10974ef5930b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
