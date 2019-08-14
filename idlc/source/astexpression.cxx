@@ -892,7 +892,7 @@ coerce_value(AstExprValue *ev, ExprType t)
                     {
                         return false;
                     }
-                    auto tmp = static_cast<unsigned char>(ev->u.fval);
+                    auto tmp = static_cast<unsigned char>(static_cast<sal_Int32>(ev->u.fval));
                     ev->u.byval = tmp;
                     ev->et = ET_byte;
                     return true;
@@ -904,7 +904,7 @@ coerce_value(AstExprValue *ev, ExprType t)
                     {
                         return false;
                     }
-                    auto tmp = static_cast<unsigned char>(ev->u.dval);
+                    auto tmp = static_cast<unsigned char>(static_cast<sal_Int32>(ev->u.dval));
                     ev->u.byval = tmp;
                     ev->et = ET_byte;
                     return true;
