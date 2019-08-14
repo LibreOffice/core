@@ -259,6 +259,20 @@ DECLARE_LINKS_EXPORT_TEST(testTdf126768_export, "tdf126768.docx", USE_ABSOLUTE, 
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
                 "file:///C:/TEMP/test.docx");
 }
+
+DECLARE_LINKS_EXPORT_TEST(testNon_ascii_link_export, "non_ascii_link.docx", USE_ABSOLUTE,
+                          DONT_MODIFY_LINK)
+{
+    xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    if (!pXmlDoc)
+        return;
+
+    OUString sTarget = "file:///C:/TEMP/%C3%A9kezet.docx";
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
+                INetURLObject::decode( sTarget, INetURLObject::DecodeMechanism::Unambiguous,
+                RTL_TEXTENCODING_UTF8));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
