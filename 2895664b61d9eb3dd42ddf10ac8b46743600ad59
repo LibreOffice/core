@@ -34,6 +34,24 @@
       "revId": "2895664b61d9eb3dd42ddf10ac8b46743600ad59",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_269f3804",
+        "filename": "external/ct2n/ConvertTextToNumber-1.5.0-add-namespace-prefix.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-08-14T16:12:15Z",
+      "side": 1,
+      "message": "another problem: the namespace URL is for an ODF manifest.xml, but presumably this is a extension manifest.xml, which uses a different URL, xmlns:manifest\u003d\"http://openoffice.org/2001/manifest\"",
+      "parentUuid": "bf659307_26ead874",
+      "revId": "2895664b61d9eb3dd42ddf10ac8b46743600ad59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
