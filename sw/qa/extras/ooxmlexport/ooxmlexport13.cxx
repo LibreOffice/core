@@ -11,6 +11,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <editeng/frmdiritem.hxx>
@@ -31,9 +32,22 @@ protected:
      */
     bool mustTestImportOf(const char* filename) const override {
         // If the testcase is stored in some other format, it's pointless to test.
-        return OString(filename).endsWith(".docx");
+        return OString(filename).endsWith(".docx") || OString(filename) == "ooo39250-1-min.rtf";
     }
 };
+
+// TODO: the re-import doesn't work just yet, but that isn't a regression...
+DECLARE_SW_EXPORT_TEST(testFlyInFly, "ooo39250-1-min.rtf", nullptr, Test)
+{
+    // check that anchor of text frame is in other text frame
+    uno::Reference<text::XTextContent> const xAnchored(getShape(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xAnchored.is());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), uno::Reference<container::XNamed>(xAnchored, uno::UNO_QUERY_THROW)->getName());
+    uno::Reference<text::XText> const xAnchorText(xAnchored->getAnchor()->getText());
+    uno::Reference<text::XTextFrame> const xAnchorFrame(xAnchorText, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xAnchorFrame.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame2"), uno::Reference<container::XNamed>(xAnchorFrame, uno::UNO_QUERY_THROW)->getName());
+}
 
 DECLARE_OOXMLEXPORT_TEST(testTdf121374_sectionHF, "tdf121374_sectionHF.odt")
 {
