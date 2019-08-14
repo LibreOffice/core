@@ -73,6 +73,10 @@
 #include <DocumentSettingManager.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
+#include <cntfrm.hxx>
+#include <tabcol.hxx>
+#include <wrtsh.hxx>
+#include <boost/property_tree/json_parser.hpp>
 
 using namespace com::sun::star;
 using namespace util;
@@ -2025,7 +2029,84 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
     if( m_bSVCursorVis )
         m_pVisibleCursor->Show(); // show again
 
+    if (comphelper::LibreOfficeKit::isActive())
+        sendLOKCursorUpdates();
+
     getIDocumentMarkAccess()->NotifyCursorUpdate(*this);
+}
+
+void SwCursorShell::sendLOKCursorUpdates()
+{
+    SwWrtShell* pShell = GetDoc()->GetDocShell()->GetWrtShell();
+    if (!pShell)
+        return;
+
+    SwFrame* pCurrentFrame = GetCurrFrame();
+    SelectionType eType = pShell->GetSelectionType();
+
+    boost::property_tree::ptree aRootTree;
+
+    if (pCurrentFrame && (eType & SelectionType::Table) && pCurrentFrame->IsInTab())
+    {
+        const SwRect& rPageRect = pShell->GetAnyCurRect(CurRectType::Page, nullptr);
+
+        boost::property_tree::ptree aTableColumns;
+        {
+            SwTabCols aTabCols;
+            pShell->GetTabCols(aTabCols);
+
+            const int nColumnOffset = aTabCols.GetLeftMin() + rPageRect.Left();
+
+            aTableColumns.put("left", aTabCols.GetLeft());
+            aTableColumns.put("right", aTabCols.GetRight());
+            aTableColumns.put("tableOffset", nColumnOffset);
+
+            boost::property_tree::ptree aEntries;
+            for (size_t i = 0; i < aTabCols.Count(); ++i)
+            {
+                auto const & rEntry = aTabCols.GetEntry(i);
+                boost::property_tree::ptree aTableColumnEntry;
+                aTableColumnEntry.put("position", rEntry.nPos);
+                aTableColumnEntry.put("min", rEntry.nMin);
+                aTableColumnEntry.put("max", rEntry.nMax);
+                aTableColumnEntry.put("hidden", rEntry.bHidden);
+                aEntries.push_back(std::make_pair("", aTableColumnEntry));
+            }
+            aTableColumns.push_back(std::make_pair("entries", aEntries));
+        }
+
+        boost::property_tree::ptree aTableRows;
+        {
+            SwTabCols aTabRows;
+            pShell->GetTabRows(aTabRows);
+
+            const int nRowOffset = aTabRows.GetLeftMin() + rPageRect.Top();
+
+            aTableRows.put("left", aTabRows.GetLeft());
+            aTableRows.put("right", aTabRows.GetRight());
+            aTableRows.put("tableOffset", nRowOffset);
+
+            boost::property_tree::ptree aEntries;
+            for (size_t i = 0; i < aTabRows.Count(); ++i)
+            {
+                auto const & rEntry = aTabRows.GetEntry(i);
+                boost::property_tree::ptree aTableRowEntry;
+                aTableRowEntry.put("position", rEntry.nPos);
+                aTableRowEntry.put("min", rEntry.nMin);
+                aTableRowEntry.put("max", rEntry.nMax);
+                aTableRowEntry.put("hidden", rEntry.bHidden);
+                aEntries.push_back(std::make_pair("", aTableRowEntry));
+            }
+            aTableRows.push_back(std::make_pair("entries", aEntries));
+        }
+
+        aRootTree.add_child("columns", aTableColumns);
+        aRootTree.add_child("rows", aTableRows);
+    }
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aRootTree);
+    GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, aStream.str().c_str());
 }
 
 void SwCursorShell::RefreshBlockCursor()

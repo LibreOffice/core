@@ -58,7 +58,7 @@
 #include <fmtcol.hxx>
 #include <section.hxx>
 #include <swruler.hxx>
-
+#include <cntfrm.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
 
@@ -1009,7 +1009,85 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             }
         }
         break;
+    case SID_TABLE_CHANGE_CURRENT_BORDER_POSITION:
+    {
+        if (pReqArgs)
+        {
+            const SfxPoolItem *pBorderType;
+            const SfxPoolItem *pIndex;
+            const SfxPoolItem *pNewPosition;
+            constexpr long constDistanceOffset = 40;
 
+            if (pReqArgs->GetItemState(SID_TABLE_BORDER_TYPE, true, &pBorderType) == SfxItemState::SET
+            && pReqArgs->GetItemState(SID_TABLE_BORDER_INDEX, true, &pIndex) == SfxItemState::SET
+            && pReqArgs->GetItemState(SID_TABLE_BORDER_NEW_POSITION, true, &pNewPosition) == SfxItemState::SET)
+            {
+                const OUString sType = static_cast<const SfxStringItem*>(pBorderType)->GetValue();
+                const sal_uInt16 nIndex = static_cast<const SfxUInt16Item*>(pIndex)->GetValue();
+                const sal_Int32 nNewPosition = static_cast<const SfxInt32Item*>(pNewPosition)->GetValue();
+
+                if (sType.startsWith("column"))
+                {
+                    SwTabCols aTabCols;
+                    rSh.GetTabCols(aTabCols);
+
+                    if (sType == "column-left")
+                    {
+                        auto & rEntry = aTabCols.GetEntry(0);
+                        long nPosition = std::min(long(nNewPosition), rEntry.nPos - constDistanceOffset);
+                        aTabCols.SetLeft(nPosition);
+                    }
+                    else if (sType == "column-right")
+                    {
+                        auto & rEntry = aTabCols.GetEntry(aTabCols.Count() - 1);
+                        long nPosition = std::max(long(nNewPosition), rEntry.nPos + constDistanceOffset);
+                        aTabCols.SetRight(nPosition);
+                    }
+                    else if (sType == "column-middle")
+                    {
+                        if (nIndex < aTabCols.Count())
+                        {
+                            auto & rEntry = aTabCols.GetEntry(nIndex);
+                            long nPosition = std::clamp(long(nNewPosition), rEntry.nMin, rEntry.nMax - constDistanceOffset);
+                            rEntry.nPos = nPosition;
+                        }
+                    }
+
+                    rSh.SetTabCols(aTabCols, false);
+                }
+                else if (sType.startsWith("row"))
+                {
+                    SwTabCols aTabRows;
+                    rSh.GetTabRows(aTabRows);
+
+                    if (sType == "row-left")
+                    {
+                        auto & rEntry = aTabRows.GetEntry(0);
+                        long nPosition = std::min(long(nNewPosition), rEntry.nPos - constDistanceOffset);
+                        aTabRows.SetLeft(nPosition);
+                    }
+                    else if (sType == "row-right")
+                    {
+                        auto & rEntry = aTabRows.GetEntry(aTabRows.Count() - 1);
+                        long nPosition = std::max(long(nNewPosition), rEntry.nPos + constDistanceOffset);
+                        aTabRows.SetRight(nPosition);
+                    }
+                    else if (sType == "row-middle")
+                    {
+                        if (nIndex < aTabRows.Count())
+                        {
+                            auto & rEntry = aTabRows.GetEntry(nIndex);
+                            long nPosition = std::clamp(long(nNewPosition), rEntry.nMin, rEntry.nMax - constDistanceOffset);
+                            rEntry.nPos = nPosition;
+                        }
+                    }
+
+                    rSh.SetTabRows(aTabRows, false);
+                }
+            }
+        }
+    }
+    break;
     case SID_ATTR_PAGE_HEADER:
     {
         if ( pReqArgs )
