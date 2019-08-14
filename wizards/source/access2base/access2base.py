@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 #     Copyright 2012-2020 Jean-Pierre LEDURE
@@ -34,7 +33,7 @@ Additionally, if Python and LibreOffice are started in separate processes:
         A2BConnect(hostname = 'localhost', port = 2019)
 
 Specific documentation about Access2Base and Python:
-    http://www.access2base.com/access2base.html#%5B%5BAccess2Base%20and_Python%5D%5D
+    http://www.access2base.com/access2base.html#%5B%5BAccess2Base%20and%20Python%5D%5D
 """
 
 from __future__ import unicode_literals
@@ -611,7 +610,7 @@ class _A2B(object, metaclass = _Singleton):
         try:
             Returned = Script.invoke((args), (), ())[0]
         except:
-            raise TypeError("Access2Base error: method '" + script + "' in module '" + module + "' call error. Check its arguments.")
+            raise TypeError("Access2Base error: method '" + script + "' in Basic module '" + module + "' call error. Check its arguments.")
         else:
             if Returned == None:
                 if cls.VerifyNoError(): return None
@@ -1012,11 +1011,11 @@ class _BasicObject(object):
             elif self.classProperties[name] == True: # True == Editable
                 self.W(_vbLet, self.objectreference, name, value)
             else:
-                raise AttributeError("'" + self.objecttype + "' object : attribute '" + name + "' is not editable")
+                raise AttributeError("type object '" + self.objecttype + "' has no editable attribute '" + name + "'")
         elif name[0:2] == '__' or name in self.internal_attributes:
             pass
         else:
-            raise AttributeError("'" + self.objecttype + " object has no attribute '" + name + "'")
+            raise AttributeError("type object '" + self.objecttype + "' has no attribute '" + name + "'")
         object.__setattr__(self, name, value)
         return
 
