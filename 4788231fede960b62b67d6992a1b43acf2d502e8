@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_dbebb5d9",
+        "filename": "pyuno/source/module/pyuno_adapter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-14T06:33:01Z",
+      "side": 1,
+      "message": "This is fine, of course; but honestly I feel that when index-based operations over containers are performed, using good old index-based for loop is more expressive:\n\n    for (sal_Int32 i \u003d 0; i \u003c seqInfo.getLength(); ++i)\n    {\n        if (seqInfo[i].aMode \u003d\u003d css::reflection::ParamMode_OUT ||\n            seqInfo[i].aMode \u003d\u003d css::reflection::ParamMode_INOUT)\n        {\n            // sequence must be interpreted as return value/outparameter tuple !\n            retVec.push_back(static_cast\u003csal_Int16\u003e(i));\n        }\n    }\n\nUsing const Sequence here, as you declared above, ensures const accessor methods here (in operator[]), which translate to simple pointer arithmetics without overhead, and the two extra lines (declaration and increment of i, which are only present here to work *against* the method!) are avoided.",
+      "range": {
+        "startLine": 143,
+        "startChar": 12,
+        "endLine": 153,
+        "endChar": 13
+      },
+      "revId": "4788231fede960b62b67d6992a1b43acf2d502e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
