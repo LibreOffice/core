@@ -2292,6 +2292,8 @@ IMPL_LINK( ImplListBox, ScrollBarHdl, ScrollBar*, pSB, void )
         SetTopEntry( nPos );
     else if( pSB == mpHScrollBar )
         SetLeftIndent( nPos );
+    if( GetParent() )
+        GetParent()->Invalidate( InvalidateFlags::Update );
 }
 
 void ImplListBox::ImplCheckScrollBars()
