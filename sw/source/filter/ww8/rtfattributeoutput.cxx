@@ -3531,6 +3531,11 @@ void RtfAttributeOutput::FormatFrameDirection(const SvxFrameDirectionItem& rDire
             // Top to bottom non-ASCII font
             m_aFlyProperties.push_back(std::make_pair<OString, OString>("txflTextFlow", "3"));
         }
+        else if (rDirection.GetValue() == SvxFrameDirection::Vertical_LR_BT)
+        {
+            // Bottom to top non-ASCII font
+            m_aFlyProperties.push_back(std::make_pair<OString, OString>("txflTextFlow", "2"));
+        }
         return;
     }
 
