@@ -94,6 +94,30 @@
       "revId": "00c535c224c3cd8a34bf7fd438ad73049a6de3eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_a60268b3",
+        "filename": "svtools/source/dialogs/addresstemplate.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-14T13:29:20Z",
+      "side": 1,
+      "message": "Then - the plugin still should warn here, and suggest this I believe (if we do this at all).",
+      "parentUuid": "bf659307_e673807f",
+      "range": {
+        "startLine": 705,
+        "startChar": 51,
+        "endLine": 705,
+        "endChar": 88
+      },
+      "revId": "00c535c224c3cd8a34bf7fd438ad73049a6de3eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
