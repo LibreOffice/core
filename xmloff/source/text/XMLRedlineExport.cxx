@@ -539,7 +539,7 @@ void XMLRedlineExport::ExportStartOrEndRedline(
     bool bIsStart = true;
     OUString sId;
     bool bIdOK = false; // have we seen an ID?
-    for(const auto& rValue : aValues)
+    for(const auto& rValue : std::as_const(aValues))
     {
         if (rValue.Name == "RedlineIdentifier")
         {

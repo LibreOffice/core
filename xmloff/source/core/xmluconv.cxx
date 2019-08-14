@@ -692,7 +692,7 @@ void SvXMLUnitConverter::convertPropertySet(uno::Sequence<beans::PropertyValue>&
     uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = aProperties->getPropertySetInfo();
     if (xPropertySetInfo.is())
     {
-        uno::Sequence< beans::Property > aProps = xPropertySetInfo->getProperties();
+        const uno::Sequence< beans::Property > aProps = xPropertySetInfo->getProperties();
         if (aProps.hasElements())
         {
             rProps.realloc(aProps.getLength());

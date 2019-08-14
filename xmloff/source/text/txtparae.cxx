@@ -461,7 +461,7 @@ void FieldParamExporter::Export()
     const Type aBoolType = cppu::UnoType<sal_Bool>::get();
     const Type aSeqType = cppu::UnoType<Sequence<OUString>>::get();
     const Type aIntType = ::cppu::UnoType<sal_Int32>::get();
-    Sequence<OUString> vParameters(m_xFieldParams->getElementNames());
+    const Sequence<OUString> vParameters(m_xFieldParams->getElementNames());
     for(const auto & rParameter : vParameters)
     {
         const Any aValue = m_xFieldParams->getByName(rParameter);
@@ -507,7 +507,7 @@ void FieldParamExporter::Export()
         {
             Sequence<OUString> vValue;
             aValue >>= vValue;
-            for(const OUString & i : vValue)
+            for(const OUString & i : std::as_const(vValue))
             {
                 ExportParameter(rParameter, i);
             }

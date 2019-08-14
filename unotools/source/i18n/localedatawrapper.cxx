@@ -295,7 +295,7 @@ std::vector< LanguageType > LocaleDataWrapper::getInstalledLanguageTypes()
     if ( !rInstalledLanguageTypes.empty() )
         return rInstalledLanguageTypes;
 
-    css::uno::Sequence< css::lang::Locale > xLoc =  getInstalledLocaleNames();
+    const css::uno::Sequence< css::lang::Locale > xLoc =  getInstalledLocaleNames();
     sal_Int32 nCount = xLoc.getLength();
     std::vector< LanguageType > xLang;
     xLang.reserve(nCount);

@@ -1081,7 +1081,7 @@ void DAVResourceAccess::getUserRequestHeaders(
 
         if ( xDAVEnv.is() )
         {
-            uno::Sequence< beans::StringPair > aRequestHeaders
+            const uno::Sequence< beans::StringPair > aRequestHeaders
                 = xDAVEnv->getUserRequestHeaders( rURI, eMethod );
 
             for ( const auto& rRequestHeader : aRequestHeaders )

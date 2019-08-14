@@ -1626,7 +1626,8 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
     if (pAutoStyles && mxNumberStyles.is() && (mnImportFlags & SvXMLImportFlags::CONTENT) )
     {
         uno::Reference<xml::sax::XAttributeList> xAttrList;
-        for (const auto& name : mxNumberStyles->getElementNames())
+        const uno::Sequence<OUString> aStyleNames = mxNumberStyles->getElementNames();
+        for (const auto& name : aStyleNames)
         {
             uno::Any aAny(mxNumberStyles->getByName(name));
             sal_Int32 nKey(0);

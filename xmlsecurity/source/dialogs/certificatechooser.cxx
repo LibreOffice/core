@@ -198,7 +198,7 @@ void CertificateChooser::ImplInitialize()
 
 
         // fill list of certificates; the first entry will be selected
-        for ( const auto& xCert : xCerts )
+        for ( const auto& xCert : std::as_const(xCerts) )
         {
             std::shared_ptr<UserData> userData = std::make_shared<UserData>();
             userData->xCertificate = xCert;

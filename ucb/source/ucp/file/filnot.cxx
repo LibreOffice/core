@@ -220,7 +220,7 @@ void PropertyChangeNotifier::notifyPropertyChanged(
     // notify listeners for all Events
 
     uno::Sequence< uno::Reference< uno::XInterface > > seqList = (*m_pListeners)[ OUString() ];
-    for( const auto& rListener : seqList )
+    for( const auto& rListener : std::as_const(seqList) )
     {
         uno::Reference< beans::XPropertiesChangeListener > aListener( rListener,uno::UNO_QUERY );
         if( aListener.is() )
@@ -230,12 +230,12 @@ void PropertyChangeNotifier::notifyPropertyChanged(
     }
 
     uno::Sequence< beans::PropertyChangeEvent > seq(1);
-    for( const auto& rChange : Changes )
+    for( const auto& rChange : std::as_const(Changes) )
     {
         seq[0] = rChange;
         seqList = (*m_pListeners)[ rChange.PropertyName ];
 
-        for( const auto& rListener : seqList )
+        for( const auto& rListener : std::as_const(seqList) )
         {
             uno::Reference< beans::XPropertiesChangeListener > aListener( rListener,uno::UNO_QUERY );
             if( aListener.is() )

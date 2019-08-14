@@ -1941,7 +1941,7 @@ bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
 
     try
     {
-        Sequence< ContentInfo > aInfo = pContent->queryCreatableContentsInfo();
+        const Sequence< ContentInfo > aInfo = pContent->queryCreatableContentsInfo();
         if ( !aInfo.hasElements() )
             return false;
 
