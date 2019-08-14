@@ -268,6 +268,7 @@ typedef bool (SwCursor:: *FNCursor)();
 
     SAL_DLLPRIVATE const SwRangeRedline* GotoRedline_( SwRedlineTable::size_type nArrPos, bool bSelect );
 
+    SAL_DLLPRIVATE void sendLOKCursorUpdates();
 protected:
 
     inline SwMoveFnCollection const & MakeFindRange( SwDocPositions, SwDocPositions, SwPaM* ) const;
