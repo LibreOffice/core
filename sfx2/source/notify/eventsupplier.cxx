@@ -180,25 +180,29 @@ void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::Docum
         }
     }
 
-    if (aType == STAR_BASIC && !aScript.isEmpty())
+    if (aType.isEmpty())
+    {
+        // Empty type means no active binding for the event. Just ignore do nothing.
+        return;
+    }
+
+    if (aScript.isEmpty())
+        return;
+
+    if (aType == STAR_BASIC)
     {
         uno::Any aAny;
         SfxMacroLoader::loadMacro( aScript, aAny, pDoc );
     }
-    else if (aType == "Service" ||
-              aType == "Script")
+    else if (aType == "Service" || aType == "Script")
     {
-        bool bAllowed = false;
         util::URL aURL;
-        if (!aScript.isEmpty())
-        {
-            uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
+        uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
 
-            aURL.Complete = aScript;
-            xTrans->parseStrict( aURL );
+        aURL.Complete = aScript;
+        xTrans->parseStrict( aURL );
 
-            bAllowed = !SfxObjectShell::UnTrustedScript(aURL.Complete);
-        }
+        bool bAllowed = !SfxObjectShell::UnTrustedScript(aURL.Complete);
 
         if (bAllowed)
         {
@@ -226,17 +230,12 @@ void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::Docum
 
             if ( xDisp.is() )
             {
-
                 beans::PropertyValue aEventParam;
                 aEventParam.Value <<= aTrigger;
                 uno::Sequence< beans::PropertyValue > aDispatchArgs( &aEventParam, 1 );
                 xDisp->dispatch( aURL, aDispatchArgs );
             }
         }
-    }
-    else if ( aType.isEmpty() )
-    {
-        // Empty type means no active binding for the event. Just ignore do nothing.
     }
     else
     {
