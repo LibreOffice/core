@@ -210,7 +210,7 @@ UnoControlDialogModel::UnoControlDialogModel( const UnoControlDialogModel& rMode
     Reference< XNameContainer > xSrcNameCont( const_cast< UnoControlDialogModel& >(rModel).getPropertyValue( GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ) ), UNO_QUERY );
     Reference<XNameContainer > xNameCont( new SimpleNamedThingContainer< XControlModel > );
 
-    uno::Sequence< OUString > sNames = xSrcNameCont->getElementNames();
+    const uno::Sequence< OUString > sNames = xSrcNameCont->getElementNames();
     for ( OUString const & name : sNames )
     {
         if ( xSrcNameCont->hasByName( name ) )
@@ -792,7 +792,7 @@ void UnoMultiPageControl::createPeer( const Reference< XToolkit > & rxToolkit, c
 
     UnoControlContainer::createPeer( rxToolkit, rParentPeer );
 
-    uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
+    const uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
     for( const auto& rCtrl : aCtrls )
        bindPage( rCtrl );
     sal_Int32 nActiveTab(0);

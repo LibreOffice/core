@@ -85,7 +85,8 @@ public:
     {
         const OUString& rLocalName = stripNamespacePrefix(rName);
 
-        for (const Attribute& rAttribute : aAttributeList->getUnknownAttributes())
+        const css::uno::Sequence<Attribute> aUnknownAttributes = aAttributeList->getUnknownAttributes();
+        for (const Attribute& rAttribute : aUnknownAttributes)
         {
             const OUString& rAttrLocalName = stripNamespacePrefix(rAttribute.Name);
 

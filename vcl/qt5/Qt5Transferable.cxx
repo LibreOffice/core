@@ -249,7 +249,7 @@ QStringList Qt5MimeData::formats() const
     if (!m_aMimeTypeList.isEmpty())
         return m_aMimeTypeList;
 
-    css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
+    const css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
         = m_aContents->getTransferDataFlavors();
     QStringList aList;
     bool bHaveUTF16 = false;

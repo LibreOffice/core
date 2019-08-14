@@ -688,7 +688,7 @@ bool SvXMLImportPropertyMapper::FillTolerantMultiPropertySet_(
     // and, finally, try to set the values
     try
     {
-        Sequence< SetPropertyTolerantFailed > aResults(rTolMultiPropSet->setPropertyValuesTolerant( aNames, aValues ));
+        const Sequence< SetPropertyTolerantFailed > aResults(rTolMultiPropSet->setPropertyValuesTolerant( aNames, aValues ));
         bSuccessful = !aResults.hasElements();
         for( const auto& rResult : aResults)
         {

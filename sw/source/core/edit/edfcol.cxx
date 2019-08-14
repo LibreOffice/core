@@ -1095,7 +1095,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
-    uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
+    const uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
 
     for (const OUString& rPageStyleName : aStyles)
     {
@@ -1616,7 +1616,7 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
-    uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
+    const uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
 
     for (const OUString& rPageStyleName : aStyles)
     {

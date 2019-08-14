@@ -100,7 +100,7 @@ static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet> const & xSou
             {
                 OUString sExtension;
                 OUString sCharSet;
-                for(const auto& rInfo : aInfo)
+                for(const auto& rInfo : std::as_const(aInfo))
                 {
                     if(rInfo.Name == "Extension")
                         rInfo.Value >>= sExtension;
@@ -170,7 +170,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
 
     SwDBConfig aDb;
     const OUString sBibliography = aDb.GetBibliographySource().sDataSource;
-    uno::Sequence< OUString> aNames = m_xDBContext->getElementNames();
+    const uno::Sequence< OUString> aNames = m_xDBContext->getElementNames();
     for(const OUString& rName : aNames)
     {
         if ( rName == sBibliography )

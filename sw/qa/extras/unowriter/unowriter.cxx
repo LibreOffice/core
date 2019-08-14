@@ -175,7 +175,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDesciptorURLBitmap)
 static bool ensureAutoTextExistsByTitle(const uno::Reference<text::XAutoTextGroup>& autoTextGroup,
                                         const OUString& autoTextName)
 {
-    uno::Sequence<OUString> aTitles(autoTextGroup->getTitles());
+    const uno::Sequence<OUString> aTitles(autoTextGroup->getTitles());
     for (const auto& rTitle : aTitles)
     {
         if (rTitle == autoTextName)
@@ -187,7 +187,7 @@ static bool ensureAutoTextExistsByTitle(const uno::Reference<text::XAutoTextGrou
 static bool ensureAutoTextExistsByName(const uno::Reference<text::XAutoTextGroup>& autoTextGroup,
                                        const OUString& autoTextName)
 {
-    uno::Sequence<OUString> aTitles(autoTextGroup->getElementNames());
+    const uno::Sequence<OUString> aTitles(autoTextGroup->getElementNames());
     for (const auto& rTitle : aTitles)
     {
         if (rTitle == autoTextName)

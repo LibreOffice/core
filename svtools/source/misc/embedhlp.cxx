@@ -854,13 +854,13 @@ OUString EmbeddedObjectRef::GetChartType()
                     if( ! xDiagram.is())
                         return OUString();
                     uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
-                    uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
+                    const uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
                     // IA2 CWS. Unused: int nCoordinateCount = aCooSysSeq.getLength();
                     bool bGetChartType = false;
                     for( const auto& rCooSys : aCooSysSeq )
                     {
                         uno::Reference< chart2::XChartTypeContainer > xCTCnt( rCooSys, uno::UNO_QUERY_THROW );
-                        uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
+                        const uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
                         int nDimesionCount = rCooSys->getDimension();
                         if( nDimesionCount == 3 )
                             Style += "3D ";

@@ -225,7 +225,7 @@ static OUString impl_getFilter( const OUString& _rURL )
             if ( !sType.isEmpty() )
             {
                 // Honor a selected/detected filter.
-                for (const auto& rDescr : aDescrList)
+                for (const auto& rDescr : std::as_const(aDescrList))
                 {
                     if (rDescr.Name == "FilterName")
                     {

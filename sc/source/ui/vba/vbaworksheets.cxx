@@ -427,7 +427,7 @@ ScVbaWorksheets::Item(const uno::Any& Index, const uno::Any& Index2)
         SheetMap aSheets;
         uno::Sequence< uno::Any > sIndices;
         aConverted >>= sIndices;
-        for( const auto& rIndex : sIndices )
+        for( const auto& rIndex : std::as_const(sIndices) )
         {
             uno::Reference< excel::XWorksheet > xWorkSheet( ScVbaWorksheets_BASE::Item( rIndex, Index2 ), uno::UNO_QUERY_THROW );
             ScVbaWorksheet* pWorkSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xWorkSheet );

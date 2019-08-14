@@ -1238,7 +1238,7 @@ bool OpCodeProviderImpl::fillTokenMap( ApiTokenMap& orTokenMap, OpCodeEntrySeque
     orTokenMap.clear();
     if( fillEntrySeq( orEntrySeq, rxMapper, nMapGroup ) )
     {
-        for( const FormulaOpCodeMapEntry& rEntry : orEntrySeq )
+        for( const FormulaOpCodeMapEntry& rEntry : std::as_const(orEntrySeq) )
             orTokenMap[ rEntry.Name ] = rEntry.Token;
     }
     return orEntrySeq.hasElements();
@@ -1250,7 +1250,7 @@ bool OpCodeProviderImpl::fillFuncTokenMaps( ApiTokenMap& orIntFuncTokenMap, ApiT
     orExtFuncTokenMap.clear();
     if( fillEntrySeq( orEntrySeq, rxMapper, css::sheet::FormulaMapGroup::FUNCTIONS ) )
     {
-        for( const FormulaOpCodeMapEntry& rEntry : orEntrySeq )
+        for( const FormulaOpCodeMapEntry& rEntry : std::as_const(orEntrySeq) )
             ((rEntry.Token.OpCode == OPCODE_EXTERNAL) ? orExtFuncTokenMap : orIntFuncTokenMap)[ rEntry.Name ] = rEntry.Token;
     }
     return orEntrySeq.hasElements();

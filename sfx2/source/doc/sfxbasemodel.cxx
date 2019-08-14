@@ -1021,7 +1021,7 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs()
         Sequence< beans::PropertyValue > aFinalCache;
         sal_Int32 nFinalLength = 0;
 
-        for ( const auto& rOrg : m_pData->m_seqArguments )
+        for ( const auto& rOrg : std::as_const(m_pData->m_seqArguments) )
         {
             auto bNew = std::none_of(seqArgsOld.begin(), seqArgsOld.end(),
                 [&rOrg](const beans::PropertyValue& rOld){ return rOld.Name == rOrg.Name; });
@@ -3316,7 +3316,7 @@ Sequence< OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
         Reference < embed::XStorage > xStorage = m_pData->m_pObjectShell->GetStorage();
         if ( xStorage.is() )
         {
-            Sequence< OUString > aTemp = xStorage->getElementNames();
+            const Sequence< OUString > aTemp = xStorage->getElementNames();
             sal_Int32 nResultSize = 0;
             for ( const auto& rName : aTemp )
             {

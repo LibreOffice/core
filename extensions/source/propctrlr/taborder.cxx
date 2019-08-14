@@ -165,7 +165,8 @@ namespace pcr
             OUString aName;
             OUString aImage;
 
-            for ( auto const& rControlModel : m_xTempModel->getControlModels() )
+            const Sequence<Reference<css::awt::XControlModel>> aControlModels = m_xTempModel->getControlModels();
+            for ( auto const& rControlModel : aControlModels )
             {
                 Reference< XPropertySet > xControl( rControlModel, UNO_QUERY );
                 Reference< XPropertySetInfo > xPI;
@@ -237,7 +238,7 @@ namespace pcr
     {
         int nEntryCount = m_xLB_Controls->n_children();
         Sequence< Reference< XControlModel > > aSortedControlModelSeq( nEntryCount );
-        Sequence< Reference< XControlModel > > aControlModels( m_xTempModel->getControlModels());
+        const Sequence< Reference< XControlModel > > aControlModels( m_xTempModel->getControlModels());
         Reference< XControlModel > * pSortedControlModels = aSortedControlModelSeq.getArray();
 
         for (int i = 0; i < nEntryCount; ++i)

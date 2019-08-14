@@ -360,7 +360,7 @@ PasswordContainerInteractionHandler::handleInteractionRequest(
     if ( aAnyRequest >>= aURLAuthenticationRequest )
         aURL = aURLAuthenticationRequest.URL;
 
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > >
+    const uno::Sequence< uno::Reference< task::XInteractionContinuation > >
         rContinuations = rRequest->getContinuations();
 
     uno::Reference< ucb::XInteractionSupplyAuthentication >

@@ -1439,7 +1439,7 @@ bool SfxObjectShell::SaveTo_Impl
             {
                 try
                 {
-                    Sequence < util::RevisionTag > aVersions = rMedium.GetVersionList();
+                    const Sequence < util::RevisionTag > aVersions = rMedium.GetVersionList();
                     if ( aVersions.hasElements() )
                     {
                         // copy the version streams
@@ -2225,7 +2225,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             // #i119492# During loading, some OLE objects like chart will be set
             // modified flag, so needs to reset the flag to false after loading
             bool bRtn = xLoader->filter( aArgs );
-            uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+            const uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
             for ( const auto& rName : aNames )
             {
                 uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( rName );
@@ -3141,7 +3141,7 @@ bool SfxObjectShell::SaveCompletedChildren()
 
     if ( pImpl->mpObjectContainer )
     {
-        uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+        const uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
         for ( const auto& rName : aNames )
         {
             uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( rName );
@@ -3248,7 +3248,7 @@ static bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embe
 
     try
     {
-        uno::Sequence< OUString > aSubElements = xSource->getElementNames();
+        const uno::Sequence< OUString > aSubElements = xSource->getElementNames();
         for ( const auto& rSubElement : aSubElements )
         {
             if ( xSource->isStorageElement( rSubElement ) )
@@ -3370,7 +3370,8 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType(const uno::Reference< embed:
 
     try
     {
-        for (const OUString& rSubElement : xSource->getElementNames())
+        const css::uno::Sequence<OUString> aSubElementNames = xSource->getElementNames();
+        for (const OUString& rSubElement : aSubElementNames)
         {
             if (std::find(rExceptions.begin(), rExceptions.end(), rSubElement) != rExceptions.end())
                 continue;

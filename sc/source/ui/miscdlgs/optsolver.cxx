@@ -966,7 +966,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     uno::Reference<beans::XPropertySet> xOptProp(xSolver, uno::UNO_QUERY);
     if ( xOptProp.is() )
     {
-        for (const beans::PropertyValue& rValue : maProperties)
+        for (const beans::PropertyValue& rValue : std::as_const(maProperties))
         {
             try
             {

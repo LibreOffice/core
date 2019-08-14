@@ -840,7 +840,7 @@ LocaleDataImpl::getAllCurrencies2( const Locale& rLocale )
 Sequence< Currency > SAL_CALL
 LocaleDataImpl::getAllCurrencies( const Locale& rLocale )
 {
-    Sequence< Currency2 > aCur2( getAllCurrencies2( rLocale));
+    const Sequence< Currency2 > aCur2( getAllCurrencies2( rLocale));
     Sequence< Currency > aCur1( aCur2.getLength());
     Currency* p1 = aCur1.getArray();
     for (const Currency2& r2 : aCur2)

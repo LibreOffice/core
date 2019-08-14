@@ -2375,7 +2375,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 xShapePropertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
 
-                for (const auto& rProp : aGrabBag)
+                for (const auto& rProp : std::as_const(aGrabBag))
                 {
                     if (rProp.Name == "VML-Z-ORDER")
                     {
@@ -2419,7 +2419,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 xShapePropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-                for (const auto& rProp : aGrabBag)
+                for (const auto& rProp : std::as_const(aGrabBag))
                 {
                     if (rProp.Name == "VML-Z-ORDER")
                     {
@@ -2553,14 +2553,14 @@ bool DomainMapper_Impl::IsSdtEndBefore()
     PropertyMapPtr pContext = GetTopContextOfType(CONTEXT_CHARACTER);
     if(pContext)
     {
-        uno::Sequence< beans::PropertyValue > currentCharProps = pContext->GetPropertyValues();
+        const uno::Sequence< beans::PropertyValue > currentCharProps = pContext->GetPropertyValues();
         for (const auto& rCurrentCharProp : currentCharProps)
         {
             if (rCurrentCharProp.Name == "CharInteropGrabBag")
             {
                 uno::Sequence<beans::PropertyValue> aCharGrabBag;
                 rCurrentCharProp.Value >>= aCharGrabBag;
-                for (const auto& rProp : aCharGrabBag)
+                for (const auto& rProp : std::as_const(aCharGrabBag))
                 {
                     if(rProp.Name == "SdtEndBefore")
                     {

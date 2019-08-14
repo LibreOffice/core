@@ -410,7 +410,7 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
 void SvtSecurityOptions_Impl::LoadAuthors()
 {
     m_seqTrustedAuthors.realloc( 0 );       // first clear
-    Sequence< OUString >    lAuthors = GetNodeNames( PROPERTYNAME_MACRO_TRUSTEDAUTHORS );
+    const Sequence< OUString > lAuthors = GetNodeNames( PROPERTYNAME_MACRO_TRUSTEDAUTHORS );
     sal_Int32               c1 = lAuthors.getLength();
     if( c1 )
     {

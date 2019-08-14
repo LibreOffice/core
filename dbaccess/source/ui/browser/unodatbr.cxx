@@ -657,7 +657,8 @@ void SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
             OUString sDefaultProperty;
             Reference< XPropertySet > xColumn;
             Reference< XPropertySetInfo > xColPSI;
-            for (const OUString& rName : xColumns->getElementNames())
+            const Sequence<OUString> aColNames = xColumns->getElementNames();
+            for (const OUString& rName : aColNames)
             {
                 xColumn.set( xColumns->getByName( rName ), UNO_QUERY_THROW );
                 xColPSI.set( xColumn->getPropertySetInfo(), UNO_SET_THROW );
@@ -2059,7 +2060,8 @@ void SbaTableQueryBrowser::initializeTreeModel()
         OUString sQueriesName, sTablesName;
 
         // fill the model with the names of the registered datasources
-        for (const OUString& rDatasource : m_xDatabaseContext->getElementNames())
+        const Sequence<OUString> aDatasourceNames = m_xDatabaseContext->getElementNames();
+        for (const OUString& rDatasource : aDatasourceNames)
             implAddDatasource( rDatasource, aDBImage, sQueriesName, aQueriesImage, sTablesName, aTablesImage, SharedConnection() );
     }
 }
@@ -2074,7 +2076,8 @@ void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAcce
 
     try
     {
-        for (const OUString& rName : _xNameAccess->getElementNames())
+        const Sequence<OUString> aNames = _xNameAccess->getElementNames();
+        for (const OUString& rName : aNames)
         {
             if( !m_pTreeView->getListBox().GetEntryPosByName(rName,_pParent))
             {
@@ -3557,7 +3560,8 @@ void SbaTableQueryBrowser::clearGridColumns(const Reference< XNameContainer >& _
 {
     // first we have to clear the grid
     Reference< XInterface > xColumn;
-    for (const OUString& rName : _xColContainer->getElementNames())
+    const Sequence<OUString> aColNames = _xColContainer->getElementNames();
+    for (const OUString& rName : aColNames)
     {
         _xColContainer->getByName(rName) >>= xColumn;
         _xColContainer->removeByName(rName);

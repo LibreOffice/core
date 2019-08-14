@@ -98,7 +98,7 @@ public:
     virtual void Export(
         SvXMLExport& rExport,                   /// the current XML export
         const OUString& rEventQName,     /// the XML name of the event
-        css::uno::Sequence<css::beans::PropertyValue> & rValues, /// the values for the event
+        const css::uno::Sequence<css::beans::PropertyValue> & rValues, /// the values for the event
         bool bUseWhitespace) = 0;  /// create whitespace around elements?
 };
 

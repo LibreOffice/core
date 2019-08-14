@@ -92,7 +92,7 @@ void SwDoc::disposeXForms( )
     if( mxXForms.is() )
     {
         // iterate over all models
-        uno::Sequence<OUString> aNames = mxXForms->getElementNames();
+        const uno::Sequence<OUString> aNames = mxXForms->getElementNames();
         for( const OUString& rName : aNames )
         {
             Reference< xforms::XModel > xModel(

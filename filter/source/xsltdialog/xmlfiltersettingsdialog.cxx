@@ -340,7 +340,7 @@ OUString XMLFilterSettingsDialog::createUniqueInterfaceName( const OUString& rIn
 
     try
     {
-        Sequence< OUString > aFilterNames( mxFilterContainer->getElementNames() );
+        const Sequence< OUString > aFilterNames( mxFilterContainer->getElementNames() );
 
         Sequence< PropertyValue > aValues;
         for( OUString const & filterName : aFilterNames)
@@ -960,7 +960,7 @@ void XMLFilterSettingsDialog::initFilterList()
 {
     if( mxFilterContainer.is() )
     {
-        Sequence< OUString > aFilterNames( mxFilterContainer->getElementNames() );
+        const Sequence< OUString > aFilterNames( mxFilterContainer->getElementNames() );
 
         Sequence< PropertyValue > aValues;
 

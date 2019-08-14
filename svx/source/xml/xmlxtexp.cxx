@@ -372,7 +372,7 @@ bool SvxXMLXTableExportComponent::exportTable() throw()
 
             SvXMLElementExport aElem( *this, XML_NAMESPACE_OOO, pEleName, true, true );
 
-            Sequence< OUString > aNames = mxTable->getElementNames();
+            const Sequence< OUString > aNames = mxTable->getElementNames();
             Any aAny;
 
             for( const OUString& rName : aNames )

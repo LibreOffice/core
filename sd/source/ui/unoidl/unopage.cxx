@@ -2459,7 +2459,7 @@ void SdDrawPage::setBackground( const Any& rValue )
         Reference< beans::XPropertySet >  xDestSet( static_cast<beans::XPropertySet*>(pBackground) );
         Reference< beans::XPropertySetInfo >  xDestSetInfo( xDestSet->getPropertySetInfo() );
 
-        Sequence< beans::Property > aProperties( xDestSetInfo->getProperties() );
+        const Sequence< beans::Property > aProperties( xDestSetInfo->getProperties() );
 
         for( const beans::Property& rProp : aProperties )
         {
@@ -2827,7 +2827,7 @@ void SdMasterPage::setBackground( const Any& rValue )
                 Reference< beans::XPropertySet > xDestSet( static_cast<beans::XPropertySet*>(pBackground) );
                 Reference< beans::XPropertySetInfo > xDestSetInfo( xDestSet->getPropertySetInfo(), UNO_SET_THROW );
 
-                uno::Sequence< beans::Property> aProperties( xDestSetInfo->getProperties() );
+                const uno::Sequence< beans::Property> aProperties( xDestSetInfo->getProperties() );
 
                 for( const beans::Property& rProp : aProperties )
                 {

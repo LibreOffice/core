@@ -277,7 +277,7 @@ namespace pcr
                 aResolvedStrings.reserve( aStrings.getLength() );
                 try
                 {
-                    for ( const OUString& rIdStr : aStrings )
+                    for ( const OUString& rIdStr : std::as_const(aStrings) )
                     {
                         OUString aPureIdStr = rIdStr.copy( 1 );
                         if( xStringResourceResolver->hasEntryForId( aPureIdStr ) )
@@ -330,7 +330,7 @@ namespace pcr
             if( ! (_rValue >>= aFontPropertyValues) )
                 SAL_WARN("extensions.propctrlr", "setPropertyValue: unable to get property " << PROPERTY_ID_FONT);
 
-            for ( const NamedValue& fontPropertyValue : aFontPropertyValues )
+            for ( const NamedValue& fontPropertyValue : std::as_const(aFontPropertyValues) )
                 m_xComponent->setPropertyValue( fontPropertyValue.Name, fontPropertyValue.Value );
         }
         else
@@ -392,7 +392,7 @@ namespace pcr
                         }
 
                         // Move strings to new Ids for all locales
-                        Sequence< Locale > aLocaleSeq = xStringResourceManager->getLocales();
+                        const Sequence< Locale > aLocaleSeq = xStringResourceManager->getLocales();
                         Sequence< OUString > aOldIdStrings;
                         aPropertyValue >>= aOldIdStrings;
                         try
@@ -445,7 +445,7 @@ namespace pcr
                         aValue <<= aNewIdStrings;
 
                         // Remove old ids from resource for all locales
-                        for( const OUString& rIdStr : aOldIdStrings )
+                        for( const OUString& rIdStr : std::as_const(aOldIdStrings) )
                         {
                             OUString aPureIdStr = rIdStr.copy( 1 );
                             for ( const Locale& rLocale : aLocaleSeq )
@@ -2365,7 +2365,8 @@ namespace pcr
                 if( ! (xFormSet->getPropertyValue( PROPERTY_COMMANDTYPE ) >>= nObjectType) )
                     SAL_WARN("extensions.propctrlr", "impl_initFieldList_nothrow: unable to get property " PROPERTY_COMMANDTYPE);
 
-                for ( const OUString& rField : ::dbtools::getFieldNamesByCommandDescriptor( m_xRowSetConnection, nObjectType, sObjectName ) )
+                const Sequence<OUString> aNames = ::dbtools::getFieldNamesByCommandDescriptor( m_xRowSetConnection, nObjectType, sObjectName );
+                for ( const OUString& rField : aNames )
                     _rFieldNames.push_back( rField );
             }
         }
@@ -2500,7 +2501,8 @@ namespace pcr
         if ( !xTableNames.is() )
             return;
 
-        for ( const OUString& rTableName : xTableNames->getElementNames() )
+        const Sequence<OUString> aNames = xTableNames->getElementNames();
+        for ( const OUString& rTableName : aNames )
             _out_rNames.push_back( rTableName );
     }
 
@@ -2527,7 +2529,8 @@ namespace pcr
 
         bool bAdd = !_sName.isEmpty();
 
-        for ( const OUString& rQueryName : _xQueryNames->getElementNames() )
+        const Sequence<OUString> aQueryNames =_xQueryNames->getElementNames();
+        for ( const OUString& rQueryName : aQueryNames )
         {
             OUStringBuffer sTemp;
             if ( bAdd )

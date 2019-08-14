@@ -2424,7 +2424,7 @@ void DbComboBox::SetList(const Any& rItems)
     css::uno::Sequence<OUString> aTest;
     if (rItems >>= aTest)
     {
-        for (const OUString& rString : aTest)
+        for (const OUString& rString : std::as_const(aTest))
              pField->InsertEntry(rString);
 
         // tell the grid control that this controller is invalid and has to be re-initialized
@@ -2545,7 +2545,7 @@ void DbListBox::SetList(const Any& rItems)
     {
         if (aTest.hasElements())
         {
-            for (const OUString& rString : aTest)
+            for (const OUString& rString : std::as_const(aTest))
                  pField->InsertEntry(rString);
 
             m_rColumn.getModel()->getPropertyValue(FM_PROP_VALUE_SEQ) >>= m_aValueList;
@@ -2707,13 +2707,13 @@ void DbFilterField::SetList(const Any& rItems, bool bComboBox)
         if (bComboBox)
         {
             ComboBox* pField = static_cast<ComboBox*>(m_pWindow.get());
-            for (const OUString& rString : aTest)
+            for (const OUString& rString : std::as_const(aTest))
                 pField->InsertEntry(rString);
         }
         else
         {
             ListBox* pField = static_cast<ListBox*>(m_pWindow.get());
-            for (const OUString& rString : aTest)
+            for (const OUString& rString : std::as_const(aTest))
                 pField->InsertEntry(rString);
 
             m_rColumn.getModel()->getPropertyValue(FM_PROP_VALUE_SEQ) >>= m_aValueList;

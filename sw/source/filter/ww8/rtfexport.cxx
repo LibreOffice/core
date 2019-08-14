@@ -330,7 +330,7 @@ void RtfExport::WriteHyperlinkData(const ::sw::mark::IFieldmark& /*rFieldmark*/)
 
 void RtfExport::DoComboBox(const OUString& /*rName*/, const OUString& /*rHelp*/,
                            const OUString& /*rToolTip*/, const OUString& /*rSelected*/,
-                           uno::Sequence<OUString>& /*rListItems*/)
+                           const uno::Sequence<OUString>& /*rListItems*/)
 {
     // this is handled in RtfAttributeOutput::OutputFlyFrame_Impl
 }
@@ -564,7 +564,7 @@ void RtfExport::WriteUserProps()
         {
             uno::Reference<beans::XPropertySet> xPropertySet(xUserDefinedProperties,
                                                              uno::UNO_QUERY);
-            uno::Sequence<beans::Property> aProperties
+            const uno::Sequence<beans::Property> aProperties
                 = xPropertySet->getPropertySetInfo()->getProperties();
 
             for (const beans::Property& rProperty : aProperties)

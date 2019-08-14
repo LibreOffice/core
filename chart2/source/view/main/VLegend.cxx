@@ -793,7 +793,8 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
     int x = 100;
     int y = 100;
 
-    for (chart2::data::PivotTableFieldEntry const & sColumnFieldEntry : xPivotTableDataProvider->getColumnFields())
+    const css::uno::Sequence<chart2::data::PivotTableFieldEntry> aPivotFieldEntries = xPivotTableDataProvider->getColumnFields();
+    for (chart2::data::PivotTableFieldEntry const & sColumnFieldEntry : aPivotFieldEntries)
     {
         std::shared_ptr<VButton> pButton(new VButton);
         aButtons.push_back(pButton);

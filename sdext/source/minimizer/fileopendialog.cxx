@@ -72,7 +72,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
     // collecting a list of impress filters
     Reference< XNameAccess > xFilters( rxContext->getServiceManager()->createInstanceWithContext(
         "com.sun.star.document.FilterFactory", rxContext ), UNO_QUERY_THROW );
-    Sequence< OUString > aFilterList( xFilters->getElementNames() );
+    const Sequence< OUString > aFilterList( xFilters->getElementNames() );
     for ( const auto& rFilter : aFilterList )
     {
         try
@@ -82,7 +82,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
             {
                 FilterEntry aFilterEntry;
                 bool bImpressFilter = false;
-                for ( const PropertyValue& rProperty : aFilterProperties )
+                for ( const PropertyValue& rProperty : std::as_const(aFilterProperties) )
                 {
                     bool bStop = false;
                     switch( TKGet( rProperty.Name ) )

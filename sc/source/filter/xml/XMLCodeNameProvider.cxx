@@ -30,7 +30,7 @@ bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, OUString& rCodeNam
     if( !(aAny >>= aProps) )
         return false;
 
-    for( const auto& rProp : aProps )
+    for( const auto& rProp : std::as_const(aProps) )
     {
         if( rProp.Name == "CodeName" )
         {

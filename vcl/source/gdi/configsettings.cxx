@@ -86,7 +86,7 @@ void SettingsConfigItem::getValues()
 {
     m_aSettings.clear();
 
-    Sequence< OUString > aNames( GetNodeNames( OUString() ) );
+    const Sequence< OUString > aNames( GetNodeNames( OUString() ) );
 
     for( const auto& aKeyName : aNames )
     {

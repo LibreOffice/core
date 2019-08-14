@@ -908,7 +908,7 @@ bool appendToFilter(const Reference<XConnection>& _xConnection,
             xProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aFilter;
             // first check if we have something like SCHEMA.%
             bool bHasToInsert = true;
-            for (const OUString& rItem : aFilter)
+            for (const OUString& rItem : std::as_const(aFilter))
             {
                 if(rItem.indexOf('%') != -1)
                 {

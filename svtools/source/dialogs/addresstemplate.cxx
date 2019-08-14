@@ -700,17 +700,16 @@ void AssignmentPersistentData::ImplCommit()
         m_xDatasource->clear();
 
         // fill the datasources listbox
-        Sequence< OUString > aDatasourceNames;
         try
         {
-            aDatasourceNames = m_xDatabaseContext->getElementNames();
+            const css::uno::Sequence<OUString> aElementNames = m_xDatabaseContext->getElementNames();
+            for (const OUString& rDatasourceName : aElementNames)
+                m_xDatasource->append_text(rDatasourceName);
         }
         catch(Exception&)
         {
             OSL_FAIL("AddressBookSourceDialog::initializeDatasources: caught an exception while asking for the data source names!");
         }
-        for (const OUString& rDatasourceName : aDatasourceNames)
-            m_xDatasource->append_text(rDatasourceName);
     }
 
     IMPL_LINK(AddressBookSourceDialog, OnFieldScroll, weld::ScrolledWindow&, rScrollBar, void)
@@ -806,7 +805,7 @@ void AssignmentPersistentData::ImplCommit()
 
         bool bKnowOldTable = false;
         // fill the table list
-        for (const OUString& rTableName : aTableNames)
+        for (const OUString& rTableName : std::as_const(aTableNames))
         {
             m_xTable->append_text(rTableName);
             if (rTableName == sOldTable)
@@ -873,7 +872,7 @@ void AssignmentPersistentData::ImplCommit()
             pListbox->set_id(0, OUString::number(i));
 
             // the field names
-            for (const OUString& rColumnName : aColumnNames)
+            for (const OUString& rColumnName : std::as_const(aColumnNames))
                 pListbox->append_text(rColumnName);
 
             if (!aInitialSelection->isEmpty() && (aColumnNameSet.end() != aColumnNameSet.find(*aInitialSelection)))

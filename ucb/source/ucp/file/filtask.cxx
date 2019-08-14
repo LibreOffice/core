@@ -2212,7 +2212,7 @@ TaskManager::load( const ContentMap::iterator& it, bool create )
             // Now put in all values in the storage in the local hash;
 
             PropertySet& properties = it->second.properties;
-            uno::Sequence< beans::Property > seq = xS->getPropertySetInfo()->getProperties();
+            const uno::Sequence< beans::Property > seq = xS->getPropertySetInfo()->getProperties();
 
             for( const auto& rProp : seq )
             {
@@ -2821,7 +2821,7 @@ TaskManager::erasePersistentSet( const OUString& aUnqPath,
     }
 
     uno::Reference< container::XNameAccess > xName( m_xFileRegistry,uno::UNO_QUERY );
-    uno::Sequence< OUString > seqNames = xName->getElementNames();
+    const uno::Sequence< OUString > seqNames = xName->getElementNames();
 
     OUString old_Name = aUnqPath;
 
@@ -2853,7 +2853,7 @@ TaskManager::copyPersistentSetWithoutChildren( const OUString& srcUnqPath,
     if( ! x_src.is() )
         return;
 
-    uno::Sequence< beans::Property > seqProperty =
+    const uno::Sequence< beans::Property > seqProperty =
         x_src->getPropertySetInfo()->getProperties();
 
     if( ! seqProperty.hasElements() )
@@ -2890,7 +2890,7 @@ TaskManager::copyPersistentSet( const OUString& srcUnqPath,
     }
 
     uno::Reference< container::XNameAccess > xName( m_xFileRegistry,uno::UNO_QUERY );
-    uno::Sequence< OUString > seqNames = xName->getElementNames();
+    const uno::Sequence< OUString > seqNames = xName->getElementNames();
 
     OUString new_Name;
 

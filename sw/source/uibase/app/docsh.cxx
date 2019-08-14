@@ -651,7 +651,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
         {
             uno::Reference< XLibraryContainer > xLibCont = GetBasicContainer();
             uno::Reference< XNameAccess > xLib;
-            Sequence<OUString> aNames = xLibCont->getElementNames();
+            const Sequence<OUString> aNames = xLibCont->getElementNames();
             for(const OUString& rName : aNames)
             {
                 Any aLib = xLibCont->getByName(rName);

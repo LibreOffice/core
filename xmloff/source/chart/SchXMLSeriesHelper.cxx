@@ -46,12 +46,12 @@ using ::com::sun::star::uno::Sequence;
     {
         Reference< chart2::XCoordinateSystemContainer > xCooSysCnt(
             xDiagram, uno::UNO_QUERY_THROW );
-        Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
+        const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
             xCooSysCnt->getCoordinateSystems());
         for( const auto& rCooSys : aCooSysSeq )
         {
             Reference< chart2::XChartTypeContainer > xCTCnt( rCooSys, uno::UNO_QUERY_THROW );
-            Sequence< Reference< chart2::XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
+            const Sequence< Reference< chart2::XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
             for( const auto& rChartType : aChartTypeSeq )
             {
                 Reference< chart2::XDataSeriesContainer > xDSCnt( rChartType, uno::UNO_QUERY_THROW );
@@ -105,7 +105,7 @@ uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
     if( !xCooSysContainer.is())
         return nullptr;
 
-    uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+    const uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
     for( const auto& xCooSys : aCooSysList )
     {
         //iterate through all chart types in the current coordinate system
@@ -113,7 +113,7 @@ uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
         SAL_WARN_IF( !xChartTypeContainer.is(), "xmloff.chart", "xChartTypeContainer is NULL");
         if( !xChartTypeContainer.is() )
             continue;
-        uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
+        const uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
         for( const auto& xChartType : aChartTypeList )
         {
             //iterate through all series in this chart type

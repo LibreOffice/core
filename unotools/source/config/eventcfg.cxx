@@ -185,7 +185,7 @@ void GlobalEventConfig_Impl::ImplCommit()
 void GlobalEventConfig_Impl::initBindingInfo()
 {
     // Get ALL names of current existing list items in configuration!
-    Sequence< OUString > lEventNames      = GetNodeNames( SETNODE_BINDINGS, utl::ConfigNameFormat::LocalPath );
+    const Sequence< OUString > lEventNames = GetNodeNames( SETNODE_BINDINGS, utl::ConfigNameFormat::LocalPath );
 
     OUString aSetNode( SETNODE_BINDINGS );
     aSetNode += PATHDELIMITER;
@@ -230,7 +230,7 @@ void GlobalEventConfig_Impl::replaceByName( const OUString& aName, const Any& aE
                 Reference< XInterface > (), 2);
     }
     OUString macroURL;
-    for( const auto& rProp : props )
+    for( const auto& rProp : std::as_const(props) )
     {
         if ( rProp.Name == "Script" )
             rProp.Value >>= macroURL;

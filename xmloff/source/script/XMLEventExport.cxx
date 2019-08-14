@@ -110,7 +110,7 @@ void XMLEventExport::Export( Reference<XNameAccess> const & rAccess,
     bool bStarted = false;
 
     // iterate over all event types
-    Sequence<OUString> aNames = rAccess->getElementNames();
+    const Sequence<OUString> aNames = rAccess->getElementNames();
     for(const auto& rName : aNames)
     {
         // translate name

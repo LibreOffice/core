@@ -2490,7 +2490,7 @@ void XMLMacroFieldImportContext::PrepareField(
         Sequence<PropertyValue> aValues;
         pEvents->GetEventSequence( "OnClick", aValues );
 
-        for( const auto& rValue : aValues )
+        for( const auto& rValue : std::as_const(aValues) )
         {
             if ( rValue.Name == "ScriptType" )
             {

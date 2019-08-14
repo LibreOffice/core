@@ -279,7 +279,7 @@ void SwEnvPage::InitDatabaseBox()
     if (m_pSh->GetDBManager())
     {
         m_xDatabaseLB->clear();
-        Sequence<OUString> aDataNames = SwDBManager::GetExistingDatabaseNames();
+        const Sequence<OUString> aDataNames = SwDBManager::GetExistingDatabaseNames();
 
         for (const OUString& rDataName : aDataNames)
             m_xDatabaseLB->append_text(rDataName);

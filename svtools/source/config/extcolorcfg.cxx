@@ -77,7 +77,7 @@ class ExtendedColorConfig_Impl : public utl::ConfigItem, public SfxBroadcaster
     static bool     m_bBroadcastWhenUnlocked;
 
     uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme);
-    void FillComponentColors(uno::Sequence < OUString >& _rComponents,const TDisplayNames& _rDisplayNames);
+    void FillComponentColors(const uno::Sequence < OUString >& _rComponents,const TDisplayNames& _rDisplayNames);
 
     virtual void                    ImplCommit() override;
 
@@ -307,7 +307,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
     }
 }
 
-void ExtendedColorConfig_Impl::FillComponentColors(uno::Sequence < OUString >& _rComponents,const TDisplayNames& _rDisplayNames)
+void ExtendedColorConfig_Impl::FillComponentColors(const uno::Sequence < OUString >& _rComponents,const TDisplayNames& _rDisplayNames)
 {
     const OUString sColorEntries("/Entries");
     for(OUString const & component : _rComponents)

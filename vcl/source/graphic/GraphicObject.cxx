@@ -83,7 +83,8 @@ void SearchForGraphics(uno::Reference<uno::XInterface> const & xInterface,
     Reference<XNameContainer> xContainer(xInterface, UNO_QUERY);
     if (xContainer.is())
     {
-        for (OUString const & rName : xContainer->getElementNames())
+        const css::uno::Sequence<OUString> aElementNames = xContainer->getElementNames();
+        for (OUString const & rName : aElementNames)
         {
             uno::Reference<XInterface> xInnerInterface;
             xContainer->getByName(rName) >>= xInnerInterface;

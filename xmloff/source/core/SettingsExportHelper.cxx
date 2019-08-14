@@ -362,7 +362,7 @@ void XMLSettingsExportHelper::exportMapEntry(const uno::Any& rAny,
         if (bNameAccess)
             m_rContext.AddAttribute( XML_NAME, rName );
         m_rContext.StartElement( XML_CONFIG_ITEM_MAP_ENTRY );
-        for (const auto& rProp : aProps)
+        for (const auto& rProp : std::as_const(aProps))
             CallTypeFunction(rProp.Value, rProp.Name);
         m_rContext.EndElement( true );
     }
@@ -379,7 +379,7 @@ void XMLSettingsExportHelper::exportNameAccess(
     {
         m_rContext.AddAttribute( XML_NAME, rName );
         m_rContext.StartElement( XML_CONFIG_ITEM_MAP_NAMED );
-        uno::Sequence< OUString > aNames(aNamed->getElementNames());
+        const uno::Sequence< OUString > aNames(aNamed->getElementNames());
         for (const auto& rElementName : aNames)
             exportMapEntry(aNamed->getByName(rElementName), rElementName, true);
         m_rContext.EndElement( true );
