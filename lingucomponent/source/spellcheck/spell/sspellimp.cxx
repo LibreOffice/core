@@ -124,7 +124,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
         uno::Sequence< OUString > aFormatList;
         aLinguCfg.GetSupportedDictionaryFormatsFor( "SpellCheckers",
                 "org.openoffice.lingu.MySpellSpellChecker", aFormatList );
-        for (auto const& format : aFormatList)
+        for (auto const& format : std::as_const(aFormatList))
         {
             std::vector< SvtLinguConfigDictionaryEntry > aTmpDic(
                     aLinguCfg.GetActiveDictionariesByFormat(format) );
@@ -150,7 +150,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             std::set<OUString> aLocaleNamesSet;
             for (auto const& dict : aDics)
             {
-                uno::Sequence< OUString > aLocaleNames( dict.aLocaleNames );
+                const uno::Sequence< OUString > aLocaleNames( dict.aLocaleNames );
                 uno::Sequence< OUString > aLocations( dict.aLocations );
                 SAL_WARN_IF(
                     aLocaleNames.hasElements() && !aLocations.hasElements(),
@@ -200,7 +200,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                 if (dict.aLocaleNames.hasElements() &&
                     dict.aLocations.hasElements())
                 {
-                    uno::Sequence< OUString > aLocaleNames( dict.aLocaleNames );
+                    const uno::Sequence< OUString > aLocaleNames( dict.aLocaleNames );
 
                     // currently only one language per dictionary is supported in the actual implementation...
                     // Thus here we work-around this by adding the same dictionary several times.
@@ -238,7 +238,7 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
     if (!m_aSuppLocales.hasElements())
         getLocales();
 
-    for (auto const& suppLocale : m_aSuppLocales)
+    for (auto const& suppLocale : std::as_const(m_aSuppLocales))
     {
         if (rLocale == suppLocale)
         {

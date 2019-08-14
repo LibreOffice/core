@@ -288,7 +288,8 @@ OUString SAL_CALL XMLSignature_NssImpl::getImplementationName()
 /* XServiceInfo */
 sal_Bool SAL_CALL XMLSignature_NssImpl::supportsService(const OUString& rServiceName)
 {
-    for (OUString const & rCurrentServiceName : getSupportedServiceNames())
+    const css::uno::Sequence<OUString> aServiceNames = getSupportedServiceNames();
+    for (OUString const & rCurrentServiceName : aServiceNames)
     {
         if (rCurrentServiceName == rServiceName)
             return true;

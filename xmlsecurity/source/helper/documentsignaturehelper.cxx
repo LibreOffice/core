@@ -86,7 +86,7 @@ static void ImplFillElementList(
     const OUString& rRootStorageName, const bool bRecursive,
     const DocumentSignatureAlgorithm mode)
 {
-    Sequence< OUString > aElements = rxStore->getElementNames();
+    const Sequence< OUString > aElements = rxStore->getElementNames();
 
     for ( const auto& rName : aElements )
     {
@@ -213,7 +213,7 @@ DocumentSignatureHelper::CreateElementList(
                     xSubStore.clear();
 
                     // Object folders...
-                    Sequence< OUString > aElementNames = rxStore->getElementNames();
+                    const Sequence< OUString > aElementNames = rxStore->getElementNames();
                     for ( const auto& rName : aElementNames )
                     {
                         if ( ( rName.match( "Object " ) ) && rxStore->isStorageElement( rName ) )
