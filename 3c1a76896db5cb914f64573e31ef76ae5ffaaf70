@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_5b87a510",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-14T07:05:57Z",
+      "side": 1,
+      "message": "In many places, simply declaring the Sequence variable as const would be sufficient, like here; in this specific case we could *alternatively* simplify this to\n\n    for(const auto\u0026 rScriptLibName : std::as_const(xScriptCont-\u003egetElementNames()))\n    {\n        uno::Any aLibAny \u003d xScriptCont-\u003egetByName( rScriptLibName );\n\n        if ( rScriptLibName \u003d\u003d \"Standard\" || rScriptLibName \u003d\u003d \"VBAProject\")\n            xScriptCont-\u003eloadLibrary( rScriptLibName );\n\n        BasMgrContainerListenerImpl::insertLibraryImpl\n            ( xScriptCont, this, aLibAny, rScriptLibName );\n    }\n\nremoving declaration/definition of xLibContainer and its emptyness check.",
+      "range": {
+        "startLine": 554,
+        "startChar": 8,
+        "endLine": 554,
+        "endChar": 83
+      },
+      "revId": "3c1a76896db5cb914f64573e31ef76ae5ffaaf70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
