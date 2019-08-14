@@ -46,6 +46,29 @@
       "revId": "3c1a76896db5cb914f64573e31ef76ae5ffaaf70",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_bbc5a13e",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1436,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-14T07:34:21Z",
+      "side": 1,
+      "message": "Something unrelated: can we have something to check for such vectors with initialized copies, and replace that with reserve() and push_back()s?\n\nInteresting that we only re-fill *some* of the pre-initialized elements, and then return the whole vector, including the trailing empty elements, to be passed to an interaction handler :-)",
+      "range": {
+        "startLine": 1436,
+        "startChar": 12,
+        "endLine": 1436,
+        "endChar": 56
+      },
+      "revId": "3c1a76896db5cb914f64573e31ef76ae5ffaaf70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
