@@ -601,8 +601,8 @@ void TimerTest::testStopwatch()
             break;
     }
 
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(10), n1Iter);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(10), n2Iter);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, double(n1Iter), 1.1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, double(n2Iter), 1.1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TimerTest);
