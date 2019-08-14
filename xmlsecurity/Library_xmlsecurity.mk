@@ -83,6 +83,8 @@ $(eval $(call gb_Library_add_defs,xmlsecurity,\
 ))
 $(eval $(call gb_Library_use_system_win32_libs,xmlsecurity,\
     crypt32 \
+    Ole32 \
+    Shell32 \
 ))
 else
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE))$(filter ANDROID,$(OS)))
