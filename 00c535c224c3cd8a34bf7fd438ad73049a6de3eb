@@ -166,6 +166,30 @@
       "revId": "00c535c224c3cd8a34bf7fd438ad73049a6de3eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_26abb889",
+        "filename": "svtools/source/dialogs/addresstemplate.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-14T13:52:24Z",
+      "side": 1,
+      "message": "Sorry I don\u0027t understand then. The getElementNames returns a temporary Sequence (not a reference). Binding the return value to a const reference and then using that (in a next line?) should create a dangling reference, or do I misunderstand?",
+      "parentUuid": "bf659307_e6cf007d",
+      "range": {
+        "startLine": 705,
+        "startChar": 51,
+        "endLine": 705,
+        "endChar": 88
+      },
+      "revId": "00c535c224c3cd8a34bf7fd438ad73049a6de3eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
