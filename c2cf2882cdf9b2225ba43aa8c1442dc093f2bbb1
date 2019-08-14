@@ -1,0 +1,215 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_3b41910c",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-08-14T09:28:36Z",
+      "side": 1,
+      "message": "Rather not change these, as nOp is of type sal_uInt16, not enum OpCode.",
+      "revId": "c2cf2882cdf9b2225ba43aa8c1442dc093f2bbb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_5b44851b",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-08-14T09:28:36Z",
+      "side": 1,
+      "message": "Ditto, it\u0027s sal_uInt16 aOpCodes[]",
+      "revId": "c2cf2882cdf9b2225ba43aa8c1442dc093f2bbb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_fb4a3925",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-08-14T09:28:36Z",
+      "side": 1,
+      "message": "These mnArgCounter and mnIfInserts per FormulaCompiler instance may work for one IFS() but not for nested expressions, functions/operators nested within IFS() arguments or even IFS() within IFS().",
+      "revId": "c2cf2882cdf9b2225ba43aa8c1442dc093f2bbb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_9b63fdb1",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1743,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-08-14T09:28:36Z",
+      "side": 1,
+      "message": "An ocIf can\u0027t be a FormulaByteToken, it must be a FormulaJumpToken instead with a proper jump array constructed. That is what now in ScInterpreter::ScIfJump() is asserted if FormulaToken::GetJump() returns nullptr. See also ScRawToken::CreateToken().\n\nIt is unclear to me how the jump positions should be known here. They can only be determined after descending into the subexpressions, which is what the\n\n pFacToken-\u003eGetJump()[nJumpCount] \u003d pc-1;\n\nbelow does.\n\nProbably (just an untested idea) a 3 positions (same as for ocIf above) jump array needs to be created and the FormulaJumpToken constructed with and the token be remembered (like a \"second factory token\") and those positions be filled along with those pFacToken-\u003eGetJump()[] positions.",
+      "range": {
+        "startLine": 1743,
+        "startChar": 41,
+        "endLine": 1743,
+        "endChar": 57
+      },
+      "revId": "c2cf2882cdf9b2225ba43aa8c1442dc093f2bbb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_1b6fed92",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1778,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-08-14T09:28:36Z",
+      "side": 1,
+      "message": "This FORMULA_MAXJUMPCOUNT must be FORMULA_MAXJUMPCOUNT_MS then.\n\nAlso the ScRawToken::nJump[] array needs to be able to hold FORMULA_MAXJUMPCOUNT_MS+1 jumps, as the array constructed from that in the svJump case will be filled here.\n\nI\u0027d probably introduce FORMULA_MAXJUMPCOUNT_MAX 254 for that specific purpose (and to be used here as well) so that clarifies what it is being used for. Later then we can change places to use also FORMULA_MAXJUMPCOUNT_MAX instead of FORMULA_MAXJUMPCOUNT where appropriate and rename FORMULA_MAXJUMPCOUNT to FORMULA_MAXJUMPCOUNT_CHOOSE. Or even let ocChoose support 255 arguments as well and get rid of the differentiation and the FORMULA_MAXJUMPCOUNT_MS define.",
+      "range": {
+        "startLine": 1778,
+        "startChar": 35,
+        "endLine": 1778,
+        "endChar": 55
+      },
+      "revId": "c2cf2882cdf9b2225ba43aa8c1442dc093f2bbb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_3b5af1f2",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-08-14T09:28:36Z",
+      "side": 1,
+      "message": "Also this FormulaByteToken must be FormulaJumpToken instead.",
+      "range": {
+        "startLine": 1790,
+        "startChar": 45,
+        "endLine": 1790,
+        "endChar": 61
+      },
+      "revId": "c2cf2882cdf9b2225ba43aa8c1442dc093f2bbb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_1bd60dc5",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1838,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-08-14T09:28:36Z",
+      "side": 1,
+      "message": "This doesn\u0027t need to be a FormulaByteToken, a simple FormulaToken( svSep, ocClose) is sufficient.",
+      "range": {
+        "startLine": 1838,
+        "startChar": 48,
+        "endLine": 1838,
+        "endChar": 64
+      },
+      "revId": "c2cf2882cdf9b2225ba43aa8c1442dc093f2bbb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_3b0f51e2",
+        "filename": "include/formula/compiler.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-08-14T09:28:36Z",
+      "side": 1,
+      "message": "When moving IDs around, the entries in the ScFuncDescCore aDescs[] array in ScFunctionList::ScFunctionList() sc/source/core/data/funcdesc.cxx must be moved accordingly. This is force-checked and asserted in Linux dbgutil builds and otherwise exits the program as soon as the function descriptions are initialized, i.e. when entering a formula.",
+      "revId": "c2cf2882cdf9b2225ba43aa8c1442dc093f2bbb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_5b12450b",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4443,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-08-14T09:28:36Z",
+      "side": 1,
+      "message": "Because up to two \u0027\u003d\u0027 characters are detected and handled, and if there are two the forced recalc is set. This could be a 2 iterations loop as well. Ignore for now ;-)",
+      "revId": "c2cf2882cdf9b2225ba43aa8c1442dc093f2bbb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_fbf8f9c4",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-08-14T09:28:36Z",
+      "side": 1,
+      "message": "Because pCur is not a FormulaJumpToken.",
+      "revId": "c2cf2882cdf9b2225ba43aa8c1442dc093f2bbb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_7b2e2944",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1677,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-08-14T09:28:36Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is a good idea now. I\u0027d rather not add them and leave it to later.",
+      "revId": "c2cf2882cdf9b2225ba43aa8c1442dc093f2bbb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

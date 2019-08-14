@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_1b460d23",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1355,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-08-14T09:28:36Z",
+      "side": 0,
+      "message": "Why remove this comment?",
+      "revId": "6c31c2b01dd32cc7ba1230f2c4a98b8f7def219b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
