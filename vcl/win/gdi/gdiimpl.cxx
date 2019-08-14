@@ -2264,7 +2264,8 @@ bool WinSalGraphicsImpl::drawPolyLine(
     if(pSystemDependentData_GraphicsPath)
     {
         // check data validity
-        if(pSystemDependentData_GraphicsPath->getNoLineJoin() != bNoLineJoin)
+        if (pSystemDependentData_GraphicsPath->getNoLineJoin() != bNoLineJoin
+            || bPixelSnapHairline /*tdf#124700*/)
         {
             // data invalid, forget
             pSystemDependentData_GraphicsPath.reset();
@@ -2295,10 +2296,13 @@ bool WinSalGraphicsImpl::drawPolyLine(
         }
 
         // add to buffering mechanism
-        rPolygon.addOrReplaceSystemDependentData<SystemDependentData_GraphicsPath>(
-            ImplGetSystemDependentDataManager(),
-            pGraphicsPath,
-            bNoLineJoin);
+        if (!bPixelSnapHairline /*tdf#124700*/)
+        {
+            rPolygon.addOrReplaceSystemDependentData<SystemDependentData_GraphicsPath>(
+                ImplGetSystemDependentDataManager(),
+                pGraphicsPath,
+                bNoLineJoin);
+        }
     }
 
     if(mrParent.getAntiAliasB2DDraw())
