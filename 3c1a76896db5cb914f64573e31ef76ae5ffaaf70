@@ -22,6 +22,30 @@
       "revId": "3c1a76896db5cb914f64573e31ef76ae5ffaaf70",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_fba2399a",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-14T07:20:48Z",
+      "side": 1,
+      "message": "\u003e removing declaration/definition of xLibContainer and its emptyness check.\n\nsorry for mistake: it should have been \"removing declaration/definition of aScriptLibNames and its emptyness check.\"",
+      "parentUuid": "bf659307_5b87a510",
+      "range": {
+        "startLine": 554,
+        "startChar": 8,
+        "endLine": 554,
+        "endChar": 83
+      },
+      "revId": "3c1a76896db5cb914f64573e31ef76ae5ffaaf70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
