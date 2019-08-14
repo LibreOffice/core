@@ -61,17 +61,17 @@ void lclConvertPresetDash(LineDash& orLineDash, sal_Int32 nPresetDash, sal_Int32
     switch( nPresetDash )
     {
         case XML_dot:           lclSetDashData( orLineDash, 1, 1, 0, 0, 3 );    break;
-        case XML_dash:          lclSetDashData( orLineDash, 0, 0, 1, 4, 3 );    break;
-        case XML_dashDot:       lclSetDashData( orLineDash, 1, 1, 1, 4, 3 );    break;
+        case XML_dash:          lclSetDashData( orLineDash, 1, 4, 0, 0, 3 );    break;
+        case XML_dashDot:       lclSetDashData( orLineDash, 1, 4, 1, 1, 3 );    break;
 
-        case XML_lgDash:        lclSetDashData( orLineDash, 0, 0, 1, 8, 3 );    break;
-        case XML_lgDashDot:     lclSetDashData( orLineDash, 1, 1, 1, 8, 3 );    break;
-        case XML_lgDashDotDot:  lclSetDashData( orLineDash, 2, 1, 1, 8, 3 );    break;
+        case XML_lgDash:        lclSetDashData( orLineDash, 1, 8, 0, 0, 3 );    break;
+        case XML_lgDashDot:     lclSetDashData( orLineDash, 1, 8, 1, 1, 3 );    break;
+        case XML_lgDashDotDot:  lclSetDashData( orLineDash, 1, 8, 2, 0, 3 );    break;
 
         case XML_sysDot:        lclSetDashData( orLineDash, 1, 1, 0, 0, 1 );    break;
-        case XML_sysDash:       lclSetDashData( orLineDash, 0, 0, 1, 3, 1 );    break;
-        case XML_sysDashDot:    lclSetDashData( orLineDash, 1, 1, 1, 3, 1 );    break;
-        case XML_sysDashDotDot: lclSetDashData( orLineDash, 2, 1, 1, 3, 1 );    break;
+        case XML_sysDash:       lclSetDashData( orLineDash, 1, 3, 0, 0, 1 );    break;
+        case XML_sysDashDot:    lclSetDashData( orLineDash, 1, 3, 1, 1, 1 );    break;
+        case XML_sysDashDotDot: lclSetDashData( orLineDash, 1, 3, 2, 1, 1 );    break;
 
         default:
             OSL_FAIL( "lclConvertPresetDash - unsupported preset dash" );
