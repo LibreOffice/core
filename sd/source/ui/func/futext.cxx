@@ -70,6 +70,7 @@
 #include <strings.hrc>
 #include <pres.hxx>
 #include <optsitem.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -201,6 +202,8 @@ void FuText::DoExecute( SfxRequest& )
         SdrViewEvent aVEvt;
         mpView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
         mpView->MarkObj(aVEvt.pRootObj, pPV);
+        if (comphelper::LibreOfficeKit::isActive() && mpViewShell && mpViewShell->GetDocSh())
+            mpViewShell->GetDocSh()->SetModified();
 
         mxTextObj.reset( dynamic_cast< SdrTextObj* >( aVEvt.pObj ) );
     }
