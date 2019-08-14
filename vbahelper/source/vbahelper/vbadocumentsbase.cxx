@@ -222,7 +222,15 @@ uno::Any VbaDocumentsBase::createDocument()
     // #163808# determine state of Application.ScreenUpdating and Application.Interactive symbols (before new document is opened)
     uno::Reference< XApplicationBase > xApplication( Application(), uno::UNO_QUERY );
     bool bScreenUpdating = !xApplication.is() || xApplication->getScreenUpdating();
-    bool bInteractive = !xApplication.is() || xApplication->getInteractive();
+    bool bInteractive = true;
+
+    try
+    {
+        bInteractive = !xApplication.is() || xApplication->getInteractive();
+    }
+    catch( const uno::Exception& )
+    {
+    }
 
     uno::Reference< frame::XDesktop2 > xLoader = frame::Desktop::create(mxContext);
     OUString sURL;
@@ -255,7 +263,15 @@ uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::A
     // #163808# determine state of Application.ScreenUpdating and Application.Interactive symbols (before new document is opened)
     uno::Reference< XApplicationBase > xApplication( Application(), uno::UNO_QUERY );
     bool bScreenUpdating = !xApplication.is() || xApplication->getScreenUpdating();
-    bool bInteractive = !xApplication.is() || xApplication->getInteractive();
+    bool bInteractive = true;
+
+    try
+    {
+        bInteractive = !xApplication.is() || xApplication->getInteractive();
+    }
+    catch( const uno::Exception& )
+    {
+    }
 
     // we need to detect if this is a URL, if not then assume it's a file path
         OUString aURL;
