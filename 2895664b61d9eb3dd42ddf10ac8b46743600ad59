@@ -16,6 +16,24 @@
       "revId": "2895664b61d9eb3dd42ddf10ac8b46743600ad59",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_a6fd883b",
+        "filename": "external/ct2n/ConvertTextToNumber-1.5.0-add-namespace-prefix.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2019-08-14T16:11:46Z",
+      "side": 1,
+      "message": "you\u0027re right. it\u0027s my fault.",
+      "parentUuid": "bf659307_26ead874",
+      "revId": "2895664b61d9eb3dd42ddf10ac8b46743600ad59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
