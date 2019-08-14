@@ -59,6 +59,12 @@
 #include <vcl/svapp.hxx>
 #include <unotools/configitem.hxx>
 
+#ifdef _WIN32
+#include <o3tl/char16_t2wchar_t.hxx>
+#include <prewin.h>
+#include <Shlobj.h>
+#endif
+
 using namespace comphelper;
 using namespace css::security;
 using namespace css::uno;
@@ -457,15 +463,28 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
                                      OUString("GNU\\GnuPG\\bin\\kleopatra.exe"),
                                      OUString("GNU\\GnuPG\\bin\\launch-gpa.exe"),
                                      OUString("GNU\\GnuPG\\bin\\gpa.exe") };
-    const char* const cPath = "C:\\Program Files (x86)";
+    static const OUString aPath = [] {
+        OUString sRet;
+        PWSTR sPath = nullptr;
+        HRESULT hr
+            = SHGetKnownFolderPath(FOLDERID_ProgramFilesX86, KF_FLAG_DEFAULT, nullptr, &sPath);
+        if (SUCCEEDED(hr))
+        {
+            sRet = o3tl::toU(sPath);
+            CoTaskMemFree(sPath);
+        }
+        return sRet;
+    }();
+    if (aPath.isEmpty())
+        return;
 #else
     const OUString aGUIServers[] = { OUString("kleopatra"), OUString("seahorse"),  OUString("gpa"), OUString("kgpg") };
     const char* cPath = getenv("PATH");
     if (!cPath)
         return;
+    OUString aPath(cPath, strlen(cPath), osl_getThreadTextEncoding());
 #endif
 
-    OUString aPath(cPath, strlen(cPath), osl_getThreadTextEncoding());
     OUString sFoundGUIServer, sExecutable;
 
     for ( auto const &rServer : aGUIServers )
