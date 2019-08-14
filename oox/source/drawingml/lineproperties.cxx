@@ -67,7 +67,7 @@ void lclConvertPresetDash(LineDash& orLineDash, sal_Int32 nPresetDash, sal_Int32
 
         case XML_lgDash:        lclSetDashData( orLineDash, 0, 0, 1, 8, 3 );    break;
         case XML_lgDashDot:     lclSetDashData( orLineDash, 1, 1, 1, 8, 3 );    break;
-        case XML_lgDashDotDot:  lclSetDashData( orLineDash, 2, 1, 1, 8, 3 );    break;
+        case XML_lgDashDotDot:  lclSetDashData( orLineDash, 1, 8, 2, 1, 3 );    break;
 
         case XML_sysDot:        lclSetDashData( orLineDash, 1, 1, 0, 0, 1 );    break;
         case XML_sysDash:       lclSetDashData( orLineDash, 0, 0, 1, 3, 1 );    break;
