@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_26ead874",
+        "filename": "external/ct2n/ConvertTextToNumber-1.5.0-add-namespace-prefix.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-08-14T16:09:15Z",
+      "side": 1,
+      "message": "how does this make any difference, this defines the default namespace and there is no use of the default namespace here?\n\nprobably you want \"xmlns:manifest\u003d...\"",
+      "revId": "2895664b61d9eb3dd42ddf10ac8b46743600ad59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
