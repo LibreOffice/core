@@ -20,6 +20,8 @@
 #include <config_features.h>
 
 #include <math.h>
+
+#include <o3tl/float_int_conversion.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <sal/log.hxx>
@@ -1035,7 +1037,8 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                             }
                             // second overflow check: see if unscaled product overflows - if so use doubles
                             dTest = static_cast<double>(aL.nInt64) * static_cast<double>(aR.nInt64);
-                            if( dTest < SAL_MIN_INT64 || SAL_MAX_INT64 < dTest)
+                            if( !(o3tl::convertsToAtLeast(dTest, SAL_MIN_INT64)
+                                  && o3tl::convertsToAtMost(dTest, SAL_MAX_INT64)))
                             {
                                 aL.nInt64 = static_cast<sal_Int64>( dTest / double(CURRENCY_FACTOR) );
                                 break;
@@ -1062,7 +1065,8 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                             }
                             // second overflow check: see if scaled dividend overflows - if so use doubles
                             dTest = static_cast<double>(aL.nInt64) * double(CURRENCY_FACTOR);
-                            if( dTest < SAL_MIN_INT64 || SAL_MAX_INT64 < dTest)
+                            if( !(o3tl::convertsToAtLeast(dTest, SAL_MIN_INT64)
+                                  && o3tl::convertsToAtMost(dTest, SAL_MAX_INT64)))
                             {
                                 aL.nInt64 = static_cast<sal_Int64>(dTest / static_cast<double>(aR.nInt64));
                                 break;
