@@ -7206,6 +7206,25 @@ SfxVoidItem RulerChangeState SID_RULER_CHANGE_STATE
     GroupId = ;
 ]
 
+SfxVoidItem TableChangeCurrentBorderPosition SID_TABLE_CHANGE_CURRENT_BORDER_POSITION
+    (SfxStringItem BorderType SID_TABLE_BORDER_TYPE,
+     SfxUInt16Item Index SID_TABLE_BORDER_INDEX,
+     SfxInt32Item NewPosition SID_TABLE_BORDER_NEW_POSITION)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = ;
+]
 
 SfxVoidItem SbaExecuteSql SID_FM_EXECUTE
 ()
