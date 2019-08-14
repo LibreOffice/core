@@ -22,6 +22,30 @@
       "revId": "00c535c224c3cd8a34bf7fd438ad73049a6de3eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_86d5e445",
+        "filename": "svtools/source/dialogs/addresstemplate.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-08-14T13:03:38Z",
+      "side": 1,
+      "message": "no, because that returns an x-value (i.e. a temporary), and it\u0027s not possible to cast those to const",
+      "parentUuid": "bf659307_66e9b018",
+      "range": {
+        "startLine": 705,
+        "startChar": 51,
+        "endLine": 705,
+        "endChar": 88
+      },
+      "revId": "00c535c224c3cd8a34bf7fd438ad73049a6de3eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
