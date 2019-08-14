@@ -454,15 +454,16 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
     // FIXME: call GpgME::dirInfo("bindir") somewhere in
     // SecurityEnvironmentGpg or whatnot
     // FIXME: perhaps poke GpgME for uiserver, and hope it returns something useful?
-    const OUString aGUIServers[] = { OUString("Gpg4win\\kleopatra.exe"),
-                                     OUString("Gpg4win\\bin\\kleopatra.exe"),
-                                     OUString("GNU\\GnuPG\\kleopatra.exe"),
-                                     OUString("GNU\\GnuPG\\launch-gpa.exe"),
-                                     OUString("GNU\\GnuPG\\gpa.exe"),
-                                     OUString("GnuPG\\bin\\gpa.exe"),
-                                     OUString("GNU\\GnuPG\\bin\\kleopatra.exe"),
-                                     OUString("GNU\\GnuPG\\bin\\launch-gpa.exe"),
-                                     OUString("GNU\\GnuPG\\bin\\gpa.exe") };
+    static const OUStringLiteral aGUIServers[] = { "Gpg4win\\kleopatra.exe",
+                                                   "Gpg4win\\bin\\kleopatra.exe",
+                                                   "GNU\\GnuPG\\kleopatra.exe",
+                                                   "GNU\\GnuPG\\launch-gpa.exe",
+                                                   "GNU\\GnuPG\\gpa.exe",
+                                                   "GnuPG\\bin\\gpa.exe",
+                                                   "GNU\\GnuPG\\bin\\kleopatra.exe",
+                                                   "GNU\\GnuPG\\bin\\launch-gpa.exe",
+                                                   "GNU\\GnuPG\\bin\\gpa.exe",
+                                                 };
     static const OUString aPath = [] {
         OUString sRet;
         PWSTR sPath = nullptr;
@@ -478,7 +479,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
     if (aPath.isEmpty())
         return;
 #else
-    const OUString aGUIServers[] = { OUString("kleopatra"), OUString("seahorse"),  OUString("gpa"), OUString("kgpg") };
+    static const OUStringLiteral aGUIServers[] = { "kleopatra", "seahorse", "gpa", "kgpg" };
     const char* cPath = getenv("PATH");
     if (!cPath)
         return;
