@@ -674,6 +674,11 @@ typedef enum
      * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
      */
     LOK_CALLBACK_CELL_AUTO_FILL_AREA = 43,
+
+    /**
+     *
+     */
+    LOK_CALLBACK_TABLE_SELECTED = 44,
 }
 LibreOfficeKitCallbackType;
 
