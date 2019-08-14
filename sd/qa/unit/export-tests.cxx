@@ -1047,7 +1047,7 @@ void SdExportTest::testBulletsAsImage()
         awt::Size aSize;
         sal_Int16 nNumberingType = -1;
 
-        for (beans::PropertyValue const & rProperty : aProperties)
+        for (beans::PropertyValue const & rProperty : std::as_const(aProperties))
         {
             if (rProperty.Name == "NumberingType")
             {

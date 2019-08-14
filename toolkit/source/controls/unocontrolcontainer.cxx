@@ -295,7 +295,7 @@ static void implUpdateVisibility
     const uno::Reference< awt::XControlContainer >& xControlContainer
 )
 {
-    uno::Sequence< uno::Reference< awt::XControl > >
+    const uno::Sequence< uno::Reference< awt::XControl > >
         aCtrls = xControlContainer->getControls();
     bool bCompleteVisible = (nDialogStep == 0);
     for( const uno::Reference< awt::XControl >& xControl : aCtrls )
@@ -406,7 +406,7 @@ void UnoControlContainer::dispose(  )
     maCListeners.disposeAndClear( aDisposeEvent );
 
 
-    uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
+    const uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
 
     for( uno::Reference< awt::XControl > const & control : aCtrls )
     {

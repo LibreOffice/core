@@ -44,7 +44,7 @@ XMLScriptExportHandler::~XMLScriptExportHandler()
 void XMLScriptExportHandler::Export(
     SvXMLExport& rExport,
     const OUString& rEventQName,
-    Sequence<PropertyValue> & rValues,
+    const Sequence<PropertyValue> & rValues,
     bool bUseWhitespace)
 {
 

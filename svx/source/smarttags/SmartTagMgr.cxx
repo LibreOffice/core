@@ -431,7 +431,7 @@ void SmartTagMgr::ReadConfiguration( bool bExcludedTypes, bool bRecognize )
             Sequence< OUString > aValues;
             aAny >>= aValues;
 
-            for ( const auto& rValue : aValues )
+            for ( const auto& rValue : std::as_const(aValues) )
                 maDisabledSmartTagTypes.insert( rValue );
         }
 

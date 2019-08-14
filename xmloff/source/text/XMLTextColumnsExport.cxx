@@ -62,7 +62,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
     Reference < XTextColumns > xColumns;
     rAny >>= xColumns;
 
-    Sequence < TextColumn > aColumns = xColumns->getColumns();
+    const Sequence < TextColumn > aColumns = xColumns->getColumns();
     sal_Int32 nCount = aColumns.getLength();
 
     OUStringBuffer sValue;

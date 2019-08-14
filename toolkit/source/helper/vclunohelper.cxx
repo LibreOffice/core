@@ -133,7 +133,7 @@ vcl::Region VCLUnoHelper::GetRegion( const css::uno::Reference< css::awt::XRegio
         aRegion = pVCLRegion->GetRegion();
     else
     {
-        css::uno::Sequence< css::awt::Rectangle > aRects = rxRegion->getRectangles();
+        const css::uno::Sequence< css::awt::Rectangle > aRects = rxRegion->getRectangles();
         for ( const auto& rRect : aRects )
             aRegion.Union( VCLRectangle( rRect ) );
     }

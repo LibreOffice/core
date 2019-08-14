@@ -250,7 +250,7 @@ namespace svxform
         ListBoxEntrySet aEmpty;
         m_aSelectedEntries.swap( aEmpty );
 
-        for (const css::uno::Sequence<sal_uInt32>& rPaths : m_aControlPaths)
+        for (const css::uno::Sequence<sal_uInt32>& rPaths : std::as_const(m_aControlPaths))
         {
             SvTreeListEntry* pSearch = pRoot;
             for (const sal_uInt32 nThisPath : rPaths)

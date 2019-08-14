@@ -290,7 +290,7 @@ void XMLFilterTestDialog::onExportBrowse()
         Reference< XNameAccess > xTypeDetection( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.TypeDetection", mxContext ), UNO_QUERY );
         if( xFilterContainer.is() && xTypeDetection.is() )
         {
-            Sequence< OUString > aFilterNames( xFilterContainer->getElementNames() );
+            const Sequence< OUString > aFilterNames( xFilterContainer->getElementNames() );
 
             for( OUString const & filterName : aFilterNames )
             {
@@ -306,7 +306,7 @@ void XMLFilterTestDialog::onExportBrowse()
 
                 int nFound = 0;
 
-                for( const PropertyValue& rValue : aValues )
+                for( const PropertyValue& rValue : std::as_const(aValues) )
                 {
                     if ( rValue.Name == "Type" )
                     {

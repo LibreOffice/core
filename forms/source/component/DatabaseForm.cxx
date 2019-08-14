@@ -305,7 +305,7 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
 
             Reference< XPropertySetInfo > xDestPSI( getPropertySetInfo(), UNO_SET_THROW );
 
-            Sequence< Property > aSourceProperties( xSourcePSI->getProperties() );
+            const Sequence< Property > aSourceProperties( xSourcePSI->getProperties() );
             for ( auto const & sourceProperty : aSourceProperties )
             {
                 if ( xDestPSI->hasPropertyByName( sourceProperty.Name ) )

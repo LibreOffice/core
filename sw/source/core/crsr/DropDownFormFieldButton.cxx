@@ -55,7 +55,7 @@ SwFieldDialog::SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM, l
         if (pListEntries != pParameters->end())
         {
             pListEntries->second >>= vListEntries;
-            for (OUString const& i : vListEntries)
+            for (OUString const& i : std::as_const(vListEntries))
                 aListBox->InsertEntry(i);
         }
 

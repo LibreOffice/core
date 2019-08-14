@@ -158,7 +158,7 @@ void OMRCListenerMultiplexerHelper::setPeer( const Reference< XWindow >& xPeer )
         if( m_xPeer.is() )
         {
             // get all types from the listener added to the peer
-            Sequence< Type >    aContainedTypes = m_aListenerHolder.getContainedTypes();
+            const Sequence< Type >    aContainedTypes = m_aListenerHolder.getContainedTypes();
             // loop over all listener types and remove the listeners from the peer
             for( const auto& rContainedType : aContainedTypes )
                 impl_unadviseFromPeer( m_xPeer, rContainedType );
@@ -167,7 +167,7 @@ void OMRCListenerMultiplexerHelper::setPeer( const Reference< XWindow >& xPeer )
         if( m_xPeer.is() )
         {
             // get all types from the listener added to the peer
-            Sequence< Type >    aContainedTypes = m_aListenerHolder.getContainedTypes();
+            const Sequence< Type >    aContainedTypes = m_aListenerHolder.getContainedTypes();
             // loop over all listener types and add the listeners to the peer
             for( const auto& rContainedType : aContainedTypes )
                 impl_adviseToPeer( m_xPeer, rContainedType );

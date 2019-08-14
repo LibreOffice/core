@@ -208,7 +208,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     m_xMain->set_label(rText.replaceAll("%DOCNAME", sDocTitle));
 
     // loading file formats
-    Sequence< Sequence< PropertyValue > > aList = m_aConfigItem.GetList();
+    const Sequence< Sequence< PropertyValue > > aList = m_aConfigItem.GetList();
 
     SvtCompatibilityEntry aEntry;
     aEntry.setValue<bool>( SvtCompatibilityEntry::Index::ExpandWordSpace, false );

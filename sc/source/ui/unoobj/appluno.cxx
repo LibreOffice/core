@@ -349,7 +349,7 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
             //  ScGlobal::SetUseTabCol does not do much else
 
             pUserList->clear();
-            for (const OUString& aEntry : aSeq)
+            for (const OUString& aEntry : std::as_const(aSeq))
             {
                 ScUserListData* pData = new ScUserListData(aEntry);
                 pUserList->push_back(pData);

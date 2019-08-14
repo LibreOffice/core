@@ -627,7 +627,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
                 Reference< XNameAccess > xNamespaceMap( xIfc, UNO_QUERY );
                 if( xNamespaceMap.is() )
                 {
-                    Sequence< OUString > aPrefixes( xNamespaceMap->getElementNames() );
+                    const Sequence< OUString > aPrefixes( xNamespaceMap->getElementNames() );
                     for( OUString const & prefix : aPrefixes )
                     {
                         OUString aURL;
@@ -1530,7 +1530,7 @@ void SvXMLExport::ExportStyles_( bool )
 
                 if( xGradient->hasElements() )
                 {
-                    uno::Sequence< OUString > aNamesSeq ( xGradient->getElementNames() );
+                    const uno::Sequence< OUString > aNamesSeq ( xGradient->getElementNames() );
                     for( const OUString& rStrName : aNamesSeq )
                     {
                         try
@@ -1560,7 +1560,7 @@ void SvXMLExport::ExportStyles_( bool )
 
                 if( xHatch->hasElements() )
                 {
-                    uno::Sequence< OUString > aNamesSeq ( xHatch->getElementNames() );
+                    const uno::Sequence< OUString > aNamesSeq ( xHatch->getElementNames() );
                     for( const OUString& rStrName : aNamesSeq )
                     {
                         try
@@ -1587,7 +1587,7 @@ void SvXMLExport::ExportStyles_( bool )
             {
                 if( xBitmap->hasElements() )
                 {
-                    uno::Sequence< OUString > aNamesSeq ( xBitmap->getElementNames() );
+                    const uno::Sequence< OUString > aNamesSeq ( xBitmap->getElementNames() );
                     for( const OUString& rStrName : aNamesSeq )
                     {
                         try
@@ -1617,7 +1617,7 @@ void SvXMLExport::ExportStyles_( bool )
 
                 if( xTransGradient->hasElements() )
                 {
-                    uno::Sequence< OUString > aNamesSeq ( xTransGradient->getElementNames() );
+                    const uno::Sequence< OUString > aNamesSeq ( xTransGradient->getElementNames() );
                     for( const OUString& rStrName : aNamesSeq )
                     {
                         try
@@ -1647,7 +1647,7 @@ void SvXMLExport::ExportStyles_( bool )
 
                 if( xMarker->hasElements() )
                 {
-                    uno::Sequence< OUString > aNamesSeq ( xMarker->getElementNames() );
+                    const uno::Sequence< OUString > aNamesSeq ( xMarker->getElementNames() );
                     for( const OUString& rStrName : aNamesSeq )
                     {
                         try
@@ -1677,7 +1677,7 @@ void SvXMLExport::ExportStyles_( bool )
 
                 if( xDashes->hasElements() )
                 {
-                    uno::Sequence< OUString > aNamesSeq ( xDashes->getElementNames() );
+                    const uno::Sequence< OUString > aNamesSeq ( xDashes->getElementNames() );
                     for( const OUString& rStrName : aNamesSeq )
                     {
                         try

@@ -835,7 +835,7 @@ bool PPTWriter::ImplCreateDocument()
                     css::uno::Reference< css::container::XNameContainer > aXCont( aXCPSup->getCustomPresentations() );
                     if ( aXCont.is() )
                     {
-                        css::uno::Sequence< OUString> aNameSeq( aXCont->getElementNames() );
+                        const css::uno::Sequence< OUString> aNameSeq( aXCont->getElementNames() );
                         if ( aNameSeq.hasElements() )
                         {
                             mpPptEscherEx->OpenContainer( EPP_NamedShows );

@@ -120,7 +120,7 @@ void DictionaryList::refillFromDictionary( sal_Int32 nTextConversionOptions )
     if(!m_xDictionary.is())
         return;
 
-    Sequence< OUString > aLeftList(  m_xDictionary->getConversionEntries( linguistic2::ConversionDirection_FROM_LEFT ) );
+    const Sequence< OUString > aLeftList(  m_xDictionary->getConversionEntries( linguistic2::ConversionDirection_FROM_LEFT ) );
 
     Reference< linguistic2::XConversionPropertyType > xPropertyType( m_xDictionary, uno::UNO_QUERY );
 

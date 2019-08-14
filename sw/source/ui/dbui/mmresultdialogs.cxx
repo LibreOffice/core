@@ -386,7 +386,7 @@ void SwMMResultEmailDialog::FillInEmailSettings()
     uno::Sequence< OUString > aFields;
     if (xColAccess.is())
         aFields = xColAccess->getElementNames();
-    for (const OUString& rField : aFields)
+    for (const OUString& rField : std::as_const(aFields))
         m_xMailToLB->append_text(rField);
 
     m_xMailToLB->set_active(0);

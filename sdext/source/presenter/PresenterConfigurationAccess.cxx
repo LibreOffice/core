@@ -181,7 +181,7 @@ void PresenterConfigurationAccess::ForAll (
         return;
 
     ::std::vector<Any> aValues(rArguments.size());
-    Sequence<OUString> aKeys (rxContainer->getElementNames());
+    const Sequence<OUString> aKeys (rxContainer->getElementNames());
     for (const OUString& rsKey : aKeys)
     {
         bool bHasAllValues (true);
@@ -213,7 +213,7 @@ void PresenterConfigurationAccess::ForAll (
 {
     if (rxContainer.is())
     {
-        Sequence<OUString> aKeys (rxContainer->getElementNames());
+        const Sequence<OUString> aKeys (rxContainer->getElementNames());
         for (const OUString& rsKey : aKeys)
         {
             Reference<beans::XPropertySet> xSet (rxContainer->getByName(rsKey), UNO_QUERY);
@@ -229,7 +229,7 @@ Any PresenterConfigurationAccess::Find (
 {
     if (rxContainer.is())
     {
-        Sequence<OUString> aKeys (rxContainer->getElementNames());
+        const Sequence<OUString> aKeys (rxContainer->getElementNames());
         for (const auto& rKey : aKeys)
         {
             Reference<beans::XPropertySet> xProperties (

@@ -402,7 +402,7 @@ namespace
         for (const ScriptEventDescriptor& rCurrent : rTransferIfAvailable)
         {
             // search the model/control idl classes for the event described by pCurrent
-            for (Sequence< Type>* pCurrentArray : { &aModelListeners, &aControlListeners })
+            for (const Sequence< Type>* pCurrentArray : { &aModelListeners, &aControlListeners })
             {
                 for (const Type& rCurrentListener : *pCurrentArray)
                 {
@@ -2823,7 +2823,7 @@ Reference< XControl> FmXFormShell::impl_getControl_Lock(const Reference<XControl
     {
         Reference< XControlContainer> xControlContainer(getControlContainerForView_Lock(), UNO_SET_THROW);
 
-        Sequence< Reference< XControl > > seqControls( xControlContainer->getControls() );
+        const Sequence< Reference< XControl > > seqControls( xControlContainer->getControls() );
         // ... that I can then search
         for (Reference< XControl > const & control : seqControls)
         {
@@ -3342,7 +3342,7 @@ void FmXFormShell::CreateExternalView_Lock()
                 aColumnProps.realloc(nExistentDescs + aProps.getLength());
                 pColumnProps = aColumnProps.getArray() + nExistentDescs;
 
-                for (const Property& rProp : aProps)
+                for (const Property& rProp : std::as_const(aProps))
                 {
                     if (rProp.Name == FM_PROP_LABEL)
                         // already set

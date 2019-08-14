@@ -519,7 +519,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl, weld::Button&, void)
 
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
-        Sequence< OUString > aFilesArr = aDlg.GetSelectedFiles();
+        const Sequence< OUString > aFilesArr = aDlg.GetSelectedFiles();
         if( aFilesArr.hasElements() )
         {
             sUrl = aDlg.GetDisplayDirectory();

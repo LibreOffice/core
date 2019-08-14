@@ -966,7 +966,7 @@ namespace svxform
                     // should only contain hidden controls
 #endif // (OSL_DEBUG_LEVEL > 0)
                 Reference< XPropertySetInfo >  xPropInfo( xCurrent->getPropertySetInfo());
-                Sequence< Property> seqAllCurrentProps = xPropInfo->getProperties();
+                const Sequence< Property> seqAllCurrentProps = xPropInfo->getProperties();
                 for (Property const & currentProp : seqAllCurrentProps)
                 {
                     if (((currentProp.Attributes & PropertyAttribute::READONLY) == 0) && (currentProp.Name != FM_PROP_NAME))

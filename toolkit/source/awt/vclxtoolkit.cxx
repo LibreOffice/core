@@ -1414,7 +1414,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                     css::uno::Sequence< css::beans::NamedValue > aProps;
                                     if( anyHandle >>= aProps )
                                     {
-                                        for( const css::beans::NamedValue& rProp : aProps )
+                                        for( const css::beans::NamedValue& rProp : std::as_const(aProps) )
                                         {
                                             if ( rProp.Name == "WINDOW" )
                                                 rProp.Value >>= nWindowHandle;
@@ -1647,7 +1647,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( con
             css::uno::Sequence< css::beans::NamedValue > aProps;
             if( Parent >>= aProps )
             {
-                for( const css::beans::NamedValue& rProp : aProps )
+                for( const css::beans::NamedValue& rProp : std::as_const(aProps) )
                 {
                     if ( rProp.Name == "WINDOW" )
                         rProp.Value >>= nWindowHandle;

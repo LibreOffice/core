@@ -84,7 +84,7 @@ short SvColorDialog::Execute(weld::Window* pParent)
         if( ret )
         {
             props = xPropertyAccess->getPropertyValues();
-            for( const auto& rProp : props )
+            for( const auto& rProp : std::as_const(props) )
             {
                 if( rProp.Name == sColor )
                 {

@@ -206,7 +206,7 @@ void SwHTMLWriter::SetupFilterOptions(const OUString& rFilterOptions)
         mbEmbedImages = true;
     }
 
-    uno::Sequence<OUString> aOptionSeq = comphelper::string::convertCommaSeparated(rFilterOptions);
+    const uno::Sequence<OUString> aOptionSeq = comphelper::string::convertCommaSeparated(rFilterOptions);
     const OUString aXhtmlNsKey("xhtmlns=");
     for (const auto& rOption : aOptionSeq)
     {

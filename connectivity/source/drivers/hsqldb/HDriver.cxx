@@ -149,7 +149,7 @@ namespace connectivity
                 _rxContext, aConfigPath.makeStringAndClear() ) );
 
             OUStringBuffer aPermittedMethods;
-            Sequence< OUString > aNodeNames( aConfig.getNodeNames() );
+            const Sequence< OUString > aNodeNames( aConfig.getNodeNames() );
             for ( auto const & nodeName : aNodeNames )
             {
                 OUString sPermittedMethod;

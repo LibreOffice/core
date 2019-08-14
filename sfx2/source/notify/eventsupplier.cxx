@@ -165,7 +165,7 @@ void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::Docum
     if ( !aProperties.hasElements() )
         return;
 
-    for ( const auto& rProp : aProperties )
+    for ( const auto& rProp : std::as_const(aProperties) )
     {
         if ( rProp.Name == PROP_EVENT_TYPE )
             rProp.Value >>= aType;
@@ -318,7 +318,7 @@ std::unique_ptr<SvxMacro> SfxEvents_Impl::ConvertToMacro( const uno::Any& rEleme
         if ( !aProperties.hasElements() )
             return pMacro;
 
-        for ( const auto& rProp : aProperties )
+        for ( const auto& rProp : std::as_const(aProperties) )
         {
             if ( rProp.Name == PROP_EVENT_TYPE )
                 rProp.Value >>= aType;

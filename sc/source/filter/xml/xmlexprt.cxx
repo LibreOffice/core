@@ -2104,7 +2104,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
                 else
                     nIndex = pCellStyles->GetIndexOfStyleName(sName, XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX, bIsAutoStyle);
 
-                uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
+                const uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
                 bool bGetMerge(true);
                 for (table::CellRangeAddress const & address : aAddresses)
                 {
@@ -2123,7 +2123,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
             pCellStyles->AddStyleName(sEncodedStyleName, nIndex, false);
             if ( !pOldName )
             {
-                uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
+                const uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
                 bool bGetMerge(true);
                 for (table::CellRangeAddress const & address : aAddresses)
                 {

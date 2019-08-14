@@ -172,7 +172,7 @@ SvtLanguageTableImpl::SvtLanguageTableImpl()
     }
 
     auto xNA = officecfg::VCL::ExtraLanguages::get();
-    uno::Sequence <OUString> rElementNames = xNA->getElementNames();
+    const uno::Sequence <OUString> rElementNames = xNA->getElementNames();
     for (const OUString& rBcp47 : rElementNames)
     {
         OUString aName;

@@ -428,7 +428,7 @@ void SwLabPage::InitDatabaseBox()
     if( GetDBManager() )
     {
         m_xDatabaseLB->clear();
-        css::uno::Sequence<OUString> aDataNames = SwDBManager::GetExistingDatabaseNames();
+        const css::uno::Sequence<OUString> aDataNames = SwDBManager::GetExistingDatabaseNames();
         for (const OUString& rDataName : aDataNames)
             m_xDatabaseLB->append_text(rDataName);
         sal_Int32 nIdx{ 0 };

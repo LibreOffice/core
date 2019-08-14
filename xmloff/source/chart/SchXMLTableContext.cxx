@@ -950,17 +950,17 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
         try
         {
             Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xChartDoc->getFirstDiagram(), uno::UNO_QUERY_THROW );
-            Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
+            const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
             for( const auto& rCooSys : aCooSysSeq )
             {
                 Reference< chart2::XChartTypeContainer > xCooSysContainer( rCooSys, uno::UNO_QUERY_THROW );
-                Sequence< Reference< chart2::XChartType > > aChartTypeSeq( xCooSysContainer->getChartTypes());
+                const Sequence< Reference< chart2::XChartType > > aChartTypeSeq( xCooSysContainer->getChartTypes());
                 for( const auto& rChartType : aChartTypeSeq )
                 {
                     Reference< chart2::XDataSeriesContainer > xSeriesContainer( rChartType, uno::UNO_QUERY );
                     if(!xSeriesContainer.is())
                         continue;
-                    Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesContainer->getDataSeries() );
+                    const Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesContainer->getDataSeries() );
                     std::vector< Reference< chart2::XDataSeries > > aRemainingSeries;
 
                     for( const auto& rSeries : aSeriesSeq )
@@ -970,7 +970,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                         {
                             bool bHasUnhiddenColumns = false;
                             OUString aRange;
-                            uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences() );
+                            const uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences() );
                             for( const auto& xLabeledSequence : aSequences )
                             {
                                 if(!xLabeledSequence.is())
@@ -1011,7 +1011,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                             //first detect which columns are really used
                             std::map< sal_Int32, bool > aUsageMap;
                             OUString aRange;
-                            Sequence< Reference< chart2::data::XLabeledDataSequence > > aUsedSequences( xDataSource->getDataSequences() );
+                            const Sequence< Reference< chart2::data::XLabeledDataSequence > > aUsedSequences( xDataSource->getDataSequences() );
                             for( const auto& xLabeledSequence : aUsedSequences )
                             {
                                 if(!xLabeledSequence.is())

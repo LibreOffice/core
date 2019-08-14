@@ -1985,7 +1985,7 @@ void FormController::setContainer(const Reference< XControlContainer > & xContai
         m_aFilterComponents.clear();
 
         // collecting the controls
-        for ( const Reference< XControl >& rControl : m_aControls )
+        for ( const Reference< XControl >& rControl : std::as_const(m_aControls) )
             implControlRemoved( rControl, true );
 
         // make database-specific things
@@ -2001,7 +2001,7 @@ void FormController::setContainer(const Reference< XControlContainer > & xContai
     // What controls belong to the container?
     if (xContainer.is() && xTabModel.is())
     {
-        Sequence< Reference< XControlModel > > aModels = xTabModel->getControlModels();
+        const Sequence< Reference< XControlModel > > aModels = xTabModel->getControlModels();
         Sequence< Reference< XControl > > aAllControls = xContainer->getControls();
 
         sal_Int32 nCount = aModels.getLength();
@@ -2066,7 +2066,7 @@ Sequence< Reference< XControl > > FormController::getControls()
         if (!xModel.is())
             return m_aControls;
 
-        Sequence< Reference< XControlModel > > aControlModels = xModel->getControlModels();
+        const Sequence< Reference< XControlModel > > aControlModels = xModel->getControlModels();
         sal_Int32 nModels = aControlModels.getLength();
 
         Sequence< Reference< XControl > > aNewControls(nModels);
@@ -2175,7 +2175,7 @@ void FormController::setLocks()
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     // lock/unlock all controls connected to a data source
-    for ( const Reference< XControl >& rControl : m_aControls )
+    for ( const Reference< XControl >& rControl : std::as_const(m_aControls) )
         setControlLock( rControl );
 }
 
@@ -2313,7 +2313,7 @@ void FormController::startListening()
     m_bModified  = false;
 
     // now register at bound fields
-    for ( const Reference< XControl >& rControl : m_aControls )
+    for ( const Reference< XControl >& rControl : std::as_const(m_aControls) )
         startControlModifyListening( rControl );
 }
 
@@ -2324,7 +2324,7 @@ void FormController::stopListening()
     m_bModified  = false;
 
     // now register at bound fields
-    for ( const Reference< XControl >& rControl : m_aControls )
+    for ( const Reference< XControl >& rControl : std::as_const(m_aControls) )
         stopControlModifyListening( rControl );
 }
 
@@ -2635,7 +2635,7 @@ void FormController::unload()
 
 void FormController::removeBoundFieldListener()
 {
-    for ( const Reference< XControl >& rControl : m_aControls )
+    for ( const Reference< XControl >& rControl : std::as_const(m_aControls) )
     {
         Reference< XPropertySet > xProp( rControl, UNO_QUERY );
         if ( xProp.is() )
@@ -3005,7 +3005,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
 
     if (m_xComposer.is())
     {
-        Sequence< Sequence < PropertyValue > > aFilterRows = m_xComposer->getStructuredFilter();
+        const Sequence< Sequence < PropertyValue > > aFilterRows = m_xComposer->getStructuredFilter();
 
         // ok, we receive the list of filters as sequence of fieldnames, value
         // now we have to transform the fieldname into UI names, that could be a label of the field or
@@ -3526,7 +3526,7 @@ Reference< XControl > FormController::locateControl( const Reference< XControlMo
 {
     try
     {
-        Sequence< Reference< XControl > > aControls( getControls() );
+        const Sequence< Reference< XControl > > aControls( getControls() );
 
         for ( auto const & control : aControls )
         {

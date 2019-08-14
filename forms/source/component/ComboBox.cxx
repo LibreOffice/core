@@ -415,7 +415,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<css::io::XObjectInputStream>&
         m_aListSource.clear();
         css::uno::Sequence<OUString> aListSource;
         _rxInStream >> aListSource;
-        for (const OUString& rToken : aListSource)
+        for (const OUString& rToken : std::as_const(aListSource))
             m_aListSource += rToken;
     }
 
@@ -763,7 +763,7 @@ bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
         if ( getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aStringItemList )
         {
             bool bFound = false;
-            for (const OUString& rStringItem : aStringItemList)
+            for (const OUString& rStringItem : std::as_const(aStringItemList))
             {
                 if ( (bFound = rStringItem == sNewValue) )
                     break;

@@ -134,7 +134,7 @@ void XMLImageMapExport::ExportMapEntry(
     enum XMLTokenEnum eType = XML_TOKEN_INVALID;
 
     // distinguish map entries by their service name
-    Sequence<OUString> sServiceNames =
+    const Sequence<OUString> sServiceNames =
         xServiceInfo->getSupportedServiceNames();
     for( const OUString& rName : sServiceNames )
     {

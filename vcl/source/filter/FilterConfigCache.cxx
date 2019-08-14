@@ -158,7 +158,7 @@ void FilterConfigCache::ImplInit()
 
     if ( xTypeAccess.is() && xFilterAccess.is() )
     {
-        Sequence< OUString > lAllFilter = xFilterAccess->getElementNames();
+        const Sequence< OUString > lAllFilter = xFilterAccess->getElementNames();
 
         for ( const OUString& sInternalFilterName : lAllFilter )
         {

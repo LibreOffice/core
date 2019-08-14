@@ -68,7 +68,7 @@ bool containsProperty(uno::Sequence<beans::Property> const& rProperties, OUStrin
 void removeAllProperties(uno::Reference<beans::XPropertyContainer> const& rxPropertyContainer)
 {
     uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
-    uno::Sequence<beans::Property> aProperties
+    const uno::Sequence<beans::Property> aProperties
         = xPropertySet->getPropertySetInfo()->getProperties();
 
     for (const beans::Property& rProperty : aProperties)

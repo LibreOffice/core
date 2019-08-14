@@ -601,7 +601,7 @@ void SfxShell::VerbExec(SfxRequest& rReq)
         return;
 
     bool bReadOnly = pViewShell->GetObjectShell()->IsReadOnly();
-    css::uno::Sequence < css::embed::VerbDescriptor > aList = pViewShell->GetVerbs();
+    const css::uno::Sequence < css::embed::VerbDescriptor > aList = pViewShell->GetVerbs();
     sal_Int32 nVerb = 0;
     for (const auto& rVerb : aList)
     {

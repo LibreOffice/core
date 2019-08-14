@@ -151,7 +151,7 @@ Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 nCurrentPage,
     sal_Int32 nPages = mxRenderable->getRendererCount( selection, renderProperties );
     if (nPages >= nCurrentPage)
     {
-        Sequence< beans::PropertyValue > aResult = mxRenderable->getRenderer(nCurrentPage - 1, selection, renderProperties );
+        const Sequence< beans::PropertyValue > aResult = mxRenderable->getRenderer(nCurrentPage - 1, selection, renderProperties );
         for( const auto& rProperty : aResult )
         {
             if ( rProperty.Name == "PageSize" )

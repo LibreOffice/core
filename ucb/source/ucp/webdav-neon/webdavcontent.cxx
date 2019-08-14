@@ -2958,7 +2958,7 @@ Content::ResourceType Content::resourceTypeForLocks(
             if ( m_xCachedProps->getValue( DAVProperties::SUPPORTEDLOCK )
                  >>= aSupportedLocks )            //get the cached value for supportedlock
             {
-                for ( const auto& rSupportedLock : aSupportedLocks )
+                for ( const auto& rSupportedLock : std::as_const(aSupportedLocks) )
                 {
                     if ( rSupportedLock.Scope
                          == ucb::LockScope_EXCLUSIVE &&

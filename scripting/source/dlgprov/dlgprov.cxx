@@ -324,7 +324,7 @@ namespace dlgprov
             }
             else
             {
-                Sequence< OUString > aOpenDocsTdocURLs( MiscUtils::allOpenTDocUrls( m_xContext ) );
+                const Sequence< OUString > aOpenDocsTdocURLs( MiscUtils::allOpenTDocUrls( m_xContext ) );
                 for ( auto const & tdocURL : aOpenDocsTdocURLs )
                 {
                     Reference< frame::XModel > xModel( MiscUtils::tDocUrlToModel( tdocURL ) );

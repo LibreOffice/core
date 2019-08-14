@@ -164,7 +164,7 @@ namespace calc
         checkInitialized( );
 
         // look up in our sequence
-        Sequence< Type > aSupportedTypes( getSupportedValueTypes() );
+        const Sequence< Type > aSupportedTypes( getSupportedValueTypes() );
         for ( auto const & i : aSupportedTypes )
             if ( aType == i )
                 return true;

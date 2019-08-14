@@ -90,7 +90,7 @@ void XMLStyleExport::exportStyleContent( const Reference< XStyle >& rStyle )
 
         aProperty >>= aSeq;
 
-        for (beans::NamedValue const& rNamedCond : aSeq)
+        for (beans::NamedValue const& rNamedCond : std::as_const(aSeq))
         {
             OUString aStyleName;
 

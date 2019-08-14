@@ -242,7 +242,7 @@ void OOXMLSecExporter::Impl::writeRelationshipTransform(const OUString& rURI)
         m_xDocumentHandler->startElement("Transform", uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
     }
 
-    uno::Sequence< uno::Sequence<beans::StringPair> > aRelationsInfo = comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(xRelStream, rURI, m_xComponentContext);
+    const uno::Sequence< uno::Sequence<beans::StringPair> > aRelationsInfo = comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(xRelStream, rURI, m_xComponentContext);
     for (const uno::Sequence<beans::StringPair>& rPairs : aRelationsInfo)
     {
         OUString aId;

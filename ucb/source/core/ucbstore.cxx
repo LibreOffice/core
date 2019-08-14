@@ -701,7 +701,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                     }
 
                     // Obtain property names.
-                    Sequence< OUString > aElems
+                    const Sequence< OUString > aElems
                                     = xOldNameAccess->getElementNames();
                     if ( aElems.hasElements() )
                     {

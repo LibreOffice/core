@@ -102,7 +102,7 @@ static bool lcl_getWindowState( const uno::Reference< container::XNameAccess >& 
         a = xWindowStateMgr->getByName( rResourceURL );
         if ( a >>= aWindowState )
         {
-            for ( const auto& rProp : aWindowState )
+            for ( const auto& rProp : std::as_const(aWindowState) )
             {
                 if ( rProp.Name == "UIName" )
                 {

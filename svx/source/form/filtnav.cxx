@@ -556,7 +556,7 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
             // insert the existing filters for the form
             OUString aTitle(SvxResId(RID_STR_FILTER_FILTER_FOR));
 
-            Sequence< Sequence< OUString > > aExpressions = xFilterController->getPredicateExpressions();
+            const Sequence< Sequence< OUString > > aExpressions = xFilterController->getPredicateExpressions();
             for ( auto const & conjunctionTerm : aExpressions )
             {
                 // we always display one row, even if there's no term to be displayed

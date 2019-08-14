@@ -439,7 +439,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                     uno::Sequence<beans::PropertyValue> aLocalEntries;
                     if ( aCompProperties[0] >>= aLocalEntries )
                     {
-                        for ( const beans::PropertyValue& rConfig : aLocalEntries )
+                        for ( const beans::PropertyValue& rConfig : std::as_const(aLocalEntries) )
                         {
                             // PropertyValue name is the locale ("convert" from
                             // string to canonicalize)

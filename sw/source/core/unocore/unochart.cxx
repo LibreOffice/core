@@ -667,7 +667,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     //!! by proceeding this way we automatically get rid of
     //!! multiple listed or overlapping cell ranges which should
     //!! just be ignored silently
-    for (const OUString& rSubRange : aSubRanges)
+    for (const OUString& rSubRange : std::as_const(aSubRanges))
     {
         OUString aTableName, aStartCell, aEndCell;
         bool bOk2 = GetTableAndCellsFromRangeRep(
@@ -1233,7 +1233,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     GetSubranges( aCellRanges, aSortedRanges, false /*sub ranges should already be normalized*/ );
     SortSubranges( aSortedRanges, (nDtaSrcIsColumns == 1) );
     OUString aSortedCellRanges;
-    for (const OUString& rSortedRange : aSortedRanges)
+    for (const OUString& rSortedRange : std::as_const(aSortedRanges))
     {
         if (!aSortedCellRanges.isEmpty())
             aSortedCellRanges += ";";

@@ -96,7 +96,7 @@ bool StdTabController::ImplCreateComponentSequence(
     }
 
     bool bOK = true;
-    for ( const Reference< XControl >& xCtrl : rControls )
+    for ( const Reference< XControl >& xCtrl : std::as_const(rControls) )
     {
         // Get the matching control for this model
         if ( !xCtrl.is() )
@@ -259,7 +259,7 @@ void StdTabController::autoTabOrder(  )
     // insert sort algorithm
     std::vector< ComponentEntry > aCtrls;
     aCtrls.reserve(nCtrls);
-    for ( const Reference< XWindow >& rComponent : aCompSeq )
+    for ( const Reference< XWindow >& rComponent : std::as_const(aCompSeq) )
     {
         XWindow* pC = rComponent.get();
         ComponentEntry newEntry;

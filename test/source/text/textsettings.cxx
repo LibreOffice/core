@@ -31,7 +31,7 @@ bool isPropertyReadOnly(css::uno::Reference<css::beans::XPropertySet> const& rxP
 {
     css::uno::Reference<css::beans::XPropertySetInfo> xPropertySetInfo(
         rxPropertySet->getPropertySetInfo());
-    css::uno::Sequence<css::beans::Property> xProperties = xPropertySetInfo->getProperties();
+    const css::uno::Sequence<css::beans::Property> xProperties = xPropertySetInfo->getProperties();
 
     for (auto const& rProperty : xProperties)
     {

@@ -803,11 +803,11 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
                 }
                 else
                 {
-                    for (auto const& it : m_aFieldNames)
+                    for (auto const& it : std::as_const(m_aFieldNames))
                     {
                         xListControl->appendListEntry(it);
                     }
-                    for (auto const& it : m_aParamNames)
+                    for (auto const& it : std::as_const(m_aParamNames))
                     {
                         xListControl->appendListEntry(it);
                     }

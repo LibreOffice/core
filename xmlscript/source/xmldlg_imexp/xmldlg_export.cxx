@@ -1151,7 +1151,7 @@ void ElementDescriptor::readEvents()
         Reference< container::XNameContainer > xEvents( xSupplier->getEvents() );
         if (xEvents.is())
         {
-            Sequence< OUString > aNames( xEvents->getElementNames() );
+            const Sequence< OUString > aNames( xEvents->getElementNames() );
             for ( const auto& rName : aNames )
             {
                 script::ScriptEventDescriptor descr;

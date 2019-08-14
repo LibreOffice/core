@@ -400,7 +400,7 @@ void Test::createInstance(
             + msg(name) + "\" reports wrong implementation name")
          .getStr()),
         expImpl, info->getImplementationName());
-    css::uno::Sequence<OUString> servs(info->getSupportedServiceNames());
+    const css::uno::Sequence<OUString> servs(info->getSupportedServiceNames());
     CPPUNIT_ASSERT_MESSAGE(
         (OString(
             "instantiating \"" + msg(implementationName) + "\" via \""
