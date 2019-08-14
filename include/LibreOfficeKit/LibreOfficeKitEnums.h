@@ -674,6 +674,15 @@ typedef enum
      * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
      */
     LOK_CALLBACK_CELL_AUTO_FILL_AREA = 43,
+
+    /**
+     * When the cursor is in a table or a table is selected in the
+     * document, this sends the table's column and row border positions
+     * to the client. If the payload is empty (empty JSON object), then
+     * no table is currently selected or the cursor is not inside a table
+     * cell.
+     */
+    LOK_CALLBACK_TABLE_SELECTED = 44,
 }
 LibreOfficeKitCallbackType;
 
