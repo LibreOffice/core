@@ -32,6 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <xcreator.hxx>
 #include <dummyobject.hxx>
@@ -208,6 +209,42 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     return xResult;
 }
 
+/**
+ * Decides if rFilter should be used to load data into a doc model or real OLE embedding should
+ * happen. Empty return value means the later.
+ */
+static OUString HandleFilter(const uno::Reference<uno::XComponentContext>& xComponentContext,
+                             const OUString& rFilter)
+{
+    OUString aRet = rFilter;
+
+    if (!officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter::get(
+            xComponentContext))
+    {
+        if (rFilter == "MS Word 97" || rFilter == "MS Word 2007 XML")
+        {
+            aRet.clear();
+        }
+    }
+
+    if (!officecfg::Office::Common::Filter::Microsoft::Import::ExcelToCalc::get(xComponentContext))
+    {
+        if (rFilter == "MS Excel 97" || rFilter == "Calc MS Excel 2007 XML")
+        {
+            aRet.clear();
+        }
+    }
+    if (!officecfg::Office::Common::Filter::Microsoft::Import::PowerPointToImpress::get(
+            xComponentContext))
+    {
+        if (rFilter == "MS PowerPoint 97" || rFilter == "Impress MS PowerPoint 2007 XML")
+        {
+            aRet.clear();
+        }
+    }
+
+    return aRet;
+}
 
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceInitFromMediaDescriptor(
         const uno::Reference< embed::XStorage >& xStorage,
@@ -232,6 +269,8 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 
     // check if there is FilterName
     OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, false );
+
+    aFilterName = HandleFilter(m_xContext, aFilterName);
 
     if ( !aFilterName.isEmpty() )
     {
