@@ -418,7 +418,7 @@ namespace
                 return;
             }
 
-            Sequence< Property > aSourceProps( xSourceInfo->getProperties() );
+            const Sequence< Property > aSourceProps( xSourceInfo->getProperties() );
             for ( auto const & sourceprop : aSourceProps )
             {
                 if ( !xDestInfo->hasPropertyByName( sourceprop.Name ) )

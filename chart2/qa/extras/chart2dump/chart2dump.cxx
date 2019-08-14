@@ -224,7 +224,7 @@ protected:
             std::abs(aExpectedTransform.Line3.Column3 - rTransform.Line3.Column3) < fEPS);
     }
 
-    OUString sequenceToOneLineString(uno::Sequence<OUString>& rSeq)
+    OUString sequenceToOneLineString(const uno::Sequence<OUString>& rSeq)
     {
         OUStringBuffer aBufer;
         for (const OUString& seqItem : rSeq)

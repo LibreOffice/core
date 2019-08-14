@@ -758,7 +758,7 @@ std::shared_ptr<PresenterTheme::Theme> ReadContext::ReadTheme (
     if (xThemes.is())
     {
         // Iterate over all themes and search the one with the given name.
-        Sequence<OUString> aKeys (xThemes->getElementNames());
+        const Sequence<OUString> aKeys (xThemes->getElementNames());
         for (const OUString& rsKey : aKeys)
         {
             Reference<container::XHierarchicalNameAccess> xTheme (

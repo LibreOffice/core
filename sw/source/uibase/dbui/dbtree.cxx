@@ -160,7 +160,7 @@ void SwDBTreeList::InitTreeList()
         { return sort.compare(x, y) < 0; });
 
     OUString aImg(RID_BMP_DB);
-    for (const OUString& rDBName : aDBNames)
+    for (const OUString& rDBName : std::as_const(aDBNames))
     {
         Reference<XConnection> xConnection = pImpl->GetConnection(rDBName);
         if (xConnection.is())
@@ -241,7 +241,7 @@ IMPL_LINK(SwDBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, b
                 if(xColsSupplier.is())
                 {
                     Reference <XNameAccess> xCols = xColsSupplier->getColumns();
-                    Sequence< OUString> aColNames = xCols->getElementNames();
+                    const Sequence< OUString> aColNames = xCols->getElementNames();
                     for (const OUString& rColName : aColNames)
                     {
                         m_xTreeView->append(&rParent, rColName);
@@ -266,7 +266,7 @@ IMPL_LINK(SwDBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, b
                     if(xTSupplier.is())
                     {
                         Reference<XNameAccess> xTables = xTSupplier->getTables();
-                        Sequence< OUString> aTableNames = xTables->getElementNames();
+                        const Sequence< OUString> aTableNames = xTables->getElementNames();
                         OUString aImg(RID_BMP_DBTABLE);
                         for (const OUString& rTableName : aTableNames)
                         {
@@ -279,7 +279,7 @@ IMPL_LINK(SwDBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, b
                     if(xQSupplier.is())
                     {
                         Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-                        Sequence< OUString> aQueryNames = xQueries->getElementNames();
+                        const Sequence< OUString> aQueryNames = xQueries->getElementNames();
                         OUString aImg(RID_BMP_DBQUERY);
                         for (const OUString& rQueryName : aQueryNames)
                         {

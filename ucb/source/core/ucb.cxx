@@ -864,7 +864,7 @@ bool UniversalContentBroker::getContentProviderData(
         uno::Reference< container::XNameAccess > xNameAccess(
                                             xInterface, uno::UNO_QUERY_THROW );
 
-        uno::Sequence< OUString > aElems = xNameAccess->getElementNames();
+        const uno::Sequence< OUString > aElems = xNameAccess->getElementNames();
 
         if ( aElems.hasElements() )
         {

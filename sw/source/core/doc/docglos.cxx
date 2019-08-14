@@ -54,7 +54,7 @@ void SwDoc::ReplaceUserDefinedDocumentProperties(
         xDocProps->getUserDefinedProperties());
     uno::Reference<beans::XPropertySet> xTargetUDSet(xTargetUD,
         uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::Property> tgtprops
+    const uno::Sequence<beans::Property> tgtprops
         = xTargetUDSet->getPropertySetInfo()->getProperties();
 
     for (const auto& rTgtProp : tgtprops) {
@@ -67,7 +67,7 @@ void SwDoc::ReplaceUserDefinedDocumentProperties(
 
     uno::Reference<beans::XPropertySetInfo> xSetInfo
         = xSourceUDSet->getPropertySetInfo();
-    uno::Sequence<beans::Property> srcprops = xSetInfo->getProperties();
+    const uno::Sequence<beans::Property> srcprops = xSetInfo->getProperties();
 
     for (const auto& rSrcProp : srcprops) {
         try {

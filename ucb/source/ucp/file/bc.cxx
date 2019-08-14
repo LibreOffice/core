@@ -1243,7 +1243,7 @@ BaseContent::cPCL()
     if (!m_pPropertyListener)
         return nullptr;
 
-    Sequence< OUString > seqNames = m_pPropertyListener->getContainedTypes();
+    const Sequence< OUString > seqNames = m_pPropertyListener->getContainedTypes();
 
     std::unique_ptr<PropertyChangeNotifier> p;
 

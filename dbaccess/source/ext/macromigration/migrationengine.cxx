@@ -966,7 +966,7 @@ namespace dbmm
                 _rContainerLoc.isEmpty() ? OUString() :
                                            OUString( _rContainerLoc +  "/" ) );
 
-            Sequence< OUString > aElementNames( _rxContainer->getElementNames() );
+            const Sequence< OUString > aElementNames( _rxContainer->getElementNames() );
             for ( auto const & elementName : aElementNames )
             {
                 Any aElement( _rxContainer->getByName( elementName ) );
@@ -1431,7 +1431,7 @@ namespace dbmm
                     Reference< XNameAccess > xSourceLib( xSourceLibraries->getByName( *pSourceLibName ), UNO_QUERY_THROW );
                     Reference< XNameContainer > xTargetLib( xTargetLibraries->createLibrary( sNewLibName ), UNO_SET_THROW );
 
-                    Sequence< OUString > aLibElementNames( xSourceLib->getElementNames() );
+                    const Sequence< OUString > aLibElementNames( xSourceLib->getElementNames() );
                     for ( auto const & sourceElementName : aLibElementNames )
                     {
                         Any aElement = xSourceLib->getByName( sourceElementName );
@@ -1627,7 +1627,7 @@ namespace dbmm
                 return;
 
             Reference< XNameReplace > xEvents( xSuppEvents->getEvents(), UNO_SET_THROW );
-            Sequence< OUString > aEventNames = xEvents->getElementNames();
+            const Sequence< OUString > aEventNames = xEvents->getElementNames();
 
             Any aEvent;
             for ( auto const & eventName : aEventNames )
@@ -1658,7 +1658,7 @@ namespace dbmm
     {
         Reference< XScriptEventsSupplier > xEventsSupplier( _rxElement, UNO_QUERY_THROW );
         Reference< XNameReplace > xEvents( xEventsSupplier->getEvents(), UNO_QUERY_THROW );
-        Sequence< OUString > aEventNames( xEvents->getElementNames() );
+        const Sequence< OUString > aEventNames( xEvents->getElementNames() );
 
         ScriptEventDescriptor aScriptEvent;
         for ( OUString const & eventName : aEventNames )

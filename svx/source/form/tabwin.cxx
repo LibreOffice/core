@@ -89,7 +89,7 @@ struct ColumnInfo
 
 static void lcl_addToList( SvTreeListBox& _rListBox, const uno::Reference< container::XNameAccess>& i_xColumns )
 {
-    uno::Sequence< OUString > aEntries = i_xColumns->getElementNames();
+    const uno::Sequence< OUString > aEntries = i_xColumns->getElementNames();
     for ( const OUString& rEntry : aEntries )
     {
         uno::Reference< beans::XPropertySet> xColumn(i_xColumns->getByName(rEntry),UNO_QUERY_THROW);

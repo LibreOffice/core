@@ -183,7 +183,7 @@ void lcl_insertErrorBarLSequencesToMap(
     if( ( xSeriesProp->getPropertyValue( "ErrorBarY" ) >>= xErrorBarSource ) &&
         xErrorBarSource.is() )
     {
-        Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSequences(
+        const Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSequences(
             xErrorBarSource->getDataSequences());
         for( const auto& rLSequence : aLSequences )
         {

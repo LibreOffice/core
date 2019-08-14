@@ -1499,7 +1499,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
             // This is the built-in default style that every style inherits from
             xParagraphStyles->getByName("Paragraph style") >>= xDefault;
 
-            uno::Sequence< beans::PropertyValue > aPropValues = m_pImpl->m_pDefaultParaProps->GetPropertyValues();
+            const uno::Sequence< beans::PropertyValue > aPropValues = m_pImpl->m_pDefaultParaProps->GetPropertyValues();
             for( const auto& rPropValue : aPropValues )
             {
                 try
@@ -1514,7 +1514,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
         }
         if( !bParaProperties && m_pImpl->m_pDefaultCharProps.get())
         {
-            uno::Sequence< beans::PropertyValue > aPropValues = m_pImpl->m_pDefaultCharProps->GetPropertyValues();
+            const uno::Sequence< beans::PropertyValue > aPropValues = m_pImpl->m_pDefaultCharProps->GetPropertyValues();
             for( const auto& rPropValue : aPropValues )
             {
                 try
@@ -1548,7 +1548,7 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
     xStyleFamilies->getByName("CharacterStyles") >>= xCharStyles;
     //search for all character styles with the name sListLabel + <index>
     sal_Int32 nStyleFound = 0;
-    uno::Sequence< OUString > aStyleNames = xCharStyles->getElementNames();
+    const uno::Sequence< OUString > aStyleNames = xCharStyles->getElementNames();
     for( const auto& rStyleName : aStyleNames )
     {
         OUString sSuffix;

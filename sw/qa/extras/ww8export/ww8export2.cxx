@@ -296,7 +296,7 @@ DECLARE_WW8EXPORT_TEST(testTdf104805, "tdf104805.doc")
     uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aNumberingRule;
     xLevels->getByIndex(1) >>= aNumberingRule; // 2nd level
-    for (const auto& rPair : aNumberingRule)
+    for (const auto& rPair : std::as_const(aNumberingRule))
     {
         if (rPair.Name == "Prefix")
             // This was "." instead of empty, so the second paragraph was

@@ -379,13 +379,13 @@ void SchXMLImportHelper::DeleteDataSeries(
     {
         Reference< chart2::XCoordinateSystemContainer > xCooSysCnt(
             xDoc->getFirstDiagram(), uno::UNO_QUERY_THROW );
-        Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
+        const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
             xCooSysCnt->getCoordinateSystems());
 
         for( const auto& rCooSys : aCooSysSeq )
         {
             Reference< chart2::XChartTypeContainer > xCTCnt( rCooSys, uno::UNO_QUERY_THROW );
-            Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
+            const Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
 
             for( const auto& rChartType : aChartTypes )
             {

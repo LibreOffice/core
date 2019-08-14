@@ -729,7 +729,7 @@ bool SwDBManager::GetTableNames(weld::ComboBox& rBox, const OUString& rDBName)
         if(xTSupplier.is())
         {
             uno::Reference<container::XNameAccess> xTables = xTSupplier->getTables();
-            uno::Sequence<OUString> aTables = xTables->getElementNames();
+            const uno::Sequence<OUString> aTables = xTables->getElementNames();
             for (const OUString& rTable : aTables)
                 rBox.append("0", rTable);
         }
@@ -737,7 +737,7 @@ bool SwDBManager::GetTableNames(weld::ComboBox& rBox, const OUString& rDBName)
         if(xQSupplier.is())
         {
             uno::Reference<container::XNameAccess> xQueries = xQSupplier->getQueries();
-            uno::Sequence<OUString> aQueries = xQueries->getElementNames();
+            const uno::Sequence<OUString> aQueries = xQueries->getElementNames();
             for (const OUString& rQuery : aQueries)
                 rBox.append("1", rQuery);
         }

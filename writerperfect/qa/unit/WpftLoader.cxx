@@ -190,7 +190,7 @@ void WpftLoader::impl_detectFilterName(uno::Sequence<beans::PropertyValue>& rDes
     uno::Sequence<beans::PropertyValue> aTypes;
     if (m_xTypeMap->getByName(rTypeName) >>= aTypes)
     {
-        for (const auto& rType : aTypes)
+        for (const auto& rType : std::as_const(aTypes))
         {
             OUString aFilterName;
             if (("PreferredFilter" == rType.Name) && (rType.Value >>= aFilterName))

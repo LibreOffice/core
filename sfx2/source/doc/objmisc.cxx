@@ -258,7 +258,7 @@ bool SfxObjectShell::IsModified()
 
     if (pImpl->mpObjectContainer)
     {
-        uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+        const uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
         for ( const auto& rName : aNames )
         {
             uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( rName );

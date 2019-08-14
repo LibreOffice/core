@@ -559,7 +559,7 @@ void SmMathConfig::LoadFontFormatList()
     else
         pFontFormatList->Clear();
 
-    Sequence< OUString > aNodes( GetNodeNames( FONT_FORMAT_LIST ) );
+    const Sequence< OUString > aNodes( GetNodeNames( FONT_FORMAT_LIST ) );
 
     for (const OUString& rNode : aNodes)
     {

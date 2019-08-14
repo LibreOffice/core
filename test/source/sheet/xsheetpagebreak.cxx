@@ -44,7 +44,7 @@ void XSheetPageBreak::testRemoveAllManualPageBreaks()
 
     xSheetPageBreak->removeAllManualPageBreaks();
 
-    uno::Sequence< sheet::TablePageBreakData > xColPageBreak = xSheetPageBreak->getColumnPageBreaks();
+    const uno::Sequence< sheet::TablePageBreakData > xColPageBreak = xSheetPageBreak->getColumnPageBreaks();
     sal_Int32 manualColPageBreaks = 0;
     for ( const auto & data : xColPageBreak )
     {
@@ -54,7 +54,7 @@ void XSheetPageBreak::testRemoveAllManualPageBreaks()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Found manual column page break",
                                  sal_Int32(0), manualColPageBreaks);
 
-    uno::Sequence< sheet::TablePageBreakData > xRowPageBreak = xSheetPageBreak->getRowPageBreaks();
+    const uno::Sequence< sheet::TablePageBreakData > xRowPageBreak = xSheetPageBreak->getRowPageBreaks();
     sal_Int32 manualRowPageBreaks = 0;
     for ( const auto & data : xRowPageBreak )
     {

@@ -117,7 +117,7 @@ DefaultFontConfiguration::DefaultFontConfiguration()
                 UNO_QUERY );
         if( m_xConfigAccess.is() )
         {
-            Sequence< OUString > aLocales = m_xConfigAccess->getElementNames();
+            const Sequence< OUString > aLocales = m_xConfigAccess->getElementNames();
             // fill config hash with empty interfaces
             for( const OUString& rLocaleString : aLocales )
             {
@@ -331,7 +331,7 @@ FontSubstConfiguration::FontSubstConfiguration() :
                 UNO_QUERY );
         if( m_xConfigAccess.is() )
         {
-            Sequence< OUString > aLocales = m_xConfigAccess->getElementNames();
+            const Sequence< OUString > aLocales = m_xConfigAccess->getElementNames();
             // fill config hash with empty interfaces
             for( const OUString& rLocaleString : aLocales )
             {
@@ -973,7 +973,7 @@ void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
             }
             if( xNode.is() )
             {
-                Sequence< OUString > aFonts = xNode->getElementNames();
+                const Sequence< OUString > aFonts = xNode->getElementNames();
                 int nFonts = aFonts.getLength();
                 // improve performance, heap fragmentation
                 it->second.aSubstAttributes.reserve( nFonts );

@@ -1127,7 +1127,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 {
                     bool bShow = false;
                     Reference< XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY );
-                    uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties();
+                    const uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties();
 
                     if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
                     {

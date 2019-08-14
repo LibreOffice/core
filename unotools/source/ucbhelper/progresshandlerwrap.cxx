@@ -38,7 +38,7 @@ static bool getStatusFromAny_Impl( const Any& aAny, OUString& aText, sal_Int32& 
 
     Sequence< Any > aSetList;
     if( aAny >>= aSetList )
-        for( const auto& rSet : aSetList )
+        for( const auto& rSet : std::as_const(aSetList) )
         {
             if( !bNumIsSet && ( rSet >>= nNum ) )
                 bNumIsSet = true;

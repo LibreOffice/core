@@ -642,14 +642,14 @@ void PropertyValueSet::appendPropertySet(
         Reference< XPropertySetInfo > xInfo = rxSet->getPropertySetInfo();
         if ( xInfo.is() )
         {
-            Sequence< Property > aProps      = xInfo->getProperties();
+            const Sequence< Property > aProps = xInfo->getProperties();
 
             Reference< XPropertyAccess > xPropertyAccess( rxSet, UNO_QUERY );
             if ( xPropertyAccess.is() )
             {
                 // Efficient: Get all prop values with one ( remote) call.
 
-                Sequence< css::beans::PropertyValue > aPropValues
+                const Sequence< css::beans::PropertyValue > aPropValues
                     = xPropertyAccess->getPropertyValues();
 
                 for ( const css::beans::PropertyValue& rPropValue : aPropValues )

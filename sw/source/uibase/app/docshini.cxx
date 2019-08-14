@@ -126,7 +126,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         if (!utl::ConfigManager::IsFuzzing())
         {
             SvxAsianConfig aAsian;
-            Sequence<lang::Locale> aLocales =  aAsian.GetStartEndCharLocales();
+            const Sequence<lang::Locale> aLocales =  aAsian.GetStartEndCharLocales();
             for(const lang::Locale& rLocale : aLocales)
             {
                 ForbiddenCharacters aForbidden;

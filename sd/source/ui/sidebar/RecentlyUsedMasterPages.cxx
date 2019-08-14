@@ -134,7 +134,7 @@ void RecentlyUsedMasterPages::LoadPersistentValues()
         OUString sName;
 
         // Read the names and URLs of the master pages.
-        Sequence<OUString> aKeys (xSet->getElementNames());
+        const Sequence<OUString> aKeys (xSet->getElementNames());
         mvMasterPages.clear();
         mvMasterPages.reserve(aKeys.getLength());
         for (const auto& rKey : aKeys)
@@ -194,7 +194,7 @@ void RecentlyUsedMasterPages::SavePersistentValues()
             return;
 
         // Clear the set.
-        Sequence<OUString> aKeys (xSet->getElementNames());
+        const Sequence<OUString> aKeys (xSet->getElementNames());
         for (const auto& rKey : aKeys)
             xSet->removeByName (rKey);
 

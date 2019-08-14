@@ -237,7 +237,7 @@ namespace pcr
     {
         int nEntryCount = m_xLB_Controls->n_children();
         Sequence< Reference< XControlModel > > aSortedControlModelSeq( nEntryCount );
-        Sequence< Reference< XControlModel > > aControlModels( m_xTempModel->getControlModels());
+        const Sequence< Reference< XControlModel > > aControlModels( m_xTempModel->getControlModels());
         Reference< XControlModel > * pSortedControlModels = aSortedControlModelSeq.getArray();
 
         for (int i = 0; i < nEntryCount; ++i)

@@ -1116,7 +1116,7 @@ bool SearchTabPage_Impl::OpenKeyword( const OUString& rKeyword )
 
 static void GetBookmarkEntry_Impl
 (
-    Sequence< PropertyValue >& aBookmarkEntry,
+    const Sequence< PropertyValue >& aBookmarkEntry,
     OUString& rTitle,
     OUString& rURL
 )

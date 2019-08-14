@@ -711,7 +711,7 @@ OUString ContextMenuSaveInData::GetUIName( const OUString& rResourceURL )
         catch ( const css::uno::Exception& )
         {}
 
-        for ( const auto& aProp : aProps )
+        for ( const auto& aProp : std::as_const(aProps) )
         {
             if ( aProp.Name == ITEM_DESCRIPTOR_UINAME )
             {
@@ -739,7 +739,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
         catch ( const css::lang::IllegalArgumentException& )
         {}
 
-        for ( const auto& aElement : aElementsInfo )
+        for ( const auto& aElement : std::as_const(aElementsInfo) )
         {
             OUString aUrl;
             for ( const auto& aElementProp : aElement )
@@ -787,7 +787,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
         catch ( const css::lang::IllegalArgumentException& )
         {}
 
-        for ( const auto& aElement : aParentElementsInfo )
+        for ( const auto& aElement : std::as_const(aParentElementsInfo) )
         {
             OUString aUrl;
             for ( const auto& aElementProp : aElement )

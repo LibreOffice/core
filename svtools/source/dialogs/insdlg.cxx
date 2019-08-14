@@ -106,7 +106,7 @@ void SvObjectServerList::FillInsertObjects()
 
         if( xNameAccess.is())
         {
-            uno::Sequence< OUString > seqNames= xNameAccess->getElementNames();
+            const uno::Sequence< OUString > seqNames= xNameAccess->getElementNames();
 
             OUString aStringProductName( "%PRODUCTNAME" );
             sal_Int32 nStringProductNameLength = aStringProductName.getLength();

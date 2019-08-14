@@ -71,7 +71,7 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
     uno::Sequence<sal_Int8> aData(aBuffer.data(), nSize + 1);
     uno::Reference<io::XInputStream> aInputStream(new comphelper::SequenceInputStream(aData));
 
-    Primitive2DSequence aPrimitiveSequence = xSvgParser->getDecomposition(aInputStream, sPath);
+    const Primitive2DSequence aPrimitiveSequence = xSvgParser->getDecomposition(aInputStream, sPath);
 
     if (!aPrimitiveSequence.hasElements())
         return;

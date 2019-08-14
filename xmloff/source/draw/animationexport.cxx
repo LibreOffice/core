@@ -724,7 +724,7 @@ void AnimationsExporterImpl::prepareNode( const Reference< XAnimationNode >& xNo
         break;
         }
 
-        Sequence< NamedValue > aUserData( xNode->getUserData() );
+        const Sequence< NamedValue > aUserData( xNode->getUserData() );
         for( const auto& rValue : aUserData )
         {
             if( IsXMLToken( rValue.Name, XML_MASTER_ELEMENT ) )
@@ -875,7 +875,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
 
         sal_Int16 nContainerNodeType = EffectNodeType::DEFAULT;
         OUString aPresetId;
-        Sequence< NamedValue > aUserData( xNode->getUserData() );
+        const Sequence< NamedValue > aUserData( xNode->getUserData() );
         for( const auto& rValue : aUserData )
         {
             if( IsXMLToken( rValue.Name, XML_NODE_TYPE ) )
@@ -1161,7 +1161,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
 
         if(nNodeType != AnimationNodeType::SET)
         {
-            Sequence< double > aKeyTimes( xAnimate->getKeyTimes() );
+            const Sequence< double > aKeyTimes( xAnimate->getKeyTimes() );
             if( aKeyTimes.hasElements() )
             {
                 for( const auto& rKeyTime : aKeyTimes )
@@ -1202,7 +1202,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
                 }
             }
 
-            Sequence< TimeFilterPair > aTimeFilter( xAnimate->getTimeFilter() );
+            const Sequence< TimeFilterPair > aTimeFilter( xAnimate->getTimeFilter() );
             if( aTimeFilter.hasElements() )
             {
                 for( const auto& rPair : aTimeFilter )

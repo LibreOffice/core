@@ -541,7 +541,7 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool)
             {
                 Reference< XNameAccess> xSourceNames( xSourceTableStyle, UNO_QUERY_THROW );
 
-                Sequence< OUString > aStyleNames( xSourceNames->getElementNames() );
+                const Sequence< OUString > aStyleNames( xSourceNames->getElementNames() );
 
                 Reference< XNameReplace > xTargetNames( xNewTableStyle, UNO_QUERY );
 

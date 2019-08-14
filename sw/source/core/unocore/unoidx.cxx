@@ -2677,7 +2677,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
     }
 
     OUStringBuffer sPattern;
-    for(const beans::PropertyValues& rToken : aSeq)
+    for(const beans::PropertyValues& rToken : std::as_const(aSeq))
     {
         const beans::PropertyValue* pProperties = rToken.getConstArray();
         const sal_Int32 nProperties = rToken.getLength();

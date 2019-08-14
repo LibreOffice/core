@@ -380,7 +380,7 @@ ScriptEventHelper::getEventListeners()
 
     Reference< beans::XIntrospectionAccess > xIntrospectionAccess =
         xIntrospection->inspect( makeAny( m_xControl ) );
-    Sequence< Type > aControlListeners =
+    const Sequence< Type > aControlListeners =
         xIntrospectionAccess->getSupportedListeners();
     for ( const Type& listType : aControlListeners )
     {
@@ -397,7 +397,7 @@ ScriptEventHelper::getEventListeners()
 Sequence< ScriptEventDescriptor >
 ScriptEventHelper::createEvents( const OUString& sCodeName )
 {
-    Sequence< OUString > aControlListeners = getEventListeners();
+    const Sequence< OUString > aControlListeners = getEventListeners();
     sal_Int32 nLength = aControlListeners.getLength();
 
     Sequence< ScriptEventDescriptor > aDest( nLength );

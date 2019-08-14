@@ -113,7 +113,7 @@ static Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
             if( xForms.is() )
             {
                 // iterate over all models
-                Sequence<OUString> aNames = xForms->getElementNames();
+                const Sequence<OUString> aNames = xForms->getElementNames();
                 for( const auto& rName : aNames )
                 {
                     Reference<xforms::XModel2> xModel(

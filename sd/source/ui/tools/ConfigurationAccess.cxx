@@ -131,7 +131,7 @@ void ConfigurationAccess::ForAll (
         return;
 
     ::std::vector<Any> aValues(rArguments.size());
-    Sequence<OUString> aKeys (rxContainer->getElementNames());
+    const Sequence<OUString> aKeys (rxContainer->getElementNames());
     for (const OUString& rsKey : aKeys)
     {
         Reference<container::XNameAccess> xSetItem (rxContainer->getByName(rsKey), UNO_QUERY);

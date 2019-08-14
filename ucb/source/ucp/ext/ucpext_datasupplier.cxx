@@ -126,7 +126,7 @@ namespace ucb { namespace ucp { namespace ext
             {
             case E_ROOT:
             {
-                Sequence< Sequence< OUString > > aExtensionInfo( xPackageInfo->getExtensionList() );
+                const Sequence< Sequence< OUString > > aExtensionInfo( xPackageInfo->getExtensionList() );
                 for ( auto const & extInfo : aExtensionInfo )
                 {
                     if ( !extInfo.hasElements() )

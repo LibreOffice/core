@@ -226,7 +226,7 @@ namespace rptui
 
     void OPropertyInfoService::getExcludeProperties(::std::vector< beans::Property >& _rExcludeProperties,const css::uno::Reference< css::inspection::XPropertyHandler >& _xFormComponentHandler)
     {
-        uno::Sequence< beans::Property > aProps = _xFormComponentHandler->getSupportedProperties();
+        const uno::Sequence< beans::Property > aProps = _xFormComponentHandler->getSupportedProperties();
         static const OUStringLiteral pExcludeProperties[] =
         {
                 "Enabled",

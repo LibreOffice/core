@@ -47,7 +47,7 @@ bool XMLAttributeContainerHandler::equals(
 
     if( ( r1 >>= xContainer1 ) && ( r2 >>= xContainer2 ) )
     {
-        uno::Sequence< OUString > aAttribNames1( xContainer1->getElementNames() );
+        const uno::Sequence< OUString > aAttribNames1( xContainer1->getElementNames() );
         uno::Sequence< OUString > aAttribNames2( xContainer2->getElementNames() );
 
         if( aAttribNames1.getLength() == aAttribNames2.getLength() )

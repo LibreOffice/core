@@ -559,7 +559,7 @@ void lcl_copyUserDefinedProperties(SfxObjectShell* pSource, SfxObjectShell* pDes
     uno::Reference<beans::XPropertyContainer> xSourcePropertyContainer = xSource->getUserDefinedProperties();
     uno::Reference<beans::XPropertyContainer> xDestinationPropertyContainer = xDestination->getUserDefinedProperties();
     uno::Reference<beans::XPropertySet> xSourcePropertySet(xSourcePropertyContainer, uno::UNO_QUERY);
-    uno::Sequence<beans::Property> aProperties = xSourcePropertySet->getPropertySetInfo()->getProperties();
+    const uno::Sequence<beans::Property> aProperties = xSourcePropertySet->getPropertySetInfo()->getProperties();
 
     for (const beans::Property& rProperty : aProperties)
     {
@@ -1106,7 +1106,7 @@ void SdDrawDocument::InitLayoutVector()
         ::comphelper::getProcessComponentContext() );
 
     // get file list from configuration
-    Sequence< OUString > aFiles(
+    const Sequence< OUString > aFiles(
         officecfg::Office::Impress::Misc::LayoutListFiles::get(xContext) );
 
     OUString sFilename;
@@ -1145,7 +1145,7 @@ void SdDrawDocument::InitObjectVector()
         ::comphelper::getProcessComponentContext() );
 
     // get file list from configuration
-    Sequence< OUString > aFiles(
+    const Sequence< OUString > aFiles(
        officecfg::Office::Impress::Misc::PresObjListFiles::get(xContext) );
 
     OUString sFilename;

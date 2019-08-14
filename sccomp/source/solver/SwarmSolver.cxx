@@ -513,7 +513,7 @@ void SAL_CALL SwarmSolver::solve()
     }
 
     // Determine variable bounds
-    for (sheet::SolverConstraint const& rConstraint : maConstraints)
+    for (sheet::SolverConstraint const& rConstraint : std::as_const(maConstraints))
     {
         table::CellAddress aLeftCellAddress = rConstraint.Left;
         sheet::SolverConstraintOperator eOp = rConstraint.Operator;

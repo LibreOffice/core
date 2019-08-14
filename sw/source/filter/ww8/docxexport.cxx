@@ -337,7 +337,7 @@ void DocxExport::DoComboBox(const OUString& rName,
                              const OUString& rHelp,
                              const OUString& rToolTip,
                              const OUString& rSelected,
-                             uno::Sequence<OUString>& rListItems)
+                             const uno::Sequence<OUString>& rListItems)
 {
     m_pDocumentFS->startElementNS(XML_w, XML_ffData);
 
@@ -1042,14 +1042,14 @@ void DocxExport::WriteSettings()
         uno::Sequence< beans::PropertyValue > propList;
         xPropSet->getPropertyValue( aGrabBagName ) >>= propList;
 
-        for( const auto& rProp : propList )
+        for( const auto& rProp : std::as_const(propList) )
         {
             if ( rProp.Name == "ThemeFontLangProps" )
             {
                 uno::Sequence< beans::PropertyValue > themeFontLangProps;
                 rProp.Value >>= themeFontLangProps;
                 OUString aValues[3];
-                for( const auto& rThemeFontLangProp : themeFontLangProps )
+                for( const auto& rThemeFontLangProp : std::as_const(themeFontLangProps) )
                 {
                     if( rThemeFontLangProp.Name == "val" )
                         rThemeFontLangProp.Value >>= aValues[0];
@@ -1070,7 +1070,7 @@ void DocxExport::WriteSettings()
                 uno::Sequence< beans::PropertyValue > aCompatSettingsSequence;
                 rProp.Value >>= aCompatSettingsSequence;
 
-                for(const auto& rCompatSetting : aCompatSettingsSequence)
+                for(const auto& rCompatSetting : std::as_const(aCompatSettingsSequence))
                 {
                     uno::Sequence< beans::PropertyValue > aCompatSetting;
                     rCompatSetting.Value >>= aCompatSetting;
@@ -1078,7 +1078,7 @@ void DocxExport::WriteSettings()
                     OUString aUri;
                     OUString aValue;
 
-                    for(const auto& rPropVal : aCompatSetting)
+                    for(const auto& rPropVal : std::as_const(aCompatSetting))
                     {
                         if( rPropVal.Name == "name" )
                             rPropVal.Value >>= aName;
@@ -1104,7 +1104,7 @@ void DocxExport::WriteSettings()
                 if (rAttributeList.hasElements())
                 {
                     sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
-                    for (const auto& rAttribute : rAttributeList)
+                    for (const auto& rAttribute : std::as_const(rAttributeList))
                     {
                         static DocxStringTokenMap const aTokens[] =
                         {
@@ -1202,7 +1202,7 @@ void DocxExport::WriteGlossary()
     uno::Sequence< beans::PropertyValue > propList;
     xPropSet->getPropertyValue( aName ) >>= propList;
     sal_Int32 collectedProperties = 0;
-    for ( const auto& rProp : propList )
+    for ( const auto& rProp : std::as_const(propList) )
     {
         OUString propName = rProp.Name;
         if ( propName == "OOXGlossary" )
@@ -1236,7 +1236,7 @@ void DocxExport::WriteGlossary()
     serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
         uno::Sequence< beans::StringPair >() );
 
-    for ( const uno::Sequence< uno::Any>& glossaryElement : glossaryDomList)
+    for ( const uno::Sequence< uno::Any>& glossaryElement : std::as_const(glossaryDomList))
     {
         OUString gTarget, gType, gId, contentType;
         uno::Reference<xml::dom::XDocument> xDom;
@@ -1391,7 +1391,7 @@ void DocxExport::WriteEmbeddings()
         [](const beans::PropertyValue& rProp) { return rProp.Name == "OOXEmbeddings"; });
     if (pProp != propList.end())
         pProp->Value >>= embeddingsList;
-    for (const auto& rEmbedding : embeddingsList)
+    for (const auto& rEmbedding : std::as_const(embeddingsList))
     {
         OUString embeddingPath = rEmbedding.Name;
         uno::Reference<io::XInputStream> embeddingsStream;

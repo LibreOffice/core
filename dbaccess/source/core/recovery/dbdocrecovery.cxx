@@ -242,7 +242,7 @@ namespace dbaccess
             for (auto const& controller : i_rControllers)
             {
                 Reference< XDatabaseDocumentUI > xDatabaseUI(controller, UNO_QUERY_THROW);
-                Sequence< Reference< XComponent > > aComponents( xDatabaseUI->getSubComponents() );
+                const Sequence< Reference< XComponent > > aComponents( xDatabaseUI->getSubComponents() );
 
                 for ( auto const & component : aComponents )
                 {

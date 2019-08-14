@@ -239,7 +239,7 @@ bool utl::UCBContentHelper::MakeFolder(
 {
     bool exists = false;
     try {
-        css::uno::Sequence<css::ucb::ContentInfo> info(
+        const css::uno::Sequence<css::ucb::ContentInfo> info(
             parent.queryCreatableContentsInfo());
         for (const auto& rInfo : info) {
             // Simply look for the first KIND_FOLDER:

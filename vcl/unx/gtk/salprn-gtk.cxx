@@ -432,7 +432,7 @@ GtkPrintDialog::impl_initCustomTab()
         if (!aOptProp.hasElements())
             continue;
 
-        for (const beans::PropertyValue& rEntry : aOptProp)
+        for (const beans::PropertyValue& rEntry : std::as_const(aOptProp))
         {
             if ( rEntry.Name == "Text" )
             {
@@ -608,7 +608,7 @@ GtkPrintDialog::impl_initCustomTab()
                 {
                    pWidget = lcl_combo_box_text_new();
 
-                   for (const auto& rChoice : aChoices)
+                   for (const auto& rChoice : std::as_const(aChoices))
                    {
                        lcl_combo_box_text_append(pWidget,
                            OUStringToOString(rChoice, RTL_TEXTENCODING_UTF8).getStr());

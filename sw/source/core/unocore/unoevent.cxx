@@ -141,7 +141,7 @@ void SwHyperlinkEventDescriptor::copyMacrosFromNameReplace(
         container::XNameReplace> const & xReplace)
 {
     // iterate over all names (all names that *we* support)
-    Sequence<OUString> aNames = getElementNames();
+    const Sequence<OUString> aNames = getElementNames();
     for(const OUString& rName : aNames)
     {
         // copy element for that name

@@ -484,7 +484,7 @@ void ResourceManager::ReadContextList (
     if (!(aValue >>= aValues))
         return;
 
-    for (const OUString& sValue : aValues)
+    for (const OUString& sValue : std::as_const(aValues))
     {
         sal_Int32 nCharacterIndex (0);
         const OUString sApplicationName (sValue.getToken(0, ',', nCharacterIndex).trim());

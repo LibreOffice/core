@@ -914,7 +914,7 @@ void ControlModelContainerBase::implUpdateGroupStructure()
 
     maGroups.clear();
 
-    Sequence< Reference< XControlModel > > aControlModels = getControlModels();
+    const Sequence< Reference< XControlModel > > aControlModels = getControlModels();
 
     // in extreme we have as much groups as controls
     maGroups.reserve( aControlModels.getLength() );
@@ -1436,7 +1436,7 @@ sal_Bool ControlContainerBase::setModel( const Reference< XControlModel >& rxMod
 
     if ( getModel().is() )
     {
-        Sequence< Reference< XControl > > aControls = getControls();
+        const Sequence< Reference< XControl > > aControls = getControls();
 
         for ( const Reference< XControl >& rCtrl : aControls )
             removeControl( rCtrl );
@@ -1460,7 +1460,7 @@ sal_Bool ControlContainerBase::setModel( const Reference< XControlModel >& rxMod
         Reference< XNameAccess > xNA( getModel(), UNO_QUERY );
         if ( xNA.is() )
         {
-            Sequence< OUString > aNames = xNA->getElementNames();
+            const Sequence< OUString > aNames = xNA->getElementNames();
 
             Reference< XControlModel > xCtrlModel;
             for( const OUString& rName : aNames )
@@ -1818,7 +1818,7 @@ ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContain
             // global list of containers
             if ( xProps.is() )
                 xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::makeAny( uno::Reference< XNameContainer >() ) );
-            Sequence< OUString > aChildNames = xChildContainer->getElementNames();
+            const Sequence< OUString > aChildNames = xChildContainer->getElementNames();
             for ( const auto& rName : aChildNames )
                 updateUserFormChildren( xAllChildren, rName, Operation,  Reference< XControlModel > () );
         }
@@ -1834,7 +1834,7 @@ ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContain
             Reference< XPropertySet > xProps( xChildContainer, UNO_QUERY );
             if ( xProps.is() )
                 xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::makeAny( xAllChildren ) );
-            Sequence< OUString > aChildNames = xChildContainer->getElementNames();
+            const Sequence< OUString > aChildNames = xChildContainer->getElementNames();
             for ( const auto& rName : aChildNames )
             {
                 Reference< XControlModel > xChildTarget( xChildContainer->getByName( rName ), UNO_QUERY );

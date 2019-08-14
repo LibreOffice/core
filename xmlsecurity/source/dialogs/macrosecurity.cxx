@@ -357,7 +357,7 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(weld::Container* pP
 
     FillCertLB();
 
-    css::uno::Sequence< OUString > aSecureURLs = m_pDlg->m_aSecOptions.GetSecureURLs();
+    const css::uno::Sequence< OUString > aSecureURLs = m_pDlg->m_aSecOptions.GetSecureURLs();
     mbURLsReadonly = m_pDlg->m_aSecOptions.IsReadOnly( SvtSecurityOptions::EOption::SecureUrls );
     m_xTrustFileROFI->set_visible(mbURLsReadonly);
     m_xTrustFileLocLB->set_sensitive(!mbURLsReadonly);

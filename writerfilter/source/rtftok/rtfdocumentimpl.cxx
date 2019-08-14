@@ -3138,7 +3138,7 @@ RTFError RTFDocumentImpl::popState()
                     xClipboardPropertyContainer, uno::UNO_QUERY);
                 uno::Reference<beans::XPropertySet> xDocumentPropertySet(xDocumentPropertyContainer,
                                                                          uno::UNO_QUERY);
-                uno::Sequence<beans::Property> aClipboardProperties
+                const uno::Sequence<beans::Property> aClipboardProperties
                     = xClipboardPropertySet->getPropertySetInfo()->getProperties();
                 uno::Sequence<beans::Property> aDocumentProperties
                     = xDocumentPropertySet->getPropertySetInfo()->getProperties();

@@ -153,7 +153,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
                 if ( xLibContainer.is() )
                 {
-                    Sequence< OUString > aLibNames = xLibContainer->getElementNames();
+                    const Sequence< OUString > aLibNames = xLibContainer->getElementNames();
                     for ( const OUString& rLibName : aLibNames )
                     {
                         if ( xLibContainer->hasByName( rLibName ) )
@@ -229,7 +229,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
                                 if ( xLib.is() )
                                 {
-                                    Sequence< OUString > aModNames = xLib->getElementNames();
+                                    const Sequence< OUString > aModNames = xLib->getElementNames();
                                     for ( const OUString& rModName : aModNames )
                                     {
                                         if ( xLib->hasByName( rModName ) )

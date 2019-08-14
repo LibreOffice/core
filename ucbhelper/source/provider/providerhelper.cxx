@@ -288,7 +288,7 @@ bool ContentProviderImplHelper::renameAdditionalPropertySet(
         if ( !xNameAccess.is() )
             return false;
 
-        uno::Sequence< OUString > aKeys
+        const uno::Sequence< OUString > aKeys
             = xNameAccess->getElementNames();
         if ( aKeys.hasElements() )
         {
@@ -361,7 +361,7 @@ bool ContentProviderImplHelper::copyAdditionalPropertySet(
         if ( !xNameAccess.is() )
             return false;
 
-        uno::Sequence< OUString > aKeys
+        const uno::Sequence< OUString > aKeys
             = xNameAccess->getElementNames();
         if ( aKeys.hasElements() )
         {
@@ -410,7 +410,7 @@ bool ContentProviderImplHelper::copyAdditionalPropertySet(
             return false;
 
         // Obtain all values from old set.
-        uno::Sequence< beans::PropertyValue > aValues
+        const uno::Sequence< beans::PropertyValue > aValues
             = xOldPropAccess->getPropertyValues();
 
         uno::Sequence< beans::Property > aProps
@@ -481,7 +481,7 @@ bool ContentProviderImplHelper::removeAdditionalPropertySet(
         if ( !xNameAccess.is() )
             return false;
 
-        uno::Sequence< OUString > aKeys
+        const uno::Sequence< OUString > aKeys
             = xNameAccess->getElementNames();
         if ( aKeys.hasElements() )
         {

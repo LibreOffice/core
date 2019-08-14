@@ -75,7 +75,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(weld::Window* pParent,
     if (xQSupplier.is())
     {
         Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-        Sequence<OUString> aQueries = xQueries->getElementNames();
+        const Sequence<OUString> aQueries = xQueries->getElementNames();
         int nPos = m_xTable->n_children();
         for (const OUString& rQuery : aQueries)
         {

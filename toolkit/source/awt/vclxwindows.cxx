@@ -2155,7 +2155,7 @@ void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent )
 
 
     Reference< XItemList > xItemList( i_rEvent.Source, uno::UNO_QUERY_THROW );
-    uno::Sequence< beans::Pair< OUString, OUString > > aItems = xItemList->getAllItems();
+    const uno::Sequence< beans::Pair< OUString, OUString > > aItems = xItemList->getAllItems();
     for ( const auto& rItem : aItems )
     {
         OUString aLocalizationKey( rItem.First );
@@ -4615,7 +4615,7 @@ void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent )
 
 
     Reference< XItemList > xItemList( i_rEvent.Source, uno::UNO_QUERY_THROW );
-    uno::Sequence< beans::Pair< OUString, OUString > > aItems = xItemList->getAllItems();
+    const uno::Sequence< beans::Pair< OUString, OUString > > aItems = xItemList->getAllItems();
     for ( const auto& rItem : aItems )
     {
         OUString aLocalizationKey( rItem.First );

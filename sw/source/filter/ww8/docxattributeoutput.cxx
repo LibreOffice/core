@@ -814,7 +814,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
         }
 
         if (nSdtPrToken ==  FSNS( XML_w, XML_date ) || nSdtPrToken ==  FSNS( XML_w, XML_docPartObj ) || nSdtPrToken ==  FSNS( XML_w, XML_docPartList ) || nSdtPrToken ==  FSNS( XML_w14, XML_checkbox )) {
-            uno::Sequence<xml::FastAttribute> aChildren = pSdtPrTokenChildren->getFastAttributes();
+            const uno::Sequence<xml::FastAttribute> aChildren = pSdtPrTokenChildren->getFastAttributes();
             for( const auto& rChild : aChildren )
                 m_pSerializer->singleElement( rChild.Token,
                                               FSNS(XML_w, XML_val), rChild.Value.toUtf8() );
@@ -2483,7 +2483,7 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<c
         }
     }
 
-    for (const auto& rAttribute : aAttributes)
+    for (const auto& rAttribute : std::as_const(aAttributes))
     {
         uno::Any aAny = rAttribute.Value;
         OString aValue;
@@ -3630,14 +3630,14 @@ sal_Int32 lcl_getWordCompatibilityMode( const SwDoc& rDoc )
         uno::Sequence< beans::PropertyValue > propList;
         xPropSet->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= propList;
 
-        for ( const auto& rProp : propList )
+        for ( const auto& rProp : std::as_const(propList) )
         {
             if ( rProp.Name == "CompatSettings" )
             {
                 css::uno::Sequence< css::beans::PropertyValue > aCurrentCompatSettings;
                 rProp.Value >>= aCurrentCompatSettings;
 
-                for ( const auto& rCurrentCompatSetting : aCurrentCompatSettings )
+                for ( const auto& rCurrentCompatSetting : std::as_const(aCurrentCompatSettings) )
                 {
                     uno::Sequence< beans::PropertyValue > aCompatSetting;
                     rCurrentCompatSetting.Value >>= aCompatSetting;
@@ -3646,7 +3646,7 @@ sal_Int32 lcl_getWordCompatibilityMode( const SwDoc& rDoc )
                     OUString sUri;
                     OUString sVal;
 
-                    for ( const auto& rPropVal : aCompatSetting )
+                    for ( const auto& rPropVal : std::as_const(aCompatSetting) )
                     {
                         if ( rPropVal.Name == "name" ) rPropVal.Value >>= sName;
                         if ( rPropVal.Name == "uri" )  rPropVal.Value >>= sUri;
@@ -3774,7 +3774,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
         else if (rGrabBagElement.first == "TableStyleLook")
         {
             FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
-            uno::Sequence<beans::PropertyValue> aAttributeList = rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
+            const uno::Sequence<beans::PropertyValue> aAttributeList = rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
 
             for (const auto& rAttribute : aAttributeList)
             {
@@ -3804,7 +3804,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
         else if (rGrabBagElement.first == "TablePosition" )
         {
             FastAttributeList *attrListTablePos = FastSerializerHelper::createAttrList( );
-            uno::Sequence<beans::PropertyValue> aTablePosition = rGrabBagElement.second.get<uno::Sequence<beans::PropertyValue> >();
+            const uno::Sequence<beans::PropertyValue> aTablePosition = rGrabBagElement.second.get<uno::Sequence<beans::PropertyValue> >();
             // look for a surrounding frame and take it's position values
             const ww8::Frame* pFrame = m_rExport.GetFloatingTableFrame();
             if( pFrame )
@@ -4378,7 +4378,7 @@ void DocxAttributeOutput::LatentStyles()
     // Extract default attributes first.
     sax_fastparser::FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
     uno::Sequence<beans::PropertyValue> aLsdExceptions;
-    for (const auto& rLatentStyle : aLatentStyles)
+    for (const auto& rLatentStyle : std::as_const(aLatentStyles))
     {
         if (sal_Int32 nToken = DocxStringGetToken(aDefaultTokens, rLatentStyle.Name))
             pAttributeList->add(FSNS(XML_w, nToken), OUStringToOString(rLatentStyle.Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
@@ -4391,13 +4391,13 @@ void DocxAttributeOutput::LatentStyles()
     pAttributeList = nullptr;
 
     // Then handle the exceptions.
-    for (const auto& rLsdException : aLsdExceptions)
+    for (const auto& rLsdException : std::as_const(aLsdExceptions))
     {
         pAttributeList = FastSerializerHelper::createAttrList();
 
         uno::Sequence<beans::PropertyValue> aAttributes;
         rLsdException.Value >>= aAttributes;
-        for (const auto& rAttribute : aAttributes)
+        for (const auto& rAttribute : std::as_const(aAttributes))
             if (sal_Int32 nToken = DocxStringGetToken(aExceptionTokens, rAttribute.Name))
                 pAttributeList->add(FSNS(XML_w, nToken), OUStringToOString(rAttribute.Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
 
@@ -5177,7 +5177,7 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 
         uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
         OUString sText = xPropertySet->getPropertyValue("Text").get<OUString>();
-        uno::Sequence<OUString> aItems = xPropertySet->getPropertyValue("StringItemList").get< uno::Sequence<OUString> >();
+        const uno::Sequence<OUString> aItems = xPropertySet->getPropertyValue("StringItemList").get< uno::Sequence<OUString> >();
 
         // output component
 
@@ -5360,7 +5360,7 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     if (pObjectsInterop != aObjectsInteropList.end())
         pObjectsInterop->Value >>= aObjectInteropAttributes;
 
-    for( const auto& rObjectInteropAttribute : aObjectInteropAttributes )
+    for( const auto& rObjectInteropAttribute : std::as_const(aObjectInteropAttributes) )
     {
         if ( rObjectInteropAttribute.Name == "ProgID" )
         {
@@ -8695,7 +8695,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
             uno::Sequence<beans::PropertyValue> aGrabBagSeq;
             rGrabBagElement.second >>= aGrabBagSeq;
 
-            for (const auto& rProp : aGrabBagSeq)
+            for (const auto& rProp : std::as_const(aGrabBagSeq))
             {
                 OString sVal = OUStringToOString(rProp.Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
 
@@ -8726,7 +8726,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
         }
         else if (rGrabBagElement.first == "SdtPr")
         {
-            uno::Sequence<beans::PropertyValue> aGrabBagSdt =
+            const uno::Sequence<beans::PropertyValue> aGrabBagSdt =
                     rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
             for (const beans::PropertyValue& aPropertyValue : aGrabBagSdt)
             {
@@ -8740,7 +8740,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
 
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     aPropertyValue.Value >>= aGrabBag;
-                    for (const auto& rProp : aGrabBag)
+                    for (const auto& rProp : std::as_const(aGrabBag))
                     {
                         OUString sValue = rProp.Value.get<OUString>();
                         if (rProp.Name == "ooxml:CT_SdtDocPart_docPartGallery")
@@ -8774,7 +8774,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                 {
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     aPropertyValue.Value >>= aGrabBag;
-                    for (const auto& rProp : aGrabBag)
+                    for (const auto& rProp : std::as_const(aGrabBag))
                     {
                         OUString sValue = rProp.Value.get<OUString>();
                         if (rProp.Name == "ooxml:CT_DataBinding_prefixMappings")
@@ -8802,7 +8802,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                     m_nParagraphSdtPrToken = FSNS( XML_w14, XML_checkbox );
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     aPropertyValue.Value >>= aGrabBag;
-                    for (const auto& rProp : aGrabBag)
+                    for (const auto& rProp : std::as_const(aGrabBag))
                     {
                         OUString sValue = rProp.Value.get<OUString>();
                         if (rProp.Name == "ooxml:CT_SdtCheckbox_checked")
@@ -8959,7 +8959,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
         }
         else if (rGrabBagElement.first == "SdtPr" && FLY_NOT_PROCESSED != m_nStateOfFlyFrame )
         {
-            uno::Sequence<beans::PropertyValue> aGrabBagSdt =
+            const uno::Sequence<beans::PropertyValue> aGrabBagSdt =
                     rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
             for (const beans::PropertyValue& aPropertyValue : aGrabBagSdt)
             {
@@ -8968,7 +8968,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                     m_nRunSdtPrToken = FSNS( XML_w14, XML_checkbox );
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     aPropertyValue.Value >>= aGrabBag;
-                    for (const auto& rProp : aGrabBag)
+                    for (const auto& rProp : std::as_const(aGrabBag))
                     {
                         OUString sValue = rProp.Value.get<OUString>();
                         if (rProp.Name == "ooxml:CT_SdtCheckbox_checked")
@@ -8989,7 +8989,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                 {
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     aPropertyValue.Value >>= aGrabBag;
-                    for (const auto& rProp : aGrabBag)
+                    for (const auto& rProp : std::as_const(aGrabBag))
                     {
                         OUString sValue = rProp.Value.get<OUString>();
                         if (rProp.Name == "ooxml:CT_DataBinding_prefixMappings")

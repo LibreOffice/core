@@ -308,7 +308,7 @@ void UnoControlTabPageContainer::updateFromModel()
 
     ContainerEvent aEvent;
     aEvent.Source = getModel();
-    Sequence< Reference< XControl > > aControls = getControls();
+    const Sequence< Reference< XControl > > aControls = getControls();
 
     for ( const Reference< XControl >& rCtrl : aControls )
     {

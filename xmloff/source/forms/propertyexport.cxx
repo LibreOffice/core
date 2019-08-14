@@ -223,7 +223,7 @@ namespace xmloff
     void OPropertyExport::examinePersistence()
     {
         m_aRemainingProps.clear();
-        Sequence< Property > aProperties = m_xPropertyInfo->getProperties();
+        const Sequence< Property > aProperties = m_xPropertyInfo->getProperties();
         for (const auto& rProp : aProperties)
         {
             // no transient props

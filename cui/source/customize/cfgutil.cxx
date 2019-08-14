@@ -157,7 +157,7 @@ std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyleFamilies()
         return std::vector< SfxStyleInfo_Impl >();
 
     css::uno::Reference< css::container::XNameAccess > xCont = xModel->getStyleFamilies();
-    css::uno::Sequence< OUString > lFamilyNames = xCont->getElementNames();
+    const css::uno::Sequence< OUString > lFamilyNames = xCont->getElementNames();
     std::vector< SfxStyleInfo_Impl > lFamilies;
     for (const auto& aFamily : lFamilyNames)
     {
