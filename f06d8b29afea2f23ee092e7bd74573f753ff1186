@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_06d6b4c4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-08-14T16:22:49Z",
+      "side": 1,
+      "message": "I quickly checked with qtbase built from \u0027dev\u0027 branch and it doesn\u0027t seem to make any difference to me wrt cursor updates... (didn\u0027t check details on Qt bug report so far)",
+      "range": {
+        "startLine": 10,
+        "startChar": 58,
+        "endLine": 18,
+        "endChar": 35
+      },
+      "revId": "f06d8b29afea2f23ee092e7bd74573f753ff1186",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_86f3a473",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 11303,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-08-14T16:22:49Z",
+      "side": 1,
+      "message": "What does the \"(recommended)\" mean here?\nI\u0027d personally probably just drop this note, since (AFAIU) this depends on the Qt version used at runtime and is not LibO specific (same e.g. with kate), but don\u0027t have a strong opinion. (and a quick check with self-built qtbase didn\u0027t help for me..., but I didn\u0027t spend more time on this)",
+      "range": {
+        "startLine": 11299,
+        "startChar": 0,
+        "endLine": 11303,
+        "endChar": 14
+      },
+      "revId": "f06d8b29afea2f23ee092e7bd74573f753ff1186",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_86e084ce",
+        "filename": "vcl/qt5/Qt5DragAndDrop.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-08-14T16:22:49Z",
+      "side": 1,
+      "message": "maybe rename the var in the header as well if done here?",
+      "range": {
+        "startLine": 56,
+        "startChar": 59,
+        "endLine": 56,
+        "endChar": 82
+      },
+      "revId": "f06d8b29afea2f23ee092e7bd74573f753ff1186",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_c61c3cc3",
+        "filename": "vcl/qt5/Qt5DragAndDrop.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-08-14T16:22:49Z",
+      "side": 1,
+      "message": "Makes this more readable. :) Nit-pick: Personally, I\u0027m a bit divided on whether such non-functional changes should ideally be done in a separate commit to keep the diff smaller and make it easier to see the \"actual\" changes and do backporting, in particular if the patchset gets larger anyway, but that\u0027s of course a matter of taste to some degree... (similar at some other places)",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 32
+      },
+      "revId": "f06d8b29afea2f23ee092e7bd74573f753ff1186",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_465fcc71",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-08-14T16:22:49Z",
+      "side": 1,
+      "message": "Can you quickly explain the logic used here (why MOVE/COPY is chosen this way)?",
+      "range": {
+        "startLine": 1224,
+        "startChar": 0,
+        "endLine": 1226,
+        "endChar": 82
+      },
+      "revId": "f06d8b29afea2f23ee092e7bd74573f753ff1186",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
