@@ -98,7 +98,7 @@ void CellMarginHandler::lcl_sprm(Sprm & rSprm)
     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
     if( pProperties.get())
     {
-        pProperties.get()->resolve( *this );
+        pProperties->resolve( *this );
         const bool rtl = false; // TODO
         switch( rSprm.getId() )
         {

@@ -1166,12 +1166,12 @@ void CondFormatBuffer::finalizeImport()
     for( const auto& rxCondFormat : maCondFormats )
     {
         if ( rxCondFormat.get())
-            rxCondFormat.get()->finalizeImport();
+            rxCondFormat->finalizeImport();
     }
     for ( const auto& rxCfRule : maCfRules )
     {
         if ( rxCfRule.get() )
-            rxCfRule.get()->finalizeImport();
+            rxCfRule->finalizeImport();
     }
 
     nExtCFIndex = 0;

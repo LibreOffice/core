@@ -78,7 +78,7 @@ SvtValueSetItem::~SvtValueSetItem()
 {
     if( mxAcc.is() )
     {
-        mxAcc.get()->ParentDestroyed();
+        mxAcc->ParentDestroyed();
     }
 }
 

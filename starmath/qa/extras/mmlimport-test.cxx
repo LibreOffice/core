@@ -64,7 +64,7 @@ private:
                                            OUString(),
                                            OUString(),
                                            "private:factory/smath*"));
-        pFilter.get()->SetVersion(SOFFICE_FILEFORMAT_60);
+        pFilter->SetVersion(SOFFICE_FILEFORMAT_60);
 
         mxDocShell = new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT |
                                     SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |

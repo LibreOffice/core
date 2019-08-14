@@ -602,14 +602,14 @@ public:
                     else if ( mpSecondArg->isConstant() && (*mpSecondArg)() == 1 )
                         aRet = mpFirstArg->fillNode( rEquations, nullptr, nFlags );
                     else if ( ( mpFirstArg->getType() == ExpressionFunct::BinaryDiv )      // don't care of (pi/180)
-                        && ( static_cast<BinaryFunctionExpression*>(mpFirstArg.get())->mpFirstArg.get()->getType() == ExpressionFunct::EnumPi )
-                        && ( static_cast<BinaryFunctionExpression*>(mpFirstArg.get())->mpSecondArg.get()->getType() == ExpressionFunct::Const ) )
+                        && ( static_cast<BinaryFunctionExpression*>(mpFirstArg.get())->mpFirstArg->getType() == ExpressionFunct::EnumPi )
+                        && ( static_cast<BinaryFunctionExpression*>(mpFirstArg.get())->mpSecondArg->getType() == ExpressionFunct::Const ) )
                     {
                         aRet = mpSecondArg->fillNode( rEquations, nullptr, nFlags );
                     }
                     else if ( ( mpSecondArg->getType() == ExpressionFunct::BinaryDiv )     // don't care of (pi/180)
-                        && ( static_cast<BinaryFunctionExpression*>(mpSecondArg.get())->mpFirstArg.get()->getType() == ExpressionFunct::EnumPi )
-                        && ( static_cast<BinaryFunctionExpression*>(mpSecondArg.get())->mpSecondArg.get()->getType() == ExpressionFunct::Const ) )
+                        && ( static_cast<BinaryFunctionExpression*>(mpSecondArg.get())->mpFirstArg->getType() == ExpressionFunct::EnumPi )
+                        && ( static_cast<BinaryFunctionExpression*>(mpSecondArg.get())->mpSecondArg->getType() == ExpressionFunct::Const ) )
                     {
                         aRet = mpFirstArg->fillNode( rEquations, nullptr, nFlags );
                     }

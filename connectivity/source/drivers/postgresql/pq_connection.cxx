@@ -232,13 +232,13 @@ void Connection::close()
 
     // close all created statements
     for (auto const& elem : vectorCloseable)
-        elem.get()->close();
+        elem->close();
 
     // close all created statements
     for (auto const& elem : vectorDispose)
     {
         if( elem.is() )
-            elem.get()->dispose();
+            elem->dispose();
     }
 }
 

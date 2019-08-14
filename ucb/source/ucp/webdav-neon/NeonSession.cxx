@@ -480,7 +480,7 @@ int NeonSession::CertificationNotify(const ne_ssl_certificate *cert)
         ::comphelper::containerToSequence( vecCerts ) );
 
     if ( isDomainMatch(
-        GetHostnamePart( xEECert.get()->getSubjectName() ) ) )
+        GetHostnamePart( xEECert->getSubjectName() ) ) )
     {
         // if host name matched with certificate then look if the
         // certificate was ok

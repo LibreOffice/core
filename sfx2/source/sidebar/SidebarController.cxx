@@ -890,7 +890,7 @@ VclPtr<Panel> SidebarController::CreatePanel (
         *xPanelDescriptor,
         pParentWindow,
         bIsInitiallyExpanded,
-        [pDeck]() { return pDeck.get()->RequestLayout(); },
+        [pDeck]() { return pDeck->RequestLayout(); },
         [this]() { return this->GetCurrentContext(); },
         mxFrame);
 

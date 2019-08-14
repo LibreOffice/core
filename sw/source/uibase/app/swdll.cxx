@@ -73,7 +73,7 @@ namespace SwGlobals
 
     sw::Filters & getFilters()
     {
-        return theSwDLLInstance::get().get()->getFilters();
+        return theSwDLLInstance::get()->getFilters();
     }
 }
 

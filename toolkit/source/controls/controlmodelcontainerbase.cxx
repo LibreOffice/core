@@ -543,19 +543,19 @@ void ControlModelContainerBase::insertByName( const OUString& aName, const Any& 
         if ( xProps.is() )
             {
 
-                Reference< beans::XPropertySetInfo > xPropInfo = xProps.get()->getPropertySetInfo();
+                Reference< beans::XPropertySetInfo > xPropInfo = xProps->getPropertySetInfo();
 
                 const OUString& sImageSourceProperty = GetPropertyName( BASEPROPERTY_IMAGEURL );
-                if ( xPropInfo.get()->hasPropertyByName(  sImageSourceProperty ) && ImplHasProperty(BASEPROPERTY_DIALOGSOURCEURL) )
+                if ( xPropInfo->hasPropertyByName(  sImageSourceProperty ) && ImplHasProperty(BASEPROPERTY_DIALOGSOURCEURL) )
                 {
-                    Any aUrl = xProps.get()->getPropertyValue(  sImageSourceProperty );
+                    Any aUrl = xProps->getPropertyValue(  sImageSourceProperty );
 
                     OUString absoluteUrl =
                         getPhysicalLocation( getPropertyValue( GetPropertyName( BASEPROPERTY_DIALOGSOURCEURL ) ), aUrl );
 
                     aUrl <<= absoluteUrl;
 
-                    xProps.get()->setPropertyValue(  sImageSourceProperty , aUrl );
+                    xProps->setPropertyValue(  sImageSourceProperty , aUrl );
                 }
             }
     }

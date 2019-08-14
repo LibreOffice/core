@@ -162,7 +162,7 @@ void SdrMarkList::ImpForceSort()
         if(nCount > 0 )
         {
             maList.erase(std::remove_if(maList.begin(), maList.end(),
-                [](std::unique_ptr<SdrMark>& rItem) { return rItem.get()->GetMarkedSdrObj() == nullptr; }),
+                [](std::unique_ptr<SdrMark>& rItem) { return rItem->GetMarkedSdrObj() == nullptr; }),
                 maList.end());
             nCount = maList.size();
         }

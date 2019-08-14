@@ -412,7 +412,7 @@ void ContentIdxStoreImpl::SaveUnoCursors(SwDoc* pDoc, sal_uLong nNode, sal_Int32
         auto pUnoCursor(pWeakUnoCursor.lock());
         if(!pUnoCursor)
             continue;
-        for(SwPaM& rPaM : pUnoCursor.get()->GetRingContainer())
+        for(SwPaM& rPaM : pUnoCursor->GetRingContainer())
         {
             lcl_ChkUnoCrsrPaMBoth(m_aUnoCursorEntries, nNode, nContent, rPaM);
         }
