@@ -816,7 +816,7 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
                 bSystemLanguage = true;
                 nLang = SvtSysLocale().GetLanguageTag().getLanguageType();
             }
-            if (nLang != LANGUAGE_ENGLISH_US)
+            if (nLang != LANGUAGE_ENGLISH_US && pEntry->GetComment().isEmpty())
             {
                 sal_Int32 nCheckPos;
                 SvNumFormatType nType = SvNumFormatType::DEFINED;
