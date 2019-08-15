@@ -318,7 +318,7 @@ void MenuToolbarController::initialize( const css::uno::Sequence< css::uno::Any 
         Sequence< PropertyValue > aProps;
         // drop down menu info is currently the first ( and only ) menu in the menusettings container
         xMenuContainer->getByIndex(0) >>= aProps;
-        for ( const auto& aProp : aProps )
+        for ( const auto& aProp : std::as_const(aProps) )
         {
             if ( aProp.Name == "ItemDescriptorContainer" )
             {

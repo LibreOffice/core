@@ -321,7 +321,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const &
         if(xMenuItemDispatch == nullptr)
             return;
 
-        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aDynamicMenuEntries =
+        const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aDynamicMenuEntries =
             SvtDynamicMenuOptions().GetMenu( m_bNewMenu ? EDynamicMenuType::NewMenu : EDynamicMenuType::WizardMenu );
 
         OUString aTitle;

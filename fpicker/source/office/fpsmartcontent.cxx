@@ -263,7 +263,8 @@ namespace svt
         bool bRet = false;
         try
         {
-            for ( auto const& rInfo : m_pContent->queryCreatableContentsInfo() )
+            const css::uno::Sequence<css::ucb::ContentInfo> aContentsInfo = m_pContent->queryCreatableContentsInfo();
+            for ( auto const& rInfo : aContentsInfo )
             {
                 // Simply look for the first KIND_FOLDER...
                 if ( rInfo.Attributes & ContentInfoAttribute::KIND_FOLDER )
@@ -291,7 +292,8 @@ namespace svt
         {
             OUString sFolderType;
 
-            for ( auto const& rInfo : m_pContent->queryCreatableContentsInfo() )
+            const css::uno::Sequence<css::ucb::ContentInfo> aContentsInfo = m_pContent->queryCreatableContentsInfo();
+            for ( auto const& rInfo : aContentsInfo )
             {
                 // Simply look for the first KIND_FOLDER...
                 if ( rInfo.Attributes & ContentInfoAttribute::KIND_FOLDER )

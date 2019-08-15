@@ -2002,19 +2002,19 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
 
     OUString progID;
 
-    for (auto const& it : grabBag)
+    for (auto const& it : std::as_const(grabBag))
     {
         if (it.Name == "EmbeddedObjects")
         {
             uno::Sequence<beans::PropertyValue> objects;
             it.Value >>= objects;
-            for (auto const& object : objects)
+            for (auto const& object : std::as_const(objects))
             {
                 if (object.Name == entryName)
                 {
                     uno::Sequence<beans::PropertyValue> props;
                     object.Value >>= props;
-                    for (auto const& prop : props)
+                    for (auto const& prop : std::as_const(props))
                     {
                         if (prop.Name == "ProgID")
                         {
