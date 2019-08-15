@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "bf659307_8c7c25ec",
+        "filename": "sw/qa/extras/odfexport/data/qrcode-properties.fodt",
+        "patchSetId": 18
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-08-15T14:32:52Z",
+      "side": 1,
+      "message": "well i have no idea what a texture-generation-mode-y is and neither does LO\u0027s type detection.... so at least it should be easy to fix...",
+      "range": {
+        "startLine": 3,
+        "startChar": 2108,
+        "endLine": 3,
+        "endChar": 2186
+      },
+      "revId": "f3a45ff928697f13a93197c0ccd10974ef5930b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_db4ad5aa",
         "filename": "sw/qa/extras/odfexport/odfexport.cxx",
         "patchSetId": 18
