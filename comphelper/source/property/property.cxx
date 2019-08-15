@@ -68,7 +68,7 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
     Reference< XPropertySetInfo > xSourceProps = _rxSource->getPropertySetInfo();
     Reference< XPropertySetInfo > xDestProps = _rxDest->getPropertySetInfo();
 
-    Sequence< Property > aSourceProps = xSourceProps->getProperties();
+    const Sequence< Property > aSourceProps = xSourceProps->getProperties();
     Property aDestProp;
     for (const Property& rSourceProp : aSourceProps)
     {

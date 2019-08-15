@@ -188,7 +188,7 @@ static xmlDocPtr notebookbarXMLParser(char* pDocName, char* pUIItemID, char* pPr
     return pDocPtr;
 }
 
-void CustomNotebookbarGenerator::modifyCustomizedUIFile(Sequence<OUString> sUIItemProperties)
+void CustomNotebookbarGenerator::modifyCustomizedUIFile(const Sequence<OUString>& sUIItemProperties)
 {
     OUString sCustomizedUIPath = getCustomizedUIPath();
     char* cCustomizedUIPath = convertToCharPointer(sCustomizedUIPath);

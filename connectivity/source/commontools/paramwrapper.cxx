@@ -131,7 +131,8 @@ namespace param
     OUString ParameterWrapper::impl_getPseudoAggregatePropertyName( sal_Int32 _nHandle ) const
     {
         Reference< XPropertySetInfo >  xInfo = const_cast<ParameterWrapper*>( this )->getPropertySetInfo();
-        for ( const Property& rProperty : xInfo->getProperties() )
+        const css::uno::Sequence<Property> aProperties = xInfo->getProperties();
+        for ( const Property& rProperty : aProperties )
         {
             if ( rProperty.Handle == _nHandle )
                 return rProperty.Name;

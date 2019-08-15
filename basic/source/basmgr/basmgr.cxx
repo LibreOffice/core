@@ -551,7 +551,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
         uno::Reference< container::XContainer> xLibContainer( xScriptCont, uno::UNO_QUERY );
         xLibContainer->addContainerListener( xLibContainerListener );
 
-        uno::Sequence< OUString > aScriptLibNames = xScriptCont->getElementNames();
+        const uno::Sequence< OUString > aScriptLibNames = xScriptCont->getElementNames();
 
         if( aScriptLibNames.hasElements() )
         {
@@ -1419,7 +1419,7 @@ bool BasicManager::LegacyPsswdBinaryLimitExceeded( std::vector< OUString >& _out
         uno::Reference< container::XNameAccess > xScripts( GetScriptLibraryContainer(), uno::UNO_QUERY_THROW );
         uno::Reference< script::XLibraryContainerPassword > xPassword( GetScriptLibraryContainer(), uno::UNO_QUERY_THROW );
 
-        uno::Sequence< OUString > aNames( xScripts->getElementNames() );
+        const uno::Sequence< OUString > aNames( xScripts->getElementNames() );
         for ( auto const & scriptElementName : aNames )
         {
             if( !xPassword->isLibraryPasswordProtected( scriptElementName ) )
@@ -1430,7 +1430,7 @@ bool BasicManager::LegacyPsswdBinaryLimitExceeded( std::vector< OUString >& _out
                 continue;
 
             uno::Reference< container::XNameAccess > xScriptLibrary( xScripts->getByName( scriptElementName ), uno::UNO_QUERY_THROW );
-            uno::Sequence< OUString > aElementNames( xScriptLibrary->getElementNames() );
+            const uno::Sequence< OUString > aElementNames( xScriptLibrary->getElementNames() );
             sal_Int32 nLen = aElementNames.getLength();
 
             std::vector< OUString > aBigModules( nLen );
