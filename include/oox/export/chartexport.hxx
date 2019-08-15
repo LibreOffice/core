@@ -136,8 +136,8 @@ private:
                               css::chart::XChartDocument >& rChartDoc );
     void exportLegend( const css::uno::Reference<
                           css::chart::XChartDocument >& rChartDoc );
-    void exportTitle( const css::uno::Reference<
-                          css::drawing::XShape >& xShape );
+    void exportTitle( const css::uno::Reference< css::drawing::XShape >& xShape,
+                          const OUString* pSubText = nullptr );
     void exportPlotArea( const css::uno::Reference<
                              css::chart::XChartDocument >& rChartDoc );
     void exportFill( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
