@@ -318,7 +318,8 @@ MappingDialog_Impl::MappingDialog_Impl(weld::Window* pParent, BibDataManager* pM
     DBG_ASSERT(xFields.is(), "MappingDialog_Impl::MappingDialog_Impl : gave me an invalid form !");
     if (xFields.is())
     {
-        for(const OUString& rName : xFields->getElementNames())
+        const Sequence<OUString> aFieldNames = xFields->getElementNames();
+        for(const OUString& rName : aFieldNames)
             aListBoxes[0]->append_text(rName);
     }
 
@@ -579,7 +580,8 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
 
         Reference< XPropertySet >  xField;
 
-        for ( const OUString& rField : xFields->getElementNames() )
+        const Sequence<OUString> aFieldNames = xFields->getElementNames();
+        for ( const OUString& rField : aFieldNames )
         {
             xFields->getByName( rField ) >>= xField;
 

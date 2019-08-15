@@ -702,7 +702,8 @@ namespace pcr
                         continue;
 
                     // loop through all methods
-                    for (const OUString& rMethod : comphelper::getEventMethodsForType( rListener ))
+                    const Sequence<OUString> aEventMethods = comphelper::getEventMethodsForType( rListener );
+                    for (const OUString& rMethod : aEventMethods)
                     {
                         EventDescription aEvent;
                         if ( !lcl_getEventDescriptionForMethod( rMethod, aEvent ) )

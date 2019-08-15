@@ -300,7 +300,7 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
             Reference< XContainer> xContainer(xQueries,UNO_QUERY_THROW);
             m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
         }
-        Sequence< OUString > aQueryNames = xQueries->getElementNames();
+        const Sequence< OUString > aQueryNames = xQueries->getElementNames();
 
         for ( auto const & name : aQueryNames )
             m_rQueryList.append("", name, aQueryImage);

@@ -470,7 +470,7 @@ namespace pcr
                     aProperties = xPSI->getProperties();
                 DBG_ASSERT( aProperties.hasElements(), "GenericPropertyHandler::getSupportedProperties: no properties!" );
 
-                for ( auto const & property : aProperties )
+                for ( auto const & property : std::as_const(aProperties) )
                 {
                     switch ( property.Type.getTypeClass() )
                     {

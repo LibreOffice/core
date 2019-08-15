@@ -261,7 +261,8 @@ void ODbaseIndexDialog::Init()
     std::vector< OUString > aUsedIndexes;
 
     aURL.SetSmartProtocol(INetProtocol::File);
-    for(const OUString& rURL : ::utl::LocalFileHelper::GetFolderContents(m_aDSN, bFolder))
+    const Sequence<OUString> aFolderUrls = ::utl::LocalFileHelper::GetFolderContents(m_aDSN, bFolder);
+    for(const OUString& rURL : aFolderUrls)
     {
         OUString aName;
         osl::FileBase::getSystemPathFromFileURL(rURL,aName);
