@@ -2475,7 +2475,7 @@ OUString OReportDefinition::getDocumentBaseURL() const
 
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
-    for (beans::PropertyValue const& it : m_pImpl->m_aArgs)
+    for (beans::PropertyValue const& it : std::as_const(m_pImpl->m_aArgs))
     {
         if (it.Name == "DocumentBaseURL")
             return it.Value.get<OUString>();
