@@ -60,23 +60,23 @@
  <toolbar:toolbaritem xlink:href=".uno:Bold" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Italic" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:UnderlineSimple" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Strikeout"/>
+ <toolbar:toolbaritem xlink:href=".uno:Strikeout" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SuperScript" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SubScript" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontColor"/>
- <toolbar:toolbaritem xlink:href=".uno:BackColor"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontColor" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:BackColor" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ResetAttributes"/>
  <toolbar:toolbarseparator/>
  <!-- These command can be enabled when tdf#107000 is fixed -->
  <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:text="List Styles" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
- <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
- <toolbar:toolbaritem xlink:href=".uno:RightPara"/>
- <toolbar:toolbaritem xlink:href=".uno:JustifyPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:LeftPara" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:CenterPara" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:RightPara" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BulletListStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberListStyle"/>
@@ -89,8 +89,8 @@
  <toolbar:toolbaritem xlink:href=".uno:IncrementIndent" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:DecrementIndent" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LineSpacing"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineSpacing" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Spacing" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease"/>
- <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease" toolbar:visible="false"/>
 </toolbar:toolbar>
