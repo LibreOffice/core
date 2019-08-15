@@ -1029,27 +1029,7 @@ public:
         return m_xWindow->GetText();
     }
 
-    void help()
-    {
-        //show help for widget with keyboard focus
-        vcl::Window* pWidget = ImplGetSVData()->maWinData.mpFocusWin;
-        if (!pWidget)
-            pWidget = m_xWindow;
-        OString sHelpId = pWidget->GetHelpId();
-        while (sHelpId.isEmpty())
-        {
-            pWidget = pWidget->GetParent();
-            if (!pWidget)
-                break;
-            sHelpId = pWidget->GetHelpId();
-        }
-        std::unique_ptr<weld::Widget> xTemp(pWidget != m_xWindow ? new SalInstanceWidget(pWidget, m_pBuilder, false) : nullptr);
-        weld::Widget* pSource = xTemp ? xTemp.get() : this;
-        bool bRunNormalHelpRequest = !m_aHelpRequestHdl.IsSet() || m_aHelpRequestHdl.Call(*pSource);
-        Help* pHelp = bRunNormalHelpRequest ? Application::GetHelp() : nullptr;
-        if (pHelp)
-            pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), pSource);
-    }
+    void help();
 
     virtual void set_busy_cursor(bool bBusy) override
     {
@@ -5526,6 +5506,17 @@ public:
         return std::make_unique<SalInstanceSizeGroup>();
     }
 
+    OString get_current_page_help_id()
+    {
+        TabControl *pCtrl = get_builder().get<TabControl>("tabcontrol");
+        TabPage* pTabPage = pCtrl ? pCtrl->GetTabPage(pCtrl->GetCurPageId()) : nullptr;
+        vcl::Window *pTabChild = pTabPage ? pTabPage->GetWindow(GetWindowType::FirstChild) : nullptr;
+        pTabChild = pTabChild ? pTabChild->GetWindow(GetWindowType::FirstChild) : nullptr;
+        if (pTabChild)
+            return pTabChild->GetHelpId();
+        return OString();
+    }
+
     virtual ~SalInstanceBuilder() override
     {
         if (VclBuilderContainer* pOwnedToplevel = dynamic_cast<VclBuilderContainer*>(m_aOwnedToplevel.get()))
@@ -5555,6 +5546,43 @@ weld::Builder* Application::CreateInterimBuilder(weld::Widget* pParent, const OU
     return Application::CreateInterimBuilder(pParentWidget, rUIFile);
 }
 
+void SalInstanceWindow::help()
+{
+    //show help for widget with keyboard focus
+    vcl::Window* pWidget = ImplGetSVData()->maWinData.mpFocusWin;
+    if (!pWidget)
+        pWidget = m_xWindow;
+    OString sHelpId = pWidget->GetHelpId();
+    while (sHelpId.isEmpty())
+    {
+        pWidget = pWidget->GetParent();
+        if (!pWidget)
+            break;
+        sHelpId = pWidget->GetHelpId();
+    }
+    std::unique_ptr<weld::Widget> xTemp(pWidget != m_xWindow ? new SalInstanceWidget(pWidget, m_pBuilder, false) : nullptr);
+    weld::Widget* pSource = xTemp ? xTemp.get() : this;
+    bool bRunNormalHelpRequest = !m_aHelpRequestHdl.IsSet() || m_aHelpRequestHdl.Call(*pSource);
+    Help* pHelp = bRunNormalHelpRequest ? Application::GetHelp() : nullptr;
+    if (pHelp)
+    {
+        // tdf#126007, there's a nice fallback route for offline help where
+        // the current page of a notebook will get checked when the help
+        // button is pressed and there was no help for the dialog found.
+        //
+        // But for online help that route doesn't get taken, so bodge this here
+        // by using the page help id if available and if the help button itself
+        // was the original id
+        if (m_pBuilder && sHelpId.endsWith("/help"))
+        {
+            OString sPageId = m_pBuilder->get_current_page_help_id();
+            if (!sPageId.isEmpty())
+                sHelpId = sPageId;
+        }
+        pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), pSource);
+    }
+}
+
 //iterate upwards through the hierarchy from this widgets through its parents
 //calling func with their helpid until func returns true or we run out of parents
 void SalInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OString&)>& func)
@@ -5564,17 +5592,11 @@ void SalInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OS
     {
         if (m_pBuilder && pParent->IsDialog())
         {
-            // tdf#122355 During help fallback, before we ask a dialog for its help
-            // see if it has a TabControl and ask the active tab of that for help
-            TabControl *pCtrl = m_pBuilder->get_builder().get<TabControl>("tabcontrol");
-            TabPage* pTabPage = pCtrl ? pCtrl->GetTabPage(pCtrl->GetCurPageId()) : nullptr;
-            vcl::Window *pTabChild = pTabPage ? pTabPage->GetWindow(GetWindowType::FirstChild) : nullptr;
-            pTabChild = pTabChild ? pTabChild->GetWindow(GetWindowType::FirstChild) : nullptr;
-            if (pTabChild)
-            {
-                if (func(pTabChild->GetHelpId()))
-                    return;
-            }
+            // tdf#122355 before trying dialog help, check to see if there is a notebook
+            // called tabcontrol, and try the help for the current page of that first
+            OString sPageHelpId(m_pBuilder->get_current_page_help_id());
+            if (!sPageHelpId.isEmpty() && func(sPageHelpId))
+                return;
         }
         if (func(pParent->GetHelpId()))
             return;
