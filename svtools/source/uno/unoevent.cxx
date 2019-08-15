@@ -151,7 +151,7 @@ void getMacroFromAny(
     OUString sScriptVal;
     OUString sMacroVal;
     OUString sLibVal;
-    for (const PropertyValue& aValue : aSequence)
+    for (const PropertyValue& aValue : std::as_const(aSequence))
     {
         if (aValue.Name == sEventType)
         {

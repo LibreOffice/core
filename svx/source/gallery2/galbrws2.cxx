@@ -192,7 +192,7 @@ void SAL_CALL GalleryThemePopup::statusChanged(
             else if ( ( rEvent.State >>= sItems ) && sItems.hasElements() )
             {
                 sal_uInt16 nId = 1;
-                for ( const OUString& rStr : sItems )
+                for ( const OUString& rStr : std::as_const(sItems) )
                 {
                     mpBackgroundPopup->InsertItem( nId, rStr );
                     nId++;

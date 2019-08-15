@@ -123,7 +123,7 @@ void SAL_CALL EnhancedCustomShapeEngine::initialize( const Sequence< Any >& aArg
         if ( rArgument >>= aParameter )
             break;
     }
-    for ( const beans::PropertyValue& rProp : aParameter )
+    for ( const beans::PropertyValue& rProp : std::as_const(aParameter) )
     {
         if ( rProp.Name == "CustomShape" )
             rProp.Value >>= mxShape;

@@ -149,7 +149,7 @@ bool lcl_ExecuteFilterDialog( const Sequence< PropertyValue >& rPropsForDialog,
             if( xFilterDialog->execute() )
             {
                 bStatus = true;
-                Sequence< PropertyValue > aPropsFromDialog = xFilterProperties->getPropertyValues();
+                const Sequence< PropertyValue > aPropsFromDialog = xFilterProperties->getPropertyValues();
                 for ( const auto& rProp : aPropsFromDialog )
                 {
                     if (rProp.Name == "FilterData")
@@ -297,7 +297,7 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
                     sal_Int32 nWidth = 0;
                     sal_Int32 nHeight = 0;
 
-                    for (const auto& rProp : aFilterData)
+                    for (const auto& rProp : std::as_const(aFilterData))
                     {
                         if (rProp.Name == "PixelWidth")
                         {

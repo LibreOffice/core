@@ -2040,7 +2040,7 @@ void EnhancedCustomShape2d::CreateSubPath(
     sal_Int32 nSegInfoSize = seqSegments.getLength();
     if ( !nSegInfoSize )
     {
-        for ( const EnhancedCustomShapeParameterPair& rCoordinate : seqCoordinates )
+        for ( const EnhancedCustomShapeParameterPair& rCoordinate : std::as_const(seqCoordinates) )
         {
             const Point aTempPoint(GetPoint( rCoordinate, true, true ));
             aNewB2DPolygon.append(basegfx::B2DPoint(aTempPoint.X(), aTempPoint.Y()));
@@ -2996,7 +2996,7 @@ void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
 {
     if ( pObj )
     {
-        for ( const auto& rGluePoint : seqGluePoints )
+        for ( const auto& rGluePoint : std::as_const(seqGluePoints) )
         {
             SdrGluePoint aGluePoint;
 

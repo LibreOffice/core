@@ -1479,7 +1479,7 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
         return;
 
     // read history pick list
-    Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
+    const Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
     INetURLObject aCurObj;
 
     for( const Sequence< PropertyValue >& rPropertySet : seqPicklist )
@@ -2045,7 +2045,7 @@ void URLBox::UpdatePicklistForSmartProtocol_Impl()
         return;
 
     // read history pick list
-    Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
+    const Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
     INetURLObject aCurObj;
 
     for( const Sequence< PropertyValue >& rPropertySet : seqPicklist )

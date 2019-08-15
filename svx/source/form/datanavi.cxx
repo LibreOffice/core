@@ -1901,7 +1901,7 @@ namespace svxform
                     if ( xContainer.is() )
                     {
                         m_xDataContainer = xContainer;
-                        Sequence< OUString > aNameList = m_xDataContainer->getElementNames();
+                        const Sequence< OUString > aNameList = m_xDataContainer->getElementNames();
                         for ( const OUString& rName : aNameList )
                         {
                             Any aAny = m_xDataContainer->getByName( rName );
@@ -2405,7 +2405,7 @@ namespace svxform
         try
         {
             // get property names & infos, and iterate over target properties
-            Sequence< Property > aProperties = xTo->getPropertySetInfo()->getProperties();
+            const Sequence< Property > aProperties = xTo->getPropertySetInfo()->getProperties();
             Reference< XPropertySetInfo > xFromInfo = xFrom->getPropertySetInfo();
             for ( const Property& rProperty : aProperties )
             {
@@ -2669,7 +2669,7 @@ namespace svxform
                         xModel->getDataTypeRepository();
                     if ( xDataTypes.is() )
                     {
-                        Sequence< OUString > aNameList = xDataTypes->getElementNames();
+                        const Sequence< OUString > aNameList = xDataTypes->getElementNames();
                         for ( const OUString& rName : aNameList )
                             m_xDataTypeLB->append_text(rName);
                     }
@@ -2958,7 +2958,7 @@ namespace svxform
         try
         {
             int nRow = 0;
-            Sequence< OUString > aAllNames = m_rNamespaces->getElementNames();
+            const Sequence< OUString > aAllNames = m_rNamespaces->getElementNames();
             for ( const OUString& sPrefix : aAllNames )
             {
                 if ( m_rNamespaces->hasByName( sPrefix ) )
