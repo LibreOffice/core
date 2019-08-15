@@ -54,10 +54,11 @@ enum class ConfigFlags {
     UseEnhancedFields            = 0x0100000,
     WordWbctbl                   = 0x0200000,
     SmartArtShapeLoad            = 0x0400000,
-    CharBackgroundToHighlighting = 0x8000000
+    CharBackgroundToHighlighting = 0x8000000,
+    VisioLoad                    = 0x4000000,
 };
 namespace o3tl {
-    template<> struct typed_flags<ConfigFlags> : is_typed_flags<ConfigFlags, 0x87fff3f> {};
+    template<> struct typed_flags<ConfigFlags> : is_typed_flags<ConfigFlags, 0xc7fff3f> {};
 }
 
 class SvtAppFilterOptions_Impl : public utl::ConfigItem
@@ -306,7 +307,7 @@ const Sequence<OUString>& GetPropertyNames()
     static Sequence<OUString> aNames;
     if(!aNames.getLength())
     {
-        int nCount = 14;
+        int nCount = 15;
         aNames.realloc(nCount);
         static const char* aPropNames[] =
         {
@@ -323,7 +324,8 @@ const Sequence<OUString>& GetPropertyNames()
             "Export/EnableWordPreview",         // 10
             "Import/ImportWWFieldsAsEnhancedFields", // 11
             "Import/SmartArtToShapes",          // 12
-            "Export/CharBackgroundToHighlighting"    // 13
+            "Export/CharBackgroundToHighlighting",   // 13
+            "Import/VisioToDraw"                     // 14
         };
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
@@ -365,6 +367,9 @@ static ConfigFlags lcl_GetFlag(sal_Int32 nProp)
         case 11: nFlag = ConfigFlags::UseEnhancedFields; break;
         case 12: nFlag = ConfigFlags::SmartArtShapeLoad; break;
         case 13: nFlag = ConfigFlags::CharBackgroundToHighlighting; break;
+        case 14:
+            nFlag = ConfigFlags::VisioLoad;
+            break;
 
         default: OSL_FAIL("illegal value");
     }
@@ -601,6 +606,14 @@ bool SvtFilterOptions::IsSmartArt2Shape() const
 void SvtFilterOptions::SetSmartArt2Shape( bool bFlag )
 {
     pImpl->SetFlag( ConfigFlags::SmartArtShapeLoad, bFlag );
+    SetModified();
+}
+
+bool SvtFilterOptions::IsVisio2Draw() const { return pImpl->IsFlag(ConfigFlags::VisioLoad); }
+
+void SvtFilterOptions::SetVisio2Draw(bool bFlag)
+{
+    pImpl->SetFlag(ConfigFlags::VisioLoad, bFlag);
     SetModified();
 }
 

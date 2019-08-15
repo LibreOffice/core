@@ -47,5 +47,9 @@ String RID_SVXSTR_CHG_SMARTART
 {
     Text [ en-US ] = "SmartArt to %PRODUCTNAME shapes or reverse";
 };
+String RID_SVXSTR_CHG_VISIO
+{
+    Text [ en-US ] = "Visio to %PRODUCTNAME Draw or reverse";
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

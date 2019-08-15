@@ -81,7 +81,8 @@ class OfaMSFilterTabPage2 : public SfxTabPage
            sChgToFromWriter,
            sChgToFromCalc,
            sChgToFromImpress,
-           sChgToFromSmartArt;
+           sChgToFromSmartArt,
+           sChgToFromVisio;
     SvLBoxButtonData*   pCheckButtonData;
 
     VclPtr<RadioButton> aHighlightingRB;

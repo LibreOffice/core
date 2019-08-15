@@ -91,6 +91,9 @@ public:
     void SetCharBackground2Highlighting();
     void SetCharBackground2Shading();
 
+    bool IsVisio2Draw() const;
+    void SetVisio2Draw(bool bFlag);
+
     static SvtFilterOptions& Get();
 };
 

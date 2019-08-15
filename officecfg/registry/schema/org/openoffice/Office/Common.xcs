@@ -4054,6 +4054,13 @@
             </info>
             <value>true</value>
           </prop>
+          <prop oor:name="VisioToDraw" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Specifies if convertible Visio OLE objects are converted
+              into Draw objects.</desc>
+            </info>
+            <value>true</value>
+          </prop>
         </group>
         <group oor:name="Export">
           <info>

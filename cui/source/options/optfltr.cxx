@@ -34,6 +34,7 @@ enum MSFltrPg2_CheckBoxEntries {
     Calc,
     Impress,
     SmartArt,
+    Visio,
     InvalidCBEntry
 };
 
@@ -150,6 +151,7 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet
     sChgToFromCalc(CuiResId(RID_SVXSTR_CHG_CALC)),
     sChgToFromImpress(CuiResId(RID_SVXSTR_CHG_IMPRESS)),
     sChgToFromSmartArt(CuiResId(RID_SVXSTR_CHG_SMARTART)),
+    sChgToFromVisio(CuiResId(RID_SVXSTR_CHG_VISIO)),
     pCheckButtonData(nullptr)
 {
     get(m_pCheckLBContainer, "checklbcontainer");
@@ -224,6 +226,8 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
                         &SvtFilterOptions::SetImpress2PowerPoint },
         { SmartArt,  &SvtFilterOptions::IsSmartArt2Shape,
                         &SvtFilterOptions::SetSmartArt2Shape },
+        { MSFltrPg2_CheckBoxEntries::Visio, &SvtFilterOptions::IsVisio2Draw,
+                        &SvtFilterOptions::SetVisio2Draw },
         { InvalidCBEntry, nullptr, nullptr }
     };
 
@@ -244,6 +248,10 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
 
                 if( bCheck != (rOpt.*pArr->FnIs)() )
                     (rOpt.*pArr->FnSet)( bCheck );
+            }
+            if (pArr->eType == MSFltrPg2_CheckBoxEntries::SmartArt)
+            {
+                bFirst = !bFirst;
             }
         }
     }
@@ -278,6 +286,8 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
         InsertEntry( sChgToFromImpress, static_cast< sal_IntPtr >( Impress ) );
     InsertEntry( sChgToFromSmartArt, static_cast< sal_IntPtr >( SmartArt ), false );
+    if (aModuleOpt.IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
+        InsertEntry(sChgToFromVisio, static_cast< sal_IntPtr >( Visio ), false);
 
     static struct ChkCBoxEntries{
         MSFltrPg2_CheckBoxEntries eType;
@@ -292,6 +302,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
         { Impress,  &SvtFilterOptions::IsPowerPoint2Impress },
         { Impress,  &SvtFilterOptions::IsImpress2PowerPoint },
         { SmartArt, &SvtFilterOptions::IsSmartArt2Shape },
+        { Visio,    &SvtFilterOptions::IsVisio2Draw },
         { InvalidCBEntry, nullptr }
     };
 
@@ -311,6 +322,10 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
                 else
                     rItem.SetStateUnchecked();
                 m_pCheckLB->InvalidateEntry( pEntry );
+            }
+            if (pArr->eType == MSFltrPg2_CheckBoxEntries::SmartArt)
+            {
+                bFirst = !bFirst;
             }
         }
     }
