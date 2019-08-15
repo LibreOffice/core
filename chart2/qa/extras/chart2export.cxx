@@ -103,6 +103,8 @@ public:
     void testTitleManualLayoutXLSX();
     void testPlotAreaManualLayoutXLSX();
     void testLegendManualLayoutXLSX();
+    void testChartSubTitle();
+    void testChartMainWithSubTitle();
     void testChartTitlePropertiesColorFillXLSX();
     void testChartTitlePropertiesGradientFillXLSX();
     void testChartTitlePropertiesBitmapFillXLSX();
@@ -203,6 +205,8 @@ public:
     CPPUNIT_TEST(testTitleManualLayoutXLSX);
     CPPUNIT_TEST(testPlotAreaManualLayoutXLSX);
     CPPUNIT_TEST(testLegendManualLayoutXLSX);
+    CPPUNIT_TEST(testChartSubTitle);
+    CPPUNIT_TEST(testChartMainWithSubTitle);
     CPPUNIT_TEST(testChartTitlePropertiesColorFillXLSX);
     CPPUNIT_TEST(testChartTitlePropertiesGradientFillXLSX);
     CPPUNIT_TEST(testChartTitlePropertiesBitmapFillXLSX);
@@ -1643,6 +1647,35 @@ void Chart2ExportTest::testLegendManualLayoutXLSX()
 
     // Make sure that default text font size is preserved after export
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:txPr/a:p/a:pPr/a:defRPr", "sz", "900");
+}
+
+void Chart2ExportTest::testChartSubTitle()
+{
+    load("/chart2/qa/extras/data/ods/", "testChartSubTitle.ods");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // test properties of subtitle
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr", "sz", "1100");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr", "b", "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr/a:solidFill/a:srgbClr", "val", "00a933");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:rPr/a:latin", "typeface", "Times New Roman");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:t", "It is a Subtitle");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:solidFill/a:srgbClr", "val", "b2b2b2");
+}
+
+void Chart2ExportTest::testChartMainWithSubTitle()
+{
+    load("/chart2/qa/extras/data/ods/", "testChartMainWithSubTitle.ods");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // test properties of title
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr", "sz", "1300");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr", "b", "0");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr", "i", "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr/a:solidFill/a:srgbClr", "val", "f10d0c");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:rPr/a:latin", "typeface", "Arial");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:t", "It is a Maintitle\nIt is a Subtitle");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:solidFill/a:srgbClr", "val", "81d41a");
 }
 
 void Chart2ExportTest::testChartTitlePropertiesColorFillXLSX()
