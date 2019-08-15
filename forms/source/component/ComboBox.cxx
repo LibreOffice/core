@@ -415,7 +415,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<css::io::XObjectInputStream>&
         m_aListSource.clear();
         css::uno::Sequence<OUString> aListSource;
         _rxInStream >> aListSource;
-        for (const OUString& rToken : aListSource)
+        for (const OUString& rToken : std::as_const(aListSource))
             m_aListSource += rToken;
     }
 
@@ -642,7 +642,8 @@ void OComboBoxModel::loadData( bool _bForce )
                 Reference<XNameAccess> xFieldNames = getTableFields(xConnection, m_aListSource);
                 if (xFieldNames.is())
                 {
-                    for (const OUString& rustrNames : xFieldNames->getElementNames())
+                    const Sequence<OUString> aFieldNames = xFieldNames->getElementNames();
+                    for (const OUString& rustrNames : aFieldNames)
                         aStringList.push_back(rustrNames);
                 }
             }
@@ -763,7 +764,7 @@ bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
         if ( getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aStringItemList )
         {
             bool bFound = false;
-            for (const OUString& rStringItem : aStringItemList)
+            for (const OUString& rStringItem : std::as_const(aStringItemList))
             {
                 if ( (bFound = rStringItem == sNewValue) )
                     break;

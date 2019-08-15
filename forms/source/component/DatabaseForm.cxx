@@ -305,7 +305,7 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
 
             Reference< XPropertySetInfo > xDestPSI( getPropertySetInfo(), UNO_SET_THROW );
 
-            Sequence< Property > aSourceProperties( xSourcePSI->getProperties() );
+            const Sequence< Property > aSourceProperties( xSourcePSI->getProperties() );
             for ( auto const & sourceProperty : aSourceProperties )
             {
                 if ( xDestPSI->hasPropertyByName( sourceProperty.Name ) )
@@ -631,7 +631,8 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
 
                 // Find the right control
                 bool bFound = false;
-                for( auto const& xControl : xControlContainer->getControls() )
+                const Sequence<Reference<XControl>> aControls = xControlContainer->getControls();
+                for( auto const& xControl : aControls )
                 {
                     Reference<XPropertySet>  xModel(xControl->getModel(), UNO_QUERY);
                     if ((bFound = xModel == xComponentSet))

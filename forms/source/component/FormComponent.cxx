@@ -2366,7 +2366,7 @@ bool OBoundControlModel::impl_approveValueBinding_nolock( const Reference< XValu
         // < SYNCHRONIZED
     }
 
-    for ( auto const & type : aTypeCandidates )
+    for ( auto const & type : std::as_const(aTypeCandidates) )
     {
         if ( _rxBinding->supportsType( type ) )
             return true;
@@ -2594,7 +2594,7 @@ void OBoundControlModel::calculateExternalValueType()
     m_aExternalValueType = Type();
     if ( !m_xExternalBinding.is() )
         return;
-    Sequence< Type > aTypeCandidates( getSupportedBindingTypes() );
+    const Sequence< Type > aTypeCandidates( getSupportedBindingTypes() );
     for ( auto const & typeCandidate : aTypeCandidates )
     {
         if ( m_xExternalBinding->supportsType( typeCandidate ) )

@@ -504,7 +504,7 @@ std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Referen
     // We create an additional job name list with the same size, then the original list...
     // step over all job entries... check her timestamps... and put only job names to the
     // destination list, which represent an enabled job.
-    css::uno::Sequence< OUString > lAllJobs = xJobList->getElementNames();
+    const css::uno::Sequence< OUString > lAllJobs = xJobList->getElementNames();
     sal_Int32 c = lAllJobs.getLength();
 
     std::vector< OUString > lEnabledJobs(c);
