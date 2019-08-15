@@ -3792,6 +3792,23 @@
         <desc>Specifies default settings of Microsoft-, Graphic- and HTML
         filters.</desc>
       </info>
+      <group oor:name="Adobe">
+        <info>
+          <desc>Specifies default settings of Adobe filters.</desc>
+        </info>
+        <group oor:name="Import">
+          <info>
+            <desc>Specifies default settings of Adobe import filters.</desc>
+          </info>
+          <prop oor:name="PDFToDraw" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Specifies if convertible PDF OLE objects are converted
+              into Draw objects.</desc>
+            </info>
+            <value>true</value>
+          </prop>
+        </group>
+      </group>
       <group oor:name="Microsoft">
         <info>
           <desc>Specifies default settings of Microsoft filters.</desc>
