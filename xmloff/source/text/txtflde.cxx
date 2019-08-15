@@ -1965,7 +1965,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
         aFieldMasters = xFieldMasterNameAccess->getElementNames();
     }
 
-    for(const OUString& sFieldMaster : aFieldMasters) {
+    for(const OUString& sFieldMaster : std::as_const(aFieldMasters)) {
 
         // workaround for #no-bug#
         if ( sFieldMaster.startsWithIgnoreAsciiCase(
@@ -2706,7 +2706,7 @@ void XMLTextFieldExport::ProcessBibliographyData(
     aAny >>= aValues;
 
     // one attribute per value (unless empty)
-    for (const auto& rProp : aValues)
+    for (const auto& rProp : std::as_const(aValues))
     {
         if( rProp.Name == "BibiliographicType" )
         {

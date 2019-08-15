@@ -684,7 +684,7 @@ void copyProperties(
     {
         Reference< beans::XPropertySetInfo > xSrcInfo( xSource->getPropertySetInfo(), uno::UNO_SET_THROW );
         Reference< beans::XPropertySetInfo > xDestInfo( xDestination->getPropertySetInfo(), uno::UNO_SET_THROW );
-        Sequence< beans::Property > aProperties( xSrcInfo->getProperties());
+        const Sequence< beans::Property > aProperties( xSrcInfo->getProperties());
         for( const auto& rProperty : aProperties )
         {
             OUString aName( rProperty.Name);

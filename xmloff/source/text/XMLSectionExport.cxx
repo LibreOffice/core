@@ -1143,7 +1143,7 @@ SvXMLEnumMapEntry<sal_Int16> const aBibliographyDataFieldMap[] =
 
 void XMLSectionExport::ExportIndexTemplateElement(
     SectionTypeEnum eType,  //i90246
-    Sequence<PropertyValue> & rValues)
+    const Sequence<PropertyValue> & rValues)
 {
     // variables for template values
 
@@ -1525,7 +1525,7 @@ void XMLSectionExport::ExportLevelParagraphStyles(
                                            true, true);
 
             // iterate over styles in this level
-            for(const auto& rStyleName : aStyleNames)
+            for(const auto& rStyleName : std::as_const(aStyleNames))
             {
                 // stylename attribute
                 GetExport().AddAttribute(XML_NAMESPACE_TEXT,

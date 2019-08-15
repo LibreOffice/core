@@ -49,7 +49,7 @@ XMLStarBasicExportHandler::~XMLStarBasicExportHandler()
 void XMLStarBasicExportHandler::Export(
     SvXMLExport& rExport,
     const OUString& rEventQName,
-    Sequence<PropertyValue> & rValues,
+    const Sequence<PropertyValue> & rValues,
     bool bUseWhitespace)
 {
     rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_LANGUAGE,

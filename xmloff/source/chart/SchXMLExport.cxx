@@ -212,7 +212,7 @@ public:
 
     void exportPropertyMapping(
         const css::uno::Reference< css::chart2::data::XDataSource > & xSource,
-        Sequence< OUString >& rSupportedMappings );
+        const Sequence< OUString >& rSupportedMappings );
 
     void exportCandleStickSeries(
         const css::uno::Sequence<
@@ -319,7 +319,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
     {
         Reference< chart2::XCoordinateSystemContainer > xCooSysCnt(
             xDiagram, uno::UNO_QUERY_THROW );
-        Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
+        const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
             xCooSysCnt->getCoordinateSystems());
         for( const auto& rCooSys : aCooSysSeq )
         {
@@ -881,7 +881,7 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
     if( !xErrorBarDataSource.is())
         return aResult;
 
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences(
+    const Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences(
         xErrorBarDataSource->getDataSequences());
     for( const auto& rSequence : aSequences )
     {
@@ -2487,14 +2487,14 @@ void SchXMLExportHelper_Impl::exportSeries(
 
     std::vector< XMLPropertyState > aPropertyStates;
 
-    Sequence< Reference< chart2::XCoordinateSystem > >
+    const Sequence< Reference< chart2::XCoordinateSystem > >
         aCooSysSeq( xBCooSysCnt->getCoordinateSystems());
     for( const auto& rCooSys : aCooSysSeq )
     {
         Reference< chart2::XChartTypeContainer > xCTCnt( rCooSys, uno::UNO_QUERY );
         if( ! xCTCnt.is())
             continue;
-        Sequence< Reference< chart2::XChartType > > aCTSeq( xCTCnt->getChartTypes());
+        const Sequence< Reference< chart2::XChartType > > aCTSeq( xCTCnt->getChartTypes());
         for( const auto& rChartType : aCTSeq )
         {
             Reference< chart2::XDataSeriesContainer > xDSCnt( rChartType, uno::UNO_QUERY );
@@ -2812,7 +2812,7 @@ void SchXMLExportHelper_Impl::exportSeries(
 }
 
 void SchXMLExportHelper_Impl::exportPropertyMapping(
-    const Reference< chart2::data::XDataSource > & xSource, Sequence< OUString >& rSupportedMappings )
+    const Reference< chart2::data::XDataSource > & xSource, const Sequence< OUString >& rSupportedMappings )
 {
     Reference< chart2::XChartDocument > xNewDoc( mrExport.GetModel(), uno::UNO_QUERY );
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
@@ -2851,7 +2851,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
     Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer( xSeries, uno::UNO_QUERY );
     if( xRegressionCurveContainer.is() )
     {
-        Sequence< Reference< chart2::XRegressionCurve > > aRegCurveSeq = xRegressionCurveContainer->getRegressionCurves();
+        const Sequence< Reference< chart2::XRegressionCurve > > aRegCurveSeq = xRegressionCurveContainer->getRegressionCurves();
 
         for( const auto& xRegCurve : aRegCurveSeq )
         {
@@ -3593,7 +3593,7 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
             if( xDataProvider.is())
             {
                 Reference< chart2::data::XDataSource > xDataSource( lcl_pressUsedDataIntoRectangularFormat( xChartDoc, mbHasCategoryLabels ));
-                Sequence< beans::PropertyValue > aArgs( xDataProvider->detectArguments( xDataSource ));
+                const Sequence< beans::PropertyValue > aArgs( xDataProvider->detectArguments( xDataSource ));
                 OUString sCellRange, sBrokenRange;
                 bool bBrokenRangeAvailable = false;
                 for( const auto& rArg : aArgs )

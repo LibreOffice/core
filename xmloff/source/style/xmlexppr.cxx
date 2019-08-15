@@ -316,7 +316,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
         }
         else
         {
-            Sequence < beans::GetPropertyTolerantResult > aResults(xTolPropSet->getPropertyValuesTolerant(rApiNames));
+            const Sequence < beans::GetPropertyTolerantResult > aResults(xTolPropSet->getPropertyValuesTolerant(rApiNames));
             OSL_ENSURE( rApiNames.getLength() == aResults.getLength(), "wrong implemented XTolerantMultiPropertySet" );
             FilterPropertyInfoList_Impl::iterator aPropIter(aPropInfos.begin());
             XMLPropertyState aNewProperty( -1 );
@@ -919,7 +919,7 @@ void SvXMLExportPropertyMapper::_exportXML(
             std::unique_ptr<SvXMLNamespaceMap> pNewNamespaceMap;
             const SvXMLNamespaceMap *pNamespaceMap = &rNamespaceMap;
 
-            uno::Sequence< OUString > aAttribNames( xAttrContainer->getElementNames() );
+            const uno::Sequence< OUString > aAttribNames( xAttrContainer->getElementNames() );
 
             OUStringBuffer sNameBuffer;
             xml::AttributeData aData;
