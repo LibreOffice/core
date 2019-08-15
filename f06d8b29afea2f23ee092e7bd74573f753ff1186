@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_0c6575e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-08-15T11:00:05Z",
+      "side": 1,
+      "message": "Just to make sure you check the right stuff. start a drag and then press and release Ctrl or Shift, which should update the cursor immediately. For Qt that just happens after mouse move.\n\nSo if it still doesn\u0027t work, this may be the reason why the bug is still open :-)",
+      "parentUuid": "bf659307_06d6b4c4",
+      "range": {
+        "startLine": 10,
+        "startChar": 58,
+        "endLine": 18,
+        "endChar": 35
+      },
+      "revId": "f06d8b29afea2f23ee092e7bd74573f753ff1186",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_86f3a473",
         "filename": "configure.ac",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2019-08-14T16:22:49Z",
       "side": 1,
       "message": "What does the \"(recommended)\" mean here?\nI\u0027d personally probably just drop this note, since (AFAIU) this depends on the Qt version used at runtime and is not LibO specific (same e.g. with kate), but don\u0027t have a strong opinion. (and a quick check with self-built qtbase didn\u0027t help for me..., but I didn\u0027t spend more time on this)",
+      "range": {
+        "startLine": 11299,
+        "startChar": 0,
+        "endLine": 11303,
+        "endChar": 14
+      },
+      "revId": "f06d8b29afea2f23ee092e7bd74573f753ff1186",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_2ca5d904",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 11303,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-08-15T11:00:05Z",
+      "side": 1,
+      "message": "\u003e What does the \"(recommended)\" mean here?\n\nThis kind of messages were the same for the native file picker bugs in Qt. At that time there were non-merged fixes by myself attached to the bug reports. This is an information mainly for packagers, that they\u0027ll probably look at the bug reports and can even fix it in their own Qt version and at least add some interest to the Qt bug report.\n\nIt\u0027s recommended, because it\u0027s not mandatory to fix this. It\u0027s a minor problem, but I want to raise awareness, eventually changing priorities for bug fixes on the Qt side. There isn\u0027t anything I can do on the LO side to workaround it.",
+      "parentUuid": "bf659307_86f3a473",
       "range": {
         "startLine": 11299,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_ecae01e6",
+        "filename": "vcl/qt5/Qt5DragAndDrop.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-08-15T11:00:05Z",
+      "side": 1,
+      "message": "I kept the old name. The header has even more renamed variables…",
+      "parentUuid": "bf659307_86e084ce",
+      "range": {
+        "startLine": 56,
+        "startChar": 59,
+        "endLine": 56,
+        "endChar": 82
+      },
+      "revId": "f06d8b29afea2f23ee092e7bd74573f753ff1186",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_c61c3cc3",
         "filename": "vcl/qt5/Qt5DragAndDrop.cxx",
         "patchSetId": 5
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_acb8092a",
+        "filename": "vcl/qt5/Qt5DragAndDrop.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-08-15T11:00:05Z",
+      "side": 1,
+      "message": "I dropped some more \"cleanup\" stuff and moved it into a separate patch. As you know, when hacking on stuff, code evolves and I\u0027m currently just interested in something that works and passes tests.",
+      "parentUuid": "bf659307_c61c3cc3",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 32
+      },
+      "revId": "f06d8b29afea2f23ee092e7bd74573f753ff1186",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_465fcc71",
         "filename": "vcl/qt5/Qt5Frame.cxx",
         "patchSetId": 5
@@ -105,6 +201,30 @@
       "writtenOn": "2019-08-14T16:22:49Z",
       "side": 1,
       "message": "Can you quickly explain the logic used here (why MOVE/COPY is chosen this way)?",
+      "range": {
+        "startLine": 1224,
+        "startChar": 0,
+        "endLine": 1226,
+        "endChar": 82
+      },
+      "revId": "f06d8b29afea2f23ee092e7bd74573f753ff1186",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ccb3fd4c",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-08-15T11:00:05Z",
+      "side": 1,
+      "message": "I\u0027ve added an additional comment.",
+      "parentUuid": "bf659307_465fcc71",
       "range": {
         "startLine": 1224,
         "startChar": 0,
