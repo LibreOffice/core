@@ -249,6 +249,13 @@ static OUString HandleFilter(const uno::Reference<uno::XComponentContext>& xComp
             aRet.clear();
         }
     }
+    if (!officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::get(xComponentContext))
+    {
+        if (rFilter == "draw_pdf_import")
+        {
+            aRet.clear();
+        }
+    }
 
     return aRet;
 }

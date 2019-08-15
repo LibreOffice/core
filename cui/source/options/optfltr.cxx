@@ -35,6 +35,7 @@ enum class MSFltrPg2_CheckBoxEntries {
     Impress,
     SmartArt,
     Visio,
+    PDF,
     InvalidCBEntry
 };
 
@@ -134,6 +135,7 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2(TabPageParent pParent, const SfxItemSet
     , sChgToFromImpress(CuiResId(RID_SVXSTR_CHG_IMPRESS))
     , sChgToFromSmartArt(CuiResId(RID_SVXSTR_CHG_SMARTART))
     , sChgToFromVisio(CuiResId(RID_SVXSTR_CHG_VISIO))
+    , sChgToFromPDF(CuiResId(RID_SVXSTR_CHG_PDF))
     , m_xCheckLB(m_xBuilder->weld_tree_view("checklbcontainer"))
     , m_xHighlightingRB(m_xBuilder->weld_radio_button("highlighting"))
     , m_xShadingRB(m_xBuilder->weld_radio_button("shading"))
@@ -209,6 +211,15 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
             bFirstCol = !bFirstCol;
         }
     }
+    int nPDFEntry = GetEntry4Type(MSFltrPg2_CheckBoxEntries::PDF);
+    bool bPDFCheck = m_xCheckLB->get_toggle(nPDFEntry, 0);
+    if (bPDFCheck != officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::get())
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::set(bPDFCheck, pBatch);
+        pBatch->commit();
+    }
 
     if( m_xHighlightingRB->get_state_changed_from_saved() )
     {
@@ -246,7 +257,10 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
         InsertEntry( sChgToFromImpress, MSFltrPg2_CheckBoxEntries::Impress );
     InsertEntry( sChgToFromSmartArt, MSFltrPg2_CheckBoxEntries::SmartArt, false );
     if (aModuleOpt.IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
+    {
         InsertEntry(sChgToFromVisio, MSFltrPg2_CheckBoxEntries::Visio, false);
+        InsertEntry(sChgToFromPDF, MSFltrPg2_CheckBoxEntries::PDF, false);
+    }
 
     static struct ChkCBoxEntries{
         MSFltrPg2_CheckBoxEntries eType;
@@ -262,6 +276,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
         { MSFltrPg2_CheckBoxEntries::Impress,  &SvtFilterOptions::IsImpress2PowerPoint },
         { MSFltrPg2_CheckBoxEntries::SmartArt, &SvtFilterOptions::IsSmartArt2Shape },
         { MSFltrPg2_CheckBoxEntries::Visio,    &SvtFilterOptions::IsVisio2Draw },
+        { MSFltrPg2_CheckBoxEntries::PDF,      nullptr },
     };
 
     bool bFirstCol = true;
@@ -275,7 +290,16 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
         int nEntry = GetEntry4Type( rArr.eType );
         if (nEntry != -1)
         {
-            bool bCheck = (rOpt.*rArr.FnIs)();
+            bool bCheck = false;
+            if (rArr.eType != MSFltrPg2_CheckBoxEntries::PDF)
+            {
+                bCheck = (rOpt.*rArr.FnIs)();
+            }
+            else
+            {
+                bCheck = officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::get();
+                nCol = 0;
+            }
             m_xCheckLB->set_toggle(nEntry, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, nCol);
         }
         if (rArr.eType == MSFltrPg2_CheckBoxEntries::SmartArt)
