@@ -425,7 +425,7 @@ namespace basprov
 
         if ( pBasicManager && xLibContainer.is() )
         {
-            Sequence< OUString > aLibNames = xLibContainer->getElementNames();
+            const Sequence< OUString > aLibNames = xLibContainer->getElementNames();
             sal_Int32 nLibCount = aLibNames.getLength();
             aChildNodes.realloc( nLibCount );
             Reference< browse::XBrowseNode >* pChildNodes = aChildNodes.getArray();

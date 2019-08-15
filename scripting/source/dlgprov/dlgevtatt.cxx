@@ -220,7 +220,7 @@ namespace dlgprov
             Reference< XPropertySet > xProps( xControlModel, uno::UNO_QUERY );
             if ( xEventCont.is() )
             {
-                Sequence< OUString > aNames = xEventCont->getElementNames();
+                const Sequence< OUString > aNames = xEventCont->getElementNames();
 
                 for ( const OUString& rName : aNames )
                 {
