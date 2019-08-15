@@ -74,10 +74,10 @@ sal_Bool SAL_CALL OHatchWindowFactory::supportsService( const OUString& ServiceN
 
 uno::Sequence< OUString > SAL_CALL OHatchWindowFactory::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aRet(2);
-    aRet[0] = "com.sun.star.embed.HatchWindowFactory";
-    aRet[1] = "com.sun.star.comp.embed.HatchWindowFactory";
-    return aRet;
+    return uno::Sequence<OUString>{
+        "com.sun.star.embed.HatchWindowFactory",
+        "com.sun.star.comp.embed.HatchWindowFactory"
+    };
 }
 
 }
