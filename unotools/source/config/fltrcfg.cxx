@@ -52,10 +52,11 @@ enum class ConfigFlags {
     WordWbctbl                   = 0x0200000,
     SmartArtShapeLoad            = 0x0400000,
     CharBackgroundToHighlighting = 0x8000000,
-    CreateMSOLockFiles           = 0x2000000
+    CreateMSOLockFiles           = 0x2000000,
+    VisioLoad                    = 0x4000000,
 };
 namespace o3tl {
-    template<> struct typed_flags<ConfigFlags> : is_typed_flags<ConfigFlags, 0xf7fff3f> {};
+    template<> struct typed_flags<ConfigFlags> : is_typed_flags<ConfigFlags, 0xe7fff3f> {};
 }
 
 class SvtAppFilterOptions_Impl : public utl::ConfigItem
@@ -318,7 +319,8 @@ const Sequence<OUString>& GetPropertyNames()
             "Import/ImportWWFieldsAsEnhancedFields", // 11
             "Import/SmartArtToShapes",          // 12
             "Export/CharBackgroundToHighlighting",   // 13
-            "Import/CreateMSOLockFiles"         // 14
+            "Import/CreateMSOLockFiles",        // 14
+            "Import/VisioToDraw"                // 15
     };
     return aNames;
 }
@@ -357,6 +359,9 @@ static ConfigFlags lcl_GetFlag(sal_Int32 nProp)
         case 12: nFlag = ConfigFlags::SmartArtShapeLoad; break;
         case 13: nFlag = ConfigFlags::CharBackgroundToHighlighting; break;
         case 14: nFlag = ConfigFlags::CreateMSOLockFiles; break;
+        case 15:
+            nFlag = ConfigFlags::VisioLoad;
+            break;
 
         default: OSL_FAIL("illegal value");
     }
@@ -593,6 +598,14 @@ bool SvtFilterOptions::IsSmartArt2Shape() const
 void SvtFilterOptions::SetSmartArt2Shape( bool bFlag )
 {
     pImpl->SetFlag( ConfigFlags::SmartArtShapeLoad, bFlag );
+    SetModified();
+}
+
+bool SvtFilterOptions::IsVisio2Draw() const { return pImpl->IsFlag(ConfigFlags::VisioLoad); }
+
+void SvtFilterOptions::SetVisio2Draw(bool bFlag)
+{
+    pImpl->SetFlag(ConfigFlags::VisioLoad, bFlag);
     SetModified();
 }
 

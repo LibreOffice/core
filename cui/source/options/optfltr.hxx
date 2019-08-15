@@ -55,7 +55,8 @@ class OfaMSFilterTabPage2 : public SfxTabPage
            sChgToFromWriter,
            sChgToFromCalc,
            sChgToFromImpress,
-           sChgToFromSmartArt;
+           sChgToFromSmartArt,
+           sChgToFromVisio;
 
     std::unique_ptr<weld::TreeView> m_xCheckLB;
     std::unique_ptr<weld::RadioButton> m_xHighlightingRB;
