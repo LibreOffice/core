@@ -336,7 +336,6 @@ private:
                         FNCopyFormat fnCopyFormat, SwFormat& rDfltFormat );
     void CopyPageDescHeaderFooterImpl( bool bCpyHeader,
                                 const SwFrameFormat& rSrcFormat, SwFrameFormat& rDestFormat );
-    static SwFormat* FindFormatByName( const SwFormatsBase& rFormatArr, const OUString& rName );
 
     SwDoc( const SwDoc &) = delete;
 
@@ -752,6 +751,8 @@ public:
 
     // Remove all language dependencies from all existing formats
     void RemoveAllFormatLanguageDependencies();
+
+    static SwFormat* FindFormatByName(const SwFormatsBase& rFormatArr, const OUString& rName);
 
     SwFrameFormat  *MakeFrameFormat(const OUString &rFormatName, SwFrameFormat *pDerivedFrom,
                           bool bBroadcast = false, bool bAuto = true);
