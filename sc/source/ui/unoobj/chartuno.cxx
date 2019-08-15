@@ -522,7 +522,7 @@ void ScChartObj::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno:
                 if ( rValue >>= aCellRanges )
                 {
                     ScRangeListRef rRangeList = new ScRangeList();
-                    for ( table::CellRangeAddress const & aCellRange : aCellRanges )
+                    for ( table::CellRangeAddress const & aCellRange : std::as_const(aCellRanges) )
                     {
                         ScRange aRange;
                         ScUnoConversion::FillScRange( aRange, aCellRange );

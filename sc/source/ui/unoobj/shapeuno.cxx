@@ -1342,7 +1342,7 @@ public:
         uno::Sequence< beans::PropertyValue > aProperties;
         aElement >>= aProperties;
         bool isEventType = false;
-        for( const beans::PropertyValue& rProperty : aProperties )
+        for( const beans::PropertyValue& rProperty : std::as_const(aProperties) )
         {
             if ( rProperty.Name == SC_EVENTACC_EVENTTYPE )
             {

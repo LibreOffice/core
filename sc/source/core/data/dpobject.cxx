@@ -262,10 +262,11 @@ static sheet::DataPilotFieldOrientation lcl_GetDataGetOrientation( const uno::Re
     sheet::DataPilotFieldOrientation nRet = sheet::DataPilotFieldOrientation_HIDDEN;
     if ( xSource.is() )
     {
-        uno::Reference<container::XNameAccess> xDimNames = xSource->getDimensions();
-        for (const OUString& rDimName: xDimNames->getElementNames())
+        uno::Reference<container::XNameAccess> xDimNameAccess = xSource->getDimensions();
+        const uno::Sequence<OUString> aDimNames = xDimNameAccess->getElementNames();
+        for (const OUString& rDimName : aDimNames)
         {
-            uno::Reference<beans::XPropertySet> xDimProp(xDimNames->getByName(rDimName),
+            uno::Reference<beans::XPropertySet> xDimProp(xDimNameAccess->getByName(rDimName),
                                                          uno::UNO_QUERY);
             if ( xDimProp.is() )
             {

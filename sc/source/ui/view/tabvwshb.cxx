@@ -114,7 +114,7 @@ public:
             sal_Int32 dimensionIndex = 0;
             OUString sPivotTableName("DataPilot1");
 
-            for (beans::PropertyValue const & rProperty : aProperties)
+            for (beans::PropertyValue const & rProperty : std::as_const(aProperties))
             {
                 if (rProperty.Name == "Rectangle")
                     rProperty.Value >>= xRectangle;

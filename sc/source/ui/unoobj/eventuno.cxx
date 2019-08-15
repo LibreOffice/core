@@ -85,7 +85,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const uno:
         uno::Sequence<beans::PropertyValue> aPropSeq;
         if ( aElement >>= aPropSeq )
         {
-            for (const beans::PropertyValue& rProp : aPropSeq)
+            for (const beans::PropertyValue& rProp : std::as_const(aPropSeq))
             {
                 if ( rProp.Name == SC_UNO_EVENTTYPE )
                 {
