@@ -11,6 +11,9 @@ import sys
 import argparse
 from textx.metamodel import metamodel_from_file
 
+tab="    "
+double_tab="        "
+
 def parse_args():
     """
     This function parses the command-line arguments
@@ -59,7 +62,7 @@ class ul_Compiler:
         "from libreoffice.uno.propertyvalue import mkPropertyValues\n" + \
         "import importlib\n\n" + \
         "class TestClass(UITestCase):\n" + \
-        "\tdef test_function(self):\n"
+        tab+"def test_function(self):\n"
 
         self.variables.append(line)
 
@@ -123,7 +126,7 @@ class ul_Compiler:
             self.objects[self.current_app]+=1
         else:
             self.objects[self.current_app]=1
-            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
+            line=double_tab+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
             self.variables.append(line)
 
     def init_Object(self,Id_of_Object,Obj_parent):
@@ -132,16 +135,16 @@ class ul_Compiler:
             self.objects[Id_of_Object]+=1
         else:
             self.objects[Id_of_Object]=1
-            line="\t\t"+Id_of_Object+" = "+Obj_parent+\
+            line=double_tab+Id_of_Object+" = "+Obj_parent+\
                 ".getChild(\""+Id_of_Object+"\")\n"
             self.variables.append(line)
 
     def write_line_without_parameters(self,Action_holder,Action,Action_type):
-        line="\t\t"+Action_holder+".executeAction(\""+Action+"\","+Action_type+"())\n"
+        line=double_tab+Action_holder+".executeAction(\""+Action+"\","+Action_type+"())\n"
         self.variables.append(line)
 
     def write_line_with_one_parameters(self,Action_holder,Action,Paramerter_name,parameter_value):
-        line="\t\t"+Action_holder+".executeAction(\""+Action+"\", mkPropertyValues({\""+\
+        line=double_tab+Action_holder+".executeAction(\""+Action+"\", mkPropertyValues({\""+\
             Paramerter_name+"\": \""+\
             str(parameter_value)+"\"}))\n"
         self.variables.append(line)
@@ -149,7 +152,7 @@ class ul_Compiler:
     def write_line_with_two_parameters(self,Action_holder,Action,Paramerter_name_1,parameter_value_1,
     Paramerter_name_2,parameter_value_2):
 
-        line="\t\t"+Action_holder+\
+        line=double_tab+Action_holder+\
                 ".executeAction(\""+Action+"\", mkPropertyValues({\""+Paramerter_name_1+"\": \""+\
                 str(parameter_value_1)+"\", \""+Paramerter_name_2+"\": \""+\
                 str(parameter_value_2)+"\"}))\n"
@@ -157,7 +160,7 @@ class ul_Compiler:
 
     def handle_uno(self, UNOCommand):
         if(UNOCommand.prameters==None):
-            line = "\t\tself.xUITest.executeCommand(\"" + \
+            line = double_tab +"self.xUITest.executeCommand(\"" + \
                 UNOCommand.uno_command_name +"\")\n"
         else:
             paramaters=""
@@ -165,18 +168,18 @@ class ul_Compiler:
                 paramaters = paramaters + "\"" + p.key + "\" : " + str(p.value) + " ,"
             paramaters = paramaters[:-1]
 
-            line = "\t\tself.xUITest.executeCommandWithParameters(\"" + \
+            line = double_tab + "self.xUITest.executeCommandWithParameters(\"" + \
                 UNOCommand.uno_command_name +"\", mkPropertyValues({"+ paramaters +"}) )\n"
 
         self.variables.append(line)
         self.prev_command=UNOCommand
 
     def handle_start(self, StarterCommand):
-        line="\t\tMainDoc = self.ui_test.create_doc_in_start_center(\""+\
+        line= double_tab + "MainDoc = self.ui_test.create_doc_in_start_center(\""+\
             StarterCommand.program_name+"\")\n"
         self.variables.append(line)
 
-        line="\t\tMainWindow = self.xUITest.getTopFocusWindow()\n"
+        line= double_tab + "MainWindow = self.xUITest.getTopFocusWindow()\n"
         self.variables.append(line)
         app={"writer":"writer_edit","calc":"grid_window","impress":"impress_win"\
             ,"math":"math_edit","draw":"draw_win"}
@@ -194,10 +197,10 @@ class ul_Compiler:
                 key_word=old_line[-9:-3]
 
             if ( key_word == "Dialog"):
-                old_line="\t\tself.ui_test.execute_dialog_through_command(\""+\
+                old_line= double_tab + "self.ui_test.execute_dialog_through_command(\""+\
                     self.prev_command.uno_command_name+"\")\n"
             self.variables.append(old_line)
-            line = "\t\t" + DialogCommand.dialog_name + " = self.xUITest.getTopFocusWindow()\n"
+            line = double_tab + DialogCommand.dialog_name + " = self.xUITest.getTopFocusWindow()\n"
             self.variables.append(line)
             self.last_parent.append(DialogCommand.dialog_name)
             self.parent_hierarchy_count=self.parent_hierarchy_count+1
@@ -210,10 +213,10 @@ class ul_Compiler:
                 key_word=old_line[-9:-3]
 
             if ( key_word == "Dialog"):
-                old_line="\t\tself.ui_test.execute_modeless_dialog_through_command(\""+\
+                old_line= double_tab + "self.ui_test.execute_modeless_dialog_through_command(\""+\
                     self.prev_command.uno_command_name+"\")\n"
             self.variables.append(old_line)
-            line = "\t\t" + DialogCommand.dialog_name + "  = self.xUITest.getTopFocusWindow()\n"
+            line = double_tab + DialogCommand.dialog_name + "  = self.xUITest.getTopFocusWindow()\n"
             self.variables.append(line)
             self.last_parent.append(DialogCommand.dialog_name)
             self.parent_hierarchy_count=self.parent_hierarchy_count+1
@@ -221,7 +224,7 @@ class ul_Compiler:
         elif (DialogCommand.__class__.__name__ == "CloseDialog"):
             if (self.prev_command.__class__.__name__ == "ButtonUIObject"):
                 old_line = self.variables.pop()
-                line="\t\tself.ui_test.close_dialog_through_button("+\
+                line= double_tab + "self.ui_test.close_dialog_through_button("+\
                     self.prev_command.ui_button+")\n"
                 self.variables.append(line)
             self.last_parent.pop()
@@ -403,7 +406,7 @@ class ul_Compiler:
 
         self.init_app()
 
-        line="\t\t"+self.current_app+".executeAction(\"LAUNCH\", mkPropertyValues"+\
+        line= double_tab +self.current_app+".executeAction(\"LAUNCH\", mkPropertyValues"+\
             "({\"AUTOFILTER\": \"\", \"COL\": \""+\
             str(calc_AutoFill_filter.col_num)+"\""+\
             ", \"ROW\": \""+str(calc_AutoFill_filter.row_num)\
@@ -448,7 +451,7 @@ class ul_Compiler:
 
     def handle_math_element_selector (self,math_element_selector):
 
-        line="\t\t"+str(math_element_selector.element_no)+" = element_selector.getChild(\""+\
+        line= double_tab +str(math_element_selector.element_no)+" = element_selector.getChild(\""+\
             str(math_element_selector.element_no)+"\")\n"
         self.variables.append(line)
 
@@ -465,7 +468,7 @@ class ul_Compiler:
         self.prev_command=setZoom_command
 
     def Generate_UI_test(self):
-        line="\t\tself.ui_test.close_doc()"
+        line= double_tab + "self.ui_test.close_doc()"
         self.variables.append(line)
 
         line="\n\n# vim: set shiftwidth=4 softtabstop=4 expandtab:"
