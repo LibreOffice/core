@@ -404,7 +404,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
 
     // Create temporary hash map to have a mapping between property names and property handles
     Reference< XPropertySetInfo > xPropSetInfo = xPathSettings->getPropertySetInfo();
-    Sequence< Property > aPathPropSeq = xPropSetInfo->getProperties();
+    const Sequence< Property > aPathPropSeq = xPropSetInfo->getProperties();
 
     NameToHandleMap aTempHashMap;
     for ( const css::beans::Property& aProperty : aPathPropSeq )

@@ -83,7 +83,7 @@ SvtOptionsDlgOptions_Impl::SvtOptionsDlgOptions_Impl()
     m_aOptionNodeList( OptionNodeList() )
 {
     OUString sRootNode( ROOT_NODE );
-    Sequence< OUString > aNodeSeq = GetNodeNames( sRootNode );
+    const Sequence< OUString > aNodeSeq = GetNodeNames( sRootNode );
     OUString sNode( sRootNode + g_sPathDelimiter );
     for ( const auto& rNode : aNodeSeq )
     {
@@ -143,7 +143,7 @@ void SvtOptionsDlgOptions_Impl::ReadNode( const OUString& _rNode, NodeType _eTyp
     if ( _eType != NT_Option )
     {
         OUString sNodes( sNode + sSet );
-        Sequence< OUString > aNodes = GetNodeNames( sNodes );
+        const Sequence< OUString > aNodes = GetNodeNames( sNodes );
         for ( const auto& rNode : aNodes )
         {
             OUString sSubNodeName( sNodes + g_sPathDelimiter + rNode );

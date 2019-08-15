@@ -170,7 +170,7 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl() : ConfigItem( ROOTN
     // 4 subkeys for every item!
     bool bDefaultFound = false;
     sal_Int32 nDestStep    = 0;
-    for ( const auto& rNode : lNodes )
+    for ( const auto& rNode : std::as_const(lNodes) )
     {
         SvtCompatibilityEntry aItem;
 
@@ -293,7 +293,7 @@ Sequence< OUString > SvtCompatibilityOptions_Impl::impl_GetPropertyNames( Sequen
 
     sal_Int32 nDestStep    = 0;
     // Copy entries to destination and expand every item with 2 supported sub properties.
-    for ( const auto& rItem : rItems )
+    for ( const auto& rItem : std::as_const(rItems) )
     {
         OUString sFixPath = SETNODE_ALLFILEFORMATS;
         sFixPath += PATHDELIMITER;
