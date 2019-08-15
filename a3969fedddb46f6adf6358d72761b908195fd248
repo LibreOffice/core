@@ -39,6 +39,30 @@
       "revId": "a3969fedddb46f6adf6358d72761b908195fd248",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_2c22b9a5",
+        "filename": "stoc/source/defaultregistry/defaultregistry.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-08-15T10:27:32Z",
+      "side": 1,
+      "message": "I wasn\u0027t sure that getKeyName() of retVec element is equal to localSeq element.\nI\u0027d use\n\n if (comphelper::findValue(localSeq, rKeyName) \u003d\u003d -1)",
+      "parentUuid": "bf659307_8c02e508",
+      "range": {
+        "startLine": 772,
+        "startChar": 8,
+        "endLine": 773,
+        "endChar": 105
+      },
+      "revId": "a3969fedddb46f6adf6358d72761b908195fd248",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
