@@ -95,6 +95,9 @@ public:
     bool IsMSOLockFileCreationIsEnabled() const;
     void EnableMSOLockFileCreation(bool bEnable);
 
+    bool IsVisio2Draw() const;
+    void SetVisio2Draw(bool bFlag);
+
     static SvtFilterOptions& Get();
 };
 

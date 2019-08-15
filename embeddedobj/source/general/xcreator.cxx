@@ -242,6 +242,13 @@ static OUString HandleFilter(const uno::Reference<uno::XComponentContext>& xComp
             aRet.clear();
         }
     }
+    if (!officecfg::Office::Common::Filter::Microsoft::Import::VisioToDraw::get(xComponentContext))
+    {
+        if (rFilter == "Visio Document")
+        {
+            aRet.clear();
+        }
+    }
 
     return aRet;
 }

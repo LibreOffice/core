@@ -34,6 +34,7 @@ enum class MSFltrPg2_CheckBoxEntries {
     Calc,
     Impress,
     SmartArt,
+    Visio,
     InvalidCBEntry
 };
 
@@ -132,6 +133,7 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2(TabPageParent pParent, const SfxItemSet
     , sChgToFromCalc(CuiResId(RID_SVXSTR_CHG_CALC))
     , sChgToFromImpress(CuiResId(RID_SVXSTR_CHG_IMPRESS))
     , sChgToFromSmartArt(CuiResId(RID_SVXSTR_CHG_SMARTART))
+    , sChgToFromVisio(CuiResId(RID_SVXSTR_CHG_VISIO))
     , m_xCheckLB(m_xBuilder->weld_tree_view("checklbcontainer"))
     , m_xHighlightingRB(m_xBuilder->weld_radio_button("highlighting"))
     , m_xShadingRB(m_xBuilder->weld_radio_button("shading"))
@@ -183,14 +185,16 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
                         &SvtFilterOptions::SetImpress2PowerPoint },
         { MSFltrPg2_CheckBoxEntries::SmartArt,  &SvtFilterOptions::IsSmartArt2Shape,
                         &SvtFilterOptions::SetSmartArt2Shape },
+        { MSFltrPg2_CheckBoxEntries::Visio, &SvtFilterOptions::IsVisio2Draw,
+                        &SvtFilterOptions::SetVisio2Draw },
     };
 
     bool bFirstCol = true;
     for( const ChkCBoxEntries & rEntry : aChkArr )
     {
         // we loop through the list, alternating reading the first/second column,
-        // each row appears twice in the list (except for smartart, which is import
-        // only
+        // each row appears twice in the list (except for smartart and later entries, which are
+        // import only)
         sal_uInt16 nCol = bFirstCol ? 0 : 1;
         bFirstCol = !bFirstCol;
         int nEntry = GetEntry4Type(rEntry.eType);
@@ -199,6 +203,10 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
             bool bCheck = m_xCheckLB->get_toggle(nEntry, nCol);
             if( bCheck != (rOpt.*rEntry.FnIs)() )
                 (rOpt.*rEntry.FnSet)( bCheck );
+        }
+        if (rEntry.eType == MSFltrPg2_CheckBoxEntries::SmartArt)
+        {
+            bFirstCol = !bFirstCol;
         }
     }
 
@@ -237,6 +245,8 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
         InsertEntry( sChgToFromImpress, MSFltrPg2_CheckBoxEntries::Impress );
     InsertEntry( sChgToFromSmartArt, MSFltrPg2_CheckBoxEntries::SmartArt, false );
+    if (aModuleOpt.IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
+        InsertEntry(sChgToFromVisio, MSFltrPg2_CheckBoxEntries::Visio, false);
 
     static struct ChkCBoxEntries{
         MSFltrPg2_CheckBoxEntries eType;
@@ -251,14 +261,15 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
         { MSFltrPg2_CheckBoxEntries::Impress,  &SvtFilterOptions::IsPowerPoint2Impress },
         { MSFltrPg2_CheckBoxEntries::Impress,  &SvtFilterOptions::IsImpress2PowerPoint },
         { MSFltrPg2_CheckBoxEntries::SmartArt, &SvtFilterOptions::IsSmartArt2Shape },
+        { MSFltrPg2_CheckBoxEntries::Visio,    &SvtFilterOptions::IsVisio2Draw },
     };
 
     bool bFirstCol = true;
     for( const ChkCBoxEntries & rArr : aChkArr )
     {
         // we loop through the list, alternating reading the first/second column,
-        // each row appears twice in the list (except for smartart, which is import
-        // only
+        // each row appears twice in the list (except for smartart and later entries, which are
+        // import only)
         sal_uInt16 nCol = bFirstCol ? 0 : 1;
         bFirstCol = !bFirstCol;
         int nEntry = GetEntry4Type( rArr.eType );
@@ -266,6 +277,10 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
         {
             bool bCheck = (rOpt.*rArr.FnIs)();
             m_xCheckLB->set_toggle(nEntry, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, nCol);
+        }
+        if (rArr.eType == MSFltrPg2_CheckBoxEntries::SmartArt)
+        {
+            bFirstCol = !bFirstCol;
         }
     }
     m_xCheckLB->thaw();

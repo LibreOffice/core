@@ -85,6 +85,39 @@ CPPUNIT_TEST_FIXTURE(EmbeddedobjGeneralTest, testInsertFileConfig)
     CPPUNIT_ASSERT(!xObject.is());
 }
 
+CPPUNIT_TEST_FIXTURE(EmbeddedobjGeneralTest, testInsertFileConfigVsdx)
+{
+    // Explicitly disable Word->Writer mapping for this test.
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Filter::Microsoft::Import::VisioToDraw::set(false, pBatch);
+    pBatch->commit();
+    comphelper::ScopeGuard g([]() {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatchReset(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Filter::Microsoft::Import::VisioToDraw::set(true, pBatchReset);
+        pBatchReset->commit();
+    });
+    getComponent().set(
+        loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"));
+
+    // Insert a file as an embedded object.
+    uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
+    comphelper::EmbeddedObjectContainer aContainer(xStorage);
+    OUString aFileName
+        = m_directories.getURLFromSrc("embeddedobj/qa/cppunit/data/insert-file-config.vsdx");
+    uno::Sequence<beans::PropertyValue> aMedium{ comphelper::makePropertyValue("URL", aFileName) };
+    OUString aName("Object 1");
+    uno::Reference<embed::XEmbeddedObject> xObject
+        = aContainer.InsertEmbeddedObject(aMedium, aName);
+
+    // Make sure that the insertion fails:
+    // 1) the user explicitly requested that the data is not loaded into Writer
+    // 2) this is non-Windows, so OLE embedding is not an option
+    // so silently still loading the data into Writer would be bad.
+    CPPUNIT_ASSERT(!xObject.is());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
