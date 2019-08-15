@@ -291,7 +291,7 @@ public:
                                    SvStream& rStream,
                                    sal_uInt16 nFormat,
                                    sal_uInt16 * pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
-                                   css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
+                                   const css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
                                    WmfExternal const *pExtHeader = nullptr );
 
     // Setting sizeLimit limits how much will be read from the stream.

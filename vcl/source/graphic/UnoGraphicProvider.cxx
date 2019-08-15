@@ -341,7 +341,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     sal_uInt16 nExtWidth = 0;
     sal_uInt16 nExtHeight = 0;
     sal_uInt16 nExtMapMode = 0;
-    for( const auto& rProp : aFilterData )
+    for( const auto& rProp : std::as_const(aFilterData) )
     {
         const OUString   aName( rProp.Name );
         const uno::Any          aValue( rProp.Value );
@@ -562,7 +562,7 @@ void ImplApplyBitmapResolution( ::Graphic& rGraphic, sal_Int32 nImageResolution,
         ImplApplyBitmapScaling( rGraphic, nDestPixelWidth, nDestPixelHeight );
 }
 
-void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyValue >& rFilterData )
+void ImplApplyFilterData( ::Graphic& rGraphic, const uno::Sequence< beans::PropertyValue >& rFilterData )
 {
     /* this method applies following attributes to the graphic, in the first step the
        cropping area (logical size in 100thmm) is applied, in the second step the resolution

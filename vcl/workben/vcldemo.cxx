@@ -1220,7 +1220,7 @@ public:
             bHasLoadedAll = true;
 
             css::uno::Reference<css::container::XNameAccess> xRef(ImageTree::get().getNameAccess());
-            css::uno::Sequence< OUString > aAllIcons = xRef->getElementNames();
+            const css::uno::Sequence< OUString > aAllIcons = xRef->getElementNames();
 
             for (const auto& rIcon : aAllIcons)
             {

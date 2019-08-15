@@ -1516,7 +1516,7 @@ void PrinterController::setUIOptions( const css::uno::Sequence< css::beans::Prop
         OUString aPropName;
         vcl::ImplPrinterControllerData::ControlDependency aDep;
         css::uno::Sequence< sal_Bool > aChoicesDisabled;
-        for( const css::beans::PropertyValue& rEntry : aOptProp )
+        for( const css::beans::PropertyValue& rEntry : std::as_const(aOptProp) )
         {
             if ( rEntry.Name == "Property" )
             {
