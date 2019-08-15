@@ -589,10 +589,8 @@ void Clipboard::DragFinished (sal_Int8 nDropAction)
     }
 }
 
-IMPL_LINK(Clipboard, ProcessDragFinished, void*, pUserData, void)
+IMPL_LINK_NOARG(Clipboard, ProcessDragFinished, void*, void)
 {
-    const sal_Int8 nDropAction (static_cast<sal_Int8>(reinterpret_cast<sal_IntPtr>(pUserData)));
-
     mnDragFinishedUserEventId = nullptr;
 
     // Hide the substitution display and insertion indicator.
@@ -600,19 +598,6 @@ IMPL_LINK(Clipboard, ProcessDragFinished, void*, pUserData, void)
     if (pFunction.is())
         pFunction->NotifyDragFinished();
 
-    PageSelector& rSelector (mrController.GetPageSelector());
-    if ((nDropAction & DND_ACTION_MOVE) != 0
-        && ! maPagesToRemove.empty())
-    {
-        // Remove the pages that have been moved to another place (possibly
-        // in the same document.)
-        rSelector.DeselectAllPages();
-        for (const auto& rpDraggedPage : maPagesToRemove)
-        {
-            rSelector.SelectPage(rpDraggedPage);
-        }
-        mrController.GetSelectionManager()->DeleteSelectedPages();
-    }
     mxUndoContext.reset();
     mxSelectionObserverContext.reset();
 }
@@ -739,7 +724,7 @@ sal_Int8 Clipboard::ExecuteDrop (
                     mrSlideSorter.GetViewShell()->GetViewShellBase().GetMainViewShell()));
                 mxSelectionObserverContext.reset(new SelectionObserver::Context(mrSlideSorter));
 
-                HandlePageDrop(*pDragTransferable);
+                HandlePageDrop(*pDragTransferable, (rEvent.mnAction & DND_ACTION_MOVE) != 0);
                 nResult = rEvent.mnAction;
 
                 // We leave the undo context alive for when moving or

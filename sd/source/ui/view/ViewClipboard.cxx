@@ -45,7 +45,7 @@ ViewClipboard::~ViewClipboard()
 {
 }
 
-void ViewClipboard::HandlePageDrop (const SdTransferable& rTransferable)
+void ViewClipboard::HandlePageDrop (const SdTransferable& rTransferable, const bool bMove)
 {
     // Determine whether to insert the given set of slides or to assign a
     // given master page.
@@ -56,7 +56,7 @@ void ViewClipboard::HandlePageDrop (const SdTransferable& rTransferable)
     if (pMasterPage)
         AssignMasterPage (rTransferable, pMasterPage);
     else
-        InsertSlides (rTransferable, DetermineInsertPosition (rTransferable));
+        InsertSlides (rTransferable, DetermineInsertPosition (rTransferable), bMove);
 }
 
 SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
@@ -179,7 +179,8 @@ sal_uInt16 ViewClipboard::DetermineInsertPosition  (
 
 sal_uInt16 ViewClipboard::InsertSlides (
     const SdTransferable& rTransferable,
-    sal_uInt16 nInsertPosition)
+    sal_uInt16 nInsertPosition,
+    const bool bMove)
 {
     SdDrawDocument& rDoc = mrView.GetDoc();
 
@@ -225,7 +226,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
             nInsertPosition,
             (&rTransferable == SD_MOD()->pTransferDrag),
             pDataDocSh,
-            true,
+            !bMove,
             bMergeMasterPages,
             false);
 

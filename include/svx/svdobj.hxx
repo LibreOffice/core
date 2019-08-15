@@ -419,6 +419,7 @@ public:
     // It may also have a Title and a Description for accessibility purposes.
     void SetName(const OUString& rStr);
     OUString GetName() const;
+    void MakeNameUnique();
     void SetTitle(const OUString& rStr);
     OUString GetTitle() const;
     void SetDescription(const OUString& rStr);

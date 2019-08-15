@@ -790,7 +790,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     }
 
     // nInsertPos > 2 is always true when inserting into non-empty models
-    if (nInsertPos > 0)
+    if (nInsertPos > 1)
     {
         sal_uInt16 nSdPageStart = (nInsertPos - 1) / 2;
         sal_uInt16 nSdPageEnd = bReplace

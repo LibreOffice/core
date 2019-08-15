@@ -40,7 +40,7 @@ public:
     /** Handle the drop of a drag-and-drop action where the transferable
         contains a set of pages.
     */
-    void HandlePageDrop (const SdTransferable& rTransferable);
+    void HandlePageDrop (const SdTransferable& rTransferable, const bool bMove);
 
 protected:
     ::sd::View& mrView;
@@ -76,7 +76,7 @@ protected:
     */
     sal_uInt16 InsertSlides (
         const SdTransferable& rTransferable,
-        sal_uInt16 nInsertPosition);
+        sal_uInt16 nInsertPosition, const bool bMove);
 };
 
 } // end of namespace ::sd

@@ -24,6 +24,7 @@
 
 #include <sot/storage.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/string.hxx>
 #include <svx/svdview.hxx>
 #include <string.h>
 #include <vcl/svapp.hxx>
@@ -176,6 +177,75 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
     {
         SdrObject* pSO(rSrcList.GetObj(no));
         SdrObject* pDO(pSO->CloneSdrObject(rTargetSdrModel));
+        if (pDO && no > 0 && !pDO->GetName().isEmpty())
+        {
+            pDO->MakeNameUnique();
+            SdrObject* pObj;
+            bool bObjFound;
+            const SdrPage* pPage;
+            sal_uInt16 nPage;
+            const sal_uInt16 nMaxPages = rTargetSdrModel.GetPageCount();
+            OUString sName(pDO->GetName());
+            bool bFirst = true;
+            do {
+                bObjFound = false;
+                // object name is unique in model the first time thru do
+                if (bFirst)
+                {
+                    bFirst = false;
+                }
+                else
+                {
+                    nPage = 0;
+                    while (nPage < nMaxPages)
+                    {
+                        pPage = rTargetSdrModel.GetPage(nPage);
+                        SdrObjListIter aIter(pPage, SdrIterMode::DeepWithGroups);
+                        while (aIter.IsMore())
+                        {
+                            pObj = aIter.Next();
+                            if (sName == pObj->GetName())
+                            {
+                                bObjFound = true;
+                                break;
+                            }
+                        }
+                        if (bObjFound)
+                            break;
+                        nPage++;
+                    }
+                }
+                if (!bObjFound)
+                {
+                    // look for name in this object list
+                    for (size_t i(0); i < GetObjCount(); ++i)
+                    {
+                        if (GetObj(i)->GetName() == sName)
+                        {
+                            bObjFound = true;
+                            break;
+                        }
+                    }
+                }
+                if (bObjFound)
+                {
+                    // make unique name
+                    sal_uInt32 n = 0;
+                    sal_Int32 index = sName.lastIndexOf("_");
+                    if (index > 0)
+                    {
+                        OUString s1 = sName.copy(index + 1);
+                        if (comphelper::string::isdigitAsciiString(s1))
+                        {
+                            n = s1.toUInt32() + 1;
+                            sName = sName.copy(0, index);
+                        }
+                    }
+                    sName = sName + "_" + OUString::number(n);
+                }
+            } while(bObjFound);
+            pDO->SetName(sName);
+        }
 
         if(nullptr != pDO)
         {

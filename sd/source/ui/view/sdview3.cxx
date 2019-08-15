@@ -380,7 +380,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
         if( pOwnData->GetDocShell().is() && pOwnData->IsPageTransferable() )
         {
-            mpClipboard->HandlePageDrop (*pOwnData);
+            mpClipboard->HandlePageDrop (*pOwnData, true);
             bReturn = true;
         }
         else if( pSourceView )
@@ -485,6 +485,9 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                     if(pObj)
                                     {
+                                        if (bCopy && !pObj->GetName().isEmpty())
+                                            pObj->MakeNameUnique();
+
                                         if(!bDropOnTabBar)
                                         {
                                             // do a NbcMove(...) instead of setting SnapRects here

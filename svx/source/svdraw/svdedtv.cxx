@@ -909,6 +909,9 @@ void SdrEditView::CopyMarkedObj()
         SdrObject* pSource(pM->GetMarkedSdrObj());
         SdrObject* pO(pSource->CloneSdrObject(pSource->getSdrModelFromSdrObject()));
         if (pO!=nullptr) {
+            if (!pO->GetName().isEmpty())
+                pO->MakeNameUnique();
+
             pM->GetPageView()->GetObjList()->InsertObject(pO, SAL_MAX_SIZE);
 
             if( bUndo )

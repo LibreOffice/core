@@ -310,6 +310,8 @@ bool SdrExchangeView::Paste(
 
             if (pNewObj!=nullptr)
             {
+                if (!pNewObj->GetName().isEmpty())
+                    pNewObj->MakeNameUnique();
                 if(bResize)
                 {
                     pNewObj->getSdrModelFromSdrObject().SetPasteResize(true);

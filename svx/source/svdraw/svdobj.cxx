@@ -140,6 +140,8 @@
 #include <libxml/xmlwriter.h>
 #include <memory>
 
+#include <comphelper/string.hxx>
+
 using namespace ::com::sun::star;
 
 
@@ -3019,6 +3021,53 @@ bool SdrObject::HasText() const
 bool SdrObject::IsTextBox() const
 {
     return false;
+}
+
+void SdrObject::MakeNameUnique()
+{
+    SdrObject* pObj;
+    bool bObjFound;
+    const SdrPage* pPage;
+    sal_uInt16 nPage;
+    const sal_uInt16 nMaxPages = mrSdrModelFromSdrObject.GetPageCount();
+    OUString sName(GetName());
+    do {
+        bObjFound = false;
+        nPage = 0;
+        while (nPage < nMaxPages)
+        {
+            pPage = mrSdrModelFromSdrObject.GetPage(nPage);
+            SdrObjListIter aIter(pPage, SdrIterMode::DeepWithGroups);
+            while (aIter.IsMore())
+            {
+                pObj = aIter.Next();
+                if (sName == pObj->GetName())
+                {
+                    bObjFound = true;
+                    break;
+                }
+            }
+            if (bObjFound)
+                break;
+            nPage++;
+        }
+        if (bObjFound)
+        {
+            sal_uInt32 n = 0;
+            sal_Int32 index = sName.lastIndexOf("_");
+            if (index > 0)
+            {
+                OUString s1 = sName.copy(index + 1);
+                if (comphelper::string::isdigitAsciiString(s1))
+                {
+                    n = s1.toUInt32() + 1;
+                    sName = sName.copy(0, index);
+                }
+            }
+            sName = sName + "_" + OUString::number(n);
+        }
+    } while(bObjFound);
+    SetName(sName);
 }
 
 SdrObject* SdrObjFactory::CreateObjectFromFactory(SdrModel& rSdrModel, SdrInventor nInventor, sal_uInt16 nObjIdentifier)
