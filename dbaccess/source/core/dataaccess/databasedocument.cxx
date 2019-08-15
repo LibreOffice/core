@@ -571,7 +571,7 @@ namespace
     {
         Reference< css::sdb::application::XDatabaseDocumentUI > xDatabaseUI( i_rController, UNO_QUERY_THROW );
 
-        Sequence< Reference< XComponent > > aComponents( xDatabaseUI->getSubComponents() );
+        const Sequence< Reference< XComponent > > aComponents( xDatabaseUI->getSubComponents() );
 
         bool isAnyModified = false;
         for ( auto const & xComponent : aComponents )

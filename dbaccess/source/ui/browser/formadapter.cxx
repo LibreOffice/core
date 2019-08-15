@@ -1202,7 +1202,8 @@ Reference< css::beans::XPropertySetInfo > SAL_CALL SbaXFormAdapter::getPropertyS
     if (-1 == m_nNamePropHandle)
     {
         // we need to determine the handle for the NAME property
-        for (const css::beans::Property& rProp : xReturn->getProperties())
+        const Sequence<css::beans::Property> aProps = xReturn->getProperties();
+        for (const css::beans::Property& rProp : aProps)
         {
             if (rProp.Name == PROPERTY_NAME)
             {

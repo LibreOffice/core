@@ -777,7 +777,8 @@ void OTableController::loadData()
         //  sal_Bool bReadOldRow = xMetaData->supportsAlterTableWithAddColumn() && xMetaData->supportsAlterTableWithDropColumn();
         bool bIsAlterAllowed = isAlterAllowed();
 
-        for(const OUString& rColumn : xColumns->getElementNames())
+        const Sequence<OUString> aColNames = xColumns->getElementNames();
+        for(const OUString& rColumn : aColNames)
         {
             Reference<XPropertySet> xColumn;
             xColumns->getByName(rColumn) >>= xColumn;
@@ -847,7 +848,8 @@ void OTableController::loadData()
         Reference<XNameAccess> xKeyColumns  = getKeyColumns();
         if(xKeyColumns.is())
         {
-            for(const OUString& rKeyColumn : xKeyColumns->getElementNames())
+            const Sequence<OUString> aKeyColumnNames = xKeyColumns->getElementNames();
+            for(const OUString& rKeyColumn : aKeyColumnNames)
             {
                 for(std::shared_ptr<OTableRow> const& pRow : m_vRowList)
                 {
@@ -1158,7 +1160,8 @@ void OTableController::alterColumns()
     // now we have to look for the columns who could be deleted
     if ( xDrop.is() )
     {
-        for(const OUString& rColumnName : xColumns->getElementNames())
+        const Sequence<OUString> aColNames = xColumns->getElementNames();
+        for(const OUString& rColumnName : aColNames)
         {
             if(aColumns.find(rColumnName) == aColumns.end()) // found a column to delete
             {

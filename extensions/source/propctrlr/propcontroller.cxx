@@ -1413,7 +1413,7 @@ namespace pcr
         if ( m_xModel.is() )
             aHandlerFactories = m_xModel->getHandlerFactories();
 
-        for ( auto const & handlerFactory : aHandlerFactories )
+        for ( auto const & handlerFactory : std::as_const(aHandlerFactories) )
         {
             if ( _rObjects.size() == 1 )
             {   // we're inspecting only one object -> one handler

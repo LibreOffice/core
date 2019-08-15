@@ -280,7 +280,8 @@ void CommandEnvironmentImpl::handle(
     }
 
     // select:
-    for ( auto const& rCont : xRequest->getContinuations() )
+    const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> xIC = xRequest->getContinuations();
+    for ( auto const& rCont : xIC )
     {
         if (approve) {
             Reference<task::XInteractionApprove> xInteractionApprove(

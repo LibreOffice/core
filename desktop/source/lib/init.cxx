@@ -2184,7 +2184,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         // saveAs() is more like save-a-copy, which allows saving to any
         // random format like PDF or PNG.
         // It is not a real filter option, so we have to filter it out.
-        uno::Sequence<OUString> aOptionSeq = comphelper::string::convertCommaSeparated(aFilterOptions);
+        const uno::Sequence<OUString> aOptionSeq = comphelper::string::convertCommaSeparated(aFilterOptions);
         std::vector<OUString> aFilteredOptionVec;
         bool bTakeOwnership = false;
         MediaDescriptor aSaveMediaDescriptor;
@@ -4019,7 +4019,7 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
             }
         }
 
-        uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
+        const uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
         for (const OUString& rStyle: aStyles )
         {
             // Filter out the default styles - they are already at the top
@@ -4959,7 +4959,7 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
     }
 
     uno::Reference<container::XNameAccess> xTypeDetection(xSFactory->createInstance("com.sun.star.document.TypeDetection"), uno::UNO_QUERY);
-    uno::Sequence<OUString> aTypes = xTypeDetection->getElementNames();
+    const uno::Sequence<OUString> aTypes = xTypeDetection->getElementNames();
     boost::property_tree::ptree aTree;
     for (const OUString& rType : aTypes)
     {
@@ -5228,7 +5228,7 @@ static void preloadData()
             aLocales = xSpell->getLocales();
     }
 
-    for (const auto& aLocale : aLocales)
+    for (const auto& aLocale : std::as_const(aLocales))
     {
         //TODO: Add more types and cache more aggressively. For now this initializes the fontcache.
         using namespace ::com::sun::star::i18n::ScriptType;

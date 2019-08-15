@@ -168,7 +168,8 @@ void OQuery::rebuildColumns()
                 throw RuntimeException();
         }
 
-        for ( const OUString& rName : xColumns->getElementNames() )
+        const Sequence<OUString> aColNames = xColumns->getElementNames();
+        for ( const OUString& rName : aColNames )
         {
             Reference<XPropertySet> xSource(xColumns->getByName( rName ),UNO_QUERY);
             OUString sLabel = rName;

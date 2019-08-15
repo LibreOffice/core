@@ -137,7 +137,8 @@ namespace
         OUString sRelatedColumn;
 
         // iterate through all foreignkey columns to create the connections
-        for(const OUString& rElement : _rxSourceForeignKeyColumns->getElementNames())
+        const Sequence<OUString> aKeyCols = _rxSourceForeignKeyColumns->getElementNames();
+        for(const OUString& rElement : aKeyCols)
         {
             Reference<XPropertySet> xColumn;
             if ( !( _rxSourceForeignKeyColumns->getByName(rElement) >>= xColumn ) )

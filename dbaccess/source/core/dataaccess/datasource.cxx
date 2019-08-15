@@ -854,7 +854,7 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
                 if (!(rValue >>= aValues))
                     throw IllegalArgumentException();
 
-                for ( auto const & checkName : aValues )
+                for ( auto const & checkName : std::as_const(aValues) )
                 {
                     if ( checkName.Name.isEmpty() )
                         throw IllegalArgumentException();
@@ -926,7 +926,7 @@ namespace
         {
             // obtain all properties currently known at the bag
             Reference< XPropertySetInfo > xPSI( _rxPropertyBag->getPropertySetInfo(), UNO_SET_THROW );
-            Sequence< Property > aAllExistentProperties( xPSI->getProperties() );
+            const Sequence< Property > aAllExistentProperties( xPSI->getProperties() );
 
             Reference< XPropertyState > xPropertyState( _rxPropertyBag, UNO_QUERY_THROW );
 
@@ -1032,7 +1032,7 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
                     // collect the property attributes of all current settings
                     Reference< XPropertySet > xSettingsAsProps( m_pImpl->m_xSettings, UNO_QUERY_THROW );
                     Reference< XPropertySetInfo > xPST( xSettingsAsProps->getPropertySetInfo(), UNO_SET_THROW );
-                    Sequence< Property > aSettings( xPST->getProperties() );
+                    const Sequence< Property > aSettings( xPST->getProperties() );
                     std::map< OUString, sal_Int32 > aPropertyAttributes;
                     for ( auto const & setting : aSettings )
                     {

@@ -383,38 +383,39 @@ migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
     uno::Reference< XNameAccess > tmpAccess;
     uno::Sequence< OUString > tmpSeq;
     migrations_vr vrMigrations(new migrations_v);
-    for (const OUString& rMigrationStep : theNameAccess->getElementNames()) {
+    const css::uno::Sequence<OUString> aMigrationSteps = theNameAccess->getElementNames();
+    for (const OUString& rMigrationStep : aMigrationSteps) {
         // get current migration step
         theNameAccess->getByName(rMigrationStep) >>= tmpAccess;
         migration_step tmpStep;
 
         // read included files from current step description
         if (tmpAccess->getByName("IncludedFiles") >>= tmpSeq) {
-            for (const OUString& rSeqEntry : tmpSeq)
+            for (const OUString& rSeqEntry : std::as_const(tmpSeq))
                 tmpStep.includeFiles.push_back(rSeqEntry);
         }
 
         // excluded files...
         if (tmpAccess->getByName("ExcludedFiles") >>= tmpSeq) {
-            for (const OUString& rSeqEntry : tmpSeq)
+            for (const OUString& rSeqEntry : std::as_const(tmpSeq))
                 tmpStep.excludeFiles.push_back(rSeqEntry);
         }
 
         // included nodes...
         if (tmpAccess->getByName("IncludedNodes") >>= tmpSeq) {
-            for (const OUString& rSeqEntry : tmpSeq)
+            for (const OUString& rSeqEntry : std::as_const(tmpSeq))
                 tmpStep.includeConfig.push_back(rSeqEntry);
         }
 
         // excluded nodes...
         if (tmpAccess->getByName("ExcludedNodes") >>= tmpSeq) {
-            for (const OUString& rSeqEntry : tmpSeq)
+            for (const OUString& rSeqEntry : std::as_const(tmpSeq))
                 tmpStep.excludeConfig.push_back(rSeqEntry);
         }
 
         // excluded extensions...
         if (tmpAccess->getByName("ExcludedExtensions") >>= tmpSeq) {
-            for (const OUString& rSeqEntry : tmpSeq)
+            for (const OUString& rSeqEntry : std::as_const(tmpSeq))
                 tmpStep.excludeExtensions.push_back(rSeqEntry);
         }
 
