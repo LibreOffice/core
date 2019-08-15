@@ -15,9 +15,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,liborcus,1))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,liborcus))
 
-# * external/liborcus/version.patch.0 covered by upstream
-#   <https://gitlab.com/orcus/orcus/commit/0dfa88f2adca7887dbe44bdb7025985777c89673> "Remove unused
-#   VERSION file":
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/rpath.patch.0 \
 	external/liborcus/gcc9.patch.0 \
