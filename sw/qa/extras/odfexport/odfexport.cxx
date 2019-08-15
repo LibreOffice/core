@@ -1618,7 +1618,8 @@ DECLARE_ODFEXPORT_TEST(testEmbeddedPdf, "embedded-pdf.odt")
         aArgs[0] <<= maTempFile.GetURL();
         uno::Reference<container::XNameAccess> xNameAccess(m_xSFactory->createInstanceWithArguments("com.sun.star.packages.zip.ZipFileAccess", aArgs), uno::UNO_QUERY);
         bool bHasBitmap = false;
-        for (const auto& rElementName : xNameAccess->getElementNames())
+        const uno::Sequence<OUString> aNames = xNameAccess->getElementNames();
+        for (const auto& rElementName : aNames)
         {
             if (rElementName.startsWith("Pictures") && rElementName.endsWith("png"))
             {

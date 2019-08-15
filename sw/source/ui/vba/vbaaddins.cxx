@@ -39,7 +39,7 @@ static uno::Reference< container::XIndexAccess > lcl_getAddinCollection( const u
     SAL_INFO("sw.vba", "lcl_getAddinCollection: " << aAddinPath );
     if( xSFA->isFolder( aAddinPath ) )
     {
-        uno::Sequence< OUString > sEntries = xSFA->getFolderContents( aAddinPath, false );
+        const uno::Sequence< OUString > sEntries = xSFA->getFolderContents( aAddinPath, false );
         for( const OUString& sUrl : sEntries )
         {
             if( !xSFA->isFolder( sUrl ) && sUrl.endsWithIgnoreAsciiCase( ".dot" ) )

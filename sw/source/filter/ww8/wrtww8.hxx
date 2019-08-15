@@ -779,7 +779,7 @@ public:
                     const OUString &rHelp,
                     const OUString &ToolTip,
                     const OUString &rSelected,
-                    css::uno::Sequence<OUString> &rListItems) = 0;
+                    const css::uno::Sequence<OUString> &rListItems) = 0;
 
     virtual void DoFormText(const SwInputField * pField) = 0;
 
@@ -1141,7 +1141,7 @@ public:
                     const OUString &rHelp,
                     const OUString &ToolTip,
                     const OUString &rSelected,
-                    css::uno::Sequence<OUString> &rListItems) override;
+                    const css::uno::Sequence<OUString> &rListItems) override;
 
     virtual void DoFormText(const SwInputField * pField) override;
 

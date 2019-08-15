@@ -108,7 +108,8 @@ public:
     void WriteHyperlinkData(const ::sw::mark::IFieldmark& rFieldmark) override;
 
     void DoComboBox(const OUString& rName, const OUString& rHelp, const OUString& ToolTip,
-                    const OUString& rSelected, css::uno::Sequence<OUString>& rListItems) override;
+                    const OUString& rSelected,
+                    const css::uno::Sequence<OUString>& rListItems) override;
 
     void DoFormText(const SwInputField* pField) override;
 

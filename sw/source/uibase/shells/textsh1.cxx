@@ -1680,7 +1680,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     uno::Reference< XNameAccess > xFamilies = xSupplier->getStyleFamilies();
                     if (xFamilies->getByName("PageStyles") >>= xContainer)
                     {
-                        uno::Sequence< OUString > aSeqNames = xContainer->getElementNames();
+                        const uno::Sequence< OUString > aSeqNames = xContainer->getElementNames();
                         for (const auto& rName : aSeqNames)
                         {
                             aStyleName = rName;

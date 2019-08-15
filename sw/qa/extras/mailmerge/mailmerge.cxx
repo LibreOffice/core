@@ -177,7 +177,7 @@ public:
 
     void executeMailMerge( bool bDontLoadResult = false )
     {
-        uno::Sequence< beans::NamedValue > aSeqMailMergeArgs = comphelper::containerToSequence( mMMargs );
+        const uno::Sequence< beans::NamedValue > aSeqMailMergeArgs = comphelper::containerToSequence( mMMargs );
         uno::Any res = mxJob->execute( aSeqMailMergeArgs );
 
         bool bOk = true;

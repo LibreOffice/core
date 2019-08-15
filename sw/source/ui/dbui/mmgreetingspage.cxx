@@ -265,7 +265,7 @@ void SwMailMergeGreetingsPage::ActivatePage()
     if(xColsSupp.is())
     {
         Reference < container::XNameAccess> xColAccess = xColsSupp->getColumns();
-        Sequence< OUString > aColumns = xColAccess->getElementNames();
+        const Sequence< OUString > aColumns = xColAccess->getElementNames();
         for(const auto& rColumn : aColumns)
             m_xFemaleColumnLB->append_text(rColumn);
     }
@@ -377,7 +377,7 @@ SwMailBodyDialog::SwMailBodyDialog(weld::Window* pParent)
     if(xColsSupp.is())
     {
         Reference < container::XNameAccess> xColAccess = xColsSupp->getColumns();
-        Sequence< OUString > aColumns = xColAccess->getElementNames();
+        const Sequence< OUString > aColumns = xColAccess->getElementNames();
         for(const auto& rColumn : aColumns)
             m_xFemaleColumnLB->append_text(rColumn);
     }

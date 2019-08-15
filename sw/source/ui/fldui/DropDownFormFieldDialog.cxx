@@ -107,7 +107,7 @@ void DropDownFormFieldDialog::InitControls()
         {
             css::uno::Sequence<OUString> vListEntries;
             pListEntries->second >>= vListEntries;
-            for (const OUString& rItem : vListEntries)
+            for (const OUString& rItem : std::as_const(vListEntries))
                 m_xListItemsTreeView->append_text(rItem);
 
             // Select the current one
