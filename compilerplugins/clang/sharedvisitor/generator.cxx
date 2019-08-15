@@ -555,7 +555,7 @@ int main(int argc, char** argv)
             "-I" STRINGIFY(BUILDDIR) "/config_host", // plugin sources use e.g. config_global.h
             "-I" STRINGIFY(CLANGDIR) "/include", // clang's headers
             "-I" STRINGIFY(CLANGSYSINCLUDE), // clang system headers
-            "-std=c++11",
+            STDOPTION,
             "-D__STDC_CONSTANT_MACROS", // Clang headers require these.
             "-D__STDC_FORMAT_MACROS",
             "-D__STDC_LIMIT_MACROS",
