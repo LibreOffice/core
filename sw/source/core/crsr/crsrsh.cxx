@@ -73,7 +73,6 @@
 #include <DocumentSettingManager.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
-#include <cntfrm.hxx>
 #include <tabcol.hxx>
 #include <wrtsh.hxx>
 #include <boost/property_tree/json_parser.hpp>
