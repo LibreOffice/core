@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_0cd6d5c4",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1117,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-08-15T15:04:02Z",
+      "side": 1,
+      "message": "sorry, likely the trim() was not a good idea, because it removes the original spaces and tabulators, so\n\nsText \u003d sText.isEmpty() ? *pSubText : sText + \"\\n\" + *pSubText;",
+      "range": {
+        "startLine": 1117,
+        "startChar": 7,
+        "endLine": 1117,
+        "endChar": 58
+      },
+      "revId": "53cadd1442db309a4a583b3f46a9408c791e43cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
