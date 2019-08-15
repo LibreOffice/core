@@ -18,6 +18,7 @@
  */
 
 #include <vector>
+#include <unordered_set>
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
 #include <rtl/strbuf.hxx>
@@ -301,7 +302,7 @@ bool SdrExchangeView::Paste(
         // #i13033#
         // New mechanism to re-create the connections of cloned connectors
         CloneList aCloneList;
-
+        std::unordered_set<rtl::OUString> aNameSet;
         for (size_t nOb=0; nOb<nObjCount; ++nOb)
         {
             const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
@@ -346,7 +347,7 @@ bool SdrExchangeView::Paste(
                     pNewObj->SetLayer(nLayer);
                 }
 
-                pDstLst->InsertObject(pNewObj, SAL_MAX_SIZE);
+                pDstLst->InsertObjectThenMakeNameUnique(pNewObj, aNameSet);
 
                 if( bUndo )
                     AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoNewObject(*pNewObj));

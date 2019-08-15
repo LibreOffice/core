@@ -903,13 +903,14 @@ void SdrEditView::CopyMarkedObj()
 
     GetMarkedObjectListWriteAccess().Clear();
     size_t nCloneErrCnt=0;
+    std::unordered_set<rtl::OUString> aNameSet;
     const size_t nMarkCount=aSourceObjectsForCopy.GetMarkCount();
     for (size_t nm=0; nm<nMarkCount; ++nm) {
         SdrMark* pM=aSourceObjectsForCopy.GetMark(nm);
         SdrObject* pSource(pM->GetMarkedSdrObj());
         SdrObject* pO(pSource->CloneSdrObject(pSource->getSdrModelFromSdrObject()));
         if (pO!=nullptr) {
-            pM->GetPageView()->GetObjList()->InsertObject(pO, SAL_MAX_SIZE);
+            pM->GetPageView()->GetObjList()->InsertObjectThenMakeNameUnique(pO, aNameSet);
 
             if( bUndo )
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoCopyObject(*pO));

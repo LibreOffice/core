@@ -136,6 +136,8 @@
 #include <svdobjplusdata.hxx>
 #include <svdobjuserdatalist.hxx>
 
+#include <unordered_set>
+
 #include <boost/optional.hpp>
 #include <libxml/xmlwriter.h>
 #include <memory>
@@ -3014,6 +3016,44 @@ bool SdrObject::HasText() const
 bool SdrObject::IsTextBox() const
 {
     return false;
+}
+
+void SdrObject::MakeNameUnique(std::unordered_set<OUString>& rNameSet)
+{
+    if (GetName().isEmpty())
+        return;
+
+    if (rNameSet.empty())
+    {
+        SdrPage* pPage;
+        SdrObject* pObj;
+        for (sal_uInt16 nPage(0); nPage < mrSdrModelFromSdrObject.GetPageCount(); ++nPage)
+        {
+            pPage = mrSdrModelFromSdrObject.GetPage(nPage);
+            SdrObjListIter aIter(pPage, SdrIterMode::DeepWithGroups);
+            while (aIter.IsMore())
+            {
+                pObj = aIter.Next();
+                if (pObj != this)
+                    rNameSet.insert(pObj->GetName());
+            }
+        }
+    }
+
+    OUString sName(GetName());
+    OUString sRootName(GetName());
+    sal_Int32 index = sName.lastIndexOf("_");
+    if ( index > 0)
+        sRootName = sRootName.copy(0, index);
+
+    sal_uInt32 n = 0;
+    while (rNameSet.find(sName) != rNameSet.end())
+    {
+        sName = sRootName + "_" + OUString::number(n++);
+    }
+    rNameSet.insert(sName);
+
+    SetName(sName);
 }
 
 SdrObject* SdrObjFactory::CreateObjectFromFactory(SdrModel& rSdrModel, SdrInventor nInventor, sal_uInt16 nObjIdentifier)

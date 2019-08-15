@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <cassert>
+#include <unordered_set>
 
 #include <svx/svdpage.hxx>
 
@@ -326,6 +327,32 @@ void SdrObjList::NbcInsertObject(SdrObject* pObj, size_t nPos)
         mbRectsDirty = true;
     }
     pObj->InsertedStateChange(); // calls the UserCall (among others)
+}
+
+void SdrObjList::InsertObjectThenMakeNameUnique(SdrObject* pObj)
+{
+    std::unordered_set<rtl::OUString> aNameSet;
+    InsertObjectThenMakeNameUnique(pObj, aNameSet);
+}
+
+void SdrObjList::InsertObjectThenMakeNameUnique(SdrObject* pObj, std::unordered_set<OUString>& rNameSet, size_t nPos)
+{
+    InsertObject(pObj, nPos);
+    if (!pObj->GetName().isEmpty())
+    {
+        pObj->MakeNameUnique(rNameSet);
+        SdrObjList* pSdrObjList = pObj->GetSubList(); // group
+        if (pSdrObjList)
+        {
+            SdrObject* pListObj;
+            SdrObjListIter aIter(pSdrObjList, SdrIterMode::DeepWithGroups);
+            while (aIter.IsMore())
+            {
+                pListObj = aIter.Next();
+                pListObj->MakeNameUnique(rNameSet);
+            }
+        }
+    }
 }
 
 void SdrObjList::InsertObject(SdrObject* pObj, size_t nPos)
@@ -1569,6 +1596,33 @@ void SdrPage::TRG_ImpMasterPageRemoved(const SdrPage& rRemovedPage)
         if(&TRG_GetMasterPage() == &rRemovedPage)
         {
             TRG_ClearMasterPage();
+        }
+    }
+}
+
+void SdrPage::MakePageObjectsNamesUnique()
+{
+    std::unordered_set<OUString> aNameSet;
+    for (size_t no(0); no < GetObjCount(); ++no)
+    {
+        SdrObject* pObj(GetObj(no));
+        if(nullptr != pObj)
+        {
+            if (!pObj->GetName().isEmpty())
+            {
+                pObj->MakeNameUnique(aNameSet);
+                SdrObjList* pSdrObjList = pObj->GetSubList(); // group
+                if (pSdrObjList)
+                {
+                    SdrObject* pListObj;
+                    SdrObjListIter aIter(pSdrObjList, SdrIterMode::DeepWithGroups);
+                    while (aIter.IsMore())
+                    {
+                        pListObj = aIter.Next();
+                        pListObj->MakeNameUnique(aNameSet);
+                    }
+                }
+            }
         }
     }
 }

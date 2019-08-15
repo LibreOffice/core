@@ -1309,6 +1309,9 @@ void SdrModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
     pPage->SetInserted();
     pPage->SetPageNum(nPos);
 
+    if (mbMakePageObjectsNamesUnique)
+        pPage->MakePageObjectsNamesUnique();
+
     if (nPos<nCount) bPagNumsDirty=true;
     SetChanged();
     SdrHint aHint(SdrHintKind::PageOrderChange, pPage);

@@ -730,7 +730,17 @@ sal_Int8 Clipboard::ExecuteDrop (
                     mrSlideSorter.GetViewShell()->GetViewShellBase().GetMainViewShell()));
                 mxSelectionObserverContext.reset(new SelectionObserver::Context(mrSlideSorter));
 
-                HandlePageDrop(*pDragTransferable);
+                if (rEvent.mnAction == DND_ACTION_MOVE)
+                {
+                    SdDrawDocument* pDoc = mrSlideSorter.GetModel().GetDocument();
+                    const bool bDoesMakePageObjectsNamesUnique = pDoc->DoesMakePageObjectsNamesUnique();
+                    pDoc->DoMakePageObjectsNamesUnique(false);
+                    HandlePageDrop(*pDragTransferable);
+                    pDoc->DoMakePageObjectsNamesUnique(bDoesMakePageObjectsNamesUnique);
+                }
+                else
+                    HandlePageDrop(*pDragTransferable);
+
                 nResult = rEvent.mnAction;
 
                 // We leave the undo context alive for when moving or

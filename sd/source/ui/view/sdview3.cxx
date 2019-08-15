@@ -463,6 +463,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                 const Size aVector( maDropPos.X() - aCurPos.X(), maDropPos.Y() - aCurPos.Y() );
 
+                                std::unordered_set<rtl::OUString> aNameSet;
                                 for(size_t a = 0; a < pMarkList->GetMarkCount(); ++a)
                                 {
                                     SdrMark* pM = pMarkList->GetMark(a);
@@ -476,7 +477,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                             pObj->NbcMove(aVector);
                                         }
 
-                                        pPage->InsertObject(pObj);
+                                        SdrObject* pMarkParent = pM->GetMarkedSdrObj()->getParentSdrObjectFromSdrObject();
+                                        if (bCopy || (pMarkParent && pMarkParent->IsGroupObject()))
+                                            pPage->InsertObjectThenMakeNameUnique(pObj, aNameSet);
+                                        else
+                                            pPage->InsertObject(pObj);
 
                                         if( IsUndoEnabled() )
                                         {
