@@ -773,7 +773,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
     }
 #endif
 
-    Sequence< Reference< XInterface > > factories(
+    const Sequence< Reference< XInterface > > factories(
         queryServiceFactories( rServiceSpecifier, xContext ) );
     for ( Reference< XInterface > const & xFactory : factories )
     {
@@ -825,7 +825,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
     }
 #endif
 
-    Sequence< Reference< XInterface > > factories(
+    const Sequence< Reference< XInterface > > factories(
         queryServiceFactories( rServiceSpecifier, xContext ) );
     for ( Reference< XInterface > const & xFactory : factories )
     {
@@ -1038,7 +1038,7 @@ void OServiceManager::insert( const Any & Element )
             m_ImplementationNameMap[ aImplName ] = xEle;
 
         //put into the service map
-        Sequence< OUString > aServiceNames = xInfo->getSupportedServiceNames();
+        const Sequence< OUString > aServiceNames = xInfo->getSupportedServiceNames();
         for( const OUString& rServiceName : aServiceNames )
         {
             m_ServiceMap.emplace(
@@ -1122,7 +1122,7 @@ void OServiceManager::remove( const Any & Element )
     if( !xSF.is() )
         return;
 
-    Sequence< OUString > aServiceNames = xSF->getSupportedServiceNames();
+    const Sequence< OUString > aServiceNames = xSF->getSupportedServiceNames();
     for( const OUString& rServiceName : aServiceNames )
     {
         pair<HashMultimap_OWString_Interface::iterator, HashMultimap_OWString_Interface::iterator> p =
@@ -1305,7 +1305,7 @@ Sequence<OUString> ORegistryServiceManager::getFromServiceName(
 Reference<XInterface > ORegistryServiceManager::loadWithServiceName(
     const OUString& serviceName, Reference< XComponentContext > const & xContext )
 {
-    Sequence<OUString> implEntries = getFromServiceName( serviceName );
+    const Sequence<OUString> implEntries = getFromServiceName( serviceName );
     for (const auto& rEntry : implEntries)
     {
         Reference< XInterface > x( loadWithImplementationName( rEntry, xContext ) );
@@ -1411,7 +1411,7 @@ Reference<XEnumeration > ORegistryServiceManager::createContentEnumeration(
     check_undisposed();
     MutexGuard aGuard(m_mutex);
     // get all implementation names registered under this service name from the registry
-    Sequence<OUString> aImpls = getFromServiceName( aServiceName );
+    const Sequence<OUString> aImpls = getFromServiceName( aServiceName );
     // load and insert all factories specified by the registry
     for( const OUString& aImplName : aImpls )
     {

@@ -639,7 +639,7 @@ void Test::testBehaviourWhenWidthAndHeightIsOrIsNotSet()
     // the container.
 
     {
-        Primitive2DSequence aSequence = parseSvg("svgio/qa/cppunit/data/Drawing_WithWidthHeight.svg");
+        const Primitive2DSequence aSequence = parseSvg("svgio/qa/cppunit/data/Drawing_WithWidthHeight.svg");
         CPPUNIT_ASSERT(aSequence.hasElements());
 
         geometry::RealRectangle2D aRealRect;
@@ -663,7 +663,7 @@ void Test::testBehaviourWhenWidthAndHeightIsOrIsNotSet()
     }
 
     {
-        Primitive2DSequence aSequence = parseSvg("svgio/qa/cppunit/data/Drawing_NoWidthHeight.svg");
+        const Primitive2DSequence aSequence = parseSvg("svgio/qa/cppunit/data/Drawing_NoWidthHeight.svg");
         CPPUNIT_ASSERT(aSequence.hasElements());
 
 

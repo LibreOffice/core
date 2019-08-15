@@ -770,7 +770,7 @@ Sequence< Reference< XRegistryKey > > SAL_CALL NestedKeyImpl::openKeys(  )
     std::transform(localSeq.begin(), localSeq.end(), retSeq.begin(), lKeyNameToRegKey);
 
     sal_uInt32 k = local;
-    for (const auto& rDef : defaultSeq)
+    for (const auto& rDef : std::as_const(defaultSeq))
     {
         bool insert = std::none_of(retSeq.begin(), std::next(retSeq.begin(), local),
             [&rDef](const Reference<XRegistryKey>& rKey) { return rKey->getKeyName() == rDef; });

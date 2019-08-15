@@ -91,7 +91,7 @@ void deleteAllLinkReferences(const Reference < XSimpleRegistry >& xReg,
     if (!(xKey.is() && (xKey->getValueType() == RegistryValueType_ASCIILIST)))
         return;
 
-    Sequence<OUString> linkNames = xKey->getAsciiListValue();
+    const Sequence<OUString> linkNames = xKey->getAsciiListValue();
 
     if (!linkNames.hasElements())
         return;
@@ -216,7 +216,7 @@ OUString searchImplForLink(
     Reference < XRegistryKey > xKey = xRootKey->openKey( slash_IMPLEMENTATIONS );
     if (xKey.is())
     {
-        Sequence< Reference < XRegistryKey > > subKeys( xKey->openKeys() );
+        const Sequence< Reference < XRegistryKey > > subKeys( xKey->openKeys() );
         OUString key_name( slash_UNO + linkName );
 
         for (const Reference < XRegistryKey >& xImplKey : subKeys)
@@ -526,7 +526,7 @@ void prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
         }
     } else
     {
-        Sequence< Reference < XRegistryKey> > subKeys = xKey->openKeys();
+        const Sequence< Reference < XRegistryKey> > subKeys = xKey->openKeys();
 
         if (subKeys.hasElements())
         {
@@ -581,7 +581,7 @@ void deleteAllImplementations(   const Reference < XSimpleRegistry >& xReg,
     {
         bool hasLocationUrl = false;
 
-        for (const Reference < XRegistryKey> & xImplKey : subKeys)
+        for (const Reference < XRegistryKey> & xImplKey : std::as_const(subKeys))
         {
             Reference < XRegistryKey > xKey = xImplKey->openKey(
                 slash_UNO_slash_LOCATION );
@@ -605,7 +605,7 @@ void deleteAllImplementations(   const Reference < XSimpleRegistry >& xReg,
                     xKey = xImplKey->openKey( slash_UNO );
                     if (xKey.is())
                     {
-                        Sequence< Reference < XRegistryKey > > subKeys2 = xKey->openKeys();
+                        const Sequence< Reference < XRegistryKey > > subKeys2 = xKey->openKeys();
 
                         for (const Reference < XRegistryKey > & rSubKey2 : subKeys2)
                         {
@@ -721,7 +721,7 @@ void deleteAllServiceEntries(    const Reference < XSimpleRegistry >& xReg,
     {
         bool hasNoImplementations = false;
 
-        for (const Reference < XRegistryKey > & xServiceKey : subKeys)
+        for (const Reference < XRegistryKey > & xServiceKey : std::as_const(subKeys))
         {
             if (xServiceKey->getValueType() == RegistryValueType_ASCIILIST)
             {
@@ -902,7 +902,7 @@ void prepareRegistry(
     Reference< XComponentContext > const & xContext )
     // throw ( InvalidRegistryException, CannotRegisterImplementationException, RuntimeException )
 {
-    Sequence< Reference < XRegistryKey > > subKeys = xSource->openKeys();
+    const Sequence< Reference < XRegistryKey > > subKeys = xSource->openKeys();
 
     if (!subKeys.hasElements())
     {
@@ -918,7 +918,7 @@ void prepareRegistry(
         if (xKey.is())
         {
             // update entries in SERVICES section
-            Sequence< Reference < XRegistryKey > > serviceKeys = xKey->openKeys();
+            const Sequence< Reference < XRegistryKey > > serviceKeys = xKey->openKeys();
 
             OUString implName = xImplKey->getKeyName().copy(1);
             sal_Int32 firstDot = implName.indexOf('/');
@@ -941,7 +941,7 @@ void prepareRegistry(
             xKey = xImplKey->openKey( slash_UNO );
             if (xKey.is())
             {
-                Sequence< Reference < XRegistryKey > > subKeys2 = xKey->openKeys();
+                const Sequence< Reference < XRegistryKey > > subKeys2 = xKey->openKeys();
 
                 for (const Reference < XRegistryKey >& rSubKey2 : subKeys2)
                 {
@@ -976,7 +976,7 @@ void prepareRegistry(
         if (xKey.is() && (xKey->getValueType() == RegistryValueType_ASCIILIST))
         {
             // update link entries in REGISTRY_LINKS section
-            Sequence<OUString> linkNames = xKey->getAsciiListValue();
+            const Sequence<OUString> linkNames = xKey->getAsciiListValue();
 
             for (const OUString& rLinkName : linkNames)
             {
@@ -1020,7 +1020,7 @@ void findImplementations(    const Reference < XRegistryKey > & xSource,
 
     try
     {
-        Sequence< Reference < XRegistryKey > > subKeys = xSource->openKeys();
+        const Sequence< Reference < XRegistryKey > > subKeys = xSource->openKeys();
 
         for (const Reference < XRegistryKey >& rSubKey : subKeys)
         {
