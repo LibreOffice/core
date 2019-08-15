@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_213ba2eb",
+        "filename": "stoc/source/defaultregistry/defaultregistry.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-15T10:09:16Z",
+      "side": 1,
+      "message": "I\u0027d even add retVec.reserve(local+def) call - I don\u0027t think it will be ever significantly too large, and it will avoid any further allocations :-)",
+      "revId": "a3969fedddb46f6adf6358d72761b908195fd248",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_8c02e508",
+        "filename": "stoc/source/defaultregistry/defaultregistry.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-15T10:09:16Z",
+      "side": 1,
+      "message": "Why keep this strange dinosaur instead of\n\n    if (std::find(std::cbegin(localSeq), std::cend(localSeq), rKeyName) \u003d\u003d std::cend(localSeq))\n\nI don\u0027t know if there may be any gain/loss if using std::set\u003cOUString\u003e and add there everything from both localSeq and defaultSeq, and then just convert the set of names into References; or if then the changed order of the items will mean something... was just thinking about that alternative :-)",
+      "range": {
+        "startLine": 772,
+        "startChar": 8,
+        "endLine": 773,
+        "endChar": 105
+      },
+      "revId": "a3969fedddb46f6adf6358d72761b908195fd248",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
