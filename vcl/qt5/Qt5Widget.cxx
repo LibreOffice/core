@@ -230,13 +230,13 @@ void Qt5Widget::dragMoveEvent(QDragMoveEvent* pEvent) { m_rFrame.handleDragMove(
 
 void Qt5Widget::dropEvent(QDropEvent* pEvent) { m_rFrame.handleDrop(pEvent); }
 
-void Qt5Widget::moveEvent(QMoveEvent* event)
+void Qt5Widget::moveEvent(QMoveEvent* pEvent)
 {
     if (m_rFrame.m_pTopLevel)
         return;
 
-    m_rFrame.maGeometry.nX = event->pos().x();
-    m_rFrame.maGeometry.nY = event->pos().y();
+    m_rFrame.maGeometry.nX = pEvent->pos().x();
+    m_rFrame.maGeometry.nY = pEvent->pos().y();
     m_rFrame.CallCallback(SalEvent::Move, nullptr);
 }
 

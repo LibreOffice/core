@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <QtCore/QPoint>
 #include <QtCore/QRect>
 #include <QtCore/QSize>
 #include <QtCore/QString>
@@ -61,6 +62,8 @@ inline tools::Rectangle toRectangle(const QRect& rRect)
 inline QSize toQSize(const Size& rSize) { return QSize(rSize.Width(), rSize.Height()); }
 
 inline Size toSize(const QSize& rSize) { return Size(rSize.width(), rSize.height()); }
+
+inline Point toPoint(const QPoint& rPoint) { return Point(rPoint.x(), rPoint.y()); }
 
 inline QColor toQColor(const Color& rColor)
 {

@@ -74,7 +74,7 @@ class Qt5Widget : public QWidget
 public:
     Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f = Qt::WindowFlags());
 
-    Qt5Frame& getFrame() const { return m_rFrame; }
+    Qt5Frame& frame() const { return m_rFrame; }
     void endExtTextInput();
 
     static bool handleEvent(Qt5Frame&, const QWidget&, QEvent*);
