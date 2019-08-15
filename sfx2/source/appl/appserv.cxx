@@ -895,7 +895,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     }
 
                     // Backup visible toolbar list and hide all toolbars
-                    Sequence<Reference<XUIElement>> aUIElements = xLayoutManager->getElements();
+                    const Sequence<Reference<XUIElement>> aUIElements = xLayoutManager->getElements();
                     for ( const Reference< XUIElement >& xUIElement : aUIElements )
                     {
                         Reference< XPropertySet > xPropertySet( xUIElement, UNO_QUERY );

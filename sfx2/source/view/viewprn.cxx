@@ -140,7 +140,7 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
         aRenderOptions[2].Value <<= true;
         try
         {
-            Sequence< beans::PropertyValue > aRenderParms( mxRenderable->getRenderer( 0 , getSelectionObject(), aRenderOptions ) );
+            const Sequence< beans::PropertyValue > aRenderParms( mxRenderable->getRenderer( 0 , getSelectionObject(), aRenderOptions ) );
             for( const auto& rRenderParm : aRenderParms )
             {
                 if ( rRenderParm.Name == "ExtraPrintUIOptions" )

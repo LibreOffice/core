@@ -591,7 +591,7 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             {
                 css::uno::Sequence< css::beans::PropertyValue > aSettings;
                 rArgument.Value >>= aSettings;
-                for ( const auto& rSetting : aSettings )
+                for ( const auto& rSetting : std::as_const(aSettings) )
                 {
                     switch( TKGet( rSetting.Name ) )
                     {

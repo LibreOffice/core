@@ -176,7 +176,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
         OUString aActualFilterTypeName;
         uno::Sequence< beans::PropertyValue > aActuralFilterData;
         xFilterFactory->getByName( aActualFilter ) >>= aActuralFilterData;
-        for ( const auto& rProp : aActuralFilterData )
+        for ( const auto& rProp : std::as_const(aActuralFilterData) )
             if ( rProp.Name == "Type" )
                 rProp.Value >>= aActualFilterTypeName;
         ::comphelper::SequenceAsHashMap aProps1( xTypeDetection->getByName( aActualFilterTypeName ) );
