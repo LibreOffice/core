@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_0ccb3572",
+        "filename": "include/oox/export/chartexport.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-08-15T13:01:03Z",
+      "side": 1,
+      "message": "const OUString* pSubText \u003d nullptr",
+      "range": {
+        "startLine": 140,
+        "startChar": 26,
+        "endLine": 140,
+        "endChar": 50
+      },
+      "revId": "7fdf197c1c275c96e3fcaa83a3d84557b53c6894",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
