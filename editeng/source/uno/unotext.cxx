@@ -1442,11 +1442,9 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextRangeBase::getSupportedServiceNames
 
 uno::Sequence< OUString > SvxUnoTextRangeBase::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString > aSeq(3);
-    aSeq[0] = "com.sun.star.style.CharacterProperties";
-    aSeq[1] = "com.sun.star.style.CharacterPropertiesComplex";
-    aSeq[2] = "com.sun.star.style.CharacterPropertiesAsian";
-    return aSeq;
+    return uno::Sequence< OUString >{ "com.sun.star.style.CharacterProperties",
+                                      "com.sun.star.style.CharacterPropertiesComplex",
+                                      "com.sun.star.style.CharacterPropertiesAsian" };
 }
 
 // XTextRangeCompare

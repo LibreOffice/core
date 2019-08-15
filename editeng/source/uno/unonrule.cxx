@@ -165,9 +165,7 @@ sal_Bool SAL_CALL SvxUnoNumberingRules::supportsService( const OUString& Service
 
 Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  )
 {
-    OUString aService( "com.sun.star.text.NumberingRules" );
-    Sequence< OUString > aSeq( &aService, 1 );
-    return aSeq;
+    return Sequence< OUString > { "com.sun.star.text.NumberingRules" };
 }
 
 Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal_Int32 nIndex) const
