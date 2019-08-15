@@ -91,7 +91,7 @@ void OColumnAlias::initialize( const css::uno::Reference< css::lang::XMultiServi
         com_sun_star_comp_sdbc_MozabDriver::ColumnAliases::get(
             comphelper::getComponentContext(_rxORB)),
         UNO_QUERY_THROW);
-    Sequence< OUString > aProgrammaticNames(xAliasesNode->getElementNames());
+    const Sequence< OUString > aProgrammaticNames(xAliasesNode->getElementNames());
     for (const auto& rProgrammaticName : aProgrammaticNames) {
         OString sAsciiProgrammaticName(
             OUStringToOString(

@@ -163,7 +163,7 @@ void SAL_CALL BaseContainerControl::dispose()
     m_aListeners.disposeAndClear( aObject );
 
     // remove controls
-    Sequence< Reference< XControl > >   seqCtrls    =   getControls();
+    const Sequence< Reference< XControl > >   seqCtrls    =   getControls();
 
     maControlInfoList.clear();
 

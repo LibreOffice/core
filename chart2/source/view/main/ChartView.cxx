@@ -2304,7 +2304,8 @@ void lcl_createButtons(const uno::Reference<drawing::XShapes>& xPageShapes,
     {
         x = 0;
 
-        for (css::chart2::data::PivotTableFieldEntry const & rPageFieldEntry : xPivotTableDataProvider->getPageFields())
+        const css::uno::Sequence<chart2::data::PivotTableFieldEntry> aPivotFieldEntries = xPivotTableDataProvider->getPageFields();
+        for (css::chart2::data::PivotTableFieldEntry const & rPageFieldEntry : aPivotFieldEntries)
         {
             std::unique_ptr<VButton> pButton(new VButton);
             pButton->init(xPageShapes, xShapeFactory);
@@ -2330,7 +2331,8 @@ void lcl_createButtons(const uno::Reference<drawing::XShapes>& xPageShapes,
     if (xPivotTableDataProvider->getRowFields().hasElements())
     {
         x = 200;
-        for (css::chart2::data::PivotTableFieldEntry const & rRowFieldEntry : xPivotTableDataProvider->getRowFields())
+        const css::uno::Sequence<chart2::data::PivotTableFieldEntry> aPivotFieldEntries = xPivotTableDataProvider->getRowFields();
+        for (css::chart2::data::PivotTableFieldEntry const & rRowFieldEntry : aPivotFieldEntries)
         {
 
             std::unique_ptr<VButton> pButton(new VButton);

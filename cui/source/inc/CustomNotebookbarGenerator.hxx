@@ -34,7 +34,7 @@ public:
     static char* convertToCharPointer(const OUString& sString);
     static Sequence<OUString> getCustomizedUIItem(OUString sNotebookbarConfigType);
     static void getFileNameAndAppName(OUString& sAppName, OUString& sNotebookbarUIFileName);
-    static void modifyCustomizedUIFile(Sequence<OUString> sUIItemProperties);
+    static void modifyCustomizedUIFile(const Sequence<OUString>& sUIItemProperties);
     static void createCustomizedUIFile();
     static void setCustomizedUIItem(Sequence<OUString> sUIItemProperties,
                                     OUString sNotebookbarConfigType);
