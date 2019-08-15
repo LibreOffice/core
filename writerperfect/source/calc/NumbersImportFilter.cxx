@@ -16,11 +16,6 @@
 
 #include "NumbersImportFilter.hxx"
 
-using com::sun::star::uno::RuntimeException;
-using com::sun::star::uno::Sequence;
-using com::sun::star::uno::XComponentContext;
-using com::sun::star::uno::XInterface;
-
 using libetonyek::EtonyekDocument;
 
 bool NumbersImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
@@ -56,13 +51,10 @@ sal_Bool SAL_CALL NumbersImportFilter::supportsService(const OUString& rServiceN
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence<OUString> SAL_CALL NumbersImportFilter::getSupportedServiceNames()
+css::uno::Sequence<OUString> SAL_CALL NumbersImportFilter::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.document.ImportFilter";
-    pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
-    return aRet;
+    return css::uno::Sequence<OUString>{ "com.sun.star.document.ImportFilter",
+                                         "com.sun.star.document.ExtendedTypeDetection" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

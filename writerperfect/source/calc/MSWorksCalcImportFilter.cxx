@@ -34,12 +34,6 @@
 
 using namespace ::com::sun::star;
 
-using uno::Exception;
-using uno::RuntimeException;
-using uno::Sequence;
-using uno::XComponentContext;
-using uno::XInterface;
-
 namespace MSWorksCalcImportFilterInternal
 {
 /// returns the list of stream name present in a folder
@@ -435,13 +429,10 @@ sal_Bool SAL_CALL MSWorksCalcImportFilter::supportsService(const OUString& rServ
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence<OUString> SAL_CALL MSWorksCalcImportFilter::getSupportedServiceNames()
+css::uno::Sequence<OUString> SAL_CALL MSWorksCalcImportFilter::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.document.ImportFilter";
-    pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
-    return aRet;
+    return css::uno::Sequence<OUString>{ "com.sun.star.document.ImportFilter",
+                                         "com.sun.star.document.ExtendedTypeDetection" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
