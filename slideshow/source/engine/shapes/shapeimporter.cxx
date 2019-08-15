@@ -397,7 +397,7 @@ void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xP
     getPropertyValue( nLineColor, xPropSet, "LineColor" );
     getPropertyValue( fLineWidth, xPropSet, "LineWidth" );
 
-    drawing::PointSequence* pOuterSequence = aRetval.getArray();
+    const drawing::PointSequence* pOuterSequence = aRetval.getArray();
 
     ::basegfx::B2DPolygon aPoly;
     basegfx::B2DPoint aPoint;
