@@ -60,7 +60,7 @@ PaneHider::PaneHider (const ViewShell& rViewShell, SlideshowImpl* pSlideShow)
             if (mxConfiguration.is())
             {
                 // Iterate over the resources and deactivate the panes.
-                Sequence<Reference<XResourceId> > aResources (
+                const Sequence<Reference<XResourceId> > aResources (
                     mxConfiguration->getResources(
                         nullptr,
                         framework::FrameworkHelper::msPaneURLPrefix,

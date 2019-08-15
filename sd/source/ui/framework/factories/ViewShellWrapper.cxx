@@ -117,7 +117,7 @@ sal_Bool SAL_CALL ViewShellWrapper::select( const css::uno::Any& aSelection )
     rSelector.DeselectAllPages();
     Sequence<Reference<drawing::XDrawPage> > xPages;
     aSelection >>= xPages;
-    for (const auto& rPage : xPages)
+    for (const auto& rPage : std::as_const(xPages))
     {
         Reference<beans::XPropertySet> xSet (rPage, UNO_QUERY);
         if (xSet.is())

@@ -92,7 +92,7 @@ void implImportLabels( const Reference< XMultiServiceFactory >& xConfigProvider,
         if( xConfigAccess.is() )
         {
             Reference< XNameAccess > xNameAccess;
-            Sequence< OUString > aNames( xConfigAccess->getElementNames() );
+            const Sequence< OUString > aNames( xConfigAccess->getElementNames() );
             for(const OUString& rName : aNames)
             {
                 xConfigAccess->getByName( rName ) >>= xNameAccess;
@@ -295,7 +295,7 @@ void CustomAnimationPresets::importEffects()
         uno::Sequence< OUString > aFiles;
         xNameAccess->getByName( "EffectFiles" ) >>= aFiles;
 
-        for( const auto& rFile : aFiles )
+        for( const auto& rFile : std::as_const(aFiles) )
         {
             OUString aURL = comphelper::getExpandedUri(xContext, rFile);
 
@@ -403,7 +403,7 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
         {
             Reference< XNameAccess > xCategoryAccess;
 
-            Sequence< OUString > aNames( xTypeAccess->getElementNames() );
+            const Sequence< OUString > aNames( xTypeAccess->getElementNames() );
             for(const OUString& rName : aNames)
             {
                 xTypeAccess->getByName( rName ) >>= xCategoryAccess;
@@ -418,7 +418,7 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
 
                     EffectDescriptorList aEffectsList;
 
-                    for( const OUString& rEffectName : aEffects )
+                    for( const OUString& rEffectName : std::as_const(aEffects) )
                     {
                         CustomAnimationPresetPtr pEffect = getEffectDescriptor( rEffectName );
                         if( pEffect.get() )

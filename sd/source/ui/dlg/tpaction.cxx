@@ -207,7 +207,7 @@ void SdTPAction::Construct()
                 aVerbs = xObj->getSupportedVerbs();
             }
 
-            for( const embed::VerbDescriptor& aVerb : aVerbs )
+            for( const embed::VerbDescriptor& aVerb : std::as_const(aVerbs) )
             {
                 if( aVerb.VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU )
                 {
