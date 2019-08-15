@@ -166,8 +166,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                 }
                 catch (const css::uno::Exception&)
                 {
-                    css::uno::Any ex( cppu::getCaughtException() );
-                    SAL_WARN( "sd", exceptionToString(ex) );
+                    TOOLS_WARN_EXCEPTION( "sd", "" );
                 }
             }
         }
@@ -231,8 +230,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     }
                     catch (const css::uno::Exception&)
                     {
-                        css::uno::Any ex( cppu::getCaughtException() );
-                        SAL_WARN( "sd", exceptionToString(ex) );
+                        TOOLS_WARN_EXCEPTION( "sd", "" );
                     }
                 }
 
@@ -279,8 +277,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     }
                     catch (const css::uno::Exception&)
                     {
-                        css::uno::Any ex( cppu::getCaughtException() );
-                        SAL_WARN( "sd", exceptionToString(ex) );
+                        TOOLS_WARN_EXCEPTION( "sd", "" );
                     }
                 }
             }
@@ -352,8 +349,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     }
                     catch (const css::uno::Exception&)
                     {
-                        css::uno::Any ex( cppu::getCaughtException() );
-                        SAL_WARN( "sd", exceptionToString(ex) );
+                        TOOLS_WARN_EXCEPTION( "sd", "" );
                     }
                 }
                 if( !sUrl2.isEmpty() )
@@ -396,8 +392,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     }
                     catch (const css::uno::Exception&)
                     {
-                        css::uno::Any ex( cppu::getCaughtException() );
-                        SAL_WARN( "sd", exceptionToString(ex) );
+                        TOOLS_WARN_EXCEPTION( "sd", "" );
                     }
                 }
                 if( !sUrl3.isEmpty() )
@@ -440,8 +435,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     }
                     catch (const css::uno::Exception&)
                     {
-                        css::uno::Any ex( cppu::getCaughtException() );
-                        SAL_WARN( "sd", exceptionToString(ex) );
+                        TOOLS_WARN_EXCEPTION( "sd", "" );
                     }
                 }
                 if( !sUrl4.isEmpty() )
@@ -486,8 +480,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     }
                     catch (const css::uno::Exception&)
                     {
-                        css::uno::Any ex( cppu::getCaughtException() );
-                        SAL_WARN( "sd", exceptionToString(ex) );
+                        TOOLS_WARN_EXCEPTION( "sd", "" );
                     }
                 }
             }

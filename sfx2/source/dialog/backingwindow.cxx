@@ -133,8 +133,7 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     }
     catch (const Exception&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "fwk", "BackingWindow - caught an exception! " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "fwk", "BackingWindow" );
     }
 
     // fdo#34392: we do the layout dynamically, the layout depends on the font,

@@ -170,8 +170,7 @@ static Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
             }
             catch (const Exception&)
             {
-                css::uno::Any ex( cppu::getCaughtException() );
-                SAL_WARN( "extensions.biblio", "::getColumns : caught an exception. " << exceptionToString(ex));
+                TOOLS_WARN_EXCEPTION( "extensions.biblio", "::getColumns");
             }
 
         }

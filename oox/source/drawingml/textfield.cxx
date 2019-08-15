@@ -235,8 +235,7 @@ sal_Int32 TextField::insertAt(
     }
     catch( const Exception&  )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("oox", "OOX:  TextField::insertAt() exception " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("oox", "OOX:  TextField::insertAt()");
     }
 
     return nCharHeight;

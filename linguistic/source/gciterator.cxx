@@ -943,9 +943,8 @@ void SAL_CALL GrammarCheckingIterator::processLinguServiceEvent(
         }
         catch (const ::uno::Exception &)
         {
-            css::uno::Any ex( cppu::getCaughtException() );
             // ignore
-            SAL_WARN("linguistic", "processLinguServiceEvent: exception: " << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION("linguistic", "processLinguServiceEvent");
         }
     }
 }
@@ -1107,8 +1106,7 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
     }
     catch (uno::Exception const &)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "linguistic", "exception caught. Failed to get configured services " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "linguistic", "exception caught. Failed to get configured services" );
     }
 
     {

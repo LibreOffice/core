@@ -524,9 +524,8 @@ UpdateCheckThread::run()
     }
 
     catch(const uno::Exception&) {
-        css::uno::Any ex( cppu::getCaughtException() );
         // Silently catch all errors
-        SAL_WARN("extensions.update", "Caught exception, thread terminated. " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION("extensions.update", "Caught exception, thread terminated" );
     }
 }
 
@@ -541,8 +540,7 @@ ManualUpdateCheckThread::run()
     }
     catch(const uno::Exception&) {
         // Silently catch all errors
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("extensions.update", "Caught exception, thread terminated. " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION("extensions.update", "Caught exception, thread terminated" );
     }
 }
 

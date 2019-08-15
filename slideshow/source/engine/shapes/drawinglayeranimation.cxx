@@ -935,7 +935,7 @@ std::shared_ptr<Activity> createDrawingLayerAnimActivity(
     catch( uno::Exception& )
     {
         // translate any error into empty factory product.
-        SAL_WARN( "slideshow", exceptionToString( cppu::getCaughtException() ) );
+        TOOLS_WARN_EXCEPTION( "slideshow", "" );
     }
 
     return pActivity;

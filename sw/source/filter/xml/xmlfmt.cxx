@@ -345,8 +345,7 @@ SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
         }
         catch (uno::Exception const&)
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN("sw.xml", "exception when setting ParaStyleConditions: " << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION("sw.xml", "exception when setting ParaStyleConditions");
         }
     }
     XMLTextStyleContext::Finish( bOverwrite );

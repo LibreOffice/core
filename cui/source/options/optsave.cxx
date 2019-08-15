@@ -417,8 +417,7 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
         }
         catch(Exception const &)
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "cui.options", "exception in FilterFactory access: " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "cui.options", "exception in FilterFactory access" );
         }
 
         pImpl->bInitialized = true;

@@ -279,25 +279,15 @@ namespace svt
                     }
                     eResult = EnumerationResult::SUCCESS;
                 }
-                catch( CommandAbortedException& )
-                {
-                    SAL_WARN( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught a CommandAbortedException while enumerating!" );
-                }
                 catch( Exception const & )
                 {
-                    css::uno::Any ex( cppu::getCaughtException() );
-                    SAL_WARN( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught an exception other than CommandAbortedException while enumerating! " << exceptionToString(ex));
+                    TOOLS_WARN_EXCEPTION( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught an exception while enumerating");
                 }
             }
         }
-        catch( CommandAbortedException& )
-        {
-            SAL_WARN( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught a CommandAbortedException!" );
-        }
         catch( Exception const & )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent: caught an exception other than CommandAbortedException! " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "svtools.contnr", "FileViewContentEnumerator::enumerateFolderContent" );
         }
 
         IEnumerationResultHandler* pHandler = nullptr;

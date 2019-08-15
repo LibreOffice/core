@@ -776,7 +776,7 @@ bool SlideImpl::implPrefetchShow()
     }
     catch( uno::Exception& )
     {
-        SAL_WARN( "slideshow", exceptionToString(cppu::getCaughtException()) );
+        TOOLS_WARN_EXCEPTION( "slideshow", "" );
         // TODO(E2): Error handling. For now, bail out
     }
 
@@ -1023,7 +1023,7 @@ bool SlideImpl::loadShapes()
             }
             catch( uno::Exception& )
             {
-                SAL_WARN( "slideshow", exceptionToString( cppu::getCaughtException() ) );
+                TOOLS_WARN_EXCEPTION( "slideshow", "" );
                 return false;
             }
         }
@@ -1062,7 +1062,7 @@ bool SlideImpl::loadShapes()
     }
     catch( uno::Exception& )
     {
-        SAL_WARN( "slideshow", exceptionToString( cppu::getCaughtException() ) );
+        TOOLS_WARN_EXCEPTION( "slideshow", "" );
         return false;
     }
 

@@ -110,8 +110,7 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
             }
             catch (css::uno::Exception&)
             {
-                auto const e2 = cppu::getCaughtException();
-                SAL_WARN("vcl", "Uncaught " << exceptionToString(e2));
+                TOOLS_WARN_EXCEPTION("vcl", "Uncaught");
                 std::abort();
             }
             catch (std::exception& e)

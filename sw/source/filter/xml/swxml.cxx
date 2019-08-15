@@ -248,20 +248,17 @@ ErrCode ReadThroughComponent(
     }
     catch(const packages::zip::ZipIOException&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "sw", "uno exception caught while importing: " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "sw", "uno exception caught while importing" );
         return ERRCODE_IO_BROKENPACKAGE;
     }
     catch(const io::IOException&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "sw", "uno exception caught while importing: " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "sw", "uno exception caught while importing" );
         return ERR_SWG_READ_ERROR;
     }
     catch(const uno::Exception&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "sw", "uno exception caught while importing: " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "sw", "uno exception caught while importing" );
         return ERR_SWG_READ_ERROR;
     }
 

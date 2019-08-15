@@ -146,9 +146,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
             }
             catch (Exception&)
             {
-                SAL_WARN("sdremote", "sd::SlideShowImpl::setPointerPosition(), "
-                                     "exception caught: "
-                                         << exceptionToString(cppu::getCaughtException()));
+                TOOLS_WARN_EXCEPTION("sdremote", "sd::SlideShowImpl::setPointerPosition()");
             }
 
             try
@@ -158,9 +156,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
             }
             catch (Exception&)
             {
-                SAL_WARN("sdremote", "sd::SlideShowImpl::setPointerMode(), "
-                                     "exception caught: "
-                                         << exceptionToString(cppu::getCaughtException()));
+                TOOLS_WARN_EXCEPTION("sdremote", "sd::SlideShowImpl::setPointerMode()");
             }
         }
 
@@ -179,8 +175,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
         }
         catch ( Exception& )
         {
-            SAL_WARN( "sdremote", "sd::SlideShowImpl::setPointerMode(), "
-                "exception caught: " << exceptionToString( cppu::getCaughtException() ));
+            TOOLS_WARN_EXCEPTION( "sdremote", "sd::SlideShowImpl::setPointerMode()" );
         }
 
         SAL_INFO( "sdremote", "Pointer dismissed, we hide the pointer on screen" );
@@ -204,8 +199,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
         }
         catch ( Exception& )
         {
-            SAL_WARN( "sdremote", "sd::SlideShowImpl::setPointerPosition(), "
-                "exception caught: " << exceptionToString( cppu::getCaughtException() ));
+            TOOLS_WARN_EXCEPTION( "sdremote", "sd::SlideShowImpl::setPointerPosition()" );
         }
     }
     else if ( aCommand[0] == "presentation_resume" )

@@ -307,8 +307,7 @@ Reference< XShape > Drawing::createAndInsertXControlShape( const ::oox::ole::Emb
     }
     catch (Exception const&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("oox", "exception inserting Shape: " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("oox", "exception inserting Shape");
     }
     return xShape;
 }

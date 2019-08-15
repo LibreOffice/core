@@ -3037,8 +3037,7 @@ bool HtmlExport::checkFileExists( Reference< css::ucb::XSimpleFileAccess3 > cons
     }
     catch( css::uno::Exception& )
     {
-        SAL_WARN( "sd", "sd::HtmlExport::checkFileExists(), exception caught: "
-                    << exceptionToString( cppu::getCaughtException() ) );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::HtmlExport::checkFileExists()" );
     }
 
     return false;
@@ -3088,8 +3087,7 @@ bool HtmlExport::checkForExistingFiles()
     }
     catch( Exception& )
     {
-        SAL_WARN( "sd", "sd::HtmlExport::checkForExistingFiles(), exception caught: "
-                    << exceptionToString( cppu::getCaughtException() ) );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::HtmlExport::checkForExistingFiles()" );
         bFound = false;
     }
 

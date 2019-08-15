@@ -84,7 +84,7 @@ namespace dxcanvas
         }
         catch( const uno::Exception& )
         {
-            SAL_WARN( "canvas", exceptionToString( cppu::getCaughtException() ) );
+            TOOLS_WARN_EXCEPTION( "canvas", "" );
         }
     }
 
@@ -115,7 +115,7 @@ namespace dxcanvas
         }
         catch( const uno::Exception& )
         {
-            SAL_WARN( "canvas", exceptionToString( cppu::getCaughtException() ) );
+            TOOLS_WARN_EXCEPTION( "canvas", "" );
         }
     }
 

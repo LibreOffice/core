@@ -134,9 +134,8 @@ void SAL_CALL InitUpdateCheckJobThread::run()
         if ( m_bShowDialog )
             aController->showDialog( true );
     } catch (const uno::Exception &) {
-        css::uno::Any ex( cppu::getCaughtException() );
         // fdo#64962 - don't bring the app down on some unexpected exception.
-        SAL_WARN("extensions.update", "Caught init update exception, thread terminated. " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION("extensions.update", "Caught init update exception, thread terminated" );
     }
 }
 
@@ -239,8 +238,7 @@ void UpdateCheckJob::handleExtensionUpdates( const uno::Sequence< beans::NamedVa
     }
     catch( const uno::Exception& )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("extensions.update", "Caught exception, thread terminated. " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("extensions.update", "Caught exception, thread terminated");
     }
 }
 

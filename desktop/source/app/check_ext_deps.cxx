@@ -295,8 +295,7 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
                 }
                 catch ( const uno::RuntimeException & ) { throw; }
                 catch (const uno::Exception & ) {
-                   css::uno::Any ex( cppu::getCaughtException() );
-                   SAL_WARN( "desktop.app", exceptionToString(ex) );
+                   TOOLS_WARN_EXCEPTION( "desktop.app", "" );
                 }
 
                 if ( bRegistered )

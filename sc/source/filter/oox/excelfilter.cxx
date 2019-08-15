@@ -97,8 +97,7 @@ bool ExcelFilter::importDocument()
         }
         catch( const Exception& )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN("sc", "exception when importing document properties " << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION("sc", "exception when importing document properties");
         }
         catch( ... )
         {

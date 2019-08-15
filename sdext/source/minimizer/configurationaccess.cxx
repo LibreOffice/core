@@ -329,9 +329,8 @@ Reference< XInterface > ConfigurationAccess::GetConfigurationNode(
     }
     catch (const Exception&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("sdext.minimizer", "caught exception while getting configuration node "
-                  << sPathToNode << " : " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("sdext.minimizer", "caught exception while getting configuration node "
+                  << sPathToNode);
     }
     return xNode;
 }

@@ -572,8 +572,7 @@ collectFilesFromStorage(uno::Reference<embed::XStorage> const& i_xStorage,
             o_rFiles.insert(styles);
         }
     } catch (const uno::Exception &) {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("sfx", "collectFilesFromStorage: " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("sfx", "collectFilesFromStorage");
     }
 }
 

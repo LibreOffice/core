@@ -490,8 +490,7 @@ void FileDialogHelper_Impl::updateExportButton()
         }
         catch( const IllegalArgumentException& )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "sfx.dialog", "FileDialogHelper_Impl::updateExportButton: caught an exception " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "sfx.dialog", "FileDialogHelper_Impl::updateExportButton" );
         }
     }
 }
@@ -593,8 +592,7 @@ void FileDialogHelper_Impl::updatePreviewState( bool _bUpdatePreviewWindow )
     }
     catch( const Exception& )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "sfx.dialog", "FileDialogHelper_Impl::updatePreviewState: caught an exception " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "sfx.dialog", "FileDialogHelper_Impl::updatePreviewState" );
     }
 }
 
@@ -1293,8 +1291,7 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
         }
         catch( const Exception& )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "sfx.dialog", "FileDialogHelper_Impl::implDoExecute: caught an exception " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "sfx.dialog", "FileDialogHelper_Impl::implDoExecute" );
         }
     }
 
@@ -1322,8 +1319,7 @@ void FileDialogHelper_Impl::implStartExecute()
         }
         catch( const Exception& )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "sfx.dialog", "FileDialogHelper_Impl::implDoExecute: caught an exception " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "sfx.dialog", "FileDialogHelper_Impl::implDoExecute" );
         }
     }
 }

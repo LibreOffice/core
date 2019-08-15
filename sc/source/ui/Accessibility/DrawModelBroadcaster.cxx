@@ -70,8 +70,7 @@ void ScDrawModelBroadcaster::Notify( SfxBroadcaster&,
         }
         catch( const uno::RuntimeException& )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN("sc.ui", "Runtime exception caught while notifying shape. : " << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION("sc.ui", "Runtime exception caught while notifying shape");
         }
     }
 }

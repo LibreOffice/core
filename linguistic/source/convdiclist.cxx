@@ -266,14 +266,9 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
                                     comphelper::getProcessComponentContext() );
             aCnt.executeCommand( "delete", makeAny( true ) );
         }
-        catch( css::ucb::CommandAbortedException& )
-        {
-            SAL_WARN( "linguistic", "HangulHanjaOptionsDialog::OkHdl(): CommandAbortedException" );
-        }
         catch( ... )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "linguistic", "HangulHanjaOptionsDialog::OkHdl(): Any other exception " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "linguistic", "HangulHanjaOptionsDialog::OkHdl()" );
         }
     }
 

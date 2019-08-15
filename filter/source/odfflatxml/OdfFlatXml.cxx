@@ -155,8 +155,7 @@ OdfFlatXml::importer(
     }
     catch (const Exception &)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("filter.odfflatxml", exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("filter.odfflatxml", "");
         return false;
     }
     catch (const std::exception &exc)
