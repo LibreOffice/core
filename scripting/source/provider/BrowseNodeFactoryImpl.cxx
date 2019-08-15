@@ -215,7 +215,7 @@ private:
     {
         m_hBNA.reset( new std::unordered_map< OUString, Reference< browse::XBrowseNode > > );
 
-        Sequence< Reference< browse::XBrowseNode > > langNodes =
+        const Sequence< Reference< browse::XBrowseNode > > langNodes =
             m_origNode->getChildNodes();
 
         for ( const auto& rLangNode : langNodes )
@@ -230,7 +230,7 @@ private:
                 xbn.set( rLangNode );
             }
 
-            Sequence< Reference< browse::XBrowseNode > > grandchildren =
+            const Sequence< Reference< browse::XBrowseNode > > grandchildren =
                 xbn->getChildNodes();
 
             for ( const Reference< browse::XBrowseNode >& grandchild : grandchildren )
@@ -262,7 +262,7 @@ namespace
 
 std::vector< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference< XComponentContext >& xCtx )
 {
-    Sequence< OUString > openDocs =
+    const Sequence< OUString > openDocs =
         MiscUtils::allOpenTDocUrls( xCtx );
 
     Reference< provider::XScriptProviderFactory > xFac;
@@ -395,7 +395,7 @@ public:
         if ( hasChildNodes() )
         {
             vXBrowseNodes aVNodes;
-            Sequence < Reference< browse::XBrowseNode > > nodes =
+            const Sequence < Reference< browse::XBrowseNode > > nodes =
                 m_xWrappedBrowseNode->getChildNodes();
             for ( const Reference< browse::XBrowseNode >& xBrowseNode : nodes )
             {
