@@ -103,32 +103,39 @@ void RTFSprms::set(Id nKeyword, const RTFValue::Pointer_t& pValue, RTFOverwrite 
 {
     ensureCopyBeforeWrite();
 
-    if (eOverwrite == RTFOverwrite::YES_PREPEND)
+    switch (eOverwrite)
     {
-        auto it = std::remove_if(m_pSprms->begin(), m_pSprms->end(), RTFSprms_compare{ nKeyword });
-        m_pSprms->erase(it, m_pSprms->end());
-        m_pSprms->insert(m_pSprms->begin(), std::make_pair(nKeyword, pValue));
-        return;
+        case RTFOverwrite::YES_PREPEND:
+        {
+            auto it
+                = std::remove_if(m_pSprms->begin(), m_pSprms->end(), RTFSprms_compare{ nKeyword });
+            m_pSprms->erase(it, m_pSprms->end());
+            m_pSprms->insert(m_pSprms->begin(), std::make_pair(nKeyword, pValue));
+            break;
+        }
+        case RTFOverwrite::YES:
+        {
+            auto it
+                = std::find_if(m_pSprms->begin(), m_pSprms->end(), RTFSprms_compare{ nKeyword });
+            if (it != m_pSprms->end())
+                it->second = pValue;
+            break;
+        }
+        case RTFOverwrite::NO_IGNORE:
+        {
+            if (std::find_if(m_pSprms->begin(), m_pSprms->end(), RTFSprms_compare{ nKeyword })
+                == m_pSprms->end())
+                m_pSprms->push_back(std::make_pair(nKeyword, pValue));
+            break;
+        }
+        case RTFOverwrite::NO_APPEND:
+        {
+            m_pSprms->push_back(std::make_pair(nKeyword, pValue));
+            break;
+        }
+        default:
+            break;
     }
-
-    bool bFound = false;
-    if (eOverwrite == RTFOverwrite::YES || eOverwrite == RTFOverwrite::NO_IGNORE)
-    {
-        for (auto& rSprm : *m_pSprms)
-            if (rSprm.first == nKeyword)
-            {
-                if (eOverwrite == RTFOverwrite::YES)
-                {
-                    rSprm.second = pValue;
-                    return;
-                }
-
-                bFound = true;
-                break;
-            }
-    }
-    if (eOverwrite == RTFOverwrite::NO_APPEND || !bFound)
-        m_pSprms->push_back(std::make_pair(nKeyword, pValue));
 }
 
 bool RTFSprms::erase(Id nKeyword)
