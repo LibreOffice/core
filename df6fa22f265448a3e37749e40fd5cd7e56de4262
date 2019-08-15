@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_0c9335a5",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-08-15T11:11:14Z",
+      "side": 1,
+      "message": "clean-up this, processing all title texts here, see the other comments",
+      "range": {
+        "startLine": 902,
+        "startChar": 0,
+        "endLine": 925,
+        "endChar": 44
+      },
+      "revId": "df6fa22f265448a3e37749e40fd5cd7e56de4262",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_0caa55d1",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1106,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-08-15T11:11:14Z",
+      "side": 1,
+      "message": "keep only a single argument sTitle",
+      "range": {
+        "startLine": 1106,
+        "startChar": 31,
+        "endLine": 1106,
+        "endChar": 65
+      },
+      "revId": "df6fa22f265448a3e37749e40fd5cd7e56de4262",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_4c812d4a",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1113,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-08-15T11:11:14Z",
+      "side": 1,
+      "message": "create a OUString lcl_getStringProperty(xShape) for this",
+      "range": {
+        "startLine": 1109,
+        "startChar": 4,
+        "endLine": 1113,
+        "endChar": 5
+      },
+      "revId": "df6fa22f265448a3e37749e40fd5cd7e56de4262",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ac4a4952",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-08-15T11:11:14Z",
+      "side": 1,
+      "message": "maintitle -\u003e title",
+      "range": {
+        "startLine": 1115,
+        "startChar": 35,
+        "endLine": 1115,
+        "endChar": 44
+      },
+      "revId": "df6fa22f265448a3e37749e40fd5cd7e56de4262",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_4c25adaa",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1121,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-08-15T11:11:14Z",
+      "side": 1,
+      "message": "only with a 1-line patch instead of the redundant conditions:\n\n sText \u003d (sText + \"\\n\" + aSubText).trim();\n\nand move to the place of the calling of this function...",
+      "range": {
+        "startLine": 1116,
+        "startChar": 3,
+        "endLine": 1121,
+        "endChar": 35
+      },
+      "revId": "df6fa22f265448a3e37749e40fd5cd7e56de4262",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ec97e18f",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2776,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-08-15T11:11:14Z",
+      "side": 1,
+      "message": "exportTitle(lcl_getStringProperty(xAxisTitle));",
+      "range": {
+        "startLine": 2772,
+        "startChar": 3,
+        "endLine": 2776,
+        "endChar": 5
+      },
+      "revId": "df6fa22f265448a3e37749e40fd5cd7e56de4262",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
