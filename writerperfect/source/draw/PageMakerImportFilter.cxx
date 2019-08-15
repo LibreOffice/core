@@ -17,11 +17,6 @@
 
 #include "PageMakerImportFilter.hxx"
 
-using com::sun::star::uno::RuntimeException;
-using com::sun::star::uno::Sequence;
-using com::sun::star::uno::XComponentContext;
-using com::sun::star::uno::XInterface;
-
 bool PageMakerImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
                                              OdgGenerator& rGenerator, utl::MediaDescriptor&)
 {
@@ -50,13 +45,10 @@ sal_Bool SAL_CALL PageMakerImportFilter::supportsService(const OUString& rServic
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence<OUString> SAL_CALL PageMakerImportFilter::getSupportedServiceNames()
+css::uno::Sequence<OUString> SAL_CALL PageMakerImportFilter::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.document.ImportFilter";
-    pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
-    return aRet;
+    return css::uno::Sequence<OUString>{ "com.sun.star.document.ImportFilter",
+                                         "com.sun.star.document.ExtendedTypeDetection" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

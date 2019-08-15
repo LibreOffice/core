@@ -33,16 +33,7 @@
 
 #include "WordPerfectImportFilter.hxx"
 
-using com::sun::star::beans::PropertyValue;
-using com::sun::star::document::XExtendedFilterDetection;
-using com::sun::star::uno::Any;
-using com::sun::star::uno::Exception;
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::RuntimeException;
-using com::sun::star::uno::Sequence;
-using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::XComponentContext;
-using com::sun::star::uno::XInterface;
 
 using com::sun::star::awt::XWindow;
 using com::sun::star::document::XImporter;
@@ -90,7 +81,8 @@ static bool handleEmbeddedWPGImage(const librevenge::RVNGBinaryData& input,
     return true;
 }
 
-bool WordPerfectImportFilter::importImpl(const Sequence<css::beans::PropertyValue>& aDescriptor)
+bool WordPerfectImportFilter::importImpl(
+    const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor)
 {
     Reference<XInputStream> xInputStream;
     Reference<XWindow> xDialogParent;
@@ -141,7 +133,7 @@ bool WordPerfectImportFilter::importImpl(const Sequence<css::beans::PropertyValu
         css::uno::UNO_QUERY_THROW);
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to.
-    Reference<XImporter> xImporter(xInternalHandler, UNO_QUERY);
+    Reference<XImporter> xImporter(xInternalHandler, css::uno::UNO_QUERY);
     xImporter->setTargetDocument(mxDoc);
 
     // OO Document Handler: abstract class to handle document SAX messages, concrete implementation here
@@ -158,7 +150,7 @@ bool WordPerfectImportFilter::importImpl(const Sequence<css::beans::PropertyValu
 }
 
 sal_Bool SAL_CALL
-WordPerfectImportFilter::filter(const Sequence<css::beans::PropertyValue>& aDescriptor)
+WordPerfectImportFilter::filter(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor)
 {
     return importImpl(aDescriptor);
 }
@@ -172,13 +164,14 @@ WordPerfectImportFilter::setTargetDocument(const Reference<css::lang::XComponent
 }
 
 // XExtendedFilterDetection
-OUString SAL_CALL WordPerfectImportFilter::detect(Sequence<PropertyValue>& Descriptor)
+OUString SAL_CALL
+WordPerfectImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descriptor)
 {
     libwpd::WPDConfidence confidence = libwpd::WPD_CONFIDENCE_NONE;
     OUString sTypeName;
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
-    const PropertyValue* pValue = Descriptor.getConstArray();
+    const css::beans::PropertyValue* pValue = Descriptor.getConstArray();
     Reference<XInputStream> xInputStream;
     for (sal_Int32 i = 0; i < nLength; i++)
     {
@@ -214,7 +207,10 @@ OUString SAL_CALL WordPerfectImportFilter::detect(Sequence<PropertyValue>& Descr
 }
 
 // XInitialization
-void SAL_CALL WordPerfectImportFilter::initialize(const Sequence<Any>& /*aArguments*/) {}
+void SAL_CALL
+WordPerfectImportFilter::initialize(const css::uno::Sequence<css::uno::Any>& /*aArguments*/)
+{
+}
 
 // XServiceInfo
 OUString SAL_CALL WordPerfectImportFilter::getImplementationName()
@@ -227,13 +223,10 @@ sal_Bool SAL_CALL WordPerfectImportFilter::supportsService(const OUString& rServ
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence<OUString> SAL_CALL WordPerfectImportFilter::getSupportedServiceNames()
+css::uno::Sequence<OUString> SAL_CALL WordPerfectImportFilter::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.document.ImportFilter";
-    pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
-    return aRet;
+    return css::uno::Sequence<OUString>{ "com.sun.star.document.ImportFilter",
+                                         "com.sun.star.document.ExtendedTypeDetection" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

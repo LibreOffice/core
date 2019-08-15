@@ -33,16 +33,6 @@
 
 #include "KeynoteImportFilter.hxx"
 
-using std::shared_ptr;
-
-using com::sun::star::io::XInputStream;
-using com::sun::star::uno::Reference;
-using com::sun::star::uno::RuntimeException;
-using com::sun::star::uno::Sequence;
-using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::XComponentContext;
-using com::sun::star::uno::XInterface;
-
 using writerperfect::DocumentHandler;
 using writerperfect::WPXSvInputStream;
 
@@ -78,10 +68,10 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
     bool bIsPackage = false;
     bool bUCBContentChanged = false;
     const beans::PropertyValue* pValue = Descriptor.getConstArray();
-    Reference<XInputStream> xInputStream;
-    Reference<ucb::XContent> xContent;
-    Sequence<beans::NamedValue> lComponentDataNV;
-    Sequence<beans::PropertyValue> lComponentDataPV;
+    css::uno::Reference<com::sun::star::io::XInputStream> xInputStream;
+    css::uno::Reference<ucb::XContent> xContent;
+    css::uno::Sequence<beans::NamedValue> lComponentDataNV;
+    css::uno::Sequence<beans::PropertyValue> lComponentDataPV;
     bool bComponentDataNV = true;
 
     for (sal_Int32 i = 0; i < nLength; i++)
@@ -115,7 +105,7 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
     if (!xInputStream.is())
         return OUString();
 
-    shared_ptr<librevenge::RVNGInputStream> input(new WPXSvInputStream(xInputStream));
+    std::shared_ptr<librevenge::RVNGInputStream> input(new WPXSvInputStream(xInputStream));
 
     /* Apple Keynote documents come in two variants:
      * * actual files (zip), only produced by Keynote 5 (at least with
@@ -248,13 +238,10 @@ sal_Bool SAL_CALL KeynoteImportFilter::supportsService(const OUString& rServiceN
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence<OUString> SAL_CALL KeynoteImportFilter::getSupportedServiceNames()
+css::uno::Sequence<OUString> SAL_CALL KeynoteImportFilter::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.document.ImportFilter";
-    pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
-    return aRet;
+    return css::uno::Sequence<OUString>{ "com.sun.star.document.ImportFilter",
+                                         "com.sun.star.document.ExtendedTypeDetection" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
