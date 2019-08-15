@@ -157,7 +157,7 @@ bool XcuParser::startElement(
                     "configmgr",
                     "bad set node <prop> member in \"" << reader.getUrl()
                         << '"');
-                state_.push(State::Ignore(true));
+                state_.push(State::Ignore(false));
             } else {
                 throw css::uno::RuntimeException(
                     "bad set node member <" + name.convertFromUtf8() +
