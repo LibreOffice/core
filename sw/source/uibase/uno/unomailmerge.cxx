@@ -561,7 +561,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             try
             {
                 bool bEverythingsFine = true;
-                for ( const Any& rBookmark : aCurSelection )
+                for ( const Any& rBookmark : std::as_const(aCurSelection) )
                 {
                     bEverythingsFine = xRowLocate->moveToBookmark( rBookmark );
                     if ( !bEverythingsFine )

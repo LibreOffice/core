@@ -1905,7 +1905,7 @@ void SwUiWriterTest::testDefaultsOfOutlineNumbering()
     css::lang::Locale alocale;
     alocale.Language = "en";
     alocale.Country = "US";
-    uno::Sequence<beans::PropertyValues> aPropVal(xDefNum->getDefaultContinuousNumberingLevels(alocale));
+    const uno::Sequence<beans::PropertyValues> aPropVal(xDefNum->getDefaultContinuousNumberingLevels(alocale));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aPropVal.getLength());
     for(const auto& rPropValues : aPropVal)
     {
@@ -1997,7 +1997,7 @@ void SwUiWriterTest::testTdf81995()
     css::lang::Locale alocale;
     alocale.Language = "en";
     alocale.Country = "US";
-    uno::Sequence<uno::Reference<container::XIndexAccess>> aIndexAccess(xDefNum->getDefaultOutlineNumberings(alocale));
+    const uno::Sequence<uno::Reference<container::XIndexAccess>> aIndexAccess(xDefNum->getDefaultOutlineNumberings(alocale));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aIndexAccess.getLength());
     for(const auto& rIndexAccess : aIndexAccess)
     {
@@ -2007,7 +2007,7 @@ void SwUiWriterTest::testTdf81995()
             uno::Sequence<beans::PropertyValue> aProps;
             rIndexAccess->getByIndex(j) >>= aProps;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(12), aProps.getLength());
-            for(const beans::PropertyValue& rProp : aProps)
+            for(const beans::PropertyValue& rProp : std::as_const(aProps))
             {
                 uno::Any aAny = rProp.Value;
                 if(rProp.Name == "Prefix" || rProp.Name == "Suffix" || rProp.Name == "BulletChar" || rProp.Name == "BulletFontName" || rProp.Name == "Transliteration")

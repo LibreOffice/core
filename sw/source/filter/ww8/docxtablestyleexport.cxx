@@ -36,7 +36,7 @@ public:
     {
     }
 
-    void TableStyle(uno::Sequence<beans::PropertyValue>& rStyle);
+    void TableStyle(const uno::Sequence<beans::PropertyValue>& rStyle);
 
     void setSerializer(sax_fastparser::FSHelperPtr pSerializer)
     {
@@ -51,40 +51,40 @@ public:
     void handleBoolean(const OUString& aValue, sal_Int32 nToken);
 
     /// Export of w:pPr.
-    void tableStylePPr(uno::Sequence<beans::PropertyValue>& rPPr);
+    void tableStylePPr(const uno::Sequence<beans::PropertyValue>& rPPr);
     /// Export of w:tblStylePr.
-    void tableStyleTableStylePr(uno::Sequence<beans::PropertyValue>& rTableStylePr);
+    void tableStyleTableStylePr(const uno::Sequence<beans::PropertyValue>& rTableStylePr);
     /// Export of w:rPr.
-    void tableStyleRPr(uno::Sequence<beans::PropertyValue>& rRPr);
+    void tableStyleRPr(const uno::Sequence<beans::PropertyValue>& rRPr);
     /// Export of w:rFonts.
-    void tableStyleRRFonts(uno::Sequence<beans::PropertyValue>& rRFonts);
+    void tableStyleRRFonts(const uno::Sequence<beans::PropertyValue>& rRFonts);
     /// Export of w:lang.
-    void tableStyleRLang(uno::Sequence<beans::PropertyValue>& rLang);
+    void tableStyleRLang(const uno::Sequence<beans::PropertyValue>& rLang);
     /// Export of w:ind in a pPr.
-    void tableStylePInd(uno::Sequence<beans::PropertyValue>& rInd);
+    void tableStylePInd(const uno::Sequence<beans::PropertyValue>& rInd);
     /// Export of w:spacing.
-    void tableStylePSpacing(uno::Sequence<beans::PropertyValue>& rSpacing);
+    void tableStylePSpacing(const uno::Sequence<beans::PropertyValue>& rSpacing);
     /// Export of w:tblPr.
-    void tableStyleTablePr(uno::Sequence<beans::PropertyValue>& rTablePr);
+    void tableStyleTablePr(const uno::Sequence<beans::PropertyValue>& rTablePr);
     /// Export of w:tcPr.
-    void tableStyleTcPr(uno::Sequence<beans::PropertyValue>& rTcPr);
+    void tableStyleTcPr(const uno::Sequence<beans::PropertyValue>& rTcPr);
     /// Export of w:tcBorders (and w:tblBorders).
-    void tableStyleTcBorders(uno::Sequence<beans::PropertyValue>& rTcBorders,
+    void tableStyleTcBorders(const uno::Sequence<beans::PropertyValue>& rTcBorders,
                              sal_Int32 nToken = XML_tcBorders);
     /// Export of w:tblInd.
-    void tableStyleTableInd(uno::Sequence<beans::PropertyValue>& rTableInd);
+    void tableStyleTableInd(const uno::Sequence<beans::PropertyValue>& rTableInd);
     /// Export of w:tblCellMar (and w:tcMar).
-    void tableStyleTableCellMar(uno::Sequence<beans::PropertyValue>& rTableCellMar,
+    void tableStyleTableCellMar(const uno::Sequence<beans::PropertyValue>& rTableCellMar,
                                 sal_Int32 nType = XML_tblCellMar);
     /// Export of a given table cell border type.
     void tableStyleTcBorder(sal_Int32 nToken, const uno::Sequence<beans::PropertyValue>& rTcBorder);
     /// Export of w:shd.
-    void tableStyleShd(uno::Sequence<beans::PropertyValue>& rShd);
+    void tableStyleShd(const uno::Sequence<beans::PropertyValue>& rShd);
     /// Export of w:color.
-    void tableStyleRColor(uno::Sequence<beans::PropertyValue>& rColor);
+    void tableStyleRColor(const uno::Sequence<beans::PropertyValue>& rColor);
 };
 
-void DocxTableStyleExport::CnfStyle(uno::Sequence<beans::PropertyValue>& rAttributeList)
+void DocxTableStyleExport::CnfStyle(const uno::Sequence<beans::PropertyValue>& rAttributeList)
 {
     sax_fastparser::FastAttributeList* pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
@@ -147,7 +147,7 @@ void DocxTableStyleExport::TableStyles(sal_Int32 nCountStylesToWrite)
 }
 
 void DocxTableStyleExport::Impl::tableStyleTableCellMar(
-    uno::Sequence<beans::PropertyValue>& rTableCellMar, sal_Int32 nType)
+    const uno::Sequence<beans::PropertyValue>& rTableCellMar, sal_Int32 nType)
 {
     static DocxStringTokenMap const aTableCellMarTokens[]
         = { { "left", XML_left }, { "right", XML_right }, { "start", XML_start },
@@ -197,7 +197,7 @@ void DocxTableStyleExport::Impl::tableStyleTcBorder(
 }
 
 void DocxTableStyleExport::Impl::tableStyleTcBorders(
-    uno::Sequence<beans::PropertyValue>& rTcBorders, sal_Int32 nToken)
+    const uno::Sequence<beans::PropertyValue>& rTcBorders, sal_Int32 nToken)
 {
     static DocxStringTokenMap const aTcBordersTokens[] = { { "left", XML_left },
                                                            { "right", XML_right },
@@ -222,7 +222,7 @@ void DocxTableStyleExport::Impl::tableStyleTcBorders(
     m_pSerializer->endElementNS(XML_w, nToken);
 }
 
-void DocxTableStyleExport::Impl::tableStyleShd(uno::Sequence<beans::PropertyValue>& rShd)
+void DocxTableStyleExport::Impl::tableStyleShd(const uno::Sequence<beans::PropertyValue>& rShd)
 {
     if (!rShd.hasElements())
         return;
@@ -250,7 +250,7 @@ void DocxTableStyleExport::Impl::tableStyleShd(uno::Sequence<beans::PropertyValu
     m_pSerializer->singleElementNS(XML_w, XML_shd, xAttributeList);
 }
 
-void DocxTableStyleExport::Impl::tableStyleRColor(uno::Sequence<beans::PropertyValue>& rColor)
+void DocxTableStyleExport::Impl::tableStyleRColor(const uno::Sequence<beans::PropertyValue>& rColor)
 {
     if (!rColor.hasElements())
         return;
@@ -272,7 +272,7 @@ void DocxTableStyleExport::Impl::tableStyleRColor(uno::Sequence<beans::PropertyV
     m_pSerializer->singleElementNS(XML_w, XML_color, xAttributeList);
 }
 
-void DocxTableStyleExport::Impl::tableStyleRLang(uno::Sequence<beans::PropertyValue>& rLang)
+void DocxTableStyleExport::Impl::tableStyleRLang(const uno::Sequence<beans::PropertyValue>& rLang)
 {
     if (!rLang.hasElements())
         return;
@@ -292,7 +292,8 @@ void DocxTableStyleExport::Impl::tableStyleRLang(uno::Sequence<beans::PropertyVa
     m_pSerializer->singleElementNS(XML_w, XML_lang, xAttributeList);
 }
 
-void DocxTableStyleExport::Impl::tableStyleRRFonts(uno::Sequence<beans::PropertyValue>& rRFonts)
+void DocxTableStyleExport::Impl::tableStyleRRFonts(
+    const uno::Sequence<beans::PropertyValue>& rRFonts)
 {
     if (!rRFonts.hasElements())
         return;
@@ -315,7 +316,8 @@ void DocxTableStyleExport::Impl::tableStyleRRFonts(uno::Sequence<beans::Property
     m_pSerializer->singleElementNS(XML_w, XML_rFonts, xAttributeList);
 }
 
-void DocxTableStyleExport::Impl::tableStylePSpacing(uno::Sequence<beans::PropertyValue>& rSpacing)
+void DocxTableStyleExport::Impl::tableStylePSpacing(
+    const uno::Sequence<beans::PropertyValue>& rSpacing)
 {
     if (!rSpacing.hasElements())
         return;
@@ -347,7 +349,7 @@ void DocxTableStyleExport::Impl::tableStylePSpacing(uno::Sequence<beans::Propert
     m_pSerializer->singleElementNS(XML_w, XML_spacing, xAttributeList);
 }
 
-void DocxTableStyleExport::Impl::tableStylePInd(uno::Sequence<beans::PropertyValue>& rInd)
+void DocxTableStyleExport::Impl::tableStylePInd(const uno::Sequence<beans::PropertyValue>& rInd)
 {
     if (!rInd.hasElements())
         return;
@@ -365,7 +367,8 @@ void DocxTableStyleExport::Impl::tableStylePInd(uno::Sequence<beans::PropertyVal
     m_pSerializer->singleElementNS(XML_w, XML_ind, xAttributeList);
 }
 
-void DocxTableStyleExport::Impl::tableStyleTableInd(uno::Sequence<beans::PropertyValue>& rTableInd)
+void DocxTableStyleExport::Impl::tableStyleTableInd(
+    const uno::Sequence<beans::PropertyValue>& rTableInd)
 {
     if (!rTableInd.hasElements())
         return;
@@ -395,7 +398,7 @@ void DocxTableStyleExport::Impl::handleBoolean(const OUString& aValue, sal_Int32
     m_pSerializer->singleElementNS(XML_w, nToken, xAttributeList);
 }
 
-void DocxTableStyleExport::Impl::tableStyleRPr(uno::Sequence<beans::PropertyValue>& rRPr)
+void DocxTableStyleExport::Impl::tableStyleRPr(const uno::Sequence<beans::PropertyValue>& rRPr)
 {
     if (!rRPr.hasElements())
         return;
@@ -473,7 +476,7 @@ void DocxTableStyleExport::Impl::tableStyleRPr(uno::Sequence<beans::PropertyValu
     m_pSerializer->endElementNS(XML_w, XML_rPr);
 }
 
-void DocxTableStyleExport::Impl::tableStylePPr(uno::Sequence<beans::PropertyValue>& rPPr)
+void DocxTableStyleExport::Impl::tableStylePPr(const uno::Sequence<beans::PropertyValue>& rPPr)
 {
     if (!rPPr.hasElements())
         return;
@@ -509,7 +512,8 @@ void DocxTableStyleExport::Impl::tableStylePPr(uno::Sequence<beans::PropertyValu
     m_pSerializer->endElementNS(XML_w, XML_pPr);
 }
 
-void DocxTableStyleExport::Impl::tableStyleTablePr(uno::Sequence<beans::PropertyValue>& rTablePr)
+void DocxTableStyleExport::Impl::tableStyleTablePr(
+    const uno::Sequence<beans::PropertyValue>& rTablePr)
 {
     if (!rTablePr.hasElements())
         return;
@@ -547,7 +551,7 @@ void DocxTableStyleExport::Impl::tableStyleTablePr(uno::Sequence<beans::Property
     m_pSerializer->endElementNS(XML_w, XML_tblPr);
 }
 
-void DocxTableStyleExport::Impl::tableStyleTcPr(uno::Sequence<beans::PropertyValue>& rTcPr)
+void DocxTableStyleExport::Impl::tableStyleTcPr(const uno::Sequence<beans::PropertyValue>& rTcPr)
 {
     if (!rTcPr.hasElements())
         return;
@@ -579,7 +583,7 @@ void DocxTableStyleExport::Impl::tableStyleTcPr(uno::Sequence<beans::PropertyVal
 }
 
 void DocxTableStyleExport::Impl::tableStyleTableStylePr(
-    uno::Sequence<beans::PropertyValue>& rTableStylePr)
+    const uno::Sequence<beans::PropertyValue>& rTableStylePr)
 {
     if (!rTableStylePr.hasElements())
         return;
@@ -619,7 +623,7 @@ void DocxTableStyleExport::Impl::tableStyleTableStylePr(
     m_pSerializer->endElementNS(XML_w, XML_tblStylePr);
 }
 
-void DocxTableStyleExport::Impl::TableStyle(uno::Sequence<beans::PropertyValue>& rStyle)
+void DocxTableStyleExport::Impl::TableStyle(const uno::Sequence<beans::PropertyValue>& rStyle)
 {
     bool bDefault = false;
     bool bCustomStyle = false;

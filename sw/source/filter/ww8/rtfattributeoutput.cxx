@@ -2191,7 +2191,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                             }
 
                             xPropSet->getPropertyValue("StringItemList") >>= aStrSeq;
-                            for (const auto& rStr : aStrSeq)
+                            for (const auto& rStr : std::as_const(aStrSeq))
                                 m_aRun
                                     ->append(
                                         "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFL

@@ -66,7 +66,7 @@ sw::DropDownFieldDialog::DropDownFieldDialog(weld::Widget *pParent, SwWrtShell &
         OUString sTitle = m_xDialog->get_title();
         sTitle += m_pDropField->GetPar2();
         m_xDialog->set_title(sTitle);
-        uno::Sequence< OUString > aItems = m_pDropField->GetItemSequence();
+        const uno::Sequence< OUString > aItems = m_pDropField->GetItemSequence();
         for (const OUString& rItem : aItems)
             m_xListItemsLB->append_text(rItem);
         m_xListItemsLB->select_text(m_pDropField->GetSelectedItem());
