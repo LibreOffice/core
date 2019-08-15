@@ -509,8 +509,7 @@ bool CreateMediaTempFile(uno::Reference<io::XInputStream> const& xInStream,
     }
     catch (uno::Exception const&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("avmedia", "exception: " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("avmedia", "");
         return false;
     }
     o_rTempFileURL = tempFileURL;

@@ -251,8 +251,7 @@ void DrawViewShell::SelectionHasChanged()
     }
     catch( css::uno::Exception& )
     {
-        SAL_WARN( "sd", "sd::DrawViewShell::SelectionHasChanged(), exception caught: "
-                << exceptionToString( cppu::getCaughtException() ) );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::DrawViewShell::SelectionHasChanged()" );
     }
 
     if( HasCurrentFunction() )

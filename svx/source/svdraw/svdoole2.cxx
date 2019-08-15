@@ -871,8 +871,7 @@ bool SdrOle2Obj::UpdateLinkURL_Impl()
                     }
                     catch( css::uno::Exception const & )
                     {
-                        SAL_WARN( "svx", "SdrOle2Obj::UpdateLinkURL_Impl(), exception: "
-                                << exceptionToString( cppu::getCaughtException() ) );
+                        TOOLS_WARN_EXCEPTION( "svx", "SdrOle2Obj::UpdateLinkURL_Impl()" );
                     }
                 }
 
@@ -905,8 +904,7 @@ void SdrOle2Obj::BreakFileLink_Impl()
             }
             catch( css::uno::Exception& )
             {
-                SAL_WARN( "svx", "SdrOle2Obj::BreakFileLink_Impl(), exception: "
-                        << exceptionToString( cppu::getCaughtException() ) );
+                TOOLS_WARN_EXCEPTION( "svx", "SdrOle2Obj::BreakFileLink_Impl()" );
             }
         }
     }
@@ -1022,8 +1020,7 @@ void SdrOle2Obj::Connect_Impl()
         }
         catch( css::uno::Exception& )
         {
-            SAL_WARN( "svx", "SdrOle2Obj::Connect_Impl(), exception: "
-                    << exceptionToString( cppu::getCaughtException() ) );
+            TOOLS_WARN_EXCEPTION( "svx", "SdrOle2Obj::Connect_Impl()" );
         }
     }
 }
@@ -1086,8 +1083,7 @@ void SdrOle2Obj::RemoveListeners_Impl()
         }
         catch( css::uno::Exception& )
         {
-            SAL_WARN( "svx",  "SdrOle2Obj::RemoveListeners_Impl(), exception: "
-                    << exceptionToString( cppu::getCaughtException() ) );
+            TOOLS_WARN_EXCEPTION( "svx",  "SdrOle2Obj::RemoveListeners_Impl()" );
         }
     }
 }
@@ -1164,8 +1160,7 @@ void SdrOle2Obj::Disconnect_Impl()
     }
     catch( css::uno::Exception& )
     {
-        SAL_WARN( "svx", "SdrOle2Obj::Disconnect_Impl(), exception: "
-                    << exceptionToString( cppu::getCaughtException() ) );
+        TOOLS_WARN_EXCEPTION( "svx", "SdrOle2Obj::Disconnect_Impl()" );
     }
 
     mpImpl->mbConnected = false;
@@ -1745,8 +1740,7 @@ bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xObj, s
         }
         catch( css::uno::Exception& )
         {
-            SAL_WARN( "svx", "SdrOle2Obj::Unload=(), exception: "
-                    << exceptionToString( cppu::getCaughtException() ) );
+            TOOLS_WARN_EXCEPTION( "svx", "SdrOle2Obj::Unload()" );
         }
     }
 

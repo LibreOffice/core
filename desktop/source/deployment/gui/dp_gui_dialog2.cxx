@@ -682,8 +682,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
         }
         catch (const lang::IllegalArgumentException &)
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "desktop", exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "desktop", "" );
         }
     }
     xFilePicker->setCurrentFilter( sDefaultFilter );
@@ -1277,8 +1276,7 @@ bool UpdateRequiredDialog::isEnabled( const uno::Reference< deployment::XPackage
     }
     catch ( const uno::RuntimeException & ) { throw; }
     catch (const uno::Exception & ) {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "desktop", exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "desktop", "" );
         bRegistered = false;
     }
 

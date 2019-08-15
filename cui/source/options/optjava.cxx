@@ -287,8 +287,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, StartFolderPickerHdl, void*, void)
     }
     catch ( Exception const & )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "cui.options", "SvxJavaOptionsPage::StartFolderPickerHdl(): caught exception " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "cui.options", "SvxJavaOptionsPage::StartFolderPickerHdl()" );
     }
 }
 

@@ -481,8 +481,7 @@ bool Scheduler::ProcessTaskScheduling()
         }
         catch (css::uno::Exception&)
         {
-            auto const ex = cppu::getCaughtException();
-            SAL_WARN("vcl.schedule", "Uncaught " << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION("vcl.schedule", "Uncaught");
             std::abort();
         }
         catch (std::exception& e)

@@ -2029,8 +2029,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox()
             }
             catch( Exception const & )
             {
-                css::uno::Any ex( cppu::getCaughtException() );
-                SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::InitOnStartupBox(): unexpected exception " << exceptionToString(ex) );
+                TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelpTextWindow_Impl::InitOnStartupBox()" );
             }
             sModuleName = sTemp;
         }
@@ -2283,8 +2282,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, CheckHdl, Button*, pButton, void )
     }
     catch( Exception const & )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::CheckHdl(): unexpected exception " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelpTextWindow_Impl::CheckHdl()" );
     }
 }
 
@@ -2440,8 +2438,7 @@ void SfxHelpTextWindow_Impl::GetFocus()
     }
     catch( Exception const & )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::GetFocus(): unexpected exception " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelpTextWindow_Impl::GetFocus()" );
     }
 }
 
@@ -2528,8 +2525,7 @@ void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
     }
     catch( Exception const & )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff(): unexpected exception " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff()" );
     }
 
     SAL_WARN_IF( !bSetOff, "sfx.appl", "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff(): set off failed" );
@@ -3101,8 +3097,7 @@ void SfxHelpWindow_Impl::CloseWindow()
     }
     catch( Exception const & )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "sfx.appl", "SfxHelpWindow_Impl::CloseWindow(): caught an exception " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelpWindow_Impl::CloseWindow()" );
     }
 }
 

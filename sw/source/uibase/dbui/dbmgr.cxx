@@ -2075,8 +2075,7 @@ OUString SwDBManager::GetDBField(uno::Reference<beans::XPropertySet> const & xCo
             }
             catch (const uno::Exception&)
             {
-                css::uno::Any ex( cppu::getCaughtException() );
-                SAL_WARN("sw.mailmerge", "exception caught: " << exceptionToString(ex));
+                TOOLS_WARN_EXCEPTION("sw.mailmerge", "");
             }
 
         }
@@ -3166,8 +3165,7 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
         }
         catch (const uno::Exception&)
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN("sw.mailmerge", "exception caught: " << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION("sw.mailmerge", "");
         }
     }
 }
@@ -3185,8 +3183,7 @@ uno::Reference<sdbc::XDataSource> SwDBManager::getDataSourceAsParent(const uno::
     }
     catch (const uno::Exception&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("sw.mailmerge", "exception caught in getDataSourceAsParent(): " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("sw.mailmerge", "getDataSourceAsParent()");
     }
     return xSource;
 }
@@ -3226,8 +3223,7 @@ uno::Reference<sdbc::XResultSet> SwDBManager::createCursor(const OUString& _sDat
     }
     catch (const uno::Exception&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("sw.mailmerge", "Caught exception while creating a new RowSet: " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("sw.mailmerge", "Caught exception while creating a new RowSet");
     }
     return xResultSet;
 }

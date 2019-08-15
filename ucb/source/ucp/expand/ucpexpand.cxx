@@ -202,8 +202,7 @@ sal_Int32 ExpandContentProviderImpl::compareContentIds(
     }
     catch (const ucb::IllegalIdentifierException &)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "ucb", exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "ucb", "" );
         return -1;
     }
 }

@@ -1431,8 +1431,7 @@ void DocxExport::WriteEmbeddings()
             }
             catch(const uno::Exception&)
             {
-                css::uno::Any ex( cppu::getCaughtException() );
-                SAL_WARN("sw.ww8", "WriteEmbeddings() ::Failed to copy Inputstream to outputstream exception caught! " << exceptionToString(ex));
+                TOOLS_WARN_EXCEPTION("sw.ww8", "WriteEmbeddings() ::Failed to copy Inputstream to outputstream exception caught");
             }
             xOutStream->closeOutput();
         }

@@ -1142,8 +1142,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
     }
     catch(uno::Exception const &)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("sc.core", "exception in WriteToSource " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("sc.core", "WriteToSource");
     }
 }
 

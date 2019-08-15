@@ -569,8 +569,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, weld::Button&, void)
         }
         catch( Exception const & )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "cui.options", "SvxPathTabPage::PathHdl_Impl: exception from folder picker " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "cui.options", "SvxPathTabPage::PathHdl_Impl: exception from folder picker" );
         }
     }
     else

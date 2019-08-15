@@ -146,8 +146,7 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar )
                 }
                 catch(const Exception& )
                 {
-                    css::uno::Any ex( cppu::getCaughtException() );
-                    SAL_WARN( "basic", "DocObjectWrapper::DocObjectWrapper: Caught exception! " << exceptionToString(ex) );
+                    TOOLS_WARN_EXCEPTION( "basic", "DocObjectWrapper::DocObjectWrapper" );
                 }
             }
 

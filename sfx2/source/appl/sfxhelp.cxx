@@ -410,8 +410,7 @@ static OUString getCurrentModuleIdentifier_Impl()
         }
         catch (const Exception&)
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "sfx.appl", "SfxHelp::getCurrentModuleIdentifier_Impl(): exception of XModuleManager::identify() " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelp::getCurrentModuleIdentifier_Impl(): exception of XModuleManager::identify()" );
         }
     }
 
@@ -488,8 +487,7 @@ OUString SfxHelp::GetHelpModuleName_Impl(const OUString& rHelpID)
             }
             catch (const Exception&)
             {
-                css::uno::Any ex( cppu::getCaughtException() );
-                SAL_WARN( "sfx.appl", "SfxHelp::GetHelpModuleName_Impl(): " << exceptionToString(ex) );
+                TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelp::GetHelpModuleName_Impl()" );
             }
         }
     }

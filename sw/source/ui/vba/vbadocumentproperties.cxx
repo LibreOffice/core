@@ -302,8 +302,7 @@ public:
         }
         catch (const uno::Exception&)
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN("sw.vba", "Got exception " << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION("sw.vba", "");
         }
         uno::Any aReturn;
         if ( rPropName == "LineCount" ) // special processing needed

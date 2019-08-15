@@ -577,8 +577,7 @@ bool MenuSaveInData::Apply()
         }
         catch ( css::uno::Exception& )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN("cui.customize", "caught some other exception saving settings " << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION("cui.customize", "caught some other exception saving settings");
         }
 
         SetModified( false );
@@ -2422,8 +2421,7 @@ void ToolbarSaveInData::ApplyToolbar( SvxConfigEntry* pToolbar )
     }
     catch ( css::uno::Exception const & )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("cui.customize", "caught exception saving settings " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("cui.customize", "caught exception saving settings");
     }
 
     PersistChanges( GetConfigManager() );
@@ -2448,8 +2446,7 @@ void ToolbarSaveInData::CreateToolbar( SvxConfigEntry* pToolbar )
     }
     catch ( css::uno::Exception const & )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("cui.customize", "caught exception saving settings " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("cui.customize", "caught exception saving settings");
     }
 
     GetEntries()->push_back( pToolbar );
@@ -3156,8 +3153,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
     }
     catch( uno::Exception const & )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("cui.customize", "Caught exception importing XGraphic: " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("cui.customize", "Caught exception importing XGraphic");
     }
     return result;
 }

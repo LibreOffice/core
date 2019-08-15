@@ -340,8 +340,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
     }
     catch( const uno::Exception& )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("editeng", "exception during xml export: " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("editeng", "exception during xml export");
     }
 }
 

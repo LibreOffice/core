@@ -1062,8 +1062,7 @@ PresenterTextCaret::~PresenterTextCaret()
     }
     catch (uno::Exception const&)
     {
-        css::uno::Any ex(DbgGetCaughtException());
-        SAL_WARN("sdext.presenter", "unexpected exception in ~PresenterTextCaret " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("sdext.presenter", "unexpected exception in ~PresenterTextCaret");
     }
 }
 

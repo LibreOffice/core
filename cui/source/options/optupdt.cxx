@@ -173,8 +173,7 @@ void SvxOnlineUpdateTabPage::UpdateUserAgent()
             }
         }
     } catch (const uno::Exception &) {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "cui.options", "Unexpected exception fetching User Agent " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "cui.options", "Unexpected exception fetching User Agent" );
     }
 }
 
@@ -393,8 +392,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl, weld::Button&, void)
     }
     catch( const uno::Exception& )
     {
-         css::uno::Any ex( cppu::getCaughtException() );
-         SAL_WARN("cui.options", "Caught exception, thread terminated. " << exceptionToString(ex));
+         TOOLS_WARN_EXCEPTION("cui.options", "Caught exception, thread terminated");
     }
 }
 

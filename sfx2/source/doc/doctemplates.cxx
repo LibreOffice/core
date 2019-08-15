@@ -773,8 +773,7 @@ bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
         }
         catch( Exception const & )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "sfx.doc", "createFolder(): Could not create new folder " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "sfx.doc", "createFolder(): Could not create new folder" );
         }
     }
     else if ( bCreateParent )

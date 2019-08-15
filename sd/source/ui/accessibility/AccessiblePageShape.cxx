@@ -194,8 +194,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground()
     }
     catch (const css::beans::UnknownPropertyException&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("sd", "caught exception due to unknown property " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("sd", "caught exception due to unknown property");
         // Ignore exception and return default color.
     }
     return nColor;

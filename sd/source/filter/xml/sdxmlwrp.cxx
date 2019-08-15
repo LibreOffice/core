@@ -288,20 +288,17 @@ ErrCode ReadThroughComponent(
     }
     catch (const packages::zip::ZipIOException&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "sd.filter", "Zip exception caught while importing: " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION( "sd.filter", "Zip exception caught while importing");
         return ERRCODE_IO_BROKENPACKAGE;
     }
     catch (const io::IOException&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "sd.filter", "IO exception caught while importing: " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION( "sd.filter", "IO exception caught while importing");
         return SD_XML_READERROR;
     }
     catch (const uno::Exception&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "sd.filter", "uno exception caught while importing: " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION( "sd.filter", "uno exception caught while importing");
         return SD_XML_READERROR;
     }
 
@@ -724,8 +721,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
         }
         catch (const Exception&)
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "sd.filter","sd::SdXMLFilter::Import(), exception during clearing of unused named items " << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION( "sd.filter","sd::SdXMLFilter::Import(), exception during clearing of unused named items");
         }
     }
 

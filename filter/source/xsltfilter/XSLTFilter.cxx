@@ -395,9 +395,8 @@ namespace XSLT
                     }
                 catch( const Exception& )
                     {
-                        css::uno::Any ex( cppu::getCaughtException() );
                         // something went wrong
-                        SAL_WARN("filter.xslt", exceptionToString(ex));
+                        TOOLS_WARN_EXCEPTION("filter.xslt", "");
                         return false;
                     }
             }

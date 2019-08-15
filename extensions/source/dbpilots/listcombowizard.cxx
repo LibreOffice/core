@@ -255,8 +255,7 @@ namespace dbp
             }
             catch(const Exception&)
             {
-                css::uno::Any ex( cppu::getCaughtException() );
-                SAL_WARN( "extensions.dbpilots", "OLinkFieldsPage::initializePage: caught an exception while retrieving the columns! " << exceptionToString(ex));
+                TOOLS_WARN_EXCEPTION( "extensions.dbpilots", "OLinkFieldsPage::initializePage: caught an exception while retrieving the columns");
             }
         }
         return aColumnNames;

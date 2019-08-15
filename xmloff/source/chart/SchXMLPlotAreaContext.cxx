@@ -119,8 +119,7 @@ void SchXML3DSceneAttributesHelper::getCameraDefaultFromDiagram( const uno::Refe
     }
     catch( const uno::Exception & )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_INFO("xmloff.chart", "Exception caught for property NumberOfLines: " << exceptionToString(ex));
+        TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught for property NumberOfLines");
     }
 }
 

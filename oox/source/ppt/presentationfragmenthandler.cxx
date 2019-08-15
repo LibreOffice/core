@@ -458,8 +458,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
     }
     catch( uno::Exception& )
     {
-        SAL_WARN( "oox", "oox::ppt::PresentationFragmentHandler::EndDocument(), "
-                  "exception caught: " << exceptionToString( cppu::getCaughtException() ) );
+        TOOLS_WARN_EXCEPTION( "oox", "oox::ppt::PresentationFragmentHandler::EndDocument()" );
     }
 }
 
@@ -509,8 +508,7 @@ void PresentationFragmentHandler::finalizeImport()
         }
         catch( uno::Exception& )
         {
-            SAL_WARN( "oox", "oox::ppt::PresentationFragmentHandler::finalizeImport(), "
-                        "exception caught: " << exceptionToString( cppu::getCaughtException() ) );
+            TOOLS_WARN_EXCEPTION( "oox", "oox::ppt::PresentationFragmentHandler::finalizeImport()" );
         }
         // todo error handling;
         if ( rxStatusIndicator.is() )

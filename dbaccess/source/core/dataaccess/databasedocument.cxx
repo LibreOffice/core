@@ -1681,8 +1681,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
         }
         catch (const uno::Exception&)
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN("dbaccess", "exception setting Version: " << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION("dbaccess", "exception setting Version");
         }
     }
 

@@ -200,8 +200,7 @@ namespace dbtools
             }
             catch( const Exception& )
             {
-                css::uno::Any ex( cppu::getCaughtException() );
-                SAL_WARN( "connectivity.commontools", "ParameterManager::collectInnerParameters: caught an exception! " << exceptionToString(ex) );
+                TOOLS_WARN_EXCEPTION( "connectivity.commontools", "ParameterManager::collectInnerParameters" );
             }
         }
     }
@@ -430,8 +429,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "connectivity.commontools", "ParameterManager::analyzeFieldLinks: caught an exception! " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "ParameterManager::analyzeFieldLinks" );
         }
     }
 
@@ -669,8 +667,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "connectivity.commontools", "ParameterManager::completeParameters: caught an exception while calling the handler! " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "ParameterManager::completeParameters: caught an exception while calling the handler" );
         }
 
         if ( !pParams->wasSelected() )
@@ -700,8 +697,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "connectivity.commontools", "ParameterManager::completeParameters: caught an exception while propagating the values! " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "ParameterManager::completeParameters: caught an exception while propagating the values" );
         }
         return true;
     }
@@ -795,8 +791,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "connectivity.commontools", "ParameterManager::cacheConnectionInfo: caught an exception! " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "ParameterManager::cacheConnectionInfo: caught an exception" );
         }
     }
 
@@ -852,8 +847,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "connectivity.commontools", "ParameterManager::getParentColumns: caught an exception! " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "ParameterManager::getParentColumns" );
         }
         return _out_rxParentColumns.is();
     }
@@ -949,8 +943,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "connectivity.commontools", "ParameterManager::resetParameterValues: caught an exception! " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "ParameterManager::resetParameterValues" );
         }
 
     }

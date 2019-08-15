@@ -264,8 +264,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl, weld::Button&, void)
     }
     catch( uno::Exception& )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "xmlsecurity.dialogs", "MacroSecurityTrustedSourcesTP::AddLocPBHdl(): exception from folder picker" << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "xmlsecurity.dialogs", "MacroSecurityTrustedSourcesTP::AddLocPBHdl(): exception from folder picker" );
     }
 }
 

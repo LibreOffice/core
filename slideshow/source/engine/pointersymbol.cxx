@@ -127,7 +127,7 @@ void PointerSymbol::viewAdded( const UnoViewSharedPtr& rView )
     }
     catch( uno::Exception& )
     {
-        SAL_WARN( "slideshow", exceptionToString( cppu::getCaughtException() ) );
+        TOOLS_WARN_EXCEPTION( "slideshow", "" );
     }
 
     maViews.emplace_back( rView, sprite );

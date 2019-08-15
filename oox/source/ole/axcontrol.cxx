@@ -180,8 +180,7 @@ bool lclExtractRangeFromName( CellRangeAddress& orRangeAddr, const Reference< XM
     }
     catch (const Exception&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("oox", exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("oox", "");
     }
     return false;
 }
@@ -214,8 +213,7 @@ void lclPrepareConverter( PropertySet& rConverter, const Reference< XModel >& rx
     }
     catch (const Exception&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("oox", exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("oox", "");
     }
     rConverter.setProperty( PROP_XLA1Representation, rAddressString );
     rConverter.setProperty( PROP_ReferenceSheet, nRefSheet );
@@ -359,8 +357,7 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
     }
     catch (const Exception&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("oox", exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("oox", "");
     }
 
     // list entry source
@@ -2748,8 +2745,7 @@ Reference< XControlModel > EmbeddedForm::convertAndInsert( const EmbeddedControl
     }
     catch (const Exception&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("oox", "exception creating Control: " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("oox", "exception creating Control");
     }
     return xRet;
 }
@@ -2775,8 +2771,7 @@ Reference< XIndexContainer > const & EmbeddedForm::createXForm()
         }
         catch (const Exception&)
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN("oox", "exception creating Form: " << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION("oox", "exception creating Form");
         }
         // always clear the forms supplier to not try to create the form again
         mxFormsSupp.clear();

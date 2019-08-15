@@ -666,8 +666,7 @@ IMPL_LINK(SvxScriptOrgDialog, ButtonHdl, weld::Button&, rButton, void)
                 }
                 catch( Exception const & )
                 {
-                    css::uno::Any ex( cppu::getCaughtException() );
-                    SAL_WARN("cui.dialogs", "Caught exception trying to invoke " << exceptionToString(ex) );
+                    TOOLS_WARN_EXCEPTION("cui.dialogs", "Caught exception trying to invoke" );
                 }
             }
         }
@@ -835,8 +834,7 @@ void SvxScriptOrgDialog::createEntry(weld::TreeIter& rEntry)
         }
         catch( Exception const & )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN("cui.dialogs", "Caught exception trying to Create " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION("cui.dialogs", "Caught exception trying to Create" );
         }
     }
     if ( aChildNode.is() )
@@ -919,8 +917,7 @@ void SvxScriptOrgDialog::renameEntry(weld::TreeIter& rEntry)
         }
         catch( Exception const & )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN("cui.dialogs", "Caught exception trying to Rename " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION("cui.dialogs", "Caught exception trying to Rename" );
         }
     }
     if ( aChildNode.is() )
@@ -968,8 +965,7 @@ void SvxScriptOrgDialog::deleteEntry(weld::TreeIter& rEntry)
         }
         catch( Exception const & )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN("cui.dialogs", "Caught exception trying to delete " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION("cui.dialogs", "Caught exception trying to delete" );
         }
     }
 

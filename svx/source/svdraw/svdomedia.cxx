@@ -303,8 +303,7 @@ static bool lcl_HandlePackageURL(
     }
     catch (uno::Exception const&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("svx", "exception: " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("svx", "");
         return false;
     }
     if (!xInStream.is())

@@ -407,15 +407,13 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
             }
             catch ( Exception const & )
             {
-                css::uno::Any ex( cppu::getCaughtException() );
-                SAL_WARN( "sfx.dialog", "SfxDocumentInfoItem::updateDocumentInfo(): exception while adding custom properties " << exceptionToString(ex) );
+                TOOLS_WARN_EXCEPTION( "sfx.dialog", "SfxDocumentInfoItem::updateDocumentInfo(): exception while adding custom properties" );
             }
         }
     }
     catch ( Exception const & )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "sfx.dialog", "SfxDocumentInfoItem::updateDocumentInfo(): exception while removing custom properties " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "sfx.dialog", "SfxDocumentInfoItem::updateDocumentInfo(): exception while removing custom properties" );
     }
 }
 

@@ -1419,8 +1419,7 @@ static OUString getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
         }
         catch ( Exception const & )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "cui.options", "getActiveModule_Impl(): exception of XModuleManager::identify() " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "cui.options", "getActiveModule_Impl(): exception of XModuleManager::identify()" );
         }
     }
 
@@ -1763,8 +1762,7 @@ OUString OfaTreeOptionsDialog::GetModuleIdentifier( const Reference< XFrame >& r
         }
         catch ( Exception const & )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "cui.options", "OfaTreeOptionsDialog::GetModuleIdentifier(): exception of XModuleManager::identify() " << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION( "cui.options", "OfaTreeOptionsDialog::GetModuleIdentifier(): exception of XModuleManager::identify()");
         }
     }
     return sModule;
@@ -2118,8 +2116,7 @@ void ExtensionsTabPage::CreateDialogWithHandler()
     }
     catch (const Exception&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "cui.options", "ExtensionsTabPage::CreateDialogWithHandler(): exception of XDialogProvider2::createDialogWithHandler(): " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION( "cui.options", "ExtensionsTabPage::CreateDialogWithHandler(): exception of XDialogProvider2::createDialogWithHandler()");
     }
 }
 
@@ -2135,8 +2132,7 @@ bool ExtensionsTabPage::DispatchAction( const OUString& rAction )
         }
         catch ( Exception const & )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "cui.options", "ExtensionsTabPage::DispatchAction(): exception of XDialogEventHandler::callHandlerMethod() " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "cui.options", "ExtensionsTabPage::DispatchAction(): exception of XDialogEventHandler::callHandlerMethod()" );
         }
     }
     return bRet;
