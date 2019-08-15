@@ -638,7 +638,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
 
                 SmModule *pp = SM_MOD();
                 SmSymbolManager &rManager = pp->GetSymbolManager();
-                for (const SymbolDescriptor& rDescriptor : aSequence)
+                for (const SymbolDescriptor& rDescriptor : std::as_const(aSequence))
                 {
                     vcl::Font aFont;
                     aFont.SetFamilyName ( rDescriptor.sFontName );

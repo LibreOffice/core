@@ -1091,7 +1091,7 @@ sal_Bool SAL_CALL PasswordContainer::changeMasterPassword( const uno::Reference<
             if ( !aPass.isEmpty() )
             {
                 // get all the persistent entries if it is possible
-                Sequence< UrlRecord > aPersistent = getAllPersistent( uno::Reference< task::XInteractionHandler >() );
+                const Sequence< UrlRecord > aPersistent = getAllPersistent( uno::Reference< task::XInteractionHandler >() );
 
                 // remove the master password and the entries persistence
                 removeMasterPassword();
@@ -1194,7 +1194,7 @@ sal_Bool SAL_CALL PasswordContainer::useDefaultMasterPassword( const uno::Refere
             if ( !aPass.isEmpty() )
             {
                 // get all the persistent entries if it is possible
-                Sequence< UrlRecord > aPersistent = getAllPersistent( uno::Reference< task::XInteractionHandler >() );
+                const Sequence< UrlRecord > aPersistent = getAllPersistent( uno::Reference< task::XInteractionHandler >() );
 
                 // remove the master password and the entries persistence
                 removeMasterPassword();
