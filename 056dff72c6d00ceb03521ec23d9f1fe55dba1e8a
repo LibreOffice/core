@@ -70,6 +70,30 @@
       "revId": "056dff72c6d00ceb03521ec23d9f1fe55dba1e8a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_0168de1e",
+        "filename": "chart2/source/view/main/VLegend.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-15T07:34:45Z",
+      "side": 1,
+      "message": "according to \u003chttps://en.cppreference.com/w/cpp/compiler_support\u003e, MSVC only supports class template argument deduction since \"19.14\" (aka \"VS 2017 15.7\"); not sure that matches our baseline of \"Visual Studio 2017\" (README.md)?",
+      "parentUuid": "bf659307_a1f3329e",
+      "range": {
+        "startLine": 796,
+        "startChar": 4,
+        "endLine": 796,
+        "endChar": 129
+      },
+      "revId": "056dff72c6d00ceb03521ec23d9f1fe55dba1e8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
