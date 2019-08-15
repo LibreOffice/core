@@ -874,13 +874,13 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
 
     // get Properties of ChartDocument
     bool bHasMainTitle = false;
+    bool bHasSubTitle = false;
     bool bHasLegend = false;
     Reference< beans::XPropertySet > xDocPropSet( xChartDoc, uno::UNO_QUERY );
     if( xDocPropSet.is())
     {
         try
         {
-            bool bHasSubTitle = false;
             Any aAny( xDocPropSet->getPropertyValue("HasMainTitle"));
             aAny >>= bHasMainTitle;
             aAny = xDocPropSet->getPropertyValue("HasSubTitle");
@@ -899,13 +899,30 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
     FSHelperPtr pFS = GetFS();
     pFS->startElement(FSNS(XML_c, XML_chart));
 
-    // title
-    if( bHasMainTitle )
+    // Titles
+    if( bHasMainTitle || bHasSubTitle )
     {
-        Reference< drawing::XShape > xShape = xChartDoc->getTitle();
+        OUString aSubText;
+        Reference< drawing::XShape > xShape;
+        if( bHasSubTitle )
+        {
+            xShape = xChartDoc->getSubTitle();
+            if( xShape.is() && bHasMainTitle )
+            {
+                Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+                if( xPropSet.is() )
+                {
+                    xPropSet->getPropertyValue("String") >>= aSubText;
+                }
+            }
+        }
+        if( bHasMainTitle )
+        {
+            xShape = xChartDoc->getTitle();
+        }
         if( xShape.is() )
         {
-            exportTitle( xShape );
+            exportTitle( xShape, aSubText );
             pFS->singleElement(FSNS(XML_c, XML_autoTitleDeleted), XML_val, "0");
         }
     }
@@ -1086,7 +1103,7 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
     pFS->endElement( FSNS( XML_c, XML_legend ) );
 }
 
-void ChartExport::exportTitle( const Reference< XShape >& xShape )
+void ChartExport::exportTitle( const Reference< XShape >& xShape, const OUString& aSubText )
 {
     OUString sText;
     Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
@@ -1094,8 +1111,14 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape )
     {
         xPropSet->getPropertyValue("String") >>= sText;
     }
-    if( sText.isEmpty() )
+
+    // tdf#101322: add subtitle to maintitle
+    if( sText.isEmpty() && aSubText.isEmpty() )
         return;
+    else if( sText.isEmpty() && !aSubText.isEmpty() )
+        sText = aSubText;
+    else if( !sText.isEmpty() && !aSubText.isEmpty() )
+        sText += "\n" + aSubText;
 
     FSHelperPtr pFS = GetFS();
     pFS->startElement(FSNS(XML_c, XML_title));
@@ -2747,7 +2770,10 @@ void ChartExport::_exportAxis(
 
     // title
     if( xAxisTitle.is() )
-        exportTitle( xAxisTitle );
+    {
+        OUString aEmptySubTitle;
+        exportTitle( xAxisTitle, aEmptySubTitle /*no axis subtitle*/ );
+    }
 
     bool bLinkedNumFmt = true;
     if (GetProperty(xAxisProp, "LinkNumberFormatToSource"))
