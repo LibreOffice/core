@@ -15,6 +15,9 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,liborcus,1))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,liborcus))
 
+# * external/liborcus/create-element.patch.0 covered by upstream
+#   <https://gitlab.com/orcus/orcus/commit/1e024e37c59574965e1b07bc5097c014d4625227> "Fix linking of
+#   newly created element":
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/rpath.patch.0 \
 	external/liborcus/gcc9.patch.0 \
