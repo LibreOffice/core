@@ -103,8 +103,7 @@ void XMLChartStyleContext::FillPropertySet(
     }
     catch( beans::UnknownPropertyException&  )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "xmloff", "unknown property exception -> shape style not completely imported for chart style " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "xmloff", "unknown property exception -> shape style not completely imported for chart style" );
     }
 
     lcl_NumberFormatStyleToProperty( msDataStyleName, "NumberFormat", mrStyles, rPropSet );

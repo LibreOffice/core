@@ -97,10 +97,7 @@ std::vector<OUString> getContents(OUString const & url) {
         assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
-        css::uno::Any e(cppu::getCaughtException());
-        SAL_INFO(
-            "unotools.ucbhelper",
-            "getContents(" << url << ") " << exceptionToString(e));
+        TOOLS_INFO_EXCEPTION("unotools.ucbhelper", "getContents(" << url << ")");
         return std::vector<OUString>();
     }
 }
@@ -144,11 +141,7 @@ bool utl::UCBContentHelper::IsDocument(OUString const & url) {
         assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
-        css::uno::Any e(cppu::getCaughtException());
-        SAL_INFO(
-            "unotools.ucbhelper",
-            "UCBContentHelper::IsDocument(" << url << ") "
-                << exceptionToString(e));
+        TOOLS_INFO_EXCEPTION("unotools.ucbhelper", "UCBContentHelper::IsDocument(" << url << ")");
         return false;
     }
 }
@@ -164,11 +157,7 @@ css::uno::Any utl::UCBContentHelper::GetProperty(
         assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
-        css::uno::Any e(cppu::getCaughtException());
-        SAL_INFO(
-            "unotools.ucbhelper",
-            "UCBContentHelper::GetProperty(" << url << ", " << property << ") "
-                << exceptionToString(e));
+        TOOLS_INFO_EXCEPTION("unotools.ucbhelper", "UCBContentHelper::GetProperty(" << url << ", " << property << ")");
         return css::uno::Any();
     }
 }
@@ -182,11 +171,7 @@ bool utl::UCBContentHelper::IsFolder(OUString const & url) {
         assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
-        css::uno::Any e(cppu::getCaughtException());
-        SAL_INFO(
-            "unotools.ucbhelper",
-            "UCBContentHelper::IsFolder(" << url << ") "
-                << exceptionToString(e));
+        TOOLS_INFO_EXCEPTION("unotools.ucbhelper", "UCBContentHelper::IsFolder(" << url << ")");
         return false;
     }
 }
@@ -203,11 +188,7 @@ bool utl::UCBContentHelper::GetTitle(
         assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
-        css::uno::Any e(cppu::getCaughtException());
-        SAL_INFO(
-            "unotools.ucbhelper",
-            "UCBContentHelper::GetTitle(" << url << ") "
-                << exceptionToString(e));
+        TOOLS_INFO_EXCEPTION("unotools.ucbhelper", "UCBContentHelper::GetTitle(" << url << ")");
         return false;
     }
 }
@@ -224,11 +205,7 @@ bool utl::UCBContentHelper::Kill(OUString const & url) {
         assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
-        css::uno::Any e(cppu::getCaughtException());
-        SAL_INFO(
-            "unotools.ucbhelper",
-            "UCBContentHelper::Kill(" << url << ") "
-                << exceptionToString(e));
+        TOOLS_INFO_EXCEPTION("unotools.ucbhelper", "UCBContentHelper::Kill(" << url << ")");
         return false;
     }
 }
@@ -310,11 +287,9 @@ bool utl::UCBContentHelper::IsYounger(
         assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
-        css::uno::Any e(cppu::getCaughtException());
-        SAL_INFO(
+        TOOLS_INFO_EXCEPTION(
             "unotools.ucbhelper",
-            "UCBContentHelper::IsYounger(" << younger << ", " << older << ") "
-                << exceptionToString(e));
+            "UCBContentHelper::IsYounger(" << younger << ", " << older << ")");
         return false;
     }
 }
@@ -394,11 +369,9 @@ bool utl::UCBContentHelper::IsSubPath(
         assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
-        css::uno::Any e(cppu::getCaughtException());
-        SAL_INFO(
+        TOOLS_INFO_EXCEPTION(
             "unotools.ucbhelper",
-            "UCBContentHelper::IsSubPath(" << parent << ", " << child << ") "
-                << exceptionToString(e));
+            "UCBContentHelper::IsSubPath(" << parent << ", " << child << ")");
     }
     return false;
 }

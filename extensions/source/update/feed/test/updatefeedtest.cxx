@@ -72,7 +72,7 @@ SAL_IMPLEMENT_MAIN()
     }
     catch( const uno::Exception & )
     {
-        SAL_WARN("extensions.update", "exception caught: " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("extensions.update", "");
     }
     catch( ... )
     {

@@ -737,8 +737,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                 }
                 catch( Exception const & )
                 {
-                    css::uno::Any ex( cppu::getCaughtException() );
-                    SAL_WARN("sc", "PivotCacheField::createParentGroupField - exception was thrown " << exceptionToString(ex) );
+                    TOOLS_WARN_EXCEPTION("sc", "PivotCacheField::createParentGroupField" );
                 }
                 SAL_WARN_IF( aAutoName.isEmpty(), "sc", "PivotCacheField::createParentGroupField - cannot find auto-generated group name" );
 
@@ -766,8 +765,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
             }
             catch( Exception const & )
             {
-                css::uno::Any ex( cppu::getCaughtException() );
-                SAL_WARN("sc", "PivotCacheField::createParentGroupField - exception was thrown " << exceptionToString(ex) );
+                TOOLS_WARN_EXCEPTION("sc", "PivotCacheField::createParentGroupField" );
             }
         }
         ++nIndex;

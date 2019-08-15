@@ -107,15 +107,9 @@ static bool KillFile_Impl( const OUString& rURL )
         Content aCnt( rURL, uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         aCnt.executeCommand( "delete", Any( true ) );
     }
-    catch( css::ucb::CommandAbortedException& )
-    {
-        SAL_WARN( "cui.options", "KillFile: CommandAbortedException" );
-        bRet = false;
-    }
     catch( ... )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "cui.options", "KillFile: Any other exception " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "cui.options", "KillFile" );
         bRet = false;
     }
 

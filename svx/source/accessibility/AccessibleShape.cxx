@@ -955,8 +955,7 @@ void SAL_CALL
     }
     catch (uno::RuntimeException const&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("svx", "caught exception while disposing " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("svx", "caught exception while disposing");
     }
 }
 

@@ -108,8 +108,7 @@ Any ConfigurationAccess::GetConfigurationNode (
     }
     catch (const Exception&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("sd", "caught exception while getting configuration node" << sPathToNode << ": " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("sd", "caught exception while getting configuration node" << sPathToNode);
     }
 
     return Any();

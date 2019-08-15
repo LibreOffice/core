@@ -1272,8 +1272,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
         }
         catch ( const uno::Exception& )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "sfx.doc", "Locking exception: WebDAV while trying to lock the file " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "sfx.doc", "Locking exception: WebDAV while trying to lock the file" );
         }
         return eResult;
     }
@@ -1524,8 +1523,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
     }
     catch( const uno::Exception& )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "sfx.doc", "Locking exception: high probability, that the content has not been created " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "sfx.doc", "Locking exception: high probability, that the content has not been created" );
     }
 
     return eResult;
@@ -2987,8 +2985,7 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
             }
             catch ( uno::Exception& )
             {
-                css::uno::Any ex( cppu::getCaughtException() );
-                SAL_WARN( "sfx.doc", "Locking exception: WebDAV while trying to lock the file " << exceptionToString(ex) );
+                TOOLS_WARN_EXCEPTION( "sfx.doc", "Locking exception: WebDAV while trying to lock the file" );
             }
         }
         return;

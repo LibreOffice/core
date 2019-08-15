@@ -151,8 +151,7 @@ Any PresenterConfigurationAccess::GetConfigurationNode (
     }
     catch (const Exception&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("sdext.presenter", "caught exception while getting configuration node " << sPathToNode << " : " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("sdext.presenter", "caught exception while getting configuration node " << sPathToNode);
     }
 
     return Any();

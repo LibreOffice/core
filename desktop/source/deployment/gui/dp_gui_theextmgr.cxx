@@ -337,8 +337,7 @@ PackageState TheExtensionManager::getPackageState( const uno::Reference< deploym
         throw;
     }
     catch (const uno::Exception &) {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "desktop", exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "desktop", "" );
         return NOT_AVAILABLE;
     }
 }

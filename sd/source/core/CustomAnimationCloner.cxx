@@ -123,8 +123,7 @@ namespace sd
         }
         catch( Exception& )
         {
-            SAL_WARN( "sd", "sd::CustomAnimationClonerImpl::Clone(), "
-                      "exception caught: " << exceptionToString( cppu::getCaughtException() ) );
+            TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationClonerImpl::Clone()" );
             Reference< XAnimationNode > xEmpty;
             return xEmpty;
         }
@@ -199,9 +198,7 @@ namespace sd
         }
         catch( Exception& )
         {
-            SAL_WARN( "sd", "sd::CustomAnimationClonerImpl::transformNode(), "
-                      "exception caught: "
-                      << exceptionToString( cppu::getCaughtException() ) );
+            TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationClonerImpl::transformNode()" );
         }
     }
 
@@ -266,9 +263,7 @@ namespace sd
         }
         catch( Exception& )
         {
-            SAL_WARN( "sd", "sd::CustomAnimationClonerImpl::transformValue(), "
-                      "exception caught: "
-                      << exceptionToString( cppu::getCaughtException() ) );
+            TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationClonerImpl::transformValue()" );
         }
 
         return rValue;

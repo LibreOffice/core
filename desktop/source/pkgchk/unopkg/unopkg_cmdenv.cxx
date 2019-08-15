@@ -122,8 +122,7 @@ CommandEnvironmentImpl::~CommandEnvironmentImpl()
             xComp->dispose();
     }
     catch (const RuntimeException &) {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "desktop", exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "desktop", "" );
     }
 }
 

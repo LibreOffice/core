@@ -54,8 +54,7 @@ namespace svx
             }
             catch ( Exception const & )
             {
-                css::uno::Any ex( cppu::getCaughtException() );
-                SAL_WARN( "svx.tbxcrtls", "ToolboxAccess::Ctor(): exception " << exceptionToString(ex) );
+                TOOLS_WARN_EXCEPTION( "svx.tbxcrtls", "ToolboxAccess::Ctor()" );
             }
         }
     }

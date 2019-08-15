@@ -148,9 +148,8 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "extensions.propctrlr", "EFormsPropertyHandler::getPropertyValue: caught an exception!"
-                "\n(have been asked for the \"" <<_rPropertyName << "\" property.) " << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsPropertyHandler::getPropertyValue: caught an exception!"
+                "(have been asked for the \"" <<_rPropertyName << "\" property.)");
         }
         return aReturn;
     }

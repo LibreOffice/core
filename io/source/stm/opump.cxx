@@ -125,8 +125,7 @@ void Pump::fireError( const  Any & exception )
         }
         catch ( const RuntimeException & )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners");
         }
     }
 }
@@ -154,8 +153,7 @@ void Pump::fireClose()
             }
             catch ( const RuntimeException & )
             {
-                css::uno::Any ex( cppu::getCaughtException() );
-                SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << exceptionToString(ex));
+                TOOLS_WARN_EXCEPTION("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners");
             }
         }
     }
@@ -172,8 +170,7 @@ void Pump::fireStarted()
         }
         catch ( const RuntimeException & )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners");
         }
     }
 }
@@ -189,8 +186,7 @@ void Pump::fireTerminated()
         }
         catch ( const RuntimeException & )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners");
         }
     }
 }
@@ -292,8 +288,7 @@ void Pump::run()
     {
         // we are the last on the stack.
         // this is to avoid crashing the program, when e.g. a bridge crashes
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners");
     }
 }
 

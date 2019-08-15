@@ -253,22 +253,19 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
     }
     catch( const packages::zip::ZipIOException& )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("sc.filter", "Zip exception caught while importing: " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("sc.filter", "Zip exception caught while importing");
 
         nReturn = ERRCODE_IO_BROKENPACKAGE;
     }
     catch( const io::IOException& )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("sc.filter", "IO exception caught while importing: " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("sc.filter", "IO exception caught while importing");
 
         nReturn = SCERR_IMPORT_OPEN;
     }
     catch( const uno::Exception& )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("sc.filter", "uno exception caught while importing: " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("sc.filter", "uno exception caught while importing");
 
         nReturn = SCERR_IMPORT_UNKNOWN;
     }

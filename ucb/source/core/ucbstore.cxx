@@ -903,8 +903,7 @@ Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
                 }
                 catch (const Exception&)
                 {
-                    css::uno::Any ex( cppu::getCaughtException() );
-                    SAL_WARN( "ucb", "caught exception! " << exceptionToString(ex) );
+                    TOOLS_WARN_EXCEPTION( "ucb", "");
                 }
             }
         }

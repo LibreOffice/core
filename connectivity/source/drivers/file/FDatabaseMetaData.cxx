@@ -148,8 +148,7 @@ namespace
         }
         catch( const Exception& )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "connectivity.drivers", "isCaseSensitiveParentFolder: caught an unexpected exception! " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "connectivity.drivers", "isCaseSensitiveParentFolder" );
         }
 
         return nIsCS;

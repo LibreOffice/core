@@ -908,12 +908,9 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                         catch(const uno::Exception& )
                         {
                             #if OSL_DEBUG_LEVEL > 0
-                            Any aError( ::cppu::getCaughtException() );
-                            SAL_WARN(
+                            TOOLS_WARN_EXCEPTION(
                                 "basic",
-                                "couldn't open sub storage for library \""
-                                    << rLib.aName << "\". Exception: "
-                                    << exceptionToString(aError));
+                                "couldn't open sub storage for library \"" << rLib.aName << "\"");
                             #endif
                         }
                     }
@@ -1938,12 +1935,9 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                     }
                     catch(const uno::Exception& )
                     {
-                        Any aError( ::cppu::getCaughtException() );
-                        SAL_WARN(
+                        TOOLS_WARN_EXCEPTION(
                             "basic",
-                            "couldn't create sub storage for library \""
-                                << rLib.aName << "\". Exception: "
-                                << exceptionToString(aError));
+                            "couldn't create sub storage for library \"" << rLib.aName << "\"");
                         throw;
                     }
 #endif
@@ -2349,11 +2343,9 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
             }
             catch(const uno::Exception& )
             {
-                Any aError( ::cppu::getCaughtException() );
-                SAL_WARN(
+                TOOLS_WARN_EXCEPTION(
                     "basic",
-                    "couldn't open sub storage for library \"" << Name
-                        << "\". Exception: " << exceptionToString(aError));
+                    "couldn't open sub storage for library \"" << Name << "\"");
                 throw;
             }
 #endif

@@ -78,8 +78,7 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
         }
         catch( const uno::Exception& )
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "sfx.bastyp", "GetResultSet: " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "sfx.bastyp", "GetResultSet" );
         }
 
 
@@ -104,8 +103,7 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
             }
             catch( const uno::Exception& )
             {
-                css::uno::Any ex( cppu::getCaughtException() );
-                SAL_WARN( "sfx.bastyp", "XContentAccess::next(): " << exceptionToString(ex) );
+                TOOLS_WARN_EXCEPTION( "sfx.bastyp", "XContentAccess::next()" );
             }
         }
     }
@@ -246,8 +244,7 @@ sal_Int64 SfxContentHelper::GetSize( const OUString& rContent )
     }
     catch( const uno::Exception& )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN( "sfx.bastyp", exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "sfx.bastyp", "" );
     }
     return nSize;
 }

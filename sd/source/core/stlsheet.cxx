@@ -706,8 +706,7 @@ void SAL_CALL SdStyleSheet::release(  ) throw ()
     catch (RuntimeException const&)
     {
         // don't break throw ()
-        css::uno::Any ex(DbgGetCaughtException());
-        SAL_WARN( "sd", exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION( "sd", "" );
     }
     OSL_ASSERT( mrBHelper.bDisposed );
     SdStyleSheetBase::release();

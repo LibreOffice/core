@@ -1087,8 +1087,7 @@ void SAL_CALL OInterfaceContainer::insertByName(const OUString& _rName, const An
     }
     catch( const Exception& )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("forms.misc", "OInterfaceContainer::insertByName: caught an exception! " << exceptionToString(ex) );
+        TOOLS_WARN_EXCEPTION("forms.misc", "OInterfaceContainer::insertByName" );
     }
     implInsert( m_aItems.size(), xElementProps, true, aElementMetaData.get(), true );
 }

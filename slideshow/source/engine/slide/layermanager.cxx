@@ -635,7 +635,7 @@ namespace slideshow
                 {
                     // TODO(E1): Might be superfluous. Nowadays,
                     // addViewLayer swallows all errors, anyway.
-                    SAL_WARN( "slideshow", exceptionToString( cppu::getCaughtException() ) );
+                    TOOLS_WARN_EXCEPTION( "slideshow", "" );
                     // at least one shape could not be rendered
                     bRet = false;
                 }

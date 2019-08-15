@@ -97,8 +97,7 @@ namespace
         }
         catch( const uno::Exception& )
         {
-            css::uno::Any ex = cppu::getCaughtException();
-            SAL_WARN( "sfx.appl", exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "sfx.appl", "" );
         }
 
         return bRet;

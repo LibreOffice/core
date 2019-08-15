@@ -360,8 +360,7 @@ Reference<XInterface> OPoolCollection::openNode(const OUString& _rPath,const Ref
     }
     catch(const Exception&)
     {
-        css::uno::Any ex(DbgGetCaughtException());
-        SAL_WARN("connectivity.cpool", "OConfigurationNode::openNode: caught an exception while retrieving the node! " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("connectivity.cpool", "OConfigurationNode::openNode: caught an exception while retrieving the node");
     }
     return xNode;
 }

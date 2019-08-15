@@ -251,8 +251,7 @@ void SlideFragmentHandler::finalizeImport()
     }
     catch( uno::Exception& )
     {
-        SAL_WARN( "oox", "oox::ppt::SlideFragmentHandler::EndElement(), "
-                    "exception caught: " << exceptionToString( cppu::getCaughtException() ) );
+        TOOLS_WARN_EXCEPTION( "oox", "oox::ppt::SlideFragmentHandler::EndElement()" );
     }
 }
 

@@ -1208,10 +1208,9 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
     }
     catch (const uno::Exception&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("sfx",
+        TOOLS_WARN_EXCEPTION("sfx",
             "caught exception while trying to access thumbnail of "
-            << msURL << ": " << exceptionToString(ex));
+            << msURL);
     }
 
     // Extract the image from the stream.

@@ -176,8 +176,7 @@ sal_Int32 TextRun::insertAt(
     }
     catch( const Exception&  )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("oox", "OOX: TextRun::insertAt() exception " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("oox", "OOX: TextRun::insertAt()");
     }
 
     return nCharHeight;

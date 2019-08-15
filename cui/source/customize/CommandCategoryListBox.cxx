@@ -335,8 +335,7 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
             }
             catch( css::uno::Exception const & )
             {
-                css::uno::Any ex( cppu::getCaughtException() );
-                SAL_WARN("cui.customize", "Caught some exception whilst retrieving browse nodes from factory... Exception: " << exceptionToString(ex));
+                TOOLS_WARN_EXCEPTION("cui.customize", "Caught some exception whilst retrieving browse nodes from factory");
                 // TODO exception handling
             }
 

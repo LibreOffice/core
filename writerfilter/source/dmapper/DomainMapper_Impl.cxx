@@ -2054,8 +2054,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
     }
     catch( const uno::Exception& )
     {
-        SAL_WARN("writerfilter.dmapper", "exception in PushFootOrEndnote: "
-            << exceptionToString( cppu::getCaughtException() ));
+        TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "PushFootOrEndnote");
     }
 }
 

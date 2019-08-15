@@ -411,8 +411,7 @@ namespace basctl
         }
         catch (const css::ucb::ContentCreationException&)
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "basctl.basicide", "ScriptDocument::getBasicManager: Caught exception: " << exceptionToString(ex) );
+            TOOLS_WARN_EXCEPTION( "basctl.basicide", "ScriptDocument::getBasicManager" );
         }
         return nullptr;
     }

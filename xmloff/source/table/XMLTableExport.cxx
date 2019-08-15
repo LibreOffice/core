@@ -591,8 +591,7 @@ void XMLTableExport::exportTableTemplates()
                     }
                     catch(const Exception&)
                     {
-                        css::uno::Any ex( cppu::getCaughtException() );
-                        SAL_WARN("xmloff", "XMLTableExport::exportTableTemplates(), export Writer specific attributes, exception caught! " << exceptionToString(ex));
+                        TOOLS_WARN_EXCEPTION("xmloff", "XMLTableExport::exportTableTemplates(), export Writer specific attributes, exception caught!");
                     }
                     pElements++;
                 }
@@ -649,8 +648,7 @@ void XMLTableExport::exportTableTemplates()
                     }
                     catch(const Exception&)
                     {
-                        css::uno::Any ex( cppu::getCaughtException() );
-                        SAL_WARN("xmloff", "XMLTableExport::exportTableTemplates(), export Writer specific styles, exception caught!" << exceptionToString(ex));
+                        TOOLS_WARN_EXCEPTION("xmloff", "XMLTableExport::exportTableTemplates(), export Writer specific styles, exception caught!");
                     }
                     pElements++;
                 }
@@ -658,14 +656,12 @@ void XMLTableExport::exportTableTemplates()
         }
         catch(const Exception&)
         {
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN("xmloff", "XMLTableExport::exportTableDesigns(), exception caught while exporting a table design! " << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION("xmloff", "XMLTableExport::exportTableDesigns(), exception caught while exporting a table design!");
         }
     }
     catch(const Exception&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
-        SAL_WARN("xmloff", "XMLTableExport::exportTableDesigns(), exception caught! " << exceptionToString(ex));
+        TOOLS_WARN_EXCEPTION("xmloff", "XMLTableExport::exportTableDesigns()");
     }
 }
 
