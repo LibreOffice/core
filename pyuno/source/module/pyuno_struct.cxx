@@ -105,7 +105,8 @@ static PyObject* PyUNOStruct_dir( PyObject *self )
     try
     {
         member_list = PyList_New( 0 );
-        for( const auto& aMember : me->members->xInvocation->getMemberNames() )
+        const css::uno::Sequence<OUString> aMemberNames = me->members->xInvocation->getMemberNames();
+        for( const auto& aMember : aMemberNames )
         {
             // setitem steals a reference
             PyList_Append( member_list, ustring2PyString( aMember ).getAcquired() );
