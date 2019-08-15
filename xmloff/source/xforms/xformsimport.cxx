@@ -149,7 +149,7 @@ void applyXFormsSettings( const Reference< XNameAccess >& _rXForms, const Sequen
 
     try
     {
-        Sequence< OUString > aSettingsForModels( xModelSettings->getElementNames() );
+        const Sequence< OUString > aSettingsForModels( xModelSettings->getElementNames() );
         for ( auto const & modelName : aSettingsForModels )
         {
             // the settings for this particular model
@@ -167,7 +167,7 @@ void applyXFormsSettings( const Reference< XNameAccess >& _rXForms, const Sequen
             Reference< XPropertySet > xModelProps( _rXForms->getByName( modelName ), UNO_QUERY_THROW );
             Reference< XPropertySetInfo > xModelPSI( xModelProps->getPropertySetInfo(), UNO_SET_THROW );
 
-            for ( auto const & setting : aModelSettings )
+            for ( auto const & setting : std::as_const(aModelSettings) )
             {
                 if ( !xModelPSI->hasPropertyByName( setting.Name ) )
                 {

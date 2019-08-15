@@ -243,7 +243,7 @@ private:
     /// export a single template element (e.g. span or tab-stop)
     void ExportIndexTemplateElement(
         SectionTypeEnum eType, //i90246, needed for ODF 1.0, 1.0 and 1.2 management
-        css::uno::Sequence<
+        const css::uno::Sequence<
             css::beans::PropertyValue> & rValues);
 
     /// export level paragraph styles

@@ -86,7 +86,7 @@ void exportXForms( SvXMLExport& rExport )
         Reference<XNameContainer> xForms = xSupplier->getXForms();
         if( xForms.is() )
         {
-            Sequence<OUString> aNames = xForms->getElementNames();
+            const Sequence<OUString> aNames = xForms->getElementNames();
 
             for( const auto& rName : aNames )
             {
@@ -331,7 +331,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
     if( xNamespaces.is() )
     {
         // iterate over Prefixes for this binding
-        Sequence<OUString> aPrefixes = xNamespaces->getElementNames();
+        const Sequence<OUString> aPrefixes = xNamespaces->getElementNames();
         for( const OUString& rPrefix : aPrefixes )
         {
             OUString sURI;
@@ -763,7 +763,7 @@ void getXFormsSettings( const Reference< XNameAccess >& _rXForms, Sequence< Prop
         // are the names of the XForm models, and which in turn provides named sequences of
         // PropertyValues - which denote the actual property values of the given named model.
 
-        Sequence< OUString > aModelNames( _rXForms->getElementNames() );
+        const Sequence< OUString > aModelNames( _rXForms->getElementNames() );
 
         Reference< XNameContainer > xModelSettings = document::NamedPropertyValues::create( comphelper::getProcessComponentContext() );
 

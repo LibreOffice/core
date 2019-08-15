@@ -962,7 +962,7 @@ void SchXMLChartContext::MergeSeriesForStockChart()
         bool bHasJapaneseCandlestick = true;
         uno::Reference< chart2::XDataSeriesContainer > xDSContainer;
         uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
-        uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
+        const uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
         for( const auto& rCooSys : aCooSysSeq )
         {
             uno::Reference< chart2::XChartTypeContainer > xCTCnt( rCooSys, uno::UNO_QUERY_THROW );

@@ -304,14 +304,16 @@ std::unordered_set<OUString> XMLFontAutoStylePool::getUsedFontList()
     uno::Reference<container::XNameAccess> xFamilies(xFamiliesSupp->getStyleFamilies());
     if (xFamilies.is())
     {
-        for (OUString const & sFamilyName : xFamilies->getElementNames())
+        const uno::Sequence<OUString> aFamilyNames = xFamilies->getElementNames();
+        for (OUString const & sFamilyName : aFamilyNames)
         {
             uno::Reference<container::XNameAccess> xStyleContainer;
             xFamilies->getByName(sFamilyName) >>= xStyleContainer;
 
             if (xStyleContainer.is())
             {
-                for (OUString const & rName : xStyleContainer->getElementNames())
+                const uno::Sequence<OUString> aStyleNames = xStyleContainer->getElementNames();
+                for (OUString const & rName : aStyleNames)
                 {
                     uno::Reference<style::XStyle> xStyle;
                     xStyleContainer->getByName(rName) >>= xStyle;
