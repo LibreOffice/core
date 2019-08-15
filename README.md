@@ -34,7 +34,7 @@ run and compile LibreOffice, also used by the TDF builds:
 
 * Windows:
     * Runtime: Windows 7
-    * Build: Cygwin + Visual Studio 2017
+    * Build: Cygwin + Visual Studio 2017 version 15.7
 * macOS:
     * Runtime: 10.10
     * Build: 10.13.2 + Xcode 9.3
