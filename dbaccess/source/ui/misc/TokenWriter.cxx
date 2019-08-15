@@ -22,6 +22,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
 #include <osl/diagnose.h>
+#include <rtl/tencinfo.h>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <RtfReader.hxx>
@@ -320,8 +321,12 @@ bool ORTFImportExport::Write()
 {
     ODatabaseImportExport::Write();
     m_pStream->WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RTF );
-    m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ANSI ).WriteCharPtr( SAL_NEWLINE_STRING );
-    rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252;
+    m_pStream->WriteCharPtr(OOO_STRING_SVTOOLS_RTF_ANSI);
+    if (sal_uInt32 nCpg = rtl_getWindowsCodePageFromTextEncoding(m_eDestEnc); nCpg && nCpg != 65001)
+    {
+        m_pStream->WriteCharPtr(OOO_STRING_SVTOOLS_RTF_ANSICPG).WriteUInt32AsString(nCpg);
+    }
+    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING);
 
     bool bBold          = ( css::awt::FontWeight::BOLD     == m_aFont.Weight );
     bool bItalic        = ( css::awt::FontSlant_ITALIC     == m_aFont.Slant );
@@ -333,11 +338,11 @@ bool ORTFImportExport::Write()
         m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
     ::Color aColor(nColor);
 
-    OString aFonts(OUStringToOString(m_aFont.Name, eDestEnc));
+    OString aFonts(OUStringToOString(m_aFont.Name, RTL_TEXTENCODING_MS_1252));
     if (aFonts.isEmpty())
     {
         OUString aName = Application::GetSettings().GetStyleSettings().GetAppFont().GetFamilyName();
-        aFonts = OUStringToOString(aName, eDestEnc);
+        aFonts = OUStringToOString(aName, RTL_TEXTENCODING_MS_1252);
     }
 
     m_pStream->WriteCharPtr( "{\\fonttbl" );
@@ -437,7 +442,7 @@ bool ORTFImportExport::Write()
 
             m_pStream->WriteCharPtr( "\\fs20\\f0\\cf0\\cb2" );
             m_pStream->WriteChar( ' ' );
-            RTFOutFuncs::Out_String(*m_pStream,sColumnName,eDestEnc);
+            RTFOutFuncs::Out_String(*m_pStream, sColumnName, m_eDestEnc);
 
             m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELL );
             m_pStream->WriteChar( '}' );
