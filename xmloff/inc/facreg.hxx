@@ -39,11 +39,6 @@ css::uno::Sequence<OUString> XMLImpressExportOOO_getSupportedServiceNames() thro
 /// @throws css::uno::Exception
 css::uno::Reference<css::uno::XInterface> XMLImpressExportOOO_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString XMLImpressMetaExportOOO_getImplementationName() throw();
-css::uno::Sequence<OUString> XMLImpressMetaExportOOO_getSupportedServiceNames() throw();
-/// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> XMLImpressMetaExportOOO_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 OUString XMLImpressSettingsExportOOO_getImplementationName() throw();
 css::uno::Sequence<OUString> XMLImpressSettingsExportOOO_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
