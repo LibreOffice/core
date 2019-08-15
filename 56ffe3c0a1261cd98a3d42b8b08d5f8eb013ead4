@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_019e9e53",
+        "filename": "external/liborcus/Library_orcus-parser.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-15T04:33:15Z",
+      "side": 1,
+      "message": "Since \u003cfilesystem\u003e is in c++17, I assume, this is because orcus supports pre-c++17? Just curious.",
+      "range": {
+        "startLine": 16,
+        "startChar": 1,
+        "endLine": 16,
+        "endChar": 17
+      },
+      "revId": "56ffe3c0a1261cd98a3d42b8b08d5f8eb013ead4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
