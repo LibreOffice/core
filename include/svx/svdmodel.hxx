@@ -260,6 +260,8 @@ private:
     // this is a weak reference to a possible living api wrapper for this model
     css::uno::Reference< css::uno::XInterface > mxUnoModel;
 
+    bool mbMakePageObjectsNamesUnique = true;
+
 public:
     SVX_DLLPRIVATE virtual bool IsCreatingDataObj() const { return false; }
     bool     IsTransportContainer() const { return bTransportContainer; }
@@ -598,6 +600,9 @@ public:
         This returns false if undo was disabled using EnableUndo( false ) and
         also during the runtime of the Undo() and Redo() methods. */
     bool IsUndoEnabled() const;
+
+    bool DoesMakePageObjectsNamesUnique() const { return mbMakePageObjectsNamesUnique; }
+    void DoMakePageObjectsNamesUnique(bool bDo) { mbMakePageObjectsNamesUnique = bDo; }
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };

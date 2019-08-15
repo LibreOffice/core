@@ -326,6 +326,26 @@ void SdrObjList::NbcInsertObject(SdrObject* pObj, size_t nPos)
     pObj->InsertedStateChange(); // calls the UserCall (among others)
 }
 
+void SdrObjList::InsertObjectThenMakeNameUnique(SdrObject* pObj, size_t nPos)
+{
+    InsertObject(pObj, nPos);
+    if (!pObj->GetName().isEmpty())
+    {
+        pObj->MakeNameUnique();
+        SdrObjList* pSdrObjList = pObj->GetSubList();
+        if (pSdrObjList)
+        {
+            SdrObject* pListObj;
+            SdrObjListIter aIter(pSdrObjList, SdrIterMode::DeepWithGroups);
+            while (aIter.IsMore())
+            {
+                pListObj = aIter.Next();
+                pListObj->MakeNameUnique();
+            }
+        }
+    }
+}
+
 void SdrObjList::InsertObject(SdrObject* pObj, size_t nPos)
 {
     DBG_ASSERT(pObj!=nullptr,"SdrObjList::InsertObject(NULL)");
@@ -1473,6 +1493,32 @@ void SdrPage::TRG_ImpMasterPageRemoved(const SdrPage& rRemovedPage)
         if(&TRG_GetMasterPage() == &rRemovedPage)
         {
             TRG_ClearMasterPage();
+        }
+    }
+}
+
+void SdrPage::MakePageObjectsNamesUnique()
+{
+    for (size_t no(0); no < GetObjCount(); ++no)
+    {
+        SdrObject* pObj(GetObj(no));
+        if(nullptr != pObj)
+        {
+            if (!pObj->GetName().isEmpty())
+            {
+                pObj->MakeNameUnique();
+                SdrObjList* pSdrObjList = pObj->GetSubList(); // group?
+                if (pSdrObjList)
+                {
+                    SdrObject* pListObj;
+                    SdrObjListIter aIter(pSdrObjList, SdrIterMode::DeepWithGroups);
+                    while (aIter.IsMore())
+                    {
+                        pListObj = aIter.Next();
+                        pListObj->MakeNameUnique();
+                    }
+                }
+            }
         }
     }
 }

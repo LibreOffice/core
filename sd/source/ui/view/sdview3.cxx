@@ -491,7 +491,12 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                             pObj->NbcMove(aVector);
                                         }
 
-                                        pPage->InsertObject(pObj);
+                                        SdrObject* pMarkParent = pM->GetMarkedSdrObj()->getParentSdrObjectFromSdrObject();
+                                        if (bCopy || (pMarkParent && pMarkParent->IsGroupObject()))
+
+                                            pPage->InsertObjectThenMakeNameUnique(pObj);
+                                        else
+                                            pPage->InsertObject(pObj);
 
                                         if( IsUndoEnabled() )
                                         {

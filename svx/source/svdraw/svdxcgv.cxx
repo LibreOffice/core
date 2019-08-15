@@ -346,7 +346,7 @@ bool SdrExchangeView::Paste(
                     pNewObj->SetLayer(nLayer);
                 }
 
-                pDstLst->InsertObject(pNewObj, SAL_MAX_SIZE);
+                pDstLst->InsertObjectThenMakeNameUnique(pNewObj, SAL_MAX_SIZE);
 
                 if( bUndo )
                     AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoNewObject(*pNewObj));

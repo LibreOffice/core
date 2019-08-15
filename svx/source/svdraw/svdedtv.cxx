@@ -909,7 +909,7 @@ void SdrEditView::CopyMarkedObj()
         SdrObject* pSource(pM->GetMarkedSdrObj());
         SdrObject* pO(pSource->CloneSdrObject(pSource->getSdrModelFromSdrObject()));
         if (pO!=nullptr) {
-            pM->GetPageView()->GetObjList()->InsertObject(pO, SAL_MAX_SIZE);
+            pM->GetPageView()->GetObjList()->InsertObjectThenMakeNameUnique(pO, SAL_MAX_SIZE);
 
             if( bUndo )
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoCopyObject(*pO));
