@@ -95,14 +95,12 @@ sal_Int8 toVclDropAction(Qt::DropAction dragOperation)
 Qt::DropAction getPreferredDropAction(sal_Int8 dragOperation)
 {
     Qt::DropAction eAct = Qt::IgnoreAction;
-
     if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_MOVE)
         eAct = Qt::MoveAction;
     else if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_COPY)
         eAct = Qt::CopyAction;
     else if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_LINK)
         eAct = Qt::LinkAction;
-
     return eAct;
 }
 

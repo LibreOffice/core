@@ -78,16 +78,16 @@ void Qt5DragSource::startDrag(
 
 void Qt5DragSource::fire_dragEnd(sal_Int8 nAction, bool bDropSuccessful)
 {
-    if (m_xListener.is())
-    {
-        datatransfer::dnd::DragSourceDropEvent aEv;
-        aEv.DropAction = nAction;
-        aEv.DropSuccess = bDropSuccessful;
+    if (!m_xListener.is())
+        return;
 
-        auto xListener = m_xListener;
-        m_xListener.clear();
-        xListener->dragDropEnd(aEv);
-    }
+    datatransfer::dnd::DragSourceDropEvent aEv;
+    aEv.DropAction = nAction;
+    aEv.DropSuccess = bDropSuccessful;
+
+    auto xListener = m_xListener;
+    m_xListener.clear();
+    xListener->dragDropEnd(aEv);
 }
 
 OUString SAL_CALL Qt5DragSource::getImplementationName()
@@ -128,11 +128,7 @@ css::uno::Sequence<OUString> SAL_CALL Qt5DropTarget::getSupportedServiceNames()
     return { "com.sun.star.datatransfer.dnd.Qt5DropTarget" };
 }
 
-Qt5DropTarget::~Qt5DropTarget()
-{
-    //if (m_pFrame)
-    //m_pFrame->deregisterDropTarget(this);
-}
+Qt5DropTarget::~Qt5DropTarget() {}
 
 void Qt5DropTarget::deinitialize()
 {
@@ -213,9 +209,7 @@ void Qt5DropTarget::fire_dragOver(const css::datatransfer::dnd::DropTargetDragEn
     aGuard.clear();
 
     for (auto const& listener : aListeners)
-    {
         listener->dragOver(dtde);
-    }
 }
 
 void Qt5DropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
@@ -228,9 +222,7 @@ void Qt5DropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent&
     aGuard.clear();
 
     for (auto const& listener : aListeners)
-    {
         listener->drop(dtde);
-    }
 }
 
 void Qt5DropTarget::fire_dragExit(const css::datatransfer::dnd::DropTargetEvent& dte)

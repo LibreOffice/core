@@ -1053,8 +1053,7 @@ void Qt5Frame::Beep() { QApplication::beep(); }
 SalFrame::SalPointerState Qt5Frame::GetPointerState()
 {
     SalPointerState aState;
-    QPoint pos = QCursor::pos();
-    aState.maPos = Point(pos.x(), pos.y());
+    aState.maPos = toPoint(QCursor::pos());
     aState.mnState = GetMouseModCode(QGuiApplication::mouseButtons())
                      | GetKeyModCode(QGuiApplication::keyboardModifiers());
     return aState;
@@ -1206,8 +1205,6 @@ static sal_Int8 lcl_getUserDropAction(const QDropEvent* pEvent, const sal_Int8 n
 {
     // we completely ignore all proposals by the Qt event, as they don't
     // match at all with the preferred LO DnD actions.
-    const sal_Int8 nFilterActions
-        = nSourceActions | css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT;
 
     // check the key modifiers to detect a user-overridden DnD action
     const Qt::KeyboardModifiers eKeyMod = pEvent->keyboardModifiers();
@@ -1218,7 +1215,7 @@ static sal_Int8 lcl_getUserDropAction(const QDropEvent* pEvent, const sal_Int8 n
         nUserDropAction = css::datatransfer::dnd::DNDConstants::ACTION_COPY;
     else if ((eKeyMod & Qt::ShiftModifier) && (eKeyMod & Qt::ControlModifier))
         nUserDropAction = css::datatransfer::dnd::DNDConstants::ACTION_LINK;
-    nUserDropAction &= nFilterActions;
+    nUserDropAction &= nSourceActions;
 
     // select the default DnD action, if there isn't a user preference
     if (0 == nUserDropAction)
@@ -1227,7 +1224,7 @@ static sal_Int8 lcl_getUserDropAction(const QDropEvent* pEvent, const sal_Int8 n
         nUserDropAction = dynamic_cast<const Qt5MimeData*>(pMimeData)
                               ? css::datatransfer::dnd::DNDConstants::ACTION_MOVE
                               : css::datatransfer::dnd::DNDConstants::ACTION_COPY;
-        nUserDropAction &= nFilterActions;
+        nUserDropAction &= nSourceActions;
 
         // if the default doesn't match any allowed source action, fall back to the
         // preferred of all allowed source actions
@@ -1309,7 +1306,7 @@ void Qt5Frame::handleDrop(QDropEvent* pEvent)
         Qt5Widget* pWidget = dynamic_cast<Qt5Widget*>(pEvent->source());
         assert(pWidget); // AFAIK there shouldn't be any non-Qt5Widget as source in LO itself
         if (pWidget)
-            pWidget->getFrame().m_pDragSource->fire_dragEnd(nDropAction, bDropSuccessful);
+            pWidget->frame().m_pDragSource->fire_dragEnd(nDropAction, bDropSuccessful);
     }
 
     // the drop target accepted our drop action => inform Qt
