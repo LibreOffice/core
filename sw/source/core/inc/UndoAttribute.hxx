@@ -85,14 +85,13 @@ public:
 class SwUndoFormatAttr : public SwUndo
 {
     friend class SwUndoDefaultAttr;
-    SwFormat * m_pFormat;
+    OUString m_sFormatName;
     std::unique_ptr<SfxItemSet> m_pOldSet;      // old attributes
     sal_uLong m_nNodeIndex;
     const sal_uInt16 m_nFormatWhich;
     const bool m_bSaveDrawPt;
 
-    bool IsFormatInDoc( SwDoc* );   //is the attribute format still in the Doc?
-    void SaveFlyAnchor( bool bSaveDrawPt = false );
+    void SaveFlyAnchor( const SwFormat * pFormat, bool bSaveDrawPt = false );
     // #i35443# - Add return value, type <bool>.
     // Return value indicates, if anchor attribute is restored.
     // Notes: - If anchor attribute is restored, all other existing attributes
@@ -103,7 +102,7 @@ class SwUndoFormatAttr : public SwUndo
     //          This situation occurs for undo of styles.
     bool RestoreFlyAnchor(::sw::UndoRedoContext & rContext);
     // --> OD 2008-02-27 #refactorlists# - removed <rAffectedItemSet>
-    void Init();
+    void Init( const SwFormat & rFormat );
 
 public:
     // register at the Format and save old attributes
@@ -123,8 +122,8 @@ public:
 
     virtual SwRewriter GetRewriter() const override;
 
-    void PutAttr( const SfxPoolItem& rItem );
-    SwFormat* GetFormat( SwDoc& rDoc );   // checks if it is still in the Doc!
+    void PutAttr( const SfxPoolItem& rItem, const SwDoc& rDoc );
+    SwFormat* GetFormat( const SwDoc& rDoc );   // checks if it is still in the Doc!
 };
 
 // --> OD 2008-02-12 #newlistlevelattrs#
