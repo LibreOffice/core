@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_47e026fb",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2019-08-15T21:09:55Z",
+      "side": 1,
+      "message": "Could you please elaborate why do you check if pEntry-\u003eGetComment() is empty? It will be great to add description in commit message.\n\nI think you should check also if pEntry is null. The easiest way is to move these code into the condition:\n\nif (pEntry)\n{",
+      "revId": "537b67d450276b2c307efa5c2c8206aa6d9fbcf2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
