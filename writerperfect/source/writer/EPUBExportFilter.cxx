@@ -69,7 +69,7 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue>& rDe
     if (aFilterOptions == "layout=fixed")
         nLayoutMethod = libepubgen::EPUB_LAYOUT_METHOD_FIXED;
 
-    for (const auto& rProp : aFilterData)
+    for (const auto& rProp : std::as_const(aFilterData))
     {
         if (rProp.Name == "EPUBVersion")
             rProp.Value >>= nVersion;

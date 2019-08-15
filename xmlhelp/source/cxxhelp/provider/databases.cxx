@@ -1308,7 +1308,7 @@ void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUS
 {
     rv.clear();
     OUString aExtensionPath = xPackage->getURL();
-    Sequence< OUString > aEntrySeq = m_xSFA->getFolderContents( aExtensionPath, true );
+    const Sequence< OUString > aEntrySeq = m_xSFA->getFolderContents( aExtensionPath, true );
 
     for( const OUString& aEntry : aEntrySeq )
     {

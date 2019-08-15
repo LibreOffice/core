@@ -1596,7 +1596,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 // Unfortunately using setParent() does not work for page styles, so make a deep copy of the page style.
                 uno::Reference< beans::XPropertySet > pageProperties( m_bTitlePage ? m_aFirstPageStyle : m_aFollowPageStyle );
                 uno::Reference< beans::XPropertySetInfo > pagePropertiesInfo( pageProperties->getPropertySetInfo() );
-                uno::Sequence< beans::Property > propertyList( pagePropertiesInfo->getProperties() );
+                const uno::Sequence< beans::Property > propertyList( pagePropertiesInfo->getProperties() );
                 // Ignore write-only properties.
                 static const std::set<OUString> aBlacklist
                     = { "FooterBackGraphicURL", "BackGraphicURL", "HeaderBackGraphicURL" };

@@ -72,7 +72,7 @@ static sal_Int32 lcl_findProperty( const uno::Sequence< beans::PropertyValue >& 
     return nPos;
 }
 
-static void lcl_mergeProperties( uno::Sequence< beans::PropertyValue >& aSrc,
+static void lcl_mergeProperties( const uno::Sequence< beans::PropertyValue >& aSrc,
         uno::Sequence< beans::PropertyValue >& aDst )
 {
     for ( const auto& rProp : aSrc )
@@ -329,7 +329,7 @@ void ListLevel::AddParaProperties( uno::Sequence< beans::PropertyValue >* props 
     if( hasFirstLineIndent && hasIndentAt )
         return; // has them all, nothing to add
 
-    uno::Sequence< beans::PropertyValue > aParaProps = m_pParaStyle->pProperties->GetPropertyValues( );
+    const uno::Sequence< beans::PropertyValue > aParaProps = m_pParaStyle->pProperties->GetPropertyValues( );
 
     // ParaFirstLineIndent -> FirstLineIndent
     // ParaLeftMargin -> IndentAt
