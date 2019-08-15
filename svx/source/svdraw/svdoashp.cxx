@@ -91,6 +91,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svdobjplusdata.hxx>
+#include <comphelper/string.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -2711,7 +2712,56 @@ void SdrObjCustomShape::NbcSetOutlinerParaObject(std::unique_ptr<OutlinerParaObj
 
 SdrObjCustomShape* SdrObjCustomShape::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrObjCustomShape >(rTargetModel);
+    SdrObjCustomShape* pCloneObj = CloneHelper< SdrObjCustomShape >(rTargetModel);
+
+    if (!GetName().isEmpty())
+    {
+        SdrObject* pObj;
+        bool bObjFound;
+        const SdrPage* pPage;
+        sal_uInt16 nPage;
+        const sal_uInt16 nMaxPages = rTargetModel.GetPageCount();
+        OUString sName(GetName());
+        do {
+            bObjFound = false;
+            nPage = 0;
+            while (nPage < nMaxPages)
+            {
+                pPage = rTargetModel.GetPage(nPage);
+                SdrObjListIter aIter(pPage, SdrIterMode::DeepWithGroups);
+                while (aIter.IsMore())
+                {
+                    pObj = aIter.Next();
+                    if (sName == pObj->GetName())
+                    {
+                        bObjFound = true;
+                        break;
+                    }
+                }
+                if (bObjFound)
+                    break;
+                nPage++;
+            }
+            if (bObjFound)
+            {
+                // make unique name
+                sal_uInt32 n = 0;
+                sal_Int32 index = sName.lastIndexOf("_");
+                if (index > 0)
+                {
+                    OUString s1 = sName.copy(index + 1);
+                    if (comphelper::string::isdigitAsciiString(s1))
+                    {
+                        n = s1.toUInt32() + 1;
+                        sName = sName.copy(0, index);
+                    }
+                }
+                sName = sName + "_" + OUString::number(n);
+            }
+        } while(bObjFound);
+        pCloneObj->SetName(sName);
+    }
+    return pCloneObj;
 }
 
 SdrObjCustomShape& SdrObjCustomShape::operator=(const SdrObjCustomShape& rObj)
