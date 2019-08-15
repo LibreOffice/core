@@ -220,8 +220,7 @@ sal_Bool SAL_CALL ODocumentCloser::supportsService( const OUString& ServiceName 
 
 uno::Sequence< OUString > SAL_CALL ODocumentCloser::getSupportedServiceNames()
 {
-    const OUString aServiceName( "com.sun.star.embed.DocumentCloser" );
-    return uno::Sequence< OUString >( &aServiceName, 1 );
+    return uno::Sequence< OUString > { "com.sun.star.embed.DocumentCloser" };
 }
 
 }
