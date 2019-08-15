@@ -741,7 +741,7 @@ Reference< XAnimationNode > AnimationExporter::createAfterEffectNodeClone( const
 bool AnimationExporter::GetNodeType( const Reference< XAnimationNode >& xNode, sal_Int16& nType )
 {
     // trying to get the nodetype
-    Sequence< NamedValue > aUserData = xNode->getUserData();
+    const Sequence< NamedValue > aUserData = xNode->getUserData();
     for( const NamedValue& rProp : aUserData )
     {
         if ( rProp.Name == "node-type" )

@@ -253,7 +253,7 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
     {
         // Get a list of the matching resources and create deactivation
         // requests for them.
-        Sequence<Reference<XResourceId> > aResourceList (
+        const Sequence<Reference<XResourceId> > aResourceList (
             mpImplementation->mxRequestedConfiguration->getResources(
                 rxResourceId->getAnchor(),
                 rxResourceId->getResourceTypePrefix(),

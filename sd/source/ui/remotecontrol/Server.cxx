@@ -146,7 +146,7 @@ void RemoteServer::execute()
 
             // Check if we already have this server.
             Reference< XNameAccess > const xConfig = officecfg::Office::Impress::Misc::AuthorisedRemotes::get();
-            Sequence< OUString > aNames = xConfig->getElementNames();
+            const Sequence< OUString > aNames = xConfig->getElementNames();
             bool aFound = false;
             for ( const auto& rName : aNames )
             {
