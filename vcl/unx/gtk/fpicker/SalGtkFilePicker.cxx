@@ -1150,7 +1150,7 @@ void SalGtkFilePicker::HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nContr
             {
                 Sequence< OUString > aStringList;
                 rValue >>= aStringList;
-                for (const auto& rString : aStringList)
+                for (const auto& rString : std::as_const(aStringList))
                 {
                     ComboBoxAppendText(pWidget, rString);
                     if (!bVersionWidthUnset)
@@ -1920,7 +1920,7 @@ void SalGtkFilePicker::SetFilters()
                 {   // it's a filter group
                     css::uno::Sequence< css::beans::StringPair > aSubFilters;
                     filter.getSubFilters( aSubFilters );
-                    for( const auto& rSubFilter : aSubFilters )
+                    for( const auto& rSubFilter : std::as_const(aSubFilters) )
                         aAllFormats.insert(rSubFilter.Second);
                 }
                 else

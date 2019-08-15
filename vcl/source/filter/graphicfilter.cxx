@@ -1440,7 +1440,7 @@ void GraphicFilter::preload()
 
 ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
-                                     css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
+                                     const css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
                                      WmfExternal const *pExtHeader )
 {
     OUString                       aFilterName;
@@ -2077,7 +2077,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                             css::uno::Sequence< css::beans::PropertyValue > aAdditionalChunkSequence;
                             if ( rPropVal.Value >>= aAdditionalChunkSequence )
                             {
-                                for ( const auto& rAdditionalChunk : aAdditionalChunkSequence )
+                                for ( const auto& rAdditionalChunk : std::as_const(aAdditionalChunkSequence) )
                                 {
                                     if ( rAdditionalChunk.Name.getLength() == 4 )
                                     {

@@ -253,7 +253,7 @@ namespace DOM
         if (xAttribs.is())
         {
             setElementFastAttributes(aElement, xAttribs);
-            Sequence< css::xml::Attribute > unknownAttribs = xAttribs->getUnknownAttributes();
+            const Sequence< css::xml::Attribute > unknownAttribs = xAttribs->getUnknownAttributes();
             for ( const auto& rUnknownAttrib : unknownAttribs )
             {
                 const OUString& rAttrValue = rUnknownAttrib.Value;
