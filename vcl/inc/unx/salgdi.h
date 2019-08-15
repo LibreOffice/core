@@ -36,6 +36,9 @@
 #include <vclpluginapi.h>
 #include <ControlCacheKey.hxx>
 
+#include "saltype.h"
+#include "saldisp.hxx"
+
 #include <deque>
 #include <memory>
 
