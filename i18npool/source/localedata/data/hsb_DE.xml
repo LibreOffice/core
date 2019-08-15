@@ -267,7 +267,7 @@
         </Month>
         <Month>
           <MonthID>mar</MonthID>
-          <DefaultAbbrvName>měrc</DefaultAbbrvName>
+          <DefaultAbbrvName>měr</DefaultAbbrvName>
           <DefaultFullName>měrc</DefaultFullName>
         </Month>
         <Month>
@@ -277,7 +277,7 @@
         </Month>
         <Month>
           <MonthID>may</MonthID>
-          <DefaultAbbrvName>meja</DefaultAbbrvName>
+          <DefaultAbbrvName>mej</DefaultAbbrvName>
           <DefaultFullName>meja</DefaultFullName>
         </Month>
         <Month>
@@ -329,7 +329,7 @@
         </Month>
         <Month>
           <MonthID>mar</MonthID>
-          <DefaultAbbrvName>měrc</DefaultAbbrvName>
+          <DefaultAbbrvName>měr</DefaultAbbrvName>
           <DefaultFullName>měrca</DefaultFullName>
         </Month>
         <Month>
@@ -339,7 +339,7 @@
         </Month>
         <Month>
           <MonthID>may</MonthID>
-          <DefaultAbbrvName>meja</DefaultAbbrvName>
+          <DefaultAbbrvName>mej</DefaultAbbrvName>
           <DefaultFullName>meja</DefaultFullName>
         </Month>
         <Month>
