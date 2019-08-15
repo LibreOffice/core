@@ -44,7 +44,7 @@ void PageCollector::CollectCustomShowPages( const css::uno::Reference< css::fram
         if ( aXCont.is() )
         {
             // creating a list of every page that is used within our customshow
-            Sequence< OUString> aNameSeq( aXCont->getElementNames() );
+            const Sequence< OUString> aNameSeq( aXCont->getElementNames() );
             for ( OUString const & i :aNameSeq )
             {
                 if ( i == rCustomShowName )
