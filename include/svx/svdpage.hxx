@@ -110,6 +110,8 @@ public:
     virtual void   InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE);
     virtual void sort( std::vector<sal_Int32>& sortOrder );
 
+    void InsertObjectThenMakeNameUnique(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE);
+
     /// remove from list without delete
     virtual SdrObject* NbcRemoveObject(size_t nObjNum);
     virtual SdrObject* RemoveObject(size_t nObjNum);
@@ -486,6 +488,8 @@ public:
     const SdrLayerIDSet& TRG_GetMasterPageVisibleLayers() const;
     void TRG_SetMasterPageVisibleLayers(const SdrLayerIDSet& rNew);
     sdr::contact::ViewContact& TRG_GetMasterPageDescriptorViewContact() const;
+
+    void MakePageObjectsNamesUnique();
 
 protected:
     void TRG_ImpMasterPageRemoved(const SdrPage& rRemovedPage);

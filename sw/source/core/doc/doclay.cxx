@@ -142,12 +142,12 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
         if( xSet.is() )
             aVal = xSet->getPropertyValue( sName );
         if( bInsInPage )
-            pPg->InsertObject( pObj );
+            pPg->InsertObjectThenMakeNameUnique( pObj );
         if( xSet.is() )
             xSet->setPropertyValue( sName, aVal );
     }
     else if( bInsInPage )
-        pPg->InsertObject( pObj );
+        pPg->InsertObjectThenMakeNameUnique( pObj );
 
     // For drawing objects: set layer of cloned object to invisible layer
     SdrLayerID nLayerIdForClone = rObj.GetLayer();
