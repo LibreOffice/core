@@ -208,6 +208,8 @@ CLANGTOOLLIBS = -lclangTooling -lclangDriver -lclangFrontend -lclangParse -lclan
         -lclangAST -lclangLex -lclangSerialization -lclangBasic $(shell $(LLVMCONFIG) --ldflags --libs --system-libs)
 # Path to the clang system headers (no idea if there's a better way to get it).
 CLANGTOOLDEFS = -DCLANGSYSINCLUDE=$(shell $(LLVMCONFIG) --libdir)/clang/$(shell $(LLVMCONFIG) --version | sed 's/svn//')/include
+# -std=c++11 is in line with the default value for COMPILER_PLUGINS_CXX in configure.ac:
+CLANGTOOLDEFS += -DSTDOPTION=\"$(or $(filter -std=%,$(COMPILER_PLUGINS_CXX)),-std=c++11)\"
 ifneq ($(filter-out MACOSX WNT,$(OS)),)
 ifneq ($(CLANGDIR),/usr)
 # Help the generator find Clang shared libs, if Clang is built so and installed in a non-standard prefix.
