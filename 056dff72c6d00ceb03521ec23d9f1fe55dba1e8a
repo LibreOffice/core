@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_a1f3329e",
+        "filename": "chart2/source/view/main/VLegend.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-15T06:18:26Z",
+      "side": 1,
+      "message": "I like less verbose\n\n    const css::uno::Sequence aPivotFieldEntries \u003d xPivotTableDataProvider-\u003egetColumnFields();\n\nbut of course, it\u0027s just a personal preference :-)",
+      "range": {
+        "startLine": 796,
+        "startChar": 4,
+        "endLine": 796,
+        "endChar": 129
+      },
+      "revId": "056dff72c6d00ceb03521ec23d9f1fe55dba1e8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
