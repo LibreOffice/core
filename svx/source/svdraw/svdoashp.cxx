@@ -2711,7 +2711,64 @@ void SdrObjCustomShape::NbcSetOutlinerParaObject(std::unique_ptr<OutlinerParaObj
 
 SdrObjCustomShape* SdrObjCustomShape::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrObjCustomShape >(rTargetModel);
+    SdrObjCustomShape* pCloneObj = CloneHelper< SdrObjCustomShape >(rTargetModel);
+
+    if (!GetName().isEmpty())
+    {
+        SdrObject* pObj;
+        bool bObjFound;
+        const SdrPage* pPage;
+        sal_uInt16 nPage;
+        const sal_uInt16 nMaxPages = rTargetModel.GetPageCount();
+        OUString sName(GetName());
+        do {
+            bObjFound = false;
+            nPage = 0;
+            while (nPage < nMaxPages)
+            {
+                pPage = rTargetModel.GetPage(nPage);
+                SdrObjListIter aIter(pPage, SdrIterMode::DeepWithGroups);
+                while (aIter.IsMore())
+                {
+                    pObj = aIter.Next();
+                    if (sName == pObj->GetName())
+                    {
+                        bObjFound = true;
+                        break;
+                    }
+                }
+                if (bObjFound)
+                    break;
+                nPage++;
+            }
+            if (bObjFound)
+            {
+                // make unique name
+                sal_uInt32 n = 0;
+                sal_Int32 index = sName.lastIndexOf("_");
+                if (index > 0)
+                {
+                    OUString s1 = sName.copy(index + 1);
+                    bool bs1IsInt = false;
+                    for (sal_Int32 i = 0; i < s1.getLength(); i++)
+                    {
+                        bs1IsInt = (s1[i] == '0' | s1[i] == '1' | s1[i] == '2' | s1[i] == '3' | s1[i] == '4' |
+                                    s1[i] == '5' | s1[i] == '6' | s1[i] == '7' | s1[i] == '8' | s1[i] == '9');
+                        if (!bs1IsInt)
+                            break;
+                    }
+                    if (bs1IsInt)
+                    {
+                        n = s1.toUInt32() + 1;
+                        sName = sName.copy(0, index);
+                    }
+                }
+                sName = sName + "_" + OUString::number(n);
+            }
+        } while(bObjFound);
+        pCloneObj->SetName(sName);
+    }
+    return pCloneObj;
 }
 
 SdrObjCustomShape& SdrObjCustomShape::operator=(const SdrObjCustomShape& rObj)
