@@ -10548,6 +10548,31 @@ public:
         m_aMnemonicButtons.clear();
     }
 
+    OString get_current_page_help_id()
+    {
+        OString sPageHelpId;
+        // check to see if there is a notebook called tabcontrol and get the
+        // helpid for the current page of that
+        std::unique_ptr<weld::Notebook> xNotebook(weld_notebook("tabcontrol", false));
+        if (xNotebook)
+        {
+            if (GtkInstanceContainer* pPage = dynamic_cast<GtkInstanceContainer*>(xNotebook->get_page(xNotebook->get_current_page_ident())))
+            {
+                GtkWidget* pContainer = pPage->getWidget();
+                GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pContainer));
+                GList* pChild = g_list_first(pChildren);
+                if (pChild)
+                {
+                    GtkWidget* pPageWidget = static_cast<GtkWidget*>(pChild->data);
+                    sPageHelpId = ::get_help_id(pPageWidget);
+                }
+                g_list_free(pChildren);
+            }
+        }
+        return sPageHelpId;
+    }
+
+
     virtual ~GtkInstanceBuilder() override
     {
         g_slist_free(m_pObjectList);
@@ -10889,7 +10914,22 @@ void GtkInstanceWindow::help()
     bool bRunNormalHelpRequest = !m_aHelpRequestHdl.IsSet() || m_aHelpRequestHdl.Call(*pSource);
     Help* pHelp = bRunNormalHelpRequest ? Application::GetHelp() : nullptr;
     if (pHelp)
+    {
+        // tdf#126007, there's a nice fallback route for offline help where
+        // the current page of a notebook will get checked when the help
+        // button is pressed and there was no help for the dialog found.
+        //
+        // But for online help that route doesn't get taken, so bodge this here
+        // by using the page help id if available and if the help button itself
+        // was the original id
+        if (m_pBuilder && sHelpId.endsWith("/help"))
+        {
+            OString sPageId = m_pBuilder->get_current_page_help_id();
+            if (!sPageId.isEmpty())
+                sHelpId = sPageId;
+        }
         pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), pSource);
+    }
 }
 
 //iterate upwards through the hierarchy from this widgets through its parents
@@ -10903,25 +10943,9 @@ void GtkInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OS
         // called tabcontrol, and try the help for the current page of that first
         if (m_pBuilder && GTK_IS_DIALOG(pParent))
         {
-            std::unique_ptr<weld::Notebook> xNotebook(m_pBuilder->weld_notebook("tabcontrol", false));
-            if (xNotebook)
-            {
-                if (GtkInstanceContainer* pPage = dynamic_cast<GtkInstanceContainer*>(xNotebook->get_page(xNotebook->get_current_page_ident())))
-                {
-                    bool bFinished = false;
-                    GtkWidget* pContainer = pPage->getWidget();
-                    GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pContainer));
-                    GList* pChild = g_list_first(pChildren);
-                    if (pChild)
-                    {
-                        GtkWidget* pPageWidget = static_cast<GtkWidget*>(pChild->data);
-                        bFinished = func(::get_help_id(pPageWidget));
-                    }
-                    g_list_free(pChildren);
-                    if (bFinished)
-                        return;
-                }
-            }
+            OString sPageHelpId(m_pBuilder->get_current_page_help_id());
+            if (!sPageHelpId.isEmpty() && func(sPageHelpId))
+                return;
         }
         if (func(::get_help_id(pParent)))
             return;
