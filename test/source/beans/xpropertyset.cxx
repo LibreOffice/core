@@ -273,7 +273,7 @@ void XPropertySet::fillPropsToTest(const uno::Reference<beans::XPropertySetInfo>
     if (maPropsToTest.initialized)
         return;
 
-    uno::Sequence<beans::Property> aProps = xPropInfo->getProperties();
+    const uno::Sequence<beans::Property> aProps = xPropInfo->getProperties();
 
     // some properties should not be changed in a unspecific way.
     // TODO: Maybe we should mark these properties read-only, instead of

@@ -130,7 +130,7 @@ void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArgument
         Reference<container::XNameContainer > xDialogModel = awt::UnoControlDialogModelProvider::create( m_xContext, sURL );
         if ( xDialogModel.is() )
         {
-            Sequence< OUString> aNames = xDialogModel->getElementNames();
+            const Sequence< OUString> aNames = xDialogModel->getElementNames();
             for(const OUString& rName : aNames)
             {
                 try

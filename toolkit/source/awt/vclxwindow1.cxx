@@ -55,7 +55,7 @@ void VCLXWindow::SetSystemParent_Impl( const css::uno::Any& rHandle )
         css::uno::Sequence< css::beans::NamedValue > aProps;
         if( rHandle >>= aProps )
         {
-            for( const css::beans::NamedValue& rProp : aProps )
+            for( const css::beans::NamedValue& rProp : std::as_const(aProps) )
             {
                 if ( rProp.Name == "WINDOW" )
                     rProp.Value >>= nHandle;
