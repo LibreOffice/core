@@ -46,6 +46,30 @@
       "revId": "056dff72c6d00ceb03521ec23d9f1fe55dba1e8a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_4186d6dd",
+        "filename": "chart2/source/view/main/VLegend.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-15T07:25:13Z",
+      "side": 1,
+      "message": "Well - in *this* case, it is nice to have Sequence explicit, because it makes it obvious that this is the structure with copy-on-write semantics; and if the contained type is also explicitly referenced in the line below in the range-based for loop variable, the full type is obvious from the code ... but - again, my own preference. No objections to any style.",
+      "parentUuid": "bf659307_817ceeeb",
+      "range": {
+        "startLine": 796,
+        "startChar": 4,
+        "endLine": 796,
+        "endChar": 129
+      },
+      "revId": "056dff72c6d00ceb03521ec23d9f1fe55dba1e8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
