@@ -36,8 +36,8 @@ public:
     bool Create(const SalBitmap& rSalBmp) override;
     bool Create(const SalBitmap& rSalBmp, SalGraphics* pGraphics) override;
     bool Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount) override;
-    virtual bool Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& rBitmapCanvas,
-                        Size& rSize, bool bMask = false) override;
+    bool Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& rBitmapCanvas,
+                Size& rSize, bool bMask = false) override;
 
     void Destroy() final override;
 
@@ -54,10 +54,8 @@ public:
     bool Replace(const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol) override;
     bool ConvertToGreyscale() override;
 
-    void ImplScale(const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag);
-
 private:
-    SkBitmap mBitmap;
+    //    SkBitmap mBitmap;
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_SALBMP_H

@@ -22,113 +22,11 @@
 
 #include <vcl/dllapi.h>
 
+#include "salgdiimpl.hxx"
+#include "salgeom.hxx"
+
 class VCL_DLLPUBLIC SkiaSalGraphicsImpl : public SalGraphicsImpl
 {
-protected:
-    SalGraphics& mrParent;
-    /// Pointer to the SalFrame or SalVirtualDevice
-    SalGeometryProvider* mpProvider;
-
-    // clipping
-    vcl::Region maClipRegion;
-    bool mbUseScissor;
-    bool mbUseStencil;
-
-    bool mbXORMode;
-
-    bool mbAcquiringSkiaContext;
-
-    Color mnLineColor;
-    Color mnFillColor;
-#ifdef DBG_UTIL
-    bool mProgramIsSolidColor;
-#endif
-    sal_uInt32 mnDrawCount;
-    sal_uInt32 mnDrawCountAtFlush;
-    Color mProgramSolidColor;
-    double mProgramSolidTransparency;
-
-    std::unique_ptr<RenderList> mpRenderList;
-
-    void ImplInitClipRegion();
-    void ImplSetClipBit(const vcl::Region& rClip, GLuint nMask);
-    void ImplDrawLineAA(double nX1, double nY1, double nX2, double nY2, bool edge);
-    void CheckOffscreenTexture();
-
-    void ApplyProgramMatrices(float fPixelOffset = 0.0);
-
-public:
-    bool UseProgram(const OUString& rVertexShader, const OUString& rFragmentShader,
-                    const OString& preamble = "");
-    bool UseSolid(Color nColor, sal_uInt8 nTransparency);
-    bool UseSolid(Color nColor, double fTransparency);
-    bool UseSolid(Color nColor);
-    void UseSolid();
-    bool UseLine(Color nColor, double fTransparency, GLfloat fLineWidth, bool bUseAA);
-    void UseLine(GLfloat fLineWidth, bool bUseAA);
-    bool UseInvert50();
-    bool UseInvert(SalInvert nFlags);
-
-    void DrawConvexPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry, bool blockAA = false);
-    void DrawConvexPolygon(const tools::Polygon& rPolygon, bool blockAA);
-    void DrawTrapezoid(const basegfx::B2DTrapezoid& trapezoid, bool blockAA);
-    void DrawRect(long nX, long nY, long nWidth, long nHeight);
-    void DrawRect(const tools::Rectangle& rRect);
-    void DrawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry);
-    void DrawLineSegment(float x1, float y1, float x2, float y2);
-    void DrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, bool blockAA = false);
-    void DrawRegionBand(const RegionBand& rRegion);
-    void DrawTextureRect(const SalTwoRect& rPosAry);
-    //    void DrawTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
-    //    void DrawTransformedTexture( OpenGLTexture& rTexture, OpenGLTexture& rMask, const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX, const basegfx::B2DPoint& rY );
-    //    void DrawAlphaTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted, bool pPremultiplied );
-    //    void DrawTextureDiff( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& rPosAry, bool bInverted );
-    //    void DrawTextureWithMask( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& rPosAry );
-    //    void DrawBlendedTexture( OpenGLTexture& rTexture, OpenGLTexture& rMask, OpenGLTexture& rAlpha, const SalTwoRect& rPosAry );
-    //    void DrawMask( OpenGLTexture& rTexture, Color nMaskColor, const SalTwoRect& rPosAry );
-    void DrawLinearGradient(const Gradient& rGradient, const tools::Rectangle& rRect);
-    void DrawAxialGradient(const Gradient& rGradient, const tools::Rectangle& rRect);
-    void DrawRadialGradient(const Gradient& rGradient, const tools::Rectangle& rRect);
-    //    void DeferredTextDraw(OpenGLTexture const & rTexture, const Color nMaskColor, const SalTwoRect& rPosAry);
-
-    void FlushDeferredDrawing();
-    void FlushLinesOrTriangles(DrawShaderType eType, RenderParameters const& rParameters);
-
-public:
-    // get the width of the device
-    GLfloat GetWidth() const { return mpProvider ? mpProvider->GetWidth() : 1; }
-
-    // get the height of the device
-    GLfloat GetHeight() const { return mpProvider ? mpProvider->GetHeight() : 1; }
-
-    /**
-     * check whether this instance is used for offscreen (Virtual Device)
-     * rendering ie. does it need its own context.
-     */
-    bool IsOffscreen() const { return mpProvider == nullptr || mpProvider->IsOffScreen(); }
-
-    /// Oddly not all operations obey the XOR option.
-    enum XOROption
-    {
-        IGNORE_XOR,
-        IMPLEMENT_XOR
-    };
-
-    // initialize pre-draw state
-    void InitializePreDrawState(XOROption eOpt);
-
-    // operations to do before painting
-    void PreDraw(XOROption eOpt = IGNORE_XOR);
-
-    // operations to do after painting
-    void PostDraw();
-
-    void PostBatchDraw();
-
-protected:
-    bool AcquireContext(bool bForceCreate = false);
-    void ReleaseContext();
-
 public:
     SkiaSalGraphicsImpl(SalGraphics& pParent, SalGeometryProvider* pProvider);
     virtual ~SkiaSalGraphicsImpl() override;
@@ -213,10 +111,6 @@ public:
     virtual void copyArea(long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
                           long nSrcHeight, bool bWindowInvalidate) override;
 
-    // CopyBits and DrawBitmap --> RasterOp and ClipRegion
-    // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-    void DoCopyBits(const SalTwoRect& rPosAry, SkiaSalGraphicsImpl& rSrcImpl);
-
     virtual bool blendBitmap(const SalTwoRect&, const SalBitmap& rBitmap) override;
 
     virtual bool blendAlphaBitmap(const SalTwoRect&, const SalBitmap& rSrcBitmap,
@@ -284,13 +178,6 @@ public:
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon,
                               const Gradient& rGradient) override;
-
-    /// queue an idle flush of contents of the back-buffer to the screen
-    void flush();
-
-public:
-    /// do flush of contents of the back-buffer to the screen & swap.
-    void doFlush();
 };
 
 #endif

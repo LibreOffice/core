@@ -14,7 +14,7 @@
 
 #include <unx/salgdi.h>
 #include <unx/x11/x11gdiimpl.h>
-#include <skia/skiagdiimpl.hxx>
+#include <skiagdiimpl.hxx>
 
 class VCL_PLUGIN_PUBLIC X11SkiaSalGraphicsImpl : public SkiaSalGraphicsImpl, public X11GraphicsImpl
 {
@@ -24,10 +24,6 @@ private:
 public:
     X11SkiaSalGraphicsImpl(X11SalGraphics& rParent);
     virtual ~X11SkiaSalGraphicsImpl() override;
-
-protected:
-    void RenderPixmap(X11Pixmap const* pPixmap, X11Pixmap const* pMask, int nX, int nY,
-                      TextureCombo& rCombo);
 
 public:
     // implementation of X11GraphicsImpl

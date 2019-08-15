@@ -106,6 +106,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
     icuuc \
     lcms2 \
     mdds_headers \
+    skia \
 ))
 
 ifeq ($(DISABLE_GUI),)
@@ -569,6 +570,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/opengl/OpenGLContext \
     vcl/source/opengl/OpenGLHelper \
     vcl/source/skia/SkiaHelper \
+    vcl/skia/salbmp \
+    vcl/skia/gdiimpl \
  ))
 
 # runtime dependency
