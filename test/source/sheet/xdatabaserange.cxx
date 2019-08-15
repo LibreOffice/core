@@ -64,7 +64,7 @@ void XDatabaseRange::testGetSubtotalDescriptor()
 void XDatabaseRange::testGetSortDescriptor()
 {
     uno::Reference< sheet::XDatabaseRange > xDBRange(init("SortDescriptor"), UNO_QUERY_THROW);
-    uno::Sequence< beans::PropertyValue > xSortDescr = xDBRange->getSortDescriptor();
+    const uno::Sequence< beans::PropertyValue > xSortDescr = xDBRange->getSortDescriptor();
     for (const beans::PropertyValue& aProp : xSortDescr)
     {
         //std::cout << "Prop " << i << " Name: " << OUString(aProp.Name) << std::endl;

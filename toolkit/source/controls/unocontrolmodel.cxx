@@ -344,7 +344,7 @@ css::uno::Any UnoControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
                     sBankSymbol = aLocaleInfo.getCurrBankSymbol();
 
                 // look for the currency entry (for this language) which has the given bank symbol
-                Sequence< Currency2 > aAllCurrencies = aLocaleInfo.getAllCurrencies();
+                const Sequence< Currency2 > aAllCurrencies = aLocaleInfo.getAllCurrencies();
 
                 OUString sCurrencySymbol = aLocaleInfo.getCurrSymbol();
                 if ( sBankSymbol.isEmpty() )
@@ -670,7 +670,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
                 rValue >>= aSeq;
                 long nEntries = aSeq.getLength();
                 OutStream->writeLong( nEntries );
-                for ( const auto& rVal : aSeq )
+                for ( const auto& rVal : std::as_const(aSeq) )
                     OutStream->writeUTF( rVal );
             }
             else if ( rType == cppu::UnoType< cppu::UnoSequenceType<cppu::UnoUnsignedShortType> >::get() )
