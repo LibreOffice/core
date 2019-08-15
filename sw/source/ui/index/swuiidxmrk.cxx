@@ -1307,7 +1307,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, ChangeSourceHdl, weld::ToggleButton&, void)
                 uno::Sequence<beans::PropertyValue> aSeq;
                 if( aNames >>= aSeq)
                 {
-                    for(const beans::PropertyValue& rProp : aSeq)
+                    for(const beans::PropertyValue& rProp : std::as_const(aSeq))
                     {
                         sal_Int16 nField = 0;
                         rProp.Value >>= nField;
@@ -1320,7 +1320,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, ChangeSourceHdl, weld::ToggleButton&, void)
         }
         if(xBibAccess.is())
         {
-            uno::Sequence<OUString> aIdentifiers = xBibAccess->getElementNames();
+            const uno::Sequence<OUString> aIdentifiers = xBibAccess->getElementNames();
             for(const OUString& rName : aIdentifiers)
                 m_xEntryLB->append_text(rName);
         }

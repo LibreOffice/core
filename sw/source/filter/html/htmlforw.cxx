@@ -124,7 +124,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
     if( nPos == nCount )
         return;
 
-    uno::Sequence< script::ScriptEventDescriptor > aDescs =
+    const uno::Sequence< script::ScriptEventDescriptor > aDescs =
             xEventManager->getScriptEvents( nPos );
     if( !aDescs.hasElements() )
         return;

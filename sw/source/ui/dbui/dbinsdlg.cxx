@@ -247,7 +247,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
             }
         }
         Reference <XNameAccess> xCols = xColSupp->getColumns();
-        Sequence<OUString> aColNames = xCols->getElementNames();
+        const Sequence<OUString> aColNames = xCols->getElementNames();
         for (const OUString& rColName : aColNames)
         {
             std::unique_ptr<SwInsDBColumn> pNew(new SwInsDBColumn( rColName ));
@@ -1482,7 +1482,7 @@ void SwInsertDBColAutoPilot::ImplCommit()
 {
     Sequence <OUString> aNames = GetNodeNames(OUString());
     //remove entries that contain this data source + table at first
-    for(OUString const & nodeName : aNames)
+    for(OUString const & nodeName : std::as_const(aNames))
     {
         Sequence<OUString> aSourceNames(2);
         OUString* pSourceNames = aSourceNames.getArray();
@@ -1552,7 +1552,7 @@ void SwInsertDBColAutoPilot::ImplCommit()
             sColumnInsertNode += "0";
         sColumnInsertNode += OUString::number(  nCol );
 
-        Sequence <OUString> aSubNodeNames = lcl_CreateSubNames(sColumnInsertNode);
+        const Sequence <OUString> aSubNodeNames = lcl_CreateSubNames(sColumnInsertNode);
         Sequence<PropertyValue> aSubValues(aSubNodeNames.getLength());
         PropertyValue* pSubValues = aSubValues.getArray();
         sal_Int32 i = 0;
@@ -1592,7 +1592,7 @@ void SwInsertDBColAutoPilot::ImplCommit()
 
 void SwInsertDBColAutoPilot::Load()
 {
-    Sequence<OUString> aNames = GetNodeNames(OUString());
+    const Sequence<OUString> aNames = GetNodeNames(OUString());
     SvNumberFormatter& rNFormatr = *pView->GetWrtShell().GetNumberFormatter();
     for(OUString const & nodeName : aNames)
     {
@@ -1624,7 +1624,7 @@ void SwInsertDBColAutoPilot::Load()
                  pNewData->bIsEmptyHeadln = *o3tl::doAccess<bool>(pDataSourceProps[10]);
 
             const OUString sSubNodeName(nodeName + "/ColumnSet/");
-            Sequence <OUString> aSubNames = GetNodeNames(sSubNodeName);
+            const Sequence <OUString> aSubNames = GetNodeNames(sSubNodeName);
             for(const OUString& rSubName : aSubNames)
             {
                 Sequence <OUString> aSubNodeNames =

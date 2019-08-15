@@ -257,7 +257,7 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, weld::TreeView&, void)
         if(bDropDown)
         {
             const SwDropDownField* pDrop = static_cast<const SwDropDownField*>(GetCurField());
-            uno::Sequence<OUString> aItems = pDrop->GetItemSequence();
+            const uno::Sequence<OUString> aItems = pDrop->GetItemSequence();
             m_xListItemsLB->clear();
             for (const OUString& rItem : aItems)
                 m_xListItemsLB->append_text(rItem);

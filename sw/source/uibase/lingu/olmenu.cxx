@@ -174,7 +174,7 @@ void SwSpellPopup::fillLangPopupMenu(
     const sal_Int16 nMaxCount = 7;
     if (xDocumentLanguages.is())
     {
-        uno::Sequence< lang::Locale > rLocales( xDocumentLanguages->getDocumentLanguages( static_cast<sal_Int16>(nScriptType), nMaxCount ) );
+        const uno::Sequence< lang::Locale > rLocales( xDocumentLanguages->getDocumentLanguages( static_cast<sal_Int16>(nScriptType), nMaxCount ) );
         for (const lang::Locale& rLocale : rLocales)
         {
             if (aLangItems.size() == size_t(nMaxCount))
@@ -334,7 +334,7 @@ SwSpellPopup::SwSpellPopup(
 
         m_aDics = xDicList->getDictionaries();
 
-        for( const uno::Reference< linguistic2::XDictionary >& rDic : m_aDics )
+        for( const uno::Reference< linguistic2::XDictionary >& rDic : std::as_const(m_aDics) )
         {
             uno::Reference< linguistic2::XDictionary >  xDicTmp = rDic;
             if (!xDicTmp.is() || LinguMgr::GetIgnoreAllList() == xDicTmp)
@@ -452,7 +452,7 @@ SwSpellPopup::SwSpellPopup(
         m_xPopupMenu->SetItemImage(MN_SHORT_COMMENT, Image(StockImage::Yes, BMP_INFO_16));
 
     // Add an item to show detailed infos if the FullCommentURL property is defined
-    beans::PropertyValues  aProperties = rResult.aErrors[ nErrorInResult ].aProperties;
+    const beans::PropertyValues  aProperties = rResult.aErrors[ nErrorInResult ].aProperties;
     for ( const auto& rProp : aProperties )
     {
         if ( rProp.Name == "FullCommentURL" )
@@ -489,7 +489,7 @@ SwSpellPopup::SwSpellPopup(
         }
 
         sal_uInt16 nItemId = MN_SUGGESTION_START;
-        for (const OUString& aEntry : m_aSuggestions)
+        for (const OUString& aEntry : std::as_const(m_aSuggestions))
         {
             m_xPopupMenu->InsertItem(nItemId, aEntry, MenuItemBits::NONE, OString(), nPos++);
             m_xPopupMenu->SetHelpId(nItemId, HID_LINGU_REPLACE);

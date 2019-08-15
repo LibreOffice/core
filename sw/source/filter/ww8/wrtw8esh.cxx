@@ -438,7 +438,7 @@ void WW8Export::DoComboBox(const OUString &rName,
                              const OUString &rHelp,
                              const OUString &rToolTip,
                              const OUString &rSelected,
-                             uno::Sequence<OUString> &rListItems)
+                             const uno::Sequence<OUString> &rListItems)
 {
     OutputField(nullptr, ww::eFORMDROPDOWN, FieldString(ww::eFORMDROPDOWN),
              FieldFlags::Start | FieldFlags::CmdStart);
