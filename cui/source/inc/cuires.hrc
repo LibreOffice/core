@@ -363,6 +363,8 @@
 
 #define RID_SVXSTR_CHG_VISIO                                (RID_SVX_START + 1257)
 
+#define RID_SVXSTR_CHG_PDF                                  (RID_SVX_START + 1273)
+
 #define RID_SVXSTR_PPI                                      (RID_SVX_START + 1252)
 #define RID_SVXSTR_SPELL                                    (RID_SVX_START + 1253)
 #define RID_SVXSTR_HYPH                                     (RID_SVX_START + 1254)

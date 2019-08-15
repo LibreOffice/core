@@ -51,5 +51,9 @@ String RID_SVXSTR_CHG_VISIO
 {
     Text [ en-US ] = "Visio to %PRODUCTNAME Draw or reverse";
 };
+String RID_SVXSTR_CHG_PDF
+{
+    Text [ en-US ] = "PDF to %PRODUCTNAME Draw or reverse";
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

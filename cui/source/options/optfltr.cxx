@@ -20,6 +20,7 @@
 #include <o3tl/make_unique.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/fltrcfg.hxx>
+#include <officecfg/Office/Common.hxx>
 #include "optfltr.hxx"
 #include <cuires.hrc>
 #include "helpid.hrc"
@@ -35,6 +36,7 @@ enum MSFltrPg2_CheckBoxEntries {
     Impress,
     SmartArt,
     Visio,
+    PDF,
     InvalidCBEntry
 };
 
@@ -152,6 +154,7 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet
     sChgToFromImpress(CuiResId(RID_SVXSTR_CHG_IMPRESS)),
     sChgToFromSmartArt(CuiResId(RID_SVXSTR_CHG_SMARTART)),
     sChgToFromVisio(CuiResId(RID_SVXSTR_CHG_VISIO)),
+    sChgToFromPDF(CuiResId(RID_SVXSTR_CHG_PDF)),
     pCheckButtonData(nullptr)
 {
     get(m_pCheckLBContainer, "checklbcontainer");
@@ -255,6 +258,24 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
             }
         }
     }
+    SvTreeListEntry* pPDFEntry = GetEntry4Type(MSFltrPg2_CheckBoxEntries::PDF);
+    bool bPDFCheck = false;
+    if (pPDFEntry)
+    {
+        SvLBoxButton& rItem = static_cast<SvLBoxButton&>(pPDFEntry->GetItem( 1 ));
+        if (rItem.GetType() == SvLBoxItemType::Button)
+        {
+            SvItemStateFlags nButtonFlags = rItem.GetButtonFlags();
+            bPDFCheck = SvButtonState::Checked == SvLBoxButtonData::ConvertToButtonState( nButtonFlags );
+        }
+    }
+    if (bPDFCheck != officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::get())
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::set(bPDFCheck, pBatch);
+        pBatch->commit();
+    }
 
     if( aHighlightingRB->IsValueChangedFromSaved() )
     {
@@ -287,7 +308,10 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
         InsertEntry( sChgToFromImpress, static_cast< sal_IntPtr >( Impress ) );
     InsertEntry( sChgToFromSmartArt, static_cast< sal_IntPtr >( SmartArt ), false );
     if (aModuleOpt.IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
+    {
         InsertEntry(sChgToFromVisio, static_cast< sal_IntPtr >( Visio ), false);
+        InsertEntry(sChgToFromPDF, static_cast< sal_IntPtr >(PDF), false);
+    }
 
     static struct ChkCBoxEntries{
         MSFltrPg2_CheckBoxEntries eType;
@@ -303,6 +327,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
         { Impress,  &SvtFilterOptions::IsImpress2PowerPoint },
         { SmartArt, &SvtFilterOptions::IsSmartArt2Shape },
         { Visio,    &SvtFilterOptions::IsVisio2Draw },
+        { PDF,      nullptr },
         { InvalidCBEntry, nullptr }
     };
 
@@ -314,10 +339,23 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
         SvTreeListEntry* pEntry = GetEntry4Type( static_cast< sal_IntPtr >( pArr->eType ) );
         if( pEntry )
         {
+            if (pArr->eType == MSFltrPg2_CheckBoxEntries::PDF)
+            {
+                nCol = 1;
+            }
             SvLBoxButton& rItem = static_cast<SvLBoxButton&>(pEntry->GetItem( nCol ));
             if (rItem.GetType() == SvLBoxItemType::Button)
             {
-                if( (rOpt.*pArr->FnIs)() )
+                bool bCheck = false;
+                if (pArr->eType != MSFltrPg2_CheckBoxEntries::PDF)
+                {
+                    bCheck = (rOpt.*pArr->FnIs)();
+                }
+                else
+                {
+                    bCheck = officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::get();
+                }
+                if( bCheck )
                     rItem.SetStateChecked();
                 else
                     rItem.SetStateUnchecked();
