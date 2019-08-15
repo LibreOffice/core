@@ -841,7 +841,7 @@ void SlideImpl::applyShapeAttributes(
     const css::uno::Reference< css::animations::XAnimationNode >& xRootAnimationNode,
     bool bInitial) const
 {
-    uno::Sequence< animations::TargetProperties > aProps(
+    const uno::Sequence< animations::TargetProperties > aProps(
         TargetPropertiesCreator::createTargetProperties( xRootAnimationNode, bInitial ) );
 
     // apply extracted values to our shapes

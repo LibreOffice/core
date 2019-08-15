@@ -237,7 +237,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
     // Append carbon copy recipients set in the message
     Sequence< OUString > aStringList = xSimpleMailMessage->getCcRecipient();
-    for ( const auto& rString : aStringList )
+    for ( const auto& rString : std::as_const(aStringList) )
     {
         aBuffer.append(" --cc ");
         appendShellWord(aBuffer, rString, false);
@@ -245,7 +245,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
     // Append blind carbon copy recipients set in the message
     aStringList = xSimpleMailMessage->getBccRecipient();
-    for ( const auto& rString : aStringList )
+    for ( const auto& rString : std::as_const(aStringList) )
     {
         aBuffer.append(" --bcc ");
         appendShellWord(aBuffer, rString, false);
@@ -260,7 +260,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
     // Append attachments set in the message
     aStringList = xSimpleMailMessage->getAttachement();
-    for ( const auto& rString : aStringList )
+    for ( const auto& rString : std::as_const(aStringList) )
     {
         OUString aSystemPath;
         if ( FileBase::E_None == FileBase::getSystemPathFromFileURL(rString, aSystemPath) )
