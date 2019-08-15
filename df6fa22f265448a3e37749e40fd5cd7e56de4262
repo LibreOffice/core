@@ -117,6 +117,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_acc5693e",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1121,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-08-15T14:07:51Z",
+      "side": 1,
+      "message": "sText \u003d OUString(sText + \"\\n\" + aSubText).trim();",
+      "parentUuid": "bf659307_4c25adaa",
+      "range": {
+        "startLine": 1116,
+        "startChar": 3,
+        "endLine": 1121,
+        "endChar": 35
+      },
+      "revId": "df6fa22f265448a3e37749e40fd5cd7e56de4262",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_ec97e18f",
         "filename": "oox/source/export/chartexport.cxx",
         "patchSetId": 1
