@@ -103,7 +103,7 @@ void ODocumentInfoPreview::fill(
         xDocProps->getUserDefinedProperties(), css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::beans::XPropertySetInfo > info(
         user->getPropertySetInfo());
-    css::uno::Sequence< css::beans::Property > props(info->getProperties());
+    const css::uno::Sequence< css::beans::Property > props(info->getProperties());
     for (const auto& rProp : props) {
         OUString name(rProp.Name);
         css::uno::Any aAny(user->getPropertyValue(name));

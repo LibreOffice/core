@@ -133,7 +133,7 @@ namespace svx
         }
 
         // build a PropertyValue sequence with the current values
-        Sequence< Property > aProperties = xPropInfo->getProperties();
+        const Sequence< Property > aProperties = xPropInfo->getProperties();
 
         Sequence< PropertyValue > aValues(aProperties.getLength());
         PropertyValue* pValues = aValues.getArray();

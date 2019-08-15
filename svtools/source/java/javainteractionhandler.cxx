@@ -93,7 +93,7 @@ void SAL_CALL JavaInteractionHandler::release(  ) throw ()
 void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionRequest >& Request )
 {
     Any anyExc = Request->getRequest();
-    Sequence< Reference< XInteractionContinuation > > aSeqCont = Request->getContinuations();
+    const Sequence< Reference< XInteractionContinuation > > aSeqCont = Request->getContinuations();
 
     Reference< XInteractionAbort > abort;
     Reference< XInteractionRetry > retry;

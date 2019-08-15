@@ -121,7 +121,7 @@ bool SvxZoomSliderItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
                     sal_Int16 nConvertedCount( 0 );
                     sal_Int32 nMinZoom( 0 ), nMaxZoom( 0 );
 
-                    for ( const auto& rProp : aSeq )
+                    for ( const auto& rProp : std::as_const(aSeq) )
                     {
                         if ( rProp.Name == ZOOMSLIDER_PARAM_CURRENTZOOM )
                         {
