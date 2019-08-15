@@ -900,7 +900,7 @@ void SfxTemplateManagerDlg::OnTemplateImportCategory(const OUString& sCategory)
     if ( nCode != ERRCODE_NONE )
         return;
 
-    css::uno::Sequence<OUString> aFiles = aFileDlg.GetSelectedFiles();
+    const css::uno::Sequence<OUString> aFiles = aFileDlg.GetSelectedFiles();
 
     if (!aFiles.hasElements())
         return;

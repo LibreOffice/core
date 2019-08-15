@@ -1028,7 +1028,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     // Check for cmis properties where otherwise unavailable
     if ( rInfoItem.isCmisDocument( ) )
     {
-        uno::Sequence< document::CmisProperty > aCmisProps = rInfoItem.GetCmisProperties();
+        const uno::Sequence< document::CmisProperty > aCmisProps = rInfoItem.GetCmisProperties();
         for ( const auto& rCmisProp : aCmisProps )
         {
             if ( rCmisProp.Id == "cmis:contentStreamLength" &&
@@ -1879,7 +1879,7 @@ IMPL_LINK_NOARG(SfxCustomPropertiesPage, AddHdl, weld::Button&, void)
     // indeed the info are deleted by ClearCustomProperties
     // each time SfxDocumentInfoItem destructor is called
     SfxDocumentInfoItem pInfo;
-    Sequence< beans::PropertyValue > aPropertySeq = m_xPropertiesCtrl->GetCustomProperties();
+    const Sequence< beans::PropertyValue > aPropertySeq = m_xPropertiesCtrl->GetCustomProperties();
     for ( const auto& rProperty : aPropertySeq )
     {
         if ( !rProperty.Name.isEmpty() )
@@ -1920,7 +1920,7 @@ bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet* rSet )
         }
 
         pInfo->ClearCustomProperties();
-        Sequence< beans::PropertyValue > aPropertySeq = m_xPropertiesCtrl->GetCustomProperties();
+        const Sequence< beans::PropertyValue > aPropertySeq = m_xPropertiesCtrl->GetCustomProperties();
         for ( const auto& rProperty : aPropertySeq )
         {
             if ( !rProperty.Name.isEmpty() )
@@ -2049,7 +2049,7 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         Sequence< sal_Int64 > seqValue;
         rAny >>= seqValue;
         sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
-        for ( const auto& rValue : seqValue )
+        for ( const auto& rValue : std::as_const(seqValue) )
         {
             OUString sValue;
             m_aNumberFormatter.GetInputLineString( rValue, nIndex, sValue );
@@ -2063,7 +2063,7 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         Sequence< double > seqValue;
         rAny >>= seqValue;
         sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
-        for ( const auto& rValue : seqValue )
+        for ( const auto& rValue : std::as_const(seqValue) )
         {
             OUString sValue;
             m_aNumberFormatter.GetInputLineString( rValue, nIndex, sValue );
@@ -2077,7 +2077,7 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     {
         Sequence<sal_Bool> seqValue;
         rAny >>= seqValue;
-        for ( const auto& rValue : seqValue )
+        for ( const auto& rValue : std::as_const(seqValue) )
         {
             std::unique_ptr<CmisYesNo> pYesNo(new CmisYesNo(m_xBox.get(), rValue));
             pYesNo->m_xYesButton->set_sensitive( bUpdatable );
@@ -2089,7 +2089,7 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     {
         Sequence< OUString > seqValue;
         rAny >>= seqValue;
-        for ( const auto& rValue : seqValue )
+        for ( const auto& rValue : std::as_const(seqValue) )
         {
             std::unique_ptr<CmisValue> pValue(new CmisValue(m_xBox.get(), rValue));
             pValue->m_xValueEdit->set_editable(bUpdatable);
@@ -2100,7 +2100,7 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     {
         Sequence< util::DateTime > seqValue;
         rAny >>= seqValue;
-        for ( const auto& rValue : seqValue )
+        for ( const auto& rValue : std::as_const(seqValue) )
         {
             std::unique_ptr<CmisDateTime> pDateTime(new CmisDateTime(m_xBox.get(), rValue));
             pDateTime->m_xDateField->set_sensitive(bUpdatable);

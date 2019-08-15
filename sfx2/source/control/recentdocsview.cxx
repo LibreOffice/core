@@ -235,7 +235,7 @@ void RecentDocsView::Reload()
     Sequence< Sequence< PropertyValue > > aHistoryList = SvtHistoryOptions().GetList( ePICKLIST );
     for ( int i = 0; i < aHistoryList.getLength(); i++ )
     {
-        Sequence< PropertyValue >& rRecentEntry = aHistoryList[i];
+        const Sequence< PropertyValue >& rRecentEntry = aHistoryList[i];
 
         OUString aURL;
         OUString aTitle;

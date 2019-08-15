@@ -1766,7 +1766,7 @@ bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         uno::Sequence< beans::PropertyValue > aFilterData;
         xFilterFactory->getByName( aFilterName ) >>= aFilterData;
         OUString aTypeName;
-        for ( const auto& rProp : aFilterData )
+        for ( const auto& rProp : std::as_const(aFilterData) )
             if ( rProp.Name == "Type" )
                 rProp.Value >>= aTypeName;
 

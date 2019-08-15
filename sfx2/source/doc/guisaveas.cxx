@@ -606,7 +606,7 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
                                 sal_uInt32(ERRCODE_IO_ABORT));
                         }
 
-                        uno::Sequence< beans::PropertyValue > aPropsFromDialog =
+                        const uno::Sequence< beans::PropertyValue > aPropsFromDialog =
                                                                     xFilterProperties->getPropertyValues();
                         for ( const auto& rProp : aPropsFromDialog )
                             GetMediaDescr()[rProp.Name] = rProp.Value;
@@ -1734,7 +1734,7 @@ void SfxStoringHelper::SetDocInfoState(
                 xDocPropsToFill->getUserDefinedProperties(), uno::UNO_QUERY);
         uno::Reference< beans::XPropertyContainer > xContainer( xSet, uno::UNO_QUERY );
         uno::Reference< beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
-        uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
+        const uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
         for (const beans::Property& rProp : lProps)
         {
             uno::Any aValue = xPropSet->getPropertyValue( rProp.Name );

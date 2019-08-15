@@ -55,7 +55,7 @@ static void NotebookbarAddonValues(
 
     for (int nIdx = 0; nIdx < aAddonsItems.GetAddonsNotebookBarCount(); nIdx++)
     {
-        css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> aExtension
+        const css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> aExtension
             = aAddonsItems.GetAddonsNotebookBarPart(nIdx);
         for (const css::uno::Sequence<css::beans::PropertyValue>& rExtensionVal : aExtension)
         {

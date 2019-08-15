@@ -60,7 +60,7 @@ bool SfxWatermarkItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberI
 
     if ( rVal >>= aSequence )
     {
-        for(const auto& aEntry : aSequence)
+        for(const auto& aEntry : std::as_const(aSequence))
         {
             if(aEntry.Name == "Text")
                 aEntry.Value >>= m_aText;

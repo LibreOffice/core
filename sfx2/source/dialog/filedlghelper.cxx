@@ -410,7 +410,7 @@ bool FileDialogHelper_Impl::CheckFilterOptionsCapability( const std::shared_ptr<
             if ( aAny >>= aProps )
             {
                 OUString aServiceName;
-                for( const auto& rProp : aProps )
+                for( const auto& rProp : std::as_const(aProps) )
                 {
                     if( rProp.Name == "UIComponent" )
                     {

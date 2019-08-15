@@ -482,7 +482,7 @@ bool SfxClassificationHelper::IsClassified(const uno::Reference<document::XDocum
         return false;
 
     uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
-    uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
+    const uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
     for (const beans::Property& rProperty : aProperties)
     {
         if (rProperty.Name.startsWith("urn:bails:"))
@@ -569,7 +569,7 @@ SfxClassificationHelper::SfxClassificationHelper(const uno::Reference<document::
         return;
 
     uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
-    uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
+    const uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
     for (const beans::Property& rProperty : aProperties)
     {
         if (!rProperty.Name.startsWith("urn:bails:"))

@@ -1368,7 +1368,7 @@ void SfxBaseController::ShowInfoBars( )
     if ( !xCmisDoc.is( ) || !xCmisDoc->canCheckOut( ) )
         return;
 
-    uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties( );
+    const uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties( );
 
     if ( !(xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( )) )
         return;

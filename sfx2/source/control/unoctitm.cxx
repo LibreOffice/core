@@ -958,7 +958,8 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         InterceptLOKStateChangeEvent(pDispatcher->GetFrame(), aEvent, pState);
     }
 
-    for (const OUString& rName: pDispatch->GetListeners().getContainedTypes())
+    const css::uno::Sequence<OUString> aContainedTypes = pDispatch->GetListeners().getContainedTypes();
+    for (const OUString& rName: aContainedTypes)
     {
         if (rName == aDispatchURL.Main || rName == aDispatchURL.Complete)
             sendStatusChanged(rName, aEvent);

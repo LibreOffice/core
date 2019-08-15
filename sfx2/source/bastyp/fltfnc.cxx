@@ -434,7 +434,7 @@ ErrCode  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std:
             uno::Sequence< beans::PropertyValue > lDescriptor = aDescriptor.getAsConstPropertyValueList();
             sTypeName = xDetection->queryTypeByDescriptor(lDescriptor, true); // lDescriptor is used as In/Out param ... don't use aDescriptor.getAsConstPropertyValueList() directly!
 
-            for (const auto& rProp : lDescriptor)
+            for (const auto& rProp : std::as_const(lDescriptor))
             {
                 if (rProp.Name == "FilterName")
                     // Type detection picked a preferred filter for this format.
@@ -926,7 +926,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
     bool bEnabled = true         ;
 
     // first get directly available properties
-    for( const auto& rFilterProperty : lFilterProperties )
+    for( const auto& rFilterProperty : std::as_const(lFilterProperties) )
     {
         if ( rFilterProperty.Name == "FileFormatVersion" )
         {
@@ -982,7 +982,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
             if( aResult >>= lTypeProperties )
             {
                 // get indirect available properties then (types)
-                for( const auto& rTypeProperty : lTypeProperties )
+                for( const auto& rTypeProperty : std::as_const(lTypeProperties) )
                 {
                     if ( rTypeProperty.Name == "ClipboardFormat" )
                     {
@@ -1104,7 +1104,7 @@ void SfxFilterContainer::ReadFilters_Impl( bool bUpdate )
         if( xFilterCFG.is() && xTypeCFG.is() )
         {
             // select right query to get right set of filters for search module
-            uno::Sequence< OUString > lFilterNames = xFilterCFG->getElementNames();
+            const uno::Sequence< OUString > lFilterNames = xFilterCFG->getElementNames();
             if ( lFilterNames.hasElements() )
             {
                 // If list of filters already exist ...
