@@ -95,7 +95,7 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
     if (maIdCache.empty())
     {
         // Cache is empty? Then let's build it!
-        uno::Sequence< uno::Sequence<beans::StringPair> >aSeqs = xRelationshipAccess->getAllRelationships();
+        const uno::Sequence< uno::Sequence<beans::StringPair> >aSeqs = xRelationshipAccess->getAllRelationships();
         for (const uno::Sequence<beans::StringPair>& rSeq : aSeqs)
         {
             OUString aId;
@@ -257,7 +257,7 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
 
     if (xRelationshipAccess.is())
     {
-        uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs =
+        const uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs =
             xRelationshipAccess->getAllRelationships();
 
         for (const uno::Sequence< beans::StringPair > &rSeq : aSeqs)
