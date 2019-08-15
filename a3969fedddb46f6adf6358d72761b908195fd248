@@ -63,6 +63,30 @@
       "revId": "a3969fedddb46f6adf6358d72761b908195fd248",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ec404138",
+        "filename": "stoc/source/defaultregistry/defaultregistry.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-15T10:33:22Z",
+      "side": 1,
+      "message": "Well - the length of the sequence was originally determined by comparing the strings, so obviously they are the same :-) - if they are not, then the old code mush have segfaulted sometimes...\n\nOf course, using the comphelper::findvalue makes perfect sense!",
+      "parentUuid": "bf659307_2c22b9a5",
+      "range": {
+        "startLine": 772,
+        "startChar": 8,
+        "endLine": 773,
+        "endChar": 105
+      },
+      "revId": "a3969fedddb46f6adf6358d72761b908195fd248",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
