@@ -1805,7 +1805,7 @@ bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
 
                 bool bInserted = false;
 
-                for (const OUString& aMemberStr : aMemberNames)
+                for (const OUString& aMemberStr : std::as_const(aMemberNames))
                 {
                     if ( !bInserted && aMemberStr == aDestData.MemberName )
                     {
