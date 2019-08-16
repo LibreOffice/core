@@ -141,7 +141,8 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     css::uno::Reference< css::sdbc::XConnection> connectRowset(
         const css::uno::Reference< css::sdbc::XRowSet>& _rxRowSet,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxContext
+        const css::uno::Reference< css::uno::XComponentContext>& _rxContext,
+        const css::uno::Reference< css::awt::XWindow>& _rxParent
     );
 
     /** ensures that a row set has a valid ActiveConnection, if possible
@@ -164,7 +165,8 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS SharedConnection    ensureRowSetConnection(
         const css::uno::Reference< css::sdbc::XRowSet>& _rxRowSet,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxContext
+        const css::uno::Reference< css::uno::XComponentContext>& _rxContext,
+        const css::uno::Reference< css::awt::XWindow>& _rxParent
     );
 
     /** returns the connection the RowSet is currently working with (which is the ActiveConnection property)
@@ -176,7 +178,8 @@ namespace dbtools
             const OUString& _rDataSourceName,
             const OUString& _rUser,
             const OUString& _rPwd,
-            const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+            const css::uno::Reference< css::uno::XComponentContext>& _rxContext,
+            const css::uno::Reference< css::awt::XWindow>& _rxParent);
 
 
     /** determines whether the given component is part of a document which is an embedded database
@@ -400,7 +403,8 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::sdb::XSingleSelectQueryComposer > getCurrentSettingsComposer(
         const css::uno::Reference< css::beans::XPropertySet>& _rxRowSetProps,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxContext
+        const css::uno::Reference< css::uno::XComponentContext>& _rxContext,
+        const css::uno::Reference< css::awt::XWindow>& _rxParent
     );
 
     /** transfer and translate properties between two FormComponents

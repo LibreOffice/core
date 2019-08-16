@@ -267,7 +267,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
             {
                 OUString sSignificantSource( sDatasource.isEmpty() ? sDatabaseLocation : sDatasource );
                 xConnection = getConnection_withFeedback(sSignificantSource, OUString(), OUString(),
-                                  static_cast<FmGridControl*>(GetParent())->getContext() );
+                                  static_cast<FmGridControl*>(GetParent())->getContext(), nullptr );
             }
             catch(NoSuchElementException&)
             {   // allowed, means sDatasource isn't a valid data source name ....

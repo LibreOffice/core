@@ -215,6 +215,8 @@ public:
     OSharedConnectionManager*                           m_pSharedConnectionManager;
     css::uno::Reference< css::lang::XEventListener >
                                                         m_xSharedConnectionManager;
+    css::uno::Reference<css::awt::XWindow>
+                                                        m_xDialogParent;
     sal_uInt16                                          m_nControllerLockCount;
 
     void reset();
@@ -448,6 +450,8 @@ public:
     void    lockModify()              { m_bModificationLock = true; }
     void    unlockModify()            { m_bModificationLock = false; }
     bool    isModifyLocked() const    { return m_bModificationLock; }
+
+    weld::Window* GetFrameWeld();
 
 private:
     void    impl_construct_nothrow();
