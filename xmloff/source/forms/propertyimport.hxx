@@ -123,7 +123,7 @@ namespace xmloff
 
         /** determine if the element imported by the object had a given attribute.
             <p>Please be aware of the fact that the name given must be a local name, i.e. not contain a namespace.
-            All form relevant attributes are in the same namespace, so this would be an redundant information.</p>
+            All form relevant attributes are in the same namespace, so this would be a redundant information.</p>
         */
         bool    encounteredAttribute(const OUString& _rAttributeName) const;
 

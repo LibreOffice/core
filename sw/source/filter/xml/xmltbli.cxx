@@ -2375,7 +2375,7 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
             // All column that have absolute widths get relative widths;
             // these widths relate to each over like the original absolute
             // widths. The smallest column gets a width that has the same
-            // value as the smallest column that has an relative width
+            // value as the smallest column that has a relative width
             // already.
             if( 0 == nMinRelColWidth )
                 nMinRelColWidth = nMinAbsColWidth;

@@ -33,7 +33,7 @@ package org.openoffice.xmerge;
  * utilizes to know how the &quot;Office&quot; {@code Document} tags are
  * supported in the &quot;Device&quot; format.</p>
  *
- * <p>The {@code DocumentMerger} object is created by a the
+ * <p>The {@code DocumentMerger} object is created by the
  * {@code DocumentMergerFactory} {@link
  * org.openoffice.xmerge.DocumentMergerFactory#createDocumentMerger
  * createDocumenMerger} method.  When it is constructed, the &quot;Original

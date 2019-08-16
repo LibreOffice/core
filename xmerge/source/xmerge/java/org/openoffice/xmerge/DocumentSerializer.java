@@ -25,10 +25,10 @@ import java.io.IOException;
  * &quot;Office&quot; {@code Document} to a &quot;Device&quot; {@code Document}
  * format.
  *
- * <p>The {@code DocumentSerializer} object is created by a the
+ * <p>The {@code DocumentSerializer} object is created by the
  * {@code PluginFactory} {@link
  * org.openoffice.xmerge.DocumentSerializerFactory#createDocumentSerializer
- * createDocumentSerializer} method.  When it is constructed, a
+ * createDocumentSerializer} method.  When it is constructed, an
  * &quot;Office&quot; {@code Document} object is passed in to be used as input.
  * </p>
  *
