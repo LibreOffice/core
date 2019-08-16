@@ -1797,12 +1797,12 @@ void SwUnoCursorHelper::SetPropertyValues(
         if (!pEntry)
         {
             aUnknownExMsg += "Unknown property: '" + rPropertyName + "' ";
-            break;
+            continue;
         }
         else if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
         {
             aPropertyVetoExMsg += "Property is read-only: '" + rPropertyName + "' ";
-            break;
+            continue;
         } else {
 // FIXME: we should have some nice way of merging ranges surely ?
             aWhichPairs.push_back(pEntry->nWID);
