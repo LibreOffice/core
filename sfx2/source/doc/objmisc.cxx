@@ -361,7 +361,7 @@ void SfxObjectShell::SetReadOnlyUI( bool bReadOnly )
 
 /*  [Description]
 
-    Turns the document in an r/o and r/w state respectively without reloading
+    Turns the document in a r/o and r/w state respectively without reloading
     it and without changing the open mode of the medium.
 */
 
