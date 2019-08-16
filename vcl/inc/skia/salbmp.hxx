@@ -55,7 +55,7 @@ public:
     bool ConvertToGreyscale() override;
 
 private:
-    //    SkBitmap mBitmap;
+    SkBitmap mBitmap;
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_SALBMP_H

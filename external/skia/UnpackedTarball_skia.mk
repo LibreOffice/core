@@ -11,12 +11,16 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,skia))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,skia,$(SKIA_TARBALL)))
 
-skia_patches :=
+skia_patches := lerp.patch
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,skia,0))
+$(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,skia,\
     $(foreach patch,$(skia_patches),external/skia/$(patch)) \
+))
+
+$(eval $(call gb_UnpackedTarball_set_post_action,skia,\
+    mv third_party/skcms/skcms.cc third_party/skcms/skcms.cpp \
 ))
 
 # vim: set noet sw=4 ts=4:

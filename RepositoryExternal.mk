@@ -122,9 +122,8 @@ $(call gb_LinkTarget_set_include,$(1),\
        -I$(call gb_UnpackedTarball_get_dir,skia) \
        $$(INCLUDE) \
 )
-$(call gb_LinkTarget_use_external_project,$(1),skia)
+$(call gb_LinkTarget_use_libraries,$(1),skia)
 endef
-
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
        skia \
 ))

@@ -1,0 +1,14 @@
+--- skia/src/shaders/SkPerlinNoiseShader.cpp.sav	2019-07-29 14:37:30.429563360 +0200
++++ skia/src/shaders/SkPerlinNoiseShader.cpp	2019-07-29 16:45:29.736231751 +0200
+@@ -573,9 +573,11 @@ static SkScalar fade(SkScalar t) {
+     return t * t * t * (t * (t * 6 - 15) + 10);
+ }
+ 
++#if __cplusplus <= 201703L
+ static SkScalar lerp(SkScalar t, SkScalar a, SkScalar b) {
+     return a + t * (b - a);
+ }
++#endif
+ 
+ static SkScalar grad(int hash, SkScalar x, SkScalar y, SkScalar z) {
+     int h = hash & 15;
