@@ -595,7 +595,6 @@ void TimerTest::testStopwatch()
 
         bool b1Done = a1Idle.isDone(n1Iter);
         bool b2Done = a2Idle.isDone(n2Iter);
-        CPPUNIT_ASSERT(n1Iter >= n2Iter);
 
         if (b1Done && b2Done)
             break;
