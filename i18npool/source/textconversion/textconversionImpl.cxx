@@ -116,8 +116,7 @@ TextConversionImpl::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 TextConversionImpl::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet { "com.sun.star.i18n.TextConversion" };
-    return aRet;
+    return Sequence< OUString > { "com.sun.star.i18n.TextConversion" };
 }
 
 }

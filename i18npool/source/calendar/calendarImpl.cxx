@@ -365,10 +365,8 @@ CalendarImpl::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 CalendarImpl::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet(2);
-    aRet[0] = "com.sun.star.i18n.LocaleCalendar";
-    aRet[1] = "com.sun.star.i18n.LocaleCalendar2";
-    return aRet;
+    return Sequence< OUString > { "com.sun.star.i18n.LocaleCalendar",
+        "com.sun.star.i18n.LocaleCalendar2" };
 }
 
 }

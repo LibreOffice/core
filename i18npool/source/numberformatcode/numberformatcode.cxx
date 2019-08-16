@@ -258,8 +258,7 @@ sal_Bool SAL_CALL NumberFormatCodeMapper::supportsService(const OUString& rServi
 css::uno::Sequence< OUString > SAL_CALL
 NumberFormatCodeMapper::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > aRet { "com.sun.star.i18n.NumberFormatMapper" };
-    return aRet;
+    return css::uno::Sequence< OUString > { "com.sun.star.i18n.NumberFormatMapper" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
