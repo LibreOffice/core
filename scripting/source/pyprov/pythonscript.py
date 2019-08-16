@@ -259,7 +259,7 @@ class MyUriHelper:
             return ret
         except UnoException as e:
             log.error( "error during converting scriptURI="+scriptURI + ": " + e.Message)
-            raise RuntimeException( "pythonscript:scriptURI2StorageUri: " +e.getMessage(), None )
+            raise RuntimeException( "pythonscript:scriptURI2StorageUri: " + e.Message, None )
         except Exception as e:
             log.error( "error during converting scriptURI="+scriptURI + ": " + str(e))
             raise RuntimeException( "pythonscript:scriptURI2StorageUri: " + str(e), None )
