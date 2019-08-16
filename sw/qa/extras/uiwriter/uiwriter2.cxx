@@ -1210,6 +1210,17 @@ void SwUiWriterTest2::testImageComment()
     pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
 
 #if !defined(MACOSX)
+    // Calc the left edge of the as-char frame.
+    SwRootFrame* pLayout = pWrtShell->GetLayout();
+    SwFrame* pPage = pLayout->GetLower();
+    SwFrame* pBody = pPage->GetLower();
+    SwFrame* pTextFrame = pBody->GetLower();
+    CPPUNIT_ASSERT(pTextFrame->GetDrawObjs());
+    const SwSortedObjs& rAnchored = *pTextFrame->GetDrawObjs();
+    CPPUNIT_ASSERT_GREATER(static_cast<size_t>(0), rAnchored.size());
+    SwAnchoredObject* pObject = rAnchored[0];
+    long nFrameLeft = pObject->GetObjRect().Left();
+
     // Make sure that the anchor points to the bottom left corner of the image.
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected less or equal than: 1418
@@ -1220,7 +1231,7 @@ void SwUiWriterTest2::testImageComment()
     for (const auto& pItem : *pPostItMgr)
     {
         const SwRect& rAnchor = pItem->pPostIt->GetAnchorRect();
-        CPPUNIT_ASSERT_LESSEQUAL(static_cast<long>(1418), rAnchor.Left());
+        CPPUNIT_ASSERT_EQUAL(nFrameLeft, rAnchor.Left());
     }
 
     // Test the comment anchor we expose via the LOK API.
@@ -1239,7 +1250,12 @@ void SwUiWriterTest2::testImageComment()
     {
         const boost::property_tree::ptree& rComment = rValue.second;
         OString aAnchorPos(rComment.get<std::string>("anchorPos").c_str());
-        CPPUNIT_ASSERT_EQUAL(OString("1418, 1418, 0, 0"), aAnchorPos);
+        OString aExpected;
+        aExpected += OString::number(nFrameLeft);
+        aExpected += ", ";
+        aExpected += OString::number(nFrameLeft);
+        aExpected += ", 0, 0";
+        CPPUNIT_ASSERT_EQUAL(aExpected, aAnchorPos);
     }
 
 #endif
