@@ -50,6 +50,7 @@
 #include <commonembobj.hxx>
 #include <intercept.hxx>
 #include "embedobj.hxx"
+#include <specialobject.hxx>
 
 using namespace ::com::sun::star;
 
@@ -174,13 +175,31 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             }
             else
             {
-                // in case embedded object is in loaded state the contents must
-                // be stored in the related storage and the storage
-                // must be created already
-                if ( !m_xObjectStorage.is() )
-                   throw io::IOException(); //TODO: access denied
+                if ( !dynamic_cast<OSpecialEmbeddedObject*>(this) )
+                {
+                    // in case embedded object is in loaded state the contents must
+                    // be stored in the related storage and the storage
+                    // must be created already
+                    if ( !m_xObjectStorage.is() )
+                        throw io::IOException(); //TODO: access denied
 
-                m_xDocHolder->SetComponent( LoadDocumentFromStorage_Impl(), m_bReadOnly );
+                    m_xDocHolder->SetComponent( LoadDocumentFromStorage_Impl(), m_bReadOnly );
+                }
+                else
+                {
+                    // objects without persistence will be initialized internally
+                    uno::Sequence < uno::Any > aArgs(1);
+                    aArgs[0] <<= uno::Reference < embed::XEmbeddedObject >( this );
+                    uno::Reference< util::XCloseable > xDocument(
+                            m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( GetDocumentServiceName(), aArgs, m_xContext),
+                            uno::UNO_QUERY );
+
+                    uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
+                    if ( xChild.is() )
+                        xChild->setParent( m_xParent );
+
+                    m_xDocHolder->SetComponent( xDocument, m_bReadOnly );
+                }
             }
 
             if ( !m_xDocHolder->GetComponent().is() )
