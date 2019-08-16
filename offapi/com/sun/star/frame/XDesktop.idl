@@ -54,9 +54,9 @@ published interface XDesktop: com::sun::star::uno::XInterface
         </p>
 
         @return
-            `TRUE`if all listener agree with this request
+            `TRUE` If all listeners agree with this request
             <br>
-            `FALSE`otherwise
+            `FALSE` Otherwise
 
         @see XTerminateListener
         @see TerminationVetoException
@@ -77,7 +77,7 @@ published interface XDesktop: com::sun::star::uno::XInterface
     /** unregisters an event listener for termination events.
 
         @param Listener
-            listener which wish to be deregistered
+            listener which wishes to be deregistered
 
         @see XDesktop::addTerminateListener()
      */
