@@ -58,7 +58,7 @@ typedef sal_uInt32 Id;
 namespace writerfilter {
 
 /**
-    Reference to an resource that generates events and sends them to a
+    Reference to a resource that generates events and sends them to a
     handler.
 
     The reference can be resolved, i.e. the resource generates its
