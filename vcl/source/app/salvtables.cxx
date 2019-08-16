@@ -5590,14 +5590,6 @@ void SalInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OS
     vcl::Window* pParent = m_xWidget;
     while ((pParent = pParent->GetParent()))
     {
-        if (m_pBuilder && pParent->IsDialog())
-        {
-            // tdf#122355 before trying dialog help, check to see if there is a notebook
-            // called tabcontrol, and try the help for the current page of that first
-            OString sPageHelpId(m_pBuilder->get_current_page_help_id());
-            if (!sPageHelpId.isEmpty() && func(sPageHelpId))
-                return;
-        }
         if (func(pParent->GetHelpId()))
             return;
     }
