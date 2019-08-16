@@ -88,7 +88,6 @@ void SwTemplateControl::StateChanged(
 
 void SwTemplateControl::Paint( const UserDrawEvent&  )
 {
-    GetStatusBar().SetItemText( GetId(), sTemplate );
 }
 
 void SwTemplateControl::Command( const CommandEvent& rCEvt )
