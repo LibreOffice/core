@@ -96,7 +96,6 @@ void SwBookmarkControl::StateChanged(
 
 void SwBookmarkControl::Paint( const UserDrawEvent&  )
 {
-    GetStatusBar().SetItemText( GetId(), sPageNumber );
 }
 
 void SwBookmarkControl::Command( const CommandEvent& rCEvt )

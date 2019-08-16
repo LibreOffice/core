@@ -89,7 +89,6 @@ void SdTemplateControl::StateChanged(
 
 void SdTemplateControl::Paint( const UserDrawEvent&  )
 {
-    GetStatusBar().SetItemText( GetId(), msTemplate );
 }
 
 void SdTemplateControl::Command( const CommandEvent& rCEvt )
