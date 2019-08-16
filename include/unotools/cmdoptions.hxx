@@ -95,7 +95,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtCommandOptions : public utl::detail:
                         deregistration mechanism too, we use weak references to
                         the given frames.
 
-            @param      "xFrame"            points to the frame, which wish to be
+            @param      "xFrame"            points to the frame, which wishes to be
                                             notified, if configuration was changed.
         *//*-*****************************************************************************************************/
 
