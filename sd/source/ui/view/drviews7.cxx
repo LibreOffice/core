@@ -325,6 +325,20 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
     const size_t nMarkCount = rMarkList.GetMarkCount();
 
+    if( nMarkCount == 1 )
+    {
+        bool bDisable = true;
+        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        if( dynamic_cast<const SdrGrafObj*>( pObj) && ( static_cast<SdrGrafObj*>(pObj)->getQrCode()))
+        {
+            bDisable = false;
+        }
+        if(bDisable)
+        {
+            rSet.DisableItem(SID_EDIT_QRCODE);
+        }
+    }
+
     //format paintbrush
     FuFormatPaintBrush::GetMenuState( *this, rSet );
 
