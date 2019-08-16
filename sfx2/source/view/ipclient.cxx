@@ -509,7 +509,7 @@ void SAL_CALL SfxInPlaceClient_Impl::changedPlacement( const awt::Rectangle& aPo
         Size aNewObjSize( long( aNewLogicRect.GetWidth()  / m_aScaleWidth ),
                           long( aNewLogicRect.GetHeight() / m_aScaleHeight ) );
 
-        // now remove scaling from new placement and keep this a the new object area
+        // now remove scaling from new placement and keep this at the new object area
         aNewLogicRect.SetSize( aNewObjSize );
         m_aObjArea = aNewLogicRect;
 

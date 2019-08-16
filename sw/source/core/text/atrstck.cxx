@@ -526,7 +526,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
     else if ( RES_TXTATR_CJK_RUBY == nAttr )
     {
         // ruby stack has no more attributes
-        // check, if an rotation attribute has to be applied
+        // check, if a rotation attribute has to be applied
         const sal_uInt16 nTwoLineStack = StackPos[ RES_CHRATR_TWO_LINES ];
         bool bTwoLineAct = false;
         const SwTextAttr* pTwoLineAttr = GetTop(nTwoLineStack);
@@ -543,7 +543,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
         if ( bTwoLineAct )
             return;
 
-        // eventually, an rotate attribute has to be activated
+        // eventually, a rotate attribute has to be activated
         const sal_uInt16 nRotateStack = StackPos[ RES_CHRATR_ROTATE ];
         const SwTextAttr* pRotateAttr = GetTop(nRotateStack);
 

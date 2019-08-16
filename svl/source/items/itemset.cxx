@@ -55,7 +55,7 @@ sal_uInt16 Count_Impl( const sal_uInt16 *pRanges )
 
 /**
  * Determines the total number of sal_uInt16s described in a 0-terminated
- * array of pairs of sal_uInt16s, each representing an range of sal_uInt16s.
+ * array of pairs of sal_uInt16s, each representing a range of sal_uInt16s.
  */
 sal_uInt16 Capacity_Impl( const sal_uInt16 *pRanges )
 {
