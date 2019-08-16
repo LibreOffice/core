@@ -41,6 +41,9 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XDrawView.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -168,11 +171,10 @@ void QrCodeGenDialog::Apply()
         // Default anchoring
         xShapeProps->setPropertyValue("AnchorType", Any(TextContentAnchorType_AT_PARAGRAPH));
 
-        const Reference<XServiceInfo> xServiceInfo(m_xModel, UNO_QUERY);
+        const Reference<XServiceInfo> xServiceInfo(m_xModel, UNO_QUERY_THROW);
 
         // Writer
-        const Reference<XTextDocument> xTextDocument(m_xModel, UNO_QUERY);
-        if (xTextDocument.is())
+        if (xServiceInfo->supportsService("com.sun.star.text.TextDocument"))
         {
             Reference<XTextContent> xTextContent(xShape, UNO_QUERY_THROW);
             Reference<XTextViewCursorSupplier> xViewCursorSupplier(m_xModel->getCurrentController(),
@@ -186,8 +188,7 @@ void QrCodeGenDialog::Apply()
         }
 
         // Calc
-        const Reference<XSpreadsheetDocument> xSpreadsheetDocument(m_xModel, UNO_QUERY);
-        if (xSpreadsheetDocument.is())
+        else if (xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
         {
             Reference<XPropertySet> xSheetCell(m_xModel->getCurrentSelection(), UNO_QUERY_THROW);
             awt::Point aCellPosition;
@@ -202,6 +203,24 @@ void QrCodeGenDialog::Apply()
 
             xShapes->add(xShape);
             return;
+        }
+
+        //Impress and Draw
+        else if (xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument")
+                 || xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument"))
+        {
+            Reference<XDrawView> xView(m_xModel->getCurrentController(), UNO_QUERY_THROW);
+            Reference<XDrawPage> xPage(xView->getCurrentPage(), UNO_SET_THROW);
+            Reference<XShapes> xShapes(xPage, UNO_QUERY_THROW);
+
+            xShapes->add(xShape);
+            return;
+        }
+
+        else
+        {
+            //Not implemented for math,base and other apps.
+            throw uno::RuntimeException("Not implemented");
         }
     }
 }
