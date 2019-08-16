@@ -9,6 +9,7 @@
 import os
 import sys
 import argparse
+import keyword
 from textx.metamodel import metamodel_from_file
 
 tab="    "
@@ -129,14 +130,14 @@ class ul_Compiler:
             line=double_tab+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
             self.variables.append(line)
 
-    def init_Object(self,Id_of_Object,Obj_parent):
+    def init_Object(self,Id_of_Object,name_of_child,Obj_parent):
 
         if Id_of_Object in self.objects:
             self.objects[Id_of_Object]+=1
         else:
             self.objects[Id_of_Object]=1
             line=double_tab+Id_of_Object+" = "+Obj_parent+\
-                ".getChild(\""+Id_of_Object+"\")\n"
+                ".getChild(\""+name_of_child+"\")\n"
             self.variables.append(line)
 
     def write_line_without_parameters(self,Action_holder,Action,Action_type):
@@ -224,8 +225,13 @@ class ul_Compiler:
         elif (DialogCommand.__class__.__name__ == "CloseDialog"):
             if (self.prev_command.__class__.__name__ == "ButtonUIObject"):
                 old_line = self.variables.pop()
-                line= double_tab + "self.ui_test.close_dialog_through_button("+\
-                    self.prev_command.ui_button+")\n"
+                line=""
+                if(keyword.iskeyword( self.prev_command.ui_button )):
+                    line= double_tab + "self.ui_test.close_dialog_through_button(x"+\
+                        self.prev_command.ui_button+")\n"
+                else:
+                    line= double_tab + "self.ui_test.close_dialog_through_button("+\
+                        self.prev_command.ui_button+")\n"
                 self.variables.append(line)
             self.last_parent.pop()
             self.parent_hierarchy_count=self.parent_hierarchy_count-1
@@ -234,109 +240,157 @@ class ul_Compiler:
 
     def handle_button(self, ButtonUIObject):
 
-        if  ButtonUIObject.parent_id == "" :
-            self.init_Object( ButtonUIObject.ui_button , self.last_parent[self.parent_hierarchy_count] )
+        name_of_obj=""
+        if(keyword.iskeyword( ButtonUIObject.ui_button )):
+            name_of_obj = "x" +ButtonUIObject.ui_button
         else:
-            self.init_Object(ButtonUIObject.ui_button,ButtonUIObject.parent_id)
+            name_of_obj = ButtonUIObject.ui_button
 
-        self.write_line_without_parameters(ButtonUIObject.ui_button,"CLICK","tuple")
+        if  ButtonUIObject.parent_id == "" :
+            self.init_Object( name_of_obj , ButtonUIObject.ui_button , self.last_parent[self.parent_hierarchy_count] )
+        else:
+            self.init_Object( name_of_obj , ButtonUIObject.ui_button,ButtonUIObject.parent_id)
+
+        self.write_line_without_parameters(name_of_obj,"CLICK","tuple")
 
         self.prev_command=ButtonUIObject
 
     def handle_check_box(self, CheckBoxUIObject):
 
-        if  CheckBoxUIObject.parent_id == "" :
-            self.init_Object( CheckBoxUIObject.Check_box_id , self.last_parent[self.parent_hierarchy_count] )
+        name_of_obj=""
+        if(keyword.iskeyword( CheckBoxUIObject.Check_box_id )):
+            name_of_obj = "x" + CheckBoxUIObject.Check_box_id
         else:
-            self.init_Object(CheckBoxUIObject.Check_box_id,CheckBoxUIObject.parent_id)
+            name_of_obj = CheckBoxUIObject.Check_box_id
 
-        self.write_line_without_parameters(CheckBoxUIObject.Check_box_id,"CLICK","tuple")
+        if  CheckBoxUIObject.parent_id == "" :
+            self.init_Object( name_of_obj , CheckBoxUIObject.Check_box_id , self.last_parent[self.parent_hierarchy_count] )
+        else:
+            self.init_Object( name_of_obj , CheckBoxUIObject.Check_box_id,CheckBoxUIObject.parent_id)
+
+        self.write_line_without_parameters(name_of_obj,"CLICK","tuple")
 
         self.prev_command=CheckBoxUIObject
 
     def handle_tab(self, TabControlUIObject):
 
-        if  TabControlUIObject.parent_id == "" :
-            self.init_Object( TabControlUIObject.tab_id , self.last_parent[self.parent_hierarchy_count] )
+        name_of_obj=""
+        if(keyword.iskeyword( TabControlUIObject.tab_id )):
+            name_of_obj = "x" + TabControlUIObject.tab_id
         else:
-            self.init_Object(TabControlUIObject.tab_id,TabControlUIObject.parent_id)
+            name_of_obj = TabControlUIObject.tab_id
 
-        self.write_line_with_one_parameters(TabControlUIObject.tab_id,"SELECT","POS",TabControlUIObject.tab_page_number)
+        if  TabControlUIObject.parent_id == "" :
+            self.init_Object( name_of_obj , TabControlUIObject.tab_id , self.last_parent[self.parent_hierarchy_count] )
+        else:
+            self.init_Object( name_of_obj , TabControlUIObject.tab_id,TabControlUIObject.parent_id)
+
+        self.write_line_with_one_parameters(name_of_obj,"SELECT","POS",TabControlUIObject.tab_page_number)
 
         self.prev_command=TabControlUIObject
 
     def handle_Combo_box(self, ComboBoxUIObject):
 
-        if  ComboBoxUIObject.parent_id == "" :
-            self.init_Object( ComboBoxUIObject.Combo_box_id , self.last_parent[self.parent_hierarchy_count] )
+        name_of_obj=""
+        if(keyword.iskeyword( ComboBoxUIObject.Combo_box_id )):
+            name_of_obj = "x" + ComboBoxUIObject.Combo_box_id
         else:
-            self.init_Object(ComboBoxUIObject.Combo_box_id,ComboBoxUIObject.parent_id)
+            name_of_obj = ComboBoxUIObject.Combo_box_id
 
-        self.write_line_with_one_parameters(ComboBoxUIObject.Combo_box_id,"SELECT","POS",ComboBoxUIObject.item_num)
+        if  ComboBoxUIObject.parent_id == "" :
+            self.init_Object( name_of_obj , ComboBoxUIObject.Combo_box_id , self.last_parent[self.parent_hierarchy_count] )
+        else:
+            self.init_Object( name_of_obj , ComboBoxUIObject.Combo_box_id,ComboBoxUIObject.parent_id)
+
+        self.write_line_with_one_parameters(name_of_obj,"SELECT","POS",ComboBoxUIObject.item_num)
 
         self.prev_command=ComboBoxUIObject
 
     def handle_Radio_button(self,RadioButtonUIObject):
 
-        if  RadioButtonUIObject.parent_id == "" :
-            self.init_Object( RadioButtonUIObject.Radio_button_id , self.last_parent[self.parent_hierarchy_count] )
+        name_of_obj=""
+        if(keyword.iskeyword( RadioButtonUIObject.Radio_button_id )):
+            name_of_obj = "x" + RadioButtonUIObject.Radio_button_id
         else:
-            self.init_Object(RadioButtonUIObject.Radio_button_id,RadioButtonUIObject.parent_id)
+            name_of_obj = RadioButtonUIObject.Radio_button_id
 
-        self.write_line_without_parameters(RadioButtonUIObject.Radio_button_id,"CLICK","tuple")
+        if  RadioButtonUIObject.parent_id == "" :
+            self.init_Object( name_of_obj , RadioButtonUIObject.Radio_button_id , self.last_parent[self.parent_hierarchy_count] )
+        else:
+            self.init_Object( name_of_obj , RadioButtonUIObject.Radio_button_id,RadioButtonUIObject.parent_id)
+
+        self.write_line_without_parameters(name_of_obj,"CLICK","tuple")
 
         self.prev_command=RadioButtonUIObject
 
     def handle_List_box(self, ListBoxUIObject):
 
-        if  ListBoxUIObject.parent_id == "" :
-            self.init_Object(  ListBoxUIObject.list_id , self.last_parent[self.parent_hierarchy_count] )
+        name_of_obj=""
+        if(keyword.iskeyword( ListBoxUIObject.list_id )):
+            name_of_obj = "x" + ListBoxUIObject.list_id
         else:
-            self.init_Object(ListBoxUIObject.list_id,ListBoxUIObject.parent_id)
+            name_of_obj = ListBoxUIObject.list_id
 
-        self.write_line_with_one_parameters(ListBoxUIObject.list_id,"SELECT","POS",ListBoxUIObject.POS)
+        if  ListBoxUIObject.parent_id == "" :
+            self.init_Object( name_of_obj , ListBoxUIObject.list_id , self.last_parent[self.parent_hierarchy_count] )
+        else:
+            self.init_Object( name_of_obj , ListBoxUIObject.list_id,ListBoxUIObject.parent_id)
+
+        self.write_line_with_one_parameters(name_of_obj,"SELECT","POS",ListBoxUIObject.POS)
 
         self.prev_command=ListBoxUIObject
 
     def handle_spin_field(self,SpinFieldUIObject):
 
-        if  SpinFieldUIObject.parent_id == "" :
-            self.init_Object( SpinFieldUIObject.Spin_id , self.last_parent[self.parent_hierarchy_count] )
+        name_of_obj=""
+        if(keyword.iskeyword( SpinFieldUIObject.Spin_id )):
+            name_of_obj = "x" + SpinFieldUIObject.Spin_id
         else:
-            self.init_Object(SpinFieldUIObject.Spin_id,SpinFieldUIObject.parent_id)
+            name_of_obj = SpinFieldUIObject.Spin_id
+
+        if  SpinFieldUIObject.parent_id == "" :
+            self.init_Object( name_of_obj , SpinFieldUIObject.Spin_id , self.last_parent[self.parent_hierarchy_count] )
+        else:
+            self.init_Object( name_of_obj , SpinFieldUIObject.Spin_id,SpinFieldUIObject.parent_id)
 
         if(SpinFieldUIObject.change=="Increase"):
-            self.write_line_without_parameters(SpinFieldUIObject.Spin_id,"UP","tuple")
+            self.write_line_without_parameters(name_of_obj,"UP","tuple")
         elif(SpinFieldUIObject.change=="Decrease"):
-            self.write_line_without_parameters(SpinFieldUIObject.Spin_id,"DOWN","tuple")
+            self.write_line_without_parameters(name_of_obj,"DOWN","tuple")
         self.prev_command=SpinFieldUIObject
 
     def handle_Edit_uiObject(self,EditUIObject):
 
-        if  EditUIObject.parent_id == "" :
-            self.init_Object( EditUIObject.action.edit_button , self.last_parent[self.parent_hierarchy_count] )
+        name_of_obj=""
+        if(keyword.iskeyword( EditUIObject.action.edit_button )):
+            name_of_obj = "x" + EditUIObject.action.edit_button
         else:
-            self.init_Object(EditUIObject.action.edit_button,EditUIObject.parent_id)
+            name_of_obj =EditUIObject.action.edit_button
+
+        if  EditUIObject.parent_id == "" :
+            self.init_Object( name_of_obj , EditUIObject.action.edit_button , self.last_parent[self.parent_hierarchy_count] )
+        else:
+            self.init_Object( name_of_obj , EditUIObject.action.edit_button,EditUIObject.parent_id)
 
         if(EditUIObject.action.__class__.__name__ =="Type_action"):
 
             if(EditUIObject.action.what_to_type.__class__.__name__=="char"):
-                self.write_line_with_one_parameters(EditUIObject.action.edit_button,\
+                self.write_line_with_one_parameters(name_of_obj,\
                     "TYPE","TEXT",EditUIObject.action.what_to_type.input_char)
 
             elif(EditUIObject.action.what_to_type.__class__.__name__=="KeyCode"):
-                self.write_line_with_one_parameters(EditUIObject.action.edit_button,\
+                self.write_line_with_one_parameters(name_of_obj,\
                     "TYPE","KEYCODE",EditUIObject.action.what_to_type.input_key_code)
 
         if(EditUIObject.action.__class__.__name__ =="SELECT"):
 
-            self.write_line_with_two_parameters(EditUIObject.action.edit_button,\
+            self.write_line_with_two_parameters(name_of_obj,\
                     "SELECT","FROM",EditUIObject.action.from_pos,"TO",\
                         EditUIObject.action.to_pos)
 
         if(EditUIObject.action.__class__.__name__ =="Clear"):
 
-            self.write_line_without_parameters(SpinFieldUIObject.Spin_id,"CLEAR","tuple")
+            self.write_line_without_parameters(name_of_obj,"CLEAR","tuple")
 
         self.prev_command=EditUIObject
 
