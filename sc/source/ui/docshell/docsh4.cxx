@@ -144,6 +144,41 @@ IMPL_LINK_NOARG( ScDocShell, ReloadAllLinksHdl, Button*, void )
     SAL_WARN_IF(!pViewFrame, "sc", "expected there to be a ViewFrame");
 }
 
+ScLkUpdMode ScDocShell::GetLinkUpdateModeState() const
+{
+    const ScDocument& rDoc = GetDocument();
+
+    ScLkUpdMode nSet = rDoc.GetLinkMode();
+
+    if (nSet == LM_UNKNOWN)
+    {
+        ScAppOptions aAppOptions = SC_MOD()->GetAppOptions();
+        nSet = aAppOptions.GetLinkMode();
+    }
+
+    if (m_nCanUpdate == css::document::UpdateDocMode::NO_UPDATE)
+        nSet = LM_NEVER;
+    else if (m_nCanUpdate == css::document::UpdateDocMode::FULL_UPDATE)
+        nSet = LM_ALWAYS;
+
+    if (nSet == LM_ALWAYS
+            && !(SvtSecurityOptions().isTrustedLocationUriForUpdatingLinks(
+                    GetMedium() == nullptr ? OUString() : GetMedium()->GetName())
+                || (IsDocShared()
+                    && SvtSecurityOptions().isTrustedLocationUriForUpdatingLinks(
+                        GetSharedFileURL()))))
+    {
+        nSet = LM_ON_DEMAND;
+    }
+    if (m_nCanUpdate == css::document::UpdateDocMode::QUIET_UPDATE
+            && nSet == LM_ON_DEMAND)
+    {
+        nSet = LM_NEVER;
+    }
+
+    return nSet;
+}
+
 void ScDocShell::Execute( SfxRequest& rReq )
 {
     const SfxItemSet* pReqArgs = rReq.GetArgs();
@@ -441,37 +476,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             break;
         case SID_UPDATETABLINKS:
             {
-                ScDocument& rDoc = GetDocument();
-
-                ScLkUpdMode nSet = rDoc.GetLinkMode();
-
-                if(nSet==LM_UNKNOWN)
-                {
-                    ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
-                    nSet=aAppOptions.GetLinkMode();
-                }
-
-                if (m_nCanUpdate == css::document::UpdateDocMode::NO_UPDATE)
-                    nSet = LM_NEVER;
-                else if (m_nCanUpdate == css::document::UpdateDocMode::FULL_UPDATE)
-                    nSet = LM_ALWAYS;
-
-                if (nSet == LM_ALWAYS
-                    && !(SvtSecurityOptions()
-                         .isTrustedLocationUriForUpdatingLinks(
-                             GetMedium() == nullptr
-                             ? OUString() : GetMedium()->GetName())
-                         || (IsDocShared()
-                             && SvtSecurityOptions().isTrustedLocationUriForUpdatingLinks(
-                                 GetSharedFileURL()))))
-                {
-                    nSet = LM_ON_DEMAND;
-                }
-                if (m_nCanUpdate == css::document::UpdateDocMode::QUIET_UPDATE
-                    && nSet == LM_ON_DEMAND)
-                {
-                    nSet = LM_NEVER;
-                }
+                ScLkUpdMode nSet = GetLinkUpdateModeState();
 
                 if (nSet == LM_ALWAYS)
                 {
