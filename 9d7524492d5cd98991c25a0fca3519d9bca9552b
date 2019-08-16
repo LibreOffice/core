@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_b950460c",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2019-08-16T11:22:03Z",
+      "side": 1,
+      "message": "it\u0027s \u003d\u003e its",
+      "revId": "9d7524492d5cd98991c25a0fca3519d9bca9552b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
