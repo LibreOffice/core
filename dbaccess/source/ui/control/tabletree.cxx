@@ -168,7 +168,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
     }
     catch(RuntimeException&)
     {
-        OSL_FAIL("OTableTreeListBox::UpdateTableList : caught an RuntimeException!");
+        OSL_FAIL("OTableTreeListBox::UpdateTableList : caught a RuntimeException!");
     }
     catch ( const SQLException& )
     {
@@ -210,7 +210,7 @@ void TableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConne
     }
     catch(RuntimeException&)
     {
-        OSL_FAIL("OTableTreeListBox::UpdateTableList : caught an RuntimeException!");
+        OSL_FAIL("OTableTreeListBox::UpdateTableList : caught a RuntimeException!");
     }
     catch ( const SQLException& )
     {

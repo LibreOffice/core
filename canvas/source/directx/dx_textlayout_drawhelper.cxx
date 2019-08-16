@@ -73,7 +73,7 @@ namespace dxcanvas
     {
         HDC hdc = rGraphics->GetHDC();
 
-        // issue an ReleaseHDC() when leaving the scope
+        // issue a ReleaseHDC() when leaving the scope
         const ::comphelper::ScopeGuard aGuard(
             [&rGraphics, &hdc]() mutable { rGraphics->ReleaseHDC(hdc); } );
 
