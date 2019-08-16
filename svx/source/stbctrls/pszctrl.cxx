@@ -231,6 +231,7 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( sal_uInt16 _nSlotId,
     addStatusListener( STR_POSITION);         // SID_ATTR_POSITION
     addStatusListener( STR_TABLECELL);   // SID_TABLE_CELL
     addStatusListener( STR_FUNC);    // SID_PSZ_FUNCTION
+    ImplUpdateItemText();
 }
 
 /*  [Description]
@@ -334,12 +335,7 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 
     GetStatusBar().SetItemData( GetId(), nullptr );
 
-    //  set only strings as text at the statusBar, so that the Help-Tips
-    //  can work with the text, when it is too long for the statusBar
-    OUString aText;
-    if ( pImpl->bTable )
-        aText = pImpl->aStr;
-    GetStatusBar().SetItemText( GetId(), aText );
+    ImplUpdateItemText();
 }
 
 
@@ -461,4 +457,27 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
     pDev->SetFillColor( aOldFillColor );
 }
 
+void SvxPosSizeStatusBarControl::ImplUpdateItemText()
+{
+    //  set only strings as text at the statusBar, so that the Help-Tips
+    //  can work with the text, when it is too long for the statusBar
+    OUString aText;
+    if ( pImpl->bPos || pImpl->bSize )
+    {
+        aText = GetMetricStr_Impl( pImpl->aPos.X());
+        aText += " / ";
+        aText += GetMetricStr_Impl( pImpl->aPos.Y());
+        if ( pImpl->bSize )
+        {
+            aText += " ";
+            aText += GetMetricStr_Impl( pImpl->aSize.Width() );
+            aText += " x ";
+            aText += GetMetricStr_Impl( pImpl->aSize.Height() );
+        }
+    }
+    else if ( pImpl->bTable )
+       aText = pImpl->aStr;
+
+    GetStatusBar().SetItemText( GetId(), aText );
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
