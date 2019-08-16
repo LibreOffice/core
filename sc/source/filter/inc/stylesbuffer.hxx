@@ -243,7 +243,7 @@ public:
     const css::awt::FontDescriptor& getFontDescriptor() const { return maApiData.maDesc;}
     /** Returns true, if the font requires rich text formatting in Calc.
         @descr  Example: Font escapement is a cell attribute in Excel, but Calc
-        needs an rich text cell for this attribute. */
+        needs a rich text cell for this attribute. */
     bool                needsRichTextFormat() const;
 
     void                fillToItemSet( SfxItemSet& rItemSet, bool bEditEngineText, bool bSkipPoolDefs = false ) const;

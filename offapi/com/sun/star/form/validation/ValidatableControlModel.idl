@@ -49,7 +49,7 @@ service ValidatableControlModel
 
     /** enables support for validating the value of the control model
 
-        <p>Setting an retrieving the current validator of the control model is
+        <p>Setting and retrieving the current validator of the control model is
         possible via the XValidatable interface (which
         XValidatableFormComponent is derived from).</p>
 

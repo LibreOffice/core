@@ -36,7 +36,7 @@ published interface XGraphicObjectResolver: com::sun::star::uno::XInterface
     /** converts the given URL from the source URL namespace to the destination
         URL space of this instance.
 
-        @deprecated since LibreOffice 6.1 - throws an RuntimeException if called
+        @deprecated since LibreOffice 6.1 - throws a RuntimeException if called
     */
     string resolveGraphicObjectURL( [in] string aURL );
 };
