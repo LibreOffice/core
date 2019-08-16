@@ -1187,6 +1187,12 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
         aStrings.push_back(pStyle->GetName());
         pStyle = pStyleSheetPool->Next();
     }
+
+    // Paradoxically, with a list and non-Latin style names,
+    // sorting twice is faster than sorting once.
+    // The first sort has a cheap comparator, and gets the list into mostly-sorted order.
+    // Then the second sort needs to call its (much more expensive) comparator less often.
+    std::sort(aStrings.begin(), aStrings.end());
     std::sort(aStrings.begin(), aStrings.end(),
        [&aSorter](const OUString& rLHS, const OUString& rRHS) {
        return aSorter.compare(rLHS, rRHS) < 0;
