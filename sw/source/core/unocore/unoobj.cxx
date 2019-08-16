@@ -1784,7 +1784,7 @@ void SwUnoCursorHelper::SetPropertyValues(
 
     // Build set of attributes we want to fetch
     std::vector<sal_uInt16> aWhichPairs;
-    std::vector<SfxItemPropertySimpleEntry const*> aEntries;
+    std::vector<std::pair<const SfxItemPropertySimpleEntry*, const uno::Any&>> aEntries;
     aEntries.reserve(rPropertyValues.getLength());
     for (const auto& rPropVal : rPropertyValues)
     {
@@ -1797,18 +1797,18 @@ void SwUnoCursorHelper::SetPropertyValues(
         if (!pEntry)
         {
             aUnknownExMsg += "Unknown property: '" + rPropertyName + "' ";
-            break;
+            continue;
         }
         else if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
         {
             aPropertyVetoExMsg += "Property is read-only: '" + rPropertyName + "' ";
-            break;
+            continue;
         } else {
 // FIXME: we should have some nice way of merging ranges surely ?
             aWhichPairs.push_back(pEntry->nWID);
             aWhichPairs.push_back(pEntry->nWID);
         }
-        aEntries.push_back(pEntry);
+        aEntries.emplace_back(pEntry, rPropVal.Value);
     }
 
     if (!aWhichPairs.empty())
@@ -1821,7 +1821,7 @@ void SwUnoCursorHelper::SetPropertyValues(
         bool bPreviousPropertyCausesSideEffectsInNodes = false;
         for (size_t i = 0; i < aEntries.size(); ++i)
         {
-            SfxItemPropertySimpleEntry const*const pEntry = aEntries[i];
+            SfxItemPropertySimpleEntry const*const pEntry = aEntries[i].first;
             bool bPropertyCausesSideEffectsInNodes =
                 propertyCausesSideEffectsInNodes(pEntry->nWID);
 
@@ -1832,7 +1832,7 @@ void SwUnoCursorHelper::SetPropertyValues(
                 SwUnoCursorHelper::GetCursorAttr(rPaM, aItemSet);
             }
 
-            const uno::Any &rValue = rPropertyValues[i].Value;
+            const uno::Any &rValue = aEntries[i].second;
             // this can set some attributes in nodes' mpAttrSet
             if (!SwUnoCursorHelper::SetCursorPropertyValue(*pEntry, rValue, rPaM, aItemSet))
                 rPropSet.setPropertyValue(*pEntry, rValue, aItemSet);

@@ -621,6 +621,29 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testViewCursorPageStyle)
     CPPUNIT_ASSERT_EQUAL(OUString("Standard"), aActualPageStyleName);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXTextCursor_setPropertyValues)
+{
+    // Create a new document, type a character, pass a set of property/value pairs consisting of one
+    // unknown property and CharStyleName, assert that it threw UnknownPropertyException (actually
+    // wrapped into WrappedTargetException), and assert the style was set, not discarded.
+    loadURL("private:factory/swriter", nullptr);
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XSimpleText> xBodyText = xTextDocument->getText();
+    xBodyText->insertString(xBodyText->getStart(), "x", false);
+
+    uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());
+    xCursor->goLeft(1, true);
+
+    uno::Reference<beans::XMultiPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
+    uno::Sequence<OUString> aPropNames = { "OneUnknownProperty", "CharStyleName" };
+    uno::Sequence<uno::Any> aPropValues = { uno::Any(), uno::Any(OUString("Emphasis")) };
+    CPPUNIT_ASSERT_THROW(xCursorProps->setPropertyValues(aPropNames, aPropValues),
+                         lang::WrappedTargetException);
+    CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"),
+                         getProperty<OUString>(xCursorProps, "CharStyleName"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
