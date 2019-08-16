@@ -237,6 +237,11 @@ class MyUriHelper:
                 log.debug( message )
                 raise RuntimeException( message )
 
+            if xFileUri.isAbsolute():
+                message = "pythonscript: an absolute uri is invalid '" + sFileUri+ "'"
+                log.debug( message )
+                raise RuntimeException( message )
+
             # absolute path to the .py file
             xAbsScriptUri = self.m_uriRefFac.makeAbsolute(xBaseUri, xFileUri, True, RETAIN)
             sAbsScriptUri = xAbsScriptUri.getUriReference()
