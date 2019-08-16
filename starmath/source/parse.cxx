@@ -1954,7 +1954,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoFontSize()
         {
             aValue = fTmp;
 
-            //!! keep the numerator and denominator from being to large
+            //!! keep the numerator and denominator from being too large
             //!! otherwise ongoing multiplications may result in overflows
             //!! (for example in SmNode::SetFontSize the font size calculated
             //!! may become 0 because of this!!! Happens e.g. for ftmp = 2.9 with Linux

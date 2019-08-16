@@ -742,7 +742,7 @@ SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNod
     if( pRootNode->GetType( ) == SmNodeType::Table ){
         //Children are SmLineNodes
         //Or so I thought... Apparently, the children can be instances of SmExpression
-        //especially if there's a error in the formula... So he we go, a simple work around.
+        //especially if there's an error in the formula... So here we go, a simple work around.
         for( auto pChild : *static_cast<SmStructureNode*>(pRootNode) )
         {
             if(!pChild)
@@ -869,7 +869,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
 
         mpRightMost->SetRight( bodyLeft );
     }
-    //If there's an CSUP
+    //If there's a CSUP
     pChild = pNode->GetSubSup( CSUP );
     if( pChild ){
         SmCaretPosGraphEntry *cLeft; //Child left
@@ -880,7 +880,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
 
         mpRightMost->SetRight( right );
     }
-    //If there's an CSUB
+    //If there's a CSUB
     pChild = pNode->GetSubSup( CSUB );
     if( pChild ){
         SmCaretPosGraphEntry *cLeft; //Child left
