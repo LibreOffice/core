@@ -635,7 +635,7 @@ Any ODatabaseContext::getByName(const OUString& _rName)
         if ( xExistent.is() )
             return makeAny( xExistent );
 
-        // see whether this is an registered name
+        // see whether this is a registered name
         OUString sURL;
         if ( hasRegisteredDatabase( _rName ) )
         {

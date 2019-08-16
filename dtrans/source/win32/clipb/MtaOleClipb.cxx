@@ -389,7 +389,7 @@ HRESULT CMtaOleClipboard::setClipboard( IDataObject* pIDataObject )
     // destroyed before the ole clipboard
     // can acquire it
     // remember: pIDataObject may be NULL
-    // which is an request to clear the
+    // which is a request to clear the
     // current clipboard content
     if ( pIDataObject )
         pIDataObject->AddRef( );

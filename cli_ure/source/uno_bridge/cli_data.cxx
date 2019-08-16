@@ -80,7 +80,7 @@ System::Object^ Bridge::map_uno2cli(uno_Interface * pUnoI, typelib_InterfaceType
         retVal = CliEnvHolder::g_cli_env->getRegisteredInterface(sOid, ifaceType);
         if (retVal)
         {
-            // There is already an registered object. It can either be a proxy
+            // There is already a registered object. It can either be a proxy
             // for the UNO object or a real cli object. In the first case we
             // tell the proxy that it shall also represent the current UNO
             // interface. If it already does that, then it does nothing
