@@ -1783,7 +1783,8 @@ void SwUnoCursorHelper::SetPropertyValues(
     OUString aUnknownExMsg, aPropertyVetoExMsg;
 
     // Build set of attributes we want to fetch
-    std::vector<sal_uInt16> aWhichPairs;
+    const sal_uInt16 zero = 0;
+    SfxItemSet aItemSet(pDoc->GetAttrPool(), &zero);
     std::vector<std::pair<const SfxItemPropertySimpleEntry*, const uno::Any&>> aEntries;
     aEntries.reserve(rPropertyValues.getLength());
     for (const auto& rPropVal : rPropertyValues)
@@ -1803,19 +1804,13 @@ void SwUnoCursorHelper::SetPropertyValues(
         {
             aPropertyVetoExMsg += "Property is read-only: '" + rPropertyName + "' ";
             continue;
-        } else {
-// FIXME: we should have some nice way of merging ranges surely ?
-            aWhichPairs.push_back(pEntry->nWID);
-            aWhichPairs.push_back(pEntry->nWID);
         }
+        aItemSet.MergeRange(pEntry->nWID, pEntry->nWID);
         aEntries.emplace_back(pEntry, rPropVal.Value);
     }
 
-    if (!aWhichPairs.empty())
+    if (!aEntries.empty())
     {
-        aWhichPairs.push_back(0); // terminate
-        SfxItemSet aItemSet(pDoc->GetAttrPool(), aWhichPairs.data());
-
         // Fetch, overwrite, and re-set the attributes from the core
 
         bool bPreviousPropertyCausesSideEffectsInNodes = false;
