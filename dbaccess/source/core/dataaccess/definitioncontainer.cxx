@@ -152,10 +152,7 @@ OUString SAL_CALL ODefinitionContainer::getImplementationName(  )
 
 Sequence< OUString > SAL_CALL ODefinitionContainer::getSupportedServiceNames(  )
 {
-    Sequence< OUString > aReturn(2);
-    aReturn.getArray()[0] = "com.sun.star.sdb.DefinitionContainer";
-    aReturn.getArray()[1] = "com.sun.star.ucb.Content";
-    return aReturn;
+    return Sequence< OUString > { "com.sun.star.sdb.DefinitionContainer", "com.sun.star.ucb.Content" };
 }
 
 // XNameContainer

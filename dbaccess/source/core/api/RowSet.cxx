@@ -478,13 +478,8 @@ sal_Bool SAL_CALL ORowSet::supportsService( const OUString& _rServiceName )
 
 Sequence< OUString > SAL_CALL ORowSet::getSupportedServiceNames()
 {
-    Sequence< OUString > aSNS( 5 );
-    aSNS[0] = SERVICE_SDBC_RESULTSET;
-    aSNS[1] = SERVICE_SDBC_ROWSET;
-    aSNS[2] = SERVICE_SDBCX_RESULTSET;
-    aSNS[3] = SERVICE_SDB_RESULTSET;
-    aSNS[4] = SERVICE_SDB_ROWSET;
-    return aSNS;
+    return Sequence< OUString >{ SERVICE_SDBC_RESULTSET, SERVICE_SDBC_ROWSET,
+                SERVICE_SDBCX_RESULTSET, SERVICE_SDB_RESULTSET, SERVICE_SDB_ROWSET };
 }
 
 // OComponentHelper
@@ -2875,10 +2870,7 @@ sal_Bool ORowSetClone::supportsService( const OUString& _rServiceName )
 
 Sequence< OUString > ORowSetClone::getSupportedServiceNames(  )
 {
-    Sequence< OUString > aSNS( 2 );
-    aSNS[0] = SERVICE_SDBC_RESULTSET;
-    aSNS[1] = SERVICE_SDB_RESULTSET;
-    return aSNS;
+    return Sequence< OUString > { SERVICE_SDBC_RESULTSET, SERVICE_SDB_RESULTSET };
 }
 
 // OComponentHelper

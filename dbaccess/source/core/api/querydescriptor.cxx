@@ -223,10 +223,7 @@ sal_Bool SAL_CALL OQueryDescriptor_Base::supportsService( const OUString& _rServ
 
 Sequence< OUString > SAL_CALL OQueryDescriptor_Base::getSupportedServiceNames(  )
 {
-    Sequence< OUString > aSupported(2);
-    aSupported.getArray()[0] = SERVICE_SDB_DATASETTINGS;
-    aSupported.getArray()[1] = SERVICE_SDB_QUERYDESCRIPTOR;
-    return aSupported;
+    return Sequence< OUString > { SERVICE_SDB_DATASETTINGS, SERVICE_SDB_QUERYDESCRIPTOR };
 }
 
 void OQueryDescriptor_Base::disposeColumns()
