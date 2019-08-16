@@ -314,7 +314,7 @@ void FmFieldWin::UpdateContent(const css::uno::Reference< css::form::XForm > & x
 
         // get the connection of the form
         m_aConnection.reset(
-            connectRowset( Reference< XRowSet >( xForm, UNO_QUERY ), ::comphelper::getProcessComponentContext() ),
+            connectRowset( Reference< XRowSet >( xForm, UNO_QUERY ), ::comphelper::getProcessComponentContext(), nullptr ),
             SharedConnection::NoTakeOwnership
         );
         // TODO: When incompatible changes (such as extending the "virtualdbtools" interface by ensureRowSetConnection)

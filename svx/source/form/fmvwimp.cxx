@@ -1166,7 +1166,8 @@ SdrObjectUniquePtr FmXFormView::implCreateFieldControl( const svx::ODataAccessDe
                 sDataSource,
                 OUString(),
                 OUString(),
-                comphelper::getProcessComponentContext()
+                comphelper::getProcessComponentContext(),
+                nullptr
             ) );
     }
     catch (const SQLException&)

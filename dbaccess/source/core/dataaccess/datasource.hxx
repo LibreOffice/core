@@ -68,6 +68,7 @@ typedef ::cppu::WeakComponentImplHelper<   css::lang::XServiceInfo
                                        ,   css::util::XFlushable
                                        ,   css::util::XFlushListener
                                        ,   css::sdb::XDocumentDataSource
+                                       ,   css::lang::XInitialization
                                        >   ODatabaseSource_Base;
 
 class ODatabaseSource   :public ModelDependentComponent // must be first
@@ -83,7 +84,7 @@ private:
     using ODatabaseSource_Base::rBHelper;
     // note: this thing uses the ref-count of "this", see OBookmarkContainer::acquire!
     OBookmarkContainer m_Bookmarks;
-    ::comphelper::OInterfaceContainerHelper2       m_aFlushListeners;
+    ::comphelper::OInterfaceContainerHelper2 m_aFlushListeners;
 
 private:
     virtual ~ODatabaseSource() override;
@@ -182,6 +183,9 @@ public:
 
     // XDocumentDataSource
     virtual css::uno::Reference< css::sdb::XOfficeDatabaseDocument > SAL_CALL getDatabaseDocument() override;
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
 protected:
     // ModelDependentComponent overridables

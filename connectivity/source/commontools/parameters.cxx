@@ -136,7 +136,7 @@ namespace dbtools
         try
         {
             // get a query composer for the 's settings
-            m_xComposer.reset( getCurrentSettingsComposer( _rxComponent, m_xContext ), SharedQueryComposer::TakeOwnership );
+            m_xComposer.reset( getCurrentSettingsComposer( _rxComponent, m_xContext, nullptr ), SharedQueryComposer::TakeOwnership );
 
             // see if the composer found parameters
             Reference< XParametersSupplier > xParamSupp( m_xComposer, UNO_QUERY );
@@ -833,7 +833,7 @@ namespace dbtools
                 // re-create the parent composer all the time. Else, we'd have to bother with
                 // being a listener at its properties, its loaded state, and event the parent-relationship.
                 m_xParentComposer.reset(
-                    getCurrentSettingsComposer( xParent, m_xContext ),
+                    getCurrentSettingsComposer( xParent, m_xContext, nullptr ),
                     SharedQueryComposer::TakeOwnership
                 );
                 xParentColSupp.set(m_xParentComposer, css::uno::UNO_QUERY);

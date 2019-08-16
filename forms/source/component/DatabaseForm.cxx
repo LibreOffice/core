@@ -2719,6 +2719,21 @@ void ODatabaseForm::stopSharingConnection( )
     }
 }
 
+namespace
+{
+    Reference<css::awt::XWindow> GetDialogParentWindow(const Reference<XModel>& rModel)
+    {
+        if (!rModel.is())
+            return nullptr;
+        Reference<XController> xController(rModel->getCurrentController());
+        if (!xController.is())
+            return nullptr;
+        Reference<XFrame> xFrame(xController->getFrame());
+        if (!xFrame.is())
+            return nullptr;
+        return xFrame->getContainerWindow();
+    }
+}
 
 bool ODatabaseForm::implEnsureConnection()
 {
@@ -2760,9 +2775,15 @@ bool ODatabaseForm::implEnsureConnection()
 
         if (m_xAggregateSet.is())
         {
+            //Dig out a suitable parent for any warning dialogs
+            Reference<css::awt::XWindow> m_xDialogParent;
+            Reference<XChild> xParent(m_xParent, UNO_QUERY);
+            if (xParent.is())
+                m_xDialogParent = GetDialogParentWindow(getXModel(xParent->getParent()));
+
             Reference< XConnection >  xConnection = connectRowset(
                 Reference<XRowSet> (m_xAggregate, UNO_QUERY),
-                m_xContext
+                m_xContext, m_xDialogParent
             );
             return xConnection.is();
         }

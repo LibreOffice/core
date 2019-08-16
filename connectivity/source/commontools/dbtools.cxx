@@ -22,12 +22,14 @@
 #include <connectivity/ParameterCont.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/BooleanComparisonMode.hpp>
@@ -265,12 +267,25 @@ static Reference< XConnection > getConnection_allowException(
             const OUString& _rsTitleOrPath,
             const OUString& _rsUser,
             const OUString& _rsPwd,
-            const Reference< XComponentContext>& _rxContext)
+            const Reference< XComponentContext>& _rxContext,
+            const Reference< XWindow >& _rxParent)
 {
     Reference< XDataSource> xDataSource( getDataSource_allowException(_rsTitleOrPath, _rxContext) );
     Reference<XConnection> xConnection;
     if (xDataSource.is())
     {
+
+        //set ParentWindow for dialog, but just for the duration of this
+        //call, undo at end of scope
+        Reference<XInitialization> xIni(xDataSource, UNO_QUERY);
+        if (xIni.is())
+        {
+            Sequence< Any > aArgs(1);
+            NamedValue aParam( "ParentWindow", makeAny(_rxParent) );
+            aArgs[0] <<= aParam;
+            xIni->initialize(aArgs);
+        }
+
         // do it with interaction handler
         if(_rsUser.isEmpty() || _rsPwd.isEmpty())
         {
@@ -293,7 +308,7 @@ static Reference< XConnection > getConnection_allowException(
                 if (xConnectionCompletion.is())
                 {   // instantiate the default SDB interaction handler
                     Reference< XInteractionHandler > xHandler =
-                        InteractionHandler::createWithParent(_rxContext, nullptr);
+                        InteractionHandler::createWithParent(_rxContext, _rxParent);
                     xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
                 }
             }
@@ -302,17 +317,27 @@ static Reference< XConnection > getConnection_allowException(
         }
         if(!xConnection.is()) // try to get one if not already have one, just to make sure
             xConnection = xDataSource->getConnection(_rsUser, _rsPwd);
+
+        if (xIni.is())
+        {
+            Sequence< Any > aArgs(1);
+            NamedValue aParam( "ParentWindow", makeAny(Reference<XWindow>()) );
+            aArgs[0] <<= aParam;
+            xIni->initialize(aArgs);
+        }
+
     }
     return xConnection;
 }
 
 Reference< XConnection> getConnection_withFeedback(const OUString& _rDataSourceName,
-        const OUString& _rUser, const OUString& _rPwd, const Reference< XComponentContext>& _rxContext)
+        const OUString& _rUser, const OUString& _rPwd, const Reference< XComponentContext>& _rxContext,
+        const Reference< XWindow >& _rxParent)
 {
     Reference< XConnection > xReturn;
     try
     {
-        xReturn = getConnection_allowException(_rDataSourceName, _rUser, _rPwd, _rxContext);
+        xReturn = getConnection_allowException(_rDataSourceName, _rUser, _rPwd, _rxContext, _rxParent);
     }
     catch(SQLException&)
     {
@@ -339,7 +364,7 @@ Reference< XConnection> getConnection(const Reference< XRowSet>& _rxRowSet)
 // if connectRowset (which is deprecated) is removed, this function and one of its parameters are
 // not needed anymore, the whole implementation can be moved into ensureRowSetConnection then)
 static SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext,
-        bool _bAttachAutoDisposer )
+        bool _bAttachAutoDisposer, const Reference< XWindow >& _rxParent)
 {
     SharedConnection xConnection;
 
@@ -387,7 +412,7 @@ static SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, 
             if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD), xRowSetProps))
                 xRowSetProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPwd;
 
-            xPureConnection = getConnection_allowException( sDataSourceName, sUser, sPwd, _rxContext );
+            xPureConnection = getConnection_allowException( sDataSourceName, sUser, sPwd, _rxContext, _rxParent );
         }
         else if (!sURL.isEmpty())
         {   // the row set has no data source, but a connection url set
@@ -448,15 +473,15 @@ static SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, 
     return xConnection;
 }
 
-Reference< XConnection> connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext )
+Reference< XConnection> connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext, const Reference< XWindow >& _rxParent)
 {
-    SharedConnection xConnection = lcl_connectRowSet( _rxRowSet, _rxContext, true );
+    SharedConnection xConnection = lcl_connectRowSet( _rxRowSet, _rxContext, true, _rxParent );
     return xConnection.getTyped();
 }
 
-SharedConnection ensureRowSetConnection(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext>& _rxContext )
+SharedConnection ensureRowSetConnection(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext>& _rxContext, const Reference< XWindow >& _rxParent)
 {
-    return lcl_connectRowSet( _rxRowSet, _rxContext, false/*bUseAutoConnectionDisposer*/ );
+    return lcl_connectRowSet( _rxRowSet, _rxContext, false/*bUseAutoConnectionDisposer*/, _rxParent );
 }
 
 Reference< XNameAccess> getTableFields(const Reference< XConnection>& _rxConn,const OUString& _rName)
@@ -1195,12 +1220,12 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
     return xDataSource;
 }
 
-static Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Reference< XPropertySet >& _rxRowSet, const Reference< XComponentContext >& _rxContext )
+static Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Reference< XPropertySet >& _rxRowSet, const Reference< XComponentContext >& _rxContext, const Reference< XWindow >& _rxParent )
 {
     Reference< XSingleSelectQueryComposer > xComposer;
     try
     {
-        Reference< XConnection> xConn = connectRowset( Reference< XRowSet >( _rxRowSet, UNO_QUERY ), _rxContext );
+        Reference< XConnection> xConn = connectRowset( Reference< XRowSet >( _rxRowSet, UNO_QUERY ), _rxContext, _rxParent );
         if ( xConn.is() )       // implies _rxRowSet.is()
         {
             // build the statement the row set is based on (can't use the ActiveCommand property of the set
@@ -1244,12 +1269,13 @@ static Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const
 
 Reference< XSingleSelectQueryComposer > getCurrentSettingsComposer(
                 const Reference< XPropertySet>& _rxRowSetProps,
-                const Reference< XComponentContext>& _rxContext)
+                const Reference< XComponentContext>& _rxContext,
+                const Reference< XWindow >& _rxParent)
 {
     Reference< XSingleSelectQueryComposer > xReturn;
     try
     {
-        xReturn = getComposedRowSetStatement( _rxRowSetProps, _rxContext );
+        xReturn = getComposedRowSetStatement( _rxRowSetProps, _rxContext, _rxParent );
     }
     catch( const SQLException& )
     {
