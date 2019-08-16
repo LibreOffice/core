@@ -62,6 +62,7 @@
 #include <columnspanset.hxx>
 #include <column.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/document/UpdateDocMode.hpp>
 #include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 
