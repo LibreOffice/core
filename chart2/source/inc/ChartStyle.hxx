@@ -101,8 +101,8 @@ public:
     virtual void SAL_CALL
     applyStyleToTitle(const css::uno::Reference<css::chart2::XTitle>& xTitle) override;
 
-    virtual void SAL_CALL
-    applyStyleToBackground(const css::uno::Reference<css::beans::XPropertySet>& xBackground) override;
+    virtual void SAL_CALL applyStyleToBackground(
+        const css::uno::Reference<css::beans::XPropertySet>& xBackground) override;
 
     // XStyle
     virtual sal_Bool SAL_CALL isUserDefined() override;
@@ -124,7 +124,8 @@ private:
 
     void applyStyleToAxis(const css::uno::Reference<css::chart2::XAxis>& xAxis);
 
-    void applyStyleToCoordinates(const css::uno::Reference<css::chart2::XCoordinateSystemContainer>& xCooSysCont);
+    void applyStyleToCoordinates(
+        const css::uno::Reference<css::chart2::XCoordinateSystemContainer>& xCooSysCont);
 };
 
 OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::container::XNameContainer> getChartStyles();
