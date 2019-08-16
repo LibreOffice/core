@@ -3094,7 +3094,7 @@ public:
     {
         assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
         disable_notify_events();
-        if (pos == -1)
+        if (pos == -1 || (pos == 0 && n_children() == 0))
             m_xTreeView->SelectAll(false);
         else
         {
