@@ -129,10 +129,8 @@ void AboutDialog::SetBackground(const Image& rBackgroundBitmap)
     Invalidate();
 }
 
-void AboutDialog::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
+void AboutDialog::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& /*rRect*/)
 {
-    rRenderContext.SetClipRegion(vcl::Region(rRect));
-
     Size aSize(GetOutputSizePixel());
     Point aPos(aSize.Width() - m_aBackgroundBitmap.GetSizePixel().Width(),
                aSize.Height() - m_aBackgroundBitmap.GetSizePixel().Height());
