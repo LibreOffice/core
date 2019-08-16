@@ -76,7 +76,7 @@ int MultiByteToWideCharEx( UINT cp_src,
     // setup a global memory pointer
     CRawHGlobalPtr ptrHGlob( refDTransHelper );
 
-    // do the conversion an return
+    // do the conversion and return
     return MultiByteToWideChar( cp_src,
                                 0,
                                 lpMultiByteString,
@@ -110,7 +110,7 @@ int WideCharToMultiByteEx( UINT cp_dest,
     // setup a global memory pointer
     CRawHGlobalPtr ptrHGlob( refDTransHelper );
 
-    // do the conversion an return
+    // do the conversion and return
     return WideCharToMultiByte( cp_dest,
                                 0,
                                 lpWideCharString,
