@@ -39,7 +39,7 @@
 // __________ Implementation __________
 
 /**
- * support ONE singleton uno connection to an running office installation!
+ * support ONE singleton uno connection to a running office installation!
  * Can be used to open/use/close connection to uno environment of an office. If
  * necessary a new office instance is started.
  * ctor isn't available from outside. You should call static function
