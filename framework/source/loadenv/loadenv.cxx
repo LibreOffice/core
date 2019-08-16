@@ -1190,8 +1190,8 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
         throw LoadEnvException(LoadEnvException::ID_INVALID_ENVIRONMENT);
     }
 
-    // Otherwise ...
-    // We need this type information to locate an registered frame loader
+    // Otherwise...
+    // We need this type information to locate a registered frame loader
     // Without such information we can't work!
     OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_TYPENAME(), OUString());
     if (sType.isEmpty())

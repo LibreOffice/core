@@ -56,7 +56,7 @@ public:
 private:
     unsigned int run( );
 
-    // create a hidden window which serves as an request target; so we
+    // create a hidden window which serves as a request target; so we
     // guarantee synchronization
     void createMtaOleReqWnd( );
 

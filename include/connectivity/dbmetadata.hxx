@@ -66,7 +66,7 @@ namespace dbtools
             @throws css::sdbc::SQLException
                 if obtaining the meta data from the connection throws an SQLException
             @throws css::uno::RuntimeException
-                if obtaining the meta data from the connection throws an RuntimeException
+                if obtaining the meta data from the connection throws a RuntimeException
         */
         DatabaseMetaData(
             const css::uno::Reference< css::sdbc::XConnection >& _connection );
