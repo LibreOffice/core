@@ -213,6 +213,7 @@ public:
 
     void    GetDocStat( ScDocStat& rDocStat );
 
+    const ScDocument& GetDocument() const { return aDocument; }
     ScDocument&     GetDocument()   { return aDocument; }
     ScDocFunc&      GetDocFunc()    { return *pDocFunc; }
 
@@ -291,6 +292,7 @@ public:
     virtual void    ReconnectDdeLink(SfxObjectShell& rServer) override;
     void            UpdateLinks() override;
     void            ReloadTabLinks();
+    ScLkUpdMode     GetLinkUpdateModeState() const;
 
     void            SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoading = false );
     virtual void    CheckConfigOptions() override;
