@@ -1220,6 +1220,7 @@ void SwUiWriterTest2::testImageComment()
     CPPUNIT_ASSERT_GREATER(static_cast<size_t>(0), rAnchored.size());
     SwAnchoredObject* pObject = rAnchored[0];
     long nFrameLeft = pObject->GetObjRect().Left();
+    long nFrameTop = pObject->GetObjRect().Top();
 
     // Make sure that the anchor points to the bottom left corner of the image.
     // Without the accompanying fix in place, this test would have failed with:
@@ -1253,7 +1254,7 @@ void SwUiWriterTest2::testImageComment()
         OString aExpected;
         aExpected += OString::number(nFrameLeft);
         aExpected += ", ";
-        aExpected += OString::number(nFrameLeft);
+        aExpected += OString::number(nFrameTop);
         aExpected += ", 0, 0";
         CPPUNIT_ASSERT_EQUAL(aExpected, aAnchorPos);
     }
