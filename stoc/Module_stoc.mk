@@ -29,4 +29,8 @@ $(eval $(call gb_Module_add_targets,stoc,\
 
 endif
 
+$(eval $(call gb_Module_add_check_targets,stoc, \
+    CppunitTest_stoc_uriproc \
+))
+
 # vim:set noet sw=4 ts=4:
