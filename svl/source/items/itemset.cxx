@@ -656,9 +656,10 @@ void SfxItemSet::PutExtended
 void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
 {
     // special case: exactly one sal_uInt16 which is already included?
-    SfxItemState eItemState = GetItemState(nFrom, false);
-    if ( nFrom == nTo && ( eItemState == SfxItemState::DEFAULT || eItemState == SfxItemState::SET ) )
-        return;
+    if (nFrom == nTo)
+        if (SfxItemState eItemState = GetItemState(nFrom, false);
+            eItemState == SfxItemState::DEFAULT || eItemState == SfxItemState::SET)
+            return;
 
 #ifdef DBG_UTIL
     assert(nFrom <= nTo);
