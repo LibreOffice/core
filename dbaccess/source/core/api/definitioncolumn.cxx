@@ -92,10 +92,8 @@ OUString OTableColumnDescriptor::getImplementationName(  )
 
 Sequence< OUString > OTableColumnDescriptor::getSupportedServiceNames(  )
 {
-    Sequence< OUString > aSNS( 2 );
-    aSNS[0] = m_bActAsDescriptor ? OUString(SERVICE_SDBCX_COLUMNDESCRIPTOR) : OUString(SERVICE_SDBCX_COLUMN);
-    aSNS[1] = SERVICE_SDB_COLUMNSETTINGS;
-    return aSNS;
+    return Sequence< OUString > { m_bActAsDescriptor? OUString(SERVICE_SDBCX_COLUMNDESCRIPTOR) : OUString(SERVICE_SDBCX_COLUMN),
+        SERVICE_SDB_COLUMNSETTINGS };
 }
 
 // comphelper::OPropertyArrayUsageHelper
@@ -438,10 +436,7 @@ OUString OTableColumnDescriptorWrapper::getImplementationName(  )
 
 Sequence< OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  )
 {
-    Sequence< OUString > aSNS( 2 );
-    aSNS[0] = SERVICE_SDBCX_COLUMNDESCRIPTOR;
-    aSNS[1] = SERVICE_SDB_COLUMNSETTINGS;
-    return aSNS;
+    return Sequence< OUString > { SERVICE_SDBCX_COLUMNDESCRIPTOR, SERVICE_SDB_COLUMNSETTINGS };
 }
 
 // comphelper::OPropertyArrayUsageHelper
@@ -599,10 +594,7 @@ OUString OTableColumnWrapper::getImplementationName(  )
 
 Sequence< OUString > OTableColumnWrapper::getSupportedServiceNames(  )
 {
-    Sequence< OUString > aSNS( 2 );
-    aSNS[0] = SERVICE_SDBCX_COLUMN;
-    aSNS[1] = SERVICE_SDB_COLUMNSETTINGS;
-    return aSNS;
+    return Sequence< OUString > { SERVICE_SDBCX_COLUMN, SERVICE_SDB_COLUMNSETTINGS };
 }
 
 ::cppu::IPropertyArrayHelper& OTableColumnWrapper::getInfoHelper()
