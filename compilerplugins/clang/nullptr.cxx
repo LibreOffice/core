@@ -75,6 +75,8 @@ public:
 
     bool TraverseLinkageSpecDecl(LinkageSpecDecl * decl);
 
+    bool TraverseInitListExpr(InitListExpr * expr, DataRecursionQueue * queue = nullptr);
+
     // bool shouldVisitTemplateInstantiations() const { return true; }
 
 private:
@@ -229,6 +231,12 @@ bool Nullptr::TraverseLinkageSpecDecl(LinkageSpecDecl * decl) {
     assert(externCContexts_ != 0);
     --externCContexts_;
     return ret;
+}
+
+bool Nullptr::TraverseInitListExpr(InitListExpr * expr, DataRecursionQueue * queue) {
+    return WalkUpFromInitListExpr(expr)
+        && TraverseSynOrSemInitListExpr(
+            expr->isSemanticForm() ? expr : expr->getSemanticForm(), queue);
 }
 
 bool Nullptr::isInLokIncludeFile(SourceLocation spellingLocation) const {
