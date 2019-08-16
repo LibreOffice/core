@@ -453,8 +453,8 @@ public:
     virtual void set_website(const OUString& rURL) = 0;
     virtual void set_website_label(const OUString& rLabel) = 0;
     virtual OUString get_website_label() const = 0;
-    virtual void set_logo(VirtualDevice* pDevice) = 0;
-    virtual void set_background(VirtualDevice* pDevice) = 0;
+    virtual void set_logo(const css::uno::Reference<css::graphic::XGraphic>& rImage) = 0;
+    virtual void set_background(const css::uno::Reference<css::graphic::XGraphic>& rImage) = 0;
 };
 
 struct VCL_DLLPUBLIC ComboBoxEntry

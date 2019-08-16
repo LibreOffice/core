@@ -3514,9 +3514,9 @@ public:
         return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
     }
 
-    virtual void set_logo(VirtualDevice* pDevice) override
+    virtual void set_logo(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
     {
-        GdkPixbuf* pixbuf = pDevice ? getPixbuf(*pDevice) : nullptr;
+        GdkPixbuf* pixbuf = rImage.is() ? getPixbuf(rImage) : nullptr;
         if (!pixbuf)
             gtk_about_dialog_set_logo(m_pAboutDialog, nullptr);
         else
@@ -3526,7 +3526,7 @@ public:
         }
     }
 
-    virtual void set_background(VirtualDevice* pDevice) override
+    virtual void set_background(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
     {
         GtkStyleContext *pStyleContext = gtk_widget_get_style_context(GTK_WIDGET(m_pAboutDialog));
         if (m_pCssProvider)
@@ -3537,37 +3537,17 @@ public:
 
         mxBackgroundImage.reset();
 
-        if (pDevice)
+        if (rImage.is())
         {
             mxBackgroundImage.reset(new utl::TempFile());
             mxBackgroundImage->EnableKillingFile(true);
 
-            OString sOutput = mxBackgroundImage->GetFileName().toUtf8();
+            Image aImage(rImage);
 
-            cairo_surface_t* orig_surface = get_underlying_cairo_surface(*pDevice);
-            double m_fXScale, m_fYScale;
-            dl_cairo_surface_get_device_scale(orig_surface, &m_fXScale, &m_fYScale);
-
-            cairo_surface_t* surface;
-            if (m_fXScale != 1.0 || m_fYScale != -1)
-            {
-                Size aSize(pDevice->GetOutputSizePixel());
-                surface = cairo_surface_create_similar_image(orig_surface,
-                                                             CAIRO_FORMAT_ARGB32,
-                                                             aSize.Width(),
-                                                             aSize.Height());
-                cairo_t* cr = cairo_create(surface);
-                cairo_set_source_surface(cr, orig_surface, 0, 0);
-                cairo_paint(cr);
-                cairo_destroy(cr);
-            }
-            else
-                surface = orig_surface;
-
-            cairo_surface_write_to_png(surface, sOutput.getStr());
-
-            if (surface != orig_surface)
-                cairo_surface_destroy(surface);
+            vcl::PNGWriter aPNGWriter(aImage.GetBitmapEx());
+            SvStream* pStream = mxBackgroundImage->GetStream(StreamMode::WRITE);
+            aPNGWriter.Write(*pStream);
+            mxBackgroundImage->CloseStream();
 
             m_pCssProvider = gtk_css_provider_new();
             OUString aBuffer = "* { background-image: url(\"" + mxBackgroundImage->GetURL() + "\"); }";

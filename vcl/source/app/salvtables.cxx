@@ -1438,13 +1438,13 @@ public:
     {
         return m_xAboutDialog->GetWebsiteLabel();
     }
-    virtual void set_logo(VirtualDevice* pDevice) override
+    virtual void set_logo(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
     {
-        m_xAboutDialog->SetLogo(createImage(*pDevice));
+        m_xAboutDialog->SetLogo(Image(rImage));
     }
-    virtual void set_background(VirtualDevice* pDevice) override
+    virtual void set_background(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
     {
-        m_xAboutDialog->SetBackground(createImage(*pDevice));
+        m_xAboutDialog->SetBackground(Image(rImage));
     }
 };
 
