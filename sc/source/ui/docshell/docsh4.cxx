@@ -108,6 +108,41 @@ using namespace ::com::sun::star;
 #include <memory>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
+ScLkUpdMode ScDocShell::GetLinkUpdateModeState() const
+{
+    const ScDocument& rDoc = GetDocument();
+
+    ScLkUpdMode nSet = rDoc.GetLinkMode();
+
+    if (nSet == LM_UNKNOWN)
+    {
+        ScAppOptions aAppOptions = SC_MOD()->GetAppOptions();
+        nSet = aAppOptions.GetLinkMode();
+    }
+
+    if (nCanUpdate == css::document::UpdateDocMode::NO_UPDATE)
+        nSet = LM_NEVER;
+    else if (nCanUpdate == css::document::UpdateDocMode::FULL_UPDATE)
+        nSet = LM_ALWAYS;
+
+    if (nSet == LM_ALWAYS
+            && !(SvtSecurityOptions().isTrustedLocationUriForUpdatingLinks(
+                    GetMedium() == nullptr ? OUString() : GetMedium()->GetName())
+                || (IsDocShared()
+                    && SvtSecurityOptions().isTrustedLocationUriForUpdatingLinks(
+                        GetSharedFileURL()))))
+    {
+        nSet = LM_ON_DEMAND;
+    }
+    if (nCanUpdate == css::document::UpdateDocMode::QUIET_UPDATE
+            && nSet == LM_ON_DEMAND)
+    {
+        nSet = LM_NEVER;
+    }
+
+    return nSet;
+}
+
 void ScDocShell::Execute( SfxRequest& rReq )
 {
     const SfxItemSet* pReqArgs = rReq.GetArgs();
@@ -409,33 +444,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                 ScDocument& rDoc = GetDocument();
 
-                ScLkUpdMode nSet = rDoc.GetLinkMode();
-
                 sal_uInt16 nDlgRet=RET_NO;
-                if(nSet==LM_UNKNOWN)
-                {
-                    ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
-                    nSet=aAppOptions.GetLinkMode();
-                }
 
-                if (nCanUpdate == css::document::UpdateDocMode::NO_UPDATE)
-                    nSet = LM_NEVER;
-                else if (nCanUpdate == css::document::UpdateDocMode::FULL_UPDATE)
-                    nSet = LM_ALWAYS;
-
-                if (nSet == LM_ALWAYS
-                    && !(SvtSecurityOptions()
-                         .isTrustedLocationUriForUpdatingLinks(
-                             GetMedium() == nullptr
-                             ? OUString() : GetMedium()->GetName())))
-                {
-                    nSet = LM_ON_DEMAND;
-                }
-                if (nCanUpdate == css::document::UpdateDocMode::QUIET_UPDATE
-                    && nSet == LM_ON_DEMAND)
-                {
-                    nSet = LM_NEVER;
-                }
+                ScLkUpdMode nSet = GetLinkUpdateModeState();
 
                 if(nSet==LM_ON_DEMAND)
                 {
