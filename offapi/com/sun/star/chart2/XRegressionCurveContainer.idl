@@ -35,7 +35,7 @@ module chart2
 
 interface XRegressionCurveContainer : com::sun::star::uno::XInterface
 {
-    /** add an regression curve to the container
+    /** add a regression curve to the container
 
         @throws IllegalArgumentException
             If the given regression curve is already contained in the

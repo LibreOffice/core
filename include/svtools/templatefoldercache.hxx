@@ -32,7 +32,7 @@ namespace svt
 
     class TemplateFolderCacheImpl;
     /** allows to cache the state of the template directories of OOo
-        <p>Usually, this class is used together with an instance of a the
+        <p>Usually, this class is used together with an instance of the
         <service scope="com.sun.star.frame">DocumentTemplates</service> service. It allows to scan the template folders
         of the Office, and updates the configuration so that it reflects the most recent state of the folders.<br/>
         As this is an expensive, the TemplateFolderCache has been introduced. It caches the state of the template

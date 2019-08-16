@@ -91,7 +91,7 @@ inline css::uno::Any DbgGetCaughtException()
                                                arg ); }
 
 /** This macro asserts the given condition (in debug mode), and throws
-    an RuntimeException afterwards.
+    a RuntimeException afterwards.
  */
 #define ENSURE_OR_THROW(c, m) \
     if( !(c) ){ \

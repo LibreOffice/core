@@ -40,7 +40,7 @@ import com.sun.star.uno.UnoRuntime;
 // __________ Implementation __________
 
 /**
- * support ONE singleton uno connection to an running office installation!
+ * support ONE singleton uno connection to a running office installation!
  * Can be used to open/use/close connection to uno environment of an already running office.
  * ctor isn't available from outside. You should call static function "getConnection()"
  * to open or use internal set connection which is created one times only.
