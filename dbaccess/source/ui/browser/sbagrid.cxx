@@ -954,7 +954,7 @@ bool SbaGridControl::IsReadOnlyDB() const
         if (xColumns.is())
         {
             Reference< XRowSet >  xDataSource(xColumns->getParent(), UNO_QUERY);
-            ::dbtools::ensureRowSetConnection( xDataSource, getContext() );
+            ::dbtools::ensureRowSetConnection( xDataSource, getContext(), nullptr );
             Reference< XChild >  xConn(::dbtools::getConnection(xDataSource),UNO_QUERY);
             if (xConn.is())
             {

@@ -576,23 +576,22 @@ void ODatabaseSource::disposing()
     m_pImpl.clear();
 }
 
-namespace
+weld::Window* ODatabaseModelImpl::GetFrameWeld()
 {
-#if ENABLE_FIREBIRD_SDBC
-    weld::Window* GetFrameWeld(const Reference<XModel>& rModel)
-    {
-        if (!rModel.is())
-            return nullptr;
-        Reference<XController> xController(rModel->getCurrentController());
-        if (!xController.is())
-            return nullptr;
-        Reference<XFrame> xFrame(xController->getFrame());
-        if (!xFrame.is())
-            return nullptr;
-        Reference<css::awt::XWindow> xWindow(xFrame->getContainerWindow());
-        return Application::GetFrameWeld(xWindow);
-    }
-#endif
+    if (m_xDialogParent.is())
+        return Application::GetFrameWeld(m_xDialogParent);
+
+    Reference<XModel> xModel = getModel_noCreate();
+    if (!xModel.is())
+        return nullptr;
+    Reference<XController> xController(xModel->getCurrentController());
+    if (!xController.is())
+        return nullptr;
+    Reference<XFrame> xFrame(xController->getFrame());
+    if (!xFrame.is())
+        return nullptr;
+    Reference<css::awt::XWindow> xWindow(xFrame->getContainerWindow());
+    return Application::GetFrameWeld(xWindow);
 }
 
 Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString& _rUid, const OUString& _rPwd)
@@ -633,7 +632,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
                 && (nOpenMode & css::embed::ElementModes::WRITE)
                 && (!Application::IsHeadlessModeEnabled()))
             {
-                MigrationWarnDialog aWarnDlg(GetFrameWeld(m_pImpl->getModel_noCreate()));
+                MigrationWarnDialog aWarnDlg(m_pImpl->GetFrameWeld());
                 bNeedMigration = aWarnDlg.run() == RET_OK;
             }
         }
@@ -776,7 +775,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
                 m_pImpl->getDocumentSubStorageSupplier() );
         dbahsql::HsqlImporter importer(xReturn,
                 xDocSup->getDocumentSubStorage("database",ElementModes::READWRITE) );
-        importer.importHsqlDatabase(GetFrameWeld(m_pImpl->getModel_noCreate()));
+        importer.importHsqlDatabase(m_pImpl->GetFrameWeld());
     }
 #endif
 
@@ -1396,6 +1395,13 @@ Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocume
         xModel = m_pImpl->createNewModel_deliverOwnership();
 
     return Reference< XOfficeDatabaseDocument >( xModel, UNO_QUERY_THROW );
+}
+
+void SAL_CALL ODatabaseSource::initialize( css::uno::Sequence< css::uno::Any > const & rArguments)
+{
+    ::comphelper::NamedValueCollection aProperties( rArguments );
+    if (aProperties.has("ParentWindow"))
+        aProperties.get("ParentWindow") >>= m_pImpl->m_xDialogParent;
 }
 
 Reference< XInterface > ODatabaseSource::getThis() const

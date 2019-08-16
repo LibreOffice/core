@@ -2406,7 +2406,7 @@ namespace pcr
             if ( xRowSetProps.is() )
             {
                 weld::WaitObject aWaitCursor(impl_getDefaultDialogFrame_nothrow());
-                m_xRowSetConnection = ::dbtools::ensureRowSetConnection( xRowSet, m_xContext );
+                m_xRowSetConnection = ::dbtools::ensureRowSetConnection( xRowSet, m_xContext, nullptr );
             }
         }
         catch ( const SQLException& ) { aError = SQLExceptionInfo( ::cppu::getCaughtException() ); }
@@ -2620,7 +2620,7 @@ namespace pcr
                 return false;
 
             // get a composer for the statement which the form is currently based on
-            Reference< XSingleSelectQueryComposer > xComposer( ::dbtools::getCurrentSettingsComposer( m_xComponent, m_xContext ) );
+            Reference< XSingleSelectQueryComposer > xComposer( ::dbtools::getCurrentSettingsComposer( m_xComponent, m_xContext, nullptr ) );
             OSL_ENSURE( xComposer.is(), "FormComponentPropertyHandler::impl_dialogFilterOrSort_nothrow: could not obtain a composer!" );
             if ( !xComposer.is() )
                 return false;

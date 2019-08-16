@@ -429,7 +429,7 @@ namespace pcr
             _rxConnection.set(_rxFormProps->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),UNO_QUERY);
 
         if ( !_rxConnection.is() )
-            _rxConnection = ::dbtools::connectRowset( Reference< XRowSet >( _rxFormProps, UNO_QUERY ), m_xContext );
+            _rxConnection = ::dbtools::connectRowset( Reference< XRowSet >( _rxFormProps, UNO_QUERY ), m_xContext, nullptr );
     }
 
 
@@ -451,7 +451,7 @@ namespace pcr
         Reference< XPropertySet > xTable;
         try
         {
-            Reference< XTablesSupplier > xTablesInForm( ::dbtools::getCurrentSettingsComposer( _rxFormProps, m_xContext ), UNO_QUERY );
+            Reference< XTablesSupplier > xTablesInForm( ::dbtools::getCurrentSettingsComposer( _rxFormProps, m_xContext, nullptr ), UNO_QUERY );
             Reference< XNameAccess > xTables;
             if ( xTablesInForm.is() )
                 xTables = xTablesInForm->getTables();
