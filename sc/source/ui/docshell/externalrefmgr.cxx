@@ -2437,6 +2437,10 @@ ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
 
 SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUString& rFilter)
 {
+    // Do not load document until it was allowed.
+    if (!isLinkUpdateAllowedInDoc(*mpDoc))
+        return nullptr;
+
     const SrcFileData* pFileData = getExternalFileData(nFileId);
     if (!pFileData)
         return nullptr;
@@ -2451,10 +2455,6 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
         aFile = pFileData->maRealFileName;
 
     if (!isFileLoadable(aFile))
-        return nullptr;
-
-    // Do not load document until it was allowed.
-    if (!isLinkUpdateAllowedInDoc(*mpDoc))
         return nullptr;
 
     OUString aOptions = pFileData->maFilterOptions;
