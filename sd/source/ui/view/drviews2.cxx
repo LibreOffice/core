@@ -100,6 +100,7 @@
 
 #include <unotools/useroptions.hxx>
 
+#include <vcl/abstdlg.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp2.hxx>
@@ -119,6 +120,7 @@
 #include <svx/xtable.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/SvxColorChildWindow.hxx>
+#include <svx/svxids.hrc>
 #include <editeng/outlobj.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/scripttypeitem.hxx>
@@ -3398,6 +3400,19 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 pWin ? pWin->GetFrameWeld() : nullptr,
                 GetDoc()));
 
+            pDlg->Execute();
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_INSERT_QRCODE:
+        case SID_EDIT_QRCODE:
+       {
+            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+            const uno::Reference<frame::XModel> xModel = GetViewShellBase().GetController()->getModel();
+            ScopedVclPtr<AbstractQrCodeGenDialog> pDlg(pFact->CreateQrCodeGenDialog(
+                GetFrameWeld(), xModel, rReq.GetSlot() == SID_EDIT_QRCODE));
             pDlg->Execute();
             Cancel();
             rReq.Ignore ();

@@ -243,6 +243,7 @@
       <menu:menuitem menu:id=".uno:InsertAnnotation"/>
       <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame" menu:style="text"/>
       <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
+      <menu:menuitem menu:id=".uno:InsertQrCode"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
       <menu:menuitem menu:id=".uno:InsertSymbol"/>
