@@ -184,15 +184,14 @@ DECLARE_LINKS_IMPORT_TEST(testTdf123627_import, "tdf123627.docx", USE_RELATIVE)
 /* EXPORT */
 
 DECLARE_LINKS_EXPORT_TEST(testRelativeToRelativeExport, "relative-link.docx", USE_RELATIVE,
-                          DONT_MODIFY_LINK)
+                          USE_TEMP_DIR)
 {
     xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
     if (!pXmlDoc)
         return;
 
-    OUString sTarget = getXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]", "Target");
-//    CPPUNIT_ASSERT(!sTarget.startsWith("file:///"));
-    CPPUNIT_ASSERT(sTarget.endsWith("relative.docx"));
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
+                "relative.docx");
 }
 
 DECLARE_LINKS_EXPORT_TEST(testRelativeToAbsoluteExport, "relative-link.docx", USE_ABSOLUTE,
@@ -229,15 +228,14 @@ DECLARE_LINKS_EXPORT_TEST(testAbsoluteToAbsoluteExport, "absolute-link.docx", US
     CPPUNIT_ASSERT(sTarget.endsWith("test.docx"));
 }
 
-DECLARE_LINKS_EXPORT_TEST(testTdf123627_export, "tdf123627.docx", USE_RELATIVE, DONT_MODIFY_LINK)
+DECLARE_LINKS_EXPORT_TEST(testTdf123627_export, "tdf123627.docx", USE_RELATIVE, USE_TEMP_DIR)
 {
     xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
     if (!pXmlDoc)
         return;
 
-    OUString sTarget = getXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]", "Target");
-//    CPPUNIT_ASSERT(!sTarget.startsWith("file:///"));
-    CPPUNIT_ASSERT(sTarget.endsWith("New/test.docx"));
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
+                "test.docx");
 }
 
 DECLARE_LINKS_EXPORT_TEST(testTdf126590_export, "tdf126590.docx", USE_ABSOLUTE, DONT_MODIFY_LINK)
