@@ -219,6 +219,7 @@ public:
 
     void    GetDocStat( ScDocStat& rDocStat );
 
+    const ScDocument& GetDocument() const { return m_aDocument; }
     ScDocument&     GetDocument()   { return m_aDocument; }
     ScDocFunc&      GetDocFunc()    { return *m_pDocFunc; }
 
@@ -301,6 +302,7 @@ public:
     void            UpdateLinks() override;
     void            ReloadAllLinks();
     void            ReloadTabLinks();
+    ScLkUpdMode     GetLinkUpdateModeState() const;
 
     void            SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoading = false );
     /**
