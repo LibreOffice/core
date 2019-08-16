@@ -629,8 +629,7 @@ BreakIteratorImpl::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 BreakIteratorImpl::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet { "com.sun.star.i18n.BreakIterator" };
-    return aRet;
+    return Sequence< OUString > { "com.sun.star.i18n.BreakIterator" };
 }
 
 }
