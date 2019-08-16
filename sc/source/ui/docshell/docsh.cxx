@@ -582,13 +582,20 @@ bool ScDocShell::Load( SfxMedium& rMedium )
     bool bRet = SfxObjectShell::Load(rMedium);
     if (bRet)
     {
-        comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
-        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
-
         if (GetMedium())
         {
             const SfxUInt16Item* pUpdateDocItem = SfxItemSet::GetItem<SfxUInt16Item>(rMedium.GetItemSet(), SID_UPDATEDOCMODE, false);
             m_nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : css::document::UpdateDocMode::NO_UPDATE;
+        }
+
+        // GetLinkUpdateModeState() evaluates m_nCanUpdate so that must have
+        // been set first. Do not override an already forbidden LinkUpdate (the
+        // default is allow).
+        comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
+        if (rEmbeddedObjectContainer.getUserAllowsLinkUpdate())
+        {
+            // For anything else than LM_ALWAYS we need user confirmation.
+            rEmbeddedObjectContainer.setUserAllowsLinkUpdate( GetLinkUpdateModeState() == LM_ALWAYS);
         }
 
         {
