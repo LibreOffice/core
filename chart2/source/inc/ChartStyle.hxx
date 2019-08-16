@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
 #include <map>
 
 #include "PropertyHelper.hxx"
@@ -38,7 +39,8 @@ namespace chart
 {
 namespace impl
 {
-typedef ::cppu::WeakImplHelper<css::style::XStyle> ChartObjectStyle_Base;
+typedef ::cppu::WeakImplHelper<css::style::XStyle,
+                               css::util::XCloneable> ChartObjectStyle_Base;
 }
 
 class ChartObjectStyle : public chart::MutexContainer,
@@ -49,6 +51,7 @@ public:
     ChartObjectStyle(css::uno::Reference<css::beans::XPropertySetInfo> xPropertySetInfo,
                      ::cppu::IPropertyArrayHelper& rArrayHelper,
                      const chart::tPropertyValueMap& rPropertyMap);
+    explicit ChartObjectStyle( const ChartObjectStyle & rOther );
     virtual ~ChartObjectStyle();
 
     /// merge XInterface implementations
@@ -74,6 +77,9 @@ public:
 
     virtual void SAL_CALL setName(const OUString&);
 
+    // _____ XCloneable _____
+    virtual css::uno::Reference<css::util::XCloneable> SAL_CALL createClone() override;
+
 private:
     ::cppu::IPropertyArrayHelper& mrArrayHelper;
     const chart::tPropertyValueMap& mrPropertyMap;
@@ -81,15 +87,19 @@ private:
 };
 
 class ChartStyle : public cppu::WeakImplHelper<css::chart2::XChartStyle, css::lang::XServiceInfo,
-                                               css::style::XStyle>
+                                               css::style::XStyle, css::util::XCloneable>
 {
 public:
     explicit ChartStyle();
+    explicit ChartStyle( const ChartStyle & rOther );
     virtual ~ChartStyle();
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    // _____ XCloneable _____
+    virtual css::uno::Reference<css::util::XCloneable> SAL_CALL createClone() override;
 
     // _____ XChartStyle _____
     virtual css::uno::Reference<css::beans::XPropertySet>
@@ -103,6 +113,8 @@ public:
 
     virtual void SAL_CALL
     applyStyleToBackground(const css::uno::Reference<css::beans::XPropertySet>& xBackground) override;
+
+    virtual void updateStyle(const sal_Int16 nChartObjectType, const css::uno::Sequence<css::beans::PropertyValue>& rProperties) override;
 
     // XStyle
     virtual sal_Bool SAL_CALL isUserDefined() override;

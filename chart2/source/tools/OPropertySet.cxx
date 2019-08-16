@@ -367,6 +367,29 @@ void SAL_CALL OPropertySet::setFastPropertyValue( sal_Int32 nHandle, const Any& 
     firePropertyChangeEvent();
 }
 
+// _____ XPropertyAccess _____
+css::uno::Sequence< css::beans::PropertyValue > SAL_CALL OPropertySet::getPropertyValues()
+{
+    auto& rPropertyMap = m_pImplProperties->exportPropertyMap();
+    Sequence< css::beans::PropertyValue > aPropertySeq( rPropertyMap.size() );
+
+    sal_Int32 nIdx = 0;
+    for (auto Itr = rPropertyMap.begin(); Itr != rPropertyMap.end(); Itr++, nIdx++ )
+    {
+        aPropertySeq[ nIdx ].Handle = Itr->first;
+        aPropertySeq[ nIdx ].Value  = Itr->second;
+    }
+    return aPropertySeq;
+}
+
+void SAL_CALL OPropertySet::setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& rPropertyValues )
+{
+    for (auto Itr = rPropertyValues.begin(); Itr != rPropertyValues.end(); Itr++)
+    {
+        setFastPropertyValue( Itr->Handle, Itr->Value );
+    }
+}
+
 } //  namespace property
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
