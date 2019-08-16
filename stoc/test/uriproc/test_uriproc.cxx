@@ -32,10 +32,10 @@
 #include <com/sun/star/uri/XVndSunStarScriptUrlReference.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <cppuhelper/bootstrap.hxx>
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/textenc.h>
@@ -49,11 +49,11 @@
 namespace {
 
 #define TEST_ASSERT_EQUAL(token1, token2, token3, expected, actual) \
-    CPPUNIT_ASSERT_MESSAGE( \
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( \
         createTestAssertEqualMessage( \
             token1, token2, token3, #expected, #actual, expected, actual). \
             getStr(), \
-        (actual) == (expected))
+        (expected), (actual))
 
 template< typename T > void append(
     OUStringBuffer & buffer, T const & value)
@@ -62,7 +62,7 @@ template< typename T > void append(
 }
 
 template<> void append(OUStringBuffer & buffer, bool const & value) {
-    buffer.append(static_cast< sal_Bool >(value));
+    buffer.append(value);
 }
 
 template<> void append(OUStringBuffer & buffer, std::size_t const & value)
@@ -195,7 +195,7 @@ void Test::testParse() {
         css::uno::Reference< css::uri::XUriReference > uriRef(
             m_uriFactory->parse(
                 OUString::createFromAscii(data[i].uriReference)));
-        CPPUNIT_ASSERT(uriRef.is() == (data[i].schemeSpecificPart != 0));
+        CPPUNIT_ASSERT_EQUAL(data[i].schemeSpecificPart != nullptr, uriRef.is());
         if (uriRef.is()) {
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
@@ -203,11 +203,11 @@ void Test::testParse() {
                 uriRef->getUriReference());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                data[i].scheme != 0, uriRef->isAbsolute());
+                data[i].scheme != nullptr, bool(uriRef->isAbsolute()));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 OUString::createFromAscii(
-                    data[i].scheme == 0 ? "" : data[i].scheme),
+                    data[i].scheme == nullptr ? "" : data[i].scheme),
                 uriRef->getScheme());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
@@ -219,11 +219,11 @@ void Test::testParse() {
                 static_cast< bool >(uriRef->isHierarchical()));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                data[i].authority != 0, uriRef->hasAuthority());
+                data[i].authority != nullptr, bool(uriRef->hasAuthority()));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 OUString::createFromAscii(
-                    data[i].authority == 0 ? "" : data[i].authority),
+                    data[i].authority == nullptr ? "" : data[i].authority),
                 uriRef->getAuthority());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
@@ -264,19 +264,19 @@ void Test::testParse() {
                 OUString(), uriRef->getPathSegment(5));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                data[i].query != 0, uriRef->hasQuery());
+                data[i].query != nullptr, bool(uriRef->hasQuery()));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 OUString::createFromAscii(
-                    data[i].query == 0 ? "" : data[i].query),
+                    data[i].query == nullptr ? "" : data[i].query),
                 uriRef->getQuery());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                data[i].fragment != 0, uriRef->hasFragment());
+                data[i].fragment != nullptr, bool(uriRef->hasFragment()));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 OUString::createFromAscii(
-                    data[i].fragment == 0 ? "" : data[i].fragment),
+                    data[i].fragment == nullptr ? "" : data[i].fragment),
                 uriRef->getFragment());
         }
     }
@@ -596,7 +596,7 @@ void Test::testMakeAbsolute() {
                 data[i].excessParentSegments));
         TEST_ASSERT_EQUAL(
             "testMakeAbsolute", i, data[i].uriReference,
-            data[i].absolute != 0, absolute.is());
+            data[i].absolute != nullptr, absolute.is());
         if (absolute.is()) {
             TEST_ASSERT_EQUAL(
                 "testMakeAbsolute", i, data[i].uriReference,
@@ -702,7 +702,7 @@ void Test::testMakeRelative() {
                 data[i].encodeRetainedSpecialSegments));
         TEST_ASSERT_EQUAL(
             "testMakeRelative", i, data[i].uriReference,
-            data[i].relative != 0, relative.is());
+            data[i].relative != nullptr, relative.is());
         if (relative.is()) {
             TEST_ASSERT_EQUAL(
                 "testMakeRelative", i, data[i].uriReference,
@@ -716,7 +716,7 @@ void Test::testMakeRelative() {
             TEST_ASSERT_EQUAL(
                 "testMakeRelative", i, data[i].uriReference,
                 OUString::createFromAscii(
-                    data[i].absolute == 0
+                    data[i].absolute == nullptr
                     ? data[i].uriReference : data[i].absolute),
                 absolute->getUriReference());
         }
@@ -735,7 +735,7 @@ void Test::testVndSunStarExpand() {
         { "vnd.sun.star.expand:%5C$%5C%24%5C%5C", "$$\\" } };
     css::uno::Reference< css::util::XMacroExpander > expander(
         m_context->getValueByName(
-              OUString( "/singletons/com.sun.star.util.theMacroExpander")),
+              "/singletons/com.sun.star.util.theMacroExpander"),
         css::uno::UNO_QUERY_THROW);
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         css::uno::Reference< css::uri::XUriReference > uriRef(
@@ -743,7 +743,7 @@ void Test::testVndSunStarExpand() {
                 OUString::createFromAscii(data[i].uriReference)));
         TEST_ASSERT_EQUAL(
             "testVndSunStarExpand", i, data[i].uriReference,
-            data[i].expanded != 0, uriRef.is());
+            data[i].expanded != nullptr, uriRef.is());
         if (uriRef.is()) {
             css::uno::Reference< css::uri::XVndSunStarExpandUrlReference >
                 expandUrl(uriRef, css::uno::UNO_QUERY_THROW);
@@ -782,7 +782,7 @@ void Test::testVndSunStarScript() {
             m_uriFactory->parse(
                 OUString::createFromAscii(data[i].uriReference)));
         TEST_ASSERT_EQUAL(
-            "testVndSunStarScript", i, data[i].uriReference, data[i].name != 0,
+            "testVndSunStarScript", i, data[i].uriReference, data[i].name != nullptr,
             uriRef.is());
         if (uriRef.is()) {
             css::uno::Reference< css::uri::XVndSunStarScriptUrlReference >
@@ -797,16 +797,17 @@ void Test::testVndSunStarScript() {
                 scriptUrl->getName());
             OUString originalReference(uriRef->getUriReference());
             for (std::size_t j = 0; j < parameterCount; ++j) {
-                if (data[i].parameters[j].key != 0) {
+                if (data[i].parameters[j].key != nullptr) {
                     TEST_ASSERT_EQUAL(
                         "testVndSunStarScript",
                         static_cast< double >(i)
                         + static_cast< double >(j) / 10.0,
                         data[i].uriReference,
-                        data[i].parameters[j].value != 0,
-                        scriptUrl->hasParameter(
-                            OUString::createFromAscii(
-                                data[i].parameters[j].key)));
+                        data[i].parameters[j].value != nullptr,
+                        bool(
+                            scriptUrl->hasParameter(
+                                OUString::createFromAscii(
+                                    data[i].parameters[j].key))));
                     TEST_ASSERT_EQUAL(
                         "testVndSunStarScript",
                         static_cast< double >(i)
@@ -854,26 +855,26 @@ void Test::testVndSunStarScript() {
 
     css::uno::Reference< css::uri::XUriReference > uriRef(
         m_uriFactory->parse(
-            OUString( "vnd.sun.star.script:Hello?location=Library.Module")),
+            "vnd.sun.star.script:Hello?location=Library.Module"),
         css::uno::UNO_SET_THROW);
     css::uno::Reference< css::uri::XVndSunStarScriptUrlReference >
         scriptUrl(uriRef, css::uno::UNO_QUERY_THROW);
 
     scriptUrl->setParameter(
-        OUString("location"),
-        OUString("foo"));
+        "location",
+        "foo");
     TEST_ASSERT_EQUAL(
-        "testVndSunStarScript", (sal_Int32)10, (sal_Int32)1,
-        uriRef->getUriReference(),
-        OUString("vnd.sun.star.script:Hello?location=foo"));
+        "testVndSunStarScript", sal_Int32(10), sal_Int32(1),
+        OUString("vnd.sun.star.script:Hello?location=foo"),
+        uriRef->getUriReference());
 
     scriptUrl->setParameter(
-        OUString("language"),
-        OUString("StarBasic"));
+        "language",
+        "StarBasic");
     TEST_ASSERT_EQUAL(
-        "testVndSunStarScript", (sal_Int32)10, (sal_Int32)2,
-        uriRef->getUriReference(),
-        OUString("vnd.sun.star.script:Hello?location=foo&language=StarBasic"));
+        "testVndSunStarScript", sal_Int32(10), sal_Int32(2),
+        OUString("vnd.sun.star.script:Hello?location=foo&language=StarBasic"),
+        uriRef->getUriReference());
 
 
     bool caughtExpected = false;
@@ -887,14 +888,14 @@ void Test::testVndSunStarScript() {
         "testVndSunStarScript",
         OUString("illegal arguments"),
         OUString("name"),
-        caughtExpected,
-        true);
+        true,
+        caughtExpected);
 
     caughtExpected = false;
     try {
         scriptUrl->setParameter(
             OUString(),
-            OUString("non-empty"));
+            "non-empty");
     }
     catch( const css::lang::IllegalArgumentException& ) {
         caughtExpected = true;
@@ -903,8 +904,8 @@ void Test::testVndSunStarScript() {
         "testVndSunStarScript",
         OUString("illegal arguments"),
         OUString("parameter"),
-        caughtExpected,
-        true);
+        true,
+        caughtExpected);
 }
 
 void Test::testTranslator() {
@@ -970,8 +971,8 @@ void Test::testPkgUrlFactory() {
                     OUString::createFromAscii(data[i].authority))));
         TEST_ASSERT_EQUAL(
             "testVndSunStarPkgFactory", i, data[i].authority,
-            data[i].result != 0, static_cast< bool >(url.is()));
-        if (data[i].result != 0) {
+            data[i].result != nullptr, url.is());
+        if (data[i].result != nullptr) {
             TEST_ASSERT_EQUAL(
                 "testVndSunStarPkgFactory", i, data[i].authority,
                 OUString::createFromAscii(data[i].result),
