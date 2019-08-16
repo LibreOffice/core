@@ -78,10 +78,7 @@ OUString OCallableStatement::getImplementationName(  )
 
 Sequence< OUString > OCallableStatement::getSupportedServiceNames(  )
 {
-    Sequence< OUString > aSNS( 2 );
-    aSNS.getArray()[0] = SERVICE_SDBC_CALLABLESTATEMENT;
-    aSNS.getArray()[1] = SERVICE_SDB_CALLABLESTATEMENT;
-    return aSNS;
+    return Sequence< OUString > { SERVICE_SDBC_CALLABLESTATEMENT, SERVICE_SDB_CALLABLESTATEMENT };
 }
 
 // XOutParameters

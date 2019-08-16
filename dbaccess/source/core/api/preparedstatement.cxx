@@ -119,10 +119,7 @@ sal_Bool OPreparedStatement::supportsService( const OUString& _rServiceName )
 
 Sequence< OUString > OPreparedStatement::getSupportedServiceNames(  )
 {
-    Sequence< OUString > aSNS( 2 );
-    aSNS.getArray()[0] = SERVICE_SDBC_PREPAREDSTATEMENT;
-    aSNS.getArray()[1] = SERVICE_SDB_PREPAREDSTATMENT;
-    return aSNS;
+    return Sequence< OUString > { SERVICE_SDBC_PREPAREDSTATEMENT, SERVICE_SDB_PREPAREDSTATMENT };
 }
 
 // OComponentHelper
