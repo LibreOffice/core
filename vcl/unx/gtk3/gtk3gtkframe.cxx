@@ -3610,6 +3610,10 @@ void GtkDropTarget::signalDragLeave(GtkWidget* pWidget, GdkDragContext* /*contex
 {
     m_bInDrag = false;
     gtk_drag_unhighlight(pWidget);
+
+    css::datatransfer::dnd::DropTargetEvent aEvent;
+    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(this);
+    fire_dragExit(aEvent);
 }
 
 void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
