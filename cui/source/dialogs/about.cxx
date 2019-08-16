@@ -178,10 +178,8 @@ void AboutDialog::SetLogo()
         m_xDialog->set_logo(nullptr);
     else
     {
-        ScopedVclPtr<VirtualDevice> xDevice(m_xDialog->create_virtual_device());
-        xDevice->SetOutputSize(aLogoBitmap.GetSizePixel());
-        xDevice->DrawBitmapEx(Point(), aLogoBitmap);
-        m_xDialog->set_logo(xDevice.get());
+        Graphic aGraphic(aLogoBitmap);
+        m_xDialog->set_logo(aGraphic.GetXGraphic());
     }
 }
 
@@ -193,10 +191,8 @@ IMPL_LINK(AboutDialog, SizeAllocHdl, const Size&, rSize, void)
     if (!(Application::GetSettings().GetStyleSettings().GetHighContrastMode()))
     {
         SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, rSize.Width());
-        ScopedVclPtr<VirtualDevice> xDevice(m_xDialog->create_virtual_device());
-        xDevice->SetOutputSize(aBackgroundBitmap.GetSizePixel());
-        xDevice->DrawBitmapEx(Point(), aBackgroundBitmap);
-        m_xDialog->set_background(xDevice.get());
+        Graphic aGraphic(aBackgroundBitmap);
+        m_xDialog->set_background(aGraphic.GetXGraphic());
     }
 }
 
