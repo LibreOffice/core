@@ -111,6 +111,7 @@ SvxZoomStatusBarControl::SvxZoomStatusBarControl( sal_uInt16 _nSlotId,
     nValueSet( SvxZoomEnableFlags::ALL )
 {
     GetStatusBar().SetQuickHelpText(GetId(), SvxResId(RID_SVXSTR_ZOOMTOOL_HINT));
+    ImplUpdateItemText();
 }
 
 void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
@@ -124,9 +125,7 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
     else if ( auto pItem = dynamic_cast< const SfxUInt16Item* >(pState) )
     {
         nZoom = pItem->GetValue();
-
-        OUString aStr(unicode::formatPercent(nZoom, Application::GetSettings().GetUILanguageTag()));
-        GetStatusBar().SetItemText( GetId(), aStr );
+        ImplUpdateItemText();
 
         if ( auto pZoomItem = dynamic_cast<const SvxZoomItem*>(pState) )
         {
@@ -140,10 +139,14 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
     }
 }
 
-void SvxZoomStatusBarControl::Paint( const UserDrawEvent& )
+void SvxZoomStatusBarControl::ImplUpdateItemText()
 {
     OUString aStr(unicode::formatPercent(nZoom, Application::GetSettings().GetUILanguageTag()));
     GetStatusBar().SetItemText( GetId(), aStr );
+}
+
+void SvxZoomStatusBarControl::Paint( const UserDrawEvent& )
+{
 }
 
 void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
@@ -156,6 +159,7 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
         if (aPop.Execute(&rStatusbar, rCEvt.GetMousePosPixel()) && (nZoom != aPop.GetZoom() || !nZoom))
         {
             nZoom = aPop.GetZoom();
+            ImplUpdateItemText();
             SvxZoomItem aZoom(SvxZoomType::PERCENT, nZoom, GetId());
 
             OString sIdent = aPop.GetCurItemIdent();
