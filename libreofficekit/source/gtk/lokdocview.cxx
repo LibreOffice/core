@@ -363,107 +363,6 @@ payloadToSize(const char* pPayload, long& rWidth, long& rHeight)
     g_strfreev(ppCoordinates);
 }
 
-/// Returns the string representation of a LibreOfficeKitCallbackType enumeration element.
-static const char*
-callbackTypeToString (int nType)
-{
-    switch (static_cast<LibreOfficeKitCallbackType>(nType))
-    {
-    case LOK_CALLBACK_INVALIDATE_TILES:
-        return "LOK_CALLBACK_INVALIDATE_TILES";
-    case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-        return "LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR";
-    case LOK_CALLBACK_TEXT_SELECTION:
-        return "LOK_CALLBACK_TEXT_SELECTION";
-    case LOK_CALLBACK_TEXT_SELECTION_START:
-        return "LOK_CALLBACK_TEXT_SELECTION_START";
-    case LOK_CALLBACK_TEXT_SELECTION_END:
-        return "LOK_CALLBACK_TEXT_SELECTION_END";
-    case LOK_CALLBACK_CURSOR_VISIBLE:
-        return "LOK_CALLBACK_CURSOR_VISIBLE";
-    case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
-        return "LOK_CALLBACK_VIEW_CURSOR_VISIBLE";
-    case LOK_CALLBACK_GRAPHIC_SELECTION:
-        return "LOK_CALLBACK_GRAPHIC_SELECTION";
-    case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
-        return "LOK_CALLBACK_GRAPHIC_VIEW_SELECTION";
-    case LOK_CALLBACK_CELL_CURSOR:
-        return "LOK_CALLBACK_CELL_CURSOR";
-    case LOK_CALLBACK_HYPERLINK_CLICKED:
-        return "LOK_CALLBACK_HYPERLINK_CLICKED";
-    case LOK_CALLBACK_MOUSE_POINTER:
-        return "LOK_CALLBACK_MOUSE_POINTER";
-    case LOK_CALLBACK_STATE_CHANGED:
-        return "LOK_CALLBACK_STATE_CHANGED";
-    case LOK_CALLBACK_STATUS_INDICATOR_START:
-        return "LOK_CALLBACK_STATUS_INDICATOR_START";
-    case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
-        return "LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE";
-    case LOK_CALLBACK_STATUS_INDICATOR_FINISH:
-        return "LOK_CALLBACK_STATUS_INDICATOR_FINISH";
-    case LOK_CALLBACK_SEARCH_NOT_FOUND:
-        return "LOK_CALLBACK_SEARCH_NOT_FOUND";
-    case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
-        return "LOK_CALLBACK_DOCUMENT_SIZE_CHANGED";
-    case LOK_CALLBACK_SET_PART:
-        return "LOK_CALLBACK_SET_PART";
-    case LOK_CALLBACK_SEARCH_RESULT_SELECTION:
-        return "LOK_CALLBACK_SEARCH_RESULT_SELECTION";
-    case LOK_CALLBACK_DOCUMENT_PASSWORD:
-        return "LOK_CALLBACK_DOCUMENT_PASSWORD";
-    case LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY:
-        return "LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY";
-    case LOK_CALLBACK_CONTEXT_MENU:
-        return "LOK_CALLBACK_CONTEXT_MENU";
-    case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
-        return "LOK_CALLBACK_INVALIDATE_VIEW_CURSOR";
-    case LOK_CALLBACK_TEXT_VIEW_SELECTION:
-        return "LOK_CALLBACK_TEXT_VIEW_SELECTION";
-    case LOK_CALLBACK_CELL_VIEW_CURSOR:
-        return "LOK_CALLBACK_CELL_VIEW_CURSOR";
-    case LOK_CALLBACK_CELL_ADDRESS:
-        return "LOK_CALLBACK_CELL_ADDRESS";
-    case LOK_CALLBACK_CELL_FORMULA:
-        return "LOK_CALLBACK_CELL_FORMULA";
-    case LOK_CALLBACK_UNO_COMMAND_RESULT:
-        return "LOK_CALLBACK_UNO_COMMAND_RESULT";
-    case LOK_CALLBACK_ERROR:
-        return "LOK_CALLBACK_ERROR";
-    case LOK_CALLBACK_VIEW_LOCK:
-        return "LOK_CALLBACK_VIEW_LOCK";
-    case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
-        return "LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED";
-    case LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
-        return "LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED";
-    case LOK_CALLBACK_INVALIDATE_HEADER:
-        return "LOK_CALLBACK_INVALIDATE_HEADER";
-    case LOK_CALLBACK_COMMENT:
-        return "LOK_CALLBACK_COMMENT";
-    case LOK_CALLBACK_RULER_UPDATE:
-        return "LOK_CALLBACK_RULER_UPDATE";
-    case LOK_CALLBACK_WINDOW:
-        return "LOK_CALLBACK_WINDOW";
-    case LOK_CALLBACK_VALIDITY_LIST_BUTTON:
-        return "LOK_CALLBACK_VALIDITY_LIST_BUTTON";
-    case LOK_CALLBACK_CLIPBOARD_CHANGED:
-        return "LOK_CALLBACK_CLIPBOARD_CHANGED";
-    case LOK_CALLBACK_CONTEXT_CHANGED:
-        return "LOK_CALLBACK_CONTEXT_CHANGED";
-    case LOK_CALLBACK_SIGNATURE_STATUS:
-        return "LOK_CALLBACK_SIGNATURE_STATUS";
-    case LOK_CALLBACK_PROFILE_FRAME:
-        return "LOK_CALLBACK_PROFILE_FRAME";
-    case LOK_CALLBACK_CELL_SELECTION_AREA:
-        return "LOK_CALLBACK_CELL_SELECTION_AREA";
-    case LOK_CALLBACK_CELL_AUTO_FILL_AREA:
-        return "LOK_CALLBACK_CELL_AUTO_FILL_AREA";
-    case LOK_CALLBACK_TABLE_SELECTED:
-        return "LOK_CALLBACK_TABLE_SELECTED";
-    }
-    g_assert(false);
-    return nullptr;
-}
-
 static void
 LOKPostCommand (LOKDocView* pDocView,
                 const gchar* pCommand,
@@ -1060,7 +959,7 @@ globalCallbackWorker(int nType, const char* pPayload, void* pData)
     LOKDocView* pDocView = LOK_DOC_VIEW (pData);
 
     CallbackData* pCallback = new CallbackData(nType, pPayload ? pPayload : "(nil)", pDocView);
-    g_info("LOKDocView_Impl::globalCallbackWorkerImpl: %s, '%s'", callbackTypeToString(nType), pPayload);
+    g_info("LOKDocView_Impl::globalCallbackWorkerImpl: %s, '%s'", lokCallbackTypeToString(nType), pPayload);
     gdk_threads_add_idle(globalCallback, pCallback);
 }
 
@@ -1477,7 +1376,7 @@ static void callbackWorker (int nType, const char* pPayload, void* pData)
     CallbackData* pCallback = new CallbackData(nType, pPayload ? pPayload : "(nil)", pDocView);
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     std::stringstream ss;
-    ss << "callbackWorker, view #" << priv->m_nViewId << ": " << callbackTypeToString(nType) << ", '" << (pPayload ? pPayload : "(nil)") << "'";
+    ss << "callbackWorker, view #" << priv->m_nViewId << ": " << lokCallbackTypeToString(nType) << ", '" << (pPayload ? pPayload : "(nil)") << "'";
     g_info("%s", ss.str().c_str());
     gdk_threads_add_idle(callback, pCallback);
 }
