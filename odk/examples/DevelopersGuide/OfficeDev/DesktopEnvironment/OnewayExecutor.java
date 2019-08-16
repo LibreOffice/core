@@ -70,7 +70,7 @@ class OnewayExecutor extends Thread
 
 
     /**
-     * @member  m_rLink     the object, which wish to be called back by this thread
+     * @member  m_rLink     the object, which wishes to be called back by this thread
      * @member  m_nRequest  describes the type of the original request (means the
      *                      called oneway method)
      * @member  m_lParams   list of parameters of the original request
@@ -84,7 +84,7 @@ class OnewayExecutor extends Thread
     /**
      * ctor
      * It's initialize this thread with all necessary parameters.
-     * It gets the object, which wish to be called back and the type
+     * It gets the object, which wishes to be called back and the type
      * and parameters of the original request.
      *
      * @param nRequest

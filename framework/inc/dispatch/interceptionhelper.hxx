@@ -221,7 +221,7 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper<
             @attention  We don't check for double registrations here!
 
             @param      xInterceptor
-                        reference to interceptor, which wish to be registered here.
+                        reference to interceptor, which wishes to be registered here.
 
             @throw      A RuntimeException if the given reference is NULL!
          */
@@ -235,7 +235,7 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper<
                         and delete all special information about it.
 
             @param      xInterceptor
-                        reference to the interceptor, which wish to be deregistered.
+                        reference to the interceptor, which wishes to be deregistered.
 
             @throw      A RuntimeException if the given reference is NULL!
          */
