@@ -733,7 +733,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Desk
 
     @descr      It's really provided by an internal helper, which is used inside the dispatch API too.
     @param      xInterceptor
-                the interceptor object, which wish to be (de)registered.
+                the interceptor object, which wishes to be (de)registered.
 
     @threadsafe yes
 *//*-*************************************************************************************************************/

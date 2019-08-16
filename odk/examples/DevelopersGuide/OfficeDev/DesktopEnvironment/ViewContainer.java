@@ -87,7 +87,7 @@ public class ViewContainer extends Thread
      * This register a new view inside this global container
      * (if it doesn't already exist).
      *
-     * @param   aView       view which wish to be registered inside this container
+     * @param   aView       view which wishes to be registered inside this container
      */
     public void addView(Object aView)
     {
@@ -109,7 +109,7 @@ public class ViewContainer extends Thread
      * visible frame anymore.
      *
      * @param aView
-     *          view object which wish to be deregistered
+     *          view object which wishes to be deregistered
      */
     public void removeView(Object aView)
     {
