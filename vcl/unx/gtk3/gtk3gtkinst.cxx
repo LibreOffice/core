@@ -10919,14 +10919,6 @@ void GtkInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OS
     GtkWidget* pParent = m_pWidget;
     while ((pParent = gtk_widget_get_parent(pParent)))
     {
-        // tdf#122355 before trying dialog help, check to see if there is a notebook
-        // called tabcontrol, and try the help for the current page of that first
-        if (m_pBuilder && GTK_IS_DIALOG(pParent))
-        {
-            OString sPageHelpId(m_pBuilder->get_current_page_help_id());
-            if (!sPageHelpId.isEmpty() && func(sPageHelpId))
-                return;
-        }
         if (func(::get_help_id(pParent)))
             return;
     }
