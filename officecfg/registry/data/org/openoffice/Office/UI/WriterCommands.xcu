@@ -1536,7 +1536,7 @@
           <value xml:lang="en-US">~Rows</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value>Delete selected rows</value>
+          <value xml:lang="en-US">Delete selected rows</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1550,7 +1550,7 @@
           <value xml:lang="en-US">~Columns</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value>Delete selected columns</value>
+          <value xml:lang="en-US">Delete selected columns</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1564,7 +1564,7 @@
           <value xml:lang="en-US">~Table</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value>Delete table</value>
+          <value xml:lang="en-US">Delete table</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1655,7 +1655,7 @@
           <value xml:lang="en-US">C~ell</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value>Select Cell</value>
+          <value xml:lang="en-US">Select Cell</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1693,7 +1693,7 @@
           <value xml:lang="en-US">~Table</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value>Select Table</value>
+          <value xml:lang="en-US">Select Table</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
