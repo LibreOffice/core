@@ -65,7 +65,6 @@ void SvxInsertStatusBarControl::StateChanged( sal_uInt16 , SfxItemState eState,
 
 void SvxInsertStatusBarControl::Paint( const UserDrawEvent& )
 {
-    DrawItemText_Impl();
 }
 
 void SvxInsertStatusBarControl::DrawItemText_Impl()
