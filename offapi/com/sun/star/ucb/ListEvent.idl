@@ -31,7 +31,7 @@ module com { module sun { module star { module ucb {
 published struct ListEvent: com::sun::star::lang::EventObject
 {
     /** If you apply the given ListActions one after the other
-        to the old version of an result set in given order, you will get the
+        to the old version of a result set in given order, you will get the
         positions in the new version.
     */
     sequence<ListAction> Changes;
