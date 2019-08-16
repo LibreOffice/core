@@ -58,6 +58,7 @@
 #include <columnspanset.hxx>
 #include <column.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/document/UpdateDocMode.hpp>
 #include <sal/log.hxx>
 
 #include <memory>
@@ -2484,6 +2485,11 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
 
     // If the current document is allowed to execute macros then the referenced
     // document may execute macros according to the security configuration.
+    // Similar for UpdateDocMode to update links, just that if we reach here
+    // the user already allowed updates and intermediate documents are expected
+    // to update as well. When loading the document ScDocShell::Load() will
+    // check through ScDocShell::GetLinkUpdateModeState() if its location is
+    // trusted.
     SfxObjectShell* pShell = mpDoc->GetDocumentShell();
     if (pShell)
     {
@@ -2495,6 +2501,8 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
                     static_cast<const SfxUInt16Item*>(pItem)->GetValue() != css::document::MacroExecMode::NEVER_EXECUTE)
                 pSet->Put( SfxUInt16Item( SID_MACROEXECMODE, css::document::MacroExecMode::USE_CONFIG));
         }
+
+        pSet->Put( SfxUInt16Item( SID_UPDATEDOCMODE, css::document::UpdateDocMode::FULL_UPDATE));
     }
 
     unique_ptr<SfxMedium> pMedium(new SfxMedium(aFile, StreamMode::STD_READ, pFilter, std::move(pSet)));
