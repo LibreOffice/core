@@ -292,10 +292,7 @@ namespace toolkit {
 
     Sequence< OUString > SAL_CALL AnimatedImagesControlModel::getSupportedServiceNames()
     {
-        Sequence< OUString > aServiceNames(2);
-        aServiceNames[0] = "com.sun.star.awt.AnimatedImagesControlModel";
-        aServiceNames[1] = "com.sun.star.awt.UnoControlModel";
-        return aServiceNames;
+        return { "com.sun.star.awt.AnimatedImagesControlModel", "com.sun.star.awt.UnoControlModel" };
     }
 
 

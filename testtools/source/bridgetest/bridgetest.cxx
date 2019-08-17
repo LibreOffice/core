@@ -76,8 +76,7 @@ static Sequence<T> cloneSequence(const Sequence<T>& val);
 
 static Sequence< OUString > getSupportedServiceNames()
 {
-    OUString aName( SERVICENAME );
-    return Sequence< OUString >( &aName, 1 );
+    return { SERVICENAME };
 }
 
 static bool check( bool b , char const * message )

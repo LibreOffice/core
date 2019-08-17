@@ -388,8 +388,7 @@ static void createInstance( Reference< T > & rxOut,
 
 inline static Sequence< OUString > getSupportedServiceNames()
 {
-    OUString aName( SERVICENAME );
-    return Sequence< OUString >( &aName, 1 );
+    return { SERVICENAME };
 }
 
 

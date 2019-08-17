@@ -115,11 +115,9 @@ protected:
 
     Sequence< OUString > SAL_CALL SpinningProgressControlModel::getSupportedServiceNames()
     {
-        Sequence< OUString > aServiceNames(3);
-        aServiceNames[0] = "com.sun.star.awt.SpinningProgressControlModel";
-        aServiceNames[1] = "com.sun.star.awt.AnimatedImagesControlModel";
-        aServiceNames[2] = "com.sun.star.awt.UnoControlModel";
-        return aServiceNames;
+        return { "com.sun.star.awt.SpinningProgressControlModel",
+                 "com.sun.star.awt.AnimatedImagesControlModel",
+                 "com.sun.star.awt.UnoControlModel" };
     }
 
 }

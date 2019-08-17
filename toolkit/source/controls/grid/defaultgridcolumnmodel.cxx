@@ -327,9 +327,7 @@ private:
 
     Sequence< OUString > SAL_CALL DefaultGridColumnModel::getSupportedServiceNames(  )
     {
-        const OUString aServiceName("com.sun.star.awt.grid.DefaultGridColumnModel");
-        const Sequence< OUString > aSeq( &aServiceName, 1 );
-        return aSeq;
+        return { "com.sun.star.awt.grid.DefaultGridColumnModel" };
     }
 
 
