@@ -357,7 +357,6 @@ public:
 
     bool            CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
     bool            MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, SvTreeListEntry* pTarget, bool bAllowCopyFallback );
-    void            RemoveSelection();
     /**
      * Removes the entry along with all of its descendants
      */
@@ -374,7 +373,6 @@ public:
     void            FillEntryPath( SvTreeListEntry* pEntry, ::std::deque< sal_Int32 >& _rPath ) const;
 
     using Window::GetParent;
-    const SvTreeListEntry* GetParent( const SvTreeListEntry* pEntry ) const;
     SvTreeListEntry* GetParent( SvTreeListEntry* pEntry ) const;
     SvTreeListEntry*    GetRootLevelParent(SvTreeListEntry* pEntry ) const;
 
@@ -618,7 +616,6 @@ public:
     static const Image&    GetCollapsedEntryBmp(const SvTreeListEntry* _pEntry );
 
     void            SetCheckButtonHdl( const Link<SvTreeListBox*,void>& rLink )  { aCheckButtonHdl=rLink; }
-    const Link<SvTreeListBox*,void>& GetCheckButtonHdl() const { return aCheckButtonHdl; }
     virtual void    CheckButtonHdl();
 
     void            SetSublistOpenWithReturn();      // open/close sublist with return/enter
