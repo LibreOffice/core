@@ -281,10 +281,7 @@ sal_Bool SAL_CALL BackingComp::supportsService( /*IN*/ const OUString& sServiceN
 
 css::uno::Sequence< OUString > SAL_CALL BackingComp::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > lNames(2);
-    lNames[0] = "com.sun.star.frame.StartModule";
-    lNames[1] = "com.sun.star.frame.ProtocolHandler";
-    return lNames;
+    return { "com.sun.star.frame.StartModule", "com.sun.star.frame.ProtocolHandler" };
 }
 
 

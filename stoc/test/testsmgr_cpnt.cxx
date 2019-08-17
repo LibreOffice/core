@@ -148,10 +148,7 @@ Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames() throw ()
 
 Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames_Static() throw ()
 {
-    Sequence< OUString > aSNS( 2 );
-    aSNS.getArray()[0] = SERVICE_NAME;
-    aSNS.getArray()[1] = "com.sun.star.bridge.Bridge";
-    return aSNS;
+    return { SERVICE_NAME, "com.sun.star.bridge.Bridge" };
 }
 
 

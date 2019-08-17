@@ -158,10 +158,7 @@ sal_Bool SAL_CALL OPackageStructureCreator::supportsService( const OUString& Ser
 
 uno::Sequence< OUString > SAL_CALL OPackageStructureCreator::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aRet(2);
-    aRet[0] = "com.sun.star.embed.PackageStructureCreator";
-    aRet[1] = "com.sun.star.comp.embed.PackageStructureCreator";
-    return aRet;
+    return { "com.sun.star.embed.PackageStructureCreator", "com.sun.star.comp.embed.PackageStructureCreator" };
 }
 
 }

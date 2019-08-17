@@ -112,10 +112,7 @@ sal_Bool SAL_CALL SfxAppDispatchProvider::supportsService( const OUString& sServ
 
 css::uno::Sequence< OUString > SAL_CALL SfxAppDispatchProvider::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > seqServiceNames( 2 );
-    seqServiceNames.getArray()[0] = "com.sun.star.frame.ProtocolHandler";
-    seqServiceNames.getArray()[1] = "com.sun.star.frame.AppDispatchProvider";
-    return seqServiceNames;
+    return { "com.sun.star.frame.ProtocolHandler", "com.sun.star.frame.AppDispatchProvider" };
 }
 
 Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(

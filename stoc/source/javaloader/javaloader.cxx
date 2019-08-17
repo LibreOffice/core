@@ -68,10 +68,7 @@ static Mutex & getInitMutex();
 
 static Sequence< OUString > loader_getSupportedServiceNames()
 {
-    Sequence< OUString > seqNames(2);
-    seqNames.getArray()[0] = "com.sun.star.loader.Java";
-    seqNames.getArray()[1] = "com.sun.star.loader.Java2";
-    return seqNames;
+    return { "com.sun.star.loader.Java", "com.sun.star.loader.Java2" };
 }
 
 static OUString loader_getImplementationName()

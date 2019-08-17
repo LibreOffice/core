@@ -106,10 +106,7 @@ sal_Bool SAL_CALL OwnSubFilterService::supportsService( const OUString& ServiceN
 
 uno::Sequence< OUString > SAL_CALL OwnSubFilterService::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aRet(2);
-    aRet[0] = "com.sun.star.document.OwnSubFilter";
-    aRet[1] = "com.sun.star.comp.document.OwnSubFilter";
-    return aRet;
+    return { "com.sun.star.document.OwnSubFilter", "com.sun.star.comp.document.OwnSubFilter" };
 }
 
 }

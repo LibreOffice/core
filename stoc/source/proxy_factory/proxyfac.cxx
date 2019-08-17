@@ -56,8 +56,7 @@ OUString proxyfac_getImplementationName()
 
 Sequence< OUString > proxyfac_getSupportedServiceNames()
 {
-    OUString str_name = SERVICE_NAME;
-    return Sequence< OUString >( &str_name, 1 );
+    return { SERVICE_NAME };
 }
 
 
