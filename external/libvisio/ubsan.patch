@@ -4,8 +4,8 @@
      }
      if (U_SUCCESS(status) && conv)
      {
--      const char *src = (const char *)&characters[0];
-+      const char *src = (const char *)characters.data();
+-      const auto *src = (const char *)&characters[0];
++      const auto *src = (const char *)characters.data();
        const char *srcLimit = (const char *)src + characters.size();
        while (src < srcLimit)
        {
