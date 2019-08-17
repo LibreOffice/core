@@ -33,6 +33,7 @@ class ul_Compiler:
     current_app=""
     parent_hierarchy_count=0
     last_parent=[]
+    flag_for_QuerySaveDialog=False
 
     def __init__(self , input_address , output_address):
         self.ui_dsl_mm = metamodel_from_file('ui_logger_dsl_grammar.tx')
@@ -190,21 +191,27 @@ class ul_Compiler:
     def handle_Dialog(self, DialogCommand):
 
         if (DialogCommand.__class__.__name__ == "OpenModalDialog"):
-            old_line = self.variables.pop()
 
-            if (self.prev_command.__class__.__name__ == "UNOCommand"):
-                key_word=self.prev_command.uno_command_name[-6:]
+            if( DialogCommand.dialog_name != "QuerySaveDialog" ):
+                # This part is just to ignore saving the Save dialog while closing the app
+
+                old_line = self.variables.pop()
+                if (self.prev_command.__class__.__name__ == "UNOCommand"):
+                    key_word=self.prev_command.uno_command_name[-6:]
+                else:
+                    key_word=old_line[-9:-3]
+
+                if ( key_word == "Dialog"):
+                    old_line= double_tab + "self.ui_test.execute_dialog_through_command(\""+\
+                        self.prev_command.uno_command_name+"\")\n"
+                self.variables.append(old_line)
+                line = double_tab + DialogCommand.dialog_name + " = self.xUITest.getTopFocusWindow()\n"
+                self.variables.append(line)
+                self.last_parent.append(DialogCommand.dialog_name)
+                self.parent_hierarchy_count=self.parent_hierarchy_count+1
+
             else:
-                key_word=old_line[-9:-3]
-
-            if ( key_word == "Dialog"):
-                old_line= double_tab + "self.ui_test.execute_dialog_through_command(\""+\
-                    self.prev_command.uno_command_name+"\")\n"
-            self.variables.append(old_line)
-            line = double_tab + DialogCommand.dialog_name + " = self.xUITest.getTopFocusWindow()\n"
-            self.variables.append(line)
-            self.last_parent.append(DialogCommand.dialog_name)
-            self.parent_hierarchy_count=self.parent_hierarchy_count+1
+                self.flag_for_QuerySaveDialog=True
 
         elif (DialogCommand.__class__.__name__ == "OpenModelessDialog"):
             old_line = self.variables.pop()
@@ -223,37 +230,46 @@ class ul_Compiler:
             self.parent_hierarchy_count=self.parent_hierarchy_count+1
 
         elif (DialogCommand.__class__.__name__ == "CloseDialog"):
-            if (self.prev_command.__class__.__name__ == "ButtonUIObject"):
-                old_line = self.variables.pop()
-                line=""
-                if(keyword.iskeyword( self.prev_command.ui_button )):
-                    line= double_tab + "self.ui_test.close_dialog_through_button(x"+\
-                        self.prev_command.ui_button+")\n"
-                else:
-                    line= double_tab + "self.ui_test.close_dialog_through_button("+\
-                        self.prev_command.ui_button+")\n"
-                self.variables.append(line)
-            self.last_parent.pop()
-            self.parent_hierarchy_count=self.parent_hierarchy_count-1
+
+            if( not ( self.flag_for_QuerySaveDialog ) ):
+                # This part is just to ignore saving the Save dialog while closing the app
+
+                if (self.prev_command.__class__.__name__ == "ButtonUIObject"):
+                    old_line = self.variables.pop()
+                    line=""
+                    if(keyword.iskeyword( self.prev_command.ui_button )):
+                        line= double_tab + "self.ui_test.close_dialog_through_button(x"+\
+                            self.prev_command.ui_button+")\n"
+                    else:
+                        line= double_tab + "self.ui_test.close_dialog_through_button("+\
+                            self.prev_command.ui_button+")\n"
+                    self.variables.append(line)
+                self.last_parent.pop()
+                self.parent_hierarchy_count=self.parent_hierarchy_count-1
+            else:
+                self.flag_for_QuerySaveDialog=False
 
         self.prev_command=DialogCommand
 
     def handle_button(self, ButtonUIObject):
 
-        name_of_obj=""
-        if(keyword.iskeyword( ButtonUIObject.ui_button )):
-            name_of_obj = "x" +ButtonUIObject.ui_button
-        else:
-            name_of_obj = ButtonUIObject.ui_button
+        if( ButtonUIObject.parent_id!="QuerySaveDialog" ):
+            # This part is just to ignore saving the Save dialog while closing the app
 
-        if  ButtonUIObject.parent_id == "" :
-            self.init_Object( name_of_obj , ButtonUIObject.ui_button , self.last_parent[self.parent_hierarchy_count] )
-        else:
-            self.init_Object( name_of_obj , ButtonUIObject.ui_button,ButtonUIObject.parent_id)
+            name_of_obj=""
+            if(keyword.iskeyword( ButtonUIObject.ui_button )):
+                name_of_obj = "x" +ButtonUIObject.ui_button
+            else:
+                name_of_obj = ButtonUIObject.ui_button
 
-        self.write_line_without_parameters(name_of_obj,"CLICK","tuple")
+            if  ButtonUIObject.parent_id == "" :
+                self.init_Object( name_of_obj , ButtonUIObject.ui_button , self.last_parent[self.parent_hierarchy_count] )
+            else:
+                self.init_Object( name_of_obj , ButtonUIObject.ui_button,ButtonUIObject.parent_id)
 
-        self.prev_command=ButtonUIObject
+            self.write_line_without_parameters(name_of_obj,"CLICK","tuple")
+
+            self.prev_command=ButtonUIObject
 
     def handle_check_box(self, CheckBoxUIObject):
 
