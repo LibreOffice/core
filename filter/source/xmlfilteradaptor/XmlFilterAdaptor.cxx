@@ -353,11 +353,7 @@ OUString XmlFilterAdaptor_getImplementationName ()
 
 Sequence< OUString > XmlFilterAdaptor_getSupportedServiceNames(  )
 {
-    Sequence < OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] =  "com.sun.star.document.ExportFilter";
-    pArray[1] =  "com.sun.star.document.ImportFilter";
-    return aRet;
+    return { "com.sun.star.document.ExportFilter", "com.sun.star.document.ImportFilter" };
 }
 
 Reference< XInterface > XmlFilterAdaptor_createInstance( const Reference< XMultiServiceFactory > & rSMgr)

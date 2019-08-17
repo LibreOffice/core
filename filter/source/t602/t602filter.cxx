@@ -870,11 +870,7 @@ OUString T602ImportFilter_getImplementationName ()
 
 Sequence< OUString > T602ImportFilter_getSupportedServiceNames(  )
 {
-    Sequence < OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] =  "com.sun.star.document.ImportFilter";
-    pArray[1] =  "com.sun.star.document.ExtendedTypeDetection";
-    return aRet;
+    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
 }
 
 Reference< XInterface > T602ImportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
@@ -1140,8 +1136,7 @@ OUString T602ImportFilterDialog_getImplementationName ()
 
 Sequence< OUString > T602ImportFilterDialog_getSupportedServiceNames(  )
 {
-    Sequence<OUString> aRet { "com.sun.star.ui.dialogs.FilterOptionsDialog" };
-    return aRet;
+    return { "com.sun.star.ui.dialogs.FilterOptionsDialog" };
 }
 
 Reference< XInterface > T602ImportFilterDialog_createInstance( const Reference< XMultiServiceFactory > & )
