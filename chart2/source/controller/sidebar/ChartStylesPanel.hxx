@@ -18,9 +18,12 @@
 #include <editeng/fhgtitem.hxx>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/chart2/XChartStyle.hpp>
 
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 
 namespace com
@@ -59,24 +62,36 @@ namespace sidebar
 class ChartStylesPanel : public PanelLayout
 {
 private:
+    css::uno::Reference<css::frame::XModel>             m_xModel;
+    css::uno::Reference<css::container::XNameContainer> m_xChartStyles;
+
     VclPtr<ListBox> aStyleList;
     VclPtr<PushButton> aApplyButton;
     VclPtr<PushButton> aNewButton;
     VclPtr<PushButton> aDefaultButton;
     VclPtr<PushButton> aDeleteButton;
 
+    VclPtr<FixedText> aDefaultText;
+
     DECL_LINK(SetSelectionHdl, ListBox&, void);
     DECL_LINK(SetSelectionClickHdl, Button*, void);
     DECL_LINK(SelHdl, ListBox&, void);
 
     void UpdateList();
+    void Initialize();
+
+    css::uno::Reference<css::chart2::XChartStyle> updateStyleFromChart(css::uno::Reference<css::chart2::XChartStyle>& xChartStyle);
+    void createNewStyle(const OUString& sName);
+    void updateDefaultStyle(const OUString& sName);
 
 public:
     static VclPtr<vcl::Window> Create(vcl::Window* pParent,
-                                      const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                                      const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                      const css::uno::Reference<css::frame::XController>& rxController);
 
     // constructor/destructor
-    ChartStylesPanel(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    ChartStylesPanel(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                           const css::uno::Reference<css::frame::XController>& pController);
 
     virtual ~ChartStylesPanel() override;
     virtual void dispose() override;

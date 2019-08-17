@@ -25,6 +25,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <com/sun/star/chart2/XChartStyle.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -49,6 +50,7 @@ public:
     ChartObjectStyle(css::uno::Reference<css::beans::XPropertySetInfo> xPropertySetInfo,
                      ::cppu::IPropertyArrayHelper& rArrayHelper,
                      const chart::tPropertyValueMap& rPropertyMap);
+    explicit ChartObjectStyle( const ChartObjectStyle & rOther );
     virtual ~ChartObjectStyle();
 
     /// merge XInterface implementations
@@ -85,6 +87,7 @@ class ChartStyle : public cppu::WeakImplHelper<css::chart2::XChartStyle, css::la
 {
 public:
     explicit ChartStyle();
+    explicit ChartStyle( const ChartStyle & rOther );
     virtual ~ChartStyle();
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName() override;
@@ -103,6 +106,10 @@ public:
 
     virtual void SAL_CALL applyStyleToBackground(
         const css::uno::Reference<css::beans::XPropertySet>& xBackground) override;
+
+    virtual void updateStyleElement(const sal_Int16 nChartObjectType, const css::uno::Sequence<css::beans::PropertyValue>& rProperties) override;
+
+    virtual void updateChartStyle(const css::uno::Reference<css::chart2::XChartDocument>& rxModel) override;
 
     // XStyle
     virtual sal_Bool SAL_CALL isUserDefined() override;
