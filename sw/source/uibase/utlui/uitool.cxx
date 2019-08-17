@@ -145,25 +145,18 @@ void ConvertAttrCharToGen(SfxItemSet& rSet)
     // Tell dialogs to use character-specific slots/whichIds
     // tdf#126684: We use RES_PARATR_GRABBAG, because RES_CHRATR_GRABBAG may be overwritten later in
     // SwDocStyleSheet::GetItemSet when applying attributes from char format
-    std::unique_ptr<SfxGrabBagItem> pGrabBag;
-    const SfxPoolItem *pTmpItem;
-    if (SfxItemState::SET == rSet.GetItemState(RES_PARATR_GRABBAG, false, &pTmpItem))
-    {
-        SAL_WARN("sw.ui", "Unexpected: non-empty paragraph grab bag in character item set!");
-        pGrabBag.reset(static_cast<SfxGrabBagItem*>(pTmpItem->Clone()));
-    }
-    else
-        pGrabBag.reset(new SfxGrabBagItem(RES_PARATR_GRABBAG));
-    pGrabBag->GetGrabBag()["DialogUseCharAttr"] <<= true;
+    assert(SfxItemState::SET != rSet.GetItemState(RES_PARATR_GRABBAG, false));
+    SfxGrabBagItem aGrabBag(RES_PARATR_GRABBAG);
+    aGrabBag.GetGrabBag()["DialogUseCharAttr"] <<= true;
     // Store initial ranges to allow restoring later
     const sal_uInt16* pRanges = rSet.GetRanges();
     const sal_uInt16* pEnd = pRanges;
     while (*pEnd)
         ++pEnd;
     const uno::Sequence<sal_uInt16> aOrigRanges(pRanges, pEnd - pRanges + 1);
-    pGrabBag->GetGrabBag()["OrigItemSetRanges"] <<= aOrigRanges;
+    aGrabBag.GetGrabBag()["OrigItemSetRanges"] <<= aOrigRanges;
     rSet.MergeRange(RES_PARATR_GRABBAG, RES_PARATR_GRABBAG);
-    rSet.Put(std::move(pGrabBag));
+    rSet.Put(aGrabBag);
 }
 
 void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet)
@@ -204,24 +197,7 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet)
                 rSet.SetRanges(aOrigRanges.getConstArray());
         }
     }
-    if (SfxItemState::SET == rSet.GetItemState(RES_PARATR_GRABBAG, false, &pTmpItem))
-    {
-        // In fact, we should not reach here: it shouldn't have been there; and even if it was, it
-        // should have been erased on the previous step when restoring original ranges
-        SAL_WARN("sw.ui", "Unexpected: paragraph grab bag in character item set!");
-        SfxGrabBagItem aGrabBag(*static_cast<const SfxGrabBagItem*>(pTmpItem));
-        std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
-        // Remove temporary GrabBag entries
-        rMap.erase("DialogUseCharAttr");
-        rMap.erase("OrigItemSetRanges");
-        if (rMap.empty())
-            rSet.ClearItem(RES_PARATR_GRABBAG);
-        else
-        {
-            SAL_WARN("sw.ui", "Unexpected: non-empty paragraph grab bag in character item set!");
-            rSet.Put(aGrabBag);
-        }
-    }
+    assert(SfxItemState::SET != rSet.GetItemState(RES_PARATR_GRABBAG, false));
 }
 
 void ApplyCharBackground(const Color& rBackgroundColor, SwWrtShell& rShell)
