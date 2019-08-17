@@ -47,8 +47,7 @@ namespace benchmark_object
 
 inline static Sequence< OUString > getSupportedServiceNames()
 {
-    OUString aName( SERVICENAME);
-    return Sequence< OUString >( &aName, 1 );
+    return { SERVICENAME };
 }
 
 

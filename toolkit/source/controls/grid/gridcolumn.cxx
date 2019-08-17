@@ -273,9 +273,7 @@ namespace toolkit
 
     css::uno::Sequence< OUString > SAL_CALL GridColumn::getSupportedServiceNames(  )
     {
-        const OUString aServiceName("com.sun.star.awt.grid.GridColumn");
-        const Sequence< OUString > aSeq( &aServiceName, 1 );
-        return aSeq;
+        return { "com.sun.star.awt.grid.GridColumn" };
     }
 
 

@@ -430,13 +430,11 @@ css::uno::Reference< css::uno::XInterface > create2(
 }
 
 OUString getImplementationName2() {
-    return
-            "comp.test.testtools.bridgetest.Constructors2";
+    return "comp.test.testtools.bridgetest.Constructors2";
 }
 
 css::uno::Sequence< OUString > getSupportedServiceNames2() {
-    css::uno::Sequence< OUString > s { "test.testtools.bridgetest.Constructors2" };
-    return s;
+    return { "test.testtools.bridgetest.Constructors2" };
 }
 
 ::cppu::ImplementationEntry const entries[] = {
