@@ -48,9 +48,7 @@ OUString OPreparedStatement::getImplementationName()
 
 css::uno::Sequence<OUString> OPreparedStatement::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> s(1);
-    s[0] = "com.sun.star.sdbc.PreparedStatement";
-    return s;
+    return { "com.sun.star.sdbc.PreparedStatement" };
 }
 
 sal_Bool OPreparedStatement::supportsService(OUString const& ServiceName)

@@ -54,10 +54,7 @@ OUString SAL_CALL ODbaseResultSet::getImplementationName(  )
 
 Sequence< OUString > SAL_CALL ODbaseResultSet::getSupportedServiceNames(  )
 {
-    Sequence< OUString > aSupported(2);
-    aSupported[0] = "com.sun.star.sdbc.ResultSet";
-    aSupported[1] = "com.sun.star.sdbcx.ResultSet";
-    return aSupported;
+    return { "com.sun.star.sdbc.ResultSet", "com.sun.star.sdbcx.ResultSet" };
 }
 
 sal_Bool SAL_CALL ODbaseResultSet::supportsService( const OUString& _rServiceName )

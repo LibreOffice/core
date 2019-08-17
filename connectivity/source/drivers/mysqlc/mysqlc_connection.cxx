@@ -207,9 +207,7 @@ OUString OConnection::getImplementationName()
 
 css::uno::Sequence<OUString> OConnection::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> s(1);
-    s[0] = "com.sun.star.sdbc.Connection";
-    return s;
+    return { "com.sun.star.sdbc.Connection" };
 }
 
 sal_Bool OConnection::supportsService(OUString const& ServiceName)

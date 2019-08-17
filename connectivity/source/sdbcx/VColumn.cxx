@@ -43,13 +43,7 @@ OUString SAL_CALL OColumn::getImplementationName(  )
 
 css::uno::Sequence< OUString > SAL_CALL OColumn::getSupportedServiceNames(  )
 {
-    css::uno::Sequence< OUString > aSupported(1);
-    if(isNew())
-        aSupported[0] = "com.sun.star.sdbcx.ColumnDescriptor";
-    else
-        aSupported[0] = "com.sun.star.sdbcx.Column";
-
-    return aSupported;
+    return { isNew()?OUString("com.sun.star.sdbcx.ColumnDescriptor"):OUString("com.sun.star.sdbcx.Column") };
 }
 
 sal_Bool SAL_CALL OColumn::supportsService( const OUString& _rServiceName )

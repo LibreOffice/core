@@ -85,10 +85,7 @@ OUString ODriver::getImplementationName_Static(  )
 
 Sequence< OUString > ODriver::getSupportedServiceNames_Static(  )
 {
-    Sequence< OUString > aSNS( 2 );
-    aSNS[0] = "com.sun.star.sdbc.Driver";
-    aSNS[1] = "com.sun.star.sdbcx.Driver";
-    return aSNS;
+    return { "com.sun.star.sdbc.Driver", "com.sun.star.sdbcx.Driver" };
 }
 
 css::uno::Reference< css::uno::XInterface > connectivity::ado::ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)

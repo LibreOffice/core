@@ -36,12 +36,7 @@ OUString SAL_CALL OIndexColumn::getImplementationName(  )
 
 css::uno::Sequence< OUString > SAL_CALL OIndexColumn::getSupportedServiceNames(  )
 {
-    css::uno::Sequence< OUString > aSupported(1);
-    if(isNew())
-        aSupported[0] = "com.sun.star.sdbcx.IndexColumnDescriptor";
-    else
-        aSupported[0] = "com.sun.star.sdbcx.IndexColumn";
-    return aSupported;
+    return { isNew()?OUString("com.sun.star.sdbcx.IndexColumnDescriptor"):OUString("com.sun.star.sdbcx.IndexColumn") };
 }
 
 sal_Bool SAL_CALL OIndexColumn::supportsService( const OUString& _rServiceName )

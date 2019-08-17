@@ -61,9 +61,7 @@ OUString MysqlCDriver::getImplementationName_Static()
 
 Sequence<OUString> MysqlCDriver::getSupportedServiceNames_Static()
 {
-    Sequence<OUString> aSNS(1);
-    aSNS[0] = "com.sun.star.sdbc.Driver";
-    return aSNS;
+    return { "com.sun.star.sdbc.Driver" };
 }
 
 OUString SAL_CALL MysqlCDriver::getImplementationName() { return getImplementationName_Static(); }
