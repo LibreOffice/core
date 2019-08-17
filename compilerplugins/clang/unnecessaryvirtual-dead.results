@@ -4,25 +4,23 @@ include/basegfx/utils/unopolypolygon.hxx:97
     void basegfx::unotools::UnoPolyPolygon::modifying()const
 include/canvas/base/bufferedgraphicdevicebase.hxx:108
     void canvas::BufferedGraphicDeviceBase::destroyBuffers()
-include/canvas/base/graphicdevicebase.hxx:300
+include/canvas/base/graphicdevicebase.hxx:306
     void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
-include/canvas/base/graphicdevicebase.hxx:313
+include/canvas/base/graphicdevicebase.hxx:319
     void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
-sc/source/core/opencl/formulagroupcl.cxx:1061
+sc/source/core/opencl/formulagroupcl.cxx:1059
     void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
 slideshow/source/engine/animationfactory.cxx:443
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
-vcl/inc/salframe.hxx:144
+vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
-vcl/inc/salmenu.hxx:71
-    void SalMenu::SetItemBits(unsigned int,enum MenuItemBits,)
 vcl/inc/salmenu.hxx:81
     void SalMenu::RemoveMenuBarButton(unsigned short,)
-vcl/inc/salobj.hxx:48
+vcl/inc/salobj.hxx:49
     void SalObject::Enable(_Bool,)
-vcl/inc/unx/saldata.hxx:68
+vcl/inc/unx/saldata.hxx:54
     void X11SalData::initNWF()
-vcl/inc/unx/saldata.hxx:69
+vcl/inc/unx/saldata.hxx:55
     void X11SalData::deInitNWF()
 writerfilter/source/ooxml/OOXMLFactory.hxx:72
     void writerfilter::ooxml::OOXMLFactory_ns::startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
