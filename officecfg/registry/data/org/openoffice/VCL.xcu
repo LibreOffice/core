@@ -60,7 +60,7 @@
         <value>Liberation Sans;Albany AMT;Albany;Arial;Arimo;Nimbus Sans L;DejaVu Sans;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif</value>
       </prop>
       <prop oor:name="CJK_DISPLAY" oor:type="xs:string" oor:op="replace">
-        <value>MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;AR PL ShanHeiSun Uni;MS PGothic;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>MS Gothic;Gothic;AR PL ShanHeiSun Uni;MS PGothic;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="LATIN_HEADING" oor:type="xs:string" oor:op="replace">
         <value>Liberation Sans;Albany AMT;Albany;Arial;Arimo;Nimbus Sans L;DejaVu Sans;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif</value>
@@ -78,13 +78,13 @@
         <value>Liberation Serif;Thorndale AMT;Thorndale;Times New Roman;Tinos;Nimbus Roman No9 L;DejaVu Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
       </prop>
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>HG Mincho Light J;MS Mincho;HG Mincho J;HG Mincho L;HG Mincho;Mincho;MS PMincho;HG Mincho Light J;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic;AR PL ShanHeiSun Uni;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>MS Gothic;Gothic;MS PGothic;AR PL ShanHeiSun Uni;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>HG Mincho Light J;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic;AR PL ShanHeiSun Uni;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>MS Gothic;Gothic;MS PGothic;AR PL ShanHeiSun Uni;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic;AR PL ShanHeiSun Uni;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>MS Gothic;Gothic;MS PGothic;AR PL ShanHeiSun Uni;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="CTL_DISPLAY" oor:type="xs:string" oor:op="replace">
         <value>Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
@@ -211,34 +211,34 @@
     </node>
     <node oor:name="ja" oor:op="replace">
       <prop oor:name="CJK_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>HG 明朝L Sun;HG MinchoL Sun;HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;HG Mincho Light J;ＭＳ 明朝;ＭＳ Ｐ明朝;ヒラギノ明朝 ProN;ヒラギノ明朝 Pro;UmePlus Gothic;UmePlus P Gothic;TLP明朝;LX明朝;HGPMinchoL;IPA 明朝;IPA P明朝;東風明朝;Kochi Mincho;さざなみ明朝;Mincho;Serif</value>
+        <value>Noto Serif CJK JP;游明朝;ＭＳ 明朝;ＭＳ Ｐ明朝;ヒラギノ明朝 ProN;ヒラギノ明朝 Pro;IPA 明朝;IPA P明朝;Mincho;Serif</value>
       </prop>
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>HG 明朝L Sun;HG 明朝L;HG Mincho Light J;ＭＳ ゴシック;ＭＳ Ｐゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;TLPゴシック;LXゴシック;HGPGothicB;IPA ゴシック;IPA Pゴシック;東風ゴシック;さざなみゴシック;Gothic;ＭＳ 明朝;HG Mincho J;HG Mincho L;HG Mincho;Mincho;ＭＳ Ｐ明朝;HG Mincho Light J;HG Gothic J;HG Gothic B;HG Gothic;Gothic;UmePlus Gothic;UmePlus P Gothic</value>
+        <value>Noto Sans CJK JP;游ゴシック;ＭＳ ゴシック;ＭＳ Ｐゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;IPA ゴシック;IPA Pゴシック;Gothic;ＭＳ 明朝;Mincho;ＭＳ Ｐ明朝;Gothic</value>
       </prop>
       <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;ヒラギノ明朝 ProN;ヒラギノ明朝 Pro;HG-PGothicB;HG-GothicB;HG Mincho Light J;ＭＳ Ｐゴシック;TLPゴシック;LXゴシック;HGPGothicB;IPA Pゴシック;東風ゴシック;さざなみゴシック;ＭＳ ゴシック;ＭＳ Ｐゴシック;HG Gothic;HG Gothic B;UmePlus P Gothic;Gothic</value>
+        <value>Noto Sans CJK JP;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;游ゴシック;ＭＳ Ｐゴシック;IPA Pゴシック;ＭＳ ゴシック;ＭＳ Ｐゴシック;Gothic</value>
       </prop>
       <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>Andale;Arial</value>
+        <value>Noto Sans CJK JP;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;游ゴシック;ＭＳ Ｐゴシック;IPA Pゴシック;ＭＳ ゴシック;ＭＳ Ｐゴシック;Gothic</value>
       </prop>
       <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;ＭＳ Ｐゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;TLPゴシック;LXゴシック;ヒラギノ明朝 ProN;ヒラギノ明朝 Pro;HGPGothicB;IPA Pゴシック;東風ゴシック;さざなみゴシック;UmePlus P Gothic;Kochi Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic</value>
+        <value>Noto Sans CJK JP;游ゴシック;ＭＳ Ｐゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;IPA Pゴシック;Gothic</value>
       </prop>
       <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;ＭＳ Ｐゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;TLPゴシック;LXゴシック;HGPGothicB;IPA Pゴシック;東風ゴシック;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Kochi Gothic;MS PGothic;UmePlus P Gothic;Gothic</value>
+        <value>Noto Sans CJK JP;游ゴシック;ＭＳ Ｐゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;IPA Pゴシック;MS Gothic;MS PGothic;Gothic</value>
       </prop>
       <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>HG ゴシックB Sun;HG-GothicB Sun;HG Mincho Light J;ＭＳ Ｐゴシック;Osaka;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;TLPゴシック;LXゴシック;HGPGothicB;IPA Pゴシック;東風ゴシック;さざなみゴシック;Kochi Gothic;UmePlus Gothic;Gothic</value>
+        <value>Noto Sans Mono CJK JP;Yu Gothic UI;ＭＳ ゴシック;Osaka;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;IPAゴシック;Gothic</value>
       </prop>
       <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
-        <value>HG ゴシックB Sun;HG-GothicB Sun;HG ゴシックB;HG Mincho Light J;ＭＳ Ｐゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;TLPゴシック;LXゴシック;HGPGothicB;IPA Pゴシック;東風ゴシック;さざなみゴシック;Kochi Gothic;UmePlus Gothic;Gothic</value>
+        <value>Noto Sans Mono CJK JP:ＭＳ ゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;IPAゴシック;Gothic</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
         <value>IPA Pゴシック;IPA P Gothic;Noto Sans CJK JP;Yu Gothic UI;Meiryo UI;ヒラギノ角ゴ ProN;Hiragino Kaku Gothic ProN;ヒラギノ角ゴ Pro;Hiragino Kaku Gothic Pro</value>
       </prop>
       <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>hgmincholightj;cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidasanstypewriter;lucidatypewriter;monaco;monospaced</value>
+        <value>cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidasanstypewriter;lucidatypewriter;monaco;monospaced</value>
       </prop>
     </node>
     <node oor:name="zh-cn" oor:op="replace">
@@ -2974,7 +2974,7 @@
       </node>
       <node oor:name="gothic" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>hggothicbsun;msgothic;mspgothic;hiraginominchopronw3;hiraginominchoprow3;hggothic;hggothicb;hggothice;ipagothic;kochigothic;sazanamigothic;andalesansui;gothic;hgmincholightj;msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou;centurygothic;avantgarde;itcavantgarde;gothic;avantgardegothic;conga;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>msgothic;mspgothic;ipagothic;gothic;centurygothic;avantgarde;itcavantgarde;avantgardegothic;conga;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>msgothic</value>
@@ -2997,7 +2997,7 @@
       </node>
       <node oor:name="gothicb" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>hggothicbsun;msgothic;mspgothic;hggothic;hggothicb;hggothice;ipagothic;kochigothic;sazanamigothic;andalesansui;gothic;hgmincholightj;msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>msgothic;mspgothic;ipagothic;gothic;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>msgothic</value>
@@ -3020,7 +3020,7 @@
       </node>
       <node oor:name="gothicl" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>msgothic;mspgothic;hggothic;hggothicb;hggothice;ipapgothic;sazanamigothic;kochigothic;andalesansui;gothic;hgmincholightj;msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou;centurygothic;avantgarde;itcavantgarde;gothic;avantgardegothic;conga;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>msgothic;mspgothic;ipapgothic;gothic;centurygothic;avantgarde;itcavantgarde;avantgardegothic;conga;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>msgothic</value>
@@ -3158,7 +3158,7 @@
       </node>
       <node oor:name="heiseimin" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>hgmincholightj;msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou;msgothic;mspgothic;hggothic;hggothicb;hggothice;andalesansui;gothic;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>msmincho;mspmincho;minchol;mincho;heiseimin;minchou;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -3292,173 +3292,6 @@
         </prop>
         <prop oor:name="FontType">
           <value>Normal,SansSerif</value>
-        </prop>
-      </node>
-      <node oor:name="hggothicbsun" oor:op="replace">
-        <prop oor:name="SubstFonts">
-          <value>msgothic;hggothicb;hiraginokakugothicpronw3;hiraginokakugothicprow3;hggothice;andalesansui;gothic;hgmincholightj;msmincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou;andalesansui;arialunicodems;lucidaunicode</value>
-        </prop>
-        <prop oor:name="SubstFontsMS">
-          <value>msgothic</value>
-        </prop>
-      </node>
-      <node oor:name="hgpgothicbsun" oor:op="replace">
-        <prop oor:name="SubstFonts">
-          <value>mspgothic;hgpgothicb;hgpgothice;andalesansui</value>
-        </prop>
-        <prop oor:name="SubstFontsMS">
-          <value>mspgothic</value>
-        </prop>
-      </node>
-      <node oor:name="hgmincholsun" oor:op="replace">
-        <prop oor:name="SubstFonts">
-          <value>hgmincholightj;msmincho;mspmincho;hgminchoj;hiraginominchopronw3;hiraginominchoprow3;minchol;mincho;hgheiseimin;heiseimin;minchou;msgothic;mspgothic;hggothic;hggothicb;hggothice;andalesansui;gothic;andalesansui;arialunicodems;lucidaunicode</value>
-        </prop>
-      </node>
-      <node oor:name="hgpmincholsun" oor:op="replace">
-        <prop oor:name="SubstFonts">
-          <value>mspmincho;ipapmincho;sazanamimincho;kochimincho;andalesansui;mincho;arialunicodems;lucidaunicode</value>
-        </prop>
-        <prop oor:name="SubstFontsMS">
-          <value>msmincho</value>
-        </prop>
-      </node>
-      <node oor:name="hggothic" oor:op="replace">
-        <prop oor:name="SubstFonts">
-          <value>msgothic;mspgothic;hggothicb;hggothice;andalesansui;gothic;hgmincholightj;msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou;andalesansui;arialunicodems;lucidaunicode</value>
-        </prop>
-        <prop oor:name="SubstFontsMS">
-          <value>msgothic</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
-        <prop oor:name="FontWeight">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontWidth">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontType">
-          <value>CJK,CJK_JP</value>
-        </prop>
-      </node>
-      <node oor:name="hggothicb" oor:op="replace">
-        <prop oor:name="SubstFonts">
-          <value>msgothic;mspgothic;hggothic;hggothice;ipagothic;ipapgothic;sazanamigothic;kochigothic;andalesansui;gothic;hgmincholightj;msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou;andalesansui;arialunicodems;lucidaunicode</value>
-        </prop>
-        <prop oor:name="SubstFontsMS">
-          <value>msgothic</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
-        <prop oor:name="FontWeight">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontWidth">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontType">
-          <value>CJK,CJK_JP</value>
-        </prop>
-      </node>
-      <node oor:name="hggothice" oor:op="replace">
-        <prop oor:name="SubstFonts">
-          <value>msgothic;mspgothic;hggothic;hggothicb;ipagothic;ipapgothic;sazanamigothic;kochigothic;andalesansui;gothic;hgmincholightj;msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou;andalesansui;arialunicodems;lucidaunicode</value>
-        </prop>
-        <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
-        <prop oor:name="FontWeight">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontWidth">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontType">
-          <value>CJK,CJK_JP</value>
-        </prop>
-      </node>
-      <node oor:name="hgminchoj" oor:op="replace">
-        <prop oor:name="SubstFonts">
-          <value>hgmincholightj;msmincho;mspmincho;ipapmincho;sazanamimincho;kochimincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou;msgothic;mspgothic;hggothic;hggothicb;hggothice;andalesansui;gothic;andalesansui;arialunicodems;lucidaunicode</value>
-        </prop>
-        <prop oor:name="SubstFontsMS">
-          <value>msmincho</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
-        <prop oor:name="FontWeight">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontWidth">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontType">
-          <value>CJK,CJK_JP</value>
-        </prop>
-      </node>
-      <node oor:name="hgminchol" oor:op="replace">
-        <prop oor:name="SubstFonts">
-          <value>hgmincholsun;hgmincholightj;msmincho;mspmincho;hgminchoj;ipamincho;ipapmincho;sazanamimincho;kochimincho;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou;msgothic;mspgothic;hggothic;hggothicb;hggothice;andalesansui;gothic;arialunicodems;lucidaunicode</value>
-        </prop>
-        <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
-        <prop oor:name="FontWeight">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontWidth">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontType">
-          <value>CJK,CJK_JP</value>
-        </prop>
-      </node>
-      <node oor:name="hgmincholightj" oor:op="replace">
-        <prop oor:name="SubstFonts">
-          <value>hgmincholsun;msmincho;mspmincho;ipapmincho;sazanamimincho;hgmincholightj;kochimincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou;msgothic;mspgothic;hggothic;hggothicb;hggothice;andalesansui;gothic;andalesansui;arialunicodems;lucidaunicode</value>
-        </prop>
-        <prop oor:name="SubstFontsMS">
-          <value>msmincho</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
-        <prop oor:name="FontWeight">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontWidth">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontType">
-          <value>CJK,CJK_JP</value>
         </prop>
       </node>
       <node oor:name="holidaypi" oor:op="replace">
@@ -4245,10 +4078,10 @@
       </node>
       <node oor:name="mincho" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>hgmincholsun;hgmincholightj;msmincho;mspmincho;hiraginominchopronw3;hiraginominchoprow3;ipamincho;ipapmincho;sazanamimincho;hgmincholightj;hgminchoj;kochimincho;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou;msgothic;mspgothic;hggothic;hggothicb;hggothice;andalesansui;gothic;arialunicodems;lucidaunicode</value>
+          <value>msmincho;mspmincho;hiraginominchopronw3;hiraginominchoprow3;ipamincho;ipapmincho;minchol;heiseimin;minchou;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>msmincho</value>
+          <value></value>
         </prop>
         <prop oor:name="SubstFontsPS">
           <value/>
@@ -4268,10 +4101,10 @@
       </node>
       <node oor:name="minchoj" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>hgmincholsun;hgmincholightj;msmincho;sazanamimincho;hgmincholightj;mspmincho;hgminchoj;hgminchol;minchol;hgheiseimin;heiseimin;mincho;minchou;msgothic;mspgothic;hggothic;hggothicb;hggothice;andalesansui;gothic;arialunicodems;lucidaunicode</value>
+          <value>msmincho;mspmincho;minchol;hgheiseimin;heiseimin;mincho;minchou;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>msmincho</value>
+          <value></value>
         </prop>
         <prop oor:name="SubstFontsPS">
           <value/>
@@ -4291,10 +4124,10 @@
       </node>
       <node oor:name="minchol" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>hgmincholsun;hgmincholightj;msmincho;ipamincho;sazanamimincho;kochimincho;mspmincho;hgminchoj;hgminchol;mincho;hgheiseimin;heiseimin;minchou;msgothic;mspgothic;hggothic;hggothicb;hggothice;andalesansui;gothic;arialunicodems;lucidaunicode</value>
+          <value>msmincho;ipamincho;mspmincho;mincho;heiseimin;minchou;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>msmincho</value>
+          <value></value>
         </prop>
         <prop oor:name="SubstFontsPS">
           <value/>
@@ -4314,7 +4147,7 @@
       </node>
       <node oor:name="minchou" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>hgmincholsun;hgmincholightj;msmincho;ipamicho;ipapmincho;sazanamimincho;kochimincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;msgothic;mspgothic;hggothic;hggothicb;hggothice;andalesansui;gothic;arialunicodems;lucidaunicode</value>
+          <value>msmincho;ipamicho;ipapmincho;mspmincho;minchol;mincho;heiseimin;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -4665,7 +4498,7 @@
       </node>
       <node oor:name="msgothic" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>hggothicbsun;mspgothic;hiraginokakugothicpronw3;hiraginokakugothicprow3;hggothic;hggothicb;ipagothic;sazanamigothic;kochigothic;hggothice;andalesansui;gothic;hgmincholightj;msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou;arialunicodems;lucidaunicode</value>
+          <value>mspgothic;hiraginokakugothicpronw3;hiraginokakugothicprow3;ipagothic;gothic;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -4688,7 +4521,7 @@
       </node>
       <node oor:name="mspgothic" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>hgpgothicbsun;mspgothic;msgothic;hiraginokakugothicpronw3;hiraginokakugothicprow3;hggothic;hggothicb;ipapgothic;sazanamigothic;kochigothic;hggothice;andalesansui;gothic;hgmincholightj;msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>mspgothic;msgothic;hiraginokakugothicpronw3;hiraginokakugothicprow3;ipapgothic;gothic;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -4702,7 +4535,7 @@
       </node>
       <node oor:name="msmincho" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>hgmincholsun;hgmincholightj;ipamincho;hiraginominchopronw3;hiraginominchoprow3;sazanamimincho;kochimincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou;msgothic;mspgothic;hggothic;hggothicb;hggothice;andalesansui;gothic;arialunicodems;lucidaunicode</value>
+          <value>ipamincho;hiraginominchopronw3;hiraginominchoprow3;mspmincho;minchol;mincho;heiseimin;minchou;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -4748,7 +4581,7 @@
       </node>
       <node oor:name="mspmincho" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>hgpmincholsun;hgmincholightj;msmincho;hiraginominchopronw3;hiraginominchoprow3;ipapmincho;sazanamimincho;hgminchoj;hgminchol;kochimincho;minchol;mincho;hgheiseimin;heiseimin;minchou;msgothic;mspgothic;hggothic;hggothicb;hggothice;andalesansui;gothic;arialunicodems;lucidaunicode</value>
+          <value>msmincho;hiraginominchopronw3;hiraginominchoprow3;ipapmincho;minchol;mincho;heiseimin;minchou;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -4771,7 +4604,7 @@
       </node>
       <node oor:name="msuigothic" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>hggothicbsun;mspgothic;msgothic;hggothic;hggothicb;ipauigothic;sazanamigothic;kochigothic;hggothice;andalesansui;gothic;hgmincholightj;msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou;arialunicodems;lucidaunicode</value>
+          <value>mspgothic;msgothic;ipauigothic;gothic;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -5369,7 +5202,7 @@
       </node>
       <node oor:name="pgothic" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>hgpgothicbsun;mspgothic;msgothic;hggothic;hggothicb;ipapgothic;sazanamigothic;kochigothic;hggothice;andalesansui;gothic;hgmincholightj;msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>mspgothic;msgothic;ipapgothic;gothic;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>mspgothic</value>
@@ -5438,10 +5271,10 @@
       </node>
       <node oor:name="pmincho" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>hgpminchobsun;hgmincholightj;mspmincho;msmincho;ipapmincho;sazanamimincho;kochimincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou;msgothic;mspgothic;hggothic;hggothicb;hggothice;andalesansui;gothic;arialunicodems;lucidaunicode</value>
+          <value>mspmincho;msmincho;ipapmincho;minchol;mincho;hgheiseimin;heiseimin;minchou;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>mspmincho</value>
+          <value></value>
         </prop>
         <prop oor:name="SubstFontsPS">
           <value/>
