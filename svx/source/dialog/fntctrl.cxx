@@ -539,16 +539,6 @@ void SvxFontPrevWindow::dispose()
     vcl::Window::dispose();
 }
 
-SvxFont& SvxFontPrevWindow::GetCTLFont()
-{
-    return pImpl->maCTLFont;
-}
-
-SvxFont& SvxFontPrevWindow::GetCJKFont()
-{
-    return pImpl->maCJKFont;
-}
-
 void SvxFontPrevWindow::StateChanged( StateChangedType nType )
 {
     if (nType == StateChangedType::ControlForeground)
@@ -568,17 +558,6 @@ void SvxFontPrevWindow::DataChanged( const DataChangedEvent& rDCEvt )
         Window::DataChanged( rDCEvt );
 }
 
-SvxFont& SvxFontPrevWindow::GetFont()
-{
-    pImpl->Invalidate100PercentFontWidth();     // because the user might change the size
-    return pImpl->maFont;
-}
-
-const SvxFont& SvxFontPrevWindow::GetFont() const
-{
-    return pImpl->maFont;
-}
-
 void SvxFontPrevWindow::SetFont( const SvxFont& rNormalOutFont, const SvxFont& rCJKOutFont, const SvxFont& rCTLFont )
 {
     setFont(rNormalOutFont, pImpl->maFont);
@@ -589,27 +568,10 @@ void SvxFontPrevWindow::SetFont( const SvxFont& rNormalOutFont, const SvxFont& r
     Invalidate();
 }
 
-void SvxFontPrevWindow::SetColor(const Color &rColor)
-{
-    pImpl->mpColor.reset(new Color(rColor));
-    Invalidate();
-}
-
-void SvxFontPrevWindow::ResetColor()
-{
-    pImpl->mpColor.reset();
-    Invalidate();
-}
-
 void SvxFontPrevWindow::SetBackColor(const Color &rColor)
 {
     pImpl->mpBackColor.reset(new Color(rColor));
     Invalidate();
-}
-
-void SvxFontPrevWindow::UseResourceText()
-{
-    pImpl->mbUseResText = true;
 }
 
 void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
