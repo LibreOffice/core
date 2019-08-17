@@ -54,11 +54,6 @@ public:
                             sal_uInt32 nButIncludeInfoFlags = 0
                             );
 
-    /** Fill with all known MIME encodings and select the best according to
-        <method>GetBestMimeEncoding</method>
-     */
-    void                FillWithMimeAndSelectBest();
-
     void                InsertTextEncoding( const rtl_TextEncoding nEnc,
                             const OUString& rEntry );
 

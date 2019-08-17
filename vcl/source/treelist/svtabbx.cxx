@@ -270,12 +270,6 @@ OUString SvTabListBox::GetEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
     return GetEntryText( pEntry, nCol );
 }
 
-void SvTabListBox::SetEntryText(const OUString& rStr, sal_uLong nPos, sal_uInt16 nCol)
-{
-    SvTreeListEntry* pEntry = SvTreeListBox::GetEntry( nPos );
-    SetEntryText( rStr, pEntry, nCol );
-}
-
 void SvTabListBox::SetEntryText(const OUString& rStr, SvTreeListEntry* pEntry, sal_uInt16 nCol)
 {
     DBG_ASSERT(pEntry,"SetEntryText:Invalid Entry");
@@ -325,21 +319,6 @@ OUString SvTabListBox::GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const
             aResult = static_cast<const SvLBoxString&>(rStr).GetText();
     }
     return aResult;
-}
-
-sal_uLong SvTabListBox::GetEntryPos( const OUString& rStr, sal_uInt16 nCol )
-{
-    sal_uLong nPos = 0;
-    SvTreeListEntry* pEntry = First();
-    while( pEntry )
-    {
-        OUString aStr( GetEntryText( pEntry, nCol ));
-        if( aStr == rStr )
-            return nPos;
-        pEntry = Next( pEntry );
-        nPos++;
-    }
-    return 0xffffffff;
 }
 
 sal_uLong SvTabListBox::GetEntryPos( const SvTreeListEntry* pEntry ) const
