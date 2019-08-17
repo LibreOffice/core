@@ -2952,9 +2952,7 @@ TaskManager::getImplementationName_static()
 uno::Sequence< OUString >
 TaskManager::getSupportedServiceNames_static()
 {
-  OUString Supported("com.sun.star.ucb.FileContentProvider");
-  css::uno::Sequence< OUString > Seq( &Supported,1 );
-  return Seq;
+  return { "com.sun.star.ucb.FileContentProvider" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

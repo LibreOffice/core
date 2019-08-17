@@ -169,10 +169,7 @@ namespace ucb { namespace ucp { namespace ext
 
     Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     {
-        Sequence< OUString > aServiceNames(2);
-        aServiceNames[0] = "com.sun.star.ucb.Content";
-        aServiceNames[1] = "com.sun.star.ucb.ExtensionContent";
-        return aServiceNames;
+        return { "com.sun.star.ucb.Content", "com.sun.star.ucb.ExtensionContent" };
     }
 
 

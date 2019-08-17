@@ -242,10 +242,7 @@ HierarchyDataSource_CreateInstance( const css::uno::Reference< css::lang::XMulti
 css::uno::Sequence< OUString >
 HierarchyDataSource::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString > aSNS( 2 );
-    aSNS[ 0 ] = "com.sun.star.ucb.DefaultHierarchyDataSource";
-    aSNS[ 1 ] = "com.sun.star.ucb.HierarchyDataSource";
-    return aSNS;
+    return { "com.sun.star.ucb.DefaultHierarchyDataSource", "com.sun.star.ucb.HierarchyDataSource" };
 }
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( HierarchyDataSource );

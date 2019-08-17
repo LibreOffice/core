@@ -68,10 +68,7 @@ namespace ucb { namespace ucp { namespace ext
 
     Sequence< OUString > ContentProvider::getSupportedServiceNames_static(  )
     {
-        Sequence< OUString > aServiceNames(2);
-        aServiceNames[0] = "com.sun.star.ucb.ContentProvider";
-        aServiceNames[1] = "com.sun.star.ucb.ExtensionContentProvider";
-        return aServiceNames;
+        return { "com.sun.star.ucb.ContentProvider", "com.sun.star.ucb.ExtensionContentProvider" };
     }
 
 
