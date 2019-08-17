@@ -208,10 +208,7 @@ OUString OdfFlatXml::impl_getImplementationName()
 
 Sequence< OUString > OdfFlatXml::impl_getSupportedServiceNames()
 {
-    Sequence< OUString > lServiceNames(2);
-    lServiceNames[0] = "com.sun.star.document.ImportFilter";
-    lServiceNames[1] = "com.sun.star.document.ExportFilter";
-    return lServiceNames;
+    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExportFilter" };
 }
 
 Reference< XInterface > SAL_CALL OdfFlatXml::impl_createInstance(const Reference< XMultiServiceFactory >& fact)

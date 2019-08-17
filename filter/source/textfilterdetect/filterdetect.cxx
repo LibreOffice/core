@@ -219,11 +219,7 @@ OUString PlainTextFilterDetect_getImplementationName()
 
 uno::Sequence<OUString> PlainTextFilterDetect_getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.document.ExtendedTypeDetection";
-    pArray[1] = "com.sun.star.comp.filters.PlainTextFilterDetect";
-    return aRet;
+    return { "com.sun.star.document.ExtendedTypeDetection", "com.sun.star.comp.filters.PlainTextFilterDetect" };
 }
 
 // XServiceInfo

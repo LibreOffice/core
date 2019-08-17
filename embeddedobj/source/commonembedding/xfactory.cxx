@@ -39,10 +39,7 @@ using namespace ::com::sun::star;
 
 uno::Sequence< OUString > OOoEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
 {
-    uno::Sequence< OUString > aRet(2);
-    aRet[0] = "com.sun.star.embed.OOoEmbeddedObjectFactory";
-    aRet[1] = "com.sun.star.comp.embed.OOoEmbeddedObjectFactory";
-    return aRet;
+    return { "com.sun.star.embed.OOoEmbeddedObjectFactory", "com.sun.star.comp.embed.OOoEmbeddedObjectFactory" };
 }
 
 OUString OOoEmbeddedObjectFactory::impl_staticGetImplementationName()
