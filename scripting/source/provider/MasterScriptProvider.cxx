@@ -688,13 +688,9 @@ static Reference< XInterface > sp_create(
 
 static Sequence< OUString > sp_getSupportedServiceNames( )
 {
-    OUString names[3];
-
-    names[0] = "com.sun.star.script.provider.MasterScriptProvider";
-    names[1] = "com.sun.star.script.browse.BrowseNode";
-    names[2] = "com.sun.star.script.provider.ScriptProvider";
-
-    return Sequence< OUString >( names, 3 );
+    return { "com.sun.star.script.provider.MasterScriptProvider",
+             "com.sun.star.script.browse.BrowseNode",
+             "com.sun.star.script.provider.ScriptProvider" };
 }
 
 
@@ -718,8 +714,7 @@ static Sequence< OUString > urihelper_getSupportedServiceNames( )
 
 static OUString urihelper_getImplementationName( )
 {
-    return
-        "com.sun.star.script.provider.ScriptURIHelper";
+    return "com.sun.star.script.provider.ScriptURIHelper";
 }
 
 static const struct cppu::ImplementationEntry s_entries [] =

@@ -166,11 +166,9 @@ namespace dlgprov
 
     static Sequence< OUString > getSupportedServiceNames_DialogProviderImpl()
     {
-        Sequence< OUString > aNames(3);
-        aNames[0] = "com.sun.star.awt.DialogProvider";
-        aNames[1] = "com.sun.star.awt.DialogProvider2";
-        aNames[2] = "com.sun.star.awt.ContainerWindowProvider";
-        return aNames;
+        return { "com.sun.star.awt.DialogProvider",
+                 "com.sun.star.awt.DialogProvider2",
+                 "com.sun.star.awt.ContainerWindowProvider" };
     }
 
 

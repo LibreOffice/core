@@ -64,16 +64,12 @@ MasterScriptProviderFactory::getActiveMSPList() const
 
 Sequence< OUString > mspf_getSupportedServiceNames( )
 {
-    OUString str_name(
-        "com.sun.star.script.provider.MasterScriptProviderFactory");
-
-    return Sequence< OUString >( &str_name, 1 );
+    return { "com.sun.star.script.provider.MasterScriptProviderFactory" };
 }
 
 OUString mspf_getImplementationName( )
 {
-    return
-        "com.sun.star.script.provider.MasterScriptProviderFactory";
+    return "com.sun.star.script.provider.MasterScriptProviderFactory";
 }
 
 Reference< XInterface >

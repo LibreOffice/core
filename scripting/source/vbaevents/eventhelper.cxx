@@ -585,8 +585,7 @@ public:
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        const OUString strName( getImplementationName() );
-        return Sequence< OUString >( &strName, 1 );
+        return { getImplementationName() };
     }
 
 protected:
@@ -931,8 +930,7 @@ public:
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        const OUString strName( getImplementationName() );
-        return Sequence< OUString >( &strName, 1 );
+        return { getImplementationName() };
     }
 
 };

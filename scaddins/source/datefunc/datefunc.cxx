@@ -177,11 +177,7 @@ OUString ScaDateAddIn::getImplementationName_Static()
 
 uno::Sequence< OUString > ScaDateAddIn::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString > aRet( 2 );
-    OUString* pArray = aRet.getArray();
-    pArray[0] = ADDIN_SERVICE;
-    pArray[1] = MY_SERVICE;
-    return aRet;
+    return { ADDIN_SERVICE, MY_SERVICE };
 }
 
 // XServiceName
