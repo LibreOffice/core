@@ -17,7 +17,6 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libvisio))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libvisio, \
     external/libvisio/ubsan.patch \
-    external/libvisio/0001-fix-debug-build.patch.1 \
 ))
 
 ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
