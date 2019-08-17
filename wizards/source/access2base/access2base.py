@@ -1444,7 +1444,8 @@ Set of directly callable error handling methods
 def DebugPrint(*args):
     dargs = ()
     for arg in args:
-        if isinstance(arg, _BasicObject): arg = '[' + arg.objecttype + ']'
+        if isinstance(arg, _BasicObject):
+            arg = ('[' + arg.objecttype + '] ' + arg.name).rstrip()
         dargs = dargs + (arg,)
     return _A2B.invokeMethod('DebugPrint', _WRAPPERMODULE, *dargs)
 def TraceConsole(): return _A2B.invokeMethod('TraceConsole', 'Trace')
