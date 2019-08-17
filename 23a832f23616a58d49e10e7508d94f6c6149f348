@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_6f2500ab",
+        "filename": "chart2/source/controller/sidebar/ChartStylesPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-08-17T13:44:34Z",
+      "side": 1,
+      "message": "Please use the pure MPL license header.",
+      "revId": "23a832f23616a58d49e10e7508d94f6c6149f348",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_2f3708e6",
+        "filename": "chart2/source/controller/sidebar/ChartStylesPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-08-17T13:44:34Z",
+      "side": 1,
+      "message": "I think I\u0027d prefer to have this code in XChartStyle. That way we can reuse the code for stuff like the menubar.",
+      "revId": "23a832f23616a58d49e10e7508d94f6c6149f348",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ef3030eb",
+        "filename": "chart2/source/controller/sidebar/ChartStylesPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-08-17T13:44:34Z",
+      "side": 1,
+      "message": ".I still don\u0027t see why this would need to be a clone.",
+      "revId": "23a832f23616a58d49e10e7508d94f6c6149f348",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_8f7654a4",
+        "filename": "chart2/source/controller/sidebar/ChartStylesPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-08-17T13:44:34Z",
+      "side": 1,
+      "message": "Use getCurrentStyle.",
+      "revId": "23a832f23616a58d49e10e7508d94f6c6149f348",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
