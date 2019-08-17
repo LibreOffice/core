@@ -34,6 +34,7 @@ module chart2
 interface XChartStyled : ::com::sun::star::uno::XInterface
 {
     XChartStyle getChartStyle();
+    void setChartStyle([in] XChartStyle xChartStyle);
 };
 
 } ; // chart2

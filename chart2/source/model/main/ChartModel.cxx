@@ -689,7 +689,7 @@ void SAL_CALL ChartModel::setFirstDiagram( const uno::Reference< chart2::XDiagra
     ModifyListenerHelper::addListener( xDiagram, xListener );
     setModified( true );
 
-    m_xChartStyle->applyStyleToDiagram(xDiagram);
+    m_xChartStyle->applyStyleToDiagram(this);
 }
 
 Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
@@ -944,6 +944,20 @@ uno::Reference< chart2::XChartStyle > SAL_CALL ChartModel::getChartStyle()
 {
     MutexGuard aGuard( m_aModelMutex );
     return m_xChartStyle;
+}
+
+void SAL_CALL ChartModel::setChartStyle(const css::uno::Reference<css::chart2::XChartStyle>& xChartStyle)
+{
+    MutexGuard aGuard( m_aModelMutex );
+
+    m_xChartStyle = xChartStyle;
+    m_xChartStyle->applyStyleToDiagram(this);
+    m_xChartStyle->applyStyleToBackground(getPageBackground());
+
+    if (getTitleObject().is())
+        m_xChartStyle->applyStyleToTitle(getTitleObject());
+
+    setModified( true );
 }
 
 // ____ XInterface (for old API wrapper) ____

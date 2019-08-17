@@ -12,7 +12,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
 #include <com/sun/star/chart2/ChartObjectType.idl>
+#include <com/sun/star/chart2/XChartDocument.idl>
 #include <com/sun/star/chart2/XDiagram.idl>
 #include <com/sun/star/chart2/XTitle.idl>
 #include <com/sun/star/chart2/XAxis.idl>
@@ -24,11 +26,16 @@ interface XChartStyle : ::com::sun::star::uno::XInterface
 {
     com::sun::star::beans::XPropertySet getStyleForObject([in] short chartObjectType);
 
-    void applyStyleToDiagram([in] XDiagram chartDiagram);
+    void applyStyleToDiagram([in] XChartDocument chartDiagram);
 
     void applyStyleToTitle([in] XTitle chartTitle);
 
     void applyStyleToBackground([in] com::sun::star::beans::XPropertySet chartBackground);
+
+    void updateStyleElement([in] short chartObjectType,
+                     [in] sequence<com::sun::star::beans::PropertyValue> chartPropertySequence);
+
+    void updateChartStyle([in] XChartDocument chartDocument);
 };
 
 }; }; }; };

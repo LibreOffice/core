@@ -723,7 +723,12 @@ void SAL_CALL ChartModel::modified( const lang::EventObject& rEvenObject)
     if (xDiagram.is())
     {
         if (m_xChartStyle.is())
-            m_xChartStyle->applyStyleToDiagram(xDiagram);
+        {
+            m_xChartStyle->applyStyleToTitle(getTitleObject());
+            m_xChartStyle->applyStyleToBackground(getPageBackground());
+            m_xChartStyle->applyStyleToDiagram(this);
+        }
+
     }
 
     if (m_nInLoad == 0)

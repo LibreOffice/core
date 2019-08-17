@@ -53,9 +53,6 @@ static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
 {
     ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
     ::chart::FillProperties::AddDefaultsToMap( rOutMap );
-
-    // override other defaults
-    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
 }
 
 } // anonymous namespace

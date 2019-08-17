@@ -13,14 +13,20 @@
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <sfx2/sidebar/SidebarModelUpdate.hxx>
+#include "ChartSidebarModifyListener.hxx"
+
 #include <vcl/EnumContext.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/chart2/XChartStyle.hpp>
 
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 
 namespace com
@@ -57,29 +63,44 @@ class ChartController;
 namespace sidebar
 {
 class ChartStylesPanel : public PanelLayout
+                       , public sfx2::sidebar::SidebarModelUpdate
+                       , public ChartSidebarModifyListenerParent
 {
 private:
-    VclPtr<ListBox> aStyleList;
-    VclPtr<PushButton> aApplyButton;
-    VclPtr<PushButton> aNewButton;
-    VclPtr<PushButton> aDefaultButton;
-    VclPtr<PushButton> aDeleteButton;
+    css::uno::Reference<css::frame::XModel> m_xModel;
+    css::uno::Reference<css::container::XNameContainer> m_xChartStyles;
 
-    DECL_LINK(SetSelectionHdl, ListBox&, void);
-    DECL_LINK(SetSelectionClickHdl, Button*, void);
+    css::uno::Reference<css::util::XModifyListener> m_xListener;
+
+    bool mbUpdate;
+    bool mbModelValid;
+
+    VclPtr<ListBox> maStyleList;
+    VclPtr<FixedText> maCreateStyleLabel;
+
     DECL_LINK(SelHdl, ListBox&, void);
 
     void UpdateList();
+    void Initialize();
+
+    void createNewStyle(const OUString& rName);
 
 public:
     static VclPtr<vcl::Window> Create(vcl::Window* pParent,
-                                      const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                                      const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                      const css::uno::Reference<css::frame::XController>& rxController);
 
     // constructor/destructor
-    ChartStylesPanel(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    ChartStylesPanel(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                           const css::uno::Reference<css::frame::XController>& pController);
 
     virtual ~ChartStylesPanel() override;
     virtual void dispose() override;
+
+    virtual void updateData() override;
+    virtual void modelInvalid() override;
+
+    virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) override;
 };
 
 } // namespace sidebar
