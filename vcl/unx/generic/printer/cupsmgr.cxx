@@ -745,6 +745,35 @@ namespace
     }
 }
 
+namespace
+{
+    OString EscapeCupsOption(const OString& rIn)
+    {
+        OStringBuffer sRet;
+        sal_Int32 nLen = rIn.getLength();
+        for (sal_Int32 i = 0; i < nLen; ++i)
+        {
+            switch(rIn[i])
+            {
+                case '\\':
+                case '\'':
+                case '\"':
+                case ',':
+                case ' ':
+                case '\f':
+                case '\n':
+                case '\r':
+                case '\t':
+                case '\v':
+                    sRet.append('\\');
+                    break;
+            }
+            sRet.append(rIn[i]);
+        }
+        return sRet.makeStringAndClear();
+    }
+}
+
 bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner, const OUString& rFaxNumber )
 {
     SAL_INFO( "vcl.unx.print", "endSpool: " << rPrintername << "," << rJobTitle << " copy count = " << rDocumentJobData.m_nCopies );
@@ -804,18 +833,18 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
                 {
                     OString sAuth;
                     if (bDomain)
-                        sAuth = aDialog.getDomain().replaceAll(",", "\\,");
+                        sAuth = EscapeCupsOption(aDialog.getDomain());
                     if (bUser)
                     {
-                        if (!sAuth.isEmpty())
+                        if (bDomain)
                             sAuth += ",";
-                        sAuth += aDialog.getUserName().replaceAll(",", "\\,");
+                        sAuth += EscapeCupsOption(aDialog.getUserName());
                     }
                     if (bPass)
                     {
-                        if (!sAuth.isEmpty())
+                        if (bUser || bDomain)
                             sAuth += ",";
-                        sAuth += aDialog.getPassword().replaceAll(",", "\\,");
+                        sAuth += EscapeCupsOption(aDialog.getPassword());
                     }
                     nNumOptions = cupsAddOption("auth-info", sAuth.getStr(), nNumOptions, &pOptions);
                 }
