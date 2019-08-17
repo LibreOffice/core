@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_cf544ccd",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2019-08-17T14:16:29Z",
+      "side": 1,
+      "message": "What\u0027s your intention of removing CJK_SPREADSHEET?",
+      "revId": "567ce33e8197da1bbb2fc85d199a1ed2736b84ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
