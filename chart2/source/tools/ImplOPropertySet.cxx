@@ -175,6 +175,11 @@ bool ImplOPropertySet::SetStyle( const Reference< style::XStyle > & xStyle )
     return true;
 }
 
+const ImplOPropertySet::tPropertyMap& ImplOPropertySet::exportPropertyMap()
+{
+    return m_aProperties;
+}
+
 } //  namespace impl
 } //  namespace chart
 

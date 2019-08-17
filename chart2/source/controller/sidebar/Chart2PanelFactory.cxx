@@ -96,7 +96,7 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
         else if (rsResourceURL.endsWith("/LinePanel"))
             pPanel = ChartLinePanel::Create(pParentWindow, xFrame, pController);
         else if (rsResourceURL.endsWith("/ChartStylesPanel"))
-            pPanel = ChartStylesPanel::Create(pParentWindow, xFrame);
+            pPanel = ChartStylesPanel::Create(pParentWindow, xFrame, pController);
 
         if (pPanel)
             xElement = sfx2::sidebar::SidebarPanelBase::Create(

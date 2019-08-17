@@ -18,6 +18,7 @@
  */
 
 #include <ChartStyle.hxx>
+#include <CloneHelper.hxx>
 #include <com/sun/star/chart2/ChartObjectType.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -63,6 +64,13 @@ ChartObjectStyle::ChartObjectStyle(css::uno::Reference<css::beans::XPropertySetI
 {
 }
 
+ChartObjectStyle::ChartObjectStyle( const ChartObjectStyle & rOther )
+    : OPropertySet(rOther.m_aMutex)
+    , mrArrayHelper(rOther.mrArrayHelper)
+    , mrPropertyMap(rOther.mrPropertyMap)
+    , mxPropSetInfo(rOther.mxPropSetInfo)
+{}
+
 ChartObjectStyle::~ChartObjectStyle() {}
 
 sal_Bool SAL_CALL ChartObjectStyle::isInUse() { return true; }
@@ -93,10 +101,27 @@ css::uno::Any ChartObjectStyle::GetDefaultValue(sal_Int32 nHandle) const
 
 ::cppu::IPropertyArrayHelper& SAL_CALL ChartObjectStyle::getInfoHelper() { return mrArrayHelper; }
 
+// _____ XCloneable _____
+css::uno::Reference<css::util::XCloneable> SAL_CALL ChartObjectStyle::createClone()
+{
+    return css::uno::Reference<css::util::XCloneable>(new ChartObjectStyle( *this ));
+}
+
 ChartStyle::ChartStyle()
     : m_nNumObjects(css::chart2::ChartObjectType::UNKNOWN)
 {
     register_styles();
+}
+
+ChartStyle::ChartStyle( const ChartStyle & rOther )
+    : m_nNumObjects(rOther.m_nNumObjects)
+{
+    for ( sal_Int16 nIdx = 0; nIdx < m_nNumObjects; nIdx++ )
+    {
+        auto It = rOther.m_xChartStyle.find( nIdx );
+        m_xChartStyle[ nIdx ] = CloneHelper::CreateRefClone<css::beans::XPropertySet>()( It->second );
+
+    }
 }
 
 ChartStyle::~ChartStyle() {}
@@ -284,6 +309,24 @@ ChartStyle::applyStyleToBackground(const css::uno::Reference<css::beans::XProper
             m_xChartStyle.find(css::chart2::ChartObjectType::PAGE)->second,
             css::uno::UNO_QUERY_THROW));
     }
+}
+
+void SAL_CALL
+ChartStyle::updateStyle(const sal_Int16 nChartObjectType, const css::uno::Sequence<css::beans::PropertyValue>& rProperties)
+{
+    css::uno::Reference<css::beans::XPropertyAccess>
+        xPropertyAccess(getStyleForObject(nChartObjectType), css::uno::UNO_QUERY_THROW);
+
+    if (xPropertyAccess.is())
+    {
+        xPropertyAccess->setPropertyValues( rProperties );
+    }
+}
+
+// _____ XCloneable _____
+css::uno::Reference<css::util::XCloneable> SAL_CALL ChartStyle::createClone()
+{
+    return css::uno::Reference<css::util::XCloneable>(new ChartStyle( *this ));
 }
 
 sal_Bool ChartStyle::isUserDefined() { return false; }
