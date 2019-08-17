@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_2fff0835",
+        "filename": "sw/source/filter/ww8/ww8par2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-08-17T17:41:45Z",
+      "side": 1,
+      "message": "I would add an \"assert (false );\" here and re-run the tests. That will give you sample documents where this code is activated.  Then remove the assert and round-trip the file a few times. I\u0027m guessing that you will start getting extra tabs in the footnote.",
+      "revId": "0fcc4dfa306fc354a5052230db76d87aa258ec24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
