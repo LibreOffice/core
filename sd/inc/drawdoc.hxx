@@ -331,7 +331,7 @@ public:
         A list of strings, denoting the names of the pages to be renamed
 
         @param bLink
-        Whether the inserted pages should be links to the bookmark document
+        Whether the inserted pages should be linked to the bookmark document
 
         @param bReplace
         Whether the pages should not be inserted, but replace the pages in
