@@ -15,97 +15,150 @@
         <property name="orientation">vertical</property>
         <property name="wide_handle">True</property>
         <child>
-          <object class="GtkGrid">
+          <object class="GtkGrid" id="grid6">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="column_spacing">12</property>
             <child>
-                <object class="GtkButton" id="setdefault">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="can_default">True</property>
-                    <property name="has_default">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="stylepanel|setdefault|tooltip_text">Set the Selected Style for all Charts</property>
-                    <property name="label">Default</property>
-                </object>
-                <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                </packing>
+              <object class="GtkLabel" id="label_style">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="sidebarelements|label_chart_style">Default Chart Style:</property>
+                <accessibility>
+                  <relation type="label-for" target="default_style"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
             </child>
             <child>
-              <object class="GtkButton" id="setstyle">
+              <object class="GtkLabel" id="default_style">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="stylepanel|setstyle|tooltip_text">Set the Selected Style for Selected Chart</property>
-                <property name="label">Set</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <accessibility>
+                  <relation type="labelled-by" target="label_style"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
               </packing>
             </child>
-            <child>
-              <object class="GtkButton" id="createstyle">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="stylepanel|createstyle|tooltip_text">Create a New style from the Selected Chart</property>
-                <property name="label">New</property>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="deletestyle">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="stylepanel|deletestyle|tooltip_text">Delete the style Selected in List</property>
-                <property name="label">Delete</property>
-              </object>
-              <packing>
-                <property name="left_attach">3</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-              </object>
-              <packing>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">5</property>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-              </packing>
+          </packing>
         </child>
         <child>
-          <object class="GtkTreeView" id="stylelist:border">
-            <property name="name">styles</property>
+          <object class="GtkPaned" id="splitter">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="expand">True</property>
-            <property name="show_expanders">False</property>
-            <child internal-child="selection">
-                <object class="GtkTreeSelection"/>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="orientation">vertical</property>
+            <property name="wide_handle">True</property>
+            <child>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="column_spacing">12</property>
+                <child>
+                    <object class="GtkButton" id="setdefault">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="can_default">True</property>
+                        <property name="has_default">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="tooltip_text" translatable="yes" context="stylepanel|setdefault|tooltip_text">Set the Selected Style for all Charts</property>
+                        <property name="label">Default</property>
+                    </object>
+                    <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="setstyle">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="can_default">True</property>
+                    <property name="has_default">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes" context="stylepanel|setstyle|tooltip_text">Set the Selected Style for Selected Chart</property>
+                    <property name="label">Set</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="createstyle">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="can_default">True</property>
+                    <property name="has_default">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes" context="stylepanel|createstyle|tooltip_text">Create a New style from the Selected Chart</property>
+                    <property name="label">New</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="deletestyle">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="can_default">True</property>
+                    <property name="has_default">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes" context="stylepanel|deletestyle|tooltip_text">Delete the style Selected in List</property>
+                    <property name="label">Delete</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">3</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                  </object>
+                  <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+                  </packing>
+            </child>
+            <child>
+              <object class="GtkTreeView" id="stylelist:border">
+                <property name="name">styles</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="expand">True</property>
+                <property name="show_expanders">False</property>
+                <child internal-child="selection">
+                    <object class="GtkTreeSelection"/>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
             </child>
           </object>
           <packing>
+            <property name="resize">True</property>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
           </packing>
         </child>
       </object>
-      <packing>
-        <property name="resize">True</property>
-      </packing>
     </child>
   </object>
 </interface>

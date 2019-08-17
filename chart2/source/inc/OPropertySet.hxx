@@ -25,11 +25,13 @@
 // interfaces and types
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/style/XStyleSupplier.hpp>
 #include "charttoolsdllapi.hxx"
 
 #include <memory>
+#include <map>
 
 namespace property
 {
@@ -46,6 +48,7 @@ class OOO_DLLPUBLIC_CHARTTOOLS OPropertySet :
     public css::lang::XTypeProvider,
     public css::beans::XPropertyState,
     public css::beans::XMultiPropertyStates,
+    public css::beans::XPropertyAccess,
     public css::style::XStyleSupplier
 {
 public:
@@ -181,6 +184,9 @@ protected:
     virtual void SAL_CALL setStyle( const css::uno::Reference< css::style::XStyle >& xStyle ) override;
 
     // ____ XMultiPropertySet ____
+    // make getPropertyValues visible along with the XPropertyAccess function newly defined here
+    using ::cppu::OPropertySetHelper::getPropertyValues;
+
     virtual void SAL_CALL setPropertyValues(
         const css::uno::Sequence< OUString >& PropertyNames,
         const css::uno::Sequence< css::uno::Any >& Values ) override;
@@ -190,6 +196,10 @@ protected:
 
     // Note: it is assumed that the base class implements setPropertyValue by
     // using setFastPropertyValue
+
+    // XPropertyAccess
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues() override;
+    virtual void SAL_CALL setPropertyValues(const css::uno::Sequence< css::beans::PropertyValue >& rPropertyValues ) override;
 
 private:
     /// reference to mutex of class deriving from here
