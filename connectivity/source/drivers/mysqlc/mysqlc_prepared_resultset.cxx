@@ -163,10 +163,7 @@ OUString SAL_CALL OPreparedResultSet::getImplementationName()
 
 uno::Sequence<OUString> SAL_CALL OPreparedResultSet::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aSupported(2);
-    aSupported[0] = "com.sun.star.sdbc.ResultSet";
-    aSupported[1] = "com.sun.star.sdbcx.ResultSet";
-    return aSupported;
+    return { "com.sun.star.sdbc.ResultSet", "com.sun.star.sdbcx.ResultSet" };
 }
 
 sal_Bool SAL_CALL OPreparedResultSet::supportsService(const OUString& _rServiceName)

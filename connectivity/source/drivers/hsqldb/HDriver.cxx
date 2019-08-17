@@ -490,10 +490,7 @@ namespace connectivity
 
     Sequence< OUString > ODriverDelegator::getSupportedServiceNames_Static(  )
     {
-        Sequence< OUString > aSNS( 2 );
-        aSNS[0] = "com.sun.star.sdbc.Driver";
-        aSNS[1] = "com.sun.star.sdbcx.Driver";
-        return aSNS;
+        return { "com.sun.star.sdbc.Driver", "com.sun.star.sdbcx.Driver" };
     }
 
     OUString SAL_CALL ODriverDelegator::getImplementationName(  )

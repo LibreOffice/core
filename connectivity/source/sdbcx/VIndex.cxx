@@ -48,13 +48,7 @@ OUString SAL_CALL OIndex::getImplementationName(  )
 
 css::uno::Sequence< OUString > SAL_CALL OIndex::getSupportedServiceNames(  )
 {
-    css::uno::Sequence< OUString > aSupported(1);
-    if(isNew())
-        aSupported[0] = "com.sun.star.sdbcx.IndexDescriptor";
-    else
-        aSupported[0] = "com.sun.star.sdbcx.Index";
-
-    return aSupported;
+    return { isNew()?OUString("com.sun.star.sdbcx.IndexDescriptor"):OUString("com.sun.star.sdbcx.Index") };
 }
 
 sal_Bool SAL_CALL OIndex::supportsService( const OUString& _rServiceName )
