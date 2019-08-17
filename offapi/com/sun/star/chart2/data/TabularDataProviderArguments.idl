@@ -100,7 +100,7 @@ service TabularDataProviderArguments
         <p>If the given SequenceMapping does not cover all existing
         labeled sequences just put the remaining sequences in old order
         behind the others. For example you have 4 sequences and a
-        SequenceMapping [3,1]. The result should be a as if [3,1,0,2]
+        SequenceMapping [3,1]. The result should be as if [3,1,0,2]
         was given.</p>
      */
     [property]   sequence< long >                              SequenceMapping;

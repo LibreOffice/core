@@ -3660,10 +3660,10 @@ void AutoRecovery::implts_doRecovery(const DispatchParams& aParams)
     // cache items. Such handle state indicates, that a document
     // was already saved during the THIS(!) Recovery session.
     // Of course a may be following EmergencySave session must be started without
-    // any "handle" state ...
+    // any "handle" state...
     implts_resetHandleStates();
 
-    // Reset the configuration hint "we was crashed"!
+    // Reset the configuration hint "we were crashed"!
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
             comphelper::ConfigurationChanges::create(m_xContext));
     officecfg::Office::Recovery::RecoveryInfo::Crashed::set(false, batch);

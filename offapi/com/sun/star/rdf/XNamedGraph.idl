@@ -190,7 +190,7 @@ interface XNamedGraph : XURI
         raises( com::sun::star::container::NoSuchElementException,
                 RepositoryException );
 
-//FIXME reification: addReifiedStatement(Statement)...
+//FIXME retification: addReifiedStatement(Statement)...
 };
 
 
