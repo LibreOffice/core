@@ -1954,8 +1954,7 @@ sal_Bool SAL_CALL Oasis2OOoTransformer::supportsService( const OUString& Service
 
 Sequence< OUString > SAL_CALL Oasis2OOoTransformer::getSupportedServiceNames(  )
 {
-    Sequence<OUString> aSeq(0);
-    return aSeq;
+    return { };
 }
 
 // Service registration
@@ -1968,9 +1967,7 @@ OUString Oasis2OOoTransformer_getImplementationName() throw()
 Sequence< OUString > Oasis2OOoTransformer_getSupportedServiceNames()
     throw()
 {
-    const OUString aServiceName( Oasis2OOoTransformer_getImplementationName() );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return { Oasis2OOoTransformer_getImplementationName() };
 }
 
 Reference< XInterface > Oasis2OOoTransformer_createInstance(

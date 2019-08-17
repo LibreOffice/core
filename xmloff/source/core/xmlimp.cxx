@@ -1144,10 +1144,7 @@ sal_Bool SAL_CALL SvXMLImport::supportsService( const OUString& rServiceName )
 
 uno::Sequence< OUString > SAL_CALL SvXMLImport::getSupportedServiceNames(  )
 {
-    uno::Sequence<OUString> aSeq(2);
-    aSeq[0] = "com.sun.star.document.ImportFilter";
-    aSeq[1] = "com.sun.star.xml.XMLImportFilter";
-    return aSeq;
+    return { "com.sun.star.document.ImportFilter", "com.sun.star.xml.XMLImportFilter" };
 }
 
 XMLTextImportHelper* SvXMLImport::CreateTextImport()
