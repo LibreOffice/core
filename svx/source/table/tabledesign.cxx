@@ -214,9 +214,7 @@ sal_Bool SAL_CALL TableDesignStyle::supportsService( const OUString& ServiceName
 
 Sequence< OUString > SAL_CALL TableDesignStyle::getSupportedServiceNames()
 {
-    OUString aServiceName("com.sun.star.style.Style");
-    Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return { "com.sun.star.style.Style" };
 }
 
 // XStyle
@@ -464,9 +462,7 @@ sal_Bool SAL_CALL TableDesignFamily::supportsService( const OUString& ServiceNam
 
 Sequence< OUString > SAL_CALL TableDesignFamily::getSupportedServiceNames()
 {
-    OUString aServiceName("com.sun.star.style.StyleFamily");
-    Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return { "com.sun.star.style.StyleFamily" };
 }
 
 // XNamed

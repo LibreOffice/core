@@ -533,9 +533,7 @@ sal_Bool SAL_CALL SvxUnoDrawingModel::supportsService( const OUString& ServiceNa
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getSupportedServiceNames()
 {
-    OUString aSN("com.sun.star.drawing.DrawingDocument");
-    uno::Sequence< OUString > aSeq( &aSN, 1 );
-    return aSeq;
+    return { "com.sun.star.drawing.DrawingDocument" };
 }
 
 // XAnyCompareFactory
@@ -666,9 +664,7 @@ sal_Bool SAL_CALL SvxUnoDrawPagesAccess::supportsService( const OUString& Servic
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawPagesAccess::getSupportedServiceNames(  )
 {
-    OUString aService( "com.sun.star.drawing.DrawPages" );
-    uno::Sequence< OUString > aSeq( &aService, 1 );
-    return aSeq;
+    return { "com.sun.star.drawing.DrawPages" };
 }
 
 css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(SdrModel* pModel)
