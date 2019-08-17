@@ -136,10 +136,10 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     // SAFE -> ----------------------------------
     SolarMutexClearableGuard aWriteLock;
 
-    // This reference indicates, that we was already called before and
+    // This reference indicates, that we were already called before and
     // our asynchronous process was not finished yet.
     // We have to reject double calls. Otherwise we risk,
-    // that we try to close an already closed resource ...
+    // that we try to close an already closed resource...
     // And it is no problem to do nothing then. The UI user will try it again, if
     // non of these jobs was successful.
     if (m_xSelfHold.is())

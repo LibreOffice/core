@@ -1070,7 +1070,7 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescript
         css::uno::Reference< css::io::XInputStream >());
 
     // Don't disturb the user for "non existing files - means empty URLs" or
-    // if we was forced to detect a stream.
+    // if we were forced to detect a stream.
     // Reason behind: we must be sure to ask user for "unknown contents" only...
     // and not for "missing files". Especially if detection is done by a stream only
     // we can't check if the stream points to an "existing content"!

@@ -102,7 +102,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
                     are checked. Additional existing items are ignored.
 
             @param  lProps
-                    contains all properties, which should not exists at this item.
+                    contains all properties, which should not exist at this item.
 
             @return sal_False if at least on property exists at this item(!);
                     sal_True otherwise.
