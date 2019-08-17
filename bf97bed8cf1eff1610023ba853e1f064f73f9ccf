@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_4f003c68",
+        "filename": "offapi/com/sun/star/rdf/XNamedGraph.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-08-17T15:08:27Z",
+      "side": 1,
+      "message": "No, \"reification\" comes from \"to reify\"",
+      "range": {
+        "startLine": 193,
+        "startChar": 8,
+        "endLine": 193,
+        "endChar": 20
+      },
+      "revId": "bf97bed8cf1eff1610023ba853e1f064f73f9ccf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
