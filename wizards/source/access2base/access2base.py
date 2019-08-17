@@ -1322,15 +1322,24 @@ class _Form(_BasicObject):
 
 
 class _Module(_BasicObject):
-    classProperties = dict(CountOfDeclarationLines = False, CountOfLines = False, Lines = False
-                        , ProcBodyLine = False, ProcCountLines = False, ProcOfLine = False, ProcStartLine = False
-                        , Type = False
+    classProperties = dict(CountOfDeclarationLines = False, CountOfLines = False
+                        , ProcStartLine = False, Type = False
                         )
 
-    def Find(self, target, startline, startcolumn, endline, endcolumn, wholeword = False
+    """ def Find(self, target, startline, startcolumn, endline, endcolumn, wholeword = False
         , matchcase = False, patternsearch = False):
         return self.W(_vbMethod, self.objectreference, 'Find', target, startline, startcolumn, endline
-                      , endcolumn, wholeword, matchcase, patternsearch)
+                      , endcolumn, wholeword, matchcase, patternsearch) """
+    def Lines(self, line, numlines):
+        return self.W(_vbMethod, self.objectreference, 'Lines', line, numlines)
+    def ProcBodyLine(self, procname, prockind):
+        return self.W(_vbMethod, self.objectreference, 'ProcBodyLine', procname, prockind)
+    def ProcCountLines(self, procname, prockind):
+        return self.W(_vbMethod, self.objectreference, 'ProcCountLines', procname, prockind)
+    """ def ProcOfLine(self, line, prockind):
+        return self.W(_vbMethod, self.objectreference, 'ProcOfLine', line, prockind) """
+    def ProcStartLine(self, procname, prockind):
+        return self.W(_vbMethod, self.objectreference, 'ProcStartLine', procname, prockind)
 
 
 class _OptionGroup(_BasicObject):
@@ -1435,7 +1444,7 @@ Set of directly callable error handling methods
 def DebugPrint(*args):
     dargs = ()
     for arg in args:
-        if isinstance(arg, _BasicObject): arg = '[OBJECT]'
+        if isinstance(arg, _BasicObject): arg = '[' + arg.objecttype + ']'
         dargs = dargs + (arg,)
     return _A2B.invokeMethod('DebugPrint', _WRAPPERMODULE, *dargs)
 def TraceConsole(): return _A2B.invokeMethod('TraceConsole', 'Trace')
