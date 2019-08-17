@@ -117,8 +117,7 @@ TVFactory::createInstanceWithArguments(
 Sequence< OUString > SAL_CALL
 TVFactory::getAvailableServiceNames( )
 {
-    Sequence<OUString> seq { "com.sun.star.ucb.HierarchyDataReadAccess" };
-    return seq;
+    return { "com.sun.star.ucb.HierarchyDataReadAccess" };
 }
 
 // static
