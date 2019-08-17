@@ -22,6 +22,30 @@
       "revId": "2379f36bd809c3cf3be71315a85946e273023a8c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_9cbe9063",
+        "filename": "dbaccess/source/core/api/RowSet.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2873,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-17T08:17:14Z",
+      "side": 1,
+      "message": "Yes, that\u0027s the case.  (I had already wondered why Julien\u0027s patches kept this syntactically more clobbered than necessary, but never bothered to contact him about it.  After all, it\u0027s strictly a syntactical improvement, without any effect on the code generated.)",
+      "parentUuid": "bf659307_79870e11",
+      "range": {
+        "startLine": 2873,
+        "startChar": 4,
+        "endLine": 2873,
+        "endChar": 82
+      },
+      "revId": "2379f36bd809c3cf3be71315a85946e273023a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
