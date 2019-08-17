@@ -682,10 +682,7 @@ Sequence<OUString> SAL_CALL OControlModel::getSupportedServiceNames()
 
 Sequence< OUString > OControlModel::getSupportedServiceNames_Static()
 {
-    Sequence< OUString > aServiceNames( 2 );
-    aServiceNames[ 0 ] = FRM_SUN_FORMCOMPONENT;
-    aServiceNames[ 1 ] = "com.sun.star.form.FormControlModel";
-    return aServiceNames;
+    return { FRM_SUN_FORMCOMPONENT, "com.sun.star.form.FormControlModel" };
 }
 
 // XEventListener

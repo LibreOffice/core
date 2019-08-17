@@ -47,11 +47,10 @@ namespace
 {
     css::uno::Sequence< OUString > VistaFilePicker_getSupportedServiceNames()
     {
-        css::uno::Sequence< OUString > aRet(3);
-        aRet[0] = "com.sun.star.ui.dialogs.FilePicker";
-        aRet[1] = "com.sun.star.ui.dialogs.SystemFilePicker";
-        aRet[2] = "com.sun.star.ui.dialogs.SystemFolderPicker";
-        return aRet;
+        return {
+            "com.sun.star.ui.dialogs.FilePicker",
+            "com.sun.star.ui.dialogs.SystemFilePicker",
+            "com.sun.star.ui.dialogs.SystemFolderPicker" };
     }
 }
 
