@@ -906,10 +906,7 @@ sal_Bool OServiceManager::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > OServiceManager::getSupportedServiceNames()
 {
-    Sequence< OUString > seqNames(2);
-    seqNames[0] = "com.sun.star.lang.MultiServiceFactory";
-    seqNames[1] = "com.sun.star.lang.ServiceManager";
-    return seqNames;
+    return { "com.sun.star.lang.MultiServiceFactory", "com.sun.star.lang.ServiceManager" };
 }
 
 
@@ -1377,10 +1374,7 @@ Sequence< OUString > ORegistryServiceManager::getAvailableServiceNames()
 // XServiceInfo
 Sequence< OUString > ORegistryServiceManager::getSupportedServiceNames()
 {
-    Sequence< OUString > seqNames(2);
-    seqNames[0] = "com.sun.star.lang.MultiServiceFactory";
-    seqNames[1] = "com.sun.star.lang.RegistryServiceManager";
-    return seqNames;
+    return { "com.sun.star.lang.MultiServiceFactory", "com.sun.star.lang.RegistryServiceManager" };
 }
 
 
