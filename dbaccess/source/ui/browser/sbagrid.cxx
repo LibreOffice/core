@@ -137,7 +137,7 @@ OUString SbaXGridControl::getImplementationName_Static()
 
 Sequence< OUString> SbaXGridControl::getSupportedServiceNames_Static()
 {
-    return Sequence< OUString> { "com.sun.star.form.control.InteractionGridControl", "com.sun.star.form.control.GridControl",
+    return { "com.sun.star.form.control.InteractionGridControl", "com.sun.star.form.control.GridControl",
          "com.sun.star.awt.UnoControl" };
 }
 

@@ -119,7 +119,7 @@ IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(ODocumentContainer)
 
 Sequence< OUString > SAL_CALL ODocumentContainer::getSupportedServiceNames(  )
 {
-    return Sequence< OUString > { m_bFormsContainer ? OUString(SERVICE_NAME_FORM_COLLECTION) : OUString(SERVICE_NAME_REPORT_COLLECTION) };
+    return { m_bFormsContainer ? OUString(SERVICE_NAME_FORM_COLLECTION) : OUString(SERVICE_NAME_REPORT_COLLECTION) };
 }
 
 OUString ODocumentContainer::determineContentType() const

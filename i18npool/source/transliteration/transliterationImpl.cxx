@@ -648,7 +648,7 @@ TransliterationImpl::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 TransliterationImpl::getSupportedServiceNames()
 {
-    return Sequence< OUString > { "com.sun.star.i18n.Transliteration" };
+    return { "com.sun.star.i18n.Transliteration" };
 }
 
 }

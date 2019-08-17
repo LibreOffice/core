@@ -92,7 +92,7 @@ OUString OTableColumnDescriptor::getImplementationName(  )
 
 Sequence< OUString > OTableColumnDescriptor::getSupportedServiceNames(  )
 {
-    return Sequence< OUString > { m_bActAsDescriptor? OUString(SERVICE_SDBCX_COLUMNDESCRIPTOR) : OUString(SERVICE_SDBCX_COLUMN),
+    return { m_bActAsDescriptor? OUString(SERVICE_SDBCX_COLUMNDESCRIPTOR) : OUString(SERVICE_SDBCX_COLUMN),
         SERVICE_SDB_COLUMNSETTINGS };
 }
 
@@ -436,7 +436,7 @@ OUString OTableColumnDescriptorWrapper::getImplementationName(  )
 
 Sequence< OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  )
 {
-    return Sequence< OUString > { SERVICE_SDBCX_COLUMNDESCRIPTOR, SERVICE_SDB_COLUMNSETTINGS };
+    return { SERVICE_SDBCX_COLUMNDESCRIPTOR, SERVICE_SDB_COLUMNSETTINGS };
 }
 
 // comphelper::OPropertyArrayUsageHelper
@@ -594,7 +594,7 @@ OUString OTableColumnWrapper::getImplementationName(  )
 
 Sequence< OUString > OTableColumnWrapper::getSupportedServiceNames(  )
 {
-    return Sequence< OUString > { SERVICE_SDBCX_COLUMN, SERVICE_SDB_COLUMNSETTINGS };
+    return { SERVICE_SDBCX_COLUMN, SERVICE_SDB_COLUMNSETTINGS };
 }
 
 ::cppu::IPropertyArrayHelper& OTableColumnWrapper::getInfoHelper()

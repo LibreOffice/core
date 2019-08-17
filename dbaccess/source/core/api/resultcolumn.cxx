@@ -116,7 +116,7 @@ OUString OResultColumn::getImplementationName(  )
 
 Sequence< OUString > OResultColumn::getSupportedServiceNames(  )
 {
-    return Sequence< OUString > { SERVICE_SDBCX_COLUMN, SERVICE_SDB_RESULTCOLUMN };
+    return { SERVICE_SDBCX_COLUMN, SERVICE_SDB_RESULTCOLUMN };
 }
 
 // OComponentHelper

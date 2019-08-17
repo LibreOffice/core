@@ -202,7 +202,7 @@ CharacterClassificationImpl::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 CharacterClassificationImpl::getSupportedServiceNames()
 {
-    return Sequence< OUString > { "com.sun.star.i18n.CharacterClassification" };
+    return { "com.sun.star.i18n.CharacterClassification" };
 }
 
 }

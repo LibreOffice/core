@@ -219,7 +219,7 @@ sal_Bool SAL_CALL CollatorImpl::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 CollatorImpl::getSupportedServiceNames()
 {
-    return Sequence< OUString > { "com.sun.star.i18n.Collator" };
+    return { "com.sun.star.i18n.Collator" };
 }
 
 }

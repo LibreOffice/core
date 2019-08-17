@@ -359,7 +359,7 @@ namespace accessibility
 
     uno::Sequence< OUString > SAL_CALL AccessibleImageBullet::getSupportedServiceNames()
     {
-        return uno::Sequence< OUString >{ "com.sun.star.accessibility.AccessibleContext" };
+        return { "com.sun.star.accessibility.AccessibleContext" };
     }
 
     void AccessibleImageBullet::SetIndexInParent( sal_Int32 nIndex )
