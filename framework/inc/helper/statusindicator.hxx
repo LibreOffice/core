@@ -35,14 +35,14 @@ namespace framework{
 /**
     @short          implement a status indicator object
 
-    @descr          With this indicator you can show a message and a progress ...
+    @descr          With this indicator you can show a message and a progress...
                     but you share the output device with other indicator objects,
                     if this instances was created by the same factory.
                     Then the last created object has full access to device.
                     All others change her internal data structure only.
 
-                    All objects of this StatusIndicator class calls a c++ interface
-                    on the StatusIndicatorFactory (where they was created).
+                    All objects of this StatusIndicator class calls a C++ interface
+                    on the StatusIndicatorFactory (where they were created).
                     The factory holds all data structures and paints the progress.
 
     @devstatus      ready to use

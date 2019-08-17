@@ -161,7 +161,7 @@ private:
 
         @attention  The results (means type and corresponding filter)
                     are already part of the in/out parameter pDescriptor.
-                    (in case they was valid).
+                    (in case they were valid).
 
         @param      sDetectService
                     uno service name of the detect service.
