@@ -123,7 +123,7 @@ sal_Bool SAL_CALL DatabaseDataProvider::supportsService( const OUString& _rServi
 
 uno::Sequence< OUString > DatabaseDataProvider::getSupportedServiceNames_Static(  )
 {
-    return uno::Sequence<OUString> { "com.sun.star.chart2.data.DatabaseDataProvider" };
+    return { "com.sun.star.chart2.data.DatabaseDataProvider" };
 }
 
 uno::Sequence< OUString > SAL_CALL DatabaseDataProvider::getSupportedServiceNames(  )

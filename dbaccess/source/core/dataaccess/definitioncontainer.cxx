@@ -152,7 +152,7 @@ OUString SAL_CALL ODefinitionContainer::getImplementationName(  )
 
 Sequence< OUString > SAL_CALL ODefinitionContainer::getSupportedServiceNames(  )
 {
-    return Sequence< OUString > { "com.sun.star.sdb.DefinitionContainer", "com.sun.star.ucb.Content" };
+    return { "com.sun.star.sdb.DefinitionContainer", "com.sun.star.ucb.Content" };
 }
 
 // XNameContainer

@@ -179,7 +179,7 @@ sal_Bool OResultSet::supportsService( const OUString& _rServiceName )
 
 Sequence< OUString > OResultSet::getSupportedServiceNames(  )
 {
-    return Sequence< OUString > { SERVICE_SDBC_RESULTSET, SERVICE_SDB_RESULTSET };
+    return { SERVICE_SDBC_RESULTSET, SERVICE_SDB_RESULTSET };
 }
 
 // css::beans::XPropertySet

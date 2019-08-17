@@ -286,7 +286,7 @@ sal_Bool SAL_CALL cclass_Unicode::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SAL_CALL cclass_Unicode::getSupportedServiceNames()
 {
-    return Sequence< OUString > { "com.sun.star.i18n.CharacterClassification_Unicode" };
+    return { "com.sun.star.i18n.CharacterClassification_Unicode" };
 }
 
 }

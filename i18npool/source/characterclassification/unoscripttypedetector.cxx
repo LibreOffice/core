@@ -78,7 +78,7 @@ UnoScriptTypeDetector::supportsService(const OUString& ServiceName)
 css::uno::Sequence< OUString > SAL_CALL
 UnoScriptTypeDetector::getSupportedServiceNames()
 {
-    return css::uno::Sequence< OUString > { "com.sun.star.i18n.ScriptTypeDetector" };
+    return { "com.sun.star.i18n.ScriptTypeDetector" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

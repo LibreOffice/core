@@ -53,8 +53,7 @@ sal_Bool SAL_CALL WPGImportFilter::supportsService(const OUString& rServiceName)
 
 css::uno::Sequence<OUString> SAL_CALL WPGImportFilter::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>{ "com.sun.star.document.ImportFilter",
-                                         "com.sun.star.document.ExtendedTypeDetection" };
+    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

@@ -151,7 +151,7 @@ sal_Bool SAL_CALL GraphicRendererVCL::supportsService( const OUString& ServiceNa
 
 uno::Sequence< OUString > SAL_CALL GraphicRendererVCL::getSupportedServiceNames()
 {
-    return uno::Sequence<OUString>{"com.sun.star.graphic.GraphicRendererVCL" };
+    return { "com.sun.star.graphic.GraphicRendererVCL" };
 }
 
 

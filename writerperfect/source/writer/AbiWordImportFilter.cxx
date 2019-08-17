@@ -46,8 +46,7 @@ sal_Bool SAL_CALL AbiWordImportFilter::supportsService(const OUString& rServiceN
 
 css::uno::Sequence<OUString> SAL_CALL AbiWordImportFilter::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>{ "com.sun.star.document.ImportFilter",
-                                         "com.sun.star.document.ExtendedTypeDetection" };
+    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

@@ -1216,7 +1216,7 @@ NativeNumberSupplierService::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 NativeNumberSupplierService::getSupportedServiceNames()
 {
-    return Sequence< OUString > {implementationName, "com.sun.star.i18n.NativeNumberSupplier2"};
+    return {implementationName, "com.sun.star.i18n.NativeNumberSupplier2"};
 }
 
 }
