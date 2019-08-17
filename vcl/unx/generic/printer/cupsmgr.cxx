@@ -718,7 +718,14 @@ namespace
         OUString aText(m_xText->get_label());
         aText = aText.replaceFirst("%s", OStringToOUString(rServer, osl_getThreadTextEncoding()));
         m_xText->set_label(aText);
-        m_xUserEdit->set_text(OStringToOUString(rUserName, osl_getThreadTextEncoding()));
+        m_xDomainEdit->set_text("WORKGROUP");
+        if (rUserName.isEmpty())
+            m_xUserEdit->grab_focus();
+        else
+        {
+            m_xUserEdit->set_text(OStringToOUString(rUserName, osl_getThreadTextEncoding()));
+            m_xPassEdit->grab_focus();
+        }
     }
 
     bool AuthenticateQuery(const OString& rServer, OString& rUserName, OString& rPassword)
@@ -786,8 +793,9 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
             if (bDomain || bUser || bPass)
             {
                 OString sPrinterName(OUStringToOString(rPrintername, RTL_TEXTENCODING_UTF8));
+                OString sUser = cupsUser();
                 vcl::Window* pWin = Application::GetDefDialogParent();
-                RTSPWDialog aDialog(pWin ? pWin->GetFrameWeld() : nullptr, sPrinterName, "");
+                RTSPWDialog aDialog(pWin ? pWin->GetFrameWeld() : nullptr, sPrinterName, sUser);
                 aDialog.SetDomainVisible(bDomain);
                 aDialog.SetUserVisible(bUser);
                 aDialog.SetPassVisible(bPass);
