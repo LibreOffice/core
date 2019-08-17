@@ -148,11 +148,7 @@ OUString AnalysisAddIn::getImplementationName_Static()
 
 uno::Sequence< OUString > AnalysisAddIn::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString >   aRet(2);
-    OUString*         pArray = aRet.getArray();
-    pArray[0] = ADDIN_SERVICE;
-    pArray[1] = MY_SERVICE;
-    return aRet;
+    return { ADDIN_SERVICE, MY_SERVICE };
 }
 
 uno::Reference< uno::XInterface > AnalysisAddIn_CreateInstance(

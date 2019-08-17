@@ -623,10 +623,7 @@ BrowseNodeFactoryImpl::getOrganizerHierarchy()
 Sequence< OUString >
 bnf_getSupportedServiceNames( )
 {
-    OUString str_name(
-        "com.sun.star.script.browse.BrowseNodeFactory");
-
-    return Sequence< OUString >( &str_name, 1 );
+    return { "com.sun.star.script.browse.BrowseNodeFactory" };
 }
 
 OUString
