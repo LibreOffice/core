@@ -113,8 +113,7 @@ static OUString getImplementationName()
 
 static Sequence< OUString > getSupportedServiceNames()
 {
-    OUString serviceName( "com.sun.star.loader.Python" );
-    return Sequence< OUString > ( &serviceName, 1 );
+    return { "com.sun.star.loader.Python" };
 }
 
 static void setPythonHome ( const OUString & pythonHome )

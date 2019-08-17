@@ -405,10 +405,7 @@ sal_Bool SAL_CALL FilterBase::supportsService( const OUString& rServiceName )
 
 Sequence< OUString > SAL_CALL FilterBase::getSupportedServiceNames()
 {
-    Sequence< OUString > aServiceNames( 2 );
-    aServiceNames[ 0 ] = "com.sun.star.document.ImportFilter";
-    aServiceNames[ 1 ] = "com.sun.star.document.ExportFilter";
-    return aServiceNames;
+    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExportFilter" };
 }
 
 // com.sun.star.lang.XInitialization interface

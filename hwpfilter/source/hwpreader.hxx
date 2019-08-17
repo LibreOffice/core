@@ -194,8 +194,7 @@ Reference< XInterface > HwpImportFilter_CreateInstance(
 
 Sequence< OUString > HwpImportFilter::getSupportedServiceNames_Static() throw ()
 {
-    Sequence< OUString > aRet { HwpImportFilter::getImplementationName_Static() };
-    return aRet;
+    return { HwpImportFilter::getImplementationName_Static() };
 }
 
 HwpImportFilter::HwpImportFilter(const Reference< XMultiServiceFactory >& rFact)
@@ -284,11 +283,7 @@ OUString HwpImportFilter::detect( css::uno::Sequence< css::beans::PropertyValue 
 
 Sequence< OUString> HwpImportFilter::getSupportedServiceNames()
 {
-    Sequence < OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = SERVICE_NAME1;
-    pArray[1] = SERVICE_NAME2;
-    return aRet;
+    return { SERVICE_NAME1, SERVICE_NAME2 };
 }
 
 extern "C"

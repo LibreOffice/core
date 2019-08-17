@@ -694,8 +694,7 @@ uno::Sequence< OUString > SAL_CALL DicList::getSupportedServiceNames(  )
 
 uno::Sequence< OUString > DicList::getSupportedServiceNames_Static() throw()
 {
-    uno::Sequence< OUString > aSNS { "com.sun.star.linguistic2.DictionaryList" };
-    return aSNS;
+    return { "com.sun.star.linguistic2.DictionaryList" };
 }
 
 void * DicList_getFactory( const sal_Char * pImplName,
