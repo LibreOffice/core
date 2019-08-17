@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_af79d893",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Impress.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-08-17T11:45:30Z",
+      "side": 1,
+      "message": "Nope, these changes are wrong.\n\nIt’s a compound adjective: object-creating button.\n\nThat is why I always recommend to hyphenate, but I understand some US native speakers may find it superfluous.",
+      "range": {
+        "startLine": 670,
+        "startChar": 104,
+        "endLine": 670,
+        "endChar": 119
+      },
+      "revId": "b8b7122639e3ced2585ef3a5c0df8a199dec91b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
