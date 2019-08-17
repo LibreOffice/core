@@ -76,7 +76,7 @@ protected:
     virtual void            SetTabs() override;
     virtual void            Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 
-    virtual void            HBarClick();
+    void                    HBarClick();
     void                    HBarDrag();
     void                    HBarEndDrag();
 
