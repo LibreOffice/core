@@ -384,10 +384,7 @@ uno::Sequence< OUString > SAL_CALL OOoEmbeddedObjectFactory::getSupportedService
 
 uno::Sequence< OUString > OOoSpecialEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
 {
-    uno::Sequence< OUString > aRet(2);
-    aRet[0] = "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory";
-    aRet[1] = "com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory";
-    return aRet;
+    return { "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory", "com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory" };
 }
 
 OUString OOoSpecialEmbeddedObjectFactory::impl_staticGetImplementationName()
