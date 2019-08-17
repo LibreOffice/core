@@ -282,9 +282,7 @@ OUString SAL_CALL SvxUnoXColorTable::getImplementationName(  )
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXColorTable::getSupportedServiceNames(  )
 {
-    const OUString aServiceName( "com.sun.star.drawing.ColorTable" );
-    uno::Sequence< OUString > aServices( &aServiceName, 1 );
-    return aServices;
+    return { "com.sun.star.drawing.ColorTable" };
 }
 
 
@@ -349,9 +347,7 @@ OUString SAL_CALL SvxUnoXLineEndTable::getImplementationName(  )
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXLineEndTable::getSupportedServiceNames(  )
 {
-    const OUString aServiceName( "com.sun.star.drawing.LineEndTable" );
-    uno::Sequence< OUString > aServices( &aServiceName, 1 );
-    return aServices;
+    return { "com.sun.star.drawing.LineEndTable" };
 }
 
 
@@ -426,9 +422,7 @@ OUString SAL_CALL SvxUnoXDashTable::getImplementationName(  )
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXDashTable::getSupportedServiceNames(  )
 {
-    const OUString aServiceName( "com.sun.star.drawing.DashTable" );
-    uno::Sequence< OUString > aServices( &aServiceName, 1 );
-    return aServices;
+    return { "com.sun.star.drawing.DashTable" };
 }
 
 
@@ -498,9 +492,7 @@ OUString SAL_CALL SvxUnoXHatchTable::getImplementationName(  )
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXHatchTable::getSupportedServiceNames(  )
 {
-    const OUString aServiceName( "com.sun.star.drawing.HatchTable" );
-    uno::Sequence< OUString > aServices( &aServiceName, 1 );
-    return aServices;
+    return { "com.sun.star.drawing.HatchTable" };
 }
 
 
@@ -582,9 +574,7 @@ OUString SAL_CALL SvxUnoXGradientTable::getImplementationName(  )
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXGradientTable::getSupportedServiceNames(  )
 {
-    const OUString aServiceName( "com.sun.star.drawing.GradientTable" );
-    uno::Sequence< OUString > aServices( &aServiceName, 1 );
-    return aServices;
+    return { "com.sun.star.drawing.GradientTable" };
 }
 
 
@@ -653,9 +643,7 @@ OUString SAL_CALL SvxUnoXBitmapTable::getImplementationName(  )
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXBitmapTable::getSupportedServiceNames(  )
 {
-    const OUString aServiceName( "com.sun.star.drawing.BitmapTable" );
-    uno::Sequence< OUString > aServices( &aServiceName, 1 );
-    return aServices;
+    return { "com.sun.star.drawing.BitmapTable" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

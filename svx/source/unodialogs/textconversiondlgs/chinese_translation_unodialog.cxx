@@ -77,8 +77,7 @@ uno::Sequence< OUString > SAL_CALL ChineseTranslation_UnoDialog::getSupportedSer
 
 uno::Sequence< OUString > ChineseTranslation_UnoDialog::getSupportedServiceNames_Static()
 {
-    uno::Sequence<OUString> aSNS { "com.sun.star.linguistic2.ChineseTranslationDialog" };
-    return aSNS;
+    return { "com.sun.star.linguistic2.ChineseTranslationDialog" };
 }
 
 // ui::dialogs::XExecutableDialog

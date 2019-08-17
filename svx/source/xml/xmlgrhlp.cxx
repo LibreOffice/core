@@ -1102,11 +1102,9 @@ sal_Bool SAL_CALL SvXMLGraphicImportExportHelper::supportsService( const OUStrin
 
 Sequence< OUString > SAL_CALL SvXMLGraphicImportExportHelper::getSupportedServiceNames()
 {
-    Sequence< OUString > aSupportedServiceNames(3);
-    aSupportedServiceNames[0] = "com.sun.star.document.GraphicObjectResolver";
-    aSupportedServiceNames[1] = "com.sun.star.document.GraphicStorageHandler";
-    aSupportedServiceNames[2] = "com.sun.star.document.BinaryStreamResolver";
-    return aSupportedServiceNames;
+    return { "com.sun.star.document.GraphicObjectResolver",
+             "com.sun.star.document.GraphicStorageHandler",
+             "com.sun.star.document.BinaryStreamResolver" };
 }
 
 }

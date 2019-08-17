@@ -1372,10 +1372,7 @@ sal_Bool SAL_CALL FindbarDispatcher::supportsService( const OUString& ServiceNam
 
 css::uno::Sequence< OUString > SAL_CALL FindbarDispatcher::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > aSNS( 2 );
-    aSNS[0] = "com.sun.star.comp.svx.FindbarDispatcher";
-    aSNS[1] = "com.sun.star.frame.ProtocolHandler";
-    return aSNS;
+    return { "com.sun.star.comp.svx.FindbarDispatcher", "com.sun.star.frame.ProtocolHandler" };
 }
 
 // XInitialization

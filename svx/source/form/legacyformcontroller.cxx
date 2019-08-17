@@ -185,10 +185,7 @@ namespace svxform
 
     Sequence< OUString > SAL_CALL LegacyFormController::getSupportedServiceNames(  )
     {
-        Sequence< OUString > aServices(2);
-        aServices.getArray()[0] = "com.sun.star.form.FormController";
-        aServices.getArray()[1] = "com.sun.star.awt.control.TabController";
-        return aServices;
+        return { "com.sun.star.form.FormController", "com.sun.star.awt.control.TabController" };
     }
 
 }

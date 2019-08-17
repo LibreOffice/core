@@ -381,10 +381,7 @@ OUString SAL_CALL FmXGridControl::getImplementationName()
 
 css::uno::Sequence<OUString> SAL_CALL FmXGridControl::getSupportedServiceNames()
 {
-    Sequence< OUString > aServiceNames(2);
-    aServiceNames[0] = FM_SUN_CONTROL_GRIDCONTROL;
-    aServiceNames[1] = "com.sun.star.awt.UnoControl";
-    return aServiceNames;
+    return { FM_SUN_CONTROL_GRIDCONTROL, "com.sun.star.awt.UnoControl" };
 }
 
 

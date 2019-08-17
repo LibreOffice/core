@@ -501,13 +501,9 @@ sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::supportsService( const OUString
 
 Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedServiceNames()
 {
-    Sequence< OUString > aSNs( 3 );
-
-    aSNs[0] = "com.sun.star.accessibility.Accessible";
-    aSNs[1] = "com.sun.star.accessibility.AccessibleContext";
-    aSNs[2] = "com.sun.star.drawing.AccessibleGraphControl";
-
-    return aSNs;
+    return { "com.sun.star.accessibility.Accessible",
+             "com.sun.star.accessibility.AccessibleContext",
+             "com.sun.star.drawing.AccessibleGraphControl" };
 }
 
 // XTypeProvider
