@@ -33,7 +33,6 @@
 #include <AxisHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <ChartTypeHelper.hxx>
-#include <ChartStyle.hxx>
 
 #include <ChartModel.hxx>
 
@@ -304,8 +303,6 @@ ChartElementsPanel::ChartElementsPanel(
     get(mpTextTitle, "text_title");
     get(mpTextSubTitle, "text_subtitle");
 
-    get(mpLBStylesBox, "cb_styles");
-
     maTextTitle = mpTextTitle->GetText();
     maTextSubTitle = mpTextSubTitle->GetText();
 
@@ -341,8 +338,6 @@ void ChartElementsPanel::dispose()
 
     mpLBLegendPosition.clear();
     mpBoxLegend.clear();
-
-    mpLBStylesBox.clear();
 
     mpLBAxis.clear();
     mpLBGrid.clear();
@@ -484,16 +479,6 @@ void ChartElementsPanel::updateData()
 
     mpLBLegendPosition->SelectEntryPos(getLegendPos(mxModel));
 
-    css::uno::Sequence<OUString> aChartStyles = ::chart::getChartStyles()->getElementNames();
-    mpLBStylesBox->Clear();
-    for (auto& rStyle : aChartStyles)
-    {
-        mpLBStylesBox->InsertEntry(rStyle);
-    }
-
-    ChartModel* pModel = getChartModel(mxModel);
-    OUString aCurrentChartStyleName = css::uno::Reference<css::style::XStyle>(pModel->getChartStyle(), css::uno::UNO_QUERY_THROW)->getName();
-    mpLBStylesBox->SelectEntry(aCurrentChartStyleName);
 }
 
 VclPtr<vcl::Window> ChartElementsPanel::Create (

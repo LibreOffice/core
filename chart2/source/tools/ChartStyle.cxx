@@ -16,8 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
+#include <iostream>
 #include <ChartStyle.hxx>
+#include <CloneHelper.hxx>
 #include <com/sun/star/chart2/ChartObjectType.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -63,6 +64,13 @@ ChartObjectStyle::ChartObjectStyle(css::uno::Reference<css::beans::XPropertySetI
 {
 }
 
+ChartObjectStyle::ChartObjectStyle( const ChartObjectStyle & rOther )
+    : OPropertySet(rOther.m_aMutex)
+    , mrArrayHelper(rOther.mrArrayHelper)
+    , mrPropertyMap(rOther.mrPropertyMap)
+    , mxPropSetInfo(rOther.mxPropSetInfo)
+{}
+
 ChartObjectStyle::~ChartObjectStyle() {}
 
 sal_Bool SAL_CALL ChartObjectStyle::isInUse() { return true; }
@@ -93,10 +101,28 @@ css::uno::Any ChartObjectStyle::GetDefaultValue(sal_Int32 nHandle) const
 
 ::cppu::IPropertyArrayHelper& SAL_CALL ChartObjectStyle::getInfoHelper() { return mrArrayHelper; }
 
+// _____ XCloneable _____
+css::uno::Reference<css::util::XCloneable> SAL_CALL ChartObjectStyle::createClone()
+{
+    return css::uno::Reference<css::util::XCloneable>(new ChartObjectStyle( *this ));
+}
+
 ChartStyle::ChartStyle()
     : m_nNumObjects(css::chart2::ChartObjectType::UNKNOWN)
 {
     register_styles();
+}
+
+ChartStyle::ChartStyle( const ChartStyle & rOther )
+    : m_nNumObjects(rOther.m_nNumObjects)
+{
+    for ( sal_Int16 nIdx = 0; nIdx < m_nNumObjects; nIdx++ )
+    {
+        auto It = rOther.m_xChartStyle.find( nIdx );
+
+        if (It != rOther.m_xChartStyle.end())
+            m_xChartStyle[ nIdx ] = CloneHelper::CreateRefClone<css::beans::XPropertySet>()( It->second );
+    }
 }
 
 ChartStyle::~ChartStyle() {}
@@ -226,10 +252,10 @@ void ChartStyle::applyStyleToCoordinates(
 
     for (sal_Int32 nCooSysIdx = 0; nCooSysIdx < aCooSysSeq.getLength(); ++nCooSysIdx)
     {
-        css::uno::Reference<css::chart2::XCoordinateSystem> xCooSys(aCooSysSeq[nCooSysIdx],
-                                                                    css::uno::UNO_QUERY);
+        css::uno::Reference<css::chart2::XCoordinateSystem> xCooSys = aCooSysSeq[nCooSysIdx];
+
         sal_Int16 nDimCount = xCooSys->getDimension();
-        for (sal_Int16 nDimIdx = 0; nDimIdx <= nDimCount; nDimIdx++)
+        for (sal_Int16 nDimIdx = 0; nDimIdx < nDimCount; nDimIdx++)
         {
             applyStyleToAxis(xCooSys->getAxisByDimension(nDimIdx, 0));
             if (xCooSys->getMaximumAxisIndexByDimension(nDimIdx))
@@ -286,6 +312,96 @@ ChartStyle::applyStyleToBackground(const css::uno::Reference<css::beans::XProper
     }
 }
 
+void SAL_CALL
+ChartStyle::updateStyleElement(const sal_Int16 nChartObjectType, const css::uno::Sequence<css::beans::PropertyValue>& rProperties)
+{
+    css::uno::Reference<css::beans::XPropertyAccess>
+        xPropertyAccess(getStyleForObject(nChartObjectType), css::uno::UNO_QUERY_THROW);
+
+    if (xPropertyAccess.is())
+    {
+        xPropertyAccess->setPropertyValues( rProperties );
+    }
+}
+
+void SAL_CALL
+ChartStyle::updateChartStyle(const css::uno::Reference<css::chart2::XChartDocument>& rxModel)
+{
+    if (!rxModel.is())
+        return;
+
+    css::uno::Reference<css::beans::XPropertyAccess> xPropAccess;
+    css::uno::Reference<css::chart2::XTitled> xMainTitled(rxModel, css::uno::UNO_QUERY);
+
+    css::uno::Reference<css::chart2::XTitle> xMainTitle = xMainTitled->getTitleObject();
+    if (xMainTitle.is())
+    {
+        xPropAccess = css::uno::Reference<css::beans::XPropertyAccess>(xMainTitle, css::uno::UNO_QUERY);
+        updateStyleElement(css::chart2::ChartObjectType::TITLE, xPropAccess->getPropertyValues());
+    }
+
+    xPropAccess = css::uno::Reference<css::beans::XPropertyAccess>(rxModel->getPageBackground(), css::uno::UNO_QUERY);
+    if (xPropAccess.is())
+        updateStyleElement(css::chart2::ChartObjectType::PAGE, xPropAccess->getPropertyValues());
+
+    xPropAccess = css::uno::Reference<css::beans::XPropertyAccess>(rxModel->getFirstDiagram(), css::uno::UNO_QUERY);
+    if (xPropAccess.is())
+        updateStyleElement(css::chart2::ChartObjectType::DIAGRAM, xPropAccess->getPropertyValues());
+
+    css::uno::Reference<css::chart2::XDiagram> xDiagram = rxModel->getFirstDiagram();
+
+    xPropAccess = css::uno::Reference<css::beans::XPropertyAccess>( xDiagram->getWall(), css::uno::UNO_QUERY);
+    if (xPropAccess.is())
+        updateStyleElement(css::chart2::ChartObjectType::WALL, xPropAccess->getPropertyValues());
+
+    xPropAccess = css::uno::Reference<css::beans::XPropertyAccess>( xDiagram->getLegend(), css::uno::UNO_QUERY);
+    if (xPropAccess.is())
+        updateStyleElement(css::chart2::ChartObjectType::LEGEND, xPropAccess->getPropertyValues());
+
+    css::uno::Reference<css::chart2::XTitled> xTitled( xDiagram, css::uno::UNO_QUERY);
+    css::uno::Reference<css::chart2::XTitle> xSubTitle = xTitled->getTitleObject();
+    if (xSubTitle.is())
+    {
+        xPropAccess = css::uno::Reference<css::beans::XPropertyAccess>( xSubTitle, css::uno::UNO_QUERY);
+        if (xPropAccess.is())
+            updateStyleElement(css::chart2::ChartObjectType::TITLE, xPropAccess->getPropertyValues());
+    }
+
+    css::uno::Reference<css::chart2::XCoordinateSystemContainer> xCooSysCont( xDiagram, css::uno::UNO_QUERY);
+
+    css::uno::Sequence<css::uno::Reference<css::chart2::XCoordinateSystem>> aCooSysSeq(
+        xCooSysCont->getCoordinateSystems());
+
+    for (sal_Int32 nCooSysIdx = 0; nCooSysIdx < aCooSysSeq.getLength(); ++nCooSysIdx)
+    {
+        css::uno::Reference<css::chart2::XCoordinateSystem> xCooSys = aCooSysSeq[nCooSysIdx];
+
+        sal_Int16 nDimCount = xCooSys->getDimension();
+        for (sal_Int16 nDimIdx = 0; nDimIdx < nDimCount; nDimIdx++)
+        {
+            css::uno::Reference<css::chart2::XAxis> xAxis = xCooSys->getAxisByDimension(nDimIdx, 0);
+            xPropAccess = css::uno::Reference<css::beans::XPropertyAccess>( xAxis, css::uno::UNO_QUERY);
+            if (xPropAccess.is())
+                updateStyleElement(css::chart2::ChartObjectType::AXIS, xPropAccess->getPropertyValues());
+
+            if (xCooSys->getMaximumAxisIndexByDimension(nDimIdx))
+            {
+                xAxis = xCooSys->getAxisByDimension(nDimIdx, 1);
+                xPropAccess = css::uno::Reference<css::beans::XPropertyAccess>( xAxis, css::uno::UNO_QUERY);
+                if (xPropAccess.is())
+                    updateStyleElement(css::chart2::ChartObjectType::AXIS, xPropAccess->getPropertyValues());
+
+            }
+        }
+    }
+}
+
+// _____ XCloneable _____
+css::uno::Reference<css::util::XCloneable> SAL_CALL ChartStyle::createClone()
+{
+    return css::uno::Reference<css::util::XCloneable>(new ChartStyle( *this ));
+}
+
 sal_Bool ChartStyle::isUserDefined() { return false; }
 
 sal_Bool ChartStyle::isInUse() { return true; }
@@ -330,10 +446,12 @@ void ChartStyles::addInitialStyles()
     css::uno::Any aDefaultStyle;
     css::uno::Reference<css::chart2::XChartStyle> xChartStyle = new ChartStyle;
     css::uno::Reference<css::style::XStyle> xStyle(xChartStyle, css::uno::UNO_QUERY_THROW);
-    xStyle->setName("Default");
+    xStyle->setName("LibreOffice");
 
     aDefaultStyle <<= xChartStyle;
+    insertByName("LibreOffice", aDefaultStyle);
     insertByName("Default", aDefaultStyle);
+
 }
 
 void ChartStyles::insertByName(const OUString& rName, const css::uno::Any& rStyle)
