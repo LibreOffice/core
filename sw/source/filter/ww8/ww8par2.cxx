@@ -268,8 +268,8 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
                 m_pPaM->GetPoint()->nContent.Assign( pTNd, 0 );
                 m_pPaM->SetMark();
                 // Strip out aesthetic tabs we may have inserted on export #i24762#
-                if (nFirstLineIndent < 0 && rText.getLength() > 1 && rText[1] == 0x09)
-                    ++m_pPaM->GetMark()->nContent;
+                /* if (nFirstLineIndent < 0 && rText.getLength() > 1 && rText[1] == 0x09)
+                    ++m_pPaM->GetMark()->nContent; */
                 ++m_pPaM->GetMark()->nContent;
                 m_xReffingStck->Delete(*m_pPaM);
                 m_rDoc.getIDocumentContentOperations().DeleteRange( *m_pPaM );
