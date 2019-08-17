@@ -907,10 +907,7 @@ sal_Bool cppuhelper::ServiceManager::supportsService(
 css::uno::Sequence< OUString >
 cppuhelper::ServiceManager::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > names(2);
-    names[0] = "com.sun.star.lang.MultiServiceFactory";
-    names[1] = "com.sun.star.lang.ServiceManager";
-    return names;
+    return { "com.sun.star.lang.MultiServiceFactory", "com.sun.star.lang.ServiceManager" };
 }
 
 css::uno::Reference< css::uno::XInterface >

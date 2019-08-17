@@ -328,8 +328,7 @@ sal_Bool RequestHandlerController::supportsService(
 
 Sequence< OUString > SAL_CALL RequestHandlerController::getSupportedServiceNames()
 {
-    Sequence< OUString > aSeq( 0 );
-    return aSeq;
+    return { };
 }
 
 // XEventListener
