@@ -53,10 +53,7 @@ namespace
     // controlling event notifications
     uno::Sequence<OUString> FolderPicker_getSupportedServiceNames()
     {
-        uno::Sequence<OUString> aRet(2);
-        aRet[0] = "com.sun.star.ui.dialogs.SystemFolderPicker";
-        aRet[1] = "com.sun.star.ui.dialogs.AquaFolderPicker";
-        return aRet;
+        return { "com.sun.star.ui.dialogs.SystemFolderPicker", "com.sun.star.ui.dialogs.AquaFolderPicker" };
     }
 }
 

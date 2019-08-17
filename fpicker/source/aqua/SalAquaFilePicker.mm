@@ -65,11 +65,9 @@ namespace
 {
     uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
     {
-        uno::Sequence<OUString> aRet(3);
-        aRet[0] = "com.sun.star.ui.dialogs.FilePicker";
-        aRet[1] = "com.sun.star.ui.dialogs.SystemFilePicker";
-        aRet[2] = "com.sun.star.ui.dialogs.AquaFilePicker";
-        return aRet;
+        return { "com.sun.star.ui.dialogs.FilePicker",
+                 "com.sun.star.ui.dialogs.SystemFilePicker",
+                 "com.sun.star.ui.dialogs.AquaFilePicker" };
     }
 }
 
