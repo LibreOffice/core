@@ -132,9 +132,7 @@ OUString SAL_CALL OShape::getImplementationName(  )
 
 uno::Sequence< OUString > OShape::getSupportedServiceNames_Static(  )
 {
-    uno::Sequence< OUString > aServices { SERVICE_SHAPE };
-
-    return aServices;
+    return { SERVICE_SHAPE };
 }
 
 uno::Sequence< OUString > SAL_CALL OShape::getSupportedServiceNames(  )

@@ -414,9 +414,7 @@ Reference< XInterface > SAL_CALL OPumpTest_CreateInstance( const Reference< XMul
 
 Sequence<OUString> OPumpTest_getSupportedServiceNames() throw()
 {
-    OUString s = OPumpTest_getServiceName();
-    Sequence< OUString > seq( &s , 1 );
-    return seq;
+    return { OPumpTest_getServiceName() };
 
 }
 OUString     OPumpTest_getServiceName() throw()

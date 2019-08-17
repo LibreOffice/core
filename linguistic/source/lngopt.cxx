@@ -422,8 +422,7 @@ uno::Sequence< OUString > SAL_CALL LinguProps::getSupportedServiceNames()
 uno::Sequence< OUString > LinguProps::getSupportedServiceNames_Static()
         throw()
 {
-    uno::Sequence< OUString > aSNS { "com.sun.star.linguistic2.LinguProperties" };
-    return aSNS;
+    return { "com.sun.star.linguistic2.LinguProperties" };
 }
 
 bool LinguProps::getPropertyBool(const OUString& aPropertyName)

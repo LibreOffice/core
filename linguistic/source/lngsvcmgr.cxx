@@ -1916,8 +1916,7 @@ uno::Sequence< OUString > SAL_CALL
 uno::Sequence< OUString > LngSvcMgr::getSupportedServiceNames_Static()
         throw()
 {
-    uno::Sequence< OUString > aSNS { "com.sun.star.linguistic2.LinguServiceManager" };
-    return aSNS;
+    return { "com.sun.star.linguistic2.LinguServiceManager" };
 }
 
 /// @throws uno::Exception
