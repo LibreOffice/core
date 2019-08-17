@@ -14,6 +14,9 @@ from textx.metamodel import metamodel_from_file
 
 tab="    "
 double_tab="        "
+ignore1="        QuerySaveDialog = self.xUITest.getTopFocusWindow()"
+ignore2="        discard = QuerySaveDialog.getChild(\"discard\")"
+ignore3="        self.ui_test.close_dialog_through_button(discard)"
 
 def parse_args():
     """
@@ -529,6 +532,8 @@ class ul_Compiler:
         self.variables.append(line)
 
         for line in self.variables:
+            # This part is just to ignore saving the Save dialog while closing the app
+            #if( line!= ignore1 and line!= ignore2 and line!= ignore3 ):
             self.output_stream.write(str(line))
 
     def do_nothing(self,Command):
