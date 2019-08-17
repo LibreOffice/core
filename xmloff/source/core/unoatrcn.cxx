@@ -241,9 +241,7 @@ OUString SAL_CALL SvUnoAttributeContainer::getImplementationName()
 
 uno::Sequence< OUString > SvUnoAttributeContainer::getSupportedServiceNames()
 {
-    OUString aSN( "com.sun.star.xml.AttributeContainer" );
-    uno::Sequence< OUString > aNS( &aSN, 1 );
-    return aNS;
+    return { "com.sun.star.xml.AttributeContainer" };
 }
 
 sal_Bool SvUnoAttributeContainer::supportsService(const OUString& ServiceName)

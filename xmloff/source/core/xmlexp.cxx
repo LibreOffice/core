@@ -859,10 +859,7 @@ sal_Bool SAL_CALL SvXMLExport::supportsService( const OUString& rServiceName )
 
 uno::Sequence< OUString > SAL_CALL SvXMLExport::getSupportedServiceNames(  )
 {
-    uno::Sequence<OUString> aSeq(2);
-    aSeq[0] = "com.sun.star.document.ExportFilter";
-    aSeq[1] = "com.sun.star.xml.XMLExportFilter";
-    return aSeq;
+    return { "com.sun.star.document.ExportFilter", "com.sun.star.xml.XMLExportFilter" };
 }
 
 OUString
