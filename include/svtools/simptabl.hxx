@@ -95,6 +95,10 @@ public:
 
     using SvHeaderTabListBox::SetTabs;
 
+    void            EnableTable();
+    void            DisableTable();
+    bool            IsEnabled() const;
+
     void            SortByCol(sal_uInt16, bool bDir=true);
     sal_uInt16      GetSortedCol(){ return nSortCol;}
     SvLBoxItem*     GetEntryAtPos( SvTreeListEntry* pEntry, sal_uInt16 nPos ) const;
