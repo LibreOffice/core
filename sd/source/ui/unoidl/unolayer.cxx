@@ -105,9 +105,7 @@ sal_Bool SAL_CALL SdLayer::supportsService( const OUString& ServiceName )
 
 uno::Sequence< OUString > SAL_CALL SdLayer::getSupportedServiceNames()
 {
-    OUString aServiceName("com.sun.star.drawing.Layer");
-    uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return { "com.sun.star.drawing.Layer" };
 }
 
 // beans::XPropertySet

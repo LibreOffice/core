@@ -842,21 +842,16 @@ sal_Bool SAL_CALL SdStyleSheet::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL SdStyleSheet::getSupportedServiceNames()
 {
-    Sequence< OUString > aNameSequence( 10 );
-    OUString* pStrings = aNameSequence.getArray();
-
-    *pStrings++ = "com.sun.star.style.Style";
-    *pStrings++ = "com.sun.star.drawing.FillProperties";
-    *pStrings++ = "com.sun.star.drawing.LineProperties";
-    *pStrings++ = "com.sun.star.drawing.ShadowProperties";
-    *pStrings++ = "com.sun.star.drawing.ConnectorProperties";
-    *pStrings++ = "com.sun.star.drawing.MeasureProperties";
-    *pStrings++ = "com.sun.star.style.ParagraphProperties";
-    *pStrings++ = "com.sun.star.style.CharacterProperties";
-    *pStrings++ = "com.sun.star.drawing.TextProperties";
-    *pStrings++ = "com.sun.star.drawing.Text";
-
-    return aNameSequence;
+    return { "com.sun.star.style.Style",
+             "com.sun.star.drawing.FillProperties",
+             "com.sun.star.drawing.LineProperties",
+             "com.sun.star.drawing.ShadowProperties",
+             "com.sun.star.drawing.ConnectorProperties",
+             "com.sun.star.drawing.MeasureProperties",
+             "com.sun.star.style.ParagraphProperties",
+             "com.sun.star.style.CharacterProperties",
+             "com.sun.star.drawing.TextProperties",
+             "com.sun.star.drawing.Text" };
 }
 
 bool SdStyleSheet::SetName(const OUString& rNewName, bool bReindexNow)

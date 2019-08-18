@@ -73,9 +73,7 @@ sal_Bool SAL_CALL SdXCustomPresentation::supportsService( const OUString& Servic
 
 uno::Sequence< OUString > SAL_CALL SdXCustomPresentation::getSupportedServiceNames()
 {
-    OUString aSN( "com.sun.star.presentation.CustomPresentation" );
-    uno::Sequence< OUString > aSeq( &aSN, 1 );
-    return aSeq;
+    return { "com.sun.star.presentation.CustomPresentation" };
 }
 
 // XIndexContainer
@@ -284,9 +282,7 @@ sal_Bool SAL_CALL SdXCustomPresentationAccess::supportsService( const OUString& 
 
 uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getSupportedServiceNames()
 {
-    const OUString aNS( "com.sun.star.presentation.CustomPresentationAccess" );
-    uno::Sequence< OUString > aSeq( &aNS, 1 );
-    return aSeq;
+    return { "com.sun.star.presentation.CustomPresentationAccess" };
 }
 
 // XSingleServiceFactory

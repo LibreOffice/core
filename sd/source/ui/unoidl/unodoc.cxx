@@ -39,11 +39,7 @@ OUString SdDrawingDocument_getImplementationName()
 
 uno::Sequence< OUString > SdDrawingDocument_getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSeq( 2 );
-    aSeq[0] = "com.sun.star.drawing.DrawingDocument";
-    aSeq[1] = "com.sun.star.drawing.DrawingDocumentFactory";
-
-    return aSeq;
+    return { "com.sun.star.drawing.DrawingDocument", "com.sun.star.drawing.DrawingDocumentFactory" };
 }
 
 uno::Reference< uno::XInterface > SdDrawingDocument_createInstance(

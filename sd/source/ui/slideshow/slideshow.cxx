@@ -249,9 +249,7 @@ sal_Bool SAL_CALL SlideShow::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL SlideShow::getSupportedServiceNames(  )
 {
-    OUString aService( "com.sun.star.presentation.Presentation" );
-    Sequence< OUString > aSeq( &aService, 1 );
-    return aSeq;
+    return { "com.sun.star.presentation.Presentation" };
 }
 
 // XPropertySet

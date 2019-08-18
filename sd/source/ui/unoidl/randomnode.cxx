@@ -554,10 +554,7 @@ sal_Bool RandomAnimationNode::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > RandomAnimationNode::getSupportedServiceNames()
 {
-    Sequence< OUString > aSeq( 2 );
-    aSeq[0] = "com.sun.star.animations.ParallelTimeContainer";
-    aSeq[1] = "com.sun.star.comp.sd.RandomAnimationNode";
-    return aSeq;
+    return { "com.sun.star.animations.ParallelTimeContainer", "com.sun.star.comp.sd.RandomAnimationNode" };
 }
 
 }

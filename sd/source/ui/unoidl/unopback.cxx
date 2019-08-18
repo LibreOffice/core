@@ -179,13 +179,7 @@ sal_Bool SAL_CALL SdUnoPageBackground::supportsService( const OUString& ServiceN
 
 uno::Sequence< OUString > SAL_CALL SdUnoPageBackground::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aNameSequence( 2 );
-    OUString* pStrings = aNameSequence.getArray();
-
-    *pStrings++ = sUNO_Service_PageBackground;
-    *pStrings   = sUNO_Service_FillProperties;
-
-    return aNameSequence;
+    return { sUNO_Service_PageBackground, sUNO_Service_FillProperties };
 }
 
 // XPropertySet

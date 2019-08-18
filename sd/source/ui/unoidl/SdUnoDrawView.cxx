@@ -544,9 +544,7 @@ sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL SdUnoDrawView::getSupportedServiceNames(  )
 {
-    OUString aSN("com.sun.star.drawing.DrawingDocumentDrawView");
-    uno::Sequence< OUString > aSeq( &aSN, 1 );
-    return aSeq;
+    return { "com.sun.star.drawing.DrawingDocumentDrawView" };
 }
 
 } // end of namespace sd
