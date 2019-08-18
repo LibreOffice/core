@@ -73,13 +73,13 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
                                              const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // Attention: May be nobody outside hold such temp. dispatch object alive (because
-    // the container in which we resists isn't implemented threadsafe but updated by a timer
-    // and clear our reference ...) we should hold us self alive!
+    // the container in which we resist isn't implemented threadsafe but updated by a timer
+    // and clear our reference...) we should hold us self alive!
     css::uno::Reference< css::uno::XInterface > xThis(static_cast< css::frame::XNotifyingDispatch* >(this), css::uno::UNO_QUERY);
 
     osl::MutexGuard g(m_mutex);
 
-    // We are the only client of this load env object ... but
+    // We are the only client of this load env object... but
     // may a dispatch request before is still in progress (?!).
     // Then we should wait a little bit and block this new request.
     // In case we run into the timeout, we should reject this new request
