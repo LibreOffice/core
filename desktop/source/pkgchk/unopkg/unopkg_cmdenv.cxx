@@ -249,7 +249,7 @@ void CommandEnvironmentImpl::handle(
     }
     else if (request >>= instExc)
     {
-        //Only if the unopgk was started with gui + extension then we user is asked.
+        //Only if the unopgk was started with gui + extension then the user is asked.
         //In console mode there is no asking.
         approve = true;
     }

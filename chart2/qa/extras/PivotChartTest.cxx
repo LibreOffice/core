@@ -389,7 +389,7 @@ void PivotChartTest::testChangePivotTable()
     xTablePivotCharts->addNewByName("Chart", awt::Rectangle{0, 0, 9000, 9000}, sPivotTableName);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
-    // Get the pivot chart document so we ca access its data
+    // Get the pivot chart document so we can access its data
     xChartDoc.set(getPivotChartDocFromSheet(xTablePivotCharts, 0));
 
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -574,7 +574,7 @@ void PivotChartTest::testPivotChartWithOneColumnField()
     xTablePivotCharts->addNewByName("PivotChart", awt::Rectangle{ 9000, 9000, 21000, 18000 }, sPivotTableName);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
-    // Get the pivot chart document so we ca access its data
+    // Get the pivot chart document so we can access its data
     xChartDoc.set(getPivotChartDocFromSheet(xTablePivotCharts, 0));
 
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -659,7 +659,7 @@ void PivotChartTest::testPivotChartWithOneRowField()
     xTablePivotCharts->addNewByName("PivotChart", awt::Rectangle{ 9000, 9000, 21000, 18000 }, sPivotTableName);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
-    // Get the pivot chart document so we ca access its data
+    // Get the pivot chart document so we can access its data
     xChartDoc.set(getPivotChartDocFromSheet(xTablePivotCharts, 0));
 
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -829,7 +829,7 @@ void PivotChartTest::testPivotChartRowFieldInOutlineMode()
     xTablePivotCharts->addNewByName("PivotChart", awt::Rectangle{ 9000, 9000, 21000, 18000 }, sPivotTableName);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
-    // Get the pivot chart document so we ca access its data
+    // Get the pivot chart document so we can access its data
     xChartDoc.set(getPivotChartDocFromSheet(xTablePivotCharts, 0));
 
     CPPUNIT_ASSERT(xChartDoc.is());

@@ -77,7 +77,7 @@ namespace dbaui
         void RecalcLines();
         /** isTableConnection
 
-            @param  _pTable the table where we should check if we belongs to it
+            @param  _pTable the table where we should check if we belong to it
             @return true when the source or the destination window are equal
         */
         bool isTableConnection(const OTableWindow* _pTable)
