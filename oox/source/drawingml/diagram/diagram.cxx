@@ -100,6 +100,44 @@ void DiagramData::dump() const
         rPoint.dump();
 }
 
+void DiagramData::getChildrenString(OUStringBuffer& rBuf, const dgm::Point* pPoint, sal_Int32 nLevel) const
+{
+    if (!pPoint)
+        return;
+
+    if (nLevel > 0)
+    {
+        for (sal_Int32 i = 0; i < nLevel-1; i++)
+            rBuf.append('\t');
+        rBuf.append('+');
+        rBuf.append(' ');
+        rBuf.append(pPoint->mpShape->getTextBody()->getParagraphs().front()->getRuns().front()->getText());
+        rBuf.append('\n');
+    }
+
+    std::vector<const dgm::Point*> aChildren;
+    for (const auto& rCxn : maConnections)
+        if (rCxn.mnType == XML_parOf && rCxn.msSourceId == pPoint->msModelId)
+        {
+            if (rCxn.mnSourceOrder >= static_cast<sal_Int32>(aChildren.size()))
+                aChildren.resize(rCxn.mnSourceOrder + 1);
+            const auto pChild = maPointNameMap.find(rCxn.msDestId);
+            if (pChild != maPointNameMap.end())
+                aChildren[rCxn.mnSourceOrder] = pChild->second;
+        }
+
+    for (auto pChild : aChildren)
+        getChildrenString(rBuf, pChild, nLevel + 1);
+}
+
+OUString DiagramData::getString() const
+{
+    OUStringBuffer aBuf;
+    const dgm::Point* pPoint = getRootPoint();
+    getChildrenString(aBuf, pPoint, 0);
+    return aBuf.makeStringAndClear();
+}
+
 #ifdef DEBUG_OOX_DIAGRAM
 OString normalizeDotName( const OUString& rStr )
 {
