@@ -109,21 +109,6 @@ using ::std::set;
 
 namespace {
 
-void collectUIInformation(const std::map<OUString, OUString>& aParameters,const OUString action)
-{
-    EventDescription aDescription;
-    aDescription.aID = "grid_window";
-    aDescription.aAction = action;
-    aDescription.aParameters = aParameters;
-    aDescription.aParent = "MainWindow";
-    aDescription.aKeyWord = "ScGridWinUIObject";
-
-    UITestLogger::getInstance().logEvent(aDescription);
-}
-}
-
-namespace {
-
 std::pair<SCTAB,SCTAB> getMarkedTableRange(const std::vector<ScTableUniquePtr>& rTables, const ScMarkData& rMark)
 {
     SCTAB nTabStart = MAXTAB;
@@ -143,6 +128,18 @@ std::pair<SCTAB,SCTAB> getMarkedTableRange(const std::vector<ScTableUniquePtr>& 
     }
 
     return std::pair<SCTAB,SCTAB>(nTabStart,nTabEnd);
+}
+
+void collectUIInformation(const std::map<OUString, OUString>& aParameters, const OUString& rAction)
+{
+    EventDescription aDescription;
+    aDescription.aID = "grid_window";
+    aDescription.aAction = rAction;
+    aDescription.aParameters = aParameters;
+    aDescription.aParent = "MainWindow";
+    aDescription.aKeyWord = "ScGridWinUIObject";
+
+    UITestLogger::getInstance().logEvent(aDescription);
 }
 
 }
@@ -913,7 +910,9 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDoc
             }
         }
     }
-    collectUIInformation({{"NewName",rName}},"Rename_Sheet");
+
+    collectUIInformation({{"NewName", rName}}, "Rename_Sheet");
+
     return bValid;
 }
 

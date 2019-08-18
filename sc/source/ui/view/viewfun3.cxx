@@ -66,7 +66,7 @@ using namespace com::sun::star;
 
 namespace {
 
-void collectUIInformation(const std::map<OUString, OUString>& aParameters,OUString action)
+void collectUIInformation(const std::map<OUString, OUString>& aParameters, const OUString& action)
 {
     EventDescription aDescription;
     aDescription.aID = "grid_window";
@@ -153,7 +153,8 @@ void ScViewFunc::CutToClip()
 
         OUString aStartAddress =  aRange.aStart.GetColRowString();
         OUString aEndAddress = aRange.aEnd.GetColRowString();
-        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}},"CUT");
+
+        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, "CUT");
     }
     else
         ErrorMessage( STR_NOMULTISELECT );
@@ -188,7 +189,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, bool bCut, bool bApi, bool bI
     if( !bCut ){
         OUString aStartAddress =  aRange.aStart.GetColRowString();
         OUString aEndAddress = aRange.aEnd.GetColRowString();
-        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}},"COPY");
+        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, "COPY");
     }
     return bDone;
 }
@@ -1465,7 +1466,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     }
     OUString aStartAddress =  aMarkRange.aStart.GetColRowString();
     OUString aEndAddress = aMarkRange.aEnd.GetColRowString();
-    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}},"PASTE");
+    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, "PASTE");
     return true;
 }
 

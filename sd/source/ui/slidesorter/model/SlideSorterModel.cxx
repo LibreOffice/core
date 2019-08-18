@@ -106,12 +106,12 @@ namespace {
 
 namespace {
 
-void collectUIInformation(const OUString& num,const OUString& action)
+void collectUIInformation(const OUString& num, const OUString& rAction)
 {
     EventDescription aDescription;
     aDescription.aID = "impress_win_or_draw_win";
     aDescription.aParameters = {{"POS", num}};
-    aDescription.aAction = action;
+    aDescription.aAction = rAction;
     aDescription.aKeyWord = "ImpressWindowUIObject";
     aDescription.aParent = "MainWindow";
 
@@ -632,9 +632,8 @@ bool SlideSorterModel::DeleteSlide (const SdPage* pPage)
         bMarkedSelected = (*iter)->HasState(PageDescriptor::ST_Selected);
         maPageDescriptors.erase(iter);
         UpdateIndices(nIndex);
-    }
-    if(nIndex>=0){
-        collectUIInformation(OUString::number(nIndex+1),"Delete_Slide_or_Page");
+
+        collectUIInformation(OUString::number(nIndex + 1), "Delete_Slide_or_Page");
     }
     return bMarkedSelected;
 }

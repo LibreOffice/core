@@ -165,11 +165,11 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer;
 namespace {
 
-void collectUIInformation(const OUString action,const OUString aParameters)
+void collectUIInformation(const OUString& rAction, const OUString& aParameters)
 {
     EventDescription aDescription;
-    aDescription.aAction = action;
-    aDescription.aParameters = {{"parameters",aParameters}};
+    aDescription.aAction = rAction;
+    aDescription.aParameters = {{"parameters", aParameters}};
     aDescription.aID = "writer_edit";
     aDescription.aKeyWord = "SwEditWinUIObject";
     aDescription.aParent = "MainWindow";
@@ -846,7 +846,7 @@ int SwTransferable::Cut()
     int nRet = Copy( true );
     if( nRet )
         DeleteSelection();
-    collectUIInformation("CUT","parameter");
+    collectUIInformation("CUT", "parameter");
     return nRet;
 }
 
@@ -1113,7 +1113,7 @@ int SwTransferable::Copy( bool bIsCut )
     }
 
     if( !bIsCut ){
-        collectUIInformation("COPY","parameter");
+        collectUIInformation("COPY", "parameter");
     }
 
     return nRet;
@@ -1433,7 +1433,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
         }
     }
 
-    collectUIInformation("PASTE","parameter");
+    collectUIInformation("PASTE", "parameter");
 
     return EXCHG_INOUT_ACTION_NONE != nAction &&
             SwTransferable::PasteData( rData, rSh, nAction, nActionFlags, nFormat,

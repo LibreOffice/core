@@ -611,7 +611,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         const css::uno::Reference< css::frame::XDispatchResultListener >& rListener )
 {
     collectUsageInformation(aURL, aArgs);
-    collectUIInformation(aURL,aArgs);
+    collectUIInformation(aURL, aArgs);
 
     SolarMutexGuard aGuard;
     if (

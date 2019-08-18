@@ -94,11 +94,11 @@ using ::editeng::SvxBorderLine;
 
 namespace {
 
-void collectUIInformation(const std::map<OUString, OUString>& aParameters,const OUString action)
+void collectUIInformation(const std::map<OUString, OUString>& aParameters, const OUString& rAction)
 {
     EventDescription aDescription;
     aDescription.aID = "grid_window";
-    aDescription.aAction = action;
+    aDescription.aAction = rAction;
     aDescription.aParameters = aParameters;
     aDescription.aParent = "MainWindow";
     aDescription.aKeyWord = "ScGridWinUIObject";
@@ -1227,11 +1227,14 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bCenter )
 
             pDocSh->UpdateOle(&GetViewData());
             UpdateInputLine();
+
+            OUString aStartAddress = aMarkRange.aStart.GetColRowString();
+            OUString aEndAddress = aMarkRange.aEnd.GetColRowString();
+
+            collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, "MERGE_CELLS");
         }
     }
-    OUString aStartAddress =  aMarkRange.aStart.GetColRowString();
-    OUString aEndAddress = aMarkRange.aEnd.GetColRowString();
-    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}},"MERGE_CELLS");
+
     return bOk;
 }
 
@@ -1318,8 +1321,8 @@ bool ScViewFunc::RemoveMerge()
             pDocSh->UpdateOle(&GetViewData());
     }
 
-    OUString Cell_location =  aRange.aStart.GetColRowString();
-    collectUIInformation({{"CELL", Cell_location }},"UNMERGE_CELL");
+    OUString aCellLocation = aRange.aStart.GetColRowString();
+    collectUIInformation({{"CELL", aCellLocation}}, "UNMERGE_CELL");
 
     return true;        //! bOk ??
 }
