@@ -55,7 +55,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 namespace {
 
-void collectUIInformation(const OUString action,const OUString aParameters)
+void collectUIInformation(const OUString& action,const OUString& aParameters)
 {
     EventDescription aDescription;
     aDescription.aAction = action;

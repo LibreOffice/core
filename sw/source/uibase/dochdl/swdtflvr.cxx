@@ -164,7 +164,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer;
 namespace {
 
-void collectUIInformation(const OUString action,const OUString aParameters)
+void collectUIInformation(const OUString& action,const OUString& aParameters)
 {
     EventDescription aDescription;
     aDescription.aAction = action;
