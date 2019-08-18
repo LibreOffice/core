@@ -221,7 +221,7 @@ bool ScEditWindow::KeyInput( const KeyEvent& rKEvt )
         aObjectSelectLink.Call(*this);
         return true;
     }
-    return false;
+    return true;
 }
 
 void ScEditWindow::GetFocus()
