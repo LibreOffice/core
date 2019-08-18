@@ -134,8 +134,7 @@ sal_Bool SwXFilterOptions::supportsService( const OUString& rServiceName )
 
 uno::Sequence< OUString > SwXFilterOptions::getSupportedServiceNames()
 {
-    OUString sService("com.sun.star.ui.dialogs.FilterOptionsDialog");
-    return uno::Sequence< OUString> (&sService, 1);
+    return { "com.sun.star.ui.dialogs.FilterOptionsDialog" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

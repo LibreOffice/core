@@ -532,11 +532,7 @@ sal_Bool SAL_CALL SwXFieldMaster::supportsService(const OUString& rServiceName)
 uno::Sequence< OUString > SAL_CALL
 SwXFieldMaster::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TextFieldMaster";
-    pArray[1] = getServiceName(m_pImpl->m_nResTypeId);
-    return aRet;
+    return { "com.sun.star.text.TextFieldMaster", getServiceName(m_pImpl->m_nResTypeId) };
 }
 
 SwXFieldMaster::SwXFieldMaster(SwDoc *const pDoc, SwFieldIds const nResId)

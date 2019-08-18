@@ -652,11 +652,7 @@ sal_Bool SwXTextSearch::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SwXTextSearch::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.util.SearchDescriptor";
-    pArray[1] = "com.sun.star.util.ReplaceDescriptor";
-    return aRet;
+    return { "com.sun.star.util.SearchDescriptor", "com.sun.star.util.ReplaceDescriptor" };
 }
 
 void SwXTextSearch::FillSearchOptions( i18nutil::SearchOptions2& rSearchOpt ) const

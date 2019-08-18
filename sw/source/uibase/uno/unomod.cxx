@@ -241,9 +241,7 @@ sal_Bool SwXModule::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXModule::getSupportedServiceNames()
 {
-    OUString sService( "com.sun.star.text.GlobalSettings");
-    const Sequence< OUString > aSeq( &sService, 1 );
-    return aSeq;
+    return { "com.sun.star.text.GlobalSettings" };
 }
 
 SwXPrintSettings::SwXPrintSettings(SwXPrintSettingsType eType, SwDoc* pDoc)

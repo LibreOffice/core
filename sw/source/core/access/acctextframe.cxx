@@ -274,11 +274,7 @@ sal_Bool SAL_CALL SwAccessibleTextFrame::supportsService(const OUString& sTestSe
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleTextFrame::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.AccessibleTextFrameView";
-    pArray[1] = sAccessibleServiceName;
-    return aRet;
+    return { "com.sun.star.text.AccessibleTextFrameView", sAccessibleServiceName };
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTextFrame::getImplementationId()

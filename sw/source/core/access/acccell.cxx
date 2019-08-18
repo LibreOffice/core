@@ -250,11 +250,7 @@ sal_Bool SAL_CALL SwAccessibleCell::supportsService(const OUString& sTestService
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleCell::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.table.AccessibleCellView";
-    pArray[1] = sAccessibleServiceName;
-    return aRet;
+    return { "com.sun.star.table.AccessibleCellView", sAccessibleServiceName };
 }
 
 void SwAccessibleCell::Dispose(bool bRecursive, bool bCanSkipInvisible)

@@ -53,11 +53,7 @@ sal_Bool SAL_CALL SwAccessibleGraphic::supportsService(const OUString& sTestServ
 
 Sequence< OUString > SAL_CALL SwAccessibleGraphic::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.AccessibleTextGraphicObject";
-    pArray[1] = sAccessibleServiceName;
-    return aRet;
+    return { "com.sun.star.text.AccessibleTextGraphicObject", sAccessibleServiceName };
 }
 
 Sequence< sal_Int8 > SAL_CALL SwAccessibleGraphic::getImplementationId()

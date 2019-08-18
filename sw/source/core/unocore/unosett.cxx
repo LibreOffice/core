@@ -2264,11 +2264,7 @@ sal_Bool SwXChapterNumbering::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXChapterNumbering::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.ChapterNumbering";
-    pArray[1] = "com.sun.star.text.NumberingRules";
-    return aRet;
+    return { "com.sun.star.text.ChapterNumbering", "com.sun.star.text.NumberingRules" };
 }
 
 SwXChapterNumbering::SwXChapterNumbering(SwDocShell& rDocSh) :

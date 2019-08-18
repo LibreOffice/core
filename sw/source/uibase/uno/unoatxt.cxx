@@ -207,9 +207,7 @@ sal_Bool SwXAutoTextContainer::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SwXAutoTextContainer::getSupportedServiceNames()
 {
-    OUString sService("com.sun.star.text.AutoTextContainer");
-    const uno::Sequence< OUString > aSeq( &sService, 1 );
-    return aSeq;
+    return { "com.sun.star.text.AutoTextContainer" };
 }
 
 namespace

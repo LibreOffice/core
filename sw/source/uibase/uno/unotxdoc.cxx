@@ -3924,16 +3924,13 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
 
 Sequence< OUString > SwXLinkTargetSupplier::getElementNames()
 {
-    Sequence< OUString > aRet(7);
-    OUString* pNames = aRet.getArray();
-    pNames[0] = sTables;
-    pNames[1] = sFrames  ;
-    pNames[2] = sGraphics;
-    pNames[3] = sOLEs   ;
-    pNames[4] = sSections;
-    pNames[5] = sOutlines;
-    pNames[6] = sBookmarks;
-    return aRet;
+    return { sTables,
+             sFrames,
+             sGraphics,
+             sOLEs,
+             sSections,
+             sOutlines,
+             sBookmarks };
 }
 
 sal_Bool SwXLinkTargetSupplier::hasByName(const OUString& rName)

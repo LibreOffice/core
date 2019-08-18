@@ -224,16 +224,13 @@ sal_Bool SAL_CALL SwXTextDefaults::supportsService( const OUString& rServiceName
 
 uno::Sequence< OUString > SAL_CALL SwXTextDefaults::getSupportedServiceNames(  )
 {
-    uno::Sequence< OUString > aRet(7);
-    OUString* pArr = aRet.getArray();
-    *pArr++ = "com.sun.star.text.Defaults";
-    *pArr++ = "com.sun.star.style.CharacterProperties";
-    *pArr++ = "com.sun.star.style.CharacterPropertiesAsian";
-    *pArr++ = "com.sun.star.style.CharacterPropertiesComplex";
-    *pArr++ = "com.sun.star.style.ParagraphProperties";
-    *pArr++ = "com.sun.star.style.ParagraphPropertiesAsian";
-    *pArr++ = "com.sun.star.style.ParagraphPropertiesComplex";
-    return aRet;
+    return { "com.sun.star.text.Defaults",
+             "com.sun.star.style.CharacterProperties",
+             "com.sun.star.style.CharacterPropertiesAsian",
+             "com.sun.star.style.CharacterPropertiesComplex",
+             "com.sun.star.style.ParagraphProperties",
+             "com.sun.star.style.ParagraphPropertiesAsian",
+             "com.sun.star.style.ParagraphPropertiesComplex" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
