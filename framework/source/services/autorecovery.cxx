@@ -284,7 +284,7 @@ public:
                         of each document and update this state flag here.
 
                         Further we postpone saving of active documents, e.g. if the user
-                        works currently on it. We wait for an idle period then ...
+                        works currently on it. We wait for an idle period then...
              */
             sal_Int32 DocumentState;
 
@@ -3663,7 +3663,7 @@ void AutoRecovery::implts_doRecovery(const DispatchParams& aParams)
     // any "handle" state ...
     implts_resetHandleStates();
 
-    // Reset the configuration hint "we was crashed"!
+    // Reset the configuration hint "we were crashed"!
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
             comphelper::ConfigurationChanges::create(m_xContext));
     officecfg::Office::Recovery::RecoveryInfo::Crashed::set(false, batch);

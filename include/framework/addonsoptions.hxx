@@ -176,7 +176,7 @@ class FWE_DLLPUBLIC AddonsOptions
         const OUString GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
 
         /*-****************************************************************************************************
-            @short      Gets a NotebookBar part of an single addon
+            @short      Gets a NotebookBar part of a single addon
             @return     A complete
 
             @onerror    We return sal_False
@@ -185,7 +185,7 @@ class FWE_DLLPUBLIC AddonsOptions
         const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& GetAddonsNotebookBarPart( sal_uInt32 nIndex ) const;
 
         /*-****************************************************************************************************
-            @short      Gets a unique NotebookBar resource name of an single addon
+            @short      Gets a unique NotebookBar resource name of a single addon
             @return     A complete
 
             @onerror    We return sal_False

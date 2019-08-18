@@ -185,7 +185,7 @@ void SAL_CALL OConnection::setAutoCommit( sal_Bool autoCommit ) throw(SQLExcepti
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-    // here you  have to set your commit mode please have a look at the jdbc documentation to get a clear explanation
+    // here you have to set your commit mode please have a look at the jdbc documentation to get a clear explanation
 }
 
 sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeException)
@@ -203,7 +203,7 @@ void SAL_CALL OConnection::commit(  ) throw(SQLException, RuntimeException)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    // when you database does support transactions you should commit here
+    // when your database does support transactions you should commit here
 }
 
 void SAL_CALL OConnection::rollback(  ) throw(SQLException, RuntimeException)
