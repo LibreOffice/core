@@ -242,6 +242,21 @@ void SvSimpleTable::InsertHeaderEntry(const OUString& rText,
     SetTabs();
 }
 
+void SvSimpleTable::EnableTable()
+{
+    m_rParentTableContainer.Enable();
+}
+
+void SvSimpleTable::DisableTable()
+{
+    m_rParentTableContainer.Disable();
+}
+
+bool SvSimpleTable::IsEnabled() const
+{
+    return m_rParentTableContainer.IsEnabled();
+}
+
 void SvSimpleTable::SortByCol(sal_uInt16 nCol, bool bDir)
 {
     if(nSortCol!=0xFFFF)

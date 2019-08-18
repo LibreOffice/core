@@ -69,6 +69,7 @@ public:
     static void PrintWindowSubTree (vcl::Window* pRoot, int nIndentation);
 
     sal_Int32 GetMinimalWidth() const { return mnMinimalWidth; }
+    sal_Int32 GetMinimalHeight() const { return mnMinimalHeight; }
 
     class ScrollContainerWindow : public vcl::Window
     {

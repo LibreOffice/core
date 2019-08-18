@@ -50,8 +50,16 @@ public:
     virtual void        StateChanged( StateChangedType nStateChange ) override;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
+    // for reasons of efficiency not const
+    SvxFont&            GetFont();
+    const SvxFont&      GetFont() const;
     void                SetFont( const SvxFont& rNormalFont, const SvxFont& rCJKFont, const SvxFont& rCTLFont );
+    SvxFont&            GetCJKFont();
+    SvxFont&            GetCTLFont();
+    void                SetColor( const Color& rColor );
+    void                ResetColor();
     void                SetBackColor( const Color& rColor );
+    void                UseResourceText();
     void                Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
 
     bool                IsTwoLines() const;

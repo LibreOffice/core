@@ -348,6 +348,10 @@ public:
     void            Check( bool bCheck = true );
     bool            IsChecked() const { return mbChecked; }
 
+    void            SaveValue() { mbSaveValue = IsChecked(); }
+    bool            GetSavedValue() const { return mbSaveValue; }
+    bool            IsValueChangedFromSaved() const { return mbSaveValue != IsChecked(); }
+
     static Image    GetRadioImage( const AllSettings& rSettings, DrawButtonFlags nFlags );
 
     Size            CalcMinimumSize() const;
