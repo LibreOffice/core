@@ -310,7 +310,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
         Reference< XNameContainer > xTableDefinitions(_rDB.getTables(),UNO_QUERY);
         m_pTables.reset( new OTableContainer( *this, m_aMutex, this, bCase, xTableDefinitions, this, m_nInAppend ) );
 
-        // check if we supports types
+        // check if we support types
         if ( xMeta.is() )
         {
             Reference<XResultSet> xRes = xMeta->getTableTypes();

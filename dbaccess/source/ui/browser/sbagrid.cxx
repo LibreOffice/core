@@ -412,7 +412,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
         // this saves us from keeping track of these events - as soon as the window dies,
         // the events are deleted automatically. For the application way, we would need to
         // do this ourself.
-        // As we use our grid as window, and the grid dies before we dy, this should be no problem.
+        // As we use our grid as window, and the grid dies before we die, this should be no problem.
         pGrid->PostUserEvent( LINK( this, SbaXGridPeer, OnDispatchEvent ) );
         return;
     }
