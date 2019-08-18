@@ -365,7 +365,7 @@ int mar_create(const char *dest, int
   if (fwrite(stack.head, stack.size_used, 1, fp) != 1)
     goto failure;
 
-  /* To protect against invalid MAR files, we assumes that the MAR file
+  /* To protect against invalid MAR files, we assume that the MAR file
      size is less than or equal to MAX_SIZE_OF_MAR_FILE. */
   if (ftell(fp) > MAX_SIZE_OF_MAR_FILE) {
     goto failure;
