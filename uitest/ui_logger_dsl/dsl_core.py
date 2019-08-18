@@ -97,6 +97,7 @@ class ul_Compiler:
             'math_Type_command':self.handle_math_Type_command,
             'setZoom_command':self.handle_setZoom_command,
             'draw_Type_command':self.handle_draw_Type_command,
+            'SideBar':self.handle_SideBar,
 
             'writer_Copy_Text':self.do_nothing,
             'writer_Cut_Text':self.do_nothing,
@@ -187,6 +188,15 @@ class ul_Compiler:
             ,"math":"math_edit","draw":"draw_win"}
         self.current_app=app[StarterCommand.program_name]
         self.prev_command=StarterCommand
+
+    def handle_SideBar(self , SideBar):
+
+        line="        self.xUITest.executeCommand(\".uno:Sidebar\")\n"
+        self.variables.append(line)
+
+        self.write_line_with_one_parameters("MainWindow","SIDEBAR","PANEL",SideBar.name)
+
+        self.prev_command=SideBar
 
     def handle_Dialog(self, DialogCommand):
 
