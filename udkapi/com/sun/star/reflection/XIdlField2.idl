@@ -69,7 +69,7 @@ published interface XIdlField2: com::sun::star::reflection::XIdlMember
                 value of field
 
         @throws IllegalAccessException
-        An com::sun::star::lang::IllegalAccessException
+        A com::sun::star::lang::IllegalAccessException
         is thrown if the given object is no interface, enum or compound type;
         or the given object does not have the reflected field.
     */
@@ -90,7 +90,7 @@ published interface XIdlField2: com::sun::star::reflection::XIdlMember
                value to be set
 
         @throws IllegalAccessException
-        An com::sun::star::lang::IllegalAccessException
+        A com::sun::star::lang::IllegalAccessException
         is thrown if the given object is no interface or compound type;
         or the given object does not have the reflected field.
     */

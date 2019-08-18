@@ -209,7 +209,7 @@ mar_extract_and_verify_signatures_fp(FILE *fp,
     return CryptoX_Error;
   }
 
-  /* To protect against invalid MAR files, we assumes that the MAR file
+  /* To protect against invalid MAR files, we assume that the MAR file
      size is less than or equal to MAX_SIZE_OF_MAR_FILE. */
   if (fseeko(fp, 0, SEEK_END)) {
     fprintf(stderr, "ERROR: Could not seek to the end of the MAR file.\n");

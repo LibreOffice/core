@@ -260,7 +260,7 @@ bool XMLStyleExport::exportStyle(
                 OUString sListName;
                 aAny >>= sListName;
 
-                /* An direct set empty list style has to be written. Otherwise,
+                /* A direct set empty list style has to be written. Otherwise,
                    this information is lost and causes an error, if the parent
                    style has a list style set. (#i69523#)
                 */
