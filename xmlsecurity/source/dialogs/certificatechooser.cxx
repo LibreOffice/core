@@ -220,13 +220,15 @@ void CertificateChooser::ImplInitialize()
 
 #if HAVE_FEATURE_GPGME
             // only GPG has preferred keys
-            if ( sIssuer == msPreferredKey )
-            {
-                if ( meAction == UserAction::Sign || meAction == UserAction::SelectSign )
-                    m_xCertLB->select(nRow);
-                else if ( meAction == UserAction::Encrypt &&
-                          aUserOpts.GetEncryptToSelf() )
-                    mxEncryptToSelf = xCert;
+            if ( !sIssuer.isEmpty() && !msPreferredKey.isEmpty() ) {
+                if ( sIssuer == msPreferredKey )
+                {
+                    if ( meAction == UserAction::Sign || meAction == UserAction::SelectSign )
+                        m_xCertLB->select(nRow);
+                    else if ( meAction == UserAction::Encrypt &&
+                              aUserOpts.GetEncryptToSelf() )
+                        mxEncryptToSelf = xCert;
+                }
             }
 #endif
         }
