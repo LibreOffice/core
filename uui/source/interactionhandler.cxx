@@ -91,13 +91,11 @@ UUIInteractionHandler::supportsService(OUString const & rServiceName)
 uno::Sequence< OUString > SAL_CALL
 UUIInteractionHandler::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aNames(3);
-    aNames[0] = "com.sun.star.task.InteractionHandler";
-    // added to indicate support for configuration.backend.MergeRecoveryRequest
-    aNames[1] = "com.sun.star.configuration.backend.InteractionHandler";
-    aNames[2] = "com.sun.star.uui.InteractionHandler";
+    return { "com.sun.star.task.InteractionHandler",
+ // added to indicate support for configuration.backend.MergeRecoveryRequest
+             "com.sun.star.configuration.backend.InteractionHandler",
     // for backwards compatibility
-    return aNames;
+             "com.sun.star.uui.InteractionHandler" };
 }
 
 void SAL_CALL

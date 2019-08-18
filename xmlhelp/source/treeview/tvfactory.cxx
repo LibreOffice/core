@@ -131,10 +131,7 @@ TVFactory::getImplementationName_static()
 Sequence< OUString >
 TVFactory::getSupportedServiceNames_static()
 {
-    Sequence< OUString > seq( 2 );
-    seq[0] = "com.sun.star.help.TreeView";
-    seq[1] = "com.sun.star.ucb.HiearchyDataSource";
-    return seq;
+    return { "com.sun.star.help.TreeView", "com.sun.star.ucb.HiearchyDataSource" };
 }
 
 Reference< XSingleServiceFactory >
