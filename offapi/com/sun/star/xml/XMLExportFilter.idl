@@ -35,7 +35,7 @@ module com { module sun { module star { module xml {
     XDocumentHandler will then be used to export the XML data stream.  */
 published service XMLExportFilter
 {
-    /** An com.sun.star.xml.sax.XDocumentHandler needs to be passed to
+    /** A com.sun.star.xml.sax.XDocumentHandler needs to be passed to
        the com::sun::star::lang::XInitialization::initialize() call.
     */
     service com::sun::star::document::ExportFilter;

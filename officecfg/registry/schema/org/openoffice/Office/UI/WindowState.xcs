@@ -62,7 +62,7 @@
       </prop>
       <prop oor:name="DockPos" oor:type="xs:string">
         <info>
-          <desc>Specifies the position of a docked user interface element. For top/bottom docked elements X describes a pixel position and Y the row number, left/right docked elements uses X for the column and Y for the pixel position. X and Y coordinates must be splitted by an comma.</desc>
+          <desc>Specifies the position of a docked user interface element. For top/bottom docked elements X describes a pixel position and Y the row number, left/right docked elements uses X for the column and Y for the pixel position. X and Y coordinates must be split by a comma.</desc>
         </info>
       </prop>
       <prop oor:name="DockSize" oor:type="xs:string">
@@ -72,12 +72,12 @@
       </prop>
       <prop oor:name="Pos" oor:type="xs:string">
         <info>
-          <desc>Specifies the position of a floating user interface element in pixel. X and Y coordinates must be splitted by an comma and are relative to the document frame.</desc>
+          <desc>Specifies the position of a floating user interface element in pixel. X and Y coordinates must be split by a comma and are relative to the document frame.</desc>
         </info>
       </prop>
       <prop oor:name="Size" oor:type="xs:string">
         <info>
-          <desc>Specifies the size of a floating user interface element in pixel. The real size can differ if the layout manager decides to resize it due to current circumstances. Width and height must be splitted by an comma.</desc>
+          <desc>Specifies the size of a floating user interface element in pixel. The real size can differ if the layout manager decides to resize it due to current circumstances. Width and height must be split by a comma.</desc>
         </info>
       </prop>
       <prop oor:name="UIName" oor:type="xs:string" oor:localized="true">

@@ -29,7 +29,7 @@
 
 
 /** used to listen on objects which allow updating their data.
-    <p>In addition to just get notified when an data update happened, the listener
+    <p>In addition to just get notified when a data update happened, the listener
     has a chance to veto updates <em>before</em> they happen.</p>
 
     @see XUpdateBroadcaster
