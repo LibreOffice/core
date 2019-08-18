@@ -508,8 +508,8 @@ public:
     void ShowPreviewSelection( sal_uInt16 nSelPage );
     void InvalidateAccessibleFocus();
 
-    // Apply Accessiblity options.
-    void ApplyAccessiblityOptions(SvtAccessibilityOptions const & rAccessibilityOptions);
+    // Apply Accessibility options.
+    void ApplyAccessibilityOptions(SvtAccessibilityOptions const & rAccessibilityOptions);
 
     /** invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
 

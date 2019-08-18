@@ -1124,7 +1124,7 @@ void SwPagePreview::Init()
     aOpt.SetHideWhitespaceMode( false );
 
     GetViewShell()->ApplyViewOptions( aOpt );
-    GetViewShell()->ApplyAccessiblityOptions(SW_MOD()->GetAccessibilityOptions());
+    GetViewShell()->ApplyAccessibilityOptions(SW_MOD()->GetAccessibilityOptions());
 
     // adjust view shell option to the same as for print
     SwPrintData const aPrintOptions = *SW_MOD()->GetPrtOptions(false);
@@ -1828,9 +1828,9 @@ uno::Reference< css::accessibility::XAccessible >
     return GetAccessible( false );
 }
 
-void SwPagePreview::ApplyAccessiblityOptions(SvtAccessibilityOptions const & rAccessibilityOptions)
+void SwPagePreview::ApplyAccessibilityOptions(SvtAccessibilityOptions const & rAccessibilityOptions)
 {
-    GetViewShell()->ApplyAccessiblityOptions(rAccessibilityOptions);
+    GetViewShell()->ApplyAccessibilityOptions(rAccessibilityOptions);
 }
 
 void SwPagePreview::ShowHScrollbar(bool bShow)
