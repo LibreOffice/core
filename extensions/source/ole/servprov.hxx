@@ -46,7 +46,7 @@ Reference<XInterface> OleServer_CreateInstance( const Reference<XMultiServiceFac
 
     OneInstanceOleWrapper
 
-    Provides an single UNO object as OLE object.
+    Provides a single UNO object as OLE object.
 
     Acts as a COM class factory. When IClassFactory::CreateInstance is being called
     then it maps the XInstance member it to a COM object.

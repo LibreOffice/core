@@ -95,7 +95,7 @@ class Job : public  ::cppu::WeakImplHelper<
 
         /**
             For some special cases we must know the environment, in which
-            this job runs. Means the frame inside which we may was triggered.
+            this job runs. Means the frame inside which we may were triggered.
             We use it too, to listen for closing events of this resource.
 
             Please note: If m_xFrame is set - m_xModel should be NULL.
@@ -105,7 +105,7 @@ class Job : public  ::cppu::WeakImplHelper<
 
         /**
             For some special cases we must know the environment, in which
-            this job runs. Means the document inside which we may was triggered.
+            this job runs. Means the document inside which we may were triggered.
             We use it too, to listen for closing events of this resource.
 
             Please note: If m_xModel is set - m_xFrame should be NULL.
