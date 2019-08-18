@@ -197,9 +197,7 @@ sal_Bool UIObjectUnoObj::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> UIObjectUnoObj::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aServiceNames(1);
-    aServiceNames[0] = "com.sun.star.ui.test.UIObject";
-    return aServiceNames;
+    return { "com.sun.star.ui.test.UIObject" };
 }
 
 OUString SAL_CALL UIObjectUnoObj::getHierarchy()
