@@ -1394,18 +1394,8 @@ sal_Bool SAL_CALL DocumentSettings::supportsService( const OUString& ServiceName
 
 Sequence< OUString > SAL_CALL DocumentSettings::getSupportedServiceNames(  )
 {
-    Sequence< OUString > aSeq( 2 );
-    aSeq[0] = "com.sun.star.document.Settings" ;
-    if( mxModel->IsImpressDocument() )
-    {
-        aSeq[1] = "com.sun.star.presentation.DocumentSettings" ;
-    }
-    else
-    {
-        aSeq[1] = "com.sun.star.drawing.DocumentSettings" ;
-    }
-
-    return aSeq;
+    return {  "com.sun.star.document.Settings" ,
+              mxModel->IsImpressDocument()?OUString("com.sun.star.presentation.DocumentSettings"):OUString("com.sun.star.drawing.DocumentSettings") };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

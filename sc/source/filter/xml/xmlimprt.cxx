@@ -116,8 +116,7 @@ OUString ScXMLImport_getImplementationName() throw()
 
 uno::Sequence< OUString > ScXMLImport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( ScXMLImport_getImplementationName() );
-    return uno::Sequence< OUString > ( &aServiceName, 1 );
+    return { ScXMLImport_getImplementationName() };
 }
 
 uno::Reference< uno::XInterface > ScXMLImport_createInstance(
@@ -134,8 +133,7 @@ OUString ScXMLImport_Meta_getImplementationName() throw()
 
 uno::Sequence< OUString > ScXMLImport_Meta_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( ScXMLImport_Meta_getImplementationName() );
-    return uno::Sequence< OUString > ( &aServiceName, 1 );
+    return { ScXMLImport_Meta_getImplementationName() };
 }
 
 uno::Reference< uno::XInterface > ScXMLImport_Meta_createInstance(
@@ -152,8 +150,7 @@ OUString ScXMLImport_Styles_getImplementationName() throw()
 
 uno::Sequence< OUString > ScXMLImport_Styles_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( ScXMLImport_Styles_getImplementationName() );
-    return uno::Sequence< OUString > ( &aServiceName, 1 );
+    return { ScXMLImport_Styles_getImplementationName() };
 }
 
 uno::Reference< uno::XInterface > ScXMLImport_Styles_createInstance(
@@ -170,8 +167,7 @@ OUString ScXMLImport_Content_getImplementationName() throw()
 
 uno::Sequence< OUString > ScXMLImport_Content_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( ScXMLImport_Content_getImplementationName() );
-    return uno::Sequence< OUString > ( &aServiceName, 1 );
+    return { ScXMLImport_Content_getImplementationName() };
 }
 
 uno::Reference< uno::XInterface > ScXMLImport_Content_createInstance(
@@ -188,8 +184,7 @@ OUString ScXMLImport_Settings_getImplementationName() throw()
 
 uno::Sequence< OUString > ScXMLImport_Settings_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( ScXMLImport_Settings_getImplementationName() );
-    return uno::Sequence< OUString > ( &aServiceName, 1 );
+    return { ScXMLImport_Settings_getImplementationName() };
 }
 
 uno::Reference< uno::XInterface > ScXMLImport_Settings_createInstance(

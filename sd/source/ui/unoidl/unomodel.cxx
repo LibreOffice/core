@@ -1180,19 +1180,10 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getSupportedServiceNames(
 {
     ::SolarMutexGuard aGuard;
 
-    uno::Sequence< OUString > aSeq( 4 );
-    OUString* pServices = aSeq.getArray();
-
-    *pServices++ = "com.sun.star.document.OfficeDocument";
-    *pServices++ = "com.sun.star.drawing.GenericDrawingDocument";
-    *pServices++ = "com.sun.star.drawing.DrawingDocumentFactory";
-
-    if( mbImpressDoc )
-        *pServices++ = "com.sun.star.presentation.PresentationDocument";
-    else
-        *pServices++ = "com.sun.star.drawing.DrawingDocument";
-
-    return aSeq;
+    return { "com.sun.star.document.OfficeDocument",
+             "com.sun.star.drawing.GenericDrawingDocument",
+             "com.sun.star.drawing.DrawingDocumentFactory",
+             mbImpressDoc?OUString("com.sun.star.presentation.PresentationDocument"):OUString("com.sun.star.drawing.DrawingDocument") };
 }
 
 // XPropertySet
@@ -3005,9 +2996,7 @@ sal_Bool SAL_CALL SdDrawPagesAccess::supportsService( const OUString& ServiceNam
 
 uno::Sequence< OUString > SAL_CALL SdDrawPagesAccess::getSupportedServiceNames(  )
 {
-    OUString aService( "com.sun.star.drawing.DrawPages" );
-    uno::Sequence< OUString > aSeq( &aService, 1 );
-    return aSeq;
+    return { "com.sun.star.drawing.DrawPages" };
 }
 
 // XComponent
@@ -3262,9 +3251,7 @@ sal_Bool SAL_CALL SdMasterPagesAccess::supportsService( const OUString& ServiceN
 
 uno::Sequence< OUString > SAL_CALL SdMasterPagesAccess::getSupportedServiceNames(  )
 {
-    OUString aService( "com.sun.star.drawing.MasterPages" );
-    uno::Sequence< OUString > aSeq( &aService, 1 );
-    return aSeq;
+    return { "com.sun.star.drawing.MasterPages" };
 }
 
 // class SdDocLinkTargets
@@ -3326,8 +3313,7 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getElementNames()
     SdDrawDocument* pDoc = mpModel->GetDoc();
     if( pDoc == nullptr )
     {
-        uno::Sequence< OUString > aSeq;
-        return aSeq;
+        return { };
     }
 
     if( pDoc->GetDocumentType() == DocumentType::Draw )
@@ -3440,9 +3426,7 @@ sal_Bool SAL_CALL SdDocLinkTargets::supportsService( const OUString& ServiceName
 
 uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getSupportedServiceNames()
 {
-    const OUString aSN( "com.sun.star.document.LinkTargets" );
-    uno::Sequence< OUString > aSeq( &aSN, 1 );
-    return aSeq;
+    return { "com.sun.star.document.LinkTargets" };
 }
 
 rtl::Reference< SdXImpressDocument > SdXImpressDocument::GetModel( SdDrawDocument const & rDocument )

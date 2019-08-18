@@ -164,9 +164,7 @@ sal_Bool SAL_CALL SdUnoSlideView::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL SdUnoSlideView::getSupportedServiceNames(  )
 {
-    OUString aSN( "com.sun.star.presentation.SlidesView" );
-    uno::Sequence< OUString > aSeq( &aSN, 1 );
-    return aSeq;
+    return { "com.sun.star.presentation.SlidesView" };
 }
 
 } // end of namespace sd

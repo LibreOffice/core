@@ -150,9 +150,7 @@ sal_Bool SAL_CALL SdUnoOutlineView::supportsService( const OUString& ServiceName
 
 Sequence< OUString > SAL_CALL SdUnoOutlineView::getSupportedServiceNames(  )
 {
-    OUString aSN( "com.sun.star.presentation.OutlineView" );
-    uno::Sequence< OUString > aSeq( &aSN, 1 );
-    return aSeq;
+    return { "com.sun.star.presentation.OutlineView" };
 }
 
 } // end of namespace sd
