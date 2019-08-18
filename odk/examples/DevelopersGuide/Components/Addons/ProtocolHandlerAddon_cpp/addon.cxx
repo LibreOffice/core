@@ -52,10 +52,6 @@ using namespace com::sun::star::awt;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::util::URL;
 
-// This is the service name an Add-On has to implement
-#define SERVICE_NAME "com.sun.star.frame.ProtocolHandler"
-
-
 /**
   * Show a message box with the UNO based toolkit
   */
@@ -203,10 +199,7 @@ throw (RuntimeException)
 Sequence< ::rtl::OUString > SAL_CALL Addon_getSupportedServiceNames()
 throw (RuntimeException)
 {
-    Sequence < ::rtl::OUString > aRet(1);
-    ::rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( SERVICE_NAME );
-    return aRet;
+    return { "com.sun.star.frame.ProtocolHandler" };
 }
 
 Reference< XInterface > SAL_CALL Addon_createInstance( const Reference< XComponentContext > & rContext)
