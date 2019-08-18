@@ -37,6 +37,7 @@
 #include <cuitabarea.hxx>
 #include <cuitbxform.hxx>
 #include <dlgname.hxx>
+#include <DiagramDialog.hxx>
 #include <dstribut.hxx>
 #include <hangulhanjadlg.hxx>
 #include <hyphen.hxx>
@@ -740,6 +741,20 @@ public:
     virtual short Execute() override;
 };
 
+class DiagramDialog;
+class AbstractDiagramDialog_Impl : public AbstractDiagramDialog
+{
+protected:
+    std::unique_ptr<DiagramDialog> m_xDlg;
+
+public:
+    explicit AbstractDiagramDialog_Impl(std::unique_ptr<DiagramDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+};
+
 //AbstractDialogFactory_Impl implementations
 class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
 {
@@ -926,6 +941,10 @@ public:
                               const css::uno::Reference<css::frame::XModel> xModel, bool bEditExisting) override;
 
     virtual VclPtr<AbstractTipOfTheDayDialog> CreateTipOfTheDayDialog(weld::Window* pParent) override;
+
+    virtual VclPtr<AbstractDiagramDialog> CreateDiagramDialog(
+        weld::Window* pParent,
+        std::shared_ptr<DiagramDataInterface> pDiagramData) override;
 };
 
 #endif
