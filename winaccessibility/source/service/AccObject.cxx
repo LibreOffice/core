@@ -238,7 +238,7 @@ void AccObject::DeleteChild( AccObject* pChild )
 }
 
 /**
-   * In order to windows API WindowFromAccessibleObject,we sometimes to set a pure
+   * In order to windows API WindowFromAccessibleObject, we sometimes to set a pure
    * top window accessible object created by windows system as top ancestor.
    * @param.
    * @return

@@ -347,7 +347,7 @@ SfxProgress* SfxProgress::GetActiveProgress
 (
     SfxObjectShell const * pDocSh /*  the <SfxObjectShell>, which should be
                                       queried after a current <SfxProgress>,
-                                      or 0 if an current SfxProgress for the
+                                      or 0 if a current SfxProgress for the
                                       entire application should be obtained.
                                       The pointer only needs at the time of
                                       the call to be valid.
