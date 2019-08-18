@@ -15,10 +15,32 @@
 #include <tools/stream.hxx>
 #include <vcl/vclevent.hxx>
 
-namespace com { namespace sun { namespace star {
-    namespace beans { struct PropertyValue; }
-} } }
-namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace beans
+{
+struct PropertyValue;
+}
+}
+}
+}
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace uno
+{
+template <class E> class Sequence;
+}
+}
+}
+}
 
 struct EventDescription;
 class Control;
@@ -27,7 +49,6 @@ class KeyEvent;
 class UITEST_DLLPUBLIC UITestLogger
 {
 private:
-
     SvFileStream maStream;
 
     bool mbValid;
@@ -35,29 +56,24 @@ private:
     OUString app_name;
 
 public:
-
     UITestLogger();
 
-    void logCommand(const OUString& rAction, const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+    void logCommand(const OUString& rAction,
+                    const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
 
-    void logAction(VclPtr<Control> const & xUIElement, VclEventId nEvent);
+    void logAction(VclPtr<Control> const& xUIElement, VclEventId nEvent);
 
     void log(const OUString& rString);
 
-    void logKeyInput(VclPtr<vcl::Window> const & xUIElement, const KeyEvent& rEvent);
+    void logKeyInput(VclPtr<vcl::Window> const& xUIElement, const KeyEvent& rEvent);
 
     void logEvent(const EventDescription& rDescription);
 
     static UITestLogger& getInstance();
 
-    void setAppName(OUString name){
-        app_name=name;
-    }
+    void setAppName(OUString name) { app_name = name; }
 
-    OUString getAppName(){
-        return app_name;
-    }
-
+    OUString getAppName() { return app_name; }
 };
 
 #endif
