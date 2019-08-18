@@ -49,13 +49,24 @@ public:
     ~ImpTwain();
 
 private:
+    enum class TWAINState
+    {
+        DSMunloaded = 1,
+        DSMloaded = 2,
+        DSMopened = 3,
+        DSopened = 4,
+        DSenabled = 5,
+        DSreadyToXfer = 6,
+        Xferring = 7,
+    };
+
     TW_IDENTITY m_aAppId;
     TW_IDENTITY m_aSrcId;
     DWORD m_nParentThreadId;
     HANDLE m_hProc;
     DSMENTRYPROC m_pDSM = nullptr;
     HMODULE m_hMod = nullptr;
-    ULONG_PTR m_nCurState = 1;
+    TWAINState m_nCurState = TWAINState::DSMunloaded;
     HWND m_hTwainWnd = nullptr;
     HHOOK m_hTwainHook = nullptr;
     HANDLE m_hMap = nullptr; // the *duplicated* handle
@@ -66,7 +77,7 @@ private:
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam);
     static LRESULT CALLBACK MsgHook(int nCode, WPARAM wParam, LPARAM lParam);
 
-    void Destroy();
+    void Destroy() { ImplFallback(TWAIN_EVENT_QUIT); }
     bool SelectSource();
     bool InitXfer();
 
@@ -199,15 +210,13 @@ ImpTwain::~ImpTwain()
     UnhookWindowsHookEx(m_hTwainHook);
 }
 
-void ImpTwain::Destroy() { ImplFallback(TWAIN_EVENT_QUIT); }
-
 bool ImpTwain::SelectSource()
 {
     TW_UINT16 nRet = TWRC_FAILURE;
 
     ImplOpenSourceManager();
 
-    if (3 == m_nCurState)
+    if (TWAINState::DSMopened == m_nCurState)
     {
         TW_IDENTITY aIdent;
 
@@ -217,8 +226,7 @@ bool ImpTwain::SelectSource()
         nRet = m_pDSM(&m_aAppId, nullptr, DG_CONTROL, DAT_IDENTITY, MSG_USERSELECT, &aIdent);
     }
 
-    ImplFallback(TWAIN_EVENT_QUIT);
-
+    Destroy();
     return (TWRC_SUCCESS == nRet);
 }
 
@@ -228,34 +236,34 @@ bool ImpTwain::InitXfer()
 
     ImplOpenSourceManager();
 
-    if (3 == m_nCurState)
+    if (TWAINState::DSMopened == m_nCurState)
     {
         ImplOpenSource();
 
-        if (4 == m_nCurState)
+        if (TWAINState::DSopened == m_nCurState)
             bRet = ImplEnableSource();
     }
 
     if (!bRet)
-        ImplFallback(TWAIN_EVENT_QUIT);
+        Destroy();
 
     return bRet;
 }
 
 void ImpTwain::ImplOpenSourceManager()
 {
-    if (1 == m_nCurState)
+    if (TWAINState::DSMunloaded == m_nCurState)
     {
         if ((m_hMod = LoadLibraryW(L"TWAIN_32.DLL")))
         {
-            m_nCurState = 2;
+            m_nCurState = TWAINState::DSMloaded;
 
             m_pDSM = reinterpret_cast<DSMENTRYPROC>(GetProcAddress(m_hMod, "DSM_Entry"));
             if (m_pDSM
                 && (m_pDSM(&m_aAppId, nullptr, DG_CONTROL, DAT_PARENT, MSG_OPENDSM, &m_hTwainWnd)
                     == TWRC_SUCCESS))
             {
-                m_nCurState = 3;
+                m_nCurState = TWAINState::DSMopened;
             }
         }
     }
@@ -263,7 +271,7 @@ void ImpTwain::ImplOpenSourceManager()
 
 void ImpTwain::ImplOpenSource()
 {
-    if (3 == m_nCurState)
+    if (TWAINState::DSMopened == m_nCurState)
     {
         if ((m_pDSM(&m_aAppId, nullptr, DG_CONTROL, DAT_IDENTITY, MSG_GETDEFAULT, &m_aSrcId)
              == TWRC_SUCCESS)
@@ -279,7 +287,7 @@ void ImpTwain::ImplOpenSource()
             GlobalUnlock(aCap.hContainer);
             m_pDSM(&m_aAppId, &m_aSrcId, DG_CONTROL, DAT_CAPABILITY, MSG_SET, &aCap);
             GlobalFree(aCap.hContainer);
-            m_nCurState = 4;
+            m_nCurState = TWAINState::DSopened;
         }
     }
 }
@@ -288,12 +296,12 @@ bool ImpTwain::ImplEnableSource()
 {
     bool bRet = false;
 
-    if (4 == m_nCurState)
+    if (TWAINState::DSopened == m_nCurState)
     {
         TW_USERINTERFACE aUI = { true, true, m_hTwainWnd };
 
         NotifyParent(TWAIN_EVENT_SCANNING, 0);
-        m_nCurState = 5;
+        m_nCurState = TWAINState::DSenabled;
 
         if (m_pDSM(&m_aAppId, &m_aSrcId, DG_CONTROL, DAT_USERINTERFACE, MSG_ENABLEDS, &aUI)
             == TWRC_SUCCESS)
@@ -303,7 +311,7 @@ bool ImpTwain::ImplEnableSource()
         else
         {
             // dialog failed
-            m_nCurState = 4;
+            m_nCurState = TWAINState::DSopened;
         }
     }
 
@@ -317,58 +325,52 @@ void ImpTwain::NotifyParent(WPARAM nEvent, LPARAM lParam)
 
 bool ImpTwain::ImplHandleMsg(MSG* pMsg)
 {
-    TW_UINT16 nRet;
+    if (!m_pDSM)
+        return false;
+
     TW_EVENT aEvt = { pMsg, MSG_NULL };
+    TW_UINT16 nRet = m_pDSM(&m_aAppId, &m_aSrcId, DG_CONTROL, DAT_EVENT, MSG_PROCESSEVENT, &aEvt);
 
-    if (m_pDSM)
-        nRet = m_pDSM(&m_aAppId, &m_aSrcId, DG_CONTROL, DAT_EVENT, MSG_PROCESSEVENT, &aEvt);
-    else
-        nRet = TWRC_NOTDSEVENT;
-
-    if (aEvt.TWMessage != MSG_NULL)
+    switch (aEvt.TWMessage)
     {
-        switch (aEvt.TWMessage)
+        case MSG_XFERREADY:
         {
-            case MSG_XFERREADY:
+            WPARAM nEvent = TWAIN_EVENT_QUIT;
+
+            if (TWAINState::DSenabled == m_nCurState)
             {
-                WPARAM nEvent = TWAIN_EVENT_QUIT;
+                m_nCurState = TWAINState::DSreadyToXfer;
+                ImplXfer();
 
-                if (5 == m_nCurState)
-                {
-                    m_nCurState = 6;
-                    ImplXfer();
-
-                    if (m_hMap)
-                        nEvent = TWAIN_EVENT_XFER;
-                }
-                else if (7 == m_nCurState && m_hMap)
-                {
-                    // Already sent TWAIN_EVENT_XFER; not processed yet;
-                    // duplicate event
-                    nEvent = TWAIN_EVENT_NONE;
-                }
-
-                ImplFallback(nEvent);
+                if (m_hMap)
+                    nEvent = TWAIN_EVENT_XFER;
             }
+            else if (TWAINState::Xferring == m_nCurState && m_hMap)
+            {
+                // Already sent TWAIN_EVENT_XFER; not processed yet;
+                // duplicate event
+                nEvent = TWAIN_EVENT_NONE;
+            }
+
+            ImplFallback(nEvent);
+        }
+        break;
+
+        case MSG_CLOSEDSREQ:
+            Destroy();
             break;
 
-            case MSG_CLOSEDSREQ:
-                ImplFallback(TWAIN_EVENT_QUIT);
-                break;
-
-            default:
-                break;
-        }
+        case MSG_NULL:
+            nRet = TWRC_NOTDSEVENT;
+            break;
     }
-    else
-        nRet = TWRC_NOTDSEVENT;
 
     return (TWRC_DSEVENT == nRet);
 }
 
 void ImpTwain::ImplXfer()
 {
-    if (m_nCurState == 6)
+    if (m_nCurState == TWAINState::DSreadyToXfer)
     {
         TW_IMAGEINFO aInfo;
         HANDLE hDIB = nullptr;
@@ -387,7 +389,7 @@ void ImpTwain::ImplXfer()
         switch (m_pDSM(&m_aAppId, &m_aSrcId, DG_IMAGE, DAT_IMAGENATIVEXFER, MSG_GET, &hDIB))
         {
             case TWRC_CANCEL:
-                m_nCurState = 7;
+                m_nCurState = TWAINState::Xferring;
                 break;
 
             case TWRC_XFERDONE:
@@ -438,7 +440,7 @@ void ImpTwain::ImplXfer()
 
                 GlobalFree(static_cast<HGLOBAL>(hDIB));
 
-                m_nCurState = 7;
+                m_nCurState = TWAINState::Xferring;
             }
             break;
 
@@ -459,8 +461,8 @@ void ImpTwain::ImplFallbackHdl(WPARAM nEvent)
 
     switch (m_nCurState)
     {
-        case 7:
-        case 6:
+        case TWAINState::Xferring:
+        case TWAINState::DSreadyToXfer:
         {
             TW_PENDINGXFERS aXfers;
 
@@ -471,43 +473,43 @@ void ImpTwain::ImplFallbackHdl(WPARAM nEvent)
                     m_pDSM(&m_aAppId, &m_aSrcId, DG_CONTROL, DAT_PENDINGXFERS, MSG_RESET, &aXfers);
             }
 
-            m_nCurState = 5;
+            m_nCurState = TWAINState::DSenabled;
         }
         break;
 
-        case 5:
+        case TWAINState::DSenabled:
         {
             TW_USERINTERFACE aUI = { true, true, m_hTwainWnd };
 
             m_pDSM(&m_aAppId, &m_aSrcId, DG_CONTROL, DAT_USERINTERFACE, MSG_DISABLEDS, &aUI);
-            m_nCurState = 4;
+            m_nCurState = TWAINState::DSopened;
         }
         break;
 
-        case 4:
+        case TWAINState::DSopened:
         {
             m_pDSM(&m_aAppId, nullptr, DG_CONTROL, DAT_IDENTITY, MSG_CLOSEDS, &m_aSrcId);
-            m_nCurState = 3;
+            m_nCurState = TWAINState::DSMopened;
         }
         break;
 
-        case 3:
+        case TWAINState::DSMopened:
         {
             m_pDSM(&m_aAppId, nullptr, DG_CONTROL, DAT_PARENT, MSG_CLOSEDSM, &m_hTwainWnd);
-            m_nCurState = 2;
+            m_nCurState = TWAINState::DSMloaded;
         }
         break;
 
-        case 2:
+        case TWAINState::DSMloaded:
         {
             m_pDSM = nullptr;
             FreeLibrary(m_hMod);
             m_hMod = nullptr;
-            m_nCurState = 1;
+            m_nCurState = TWAINState::DSMunloaded;
         }
         break;
 
-        default:
+        case TWAINState::DSMunloaded:
         {
             if (nEvent > TWAIN_EVENT_NONE)
                 NotifyParent(nEvent, reinterpret_cast<LPARAM>(m_hMap));
