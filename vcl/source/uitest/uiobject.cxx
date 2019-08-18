@@ -622,7 +622,7 @@ OUString ButtonUIObject::get_action(VclEventId nEvent) const
             return "Start database" ;
         }
         else{
-            if (get_top_parent(mxButton)->get_id()==""){
+            if (get_top_parent(mxButton)->get_id().isEmpty()){
                 //This part because if we don't have parent
                 return "Click on '" + mxButton->get_id() ;
             }
@@ -751,7 +751,7 @@ OUString EditUIObject::get_action(VclEventId nEvent) const
         const Selection& rSelection  = mxEdit->GetSelection();
         long nMin = rSelection.Min();
         long nMax = rSelection.Max();
-        if(get_top_parent(mxEdit)->get_id()==""){
+        if(get_top_parent(mxEdit)->get_id().isEmpty()){
             //This part because if we don't have parent
             return  "Select in '" +
                 mxEdit->get_id() +
@@ -880,7 +880,7 @@ OUString CheckBoxUIObject::get_action(VclEventId nEvent) const
 {
     if (nEvent == VclEventId::CheckboxToggle)
     {
-        if(get_top_parent(mxCheckBox)->get_id()==""){
+        if(get_top_parent(mxCheckBox)->get_id().isEmpty()){
             //This part because if we don't have parent
             return "Toggle '" + mxCheckBox->get_id() + "' CheckBox";
         }
@@ -934,7 +934,7 @@ OUString RadioButtonUIObject::get_action(VclEventId nEvent) const
 {
     if (nEvent == VclEventId::RadiobuttonToggle)
     {
-        if(get_top_parent(mxRadioButton)->get_id()==""){
+        if(get_top_parent(mxRadioButton)->get_id().isEmpty()){
             //This part because if we don't have parent
             return "Select '" + mxRadioButton->get_id() + "' RadioButton";
         }
@@ -1044,7 +1044,7 @@ OUString ListBoxUIObject::get_action(VclEventId nEvent) const
     if (nEvent == VclEventId::ListboxSelect)
     {
         sal_Int32 nPos = mxListBox->GetSelectedEntryPos();
-        if(get_top_parent(mxListBox)->get_id()==""){
+        if(get_top_parent(mxListBox)->get_id().isEmpty()){
             //This part because if we don't have parent
             return "Select element with position " + OUString::number(nPos) +
                  " in '" + mxListBox->get_id();
@@ -1054,7 +1054,7 @@ OUString ListBoxUIObject::get_action(VclEventId nEvent) const
     }
     else if (nEvent == VclEventId::ListboxFocus)
     {
-        if(get_top_parent(mxListBox)->get_id()=="")
+        if(get_top_parent(mxListBox)->get_id().isEmpty())
         {
             //This part because if we don't have parent
             return this->get_type() + " Action:FOCUS Id:" + mxListBox->get_id();
@@ -1129,7 +1129,7 @@ OUString ComboBoxUIObject::get_action(VclEventId nEvent) const
     if (nEvent == VclEventId::ComboboxSelect)
     {
         sal_Int32 nPos = mxComboBox->GetSelectedEntryPos();
-        if (get_top_parent(mxComboBox)->get_id()==""){
+        if (get_top_parent(mxComboBox)->get_id().isEmpty()){
             //This part because if we don't have parent
             return "Select in '" + mxComboBox->get_id() +
                 "' ComboBox item number " + OUString::number(nPos);
@@ -1249,7 +1249,7 @@ OUString SpinFieldUIObject::get_action(VclEventId nEvent) const
 {
     if (nEvent == VclEventId::SpinfieldUp)
     {
-        if(get_top_parent(mxSpinField)->get_id()=="")
+        if(get_top_parent(mxSpinField)->get_id().isEmpty())
         {
             //This part because if we don't have parent
             return "Increase '" + mxSpinField->get_id();
@@ -1259,7 +1259,7 @@ OUString SpinFieldUIObject::get_action(VclEventId nEvent) const
     }
     else if (nEvent == VclEventId::SpinfieldDown)
     {
-        if(get_top_parent(mxSpinField)->get_id()=="")
+        if(get_top_parent(mxSpinField)->get_id().isEmpty())
         {
             //This part because if we don't have parent
             return "Decrease '" + mxSpinField->get_id();
@@ -1328,7 +1328,7 @@ OUString TabControlUIObject::get_action(VclEventId nEvent) const
     {
         sal_Int32 nPageId = mxTabControl->GetCurPageId();
 
-        if(get_top_parent(mxTabControl)->get_id()==""){
+        if(get_top_parent(mxTabControl)->get_id().isEmpty()){
             //This part because if we don't have parent
             return "Choose Tab number " + OUString::number(mxTabControl->GetPagePos(nPageId)) +
                 " in '" + mxTabControl->get_id();
