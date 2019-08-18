@@ -38,12 +38,6 @@ namespace DOM
         return static_cast< XSAXDocumentBuilder* >(new CSAXDocumentBuilder(rSMgr));
     }
 
-    static const char aImplementationName[] = "com.sun.star.comp.xml.dom.SAXDocumentBuilder";
-    static const char* aSupportedServiceNames[] = {
-        "com.sun.star.xml.dom.SAXDocumentBuilder",
-        nullptr
-    };
-
     CSAXDocumentBuilder::CSAXDocumentBuilder(const Reference< XMultiServiceFactory >& mgr)
         : m_aServiceManager(mgr)
         , m_aState( SAXDocumentBuilderState_READY)
@@ -51,16 +45,11 @@ namespace DOM
 
     OUString CSAXDocumentBuilder::_getImplementationName()
     {
-        return aImplementationName;
+        return "com.sun.star.comp.xml.dom.SAXDocumentBuilder";
     }
     Sequence<OUString> CSAXDocumentBuilder::_getSupportedServiceNames()
     {
-        Sequence<OUString> aSequence;
-        for (int i=0; aSupportedServiceNames[i]!=nullptr; i++) {
-            aSequence.realloc(i+1);
-            aSequence[i] = OUString::createFromAscii(aSupportedServiceNames[i]);
-        }
-        return aSequence;
+        return { "com.sun.star.xml.dom.SAXDocumentBuilder" };
     }
 
     Sequence< OUString > SAL_CALL CSAXDocumentBuilder::getSupportedServiceNames()
