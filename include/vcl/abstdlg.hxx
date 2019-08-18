@@ -35,6 +35,7 @@ namespace com { namespace sun { namespace star { namespace frame { class XModel;
 namespace vcl { class Window; }
 class Dialog;
 class BitmapEx;
+class DiagramDataInterface;
 namespace weld
 {
     class Dialog;
@@ -131,6 +132,13 @@ protected:
     virtual ~AbstractTipOfTheDayDialog() override = default;
 };
 
+/** Edit Diagram dialog */
+class VCL_DLLPUBLIC AbstractDiagramDialog : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractDiagramDialog() override = default;
+};
+
 class VCL_DLLPUBLIC VclAbstractDialogFactory
 {
 public:
@@ -170,6 +178,10 @@ public:
     // create info dialog to show tip-of-the-day
     virtual VclPtr<AbstractTipOfTheDayDialog>
     CreateTipOfTheDayDialog(weld::Window* pParent) = 0;
+
+    virtual VclPtr<AbstractDiagramDialog> CreateDiagramDialog(
+        weld::Window* pParent,
+        std::shared_ptr<DiagramDataInterface> pDiagramData) = 0;
 };
 
 #endif

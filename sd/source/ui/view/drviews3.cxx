@@ -508,6 +508,27 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         }
         break;
 
+        case SID_EDIT_DIAGRAM:
+        {
+            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+            if (rMarkList.GetMarkCount() == 1)
+            {
+                SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                Reference<css::drawing::XShape> xShape(pObj->getUnoShape(), UNO_QUERY);
+
+                if (oox::drawingml::DrawingML::IsDiagram(xShape))
+                {
+                    VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+                    VclPtr<VclAbstractDialog> pDlg
+                        = pFact->CreateDiagramDialog(GetFrameWeld(), pObj->GetDiagramData());
+                    pDlg->Execute();
+                }
+            }
+
+            rReq.Done();
+        }
+        break;
+
         default:
         break;
     }

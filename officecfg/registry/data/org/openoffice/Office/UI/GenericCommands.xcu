@@ -7081,6 +7081,11 @@
           <value xml:lang="en-US">Regenerate Diagram</value>
         </prop>
       </node>
+      <node oor:name=".uno:EditDiagram" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Edit Diagram</value>
+        </prop>
+      </node>
       <node oor:name=".uno:RemoveHyperlink" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Remove Hyperlink</value>
