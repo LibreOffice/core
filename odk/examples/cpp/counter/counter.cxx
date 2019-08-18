@@ -129,8 +129,7 @@ Sequence<OUString> SAL_CALL MyCounterImpl::getSupportedServiceNames(  )
 
 Sequence<OUString> SAL_CALL MyCounterImpl::getSupportedServiceNames_Static(  )
 {
-    OUString aName( SERVICENAME );
-    return Sequence< OUString >( &aName, 1 );
+    return { SERVICENAME };
 }
 
 /**

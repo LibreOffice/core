@@ -294,19 +294,7 @@ Reference< XInterface > SAL_CALL CreateInstance( const Reference< XMultiServiceF
 
 Sequence< OUString > getSupportedServiceNames()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString(
-                "devguide.officedev.samples.filter.FlatXmlCpp");
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    return { "devguide.officedev.samples.filter.FlatXmlCpp" };
 }
 
 }

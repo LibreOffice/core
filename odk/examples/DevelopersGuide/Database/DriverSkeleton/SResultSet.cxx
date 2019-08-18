@@ -62,10 +62,7 @@ using namespace com::sun::star::util;
 
  Sequence< ::rtl::OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
-     Sequence< ::rtl::OUString > aSupported(2);
-    aSupported[0] = ::rtl::OUString("com.sun.star.sdbc.ResultSet");
-    aSupported[1] = ::rtl::OUString("com.sun.star.sdbcx.ResultSet");
-    return aSupported;
+    return { "com.sun.star.sdbc.ResultSet", "com.sun.star.sdbcx.ResultSet" }
 }
 
 sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceName ) throw( RuntimeException)

@@ -203,10 +203,7 @@ throw (RuntimeException)
 Sequence< ::rtl::OUString > SAL_CALL Addon_getSupportedServiceNames()
 throw (RuntimeException)
 {
-    Sequence < ::rtl::OUString > aRet(1);
-    ::rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( SERVICE_NAME );
-    return aRet;
+    return { SERVICE_NAME };
 }
 
 Reference< XInterface > SAL_CALL Addon_createInstance( const Reference< XComponentContext > & rContext)

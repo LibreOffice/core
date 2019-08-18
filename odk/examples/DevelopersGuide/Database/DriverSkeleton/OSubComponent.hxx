@@ -225,9 +225,7 @@ namespace connectivity
     }                                                                                                               \
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)  \
     {                                                                                                                                                   \
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);                                                                               \
-        aSupported[0] = ::rtl::OUString::createFromAscii(serviceasciiname);                                                                             \
-        return aSupported;                                                                                                                              \
+        return { serviceasciiname };                                                                                                                    \
     }                                                                                                                                                   \
     sal_Bool SAL_CALL classname::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException) \
     {                                                                                                                                   \
