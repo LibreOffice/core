@@ -95,8 +95,7 @@ public:
     }   \
     css::uno::Sequence< OUString > classname::getSupportedServiceNames_Static(  )   \
     {   \
-        css::uno::Sequence< OUString > aSupported { serviceasciiname }; \
-        return aSupported;  \
+        return { serviceasciiname }; \
     }   \
 
 #define IMPLEMENT_SERVICE_INFO_GETSUPPORTED2_STATIC(classname, serviceasciiname1, serviceasciiname2)    \
@@ -106,10 +105,7 @@ public:
     }   \
     css::uno::Sequence< OUString > classname::getSupportedServiceNames_Static(  )   \
     {   \
-        css::uno::Sequence< OUString > aSupported(2);   \
-        aSupported[0] = serviceasciiname1;    \
-        aSupported[1] = serviceasciiname2;    \
-        return aSupported;  \
+        return { serviceasciiname1, serviceasciiname2 };    \
     }   \
 
 #define IMPLEMENT_SERVICE_INFO1(classname, implasciiname, serviceasciiname) \
@@ -117,7 +113,7 @@ public:
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
     css::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  )  \
     {   \
-        return css::uno::Sequence< OUString > { serviceasciiname }; \
+        return { serviceasciiname }; \
     }   \
 
 
@@ -126,7 +122,7 @@ public:
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
     css::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  )  \
     {   \
-        return css::uno::Sequence< OUString > { serviceasciiname1, serviceasciiname2 };    \
+        return { serviceasciiname1, serviceasciiname2 };    \
     }
 
 
@@ -146,7 +142,7 @@ public:
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
     css::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  )  \
     {   \
-        return css::uno::Sequence< OUString > { serviceasciiname1, serviceasciiname2, serviceasciiname3 };  \
+        return { serviceasciiname1, serviceasciiname2, serviceasciiname3 };  \
     }   \
 
 
