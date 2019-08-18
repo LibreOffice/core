@@ -56,18 +56,11 @@ OUString MyJob_getImplementationName ()
     return OUString( "com.sun.star.comp.Office.MyJob" );
 }
 
-#define SERVICE_NAME "com.sun.star.task.Job"
-
 Sequence< OUString > SAL_CALL MyJob_getSupportedServiceNames(  )
     throw (RuntimeException)
 {
-    Sequence < OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( SERVICE_NAME );
-    return aRet;
+    return { "com.sun.star.task.Job" };
 }
-
-#undef SERVICE_NAME
 
 Reference< XInterface > SAL_CALL MyJob_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
