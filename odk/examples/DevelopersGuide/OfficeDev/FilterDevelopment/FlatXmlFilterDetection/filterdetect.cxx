@@ -206,18 +206,11 @@ OUString FilterDetect_getImplementationName ()
     return OUString( "devguide.officedev.samples.filter.FlatXmlDetect" );
 }
 
-#define SERVICE_NAME1 "com.sun.star.document.ExtendedTypeDetection"
-
 Sequence< OUString > SAL_CALL FilterDetect_getSupportedServiceNames(  )
     throw (RuntimeException)
 {
-    Sequence < OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( SERVICE_NAME1 );
-    return aRet;
+    return { "com.sun.star.document.ExtendedTypeDetection" };
 }
-#undef SERVICE_NAME1
-#undef SERVICE_NAME2
 
 Reference< XInterface > SAL_CALL FilterDetect_createInstance( const Reference< XComponentContext > & rContext)
     throw( Exception )

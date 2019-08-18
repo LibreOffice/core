@@ -113,9 +113,7 @@ css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans:
 css::uno::Sequence< ::rtl::OUString > SAL_CALL MyListener::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< ::rtl::OUString > lNames(1);
-    lNames[0] = ::rtl::OUString( MYLISTENER_SERVICENAME );
-    return lNames;
+    return { MYLISTENER_SERVICENAME };
 }
 
 sal_Bool SAL_CALL MyListener::supportsService(const ::rtl::OUString& sServiceName)

@@ -143,11 +143,7 @@ uno::Sequence< OUString > SAL_CALL OShape::getSupportedServiceNames(  )
     }
     else
     {
-        uno::Sequence< OUString > aServices(2);
-        aServices.getArray()[0] = SERVICE_SHAPE;
-        aServices.getArray()[1] = m_sServiceName;
-
-        return aServices;
+        return { SERVICE_SHAPE, m_sServiceName };
     }
 }
 

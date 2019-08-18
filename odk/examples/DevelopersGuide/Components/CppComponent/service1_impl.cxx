@@ -52,9 +52,7 @@ namespace my_sc_impl
 
 Sequence< OUString > SAL_CALL getSupportedServiceNames_MyService1Impl()
 {
-    Sequence< OUString > names(1);
-    names[0] = "my_module.MyService1";
-    return names;
+    return { "my_module.MyService1" };
 }
 
 OUString SAL_CALL getImplementationName_MyService1Impl()
@@ -208,8 +206,7 @@ Sequence< OUString > MyService1Impl::getSupportedServiceNames()
     throw (RuntimeException)
 {
     // this object only supports one service
-    OUString serviceName("my_module.MyService1");
-    return Sequence< OUString >( &serviceName, 1 );
+    return { "my_module.MyService1" };
 }
 
 Reference< XInterface > SAL_CALL create_MyService1Impl(

@@ -171,9 +171,7 @@ Sequence < Reference< XDispatch > > SAL_CALL MyProtocolHandler::queryDispatches(
 Sequence< ::rtl::OUString > SAL_CALL MyProtocolHandler_getSupportedServiceNames(  )
     throw (RuntimeException)
 {
-    Sequence < ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString( MYPROTOCOLHANDLER_SERVICENAME );
-    return aRet;
+    return { MYPROTOCOLHANDLER_SERVICENAME };
 }
 
 #undef SERVICE_NAME
