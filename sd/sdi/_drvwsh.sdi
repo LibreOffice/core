@@ -2809,5 +2809,10 @@ interface DrawView
         ExecMethod = ExecCtrl ;
         StateMethod = GetMenuState ;
     ]
+    SID_EDIT_DIAGRAM
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetMenuState ;
+    ]
 
 }
