@@ -87,6 +87,7 @@
 #include <thesdlg.hxx>
 #include <about.hxx>
 #include <tipofthedaydlg.hxx>
+#include <DiagramDialog.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -1384,6 +1385,11 @@ short AbstractTipOfTheDayDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
+short AbstractDiagramDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxMacroAssignDlg(
     weld::Window* _pParent, const Reference< XFrame >& _rxDocumentFrame, const bool _bUnoDialogMode,
     const Reference< XNameReplace >& _rxEvents, const sal_uInt16 _nInitiallySelectedEvent )
@@ -1639,6 +1645,13 @@ VclPtr<AbstractTipOfTheDayDialog>
 AbstractDialogFactory_Impl::CreateTipOfTheDayDialog(weld::Window* pParent)
 {
     return VclPtr<AbstractTipOfTheDayDialog_Impl>::Create(std::make_unique<TipOfTheDayDialog>(pParent));
+}
+
+VclPtr<AbstractDiagramDialog>
+AbstractDialogFactory_Impl::CreateDiagramDialog(weld::Window* pParent, std::shared_ptr<DiagramDataInterface> pDiagramData)
+{
+    return VclPtr<AbstractDiagramDialog_Impl>::Create(
+        std::make_unique<DiagramDialog>(pParent, pDiagramData));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
