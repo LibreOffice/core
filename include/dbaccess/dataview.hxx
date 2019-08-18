@@ -51,7 +51,7 @@ namespace dbaui
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;  // the service factory to work with
 
     protected:
-        rtl::Reference<IController> m_xController;  // the controller in where we resides in
+        rtl::Reference<IController> m_xController;  // the controller where we reside in
         VclPtr<FixedLine>   m_aSeparator;
         ::std::unique_ptr< ::svt::AcceleratorExecute> m_pAccel;
 
