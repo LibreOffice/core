@@ -102,24 +102,13 @@ namespace DOM
         return static_cast< XDocumentBuilder* >(new CDocumentBuilder);
     }
 
-    static const char aImplementationName[] = "com.sun.star.comp.xml.dom.DocumentBuilder";
-    static const char* aSupportedServiceNames[] = {
-        "com.sun.star.xml.dom.DocumentBuilder",
-        nullptr
-    };
-
     OUString CDocumentBuilder::_getImplementationName()
     {
-        return aImplementationName;
+        return "com.sun.star.comp.xml.dom.DocumentBuilder";
     }
     Sequence<OUString> CDocumentBuilder::_getSupportedServiceNames()
     {
-        Sequence<OUString> aSequence;
-        for (int i=0; aSupportedServiceNames[i]!=nullptr; i++) {
-            aSequence.realloc(i+1);
-            aSequence[i] = OUString::createFromAscii(aSupportedServiceNames[i]);
-        }
-        return aSequence;
+        return { "com.sun.star.xml.dom.DocumentBuilder" };
     }
 
     Sequence< OUString > SAL_CALL CDocumentBuilder::getSupportedServiceNames()
