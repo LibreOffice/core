@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_52353f45",
+        "filename": "package/source/manifest/ManifestExport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-18T19:10:50Z",
+      "side": 1,
+      "message": "This also wants similar refactoring; the only use of index here is nRootFolderPropIndex, which is only used to point to a specific element in the rManList; so it may be easily replaced with a pointer to the element?",
+      "range": {
+        "startLine": 114,
+        "startChar": 4,
+        "endLine": 115,
+        "endChar": 55
+      },
+      "revId": "8b53176d8a11f552b2d4d2483bb40c01b0167f2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_921437a2",
+        "filename": "package/source/xstor/ocompinstream.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-18T19:10:50Z",
+      "side": 1,
+      "message": "pSeq doesn\u0027t point to a sequence - rather to a pair; pTarget?",
+      "range": {
+        "startLine": 314,
+        "startChar": 9,
+        "endLine": 314,
+        "endChar": 13
+      },
+      "revId": "8b53176d8a11f552b2d4d2483bb40c01b0167f2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_b217fba3",
+        "filename": "package/source/xstor/ocompinstream.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-18T19:10:50Z",
+      "side": 1,
+      "message": "pType?",
+      "range": {
+        "startLine": 335,
+        "startChar": 9,
+        "endLine": 335,
+        "endChar": 13
+      },
+      "revId": "8b53176d8a11f552b2d4d2483bb40c01b0167f2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_f24333ae",
+        "filename": "package/source/xstor/ocompinstream.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-18T19:10:50Z",
+      "side": 1,
+      "message": "pSeq, rSeq would be better renamed to pRel, rRel - because aSeq is a sequence of relations ... and so they would be easily differentiated - now all there *Seq are a bit confusing ;-)",
+      "range": {
+        "startLine": 357,
+        "startChar": 9,
+        "endLine": 357,
+        "endChar": 13
+      },
+      "revId": "8b53176d8a11f552b2d4d2483bb40c01b0167f2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_520e9f8d",
+        "filename": "package/source/xstor/owriteablestream.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-18T19:10:50Z",
+      "side": 1,
+      "message": "I\u0027m afraid that std::equal might not contain size comparison as an optimization (of course, smart implementation could have it for iterators that are pointers... - but AFAICT MSVS2019 simply does memcmp for pointer types, without comparing sizes) - so possibly good to still compare sizes first?\n\n    result \u003d aKey1.getLength() \u003d\u003d aKey2.getLength()\n        \u0026\u0026 std::equal(std::cbegin(aKey1), std::cend(aKey1), aKey2.begin(), aKey2.end());",
+      "range": {
+        "startLine": 97,
+        "startChar": 12,
+        "endLine": 97,
+        "endChar": 32
+      },
+      "revId": "8b53176d8a11f552b2d4d2483bb40c01b0167f2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_122827e0",
+        "filename": "package/source/xstor/owriteablestream.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-18T19:10:50Z",
+      "side": 1,
+      "message": "I don\u0027t see this change as an improvement: the original one using index (and making the correspondence between same-index property and value obvious) looks more comprehensible to me...",
+      "range": {
+        "startLine": 935,
+        "startChar": 8,
+        "endLine": 940,
+        "endChar": 58
+      },
+      "revId": "8b53176d8a11f552b2d4d2483bb40c01b0167f2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_3223eb07",
+        "filename": "package/source/xstor/owriteablestream.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-18T19:10:50Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 960,
+        "startChar": 8,
+        "endLine": 965,
+        "endChar": 42
+      },
+      "revId": "8b53176d8a11f552b2d4d2483bb40c01b0167f2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_d2214ffd",
+        "filename": "package/source/xstor/owriteablestream.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2661,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-18T19:10:50Z",
+      "side": 1,
+      "message": "Possibly use vector (with reserve) and back_inserter, and in the end, just reassign the aSeq[nIDInd] with converted vector-to-sequence, instead of playing with two reallocs and pointer arithmetics?",
+      "range": {
+        "startLine": 2660,
+        "startChar": 4,
+        "endLine": 2661,
+        "endChar": 33
+      },
+      "revId": "8b53176d8a11f552b2d4d2483bb40c01b0167f2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
