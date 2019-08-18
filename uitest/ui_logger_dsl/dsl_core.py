@@ -10,7 +10,12 @@ import os
 import sys
 import argparse
 import keyword
-from textx.metamodel import metamodel_from_file
+try:
+    from textx.metamodel import metamodel_from_file
+except ImportError:
+    print("textx is a required package.")
+    print("Please install the package for example with \"pip3 install --user textx\"")
+    sys.exit(1)
 
 tab="    "
 double_tab="        "
