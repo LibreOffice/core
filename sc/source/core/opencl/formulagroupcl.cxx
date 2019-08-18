@@ -964,7 +964,7 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
     return 1;
 }
 
-/// A mixed string/numberic vector
+/// A mixed string/numeric vector
 class DynamicKernelMixedArgument : public VectorRef
 {
 public:
@@ -1212,7 +1212,7 @@ protected:
     std::shared_ptr<SlidingFunctionBase> mpCodeGen;
 };
 
-/// A mixed string/numberic vector
+/// A mixed string/numeric vector
 class DynamicKernelMixedSlidingArgument : public VectorRef
 {
 public:

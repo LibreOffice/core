@@ -198,7 +198,7 @@ StructKind getStructKind(typelib_CompoundTypeDescription const * type) {
         case STRUCT_KIND_EMPTY:
             // this means an empty sub-object, which nevertheless obtains a byte
             // of storage (TODO: does it?), so the full object cannot be a
-            // homogenous collection of float or double
+            // homogeneous collection of float or double
         case STRUCT_KIND_POD:
             assert(k != STRUCT_KIND_DTOR);
             k = STRUCT_KIND_POD;
