@@ -91,11 +91,11 @@ void lcl_LOKRemoveWindow(ScTabViewShell* pTabViewShell, ScSplitPos eWhich)
 
 namespace {
 
-void collectUIInformation(const std::map<OUString, OUString>& aParameters,const OUString action)
+void collectUIInformation(const std::map<OUString, OUString>& aParameters, const OUString& rAction)
 {
     EventDescription aDescription;
     aDescription.aID = "grid_window";
-    aDescription.aAction = action;
+    aDescription.aAction = rAction;
     aDescription.aParameters = aParameters;
     aDescription.aParent = "MainWindow";
     aDescription.aKeyWord = "ScGridWinUIObject";
@@ -857,7 +857,8 @@ void ScViewData::InsertTab( SCTAB nTab )
 
     UpdateCurrentTab();
     mpMarkData->InsertTab( nTab );
-    collectUIInformation({{}},"InsertTab");
+
+    collectUIInformation({{}}, "InsertTab");
 }
 
 void ScViewData::InsertTabs( SCTAB nTab, SCTAB nNewSheets )

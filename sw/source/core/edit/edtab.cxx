@@ -55,11 +55,11 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 namespace {
 
-void collectUIInformation(const OUString action,const OUString aParameters)
+void collectUIInformation(const OUString& rAction, const OUString& aParameters)
 {
     EventDescription aDescription;
-    aDescription.aAction = action;
-    aDescription.aParameters = {{"parameters",aParameters}};
+    aDescription.aAction = rAction;
+    aDescription.aParameters = {{"parameters", aParameters}};
     aDescription.aID = "writer_edit";
     aDescription.aKeyWord = "SwEditWinUIObject";
     aDescription.aParent = "MainWindow";
@@ -129,8 +129,9 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTableOp
         EndUndo( SwUndoId::END );
 
     EndAllAction();
-    OUString parameter = " Columns : " + OUString::number( nCols )+ " , Rows : " +OUString::number( nRows ) +" ";
-    collectUIInformation("CREATE_TABLE",parameter);
+
+    OUString parameter = " Columns : " + OUString::number( nCols ) + " , Rows : " + OUString::number( nRows ) + " ";
+    collectUIInformation("CREATE_TABLE", parameter);
 
     return *pTable;
 }

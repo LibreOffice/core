@@ -101,11 +101,11 @@ ScViewFunc::~ScViewFunc()
 
 namespace {
 
-void collectUIInformation(const std::map<OUString, OUString>& aParameters,const OUString action)
+void collectUIInformation(const std::map<OUString, OUString>& aParameters, const OUString& rAction)
 {
     EventDescription aDescription;
     aDescription.aID = "grid_window";
-    aDescription.aAction = action;
+    aDescription.aAction = rAction;
     aDescription.aParameters = aParameters;
     aDescription.aParent = "MainWindow";
     aDescription.aKeyWord = "ScGridWinUIObject";
@@ -1636,7 +1636,7 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
         }
         OUString aStartAddress =  aRange.aStart.GetColRowString();
         OUString aEndAddress = aRange.aEnd.GetColRowString();
-        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}},"INSERT_CELLS");
+        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, "INSERT_CELLS");
         return bSuccess;
     }
     else
@@ -1724,7 +1724,7 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
 
     OUString aStartAddress =  aRange.aStart.GetColRowString();
     OUString aEndAddress = aRange.aEnd.GetColRowString();
-    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}},"DELETE_CELLS");
+    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, "DELETE_CELLS");
 
     Unmark();
 }
@@ -2005,7 +2005,7 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
     }
     OUString aStartAddress =  aMarkRange.aStart.GetColRowString();
     OUString aEndAddress = aMarkRange.aEnd.GetColRowString();
-    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}},"DELETE");
+    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, "DELETE");
 }
 
 //  column width/row height (via header) - undo OK
