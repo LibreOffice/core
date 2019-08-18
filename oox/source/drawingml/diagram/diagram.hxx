@@ -192,9 +192,11 @@ public:
         { return maExtDrawings; }
     const dgm::Point* getRootPoint() const;
     void dump() const;
-    OUString getString() const override { return OUString(); }
+    OUString getString() const override;
 
 private:
+    void getChildrenString(OUStringBuffer& rBuf, const dgm::Point* pPoint, sal_Int32 nLevel) const;
+
     ::std::vector<OUString>  maExtDrawings;
     FillPropertiesPtr mpFillProperties;
     dgm::Connections  maConnections;
