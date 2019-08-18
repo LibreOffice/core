@@ -101,14 +101,8 @@ sal_Bool SAL_CALL SwAccessibleFootnote::supportsService(const OUString& sTestSer
 
 Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    if( AccessibleRole::END_NOTE == GetRole() )
-        pArray[0] = "com.sun.star.text.AccessibleEndnoteView";
-    else
-        pArray[0] = "com.sun.star.text.AccessibleFootnoteView";
-    pArray[1] = sAccessibleServiceName;
-    return aRet;
+    return { (AccessibleRole::END_NOTE == GetRole())?OUString("com.sun.star.text.AccessibleEndnoteView"):OUString("com.sun.star.text.AccessibleFootnoteView"),
+             sAccessibleServiceName };
 }
 
 Sequence< sal_Int8 > SAL_CALL SwAccessibleFootnote::getImplementationId()

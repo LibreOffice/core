@@ -1174,11 +1174,7 @@ sal_Bool SAL_CALL SwXMailMerge::supportsService( const OUString& rServiceName )
 
 uno::Sequence< OUString > SAL_CALL SwXMailMerge::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aNames(2);
-    OUString *pName = aNames.getArray();
-    pName[0] = "com.sun.star.text.MailMerge";
-    pName[1] = "com.sun.star.sdb.DataAccessDescriptor";
-    return aNames;
+    return { "com.sun.star.text.MailMerge", "com.sun.star.sdb.DataAccessDescriptor" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

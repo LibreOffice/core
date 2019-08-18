@@ -435,11 +435,7 @@ sal_Bool SAL_CALL SwAccessibleDocument::supportsService(const OUString& sTestSer
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleDocument::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = sServiceName;
-    pArray[1] = sAccessibleServiceName;
-    return aRet;
+    return { sServiceName, sAccessibleServiceName };
 }
 
 // XInterface

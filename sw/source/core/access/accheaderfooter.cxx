@@ -85,14 +85,8 @@ sal_Bool SAL_CALL SwAccessibleHeaderFooter::supportsService(const OUString& sTes
 
 Sequence< OUString > SAL_CALL SwAccessibleHeaderFooter::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    if( AccessibleRole::HEADER == GetRole() )
-        pArray[0] = "com.sun.star.text.AccessibleHeaderView";
-    else
-        pArray[0] = "com.sun.star.text.AccessibleFooterView";
-    pArray[1] = sAccessibleServiceName;
-    return aRet;
+    return { (AccessibleRole::HEADER == GetRole())?OUString("com.sun.star.text.AccessibleHeaderView"):OUString("com.sun.star.text.AccessibleFooterView"),
+             sAccessibleServiceName };
 }
 
 Sequence< sal_Int8 > SAL_CALL SwAccessibleHeaderFooter::getImplementationId()

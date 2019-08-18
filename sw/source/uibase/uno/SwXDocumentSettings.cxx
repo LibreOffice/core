@@ -1405,11 +1405,7 @@ sal_Bool SAL_CALL SwXDocumentSettings::supportsService( const OUString& ServiceN
 
 Sequence< OUString > SAL_CALL SwXDocumentSettings::getSupportedServiceNames(  )
 {
-    Sequence< OUString > aSeq( 3 );
-    aSeq[0] = "com.sun.star.document.Settings";
-    aSeq[1] = "com.sun.star.text.DocumentSettings";
-    aSeq[2] = "com.sun.star.text.PrintSettings";
-    return aSeq;
+    return { "com.sun.star.document.Settings", "com.sun.star.text.DocumentSettings", "com.sun.star.text.PrintSettings" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

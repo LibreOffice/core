@@ -148,11 +148,7 @@ sal_Bool SAL_CALL SwFilterDetect::supportsService( const OUString& sServiceName 
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL SwFilterDetect::getSupportedServiceNames()
 {
-    Sequence< OUString > seqServiceNames( 3 );
-    seqServiceNames.getArray() [0] = "com.sun.star.frame.ExtendedTypeDetection";
-    seqServiceNames.getArray() [1] = "com.sun.star.text.FormatDetector";
-    seqServiceNames.getArray() [2] = "com.sun.star.text.W4WFormatDetector";
-    return seqServiceNames ;
+    return { "com.sun.star.frame.ExtendedTypeDetection", "com.sun.star.text.FormatDetector", "com.sun.star.text.W4WFormatDetector" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

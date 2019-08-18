@@ -1196,11 +1196,7 @@ sal_Bool SwXFrame::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SwXFrame::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aRet(3);
-    aRet[0] = "com.sun.star.text.BaseFrame";
-    aRet[1] = "com.sun.star.text.TextContent";
-    aRet[2] = "com.sun.star.document.LinkTarget";
-    return aRet;
+    return { "com.sun.star.text.BaseFrame", "com.sun.star.text.TextContent", "com.sun.star.document.LinkTarget" };
 }
 
 SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDoc)

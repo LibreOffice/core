@@ -847,11 +847,7 @@ sal_Bool SwXTextView::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXTextView::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TextDocumentView";
-    pArray[1] = "com.sun.star.view.OfficeDocumentView";
-    return aRet;
+    return { "com.sun.star.text.TextDocumentView", "com.sun.star.view.OfficeDocumentView" };
 }
 
 SwXTextViewCursor::SwXTextViewCursor(SwView* pVw) :
@@ -1661,16 +1657,13 @@ sal_Bool SwXTextViewCursor::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXTextViewCursor::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet(7);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TextViewCursor";
-    pArray[1] = "com.sun.star.style.CharacterProperties";
-    pArray[2] = "com.sun.star.style.CharacterPropertiesAsian";
-    pArray[3] = "com.sun.star.style.CharacterPropertiesComplex";
-    pArray[4] = "com.sun.star.style.ParagraphProperties";
-    pArray[5] = "com.sun.star.style.ParagraphPropertiesAsian";
-    pArray[6] = "com.sun.star.style.ParagraphPropertiesComplex";
-    return aRet;
+    return { "com.sun.star.text.TextViewCursor",
+             "com.sun.star.style.CharacterProperties",
+             "com.sun.star.style.CharacterPropertiesAsian",
+             "com.sun.star.style.CharacterPropertiesComplex",
+             "com.sun.star.style.ParagraphProperties",
+             "com.sun.star.style.ParagraphPropertiesAsian",
+             "com.sun.star.style.ParagraphPropertiesComplex" };
 }
 
 namespace
