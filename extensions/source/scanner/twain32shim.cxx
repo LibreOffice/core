@@ -511,8 +511,7 @@ void ImpTwain::ImplFallbackHdl(WPARAM nEvent)
         {
             if (nEvent > TWAIN_EVENT_NONE)
                 NotifyParent(nEvent, reinterpret_cast<LPARAM>(m_hMap));
-            if (nEvent == TWAIN_EVENT_QUIT)
-                PostQuitMessage(0);
+            PostQuitMessage(0);
 
             bFallback = false;
         }
