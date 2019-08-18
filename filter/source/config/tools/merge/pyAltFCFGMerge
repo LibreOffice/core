@@ -358,7 +358,7 @@ class ConfigHelper:
         # printOut(lCommandLineArgs, "and len is", count)
         for arg in range(count):
             # is it a named-value argument?
-            # Note: We ignores double "=" signs! => search from left to right
+            # Note: we ignore double "=" signs! => search from left to right
             pos = lCommandLineArgs[arg].find('=')
             if pos != -1:
                 sArg   = lCommandLineArgs[arg][0:pos]
