@@ -405,9 +405,9 @@ void GenericDropTarget::setDefaultActions( sal_Int8)
 Sequence< OUString > DropTarget_getSupportedServiceNames()
 {
 #if defined MACOSX
-    return Sequence< OUString > {  "com.sun.star.datatransfer.dnd.OleDropTarget" };
+    return {  "com.sun.star.datatransfer.dnd.OleDropTarget" };
 #elif defined UNX
-    return Sequence< OUString > { "com.sun.star.datatransfer.dnd.X11DropTarget" };
+    return { "com.sun.star.datatransfer.dnd.X11DropTarget" };
 #else
     return GenericDropTarget::getSupportedServiceNames_static();
 #endif

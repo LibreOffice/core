@@ -107,9 +107,7 @@ sal_Bool UITestUnoObj::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> UITestUnoObj::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aServiceNames(1);
-    aServiceNames[0] = "com.sun.star.ui.test.UITest";
-    return aServiceNames;
+    return { "com.sun.star.ui.test.UITest" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

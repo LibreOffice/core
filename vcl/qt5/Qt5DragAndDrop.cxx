@@ -120,8 +120,7 @@ sal_Bool SAL_CALL Qt5DragSource::supportsService(OUString const& ServiceName)
 
 css::uno::Sequence<OUString> SAL_CALL Qt5DragSource::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet{ "com.sun.star.datatransfer.dnd.Qt5DragSource" };
-    return aRet;
+    return { "com.sun.star.datatransfer.dnd.Qt5DragSource" };
 }
 
 Qt5DropTarget::Qt5DropTarget()
@@ -144,8 +143,7 @@ sal_Bool SAL_CALL Qt5DropTarget::supportsService(OUString const& ServiceName)
 
 css::uno::Sequence<OUString> SAL_CALL Qt5DropTarget::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet{ "com.sun.star.datatransfer.dnd.Qt5DropTarget" };
-    return aRet;
+    return { "com.sun.star.datatransfer.dnd.Qt5DropTarget" };
 }
 
 Qt5DropTarget::~Qt5DropTarget()
