@@ -506,7 +506,7 @@ certain functionality.
 @li @c vcl.window
 @li @c vcl.wmf
 
-@section winaccessiblity
+@section winaccessibility
 
 @li @c iacc2 - IAccessible2 bridge debug
 

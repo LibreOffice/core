@@ -2464,7 +2464,7 @@ SwAccessibleMap* SwViewShell::GetAccessibleMap()
     return nullptr;
 }
 
-void SwViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions const & rAccessibilityOptions)
+void SwViewShell::ApplyAccessibilityOptions(SvtAccessibilityOptions const & rAccessibilityOptions)
 {
     if (utl::ConfigManager::IsFuzzing())
         return;
