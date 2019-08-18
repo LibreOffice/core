@@ -259,12 +259,12 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
     OUString aContent;
 
     if(pUIObject->get_type()=="EditUIObject"){
-        if(aParentID=="")
+        if(isEmpty( aParentID ) )
         {
             VclPtr <vcl::Window> pParent_top = get_top_parent(xUIElement);
             aParentID= pParent_top->get_id();
         }
-        if(aParentID==""){
+        if(isEmpty( aParentID ) ){
             aContent =  aContent+"Type on '" + rID + "' " + aKeyCode;
         }
         else{
@@ -287,12 +287,12 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
         aContent = "Type on draw " + aKeyCode ;
     }
     else{
-        if(aParentID=="")
+        if(isEmpty( aParentID) )
         {
             VclPtr <vcl::Window> pParent_top = get_top_parent(xUIElement);
             aParentID= pParent_top->get_id();
         }
-        if(aParentID==""){
+        if(isEmpty( aParentID) ){
             aContent =  "Type on '" + rID + "' " + aKeyCode ;
         }
         else{
@@ -362,7 +362,7 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
     else if(rDescription.aAction=="SIDEBAR"){
         aLogLine = "From SIDEBAR Choose " + aParameterString;
     }
-    else if(rDescription.aAction=="SELECT" && rDescription.aID==""){
+    else if(rDescription.aAction=="SELECT" && isEmpty( rDescription.aID ) ){
         aLogLine = "Select " + aParameterString;
     }
     else if(rDescription.aID=="writer_edit"){
