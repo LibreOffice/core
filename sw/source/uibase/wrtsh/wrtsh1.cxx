@@ -121,7 +121,7 @@ using namespace sw::mark;
 using namespace com::sun::star;
 namespace {
 
-void collectUIInformation(const OUString action,const OUString aParameters)
+void collectUIInformation(const OUString& action,const OUString& aParameters)
 {
     EventDescription aDescription;
     aDescription.aAction = action;

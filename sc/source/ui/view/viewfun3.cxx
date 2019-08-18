@@ -80,7 +80,7 @@ using namespace com::sun::star;
 
 namespace {
 
-void collectUIInformation(const std::map<OUString, OUString>& aParameters,OUString action)
+void collectUIInformation(const std::map<OUString, OUString>& aParameters,OUString& action)
 {
     EventDescription aDescription;
     aDescription.aID = "grid_window";

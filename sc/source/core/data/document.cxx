@@ -109,7 +109,7 @@ using ::std::set;
 
 namespace {
 
-void collectUIInformation(const std::map<OUString, OUString>& aParameters,const OUString action)
+void collectUIInformation(const std::map<OUString, OUString>& aParameters,const OUString& action)
 {
     EventDescription aDescription;
     aDescription.aID = "grid_window";
