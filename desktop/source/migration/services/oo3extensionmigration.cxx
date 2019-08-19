@@ -214,7 +214,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const OUString& sDescriptionXmlU
         if ( !aExtIdentifier.isEmpty() )
         {
             // scan extension identifier and try to match with our black list entries
-            for (OUString & i : m_aBlackList)
+            for (const OUString & i : m_aBlackList)
             {
                 utl::SearchParam param(i, utl::SearchParam::SearchType::Regexp);
                 utl::TextSearch  ts(param, LANGUAGE_DONTKNOW);
@@ -239,7 +239,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const OUString& sDescriptionXmlU
         // Try to use the folder name to match our black list
         // as some extensions don't provide an identifier in the
         // description.xml!
-        for (OUString & i : m_aBlackList)
+        for (const OUString & i : m_aBlackList)
         {
             utl::SearchParam param(i, utl::SearchParam::SearchType::Regexp);
             utl::TextSearch  ts(param, LANGUAGE_DONTKNOW);

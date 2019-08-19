@@ -928,14 +928,14 @@ void PropertySetMixinImpl::dispose() {
     }
     css::lang::EventObject event(
         static_cast< css::beans::XPropertySet * >(this));
-    for (auto& rEntry : boundListeners)
+    for (const auto& rEntry : boundListeners)
     {
         for (auto& rxBoundListener : rEntry.second)
         {
             rxBoundListener->disposing(event);
         }
     }
-    for (auto& rEntry : vetoListeners)
+    for (const auto& rEntry : vetoListeners)
     {
         for (auto& rxVetoListener : rEntry.second)
         {

@@ -275,7 +275,7 @@ void PackageRegistryBackend::deleteUnusedFolders(
                     makeURLAppendSysPathSegment(sDataFolder, title));
         }
 
-        for (OUString & tempEntrie : tempEntries)
+        for (const OUString & tempEntrie : tempEntries)
         {
             if (std::find( usedFolders.begin(), usedFolders.end(), tempEntrie ) ==
                 usedFolders.end())
