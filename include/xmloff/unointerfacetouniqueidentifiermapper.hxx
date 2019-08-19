@@ -38,7 +38,7 @@ class XMLOFF_DLLPUBLIC UnoInterfaceToUniqueIdentifierMapper
 public:
     UnoInterfaceToUniqueIdentifierMapper();
 
-    /** returns a unique identifier for the given uno object. IF a uno object is
+    /** returns a unique identifier for the given uno object. If a UNO object is
         registered more than once, the returned identifier is always the same.
     */
     const OUString& registerReference( const css::uno::Reference< css::uno::XInterface >& rInterface );
