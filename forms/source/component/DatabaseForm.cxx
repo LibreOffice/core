@@ -3720,7 +3720,7 @@ Sequence< OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames()
     if (query_aggregation(m_xAggregate, xInfo))
         aServices = xInfo->getSupportedServiceNames();
 
-    // concat with out own services
+    // concat without own services
     return ::comphelper::concatSequences(
         css::uno::Sequence<OUString> {
             FRM_SUN_FORMCOMPONENT, "com.sun.star.form.FormComponents",
