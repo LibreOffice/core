@@ -930,7 +930,7 @@
         </info>
         <prop oor:name="Graphic" oor:type="xs:int" oor:nillable="false">
           <info>
-            <desc>Specifies whether the Image Object Bar or the Text Object Bar/Web is the visible toolbar when a image is selected.</desc>
+            <desc>Specifies whether the Image Object Bar or the Text Object Bar/Web is the visible toolbar when an image is selected.</desc>
           </info>
           <value>-1</value>
         </prop>

@@ -117,7 +117,7 @@ def usage():
                   "by the same system path.\n"
                   "\n"+
                   "-c <connection-string> | --connection-string=<connection-string>\n" +
-                  "        The connection-string part of a uno url to where the\n" +
+                  "        The connection-string part of a UNO URL to where the\n" +
                   "        the script should connect to in order to do the conversion.\n" +
                   "        The strings defaults to socket,host=localhost,port=2002\n"
                   "--html \n"
