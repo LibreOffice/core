@@ -71,6 +71,7 @@ public:
 protected:
     virtual void makeEditEngine() override;
     virtual bool KeyInput( const KeyEvent& rKEvt ) override;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
 
