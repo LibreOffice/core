@@ -156,7 +156,8 @@ static sal_uInt32 const indexTable[NF_INDEX_TABLE_ENTRIES] = {
     ZF_STANDARD_FRACTION + 6, // NF_FRACTION_16
     ZF_STANDARD_FRACTION + 7, // NF_FRACTION_10
     ZF_STANDARD_FRACTION + 8, // NF_FRACTION_100
-    ZF_STANDARD_DATETIME + 2 // NF_DATETIME_ISO_YYYYMMDD_HHMMSS
+    ZF_STANDARD_DATETIME + 2, // NF_DATETIME_ISO_YYYYMMDD_HHMMSS
+    ZF_STANDARD_DATETIME + 3  // NF_DATETIME_ISO_YYYYMMDDTHHMMSS
 };
 
 /**
@@ -1507,7 +1508,9 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
         nKey = GetTimeFormat( fNumber, eLang, true);
         break;
     case SvNumFormatType::DATETIME :
-        if (nFIndex == GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, eLang) || (pFormat && pFormat->IsIso8601( 0 )))
+        if (nFIndex == GetFormatIndex( NF_DATETIME_ISO_YYYYMMDDTHHMMSS, eLang))
+            nKey = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDDTHHMMSS, eLang );
+        else if (nFIndex == GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, eLang) || (pFormat && pFormat->IsIso8601( 0 )))
             nKey = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, eLang );
         else
             nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
@@ -2649,7 +2652,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     OUStringBuffer aBuf;
     aSingleFormatCode.Usage = i18n::KNumberFormatUsage::DATE_TIME;
 
-    // YYYY-MM-DD HH:MM:SS   ISO
+    // YYYY-MM-DD HH:MM:SS   ISO (with blank instead of 'T')
     aBuf.append( rKeyword[NF_KEY_YYYY]).append('-').
         append( rKeyword[NF_KEY_MM]).append('-').
         append( rKeyword[NF_KEY_DD]).append(' ').
@@ -2659,6 +2662,19 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     aSingleFormatCode.Code = aBuf.makeStringAndClear();
     ImpInsertFormat( aSingleFormatCode,
                      CLOffset + ZF_STANDARD_DATETIME+2 /* NF_DATETIME_ISO_YYYYMMDD_HHMMSS */ );
+
+    // YYYY-MM-DD"T"HH:MM:SS   ISO
+    aBuf.append( rKeyword[NF_KEY_YYYY]).append('-').
+        append( rKeyword[NF_KEY_MM]).append('-').
+        append( rKeyword[NF_KEY_DD]).append("\"T\"").
+        append( rKeyword[NF_KEY_HH]).append(':').
+        append( rKeyword[NF_KEY_MMI]).append(':').
+        append( rKeyword[NF_KEY_SS]);
+    aSingleFormatCode.Code = aBuf.makeStringAndClear();
+    SvNumberformat* pFormat = ImpInsertFormat( aSingleFormatCode,
+                     CLOffset + ZF_STANDARD_DATETIME+3 /* NF_DATETIME_ISO_YYYYMMDDTHHMMSS */ );
+    assert(pFormat);
+    pFormat->SetComment("ISO 8601");    // not to be localized
 
 
     // Scientific number
