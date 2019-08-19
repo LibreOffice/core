@@ -40,6 +40,7 @@ const std::pair<const char*, int> RID_SVXSTRARY_NUMBERINGTYPE[] =
     { NC_("RID_SVXSTRARY_NUMBERINGTYPE", "First, Second, Third, ...") ,           62 /* TEXT_ORDINAL                     */ },
     { NC_("RID_SVXSTRARY_NUMBERINGTYPE", "A, .., AA, .., AAA, ...") ,             9  /* SVX_NUM_CHARS_UPPER_LETTER_N     */ },
     { NC_("RID_SVXSTRARY_NUMBERINGTYPE", "a, .., aa, .., aaa, ...") ,             10 /* SVX_NUM_CHARS_LOWER_LETTER_N     */ },
+    { NC_("RID_SVXSTRARY_NUMBERINGTYPE", "*, †, ‡, §, **, ††, ...") ,             63 /* SYMBOL_CHICAGO                   */ },
     { NC_("RID_SVXSTRARY_NUMBERINGTYPE", "Native Numbering") ,                    12 /* NATIVE_NUMBERING                 */ },
     { NC_("RID_SVXSTRARY_NUMBERINGTYPE", "А, Б, .., Аа, Аб, ... (Bulgarian)") ,   38 /* CHARS_CYRILLIC_UPPER_LETTER_BG   */ },
     { NC_("RID_SVXSTRARY_NUMBERINGTYPE", "а, б, .., аа, аб, ... (Bulgarian)") ,   39 /* CHARS_CYRILLIC_LOWER_LETTER_BG   */ },
