@@ -158,7 +158,7 @@ void recursiveAdd(chart::ObjectIdentifier const & rID, std::set<OUString>& rChil
                 }
             );
 
-    for (chart::ObjectIdentifier& ID: aChildIndentifiers)
+    for (const chart::ObjectIdentifier& ID: aChildIndentifiers)
         recursiveAdd(ID, rChildren, rHierarchy);
 }
 

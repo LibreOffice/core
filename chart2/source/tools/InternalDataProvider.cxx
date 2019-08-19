@@ -569,7 +569,7 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
 
         std::vector<double> aValues;
         aValues.reserve(aRawElems.size());
-        for (OUString & aRawElem : aRawElems)
+        for (const OUString & aRawElem : aRawElems)
         {
             if (aRawElem.isEmpty())
                 aValues.push_back(NAN);
@@ -590,7 +590,7 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
         aValues.reserve(aRawElems.size());
         if (bAllNumeric)
         {
-            for (OUString & aRawElem : aRawElems)
+            for (const OUString & aRawElem : aRawElems)
                 aValues.push_back(aRawElem.toDouble());
         }
         else

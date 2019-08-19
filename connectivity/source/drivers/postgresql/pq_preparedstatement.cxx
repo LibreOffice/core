@@ -168,7 +168,7 @@ PreparedStatement::PreparedStatement(
 
     splitSQL( m_stmt, m_splittedStatement );
     int elements = 0;
-    for(OString & str : m_splittedStatement)
+    for(const OString & str : m_splittedStatement)
     {
         // ignore quoted strings ....
         if( ! isQuoted( str ) )
@@ -298,7 +298,7 @@ sal_Bool PreparedStatement::execute( )
     OStringBuffer buf( m_stmt.getLength() *2 );
 
     std::vector< OString >::size_type vars = 0;
-    for(OString & str : m_splittedStatement)
+    for(const OString & str : m_splittedStatement)
     {
         // LEM TODO: instead of this manual mucking with SQL
         // could we use PQexecParams / PQExecPrepared / ...?

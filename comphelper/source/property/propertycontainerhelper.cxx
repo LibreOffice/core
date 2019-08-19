@@ -176,7 +176,7 @@ namespace
 void OPropertyContainerHelper::implPushBackProperty(const PropertyDescription& _rProp)
 {
 #ifdef DBG_UTIL
-    for (auto& checkConflicts : m_aProperties)
+    for (const auto& checkConflicts : m_aProperties)
     {
         OSL_ENSURE(checkConflicts.aProperty.Name != _rProp.aProperty.Name, "OPropertyContainerHelper::implPushBackProperty: name already exists!");
         OSL_ENSURE(checkConflicts.aProperty.Handle != _rProp.aProperty.Handle, "OPropertyContainerHelper::implPushBackProperty: handle already exists!");
