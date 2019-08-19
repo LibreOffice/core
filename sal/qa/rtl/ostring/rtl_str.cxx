@@ -290,7 +290,7 @@ namespace rtl_str
 
         void indexOfChar_001()
             {
-                OString aStr1 = "Line for a indexOfChar.";
+                OString aStr1 = "Line for an indexOfChar.";
 
                 sal_Int32 nIndex = rtl_str_indexOfChar( aStr1.getStr(), 'L' );
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 0);
@@ -307,7 +307,7 @@ namespace rtl_str
 
         void indexOfChar_002()
             {
-                OString aStr1 = "Line for a indexOfChar.";
+                OString aStr1 = "Line for an indexOfChar.";
                 sal_Int32 nIndex = rtl_str_indexOfChar( aStr1.getStr(), 'y' );
 
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1 );
@@ -380,13 +380,13 @@ namespace rtl_str
 
         void indexOfStr_000_1()
             {
-                OString aStr1 = "Line for a indexOfStr.";
+                OString aStr1 = "Line for an indexOfStr.";
                 rtl_str_indexOfStr( aStr1.getStr(), 0 );
             }
 
         void indexOfStr_001()
             {
-                OString aStr1 = "Line for a indexOfStr.";
+                OString aStr1 = "Line for an indexOfStr.";
 
                 sal_Int32 nIndex = rtl_str_indexOfStr( aStr1.getStr(), "Line" );
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 0);
@@ -397,13 +397,13 @@ namespace rtl_str
                 /* sal_Int32 */ nIndex = rtl_str_indexOfStr( aStr1.getStr(), "a" );
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 9);
 
-                /* sal_Int32 */ nIndex = rtl_str_indexOfStr( aStr1.getStr(), "a index" );
+                /* sal_Int32 */ nIndex = rtl_str_indexOfStr( aStr1.getStr(), "an index" );
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex ==9);
             }
 
         void indexOfStr_002()
             {
-                OString aStr1 = "Line for a indexOfStr.";
+                OString aStr1 = "Line for an indexOfStr.";
                 sal_Int32 nIndex = rtl_str_indexOfStr( aStr1.getStr(), "not exist" );
 
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1 );

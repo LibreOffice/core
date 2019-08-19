@@ -1870,7 +1870,7 @@ namespace osl_FileStatus
             free(pTV_current);
             free(pTV_access);
 
-            CPPUNIT_ASSERT_MESSAGE("test for getAccessTime function: This test turns out that UNX pricision is no more than 1 sec, don't know how to test this function, in Windows test, it lost hour min sec, only have date time. ",
+            CPPUNIT_ASSERT_MESSAGE("test for getAccessTime function: This test turns out that UNX precision is no more than 1 sec, don't know how to test this function, in Windows test, it lost hour min sec, only have date time. ",
                                     bOK);
         }
 
@@ -1924,7 +1924,7 @@ namespace osl_FileStatus
             free(pTV_current);
             free(pTV_modify);
 
-            CPPUNIT_ASSERT_MESSAGE("test for getModifyTime function: This test turns out that UNX pricision is no more than 1 sec, don't know how to improve this function.  ",
+            CPPUNIT_ASSERT_MESSAGE("test for getModifyTime function: This test turns out that UNX precision is no more than 1 sec, don't know how to improve this function.  ",
                                     bOK);
         }
 
@@ -3767,7 +3767,7 @@ namespace osl_DirectoryItem
             nError1 = copyItem.getFileStatus(rFileStatus);
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
-            CPPUNIT_ASSERT_MESSAGE("test for copy_assin_Ctors function: test assinment operator here since it is same as copy constructor in test way.",
+            CPPUNIT_ASSERT_MESSAGE("test for copy_assin_Ctors function: test assignment operator here since it is same as copy constructor in test way.",
                                     compareFileName(rFileStatus.getFileName(), aTmpName2));
         }
 

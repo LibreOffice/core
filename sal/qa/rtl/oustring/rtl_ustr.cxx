@@ -304,7 +304,7 @@ namespace rtl_ustr
 
         void indexOfChar_001()
             {
-                OUString aStr1("Line for a indexOfChar.");
+                OUString aStr1("Line for an indexOfChar.");
 
                 sal_Int32 nIndex = rtl_ustr_indexOfChar( aStr1.getStr(), 'L' );
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 0);
@@ -321,7 +321,7 @@ namespace rtl_ustr
 
         void indexOfChar_002()
             {
-                OUString aStr1("Line for a indexOfChar.");
+                OUString aStr1("Line for an indexOfChar.");
                 sal_Int32 nIndex = rtl_ustr_indexOfChar( aStr1.getStr(), 'y' );
 
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1 );
@@ -394,13 +394,13 @@ namespace rtl_ustr
 
         void indexOfStr_000_1()
             {
-                OUString aStr1("Line for a indexOfStr.");
+                OUString aStr1("Line for an indexOfStr.");
                 rtl_ustr_indexOfStr( aStr1.getStr(), 0 );
             }
 
         void indexOfStr_001()
             {
-                OUString aStr1("Line for a indexOfStr.");
+                OUString aStr1("Line for an indexOfStr.");
 
                 OUString suSearch("Line");
                 sal_Int32 nIndex = rtl_ustr_indexOfStr( aStr1.getStr(), suSearch );
@@ -414,14 +414,14 @@ namespace rtl_ustr
                 /* sal_Int32 */ nIndex = rtl_ustr_indexOfStr( aStr1.getStr(), suSearch );
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 9);
 
-                /* OUString */ suSearch("a index");
+                /* OUString */ suSearch("an index");
                 /* sal_Int32 */ nIndex = rtl_ustr_indexOfStr( aStr1.getStr(), suSearch );
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex ==9);
             }
 
         void indexOfStr_002()
             {
-                OUString aStr1("Line for a indexOfStr.");
+                OUString aStr1("Line for an indexOfStr.");
                 OUString suSearch("not exist");
                 sal_Int32 nIndex = rtl_ustr_indexOfStr( aStr1.getStr(), suSearch );
 
