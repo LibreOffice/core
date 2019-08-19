@@ -247,8 +247,11 @@ namespace weld
                 aStr += " ";
             if (m_eSrcUnit == FieldUnit::INCH)
             {
-                if (aSuffix != "\"")
+                OUString sDoublePrime = OUString(static_cast<sal_Unicode>(0x2033));
+                if (aSuffix != "\"" && aSuffix != sDoublePrime)
                     aStr += " ";
+                else
+                    aSuffix = sDoublePrime;
             }
             assert(m_eSrcUnit != FieldUnit::PERCENT);
             aStr += aSuffix;
