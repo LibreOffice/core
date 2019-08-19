@@ -1168,6 +1168,10 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
             {
                 F_Index = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDDTHHMMSS, ActLnge );
             }
+            else if (pStringScanner->CanForceToIso8601( DateOrder::Invalid))
+            {
+                F_Index = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, ActLnge );
+            }
             else
             {
                 F_Index = GetStandardFormat( RType, ActLnge );
