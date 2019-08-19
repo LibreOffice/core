@@ -421,7 +421,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
     }
 
     // The PaperSize may be set only when actually PAPER_USER
-    // applies, otherwise the driver could choose a invalid format.
+    // applies, otherwise the driver could choose an invalid format.
     if(nPaperFormat == view::PaperFormat_USER && aSetPaperSize.Width())
     {
         // Bug 56929 - MapMode of 100mm which recalculated when
@@ -626,7 +626,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             {
                 // OK - it's not a valid URL. But may it's a simple
                 // system path directly. It will be supported for historical
-                // reasons. Otherwise we break to much external code ...
+                // reasons. Otherwise we break too much external code...
                 // We try to convert it to a file URL. If its possible
                 // we put the system path to the item set and let vcl work with it.
                 // No ucb or thread will be necessary then. In case it couldn't be
@@ -750,7 +750,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
 
     // Ok - may be execution before has finished (or started!) printing.
     // And may it was a printing to a file.
-    // Now we have to check if we can move the file (if necessary) via ucb to his right location.
+    // Now we have to check if we can move the file (if necessary) via UCB to its right location.
     // Cases:
     //  a) printing finished                        => move the file directly and forget the watcher thread
     //  b) printing is asynchron and runs currently => start watcher thread and exit this method
@@ -766,7 +766,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     else
     {
         // Note: we create(d) some resource on the heap (thread and temp file).
-        // They will be deleted by the thread automatically if he finish his run() method.
+        // They will be deleted by the thread automatically if it finishes its run() method.
         ImplUCBPrintWatcher* pWatcher = new ImplUCBPrintWatcher( pPrinter, pUCBPrintTempFile, sUcbUrl );
         pWatcher->create();
     }

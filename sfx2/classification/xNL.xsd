@@ -52,7 +52,7 @@
 			</xs:element>
 			<xs:element name="OrganisationName" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>A container for organisation name details. Same organisaion with many types of names can be used by this container</xs:documentation>
+					<xs:documentation>A container for organisation name details. Same organisation with many types of names can be used by this container</xs:documentation>
 				</xs:annotation>
 				<xs:complexType>
 					<xs:complexContent>
