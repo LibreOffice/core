@@ -481,6 +481,17 @@ published constants NumberingType
         @since LibreOffice 6.1
      */
     const short TEXT_ORDINAL = 62;
+
+    /** Footnoting symbols according the University of Chicago style:
+          *, &#2020;, &#2021;, &#00a7;, **, &#2020;&#2020; etc.
+
+        @since LibreOffice 6.4
+     */
+     /*
+        ASTERISK, DAGGER, DOUBLE DAGGER, SECTION SIGN,
+        ASTERISK ASTERISK, DAGGER DAGGER, etc.
+      */
+    const short SYMBOL_CHICAGO = 63;
 };
 
 

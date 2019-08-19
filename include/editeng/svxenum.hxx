@@ -204,7 +204,8 @@ enum SvxNumType : sal_Int16
     SVX_NUM_NUMBER_INDIC_DEVANAGARI  = css::style::NumberingType::NUMBER_INDIC_DEVANAGARI,
     SVX_NUM_TEXT_NUMBER           = css::style::NumberingType::TEXT_NUMBER,
     SVX_NUM_TEXT_CARDINAL         = css::style::NumberingType::TEXT_CARDINAL,
-    SVX_NUM_TEXT_ORDINAL          = css::style::NumberingType::TEXT_ORDINAL
+    SVX_NUM_TEXT_ORDINAL          = css::style::NumberingType::TEXT_ORDINAL,
+    SVX_NUM_SYMBOL_CHICAGO        = css::style::NumberingType::SYMBOL_CHICAGO
 };
 
 #endif
