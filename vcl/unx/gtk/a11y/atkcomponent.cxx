@@ -170,6 +170,8 @@ component_wrapper_get_position (AtkComponent   *component,
         return;
     }
 
+    *x = *y = -1;
+
     try
     {
         css::uno::Reference<css::accessibility::XAccessibleComponent> pComponent
@@ -207,6 +209,8 @@ component_wrapper_get_size (AtkComponent   *component,
         atk_component_get_extents(ATK_COMPONENT(obj->mpOrig), nullptr, nullptr, width, height, ATK_XY_WINDOW);
         return;
     }
+
+    *width = *height = -1;
 
     try
     {

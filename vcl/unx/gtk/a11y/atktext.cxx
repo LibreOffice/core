@@ -621,12 +621,13 @@ text_wrapper_get_character_extents( AtkText          *text,
                                     gint             *height,
                                     AtkCoordType      coords )
 {
+    *x = *y = *width = *height = -1;
+
     try {
         css::uno::Reference<css::accessibility::XAccessibleText> pText
             = getText( text );
         if( pText.is() )
         {
-            *x = *y = *width = *height = 0;
             awt::Rectangle aRect = pText->getCharacterBounds( offset );
 
             gint origin_x = 0;
