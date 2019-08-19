@@ -975,7 +975,6 @@ void Menu::ShowItem( sal_uInt16 nItemId, bool bVisible )
             SAL_WARN( "vcl", "Menu::ShowItem - ignored for visible popups!" );
             return;
         }
-        pData->bVisible = bVisible;
 
         // update native menu
         if( ImplGetSalMenu() )
