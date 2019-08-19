@@ -69,7 +69,7 @@
     </group>
     <group oor:name="ExtraLanguage">
       <info>
-        <desc>Specifies an extenisble list of languages that should be added to the various language selection lists</desc>
+        <desc>Specifies an extensible list of languages that should be added to the various language selection lists</desc>
       </info>
       <prop oor:name="Name" oor:type="xs:string" oor:nillable="false" oor:localized="true">
         <info>

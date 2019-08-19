@@ -495,7 +495,7 @@
         <!-- UIHints: Tools - Options - General - Language -->
         <info>
           <desc>Allows for automatic insertion of soft hyphens.</desc>
-          <label>Automatic hyphention.</label>
+          <label>Automatic hyphenation.</label>
         </info>
         <value>false</value>
       </prop>
