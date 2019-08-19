@@ -558,7 +558,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             bIsAutoRedact = true;
             //aDlg.getTargets(aRedactionTargets);
 
-            [[fallthrough]];
+            SAL_FALLTHROUGH;
         }
 
         case SID_REDACTDOC:
