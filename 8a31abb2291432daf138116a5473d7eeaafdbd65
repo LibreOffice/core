@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_0d89ecc8",
+        "filename": "xmloff/dtd/drawing.mod",
+        "patchSetId": 19
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-08-19T11:21:14Z",
+      "side": 1,
+      "message": "what is this?",
+      "range": {
+        "startLine": 343,
+        "startChar": 58,
+        "endLine": 343,
+        "endChar": 83
+      },
+      "revId": "8a31abb2291432daf138116a5473d7eeaafdbd65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
