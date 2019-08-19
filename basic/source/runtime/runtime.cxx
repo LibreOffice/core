@@ -4040,7 +4040,7 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
                     if( nDefaultId > 0 )
                     {
                         OUString aDefaultStr = pImg->GetString( nDefaultId );
-                        p = new SbxVariable();
+                        p = new SbxVariable(pParam-> eType);
                         p->PutString( aDefaultStr );
                         refParams->Put( p, i );
                     }
