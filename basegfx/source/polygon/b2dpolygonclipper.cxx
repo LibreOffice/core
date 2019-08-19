@@ -796,7 +796,7 @@ namespace basegfx
                                 else
                                 {
                                     // the last triangle has not been altered, simply copy to result
-                                    for(basegfx::B2DPoint & i : stack)
+                                    for(const basegfx::B2DPoint & i : stack)
                                         aResult.append(i);
                                 }
                             }
