@@ -245,7 +245,7 @@ void SaxWriterHelper::AddBytes(sal_Int8* pTarget, sal_uInt32& rPos,
         AddBytes(pTarget, rPos, &pBytes[nCount], nRestCount);
 }
 
-/** Converts an UTF16 string to UTF8 and does XML normalization
+/** Converts a UTF-16 string to UTF-8 and does XML normalization
 
     @param pTarget
            Pointer to a piece of memory, to where the output should be written. The caller
