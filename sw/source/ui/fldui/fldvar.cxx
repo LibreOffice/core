@@ -680,7 +680,7 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
     // fill Format-Listbox
     m_xFormatLB->freeze();
     m_xFormatLB->clear();
-    rWidget.clear();
+    m_xNumFormatLB->clear(); // flags list as dirty and needing refilling with stock entries
     bool bSpecialFormat = false;
 
     if( TYP_GETREFPAGEFLD != nTypeId )
@@ -714,8 +714,9 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
         {
             if (!IsFieldEdit() || bSpecialFormat)
             {
-                rWidget.append(OUString::number(NUMBERFORMAT_ENTRY_NOT_FOUND), SwResId(FMT_MARK_TEXT));
-                rWidget.append(OUString::number(NUMBERFORMAT_ENTRY_NOT_FOUND), SwResId(FMT_USERVAR_CMD));
+                OUString sId(OUString::number(NUMBERFORMAT_ENTRY_NOT_FOUND));
+                rWidget.insert(0, SwResId(FMT_MARK_TEXT), &sId, nullptr, nullptr);
+                rWidget.insert(1, SwResId(FMT_USERVAR_CMD), &sId, nullptr, nullptr);
             }
         }
         break;
@@ -724,20 +725,23 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
         {
             if (!IsFieldEdit() || bSpecialFormat)
             {
-                rWidget.append(OUString::number(NUMBERFORMAT_ENTRY_NOT_FOUND), SwResId(FMT_SETVAR_TEXT));
+                OUString sId(OUString::number(NUMBERFORMAT_ENTRY_NOT_FOUND));
+                rWidget.insert(0, SwResId(FMT_SETVAR_TEXT), &sId, nullptr, nullptr);
             }
         }
         break;
 
         case TYP_FORMELFLD:
         {
-            rWidget.append(OUString::number(NUMBERFORMAT_ENTRY_NOT_FOUND), SwResId(FMT_GETVAR_NAME));
+            OUString sId(OUString::number(NUMBERFORMAT_ENTRY_NOT_FOUND));
+            rWidget.insert(0, SwResId(FMT_GETVAR_NAME), &sId, nullptr, nullptr);
         }
         break;
 
         case TYP_GETFLD:
         {
-            rWidget.append(OUString::number(NUMBERFORMAT_ENTRY_NOT_FOUND), SwResId(FMT_GETVAR_NAME));
+            OUString sId(OUString::number(NUMBERFORMAT_ENTRY_NOT_FOUND));
+            rWidget.insert(0, SwResId(FMT_GETVAR_NAME), &sId, nullptr, nullptr);
         }
         break;
     }
