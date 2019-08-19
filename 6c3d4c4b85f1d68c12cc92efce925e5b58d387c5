@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_8d95fce6",
+        "filename": "vcl/source/window/NotebookBarAddonsMerger.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-08-19T11:11:33Z",
+      "side": 1,
+      "message": "Please note you removed from .ui file sfxlo-NotebookbarToolBox and you are inserting here normal ToolBox. THis is why it doesn\u0027t work, sfx bindings are missing. You neeed to create correct type of toolbox.",
+      "revId": "6c3d4c4b85f1d68c12cc92efce925e5b58d387c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
