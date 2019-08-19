@@ -67,6 +67,11 @@
 #define S_HI_TWO "\xDB\xB2"
 #define S_HI_THREE "\xDB\xB3"
 
+// Chicago footnote symbols
+#define S_DAGGER "\xE2\x80\xA0"
+#define S_DBL_DAGGER "\xE2\x80\xA1"
+#define S_SECTION "\xC2\xA7"
+
 #include <sal/macros.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -224,6 +229,10 @@ static const sal_Unicode lowerLetter[] = {
     0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69,
     0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x6F, 0x70, 0x71, 0x72,
     0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A
+};
+
+static const sal_Unicode table_Chicago[] = {
+    0x002a, 0x2020, 0x2021, 0x00a7
 };
 
 // Tables used for numbering in persian words
@@ -899,6 +908,10 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
               lcl_formatPersianWord(number, result);
               break;
 
+          case SYMBOL_CHICAGO:
+             lcl_formatChars1( table_Chicago, 4, number-1, result );  // *, +, |, S, **, ++, ...
+             break;
+
           default:
                OSL_ASSERT(false);
                throw IllegalArgumentException();
@@ -943,6 +956,7 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHAR_SPECIAL,                    "Bullet", LANG_ALL},
         {style::NumberingType::PAGE_DESCRIPTOR,                 "Page", LANG_ALL},
         {style::NumberingType::BITMAP,                          "Bitmap", LANG_ALL},
+        {style::NumberingType::SYMBOL_CHICAGO,          "*, " S_DAGGER ", " S_DBL_DAGGER ", " S_SECTION ", **, " S_DAGGER S_DAGGER ", ...", LANG_ALL},
         {style::NumberingType::TEXT_NUMBER,             "1st", LANG_ALL},
         {style::NumberingType::TEXT_CARDINAL,           "One", LANG_ALL},
         {style::NumberingType::TEXT_ORDINAL,            "First", LANG_ALL},
