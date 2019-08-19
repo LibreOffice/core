@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_28237e07",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 2977,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2019-08-19T17:30:29Z",
+      "side": 1,
+      "message": "Let\u0027s drop a duplicate entry of \u0027gothic\u0027 here.",
+      "range": {
+        "startLine": 2977,
+        "startChar": 92,
+        "endLine": 2977,
+        "endChar": 98
+      },
+      "revId": "44151e3f91ff297931a25f3ea6eeaa3f97d8edfc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_e81ca6c2",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 3023,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2019-08-19T17:30:29Z",
+      "side": 1,
+      "message": "Ditto.",
+      "range": {
+        "startLine": 3023,
+        "startChar": 93,
+        "endLine": 3023,
+        "endChar": 99
+      },
+      "revId": "44151e3f91ff297931a25f3ea6eeaa3f97d8edfc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

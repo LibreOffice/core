@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_480ef28d",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2019-08-19T17:30:29Z",
+      "side": 0,
+      "message": "It would be nice to keep \u0027Gothic\u0027 here for backward compatibility.",
+      "range": {
+        "startLine": 87,
+        "startChar": 59,
+        "endLine": 87,
+        "endChar": 65
+      },
+      "revId": "3d24130986e6a0e1baa2cff61309f0f42cf0c339",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
