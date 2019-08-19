@@ -238,7 +238,7 @@ class MyUriHelper:
                 log.debug( message )
                 raise RuntimeException( message, self.ctx )
 
-            if xFileUri.isAbsolute():
+            if not xFileUri.hasRelativePath():
                 message = "pythonscript: an absolute uri is invalid '" + sFileUri+ "'"
                 log.debug( message )
                 raise RuntimeException( message, self.ctx )
