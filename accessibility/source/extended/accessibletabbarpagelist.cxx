@@ -58,7 +58,7 @@ namespace accessibility
 
     void AccessibleTabBarPageList::UpdateShowing( bool bShowing )
     {
-        for (Reference<XAccessible>& xChild : m_aAccessibleChildren)
+        for (const Reference<XAccessible>& xChild : m_aAccessibleChildren)
         {
             if ( xChild.is() )
             {
@@ -346,7 +346,7 @@ namespace accessibility
         AccessibleTabBarBase::disposing();
 
         // dispose all children
-        for (Reference<XAccessible>& i : m_aAccessibleChildren)
+        for (const Reference<XAccessible>& i : m_aAccessibleChildren)
         {
             Reference< XComponent > xComponent( i, UNO_QUERY );
             if ( xComponent.is() )

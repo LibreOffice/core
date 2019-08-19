@@ -137,7 +137,7 @@ namespace basegfx
 
     SystemDependentDataHolder::~SystemDependentDataHolder()
     {
-        for(auto& candidate : maSystemDependentReferences)
+        for(const auto& candidate : maSystemDependentReferences)
         {
             basegfx::SystemDependentData_SharedPtr aData(candidate.second.lock());
 

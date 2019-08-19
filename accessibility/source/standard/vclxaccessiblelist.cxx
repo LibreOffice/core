@@ -205,7 +205,7 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
         {
             sal_Int32 i=0;
             m_nCurSelectedPos = LISTBOX_ENTRY_NOTFOUND;
-            for ( auto& rChild : m_aAccessibleChildren )
+            for ( const auto& rChild : m_aAccessibleChildren )
             {
                 Reference< XAccessible > xHold = rChild;
                 if ( xHold.is() )
@@ -670,7 +670,7 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_Int32)
         {
             sal_Int32 i=0;
             m_nCurSelectedPos = LISTBOX_ENTRY_NOTFOUND;
-            for ( auto& rChild : m_aAccessibleChildren )
+            for ( const auto& rChild : m_aAccessibleChildren )
             {
                 Reference< XAccessible > xHold = rChild;
                 if ( xHold.is() )

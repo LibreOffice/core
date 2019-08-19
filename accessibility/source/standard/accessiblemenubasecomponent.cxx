@@ -227,7 +227,7 @@ void OAccessibleMenuBaseComponent::UpdateFocused( sal_Int32 i, bool bFocused )
 void OAccessibleMenuBaseComponent::UpdateVisible()
 {
     SetVisible( IsVisible() );
-    for (Reference<XAccessible>& xChild : m_aAccessibleChildren)
+    for (const Reference<XAccessible>& xChild : m_aAccessibleChildren)
     {
         if ( xChild.is() )
         {
@@ -456,7 +456,7 @@ bool OAccessibleMenuBaseComponent::IsChildHighlighted()
 {
     bool bChildHighlighted = false;
 
-    for (Reference<XAccessible>& xChild : m_aAccessibleChildren)
+    for (const Reference<XAccessible>& xChild : m_aAccessibleChildren)
     {
         if ( xChild.is() )
         {
@@ -606,7 +606,7 @@ void OAccessibleMenuBaseComponent::ProcessMenuEvent( const VclMenuEvent& rVclMen
                 m_pMenu = nullptr;
 
                 // dispose all menu items
-                for (Reference<XAccessible>& i : m_aAccessibleChildren)
+                for (const Reference<XAccessible>& i : m_aAccessibleChildren)
                 {
                     Reference< XComponent > xComponent( i, UNO_QUERY );
                     if ( xComponent.is() )
@@ -650,7 +650,7 @@ void OAccessibleMenuBaseComponent::disposing()
         m_pMenu = nullptr;
 
         // dispose all menu items
-        for (Reference<XAccessible>& i : m_aAccessibleChildren)
+        for (const Reference<XAccessible>& i : m_aAccessibleChildren)
         {
             Reference< XComponent > xComponent( i, UNO_QUERY );
             if ( xComponent.is() )

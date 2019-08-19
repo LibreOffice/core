@@ -1037,7 +1037,7 @@ namespace basegfx
                 B2DPolyPolygonVector aResult;
                 aResult.reserve(aInput.size());
 
-                for(basegfx::B2DPolyPolygon & a : aInput)
+                for(const basegfx::B2DPolyPolygon & a : aInput)
                 {
                     const basegfx::B2DPolyPolygon aCandidate(prepareForPolygonOperation(a));
 
