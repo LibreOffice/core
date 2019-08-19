@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_a3500f0c",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-08-19T20:05:22Z",
+      "side": 1,
+      "message": "This change quite certainly is wrong. Why would a comment present lead to PutandConvertEntry() not converting a format? Can you point to the code in question please?\n\nAs mentioned in the commit message, the problem is a wrong separator used in\n\n [RED][\u003c\u003d0,9]\n\nnot a comment. A comment present would just be coincidence.",
+      "revId": "d6188f99cfa9f2b15def4af40c63895aa1c315ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
