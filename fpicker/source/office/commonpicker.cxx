@@ -205,7 +205,7 @@ namespace svt
 
             if ( m_pDlg )
             {
-                // synchronize the help id of the dialog with out help URL property
+                // synchronize the help id of the dialog without help URL property
                 if ( !m_sHelpURL.isEmpty() )
                 {   // somebody already set the help URL while we had no dialog yet
                     OControlAccess::setHelpURL( m_pDlg, m_sHelpURL, false );

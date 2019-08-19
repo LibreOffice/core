@@ -48,7 +48,7 @@ namespace basegfx
         For the exact definitions of the color blending applied refer to the
         implementation of the method getModifiedColor
 
-        BColorModifier is not copyable (no copy constructor, no assignment
+        BColorModifier is not copiable (no copy constructor, no assignment
         operator); local values cannot be changed after construction. The
         instances are cheap and the idea is to create them on demand. To
         be able to reuse these as much as possible, a define for a
