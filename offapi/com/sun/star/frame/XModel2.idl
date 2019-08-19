@@ -46,7 +46,7 @@ interface XModel2 : com::sun::star::frame::XModel
         <p>
         Please note: Because this interface will might be used inside
         multi threaded environments those list can contain still disposed items
-        or it new added controller will be missing (if they was added after this
+        or it new added controller will be missing (if they were added after this
         enumeration was created).
         </P>
 
