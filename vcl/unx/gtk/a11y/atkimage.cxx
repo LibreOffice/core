@@ -77,7 +77,7 @@ image_get_image_position( AtkImage     *image,
                           gint         *y,
                           AtkCoordType  coord_type )
 {
-    *x = *y = 0;
+    *x = *y = -1;
     if( ATK_IS_COMPONENT( image ) )
     {
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -93,8 +93,7 @@ image_get_image_size( AtkImage *image,
                       gint     *width,
                       gint     *height )
 {
-    *width = 0;
-    *height = 0;
+    *width = *height = -1;
     try {
         css::uno::Reference<css::accessibility::XAccessibleImage> pImage
             = getImage( image );
