@@ -42,7 +42,7 @@ struct pseudo_Mapping : public uno_Mapping
     ~pseudo_Mapping();
 };
 
-//==== a uno pseudo proxy =============================================================================
+//==== a UNO pseudo proxy =============================================================================
 struct pseudo_unoInterfaceProxy : public uno_Interface
 {
     oslInterlockedCount                 nRef;
