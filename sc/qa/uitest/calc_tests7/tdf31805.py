@@ -27,7 +27,7 @@ class tdf31805(UITestCase):
         #2. click 'G1'
         #3. Menu 'edit -> Delete Cell - Delete entire Column'
         #expected: Column with cell containing "g" will be deleted,
-        #     a merged cell range will remainlect row 1
+        #     a merged cell range will remain left row 1
 
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "G1"}))
         self.assertEqual(get_cell_by_position(document, 0, 2, 4).getIsMerged(), True)
