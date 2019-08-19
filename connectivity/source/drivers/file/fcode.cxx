@@ -355,7 +355,7 @@ void ONthOperator::Exec(OCodeStack& rCodeStack)
 
     rCodeStack.push(new OOperandResult(operate(aValues)));
 
-    for (auto& rpOperand : aOperands)
+    for (const auto& rpOperand : aOperands)
     {
         if (typeid(OOperandResult) == typeid(*rpOperand))
             delete rpOperand;

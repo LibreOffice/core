@@ -169,7 +169,7 @@ BaseCoordinateSystem::~BaseCoordinateSystem()
 {
     try
     {
-        for(tAxisVecVecType::value_type & i : m_aAllAxis)
+        for(const tAxisVecVecType::value_type & i : m_aAllAxis)
             ModifyListenerHelper::removeListenerFromAllElements( i, m_xModifyEventForwarder );
         ModifyListenerHelper::removeListenerFromAllElements( m_aChartTypes, m_xModifyEventForwarder );
     }

@@ -67,7 +67,7 @@ MasterPropertySet::MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, 
 MasterPropertySet::~MasterPropertySet()
     throw()
 {
-    for( auto& rSlave : maSlaveMap )
+    for( const auto& rSlave : maSlaveMap )
         delete rSlave.second;
 }
 

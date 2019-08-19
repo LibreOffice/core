@@ -40,7 +40,7 @@ MasterPropertySetInfo::MasterPropertySetInfo( PropertyInfo const * pMap )
 MasterPropertySetInfo::~MasterPropertySetInfo()
     throw()
 {
-    for( auto& rObj : maMap )
+    for( const auto& rObj : maMap )
         delete rObj.second;
 }
 

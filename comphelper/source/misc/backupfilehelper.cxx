@@ -1518,7 +1518,7 @@ namespace
                             if (bRetval)
                             {
                                 // write headers
-                                for (auto& candidate : maPackedFileEntryVector)
+                                for (const auto& candidate : maPackedFileEntryVector)
                                 {
                                     if (!candidate.write_header(aHandle))
                                     {
