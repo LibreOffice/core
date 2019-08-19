@@ -23,4 +23,10 @@ $(eval $(call gb_CppunitTest_use_udk_api,stoc_uriproc))
 
 $(eval $(call gb_CppunitTest_use_ure,stoc_uriproc))
 
+# In a full build this is already covered indirectly by gb_CppunitTest_use_ure, but a module-only
+# build needs it (and instead using gb_CppunitTest_use_component would cause a "duplicate
+# implementation" DeploymentException):
+$(call gb_CppunitTest_get_target,stoc_uriproc): \
+    $(call gb_ComponentTarget_get_target,stoc/util/stocservices)
+
 # vim: set noet sw=4 ts=4:
