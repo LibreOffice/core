@@ -82,7 +82,7 @@ class FWE_DLLPUBLIC MenuConfiguration final
 {
 public:
         MenuConfiguration(
-            // use const when giving a uno reference by reference
+            // use const when giving a UNO reference by reference
             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
         ~MenuConfiguration();

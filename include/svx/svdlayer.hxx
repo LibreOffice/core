@@ -157,7 +157,7 @@ public:
     void               getLockedLayersODF( SdrLayerIDSet& rOutSet) const;
 
     // Generates a bitfield for settings.xml from the SdrLayerIDSet.
-    // Output is a uno sequence of BYTE (which is 'short' in API).
+    // Output is a UNO sequence of BYTE (which is 'short' in API).
     void               QueryValue(const SdrLayerIDSet& rViewLayerSet, css::uno::Any& rAny);
 };
 
