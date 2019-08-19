@@ -252,6 +252,18 @@ void ScEditWindow::LoseFocus()
     WeldEditView::LoseFocus();
 }
 
+bool ScEditWindow::MouseButtonDown(const MouseEvent& rMEvt)
+{
+    bool bHadFocus = HasFocus();
+    bool bRet = WeldEditView::MouseButtonDown(rMEvt);
+    if (!bHadFocus)
+    {
+        assert(HasFocus());
+        GetFocus();
+    }
+    return bRet;
+}
+
 css::uno::Reference< css::accessibility::XAccessible > ScEditWindow::CreateAccessible()
 {
     pAcc = new ScAccessibleEditControlObject(this);
