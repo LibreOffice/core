@@ -540,7 +540,7 @@ static bool osl_decodeURL_( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )
     pSrc = rtl_string_getStr(strUTF8);
     pSrcEnd = pSrc + nSrcLen;
 
-    /* Now decode the URL what should result in an UTF8 string */
+    /* Now decode the URL what should result in a UTF-8 string */
     while ( bValidEncoded && pSrc < pSrcEnd )
     {
         switch ( *pSrc )

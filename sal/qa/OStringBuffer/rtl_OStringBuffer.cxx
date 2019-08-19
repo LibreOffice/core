@@ -242,7 +242,7 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "two empty strings(with a argu)",
+                "two empty strings(with an argu)",
                 lastRes && ( aStrBuf2.getCapacity() == 0 ) &&
                         ( *(aStrBuf2.getStr()) == '\0' )
             );
