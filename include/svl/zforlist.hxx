@@ -243,11 +243,12 @@ enum NfIndexTableOffset
     NF_FRACTION_100,                        // # ??/100
 
     NF_DATETIME_ISO_YYYYMMDD_HHMMSS,        // 1997-10-08 01:23:45          ISO (with blank instead of T)
+    NF_DATETIME_ISO_YYYYMMDDTHHMMSS,        // 1997-10-08T01:23:45          ISO
 
     // XXX When adding values here, follow the comment above about
     // svx/source/items/numfmtsh.cxx
 
-    NF_INDEX_TABLE_ENTRIES                  // == 58, reserved up to #59 to not be used in i18npool locale data.
+    NF_INDEX_TABLE_ENTRIES                  // == 59, reserved up to #59 to not be used in i18npool locale data.
 
     // XXX Adding values above may increment the reserved area that can't be
     // used by i18npool's locale data FormatCode definitions, see the

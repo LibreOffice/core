@@ -688,7 +688,8 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl(std::vector<OUString>& rL
                 // Ugly hack to suppress an ISO date+time format that is the
                 // default date+time format of the locale and identical to the
                 // internally generated one to be added below.
-                if (!bSuppressDuplicates || aNewFormNInfo != "YYYY-MM-DD HH:MM:SS")
+                if (!bSuppressDuplicates || (aNewFormNInfo != "YYYY-MM-DD HH:MM:SS"
+                            && aNewFormNInfo != "YYYY-MM-DD\"T\"HH:MM:SS"))
                 {
                     rList.push_back(aNewFormNInfo);
                     aCurEntryList.push_back(nNFEntry);
@@ -697,9 +698,9 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl(std::vector<OUString>& rL
         }
     }
 
-    // Always add the internally generated ISO format.
+    // Always add the internally generated ISO formats.
     nSelPos = FillEListWithFormats_Impl(rList, nSelPos, NF_DATETIME_ISO_YYYYMMDD_HHMMSS,
-                                        NF_DATETIME_ISO_YYYYMMDD_HHMMSS, false);
+                                        NF_DATETIME_ISO_YYYYMMDDTHHMMSS, false);
 
     return nSelPos;
 }
@@ -720,6 +721,7 @@ bool SvxNumberFormatShell::IsEssentialFormat_Impl(SvNumFormatType eType, sal_uIn
         case NF_TIME_HH_MMSS00:
         case NF_DATETIME_SYS_DDMMYYYY_HHMMSS:
         case NF_DATETIME_ISO_YYYYMMDD_HHMMSS:
+        case NF_DATETIME_ISO_YYYYMMDDTHHMMSS:
             return true;
         default:
         break;
