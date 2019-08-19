@@ -14428,7 +14428,6 @@ svx/source/svdraw/svddrgv.cxx
 svx/source/svdraw/svdedtv.cxx
 svx/source/svdraw/svdedtv1.cxx
 svx/source/svdraw/svdedtv2.cxx
-svx/source/svdraw/svdedxv.cxx
 svx/source/svdraw/svdetc.cxx
 svx/source/svdraw/svdfmtf.cxx
 svx/source/svdraw/svdfmtf.hxx
