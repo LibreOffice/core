@@ -13500,6 +13500,7 @@ module com {
      const short PAGE_DESCRIPTOR = 7;
      const short ROMAN_LOWER = 3;
      const short ROMAN_UPPER = 2;
+     const short SYMBOL_CHICAGO = 63;
      const short TEXT_CARDINAL = 61;
      const short TEXT_NUMBER = 60;
      const short TEXT_ORDINAL = 62;
