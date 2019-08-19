@@ -40,8 +40,11 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="condition">
+                    <property name="width_request">10</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="ellipsize">end</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
