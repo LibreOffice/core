@@ -409,12 +409,20 @@ void SwFrame::PrepareCursor()
 
         if ( bTab )
         {
+#if BOOST_VERSION < 105600
+            tabGuard.reset(static_cast<SwTabFrame*>(this)); // tdf#125741
+#else
             tabGuard.emplace(static_cast<SwTabFrame*>(this)); // tdf#125741
+#endif
             pThis = static_cast<SwTabFrame*>(this);
         }
         else if (IsRowFrame())
         {
+#if BOOST_VERSION < 105600
+            rowGuard.reset(SwFrameDeleteGuard(this)); // tdf#125741 keep this alive
+#else
             rowGuard.emplace(this); // tdf#125741 keep this alive
+#endif
         }
         else if( IsSctFrame() )
         {
