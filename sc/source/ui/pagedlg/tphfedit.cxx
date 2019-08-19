@@ -279,8 +279,11 @@ bool ScEditWindow::MouseMove( const MouseEvent& rMEvt )
 
 bool ScEditWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( !HasFocus() )
+    if (!HasFocus())
+    {
         GrabFocus();
+        GetFocus();
+    }
 
     return pEdView->MouseButtonDown( rMEvt );
 }
