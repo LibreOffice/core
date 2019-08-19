@@ -406,22 +406,22 @@
       </prop>
       <prop oor:name="ImageSmallURL" oor:type="xs:string">
         <info>
-          <desc>A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+          <desc>A file URL to address an external bitmap file used for menu images and/or small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
         </info>
       </prop>
       <prop oor:name="ImageBigURL" oor:type="xs:string">
         <info>
-          <desc>A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+          <desc>A file URL to address an external bitmap file used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
         </info>
       </prop>
       <prop oor:name="ImageSmallHCURL" oor:type="xs:string">
         <info>
-          <desc>A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+          <desc>A file URL to address an external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
         </info>
       </prop>
       <prop oor:name="ImageBigHCURL" oor:type="xs:string">
         <info>
-          <desc>A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+          <desc>A file URL to address an external bitmap file used for big high contrast toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
         </info>
       </prop>
     </group>
@@ -478,7 +478,7 @@
       </info>
       <set oor:name="AddonMenu" oor:node-type="MenuItem">
         <info>
-          <desc>Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+          <desc>Contains the structure of the addon menu used by the Office. It provides functions of external components to the user.</desc>
         </info>
       </set>
       <set oor:name="Images" oor:node-type="Images">
@@ -488,7 +488,7 @@
       </set>
       <set oor:name="OfficeMenuBar" oor:node-type="PopupMenu">
         <info>
-          <desc>Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+          <desc>Contains the structure of addon popup-menus inserted into the Office menubar. It provides functions of external components to the user.</desc>
         </info>
       </set>
       <set oor:name="OfficeMenuBarMerging" oor:node-type="MergeMenuItems">
