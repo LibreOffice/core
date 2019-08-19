@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_8d065c86",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Linguistic.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-08-19T09:49:00Z",
+      "side": 1,
+      "message": "No need to add an extra \".\"",
+      "range": {
+        "startLine": 498,
+        "startChar": 38,
+        "endLine": 498,
+        "endChar": 39
+      },
+      "revId": "af5a525093e04f00ab0bb1e8c5223e89d4e5d07a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
