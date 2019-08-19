@@ -3698,13 +3698,13 @@ static int doc_getClipboard(LibreOfficeKitDocument* pThis,
     std::vector<OString> aMimeTypes;
     if (!pMimeTypes) // everything
     {
-        uno::Sequence< css::datatransfer::DataFlavor > flavors = xTransferable->getTransferDataFlavors();
+        const uno::Sequence< css::datatransfer::DataFlavor > flavors = xTransferable->getTransferDataFlavors();
         if (!flavors.getLength())
         {
             SetLastExceptionMsg("Flavourless selection");
             return 0;
         }
-        for (auto &it : flavors)
+        for (const auto &it : flavors)
             aMimeTypes.push_back(OUStringToOString(it.MimeType, RTL_TEXTENCODING_UTF8));
     }
     else
@@ -5256,10 +5256,10 @@ public:
     }
     virtual void Invoke() override
     {
-        css::uno::Sequence<OUString> aEvents =
+        const css::uno::Sequence<OUString> aEvents =
             comphelper::ProfileRecording::getRecordingAndClear();
         OStringBuffer aOutput;
-        for (auto &s : aEvents)
+        for (const auto &s : aEvents)
         {
             aOutput.append(OUStringToOString(s, RTL_TEXTENCODING_UTF8));
             aOutput.append("\n");
@@ -5290,7 +5290,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         const char *pOptions = getenv("SAL_LOK_OPTIONS");
         if (pOptions)
             aOpts = comphelper::string::split(OUString(pOptions, strlen(pOptions), RTL_TEXTENCODING_UTF8), ':');
-        for (auto &it : aOpts)
+        for (const auto &it : aOpts)
         {
             if (it == "unipoll")
                 bUnipoll = true;

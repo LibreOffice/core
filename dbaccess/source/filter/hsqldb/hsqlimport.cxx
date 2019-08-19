@@ -316,7 +316,7 @@ void HsqlImporter::importHsqlDatabase(weld::Window* pParent)
     }
 
     // schema
-    for (auto& sSql : statements)
+    for (const auto& sSql : statements)
     {
         Reference<XStatement> statement = m_rConnection->createStatement();
         try

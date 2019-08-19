@@ -158,10 +158,10 @@ void SvxOnlineUpdateTabPage::UpdateUserAgent()
         OUString aPseudoURL = "useragent:normal";
         if( m_xExtrasCheckBox->get_active() )
             aPseudoURL = "useragent:extended";
-        uno::Sequence< beans::StringPair > aHeaders
+        const uno::Sequence< beans::StringPair > aHeaders
             = xDav->getUserRequestHeaders( aPseudoURL, ucb::WebDAVHTTPMethod(0) );
 
-        for (css::beans::StringPair & aHeader : aHeaders)
+        for (const css::beans::StringPair & aHeader : aHeaders)
         {
             if ( aHeader.First == "User-Agent" )
             {

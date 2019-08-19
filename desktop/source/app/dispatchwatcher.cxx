@@ -744,7 +744,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
         aArgs[1].Name = "SynchronMode";
         aArgs[1].Value <<= true;
 
-        for (DispatchHolder & aDispatche : aDispatches)
+        for (const DispatchHolder & aDispatche : aDispatches)
         {
             Reference< XDispatch > xDispatch = aDispatche.xDispatch;
             Reference < XNotifyingDispatch > xDisp( xDispatch, UNO_QUERY );

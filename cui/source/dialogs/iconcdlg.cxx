@@ -292,7 +292,7 @@ void SvxHpLinkDlg::Start_Impl()
 IconChoicePageData* SvxHpLinkDlg::GetPageData ( const OString& rId )
 {
     IconChoicePageData *pRet = nullptr;
-    for (auto & pData : maPageList)
+    for (const auto & pData : maPageList)
     {
         if ( pData->sId == rId )
         {

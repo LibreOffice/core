@@ -399,7 +399,7 @@ extern "C" int unopkg_main()
 
         if ( subcmd_add || subCommand == "remove" )
         {
-            for (OUString & cmdPackage : cmdPackages)
+            for (const OUString & cmdPackage : cmdPackages)
             {
                 if (subcmd_add)
                 {
@@ -483,7 +483,7 @@ extern "C" int unopkg_main()
             {
                 //The user provided the names (ids or file names) of the extensions
                 //which shall be listed
-                for (OUString & cmdPackage : cmdPackages)
+                for (const OUString & cmdPackage : cmdPackages)
                 {
                     Reference<deployment::XPackage> extension;
                     try
@@ -531,7 +531,7 @@ extern "C" int unopkg_main()
                 vecExtUnaccepted, xExtensionManager->getExtensionsWithUnacceptedLicenses(
                     repository, xCmdEnv));
 
-            for (OUString & cmdPackage : cmdPackages)
+            for (const OUString & cmdPackage : cmdPackages)
             {
                 Reference<deployment::XPackage> extension;
                 try
