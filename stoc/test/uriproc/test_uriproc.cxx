@@ -195,7 +195,9 @@ void Test::testParse() {
         css::uno::Reference< css::uri::XUriReference > uriRef(
             m_uriFactory->parse(
                 OUString::createFromAscii(data[i].uriReference)));
-        CPPUNIT_ASSERT_EQUAL(data[i].schemeSpecificPart != nullptr, uriRef.is());
+        TEST_ASSERT_EQUAL(
+            "testParse", i, data[i].uriReference, data[i].schemeSpecificPart != nullptr,
+            uriRef.is());
         if (uriRef.is()) {
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
@@ -587,11 +589,11 @@ void Test::testMakeAbsolute() {
         css::uno::Reference< css::uri::XUriReference > baseUriRef(
             m_uriFactory->parse(
                 OUString::createFromAscii(data[i].baseUriReference)));
-        CPPUNIT_ASSERT(baseUriRef.is());
+        TEST_ASSERT_EQUAL("testMakeAbsolute", i, data[i].baseUriReference, true, baseUriRef.is());
         css::uno::Reference< css::uri::XUriReference > uriRef(
             m_uriFactory->parse(
                 OUString::createFromAscii(data[i].uriReference)));
-        CPPUNIT_ASSERT(uriRef.is());
+        TEST_ASSERT_EQUAL("testMakeAbsolute", i, data[i].uriReference, true, uriRef.is());
         css::uno::Reference< css::uri::XUriReference > absolute(
             m_uriFactory->makeAbsolute(
                 baseUriRef, uriRef, data[i].processSpecialBaseSegments,
@@ -692,11 +694,11 @@ void Test::testMakeRelative() {
         css::uno::Reference< css::uri::XUriReference > baseUriRef(
             m_uriFactory->parse(
                 OUString::createFromAscii(data[i].baseUriReference)));
-        CPPUNIT_ASSERT(baseUriRef.is());
+        TEST_ASSERT_EQUAL("testMakeRelative", i, data[i].baseUriReference, true, baseUriRef.is());
         css::uno::Reference< css::uri::XUriReference > uriRef(
             m_uriFactory->parse(
                 OUString::createFromAscii(data[i].uriReference)));
-        CPPUNIT_ASSERT(uriRef.is());
+        TEST_ASSERT_EQUAL("testMakeRelative", i, data[i].uriReference, true, uriRef.is());
         css::uno::Reference< css::uri::XUriReference > relative(
             m_uriFactory->makeRelative(
                 baseUriRef, uriRef, data[i].preferAuthorityOverRelativePath,
@@ -714,7 +716,7 @@ void Test::testMakeRelative() {
                 m_uriFactory->makeAbsolute(
                     baseUriRef, relative, true,
                     css::uri::RelativeUriExcessParentSegments_ERROR));
-            CPPUNIT_ASSERT(absolute.is());
+            TEST_ASSERT_EQUAL("testMakeRelative", i, data[i].uriReference, true, absolute.is());
             TEST_ASSERT_EQUAL(
                 "testMakeRelative", i, data[i].uriReference,
                 OUString::createFromAscii(
