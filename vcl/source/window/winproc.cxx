@@ -482,7 +482,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
                                     pMouseDownWin->ImplGetFrameData()->mnFirstMouseX,
                                     pMouseDownWin->ImplGetFrameData()->mnFirstMouseY ) );
 
-                                // create a uno mouse event out of the available data
+                                // create a UNO mouse event out of the available data
                                 css::awt::MouseEvent aMouseEvent( static_cast < css::uno::XInterface * > ( nullptr ),
 #ifdef MACOSX
                                     nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3),
