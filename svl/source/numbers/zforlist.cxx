@@ -1162,6 +1162,17 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
                 F_Index = GetStandardFormat( RType, ActLnge );
             }
             break;
+        case SvNumFormatType::DATETIME :
+            // Preserve ISO 8601 input.
+            if (pStringScanner->HasIso8601Tsep())
+            {
+                F_Index = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDDTHHMMSS, ActLnge );
+            }
+            else
+            {
+                F_Index = GetStandardFormat( RType, ActLnge );
+            }
+            break;
         default:
             F_Index = GetStandardFormat( RType, ActLnge );
         }
