@@ -1662,7 +1662,7 @@ bool SfxObjectShell::SaveTo_Impl
         {
             SAL_WARN( "sfx.doc", "Storing has failed." );
 
-            // in case the document storage was connected to backup temporarely it must be disconnected now
+            // in case the document storage was connected to backup temporarily it must be disconnected now
             if ( bNeedsDisconnectionOnFail )
                 ConnectTmpStorage_Impl( pImpl->m_xDocStorage, nullptr );
         }
@@ -3049,7 +3049,7 @@ bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
     {
         sal_Int32 nVersion = rMedium.GetFilter()->GetVersion();
 
-        // OASIS templates have own mediatypes ( SO7 also actually, but it is to late to use them here )
+        // OASIS templates have own mediatypes (SO7 also actually, but it is to late to use them here)
         const bool bTemplate = rMedium.GetFilter()->IsOwnTemplateFormat()
             && nVersion > SOFFICE_FILEFORMAT_60;
 

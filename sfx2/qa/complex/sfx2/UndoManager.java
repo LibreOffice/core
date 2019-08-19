@@ -654,7 +654,7 @@ public class UndoManager
         m_currentTestCase.verifySingleModificationDocumentState();
 
         // undo the modification, ensure the listener got the proper notifications
-        assertEquals( "We did not yet do a undo!", 0, m_undoListener.getUndoActionCount() );
+        assertEquals( "We did not yet do an undo!", 0, m_undoListener.getUndoActionCount() );
         i_undoManager.undo();
         assertEquals( "A simple undo does not result in the proper Undo count.",
             1, m_undoListener.getUndoActionCount() );
