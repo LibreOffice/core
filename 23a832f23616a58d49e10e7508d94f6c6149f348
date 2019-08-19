@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_32e20b03",
+        "filename": "chart2/source/controller/sidebar/ChartStylesPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1002072
+      },
+      "writtenOn": "2019-08-19T06:11:26Z",
+      "side": 1,
+      "message": "Would do that",
+      "parentUuid": "bf659307_6f2500ab",
+      "revId": "23a832f23616a58d49e10e7508d94f6c6149f348",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_2f3708e6",
         "filename": "chart2/source/controller/sidebar/ChartStylesPanel.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_d2f06fcc",
+        "filename": "chart2/source/controller/sidebar/ChartStylesPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1002072
+      },
+      "writtenOn": "2019-08-19T06:11:26Z",
+      "side": 1,
+      "message": "Would do this",
+      "parentUuid": "bf659307_2f3708e6",
+      "revId": "23a832f23616a58d49e10e7508d94f6c6149f348",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_ef3030eb",
         "filename": "chart2/source/controller/sidebar/ChartStylesPanel.cxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2019-08-17T13:44:34Z",
       "side": 1,
       "message": ".I still don\u0027t see why this would need to be a clone.",
+      "revId": "23a832f23616a58d49e10e7508d94f6c6149f348",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_72e083fb",
+        "filename": "chart2/source/controller/sidebar/ChartStylesPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1002072
+      },
+      "writtenOn": "2019-08-19T06:11:26Z",
+      "side": 1,
+      "message": "If we are using an already newly created style that has it\u0027s own direct properties, so that is why I want to clone ( although I am doing this with the assumption that copying using XCloneable and copy constructor is safe way).\n\nIf the applied style to chart is just default, then, yes we dont need to clone but just create new style.\n\nAnother way without XCloneable would be to create a new style and then first apply the existing style\u0027s properties using our newly added XPropertyAccess and then export the Chart user properties and update the newChartStyle.\n\nPlease correct me if I am overthinking things here as the architecture is already very complex regarding thread-safe and uno-safe.",
+      "parentUuid": "bf659307_ef3030eb",
       "revId": "23a832f23616a58d49e10e7508d94f6c6149f348",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
