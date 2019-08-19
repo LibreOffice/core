@@ -582,11 +582,13 @@ sal_Int16 ConvertNumberingType(sal_Int32 nFmt)
         case NS_ooxml::LN_Value_ST_NumberFormat_ordinalText:
             nRet = style::NumberingType::TEXT_ORDINAL;
             break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_chicago:
+            nRet = style::NumberingType::SYMBOL_CHICAGO;
+            break;
         default: nRet = style::NumberingType::ARABIC;
     }
 /*  TODO: Lots of additional values are available - some are supported in the I18 framework
     NS_ooxml::LN_Value_ST_NumberFormat_hex = 91685;
-    NS_ooxml::LN_Value_ST_NumberFormat_chicago = 91686;
     NS_ooxml::LN_Value_ST_NumberFormat_decimalFullWidth = 91691;
     NS_ooxml::LN_Value_ST_NumberFormat_decimalHalfWidth = 91692;
     NS_ooxml::LN_Value_ST_NumberFormat_japaneseDigitalTenThousand = 91694;
