@@ -1,6 +1,6 @@
 //this file is to define the new dsl grammar
 /*
-  This file just Import all Grammar Statments from all other files to this file 
+  This file just Import all Grammar Statements from all other files to this file 
   The Compiler just work with this file to Compile it
   Each file of these imported file has a Comments related to it's content
 */ 
