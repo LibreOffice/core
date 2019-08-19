@@ -145,10 +145,10 @@ EWorkingMode TransactionManager::getWorkingMode() const
 
 /*-****************************************************************************************************
     @short      start new transaction
-    @descr      A guard should use this method to start a new transaction. He should looks for rejected
+    @descr      A guard should use this method to start a new transaction. He should look for rejected
                 calls to by using parameter eMode and eReason.
                 If call was not rejected your transaction will be non breakable during releasing your transaction
-                guard! BUT ... your code isn't threadsafe then! It's a transaction manager only ....
+                guard! BUT ... your code isn't threadsafe then! It's a transaction manager only...
 
     @seealso    method unregisterTransaction()
 
