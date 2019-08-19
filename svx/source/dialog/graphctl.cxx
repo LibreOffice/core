@@ -815,7 +815,7 @@ void GraphCtrlView::InvalidateOneWin(OutputDevice& rDevice, const tools::Rectang
 GraphCtrlView::~GraphCtrlView()
 {
     // turn SetOutputToWindow back off again before
-    // turning back into our baseclass during dtoring
+    // turning back into our baseclass during storing
     const sal_uInt32 nWindowCount(PaintWindowCount());
     for (sal_uInt32 nWinNum(0); nWinNum < nWindowCount; nWinNum++)
     {

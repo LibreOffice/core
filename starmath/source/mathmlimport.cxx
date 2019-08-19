@@ -503,7 +503,7 @@ void SmXMLImport::endDocument()
 
             pDocShell->SetText( aText );
         }
-        OSL_ENSURE(pModel,"So there *was* a uno problem after all");
+        OSL_ENSURE(pModel,"So there *was* a UNO problem after all");
 
         bSuccess = true;
     }
