@@ -357,7 +357,7 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
 {
     OUString aParameterString = StringMapToOUString(rDescription.aParameters);
 
-    //here we will customize our statments depending on the caller of this function
+    //here we will customize our statements depending on the caller of this function
     OUString aLogLine;
     //first check on general commands
     if (rDescription.aAction == "SET")
@@ -424,7 +424,7 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
         }
         else if (rDescription.aAction == "LAUNCH")
         {
-            aLogLine = "Lanuch AutoFilter from Col "
+            aLogLine = "Launch AutoFilter from Col "
                        + GetValueInMapWithIndex(rDescription.aParameters, 2) + " and Row "
                        + GetValueInMapWithIndex(rDescription.aParameters, 1);
         }
