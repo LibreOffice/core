@@ -5843,7 +5843,7 @@
         <info>
           <desc>Determines the type of character distance compression in Asian
           text: 0 - no compression; 1 - compress punctuation only; 2 - compress
-          interpunction an japanese kana.</desc>
+          interpunction a Japanese kana.</desc>
           <label>CompressCharacterDistance</label>
         </info>
         <value>0</value>

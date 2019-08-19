@@ -423,7 +423,7 @@
         <!-- OldLocation: -->
         <!-- UIHints: Default size for newly created objects when using CTRL-Return or CTRL-Click -->
         <info>
-          <desc>Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button</desc>
+          <desc>Defines the default size of newly created objects using CTRL-Return or CTRL-Click at an object-creating Button</desc>
           <label>Default Object Size</label>
         </info>
         <prop oor:name="Width" oor:type="xs:int" oor:nillable="false">
