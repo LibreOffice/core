@@ -34,6 +34,7 @@
 #include <sfx2/app.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/ctloptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -53,7 +54,9 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/CharacterCompressionType.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
-
+#include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/system/XSystemShellExecute.hpp>
 
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -63,6 +66,7 @@
 #include <i18nutil/unicode.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/lok.hxx>
+#include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
 
 #include <unicode/ubidi.h>
@@ -588,6 +592,23 @@ bool ImpEditEngine::MouseButtonUp( const MouseEvent& rMEvt, EditView* pView )
             Point aLogicClick = rOutDev.PixelToLogic(rMEvt.GetPosPixel());
             if (const SvxFieldItem* pFld = pView->GetField(aLogicClick))
             {
+                // tdf#121039 When in edit mode, editeng is responsible for opening the URL on mouse click
+                if (auto pUrlField = dynamic_cast<const SvxURLField*>(pFld->GetField()))
+                {
+                    SvtSecurityOptions aSecOpt;
+                    bool bCtrlClickHappened = rMEvt.IsMod1();
+                    bool bCtrlClickSecOption
+                        = aSecOpt.IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink);
+                    if ((bCtrlClickHappened && bCtrlClickSecOption)
+                        || (!bCtrlClickHappened && !bCtrlClickSecOption))
+                    {
+                        css::uno::Reference<css::system::XSystemShellExecute> exec(
+                            css::system::SystemShellExecute::create(
+                                comphelper::getProcessComponentContext()));
+                        exec->execute(pUrlField->GetURL(), OUString(),
+                                      css::system::SystemShellExecuteFlags::URIS_ONLY);
+                    }
+                }
                 EditPaM aPaM( aCurSel.Max() );
                 sal_Int32 nPara = GetEditDoc().GetPos( aPaM.GetNode() );
                 GetEditEnginePtr()->FieldClicked( *pFld, nPara, aPaM.GetIndex() );
