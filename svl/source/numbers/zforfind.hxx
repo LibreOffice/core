@@ -68,6 +68,10 @@ public:
 
     void InvalidateDateAcceptancePatterns();
 
+    /** Whether 'T' separator was detected in an ISO 8601 date+time format.
+     */
+    bool HasIso8601Tsep() const { return bIso8601Tsep; }
+
 private:
     SvNumberFormatter*  pFormatter;
     const SvNumberformat* mpFormat;                            //* The format to compare against, if any
