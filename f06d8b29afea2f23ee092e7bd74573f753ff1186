@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_e8990679",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-08-19T16:22:26Z",
+      "side": 1,
+      "message": "Yes, that\u0027s basically what I did. Looking at QTBUG-56218 again, it mentions that pressing a modifier key still doesn\u0027t cause a DragMove event [1], which something might rely on to properly update the cursor.\nI can still reproduce also with the sample from QTBUG-56218.\n\n[1] https://bugreports.qt.io/browse/QTBUG-56218?focusedCommentId\u003d402639\u0026page\u003dcom.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-402639",
+      "parentUuid": "bf659307_0c6575e1",
+      "range": {
+        "startLine": 10,
+        "startChar": 58,
+        "endLine": 18,
+        "endChar": 35
+      },
+      "revId": "f06d8b29afea2f23ee092e7bd74573f753ff1186",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_86f3a473",
         "filename": "configure.ac",
         "patchSetId": 5
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "\u003e What does the \"(recommended)\" mean here?\n\nThis kind of messages were the same for the native file picker bugs in Qt. At that time there were non-merged fixes by myself attached to the bug reports. This is an information mainly for packagers, that they\u0027ll probably look at the bug reports and can even fix it in their own Qt version and at least add some interest to the Qt bug report.\n\nIt\u0027s recommended, because it\u0027s not mandatory to fix this. It\u0027s a minor problem, but I want to raise awareness, eventually changing priorities for bug fixes on the Qt side. There isn\u0027t anything I can do on the LO side to workaround it.",
       "parentUuid": "bf659307_86f3a473",
+      "range": {
+        "startLine": 11299,
+        "startChar": 0,
+        "endLine": 11303,
+        "endChar": 14
+      },
+      "revId": "f06d8b29afea2f23ee092e7bd74573f753ff1186",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_68873611",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 11303,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-08-19T16:22:26Z",
+      "side": 1,
+      "message": "OK, thx for the explanation!\n\nI still don\u0027t really get what exactly the \"recommended\" refers to in that context (recommended to look at the Qt bug report, or to upgrade to newer Qt version? - though the latter doesn\u0027t seem to help yet).",
+      "parentUuid": "bf659307_2ca5d904",
       "range": {
         "startLine": 11299,
         "startChar": 0,
@@ -190,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_28793e2e",
+        "filename": "vcl/qt5/Qt5DragAndDrop.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-08-19T16:22:26Z",
+      "side": 1,
+      "message": "Thx!",
+      "parentUuid": "bf659307_acb8092a",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 32
+      },
+      "revId": "f06d8b29afea2f23ee092e7bd74573f753ff1186",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_465fcc71",
         "filename": "vcl/qt5/Qt5Frame.cxx",
         "patchSetId": 5
@@ -225,6 +297,30 @@
       "side": 1,
       "message": "I\u0027ve added an additional comment.",
       "parentUuid": "bf659307_465fcc71",
+      "range": {
+        "startLine": 1224,
+        "startChar": 0,
+        "endLine": 1226,
+        "endChar": 82
+      },
+      "revId": "f06d8b29afea2f23ee092e7bd74573f753ff1186",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_888f2a22",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-08-19T16:22:26Z",
+      "side": 1,
+      "message": "Thx!",
+      "parentUuid": "bf659307_ccb3fd4c",
       "range": {
         "startLine": 1224,
         "startChar": 0,
