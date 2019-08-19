@@ -640,7 +640,7 @@ void Test::testMakeRelative() {
         { "scheme://a", "scheme://a/?q", true, true, false, "?q",
           "scheme://a?q" },
         { "scheme://a/", "scheme://a/?q", true, true, false, "?q",
-          "scheme://a/?q" },
+          nullptr },
         { "scheme://a?q", "scheme://a?q", true, true, false, "", nullptr },
         { "scheme://a/?q", "scheme://a?q", true, true, false, "",
           "scheme://a/?q" },
