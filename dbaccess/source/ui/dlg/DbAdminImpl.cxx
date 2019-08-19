@@ -183,15 +183,15 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     m_aIndirectPropTranslator.emplace( DSID_RESPECTRESULTSETTYPE, OUString("RespectDriverResultSetType") );
     m_aIndirectPropTranslator.emplace( DSID_MAX_ROW_SCAN, OUString("MaxRowScan") );
 
-    // extra settings for odbc
+    // extra settings for ODBC
     m_aIndirectPropTranslator.emplace( DSID_USECATALOG, INFO_USECATALOG );
-    // extra settings for a ldap address book
+    // extra settings for an LDAP address book
     m_aIndirectPropTranslator.emplace( DSID_CONN_LDAP_BASEDN, INFO_CONN_LDAP_BASEDN );
     m_aIndirectPropTranslator.emplace( DSID_CONN_LDAP_ROWCOUNT, INFO_CONN_LDAP_ROWCOUNT );
     m_aIndirectPropTranslator.emplace( DSID_CONN_LDAP_USESSL, OUString("UseSSL") );
     m_aIndirectPropTranslator.emplace( DSID_DOCUMENT_URL, PROPERTY_URL );
 
-    // oracle
+    // Oracle
     m_aIndirectPropTranslator.emplace( DSID_IGNORECURRENCY, OUString("IgnoreCurrency") );
 
     try

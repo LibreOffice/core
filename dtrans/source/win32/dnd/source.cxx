@@ -68,7 +68,7 @@ DragSource::~DragSource()
      ????
           Do we really need a separate thread for
           every Dnd operation or only if the source
-          thread is a MTA thread
+          thread is an MTA thread
      ????
 */
 void DragSource::StartDragImpl(

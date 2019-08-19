@@ -23,7 +23,7 @@
 
  module com {  module sun {  module star {  module uno {
 
-/** Specifies an universal interface key (globally unique).
+/** Specifies a universal interface key (globally unique).
 
     This struct is deprecated.  Uiks are not used anymore.
     @deprecated

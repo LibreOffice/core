@@ -884,7 +884,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             }
             else
             {
-                // Most Complex, need to use an RE
+                // Most Complex, need to use a RE
                 sal_Int32 pos;
                 while ( (pos = matchString.indexOf ( WILDCARD )) != -1 )
                 {

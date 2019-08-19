@@ -45,7 +45,7 @@ DWORD WINAPI MTAFunc(LPVOID pParams);
 
 char* szSTAWin= "XDragSource::executeDrag is called from the same "
                 "OLE STA thread that created the window.";
-char* szMTAWin= "XDragSource::executeDrag is called from a MTA thread "
+char* szMTAWin= "XDragSource::executeDrag is called from an MTA thread "
                 "that did not create the window.";
 
 WNDPROC wpOrigEditProc;

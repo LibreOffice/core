@@ -36,7 +36,7 @@ CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
     OSL_ENSURE( m_rIDataObjectOrg.get( ), "constructing CAPNDataObject with empty data object" );
 
     // we marshal the IDataObject interface pointer here so
-    // that it can be unmarshaled multiple times when this
+    // that it can be unmarshalled multiple times when this
     // class will be used from another apartment
     IStreamPtr pStm;
     HRESULT hr = CreateStreamOnHGlobal( nullptr, KEEP_HGLOB_ON_RELEASE, &pStm );

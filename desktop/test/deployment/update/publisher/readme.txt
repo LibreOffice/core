@@ -147,7 +147,7 @@ Test
 Repository:
 
 -Create the new extension in the repository. 
--Provide a company name and a URL to the company website. They should then be in the update 
+-Provide a company name and a URL to the company website. They should then be in the update
  feed. 
   
 -Create a new release for the extension. Upload the version 2.0 (update/pub10.oxt). 
@@ -190,7 +190,7 @@ Test
 Repository:
 
 -Create the new extension in the repository. 
--Provide a company name and a URL to the company website. They should then be in the update 
+-Provide a company name and a URL to the company website. They should then be in the update
  feed. 
   
 -Create a new release for the extension. Upload the version 2.0 (update/pub11.oxt). 
