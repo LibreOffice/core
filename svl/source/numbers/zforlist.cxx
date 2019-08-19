@@ -45,6 +45,7 @@
 #include "zforscan.hxx"
 #include "zforfind.hxx"
 #include <svl/zformat.hxx>
+#include <i18npool/reservedconstants.hxx>
 
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/digitgroupingiterator.hxx>
@@ -91,6 +92,12 @@ using namespace ::std;
 #define ZF_STANDARD_TEXT        SV_MAX_COUNT_STANDARD_FORMATS   // 100
 
 static_assert( ZF_STANDARD_TEXT == NF_STANDARD_FORMAT_TEXT, "definition mismatch" );
+
+static_assert( NF_INDEX_TABLE_ENTRIES <= i18npool::nFirstFreeFormatIndex,
+        "NfIndexTableOffset crosses i18npool's locale data reserved format code index bounds.\n"
+        "You will need to adapt all locale data files defining index values "
+        "(formatIndex=\"...\") in that range and increment those and when done "
+        "adjust nFirstFreeFormatIndex in i18npool/reservedconstants.hxx");
 
 /* Locale that is set if an unknown locale (from another system) is loaded of
  * legacy documents. Can not be SYSTEM because else, for example, a German "DM"

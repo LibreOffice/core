@@ -28,6 +28,7 @@
 #include <sal/macros.h>
 
 #include "LocaleNode.hxx"
+#include <i18npool/reservedconstants.hxx>
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
@@ -574,7 +575,6 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     bool bCtypeIsRef = false;
     bool bHaveEngineering = false;
     bool bShowNextFreeFormatIndex = false;
-    const sal_Int16 nFirstFreeFormatIndex = 60;
 
     for (sal_Int32 i = 0; i< getNumberOfChildren() ; i++, formatCount++)
     {
@@ -621,7 +621,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         sal_Int16 formatindex = static_cast<sal_Int16>(aFormatIndex.toInt32());
         // Ensure the new reserved range is not used anymore, free usage start
         // was up'ed from 50 to 60.
-        if (50 <= formatindex && formatindex < nFirstFreeFormatIndex)
+        if (50 <= formatindex && formatindex < i18npool::nFirstFreeFormatIndex)
         {
             incErrorInt( "Error: Reserved formatindex=\"%d\" in FormatElement.\n", formatindex);
             bShowNextFreeFormatIndex = true;
@@ -828,7 +828,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
 
     if (bShowNextFreeFormatIndex)
     {
-        sal_Int16 nNext = nFirstFreeFormatIndex;
+        sal_Int16 nNext = i18npool::nFirstFreeFormatIndex;
         std::set<sal_Int16>::const_iterator it( aFormatIndexSet.find( nNext));
         if (it != aFormatIndexSet.end())
         {
