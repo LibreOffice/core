@@ -1384,10 +1384,16 @@ OUString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
         aStr += maCustomUnitText;
     else
     {
-        if (meUnit != FieldUnit::NONE && meUnit != FieldUnit::DEGREE)
+        OUString aSuffix = ImplMetricToString( meUnit );
+        if (meUnit != FieldUnit::NONE && meUnit != FieldUnit::DEGREE && meUnit != FieldUnit::INCH)
             aStr += " ";
+        if (meUnit == FieldUnit::INCH)
+        {
+            if (aSuffix != "\"")
+                aStr += " ";
+        }
         assert(meUnit != FieldUnit::PERCENT);
-        aStr += ImplMetricToString( meUnit );
+        aStr += aSuffix;
     }
     return aStr;
 }
