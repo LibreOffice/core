@@ -1111,7 +1111,7 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq,
                     for( sal_Int32 i= 0; i < pCurrentSeq->nElements; i++)
                     {
                         Any unoElement( pCurrentSeq->elements + i * elementSize, rawTypeDesc );
-                        // The any is being converted into an VARIANT which value is then copied
+                        // The any is being converted into a VARIANT which value is then copied
                         // to the SAFEARRAY's data block. When copying one has to follow the rules for
                         // copying certain types, as are VT_DISPATCH, VT_UNKNOWN, VT_VARIANT, VT_BSTR.
                         // To increase performance, we just do a memcpy of VARIANT::byref. This is possible
@@ -1248,7 +1248,7 @@ void  UnoConversionUtilities<T>::getElementCountAndTypeOfSequence( const Any& rS
     rSeq.getValueTypeDescription( &pSeqDesc);
     typelib_TypeDescriptionReference* pElementDescRef= reinterpret_cast<typelib_IndirectTypeDescription*>(pSeqDesc)->pType;
 
-    // if the elements are Sequences than do recursion
+    // if the elements are Sequences then do recursion
     if( dim < seqElementCounts.getLength() )
     {
         uno_Sequence* pSeq = *static_cast<uno_Sequence* const*>(rSeq.getValue());
@@ -2201,7 +2201,7 @@ Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapper(SAFEARRAY* pArray
     return ret;
 }
 
-// If an VARIANT has the type VT_DISPATCH it can either be an JScript Array
+// If a VARIANT has the type VT_DISPATCH it can either be an JScript Array
 // or some other object. This function finds out if it is such an array or
 // not. Currently there's no way to make sure it's an array
 // so we assume that when the object has a property "0" then it is an Array.
@@ -2285,7 +2285,7 @@ Sequence<Type> UnoConversionUtilities<T>::getImplementedInterfaces(IUnknown* pUn
         }
         if (SUCCEEDED( hr))
         {
-            // we exspect an array( SafeArray or IDispatch) of Strings.
+            // we expect an array( SafeArray or IDispatch) of Strings.
             Any anyNames;
             variantToAny( &var, anyNames, cppu::UnoType<Sequence<Any>>::get());
             Sequence<Any> seqAny;

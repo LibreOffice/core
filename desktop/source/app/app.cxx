@@ -812,7 +812,7 @@ void Desktop::HandleBootstrapErrors(
     }
     else if ( aBootstrapError == BE_UNO_SERVICEMANAGER || aBootstrapError == BE_UNO_SERVICE_CONFIG_MISSING )
     {
-        // Uno service manager is not available. VCL needs a uno service manager to display a message box!!!
+        // UNO service manager is not available. VCL needs a UNO service manager to display a message box!!!
         // Currently we are not able to display a message box with a service manager due to this limitations inside VCL.
 
         // When UNO is not properly initialized, all kinds of things can fail
