@@ -59,7 +59,7 @@ enum ExtAltNameType
     DIRECTORY_NAME,
 
     /**
-     * The entry contains a url.
+     * The entry contains a URL.
      * The value of CertAltNameEntry contains a OUString.
      *
      * @see com::sun::star::security::CertAltNameEntry
@@ -67,7 +67,7 @@ enum ExtAltNameType
     URL,
 
     /**
-     * The entry contains a ip address.
+     * The entry contains an IP address.
      * The value of CertAltNameEntry contains a Sequence of sal_Int8.
      *
      * @see com::sun::star::security::CertAltNameEntry

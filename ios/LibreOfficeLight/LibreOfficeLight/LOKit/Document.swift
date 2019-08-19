@@ -378,7 +378,7 @@ open class Document
     /**
      * Returns a json mapping of the possible values for the given command
      * e.g. {commandName: ".uno:StyleApply", commandValues: {"familyName1" : ["list of style names in the family1"], etc.}}
-     * @param pCommand a uno command for which the possible values are requested
+     * @param pCommand a UNO command for which the possible values are requested
      * @return {commandName: unoCmd, commandValues: {possible_values}}
      */
     public func getCommandValues(command: String) -> String?
