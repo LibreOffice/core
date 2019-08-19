@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_48e7d2e5",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 11303,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-08-19T18:11:28Z",
+      "side": 1,
+      "message": "From reading the bug report, I assumed it was fixed on Linux (2nd problem) from https://bugreports.qt.io/browse/QTBUG-56218?focusedCommentId\u003d402639\u0026page\u003dcom.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-402639. If it isn\u0027t, then the recommended is totally mood.\n\nBased on your comment, I\u0027ll remove the recommended. I followed the link in the comment to the merged patch and thought that was mentioned as the fix for the Linux problem. The first problem doesn\u0027t seem Linux related at all.",
+      "parentUuid": "bf659307_68873611",
+      "range": {
+        "startLine": 11299,
+        "startChar": 0,
+        "endLine": 11303,
+        "endChar": 14
+      },
+      "revId": "f06d8b29afea2f23ee092e7bd74573f753ff1186",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_86e084ce",
         "filename": "vcl/qt5/Qt5DragAndDrop.cxx",
         "patchSetId": 5
