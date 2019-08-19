@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_6d73c8b2",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-08-19T06:07:33Z",
+      "side": 1,
+      "message": "Have you tried without? It works with the other macros/templates such as %PRODUCTNAME.",
+      "range": {
+        "startLine": 81,
+        "startChar": 25,
+        "endLine": 81,
+        "endChar": 33
+      },
+      "revId": "9400dd43a021042c5fc1fb3348604f6bed91fec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
