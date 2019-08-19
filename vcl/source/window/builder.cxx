@@ -242,10 +242,16 @@ namespace weld
         else
         {
             aStr = rLocaleData.getNum(nValue, nDecimalDigits, true, true);
-            if (m_eSrcUnit != FieldUnit::NONE && m_eSrcUnit != FieldUnit::DEGREE)
+            OUString aSuffix = MetricToString(m_eSrcUnit);
+            if (m_eSrcUnit != FieldUnit::NONE && m_eSrcUnit != FieldUnit::DEGREE && m_eSrcUnit != FieldUnit::INCH)
                 aStr += " ";
+            if (m_eSrcUnit == FieldUnit::INCH)
+            {
+                if (aSuffix != "\"")
+                    aStr += " ";
+            }
             assert(m_eSrcUnit != FieldUnit::PERCENT);
-            aStr += MetricToString(m_eSrcUnit);
+            aStr += aSuffix;
         }
 
         return aStr;
