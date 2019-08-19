@@ -8275,11 +8275,13 @@ private:
     gulong m_nInputSignalId;
     bool m_bFormatting;
     bool m_bBlockOutput;
+    bool m_bBlank;
 
     static void signalValueChanged(GtkSpinButton*, gpointer widget)
     {
         GtkInstanceSpinButton* pThis = static_cast<GtkInstanceSpinButton*>(widget);
         SolarMutexGuard aGuard;
+        pThis->m_bBlank = false;
         pThis->signal_value_changed();
     }
 
@@ -8335,6 +8337,7 @@ public:
         , m_nInputSignalId(g_signal_connect(pButton, "input", G_CALLBACK(signalInput), this))
         , m_bFormatting(false)
         , m_bBlockOutput(false)
+        , m_bBlank(false)
     {
     }
 
@@ -8346,6 +8349,7 @@ public:
     virtual void set_value(int value) override
     {
         disable_notify_events();
+        m_bBlank = false;
         gtk_spin_button_set_value(m_pButton, toGtk(value));
         enable_notify_events();
     }
@@ -8353,15 +8357,26 @@ public:
     virtual void set_text(const OUString& rText) override
     {
         disable_notify_events();
-        gtk_entry_set_text(GTK_ENTRY(m_pButton), OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
         // tdf#122786 if we're just formatting a value, then we're done,
         // however if set_text has been called directly we want to update our
         // value from this new text, but don't want to reformat with that value
         if (!m_bFormatting)
         {
+            gtk_entry_set_text(GTK_ENTRY(m_pButton), OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
+
             m_bBlockOutput = true;
             gtk_spin_button_update(m_pButton);
+            m_bBlank = rText.isEmpty();
             m_bBlockOutput = false;
+        }
+        else
+        {
+            bool bKeepBlank = m_bBlank && get_value() == 0;
+            if (!bKeepBlank)
+            {
+                gtk_entry_set_text(GTK_ENTRY(m_pButton), OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
+                m_bBlank = false;
+            }
         }
         enable_notify_events();
     }
