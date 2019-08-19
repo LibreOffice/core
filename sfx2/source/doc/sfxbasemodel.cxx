@@ -477,13 +477,13 @@ SfxSaveGuard::~SfxSaveGuard()
     // storing at the same time. Further m_bSuicide was set to sal_True only if close(sal_True) was called.
     // So the ownership was delegated to the place where a veto exception was thrown.
     // Now we have to call close() again and delegate the ownership to the next one, which
-    // can't accept that. Close(sal_False) can't work in this case. Because then the document will may be never closed ...
+    // can't accept that. Close(sal_False) can't work in this case. Because then the document will may be never closed...
 
     if ( !m_pData->m_bSuicide )
         return;
 
-    // Reset this state. In case the new close() request is not accepted by someone else ...
-    // it's not a good idea to have two "owners" for close .-)
+    // Reset this state. In case the new close() request is not accepted by someone else...
+    // it's not a good idea to have two "owners" for close.-)
     m_pData->m_bSuicide = false;
     try
     {
@@ -1896,7 +1896,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
         m_pData->m_pObjectShell->SetModified();
     }
 
-    // TODO/LATER: may be the mode should be retrieved from outside and the preused filter should not be set
+    // TODO/LATER: maybe the mode should be retrieved from outside and the preused filter should not be set
     if ( m_pData->m_pObjectShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
     {
         const SfxStringItem* pFilterItem = SfxItemSet::GetItem<SfxStringItem>(pMedium->GetItemSet(), SID_FILTER_NAME, false);
@@ -3653,7 +3653,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
     SfxAllItemSet aSet( m_pData->m_pObjectShell->GetPool() );
     TransformParameters( SID_SAVEASDOC, aMediaDescriptor, aSet );
 
-    // TODO/LATER: may be a special URL "private:storage" should be used
+    // TODO/LATER: maybe a special URL "private:storage" should be used
     const SfxStringItem* pItem = aSet.GetItem<SfxStringItem>(SID_FILTER_NAME, false);
     sal_Int32 nVersion = SOFFICE_FILEFORMAT_CURRENT;
     if( pItem )
@@ -4163,7 +4163,7 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
     // tell the guard we were successful
     aViewCreationGuard.releaseAll();
 
-    // outta gere
+    // outta here
     return pBaseController;
 }
 
