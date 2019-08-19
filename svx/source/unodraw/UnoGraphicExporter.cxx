@@ -377,7 +377,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
         pInfo->SetSdrPage( nullptr );
 }
 
-/** creates an virtual device for the given page
+/** creates a virtual device for the given page
 
     @return the returned VirtualDevice is owned by the caller
 */
@@ -767,7 +767,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
                 // from the metafile. I asked some other developers why this was done, but no
                 // one knew a direct reason. Since it's in for long time, it may be an old
                 // piece of code. MetaFiles save and load ClipRegions with polygons with preserving
-                // the polygons, so a resolution-indepent roundtrip is supported. Removed this
+                // the polygons, so a resolution-independent roundtrip is supported. Removed this
                 // code since it destroys some MetaFiles where ClipRegions are used. Anyways,
                 // just filtering them out is a hack, at least the encapsulated content would need
                 // to be clipped geometrically.
@@ -1109,7 +1109,7 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
 
     try
     {
-    // any break inside this one loop while will throw a IllegalArgumentException
+    // any break inside this one loop while will throw an IllegalArgumentException
     do
     {
         mxPage.set( xComponent, UNO_QUERY );
