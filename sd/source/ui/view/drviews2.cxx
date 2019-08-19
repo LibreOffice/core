@@ -120,7 +120,6 @@
 #include <svx/xtable.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/SvxColorChildWindow.hxx>
-#include <svx/svxids.hrc>
 #include <editeng/outlobj.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/scripttypeitem.hxx>
