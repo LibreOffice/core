@@ -260,7 +260,7 @@ QStringList Qt5MimeData::formats() const
         lcl_textMimeInfo(rFlavor.MimeType, m_bHaveNoCharset, bHaveUTF16, m_bHaveUTF8);
     }
 
-    // we provide a locale encoded and an UTF-8 variant, if missing
+    // we provide a locale encoded and a UTF-8 variant, if missing
     if (m_bHaveNoCharset || bHaveUTF16 || m_bHaveUTF8)
     {
         // if there is a text representation from LO point of view, it'll be UTF-16
