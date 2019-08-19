@@ -1600,7 +1600,7 @@
           <prop oor:name="TimeBetweenHighPriorityRequests" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>
-                Time in milli seconds to wait between processing
+                Time in milliseconds to wait between processing
                 preview creation requests with high priority.
               </desc>
               <label>Time Between High Priority Requests</label>
@@ -1610,7 +1610,7 @@
           <prop oor:name="TimeBetweenLowPriorityRequests" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>
-                Time in milli seconds to wait between processing
+                Time in milliseconds to wait between processing
                 preview creation requests with low priority.
               </desc>
               <label>Time Between Low Priority Requests</label>
@@ -1620,8 +1620,8 @@
           <prop oor:name="TimeBetweenRequestsDuringShow" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>
-                Time in milli seconds to wait between processing
-                preview creation requestsest when show is running.
+                Time in milliseconds to wait between processing
+                preview creation requests when show is running.
               </desc>
               <label>Time Between Requests During Show</label>
             </info>

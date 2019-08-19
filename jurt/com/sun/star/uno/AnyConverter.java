@@ -33,7 +33,7 @@ package com.sun.star.uno;
 public class AnyConverter
 {
     /**
-     * Determines the type of an any object.
+     * Determines the type of an Any object.
      *
      * @param object any object.
      * @return type object.
