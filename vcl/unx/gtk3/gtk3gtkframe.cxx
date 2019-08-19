@@ -3438,6 +3438,13 @@ gboolean GtkSalFrame::signalDragDrop(GtkWidget* pWidget, GdkDragContext* context
 
 gboolean GtkDropTarget::signalDragDrop(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time)
 {
+    // remove the deferred dragExit, as we'll do a drop
+#ifndef NDEBUG
+    gboolean res =
+#endif
+        g_idle_remove_by_data(this);
+    assert(TRUE == res);
+
     css::datatransfer::dnd::DropTargetDropEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(this);
     aEvent.Context = new GtkDropTargetDropContext(context, time);
@@ -3606,14 +3613,24 @@ void GtkSalFrame::signalDragLeave(GtkWidget *pWidget, GdkDragContext *context, g
     pThis->m_pDropTarget->signalDragLeave(pWidget, context, time);
 }
 
+static gboolean lcl_deferred_dragExit(gpointer user_data)
+{
+    GtkDropTarget* pThis = static_cast<GtkDropTarget*>(user_data);
+    css::datatransfer::dnd::DropTargetEvent aEvent;
+    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(pThis);
+    pThis->fire_dragExit(aEvent);
+    return FALSE;
+}
+
 void GtkDropTarget::signalDragLeave(GtkWidget* pWidget, GdkDragContext* /*context*/, guint /*time*/)
 {
     m_bInDrag = false;
     gtk_drag_unhighlight(pWidget);
-
-    css::datatransfer::dnd::DropTargetEvent aEvent;
-    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(this);
-    fire_dragExit(aEvent);
+    // defer fire_dragExit, since gtk also sends a drag-leave before the drop, while
+    // LO expect to either handle the drop or the exit... at least in Writer.
+    // but since we don't know there will be a drop following the leave, defer the
+    // exit handling to an idle.
+    g_idle_add(lcl_deferred_dragExit, this);
 }
 
 void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
