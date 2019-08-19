@@ -303,15 +303,41 @@ DomainMapper_Impl::~DomainMapper_Impl()
 
 uno::Reference< container::XNameContainer > const &  DomainMapper_Impl::GetPageStyles()
 {
-    if(!m_xPageStyles.is())
+    if(!m_xPageStyles1.is())
     {
         uno::Reference< style::XStyleFamiliesSupplier > xSupplier( m_xTextDocument, uno::UNO_QUERY );
         if (xSupplier.is())
-            xSupplier->getStyleFamilies()->getByName("PageStyles") >>= m_xPageStyles;
+            xSupplier->getStyleFamilies()->getByName("PageStyles") >>= m_xPageStyles1;
     }
-    return m_xPageStyles;
+    return m_xPageStyles1;
 }
 
+OUString DomainMapper_Impl::GetUnusedPageStyleName()
+{
+    static const char DEFAULT_STYLE[] = "Converted";
+    if (!m_xNextUnusedPageStyleNo)
+    {
+        const uno::Sequence< OUString > aPageStyleNames = GetPageStyles()->getElementNames();
+        sal_Int32         nMaxIndex       = 0;
+        // find the highest number x in each style with the name "DEFAULT_STYLE+x" and
+        // return an incremented name
+
+        for ( const auto& rStyleName : aPageStyleNames )
+        {
+            if ( rStyleName.startsWith( DEFAULT_STYLE ) )
+            {
+                sal_Int32 nIndex = rStyleName.copy( strlen( DEFAULT_STYLE ) ).toInt32();
+                if ( nIndex > nMaxIndex )
+                    nMaxIndex = nIndex;
+            }
+        }
+        m_xNextUnusedPageStyleNo = nMaxIndex + 1;
+    }
+
+    OUString sPageStyleName = DEFAULT_STYLE + OUString::number( *m_xNextUnusedPageStyleNo );
+    *m_xNextUnusedPageStyleNo = *m_xNextUnusedPageStyleNo + 1;
+    return sPageStyleName;
+}
 
 uno::Reference< text::XText > const & DomainMapper_Impl::GetBodyText()
 {
@@ -1942,8 +1968,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
 
         uno::Reference< beans::XPropertySet > xPageStyle =
             pSectionContext->GetPageStyle(
-                GetPageStyles(),
-                m_xTextFactory,
+                *this,
                 eType == SectionPropertyMap::PAGE_FIRST );
         if (!xPageStyle.is())
             return;

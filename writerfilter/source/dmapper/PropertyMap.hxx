@@ -317,9 +317,7 @@ public:
 
     const css::uno::Reference< css::text::XTextRange >& GetStartingRange() const { return m_xStartingRange; }
 
-    css::uno::Reference< css::beans::XPropertySet > GetPageStyle( const css::uno::Reference< css::container::XNameContainer >& xStyles,
-                                                                  const css::uno::Reference< css::lang::XMultiServiceFactory >& xTextFactory,
-                                                                  bool bFirst );
+    css::uno::Reference< css::beans::XPropertySet > GetPageStyle( DomainMapper_Impl& rDM_Impl, bool bFirst );
 
     const OUString& GetPageStyleName( bool bFirstPage = false )
     {
@@ -376,8 +374,7 @@ public:
     void addRelativeWidthShape( css::uno::Reference<css::drawing::XShape> xShape ) { m_xRelativeWidthShapes.push_back( xShape ); }
 
     // determine which style gets the borders
-    void ApplyBorderToPageStyles( const css::uno::Reference< css::container::XNameContainer >& xStyles,
-                                  const css::uno::Reference< css::lang::XMultiServiceFactory >& xTextFactory,
+    void ApplyBorderToPageStyles( DomainMapper_Impl &rDM_Impl,
                                   BorderApply eBorderApply, BorderOffsetFrom eOffsetFrom );
 
     void CloseSectionGroup( DomainMapper_Impl& rDM_Impl );
