@@ -127,7 +127,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes" context="qrcodegen|label_text" comments="Text to be converted in qr">URL/Text :</property>
+                            <property name="label" translatable="yes" context="qrcodegen|label_text" comments="Text to be stored in the QR">URL/Text :</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">edit_text</property>
                           </object>
@@ -141,7 +141,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes" context="qrcodegen|label_border" comments="Set Border">Border :</property>
+                            <property name="label" translatable="yes" context="qrcodegen|label_border" comments="Set Border around QR">Border :</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">edit_border</property>
                           </object>
@@ -155,7 +155,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes" context="qrcodegen|label_ecc" comments="Error correction while qr gen">Error Correction Level :</property>
+                            <property name="label" translatable="yes" context="qrcodegen|label_ecc" comments="Error Correction Level of QR code">Options :</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
