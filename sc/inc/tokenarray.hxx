@@ -138,7 +138,7 @@ public:
 
     /**
      * Make all absolute references pointing to the copied range if the range is copied too
-     * @param bCheckCopyArea should references pointing into the copy area be adjusted independently from being absolute, should be true only for copy&paste between documents
+     * @param bCheckCopyArea should reference pointing into the copy area be adjusted independently from being absolute, should be true only for copy&paste between documents
      */
     void AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos, bool bCheckCopyArea );
 
