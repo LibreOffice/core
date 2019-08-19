@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_2daab0d1",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Jobs.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-08-19T06:22:14Z",
+      "side": 1,
+      "message": "wish was correct as this is plural.",
+      "range": {
+        "startLine": 68,
+        "startChar": 62,
+        "endLine": 68,
+        "endChar": 68
+      },
+      "revId": "fab31da8f89c3e7db1ef95061f78c956ac96260c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
