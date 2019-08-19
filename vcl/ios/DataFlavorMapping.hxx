@@ -64,7 +64,7 @@ public:
 
     /* Map a system data flavor to an OpenOffice data flavor.
      Return an empty string if there is not suitable
-     mapping from a system data flavor to a OpenOffice data
+     mapping from a system data flavor to an OpenOffice data
      flavor.
   */
     css::datatransfer::DataFlavor systemToOpenOfficeFlavor(const NSString* systemDataFlavor) const;

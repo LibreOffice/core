@@ -94,7 +94,7 @@ typedef Qt5Transferable Qt5DnDTransferable;
  * container for mime data. There is no need to ever set any of its data.
  *
  * LO will offer at least UTF-16, if there is a viable text representation.
- * If LO misses to offer an UTF-8 or a locale encoded string, these objects
+ * If LO misses to offer a UTF-8 or a locale encoded string, these objects
  * will offer them themselves and convert from UTF-16 on demand.
  *
  * It's the "mirror" interface of the Qt5Transferable.
