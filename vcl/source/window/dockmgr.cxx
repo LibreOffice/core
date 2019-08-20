@@ -277,7 +277,7 @@ DockingManager::~DockingManager()
 
 ImplDockingWindowWrapper* DockingManager::GetDockingWindowWrapper( const vcl::Window *pWindow )
 {
-    for( auto& xWrapper : mvDockingWindows )
+    for( const auto& xWrapper : mvDockingWindows )
     {
         if( xWrapper->mpDockingWindow == pWindow )
             return xWrapper.get();

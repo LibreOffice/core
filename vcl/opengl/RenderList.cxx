@@ -293,7 +293,7 @@ void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon,
         {
             RenderParameters& rTriangleRenderParameter = maRenderEntries.back().maTriangleParameters;
 
-            for (basegfx::B2DTrapezoid & rTrapezoid : aTrapezoidVector)
+            for (const basegfx::B2DTrapezoid & rTrapezoid : aTrapezoidVector)
             {
                 GLfloat topX1 = rTrapezoid.getTopXLeft();
                 GLfloat topX2 = rTrapezoid.getTopXRight();

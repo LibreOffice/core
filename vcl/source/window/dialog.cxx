@@ -1478,7 +1478,7 @@ vcl::Window* Dialog::get_widget_for_response(int response)
         }
     }
 
-    for (auto& a : aResponses)
+    for (const auto& a : aResponses)
     {
         if (a.second == response)
            return a.first;
@@ -1517,7 +1517,7 @@ int Dialog::get_default_response()
         }
     }
 
-    for (auto& a : aResponses)
+    for (const auto& a : aResponses)
     {
         if (a.first->GetStyle() & WB_DEFBUTTON)
         {

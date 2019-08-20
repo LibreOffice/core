@@ -1134,7 +1134,7 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectang
             if (mpTabCtrlData->maItemList.size())
             {
                 long nRight = 0;
-                for (auto &item : mpTabCtrlData->maItemList)
+                for (const auto &item : mpTabCtrlData->maItemList)
                     if (item.m_bVisible)
                         nRight = item.maRect.Right();
                 assert(nRight);

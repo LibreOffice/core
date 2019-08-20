@@ -787,7 +787,7 @@ IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
 
     // walk over all objects and execute HitTest
     IMapObject* pObj = nullptr;
-    for(auto& i : maList) {
+    for(const auto& i : maList) {
         if ( i->IsHit( aRelPoint ) ) {
             pObj = i.get();
             break;

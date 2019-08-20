@@ -211,7 +211,7 @@ std::vector<OUString> ImplImageTree::getPaths(OUString const & name, LanguageTag
     sal_Int32 pos = name.lastIndexOf('/');
     if (pos != -1)
     {
-        for (OUString& rFallback : rLanguageTag.getFallbackStrings(true))
+        for (const OUString& rFallback : rLanguageTag.getFallbackStrings(true))
         {
             OUString aFallbackName = getNameNoExtension(getRealImageName(createPath(name, pos, rFallback)));
             sPaths.emplace_back(aFallbackName + ".png");
@@ -243,7 +243,7 @@ OUString ImplImageTree::getImageUrl(OUString const & rName, OUString const & rSt
 
                 LanguageTag aLanguageTag(rLang);
 
-                for (OUString& rPath: getPaths(rName, aLanguageTag))
+                for (const OUString& rPath: getPaths(rName, aLanguageTag))
                 {
                     if (rNameAccess->hasByName(rPath))
                     {
@@ -282,7 +282,7 @@ std::shared_ptr<SvMemoryStream> ImplImageTree::getImageStream(OUString const & r
 
                 LanguageTag aLanguageTag(rLang);
 
-                for (OUString& rPath: getPaths(rName, aLanguageTag))
+                for (const OUString& rPath: getPaths(rName, aLanguageTag))
                 {
                     if (rNameAccess->hasByName(rPath))
                     {
