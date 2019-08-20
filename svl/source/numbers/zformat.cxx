@@ -789,8 +789,11 @@ SvNumberformat::SvNumberformat(OUString& rString,
             sBuff.replace( cNNBSp, ' ');
     }
 
+    OUString aConvertFromDecSep;
+    OUString aConvertToDecSep;
     if (rScan.GetConvertMode())
     {
+        aConvertFromDecSep = GetFormatter().GetNumDecimalSep();
         maLocale.meLanguage = rScan.GetNewLnge();
         eLan = maLocale.meLanguage; // Make sure to return switch
     }
@@ -851,6 +854,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                     sal_Int32 nCntChars = ImpGetNumber(sBuff, nPos, sStr);
                     if (nCntChars > 0)
                     {
+                        sal_Int32 nDecPos;
                         SvNumFormatType F_Type = SvNumFormatType::UNDEFINED;
                         if (!pISc->IsNumberFormat(sStr, F_Type, fNumber, nullptr) ||
                             ( F_Type != SvNumFormatType::NUMBER &&
@@ -861,6 +865,20 @@ SvNumberformat::SvNumberformat(OUString& rString,
                             sBuff.remove(nPos, nCntChars);
                             sBuff.insert(nPos, '0');
                             nPos++;
+                        }
+                        else if (rScan.GetConvertMode() && ((nDecPos = sStr.indexOf( aConvertFromDecSep)) >= 0))
+                        {
+                            if (aConvertToDecSep.isEmpty())
+                                aConvertToDecSep = GetFormatter().GetLangDecimalSep( rScan.GetNewLnge());
+                            if (aConvertToDecSep != aConvertFromDecSep)
+                            {
+                                const OUString aStr( sStr.replaceAt( nDecPos,
+                                            aConvertFromDecSep.getLength(), aConvertToDecSep));
+                                nPos = nPos - nCntChars;
+                                sBuff.remove(nPos, nCntChars);
+                                sBuff.insert(nPos, aStr);
+                                nPos += aStr.getLength();
+                            }
                         }
                     }
                     else
