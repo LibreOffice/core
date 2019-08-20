@@ -123,6 +123,12 @@ public:
         aStyleSet.SetTabFont( aFont );
         aStyleSet.SetGroupFont( aFont );
 
+        Color aBackgroundColor( 0xff, 0xff, 0xff );
+        aStyleSet.BatchSetBackgrounds( aBackgroundColor, false );
+        aStyleSet.SetMenuColor( aBackgroundColor );
+        aStyleSet.SetMenuBarColor( aBackgroundColor );
+        aStyleSet.SetDialogColor( aBackgroundColor );
+
         rSettings.SetStyleSettings( aStyleSet );
     }
 };
