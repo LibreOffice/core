@@ -29,7 +29,7 @@ module com { module sun { module star { module uri {
 /**
    creates URI references.
 
-   <p>See <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC&nbsp;2396</a> for a
+   <p>See <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC&nbsp;3986</a> for a
    description of URI references and related terms.</p>
 
    @since OOo 2.0
@@ -59,35 +59,38 @@ published interface XUriReferenceFactory: com::sun::star::uno::XInterface {
 
        @param uriReference
        any URI reference.  Backwards-compatible relative URI references starting
-       with a scheme component (see RFC&nbsp;2396, Section&nbsp;5.2,
-       step&nbsp;3) are not supported; instead, they are interpreted as absolute
+       with a scheme component (see RFC&nbsp;3986, Sections 5.2.2 and&nbsp;5.4,2)
+       are not supported; instead, they are interpreted as absolute
        URI references.
 
-       @param processSpecialBaseSegments
+       @param processAdditionalSpecialSegments
        if `TRUE`, special segments (&ldquo;<code>.</code>&rdquo; and
        &ldquo;<code>..</code>&rdquo;) within the path of the base URI (except
-       for the last, cut-off segment) are processed as suggested by
-       RFC&nbsp;2396.  If `FALSE`, special segments within the path of the base
-       URI are treated like ordinary segments.
+       for the last, cut-off segment), and within an already absolute <code>uriReference</code>, are
+       processed as required by
+       RFC&nbsp;3986.  If `FALSE`, such special segments
+       are treated like ordinary segments.
+       Conformance with RFC&nbsp;3986 requires `TRUE` to be passed.
 
        @param excessParentSegments
        details how excess special parent segments
        (&ldquo;<code>..</code>&rdquo;) are handled.
+       Conformance with RFC&nbsp;3986 requires REMOVE to be passed.
 
        @returns
        a fresh object that supports
        com::sun::star::uri::XUriReference (and possibly also
        additional, scheme-specific interfaces), if the given
-       <code>uriReference</code> is either already absolute, or can be resolved
+       <code>uriReference</code> can be resolved
        to an absolute URI reference, relative to the given
        <code>baseUriReference</code>; otherwise, `NULL` is returned.
        Especially, if <code>baseUriReference</code> is `NULL`, or is not an
-       absolute, hierarchical URI reference, or if <code>uriReference</code> is
+       absolute URI reference, or if <code>uriReference</code> is
        `NULL`, then `NULL` is always returned.
      */
     XUriReference makeAbsolute(
         [in] XUriReference baseUriReference, [in] XUriReference uriReference,
-        [in] boolean processSpecialBaseSegments,
+        [in] boolean processAdditionalSpecialSegments,
         [in] RelativeUriExcessParentSegments excessParentSegments);
 
     /**
@@ -134,13 +137,13 @@ published interface XUriReferenceFactory: com::sun::star::uno::XInterface {
        @returns
        a fresh object that supports
        com::sun::star::uri::XUriReference, if the given
-       <code>uriReference</code> is either already relative, or is not
-       hierarchical, or is of a different scheme than the given
+       <code>uriReference</code> is either already relative, or has a relative
+       path, or is of a different scheme than the given
        <code>baseUriReference</code>, or can be changed to a relative URI
        reference, relative to the given <code>baseUriReference</code>;
        otherwise, `NULL` is returned.  Especially, if
-       <code>baseUriReference</code> is `NULL`, or is not an absolute,
-       hierarchical URI reference, or if <code>uriReference</code> is `NULL`,
+       <code>baseUriReference</code> is `NULL`, or is not an absolute
+       URI reference, or if <code>uriReference</code> is `NULL`,
        then `NULL` is always returned.
      */
     XUriReference makeRelative(
