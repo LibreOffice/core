@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_83f06b69",
+        "filename": "vcl/unx/gtk3/gtk3gtkframe.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3446,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-08-20T08:45:57Z",
+      "side": 1,
+      "message": "still the same as in previous patch set: \u0027res\u0027 undefined for non-debug build?",
+      "range": {
+        "startLine": 3446,
+        "startChar": 4,
+        "endLine": 3446,
+        "endChar": 16
+      },
+      "revId": "fc1383c24acb67f3ee3e4720c9e4b202116027c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
