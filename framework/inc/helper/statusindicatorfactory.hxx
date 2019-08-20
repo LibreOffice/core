@@ -25,6 +25,7 @@
 #include <vector>
 
 // include files of own module
+#include <helper/wakeupthread.hxx>
 #include <general.h>
 
 // include uno interfaces
@@ -44,9 +45,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <vcl/status.hxx>
-#include <vcl/timer.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/thread.hxx>
 
@@ -166,7 +165,7 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper<
 
         /** Notify us if a fix time is over. We use it to implement an
             intelligent "Reschedule" ... */
-        boost::optional<Timer> m_xWakeUpTimer;
+        rtl::Reference<WakeUpThread> m_pWakeUp;
 
         /** Our WakeUpThread calls us in our interface method "XUpdatable::update().
             There we set this member m_bAllowReschedule to sal_True. Next time if our impl_reschedule()
@@ -182,8 +181,6 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper<
 
         /** prevent recursive calling of Application::Reschedule(). */
         static sal_Int32 m_nInReschedule;
-
-        DECL_LINK( WakeupTimerHdl, Timer*, void );
 
     // interface
 
