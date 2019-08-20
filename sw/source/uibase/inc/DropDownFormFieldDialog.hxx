@@ -26,6 +26,7 @@ namespace sw
 class DropDownFormFieldDialog : public weld::GenericDialogController
 {
 private:
+    weld::Widget* const m_pParent;
     mark::IFieldmark* m_pDropDownField;
     bool m_bListHasChanged;
 
