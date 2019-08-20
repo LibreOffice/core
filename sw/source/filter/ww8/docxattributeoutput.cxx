@@ -1837,6 +1837,9 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
         OUString sName, sSelected;
 
         params.extractParam( ODF_FORMDROPDOWN_LISTENTRY, vListEntries );
+        if (vListEntries.getLength() > ODF_FORMDROPDOWN_ENTRY_COUNT_LIMIT)
+            vListEntries = uno::Sequence< OUString>(vListEntries.getArray(), ODF_FORMDROPDOWN_ENTRY_COUNT_LIMIT);
+
         sName = params.getName();
         sal_Int32 nSelectedIndex = 0;
 
