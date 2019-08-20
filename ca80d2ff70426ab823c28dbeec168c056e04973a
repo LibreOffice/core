@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_83606ba7",
+        "filename": "vcl/unx/gtk3/gtk3gtkframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3442,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-08-20T06:39:37Z",
+      "side": 1,
+      "message": "AFAIU, having this inside an assert will make \u0027g_idle_remove_by_data\u0027 only be called in a debug build - which may or may not be desirable, but I see no obvious reason...",
+      "range": {
+        "startLine": 3442,
+        "startChar": 4,
+        "endLine": 3442,
+        "endChar": 40
+      },
+      "revId": "ca80d2ff70426ab823c28dbeec168c056e04973a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
