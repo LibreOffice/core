@@ -14082,6 +14082,7 @@ module com {
      [property] boolean IsProtected;
      [property] short VertOrient;
      [property, optional] ::com::sun::star::graphic::XGraphic BackGraphic;
+     [property, optional, readonly] ::com::sun::star::text::XText ParentText;
     };
     published service CellRange {
      service ::com::sun::star::style::CharacterProperties;
@@ -14121,6 +14122,7 @@ module com {
      [property, optional] short WritingMode;
      [property, optional] boolean IsFollowingTextFlow;
      [property, optional] ::com::sun::star::drawing::TextVerticalAdjust TextVerticalAdjust;
+     [property, optional, readonly] ::com::sun::star::text::XText ParentText;
     };
     published service ChainedTextFrame {
      service ::com::sun::star::text::TextFrame;
@@ -15322,6 +15324,7 @@ module com {
      [property, optional] boolean UseHeaderFooterMenu;
     };
     published constants WritingMode2 {
+     const short BT_LR = 5;
      const short CONTEXT = 4;
      const short LR_TB = 0;
      /** @deprecated */ const short PAGE = 4;
@@ -17140,6 +17143,7 @@ module com {
      const short DATE = 2;
      const short DATETIME = 6;
      const short DEFINED = 1;
+     const short DURATION = 8196;
      const short EMPTY = 4096;
      const short FRACTION = 64;
      const short LOGICAL = 1024;
