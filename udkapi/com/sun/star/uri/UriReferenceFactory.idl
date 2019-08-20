@@ -27,7 +27,7 @@ published interface XUriReferenceFactory;
 /**
    creates URI references.
 
-   <p>See <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC&nbsp;2396</a> for a
+   <p>See <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC&nbsp;3986</a> for a
    description of URI references and related terms.</p>
 
    <p>For parsing absolute URI references, this service tries to use a

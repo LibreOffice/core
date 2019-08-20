@@ -366,7 +366,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
         {
             // In this case the host contains the real path, and the path is the embedded stream name.
             auto const uri = css::uri::UriReferenceFactory::create(m_aContext)->parse(_sURL);
-            if (uri.is() && uri->isAbsolute() && uri->isHierarchical()
+            if (uri.is() && uri->isAbsolute()
                 && uri->hasAuthority() && !uri->hasQuery() && !uri->hasFragment())
             {
                 auto const auth = uri->getAuthority();

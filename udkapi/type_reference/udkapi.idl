@@ -1844,7 +1844,7 @@ module com {
     published interface XUriReferenceFactory {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::uri::XUriReference parse([in] string uriReference);
-     ::com::sun::star::uri::XUriReference makeAbsolute([in] ::com::sun::star::uri::XUriReference baseUriReference, [in] ::com::sun::star::uri::XUriReference uriReference, [in] boolean processSpecialBaseSegments, [in] ::com::sun::star::uri::RelativeUriExcessParentSegments excessParentSegments);
+     ::com::sun::star::uri::XUriReference makeAbsolute([in] ::com::sun::star::uri::XUriReference baseUriReference, [in] ::com::sun::star::uri::XUriReference uriReference, [in] boolean processAdditionalSpecialSegments, [in] ::com::sun::star::uri::RelativeUriExcessParentSegments excessParentSegments);
      ::com::sun::star::uri::XUriReference makeRelative([in] ::com::sun::star::uri::XUriReference baseUriReference, [in] ::com::sun::star::uri::XUriReference uriReference, [in] boolean preferAuthorityOverRelativePath, [in] boolean preferAbsoluteOverRelativePath, [in] boolean encodeRetainedSpecialSegments);
     };
     published service UriReferenceFactory: ::com::sun::star::uri::XUriReferenceFactory;
