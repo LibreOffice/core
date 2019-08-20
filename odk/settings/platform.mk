@@ -54,7 +54,11 @@ else
         EXTENSION_PLATFORM=solaris_x86
     else
     ifeq "$(UNOPKG_PLATFORM)" "Windows"
-        EXTENSION_PLATFORM=windows_x86
+        ifeq "$(PROCTYPE)" "x86_64"
+            EXTENSION_PLATFORM=windows_x86_64
+        else
+            EXTENSION_PLATFORM=windows_x86
+        endif
     endif
     endif
     endif
