@@ -975,7 +975,7 @@ bool XMLSectionExport::ExportIndexTemplate(
     SectionTypeEnum eType,
     sal_Int32 nOutlineLevel,
     const Reference<XPropertySet> & rPropertySet,
-    Sequence<Sequence<PropertyValue> > & rValues)
+    const Sequence<Sequence<PropertyValue> > & rValues)
 {
     OSL_ENSURE(eType >= TEXT_SECTION_TYPE_TOC, "illegal index type");
     OSL_ENSURE(eType <= TEXT_SECTION_TYPE_BIBLIOGRAPHY, "illegal index type");
@@ -1643,9 +1643,9 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
             aAny = xPropSet->getPropertyValue(sSortKeys);
             Sequence<Sequence<PropertyValue> > aKeys;
             aAny >>= aKeys;
-            for(Sequence<PropertyValue> & rKey : aKeys)
+            for(const Sequence<PropertyValue> & rKey : std::as_const(aKeys))
             {
-                for(PropertyValue& rValue : rKey)
+                for(const PropertyValue& rValue : rKey)
                 {
                     if (rValue.Name == "SortKey")
                     {

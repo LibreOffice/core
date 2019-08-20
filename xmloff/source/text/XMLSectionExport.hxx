@@ -238,7 +238,7 @@ private:
         SectionTypeEnum eType,                /// index type
         sal_Int32 nLevel,                     /// outline level (if applicable)
         const css::uno::Reference< css::beans::XPropertySet> & rPropSet,
-        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue> > & rValues);
+        const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue> > & rValues);
 
     /// export a single template element (e.g. span or tab-stop)
     void ExportIndexTemplateElement(

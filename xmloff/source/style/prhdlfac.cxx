@@ -129,7 +129,7 @@ XMLPropertyHandlerFactory::XMLPropertyHandlerFactory() :
 
 XMLPropertyHandlerFactory::~XMLPropertyHandlerFactory()
 {
-    for( auto& rCacheEntry : mpImpl->maHandlerCache )
+    for( const auto& rCacheEntry : mpImpl->maHandlerCache )
         delete rCacheEntry.second;
 }
 
