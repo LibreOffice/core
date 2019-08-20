@@ -937,6 +937,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
     else
     {
         // Prevent multiple broadcasts during the series of changes.
+        bool bWasLocked = pObj->getSdrModelFromSdrObject().isLocked();
         pObj->getSdrModelFromSdrObject().setLock(true);
         bool bCanResize = bValid2 && !pObj->IsResizeProtect() && rData.mbResizeWithCell;
 
@@ -1068,8 +1069,9 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         }
 
         // End prevent multiple broadcasts during the series of changes.
-        pObj->getSdrModelFromSdrObject().setLock(false);
-        pObj->BroadcastObjectChange();
+        pObj->getSdrModelFromSdrObject().setLock(bWasLocked);
+        if (!bWasLocked)
+            pObj->BroadcastObjectChange();
     }
 }
 
