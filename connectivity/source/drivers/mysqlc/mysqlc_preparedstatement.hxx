@@ -39,11 +39,17 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Type;
 
+#if defined MYSQL_VERSION_ID && (MYSQL_VERSION_ID >= 80000)
+using my_bool = bool;
+#else
+using my_bool = char;
+#endif
+
 struct BindMetaData
 {
-    char is_null = 0;
+    my_bool is_null = 0;
     unsigned long length = 0;
-    char error = 0;
+    my_bool error = 0;
 };
 
 typedef ::cppu::ImplHelper5<css::sdbc::XPreparedStatement, css::sdbc::XParameters,
