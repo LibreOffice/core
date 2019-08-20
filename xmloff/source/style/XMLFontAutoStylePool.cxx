@@ -394,16 +394,13 @@ void XMLFontAutoStylePool::exportXML()
     const SvXMLUnitConverter& rUnitConv = GetExport().GetMM100UnitConverter();
 
     std::map<OUString, OUString> fontFilesMap; // our url to document url
-    sal_uInt32 nCount = m_pFontAutoStylePool->size();
 
     std::unordered_set<OUString> aUsedFontNames;
     if (m_bEmbedUsedOnly)
         aUsedFontNames = getUsedFontList();
 
-    for (sal_uInt32 i = 0; i < nCount; i++)
+    for (const auto& pEntry : *m_pFontAutoStylePool)
     {
-        const XMLFontAutoStylePoolEntry_Impl* pEntry = (*m_pFontAutoStylePool)[i].get();
-
         GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, pEntry->GetName());
 
         aAny <<= pEntry->GetFamilyName();
