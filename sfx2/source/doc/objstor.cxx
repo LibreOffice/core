@@ -3049,7 +3049,7 @@ bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
     {
         sal_Int32 nVersion = rMedium.GetFilter()->GetVersion();
 
-        // OASIS templates have own mediatypes (SO7 also actually, but it is to late to use them here)
+        // OASIS templates have own mediatypes (SO7 also actually, but it is too late to use them here)
         const bool bTemplate = rMedium.GetFilter()->IsOwnTemplateFormat()
             && nVersion > SOFFICE_FILEFORMAT_60;
 
