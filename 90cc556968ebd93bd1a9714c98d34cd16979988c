@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_03953b40",
+        "filename": "include/basegfx/color/bcolormodifier.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-08-20T07:14:10Z",
+      "side": 1,
+      "message": "It\u0027s rather \"copyable\" (see https://www.collinsdictionary.com/dictionary/english/copyable)",
+      "range": {
+        "startLine": 51,
+        "startChar": 30,
+        "endLine": 51,
+        "endChar": 38
+      },
+      "revId": "90cc556968ebd93bd1a9714c98d34cd16979988c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
