@@ -112,7 +112,7 @@ $(OUT_COMP_GEN)/%/manifest.xml :
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)Addons.xcu$(QM)"/$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)WriterWindowState.xcu$(QM)"/$(CSEP) >> $@
-	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:meda-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)CalcWindowState.xcu$(QM)"/$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)ProtocolHandler.xcu$(QM)"/$(CSEP) >> $@
