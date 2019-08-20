@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_c302e3b4",
+        "filename": "sw/source/uibase/inc/conttree.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-08-20T07:01:29Z",
+      "side": 1,
+      "message": "don\u0027t understand the whole meaning.\nCan a tree be \"glided\"?",
+      "range": {
+        "startLine": 219,
+        "startChar": 7,
+        "endLine": 219,
+        "endChar": 42
+      },
+      "revId": "d4290ab0107cd5d3dd0979d78404618c1a0a2593",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
