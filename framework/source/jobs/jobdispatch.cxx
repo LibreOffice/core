@@ -318,7 +318,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
     // It's not really an error, if no registered jobs could be located.
     // Step over all found jobs and execute it
     int nExecutedJobs=0;
-    for (OUString & lJob : lJobs)
+    for (const OUString & lJob : lJobs)
     {
         /* SAFE { */
         aReadLock.reset();

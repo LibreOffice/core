@@ -1720,7 +1720,7 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
 
         // i89825: Use CTL font for numbers embedded into an RTL run:
         WritingDirectionInfos& rDirInfos = pParaPortion->aWritingDirectionInfos;
-        for (WritingDirectionInfo & rDirInfo : rDirInfos)
+        for (const WritingDirectionInfo & rDirInfo : rDirInfos)
         {
             const sal_Int32 nStart = rDirInfo.nStartPos;
             const sal_Int32 nEnd   = rDirInfo.nEndPos;
@@ -3371,7 +3371,7 @@ void ImpEditEngine::UpdateSelections()
     {
         EditSelection aCurSel( pView->pImpEditView->GetEditSelection() );
         bool bChanged = false;
-        for (std::unique_ptr<DeletedNodeInfo> & aDeletedNode : aDeletedNodes)
+        for (const std::unique_ptr<DeletedNodeInfo> & aDeletedNode : aDeletedNodes)
         {
             const DeletedNodeInfo& rInf = *aDeletedNode;
             if ( ( aCurSel.Min().GetNode() == rInf.GetNode() ) ||

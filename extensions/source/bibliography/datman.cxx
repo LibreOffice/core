@@ -567,7 +567,8 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
         // remove the old fields
         if ( xColContainer->hasElements() )
         {
-            for ( OUString& rName : xColContainer->getElementNames() )
+            const Sequence<OUString> aOldNames = xColContainer->getElementNames();
+            for ( const OUString& rName : aOldNames )
                 xColContainer->removeByName( rName );
         }
 

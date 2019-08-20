@@ -6379,7 +6379,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
 sal_uInt32 PPTParagraphObj::GetTextSize()
 {
     sal_uInt32 nCount, nRetValue = 0;
-    for (std::unique_ptr<PPTPortionObj> & i : m_PortionList)
+    for (const std::unique_ptr<PPTPortionObj> & i : m_PortionList)
     {
         PPTPortionObj const& rPortionObj = *i;
         nCount = rPortionObj.Count();
@@ -6694,7 +6694,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                         &(rSdrPowerPointImport.pPPTStyleSheet->maTxSI) ) )
                                 {
                                     size_t nI = 0;
-                                    for (PPTTextSpecInfo& rSpecInfo : aTextSpecInfoAtomInterpreter.aList)
+                                    for (const PPTTextSpecInfo& rSpecInfo : aTextSpecInfoAtomInterpreter.aList)
                                     {
                                         sal_uInt32 nCharIdx = rSpecInfo.nCharIdx;
 
@@ -6870,7 +6870,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                         {
                                             PptInteractiveInfoAtom aInteractiveInfoAtom;
                                             ReadPptInteractiveInfoAtom( rIn, aInteractiveInfoAtom );
-                                            for (SdHyperlinkEntry& rHyperlink : rSdrPowerPointImport.aHyperList)
+                                            for (const SdHyperlinkEntry& rHyperlink : rSdrPowerPointImport.aHyperList)
                                             {
                                                 if ( rHyperlink.nIndex == aInteractiveInfoAtom.nExHyperlinkId )
                                                 {

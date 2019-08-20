@@ -33,7 +33,7 @@ CGMChart::CGMChart()
 CGMChart::~CGMChart()
 {
     // delete the whole textentry structure
-    for (auto & pTextEntry : maTextEntryList)
+    for (const auto & pTextEntry : maTextEntryList)
     {
         if ( pTextEntry )
             delete pTextEntry->pText;

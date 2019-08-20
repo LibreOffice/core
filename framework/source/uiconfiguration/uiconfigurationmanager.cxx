@@ -812,7 +812,7 @@ void SAL_CALL UIConfigurationManager::reset()
             aGuard.clear();
 
             // Notify our listeners
-            for (ConfigurationEvent & k : aRemoveEventNotifyContainer)
+            for (const ConfigurationEvent & k : aRemoveEventNotifyContainer)
                 implts_notifyContainerListener( k, NotifyOp_Remove );
         }
         catch ( const css::lang::IllegalArgumentException& )
@@ -1253,9 +1253,9 @@ void SAL_CALL UIConfigurationManager::reload()
         aGuard.clear();
 
         // Notify our listeners
-        for (ConfigurationEvent & j : aRemoveNotifyContainer)
+        for (const ConfigurationEvent & j : aRemoveNotifyContainer)
             implts_notifyContainerListener( j, NotifyOp_Remove );
-        for (ConfigurationEvent & k : aReplaceNotifyContainer)
+        for (const ConfigurationEvent & k : aReplaceNotifyContainer)
             implts_notifyContainerListener( k, NotifyOp_Replace );
     }
 }
