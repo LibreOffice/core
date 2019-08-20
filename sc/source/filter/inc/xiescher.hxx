@@ -959,7 +959,7 @@ private:
                             DffRecordHeader& rHeader,
                             SvxMSDffClientData& rClientData,
                             DffObjData& rObjData ) override;
-    /** Processes an DFF object, reads properties from DFF stream. */
+    /** Processes a DFF object, reads properties from DFF stream. */
     virtual SdrObject*  ProcessObj(
                             SvStream& rDffStrm,
                             DffObjData& rDffObjData,
@@ -1086,7 +1086,7 @@ private:
     /** Reads and returns a bitmap from BMP format. */
     static void         ReadBmp( Graphic& rGraphic, const XclImpRoot& rRoot, XclImpStream& rStrm );
 
-    /** Reads contents of an DFF record and append data to internal DFF stream. */
+    /** Reads contents of a DFF record and append data to internal DFF stream. */
     void                ReadDffRecord( XclImpStream& rStrm );
     /** Reads a BIFF8 OBJ record following an MSODRAWING record. */
     void                ReadObj8( XclImpStream& rStrm );
@@ -1181,7 +1181,7 @@ private:
 
 // DFF property set helper ====================================================
 
-/** This class reads an DFF property set (msofbtOPT record).
+/** This class reads a DFF property set (msofbtOPT record).
 
     It can return separate property values or an item set which contains items
     translated from these properties.
@@ -1191,8 +1191,8 @@ class XclImpDffPropSet : protected XclImpRoot
 public:
     explicit            XclImpDffPropSet( const XclImpRoot& rRoot );
 
-    /** Reads an DFF property set from the stream.
-        @descr  The stream must point to the start of an DFF record containing properties. */
+    /** Reads a DFF property set from the stream.
+        @descr  The stream must point to the start of a DFF record containing properties. */
     void                Read( XclImpStream& rStrm );
 
     /** Returns the specified property or zero, if not extant. */

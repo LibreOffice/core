@@ -112,7 +112,7 @@
 	</xs:simpleType>
 	<xs:simpleType name="OrganisationNameElementList">
 		<xs:annotation>
-			<xs:documentation>A list of organisation name element types, e.g. Name, propriety type, liability type, etc.</xs:documentation>
+			<xs:documentation>A list of organisation name element types, e.g. Name, property type, liability type, etc.</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:normalizedString">
 			<xs:enumeration value="NameOnly">
