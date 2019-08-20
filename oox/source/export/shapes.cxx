@@ -47,6 +47,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/ConnectorType.hpp>
@@ -102,6 +103,7 @@
 #include <oox/export/chartexport.hxx>
 #include <oox/mathml/export.hxx>
 #include <drawingml/presetgeometrynames.hxx>
+#include <basegfx/numeric/ftools.hxx>
 
 using namespace ::css;
 using namespace ::css::beans;
@@ -697,6 +699,21 @@ static sal_Int32 lcl_NormalizeAngle( sal_Int32 nAngle )
     return nAngle < 0 ? ( nAngle + 360 ) : nAngle ;
 }
 
+static sal_Int32 lcl_CircleAngle2CustomShapeEllipseAngleOOX(const sal_Int32 nInternAngle, const sal_Int32 nWidth, const sal_Int32 nHeight)
+{
+    if (nWidth != 0 || nHeight != 0)
+    {
+        double fAngle = basegfx::deg2rad(nInternAngle / 100.0); // intern 1/100 deg to degree to rad
+        fAngle = atan2(nHeight * sin(fAngle), nWidth * cos(fAngle)); // circle to ellipse
+        fAngle = basegfx::rad2deg(fAngle) * 60000.0; // rad to degree to OOXML angle unit
+        sal_Int32 nAngle = basegfx::fround(fAngle); // normalize
+        nAngle = nAngle % 21600000;
+        return nAngle < 0 ? (nAngle + 21600000) : nAngle;
+    }
+    else // should be handled by caller, dummy value
+        return 0;
+}
+
 ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
 {
     // First check, if this is a Fontwork-shape. For DrawingML, such a shape is a
@@ -1055,7 +1072,7 @@ ShapeExport& ShapeExport::WriteEllipseShape( const Reference< XShape >& xShape )
 
     pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp));
 
-    // TODO: arc, section, cut, connector
+    // TODO: connector ?
 
     // non visual shape properties
     if (GetDocumentType() != DOCUMENT_DOCX)
@@ -1071,13 +1088,64 @@ ShapeExport& ShapeExport::WriteEllipseShape( const Reference< XShape >& xShape )
     else
         pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr);
 
+    Reference< XPropertySet > xProps( xShape, UNO_QUERY );
+    CircleKind  eCircleKind(CircleKind_FULL);
+    if (xProps.is())
+        xProps->getPropertyValue("CircleKind" ) >>= eCircleKind;
+
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr );
     WriteShapeTransformation( xShape, XML_a );
-    WritePresetShape( "ellipse" );
-    Reference< XPropertySet > xProps( xShape, UNO_QUERY );
+
+    if (CircleKind_FULL == eCircleKind)
+        WritePresetShape("ellipse");
+    else
+    {
+        sal_Int32 nStartAngleIntern(9000);
+        sal_Int32 nEndAngleIntern(0);
+        if (xProps.is())
+        {
+           xProps->getPropertyValue("CircleStartAngle" ) >>= nStartAngleIntern;
+           xProps->getPropertyValue("CircleEndAngle") >>= nEndAngleIntern;
+        }
+        std::vector< std::pair<sal_Int32,sal_Int32>> aAvList;
+        awt::Size aSize = xShape->getSize();
+        if (aSize.Width != 0 || aSize.Height != 0)
+        {
+            // Our arc has 90° up, OOXML has 90° down, so mirror it.
+            // API angles are 1/100 degree.
+            sal_Int32 nStartAngleOOXML(lcl_CircleAngle2CustomShapeEllipseAngleOOX(36000 - nEndAngleIntern, aSize.Width, aSize.Height));
+            sal_Int32 nEndAngleOOXML(lcl_CircleAngle2CustomShapeEllipseAngleOOX(36000 - nStartAngleIntern, aSize.Width, aSize.Height));
+            lcl_AppendAdjustmentValue( aAvList, 1, nStartAngleOOXML);
+            lcl_AppendAdjustmentValue( aAvList, 2, nEndAngleOOXML);
+        }
+        switch (eCircleKind)
+        {
+            case CircleKind_ARC :
+                WritePresetShape("arc", aAvList);
+            break;
+            case CircleKind_SECTION :
+                WritePresetShape("pie", aAvList);
+            break;
+            case CircleKind_CUT :
+                WritePresetShape("chord", aAvList);
+            break;
+        default :
+            WritePresetShape("ellipse");
+        }
+    }
     if( xProps.is() )
     {
+        if (CircleKind_ARC == eCircleKind)
+        {
+            // An arc in ODF is never filled, even if a fill style other than
+            // "none" is set. OOXML arc can be filled, so set fill explicit to
+            // NONE, otherwise some hidden or inherited filling is shown.
+            FillStyle eFillStyle(FillStyle_NONE);
+            uno::Any aNewValue;
+            aNewValue <<= eFillStyle;
+            xProps->setPropertyValue("FillStyle", aNewValue);
+        }
         WriteFill( xProps );
         WriteOutline( xProps );
     }
