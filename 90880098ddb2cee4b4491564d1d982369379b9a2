@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_1e9ef053",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-08-20T13:18:18Z",
+      "side": 1,
+      "message": "Would you mind adding a link to upstream atk issue/PR for reference? (either here or inline in code comments)",
+      "revId": "90880098ddb2cee4b4491564d1d982369379b9a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
