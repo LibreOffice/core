@@ -254,7 +254,7 @@ inline ds_status writeProfile(const OUString& rStreamName, std::unique_ptr<ds_pr
     aXmlWriter.content(pProfile->version);
     aXmlWriter.endElement();
 
-    for (ds_device& rDevice : pProfile->devices)
+    for (const ds_device& rDevice : pProfile->devices)
     {
         aXmlWriter.startElement("device");
 

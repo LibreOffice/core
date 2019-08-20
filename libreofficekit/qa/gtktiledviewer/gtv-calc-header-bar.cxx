@@ -177,7 +177,7 @@ void gtv_calc_header_bar_configure(GtvCalcHeaderBar* bar, const boost::property_
         boost::property_tree::ptree val = *values;
         try
         {
-            for (boost::property_tree::ptree::value_type& rValue : val)
+            for (const boost::property_tree::ptree::value_type& rValue : val)
             {
                 int nSize = std::round(lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(window->lokdocview), std::atof(rValue.second.get<std::string>("size").c_str())));
                 if (nSize >= bar->m_nPositionPixel)

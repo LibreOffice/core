@@ -1709,7 +1709,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
 
     if (!priv->m_aTextSelectionRectangles.empty())
     {
-        for (GdkRectangle& rRectangle : priv->m_aTextSelectionRectangles)
+        for (const GdkRectangle& rRectangle : priv->m_aTextSelectionRectangles)
         {
             // Blue with 75% transparency.
             cairo_set_source_rgba(pCairo, (double(0x43))/255, (double(0xac))/255, (double(0xe8))/255, 0.25);
@@ -1749,12 +1749,12 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     }
 
     // Selections of other views.
-    for (auto& rPair : priv->m_aTextViewSelectionRectangles)
+    for (const auto& rPair : priv->m_aTextViewSelectionRectangles)
     {
         if (rPair.second.m_nPart != priv->m_nPartId && priv->m_eDocumentType != LOK_DOCTYPE_TEXT)
             continue;
 
-        for (GdkRectangle& rRectangle : rPair.second.m_aRectangles)
+        for (const GdkRectangle& rRectangle : rPair.second.m_aRectangles)
         {
             const GdkRGBA& rDark = getDarkColor(rPair.first, priv);
             // 75% transparency.
@@ -1775,7 +1775,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     }
 
     // Graphic selections of other views.
-    for (auto& rPair : priv->m_aGraphicViewSelections)
+    for (const auto& rPair : priv->m_aGraphicViewSelections)
     {
         const ViewRectangle& rRectangle = rPair.second;
         if (rRectangle.m_nPart != priv->m_nPartId && priv->m_eDocumentType != LOK_DOCTYPE_TEXT)
@@ -1799,7 +1799,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     }
 
     // Cell view cursors: they are colored.
-    for (auto& rPair : priv->m_aCellViewCursors)
+    for (const auto& rPair : priv->m_aCellViewCursors)
     {
         const ViewRectangle& rCursor = rPair.second;
         if (rCursor.m_nPart != priv->m_nPartId)
@@ -1817,7 +1817,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     }
 
     // View locks: they are colored.
-    for (auto& rPair : priv->m_aViewLockRectangles)
+    for (const auto& rPair : priv->m_aViewLockRectangles)
     {
         const ViewRectangle& rRectangle = rPair.second;
         if (rRectangle.m_nPart != priv->m_nPartId)

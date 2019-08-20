@@ -412,18 +412,18 @@ sal_Int32 AlgAtom::getVerticalShapesCount(const ShapePtr& rShape)
     sal_Int32 nCount = 0;
     if (nDir == XML_fromT || nDir == XML_fromB)
     {
-        for (ShapePtr& pChild : rShape->getChildren())
+        for (const ShapePtr& pChild : rShape->getChildren())
             nCount += pChild->getVerticalShapesCount();
     }
     else if ((nDir == XML_fromL || nDir == XML_fromR) && nSecDir == XML_fromT)
     {
-        for (ShapePtr& pChild : rShape->getChildren())
+        for (const ShapePtr& pChild : rShape->getChildren())
             nCount += pChild->getVerticalShapesCount();
         nCount = (nCount + 1) / 2;
     }
     else
     {
-        for (ShapePtr& pChild : rShape->getChildren())
+        for (const ShapePtr& pChild : rShape->getChildren())
             nCount = std::max(nCount, pChild->getVerticalShapesCount());
     }
 
@@ -828,7 +828,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             // See if children requested more than 100% space in total: scale
             // down in that case.
             awt::Size aTotalSize;
-            for (auto & aCurrShape : rShape->getChildren())
+            for (const auto & aCurrShape : rShape->getChildren())
             {
                 oox::OptValue<sal_Int32> oWidth = findProperty(aProperties, aCurrShape->getInternalName(), XML_w);
                 oox::OptValue<sal_Int32> oHeight = findProperty(aProperties, aCurrShape->getInternalName(), XML_h);
