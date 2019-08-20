@@ -49,7 +49,7 @@ namespace drawinglayer
         {
             basegfx::B3DRange aRetval;
 
-            for(basegfx::B3DPolyPolygon & a : rFill)
+            for(const basegfx::B3DPolyPolygon & a : rFill)
             {
                 aRetval.expand(basegfx::utils::getRange(a));
             }

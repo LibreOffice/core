@@ -568,11 +568,11 @@ bool SVGFilter::implExportImpressOrDraw( const Reference< XOutputStream >& rxOSt
                 Reference< XInterface > xSVGExport = static_cast< css::document::XFilter* >( mpSVGExport );
 
                 // create an id for each draw page
-                for( auto& rPage : mSelectedPages )
+                for( const auto& rPage : mSelectedPages )
                     implRegisterInterface( rPage );
 
                 // create an id for each master page
-                for(uno::Reference<drawing::XDrawPage> & mMasterPageTarget : mMasterPageTargets)
+                for(const uno::Reference<drawing::XDrawPage> & mMasterPageTarget : mMasterPageTargets)
                     implRegisterInterface( mMasterPageTarget );
 
                 SdrModel* pSdrModel(nullptr);
@@ -1237,7 +1237,7 @@ void SVGFilter::implGenerateMetaData()
                 }
                 if( mpSVGExport->IsEmbedFonts() && mpSVGExport->IsUsePositionedCharacters() )
                 {
-                    for(std::unique_ptr<TextField>& i : aFieldSet)
+                    for(const std::unique_ptr<TextField>& i : aFieldSet)
                     {
                         i->growCharSet( mTextFieldCharSets );
                     }
@@ -1256,7 +1256,7 @@ void SVGFilter::implExportAnimations()
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", "presentation-animations" );
     SvXMLElementExport aDefsContainerElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
 
-    for(uno::Reference<drawing::XDrawPage> & mSelectedPage : mSelectedPages)
+    for(const uno::Reference<drawing::XDrawPage> & mSelectedPage : mSelectedPages)
     {
         Reference< XPropertySet > xProps( mSelectedPage, UNO_QUERY );
 
