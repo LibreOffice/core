@@ -431,7 +431,7 @@ const ScDocumentThreadSpecific& ScDocument::CalculateInColumnInThread( ScInterpr
 void ScDocument::HandleStuffAfterParallelCalculation( const ScAddress& rTopPos, size_t nLen )
 {
     assert(!IsThreadedGroupCalcInProgress());
-    for( DelayedSetNumberFormat& data : GetNonThreadedContext().maDelayedSetNumberFormat)
+    for( const DelayedSetNumberFormat& data : GetNonThreadedContext().maDelayedSetNumberFormat)
         SetNumberFormat( ScAddress( rTopPos.Col(), data.mRow, rTopPos.Tab()), data.mnNumberFormat );
     GetNonThreadedContext().maDelayedSetNumberFormat.clear();
 

@@ -3415,7 +3415,7 @@ void OpGeoMean::GenSlidingWindowFunction(
     ss << "    int offset;\n";
     ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
 
-    for(DynamicKernelArgumentRef & rArg : vSubArguments)
+    for(const DynamicKernelArgumentRef & rArg : vSubArguments)
     {
         assert(rArg->GetFormulaToken());
 
@@ -4723,7 +4723,7 @@ void OpMedian::GenSlidingWindowFunction(
     ss << "    unsigned int startFlag = 0;\n";
     ss << "    unsigned int endFlag = 0;\n";
     ss << "    double dataIna;\n";
-    for (DynamicKernelArgumentRef & rArg : vSubArguments)
+    for (const DynamicKernelArgumentRef & rArg : vSubArguments)
     {
         FormulaToken *pCur = rArg->GetFormulaToken();
         assert(pCur);

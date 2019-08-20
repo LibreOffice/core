@@ -236,7 +236,7 @@ Sequence< Attribute > FastAttributeList::getUnknownAttributes(  )
 {
     Sequence< Attribute > aSeq( maUnknownAttributes.size() );
     Attribute* pAttr = aSeq.getArray();
-    for( auto& rAttr : maUnknownAttributes )
+    for( const auto& rAttr : maUnknownAttributes )
         rAttr.FillAttribute( pAttr++ );
     return aSeq;
 }

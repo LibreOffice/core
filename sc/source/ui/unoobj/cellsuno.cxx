@@ -1631,7 +1631,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 // the EventObject holds a Ref to this object until after the listener calls
 
                 ScDocument& rDoc = pDocShell->GetDocument();
-                for (uno::Reference<util::XModifyListener> & xValueListener : aValueListeners)
+                for (const uno::Reference<util::XModifyListener> & xValueListener : aValueListeners)
                     rDoc.AddUnoListenerCall( xValueListener, aEvent );
 
                 bGotDataChangedHint = false;

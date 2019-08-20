@@ -583,7 +583,7 @@ sc::FormulaGroupAreaListener* ScFormulaCellGroup::getAreaListener(
 
 void ScFormulaCellGroup::endAllGroupListening( ScDocument& rDoc )
 {
-    for (auto& rEntry : mpImpl->m_AreaListeners)
+    for (const auto& rEntry : mpImpl->m_AreaListeners)
     {
         sc::FormulaGroupAreaListener *const pListener = rEntry.second.get();
         ScRange aListenRange = pListener->getListeningRange();

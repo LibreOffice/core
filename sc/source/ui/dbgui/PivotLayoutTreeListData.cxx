@@ -113,7 +113,7 @@ void ScPivotLayoutTreeListData::FillDataField(ScPivotFieldVector& rDataFields)
     mxControl->clear();
     maDataItemValues.clear();
 
-    for (ScPivotField& rField : rDataFields)
+    for (const ScPivotField& rField : rDataFields)
     {
         if (rField.nCol == PIVOT_DATA_FIELD)
             continue;

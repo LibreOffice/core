@@ -1177,7 +1177,7 @@ void ScTable::SortReorderByRowRefUpdate(
                 aMoveRange, sc::AreaOverlapType::InsideOrOverlap, sc::ListenerGroupType::Group);
 
         {
-            for (auto& rGrpListener : aGrpListeners)
+            for (const auto& rGrpListener : aGrpListeners)
             {
                 assert(rGrpListener.mbGroupListening);
                 SvtListener* pGrpLis = rGrpListener.mpListener;

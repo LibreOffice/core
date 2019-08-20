@@ -329,7 +329,7 @@ void ScParameterClassification::Init()
                         pRun->aData.nParam[CommonData::nMaxParams-1] != Bounds)
                     pRun->nMinParams = CommonData::nMaxParams;
             }
-            for (formula::ParamClass & j : pRun->aData.nParam)
+            for (const formula::ParamClass & j : pRun->aData.nParam)
             {
                 if ( j == ForceArray || j == ReferenceOrForceArray )
                 {

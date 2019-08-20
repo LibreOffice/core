@@ -322,7 +322,7 @@ OStorage_Impl::~OStorage_Impl()
         m_pParent = nullptr;
     }
 
-    for (auto & pair : m_aChildrenMap)
+    for (const auto & pair : m_aChildrenMap)
         for (auto pElement : pair.second)
             delete pElement;
     m_aChildrenMap.clear();
@@ -654,7 +654,7 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
     if ( !m_xPackageFolder.is() )
         throw embed::InvalidStorageException( THROW_WHERE );
 
-    for ( auto& pair : m_aChildrenMap )
+    for ( const auto& pair : m_aChildrenMap )
         for (auto pElement : pair.second)
         {
             if ( !pElement->m_bIsRemoved )
@@ -1054,7 +1054,7 @@ void OStorage_Impl::Commit()
 
 
     // there should be no more deleted elements
-    for ( auto& pair : m_aChildrenMap )
+    for ( const auto& pair : m_aChildrenMap )
         for (auto pElement : pair.second)
         {
             // if it is a 'duplicate commit' inserted elements must be really inserted to package later
@@ -1127,7 +1127,7 @@ void OStorage_Impl::Commit()
             }
         }
 
-    for ( auto& pair : m_aChildrenMap )
+    for ( const auto& pair : m_aChildrenMap )
         for (auto pElement : pair.second)
         {
             // now inserted elements can be inserted to the package
@@ -1228,7 +1228,7 @@ void OStorage_Impl::Revert()
     std::unordered_map<OUString, std::vector<SotElement_Impl*>> oldMap;
     std::swap(oldMap, m_aChildrenMap);
 
-    for (auto & rPair : oldMap)
+    for (const auto & rPair : oldMap)
         for (auto pElement : rPair.second)
         {
             if ( pElement->m_bIsInserted )
@@ -1855,7 +1855,7 @@ void OStorage::InternalDispose( bool bNotifyImpl )
             // deregister m_pData->m_pSubElDispListener and dispose all of them
             if ( !m_pData->m_aOpenSubComponentsVector.empty() )
             {
-                for ( auto& pComp : m_pData->m_aOpenSubComponentsVector )
+                for ( const auto& pComp : m_pData->m_aOpenSubComponentsVector )
                 {
                     uno::Reference< lang::XComponent > xTmp = pComp;
                     if ( xTmp.is() )
@@ -2399,7 +2399,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
 
                 if ( nStorageMode & embed::ElementModes::TRUNCATE )
                 {
-                    for (auto & rPair : pElement->m_xStorage->m_aChildrenMap)
+                    for (const auto & rPair : pElement->m_xStorage->m_aChildrenMap)
                         for (auto pElementToDel : rPair.second)
                             m_pImpl->RemoveElement( /*aName*/rPair.first, pElementToDel );
                 }
@@ -3633,7 +3633,7 @@ void SAL_CALL OStorage::revert()
             throw lang::DisposedException(THROW_WHERE);
         }
 
-        for (auto & rPair : m_pImpl->m_aChildrenMap)
+        for (const auto & rPair : m_pImpl->m_aChildrenMap)
             for (auto pElement : rPair.second)
             {
                 bool bThrow = (pElement->m_xStorage

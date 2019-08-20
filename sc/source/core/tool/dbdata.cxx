@@ -1427,7 +1427,7 @@ void ScDBCollection::DeleteOnTab( SCTAB nTab )
     }
 
     // Delete them all.
-    for (auto& rIter : v)
+    for (const auto& rIter : v)
         maNamedDBs.erase(rIter);
 
     maAnonDBs.deleteOnTab(nTab);

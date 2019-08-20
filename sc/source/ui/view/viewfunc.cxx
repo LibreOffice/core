@@ -1829,7 +1829,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( &rDoc, nTab, nTab, !bRows, bRows );      // row height
 
-        for (sc::ColRowSpan & rSpan : aSpans)
+        for (const sc::ColRowSpan & rSpan : aSpans)
         {
             SCCOLROW nStart = rSpan.mnStart;
             SCCOLROW nEnd = rSpan.mnEnd;
