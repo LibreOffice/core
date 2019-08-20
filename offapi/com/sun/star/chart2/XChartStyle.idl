@@ -26,7 +26,7 @@ interface XChartStyle : ::com::sun::star::uno::XInterface
 {
     com::sun::star::beans::XPropertySet getStyleForObject([in] short chartObjectType);
 
-    void applyStyleToDiagram([in] XDiagram chartDiagram);
+    void applyStyleToDiagram([in] XChartDocument chartDiagram);
 
     void applyStyleToTitle([in] XTitle chartTitle);
 

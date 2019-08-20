@@ -38,6 +38,8 @@
 #include <Title.hxx>
 #include <Wall.hxx>
 
+#include <sal/log.hxx>
+
 namespace com
 {
 namespace sun
@@ -267,8 +269,10 @@ void ChartStyle::applyStyleToCoordinates(
 }
 
 void SAL_CALL
-ChartStyle::applyStyleToDiagram(const css::uno::Reference<css::chart2::XDiagram>& xDiagram)
+ChartStyle::applyStyleToDiagram(const css::uno::Reference<css::chart2::XChartDocument>& xChartDocument)
 {
+
+    css::uno::Reference<css::chart2::XDiagram> xDiagram = xChartDocument->getFirstDiagram();
     css::uno::Reference<css::style::XStyleSupplier> xLegendStyle(xDiagram->getLegend(),
                                                                  css::uno::UNO_QUERY);
     if (xLegendStyle.is())
@@ -287,7 +291,7 @@ ChartStyle::applyStyleToDiagram(const css::uno::Reference<css::chart2::XDiagram>
             css::uno::UNO_QUERY_THROW));
     }
 
-    css::uno::Reference<css::chart2::XTitled> xTitled(xDiagram, css::uno::UNO_QUERY);
+    css::uno::Reference<css::chart2::XTitled> xTitled(xChartDocument, css::uno::UNO_QUERY);
     if (xTitled.is())
     {
         css::uno::Reference<css::chart2::XTitle> xTitle = xTitled->getTitleObject();
@@ -342,6 +346,13 @@ ChartStyle::updateChartStyle(const css::uno::Reference<css::chart2::XChartDocume
         xPropAccess
             = css::uno::Reference<css::beans::XPropertyAccess>(xMainTitle, css::uno::UNO_QUERY);
         updateStyleElement(css::chart2::ChartObjectType::TITLE, xPropAccess->getPropertyValues());
+
+
+        css::uno::Reference<css::beans::XPropertyAccess> xTitleStyle(m_xChartStyle[css::chart2::ChartObjectType::TITLE], css::uno::UNO_QUERY);
+        SAL_DEBUG(xTitleStyle);
+        auto vals = xTitleStyle->getPropertyValues();
+        for (auto& i : vals)
+            SAL_DEBUG(i.Value);
     }
 
     xPropAccess = css::uno::Reference<css::beans::XPropertyAccess>(rxModel->getPageBackground(),

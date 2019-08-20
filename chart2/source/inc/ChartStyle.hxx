@@ -107,7 +107,7 @@ public:
         SAL_CALL getStyleForObject(const sal_Int16 nChartObjectType) override;
 
     virtual void SAL_CALL
-    applyStyleToDiagram(const css::uno::Reference<css::chart2::XDiagram>& xDiagram) override;
+    applyStyleToDiagram(const css::uno::Reference<css::chart2::XChartDocument>& xChartDocument) override;
 
     virtual void SAL_CALL
     applyStyleToTitle(const css::uno::Reference<css::chart2::XTitle>& xTitle) override;

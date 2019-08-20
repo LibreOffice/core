@@ -175,7 +175,7 @@ IMPL_LINK(ChartStylesPanel, SelHdl, ListBox&, rBox, void)
     {
         OUString aNewStyleName;
         vcl::Window* pWin = Application::GetDefDialogParent();
-        QueryString aQuery(pWin ? pWin->GetFrameWeld() : nullptr, "", aNewStyleName);
+        QueryString aQuery(pWin ? pWin->GetFrameWeld() : nullptr, "Select name for new chart style:", aNewStyleName);
 
         int nReturnCode = aQuery.run();
         if (nReturnCode == RET_OK)
