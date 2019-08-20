@@ -310,7 +310,7 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                 // In this case the authority contains the real path, and the path is the embedded stream name.
                 auto const uri = css::uri::UriReferenceFactory::create(GetComponentContext())
                     ->parse(sFileName);
-                if (uri.is() && uri->isAbsolute() && uri->isHierarchical()
+                if (uri.is() && uri->isAbsolute()
                     && uri->hasAuthority() && !uri->hasQuery() && !uri->hasFragment())
                 {
                     auto const auth = uri->getAuthority();

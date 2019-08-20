@@ -125,7 +125,7 @@ bool isAbsoluteHierarchicalUriReference(
     css::uno::Reference< css::uri::XUriReference > const & uriReference)
 {
     return uriReference.is() && uriReference->isAbsolute()
-        && uriReference->isHierarchical() && !uriReference->hasRelativePath();
+        && !uriReference->hasRelativePath();
 }
 
 // To improve performance, assume that if for any prefix URL of a given

@@ -56,7 +56,7 @@ class UrlReference:
 public:
     UrlReference(OUString const & scheme, OUString const & path):
         base_(
-            scheme, false, false, OUString(), path, false,
+            scheme, false, OUString(), path, false,
             OUString())
     {}
 
