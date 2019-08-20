@@ -2076,20 +2076,30 @@ OUString SvNumberFormatter::GetFormatDecimalSep( sal_uInt32 nFormat ) const
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
     const SvNumberformat* pFormat = GetFormatEntry(nFormat);
-    if ( !pFormat || pFormat->GetLanguage() == ActLnge )
+    if (!pFormat)
+    {
+        return GetNumDecimalSep();
+    }
+    return GetLangDecimalSep( pFormat->GetLanguage());
+}
+
+OUString SvNumberFormatter::GetLangDecimalSep( LanguageType nLang ) const
+{
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
+    if (nLang == ActLnge)
     {
         return GetNumDecimalSep();
     }
     OUString aRet;
     LanguageType eSaveLang = xLocaleData.getCurrentLanguage();
-    if ( pFormat->GetLanguage() == eSaveLang )
+    if (nLang == eSaveLang)
     {
         aRet = xLocaleData->getNumDecimalSep();
     }
     else
     {
         LanguageTag aSaveLocale( xLocaleData->getLanguageTag() );
-        const_cast<SvNumberFormatter*>(this)->xLocaleData.changeLocale( LanguageTag( pFormat->GetLanguage()) );
+        const_cast<SvNumberFormatter*>(this)->xLocaleData.changeLocale( LanguageTag( nLang));
         aRet = xLocaleData->getNumDecimalSep();
         const_cast<SvNumberFormatter*>(this)->xLocaleData.changeLocale( aSaveLocale );
     }
