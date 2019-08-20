@@ -416,7 +416,7 @@ css::uno::Sequence < OUString > SvtModuleOptions_Impl::GetAllServiceNames()
 {
     std::vector<OUString> aVec;
 
-    for( auto & rFactory : m_lFactories )
+    for( const auto & rFactory : m_lFactories )
         if( rFactory.getInstalled() )
             aVec.push_back( rFactory.getFactory() );
 

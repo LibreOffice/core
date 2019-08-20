@@ -605,7 +605,7 @@ FTPDirentry FTPURL::direntry() const
 
         std::vector<FTPDirentry> aList = aURL.list(OpenMode::ALL);
 
-        for(FTPDirentry & d : aList) {
+        for(const FTPDirentry & d : aList) {
             if(d.m_aName == nettitle) { // the relevant file is found
                 aDirentry = d;
                 break;

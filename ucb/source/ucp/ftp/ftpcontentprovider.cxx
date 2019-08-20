@@ -227,7 +227,7 @@ void FTPContentProvider::forHost( const OUString& host,
                                   OUString& account)
 {
     osl::MutexGuard aGuard(m_aMutex);
-    for(ServerInfo & i : m_ServerInfo)
+    for(const ServerInfo & i : m_ServerInfo)
         if(host == i.host &&
            port == i.port &&
            username == i.username )
