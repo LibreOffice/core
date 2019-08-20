@@ -26,7 +26,7 @@
 
 namespace com { namespace sun { namespace star {
     namespace accessibility { class XAccessibleComponent; }
-    namespace document { class XEventBroadcaster; }
+    namespace document { class XShapeEventBroadcaster; }
     namespace frame { class XController; }
 } } }
 
@@ -89,7 +89,7 @@ public:
             reference may be passed to unset the broadcaster
     */
     void SetModelBroadcaster (const css::uno::Reference<
-        css::document::XEventBroadcaster>& rxModelBroadcaster);
+        css::document::XShapeEventBroadcaster>& rxModelBroadcaster);
 
     /** Return the current model broadcaster.
         @return
@@ -97,7 +97,7 @@ public:
             been set or has been set to an empty reference.
     */
     const css::uno::Reference<
-        css::document::XEventBroadcaster>&
+        css::document::XShapeEventBroadcaster>&
         GetModelBroadcaster() const { return mxModelBroadcaster;}
 
     /** Set the view that will be used to construct SvxTextEditSources which
@@ -173,7 +173,7 @@ private:
         This once was named mxControllerBroadcaster.
     */
     css::uno::Reference<
-        css::document::XEventBroadcaster> mxModelBroadcaster;
+        css::document::XShapeEventBroadcaster> mxModelBroadcaster;
 
     /** This view is necessary to construct an SvxTextEditSource which in
         turn is used to create an accessible edit engine.

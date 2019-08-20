@@ -24,14 +24,17 @@
 #include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/document/XShapeEventBroadcaster.hpp>
+#include <unordered_map>
 
 class SdrModel;
 
 class ScDrawModelBroadcaster : public SfxListener,
-    public ::cppu::WeakImplHelper< css::document::XEventBroadcaster >
+    public ::cppu::WeakImplHelper< css::document::XShapeEventBroadcaster >
 {
     mutable ::osl::Mutex maListenerMutex;
     ::comphelper::OInterfaceContainerHelper3<css::document::XEventListener> maEventListeners;
+    std::unordered_map<css::uno::Reference< css::drawing::XShape >, css::uno::Reference< css::document::XShapeEventListener >> maShapeListeners;
     SdrModel *mpDrawModel;
 
 public:
@@ -39,8 +42,12 @@ public:
     ScDrawModelBroadcaster( SdrModel *pDrawModel );
     virtual ~ScDrawModelBroadcaster() override;
 
+    // css::document::XEventBroadcaster
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::document::XEventListener >& xListener ) override;
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::document::XEventListener >& xListener ) override;
+    // css::document::XShapeEventBroadcaster
+    virtual void SAL_CALL addShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::document::XShapeEventListener >& xListener ) override;
+    virtual void SAL_CALL removeShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::document::XShapeEventListener >& xListener ) override;
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
