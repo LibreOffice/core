@@ -2201,11 +2201,11 @@ Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapper(SAFEARRAY* pArray
     return ret;
 }
 
-// If a VARIANT has the type VT_DISPATCH it can either be an JScript Array
+// If a VARIANT has the type VT_DISPATCH it can either be a JScript Array
 // or some other object. This function finds out if it is such an array or
 // not. Currently there's no way to make sure it's an array
 // so we assume that when the object has a property "0" then it is an Array.
-// An JScript has property like "0", "1", "2" etc. which represent the
+// A JScript has property like "0", "1", "2" etc. which represent the
 // value at the corresponding index of the array
 template<class T>
 bool UnoConversionUtilities<T>::isJScriptArray(const VARIANT* rvar)
