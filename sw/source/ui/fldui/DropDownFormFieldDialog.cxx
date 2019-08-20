@@ -21,7 +21,6 @@ DropDownFormFieldDialog::DropDownFormFieldDialog(weld::Widget* pParent,
                                                  mark::IFieldmark* pDropDownField)
     : GenericDialogController(pParent, "modules/swriter/ui/dropdownformfielddialog.ui",
                               "DropDownFormFieldDialog")
-    , m_pParent(pParent)
     , m_pDropDownField(pDropDownField)
     , m_bListHasChanged(false)
     , m_xListItemEntry(m_xBuilder->weld_entry("item_entry"))
@@ -135,7 +134,7 @@ void DropDownFormFieldDialog::AppendItemToList()
         if (m_xListItemsTreeView->n_children() >= ODF_FORMDROPDOWN_ENTRY_COUNT_LIMIT)
         {
             std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(
-                m_pParent, VclMessageType::Info, VclButtonsType::Ok,
+                m_xDialog.get(), VclMessageType::Info, VclButtonsType::Ok,
                 SwResId(STR_DROP_DOWN_FIELD_ITEM_LIMIT)));
             xInfoBox->run();
             return;
