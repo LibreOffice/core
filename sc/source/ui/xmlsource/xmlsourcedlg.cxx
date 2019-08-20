@@ -241,7 +241,7 @@ std::unique_ptr<weld::TreeIter> getReferenceEntry(const weld::TreeView& rTree, w
     return xCurEntry;
 }
 
-};
+}
 
 void ScXMLSourceDlg::TreeItemSelected()
 {
