@@ -417,7 +417,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
             if (slash) {
                 abs.append('/');
             }
-            for (auto& i : segments)
+            for (const auto& i : segments)
             {
                 if (i < -1) {
                     OUString segment(
