@@ -329,24 +329,6 @@ Public Function setTripleState(Optional pvObject As Variant, ByVal Optional pvVa
 End Function		&apos;	setTripleState
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function setValue(Optional pvObject As Variant, ByVal Optional pvValue As Variant) As Boolean
-&apos;	setValue also interprets shortcut strings !!
-Dim vItem As Variant, sProperty As String
-	If IsMissing(pvObject) Or IsMissing(pvValue) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;setValue&quot;)
-	If VarType(pvObject) = vbString Then
-		Utils._SetCalledSub(&quot;setValue&quot;)
-		Set vItem = getObject(pvObject)
-		sProperty = Utils._FinalProperty(pvObject)
-		If sProperty = &quot;&quot; Then sProperty = &quot;Value&quot;
-		setValue = vItem.setProperty(sProperty, pvValue)
-		Utils._ResetCalledSub(&quot;setValue&quot;)
-	Else
-		Set vItem = pvObject
-		setValue = vItem.setProperty(&quot;Value&quot;, pvValue)
-	End If
-End Function		&apos;	setValue
-
-REM -----------------------------------------------------------------------------------------------------------------------
 Public Function setVisible(Optional pvObject As Variant, ByVal Optional pvValue As Variant) As Boolean
 &apos;	Only for open forms and controls
 	If IsMissing(pvObject) Or IsMissing(pvValue) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;setVisible&quot;)

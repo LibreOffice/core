@@ -399,87 +399,6 @@ Public Function getName(Optional pvObject As Variant) As String
 End Function		&apos;	getName
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function getObject(Optional pvShortcut As Variant) As Variant
-&apos; Return the object described by pvShortcut ignoring its final property
-&apos; Example:		&quot;Forms!myForm!myControl.myProperty&quot; =&gt;	Controls(Forms(&quot;myForm&quot;), &quot;myControl&quot;))
-
-Const cstEXCLAMATION = &quot;!&quot;
-Const cstDOT = &quot;.&quot;
-
-	If _ErrorHandler() Then On Local Error Goto Error_Function
-Const cstThisSub = &quot;getObject&quot;
-	Utils._SetCalledSub(cstThisSub)
-	If IsMissing(pvShortcut) Then Call _TraceArguments()
-	If Not Utils._CheckArgument(pvShortcut, 1, vbString) Then Goto Exit_Function
-
-Dim iCurrentIndex As Integer, vCurrentObject As Variant, sCurrentProperty As String
-Dim sComponents() As String, sSubComponents() As String, sDialog As String
-Dim oDoc As Object
-	Set vCurrentObject = Nothing
-	sComponents = Split(Trim(pvShortcut), cstEXCLAMATION)
-	If UBound(sComponents) = 0 Then Goto Trace_Error
-	If Not Utils._InList(UCase(sComponents(0)), Array(&quot;FORMS&quot;, &quot;DIALOGS&quot;, &quot;TEMPVARS&quot;)) Then Goto Trace_Error
-	If sComponents(1) = &quot;0&quot; Or Left(sComponents(1), 2) = &quot;0.&quot; Then
-		Set oDoc = _A2B_.CurrentDocument()
-		If oDoc.DbConnect = DBCONNECTFORM Then sComponents(1) = oDoc.DbContainers(0).FormName Else Goto Trace_Error
-	End If
-
-	sSubComponents = Split(sComponents(UBound(sComponents)), cstDOT)
-	sComponents(UBound(sComponents)) = sSubComponents(0)				&apos;	Ignore final property, if any
-	
-	Set vCurrentObject = New Collect
-	Set vCurrentObject._This = vCurrentObject
-	Select Case UCase(sComponents(0))
-		Case &quot;FORMS&quot;	:	vCurrentObject._CollType = COLLFORMS
-		Case &quot;DIALOGS&quot;	:	vCurrentObject._CollType = COLLALLDIALOGS
-		Case &quot;TEMPVARS&quot;	:	vCurrentObject._CollType = COLLTEMPVARS
-	End Select
-	For iCurrentIndex = 1 To UBound(sComponents)	&apos;	Start parsing ...
-		sSubComponents = Split(sComponents(iCurrentIndex), cstDOT)
-		sComponents(iCurrentIndex) = Utils._Trim(sSubComponents(0))
-		Select Case UBound(sSubComponents)
-			Case 0
-				sCurrentProperty = &quot;&quot;
-			Case 1
-				sCurrentProperty = sSubComponents(1)
-			Case Else
-				Goto Trace_Error
-		End Select
-		Select Case vCurrentObject._Type
-			Case OBJCOLLECTION
-				Select Case vCurrentObject._CollType
-					Case COLLFORMS
-						vCurrentObject = Application.AllForms(sComponents(iCurrentIndex))
-					Case COLLALLDIALOGS
-						sDialog = UCase(sComponents(iCurrentIndex))
-						vCurrentObject = Application.AllDialogs(sDialog)
-						If Not vCurrentObject.IsLoaded Then Goto Trace_Error
-						Set vCurrentObject.UnoDialog = _A2B_.Dialogs.Item(sDialog)
-					Case COLLTEMPVARS
-						If UBound(sComponents) &gt; 1 Then Goto Trace_Error
-						vCurrentObject = Application.TempVars(sComponents(1))
-					&apos;Case Else
-				End Select
-			Case OBJFORM, OBJSUBFORM, OBJCONTROL, OBJDIALOG
-				vCurrentObject = vCurrentObject.Controls(sComponents(iCurrentIndex))
-		End Select
-		If sCurrentProperty &lt;&gt; &quot;&quot; Then vCurrentObject = vCurrentObject.getProperty(sCurrentProperty)
-	Next iCurrentIndex
-	
-	Set getObject = vCurrentObject
-				
-Exit_Function:
-	Utils._ResetCalledSub(cstThisSub)
-	Exit Function
-Trace_Error:
-	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , Array(1, pvShortcut))
-	Goto Exit_Function
-Error_Function:
-	TraceError(TRACEABORT, Err, cstThisSub, Erl)
-	GoTo Exit_Function
-End Function		&apos;	getObject	V0.9.5
-
-REM -----------------------------------------------------------------------------------------------------------------------
 Public Function getObjectType(Optional pvObject As Variant) As String
 	If IsMissing(pvObject) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;getObjectType&quot;)
 	getObjectType = PropertiesGet._getProperty(pvObject, &quot;ObjectType&quot;)
@@ -705,24 +624,6 @@ Public Function getTypeName(Optional pvObject As Variant) As Variant
 	If IsMissing(pvObject) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;getTypeName&quot;)
 	getTypeName = PropertiesGet._getProperty(pvObject, &quot;TypeName&quot;)
 End Function		&apos;	getTypeName
-
-REM -----------------------------------------------------------------------------------------------------------------------
-Public Function getValue(Optional pvObject As Variant) As Variant
-&apos;	getValue also interprets shortcut strings !!
-Dim vItem As Variant, sProperty As String
-	If IsMissing(pvObject) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;getValue&quot;)
-	If VarType(pvObject) = vbString Then
-		Utils._SetCalledSub(&quot;getValue&quot;)
-		Set vItem = getObject(pvObject)
-		sProperty = Utils._FinalProperty(pvObject)
-		If sProperty = &quot;&quot; Then sProperty = &quot;Value&quot;			&apos;	Default value if final property in shortcut is absent
-		getValue = vItem.getProperty(sproperty)
-		Utils._ResetCalledSub(&quot;getValue&quot;)
-	Else
-		Set vItem = pvObject
-		getValue = vItem.getProperty(&quot;Value&quot;)
-	End If
-End Function		&apos;	getValue
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function getVisible(Optional pvObject As Variant) As Variant

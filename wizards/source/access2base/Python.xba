@@ -78,7 +78,7 @@ Public Function PythonWrapper(ByVal pvCallType As Variant _
 									, ByVal pvScript As Variant _
 									, ParamArray pvArgs() As Variant _
 								) As Variant
-&apos;		 Called from Python to apply
+&apos;		Called from Python to apply
 &apos;			- on object with entry pvObject in PythonCache
 &apos;				Conventionally:	-1 = Application
 &apos;									-2 = DoCmd
@@ -103,7 +103,7 @@ Const cstScalar = 0, cstObject = 1, cstNull = 2, cstUNO = 3
 &apos;Conventional special values
 Const cstNoArgs = &quot;+++NOARGS+++&quot;, cstSymEmpty = &quot;+++EMPTY+++&quot;, cstSymNull = &quot;+++NULL+++&quot;
 
-&apos;https://support.office.com/en-us/article/callbyname-function-49ce9475-c315-4f13-8d35-e98cfe98729a
+&apos;https://support.office.com/en-us/article/CallByName-fonction-49ce9475-c315-4f13-8d35-e98cfe98729a
 &apos;Determines the pvCallType
 Const vbGet = 2, vbLet = 4, vbMethod = 1, vbSet = 8, vbUNO = 16
 
@@ -160,12 +160,12 @@ Const vbGet = 2, vbLet = 4, vbMethod = 1, vbSet = 8, vbUNO = 16
 				Case &quot;DVar&quot;			:	vReturn = Application.DVar(vArgs(0), vArgs(1), vArgs(2))
 				Case &quot;DVarP&quot;		:	vReturn = Application.DVarP(vArgs(0), vArgs(1), vArgs(2))
 				Case &quot;Forms&quot;		:	If iNbArgs &lt; 0 Then vReturn = Application.Forms() Else vReturn = Application.Forms(vArgs(0))
-				Case &quot;getObject&quot;	:	vReturn = PropertiesGet.getObject(vArgs(0))
-				Case &quot;getValue&quot;		:	vReturn = PropertiesGet.getValue(vArgs(0))
+				Case &quot;getObject&quot;	:	vReturn = Application.getObject(vArgs(0))
+				Case &quot;getValue&quot;		:	vReturn = Application.getValue(vArgs(0))
 				Case &quot;HtmlEncode&quot;	:	vReturn = Application.HtmlEncode(vArgs(0), vArgs(1))
 				Case &quot;OpenDatabase&quot;	:	vReturn = Application.OpenDatabase(vArgs(0), vArgs(1), vArgs(2), vArgs(3))
 				Case &quot;ProductCode&quot;	:	vReturn = Application.ProductCode()
-				Case &quot;setValue&quot;		:	vReturn = PropertiesGet.setValue(vArgs(0), vArgs(1))
+				Case &quot;setValue&quot;		:	vReturn = Application.setValue(vArgs(0), vArgs(1))
 				Case &quot;SysCmd&quot;		:	vReturn = Application.SysCmd(vArgs(0), vArgs(1), vARgs(2))
 				Case &quot;TempVars&quot;		:	If iNbArgs &lt; 0 Then vReturn = Application.TempVars() Else vReturn = Application.TempVars(vArgs(0))
 				Case &quot;Version&quot;		:	vReturn = Application.Version()
