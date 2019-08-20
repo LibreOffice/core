@@ -62,7 +62,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/document/XShapeEventBroadcaster.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <pagepreviewlayout.hxx>
@@ -126,10 +126,11 @@ public:
 };
 
 class SwDrawModellListener_Impl : public SfxListener,
-    public ::cppu::WeakImplHelper< document::XEventBroadcaster >
+    public ::cppu::WeakImplHelper< document::XShapeEventBroadcaster >
 {
     mutable ::osl::Mutex maListenerMutex;
     ::comphelper::OInterfaceContainerHelper2 maEventListeners;
+    std::unordered_map<css::uno::Reference< css::drawing::XShape >, css::uno::Reference< css::document::XShapeEventListener >> maShapeListeners;
     SdrModel *mpDrawModel;
 protected:
     virtual ~SwDrawModellListener_Impl() override;
@@ -137,8 +138,12 @@ protected:
 public:
     explicit SwDrawModellListener_Impl( SdrModel *pDrawModel );
 
+    // css::document::XEventBroadcaster
     virtual void SAL_CALL addEventListener( const uno::Reference< document::XEventListener >& xListener ) override;
     virtual void SAL_CALL removeEventListener( const uno::Reference< document::XEventListener >& xListener ) override;
+    // css::document::XShapeEventBroadcaster
+    virtual void SAL_CALL addShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::document::XShapeEventListener >& xListener ) override;
+    virtual void SAL_CALL removeShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::document::XShapeEventListener >& xListener ) override;
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     void Dispose();
@@ -164,6 +169,28 @@ void SAL_CALL SwDrawModellListener_Impl::addEventListener( const uno::Reference<
 void SAL_CALL SwDrawModellListener_Impl::removeEventListener( const uno::Reference< document::XEventListener >& xListener )
 {
     maEventListeners.removeInterface( xListener );
+}
+
+void SAL_CALL SwDrawModellListener_Impl::addShapeEventListener(
+                const css::uno::Reference< css::drawing::XShape >& xShape,
+                const uno::Reference< document::XShapeEventListener >& xListener )
+{
+    osl::MutexGuard aGuard(maListenerMutex);
+    auto rv = maShapeListeners.emplace(xShape, xListener);
+    assert(rv.second && "duplicate listener?");
+}
+
+void SAL_CALL SwDrawModellListener_Impl::removeShapeEventListener(
+                const css::uno::Reference< css::drawing::XShape >& xShape,
+                const uno::Reference< document::XShapeEventListener >& xListener )
+{
+    osl::MutexGuard aGuard(maListenerMutex);
+    auto it = maShapeListeners.find(xShape);
+    if (it != maShapeListeners.end())
+    {
+        assert(it->second == xListener);
+        maShapeListeners.erase(it);
+    }
 }
 
 void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
@@ -203,6 +230,16 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
         {
             TOOLS_WARN_EXCEPTION("sw.a11y", "Runtime exception caught while notifying shape");
         }
+    }
+
+    if (pSdrHint->GetKind() == SdrHintKind::ObjectChange)
+    {
+        osl::MutexGuard aGuard(maListenerMutex);
+        auto pSdrObject = const_cast<SdrObject*>(pSdrHint->GetObject());
+        uno::Reference<drawing::XShape> xShape(pSdrObject->getUnoShape(), uno::UNO_QUERY);
+        auto it = maShapeListeners.find(xShape);
+        if (it != maShapeListeners.end())
+            it->second->notifyShapeEvent(aEvent);
     }
 }
 
@@ -247,7 +284,7 @@ public:
         maInfo.SetSdrView( pMap->GetShell()->GetDrawView() );
         maInfo.SetDevice( pMap->GetShell()->GetWin() );
         maInfo.SetViewForwarder( pMap );
-        uno::Reference < document::XEventBroadcaster > xModelBroadcaster =
+        uno::Reference < document::XShapeEventBroadcaster > xModelBroadcaster =
             new SwDrawModellListener_Impl(
                     pMap->GetShell()->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
         maInfo.SetModelBroadcaster( xModelBroadcaster );
