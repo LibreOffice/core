@@ -114,9 +114,6 @@ private:
     //---  XAccessibleEventListener ----------------------------
     virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
 
-    //---  document::XEventListener ----------------------------
-    using AccessibleShape::notifyEvent;
-
     // XVclContainerListener
     virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
     virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override;

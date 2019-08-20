@@ -29,7 +29,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/document/XShapeEventListener.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -99,7 +99,7 @@ class SVX_DLLPUBLIC AccessibleShape
         public css::accessibility::XAccessibleGroupPosition,
         public css::accessibility::XAccessibleHypertext,
         public IAccessibleViewForwarderListener,
-        public css::document::XEventListener,
+        public css::document::XShapeEventListener,
         public css::lang::XUnoTunnel
 {
 public:
@@ -312,18 +312,15 @@ public:
     //=====  IAccessibleViewForwarderListener  ================================
     virtual void ViewForwarderChanged() override;
 
-    //=====  lang::XEventListener  ============================================
-
     /** Listen for disposing events of the model.  The accessible shape
         remains functional when this happens.
     */
-    virtual void SAL_CALL
-        disposing (const css::lang::EventObject& Source) override;
+    void disposing (const css::lang::EventObject& Source);
 
-    //=====  document::XEventListener  ========================================
+    //=====  document::XShapeEventListener  ========================================
 
     virtual void SAL_CALL
-        notifyEvent (const css::document::EventObject& rEventObject) override;
+        notifyShapeEvent (const css::document::EventObject& rEventObject) override;
 
 
     //===== XUnoTunnel ========================================================

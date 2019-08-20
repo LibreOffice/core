@@ -198,6 +198,8 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     OUString                                                   m_sRuntimeUID            ;
     OUString                                                   m_aPreusedFilterName     ;
     ::cppu::OMultiTypeInterfaceContainerHelper                 m_aInterfaceContainer    ;
+    std::unordered_map<css::uno::Reference< css::drawing::XShape >,
+                       css::uno::Reference< css::document::XShapeEventListener >> maShapeListeners;
     Reference< XInterface >                                    m_xParent                ;
     Reference< frame::XController >                            m_xCurrent               ;
     Reference< document::XDocumentProperties >                 m_xDocumentProperties    ;
@@ -2370,6 +2372,33 @@ void SAL_CALL SfxBaseModel::removeEventListener( const Reference< document::XEve
     m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<document::XEventListener>::get(), aListener );
 }
 
+//  XShapeEventBroadcaster
+
+void SAL_CALL SfxBaseModel::addShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape, const Reference< document::XShapeEventListener >& xListener )
+{
+    SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
+
+    auto rv = m_pData->maShapeListeners.emplace(xShape, xListener);
+    assert(rv.second && "duplicate listener?");
+    (void)rv;
+}
+
+
+//  XShapeEventBroadcaster
+
+
+void SAL_CALL SfxBaseModel::removeShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape, const Reference< document::XShapeEventListener >& xListener )
+{
+    SfxModelGuard aGuard( *this );
+
+    auto it = m_pData->maShapeListeners.find(xShape);
+    if (it != m_pData->maShapeListeners.end())
+    {
+        assert(it->second == xListener && "removing wrong listener?");
+        (void)xListener;
+        m_pData->maShapeListeners.erase(it);
+    }
+}
 
 //  XDocumentEventBroadcaster
 
@@ -3219,12 +3248,25 @@ void SfxBaseModel::notifyEvent( const document::EventObject& aEvent ) const
             aIt.remove();
         }
     }
+    // for right now, we're only doing the event that this particular performance problem needed
+    if (aEvent.EventName == "ShapeModified")
+    {
+        uno::Reference<drawing::XShape> xShape(aEvent.Source, uno::UNO_QUERY);
+        if (xShape.is())
+        {
+            auto it = m_pData->maShapeListeners.find(xShape);
+            if (it != m_pData->maShapeListeners.end())
+                it->second->notifyShapeEvent(aEvent);
+        }
+    }
 }
 
 /** returns true if someone added a XEventListener to this XEventBroadcaster */
 bool SfxBaseModel::hasEventListeners() const
 {
-    return !impl_isDisposed() && (nullptr != m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<document::XEventListener>::get()) );
+    return !impl_isDisposed()
+        && ( (nullptr != m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<document::XEventListener>::get()) )
+             || !m_pData->maShapeListeners.empty());
 }
 
 void SAL_CALL SfxBaseModel::addPrintJobListener( const Reference< view::XPrintJobListener >& xListener )

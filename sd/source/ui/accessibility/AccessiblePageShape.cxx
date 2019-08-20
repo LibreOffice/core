@@ -216,24 +216,10 @@ css::uno::Sequence< OUString> SAL_CALL
     return AccessibleShape::getSupportedServiceNames();
 }
 
-//=====  lang::XEventListener  ================================================
-
-void SAL_CALL
-    AccessiblePageShape::disposing (const css::lang::EventObject& aEvent)
-{
-    ThrowIfDisposed ();
-    AccessibleShape::disposing (aEvent);
-}
-
 //=====  XComponent  ==========================================================
 
 void AccessiblePageShape::dispose()
 {
-    // Unregister listeners.
-    Reference<lang::XComponent> xComponent (mxShape, uno::UNO_QUERY);
-    if (xComponent.is())
-        xComponent->removeEventListener (this);
-
     // Cleanup.
     mxShape = nullptr;
 

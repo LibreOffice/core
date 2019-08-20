@@ -30,7 +30,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/document/XShapeEventBroadcaster.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -141,8 +141,8 @@ void AccessibleShape::Init()
 
     // Register at model as document::XEventListener.
     if (maShapeTreeInfo.GetModelBroadcaster().is())
-        maShapeTreeInfo.GetModelBroadcaster()->addEventListener (
-            static_cast<document::XEventListener*>(this));
+        maShapeTreeInfo.GetModelBroadcaster()->addShapeEventListener(mxShape,
+            static_cast<document::XShapeEventListener*>(this));
 
     // Beware! Here we leave the paths of the UNO API and descend into the
     // depths of the core.  Necessary for making the edit engine
@@ -750,8 +750,7 @@ css::uno::Any SAL_CALL
             static_cast<XAccessibleExtendedComponent*>(this),
             static_cast< css::accessibility::XAccessibleSelection* >(this),
             static_cast< css::accessibility::XAccessibleExtendedAttributes* >(this),
-            static_cast<lang::XEventListener*>(this),
-            static_cast<document::XEventListener*>(this),
+            static_cast<document::XShapeEventListener*>(this),
             static_cast<lang::XUnoTunnel*>(this),
             static_cast<XAccessibleGroupPosition*>(this),
             static_cast<XAccessibleHypertext*>(this)
@@ -937,8 +936,7 @@ uno::Sequence<uno::Type> SAL_CALL
     reference to the model in the shape tree info.  Otherwise this object
     remains functional.
 */
-void SAL_CALL
-    AccessibleShape::disposing (const lang::EventObject& aEvent)
+void AccessibleShape::disposing (const lang::EventObject& aEvent)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
@@ -959,33 +957,27 @@ void SAL_CALL
     }
 }
 
-// document::XEventListener
+// document::XShapeEventListener
 void SAL_CALL
-    AccessibleShape::notifyEvent (const document::EventObject& rEventObject)
+    AccessibleShape::notifyShapeEvent (const document::EventObject& rEventObject)
 {
-    // First check if the event is for us.
-    uno::Reference<drawing::XShape> xShape (
-        rEventObject.Source, uno::UNO_QUERY);
-    if ( xShape.get() == mxShape.get() )
+    if (rEventObject.EventName == "ShapeModified")
     {
-        if (rEventObject.EventName == "ShapeModified")
-        {
-            //Need to update text children when receiving ShapeModified hint when exiting edit mode for text box
-            if (mpText)
-                mpText->UpdateChildren();
+        //Need to update text children when receiving ShapeModified hint when exiting edit mode for text box
+        if (mpText)
+            mpText->UpdateChildren();
 
 
-            // Some property of a shape has been modified.  Send an event
-            // that indicates a change of the visible data to all listeners.
-            CommitChange (
-                AccessibleEventId::VISIBLE_DATA_CHANGED,
-                uno::Any(),
-                uno::Any());
+        // Some property of a shape has been modified.  Send an event
+        // that indicates a change of the visible data to all listeners.
+        CommitChange (
+            AccessibleEventId::VISIBLE_DATA_CHANGED,
+            uno::Any(),
+            uno::Any());
 
-            // Name and Description may have changed.  Update the local
-            // values accordingly.
-            UpdateNameAndDescription();
-        }
+        // Name and Description may have changed.  Update the local
+        // values accordingly.
+        UpdateNameAndDescription();
     }
 }
 
@@ -1071,15 +1063,10 @@ void AccessibleShape::disposing()
     if (pStateSet != nullptr)
         pStateSet->RemoveState (AccessibleStateType::FOCUSED);
 
-    // Unregister from broadcasters.
-    Reference<lang::XComponent> xComponent (mxShape, uno::UNO_QUERY);
-    if (xComponent.is())
-        xComponent->removeEventListener (this);
-
     // Unregister from model.
     if (maShapeTreeInfo.GetModelBroadcaster().is())
-        maShapeTreeInfo.GetModelBroadcaster()->removeEventListener (
-            static_cast<document::XEventListener*>(this));
+        maShapeTreeInfo.GetModelBroadcaster()->removeShapeEventListener(mxShape,
+            static_cast<document::XShapeEventListener*>(this));
 
     // Release the child containers.
     if (mpChildrenManager != nullptr)
