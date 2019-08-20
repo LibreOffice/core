@@ -22,6 +22,30 @@
       "revId": "ca80d2ff70426ab823c28dbeec168c056e04973a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_435a53f3",
+        "filename": "vcl/unx/gtk3/gtk3gtkframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3442,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-08-20T06:58:11Z",
+      "side": 1,
+      "message": "Ups. That would probably be a bug. Shouldn\u0027t code, when already tired... Thanks and done.",
+      "parentUuid": "bf659307_83606ba7",
+      "range": {
+        "startLine": 3442,
+        "startChar": 4,
+        "endLine": 3442,
+        "endChar": 40
+      },
+      "revId": "ca80d2ff70426ab823c28dbeec168c056e04973a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
