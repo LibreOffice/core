@@ -910,7 +910,7 @@ void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
     ::std::vector< std::unique_ptr<FmFilterData> >& rChildren = _rItem.GetChildren();
     bool bAppendLevel = dynamic_cast<const FmFormItem*>(&_rItem) !=  nullptr;
 
-    for ( auto& rpChild : rChildren )
+    for ( const auto& rpChild : rChildren )
     {
         FmFilterItems* pItems = dynamic_cast<FmFilterItems*>( rpChild.get() );
         if ( pItems && pItems->GetChildren().empty() )

@@ -2338,7 +2338,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(bool bForceLineDash)
             extractLineContourFromPrimitive2DSequence(xSequence, aExtractedHairlines, aExtractedLineFills);
 
             // for SdrObject creation, just copy all to a single Hairline-PolyPolygon
-            for(basegfx::B2DPolygon & rExtractedHairline : aExtractedHairlines)
+            for(const basegfx::B2DPolygon & rExtractedHairline : aExtractedHairlines)
             {
                 aMergedHairlinePolyPolygon.append(rExtractedHairline);
             }
