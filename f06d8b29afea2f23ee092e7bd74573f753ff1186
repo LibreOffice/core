@@ -168,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_43ab3388",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 11303,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-08-20T07:11:22Z",
+      "side": 1,
+      "message": "Thinking about it again, if there isn\u0027t a fix, it might not be worth to generate this fuss for a minor, unfixed bug. Not many people have complained, otherwise it would probably have been fixed since quite some time. I\u0027ll just remove the code.",
+      "parentUuid": "bf659307_48e7d2e5",
+      "range": {
+        "startLine": 11299,
+        "startChar": 0,
+        "endLine": 11303,
+        "endChar": 14
+      },
+      "revId": "f06d8b29afea2f23ee092e7bd74573f753ff1186",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_86e084ce",
         "filename": "vcl/qt5/Qt5DragAndDrop.cxx",
         "patchSetId": 5
