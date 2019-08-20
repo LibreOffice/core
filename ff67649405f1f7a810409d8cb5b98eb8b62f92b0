@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_03d0db1e",
+        "filename": "offapi/com/sun/star/deployment/XPackageRegistry.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-08-20T07:09:37Z",
+      "side": 1,
+      "message": "\"to late-initialize\", it\u0027s indeed a verb so \"to\" is ok.",
+      "range": {
+        "startLine": 38,
+        "startChar": 40,
+        "endLine": 38,
+        "endChar": 65
+      },
+      "revId": "ff67649405f1f7a810409d8cb5b98eb8b62f92b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
