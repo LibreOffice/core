@@ -692,7 +692,7 @@ void ToolBarManager::Implementation::PreUpdate()
     maToolBarList.GetToolBarsToDeactivate(aToolBars);
 
     // Turn off the tool bars.
-    for (auto& aToolBar : aToolBars)
+    for (const auto& aToolBar : aToolBars)
     {
         OUString sFullName (GetToolBarResourceName(aToolBar));
         SAL_INFO("sd.view", OSL_THIS_FUNC << ":    turning off tool bar " << sFullName);
@@ -721,7 +721,7 @@ void ToolBarManager::Implementation::PostUpdate()
     SAL_INFO("sd.view", OSL_THIS_FUNC << ": ToolBarManager::PostUpdate [");
 
     // Turn on the tool bars that are visible in the new context.
-    for (auto& aToolBar : aToolBars)
+    for (const auto& aToolBar : aToolBars)
     {
         OUString sFullName (GetToolBarResourceName(aToolBar));
         SAL_INFO("sd.view", OSL_THIS_FUNC << ":    turning on tool bar " << sFullName);
@@ -1262,7 +1262,7 @@ void ToolBarList::GetToolBarsToActivate (std::vector<OUString>& rToolBars) const
     std::vector<OUString> aRequestedToolBars;
     MakeRequestedToolBarList(aRequestedToolBars);
 
-    for (auto& aToolBar : aRequestedToolBars)
+    for (const auto& aToolBar : aRequestedToolBars)
     {
         if (::std::find(maActiveToolBars.begin(),maActiveToolBars.end(),aToolBar)
             == maActiveToolBars.end())

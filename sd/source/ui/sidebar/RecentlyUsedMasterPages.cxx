@@ -271,7 +271,7 @@ MasterPageContainer::Token RecentlyUsedMasterPages::GetTokenForIndex (sal_uInt32
 
 void RecentlyUsedMasterPages::SendEvent()
 {
-    for (auto& aLink : maListeners)
+    for (const auto& aLink : maListeners)
     {
         aLink.Call(nullptr);
     }

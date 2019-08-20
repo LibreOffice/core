@@ -107,7 +107,7 @@ struct ImpRememberOrigAndClone
 
 static SdrObject* ImpGetClone(std::vector<ImpRememberOrigAndClone>& aConnectorContainer, SdrObject const * pConnObj)
 {
-    for(ImpRememberOrigAndClone& rImp : aConnectorContainer)
+    for(const ImpRememberOrigAndClone& rImp : aConnectorContainer)
     {
         if(pConnObj == rImp.pOrig)
             return rImp.pClone;

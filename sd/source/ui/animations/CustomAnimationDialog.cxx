@@ -138,7 +138,7 @@ void PresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId )
 
         mpControl->Enable( !aSubTypes.empty() );
 
-        for( auto& aSubType : aSubTypes )
+        for( const auto& aSubType : aSubTypes )
         {
             sal_Int32 nPos = mpControl->InsertEntry( rPresets.getUINameForProperty( aSubType ) );
             if( aSubType == aPropertyValue )
@@ -225,7 +225,7 @@ void SdPresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId
 
         mxControl->set_sensitive(!aSubTypes.empty());
 
-        for( auto& aSubType : aSubTypes )
+        for( const auto& aSubType : aSubTypes )
         {
             mxControl->append_text(rPresets.getUINameForProperty(aSubType));
             maPropertyValues.push_back(aSubType);

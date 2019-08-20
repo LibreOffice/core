@@ -400,7 +400,7 @@ size_t SwarmSolver::getDimensionality() { return maVariables.getLength(); }
 
 bool SwarmSolver::doesViolateConstraints()
 {
-    for (sheet::SolverConstraint& rConstraint : maNonBoundedConstraints)
+    for (const sheet::SolverConstraint& rConstraint : maNonBoundedConstraints)
     {
         double fLeftValue = getValue(rConstraint.Left);
         double fRightValue = 0.0;
@@ -520,7 +520,7 @@ void SAL_CALL SwarmSolver::solve()
 
         size_t index = 0;
         bool bFoundVariable = false;
-        for (table::CellAddress& rVariableCell : maVariables)
+        for (const table::CellAddress& rVariableCell : std::as_const(maVariables))
         {
             if (aLeftCellAddress == rVariableCell)
             {

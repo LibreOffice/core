@@ -74,7 +74,7 @@ bool SdPdfFilter::Import()
     }
 
     size_t nPageNumber = 0;
-    for (Bitmap& aBitmap : aBitmaps)
+    for (const Bitmap& aBitmap : aBitmaps)
     {
         // Create the Graphic and link the original PDF stream.
         Graphic aGraphic(aBitmap);

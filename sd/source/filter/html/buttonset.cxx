@@ -223,7 +223,7 @@ bool ButtonSetImpl::getPreview( int nSet, const std::vector< OUString >& rButton
 
         Point aPos;
 
-        for( Graphic& aGraphic : aGraphics )
+        for( const Graphic& aGraphic : aGraphics )
         {
             aGraphic.Draw( pDev, aPos );
 

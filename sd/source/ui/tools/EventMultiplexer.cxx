@@ -636,7 +636,7 @@ void EventMultiplexer::Implementation::CallListeners (
 void EventMultiplexer::Implementation::CallListeners (EventMultiplexerEvent& rEvent)
 {
     ListenerList aCopyListeners( maListeners );
-    for (auto& rListener : aCopyListeners)
+    for (const auto& rListener : aCopyListeners)
     {
         rListener.Call(rEvent);
     }

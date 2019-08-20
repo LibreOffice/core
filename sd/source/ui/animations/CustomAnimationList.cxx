@@ -693,7 +693,7 @@ sal_Int8 CustomAnimationList::ExecuteDrop( const ExecuteDropEvent& /*rEvt*/ )
 
         // Build list of effects
         std::vector< CustomAnimationEffectPtr > aEffects;
-        for( auto &pEntry : mDndEffectsSelected )
+        for( const auto &pEntry : mDndEffectsSelected )
         {
             CustomAnimationListEntry* pCustomAnimationEffect = static_cast< CustomAnimationListEntry* >( pEntry );
             aEffects.push_back( pCustomAnimationEffect->getEffect() );

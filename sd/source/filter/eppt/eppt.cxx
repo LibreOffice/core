@@ -1231,7 +1231,7 @@ void PPTWriter::ImplWriteOLE( )
 
     SvxMSExportOLEObjects aOleExport( mnCnvrtFlags );
 
-    for ( auto& rxExOleObjEntry : maExOleObj )
+    for ( const auto& rxExOleObjEntry : maExOleObj )
     {
         PPTExOleObjEntry* pPtr = rxExOleObjEntry.get();
         std::unique_ptr<SvMemoryStream> pStrm;
@@ -1355,7 +1355,7 @@ void PPTWriter::ImplWriteAtomEnding()
         }
     }
     // Ole persists
-    for ( auto& rxExOleObjEntry : maExOleObj )
+    for ( const auto& rxExOleObjEntry : maExOleObj )
     {
         PPTExOleObjEntry* pPtr = rxExOleObjEntry.get();
         nOfs = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_ExObj );

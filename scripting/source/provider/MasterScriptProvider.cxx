@@ -456,7 +456,8 @@ template <typename Proc> bool FindProviderAndApply(ProviderCache& rCache, Proc p
     auto pass = [&rCache, &p]() -> bool
     {
         bool bResult = false;
-        for (auto& rProv : rCache.getAllProviders())
+        const Sequence<Reference<provider::XScriptProvider>> aAllProviders = rCache.getAllProviders();
+        for (const auto& rProv : aAllProviders)
         {
             Reference<container::XNameContainer> xCont(rProv, UNO_QUERY);
             if (!xCont.is())

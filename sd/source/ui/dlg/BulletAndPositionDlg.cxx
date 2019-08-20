@@ -914,7 +914,7 @@ IMPL_LINK_NOARG(SvxBulletAndPositionDlg, PopupActivateHdl_Impl, weld::ToggleButt
             OUString sGrfName;
             ScopedVclPtrInstance<VirtualDevice> pVD;
             size_t i = 0;
-            for (auto& grfName : aGrfNames)
+            for (const auto& grfName : aGrfNames)
             {
                 sGrfName = grfName;
                 OUString sItemId = "gallery" + OUString::number(i);

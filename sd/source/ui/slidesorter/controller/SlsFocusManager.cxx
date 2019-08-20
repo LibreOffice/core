@@ -220,7 +220,7 @@ void FocusManager::NotifyFocusChangeListeners() const
     ::std::vector<Link<LinkParamNone*,void>> aListeners (maFocusChangeListeners);
 
     // Tell the selection change listeners that the selection has changed.
-    for (auto& rListener : aListeners)
+    for (const auto& rListener : aListeners)
     {
         rListener.Call(nullptr);
     }

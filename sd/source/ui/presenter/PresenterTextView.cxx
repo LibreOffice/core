@@ -247,7 +247,7 @@ PresenterTextView::Implementation::Implementation()
     aTable[1].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CJK, css::i18n::ScriptType::ASIAN);
     aTable[2].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CTL, css::i18n::ScriptType::COMPLEX);
 
-    for (FontDta & rFntDta : aTable)
+    for (const FontDta & rFntDta : aTable)
     {
         LanguageType nLang = (LANGUAGE_NONE == rFntDta.nLang) ?
             rFntDta.nFallbackLang : rFntDta.nLang;
