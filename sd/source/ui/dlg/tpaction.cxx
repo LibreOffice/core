@@ -234,7 +234,7 @@ void SdTPAction::Construct()
     maCurrentActions.push_back( presentation::ClickAction_STOPPRESENTATION );
 
     // fill Action-Listbox
-    for (presentation::ClickAction & rAction : maCurrentActions)
+    for (const presentation::ClickAction & rAction : maCurrentActions)
     {
         const char* pRId = GetClickActionSdResId(rAction);
         m_xLbAction->append_text(SdResId(pRId));

@@ -31,7 +31,7 @@ SdMoveStyleSheetsUndoAction::SdMoveStyleSheetsUndoAction( SdDrawDocument* pTheDo
     maListOfChildLists.resize( maStyles.size() );
     // create list with lists of style sheet children
     std::size_t i = 0;
-    for (auto& a : maStyles)
+    for (const auto& a : maStyles)
     {
         maListOfChildLists[i++] = SdStyleSheetPool::CreateChildList(a.m_xStyleSheet.get());
     }
@@ -55,7 +55,7 @@ void SdMoveStyleSheetsUndoAction::Undo()
 
         // now assign the children again
         std::vector< SdStyleSheetVector >::iterator childlistiter( maListOfChildLists.begin() );
-        for (auto& a : maStyles)
+        for (const auto& a : maStyles)
         {
             OUString aParent(a.m_xStyleSheet->GetName());
             for( auto& rxChild : *childlistiter )
