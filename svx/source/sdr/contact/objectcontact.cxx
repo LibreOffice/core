@@ -69,7 +69,7 @@ ObjectContact::~ObjectContact() COVERITY_NOEXCEPT_FALSE
     std::vector< ViewObjectContact* > aLocalVOCList;
     aLocalVOCList.swap(maViewObjectContactVector);
 
-    for (auto & pCandidate : aLocalVOCList)
+    for (const auto & pCandidate : aLocalVOCList)
         // ViewObjectContacts only make sense with View and Object contacts.
         // When the contact to the SdrObject is deleted like in this case,
         // all ViewObjectContacts can be deleted, too.
