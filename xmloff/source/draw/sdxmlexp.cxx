@@ -716,7 +716,7 @@ bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUStr
 
 void SdXMLExport::ImpWriteAutoLayoutInfos()
 {
-    for(auto & pInfo : mvAutoLayoutInfoList)
+    for(const auto & pInfo : mvAutoLayoutInfoList)
     {
         if(pInfo)
         {
@@ -1289,7 +1289,7 @@ ImpXMLEXPPageMasterInfo* SdXMLExport::ImpGetPageMasterInfoByName(const OUString&
 {
     if(!rName.isEmpty())
     {
-        for(auto & pInfo : mvPageMasterInfoList)
+        for(const auto & pInfo : mvPageMasterInfoList)
         {
             if(pInfo)
             {

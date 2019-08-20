@@ -1227,7 +1227,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
         }
 
         // Path
-        for ( beans::PropertyValue& rPathItem : maPath )
+        for ( const beans::PropertyValue& rPathItem : maPath )
         {
             switch( EASGet( rPathItem.Name ) )
             {

@@ -803,7 +803,7 @@ void ShapeSortContext::popGroupAndSort()
     // this is the current index, all shapes before that
     // index are finished
     sal_Int32 nIndex = 0;
-    for (ZOrderHint& rHint : maZOrderList)
+    for (const ZOrderHint& rHint : maZOrderList)
     {
         for (vector<ZOrderHint>::iterator aIt = maUnsortedList.begin(); aIt != maUnsortedList.end() && nIndex < rHint.nShould; )
         {
