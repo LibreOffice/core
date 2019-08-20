@@ -29,6 +29,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/random.hxx>
+#include <unotools/resmgr.hxx>
 
 TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/tipofthedaydialog.ui", "TipOfTheDayDialog")
@@ -77,7 +78,8 @@ void TipOfTheDayDialog::UpdateTip()
     }
     else if (aLink.startsWith("http"))
     {
-        m_pLink->set_uri(CuiResId(aLink.toUtf8().getStr()));
+        // Links may have some %PRODUCTVERSION which need to be expanded
+        m_pLink->set_uri(Translate::ExpandVariables(aLink));
         m_pLink->set_label(CuiResId(STR_MORE_LINK));
         m_pLink->set_visible(true);
         m_pLink->connect_clicked(Link<weld::LinkButton&, void>());
