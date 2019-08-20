@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_1ef59083",
+        "filename": "xmlsecurity/source/dialogs/certificatechooser.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-20T13:50:27Z",
+      "side": 1,
+      "message": "Would look cleaner and simpler and touch less lines like in\n\n    if (sIssuer \u003d\u003d msPreferredKey \u0026\u0026 !msPreferredKey.isEmpty())",
+      "range": {
+        "startLine": 223,
+        "startChar": 17,
+        "endLine": 224,
+        "endChar": 46
+      },
+      "revId": "648990692c8253e3843c4c5954940e8b893d5f3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
