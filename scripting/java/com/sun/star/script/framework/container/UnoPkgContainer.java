@@ -348,7 +348,7 @@ public class UnoPkgContainer extends ParcelContainer {
             uri.contains("$BUNDLED_EXTENSIONS/")) {
 
             //its in a bundle need to determine the uno-package file its in
-            LogUtils.DEBUG("processUnoPackage - is part of a uno bundle");
+            LogUtils.DEBUG("processUnoPackage - is part of a UNO bundle");
 
             int index = uri.lastIndexOf('/');
 
