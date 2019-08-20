@@ -1334,7 +1334,7 @@ structMember:
           dynamic_cast<unoidl::detail::SourceProviderPlainStructTypeEntityPad *>(
               ent->pad.get());
       if (p1 != nullptr) {
-          for (auto & i: p1->members) {
+          for (const auto & i: p1->members) {
               if (id == i.name) {
                   error(
                       @3, yyscanner,
@@ -1401,7 +1401,7 @@ structMember:
               p2 = dynamic_cast<unoidl::detail::SourceProviderPolymorphicStructTypeTemplateEntityPad *>(
                   ent->pad.get());
           if (p2 != nullptr) {
-              for (auto & i: p2->members) {
+              for (const auto & i: p2->members) {
                   if (id == i.name) {
                       error(
                           @3, yyscanner,
@@ -1420,7 +1420,7 @@ structMember:
                   = dynamic_cast<unoidl::detail::SourceProviderExceptionTypeEntityPad *>(
                       ent->pad.get());
               assert(p3 != nullptr);
-              for (auto & i: p3->members) {
+              for (const auto & i: p3->members) {
                   if (id == i.name) {
                       error(
                           @3, yyscanner,
@@ -1869,7 +1869,7 @@ methodParam:
       default:
           break;
       }
-      for (auto & i: pad->directMethods.back().parameters) {
+      for (const auto & i: pad->directMethods.back().parameters) {
           if (id == i.name) {
               error(
                   @5, yyscanner,
@@ -2353,7 +2353,7 @@ singleInterfaceBasedServiceDefn:
       assert(pad != nullptr);
       std::vector<unoidl::SingleInterfaceBasedServiceEntity::Constructor> ctors;
       if ($7) {
-          for (auto & i: pad->constructors) {
+          for (const auto & i: pad->constructors) {
               std::vector<unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter> parms;
               for (auto & j: i.parameters) {
                   parms.emplace_back(j.name, j.type.getName(), j.rest);
@@ -2392,7 +2392,7 @@ ctor:
       rtl::Reference<unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad>
           pad(getCurrentPad<unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad>(
                   data));
-      for (auto & i: pad->constructors) {
+      for (const auto & i: pad->constructors) {
           if (id == i.name) {
               error(
                   @2, yyscanner,
@@ -2518,7 +2518,7 @@ ctorParam:
                + " rest parameter must be last parameter"));
           YYERROR;
       }
-      for (auto & i: pad->constructors.back().parameters) {
+      for (const auto & i: pad->constructors.back().parameters) {
           if (id == i.name) {
               error(
                   @6, yyscanner,
@@ -2630,7 +2630,7 @@ serviceBase:
       std::vector<unoidl::AnnotatedReference> & v(
           opt
           ? pad->directOptionalBaseServices : pad->directMandatoryBaseServices);
-      for (auto & i: v) {
+      for (const auto & i: v) {
           if (name == i.name) {
               error(
                   @4, yyscanner,
@@ -2707,7 +2707,7 @@ serviceInterfaceBase:
           opt
           ? pad->directOptionalBaseInterfaces
           : pad->directMandatoryBaseInterfaces);
-      for (auto & i: v) {
+      for (const auto & i: v) {
           if (name == i.name) {
               error(
                   @4, yyscanner,
@@ -2794,7 +2794,7 @@ serviceProperty:
       rtl::Reference<unoidl::detail::SourceProviderAccumulationBasedServiceEntityPad>
           pad(getCurrentPad<unoidl::detail::SourceProviderAccumulationBasedServiceEntityPad>(
                   data));
-      for (auto & i: pad->directProperties) {
+      for (const auto & i: pad->directProperties) {
           if (id == i.name) {
               error(
                   @4, yyscanner,
@@ -3477,7 +3477,7 @@ primaryExpr:
           unoidl::detail::SourceProviderEnumTypeEntityPad * p1 = dynamic_cast<
               unoidl::detail::SourceProviderEnumTypeEntityPad *>(pad.get());
           if (p1 != nullptr) {
-              for (auto & j: p1->members) {
+              for (const auto & j: p1->members) {
                   if (j.name == name) {
                       v = unoidl::ConstantValue(j.value);
                       found = true;
@@ -3490,7 +3490,7 @@ primaryExpr:
                       unoidl::detail::SourceProviderConstantGroupEntityPad *>(
                           pad.get());
               if (p2 != nullptr) {
-                  for (auto & j: p2->members) {
+                  for (const auto & j: p2->members) {
                       if (j.name == name) {
                           v = j.value;
                           found = true;
@@ -3538,7 +3538,7 @@ primaryExpr:
                           unoidl::detail::SourceProviderConstantGroupEntityPad *>(
                               ent->pad.get());
                   if (pad != nullptr) {
-                      for (auto & j: pad->members) {
+                      for (const auto & j: pad->members) {
                           if (j.name == id) {
                               v = j.value;
                               found = true;

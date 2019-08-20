@@ -27,13 +27,13 @@ namespace apitest
 void SheetSortDescriptor2::testSheetSortDescriptor2Properties()
 {
     uno::Reference<util::XSortable> xSortable(init(), UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> values = xSortable->createSortDescriptor();
+    const uno::Sequence<beans::PropertyValue> values = xSortable->createSortDescriptor();
 
     std::vector<OUString> names;
     // Only test the get/read operation of the values, because set/write operation doesn't
     // make any sense. It doesn't trigger any changes.
     // See discussion: nabble.documentfoundation.org/Testing-UNO-API-service-properties-td4236286.html.
-    for (auto& value : values)
+    for (const auto& value : values)
     {
         if (value.Name == "BindFormatsToContent")
         {
