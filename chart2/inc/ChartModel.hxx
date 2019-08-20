@@ -390,6 +390,7 @@ public:
 
     // _____ XChartStyled _____
     virtual css::uno::Reference< css::chart2::XChartStyle > SAL_CALL getChartStyle() override;
+    virtual void SAL_CALL setChartStyle(const css::uno::Reference<css::chart2::XChartStyle>& xChartStyle ) override;
 
     // ____ XInterface (for old API wrapper) ____
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;

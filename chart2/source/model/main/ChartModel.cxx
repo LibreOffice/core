@@ -946,6 +946,14 @@ uno::Reference< chart2::XChartStyle > SAL_CALL ChartModel::getChartStyle()
     return m_xChartStyle;
 }
 
+void SAL_CALL ChartModel::setChartStyle(const css::uno::Reference<css::chart2::XChartStyle>& xChartStyle)
+{
+    MutexGuard aGuard( m_aModelMutex );
+
+    m_xChartStyle = xChartStyle;
+    m_xChartStyle->applyStyleToDiagram(m_xDiagram);
+}
+
 // ____ XInterface (for old API wrapper) ____
 uno::Any SAL_CALL ChartModel::queryInterface( const uno::Type& aType )
 {
