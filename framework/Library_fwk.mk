@@ -88,6 +88,7 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/helper/uiconfigelementwrapperbase \
     framework/source/helper/uielementwrapperbase \
     framework/source/helper/vclstatusindicator \
+    framework/source/helper/wakeupthread \
     framework/source/interaction/quietinteraction \
     framework/source/jobs/job \
     framework/source/jobs/jobdata \
