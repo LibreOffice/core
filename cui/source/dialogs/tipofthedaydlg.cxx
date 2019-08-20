@@ -29,6 +29,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/configmgr.hxx>
 
 TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
@@ -88,8 +89,8 @@ void TipOfTheDayDialog::UpdateTip()
     }
     else if (aLink.startsWith("http"))
     {
-        aText = CuiResId(aLink.toUtf8().getStr());
-
+        // Links may have some %PRODUCTVERSION which need to be expanded
+        aText = Translate::ExpandVariables(aLink);
         sal_Int32 aPos = aText.indexOf("%LANGUAGENAME");
         if (aPos != -1)
         {
@@ -98,8 +99,8 @@ void TipOfTheDayDialog::UpdateTip()
                 aLang = LanguageTag(utl::ConfigManager::getUILocale()).getBcp47();
             aText = aText.replaceAt(aPos, 13, aLang);
         }
-
         m_pLink->set_uri(aText);
+
         m_pLink->set_label(CuiResId(STR_MORE_LINK));
         m_pLink->set_visible(true);
         m_pLink->connect_clicked(Link<weld::LinkButton&, void>());
