@@ -432,7 +432,7 @@ bool SwEditShell::SetCurFootnote( const SwFormatFootnote& rFillFootnote )
     bool bChgd = false;
     StartAllAction();
 
-    for(SwPaM& rCursor : GetCursor()->GetRingContainer())
+    for(const SwPaM& rCursor : GetCursor()->GetRingContainer())
     {
         bChgd |=
             mxDoc->SetCurFootnote(rCursor, rFillFootnote.GetNumStr(), rFillFootnote.IsEndNote());

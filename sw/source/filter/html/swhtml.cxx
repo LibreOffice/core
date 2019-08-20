@@ -480,7 +480,7 @@ SwHTMLParser::~SwHTMLParser()
     if( !m_aSetAttrTab.empty() )
     {
         OSL_ENSURE( m_aSetAttrTab.empty(),"There are still attributes on the stack" );
-        for ( auto& rpAttr : m_aSetAttrTab )
+        for ( const auto& rpAttr : m_aSetAttrTab )
             delete rpAttr;
         m_aSetAttrTab.clear();
     }

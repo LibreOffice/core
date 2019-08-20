@@ -705,7 +705,7 @@ void DocxTableStyleExport::Impl::TableStyle(const uno::Sequence<beans::PropertyV
     tableStyleRPr(aRPr);
     tableStyleTablePr(aTablePr);
     tableStyleTcPr(aTcPr);
-    for (uno::Sequence<beans::PropertyValue>& i : aTableStylePrs)
+    for (const uno::Sequence<beans::PropertyValue>& i : std::as_const(aTableStylePrs))
         tableStyleTableStylePr(i);
 
     m_pSerializer->endElementNS(XML_w, XML_style);

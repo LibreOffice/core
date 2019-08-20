@@ -1365,7 +1365,7 @@ IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, vo
         Sequence< OUString >aFileNames( aMedList.size() );
         OUString* pFileNames = aFileNames.getArray();
         sal_Int32 nPos = 0;
-        for (std::unique_ptr<SfxMedium>& pMed : aMedList)
+        for (const std::unique_ptr<SfxMedium>& pMed : aMedList)
         {
             OUString sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE )
                 + OUStringLiteral1(sfx2::cTokenSeparator)

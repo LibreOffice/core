@@ -2555,7 +2555,7 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
         m_pSerializer->singleElementNS( XML_w, XML_lang, xAttrList );
     }
 
-    for (beans::PropertyValue & i : m_aTextEffectsGrabBag)
+    for (const beans::PropertyValue & i : m_aTextEffectsGrabBag)
     {
         boost::optional<sal_Int32> aElementId = lclGetElementIdForName(i.Name);
         if(aElementId)

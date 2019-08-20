@@ -1653,7 +1653,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageComment)
     std::stringstream aStream(aPostits.toUtf8().getStr());
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
-    for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))
+    for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))
     {
         const boost::property_tree::ptree& rComment = rValue.second;
         OString aAnchorPos(rComment.get<std::string>("anchorPos").c_str());

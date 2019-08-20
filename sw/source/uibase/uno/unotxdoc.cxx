@@ -3306,7 +3306,7 @@ OUString SwXTextDocument::getTrackedChanges()
 
                 SwRects* pRects(&aCursor);
                 std::vector<OString> aRects;
-                for (SwRect& rNextRect : *pRects)
+                for (const SwRect& rNextRect : *pRects)
                     aRects.push_back(rNextRect.SVRect().toString());
 
                 const OString sRects = comphelper::string::join("; ", aRects);

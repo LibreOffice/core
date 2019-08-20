@@ -1029,7 +1029,7 @@ void SwEditShell::TransliterateText( TransliterationFlags nType )
     if( pCursor->GetNext() != pCursor )
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
-        for(SwPaM& rPaM : GetCursor()->GetRingContainer())
+        for(const SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
             if( rPaM.HasMark() )
                 GetDoc()->getIDocumentContentOperations().TransliterateText( rPaM, aTrans );
@@ -1044,7 +1044,7 @@ void SwEditShell::TransliterateText( TransliterationFlags nType )
 
 void SwEditShell::CountWords( SwDocStat& rStat ) const
 {
-    for(SwPaM& rPaM : GetCursor()->GetRingContainer())
+    for(const SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
         if( rPaM.HasMark() )
             SwDoc::CountWords( rPaM, rStat );

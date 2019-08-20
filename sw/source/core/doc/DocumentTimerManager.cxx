@@ -116,7 +116,7 @@ DocumentTimerManager::IdleJob DocumentTimerManager::GetNextIdleJob() const
         !SfxProgress::GetActiveProgress( m_rDoc.GetDocShell() ) )
     {
         SwViewShell* pShell(m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell());
-        for(SwViewShell& rSh : pShell->GetRingContainer())
+        for(const SwViewShell& rSh : pShell->GetRingContainer())
             if( rSh.ActionPend() )
                 return IdleJob::Busy;
 

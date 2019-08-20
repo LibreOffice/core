@@ -674,7 +674,7 @@ void SvxCSS1Parser::SelectorParsed( std::unique_ptr<CSS1Selector> pSelector, boo
     {
         OSL_ENSURE( pSheetItemSet, "Where is the Item-Set for Style-Sheets?" );
 
-        for (std::unique_ptr<CSS1Selector> & rpSelection : m_Selectors)
+        for (const std::unique_ptr<CSS1Selector> & rpSelection : m_Selectors)
         {
             StyleParsed(rpSelection.get(), *pSheetItemSet, *pSheetPropInfo);
         }
@@ -817,7 +817,7 @@ bool SvxCSS1Parser::ParseStyleSheet( const OUString& rIn )
 
     CSS1Parser::ParseStyleSheet( rIn );
 
-    for (std::unique_ptr<CSS1Selector> & rpSelector : m_Selectors)
+    for (const std::unique_ptr<CSS1Selector> & rpSelector : m_Selectors)
     {
         StyleParsed(rpSelector.get(), *pSheetItemSet, *pSheetPropInfo);
     }

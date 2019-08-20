@@ -1676,7 +1676,7 @@ std::set<SwRootFrame*> SwDoc::GetAllLayouts()
     SwViewShell *pStart = getIDocumentLayoutAccess().GetCurrentViewShell();
     if(pStart)
     {
-        for(SwViewShell& rShell : pStart->GetRingContainer())
+        for(const SwViewShell& rShell : pStart->GetRingContainer())
         {
             if(rShell.GetLayout())
                 aAllLayouts.insert(rShell.GetLayout());

@@ -406,7 +406,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         if (it != aGrabBag.end())
         {
             comphelper::SequenceAsHashMap aEffectExtent(it->second);
-            for (std::pair<const OUString, uno::Any>& rDirection : aEffectExtent)
+            for (const std::pair<const OUString, uno::Any>& rDirection : aEffectExtent)
             {
                 if (rDirection.first == "l" && rDirection.second.has<sal_Int32>())
                     nLeftExt = rDirection.second.get<sal_Int32>();

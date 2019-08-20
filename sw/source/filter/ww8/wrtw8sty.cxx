@@ -1786,7 +1786,7 @@ bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )
     unsigned int nOldIndex = rWrt.GetHdFtIndex();
     rWrt.SetHdFtIndex( 0 );
 
-    for (WW8_SepInfo & rSepInfo : aSects)
+    for (const WW8_SepInfo & rSepInfo : aSects)
     {
         std::shared_ptr<WW8_PdAttrDesc> const pAttrDesc(new WW8_PdAttrDesc);
         m_SectionAttributes.push_back(pAttrDesc);

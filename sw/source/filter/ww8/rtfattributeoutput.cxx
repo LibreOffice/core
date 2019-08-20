@@ -1925,7 +1925,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
             lcl_TextFrameShadow(m_aFlyProperties, rFrameFormat);
             lcl_TextFrameRelativeSize(m_aFlyProperties, rFrameFormat);
 
-            for (std::pair<OString, OString>& rPair : m_aFlyProperties)
+            for (const std::pair<OString, OString>& rPair : m_aFlyProperties)
             {
                 m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SP "{");
                 m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SN " ");
@@ -4144,7 +4144,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
             }
         }
 
-        for (std::pair<OString, OString>& rPair : aFlyProperties)
+        for (const std::pair<OString, OString>& rPair : aFlyProperties)
         {
             m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SP "{");
             m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SN " ");

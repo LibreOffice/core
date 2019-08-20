@@ -1378,7 +1378,7 @@ void SAL_CALL SwChartDataProvider::dispose(  )
     if (bMustDispose)
     {
         // dispose all data-sequences
-        for (auto& rEntry : aDataSequences)
+        for (const auto& rEntry : aDataSequences)
         {
             DisposeAllDataSequences( rEntry.first );
         }

@@ -981,7 +981,7 @@ void SwPostItMgr::DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage)
 
 void SwPostItMgr::PaintTile(OutputDevice& rRenderContext)
 {
-    for (std::unique_ptr<SwSidebarItem>& pItem : mvPostItFields)
+    for (const std::unique_ptr<SwSidebarItem>& pItem : mvPostItFields)
     {
         SwAnnotationWin* pPostIt = pItem->pPostIt;
         if (!pPostIt)
@@ -1937,7 +1937,7 @@ vcl::Window* SwPostItMgr::IsHitSidebarWindow(const Point& rPointLogic)
         if (bEnableMapMode)
             mpEditWin->EnableMapMode();
 
-        for (std::unique_ptr<SwSidebarItem>& pItem : mvPostItFields)
+        for (const std::unique_ptr<SwSidebarItem>& pItem : mvPostItFields)
         {
             SwAnnotationWin* pPostIt = pItem->pPostIt;
             if (!pPostIt)
@@ -2041,7 +2041,7 @@ void SwPostItMgr::CorrectPositions()
     {
         long aAnchorPosX = 0;
         long aAnchorPosY = 0;
-        for (std::unique_ptr<SwPostItPageItem>& pPage : mPages)
+        for (const std::unique_ptr<SwPostItPageItem>& pPage : mPages)
         {
             for (auto const& item : pPage->mvSidebarItems)
             {
