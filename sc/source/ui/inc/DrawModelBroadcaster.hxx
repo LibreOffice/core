@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_DRAWMODELBROADCASTER_HXX
 
 #include <svl/lstner.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 
@@ -31,7 +31,7 @@ class ScDrawModelBroadcaster : public SfxListener,
     public ::cppu::WeakImplHelper< css::document::XEventBroadcaster >
 {
     mutable ::osl::Mutex maListenerMutex;
-    ::comphelper::OInterfaceContainerHelper2 maEventListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::document::XEventListener> maEventListeners;
     SdrModel *mpDrawModel;
 
 public:
