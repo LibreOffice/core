@@ -27,7 +27,7 @@ module com { module sun { module star { module uri {
 /**
    represents generic, mutable URI references.
 
-   <p>See <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC&nbsp;2396</a> for a
+   <p>See <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC&nbsp;3986</a> for a
    description of URI references and related terms.</p>
 
    <p>This interface only handles generic URI references (both absolute and
@@ -53,6 +53,8 @@ published interface XUriReference: com::sun::star::uno::XInterface {
 
     /**
        returns whether this URI reference is absolute or relative.
+
+       <p>A URI is absolute if it has a scheme.</p>
 
        @returns
        `TRUE` if this URI reference is absolute, `FALSE` if it is relative.
@@ -86,7 +88,7 @@ published interface XUriReference: com::sun::star::uno::XInterface {
     string getSchemeSpecificPart();
 
     /**
-       returns whether this URI reference is hierarchical or opaque.
+       returns whether this URI reference is hierarchical or opaque, in the sense of RFC&nbsp2396.
 
        <p>An absolute URI reference is hierarchical if its scheme-specific part
        starts with &ldquo;<code>/</code>&rdquo;.  A relative URI reference is
@@ -94,23 +96,25 @@ published interface XUriReference: com::sun::star::uno::XInterface {
 
        @returns
        `TRUE` if this URI reference is hierarchical, `FALSE` if it is opaque.
+
+       @deprecated RFC&nbsp;3986 no longer differentiates between hierarchical and opaque URIs.
      */
     boolean isHierarchical();
 
     /**
-       returns whether this (hierarchical) URI reference has an authority part.
+       returns whether this URI reference has an authority part.
 
        @returns
-       `TRUE` if this URI reference is hierarchical and has an authority part.
+       `TRUE` if this URI reference has an authority part.
      */
     boolean hasAuthority();
 
     /**
-       returns the authority part of this (hierarchical) URI reference.
+       returns the authority part of this URI reference.
 
        @returns
        the textual representation of the authority part (with the exact spelling
-       retained), if this is a hierarchical URI reference that has an authority
+       retained), if this is a URI reference that has an authority
        part; otherwise, an empty `string` is returned.
      */
     string getAuthority();
@@ -120,28 +124,26 @@ published interface XUriReference: com::sun::star::uno::XInterface {
 
        @returns
        the textual representation of the path part (with the exact spelling
-       retained), if this is a hierarchical URI reference; for an opaque URI
-       reference, the scheme-specific part (with the exact spelling retained) is
-       returned.
+       retained).
      */
     string getPath();
 
     /**
-       returns whether this (relative) URI reference has a relative path.
+       returns whether this URI reference has a relative path.
 
        @returns
-       `TRUE` if this URI reference is relative and has a relative path.
+       `TRUE` if this URI reference has a relative path.
      */
     boolean hasRelativePath();
 
     /**
-       returns the number of path segments of this (hierarchical) URI reference.
+       returns the number of path segments of this URI reference.
 
-       <p>For an opaque URI reference, and for a hierarchical URI reference with
-       an empty path, the number of path segments is zero.  For a hierarchical
+       <p>For a URI reference with
+       an empty path, the number of path segments is zero.  For a
        URI reference with an absolute, non-empty path, the number of path
        segments equals the number of &ldquo;<code>/</code>&rdquo; delimiters.
-       For a hierarchical URI reference with a relative, non-empty path, the
+       For a URI reference with a relative, non-empty path, the
        number of path segments equals the number of &ldquo;<code>/</code>&rdquo;
        delimiters, plus one.</p>
 
@@ -151,7 +153,7 @@ published interface XUriReference: com::sun::star::uno::XInterface {
     long getPathSegmentCount();
 
     /**
-       returns a given path segment of this (hierarchical) URI reference.
+       returns a given path segment of this URI reference.
 
        @param index
        the index of the path segment, starting at zero.
@@ -159,27 +161,27 @@ published interface XUriReference: com::sun::star::uno::XInterface {
        @returns
        the textual representation of the given path segment (with the exact
        spelling retained, without any delimiting &ldquo;<code>/</code>&rdquo;),
-       if this URI reference is hierarchical and has that many path segments;
+       if this URI reference has that many path segments;
        otherwise, and in particular if <code>index</code> is negative, an empty
        `string` is returned.
      */
     string getPathSegment([in] long index);
 
     /**
-       returns whether this (hierarchical) URI reference has a query part.
+       returns whether this URI reference has a query part.
 
        @returns
-       `TRUE` if this URI reference is hierarchical and has a query part.
+       `TRUE` if this URI reference has a query part.
      */
     boolean hasQuery();
 
     /**
-       returns the query part of this (hierarchical) URI reference.
+       returns the query part of this URI reference.
 
        @returns
        the textual representation of the query part (with the exact spelling
        retained; without the delimiting &ldquo;<code>?</code>&rdquo;), if this
-       is a hierarchical URI reference that has a query part; otherwise, an
+       is a URI reference that has a query part; otherwise, an
        empty `string` is returned.
      */
     string getQuery();

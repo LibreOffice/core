@@ -30,7 +30,7 @@ namespace stoc { namespace uriproc {
 class UriReference {
 public:
     UriReference(
-        OUString const & scheme, bool isHierarchical, bool hasAuthority,
+        OUString const & scheme, bool hasAuthority,
         OUString const & authority, OUString const & path,
         bool hasQuery, OUString const & query);
 
@@ -93,7 +93,6 @@ public:
     OUString m_path;
     OUString const m_query;
     OUString m_fragment;
-    bool const m_isHierarchical;
     bool const m_hasAuthority;
     bool const m_hasQuery;
     bool m_hasFragment;

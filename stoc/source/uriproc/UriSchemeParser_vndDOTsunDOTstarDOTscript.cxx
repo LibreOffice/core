@@ -191,7 +191,7 @@ class UrlReference:
 public:
     UrlReference(OUString const & scheme, OUString const & path):
         m_base(
-            scheme, false, false, OUString(), path, false, OUString())
+            scheme, false, OUString(), path, false, OUString())
     {}
 
     UrlReference(const UrlReference&) = delete;
