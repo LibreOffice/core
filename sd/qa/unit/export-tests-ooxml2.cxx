@@ -193,6 +193,7 @@ public:
     void testTdf111789();
     void testTdf100348_convert_Fontwork2TextWarp();
     void testTdf1225573_FontWorkScaleX();
+    void testTdf99497_keepAppearanceOfCircleKind();
     /// SmartArt animated elements
     void testTdf104792();
     void testTdf90627();
@@ -288,6 +289,7 @@ public:
     CPPUNIT_TEST(testTdf111789);
     CPPUNIT_TEST(testTdf100348_convert_Fontwork2TextWarp);
     CPPUNIT_TEST(testTdf1225573_FontWorkScaleX);
+    CPPUNIT_TEST(testTdf99497_keepAppearanceOfCircleKind);
     CPPUNIT_TEST(testTdf104792);
     CPPUNIT_TEST(testTdf90627);
     CPPUNIT_TEST(testTdf104786);
@@ -2534,6 +2536,46 @@ void SdOOXMLExportTest2::testTdf126741()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), rDashItem.GetDashValue().GetDashes());
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(35), rDashItem.GetDashValue().GetDashLen());
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(105), rDashItem.GetDashValue().GetDistance());
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf99497_keepAppearanceOfCircleKind()
+{
+    // Error was, that all CircleKind were exported to 'ellipse'.
+    // Resulting pptx has to contain the customshapes of the corresponding kind
+    // slide 1 ARC -> arc, slide 2 CUT -> chord, slide 3 SECTION -> pie
+    // Adjustment values need to exist and their values need to correspond to the
+    // orignal angles. Shape 'arc' needs to be unfilled.
+    const OUString sPath("/sd/qa/unit/data/odp/tdf99497_CircleKind.odp");
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(sPath), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    // slide 1 45° -> adj1 = 20493903, 270° -> adj2 = 5400000, <a:noFill/> exists
+    xmlDocPtr pXmlDocContent1 = parseExport(tempFile, "ppt/slides/slide1.xml");
+    const OString sPathStart1("/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom");
+    assertXPath(pXmlDocContent1, sPathStart1 + "[@prst='arc']");
+    const OString sPathAdj1(sPathStart1 + "/a:avLst/a:gd");
+    assertXPath(pXmlDocContent1, sPathAdj1 + "[@name='adj1' and  @fmla='val 20493903']");
+    assertXPath(pXmlDocContent1, sPathAdj1 + "[@name='adj2' and  @fmla='val 5400000']");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:noFill");
+
+    // slide 2 270° -> adj1 = 5400000, 180° -> adj2 = 10800000
+    xmlDocPtr pXmlDocContent2 = parseExport(tempFile, "ppt/slides/slide2.xml");
+    const OString sPathStart2("/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom");
+    assertXPath(pXmlDocContent2, sPathStart2 + "[@prst='chord']");
+    const OString sPathAdj2(sPathStart2 + "/a:avLst/a:gd");
+    assertXPath(pXmlDocContent2, sPathAdj2 + "[@name='adj1' and  @fmla='val 5400000']");
+    assertXPath(pXmlDocContent2, sPathAdj2 + "[@name='adj2' and  @fmla='val 10800000']");
+
+    // slide 3 120° -> adj1 = 12600000, 30° -> adj2 = 20946396
+    xmlDocPtr pXmlDocContent3 = parseExport(tempFile, "ppt/slides/slide3.xml");
+    const OString sPathStart3("/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom");
+    assertXPath(pXmlDocContent3, sPathStart3 + "[@prst='pie']");
+    const OString sPathAdj3(sPathStart3 + "/a:avLst/a:gd");
+    assertXPath(pXmlDocContent3, sPathAdj3 + "[@name='adj1' and  @fmla='val 12600000']");
+    assertXPath(pXmlDocContent3, sPathAdj3 + "[@name='adj2' and  @fmla='val 20946396']");
 
     xDocShRef->DoClose();
 }
