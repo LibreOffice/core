@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_231ddf0e",
+        "filename": "vcl/unx/gtk3/gtk3gtkframe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3446,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-08-20T07:05:10Z",
+      "side": 1,
+      "message": "Won\u0027t \u0027res\u0027 be undefined for non-debug build here?\nShouldn\u0027t it be fine to just assign \u0027res\u0027 unconditionally, i.e. drop the \u0027#ifndef\u0027?",
+      "range": {
+        "startLine": 3446,
+        "startChar": 19,
+        "endLine": 3446,
+        "endChar": 22
+      },
+      "revId": "8a5989d5ed9fe4d7568e54063b0432a820ad687f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
