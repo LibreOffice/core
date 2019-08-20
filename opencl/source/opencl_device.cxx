@@ -460,7 +460,7 @@ void writeDevicesLog(std::unique_ptr<ds_profile> const & rProfile, OUString cons
 
     int nIndex = 0;
 
-    for (ds_device& rDevice : rProfile->devices)
+    for (const ds_device& rDevice : rProfile->devices)
     {
         if (rDevice.eType == DeviceType::OpenCLDevice)
         {

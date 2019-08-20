@@ -214,7 +214,7 @@ static void sortChildrenByZOrder(const ShapePtr& pShape)
               [](const ShapePtr& a, const ShapePtr& b) { return a->getZOrder() < b->getZOrder(); });
 
     // Apply also for children.
-    for (auto& rChild : rChildren)
+    for (const auto& rChild : rChildren)
         sortChildrenByZOrder(rChild);
 }
 

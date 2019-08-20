@@ -509,7 +509,7 @@ lcl_LookupTableHelper::lcl_LookupTableHelper()
 
 lcl_LookupTableHelper::~lcl_LookupTableHelper()
 {
-    for ( LocaleDataLookupTableItem& item : maLookupTable ) {
+    for ( const LocaleDataLookupTableItem& item : maLookupTable ) {
         delete item.module;
     }
 }
@@ -879,7 +879,7 @@ LocaleDataImpl::getAllFormats( const Locale& rLocale )
 
     Sequence< FormatElement > seq(formatCount);
     sal_Int32 f = 0;
-    for (FormatSection & s : section)
+    for (const FormatSection & s : section)
     {
         sal_Unicode const * const * const formatArray = s.formatArray;
         if ( formatArray )

@@ -185,7 +185,7 @@ void Drawing::convertAndInsert() const
             DBG_UNHANDLED_EXCEPTION("oox.vml");
         }
     }
-    for ( auto& BoxItr : GroupBoxMap )
+    for ( const auto& BoxItr : GroupBoxMap )
     {
         const uno::Any aGroup( OUString("autoGroup_").concat(BoxItr.first) );
         for ( auto RadioItr = RadioButtonMap.begin(); RadioItr != RadioButtonMap.end(); )

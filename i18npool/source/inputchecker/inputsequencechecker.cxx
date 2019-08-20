@@ -108,7 +108,7 @@ InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char const * rLanguage)
         return cachedItem->xISC;
     }
     else {
-        for (auto& l : lookupTable) {
+        for (const auto& l : lookupTable) {
             cachedItem = l.get();
             if (cachedItem->aLanguage == rLanguage)
                 return cachedItem->xISC;
