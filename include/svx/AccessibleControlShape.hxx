@@ -111,11 +111,11 @@ private:
     //---  XModeChangeListener  --------------------------------
     virtual void SAL_CALL modeChanged( const css::util::ModeChangeEvent& _rSource ) override;
 
-    //---  XAccessibleEventListener ----------------------------
-    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
-
     //---  document::XEventListener ----------------------------
     using AccessibleShape::notifyEvent;
+
+    //---  XAccessibleEventListener ----------------------------
+    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
 
     // XVclContainerListener
     virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
