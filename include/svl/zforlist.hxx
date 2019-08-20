@@ -718,6 +718,9 @@ public:
     /// Return the decimal separator matching the locale of the given format
     OUString GetFormatDecimalSep( sal_uInt32 nFormat ) const;
 
+    /// Return the decimal separator matching the given locale / LanguageType.
+    OUString GetLangDecimalSep( LanguageType nLang ) const;
+
     /// Return a NfCurrencyTable with pointers to <type>NfCurrencyEntry</type> entries
     static const NfCurrencyTable& GetTheCurrencyTable();
 
