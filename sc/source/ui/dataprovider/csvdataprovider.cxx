@@ -110,7 +110,7 @@ void CSVFetchThread::execute()
     orcus::csv_parser<CSVHandler> parser(aBuffer.getStr(), aBuffer.getLength(), aHdl, maConfig);
     parser.parse();
 
-    for (auto& itr : maDataTransformations)
+    for (const auto& itr : maDataTransformations)
     {
         itr->Transform(mrDocument);
     }

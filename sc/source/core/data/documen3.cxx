@@ -204,7 +204,7 @@ bool ScDocument::IsAddressInRangeName( RangeNameScope eScope, const ScAddress& r
     else
         pRangeNames= GetRangeName(rAddress.Tab());
 
-    for (auto& rEntry : *pRangeNames)
+    for (const auto& rEntry : *pRangeNames)
     {
         if (rEntry.second->IsValidReference(aNameRange))
         {
