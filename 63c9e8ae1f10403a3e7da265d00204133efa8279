@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_03f9bbc6",
+        "filename": "sd/source/ui/inc/EventMultiplexer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-08-20T06:59:21Z",
+      "side": 1,
+      "message": "I still don\u0027t understand the whole meaning.",
+      "range": {
+        "startLine": 135,
+        "startChar": 4,
+        "endLine": 135,
+        "endChar": 49
+      },
+      "revId": "63c9e8ae1f10403a3e7da265d00204133efa8279",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
