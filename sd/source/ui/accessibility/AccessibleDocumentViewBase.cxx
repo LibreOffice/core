@@ -20,7 +20,7 @@
 #include <AccessibleDocumentViewBase.hxx>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/document/XShapeEventBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -76,8 +76,8 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
 
     // Fill the shape tree info.
     maShapeTreeInfo.SetModelBroadcaster (
-        uno::Reference<document::XEventBroadcaster>(
-            mxModel, uno::UNO_QUERY));
+        uno::Reference<document::XShapeEventBroadcaster>(
+            mxModel, uno::UNO_QUERY_THROW));
     maShapeTreeInfo.SetController (mxController);
     maShapeTreeInfo.SetSdrView (pViewShell->GetView());
     maShapeTreeInfo.SetDevice (pSdWindow);

@@ -34,6 +34,7 @@
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/document/XShapeEventBroadcaster.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
@@ -119,7 +120,7 @@ typedef ::cppu::WeakImplHelper  <   css::container::XChild
                                         ,   css::rdf::XDocumentMetadataAccess
                                         ,   css::document::XDocumentRecovery
                                         ,   css::document::XUndoManagerSupplier
-                                        ,   css::document::XEventBroadcaster
+                                        ,   css::document::XShapeEventBroadcaster
                                         ,   css::document::XDocumentEventBroadcaster
                                         ,   css::lang::XEventListener
                                         ,   css::document::XEventsSupplier
@@ -494,24 +495,33 @@ public:
     virtual css::uno::Reference< css::document::XEmbeddedScripts > SAL_CALL getScriptContainer() override;
 
 
-    //  XEventBroadcaster
-
+    //  document::XEventBroadcaster
 
     /**___________________________________________________________________________________________________
         @descr      -   registers the given XEventListener.
     */
-
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::document::XEventListener >& xListener ) override;
 
     /**___________________________________________________________________________________________________
         @descr      -   unregisters the given XEventListener.
     */
-
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::document::XEventListener >& xListener ) override;
 
 
-    //  XDocumentEventBroadcaster
+    //  document::XShapeEventBroadcaster
 
+    /**___________________________________________________________________________________________________
+        @descr      -   registers the given XEventListener.
+    */
+    virtual void SAL_CALL addShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::document::XShapeEventListener >& xListener ) override;
+
+    /**___________________________________________________________________________________________________
+        @descr      -   unregisters the given XEventListener.
+    */
+    virtual void SAL_CALL removeShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::document::XShapeEventListener >& xListener ) override;
+
+
+    //  XDocumentEventBroadcaster
 
     virtual void SAL_CALL addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& Listener ) override;
     virtual void SAL_CALL removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& Listener ) override;

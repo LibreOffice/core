@@ -95,11 +95,6 @@ public:
     virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
 
-    //=====  lang::XEventListener  ============================================
-
-    virtual void SAL_CALL
-        disposing (const css::lang::EventObject& Source) override;
-
     using AccessibleShape::disposing;
 
 protected:
