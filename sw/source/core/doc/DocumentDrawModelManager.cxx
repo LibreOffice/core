@@ -137,7 +137,7 @@ void DocumentDrawModelManager::InitDrawModel()
     SwViewShell* const pSh = m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
     if ( pSh )
     {
-        for(SwViewShell& rViewSh : pSh->GetRingContainer())
+        for(const SwViewShell& rViewSh : pSh->GetRingContainer())
         {
             SwRootFrame* pRoot =  rViewSh.GetLayout();
             if( pRoot && !pRoot->GetDrawPage() )

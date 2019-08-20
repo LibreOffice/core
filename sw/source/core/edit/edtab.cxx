@@ -143,7 +143,7 @@ bool SwEditShell::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     SwWait aWait( *GetDoc()->GetDocShell(), true );
     bool bRet = false;
     StartAllAction();
-    for(SwPaM& rPaM : GetCursor()->GetRingContainer())
+    for(const SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
         if( rPaM.HasMark() )
             bRet |= nullptr != GetDoc()->TextToTable( rInsTableOpts, rPaM, cCh,

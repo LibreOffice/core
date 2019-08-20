@@ -836,7 +836,7 @@ void SwAnnotationWin::SetPosAndSize()
                 EditWin().EnableMapMode();
 
             SwRects* pRects(pTmpCursorForAnnotationTextRange.get());
-            for(SwRect & rNextRect : *pRects)
+            for(const SwRect & rNextRect : *pRects)
             {
                 const tools::Rectangle aPntRect(rNextRect.SVRect());
                 maAnnotationTextRanges.emplace_back(

@@ -1856,7 +1856,8 @@ void SwXStyle::SetPropertyValue<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemPrope
     if(!rValue.has<expectedarg_t>() || !m_pBasePool)
         throw lang::IllegalArgumentException();
     SwCondCollItem aCondItem;
-    for(auto& rNamedValue : rValue.get<expectedarg_t>())
+    const auto aNamedValues = rValue.get<expectedarg_t>();
+    for(const auto& rNamedValue : aNamedValues)
     {
         if(!rNamedValue.Value.has<OUString>())
             throw lang::IllegalArgumentException();

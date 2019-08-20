@@ -838,14 +838,14 @@ SwDBManager::~SwDBManager() COVERITY_NOEXCEPT_FALSE
 
     // copy required, m_DataSourceParams can be modified while disposing components
     std::vector<uno::Reference<sdbc::XConnection>> aCopiedConnections;
-    for (auto & pParam : m_DataSourceParams)
+    for (const auto & pParam : m_DataSourceParams)
     {
         if(pParam->xConnection.is())
         {
             aCopiedConnections.push_back(pParam->xConnection);
         }
     }
-    for (auto & xConnection : aCopiedConnections)
+    for (const auto & xConnection : aCopiedConnections)
     {
         try
         {
@@ -2568,7 +2568,7 @@ SwDSParam*  SwDBManager::FindDSConnection(const OUString& rDataSource, bool bCre
         return m_pImpl->pMergeData.get();
     }
     SwDSParam* pFound = nullptr;
-    for (auto & pParam : m_DataSourceParams)
+    for (const auto & pParam : m_DataSourceParams)
     {
         if(rDataSource == pParam->sDataSource)
         {
@@ -3085,7 +3085,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
     }
     if(pFound)
     {
-        for (auto & pParam : m_DataSourceParams)
+        for (const auto & pParam : m_DataSourceParams)
         {
             if (pParam.get() == pFound)
             {

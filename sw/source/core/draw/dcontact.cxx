@@ -882,7 +882,7 @@ SdrObject* SwDrawContact::GetDrawObjectByAnchorFrame( const SwFrame& _rAnchorFra
 
 void SwDrawContact::NotifyBackgrdOfAllVirtObjs(const tools::Rectangle* pOldBoundRect)
 {
-    for(auto& rpDrawVirtObj : maDrawVirtObjs)
+    for(const auto& rpDrawVirtObj : maDrawVirtObjs)
     {
         SwDrawVirtObj* pDrawVirtObj(rpDrawVirtObj.get());
         if ( pDrawVirtObj->GetAnchorFrame() )
@@ -1568,7 +1568,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 // #i28701# - added parameter <_bUpdateSortedObjsList>
 void SwDrawContact::InvalidateObjs_( const bool _bUpdateSortedObjsList )
 {
-    for(auto& rpDrawVirtObj : maDrawVirtObjs)
+    for(const auto& rpDrawVirtObj : maDrawVirtObjs)
     // invalidate position of existing 'virtual' drawing objects
     {
         SwDrawVirtObj* pDrawVirtObj(rpDrawVirtObj.get());

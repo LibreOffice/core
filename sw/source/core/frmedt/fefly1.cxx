@@ -895,7 +895,7 @@ SwFlyFrameFormat* SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
     SET_CURR_SHELL( this );
     StartAllAction();
     {
-        for(SwPaM& rPaM : GetCursor()->GetRingContainer())
+        for(const SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
             pFormat = GetDoc()->getIDocumentContentOperations().InsertEmbObject(
                             rPaM, xObj, pFlyAttrSet );

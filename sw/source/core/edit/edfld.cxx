@@ -159,7 +159,7 @@ void SwEditShell::Insert2(SwField const & rField, const bool bForceExpandHints)
         ? SetAttrMode::FORCEHINTEXPAND
         : SetAttrMode::DEFAULT;
 
-    for(SwPaM& rPaM : GetCursor()->GetRingContainer()) // for each PaM
+    for(const SwPaM& rPaM : GetCursor()->GetRingContainer()) // for each PaM
     {
         const bool bSuccess(GetDoc()->getIDocumentContentOperations().InsertPoolItem(rPaM, aField, nInsertFlags));
         OSL_ENSURE( bSuccess, "Doc->Insert(Field) failed");

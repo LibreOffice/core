@@ -1208,7 +1208,7 @@ namespace sw { namespace mark
         m_vFieldmarks.clear();
         m_vBookmarks.clear();
         m_vAnnotationMarks.clear();
-        for (auto & p : m_vAllMarks)
+        for (const auto & p : m_vAllMarks)
             delete p;
         m_vAllMarks.clear();
     }

@@ -4380,7 +4380,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
 
     pOut->SetDrawMode( nOldDrawMode );
 
-    for (SwRect & rOut : aRegion)
+    for (const SwRect & rOut : aRegion)
     {
         aOut = rOut;
         if ( rRect.IsOver( aOut ) && aOut.Height() > 0 && aOut.Width() > 0 )

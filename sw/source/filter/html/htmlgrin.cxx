@@ -103,7 +103,7 @@ ImageMap *SwHTMLParser::FindImageMap( const OUString& rName ) const
 
     if (m_pImageMaps)
     {
-        for (auto &rpIMap : *m_pImageMaps)
+        for (const auto &rpIMap : *m_pImageMaps)
         {
             if (rName.equalsIgnoreAsciiCase(rpIMap->GetName()))
             {
