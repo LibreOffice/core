@@ -1,7 +1,7 @@
 import type_options
 
 /*
-    This file for the log statments that relates to each diffrent applications
+    This file for the log statements that relates to each different applications
     Each Grammar Command here is related to his own application
 */
 
@@ -10,7 +10,7 @@ SpecialCommand:
 ;
 
 /*
-  This part for all the writer log statments:
+  This part for all the writer log statements:
    
     1)  Type
     2)  Select
@@ -55,7 +55,7 @@ writer_Insert_BreakPage:
 
 //=================================================================//
 /*
-  This part for all the calc log statments:
+  This part for all the calc log statements:
 
     1)  select sheet
     2)  Select cell or range
@@ -132,7 +132,7 @@ select_options:
 
 //=================================================================//
 /*
-  This part for all the impress log statments:
+  This part for all the impress log statements:
    
     1)  Type 
     2)  Insert New Slide
@@ -163,7 +163,7 @@ impress_Rename_Slide:
 ;
 //=================================================================//
 /*
-  This part for all the math log statments:
+  This part for all the math log statements:
    
     1)  element selector 
     2)  Type
@@ -182,7 +182,7 @@ math_Type_command:
 
 //=================================================================//
 /*
-  This part for all the draw log statments:
+  This part for all the draw log statements:
    
     1) Type
     2) Insert New Page
