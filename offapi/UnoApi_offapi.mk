@@ -2246,6 +2246,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/document,\
 	XOOXMLDocumentPropertiesImporter \
 	XRedlinesSupplier \
 	XScriptInvocationContext \
+	XShapeEventBroadcaster \
+	XShapeEventListener \
 	XStorageBasedDocument \
 	XStorageChangeListener \
 	XTypeDetection \

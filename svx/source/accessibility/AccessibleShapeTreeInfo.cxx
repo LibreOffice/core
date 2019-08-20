@@ -86,7 +86,7 @@ void AccessibleShapeTreeInfo::SetDocumentWindow (
 }
 
 void AccessibleShapeTreeInfo::SetModelBroadcaster (
-    const Reference<document::XEventBroadcaster>& rxModelBroadcaster)
+    const Reference<document::XShapeEventBroadcaster>& rxModelBroadcaster)
 {
     mxModelBroadcaster = rxModelBroadcaster;
 }
