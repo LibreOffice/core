@@ -925,13 +925,13 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     }
 
                     // Show toolbars
-                    for ( OUString& rName : aMandatoryToolbars )
+                    for ( const OUString& rName : std::as_const(aMandatoryToolbars) )
                     {
                         xLayoutManager->createElement( rName );
                         xLayoutManager->showElement( rName );
                     }
 
-                    for ( OUString& rName : aUserToolbars )
+                    for ( const OUString& rName : std::as_const(aUserToolbars) )
                     {
                         xLayoutManager->createElement( rName );
                         xLayoutManager->showElement( rName );

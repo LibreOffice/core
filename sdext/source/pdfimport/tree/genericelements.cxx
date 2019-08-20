@@ -375,7 +375,7 @@ void PageElement::resolveUnderlines( PDFIProcessor const & rProc )
             u_y = r_x; r_x = l_x; l_x = u_y;
         }
         u_y = aPoly.getB2DPoint(0).getY();
-        for( auto& rxChild : Children )
+        for( const auto& rxChild : Children )
         {
             Element* pEle = rxChild.get();
             if( pEle->y <= u_y && pEle->y + pEle->h*1.1 >= u_y )

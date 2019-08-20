@@ -1273,12 +1273,12 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl(vcl::Window* pParent, SfxHelpIndexW
     m_pBookmarksPB->SetClickHdl( LINK( this, BookmarksTabPage_Impl, OpenHdl ) );
 
     // load bookmarks from configuration
-    Sequence< Sequence< PropertyValue > > aBookmarkSeq = SvtHistoryOptions().GetList( eHELPBOOKMARKS );
+    const Sequence< Sequence< PropertyValue > > aBookmarkSeq = SvtHistoryOptions().GetList( eHELPBOOKMARKS );
 
     OUString aTitle;
     OUString aURL;
 
-    for ( auto& rBookmark : aBookmarkSeq )
+    for ( const auto& rBookmark : aBookmarkSeq )
     {
         GetBookmarkEntry_Impl( rBookmark, aTitle, aURL );
         AddBookmarks( aTitle, aURL );
