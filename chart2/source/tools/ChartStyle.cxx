@@ -266,9 +266,10 @@ void ChartStyle::applyStyleToCoordinates(
     }
 }
 
-void SAL_CALL
-ChartStyle::applyStyleToDiagram(const css::uno::Reference<css::chart2::XDiagram>& xDiagram)
+void SAL_CALL ChartStyle::applyStyleToDiagram(
+    const css::uno::Reference<css::chart2::XChartDocument>& xChartDocument)
 {
+    css::uno::Reference<css::chart2::XDiagram> xDiagram = xChartDocument->getFirstDiagram();
     css::uno::Reference<css::style::XStyleSupplier> xLegendStyle(xDiagram->getLegend(),
                                                                  css::uno::UNO_QUERY);
     if (xLegendStyle.is())
@@ -287,7 +288,7 @@ ChartStyle::applyStyleToDiagram(const css::uno::Reference<css::chart2::XDiagram>
             css::uno::UNO_QUERY_THROW));
     }
 
-    css::uno::Reference<css::chart2::XTitled> xTitled(xDiagram, css::uno::UNO_QUERY);
+    css::uno::Reference<css::chart2::XTitled> xTitled(xChartDocument, css::uno::UNO_QUERY);
     if (xTitled.is())
     {
         css::uno::Reference<css::chart2::XTitle> xTitle = xTitled->getTitleObject();
