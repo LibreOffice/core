@@ -783,7 +783,7 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
             return pInfo->mpSalQueueInfo.get();
 
         // then search case insensitive
-        for(ImplPrnQueueData & rQueueInfo : pPrnList->m_aQueueInfos)
+        for(const ImplPrnQueueData & rQueueInfo : pPrnList->m_aQueueInfos)
         {
             if( rQueueInfo.mpSalQueueInfo->maPrinterName.equalsIgnoreAsciiCase( rPrinterName ) )
                 return rQueueInfo.mpSalQueueInfo.get();
@@ -792,7 +792,7 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
         // then search for driver name
         if ( pDriver )
         {
-            for(ImplPrnQueueData & rQueueInfo : pPrnList->m_aQueueInfos)
+            for(const ImplPrnQueueData & rQueueInfo : pPrnList->m_aQueueInfos)
             {
                 if( rQueueInfo.mpSalQueueInfo->maDriver == *pDriver )
                     return rQueueInfo.mpSalQueueInfo.get();

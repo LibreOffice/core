@@ -2556,7 +2556,7 @@ public:
 
     void clear_items()
     {
-        for (auto& a : m_aMap)
+        for (const auto& a : m_aMap)
         {
             GtkMenuItem* pMenuItem = a.second;
             g_signal_handlers_disconnect_by_data(pMenuItem, this);

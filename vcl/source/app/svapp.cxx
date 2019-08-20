@@ -801,7 +801,7 @@ bool Application::HandleKey( VclEventId nEvent, vcl::Window *pWin, KeyEvent* pKe
     bool bProcessed = false;
     // Copy the list, because this can be destroyed when calling a Link...
     std::vector<Link<VclWindowEvent&,bool>> aCopy( pSVData->maAppData.maKeyListeners );
-    for ( Link<VclWindowEvent&,bool>& rLink : aCopy )
+    for ( const Link<VclWindowEvent&,bool>& rLink : aCopy )
     {
         if( rLink.Call( aEvent ) )
         {

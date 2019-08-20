@@ -202,7 +202,7 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const& xUIElement, const KeyE
             { "PAGEUP", KEY_PAGEUP }, { "PAGEDOWN", KEY_PAGEDOWN } };
 
     OUString aFound;
-    for (auto& itr : aKeyMap)
+    for (const auto& itr : aKeyMap)
     {
         if (itr.second == nKeyCode)
         {

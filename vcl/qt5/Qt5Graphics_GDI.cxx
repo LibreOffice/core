@@ -127,7 +127,7 @@ bool Qt5Graphics::setClipRegion(const vcl::Region& rRegion)
         QRegion aQRegion;
         RectangleVector aRectangles;
         rRegion.GetRegionRectangles(aRectangles);
-        for (auto& rRect : aRectangles)
+        for (const auto& rRect : aRectangles)
             aQRegion += toQRect(rRect);
         m_aClipRegion = aQRegion;
         if (!m_aClipPath.isEmpty())

@@ -2765,7 +2765,7 @@ bool PDFWriterImpl::emitFonts()
 
     OUString aTmpName;
     osl_createTempFile( nullptr, nullptr, &aTmpName.pData );
-    for (auto & subset : m_aSubsets)
+    for (const auto & subset : m_aSubsets)
     {
         for (auto & s_subset :subset.second.m_aSubsets)
         {
@@ -4604,7 +4604,7 @@ bool PDFWriterImpl::emitCatalog()
     aLine.append( " ]\n"
                   "/Kids[ " );
     unsigned int i = 0;
-    for (auto & page : m_aPages)
+    for (const auto & page : m_aPages)
     {
         aLine.append( page.m_nPageObject );
         aLine.append( " 0 R" );
