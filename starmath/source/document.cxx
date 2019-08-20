@@ -304,7 +304,7 @@ void SmDocShell::UpdateEditEngineDefaultFonts(const Color& aTextColor)
     aTable[1].nLang = maLinguOptions.nDefaultLanguage_CJK;
     aTable[2].nLang = maLinguOptions.nDefaultLanguage_CTL;
 
-    for (FontDta & rFntDta : aTable)
+    for (const FontDta & rFntDta : aTable)
     {
         LanguageType nLang = (LANGUAGE_NONE == rFntDta.nLang) ?
                 rFntDta.nFallbackLang : rFntDta.nLang;

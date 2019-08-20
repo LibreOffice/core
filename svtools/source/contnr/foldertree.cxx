@@ -74,7 +74,7 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
 
         if ( EnumerationResult::SUCCESS == eResult )
         {
-            for(auto & i : aContent)
+            for(const auto & i : aContent)
             {
                 if( i->mbIsFolder )
                 {

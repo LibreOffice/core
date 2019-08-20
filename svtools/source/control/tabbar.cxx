@@ -1796,7 +1796,7 @@ sal_uInt16 TabBar::GetPagePos(sal_uInt16 nPageId) const
 
 sal_uInt16 TabBar::GetPageId(const Point& rPos) const
 {
-    for (auto& pItem : mpImpl->mpItemList)
+    for (const auto& pItem : mpImpl->mpItemList)
     {
         if (pItem->maRect.IsInside(rPos))
             return pItem->mnId;
@@ -1997,7 +1997,7 @@ void TabBar::SelectPage(sal_uInt16 nPageId, bool bSelect)
 sal_uInt16 TabBar::GetSelectPageCount() const
 {
     sal_uInt16 nSelected = 0;
-    for (auto& pItem : mpImpl->mpItemList)
+    for (const auto& pItem : mpImpl->mpItemList)
     {
         if (pItem->mbSelect)
             nSelected++;
@@ -2500,7 +2500,7 @@ Size TabBar::CalcWindowSizePixel() const
     if (!mpImpl->mpItemList.empty())
     {
         const_cast<TabBar*>(this)->ImplCalcWidth();
-        for (auto& pItem : mpImpl->mpItemList)
+        for (const auto& pItem : mpImpl->mpItemList)
         {
             nWidth += pItem->mnWidth;
         }

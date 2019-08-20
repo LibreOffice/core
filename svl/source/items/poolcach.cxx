@@ -45,7 +45,7 @@ SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
 
 SfxItemPoolCache::~SfxItemPoolCache()
 {
-    for (SfxItemModifyImpl & rImpl : m_aCache) {
+    for (const SfxItemModifyImpl & rImpl : m_aCache) {
         pPool->Remove( *rImpl.pPoolItem );
         pPool->Remove( *rImpl.pOrigItem );
     }
@@ -62,7 +62,7 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem )
                 "original not in pool" );
 
     // Find whether this Transformations ever occurred
-    for (SfxItemModifyImpl & rMapEntry : m_aCache)
+    for (const SfxItemModifyImpl & rMapEntry : m_aCache)
     {
         if ( rMapEntry.pOrigItem == &rOrigItem )
         {

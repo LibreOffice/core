@@ -628,7 +628,7 @@ void BrowserDataWin::SetUpdateMode( bool bMode )
 
 void BrowserDataWin::DoOutstandingInvalidations()
 {
-    for (auto& rRect : aInvalidRegion)
+    for (const auto& rRect : aInvalidRegion)
         Control::Invalidate( rRect );
     aInvalidRegion.clear();
 }

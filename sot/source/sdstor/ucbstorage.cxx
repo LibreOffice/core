@@ -2445,7 +2445,7 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl const & rElemen
 UCBStorageElement_Impl* UCBStorage::FindElement_Impl( const OUString& rName ) const
 {
     DBG_ASSERT( !rName.isEmpty(), "Name is empty!" );
-    for (auto& pElement : pImp->GetChildrenList())
+    for (const auto& pElement : pImp->GetChildrenList())
     {
         if ( pElement->m_aName == rName && !pElement->m_bIsRemoved )
             return pElement.get();
