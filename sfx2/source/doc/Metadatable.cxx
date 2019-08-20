@@ -628,7 +628,7 @@ removeLink(Metadatable* i_pObject)
 XmlIdRegistryDocument::~XmlIdRegistryDocument()
 {
     // notify all list elements that are actually in the clipboard
-    for (auto& aXmlId : m_pImpl->m_XmlIdMap) {
+    for (const auto& aXmlId : m_pImpl->m_XmlIdMap) {
         for (auto aLink : aXmlId.second.first)
             removeLink(aLink);
         for (auto aLink : aXmlId.second.second)

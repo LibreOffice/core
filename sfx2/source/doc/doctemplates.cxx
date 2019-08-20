@@ -2388,7 +2388,7 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
         return;
 
     GroupData_Impl* pGroup = nullptr;
-    for (std::unique_ptr<GroupData_Impl>& i : rList)
+    for (const std::unique_ptr<GroupData_Impl>& i : rList)
     {
         if ( i->getTitle() == aTitle )
         {
@@ -2500,7 +2500,7 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
             else
             {
                 OUString aUITitle;
-                for (beans::StringPair & rUIName : aUINames)
+                for (const beans::StringPair & rUIName : aUINames)
                     if ( rUIName.First == aTitle )
                     {
                         aUITitle = rUIName.Second;

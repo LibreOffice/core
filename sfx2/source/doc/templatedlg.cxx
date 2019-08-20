@@ -759,7 +759,7 @@ void SfxTemplateManagerDlg::SearchUpdate()
         std::vector<TemplateItemProperties> aItems =
                 mxLocalView->getFilteredItems(SearchView_Keyword(aKeyword, getCurrentApplicationFilter()));
 
-        for (TemplateItemProperties& rItem : aItems)
+        for (const TemplateItemProperties& rItem : aItems)
         {
             OUString aFolderName = mxLocalView->getRegionName(rItem.nRegionId);
 

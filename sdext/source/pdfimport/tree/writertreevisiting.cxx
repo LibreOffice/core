@@ -321,7 +321,7 @@ void WriterXmlEmitter::visit( DocumentElement& elem, const std::list< std::uniqu
     m_rEmitContext.rEmitter.beginTag( "office:body", PropertyMap() );
     m_rEmitContext.rEmitter.beginTag( "office:text", PropertyMap() );
 
-    for( auto& rxChild : elem.Children )
+    for( const auto& rxChild : elem.Children )
     {
         PageElement* pPage = dynamic_cast<PageElement*>(rxChild.get());
         if( pPage )
@@ -505,7 +505,7 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< std::unique_
             // adjust line height and text items
             fCurLineHeight = 0.0;
             nCurLineElements = 0;
-            for( auto& rxChild : pCurPara->Children )
+            for( const auto& rxChild : pCurPara->Children )
             {
                 TextElement* pTestText = dynamic_cast<TextElement*>(rxChild.get());
                 if( pTestText )
@@ -1085,7 +1085,7 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< std::unique_
     elem.RightMargin = 0;
     // first element should be a paragraph
     ParagraphElement* pFirstPara = nullptr;
-    for( auto& rxChild : elem.Children )
+    for( const auto& rxChild : elem.Children )
     {
         if( dynamic_cast<ParagraphElement*>( rxChild.get() ) )
         {
