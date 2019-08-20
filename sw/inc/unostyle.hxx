@@ -228,7 +228,7 @@ public:
 
 typedef std::map<OUString, sal_Int32> CellStyleNameMap;
 
-/// A text table style is a uno api wrapper for a SwTableAutoFormat
+/// A text table style is a UNO API wrapper for a SwTableAutoFormat
 class SwXTextTableStyle : public cppu::WeakImplHelper
 <
     css::style::XStyle,
@@ -321,7 +321,7 @@ public:
     static css::uno::Reference<css::style::XStyle> CreateXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName);
 };
 
-/// A text cell style is a uno api wrapper for a SwBoxAutoFormat core class
+/// A text cell style is a UNO API wrapper for a SwBoxAutoFormat core class
 class SwXTextCellStyle : public cppu::WeakImplHelper
 <
     css::style::XStyle,
