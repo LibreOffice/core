@@ -556,7 +556,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             // else continue with normal redaction
             bIsAutoRedact = true;
-            //aDlg.getTargets(aRedactionTargets);
+            aDlg.getTargets(aRedactionTargets);
 
             SAL_FALLTHROUGH;
         }
