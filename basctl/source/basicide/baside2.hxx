@@ -113,7 +113,7 @@ private:
     void HandleAutoCloseDoubleQuotes();
     void HandleCodeCompletion();
     void HandleProcedureCompletion();
-    TextSelection GetLastHighlightPortionTextSelection();
+    TextSelection GetLastHighlightPortionTextSelection() const;
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
     virtual void    Resize() override;

@@ -73,7 +73,7 @@ AccessibleDialogControlShape::~AccessibleDialogControlShape()
 }
 
 
-bool AccessibleDialogControlShape::IsFocused()
+bool AccessibleDialogControlShape::IsFocused() const
 {
     bool bFocused = false;
     if ( m_pDialogWindow )
@@ -87,7 +87,7 @@ bool AccessibleDialogControlShape::IsFocused()
 }
 
 
-bool AccessibleDialogControlShape::IsSelected()
+bool AccessibleDialogControlShape::IsSelected() const
 {
     if ( m_pDialogWindow )
         return m_pDialogWindow->GetView().IsObjMarked(m_pDlgEdObj);
@@ -125,7 +125,7 @@ void AccessibleDialogControlShape::SetSelected( bool bSelected )
 }
 
 
-awt::Rectangle AccessibleDialogControlShape::GetBounds()
+awt::Rectangle AccessibleDialogControlShape::GetBounds() const
 {
     awt::Rectangle aBounds( 0, 0, 0, 0 );
     if ( m_pDlgEdObj )

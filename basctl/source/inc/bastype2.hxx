@@ -319,7 +319,7 @@ public:
     bool iter_parent(weld::TreeIter& rIter) const { return m_xControl->iter_parent(rIter); }
     int get_iter_depth(const weld::TreeIter& rIter) const { return m_xControl->get_iter_depth(rIter); }
     bool get_row_expanded(const weld::TreeIter& rIter) const { return m_xControl->get_row_expanded(rIter); }
-    void expand_row(weld::TreeIter& rIter) { m_xControl->expand_row(rIter); }
+    void expand_row(const weld::TreeIter& rIter) { m_xControl->expand_row(rIter); }
     void set_size_request(int nWidth, int nHeight) { m_xControl->set_size_request(nWidth, nHeight); }
     float get_approximate_digit_width() const { return m_xControl->get_approximate_digit_width(); }
     int get_height_rows(int nRows) const { return m_xControl->get_height_rows(nRows); }
@@ -335,7 +335,7 @@ public:
 
     void make_sorted() { m_xControl->make_sorted(); };
     void make_unsorted() { m_xControl->make_unsorted(); }
-    bool get_sort_order() { return m_xControl->get_sort_order(); }
+    bool get_sort_order() const { return m_xControl->get_sort_order(); }
     void set_sort_order(bool bAscending) { m_xControl->set_sort_order(bAscending); }
 
     void set_sort_indicator(TriState eState, int nColumn = -1)
@@ -347,7 +347,7 @@ public:
         return m_xControl->get_sort_indicator(nColumn);
     }
 
-    int get_sort_column() { return m_xControl->get_sort_column(); }
+    int get_sort_column() const { return m_xControl->get_sort_column(); }
     void set_sort_column(int nColumn) { m_xControl->set_sort_column(nColumn); }
 
     void set_sort_func(const std::function<int(const weld::TreeIter&, const weld::TreeIter&)>& func)
