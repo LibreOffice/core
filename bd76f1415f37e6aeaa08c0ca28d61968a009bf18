@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_1f87cbd9",
+        "filename": "cui/source/factory/dlgfact.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-08-21T11:42:48Z",
+      "side": 1,
+      "message": "Please write a one-liner doxygen comment for the new class.",
+      "revId": "bd76f1415f37e6aeaa08c0ca28d61968a009bf18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_bf6d7f33",
+        "filename": "cui/source/inc/DiagramDialog.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-08-21T11:42:48Z",
+      "side": 1,
+      "message": "Please write a one-liner doxygen comment for the new class.",
+      "revId": "bd76f1415f37e6aeaa08c0ca28d61968a009bf18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_df687322",
+        "filename": "include/vcl/abstdlg.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-08-21T11:42:48Z",
+      "side": 1,
+      "message": "Please write a one-liner doxygen comment for the new class.",
+      "revId": "bd76f1415f37e6aeaa08c0ca28d61968a009bf18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
