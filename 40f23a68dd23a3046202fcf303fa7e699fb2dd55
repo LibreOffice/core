@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_1f26ebb8",
+        "filename": "cui/uiconfig/ui/qrcodegen.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-08-21T06:19:40Z",
+      "side": 1,
+      "message": "not sure if \"Options\" is better here.",
+      "range": {
+        "startLine": 158,
+        "startChar": 145,
+        "endLine": 158,
+        "endChar": 152
+      },
+      "revId": "40f23a68dd23a3046202fcf303fa7e699fb2dd55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
