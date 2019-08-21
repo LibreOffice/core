@@ -27,7 +27,7 @@ public:
 
     virtual bool importODS_Styles(ScDocument& rDoc, OUString& aFileName) const override;
 
-    virtual ScOrcusXMLContext* createXMLContext(ScDocument& rDoc, const OUString& rPath) const override;
+    virtual std::unique_ptr<ScOrcusXMLContext> createXMLContext(ScDocument& rDoc, const OUString& rPath) const override;
 };
 
 class ScOrcusXMLContextImpl : public ScOrcusXMLContext

@@ -195,7 +195,7 @@ void ScXMLSourceDlg::LoadSourceFileStructure(const OUString& rPath)
     if (!pOrcus)
         return;
 
-    mpXMLContext.reset(pOrcus->createXMLContext(*mpDoc, rPath));
+    mpXMLContext = pOrcus->createXMLContext(*mpDoc, rPath);
     if (!mpXMLContext)
         return;
 

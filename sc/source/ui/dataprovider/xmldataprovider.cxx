@@ -58,7 +58,7 @@ void XMLFetchThread::execute()
     if (!pOrcus)
         return;
 
-    mpXMLContext.reset(pOrcus->createXMLContext(mrDocument, maURL));
+    mpXMLContext = pOrcus->createXMLContext(mrDocument, maURL);
     if (!mpXMLContext)
         return;
 

@@ -11,6 +11,7 @@
 #define INCLUDED_SC_INC_ORCUSFILTERS_HXX
 
 #include <rtl/ustring.hxx>
+#include <memory>
 
 class ScDocument;
 struct ScOrcusXMLTreeParam;
@@ -52,7 +53,7 @@ public:
      * The caller is responsible for deleting the instance returned from this
      * method when it's done.
      */
-    virtual ScOrcusXMLContext* createXMLContext(ScDocument& rDoc, const OUString& rPath) const = 0;
+    virtual std::unique_ptr<ScOrcusXMLContext> createXMLContext(ScDocument& rDoc, const OUString& rPath) const = 0;
 };
 
 class ScOrcusXMLContext

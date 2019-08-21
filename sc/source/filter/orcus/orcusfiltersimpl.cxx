@@ -153,9 +153,9 @@ bool ScOrcusFiltersImpl::importODS_Styles(ScDocument& rDoc, OUString& aPath) con
     return true;
 }
 
-ScOrcusXMLContext* ScOrcusFiltersImpl::createXMLContext(ScDocument& rDoc, const OUString& rPath) const
+std::unique_ptr<ScOrcusXMLContext> ScOrcusFiltersImpl::createXMLContext(ScDocument& rDoc, const OUString& rPath) const
 {
-    return new ScOrcusXMLContextImpl(rDoc, rPath);
+    return std::make_unique<ScOrcusXMLContextImpl>(rDoc, rPath);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
