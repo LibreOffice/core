@@ -22,17 +22,27 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/comphelperdllapi.h>
 
 #include <algorithm>
 #include <vector>
 
 namespace comphelper
 {
-    /** Search the given string within the given sequence, return the position of the first occurrence.
+    /** Search the given value within the given sequence, return the position of the first occurrence.
         Returns -1 if nothing found.
     */
-    COMPHELPER_DLLPUBLIC sal_Int32 findValue(const css::uno::Sequence< OUString >& _rList, const OUString& _rValue);
+    template <class T1, class T2>
+    inline sal_Int32 findValue(const css::uno::Sequence<T1>& _rList, const T2& _rValue)
+    {
+        // at which position do I find the value?
+        for (sal_Int32 i = 0; i < _rList.getLength(); ++i)
+        {
+            if (_rList[i] == _rValue)
+                return i;
+        }
+
+        return -1;
+    }
 
     /// concat several sequences
     template <class T, class... Ss>
