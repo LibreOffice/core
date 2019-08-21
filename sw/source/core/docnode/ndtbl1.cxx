@@ -1365,24 +1365,25 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
  * We do not iterate over the TabCols' entries, but over the gaps that describe Cells.
  * We set TabCol entries for which we did not calculate Cells to 0.
  *
- * @param bWishValues == true:     Calculate the desired width of the content
- *                                 The highest desired value is returned.
- * @param bWishValues == false:    Calculate the minimum width of the content
- * @param bColumnWidth == false:   We calculate the desired value of all affected
- *                                 Cells for the current Selection only.
- * @param bColumnWidth == true:     The Selection is expanded vertically.
- *                                  We calculate the wish/minimum value for
- *                                  each cell in every Column that intersects
- *                                  with the Selection.
+ * @param bWishValues == true:      We calculate the desired value of all affected
+ *                                  Cells for the current Selection/current Cell.
+ *                                  If more Cells are within a Column, the highest
+ *                                  desired value is returned.
+ *                                  We set TabCol entries for which we did not calculate
+ *                                  Cells to 0.
+ *
+ * @param bWishValues == false:     The Selection is expanded vertically.
+ *                                  We calculate the minimum value for every
+ *                                  Column in the TabCols that intersects with the
+ *                                  Selection.
  */
 static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols &rCols,
                            const SwLayoutFrame *pStart, const SwLayoutFrame *pEnd,
-                           bool bWishValues,
-                           bool bColumnWidth )
+                           bool bWishValues )
 {
     SwSelUnions aUnions;
     ::MakeSelUnions( aUnions, pStart, pEnd,
-                    bColumnWidth ? SwTableSearchType::Col : SwTableSearchType::NONE );
+                    bWishValues ? SwTableSearchType::NONE : SwTableSearchType::Col );
 
     for ( auto &rU : aUnions )
     {
@@ -1463,8 +1464,7 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
 
 void SwDoc::AdjustCellWidth( const SwCursor& rCursor,
                              const bool bBalance,
-                             const bool bNoShrink,
-                             const bool bColumnWidth )
+                             const bool bNoShrink )
 {
     // Check whether the current Cursor has it's Point/Mark in a Table
     SwContentNode* pCntNd = rCursor.GetPoint()->nNode.GetNode().GetContentNode();
@@ -1492,7 +1492,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor,
     std::vector<sal_uInt16> aWish(aTabCols.Count() + 1);
     std::vector<sal_uInt16> aMins(aTabCols.Count() + 1);
 
-    ::lcl_CalcColValues( aWish, aTabCols, pStart, pEnd, true, bColumnWidth );
+    ::lcl_CalcColValues( aWish, aTabCols, pStart, pEnd, /*bWishValues=*/true );
 
     // It's more robust if we calculate the minimum values for the whole Table
     const SwTabFrame *pTab = pStart->ImplFindTabFrame();
@@ -1500,7 +1500,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor,
     pEnd   = const_cast<SwLayoutFrame*>(pTab->FindLastContent()->GetUpper());
     while( !pEnd->IsCellFrame() )
         pEnd = pEnd->GetUpper();
-    ::lcl_CalcColValues( aMins, aTabCols, pStart, pEnd, false, /*bColumnWidth=*/true );
+    ::lcl_CalcColValues( aMins, aTabCols, pStart, pEnd, /*bWishValues=*/false );
 
     sal_uInt16 nSelectedWidth = 0, nCols = 0;
     float fTotalWish = 0;

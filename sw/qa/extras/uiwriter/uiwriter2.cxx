@@ -15,6 +15,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/frame/DispatchHelper.hpp>
+#include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svx/svdpage.hxx>
@@ -69,6 +70,7 @@ public:
     void testTdf54819();
     void testTdf109376_redline();
     void testTdf109376();
+    void testTdf126784_distributeSelectedColumns();
     void testTdf108687_tabstop();
     void testTdf119571();
     void testTdf119019();
@@ -105,6 +107,7 @@ public:
     CPPUNIT_TEST(testTdf101534);
     CPPUNIT_TEST(testTdf54819);
     CPPUNIT_TEST(testTdf109376_redline);
+    CPPUNIT_TEST(testTdf126784_distributeSelectedColumns);
     CPPUNIT_TEST(testTdf109376);
     CPPUNIT_TEST(testTdf108687_tabstop);
     CPPUNIT_TEST(testTdf119571);
@@ -421,6 +424,34 @@ void SwUiWriterTest2::testTdf109376()
     CPPUNIT_ASSERT_EQUAL(size_t(0), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
     rUndoManager.Undo();
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+}
+
+void SwUiWriterTest2::testTdf126784_distributeSelectedColumns()
+{
+    SwDoc* pDoc = createDoc("tdf126784_distributeSelectedColumns.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
+
+    auto aSeq = getProperty<uno::Sequence<text::TableColumnSeparator>>(xTableRows->getByIndex(0),
+                                                                       "TableColumnSeparators");
+    sal_Int16 nOrigCol2Pos = aSeq[0].Position;
+    sal_Int16 nOrigCol3Pos = aSeq[1].Position;
+
+    //Select column 1 and 2
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+
+    lcl_dispatchCommand(mxComponent, ".uno:DistributeColumns", {});
+
+    aSeq = getProperty<uno::Sequence<text::TableColumnSeparator>>(xTableRows->getByIndex(0),
+                                                                  "TableColumnSeparators");
+    CPPUNIT_ASSERT_MESSAGE("Second column should shrink", nOrigCol2Pos < aSeq[0].Position);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Last column shouldn't change", nOrigCol3Pos, aSeq[1].Position);
 }
 
 void SwUiWriterTest2::testTdf108687_tabstop()

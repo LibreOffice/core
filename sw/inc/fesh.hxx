@@ -706,7 +706,7 @@ public:
     bool IsInRepeatedHeadline() const { return CheckHeadline( true ); }
     bool IsInHeadline() const { return CheckHeadline( false ); }
 
-    void AdjustCellWidth( bool bBalance, const bool bNoShrink, const bool bColumnWidth );
+    void AdjustCellWidth( const bool bBalance, const bool bNoShrink );
 
     /// Not allowed if only empty cells are selected.
     bool IsAdjustCellWidthAllowed( bool bBalance = false ) const;
