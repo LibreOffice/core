@@ -16,6 +16,24 @@
       "revId": "8bb6452411264c0c038ee77d53f59f08310e2a46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_228716da",
+        "filename": "package/source/xstor/owriteablestream.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-21T17:53:01Z",
+      "side": 1,
+      "message": "The getLength() inline accessor is optimized away into a simple variable access, so I don\u0027t think that introducing a variable is needed.",
+      "parentUuid": "bf659307_6218aed2",
+      "revId": "8bb6452411264c0c038ee77d53f59f08310e2a46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
