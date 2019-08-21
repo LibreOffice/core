@@ -41,7 +41,7 @@ struct RedactionTarget
 };
 
 /// Used to display the targets list
-/*class TargetsTable : public SvSimpleTable
+class TargetsTable : public SvSimpleTable
 {
     SvTreeListEntry* GetRowByTargetName(const OUString& sName);
 
@@ -51,13 +51,7 @@ public:
     void SelectByName(const OUString& sName);
     RedactionTarget* GetTargetByName(const OUString& sName);
     OUString GetNameProposal();
-
-    // Sync data on the targets box with the data on the target
-    void setRowData(SvTreeListEntry* pRow, const RedactionTarget* pTarget);
-
-    //void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_changed(rLink); }
-    //void connect_row_activated(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_row_activated(rLink); }
-};*/
+};
 
 namespace sfx2
 {
@@ -78,8 +72,8 @@ class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxModalDialog
     bool m_bIsValidState;
     bool m_bTargetsCopied;
 
-    //VclPtr<SvSimpleTableContainer>      m_pTargetsContainer;
-    //VclPtr<TargetsTable>                m_pTargetsBox;
+    VclPtr<SvSimpleTableContainer> m_pTargetsContainer;
+    VclPtr<TargetsTable> m_pTargetsBox;
     VclPtr<FixedText> m_pRedactionTargetsLabel;
     VclPtr<PushButton> m_pLoadBtn;
     VclPtr<PushButton> m_pSaveBtn;
