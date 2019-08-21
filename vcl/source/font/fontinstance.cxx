@@ -144,12 +144,51 @@ void LogicalFontInstance::IgnoreFallbackForUnicode( sal_UCS4 cChar, FontWeight e
         mpUnicodeFallbackList->erase( it );
 }
 
-bool LogicalFontInstance::GetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &rRect, bool bVertical) const
+bool LogicalFontInstance::GetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &rRect, bool bVertical)
 {
     if (mpFontCache && mpFontCache->GetCachedGlyphBoundRect(this, nID, rRect))
         return true;
 
-    bool res = ImplGetGlyphBoundRect(nID, rRect, bVertical);
+    hb_font_t* pHbFont = GetHbFont();
+    hb_glyph_extents_t aExtents;
+    bool res = hb_font_get_glyph_extents(pHbFont, nID, &aExtents);
+    if (res)
+    {
+        double nXScale = 0, nYScale = 0;
+        GetScale(&nXScale, &nYScale);
+
+        double fMinX = aExtents.x_bearing;
+        double fMinY = aExtents.y_bearing;
+        double fMaxX = aExtents.x_bearing + aExtents.width;
+        double fMaxY = aExtents.y_bearing + aExtents.height;
+
+        tools::Rectangle aRect( std::floor(fMinX * nXScale),
+                               -std::ceil(fMinY  * nYScale),
+                                std::ceil(fMaxX  * nXScale),
+                               -std::floor(fMaxY * nYScale));
+
+        if (mnOrientation && !bVertical)
+        {
+            // Apply font rotation.
+            const double fRad = basegfx::deg2rad(mnOrientation);
+            const double fCos = cos(fRad);
+            const double fSin = sin(fRad);
+
+            rRect.SetLeft(   fCos * aRect.Left() + fSin * aRect.Top());
+            rRect.SetTop(   -fSin * aRect.Left() - fCos * aRect.Top());
+            rRect.SetRight(  fCos * aRect.Right() + fSin * aRect.Bottom());
+            rRect.SetBottom(-fSin * aRect.Right() - fCos * aRect.Bottom());
+        }
+        else
+            rRect = aRect;
+    }
+    else
+    {
+        // Fallback to platform implementations.
+        // TODO: remove once we require HarfBuzz >= 2.3.0
+        res = ImplGetGlyphBoundRect(nID, rRect, bVertical);
+    }
+
     if (mpFontCache && res)
         mpFontCache->CacheGlyphBoundRect(this, nID, rRect);
     return res;
