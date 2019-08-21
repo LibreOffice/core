@@ -92,6 +92,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/AccessibleImplementationHelper \
     comphelper/source/misc/anytostring \
     comphelper/source/misc/asyncnotification \
+    comphelper/source/misc/asyncquithandler \
     comphelper/source/misc/automationinvokedzone \
     comphelper/source/misc/backupfilehelper \
     comphelper/source/misc/base64 \
