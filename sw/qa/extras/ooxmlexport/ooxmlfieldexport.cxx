@@ -8,6 +8,9 @@
  */
 
 #include <swmodeltestbase.hxx>
+#include <xmloff/odffields.hxx>
+#include <IDocumentMarkAccess.hxx>
+#include <IMark.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -662,6 +665,33 @@ DECLARE_OOXMLEXPORT_TEST( testTdf66401, "tdf66401.docx")
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[9]/w:rPr/w:rFonts", "ascii", "Arial Black");
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[9]/w:rPr/w:sz", "val", "24");
     }
+}
+
+DECLARE_OOXMLEXPORT_TEST(testDropDownFieldEntryLimit, "tdf126792.odt" )
+{
+    // In MSO, there is a limit of 25 for the items in a drop-down form field.
+    // So we truncate the list of items to not exceed this limit.
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+
+    ::sw::mark::IFieldmark* pFieldmark
+          = dynamic_cast<::sw::mark::IFieldmark*>(*pMarkAccess->getAllMarksBegin());
+    CPPUNIT_ASSERT(pFieldmark);
+    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDROPDOWN), pFieldmark->GetFieldname());
+
+    const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
+    auto pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
+    CPPUNIT_ASSERT(bool(pListEntries != pParameters->end()));
+    css::uno::Sequence<OUString> vListEntries;
+    pListEntries->second >>= vListEntries;
+    if (!mbExported)
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(26), vListEntries.getLength());
+    else
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(25), vListEntries.getLength());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
