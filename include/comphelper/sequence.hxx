@@ -219,15 +219,13 @@ namespace comphelper
         elements
 
         @tpl DstType
-        Container type. This type must fulfill the STL container and
-        sequence concepts, in particular, the begin(), end() and the
-        unary constructor DstType(int) methods must be available and
-        have the usual semantics.
+        Container type. This type must have a constructor taking a pair
+        of iterators defining a range to copy from
 
         @param i_Sequence
         Reference to a Sequence of SrcType elements
 
-        @return the generated container
+        @return the generated container. C++17 copy elision rules apply
 
         @attention this function always performs a copy. Furthermore,
         when copying from e.g. a Sequence<double> to a vector<int>, no
@@ -238,18 +236,14 @@ namespace comphelper
     template < typename DstType, typename SrcType >
     inline DstType sequenceToContainer( const css::uno::Sequence< SrcType >& i_Sequence )
     {
-        DstType result( i_Sequence.getLength() );
-        ::std::copy( i_Sequence.begin(), i_Sequence.end(), result.begin() );
-        return result;
+        return DstType(i_Sequence.begin(), i_Sequence.end());
     }
 
     // this one does better type deduction, but does not allow us to copy into a different element type
     template < typename DstType >
     inline DstType sequenceToContainer( const css::uno::Sequence< typename DstType::value_type >& i_Sequence )
     {
-        DstType result( i_Sequence.getLength() );
-        ::std::copy( i_Sequence.begin(), i_Sequence.end(), result.begin() );
-        return result;
+        return DstType(i_Sequence.begin(), i_Sequence.end());
     }
 
     /** Copy from a Sequence into an existing container

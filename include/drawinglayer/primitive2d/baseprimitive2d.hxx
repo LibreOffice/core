@@ -79,6 +79,8 @@ namespace drawinglayer { namespace primitive2d {
         Primitive2DContainer( const Primitive2DContainer&& other ) : deque(other) {}
         Primitive2DContainer( const std::deque< Primitive2DReference >& other ) : deque(other) {}
         Primitive2DContainer( std::initializer_list<Primitive2DReference> init ) : deque(init) {}
+        template <class _Iter>
+        Primitive2DContainer(_Iter _First, _Iter _Last) : deque(_First, _Last) {}
 
         virtual void append(const Primitive2DReference&) override;
         virtual void append(const Primitive2DContainer& rSource) override;
