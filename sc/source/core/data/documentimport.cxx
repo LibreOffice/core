@@ -537,6 +537,41 @@ void ScDocumentImport::setTableOpCells(const ScRange& rRange, const ScTabOpParam
     }
 }
 
+void ScDocumentImport::fillDownCells(const ScAddress& rPos, SCROW nFillSize)
+{
+    ScTable* pTab = mpImpl->mrDoc.FetchTable(rPos.Tab());
+    if (!pTab)
+        return;
+
+    sc::ColumnBlockPosition* pBlockPos = mpImpl->getBlockPosition(rPos.Tab(), rPos.Col());
+
+    if (!pBlockPos)
+        return;
+
+    sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
+    ScRefCellValue aRefCell = pTab->aCol[rPos.Col()].GetCellValue(*pBlockPos, rPos.Row());
+
+    switch (aRefCell.meType)
+    {
+        case CELLTYPE_VALUE:
+        {
+            std::vector<double> aCopied(nFillSize, aRefCell.mfValue);
+            pBlockPos->miCellPos = rCells.set(
+                pBlockPos->miCellPos, rPos.Row()+1, aCopied.begin(), aCopied.end());
+            break;
+        }
+        case CELLTYPE_STRING:
+        {
+            std::vector<svl::SharedString> aCopied(nFillSize, *aRefCell.mpString);
+            pBlockPos->miCellPos = rCells.set(
+                pBlockPos->miCellPos, rPos.Row()+1, aCopied.begin(), aCopied.end());
+            break;
+        }
+        default:
+            break;
+    }
+}
+
 void ScDocumentImport::setAttrEntries( SCTAB nTab, SCCOL nCol, Attrs&& rAttrs )
 {
     ScTable* pTab = mpImpl->mrDoc.FetchTable(nTab);

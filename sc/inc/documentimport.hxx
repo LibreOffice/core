@@ -112,6 +112,8 @@ public:
 
     void setTableOpCells(const ScRange& rRange, const ScTabOpParam& rParam);
 
+    void fillDownCells(const ScAddress& rPos, SCROW nFillSize);
+
     /**
      * Set an array of cell attributes to specified column.  This call
      * transfers the ownership of the ScAttrEntry array from the caller to the

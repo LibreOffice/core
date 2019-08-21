@@ -587,7 +587,8 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
             FormulaWithResult,
             SharedFormula,
             SharedFormulaWithResult,
-            Matrix
+            Matrix,
+            FillDownCells
         };
 
         ScAddress const maPos;
@@ -650,6 +651,7 @@ public:
     void pushCellStoreToken( const ScAddress& rPos, double fValue );
     void pushCellStoreToken(
         const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar );
+    void pushFillDownCellsToken( const ScAddress& rPos, uint32_t nFillSize );
 
     void pushSharedFormulaToken( const ScAddress& rPos, uint32_t nIndex );
     void pushMatrixFormulaToken(
