@@ -25,6 +25,10 @@
 
 #include <PhysicalFontFace.hxx>
 
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+#include <vcl/canvastools.hxx>
+
 // extend std namespace to add custom hash needed for LogicalFontInstance
 
 namespace std
@@ -144,12 +148,46 @@ void LogicalFontInstance::IgnoreFallbackForUnicode( sal_UCS4 cChar, FontWeight e
         mpUnicodeFallbackList->erase( it );
 }
 
-bool LogicalFontInstance::GetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &rRect, bool bVertical) const
+bool LogicalFontInstance::GetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &rRect, bool bVertical)
 {
     if (mpFontCache && mpFontCache->GetCachedGlyphBoundRect(this, nID, rRect))
         return true;
 
-    bool res = ImplGetGlyphBoundRect(nID, rRect, bVertical);
+    bool res = false;
+    hb_font_t* pHbFont = GetHbFont();
+    hb_glyph_extents_t aExtents;
+    if (hb_font_get_glyph_extents(pHbFont, nID, &aExtents))
+    {
+        double nXScale = 0, nYScale = 0;
+        GetScale(&nXScale, &nYScale);
+
+        double fMinX = aExtents.x_bearing;
+        double fMinY = aExtents.y_bearing;
+        double fMaxX = aExtents.x_bearing + aExtents.width;
+        double fMaxY = aExtents.y_bearing + aExtents.height;
+
+        if (mnOrientation && !bVertical)
+        {
+            // Apply font rotation to non-vertical glyphs.
+            basegfx::B2DRectangle aRect(fMinX, fMinY, fMaxX, fMaxY);
+            aRect.transform(basegfx::utils::createRotateB2DHomMatrix(basegfx::deg2rad(mnOrientation)));
+            rRect = tools::Rectangle( std::floor(aRect.getMinX() * nXScale),
+                                     -std::ceil(aRect.getMinY()  * nYScale),
+                                      std::ceil(aRect.getMaxX()  * nXScale),
+                                     -std::floor(aRect.getMaxY() * nYScale));
+        }
+        else
+        {
+            rRect = tools::Rectangle( std::floor(fMinX * nXScale),
+                                     -std::ceil(fMinY  * nYScale),
+                                      std::ceil(fMaxX  * nXScale),
+                                     -std::floor(fMaxY * nYScale));
+        }
+
+        res = true;
+    }
+    else
+        res = ImplGetGlyphBoundRect(nID, rRect, bVertical);
     if (mpFontCache && res)
         mpFontCache->CacheGlyphBoundRect(this, nID, rRect);
     return res;
