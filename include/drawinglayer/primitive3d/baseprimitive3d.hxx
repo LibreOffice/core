@@ -62,6 +62,8 @@ namespace drawinglayer { namespace primitive3d {
         Primitive3DContainer( const Primitive3DContainer& other ) : deque(other) {}
         Primitive3DContainer( const Primitive3DContainer&& other ) : deque(other) {}
         Primitive3DContainer( std::initializer_list<Primitive3DReference> init ) : deque(init) {}
+        template <class Iter>
+        Primitive3DContainer(Iter first, Iter last) : deque(first, last) {}
 
         void append(const Primitive3DContainer& rSource);
         Primitive3DContainer& operator=(const Primitive3DContainer& r) { deque::operator=(r); return *this; }
