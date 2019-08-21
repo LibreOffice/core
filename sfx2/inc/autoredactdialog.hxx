@@ -67,7 +67,7 @@ enum class StartFileDialogType
 class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxModalDialog
 {
     SfxObjectShellLock m_xDocShell;
-    std::vector<std::pair<RedactionTarget*, OUString>> m_aTableTargets;
+    //std::vector<std::pair<RedactionTarget*, OUString>> m_aTableTargets;
     std::unique_ptr<sfx2::FileDialogHelper> m_pFileDlg;
     bool m_bIsValidState;
     bool m_bTargetsCopied;
@@ -81,20 +81,20 @@ class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxModalDialog
     VclPtr<PushButton> m_pEditBtn;
     VclPtr<PushButton> m_pDeleteBtn;
 
-    /*DECL_LINK(Load, Button*, void);
-    DECL_LINK(Save, Button*, void);
+    DECL_LINK(Load, Button*, void);
+    /*DECL_LINK(Save, Button*, void);
     DECL_LINK(AddHdl, Button*, void);
     DECL_LINK(EditHdl, Button*, void);
-    DECL_LINK(DeleteHdl, Button*, void);
+    DECL_LINK(DeleteHdl, Button*, void);*/
 
     DECL_LINK(LoadHdl, sfx2::FileDialogHelper*, void);
     DECL_LINK(SaveHdl, sfx2::FileDialogHelper*, void);
 
     void StartFileDialog(StartFileDialogType nType, const OUString& rTitle);
     /// Carry out proper addition both to the targets box, and to the tabletargets vector.
-    void addTarget(RedactionTarget* pTarget);
+    /*void addTarget(RedactionTarget* pTarget);*/
     /// Clear all targets both visually and from the targets vector
-    void clearTargets();*/
+    void clearTargets();
 
 public:
     SfxAutoRedactDialog(vcl::Window* pParent);
@@ -110,7 +110,7 @@ public:
      *  Does a shallow copy.
      *  Returns true if successful.
      */
-    //bool getTargets(std::vector<std::pair<RedactionTarget*, OUString>>& r_aTargets);
+    bool getTargets(std::vector<std::pair<RedactionTarget*, OUString>>& r_aTargets);
 };
 
 /*class SfxAddTargetDialog : public weld::GenericDialogController

@@ -204,7 +204,7 @@ OUString TargetsTable::GetNameProposal()
     m_xControl->set_text(nRowIndex, sContent, 2);
     m_xControl->set_text(nRowIndex, pTarget->bCaseSensitive ? OUString("Yes") : OUString("No"), 3);
     m_xControl->set_text(nRowIndex, pTarget->bWholeWords ? OUString("Yes") : OUString("No"), 4);
-}
+}*/
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, Load, Button*, void)
 {
@@ -213,7 +213,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, Load, Button*, void)
     StartFileDialog(StartFileDialogType::Open, "Load Targets");
 }
 
-IMPL_LINK_NOARG(SfxAutoRedactDialog, Save, Button*, void)
+/*IMPL_LINK_NOARG(SfxAutoRedactDialog, Save, Button*, void)
 {
     //Allow saving the targets into a file
     StartFileDialog(StartFileDialogType::SaveAs, "Save Targets");
@@ -370,11 +370,11 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, DeleteHdl, Button*, void)
         m_aTableTargets.erase(m_aTableTargets.begin() + (i - delta));
         m_xTargetsBox->remove(i - delta++);
     }
-}
+}*/
 
 namespace
 {
-boost::property_tree::ptree redactionTargetToJSON(RedactionTarget* pTarget)
+/*boost::property_tree::ptree redactionTargetToJSON(RedactionTarget* pTarget)
 {
     boost::property_tree::ptree aNode;
     aNode.put("sName", pTarget->sName.toUtf8().getStr());
@@ -385,7 +385,7 @@ boost::property_tree::ptree redactionTargetToJSON(RedactionTarget* pTarget)
     aNode.put("nID", pTarget->nID);
 
     return aNode;
-}
+}*/
 
 RedactionTarget* JSONtoRedactionTarget(const boost::property_tree::ptree::value_type& rValue)
 {
@@ -421,7 +421,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, LoadHdl, sfx2::FileDialogHelper*, void)
     osl::File::getSystemPathFromFileURL(sTargetsFile, sSysPath);
     sTargetsFile = sSysPath;
 
-    weld::WaitObject aWaitObject(getDialog());
+    EnterWait();
 
     try
     {
@@ -440,7 +440,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, LoadHdl, sfx2::FileDialogHelper*, void)
              aTargetsJSON.get_child("RedactionTargets"))
         {
             RedactionTarget* pTarget = JSONtoRedactionTarget(rValue);
-            addTarget(pTarget);
+            m_pTargetsBox->InsertTarget(pTarget);
         }
     }
     catch (css::uno::Exception& e)
@@ -450,11 +450,13 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, LoadHdl, sfx2::FileDialogHelper*, void)
         return;
         //TODO: Warn the user with a message box
     }
+
+    LeaveWait();
 }
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, SaveHdl, sfx2::FileDialogHelper*, void)
 {
-    assert(m_pFileDlg);
+    /*assert(m_pFileDlg);
 
     OUString sTargetsFile;
     if (ERRCODE_NONE == m_pFileDlg->GetError())
@@ -493,7 +495,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, SaveHdl, sfx2::FileDialogHelper*, void)
                  "Exception caught while trying to save the targets JSON to file: " << e.Message);
         return;
         //TODO: Warn the user with a message box
-    }
+    }*/
 }
 
 void SfxAutoRedactDialog::StartFileDialog(StartFileDialogType nType, const OUString& rTitle)
@@ -504,7 +506,7 @@ void SfxAutoRedactDialog::StartFileDialog(StartFileDialogType nType, const OUStr
     bool bSave = nType == StartFileDialogType::SaveAs;
     short nDialogType = bSave ? css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION
                               : css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
-    m_pFileDlg.reset(new sfx2::FileDialogHelper(nDialogType, FileDialogFlags::NONE, getDialog()));
+    m_pFileDlg.reset(new sfx2::FileDialogHelper(nDialogType, FileDialogFlags::NONE, this));
 
     m_pFileDlg->SetTitle(rTitle);
     m_pFileDlg->AddFilter(aFilterAllStr, FILEDIALOG_FILTER_ALL);
@@ -517,7 +519,7 @@ void SfxAutoRedactDialog::StartFileDialog(StartFileDialogType nType, const OUStr
     m_pFileDlg->StartExecuteModal(aDlgClosedLink);
 }
 
-void SfxAutoRedactDialog::addTarget(RedactionTarget* pTarget)
+/*void SfxAutoRedactDialog::addTarget(RedactionTarget* pTarget)
 {
     // Only the visual/display part
     m_xTargetsBox->InsertTarget(pTarget);
@@ -533,21 +535,23 @@ void SfxAutoRedactDialog::addTarget(RedactionTarget* pTarget)
         xBox->run();
         delete pTarget;
     }
-}
+}*/
 
 void SfxAutoRedactDialog::clearTargets()
 {
-    // Clear the targets box
-    m_xTargetsBox->clear();
+    SvTreeListEntry* pEntry = m_pTargetsBox->First();
+    while (pEntry)
+    {
+        RedactionTarget* pTarget = static_cast<RedactionTarget*>(pEntry->GetUserData());
+        if (pTarget)
+        {
+            delete pTarget;
+        }
+        pEntry = m_pTargetsBox->Next(pEntry);
+    }
 
-    // Clear the targets vector
-    auto delTarget
-        = [](const std::pair<RedactionTarget*, OUString>& targetPair) { delete targetPair.first; };
-
-    std::for_each(m_aTableTargets.begin(), m_aTableTargets.end(), delTarget);
-
-    m_aTableTargets.clear();
-}*/
+    m_pTargetsBox->Clear();
+}
 
 SfxAutoRedactDialog::SfxAutoRedactDialog(vcl::Window* pParent)
     : SfxModalDialog(pParent, "AutoRedactDialog", "sfx/ui/autoredactdialog.ui")
@@ -563,6 +567,8 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(vcl::Window* pParent)
     get(m_pDeleteBtn, "delete");
 
     m_pTargetsBox = VclPtr<TargetsTable>::Create(*m_pTargetsContainer);
+
+    m_pLoadBtn->SetClickHdl(LINK(this, SfxAutoRedactDialog, Load));
 
     // Can be used to remmeber the last set of redaction targets?
     /*OUString sExtraData;
@@ -615,6 +621,8 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(vcl::Window* pParent)
 
 SfxAutoRedactDialog::~SfxAutoRedactDialog()
 {
+    if (!m_bTargetsCopied)
+        clearTargets();
     /*if (m_aTableTargets.empty())
     {
         // Clear the dialog data
@@ -680,19 +688,33 @@ void SfxAutoRedactDialog::dispose()
         return false;
 
     return true;
-}
+}*/
 
 bool SfxAutoRedactDialog::getTargets(std::vector<std::pair<RedactionTarget*, OUString>>& r_aTargets)
 {
-    if (m_aTableTargets.empty())
-        return true;
+    SvTreeListEntry* pEntry = m_pTargetsBox->First();
 
-    r_aTargets = m_aTableTargets;
-    m_bTargetsCopied = true;
+    if (!pEntry)
+    {
+        return false;
+    }
+
+    while (pEntry)
+    {
+        RedactionTarget* pTarget = static_cast<RedactionTarget*>(pEntry->GetUserData());
+        if (pTarget && !pTarget->sName.isEmpty())
+        {
+            r_aTargets.emplace_back(pTarget, pTarget->sName);
+            if (!m_bTargetsCopied)
+                m_bTargetsCopied = true;
+        }
+        pEntry = m_pTargetsBox->Next(pEntry);
+    }
+
     return true;
 }
 
-IMPL_LINK_NOARG(SfxAddTargetDialog, SelectTypeHdl, weld::ComboBox&, void)
+/*IMPL_LINK_NOARG(SfxAddTargetDialog, SelectTypeHdl, weld::ComboBox&, void)
 {
     if (m_xType->get_active_id() == "predefined")
     {
