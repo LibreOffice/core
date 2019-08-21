@@ -79,7 +79,7 @@ public:
                  const css::uno::Reference < css::io::XInputStream >& xRawStream,
                  const ::rtl::Reference< EncryptionData >& rData );
 
-    sal_Int64 getSize() { return mnZipSize; }
+    sal_Int64 getSize() const { return mnZipSize; }
 
     virtual ~XUnbufferedStream() override;
 

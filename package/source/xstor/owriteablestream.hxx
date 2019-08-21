@@ -161,10 +161,10 @@ public:
 
     void SetToBeCommited() { m_bFlushed = true; }
 
-    bool HasCachedEncryptionData() { return m_bHasCachedEncryptionData; }
+    bool HasCachedEncryptionData() const { return m_bHasCachedEncryptionData; }
     ::comphelper::SequenceAsHashMap& GetCachedEncryptionData() { return m_aEncryptionData; }
 
-    bool IsModified() { return m_bHasDataToFlush || m_bFlushed; }
+    bool IsModified() const { return m_bHasDataToFlush || m_bFlushed; }
 
     bool IsEncrypted();
     void SetDecrypted();
