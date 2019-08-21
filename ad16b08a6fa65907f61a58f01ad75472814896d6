@@ -16,6 +16,24 @@
       "revId": "ad16b08a6fa65907f61a58f01ad75472814896d6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_02369253",
+        "filename": "include/comphelper/sequence.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-21T17:11:28Z",
+      "side": 1,
+      "message": "Oh! Great - only saw this after submitting 2nd changeset",
+      "parentUuid": "bf659307_0201b26b",
+      "revId": "ad16b08a6fa65907f61a58f01ad75472814896d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
