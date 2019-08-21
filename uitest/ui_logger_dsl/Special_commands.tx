@@ -1,7 +1,7 @@
 import type_options
 
 /*
-    This file for the log statments that relates to each diffrent applications
+    This file for the log statements that relates to each different applications
     Each Grammar Command here is related to his own application
 */
 
@@ -10,8 +10,8 @@ SpecialCommand:
 ;
 
 /*
-  This part for all the writer log statments:
-   
+  This part for all the writer log statements:
+
     1)  Type
     2)  Select
     3)  GOTO page
@@ -55,7 +55,7 @@ writer_Insert_BreakPage:
 
 //=================================================================//
 /*
-  This part for all the calc log statments:
+  This part for all the calc log statements:
 
     1)  select sheet
     2)  Select cell or range
@@ -87,7 +87,7 @@ calc_Select_cell:
   'Select from calc' select_op=select_options
 ;
 calc_AutoFill_filter:
-  'Lanuch AutoFilter from Col' col_num=INT 'and Row' row_num=INT
+  'Launch AutoFilter from Col' col_num=INT 'and Row' row_num=INT
 ;
 range_of_cells:
     '{' '"RANGE":' input_range=STRING '}'
@@ -132,9 +132,9 @@ select_options:
 
 //=================================================================//
 /*
-  This part for all the impress log statments:
-   
-    1)  Type 
+  This part for all the impress log statements:
+
+    1)  Type
     2)  Insert New Slide
     3)  Delete Slide
     4)  Duplicate Slide
@@ -163,9 +163,9 @@ impress_Rename_Slide:
 ;
 //=================================================================//
 /*
-  This part for all the math log statments:
-   
-    1)  element selector 
+  This part for all the math log statements:
+
+    1)  element selector
     2)  Type
 
   then we can add whatever we need in the future
@@ -182,8 +182,8 @@ math_Type_command:
 
 //=================================================================//
 /*
-  This part for all the draw log statments:
-   
+  This part for all the draw log statements:
+
     1) Type
     2) Insert New Page
     3) Delete Page

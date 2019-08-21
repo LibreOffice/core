@@ -103,7 +103,7 @@ class ul_Compiler:
                 "EditUIObject": self.handle_Edit_uiObject,
                 "writer_Type_command": self.handle_writer_type,
                 "writer_Select_command": self.handle_writer_select,
-                "writer_GOTO_command": self.handle_wirter_goto,
+                "writer_GOTO_command": self.handle_writer_goto,
                 "calc_Select_cell": self.handle_calc_select,
                 "calc_switch_sheet": self.handle_calc_switch_sheet,
                 "calc_Type_command": self.handle_calc_Type_command,
@@ -227,7 +227,7 @@ class ul_Compiler:
         self.variables.append(line)
 
     def handle_uno(self, UNOCommand):
-        if UNOCommand.prameters == None:
+        if UNOCommand.parameters == None:
             line = (
                 double_tab
                 + 'self.xUITest.executeCommand("'
@@ -235,17 +235,17 @@ class ul_Compiler:
                 + '")\n'
             )
         else:
-            paramaters = ""
-            for p in UNOCommand.prameters.parameter_data:
-                paramaters = paramaters + '"' + p.key + '" : ' + str(p.value) + " ,"
-            paramaters = paramaters[:-1]
+            parameters = ""
+            for p in UNOCommand.parameters.parameter_data:
+                parameters = parameters + '"' + p.key + '" : ' + str(p.value) + " ,"
+            parameters = parameters[:-1]
 
             line = (
                 double_tab
                 + 'self.xUITest.executeCommandWithParameters("'
                 + UNOCommand.uno_command_name
                 + '", mkPropertyValues({'
-                + paramaters
+                + parameters
                 + "}) )\n"
             )
 
@@ -636,7 +636,7 @@ class ul_Compiler:
 
         self.prev_command = writer_Select_command
 
-    def handle_wirter_goto(self, writer_GOTO_command):
+    def handle_writer_goto(self, writer_GOTO_command):
 
         self.init_app()
 

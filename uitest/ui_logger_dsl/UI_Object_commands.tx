@@ -37,13 +37,13 @@ EditUIObject:
    action=action_on_UIObject ('from' parent_id=ID)?
 ;
 SpinFieldUIObject:
-   change=increase_or_ecrease Spin_id=STRING ('from' parent_id=ID)? 
+   change=increase_or_ecrease Spin_id=STRING ('from' parent_id=ID)?
 ;
 ListBoxUIObject:
    'Select element with position ' POS=INT 'in' list_id=STRING ('from' parent_id=ID)?
 ;
 //=============================================================
-//hellper grammer for EditUIObject
+//hellper grammar for EditUIObject
 action_on_UIObject:
     Type_action | SELECT | Clear
 ;

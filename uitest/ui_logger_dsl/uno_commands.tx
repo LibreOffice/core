@@ -4,7 +4,7 @@
 */
 
 UNOCommand:
-    'Send UNO Command' '(' uno_command_name=STRING ')'  (prameters=parameter)?
+    'Send UNO Command' '(' uno_command_name=STRING ')'  (parameters=parameter)?
 ;
 
 parameter:
@@ -12,6 +12,6 @@ parameter:
 ;
 
 data:
-     ','? key=STRING ':' value= INT|ID 
+     ','? key=STRING ':' value= INT|ID
 ;
 
