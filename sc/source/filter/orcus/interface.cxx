@@ -470,6 +470,14 @@ void ScOrcusFactory::finalize()
                 maDoc.setMatrixCells(aRange, *pArray, rToken.meGrammar);
                 break;
             }
+            case CellStoreToken::Type::FillDownCells:
+            {
+                if (!rToken.mnIndex1)
+                    break;
+
+                maDoc.fillDownCells(rToken.maPos, rToken.mnIndex1);
+                break;
+            }
             default:
                 ;
         }
@@ -536,6 +544,12 @@ void ScOrcusFactory::pushCellStoreToken(
     const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar )
 {
     maCellStoreTokens.emplace_back(rPos, rFormula, eGrammar);
+}
+
+void ScOrcusFactory::pushFillDownCellsToken( const ScAddress& rPos, uint32_t nFillSize )
+{
+    maCellStoreTokens.emplace_back(rPos, CellStoreToken::Type::FillDownCells);
+    maCellStoreTokens.back().mnIndex1 = nFillSize;
 }
 
 void ScOrcusFactory::pushSharedFormulaToken( const ScAddress& rPos, uint32_t nIndex )
@@ -1187,9 +1201,10 @@ orcus::spreadsheet::range_size_t ScOrcusSheet::get_sheet_size() const
     return ret;
 }
 
-void ScOrcusSheet::fill_down_cells(os::row_t /*row*/, os::col_t /*col*/, os::row_t /*range_size*/)
+void ScOrcusSheet::fill_down_cells(os::row_t row, os::col_t col, os::row_t range_size)
 {
-    // TODO : implement this.
+    mrFactory.pushFillDownCellsToken(ScAddress(col, row, mnTab), range_size);
+    cellInserted();
 }
 
 const sc::SharedFormulaGroups& ScOrcusSheet::getSharedFormulaGroups() const
