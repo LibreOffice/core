@@ -63,7 +63,7 @@ public:
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
     void finish();
-    const css::uno::Reference< css::io::XOutputStream >& getStream();
+    const css::uno::Reference< css::io::XOutputStream >& getStream() const;
 
     static sal_uInt32 getCurrentDosTime();
     static void setEntry( ZipEntry *pEntry );
@@ -87,7 +87,7 @@ public:
     void reduceScheduledThreadTasksToGivenNumberOrLess(
         sal_Int32 nThreadTasks);
 
-    const std::shared_ptr<comphelper::ThreadTaskTag>& getThreadTaskTag() { return mpThreadTaskTag; }
+    const std::shared_ptr<comphelper::ThreadTaskTag>& getThreadTaskTag() const { return mpThreadTaskTag; }
 };
 
 #endif

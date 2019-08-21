@@ -39,7 +39,7 @@ public:
     /// @throws css::uno::RuntimeException
     void update(const css::uno::Sequence< sal_Int8 > &b);
     /// @throws css::uno::RuntimeException
-    sal_Int32 getValue();
+    sal_Int32 getValue() const;
     /// @throws css::uno::RuntimeException
     void reset();
 };

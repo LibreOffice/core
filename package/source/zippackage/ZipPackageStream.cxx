@@ -255,7 +255,7 @@ uno::Sequence<sal_Int8> ZipPackageStream::GetEncryptionKey(Bugs const bugs)
     return aResult;
 }
 
-sal_Int32 ZipPackageStream::GetStartKeyGenID()
+sal_Int32 ZipPackageStream::GetStartKeyGenID() const
 {
     // generally should all the streams use the same Start Key
     // but if raw copy without password takes place, we should preserve the imported algorithm
