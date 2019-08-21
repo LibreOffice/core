@@ -766,14 +766,13 @@ void SwTableShell::Execute(SfxRequest &rReq)
         {
             bool bBalance = (FN_TABLE_BALANCE_CELLS == nSlot);
             const bool bNoShrink = FN_TABLE_ADJUST_CELLS == nSlot;
-            const bool bSelectedWidth = SID_TABLE_MINIMAL_COLUMN_WIDTH == nSlot;
             if ( rSh.IsAdjustCellWidthAllowed(bBalance) )
             {
                 {
                     // remove actions to make a valid table selection
                     UnoActionRemoveContext aRemoveContext(rSh.GetDoc());
                 }
-                rSh.AdjustCellWidth(bBalance, bNoShrink, !bSelectedWidth);
+                rSh.AdjustCellWidth(bBalance, bNoShrink);
             }
             bCallDone = true;
             break;
