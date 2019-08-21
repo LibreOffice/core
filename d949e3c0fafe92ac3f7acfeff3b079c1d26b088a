@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "bf659307_a2e2462e",
+        "filename": "package/source/xstor/owriteablestream.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-21T15:05:05Z",
+      "side": 1,
+      "message": "Please see https://gerrit.libreoffice.org/77892 where I simplify this function. I also make sure to only use copy-on-write Sequence stuff when necessary (so not in every iteration of the search loop).",
+      "range": {
+        "startLine": 928,
+        "startChar": 57,
+        "endLine": 928,
+        "endChar": 71
+      },
+      "revId": "d949e3c0fafe92ac3f7acfeff3b079c1d26b088a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_1f826b50",
         "filename": "package/source/xstor/owriteablestream.cxx",
         "patchSetId": 4
