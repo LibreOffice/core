@@ -175,6 +175,7 @@ public:
     void testTdf111786();
     void testFontScale();
     void testShapeAutofitPPTX();
+    void testLegacyShapeAutofitPPTX();
     void testTdf115394();
     void testTdf115394Zero();
     void testTdf115005();
@@ -267,6 +268,7 @@ public:
     CPPUNIT_TEST(testTdf111786);
     CPPUNIT_TEST(testFontScale);
     CPPUNIT_TEST(testShapeAutofitPPTX);
+    CPPUNIT_TEST(testLegacyShapeAutofitPPTX);
     CPPUNIT_TEST(testTdf115394);
     CPPUNIT_TEST(testTdf115394Zero);
     CPPUNIT_TEST(testTdf115005);
@@ -1642,6 +1644,22 @@ void SdOOXMLExportTest2::testShapeAutofitPPTX()
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr/a:spAutoFit", 1);
     // TextAutoGrowHeight --> "Resize shape to fit text" --> false
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:bodyPr/a:noAutofit", 1);
+}
+
+void SdOOXMLExportTest2::testLegacyShapeAutofitPPTX()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/testLegacyShapeAutofit.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    CPPUNIT_ASSERT(pXmlDocContent);
+
+    // Text in a legacy rectangle
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr/a:noAutofit", 1);
+    // Text in (closed) Polygon
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:bodyPr/a:noAutofit", 1);
+    // Text in a legacy ellipse
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:txBody/a:bodyPr/a:noAutofit", 1);
 }
 
 void SdOOXMLExportTest2::testTdf115394()
