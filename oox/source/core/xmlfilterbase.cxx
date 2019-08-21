@@ -517,7 +517,7 @@ OUString lclAddRelation( const Reference< XRelationshipAccess >& rRelations, sal
     aEntry[0].First = "Type";
     aEntry[0].Second = rType;
     aEntry[1].First = "Target";
-    aEntry[1].Second = INetURLObject::decode(rTarget, INetURLObject::DecodeMechanism::Unambiguous, RTL_TEXTENCODING_UTF8);
+    aEntry[1].Second = INetURLObject::decode(rTarget, INetURLObject::DecodeMechanism::ToIUri, RTL_TEXTENCODING_UTF8);
     if( bExternal )
     {
         aEntry[2].First = "TargetMode";
