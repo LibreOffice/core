@@ -609,7 +609,7 @@ bool ScDocShell::Load( SfxMedium& rMedium )
             {
                 /* Create styles that are imported through Orcus */
 
-                OUString aURL("$BRAND_BASE_DIR" LIBO_SHARE_FOLDER "/calc/styles.xml");
+                OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/calc/styles.xml");
                 rtl::Bootstrap::expandMacros(aURL);
 
                 OUString aPath;
