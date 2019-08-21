@@ -11,6 +11,7 @@
 
 #include <memory>
 #include <system_error>
+#include <utility>
 
 #include "plugin.hxx"
 #include "pluginhandler.hxx"
@@ -385,7 +386,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
 
 std::unique_ptr<ASTConsumer> LibreOfficeAction::CreateASTConsumer( CompilerInstance& Compiler, StringRef )
 {
-    return llvm::make_unique<PluginHandler>( Compiler, _args );
+    return std::make_unique<PluginHandler>( Compiler, _args );
 }
 
 bool LibreOfficeAction::ParseArgs( const CompilerInstance&, const std::vector< std::string >& args )
