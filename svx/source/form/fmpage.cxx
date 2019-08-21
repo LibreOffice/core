@@ -140,7 +140,7 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
             for (const INetProtocol& i : s_aQuickHelpSupported)
                 if (i == aProtocol)
                 {
-                    aHelpText = INetURLObject::decode(aUrl.GetURLNoPass(), INetURLObject::DecodeMechanism::Unambiguous);
+                    aHelpText = aUrl.GetURLNoPass(INetURLObject::DecodeMechanism::Unambiguous);
                     break;
                 }
         }

@@ -988,7 +988,7 @@ IMPL_LINK_NOARG( RemoteFilesDialog, SelectHdl, SvTreeListBox*, void )
 
                 m_sPath = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
-                m_pName_ed->SetText( INetURLObject::decode( aURL.GetLastName(), INetURLObject::DecodeMechanism::WithCharset ) );
+                m_pName_ed->SetText( aURL.GetLastName(INetURLObject::DecodeMechanism::WithCharset) );
             }
             else
             {

@@ -2779,8 +2779,8 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
         uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
         uno::Reference<sdb::XDatabaseContext> xDBContext = sdb::DatabaseContext::create(xContext);
 
-        OUString sNewName = INetURLObject::decode(rURL.getName(),
-            INetURLObject::DecodeMechanism::Unambiguous);
+        OUString sNewName = rURL.getName(
+            INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::Unambiguous);
         sal_Int32 nExtLen = sExt.getLength();
         sNewName = sNewName.replaceAt(sNewName.getLength() - nExtLen - 1, nExtLen + 1, "");
 
