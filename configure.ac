@@ -7002,7 +7002,7 @@ if test "$COM_IS_CLANG" = "TRUE"; then
         save_CXX=$CXX
         save_CXXCPP=$CXXCPP
         # compiler plugins must be built with "native" compiler that was used to build Clang itself:
-        : "${COMPILER_PLUGINS_CXX=g++ -std=c++11}"
+        : "${COMPILER_PLUGINS_CXX=g++ -std=c++14}"
         CXX=$COMPILER_PLUGINS_CXX
         CXXCPP="$COMPILER_PLUGINS_CXX -E"
         CPPFLAGS="$CPPFLAGS -I$CLANGDIR/include -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS"

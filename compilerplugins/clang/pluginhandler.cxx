@@ -386,11 +386,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
 
 std::unique_ptr<ASTConsumer> LibreOfficeAction::CreateASTConsumer( CompilerInstance& Compiler, StringRef )
 {
-#if __cplusplus >= 201402L
     return std::make_unique<PluginHandler>( Compiler, _args );
-#else
-    return llvm::make_unique<PluginHandler>( Compiler, _args );
-#endif
 }
 
 bool LibreOfficeAction::ParseArgs( const CompilerInstance&, const std::vector< std::string >& args )
