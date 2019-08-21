@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_c23f3a23",
+        "filename": "package/source/xstor/owriteablestream.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-08-21T17:17:02Z",
+      "side": 1,
+      "message": "I\u0027ll revert this part to avoid merge conflicts then.",
+      "parentUuid": "bf659307_a2e2462e",
+      "range": {
+        "startLine": 928,
+        "startChar": 57,
+        "endLine": 928,
+        "endChar": 71
+      },
+      "revId": "d949e3c0fafe92ac3f7acfeff3b079c1d26b088a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_1f826b50",
         "filename": "package/source/xstor/owriteablestream.cxx",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2019-08-21T07:45:52Z",
       "side": 1,
       "message": "I believe that there\u0027s no need in this variable.\n\nHere it is defined to be reused twice: to construct aIdRel, and in comparison in copy_if below. But it has no advantage over using literals in both places; in fact, it even has one (insignificant, yes) disadvantage:\n\nwhen you use plain \"Id\" literals in both places, then in first case, the same optimized OUString ctor would be called as you used here; and in the second case (in the copy_if), another optimized function (operator!\u003d( const OUString\u0026 rString, T\u0026 literal )) would be used, which doesn\u0027t create a OUString from the literal. OTOH, when you use the aIDTag, you need to use a capture list in the lambda in the copy_if, and using the capture list forces the lambda to be compiled as an *object with initializer*, not as plain function.\n\nI hope I don\u0027t sound too picky; I just wanted to share what I learned myself, and I don\u0027t think that this nitpick is important; feel free to ignore it if you like.",
+      "range": {
+        "startLine": 2632,
+        "startChar": 13,
+        "endLine": 2632,
+        "endChar": 19
+      },
+      "revId": "d949e3c0fafe92ac3f7acfeff3b079c1d26b088a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_622f4ef6",
+        "filename": "package/source/xstor/owriteablestream.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2632,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-08-21T17:17:02Z",
+      "side": 1,
+      "message": "\u003e I believe that there\u0027s no need in this variable.\n\nI guess, it\u0027s ok to repeat \"Id\" twice. After all whole method is about ID and is not very long.\n\n\u003e I hope I don\u0027t sound too picky; I just wanted to share what I learned myself\n\nNot at all, I really appreciate your reviews.",
+      "parentUuid": "bf659307_1f826b50",
       "range": {
         "startLine": 2632,
         "startChar": 13,
