@@ -52,9 +52,6 @@ public:
 
        @param bCallPrtDataChanged
        [in] if set, triggers all necessary invalidations.
-
-       @returns
-       the printer set at the document.
     */
     virtual void setPrinter(/*[in]*/ SfxPrinter* pP,/*[in]*/ bool bDeleteOld,/*[in]*/ bool bCallPrtDataChanged ) = 0;
 
