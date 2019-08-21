@@ -176,17 +176,17 @@ namespace cairocanvas
         return maDeviceHelper.getOutputDevice();
     }
 
-    SurfaceSharedPtr const & SpriteCanvas::getBufferSurface()
+    SurfaceSharedPtr const & SpriteCanvas::getBufferSurface() const
     {
         return maDeviceHelper.getBufferSurface();
     }
 
-    SurfaceSharedPtr const & SpriteCanvas::getWindowSurface()
+    SurfaceSharedPtr const & SpriteCanvas::getWindowSurface() const
     {
         return maDeviceHelper.getWindowSurface();
     }
 
-    const ::basegfx::B2ISize& SpriteCanvas::getSizePixel()
+    const ::basegfx::B2ISize& SpriteCanvas::getSizePixel() const
     {
         return maDeviceHelper.getSizePixel();
     }

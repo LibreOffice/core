@@ -46,7 +46,7 @@ public:
         xProcessFactory = xSMgr;
     }
 
-    Reference< XMultiServiceFactory > get()
+    Reference< XMultiServiceFactory > get() const
     {
         Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
 
