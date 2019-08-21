@@ -16,6 +16,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <i18nlangtag/languagetag.hxx>
@@ -625,6 +626,34 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf64242_optimizeTable)
     CPPUNIT_ASSERT_MESSAGE("Row Height: minimized",
                            (optimalRowHeight - nToleranceH) > minimalRowHeight);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Row set to auto-height", double(0), minimalRowHeight);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126784_distributeSelectedColumns)
+{
+    SwDoc* pDoc = createDoc("tdf126784_distributeSelectedColumns.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
+
+    auto aSeq = getProperty<uno::Sequence<text::TableColumnSeparator>>(xTableRows->getByIndex(0),
+                                                                       "TableColumnSeparators");
+    sal_Int16 nOrigCol2Pos = aSeq[0].Position;
+    sal_Int16 nOrigCol3Pos = aSeq[1].Position;
+
+    //Select column 1 and 2
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+
+    lcl_dispatchCommand(mxComponent, ".uno:DistributeColumns", {});
+
+    aSeq = getProperty<uno::Sequence<text::TableColumnSeparator>>(xTableRows->getByIndex(0),
+                                                                  "TableColumnSeparators");
+    CPPUNIT_ASSERT_MESSAGE("Second column should shrink", nOrigCol2Pos < aSeq[0].Position);
+    CPPUNIT_ASSERT_MESSAGE("Last column shouldn't change", nOrigCol3Pos == aSeq[1].Position);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf108687_tabstop)
