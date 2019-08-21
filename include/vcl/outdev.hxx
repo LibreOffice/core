@@ -52,6 +52,7 @@
 #include <memory>
 #include <vector>
 
+namespace vcl { class Drawable; }
 struct ImplOutDevData;
 class LogicalFontInstance;
 struct SystemGraphicsData;
@@ -313,6 +314,7 @@ private:
     OutputDevice(const OutputDevice&) = delete;
     OutputDevice& operator=(const OutputDevice&) = delete;
 
+private:
     mutable SalGraphics*            mpGraphics;         ///< Graphics context to draw on
     mutable VclPtr<OutputDevice>    mpPrevGraphics;     ///< Previous output device in list
     mutable VclPtr<OutputDevice>    mpNextGraphics;     ///< Next output device in list
@@ -455,6 +457,8 @@ public:
     std::vector< VCLXGraphics* > *GetUnoGraphicsList() const  { return mpUnoGraphicsList; }
     std::vector< VCLXGraphics* > *CreateUnoGraphicsList();
 
+    VirtualDevice* GetAlphaVirtDev() const { return mpAlphaVDev; }
+
 protected:
 
     /** Acquire a graphics device that the output device uses to draw on.
@@ -539,6 +543,8 @@ public:
     ///@{
 
 public:
+    bool                        Draw(vcl::Drawable const& rDrawable);
+
     virtual void                Flush() {}
 
     virtual void                DrawOutDev(
@@ -555,13 +561,13 @@ public:
                                     const Point& rSrcPt,  const Size& rSrcSize,
                                     bool bWindowInvalidate = false );
 
+    SAL_DLLPRIVATE bool         is_double_buffered_window() const;
+
 protected:
 
     virtual void                CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate);
 
     SAL_DLLPRIVATE void         drawOutDevDirect ( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
-
-    SAL_DLLPRIVATE bool         is_double_buffered_window() const;
 
 private:
 
@@ -636,15 +642,15 @@ public:
     void                        SetFont( const vcl::Font& rNewFont );
     const vcl::Font&            GetFont() const { return maFont; }
 
+    bool                        IsLineColorInitialized() const { return mbInitLineColor; }
+    SAL_DLLPRIVATE void         InitLineColor();
+
+    bool                        IsFillColorInitialized() const { return mbInitFillColor; }
+    SAL_DLLPRIVATE void         InitFillColor();
+
 protected:
 
     virtual void                ImplReleaseFonts();
-
-private:
-
-    SAL_DLLPRIVATE void         InitLineColor();
-
-    SAL_DLLPRIVATE void         InitFillColor();
 
     ///@}
 
@@ -660,7 +666,10 @@ public:
     void                        SetClipRegion( const vcl::Region& rRegion );
     bool                        SelectClipRegion( const vcl::Region&, SalGraphics* pGraphics = nullptr );
 
+    bool                        IsClipRegionInitialized() const { return mbInitClipRegion; }
     bool                        IsClipRegion() const { return mbClipRegion; }
+    bool                        IsOutputClipped() const { return mbOutputClipped; }
+    virtual void                InitClipRegion();
 
     void                        MoveClipRegion( long nHorzMove, long nVertMove );
     void                        IntersectClipRegion( const tools::Rectangle& rRect );
@@ -669,9 +678,6 @@ public:
     virtual vcl::Region         GetActiveClipRegion() const;
 
 protected:
-
-    virtual void                InitClipRegion();
-
     /** Perform actual rect clip against outdev dimensions, to generate
         empty clips whenever one of the values is completely off the device.
 
