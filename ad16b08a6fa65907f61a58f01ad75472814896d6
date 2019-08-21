@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_0201b26b",
+        "filename": "include/comphelper/sequence.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-08-21T16:56:26Z",
+      "side": 1,
+      "message": "possibly we can simply replace this with\n\n    return DstType(_Sequence.begin(), i_Sequence.end())\n\nwhich should do the optimal thing for std::vector, not sure about other destination types",
+      "revId": "ad16b08a6fa65907f61a58f01ad75472814896d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
