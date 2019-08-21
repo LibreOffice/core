@@ -212,6 +212,19 @@ namespace comphelper
     }
 
 
+    template <typename T> struct has_reserve_method
+    {
+    private:
+        template <typename U>
+        static auto test(int) -> decltype(std::declval<U>().reserve(0), std::true_type());
+
+        template <typename>
+        static std::false_type test(...);
+
+    public:
+        static constexpr bool value = std::is_same<decltype(test<T>(0)), std::true_type>::value;
+    };
+
     /** Copy from a Sequence into a container
 
         @tpl SrcType
@@ -236,7 +249,8 @@ namespace comphelper
         precision loss, overflow or truncation.
      */
     template < typename DstType, typename SrcType >
-    inline DstType sequenceToContainer( const css::uno::Sequence< SrcType >& i_Sequence )
+    inline typename std::enable_if<std::negation<has_reserve_method<DstType>>::value, DstType>::type
+    sequenceToContainer( const css::uno::Sequence< SrcType >& i_Sequence )
     {
         DstType result( i_Sequence.getLength() );
         ::std::copy( i_Sequence.begin(), i_Sequence.end(), result.begin() );
@@ -245,10 +259,31 @@ namespace comphelper
 
     // this one does better type deduction, but does not allow us to copy into a different element type
     template < typename DstType >
-    inline DstType sequenceToContainer( const css::uno::Sequence< typename DstType::value_type >& i_Sequence )
+    inline typename std::enable_if<std::negation<has_reserve_method<DstType>>::value, DstType>::type
+    sequenceToContainer( const css::uno::Sequence< typename DstType::value_type >& i_Sequence )
     {
         DstType result( i_Sequence.getLength() );
         ::std::copy( i_Sequence.begin(), i_Sequence.end(), result.begin() );
+        return result;
+    }
+
+    // vector overrides, to make use of reserve to avoid default-insertion then assignment
+    template <typename DstType, typename SrcType>
+    inline typename std::enable_if<has_reserve_method<DstType>::value, DstType>::type
+    sequenceToContainer(const css::uno::Sequence<SrcType>& i_Sequence)
+    {
+        DstType result;
+        result.reserve(i_Sequence.getLength());
+        ::std::copy(i_Sequence.begin(), i_Sequence.end(), ::std::back_inserter(result));
+        return result;
+    }
+    template <typename DstType>
+    inline typename std::enable_if<has_reserve_method<DstType>::value, DstType>::type
+    sequenceToContainer(const css::uno::Sequence<typename DstType::value_type>& i_Sequence)
+    {
+        DstType result;
+        result.reserve(i_Sequence.getLength());
+        ::std::copy(i_Sequence.begin(), i_Sequence.end(), ::std::back_inserter(result));
         return result;
     }
 
