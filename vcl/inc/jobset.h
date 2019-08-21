@@ -22,6 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <i18nutil/paper.hxx>
+#include <vcl/dllapi.h>
 #include <vcl/prntypes.hxx>
 #include <unordered_map>
 
