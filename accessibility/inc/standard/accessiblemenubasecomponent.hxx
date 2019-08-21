@@ -84,7 +84,7 @@ protected:
     void                    UpdateAccessibleName( sal_Int32 i );
     void                    UpdateItemText( sal_Int32 i );
 
-    sal_Int32               GetChildCount();
+    sal_Int32               GetChildCount() const;
 
     css::uno::Reference< css::accessibility::XAccessible > GetChild( sal_Int32 i );
     css::uno::Reference< css::accessibility::XAccessible > GetChildAt( const css::awt::Point& rPoint );

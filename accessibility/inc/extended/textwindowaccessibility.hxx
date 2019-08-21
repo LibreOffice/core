@@ -329,7 +329,7 @@ public:
              ::TextView & rView);
 
     const css::uno::Reference< css::accessibility::XAccessible >&
-    getAccessible() { return m_xAccessible; }
+    getAccessible() const { return m_xAccessible; }
 
     // Must be called only after init has been called.
     css::lang::Locale retrieveLocale();
