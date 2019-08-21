@@ -85,6 +85,7 @@
 #include <osl/interlck.h>
 #include <com/sun/star/uno/genfunc.h>
 #include <comphelper/automationinvokedzone.hxx>
+#include <comphelper/asyncquithandler.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>
 #include <comphelper/windowsdebugoutput.hxx>
@@ -148,8 +149,9 @@ public:
     void SAL_CALL queryTermination( const EventObject& ) override
     {
         SAL_INFO("extensions.olebridge", "TerminationVetoer::queryTermination: count=" << mnCount);
-        // Always veto termination while an OLE object is active
-        if (mnCount > 0)
+        // Always veto termination while an OLE object is active, except if it is an OLE object that
+        // has asked us to quit.
+        if (!AsyncQuitHandler::instance().IsForceQuit() && mnCount > 0)
         {
             SAL_INFO("extensions.olebridge", "TerminationVetoer::queryTermination: Throwing!");
             throw css::frame::TerminationVetoException();
