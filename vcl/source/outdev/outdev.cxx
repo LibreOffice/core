@@ -29,6 +29,7 @@
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/drawables/Drawable.hxx>
 
 #include <salgdi.hxx>
 #include <window.h>
@@ -344,6 +345,11 @@ bool OutputDevice::SupportsOperation( OutDevSupportType eType ) const
 }
 
 // Direct OutputDevice drawing public functions
+
+bool OutputDevice::Draw(vcl::Drawable const& rDrawable)
+{
+    return rDrawable.execute(this);
+}
 
 void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                const Point& rSrcPt,  const Size& rSrcSize )
