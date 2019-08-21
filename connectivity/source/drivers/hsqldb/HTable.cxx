@@ -301,7 +301,7 @@ void OHSQLTable::dropDefaultValue(const OUString& _rColName)
     executeStatement(sSql);
 }
 
-OUString OHSQLTable::getAlterTableColumnPart()
+OUString OHSQLTable::getAlterTableColumnPart() const
 {
     OUString sSql(  "ALTER TABLE " );
 

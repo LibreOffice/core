@@ -87,7 +87,7 @@ namespace connectivity
             // getInputStream
             // Gets the input stream for the bound parameter
 
-            const css::uno::Reference< css::io::XInputStream>& getInputStream ()
+            const css::uno::Reference< css::io::XInputStream>& getInputStream () const
             {
                 return paramInputStream;
             }
@@ -96,7 +96,7 @@ namespace connectivity
             // getInputStreamLen
             // Gets the input stream length for the bound parameter
 
-            sal_Int32 getInputStreamLen ()
+            sal_Int32 getInputStreamLen () const
             {
                 return paramInputStreamLen;
             }

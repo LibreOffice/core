@@ -101,7 +101,7 @@ namespace connectivity
             /**
                 returns the ALTER TABLE XXX COLUMN statement
             */
-            OUString getAlterTableColumnPart();
+            OUString getAlterTableColumnPart() const;
 
             // some methods to alter table structures
             void alterColumnType(sal_Int32 nNewType,const OUString& _rColName,const css::uno::Reference< css::beans::XPropertySet >& _xDescriptor);
