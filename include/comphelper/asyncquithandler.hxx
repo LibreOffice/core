@@ -31,7 +31,12 @@
 
 class AsyncQuitHandler
 {
-    AsyncQuitHandler() {}
+    AsyncQuitHandler()
+        : mbForceQuit(false)
+    {
+    }
+
+    bool mbForceQuit;
 
 public:
     AsyncQuitHandler(const AsyncQuitHandler&) = delete;
@@ -49,6 +54,13 @@ public:
             = css::frame::Desktop::create(comphelper::getProcessComponentContext());
         xDesktop->terminate();
     }
+
+    // Hack for the TerminationVetoer in extensions/source/ole/unoobjw.cxx. When it is an Automation
+    // client itself that explicitly requests a quit (see VbaApplicationBase::Quit()), we do quit.
+    // The flag can only be set to true, not back to false.
+    void SetForceQuit() { mbForceQuit = true; }
+
+    bool IsForceQuit() { return mbForceQuit; }
 
     DECL_STATIC_LINK(AsyncQuitHandler, OnAsyncQuit, void*, void);
 };
