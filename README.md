@@ -46,7 +46,8 @@ run and compile LibreOffice, also used by the TDF builds:
     * Build: Xcode 9.3 and iPhone SDK 11.4
 
 If you want to use Clang with the LibreOffice compiler plugins, the minimal
-version of Clang is 5.0.2. Since Xcode doesn't provide the compiler plugin
+version of Clang is 5.0.2 (built against a $COMPILER_PLUGINS_CXX that supports at least C++14).
+Since Xcode doesn't provide the compiler plugin
 headers, you have to compile your own Clang to use them on macOS.
 
 You can find the TDF configure switches in the distro-configs/ directory.
