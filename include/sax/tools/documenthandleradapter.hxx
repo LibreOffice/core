@@ -86,7 +86,7 @@ namespace sax
             m_handler = delegate;
         }
         const css::uno::Reference< css::xml::sax::XDocumentHandler >&
-        getDelegate()
+        getDelegate() const
         {
             return m_handler;
         }
@@ -196,7 +196,7 @@ namespace sax
             m_handler = delegate;
         }
         const css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >&
-        getDelegate()
+        getDelegate() const
         {
             return m_handler;
         }
