@@ -81,12 +81,12 @@ void Qt5SvpGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
 
     QImage* pImage = static_cast<Qt5Graphics_Controls*>(m_pWidgetDraw.get())->getImage();
     assert(pImage);
-    BitmapBuffer* pBuffer = new BitmapBuffer;
 
-    QImage2BitmapBuffer(*pImage, *pBuffer);
+    BitmapBuffer aBuffer;
+    QImage2BitmapBuffer(*pImage, aBuffer);
     SalTwoRect aTR(0, 0, pImage->width(), pImage->height(), rDamagedRegion.getX(),
                    rDamagedRegion.getY(), rDamagedRegion.GetWidth(), rDamagedRegion.GetHeight());
-    drawBitmap(aTR, pBuffer, CAIRO_OPERATOR_OVER);
+    drawBitmap(aTR, &aBuffer, CAIRO_OPERATOR_OVER);
 }
 
 void Qt5SvpGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
