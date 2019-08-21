@@ -80,7 +80,7 @@ namespace vclcanvas
 
         void clear();
 
-        css::geometry::IntegerSize2D getSize();
+        css::geometry::IntegerSize2D getSize() const;
 
         css::uno::Reference< css::rendering::XBitmap >
             getScaledBitmap( const css::geometry::RealSize2D&  newSize,
@@ -94,7 +94,7 @@ namespace vclcanvas
             getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
                       const css::geometry::IntegerPoint2D& pos );
 
-        css::rendering::IntegerBitmapLayout getMemoryLayout();
+        css::rendering::IntegerBitmapLayout getMemoryLayout() const;
 
         /// @internal
         BitmapEx getBitmap() const;
