@@ -397,7 +397,7 @@ lcl_GetSwUndoId(SwFrameFormat const *const pFrameFormat)
 
 SwUndoDelLayFormat::SwUndoDelLayFormat( SwFrameFormat* pFormat )
     : SwUndoFlyBase( pFormat, lcl_GetSwUndoId(pFormat) )
-    , bShowSelFrame( true )
+    , m_bShowSelFrame( true )
 {
     SwDoc* pDoc = pFormat->GetDoc();
     DelFly( pDoc );
@@ -430,7 +430,7 @@ SwRewriter SwUndoDelLayFormat::GetRewriter() const
 
 void SwUndoDelLayFormat::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    InsFly( rContext, bShowSelFrame );
+    InsFly( rContext, m_bShowSelFrame );
 }
 
 void SwUndoDelLayFormat::RedoImpl(::sw::UndoRedoContext & rContext)
