@@ -32,6 +32,7 @@
 #define ODF_FORMDROPDOWN "vnd.oasis.opendocument.field.FORMDROPDOWN"
 #define ODF_FORMDROPDOWN_LISTENTRY "Dropdown_ListEntry"
 #define ODF_FORMDROPDOWN_RESULT "Dropdown_Selected"
+#define ODF_FORMDROPDOWN_ENTRY_COUNT_LIMIT 25
 
 #define ODF_TOC "vnd.oasis.opendocument.field.TOC"
 
