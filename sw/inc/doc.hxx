@@ -1492,8 +1492,7 @@ public:
     /// Adjusts selected cell widths in such a way, that their content does not need to be wrapped (if possible).
     /// bBalance evenly re-distributes the available space regardless of content or wrapping.
     /// bNoShrink keeps table size the same by distributing excess space proportionately.
-    /// bColumnWidth tests the entire column for content width, not just selected cells.
-    void AdjustCellWidth( const SwCursor& rCursor, const bool bBalance, const bool bNoShrink, const bool bColumnWidth );
+    void AdjustCellWidth( const SwCursor& rCursor, const bool bBalance, const bool bNoShrink );
 
     SwChainRet Chainable( const SwFrameFormat &rSource, const SwFrameFormat &rDest );
     SwChainRet Chain( SwFrameFormat &rSource, const SwFrameFormat &rDest );
