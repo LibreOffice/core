@@ -559,8 +559,8 @@ void SvBaseLinksDlg::InsertEntry(const SvBaseLink& rLink, int nPos, bool bSelect
     auto nWidthPixel = m_xTbLinks->get_column_width(0);
     OUString aTxt = m_xVirDev->GetEllipsisString(sFileNm, nWidthPixel, DrawTextFlags::PathEllipsis);
     INetURLObject aPath( sFileNm, INetProtocol::File );
-    OUString aFileName = aPath.getName();
-    aFileName = INetURLObject::decode(aFileName, INetURLObject::DecodeMechanism::Unambiguous);
+    OUString aFileName = aPath.getName(
+        INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::Unambiguous);
 
     if( aFileName.getLength() > aTxt.getLength() )
         aTxt = aFileName;

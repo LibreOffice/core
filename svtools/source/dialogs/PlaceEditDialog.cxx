@@ -134,10 +134,8 @@ PlaceEditDialog::PlaceEditDialog(weld::Window* pParent, const std::shared_ptr<Pl
             // Fill the Username field
             if ( rUrl.HasUserData( ) )
             {
-                m_xEDUsername->set_text( INetURLObject::decode( rUrl.GetUser( ),
-                                                              INetURLObject::DecodeMechanism::WithCharset ) );
-                m_aDetailsContainers[i]->setUsername( INetURLObject::decode( rUrl.GetUser( ),
-                                                              INetURLObject::DecodeMechanism::WithCharset ) );
+                m_xEDUsername->set_text( rUrl.GetUser(INetURLObject::DecodeMechanism::WithCharset) );
+                m_aDetailsContainers[i]->setUsername( rUrl.GetUser(INetURLObject::DecodeMechanism::WithCharset) );
             }
 
             m_xLBServerType->set_active(i);
