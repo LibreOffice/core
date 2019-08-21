@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <comphelper/asyncquithandler.hxx>
+#include <comphelper/processfactory.hxx>
 
 AsyncQuitHandler::AsyncQuitHandler()
     : mbForceQuit(false)
