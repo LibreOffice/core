@@ -57,8 +57,8 @@ private:
 
     sal_Int32               implGetAccessibleChildCount();
 
-    bool                    IsFocused();
-    bool                    IsSelected();
+    bool                    IsFocused() const;
+    bool                    IsSelected() const;
 
     void                    SetFocused( bool bFocused );
     void                    SetSelected( bool bSelected );

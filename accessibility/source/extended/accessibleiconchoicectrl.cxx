@@ -328,7 +328,7 @@ namespace accessibility
         }
     }
 
-    VclPtr< SvtIconChoiceCtrl > AccessibleIconChoiceCtrl::getCtrl()
+    VclPtr< SvtIconChoiceCtrl > AccessibleIconChoiceCtrl::getCtrl() const
     {
         return GetAs<SvtIconChoiceCtrl >();
     }

@@ -918,7 +918,7 @@ awt::Point VCLXAccessibleList::getLocationOnScreen(  )
 }
 
 
-bool VCLXAccessibleList::IsInDropDown()
+bool VCLXAccessibleList::IsInDropDown() const
 {
     return m_pListBoxHelper->IsInDropDown();
 }
