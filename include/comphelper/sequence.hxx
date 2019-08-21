@@ -252,6 +252,24 @@ namespace comphelper
         return result;
     }
 
+    // vector overrides, to make use of reserve to avoid default-insertion then assignment
+    template <typename DstType, typename SrcType>
+    inline ::std::vector<DstType> sequenceToContainer(const css::uno::Sequence<SrcType>& i_Sequence)
+    {
+        ::std::vector<DstType> result;
+        result.reserve(i_Sequence.getLength());
+        ::std::copy(i_Sequence.begin(), i_Sequence.end(), ::std::back_inserter(result));
+        return result;
+    }
+    template <typename T>
+    inline ::std::vector<T> sequenceToContainer(const css::uno::Sequence<T>& i_Sequence)
+    {
+        ::std::vector<T> result;
+        result.reserve(i_Sequence.getLength());
+        ::std::copy(i_Sequence.begin(), i_Sequence.end(), ::std::back_inserter(result));
+        return result;
+    }
+
     /** Copy from a Sequence into an existing container
 
         This potentially saves a needless extra copy operation over
