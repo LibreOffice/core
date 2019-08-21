@@ -11,6 +11,10 @@
 #include <vcl/event.hxx>
 #include <IMark.hxx>
 #include <xmloff/odffields.hxx>
+#include <vcl/svapp.hxx>
+#include <strings.hrc>
+#include <swtypes.hxx>
+#include <vcl/layout.hxx>
 
 namespace sw
 {
@@ -125,6 +129,14 @@ void DropDownFormFieldDialog::AppendItemToList()
 {
     if (m_xListAddButton->IsEnabled())
     {
+        if (m_xListItemsTreeView->GetEntryCount() >= ODF_FORMDROPDOWN_ENTRY_COUNT_LIMIT)
+        {
+            ScopedVclPtrInstance<MessageDialog>(this, SwResId(STR_DROP_DOWN_FIELD_ITEM_LIMIT),
+                                                VclMessageType::Info)
+                ->Execute();
+            return;
+        }
+
         const OUString sEntry(m_xListItemEntry->GetText());
         if (!sEntry.isEmpty())
         {
