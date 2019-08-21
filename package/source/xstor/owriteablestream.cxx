@@ -930,43 +930,33 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
                                                                     bool bUseCommonEncryption )
 {
     uno::Sequence< beans::PropertyValue > aResult( aProps );
-    sal_Int32 nLen = aResult.getLength();
+    beans::PropertyValue aPropVal;
 
     if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
-        for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
-            if ( aResult[nInd].Name == "UseCommonStoragePasswordEncryption" )
-            {
-                aResult[nInd].Value <<= bUseCommonEncryption;
-                return aResult;
-            }
-
-        aResult.realloc( ++nLen );
-        aResult[nLen - 1].Name = "UseCommonStoragePasswordEncryption";
-        aResult[nLen - 1].Value <<= bUseCommonEncryption;
+        aPropVal.Name = "UseCommonStoragePasswordEncryption";
+        aPropVal.Value <<= bUseCommonEncryption;
     }
     else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         ReadRelInfoIfNecessary();
-
-        uno::Any aValue;
+        aPropVal.Name = "RelationsInfo";
         if ( m_nRelInfoStatus == RELINFO_READ )
-            aValue <<= m_aOrigRelInfo;
+            aPropVal.Value <<= m_aOrigRelInfo;
         else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ || m_nRelInfoStatus == RELINFO_CHANGED )
-            aValue <<= m_aNewRelInfo;
+            aPropVal.Value <<= m_aNewRelInfo;
         else // m_nRelInfoStatus == RELINFO_CHANGED_BROKEN || m_nRelInfoStatus == RELINFO_BROKEN
             throw io::IOException( "Wrong relinfo stream!" );
-
-        for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
-            if ( aResult[nInd].Name == "RelationsInfo" )
-            {
-                aResult[nInd].Value = aValue;
-                return aResult;
-            }
-
-        aResult.realloc( ++nLen );
-        aResult[nLen - 1].Name = "RelationsInfo";
-        aResult[nLen - 1].Value = aValue;
+    }
+    if (!aPropVal.Name.isEmpty())
+    {
+        sal_Int32 i = 0;
+        for (auto p = aResult.getConstArray(); i < aResult.getLength(); ++i)
+            if (p[i].Name == aPropVal.Name)
+                break;
+        if (i == aResult.getLength())
+            aResult.realloc(i + 1);
+        aResult[i] = aPropVal;
     }
 
     return aResult;
