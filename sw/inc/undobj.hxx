@@ -320,7 +320,7 @@ public:
 
 class SwUndoDelLayFormat : public SwUndoFlyBase
 {
-    bool bShowSelFrame;
+    bool m_bShowSelFrame;
 public:
     SwUndoDelLayFormat( SwFrameFormat* pFormat );
 
@@ -329,7 +329,7 @@ public:
 
     void RedoForRollback();
 
-    void ChgShowSel( bool bNew ) { bShowSelFrame = bNew; }
+    void ChgShowSel( bool bNew ) { m_bShowSelFrame = bNew; }
 
     virtual SwRewriter GetRewriter() const override;
 
