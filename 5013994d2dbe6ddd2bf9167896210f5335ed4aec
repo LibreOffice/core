@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_7fada786",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2019-08-21T10:33:20Z",
+      "side": 1,
+      "message": "internl \u003d\u003e internal",
+      "revId": "5013994d2dbe6ddd2bf9167896210f5335ed4aec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
