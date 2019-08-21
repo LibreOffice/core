@@ -18,8 +18,10 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <fstream>
+#include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <sfx2/objsh.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/configmgr.hxx>
 #include <vcl/graph.hxx>
@@ -711,6 +713,10 @@ bool Tcg255::ImportCustomToolBar( SfxObjectShell& rDocSh )
             SwCTBWrapper* pCTBWrapper =  dynamic_cast< SwCTBWrapper* > ( rSubStruct.get() );
             if ( pCTBWrapper )
             {
+                // tdf#127048 set this flag if we might import something
+                uno::Reference<frame::XModel> const xModel(rDocSh.GetBaseModel());
+                comphelper::DocumentInfo::notifyMacroEventRead(xModel);
+
                 if ( !pCTBWrapper->ImportCustomToolBar( rDocSh ) )
                     return false;
             }
