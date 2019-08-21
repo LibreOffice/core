@@ -930,43 +930,34 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
                                                                     bool bUseCommonEncryption )
 {
     uno::Sequence< beans::PropertyValue > aResult( aProps );
-    sal_Int32 nLen = aResult.getLength();
-
-    if ( m_nStorageType == embed::StorageFormats::PACKAGE )
+    beans::PropertyValue aPropVal;
+    switch (m_nStorageType)
     {
-        for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
-            if ( aResult[nInd].Name == "UseCommonStoragePasswordEncryption" )
-            {
-                aResult[nInd].Value <<= bUseCommonEncryption;
-                return aResult;
-            }
-
-        aResult.realloc( ++nLen );
-        aResult[nLen - 1].Name = "UseCommonStoragePasswordEncryption";
-        aResult[nLen - 1].Value <<= bUseCommonEncryption;
+        case embed::StorageFormats::PACKAGE:
+            aPropVal.Name = "UseCommonStoragePasswordEncryption";
+            aPropVal.Value <<= bUseCommonEncryption;
+            break;
+        case embed::StorageFormats::OFOPXML:
+            aPropVal.Name = "RelationsInfo";
+            ReadRelInfoIfNecessary();
+            if (m_nRelInfoStatus == RELINFO_READ)
+                aPropVal.Value <<= m_aOrigRelInfo;
+            else if (m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ
+                     || m_nRelInfoStatus == RELINFO_CHANGED)
+                aPropVal.Value <<= m_aNewRelInfo;
+            else // m_nRelInfoStatus == RELINFO_CHANGED_BROKEN || m_nRelInfoStatus == RELINFO_BROKEN
+                throw io::IOException("Wrong relinfo stream!");
+            break;
     }
-    else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
+    if (!aPropVal.Name.isEmpty())
     {
-        ReadRelInfoIfNecessary();
-
-        uno::Any aValue;
-        if ( m_nRelInfoStatus == RELINFO_READ )
-            aValue <<= m_aOrigRelInfo;
-        else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ || m_nRelInfoStatus == RELINFO_CHANGED )
-            aValue <<= m_aNewRelInfo;
-        else // m_nRelInfoStatus == RELINFO_CHANGED_BROKEN || m_nRelInfoStatus == RELINFO_BROKEN
-            throw io::IOException( "Wrong relinfo stream!" );
-
-        for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
-            if ( aResult[nInd].Name == "RelationsInfo" )
-            {
-                aResult[nInd].Value = aValue;
-                return aResult;
-            }
-
-        aResult.realloc( ++nLen );
-        aResult[nLen - 1].Name = "RelationsInfo";
-        aResult[nLen - 1].Value = aValue;
+        sal_Int32 i = 0;
+        for (auto p = aResult.getConstArray(); i < aResult.getLength(); ++i)
+            if (p[i].Name == aPropVal.Name)
+                break;
+        if (i == aResult.getLength())
+            aResult.realloc(i + 1);
+        aResult[i] = aPropVal;
     }
 
     return aResult;
