@@ -4699,8 +4699,6 @@ void SwWW8ImplReader::StoreMacroCmds()
 
         try
         {
-            NotifyMacroEventRead();
-
             uno::Reference < io::XStream > xStream =
                     xRoot->openStreamElement( SL::aMSMacroCmds, embed::ElementModes::READWRITE );
             std::unique_ptr<SvStream> xOutStream(::utl::UcbStreamHelper::CreateStream(xStream));
