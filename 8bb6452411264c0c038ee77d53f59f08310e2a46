@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_6218aed2",
+        "filename": "package/source/xstor/owriteablestream.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-08-21T17:24:31Z",
+      "side": 1,
+      "message": "Call getLength() once?\n\n const sal_Int32 nLength \u003d aResult.getLength();",
+      "revId": "8bb6452411264c0c038ee77d53f59f08310e2a46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
