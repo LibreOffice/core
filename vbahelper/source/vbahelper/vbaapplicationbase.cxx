@@ -471,9 +471,13 @@ void VbaApplicationBase::Quit()
     {
         // This is the case of a call from an (OLE) Automation client.
 
+        // When an Automation client itself asks the proces to quit, it should obey it.
+        AsyncQuitHandler::instance().SetForceQuit();
+
         // TODO: Probably we should just close any document windows open by the "application"
         // (Writer or Calc) the call being handled is for. And only then, if no document windows
         // are left open, quit the actual LibreOffice application.
+
         Application::PostUserEvent( LINK( &AsyncQuitHandler::instance(), AsyncQuitHandler, OnAsyncQuit ) );
     }
 }
