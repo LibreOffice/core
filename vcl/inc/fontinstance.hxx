@@ -71,7 +71,7 @@ public: // TODO: make data members private
     const PhysicalFontFace* GetFontFace() const { return m_pFontFace.get(); }
     const ImplFontCache* GetFontCache() const { return mpFontCache; }
 
-    bool GetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const;
+    bool GetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool);
     virtual bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const = 0;
 
     int GetKashidaWidth();
