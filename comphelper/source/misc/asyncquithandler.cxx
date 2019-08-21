@@ -17,36 +17,35 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_ASYNCQUITHANDLER_HXX
-#define INCLUDED_COMPHELPER_ASYNCQUITHANDLER_HXX
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
-#include <comphelper/comphelperdllapi.h>
-#include <tools/link.hxx>
+#include <comphelper/asyncquithandler.hxx>
+#include <comphelper/processfactory.hxx>
 
-// Use: Application::PostUserEvent( LINK( &AsyncQuitHandler::instance(), AsyncQuitHandler, OnAsyncQuit ) );
-
-class COMPHELPER_DLLPUBLIC AsyncQuitHandler
+AsyncQuitHandler::AsyncQuitHandler()
+    : mbForceQuit(false)
 {
-    AsyncQuitHandler();
+}
 
-    bool mbForceQuit;
+AsyncQuitHandler& AsyncQuitHandler::instance()
+{
+    static AsyncQuitHandler aInst;
+    return aInst;
+}
 
-public:
-    AsyncQuitHandler(const AsyncQuitHandler&) = delete;
-    const AsyncQuitHandler& operator=(const AsyncQuitHandler&) = delete;
+void AsyncQuitHandler::QuitApplication()
+{
+    css::uno::Reference<css::frame::XDesktop2> xDesktop
+        = css::frame::Desktop::create(comphelper::getProcessComponentContext());
+    xDesktop->terminate();
+}
 
-    static AsyncQuitHandler& instance();
-    static void QuitApplication();
+void AsyncQuitHandler::SetForceQuit() { mbForceQuit = true; }
 
-    // Hack for the TerminationVetoer in extensions/source/ole/unoobjw.cxx. When it is an Automation
-    // client itself that explicitly requests a quit (see VbaApplicationBase::Quit()), we do quit.
-    // The flag can only be set to true, not back to false.
-    void SetForceQuit();
-    bool IsForceQuit();
+bool AsyncQuitHandler::IsForceQuit() { return mbForceQuit; }
 
-    DECL_STATIC_LINK(AsyncQuitHandler, OnAsyncQuit, void*, void);
-};
-
-#endif
+IMPL_STATIC_LINK_NOARG(AsyncQuitHandler, OnAsyncQuit, void*, void) { QuitApplication(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
