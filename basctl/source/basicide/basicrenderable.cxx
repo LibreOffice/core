@@ -75,7 +75,7 @@ Renderable::~Renderable()
 {
 }
 
-VclPtr< Printer > Renderable::getPrinter()
+VclPtr< Printer > Renderable::getPrinter() const
 {
     VclPtr< Printer > pPrinter;
     Any aValue( getValue( "RenderDevice" ) );
@@ -90,13 +90,13 @@ VclPtr< Printer > Renderable::getPrinter()
     return pPrinter;
 }
 
-bool Renderable::isPrintOddPages()
+bool Renderable::isPrintOddPages() const
 {
     sal_Int64 nContent = getIntValue( "PrintContent", -1 );
     return nContent != 2;
 }
 
-bool Renderable::isPrintEvenPages()
+bool Renderable::isPrintEvenPages() const
 {
     sal_Int64 nContent = getIntValue( "PrintContent", -1 );
     return nContent != 3;

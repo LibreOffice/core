@@ -102,7 +102,7 @@ public:
 
 namespace
 {
-    int FindEntry(weld::TreeView& rBox, const OUString& rName)
+    int FindEntry(const weld::TreeView& rBox, const OUString& rName)
     {
         int nCount = rBox.n_children();
         for (int i = 0; i < nCount; ++i)

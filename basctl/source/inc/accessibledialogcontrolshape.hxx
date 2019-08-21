@@ -60,13 +60,13 @@ private:
     css::awt::Rectangle                                            m_aBounds;
     css::uno::Reference< css::beans::XPropertySet >   m_xControlModel;
 
-    bool                    IsFocused();
-    bool                    IsSelected();
+    bool                    IsFocused() const;
+    bool                    IsSelected() const;
 
     void                    SetFocused (bool bFocused);
     void                    SetSelected (bool bSelected);
 
-    css::awt::Rectangle     GetBounds();
+    css::awt::Rectangle     GetBounds() const;
     void                    SetBounds( const css::awt::Rectangle& aBounds );
 
     vcl::Window*            GetWindow() const;
