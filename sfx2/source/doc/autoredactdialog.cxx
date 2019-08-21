@@ -31,36 +31,41 @@
 #include <tools/urlobj.hxx>
 #include <unotools/viewoptions.hxx>
 
+#include <svtools/treelistentry.hxx>
+
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <boost/property_tree/json_parser.hpp>
 
-/*int TargetsTable::GetRowByTargetName(const OUString& sName)
+SvTreeListEntry* TargetsTable::GetRowByTargetName(const OUString& sName)
 {
-    for (int i = 0, nCount = m_xControl->n_children(); i < nCount; ++i)
+    SvTreeListEntry* pEntry = First();
+    while (pEntry)
     {
-        RedactionTarget* pTarget
-            = reinterpret_cast<RedactionTarget*>(m_xControl->get_id(i).toInt64());
+        RedactionTarget* pTarget = static_cast<RedactionTarget*>(pEntry->GetUserData());
         if (pTarget->sName == sName)
         {
-            return i;
+            return pEntry;
         }
+        pEntry = Next(pEntry);
     }
-    return -1;
+    return nullptr;
 }
 
-TargetsTable::TargetsTable(std::unique_ptr<weld::TreeView> xControl)
-    : m_xControl(std::move(xControl))
+TargetsTable::TargetsTable(SvSimpleTableContainer& rParent)
+    : SvSimpleTable(rParent, 0)
 {
-    m_xControl->set_size_request(555, 250);
-    std::vector<int> aWidths;
-    aWidths.push_back(100);
-    aWidths.push_back(50);
-    aWidths.push_back(200);
-    aWidths.push_back(105);
-    aWidths.push_back(105);
-    m_xControl->set_column_fixed_widths(aWidths);
-    m_xControl->set_selection_mode(SelectionMode::Multiple);
+    static long nTabs[] = { 5, 0, 100, 150, 350, 455 };
+
+    SetTabs(nTabs, MapUnit::MapPixel);
+    SetSelectionMode(SelectionMode::Multiple);
+    InsertHeaderEntry("Target Name");
+    InsertHeaderEntry("Type");
+    InsertHeaderEntry("Content");
+    InsertHeaderEntry("Case Sensitive");
+    InsertHeaderEntry("Whole Words");
+
+    rParent.SetTable(this);
 }
 
 namespace
@@ -122,8 +127,9 @@ void TargetsTable::InsertTarget(RedactionTarget* pTarget)
     }
 
     // Check if the name is empty or invalid (clashing with another entry's name)
-    if (pTarget->sName.isEmpty() || GetRowByTargetName(pTarget->sName) != -1)
+    if (pTarget->sName.isEmpty() || GetRowByTargetName(pTarget->sName) != nullptr)
     {
+        SAL_WARN("sfx.doc", "Repetitive or empty target name in TargetsTable::InsertTarget()");
         pTarget->sName = GetNameProposal();
     }
 
@@ -135,30 +141,29 @@ void TargetsTable::InsertTarget(RedactionTarget* pTarget)
         sContent = sContent.getToken(1, ';');
     }
 
-    // Add to the end
-    int nRow = m_xControl->n_children();
-    m_xControl->append(OUString::number(reinterpret_cast<sal_Int64>(pTarget)), pTarget->sName);
-    m_xControl->set_text(nRow, getTypeName(pTarget->sType), 1);
-    m_xControl->set_text(nRow, sContent, 2);
-    m_xControl->set_text(nRow, pTarget->bCaseSensitive ? OUString("Yes") : OUString("No"), 3);
-    m_xControl->set_text(nRow, pTarget->bWholeWords ? OUString("Yes") : OUString("No"), 4);
+    OUString sColumnData = pTarget->sName + "\t" + getTypeName(pTarget->sType) + "\t" + sContent
+                           + "\t" + (pTarget->bCaseSensitive ? OUString("Yes") : OUString("No"))
+                           + "\t" + (pTarget->bWholeWords ? OUString("Yes") : OUString("No"));
+
+    InsertEntryToColumn(sColumnData, TREELIST_APPEND, 0xffff, pTarget);
 }
 
 void TargetsTable::SelectByName(const OUString& sName)
 {
-    int nEntry = GetRowByTargetName(sName);
-    if (nEntry == -1)
+    SvTreeListEntry* pEntry = GetRowByTargetName(sName);
+    if (!pEntry)
         return;
-    select(nEntry);
+
+    Select(pEntry);
 }
 
 RedactionTarget* TargetsTable::GetTargetByName(const OUString& sName)
 {
-    int nEntry = GetRowByTargetName(sName);
-    if (nEntry == -1)
+    SvTreeListEntry* pEntry = GetRowByTargetName(sName);
+    if (!pEntry)
         return nullptr;
 
-    return reinterpret_cast<RedactionTarget*>(m_xControl->get_id(nEntry).toInt64());
+    return static_cast<RedactionTarget*>(pEntry->GetUserData());
 }
 
 OUString TargetsTable::GetNameProposal()
@@ -166,22 +171,25 @@ OUString TargetsTable::GetNameProposal()
     //TODO: Define a translatable string
     OUString sDefaultTargetName("Target");
     sal_Int32 nHighestTargetId = 0;
-    for (int i = 0, nCount = m_xControl->n_children(); i < nCount; ++i)
+    SvTreeListEntry* pEntry = First();
+
+    while (pEntry)
     {
-        RedactionTarget* pTarget
-            = reinterpret_cast<RedactionTarget*>(m_xControl->get_id(i).toInt64());
-        const OUString& sName = pTarget->sName;
+        RedactionTarget* pTarget = static_cast<RedactionTarget*>(pEntry->GetUserData());
+        OUString sName = pTarget->sName;
         sal_Int32 nIndex = 0;
         if (sName.getToken(0, ' ', nIndex) == sDefaultTargetName)
         {
             sal_Int32 nCurrTargetId = sName.getToken(0, ' ', nIndex).toInt32();
             nHighestTargetId = std::max<sal_Int32>(nHighestTargetId, nCurrTargetId);
         }
+        pEntry = Next(pEntry);
     }
+
     return sDefaultTargetName + " " + OUString::number(nHighestTargetId + 1);
 }
 
-void TargetsTable::setRowData(const int& nRowIndex, const RedactionTarget* pTarget)
+/*void TargetsTable::setRowData(const int& nRowIndex, const RedactionTarget* pTarget)
 {
     OUString sContent = pTarget->sContent;
 
@@ -546,12 +554,16 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(vcl::Window* pParent)
     , m_bIsValidState(true)
     , m_bTargetsCopied(false)
 {
+    get(m_pTargetsContainer, "targets");
     get(m_pRedactionTargetsLabel, "labelRedactionTargets");
     get(m_pLoadBtn, "btnLoadTargets");
     get(m_pSaveBtn, "btnSaveTargets");
     get(m_pAddBtn, "add");
     get(m_pEditBtn, "edit");
     get(m_pDeleteBtn, "delete");
+
+    m_pTargetsBox = VclPtr<TargetsTable>::Create(*m_pTargetsContainer);
+
     // Can be used to remmeber the last set of redaction targets?
     /*OUString sExtraData;
     SvtViewOptions aDlgOpt(EViewType::Dialog,
@@ -650,6 +662,8 @@ SfxAutoRedactDialog::~SfxAutoRedactDialog()
 
 void SfxAutoRedactDialog::dispose()
 {
+    m_pTargetsBox.disposeAndClear();
+    m_pTargetsContainer.clear();
     m_pRedactionTargetsLabel.clear();
     m_pLoadBtn.clear();
     m_pSaveBtn.clear();

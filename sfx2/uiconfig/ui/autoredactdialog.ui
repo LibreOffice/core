@@ -1,28 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.22.1 -->
-<interface domain="sfx">
-  <requires lib="gtk+" version="3.18"/>
-  <object class="GtkTreeStore" id="liststore1">
-    <columns>
-      <!-- column-name sTargetName -->
-      <column type="gchararray"/>
-      <!-- column-name sType -->
-      <column type="gchararray"/>
-      <!-- column-name sContent -->
-      <column type="gchararray"/>
-      <!-- column-name bIsCaseSensitive -->
-      <column type="gchararray"/>
-      <!-- column-name bWholeWords -->
-      <column type="gchararray"/>
-      <!-- column-name id -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
+<interface domain="sw">
+  <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="AutoRedactDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="autoredactdialog|AutoRedactDialog">Automatic Redaction</property>
-    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
@@ -30,189 +14,76 @@
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
+        <property name="valign">start</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
+        <property name="spacing">6</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox">
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkButton" id="help">
-                <property name="label">gtk-help</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-                <property name="secondary">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="ok">
-                <property name="label">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="cancel">
-                <property name="label">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">5</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkGrid">
+          <object class="GtkBox" id="box1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="shadow_type">in</property>
-                <child>
-                  <object class="GtkTreeView" id="targets">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="margin_right">5</property>
-                    <property name="margin_bottom">5</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="model">liststore1</property>
-                    <property name="search_column">0</property>
-                    <property name="show_expanders">False</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn0">
-                        <property name="resizable">True</property>
-                        <property name="spacing">6</property>
-                        <property name="title" translatable="yes" context="autoredactdialog|target">Target Name</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderer0"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                        <property name="resizable">True</property>
-                        <property name="spacing">6</property>
-                        <property name="title" translatable="yes" context="autoredactdialog|description">Type</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderer1"/>
-                          <attributes>
-                            <attribute name="text">1</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                        <property name="resizable">True</property>
-                        <property name="spacing">6</property>
-                        <property name="title" translatable="yes" context="autoredactdialog|target">Content</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderer2"/>
-                          <attributes>
-                            <attribute name="text">2</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn3">
-                        <property name="resizable">True</property>
-                        <property name="spacing">6</property>
-                        <property name="title" translatable="yes" context="autoredactdialog|target">Case Sensitive</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderer3"/>
-                          <attributes>
-                            <attribute name="text">3</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn4">
-                        <property name="resizable">True</property>
-                        <property name="spacing">6</property>
-                        <property name="title" translatable="yes" context="autoredactdialog|target">Whole Words</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderer4"/>
-                          <attributes>
-                            <attribute name="text">4</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="labelRedactionTargets"/>
-                    </accessibility>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
+            <property name="valign">start</property>
             <child>
               <object class="GtkLabel" id="labelRedactionTargets">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">center</property>
-                <property name="margin_right">1</property>
                 <property name="margin_bottom">1</property>
-                <property name="label" translatable="yes" context="menuassignpage|contentslabel">_Redaction Targets</property>
+                <property name="label" translatable="yes" context="autoredactdialog|labelRedactionTargets">_Redaction Targets</property>
                 <property name="use_underline">True</property>
                 <accessibility>
                   <relation type="label-for" target="targets"/>
                 </accessibility>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="svtlo-SvSimpleTableContainer" id="targets">
+                <property name="width_request">555</property>
+                <property name="height_request">300</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection"/>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButtonBox">
+              <object class="GtkButtonBox" id="box5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
                 <property name="layout_style">start</property>
                 <child>
                   <object class="GtkButton" id="btnLoadTargets">
@@ -246,25 +117,24 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="padding">6</property>
+                <property name="position">1</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box2">
+          <object class="GtkButtonBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="spacing">6</property>
+            <property name="layout_style">start</property>
             <child>
               <object class="GtkButton" id="add">
                 <property name="label" translatable="yes" context="autoredactdialog|add">Add</property>
@@ -307,33 +177,92 @@
           </object>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="box2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkButtonBox" id="box4">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkButton" id="help">
+                    <property name="label">gtk-help</property>
+                    <property name="width_request">75</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_stock">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButtonBox" id="box3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="spacing">6</property>
+                <property name="homogeneous">True</property>
+                <child>
+                  <object class="GtkButton" id="ok">
+                    <property name="label">gtk-ok</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_stock">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="cancel">
+                    <property name="label" context="insertbookmark|goto">gtk-cancel</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_stock">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="pack_type">end</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="position">4</property>
           </packing>
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="-11">help</action-widget>
-      <action-widget response="-5">ok</action-widget>
-      <action-widget response="-6">cancel</action-widget>
-    </action-widgets>
-  </object>
-  <object class="GtkSizeGroup" id="TargetButtons">
-    <property name="mode">both</property>
-    <widgets>
-      <widget name="btnLoadTargets"/>
-      <widget name="btnSaveTargets"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="otherbuttons">
-    <widgets>
-      <widget name="add"/>
-      <widget name="edit"/>
-      <widget name="delete"/>
-      <widget name="ok"/>
-      <widget name="cancel"/>
-      <widget name="help"/>
-    </widgets>
   </object>
 </interface>
