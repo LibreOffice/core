@@ -1,0 +1,10 @@
+Verified+1: Jenkins
+Code-Review+1: Tomáš Chvátal <tchvatal@suse.com>
+Verified+1: Tomáš Chvátal <tchvatal@suse.com>
+Code-Review+2: Caolán McNamara <caolanm@redhat.com>
+Verified+1: Caolán McNamara <caolanm@redhat.com>
+Submitted-by: Caolán McNamara <caolanm@redhat.com>
+Submitted-at: Wed, 21 Aug 2019 11:56:51 +0200
+Reviewed-on: https://gerrit.libreoffice.org/77715
+Project: core
+Branch: refs/heads/libreoffice-6-3
