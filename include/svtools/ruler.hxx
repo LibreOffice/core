@@ -788,7 +788,7 @@ public:
     void            SetDoubleClickHdl( const Link<Ruler*,void>& rLink ) { maDoubleClickHdl = rLink; }
 
     void            SetTextRTL(bool bRTL);
-    bool            GetTextRTL();
+    bool            GetTextRTL() const;
     void            SetCharWidth( long nWidth ) { mnCharWidth = nWidth ; }
     void            SetLineHeight( long nHeight ) { mnLineHeight = nHeight ; }
 

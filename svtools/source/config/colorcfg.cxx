@@ -93,7 +93,7 @@ public:
     using ConfigItem::SetModified;
     using ConfigItem::ClearModified;
     void                            SettingsChanged();
-    bool GetAutoDetectSystemHC() {return m_bAutoDetectSystemHC;}
+    bool GetAutoDetectSystemHC() const {return m_bAutoDetectSystemHC;}
 
     DECL_LINK( DataChangedEventListener, VclSimpleEvent&, void );
 
