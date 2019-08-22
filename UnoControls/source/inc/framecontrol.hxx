@@ -127,9 +127,9 @@ public:
 
     //  impl but public methods to register service!
 
-    static const css::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
+    static css::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
 
-    static const OUString impl_getStaticImplementationName();
+    static OUString impl_getStaticImplementationName();
 
 protected:
     using OPropertySetHelper::getFastPropertyValue;

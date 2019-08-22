@@ -257,7 +257,7 @@ public:
                     DdeTopic( SAL_UNUSED_PARAMETER const OUString& );
     virtual        ~DdeTopic();
 
-    const OUString  GetName() const;
+    OUString        GetName() const;
 
     void            NotifyClient( const OUString& );
     bool            IsSystemTopic();
@@ -302,7 +302,7 @@ public:
                     DdeService( const DdeService& ) = delete;
     DdeService&     operator= ( const DdeService& ) = delete;
 
-    const OUString  GetName() const;
+    OUString        GetName() const;
     short           GetError() const { return nStatus; }
 
     static DdeServices& GetServices();

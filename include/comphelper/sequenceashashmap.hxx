@@ -158,7 +158,7 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
             @return A const Any, which
                     contains all items of this map.
          */
-        const css::uno::Any getAsConstAny(bool bAsPropertyValue) const;
+        css::uno::Any getAsConstAny(bool bAsPropertyValue) const;
 
 
         /** @short  return this map instance to as a
@@ -172,7 +172,7 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
             @return A const sequence of type NamedValue, which
                     contains all items of this map.
          */
-        const css::uno::Sequence< css::beans::NamedValue > getAsConstNamedValueList() const;
+        css::uno::Sequence< css::beans::NamedValue > getAsConstNamedValueList() const;
 
 
         /** @short  return this map instance to as a
@@ -186,7 +186,7 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
             @return A const sequence of type PropertyValue, which
                     contains all items of this map.
          */
-        const css::uno::Sequence< css::beans::PropertyValue > getAsConstPropertyValueList() const;
+        css::uno::Sequence< css::beans::PropertyValue > getAsConstPropertyValueList() const;
 
 
         /** @short  check if the specified item exists

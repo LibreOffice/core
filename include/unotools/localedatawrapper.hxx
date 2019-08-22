@@ -211,7 +211,7 @@ public:
         Indian grouping. The sal_Int32* getConstArray() can be passed directly
         to the ::rtl::math::doubleToString() methods as argument for the
         pGroups parameter. */
-    const css::uno::Sequence< sal_Int32 > getDigitGrouping() const;
+    css::uno::Sequence< sal_Int32 > getDigitGrouping() const;
 
     // Functionality of class International methods, LocaleItem
 

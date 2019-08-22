@@ -1079,7 +1079,7 @@ void LocaleDataWrapper::getDigitGroupingImpl()
     }
 }
 
-const css::uno::Sequence< sal_Int32 > LocaleDataWrapper::getDigitGrouping() const
+css::uno::Sequence< sal_Int32 > LocaleDataWrapper::getDigitGrouping() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     if (!aGrouping.hasElements() || aGrouping[0] == 0)

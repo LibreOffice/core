@@ -376,10 +376,10 @@ public:
     // get import helper for events
     XMLEventImportHelper& GetEventImport();
 
-    static const OUString getNameFromToken( sal_Int32 nToken );
-    static const OUString getNamespacePrefixFromToken(sal_Int32 nToken, const SvXMLNamespaceMap* pMap);
-    static const OUString getNamespaceURIFromToken( sal_Int32 nToken );
-    static const OUString getNamespacePrefixFromURI( const OUString& rURI );
+    static OUString getNameFromToken( sal_Int32 nToken );
+    static OUString getNamespacePrefixFromToken(sal_Int32 nToken, const SvXMLNamespaceMap* pMap);
+    static OUString getNamespaceURIFromToken( sal_Int32 nToken );
+    static OUString getNamespacePrefixFromURI( const OUString& rURI );
 
     SvXMLNamespaceMap& GetNamespaceMap() { return *mpNamespaceMap; }
     const SvXMLNamespaceMap& GetNamespaceMap() const { return *mpNamespaceMap; }
