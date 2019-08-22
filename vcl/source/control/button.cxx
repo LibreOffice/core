@@ -1101,7 +1101,13 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
                                   aInRect, bDrawMenuSep, nButtonStyle);
 
         if (HasFocus())
+        {
             ShowFocus(ImplGetFocusRect());
+            if (SupportsDoubleBuffering())
+            {
+                rRenderContext.Invert(ImplGetFocusRect(), InvertFlags::TrackFrame);
+            }
+        }
     }
 
     if (!bNativeOK)
@@ -1128,6 +1134,10 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
         if (HasFocus())
         {
             ShowFocus(ImplGetFocusRect());
+            if (SupportsDoubleBuffering())
+            {
+                rRenderContext.Invert(ImplGetFocusRect(), InvertFlags::TrackFrame);
+            }
         }
     }
 }

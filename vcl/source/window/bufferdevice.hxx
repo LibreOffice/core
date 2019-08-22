@@ -25,6 +25,7 @@ class BufferDevice
 public:
     BufferDevice(const VclPtr<vcl::Window>& pWindow, vcl::RenderContext& rRenderContext);
     ~BufferDevice();
+    vcl::RenderContext& GetRenderContext();
 
     vcl::RenderContext* operator->();
     vcl::RenderContext& operator*();

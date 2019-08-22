@@ -914,8 +914,20 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
         return;
     }
 
-    // Make sure that all actual rendering happens in one go to avoid flicker.
-    vcl::BufferDevice pBuffer(this, rRenderContext);
+    vcl::RenderContext* pBuffer = nullptr;
+    std::unique_ptr<vcl::BufferDevice> pBufferDevice;
+    if (SupportsDoubleBuffering())
+    {
+        // No need to buffer twice, just set up the background.
+        pBuffer = &rRenderContext;
+        pBuffer->Erase(tools::Rectangle(Point(GetOutOffXPixel(), GetOutOffYPixel()), GetOutputSizePixel()));
+    }
+    else
+    {
+        // Make sure that all actual rendering happens in one go to avoid flicker.
+        pBufferDevice.reset(new vcl::BufferDevice(this, rRenderContext));
+        pBuffer = &pBufferDevice->GetRenderContext();
+    }
 
     if (rRenderContext.IsNativeControlSupported(ControlType::Menubar, ControlPart::Entire))
     {
