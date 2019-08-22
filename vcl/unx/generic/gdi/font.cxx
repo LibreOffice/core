@@ -58,7 +58,7 @@ void X11SalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     mxTextRenderImpl->DrawTextLayout(rLayout, *this);
 }
 
-const FontCharMapRef X11SalGraphics::GetFontCharMap() const
+FontCharMapRef X11SalGraphics::GetFontCharMap() const
 {
     return mxTextRenderImpl->GetFontCharMap();
 }

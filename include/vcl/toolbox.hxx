@@ -413,7 +413,7 @@ public:
     bool                IsItemReallyVisible( sal_uInt16 nItemId ) const;
 
     void                SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand );
-    const OUString      GetItemCommand( sal_uInt16 nItemId ) const;
+    OUString            GetItemCommand( sal_uInt16 nItemId ) const;
 
     using Window::SetQuickHelpText;
     void                SetQuickHelpText( sal_uInt16 nItemId, const OUString& rText );

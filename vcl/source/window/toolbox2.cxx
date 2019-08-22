@@ -1345,7 +1345,7 @@ void ToolBox::SetItemCommand(sal_uInt16 nItemId, const OUString& rCommand)
         pItem->maCommandStr = rCommand;
 }
 
-const OUString ToolBox::GetItemCommand( sal_uInt16 nItemId ) const
+OUString ToolBox::GetItemCommand( sal_uInt16 nItemId ) const
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 

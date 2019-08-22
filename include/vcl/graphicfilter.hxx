@@ -300,7 +300,7 @@ public:
     const FilterErrorEx&    GetLastError() const { return *pErrorEx;}
     void                    ResetLastError();
 
-    const Link<ConvertData&,bool> GetFilterCallback() const;
+    Link<ConvertData&,bool> GetFilterCallback() const;
     static GraphicFilter& GetGraphicFilter();
     static ErrCode  LoadGraphic( const OUString& rPath, const OUString& rFilter,
                      Graphic& rGraphic,

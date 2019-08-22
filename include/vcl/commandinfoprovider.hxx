@@ -88,7 +88,7 @@ namespace vcl { namespace CommandInfoProvider {
         const OUString& rsCommandName,
         const OUString& rModuleName);
 
-    VCL_DLLPUBLIC OUString const GetModuleIdentifier(const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    VCL_DLLPUBLIC OUString GetModuleIdentifier(const css::uno::Reference<css::frame::XFrame>& rxFrame);
 } }
 
 #endif // INCLUDED_VCL_COMMANDINFOPROVIDER_HXX
