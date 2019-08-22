@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_2bf7f1f7",
+        "filename": "vcl/source/window/NotebookBarAddonsMerger.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-08-22T19:19:02Z",
+      "side": 1,
+      "message": "I\u0027m wondering about VclPointers lifecycle here, shouldn\u0027t we use ScopedVclPtr here?\n\nAnd why second pOptionalParent pointer?\n\nhttps://opengrok.libreoffice.org/xref/core/vcl/README.lifecycle?r\u003de6c03691",
+      "revId": "dfee651c93f968a1e3bbb3e9f40d9f75428076fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_0bf46df1",
+        "filename": "vcl/source/window/NotebookBarAddonsMerger.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-08-22T19:19:02Z",
+      "side": 1,
+      "message": "please move this code to a separate function like createNotebookbarToolBox(...)",
+      "revId": "dfee651c93f968a1e3bbb3e9f40d9f75428076fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_cbdd1571",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2177,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-08-22T19:19:02Z",
+      "side": 1,
+      "message": "aI iterator will be always ok? no dereference errors possible?",
+      "revId": "dfee651c93f968a1e3bbb3e9f40d9f75428076fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
