@@ -80,7 +80,7 @@ public:
     long                    Width();
     long                    Height();
     void                    SetLink( const Link<SvLBoxButtonData*,void>& rLink) { aLink=rLink; }
-    bool                    IsRadio();
+    bool                    IsRadio() const;
     // as buttons are not derived from LinkHdl
     void                    CallLink();
 

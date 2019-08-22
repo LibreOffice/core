@@ -869,7 +869,7 @@ ErrCode GraphicFilter::ImplSetError( ErrCode nError, const SvStream* pStm )
     return nError;
 }
 
-sal_uInt16 GraphicFilter::GetImportFormatCount()
+sal_uInt16 GraphicFilter::GetImportFormatCount() const
 {
     return pConfig->GetImportFormatCount();
 }
@@ -916,7 +916,7 @@ OUString GraphicFilter::GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry 
     return pConfig->GetImportWildcard( nFormat, nEntry );
 }
 
-sal_uInt16 GraphicFilter::GetExportFormatCount()
+sal_uInt16 GraphicFilter::GetExportFormatCount() const
 {
     return pConfig->GetExportFormatCount();
 }
@@ -1176,7 +1176,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
 }
 
 Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 sizeLimit,
-                                             Size* pSizeHint)
+                                             const Size* pSizeHint)
 {
     Graphic aGraphic;
     sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;

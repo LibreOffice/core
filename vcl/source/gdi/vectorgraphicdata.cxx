@@ -208,7 +208,7 @@ void VectorGraphicData::ensureSequenceAndRange()
     }
 }
 
-auto VectorGraphicData::getSizeBytes() -> std::pair<State, size_t>
+auto VectorGraphicData::getSizeBytes() const -> std::pair<State, size_t>
 {
     if (maSequence.empty() && maVectorGraphicDataArray.hasElements())
     {

@@ -1209,7 +1209,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     return PrinterController::PageSize( aPaperSize, true );
 }
 
-int PrinterController::getFilteredPageCount()
+int PrinterController::getFilteredPageCount() const
 {
     int nDiv = mpImplData->maMultiPage.nRows * mpImplData->maMultiPage.nColumns;
     if( nDiv < 1 )

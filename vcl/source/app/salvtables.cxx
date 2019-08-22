@@ -5506,7 +5506,7 @@ public:
         return std::make_unique<SalInstanceSizeGroup>();
     }
 
-    OString get_current_page_help_id()
+    OString get_current_page_help_id() const
     {
         TabControl *pCtrl = get_builder().get<TabControl>("tabcontrol");
         TabPage* pTabPage = pCtrl ? pCtrl->GetTabPage(pCtrl->GetCurPageId()) : nullptr;

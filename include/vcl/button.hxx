@@ -161,7 +161,7 @@ public:
         mbIsAction = bIsAction;
     }
 
-    bool isAction()
+    bool isAction() const
     {
         return mbIsAction;
     }

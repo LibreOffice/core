@@ -521,7 +521,7 @@ ImpSwapFile::~ImpSwapFile()
     }
 }
 
-void ImpGraphic::ImplSetPrepared(bool bAnimated, Size* pSizeHint)
+void ImpGraphic::ImplSetPrepared(bool bAnimated, const Size* pSizeHint)
 {
     mbPrepared = true;
     mbSwapOut = true;
