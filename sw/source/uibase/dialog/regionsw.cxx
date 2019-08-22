@@ -82,7 +82,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         VclPtr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
-            GetView().GetViewFrame()->GetWindow().GetFrameWeld(), aSet , rSh));
+            GetView().GetFrameWeld(), aSet , rSh));
         aTabDlg->StartExecuteAsync([aTabDlg](sal_Int32 /*nResult*/){
             aTabDlg->disposeOnce();
         });
@@ -191,7 +191,7 @@ void SwWrtShell::StartInsertRegionDialog(const SwSectionData& rSectionData)
     aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     VclPtr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
-        GetView().GetViewFrame()->GetWindow().GetFrameWeld(), aSet, *this));
+        GetView().GetFrameWeld(), aSet, *this));
     aTabDlg->SetSectionData(rSectionData);
     aTabDlg->StartExecuteAsync([aTabDlg](sal_Int32 /*nResult*/){
         aTabDlg->disposeOnce();
@@ -212,7 +212,7 @@ void SwBaseShell::EditRegionDialog(SfxRequest const & rReq)
         case FN_EDIT_REGION:
         case FN_EDIT_CURRENT_REGION:
         {
-            weld::Window* pParentWin = GetView().GetViewFrame()->GetWindow().GetFrameWeld();
+            weld::Window* pParentWin = GetView().GetFrameWeld();
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 ScopedVclPtr<AbstractEditRegionDlg> pEditRegionDlg(pFact->CreateEditRegionDlg(pParentWin, rWrtShell));

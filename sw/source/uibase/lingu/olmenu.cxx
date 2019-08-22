@@ -739,7 +739,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
                     sWord, false, OUString() );
             if (linguistic::DictionaryError::NONE != nAddRes && !xDictionary->getEntry(sWord).is())
             {
-                SvxDicError(m_pSh->GetView().GetViewFrame()->GetWindow().GetFrameWeld(), nAddRes);
+                SvxDicError(m_pSh->GetView().GetFrameWeld(), nAddRes);
             }
         }
     }
@@ -771,7 +771,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
 
             if (linguistic::DictionaryError::NONE != nAddRes && !xDic->getEntry(sWord).is())
             {
-                SvxDicError(m_pSh->GetView().GetViewFrame()->GetWindow().GetFrameWeld(), nAddRes);
+                SvxDicError(m_pSh->GetView().GetFrameWeld(), nAddRes);
             }
         }
     }
@@ -789,7 +789,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             uno::Any exc( ::cppu::getCaughtException() );
             OUString msg( ::comphelper::anyToString( exc ) );
             const SolarMutexGuard guard;
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_pSh->GetView().GetViewFrame()->GetWindow().GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_pSh->GetView().GetFrameWeld(),
                                                       VclMessageType::Warning, VclButtonsType::Ok, msg));
             xBox->set_title("Explanations");
             xBox->run();
