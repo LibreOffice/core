@@ -573,6 +573,13 @@ void AddressPreview::SelectAddress(sal_uInt16 nSelect)
         m_xVScrollBar->vadjustment_set_value(nSelectRow);
 }
 
+void AddressPreview::Clear()
+{
+    pImpl->aAddresses.clear();
+    pImpl->nSelectedAddress = 0;
+    UpdateScrollBar();
+}
+
 void AddressPreview::ReplaceSelectedAddress(const OUString& rNew)
 {
     pImpl->aAddresses[pImpl->nSelectedAddress] = rNew;
@@ -683,6 +690,7 @@ bool AddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
                 pImpl->nSelectedAddress != static_cast<sal_uInt16>(nSelect))
         {
             pImpl->nSelectedAddress = static_cast<sal_uInt16>(nSelect);
+            m_aSelectHdl.Call(nullptr);
         }
         Invalidate();
     }
@@ -726,6 +734,7 @@ bool AddressPreview::KeyInput( const KeyEvent& rKEvt )
                 pImpl->nSelectedAddress != static_cast<sal_uInt16>(nSelect))
         {
             pImpl->nSelectedAddress = static_cast<sal_uInt16>(nSelect);
+            m_aSelectHdl.Call(nullptr);
             Invalidate();
         }
     }
