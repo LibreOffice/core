@@ -385,7 +385,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 {
                     case SID_STYLE_NEW_BY_EXAMPLE:
                     {
-                        SfxNewStyleDlg aDlg(GetView()->GetViewFrame()->GetWindow().GetFrameWeld(), *GetStyleSheetPool());
+                        SfxNewStyleDlg aDlg(GetView()->GetFrameWeld(), *GetStyleSheetPool());
                         if (aDlg.run() == RET_OK)
                         {
                             aParam = aDlg.GetName();
@@ -833,7 +833,7 @@ void SwDocShell::Edit(
         FieldUnit eMetric = ::GetDfltMetric(0 != (HTMLMODE_ON&nHtmlMode));
         SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        VclPtr<SfxAbstractApplyTabDialog> pDlg(pFact->CreateTemplateDialog(GetView()->GetViewFrame()->GetWindow().GetFrameWeld(),
+        VclPtr<SfxAbstractApplyTabDialog> pDlg(pFact->CreateTemplateDialog(GetView()->GetFrameWeld(),
                                                     *xTmp, nFamily, sPage, pCurrShell, bNew));
         std::shared_ptr<ApplyStyle> pApplyStyleHelper(new ApplyStyle(*this, bNew, xTmp, nFamily, pDlg.get(), m_xBasePool, bModified));
         pDlg->SetApplyHdl(LINK(pApplyStyleHelper.get(), ApplyStyle, ApplyHdl));

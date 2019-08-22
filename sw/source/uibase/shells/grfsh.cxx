@@ -177,7 +177,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     OUString sGrfNm;
                     OUString sFilterNm;
                     rSh.GetGrfNms( &sGrfNm, &sFilterNm );
-                    GraphicHelper::ExportGraphic(GetView().GetViewFrame()->GetWindow().GetFrameWeld(), aGraphic, sGrfNm);
+                    GraphicHelper::ExportGraphic(GetView().GetFrameWeld(), aGraphic, sGrfNm);
                 }
             }
             else if (nState == RET_NO)
@@ -188,7 +188,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     OUString sGrfNm;
                     OUString sFilterNm;
                     rSh.GetGrfNms( &sGrfNm, &sFilterNm );
-                    GraphicHelper::ExportGraphic(GetView().GetViewFrame()->GetWindow().GetFrameWeld(), *pGraphic, sGrfNm);
+                    GraphicHelper::ExportGraphic(GetView().GetFrameWeld(), *pGraphic, sGrfNm);
                 }
             }
         }

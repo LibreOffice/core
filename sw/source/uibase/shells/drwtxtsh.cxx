@@ -446,7 +446,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                 pSdrView->GetAttributes( aNewAttr );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(
-                            GetView().GetViewFrame()->GetWindow().GetFrameWeld(),
+                            GetView().GetFrameWeld(),
                             &aNewAttr, pSdrView ));
                 sal_uInt16 nResult = pDlg->Execute();
 

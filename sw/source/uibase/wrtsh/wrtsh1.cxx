@@ -1839,7 +1839,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
                 //Actions have to be closed while the dialog is showing
                 EndAllAction();
 
-                weld::Window* pParent = GetView().GetViewFrame()->GetWindow().GetFrameWeld();
+                weld::Window* pParent = GetView().GetFrameWeld();
                 short nResult;
                 if (bHeader) {
                     nResult = DeleteHeaderDialog(pParent).run();
