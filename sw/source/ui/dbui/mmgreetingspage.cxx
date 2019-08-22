@@ -173,7 +173,7 @@ void SwMailMergeGreetingsPage::UpdatePreview()
     OUString sPreview = bFemale ? m_xFemaleLB->get_active_text() :
         bNoValue ? m_xNeutralCB->get_active_text() : m_xMaleLB->get_active_text();
 
-    sPreview = AddressPreview::FillData(sPreview, m_rConfigItem);
+    sPreview = SwAddressPreview::FillData(sPreview, m_rConfigItem);
     m_xPreview->SetAddress(sPreview);
 }
 
@@ -199,7 +199,7 @@ void SwGreetingsHandler::Contains(bool bContainsGreeting)
 SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* pWizard, TabPageParent pParent)
     : vcl::OWizardPage(pParent, "modules/swriter/ui/mmsalutationpage.ui", "MMSalutationPage")
     , SwGreetingsHandler(pWizard->GetConfigItem(), *m_xBuilder)
-    , m_xPreview(new AddressPreview(m_xBuilder->weld_scrolled_window("previewwin")))
+    , m_xPreview(new SwAddressPreview(m_xBuilder->weld_scrolled_window("previewwin")))
     , m_xPreviewFI(m_xBuilder->weld_label("previewft"))
     , m_xAssignPB(m_xBuilder->weld_button("assign"))
     , m_xDocumentIndexFI(m_xBuilder->weld_label("documentindex"))
