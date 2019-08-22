@@ -180,7 +180,7 @@ struct  SwAddressPreview_Impl
     }
 };
 
-OUString AddressPreview::FillData(
+OUString SwAddressPreview::FillData(
         const OUString& rAddress,
         SwMailMergeConfigItem const & rConfigItem,
         const Sequence< OUString>* pAssignments)
@@ -275,30 +275,30 @@ OUString AddressPreview::FillData(
     return sAddress.makeStringAndClear();
 }
 
-AddressPreview::AddressPreview(std::unique_ptr<weld::ScrolledWindow> xWindow)
+SwAddressPreview::SwAddressPreview(std::unique_ptr<weld::ScrolledWindow> xWindow)
     : pImpl(new SwAddressPreview_Impl())
     , m_xVScrollBar(std::move(xWindow))
 {
     m_xVScrollBar->set_user_managed_scrolling();
-    m_xVScrollBar->connect_vadjustment_changed(LINK(this, AddressPreview, ScrollHdl));
+    m_xVScrollBar->connect_vadjustment_changed(LINK(this, SwAddressPreview, ScrollHdl));
 }
 
-AddressPreview::~AddressPreview()
+SwAddressPreview::~SwAddressPreview()
 {
 }
 
-IMPL_LINK_NOARG(AddressPreview, ScrollHdl, weld::ScrolledWindow&, void)
+IMPL_LINK_NOARG(SwAddressPreview, ScrollHdl, weld::ScrolledWindow&, void)
 {
     Invalidate();
 }
 
-void AddressPreview::AddAddress(const OUString& rAddress)
+void SwAddressPreview::AddAddress(const OUString& rAddress)
 {
     pImpl->aAddresses.push_back(rAddress);
     UpdateScrollBar();
 }
 
-void AddressPreview::SetAddress(const OUString& rAddress)
+void SwAddressPreview::SetAddress(const OUString& rAddress)
 {
     pImpl->aAddresses.clear();
     pImpl->aAddresses.push_back(rAddress);
@@ -306,13 +306,13 @@ void AddressPreview::SetAddress(const OUString& rAddress)
     Invalidate();
 }
 
-sal_uInt16 AddressPreview::GetSelectedAddress()const
+sal_uInt16 SwAddressPreview::GetSelectedAddress()const
 {
     OSL_ENSURE(pImpl->nSelectedAddress < pImpl->aAddresses.size(), "selection invalid");
     return pImpl->nSelectedAddress;
 }
 
-void AddressPreview::SelectAddress(sal_uInt16 nSelect)
+void SwAddressPreview::SelectAddress(sal_uInt16 nSelect)
 {
     OSL_ENSURE(pImpl->nSelectedAddress < pImpl->aAddresses.size(), "selection invalid");
     pImpl->nSelectedAddress = nSelect;
@@ -323,20 +323,20 @@ void AddressPreview::SelectAddress(sal_uInt16 nSelect)
         m_xVScrollBar->vadjustment_set_value(nSelectRow);
 }
 
-void AddressPreview::Clear()
+void SwAddressPreview::Clear()
 {
     pImpl->aAddresses.clear();
     pImpl->nSelectedAddress = 0;
     UpdateScrollBar();
 }
 
-void AddressPreview::ReplaceSelectedAddress(const OUString& rNew)
+void SwAddressPreview::ReplaceSelectedAddress(const OUString& rNew)
 {
     pImpl->aAddresses[pImpl->nSelectedAddress] = rNew;
     Invalidate();
 }
 
-void AddressPreview::RemoveSelectedAddress()
+void SwAddressPreview::RemoveSelectedAddress()
 {
     pImpl->aAddresses.erase(pImpl->aAddresses.begin() + pImpl->nSelectedAddress);
     if(pImpl->nSelectedAddress)
@@ -345,19 +345,19 @@ void AddressPreview::RemoveSelectedAddress()
     Invalidate();
 }
 
-void AddressPreview::SetLayout(sal_uInt16 nRows, sal_uInt16 nColumns)
+void SwAddressPreview::SetLayout(sal_uInt16 nRows, sal_uInt16 nColumns)
 {
     pImpl->nRows = nRows;
     pImpl->nColumns = nColumns;
     UpdateScrollBar();
 }
 
-void AddressPreview::EnableScrollBar()
+void SwAddressPreview::EnableScrollBar()
 {
     pImpl->bEnableScrollBar = true;
 }
 
-void AddressPreview::UpdateScrollBar()
+void SwAddressPreview::UpdateScrollBar()
 {
     if (pImpl->nColumns)
     {
@@ -371,7 +371,7 @@ void AddressPreview::UpdateScrollBar()
     }
 }
 
-void AddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SwAddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
     rRenderContext.SetFillColor(rSettings.GetWindowColor());
@@ -420,7 +420,7 @@ void AddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     rRenderContext.SetClipRegion();
 }
 
-bool AddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
+bool SwAddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (rMEvt.IsLeft() && pImpl->nRows && pImpl->nColumns)
     {
@@ -447,7 +447,7 @@ bool AddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
     return true;
 }
 
-bool AddressPreview::KeyInput( const KeyEvent& rKEvt )
+bool SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
 {
     sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
     bool bHandled = false;
@@ -491,7 +491,7 @@ bool AddressPreview::KeyInput( const KeyEvent& rKEvt )
     return bHandled;
 }
 
-void AddressPreview::DrawText_Impl(vcl::RenderContext& rRenderContext, const OUString& rAddress,
+void SwAddressPreview::DrawText_Impl(vcl::RenderContext& rRenderContext, const OUString& rAddress,
                                      const Point& rTopLeft, const Size& rSize, bool bIsSelected)
 {
     rRenderContext.SetClipRegion(vcl::Region(tools::Rectangle(rTopLeft, rSize)));
