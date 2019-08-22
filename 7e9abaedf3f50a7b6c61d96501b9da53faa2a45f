@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_f0c1e481",
+        "filename": "vcl/source/font/fontinstance.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-08-22T13:46:48Z",
+      "side": 1,
+      "message": "Ok",
+      "parentUuid": "bf659307_d0ddc070",
+      "revId": "7e9abaedf3f50a7b6c61d96501b9da53faa2a45f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_e59e0853",
         "filename": "vcl/source/font/fontinstance.cxx",
         "patchSetId": 7
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Is Qt glyph positioning being wrong something introduced by this patch? Actually, no, I didn’t test rotated text and was merely relying on the tests since they failed badly last time I touched bounding rectangles. But I’ll test once I get back to that machine.",
       "parentUuid": "bf659307_e59e0853",
+      "revId": "7e9abaedf3f50a7b6c61d96501b9da53faa2a45f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_703b949b",
+        "filename": "vcl/source/font/fontinstance.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-08-22T13:46:48Z",
+      "side": 1,
+      "message": "\u003e Is Qt glyph positioning being wrong something introduced by this patch?\n\nNo. That is a known problem of the QFont based SalLayout. I also missed the fact, that bVertical is actually a property of the font and not a parameter to rotate the font.\n\n\u003e Actually, no, I didn’t test rotated text and was merely\n \u003e relying on the tests since they failed badly last time I touched\n \u003e bounding rectangles. But I’ll test once I get back to that machine.\n\nFWIW - for QFont the vertical ruler in Writer is currently empty (if you start  LO with SAL_USE_VCLPLUGIN\u003dqt5). The QPainter based drawing in LO is experimental, so that\u0027s not a problem. But I was wondering, how to fix it, and didn\u0027t understand what was going on. Your patch explains a potential problem, I had missed.",
+      "parentUuid": "bf659307_10cd78b7",
       "revId": "7e9abaedf3f50a7b6c61d96501b9da53faa2a45f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
