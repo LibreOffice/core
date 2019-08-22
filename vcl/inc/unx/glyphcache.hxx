@@ -107,7 +107,7 @@ public:
 
     void                    GetFontMetric(ImplFontMetricDataRef const &) const;
     const unsigned char*    GetTable( const char* pName, sal_uLong* pLength ) const;
-    const FontCharMapRef    GetFontCharMap() const;
+    FontCharMapRef          GetFontCharMap() const;
     bool                    GetFontCapabilities(vcl::FontCapabilities &) const;
 
     bool                    GetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const;
