@@ -74,7 +74,7 @@ namespace connectivity
         bool                m_bModified : 1;    // value was changed
         bool                m_bSigned   : 1;    // value is signed
 
-        void free();
+        void free() noexcept;
 
     public:
         ORowSetValue()
@@ -98,7 +98,7 @@ namespace connectivity
             operator=(_rRH);
         }
 
-        ORowSetValue(ORowSetValue&& _rRH)
+        ORowSetValue(ORowSetValue&& _rRH) noexcept
             :m_eTypeKind(css::sdbc::DataType::VARCHAR)
             ,m_bNull(true)
             ,m_bBound(true)
@@ -106,7 +106,7 @@ namespace connectivity
             ,m_bSigned(true)
         {
             m_aValue.m_pString = nullptr;
-            operator=(_rRH);
+            operator=(std::move(_rRH));
         }
 
         ORowSetValue(const OUString& _rRH)
@@ -279,7 +279,7 @@ namespace connectivity
         }
 
         ORowSetValue& operator=(const ORowSetValue& _rRH);
-        ORowSetValue& operator=(ORowSetValue&& _rRH);
+        ORowSetValue& operator=(ORowSetValue&& _rRH) noexcept;
 
         // simple types
         ORowSetValue& operator=(bool _rRH);

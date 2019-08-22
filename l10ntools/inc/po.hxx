@@ -51,7 +51,7 @@ public:
 
                     PoEntry( const PoEntry& rPo );
     PoEntry&        operator=( const PoEntry& rPo );
-    PoEntry&        operator=( PoEntry&& rPo );
+    PoEntry&        operator=( PoEntry&& rPo ) noexcept;
 
     OString const &  getSourceFile() const;      ///< Get name of file from which entry is extracted
     OString         getGroupId() const;

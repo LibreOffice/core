@@ -48,10 +48,10 @@ namespace comphelper
         NamedValueCollection();
 
         NamedValueCollection( const NamedValueCollection& _rCopySource );
-        NamedValueCollection( NamedValueCollection&& _rCopySource );
+        NamedValueCollection(NamedValueCollection&& _rCopySource) noexcept;
 
         NamedValueCollection& operator=( const NamedValueCollection& i_rCopySource );
-        NamedValueCollection& operator=( NamedValueCollection&& i_rCopySource );
+        NamedValueCollection& operator=(NamedValueCollection&& i_rCopySource) noexcept;
 
         /** constructs a collection
             @param  _rElements

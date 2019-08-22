@@ -56,7 +56,7 @@ cow_wrapper_client2::cow_wrapper_client2( const cow_wrapper_client2& rSrc ) :
 {
 }
 
-cow_wrapper_client2::cow_wrapper_client2( cow_wrapper_client2&& rSrc ) :
+cow_wrapper_client2::cow_wrapper_client2( cow_wrapper_client2&& rSrc ) noexcept :
     maImpl( std::move( rSrc.maImpl ) )
 {
 }
@@ -68,7 +68,7 @@ cow_wrapper_client2& cow_wrapper_client2::operator=( const cow_wrapper_client2& 
     return *this;
 }
 
-cow_wrapper_client2& cow_wrapper_client2::operator=( cow_wrapper_client2&& rSrc )
+cow_wrapper_client2& cow_wrapper_client2::operator=(cow_wrapper_client2&& rSrc) noexcept
 {
     maImpl = std::move(rSrc.maImpl);
 
@@ -134,7 +134,7 @@ cow_wrapper_client3::cow_wrapper_client3( const cow_wrapper_client3& rSrc ) :
 {
 }
 
-cow_wrapper_client3::cow_wrapper_client3( cow_wrapper_client3&& rSrc ) :
+cow_wrapper_client3::cow_wrapper_client3( cow_wrapper_client3&& rSrc ) noexcept :
     maImpl( std::move( rSrc.maImpl ) )
 {
 }
@@ -146,7 +146,7 @@ cow_wrapper_client3& cow_wrapper_client3::operator=( const cow_wrapper_client3& 
     return *this;
 }
 
-cow_wrapper_client3& cow_wrapper_client3::operator=( cow_wrapper_client3&& rSrc )
+cow_wrapper_client3& cow_wrapper_client3::operator=(cow_wrapper_client3&& rSrc) noexcept
 {
     maImpl = std::move(rSrc.maImpl);
 
@@ -260,7 +260,7 @@ cow_wrapper_client5::cow_wrapper_client5( const cow_wrapper_client5& rSrc ) :
 {
 }
 
-cow_wrapper_client5::cow_wrapper_client5( cow_wrapper_client5&& rSrc ) :
+cow_wrapper_client5::cow_wrapper_client5( cow_wrapper_client5&& rSrc ) noexcept :
     maImpl( std::move( rSrc.maImpl ) )
 {
 }
@@ -276,7 +276,7 @@ cow_wrapper_client5& cow_wrapper_client5::operator=( const cow_wrapper_client5& 
     return *this;
 }
 
-cow_wrapper_client5& cow_wrapper_client5::operator=( cow_wrapper_client5&& rSrc )
+cow_wrapper_client5& cow_wrapper_client5::operator=(cow_wrapper_client5&& rSrc) noexcept
 {
     maImpl = std::move( rSrc.maImpl );
 

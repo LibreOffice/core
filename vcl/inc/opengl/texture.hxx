@@ -91,7 +91,7 @@ public:
                     OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, void const * pData );
                     OpenGLTexture( int nX, int nY, int nWidth, int nHeight );
                     OpenGLTexture( const OpenGLTexture& rTexture );
-                    OpenGLTexture( OpenGLTexture&& rTexture );
+                    OpenGLTexture( OpenGLTexture&& rTexture ) noexcept;
                     OpenGLTexture( const OpenGLTexture& rTexture, int nX, int nY, int nWidth, int nHeight );
                     ~OpenGLTexture();
 

@@ -112,7 +112,7 @@ struct PartialState
         , mnRegionClipPathId( 0 )
     {}
 
-    PartialState(PartialState&& aPartialState)
+    PartialState(PartialState&& aPartialState) noexcept
         : meFlags( aPartialState.meFlags )
         , mupFont( std::move( aPartialState.mupFont ) )
         , mnRegionClipPathId( aPartialState.mnRegionClipPathId )

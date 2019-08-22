@@ -1141,7 +1141,7 @@ TransferableDataHelper::TransferableDataHelper(const TransferableDataHelper& rDa
 {
 }
 
-TransferableDataHelper::TransferableDataHelper(TransferableDataHelper&& rDataHelper)
+TransferableDataHelper::TransferableDataHelper(TransferableDataHelper&& rDataHelper) noexcept
     : mxTransfer(std::move(rDataHelper.mxTransfer))
     , mxClipboard(std::move(rDataHelper.mxClipboard))
     , maFormats(std::move(rDataHelper.maFormats))

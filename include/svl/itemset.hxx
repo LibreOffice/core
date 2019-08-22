@@ -112,7 +112,7 @@ public:
     struct Pair { sal_uInt16 wid1, wid2; };
 
                                 SfxItemSet( const SfxItemSet& );
-                                SfxItemSet( SfxItemSet&& );
+                                SfxItemSet( SfxItemSet&& ) noexcept;
 
                                 SfxItemSet( SfxItemPool&);
     template<sal_uInt16... WIDs> SfxItemSet(

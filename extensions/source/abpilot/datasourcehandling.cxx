@@ -320,7 +320,7 @@ namespace abp
         return *this;
     }
 
-    ODataSource& ODataSource::operator=( ODataSource&& _rSource )
+    ODataSource& ODataSource::operator=(ODataSource&& _rSource) noexcept
     {
         m_pImpl = std::move(_rSource.m_pImpl);
         return *this;

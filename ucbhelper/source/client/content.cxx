@@ -320,7 +320,7 @@ Content::Content( const Content& rOther )
     m_xImpl = rOther.m_xImpl;
 }
 
-Content::Content( Content&& rOther )
+Content::Content( Content&& rOther ) noexcept
 {
     m_xImpl = std::move(rOther.m_xImpl);
 }
@@ -361,7 +361,7 @@ Content& Content::operator=( const Content& rOther )
     return *this;
 }
 
-Content& Content::operator=( Content&& rOther )
+Content& Content::operator=( Content&& rOther ) noexcept
 {
     m_xImpl = std::move(rOther.m_xImpl);
     return *this;

@@ -188,7 +188,7 @@ namespace dbtools
     {
     }
 
-    DatabaseMetaData::DatabaseMetaData( DatabaseMetaData&& _copyFrom )
+    DatabaseMetaData::DatabaseMetaData(DatabaseMetaData&& _copyFrom) noexcept
         :m_pImpl(std::move(_copyFrom.m_pImpl))
     {
     }
@@ -202,7 +202,7 @@ namespace dbtools
         return *this;
     }
 
-    DatabaseMetaData& DatabaseMetaData::operator=( DatabaseMetaData&& _copyFrom )
+    DatabaseMetaData& DatabaseMetaData::operator=(DatabaseMetaData&& _copyFrom) noexcept
     {
         m_pImpl = std::move(_copyFrom.m_pImpl);
         return *this;

@@ -32,7 +32,7 @@ ScMarkArray::ScMarkArray() :
 }
 
 // Move constructor
-ScMarkArray::ScMarkArray( ScMarkArray&& rOther )
+ScMarkArray::ScMarkArray( ScMarkArray&& rOther ) noexcept
 {
     operator=(std::move(rOther));
 }
@@ -338,7 +338,7 @@ ScMarkArray& ScMarkArray::operator=( const ScMarkArray& rOther )
     return *this;
 }
 
-ScMarkArray& ScMarkArray::operator=( ScMarkArray&& rOther )
+ScMarkArray& ScMarkArray::operator=(ScMarkArray&& rOther) noexcept
 {
     nCount = rOther.nCount;
     nLimit = rOther.nLimit;
