@@ -102,7 +102,7 @@ static MapUnit GetMapUnit( sal_Int32 nUnit )
     return aMapUnit;
 }
 
-sal_Int32 ExportDialog::GetDefaultUnit()
+sal_Int32 ExportDialog::GetDefaultUnit() const
 {
     sal_Int32 nDefaultUnit = UNIT_CM;
     switch( mrFltCallPara.eFieldUnit )
