@@ -230,8 +230,6 @@ namespace vcl
 
         void            SetRoadmapHelpId( const OString& _rId );
 
-        void            SetRoadmapInteractive( bool _bInteractive );
-
         // returns whether a given state is enabled
         bool            isStateEnabled( WizardState _nState ) const;
 

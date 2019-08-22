@@ -30,9 +30,6 @@
 #include "ChartTypeTemplateProvider.hxx"
 #include "DialogModel.hxx"
 
-#define CHART_WIZARD_PAGEWIDTH  250
-#define CHART_WIZARD_PAGEHEIGHT 170
-
 using namespace css;
 
 namespace chart
@@ -45,14 +42,14 @@ namespace chart
 #define STATE_OBJECTS      3
 #define STATE_LAST         STATE_OBJECTS
 
-CreationWizard::CreationWizard(vcl::Window* pParent, const uno::Reference<frame::XModel>& xChartModel,
+CreationWizard::CreationWizard(weld::Window* pParent, const uno::Reference<frame::XModel>& xChartModel,
                                const uno::Reference<uno::XComponentContext>& xContext)
-                : vcl::RoadmapWizard(pParent)
-                , m_xChartModel(xChartModel,uno::UNO_QUERY)
-                , m_xComponentContext(xContext)
-                , m_pTemplateProvider(nullptr)
-                , m_aTimerTriggeredControllerLock(xChartModel)
-                , m_bCanTravel(true)
+    : vcl::RoadmapWizardMachine(pParent)
+    , m_xChartModel(xChartModel,uno::UNO_QUERY)
+    , m_xComponentContext(xContext)
+    , m_pTemplateProvider(nullptr)
+    , m_aTimerTriggeredControllerLock(xChartModel)
+    , m_bCanTravel(true)
 {
     m_pDialogModel.reset(new DialogModel(m_xChartModel, m_xComponentContext));
     defaultButton(WizardButtonFlags::FINISH);
@@ -69,12 +66,6 @@ CreationWizard::CreationWizard(vcl::Window* pParent, const uno::Reference<frame:
     declarePath(PATH_FULL, aPath);
 
     SetRoadmapHelpId(HID_SCH_WIZARD_ROADMAP);
-    SetRoadmapInteractive(true);
-
-    Size aAdditionalRoadmapSize(LogicToPixel(Size(85, 0), MapMode(MapUnit::MapAppFont)));
-    Size aSize(LogicToPixel(Size(CHART_WIZARD_PAGEWIDTH, CHART_WIZARD_PAGEHEIGHT), MapMode(MapUnit::MapAppFont)));
-    aSize.AdjustWidth(aAdditionalRoadmapSize.Width() );
-    SetSizePixel(aSize);
 
     if (!m_pDialogModel->getModel().isDataFromSpreadsheet())
     {
@@ -84,6 +75,8 @@ CreationWizard::CreationWizard(vcl::Window* pParent, const uno::Reference<frame:
 
     // Call ActivatePage, to create and activate the first page
     ActivatePage();
+
+    m_xAssistant->set_current_page(0);
 }
 
 CreationWizard::~CreationWizard() = default;
@@ -91,12 +84,18 @@ CreationWizard::~CreationWizard() = default;
 VclPtr<TabPage> CreationWizard::createPage(WizardState nState)
 {
     VclPtr<vcl::OWizardPage> pRet;
+
+    OString sIdent(OString::number(nState));
+    weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
+    // TODO eventually pass DialogController as distinct argument instead of bundling into TabPageParent
+    TabPageParent aParent(pPageContainer, this);
+
     switch( nState )
     {
     case STATE_CHARTTYPE:
         {
         m_aTimerTriggeredControllerLock.startTimer();
-        VclPtrInstance<ChartTypeTabPage> pChartTypeTabPage(this,m_xChartModel);
+        VclPtrInstance<ChartTypeTabPage> pChartTypeTabPage(aParent, m_xChartModel);
         pRet  = pChartTypeTabPage;
         m_pTemplateProvider = pChartTypeTabPage;
         if (m_pDialogModel)
@@ -106,18 +105,18 @@ VclPtr<TabPage> CreationWizard::createPage(WizardState nState)
     case STATE_SIMPLE_RANGE:
         {
         m_aTimerTriggeredControllerLock.startTimer();
-        pRet = VclPtr<RangeChooserTabPage>::Create(this, *m_pDialogModel, m_pTemplateProvider, this);
+        pRet = VclPtr<RangeChooserTabPage>::Create(aParent, *m_pDialogModel, m_pTemplateProvider, this);
         }
         break;
     case STATE_DATA_SERIES:
         {
         m_aTimerTriggeredControllerLock.startTimer();
-        pRet = VclPtr<DataSourceTabPage>::Create(this, *m_pDialogModel, m_pTemplateProvider, this);
+        pRet = VclPtr<DataSourceTabPage>::Create(aParent, *m_pDialogModel, m_pTemplateProvider, this);
         }
         break;
     case STATE_OBJECTS:
         {
-        pRet  = VclPtr<TitlesAndObjectsTabPage>::Create(this,m_xChartModel, m_xComponentContext);
+        pRet  = VclPtr<TitlesAndObjectsTabPage>::Create(aParent, m_xChartModel, m_xComponentContext);
         m_aTimerTriggeredControllerLock.startTimer();
         }
         break;
@@ -147,13 +146,14 @@ vcl::WizardTypes::WizardState CreationWizard::determineNextState( WizardState nC
         ++nNextState;
     return (nNextState==STATE_LAST+1) ? WZS_INVALID_STATE : nNextState;
 }
+
 void CreationWizard::enterState(WizardState nState)
 {
     m_aTimerTriggeredControllerLock.startTimer();
     enableButtons( WizardButtonFlags::PREVIOUS, nState > STATE_FIRST );
     enableButtons( WizardButtonFlags::NEXT, nState < STATE_LAST );
     if( isStateEnabled( nState ))
-        vcl::RoadmapWizard::enterState(nState);
+        vcl::RoadmapWizardMachine::enterState(nState);
 }
 
 void CreationWizard::setInvalidPage( TabPage * /* pTabPage */ )

@@ -685,7 +685,7 @@ namespace vcl
     }
 
     WizardMachine::WizardMachine(weld::Window* pParent, WizardButtonFlags nButtonFlags)
-        : AssistantController(pParent, "dbaccess/ui/databasewizard.ui", "DatabaseWizard")
+        : AssistantController(pParent, "vcl/ui/wizard.ui", "Wizard")
         , m_nCurState(0)
         , m_pFirstPage(nullptr)
         , m_xFinish(m_xAssistant->weld_widget_for_response(static_cast<int>(WizardButtonFlags::FINISH)))
@@ -892,7 +892,7 @@ namespace vcl
 
     bool WizardMachine::onFinish()
     {
-        return Finish( RET_OK );
+        return Finish(static_cast<int>(WizardButtonFlags::FINISH));
     }
 
     IMPL_LINK_NOARG(WizardMachine, OnFinish, weld::Button&, void)

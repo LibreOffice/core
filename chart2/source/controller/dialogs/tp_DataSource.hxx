@@ -54,7 +54,6 @@ public:
     explicit DataSourceTabPage(TabPageParent pParent,
                                DialogModel & rDialogModel,
                                ChartTypeTemplateProvider* pTemplateProvider,
-                               Dialog * pParentDialog,
                                bool bHideDescription = false);
     virtual ~DataSourceTabPage() override;
 
@@ -64,7 +63,6 @@ public:
 
 private:
     // OWizardPage
-    virtual void dispose() override;
     virtual bool commitPage( ::vcl::WizardTypes::CommitPageReason eReason ) override;
 
     //TabPage
@@ -123,7 +121,6 @@ private:
     weld::Entry*                m_pCurrentRangeChoosingField;
     bool                        m_bIsDirty;
 
-    VclPtr<Dialog>              m_pParentDialog;
     weld::DialogController*     m_pParentController;
     TabPageNotifiable *         m_pTabPageNotifiable;
 

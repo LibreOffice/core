@@ -92,10 +92,10 @@ DataSourceDialog::DataSourceDialog(weld::Window * pParent,
 {
     TabPageParent aRangeParent(m_xTabControl->get_page("range"), this);
     m_pRangeChooserTabPage = VclPtr<RangeChooserTabPage>::Create(aRangeParent, *(m_apDialogModel.get()),
-                                     m_apDocTemplateProvider.get(), nullptr, true /* bHideDescription */ );
+                                     m_apDocTemplateProvider.get(), true /* bHideDescription */ );
     TabPageParent aSeriesParent(m_xTabControl->get_page("series"), this);
     m_pDataSourceTabPage = VclPtr<DataSourceTabPage>::Create(aSeriesParent, *(m_apDialogModel.get()),
-                                    m_apDocTemplateProvider.get(), nullptr, true /* bHideDescription */ );
+                                    m_apDocTemplateProvider.get(), true /* bHideDescription */ );
     m_xTabControl->connect_enter_page(LINK(this, DataSourceDialog, ActivatePageHdl));
     m_xTabControl->connect_leave_page(LINK(this, DataSourceDialog, DeactivatePageHdl));
     ActivatePageHdl(m_xTabControl->get_current_page_ident());

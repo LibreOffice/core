@@ -113,8 +113,11 @@ svt::OGenericUnoDialog::Dialog ODBTypeWizDialogSetup::createDialog(const css::un
 
 void ODBTypeWizDialogSetup::executedDialog(sal_Int16 _nExecutionResult)
 {
-    if ( _nExecutionResult == RET_OK )
+    fprintf(stderr, "res is %d\n", _nExecutionResult);
+
+    if ( _nExecutionResult == static_cast<int>(WizardButtonFlags::FINISH) )
     {
+        fprintf(stderr, "do something\n");
         const ODbTypeWizDialogSetup* pDialog = static_cast<ODbTypeWizDialogSetup*>(m_aDialog.m_xWeldDialog.get());
         m_bOpenDatabase = pDialog->IsDatabaseDocumentToBeOpened();
         m_bStartTableWizard = pDialog->IsTableWizardToBeStarted();
