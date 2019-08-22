@@ -74,7 +74,7 @@ namespace dbp
         OAccessRegulator() { }
     };
 
-    OControlWizardPage::OControlWizardPage( OControlWizard* _pParent, const OString& rID, const OUString& rUIXMLDescription )
+    OControlWizardPage::OControlWizardPage( vcl::Window* _pParent, const OString& rID, const OUString& rUIXMLDescription )
         :OControlWizardPage_Base( _pParent, rID, rUIXMLDescription )
         ,m_pFormDatasourceLabel(nullptr)
         ,m_pFormDatasource(nullptr)
