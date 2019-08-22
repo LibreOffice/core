@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_85938cfa",
+        "filename": "oox/source/drawingml/lineproperties.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2019-08-22T10:23:12Z",
+      "side": 1,
+      "message": "change\n  1,8,2,0,3\nto\n  1,8,2,1,3",
+      "range": {
+        "startLine": 69,
+        "startChar": 69,
+        "endLine": 69,
+        "endChar": 70
+      },
+      "revId": "782ed6436c5372f33ee5edd2996f4cdaf2ca7f0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_a58ed0cd",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2019-08-22T10:23:12Z",
+      "side": 1,
+      "message": "change\n relDashLen \u003d\u003d 0\nto\n relDashLen \u003d\u003d 1",
+      "range": {
+        "startLine": 892,
+        "startChar": 97,
+        "endLine": 892,
+        "endChar": 98
+      },
+      "revId": "782ed6436c5372f33ee5edd2996f4cdaf2ca7f0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
