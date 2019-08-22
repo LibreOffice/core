@@ -12,7 +12,7 @@
   <object class="GtkDialog" id="QrCodeGenDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="qrcodegen|QrCodeGenDialog">QR Code</property>
+    <property name="title" translatable="yes" context="qrcodegen|QrCodeGenDialog">QR Code Generator</property>
     <property name="modal">True</property>
     <property name="default_width">0</property>
     <property name="default_height">0</property>
@@ -102,7 +102,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="top_padding">6</property>
-                    <property name="left_padding">12</property>
                     <child>
                       <object class="GtkGrid">
                         <property name="visible">True</property>
@@ -127,9 +126,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes" context="qrcodegen|label_text" comments="Text to be converted in qr">URL/Text :</property>
+                            <property name="label" translatable="yes" context="qrcodegen|label_text" comments="Text to be stored in the QR">URL/Text :</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">edit_text</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -141,9 +141,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes" context="qrcodegen|label_border" comments="Set Border">Border :</property>
+                            <property name="label" translatable="yes" context="qrcodegen|label_border" comments="Set Border around QR">Border :</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">edit_border</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -151,12 +152,27 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label_ecc">
+                          <object class="GtkGrid">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes" context="qrcodegen|label_ecc" comments="Error correction while qr gen">Error Correction Level :</property>
-                            <property name="use_underline">True</property>
+                            <property name="row_spacing">2</property>
+                            <child>
+                              <object class="GtkLabel" id="label_ecc">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes" context="qrcodegen|label_ecc" comments="Error Correction Level of QR code">Error Correction:</property>
+                                <property name="use_underline">True</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -182,8 +198,7 @@
                           <object class="GtkGrid">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="row_spacing">6</property>
-                            <property name="column_spacing">4</property>
+                            <property name="row_spacing">2</property>
                             <child>
                               <object class="GtkRadioButton" id="button_low">
                                 <property name="label" translatable="yes" context="qrcodegen|ErrorCorrection">Low</property>
@@ -266,7 +281,7 @@
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="qrcodegen|QR Code Properties">QR Code</property>
+                    <property name="label" translatable="yes" context="qrcodegen|QR Code Properties">Options</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
