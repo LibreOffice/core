@@ -344,11 +344,6 @@ namespace vcl
         */
         virtual OUString  getStateDisplayName( WizardState _nState ) const;
 
-        /** asks for a new label of the wizard page
-
-         */
-        void    updateRoadmapItemLabel( WizardState _nState );
-
     private:
         DECL_DLLPRIVATE_LINK( OnRoadmapItemSelected, const OString&, bool );
 

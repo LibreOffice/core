@@ -25,7 +25,7 @@ class SwMailMergeWizard;
 
 class SwMailMergeOutputTypePage : public vcl::OWizardPage
 {
-    VclPtr<SwMailMergeWizard>  m_pWizard;
+    SwMailMergeWizard*  m_pWizard;
 
     std::unique_ptr<weld::RadioButton> m_xLetterRB;
     std::unique_ptr<weld::RadioButton> m_xMailRB;
@@ -37,7 +37,6 @@ class SwMailMergeOutputTypePage : public vcl::OWizardPage
 public:
     SwMailMergeOutputTypePage(SwMailMergeWizard* pWizard, TabPageParent pParent);
     virtual ~SwMailMergeOutputTypePage() override;
-    virtual void dispose() override;
 };
 #endif
 

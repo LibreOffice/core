@@ -1553,10 +1553,18 @@ public:
         // take the first shown page as the size for all pages
         if (m_xWizard->GetPageSizePixel().Width() == 0)
         {
-            TabPage* pPage = m_xWizard->GetPage(m_aIds[nPage]);
-            assert(pPage);
-            Size aPageSize(pPage->get_preferred_size());
-            m_xWizard->SetPageSizePixel(aPageSize);
+            Size aFinalSize;
+            for (int i = 0, nPages = get_n_pages(); i < nPages; ++i)
+            {
+                TabPage* pPage = m_xWizard->GetPage(m_aIds[i]);
+                assert(pPage);
+                Size aPageSize(pPage->get_preferred_size());
+                if (aPageSize.Width() > aFinalSize.Width())
+                    aFinalSize.setWidth(aPageSize.Width());
+                if (aPageSize.Height() > aFinalSize.Height())
+                    aFinalSize.setHeight(aPageSize.Height());
+            }
+            m_xWizard->SetPageSizePixel(aFinalSize);
         }
 
         m_xWizard->ShowPage(m_aIds[nPage]);

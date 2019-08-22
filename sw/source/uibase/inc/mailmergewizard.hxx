@@ -31,7 +31,7 @@ class SwMailMergeConfigItem;
 #define MM_GREETINGSPAGE        3
 #define MM_LAYOUTPAGE           4
 
-class SwMailMergeWizard : public ::vcl::RoadmapWizard
+class SwMailMergeWizard : public ::vcl::RoadmapWizardMachine
 {
     SwView* const           m_pSwView;
     OUString                sDocumentURL;
@@ -48,14 +48,12 @@ class SwMailMergeWizard : public ::vcl::RoadmapWizard
 
     sal_uInt16              m_nRestartPage;
 
-    using vcl::OWizardMachine::skipUntil;
+    using vcl::WizardMachine::skipUntil;
 
 protected:
     virtual VclPtr<TabPage>         createPage( WizardState _nState ) override;
     virtual void                    enterState( WizardState _nState ) override;
 
-// roadmap feature ??
-//    virtual sal_Bool            prepareLeaveCurrentState( CommitPageReason _eReason );
     virtual OUString                getStateDisplayName( WizardState _nState ) const override;
 
 public:
@@ -77,11 +75,9 @@ public:
     void                    SetRestartPage(sal_uInt16 nPage) { m_nRestartPage = nPage;}
 
     bool                skipUntil( sal_uInt16 nPage)
-                                {return ::vcl::RoadmapWizard::skipUntil(WizardState(nPage));}
+                                {return ::vcl::RoadmapWizardMachine::skipUntil(WizardState(nPage));}
 
-    using vcl::RoadmapWizard::updateRoadmapItemLabel;
-
-    virtual short           Execute() override;
+    virtual short           run() override;
 };
 #endif
 
