@@ -3413,7 +3413,7 @@ void VCLXScrollBar::setMinimum( sal_Int32 n )
         pScrollBar->SetRangeMin( n );
 }
 
-sal_Int32 VCLXScrollBar::getMinimum()
+sal_Int32 VCLXScrollBar::getMinimum() const
 {
     SolarMutexGuard aGuard;
 
@@ -4662,7 +4662,7 @@ void VCLXFormattedSpinField::setStrictFormat( bool bStrict )
         pFormatter->SetStrictFormat( bStrict );
 }
 
-bool VCLXFormattedSpinField::isStrictFormat()
+bool VCLXFormattedSpinField::isStrictFormat() const
 {
     FormatterBase* pFormatter = GetFormatter();
     return pFormatter && pFormatter->IsStrictFormat();
