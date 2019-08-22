@@ -10916,7 +10916,8 @@ public:
         GtkAssistant* pAssistant = GTK_ASSISTANT(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pAssistant)
             return nullptr;
-        gtk_window_set_transient_for(GTK_WINDOW(pAssistant), GTK_WINDOW(gtk_widget_get_toplevel(m_pParentWidget)));
+        if (m_pParentWidget)
+            gtk_window_set_transient_for(GTK_WINDOW(pAssistant), GTK_WINDOW(gtk_widget_get_toplevel(m_pParentWidget)));
         return std::make_unique<GtkInstanceAssistant>(pAssistant, this, bTakeOwnership);
     }
 
