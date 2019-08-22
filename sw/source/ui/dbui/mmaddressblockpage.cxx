@@ -57,46 +57,46 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 
-SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage( SwMailMergeWizard* _pParent) :
-    vcl::OWizardPage(_pParent, "MMAddressBlockPage",
-        "modules/swriter/ui/mmaddressblockpage.ui")
-    , m_pWizard(_pParent)
+SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage(SwMailMergeWizard* pWizard, TabPageParent pParent)
+    : vcl::OWizardPage(pParent, "modules/swriter/ui/mmaddressblockpage.ui", "MMAddressBlockPage")
+    , m_pWizard(pWizard)
+    , m_xAddressListPB(m_xBuilder->weld_button("addresslist"))
+    , m_xCurrentAddressFI(m_xBuilder->weld_label("currentaddress"))
+    , m_xStep2(m_xBuilder->weld_container("step2"))
+    , m_xStep3(m_xBuilder->weld_container("step3"))
+    , m_xStep4(m_xBuilder->weld_container("step4"))
+    , m_xSettingsFI(m_xBuilder->weld_label("settingsft"))
+    , m_xAddressCB(m_xBuilder->weld_check_button("address"))
+    , m_xSettingsPB(m_xBuilder->weld_button("settings"))
+    , m_xHideEmptyParagraphsCB(m_xBuilder->weld_check_button("hideempty"))
+    , m_xAssignPB(m_xBuilder->weld_button("assign"))
+    , m_xDocumentIndexFI(m_xBuilder->weld_label("documentindex"))
+    , m_xPrevSetIB(m_xBuilder->weld_button("prev"))
+    , m_xNextSetIB(m_xBuilder->weld_button("next"))
+    , m_xDifferentlist(m_xBuilder->weld_label("differentlist"))
+    , m_xSettings(new AddressPreview(m_xBuilder->weld_scrolled_window("settingspreviewwin")))
+    , m_xPreview(new AddressPreview(m_xBuilder->weld_scrolled_window("addresspreviewwin")))
+    , m_xSettingsWIN(new weld::CustomWeld(*m_xBuilder, "settingspreview", *m_xSettings))
+    , m_xPreviewWIN(new weld::CustomWeld(*m_xBuilder, "addresspreview", *m_xPreview))
 {
-    get(m_pAddressListPB, "addresslist");
-    get(m_pCurrentAddressFI, "currentaddress");
-    get(m_pStep2, "step2");
-    get(m_pStep3, "step3");
-    get(m_pStep4, "step4");
-    get(m_pSettingsFI, "settingsft");
-    get(m_pAddressCB, "address");
-    get(m_pSettingsWIN, "settingspreview");
     Size aSize(LogicToPixel(Size(164 , 45), MapMode(MapUnit::MapAppFont)));
-    m_pSettingsWIN->set_width_request(aSize.Width());
-    m_pSettingsWIN->set_height_request(aSize.Height());
-    get(m_pSettingsPB, "settings");
-    get(m_pHideEmptyParagraphsCB, "hideempty");
-    get(m_pAssignPB, "assign");
-    get(m_pPreviewWIN, "addresspreview");
+    m_xSettingsWIN->set_size_request(aSize.Width(), aSize.Height());
     aSize = LogicToPixel(Size(176, 46), MapMode(MapUnit::MapAppFont));
-    m_pPreviewWIN->set_width_request(aSize.Width());
-    m_pPreviewWIN->set_height_request(aSize.Height());
-    get(m_pDocumentIndexFI, "documentindex");
-    get(m_pPrevSetIB, "prev");
-    get(m_pNextSetIB, "next");
-    m_sDocument = m_pDocumentIndexFI->GetText();
-    m_sChangeAddress = get<Button>("differentlist")->GetText();
+    m_xPreviewWIN->set_size_request(aSize.Width(), aSize.Height());
+    m_sChangeAddress = m_xDifferentlist->get_label();
+    m_sDocument = m_xDocumentIndexFI->get_label();
 
-    m_sCurrentAddress = m_pCurrentAddressFI->GetText();
-    m_pAddressListPB->SetClickHdl(LINK(this, SwMailMergeAddressBlockPage, AddressListHdl_Impl));
-    m_pSettingsPB->SetClickHdl(LINK(this, SwMailMergeAddressBlockPage, SettingsHdl_Impl));
-    m_pAssignPB->SetClickHdl(LINK(this, SwMailMergeAddressBlockPage, AssignHdl_Impl ));
-    m_pAddressCB->SetClickHdl(LINK(this, SwMailMergeAddressBlockPage, AddressBlockHdl_Impl));
-    m_pSettingsWIN->SetSelectHdl(LINK(this, SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl));
-    m_pHideEmptyParagraphsCB->SetClickHdl(LINK(this, SwMailMergeAddressBlockPage, HideParagraphsHdl_Impl));
+    m_sCurrentAddress = m_xCurrentAddressFI->get_label();
+    m_xAddressListPB->connect_clicked(LINK(this, SwMailMergeAddressBlockPage, AddressListHdl_Impl));
+    m_xSettingsPB->connect_clicked(LINK(this, SwMailMergeAddressBlockPage, SettingsHdl_Impl));
+    m_xAssignPB->connect_clicked(LINK(this, SwMailMergeAddressBlockPage, AssignHdl_Impl ));
+    m_xAddressCB->connect_toggled(LINK(this, SwMailMergeAddressBlockPage, AddressBlockHdl_Impl));
+    m_xSettings->SetSelectHdl(LINK(this, SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl));
+    m_xHideEmptyParagraphsCB->connect_toggled(LINK(this, SwMailMergeAddressBlockPage, HideParagraphsHdl_Impl));
 
-    Link<Button*,void> aLink = LINK(this, SwMailMergeAddressBlockPage, InsertDataHdl_Impl);
-    m_pPrevSetIB->SetClickHdl(aLink);
-    m_pNextSetIB->SetClickHdl(aLink);
+    Link<weld::Button&,void> aLink = LINK(this, SwMailMergeAddressBlockPage, InsertDataHdl_Impl);
+    m_xPrevSetIB->connect_clicked(aLink);
+    m_xNextSetIB->connect_clicked(aLink);
 }
 
 SwMailMergeAddressBlockPage::~SwMailMergeAddressBlockPage()
@@ -106,21 +106,11 @@ SwMailMergeAddressBlockPage::~SwMailMergeAddressBlockPage()
 
 void SwMailMergeAddressBlockPage::dispose()
 {
-    m_pAddressListPB.clear();
-    m_pCurrentAddressFI.clear();
-    m_pStep2.clear();
-    m_pStep3.clear();
-    m_pStep4.clear();
-    m_pSettingsFI.clear();
-    m_pAddressCB.clear();
-    m_pSettingsWIN.clear();
-    m_pSettingsPB.clear();
-    m_pHideEmptyParagraphsCB.clear();
-    m_pAssignPB.clear();
-    m_pPreviewWIN.clear();
-    m_pDocumentIndexFI.clear();
-    m_pPrevSetIB.clear();
-    m_pNextSetIB.clear();
+    m_xPreviewWIN.reset();
+    m_xSettingsWIN.reset();
+    m_xPreview.reset();
+    m_xSettings.reset();
+
     m_pWizard.clear();
     vcl::OWizardPage::dispose();
 }
@@ -136,25 +126,25 @@ void SwMailMergeAddressBlockPage::ActivatePage()
     bool bIsLetter = rConfigItem.IsOutputToLetter();
 
     //no address block is created for e-Mail
-    m_pStep2->Show(bIsLetter);
-    m_pStep3->Show(bIsLetter);
-    m_pStep4->Show(bIsLetter);
+    m_xStep2->set_visible(bIsLetter);
+    m_xStep3->set_visible(bIsLetter);
+    m_xStep4->set_visible(bIsLetter);
 
     if (bIsLetter)
     {
-        m_pHideEmptyParagraphsCB->Check( rConfigItem.IsHideEmptyParagraphs() );
-        m_pDocumentIndexFI->SetText(m_sDocument.replaceFirst("%1", "1"));
+        m_xHideEmptyParagraphsCB->set_active( rConfigItem.IsHideEmptyParagraphs() );
+        m_xDocumentIndexFI->set_label(m_sDocument.replaceFirst("%1", "1"));
 
-        m_pSettingsWIN->Clear();
+        m_xSettings->Clear();
         const uno::Sequence< OUString> aBlocks =
                     m_pWizard->GetConfigItem().GetAddressBlocks();
         for(const auto& rAddress : aBlocks)
-            m_pSettingsWIN->AddAddress(rAddress);
-        m_pSettingsWIN->SelectAddress(static_cast<sal_uInt16>(rConfigItem.GetCurrentAddressBlockIndex()));
-        m_pAddressCB->Check(rConfigItem.IsAddressBlock());
-        AddressBlockHdl_Impl(m_pAddressCB);
-        m_pSettingsWIN->SetLayout(1, 2);
-        InsertDataHdl_Impl(nullptr);
+            m_xSettings->AddAddress(rAddress);
+        m_xSettings->SelectAddress(static_cast<sal_uInt16>(rConfigItem.GetCurrentAddressBlockIndex()));
+        m_xAddressCB->set_active(rConfigItem.IsAddressBlock());
+        AddressBlockHdl_Impl(*m_xAddressCB);
+        m_xSettings->SetLayout(1, 2);
+        InsertDataHdl(nullptr);
     }
 }
 
@@ -163,7 +153,7 @@ bool SwMailMergeAddressBlockPage::commitPage( ::vcl::WizardTypes::CommitPageReas
     return ::vcl::WizardTypes::eTravelForward != _eReason || m_pWizard->GetConfigItem().GetResultSet().is();
 }
 
-IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl, weld::Button&, void)
 {
     try
     {
@@ -178,7 +168,7 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl, Button*, void)
                             aAddrDialog.GetDBData());
             OUString sFilter = aAddrDialog.GetFilter();
             rConfigItem.SetFilter( sFilter );
-            InsertDataHdl_Impl(nullptr);
+            InsertDataHdl(nullptr);
             GetWizard()->UpdateRoadmap();
             GetWizard()->enableButtons(WizardButtonFlags::NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
         }
@@ -192,39 +182,39 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, SettingsHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, SettingsHdl_Impl, weld::Button&, void)
 {
     SwSelectAddressBlockDialog aDlg(GetFrameWeld(), m_pWizard->GetConfigItem());
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
-    aDlg.SetAddressBlocks(rConfig.GetAddressBlocks(), m_pSettingsWIN->GetSelectedAddress());
+    aDlg.SetAddressBlocks(rConfig.GetAddressBlocks(), m_xSettings->GetSelectedAddress());
     aDlg.SetSettings(rConfig.IsIncludeCountry(), rConfig.GetExcludeCountry());
     if (aDlg.run() == RET_OK)
     {
         //the dialog provides the selected address at the first position!
         const uno::Sequence< OUString> aBlocks = aDlg.GetAddressBlocks();
         rConfig.SetAddressBlocks(aBlocks);
-        m_pSettingsWIN->Clear();
+        m_xSettings->Clear();
         for(const auto& rAddress : aBlocks)
-            m_pSettingsWIN->AddAddress(rAddress);
-        m_pSettingsWIN->SelectAddress(0);
-        m_pSettingsWIN->Invalidate();    // #i40408
+            m_xSettings->AddAddress(rAddress);
+        m_xSettings->SelectAddress(0);
+        m_xSettings->Invalidate();    // #i40408
         rConfig.SetCountrySettings(aDlg.IsIncludeCountry(), aDlg.GetCountry());
-        InsertDataHdl_Impl(nullptr);
+        InsertDataHdl(nullptr);
     }
     GetWizard()->UpdateRoadmap();
     GetWizard()->enableButtons(WizardButtonFlags::NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
 }
 
-IMPL_LINK(SwMailMergeAddressBlockPage, AssignHdl_Impl, Button*, pButton, void)
+IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AssignHdl_Impl, weld::Button&, void)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
-    const sal_uInt16 nSel = m_pSettingsWIN->GetSelectedAddress();
+    const sal_uInt16 nSel = m_xSettings->GetSelectedAddress();
     const uno::Sequence< OUString> aBlocks = rConfigItem.GetAddressBlocks();
-    SwAssignFieldsDialog aDlg(pButton->GetFrameWeld(), m_pWizard->GetConfigItem(), aBlocks[nSel], true);
+    SwAssignFieldsDialog aDlg(m_pWizard->GetFrameWeld(), m_pWizard->GetConfigItem(), aBlocks[nSel], true);
     if(RET_OK == aDlg.run())
     {
         //preview update
-        InsertDataHdl_Impl(nullptr);
+        InsertDataHdl(nullptr);
         GetWizard()->UpdateRoadmap();
         GetWizard()->enableButtons(WizardButtonFlags::NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
     }
@@ -232,44 +222,44 @@ IMPL_LINK(SwMailMergeAddressBlockPage, AssignHdl_Impl, Button*, pButton, void)
 
 void SwMailMergeAddressBlockPage::EnableAddressBlock(bool bAll, bool bSelective)
 {
-    m_pSettingsFI->Enable(bAll);
-    m_pAddressCB->Enable(bAll);
+    m_xSettingsFI->set_sensitive(bAll);
+    m_xAddressCB->set_sensitive(bAll);
     bSelective &= bAll;
-    m_pHideEmptyParagraphsCB->Enable(bSelective);
-    m_pSettingsWIN->Enable(bSelective);
-    m_pSettingsPB->Enable(bSelective);
-    m_pStep3->Enable(bSelective);
-    m_pStep4->Enable(bSelective);
+    m_xHideEmptyParagraphsCB->set_sensitive(bSelective);
+    m_xSettingsWIN->set_sensitive(bSelective);
+    m_xSettingsPB->set_sensitive(bSelective);
+    m_xStep3->set_sensitive(bSelective);
+    m_xStep4->set_sensitive(bSelective);
 }
 
-IMPL_LINK(SwMailMergeAddressBlockPage, AddressBlockHdl_Impl, Button*, pBox, void)
+IMPL_LINK(SwMailMergeAddressBlockPage, AddressBlockHdl_Impl, weld::ToggleButton&, rBox, void)
 {
-    EnableAddressBlock(pBox->IsEnabled(), static_cast<CheckBox*>(pBox)->IsChecked());
+    EnableAddressBlock(rBox.get_sensitive(), rBox.get_active());
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
-    rConfigItem.SetAddressBlock(m_pAddressCB->IsChecked());
+    rConfigItem.SetAddressBlock(m_xAddressCB->get_active());
     m_pWizard->UpdateRoadmap();
     GetWizard()->enableButtons(WizardButtonFlags::NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
 }
 
 IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl, LinkParamNone*, void)
 {
-    const sal_uInt16 nSel = m_pSettingsWIN->GetSelectedAddress();
+    const sal_uInt16 nSel = m_xSettings->GetSelectedAddress();
     const uno::Sequence< OUString> aBlocks =
                 m_pWizard->GetConfigItem().GetAddressBlocks();
-    m_pPreviewWIN->SetAddress(SwAddressPreview::FillData(aBlocks[nSel],
+    m_xPreview->SetAddress(SwAddressPreview::FillData(aBlocks[nSel],
                                                          m_pWizard->GetConfigItem()));
     m_pWizard->GetConfigItem().SetCurrentAddressBlockIndex( nSel );
     GetWizard()->UpdateRoadmap();
     GetWizard()->enableButtons(WizardButtonFlags::NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
 }
 
-IMPL_LINK(SwMailMergeAddressBlockPage, HideParagraphsHdl_Impl, Button*, pBox, void)
+IMPL_LINK(SwMailMergeAddressBlockPage, HideParagraphsHdl_Impl, weld::ToggleButton&, rBox, void)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
-    rConfigItem.SetHideEmptyParagraphs( static_cast<CheckBox*>(pBox)->IsChecked() );
+    rConfigItem.SetHideEmptyParagraphs(rBox.get_active());
 }
 
-IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, Button*, pButton, void)
+void SwMailMergeAddressBlockPage::InsertDataHdl(weld::Button* pButton)
 {
     //if no pButton is given, the first set has to be pre-set
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
@@ -280,7 +270,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, Button*, pButton, voi
     }
     else
     {
-        bool bNext = pButton == m_pNextSetIB;
+        bool bNext = pButton == m_xNextSetIB.get();
         sal_Int32 nPos = rConfig.GetResultSetPosition();
         rConfig.MoveResultSet( bNext ? ++nPos : --nPos);
     }
@@ -295,27 +285,32 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, Button*, pButton, voi
     else
     {
         //if output type is letter
-        if(m_pSettingsWIN->IsVisible())
+        if (m_xSettings->IsVisible())
         {
             //Fill data into preview
-            const sal_uInt16 nSel = m_pSettingsWIN->GetSelectedAddress();
+            const sal_uInt16 nSel = m_xSettings->GetSelectedAddress();
             const uno::Sequence< OUString> aBlocks =
                         m_pWizard->GetConfigItem().GetAddressBlocks();
-            m_pPreviewWIN->SetAddress(SwAddressPreview::FillData(aBlocks[nSel], rConfig));
+            m_xPreview->SetAddress(SwAddressPreview::FillData(aBlocks[nSel], rConfig));
         }
     }
-    m_pPrevSetIB->Enable(bEnable);
-    m_pDocumentIndexFI->SetText(m_sDocument.replaceFirst("%1", OUString::number(nPos)));
+    m_xPrevSetIB->set_sensitive(bEnable);
+    m_xDocumentIndexFI->set_label(m_sDocument.replaceFirst("%1", OUString::number(nPos)));
 
     GetWizard()->enableButtons(WizardButtonFlags::NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
     bool bHasResultSet = rConfig.GetResultSet().is();
-    m_pCurrentAddressFI->Show(bHasResultSet);
+    m_xCurrentAddressFI->set_visible(bHasResultSet);
     if(bHasResultSet)
     {
-        m_pCurrentAddressFI->SetText(m_sCurrentAddress.replaceFirst("%1", rConfig.GetCurrentDBData().sDataSource));
-        m_pAddressListPB->SetText(m_sChangeAddress);
+        m_xCurrentAddressFI->set_label(m_sCurrentAddress.replaceFirst("%1", rConfig.GetCurrentDBData().sDataSource));
+        m_xAddressListPB->set_label(m_sChangeAddress);
     }
-    EnableAddressBlock(bHasResultSet, m_pAddressCB->IsChecked());
+    EnableAddressBlock(bHasResultSet, m_xAddressCB->get_active());
+}
+
+IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, weld::Button&, rButton, void)
+{
+    InsertDataHdl(&rButton);
 }
 
 SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(weld::Window* pParent, SwMailMergeConfigItem& rConfig)
