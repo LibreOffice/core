@@ -76,7 +76,7 @@ namespace drawinglayer { namespace primitive2d {
         explicit Primitive2DContainer( size_type count ) : deque(count) {}
         virtual ~Primitive2DContainer() override;
         Primitive2DContainer( const Primitive2DContainer& other ) : deque(other) {}
-        Primitive2DContainer( const Primitive2DContainer&& other ) : deque(other) {}
+        Primitive2DContainer( Primitive2DContainer&& other ) : deque(std::move(other)) {}
         Primitive2DContainer( const std::deque< Primitive2DReference >& other ) : deque(other) {}
         Primitive2DContainer( std::initializer_list<Primitive2DReference> init ) : deque(init) {}
         template <class Iter>
@@ -87,7 +87,7 @@ namespace drawinglayer { namespace primitive2d {
         virtual void append(Primitive2DContainer&& rSource) override;
         void append(const Primitive2DSequence& rSource);
         Primitive2DContainer& operator=(const Primitive2DContainer& r) { deque::operator=(r); return *this; }
-        Primitive2DContainer& operator=(const Primitive2DContainer&& r) { deque::operator=(r); return *this; }
+        Primitive2DContainer& operator=(Primitive2DContainer&& r) { deque::operator=(std::move(r)); return *this; }
         bool operator==(const Primitive2DContainer& rB) const;
         bool operator!=(const Primitive2DContainer& rB) const { return !operator==(rB); }
         basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& aViewInformation) const;
