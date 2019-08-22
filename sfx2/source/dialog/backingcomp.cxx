@@ -576,6 +576,12 @@ void SAL_CALL BackingComp::dispose()
     {
         m_xWindow->removeEventListener(this);
         m_xWindow->removeKeyListener(this);
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(m_xWindow);
+        auto pBack = dynamic_cast<BackingWindow*>(pWindow.get());
+        if (pBack)
+        {
+            pBack->RequestDoubleBuffering(false);
+        }
         m_xWindow.clear();
     }
 
@@ -660,6 +666,10 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
     // create the component window
     VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow(xParentWindow);
     VclPtr<vcl::Window> pWindow = VclPtr<BackingWindow>::Create(pParent);
+    if (!pWindow->IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus))
+    {
+        pWindow->RequestDoubleBuffering(true);
+    }
     m_xWindow = VCLUnoHelper::GetInterface(pWindow);
 
     if (!m_xWindow.is())
