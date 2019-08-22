@@ -979,7 +979,17 @@ void Test::testMakeAbsolute() {
           css::uri::RelativeUriExcessParentSegments_REMOVE, "scheme://a#s2" },
 
         { "schema://a", "schema://b/c/../d", true, css::uri::RelativeUriExcessParentSegments_REMOVE,
-          "schema://b/d" } };
+          "schema://b/d" },
+
+        // Per RFC 3986 Section 5.2.1 "Pre-parse the Base URI", "Normalization of the base URI
+        // [...; esp. dot-segment removal per Section 6.2.2.3 "Path Segment Normalization"] is
+        // optional" (and not done by our implemenation), so if the relative URI has no scheme and
+        // no authority and an empty path, the Base URI's path is used unmodified per Section 5.2.2
+        // "Transform References" and thus still contains dot-segments:
+        { "scheme:/a/../b/c", "", true, css::uri::RelativeUriExcessParentSegments_REMOVE,
+          "scheme:/a/../b/c" },
+        { "scheme:/a/../b/c", "d", true, css::uri::RelativeUriExcessParentSegments_REMOVE,
+          "scheme:/b/d" } };
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         css::uno::Reference< css::uri::XUriReference > baseUriRef(
             m_uriFactory->parse(
