@@ -3010,7 +3010,7 @@ struct DialogRunner
     }
 
     static void signal_response(GtkDialog*, gint nResponseId, gpointer data);
-    static void signal_cancel(GtkDialog*, gpointer data);
+    static void signal_cancel(GtkAssistant*, gpointer data);
 
     static gboolean signal_delete(GtkDialog* pDialog, GdkEventAny*, gpointer data)
     {
@@ -3159,6 +3159,7 @@ private:
     std::function<void(sal_Int32)> m_aFunc;
     gulong m_nCloseSignalId;
     gulong m_nResponseSignalId;
+    gulong m_nCancelSignalId;
     gulong m_nSignalDeleteId;
 
     // for calc ref dialog that shrink to range selection widgets and resize back
@@ -3185,12 +3186,25 @@ private:
         pThis->asyncresponse(ret);
     }
 
-    static gboolean signalAsyncDelete(GtkDialog*, GdkEventAny*, gpointer)
+    static void signalAsyncCancel(GtkAssistant*, gpointer widget)
     {
+        GtkInstanceDialog* pThis = static_cast<GtkInstanceDialog*>(widget);
+        // make esc in an assistant act as if cancel button was pressed
+        pThis->close(false);
+    }
+
+    static gboolean signalAsyncDelete(GtkWidget* pDialog, GdkEventAny*, gpointer widget)
+    {
+        GtkInstanceDialog* pThis = static_cast<GtkInstanceDialog*>(widget);
+        if (GTK_IS_ASSISTANT(pThis->m_pDialog))
+        {
+            // An assistant isn't a dialog, but we want to treat it like one
+            signalAsyncResponse(pDialog, GTK_RESPONSE_DELETE_EVENT, widget);
+        }
         return true; /* Do not destroy */
     }
 
-    virtual int GtkToVcl(int ret)
+    static int GtkToVcl(int ret)
     {
         if (ret == GTK_RESPONSE_OK)
             ret = RET_OK;
@@ -3204,10 +3218,12 @@ private:
             ret = RET_YES;
         else if (ret == GTK_RESPONSE_NO)
             ret = RET_NO;
+        else if (ret == GTK_RESPONSE_HELP)
+            ret = RET_HELP;
         return ret;
     }
 
-    virtual int VclToGtk(int nResponse)
+    static int VclToGtk(int nResponse)
     {
         if (nResponse == RET_OK)
             return GTK_RESPONSE_OK;
@@ -3233,6 +3249,7 @@ public:
         , m_aDialogRun(pDialog, this)
         , m_nCloseSignalId(g_signal_connect(m_pDialog, "close", G_CALLBACK(signalClose), this))
         , m_nResponseSignalId(0)
+        , m_nCancelSignalId(0)
         , m_nSignalDeleteId(0)
         , m_pRefEdit(nullptr)
         , m_nOldEditWidth(0)
@@ -3243,7 +3260,7 @@ public:
 
     virtual bool runAsync(std::shared_ptr<weld::DialogController> rDialogController, const std::function<void(sal_Int32)>& func) override
     {
-        assert(!m_nResponseSignalId);
+        assert(!m_nResponseSignalId && !m_nCancelSignalId);
 
         m_xDialogController = rDialogController;
         m_aFunc = func;
@@ -3252,7 +3269,8 @@ public:
             m_aDialogRun.inc_modal_count();
         show();
 
-        m_nResponseSignalId = g_signal_connect(m_pDialog, "response", G_CALLBACK(signalAsyncResponse), this);
+        m_nResponseSignalId = GTK_IS_DIALOG(m_pDialog) ? g_signal_connect(m_pDialog, "response", G_CALLBACK(signalAsyncResponse), this) : 0;
+        m_nCancelSignalId = GTK_IS_ASSISTANT(m_pDialog) ? g_signal_connect(m_pDialog, "cancel", G_CALLBACK(signalAsyncCancel), this) : 0;
         m_nSignalDeleteId = g_signal_connect(m_pDialog, "delete-event", G_CALLBACK(signalAsyncDelete), this);
 
         return true;
@@ -3261,7 +3279,7 @@ public:
     virtual bool runAsync(std::shared_ptr<Dialog> const & rxSelf, const std::function<void(sal_Int32)>& func) override
     {
         assert( rxSelf.get() == this );
-        assert(!m_nResponseSignalId);
+        assert(!m_nResponseSignalId && !m_nCancelSignalId);
 
         // In order to store a shared_ptr to ourself, we have to have been constructed by make_shared,
         // which is that rxSelf enforces.
@@ -3272,7 +3290,8 @@ public:
             m_aDialogRun.inc_modal_count();
         show();
 
-        m_nResponseSignalId = g_signal_connect(m_pDialog, "response", G_CALLBACK(signalAsyncResponse), this);
+        m_nResponseSignalId = GTK_IS_DIALOG(m_pDialog) ? g_signal_connect(m_pDialog, "response", G_CALLBACK(signalAsyncResponse), this) : 0;
+        m_nCancelSignalId = GTK_IS_ASSISTANT(m_pDialog) ? g_signal_connect(m_pDialog, "cancel", G_CALLBACK(signalAsyncCancel), this) : 0;
         m_nSignalDeleteId = g_signal_connect(m_pDialog, "delete-event", G_CALLBACK(signalAsyncDelete), this);
 
         return true;
@@ -3442,6 +3461,8 @@ public:
         g_signal_handler_disconnect(m_pDialog, m_nCloseSignalId);
         if (m_nResponseSignalId)
             g_signal_handler_disconnect(m_pDialog, m_nResponseSignalId);
+        if (m_nCancelSignalId)
+            g_signal_handler_disconnect(m_pDialog, m_nCancelSignalId);
         if (m_nSignalDeleteId)
             g_signal_handler_disconnect(m_pDialog, m_nSignalDeleteId);
     }
@@ -3462,7 +3483,7 @@ void DialogRunner::signal_response(GtkDialog*, gint nResponseId, gpointer data)
     pThis->loop_quit();
 }
 
-void DialogRunner::signal_cancel(GtkDialog*, gpointer data)
+void DialogRunner::signal_cancel(GtkAssistant*, gpointer data)
 {
     DialogRunner* pThis = static_cast<DialogRunner*>(data);
 
@@ -3628,40 +3649,6 @@ private:
                 return i;
         }
         return -1;
-    }
-
-    virtual int GtkToVcl(int ret) override
-    {
-        if (ret == GTK_RESPONSE_OK)
-            ret = static_cast<int>(WizardButtonFlags::FINISH);
-        else if (ret == GTK_RESPONSE_CANCEL)
-            ret = static_cast<int>(WizardButtonFlags::CANCEL);
-        else if (ret == GTK_RESPONSE_DELETE_EVENT)
-            ret = static_cast<int>(WizardButtonFlags::CANCEL);
-        else if (ret == GTK_RESPONSE_CLOSE)
-            ret = static_cast<int>(WizardButtonFlags::CANCEL);
-        else if (ret == GTK_RESPONSE_ACCEPT)
-            ret = static_cast<int>(WizardButtonFlags::NEXT);
-        else if (ret == GTK_RESPONSE_REJECT)
-            ret = static_cast<int>(WizardButtonFlags::PREVIOUS);
-        else if (ret == GTK_RESPONSE_HELP)
-            ret = static_cast<int>(WizardButtonFlags::HELP);
-        return ret;
-    }
-
-    virtual int VclToGtk(int nResponse) override
-    {
-        if (nResponse == static_cast<int>(WizardButtonFlags::NEXT))
-            return GTK_RESPONSE_ACCEPT;
-        if (nResponse == static_cast<int>(WizardButtonFlags::PREVIOUS))
-            return GTK_RESPONSE_REJECT;
-        else if (nResponse == static_cast<int>(WizardButtonFlags::FINISH))
-            return GTK_RESPONSE_OK;
-        else if (nResponse == static_cast<int>(WizardButtonFlags::CANCEL))
-            return GTK_RESPONSE_CANCEL;
-        else if (nResponse == static_cast<int>(WizardButtonFlags::HELP))
-            return GTK_RESPONSE_HELP;
-        return nResponse;
     }
 
     static void wrap_sidebar_label(GtkWidget *pWidget, gpointer /*user_data*/)
@@ -3851,9 +3838,9 @@ public:
     virtual GtkButton* get_widget_for_response(int nGtkResponse) override
     {
         GtkButton* pButton = nullptr;
-        if (nGtkResponse == GTK_RESPONSE_ACCEPT)
+        if (nGtkResponse == GTK_RESPONSE_YES)
             pButton = m_pNext;
-        else if (nGtkResponse == GTK_RESPONSE_REJECT)
+        else if (nGtkResponse == GTK_RESPONSE_NO)
             pButton = m_pBack;
         else if (nGtkResponse == GTK_RESPONSE_OK)
             pButton = m_pFinish;
@@ -5212,8 +5199,13 @@ void GtkInstanceDialog::response(int nResponse)
         gtk_dialog_response(GTK_DIALOG(m_pDialog), nGtkResponse);
     else if (GTK_IS_ASSISTANT(m_pDialog))
     {
-        m_aDialogRun.m_nResponseId = nGtkResponse;
-        m_aDialogRun.loop_quit();
+        if (!m_aDialogRun.loop_is_running())
+            asyncresponse(nGtkResponse);
+        else
+        {
+            m_aDialogRun.m_nResponseId = nGtkResponse;
+            m_aDialogRun.loop_quit();
+        }
     }
 }
 

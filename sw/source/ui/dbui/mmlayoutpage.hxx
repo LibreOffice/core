@@ -40,7 +40,7 @@ class SwMailMergeLayoutPage : public vcl::OWizardPage
 
     bool                m_bIsGreetingInserted;
 
-    VclPtr<SwMailMergeWizard>  m_pWizard;
+    SwMailMergeWizard*  m_pWizard;
 
     css::uno::Reference< css::beans::XPropertySet >  m_xViewProperties;
 

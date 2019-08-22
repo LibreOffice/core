@@ -73,7 +73,7 @@ SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage(SwMailMergeWizard* pWiz
     , m_xDocumentIndexFI(m_xBuilder->weld_label("documentindex"))
     , m_xPrevSetIB(m_xBuilder->weld_button("prev"))
     , m_xNextSetIB(m_xBuilder->weld_button("next"))
-    , m_xDifferentlist(m_xBuilder->weld_label("differentlist"))
+    , m_xDifferentlist(m_xBuilder->weld_button("differentlist"))
     , m_xSettings(new SwAddressPreview(m_xBuilder->weld_scrolled_window("settingspreviewwin")))
     , m_xPreview(new SwAddressPreview(m_xBuilder->weld_scrolled_window("addresspreviewwin")))
     , m_xSettingsWIN(new weld::CustomWeld(*m_xBuilder, "settingspreview", *m_xSettings))
@@ -111,7 +111,6 @@ void SwMailMergeAddressBlockPage::dispose()
     m_xPreview.reset();
     m_xSettings.reset();
 
-    m_pWizard.clear();
     vcl::OWizardPage::dispose();
 }
 
@@ -210,7 +209,7 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AssignHdl_Impl, weld::Button&, void
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     const sal_uInt16 nSel = m_xSettings->GetSelectedAddress();
     const uno::Sequence< OUString> aBlocks = rConfigItem.GetAddressBlocks();
-    SwAssignFieldsDialog aDlg(m_pWizard->GetFrameWeld(), m_pWizard->GetConfigItem(), aBlocks[nSel], true);
+    SwAssignFieldsDialog aDlg(m_pWizard->getDialog(), m_pWizard->GetConfigItem(), aBlocks[nSel], true);
     if(RET_OK == aDlg.run())
     {
         //preview update
@@ -263,7 +262,7 @@ void SwMailMergeAddressBlockPage::InsertDataHdl(weld::Button* pButton)
 {
     //if no pButton is given, the first set has to be pre-set
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
-    m_pWizard->EnterWait();
+    std::unique_ptr<weld::WaitObject> xWaitObj(new weld::WaitObject(m_pWizard->getDialog()));
     if(!pButton)
     {
         rConfig.GetResultSet();
@@ -274,7 +273,7 @@ void SwMailMergeAddressBlockPage::InsertDataHdl(weld::Button* pButton)
         sal_Int32 nPos = rConfig.GetResultSetPosition();
         rConfig.MoveResultSet( bNext ? ++nPos : --nPos);
     }
-    m_pWizard->LeaveWait();
+    xWaitObj.reset();
     sal_Int32 nPos = rConfig.GetResultSetPosition();
     bool bEnable = true;
     if(nPos < 1)

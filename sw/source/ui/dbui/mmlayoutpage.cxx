@@ -159,7 +159,6 @@ SwMailMergeLayoutPage::~SwMailMergeLayoutPage()
 void SwMailMergeLayoutPage::dispose()
 {
     File::remove( m_sExampleURL );
-    m_pWizard.clear();
     vcl::OWizardPage::dispose();
 }
 

@@ -50,8 +50,6 @@ public:
     virtual void setInvalidPage(TabPage * pTabPage) override;
     virtual void setValidPage(TabPage * pTabPage) override;
 
-    virtual short run() override;
-
 protected:
     virtual bool leaveState( WizardState _nState ) override;
     virtual WizardState determineNextState(WizardState nCurrentState) const override;

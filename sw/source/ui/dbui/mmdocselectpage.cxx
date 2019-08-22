@@ -88,13 +88,6 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(SwMailMergeWizard* pWizard, T
 
 SwMailMergeDocSelectPage::~SwMailMergeDocSelectPage()
 {
-    disposeOnce();
-}
-
-void SwMailMergeDocSelectPage::dispose()
-{
-    m_pWizard.clear();
-    vcl::OWizardPage::dispose();
 }
 
 IMPL_LINK_NOARG(SwMailMergeDocSelectPage, DocSelectHdl, weld::ToggleButton&, void)
@@ -194,7 +187,7 @@ bool SwMailMergeDocSelectPage::commitPage( ::vcl::WizardTypes::CommitPageReason 
             if(!sReloadDocument.isEmpty())
                 m_pWizard->SetReloadDocument( sReloadDocument );
             m_pWizard->SetRestartPage(MM_OUTPUTTYPETPAGE);
-            m_pWizard->EndDialog(RET_LOAD_DOC);
+            m_pWizard->response(RET_LOAD_DOC);
         }
     }
     return bReturn;

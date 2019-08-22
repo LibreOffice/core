@@ -174,14 +174,6 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(weld::Window* _pParent
     m_xAssistant->set_current_page(0);
 }
 
-short ODbTypeWizDialogSetup::run()
-{
-    int nRet = vcl::RoadmapWizardMachine::run();
-    if (nRet == static_cast<int>(WizardButtonFlags::FINISH))
-        return ui::dialogs::ExecutableDialogResults::OK;
-    return ui::dialogs::ExecutableDialogResults::CANCEL;
-}
-
 void ODbTypeWizDialogSetup::declareAuthDepPath( const OUString& _sURL, PathId _nPathId, const vcl::RoadmapWizardTypes::WizardPath& _rPaths)
 {
     bool bHasAuthentication = DataSourceMetaData::getAuthentication( _sURL ) != AuthNone;

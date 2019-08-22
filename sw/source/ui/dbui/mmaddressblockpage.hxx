@@ -38,7 +38,7 @@ class SwMailMergeAddressBlockPage : public vcl::OWizardPage
     OUString            m_sCurrentAddress;
     OUString            m_sChangeAddress;
 
-    VclPtr<SwMailMergeWizard>  m_pWizard;
+    SwMailMergeWizard*  m_pWizard;
 
     std::unique_ptr<weld::Button> m_xAddressListPB;
     std::unique_ptr<weld::Label> m_xCurrentAddressFI;
@@ -58,7 +58,7 @@ class SwMailMergeAddressBlockPage : public vcl::OWizardPage
     std::unique_ptr<weld::Button> m_xPrevSetIB;
     std::unique_ptr<weld::Button> m_xNextSetIB;
 
-    std::unique_ptr<weld::Label> m_xDifferentlist;
+    std::unique_ptr<weld::Button> m_xDifferentlist;
 
     std::unique_ptr<SwAddressPreview> m_xSettings;
     std::unique_ptr<SwAddressPreview> m_xPreview;
