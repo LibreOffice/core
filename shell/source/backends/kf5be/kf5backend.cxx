@@ -190,7 +190,7 @@ void initQApp(std::map<OUString, css::beans::Optional<css::uno::Any>>& rSettings
     std::unique_ptr<QApplication> app(new QApplication(nFakeArgc, pFakeArgv));
     QObject::connect(app.get(), &QObject::destroyed, app.get(), [nFakeArgc, pFakeArgv]() {
         for (int i = 0; i < nFakeArgc; ++i)
-            delete pFakeArgv[i];
+            free(pFakeArgv[i]);
         delete[] pFakeArgv;
     });
 
