@@ -115,9 +115,9 @@ public:
 
     //  BaseControl
 
-    static const css::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
+    static css::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
 
-    static const OUString impl_getStaticImplementationName();
+    static OUString impl_getStaticImplementationName();
 
 protected:
     virtual void impl_paint(

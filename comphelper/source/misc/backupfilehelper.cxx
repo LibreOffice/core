@@ -2203,7 +2203,7 @@ namespace comphelper
 
     /////////////////// helpers ///////////////////////
 
-    const OUString BackupFileHelper::getPackURL()
+    OUString BackupFileHelper::getPackURL()
     {
         return OUString(maUserConfigWorkURL + "/pack");
     }
