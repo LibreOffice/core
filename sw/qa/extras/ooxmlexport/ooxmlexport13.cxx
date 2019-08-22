@@ -408,6 +408,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125518, "tdf125518.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("Object3"), anchorName);
 }
 
+DECLARE_OOXMLEXPORT_TEST(tdf127085, "tdf127085.docx")
+{
+    // Fill transparency was lost during export
+    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(50), getProperty<sal_Int16>(xShape, "FillTransparence"));
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
