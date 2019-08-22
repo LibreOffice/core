@@ -173,7 +173,7 @@ void SwMailMergeGreetingsPage::UpdatePreview()
     OUString sPreview = bFemale ? m_xFemaleLB->get_active_text() :
         bNoValue ? m_xNeutralCB->get_active_text() : m_xMaleLB->get_active_text();
 
-    sPreview = SwAddressPreview::FillData(sPreview, m_rConfigItem);
+    sPreview = AddressPreview::FillData(sPreview, m_rConfigItem);
     m_xPreview->SetAddress(sPreview);
 }
 
