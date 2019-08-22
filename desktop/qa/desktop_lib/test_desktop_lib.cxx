@@ -75,7 +75,6 @@ public:
         comphelper::LibreOfficeKit::setActive(true);
 
         UnoApiTest::setUp();
-
         mxDesktop.set(frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
         SfxApplication::GetOrCreate();
     };
@@ -85,11 +84,13 @@ public:
         if (m_pDocument)
             m_pDocument->pClass->registerCallback(m_pDocument.get(), nullptr, nullptr);
         closeDoc();
+
         UnoApiTest::tearDown();
 
         comphelper::LibreOfficeKit::setActive(false);
     };
 
+    LibLODocument_Impl* loadDocUrl(const OUString& rFileURL, LibreOfficeKitDocumentType eType);
     LibLODocument_Impl* loadDoc(const char* pName, LibreOfficeKitDocumentType eType = LOK_DOCTYPE_TEXT);
     void closeDoc();
     static void callback(int nType, const char* pPayload, void* pData);
@@ -146,6 +147,7 @@ public:
     void testComplexSelection();
     void testDialogPaste();
     void testShowHideDialog();
+    void testCalcSaveAs();
     void testABI();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
@@ -202,6 +204,7 @@ public:
     CPPUNIT_TEST(testComplexSelection);
     CPPUNIT_TEST(testDialogPaste);
     CPPUNIT_TEST(testShowHideDialog);
+    CPPUNIT_TEST(testCalcSaveAs);
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
 
@@ -247,10 +250,8 @@ static Control* GetFocusControl(vcl::Window const * pParent)
     return nullptr;
 }
 
-LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, LibreOfficeKitDocumentType eType)
+LibLODocument_Impl* DesktopLOKTest::loadDocUrl(const OUString& rFileURL, LibreOfficeKitDocumentType eType)
 {
-    OUString aFileURL;
-    createFileURL(OUString::createFromAscii(pName), aFileURL);
     OUString aService;
     switch (eType)
     {
@@ -267,13 +268,20 @@ LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, LibreOfficeKitDoc
         CPPUNIT_ASSERT(false);
         break;
     }
-    mxComponent = loadFromDesktop(aFileURL, aService);
+    mxComponent = loadFromDesktop(rFileURL, aService);
     if (!mxComponent.is())
     {
         CPPUNIT_ASSERT(false);
     }
     m_pDocument.reset(new LibLODocument_Impl(mxComponent));
     return m_pDocument.get();
+}
+
+LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, LibreOfficeKitDocumentType eType)
+{
+    OUString aFileURL;
+    createFileURL(OUString::createFromAscii(pName), aFileURL);
+    return loadDocUrl(aFileURL, eType);
 }
 
 void DesktopLOKTest::closeDoc()
@@ -903,7 +911,7 @@ void DesktopLOKTest::testTrackChanges()
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
     Scheduler::ProcessEventsToIdle();
 
-    // Enable track changes and assert that both views get notified.
+    // Enable trak changes and assert that both views get notified.
     m_nTrackChanges = 0;
     pDocument->pClass->postUnoCommand(pDocument, ".uno:TrackChanges", nullptr, false);
     Scheduler::ProcessEventsToIdle();
@@ -1799,6 +1807,7 @@ class ViewCallback
     LibLODocument_Impl* mpDocument;
     int mnView;
 public:
+    OString m_aCellFormula;
     bool m_bTilesInvalidated;
     tools::Rectangle m_aOwnCursor;
     boost::property_tree::ptree m_aCommentCallbackResult;
@@ -1860,6 +1869,11 @@ public:
             boost::property_tree::read_json(aStream, m_aCallbackWindowResult);
         }
         break;
+        case LOK_CALLBACK_CELL_FORMULA:
+        {
+            m_aCellFormula = aPayload;
+        }
+        break;
         }
     }
 };
@@ -1867,7 +1881,6 @@ public:
 void DesktopLOKTest::testPaintPartTile()
 {
     // Load an impress doc of 2 slides.
-
 //    ViewCallback aView1;
 //    ViewCallback aView2;
     LibLODocument_Impl* pDocument = loadDoc("2slides.odp");
@@ -2651,6 +2664,40 @@ void DesktopLOKTest::testComplexSelection()
 
     // We expect this to be complex.
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(LOK_SELTYPE_COMPLEX), pDocument->pClass->getSelectionType(pDocument));
+}
+
+void DesktopLOKTest::testCalcSaveAs()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
+    CPPUNIT_ASSERT(pDocument);
+
+    // Enter some text, but don't commit.
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'X', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'X', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Save as a new file.
+    OUString aNewFileUrl = "file:///tmp/saveas.ods";
+    pDocument->pClass->saveAs(pDocument, aNewFileUrl.toUtf8().getStr(), nullptr, nullptr);
+    closeDoc();
+
+    // Load the new document and verify that the in-flight changes are saved.
+    pDocument = loadDocUrl(aNewFileUrl, LOK_DOCTYPE_SPREADSHEET);
+    CPPUNIT_ASSERT(pDocument);
+
+    ViewCallback aView(pDocument);
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView);
+
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 0, KEY_RIGHT);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 0, KEY_LEFT);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OString("X"), aView.m_aCellFormula);
 }
 
 namespace {

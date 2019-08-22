@@ -299,6 +299,8 @@ public:
 
     // TODO/LATER: currently only overridden in Calc, should be made non-virtual
     virtual bool                DoSaveCompleted( SfxMedium* pNewStor=nullptr, bool bRegisterRecent=true );
+    /// Terminate any in-flight editing. Used before saving, primarily by Calc to commit cell changes.
+    virtual void                TerminateEditing() {}
 
     bool                        LoadOwnFormat( SfxMedium& pMedium );
     virtual bool                SaveAsOwnFormat( SfxMedium& pMedium );

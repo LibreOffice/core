@@ -2667,6 +2667,7 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
         return false;
     }
 
+
     const SfxBoolItem* pCopyStreamItem = rItemSet.GetItem<SfxBoolItem>(SID_COPY_STREAM_IF_POSSIBLE, false);
     if ( bSaveTo && pCopyStreamItem && pCopyStreamItem->GetValue() && !IsModified() )
     {
@@ -2822,6 +2823,12 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
         SetError(pNewFile->GetError());
         delete pNewFile;
         return false;
+    }
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // Before saving, commit in-flight changes.
+        TerminateEditing();
     }
 
     // check if a "SaveTo" is wanted, no "SaveAs"
