@@ -34,7 +34,7 @@ class SAL_WARN_UNUSED SC_DLLPUBLIC ScRangeList final : public SvRefBase
 public:
     ScRangeList();
     ScRangeList( const ScRangeList& rList );
-    ScRangeList( const ScRangeList&& rList );
+    ScRangeList( ScRangeList&& rList );
     ScRangeList( const ScRange& rRange );
     virtual ~ScRangeList() override;
 

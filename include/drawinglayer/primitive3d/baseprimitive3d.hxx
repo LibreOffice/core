@@ -60,14 +60,14 @@ namespace drawinglayer { namespace primitive3d {
         explicit Primitive3DContainer() {}
         explicit Primitive3DContainer( size_type count ) : deque(count) {}
         Primitive3DContainer( const Primitive3DContainer& other ) : deque(other) {}
-        Primitive3DContainer( const Primitive3DContainer&& other ) : deque(other) {}
+        Primitive3DContainer( Primitive3DContainer&& other ) : deque(other) {}
         Primitive3DContainer( std::initializer_list<Primitive3DReference> init ) : deque(init) {}
         template <class Iter>
         Primitive3DContainer(Iter first, Iter last) : deque(first, last) {}
 
         void append(const Primitive3DContainer& rSource);
         Primitive3DContainer& operator=(const Primitive3DContainer& r) { deque::operator=(r); return *this; }
-        Primitive3DContainer& operator=(const Primitive3DContainer&& r) { deque::operator=(r); return *this; }
+        Primitive3DContainer& operator=(Primitive3DContainer&& r) { deque::operator=(r); return *this; }
         bool operator==(const Primitive3DContainer& rB) const;
         bool operator!=(const Primitive3DContainer& rB) const { return !operator==(rB); }
         basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& aViewInformation) const;

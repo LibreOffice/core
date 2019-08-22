@@ -983,9 +983,9 @@ ScRangeList::ScRangeList( const ScRangeList& rList ) :
 {
 }
 
-ScRangeList::ScRangeList( const ScRangeList&& rList ) :
+ScRangeList::ScRangeList( ScRangeList&& rList ) :
     SvRefBase(),
-    maRanges(rList.maRanges),
+    maRanges(std::move(rList.maRanges)),
     mnMaxRowUsed(rList.mnMaxRowUsed)
 {
 }
