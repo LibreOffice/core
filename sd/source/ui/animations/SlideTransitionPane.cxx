@@ -379,7 +379,7 @@ public:
         EnableFullItemMode( false );
         set_hexpand( true );
         set_vexpand( true );
-        SetExtraSpacing( 2 );
+        SetColCount(3);
     }
     virtual ~TransitionPane() override { disposeOnce(); }
 
