@@ -78,7 +78,7 @@ public:
             bool bOutputEnabled );
 
     public:
-        GroupScope( GroupScope&& r );
+        GroupScope(GroupScope&& r) noexcept;
         ~GroupScope();
 
         /**

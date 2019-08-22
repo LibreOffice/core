@@ -117,7 +117,7 @@ namespace abp
         ODataSource& operator=( const ODataSource& _rSource );
 
         /// move assignment
-        ODataSource& operator=( ODataSource&& _rSource );
+        ODataSource& operator=(ODataSource&& _rSource) noexcept;
 
         /// checks whether or not the object represents a valid data source
         bool    isValid() const;

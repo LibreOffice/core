@@ -163,7 +163,7 @@ class TableColumnBlockPositionSet
 
 public:
     TableColumnBlockPositionSet( ScDocument& rDoc, SCTAB nTab );
-    TableColumnBlockPositionSet( TableColumnBlockPositionSet&& rOther );
+    TableColumnBlockPositionSet(TableColumnBlockPositionSet&& rOther) noexcept;
     ~TableColumnBlockPositionSet();
 
     ColumnBlockPosition* getBlockPosition( SCCOL nCol );

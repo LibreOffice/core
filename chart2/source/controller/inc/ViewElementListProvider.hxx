@@ -35,7 +35,7 @@ class ViewElementListProvider final
 {
 public:
     ViewElementListProvider( DrawModelWrapper* pDrawModelWrapper );
-    ViewElementListProvider( ViewElementListProvider&& );
+    ViewElementListProvider(ViewElementListProvider&&) noexcept;
     ~ViewElementListProvider();
 
     XColorListRef     GetColorTable() const;

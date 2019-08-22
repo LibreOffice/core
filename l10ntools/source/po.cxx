@@ -322,7 +322,7 @@ PoEntry& PoEntry::operator=(const PoEntry& rPo)
     return *this;
 }
 
-PoEntry& PoEntry::operator=(PoEntry&& rPo)
+PoEntry& PoEntry::operator=(PoEntry&& rPo) noexcept
 {
     m_pGenPo = std::move(rPo.m_pGenPo);
     m_bIsInitialized = std::move(rPo.m_bIsInitialized);

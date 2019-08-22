@@ -144,7 +144,7 @@ public:
     /**
       * Move constructor.
       */
-    Content( Content&& rOther );
+    Content(Content&& rOther) noexcept;
 
     /**
       * Destructor.
@@ -161,7 +161,7 @@ public:
     /**
       * Move assignment operator.
       */
-    Content& operator=( Content&& rOther );
+    Content& operator=(Content&& rOther) noexcept;
 
     /**
       * Constructor. This method should be used, if the exception thrown

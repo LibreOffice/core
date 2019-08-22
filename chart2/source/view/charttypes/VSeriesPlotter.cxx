@@ -106,10 +106,10 @@ VDataSeriesGroup::VDataSeriesGroup( std::unique_ptr<VDataSeries> pSeries )
     m_aSeriesVector[0] = std::move(pSeries);
 }
 
-VDataSeriesGroup::VDataSeriesGroup( VDataSeriesGroup&& other )
+VDataSeriesGroup::VDataSeriesGroup(VDataSeriesGroup&& other) noexcept
         : m_aSeriesVector( std::move(other.m_aSeriesVector) )
         , m_bMaxPointCountDirty( other.m_bMaxPointCountDirty )
-        , m_nMaxPointCount( std::move(other.m_nMaxPointCount) )
+        , m_nMaxPointCount( other.m_nMaxPointCount )
         , m_aListOfCachedYValues( std::move(other.m_aListOfCachedYValues) )
 {
 }

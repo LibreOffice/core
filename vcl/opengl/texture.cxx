@@ -307,7 +307,7 @@ OpenGLTexture::OpenGLTexture(const OpenGLTexture& rTexture)
         mpImpl->IncreaseRefCount(mnSlotNumber);
 }
 
-OpenGLTexture::OpenGLTexture(OpenGLTexture&& rTexture)
+OpenGLTexture::OpenGLTexture(OpenGLTexture&& rTexture) noexcept
     : maRect(rTexture.maRect)
     , mpImpl(std::move(rTexture.mpImpl))
     , mnSlotNumber(rTexture.mnSlotNumber)

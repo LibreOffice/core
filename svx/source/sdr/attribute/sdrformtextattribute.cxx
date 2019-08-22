@@ -277,7 +277,7 @@ namespace drawinglayer
         {
         }
 
-        SdrFormTextAttribute::SdrFormTextAttribute(SdrFormTextAttribute&& rCandidate)
+        SdrFormTextAttribute::SdrFormTextAttribute(SdrFormTextAttribute&& rCandidate) noexcept
         :   mpSdrFormTextAttribute(std::move(rCandidate.mpSdrFormTextAttribute))
         {
         }
@@ -297,7 +297,7 @@ namespace drawinglayer
             return *this;
         }
 
-        SdrFormTextAttribute& SdrFormTextAttribute::operator=(SdrFormTextAttribute&& rCandidate)
+        SdrFormTextAttribute& SdrFormTextAttribute::operator=(SdrFormTextAttribute&& rCandidate) noexcept
         {
             mpSdrFormTextAttribute = std::move(rCandidate.mpSdrFormTextAttribute);
             return *this;

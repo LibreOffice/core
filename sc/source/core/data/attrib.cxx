@@ -677,7 +677,7 @@ ScCondFormatItem::ScCondFormatItem( const ScCondFormatIndexes& rIndex ):
 {
 }
 
-ScCondFormatItem::ScCondFormatItem( ScCondFormatIndexes&& aIndex ):
+ScCondFormatItem::ScCondFormatItem( ScCondFormatIndexes&& aIndex ) noexcept:
     SfxPoolItem( ATTR_CONDITIONAL ),
     maIndex( std::move(aIndex) )
 {

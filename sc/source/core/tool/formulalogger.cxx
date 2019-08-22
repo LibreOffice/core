@@ -126,7 +126,7 @@ FormulaLogger::GroupScope::GroupScope(
     const ScFormulaCell& rCell, bool bOutputEnabled ) :
     mpImpl(std::make_unique<Impl>(rLogger, rPrefix, rDoc, rCell, bOutputEnabled)) {}
 
-FormulaLogger::GroupScope::GroupScope( GroupScope&& r ) : mpImpl(std::move(r.mpImpl)) {}
+FormulaLogger::GroupScope::GroupScope(GroupScope&& r) noexcept : mpImpl(std::move(r.mpImpl)) {}
 
 FormulaLogger::GroupScope::~GroupScope() {}
 

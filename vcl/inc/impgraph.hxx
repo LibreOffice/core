@@ -106,7 +106,7 @@ private:
 public:
     ImpGraphic();
     ImpGraphic( const ImpGraphic& rImpGraphic );
-    ImpGraphic( ImpGraphic&& rImpGraphic );
+    ImpGraphic( ImpGraphic&& rImpGraphic ) noexcept;
     ImpGraphic( const GraphicExternalLink& rExternalLink);
     ImpGraphic( const Bitmap& rBmp );
     ImpGraphic( const BitmapEx& rBmpEx );

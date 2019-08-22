@@ -220,7 +220,7 @@ Bitmap& Bitmap::operator=( const Bitmap& rBitmap )
     return *this;
 }
 
-Bitmap& Bitmap::operator=( Bitmap&& rBitmap )
+Bitmap& Bitmap::operator=( Bitmap&& rBitmap ) noexcept
 {
     maPrefSize = std::move(rBitmap.maPrefSize);
     maPrefMapMode = std::move(rBitmap.maPrefMapMode);

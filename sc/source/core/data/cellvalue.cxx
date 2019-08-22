@@ -244,7 +244,7 @@ ScCellValue::ScCellValue( const ScCellValue& r ) : meType(r.meType), mfValue(r.m
     }
 }
 
-ScCellValue::ScCellValue(ScCellValue&& r)
+ScCellValue::ScCellValue(ScCellValue&& r) noexcept
     : meType(r.meType)
     , mfValue(r.mfValue)
 {
@@ -270,7 +270,7 @@ ScCellValue::~ScCellValue()
     clear();
 }
 
-void ScCellValue::clear()
+void ScCellValue::clear() noexcept
 {
     switch (meType)
     {
@@ -513,7 +513,7 @@ ScCellValue& ScCellValue::operator= ( const ScCellValue& r )
     return *this;
 }
 
-ScCellValue& ScCellValue::operator=(ScCellValue&& rCell)
+ScCellValue& ScCellValue::operator=(ScCellValue&& rCell) noexcept
 {
     clear();
 

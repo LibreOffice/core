@@ -259,7 +259,7 @@ void ORowSetValue::setTypeKind(sal_Int32 _eType)
 }
 
 
-void ORowSetValue::free()
+void ORowSetValue::free() noexcept
 {
     if(!m_bNull)
     {
@@ -470,7 +470,7 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
     return *this;
 }
 
-ORowSetValue& ORowSetValue::operator=(ORowSetValue&& _rRH)
+ORowSetValue& ORowSetValue::operator=(ORowSetValue&& _rRH) noexcept
 {
     if ( m_eTypeKind != _rRH.m_eTypeKind || !m_bNull)
         free();

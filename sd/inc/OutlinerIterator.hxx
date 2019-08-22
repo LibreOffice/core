@@ -81,7 +81,7 @@ public:
         implementation object.
     */
     Iterator (const Iterator& rIterator);
-    Iterator (Iterator&& rIterator);
+    Iterator(Iterator&& rIterator) noexcept;
 
     /** Create a new iterator with the implementation object being the
         provided one.
@@ -98,7 +98,7 @@ public:
             The iterator which to assign from.
     */
     Iterator& operator= (const Iterator& rIterator);
-    Iterator& operator= (Iterator&& rIterator);
+    Iterator& operator=(Iterator&& rIterator) noexcept;
 
     /** Return the current position of the iterator.
         @return

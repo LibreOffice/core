@@ -482,15 +482,15 @@ ScCaptionPtr::ScCaptionPtr( const ScCaptionPtr& r ) :
     }
 }
 
-ScCaptionPtr::ScCaptionPtr( ScCaptionPtr&& r ) :
-    mpHead(r.mpHead), mpNext(r.mpNext), mpCaption(r.mpCaption), mbNotOwner(false)
+ScCaptionPtr::ScCaptionPtr(ScCaptionPtr&& r) noexcept
+    : mpHead(r.mpHead), mpNext(r.mpNext), mpCaption(r.mpCaption), mbNotOwner(false)
 {
     r.replaceInList( this );
     r.mpCaption = nullptr;
     r.mbNotOwner = false;
 }
 
-ScCaptionPtr& ScCaptionPtr::operator=( ScCaptionPtr&& r )
+ScCaptionPtr& ScCaptionPtr::operator=(ScCaptionPtr&& r) noexcept
 {
     assert(this != &r);
 
@@ -560,7 +560,7 @@ void ScCaptionPtr::newHead()
     mpHead = new Head(this);
 }
 
-void ScCaptionPtr::replaceInList( ScCaptionPtr* pNew )
+void ScCaptionPtr::replaceInList(ScCaptionPtr* pNew) noexcept
 {
     if (!mpHead && !mpNext)
         return;

@@ -85,7 +85,7 @@ class VDataSeriesGroup final
 public:
     VDataSeriesGroup() = delete;
     VDataSeriesGroup( std::unique_ptr<VDataSeries> pSeries );
-    VDataSeriesGroup( VDataSeriesGroup&& );
+    VDataSeriesGroup(VDataSeriesGroup&&) noexcept;
     ~VDataSeriesGroup();
 
     void addSeries( std::unique_ptr<VDataSeries> pSeries );//takes ownership of pSeries

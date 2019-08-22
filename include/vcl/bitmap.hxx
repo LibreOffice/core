@@ -113,7 +113,7 @@ public:
     virtual                 ~Bitmap();
 
     Bitmap&                 operator=( const Bitmap& rBitmap );
-    Bitmap&                 operator=( Bitmap&& rBitmap );
+    Bitmap&                 operator=( Bitmap&& rBitmap ) noexcept;
     inline bool             operator!() const;
     bool                    operator==( const Bitmap& rBitmap ) const;
     bool                    operator!=( const Bitmap& rBitmap ) const { return !operator==(rBitmap); }
