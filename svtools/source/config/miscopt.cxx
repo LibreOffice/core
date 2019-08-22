@@ -154,13 +154,13 @@ public:
         bool IsPluginsEnabled() const
         { return m_bPluginsEnabled; }
 
-        sal_Int16 GetSymbolsSize()
+        sal_Int16 GetSymbolsSize() const
         { return m_nSymbolsSize; }
 
-        ToolBoxButtonSize GetSidebarIconSize()
+        ToolBoxButtonSize GetSidebarIconSize() const
         { return m_nSidebarIconSize; }
 
-        ToolBoxButtonSize GetNotebookbarIconSize()
+        ToolBoxButtonSize GetNotebookbarIconSize() const
         { return m_nNotebookbarIconSize; }
 
         void SetSymbolsSize( sal_Int16 nSet );
@@ -192,7 +192,7 @@ public:
         {return m_bIconThemeWasSetAutomatically;}
 
         // translate to VCL settings ( "0" = 3D, "1" = FLAT )
-        sal_Int16 GetToolboxStyle()
+        sal_Int16 GetToolboxStyle() const
         { return m_nToolboxStyle ? VCL_TOOLBOX_STYLE_FLAT : 0; }
 
         // translate from VCL settings

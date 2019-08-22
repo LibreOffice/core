@@ -100,7 +100,7 @@ public:
     bool            IsEnabled() const;
 
     void            SortByCol(sal_uInt16, bool bDir=true);
-    sal_uInt16      GetSortedCol(){ return nSortCol;}
+    sal_uInt16      GetSortedCol() const { return nSortCol;}
     SvLBoxItem*     GetEntryAtPos( SvTreeListEntry* pEntry, sal_uInt16 nPos ) const;
 
     bool     IsFocusOnCellEnabled() const { return IsCellFocusEnabled(); }
