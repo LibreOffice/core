@@ -68,6 +68,7 @@
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <svl/filenotation.hxx>
@@ -171,6 +172,14 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(weld::Window* _pParent
     ActivatePage();
     setTitleBase(DBA_RES(STR_DBWIZARDTITLE));
     m_xAssistant->set_current_page(0);
+}
+
+short ODbTypeWizDialogSetup::run()
+{
+    int nRet = vcl::RoadmapWizardMachine::run();
+    if (nRet == static_cast<int>(WizardButtonFlags::FINISH))
+        return ui::dialogs::ExecutableDialogResults::OK;
+    return ui::dialogs::ExecutableDialogResults::CANCEL;
 }
 
 void ODbTypeWizDialogSetup::declareAuthDepPath( const OUString& _sURL, PathId _nPathId, const vcl::RoadmapWizardTypes::WizardPath& _rPaths)

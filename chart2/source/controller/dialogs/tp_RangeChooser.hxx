@@ -39,9 +39,8 @@ public:
 
     RangeChooserTabPage(TabPageParent pParent, DialogModel & rDialogModel,
                         ChartTypeTemplateProvider* pTemplateProvider,
-                        Dialog * pParentDialog, bool bHideDescription = false);
+                        bool bHideDescription = false);
     virtual ~RangeChooserTabPage() override;
-    virtual void dispose() override;
 
     //RangeSelectionListenerParent
     virtual void listeningFinished( const OUString & rNewRange ) override;
@@ -78,7 +77,6 @@ private:
     ChartTypeTemplateProvider*                              m_pTemplateProvider;
 
     DialogModel &                                           m_rDialogModel;
-    VclPtr<Dialog>                                          m_pParentDialog;
     weld::DialogController*                                 m_pParentController;
     TabPageNotifiable *                                     m_pTabPageNotifiable;
 

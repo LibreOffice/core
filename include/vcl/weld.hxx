@@ -480,6 +480,8 @@ public:
     virtual void set_page_sensitive(const OString& rIdent, bool bSensitive) = 0;
     virtual weld::Container* append_page(const OString& rIdent) = 0;
 
+    virtual void set_page_side_help_id(const OString& rHelpId) = 0;
+
     void connect_jump_page(const Link<const OString&, bool>& rLink) { m_aJumpPageHdl = rLink; }
 };
 

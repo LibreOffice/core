@@ -118,6 +118,7 @@ public:
     */
     bool IsTableWizardToBeStarted() const;
 
+    virtual short run() override;
 private:
     /// to override to create new pages
     virtual VclPtr<TabPage> createPage(WizardState _nState) override;
