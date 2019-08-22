@@ -1134,7 +1134,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
                         SwMailMergeConfigItem::FEMALE :
                         SwMailMergeConfigItem::MALE;
 
-                    sGreeting = AddressPreview::FillData(
+                    sGreeting = SwAddressPreview::FillData(
                         xConfigItem->GetGreetings(eGenderType)
                         [xConfigItem->GetCurrentGreeting(eGenderType)],
                             *xConfigItem);

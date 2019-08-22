@@ -74,8 +74,8 @@ SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage(SwMailMergeWizard* pWiz
     , m_xPrevSetIB(m_xBuilder->weld_button("prev"))
     , m_xNextSetIB(m_xBuilder->weld_button("next"))
     , m_xDifferentlist(m_xBuilder->weld_label("differentlist"))
-    , m_xSettings(new AddressPreview(m_xBuilder->weld_scrolled_window("settingspreviewwin")))
-    , m_xPreview(new AddressPreview(m_xBuilder->weld_scrolled_window("addresspreviewwin")))
+    , m_xSettings(new SwAddressPreview(m_xBuilder->weld_scrolled_window("settingspreviewwin")))
+    , m_xPreview(new SwAddressPreview(m_xBuilder->weld_scrolled_window("addresspreviewwin")))
     , m_xSettingsWIN(new weld::CustomWeld(*m_xBuilder, "settingspreview", *m_xSettings))
     , m_xPreviewWIN(new weld::CustomWeld(*m_xBuilder, "addresspreview", *m_xPreview))
 {
@@ -246,7 +246,7 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl, LinkPar
     const sal_uInt16 nSel = m_xSettings->GetSelectedAddress();
     const uno::Sequence< OUString> aBlocks =
                 m_pWizard->GetConfigItem().GetAddressBlocks();
-    m_xPreview->SetAddress(AddressPreview::FillData(aBlocks[nSel],
+    m_xPreview->SetAddress(SwAddressPreview::FillData(aBlocks[nSel],
                                                          m_pWizard->GetConfigItem()));
     m_pWizard->GetConfigItem().SetCurrentAddressBlockIndex( nSel );
     GetWizard()->UpdateRoadmap();
@@ -291,7 +291,7 @@ void SwMailMergeAddressBlockPage::InsertDataHdl(weld::Button* pButton)
             const sal_uInt16 nSel = m_xSettings->GetSelectedAddress();
             const uno::Sequence< OUString> aBlocks =
                         m_pWizard->GetConfigItem().GetAddressBlocks();
-            m_xPreview->SetAddress(AddressPreview::FillData(aBlocks[nSel], rConfig));
+            m_xPreview->SetAddress(SwAddressPreview::FillData(aBlocks[nSel], rConfig));
         }
     }
     m_xPrevSetIB->set_sensitive(bEnable);
@@ -316,7 +316,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, weld::Button&, rButto
 SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(weld::Window* pParent, SwMailMergeConfigItem& rConfig)
     : SfxDialogController(pParent, "modules/swriter/ui/selectblockdialog.ui", "SelectBlockDialog")
     , m_rConfig(rConfig)
-    , m_xPreview(new AddressPreview(m_xBuilder->weld_scrolled_window("previewwin")))
+    , m_xPreview(new SwAddressPreview(m_xBuilder->weld_scrolled_window("previewwin")))
     , m_xNewPB(m_xBuilder->weld_button("new"))
     , m_xCustomizePB(m_xBuilder->weld_button("edit"))
     , m_xDeletePB(m_xBuilder->weld_button("delete"))
@@ -472,7 +472,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     , m_xFieldFT(m_xBuilder->weld_label("customft"))
     , m_xFieldCB(m_xBuilder->weld_combo_box("custom"))
     , m_xOK(m_xBuilder->weld_button("ok"))
-    , m_xPreview(new AddressPreview(m_xBuilder->weld_scrolled_window("previewwin")))
+    , m_xPreview(new SwAddressPreview(m_xBuilder->weld_scrolled_window("previewwin")))
     , m_xPreviewWIN(new weld::CustomWeld(*m_xBuilder, "addrpreview", *m_xPreview))
     , m_xDragED(new AddressMultiLineEdit(this))
     , m_xDragWIN(new weld::CustomWeld(*m_xBuilder, "addressdest", *m_xDragED))
@@ -569,7 +569,7 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl, weld::TreeView&,
 
 IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, EditModifyHdl_Impl, AddressMultiLineEdit&, void)
 {
-    m_xPreview->SetAddress(AddressPreview::FillData(GetAddress(), m_rConfigItem));
+    m_xPreview->SetAddress(SwAddressPreview::FillData(GetAddress(), m_rConfigItem));
     UpdateImageButtons_Impl();
 }
 
@@ -968,7 +968,7 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
     , m_sNone(SwResId(SW_STR_NONE))
     , m_rPreviewString(rPreview)
     , m_rConfigItem(rConfigItem)
-    , m_xPreview(new AddressPreview(m_xBuilder->weld_scrolled_window("previewwin")))
+    , m_xPreview(new SwAddressPreview(m_xBuilder->weld_scrolled_window("previewwin")))
     , m_xMatchingFI(m_xBuilder->weld_label("MATCHING_LABEL"))
     , m_xAddressTitle(m_xBuilder->weld_label("addresselem"))
     , m_xMatchTitle(m_xBuilder->weld_label("matchelem"))
@@ -1026,7 +1026,7 @@ IMPL_LINK_NOARG(SwAssignFieldsDialog, OkHdl_Impl, weld::Button&, void)
 IMPL_LINK_NOARG(SwAssignFieldsDialog, AssignmentModifyHdl_Impl, LinkParamNone*, void)
 {
     uno::Sequence< OUString > aAssignments = CreateAssignments();
-    const OUString sPreview = AddressPreview::FillData(
+    const OUString sPreview = SwAddressPreview::FillData(
             m_rPreviewString, m_rConfigItem, &aAssignments);
     m_xPreview->SetAddress(sPreview);
 }
