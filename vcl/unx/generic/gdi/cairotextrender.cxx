@@ -346,13 +346,12 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     releaseCairoContext(cr);
 }
 
-const FontCharMapRef CairoTextRender::GetFontCharMap() const
+FontCharMapRef CairoTextRender::GetFontCharMap() const
 {
     if( !mpFreetypeFont[0] )
         return nullptr;
 
-    const FontCharMapRef xFCMap = mpFreetypeFont[0]->GetFontCharMap();
-    return xFCMap;
+    return mpFreetypeFont[0]->GetFontCharMap();
 }
 
 bool CairoTextRender::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCapabilities) const
