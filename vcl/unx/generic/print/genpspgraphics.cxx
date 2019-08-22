@@ -578,13 +578,12 @@ void GenPspGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
         m_pPrinterGfx->DrawGlyph(aPos, *pGlyph);
 }
 
-const FontCharMapRef GenPspGraphics::GetFontCharMap() const
+FontCharMapRef GenPspGraphics::GetFontCharMap() const
 {
     if( !m_pFreetypeFont[0] )
         return nullptr;
 
-    const FontCharMapRef xFCMap = m_pFreetypeFont[0]->GetFontCharMap();
-    return xFCMap;
+    return m_pFreetypeFont[0]->GetFontCharMap();
 }
 
 bool GenPspGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const

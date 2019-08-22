@@ -983,12 +983,11 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
     rxFontMetric->ImplCalcLineSpacing(rHhea, rOS2, aOutlineMetric.otmEMSquare);
 }
 
-const FontCharMapRef WinSalGraphics::GetFontCharMap() const
+FontCharMapRef WinSalGraphics::GetFontCharMap() const
 {
     if (!mpWinFontEntry[0])
     {
-        FontCharMapRef xDefFontCharMap( new FontCharMap() );
-        return xDefFontCharMap;
+        return FontCharMapRef( new FontCharMap() );
     }
     return mpWinFontEntry[0]->GetFontFace()->GetFontCharMap();
 }

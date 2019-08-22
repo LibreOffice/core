@@ -979,7 +979,7 @@ static OUString ImplMetricGetUnitText(const OUString& rStr)
 
 // #104355# support localized measurements
 
-static const OUString ImplMetricToString( FieldUnit rUnit )
+static OUString ImplMetricToString( FieldUnit rUnit )
 {
     // return unit's default string (ie, the first one )
     for (auto const& elem : ImplGetFieldUnits())

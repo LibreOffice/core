@@ -41,7 +41,7 @@ using namespace css::uno;
 
 namespace vcl { namespace CommandInfoProvider {
 
-static Reference<container::XNameAccess> const GetCommandDescription()
+static Reference<container::XNameAccess> GetCommandDescription()
 {
     static WeakReference<container::XNameAccess> xWeakRef;
     css::uno::Reference<container::XNameAccess> xRef(xWeakRef);
@@ -55,7 +55,7 @@ static Reference<container::XNameAccess> const GetCommandDescription()
     return xRef;
 }
 
-static Reference<ui::XModuleUIConfigurationManagerSupplier> const GetModuleConfigurationSupplier()
+static Reference<ui::XModuleUIConfigurationManagerSupplier> GetModuleConfigurationSupplier()
 {
     static WeakReference<ui::XModuleUIConfigurationManagerSupplier> xWeakRef;
     css::uno::Reference<ui::XModuleUIConfigurationManagerSupplier> xRef(xWeakRef);
@@ -69,7 +69,7 @@ static Reference<ui::XModuleUIConfigurationManagerSupplier> const GetModuleConfi
     return xRef;
 }
 
-static Reference<ui::XAcceleratorConfiguration> const GetGlobalAcceleratorConfiguration()
+static Reference<ui::XAcceleratorConfiguration> GetGlobalAcceleratorConfiguration()
 {
     static WeakReference<ui::XAcceleratorConfiguration> xWeakRef;
     css::uno::Reference<ui::XAcceleratorConfiguration> xRef(xWeakRef);
@@ -83,7 +83,7 @@ static Reference<ui::XAcceleratorConfiguration> const GetGlobalAcceleratorConfig
     return xRef;
 }
 
-static Reference<ui::XAcceleratorConfiguration> const GetDocumentAcceleratorConfiguration(const Reference<frame::XFrame>& rxFrame)
+static Reference<ui::XAcceleratorConfiguration> GetDocumentAcceleratorConfiguration(const Reference<frame::XFrame>& rxFrame)
 {
     Reference<frame::XController> xController = rxFrame->getController();
     if (xController.is())
@@ -102,7 +102,7 @@ static Reference<ui::XAcceleratorConfiguration> const GetDocumentAcceleratorConf
     return nullptr;
 }
 
-static Reference<ui::XAcceleratorConfiguration> const GetModuleAcceleratorConfiguration(const Reference<frame::XFrame>& rxFrame)
+static Reference<ui::XAcceleratorConfiguration> GetModuleAcceleratorConfiguration(const Reference<frame::XFrame>& rxFrame)
 {
     css::uno::Reference<css::ui::XAcceleratorConfiguration> curModuleAcceleratorConfiguration;
     try
@@ -418,7 +418,7 @@ bool IsExperimental(const OUString& rsCommandName, const OUString& rModuleName)
     return false;
 }
 
-OUString const GetModuleIdentifier(const Reference<frame::XFrame>& rxFrame)
+OUString GetModuleIdentifier(const Reference<frame::XFrame>& rxFrame)
 {
     static WeakReference<frame::XModuleManager2> xWeakRef;
     css::uno::Reference<frame::XModuleManager2> xRef(xWeakRef);
