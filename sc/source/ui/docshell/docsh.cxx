@@ -1764,6 +1764,12 @@ void popFileName(OUString& rPath)
 
 }
 
+void ScDocShell::TerminateEditing()
+{
+    // Commit any cell changes before saving.
+    SC_MOD()->InputEnterHandler();
+}
+
 bool ScDocShell::SaveAs( SfxMedium& rMedium )
 {
     OUString aCurPath; // empty for new document that hasn't been saved.
