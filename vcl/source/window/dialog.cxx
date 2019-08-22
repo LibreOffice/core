@@ -224,10 +224,10 @@ void Accelerator::GenerateAutoMnemonicsOnHierarchy(const vcl::Window* pWindow)
     if ( pWindow->GetType() == WindowType::TABPAGE )
     {
         vcl::Window* pParent = pWindow->GetParent();
-        if ( pParent->GetType() == WindowType::TABCONTROL )
+        if (pParent && pParent->GetType() == WindowType::TABCONTROL )
             pParent = pParent->GetParent();
 
-        if ( (pParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) == WB_DIALOGCONTROL )
+        if (pParent && (pParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) == WB_DIALOGCONTROL )
         {
             pGetChild = pParent->GetWindow( GetWindowType::FirstChild );
             while ( pGetChild )
