@@ -83,7 +83,7 @@ void const * DdeData::getData() const
 
 struct DdeImp {};
 
-long DdeConnection::GetError()
+long DdeConnection::GetError() const
 {
     return 0L;
 }
@@ -98,12 +98,12 @@ DdeConnection::~DdeConnection()
 {
 }
 
-const OUString DdeConnection::GetServiceName()
+OUString DdeConnection::GetServiceName() const
 {
     return OUString();
 }
 
-const OUString DdeConnection::GetTopicName()
+OUString DdeConnection::GetTopicName() const
 {
     return OUString();
 }
