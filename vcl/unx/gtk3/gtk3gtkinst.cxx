@@ -3012,10 +3012,16 @@ struct DialogRunner
     static void signal_response(GtkDialog*, gint nResponseId, gpointer data);
     static void signal_cancel(GtkDialog*, gpointer data);
 
-    static gboolean signal_delete(GtkDialog*, GdkEventAny*, gpointer data)
+    static gboolean signal_delete(GtkDialog* pDialog, GdkEventAny*, gpointer data)
     {
         DialogRunner* pThis = static_cast<DialogRunner*>(data);
-        pThis->loop_quit();
+        if (GTK_IS_ASSISTANT(pThis->m_pDialog))
+        {
+            // An assistant isn't a dialog, but we want to treat it like one
+            signal_response(pDialog, GTK_RESPONSE_DELETE_EVENT, data);
+        }
+        else
+            pThis->loop_quit();
         return true; /* Do not destroy */
     }
 
@@ -3833,6 +3839,13 @@ public:
         m_aPages.emplace_back(new GtkInstanceContainer(GTK_CONTAINER(pChild), m_pBuilder, false));
 
         return m_aPages.back().get();
+    }
+
+    virtual void set_page_side_help_id(const OString& rHelpId) override
+    {
+        if (!m_pSidebar)
+            return;
+        ::set_help_id(m_pSidebar, rHelpId);
     }
 
     virtual GtkButton* get_widget_for_response(int nGtkResponse) override
