@@ -352,7 +352,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                 auto const& rWidgetDraw = static_cast<WidgetDrawActionImage const&>(*pDrawAction);
                 auto& rCacheImages = ImplGetSVData()->maGDIData.maThemeImageCache;
                 OUString rCacheKey = rWidgetDraw.msSource + "@" + OUString::number(nScaleFactor);
-                auto& aIterator = rCacheImages.find(rCacheKey);
+                auto aIterator = rCacheImages.find(rCacheKey);
 
                 BitmapEx aBitmap;
                 if (aIterator == rCacheImages.end())
@@ -398,7 +398,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
 
                 auto& rCacheDrawCommands = ImplGetSVData()->maGDIData.maThemeDrawCommandsCache;
 
-                auto& aIterator = rCacheDrawCommands.find(rWidgetDraw.msSource);
+                auto aIterator = rCacheDrawCommands.find(rWidgetDraw.msSource);
 
                 gfx::DrawRoot aDrawRoot;
 
