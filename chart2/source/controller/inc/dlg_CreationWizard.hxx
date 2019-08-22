@@ -36,10 +36,10 @@ namespace chart
 class DialogModel;
 class ChartTypeTemplateProvider;
 
-class CreationWizard : public vcl::RoadmapWizard, public TabPageNotifiable
+class CreationWizard : public vcl::RoadmapWizardMachine, public TabPageNotifiable
 {
 public:
-    CreationWizard(vcl::Window* pParent,
+    CreationWizard(weld::Window* pParent,
         const css::uno::Reference<css::frame::XModel>& xChartModel,
         const css::uno::Reference<css::uno::XComponentContext>& xContext);
 
@@ -49,6 +49,8 @@ public:
     // TabPageNotifiable
     virtual void setInvalidPage(TabPage * pTabPage) override;
     virtual void setValidPage(TabPage * pTabPage) override;
+
+    virtual short run() override;
 
 protected:
     virtual bool leaveState( WizardState _nState ) override;

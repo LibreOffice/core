@@ -92,8 +92,6 @@ public:
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
-    DECL_LINK( DialogEventHdl, VclWindowEvent&, void );
-
 protected:
     // ____ OComponentHelper ____
     /// Called in dispose method after the listeners were notified.
@@ -107,7 +105,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext>    m_xCC;
     css::uno::Reference< css::awt::XWindow >             m_xParentWindow;
 
-    VclPtr<CreationWizard>     m_pDialog;
+    std::unique_ptr<CreationWizard> m_xDialog;
     bool            m_bUnlockControllersOnExecute;
 };
 

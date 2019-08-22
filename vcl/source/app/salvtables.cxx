@@ -1653,6 +1653,11 @@ public:
         }
     }
 
+    virtual void set_page_side_help_id(const OString& rHelpId) override
+    {
+        m_xWizard->SetRoadmapHelpId(rHelpId);
+    }
+
     weld::Button* weld_widget_for_response(int nResponse) override;
 
     virtual ~SalInstanceAssistant() override

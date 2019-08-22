@@ -170,12 +170,12 @@ namespace vcl
         m_pImpl->pRoadmap->SetHelpId( _rId );
     }
 
-    void RoadmapWizard::SetRoadmapInteractive( bool _bInteractive )
+    void RoadmapWizardMachine::SetRoadmapHelpId(const OString& rId)
     {
-        m_pImpl->pRoadmap->SetRoadmapInteractive( _bInteractive );
+        m_xAssistant->set_page_side_help_id(rId);
     }
 
-    void RoadmapWizardMachine::SetRoadmapInteractive( bool _bInteractive )
+    void RoadmapWizard::SetRoadmapInteractive( bool _bInteractive )
     {
         m_pImpl->pRoadmap->SetRoadmapInteractive( _bInteractive );
     }
