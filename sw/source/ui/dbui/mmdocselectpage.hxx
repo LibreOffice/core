@@ -29,7 +29,7 @@ class SwMailMergeDocSelectPage : public vcl::OWizardPage
     OUString            m_sLoadFileName;
     OUString            m_sLoadTemplateName;
 
-    VclPtr<SwMailMergeWizard>  m_pWizard;
+    SwMailMergeWizard*  m_pWizard;
 
     std::unique_ptr<weld::RadioButton> m_xCurrentDocRB;
     std::unique_ptr<weld::RadioButton> m_xNewDocRB;
@@ -48,7 +48,6 @@ class SwMailMergeDocSelectPage : public vcl::OWizardPage
 public:
     SwMailMergeDocSelectPage(SwMailMergeWizard* pWizard, TabPageParent pParent);
     virtual ~SwMailMergeDocSelectPage() override;
-    virtual void dispose() override;
 };
 
 #endif

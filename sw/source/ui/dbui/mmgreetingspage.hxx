@@ -31,7 +31,7 @@ class SwMailMergeWizard;
 class SwGreetingsHandler
 {
 protected:
-    VclPtr<SwMailMergeWizard>  m_pWizard;
+    SwMailMergeWizard*  m_pWizard;
     /// The mail merge state, available even when m_pWizard is nullptr.
     SwMailMergeConfigItem& m_rConfigItem;
     bool m_bIsTabPage;

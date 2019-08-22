@@ -80,14 +80,6 @@ CreationWizard::CreationWizard(weld::Window* pParent, const uno::Reference<frame
     m_xAssistant->set_current_page(0);
 }
 
-short CreationWizard::run()
-{
-    int nRet = vcl::RoadmapWizardMachine::run();
-    if (nRet == static_cast<int>(WizardButtonFlags::FINISH))
-        return ui::dialogs::ExecutableDialogResults::OK;
-    return ui::dialogs::ExecutableDialogResults::CANCEL;
-}
-
 CreationWizard::~CreationWizard() = default;
 
 VclPtr<TabPage> CreationWizard::createPage(WizardState nState)

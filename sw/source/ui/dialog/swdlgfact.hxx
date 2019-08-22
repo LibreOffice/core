@@ -637,14 +637,14 @@ public:
 class SwMailMergeWizard;
 class AbstractMailMergeWizard_Impl : public AbstractMailMergeWizard
 {
-    VclPtr<SwMailMergeWizard> pDlg;
+    std::shared_ptr<SwMailMergeWizard> m_xDlg;
 
 public:
-    explicit AbstractMailMergeWizard_Impl( SwMailMergeWizard* p )
-     : pDlg(p)
-     {}
+    explicit AbstractMailMergeWizard_Impl(std::unique_ptr<SwMailMergeWizard> p)
+        : m_xDlg(std::move(p))
+    {
+    }
     virtual         ~AbstractMailMergeWizard_Impl() override;
-    virtual void    dispose() override;
     virtual bool    StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual short   Execute() override;
 

@@ -739,13 +739,6 @@ void AbstractSwWordCountFloatDlg_Impl::SetCounts(const SwDocStat &rCurrCnt, cons
 
 AbstractMailMergeWizard_Impl::~AbstractMailMergeWizard_Impl()
 {
-    disposeOnce();
-}
-
-void AbstractMailMergeWizard_Impl::dispose()
-{
-    pDlg.disposeAndClear();
-    AbstractMailMergeWizard::dispose();
 }
 
 bool AbstractMailMergeWizard_Impl::StartExecuteAsync(AsyncContext &rCtx)
@@ -753,27 +746,27 @@ bool AbstractMailMergeWizard_Impl::StartExecuteAsync(AsyncContext &rCtx)
     // SwMailMergeWizardExecutor wants to run the lifecycle of this dialog
     // so clear mxOwner here and leave it up to SwMailMergeWizardExecutor
     rCtx.mxOwner.clear();
-    return pDlg->StartExecuteAsync(rCtx);
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractMailMergeWizard_Impl::Execute()
 {
-    return pDlg->Execute();
+    return m_xDlg->run();
 }
 
 OUString AbstractMailMergeWizard_Impl::GetReloadDocument() const
 {
-    return pDlg->GetReloadDocument();
+    return m_xDlg->GetReloadDocument();
 }
 
 void AbstractMailMergeWizard_Impl::ShowPage( sal_uInt16 nLevel )
 {
-    pDlg->skipUntil(nLevel);
+    m_xDlg->skipUntil(nLevel);
 }
 
 sal_uInt16 AbstractMailMergeWizard_Impl::GetRestartPage() const
 {
-    return pDlg->GetRestartPage();
+    return m_xDlg->GetRestartPage();
 }
 
 VclPtr<AbstractSwInsertAbstractDlg> SwAbstractDialogFactory_Impl::CreateSwInsertAbstractDlg(weld::Window* pParent)
@@ -1149,7 +1142,7 @@ VclPtr<AbstractMailMergeWizard> SwAbstractDialogFactory_Impl::CreateMailMergeWiz
                                     SwView& rView, std::shared_ptr<SwMailMergeConfigItem>& rConfigItem)
 {
 #if HAVE_FEATURE_DBCONNECTIVITY
-    return VclPtr<AbstractMailMergeWizard_Impl>::Create( VclPtr<SwMailMergeWizard>::Create(rView, rConfigItem));
+    return VclPtr<AbstractMailMergeWizard_Impl>::Create(std::make_unique<SwMailMergeWizard>(rView, rConfigItem));
 #else
     (void) rView;
     (void) rConfigItem;

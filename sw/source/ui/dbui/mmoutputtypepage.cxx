@@ -62,13 +62,6 @@ SwMailMergeOutputTypePage::SwMailMergeOutputTypePage(SwMailMergeWizard* pWizard,
 
 SwMailMergeOutputTypePage::~SwMailMergeOutputTypePage()
 {
-    disposeOnce();
-}
-
-void SwMailMergeOutputTypePage::dispose()
-{
-    m_pWizard.clear();
-    vcl::OWizardPage::dispose();
 }
 
 IMPL_LINK_NOARG(SwMailMergeOutputTypePage, TypeHdl_Impl, weld::ToggleButton&, void)
@@ -77,7 +70,6 @@ IMPL_LINK_NOARG(SwMailMergeOutputTypePage, TypeHdl_Impl, weld::ToggleButton&, vo
     m_xLetterHint->set_visible(bLetter);
     m_xMailHint->set_visible(!bLetter);
     m_pWizard->GetConfigItem().SetOutputToLetter(bLetter);
-    m_pWizard->updateRoadmapItemLabel( MM_ADDRESSBLOCKPAGE );
     m_pWizard->UpdateRoadmap();
 }
 

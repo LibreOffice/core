@@ -1553,10 +1553,18 @@ public:
         // take the first shown page as the size for all pages
         if (m_xWizard->GetPageSizePixel().Width() == 0)
         {
-            TabPage* pPage = m_xWizard->GetPage(m_aIds[nPage]);
-            assert(pPage);
-            Size aPageSize(pPage->get_preferred_size());
-            m_xWizard->SetPageSizePixel(aPageSize);
+            Size aFinalSize;
+            for (int i = 0, nPages = get_n_pages(); i < nPages; ++i)
+            {
+                TabPage* pPage = m_xWizard->GetPage(m_aIds[i]);
+                assert(pPage);
+                Size aPageSize(pPage->get_preferred_size());
+                if (aPageSize.Width() > aFinalSize.Width())
+                    aFinalSize.setWidth(aPageSize.Width());
+                if (aPageSize.Height() > aFinalSize.Height())
+                    aFinalSize.setHeight(aPageSize.Height());
+            }
+            m_xWizard->SetPageSizePixel(aFinalSize);
         }
 
         m_xWizard->ShowPage(m_aIds[nPage]);
@@ -2238,15 +2246,15 @@ weld::Button* SalInstanceDialog::weld_widget_for_response(int nResponse)
 weld::Button* SalInstanceAssistant::weld_widget_for_response(int nResponse)
 {
     PushButton* pButton = nullptr;
-    if (nResponse == static_cast<int>(WizardButtonFlags::NEXT))
+    if (nResponse == RET_YES)
         pButton = m_xWizard->m_pNextPage;
-    else if (nResponse == static_cast<int>(WizardButtonFlags::PREVIOUS))
+    else if (nResponse == RET_NO)
         pButton = m_xWizard->m_pPrevPage;
-    else if (nResponse == static_cast<int>(WizardButtonFlags::FINISH))
+    else if (nResponse == RET_OK)
         pButton = m_xWizard->m_pFinish;
-    else if (nResponse == static_cast<int>(WizardButtonFlags::CANCEL))
+    else if (nResponse == RET_CANCEL)
         pButton = m_xWizard->m_pCancel;
-    else if (nResponse == static_cast<int>(WizardButtonFlags::HELP))
+    else if (nResponse == RET_HELP)
         pButton = m_xWizard->m_pHelp;
     if (pButton)
         return new SalInstanceButton(pButton, nullptr, false);
