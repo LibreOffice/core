@@ -338,7 +338,7 @@ namespace dbaccess
     void SAL_CALL SettingsDocumentHandler::setDocumentLocator( const Reference< XLocator >& ) {}
 
     // SubComponentRecovery
-    const OUString SubComponentRecovery::getComponentsStorageName( const SubComponentType i_eType )
+    OUString SubComponentRecovery::getComponentsStorageName( const SubComponentType i_eType )
     {
         switch ( i_eType )
         {

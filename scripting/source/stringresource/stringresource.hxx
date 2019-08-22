@@ -421,7 +421,7 @@ class StringResourceWithLocationImpl : public StringResourceWithLocationImpl_BAS
     css::uno::Reference< css::ucb::XSimpleFileAccess3 >   m_xSFI;
     css::uno::Reference< css::task::XInteractionHandler > m_xInteractionHandler;
 
-    const css::uno::Reference< css::ucb::XSimpleFileAccess3 > getFileAccess();
+    const css::uno::Reference< css::ucb::XSimpleFileAccess3 > & getFileAccess();
 
     virtual void implScanLocales() override;
     virtual bool implLoadLocale( LocaleItem* pLocaleItem ) override;

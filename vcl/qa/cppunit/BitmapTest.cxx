@@ -198,7 +198,7 @@ void BitmapTest::testEmpty()
     CPPUNIT_ASSERT(aBitmap.IsEmpty());
 }
 
-const Bitmap createTestBitmap()
+Bitmap createTestBitmap()
 {
     Bitmap aBmp(Size(4, 4), 24);
     BitmapWriteAccess aBmpAccess(aBmp);

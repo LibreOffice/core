@@ -70,7 +70,7 @@ bool ReturnConstVal::VisitFunctionDecl(const FunctionDecl* functionDecl)
     return true;
 }
 
-loplugin::Plugin::Registration<ReturnConstVal> X("returnconstval", false);
+loplugin::Plugin::Registration<ReturnConstVal> X("returnconstval");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
