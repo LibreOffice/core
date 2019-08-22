@@ -68,7 +68,7 @@ public:
 
     bool        operator==( HSZ );
     HSZ getHSZ();
-    OUString toOUString() const { return m_aString; }
+    const OUString & toOUString() const { return m_aString; }
 };
 
 
