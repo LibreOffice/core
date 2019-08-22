@@ -60,8 +60,8 @@ class SwMailMergeAddressBlockPage : public vcl::OWizardPage
 
     std::unique_ptr<weld::Label> m_xDifferentlist;
 
-    std::unique_ptr<AddressPreview> m_xSettings;
-    std::unique_ptr<AddressPreview> m_xPreview;
+    std::unique_ptr<SwAddressPreview> m_xSettings;
+    std::unique_ptr<SwAddressPreview> m_xPreview;
     std::unique_ptr<weld::CustomWeld> m_xSettingsWIN;
     std::unique_ptr<weld::CustomWeld> m_xPreviewWIN;
 
@@ -93,7 +93,7 @@ class SwSelectAddressBlockDialog : public SfxDialogController
     css::uno::Sequence< OUString>    m_aAddressBlocks;
     SwMailMergeConfigItem& m_rConfig;
 
-    std::unique_ptr<AddressPreview> m_xPreview;
+    std::unique_ptr<SwAddressPreview> m_xPreview;
     std::unique_ptr<weld::Button> m_xNewPB;
     std::unique_ptr<weld::Button> m_xCustomizePB;
     std::unique_ptr<weld::Button> m_xDeletePB;
@@ -214,7 +214,7 @@ private:
     std::unique_ptr<weld::Label> m_xFieldFT;
     std::unique_ptr<weld::ComboBox> m_xFieldCB;
     std::unique_ptr<weld::Button> m_xOK;
-    std::unique_ptr<AddressPreview> m_xPreview;
+    std::unique_ptr<SwAddressPreview> m_xPreview;
     std::unique_ptr<weld::CustomWeld> m_xPreviewWIN;
     std::unique_ptr<AddressMultiLineEdit> m_xDragED;
     std::unique_ptr<weld::CustomWeld> m_xDragWIN;
@@ -254,7 +254,7 @@ class SwAssignFieldsDialog : public SfxDialogController
 
     SwMailMergeConfigItem&  m_rConfigItem;
 
-    std::unique_ptr<AddressPreview> m_xPreview;
+    std::unique_ptr<SwAddressPreview> m_xPreview;
     std::unique_ptr<weld::Label> m_xMatchingFI;
     std::unique_ptr<weld::Label> m_xAddressTitle;
     std::unique_ptr<weld::Label> m_xMatchTitle;

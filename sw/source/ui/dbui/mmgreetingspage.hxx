@@ -85,7 +85,7 @@ protected:
 class SwMailMergeGreetingsPage : public vcl::OWizardPage
                                , public SwGreetingsHandler
 {
-    std::unique_ptr<AddressPreview> m_xPreview;
+    std::unique_ptr<SwAddressPreview> m_xPreview;
     std::unique_ptr<weld::Label> m_xPreviewFI;
     std::unique_ptr<weld::Button> m_xAssignPB;
     std::unique_ptr<weld::Label> m_xDocumentIndexFI;
