@@ -340,14 +340,14 @@ void SAL_CALL StatusIndicator::setPosSize (
 
 //  impl but public method to register service
 
-const Sequence< OUString > StatusIndicator::impl_getStaticSupportedServiceNames()
+Sequence< OUString > StatusIndicator::impl_getStaticSupportedServiceNames()
 {
     return css::uno::Sequence<OUString>();
 }
 
 //  impl but public method to register service
 
-const OUString StatusIndicator::impl_getStaticImplementationName()
+OUString StatusIndicator::impl_getStaticImplementationName()
 {
     return "stardiv.UnoControls.StatusIndicator";
 }

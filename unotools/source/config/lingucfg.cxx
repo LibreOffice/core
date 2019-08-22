@@ -68,7 +68,7 @@ static bool lcl_SetLocale( LanguageType &rLanguage, const uno::Any &rVal )
     return bSucc;
 }
 
-static const OUString lcl_LanguageToCfgLocaleStr( LanguageType nLanguage )
+static OUString lcl_LanguageToCfgLocaleStr( LanguageType nLanguage )
 {
     OUString aRes;
     if (LANGUAGE_SYSTEM != nLanguage)
@@ -148,7 +148,7 @@ class SvtLinguConfigItem : public utl::ConfigItem
     SvtLinguOptions     aOpt;
 
     static bool GetHdlByName( sal_Int32 &rnHdl, const OUString &rPropertyName, bool bFullPropName = false );
-    static const uno::Sequence< OUString > GetPropertyNames();
+    static uno::Sequence< OUString > GetPropertyNames();
     void                LoadOptions( const uno::Sequence< OUString > &rProperyNames );
     bool                SaveOptions( const uno::Sequence< OUString > &rProperyNames );
 
@@ -256,7 +256,7 @@ static struct NamesToHdl
 {            nullptr,                                            nullptr,                                      -1}
 };
 
-const uno::Sequence< OUString > SvtLinguConfigItem::GetPropertyNames()
+uno::Sequence< OUString > SvtLinguConfigItem::GetPropertyNames()
 {
     uno::Sequence< OUString > aNames;
 
