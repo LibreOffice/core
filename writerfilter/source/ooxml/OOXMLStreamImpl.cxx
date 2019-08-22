@@ -319,7 +319,7 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
                     // simple string concatination here to handle that.
                     uno::Reference<uri::XUriReference> xPart = xFac->parse(sMyTarget);
                     uno::Reference<uri::XUriReference> xAbs = xFac->makeAbsolute(xBase, xPart, true, uri::RelativeUriExcessParentSegments_RETAIN);
-                    if (!xAbs)
+                    if (!xAbs.is())
                     {
                         //it was invalid gibberish
                         bFound = false;
