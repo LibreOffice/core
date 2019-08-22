@@ -34,39 +34,46 @@ class SwMailMergeConfigItem;
 
 class SwMailMergeAddressBlockPage : public vcl::OWizardPage
 {
-    VclPtr<PushButton>         m_pAddressListPB;
-    VclPtr<FixedText>          m_pCurrentAddressFI;
-
-    VclPtr<VclContainer>       m_pStep2;
-    VclPtr<VclContainer>       m_pStep3;
-    VclPtr<VclContainer>       m_pStep4;
-
-    VclPtr<FixedText>          m_pSettingsFI;
-    VclPtr<CheckBox>           m_pAddressCB;
-    VclPtr<SwAddressPreview>   m_pSettingsWIN;
-    VclPtr<PushButton>         m_pSettingsPB;
-    VclPtr<CheckBox>           m_pHideEmptyParagraphsCB;
-
-    VclPtr<PushButton>         m_pAssignPB;
-
-    VclPtr<SwAddressPreview>   m_pPreviewWIN;
-    VclPtr<FixedText>          m_pDocumentIndexFI;
-    VclPtr<PushButton>         m_pPrevSetIB;
-    VclPtr<PushButton>         m_pNextSetIB;
-
     OUString            m_sDocument;
     OUString            m_sCurrentAddress;
     OUString            m_sChangeAddress;
 
     VclPtr<SwMailMergeWizard>  m_pWizard;
 
-    DECL_LINK(AddressListHdl_Impl, Button *, void);
-    DECL_LINK(SettingsHdl_Impl, Button*, void);
-    DECL_LINK(AssignHdl_Impl, Button*, void);
-    DECL_LINK(AddressBlockHdl_Impl, Button*, void);
-    DECL_LINK(InsertDataHdl_Impl, Button*, void);
+    std::unique_ptr<weld::Button> m_xAddressListPB;
+    std::unique_ptr<weld::Label> m_xCurrentAddressFI;
+
+    std::unique_ptr<weld::Container> m_xStep2;
+    std::unique_ptr<weld::Container> m_xStep3;
+    std::unique_ptr<weld::Container> m_xStep4;
+
+    std::unique_ptr<weld::Label> m_xSettingsFI;
+    std::unique_ptr<weld::CheckButton> m_xAddressCB;
+    std::unique_ptr<weld::Button> m_xSettingsPB;
+    std::unique_ptr<weld::CheckButton> m_xHideEmptyParagraphsCB;
+
+    std::unique_ptr<weld::Button> m_xAssignPB;
+
+    std::unique_ptr<weld::Label> m_xDocumentIndexFI;
+    std::unique_ptr<weld::Button> m_xPrevSetIB;
+    std::unique_ptr<weld::Button> m_xNextSetIB;
+
+    std::unique_ptr<weld::Label> m_xDifferentlist;
+
+    std::unique_ptr<AddressPreview> m_xSettings;
+    std::unique_ptr<AddressPreview> m_xPreview;
+    std::unique_ptr<weld::CustomWeld> m_xSettingsWIN;
+    std::unique_ptr<weld::CustomWeld> m_xPreviewWIN;
+
+    void InsertDataHdl(weld::Button* pButton);
+
+    DECL_LINK(AddressListHdl_Impl, weld::Button&, void);
+    DECL_LINK(SettingsHdl_Impl, weld::Button&, void);
+    DECL_LINK(AssignHdl_Impl, weld::Button&, void);
+    DECL_LINK(AddressBlockHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(InsertDataHdl_Impl, weld::Button&, void);
     DECL_LINK(AddressBlockSelectHdl_Impl, LinkParamNone*, void);
-    DECL_LINK(HideParagraphsHdl_Impl, Button*, void);
+    DECL_LINK(HideParagraphsHdl_Impl, weld::ToggleButton&, void);
 
     void                EnableAddressBlock(bool bAll, bool bSelective);
 
@@ -75,7 +82,7 @@ class SwMailMergeAddressBlockPage : public vcl::OWizardPage
     virtual bool        canAdvance() const override;
 
 public:
-    SwMailMergeAddressBlockPage(SwMailMergeWizard* _pParent);
+    SwMailMergeAddressBlockPage(SwMailMergeWizard* pWizard, TabPageParent pParent);
     virtual ~SwMailMergeAddressBlockPage() override;
     virtual void dispose() override;
     SwMailMergeWizard* GetWizard() { return m_pWizard; }
