@@ -1194,11 +1194,19 @@ OUString DrawingML::WriteBlip( const Reference< XPropertySet >& rXPropSet, const
     }
     sal_Int16 nBright = 0;
     sal_Int32 nContrast = 0;
-    sal_Int16 nTransparence = 0;
+    sal_Int32 nTransparence = 0;
 
     GET( nBright, AdjustLuminance );
     GET( nContrast, AdjustContrast );
-    GET( nTransparence, Transparency );
+    // Used for shapes with picture fill
+    GET( nTransparence, FillTransparence );
+    if (nTransparence == 0)
+    {
+        // Used for pictures
+        sal_Int16 nPicTransparency = 0;
+        GET( nPicTransparency, Transparency );
+        nTransparence = static_cast<sal_Int32>(nPicTransparency);
+    }
 
     mpFS->startElementNS( XML_a, XML_blip,
             FSNS( XML_r, XML_embed), sRelId.toUtf8().getStr(),
