@@ -80,6 +80,7 @@
 #include <svl/sharecontrolfile.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/uri.hxx>
 #include <vcl/svapp.hxx>
 #include <framework/interaction.hxx>
 #include <framework/documentundoguard.hxx>
@@ -1477,10 +1478,12 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
             pDoc->getDocProperties());
         if( aURL.startsWithIgnoreAsciiCase( "url=" ) )
         {
-            INetURLObject aObj;
-            INetURLObject( pDoc->GetMedium()->GetName() ).GetNewAbsURL( aURL.copy( 4 ), &aObj );
-            xDocProps->setAutoloadURL(
-                aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+            try {
+                xDocProps->setAutoloadURL(
+                    rtl::Uri::convertRelToAbs(pDoc->GetMedium()->GetName(), aURL.copy( 4 )) );
+            } catch (rtl::MalformedUriException & e) {
+                TOOLS_WARN_EXCEPTION("sfx", "");
+            }
         }
         try
         {
