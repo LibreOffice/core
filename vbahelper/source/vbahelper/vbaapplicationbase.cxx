@@ -472,7 +472,7 @@ void VbaApplicationBase::Quit()
     {
         // This is the case of a call from an (OLE) Automation client.
 
-        // When an Automation client itself asks the proces to quit, it should obey it.
+        // When an Automation client itself asks the process to quit, it should obey it.
         AsyncQuitHandler::instance().SetForceQuit();
 
         // TODO: Probably we should just close any document windows open by the "application"
