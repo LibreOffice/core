@@ -293,7 +293,6 @@ bool SfxObjectShell::APISaveAs_Impl(const OUString& aFileName, SfxItemSet& rItem
 {
     bool bOk = false;
 
-
     if ( GetMedium() )
     {
         OUString aFilterName;
