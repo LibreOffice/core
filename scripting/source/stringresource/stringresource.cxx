@@ -2647,7 +2647,7 @@ bool StringResourceWithLocationImpl::implLoadLocale( LocaleItem* pLocaleItem )
     return bSuccess;
 }
 
-const Reference< ucb::XSimpleFileAccess3 > StringResourceWithLocationImpl::getFileAccess()
+const Reference< ucb::XSimpleFileAccess3 > & StringResourceWithLocationImpl::getFileAccess()
 {
     ::osl::MutexGuard aGuard( getMutex() );
 

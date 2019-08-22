@@ -72,7 +72,7 @@ namespace dbaccess
                     const bool i_bForEditing
                 );
 
-        static const OUString getComponentsStorageName( const SubComponentType i_eType );
+        static OUString getComponentsStorageName( const SubComponentType i_eType );
 
     private:
         void    impl_saveSubDocument_throw(
