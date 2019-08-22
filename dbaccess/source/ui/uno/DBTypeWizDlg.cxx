@@ -22,7 +22,7 @@
 #include "DBTypeWizDlg.hxx"
 #include <dbwiz.hxx>
 #include <comphelper/processfactory.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace dbaui;
 
@@ -94,7 +94,7 @@ Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialog::getPropertySetInfo()
 
 svt::OGenericUnoDialog::Dialog ODBTypeWizDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    return svt::OGenericUnoDialog::Dialog(VclPtr<ODbTypeWizDialog>::Create(VCLUnoHelper::GetWindow(rParent), m_pDatasourceItems.get(), m_aContext, m_aInitialSelection));
+    return svt::OGenericUnoDialog::Dialog(std::make_unique<ODbTypeWizDialog>(Application::GetFrameWeld(rParent), m_pDatasourceItems.get(), m_aContext, m_aInitialSelection));
 }
 
 }   // namespace dbaui

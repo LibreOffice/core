@@ -50,7 +50,7 @@ class OGeneralPage;
 class ODbDataSourceAdministrationHelper;
 /** tab dialog for administrating the office wide registered data sources
 */
-class ODbTypeWizDialog : public vcl::OWizardMachine , public IItemSetHelper, public IDatabaseSettingsDialog
+class ODbTypeWizDialog : public vcl::WizardMachine , public IItemSetHelper, public IDatabaseSettingsDialog
 {
 private:
     std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
@@ -63,13 +63,12 @@ public:
     /** ctor. The itemset given should have been created by <method>createItemSet</method> and should be destroyed
         after the dialog has been destroyed
     */
-    ODbTypeWizDialog(vcl::Window* pParent
+    ODbTypeWizDialog(weld::Window* pParent
         ,SfxItemSet const * _pItems
         ,const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         ,const css::uno::Any& _aDataSourceName
         );
     virtual ~ODbTypeWizDialog() override;
-    virtual void dispose() override;
 
     virtual const SfxItemSet* getOutputSet() const override;
     virtual SfxItemSet* getWriteOutputSet() override;
