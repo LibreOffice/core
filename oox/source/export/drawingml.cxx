@@ -1264,14 +1264,18 @@ void DrawingML::WriteImageBrightnessContrastTransparence(uno::Reference<beans::X
 {
     sal_Int16 nBright = 0;
     sal_Int32 nContrast = 0;
-    sal_Int16 nTransparence = 0;
+    sal_Int32 nTransparence = 0;
 
     if (GetProperty(rXPropSet, "AdjustLuminance"))
         nBright = mAny.get<sal_Int16>();
     if (GetProperty(rXPropSet, "AdjustContrast"))
         nContrast = mAny.get<sal_Int32>();
-    if (GetProperty(rXPropSet, "Transparency"))
-        nTransparence = mAny.get<sal_Int16>();
+    // Used for shapes with picture fill
+    if (GetProperty(rXPropSet, "FillTransparence"))
+        nTransparence = mAny.get<sal_Int32>();
+    // Used for pictures
+    if (nTransparence == 0 && GetProperty(rXPropSet, "Transparency"))
+        nTransparence = static_cast<sal_Int32>(mAny.get<sal_Int16>());
 
 
     if (nBright || nContrast)
