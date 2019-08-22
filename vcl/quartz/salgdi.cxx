@@ -507,12 +507,11 @@ std::unique_ptr<GenericSalLayout> AquaSalGraphics::GetTextLayout(int nFallbackLe
     return std::make_unique<GenericSalLayout>(*mpTextStyle[nFallbackLevel]);
 }
 
-const FontCharMapRef AquaSalGraphics::GetFontCharMap() const
+FontCharMapRef AquaSalGraphics::GetFontCharMap() const
 {
     if (!mpTextStyle[0])
     {
-        FontCharMapRef xFontCharMap( new FontCharMap() );
-        return xFontCharMap;
+        return FontCharMapRef( new FontCharMap() );
     }
 
     return static_cast<const CoreTextFontFace*>(mpTextStyle[0]->GetFontFace())->GetFontCharMap();
