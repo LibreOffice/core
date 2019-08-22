@@ -82,8 +82,8 @@ public:
 
     // access with converters, the asked data will be created from the most
     // valuable data, buffered and returned
-    const tools::PolyPolygon GetAsPolyPolygon() const;
-    const basegfx::B2DPolyPolygon GetAsB2DPolyPolygon() const;
+    tools::PolyPolygon GetAsPolyPolygon() const;
+    basegfx::B2DPolyPolygon GetAsB2DPolyPolygon() const;
     const RegionBand* GetAsRegionBand() const;
 
     // manipulators

@@ -36,7 +36,7 @@ void SvpSalGraphics::GetFontMetric( ImplFontMetricDataRef& xFontMetric, int nFal
     m_aTextRenderImpl.GetFontMetric(xFontMetric, nFallbackLevel);
 }
 
-const FontCharMapRef SvpSalGraphics::GetFontCharMap() const
+FontCharMapRef SvpSalGraphics::GetFontCharMap() const
 {
     return m_aTextRenderImpl.GetFontCharMap();
 }

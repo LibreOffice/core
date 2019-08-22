@@ -133,7 +133,7 @@ public:
     virtual void                GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) = 0;
 
     // get the repertoire of the current font
-    virtual const FontCharMapRef GetFontCharMap() const = 0;
+    virtual FontCharMapRef      GetFontCharMap() const = 0;
 
     // get the layout capabilities of the current font
     virtual bool                GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;

@@ -1258,7 +1258,7 @@ tools::Rectangle vcl::Region::GetBoundRect() const
     return tools::Rectangle();
 }
 
-const tools::PolyPolygon vcl::Region::GetAsPolyPolygon() const
+tools::PolyPolygon vcl::Region::GetAsPolyPolygon() const
 {
     if(getPolyPolygon())
     {
@@ -1286,7 +1286,7 @@ const tools::PolyPolygon vcl::Region::GetAsPolyPolygon() const
     return tools::PolyPolygon();
 }
 
-const basegfx::B2DPolyPolygon vcl::Region::GetAsB2DPolyPolygon() const
+basegfx::B2DPolyPolygon vcl::Region::GetAsB2DPolyPolygon() const
 {
     if(getB2DPolyPolygon())
     {
