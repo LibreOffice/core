@@ -286,7 +286,7 @@ ScXMLDDERowContext::ScXMLDDERowContext( ScXMLImport& rImport,
 {
     if ( rAttrList.is() )
     {
-        auto &aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_NUMBER_ROWS_REPEATED ) ) );
+        auto aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_NUMBER_ROWS_REPEATED ) ) );
         if (aIter != rAttrList->end())
             nRows = aIter.toInt32();
 

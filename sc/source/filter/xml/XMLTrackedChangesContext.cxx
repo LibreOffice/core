@@ -549,7 +549,7 @@ ScXMLCellContentDeletionContext::ScXMLCellContentDeletionContext(  ScXMLImport& 
 {
     if ( rAttrList.is() )
     {
-        auto &aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_ID ) ) );
+        auto aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_ID ) ) );
         if (aIter != rAttrList->end())
             nID = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
     }
@@ -598,7 +598,7 @@ ScXMLDependenceContext::ScXMLDependenceContext(  ScXMLImport& rImport,
     sal_uInt32 nID(0);
     if ( rAttrList.is() )
     {
-        auto &aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_ID ) ) );
+        auto aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_ID ) ) );
         if (aIter != rAttrList->end())
             nID = ScXMLChangeTrackingImportHelper::GetIDFromString(aIter.toString());
     }
@@ -641,7 +641,7 @@ ScXMLChangeDeletionContext::ScXMLChangeDeletionContext(  ScXMLImport& rImport,
     sal_uInt32 nID(0);
     if ( rAttrList.is() )
     {
-        auto &aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_ID ) ) );
+        auto aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_ID ) ) );
         if (aIter != rAttrList->end())
             nID = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
     }
@@ -953,7 +953,7 @@ ScXMLPreviousContext::ScXMLPreviousContext(  ScXMLImport& rImport,
 {
     if ( rAttrList.is() )
     {
-        auto &aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_ID ) ) );
+        auto aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_ID ) ) );
         if (aIter != rAttrList->end())
             nID = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
     }

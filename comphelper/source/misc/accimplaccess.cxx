@@ -38,7 +38,7 @@ namespace comphelper
     {
     }
 
-    const Sequence< sal_Int8 > OAccessibleImplementationAccess::getUnoTunnelImplementationId()
+    Sequence< sal_Int8 > OAccessibleImplementationAccess::getUnoTunnelImplementationId()
     {
         static cppu::OImplementationId implID;
 

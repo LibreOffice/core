@@ -44,7 +44,7 @@ private:
     bool            bNotFound;
     sal_Int32       nYear2000;      // two digit year representation
 
-    static const css::uno::Sequence<OUString> GetPropertyNames();
+    static css::uno::Sequence<OUString> GetPropertyNames();
     void                    Load();
 
     virtual void            ImplCommit() final override;
@@ -114,17 +114,15 @@ void SfxMiscCfg::SetYear2000( sal_Int32 nSet )
     nYear2000 = nSet;
 }
 
-const Sequence<OUString> SfxMiscCfg::GetPropertyNames()
+Sequence<OUString> SfxMiscCfg::GetPropertyNames()
 {
-    const OUString pProperties[] =
+    return
     {
         OUString("Print/Warning/PaperSize"),
         OUString("Print/Warning/PaperOrientation"),
         OUString("Print/Warning/NotFound"),
         OUString("DateFormat/TwoDigitYear")
     };
-    const Sequence< OUString > seqPropertyNames( pProperties, 4 );
-    return seqPropertyNames;
 }
 
 void SfxMiscCfg::Load()

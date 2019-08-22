@@ -147,7 +147,7 @@ ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
 {
     if ( rAttrList.is() )
     {
-        auto &aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_DATE_VALUE ) ) );
+        auto aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_DATE_VALUE ) ) );
         if (aIter != rAttrList->end())
         {
             util::DateTime aDateTime;
