@@ -78,10 +78,9 @@ namespace canvas
                     mpWrappee = nullptr;
             }
 
-            VCLObject( VCLObject&& rOrig )
-                : mpWrappee(rOrig.mpWrappee)
+            VCLObject(VCLObject&& rOrig) noexcept
+                : mpWrappee(std::move(rOrig.mpWrappee))
             {
-                rOrig.mpWrappee = nullptr;
             }
 
             // This object has value semantics, thus, forward copy
@@ -111,7 +110,7 @@ namespace canvas
                 return *this;
             }
 
-            VCLObject& operator=( VCLObject&& rhs )
+            VCLObject& operator=(VCLObject&& rhs) noexcept
             {
                 std::swap(mpWrappee, rhs.mpWrappee);
 

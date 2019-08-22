@@ -80,9 +80,9 @@ namespace drawinglayer
 
             SdrTextAttribute();
             SdrTextAttribute(const SdrTextAttribute& rCandidate);
-            SdrTextAttribute(SdrTextAttribute&& rCandidate);
+            SdrTextAttribute(SdrTextAttribute&& rCandidate) noexcept;
             SdrTextAttribute& operator=(const SdrTextAttribute& rCandidate);
-            SdrTextAttribute& operator=(SdrTextAttribute&& rCandidate);
+            SdrTextAttribute& operator=(SdrTextAttribute&& rCandidate) noexcept;
             ~SdrTextAttribute();
 
             // checks if the incarnation is default constructed

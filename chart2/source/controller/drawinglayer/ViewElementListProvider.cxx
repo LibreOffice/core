@@ -45,7 +45,7 @@ ViewElementListProvider::ViewElementListProvider( DrawModelWrapper* pDrawModelWr
 {
 }
 
-ViewElementListProvider::ViewElementListProvider( ViewElementListProvider&& rOther )
+ViewElementListProvider::ViewElementListProvider(ViewElementListProvider&& rOther) noexcept
 {
     m_pDrawModelWrapper = rOther.m_pDrawModelWrapper;
     m_pFontList = std::move(rOther.m_pFontList);

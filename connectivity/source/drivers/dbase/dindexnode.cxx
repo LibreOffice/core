@@ -809,7 +809,7 @@ ONDXPagePtr::ONDXPagePtr()
 {
 }
 
-ONDXPagePtr::ONDXPagePtr(ONDXPagePtr&& rRef)
+ONDXPagePtr::ONDXPagePtr(ONDXPagePtr&& rRef) noexcept
 {
     mpPage = rRef.mpPage;
     rRef.mpPage = nullptr;

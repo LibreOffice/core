@@ -35,7 +35,7 @@ template<typename T> class SAL_DLLPUBLIC_RTTI SvRef final {
 public:
     SvRef(): pObj(nullptr) {}
 
-    SvRef(SvRef&& rObj)
+    SvRef(SvRef&& rObj) noexcept
     {
         pObj = rObj.pObj;
         rObj.pObj = nullptr;

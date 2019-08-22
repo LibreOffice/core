@@ -191,7 +191,7 @@ Graphic::Graphic(const Graphic& rGraphic)
         mxImpGraphic = rGraphic.mxImpGraphic;
 }
 
-Graphic::Graphic(Graphic&& rGraphic)
+Graphic::Graphic(Graphic&& rGraphic) noexcept
     : mxImpGraphic(std::move(rGraphic.mxImpGraphic))
 {
 }
@@ -275,7 +275,7 @@ Graphic& Graphic::operator=( const Graphic& rGraphic )
     return *this;
 }
 
-Graphic& Graphic::operator=(Graphic&& rGraphic)
+Graphic& Graphic::operator=(Graphic&& rGraphic) noexcept
 {
     mxImpGraphic = std::move(rGraphic.mxImpGraphic);
     return *this;

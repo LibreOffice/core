@@ -120,7 +120,7 @@ TableColumnBlockPositionSet::TableColumnBlockPositionSet( ScDocument& rDoc, SCTA
     }
 }
 
-TableColumnBlockPositionSet::TableColumnBlockPositionSet( TableColumnBlockPositionSet&& rOther ) :
+TableColumnBlockPositionSet::TableColumnBlockPositionSet( TableColumnBlockPositionSet&& rOther ) noexcept :
     mpImpl(std::move(rOther.mpImpl)) {}
 
 TableColumnBlockPositionSet::~TableColumnBlockPositionSet() {}

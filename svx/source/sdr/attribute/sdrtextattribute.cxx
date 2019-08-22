@@ -279,7 +279,7 @@ namespace drawinglayer
         {
         }
 
-        SdrTextAttribute::SdrTextAttribute(SdrTextAttribute&& rCandidate)
+        SdrTextAttribute::SdrTextAttribute(SdrTextAttribute&& rCandidate) noexcept
         :   mpSdrTextAttribute(std::move(rCandidate.mpSdrTextAttribute))
         {
         }
@@ -299,7 +299,7 @@ namespace drawinglayer
             return *this;
         }
 
-        SdrTextAttribute& SdrTextAttribute::operator=(SdrTextAttribute&& rCandidate)
+        SdrTextAttribute& SdrTextAttribute::operator=(SdrTextAttribute&& rCandidate) noexcept
         {
             mpSdrTextAttribute = std::move(rCandidate.mpSdrTextAttribute);
             return *this;

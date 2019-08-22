@@ -108,7 +108,7 @@ namespace drawinglayer
             return *this;
         }
 
-        SdrFormTextOutlineAttribute& SdrFormTextOutlineAttribute::operator=(SdrFormTextOutlineAttribute&& rCandidate)
+        SdrFormTextOutlineAttribute& SdrFormTextOutlineAttribute::operator=(SdrFormTextOutlineAttribute&& rCandidate) noexcept
         {
             mpSdrFormTextOutlineAttribute = std::move(rCandidate.mpSdrFormTextOutlineAttribute);
             return *this;

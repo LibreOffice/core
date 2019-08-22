@@ -49,7 +49,7 @@ friend class ScDocument;                // for FillInfo
 
 public:
             ScMarkArray();
-            ScMarkArray( ScMarkArray&& rArray );
+            ScMarkArray( ScMarkArray&& rArray ) noexcept;
             ScMarkArray( const ScMarkArray& rArray );
             ~ScMarkArray();
     void    Reset( bool bMarked = false, SCSIZE nNeeded = 1 );
@@ -62,7 +62,7 @@ public:
     bool    HasMarks() const    { return ( nCount > 1 || ( nCount == 1 && pData[0].bMarked ) ); }
 
     ScMarkArray& operator=( ScMarkArray const & rSource );
-    ScMarkArray& operator=( ScMarkArray&& rSource );
+    ScMarkArray& operator=(ScMarkArray&& rSource) noexcept;
     bool operator==(ScMarkArray const & rOther ) const;
 
     bool    Search( SCROW nRow, SCSIZE& nIndex ) const;

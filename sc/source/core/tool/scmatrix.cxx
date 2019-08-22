@@ -1198,10 +1198,10 @@ public:
     WalkElementBlocksMultipleValues( const WalkElementBlocksMultipleValues& ) = delete;
     WalkElementBlocksMultipleValues& operator= ( const WalkElementBlocksMultipleValues& ) = delete;
 
-    WalkElementBlocksMultipleValues( WalkElementBlocksMultipleValues&& r ) :
-        mpOp(r.mpOp), maRes(std::move(r.maRes)), mbFirst(r.mbFirst) {}
+    WalkElementBlocksMultipleValues(WalkElementBlocksMultipleValues&& r) noexcept
+        : mpOp(r.mpOp), maRes(std::move(r.maRes)), mbFirst(r.mbFirst) {}
 
-    WalkElementBlocksMultipleValues& operator= ( WalkElementBlocksMultipleValues&& r )
+    WalkElementBlocksMultipleValues& operator=(WalkElementBlocksMultipleValues&& r) noexcept
     {
         mpOp = r.mpOp;
         maRes = std::move(r.maRes);
@@ -1689,13 +1689,14 @@ public:
     CompareMatrixFunc( const CompareMatrixFunc& ) = delete;
     CompareMatrixFunc& operator= ( const CompareMatrixFunc& ) = delete;
 
-    CompareMatrixFunc( CompareMatrixFunc&& r ) :
-        mrComp(r.mrComp),
-        mnMatPos(r.mnMatPos),
-        mpOptions(r.mpOptions),
-        maResValues(std::move(r.maResValues)) {}
+    CompareMatrixFunc(CompareMatrixFunc&& r) noexcept
+        : mrComp(r.mrComp)
+        , mnMatPos(r.mnMatPos)
+        , mpOptions(r.mpOptions)
+        , maResValues(std::move(r.maResValues))
+    {}
 
-    CompareMatrixFunc& operator= ( CompareMatrixFunc&& r )
+    CompareMatrixFunc& operator=(CompareMatrixFunc&& r) noexcept
     {
         mrComp = r.mrComp;
         mnMatPos = r.mnMatPos;
@@ -1815,13 +1816,14 @@ public:
     CompareMatrixToNumericFunc( const CompareMatrixToNumericFunc& ) = delete;
     CompareMatrixToNumericFunc& operator= ( const CompareMatrixToNumericFunc& ) = delete;
 
-    CompareMatrixToNumericFunc( CompareMatrixToNumericFunc&& r ) :
-        mrComp(r.mrComp),
-        mfRightValue(r.mfRightValue),
-        mpOptions(r.mpOptions),
-        maResValues(std::move(r.maResValues)) {}
+    CompareMatrixToNumericFunc(CompareMatrixToNumericFunc&& r) noexcept
+        : mrComp(r.mrComp)
+        , mfRightValue(r.mfRightValue)
+        , mpOptions(r.mpOptions)
+        , maResValues(std::move(r.maResValues))
+    {}
 
-    CompareMatrixToNumericFunc& operator= ( CompareMatrixToNumericFunc&& r )
+    CompareMatrixToNumericFunc& operator=(CompareMatrixToNumericFunc&& r) noexcept
     {
         mrComp = r.mrComp;
         mfRightValue = r.mfRightValue;
@@ -1913,13 +1915,13 @@ public:
     ToDoubleArray( const ToDoubleArray& ) = delete;
     ToDoubleArray& operator= ( const ToDoubleArray& ) = delete;
 
-    ToDoubleArray( ToDoubleArray&& r ) :
-        mfNaN(r.mfNaN), mbEmptyAsZero(r.mbEmptyAsZero)
+    ToDoubleArray(ToDoubleArray&& r) noexcept
+        : mfNaN(r.mfNaN), mbEmptyAsZero(r.mbEmptyAsZero)
     {
         moveArray(r);
     }
 
-    ToDoubleArray& operator= ( ToDoubleArray&& r )
+    ToDoubleArray& operator=(ToDoubleArray&& r) noexcept
     {
         mfNaN = r.mfNaN;
         mbEmptyAsZero = r.mbEmptyAsZero;

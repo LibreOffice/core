@@ -53,7 +53,7 @@ namespace drawinglayer
             SdrFormTextOutlineAttribute();
             SdrFormTextOutlineAttribute(const SdrFormTextOutlineAttribute& rCandidate);
             SdrFormTextOutlineAttribute& operator=(const SdrFormTextOutlineAttribute& rCandidate);
-            SdrFormTextOutlineAttribute& operator=(SdrFormTextOutlineAttribute&& rCandidate);
+            SdrFormTextOutlineAttribute& operator=(SdrFormTextOutlineAttribute&& rCandidate) noexcept;
             ~SdrFormTextOutlineAttribute();
 
             // checks if the incarnation is default constructed

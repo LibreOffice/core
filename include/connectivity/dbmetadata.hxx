@@ -72,8 +72,8 @@ namespace dbtools
             const css::uno::Reference< css::sdbc::XConnection >& _connection );
         DatabaseMetaData( const DatabaseMetaData& _copyFrom );
         DatabaseMetaData& operator=( const DatabaseMetaData& _copyFrom );
-        DatabaseMetaData( DatabaseMetaData&& _copyFrom );
-        DatabaseMetaData& operator=( DatabaseMetaData&& _copyFrom );
+        DatabaseMetaData(DatabaseMetaData&& _copyFrom) noexcept;
+        DatabaseMetaData& operator=(DatabaseMetaData&& _copyFrom) noexcept;
 
         ~DatabaseMetaData();
 

@@ -216,7 +216,7 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
     memcpy( m_pWhichRanges, rASet.m_pWhichRanges, sizeof( sal_uInt16 ) * cnt);
 }
 
-SfxItemSet::SfxItemSet( SfxItemSet&& rASet )
+SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
     : m_pPool( rASet.m_pPool )
     , m_pParent( rASet.m_pParent )
     , m_pItems( std::move(rASet.m_pItems) )

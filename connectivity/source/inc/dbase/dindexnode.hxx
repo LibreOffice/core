@@ -92,7 +92,7 @@ namespace connectivity
 
         public:
             ONDXPagePtr();
-            ONDXPagePtr(ONDXPagePtr&& rObj);
+            ONDXPagePtr(ONDXPagePtr&& rObj) noexcept;
             ONDXPagePtr(ONDXPagePtr const & rRef);
             ONDXPagePtr(ONDXPage* pRefPage);
             ~ONDXPagePtr();

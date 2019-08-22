@@ -241,7 +241,7 @@ namespace svx
     {
     }
 
-    ODataAccessDescriptor::ODataAccessDescriptor( ODataAccessDescriptor&& _rSource )
+    ODataAccessDescriptor::ODataAccessDescriptor(ODataAccessDescriptor&& _rSource) noexcept
         :m_pImpl(std::move(_rSource.m_pImpl))
     {
     }
@@ -253,7 +253,7 @@ namespace svx
         return *this;
     }
 
-    ODataAccessDescriptor& ODataAccessDescriptor::operator=(ODataAccessDescriptor&& _rSource)
+    ODataAccessDescriptor& ODataAccessDescriptor::operator=(ODataAccessDescriptor&& _rSource) noexcept
     {
         m_pImpl = std::move(_rSource.m_pImpl);
         return *this;

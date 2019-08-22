@@ -284,7 +284,7 @@ public:
 
                                 TransferableDataHelper();
                                 TransferableDataHelper( const TransferableDataHelper& rDataHelper );
-                                TransferableDataHelper( TransferableDataHelper&& rDataHelper );
+                                TransferableDataHelper( TransferableDataHelper&& rDataHelper ) noexcept;
                                 TransferableDataHelper( const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable );
                                 ~TransferableDataHelper();
 

@@ -267,7 +267,7 @@ public:
     explicit ScCondFormatItem();
     explicit ScCondFormatItem(sal_uInt32 nIndex);
     explicit ScCondFormatItem(const ScCondFormatIndexes& );
-    explicit ScCondFormatItem(ScCondFormatIndexes&& );
+    explicit ScCondFormatItem(ScCondFormatIndexes&&) noexcept;
 
     virtual ~ScCondFormatItem() override;
 
