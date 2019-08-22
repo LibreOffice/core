@@ -983,10 +983,10 @@ ScRangeList::ScRangeList( const ScRangeList& rList ) :
 {
 }
 
-ScRangeList::ScRangeList( ScRangeList&& rList ) :
-    SvRefBase(),
-    maRanges(std::move(rList.maRanges)),
-    mnMaxRowUsed(rList.mnMaxRowUsed)
+ScRangeList::ScRangeList(ScRangeList&& rList) noexcept
+    : SvRefBase()
+    , maRanges(std::move(rList.maRanges))
+    , mnMaxRowUsed(rList.mnMaxRowUsed)
 {
 }
 
@@ -1004,7 +1004,7 @@ ScRangeList& ScRangeList::operator=(const ScRangeList& rList)
     return *this;
 }
 
-ScRangeList& ScRangeList::operator=(ScRangeList&& rList)
+ScRangeList& ScRangeList::operator=(ScRangeList&& rList) noexcept
 {
     maRanges = std::move(rList.maRanges);
     mnMaxRowUsed = rList.mnMaxRowUsed;

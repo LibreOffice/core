@@ -237,7 +237,7 @@ int cow_wrapper_client::queryUnmodified() const
 
         /** Move-construct and steal rSrc shared resource
          */
-        explicit cow_wrapper( cow_wrapper&& rSrc ) :
+        explicit cow_wrapper( cow_wrapper&& rSrc ) noexcept :
             m_pimpl( rSrc.m_pimpl )
         {
             rSrc.m_pimpl = nullptr;
@@ -261,7 +261,7 @@ int cow_wrapper_client::queryUnmodified() const
         }
 
         /// stealing rSrc's resource
-        cow_wrapper& operator=( cow_wrapper&& rSrc )
+        cow_wrapper& operator=(cow_wrapper&& rSrc) noexcept
         {
             // self-movement guts ourself, see also 17.6.4.9
             release();

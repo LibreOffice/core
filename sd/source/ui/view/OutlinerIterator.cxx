@@ -65,7 +65,7 @@ Iterator::Iterator (const Iterator& rIterator)
 {
 }
 
-Iterator::Iterator (Iterator&& rIterator)
+Iterator::Iterator(Iterator&& rIterator) noexcept
     : mxIterator(std::move(rIterator.mxIterator))
 {
 }
@@ -91,7 +91,7 @@ Iterator& Iterator::operator= (const Iterator& rIterator)
     return *this;
 }
 
-Iterator& Iterator::operator= (Iterator&& rIterator)
+Iterator& Iterator::operator=(Iterator&& rIterator) noexcept
 {
     mxIterator = std::move(rIterator.mxIterator);
     return *this;

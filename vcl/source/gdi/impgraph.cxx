@@ -211,7 +211,7 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     }
 }
 
-ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic)
+ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic) noexcept
     : maMetaFile(std::move(rImpGraphic.maMetaFile))
     , maEx(std::move(rImpGraphic.maEx))
     , maSwapInfo(std::move(rImpGraphic.maSwapInfo))

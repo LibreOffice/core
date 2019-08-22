@@ -116,7 +116,7 @@ public:
                     Graphic();
                     Graphic( const GraphicExternalLink& rGraphicLink );
                     Graphic( const Graphic& rGraphic );
-                    Graphic( Graphic&& rGraphic );
+                    Graphic( Graphic&& rGraphic ) noexcept;
                     Graphic( const Bitmap& rBmp );
                     Graphic( const BitmapEx& rBmpEx );
                     Graphic( const VectorGraphicDataPtr& rVectorGraphicDataPtr );
@@ -125,7 +125,7 @@ public:
                     Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
 
     Graphic&        operator=( const Graphic& rGraphic );
-    Graphic&        operator=( Graphic&& rGraphic );
+    Graphic&        operator=( Graphic&& rGraphic ) noexcept;
     bool            operator==( const Graphic& rGraphic ) const;
     bool            operator!=( const Graphic& rGraphic ) const;
 

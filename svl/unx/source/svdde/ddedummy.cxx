@@ -40,7 +40,7 @@ DdeData::DdeData(const DdeData&)
 {
 }
 
-DdeData::DdeData(DdeData&&)
+DdeData::DdeData(DdeData&&) noexcept
 {
 }
 
@@ -66,7 +66,7 @@ DdeData& DdeData::operator=(const DdeData&)
     return *this;
 }
 
-DdeData& DdeData::operator=(DdeData&&)
+DdeData& DdeData::operator=(DdeData&&) noexcept
 {
     return *this;
 }

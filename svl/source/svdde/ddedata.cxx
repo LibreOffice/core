@@ -67,7 +67,7 @@ DdeData::DdeData(const DdeData& rData)
     Lock();
 }
 
-DdeData::DdeData(DdeData&& rData)
+DdeData::DdeData(DdeData&& rData) noexcept
     : xImp(std::move(rData.xImp))
 {
 }
@@ -115,7 +115,7 @@ DdeData& DdeData::operator=(const DdeData& rData)
     return *this;
 }
 
-DdeData& DdeData::operator=(DdeData&& rData)
+DdeData& DdeData::operator=(DdeData&& rData) noexcept
 {
     xImp = std::move(rData.xImp);
     return *this;

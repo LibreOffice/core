@@ -61,7 +61,7 @@ public:
                     DdeData(SAL_UNUSED_PARAMETER const void*, SAL_UNUSED_PARAMETER long, SAL_UNUSED_PARAMETER SotClipboardFormatId = SotClipboardFormatId::STRING);
                     DdeData(SAL_UNUSED_PARAMETER const OUString&);
                     DdeData(const DdeData&);
-                    DdeData(DdeData&&);
+                    DdeData(DdeData&&) noexcept;
                     ~DdeData();
 
     void const *    getData() const;
@@ -70,7 +70,7 @@ public:
     SotClipboardFormatId GetFormat() const;
 
     DdeData&        operator=(const DdeData&);
-    DdeData&        operator=(DdeData&&);
+    DdeData&        operator=(DdeData&&) noexcept;
 
     static sal_uLong GetExternalFormat(SotClipboardFormatId nFmt);
     static SotClipboardFormatId GetInternalFormat(sal_uLong nFmt);

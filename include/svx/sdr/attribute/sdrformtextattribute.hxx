@@ -52,9 +52,9 @@ namespace drawinglayer
             SdrFormTextAttribute(const SfxItemSet& rSet);
             SdrFormTextAttribute();
             SdrFormTextAttribute(const SdrFormTextAttribute& rCandidate);
-            SdrFormTextAttribute(SdrFormTextAttribute&& rCandidate);
+            SdrFormTextAttribute(SdrFormTextAttribute&& rCandidate) noexcept;
             SdrFormTextAttribute& operator=(const SdrFormTextAttribute& rCandidate);
-            SdrFormTextAttribute& operator=(SdrFormTextAttribute&& rCandidate);
+            SdrFormTextAttribute& operator=(SdrFormTextAttribute&& rCandidate) noexcept;
             ~SdrFormTextAttribute();
 
             // checks if the incarnation is default constructed

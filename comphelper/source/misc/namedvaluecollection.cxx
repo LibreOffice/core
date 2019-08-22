@@ -64,7 +64,7 @@ namespace comphelper
         *this = _rCopySource;
     }
 
-    NamedValueCollection::NamedValueCollection( NamedValueCollection&& _rCopySource )
+    NamedValueCollection::NamedValueCollection(NamedValueCollection&& _rCopySource) noexcept
         :m_pImpl( std::move(_rCopySource.m_pImpl) )
     {
     }
@@ -75,7 +75,7 @@ namespace comphelper
         return *this;
     }
 
-    NamedValueCollection& NamedValueCollection::operator=( NamedValueCollection&& i_rCopySource )
+    NamedValueCollection& NamedValueCollection::operator=(NamedValueCollection&& i_rCopySource) noexcept
     {
         m_pImpl = std::move(i_rCopySource.m_pImpl);
         return *this;
