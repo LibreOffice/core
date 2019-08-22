@@ -246,7 +246,7 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl, LinkPar
     const sal_uInt16 nSel = m_xSettings->GetSelectedAddress();
     const uno::Sequence< OUString> aBlocks =
                 m_pWizard->GetConfigItem().GetAddressBlocks();
-    m_xPreview->SetAddress(SwAddressPreview::FillData(aBlocks[nSel],
+    m_xPreview->SetAddress(AddressPreview::FillData(aBlocks[nSel],
                                                          m_pWizard->GetConfigItem()));
     m_pWizard->GetConfigItem().SetCurrentAddressBlockIndex( nSel );
     GetWizard()->UpdateRoadmap();
@@ -291,7 +291,7 @@ void SwMailMergeAddressBlockPage::InsertDataHdl(weld::Button* pButton)
             const sal_uInt16 nSel = m_xSettings->GetSelectedAddress();
             const uno::Sequence< OUString> aBlocks =
                         m_pWizard->GetConfigItem().GetAddressBlocks();
-            m_xPreview->SetAddress(SwAddressPreview::FillData(aBlocks[nSel], rConfig));
+            m_xPreview->SetAddress(AddressPreview::FillData(aBlocks[nSel], rConfig));
         }
     }
     m_xPrevSetIB->set_sensitive(bEnable);
@@ -569,7 +569,7 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl, weld::TreeView&,
 
 IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, EditModifyHdl_Impl, AddressMultiLineEdit&, void)
 {
-    m_xPreview->SetAddress(SwAddressPreview::FillData(GetAddress(), m_rConfigItem));
+    m_xPreview->SetAddress(AddressPreview::FillData(GetAddress(), m_rConfigItem));
     UpdateImageButtons_Impl();
 }
 
@@ -1026,7 +1026,7 @@ IMPL_LINK_NOARG(SwAssignFieldsDialog, OkHdl_Impl, weld::Button&, void)
 IMPL_LINK_NOARG(SwAssignFieldsDialog, AssignmentModifyHdl_Impl, LinkParamNone*, void)
 {
     uno::Sequence< OUString > aAssignments = CreateAssignments();
-    const OUString sPreview = SwAddressPreview::FillData(
+    const OUString sPreview = AddressPreview::FillData(
             m_rPreviewString, m_rConfigItem, &aAssignments);
     m_xPreview->SetAddress(sPreview);
 }
