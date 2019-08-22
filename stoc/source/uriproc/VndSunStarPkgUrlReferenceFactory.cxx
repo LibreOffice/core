@@ -19,6 +19,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
@@ -31,7 +32,6 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <osl/diagnose.h>
 #include <sal/types.h>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -88,7 +88,11 @@ css::uno::Reference< css::uri::XUriReference >
 Factory::createVndSunStarPkgUrlReference(
     css::uno::Reference< css::uri::XUriReference > const & authority)
 {
-    OSL_ASSERT(authority.is());
+    if (!authority.is()) {
+        throw css::uno::RuntimeException(
+            "null authority passed to"
+            " XVndSunStarPkgUrlReferenceFactory.createVndSunStarPkgUrlReference");
+    }
     if (authority->isAbsolute() && !authority->hasFragment()) {
         OUStringBuffer buf;
         buf.append("vnd.sun.star.pkg://");
@@ -99,7 +103,6 @@ Factory::createVndSunStarPkgUrlReference(
         css::uno::Reference< css::uri::XUriReference > uriRef(
             css::uri::UriReferenceFactory::create(m_context)->parse(
                 buf.makeStringAndClear()));
-        OSL_ASSERT(uriRef.is());
         return uriRef;
     } else {
         return css::uno::Reference< css::uri::XUriReference >();

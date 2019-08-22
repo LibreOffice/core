@@ -17,10 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
 
 #include "UriReference.hxx"
 
-#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -40,8 +42,8 @@ UriReference::UriReference(
     m_hasQuery(bHasQuery),
     m_hasFragment(false)
 {
-    OSL_ASSERT(authority.isEmpty() || bHasAuthority);
-    OSL_ASSERT(query.isEmpty() || bHasQuery);
+    assert(authority.isEmpty() || bHasAuthority);
+    assert(query.isEmpty() || bHasQuery);
 }
 
 UriReference::~UriReference() {}
