@@ -502,7 +502,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121663, "tdf121663.docx")
     assertXPath(pXmlDoc, "//w:lnNumType", "distance", "283");
 }
 
-DECLARE_OOXMLIMPORT_TEST(testInvalidDateFormField, "invalid_date_form_field.docx")
+DECLARE_OOXMLEXPORT_TEST(testInvalidDateFormField, "invalid_date_form_field.docx")
 {
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
