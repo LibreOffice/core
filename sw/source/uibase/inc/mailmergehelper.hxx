@@ -57,7 +57,7 @@ struct SwAddressPreview_Impl;
 
 // Preview window used to show the possible selection of address blocks
 // and also the resulting address filled with database data
-class SW_DLLPUBLIC AddressPreview : public weld::CustomWidgetController
+class SW_DLLPUBLIC SwAddressPreview : public weld::CustomWidgetController
 {
     std::unique_ptr<SwAddressPreview_Impl> pImpl;
     std::unique_ptr<weld::ScrolledWindow> m_xVScrollBar;
@@ -74,8 +74,8 @@ class SW_DLLPUBLIC AddressPreview : public weld::CustomWidgetController
     DECL_LINK(ScrollHdl, weld::ScrolledWindow&,void);
 
 public:
-    AddressPreview(std::unique_ptr<weld::ScrolledWindow> xParent);
-    virtual ~AddressPreview() override;
+    SwAddressPreview(std::unique_ptr<weld::ScrolledWindow> xParent);
+    virtual ~SwAddressPreview() override;
 
     /** The address string is a list of address elements separated by spaces
     and breaks. The addresses fit into the given layout. If more addresses then
