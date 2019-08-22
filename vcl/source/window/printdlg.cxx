@@ -1760,17 +1760,17 @@ void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
     }
 }
 
-bool PrintDialog::isPrintToFile()
+bool PrintDialog::isPrintToFile() const
 {
     return ( mpPrinters->GetSelectedEntryPos() == 0 );
 }
 
-bool PrintDialog::isCollate()
+bool PrintDialog::isCollate() const
 {
     return mpCopyCountField->GetValue() > 1 && mpCollateBox->IsChecked();
 }
 
-bool PrintDialog::hasPreview()
+bool PrintDialog::hasPreview() const
 {
     return mpPreviewBox->IsChecked();
 }

@@ -65,12 +65,12 @@ public:
     GlyphSet (sal_Int32 nFontID, bool bVertical);
     ~GlyphSet ();
 
-    sal_Int32       GetFontID () { return mnFontID;}
+    sal_Int32       GetFontID () const { return mnFontID;}
     static OString
     GetReencodedFontName (rtl_TextEncoding nEnc,
                           const OString &rFontName);
 
-    bool            IsVertical () { return mbVertical;}
+    bool            IsVertical () const { return mbVertical;}
 
     void            DrawGlyph (PrinterGfx& rGfx,
                                const Point& rPoint,

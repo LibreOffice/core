@@ -126,7 +126,7 @@ static void ImplCursorInvert(vcl::Window* pWindow, ImplCursorData const * pData)
         pGuard->SetPaintRect(pRenderContext->PixelToLogic(aPaintRect));
 }
 
-bool vcl::Cursor::ImplPrepForDraw(OutputDevice* pDevice, ImplCursorData& rData)
+bool vcl::Cursor::ImplPrepForDraw(const OutputDevice* pDevice, ImplCursorData& rData)
 {
     if (pDevice && !rData.mbCurVisible)
     {

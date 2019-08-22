@@ -301,7 +301,7 @@ void ORoadmap::SetRoadmapInteractive(bool _bInteractive)
     }
 }
 
-bool ORoadmap::IsRoadmapInteractive()
+bool ORoadmap::IsRoadmapInteractive() const
 {
     return m_pImpl->isInteractive();
 }

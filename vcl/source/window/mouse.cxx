@@ -604,7 +604,7 @@ Window::PointerState Window::GetPointerState()
     return aState;
 }
 
-bool Window::IsMouseOver()
+bool Window::IsMouseOver() const
 {
     return ImplGetWinData()->mbMouseOver;
 }

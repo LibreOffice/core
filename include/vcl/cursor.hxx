@@ -100,7 +100,7 @@ public:
 
 private:
     void LOKNotify( vcl::Window* pWindow, const OUString& rAction );
-    bool ImplPrepForDraw(OutputDevice* pDevice, ImplCursorData& rData);
+    bool ImplPrepForDraw(const OutputDevice* pDevice, ImplCursorData& rData);
     void ImplRestore();
     void ImplDoShow( bool bDrawDirect, bool bRestore );
     bool ImplDoHide( bool bStop );

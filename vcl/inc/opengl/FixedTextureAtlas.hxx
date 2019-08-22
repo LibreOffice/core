@@ -36,7 +36,7 @@ public:
     OpenGLTexture InsertBuffer(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8 const * pData);
     OpenGLTexture Reserve(int nWidth, int nHeight);
 
-    int GetSubtextureSize()
+    int GetSubtextureSize() const
     {
         return mSubTextureSize;
     }

@@ -31,7 +31,7 @@ private:
     void readPart(tools::XmlWalker& rWalker, std::shared_ptr<WidgetDefinitionPart> rpPart);
 
     void readDrawingDefinition(tools::XmlWalker& rWalker,
-                               std::shared_ptr<WidgetDefinitionState>& rStates);
+                               const std::shared_ptr<WidgetDefinitionState>& rStates);
 
 public:
     WidgetDefinitionReader(OUString const& rDefinitionFile, OUString const& rResourcePath);
