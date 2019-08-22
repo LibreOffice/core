@@ -579,6 +579,13 @@ DECLARE_OOXMLIMPORT_TEST(testInvalidDateFormField, "invalid_date_form_field.docx
     CPPUNIT_ASSERT_EQUAL(int(3), nIndex);
 }
 
+DECLARE_OOXMLEXPORT_TEST(tdf127085, "tdf127085.docx")
+{
+    // Fill transparency was lost during export
+    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(50), getProperty<sal_Int16>(xShape, "FillTransparence"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
