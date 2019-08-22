@@ -216,12 +216,12 @@ bool DdeConnection::IsConnected()
     }
 }
 
-const OUString DdeConnection::GetServiceName()
+OUString DdeConnection::GetServiceName() const
 {
     return pService->toOUString();
 }
 
-const OUString DdeConnection::GetTopicName()
+ OUString DdeConnection::GetTopicName() const
 {
     return pTopic->toOUString();
 }
