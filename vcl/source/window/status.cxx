@@ -1187,7 +1187,7 @@ void StatusBar::SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand )
     }
 }
 
-const OUString StatusBar::GetItemCommand( sal_uInt16 nItemId )
+OUString StatusBar::GetItemCommand( sal_uInt16 nItemId )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 

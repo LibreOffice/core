@@ -682,10 +682,9 @@ bool FreetypeFont::GetAntialiasAdvice() const
 
 // determine unicode ranges in font
 
-const FontCharMapRef FreetypeFont::GetFontCharMap() const
+FontCharMapRef FreetypeFont::GetFontCharMap() const
 {
-    const FontCharMapRef xFCMap = mpFontInfo->GetFontCharMap();
-    return xFCMap;
+    return mpFontInfo->GetFontCharMap();
 }
 
 const FontCharMapRef& FreetypeFontInfo::GetFontCharMap()

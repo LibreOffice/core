@@ -73,7 +73,7 @@ void Qt5Graphics::GetFontMetric(ImplFontMetricDataRef& rFMD, int nFallbackLevel)
     rFMD->SetMinKashida(m_pTextStyle[nFallbackLevel]->GetKashidaWidth());
 }
 
-const FontCharMapRef Qt5Graphics::GetFontCharMap() const
+FontCharMapRef Qt5Graphics::GetFontCharMap() const
 {
     if (!m_pTextStyle[0])
         return FontCharMapRef(new FontCharMap());
