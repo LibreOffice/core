@@ -1,4 +1,4 @@
-From 46221fdfc62e317d34def4ebede814cf2bb14ebb Mon Sep 17 00:00:00 2001
+From 37e7b4629c06c241e2fbd33c1897b384875bcbd3 Mon Sep 17 00:00:00 2001
 From: Stephan Bergmann <sbergman@redhat.com>
 Date: Fri, 23 Aug 2019 10:26:51 +0200
 Subject: [PATCH] Blind fix attempt for older macOS builds
@@ -30,27 +30,84 @@ MacOSX10.13.sdk, but not sure with what Clang and libc++ versions):
 > Makefile:1804: recipe for target 'liborcus_0.15_la-xml_map_tree.lo' failed
 > make[5]: *** [liborcus_0.15_la-xml_map_tree.lo] Error 1
 
-(while building orcus as part of LibreOffice)
+(while building orcus as part of LibreOffice).
+
+(Using "nm" instead of a more descriptive variable name "name" to avoid
+-Wshadow warnings like
+
+> xml_map_tree.cpp: In member function ‘orcus::xml_map_tree::element* orcus::xml_map_tree::element::get_or_create_child(orcus::xml_map_tree&, orcus::xmlns_id_t, const orcus::pstring&)’:
+> xml_map_tree.cpp:214:16: warning: declaration of ‘name’ shadows a member of ‘orcus::xml_map_tree::element’ [-Wshadow]
+>   214 |     auto const name = sp.intern(_name.get(), _name.size()).first;
+>       |                ^~~~
+> In file included from xml_map_tree.cpp:8:
+> xml_map_tree.hpp:126:17: note: shadowed declaration is here
+>   126 |         pstring name;
+>       |                 ^~~~
+
+)
 ---
- src/liborcus/xml_map_tree.cpp | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ src/liborcus/xml_map_tree.cpp | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/src/liborcus/xml_map_tree.cpp b/src/liborcus/xml_map_tree.cpp
-index 8338b930..8fd40534 100644
+index 8338b930..f66b1ff6 100644
 --- a/src/liborcus/xml_map_tree.cpp
 +++ b/src/liborcus/xml_map_tree.cpp
 @@ -211,12 +211,13 @@ xml_map_tree::element* xml_map_tree::element::get_or_create_child(
      string_pool& sp = parent.m_names;
  
      // Insert a new element of this name.
-+    auto const name = sp.intern(_name.get(), _name.size()).first;
++    auto const nm = sp.intern(_name.get(), _name.size()).first;
      child_elements->push_back(
          parent.m_element_pool.construct(
              element::args_type(
                  parent,
                  _ns,
 -                sp.intern(_name.get(), _name.size()).first,
-+                name,
++                nm,
+                 element_unlinked,
+                 reference_unknown
+             )
+@@ -251,12 +252,13 @@ xml_map_tree::element* xml_map_tree::element::get_or_create_linked_child(
+     string_pool& sp = parent.m_names;
+ 
+     // Insert a new linked element of this name.
++    auto const nm = sp.intern(_name.get(), _name.size()).first;
+     child_elements->push_back(
+         parent.m_element_pool.construct(
+             element::args_type(
+                 parent,
+                 _ns,
+-                sp.intern(_name.get(), _name.size()).first,
++                nm,
+                 element_linked,
+                 _ref_type
+             )
+@@ -699,11 +701,12 @@ xml_map_tree::linked_node_type xml_map_tree::get_linked_node(const pstring& xpat
+         if (token.attribute)
+             throw xpath_error("root element cannot be an attribute.");
+ 
++        auto const nm = m_names.intern(token.name).first;
+         mp_root = m_element_pool.construct(
+             element::args_type(
+                 *this,
+                 token.ns,
+-                m_names.intern(token.name).first,
++                nm,
+                 element_unlinked,
+                 reference_unknown
+             )
+@@ -789,11 +792,12 @@ xml_map_tree::element* xml_map_tree::get_element(const pstring& xpath)
+         if (token.attribute)
+             throw xpath_error("root element cannot be an attribute.");
+ 
++        auto const nm = m_names.intern(token.name).first;
+         mp_root = m_element_pool.construct(
+             element::args_type(
+                 *this,
+                 token.ns,
+-                m_names.intern(token.name).first,
++                nm,
                  element_unlinked,
                  reference_unknown
              )
