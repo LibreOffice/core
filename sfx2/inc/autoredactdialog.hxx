@@ -82,10 +82,10 @@ class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxModalDialog
     VclPtr<PushButton> m_pDeleteBtn;
 
     DECL_LINK(Load, Button*, void);
-    /*DECL_LINK(Save, Button*, void);
-    DECL_LINK(AddHdl, Button*, void);
-    DECL_LINK(EditHdl, Button*, void);
-    DECL_LINK(DeleteHdl, Button*, void);*/
+    DECL_LINK(Save, Button*, void);
+    /*DECL_LINK(AddHdl, Button*, void);
+    DECL_LINK(EditHdl, Button*, void);*/
+    DECL_LINK(DeleteHdl, Button*, void);
 
     DECL_LINK(LoadHdl, sfx2::FileDialogHelper*, void);
     DECL_LINK(SaveHdl, sfx2::FileDialogHelper*, void);
