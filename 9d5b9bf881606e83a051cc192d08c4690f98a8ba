@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_cbcc356c",
+        "filename": "vcl/source/filter/graphicfilter.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2242,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-23T07:34:42Z",
+      "side": 1,
+      "message": "I am sure that this will be copy-elided by compilers anyway, but iiuc, the strict c++17 copy elision guarantee does not cover this, but covers code like\n\n    return Link\u003cConvertData\u0026,bool\u003e( LINK( const_cast\u003cGraphicFilter*\u003e(this), GraphicFilter, FilterCallback ) );\n\n(like you did in some other places). Am I right?",
+      "range": {
+        "startLine": 2241,
+        "startChar": 4,
+        "endLine": 2242,
+        "endChar": 17
+      },
+      "revId": "9d5b9bf881606e83a051cc192d08c4690f98a8ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
