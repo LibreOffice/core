@@ -68,7 +68,7 @@ public:
     // only needed for import, leave them empty, refactor later XmlFilterBase to export and import base?
     virtual oox::vml::Drawing* getVmlDrawing() override { return nullptr; }
     virtual const oox::drawingml::Theme* getCurrentTheme() const override { return nullptr; }
-    virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() override { return oox::drawingml::table::TableStyleListPtr(); }
+    virtual oox::drawingml::table::TableStyleListPtr getTableStyles() override { return oox::drawingml::table::TableStyleListPtr(); }
     virtual oox::drawingml::chart::ChartConverter* getChartConverter() override { return nullptr; }
 
     static const char* GetSideDirection( sal_uInt8 nDirection );

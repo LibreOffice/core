@@ -985,7 +985,7 @@ const oox::drawingml::Theme* XclExpXmlStream::getCurrentTheme() const
     return nullptr;
 }
 
-const oox::drawingml::table::TableStyleListPtr XclExpXmlStream::getTableStyles()
+oox::drawingml::table::TableStyleListPtr XclExpXmlStream::getTableStyles()
 {
     return oox::drawingml::table::TableStyleListPtr();
 }

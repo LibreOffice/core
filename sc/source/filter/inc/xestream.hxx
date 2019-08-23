@@ -310,7 +310,7 @@ public:
     virtual bool importDocument() throw() override;
     virtual oox::vml::Drawing* getVmlDrawing() override;
     virtual const oox::drawingml::Theme* getCurrentTheme() const override;
-    virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() override;
+    virtual oox::drawingml::table::TableStyleListPtr getTableStyles() override;
     virtual oox::drawingml::chart::ChartConverter* getChartConverter() override;
 
 private:

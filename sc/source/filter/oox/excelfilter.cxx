@@ -191,7 +191,7 @@ const ::oox::drawingml::Theme* ExcelFilter::getCurrentTheme() const
     return nullptr;
 }
 
-const TableStyleListPtr ExcelFilter::getTableStyles()
+TableStyleListPtr ExcelFilter::getTableStyles()
 {
     return TableStyleListPtr();
 }
