@@ -332,7 +332,7 @@ void Deck::ShowPanel(const Panel& rPanel)
     }
 }
 
-static const OUString GetWindowClassification(const vcl::Window* pWindow)
+static OUString GetWindowClassification(const vcl::Window* pWindow)
 {
     const OUString& rsName (pWindow->GetText());
     if (!rsName.isEmpty())

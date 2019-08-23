@@ -149,7 +149,7 @@ public:
 
     SAL_DLLPRIVATE void SetDispatchProvider_Impl( const css::uno::Reference< css::frame::XDispatchProvider > & rFrame );
     void             SetActiveFrame( const css::uno::Reference< css::frame::XFrame > & rFrame );
-    const css::uno::Reference< css::frame::XFrame > GetActiveFrame() const;
+    css::uno::Reference< css::frame::XFrame > GetActiveFrame() const;
                      // Reconfig
     sal_uInt16       EnterRegistrations(const char *pFile = nullptr, int nLine = 0);
     void             LeaveRegistrations( const char *pFile = nullptr, int nLine = 0 );
