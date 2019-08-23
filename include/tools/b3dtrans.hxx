@@ -121,8 +121,8 @@ public:
     void CalcViewport();
 
     // Direct accessors for miscellaneous transformations
-    const basegfx::B3DPoint WorldToEyeCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint EyeToWorldCoor(const basegfx::B3DPoint& rVec);
+    basegfx::B3DPoint WorldToEyeCoor(const basegfx::B3DPoint& rVec);
+    basegfx::B3DPoint EyeToWorldCoor(const basegfx::B3DPoint& rVec);
 
     static void Frustum(
         basegfx::B3DHomMatrix& rTarget,

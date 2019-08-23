@@ -44,7 +44,7 @@ public:
     {
     }
 
-    const OUString getGlob() const
+    OUString getGlob() const
     {
         return OStringToOUString(aWildString, osl_getThreadTextEncoding());
     }
