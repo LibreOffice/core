@@ -29,6 +29,7 @@
 #include <xmloff/odffields.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IMark.hxx>
+#include <com/sun/star/drawing/XControlShape.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -553,6 +554,16 @@ DECLARE_OOXMLEXPORT_TEST(tdf127085, "tdf127085.docx")
     // Fill transparency was lost during export
     uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), getProperty<sal_Int16>(xShape, "FillTransparence"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(tdf119809, "tdf119809.docx")
+{
+    // Combobox without an item list lost during import
+    uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.ComboBox")));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<OUString> >(xPropertySet, "StringItemList").getLength());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
