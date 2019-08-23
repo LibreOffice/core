@@ -79,8 +79,8 @@ public:
                 Show();
                 Size aParentSize(pParent->GetOutputSizePixel());
                 Size aOwnSize(GetSizePixel());
-                aParentSize.Width() -= aOwnSize.Width();
-                aParentSize.Height() -= aOwnSize.Height();
+                aParentSize.setWidth(aParentSize.Width() - aOwnSize.Width());
+                aParentSize.setHeight(aParentSize.Height() - aOwnSize.Height());
                 SetPosPixel(Point(aParentSize.Width(), aParentSize.Height()));
             }
         ~RulerDebugWindow();
