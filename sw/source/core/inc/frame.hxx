@@ -1232,11 +1232,15 @@ public:
             m_pForbidFrame->ForbidDelete();
     }
 
+    SwFrameDeleteGuard(const SwFrameDeleteGuard&) =delete;
+
     ~SwFrameDeleteGuard()
     {
         if (m_pForbidFrame)
             m_pForbidFrame->AllowDelete();
     }
+
+    SwFrameDeleteGuard& operator=(const SwFrameDeleteGuard&) =delete;
 };
 
 typedef long (SwFrame:: *SwFrameGet)() const;
