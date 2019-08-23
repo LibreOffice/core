@@ -1761,6 +1761,7 @@ void DomainMapper_Impl::appendTextContent(
                 xTextAppendAndConvert->insertTextContentWithProperties( xContent, xPropertyValues, m_aTextAppendStack.top().xInsertPosition );
             else
                 xTextAppendAndConvert->appendTextContent( xContent, xPropertyValues );
+            CheckRedline( xContent->getAnchor( ) );
         }
         catch(const lang::IllegalArgumentException&)
         {
