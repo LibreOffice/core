@@ -612,7 +612,7 @@ ScXMLConResContext::ScXMLConResContext( ScXMLImport& rImport,
     OUString sConRes;
     if ( rAttrList.is() )
     {
-        auto &aIter( rAttrList->find( XML_ELEMENT( XLINK, XML_HREF ) ) );
+        auto aIter( rAttrList->find( XML_ELEMENT( XLINK, XML_HREF ) ) );
         if (aIter != rAttrList->end())
             sConRes = aIter.toString();
     }

@@ -1503,7 +1503,7 @@ ScXMLDataPilotGroupContext::ScXMLDataPilotGroupContext( ScXMLImport& rImport,
 {
     if ( rAttrList.is() )
     {
-        auto &aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_NAME ) ) );
+        auto aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_NAME ) ) );
         if (aIter != rAttrList->end())
             sName = aIter.toString();
     }
@@ -1545,7 +1545,7 @@ ScXMLDataPilotGroupMemberContext::ScXMLDataPilotGroupMemberContext( ScXMLImport&
 {
     if ( rAttrList.is() )
     {
-        auto &aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_NAME ) ) );
+        auto aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_NAME ) ) );
         if (aIter != rAttrList->end())
             sName = aIter.toString();
     }

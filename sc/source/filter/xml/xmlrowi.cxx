@@ -243,7 +243,7 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
         ++nGroupStartRow;
         if ( rAttrList.is() )
         {
-            auto &aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_DISPLAY ) ) );
+            auto aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_DISPLAY ) ) );
             if (aIter != rAttrList->end())
                 bGroupDisplay = IsXMLToken( aIter, XML_TRUE );
         }
