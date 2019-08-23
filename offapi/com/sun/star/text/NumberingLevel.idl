@@ -145,7 +145,7 @@ published service NumberingLevel
     [property] long FirstLineOffset;
 
 
-    /** specifies the type of numbering.
+    /** specifies the type of numbering. @see NumberingType
      */
     [property] short NumberingType;
 
