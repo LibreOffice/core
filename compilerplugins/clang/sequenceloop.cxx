@@ -64,7 +64,7 @@ bool SequenceLoop::VisitCXXForRangeStmt(CXXForRangeStmt const* forStmt)
 
     report(DiagnosticsEngine::Warning,
            "use std::as_const, or make range var const, to avoid creating a copy of the Sequence",
-           compat::getBeginLoc(forStmt))
+           compat::getBeginLoc(forStmt->getRangeInit()))
         << forStmt->getSourceRange();
     return true;
 }
