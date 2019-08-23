@@ -1016,7 +1016,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             else
                 m_pImpl->setSdtEndDeferred(true);
 
-            if (!m_pImpl->m_pSdtHelper->getDropDownItems().empty())
+            if (m_pImpl->m_pSdtHelper->isInsideDropDownControl())
                 m_pImpl->m_pSdtHelper->createDropDownControl();
         break;
         case NS_ooxml::LN_CT_SdtListItem_displayText:
@@ -2394,6 +2394,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_SdtPr_dropDownList:
     case NS_ooxml::LN_CT_SdtPr_comboBox:
     {
+        m_pImpl->m_pSdtHelper->setInsideDropDownControl(true);
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if (pProperties.get() != nullptr)
             pProperties->resolve(*this);
@@ -3193,7 +3194,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     }
 
     bool bNewLine = len == 1 && (sText[0] == 0x0d || sText[0] == 0x07);
-    if (!m_pImpl->m_pSdtHelper->getDropDownItems().empty())
+    if (m_pImpl->m_pSdtHelper->isInsideDropDownControl())
     {
         if (bNewLine)
             // Dropdown control has single-line texts, so in case of newline, create the control.
