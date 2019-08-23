@@ -352,7 +352,9 @@ void ChartAreaPanel::setFillStyleAndColor(const XFillStyleItem* pStyleItem,
 
     if (pStyleItem)
         xPropSet->setPropertyValue("FillStyle", css::uno::Any(pStyleItem->GetValue()));
-    xPropSet->setPropertyValue("FillColor", css::uno::Any(rColorItem.GetValue()));
+
+    sal_Int32 nColor = rColorItem.GetColorValue().mValue;
+    xPropSet->setPropertyValue("FillColor", css::uno::Any(nColor));
 }
 
 void ChartAreaPanel::setFillStyleAndGradient(const XFillStyleItem* pStyleItem,
