@@ -11,7 +11,6 @@
 #include <app.hrc>
 #include <test/bootstrapfixture.hxx>
 #include <test/helper/transferable.hxx>
-#include <unotest/macros_test.hxx>
 #include <test/xmltesttools.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -26,14 +25,12 @@
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
-#include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/outlobj.hxx>
 #include <osl/conditn.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/srchitem.hxx>
-#include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <comphelper/lok.hxx>
@@ -50,7 +47,6 @@
 #include <undo/undomanager.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svxids.hrc>
-#include <DrawViewShell.hxx>
 #include <pres.hxx>
 #include <navigatr.hxx>
 #include <vcl/cursor.hxx>

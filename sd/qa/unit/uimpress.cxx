@@ -20,9 +20,6 @@
 #include <sddll.hxx>
 #include <drawdoc.hxx>
 
-#include <iostream>
-#include <vector>
-
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
