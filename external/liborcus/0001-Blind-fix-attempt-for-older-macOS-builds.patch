@@ -1,4 +1,4 @@
-From 37e7b4629c06c241e2fbd33c1897b384875bcbd3 Mon Sep 17 00:00:00 2001
+From a0d47fff81ac100192ada343574da75d992dd00d Mon Sep 17 00:00:00 2001
 From: Stephan Bergmann <sbergman@redhat.com>
 Date: Fri, 23 Aug 2019 10:26:51 +0200
 Subject: [PATCH] Blind fix attempt for older macOS builds
@@ -46,11 +46,11 @@ MacOSX10.13.sdk, but not sure with what Clang and libc++ versions):
 
 )
 ---
- src/liborcus/xml_map_tree.cpp | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ src/liborcus/xml_map_tree.cpp | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
 diff --git a/src/liborcus/xml_map_tree.cpp b/src/liborcus/xml_map_tree.cpp
-index 8338b930..f66b1ff6 100644
+index 8338b930..1a9251c8 100644
 --- a/src/liborcus/xml_map_tree.cpp
 +++ b/src/liborcus/xml_map_tree.cpp
 @@ -211,12 +211,13 @@ xml_map_tree::element* xml_map_tree::element::get_or_create_child(
@@ -97,7 +97,21 @@ index 8338b930..f66b1ff6 100644
                  element_unlinked,
                  reference_unknown
              )
-@@ -789,11 +792,12 @@ xml_map_tree::element* xml_map_tree::get_element(const pstring& xpath)
+@@ -748,11 +751,12 @@ xml_map_tree::linked_node_type xml_map_tree::get_linked_node(const pstring& xpat
+         if (it != attrs.end())
+             throw xpath_error("This attribute is already linked.  You can't link the same attribute twice.");
+ 
++        auto const nm = m_names.intern(token.name.get(), token.name.size()).first;
+         attribute* p = m_attribute_pool.construct(
+             attribute::args_type(
+                 *this,
+                 token.ns,
+-                m_names.intern(token.name.get(), token.name.size()).first,
++                nm,
+                 ref_type
+             )
+         );
+@@ -789,11 +793,12 @@ xml_map_tree::element* xml_map_tree::get_element(const pstring& xpath)
          if (token.attribute)
              throw xpath_error("root element cannot be an attribute.");
  
