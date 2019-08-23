@@ -30,6 +30,7 @@
 
 class UserDrawEvent;
 
+/// A widget used to choose from a list of items and which has an entry.
 class VCL_DLLPUBLIC ComboBox : public Edit
 {
 private:
