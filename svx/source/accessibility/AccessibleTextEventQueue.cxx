@@ -49,7 +49,13 @@ namespace accessibility
 
     void AccessibleTextEventQueue::Append( const SdrHint& rHint )
     {
-        maEventQueue.push_back( new SdrHint( rHint ) );
+        // only enqueue the events we actually care about in
+        // AccessibleTextHelper_Impl::ProcessQueue(), because
+        // the cost of some events adds up.
+        auto eKind = rHint.GetKind();
+        if (eKind == SdrHintKind::BeginEdit
+            || eKind == SdrHintKind::EndEdit)
+            maEventQueue.push_back( new SdrHint( rHint ) );
     }
 
     void AccessibleTextEventQueue::Append( const TextHint& rHint )
@@ -82,8 +88,9 @@ namespace accessibility
     void AccessibleTextEventQueue::Clear()
     {
         // clear queue
-        while( !IsEmpty() )
-            PopFront();
+        for( auto p : maEventQueue)
+            delete p;
+        maEventQueue.clear();
     }
 
 } // end of namespace accessibility

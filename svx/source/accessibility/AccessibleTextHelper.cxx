@@ -1134,6 +1134,8 @@ namespace accessibility
             {
                 const SfxHint& rHint = *pHint;
 
+                // Note, if you add events here, you need to update the AccessibleTextEventQueue::Append
+                // code, because only the events we process here, are actually queued there.
 
                 try
                 {
