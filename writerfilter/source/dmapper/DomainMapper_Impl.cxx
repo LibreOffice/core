@@ -2284,7 +2284,9 @@ void DomainMapper_Impl::PopAnnotation()
         if (m_nAnnotationId == -1 || !m_aAnnotationPositions[m_nAnnotationId].m_xStart.is() || !m_aAnnotationPositions[m_nAnnotationId].m_xEnd.is())
         {
             uno::Sequence< beans::PropertyValue > aEmptyProperties;
-            appendTextContent( uno::Reference< text::XTextContent >( m_xAnnotationField, uno::UNO_QUERY_THROW ), aEmptyProperties );
+            uno::Reference< text::XTextContent > xContent( m_xAnnotationField, uno::UNO_QUERY_THROW );
+            appendTextContent( xContent, aEmptyProperties );
+            CheckRedline( xContent->getAnchor( ) );
         }
         else
         {
