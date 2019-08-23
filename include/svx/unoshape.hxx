@@ -588,7 +588,7 @@ protected:
 
     void resetModifiedState();
 
-    const SvGlobalName GetClassName_Impl(OUString& rHexCLSID);
+    SvGlobalName GetClassName_Impl(OUString& rHexCLSID);
 public:
     SvxOle2Shape(SdrObject* pObj);
     SvxOle2Shape(SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet);

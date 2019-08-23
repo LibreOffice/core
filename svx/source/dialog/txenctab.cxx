@@ -23,7 +23,7 @@
 #include <svx/txenctab.hxx>
 #include <txenctab.hrc>
 
-const OUString SvxTextEncodingTable::GetTextString(const rtl_TextEncoding nEnc)
+OUString SvxTextEncodingTable::GetTextString(const rtl_TextEncoding nEnc)
 {
     const size_t nCount = SAL_N_ELEMENTS(RID_SVXSTR_TEXTENCODING_TABLE);
 

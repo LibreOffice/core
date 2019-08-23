@@ -27,7 +27,7 @@
 class SVX_DLLPUBLIC SvxTextEncodingTable
 {
 public:
-    static const OUString GetTextString(const rtl_TextEncoding nEnc);
+    static OUString GetTextString(const rtl_TextEncoding nEnc);
     static rtl_TextEncoding GetTextEncoding(const OUString& rStr);
 };
 

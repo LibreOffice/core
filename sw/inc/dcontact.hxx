@@ -236,7 +236,7 @@ class SwDrawVirtObj : public SdrVirtObj
             SwDrawContact& _rDrawContact);
 
         /// access to offset
-        virtual const Point GetOffset() const override;
+        virtual Point GetOffset() const override;
 
         virtual SwDrawVirtObj* CloneSdrObject(SdrModel& rTargetModel) const override;
         SwDrawVirtObj& operator= (const SwDrawVirtObj& rObj);

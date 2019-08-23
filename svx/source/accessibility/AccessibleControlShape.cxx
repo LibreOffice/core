@@ -82,7 +82,7 @@ namespace
         return "LabelControl";
     }
     // return the property which should be used as AccessibleName
-    const OUString lcl_getPreferredAccNameProperty( const Reference< XPropertySetInfo >& _rxPSI )
+    OUString lcl_getPreferredAccNameProperty( const Reference< XPropertySetInfo >& _rxPSI )
     {
         if ( _rxPSI.is() && _rxPSI->hasPropertyByName( lcl_getLabelPropertyName() ) )
             return lcl_getLabelPropertyName();
