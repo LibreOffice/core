@@ -559,10 +559,10 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(vcl::Window* pParent)
     m_pAddBtn->SetClickHdl(LINK(this, SfxAutoRedactDialog, AddHdl));
     m_pEditBtn->SetClickHdl(LINK(this, SfxAutoRedactDialog, EditHdl));
 
-    // Can be used to remmeber the last set of redaction targets?
-    /*OUString sExtraData;
+    // Bring back last set of targets
+    OUString sExtraData;
     SvtViewOptions aDlgOpt(EViewType::Dialog,
-                           OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+                           OStringToOUString(GetHelpId(), RTL_TEXTENCODING_UTF8));
 
     if (aDlgOpt.Exists())
     {
@@ -573,13 +573,14 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(vcl::Window* pParent)
     // update the targets configuration if necessary
     if (!sExtraData.isEmpty())
     {
-        weld::WaitObject aWaitCursor(m_xDialog.get());
+        EnterWait();
 
         try
         {
             // Create path string, and read JSON from file
             boost::property_tree::ptree aTargetsJSON;
-            std::stringstream aStream(std::string(sExtraData.toUtf8()));
+            std::stringstream aStream(
+                std::string(sExtraData.toUtf8().getStr())); //TODO: Check correctness
 
             boost::property_tree::read_json(aStream, aTargetsJSON);
 
@@ -588,7 +589,7 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(vcl::Window* pParent)
                  aTargetsJSON.get_child("RedactionTargets"))
             {
                 RedactionTarget* pTarget = JSONtoRedactionTarget(rValue);
-                addTarget(pTarget);
+                m_pTargetsBox->InsertTarget(pTarget);
             }
         }
         catch (css::uno::Exception& e)
@@ -598,18 +599,18 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(vcl::Window* pParent)
             return;
             //TODO: Warn the user with a message box
         }
-    }*/
+
+        LeaveWait();
+    }
 }
 
 SfxAutoRedactDialog::~SfxAutoRedactDialog()
 {
-    if (!m_bTargetsCopied)
-        clearTargets();
-    /*if (m_aTableTargets.empty())
+    if (m_pTargetsBox->GetEntryCount() < 1)
     {
         // Clear the dialog data
         SvtViewOptions aDlgOpt(EViewType::Dialog,
-                               OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+                               OStringToOUString(GetHelpId(), RTL_TEXTENCODING_UTF8));
         aDlgOpt.Delete();
         return;
     }
@@ -618,7 +619,12 @@ SfxAutoRedactDialog::~SfxAutoRedactDialog()
     {
         // Put the targets into a JSON array
         boost::property_tree::ptree aTargetsArray;
-        for (const auto& targetPair : m_aTableTargets)
+        std::vector<std::pair<RedactionTarget*, OUString>> vRedactionTargets;
+
+        // Get the targets
+        getTargets(vRedactionTargets);
+
+        for (const auto& targetPair : vRedactionTargets)
         {
             aTargetsArray.push_back(std::make_pair("", redactionTargetToJSON(targetPair.first)));
         }
@@ -634,7 +640,7 @@ SfxAutoRedactDialog::~SfxAutoRedactDialog()
 
         // Store the dialog data
         SvtViewOptions aDlgOpt(EViewType::Dialog,
-                               OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+                               OStringToOUString(GetHelpId(), RTL_TEXTENCODING_UTF8));
         aDlgOpt.SetUserItem("UserItem", css::uno::makeAny(sUserDataStr));
 
         if (!m_bTargetsCopied)
@@ -646,7 +652,8 @@ SfxAutoRedactDialog::~SfxAutoRedactDialog()
                  "Exception caught while trying to store the dialog state: " << e.Message);
         return;
         //TODO: Warn the user with a message box
-    }*/
+    }
+
     disposeOnce();
 }
 
