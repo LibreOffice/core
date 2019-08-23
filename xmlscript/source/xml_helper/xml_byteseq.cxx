@@ -113,9 +113,11 @@ void BSeqOutputStream::writeBytes( Sequence< sal_Int8 > const & rData )
 {
     sal_Int32 nPos = _seq->size();
     _seq->resize( nPos + rData.getLength() );
-    memcpy( _seq->data() + nPos,
-                      rData.getConstArray(),
-                      rData.getLength() );
+    if (rData.getLength() != 0) {
+        memcpy( _seq->data() + nPos,
+                rData.getConstArray(),
+                rData.getLength() );
+    }
 }
 void BSeqOutputStream::flush()
 {
