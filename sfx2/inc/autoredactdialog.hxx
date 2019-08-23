@@ -48,7 +48,7 @@ class TargetsTable : public SvSimpleTable
 public:
     TargetsTable(SvSimpleTableContainer& rParent);
     void InsertTarget(RedactionTarget* pTarget);
-    void SelectByName(const OUString& sName);
+    void InsertTargetAtPos(RedactionTarget* pTarget, const sal_uLong& nPos);
     RedactionTarget* GetTargetByName(const OUString& sName);
     OUString GetNameProposal();
 };
@@ -67,7 +67,6 @@ enum class StartFileDialogType
 class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxModalDialog
 {
     SfxObjectShellLock m_xDocShell;
-    //std::vector<std::pair<RedactionTarget*, OUString>> m_aTableTargets;
     std::unique_ptr<sfx2::FileDialogHelper> m_pFileDlg;
     bool m_bIsValidState;
     bool m_bTargetsCopied;
@@ -84,27 +83,20 @@ class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxModalDialog
     DECL_LINK(Load, Button*, void);
     DECL_LINK(Save, Button*, void);
     DECL_LINK(AddHdl, Button*, void);
-    //DECL_LINK(EditHdl, Button*, void);
+    DECL_LINK(EditHdl, Button*, void);
     DECL_LINK(DeleteHdl, Button*, void);
 
     DECL_LINK(LoadHdl, sfx2::FileDialogHelper*, void);
     DECL_LINK(SaveHdl, sfx2::FileDialogHelper*, void);
 
     void StartFileDialog(StartFileDialogType nType, const OUString& rTitle);
-    /// Carry out proper addition both to the targets box, and to the tabletargets vector.
-    /*void addTarget(RedactionTarget* pTarget);*/
-    /// Clear all targets both visually and from the targets vector
+    /// Clear all targets both visually and from the memory
     void clearTargets();
 
 public:
     SfxAutoRedactDialog(vcl::Window* pParent);
     virtual ~SfxAutoRedactDialog() override;
     virtual void dispose() override;
-
-    /// Check if the dialog has any valid redaction targets.
-    //bool hasTargets() const;
-    /// Check if the dialog is in a valid state.
-    //bool isValidState() const { return m_bIsValidState; }
 
     /** Copies targets vector
      *  Does a shallow copy.

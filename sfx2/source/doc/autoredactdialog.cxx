@@ -150,13 +150,34 @@ void TargetsTable::InsertTarget(RedactionTarget* pTarget)
     InsertEntryToColumn(sColumnData, TREELIST_APPEND, 0xffff, pTarget);
 }
 
-void TargetsTable::SelectByName(const OUString& sName)
+void TargetsTable::InsertTargetAtPos(RedactionTarget* pTarget, const sal_uLong& nPos)
 {
-    SvTreeListEntry* pEntry = GetRowByTargetName(sName);
-    if (!pEntry)
+    if (!pTarget)
+    {
+        SAL_WARN("sfx.doc", "pTarget is null in TargetsTable::InsertTarget()");
         return;
+    }
 
-    Select(pEntry);
+    // Check if the name is empty or invalid (clashing with another entry's name)
+    if (pTarget->sName.isEmpty() || GetRowByTargetName(pTarget->sName) != nullptr)
+    {
+        SAL_WARN("sfx.doc", "Repetitive or empty target name in TargetsTable::InsertTarget()");
+        pTarget->sName = GetNameProposal();
+    }
+
+    OUString sContent = pTarget->sContent;
+
+    if (pTarget->sType == RedactionTargetType::REDACTION_TARGET_PREDEFINED)
+    {
+        //selection_num;selection_name
+        sContent = sContent.getToken(1, ';');
+    }
+
+    OUString sColumnData = pTarget->sName + "\t" + getTypeName(pTarget->sType) + "\t" + sContent
+                           + "\t" + (pTarget->bCaseSensitive ? OUString("Yes") : OUString("No"))
+                           + "\t" + (pTarget->bWholeWords ? OUString("Yes") : OUString("No"));
+
+    InsertEntryToColumn(sColumnData, nPos, 0xffff, pTarget);
 }
 
 RedactionTarget* TargetsTable::GetTargetByName(const OUString& sName)
@@ -190,23 +211,6 @@ OUString TargetsTable::GetNameProposal()
 
     return sDefaultTargetName + " " + OUString::number(nHighestTargetId + 1);
 }
-
-/*void TargetsTable::setRowData(const int& nRowIndex, const RedactionTarget* pTarget)
-{
-    OUString sContent = pTarget->sContent;
-
-    if (pTarget->sType == RedactionTargetType::REDACTION_TARGET_PREDEFINED)
-    {
-        //selection_num;selection_name
-        sContent = sContent.getToken(1, ';');
-    }
-
-    m_xControl->set_text(nRowIndex, pTarget->sName, 0);
-    m_xControl->set_text(nRowIndex, getTypeName(pTarget->sType), 1);
-    m_xControl->set_text(nRowIndex, sContent, 2);
-    m_xControl->set_text(nRowIndex, pTarget->bCaseSensitive ? OUString("Yes") : OUString("No"), 3);
-    m_xControl->set_text(nRowIndex, pTarget->bWholeWords ? OUString("Yes") : OUString("No"), 4);
-}*/
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, Load, Button*, void)
 {
@@ -260,41 +264,38 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, Button*, void)
     m_pTargetsBox->InsertTarget(redactiontarget);
 }
 
-/*IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, Button*, void)
+IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, Button*, void)
 {
-    sal_Int32 nSelectedRow = m_xTargetsBox->get_selected_index();
+    SvTreeListEntry* pEntry = m_pTargetsBox->FirstSelected();
 
     // No selection, nothing to edit
-    if (nSelectedRow < 0)
+    if (pEntry == nullptr)
         return;
 
     // Only one entry should be selected for editing
-    if (m_xTargetsBox->get_selected_rows().size() > 1)
+    if (m_pTargetsBox->GetSelectionCount() > 1)
     {
         OUString sMsg(
             "You have selected multiple targets, but only one target can be edited at once.");
         //Warn the user about multiple selections
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
-            getDialog(), VclMessageType::Error, VclButtonsType::Ok, sMsg));
-        xBox->run();
+        ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok, sMsg)->Execute();
         return;
     }
 
-    // Get the redaction target to be edited
-    RedactionTarget* pTarget
-        = reinterpret_cast<RedactionTarget*>(m_xTargetsBox->get_id(nSelectedRow).toInt64());
+    // Get the redaction target to be edited, and its position
+    RedactionTarget* pTarget = static_cast<RedactionTarget*>(pEntry->GetUserData());
+    sal_uLong nPos = m_pTargetsBox->GetEntryPos(pEntry);
 
     // Construct and run the edit target dialog
-    SfxAddTargetDialog aEditTargetDialog(getDialog(), pTarget->sName, pTarget->sType,
-                                         pTarget->sContent, pTarget->bCaseSensitive,
-                                         pTarget->bWholeWords);
+    SfxAddTargetDialog aEditTargetDialog(this, pTarget->sName, pTarget->sType, pTarget->sContent,
+                                         pTarget->bCaseSensitive, pTarget->bWholeWords);
 
     bool bIncomplete;
     do
     {
         bIncomplete = false;
 
-        if (aEditTargetDialog.run() != RET_OK)
+        if (aEditTargetDialog.Execute() != RET_OK)
             return;
 
         if (aEditTargetDialog.getName().isEmpty()
@@ -302,19 +303,16 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, Button*, void)
             || aEditTargetDialog.getContent().isEmpty())
         {
             bIncomplete = true;
-            std::unique_ptr<weld::MessageDialog> xBox(
-                Application::CreateMessageDialog(getDialog(), VclMessageType::Warning,
-                                                 VclButtonsType::Ok, "All fields are required"));
-            xBox->run();
+            ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok, "All fields are required")
+                ->Execute();
         }
         else if (aEditTargetDialog.getName() != pTarget->sName
-                 && m_xTargetsBox->GetTargetByName(aEditTargetDialog.getName()))
+                 && m_pTargetsBox->GetTargetByName(aEditTargetDialog.getName()))
         {
             bIncomplete = true;
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
-                getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
-                "There is already a target with this name"));
-            xBox->run();
+            ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok,
+                                             "There is already a target with this name")
+                ->Execute();
         }
 
     } while (bIncomplete);
@@ -327,8 +325,12 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, Button*, void)
     pTarget->bWholeWords = aEditTargetDialog.isWholeWords();
 
     // And sync the targets box row with the actual target data
-    m_xTargetsBox->setRowData(nSelectedRow, pTarget);
-}*/
+    m_pTargetsBox->RemoveEntry(pEntry);
+    m_pTargetsBox->InsertTargetAtPos(pTarget, nPos);
+
+    m_pTargetsBox->SelectAll(false);
+    m_pTargetsBox->SelectRow(nPos);
+}
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, DeleteHdl, Button*, void)
 {
@@ -520,24 +522,6 @@ void SfxAutoRedactDialog::StartFileDialog(StartFileDialogType nType, const OUStr
     m_pFileDlg->StartExecuteModal(aDlgClosedLink);
 }
 
-/*void SfxAutoRedactDialog::addTarget(RedactionTarget* pTarget)
-{
-    // Only the visual/display part
-    m_xTargetsBox->InsertTarget(pTarget);
-
-    // Actually add to the targets vector
-    if (m_xTargetsBox->GetTargetByName(pTarget->sName))
-        m_aTableTargets.emplace_back(pTarget, pTarget->sName);
-    else
-    {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
-            getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
-            "An error occurred while adding new target. Please report this incident."));
-        xBox->run();
-        delete pTarget;
-    }
-}*/
-
 void SfxAutoRedactDialog::clearTargets()
 {
     SvTreeListEntry* pEntry = m_pTargetsBox->First();
@@ -573,6 +557,7 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(vcl::Window* pParent)
     m_pSaveBtn->SetClickHdl(LINK(this, SfxAutoRedactDialog, Save));
     m_pDeleteBtn->SetClickHdl(LINK(this, SfxAutoRedactDialog, DeleteHdl));
     m_pAddBtn->SetClickHdl(LINK(this, SfxAutoRedactDialog, AddHdl));
+    m_pEditBtn->SetClickHdl(LINK(this, SfxAutoRedactDialog, EditHdl));
 
     // Can be used to remmeber the last set of redaction targets?
     /*OUString sExtraData;
@@ -614,13 +599,6 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(vcl::Window* pParent)
             //TODO: Warn the user with a message box
         }
     }*/
-
-    // Handler connections
-    /*m_xLoadBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, Load));
-    m_xSaveBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, Save));
-    m_xAddBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, AddHdl));
-    m_xEditBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, EditHdl));
-    m_xDeleteBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, DeleteHdl));*/
 }
 
 SfxAutoRedactDialog::~SfxAutoRedactDialog()
