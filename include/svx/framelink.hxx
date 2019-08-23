@@ -150,9 +150,9 @@ public:
     explicit Style( const editeng::SvxBorderLine* pBorder, double fScale );
 
     RefMode GetRefMode() const { if(!maImplStyle) return RefMode::Centered; return maImplStyle->meRefMode; }
-    const Color GetColorPrim() const { if(!maImplStyle) return Color(); return maImplStyle->maColorPrim; }
-    const Color GetColorSecn() const { if(!maImplStyle) return Color(); return maImplStyle->maColorSecn; }
-    const Color GetColorGap() const { if(!maImplStyle) return Color(); return maImplStyle->maColorGap; }
+    Color GetColorPrim() const { if(!maImplStyle) return Color(); return maImplStyle->maColorPrim; }
+    Color GetColorSecn() const { if(!maImplStyle) return Color(); return maImplStyle->maColorSecn; }
+    Color GetColorGap() const { if(!maImplStyle) return Color(); return maImplStyle->maColorGap; }
     bool UseGapColor() const { if(!maImplStyle) return false; return maImplStyle->mbUseGapColor; }
     double Prim() const { if(!maImplStyle) return 0.0; return maImplStyle->mfPrim; }
     double Dist() const { if(!maImplStyle) return 0.0; return maImplStyle->mfDist; }

@@ -544,7 +544,7 @@ bool SdrVirtObj::DoMacro(const SdrObjMacroHitRec& rRec)
     return rRefObj.DoMacro(rRec); // TODO: positioning offset
 }
 
-const Point SdrVirtObj::GetOffset() const
+Point SdrVirtObj::GetOffset() const
 {
     // #i73248# default offset of SdrVirtObj is aAnchor
     return aAnchor;
