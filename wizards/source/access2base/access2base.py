@@ -985,16 +985,17 @@ class _BasicObject(object):
         5. Setting a property value is done via a Basic call, except if self.internal == True
     """
     W = _A2B.invokeWrapper
-    internal_attributes = ('objectreference', 'objecttype', 'name', 'count', 'index', 'internal')
+    internal_attributes = ('objectreference', 'objecttype', 'name', 'internal')
 
     def __init__(self, reference = -1, objtype = None, name = ''):
         self.objectreference = reference    # reference in the cache managed by Basic
         self.objecttype = objtype           # ('DATABASE', 'COLLECTION', ...)
         self.name = name                    # '' when no name
         self.internal = False               # True to exceptionally allow assigning a new value to a read-only property
+        self.localProperties = ()
 
     def __getattr__(self, name):
-        if name == 'classProperties':
+        if name in ('classProperties', 'localProperties'):
             pass
         elif name in self.classProperties:
             # Get Property from Basic
@@ -1003,7 +1004,7 @@ class _BasicObject(object):
         return super(_BasicObject, self).__getattribute__(name)
 
     def __setattr__(self, name, value):
-        if name == 'classProperties':
+        if name in ('classProperties', 'localProperties'):
             pass
         elif name in self.classProperties:
             if self.internal:       # internal = True forces property setting even if property is read-only
@@ -1012,7 +1013,7 @@ class _BasicObject(object):
                 self.W(_vbLet, self.objectreference, name, value)
             else:
                 raise AttributeError("type object '" + self.objecttype + "' has no editable attribute '" + name + "'")
-        elif name[0:2] == '__' or name in self.internal_attributes:
+        elif name[0:2] == '__' or name in self.internal_attributes or name in self.localProperties:
             pass
         else:
             raise AttributeError("type object '" + self.objecttype + "' has no attribute '" + name + "'")
@@ -1069,6 +1070,7 @@ class _Collection(_BasicObject):
     classProperties = dict(Count = False)
     def __init__(self, reference = -1, objtype = None):
         super().__init__(reference, objtype)
+        self.localProperties = ('count', 'index')
         self.count = self.Count
         self.index = 0
     def __iter__(self):
@@ -1325,19 +1327,35 @@ class _Module(_BasicObject):
     classProperties = dict(CountOfDeclarationLines = False, CountOfLines = False
                         , ProcStartLine = False, Type = False
                         )
+    def __init__(self, reference = -1, objtype = None, name = ''):
+        super().__init__(reference, objtype, name)
+        self.localProperties = ('startline', 'startcolumn', 'endline', 'endcolumn', 'prockind')
 
-    """ def Find(self, target, startline, startcolumn, endline, endcolumn, wholeword = False
+    def Find(self, target, startline, startcolumn, endline, endcolumn, wholeword = False
         , matchcase = False, patternsearch = False):
-        return self.W(_vbMethod, self.objectreference, 'Find', target, startline, startcolumn, endline
-                      , endcolumn, wholeword, matchcase, patternsearch) """
+        Returned = self.W(_vbMethod, self.objectreference, 'Find', target, startline, startcolumn, endline
+                      , endcolumn, wholeword, matchcase, patternsearch)
+        if isinstance(Returned, tuple):
+            if Returned[0] == True and len(Returned) == 5:
+                self.startline = Returned[1]
+                self.startcolumn = Returned[2]
+                self.endline = Returned[3]
+                self.endcolumn = Returned[4]
+            return Returned[0]
+        return Returned
     def Lines(self, line, numlines):
         return self.W(_vbMethod, self.objectreference, 'Lines', line, numlines)
     def ProcBodyLine(self, procname, prockind):
         return self.W(_vbMethod, self.objectreference, 'ProcBodyLine', procname, prockind)
     def ProcCountLines(self, procname, prockind):
         return self.W(_vbMethod, self.objectreference, 'ProcCountLines', procname, prockind)
-    """ def ProcOfLine(self, line, prockind):
-        return self.W(_vbMethod, self.objectreference, 'ProcOfLine', line, prockind) """
+    def ProcOfLine(self, line, prockind):
+        Returned = self.W(_vbMethod, self.objectreference, 'ProcOfLine', line, prockind)
+        if isinstance(Returned, tuple):
+            if len(Returned) == 2:
+                self.prockind = Returned[1]
+                return Returned[0]
+        return Returned
     def ProcStartLine(self, procname, prockind):
         return self.W(_vbMethod, self.objectreference, 'ProcStartLine', procname, prockind)
 

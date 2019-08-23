@@ -88,7 +88,7 @@ Public Function PythonWrapper(ByVal pvCallType As Variant _
 &apos;				[0] =&gt; 0 = scalar or array returned by the method
 &apos;					=&gt; 1 = basic object returned by the method
 &apos;					=&gt; 2 = a null value
-&apos;				[1] =&gt; the object reference or the returned value or Null
+&apos;				[1] =&gt; the object reference or the returned value (complemented with arguments passed by reference, if any) or Null
 &apos;				[2] =&gt; the object type or Null
 &apos;				[3] =&gt; the object name, if any
 &apos; 		or, when pvCallType == vbUNO, as the UNO object returned by the property
@@ -222,6 +222,10 @@ Const vbGet = 2, vbLet = 4, vbMethod = 1, vbSet = 8, vbUNO = 16
 					If vObject._Type = &quot;COLLECTION&quot; And vObject._CollType = COLLTABLEDEFS Then vArgs = Array(_A2B_.PythonCache(vArgs(0)))
 				Case &quot;Close&quot;
 					sSCript = &quot;mClose&quot;
+				Case &quot;Find&quot;
+					For i = 0 To UBound(vArgs)
+						If IsNull(vArgs(i)) Then vArgs(i) = Empty
+					Next i
 				Case &quot;Type&quot;
 					sScript = &quot;pType&quot;
 				Case Else
@@ -294,9 +298,15 @@ Const vbGet = 2, vbLet = 4, vbMethod = 1, vbSet = 8, vbUNO = 16
 				Case &quot;Close&quot;, &quot;Dispose&quot;, &quot;Terminate&quot;
 					Set _A2B_.PythonCache(pvObject) = Nothing
 				Case &quot;Move&quot;, &quot;MoveFirst&quot;, &quot;MoveLast&quot;, &quot;MoveNext&quot;, &quot;MovePrevious&quot;	&apos;	Pass the new BOF, EOF values (binary format)
-						If vObject._Type = &quot;RECORDSET&quot; Then
-							vReturn = (Iif(vObject.BOF, 1, 0) * 2 + Iif(vObject.EOF, 1, 0)) * Iif(vReturn, 1, -1)
-						End If
+					If vObject._Type = &quot;RECORDSET&quot; Then
+						vReturn = (Iif(vObject.BOF, 1, 0) * 2 + Iif(vObject.EOF, 1, 0)) * Iif(vReturn, 1, -1)
+					End If
+				Case &quot;Find&quot;				&apos;	Store in array the arguments passed by reference
+					If vObject._Type = &quot;MODULE&quot; And vReturn = True Then
+						vReturn = Array(vReturn, vArgs(1), vArgs(2), vArgs(3), vArgs(4))
+					End If
+				Case &quot;ProcOfLine&quot;		&apos;	Store in array the arguments passed by reference
+					vReturn = Array(vReturn, vArgs(1))
 				Case Else
 			End Select
 	End Select
