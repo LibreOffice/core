@@ -2293,7 +2293,7 @@ const tools::Rectangle& SwDrawVirtObj::GetLastBoundRect() const
     return aOutRect;
 }
 
-const Point SwDrawVirtObj::GetOffset() const
+Point SwDrawVirtObj::GetOffset() const
 {
     // do NOT use IsEmpty() here, there is already a useful offset
     // in the position

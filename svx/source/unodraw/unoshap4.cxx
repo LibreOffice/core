@@ -515,7 +515,7 @@ void SvxOle2Shape::resetModifiedState()
     }
 }
 
-const SvGlobalName SvxOle2Shape::GetClassName_Impl(OUString& rHexCLSID)
+SvGlobalName SvxOle2Shape::GetClassName_Impl(OUString& rHexCLSID)
 {
     DBG_TESTSOLARMUTEX();
     SvGlobalName aClassName;

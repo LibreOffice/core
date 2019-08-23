@@ -1017,16 +1017,6 @@ void FmXGridPeer::columnChanged()
 }
 
 
-namespace fmgridif
-{
-    static const OUString getDataModeIdentifier()
-    {
-        return "DataMode";
-    }
-}
-using namespace fmgridif;
-
-
 FmXGridPeer::FmXGridPeer(const Reference< XComponentContext >& _rxContext)
             :m_xContext(_rxContext)
             ,m_aModifyListeners(m_aMutex)
@@ -1034,7 +1024,7 @@ FmXGridPeer::FmXGridPeer(const Reference< XComponentContext >& _rxContext)
             ,m_aContainerListeners(m_aMutex)
             ,m_aSelectionListeners(m_aMutex)
             ,m_aGridControlListeners(m_aMutex)
-            ,m_aMode( getDataModeIdentifier() )
+            ,m_aMode("DataMode")
             ,m_nCursorListening(0)
             ,m_bInterceptingDispatch(false)
 {
