@@ -414,6 +414,26 @@ DECLARE_OOXMLIMPORT_TEST(testTdf126114, "tdf126114.docx")
     CPPUNIT_ASSERT_EQUAL(7, getLength());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf103345, "numbering-circle.docx")
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(
+        xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        if (aProps[i].Name == "NumberingType")
+        {
+            CPPUNIT_ASSERT_EQUAL(style::NumberingType::CIRCLE_NUMBER,
+                                 aProps[i].Value.get<sal_Int16>());
+            return;
+        }
+    }
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
