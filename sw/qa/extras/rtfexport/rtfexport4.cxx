@@ -224,6 +224,18 @@ DECLARE_RTFIMPORT_TEST(testPageBorder, "page-border.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(71), aRightBorder.LineWidth);
 }
 
+DECLARE_RTFEXPORT_TEST(testTbrlPage, "tbrl-page.rtf")
+{
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+    auto nActual = getProperty<sal_Int16>(xPageStyle, "WritingMode");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 0
+    // i.e. custom writing mode was lost.
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, nActual);
+}
+
 DECLARE_RTFIMPORT_TEST(testTdf126309, "tdf126309.rtf")
 {
     // Without the accompanying fix in place, this test would have failed, as
