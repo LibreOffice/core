@@ -1238,7 +1238,12 @@ public:
     //it in e.g. SwSectionFrame::MergeNext etc because we will need it
     //again after the SwFrameDeleteGuard dtor
     explicit SwFrameDeleteGuard(SwFrame* pFrame);
+
+    SwFrameDeleteGuard(const SwFrameDeleteGuard&) =delete;
+
     ~SwFrameDeleteGuard();
+
+    SwFrameDeleteGuard& operator=(const SwFrameDeleteGuard&) =delete;
 };
 
 typedef long (SwFrame:: *SwFrameGet)() const;
