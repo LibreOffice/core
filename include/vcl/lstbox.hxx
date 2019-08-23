@@ -74,6 +74,7 @@ class ImplBtn;
 class ImplWin;
 class ImplListBoxWindow;
 
+/// A widget used to choose from a list of items and which has no entry.
 class VCL_DLLPUBLIC ListBox : public Control
 {
 private:
