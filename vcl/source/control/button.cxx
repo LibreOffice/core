@@ -3378,6 +3378,9 @@ void CheckBox::GetFocus()
         aSize.AdjustWidth(2 );
         setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
         Invalidate();
+        // Trigger drawing to initialize the mouse rectangle, otherwise the mouse button down
+        // handler would ignore the mouse event.
+        Update();
     }
     else
         ShowFocus( ImplGetFocusRect() );
