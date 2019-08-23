@@ -1655,6 +1655,26 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             outputSettingsTable();
             break;
         }
+        case RTF_STEXTFLOW:
+        {
+            nId = 0;
+            switch (nParam)
+            {
+                case 0:
+                    nId = NS_ooxml::LN_Value_ST_TextDirection_lrTb;
+                    break;
+                case 1:
+                    nId = NS_ooxml::LN_Value_ST_TextDirection_tbRl;
+                    break;
+            }
+
+            if (nId > 0)
+            {
+                m_aStates.top().getSectionSprms().set(NS_ooxml::LN_EG_SectPrContents_textDirection,
+                                                      new RTFValue(nId));
+            }
+        }
+        break;
         default:
         {
             SAL_INFO("writerfilter", "TODO handle value '" << keywordToString(nKeyword) << "'");

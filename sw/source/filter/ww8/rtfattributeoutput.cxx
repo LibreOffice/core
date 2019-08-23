@@ -3524,9 +3524,25 @@ void RtfAttributeOutput::FormatLineNumbering(const SwFormatLineNumber& rNumberin
 
 void RtfAttributeOutput::FormatFrameDirection(const SvxFrameDirectionItem& rDirection)
 {
+    SvxFrameDirection nDir = rDirection.GetValue();
+    if (nDir == SvxFrameDirection::Environment)
+        nDir = GetExport().GetDefaultFrameDirection();
+
+    if (m_rExport.m_bOutPageDescs)
+    {
+        if (nDir == SvxFrameDirection::Vertical_RL_TB)
+        {
+            m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_STEXTFLOW);
+            m_aSectionBreaks.append(static_cast<sal_Int32>(1));
+            if (!m_bBufferSectionBreaks)
+                m_rExport.Strm().WriteCharPtr(m_aSectionBreaks.makeStringAndClear().getStr());
+        }
+        return;
+    }
+
     if (m_rExport.GetRTFFlySyntax())
     {
-        if (rDirection.GetValue() == SvxFrameDirection::Vertical_RL_TB)
+        if (nDir == SvxFrameDirection::Vertical_RL_TB)
         {
             // Top to bottom non-ASCII font
             m_aFlyProperties.push_back(std::make_pair<OString, OString>("txflTextFlow", "3"));
@@ -3539,17 +3555,10 @@ void RtfAttributeOutput::FormatFrameDirection(const SvxFrameDirectionItem& rDire
         return;
     }
 
-    if (!m_rExport.m_bOutPageDescs)
-    {
-        SvxFrameDirection nDir = rDirection.GetValue();
-        if (nDir == SvxFrameDirection::Environment)
-            nDir = GetExport().GetDefaultFrameDirection();
-
-        if (nDir == SvxFrameDirection::Horizontal_RL_TB)
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_RTLPAR);
-        else
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LTRPAR);
-    }
+    if (nDir == SvxFrameDirection::Horizontal_RL_TB)
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_RTLPAR);
+    else
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LTRPAR);
 }
 
 void RtfAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
