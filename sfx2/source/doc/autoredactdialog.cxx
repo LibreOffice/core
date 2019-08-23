@@ -31,6 +31,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/lstbox.hxx>
 
 #include <svtools/treelistentry.hxx>
 
@@ -95,28 +96,28 @@ OUString getTypeName(RedactionTargetType nType)
 }
 
 /// Returns TypeID to be used in the add/edit target dialog
-/*OUString getTypeID(RedactionTargetType nType)
+sal_Int32 getTypeID(RedactionTargetType nType)
 {
-    OUString sTypeID("unknown");
+    sal_Int32 nTypeID(-1);
 
     switch (nType)
     {
         case RedactionTargetType::REDACTION_TARGET_TEXT:
-            sTypeID = "text";
+            nTypeID = 0;
             break;
         case RedactionTargetType::REDACTION_TARGET_REGEX:
-            sTypeID = "regex";
+            nTypeID = 1;
             break;
         case RedactionTargetType::REDACTION_TARGET_PREDEFINED:
-            sTypeID = "predefined";
+            nTypeID = 2;
             break;
         case RedactionTargetType::REDACTION_TARGET_UNKNOWN:
-            sTypeID = "unknown";
+            nTypeID = -1;
             break;
     }
 
-    return sTypeID;
-}*/
+    return nTypeID;
+}
 }
 
 void TargetsTable::InsertTarget(RedactionTarget* pTarget)
@@ -220,17 +221,17 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, Save, Button*, void)
     StartFileDialog(StartFileDialogType::SaveAs, "Save Targets");
 }
 
-/*IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, Button*, void)
+IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, Button*, void)
 {
     // Open the Add Target dialog, craete a new target and insert into the targets vector and the listbox
-    SfxAddTargetDialog aAddTargetDialog(getDialog(), m_xTargetsBox->GetNameProposal());
+    SfxAddTargetDialog aAddTargetDialog(this, m_pTargetsBox->GetNameProposal());
 
     bool bIncomplete;
     do
     {
         bIncomplete = false;
 
-        if (aAddTargetDialog.run() != RET_OK)
+        if (aAddTargetDialog.Execute() != RET_OK)
             return;
 
         if (aAddTargetDialog.getName().isEmpty()
@@ -238,18 +239,15 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, Save, Button*, void)
             || aAddTargetDialog.getContent().isEmpty())
         {
             bIncomplete = true;
-            std::unique_ptr<weld::MessageDialog> xBox(
-                Application::CreateMessageDialog(getDialog(), VclMessageType::Warning,
-                                                 VclButtonsType::Ok, "All fields are required"));
-            xBox->run();
+            ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok, "All fields are required")
+                ->Execute();
         }
-        else if (m_xTargetsBox->GetTargetByName(aAddTargetDialog.getName()))
+        else if (m_pTargetsBox->GetTargetByName(aAddTargetDialog.getName()))
         {
             bIncomplete = true;
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
-                getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
-                "There is already a target with this name"));
-            xBox->run();
+            ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok,
+                                             "There is already a target with this name")
+                ->Execute();
         }
 
     } while (bIncomplete);
@@ -259,23 +257,10 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, Save, Button*, void)
         { aAddTargetDialog.getName(), aAddTargetDialog.getType(), aAddTargetDialog.getContent(),
           aAddTargetDialog.isCaseSensitive(), aAddTargetDialog.isWholeWords(), 0 });
 
-    // Only the visual/display part
-    m_xTargetsBox->InsertTarget(redactiontarget);
-
-    // Actually add to the targets vector
-    if (m_xTargetsBox->GetTargetByName(redactiontarget->sName))
-        m_aTableTargets.emplace_back(redactiontarget, redactiontarget->sName);
-    else
-    {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
-            getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
-            "An error occured while adding new target. Please report this incidence."));
-        xBox->run();
-        delete redactiontarget;
-    }
+    m_pTargetsBox->InsertTarget(redactiontarget);
 }
 
-IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, Button*, void)
+/*IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, Button*, void)
 {
     sal_Int32 nSelectedRow = m_xTargetsBox->get_selected_index();
 
@@ -587,6 +572,7 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(vcl::Window* pParent)
     m_pLoadBtn->SetClickHdl(LINK(this, SfxAutoRedactDialog, Load));
     m_pSaveBtn->SetClickHdl(LINK(this, SfxAutoRedactDialog, Save));
     m_pDeleteBtn->SetClickHdl(LINK(this, SfxAutoRedactDialog, DeleteHdl));
+    m_pAddBtn->SetClickHdl(LINK(this, SfxAutoRedactDialog, AddHdl));
 
     // Can be used to remmeber the last set of redaction targets?
     /*OUString sExtraData;
@@ -732,121 +718,143 @@ bool SfxAutoRedactDialog::getTargets(std::vector<std::pair<RedactionTarget*, OUS
     return true;
 }
 
-/*IMPL_LINK_NOARG(SfxAddTargetDialog, SelectTypeHdl, weld::ComboBox&, void)
+IMPL_LINK_NOARG(SfxAddTargetDialog, SelectTypeHdl, ListBox&, void)
 {
-    if (m_xType->get_active_id() == "predefined")
+    if (m_pType->GetSelectedEntryPos() == 2) //Predefined
     {
         // Hide the usual content widgets
         // We will just set the id as content
         // And handle with proper regex in the SfxRedactionHelper
-        m_xLabelContent->set_sensitive(false);
-        m_xLabelContent->set_visible(false);
-        m_xContent->set_sensitive(false);
-        m_xContent->set_visible(false);
-        m_xWholeWords->set_sensitive(false);
-        m_xWholeWords->set_visible(false);
-        m_xCaseSensitive->set_sensitive(false);
-        m_xCaseSensitive->set_visible(false);
+        m_pLabelContent->Disable();
+        m_pLabelContent->Hide();
+        m_pContent->Disable();
+        m_pContent->Hide();
+        m_pWholeWords->Disable();
+        m_pWholeWords->Hide();
+        m_pCaseSensitive->Disable();
+        m_pCaseSensitive->Hide();
 
         // And show the predefined targets
-        m_xLabelPredefContent->set_sensitive(true);
-        m_xLabelPredefContent->set_visible(true);
-        m_xPredefContent->set_sensitive(true);
-        m_xPredefContent->set_visible(true);
+        m_pLabelPredefContent->Enable();
+        m_pLabelPredefContent->Show();
+        m_pPredefContent->Enable();
+        m_pPredefContent->Show();
     }
     else
     {
-        m_xLabelPredefContent->set_sensitive(false);
-        m_xLabelPredefContent->set_visible(false);
-        m_xPredefContent->set_sensitive(false);
-        m_xPredefContent->set_visible(false);
+        m_pLabelPredefContent->Disable();
+        m_pLabelPredefContent->Hide();
+        m_pPredefContent->Disable();
+        m_pPredefContent->Hide();
 
-        m_xLabelContent->set_sensitive(true);
-        m_xLabelContent->set_visible(true);
-        m_xContent->set_sensitive(true);
-        m_xContent->set_visible(true);
-        m_xWholeWords->set_sensitive(true);
-        m_xWholeWords->set_visible(true);
-        m_xCaseSensitive->set_sensitive(true);
-        m_xCaseSensitive->set_visible(true);
+        m_pLabelContent->Enable();
+        m_pLabelContent->Show();
+        m_pContent->Enable();
+        m_pContent->Show();
+        m_pWholeWords->Enable();
+        m_pWholeWords->Show();
+        m_pCaseSensitive->Enable();
+        m_pCaseSensitive->Show();
     }
 }
 
-SfxAddTargetDialog::SfxAddTargetDialog(weld::Window* pParent, const OUString& rName)
-    : GenericDialogController(pParent, "sfx/ui/addtargetdialog.ui", "AddTargetDialog")
-    , m_xName(m_xBuilder->weld_entry("name"))
-    , m_xType(m_xBuilder->weld_combo_box("type"))
-    , m_xLabelContent(m_xBuilder->weld_label("label_content"))
-    , m_xContent(m_xBuilder->weld_entry("content"))
-    , m_xLabelPredefContent(m_xBuilder->weld_label("label_content_predef"))
-    , m_xPredefContent(m_xBuilder->weld_combo_box("content_predef"))
-    , m_xCaseSensitive(m_xBuilder->weld_check_button("checkboxCaseSensitive"))
-    , m_xWholeWords(m_xBuilder->weld_check_button("checkboxWholeWords"))
+SfxAddTargetDialog::SfxAddTargetDialog(vcl::Window* pParent, const OUString& rName)
+    : SfxModalDialog(pParent, "AddTargetDialog", "sfx/ui/addtargetdialog.ui")
 {
-    m_xName->set_text(rName);
-    m_xName->select_region(0, rName.getLength());
+    get(m_pName, "name");
+    get(m_pType, "type");
+    get(m_pLabelContent, "label_content");
+    get(m_pContent, "content");
+    get(m_pLabelPredefContent, "label_content_predef");
+    get(m_pPredefContent, "content_predef");
+    get(m_pCaseSensitive, "checkboxCaseSensitive");
+    get(m_pWholeWords, "checkboxWholeWords");
 
-    m_xType->connect_changed(LINK(this, SfxAddTargetDialog, SelectTypeHdl));
+    m_pName->SetText(rName);
+    m_pName->SetSelection(Selection(0, rName.getLength()));
+
+    m_pType->SetSelectHdl(LINK(this, SfxAddTargetDialog, SelectTypeHdl));
 }
 
-SfxAddTargetDialog::SfxAddTargetDialog(weld::Window* pParent, const OUString& sName,
+SfxAddTargetDialog::SfxAddTargetDialog(vcl::Window* pParent, const OUString& sName,
                                        const RedactionTargetType& eTargetType,
                                        const OUString& sContent, const bool& bCaseSensitive,
                                        const bool& bWholeWords)
-    : GenericDialogController(pParent, "sfx/ui/addtargetdialog.ui", "AddTargetDialog")
-    , m_xName(m_xBuilder->weld_entry("name"))
-    , m_xType(m_xBuilder->weld_combo_box("type"))
-    , m_xLabelContent(m_xBuilder->weld_label("label_content"))
-    , m_xContent(m_xBuilder->weld_entry("content"))
-    , m_xLabelPredefContent(m_xBuilder->weld_label("label_content_predef"))
-    , m_xPredefContent(m_xBuilder->weld_combo_box("content_predef"))
-    , m_xCaseSensitive(m_xBuilder->weld_check_button("checkboxCaseSensitive"))
-    , m_xWholeWords(m_xBuilder->weld_check_button("checkboxWholeWords"))
+    : SfxModalDialog(pParent, "AddTargetDialog", "sfx/ui/addtargetdialog.ui")
 {
-    m_xName->set_text(sName);
-    m_xName->select_region(0, sName.getLength());
+    get(m_pName, "name");
+    get(m_pType, "type");
+    get(m_pLabelContent, "label_content");
+    get(m_pContent, "content");
+    get(m_pLabelPredefContent, "label_content_predef");
+    get(m_pPredefContent, "content_predef");
+    get(m_pCaseSensitive, "checkboxCaseSensitive");
+    get(m_pWholeWords, "checkboxWholeWords");
 
-    m_xType->set_active_id(getTypeID(eTargetType));
+    m_pName->SetText(sName);
+    m_pName->SetSelection(Selection(0, sName.getLength()));
+
+    m_pType->SelectEntryPos(getTypeID(eTargetType));
 
     if (eTargetType == RedactionTargetType::REDACTION_TARGET_PREDEFINED)
     {
-        SelectTypeHdl(*m_xPredefContent);
-        m_xPredefContent->set_active(sContent.getToken(0, ';').toInt32());
+        SelectTypeHdl(*m_pPredefContent);
+        m_pPredefContent->SelectEntryPos(sContent.getToken(0, ';').toInt32());
     }
     else
     {
-        m_xContent->set_text(sContent);
+        m_pContent->SetText(sContent);
     }
 
-    m_xCaseSensitive->set_active(bCaseSensitive);
-    m_xWholeWords->set_active(bWholeWords);
+    if (bCaseSensitive)
+        m_pCaseSensitive->SetState(TriState::TRISTATE_TRUE);
+    if (bWholeWords)
+        m_pWholeWords->SetState(TriState::TRISTATE_TRUE);
 
-    set_title("Edit Target");
+    SetText("Edit Target");
+}
+
+SfxAddTargetDialog::~SfxAddTargetDialog() { disposeOnce(); }
+
+void SfxAddTargetDialog::dispose()
+{
+    m_pName.clear();
+    m_pType.clear();
+    m_pLabelContent.clear();
+    m_pContent.clear();
+    m_pLabelPredefContent.clear();
+    m_pPredefContent.clear();
+    m_pCaseSensitive.clear();
+    m_pWholeWords.clear();
+    SfxModalDialog::dispose();
 }
 
 RedactionTargetType SfxAddTargetDialog::getType() const
 {
-    OUString sTypeID = m_xType->get_active_id();
+    sal_Int32 nTypeID = m_pType->GetSelectedEntryPos();
 
-    if (sTypeID == "text")
-        return RedactionTargetType::REDACTION_TARGET_TEXT;
-    else if (sTypeID == "regex")
-        return RedactionTargetType::REDACTION_TARGET_REGEX;
-    else if (sTypeID == "predefined")
-        return RedactionTargetType::REDACTION_TARGET_PREDEFINED;
-    else
-        return RedactionTargetType::REDACTION_TARGET_UNKNOWN;
+    switch (nTypeID)
+    {
+        case 0:
+            return RedactionTargetType::REDACTION_TARGET_TEXT;
+        case 1:
+            return RedactionTargetType::REDACTION_TARGET_REGEX;
+        case 2:
+            return RedactionTargetType::REDACTION_TARGET_PREDEFINED;
+        default:
+            return RedactionTargetType::REDACTION_TARGET_UNKNOWN;
+    }
 }
 
 OUString SfxAddTargetDialog::getContent() const
 {
-    if (m_xType->get_active_id() == "predefined")
+    if (m_pType->GetSelectedEntryPos() == 2) //Predefined
     {
-        return OUString(OUString::number(m_xPredefContent->get_active()) + ";"
-                        + m_xPredefContent->get_active_text());
+        return OUString(OUString::number(m_pPredefContent->GetSelectedEntryPos()) + ";"
+                        + m_pPredefContent->GetSelectedEntry());
     }
 
-    return m_xContent->get_text();
-}*/
+    return m_pContent->GetText();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
