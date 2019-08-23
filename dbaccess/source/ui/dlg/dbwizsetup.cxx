@@ -556,7 +556,6 @@ VclPtr<TabPage> ODbTypeWizDialogSetup::createPage(WizardState _nState)
         defaultButton( _nState == PAGE_DBSETUPWIZARD_FINAL ? WizardButtonFlags::FINISH : WizardButtonFlags::NEXT );
         enableButtons( WizardButtonFlags::FINISH, _nState == PAGE_DBSETUPWIZARD_FINAL );
         enableButtons( WizardButtonFlags::NEXT, _nState != PAGE_DBSETUPWIZARD_FINAL );
-        pPage->Show();
 
         m_xAssistant->set_page_title(sIdent, getStateDisplayName(_nState));
     }
