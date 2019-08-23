@@ -31,6 +31,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 		external/firebird/c++17.patch \
 		external/firebird/ubsan.patch \
 		external/firebird/asan.patch \
+		external/firebird/firebird-tdf125284.patch.1 \
 ))
 
 ifeq ($(OS),WNT)
