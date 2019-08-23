@@ -184,7 +184,7 @@ namespace comphelper
 
     private:
         // internal helper methods
-        static const OUString getPackURL();
+        static OUString getPackURL();
         static const std::vector< OUString >& getCustomizationDirNames();
         static const std::vector< OUString >& getCustomizationFileNames();
 
