@@ -101,7 +101,7 @@ Const cstApplication = -1, cstDoCmd = -2
 Const cstScalar = 0, cstObject = 1, cstNull = 2, cstUNO = 3
 
 &apos;Conventional special values
-Const cstNoArgs = &quot;+++NOARGS+++&quot;, cstSymEmpty = &quot;+++EMPTY+++&quot;, cstSymNull = &quot;+++NULL+++&quot;
+Const cstNoArgs = &quot;+++NOARGS+++&quot;, cstSymEmpty = &quot;+++EMPTY+++&quot;, cstSymNull = &quot;+++NULL+++&quot;, cstSymMissing = &quot;+++MISSING+++&quot;
 
 &apos;https://support.office.com/en-us/article/CallByName-fonction-49ce9475-c315-4f13-8d35-e98cfe98729a
 &apos;Determines the pvCallType
@@ -124,15 +124,15 @@ Const vbGet = 2, vbLet = 4, vbMethod = 1, vbSet = 8, vbUNO = 16
 					vArg = Empty
 				ElseIf vArg = cstSymNull Then
 					vArg = Null
+				ElseIf vArg = cstSymMissing Then
+					Exit For	&apos;	Next arguments must be missing also
 				Else
 					vArg = _CDate(vArg)
 				End If
 			End If
-			If Not IsEmpty(vArg) Then
-				iNbArgs = iNbArgs + 1
-				ReDim Preserve vArgs(iNbArgs)
-				vArgs(iNbArgs) = vArg
-			End If
+			iNbArgs = iNbArgs + 1
+			ReDim Preserve vArgs(iNbArgs)
+			vArgs(iNbArgs) = vArg
 		Next i
 	End If
 
@@ -222,10 +222,6 @@ Const vbGet = 2, vbLet = 4, vbMethod = 1, vbSet = 8, vbUNO = 16
 					If vObject._Type = &quot;COLLECTION&quot; And vObject._CollType = COLLTABLEDEFS Then vArgs = Array(_A2B_.PythonCache(vArgs(0)))
 				Case &quot;Close&quot;
 					sSCript = &quot;mClose&quot;
-				Case &quot;Find&quot;
-					For i = 0 To UBound(vArgs)
-						If IsNull(vArgs(i)) Then vArgs(i) = Empty
-					Next i
 				Case &quot;Type&quot;
 					sScript = &quot;pType&quot;
 				Case Else

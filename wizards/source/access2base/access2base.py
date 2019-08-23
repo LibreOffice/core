@@ -73,6 +73,7 @@ class acConstants(object, metaclass = _Singleton):
     # -----------------------------------------------------------------
     Empty = '+++EMPTY+++'
     Null = '+++NULL+++'
+    Missing = '+++MISSING+++'
     FromIsoFormat = '%Y-%m-%d %H:%M:%S' # To be used with datetime.datetime.strptime()
 
     # AcCloseSave
@@ -684,19 +685,19 @@ class Application(object, metaclass = _Singleton):
     basicmodule = -1
 
     @classmethod
-    def AllDialogs(cls, dialog = None):
+    def AllDialogs(cls, dialog = acConstants.Missing):
         return cls.W(_vbMethod, cls.basicmodule, 'AllDialogs', dialog)
     @classmethod
-    def AllForms(cls, form = None):
+    def AllForms(cls, form = acConstants.Missing):
         return cls.W(_vbMethod, cls.basicmodule, 'AllForms', form)
     @classmethod
-    def AllModules(cls, module = None):
+    def AllModules(cls, module = acConstants.Missing):
         return cls.W(_vbMethod, cls.basicmodule, 'AllModules', module)
     @classmethod
     def CloseConnection(cls):
         return cls.W(_vbMethod, cls.basicmodule, 'CloseConnection')
     @classmethod
-    def CommandBars(cls, bar = None):
+    def CommandBars(cls, bar = acConstants.Missing):
         return cls.W(_vbMethod, cls.basicmodule, 'CommandBars', bar)
     @classmethod
     def CurrentDb(cls):
@@ -738,7 +739,7 @@ class Application(object, metaclass = _Singleton):
     def Events(cls, event):
         return cls.W(_vbMethod, cls.basicmodule, 'Events', event)
     @classmethod
-    def Forms(cls, form = None):
+    def Forms(cls, form = acConstants.Missing):
         return cls.W(_vbMethod, cls.basicmodule, 'Forms', form)
     @classmethod
     def getObject(cls, shortcut):
@@ -752,7 +753,7 @@ class Application(object, metaclass = _Singleton):
     def HtmlEncode(cls, string, length = 0):
         return cls.W(_vbMethod, cls.basicmodule, 'HtmlEncode', string, length)
     @classmethod
-    def OpenConnection(cls, thisdatabasedocument = None):
+    def OpenConnection(cls, thisdatabasedocument = acConstants.Missing):
         global THISDATABASEDOCUMENT
         if COMPONENTCONTEXT == None: A2BConnect()     #   Connection from inside LibreOffice is done at first API invocation
         if DESKTOP != None:
@@ -773,7 +774,7 @@ class Application(object, metaclass = _Singleton):
     def SysCmd(cls, action, text = '', value = -1):
         return cls.W(_vbMethod, cls.basicmodule, 'SysCmd', action, text, value)
     @classmethod
-    def TempVars(cls, var = None):
+    def TempVars(cls, var = acConstants.Missing):
         return cls.W(_vbMethod, cls.basicmodule, 'TempVars', var)
     @classmethod
     def Version(cls):
@@ -1049,15 +1050,15 @@ class _BasicObject(object):
 
     def Dispose(self):
         return self.W(_vbMethod, self.objectreference, 'Dispose')
-    def getProperty(self, propertyname, index = None):
+    def getProperty(self, propertyname, index = acConstants.Missing):
         return self.W(_vbMethod, self.objectreference, 'getProperty', propertyname, index)
     GetProperty = getProperty
     def hasProperty(self, propertyname):
         return propertyname in tuple(self.classProperties.keys())
     HasProperty = hasProperty
-    def Properties(self, index = acConstants.Empty):
+    def Properties(self, index = acConstants.Missing):
         return self.W(_vbMethod, self.objectreference, 'Properties', index)
-    def setProperty(self, propertyname, value, index = None):
+    def setProperty(self, propertyname, value, index = acConstants.Missing):
         if self.hasProperty(propertyname):
             if self.W(_vbMethod, self.objectreference, 'setProperty', propertyname, value, index):
                 return self.__setattr__(propertyname, value)
@@ -1085,7 +1086,7 @@ class _Collection(_BasicObject):
     def __len__(self):
         return self.count
 
-    def Add(self, table, value = None):
+    def Add(self, table, value = acConstants.Missing):
         if isinstance(table, _BasicObject):     # Add method applied to a TABLEDEFS collection
             return self.W(_vbMethod, self.objectreference, 'Add', table.objectreference)
         else:                                   # Add method applied to a TEMPVARS collection
@@ -1109,7 +1110,7 @@ class _Collection(_BasicObject):
 class _CommandBar(_BasicObject):
     classProperties = dict(BuiltIn = False, Parent = False, Visible = True)
 
-    def CommandBarControls(self, index = acConstants.Empty):
+    def CommandBarControls(self, index = acConstants.Missing):
         return self.W(_vbMethod, self.objectreference, 'CommandBarControls', index)
     def Reset(self):
         return self.W(_vbMethod, self.objectreference, 'Reset')
@@ -1154,7 +1155,7 @@ class _Control(_BasicObject):
         self._Reset('ItemData')
         self._Reset('ListCount')
         return basicreturn
-    def Controls(self, index = acConstants.Empty):
+    def Controls(self, index = acConstants.Missing):
         return self.W(_vbMethod, self.objectreference, 'Controls', index)
     # Overrides method in parent class: list of properties is strongly control type dependent
     def hasProperty(self, propertyname):
@@ -1224,13 +1225,13 @@ class _Database(_BasicObject):
         if objecttype == acConstants.acOutputForm: encoding = 0
         return self.W(_vbMethod, self.objectreference, 'OutputTo', objecttype, objectname, outputformat, outputfile
                       , autostart, templatefile, encoding, quality)
-    def QueryDefs(self, index = acConstants.Empty):
+    def QueryDefs(self, index = acConstants.Missing):
         return self.W(_vbMethod, self.objectreference, 'QueryDefs', index)
-    def Recordsets(self, index = acConstants.Empty):
+    def Recordsets(self, index = acConstants.Missing):
         return self.W(_vbMethod, self.objectreference, 'Recordsets', index)
     def RunSQL(self, SQL, option = -1):
         return self.W(_vbMethod, self.objectreference, 'RunSQL', SQL, option)
-    def TableDefs(self, index = acConstants.Empty):
+    def TableDefs(self, index = acConstants.Missing):
         return self.W(_vbMethod, self.objectreference, 'TableDefs', index)
 
 
@@ -1309,7 +1310,7 @@ class _Form(_BasicObject):
 
     def Close(self):
         return self.W(_vbMethod, self.objectreference, 'Close')
-    def Controls(self, index = acConstants.Empty):
+    def Controls(self, index = acConstants.Missing):
         return self.W(_vbMethod, self.objectreference, 'Controls', index)
     def Move(self, left = -1, top = -1, width = -1, height = -1):
         return self.W(_vbMethod, self.objectreference, 'Move', left, top, width, height)
@@ -1363,7 +1364,7 @@ class _Module(_BasicObject):
 class _OptionGroup(_BasicObject):
     classProperties = dict(Count = False, Value = True)
 
-    def Controls(self, index = acConstants.Empty):
+    def Controls(self, index = acConstants.Missing):
         return self.W(_vbMethod, self.objectreference, 'Controls', index)
 
 
@@ -1377,9 +1378,9 @@ class _QueryDef(_BasicObject):
     @property
     def Query(self): return self.W(_vbUNO, self.objectreference, 'Query')
 
-    def Execute(self, options = acConstants.Empty):
+    def Execute(self, options = acConstants.Missing):
         return self.W(_vbMethod, self.objectreference, 'Execute', options)
-    def Fields(self, index = acConstants.Empty):
+    def Fields(self, index = acConstants.Missing):
         return self.W(_vbMethod, self.objectreference, 'Fields', index)
     def OpenRecordset(self, type = -1, option = -1, lockedit = -1):
         return self.W(_vbMethod, self.objectreference, 'OpenRecordset', type, option, lockedit)
@@ -1405,11 +1406,11 @@ class _Recordset(_BasicObject):
         return self._Reset('RecordCount',self.W(_vbMethod, self.objectreference, 'Delete'))
     def Edit(self):
         return self.W(_vbMethod, self.objectreference, 'Edit')
-    def Fields(self, index = acConstants.Empty):
+    def Fields(self, index = acConstants.Missing):
         return self.W(_vbMethod, self.objectreference, 'Fields', index)
     def GetRows(self, numrows):
         return self.W(_vbMethod, self.objectreference, 'GetRows', numrows)
-    def Move(self, rows, startbookmark = acConstants.Empty):
+    def Move(self, rows, startbookmark = acConstants.Missing):
         return self._Reset('BOF', self.W(_vbMethod, self.objectreference, 'Move', rows, startbookmark))
     def MoveFirst(self):
         return self._Reset('BOF', self.W(_vbMethod, self.objectreference, 'MoveFirst'))
@@ -1447,7 +1448,7 @@ class _TableDef(_BasicObject):
 
     def CreateField(self, name, type, size = 0, attributes = 0):
         return self.W(_vbMethod, self.objectreference, 'CreateField', name, type, size, attributes)
-    def Fields(self, index = acConstants.Empty):
+    def Fields(self, index = acConstants.Missing):
         return self.W(_vbMethod, self.objectreference, 'Fields', index)
     def OpenRecordset(self, type = -1, option = -1, lockedit = -1):
         return self.W(_vbMethod, self.objectreference, 'OpenRecordset', type, option, lockedit)
