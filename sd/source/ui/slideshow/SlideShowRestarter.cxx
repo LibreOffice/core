@@ -25,7 +25,6 @@
 #include <framework/FrameworkHelper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/app.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/svapp.hxx>
 

@@ -30,7 +30,6 @@
 
 #include <slideshow.hxx>
 #include <ViewShell.hxx>
-#include <ViewShellBase.hxx>
 #include <sdresid.hxx>
 #include <helpids.h>
 #include <strings.hrc>

@@ -22,16 +22,10 @@
 #include <cstddef>
 
 #include "PresenterHelper.hxx"
-#include "CanvasUpdateRequester.hxx"
 #include "PresenterCanvas.hxx"
-#include <facreg.hxx>
 #include <cppcanvas/vclfactory.hxx>
-#include <com/sun/star/awt/WindowAttribute.hpp>
-#include <com/sun/star/awt/WindowClass.hpp>
-#include <com/sun/star/awt/WindowDescriptor.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 

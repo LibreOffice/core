@@ -20,7 +20,6 @@
 #include <controller/SlsTransferableData.hxx>
 
 #include <SlideSorterViewShell.hxx>
-#include <View.hxx>
 
 namespace sd { namespace slidesorter { namespace controller {
 

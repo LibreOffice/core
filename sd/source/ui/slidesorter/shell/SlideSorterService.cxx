@@ -19,7 +19,6 @@
 
 #include "SlideSorterService.hxx"
 #include <SlideSorter.hxx>
-#include <facreg.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsProperties.hxx>
 #include <controller/SlsCurrentSlideManager.hxx>
@@ -29,9 +28,7 @@
 #include <view/SlsLayouter.hxx>
 #include <DrawController.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

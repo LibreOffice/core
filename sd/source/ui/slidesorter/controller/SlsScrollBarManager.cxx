@@ -27,7 +27,6 @@
 #include <model/SlsPageDescriptor.hxx>
 #include <view/SlideSorterView.hxx>
 #include <view/SlsLayouter.hxx>
-#include <view/SlsTheme.hxx>
 #include <Window.hxx>
 #include <sdpage.hxx>
 

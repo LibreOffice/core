@@ -19,11 +19,8 @@
 
 #include <sal/config.h>
 
-#include <cstdlib>
-
 #include <controller/SlsVisibleAreaManager.hxx>
 #include <controller/SlideSorterController.hxx>
-#include <controller/SlsProperties.hxx>
 #include <controller/SlsAnimationFunction.hxx>
 #include <controller/SlsScrollBarManager.hxx>
 #include <controller/SlsCurrentSlideManager.hxx>

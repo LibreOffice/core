@@ -8,10 +8,7 @@
  */
 
 #include <errno.h>
-#include <stdlib.h>
 #include <string.h>
-#include <algorithm>
-#include <vector>
 #include <iostream>
 
 #include <rtl/strbuf.hxx>
@@ -34,7 +31,6 @@
   typedef int socklen_t;
 #else
   #include <unistd.h>
-  #include <sys/types.h>
   #include <sys/socket.h>
   #include <netinet/in.h>
   #include <arpa/inet.h>

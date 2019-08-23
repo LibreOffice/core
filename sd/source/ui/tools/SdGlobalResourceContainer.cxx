@@ -26,7 +26,6 @@
 
 #include <com/sun/star/frame/Desktop.hpp>
 
-#include <o3tl/deleter.hxx>
 #include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>

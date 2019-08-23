@@ -25,13 +25,11 @@
 #include <model/SlsPageDescriptor.hxx>
 #include <model/SlsPageEnumerationProvider.hxx>
 #include <view/SlideSorterView.hxx>
-#include <view/SlsTheme.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsInsertionIndicatorHandler.hxx>
 #include <controller/SlsPageSelector.hxx>
 #include <controller/SlsSelectionFunction.hxx>
 #include <controller/SlsCurrentSlideManager.hxx>
-#include <controller/SlsScrollBarManager.hxx>
 #include <controller/SlsFocusManager.hxx>
 #include <controller/SlsSelectionManager.hxx>
 #include <controller/SlsTransferableData.hxx>
@@ -40,16 +38,9 @@
 #include <cache/SlsPageCache.hxx>
 
 #include <ViewShellBase.hxx>
-#include <View.hxx>
 #include <DrawViewShell.hxx>
 #include <Window.hxx>
 #include <fupoor.hxx>
-#include <fuzoom.hxx>
-#include <fucushow.hxx>
-#include <fusldlg.hxx>
-#include <fuexpand.hxx>
-#include <fusumry.hxx>
-#include <app.hrc>
 #include <strings.hrc>
 #include <sdresid.hxx>
 #include <sdxfer.hxx>

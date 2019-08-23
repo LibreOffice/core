@@ -21,7 +21,6 @@
 #include "MasterPageContainerProviders.hxx"
 
 #include <tools/IdleDetection.hxx>
-#include <PreviewRenderer.hxx>
 
 #include <set>
 

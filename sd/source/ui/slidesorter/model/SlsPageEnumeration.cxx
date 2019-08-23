@@ -24,7 +24,6 @@
 
 #include <model/SlsPageEnumeration.hxx>
 #include <model/SlideSorterModel.hxx>
-#include <model/SlsPageDescriptor.hxx>
 
 using namespace ::sd::slidesorter;
 using namespace ::sd::slidesorter::model;

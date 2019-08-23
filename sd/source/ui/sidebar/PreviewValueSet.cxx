@@ -19,7 +19,6 @@
 
 #include "PreviewValueSet.hxx"
 #include <vcl/event.hxx>
-#include <vcl/image.hxx>
 
 namespace sd { namespace sidebar {
 
