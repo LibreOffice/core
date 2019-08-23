@@ -19,7 +19,6 @@
 
 #include <SlideSorter.hxx>
 
-#include <SlideSorterViewShell.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsScrollBarManager.hxx>
 #include <controller/SlsProperties.hxx>
@@ -29,17 +28,14 @@
 #include <view/SlsTheme.hxx>
 #include <model/SlideSorterModel.hxx>
 
-#include <DrawController.hxx>
+#include <ViewShell.hxx>
 #include <ViewShellBase.hxx>
-#include <ViewShellManager.hxx>
 #include <Window.hxx>
 
 #include <tools/debug.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-
-#include <sfx2/dispatch.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;

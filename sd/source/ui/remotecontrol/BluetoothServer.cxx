@@ -10,7 +10,6 @@
 #include "BluetoothServer.hxx"
 
 #include <iostream>
-#include <iomanip>
 #include <memory>
 #include <new>
 
@@ -22,7 +21,7 @@
   #include <dbus/dbus.h>
   #include <errno.h>
   #include <fcntl.h>
-  #include <sys/unistd.h>
+  #include <unistd.h>
   #include <sys/socket.h>
   #include <bluetooth/bluetooth.h>
   #include <bluetooth/rfcomm.h>
@@ -40,6 +39,7 @@
 #endif
 
 #ifdef MACOSX
+  #include <iomanip>
   #include <osl/conditn.hxx>
   #include <premac.h>
   #import <CoreFoundation/CoreFoundation.h>

@@ -20,15 +20,8 @@
 #include "SlsBitmapFactory.hxx"
 
 #include <PreviewRenderer.hxx>
-#include <view/SlideSorterView.hxx>
 #include <sdpage.hxx>
-#include <Window.hxx>
-#include <drawdoc.hxx>
-#include <DrawDocShell.hxx>
-#include <svx/svdtypes.hxx>
-#include <svx/svdpage.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bitmapaccess.hxx>
 
 namespace sd { namespace slidesorter { namespace view {
 class SlideSorterView;

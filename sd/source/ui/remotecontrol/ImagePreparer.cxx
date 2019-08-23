@@ -24,19 +24,10 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <sax/tools/converter.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
-#include <unotools/streamwrap.hxx>
-
-#include <svl/itemset.hxx>
-#include <sfx2/docfile.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XImporter.hpp>
-#include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>

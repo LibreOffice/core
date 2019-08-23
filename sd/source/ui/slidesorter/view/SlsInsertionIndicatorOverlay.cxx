@@ -20,23 +20,18 @@
 #include <view/SlsInsertionIndicatorOverlay.hxx>
 
 #include <SlideSorter.hxx>
-#include <model/SlsPageEnumeration.hxx>
 #include <view/SlideSorterView.hxx>
 #include <view/SlsLayouter.hxx>
 #include <view/SlsPageObjectLayouter.hxx>
 #include <view/SlsTheme.hxx>
-#include <cache/SlsPageCache.hxx>
 #include "SlsFramePainter.hxx"
 #include "SlsLayeredDevice.hxx"
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
-#include <sdpage.hxx>
-#include <sdmod.hxx>
 #include <Window.hxx>
 
 #include <vcl/virdev.hxx>
 #include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 

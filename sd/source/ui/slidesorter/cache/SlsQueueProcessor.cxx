@@ -18,7 +18,6 @@
  */
 
 #include "SlsQueueProcessor.hxx"
-#include "SlsCacheConfiguration.hxx"
 #include "SlsRequestQueue.hxx"
 #include "SlsBitmapCache.hxx"
 

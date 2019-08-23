@@ -21,23 +21,15 @@
 
 #include <SlideSorter.hxx>
 #include <model/SlideSorterModel.hxx>
-#include <model/SlsPageEnumerationProvider.hxx>
-#include <view/SlideSorterView.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsInsertionIndicatorHandler.hxx>
 #include <controller/SlsScrollBarManager.hxx>
 #include <controller/SlsProperties.hxx>
-#include <controller/SlsSelectionFunction.hxx>
-#include <controller/SlsSelectionManager.hxx>
 #include <controller/SlsClipboard.hxx>
 #include <controller/SlsTransferableData.hxx>
-#include <DrawDocShell.hxx>
-#include <drawdoc.hxx>
 #include <Window.hxx>
-#include <app.hrc>
 #include <sdtreelb.hxx>
 #include <sdmod.hxx>
-#include <sfx2/bindings.hxx>
 
 namespace sd { namespace slidesorter { namespace controller {
 

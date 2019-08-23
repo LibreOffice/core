@@ -19,9 +19,7 @@
 
 #include <tools/gen.hxx>
 #include "SlsGenericPageCache.hxx"
-#include "SlsRequestFactory.hxx"
 #include <cache/SlsPageCache.hxx>
-#include <model/SlideSorterModel.hxx>
 
 using namespace ::com::sun::star;
 

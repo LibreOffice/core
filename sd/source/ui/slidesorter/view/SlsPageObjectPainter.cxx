@@ -27,11 +27,8 @@
 #include <SlideSorter.hxx>
 #include "SlsFramePainter.hxx"
 #include <cache/SlsPageCache.hxx>
-#include <controller/SlsProperties.hxx>
 #include <Window.hxx>
 #include <sdpage.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/vclenum.hxx>
 #include <vcl/virdev.hxx>
 #include <CustomAnimationEffect.hxx>
 #include <memory>

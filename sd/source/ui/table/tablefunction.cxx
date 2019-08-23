@@ -20,49 +20,28 @@
 #include <sal/config.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/XSelectionFunction.hpp>
-#include <com/sun/star/awt/KeyModifier.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 
 #include <comphelper/lok.hxx>
-#include <cppuhelper/basemutex.hxx>
-
-#include <vcl/svapp.hxx>
 
 #include <svx/svdotable.hxx>
-#include <svx/sdr/overlay/overlayobjectcell.hxx>
-#include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svxids.hrc>
-#include <editeng/outlobj.hxx>
-#include <svx/svdoutl.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/svdetc.hxx>
-#include <editeng/editstat.hxx>
-#include <editeng/unolingu.hxx>
-#include <svx/sdrpagewindow.hxx>
-#include <svx/sdr/table/tabledesign.hxx>
 #include <svx/svxdlg.hxx>
 
-#include <svl/itempool.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <svl/style.hxx>
 
-#include <framework/FrameworkHelper.hxx>
-#include "TableDesignPane.hxx"
-#include <app.hrc>
 #include <tablefunction.hxx>
 #include <DrawViewShell.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
-#include <DrawDocShell.hxx>
 #include <Window.hxx>
 #include <drawview.hxx>
-#include <undo/undoobjects.hxx>
 #include <sdmod.hxx>
 
 #include <memory>

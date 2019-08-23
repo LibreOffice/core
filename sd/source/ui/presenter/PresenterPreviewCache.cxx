@@ -18,11 +18,9 @@
  */
 
 #include "PresenterPreviewCache.hxx"
-#include <facreg.hxx>
 
 #include <cache/SlsPageCache.hxx>
 #include <cache/SlsCacheContext.hxx>
-#include <tools/IdleDetection.hxx>
 #include <vcl/bitmapex.hxx>
 #include <sdpage.hxx>
 #include <cppcanvas/vclfactory.hxx>

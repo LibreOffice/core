@@ -20,26 +20,16 @@
 #include "RecentlyUsedMasterPages.hxx"
 #include "MasterPageContainerProviders.hxx"
 #include <MasterPageObserver.hxx>
-#include "MasterPagesSelector.hxx"
 #include "MasterPageDescriptor.hxx"
 #include <tools/ConfigurationAccess.hxx>
-#include <drawdoc.hxx>
-#include <sdpage.hxx>
 
 #include <algorithm>
 #include <memory>
 #include <vector>
 
-#include <unomodel.hxx>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
-#include <unotools/confignode.hxx>
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
 

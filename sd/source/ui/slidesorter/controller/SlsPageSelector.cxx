@@ -20,10 +20,8 @@
 #include <controller/SlsPageSelector.hxx>
 
 #include <SlideSorter.hxx>
-#include <SlideSorterViewShell.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsSelectionManager.hxx>
-#include <controller/SlsAnimator.hxx>
 #include <controller/SlsCurrentSlideManager.hxx>
 #include <controller/SlsVisibleAreaManager.hxx>
 #include <model/SlsPageDescriptor.hxx>
@@ -32,11 +30,6 @@
 #include <view/SlideSorterView.hxx>
 
 #include <sdpage.hxx>
-#include <ViewShell.hxx>
-#include <DrawViewShell.hxx>
-#include <ViewShellBase.hxx>
-#include <com/sun/star/drawing/XDrawView.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/debug.hxx>
 #include <memory>
 

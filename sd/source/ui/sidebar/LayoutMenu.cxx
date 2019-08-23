@@ -23,7 +23,6 @@
 #include <drawdoc.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <strings.hrc>
-#include <glob.hxx>
 #include <helpids.h>
 #include <pres.hxx>
 #include <sdmod.hxx>
@@ -43,9 +42,7 @@
 #include <sal/log.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/languageoptions.hxx>

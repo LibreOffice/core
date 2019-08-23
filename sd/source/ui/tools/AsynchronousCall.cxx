@@ -20,8 +20,6 @@
 #include <memory>
 #include <tools/AsynchronousCall.hxx>
 
-#include <DrawViewShell.hxx>
-
 namespace sd { namespace tools {
 
 AsynchronousCall::AsynchronousCall()
