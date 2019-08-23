@@ -30,6 +30,7 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/viewoptions.hxx>
+#include <vcl/msgbox.hxx>
 
 #include <svtools/treelistentry.hxx>
 
@@ -213,13 +214,13 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, Load, Button*, void)
     StartFileDialog(StartFileDialogType::Open, "Load Targets");
 }
 
-/*IMPL_LINK_NOARG(SfxAutoRedactDialog, Save, Button*, void)
+IMPL_LINK_NOARG(SfxAutoRedactDialog, Save, Button*, void)
 {
     //Allow saving the targets into a file
     StartFileDialog(StartFileDialogType::SaveAs, "Save Targets");
 }
 
-IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, Button*, void)
+/*IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, Button*, void)
 {
     // Open the Add Target dialog, craete a new target and insert into the targets vector and the listbox
     SfxAddTargetDialog aAddTargetDialog(getDialog(), m_xTargetsBox->GetNameProposal());
@@ -342,39 +343,47 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, Button*, void)
 
     // And sync the targets box row with the actual target data
     m_xTargetsBox->setRowData(nSelectedRow, pTarget);
-}
+}*/
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, DeleteHdl, Button*, void)
 {
-    std::vector<int> aSelectedRows = m_xTargetsBox->get_selected_rows();
+    sal_uLong nSelectionCount = m_pTargetsBox->GetSelectionCount();
 
     //No selection, so nothing to delete
-    if (aSelectedRows.empty())
+    if (nSelectionCount < 1)
         return;
 
-    if (aSelectedRows.size() > 1)
+    if (nSelectionCount > 1)
     {
-        OUString sMsg("Are you sure you would like to delete "
-                      + OUString::number(aSelectedRows.size()) + " targets at once?");
+        OUString sMsg("Are you sure you would like to delete " + OUString::number(nSelectionCount)
+                      + " targets at once?");
+
         //Warn the user about multiple deletions
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
-            getDialog(), VclMessageType::Question, VclButtonsType::OkCancel, sMsg));
-        if (xBox->run() == RET_CANCEL)
+        if (ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::OkCancel, sMsg)->Execute()
+            == RET_CANCEL)
             return;
     }
 
-    // After each delete, the indexes of the following items decrease by one.
-    int delta = 0;
-    for (const auto& i : aSelectedRows)
+    SvTreeListEntry* pSelected = m_pTargetsBox->FirstSelected();
+
+    for (sal_uLong i = nSelectionCount; i > 0; i--)
     {
-        m_aTableTargets.erase(m_aTableTargets.begin() + (i - delta));
-        m_xTargetsBox->remove(i - delta++);
+        // remove the target
+        RedactionTarget* pTarget = static_cast<RedactionTarget*>(pSelected->GetUserData());
+        delete pTarget;
+
+        // remove from the table
+        SvTreeListEntry* nextSelected = m_pTargetsBox->NextSelected(pSelected);
+        m_pTargetsBox->RemoveEntry(pSelected);
+        pSelected = nextSelected;
     }
-}*/
+
+    m_pTargetsBox->SelectAll(false);
+}
 
 namespace
 {
-/*boost::property_tree::ptree redactionTargetToJSON(RedactionTarget* pTarget)
+boost::property_tree::ptree redactionTargetToJSON(RedactionTarget* pTarget)
 {
     boost::property_tree::ptree aNode;
     aNode.put("sName", pTarget->sName.toUtf8().getStr());
@@ -385,7 +394,7 @@ namespace
     aNode.put("nID", pTarget->nID);
 
     return aNode;
-}*/
+}
 
 RedactionTarget* JSONtoRedactionTarget(const boost::property_tree::ptree::value_type& rValue)
 {
@@ -456,7 +465,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, LoadHdl, sfx2::FileDialogHelper*, void)
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, SaveHdl, sfx2::FileDialogHelper*, void)
 {
-    /*assert(m_pFileDlg);
+    assert(m_pFileDlg);
 
     OUString sTargetsFile;
     if (ERRCODE_NONE == m_pFileDlg->GetError())
@@ -469,13 +478,18 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, SaveHdl, sfx2::FileDialogHelper*, void)
     osl::File::getSystemPathFromFileURL(sTargetsFile, sSysPath);
     sTargetsFile = sSysPath;
 
-    weld::WaitObject aWaitObject(getDialog());
+    EnterWait();
 
     try
     {
-        // Put the targets into a JSON array
         boost::property_tree::ptree aTargetsArray;
-        for (const auto& targetPair : m_aTableTargets)
+        std::vector<std::pair<RedactionTarget*, OUString>> vRedactionTargets;
+
+        // Get the targets
+        getTargets(vRedactionTargets);
+
+        // Put the targets into a JSON array
+        for (const auto& targetPair : vRedactionTargets)
         {
             aTargetsArray.push_back(std::make_pair("", redactionTargetToJSON(targetPair.first)));
         }
@@ -495,7 +509,9 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, SaveHdl, sfx2::FileDialogHelper*, void)
                  "Exception caught while trying to save the targets JSON to file: " << e.Message);
         return;
         //TODO: Warn the user with a message box
-    }*/
+    }
+
+    LeaveWait();
 }
 
 void SfxAutoRedactDialog::StartFileDialog(StartFileDialogType nType, const OUString& rTitle)
@@ -569,6 +585,8 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(vcl::Window* pParent)
     m_pTargetsBox = VclPtr<TargetsTable>::Create(*m_pTargetsContainer);
 
     m_pLoadBtn->SetClickHdl(LINK(this, SfxAutoRedactDialog, Load));
+    m_pSaveBtn->SetClickHdl(LINK(this, SfxAutoRedactDialog, Save));
+    m_pDeleteBtn->SetClickHdl(LINK(this, SfxAutoRedactDialog, DeleteHdl));
 
     // Can be used to remmeber the last set of redaction targets?
     /*OUString sExtraData;
