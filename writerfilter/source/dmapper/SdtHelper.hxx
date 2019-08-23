@@ -50,6 +50,8 @@ class SdtHelper final : public virtual SvRefBase
 
     /// Items of the drop-down control.
     std::vector<OUString> m_aDropDownItems;
+    /// Indicator of a drop-down control
+    bool m_bInsideDropDownControl;
     /// Pieces of the default text -- currently used only by the dropdown control.
     OUStringBuffer m_aSdtTexts;
     /// Date ISO string contained in the w:date element, used by the date control.
@@ -110,6 +112,9 @@ public:
     {
         return m_bOutsideAParagraph;
     }
+
+    bool isInsideDropDownControl() const { return m_bInsideDropDownControl; }
+    void setInsideDropDownControl(bool bInside) { m_bInsideDropDownControl = bInside; }
 
     /// Create drop-down control from w:sdt's w:dropDownList.
     void createDropDownControl();
