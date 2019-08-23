@@ -131,13 +131,18 @@ bool ImplDdeService::MakeTopic( const OUString& rNm )
 
     if( !bRet )
     {
-        INetURLObject aWorkPath( SvtPathOptions().GetWorkPath() );
-        INetURLObject aFile;
-        if ( aWorkPath.GetNewAbsURL( rNm, &aFile ) &&
-             lcl_IsDocument( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
+        bool abs;
+        OUString url;
+        try {
+            url = rtl::Uri::convertRelToAbs(SvtPathOptions().GetWorkPath(), rNm);
+            abs = true;
+        } catch (rtl::MalformedUriReference &) {
+            abs = false;
+        }
+        if ( abs && lcl_IsDocument( url ) )
         {
             // File exists? then try to load it:
-            SfxStringItem aName( SID_FILE_NAME, aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+            SfxStringItem aName( SID_FILE_NAME, url );
             SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, true);
 
             SfxBoolItem aSilent(SID_SILENT, true);
