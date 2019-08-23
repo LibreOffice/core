@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_ebd6d9c3",
+        "filename": "chart2/source/controller/inc/ViewElementListProvider.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-23T09:02:15Z",
+      "side": 1,
+      "message": "e.g., this one could be defined as defaulted here (esp. so as it is not exported from a library, so shouldn\u0027t hurt much to make it inline), obviating the need to explicitly mark it as noexcept",
+      "revId": "536678fcd8f8aad3d9a86787b1bcc593718db113",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
