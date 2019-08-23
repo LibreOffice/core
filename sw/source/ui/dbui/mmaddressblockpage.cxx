@@ -97,6 +97,19 @@ SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage(SwMailMergeWizard* pWiz
     Link<weld::Button&,void> aLink = LINK(this, SwMailMergeAddressBlockPage, InsertDataHdl_Impl);
     m_xPrevSetIB->connect_clicked(aLink);
     m_xNextSetIB->connect_clicked(aLink);
+
+    // lock in preferred size including current address line
+    Size aSize1(m_xContainer->get_preferred_size());
+
+    OUString sOrigLabel = m_xAddressListPB->get_label();
+    m_xAddressListPB->set_label(m_sChangeAddress);
+    Size aSize2(m_xContainer->get_preferred_size());
+    m_xAddressListPB->set_label(sOrigLabel);
+
+    m_xCurrentAddressFI->hide();
+
+    m_xContainer->set_size_request(std::max(aSize1.Width(), aSize2.Width()),
+                                   std::max(aSize1.Height(), aSize2.Height()));
 }
 
 SwMailMergeAddressBlockPage::~SwMailMergeAddressBlockPage()
