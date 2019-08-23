@@ -911,6 +911,8 @@ public:
 
     void setSuitableOutlinerBg(Outliner& rOutliner) const;
 
+    virtual bool IsSdrEdgeObj() const { return false; }
+
 protected:
     tools::Rectangle            aOutRect;     // surrounding rectangle for Paint (incl. LineWidth, ...)
     Point                       aAnchor;      // anchor position (Writer)
