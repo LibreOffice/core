@@ -21,20 +21,13 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/wghtitem.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/lrspitem.hxx>
-#include <editeng/postitem.hxx>
 #include <editeng/unoprnms.hxx>
 #include <svl/style.hxx>
 
-#include <sfx2/sfxsids.hrc>
 #include <svx/svdotext.hxx>
 #include <svx/svdoashp.hxx>
-#include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/svdomedia.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/xfillit0.hxx>
@@ -76,6 +69,7 @@
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -95,9 +89,6 @@
 #include <vcl/pngread.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/dibtools.hxx>
-#include <sfx2/frame.hxx>
-#include <com/sun/star/frame/XModel2.hpp>
-#include <com/sun/star/frame/XController2.hpp>
 
 using namespace ::com::sun::star;
 
