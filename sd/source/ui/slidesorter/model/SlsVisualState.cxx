@@ -18,8 +18,6 @@
  */
 
 #include <model/SlsVisualState.hxx>
-#include <model/SlsPageDescriptor.hxx>
-#include <controller/SlsAnimator.hxx>
 
 namespace sd { namespace slidesorter { namespace model {
 

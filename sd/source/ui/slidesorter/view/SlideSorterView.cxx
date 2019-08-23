@@ -19,9 +19,7 @@
 
 #include <view/SlideSorterView.hxx>
 
-#include <ViewShellBase.hxx>
 #include <SlideSorter.hxx>
-#include <SlideSorterViewShell.hxx>
 #include <ViewShell.hxx>
 #include "SlsViewCacheContext.hxx"
 #include "SlsLayeredDevice.hxx"
@@ -31,7 +29,6 @@
 #include <view/SlsILayerPainter.hxx>
 #include <view/SlsToolTip.hxx>
 #include <controller/SlideSorterController.hxx>
-#include <controller/SlsProperties.hxx>
 #include <controller/SlsClipboard.hxx>
 #include <model/SlideSorterModel.hxx>
 #include <model/SlsPageEnumerationProvider.hxx>
@@ -39,32 +36,16 @@
 #include <cache/SlsPageCache.hxx>
 #include <cache/SlsPageCacheManager.hxx>
 #include <cache/SlsCacheContext.hxx>
-#include <DrawDocShell.hxx>
 #include <PaneDockingWindow.hxx>
 
-#include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <Window.hxx>
 
-#include <sal/log.hxx>
-#include <svl/itempool.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svdopage.hxx>
-#include <svx/xlndsit.hxx>
-#include <svx/xlnclit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 
-#include <tools/poly.hxx>
-#include <vcl/lineinfo.hxx>
 #include <algorithm>
-#include <svx/sdrpagewindow.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <canvas/elapsedtime.hxx>
 
 //#define DEBUG_TIMING
 #ifdef DEBUG_TIMING

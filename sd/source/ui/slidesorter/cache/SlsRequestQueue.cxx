@@ -18,9 +18,8 @@
  */
 
 #include "SlsRequestQueue.hxx"
-#include <sdpage.hxx>
 
-#include <sal/log.hxx>
+#include <svx/svdpage.hxx>
 
 #include <set>
 

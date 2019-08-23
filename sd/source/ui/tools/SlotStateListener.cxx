@@ -22,7 +22,6 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/beans/PropertyChangeEvent.hpp>
 
 #include <comphelper/processfactory.hxx>
 

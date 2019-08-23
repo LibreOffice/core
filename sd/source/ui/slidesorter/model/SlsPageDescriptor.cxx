@@ -20,12 +20,6 @@
 #include <model/SlsPageDescriptor.hxx>
 
 #include <sdpage.hxx>
-#include <drawdoc.hxx>
-
-#include <svx/svdopage.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/sdr/contact/viewcontact.hxx>
-#include <svx/sdr/contact/viewobjectcontact.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;

@@ -19,7 +19,6 @@
 
 #include <tools/IdleDetection.hxx>
 
-#include <ViewShell.hxx>
 #include <slideshow.hxx>
 #include <ViewShellBase.hxx>
 

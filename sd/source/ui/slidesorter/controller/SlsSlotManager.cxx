@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/beans/PropertyValue.hpp>
-
 #include <editeng/outlobj.hxx>
 
 #include <controller/SlsSlotManager.hxx>
@@ -27,12 +25,10 @@
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsClipboard.hxx>
 #include <controller/SlsCurrentSlideManager.hxx>
-#include <controller/SlsFocusManager.hxx>
 #include <controller/SlsInsertionIndicatorHandler.hxx>
 #include <controller/SlsPageSelector.hxx>
 #include <controller/SlsSelectionFunction.hxx>
 #include <controller/SlsSelectionManager.hxx>
-#include <controller/SlsSelectionObserver.hxx>
 #include <model/SlideSorterModel.hxx>
 #include <model/SlsPageEnumerationProvider.hxx>
 #include <model/SlsPageDescriptor.hxx>
@@ -41,12 +37,10 @@
 #include <framework/FrameworkHelper.hxx>
 #include <Window.hxx>
 #include <fupoor.hxx>
-#include <fuzoom.hxx>
 #include <fucushow.hxx>
 #include <fusldlg.hxx>
 #include <fuexpand.hxx>
 #include <fusumry.hxx>
-#include <fuscale.hxx>
 #include <slideshow.hxx>
 #include <app.hrc>
 #include <strings.hrc>
@@ -56,9 +50,6 @@
 #include <DrawDocShell.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShellImplementation.hxx>
-#include <sdattr.hxx>
-#include <FrameView.hxx>
-#include <zoomlist.hxx>
 #include <sdpage.hxx>
 #include <sdxfer.hxx>
 #include <helpids.h>
@@ -76,16 +67,13 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <svx/svxids.hrc>
-#include <sfx2/zoomitem.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 #include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itempool.hxx>
-#include <svl/aeitem.hxx>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
-#include <vcl/svapp.hxx>
 
 
 #include <memory>

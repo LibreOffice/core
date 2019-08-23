@@ -18,7 +18,6 @@
  */
 
 #include <controller/SlsInsertionIndicatorHandler.hxx>
-#include <controller/SlsProperties.hxx>
 #include <view/SlideSorterView.hxx>
 #include <view/SlsLayouter.hxx>
 #include <view/SlsInsertAnimator.hxx>

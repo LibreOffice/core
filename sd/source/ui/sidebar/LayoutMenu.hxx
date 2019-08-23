@@ -24,7 +24,7 @@
 
 #include <svtools/valueset.hxx>
 #include <vcl/transfer.hxx>
-#include <sfx2/shell.hxx>
+#include <sfx2/request.hxx>
 #include <xmloff/autolayout.hxx>
 
 namespace com { namespace sun { namespace star { namespace frame { class XStatusListener; } } } }

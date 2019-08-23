@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include "Receiver.hxx"
-#include <string.h>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
@@ -15,11 +14,6 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/anytostring.hxx>
-#include <cppuhelper/exc_hlp.hxx>
-#include <osl/file.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/svapp.hxx>

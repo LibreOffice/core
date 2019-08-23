@@ -24,11 +24,9 @@
 #include <config_features.h>
 
 #include <com/sun/star/frame/theAutoRecovery.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
-#include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -39,7 +37,6 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/presentation/SlideShow.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
-#include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/saveopt.hxx>
@@ -49,14 +46,12 @@
 #include <tools/diagnose_ex.h>
 
 #include <sfx2/infobar.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
-#include <sfx2/templdlg.hxx>
 #include <svx/f3dchild.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/fontwork.hxx>
@@ -69,7 +64,6 @@
 #include <notifydocumentevent.hxx>
 #include "slideshowimpl.hxx"
 #include "slideshowviewimpl.hxx"
-#include <pgjump.hxx>
 #include "PaneHider.hxx"
 
 #include <bitmaps.hlst>
@@ -81,12 +75,8 @@
 #include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
-#include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ref.hxx>
-#include <sal/log.hxx>
-#include <canvas/elapsedtime.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svtools/colrdlg.hxx>
 #include <DrawDocShell.hxx>

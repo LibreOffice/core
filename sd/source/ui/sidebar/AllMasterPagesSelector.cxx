@@ -18,14 +18,11 @@
  */
 
 #include "AllMasterPagesSelector.hxx"
-#include "PreviewValueSet.hxx"
 #include <ViewShellBase.hxx>
 #include "MasterPageContainer.hxx"
 #include "MasterPageDescriptor.hxx"
-#include <app.hrc>
 #include <helpids.h>
 
-#include <tools/link.hxx>
 #include <set>
 
 namespace {

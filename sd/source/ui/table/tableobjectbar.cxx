@@ -17,41 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sfx2/bindings.hxx>
 #include <sfx2/msg.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/msgpool.hxx>
 #include <vcl/EnumContext.hxx>
-#include <svl/whiter.hxx>
-#include <svl/itempool.hxx>
 #include <svl/intitem.hxx>
-#include <svx/svdomedia.hxx>
-#include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 
-#include <app.hrc>
 #include <createtableobjectbar.hxx>
 #include <registerinterfaces.hxx>
 
 #include <strings.hrc>
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
-#include <Window.hxx>
-#include <drawview.hxx>
 #include <sdmod.hxx>
 #include <sdresid.hxx>
-#include <drawdoc.hxx>
 #include <DrawViewShell.hxx>
 
 #include "tableobjectbar.hxx"
-
-#include <memory>
 
 using namespace sd;
 using namespace sd::ui::table;
