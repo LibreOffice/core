@@ -34,6 +34,24 @@
       "revId": "536678fcd8f8aad3d9a86787b1bcc593718db113",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_2bbcd167",
+        "filename": "chart2/source/controller/inc/ViewElementListProvider.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-23T09:21:19Z",
+      "side": 1,
+      "message": "\u003e Do you mean you want this change be modified (here and in some\n\u003e other places that I don\u0027t know about),\n\nYou changed all those places to \"noexcept\", so shouldn\u0027t be a problem to identify the subset that could be defaulted on first declaration, no?\n\n\u003e or do you mean that a\n\u003e hypothetical plugin could suggest defaulting some functions like\n\u003e this?\n\nSuch a plugin might indeed be worthwhile (independent of this change, even).  I\u0027m not sure what approach would be better here, add \"noexcept\" now even in cases that could be defaulted, or clean up potential candidates that can be defaulted first.  One potential benefit of the first approach is that any additional functions (called from the move ctor in question) that you marked \"noexcept\" now will be marked so, and will mean that if we ever make the move ctor defaulted, it will indeed implicitly be noexcept.",
+      "parentUuid": "bf659307_abe0e197",
+      "revId": "536678fcd8f8aad3d9a86787b1bcc593718db113",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
