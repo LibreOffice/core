@@ -406,7 +406,7 @@
                         <property name="has_entry">True</property>
                         <child internal-child="entry">
                           <object class="GtkEntry">
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
                           </object>
                         </child>
                       </object>

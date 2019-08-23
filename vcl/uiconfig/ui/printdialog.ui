@@ -572,7 +572,7 @@
                                             <child>
                                               <object class="GtkEntry" id="pagerange">
                                                 <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
+                                                <property name="can_focus">True</property>
                                                 <property name="hexpand">True</property>
                                                 <property name="placeholder_text" translatable="yes" context="printdialog|pagerange">e.g.: 1, 3-5, 7, 9</property>
                                               </object>
