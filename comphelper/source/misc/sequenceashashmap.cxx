@@ -180,7 +180,7 @@ void SequenceAsHashMap::operator>>(css::uno::Sequence< css::beans::NamedValue >&
     }
 }
 
-const css::uno::Any SequenceAsHashMap::getAsConstAny(bool bAsPropertyValueList) const
+css::uno::Any SequenceAsHashMap::getAsConstAny(bool bAsPropertyValueList) const
 {
     css::uno::Any aDestination;
     if (bAsPropertyValueList)
@@ -190,14 +190,14 @@ const css::uno::Any SequenceAsHashMap::getAsConstAny(bool bAsPropertyValueList) 
     return aDestination;
 }
 
-const css::uno::Sequence< css::beans::NamedValue > SequenceAsHashMap::getAsConstNamedValueList() const
+css::uno::Sequence< css::beans::NamedValue > SequenceAsHashMap::getAsConstNamedValueList() const
 {
     css::uno::Sequence< css::beans::NamedValue > lReturn;
     (*this) >> lReturn;
     return lReturn;
 }
 
-const css::uno::Sequence< css::beans::PropertyValue > SequenceAsHashMap::getAsConstPropertyValueList() const
+css::uno::Sequence< css::beans::PropertyValue > SequenceAsHashMap::getAsConstPropertyValueList() const
 {
     css::uno::Sequence< css::beans::PropertyValue > lReturn;
     (*this) >> lReturn;
