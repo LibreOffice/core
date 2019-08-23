@@ -411,7 +411,7 @@ void aqua_init_systray()
             SvtModuleOptions    aModuleOptions;
             std::set< OUString > aFileNewAppsAvailable;
             SvtDynamicMenuOptions aOpt;
-            css::uno::Sequence < css::uno::Sequence < css::beans::PropertyValue > > aNewMenu = aOpt.GetMenu( EDynamicMenuType::NewMenu );
+            css::uno::Sequence < css::uno::Sequence < css::beans::PropertyValue > > const aNewMenu = aOpt.GetMenu( EDynamicMenuType::NewMenu );
 
             for ( auto const & newMenuProp : aNewMenu )
             {
