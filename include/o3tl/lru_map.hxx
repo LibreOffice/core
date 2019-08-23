@@ -122,7 +122,7 @@ public:
         }
     }
 
-    const list_const_iterator_t find(const Key& key)
+    list_const_iterator_t find(const Key& key)
     {
         const map_iterator_t i = mLruMap.find(key);
         if (i == mLruMap.cend()) // can't find entry for the key
@@ -155,12 +155,12 @@ public:
         }
     }
 
-    const list_const_iterator_t begin() const
+    list_const_iterator_t begin() const
     {
         return mLruList.cbegin();
     }
 
-    const list_const_iterator_t end() const
+    list_const_iterator_t end() const
     {
         return mLruList.cend();
     }
