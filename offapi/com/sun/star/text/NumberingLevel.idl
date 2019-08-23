@@ -145,7 +145,7 @@ published service NumberingLevel
     [property] long FirstLineOffset;
 
 
-    /** specifies the type of numbering. @see NumberingType
+    /** specifies the type of numbering. @see com::sun::star::style::NumberingType
      */
     [property] short NumberingType;
 
