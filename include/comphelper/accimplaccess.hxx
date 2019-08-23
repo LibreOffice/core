@@ -65,7 +65,7 @@ namespace comphelper
     public:
 
     private:
-        COMPHELPER_DLLPRIVATE static const css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+        COMPHELPER_DLLPRIVATE static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
     };
 
 } // namespace comphelper
