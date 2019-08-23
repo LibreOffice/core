@@ -102,7 +102,7 @@ public:
     virtual void useInternalChartDataTable( bool /*bInternal*/ ) { }
 
     /** Has to be implemented by each filter to return the table style list. */
-    virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() = 0;
+    virtual ::oox::drawingml::table::TableStyleListPtr getTableStyles() = 0;
 
 
     OUString getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rPart );

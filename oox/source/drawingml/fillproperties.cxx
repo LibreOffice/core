@@ -132,7 +132,7 @@ RectanglePoint lclGetRectanglePoint( sal_Int32 nToken )
     return RectanglePoint_LEFT_TOP;
 }
 
-const awt::Size lclGetOriginalSize( const GraphicHelper& rGraphicHelper, const Reference< XGraphic >& rxGraphic )
+awt::Size lclGetOriginalSize( const GraphicHelper& rGraphicHelper, const Reference< XGraphic >& rxGraphic )
 {
     awt::Size aSizeHmm( 0, 0 );
     try

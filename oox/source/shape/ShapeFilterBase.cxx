@@ -57,7 +57,7 @@ void ShapeFilterBase::setCurrentTheme(const ::oox::drawingml::ThemePtr& pTheme)
     return nullptr;
 }
 
-const ::oox::drawingml::table::TableStyleListPtr ShapeFilterBase::getTableStyles()
+::oox::drawingml::table::TableStyleListPtr ShapeFilterBase::getTableStyles()
 {
     return ::oox::drawingml::table::TableStyleListPtr();
 }

@@ -37,7 +37,7 @@ public:
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const override { return nullptr; }
     virtual ::oox::vml::Drawing* getVmlDrawing() override { return nullptr; }
     virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() override { return nullptr; }
-    virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() override { return ::oox::drawingml::table::TableStyleListPtr(); }
+    virtual ::oox::drawingml::table::TableStyleListPtr getTableStyles() override { return ::oox::drawingml::table::TableStyleListPtr(); }
 
     // Actual export of the DOCX document
     virtual bool        exportDocument() override;
