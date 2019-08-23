@@ -22,6 +22,30 @@
       "revId": "9d5b9bf881606e83a051cc192d08c4690f98a8ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_abc1c130",
+        "filename": "vcl/source/filter/graphicfilter.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2242,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-08-23T07:36:20Z",
+      "side": 1,
+      "message": "you are probably right, although I would assume most compilers would see through this and still apply the optimisation",
+      "parentUuid": "bf659307_cbcc356c",
+      "range": {
+        "startLine": 2241,
+        "startChar": 4,
+        "endLine": 2242,
+        "endChar": 17
+      },
+      "revId": "9d5b9bf881606e83a051cc192d08c4690f98a8ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
