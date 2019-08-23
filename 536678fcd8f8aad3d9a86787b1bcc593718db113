@@ -52,6 +52,24 @@
       "revId": "536678fcd8f8aad3d9a86787b1bcc593718db113",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_8b815d92",
+        "filename": "chart2/source/controller/inc/ViewElementListProvider.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-23T09:28:28Z",
+      "side": 1,
+      "message": "\u003e so shouldn\u0027t be a problem to identify the subset ...\n\nheh, well, yes - except for additional work to check is all the members are handled by the function - which I didn\u0027t do initially :-) (I only checked if the function used some safe calls, which was enough for the task)...\n\nWill do. (Sigh :-))",
+      "parentUuid": "bf659307_2bbcd167",
+      "revId": "536678fcd8f8aad3d9a86787b1bcc593718db113",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
