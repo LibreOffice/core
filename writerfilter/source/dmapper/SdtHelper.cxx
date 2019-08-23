@@ -69,6 +69,7 @@ static awt::Size lcl_getOptimalWidth(const StyleSheetTablePtr& pStyleSheet,
 
 SdtHelper::SdtHelper(DomainMapper_Impl& rDM_Impl)
     : m_rDM_Impl(rDM_Impl)
+    , m_bInsideDropDownControl(false)
     , m_bHasElements(false)
     , m_bOutsideAParagraph(false)
 {
@@ -78,6 +79,7 @@ SdtHelper::~SdtHelper() = default;
 
 void SdtHelper::createDropDownControl()
 {
+    assert(m_bInsideDropDownControl);
     OUString aDefaultText = m_aSdtTexts.makeStringAndClear();
     uno::Reference<awt::XControlModel> xControlModel(
         m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.form.component.ComboBox"),
@@ -92,6 +94,7 @@ void SdtHelper::createDropDownControl()
         lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), aDefaultText, m_aDropDownItems),
         xControlModel, uno::Sequence<beans::PropertyValue>());
     m_aDropDownItems.clear();
+    m_bInsideDropDownControl = false;
 }
 
 bool SdtHelper::validateDateFormat()
