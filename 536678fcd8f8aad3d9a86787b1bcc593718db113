@@ -88,6 +88,24 @@
       "revId": "536678fcd8f8aad3d9a86787b1bcc593718db113",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_cb60b504",
+        "filename": "chart2/source/controller/inc/ViewElementListProvider.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-23T09:44:37Z",
+      "side": 1,
+      "message": "Oh. /me is confused what to do with the change now :-)",
+      "parentUuid": "bf659307_4b4d8598",
+      "revId": "536678fcd8f8aad3d9a86787b1bcc593718db113",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
