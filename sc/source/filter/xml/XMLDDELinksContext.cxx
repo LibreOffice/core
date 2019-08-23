@@ -265,7 +265,7 @@ ScXMLDDEColumnContext::ScXMLDDEColumnContext( ScXMLImport& rImport,
     if ( rAttrList.is() )
     {
         sal_Int32 nCols(1);
-        auto &aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_NUMBER_COLUMNS_REPEATED ) ) );
+        auto aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_NUMBER_COLUMNS_REPEATED ) ) );
         if (aIter != rAttrList->end())
             nCols = aIter.toInt32();
 
@@ -286,7 +286,7 @@ ScXMLDDERowContext::ScXMLDDERowContext( ScXMLImport& rImport,
 {
     if ( rAttrList.is() )
     {
-        auto &aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_NUMBER_ROWS_REPEATED ) ) );
+        auto aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_NUMBER_ROWS_REPEATED ) ) );
         if (aIter != rAttrList->end())
             nRows = aIter.toInt32();
 

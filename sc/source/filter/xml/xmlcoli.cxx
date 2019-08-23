@@ -160,7 +160,7 @@ ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
         nGroupStartCol = rImport.GetTables().GetCurrentColCount();
         if ( rAttrList.is() )
         {
-            auto &aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_DISPLAY ) ) );
+            auto aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_DISPLAY ) ) );
             if ( aIter != rAttrList->end() && IsXMLToken(aIter, XML_FALSE) )
                 bGroupDisplay = false;
         }
