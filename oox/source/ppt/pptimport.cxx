@@ -254,7 +254,7 @@ sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDe
     return mpActualSlidePersist ? mpActualSlidePersist->getDrawing() : nullptr;
 }
 
-const oox::drawingml::table::TableStyleListPtr PowerPointImport::getTableStyles()
+oox::drawingml::table::TableStyleListPtr PowerPointImport::getTableStyles()
 {
     if ( !mpTableStyleList && !maTableStyleListPath.isEmpty() )
     {
