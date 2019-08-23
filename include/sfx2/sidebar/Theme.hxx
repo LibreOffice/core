@@ -130,7 +130,7 @@ public:
     static Image GetImage (const ThemeItem eItem);
     static Color GetColor (const ThemeItem eItem);
     static const Paint& GetPaint (const ThemeItem eItem);
-    static const Wallpaper GetWallpaper (const ThemeItem eItem);
+    static Wallpaper GetWallpaper (const ThemeItem eItem);
     static sal_Int32 GetInteger (const ThemeItem eItem);
     static bool GetBoolean (const ThemeItem eItem);
 

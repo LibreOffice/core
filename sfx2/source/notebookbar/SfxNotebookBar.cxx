@@ -185,7 +185,7 @@ static utl::OConfigurationTreeRoot lcl_getCurrentImplConfigRoot()
                                        true);
 }
 
-static const utl::OConfigurationNode lcl_getCurrentImplConfigNode(const Reference<css::frame::XFrame>& xFrame,
+static utl::OConfigurationNode lcl_getCurrentImplConfigNode(const Reference<css::frame::XFrame>& xFrame,
                                                                   utl::OConfigurationTreeRoot const & rNotebookbarNode )
 {
     if (!rNotebookbarNode.isValid())

@@ -1677,7 +1677,7 @@ void SfxBindings::SetActiveFrame( const css::uno::Reference< css::frame::XFrame 
             pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY ) );
 }
 
-const css::uno::Reference< css::frame::XFrame > SfxBindings::GetActiveFrame() const
+css::uno::Reference< css::frame::XFrame > SfxBindings::GetActiveFrame() const
 {
     const css::uno::Reference< css::frame::XFrame > xFrame( pImpl->xProv, css::uno::UNO_QUERY );
     if ( xFrame.is() || !pDispatcher )

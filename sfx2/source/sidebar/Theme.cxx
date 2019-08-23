@@ -94,7 +94,7 @@ const Paint& Theme::GetPaint (const ThemeItem eItem)
     return rTheme.maPaints[nIndex];
 }
 
-const Wallpaper Theme::GetWallpaper (const ThemeItem eItem)
+Wallpaper Theme::GetWallpaper (const ThemeItem eItem)
 {
     return GetPaint(eItem).GetWallpaper();
 }
