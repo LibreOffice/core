@@ -83,8 +83,8 @@ class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxModalDialog
 
     DECL_LINK(Load, Button*, void);
     DECL_LINK(Save, Button*, void);
-    /*DECL_LINK(AddHdl, Button*, void);
-    DECL_LINK(EditHdl, Button*, void);*/
+    DECL_LINK(AddHdl, Button*, void);
+    //DECL_LINK(EditHdl, Button*, void);
     DECL_LINK(DeleteHdl, Button*, void);
 
     DECL_LINK(LoadHdl, sfx2::FileDialogHelper*, void);
@@ -113,35 +113,34 @@ public:
     bool getTargets(std::vector<std::pair<RedactionTarget*, OUString>>& r_aTargets);
 };
 
-/*class SfxAddTargetDialog : public weld::GenericDialogController
+class SfxAddTargetDialog : public SfxModalDialog
 {
 private:
-    std::unique_ptr<weld::Entry> m_xName;
-    std::unique_ptr<weld::ComboBox> m_xType;
-    std::unique_ptr<weld::Label> m_xLabelContent;
-    std::unique_ptr<weld::Entry> m_xContent;
-    std::unique_ptr<weld::Label> m_xLabelPredefContent;
-    std::unique_ptr<weld::ComboBox> m_xPredefContent;
-    std::unique_ptr<weld::CheckButton> m_xCaseSensitive;
-    std::unique_ptr<weld::CheckButton> m_xWholeWords;
+    VclPtr<Edit> m_pName;
+    VclPtr<ListBox> m_pType;
+    VclPtr<FixedText> m_pLabelContent;
+    VclPtr<Edit> m_pContent;
+    VclPtr<FixedText> m_pLabelPredefContent;
+    VclPtr<ListBox> m_pPredefContent;
+    VclPtr<CheckBox> m_pCaseSensitive;
+    VclPtr<CheckBox> m_pWholeWords;
 
-    DECL_LINK(SelectTypeHdl, weld::ComboBox&, void);
+    DECL_LINK(SelectTypeHdl, ListBox&, void);
 
 public:
-    SfxAddTargetDialog(weld::Window* pWindow, const OUString& rName);
-    SfxAddTargetDialog(weld::Window* pWindow, const OUString& sName,
+    SfxAddTargetDialog(vcl::Window* pWindow, const OUString& rName);
+    SfxAddTargetDialog(vcl::Window* pWindow, const OUString& sName,
                        const RedactionTargetType& eTargetType, const OUString& sContent,
                        const bool& bCaseSensitive, const bool& bWholeWords);
+    virtual ~SfxAddTargetDialog() override;
+    virtual void dispose() override;
 
-    OUString getName() const { return m_xName->get_text(); }
+    OUString getName() const { return m_pName->GetText(); }
     RedactionTargetType getType() const;
     OUString getContent() const;
-    bool isCaseSensitive() const
-    {
-        return m_xCaseSensitive->get_state() == TriState::TRISTATE_TRUE;
-    }
-    bool isWholeWords() const { return m_xWholeWords->get_state() == TriState::TRISTATE_TRUE; }
-};*/
+    bool isCaseSensitive() const { return m_pCaseSensitive->GetState() == TriState::TRISTATE_TRUE; }
+    bool isWholeWords() const { return m_pWholeWords->GetState() == TriState::TRISTATE_TRUE; }
+};
 
 #endif
 
