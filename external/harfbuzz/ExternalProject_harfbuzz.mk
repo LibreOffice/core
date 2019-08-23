@@ -50,6 +50,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 				$(CXXFLAGS) $(CXXFLAGS_CXX11) \
 				$(ICU_UCHAR_TYPE) \
 				$(if $(filter LINUX,$(OS)),-fvisibility=hidden)' \
+			MAKE=$(MAKE) \
 		&& (cd $(EXTERNAL_WORKDIR)/src && $(MAKE) lib) \
 	)
 
