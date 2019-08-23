@@ -337,6 +337,8 @@ OUString GetValueInMapWithIndex(const std::map<OUString, OUString>& rParameters,
     for (; itr != rParameters.end() && j < index; ++itr, ++j)
         ;
 
+    assert(itr != rParameters.end());
+
     return itr->second;
 }
 
@@ -348,6 +350,8 @@ OUString GetKeyInMapWithIndex(const std::map<OUString, OUString>& rParameters, s
 
     for (; itr != rParameters.end() && j < index; ++itr, ++j)
         ;
+
+    assert(itr != rParameters.end());
 
     return itr->first;
 }
