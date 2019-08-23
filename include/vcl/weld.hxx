@@ -514,6 +514,7 @@ enum class EntryMessageType
     Error,
 };
 
+/// A widget used to choose from a list of items.
 class VCL_DLLPUBLIC ComboBox : virtual public Container
 {
 private:
