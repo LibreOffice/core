@@ -374,12 +374,16 @@ css::uno::Sequence< css::beans::PropertyValue > SAL_CALL OPropertySet::getProper
 {
     auto& rPropertyMap = m_pImplProperties->exportPropertyMap();
     Sequence< css::beans::PropertyValue > aPropertySeq( rPropertyMap.size() );
+    cppu::IPropertyArrayHelper & rPH = getInfoHelper();
 
     sal_Int32 nIdx = 0;
     for (auto Itr = rPropertyMap.begin(); Itr != rPropertyMap.end(); Itr++, nIdx++ )
     {
         aPropertySeq[ nIdx ].Handle = Itr->first;
         aPropertySeq[ nIdx ].Value  = Itr->second;
+        OUString aName;
+        rPH.fillPropertyMembersByHandle( &aName, nullptr, Itr->first );
+        aPropertySeq[ nIdx ].Name = aName;
     }
     return aPropertySeq;
 }
