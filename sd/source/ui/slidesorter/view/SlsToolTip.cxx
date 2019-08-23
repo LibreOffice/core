@@ -21,7 +21,6 @@
 #include <view/SlsToolTip.hxx>
 #include <view/SlideSorterView.hxx>
 #include <view/SlsLayouter.hxx>
-#include <view/SlsTheme.hxx>
 #include <SlideSorter.hxx>
 #include <Window.hxx>
 #include <sdpage.hxx>

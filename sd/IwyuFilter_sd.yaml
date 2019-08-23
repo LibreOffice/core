@@ -458,3 +458,6 @@ blacklist:
     sd/source/ui/inc/fupoor.hxx:
     # Don't stop on false positive while checking fupoor.cxx
     - namespace sd { class Window; }
+    sd/source/ui/slidesorter/view/SlsInsertionIndicatorOverlay.cxx:
+    # Needed for instantiation of function template specialization
+    - Window.hxx

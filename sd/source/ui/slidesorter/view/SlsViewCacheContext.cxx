@@ -29,9 +29,6 @@
 #include <drawdoc.hxx>
 #include <tools/IdleDetection.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/sdr/contact/viewcontact.hxx>
-#include <vcl/window.hxx>
-#include <svx/sdr/contact/objectcontact.hxx>
 
 namespace sd { namespace slidesorter { namespace view {
 

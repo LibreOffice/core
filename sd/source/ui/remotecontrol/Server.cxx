@@ -6,11 +6,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <stdlib.h>
+
 #include <algorithm>
 #include <vector>
 
-#include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -29,7 +28,6 @@
 
 #include "DiscoveryService.hxx"
 #include "Listener.hxx"
-#include "Receiver.hxx"
 #include <RemoteServer.hxx>
 #include "BluetoothServer.hxx"
 #include "Communicator.hxx"

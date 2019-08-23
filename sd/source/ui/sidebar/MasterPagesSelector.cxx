@@ -27,35 +27,18 @@
 #include "DocumentHelper.hxx"
 #include <pres.hxx>
 #include <drawdoc.hxx>
-#include <DrawDocShell.hxx>
 #include <sdpage.hxx>
-#include <glob.hxx>
 #include <app.hrc>
 
-#include <DrawViewShell.hxx>
 #include <DrawController.hxx>
 #include <SlideSorterViewShell.hxx>
 #include "PreviewValueSet.hxx"
 #include <ViewShellBase.hxx>
-#include <sfx2/objface.hxx>
-#include <drawview.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/image.hxx>
 #include <vcl/floatwin.hxx>
-#include <svl/languageoptions.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/itemset.hxx>
-#include <svl/eitem.hxx>
-#include <svx/dlgutil.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svxids.hrc>
-#include <FrameView.hxx>
-#include <stlpool.hxx>
-#include <unmovss.hxx>
-#include <sfx2/request.hxx>
-#include <svl/itempool.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <memory>
 

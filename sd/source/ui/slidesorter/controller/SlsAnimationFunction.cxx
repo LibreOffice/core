@@ -18,11 +18,6 @@
  */
 
 #include <controller/SlsAnimationFunction.hxx>
-#include <model/SlsPageDescriptor.hxx>
-#include <view/SlideSorterView.hxx>
-
-#include <osl/diagnose.hxx>
-#include <rtl/math.hxx>
 
 namespace sd { namespace slidesorter { namespace controller {
 

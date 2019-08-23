@@ -17,17 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sddll.hxx>
-
-#include <com/sun/star/beans/XMultiPropertyStates.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 
+#include <comphelper/sequence.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 
@@ -50,10 +49,8 @@
 #include "TableDesignPane.hxx"
 #include <createtabledesignpanel.hxx>
 
-#include <DrawDocShell.hxx>
+#include <ViewShell.hxx>
 #include <ViewShellBase.hxx>
-#include <DrawViewShell.hxx>
-#include <DrawController.hxx>
 #include <EventMultiplexer.hxx>
 
 using namespace ::com::sun::star;

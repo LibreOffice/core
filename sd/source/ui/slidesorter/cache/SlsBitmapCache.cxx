@@ -24,8 +24,7 @@
 #include "SlsBitmapCompressor.hxx"
 #include "SlsCacheConfiguration.hxx"
 
-#include <sdpage.hxx>
-#include <drawdoc.hxx>
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 // Define the default value for the maximal cache size that is used for

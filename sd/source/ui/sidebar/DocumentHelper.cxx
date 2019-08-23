@@ -31,7 +31,6 @@
 #include <ViewShellBase.hxx>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <stlpool.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/svdundo.hxx>

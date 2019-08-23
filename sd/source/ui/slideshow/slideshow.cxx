@@ -22,7 +22,6 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/URL.hpp>
 
-#include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <sal/log.hxx>
@@ -30,13 +29,10 @@
 #include <vcl/wrkwin.hxx>
 #include <svx/svdpool.hxx>
 #include <svl/itemprop.hxx>
-#include <tools/debug.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxsids.hrc>
-
-#include <svx/unoprov.hxx>
 
 #include <framework/FrameworkHelper.hxx>
 

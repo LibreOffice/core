@@ -19,7 +19,6 @@
 
 #include <controller/SlsAnimator.hxx>
 #include <view/SlideSorterView.hxx>
-#include <View.hxx>
 
 namespace sd { namespace slidesorter { namespace controller {
 

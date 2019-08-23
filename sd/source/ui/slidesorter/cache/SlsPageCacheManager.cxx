@@ -20,8 +20,6 @@
 #include <cache/SlsPageCacheManager.hxx>
 
 #include "SlsBitmapCache.hxx"
-#include <view/SlideSorterView.hxx>
-#include <model/SlideSorterModel.hxx>
 
 #include <deque>
 #include <map>

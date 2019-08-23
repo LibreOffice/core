@@ -18,7 +18,6 @@
  */
 
 #include "PanelFactory.hxx"
-#include <facreg.hxx>
 #include <framework/Pane.hxx>
 #include <ViewShellBase.hxx>
 #include <DrawController.hxx>
@@ -32,7 +31,6 @@
 #include "TableDesignPanel.hxx"
 #include "SlideBackground.hxx"
 
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <vcl/window.hxx>

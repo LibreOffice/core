@@ -9,20 +9,16 @@
 
 #include <config_dbus.h>
 
-#include <time.h>
 #include <iostream>
 #include <limits>
 #include <new>
-#include <stdlib.h>
 #include <assert.h>
 
 #include <avahi-client/client.h>
 #include <avahi-client/publish.h>
 
 #include <avahi-common/alternative.h>
-#include <avahi-common/malloc.h>
 #include <avahi-common/error.h>
-#include <avahi-common/timeval.h>
 #include <avahi-common/thread-watch.h>
 #include <comphelper/random.hxx>
 

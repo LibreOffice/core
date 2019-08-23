@@ -23,25 +23,20 @@
 #include <SlideSorter.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsClipboard.hxx>
-#include <controller/SlsFocusManager.hxx>
 #include <controller/SlsScrollBarManager.hxx>
 #include <controller/SlsPageSelector.hxx>
 #include <controller/SlsSlotManager.hxx>
 #include <controller/SlsCurrentSlideManager.hxx>
 #include <controller/SlsSelectionManager.hxx>
-#include <controller/SlsSelectionFunction.hxx>
-#include <controller/SlsProperties.hxx>
 #include <view/SlideSorterView.hxx>
 #include <view/SlsLayouter.hxx>
 #include <model/SlideSorterModel.hxx>
-#include <model/SlsPageEnumeration.hxx>
 #include <model/SlsPageDescriptor.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <ViewShellBase.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <app.hrc>
-#include <sdattr.hrc>
 #include <AccessibleSlideSorterView.hxx>
 #include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
@@ -50,21 +45,15 @@
 #include <ViewShellManager.hxx>
 #include <Window.hxx>
 #include <drawview.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/EnumContext.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
-#include <svx/sidebar/SelectionAnalyzer.hxx>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#include <com/sun/star/drawing/framework/ResourceId.hpp>
-#include <cppuhelper/bootstrap.hxx>
 
 using namespace ::sd::slidesorter;
 #define ShellClass_SlideSorterViewShell

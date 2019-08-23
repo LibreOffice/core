@@ -23,10 +23,6 @@
 #include <controller/SlsSelectionObserver.hxx>
 #include <controller/SlsPageSelector.hxx>
 #include <controller/SlsFocusManager.hxx>
-#include <model/SlideSorterModel.hxx>
-#include <model/SlsPageDescriptor.hxx>
-#include <svx/svdmodel.hxx>
-#include <drawdoc.hxx>
 #include <sdpage.hxx>
 
 namespace sd { namespace slidesorter { namespace controller {

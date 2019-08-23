@@ -20,14 +20,11 @@
 #include <memory>
 #include <sal/config.h>
 
-#include <cstdlib>
-
 #include <controller/SlsSelectionFunction.hxx>
 
 #include <SlideSorter.hxx>
 #include <SlideSorterViewShell.hxx>
 #include "SlsDragAndDropContext.hxx"
-#include <controller/SlsTransferableData.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsPageSelector.hxx>
 #include <controller/SlsFocusManager.hxx>
@@ -37,30 +34,22 @@
 #include <controller/SlsInsertionIndicatorHandler.hxx>
 #include <controller/SlsSelectionManager.hxx>
 #include <controller/SlsProperties.hxx>
-#include <controller/SlsSlotManager.hxx>
 #include <controller/SlsVisibleAreaManager.hxx>
 #include <model/SlideSorterModel.hxx>
 #include <model/SlsPageDescriptor.hxx>
 #include <model/SlsPageEnumerationProvider.hxx>
 #include <view/SlideSorterView.hxx>
 #include <view/SlsLayouter.hxx>
-#include <view/SlsPageObjectLayouter.hxx>
 #include <framework/FrameworkHelper.hxx>
-#include <ViewShellBase.hxx>
-#include <DrawController.hxx>
 #include <Window.hxx>
 #include <sdpage.hxx>
 #include <drawdoc.hxx>
-#include <DrawDocShell.hxx>
 #include <sdxfer.hxx>
 #include <ViewShell.hxx>
 #include <FrameView.hxx>
 #include <app.hrc>
 #include <o3tl/deleter.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svxids.hrc>
 #include <vcl/ptrstyle.hxx>
 #include <boost/optional.hpp>
 #include <sdmod.hxx>

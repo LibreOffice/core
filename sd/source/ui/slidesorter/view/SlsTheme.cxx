@@ -22,11 +22,9 @@
 #include <controller/SlsProperties.hxx>
 #include <tools/color.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <svtools/colorcfg.hxx>
 #include <osl/diagnose.h>
 
 namespace sd { namespace slidesorter { namespace view {
