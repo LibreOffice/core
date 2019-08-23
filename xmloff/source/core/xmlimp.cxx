@@ -2012,14 +2012,14 @@ bool SvXMLImport::embeddedFontAlreadyProcessed( const OUString& url )
     return false;
 }
 
-const OUString SvXMLImport::getNameFromToken( sal_Int32 nToken )
+OUString SvXMLImport::getNameFromToken( sal_Int32 nToken )
 {
     uno::Sequence< sal_Int8 > aSeq = xTokenHandler->getUTF8Identifier( nToken & TOKEN_MASK );
     return OUString( reinterpret_cast< const char* >(
                     aSeq.getConstArray() ), aSeq.getLength(), RTL_TEXTENCODING_UTF8 );
 }
 
-const OUString SvXMLImport::getNamespacePrefixFromToken(sal_Int32 nToken, const SvXMLNamespaceMap* pMap)
+OUString SvXMLImport::getNamespacePrefixFromToken(sal_Int32 nToken, const SvXMLNamespaceMap* pMap)
 {
     sal_Int32 nNamespaceToken = ( nToken & NMSP_MASK ) >> NMSP_SHIFT;
     auto aIter( aNamespaceMap.find( nNamespaceToken ) );
@@ -2037,7 +2037,7 @@ const OUString SvXMLImport::getNamespacePrefixFromToken(sal_Int32 nToken, const 
         return OUString();
 }
 
-const OUString SvXMLImport::getNamespaceURIFromToken( sal_Int32 nToken )
+OUString SvXMLImport::getNamespaceURIFromToken( sal_Int32 nToken )
 {
     sal_Int32 nNamespaceToken = ( nToken & NMSP_MASK ) >> NMSP_SHIFT;
     auto aIter( aNamespaceMap.find( nNamespaceToken ) );
@@ -2047,7 +2047,7 @@ const OUString SvXMLImport::getNamespaceURIFromToken( sal_Int32 nToken )
         return OUString();
 }
 
-const OUString SvXMLImport::getNamespacePrefixFromURI( const OUString& rURI )
+OUString SvXMLImport::getNamespacePrefixFromURI( const OUString& rURI )
 {
     auto aIter( aNamespaceURIPrefixMap.find(rURI) );
     if( aIter != aNamespaceURIPrefixMap.end() )

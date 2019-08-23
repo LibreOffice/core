@@ -47,8 +47,8 @@ public:
                   const OUString& rValue );
 
     size_t GetAttrCount() const;
-    const OUString GetAttrNamespace( size_t i ) const;
-    const OUString GetAttrPrefix( size_t i ) const;
+    OUString GetAttrNamespace( size_t i ) const;
+    OUString GetAttrPrefix( size_t i ) const;
     const OUString& GetAttrLName( size_t i ) const;
     const OUString& GetAttrValue( size_t i ) const;
 

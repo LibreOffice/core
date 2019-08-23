@@ -283,7 +283,7 @@ static bool GetOptionalBoolProperty(const OUString&,
                                               bool bDefault);
 static double GetDoubleProperty(const OUString&,
                                       const Reference<XPropertySet> &);
-static OUString const GetStringProperty(const OUString&,
+static OUString GetStringProperty(const OUString&,
                                         const Reference<XPropertySet> &);
 static sal_Int32 GetIntProperty(const OUString&,
                                       const Reference<XPropertySet> &);
@@ -291,9 +291,9 @@ static sal_Int16 GetInt16Property(const OUString&,
                                         const Reference<XPropertySet> &);
 static sal_Int8 GetInt8Property(const OUString&,
                                       const Reference<XPropertySet> &);
-static util::DateTime const GetDateTimeProperty( const OUString& sPropName,
+static util::DateTime GetDateTimeProperty( const OUString& sPropName,
                                            const Reference<XPropertySet> & xPropSet);
-static Sequence<OUString> const GetStringSequenceProperty(
+static Sequence<OUString> GetStringSequenceProperty(
                                    const OUString& sPropName,
                                    const Reference<XPropertySet> & xPropSet);
 
@@ -3504,7 +3504,7 @@ double GetDoubleProperty(
     return fDouble;
 }
 
-OUString const GetStringProperty(
+OUString GetStringProperty(
     const OUString& sPropName,
     const Reference<XPropertySet> & xPropSet)
 {
@@ -3544,7 +3544,7 @@ sal_Int8 GetInt8Property(
     return nInt;
 }
 
-util::DateTime const GetDateTimeProperty(
+util::DateTime GetDateTimeProperty(
     const OUString& sPropName,
     const Reference<XPropertySet> & xPropSet)
 {
@@ -3554,7 +3554,7 @@ util::DateTime const GetDateTimeProperty(
     return aTime;
 }
 
-Sequence<OUString> const GetStringSequenceProperty(
+Sequence<OUString> GetStringSequenceProperty(
     const OUString& sPropName,
     const Reference<XPropertySet> & xPropSet)
 {

@@ -130,7 +130,7 @@ const OUString& SvXMLAttrCollection::GetAttrValue(size_t i) const
     return aAttrs[i].getValue();
 }
 
-const OUString SvXMLAttrCollection::GetAttrNamespace( size_t i ) const
+OUString SvXMLAttrCollection::GetAttrNamespace( size_t i ) const
 {
     OUString sRet;
     sal_uInt16 nPos = GetPrefixPos( i );
@@ -140,7 +140,7 @@ const OUString SvXMLAttrCollection::GetAttrNamespace( size_t i ) const
     return sRet;
 }
 
-const OUString SvXMLAttrCollection::GetAttrPrefix( size_t i ) const
+OUString SvXMLAttrCollection::GetAttrPrefix( size_t i ) const
 {
     OUString sRet;
     sal_uInt16 nPos = GetPrefixPos( i );
