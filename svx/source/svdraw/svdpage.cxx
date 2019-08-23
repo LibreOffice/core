@@ -612,12 +612,12 @@ void SdrObjList::ReformatAllEdgeObjects()
 
     while(aIter.IsMore())
     {
-        SdrEdgeObj* pSdrEdgeObj = dynamic_cast< SdrEdgeObj* >(aIter.Next());
+        SdrObject* pObj = aIter.Next();
+        if (!pObj->IsSdrEdgeObj())
+            continue;
 
-        if(pSdrEdgeObj)
-        {
-            pSdrEdgeObj->Reformat();
-        }
+        SdrEdgeObj* pSdrEdgeObj = static_cast< SdrEdgeObj* >(pObj);
+        pSdrEdgeObj->Reformat();
     }
 }
 
