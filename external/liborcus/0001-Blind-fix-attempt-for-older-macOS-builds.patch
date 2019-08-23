@@ -1,0 +1,59 @@
+From 46221fdfc62e317d34def4ebede814cf2bb14ebb Mon Sep 17 00:00:00 2001
+From: Stephan Bergmann <sbergman@redhat.com>
+Date: Fri, 23 Aug 2019 10:26:51 +0200
+Subject: [PATCH] Blind fix attempt for older macOS builds
+
+...like <https://ci.libreoffice.org/job/gerrit_mac/40711/> (which builds with
+MacOSX10.13.sdk, but not sure with what Clang and libc++ versions):
+
+> In file included from xml_map_tree.cpp:8:
+> In file included from ./xml_map_tree.hpp:11:
+> In file included from ../../include/orcus/pstring.hpp:14:
+> In file included from /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string:470:
+> In file included from /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string_view:169:
+> In file included from /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/__string:56:
+> In file included from /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/algorithm:643:
+> In file included from /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/memory:653:
+> /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/tuple:227:10: error: static_assert failed "Attempted to construct a reference element in a tuple with an rvalue"
+>         {static_assert(__can_bind_reference<_Tp>(),
+>          ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/tuple:385:13: note: in instantiation of function template specialization 'std::__1::__tuple_leaf<2, const orcus::pstring &, false>::__tuple_leaf<orcus::pstring, void>' requested here
+>             __tuple_leaf<_Uf, _Tf>(_VSTD::forward<_Up>(__u))...,
+>             ^
+> /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/tuple:738:15: note: in instantiation of function template specialization 'std::__1::__tuple_impl<std::__1::__tuple_indices<0, 1, 2, 3, 4>, orcus::xml_map_tree &, const char *, const orcus::pstring &, orcus::xml_map_tree::element_type, orcus::xml_map_tree::reference_type>::__tuple_impl<0, 1, 2, 3, 4, orcus::xml_map_tree &, const char *, const orcus::pstring &, orcus::xml_map_tree::element_type, orcus::xml_map_tree::reference_type, orcus::xml_map_tree &, const char *&, orcus::pstring, orcus::xml_map_tree::element_type, orcus::xml_map_tree::reference_type>' requested here
+>             : __base_(typename __make_tuple_indices<sizeof...(_Up)>::type(),
+>               ^
+> xml_map_tree.cpp:216:13: note: in instantiation of function template specialization 'std::__1::tuple<orcus::xml_map_tree &, const char *, const orcus::pstring &, orcus::xml_map_tree::element_type, orcus::xml_map_tree::reference_type>::tuple<orcus::xml_map_tree &, const char *&, orcus::pstring, orcus::xml_map_tree::element_type, orcus::xml_map_tree::reference_type, false, false>' requested here
+>             element::args_type(
+>             ^
+> 1 error generated.
+> Makefile:1804: recipe for target 'liborcus_0.15_la-xml_map_tree.lo' failed
+> make[5]: *** [liborcus_0.15_la-xml_map_tree.lo] Error 1
+
+(while building orcus as part of LibreOffice)
+---
+ src/liborcus/xml_map_tree.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/liborcus/xml_map_tree.cpp b/src/liborcus/xml_map_tree.cpp
+index 8338b930..8fd40534 100644
+--- a/src/liborcus/xml_map_tree.cpp
++++ b/src/liborcus/xml_map_tree.cpp
+@@ -211,12 +211,13 @@ xml_map_tree::element* xml_map_tree::element::get_or_create_child(
+     string_pool& sp = parent.m_names;
+ 
+     // Insert a new element of this name.
++    auto const name = sp.intern(_name.get(), _name.size()).first;
+     child_elements->push_back(
+         parent.m_element_pool.construct(
+             element::args_type(
+                 parent,
+                 _ns,
+-                sp.intern(_name.get(), _name.size()).first,
++                name,
+                 element_unlinked,
+                 reference_unknown
+             )
+-- 
+2.21.0
+
