@@ -10,25 +10,13 @@
 #include <sal/config.h>
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
-#include <rtl/strbuf.hxx>
-#include <osl/file.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/document/XFilter.hpp>
 
-#include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
-#include <svl/stritem.hxx>
-
-#include <svx/svdtext.hxx>
-#include <svx/svdotext.hxx>
 
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
-
-#include <osl/process.h>
-#include <osl/thread.h>
 
 using namespace ::com::sun::star;
 

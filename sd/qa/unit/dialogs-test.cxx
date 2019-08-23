@@ -10,50 +10,30 @@
 #include <memory>
 #include <sal/config.h>
 #include <test/screenshot_test.hxx>
-#include <rtl/strbuf.hxx>
-#include <osl/file.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 
-#include <sfx2/app.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/sfxdlg.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/aeitem.hxx>
 #include <editeng/colritem.hxx>
-#include <svx/svdtext.hxx>
-#include <svx/svdotext.hxx>
 #include <svx/xfillit0.hxx>
-#include <vcl/sound.hxx>
 #include <vcl/svapp.hxx>
 
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
 
-#include <osl/process.h>
-#include <osl/thread.h>
-
 #include <sdabstdlg.hxx>
 #include <sdpage.hxx>
-#include <vcl/pngwrite.hxx>
 #include <unomodel.hxx>
 #include <ViewShell.hxx>
-#include <Window.hxx>
 #include <drawview.hxx>
-#include <DrawViewShell.hxx>
-#include <app.hrc>
-#include <stlsheet.hxx>
 #include <sdattr.hrc>
 #include <strings.hrc>
 #include <sdresid.hxx>
 #include <sdattr.hxx>
-
-#include <unotest/macros_test.hxx>
 
 using namespace ::com::sun::star;
 

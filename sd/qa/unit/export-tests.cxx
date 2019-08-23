@@ -10,34 +10,13 @@
 #include "sdmodeltestbase.hxx"
 #include <sdpage.hxx>
 
-#include <Outliner.hxx>
-#include <svl/stritem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
-#include <editeng/ulspitem.hxx>
-#include <editeng/fhgtitem.hxx>
-#include <editeng/escapementitem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/numitem.hxx>
-#include <editeng/lrspitem.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/bulletitem.hxx>
 
-#include <oox/drawingml/drawingmltypes.hxx>
-
-#include <svl/style.hxx>
-
-#include <svx/svdoutl.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/svdoashp.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/svdogrp.hxx>
 #include <svx/svdomedia.hxx>
-#include <svx/svdoole2.hxx>
-#include <svx/xflclit.hxx>
-#include <animations/animationnodehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <rtl/ustring.hxx>
 
@@ -46,31 +25,16 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/chart/XChartDocument.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
-#include <com/sun/star/chart2/data/XDataSequence.hpp>
-#include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
-#include <com/sun/star/table/XTable.hpp>
-#include <com/sun/star/table/XMergeableCell.hpp>
 
 
 #include <svx/svdotable.hxx>
 #include <config_features.h>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 using namespace css;
 using namespace css::animations;

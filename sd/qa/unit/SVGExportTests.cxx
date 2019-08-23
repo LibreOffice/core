@@ -7,14 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sdmodeltestbase.hxx"
+#include <test/bootstrapfixture.hxx>
 
 #include <test/xmltesttools.hxx>
+#include <unotest/macros_test.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <boost/preprocessor/stringize.hpp>
 
