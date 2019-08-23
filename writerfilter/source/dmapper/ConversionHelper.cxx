@@ -524,6 +524,7 @@ sal_Int16 ConvertNumberingType(sal_Int32 nFmt)
             nRet = style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_RU;
             break;
         case NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedCircleChinese:
+        case NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedCircle:
         case NS_ooxml::LN_Value_ST_NumberFormat_ideographEnclosedCircle:
             nRet = style::NumberingType::CIRCLE_NUMBER;
             break;
@@ -590,7 +591,6 @@ sal_Int16 ConvertNumberingType(sal_Int32 nFmt)
     NS_ooxml::LN_Value_ST_NumberFormat_decimalFullWidth = 91691;
     NS_ooxml::LN_Value_ST_NumberFormat_decimalHalfWidth = 91692;
     NS_ooxml::LN_Value_ST_NumberFormat_japaneseDigitalTenThousand = 91694;
-    NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedCircle = 91695;
     NS_ooxml::LN_Value_ST_NumberFormat_decimalZero = 91699;
     NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedFullstop = 91703;
     NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedParen = 91704;
