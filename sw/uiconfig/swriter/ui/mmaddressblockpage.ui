@@ -90,8 +90,8 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="currentaddress">
+                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="no_show_all">True</property>
                         <property name="label" translatable="yes" context="mmaddressblockpage|currentaddress">Current address list: %1</property>
                         <property name="xalign">1</property>
                       </object>
@@ -114,7 +114,8 @@
                             <property name="hexpand">True</property>
                             <property name="label" translatable="yes" context="mmaddressblockpage|label2">Select the address list containing the address data you want to use. This data is needed to create the address block.</property>
                             <property name="wrap">True</property>
-                            <property name="max_width_chars">56</property>
+                            <property name="width_chars">40</property>
+                            <property name="max_width_chars">40</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
                           </object>
@@ -181,7 +182,8 @@
                             <property name="hexpand">True</property>
                             <property name="label" translatable="yes" context="mmaddressblockpage|label4">Match the field name used in the mail merge to the column headers in your data source.</property>
                             <property name="wrap">True</property>
-                            <property name="max_width_chars">56</property>
+                            <property name="width_chars">40</property>
+                            <property name="max_width_chars">40</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
                           </object>
