@@ -197,7 +197,7 @@ bool DdeTopic::Put( SAL_UNUSED_PARAMETER const DdeData* )
     return false;
 }
 
-const OUString DdeTopic::GetName() const
+OUString DdeTopic::GetName() const
 {
     return OUString();
 }
@@ -244,7 +244,7 @@ void DdeService::RemoveTopic( SAL_UNUSED_PARAMETER const DdeTopic& )
 {
 }
 
-const OUString DdeService::GetName() const
+OUString DdeService::GetName() const
 {
     return OUString();
 }
