@@ -78,7 +78,9 @@ QRCodeContext::QRCodeContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const OUStr
 
                 if (IsXMLToken(aLocalName, XML_QRCODE_BORDER))
                 {
-                    sax::Converter::convertNumber(aQRCode.Border, sValue, 0);
+                    sal_Int32 nAttrVal;
+                    if (sax::Converter::convertNumber(nAttrVal, sValue, 0))
+                        aQRCode.Border = nAttrVal;
                 }
                 break;
 
