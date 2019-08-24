@@ -2546,7 +2546,7 @@ void SdOOXMLExportTest2::testTdf99497_keepAppearanceOfCircleKind()
     // Resulting pptx has to contain the customshapes of the corresponding kind
     // slide 1 ARC -> arc, slide 2 CUT -> chord, slide 3 SECTION -> pie
     // Adjustment values need to exist and their values need to correspond to the
-    // orignal angles. Shape 'arc' needs to be unfilled.
+    // original angles. Shape 'arc' needs to be unfilled.
     const OUString sPath("/sd/qa/unit/data/odp/tdf99497_CircleKind.odp");
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(sPath), ODP);
     utl::TempFile tempFile;

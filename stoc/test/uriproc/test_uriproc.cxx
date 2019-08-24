@@ -983,7 +983,7 @@ void Test::testMakeAbsolute() {
 
         // Per RFC 3986 Section 5.2.1 "Pre-parse the Base URI", "Normalization of the base URI
         // [...; esp. dot-segment removal per Section 6.2.2.3 "Path Segment Normalization"] is
-        // optional" (and not done by our implemenation), so if the relative URI has no scheme and
+        // optional" (and not done by our implementation), so if the relative URI has no scheme and
         // no authority and an empty path, the Base URI's path is used unmodified per Section 5.2.2
         // "Transform References" and thus still contains dot-segments:
         { "scheme:/a/../b/c", "", true, css::uri::RelativeUriExcessParentSegments_REMOVE,
