@@ -42,7 +42,7 @@ public:
 
 // Add LRE or RLE embedding characters to the string based on the
 // String content (see #i78466#, #i32179#)
-SVT_DLLPUBLIC const OUString ApplyLreOrRleEmbedding( const OUString &rText );
+SVT_DLLPUBLIC OUString ApplyLreOrRleEmbedding( const OUString &rText );
 
 #endif
 
