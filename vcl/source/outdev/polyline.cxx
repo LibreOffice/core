@@ -32,147 +32,158 @@
 
 #include <cassert>
 
-void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
+void OutputDevice::DrawPolyLine(const tools::Polygon& rPoly, const LineInfo& rLineInfo)
 {
     assert(!is_double_buffered_window());
 
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaPolyLineAction( rPoly ) );
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaPolyLineAction(rPoly, rLineInfo));
 
     sal_uInt16 nPoints = rPoly.GetSize();
 
-    if ( !IsDeviceOutputNecessary() || !mbLineColor || (nPoints < 2) || ImplIsRecordLayout() )
+    if (!IsDeviceOutputNecessary() || !mbLineColor || (nPoints < 2) || ImplIsRecordLayout())
         return;
 
     // we need a graphics
-    if ( !mpGraphics && !AcquireGraphics() )
+    if (!mpGraphics && !AcquireGraphics())
         return;
 
-    if ( mbInitClipRegion )
+    if (mbInitClipRegion)
         InitClipRegion();
 
-    if ( mbOutputClipped )
+    if (mbOutputClipped)
         return;
 
-    if ( mbInitLineColor )
+    if (mbInitLineColor)
         InitLineColor();
 
-    LineInfo aHairlineInfo;
-    aHairlineInfo.SetLineJoin(basegfx::B2DLineJoin::NONE);
-    aHairlineInfo.SetLineCap(css::drawing::LineCap_BUTT);
-
-    // use b2dpolygon drawing if possible
-    if (Draw(vcl::PolyHairlineDrawable(basegfx::B2DHomMatrix(), rPoly.getB2DPolygon(), aHairlineInfo)))
+    if (rLineInfo.IsDefault())
     {
-        return;
-    }
+        LineInfo aHairlineInfo;
+        aHairlineInfo.SetLineJoin(basegfx::B2DLineJoin::NONE);
+        aHairlineInfo.SetLineCap(css::drawing::LineCap_BUTT);
 
-    const basegfx::B2DPolygon aB2DPolyLine(rPoly.getB2DPolygon());
-    const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
-    const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
-    const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
-
-    if(mpGraphics->DrawPolyLine(
-        aTransform,
-        aB2DPolyLine,
-        0.0,
-        aB2DLineWidth,
-        basegfx::B2DLineJoin::NONE,
-        css::drawing::LineCap_BUTT,
-        basegfx::deg2rad(15.0) /*default fMiterMinimumAngle, not used*/,
-        bPixelSnapHairline,
-        this))
-    {
-        return;
-    }
-
-    tools::Polygon aPoly = ImplLogicToDevicePixel( rPoly );
-    SalPoint* pPtAry = reinterpret_cast<SalPoint*>(aPoly.GetPointAry());
-
-    // #100127# Forward beziers to sal, if any
-    if( aPoly.HasFlags() )
-    {
-        const PolyFlags* pFlgAry = aPoly.GetConstFlagAry();
-        if( !mpGraphics->DrawPolyLineBezier( nPoints, pPtAry, pFlgAry, this ) )
+        // use b2dpolygon drawing if possible
+        if (Draw(vcl::PolyHairlineDrawable(basegfx::B2DHomMatrix(), rPoly.getB2DPolygon(),
+                                           aHairlineInfo)))
         {
-            aPoly = tools::Polygon::SubdivideBezier(aPoly);
-            pPtAry = reinterpret_cast<SalPoint*>(aPoly.GetPointAry());
-            mpGraphics->DrawPolyLine( aPoly.GetSize(), pPtAry, this );
+            return;
+        }
+
+        const basegfx::B2DPolygon aB2DPolyLine(rPoly.getB2DPolygon());
+        const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
+        const basegfx::B2DVector aB2DLineWidth(1.0, 1.0);
+        const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
+
+        if (mpGraphics->DrawPolyLine(
+                aTransform, aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLineJoin::NONE,
+                css::drawing::LineCap_BUTT,
+                basegfx::deg2rad(15.0) /*default fMiterMinimumAngle, not used*/, bPixelSnapHairline,
+                this))
+        {
+            return;
+        }
+
+        tools::Polygon aPoly = ImplLogicToDevicePixel(rPoly);
+        SalPoint* pPtAry = reinterpret_cast<SalPoint*>(aPoly.GetPointAry());
+
+        // #100127# Forward beziers to sal, if any
+        if (aPoly.HasFlags())
+        {
+            const PolyFlags* pFlgAry = aPoly.GetConstFlagAry();
+            if (!mpGraphics->DrawPolyLineBezier(nPoints, pPtAry, pFlgAry, this))
+            {
+                aPoly = tools::Polygon::SubdivideBezier(aPoly);
+                pPtAry = reinterpret_cast<SalPoint*>(aPoly.GetPointAry());
+                mpGraphics->DrawPolyLine(aPoly.GetSize(), pPtAry, this);
+            }
+        }
+        else
+        {
+            mpGraphics->DrawPolyLine(nPoints, pPtAry, this);
         }
     }
     else
     {
-        mpGraphics->DrawPolyLine( nPoints, pPtAry, this );
+        tools::Polygon aPoly = ImplLogicToDevicePixel(rPoly);
+
+        // #i101491#
+        // Try direct Fallback to B2D-Version of DrawPolyLine
+        if ((mnAntialiasing & AntialiasingFlags::EnableB2dDraw)
+            && LineStyle::Solid == rLineInfo.GetStyle())
+        {
+            DrawPolyLine(
+                rPoly.getB2DPolygon(), static_cast<double>(rLineInfo.GetWidth()),
+                rLineInfo.GetLineJoin(), rLineInfo.GetLineCap(),
+                basegfx::deg2rad(
+                    15.0), /* default fMiterMinimumAngle, value not available in LineInfo */
+                false);
+            return;
+        }
+
+        const LineInfo aInfo(ImplLogicToDevicePixel(rLineInfo));
+        const bool bDashUsed(LineStyle::Dash == aInfo.GetStyle());
+        const bool bLineWidthUsed(aInfo.GetWidth() > 1);
+
+        if (bDashUsed || bLineWidthUsed)
+        {
+            Draw(vcl::B2DPolyLineDrawable(basegfx::B2DPolyPolygon(aPoly.getB2DPolygon()), aInfo));
+        }
+        else
+        {
+            // #100127# the subdivision HAS to be done here since only a pointer
+            // to an array of points is given to the DrawPolyLine method, there is
+            // NO way to find out there that it's a curve.
+            if (aPoly.HasFlags())
+            {
+                aPoly = tools::Polygon::SubdivideBezier(aPoly);
+                nPoints = aPoly.GetSize();
+            }
+
+            mpGraphics->DrawPolyLine(nPoints, reinterpret_cast<SalPoint*>(aPoly.GetPointAry()),
+                                     this);
+        }
     }
 
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawPolyLine( rPoly );
+    if (mpAlphaVDev)
+        mpAlphaVDev->DrawPolyLine(rPoly, rLineInfo);
 }
 
-void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly, const LineInfo& rLineInfo )
+void OutputDevice::DrawPolyLine(const basegfx::B2DPolygon& rB2DPolygon, double fLineWidth,
+                                basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap,
+                                double fMiterMinimumAngle, bool bUseScaffolding)
 {
-    assert(!is_double_buffered_window());
-
-    if ( rLineInfo.IsDefault() )
+    if (bUseScaffolding)
     {
-        DrawPolyLine( rPoly );
-        return;
+        assert(!is_double_buffered_window());
+
+        if (mpMetaFile)
+        {
+            LineInfo aLineInfo;
+            if (fLineWidth != 0.0)
+                aLineInfo.SetWidth(static_cast<long>(fLineWidth + 0.5));
+
+            const tools::Polygon aToolsPolygon(rB2DPolygon);
+            mpMetaFile->AddAction(new MetaPolyLineAction(aToolsPolygon, aLineInfo));
+        }
+
+        // Do not paint empty PolyPolygons
+        if (!rB2DPolygon.count() || !IsDeviceOutputNecessary())
+            return;
+
+        // we need a graphics
+        if (!mpGraphics && !AcquireGraphics())
+            return;
+
+        if (mbInitClipRegion)
+            InitClipRegion();
+
+        if (mbOutputClipped)
+            return;
+
+        if (mbInitLineColor)
+            InitLineColor();
     }
-
-    // #i101491#
-    // Try direct Fallback to B2D-Version of DrawPolyLine
-    if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
-       LineStyle::Solid == rLineInfo.GetStyle())
-    {
-        DrawPolyLine(
-            rPoly.getB2DPolygon(),
-            static_cast< double >(rLineInfo.GetWidth()),
-            rLineInfo.GetLineJoin(),
-            rLineInfo.GetLineCap(),
-            basegfx::deg2rad(15.0) /* default fMiterMinimumAngle, value not available in LineInfo */);
-        return;
-    }
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaPolyLineAction( rPoly, rLineInfo ) );
-
-    drawPolyLine(rPoly, rLineInfo);
-}
-
-void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
-                                 double fLineWidth,
-                                 basegfx::B2DLineJoin eLineJoin,
-                                 css::drawing::LineCap eLineCap,
-                                 double fMiterMinimumAngle)
-{
-    assert(!is_double_buffered_window());
-
-    if( mpMetaFile )
-    {
-        LineInfo aLineInfo;
-        if( fLineWidth != 0.0 )
-            aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
-
-        const tools::Polygon aToolsPolygon( rB2DPolygon );
-        mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
-    }
-
-    // Do not paint empty PolyPolygons
-    if(!rB2DPolygon.count() || !IsDeviceOutputNecessary())
-        return;
-
-    // we need a graphics
-    if( !mpGraphics && !AcquireGraphics() )
-        return;
-
-    if( mbInitClipRegion )
-        InitClipRegion();
-
-    if( mbOutputClipped )
-        return;
-
-    if( mbInitLineColor )
-        InitLineColor();
 
     {
         LineInfo aHairlineInfo;
@@ -181,7 +192,8 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         aHairlineInfo.SetLineCap(eLineCap);
 
         // use b2dpolygon drawing if possible
-        if (Draw(vcl::PolyHairlineDrawable(basegfx::B2DHomMatrix(), rB2DPolygon, aHairlineInfo, 0.0, fMiterMinimumAngle)))
+        if (Draw(vcl::PolyHairlineDrawable(basegfx::B2DHomMatrix(), rB2DPolygon, aHairlineInfo, 0.0,
+                                           fMiterMinimumAngle)))
         {
             return;
         }
@@ -191,17 +203,11 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
     // no output yet; fallback to geometry decomposition and use filled polygon paint
     // when line is fat and not too complex. ImplDrawPolyPolygonWithB2DPolyPolygon
     // will do internal needed AA checks etc.
-    if(fLineWidth >= 2.5 &&
-       rB2DPolygon.count() &&
-       rB2DPolygon.count() <= 1000)
+    if (fLineWidth >= 2.5 && rB2DPolygon.count() && rB2DPolygon.count() <= 1000)
     {
         const double fHalfLineWidth((fLineWidth * 0.5) + 0.5);
-        const basegfx::B2DPolyPolygon aAreaPolyPolygon(
-                basegfx::utils::createAreaGeometry( rB2DPolygon,
-                                                    fHalfLineWidth,
-                                                    eLineJoin,
-                                                    eLineCap,
-                                                    fMiterMinimumAngle));
+        const basegfx::B2DPolyPolygon aAreaPolyPolygon(basegfx::utils::createAreaGeometry(
+            rB2DPolygon, fHalfLineWidth, eLineJoin, eLineCap, fMiterMinimumAngle));
         const Color aOldLineColor(maLineColor);
         const Color aOldFillColor(maFillColor);
 
@@ -211,10 +217,9 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         InitFillColor();
 
         // draw using a loop; else the topology will paint a PolyPolygon
-        for(auto const& rPolygon : aAreaPolyPolygon)
+        for (auto const& rPolygon : aAreaPolyPolygon)
         {
-            ImplDrawPolyPolygonWithB2DPolyPolygon(
-                basegfx::B2DPolyPolygon(rPolygon));
+            ImplDrawPolyPolygonWithB2DPolyPolygon(basegfx::B2DPolyPolygon(rPolygon));
         }
 
         SetLineColor(aOldLineColor);
@@ -224,7 +229,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
 
         // when AA it is necessary to also paint the filled polygon's outline
         // to avoid optical gaps
-        for(auto const& rPolygon : aAreaPolyPolygon)
+        for (auto const& rPolygon : aAreaPolyPolygon)
         {
             LineInfo aHairlineInfo;
             aHairlineInfo.SetWidth(fLineWidth);
@@ -237,61 +242,48 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
     else
     {
         // fallback to old polygon drawing if needed
-        const tools::Polygon aToolsPolygon( rB2DPolygon );
+        const tools::Polygon aToolsPolygon(rB2DPolygon);
         LineInfo aLineInfo;
-        if( fLineWidth != 0.0 )
-            aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
+        if (fLineWidth != 0.0)
+            aLineInfo.SetWidth(static_cast<long>(fLineWidth + 0.5));
 
-        drawPolyLine( aToolsPolygon, aLineInfo );
-    }
-}
+        sal_uInt16 nPoints(aToolsPolygon.GetSize());
 
-void OutputDevice::drawPolyLine(const tools::Polygon& rPoly, const LineInfo& rLineInfo)
-{
-    sal_uInt16 nPoints(rPoly.GetSize());
+        if (!IsDeviceOutputNecessary() || !mbLineColor || (nPoints < 2)
+            || (LineStyle::NONE == aLineInfo.GetStyle()) || ImplIsRecordLayout())
+            return;
 
-    if ( !IsDeviceOutputNecessary() || !mbLineColor || ( nPoints < 2 ) || ( LineStyle::NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
-        return;
+        tools::Polygon aPoly = ImplLogicToDevicePixel(aToolsPolygon);
 
-    tools::Polygon aPoly = ImplLogicToDevicePixel( rPoly );
+        const LineInfo aInfo(ImplLogicToDevicePixel(aLineInfo));
+        const bool bDashUsed(LineStyle::Dash == aInfo.GetStyle());
+        const bool bLineWidthUsed(aInfo.GetWidth() > 1);
 
-    // we need a graphics
-    if ( !mpGraphics && !AcquireGraphics() )
-        return;
-
-    if ( mbInitClipRegion )
-        InitClipRegion();
-
-    if ( mbOutputClipped )
-        return;
-
-    if ( mbInitLineColor )
-        InitLineColor();
-
-    const LineInfo aInfo( ImplLogicToDevicePixel( rLineInfo ) );
-    const bool bDashUsed(LineStyle::Dash == aInfo.GetStyle());
-    const bool bLineWidthUsed(aInfo.GetWidth() > 1);
-
-    if(bDashUsed || bLineWidthUsed)
-    {
-        Draw(vcl::B2DPolyLineDrawable(basegfx::B2DPolyPolygon(aPoly.getB2DPolygon()), aInfo));
-    }
-    else
-    {
-        // #100127# the subdivision HAS to be done here since only a pointer
-        // to an array of points is given to the DrawPolyLine method, there is
-        // NO way to find out there that it's a curve.
-        if( aPoly.HasFlags() )
+        if (bDashUsed || bLineWidthUsed)
         {
-            aPoly = tools::Polygon::SubdivideBezier( aPoly );
-            nPoints = aPoly.GetSize();
+            Draw(vcl::B2DPolyLineDrawable(basegfx::B2DPolyPolygon(aPoly.getB2DPolygon()), aInfo));
+        }
+        else
+        {
+            // #100127# the subdivision HAS to be done here since only a pointer
+            // to an array of points is given to the DrawPolyLine method, there is
+            // NO way to find out there that it's a curve.
+            if (aPoly.HasFlags())
+            {
+                aPoly = tools::Polygon::SubdivideBezier(aPoly);
+                nPoints = aPoly.GetSize();
+            }
+
+            mpGraphics->DrawPolyLine(nPoints, reinterpret_cast<SalPoint*>(aPoly.GetPointAry()),
+                                     this);
         }
 
-        mpGraphics->DrawPolyLine(nPoints, reinterpret_cast<SalPoint*>(aPoly.GetPointAry()), this);
+        if (bUseScaffolding)
+        {
+            if (mpAlphaVDev)
+                mpAlphaVDev->DrawPolyLine(aToolsPolygon, aLineInfo);
+        }
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawPolyLine( rPoly, rLineInfo );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

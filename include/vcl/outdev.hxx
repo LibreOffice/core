@@ -39,6 +39,7 @@
 #include <vcl/outdevstate.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/vclreferencebase.hxx>
+#include <vcl/lineinfo.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/vector/b2enums.hxx>
@@ -758,22 +759,13 @@ protected:
 
 public:
 
-    /** Render the given polygon as a line stroke
-
-        The given polygon is stroked with the current LineColor, start
-        and end point are not automatically connected
-
-        @see DrawPolygon
-        @see DrawPolyPolygon
-     */
-    void                        DrawPolyLine( const tools::Polygon& rPoly );
-
     void                        DrawPolyLine(
                                     const basegfx::B2DPolygon&,
                                     double fLineWidth = 0.0,
                                     basegfx::B2DLineJoin eLineJoin = basegfx::B2DLineJoin::Round,
                                     css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT,
-                                    double fMiterMinimumAngle = basegfx::deg2rad(15.0));
+                                    double fMiterMinimumAngle = basegfx::deg2rad(15.0),
+                                    bool bUsesScaffolding = true);
 
     /** Render the given polygon as a line stroke
 
@@ -785,16 +777,8 @@ public:
         @see DrawPolygon
         @see DrawPolyPolygon
      */
-    void                        DrawPolyLine( const tools::Polygon& rPoly,
-                                              const LineInfo& rLineInfo );
-
-private:
-
-    // #i101491#
-    // Helper which holds the old line geometry creation and is extended to use AA when
-    // switched on. Advantage is that line geometry is only temporarily used for paint
-    SAL_DLLPRIVATE void         drawPolyLine(const tools::Polygon& rPoly, const LineInfo& rLineInfo);
-
+    void                        DrawPolyLine(const tools::Polygon& rPoly,
+                                             const LineInfo& rLineInfo = LineInfo());
     ///@}
 
 
