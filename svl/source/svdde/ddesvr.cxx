@@ -451,7 +451,7 @@ DdeService::~DdeService()
     }
 }
 
-const OUString DdeService::GetName() const
+OUString DdeService::GetName() const
 {
     return pName->toOUString();
 }
@@ -534,7 +534,7 @@ DdeTopic::~DdeTopic()
     delete pName;
 }
 
-const OUString DdeTopic::GetName() const
+OUString DdeTopic::GetName() const
 {
     return pName->toOUString();
 }
