@@ -130,7 +130,7 @@ public:
     rtl::Reference<comphelper::RefCountedMutex>& GetSharedMutexRef() { return m_aMutexHolder; }
 
     void ConnectTo( const css::uno::Reference< css::io::XInputStream >& xInStream );
-    const css::uno::Sequence< sal_Int8 > GetEncryptionKey();
+    css::uno::Sequence< sal_Int8 > GetEncryptionKey();
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;

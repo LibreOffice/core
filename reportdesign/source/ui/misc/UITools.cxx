@@ -227,7 +227,7 @@ namespace
         return lcl_getReportControlFont( _rxReportControlFormat, aAwtFont, _nWhich );
     }
 
-    const vcl::Font lcl_setFont(const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
+    vcl::Font lcl_setFont(const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
         SfxItemSet& _rItemSet,sal_uInt16 _nWhich,sal_uInt16 _nFont, sal_uInt16 _nFontHeight,sal_uInt16 _nLanguage,sal_uInt16 _nPosture, sal_uInt16 _nWeight)
     {
         // fill it

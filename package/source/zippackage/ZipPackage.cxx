@@ -1624,7 +1624,7 @@ void ZipPackage::DisconnectFromTargetAndThrowException_Impl( const uno::Referenc
                                     makeAny ( aException ) );
 }
 
-const uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
+uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
 {
     uno::Sequence< sal_Int8 > aResult;
 

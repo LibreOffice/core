@@ -1010,7 +1010,7 @@ payloadToRectangle (LOKDocView* pDocView, const char* pPayload)
     return aRet;
 }
 
-static const std::vector<GdkRectangle>
+static std::vector<GdkRectangle>
 payloadToRectangles(LOKDocView* pDocView, const char* pPayload)
 {
     std::vector<GdkRectangle> aRet;

@@ -57,7 +57,7 @@ using namespace linguistic;
 #define CONV_TYPE_SCHINESE_TCHINESE     "Chinese simplified / Chinese traditional"
 
 
-static const OUString ConversionTypeToText( sal_Int16 nConversionType )
+static OUString ConversionTypeToText( sal_Int16 nConversionType )
 {
     OUString aRes;
     if (nConversionType == ConversionDictionaryType::HANGUL_HANJA)

@@ -278,7 +278,7 @@ GtkToolItem* gtv_application_window_find_tool_by_unocommand(GtvApplicationWindow
     return result;
 }
 
-static const std::string
+static std::string
 createRenderingArgsJSON(const GtvRenderingArgs* pRenderingArgs)
 {
     boost::property_tree::ptree aTree;
