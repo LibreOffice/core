@@ -145,6 +145,7 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
 BreakIterator_zh::BreakIterator_zh()
 {
     m_xDict = std::make_unique<xdictionary>("zh");
+    assert(hangingCharacters.pData);
     hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE("zh", "CN"));
     cBreakIterator = "com.sun.star.i18n.BreakIterator_zh";
 }
@@ -155,6 +156,7 @@ BreakIterator_zh::BreakIterator_zh()
 BreakIterator_zh_TW::BreakIterator_zh_TW()
 {
     m_xDict = std::make_unique<xdictionary>("zh");
+    assert(hangingCharacters.pData);
     hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE("zh", "TW"));
     cBreakIterator = "com.sun.star.i18n.BreakIterator_zh_TW";
 }
@@ -166,6 +168,7 @@ BreakIterator_ja::BreakIterator_ja()
 {
     m_xDict = std::make_unique<xdictionary>("ja");
     m_xDict->setJapaneseWordBreak();
+    assert(hangingCharacters.pData);
     hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE("ja", "JP"));
     cBreakIterator = "com.sun.star.i18n.BreakIterator_ja";
 }
@@ -175,6 +178,7 @@ BreakIterator_ja::BreakIterator_ja()
 //      ----------------------------------------------------;
 BreakIterator_ko::BreakIterator_ko()
 {
+    assert(hangingCharacters.pData);
     hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE("ko", "KR"));
     cBreakIterator = "com.sun.star.i18n.BreakIterator_ko";
 }
