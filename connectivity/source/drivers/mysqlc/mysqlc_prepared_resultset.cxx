@@ -58,7 +58,7 @@ using ::osl::MutexGuard;
 
 namespace
 {
-const std::type_index getTypeFromMysqlType(enum_field_types type)
+std::type_index getTypeFromMysqlType(enum_field_types type)
 {
     switch (type)
     {

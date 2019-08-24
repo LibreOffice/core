@@ -42,7 +42,7 @@ private:
     OUString m_sOriginalImageBtnLabel;
 
     void ValidateFields();
-    const css::uno::Reference<css::graphic::XGraphic> getSignedGraphic(bool bValid);
+    css::uno::Reference<css::graphic::XGraphic> getSignedGraphic(bool bValid);
     virtual void Apply() override;
 
     DECL_LINK(clearImage, weld::Button&, void);

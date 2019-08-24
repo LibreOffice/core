@@ -214,8 +214,7 @@ void SignSignatureLineDialog::Apply()
                               xValidGraphic, xInvalidGraphic, m_xEditComment->get_text());
 }
 
-const css::uno::Reference<css::graphic::XGraphic>
-SignSignatureLineDialog::getSignedGraphic(bool bValid)
+css::uno::Reference<css::graphic::XGraphic> SignSignatureLineDialog::getSignedGraphic(bool bValid)
 {
     // Read svg and replace placeholder texts
     OUString aSvgImage(getSignatureImage());
@@ -274,8 +273,7 @@ SignSignatureLineDialog::getSignedGraphic(bool bValid)
     Sequence<PropertyValue> aMediaProperties(1);
     aMediaProperties[0].Name = "InputStream";
     aMediaProperties[0].Value <<= xInputStream;
-    Reference<XGraphic> xGraphic = xProvider->queryGraphic(aMediaProperties);
-    return xGraphic;
+    return xProvider->queryGraphic(aMediaProperties);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
