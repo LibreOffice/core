@@ -749,12 +749,6 @@ public:
 
 protected:
     virtual void DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint);
-
-private:
-
-    /** Helper for line geometry paint with support for graphic expansion (pattern and fat_to_area)
-     */
-    SAL_DLLPRIVATE void         drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const LineInfo& rInfo );
     ///@}
 
 
