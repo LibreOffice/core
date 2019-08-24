@@ -624,11 +624,6 @@ int DemoApp::Main()
         return 1;
     }
 
-    // Create UCB (for backwards compatibility, in case some code still uses
-    // plain createInstance w/o args directly to obtain an instance):
-    ::ucb::UniversalContentBroker::create(
-        comphelper::getProcessComponentContext() );
-
     ScopedVclPtr<TestWindow> aWindow = VclPtr<TestWindow>::Create();
     aWindow->Show();
 
