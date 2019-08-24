@@ -16,7 +16,7 @@ namespace writerperfect
   */
 template <class Generator> struct DocumentHandlerFor
 {
-    // static const OUString name();
+    // static OUString name();
 };
 }
 
