@@ -86,7 +86,7 @@ OUString lcl_normalizeSubStreamPath(const OUString& rPath)
 
 namespace
 {
-const OUString concatPath(const OUString& lhs, const OUString& rhs)
+OUString concatPath(const OUString& lhs, const OUString& rhs)
 {
     if (lhs.isEmpty())
         return rhs;

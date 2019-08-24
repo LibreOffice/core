@@ -157,7 +157,7 @@ DirectoryStream::createForParent(const css::uno::Reference<css::ucb::XContent>& 
     }
 }
 
-const css::uno::Reference<css::ucb::XContent> DirectoryStream::getContent() const
+css::uno::Reference<css::ucb::XContent> DirectoryStream::getContent() const
 {
     if (!m_pImpl)
         return css::uno::Reference<css::ucb::XContent>();
