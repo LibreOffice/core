@@ -69,7 +69,7 @@ public:
     SvxBrushItem( const OUString& rLink, const OUString& rFilter,
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
     SvxBrushItem( const SvxBrushItem& );
-    SvxBrushItem(SvxBrushItem&&) noexcept;
+    SvxBrushItem(SvxBrushItem&&);
 
     virtual ~SvxBrushItem() override;
 
