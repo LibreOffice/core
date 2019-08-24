@@ -92,8 +92,7 @@ public:
     const Size& GetPreviewSizePixel (PreviewSize eSize) const;
 
     bool HasToken (Token aToken) const;
-    const SharedMasterPageDescriptor GetDescriptor (MasterPageContainer::Token aToken) const;
-    SharedMasterPageDescriptor GetDescriptor (MasterPageContainer::Token aToken);
+    SharedMasterPageDescriptor GetDescriptor (MasterPageContainer::Token aToken) const;
     virtual Token PutMasterPage (const SharedMasterPageDescriptor& rDescriptor) override;
     void InvalidatePreview (Token aToken);
     Image GetPreviewForToken (
@@ -689,16 +688,7 @@ bool MasterPageContainer::Implementation::HasToken (Token aToken) const
         && maContainer[aToken].get()!=nullptr;
 }
 
-const SharedMasterPageDescriptor MasterPageContainer::Implementation::GetDescriptor (
-    Token aToken) const
-{
-    if (aToken>=0 && static_cast<unsigned>(aToken)<maContainer.size())
-        return maContainer[aToken];
-    else
-        return SharedMasterPageDescriptor();
-}
-
-SharedMasterPageDescriptor MasterPageContainer::Implementation::GetDescriptor (Token aToken)
+SharedMasterPageDescriptor MasterPageContainer::Implementation::GetDescriptor (Token aToken) const
 {
     if (aToken>=0 && static_cast<unsigned>(aToken)<maContainer.size())
         return maContainer[aToken];

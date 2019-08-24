@@ -52,7 +52,7 @@ struct SmFontFormat
     SmFontFormat();
     explicit SmFontFormat( const vcl::Font &rFont );
 
-    const vcl::Font GetFont() const;
+    vcl::Font       GetFont() const;
     bool            operator == ( const SmFontFormat &rFntFmt ) const;
 };
 
@@ -81,10 +81,10 @@ public:
 
     const SmFontFormat *    GetFontFormat( const OUString &rFntFmtId ) const;
     const SmFontFormat *    GetFontFormat( size_t nPos ) const;
-    const OUString          GetFontFormatId( const SmFontFormat &rFntFmt ) const;
-    const OUString          GetFontFormatId( const SmFontFormat &rFntFmt, bool bAdd );
-    const OUString          GetFontFormatId( size_t nPos ) const;
-    const OUString          GetNewFontFormatId() const;
+    OUString                GetFontFormatId( const SmFontFormat &rFntFmt ) const;
+    OUString                GetFontFormatId( const SmFontFormat &rFntFmt, bool bAdd );
+    OUString                GetFontFormatId( size_t nPos ) const;
+    OUString                GetNewFontFormatId() const;
     size_t                  GetCount() const    { return aEntries.size(); }
 
     bool    IsModified() const          { return bModified; }

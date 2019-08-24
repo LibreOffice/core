@@ -82,9 +82,9 @@ public:
 
     // symbol sets are for UI purpose only, thus we assemble them here
     std::set< OUString >      GetSymbolSetNames() const;
-    const SymbolPtrVec_t    GetSymbolSet(  const OUString& rSymbolSetName );
+    SymbolPtrVec_t          GetSymbolSet(  const OUString& rSymbolSetName );
 
-    const SymbolPtrVec_t    GetSymbols() const;
+    SymbolPtrVec_t          GetSymbols() const;
     bool                    AddOrReplaceSymbol( const SmSym & rSymbol, bool bForceChange = false );
     void                    RemoveSymbol( const OUString & rSymbolName );
 

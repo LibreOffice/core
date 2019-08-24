@@ -121,7 +121,7 @@ SmSym *SmSymbolManager::GetSymbolByName(const OUString& rSymbolName)
 }
 
 
-const SymbolPtrVec_t SmSymbolManager::GetSymbols() const
+SymbolPtrVec_t SmSymbolManager::GetSymbols() const
 {
     SymbolPtrVec_t aRes;
     for (const auto& rEntry : m_aSymbols)
@@ -187,7 +187,7 @@ std::set< OUString > SmSymbolManager::GetSymbolSetNames() const
 }
 
 
-const SymbolPtrVec_t SmSymbolManager::GetSymbolSet( const OUString& rSymbolSetName )
+SymbolPtrVec_t SmSymbolManager::GetSymbolSet( const OUString& rSymbolSetName )
 {
     SymbolPtrVec_t aRes;
     if (!rSymbolSetName.isEmpty())

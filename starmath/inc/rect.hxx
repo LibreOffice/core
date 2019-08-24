@@ -153,7 +153,7 @@ public:
 
             const Size & GetSize() const    { return aSize; }
 
-            const Size  GetItalicSize() const
+            Size  GetItalicSize() const
             {   return Size(GetItalicWidth(), GetHeight()); }
 
             void Move  (const Point &rPosition);
@@ -166,7 +166,7 @@ public:
 
             bool HasAlignInfo() const { return bHasAlignInfo; }
 
-            const Point AlignTo(const SmRect &rRect, RectPos ePos,
+            Point AlignTo(const SmRect &rRect, RectPos ePos,
                                 RectHorAlign eHor, RectVerAlign eVer) const;
 
             SmRect & ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode);
