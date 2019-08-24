@@ -195,18 +195,12 @@ Reference< XPropertySetInfo > SAL_CALL ActionTriggerSeparatorPropertySet::getPro
     return xInfo;
 }
 
-const Sequence< Property > ActionTriggerSeparatorPropertySet::impl_getStaticPropertyDescriptor()
+Sequence< Property > ActionTriggerSeparatorPropertySet::impl_getStaticPropertyDescriptor()
 {
-    const Property pActionTriggerPropertys[] =
+    return
     {
         Property( "SeparatorType", HANDLE_TYPE, cppu::UnoType<sal_Int16>::get(), PropertyAttribute::TRANSIENT )
     };
-
-    // Use it to initialize sequence!
-    const Sequence< Property > seqActionTriggerPropertyDescriptor( pActionTriggerPropertys, PROPERTYCOUNT );
-
-    // Return "PropertyDescriptor"
-    return seqActionTriggerPropertyDescriptor;
 }
 
 bool ActionTriggerSeparatorPropertySet::impl_tryToChangeProperty(

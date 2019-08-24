@@ -829,7 +829,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL TabWindow::getPrope
     return xInfo;
 }
 
-const css::uno::Sequence< css::beans::Property > TabWindow::impl_getStaticPropertyDescriptor()
+css::uno::Sequence< css::beans::Property > TabWindow::impl_getStaticPropertyDescriptor()
 {
     // Create property array to initialize sequence!
     // Table of all predefined properties of this class. It's used from OPropertySetHelper-class!
@@ -838,7 +838,7 @@ const css::uno::Sequence< css::beans::Property > TabWindow::impl_getStaticProper
     // ATTENTION:
     //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
 
-    const css::beans::Property pProperties[] =
+    return
     {
         css::beans::Property( TABWINDOW_PROPNAME_PARENTWINDOW,
                                          TABWINDOW_PROPHANDLE_PARENTWINDOW,
@@ -848,11 +848,7 @@ const css::uno::Sequence< css::beans::Property > TabWindow::impl_getStaticProper
                                          TABWINDOW_PROPHANDLE_TOPWINDOW,
                                          cppu::UnoType<css::awt::XWindow>::get(),
                                          css::beans::PropertyAttribute::READONLY  )
-    };  // Use it to initialize sequence!
-    const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, TABWINDOW_PROPCOUNT );
-
-    // Return "PropertyDescriptor"
-    return lPropertyDescriptor;
+    };
 }
 
 }

@@ -249,9 +249,9 @@ Reference< XPropertySetInfo > SAL_CALL ActionTriggerPropertySet::getPropertySetI
     return xInfo;
 }
 
-const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescriptor()
+Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescriptor()
 {
-    const Property pActionTriggerPropertys[] =
+    return
     {
         Property( "CommandURL"   , HANDLE_COMMANDURL   , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
         Property( "HelpURL"      , HANDLE_HELPURL      , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
@@ -259,12 +259,6 @@ const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescr
         Property( "SubContainer" , HANDLE_SUBCONTAINER , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
         Property( "Text"         , HANDLE_TEXT         , cppu::UnoType<XInterface>::get(), PropertyAttribute::TRANSIENT  )
     };
-
-    // Use it to initialize sequence!
-    const Sequence< Property > seqActionTriggerPropertyDescriptor( pActionTriggerPropertys, PROPERTYCOUNT );
-
-    // Return "PropertyDescriptor"
-    return seqActionTriggerPropertyDescriptor;
 }
 
 bool ActionTriggerPropertySet::impl_tryToChangeProperty(

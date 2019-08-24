@@ -173,7 +173,7 @@ class FWE_DLLPUBLIC AddonsOptions
             @onerror    We return sal_False
         *//*-*****************************************************************************************************/
 
-        const OUString GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
+        OUString GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
 
         /*-****************************************************************************************************
             @short      Gets a NotebookBar part of a single addon
@@ -191,7 +191,7 @@ class FWE_DLLPUBLIC AddonsOptions
             @onerror    We return sal_False
         *//*-*****************************************************************************************************/
 
-        const OUString GetAddonsNotebookBarResourceName( sal_uInt32    ) const;
+        OUString GetAddonsNotebookBarResourceName( sal_uInt32    ) const;
 
         /*-****************************************************************************************************
             @short      Retrieves all available merge instructions for the Office menu bar

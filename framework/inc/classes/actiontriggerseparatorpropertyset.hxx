@@ -78,7 +78,7 @@ class ActionTriggerSeparatorPropertySet :   private cppu::BaseMutex,
 
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
 
-        static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
+        static css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
         //  helper
 
