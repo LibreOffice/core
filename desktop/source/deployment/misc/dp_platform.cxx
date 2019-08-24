@@ -35,7 +35,7 @@ namespace
 {
     struct StrOperatingSystem :
         public rtl::StaticWithInit<OUString, StrOperatingSystem> {
-            const OUString operator () () {
+             OUString operator () () {
                 OUString os( "$_OS" );
                 ::rtl::Bootstrap::expandMacros( os );
                 return os;
@@ -44,7 +44,7 @@ namespace
 
     struct StrCPU :
         public rtl::StaticWithInit<OUString, StrCPU> {
-            const OUString operator () () {
+            OUString operator () () {
                 OUString arch( "$_ARCH" );
                 ::rtl::Bootstrap::expandMacros( arch );
                 return arch;
@@ -54,7 +54,7 @@ namespace
 
     struct StrPlatform : public rtl::StaticWithInit<
         OUString, StrPlatform> {
-            const OUString operator () () {
+            OUString operator () () {
                 OUStringBuffer buf;
                 buf.append( StrOperatingSystem::get() );
                 buf.append( '_' );

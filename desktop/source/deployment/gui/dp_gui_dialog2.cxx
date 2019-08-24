@@ -94,7 +94,7 @@ namespace dp_gui {
 
 struct StrAllFiles : public rtl::StaticWithInit< OUString, StrAllFiles >
 {
-    const OUString operator () () {
+    OUString operator () () {
         const SolarMutexGuard guard;
         std::locale loc = Translate::Create("fps");
         return Translate::get(STR_FILTERNAME_ALL, loc);

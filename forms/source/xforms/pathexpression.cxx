@@ -69,7 +69,7 @@ void PathExpression::setExpression( const OUString& rExpression )
     maNodes.clear();
 }
 
-const OUString PathExpression::_getExpressionForEvaluation() const
+OUString PathExpression::_getExpressionForEvaluation() const
 {
     OUString sExpr = ComputedExpression::_getExpressionForEvaluation();
     if( sExpr.isEmpty())

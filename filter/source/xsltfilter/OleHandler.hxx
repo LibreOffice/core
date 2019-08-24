@@ -67,8 +67,8 @@ namespace XSLT
             if (m_tcontext)
                 m_tcontext->_private = nullptr;
         }
-        void          insertByName(const OUString& streamName, const OString& content);
-        const OString getByName(const OUString& streamName);
+        void    insertByName(const OUString& streamName, const OString& content);
+        OString getByName(const OUString& streamName);
         void registercontext(xsltTransformContextPtr context)
         {
             assert(context);

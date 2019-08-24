@@ -75,7 +75,7 @@ namespace {
 
 struct UnoRc : public rtl::StaticWithInit<
     std::shared_ptr<rtl::Bootstrap>, UnoRc> {
-    const std::shared_ptr<rtl::Bootstrap> operator () () {
+    std::shared_ptr<rtl::Bootstrap> operator () () {
         OUString unorc( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("louno") );
         ::rtl::Bootstrap::expandMacros( unorc );
         std::shared_ptr< ::rtl::Bootstrap > ret(
@@ -86,10 +86,10 @@ struct UnoRc : public rtl::StaticWithInit<
 };
 
 struct OfficePipeId : public rtl::StaticWithInit<OUString, OfficePipeId> {
-    const OUString operator () ();
+    OUString operator () ();
 };
 
-const OUString OfficePipeId::operator () ()
+OUString OfficePipeId::operator () ()
 {
     OUString userPath;
     ::utl::Bootstrap::PathStatus aLocateResult =

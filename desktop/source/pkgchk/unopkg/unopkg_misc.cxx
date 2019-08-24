@@ -160,7 +160,7 @@ bool readArgument(
 namespace {
 struct ExecutableDir : public rtl::StaticWithInit<
     OUString, ExecutableDir> {
-    const OUString operator () () {
+    OUString operator () () {
         OUString path;
         if (osl_getExecutableFile( &path.pData ) != osl_Process_E_None) {
             throw RuntimeException("cannot locate executable directory!",nullptr);
@@ -170,7 +170,7 @@ struct ExecutableDir : public rtl::StaticWithInit<
 };
 struct ProcessWorkingDir : public rtl::StaticWithInit<
     OUString, ProcessWorkingDir> {
-    const OUString operator () () {
+    OUString operator () () {
         OUString workingDir;
         utl::Bootstrap::getProcessWorkingDir(workingDir);
         return workingDir;

@@ -140,7 +140,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             ::rtl::Reference<AbortChannel> const & abortChannel,
             Reference<XCommandEnvironment> const & xCmdEnv ) override;
 
-        const Reference<registry::XSimpleRegistry> getRDB() const;
+        Reference<registry::XSimpleRegistry> getRDB() const;
 
     public:
         ComponentPackageImpl(
@@ -220,8 +220,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     private:
         BackendImpl * getMyBackend() const;
 
-        const Reference<registry::XSimpleRegistry> impl_openRDB() const;
-        const Reference<XInterface> impl_createInstance(OUString const& rService) const;
+        Reference<registry::XSimpleRegistry> impl_openRDB() const;
+        Reference<XInterface> impl_createInstance(OUString const& rService) const;
 
         // Package
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
@@ -342,7 +342,7 @@ BackendImpl::ComponentPackageImpl::ComponentPackageImpl(
       m_registered( REG_UNINIT )
 {}
 
-const Reference<registry::XSimpleRegistry>
+Reference<registry::XSimpleRegistry>
 BackendImpl::ComponentPackageImpl::getRDB() const
 {
     BackendImpl * that = getMyBackend();
@@ -1534,7 +1534,7 @@ BackendImpl::OtherPlatformPackageImpl::getMyBackend() const
     return pBackend;
 }
 
-Reference<registry::XSimpleRegistry> const
+Reference<registry::XSimpleRegistry>
 BackendImpl::OtherPlatformPackageImpl::impl_openRDB() const
 {
     OUString const aRDB(m_aPlatform + ".rdb");
@@ -1561,7 +1561,7 @@ BackendImpl::OtherPlatformPackageImpl::impl_openRDB() const
     return xRegistry;
 }
 
-Reference<XInterface> const
+Reference<XInterface>
 BackendImpl::OtherPlatformPackageImpl::impl_createInstance(OUString const& rService)
 const
 {
