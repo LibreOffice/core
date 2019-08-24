@@ -161,7 +161,7 @@ public:
     SfxPrinter *GetPrinter()    { GetPrt(); return mpPrinter; }
     void        SetPrinter( SfxPrinter * );
 
-    const OUString GetComment() const;
+    OUString GetComment() const;
 
     // to replace chars that can not be saved with the document...
     void        ReplaceBadChars();

@@ -55,11 +55,11 @@ class SmLocalizedSymbolData
 public:
     SmLocalizedSymbolData() = delete;
 
-    static const OUString GetUiSymbolName( const OUString &rExportName );
-    static const OUString GetExportSymbolName( const OUString &rUiName );
+    static OUString GetUiSymbolName( const OUString &rExportName );
+    static OUString GetExportSymbolName( const OUString &rUiName );
 
-    static const OUString GetUiSymbolSetName( const OUString &rExportName );
-    static const OUString GetExportSymbolSetName( const OUString &rUiName );
+    static OUString GetUiSymbolSetName( const OUString &rExportName );
+    static OUString GetExportSymbolSetName( const OUString &rUiName );
 };
 
 class SmModule : public SfxModule, public utl::ConfigurationListener

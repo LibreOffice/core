@@ -127,7 +127,7 @@ class PaneStyle
 public:
     PaneStyle();
 
-    const SharedBitmapDescriptor GetBitmap (const OUString& sBitmapName) const;
+    SharedBitmapDescriptor GetBitmap (const OUString& sBitmapName) const;
 
     OUString msStyleName;
     std::shared_ptr<PaneStyle> mpParentStyle;
@@ -166,7 +166,7 @@ class ViewStyle
 public:
     ViewStyle();
 
-    const SharedBitmapDescriptor GetBitmap (const OUString& sBitmapName) const;
+    SharedBitmapDescriptor GetBitmap (const OUString& sBitmapName) const;
 
     PresenterTheme::SharedFontDescriptor GetFont() const;
 
@@ -902,11 +902,11 @@ PaneStyle::PaneStyle()
 {
 }
 
-const SharedBitmapDescriptor PaneStyle::GetBitmap (const OUString& rsBitmapName) const
+SharedBitmapDescriptor PaneStyle::GetBitmap (const OUString& rsBitmapName) const
 {
     if (mpBitmaps != nullptr)
     {
-        const SharedBitmapDescriptor pBitmap = mpBitmaps->GetBitmap(rsBitmapName);
+        SharedBitmapDescriptor pBitmap = mpBitmaps->GetBitmap(rsBitmapName);
         if (pBitmap.get() != nullptr)
             return pBitmap;
     }
@@ -1015,7 +1015,7 @@ ViewStyle::ViewStyle()
 {
 }
 
-const SharedBitmapDescriptor ViewStyle::GetBitmap (const OUString& rsBitmapName) const
+SharedBitmapDescriptor ViewStyle::GetBitmap (const OUString& rsBitmapName) const
 {
     if (rsBitmapName == "Background")
         return mpBackground;

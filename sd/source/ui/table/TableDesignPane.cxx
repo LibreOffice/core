@@ -576,7 +576,7 @@ static void FillCellInfoMatrix( const CellInfoVector& rStyle, const TableStyleSe
     }
 }
 
-static const BitmapEx CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, const TableStyleSettings& rSettings, bool bIsPageDark )
+static BitmapEx CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, const TableStyleSettings& rSettings, bool bIsPageDark )
 {
     CellInfoVector aCellInfoVector(sdr::table::style_count);
     FillCellInfoVector( xTableStyle, aCellInfoVector );

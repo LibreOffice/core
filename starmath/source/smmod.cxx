@@ -45,7 +45,7 @@ OUString SmResId(const char* pId)
     return Translate::get(pId, SM_MOD()->GetResLocale());
 }
 
-const OUString SmLocalizedSymbolData::GetUiSymbolName( const OUString &rExportName )
+OUString SmLocalizedSymbolData::GetUiSymbolName( const OUString &rExportName )
 {
     OUString aRes;
 
@@ -61,7 +61,7 @@ const OUString SmLocalizedSymbolData::GetUiSymbolName( const OUString &rExportNa
     return aRes;
 }
 
-const OUString SmLocalizedSymbolData::GetExportSymbolName( const OUString &rUiName )
+OUString SmLocalizedSymbolData::GetExportSymbolName( const OUString &rUiName )
 {
     OUString aRes;
 
@@ -78,7 +78,7 @@ const OUString SmLocalizedSymbolData::GetExportSymbolName( const OUString &rUiNa
     return aRes;
 }
 
-const OUString SmLocalizedSymbolData::GetUiSymbolSetName( const OUString &rExportName )
+OUString SmLocalizedSymbolData::GetUiSymbolSetName( const OUString &rExportName )
 {
     OUString aRes;
 
@@ -94,7 +94,7 @@ const OUString SmLocalizedSymbolData::GetUiSymbolSetName( const OUString &rExpor
     return aRes;
 }
 
-const OUString SmLocalizedSymbolData::GetExportSymbolSetName( const OUString &rUiName )
+OUString SmLocalizedSymbolData::GetExportSymbolSetName( const OUString &rUiName )
 {
     OUString aRes;
 

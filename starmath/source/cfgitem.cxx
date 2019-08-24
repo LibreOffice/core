@@ -176,7 +176,7 @@ SmFontFormat::SmFontFormat( const vcl::Font &rFont )
 }
 
 
-const vcl::Font SmFontFormat::GetFont() const
+vcl::Font SmFontFormat::GetFont() const
 {
     vcl::Font aRes;
     aRes.SetFamilyName( aName );
@@ -280,7 +280,7 @@ const SmFontFormat * SmFontFormatList::GetFontFormat( size_t nPos ) const
 }
 
 
-const OUString SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt ) const
+OUString SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt ) const
 {
     OUString aRes;
 
@@ -297,7 +297,7 @@ const OUString SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt ) 
 }
 
 
-const OUString SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt, bool bAdd )
+OUString SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt, bool bAdd )
 {
     OUString aRes( GetFontFormatId( rFntFmt) );
     if (aRes.isEmpty()  &&  bAdd)
@@ -309,7 +309,7 @@ const OUString SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt, b
 }
 
 
-const OUString SmFontFormatList::GetFontFormatId( size_t nPos ) const
+OUString SmFontFormatList::GetFontFormatId( size_t nPos ) const
 {
     OUString aRes;
     if (nPos < aEntries.size())
@@ -318,7 +318,7 @@ const OUString SmFontFormatList::GetFontFormatId( size_t nPos ) const
 }
 
 
-const OUString SmFontFormatList::GetNewFontFormatId() const
+OUString SmFontFormatList::GetNewFontFormatId() const
 {
     // returns first unused FormatId
 

@@ -333,7 +333,7 @@ void SmRect::Move(const Point &rPosition)
 }
 
 
-const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
+Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                             RectHorAlign eHor, RectVerAlign eVer) const
 {   Point  aPos (GetTopLeft());
         // will become the topleft point of the new rectangle position
