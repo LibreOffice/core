@@ -753,7 +753,7 @@ namespace emfplushelper
     {
     }
 
-    ::basegfx::B2DPolyPolygon const EmfPlusHelperData::combineClip(::basegfx::B2DPolyPolygon const & leftPolygon, int combineMode, ::basegfx::B2DPolyPolygon const & rightPolygon)
+    ::basegfx::B2DPolyPolygon EmfPlusHelperData::combineClip(::basegfx::B2DPolyPolygon const & leftPolygon, int combineMode, ::basegfx::B2DPolyPolygon const & rightPolygon)
     {
         basegfx::B2DPolyPolygon aClippedPolyPolygon;
         switch (combineMode)

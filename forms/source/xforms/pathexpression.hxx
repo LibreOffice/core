@@ -49,7 +49,7 @@ private:
     NodeVector_t maNodes;
 
     /// get expression for evaluation
-    const OUString _getExpressionForEvaluation() const;
+    OUString _getExpressionForEvaluation() const;
 
 
 public:

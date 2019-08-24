@@ -161,7 +161,7 @@ namespace XSLT
         }
     }
 
-    const OString
+    OString
     OleHandler::getByName(const OUString& streamName)
     {
         if ( streamName == "oledata.mso" )

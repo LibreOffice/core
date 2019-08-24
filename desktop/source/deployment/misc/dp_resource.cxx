@@ -36,7 +36,7 @@ namespace {
 
 struct OfficeLocale :
         public rtl::StaticWithInit<LanguageTag, OfficeLocale> {
-    const LanguageTag operator () () {
+    LanguageTag operator () () {
         OUString slang(utl::ConfigManager::getUILocale());
         //fallback, the locale is currently only set when the user starts the
         //office for the first time.
