@@ -232,24 +232,24 @@ public:
         inline TokenPool&           operator <<( TokenStack& rStack );
         void                        operator >>( TokenId& rId );
         inline void                 operator >>( TokenStack& rStack );
-        inline const TokenId        Store();
-        const TokenId               Store( const double& rDouble );
+        inline TokenId              Store();
+        TokenId                     Store( const double& rDouble );
 
                                     // only for Range-Names
-        const TokenId               Store( const sal_uInt16 nIndex );
-        ;
-        const TokenId               Store( const OUString& rString );
-        const TokenId               Store( const ScSingleRefData& rTr );
-        const TokenId               Store( const ScComplexRefData& rTr );
+        TokenId                     Store( const sal_uInt16 nIndex );
 
-        const TokenId               Store( const DefTokenId eId, const OUString& rName );
+        TokenId                     Store( const OUString& rString );
+        TokenId                     Store( const ScSingleRefData& rTr );
+        TokenId                     Store( const ScComplexRefData& rTr );
+
+        TokenId                     Store( const DefTokenId eId, const OUString& rName );
                                         // 4 externals (e.g. AddIns, Macros...)
-        const TokenId               StoreNlf( const ScSingleRefData& rTr );
-        const TokenId               StoreMatrix();
-        const TokenId               StoreName( sal_uInt16 nIndex, sal_Int16 nSheet );
-        const TokenId               StoreExtName( sal_uInt16 nFileId, const OUString& rName );
-        const TokenId               StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef );
-        const TokenId               StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef );
+        TokenId                     StoreNlf( const ScSingleRefData& rTr );
+        TokenId                     StoreMatrix();
+        TokenId                     StoreName( sal_uInt16 nIndex, sal_Int16 nSheet );
+        TokenId                     StoreExtName( sal_uInt16 nFileId, const OUString& rName );
+        TokenId                     StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef );
+        TokenId                     StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef );
 
         std::unique_ptr<ScTokenArray> GetTokenArray( const TokenId& rId );
         void                        Reset();
@@ -275,10 +275,10 @@ class TokenStack
         inline void                 Reset();
 
         bool                 HasMoreTokens() const { return nPos > 0; }
-        inline const TokenId        Get();
+        inline TokenId              Get();
 };
 
-inline const TokenId TokenStack::Get()
+inline TokenId TokenStack::Get()
 {
     TokenId nRet;
 
@@ -401,7 +401,7 @@ inline void TokenPool::operator >>( TokenStack& rStack )
     rStack << nId;
 }
 
-inline const TokenId TokenPool::Store()
+inline TokenId TokenPool::Store()
 {
     TokenId nId;
     *this >> nId;

@@ -416,7 +416,7 @@ void TokenPool::operator >>( TokenId& rId )
     nP_IdLast = nP_IdCurrent;
 }
 
-const TokenId TokenPool::Store( const double& rDouble )
+TokenId TokenPool::Store( const double& rDouble )
 {
     if (!CheckElementOrGrow())
         return static_cast<const TokenId>(nElementCurrent+1);
@@ -438,12 +438,12 @@ const TokenId TokenPool::Store( const double& rDouble )
     return static_cast<const TokenId>(nElementCurrent); // return old value + 1!
 }
 
-const TokenId TokenPool::Store( const sal_uInt16 nIndex )
+TokenId TokenPool::Store( const sal_uInt16 nIndex )
 {
     return StoreName(nIndex, -1);
 }
 
-const TokenId TokenPool::Store( const OUString& rString )
+TokenId TokenPool::Store( const OUString& rString )
 {
     // mostly copied to Store( const sal_Char* ), to avoid a temporary string
     if (!CheckElementOrGrow())
@@ -473,7 +473,7 @@ const TokenId TokenPool::Store( const OUString& rString )
     return static_cast<const TokenId>(nElementCurrent); // return old value + 1!
 }
 
-const TokenId TokenPool::Store( const ScSingleRefData& rTr )
+TokenId TokenPool::Store( const ScSingleRefData& rTr )
 {
     if (!CheckElementOrGrow())
         return static_cast<const TokenId>(nElementCurrent+1);
@@ -496,7 +496,7 @@ const TokenId TokenPool::Store( const ScSingleRefData& rTr )
     return static_cast<const TokenId>(nElementCurrent); // return old value + 1!
 }
 
-const TokenId TokenPool::Store( const ScComplexRefData& rTr )
+TokenId TokenPool::Store( const ScComplexRefData& rTr )
 {
     if (!CheckElementOrGrow())
         return static_cast<const TokenId>(nElementCurrent+1);
@@ -525,7 +525,7 @@ const TokenId TokenPool::Store( const ScComplexRefData& rTr )
     return static_cast<const TokenId>(nElementCurrent); // return old value + 1!
 }
 
-const TokenId TokenPool::Store( const DefTokenId e, const OUString& r )
+TokenId TokenPool::Store( const DefTokenId e, const OUString& r )
 {
     if (!CheckElementOrGrow())
         return static_cast<const TokenId>(nElementCurrent+1);
@@ -551,7 +551,7 @@ const TokenId TokenPool::Store( const DefTokenId e, const OUString& r )
     return static_cast<const TokenId>(nElementCurrent); // return old value + 1!
 }
 
-const TokenId TokenPool::StoreNlf( const ScSingleRefData& rTr )
+TokenId TokenPool::StoreNlf( const ScSingleRefData& rTr )
 {
     if (!CheckElementOrGrow())
         return static_cast<const TokenId>(nElementCurrent+1);
@@ -576,7 +576,7 @@ const TokenId TokenPool::StoreNlf( const ScSingleRefData& rTr )
     return static_cast<const TokenId>(nElementCurrent);
 }
 
-const TokenId TokenPool::StoreMatrix()
+TokenId TokenPool::StoreMatrix()
 {
     if (!CheckElementOrGrow())
         return static_cast<const TokenId>(nElementCurrent+1);
@@ -598,7 +598,7 @@ const TokenId TokenPool::StoreMatrix()
     return static_cast<const TokenId>(nElementCurrent);
 }
 
-const TokenId TokenPool::StoreName( sal_uInt16 nIndex, sal_Int16 nSheet )
+TokenId TokenPool::StoreName( sal_uInt16 nIndex, sal_Int16 nSheet )
 {
     if (!CheckElementOrGrow())
         return static_cast<const TokenId>(nElementCurrent+1);
@@ -616,7 +616,7 @@ const TokenId TokenPool::StoreName( sal_uInt16 nIndex, sal_Int16 nSheet )
     return static_cast<const TokenId>(nElementCurrent);
 }
 
-const TokenId TokenPool::StoreExtName( sal_uInt16 nFileId, const OUString& rName )
+TokenId TokenPool::StoreExtName( sal_uInt16 nFileId, const OUString& rName )
 {
     if (!CheckElementOrGrow())
         return static_cast<const TokenId>(nElementCurrent+1);
@@ -634,7 +634,7 @@ const TokenId TokenPool::StoreExtName( sal_uInt16 nFileId, const OUString& rName
     return static_cast<const TokenId>(nElementCurrent);
 }
 
-const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef )
+TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef )
 {
     if (!CheckElementOrGrow())
         return static_cast<const TokenId>(nElementCurrent+1);
@@ -653,7 +653,7 @@ const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const OUString& rTabNa
     return static_cast<const TokenId>(nElementCurrent);
 }
 
-const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef )
+TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef )
 {
     if (!CheckElementOrGrow())
         return static_cast<const TokenId>(nElementCurrent+1);

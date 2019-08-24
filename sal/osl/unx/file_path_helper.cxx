@@ -28,14 +28,11 @@ const sal_Unicode FPH_CHAR_PATH_SEPARATOR = '/';
 const sal_Unicode FPH_CHAR_DOT            = '.';
 const sal_Unicode FPH_CHAR_COLON          = ':';
 
-static const OUString FPH_PATH_SEPARATOR()
-{ return OUString(FPH_CHAR_PATH_SEPARATOR); }
+static const OUStringLiteral FPH_PATH_SEPARATOR("/");
 
-static const OUString FPH_LOCAL_DIR_ENTRY()
-{ return OUString(FPH_CHAR_DOT); }
+static const OUStringLiteral FPH_LOCAL_DIR_ENTRY(".");
 
-static const OUString FPH_PARENT_DIR_ENTRY()
-{ return ".."; }
+static const OUStringLiteral FPH_PARENT_DIR_ENTRY("..");
 
 void osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
 {
@@ -68,11 +65,11 @@ void osl_systemPathEnsureSeparator(rtl_uString** ppustrPath)
 
         if ((lp > 1 && i != (lp - 1)) || ((lp < 2) && i < 0))
         {
-            path += FPH_PATH_SEPARATOR();
+            path += FPH_PATH_SEPARATOR;
             rtl_uString_assign(ppustrPath, path.pData);
         }
 
-        SAL_WARN_IF( !path.endsWith(FPH_PATH_SEPARATOR()),
+        SAL_WARN_IF( !path.endsWith(FPH_PATH_SEPARATOR),
                      "sal.osl",
                      "osl_systemPathEnsureSeparator: Post condition failed");
     }
@@ -147,8 +144,8 @@ bool osl_systemPathIsLocalOrParentDirectoryEntry(
 
     osl_systemPathGetFileNameOrLastDirectoryPart(pustrPath, &dirent.pData);
 
-    return (dirent == FPH_LOCAL_DIR_ENTRY() ||
-            dirent == FPH_PARENT_DIR_ENTRY());
+    return (dirent == FPH_LOCAL_DIR_ENTRY ||
+            dirent == FPH_PARENT_DIR_ENTRY);
 }
 
 /** Simple iterator for a path list separated by the specified character

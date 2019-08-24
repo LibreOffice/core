@@ -130,8 +130,8 @@ private:
     Reference< XDocumentHandler > m_xDocumentHandler;
     Reference< XFastTokenHandler > m_xTokenHandler;
     rtl::Reference< NamespaceHandler > m_aNamespaceHandler;
-    const OUString getNamespacePrefixFromToken( sal_Int32 nToken );
-    const OUString getNameFromToken( sal_Int32 nToken );
+    OUString getNamespacePrefixFromToken( sal_Int32 nToken );
+    OUString getNameFromToken( sal_Int32 nToken );
 
     static const OUString aDefaultNamespace;
     static const OUString aNamespaceSeparator;
@@ -161,7 +161,7 @@ public:
 const OUString CallbackDocumentHandler::aDefaultNamespace = OUString("");
 const OUString CallbackDocumentHandler::aNamespaceSeparator = OUString(":");
 
-const OUString CallbackDocumentHandler::getNamespacePrefixFromToken( sal_Int32 nToken )
+OUString CallbackDocumentHandler::getNamespacePrefixFromToken( sal_Int32 nToken )
 {
     if ( ( nToken & 0xffff0000 ) != 0 )
     {
@@ -173,7 +173,7 @@ const OUString CallbackDocumentHandler::getNamespacePrefixFromToken( sal_Int32 n
         return OUString();
 }
 
-const OUString CallbackDocumentHandler::getNameFromToken( sal_Int32 nToken )
+OUString CallbackDocumentHandler::getNameFromToken( sal_Int32 nToken )
 {
     Sequence< sal_Int8 > aSeq = m_xTokenHandler->getUTF8Identifier( nToken & 0xffff );
     return OUString( reinterpret_cast< const char* >(

@@ -597,7 +597,7 @@ bool ScTabViewShell::UseSubTotal(ScRangeList* pRangeList)
     return bSubTotal;
 }
 
-const OUString ScTabViewShell::DoAutoSum(bool& rRangeFinder, bool& rSubTotal, const OpCode eCode)
+OUString ScTabViewShell::DoAutoSum(bool& rRangeFinder, bool& rSubTotal, const OpCode eCode)
 {
     OUString aFormula;
     const ScMarkData& rMark = GetViewData().GetMarkData();
