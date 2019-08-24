@@ -699,10 +699,10 @@ private:
 
 public:
 
-    void                        DrawPixel( const Point& rPt );
-    void                        DrawPixel( const Point& rPt, const Color& rColor );
+    void                        DrawPixel(Point const& rPt);
+    void                        DrawPixel(Point const& rPt, const Color& rColor);
 
-    Color                       GetPixel( const Point& rPt ) const;
+    Color                       GetPixel(Point const& rPt) const;
     ///@}
 
 
