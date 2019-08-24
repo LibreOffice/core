@@ -3664,7 +3664,7 @@ void Content::cancelCommandExecution(
 }
 
 
-const OUString
+OUString
 Content::getBaseURI( const std::unique_ptr< DAVResourceAccess > & rResAccess )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );

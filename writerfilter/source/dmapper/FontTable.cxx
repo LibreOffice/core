@@ -217,7 +217,7 @@ void FontTable::lcl_endShape( )
 {
 }
 
-const FontEntry::Pointer_t FontTable::getFontEntry(sal_uInt32 nIndex)
+FontEntry::Pointer_t FontTable::getFontEntry(sal_uInt32 nIndex)
 {
     return (m_pImpl->aFontEntries.size() > nIndex)
         ?   m_pImpl->aFontEntries[nIndex]

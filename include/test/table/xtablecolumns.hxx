@@ -47,7 +47,7 @@ protected:
 private:
     css::uno::Reference<css::sheet::XSpreadsheet> m_xSheet;
 
-    static const OUString getCellText(const css::uno::Reference<css::table::XCell>& r_xCell);
+    static OUString getCellText(const css::uno::Reference<css::table::XCell>& r_xCell);
 };
 
 } // namespace apitest

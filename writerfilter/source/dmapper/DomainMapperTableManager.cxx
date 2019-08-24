@@ -400,12 +400,12 @@ DomainMapperTableManager::IntVectorPtr const & DomainMapperTableManager::getCurr
     return m_aCellWidths.back( );
 }
 
-const uno::Sequence<beans::PropertyValue> DomainMapperTableManager::getCurrentTablePosition( )
+uno::Sequence<beans::PropertyValue> DomainMapperTableManager::getCurrentTablePosition( )
 {
     if ( !m_aTablePositions.empty( ) && m_aTablePositions.back() )
         return m_aTablePositions.back( )->getTablePosition();
     else
-        return uno::Sequence< beans::PropertyValue >( 0 );
+        return uno::Sequence< beans::PropertyValue >();
 }
 
 TablePositionHandler* DomainMapperTableManager::getCurrentTableRealPosition()

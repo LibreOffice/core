@@ -41,7 +41,7 @@ public:
     ThemeTable();
     virtual ~ThemeTable() override;
 
-    const OUString getFontNameForTheme(const Id id) const;
+    OUString getFontNameForTheme(const Id id) const;
     static OUString getStringForTheme(const Id id);
     void setThemeFontLangProperties(const css::uno::Sequence<css::beans::PropertyValue>& aPropSeq);
 

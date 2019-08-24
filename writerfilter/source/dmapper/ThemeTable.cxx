@@ -187,7 +187,7 @@ OUString ThemeTable::getStringForTheme(const Id id)
     }
     return OUString();
 }
-const OUString ThemeTable::getFontNameForTheme(const Id id) const
+OUString ThemeTable::getFontNameForTheme(const Id id) const
 {
     std::map<sal_uInt32, OUString> tmpThemeFontMap;
     switch (id)
