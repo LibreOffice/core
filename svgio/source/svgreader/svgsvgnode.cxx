@@ -726,7 +726,7 @@ namespace svgio
             rTarget.push_back(xHidden);
         }
 
-        const basegfx::B2DRange SvgSvgNode::getCurrentViewPort() const
+        basegfx::B2DRange SvgSvgNode::getCurrentViewPort() const
         {
             if(getViewBox())
             {

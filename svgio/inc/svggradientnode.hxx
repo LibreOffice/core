@@ -77,25 +77,25 @@ namespace svgio
             void collectGradientEntries(drawinglayer::primitive2d::SvgGradientEntryVector& aVector) const;
 
             /// x1 content
-            const SvgNumber getX1() const;
+            SvgNumber getX1() const;
 
             /// y1 content
-            const SvgNumber getY1() const;
+            SvgNumber getY1() const;
 
             /// x2 content
-            const SvgNumber getX2() const;
+            SvgNumber getX2() const;
 
             /// y2 content
-            const SvgNumber getY2() const;
+            SvgNumber getY2() const;
 
             /// Cx content
-            const SvgNumber getCx() const;
+            SvgNumber getCx() const;
 
             /// Cy content
-            const SvgNumber getCy() const;
+            SvgNumber getCy() const;
 
             /// R content
-            const SvgNumber getR() const;
+            SvgNumber getR() const;
 
             /// Fx content
             const SvgNumber* getFx() const;

@@ -580,7 +580,7 @@ namespace svgio
             mbDecomposing = false;
         }
 
-        const basegfx::B2DRange SvgNode::getCurrentViewPort() const
+        basegfx::B2DRange SvgNode::getCurrentViewPort() const
         {
             if(getParent())
             {
