@@ -20,9 +20,9 @@
 
 #include <tools/urlobj.hxx>
 #include <tools/fract.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/window.hxx>
 #include <o3tl/numeric.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/imap.hxx>

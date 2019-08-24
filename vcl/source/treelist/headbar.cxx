@@ -29,7 +29,6 @@
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
 
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
 class ImplHeadItem

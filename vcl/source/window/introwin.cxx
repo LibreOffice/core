@@ -18,11 +18,9 @@
  */
 
 #include <vcl/wrkwin.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/introwin.hxx>
 
 #include <svdata.hxx>
-#include <salframe.hxx>
 
 void IntroWindow::ImplInitIntroWindowData()
 {

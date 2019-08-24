@@ -50,3 +50,9 @@ blacklist:
     vcl/source/gdi/salgdilayout.cxx:
     # Needed on WIN32
     - desktop/exithelper.h
+    vcl/source/window/dialog.cxx:
+    # comphelper::ScopeGuard is actually used
+    - comphelper/scopeguard.hxx
+    vcl/source/window/event.cxx:
+    # comphelper::ScopeGuard is actually used
+    - comphelper/scopeguard.hxx

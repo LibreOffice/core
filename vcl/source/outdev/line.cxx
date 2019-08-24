@@ -25,11 +25,8 @@
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/window.hxx>
 
 #include <salgdi.hxx>
-
-#include <outdata.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

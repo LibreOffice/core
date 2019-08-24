@@ -19,8 +19,8 @@
 
 #include <cassert>
 
+#include <osl/diagnose.h>
 #include <tools/line.hxx>
-#include <tools/stream.hxx>
 #include <tools/helpers.hxx>
 
 #include <vcl/hatch.hxx>
@@ -28,9 +28,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/window.hxx>
 
-#include "../gdi/pdfwriter_impl.hxx"
+#include <salgdi.hxx>
 
 #include <memory>
 

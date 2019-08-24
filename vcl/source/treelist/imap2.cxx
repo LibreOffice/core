@@ -21,10 +21,9 @@
 #include <comphelper/string.hxx>
 #include <string.h>
 #include <rtl/strbuf.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/wrkwin.hxx>
-#include <sot/formats.hxx>
 
 #include <svl/urihelper.hxx>
 #include <vcl/imap.hxx>

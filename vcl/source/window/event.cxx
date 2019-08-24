@@ -28,10 +28,6 @@
 #include <svdata.hxx>
 #include <salframe.hxx>
 #include <config_features.h>
-#include <com/sun/star/awt/MouseEvent.hpp>
-#include <com/sun/star/awt/KeyModifier.hpp>
-#include <com/sun/star/awt/MouseButton.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <comphelper/scopeguard.hxx>
 
 namespace vcl {

@@ -20,15 +20,9 @@
 #include <vcl/accel.hxx>
 #include <vcl/event.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
-#include <vcl/tabctrl.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/settings.hxx>
-
-#include <svdata.hxx>
-
-#include <com/sun/star/accessibility/XAccessible.hpp>
 
 void TabPage::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {

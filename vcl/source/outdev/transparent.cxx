@@ -22,7 +22,6 @@
 #include <sal/types.h>
 #include <tools/helpers.hxx>
 
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <memory>
 
 #include <vcl/bitmapaccess.hxx>
@@ -31,7 +30,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/window.hxx>
 
 #include <outdata.hxx>
 #include <salgdi.hxx>

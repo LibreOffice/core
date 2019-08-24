@@ -19,20 +19,14 @@
 
 #include <string.h>
 
-#include <tools/debug.hxx>
 #include <sal/log.hxx>
 
 #include <vcl/event.hxx>
 #include <vcl/wall.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/decoview.hxx>
-#include <vcl/image.hxx>
 #include <vcl/help.hxx>
 #include <vcl/splitwin.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/ptrstyle.hxx>
-
-#include <vcl/vclenum.hxx>
 
 #include <svdata.hxx>
 #include <strings.hrc>

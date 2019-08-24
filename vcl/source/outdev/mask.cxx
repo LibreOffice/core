@@ -23,11 +23,9 @@
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/window.hxx>
 
 #include <salgdi.hxx>
 #include <salbmp.hxx>
-#include <outdata.hxx>
 
 void OutputDevice::DrawMask( const Point& rDestPt,
                              const Bitmap& rBitmap, const Color& rMaskColor )

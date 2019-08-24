@@ -21,13 +21,8 @@
 
 #include <osl/mutex.hxx>
 #include <sot/exchange.hxx>
-#include <sot/storage.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
-#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
@@ -35,8 +30,6 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <svl/urlbmk.hxx>
-#include <vcl/inetimg.hxx>
-#include <vcl/imap.hxx>
 #include <vcl/transfer.hxx>
 
 

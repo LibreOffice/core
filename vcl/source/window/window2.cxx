@@ -20,17 +20,13 @@
 #include <limits.h>
 
 #include <o3tl/float_int_conversion.hxx>
-#include <tools/poly.hxx>
 #include <sal/log.hxx>
 
-#include <vcl/bitmap.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/metric.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/dockwin.hxx>
@@ -38,10 +34,7 @@
 #include <vcl/builder.hxx>
 
 #include <window.h>
-#include <fontinstance.hxx>
-#include <outdev.h>
 #include <svdata.hxx>
-#include <salbmp.hxx>
 #include <salgdi.hxx>
 #include <salframe.hxx>
 #include <scrwnd.hxx>

@@ -20,15 +20,12 @@
 #ifndef INCLUDED_VCL_NOTEBOOKBARADDONSMERGER_HXX
 #define INCLUDED_VCL_NOTEBOOKBARADDONSMERGER_HXX
 
-#include <vcl/dllapi.h>
 #include <vcl/window.hxx>
-#include <vcl/vclptr.hxx>
 #include <vcl/image.hxx>
 #include <vcl/menu.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/Sequence.h>
-#include <memory>
 #include <vector>
 
 class PopupMenu;

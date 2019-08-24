@@ -23,6 +23,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
+#include <vcl/vcllayout.hxx>
 #include <vcl/status.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
@@ -32,8 +33,6 @@
 #endif
 #include <svdata.hxx>
 #include <window.h>
-
-#include <sallayout.hxx>
 
 #define STATUSBAR_OFFSET_X      STATUSBAR_OFFSET
 #define STATUSBAR_OFFSET_Y      2

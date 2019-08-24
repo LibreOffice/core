@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
@@ -30,16 +29,11 @@
 #include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>
-#include <vcl/syschild.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/gradient.hxx>
-#include <vcl/button.hxx>
 #include <vcl/taskpanelist.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/toolkit/unowrap.hxx>
-#include <vcl/gdimtf.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
@@ -49,7 +43,6 @@
 #include <vcl/transfer.hxx>
 
 #include <vcl/uitest/uiobject.hxx>
-#include <vcl/uitest/uitest.hxx>
 
 #include <salframe.hxx>
 #include <salobj.hxx>
@@ -61,21 +54,19 @@
 #include <outdev.h>
 #include <brdwin.hxx>
 #include <helpwin.hxx>
-#include <dndlistenercontainer.hxx>
 
-#include <com/sun/star/awt/XDisplayConnection.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
+#include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
+#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
-#include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <tools/debug.hxx>
 
 #include <cassert>
-#include <set>
 #include <typeinfo>
 
 #ifdef _WIN32 // see #140456#

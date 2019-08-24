@@ -28,7 +28,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/accel.hxx>
-#include <vcl/i18nhelp.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>

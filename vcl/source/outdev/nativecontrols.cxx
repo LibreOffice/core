@@ -23,7 +23,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <sal/log.hxx>
-#include <osl/diagnose.h>
 
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/pdfextoutdevdata.hxx>

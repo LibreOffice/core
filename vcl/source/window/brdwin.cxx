@@ -28,13 +28,8 @@
 #include <vcl/syswin.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/gradient.hxx>
-#include <vcl/image.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/help.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/metric.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/ptrstyle.hxx>

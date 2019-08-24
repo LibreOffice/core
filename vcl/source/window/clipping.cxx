@@ -20,7 +20,6 @@
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
 
-#include <sal/types.h>
 #include <tools/debug.hxx>
 
 #include <salobj.hxx>

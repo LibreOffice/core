@@ -17,25 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/syswin.hxx>
 #include <vcl/window.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <sal/log.hxx>
 
-// declare system types in sysdata.hxx
-#include <vcl/sysdata.hxx>
-
 #include <salframe.hxx>
-#include <salobj.hxx>
-#include <salgdi.hxx>
 #include <svdata.hxx>
 #include <window.h>
 #include <brdwin.hxx>
-#include <helpwin.hxx>
 
 #include <com/sun/star/awt/XTopWindow.hpp>
-
-#include <set>
-#include <typeinfo>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

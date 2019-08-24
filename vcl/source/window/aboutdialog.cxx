@@ -7,38 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_features.h>
-#include <osl/process.h>
-#include <sal/log.hxx>
-#include <osl/diagnose.h>
-#include <rtl/character.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <aboutdialog.hxx>
-
-#include <tools/stream.hxx>
-#include <rtl/bootstrap.hxx>
-#include <unotools/configmgr.hxx>
-#include <unotools/bootstrap.hxx>
-#include <com/sun/star/uno/Any.h>
-#include <vcl/graph.hxx>
-#include <vcl/graphicfilter.hxx>
-#include <i18nlangtag/languagetag.hxx>
-
-#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <com/sun/star/system/SystemShellExecute.hpp>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/anytostring.hxx>
-#include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/bootstrap.hxx>
-#include <basegfx/numeric/ftools.hxx>
-#include <com/sun/star/geometry/RealRectangle2D.hpp>
-
-#include <config_buildid.h>
-#include <rtl/ustrbuf.hxx>
-#include <vcl/bitmap.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

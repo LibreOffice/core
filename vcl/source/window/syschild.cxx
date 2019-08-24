@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_java.h>
-
-#include <rtl/process.h>
-#include <rtl/ref.hxx>
-
 #include <vcl/window.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
@@ -29,16 +24,8 @@
 
 #include <window.h>
 #include <salinst.hxx>
-#include <salframe.hxx>
 #include <salobj.hxx>
 #include <svdata.hxx>
-
-#if HAVE_FEATURE_JAVA
-#include <jni.h>
-#include <jvmaccess/virtualmachine.hxx>
-#include <com/sun/star/java/JavaVirtualMachine.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 
 using namespace ::com::sun::star;
 

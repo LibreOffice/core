@@ -23,18 +23,10 @@
 #include <tools/debug.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/window.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/print.hxx>
 #include <vcl/outdev.hxx>
 
 #include <salgdi.hxx>
-#include <salframe.hxx>
-#include <salvd.hxx>
-#include <salprn.hxx>
-#include <window.h>
-
-#include <numeric>
 
 void OutputDevice::SaveBackground(VirtualDevice& rSaveDevice,
                                   const Point& rPos, const Size& rSize, const Size& rBackgroundSize) const

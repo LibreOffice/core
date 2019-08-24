@@ -20,10 +20,10 @@
 #include <config_features.h>
 #include <vcl/gdimtf.hxx>
 #include <vcl/window.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/syswin.hxx>
 
 #include <sal/types.h>
 #include <sal/log.hxx>

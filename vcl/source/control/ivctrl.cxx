@@ -23,7 +23,6 @@
 #include <vcl/accessiblefactory.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/controllayout.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/tabctrl.hxx>

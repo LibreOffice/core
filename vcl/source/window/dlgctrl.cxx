@@ -19,6 +19,7 @@
 
 
 #include <svdata.hxx>
+#include <window.h>
 
 #include "dlgctrl.hxx"
 #include <vcl/event.hxx>
@@ -29,7 +30,6 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/button.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/unohelp.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 

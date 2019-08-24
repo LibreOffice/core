@@ -18,10 +18,8 @@
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <config_folders.h>
-#include <vcl/bitmapaccess.hxx>
 #include <memory>
 #include <vcl/pngwrite.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/util/XFlushable.hpp>
@@ -29,12 +27,8 @@
 
 #include <stdarg.h>
 #include <vector>
-#include <deque>
 #include <unordered_map>
 
-#include <svdata.hxx>
-#include <salgdi.hxx>
-#include <salinst.hxx>
 #include <opengl/zone.hxx>
 #include <opengl/watchdog.hxx>
 #include <osl/conditn.hxx>

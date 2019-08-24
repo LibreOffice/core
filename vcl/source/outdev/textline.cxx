@@ -25,18 +25,14 @@
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/window.hxx>
 
 #include <tools/helpers.hxx>
 
 #include <salgdi.hxx>
-#include <impfont.hxx>
-#include <outdata.hxx>
 #include <impglyphitem.hxx>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/WaveLine.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
 
 #define UNDERLINE_LAST      LINESTYLE_BOLDWAVE
 #define STRIKEOUT_LAST      STRIKEOUT_X

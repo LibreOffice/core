@@ -29,7 +29,6 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/mnemonic.hxx>
-#include <vcl/controllayout.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 

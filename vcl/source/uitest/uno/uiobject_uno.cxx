@@ -10,13 +10,11 @@
 #include <memory>
 #include "uiobject_uno.hxx"
 #include <utility>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/scheduler.hxx>
 
 #include <set>
-#include <chrono>
-#include <thread>
 
 UIObjectUnoObj::UIObjectUnoObj(std::unique_ptr<UIObject> pObj):
     UIObjectBase(m_aMutex),

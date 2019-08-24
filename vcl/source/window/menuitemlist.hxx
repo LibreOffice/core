@@ -18,13 +18,11 @@
  */
 
 #include <vcl/vclenum.hxx>
+#include <vcl/glyphitem.hxx>
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/vcllayout.hxx>
-#include <fontinstance.hxx>
-
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <salmenu.hxx>
 
 #include <memory>
 #include <vector>

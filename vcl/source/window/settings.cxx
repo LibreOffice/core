@@ -23,19 +23,15 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 
-#include <unotools/fontcfg.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/confignode.hxx>
 
 #include <comphelper/processfactory.hxx>
 
 #include <salframe.hxx>
-#include <svdata.hxx>
 #include <brdwin.hxx>
-#include <PhysicalFontCollection.hxx>
 
 #include <window.h>
 

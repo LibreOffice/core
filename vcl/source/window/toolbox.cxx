@@ -24,7 +24,6 @@
 #include <vcl/accel.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/layout.hxx>
@@ -41,15 +40,12 @@
 #include <svdata.hxx>
 #include <window.h>
 #include <toolbox.h>
-#include <salframe.hxx>
 #include <spin.hxx>
 #if defined(_WIN32)
 #include <svsys.h>
 #endif
 
 #include <cstdlib>
-#include <limits>
-#include <string.h>
 #include <vector>
 #include <math.h>
 

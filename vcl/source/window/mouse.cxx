@@ -26,9 +26,7 @@
 
 #include <vcl/ITiledRenderable.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/salgtype.hxx>
 #include <vcl/window.hxx>
-#include <vcl/floatwin.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/event.hxx>
@@ -36,7 +34,6 @@
 #include <sal/types.h>
 
 #include <window.h>
-#include <outdev.h>
 #include <svdata.hxx>
 #include <salobj.hxx>
 #include <salgdi.hxx>

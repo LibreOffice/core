@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_SOURCE_WINDOW_DLGCTRL_HXX
 #define INCLUDED_VCL_SOURCE_WINDOW_DLGCTRL_HXX
 
-#include <window.h>
+#include <vcl/window.hxx>
 
 vcl::Window* ImplGetChildWindow( vcl::Window* pParent, sal_uInt16 n, sal_uInt16& nIndex, bool bTestEnable );
 

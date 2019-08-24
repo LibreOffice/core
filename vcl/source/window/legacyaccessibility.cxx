@@ -18,20 +18,9 @@
  */
 
 
-#include <svdata.hxx>
+#include <window.h>
 
 #include "dlgctrl.hxx"
-#include <vcl/event.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/tabctrl.hxx>
-#include <vcl/button.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/unohelp.hxx>
-
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
 
 using namespace ::com::sun::star;
 
