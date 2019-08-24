@@ -6981,7 +6981,7 @@ void SwLayoutFrame::RefreshExtraData( const SwRect &rRect ) const
  *
  * @return Color
  */
-const Color SwPageFrame::GetDrawBackgrdColor() const
+Color SwPageFrame::GetDrawBackgrdColor() const
 {
     const SvxBrushItem* pBrushItem;
     const Color* pDummyColor;

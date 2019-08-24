@@ -93,7 +93,7 @@ public:
 
     void UpdateTextNodeContent( const OUString& rNewContent );
 
-    const OUString GetFieldContent() const;
+    OUString GetFieldContent() const;
     void UpdateFieldContent();
 
 private:

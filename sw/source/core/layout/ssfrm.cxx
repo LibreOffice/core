@@ -578,7 +578,7 @@ SwLayoutFrame::~SwLayoutFrame()
 |*  to be displayed. This region could be larger than the printarea (getFramePrintArea())
 |*  of the upper, it includes e.g. often the margin of the page.
 |*/
-const SwRect SwFrame::GetPaintArea() const
+SwRect SwFrame::GetPaintArea() const
 {
     // NEW TABLES
     // Cell frames may not leave their upper:
@@ -672,7 +672,7 @@ const SwRect SwFrame::GetPaintArea() const
 |*  The unionframe is the framearea (getFrameArea()) of a frame expanded by the
 |*  printarea, if there's a negative margin at the left or right side.
 |*/
-const SwRect SwFrame::UnionFrame( bool bBorder ) const
+SwRect SwFrame::UnionFrame( bool bBorder ) const
 {
     bool bVert = IsVertical();
     SwRectFn fnRect = bVert ? ( IsVertLR() ? (IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;

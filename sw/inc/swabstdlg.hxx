@@ -146,7 +146,7 @@ protected:
 public:
     virtual DBManagerOptions GetMergeType() = 0;
     virtual const OUString& GetSaveFilter() const = 0;
-    virtual const css::uno::Sequence< css::uno::Any > GetSelection() const = 0;
+    virtual css::uno::Sequence< css::uno::Any > GetSelection() const = 0;
     virtual css::uno::Reference< css::sdbc::XResultSet> GetResultSet() const = 0;
     virtual bool IsSaveSingleDoc() const = 0;
     virtual bool IsGenerateFromDataBase() const = 0;

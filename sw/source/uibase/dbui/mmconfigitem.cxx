@@ -160,12 +160,11 @@ public:
     SwMailMergeConfigItem_Impl();
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
-    const           Sequence< OUString>
-                        GetAddressBlocks(bool bConvertToConfig = false) const;
+    Sequence< OUString> GetAddressBlocks(bool bConvertToConfig = false) const;
     void                SetAddressBlocks(
                                 const Sequence< OUString>& rBlocks,
                                 bool bConvertFromConfig = false);
-    const uno::Sequence< OUString>
+    uno::Sequence< OUString>
                         GetGreetings(SwMailMergeConfigItem::Gender eType,
                                         bool bConvertToConfig = false) const;
     void                SetGreetings(SwMailMergeConfigItem::Gender eType,
@@ -580,7 +579,7 @@ void  SwMailMergeConfigItem_Impl::ImplCommit()
     m_bUserSettingWereOverwritten = false;
 }
 
-const Sequence< OUString> SwMailMergeConfigItem_Impl::GetAddressBlocks(
+Sequence< OUString> SwMailMergeConfigItem_Impl::GetAddressBlocks(
         bool bConvertToConfig) const
 {
     Sequence< OUString> aRet(m_aAddressBlocks.size());
@@ -610,7 +609,7 @@ void SwMailMergeConfigItem_Impl::SetAddressBlocks(
     SetModified();
 }
 
-const Sequence< OUString>   SwMailMergeConfigItem_Impl::GetGreetings(
+Sequence< OUString>   SwMailMergeConfigItem_Impl::GetGreetings(
         SwMailMergeConfigItem::Gender eType, bool bConvertToConfig) const
 {
     const std::vector< OUString>& rGreetings =
@@ -732,7 +731,7 @@ void SwMailMergeConfigItem::SetAddressBlocks(
     m_pImpl->SetAddressBlocks(rBlocks);
 }
 
-const Sequence< OUString> SwMailMergeConfigItem::GetAddressBlocks() const
+Sequence< OUString> SwMailMergeConfigItem::GetAddressBlocks() const
 {
     return m_pImpl->GetAddressBlocks();
 }
@@ -1085,7 +1084,7 @@ void     SwMailMergeConfigItem::SetGreetingLine(bool bSet, bool bInEMail)
     }
 }
 
-const Sequence< OUString>   SwMailMergeConfigItem::GetGreetings(
+Sequence< OUString>   SwMailMergeConfigItem::GetGreetings(
         Gender eType ) const
 {
     return m_pImpl->GetGreetings(eType);

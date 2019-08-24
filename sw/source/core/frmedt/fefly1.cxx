@@ -1453,7 +1453,7 @@ OUString SwFEShell::GetFlyName() const
     return OUString();
 }
 
-const uno::Reference < embed::XEmbeddedObject > SwFEShell::GetOleRef() const
+uno::Reference < embed::XEmbeddedObject > SwFEShell::GetOleRef() const
 {
     uno::Reference < embed::XEmbeddedObject > xObj;
     SwFlyFrame * pFly = GetSelectedFlyFrame();

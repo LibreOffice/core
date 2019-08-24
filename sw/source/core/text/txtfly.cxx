@@ -158,7 +158,7 @@ void ClrContourCache()
 }
 
 // #i68520#
-const SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
+SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
                                             const SwRect &rLine,
                                             const SwTextFrame* pFrame,
                                             const long nXPos,
@@ -206,7 +206,7 @@ const SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj
     return aRet;
 }
 
-const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
+SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
     const SdrObject* pObj, const SwTextFrame* pFrame, const SwRect &rLine,
     const long nXPos, const bool bRight )
 {

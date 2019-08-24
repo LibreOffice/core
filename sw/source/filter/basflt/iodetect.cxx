@@ -52,7 +52,7 @@ SwIoDetect aFilterDetect[] =
     SwIoDetect( FILTER_DOCX )
 };
 
-const OUString SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
+OUString SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
 {
     // for StorageFilters also set the SubStorageName
     const OUString& rUserData = rFltr.GetUserData();

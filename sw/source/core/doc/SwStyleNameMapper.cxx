@@ -356,7 +356,7 @@ lcl_NewProgNameArray(const SwTableEntry *pTable, sal_uInt8 const nCount)
     return pProgNameArray;
 }
 
-OUString
+const OUString &
 lcl_GetSpecialExtraName(const OUString& rExtraName, const bool bIsUIName )
 {
     const std::vector<OUString>& rExtraArr = bIsUIName
@@ -875,13 +875,13 @@ const std::vector<OUString>& SwStyleNameMapper::GetCellStyleProgNameArray()
     return *s_pCellStyleProgNameArray;
 }
 
-const OUString
+const OUString &
 SwStyleNameMapper::GetSpecialExtraProgName(const OUString& rExtraUIName)
 {
     return lcl_GetSpecialExtraName( rExtraUIName, true );
 }
 
-const OUString
+const OUString &
 SwStyleNameMapper::GetSpecialExtraUIName(const OUString& rExtraProgName)
 {
     return lcl_GetSpecialExtraName( rExtraProgName, false );

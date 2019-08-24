@@ -166,9 +166,9 @@ public:
     // RES_POOLCOLL_LABEL_TABLE, RES_POOLCOLL_LABEL_FRAME
     // forth and back.
     // Non-matching names remain unchanged.
-    SW_DLLPUBLIC static const OUString GetSpecialExtraProgName(
+    SW_DLLPUBLIC static const OUString & GetSpecialExtraProgName(
                     const OUString& rExtraUIName);
-    static const OUString GetSpecialExtraUIName(const OUString& rExtraProgName);
+    static const OUString & GetSpecialExtraUIName(const OUString& rExtraProgName);
 
     static const std::vector<OUString>& GetTextUINameArray();
     static const std::vector<OUString>& GetListsUINameArray();

@@ -203,8 +203,8 @@ public:
     const SwNode * getNextNode() const { return mpNextNode;}
 
     const Inners_t & getInners() const { return mInners;}
-    const WW8TableNodeInfoInner::Pointer_t getFirstInner() const;
-    const WW8TableNodeInfoInner::Pointer_t getInnerForDepth(sal_uInt32 nDepth) const;
+    WW8TableNodeInfoInner::Pointer_t getFirstInner() const;
+    WW8TableNodeInfoInner::Pointer_t getInnerForDepth(sal_uInt32 nDepth) const;
 
     sal_uInt32 getCell() const;
     sal_uInt32 getRow() const;

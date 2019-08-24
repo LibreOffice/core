@@ -2756,14 +2756,14 @@ const SwFrameFormat& SwFlyFrame::GetFrameFormat() const
     return *GetFormat();
 }
 
-const SwRect SwFlyFrame::GetObjRect() const
+SwRect SwFlyFrame::GetObjRect() const
 {
     return getFrameArea();
 }
 
 // #i70122#
 // for Writer fly frames the bounding rectangle equals the object rectangles
-const SwRect SwFlyFrame::GetObjBoundRect() const
+SwRect SwFlyFrame::GetObjBoundRect() const
 {
     return GetObjRect();
 }

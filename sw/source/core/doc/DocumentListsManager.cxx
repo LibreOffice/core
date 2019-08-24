@@ -180,7 +180,7 @@ DocumentListsManager::~DocumentListsManager()
 }
 
 
-const OUString DocumentListsManager::MakeListIdUnique( const OUString& aSuggestedUniqueListId )
+OUString DocumentListsManager::MakeListIdUnique( const OUString& aSuggestedUniqueListId )
 {
     long nHitCount = 0;
     OUString aTmpStr = aSuggestedUniqueListId;
@@ -193,7 +193,7 @@ const OUString DocumentListsManager::MakeListIdUnique( const OUString& aSuggeste
     return aTmpStr;
 }
 
-const OUString DocumentListsManager::CreateUniqueListId()
+OUString DocumentListsManager::CreateUniqueListId()
 {
     static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
     if (bHack)

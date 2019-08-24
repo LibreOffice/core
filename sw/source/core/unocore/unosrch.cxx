@@ -56,7 +56,7 @@ public:
     /// @throws lang::IllegalArgumentException
     /// @throws uno::RuntimeException
     void    SetProperties(const uno::Sequence< beans::PropertyValue >& aSearchAttribs);
-    const uno::Sequence< beans::PropertyValue > GetProperties() const;
+    uno::Sequence< beans::PropertyValue > GetProperties() const;
 
     void    FillItemSet(SfxItemSet& rSet, bool bIsValueSearch) const;
     bool    HasAttributes() const;
@@ -89,7 +89,7 @@ void SwSearchProperties_Impl::SetProperties(const uno::Sequence< beans::Property
     }
 }
 
-const uno::Sequence< beans::PropertyValue > SwSearchProperties_Impl::GetProperties() const
+uno::Sequence< beans::PropertyValue > SwSearchProperties_Impl::GetProperties() const
 {
     sal_uInt32 nPropCount = 0;
     for( size_t i = 0; i < aPropertyEntries.size(); i++)

@@ -231,7 +231,7 @@ public:
 
         @return reference to an instance of class Color
     */
-    const Color GetDrawBackgrdColor() const;
+    Color GetDrawBackgrdColor() const;
 
     /** paint margin area of a page
 
@@ -311,7 +311,7 @@ public:
 
     virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const override;
 
-    const SwRect PrtWithoutHeaderAndFooter() const;
+    SwRect PrtWithoutHeaderAndFooter() const;
 
     // in case this is an empty page, this function returns the 'reference' page
     const SwPageFrame& GetFormatPage() const;

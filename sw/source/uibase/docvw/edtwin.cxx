@@ -243,7 +243,7 @@ public:
             bTopRightHandle = (pHdl->GetKind() == SdrHdlKind::Anchor_TR);
         }
     }
-    const Point GetPosForHitTest( const OutputDevice& rOut )
+    Point GetPosForHitTest( const OutputDevice& rOut )
     {
         Point aHitTestPos( pHdl->GetPos() );
         aHitTestPos = rOut.LogicToPixel( aHitTestPos );

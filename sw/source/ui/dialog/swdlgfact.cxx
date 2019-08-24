@@ -636,7 +636,7 @@ const OUString& AbstractMailMergeDlg_Impl::GetSaveFilter() const
     return pDlg->GetSaveFilter();
 }
 
-const css::uno::Sequence< css::uno::Any > AbstractMailMergeDlg_Impl::GetSelection() const
+css::uno::Sequence< css::uno::Any > AbstractMailMergeDlg_Impl::GetSelection() const
 {
     return pDlg->GetSelection();
 }

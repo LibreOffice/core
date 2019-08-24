@@ -70,7 +70,7 @@ bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt )
            SvxCaseMap::SmallCaps == rFnt.GetCaseMap();
 }
 
-static const Color GetUnderColor( const SwFont *pFont )
+static Color GetUnderColor( const SwFont *pFont )
 {
     return pFont->GetUnderColor() == COL_AUTO ?
         pFont->GetColor() : pFont->GetUnderColor();

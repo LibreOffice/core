@@ -279,7 +279,7 @@ public:
 
     sal_uInt16 GetPageCount() const;
 
-    const Size GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const;
+    Size GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const;
 
     SwDoc *GetDoc()  const { return mxDoc.get(); }  //Never 0.
 
