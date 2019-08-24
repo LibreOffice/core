@@ -125,17 +125,17 @@ const SCROW SCROW_REPEAT_NONE = SCROW_MAX;
 
 [[nodiscard]] inline SCCOL SanitizeCol( SCCOL nCol )
 {
-    return nCol < 0 ? 0 : std::min(nCol, MAXCOL);
+    return nCol < 0 ? 0 : (nCol > MAXCOL ? MAXCOL : nCol);
 }
 
 [[nodiscard]] inline SCROW SanitizeRow( SCROW nRow )
 {
-    return nRow < 0 ? 0 : std::min(nRow, MAXROW);
+    return nRow < 0 ? 0 : (nRow > MAXROW ? MAXROW : nRow);
 }
 
 [[nodiscard]] inline SCTAB SanitizeTab( SCTAB nTab )
 {
-    return nTab < 0 ? 0 : std::min(nTab, MAXTAB);
+    return nTab < 0 ? 0 : (nTab > MAXTAB ? MAXTAB : nTab);
 }
 
 // The result of ConvertRef() is a bit group of the following:
