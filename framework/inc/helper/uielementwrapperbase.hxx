@@ -97,7 +97,7 @@ class UIElementWrapperBase : private cppu::BaseMutex,
         virtual  ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper() override;
         virtual  css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
 
-        static  const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
+        static css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
         ::cppu::OMultiTypeInterfaceContainerHelper             m_aListenerContainer;   /// container for ALL Listener
         OUString                                               m_aResourceURL;

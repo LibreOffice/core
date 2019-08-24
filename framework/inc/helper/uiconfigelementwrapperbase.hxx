@@ -119,7 +119,7 @@ class UIConfigElementWrapperBase : private cppu::BaseMutex,
 
         virtual  void impl_fillNewData();
 
-        static  const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
+        static css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
         sal_Int16                                                                               m_nType;
         bool                                                                                    m_bPersistent : 1,

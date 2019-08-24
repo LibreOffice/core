@@ -223,8 +223,8 @@ class AddonsOptions_Impl : public ConfigItem
         const Sequence< Sequence< PropertyValue > >&    GetAddonsMenuBarPart () const { return m_aCachedMenuBarPartProperties;}
         const Sequence< Sequence< PropertyValue > >&    GetAddonsToolBarPart ( sal_uInt32 nIndex ) const;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsNotebookBarPart ( sal_uInt32 nIndex ) const;
-        const OUString                           GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
-        const OUString                           GetAddonsNotebookBarResourceName( sal_uInt32 nIndex ) const;
+        OUString                                        GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
+        OUString                                        GetAddonsNotebookBarResourceName( sal_uInt32 nIndex ) const;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsHelpMenu    () const { return m_aCachedHelpMenuProperties;}
         Image                                           GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale );
         const MergeMenuInstructionContainer&            GetMergeMenuInstructions() const { return m_aCachedMergeMenuInsContainer;}
@@ -524,7 +524,7 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsNotebo
 
 //  public method
 
-const OUString AddonsOptions_Impl::GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const
+OUString AddonsOptions_Impl::GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const
 {
     if ( nIndex < m_aCachedToolBarPartResourceNames.size() )
         return m_aCachedToolBarPartResourceNames[nIndex];
@@ -534,7 +534,7 @@ const OUString AddonsOptions_Impl::GetAddonsToolbarResourceName( sal_uInt32 nInd
 
 //  public method
 
-const OUString AddonsOptions_Impl::GetAddonsNotebookBarResourceName( sal_uInt32 nIndex ) const
+OUString AddonsOptions_Impl::GetAddonsNotebookBarResourceName( sal_uInt32 nIndex ) const
 {
     if ( nIndex < m_aCachedNotebookBarPartResourceNames.size() )
         return m_aCachedNotebookBarPartResourceNames[nIndex];
@@ -1869,7 +1869,7 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsNotebookBar
 
 //  public method
 
-const OUString AddonsOptions::GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const
+OUString AddonsOptions::GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->GetAddonsToolbarResourceName( nIndex );
@@ -1877,7 +1877,7 @@ const OUString AddonsOptions::GetAddonsToolbarResourceName( sal_uInt32 nIndex ) 
 
 //  public method
 
-const OUString AddonsOptions::GetAddonsNotebookBarResourceName( sal_uInt32 nIndex ) const
+OUString AddonsOptions::GetAddonsNotebookBarResourceName( sal_uInt32 nIndex ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->GetAddonsNotebookBarResourceName( nIndex );

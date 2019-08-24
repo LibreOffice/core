@@ -31,7 +31,6 @@
 const int UIELEMENT_PROPHANDLE_RESOURCEURL  = 1;
 const int UIELEMENT_PROPHANDLE_TYPE         = 2;
 const int UIELEMENT_PROPHANDLE_FRAME        = 3;
-const int UIELEMENT_PROPCOUNT               = 3;
 const char UIELEMENT_PROPNAME_RESOURCEURL[] = "ResourceURL";
 const char UIELEMENT_PROPNAME_TYPE[] = "Type";
 const char UIELEMENT_PROPNAME_FRAME[] = "Frame";
@@ -185,7 +184,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL UIElementWrapperBas
     return xInfo;
 }
 
-const css::uno::Sequence< css::beans::Property > UIElementWrapperBase::impl_getStaticPropertyDescriptor()
+css::uno::Sequence< css::beans::Property > UIElementWrapperBase::impl_getStaticPropertyDescriptor()
 {
     // Create a property array to initialize sequence!
     // Table of all predefined properties of this class. It's used from OPropertySetHelper-class!
@@ -194,16 +193,12 @@ const css::uno::Sequence< css::beans::Property > UIElementWrapperBase::impl_getS
     // ATTENTION:
     //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
 
-    const css::beans::Property pProperties[] =
+    return
     {
         css::beans::Property( UIELEMENT_PROPNAME_FRAME, UIELEMENT_PROPHANDLE_FRAME          , cppu::UnoType<XFrame>::get(), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
         css::beans::Property( UIELEMENT_PROPNAME_RESOURCEURL, UIELEMENT_PROPHANDLE_RESOURCEURL    , cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
         css::beans::Property( UIELEMENT_PROPNAME_TYPE, UIELEMENT_PROPHANDLE_TYPE           , cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY )
     };
-    // Use it to initialize sequence!
-    const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, UIELEMENT_PROPCOUNT );
-    // Return "PropertyDescriptor"
-    return lPropertyDescriptor;
 }
 
 }

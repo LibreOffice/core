@@ -39,7 +39,6 @@ using namespace com::sun::star::container;
 const char WRONG_TYPE_EXCEPTION[] = "Type must be css::uno::Sequence< css::beans::PropertyValue >";
 
 const int PROPHANDLE_UINAME     = 1;
-const int PROPCOUNT             = 1;
 const char PROPNAME_UINAME[]    = "UIName";
 
 namespace framework
@@ -306,7 +305,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL RootItemContainer::
     return xInfo;
 }
 
-const css::uno::Sequence< css::beans::Property > RootItemContainer::impl_getStaticPropertyDescriptor()
+css::uno::Sequence< css::beans::Property > RootItemContainer::impl_getStaticPropertyDescriptor()
 {
     // Create a property array to initialize sequence!
     // Table of all predefined properties of this class. It's used from OPropertySetHelper-class!
@@ -315,16 +314,12 @@ const css::uno::Sequence< css::beans::Property > RootItemContainer::impl_getStat
     // ATTENTION:
     //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
 
-    const css::beans::Property pProperties[] =
+    return
     {
         css::beans::Property( PROPNAME_UINAME, PROPHANDLE_UINAME ,
                               cppu::UnoType<OUString>::get(),
                               css::beans::PropertyAttribute::TRANSIENT )
     };
-    // Use it to initialize sequence!
-    const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, PROPCOUNT );
-    // Return "PropertyDescriptor"
-    return lPropertyDescriptor;
 }
 
 } // namespace framework

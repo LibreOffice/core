@@ -84,7 +84,7 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
     if ( aProtocol.empty() )
         return;
 
-    ::comphelper::SequenceAsHashMap::const_iterator pIt = aProtocol.find(JobConst::ANSWER_DEACTIVATE_JOB());
+    ::comphelper::SequenceAsHashMap::const_iterator pIt = aProtocol.find(JobConst::ANSWER_DEACTIVATE_JOB);
     if (pIt != aProtocol.end())
     {
         /**
@@ -98,7 +98,7 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
             m_eParts |= E_DEACTIVATE;
     }
 
-    pIt = aProtocol.find(JobConst::ANSWER_SAVE_ARGUMENTS());
+    pIt = aProtocol.find(JobConst::ANSWER_SAVE_ARGUMENTS);
     if (pIt != aProtocol.end())
     {
         css::uno::Sequence<css::beans::NamedValue> aTmp;
@@ -108,7 +108,7 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
             m_eParts |= E_ARGUMENTS;
     }
 
-    pIt = aProtocol.find(JobConst::ANSWER_SEND_DISPATCHRESULT());
+    pIt = aProtocol.find(JobConst::ANSWER_SEND_DISPATCHRESULT);
     if (pIt != aProtocol.end())
     {
         if (pIt->second >>= m_aDispatchResult)

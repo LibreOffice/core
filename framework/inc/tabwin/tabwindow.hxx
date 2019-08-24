@@ -124,7 +124,7 @@ class TabWindow final : public css::lang::XTypeProvider             ,
         virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper() override;
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
 
-        static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
+        static css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
         enum Notification
         {
