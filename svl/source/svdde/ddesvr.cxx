@@ -451,7 +451,7 @@ DdeService::~DdeService()
     }
 }
 
-const OUString DdeService::GetName() const
+OUString DdeService::GetName() const
 {
     return pName->toOUString();
 }
