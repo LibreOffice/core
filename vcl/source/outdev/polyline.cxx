@@ -26,6 +26,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/drawables/B2DPolyLineDrawable.hxx>
+#include <vcl/drawables/PolyHairlineDrawable.hxx>
 
 #include <salgdi.hxx>
 
@@ -56,10 +57,12 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
     if ( mbInitLineColor )
         InitLineColor();
 
+    LineInfo aHairlineInfo;
+    aHairlineInfo.SetLineJoin(basegfx::B2DLineJoin::NONE);
+    aHairlineInfo.SetLineCap(css::drawing::LineCap_BUTT);
+
     // use b2dpolygon drawing if possible
-    if(DrawPolyLineDirect(
-        basegfx::B2DHomMatrix(),
-        rPoly.getB2DPolygon()))
+    if (Draw(vcl::PolyHairlineDrawable(basegfx::B2DHomMatrix(), rPoly.getB2DPolygon(), aHairlineInfo)))
     {
         return;
     }
@@ -171,17 +174,17 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
     if( mbInitLineColor )
         InitLineColor();
 
-    // use b2dpolygon drawing if possible
-    if(DrawPolyLineDirect(
-        basegfx::B2DHomMatrix(),
-        rB2DPolygon,
-        fLineWidth,
-        0.0,
-        eLineJoin,
-        eLineCap,
-        fMiterMinimumAngle))
     {
-        return;
+        LineInfo aHairlineInfo;
+        aHairlineInfo.SetWidth(fLineWidth);
+        aHairlineInfo.SetLineJoin(eLineJoin);
+        aHairlineInfo.SetLineCap(eLineCap);
+
+        // use b2dpolygon drawing if possible
+        if (Draw(vcl::PolyHairlineDrawable(basegfx::B2DHomMatrix(), rB2DPolygon, aHairlineInfo, 0.0, fMiterMinimumAngle)))
+        {
+            return;
+        }
     }
 
     // #i101491#
@@ -219,24 +222,16 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         SetFillColor(aOldFillColor);
         InitFillColor();
 
-        const bool bTryAA((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
-                          mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
-                          RasterOp::OverPaint == GetRasterOp() &&
-                          IsLineColor());
-
         // when AA it is necessary to also paint the filled polygon's outline
         // to avoid optical gaps
         for(auto const& rPolygon : aAreaPolyPolygon)
         {
-            (void)DrawPolyLineDirect(
-                basegfx::B2DHomMatrix(),
-                rPolygon,
-                0.0,
-                0.0,
-                basegfx::B2DLineJoin::NONE,
-                css::drawing::LineCap_BUTT,
-                basegfx::deg2rad(15.0) /*default, not used*/,
-                bTryAA);
+            LineInfo aHairlineInfo;
+            aHairlineInfo.SetWidth(fLineWidth);
+            aHairlineInfo.SetLineJoin(basegfx::B2DLineJoin::NONE);
+            aHairlineInfo.SetLineCap(css::drawing::LineCap_BUTT);
+
+            Draw(vcl::PolyHairlineDrawable(basegfx::B2DHomMatrix(), rPolygon, aHairlineInfo));
         }
     }
     else
@@ -297,82 +292,6 @@ void OutputDevice::drawPolyLine(const tools::Polygon& rPoly, const LineInfo& rLi
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPolyLine( rPoly, rLineInfo );
-}
-
-bool OutputDevice::DrawPolyLineDirect(
-    const basegfx::B2DHomMatrix& rObjectTransform,
-    const basegfx::B2DPolygon& rB2DPolygon,
-    double fLineWidth,
-    double fTransparency,
-    basegfx::B2DLineJoin eLineJoin,
-    css::drawing::LineCap eLineCap,
-    double fMiterMinimumAngle,
-    bool bBypassAACheck)
-{
-    assert(!is_double_buffered_window());
-
-    // AW: Do NOT paint empty PolyPolygons
-    if(!rB2DPolygon.count())
-        return true;
-
-    // we need a graphics
-    if( !mpGraphics && !AcquireGraphics() )
-        return false;
-
-    if( mbInitClipRegion )
-        InitClipRegion();
-
-    if( mbOutputClipped )
-        return true;
-
-    if( mbInitLineColor )
-        InitLineColor();
-
-    const bool bTryAA( bBypassAACheck ||
-                      ((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
-                      mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
-                      RasterOp::OverPaint == GetRasterOp() &&
-                      IsLineColor()));
-
-    if(bTryAA)
-    {
-        // combine rObjectTransform with WorldToDevice
-        const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation() * rObjectTransform);
-        const bool bLineWidthZero(basegfx::fTools::equalZero(fLineWidth));
-        const basegfx::B2DVector aB2DLineWidth(bLineWidthZero ? 1.0 : fLineWidth, bLineWidthZero ? 1.0 : fLineWidth);
-        const bool bPixelSnapHairline((mnAntialiasing & AntialiasingFlags::PixelSnapHairline) && rB2DPolygon.count() < 1000);
-
-        // draw the polyline
-        bool bDrawSuccess = mpGraphics->DrawPolyLine(
-            aTransform,
-            rB2DPolygon,
-            fTransparency,
-            aB2DLineWidth,
-            eLineJoin,
-            eLineCap,
-            fMiterMinimumAngle,
-            bPixelSnapHairline,
-            this);
-
-        if( bDrawSuccess )
-        {
-            // worked, add metafile action (if recorded) and return true
-            if( mpMetaFile )
-            {
-                LineInfo aLineInfo;
-                if( fLineWidth != 0.0 )
-                    aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
-                // Transport known information, might be needed
-                aLineInfo.SetLineJoin(eLineJoin);
-                aLineInfo.SetLineCap(eLineCap);
-                // MiterMinimumAngle does not exist yet in LineInfo
-                const tools::Polygon aToolsPolygon( rB2DPolygon );
-                mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
-            }
-            return true;
-        }
-    }
-    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

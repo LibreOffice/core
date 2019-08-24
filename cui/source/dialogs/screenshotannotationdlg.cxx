@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/drawables/PolyHairlineDrawable.hxx>
+
 #include <screenshotannotationdlg.hxx>
 
 #include <strings.hrc>
@@ -401,18 +403,14 @@ void ScreenshotAnnotationDlg_Impl::PaintScreenShotEntry(
 
         mxVirtualBufferDevice->SetLineColor(rColor);
 
+        LineInfo aHairlineInfo;
+        aHairlineInfo.SetWidth(fLineWidth);
+
         // try to use transparency
-        if (!mxVirtualBufferDevice->DrawPolyLineDirect(
-            basegfx::B2DHomMatrix(),
-            aPolygon,
-            fLineWidth,
-            fTransparency,
-            basegfx::B2DLineJoin::Round))
+        if (!mxVirtualBufferDevice->Draw(vcl::PolyHairlineDrawable(basegfx::B2DHomMatrix(), aPolygon, aHairlineInfo, fTransparency)))
         {
             // no transparency, draw without
-            mxVirtualBufferDevice->DrawPolyLine(
-                aPolygon,
-                fLineWidth);
+            mxVirtualBufferDevice->DrawPolyLine(aPolygon, fLineWidth);
         }
     }
 }

@@ -788,18 +788,6 @@ public:
     void                        DrawPolyLine( const tools::Polygon& rPoly,
                                               const LineInfo& rLineInfo );
 
-    // #i101491#
-    // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool.
-    bool                        DrawPolyLineDirect(
-                                    const basegfx::B2DHomMatrix& rObjectTransform,
-                                    const basegfx::B2DPolygon& rB2DPolygon,
-                                    double fLineWidth = 0.0,
-                                    double fTransparency = 0.0,
-                                    basegfx::B2DLineJoin eLineJoin = basegfx::B2DLineJoin::NONE,
-                                    css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT,
-                                    double fMiterMinimumAngle = basegfx::deg2rad(15.0),
-                                    bool bBypassAACheck = false);
-
 private:
 
     // #i101491#

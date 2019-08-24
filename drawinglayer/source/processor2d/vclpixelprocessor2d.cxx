@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/drawables/PolyHairlineDrawable.hxx>
+
 #include "vclpixelprocessor2d.hxx"
 #include <vcl/outdev.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
@@ -140,12 +142,12 @@ namespace drawinglayer
             mpOutputDevice->SetLineColor(Color(aLineColor));
             //aLocalPolygon.transform(maCurrentTransformation);
 
+            LineInfo aHairlineInfo;
+            aHairlineInfo.SetLineJoin(basegfx::B2DLineJoin::NONE);
+            aHairlineInfo.SetLineCap(css::drawing::LineCap_BUTT);
+
             // try drawing; if it did not work, use standard fallback
-            return mpOutputDevice->DrawPolyLineDirect(
-                maCurrentTransformation,
-                rLocalPolygon,
-                0.0,
-                fTransparency);
+            return mpOutputDevice->Draw(vcl::PolyHairlineDrawable(maCurrentTransformation, rLocalPolygon, aHairlineInfo, fTransparency));
         }
 
         bool VclPixelProcessor2D::tryDrawPolygonStrokePrimitive2DDirect(const drawinglayer::primitive2d::PolygonStrokePrimitive2D& rSource, double fTransparency)
@@ -227,15 +229,17 @@ namespace drawinglayer
                 {
                     bHasPoints = true;
 
-                    if(mpOutputDevice->DrawPolyLineDirect(
+                    LineInfo aHairlineInfo;
+                    aHairlineInfo.SetWidth(fLineWidth);
+                    aHairlineInfo.SetLineJoin(rSource.getLineAttribute().getLineJoin());
+                    aHairlineInfo.SetLineCap(rSource.getLineAttribute().getLineCap());
+
+                    if (mpOutputDevice->Draw(vcl::PolyHairlineDrawable(
                         maCurrentTransformation,
                         aSingle,
-                        fLineWidth,
+                        aHairlineInfo,
                         fTransparency,
-                        rSource.getLineAttribute().getLineJoin(),
-                        rSource.getLineAttribute().getLineCap(),
-                        rSource.getLineAttribute().getMiterMinimumAngle()
-                        /* false bBypassAACheck, default*/))
+                        rSource.getLineAttribute().getMiterMinimumAngle())))
                     {
                         bTryWorked = true;
                     }
