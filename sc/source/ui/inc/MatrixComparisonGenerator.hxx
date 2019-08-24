@@ -30,8 +30,8 @@ protected:
     virtual const char* GetUndoNameId() override;
     virtual ScRange ApplyOutput(ScDocShell* pDocShell) override;
 
-    virtual const OUString getLabel() = 0;
-    virtual const OUString getTemplate() = 0;
+    virtual OUString getLabel() = 0;
+    virtual OUString getTemplate() = 0;
 };
 
 #endif

@@ -26,12 +26,12 @@ void ScCorrelationDialog::Close()
     DoClose(ScCorrelationDialogWrapper::GetChildWindowId());
 }
 
-const OUString ScCorrelationDialog::getLabel()
+OUString ScCorrelationDialog::getLabel()
 {
     return ScResId(STR_CORRELATION_LABEL);
 }
 
-const OUString ScCorrelationDialog::getTemplate()
+OUString ScCorrelationDialog::getTemplate()
 {
     return "=CORREL(%VAR1%; %VAR2%)";
 }

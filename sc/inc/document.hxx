@@ -958,10 +958,10 @@ public:
     SC_DLLPUBLIC void                                       SetGrammar( formula::FormulaGrammar::Grammar eGram );
     SC_DLLPUBLIC ScLinkMode                                 GetLinkMode( SCTAB nTab ) const;
     bool                                                    IsLinked( SCTAB nTab ) const;
-    SC_DLLPUBLIC const OUString                             GetLinkDoc( SCTAB nTab ) const;
-    const OUString                                          GetLinkFlt( SCTAB nTab ) const;
-    const OUString                                          GetLinkOpt( SCTAB nTab ) const;
-    SC_DLLPUBLIC const OUString                             GetLinkTab( SCTAB nTab ) const;
+    SC_DLLPUBLIC OUString                                   GetLinkDoc( SCTAB nTab ) const;
+    OUString                                                GetLinkFlt( SCTAB nTab ) const;
+    OUString                                                GetLinkOpt( SCTAB nTab ) const;
+    SC_DLLPUBLIC OUString                                   GetLinkTab( SCTAB nTab ) const;
     sal_uLong                                               GetLinkRefreshDelay( SCTAB nTab ) const;
     void                                                    SetLink( SCTAB nTab, ScLinkMode nMode, const OUString& rDoc,
                                                                      const OUString& rFilter, const OUString& rOptions,
@@ -1958,8 +1958,8 @@ public:
     void GetUnprotectedCells( ScRangeList& rRange, SCTAB nTab ) const;
 
     // PageStyle:
-    SC_DLLPUBLIC const OUString  GetPageStyle( SCTAB nTab ) const;
-    SC_DLLPUBLIC void            SetPageStyle( SCTAB nTab, const OUString& rName );
+    SC_DLLPUBLIC OUString GetPageStyle( SCTAB nTab ) const;
+    SC_DLLPUBLIC void     SetPageStyle( SCTAB nTab, const OUString& rName );
     Size            GetPageSize( SCTAB nTab ) const;
     void            SetPageSize( SCTAB nTab, const Size& rSize );
     void            SetRepeatArea( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow );

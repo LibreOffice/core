@@ -6184,7 +6184,7 @@ void ScDocument::SetPageStyle( SCTAB nTab, const OUString& rName )
         maTabs[nTab]->SetPageStyle( rName );
 }
 
-const OUString ScDocument::GetPageStyle( SCTAB nTab ) const
+OUString ScDocument::GetPageStyle( SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetPageStyle();

@@ -124,7 +124,7 @@ public:
     ScEditEngineDefaulter*  GetEditEngine() { GetTextForwarder(); return pEditEngine.get(); }
 
     ScHeaderFooterPart      GetPart() const         { return nPart; }
-    const css::uno::Reference<css::sheet::XHeaderFooterContent> GetContentObj() const { return xContentObj; }
+    css::uno::Reference<css::sheet::XHeaderFooterContent> GetContentObj() const { return xContentObj; }
 
     const EditTextObject* GetTextObject() const { return mpTextObj.get(); }
 };

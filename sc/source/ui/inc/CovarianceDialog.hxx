@@ -23,8 +23,8 @@ public:
     virtual void Close() override;
 
 protected:
-    virtual const OUString getLabel() override;
-    virtual const OUString getTemplate() override;
+    virtual OUString getLabel() override;
+    virtual OUString getTemplate() override;
     virtual const char* GetUndoNameId() override;
 };
 
