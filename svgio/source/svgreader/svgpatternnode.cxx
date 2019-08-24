@@ -280,7 +280,7 @@ namespace svgio
             return aPrimitives;
         }
 
-        const basegfx::B2DRange SvgPatternNode::getCurrentViewPort() const
+        basegfx::B2DRange SvgPatternNode::getCurrentViewPort() const
         {
             if(getViewBox())
             {

@@ -184,8 +184,8 @@ namespace svgio
 
         SVGToken StrToSVGToken(const OUString& rStr, bool bCaseIndependent);
 
-        const OUString getStrTitle();
-        const OUString getStrDesc();
+        OUString getStrTitle();
+        OUString getStrDesc();
     } // end of namespace svgreader
 } // end of namespace svgio
 

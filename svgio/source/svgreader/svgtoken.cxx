@@ -353,12 +353,12 @@ namespace svgio
             }
         }
 
-        const OUString getStrTitle()
+        OUString getStrTitle()
         {
             return aSVGStrTitle;
         }
 
-        const OUString getStrDesc()
+        OUString getStrDesc()
         {
             return aSVGStrDesc;
         }

@@ -160,7 +160,7 @@ namespace svgio
             const std::vector< std::unique_ptr<SvgNode> > & getChildren() const { return maChildren; }
 
             /// InfoProvider support for %, em and ex values
-            virtual const basegfx::B2DRange getCurrentViewPort() const override;
+            virtual basegfx::B2DRange getCurrentViewPort() const override;
             virtual double getCurrentFontSizeInherited() const override;
             virtual double getCurrentXHeightInherited() const override;
 

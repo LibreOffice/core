@@ -305,7 +305,7 @@ namespace svgio
             }
         }
 
-        const SvgNumber SvgGradientNode::getX1() const
+        SvgNumber SvgGradientNode::getX1() const
         {
             if(maX1.isSet())
             {
@@ -326,7 +326,7 @@ namespace svgio
             return SvgNumber(0.0, Unit_percent);
         }
 
-        const SvgNumber SvgGradientNode::getY1() const
+        SvgNumber SvgGradientNode::getY1() const
         {
             if(maY1.isSet())
             {
@@ -347,7 +347,7 @@ namespace svgio
             return SvgNumber(0.0, Unit_percent);
         }
 
-        const SvgNumber SvgGradientNode::getX2() const
+        SvgNumber SvgGradientNode::getX2() const
         {
             if(maX2.isSet())
             {
@@ -368,7 +368,7 @@ namespace svgio
             return SvgNumber(100.0, Unit_percent);
         }
 
-        const SvgNumber SvgGradientNode::getY2() const
+        SvgNumber SvgGradientNode::getY2() const
         {
             if(maY2.isSet())
             {
@@ -389,7 +389,7 @@ namespace svgio
             return SvgNumber(0.0, Unit_percent);
         }
 
-        const SvgNumber SvgGradientNode::getCx() const
+        SvgNumber SvgGradientNode::getCx() const
         {
             if(maCx.isSet())
             {
@@ -410,7 +410,7 @@ namespace svgio
             return SvgNumber(50.0, Unit_percent);
         }
 
-        const SvgNumber SvgGradientNode::getCy() const
+        SvgNumber SvgGradientNode::getCy() const
         {
             if(maCy.isSet())
             {
@@ -431,7 +431,7 @@ namespace svgio
             return SvgNumber(50.0, Unit_percent);
         }
 
-        const SvgNumber SvgGradientNode::getR() const
+        SvgNumber SvgGradientNode::getR() const
         {
             if(maR.isSet())
             {
