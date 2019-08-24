@@ -53,7 +53,8 @@ protected:
     std::unique_ptr<weld::ComboBox> m_xNeutralCB;
 
     SwGreetingsHandler(SwMailMergeConfigItem& rConfigItem, weld::Builder& rBuilder)
-        : m_rConfigItem(rConfigItem)
+        : m_pWizard(nullptr)
+        , m_rConfigItem(rConfigItem)
         , m_bIsTabPage(false)
         , m_xGreetingLineCB(rBuilder.weld_check_button("greeting"))
         , m_xPersonalizedCB(rBuilder.weld_check_button("personalized"))
