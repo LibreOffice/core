@@ -17,16 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
-#include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/drawables/PixelDrawable.hxx>
 
 #include <salgdi.hxx>
 
-Color OutputDevice::GetPixel(const Point& rPoint) const
+Color OutputDevice::GetPixel(Point const& rPoint) const
 {
     Color aColor;
 
@@ -51,66 +47,8 @@ Color OutputDevice::GetPixel(const Point& rPoint) const
     return aColor;
 }
 
-void OutputDevice::DrawPixel( const Point& rPt )
-{
-    assert(!is_double_buffered_window());
+void OutputDevice::DrawPixel(Point const& rPt) { Draw(vcl::PixelDrawable(rPt)); }
 
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaPointAction( rPt ) );
-
-    if ( !IsDeviceOutputNecessary() || !mbLineColor || ImplIsRecordLayout() )
-        return;
-
-    Point aPt = ImplLogicToDevicePixel( rPt );
-
-    if ( !mpGraphics && !AcquireGraphics() )
-        return;
-
-    if ( mbInitClipRegion )
-        InitClipRegion();
-
-    if ( mbOutputClipped )
-        return;
-
-    if ( mbInitLineColor )
-        InitLineColor();
-
-    mpGraphics->DrawPixel( aPt.X(), aPt.Y(), this );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawPixel( rPt );
-}
-
-void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
-{
-    assert(!is_double_buffered_window());
-
-    Color aColor = ImplDrawModeToColor( rColor );
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaPixelAction( rPt, aColor ) );
-
-    if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
-        return;
-
-    Point aPt = ImplLogicToDevicePixel( rPt );
-
-    if ( !mpGraphics && !AcquireGraphics() )
-        return;
-
-    if ( mbInitClipRegion )
-        InitClipRegion();
-
-    if ( mbOutputClipped )
-        return;
-
-    mpGraphics->DrawPixel( aPt.X(), aPt.Y(), aColor, this );
-
-    if (mpAlphaVDev)
-    {
-        Color aAlphaColor(rColor.GetTransparency(), rColor.GetTransparency(), rColor.GetTransparency());
-        mpAlphaVDev->DrawPixel(rPt, aAlphaColor);
-    }
-}
+void OutputDevice::DrawPixel(Point const& rPt, Color const& rColor) { Draw(vcl::PixelDrawable(rPt, rColor)); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
