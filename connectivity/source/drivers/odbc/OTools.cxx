@@ -145,7 +145,7 @@ void OTools::getValue(  OConnection const * _pConnection,
             memset(_pValue, 0, _nSize);
 #ifdef OSL_BIGENDIAN
             // This is skewed in favour of integer types
-            _pValue += _nSize - properSize;
+            _pValue = static_cast<char*>(_pValue) + _nSize - properSize;
 #endif
         }
     }
