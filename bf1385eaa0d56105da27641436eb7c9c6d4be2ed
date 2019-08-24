@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_b1efeeae",
+        "filename": "wizards/source/tools/Debug.xba",
+        "patchSetId": 74
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-08-24T12:36:13Z",
+      "side": 1,
+      "message": "if you need to change basic code like this, then we probably can\u0027t deploy this patch :-(\n\nthe last time I \"improved\" the error checking in basic I broke several plugins. At best you could issue at some kind of optional warning",
+      "revId": "bf1385eaa0d56105da27641436eb7c9c6d4be2ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
