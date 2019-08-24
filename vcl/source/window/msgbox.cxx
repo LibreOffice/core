@@ -20,18 +20,8 @@
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <svdata.hxx>
-#include <brdwin.hxx>
-#include <window.h>
 
-#include <vcl/textrectinfo.hxx>
-#include <vcl/metric.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/button.hxx>
-#include <vcl/mnemonic.hxx>
-#include <vcl/settings.hxx>
 
 static void ImplInitMsgBoxImageList()
 {

@@ -51,7 +51,6 @@
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 
 #include <svl/urlbmk.hxx>
 #include <vcl/inetimg.hxx>

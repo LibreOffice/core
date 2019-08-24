@@ -12,16 +12,13 @@
 #include <memory>
 #include <unordered_map>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <i18nutil/unicode.hxx>
 #include <osl/module.hxx>
-#include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/button.hxx>
 #include <vcl/calendar.hxx>
 #include <vcl/dialog.hxx>
@@ -63,7 +60,6 @@
 #include <strings.hrc>
 #include <aboutdialog.hxx>
 #include <treeglue.hxx>
-#include <tools/svlibrary.h>
 #include <tools/diagnose_ex.h>
 
 #ifdef DISABLE_DYNLOADING

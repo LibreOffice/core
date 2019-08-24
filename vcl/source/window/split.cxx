@@ -24,7 +24,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
-#include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/ptrstyle.hxx>

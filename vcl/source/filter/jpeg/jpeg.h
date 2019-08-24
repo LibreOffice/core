@@ -23,9 +23,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <sal/types.h>
 #include <basegfx/vector/b2dsize.hxx>
-#include <vcl/bitmap.hxx>
 #include <bitmapwriteaccess.hxx>
 
 #include <jpeglib.h>

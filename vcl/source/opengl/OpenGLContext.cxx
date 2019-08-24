@@ -15,9 +15,6 @@
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 
-#include <vcl/bitmapaccess.hxx>
-#include <vcl/graph.hxx>
-
 #include <osl/thread.hxx>
 #include <sal/log.hxx>
 

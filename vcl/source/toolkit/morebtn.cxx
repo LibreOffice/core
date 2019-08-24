@@ -19,8 +19,6 @@
 
 #include <vcl/toolkit/morebtn.hxx>
 
-#include <vector>
-
 struct ImplMoreButtonData
 {
     OUString                             maMoreText;

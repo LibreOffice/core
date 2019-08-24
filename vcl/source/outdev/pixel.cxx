@@ -19,17 +19,11 @@
 
 #include <cassert>
 
-#include <sal/types.h>
-#include <sal/log.hxx>
-
-#include <memory>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/window.hxx>
 
-#include <outdata.hxx>
 #include <salgdi.hxx>
 
 Color OutputDevice::GetPixel(const Point& rPoint) const

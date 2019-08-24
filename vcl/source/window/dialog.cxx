@@ -25,16 +25,12 @@
 #include <postmac.h>
 #endif
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/thePathSettings.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <comphelper/lok.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <osl/file.hxx>
-
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include <svdata.hxx>
 #include <window.h>
@@ -54,14 +50,9 @@
 #include <vcl/button.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/tabctrl.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/decoview.hxx>
-#include <vcl/toolkit/unowrap.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/logger.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/IDialogRenderable.hxx>
 #include <messagedialog.hxx>
 #include <salframe.hxx>

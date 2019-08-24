@@ -20,7 +20,6 @@
 #include "menuwindow.hxx"
 #include "menuitemlist.hxx"
 
-#include <salmenu.hxx>
 #include <vcl/help.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>

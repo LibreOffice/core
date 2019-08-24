@@ -20,7 +20,6 @@
 #include <vcl/edit.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/uitest/logger.hxx>
-#include <vcl/uitest/eventdescription.hxx>
 
 #include <comphelper/string.hxx>
 

@@ -24,8 +24,6 @@
 #include <unotools/localedatawrapper.hxx>
 
 #include <comphelper/lok.hxx>
-#include <vcl/i18nhelp.hxx>
-#include <vcl/unohelp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/event.hxx>
 #include <vcl/GestureEvent.hxx>
@@ -39,7 +37,6 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/lazydelete.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/ptrstyle.hxx>
 
@@ -51,7 +48,6 @@
 #include <window.h>
 #include <helpwin.hxx>
 #include <brdwin.hxx>
-#include <salgdi.hxx>
 #include <dndlistenercontainer.hxx>
 
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>

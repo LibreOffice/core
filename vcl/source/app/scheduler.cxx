@@ -25,7 +25,6 @@
 #include <typeinfo>
 
 #include <com/sun/star/uno/Exception.hpp>
-#include <cppuhelper/exc_hlp.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <svdata.hxx>

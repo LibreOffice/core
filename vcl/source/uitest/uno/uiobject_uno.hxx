@@ -12,11 +12,8 @@
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/test/XUIObject.hpp>
-#include <com/sun/star/beans/PropertyValues.hpp>
 
 #include <memory>
 #include <condition_variable>

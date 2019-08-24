@@ -19,12 +19,9 @@
 
 #include <memory>
 #include <vcl/treelistentry.hxx>
-#include <vcl/treelist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <tools/debug.hxx>
-
-#include <limits>
 
 void SvTreeListEntry::ClearChildren()
 {

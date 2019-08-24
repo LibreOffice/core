@@ -18,7 +18,6 @@
  */
 
 #include <tools/diagnose_ex.h>
-#include <tools/stream.hxx>
 #include <sal/log.hxx>
 
 #include <comphelper/lok.hxx>
@@ -28,22 +27,12 @@
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/button.hxx>
-#include <vcl/gradient.hxx>
-#include <vcl/i18nhelp.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/controllayout.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/dockingarea.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/IDialogRenderable.hxx>
-#include <impglyphitem.hxx>
 
 #include <salinst.hxx>
 #include <svdata.hxx>
@@ -59,14 +48,9 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <vcl/toolkit/unowrap.hxx>
 
-#include <vcl/unohelp.hxx>
 #include <vcl/configsettings.hxx>
-
-#include <vcl/lazydelete.hxx>
-#include <vcl/vcllayout.hxx>
 
 #include <map>
 #include <string_view>

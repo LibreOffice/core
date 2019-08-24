@@ -21,8 +21,6 @@
 #define INCLUDED_VCL_SOURCE_WINDOW_MENUWINDOW_HXX
 
 #include <sal/types.h>
-#include <tools/link.hxx>
-#include <tools/solar.h>
 #include <vcl/event.hxx>
 
 class HelpEvent;

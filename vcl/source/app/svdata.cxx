@@ -34,7 +34,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/uitest/logger.hxx>
-#include <salframe.hxx>
 #include <scrwnd.hxx>
 #include <helpwin.hxx>
 #include <vcl/dialog.hxx>

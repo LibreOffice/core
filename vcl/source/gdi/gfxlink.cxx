@@ -17,16 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/file.h>
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
-#include <unotools/tempfile.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <memory>
-#include <o3tl/make_shared.hxx>
 
 GfxLink::GfxLink()
     : meType(GfxLinkType::NONE)

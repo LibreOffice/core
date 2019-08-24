@@ -32,13 +32,11 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
-#include <vcl/window.hxx>
 #include <vcl/BitmapMonochromeFilter.hxx>
 
 #include <bmpfast.hxx>
 #include <salgdi.hxx>
 #include <salbmp.hxx>
-#include <image.h>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <memory>

@@ -26,7 +26,6 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/seleng.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svtaccessiblefactory.hxx>
 

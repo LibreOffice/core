@@ -30,7 +30,6 @@
 #include <vcl/treelistbox.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/svimpbox.hxx>
-#include <rtl/instance.hxx>
 #include <tools/wintypes.hxx>
 #include <bitmaps.hlst>
 #include <comphelper/processfactory.hxx>

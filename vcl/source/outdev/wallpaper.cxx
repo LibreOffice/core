@@ -23,9 +23,6 @@
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/window.hxx>
-
-#include <wall2.hxx>
 
 Color OutputDevice::GetBackgroundColor() const
 {

@@ -23,10 +23,8 @@
 #include <vcl/headbar.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
-#include <vcl/builderfactory.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <strings.hrc>

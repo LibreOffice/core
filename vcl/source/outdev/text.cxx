@@ -34,7 +34,6 @@
 #include <vcl/metric.hxx>
 #include <vcl/textrectinfo.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/controllayout.hxx>

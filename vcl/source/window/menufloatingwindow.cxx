@@ -23,12 +23,10 @@
 #include "bufferdevice.hxx"
 
 #include <sal/log.hxx>
-#include <salmenu.hxx>
 #include <salframe.hxx>
 #include <svdata.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/virdev.hxx>
 #include <window.h>
 
 MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, vcl::Window* pParent, WinBits nStyle ) :

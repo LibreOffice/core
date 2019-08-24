@@ -18,15 +18,14 @@
  */
 
 #include <osl/diagnose.h>
-#include <rtl/strbuf.hxx>
+#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 
 #include <tools/debug.hxx>
 #include <vcl/errinf.hxx>
-#include <vcl/window.hxx>
 
+#include <algorithm>
 #include <vector>
-#include <limits.h>
 
 class ErrorHandler;
 class TheErrorRegistry: public rtl::Static<ErrorRegistry, TheErrorRegistry> {};

@@ -22,7 +22,6 @@
 #include <o3tl/float_int_conversion.hxx>
 #include <tools/time.hxx>
 
-#include <strings.hrc>
 #include <bitmaps.hlst>
 #include <svdata.hxx>
 #include <scrwnd.hxx>

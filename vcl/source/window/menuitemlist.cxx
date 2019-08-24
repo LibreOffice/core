@@ -25,8 +25,8 @@
 #include <svdata.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vcllayout.hxx>
 #include <vcl/window.hxx>
-#include <impglyphitem.hxx>
 
 using namespace css;
 using namespace vcl;

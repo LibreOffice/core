@@ -26,30 +26,22 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/wall.hxx>
-#include <vcl/status.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/configsettings.hxx>
 #include <vcl/help.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
-#include <vcl/unohelp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/lstbox.hxx>
-#include <jobset.h>
 
 #include <unotools/localedatawrapper.hxx>
 
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/awt/Size.hpp>
 
 using namespace vcl;
 using namespace com::sun::star;
