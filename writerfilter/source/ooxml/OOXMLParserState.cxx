@@ -80,7 +80,7 @@ void OOXMLParserState::setForwardEvents(bool bForwardEvents)
 }
 
 
-const std::string OOXMLParserState::getHandle() const
+std::string OOXMLParserState::getHandle() const
 {
     return std::to_string(mnHandle);
 }

@@ -94,9 +94,9 @@ public:
     virtual ~StyleSheetTable() override;
 
     void ApplyStyleSheets( const FontTablePtr& rFontTable );
-    const StyleSheetEntryPtr FindStyleSheetByISTD(const OUString& sIndex);
-    const StyleSheetEntryPtr FindStyleSheetByConvertedStyleName(const OUString& rIndex);
-    const StyleSheetEntryPtr FindDefaultParaStyle();
+    StyleSheetEntryPtr FindStyleSheetByISTD(const OUString& sIndex);
+    StyleSheetEntryPtr FindStyleSheetByConvertedStyleName(const OUString& rIndex);
+    StyleSheetEntryPtr FindDefaultParaStyle();
 
     OUString ConvertStyleName( const OUString& rWWName, bool bExtendedSearch = false );
 

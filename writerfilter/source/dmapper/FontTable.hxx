@@ -51,7 +51,7 @@ class FontTable : public LoggedProperties, public LoggedTable
     virtual ~FontTable() override;
 
     sal_uInt32          size();
-    const FontEntry::Pointer_t  getFontEntry(sal_uInt32 nIndex);
+    FontEntry::Pointer_t  getFontEntry(sal_uInt32 nIndex);
 
  private:
     // Properties

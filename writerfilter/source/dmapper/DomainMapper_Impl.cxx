@@ -701,7 +701,7 @@ uno::Sequence< style::TabStop > DomainMapper_Impl::GetCurrentTabStopAndClear()
     return comphelper::containerToSequence(aRet);
 }
 
-const OUString DomainMapper_Impl::GetCurrentParaStyleName()
+OUString DomainMapper_Impl::GetCurrentParaStyleName()
 {
     // use saved currParaStyleName as a fallback, in case no particular para style name applied.
     OUString sName = m_sCurrentParaStyleName;
@@ -719,7 +719,7 @@ const OUString DomainMapper_Impl::GetCurrentParaStyleName()
     return sName;
 }
 
-const OUString DomainMapper_Impl::GetDefaultParaStyleName()
+OUString DomainMapper_Impl::GetDefaultParaStyleName()
 {
     // After import the default style won't change and is frequently requested: cache the LO style name.
     // TODO assert !InStyleSheetImport? This function really only makes sense once import is finished anyway.

@@ -344,10 +344,10 @@ public:
             const uno::Sequence< css::uno::Any > & i_rArguments) override;
 
     // XNamedGraph forwards ---------------------------------------------
-    const NamedGraphMap_t::iterator clearGraph_NoLock(
+    NamedGraphMap_t::iterator clearGraph_NoLock(
             const OUString & i_rGraphName,
             bool i_Internal = false );
-    const NamedGraphMap_t::iterator clearGraph_Lock(
+    NamedGraphMap_t::iterator clearGraph_Lock(
             const OUString & i_rGraphName,
             bool i_Internal);
     void addStatementGraph_NoLock(
@@ -1747,7 +1747,7 @@ void SAL_CALL librdf_Repository::initialize(
         m_pWorld.get(), m_pStorage.get()), safe_librdf_free_model);
 }
 
-const NamedGraphMap_t::iterator librdf_Repository::clearGraph_NoLock(
+NamedGraphMap_t::iterator librdf_Repository::clearGraph_NoLock(
         OUString const& i_rGraphName, bool i_Internal)
 //    throw (uno::RuntimeException, container::NoSuchElementException,
 //        rdf::RepositoryException)
@@ -1757,7 +1757,7 @@ const NamedGraphMap_t::iterator librdf_Repository::clearGraph_NoLock(
     return clearGraph_Lock(i_rGraphName, i_Internal);
 }
 
-const NamedGraphMap_t::iterator librdf_Repository::clearGraph_Lock(
+NamedGraphMap_t::iterator librdf_Repository::clearGraph_Lock(
         OUString const& i_rGraphName, bool i_Internal)
 {
     // internal: must be called with mutex locked!

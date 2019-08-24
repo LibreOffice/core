@@ -163,7 +163,7 @@ void XTableColumns::testRemoveByIndexWithOutOfBoundIndex()
     CPPUNIT_ASSERT_THROW(xTC->removeByIndex(xTC->getCount(), 1), uno::RuntimeException);
 }
 
-const OUString XTableColumns::getCellText(const uno::Reference<table::XCell>& r_xCell)
+OUString XTableColumns::getCellText(const uno::Reference<table::XCell>& r_xCell)
 {
     uno::Reference<text::XSimpleText> xST(r_xCell, uno::UNO_QUERY_THROW);
     return xST->getString();

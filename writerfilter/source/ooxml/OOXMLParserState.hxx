@@ -84,7 +84,7 @@ public:
     void setForwardEvents(bool bForwardEvents);
     bool isForwardEvents() const { return mbForwardEvents;}
 
-    const std::string getHandle() const;
+    std::string getHandle() const;
     void setHandle();
 
     void setDocument(OOXMLDocumentImpl* pDocument);

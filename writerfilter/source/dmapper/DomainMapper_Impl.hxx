@@ -708,8 +708,8 @@ public:
     css::uno::Sequence<css::style::TabStop> GetCurrentTabStopAndClear();
 
     void            SetCurrentParaStyleName(const OUString& sStringValue) {m_sCurrentParaStyleName = sStringValue;}
-    const OUString  GetCurrentParaStyleName();
-    const OUString  GetDefaultParaStyleName();
+    OUString  GetCurrentParaStyleName();
+    OUString  GetDefaultParaStyleName();
 
     css::uno::Any GetPropertyFromStyleSheet(PropertyIds eId);
     // get property first from the given context, or secondly from its stylesheet
