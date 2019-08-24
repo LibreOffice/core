@@ -31,6 +31,8 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_drawable, \
 	utl \
 ))
 
+$(eval $(call gb_Library_use_externals, boost_headers))
+
 $(eval $(call gb_CppunitTest_use_sdk_api,vcl_drawable))
 
 $(eval $(call gb_CppunitTest_use_ure,vcl_drawable))
