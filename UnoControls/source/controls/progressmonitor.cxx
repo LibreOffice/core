@@ -522,13 +522,13 @@ void SAL_CALL ProgressMonitor::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int3
 }
 
 //  impl but public method to register service
-const Sequence< OUString > ProgressMonitor::impl_getStaticSupportedServiceNames()
+Sequence< OUString > ProgressMonitor::impl_getStaticSupportedServiceNames()
 {
     return css::uno::Sequence<OUString>();
 }
 
 //  impl but public method to register service
-const OUString ProgressMonitor::impl_getStaticImplementationName()
+OUString ProgressMonitor::impl_getStaticImplementationName()
 {
     return "stardiv.UnoControls.ProgressMonitor";
 }

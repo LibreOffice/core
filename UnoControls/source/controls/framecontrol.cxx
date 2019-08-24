@@ -250,15 +250,14 @@ void SAL_CALL FrameControl::unadvise(   const   Type&                       aTyp
 
 //  impl but public method to register service
 
-const Sequence< OUString > FrameControl::impl_getStaticSupportedServiceNames()
+Sequence< OUString > FrameControl::impl_getStaticSupportedServiceNames()
 {
-    Sequence<OUString> seqServiceNames { "com.sun.star.frame.FrameControl" };
-    return seqServiceNames;
+    return { "com.sun.star.frame.FrameControl" };
 }
 
 //  impl but public method to register service
 
-const OUString FrameControl::impl_getStaticImplementationName()
+OUString FrameControl::impl_getStaticImplementationName()
 {
     return "stardiv.UnoControls.FrameControl";
 }
