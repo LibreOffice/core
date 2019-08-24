@@ -94,6 +94,7 @@ ODefinitionContainer::ODefinitionContainer(   const Reference< XComponentContext
     ,m_bInPropertyChange(false)
     ,m_bCheckSlash(_bCheckSlash)
 {
+    assert(m_pImpl);
     m_pImpl->m_aProps.bIsDocument = false;
     m_pImpl->m_aProps.bIsFolder = true;
 
