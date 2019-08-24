@@ -19,22 +19,13 @@
 
 #include <jobs/jobconst.hxx>
 
-namespace framework{
+namespace framework {
 
-const OUString JobConst::ANSWER_DEACTIVATE_JOB()
-{
-    return "Deactivate";
-}
+const OUString & JobConst::ANSWER_DEACTIVATE_JOB = "Deactivate";
 
-const OUString JobConst::ANSWER_SAVE_ARGUMENTS()
-{
-    return "SaveArguments";
-}
+const OUString & JobConst::ANSWER_SAVE_ARGUMENTS = "SaveArguments";
 
-const OUString JobConst::ANSWER_SEND_DISPATCHRESULT()
-{
-    return "SendDispatchResult";
-}
+const OUString & JobConst::ANSWER_SEND_DISPATCHRESULT =  "SendDispatchResult";
 
 } // namespace framework
 

@@ -39,7 +39,6 @@ const int UIELEMENT_PROPHANDLE_TYPE             = 5;
 const int UIELEMENT_PROPHANDLE_XMENUBAR         = 6;
 const int UIELEMENT_PROPHANDLE_CONFIGLISTENER   = 7;
 const int UIELEMENT_PROPHANDLE_NOCLOSE          = 8;
-const int UIELEMENT_PROPCOUNT                   = 8;
 const char UIELEMENT_PROPNAME_CONFIGLISTENER[] = "ConfigListener";
 const char UIELEMENT_PROPNAME_CONFIGSOURCE[] = "ConfigurationSource";
 const char UIELEMENT_PROPNAME_FRAME[] = "Frame";
@@ -390,7 +389,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL UIConfigElementWrap
     return xInfo;
 }
 
-const css::uno::Sequence< css::beans::Property > UIConfigElementWrapperBase::impl_getStaticPropertyDescriptor()
+css::uno::Sequence< css::beans::Property > UIConfigElementWrapperBase::impl_getStaticPropertyDescriptor()
 {
     // Create property array to initialize sequence!
     // Table of all predefined properties of this class. It's used from OPropertySetHelper-class!
@@ -399,7 +398,7 @@ const css::uno::Sequence< css::beans::Property > UIConfigElementWrapperBase::imp
     // ATTENTION:
     //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
 
-    const css::beans::Property pProperties[] =
+    return
     {
         css::beans::Property( UIELEMENT_PROPNAME_CONFIGLISTENER, UIELEMENT_PROPHANDLE_CONFIGLISTENER , cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::TRANSIENT  ),
         css::beans::Property( UIELEMENT_PROPNAME_CONFIGSOURCE, UIELEMENT_PROPHANDLE_CONFIGSOURCE   , cppu::UnoType<css::ui::XUIConfigurationManager>::get(), css::beans::PropertyAttribute::TRANSIENT  ),
@@ -410,11 +409,8 @@ const css::uno::Sequence< css::beans::Property > UIConfigElementWrapperBase::imp
         css::beans::Property( UIELEMENT_PROPNAME_TYPE, UIELEMENT_PROPHANDLE_TYPE           , cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
         css::beans::Property( UIELEMENT_PROPNAME_XMENUBAR, UIELEMENT_PROPHANDLE_XMENUBAR       , cppu::UnoType<css::awt::XMenuBar>::get(), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY )
     };
-    // Use it to initialize sequence!
-    const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, UIELEMENT_PROPCOUNT );
-    // Return "PropertyDescriptor"
-    return lPropertyDescriptor;
 }
+
 void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAccess >& xSettings )
 {
     SolarMutexClearableGuard aLock;

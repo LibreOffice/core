@@ -39,9 +39,9 @@ namespace framework{
 class FWI_DLLPUBLIC JobConst
 {
     public:
-        static const OUString ANSWER_DEACTIVATE_JOB();
-        static const OUString ANSWER_SAVE_ARGUMENTS();
-        static const OUString ANSWER_SEND_DISPATCHRESULT();
+        static const OUString & ANSWER_DEACTIVATE_JOB;
+        static const OUString & ANSWER_SAVE_ARGUMENTS;
+        static const OUString & ANSWER_SEND_DISPATCHRESULT;
 };
 
 } // namespace framework
