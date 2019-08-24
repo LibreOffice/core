@@ -250,7 +250,7 @@ gtv_main_toolbar_add_recent_uno(GtvMainToolbar* toolbar, const std::string& rUno
     // TODO: Remove other text entries with same key
 }
 
-const std::string
+std::string
 gtv_main_toolbar_get_recent_uno_args(GtvMainToolbar* toolbar, const std::string& rUnoCmd)
 {
     GtvMainToolbarPrivate& priv = getPrivate(toolbar);

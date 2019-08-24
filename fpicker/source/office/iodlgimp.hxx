@@ -57,7 +57,7 @@ public:
 
     const OUString&     GetName() const     { return m_aName; }
     const OUString&     GetType() const     { return m_aType; }
-    const OUString      GetExtension() const    { return m_aType.getLength() > 2 ? m_aType.copy( 2 ) : OUString(); }
+    OUString            GetExtension() const    { return m_aType.getLength() > 2 ? m_aType.copy( 2 ) : OUString(); }
 
     bool            isGroupSeparator() const    { return m_aType.isEmpty(); }
 };

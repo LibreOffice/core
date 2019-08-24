@@ -37,10 +37,10 @@ namespace GtvHelpers
 
     GtkWidget* createCommentBox(const boost::property_tree::ptree& aComment);
 
-    const std::string getDirPath(const std::string& filePath);
+    std::string getDirPath(const std::string& filePath);
 
     template<typename T>
-    const std::vector<T> split(const std::string& aPayload, const std::string& aDelim, const int nItems)
+    std::vector<T> split(const std::string& aPayload, const std::string& aDelim, const int nItems)
     {
         std::vector<T> aRet;
 

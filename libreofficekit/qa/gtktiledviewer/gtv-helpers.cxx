@@ -139,7 +139,7 @@ GtkWidget* GtvHelpers::createCommentBox(const boost::property_tree::ptree& aComm
     return pCommentVBox;
 }
 
-const std::string GtvHelpers::getDirPath(const std::string& filePath)
+std::string GtvHelpers::getDirPath(const std::string& filePath)
 {
     int position = filePath.find_last_of('/');
     const std::string dirPath = filePath.substr(0, position + 1);

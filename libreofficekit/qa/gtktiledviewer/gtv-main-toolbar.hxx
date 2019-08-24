@@ -53,7 +53,7 @@ void gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, LibreOfficeKitDocument
 
 void gtv_main_toolbar_add_recent_uno(GtvMainToolbar* toolbar, const std::string& rUnoCmdStr);
 
-const std::string gtv_main_toolbar_get_recent_uno_args(GtvMainToolbar* toolbar, const std::string& rUnoCmd);
+std::string gtv_main_toolbar_get_recent_uno_args(GtvMainToolbar* toolbar, const std::string& rUnoCmd);
 
 #endif /* GTV_MAIN_TOOLBAR_H */
 
