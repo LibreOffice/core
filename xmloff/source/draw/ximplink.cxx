@@ -38,6 +38,7 @@ SdXMLShapeLinkContext::SdXMLShapeLinkContext( SvXMLImport& rImport, sal_uInt16 n
         sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
         if( (nPrefix == XML_NAMESPACE_XLINK) && IsXMLToken( aLocalName, XML_HREF ) )
         {
+            assert(msHyperlink.pData);
             msHyperlink = xAttrList->getValueByIndex( i );
             break;
         }
