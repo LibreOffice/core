@@ -17,112 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
 #include <sal/types.h>
-
 #include <tools/poly.hxx>
 #include <tools/helpers.hxx>
+
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/drawables/RectangleDrawable.hxx>
+#include <vcl/drawables/RoundRectDrawable.hxx>
 
 #include <salgdi.hxx>
 
-void OutputDevice::DrawRect( const tools::Rectangle& rRect )
+#include <cassert>
+
+void OutputDevice::DrawRect(tools::Rectangle const& rRect)
 {
-    assert(!is_double_buffered_window());
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaRectAction( rRect ) );
-
-    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
-        return;
-
-    tools::Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
-
-    if ( aRect.IsEmpty() )
-        return;
-
-    aRect.Justify();
-
-    if ( !mpGraphics && !AcquireGraphics() )
-        return;
-
-    if ( mbInitClipRegion )
-        InitClipRegion();
-
-    if ( mbOutputClipped )
-        return;
-
-    if ( mbInitLineColor )
-        InitLineColor();
-
-    if ( mbInitFillColor )
-        InitFillColor();
-
-    mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), this );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawRect( rRect );
+    Draw(vcl::RectangleDrawable(rRect));
 }
 
-void OutputDevice::DrawRect( const tools::Rectangle& rRect,
-                             sal_uLong nHorzRound, sal_uLong nVertRound )
+void OutputDevice::DrawRect(tools::Rectangle const& rRect,
+                            sal_uLong nHorzRound, sal_uLong nVertRound)
 {
-    assert(!is_double_buffered_window());
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaRoundRectAction( rRect, nHorzRound, nVertRound ) );
-
-    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
-        return;
-
-    const tools::Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
-
-    if ( aRect.IsEmpty() )
-        return;
-
-    nHorzRound = ImplLogicWidthToDevicePixel( nHorzRound );
-    nVertRound = ImplLogicHeightToDevicePixel( nVertRound );
-
-    // we need a graphics
-    if ( !mpGraphics && !AcquireGraphics() )
-        return;
-
-    if ( mbInitClipRegion )
-        InitClipRegion();
-
-    if ( mbOutputClipped )
-        return;
-
-    if ( mbInitLineColor )
-        InitLineColor();
-
-    if ( mbInitFillColor )
-        InitFillColor();
-
-    if ( !nHorzRound && !nVertRound )
-    {
-        mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), this );
-    }
-    else
-    {
-        tools::Polygon aRoundRectPoly( aRect, nHorzRound, nVertRound );
-
-        if ( aRoundRectPoly.GetSize() >= 2 )
-        {
-            SalPoint* pPtAry = reinterpret_cast<SalPoint*>(aRoundRectPoly.GetPointAry());
-
-            if ( !mbFillColor )
-                mpGraphics->DrawPolyLine( aRoundRectPoly.GetSize(), pPtAry, this );
-            else
-                mpGraphics->DrawPolygon( aRoundRectPoly.GetSize(), pPtAry, this );
-        }
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawRect( rRect, nHorzRound, nVertRound );
+    Draw(vcl::RoundRectDrawable(rRect, nHorzRound, nVertRound));
 }
 
 void OutputDevice::Invert( const tools::Rectangle& rRect, InvertFlags nFlags )

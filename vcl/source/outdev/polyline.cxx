@@ -17,18 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
 #include <sal/types.h>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
+
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/drawables/B2DPolyLineDrawable.hxx>
 
 #include <salgdi.hxx>
+
+#include <cassert>
 
 void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
 {
@@ -278,7 +279,7 @@ void OutputDevice::drawPolyLine(const tools::Polygon& rPoly, const LineInfo& rLi
 
     if(bDashUsed || bLineWidthUsed)
     {
-        drawLine ( basegfx::B2DPolyPolygon(aPoly.getB2DPolygon()), aInfo );
+        Draw(vcl::B2DPolyLineDrawable(basegfx::B2DPolyPolygon(aPoly.getB2DPolygon()), aInfo));
     }
     else
     {
