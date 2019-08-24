@@ -594,7 +594,7 @@ void LibPage::InsertLib()
     // file URLs
     Sequence< OUString > aFiles = xFP->getSelectedFiles();
     INetURLObject aURLObj( aFiles[0] );
-    INetURLObject aModURLObj( aURLObj );
+    std::shared_ptr<INetURLObject> xModURLObj(new INetURLObject(aURLObj));
     std::shared_ptr<INetURLObject> xDlgURLObj(new INetURLObject(aURLObj));
 
     OUString aBase = aURLObj.getBase();
@@ -603,13 +603,13 @@ void LibPage::InsertLib()
 
     if ( aBase == aModBase || aBase == aDlgBase )
     {
-        aModURLObj.setBase( aModBase );
+        xModURLObj->setBase( aModBase );
         xDlgURLObj->setBase( aDlgBase );
     }
 
     Reference< XSimpleFileAccess3 > xSFA( SimpleFileAccess::create(comphelper::getProcessComponentContext()) );
 
-    OUString aModURL( aModURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+    OUString aModURL( xModURLObj->GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     if ( xSFA->exists( aModURL ) )
     {
         xModLibContImport = script::DocumentScriptLibraryContainer::createWithURL(xContext, aModURL);
@@ -669,7 +669,7 @@ void LibPage::InsertLib()
     if ( aExtension != aLibExtension && aExtension != aContExtension )
         xLibDlg->EnableReference(false);
 
-    weld::DialogController::runAsync(xLibDlg, [aContExtension, xDlgURLObj, aExtension, aLibExtension, aModURLObj, xLibDlg, xDlgLibContImport, xModLibContImport, this](sal_Int32 nResult)
+    weld::DialogController::runAsync(xLibDlg, [aContExtension, xDlgURLObj, aExtension, aLibExtension, xModURLObj, xLibDlg, xDlgLibContImport, xModLibContImport, this](sal_Int32 nResult)
         {
             if (!nResult )
                 return;
@@ -779,7 +779,7 @@ void LibPage::InsertLib()
                         if ( bReference )
                         {
                             // storage URL
-                            INetURLObject aModStorageURLObj( aModURLObj );
+                            INetURLObject aModStorageURLObj(*xModURLObj);
                             if ( aExtension == aContExtension )
                             {
                                 sal_Int32 nCount = aModStorageURLObj.getSegmentCount();
