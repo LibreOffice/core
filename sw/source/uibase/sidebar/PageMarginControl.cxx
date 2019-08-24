@@ -79,7 +79,7 @@ namespace
         return rPool.GetMetric( nWhich );
     }
 
-    const css::uno::Reference< css::document::XUndoManager > getUndoManager( const css::uno::Reference< css::frame::XFrame >& rxFrame )
+    css::uno::Reference< css::document::XUndoManager > getUndoManager( const css::uno::Reference< css::frame::XFrame >& rxFrame )
     {
         const css::uno::Reference< css::frame::XController >& xController = rxFrame->getController();
         if ( xController.is() )
@@ -88,8 +88,7 @@ namespace
             if ( xModel.is() )
             {
                 const css::uno::Reference< css::document::XUndoManagerSupplier > xSuppUndo( xModel, css::uno::UNO_QUERY_THROW );
-                const css::uno::Reference< css::document::XUndoManager > xUndoManager( xSuppUndo->getUndoManager(), css::uno::UNO_SET_THROW );
-                return xUndoManager;
+                return css::uno::Reference< css::document::XUndoManager >( xSuppUndo->getUndoManager(), css::uno::UNO_SET_THROW );
             }
         }
 

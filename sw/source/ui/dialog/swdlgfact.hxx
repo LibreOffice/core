@@ -527,7 +527,7 @@ class AbstractMailMergeDlg_Impl : public AbstractMailMergeDlg
     DECL_ABSTDLG_BASE(AbstractMailMergeDlg_Impl,SwMailMergeDlg)
     virtual DBManagerOptions GetMergeType() override ;
     virtual const OUString& GetSaveFilter() const override;
-    virtual const css::uno::Sequence< css::uno::Any > GetSelection() const override ;
+    virtual css::uno::Sequence< css::uno::Any > GetSelection() const override ;
     virtual css::uno::Reference< css::sdbc::XResultSet> GetResultSet() const override;
     virtual bool IsSaveSingleDoc() const override;
     virtual bool IsGenerateFromDataBase() const override;

@@ -529,7 +529,7 @@ sal_uInt32 WW8TableNodeInfo::getRow() const
     return getInnerForDepth(mnDepth)->getRow();
 }
 
-const WW8TableNodeInfoInner::Pointer_t WW8TableNodeInfo::getFirstInner() const
+WW8TableNodeInfoInner::Pointer_t WW8TableNodeInfo::getFirstInner() const
 {
     WW8TableNodeInfoInner::Pointer_t pResult;
 
@@ -539,7 +539,7 @@ const WW8TableNodeInfoInner::Pointer_t WW8TableNodeInfo::getFirstInner() const
     return pResult;
 }
 
-const WW8TableNodeInfoInner::Pointer_t WW8TableNodeInfo::getInnerForDepth(sal_uInt32 nDepth) const
+WW8TableNodeInfoInner::Pointer_t WW8TableNodeInfo::getInnerForDepth(sal_uInt32 nDepth) const
 {
     WW8TableNodeInfoInner::Pointer_t pResult;
 

@@ -106,7 +106,7 @@ public:
     static bool IsDetectableText( const sal_Char* pBuf, sal_uLong &rLen,
             rtl_TextEncoding *pCharSet, bool *pSwap, LineEnd *pLineEnd );
 
-    static const OUString GetSubStorageName( const SfxFilter& rFltr );
+    static OUString GetSubStorageName( const SfxFilter& rFltr );
 };
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportFODT(SvStream &rStream);

@@ -62,8 +62,8 @@ class DocumentListsManager : public IDocumentListsAccess
         // relation between list style and its default list
         std::unordered_map<OUString, SwList*> maListStyleLists;
 
-        const OUString CreateUniqueListId();
-        const OUString MakeListIdUnique( const OUString& aSuggestedUniqueListId );
+        OUString CreateUniqueListId();
+        OUString MakeListIdUnique( const OUString& aSuggestedUniqueListId );
 };
 
 }

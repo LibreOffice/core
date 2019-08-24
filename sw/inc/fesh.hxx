@@ -458,7 +458,7 @@ public:
     OUString GetFlyName() const;
 
     /// get reference to OLE object (if there is one) for selected FlyFrame
-    const css::uno::Reference < css::embed::XEmbeddedObject > GetOleRef() const;
+    css::uno::Reference < css::embed::XEmbeddedObject > GetOleRef() const;
 
     /// Created unique name for frame.
     OUString GetUniqueGrfName() const;
@@ -779,7 +779,7 @@ public:
 
         @returns an object of class Color
     */
-    const Color GetShapeBackgrd() const;
+    Color GetShapeBackgrd() const;
 
     /** Is default horizontal text direction for selected drawing object right-to-left
 

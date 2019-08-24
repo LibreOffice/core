@@ -224,7 +224,7 @@ static map<sal_uInt16,OUString> & GetItemWhichMap()
     return aItemWhichMap;
 }
 
-static const OUString lcl_dbg_out(const SfxPoolItem & rItem)
+static OUString lcl_dbg_out(const SfxPoolItem & rItem)
 {
     OUString aStr("[ ");
 
@@ -248,7 +248,7 @@ const char * dbg_out(const SfxPoolItem * pItem)
     return dbg_out(pItem ? lcl_dbg_out(*pItem) : OUString("(nil)"));
 }
 
-static const OUString lcl_dbg_out(const SfxItemSet & rSet)
+static OUString lcl_dbg_out(const SfxItemSet & rSet)
 {
     SfxItemIter aIter(rSet);
     const SfxPoolItem * pItem;
@@ -282,7 +282,7 @@ const char * dbg_out(const SfxItemSet & rSet)
     return dbg_out(lcl_dbg_out(rSet));
 }
 
-static const OUString lcl_dbg_out(const SwTextAttr & rAttr)
+static OUString lcl_dbg_out(const SwTextAttr & rAttr)
 {
     OUString aStr("[ ");
 
@@ -302,7 +302,7 @@ const char * dbg_out(const SwTextAttr & rAttr)
     return dbg_out(lcl_dbg_out(rAttr));
 }
 
-static const OUString lcl_dbg_out(const SwpHints & rHints)
+static OUString lcl_dbg_out(const SwpHints & rHints)
 {
     OUStringBuffer aStr("[ SwpHints\n");
 
@@ -425,7 +425,7 @@ const char * dbg_out(const SwFrameFormat & rFrameFormat)
     return dbg_out(lcl_dbg_out(rFrameFormat));
 }
 
-static const OUString lcl_AnchoredFrames(const SwNode & rNode)
+static OUString lcl_AnchoredFrames(const SwNode & rNode)
 {
     OUStringBuffer aResult("[");
 

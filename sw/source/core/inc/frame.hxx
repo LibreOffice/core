@@ -724,11 +724,11 @@ public:
 
     // PaintArea is the area where content might be displayed.
     // The margin of a page or the space between columns belongs to it.
-    const SwRect GetPaintArea() const;
+    SwRect GetPaintArea() const;
 
     // UnionFrame is the union of Frame- and PrtArea, normally identical
     // to the FrameArea except in case of negative Prt margins.
-    const SwRect UnionFrame( bool bBorder = false ) const;
+    SwRect UnionFrame( bool bBorder = false ) const;
 
     virtual Size ChgSize( const Size& aNewSize );
 

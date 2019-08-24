@@ -120,7 +120,7 @@ public:
     bool IsHideEmptyParagraphs() const;
     void SetHideEmptyParagraphs(bool bSet);
 
-    const css::uno::Sequence<OUString> GetAddressBlocks() const;
+    css::uno::Sequence<OUString> GetAddressBlocks() const;
     void SetAddressBlocks(const css::uno::Sequence< OUString>& rBlocks);
 
     void SetCurrentAddressBlockIndex( sal_Int32 nSet );
@@ -136,7 +136,7 @@ public:
     bool IsGreetingLine(bool bInEMail) const;
     void SetGreetingLine(bool bSet, bool bInEMail);
 
-    const css::uno::Sequence<OUString> GetGreetings(Gender eType) const;
+    css::uno::Sequence<OUString> GetGreetings(Gender eType) const;
     void SetGreetings(Gender eType, const css::uno::Sequence< OUString>& rBlocks);
 
     sal_Int32 GetCurrentGreeting(Gender eType) const;

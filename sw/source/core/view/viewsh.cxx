@@ -2501,7 +2501,7 @@ sal_uInt16 SwViewShell::GetPageCount() const
     return GetLayout() ? GetLayout()->GetPageNum() : 1;
 }
 
-const Size SwViewShell::GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const
+Size SwViewShell::GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const
 {
     Size aSize;
     const SwRootFrame* pTmpRoot = GetLayout();

@@ -42,7 +42,7 @@ public:
      * \param rRect ignored
      */
     virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    const std::string CreateJsonNotification();
+    std::string CreateJsonNotification();
 
 private:
     SwViewShell * mpViewShell;     //< Shell to check if there is any comments on doc and their visibility

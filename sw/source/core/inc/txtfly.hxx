@@ -59,7 +59,7 @@ class SwContourCache
     };
     std::vector<CacheItem> mvItems;
     long nPntCnt;
-    const SwRect ContourRect( const SwFormat* pFormat, const SdrObject* pObj,
+    SwRect ContourRect( const SwFormat* pFormat, const SdrObject* pObj,
         const SwTextFrame* pFrame, const SwRect &rLine, const long nXPos,
         const bool bRight );
 
@@ -77,7 +77,7 @@ public:
       BoundRect (including spacing), and the line, for contour-flow,
       the tools::PolyPolygon of the object gets traversed
      */
-    static const SwRect CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
+    static SwRect CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
                                        const SwRect &rLine,
                                        const SwTextFrame* pFrame,
                                        const long nXPos,

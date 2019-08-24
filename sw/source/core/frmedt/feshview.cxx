@@ -3167,7 +3167,7 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
 
     @returns an object of class Color
 */
-const Color SwFEShell::GetShapeBackgrd() const
+Color SwFEShell::GetShapeBackgrd() const
 {
     Color aRetColor;
 

@@ -133,12 +133,12 @@ public:
     void SetUpperLeftCorner(  const Point& rNew );
     void SetUpperRightCorner(  const Point& rNew );
     void SetLowerLeftCorner(  const Point& rNew );
-    const Size  Size_() const;
-    const Point TopLeft()  const;
-    const Point TopRight()  const;
-    const Point BottomLeft()  const;
-    const Point BottomRight()  const;
-    const Size  SwappedSize() const;
+    Size  Size_() const;
+    Point TopLeft()  const;
+    Point TopRight()  const;
+    Point BottomLeft()  const;
+    Point BottomRight()  const;
+    Size  SwappedSize() const;
     long GetLeftDistance( long ) const;
     long GetBottomDistance( long ) const;
     long GetRightDistance( long ) const;
@@ -151,8 +151,8 @@ public:
 
 typedef void (SwRect:: *SwRectSet)( const long nNew );
 typedef long (SwRect:: *SwRectGet)() const;
-typedef const Point (SwRect:: *SwRectPoint)() const;
-typedef const Size (SwRect:: *SwRectSize)() const;
+typedef Point (SwRect:: *SwRectPoint)() const;
+typedef Size (SwRect:: *SwRectSize)() const;
 typedef bool (SwRect:: *SwRectMax)( long ) const;
 typedef long (SwRect:: *SwRectDist)( long ) const;
 typedef void (SwRect:: *SwRectSetTwice)( long, long );

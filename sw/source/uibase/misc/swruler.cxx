@@ -253,7 +253,7 @@ void SwCommentRuler::MouseButtonDown( const MouseEvent& rMEvt )
     Invalidate();
 }
 
-const std::string SwCommentRuler::CreateJsonNotification()
+std::string SwCommentRuler::CreateJsonNotification()
 {
     boost::property_tree::ptree jsonNotif;
 
@@ -268,8 +268,7 @@ const std::string SwCommentRuler::CreateJsonNotification()
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, jsonNotif);
-    std::string aPayload = aStream.str();
-    return aPayload;
+    return aStream.str();
 }
 
 void SwCommentRuler::NotifyKit()

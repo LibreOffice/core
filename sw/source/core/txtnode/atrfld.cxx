@@ -583,7 +583,7 @@ void SwTextInputField::NotifyContentChange( SwFormatField& rFormatField )
     }
 }
 
-const OUString SwTextInputField::GetFieldContent() const
+OUString SwTextInputField::GetFieldContent() const
 {
     return GetFormatField().GetField()->ExpandField(false, nullptr/*ignored anyway*/);
 }

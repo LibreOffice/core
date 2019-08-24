@@ -189,7 +189,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         virtual bool SetObjTop_( const SwTwips _nTop) = 0;
         virtual bool SetObjLeft_( const SwTwips _nLeft) = 0;
 
-        virtual const SwRect GetObjBoundRect() const = 0;
+        virtual SwRect GetObjBoundRect() const = 0;
     public:
 
         virtual ~SwAnchoredObject();
@@ -316,7 +316,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         virtual const SwFrameFormat& GetFrameFormat() const = 0;
 
         // accessors to the object area and its position
-        virtual const SwRect GetObjRect() const = 0;
+        virtual SwRect GetObjRect() const = 0;
 
         void SetObjTop( const SwTwips _nTop);
         void SetObjLeft( const SwTwips _nLeft);

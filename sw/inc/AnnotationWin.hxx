@@ -124,8 +124,8 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         void            SetScrollbar();
 
         void            SetVirtualPosSize( const Point& aPoint, const Size& aSize);
-        const Point     VirtualPos()    { return mPosSize.TopLeft(); }
-        const Size      VirtualSize()   { return mPosSize.GetSize(); }
+        Point           VirtualPos()    { return mPosSize.TopLeft(); }
+        Size            VirtualSize()   { return mPosSize.GetSize(); }
 
         void            ShowAnchorOnly(const Point &aPoint);
         void            ShowNote();

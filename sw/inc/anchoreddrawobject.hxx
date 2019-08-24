@@ -99,7 +99,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
         virtual bool SetObjTop_( const SwTwips _nTop) override;
         virtual bool SetObjLeft_( const SwTwips _nLeft) override;
 
-        virtual const SwRect GetObjBoundRect() const override;
+        virtual SwRect GetObjBoundRect() const override;
 
     public:
 
@@ -119,7 +119,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
         virtual const SwFrameFormat& GetFrameFormat() const override;
 
         // accessors to the object area and its position
-        virtual const SwRect GetObjRect() const override;
+        virtual SwRect GetObjRect() const override;
 
         boost::optional<tools::Rectangle> const & GetLastObjRect() const { return maLastObjRect;}
         void SetLastObjRect( const tools::Rectangle& _rNewObjRect );

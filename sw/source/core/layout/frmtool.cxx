@@ -3636,7 +3636,7 @@ bool IsExtraData( const SwDoc *pDoc )
 }
 
 // OD 22.09.2003 #110978#
-const SwRect SwPageFrame::PrtWithoutHeaderAndFooter() const
+SwRect SwPageFrame::PrtWithoutHeaderAndFooter() const
 {
     SwRect aPrtWithoutHeaderFooter( getFramePrintArea() );
     aPrtWithoutHeaderFooter.Pos() += getFrameArea().Pos();
