@@ -150,7 +150,7 @@ class SC_DLLPUBLIC NumberTransformation : public DataTransformation
                              int nPrecision);
         virtual void Transform(ScDocument& rDoc) const override;
         virtual TransformationType getTransformationType() const override;
-        NUMBER_TRANSFORM_TYPE getNumberTransfromationType() const;
+        NUMBER_TRANSFORM_TYPE getNumberTransformationType() const;
         int getPrecision() const;
         const std::set<SCCOL>& getColumn() const;
 };
@@ -178,7 +178,7 @@ class SC_DLLPUBLIC DateTimeTransformation : public DataTransformation
                                const DATETIME_TRANSFORMATION_TYPE rType);
         virtual void Transform(ScDocument& rDoc) const override;
         virtual TransformationType getTransformationType() const override;
-        DATETIME_TRANSFORMATION_TYPE getDateTimeTransfromationType() const;
+        DATETIME_TRANSFORMATION_TYPE getDateTimeTransformationType() const;
         const std::set<SCCOL>& getColumn() const;
 };
 

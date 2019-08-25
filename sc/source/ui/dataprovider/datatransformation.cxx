@@ -646,7 +646,7 @@ TransformationType NumberTransformation::getTransformationType() const
     return TransformationType::NUMBER_TRANSFORMATION;
 }
 
-NUMBER_TRANSFORM_TYPE NumberTransformation::getNumberTransfromationType() const
+NUMBER_TRANSFORM_TYPE NumberTransformation::getNumberTransformationType() const
 {
     return maType;
 }
@@ -1161,7 +1161,7 @@ TransformationType DateTimeTransformation::getTransformationType() const
     return TransformationType::DATETIME_TRANSFORMATION;
 }
 
-DATETIME_TRANSFORMATION_TYPE DateTimeTransformation::getDateTimeTransfromationType() const
+DATETIME_TRANSFORMATION_TYPE DateTimeTransformation::getDateTimeTransformationType() const
 {
     return maType;
 }

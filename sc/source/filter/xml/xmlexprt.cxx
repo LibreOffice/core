@@ -4179,7 +4179,7 @@ void ScXMLExport::WriteExternalDataTransformations(const std::vector<std::shared
                 // Number Transformation
                 std::shared_ptr<sc::NumberTransformation> aNumberTransformation = std::dynamic_pointer_cast<sc::NumberTransformation>(itr);
 
-                sc::NUMBER_TRANSFORM_TYPE aNumberTransformType = aNumberTransformation->getNumberTransfromationType();
+                sc::NUMBER_TRANSFORM_TYPE aNumberTransformType = aNumberTransformation->getNumberTransformationType();
 
                 switch ( aNumberTransformType )
                 {
@@ -4258,7 +4258,7 @@ void ScXMLExport::WriteExternalDataTransformations(const std::vector<std::shared
                 // Number Transformation
                 std::shared_ptr<sc::DateTimeTransformation> aDateTimeTransformation = std::dynamic_pointer_cast<sc::DateTimeTransformation>(itr);
 
-                sc::DATETIME_TRANSFORMATION_TYPE aDateTimeTransformationType = aDateTimeTransformation->getDateTimeTransfromationType();
+                sc::DATETIME_TRANSFORMATION_TYPE aDateTimeTransformationType = aDateTimeTransformation->getDateTimeTransformationType();
 
                 switch ( aDateTimeTransformationType )
                 {
