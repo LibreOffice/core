@@ -22,7 +22,6 @@
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/SubTotalColumn.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSubTotalCalculatable.hpp>
 #include <com/sun/star/sheet/XSubTotalDescriptor.hpp>

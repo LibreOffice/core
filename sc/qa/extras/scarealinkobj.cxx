@@ -12,7 +12,6 @@
 #include <test/sheet/cellarealink.hxx>
 #include <test/sheet/xarealink.hxx>
 #include <test/util/xrefreshable.hxx>
-#include <sfx2/app.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

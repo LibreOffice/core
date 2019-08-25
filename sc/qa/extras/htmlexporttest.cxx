@@ -20,10 +20,6 @@
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotest/macros_test.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/docfile.hxx>
-
-#include <docsh.hxx>
 
 using namespace css::uno;
 using namespace css::lang;

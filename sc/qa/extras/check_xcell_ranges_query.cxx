@@ -9,15 +9,12 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XCellRangesQuery.hpp>
 #include <com/sun/star/sheet/XSheetCellRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 using namespace css;
 using namespace css::lang;

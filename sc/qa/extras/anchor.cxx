@@ -12,11 +12,9 @@
 #include <svx/svdpage.hxx>
 #include <test/calc_unoapi_test.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <unonames.hxx>
 
 #include <docsh.hxx>
 #include <drwlayer.hxx>

@@ -21,7 +21,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>

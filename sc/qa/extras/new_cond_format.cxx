@@ -13,13 +13,11 @@
 #include <com/sun/star/sheet/XConditionalFormats.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/sheet/DataBarAxis.hpp>
 #include <com/sun/star/sheet/XDataBarEntry.hpp>
 #include <com/sun/star/sheet/DataBarEntryType.hpp>
 #include <com/sun/star/sheet/ColorScaleEntryType.hpp>
 #include <com/sun/star/sheet/XColorScaleEntry.hpp>
-#include <unonames.hxx>
 
 using namespace css;
 

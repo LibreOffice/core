@@ -17,8 +17,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
@@ -26,7 +24,6 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextField.hpp>
-#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 

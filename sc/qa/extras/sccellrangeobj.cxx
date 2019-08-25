@@ -33,16 +33,9 @@
 #include <test/util/xsearchable.hxx>
 #include <comphelper/propertysequence.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sheet/FilterOperator.hpp>
-#include <com/sun/star/sheet/TableFilterField.hpp>
-#include <com/sun/star/sheet/XSheetFilterDescriptor.hpp>
-#include <com/sun/star/sheet/XSheetFilterable.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/table/XColumnRowRange.hpp>
-#include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/util/SortField.hpp>
 #include <com/sun/star/util/XSortable.hpp>
 

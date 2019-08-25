@@ -16,7 +16,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XFunctionDescriptions.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>

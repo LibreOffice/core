@@ -25,8 +25,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <rtl/string.hxx>
-
 using namespace css;
 using namespace css::uno;
 

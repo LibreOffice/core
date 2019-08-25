@@ -23,7 +23,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <rtl/string.hxx>
 #include <sal/types.h>
 
 using namespace css;

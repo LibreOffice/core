@@ -25,8 +25,6 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
 using namespace css;
