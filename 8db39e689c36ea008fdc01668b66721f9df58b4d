@@ -22,6 +22,98 @@
       "revId": "8db39e689c36ea008fdc01668b66721f9df58b4d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_e6228ba4",
+        "filename": "oox/source/drawingml/shape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1777,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-25T22:35:13Z",
+      "side": 1,
+      "message": "Interesting why do we explicitly only keep the two members of the 4... however, we may do\n\n    return PropertyValue(rProp.Name, 0, rProp.Value, css::beans::PropertyState_DIRECT_VALUE);",
+      "range": {
+        "startLine": 1774,
+        "startChar": 16,
+        "endLine": 1777,
+        "endChar": 29
+      },
+      "revId": "8db39e689c36ea008fdc01668b66721f9df58b4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_06269fb8",
+        "filename": "oox/source/drawingml/shape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1783,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-25T22:35:13Z",
+      "side": 1,
+      "message": "See comment in textcharacterproperties.cxx",
+      "range": {
+        "startLine": 1780,
+        "startChar": 8,
+        "endLine": 1783,
+        "endChar": 103
+      },
+      "revId": "8db39e689c36ea008fdc01668b66721f9df58b4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_86186f75",
+        "filename": "oox/source/drawingml/textcharacterproperties.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-25T22:35:13Z",
+      "side": 1,
+      "message": "If https://gerrit.libreoffice.org/78092 is merged, these two could be joined into a single comphelper::concatSequences(aGrabBag, aVectorOfProperyValues) without an intermediate object",
+      "range": {
+        "startLine": 170,
+        "startChar": 4,
+        "endLine": 172,
+        "endChar": 107
+      },
+      "revId": "8db39e689c36ea008fdc01668b66721f9df58b4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_a613335c",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-25T22:35:13Z",
+      "side": 1,
+      "message": "I\u0027d do\n\n    std::transform(\n        aCategories.begin(), aCategories.end(),\n        std::reverse_iterator(aFinalSplitSource.end()),\n        [](const Reference\u003cchart2::data::XLabeledDataSequence\u003e\u0026 xCat) {\n            return lcl_getLabelSequence(xCat-\u003egetValues());\n        });\n\nThat would eliminate the need in the nCategories again",
+      "range": {
+        "startLine": 549,
+        "startChar": 28,
+        "endLine": 552,
+        "endChar": 29
+      },
+      "revId": "8db39e689c36ea008fdc01668b66721f9df58b4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
