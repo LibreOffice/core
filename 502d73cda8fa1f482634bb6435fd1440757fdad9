@@ -94,6 +94,64 @@
       "revId": "502d73cda8fa1f482634bb6435fd1440757fdad9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_a32805e2",
+        "filename": "vcl/inc/fontinstance.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-08-25T11:59:07Z",
+      "side": 1,
+      "message": "Actually I think you\u0027re right. BuildinFontInstance doesn\u0027t have any hb_font backing, as these fonts don\u0027t exist inside LO, just in the PDF reader. So now GetGlyphBoundRect will assert in the GetHbFont() call. I guess the fix would be to add a\n\nhb_font_t* BuildinFontInstance::ImplInitHbFont() override { return nullptr; }\n\nI refactored this code two years ago, but I have no idea left, why I chose this kind of implementation back then.",
+      "parentUuid": "bf659307_432fa9f5",
+      "range": {
+        "startLine": 89,
+        "startChar": 40,
+        "endLine": 89,
+        "endChar": 74
+      },
+      "revId": "502d73cda8fa1f482634bb6435fd1440757fdad9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_c33ad932",
+        "filename": "vcl/inc/fontinstance.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-08-25T11:59:07Z",
+      "side": 1,
+      "message": "This is the only call side of this function.",
+      "revId": "502d73cda8fa1f482634bb6435fd1440757fdad9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_c323b904",
+        "filename": "vcl/source/font/fontinstance.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-08-25T11:59:07Z",
+      "side": 1,
+      "message": "This will now assert for BuildinFontInstance AKA PDF-reader buildin fonts, which aren\u0027t hb_font backed.",
+      "revId": "502d73cda8fa1f482634bb6435fd1440757fdad9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
