@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_03ebf1af",
+        "filename": "vcl/inc/fontinstance.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-25T10:45:58Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be made pure virtual (\u003d0)? Because the change seemingly makes it heavily dependent on the implementation on the method; and e.g. vcl::pdf::BuildinFontInstance doesn\u0027t override the method, which should make it assert on calling this... Or remove the assert from here, if hb_font_get_glyph_extents correctly handles nullptr and returns false?",
+      "range": {
+        "startLine": 89,
+        "startChar": 40,
+        "endLine": 89,
+        "endChar": 74
+      },
+      "revId": "502d73cda8fa1f482634bb6435fd1440757fdad9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
