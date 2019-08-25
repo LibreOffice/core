@@ -757,6 +757,8 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     // correct position )
     Point aGridOff = GetGridOffset();
 
+    SfxViewShell* pViewShell = GetSfxViewShell();
+
     // check if text edit or ole is active and handles need to be suppressed. This may be the case
     // when a single object is selected
     // Using a strict return statement is okay here; no handles means *no* handles.
@@ -777,7 +779,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                 if (bTiledRendering)
                 {
                     // Suppress handles -> empty graphic selection.
-                    if(SfxViewShell* pViewShell = GetSfxViewShell())
+                    if (pViewShell)
                     {
                         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
                         SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY");
@@ -790,14 +792,11 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         // formerly #i118524#: if inplace activated OLE is selected, suppress handles
         const SdrOle2Obj* pSdrOle2Obj = dynamic_cast< const SdrOle2Obj* >(mpMarkedObj);
 
-        if(pSdrOle2Obj && (pSdrOle2Obj->isInplaceActive() || pSdrOle2Obj->isUiActive()))
+        if (pSdrOle2Obj && (pSdrOle2Obj->isInplaceActive() || pSdrOle2Obj->isUiActive()))
         {
-            if(SfxViewShell* pViewShell = GetSfxViewShell())
-            {
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "INPLACE");
-                SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "INPLACE");
-                return;
-            }
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "INPLACE");
+            SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "INPLACE");
+            return;
         }
 
         if (bTiledRendering && mpMarkedObj->GetObjIdentifier() == OBJ_TABLE)
@@ -806,7 +805,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
             if (xController.is() && xController->hasSelectedCells())
             {
                 // The table shape has selected cells, which provide text selection already -> no graphic selection.
-                if(SfxViewShell* pViewShell = GetSfxViewShell())
+                if (pViewShell)
                 {
                     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
                     SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY");
@@ -817,35 +816,33 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     }
 
     tools::Rectangle aRect(GetMarkedObjRect());
-    tools::Rectangle aSelection(aRect);
 
-    bool bIsChart = false;
-    if (bTiledRendering && !aRect.IsEmpty())
+    if (bTiledRendering && pViewShell)
     {
-        sal_uInt32 nTotalPaintWindows = this->PaintWindowCount();
-        if (nTotalPaintWindows == 1)
+        tools::Rectangle aSelection(aRect);
+        bool bIsChart = false;
+
+        if (!aRect.IsEmpty())
         {
-            const vcl::Window* pWin = dynamic_cast<const vcl::Window*>(this->GetFirstOutputDevice());
-            if (pWin && pWin->IsChart())
+            sal_uInt32 nTotalPaintWindows = this->PaintWindowCount();
+            if (nTotalPaintWindows == 1)
             {
-                bIsChart = true;
-                const vcl::Window* pViewShellWindow = GetSfxViewShell()->GetEditWindowForActiveOLEObj();
-                if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pWin))
+                const vcl::Window* pWin = dynamic_cast<const vcl::Window*>(this->GetFirstOutputDevice());
+                if (pWin && pWin->IsChart())
                 {
-                    Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
-                    Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
-                    aSelection.Move(aLogicOffset.getX(), aLogicOffset.getY());
+                    bIsChart = true;
+                    const vcl::Window* pViewShellWindow = GetSfxViewShell()->GetEditWindowForActiveOLEObj();
+                    if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pWin))
+                    {
+                        Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
+                        Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
+                        aSelection.Move(aLogicOffset.getX(), aLogicOffset.getY());
+                    }
                 }
             }
         }
-    }
 
-    if (bTiledRendering)
-    {
-        OString sSelection;
-        if (aSelection.IsEmpty())
-            sSelection = "EMPTY";
-        else
+        if (!aSelection.IsEmpty())
         {
             // In case the map mode is in 100th MM, then need to convert the coordinates over to twips for LOK.
             if (mpMarkedPV)
@@ -857,14 +854,13 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                 }
             }
 
-            sSelection = aSelection.toString();
-
             // hide the text selection too
-            if(SfxViewShell* pViewShell = GetSfxViewShell())
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "");
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "");
         }
-        if(SfxViewShell* pViewShell = GetSfxViewShell())
+
         {
+            OString sSelectionText;
+
             if (GetMarkedObjectCount())
             {
                 SdrMark* pM = GetSdrMarkByIndex(0);
@@ -878,8 +874,6 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                 {
                     nRotAngle *= 10;
                 }
-
-                sSelection += OString(", ") + OString::number(nRotAngle);
 
                 OStringBuffer aExtraInfo;
                 if (bWriterGraphic)
@@ -1014,27 +1008,31 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                         }
                     }
                 }
-
+                sSelectionText = aSelection.toString();
+                sSelectionText += OString(", ") + OString::number(nRotAngle);
                 if (!aExtraInfo.isEmpty())
                 {
-                    sSelection += ", ";
-                    sSelection += aExtraInfo.makeStringAndClear();
+                    sSelectionText += ", ";
+                    sSelectionText += aExtraInfo.makeStringAndClear();
                 }
             }
+
+            if (sSelectionText.isEmpty())
+                sSelectionText = "EMPTY";
 
             if (pOtherShell)
             {
                 // An other shell wants to know about our existing
                 // selection.
                 if (pViewShell != pOtherShell)
-                    SfxLokHelper::notifyOtherView(pViewShell, pOtherShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelection);
+                    SfxLokHelper::notifyOtherView(pViewShell, pOtherShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionText);
             }
             else
             {
                 // We have a new selection, so both pViewShell and the
                 // other views want to know about it.
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelection.getStr());
-                SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelection);
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelectionText.getStr());
+                SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionText);
             }
         }
     }
