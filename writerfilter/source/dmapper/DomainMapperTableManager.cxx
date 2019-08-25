@@ -609,7 +609,7 @@ void DomainMapperTableManager::endOfRowAction()
     //calculate number of used grids - it has to match the size of m_aTableGrid
     size_t nGrids = std::accumulate(pCurrentSpans->begin(), pCurrentSpans->end(), sal::static_int_cast<size_t>(0));
 
-    // sj: the grid is having no units... they is containing only relative values.
+    // sj: the grid is having no units... they are containing only relative values.
     // a table with a grid of "1:2:1" looks identical as if the table is having
     // a grid of "20:40:20" and it doesn't have to do something with the tableWidth
     // -> so we have get the sum of each grid entry for the fullWidthRelative:
