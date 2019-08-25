@@ -21,7 +21,6 @@
 #include <cellatr.hxx>
 #include <doc.hxx>
 #include <float.h>
-#include <format.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <node.hxx>

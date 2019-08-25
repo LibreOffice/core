@@ -21,7 +21,6 @@
 
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <vcl/settings.hxx>
 #include <viewopt.hxx>
 #include <frmtool.hxx>
@@ -33,13 +32,9 @@
 #include <dview.hxx>
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>
-#include <docary.hxx>
-#include <extinput.hxx>
 #include <ndtxt.hxx>
 #include <txtfld.hxx>
 #include <scriptinfo.hxx>
-#include <mdiexp.hxx>
-#include <wrtsh.hxx>
 #include <view.hxx>
 #include <IDocumentLayoutAccess.hxx>
 
@@ -50,7 +45,6 @@
 #include "overlayrangesoutline.hxx"
 
 #include <memory>
-#include <boost/property_tree/json_parser.hpp>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>

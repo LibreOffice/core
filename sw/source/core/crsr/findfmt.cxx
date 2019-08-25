@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <doc.hxx>
 #include <pamtyp.hxx>
 #include <pam.hxx>
 #include <txtfrm.hxx>

@@ -17,19 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <fmtcntnt.hxx>
 #include <txatbase.hxx>
-#include <frmatr.hxx>
-#include <viscrs.hxx>
 #include "callnk.hxx"
 #include <crsrsh.hxx>
 #include <doc.hxx>
 #include <frmfmt.hxx>
 #include <txtfrm.hxx>
-#include <tabfrm.hxx>
 #include <rowfrm.hxx>
 #include <fmtfsize.hxx>
 #include <ndtxt.hxx>

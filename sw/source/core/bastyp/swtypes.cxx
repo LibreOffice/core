@@ -18,31 +18,10 @@
  */
 
 #include <swtypes.hxx>
-#include <rtl/ustring.hxx>
 
-#include <bodyfrm.hxx>
-#include <cellfrm.hxx>
-#include <colfrm.hxx>
 #include <editeng/unolingu.hxx>
-#include <fntcache.hxx>
-#include <frmfmt.hxx>
-#include <frmtool.hxx>
-#include <hffrm.hxx>
-#include <ndtxt.hxx>
-#include <pagefrm.hxx>
-#include <rowfrm.hxx>
-#include <sectfrm.hxx>
-#include <swatrset.hxx>
-#include <swfntcch.hxx>
-#include <swtable.hxx>
-#include <swtblfmt.hxx>
-#include <tabfrm.hxx>
-#include <txtfrm.hxx>
-#include <UndoDelete.hxx>
-#include <UndoInsert.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
-#include <viscrs.hxx>
 
 using namespace com::sun::star;
 

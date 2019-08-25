@@ -19,7 +19,6 @@
 
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <flyfrm.hxx>
@@ -27,8 +26,6 @@
 #include <cntfrm.hxx>
 #include <notxtfrm.hxx>
 #include <ndole.hxx>
-#include <doc.hxx>
-#include <docsh.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

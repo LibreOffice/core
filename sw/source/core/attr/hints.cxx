@@ -18,11 +18,11 @@
  */
 
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <editeng/scripttypeitem.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <ndtxt.hxx>
 #include <swtypes.hxx>
+#include <svl/languageoptions.hxx>
 #include <vcl/outdev.hxx>
 #include <osl/diagnose.h>
 

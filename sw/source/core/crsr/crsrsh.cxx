@@ -21,9 +21,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 
 #include <hintids.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/srchdlg.hxx>
-#include <editeng/frmdiritem.hxx>
 #include <sfx2/viewsh.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <doc.hxx>
@@ -38,7 +36,6 @@
 #include <flyfrm.hxx>
 #include <dview.hxx>
 #include <viewopt.hxx>
-#include <frmtool.hxx>
 #include <crsrsh.hxx>
 #include <tabfrm.hxx>
 #include <txtfrm.hxx>
@@ -57,10 +54,8 @@
 #include <unotextrange.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <numrule.hxx>
 #include <IGrammarContact.hxx>
 #include <comphelper/flagguard.hxx>
-#include <globals.hrc>
 #include <strings.hrc>
 #include <IDocumentLayoutAccess.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -68,6 +63,7 @@
 #include <comphelper/sequence.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <editeng/editview.hxx>
+#include <editeng/frmdir.hxx>
 #include <sal/log.hxx>
 #include <PostItMgr.hxx>
 #include <DocumentSettingManager.hxx>

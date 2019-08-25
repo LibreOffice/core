@@ -18,17 +18,13 @@
  */
 
 #include "accfrmobjmap.hxx"
-#include "accframe.hxx"
 #include <accmap.hxx>
 #include "acccontext.hxx"
 
 #include <viewsh.hxx>
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-#include <frmfmt.hxx>
 #include <pagefrm.hxx>
-#include <txtfrm.hxx>
-#include <node.hxx>
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
 

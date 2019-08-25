@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <bookmrk.hxx>
-#include <IDocumentMarkAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentState.hxx>
@@ -27,9 +26,7 @@
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <swserv.hxx>
-#include <svl/listener.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <swtypes.hxx>
 #include <UndoBookmark.hxx>
 #include <unobookmark.hxx>
 #include <xmloff/odffields.hxx>
@@ -37,10 +34,10 @@
 #include <comphelper/random.hxx>
 #include <comphelper/anytostring.hxx>
 #include <sal/log.hxx>
+#include <svl/zforlist.hxx>
 #include <edtwin.hxx>
 #include <DateFormFieldButton.hxx>
 #include <DropDownFormFieldButton.hxx>
-#include <svx/numfmtsh.hxx>
 #include <DocumentContentOperationsManager.hxx>
 
 using namespace ::sw::mark;

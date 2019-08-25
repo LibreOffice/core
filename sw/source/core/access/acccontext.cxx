@@ -22,7 +22,6 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -43,14 +42,12 @@
 #include <flyfrm.hxx>
 #include <dflyobj.hxx>
 #include <pam.hxx>
-#include <viewimp.hxx>
 #include <accmap.hxx>
 #include "accfrmobjslist.hxx"
 #include "acccontext.hxx"
 #include <svx/AccessibleShape.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "accpara.hxx"
 #include <PostItMgr.hxx>
 
 using namespace sw::access;

@@ -33,8 +33,6 @@
 #include <fmtanchr.hxx>
 #include <dcontact.hxx>
 
-#include <pam.hxx>
-
 #include <vcl/window.hxx>
 
 namespace sw { namespace access {

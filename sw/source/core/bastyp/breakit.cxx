@@ -23,8 +23,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
-#include <editeng/unolingu.hxx>
-#include <editeng/scripttypeitem.hxx>
+#include <svl/languageoptions.hxx>
 #include <unicode/uchar.h>
 #include <unotools/localedatawrapper.hxx>
 #include <algorithm>

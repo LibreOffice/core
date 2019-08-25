@@ -17,18 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svdmodel.hxx>
-#include <svx/svdpage.hxx>
 #include <crsrsh.hxx>
 #include <doc.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
 #include <ftnfrm.hxx>
-#include <viewimp.hxx>
 #include <swcrsr.hxx>
-#include <dflyobj.hxx>
 #include <ndtxt.hxx>
-#include <flyfrm.hxx>
 #include <txtfrm.hxx>
 #include <txtftn.hxx>
 #include <ftnidx.hxx>

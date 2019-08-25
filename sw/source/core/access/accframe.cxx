@@ -17,22 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <editeng/brushitem.hxx>
 #include <flyfrm.hxx>
-#include <rootfrm.hxx>
-#include <txtfrm.hxx>
 #include <sectfrm.hxx>
 #include <section.hxx>
 #include <viewsh.hxx>
 #include <viewopt.hxx>
-#include <doc.hxx>
 #include <frmatr.hxx>
 #include <pagefrm.hxx>
 #include <pagedesc.hxx>
-#include <fmtanchr.hxx>
 #include <fldbas.hxx>
-#include <dcontact.hxx>
 #include <accmap.hxx>
 #include "accfrmobjslist.hxx"
 #include "accfrmobjmap.hxx"

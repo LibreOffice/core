@@ -24,9 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <frmfmt.hxx>
-#include <ndnotxt.hxx>
 #include <flyfrm.hxx>
-#include <cntfrm.hxx>
 #include <fmtcntnt.hxx>
 #include <ndindex.hxx>
 #include <fesh.hxx>
@@ -35,11 +33,9 @@
 #include "accframebase.hxx"
 
 #include <crsrsh.hxx>
-#include <txtfrm.hxx>
 #include <notxtfrm.hxx>
 #include <ndtxt.hxx>
 #include <undobj.hxx>
-#include <dcontact.hxx>
 #include <fmtanchr.hxx>
 
 using namespace ::com::sun::star;

@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
 #include <algorithm>
 #include <vector>
-#include <set>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -33,19 +31,16 @@
 #include <vcl/svapp.hxx>
 #include <frmfmt.hxx>
 #include <tabfrm.hxx>
-#include <rowfrm.hxx>
 #include <cellfrm.hxx>
 #include <swtable.hxx>
 #include <crsrsh.hxx>
 #include <viscrs.hxx>
 #include <hints.hxx>
-#include <fesh.hxx>
 #include "accfrmobjslist.hxx"
 #include <accmap.hxx>
 #include <strings.hrc>
 #include "acctable.hxx"
 
-#include <layfrm.hxx>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 
 #include <editeng/brushitem.hxx>

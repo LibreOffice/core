@@ -25,6 +25,10 @@
 #include <vector>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
+#include <svl/poolitem.hxx>
+
+#include <calbck.hxx>
+
 #include "acccontext.hxx"
 
 class SwTabFrame;

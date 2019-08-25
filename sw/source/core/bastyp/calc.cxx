@@ -27,7 +27,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <cstdlib>
-#include <dbfld.hxx>
 #include <dbmgr.hxx>
 #include <docfld.hxx>
 #include <docstat.hxx>
@@ -35,14 +34,13 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStatistics.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/scripttypeitem.hxx>
-#include <editeng/unolingu.hxx>
 #include <expfld.hxx>
 #include <hintids.hxx>
 #include <o3tl/temporary.hxx>
-#include <osl/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #include <shellres.hxx>
+#include <svl/languageoptions.hxx>
 #include <svl/zforlist.hxx>
 #include <swmodule.hxx>
 #include <swtypes.hxx>

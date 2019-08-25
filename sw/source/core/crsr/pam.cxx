@@ -22,7 +22,6 @@
 #include <string_view>
 
 #include <tools/gen.hxx>
-#include <hintids.hxx>
 #include <editeng/protitem.hxx>
 #include <cntfrm.hxx>
 #include <pagefrm.hxx>
@@ -34,7 +33,6 @@
 #include <txtfrm.hxx>
 #include <fmtcntnt.hxx>
 #include <frmatr.hxx>
-#include <swtable.hxx>
 #include <flyfrm.hxx>
 #include <fmteiro.hxx>
 #include <section.hxx>

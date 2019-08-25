@@ -18,7 +18,6 @@
  */
 
 #include <vcl/window.hxx>
-#include <vcl/svapp.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

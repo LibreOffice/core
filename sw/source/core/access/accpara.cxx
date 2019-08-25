@@ -32,7 +32,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -51,18 +50,14 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <unotools/charclass.hxx>
 #include <unocrsr.hxx>
 #include <unoport.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
-#include <txtatr.hxx>
 #include "acchyperlink.hxx"
 #include "acchypertextdata.hxx"
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
-#include <section.hxx>
-#include <doctxm.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <algorithm>
 #include <docufld.hxx>
@@ -78,9 +73,7 @@
 #include <wrong.hxx>
 #include <editeng/brushitem.hxx>
 #include <swatrset.hxx>
-#include <frmatr.hxx>
 #include <unosett.hxx>
-#include <paratr.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <com/sun/star/text/WritingMode2.hpp>
@@ -94,7 +87,6 @@
 #include <editeng/editids.hrc>
 
 #include <reffld.hxx>
-#include <expfld.hxx>
 #include <flddat.hxx>
 #include "../../uibase/inc/fldmgr.hxx"
 #include <fldbas.hxx>      // SwField

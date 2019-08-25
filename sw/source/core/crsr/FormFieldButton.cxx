@@ -8,19 +8,11 @@
  */
 
 #include <DropDownFormFieldButton.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <edtwin.hxx>
 #include <basegfx/color/bcolortools.hxx>
-#include <viewopt.hxx>
 #include <bookmrk.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/event.hxx>
-#include <vcl/lstbox.hxx>
-#include <IMark.hxx>
-#include <view.hxx>
-#include <docsh.hxx>
-#include <strings.hrc>
 
 FormFieldButton::FormFieldButton(SwEditWin* pEditWin, sw::mark::Fieldmark& rFieldmark)
     : MenuButton(pEditWin, WB_DIALOGCONTROL)
