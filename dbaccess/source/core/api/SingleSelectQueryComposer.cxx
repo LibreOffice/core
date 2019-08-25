@@ -233,7 +233,7 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
     if ( !m_aContext.is() || !m_xConnection.is() || !m_xConnectionTables.is() )
         throw IllegalArgumentException();
 
-    registerProperty(PROPERTY_ORIGINAL,PROPERTY_ID_ORIGINAL,PropertyAttribute::BOUND|PropertyAttribute::READONLY,&m_sOrignal,cppu::UnoType<decltype(m_sOrignal)>::get());
+    registerProperty(PROPERTY_ORIGINAL,PROPERTY_ID_ORIGINAL,PropertyAttribute::BOUND|PropertyAttribute::READONLY,&m_sOriginal,cppu::UnoType<decltype(m_sOriginal)>::get());
 
     m_aCurrentColumns.resize(4);
 
@@ -311,10 +311,10 @@ void SAL_CALL OSingleSelectQueryComposer::setQuery( const OUString& command )
     clearCurrentCollections();
     // now set the new one
     setQuery_Impl(command);
-    m_sOrignal = command;
+    m_sOriginal = command;
 
     // reset the additive iterator to the same statement
-    parseAndCheck_throwError( m_aSqlParser, m_sOrignal, m_aAdditiveIterator, *this );
+    parseAndCheck_throwError( m_aSqlParser, m_sOriginal, m_aAdditiveIterator, *this );
 
     // we have no "elementary" parts anymore (means filter/groupby/having/order clauses)
     for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
@@ -386,7 +386,7 @@ void SAL_CALL OSingleSelectQueryComposer::setCommand( const OUString& Command,sa
     // now set the new one
     OUString sCommand = sSQL.makeStringAndClear();
     setElementaryQuery(sCommand);
-    m_sOrignal = sCommand;
+    m_sOriginal = sCommand;
 }
 
 void OSingleSelectQueryComposer::setQuery_Impl( const OUString& command )

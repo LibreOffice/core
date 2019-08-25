@@ -106,7 +106,7 @@ namespace dbaccess
         sal_Int32                               m_nCommandType;
 
         // <properties>
-        OUString                         m_sOrignal;
+        OUString                         m_sOriginal;
         // </properties>
 
 
