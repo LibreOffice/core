@@ -20,6 +20,8 @@
 #include <memory>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
+#include <vcl/drawables/PolygonDrawable.hxx>
+
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
@@ -128,7 +130,7 @@ void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
             tools::Rectangle aRect( Point( nX, nY ), Size( nWidth+1, nHeight+1 ) );
             tools::Polygon   aPoly( aRect );
             aPoly.Rotate( Point( nBaseX, nBaseY ), mpFontInstance->mnOrientation );
-            ImplDrawPolygon( aPoly );
+            Draw(vcl::PolygonDrawable(aPoly));
             return;
         }
     }

@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
 #include <sal/types.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -28,13 +26,20 @@
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/drawables/PolygonDrawable.hxx>
 #include <vcl/drawables/B2DPolyPolyLineDrawable.hxx>
 
 #include <salgdi.hxx>
 
 #include <memory>
+#include <cassert>
 
 #define OUTDEV_POLYPOLY_STACKBUF        32
+
+void OutputDevice::DrawPolygon(const tools::Polygon& rPoly)
+{
+    Draw(vcl::PolygonDrawable(rPoly));
+}
 
 void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
@@ -156,106 +161,6 @@ void OutputDevice::DrawPolygon( const basegfx::B2DPolygon& rB2DPolygon)
     }
 }
 
-void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
-{
-    assert(!is_double_buffered_window());
-
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaPolygonAction( rPoly ) );
-
-    sal_uInt16 nPoints = rPoly.GetSize();
-
-    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || (nPoints < 2) || ImplIsRecordLayout() )
-        return;
-
-    // we need a graphics
-    if ( !mpGraphics && !AcquireGraphics() )
-        return;
-
-    if ( mbInitClipRegion )
-        InitClipRegion();
-
-    if ( mbOutputClipped )
-        return;
-
-    if ( mbInitLineColor )
-        InitLineColor();
-
-    if ( mbInitFillColor )
-        InitFillColor();
-
-    // use b2dpolygon drawing if possible
-    if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
-       mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
-       RasterOp::OverPaint == GetRasterOp() &&
-       (IsLineColor() || IsFillColor()))
-    {
-        const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
-        basegfx::B2DPolygon aB2DPolygon(rPoly.getB2DPolygon());
-        bool bSuccess(true);
-
-        // ensure closed - maybe assert, hinders buffering
-        if(!aB2DPolygon.isClosed())
-        {
-            aB2DPolygon.setClosed(true);
-        }
-
-        if(IsFillColor())
-        {
-            bSuccess = mpGraphics->DrawPolyPolygon(
-                aTransform,
-                basegfx::B2DPolyPolygon(aB2DPolygon),
-                0.0,
-                this);
-        }
-
-        if(bSuccess && IsLineColor())
-        {
-            const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
-            const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
-
-            bSuccess = mpGraphics->DrawPolyLine(
-                aTransform,
-                aB2DPolygon,
-                0.0,
-                aB2DLineWidth,
-                basegfx::B2DLineJoin::NONE,
-                css::drawing::LineCap_BUTT,
-                basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
-                bPixelSnapHairline,
-                this);
-        }
-
-        if(bSuccess)
-        {
-            if( mpAlphaVDev )
-                mpAlphaVDev->DrawPolygon( rPoly );
-            return;
-        }
-    }
-
-    tools::Polygon aPoly = ImplLogicToDevicePixel( rPoly );
-    const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(aPoly.GetConstPointAry());
-
-    // #100127# Forward beziers to sal, if any
-    if( aPoly.HasFlags() )
-    {
-        const PolyFlags* pFlgAry = aPoly.GetConstFlagAry();
-        if( !mpGraphics->DrawPolygonBezier( nPoints, pPtAry, pFlgAry, this ) )
-        {
-            aPoly = tools::Polygon::SubdivideBezier(aPoly);
-            pPtAry = reinterpret_cast<const SalPoint*>(aPoly.GetConstPointAry());
-            mpGraphics->DrawPolygon( aPoly.GetSize(), pPtAry, this );
-        }
-    }
-    else
-    {
-        mpGraphics->DrawPolygon( nPoints, pPtAry, this );
-    }
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawPolygon( rPoly );
-}
-
 // Caution: This method is nearly the same as
 // OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency),
 // so when changes are made here do not forget to make changes there, too
@@ -359,24 +264,6 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolyg
         delete[] pPointAry;
         delete[] pPointAryAry;
         delete[] pFlagAryAry;
-    }
-}
-
-void OutputDevice::ImplDrawPolygon( const tools::Polygon& rPoly, const tools::PolyPolygon* pClipPolyPoly )
-{
-    if( pClipPolyPoly )
-    {
-        ImplDrawPolyPolygon( rPoly, pClipPolyPoly );
-    }
-    else
-    {
-        sal_uInt16 nPoints = rPoly.GetSize();
-
-        if ( nPoints < 2 )
-            return;
-
-        const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(rPoly.GetConstPointAry());
-        mpGraphics->DrawPolygon( nPoints, pPtAry, this );
     }
 }
 

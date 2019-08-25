@@ -28,6 +28,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
+#include <vcl/drawables/PolygonDrawable.hxx>
 
 #include <salgdi.hxx>
 
@@ -336,7 +337,10 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
         aPoly[3] = aBorderRect.BottomLeft();
         aPoly.Rotate( aCenter, nAngle );
 
-        ImplDrawPolygon( aPoly, pClixPolyPoly );
+        if (pClixPolyPoly)
+            Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+        else
+            Draw(vcl::PolygonDrawable(aPoly));
 
         if ( !bLinear)
         {
@@ -349,7 +353,10 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
             aPoly[3] = aBorderRect.BottomLeft();
             aPoly.Rotate( aCenter, nAngle );
 
-            ImplDrawPolygon( aPoly, pClixPolyPoly );
+            if (pClixPolyPoly)
+                Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+            else
+                Draw(vcl::PolygonDrawable(aPoly));
         }
     }
 
@@ -399,7 +406,10 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
         aPoly[3] = aRect.BottomLeft();
         aPoly.Rotate( aCenter, nAngle );
 
-        ImplDrawPolygon( aPoly, pClixPolyPoly );
+        if (pClixPolyPoly)
+            Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+        else
+            Draw(vcl::PolygonDrawable(aPoly));
 
         if ( !bLinear )
         {
@@ -411,7 +421,10 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
             aPoly[3] = aMirrorRect.BottomLeft();
             aPoly.Rotate( aCenter, nAngle );
 
-            ImplDrawPolygon( aPoly, pClixPolyPoly );
+            if (pClixPolyPoly)
+                Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+            else
+                Draw(vcl::PolygonDrawable(aPoly));
         }
     }
     if ( bLinear)
@@ -432,7 +445,10 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
     aPoly[3] = aRect.BottomLeft();
     aPoly.Rotate( aCenter, nAngle );
 
-    ImplDrawPolygon( aPoly, pClixPolyPoly );
+    if (pClixPolyPoly)
+        Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+    else
+        Draw(vcl::PolygonDrawable(aPoly));
 
 }
 
@@ -530,7 +546,10 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
         aExtRect.AdjustBottom(1 );
 
         aPoly = aExtRect;
-        ImplDrawPolygon( aPoly, pClixPolyPoly );
+        if (pClixPolyPoly)
+            Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+        else
+            Draw(vcl::PolygonDrawable(aPoly));
     }
 
     // loop to output Polygon/PolyPolygon sequentially
@@ -586,7 +605,10 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
             // #107349# Set fill color _before_ geometry painting
             mpGraphics->SetFillColor( Color( nRed, nGreen, nBlue ) );
 
-            ImplDrawPolygon( aPoly, pClixPolyPoly );
+            if (pClixPolyPoly)
+                Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+            else
+                Draw(vcl::PolygonDrawable(aPoly));
         }
     }
 
@@ -608,7 +630,11 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
             }
 
             mpGraphics->SetFillColor( Color( nRed, nGreen, nBlue ) );
-            ImplDrawPolygon( rPoly, pClixPolyPoly );
+
+            if (pClixPolyPoly)
+                Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+            else
+                Draw(vcl::PolygonDrawable(aPoly));
         }
     }
 }
