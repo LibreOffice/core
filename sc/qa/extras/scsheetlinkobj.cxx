@@ -11,7 +11,6 @@
 #include <test/container/xnamed.hxx>
 #include <test/sheet/sheetlink.hxx>
 #include <test/util/xrefreshable.hxx>
-#include <sfx2/app.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

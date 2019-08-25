@@ -17,13 +17,10 @@
 
 #include <cppu/unotype.hxx>
 #include <rtl/ustring.hxx>
-#include <sfx2/app.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XDDELink.hpp>
 #include <com/sun/star/sheet/XDDELinks.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>

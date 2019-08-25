@@ -14,7 +14,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <test/bootstrapfixture.hxx>
 #include <unotools/tempfile.hxx>
@@ -22,7 +21,6 @@
 #include <docsh.hxx>
 #include <editutil.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/editobj.hxx>
 #include <editeng/fontitem.hxx>
 #include <osl/file.hxx>
 #include <comphelper/processfactory.hxx>

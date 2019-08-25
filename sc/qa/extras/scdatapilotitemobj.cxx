@@ -10,7 +10,6 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xnamed.hxx>
 #include <test/sheet/datapilotitem.hxx>
-#include <rtl/string.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

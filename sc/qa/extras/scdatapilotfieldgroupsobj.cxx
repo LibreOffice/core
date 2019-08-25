@@ -16,12 +16,10 @@
 #include <test/lang/xserviceinfo.hxx>
 
 #include <comphelper/types.hxx>
-#include <rtl/string.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>

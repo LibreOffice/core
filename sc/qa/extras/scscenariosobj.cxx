@@ -21,13 +21,11 @@
 #include <com/sun/star/sheet/XScenario.hpp>
 #include <com/sun/star/sheet/XScenariosSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
-#include <unonames.hxx>
 #include <cppu/unotype.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>

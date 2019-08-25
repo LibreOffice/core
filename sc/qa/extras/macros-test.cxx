@@ -9,23 +9,12 @@
 
 #include <sal/config.h>
 #include <test/unoapi_test.hxx>
-#include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 
 #include <vcl/svapp.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
-#include <svl/intitem.hxx>
-#include <com/sun/star/frame/Desktop.hpp>
-
-#include <basic/sbxdef.hxx>
 
 #include <docsh.hxx>
-#include <patattr.hxx>
-#include <scitems.hxx>
 #include <document.hxx>
 
 using namespace ::com::sun::star;

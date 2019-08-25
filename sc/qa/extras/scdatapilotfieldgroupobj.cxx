@@ -15,7 +15,6 @@
 #include <test/container/xnamed.hxx>
 #include <test/lang/xserviceinfo.hxx>
 #include <comphelper/types.hxx>
-#include <rtl/string.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
