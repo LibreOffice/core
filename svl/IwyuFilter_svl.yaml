@@ -1,0 +1,43 @@
+---
+assumeFilename: svl/source/items/intitem.cxx
+blacklist:
+    svl/source/config/itemholder2.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XEventListener.hpp
+    svl/source/fsstor/oinputstreamcontainer.hxx:
+    # Base class needs complete type
+    - com/sun/star/io/XInputStream.hpp
+    - com/sun/star/embed/XExtendedStorageStream.hpp
+    svl/source/numbers/zforscan.hxx:
+    # Needed for direct member access
+    - tools/color.hxx
+    svl/source/numbers/numfmuno.hxx:
+    # Base class needs complete type
+    - com/sun/star/util/XNumberFormatter2.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XNumberFormats.hpp
+    - com/sun/star/util/XNumberFormatTypes.hpp
+    - com/sun/star/beans/XPropertyAccess.hpp
+    svl/source/passwordcontainer/passwordcontainer.hxx:
+    # Base class needs complete type
+    - com/sun/star/task/XPasswordContainer2.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XEventListener.hpp
+    svl/source/crypto/cryptosign.cxx:
+    # Needed on WIN32
+    - o3tl/char16_t2wchar_t.hxx
+    svl/source/filepicker/pickerhistory.cxx:
+    # Needed to inherit linker visibility from function declaration
+    - svl/pickerhistoryaccess.hxx
+    svl/source/misc/getstringresource.cxx:
+    # Needed to inherit linker visibility from function declaration
+    - svl/svlresid.hxx
+    svl/source/misc/fstathelper.cxx:
+    # Needed to inherit linker visibility from function declaration
+    - svl/fstathelper.hxx
+    svl/source/misc/urihelper.cxx:
+    # Needed to inherit linker visibility from function declaration
+    - svl/urihelper.hxx
+    svl/source/numbers/zforfind.cxx:
+    # Used in test code behind #ifdef
+    - com/sun/star/i18n/LocaleCalendar2.hpp
