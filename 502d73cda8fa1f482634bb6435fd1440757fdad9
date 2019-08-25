@@ -70,6 +70,30 @@
       "revId": "502d73cda8fa1f482634bb6435fd1440757fdad9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_432fa9f5",
+        "filename": "vcl/inc/fontinstance.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-25T11:33:46Z",
+      "side": 1,
+      "message": "I *think* that I see why it\u0027s OK in the current status; still I know little in the matter, so I\u0027m afraid of adding potentially misleading comments :-) - so no, at least not me.",
+      "parentUuid": "bf659307_0304517a",
+      "range": {
+        "startLine": 89,
+        "startChar": 40,
+        "endLine": 89,
+        "endChar": 74
+      },
+      "revId": "502d73cda8fa1f482634bb6435fd1440757fdad9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
