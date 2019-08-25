@@ -21,8 +21,6 @@
 #include <editeng/sizeitem.hxx>
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/module.hxx>
 
 #include <strings.hrc>
 #include <svx/colorbox.hxx>
@@ -42,32 +40,24 @@
 
 
 #include <svx/tabline.hxx>
-#include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
 #include <cuitabline.hxx>
-#include <dlgname.hxx>
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/svxgrahicitem.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/dialoghelper.hxx>
 #include <svx/ofaitem.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/numvset.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/svxenum.hxx>
-#include <sfx2/objsh.hxx>
 #include <editeng/brushitem.hxx>
 #include <svx/gallery.hxx>
 #include <sfx2/opengrf.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <svx/strings.hrc>
 #include <vcl/settings.hxx>

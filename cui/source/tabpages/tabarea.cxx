@@ -17,21 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svx/svdmark.hxx>
-#include <svx/svdobj.hxx>
-#include <svx/svdview.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 
 #include <svx/xtable.hxx>
-#include <svx/globl3d.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/drawitem.hxx>
 #include <cuitabarea.hxx>
-#include <dlgname.hxx>
 
 SvxAreaTabDialog::SvxAreaTabDialog
 (

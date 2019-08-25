@@ -20,15 +20,14 @@
 #include "connpoolconfig.hxx"
 #include "connpoolsettings.hxx"
 
-#include "connpooloptions.hxx"
 #include <svl/itemset.hxx>
 #include <svx/databaseregistrationui.hxx>
 #include <unotools/confignode.hxx>
 #include <svl/eitem.hxx>
-#include <svl/solar.hrc>
 #include <comphelper/processfactory.hxx>
 #include "sdbcdriverenum.hxx"
 
+#include <com/sun/star/uno/Sequence.hxx>
 
 namespace offapp
 {

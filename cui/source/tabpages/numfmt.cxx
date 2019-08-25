@@ -22,10 +22,7 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <i18nlangtag/lang.h>
-#include <i18nlangtag/mslangid.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <svtools/colorcfg.hxx>
 
@@ -37,8 +34,6 @@
 #include <numfmt.hxx>
 #include <svx/numfmtsh.hxx>
 #include <dialmgr.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svx/flagsdef.hxx>
 #include <vector>

@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
-#include <sfx2/module.hxx>
 #include <svx/svddef.hxx>
 #include <svx/sdasitm.hxx>
 #include <svx/sdtditm.hxx>
@@ -27,16 +25,10 @@
 #include <svx/sdtfsitm.hxx>
 #include <svx/sdtcfitm.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svdmark.hxx>
-#include <svx/svdview.hxx>
-#include <svx/svdotext.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 
 #include <textattr.hxx>
 #include <svx/dlgutil.hxx>
-#include <sfx2/request.hxx>
-#include <svx/ofaitem.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <svtools/unitconv.hxx>
 

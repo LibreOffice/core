@@ -19,7 +19,6 @@
 
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
-#include <com/sun/star/text/RelOrientation.hpp>
 
 #include <numpages.hxx>
 #include <dialmgr.hxx>
@@ -32,8 +31,6 @@
 #include <svx/colorbox.hxx>
 #include <svx/strarray.hxx>
 #include <svx/gallery.hxx>
-#include <svx/ucsubset.hxx>
-#include <svl/urihelper.hxx>
 #include <editeng/brushitem.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
@@ -41,25 +38,18 @@
 #include <vcl/settings.hxx>
 #include <cui/cuicharmap.hxx>
 #include <editeng/flstitem.hxx>
-#include <svx/dlgutil.hxx>
-#include <svx/xtable.hxx>
-#include <svx/drawitem.hxx>
 #include <svx/numvset.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/unitconv.hxx>
-#include <editeng/unolingu.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XNumberingFormatter.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/text/XNumberingTypeInfo.hpp>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 
 #include <algorithm>
@@ -68,20 +58,18 @@
 #include <sfx2/opengrf.hxx>
 
 #include <strings.hrc>
-#include <sfx2/request.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/slstitm.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <svx/gallery1.hxx>
-#include <svx/galtheme.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <rtl/ustring.h>
 #include <sal/log.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
+#include <tools/urlobj.hxx>
+#include <osl/diagnose.h>
 
 using namespace css;
 using namespace css::uno;

@@ -21,8 +21,6 @@
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTUPDT_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/configuration/XReadWriteAccess.hpp>
 

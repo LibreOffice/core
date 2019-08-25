@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
-#include <sfx2/module.hxx>
-
-#include <svx/dialogs.hrc>
-
 #include <textanim.hxx>
 #include <textattr.hxx>
 #include <svx/dlgutil.hxx>

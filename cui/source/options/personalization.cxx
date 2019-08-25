@@ -13,35 +13,18 @@
 
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
-#include <rtl/strbuf.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
-#include <vcl/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/mnemonic.hxx>
-#include <vcl/virdev.hxx>
-#include <dialmgr.hxx>
-#include <strings.hrc>
-
-#include <com/sun/star/task/InteractionHandler.hpp>
-#include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
-#include <com/sun/star/xml/sax/Parser.hpp>
-#include <ucbhelper/content.hxx>
-#include <comphelper/simplefileaccessinteraction.hxx>
 
 #include <vector>
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
 
 // persona

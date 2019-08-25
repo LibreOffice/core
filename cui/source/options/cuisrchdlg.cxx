@@ -17,25 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/slstitm.hxx>
-#include <svl/itemiter.hxx>
-#include <svl/style.hxx>
-#include <unotools/searchopt.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/module.hxx>
-#include <sfx2/viewsh.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <svl/cjkoptions.hxx>
 
 #include <cuisrchdlg.hxx>
 
-#include <svl/srchitem.hxx>
-#include <svx/pageitem.hxx>
-#include <svx/dlgutil.hxx>
 #include "optjsearch.hxx"
-#include <editeng/brushitem.hxx>
-#include <backgrnd.hxx>
 
 
 // class SvxJSearchOptionsDialog -----------------------------------------

@@ -18,17 +18,13 @@
  */
 
 #include <memory>
-#include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
-#include <vcl/graph.hxx>
 #include <sfx2/viewsh.hxx>
-#include <svl/itemiter.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/unitconv.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <unotools/configitem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <sal/macros.h>
 
@@ -46,7 +42,6 @@
 #include <editeng/frmdiritem.hxx>
 #include <svx/dlgutil.hxx>
 #include <editeng/paperinf.hxx>
-#include <sfx2/module.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
@@ -54,7 +49,6 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/aeitem.hxx>
-#include <sfx2/request.hxx>
 #include <svx/xdef.hxx>
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
