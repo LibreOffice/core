@@ -28,11 +28,18 @@ namespace vcl
 class VCL_DLLPUBLIC B2DPolyPolyLineDrawable : public Drawable
 {
 public:
+    B2DPolyPolyLineDrawable(basegfx::B2DPolyPolygon aLinePolyPolygon)
+        : maLinePolyPolygon(aLinePolyPolygon)
+        , mbUsesLineInfo(false)
+    {
+    }
+
     B2DPolyPolyLineDrawable(basegfx::B2DPolyPolygon aLinePolyPolygon, LineInfo const aLineInfo,
                             bool bUsesScaffolding = true)
         : Drawable(bUsesScaffolding)
         , maLinePolyPolygon(aLinePolyPolygon)
         , maLineInfo(aLineInfo)
+        , mbUsesLineInfo(true)
     {
     }
 
@@ -46,8 +53,11 @@ private:
     bool Draw(OutputDevice* pRenderContext, basegfx::B2DPolyPolygon const& rLinePolyPolygon,
               LineInfo const& rLineInfo) const;
 
+    bool Draw(OutputDevice* pRenderContext, basegfx::B2DPolyPolygon const& rLinePolyPolygon) const;
+
     basegfx::B2DPolyPolygon maLinePolyPolygon;
     LineInfo maLineInfo;
+    bool mbUsesLineInfo;
 };
 
 } // namespace vcl

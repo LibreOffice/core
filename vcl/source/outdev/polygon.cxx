@@ -22,14 +22,17 @@
 #include <sal/types.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <memory>
 #include <tools/poly.hxx>
+
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/drawables/B2DPolyPolyLineDrawable.hxx>
 
 #include <salgdi.hxx>
+
+#include <memory>
 
 #define OUTDEV_POLYPOLY_STACKBUF        32
 
@@ -265,87 +268,7 @@ void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly 
         mpMetaFile->AddAction( new MetaPolyPolygonAction( tools::PolyPolygon( rB2DPolyPoly ) ) );
 
     // call helper
-    ImplDrawPolyPolygonWithB2DPolyPolygon(rB2DPolyPoly);
-}
-
-void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly)
-{
-    // Do not paint empty PolyPolygons
-    if(!rB2DPolyPoly.count() || !IsDeviceOutputNecessary())
-        return;
-
-    // we need a graphics
-    if( !mpGraphics && !AcquireGraphics() )
-        return;
-
-    if( mbInitClipRegion )
-        InitClipRegion();
-
-    if( mbOutputClipped )
-        return;
-
-    if( mbInitLineColor )
-        InitLineColor();
-
-    if( mbInitFillColor )
-        InitFillColor();
-
-    if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
-       mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
-       RasterOp::OverPaint == GetRasterOp() &&
-       (IsLineColor() || IsFillColor()))
-    {
-        const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
-        basegfx::B2DPolyPolygon aB2DPolyPolygon(rB2DPolyPoly);
-        bool bSuccess(true);
-
-        // ensure closed - maybe assert, hinders buffering
-        if(!aB2DPolyPolygon.isClosed())
-        {
-            aB2DPolyPolygon.setClosed(true);
-        }
-
-        if(IsFillColor())
-        {
-            bSuccess = mpGraphics->DrawPolyPolygon(
-                aTransform,
-                aB2DPolyPolygon,
-                0.0,
-                this);
-        }
-
-        if(bSuccess && IsLineColor())
-        {
-            const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
-            const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
-
-            for(auto const& rPolygon : aB2DPolyPolygon)
-            {
-                bSuccess = mpGraphics->DrawPolyLine(
-                    aTransform,
-                    rPolygon,
-                    0.0,
-                    aB2DLineWidth,
-                    basegfx::B2DLineJoin::NONE,
-                    css::drawing::LineCap_BUTT,
-                    basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
-                    bPixelSnapHairline,
-                    this);
-                if (!bSuccess)
-                    break;
-            }
-        }
-
-        if(bSuccess)
-        {
-            return;
-        }
-    }
-
-    // fallback to old polygon drawing if needed
-    const tools::PolyPolygon aToolsPolyPolygon( rB2DPolyPoly );
-    const tools::PolyPolygon aPixelPolyPolygon = ImplLogicToDevicePixel( aToolsPolyPolygon );
-    ImplDrawPolyPolygon( aPixelPolyPolygon.Count(), aPixelPolyPolygon );
+    Draw(vcl::B2DPolyPolyLineDrawable(rB2DPolyPoly));
 }
 
 // #100127# Extracted from OutputDevice::DrawPolyPolygon()

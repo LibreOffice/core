@@ -82,8 +82,7 @@ bool B2DPolyLineDrawable::Draw(OutputDevice* pRenderContext, basegfx::B2DPolygon
         // draw using a loop; else the topology will paint a PolyPolygon
         for (auto const& rPolygon : aAreaPolyPolygon)
         {
-            pRenderContext->ImplDrawPolyPolygonWithB2DPolyPolygon(
-                basegfx::B2DPolyPolygon(rPolygon));
+            pRenderContext->Draw(vcl::B2DPolyPolyLineDrawable(basegfx::B2DPolyPolygon(rPolygon)));
         }
 
         pRenderContext->SetLineColor(aOldLineColor);
