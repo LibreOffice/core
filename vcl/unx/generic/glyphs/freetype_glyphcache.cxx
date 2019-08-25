@@ -557,15 +557,7 @@ void FreetypeFont::GetFontMetric(ImplFontMetricDataRef const & rxTo) const
 
     FT_Activate_Size( maSizeFT );
 
-    sal_uLong nHhea = 0;
-    const uint8_t* pHheaBuf = mpFontInfo->GetTable("hhea", &nHhea);
-    const std::vector<uint8_t> rHhea(pHheaBuf, pHheaBuf + nHhea);
-
-    sal_uLong nOS2 = 0;
-    const uint8_t* pOS2Buf = mpFontInfo->GetTable("OS/2", &nOS2);
-    const std::vector<uint8_t> rOS2(pOS2Buf, pOS2Buf + nOS2);
-
-    rxTo->ImplCalcLineSpacing(rHhea, rOS2, maFaceFT->units_per_EM);
+    rxTo->ImplCalcLineSpacing(mpFontInstance.get());
 
     rxTo->SetSlant( 0 );
     rxTo->SetWidth( mnWidth );

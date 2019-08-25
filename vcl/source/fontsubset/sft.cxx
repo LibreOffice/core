@@ -2351,8 +2351,8 @@ std::unique_ptr<sal_uInt16[]> GetTTSimpleGlyphMetrics(TrueTypeFont const *ttf, c
 }
 
 // TODO, clean up table parsing and re-use it elsewhere in this file.
-void GetTTFontMetrics(const std::vector<uint8_t>& hhea,
-                      const std::vector<uint8_t>& os2,
+void GetTTFontMetrics(const uint8_t *pHhea, size_t nHhea,
+                      const uint8_t *pOs2, size_t nOs2,
                       TTGlobalFontInfo *info)
 {
     /* There are 3 different versions of OS/2 table: original (68 bytes long),
@@ -2362,20 +2362,20 @@ void GetTTFontMetrics(const std::vector<uint8_t>& hhea,
      * FIXME: horribly outdated comment and horrible code that uses hard-coded
      * offsets to read the table.
      */
-    if (os2.size() >= 76 + 2)
+    if (nOs2 >= 76 + 2)
     {
-        info->fsSelection   = GetUInt16(os2.data(), 62);
-        info->typoAscender  = GetInt16(os2.data(),  68);
-        info->typoDescender = GetInt16(os2.data(),  70);
-        info->typoLineGap   = GetInt16(os2.data(),  72);
-        info->winAscent     = GetUInt16(os2.data(), 74);
-        info->winDescent    = GetUInt16(os2.data(), 76);
+        info->fsSelection   = GetUInt16(pOs2, 62);
+        info->typoAscender  = GetInt16(pOs2,  68);
+        info->typoDescender = GetInt16(pOs2,  70);
+        info->typoLineGap   = GetInt16(pOs2,  72);
+        info->winAscent     = GetUInt16(pOs2, 74);
+        info->winDescent    = GetUInt16(pOs2, 76);
     }
 
-    if (hhea.size() >= 8 + 2) {
-        info->ascender      = GetInt16(hhea.data(), 4);
-        info->descender     = GetInt16(hhea.data(), 6);
-        info->linegap       = GetInt16(hhea.data(), 8);
+    if (nHhea >= 8 + 2) {
+        info->ascender      = GetInt16(pHhea, 4);
+        info->descender     = GetInt16(pHhea, 6);
+        info->linegap       = GetInt16(pHhea, 8);
     }
 }
 

@@ -32,6 +32,7 @@ typedef tools::SvRef<ImplFontMetricData> ImplFontMetricDataRef;
 
 class OutputDevice;
 class FontSelectPattern;
+class LogicalFontInstance;
 
 class VCL_DLLPUBLIC ImplFontMetricData : public FontAttributes, public SvRefBase
 {
@@ -92,9 +93,7 @@ public:
     void            ImplInitTextLineSize( const OutputDevice* pDev );
     void            ImplInitAboveTextLineSize();
     void            ImplInitFlags( const OutputDevice* pDev );
-    void            ImplCalcLineSpacing(const std::vector<uint8_t>& rHhea,
-                                        const std::vector<uint8_t>& rOS_2,
-                                        int nUPEM);
+    void            ImplCalcLineSpacing(LogicalFontInstance *pFontInstance);
 
 private:
     bool            ShouldUseWinMetrics(vcl::TTGlobalFontInfo& rInfo);
