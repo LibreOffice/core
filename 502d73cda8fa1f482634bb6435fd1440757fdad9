@@ -22,6 +22,30 @@
       "revId": "502d73cda8fa1f482634bb6435fd1440757fdad9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_63dbcd1a",
+        "filename": "vcl/inc/fontinstance.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-25T11:24:48Z",
+      "side": 1,
+      "message": "It seems that I\u0027m wrong, and the mentioned BuildinFontInstance shouldn\u0027t call that method; in that case, current status makes perfect sense to prevent wrong use... sorry for the noise.",
+      "parentUuid": "bf659307_03ebf1af",
+      "range": {
+        "startLine": 89,
+        "startChar": 40,
+        "endLine": 89,
+        "endChar": 74
+      },
+      "revId": "502d73cda8fa1f482634bb6435fd1440757fdad9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
