@@ -1261,11 +1261,11 @@
     </xsl:template>
     <xsl:template name="convert2in_special">
         <!-- this template is specially to  deal with w:type ='dxa' situation -->
-        <xsl:param name="orignal_value"/>
+        <xsl:param name="original_value"/>
         <xsl:choose>
-            <xsl:when test="contains($orignal_value, 'dxa') ">
+            <xsl:when test="contains($original_value, 'dxa') ">
                 <xsl:variable name="table_measurement_new_value">
-                    <xsl:value-of select="concat( substring-before($orignal_value,'dxa'), 'twip')"/>
+                    <xsl:value-of select="concat( substring-before($original_value,'dxa'), 'twip')"/>
                 </xsl:variable>
                 <xsl:call-template name="ConvertMeasure">
                     <xsl:with-param name="TargetMeasure" select="'in'"/>
