@@ -128,6 +128,7 @@ BackendImpl::PackageImpl::PackageImpl(
             dialogURL, xCmdEnv, myBackend->getComponentContext() );
     }
     if (!scriptURL.isEmpty()) {
+        assert(m_name.pData);
         m_name = LibraryContainer::get_libname(
             scriptURL, xCmdEnv, myBackend->getComponentContext() );
     }
