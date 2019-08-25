@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
 #include <svtools/ruler.hxx>
 #include <svtools/unitconv.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -28,10 +26,8 @@
 #include <editeng/lrspitem.hxx>
 #include <tabstpge.hxx>
 #include <svx/dlgutil.hxx>
-#include <sfx2/module.hxx>
 #include <svl/cjkoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
 
 constexpr FieldUnit eDefUnit = FieldUnit::MM_100TH;

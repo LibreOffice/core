@@ -17,18 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "connpooloptions.hxx"
 #include "dbregisterednamesconfig.hxx"
 #include "dbregistersettings.hxx"
 #include <svx/databaseregistrationui.hxx>
-#include <svx/svxids.hrc>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
-#include <unotools/pathoptions.hxx>
-#include <unotools/confignode.hxx>
 #include <tools/diagnose_ex.h>
 
 
@@ -36,7 +30,6 @@ namespace svx
 {
 
 
-    using namespace ::utl;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::container;

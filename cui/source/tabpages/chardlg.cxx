@@ -17,22 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/unolingu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
-#include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
-#include <sfx2/printer.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
-#include <svx/ucsubset.hxx>
 #include <svtools/unitconv.hxx>
 #include <svl/languageoptions.hxx>
-#include <svx/xtable.hxx>
 #include <chardlg.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/postitem.hxx>
@@ -50,10 +41,7 @@
 #include <editeng/blinkitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/autokernitem.hxx>
-#include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
-#include <svx/drawitem.hxx>
-#include <svx/dlgutil.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <cui/cuicharmap.hxx>
@@ -62,15 +50,12 @@
 #include <editeng/charreliefitem.hxx>
 #include <editeng/twolinesitem.hxx>
 #include <editeng/charhiddenitem.hxx>
-#include <svl/stritem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <svx/svxdlg.hxx>
 #include <strings.hrc>
 #include <twolines.hrc>
 #include <svl/intitem.hxx>
-#include <sfx2/request.hxx>
 #include <svx/flagsdef.hxx>
 #include <FontFeaturesDialog.hxx>
 #include <sal/log.hxx>

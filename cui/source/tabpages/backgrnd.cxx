@@ -19,22 +19,17 @@
 
 #include <memory>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <unotools/pathoptions.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
-#include <sfx2/dialoghelper.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/docfile.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <svx/strings.hrc>
 
 #include <strings.hrc>
 #include <svx/dialmgr.hxx>
-#include <editeng/memberids.h>
 
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
@@ -48,10 +43,8 @@
 #include <svx/xflclit.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
-#include <svtools/controldims.hxx>
 #include <svx/flagsdef.hxx>
 #include <svl/intitem.hxx>
-#include <sfx2/request.hxx>
 #include <vcl/GraphicObject.hxx>
 
 #include <svx/unobrushitemhelper.hxx>

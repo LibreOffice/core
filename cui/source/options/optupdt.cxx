@@ -19,7 +19,6 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <sfx2/filedlghelper.hxx>
 #include <svl/zforlist.hxx>
 #include "optupdt.hxx"
 #include <comphelper/processfactory.hxx>
@@ -40,7 +39,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::css;

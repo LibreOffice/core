@@ -20,9 +20,6 @@
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTINET2_HXX
 
 #include <memory>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
 #include <sfx2/tabdlg.hxx>
 
 namespace svx {

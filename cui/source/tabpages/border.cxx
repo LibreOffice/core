@@ -17,19 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/module.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
-#include <svx/dialmgr.hxx>
-#include <svx/strings.hrc>
 
 #include <strings.hrc>
 #include <bitmaps.hlst>
 
-#include <svx/xtable.hxx>
-#include <svx/drawitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <border.hxx>
@@ -39,7 +32,6 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <svx/flagsdef.hxx>
-#include <sfx2/request.hxx>
 #include <svl/grabbagitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/ilstitem.hxx>

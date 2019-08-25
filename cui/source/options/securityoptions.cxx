@@ -19,7 +19,6 @@
 
 #include <tools/debug.hxx>
 #include <unotools/securityoptions.hxx>
-#include <vcl/svapp.hxx>
 #include "securityoptions.hxx"
 
 namespace

@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdlib.h>
-
-#include <tools/urlobj.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/module.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 
 #include <svx/xfillit0.hxx>
@@ -31,20 +25,11 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
-#include <svx/xpool.hxx>
 #include <svx/xflbckit.hxx>
 #include <svx/sdshtitm.hxx>
-#include <svx/xtable.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/drawitem.hxx>
 #include <svx/xfltrit.hxx>
 #include <cuitabarea.hxx>
-#include <dlgname.hxx>
-#include <svx/dlgutil.hxx>
 #include <svl/intitem.hxx>
-#include <sfx2/request.hxx>
-
-#include <sfx2/opengrf.hxx>
 
 using namespace com::sun::star;
 

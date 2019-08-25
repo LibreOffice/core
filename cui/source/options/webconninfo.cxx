@@ -18,14 +18,12 @@
  */
 
 #include "webconninfo.hxx"
-#include <sal/macros.h>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/PasswordContainer.hpp>
 #include <com/sun/star/task/UrlRecord.hpp>
 #include <com/sun/star/task/XPasswordContainer2.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/docpasswordrequest.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 using namespace ::com::sun::star;
 

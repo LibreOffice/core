@@ -19,9 +19,7 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTFLTR_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTFLTR_HXX
 
-#include <vcl/button.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svtools/simptabl.hxx>
 
 class OfaMSFilterTabPage : public SfxTabPage
 {

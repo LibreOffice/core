@@ -20,14 +20,8 @@
 #include <svx/svxdlg.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/app.hxx>
-#include <svl/aeitem.hxx>
-#include <vcl/svtabbx.hxx>
-#include <vcl/treelistentry.hxx>
-#include <vcl/fixed.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/svapp.hxx>
 #include <unotools/defaultoptions.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/viewoptions.hxx>
@@ -40,9 +34,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
@@ -50,7 +42,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <officecfg/Office/Common.hxx>
-#include <vcl/help.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 

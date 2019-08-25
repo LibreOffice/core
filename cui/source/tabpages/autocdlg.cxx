@@ -21,28 +21,20 @@
 #include <vcl/event.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/settings.hxx>
-#include <sot/exchange.hxx>
 #include <vcl/transfer.hxx>
-#include <unotools/syslocale.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <com/sun/star/i18n/CollatorOptions.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/module.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <svl/eitem.hxx>
 #include <svl/languageoptions.hxx>
 #include <svx/SmartTagMgr.hxx>
-#include <svx/ucsubset.hxx>
 #include <com/sun/star/smarttags/XSmartTagRecognizer.hpp>
-#include <com/sun/star/smarttags/XSmartTagAction.hpp>
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
@@ -52,7 +44,6 @@
 #include <editeng/svxacorr.hxx>
 #include <cui/cuicharmap.hxx>
 #include <strings.hrc>
-#include <editeng/unolingu.hxx>
 #include <dialmgr.hxx>
 #include <svx/svxids.hrc>
 

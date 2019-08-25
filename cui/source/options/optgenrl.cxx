@@ -31,13 +31,10 @@
 #include <vcl/svapp.hxx>
 #include <unotools/saveopt.hxx>
 #include <svl/intitem.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
 
 #include <unotools/useroptions.hxx>
 #include <cuioptgenrl.hxx>
-#include <svx/dlgutil.hxx>
 #include <svx/svxids.hrc>
 #include <svx/optgenrl.hxx>
 

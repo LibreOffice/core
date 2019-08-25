@@ -19,7 +19,6 @@
 
 #include "optbasic.hxx"
 #include <basic/codecompletecache.hxx>
-#include <iostream>
 #include <officecfg/Office/BasicIDE.hxx>
 
 SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage(TabPageParent pParent, const SfxItemSet& rSet)

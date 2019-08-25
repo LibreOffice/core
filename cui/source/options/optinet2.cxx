@@ -25,61 +25,25 @@
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Security.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/config.hxx>
 #include <vcl/weld.hxx>
-#include <svl/intitem.hxx>
-#include <svl/stritem.hxx>
-#include <svl/eitem.hxx>
-#include <svl/slstitm.hxx>
-#include <sfx2/fcontnr.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <sfx2/filedlghelper.hxx>
-#include <svl/urihelper.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/objsh.hxx>
-#include <unotools/bootstrap.hxx>
-#include <vcl/help.hxx>
-#include <vcl/builderfactory.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <unotools/pathoptions.hxx>
+#include <vcl/svapp.hxx>
 #include <unotools/securityoptions.hxx>
-#include <unotools/extendedsecurityoptions.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <dialmgr.hxx>
 #include "optinet2.hxx"
-#include <svx/svxdlg.hxx>
-#include <svx/ofaitem.hxx>
-#include <sfx2/htmlmode.hxx>
-#include <svx/svxids.hrc>
 #include <strings.hrc>
 
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
-#ifdef UNX
-#include <sys/stat.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <pwd.h>
-#include <sys/types.h>
-#include <string.h>
-#include <rtl/textenc.h>
-#include <rtl/locale.h>
-#include <osl/nlsupport.h>
-#endif
 #include <sal/types.h>
-#include <sal/macros.h>
 #include <sal/log.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
-#include <osl/process.h>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -97,7 +61,6 @@
 #include "tsaurls.hxx"
 
 #include <svtools/restartdialog.hxx>
-#include <comphelper/solarmutex.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

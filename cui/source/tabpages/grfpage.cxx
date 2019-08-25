@@ -20,9 +20,6 @@
 #include <memory>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/module.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <editeng/sizeitem.hxx>
@@ -32,7 +29,6 @@
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <strings.hrc>
 #include <vcl/field.hxx>

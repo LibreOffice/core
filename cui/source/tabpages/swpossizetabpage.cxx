@@ -34,7 +34,6 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <svtools/unitconv.hxx>
 

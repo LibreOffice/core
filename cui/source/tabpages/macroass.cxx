@@ -20,18 +20,14 @@
 #include <macroass.hxx>
 
 #include <osl/diagnose.h>
-#include <basic/basmgr.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svl/macitem.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <tools/debug.hxx>
 #include <vcl/idle.hxx>
 #include <cfgutil.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/evntconf.hxx>
-#include <sfx2/objsh.hxx>
 #include <headertablistbox.hxx>
 
 using ::com::sun::star::uno::Reference;

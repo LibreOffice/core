@@ -18,38 +18,23 @@
  */
 
 #include <memory>
-#include <vcl/wrkwin.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/pathoptions.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/dialoghelper.hxx>
-#include <sfx2/filedlghelper.hxx>
-#include <unotools/localfilehelper.hxx>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <svx/colorbox.hxx>
 #include <svx/dialmgr.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapTools.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
 
 #include <strings.hrc>
 #include <svx/xfillit0.hxx>
 #include <svx/xbtmpit.hxx>
-#include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
-#include <svx/xoutbmp.hxx>
-#include <svx/drawitem.hxx>
 #include <svx/xflbmtit.hxx>
 #include <cuitabarea.hxx>
-#include <defdlgname.hxx>
-#include <dlgname.hxx>
 #include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
-#include <sfx2/opengrf.hxx>
 #include <sal/log.hxx>
 
 using namespace com::sun::star;

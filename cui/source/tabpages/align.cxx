@@ -20,24 +20,16 @@
 #include <align.hxx>
 
 #include <editeng/svxenum.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <bitmaps.hlst>
 #include <svx/rotmodit.hxx>
 
-#include <svx/algitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/justifyitem.hxx>
-#include <svx/dlgutil.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/module.hxx>
 #include <svl/cjkoptions.hxx>
-#include <svl/languageoptions.hxx>
-#include <svx/flagsdef.hxx>
 #include <svl/intitem.hxx>
-#include <sfx2/request.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
 

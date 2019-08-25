@@ -19,24 +19,14 @@
 
 #include <strings.hrc>
 #include <dialmgr.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/module.hxx>
-#include <sfx2/request.hxx>
-#include <vcl/settings.hxx>
 
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <svx/dlgutil.hxx>
 #include <svx/measctrl.hxx>
 #include <svx/ofaitem.hxx>
 #include <svx/strarray.hxx>
-#include <svx/svdomeas.hxx>
 #include <svx/svdview.hxx>
-#include <svx/sxekitm.hxx>
-#include <svx/sxelditm.hxx>
-#include <svx/sxenditm.hxx>
 #include <svx/sxmbritm.hxx>
-#include <svx/sxmfsitm.hxx>
 #include <svx/sxmlhitm.hxx>
 #include <svx/sxmtfitm.hxx>
 #include <svx/sxmtpitm.hxx>

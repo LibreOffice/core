@@ -18,10 +18,7 @@
  */
 
 #include <editeng/unolingu.hxx>
-#include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
-#include <sfx2/sfxuno.hxx>
-#include <svl/eitem.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
@@ -32,9 +29,6 @@
 #include <unotools/syslocale.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/event.hxx>
-#include <svx/dialogs.hrc>
 
 #include <linguistic/misc.hxx>
 #include <strings.hrc>

@@ -18,22 +18,12 @@
  */
 
 #include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
-#include <svl/zforlist.hxx>
 #include <opencl/openclconfig.hxx>
 #include <opencl/openclwrapper.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svtools/restartdialog.hxx>
 
-#include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/util/XChangesBatch.hpp>
-
-#include <strings.hrc>
-#include <dialmgr.hxx>
 #include "optopencl.hxx"
 
 SvxOpenCLTabPage::SvxOpenCLTabPage(TabPageParent pParent, const SfxItemSet& rSet)

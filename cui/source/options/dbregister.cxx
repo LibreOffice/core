@@ -19,28 +19,17 @@
 
 #include <dbregister.hxx>
 #include "dbregistersettings.hxx"
-#include "connpooloptions.hxx"
 #include <svl/filenotation.hxx>
 #include <helpids.h>
 #include <tools/debug.hxx>
-#include <svtools/editbrowsebox.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <svl/eitem.hxx>
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <svl/itemset.hxx>
 #include "doclinkdialog.hxx"
-#include <unotools/localfilehelper.hxx>
-#include <sfx2/docfilt.hxx>
 #include <dialmgr.hxx>
 #include "dbregisterednamesconfig.hxx"
-#include <svx/dialogs.hrc>
 #include <svx/databaseregistrationui.hxx>
 
 #define TAB_WIDTH1      80

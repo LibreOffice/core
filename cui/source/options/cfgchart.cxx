@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <sal/log.hxx>
 #include "cfgchart.hxx"

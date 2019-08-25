@@ -24,7 +24,6 @@
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 
-#include <strings.hrc>
 #include <treeopt.hrc>
 #include <helpids.h>
 
@@ -32,12 +31,10 @@
 #include "connpoolconfig.hxx"
 #include "connpooloptions.hxx"
 #include <cuioptgenrl.hxx>
-#include <cuitabarea.hxx>
 #include <dbregister.hxx>
 #include "dbregisterednamesconfig.hxx"
 #include <dialmgr.hxx>
 #include "fontsubs.hxx"
-#include "optaboutconfig.hxx"
 #include "optaccessibility.hxx"
 #include <optasian.hxx>
 #include "optchart.hxx"
@@ -68,7 +65,6 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/linguistic2/LinguProperties.hpp>
 #include <com/sun/star/setup/UpdateCheck.hpp>
 #include <comphelper/getexpandeduri.hxx>
@@ -78,44 +74,31 @@
 #include <editeng/unolingu.hxx>
 #include <linguistic/misc.hxx>
 #include <officecfg/Office/OptionsDialog.hxx>
-#include <osl/module.hxx>
-#include <osl/process.h>
-#include <rtl/bootstrap.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/printopt.hxx>
 #include <sfx2/shell.hxx>
-#include <sfx2/tplpitem.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svl/flagitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/helpopt.hxx>
 #include <svtools/miscopt.hxx>
 #include <svx/databaseregistrationui.hxx>
-#include <svx/drawitem.hxx>
-#include <svx/xtable.hxx>
-#include <svx/xpool.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/configmgr.hxx>
-#include <unotools/linguprops.hxx>
 #include <unotools/misccfg.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/optionsdlg.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/help.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/waitobj.hxx>
-#include <vcl/settings.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/treelistentry.hxx>
 #include <sal/log.hxx>
-
-#ifdef LINUX
-#include <sys/stat.h>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;

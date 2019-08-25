@@ -22,8 +22,6 @@
 #include <optasian.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
-#include <editeng/langitem.hxx>
-#include <editeng/unolingu.hxx>
 #include <o3tl/any.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svl/asiancfg.hxx>

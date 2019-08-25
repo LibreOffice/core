@@ -19,17 +19,12 @@
 
 #include <strings.hrc>
 #include <dialmgr.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/module.hxx>
-#include <sfx2/request.hxx>
 
 #include <svx/connctrl.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <svx/dlgutil.hxx>
 #include <svx/ofaitem.hxx>
 
-#include <svx/svdoedge.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sxekitm.hxx>
 #include <svx/sxelditm.hxx>

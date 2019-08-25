@@ -11,9 +11,7 @@
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <osl/thread.h>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
-#include <unotools/securityoptions.hxx>
 #include "certpath.hxx"
 
 #include <com/sun/star/mozilla/MozillaBootstrap.hpp>

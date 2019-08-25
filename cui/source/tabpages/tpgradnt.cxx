@@ -18,31 +18,21 @@
  */
 
 #include <memory>
-#include <vcl/wrkwin.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <unotools/pathoptions.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/dialoghelper.hxx>
-#include <sfx2/filedlghelper.hxx>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <strings.hrc>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/xtable.hxx>
-#include <svx/xpool.hxx>
-#include <svx/drawitem.hxx>
 #include <svx/xgrscit.hxx>
 #include <cuitabarea.hxx>
-#include <defdlgname.hxx>
-#include <dlgname.hxx>
 #include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
 #include <sal/log.hxx>
 
