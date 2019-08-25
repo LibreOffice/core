@@ -272,6 +272,16 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
 }
 }
 
+#if defined LIBO_INTERNAL_ONLY
+namespace std
+{
+template <class E> sal_Int32 size(const ::com::sun::star::uno::Sequence<E>& s)
+{
+    return s.getLength();
+}
+}
+#endif
+
 /** Gets the meta type of IDL sequence.
 
     There are cases (involving templates) where uses of getCppuType are known to
