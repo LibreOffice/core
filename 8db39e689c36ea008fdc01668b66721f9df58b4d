@@ -114,6 +114,29 @@
       "revId": "8db39e689c36ea008fdc01668b66721f9df58b4d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_4651f70d",
+        "filename": "oox/source/helper/propertyset.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-25T23:01:16Z",
+      "side": 1,
+      "message": "for( const OUString\u0026 rPropName : rPropNames )\n        implSetPropertyValue( rPropName, *pValue++ );",
+      "range": {
+        "startLine": 94,
+        "startChar": 8,
+        "endLine": 98,
+        "endChar": 9
+      },
+      "revId": "8db39e689c36ea008fdc01668b66721f9df58b4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
