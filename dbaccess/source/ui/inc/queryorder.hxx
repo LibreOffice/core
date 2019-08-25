@@ -79,7 +79,7 @@ namespace dbaui
         void            BuildOrderPart();
 
         OUString GetOrderList( ) const;
-        const OUString& GetOrignalOrder() const { return m_sOrgOrder; }
+        const OUString& GetOriginalOrder() const { return m_sOrgOrder; }
 
     private:
         void            impl_initializeOrderList_nothrow();

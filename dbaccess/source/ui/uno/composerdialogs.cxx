@@ -229,7 +229,7 @@ namespace dbaui
         if ( _nExecutionResult )
             static_cast< DlgOrderCrit* >( m_aDialog.m_xWeldDialog.get() )->BuildOrderPart();
         else if ( m_xComposer.is() )
-            m_xComposer->setOrder( static_cast< DlgOrderCrit* >( m_aDialog.m_xWeldDialog.get() )->GetOrignalOrder() );
+            m_xComposer->setOrder( static_cast< DlgOrderCrit* >( m_aDialog.m_xWeldDialog.get() )->GetOriginalOrder() );
     }
 
 }   // namespace dbaui
