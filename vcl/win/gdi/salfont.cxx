@@ -957,12 +957,8 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
     if( GetTextFaceW( getHDC(), SAL_N_ELEMENTS(aFaceName), aFaceName ) )
         rxFontMetric->SetFamilyName(o3tl::toU(aFaceName));
 
-    const DWORD nHheaTag = CalcTag("hhea");
-    const DWORD nOS2Tag = CalcTag("OS/2");
-    const RawFontData aHheaRawData(getHDC(), nHheaTag);
-    const RawFontData aOS2RawData(getHDC(), nOS2Tag);
-
     rxFontMetric->SetMinKashida(pFontInstance->GetKashidaWidth());
+    rxFontMetric->ImplCalcLineSpacing(pFontInstance.get());
 
     // get the font metric
     OUTLINETEXTMETRICW aOutlineMetric;
@@ -984,10 +980,6 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
 
     // transformation dependent font metrics
     rxFontMetric->SetWidth(static_cast<int>(pFontInstance->GetScale() * aWinMetric.tmAveCharWidth));
-
-    const std::vector<uint8_t> rHhea(aHheaRawData.get(), aHheaRawData.get() + aHheaRawData.size());
-    const std::vector<uint8_t> rOS2(aOS2RawData.get(), aOS2RawData.get() + aOS2RawData.size());
-    rxFontMetric->ImplCalcLineSpacing(rHhea, rOS2, aOutlineMetric.otmEMSquare);
 }
 
 const FontCharMapRef WinSalGraphics::GetFontCharMap() const

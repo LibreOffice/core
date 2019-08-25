@@ -434,17 +434,28 @@ bool ImplFontMetricData::ShouldUseWinMetrics(vcl::TTGlobalFontInfo& rInfo)
  *   - Use Win metrics if available.
  *   - Unless USE_TYPO_METRICS flag is set, in which case use Typo metrics.
 */
-void ImplFontMetricData::ImplCalcLineSpacing(const std::vector<uint8_t>& rHheaData,
-        const std::vector<uint8_t>& rOS2Data, int nUPEM)
+void ImplFontMetricData::ImplCalcLineSpacing(LogicalFontInstance *pFontInstance)
 {
     mnAscent = mnDescent = mnExtLeading = mnIntLeading = 0;
 
-    double fScale = static_cast<double>(mnHeight) / nUPEM;
-    double fAscent = 0, fDescent = 0, fExtLeading = 0;
+    hb_font_t* pHbFont = pFontInstance->GetHbFont();
+    hb_face_t* pHbFace = hb_font_get_face(pHbFont);
+
+    hb_blob_t* pHhea = hb_face_reference_table(pHbFace, HB_TAG('h', 'h', 'e', 'a'));
+    hb_blob_t* pOS2 = hb_face_reference_table(pHbFace, HB_TAG('O', 'S', '/', '2'));
 
     vcl::TTGlobalFontInfo rInfo;
     memset(&rInfo, 0, sizeof(vcl::TTGlobalFontInfo));
-    GetTTFontMetrics(rHheaData, rOS2Data, &rInfo);
+    GetTTFontMetrics(reinterpret_cast<const uint8_t*>(hb_blob_get_data(pHhea, nullptr)), hb_blob_get_length(pHhea),
+                     reinterpret_cast<const uint8_t*>(hb_blob_get_data(pOS2, nullptr)), hb_blob_get_length(pOS2),
+                     &rInfo);
+
+    hb_blob_destroy(pHhea);
+    hb_blob_destroy(pOS2);
+
+    double nUPEM = hb_face_get_upem(pHbFace);
+    double fScale = mnHeight / nUPEM;
+    double fAscent = 0, fDescent = 0, fExtLeading = 0;
 
     // Try hhea table first.
     // tdf#107605: Some fonts have weird values here, so check that ascender is

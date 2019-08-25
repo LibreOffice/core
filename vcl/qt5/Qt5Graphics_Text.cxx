@@ -59,13 +59,7 @@ void Qt5Graphics::GetFontMetric(ImplFontMetricDataRef& rFMD, int nFallbackLevel)
     QRawFont aRawFont(QRawFont::fromFont(*m_pTextStyle[nFallbackLevel]));
     Qt5FontFace::fillAttributesFromQFont(*m_pTextStyle[nFallbackLevel], *rFMD);
 
-    QByteArray aHheaTable = aRawFont.fontTable("hhea");
-    std::vector<uint8_t> rHhea(aHheaTable.data(), aHheaTable.data() + aHheaTable.size());
-
-    QByteArray aOs2Table = aRawFont.fontTable("OS/2");
-    std::vector<uint8_t> rOS2(aOs2Table.data(), aOs2Table.data() + aOs2Table.size());
-
-    rFMD->ImplCalcLineSpacing(rHhea, rOS2, aRawFont.unitsPerEm());
+    rFMD->ImplCalcLineSpacing(m_pTextStyle[nFallbackLevel].get());
 
     rFMD->SetSlant(0);
     rFMD->SetWidth(aRawFont.averageCharWidth());
