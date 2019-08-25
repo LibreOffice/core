@@ -49,10 +49,9 @@ namespace comphelper
     inline css::uno::Sequence<T> concatSequences(const css::uno::Sequence<T>& rS1, const Ss&... rSn)
     {
         // unary fold to disallow empty parameter pack: at least have one sequence in rSn
-        css::uno::Sequence<T> aReturn(rS1.getLength() + (... + rSn.getLength()));
-        T* pReturn;
-        ((pReturn = std::copy_n(rS1.getConstArray(), rS1.getLength(), aReturn.getArray())), ...,
-         (pReturn = std::copy_n(rSn.getConstArray(), rSn.getLength(), pReturn)));
+        css::uno::Sequence<T> aReturn(std::size(rS1) + (... + std::size(rSn)));
+        T* pReturn = std::copy(std::begin(rS1), std::end(rS1), aReturn.begin());
+        (..., (pReturn = std::copy(std::begin(rSn), std::end(rSn), pReturn)));
         return aReturn;
     }
 
