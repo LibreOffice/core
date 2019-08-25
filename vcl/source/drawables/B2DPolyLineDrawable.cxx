@@ -28,6 +28,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/drawables/B2DPolyLineDrawable.hxx>
+#include <vcl/drawables/B2DPolyPolyLineDrawable.hxx>
+#include <vcl/drawables/PolyHairlineDrawable.hxx>
 
 #include <salgdi.hxx>
 #include <outdata.hxx>
@@ -39,117 +41,36 @@ namespace vcl
 {
 bool B2DPolyLineDrawable::DrawCommand(OutputDevice* pRenderContext) const
 {
-    return Draw(pRenderContext, maLinePolyPolygon, maLineInfo);
+    return Draw(pRenderContext, maPolyLine, maLineInfo, mfMiterMinimumAngle);
 }
 
-bool B2DPolyLineDrawable::Draw(OutputDevice* pRenderContext,
-                               basegfx::B2DPolyPolygon const& rLinePolyPolygon,
-                               LineInfo const& rLineInfo) const
+bool B2DPolyLineDrawable::Draw(OutputDevice* pRenderContext, basegfx::B2DPolygon const& rB2DPolygon,
+                               LineInfo const& rLineInfo, double fMiterMinimumAngle) const
 {
-    basegfx::B2DPolyPolygon aFillPolyPolygon;
-    const bool bDashUsed(LineStyle::Dash == rLineInfo.GetStyle());
-    const bool bLineWidthUsed(rLineInfo.GetWidth() > 1);
-
-    basegfx::B2DPolyPolygon aLinePolyPolygon(rLinePolyPolygon);
-
-    if (bDashUsed && aLinePolyPolygon.count())
     {
-        ::std::vector<double> fDotDashArray;
-        const double fDashLen(rLineInfo.GetDashLen());
-        const double fDotLen(rLineInfo.GetDotLen());
-        const double fDistance(rLineInfo.GetDistance());
+        LineInfo aHairlineInfo;
+        aHairlineInfo.SetWidth(rLineInfo.GetWidth());
+        aHairlineInfo.SetLineJoin(rLineInfo.GetLineJoin());
+        aHairlineInfo.SetLineCap(rLineInfo.GetLineCap());
 
-        for (sal_uInt16 a(0); a < rLineInfo.GetDashCount(); a++)
+        // use b2dpolygon drawing if possible
+        if (pRenderContext->Draw(vcl::PolyHairlineDrawable(basegfx::B2DHomMatrix(), rB2DPolygon,
+                                                           aHairlineInfo, 0.0, fMiterMinimumAngle)))
         {
-            fDotDashArray.push_back(fDashLen);
-            fDotDashArray.push_back(fDistance);
-        }
-
-        for (sal_uInt16 b(0); b < rLineInfo.GetDotCount(); b++)
-        {
-            fDotDashArray.push_back(fDotLen);
-            fDotDashArray.push_back(fDistance);
-        }
-
-        const double fAccumulated(
-            ::std::accumulate(fDotDashArray.begin(), fDotDashArray.end(), 0.0));
-
-        if (fAccumulated > 0.0)
-        {
-            basegfx::B2DPolyPolygon aResult;
-
-            for (auto const& rPolygon : aLinePolyPolygon)
-            {
-                basegfx::B2DPolyPolygon aLineTarget;
-                basegfx::utils::applyLineDashing(rPolygon, fDotDashArray, &aLineTarget);
-                aResult.append(aLineTarget);
-            }
-
-            aLinePolyPolygon = aResult;
+            return true;
         }
     }
 
-    if (bLineWidthUsed && aLinePolyPolygon.count())
+    // #i101491#
+    // no output yet; fallback to geometry decomposition and use filled polygon paint
+    // when line is fat and not too complex. ImplDrawPolyPolygonWithB2DPolyPolygon
+    // will do internal needed AA checks etc.
+    if (rLineInfo.GetWidth() >= 2.5 && rB2DPolygon.count() && rB2DPolygon.count() <= 1000)
     {
         const double fHalfLineWidth((rLineInfo.GetWidth() * 0.5) + 0.5);
-
-        if (aLinePolyPolygon.areControlPointsUsed())
-        {
-            // #i110768# When area geometry has to be created, do not
-            // use the fallback bezier decomposition inside createAreaGeometry,
-            // but one that is at least as good as ImplSubdivideBezier was.
-            // There, Polygon::AdaptiveSubdivide was used with default parameter
-            // 1.0 as quality index.
-            aLinePolyPolygon = basegfx::utils::adaptiveSubdivideByDistance(aLinePolyPolygon, 1.0);
-        }
-
-        for (auto const& rPolygon : aLinePolyPolygon)
-        {
-            aFillPolyPolygon.append(basegfx::utils::createAreaGeometry(
-                rPolygon, fHalfLineWidth, rLineInfo.GetLineJoin(), rLineInfo.GetLineCap()));
-        }
-
-        aLinePolyPolygon.clear();
-    }
-
-    GDIMetaFile* pOldMetaFile = pRenderContext->GetConnectMetaFile();
-    pRenderContext->SetConnectMetaFile(nullptr);
-
-    const bool bTryAA((pRenderContext->GetAntialiasing() & AntialiasingFlags::EnableB2dDraw)
-                      && mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
-                      && pRenderContext->GetRasterOp() == RasterOp::OverPaint
-                      && pRenderContext->IsLineColor());
-
-    if (aLinePolyPolygon.count())
-    {
-        for (auto const& rB2DPolygon : aLinePolyPolygon)
-        {
-            const bool bPixelSnapHairline(pRenderContext->GetAntialiasing()
-                                          & AntialiasingFlags::PixelSnapHairline);
-            bool bDone = false;
-
-            if (bTryAA)
-            {
-                bDone = mpGraphics->DrawPolyLine(
-                    basegfx::B2DHomMatrix(), rB2DPolygon, 0.0, basegfx::B2DVector(1.0, 1.0),
-                    basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT,
-                    basegfx::deg2rad(
-                        15.0), // not used with B2DLineJoin::NONE, but the correct default
-                    bPixelSnapHairline, pRenderContext);
-            }
-
-            if (!bDone)
-            {
-                tools::Polygon aPolygon(rB2DPolygon);
-                mpGraphics->DrawPolyLine(aPolygon.GetSize(),
-                                         reinterpret_cast<SalPoint*>(aPolygon.GetPointAry()),
-                                         pRenderContext);
-            }
-        }
-    }
-
-    if (aFillPolyPolygon.count())
-    {
+        const basegfx::B2DPolyPolygon aAreaPolyPolygon(
+            basegfx::utils::createAreaGeometry(rB2DPolygon, fHalfLineWidth, rLineInfo.GetLineJoin(),
+                                               rLineInfo.GetLineCap(), fMiterMinimumAngle));
         const Color aOldLineColor(pRenderContext->GetLineColor());
         const Color aOldFillColor(pRenderContext->GetFillColor());
 
@@ -158,44 +79,82 @@ bool B2DPolyLineDrawable::Draw(OutputDevice* pRenderContext,
         pRenderContext->SetFillColor(aOldLineColor);
         pRenderContext->InitFillColor();
 
-        bool bDone = false;
-
-        if (bTryAA)
+        // draw using a loop; else the topology will paint a PolyPolygon
+        for (auto const& rPolygon : aAreaPolyPolygon)
         {
-            bDone = mpGraphics->DrawPolyPolygon(basegfx::B2DHomMatrix(), aFillPolyPolygon, 0.0,
-                                                pRenderContext);
+            pRenderContext->ImplDrawPolyPolygonWithB2DPolyPolygon(
+                basegfx::B2DPolyPolygon(rPolygon));
         }
 
-        if (!bDone)
-        {
-            for (auto const& rB2DPolygon : aFillPolyPolygon)
-            {
-                tools::Polygon aPolygon(rB2DPolygon);
-
-                // need to subdivide, mpGraphics->DrawPolygon ignores curves
-                aPolygon.AdaptiveSubdivide(aPolygon);
-                mpGraphics->DrawPolygon(
-                    aPolygon.GetSize(),
-                    reinterpret_cast<const SalPoint*>(aPolygon.GetConstPointAry()), pRenderContext);
-            }
-        }
-
-        pRenderContext->SetFillColor(aOldFillColor);
         pRenderContext->SetLineColor(aOldLineColor);
-    }
+        pRenderContext->InitLineColor();
+        pRenderContext->SetFillColor(aOldFillColor);
+        pRenderContext->InitFillColor();
 
-    pRenderContext->SetConnectMetaFile(pOldMetaFile);
+        // when AA it is necessary to also paint the filled polygon's outline
+        // to avoid optical gaps
+        for (auto const& rPolygon : aAreaPolyPolygon)
+        {
+            LineInfo aHairlineInfo;
+            aHairlineInfo.SetWidth(rLineInfo.GetWidth());
+            aHairlineInfo.SetLineJoin(basegfx::B2DLineJoin::NONE);
+            aHairlineInfo.SetLineCap(css::drawing::LineCap_BUTT);
+
+            pRenderContext->Draw(
+                vcl::PolyHairlineDrawable(basegfx::B2DHomMatrix(), rPolygon, aHairlineInfo));
+        }
+    }
+    else
+    {
+        // fallback to old polygon drawing if needed
+        const tools::Polygon aToolsPolygon(rB2DPolygon);
+        LineInfo aLineInfo;
+        if (rLineInfo.GetWidth() != 0.0)
+            aLineInfo.SetWidth(static_cast<long>(rLineInfo.GetWidth() + 0.5));
+
+        sal_uInt16 nPoints(aToolsPolygon.GetSize());
+
+        if (nPoints < 2 || aLineInfo.GetStyle() == LineStyle::NONE)
+            return false;
+
+        tools::Polygon aPoly = pRenderContext->ImplLogicToDevicePixel(aToolsPolygon);
+
+        const LineInfo aInfo(pRenderContext->ImplLogicToDevicePixel(aLineInfo));
+        const bool bDashUsed(aInfo.GetStyle() == LineStyle::Dash);
+        const bool bLineWidthUsed(aInfo.GetWidth() > 1);
+
+        if (bDashUsed || bLineWidthUsed)
+        {
+            pRenderContext->Draw(vcl::B2DPolyPolyLineDrawable(
+                basegfx::B2DPolyPolygon(aPoly.getB2DPolygon()), aInfo));
+        }
+        else
+        {
+            // #100127# the subdivision HAS to be done here since only a pointer
+            // to an array of points is given to the DrawPolyLine method, there is
+            // NO way to find out there that it's a curve.
+            if (aPoly.HasFlags())
+            {
+                aPoly = tools::Polygon::SubdivideBezier(aPoly);
+                nPoints = aPoly.GetSize();
+            }
+
+            mpGraphics->DrawPolyLine(nPoints, reinterpret_cast<SalPoint*>(aPoly.GetPointAry()),
+                                     pRenderContext);
+        }
+
+        DrawAlphaVirtDev(pRenderContext);
+    }
 
     return true;
 }
 
 bool B2DPolyLineDrawable::CanDraw(OutputDevice* pRenderContext) const
 {
-    return (!((!pRenderContext->IsDeviceOutputNecessary()
-               || (!pRenderContext->IsLineColor() && !pRenderContext->IsFillColor())
-               || pRenderContext->ImplIsRecordLayout())));
+    return (!(!pRenderContext->IsDeviceOutputNecessary()
+              || (!pRenderContext->IsLineColor() && !pRenderContext->IsFillColor())
+              || pRenderContext->ImplIsRecordLayout()));
 }
-
 } // namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

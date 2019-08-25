@@ -28,7 +28,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/drawables/LineDrawable.hxx>
-#include <vcl/drawables/B2DPolyLineDrawable.hxx>
+#include <vcl/drawables/B2DPolyPolyLineDrawable.hxx>
 
 #include <salgdi.hxx>
 #include <outdata.hxx>
@@ -98,7 +98,7 @@ bool LineDrawable::Draw(OutputDevice* pRenderContext, Point const& rStartPt, Poi
             aLinePolygon.append(basegfx::B2DPoint(aEndPt.X(), aEndPt.Y()));
 
             pRenderContext->Draw(
-                B2DPolyLineDrawable(basegfx::B2DPolyPolygon(aLinePolygon), aInfo, false));
+                B2DPolyPolyLineDrawable(basegfx::B2DPolyPolygon(aLinePolygon), aInfo, false));
         }
         else
         {

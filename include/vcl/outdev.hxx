@@ -814,15 +814,16 @@ public:
     void                        DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly );
     void                        DrawPolyPolygon( const basegfx::B2DPolyPolygon& );
 
+    // #i101491#
+    // Helper who implements the DrawPolyPolygon functionality for basegfx::B2DPolyPolygon
+    // without MetaFile processing
+    SAL_DLLPRIVATE void         ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly);
+
 private:
 
     SAL_DLLPRIVATE void         ImplDrawPolygon( const tools::Polygon& rPoly, const tools::PolyPolygon* pClipPolyPoly = nullptr );
     SAL_DLLPRIVATE void         ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, const tools::PolyPolygon* pClipPolyPoly );
     SAL_DLLPRIVATE void         ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolygon& rPolyPoly );
-    // #i101491#
-    // Helper who implements the DrawPolyPolygon functionality for basegfx::B2DPolyPolygon
-    // without MetaFile processing
-    SAL_DLLPRIVATE void         ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly);
     ///@}
 
 

@@ -28,26 +28,34 @@ namespace vcl
 class VCL_DLLPUBLIC B2DPolyLineDrawable : public Drawable
 {
 public:
-    B2DPolyLineDrawable(basegfx::B2DPolyPolygon aLinePolyPolygon, LineInfo const aInfo,
-                        bool bUsesScaffolding = true)
+    B2DPolyLineDrawable(basegfx::B2DPolygon aPolyLine, LineInfo const aLineInfo,
+                        double fMiterMinimumAngle, bool bUsesScaffolding = true)
         : Drawable(bUsesScaffolding)
-        , maLinePolyPolygon(aLinePolyPolygon)
-        , maLineInfo(aInfo)
+        , maPolyLine(aPolyLine)
+        , maLineInfo(aLineInfo)
+        , mfMiterMinimumAngle(fMiterMinimumAngle)
     {
+        LineInfo aTmpLineInfo(aLineInfo);
+        if (aTmpLineInfo.GetWidth() != 0.0)
+            aTmpLineInfo.SetWidth(static_cast<long>(aLineInfo.GetWidth() + 0.5));
+
+        const tools::Polygon aToolsPolygon(aPolyLine);
+        mpMetaAction = new MetaPolyLineAction(aToolsPolygon, aTmpLineInfo);
     }
 
 protected:
-    bool ShouldAddAction() const override { return false; }
     bool CanDraw(OutputDevice* pRenderContext) const override;
+    bool UseAlphaVirtDev() const override { return false; }
 
     bool DrawCommand(OutputDevice* pRenderContext) const override;
 
 private:
-    bool Draw(OutputDevice* pRenderContext, basegfx::B2DPolyPolygon const& rLinePolyPolygon,
-              LineInfo const& rLineInfo) const;
+    bool Draw(OutputDevice* pRenderContext, basegfx::B2DPolygon const& rB2DPolygon,
+              LineInfo const& rLineInfo, double fMiterMinimumAngle) const;
 
-    basegfx::B2DPolyPolygon maLinePolyPolygon;
+    basegfx::B2DPolygon maPolyLine;
     LineInfo maLineInfo;
+    double mfMiterMinimumAngle;
 };
 
 } // namespace vcl
