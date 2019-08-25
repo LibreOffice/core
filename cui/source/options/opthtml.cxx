@@ -20,7 +20,6 @@
 #include <svtools/langtab.hxx>
 #include <svtools/htmlcfg.hxx>
 #include "opthtml.hxx"
-#include <sal/macros.h>
 
 
 OfaHtmlTabPage::OfaHtmlTabPage(TabPageParent pParent, const SfxItemSet& rSet)

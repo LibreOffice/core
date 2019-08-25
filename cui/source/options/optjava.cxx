@@ -35,20 +35,16 @@
 
 #include <strings.hrc>
 #include <vcl/svapp.hxx>
-#include <vcl/help.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/waitobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/restartdialog.hxx>
-#include <vcl/treelistentry.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/inputdlg.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>

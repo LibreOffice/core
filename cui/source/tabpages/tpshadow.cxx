@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
-#include <sfx2/module.hxx>
 #include <svx/colorbox.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <svtools/unitconv.hxx>
 
@@ -29,7 +26,6 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
-#include <svx/xpool.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/sdprcitm.hxx>
@@ -42,8 +38,6 @@
 #include <cuitabarea.hxx>
 #include <svx/dlgutil.hxx>
 #include <cuitabline.hxx>
-#include <svx/xlineit0.hxx>
-#include <sfx2/request.hxx>
 
 using namespace com::sun::star;
 

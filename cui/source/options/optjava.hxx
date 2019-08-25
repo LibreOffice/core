@@ -23,12 +23,8 @@
 
 #include <memory>
 #include <vector>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/treelistbox.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>

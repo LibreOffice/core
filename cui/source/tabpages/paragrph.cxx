@@ -20,13 +20,9 @@
 #include <memory>
 #include <osl/diagnose.h>
 #include <svl/style.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/dialoghelper.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/module.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svx/flagsdef.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 
 #include <svl/languageoptions.hxx>
@@ -52,7 +48,6 @@
 #include <sfx2/htmlmode.hxx>
 #include <editeng/paravertalignitem.hxx>
 #include <svl/eitem.hxx>
-#include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
 
 #include <sfx2/viewfrm.hxx>

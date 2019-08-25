@@ -18,13 +18,10 @@
  */
 
 #include <unotools/pathoptions.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <cuitabarea.hxx>
 #include <cuitabline.hxx>
-#include <dlgname.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>

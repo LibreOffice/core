@@ -21,30 +21,23 @@
 
 #include <algorithm>
 
-#include <sfx2/app.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/svdotext.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/sderitm.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <svx/transfrmhelper.hxx>
-#include <editeng/sizeitem.hxx>
 #include <svtools/unitconv.hxx>
 
 #include <transfrm.hxx>
 #include <svx/dlgutil.hxx>
-#include <editeng/svxenum.hxx>
 #include <svx/anchorid.hxx>
-#include <sfx2/module.hxx>
 #include <svl/rectitem.hxx>
 #include <svl/aeitem.hxx>
 #include <swpossizetabpage.hxx>
-#include <comphelper/lok.hxx>
 #include <vcl/canvastools.hxx>
 
 // static ----------------------------------------------------------------

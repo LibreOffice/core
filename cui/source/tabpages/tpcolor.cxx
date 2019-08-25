@@ -19,39 +19,20 @@
 
 #include <memory>
 #include <i18nutil/unicode.hxx>
-#include <tools/urlobj.hxx>
-#include <unotools/pathoptions.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/module.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/dispatch.hxx>
 #include <svtools/colrdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <sfx2/filedlghelper.hxx>
-#include <svx/ofaitem.hxx>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <strings.hrc>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
-#include <svx/drawitem.hxx>
 #include <cuitabarea.hxx>
-#include <defdlgname.hxx>
-#include <dlgname.hxx>
 #include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
 #include <cuitabline.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
-#include <osl/file.hxx>
-#include <svx/Palette.hxx>
-#include <cppu/unotype.hxx>
 #include <officecfg/Office/Common.hxx>
 
 using namespace com::sun::star;

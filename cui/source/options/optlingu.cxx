@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -26,36 +24,24 @@
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 #include <editeng/unolingu.hxx>
-#include <svx/dlgutil.hxx>
-#include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>
-#include <sfx2/sfxuno.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/lang/XServiceDisplayName.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <unotools/extendedsecurityoptions.hxx>
-#include <vcl/svlbitm.hxx>
-#include <vcl/treelistbox.hxx>
-#include <vcl/treelistentry.hxx>
-#include <svtools/langhelp.hxx>
 #include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>

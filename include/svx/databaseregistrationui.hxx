@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_DATABASEREGISTRATIONUI_HXX
 
 #include <svx/svxdllapi.h>
+#include <svl/solar.hrc>
 
 namespace weld { class Window; }
 

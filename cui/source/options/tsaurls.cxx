@@ -10,13 +10,9 @@
 #include <officecfg/Office/Common.hxx>
 #include <svx/svxdlg.hxx>
 #include <comphelper/sequence.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/fixed.hxx>
 
 #include "tsaurls.hxx"
-
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 using namespace ::com::sun::star;
 

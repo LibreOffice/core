@@ -27,22 +27,17 @@
 #include <svtools/colorcfg.hxx>
 #include <svtools/extcolorcfg.hxx>
 #include <vcl/headbar.hxx>
-#include <svtools/ctrlbox.hxx>
 #include <vcl/scrbar.hxx>
 #include <svx/colorbox.hxx>
-#include <svx/xtable.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <unotools/pathoptions.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/weld.hxx>
 #include <svx/svxdlg.hxx>
 #include <helpids.h>
 #include <dialmgr.hxx>
 #include "optcolor.hxx"
 #include <strings.hrc>
-#include <svx/dlgutil.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::svtools;

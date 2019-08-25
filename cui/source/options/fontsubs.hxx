@@ -20,10 +20,6 @@
 #define INCLUDED_CUI_SOURCE_OPTIONS_FONTSUBS_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <svtools/ctrlbox.hxx>
-#include <svtools/simptabl.hxx>
-#include <vcl/treelistentry.hxx>
-#include <vcl/layout.hxx>
 
 // class SvxFontSubstTabPage ----------------------------------------------------
 class SvtFontSubstConfig;

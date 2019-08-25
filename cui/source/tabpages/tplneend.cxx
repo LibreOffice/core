@@ -22,7 +22,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/pathoptions.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
@@ -31,8 +30,6 @@
 #include <svx/dlgctrl.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdopath.hxx>
-#include <svx/drawitem.hxx>
-#include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnwtit.hxx>
@@ -45,14 +42,9 @@
 #include <cuitabarea.hxx>
 #include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
-#include <svx/dlgutil.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
 
 #define XOUT_WIDTH    150

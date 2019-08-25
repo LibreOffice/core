@@ -20,38 +20,22 @@
 #include <config_features.h>
 #include <svl/zforlist.hxx>
 #include <svl/currencytable.hxx>
-#include <vcl/GraphicObject.hxx>
 #include <svtools/langhelp.hxx>
-#include <svl/flagitem.hxx>
-#include <sfx2/dispatch.hxx>
 #include <unotools/lingucfg.hxx>
-#include <sfx2/viewsh.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/configsettings.hxx>
-#include <vcl/mnemonic.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/compatibility.hxx>
-#include <unotools/useroptions.hxx>
 #include <unotools/fontoptions.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/printwarningoptions.hxx>
 #include <unotools/syslocaleoptions.hxx>
-#include <unotools/configitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <svtools/langtab.hxx>
-#include <unotools/localfilehelper.hxx>
-#include <unotools/configmgr.hxx>
-#include <cuioptgenrl.hxx>
-#include <optpath.hxx>
-#include "optsave.hxx"
-#include <optlingu.hxx>
-#include <svx/xpool.hxx>
-#include <svx/dlgutil.hxx>
-#include <cuitabarea.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
 #include <comphelper/processfactory.hxx>
@@ -60,9 +44,7 @@
 #include <svx/svxids.hrc>
 #include <svl/intitem.hxx>
 #include <svtools/helpopt.hxx>
-#include <unotools/saveopt.hxx>
 #include <unotools/searchopt.hxx>
-#include <sal/macros.h>
 #include <sal/log.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
@@ -73,8 +55,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -94,12 +74,10 @@
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #endif
 #include "optgdlg.hxx"
-#include <svx/ofaitem.hxx>
 #include <svtools/apearcfg.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/restartdialog.hxx>
 #include <svtools/imgdef.hxx>
-#include <comphelper/solarmutex.hxx>
 
 #include <config_vclplug.h>
 

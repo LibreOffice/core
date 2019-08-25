@@ -29,13 +29,9 @@
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/util/XFlushable.hpp>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/docfilt.hxx>
-#include <vcl/fixed.hxx>
-#include <unotools/configitem.hxx>
 #include <unotools/optionsdlg.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 
