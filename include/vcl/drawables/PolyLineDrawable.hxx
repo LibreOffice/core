@@ -8,10 +8,10 @@
  *
  */
 
-#ifndef INCLUDED_INCLUDE_VCL_DRAWABLE_LINEDRAWABLE_HXX
-#define INCLUDED_INCLUDE_VCL_DRAWABLE_LINEDRAWABLE_HXX
+#ifndef INCLUDED_INCLUDE_VCL_DRAWABLE_POLYLINEDRAWABLE_HXX
+#define INCLUDED_INCLUDE_VCL_DRAWABLE_POLYLINEDRAWABLE_HXX
 
-#include <tools/gen.hxx>
+#include <tools/poly.hxx>
 
 #include <vcl/metaact.hxx>
 #include <vcl/lineinfo.hxx>
@@ -23,34 +23,29 @@ class OutputDevice;
 
 namespace vcl
 {
-class VCL_DLLPUBLIC LineDrawable : public Drawable
+class VCL_DLLPUBLIC PolyLineDrawable : public Drawable
 {
 public:
-    LineDrawable(Point const aStartPt, Point const aEndPt, LineInfo const aInfo = LineInfo())
-        : maStartPt(aStartPt)
-        , maEndPt(aEndPt)
-        , maLineInfo(aInfo)
+    PolyLineDrawable(tools::Polygon aPolygon, LineInfo aLineInfo = LineInfo())
+        : maPolygon(aPolygon)
+        , maLineInfo(aLineInfo)
     {
-        if (maLineInfo.IsDefault())
-            mpMetaAction = new MetaLineAction(maStartPt, maEndPt);
-        else
-            mpMetaAction = new MetaLineAction(maStartPt, maEndPt, aInfo);
+        mpMetaAction = new MetaPolyLineAction(aPolygon, aLineInfo);
     }
 
 protected:
     bool CanDraw(OutputDevice* pRenderContext) const override;
+    bool ShouldInitFillColor() const override { return false; }
 
     bool DrawCommand(OutputDevice* pRenderContext) const override;
 
 private:
-    bool Draw(OutputDevice* pRenderContext, Point const& rStartPt, Point const& rEndPt,
+    bool Draw(OutputDevice* pRenderContext, tools::Polygon const& rPoly,
               LineInfo const& rLineInfo) const;
 
-    Point maStartPt;
-    Point maEndPt;
+    tools::Polygon maPolygon;
     LineInfo maLineInfo;
 };
-
 } // namespace vcl
 
 #endif
