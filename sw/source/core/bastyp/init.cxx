@@ -23,7 +23,6 @@
 #include <cellatr.hxx>
 #include <checkit.hxx>
 #include <cmdid.h>
-#include <fesh.hxx>
 #include <comphelper/processfactory.hxx>
 #include <doc.hxx>
 #include <editeng/acorrcfg.hxx>
@@ -74,7 +73,6 @@
 #include <editeng/twolinesitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/udlnitem.hxx>
-#include <editeng/unolingu.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/widwitem.hxx>
 #include <editeng/wrlmitem.hxx>
@@ -113,15 +111,12 @@
 #include <hfspacingitem.hxx>
 #include <hintids.hxx>
 #include <init.hxx>
-#include <pam.hxx>
 #include <paratr.hxx>
 #include <proofreadingiterator.hxx>
 #include <editeng/editids.hrc>
 #include <svx/svxids.hrc>
 #include <rtl/instance.hxx>
 #include <svl/macitem.hxx>
-#include <svx/xfillit0.hxx>
-#include <svx/xflgrit.hxx>
 #include <svx/sdtaitm.hxx>
 #include <swcalwrp.hxx>
 #include <SwStyleNameMapper.hxx>
@@ -132,7 +127,6 @@
 #include <unotools/charclass.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/svapp.hxx>

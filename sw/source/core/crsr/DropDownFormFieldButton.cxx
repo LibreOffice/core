@@ -9,11 +9,8 @@
 
 #include <DropDownFormFieldButton.hxx>
 #include <edtwin.hxx>
-#include <basegfx/color/bcolortools.hxx>
-#include <viewopt.hxx>
 #include <bookmrk.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/event.hxx>
 #include <vcl/lstbox.hxx>
 #include <xmloff/odffields.hxx>
 #include <IMark.hxx>

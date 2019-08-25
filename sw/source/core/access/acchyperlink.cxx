@@ -26,7 +26,6 @@
 #include <swurl.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/svapp.hxx>
-#include <ndtxt.hxx>
 #include <txtinet.hxx>
 #include "accpara.hxx"
 #include "acchyperlink.hxx"

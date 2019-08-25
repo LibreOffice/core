@@ -453,3 +453,6 @@ blacklist:
     sw/source/uibase/sidebar/PageMarginUtils.hxx:
     # Needed for std::abs
     - cmath
+    sw/source/core/crsr/paminit.cxx:
+    # Needed for linker visibility of extern functions
+    - cshtyp.hxx

@@ -18,25 +18,19 @@
  */
 
 #include <hintids.hxx>
-#include <vcl/svapp.hxx>
-#include <editeng/protitem.hxx>
 #include <crsrsh.hxx>
 #include <doc.hxx>
 #include <cntfrm.hxx>
 #include <editsh.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
-#include <docary.hxx>
-#include <frmatr.hxx>
 #include <frmfmt.hxx>
 #include <viscrs.hxx>
 #include "callnk.hxx"
 #include <tabfrm.hxx>
 #include <ndtxt.hxx>
 #include <shellres.hxx>
-#include <cellatr.hxx>
 #include <cellfrm.hxx>
-#include <rowfrm.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <svx/srchdlg.hxx>
 

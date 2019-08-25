@@ -9,20 +9,11 @@
 
 #include <DateFormFieldButton.hxx>
 #include <edtwin.hxx>
-#include <basegfx/color/bcolortools.hxx>
-#include <viewopt.hxx>
 #include <bookmrk.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/event.hxx>
-#include <vcl/lstbox.hxx>
-#include <xmloff/odffields.hxx>
-#include <IMark.hxx>
-#include <view.hxx>
-#include <docsh.hxx>
-#include <strings.hrc>
 #include <vcl/calendar.hxx>
 #include <tools/date.hxx>
-#include <svx/numfmtsh.hxx>
+#include <svl/zforlist.hxx>
 
 class SwDatePickerDialog : public FloatingWindow
 {

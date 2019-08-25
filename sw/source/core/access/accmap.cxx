@@ -18,8 +18,6 @@
  */
 
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <vcl/window.hxx>
 #include <svx/svdmodel.hxx>
@@ -55,7 +53,6 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
 #include <svx/ShapeTypeHandler.hxx>
-#include <vcl/svapp.hxx>
 #include <svx/SvxShapeTypes.hxx>
 #include <svx/svdpage.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

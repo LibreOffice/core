@@ -10,8 +10,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_DROPDOWNFORMEFIELDBUTTO_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_DROPDOWNFORMEFIELDBUTTO_HXX
 
-#include <vcl/menubtn.hxx>
-#include <swrect.hxx>
 #include "FormFieldButton.hxx"
 
 class SwEditWin;

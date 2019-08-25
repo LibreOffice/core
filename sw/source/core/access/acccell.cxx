@@ -39,9 +39,7 @@
 #include "acccell.hxx"
 
 #include <cfloat>
-#include <limits.h>
 
-#include <ndtxt.hxx>
 #include <editeng/brushitem.hxx>
 #include <swatrset.hxx>
 #include <frmatr.hxx>

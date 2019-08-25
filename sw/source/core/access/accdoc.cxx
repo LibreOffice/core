@@ -26,7 +26,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <sfx2/viewsh.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <viewsh.hxx>
@@ -36,16 +35,12 @@
 #include <strings.hrc>
 #include <pagefrm.hxx>
 
-#include <editeng/brushitem.hxx>
 #include <swatrset.hxx>
-#include <frmatr.hxx>
-#include <unostyle.hxx>
 #include <docsh.hxx>
 #include <crsrsh.hxx>
 #include <fesh.hxx>
 #include <fmtclds.hxx>
 #include <flyfrm.hxx>
-#include <colfrm.hxx>
 #include <txtfrm.hxx>
 #include <sectfrm.hxx>
 #include <section.hxx>

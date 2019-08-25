@@ -21,18 +21,12 @@
 
 #include <cellatr.hxx>
 #include <charfmt.hxx>
-#include <cmdid.h>
 #include <doc.hxx>
 #include <IDocumentListsAccess.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/brushitem.hxx>
-#include <editeng/lineitem.hxx>
-#include <editeng/boxitem.hxx>
 #include <editeng/editeng.hxx>
 #include <fmtanchr.hxx>
 #include <fmtpdsc.hxx>
 #include <hintids.hxx>
-#include <istyleaccess.hxx>
 #include <list.hxx>
 #include <node.hxx>
 #include <numrule.hxx>
@@ -40,7 +34,6 @@
 #include <paratr.hxx>
 #include <osl/diagnose.h>
 #include <svl/whiter.hxx>
-#include <svx/xtable.hxx>
 
 #include <svx/svdpool.hxx>
 #include <svx/sxenditm.hxx>

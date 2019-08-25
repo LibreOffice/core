@@ -18,7 +18,6 @@
  */
 
 #include <crsrsh.hxx>
-#include <doc.hxx>
 #include <layfrm.hxx>
 #include <cntfrm.hxx>
 #include <swcrsr.hxx>

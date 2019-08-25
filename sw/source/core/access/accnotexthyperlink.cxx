@@ -22,8 +22,6 @@
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <swurl.hxx>
 #include <vcl/svapp.hxx>
-#include <ndtxt.hxx>
-#include <txtinet.hxx>
 #include <frmfmt.hxx>
 
 #include "accnotexthyperlink.hxx"

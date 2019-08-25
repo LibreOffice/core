@@ -20,21 +20,17 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <frmfmt.hxx>
 #include <ndnotxt.hxx>
 #include <flyfrm.hxx>
-#include <cntfrm.hxx>
 #include <notxtfrm.hxx>
 #include <hints.hxx>
 #include "accnotextframe.hxx"
 #include <fmturl.hxx>
 #include "accnotexthyperlink.hxx"
-#include <vcl/imap.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
-#include <doc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

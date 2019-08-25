@@ -23,9 +23,6 @@
 #include <tools/stream.hxx>
 #endif
 
-#include <math.h>
-#include <stdlib.h>
-
 SwRect::SwRect( const tools::Rectangle &rRect ) :
     m_Point( rRect.Left(), rRect.Top() )
 {

@@ -20,7 +20,6 @@
 #include <annotationmark.hxx>
 
 #include <doc.hxx>
-#include <IDocumentMarkAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
 #include <fldbas.hxx>

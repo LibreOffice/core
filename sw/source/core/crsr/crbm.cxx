@@ -21,9 +21,7 @@
 #include <ndtxt.hxx>
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>
-#include <docary.hxx>
 #include <IMark.hxx>
-#include "callnk.hxx"
 #include <swcrsr.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentSettingAccess.hxx>

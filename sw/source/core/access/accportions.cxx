@@ -32,27 +32,10 @@
 
 // for GetWordBoundary(...), GetSentenceBoundary(...):
 #include <breakit.hxx>
-#include <ndtxt.hxx>
 #include <txtfrm.hxx>
 
 // for FillSpecialPos(...)
 #include <crstate.hxx>
-
-// for SwAccessibleContext::GetResource()
-#include "acccontext.hxx"
-
-// for Post-It replacement text:
-#include <txatbase.hxx>
-#include <fmtfld.hxx>
-#include <fldbas.hxx>
-#include <docufld.hxx>
-
-// for in-line graphics replacement:
-#include <ndindex.hxx>
-#include <ndnotxt.hxx>
-#include <fmtflcnt.hxx>
-#include <frmfmt.hxx>
-#include <fmtcntnt.hxx>
 
 using namespace ::com::sun::star;
 
