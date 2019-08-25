@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_c32099b3",
+        "filename": "oox/source/drawingml/customshapeproperties.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-25T20:06:29Z",
+      "side": 0,
+      "message": "This line really deserves to be dropped... Unnecessary ctor in loop, where an optimized compare to string literal could be used...",
+      "range": {
+        "startLine": 166,
+        "startChar": 16,
+        "endLine": 166,
+        "endChar": 69
+      },
+      "revId": "b8db9688a4bdfbe272993ee9808c23d5d7dae879",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
