@@ -110,24 +110,8 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric )
     // get the matching CoreText font handle
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
     CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
-    const CoreTextFontFace* mpFontData = static_cast<const CoreTextFontFace*>(GetFontFace());
 
-    int nBufSize = 0;
-
-    nBufSize = mpFontData->GetFontTable("hhea", nullptr);
-    uint8_t* pHheaBuf = new uint8_t[nBufSize];
-    nBufSize = mpFontData->GetFontTable("hhea", pHheaBuf);
-    std::vector<uint8_t> rHhea(pHheaBuf, pHheaBuf + nBufSize);
-
-    nBufSize = mpFontData->GetFontTable("OS/2", nullptr);
-    uint8_t* pOS2Buf = new uint8_t[nBufSize];
-    nBufSize = mpFontData->GetFontTable("OS/2", pOS2Buf);
-    std::vector<uint8_t> rOS2(pOS2Buf, pOS2Buf + nBufSize);
-
-    rxFontMetric->ImplCalcLineSpacing(rHhea, rOS2, CTFontGetUnitsPerEm(aCTFontRef));
-
-    delete[] pHheaBuf;
-    delete[] pOS2Buf;
+    rxFontMetric->ImplCalcLineSpacing(this);
 
     // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
