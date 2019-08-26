@@ -85,6 +85,9 @@ public:
     /// Get the width of all columns in this table.
     std::vector<sal_Int32> getColumnWidths();
 
+    /// Get the height of all rows in this table.
+    std::vector<sal_Int32> getRowHeights();
+
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     // ICellRange
