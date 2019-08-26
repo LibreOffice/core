@@ -1484,6 +1484,16 @@ sal_Int32 SdrTableObj::getColumnCount() const
     return mpImpl.is() ? mpImpl->getColumnCount() : 0;
 }
 
+sal_Int32 SdrTableObj::getRowCount() const
+{
+    return mpImpl.is() ? mpImpl->getRowCount() : 0;
+}
+
+void SdrTableObj::changeEdge(bool bHorizontal, int nEdge, sal_Int32 nOffset)
+{
+    if (mpImpl.is())
+        mpImpl->DragEdge(bHorizontal, nEdge, nOffset);
+}
 
 void SdrTableObj::setActiveCell( const CellPos& rPos )
 {
@@ -2008,41 +2018,29 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
     const sal_Int32 nColCount = mpImpl->getColumnCount();
 
     // first add row handles
-    std::vector< TableEdgeHdl* > aRowEdges( nRowCount + 1 );
-
-    for( sal_Int32 nRow = 0; nRow <= nRowCount; nRow++ )
+    std::vector<TableEdgeHdl*> aRowEdges(nRowCount + 1);
+    for (auto const & rEdge : mpImpl->mpLayouter->getHorizontalEdges())
     {
-        sal_Int32 nEdgeMin, nEdgeMax;
-        const sal_Int32 nEdge = mpImpl->mpLayouter->getHorizontalEdge( nRow, &nEdgeMin, &nEdgeMax );
-        nEdgeMin -= nEdge;
-        nEdgeMax -= nEdge;
+        Point aPoint(maRect.TopLeft());
+        aPoint.Y() += rEdge.nPosition;
 
-        Point aPoint( maRect.TopLeft() );
-        aPoint.Y() += nEdge;
-
-        TableEdgeHdl* pHdl= new TableEdgeHdl(aPoint,true,nEdgeMin,nEdgeMax,nColCount+1);
-        pHdl->SetPointNum( nRow );
-        rHdlList.AddHdl( pHdl );
-        aRowEdges[nRow] = pHdl;
+        TableEdgeHdl* pHdl= new TableEdgeHdl(aPoint,true,rEdge.nMin,rEdge.nMax,nColCount+1);
+        pHdl->SetPointNum(rEdge.nIndex);
+        rHdlList.AddHdl(pHdl);
+        aRowEdges[rEdge.nIndex] = pHdl;
     }
 
     // second add column handles
-    std::vector< TableEdgeHdl* > aColEdges( nColCount + 1 );
-
-    for( sal_Int32 nCol = 0; nCol <= nColCount; nCol++ )
+    std::vector<TableEdgeHdl*> aColEdges(nColCount + 1);
+    for (auto const & rEdge : mpImpl->mpLayouter->getVerticalEdges())
     {
-        sal_Int32 nEdgeMin, nEdgeMax;
-        const sal_Int32 nEdge = mpImpl->mpLayouter->getVerticalEdge( nCol, &nEdgeMin, &nEdgeMax );
-        nEdgeMin -= nEdge;
-        nEdgeMax -= nEdge;
+        Point aPoint(maRect.TopLeft());
+        aPoint.X() += rEdge.nPosition;
 
-        Point aPoint( maRect.TopLeft() );
-        aPoint.X() += nEdge;
-
-        TableEdgeHdl* pHdl = new TableEdgeHdl(aPoint,false,nEdgeMin,nEdgeMax, nRowCount+1);
-        pHdl->SetPointNum( nCol );
-        rHdlList.AddHdl( pHdl );
-        aColEdges[nCol] = pHdl;
+        TableEdgeHdl* pHdl = new TableEdgeHdl(aPoint,false,rEdge.nMin,rEdge.nMax, nRowCount+1);
+        pHdl->SetPointNum(rEdge.nIndex);
+        rHdlList.AddHdl(pHdl);
+        aColEdges[rEdge.nIndex] = pHdl;
     }
 
     // now add visible edges to row and column handles
@@ -2454,6 +2452,74 @@ void SdrTableObj::dumpAsXml(xmlTextWriterPtr pWriter) const
     mpImpl->dumpAsXml(pWriter);
 
     xmlTextWriterEndElement(pWriter);
+}
+
+bool SdrTableObj::createTableEdgesJson(boost::property_tree::ptree & rJsonRoot)
+{
+    if (!mpImpl.is() || !mpImpl->mxTable.is())
+        return false;
+
+    tools::Rectangle aRect = GetCurrentBoundRect();
+    boost::property_tree::ptree aTableColumns;
+    {
+        aTableColumns.put("tableOffset", convertMm100ToTwip(aRect.Left()));
+
+        boost::property_tree::ptree aEntries;
+        auto const & aEdges = mpImpl->mpLayouter->getVerticalEdges();
+        for (auto & rEdge : aEdges)
+        {
+            if (rEdge.nIndex == 0)
+            {
+                aTableColumns.put("left", convertMm100ToTwip(rEdge.nPosition));
+            }
+            else if (rEdge.nIndex == sal_Int32(aEdges.size() - 1))
+            {
+                aTableColumns.put("right", convertMm100ToTwip(rEdge.nPosition));
+            }
+            else
+            {
+                boost::property_tree::ptree aEntry;
+                aEntry.put("position", convertMm100ToTwip(rEdge.nPosition));
+                aEntry.put("min", convertMm100ToTwip(rEdge.nPosition + rEdge.nMin));
+                aEntry.put("max", convertMm100ToTwip(rEdge.nPosition + rEdge.nMax));
+                aEntry.put("hidden", false);
+                aEntries.push_back(std::make_pair("", aEntry));
+            }
+        }
+        aTableColumns.push_back(std::make_pair("entries", aEntries));
+    }
+    rJsonRoot.add_child("columns", aTableColumns);
+
+    boost::property_tree::ptree aTableRows;
+    {
+        aTableRows.put("tableOffset", convertMm100ToTwip(aRect.Top()));
+
+        boost::property_tree::ptree aEntries;
+        auto const & aEdges = mpImpl->mpLayouter->getHorizontalEdges();
+        for (auto & rEdge : aEdges)
+        {
+            if (rEdge.nIndex == 0)
+            {
+                aTableRows.put("left", convertMm100ToTwip(rEdge.nPosition));
+            }
+            else if (rEdge.nIndex == sal_Int32(aEdges.size() - 1))
+            {
+                aTableRows.put("right", convertMm100ToTwip(rEdge.nPosition));
+            }
+            else
+            {
+                boost::property_tree::ptree aEntry;
+                aEntry.put("position", convertMm100ToTwip(rEdge.nPosition));
+                aEntry.put("min", convertMm100ToTwip(rEdge.nPosition + rEdge.nMin));
+                aEntry.put("max", convertMm100ToTwip(rEdge.nPosition + rEdge.nMax));
+                aEntry.put("hidden", false);
+                aEntries.push_back(std::make_pair("", aEntry));
+            }
+        }
+        aTableRows.push_back(std::make_pair("entries", aEntries));
+    }
+    rJsonRoot.add_child("rows", aTableRows);
+    return true;
 }
 
 } }

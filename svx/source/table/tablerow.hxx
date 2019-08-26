@@ -50,6 +50,8 @@ public:
     void removeColumns( sal_Int32 nIndex, sal_Int32 nCount );
     /// Reference to the table model containing this row.
     const TableModelRef& getModel() const;
+    /// Get the height of this row.
+    sal_Int32 getHeight() const;
 
     // XCellRange
     virtual css::uno::Reference< css::table::XCell > SAL_CALL getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) override;
