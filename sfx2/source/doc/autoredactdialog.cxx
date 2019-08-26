@@ -36,6 +36,8 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
+#define FILEDIALOG_FILTER_JSON "*.json"
+
 int TargetsTable::GetRowByTargetName(const OUString& sName)
 {
     for (int i = 0, nCount = m_xControl->n_children(); i < nCount; ++i)
@@ -68,21 +70,21 @@ namespace
 {
 OUString getTypeName(RedactionTargetType nType)
 {
-    OUString sTypeName("Unknown");
+    OUString sTypeName(SfxResId(STR_REDACTION_TARGET_TYPE_UNKNOWN));
 
     switch (nType)
     {
         case RedactionTargetType::REDACTION_TARGET_TEXT:
-            sTypeName = "Text";
+            sTypeName = SfxResId(STR_REDACTION_TARGET_TYPE_TEXT);
             break;
         case RedactionTargetType::REDACTION_TARGET_REGEX:
-            sTypeName = "Regex";
+            sTypeName = SfxResId(STR_REDACTION_TARGET_TYPE_REGEX);
             break;
         case RedactionTargetType::REDACTION_TARGET_PREDEFINED:
-            sTypeName = "Predefined";
+            sTypeName = SfxResId(STR_REDACTION_TARGET_TYPE_PREDEF);
             break;
         case RedactionTargetType::REDACTION_TARGET_UNKNOWN:
-            sTypeName = "Unknown";
+            sTypeName = SfxResId(STR_REDACTION_TARGET_TYPE_UNKNOWN);
             break;
     }
 
@@ -141,8 +143,11 @@ void TargetsTable::InsertTarget(RedactionTarget* pTarget)
     m_xControl->append(OUString::number(reinterpret_cast<sal_Int64>(pTarget)), pTarget->sName);
     m_xControl->set_text(nRow, getTypeName(pTarget->sType), 1);
     m_xControl->set_text(nRow, sContent, 2);
-    m_xControl->set_text(nRow, pTarget->bCaseSensitive ? OUString("Yes") : OUString("No"), 3);
-    m_xControl->set_text(nRow, pTarget->bWholeWords ? OUString("Yes") : OUString("No"), 4);
+    m_xControl->set_text(
+        nRow, pTarget->bCaseSensitive ? SfxResId(STR_REDACTION_YES) : SfxResId(STR_REDACTION_NO),
+        3);
+    m_xControl->set_text(
+        nRow, pTarget->bWholeWords ? SfxResId(STR_REDACTION_YES) : SfxResId(STR_REDACTION_NO), 4);
 }
 
 void TargetsTable::SelectByName(const OUString& sName)
@@ -164,8 +169,7 @@ RedactionTarget* TargetsTable::GetTargetByName(const OUString& sName)
 
 OUString TargetsTable::GetNameProposal()
 {
-    //TODO: Define a translatable string
-    OUString sDefaultTargetName("Target");
+    OUString sDefaultTargetName(SfxResId(STR_REDACTION_TARGET));
     sal_Int32 nHighestTargetId = 0;
     for (int i = 0, nCount = m_xControl->n_children(); i < nCount; ++i)
     {
@@ -195,21 +199,25 @@ void TargetsTable::setRowData(int nRowIndex, const RedactionTarget* pTarget)
     m_xControl->set_text(nRowIndex, pTarget->sName, 0);
     m_xControl->set_text(nRowIndex, getTypeName(pTarget->sType), 1);
     m_xControl->set_text(nRowIndex, sContent, 2);
-    m_xControl->set_text(nRowIndex, pTarget->bCaseSensitive ? OUString("Yes") : OUString("No"), 3);
-    m_xControl->set_text(nRowIndex, pTarget->bWholeWords ? OUString("Yes") : OUString("No"), 4);
+    m_xControl->set_text(
+        nRowIndex,
+        pTarget->bCaseSensitive ? SfxResId(STR_REDACTION_YES) : SfxResId(STR_REDACTION_NO), 3);
+    m_xControl->set_text(
+        nRowIndex, pTarget->bWholeWords ? SfxResId(STR_REDACTION_YES) : SfxResId(STR_REDACTION_NO),
+        4);
 }
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, Load, weld::Button&, void)
 {
     //Load a targets list from a previously saved file (a json file?)
     // ask for filename, where we should load the new config data from
-    StartFileDialog(StartFileDialogType::Open, "Load Targets");
+    StartFileDialog(StartFileDialogType::Open, SfxResId(STR_REDACTION_LOAD_TARGETS));
 }
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, Save, weld::Button&, void)
 {
     //Allow saving the targets into a file
-    StartFileDialog(StartFileDialogType::SaveAs, "Save Targets");
+    StartFileDialog(StartFileDialogType::SaveAs, SfxResId(STR_REDACTION_SAVE_TARGETS));
 }
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, weld::Button&, void)
@@ -230,9 +238,9 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, weld::Button&, void)
             || aAddTargetDialog.getContent().isEmpty())
         {
             bIncomplete = true;
-            std::unique_ptr<weld::MessageDialog> xBox(
-                Application::CreateMessageDialog(getDialog(), VclMessageType::Warning,
-                                                 VclButtonsType::Ok, "All fields are required"));
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
+                SfxResId(STR_REDACTION_FIELDS_REQUIRED)));
             xBox->run();
         }
         else if (m_xTargetsBox->GetTargetByName(aAddTargetDialog.getName()))
@@ -240,7 +248,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, weld::Button&, void)
             bIncomplete = true;
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
                 getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
-                "There is already a target with this name"));
+                SfxResId(STR_REDACTION_TARGET_NAME_CLASH)));
             xBox->run();
         }
 
@@ -261,7 +269,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, weld::Button&, void)
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
             getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
-            "An error occurred while adding new target. Please report this incident."));
+            SfxResId(STR_REDACTION_TARGET_ADD_ERROR)));
         xBox->run();
         delete redactiontarget;
     }
@@ -278,11 +286,10 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, weld::Button&, void)
     // Only one entry should be selected for editing
     if (m_xTargetsBox->get_selected_rows().size() > 1)
     {
-        OUString sMsg(
-            "You have selected multiple targets, but only one target can be edited at once.");
         //Warn the user about multiple selections
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
-            getDialog(), VclMessageType::Error, VclButtonsType::Ok, sMsg));
+        std::unique_ptr<weld::MessageDialog> xBox(
+            Application::CreateMessageDialog(getDialog(), VclMessageType::Error, VclButtonsType::Ok,
+                                             SfxResId(STR_REDACTION_MULTI_EDIT)));
         xBox->run();
         return;
     }
@@ -309,9 +316,9 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, weld::Button&, void)
             || aEditTargetDialog.getContent().isEmpty())
         {
             bIncomplete = true;
-            std::unique_ptr<weld::MessageDialog> xBox(
-                Application::CreateMessageDialog(getDialog(), VclMessageType::Warning,
-                                                 VclButtonsType::Ok, "All fields are required"));
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
+                SfxResId(STR_REDACTION_FIELDS_REQUIRED)));
             xBox->run();
         }
         else if (aEditTargetDialog.getName() != pTarget->sName
@@ -320,7 +327,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, weld::Button&, void)
             bIncomplete = true;
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
                 getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
-                "There is already a target with this name"));
+                SfxResId(STR_REDACTION_TARGET_NAME_CLASH)));
             xBox->run();
         }
 
@@ -347,8 +354,8 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, DeleteHdl, weld::Button&, void)
 
     if (aSelectedRows.size() > 1)
     {
-        OUString sMsg("Are you sure you would like to delete "
-                      + OUString::number(aSelectedRows.size()) + " targets at once?");
+        OUString sMsg(SfxResId(STR_REDACTION_MULTI_DELETE)
+                          .replaceFirst("$(TARGETSCOUNT)", OUString::number(aSelectedRows.size())));
         //Warn the user about multiple deletions
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
             getDialog(), VclMessageType::Question, VclButtonsType::OkCancel, sMsg));
@@ -492,7 +499,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, SaveHdl, sfx2::FileDialogHelper*, void)
 void SfxAutoRedactDialog::StartFileDialog(StartFileDialogType nType, const OUString& rTitle)
 {
     OUString aFilterAllStr(SfxResId(STR_SFX_FILTERNAME_ALL));
-    OUString aFilterCfgStr("Target Set (*.json)");
+    OUString aFilterJsonStr(SfxResId(STR_REDACTION_JSON_FILE_FILTER));
 
     bool bSave = nType == StartFileDialogType::SaveAs;
     short nDialogType = bSave ? css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION
@@ -501,8 +508,8 @@ void SfxAutoRedactDialog::StartFileDialog(StartFileDialogType nType, const OUStr
 
     m_pFileDlg->SetTitle(rTitle);
     m_pFileDlg->AddFilter(aFilterAllStr, FILEDIALOG_FILTER_ALL);
-    m_pFileDlg->AddFilter(aFilterCfgStr, "*.json");
-    m_pFileDlg->SetCurrentFilter(aFilterCfgStr);
+    m_pFileDlg->AddFilter(aFilterJsonStr, FILEDIALOG_FILTER_JSON);
+    m_pFileDlg->SetCurrentFilter(aFilterJsonStr);
 
     Link<sfx2::FileDialogHelper*, void> aDlgClosedLink
         = bSave ? LINK(this, SfxAutoRedactDialog, SaveHdl)
@@ -522,7 +529,7 @@ void SfxAutoRedactDialog::addTarget(RedactionTarget* pTarget)
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
             getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
-            "An error occurred while adding new target. Please report this incident."));
+            SfxResId(STR_REDACTION_TARGET_ADD_ERROR)));
         xBox->run();
         delete pTarget;
     }
@@ -757,7 +764,7 @@ SfxAddTargetDialog::SfxAddTargetDialog(weld::Window* pParent, const OUString& sN
     m_xCaseSensitive->set_active(bCaseSensitive);
     m_xWholeWords->set_active(bWholeWords);
 
-    set_title("Edit Target");
+    set_title(SfxResId(STR_REDACTION_EDIT_TARGET));
 }
 
 RedactionTargetType SfxAddTargetDialog::getType() const
