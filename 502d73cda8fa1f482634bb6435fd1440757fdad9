@@ -152,6 +152,24 @@
       "revId": "502d73cda8fa1f482634bb6435fd1440757fdad9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_a6afb3e1",
+        "filename": "vcl/source/font/fontinstance.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2019-08-26T03:05:32Z",
+      "side": 1,
+      "message": "Do we ever call GetGlyphBoundRect for these fonts? It apparently never returned anything, so I don’t see how it would have been used for anything so assert is good here as it probably masks a bug somewhere. We need to check for nullptr here though as hb_font_get_glyph_extents() doesn’t check for it, or make GetHbFont() return hb_font_get_empty() (a safe singleton object) instead of nullptr.",
+      "parentUuid": "bf659307_c323b904",
+      "revId": "502d73cda8fa1f482634bb6435fd1440757fdad9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
