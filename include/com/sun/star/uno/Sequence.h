@@ -151,6 +151,14 @@ public:
     bool SAL_CALL hasElements() const
         { return (_pSequence->nElements > 0); }
 
+#if defined LIBO_INTERNAL_ONLY
+    /** This function allows to use Sequence in cases where  std::size is needed, and the like.
+
+        @since LibreOffice 6.4
+    */
+    sal_uInt32 size() const { return static_cast<sal_uInt32>(getLength()); }
+#endif
+
     /** Gets a pointer to elements array for reading.
         If the sequence has a length of 0, then the returned pointer is
         undefined.
@@ -271,16 +279,6 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
 }
 }
 }
-
-#if defined LIBO_INTERNAL_ONLY
-namespace std
-{
-template <class E> sal_Int32 size(const ::com::sun::star::uno::Sequence<E>& s)
-{
-    return s.getLength();
-}
-}
-#endif
 
 /** Gets the meta type of IDL sequence.
 
