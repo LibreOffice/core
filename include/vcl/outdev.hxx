@@ -813,9 +813,6 @@ public:
      */
     void                        DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly );
     void                        DrawPolyPolygon( const basegfx::B2DPolyPolygon& );
-
-    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolygon& rPolyPoly );
-    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, const tools::PolyPolygon* pClipPolyPoly );
     ///@}
 
 

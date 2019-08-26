@@ -22,6 +22,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/drawables/PolygonDrawable.hxx>
+#include <vcl/drawables/PolyPolygonDrawable.hxx>
 
 #include <salgdi.hxx>
 
@@ -110,7 +111,7 @@ bool PolygonDrawable::Draw(OutputDevice* pRenderContext, tools::Polygon const& r
 bool PolygonDrawable::Draw(OutputDevice* pRenderContext, tools::Polygon const& rPolygon,
                            tools::PolyPolygon const& rClipPolyPolygon)
 {
-    pRenderContext->ImplDrawPolyPolygon(rPolygon, &rClipPolyPolygon);
+    pRenderContext->Draw(PolyPolygonDrawable(rPolygon, rClipPolyPolygon));
     return true;
 }
 
@@ -123,6 +124,6 @@ bool PolygonDrawable::CanDraw(OutputDevice* pRenderContext) const
 
     return true;
 }
-}
+} // namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

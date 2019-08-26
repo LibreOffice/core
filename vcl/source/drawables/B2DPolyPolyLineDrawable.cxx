@@ -27,6 +27,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
+#include <vcl/drawables/PolyPolygonDrawable.hxx>
 #include <vcl/drawables/B2DPolyPolyLineDrawable.hxx>
 
 #include <salgdi.hxx>
@@ -247,7 +248,7 @@ bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
     const tools::PolyPolygon aToolsPolyPolygon(rLinePolyPolygon);
     const tools::PolyPolygon aPixelPolyPolygon
         = pRenderContext->ImplLogicToDevicePixel(aToolsPolyPolygon);
-    pRenderContext->ImplDrawPolyPolygon(aPixelPolyPolygon.Count(), aPixelPolyPolygon);
+    pRenderContext->Draw(PolyPolygonDrawable(aPixelPolyPolygon.Count(), aPixelPolyPolygon));
 
     return true;
 }
