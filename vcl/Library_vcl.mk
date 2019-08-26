@@ -120,13 +120,14 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/drawables/LineDrawable \
     vcl/source/drawables/B2DPolyLineDrawable \
     vcl/source/drawables/B2DPolyPolyLineDrawable \
+    vcl/source/drawables/B2DPolygonDrawable \
+    vcl/source/drawables/B2DPolyPolygonDrawable \
     vcl/source/drawables/RectangleDrawable \
     vcl/source/drawables/RoundRectDrawable \
     vcl/source/drawables/PolyHairlineDrawable \
     vcl/source/drawables/PolyLineDrawable \
     vcl/source/drawables/PolygonDrawable \
     vcl/source/drawables/PolyPolygonDrawable \
-    vcl/source/drawables/B2DPolygonDrawable \
     vcl/source/animate/Animation \
     vcl/source/animate/AnimationBitmap \
     vcl/source/window/aboutdialog \

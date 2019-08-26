@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/types.h>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/poly.hxx>
 
@@ -30,13 +28,9 @@
 #include <vcl/drawables/PolyPolygonDrawable.hxx>
 #include <vcl/drawables/B2DPolygonDrawable.hxx>
 #include <vcl/drawables/B2DPolyPolyLineDrawable.hxx>
+#include <vcl/drawables/B2DPolyPolygonDrawable.hxx>
 
 #include <salgdi.hxx>
-
-#include <memory>
-#include <cassert>
-
-#define OUTDEV_POLYPOLY_STACKBUF        32
 
 void OutputDevice::DrawPolygon(const tools::Polygon& rPoly)
 {
@@ -53,19 +47,9 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
     Draw(vcl::PolyPolygonDrawable(rPolyPoly));
 }
 
-// Caution: This method is nearly the same as
-// OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency),
-// so when changes are made here do not forget to make changes there, too
-
 void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
-    assert(!is_double_buffered_window());
-
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaPolyPolygonAction( tools::PolyPolygon( rB2DPolyPoly ) ) );
-
-    // call helper
-    Draw(vcl::B2DPolyPolyLineDrawable(rB2DPolyPoly));
+    Draw(vcl::B2DPolyPolygonDrawable(rB2DPolyPoly));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
