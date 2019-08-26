@@ -125,6 +125,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/drawables/PolyHairlineDrawable \
     vcl/source/drawables/PolyLineDrawable \
     vcl/source/drawables/PolygonDrawable \
+    vcl/source/drawables/B2DPolygonDrawable \
     vcl/source/animate/Animation \
     vcl/source/animate/AnimationBitmap \
     vcl/source/window/aboutdialog \

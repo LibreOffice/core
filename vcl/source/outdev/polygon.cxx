@@ -27,6 +27,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/drawables/PolygonDrawable.hxx>
+#include <vcl/drawables/B2DPolygonDrawable.hxx>
 #include <vcl/drawables/B2DPolyPolyLineDrawable.hxx>
 
 #include <salgdi.hxx>
@@ -39,6 +40,11 @@
 void OutputDevice::DrawPolygon(const tools::Polygon& rPoly)
 {
     Draw(vcl::PolygonDrawable(rPoly));
+}
+
+void OutputDevice::DrawPolygon( const basegfx::B2DPolygon& rB2DPolygon)
+{
+    Draw(vcl::B2DPolygonDrawable(rB2DPolygon));
 }
 
 void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
@@ -147,18 +153,6 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
     }
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
-}
-
-void OutputDevice::DrawPolygon( const basegfx::B2DPolygon& rB2DPolygon)
-{
-    assert(!is_double_buffered_window());
-
-    // AW: Do NOT paint empty polygons
-    if(rB2DPolygon.count())
-    {
-        basegfx::B2DPolyPolygon aPP( rB2DPolygon );
-        DrawPolyPolygon( aPP );
-    }
 }
 
 // Caution: This method is nearly the same as
