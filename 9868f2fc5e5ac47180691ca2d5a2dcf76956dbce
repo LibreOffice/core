@@ -16,6 +16,23 @@
       "revId": "9868f2fc5e5ac47180691ca2d5a2dcf76956dbce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_468ed72e",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 13503,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-26T09:06:52Z",
+      "side": 1,
+      "message": "This file is not meant to be changed manually.  (It contains the LO 6.3 state of offapi, to allow detecting accidental incompatible changes.  But adding a constant to a constant group is not an incompatible change.)",
+      "revId": "9868f2fc5e5ac47180691ca2d5a2dcf76956dbce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
