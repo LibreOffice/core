@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_libraries,slideshow,\
     sal \
     salhelper \
     svt \
+    svxcore \
     tl \
     utl \
     vcl \
