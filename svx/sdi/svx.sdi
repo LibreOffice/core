@@ -7180,7 +7180,7 @@ SfxVoidItem RulerChangeState SID_RULER_CHANGE_STATE
 SfxVoidItem TableChangeCurrentBorderPosition SID_TABLE_CHANGE_CURRENT_BORDER_POSITION
     (SfxStringItem BorderType SID_TABLE_BORDER_TYPE,
      SfxUInt16Item Index SID_TABLE_BORDER_INDEX,
-     SfxInt32Item NewPosition SID_TABLE_BORDER_NEW_POSITION)
+     SfxInt32Item Offset SID_TABLE_BORDER_OFFSET)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
