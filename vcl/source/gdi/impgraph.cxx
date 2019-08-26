@@ -477,7 +477,7 @@ void ImpGraphic::setPdfData(const std::shared_ptr<std::vector<sal_Int8>>& rPdfDa
     mpPdfData = rPdfData;
 }
 
-std::shared_ptr<std::vector<sal_Int8>> ImpGraphic::getPdfData() const
+const std::shared_ptr<std::vector<sal_Int8>> & ImpGraphic::getPdfData() const
 {
     ensureAvailable();
 
