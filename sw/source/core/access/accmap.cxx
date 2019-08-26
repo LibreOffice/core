@@ -175,6 +175,7 @@ void SAL_CALL SwDrawModellListener_Impl::addShapeEventListener(
                 const css::uno::Reference< css::drawing::XShape >& xShape,
                 const uno::Reference< document::XShapeEventListener >& xListener )
 {
+    assert(xShape.is() && "no shape?");
     osl::MutexGuard aGuard(maListenerMutex);
     auto rv = maShapeListeners.emplace(xShape, xListener);
     assert(rv.second && "duplicate listener?");

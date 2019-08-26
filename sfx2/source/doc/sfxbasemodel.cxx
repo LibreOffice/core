@@ -199,7 +199,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     OUString                                                   m_aPreusedFilterName     ;
     ::cppu::OMultiTypeInterfaceContainerHelper                 m_aInterfaceContainer    ;
     std::unordered_map<css::uno::Reference< css::drawing::XShape >,
-                       css::uno::Reference< css::document::XShapeEventListener >> maShapeListeners;
+                       std::vector<css::uno::Reference< css::document::XShapeEventListener >>> maShapeListeners;
     Reference< XInterface >                                    m_xParent                ;
     Reference< frame::XController >                            m_xCurrent               ;
     Reference< document::XDocumentProperties >                 m_xDocumentProperties    ;
@@ -2376,11 +2376,10 @@ void SAL_CALL SfxBaseModel::removeEventListener( const Reference< document::XEve
 
 void SAL_CALL SfxBaseModel::addShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape, const Reference< document::XShapeEventListener >& xListener )
 {
+    assert(xShape.is() && "no shape?");
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
 
-    auto rv = m_pData->maShapeListeners.emplace(xShape, xListener);
-    assert(rv.second && "duplicate listener?");
-    (void)rv;
+    m_pData->maShapeListeners[xShape].push_back(xListener);
 }
 
 
@@ -2394,9 +2393,14 @@ void SAL_CALL SfxBaseModel::removeShapeEventListener( const css::uno::Reference<
     auto it = m_pData->maShapeListeners.find(xShape);
     if (it != m_pData->maShapeListeners.end())
     {
-        assert(it->second == xListener && "removing wrong listener?");
-        (void)xListener;
-        m_pData->maShapeListeners.erase(it);
+        auto rVec = it->second;
+        auto it2 = std::find(rVec.begin(), rVec.end(), xListener);
+        if (it2 != rVec.end())
+        {
+            rVec.erase(it2);
+            if (rVec.empty())
+            m_pData->maShapeListeners.erase(it);
+        }
     }
 }
 
@@ -3256,7 +3260,8 @@ void SfxBaseModel::notifyEvent( const document::EventObject& aEvent ) const
         {
             auto it = m_pData->maShapeListeners.find(xShape);
             if (it != m_pData->maShapeListeners.end())
-                it->second->notifyShapeEvent(aEvent);
+                for (auto const & rListenerUnoRef : it->second)
+                    rListenerUnoRef->notifyShapeEvent(aEvent);
         }
     }
 }
