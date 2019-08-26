@@ -589,7 +589,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
  */
 bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
 {
-    bool bImageMapInfo = SdDrawDocument::GetIMapInfo(pObj) != nullptr;
+    bool bImageMapInfo = SvxIMapInfo::GetIMapInfo(pObj) != nullptr;
 
     if (!bImageMapInfo)
         return false;
@@ -618,7 +618,7 @@ bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
                                      pVisiLayer, false)))
     {
         // hit inside the object (without margin) or open object
-        if (SdDrawDocument::GetHitIMapObject(pObj, rPos))
+        if (SvxIMapInfo::GetHitIMapObject(pObj, rPos))
         {
             mpWindow->SetPointer(PointerStyle::RefHand);
             return true;
@@ -737,7 +737,7 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
 {
     OUString aHelpText;
     Point aPos(mpWindow->PixelToLogic(mpWindow->ScreenToOutputPixel(rPosPixel)));
-    IMapObject* pIMapObj = SdDrawDocument::GetHitIMapObject(pObj, aPos);
+    IMapObject* pIMapObj = SvxIMapInfo::GetHitIMapObject(pObj, aPos);
 
     if (!rVEvt.pURLField && !pIMapObj)
         return false;

@@ -29,6 +29,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svxdlg.hxx>
+#include <svx/ImageMapInfo.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/style.hxx>
@@ -40,7 +41,6 @@
 
 #include <app.hrc>
 #include <Window.hxx>
-#include <imapinfo.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
 #include <drawview.hxx>
@@ -59,7 +59,7 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
     Graphic     aGraphic;
     ImageMap*   pIMap = nullptr;
     std::unique_ptr<TargetList> pTargetList;
-    SdIMapInfo* pIMapInfo = SdDrawDocument::GetIMapInfo( pObj );
+    SvxIMapInfo* pIMapInfo = SvxIMapInfo::GetIMapInfo( pObj );
 
     // get graphic from shape
     SdrGrafObj* pGrafObj = dynamic_cast< SdrGrafObj* >( pObj );

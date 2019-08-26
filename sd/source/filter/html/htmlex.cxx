@@ -55,6 +55,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdotable.hxx>
+#include <svx/ImageMapInfo.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/sfxecode.hxx>
 #include <comphelper/anytostring.hxx>
@@ -71,7 +72,6 @@
 #include <strings.hrc>
 #include <strings.hxx>
 #include <anminfo.hxx>
-#include <imapinfo.hxx>
 #include <sdresid.hxx>
 #include "buttonset.hxx"
 
@@ -1549,7 +1549,7 @@ bool HtmlExport::CreateHtmlForPresPages()
             while (pObject)
             {
                 SdAnimationInfo* pInfo     = SdDrawDocument::GetAnimationInfo(pObject);
-                SdIMapInfo*      pIMapInfo = SdDrawDocument::GetIMapInfo(pObject);
+                SvxIMapInfo*      pIMapInfo = SvxIMapInfo::GetIMapInfo(pObject);
 
                 if ((pInfo &&
                      (pInfo->meClickAction == presentation::ClickAction_BOOKMARK  ||
@@ -1665,7 +1665,7 @@ bool HtmlExport::CreateHtmlForPresPages()
             for (SdrObject* pObject : aClickableObjects)
             {
                 SdAnimationInfo* pInfo     = SdDrawDocument::GetAnimationInfo(pObject);
-                SdIMapInfo*      pIMapInfo = SdDrawDocument::GetIMapInfo(pObject);
+                SvxIMapInfo*      pIMapInfo = SvxIMapInfo::GetIMapInfo(pObject);
 
                 ::tools::Rectangle aRect(pObject->GetCurrentBoundRect());
                 Point     aLogPos(aRect.TopLeft());

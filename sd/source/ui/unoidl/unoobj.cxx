@@ -50,6 +50,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/ImageMapInfo.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <svl/instrm.hxx>
 #include <editeng/outlobj.hxx>
@@ -74,7 +75,6 @@
 #include <DrawDocShell.hxx>
 #include <glob.hxx>
 #include "unolayer.hxx"
-#include <imapinfo.hxx>
 #include <EffectMigration.hxx>
 
 using namespace ::sd;
@@ -632,7 +632,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
                         if( !xImageMap.is() || !SvUnoImageMap_fillImageMap( xImageMap, aImageMap ) )
                             throw lang::IllegalArgumentException();
 
-                        SdIMapInfo* pIMapInfo = SdDrawDocument::GetIMapInfo(pObj);
+                        SvxIMapInfo* pIMapInfo = SvxIMapInfo::GetIMapInfo(pObj);
                         if( pIMapInfo )
                         {
                             // replace existing image map
@@ -641,7 +641,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
                         else
                         {
                             // insert new user data with image map
-                            pObj->AppendUserData(std::unique_ptr<SdrObjUserData>(new SdIMapInfo(aImageMap) ));
+                            pObj->AppendUserData(std::unique_ptr<SdrObjUserData>(new SvxIMapInfo(aImageMap) ));
                         }
                     }
                 }
@@ -775,7 +775,7 @@ css::uno::Any SAL_CALL SdXShape::getPropertyValue( const OUString& PropertyName 
                 if( pDoc )
                 {
 
-                    SdIMapInfo* pIMapInfo = SdDrawDocument::GetIMapInfo(mpShape->GetSdrObject());
+                    SvxIMapInfo* pIMapInfo = SvxIMapInfo::GetIMapInfo(mpShape->GetSdrObject());
                     if( pIMapInfo )
                     {
                         const ImageMap& rIMap = pIMapInfo->GetImageMap();

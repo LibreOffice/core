@@ -11593,7 +11593,6 @@ sd/inc/fadedef.h
 sd/inc/glob.hxx
 sd/inc/helper/simplereferencecomponent.hxx
 sd/inc/helpids.h
-sd/inc/imapinfo.hxx
 sd/inc/misc/scopelock.hxx
 sd/inc/notifydocumentevent.hxx
 sd/inc/pch/precompiled_sd.cxx

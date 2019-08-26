@@ -17,34 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_IMAPINFO_HXX
-#define INCLUDED_SD_INC_IMAPINFO_HXX
+#pragma once
 
-#include "glob.hxx"
+#include <svx/svxdllapi.h>
 #include <svx/svdobj.hxx>
 #include <vcl/imap.hxx>
 
-class SdIMapInfo : public SdrObjUserData, public SfxListener
-{
+#define SVX_IMAPINFO_ID 2
 
-    ImageMap        aImageMap;
+class SVX_DLLPUBLIC SvxIMapInfo : public SdrObjUserData, public SfxListener
+{
+    ImageMap aImageMap;
 
 public:
-                    SdIMapInfo( const ImageMap& rImageMap ) :
-                        SdrObjUserData( SdrInventor::StarDrawUserData, SD_IMAPINFO_ID ),
-                        aImageMap( rImageMap ) {};
+    SvxIMapInfo(const ImageMap& rImageMap)
+        : SdrObjUserData(SdrInventor::StarDrawUserData, SVX_IMAPINFO_ID)
+        , aImageMap(rImageMap){};
 
-                    SdIMapInfo( const SdIMapInfo& rIMapInfo ) :
-                        SdrObjUserData( SdrInventor::StarDrawUserData, SD_IMAPINFO_ID ),
-                        SfxListener(),
-                        aImageMap( rIMapInfo.aImageMap ) {};
+    SvxIMapInfo(const SvxIMapInfo& rIMapInfo)
+        : SdrObjUserData(SdrInventor::StarDrawUserData, SVX_IMAPINFO_ID)
+        , SfxListener()
+        , aImageMap(rIMapInfo.aImageMap){};
 
-    virtual std::unique_ptr<SdrObjUserData> Clone( SdrObject* ) const override { return std::unique_ptr<SdrObjUserData>(new SdIMapInfo( *this )); }
+    virtual std::unique_ptr<SdrObjUserData> Clone(SdrObject*) const override
+    {
+        return std::unique_ptr<SdrObjUserData>(new SvxIMapInfo(*this));
+    }
 
-    void            SetImageMap( const ImageMap& rIMap ) { aImageMap = rIMap; }
+    void SetImageMap(const ImageMap& rIMap) { aImageMap = rIMap; }
     const ImageMap& GetImageMap() const { return aImageMap; }
-};
 
-#endif // INCLUDED_SD_INC_IMAPINFO_HXX
+    static SvxIMapInfo* GetIMapInfo(SdrObject const* pObject);
+    static IMapObject* GetHitIMapObject(SdrObject const* pObj, const Point& rWinPoint);
+    static ImageMap* GetImageMapForObject(SdrObject* pObj);
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

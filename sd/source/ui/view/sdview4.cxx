@@ -39,6 +39,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/ImageMapInfo.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/app.hxx>
 #include <avmedia/mediawindow.hxx>
@@ -54,7 +55,6 @@
 #include <drawdoc.hxx>
 #include <sdresid.hxx>
 #include <strings.hrc>
-#include <imapinfo.hxx>
 #include <sdpage.hxx>
 #include <view/SlideSorterView.hxx>
 #include <undo/undoobjects.hxx>
@@ -145,7 +145,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         }
 
         if (pImageMap)
-            pNewGrafObj->AppendUserData(std::unique_ptr<SdrObjUserData>(new SdIMapInfo(*pImageMap)));
+            pNewGrafObj->AppendUserData(std::unique_ptr<SdrObjUserData>(new SvxIMapInfo(*pImageMap)));
 
         ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj); // maybe ReplaceObjectAtView
 
@@ -230,7 +230,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         {
             // replace object
             if (pImageMap)
-                pNewGrafObj->AppendUserData(std::unique_ptr<SdrObjUserData>(new SdIMapInfo(*pImageMap)));
+                pNewGrafObj->AppendUserData(std::unique_ptr<SdrObjUserData>(new SvxIMapInfo(*pImageMap)));
 
             ::tools::Rectangle aPickObjRect(pPickObj->GetCurrentBoundRect());
             Size aPickObjSize(aPickObjRect.GetSize());
@@ -274,7 +274,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             if (!bSuccess)
                 pNewGrafObj = nullptr;
             else if (pImageMap)
-                pNewGrafObj->AppendUserData(std::unique_ptr<SdrObjUserData>(new SdIMapInfo(*pImageMap)));
+                pNewGrafObj->AppendUserData(std::unique_ptr<SdrObjUserData>(new SvxIMapInfo(*pImageMap)));
         }
     }
 
