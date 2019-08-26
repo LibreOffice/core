@@ -1244,9 +1244,9 @@ bool FuSelection::HandleImageMapClick(SdrObject* pObj, const Point& rPos)
             && SdrObjectPrimitiveHit(*pObj, aHitPosB, nHitLog, *mpView->GetSdrPageView(),
                                      pVisiLayer, false)))
     {
-        if (SdDrawDocument::GetIMapInfo(pObj))
+        if (ImageMapHelper::GetIMapInfo(pObj))
         {
-            const IMapObject* pIMapObj = SdDrawDocument::GetHitIMapObject(pObj, rPos);
+            const IMapObject* pIMapObj = ImageMapHelper::GetHitIMapObject(pObj, rPos);
 
             if (pIMapObj && !pIMapObj->GetURL().isEmpty())
             {

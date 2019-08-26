@@ -23,6 +23,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <svl/style.hxx>
 #include <svx/fmmodel.hxx>
+#include <svx/ImageMapInfo.hxx>
 #include <vcl/prntypes.hxx>
 #include <xmloff/autolayout.hxx>
 
@@ -55,8 +56,6 @@ class Timer;
 class SfxObjectShell;
 class SdPage;
 class SdAnimationInfo;
-class SdIMapInfo;
-class IMapObject;
 class SdStyleSheetPool;
 class SfxMedium;
 class SvxSearchItem;
@@ -478,9 +477,6 @@ public:
 
     static     SdAnimationInfo* GetShapeUserData(SdrObject& rObject, bool bCreate = false );
 
-    SAL_DLLPRIVATE static SdIMapInfo*  GetIMapInfo( SdrObject const * pObject );
-    SAL_DLLPRIVATE static IMapObject*  GetHitIMapObject( SdrObject const * pObject, const Point& rWinPoint );
-
     SAL_DLLPRIVATE CharClass*          GetCharClass() const { return mpCharClass.get(); }
 
     SAL_DLLPRIVATE void                UpdateAllLinks();
@@ -706,7 +702,6 @@ private:
 
     SAL_DLLPRIVATE virtual void PageListChanged() override;
     SAL_DLLPRIVATE virtual void MasterPageListChanged() override;
-    SAL_DLLPRIVATE virtual ImageMap* GetImageMapForObject(SdrObject* pObj) override;
 };
 
 namespace sd
