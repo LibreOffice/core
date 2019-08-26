@@ -3574,7 +3574,7 @@ public:
                 }
             }
 
-            pEntry->AddItem(std::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pData));
+            pEntry->AddItem(std::make_unique<SvLBoxButton>(pData));
             SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pEntry);
             m_xTreeView->InitViewData(pViewData, pEntry);
 

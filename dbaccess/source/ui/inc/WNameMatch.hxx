@@ -33,7 +33,7 @@ namespace dbaui
     {
         bool m_bReadOnly;
     protected:
-        virtual void InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind) override;
+        virtual void InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2) override;
 
     public:
         OColumnTreeBox( vcl::Window* pParent );

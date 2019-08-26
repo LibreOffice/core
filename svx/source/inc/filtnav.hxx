@@ -254,7 +254,7 @@ private:
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
     virtual void Command( const CommandEvent& rEvt ) override;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-    virtual void InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind) override;
+    virtual void InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2) override;
     virtual bool Select( SvTreeListEntry* pEntry, bool bSelect=true ) override;
     virtual bool EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection ) override;
     virtual bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) override;

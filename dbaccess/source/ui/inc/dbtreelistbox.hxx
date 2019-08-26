@@ -102,7 +102,7 @@ namespace dbaui
         virtual void    KeyInput( const KeyEvent& rKEvt ) override;
 
         virtual void    StateChanged( StateChangedType nStateChange ) override;
-        virtual void    InitEntry(SvTreeListEntry* pEntry, const OUString& aStr, const Image& aCollEntryBmp, const Image& aExpEntryBmp, SvLBoxButtonKind eButtonKind) override;
+        virtual void    InitEntry(SvTreeListEntry* pEntry, const OUString& aStr, const Image& aCollEntryBmp, const Image& aExpEntryBmp) override;
 
         // enable editing for tables/views and queries
         virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& ) override;

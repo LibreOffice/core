@@ -102,7 +102,7 @@ public:
     SvTreeListEntry*    getEntryByQualifiedName( const OUString& _rName );
 
 private:
-    virtual void InitEntry(SvTreeListEntry* _pEntry, const OUString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap, SvLBoxButtonKind _eButtonKind) override;
+    virtual void InitEntry(SvTreeListEntry* _pEntry, const OUString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap) override;
 
     virtual void checkedButton_noBroadcast(SvTreeListEntry* _pEntry) override;
 

@@ -129,7 +129,7 @@ class SwContentTree final
     using SvTreeListBox::EditEntry;
 
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
-    virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind) override;
+    virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     SwNavigationPI* GetParentWindow();
@@ -318,7 +318,7 @@ private:
     virtual void    GetFocus() override;
     virtual void    SelectHdl() override;
     virtual void    DeselectHdl() override;
-    virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind) override;
+    virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&) override;
 
     void            Clear();
 
