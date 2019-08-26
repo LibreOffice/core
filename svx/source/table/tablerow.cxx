@@ -153,6 +153,11 @@ const TableModelRef& TableRow::getModel() const
     return mxTableModel;
 }
 
+sal_Int32 TableRow::getHeight() const
+{
+    return mnHeight;
+}
+
 // XCellRange
 
 

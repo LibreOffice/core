@@ -51,6 +51,20 @@ typedef std::vector< BorderLineVector > BorderLineMap;
 
 // TableModel
 
+struct EdgeInfo final
+{
+    sal_Int32 nIndex;
+    sal_Int32 nPosition;
+    sal_Int32 nMin;
+    sal_Int32 nMax;
+
+    EdgeInfo(sal_Int32 nInIndex, sal_Int32 nInPosition, sal_Int32 nInMin, sal_Int32 nInMax)
+        : nIndex(nInIndex)
+        , nPosition(nInPosition)
+        , nMin(nInMin)
+        , nMax(nInMax)
+    {}
+};
 
 class TableLayouter final
 {
@@ -92,8 +106,12 @@ public:
 
     void updateCells( ::tools::Rectangle const & rRectangle );
 
+    std::vector<EdgeInfo> getHorizontalEdges();
     sal_Int32 getHorizontalEdge( int nEdgeY, sal_Int32* pnMin, sal_Int32* pnMax );
+
+    std::vector<EdgeInfo> getVerticalEdges();
     sal_Int32 getVerticalEdge( int nEdgeX , sal_Int32* pnMin, sal_Int32* pnMax);
+
 
     void DistributeColumns( ::tools::Rectangle& rArea,
                             sal_Int32 nFirstCol,
