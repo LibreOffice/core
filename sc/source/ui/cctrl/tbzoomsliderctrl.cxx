@@ -24,6 +24,7 @@
 #include <vcl/gradient.hxx>
 #include <vcl/settings.hxx>
 #include <svx/zoomslideritem.hxx>
+#include <iterator>
 #include <set>
 #include <bitmaps.hlst>
 
