@@ -346,18 +346,6 @@ sal_Int32 SvxLanguageBoxBase::ImplInsertLanguage( const LanguageType nLangType, 
 }
 
 
-void SvxLanguageBoxBase::InsertDefaultLanguage( sal_Int16 nType )
-{
-    ImplInsertLanguage( LANGUAGE_SYSTEM, LISTBOX_APPEND, nType );
-}
-
-
-void SvxLanguageBoxBase::InsertSystemLanguage()
-{
-    ImplInsertLanguage( LANGUAGE_USER_SYSTEM_CONFIG, LISTBOX_APPEND, css::i18n::ScriptType::WEAK );
-}
-
-
 LanguageType SvxLanguageBoxBase::GetSelectedLanguage() const
 {
     sal_Int32     nPos   = ImplGetSelectedEntryPos();

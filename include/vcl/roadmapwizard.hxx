@@ -202,11 +202,6 @@ namespace vcl
         */
         virtual VclPtr<TabPage> createPage( WizardState _nState ) override;
 
-        /** asks for a new label of the wizard page
-
-         */
-        void    updateRoadmapItemLabel( WizardState _nState );
-
     private:
         DECL_DLLPRIVATE_LINK( OnRoadmapItemSelected, LinkParamNone*, void );
 
@@ -256,13 +251,6 @@ namespace vcl
                 to refer to the path which you just declared
         */
         void    declarePath( PathId _nPathId, const WizardPath& _lWizardStates);
-
-        /** provides basic information about a state
-
-            The given display name is used in the default implementation of getStateDisplayName,
-            and the given factory is used in the default implementation of createPage.
-        */
-        void    describeState( WizardState _nState, const OUString& _rStateDisplayName, RoadmapPageFactory _pPageFactory );
 
         /** activates a path which has previously been declared with <member>declarePath</member>
 
@@ -327,10 +315,6 @@ namespace vcl
             @see declarePath
         */
         void    enableState( WizardState _nState, bool _bEnable = true );
-
-        /** returns true if and only if the given state is known in at least one declared path
-        */
-        bool    knowsState( WizardState _nState ) const;
 
         // OWizardMachine overriables
         virtual void            enterState( WizardState _nState ) override;
