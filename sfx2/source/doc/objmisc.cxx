@@ -1485,7 +1485,7 @@ bool SfxObjectShell::UnTrustedScript(const OUString& rScriptURL)
     do
     {
         OUString aToken = sScript.getToken(0, '/', nIndex);
-        if (aToken.startsWithIgnoreAsciiCase("LibreLogo"))
+        if (aToken.startsWithIgnoreAsciiCase("LibreLogo") || aToken.indexOf('~') != -1)
         {
             return true;
         }
