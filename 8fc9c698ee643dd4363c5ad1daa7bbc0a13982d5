@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_26b963cb",
+        "filename": "include/com/sun/star/uno/Sequence.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-26T09:34:15Z",
+      "side": 1,
+      "message": "* Better provide a member function size, in line with existing begin/end member functions?\n\n* Better return an unsigned integer type, to fulfil the container requirements?",
+      "revId": "8fc9c698ee643dd4363c5ad1daa7bbc0a13982d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
