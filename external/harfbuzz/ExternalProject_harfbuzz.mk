@@ -38,6 +38,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 			--with-glib=no \
 			--with-graphite2=yes \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
+			$(if $(gb_FULLDEPS),,--disable-dependency-tracking) \
 			--libdir=$(call gb_UnpackedTarball_get_dir,harfbuzz/src/.libs) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			CXXFLAGS=' \
