@@ -43,8 +43,7 @@ class SVX_DLLPUBLIC DescriptionGenerator
 public:
     enum class PropertyType {
         Color,
-        Integer,
-        String
+        Integer
     };
 
     /** Creates a new description generator with an empty description
@@ -95,14 +94,10 @@ public:
         @param sLocalizedName
             Localized name of the property.  An empty string tells the
             method to use the property name instead.
-        @param nWhichId
-            This which id is used to localize the property value.  If it is
-            not known a value of -1 signals to use a default representation.
     */
     void AddProperty (const OUString& sPropertyName,
         PropertyType aType,
-        const OUString& sLocalizedName=OUString(),
-        sal_uInt16 nWhichId = 0xffff);
+        const OUString& sLocalizedName=OUString());
 
     /** Add the given property name and its associated value to the
         description string.  If the property value does not differ from the
@@ -117,14 +112,10 @@ public:
             into the value's string representation.
         @param pResourceId
             Id of the localized name of the property int the resource.
-        @param nWhichId
-            This which id is used to localize the property value.  If it is
-            not known a value of -1 signals to use a default representation.
     */
     void AddProperty (const OUString& sPropertyName,
         PropertyType aType,
-        const char* pResourceId,
-        sal_uInt16 nWhichId = 0xffff);
+        const char* pResourceId);
 
     /** Append the given string as is to the current description.
         @param sString
