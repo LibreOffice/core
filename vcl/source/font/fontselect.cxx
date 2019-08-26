@@ -22,6 +22,7 @@
 #include <tools/gen.hxx>
 #include <vcl/font.hxx>
 
+#include <PhysicalFontFace.hxx>
 #include <fontselect.hxx>
 
 // These mustn't conflict with font name lists which use ; and ,
