@@ -305,6 +305,14 @@ sal_Int32 SAL_CALL TableModel::getRowCount()
     return getRowCountImpl();
 }
 
+std::vector<sal_Int32> TableModel::getRowHeights()
+{
+    std::vector<sal_Int32> aRet;
+    for (const TableRowRef& xRow : maRows)
+        aRet.push_back(xRow->getHeight());
+    return aRet;
+}
+
 
 sal_Int32 SAL_CALL TableModel::getColumnCount()
 {
