@@ -278,8 +278,18 @@ void SAL_CALL UnoControlDialogModel::setFastPropertyValue_NoBroadcast( sal_Int32
         if ( nHandle == BASEPROPERTY_IMAGEURL && ImplHasProperty( BASEPROPERTY_GRAPHIC ) )
         {
             OUString sImageURL;
-            OSL_VERIFY( rValue >>= sImageURL );
-            setPropertyValue( GetPropertyName( BASEPROPERTY_GRAPHIC ), uno::makeAny( ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( mxGrfObj, sImageURL ) ) );
+            uno::Reference<graphic::XGraphic> xGraphic;
+            if (rValue >>= sImageURL)
+            {
+                setPropertyValue(
+                    GetPropertyName(BASEPROPERTY_GRAPHIC),
+                    uno::makeAny(ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow(
+                        mxGrfObj, sImageURL)));
+            }
+            else if (rValue >>= xGraphic)
+            {
+                setPropertyValue("Graphic", uno::makeAny(xGraphic));
+            }
         }
     }
     catch( const css::uno::Exception& )
@@ -618,7 +628,7 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
         const PropertyChangeEvent& rEvt = rEvents.getConstArray()[i];
         Reference< XControlModel > xModel( rEvt.Source, UNO_QUERY );
         bool bOwnModel = xModel.get() == getModel().get();
-        if ( bOwnModel && rEvt.PropertyName == "ImageURL" )
+        if (bOwnModel && rEvt.PropertyName == "ImageURL" && !ImplHasProperty(BASEPROPERTY_GRAPHIC))
         {
             OUString aImageURL;
             Reference< graphic::XGraphic > xGraphic;
@@ -629,6 +639,15 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
                 xGraphic = ImageHelper::getGraphicFromURL_nothrow( absoluteUrl );
             }
             ImplSetPropertyValue(  GetPropertyName( BASEPROPERTY_GRAPHIC), uno::makeAny( xGraphic ), true );
+            break;
+        }
+        else if (bOwnModel && rEvt.PropertyName == "Graphic")
+        {
+            uno::Reference<graphic::XGraphic> xGraphic;
+            if (ImplGetPropertyValue("Graphic") >>= xGraphic)
+            {
+                ImplSetPropertyValue("Graphic", uno::makeAny(xGraphic), true);
+            }
             break;
         }
     }

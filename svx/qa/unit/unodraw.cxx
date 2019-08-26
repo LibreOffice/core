@@ -13,6 +13,10 @@
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -76,6 +80,35 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testWriterGraphicExport)
         comphelper::InitPropertySequence({ { "URL", uno::Any(aTempFile.GetURL()) },
                                            { "MediaType", uno::Any(OUString("image/jpeg")) } }));
     CPPUNIT_ASSERT(xExportFilter->filter(aProperties));
+}
+
+CPPUNIT_TEST_FIXTURE(UnodrawTest, testTdf93998)
+{
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf93998.odp");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDrawPagesSupplier.is());
+
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDrawPage.is());
+
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+
+    uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
+    uno::Reference<awt::XControlModel> xModel(
+        xFactory->createInstance("com.sun.star.awt.UnoControlDialogModel"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel.is());
+
+    uno::Reference<beans::XPropertySet> xModelProps(xModel, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModelProps.is());
+
+    // This resulted in a uno::RuntimeException, assigning a shape to a dialog model's image was
+    // broken.
+    xModelProps->setPropertyValue("ImageURL", xShape->getPropertyValue("GraphicURL"));
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xModelProps->getPropertyValue("Graphic") >>= xGraphic;
+    CPPUNIT_ASSERT(xGraphic.is());
 }
 }
 

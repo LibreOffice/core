@@ -161,7 +161,7 @@ static ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
         DECL_PROP_2     ( "HardLineBreaks",         HARDLINEBREAKS,     bool,               BOUND, MAYBEDEFAULT ),
         DECL_PROP_2     ( "ImageAlign",             IMAGEALIGN,         sal_Int16,          BOUND, MAYBEDEFAULT),
         DECL_PROP_2     ( "ImagePosition",          IMAGEPOSITION,      sal_Int16,          BOUND, MAYBEDEFAULT),
-        DECL_PROP_2     ( "ImageURL",               IMAGEURL,           OUString,           BOUND, MAYBEDEFAULT ),
+        DECL_PROP_2     ( "ImageURL",               IMAGEURL,           css::uno::Any,      BOUND, MAYBEDEFAULT ),
         DECL_PROP_3     ( "ItemSeparatorPos",       ITEM_SEPARATOR_POS, sal_Int16,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
         DECL_PROP_2     ( "Label",                  LABEL,              OUString,           BOUND, MAYBEDEFAULT ),
         DECL_PROP_3     ( "LineColor",              LINECOLOR,          sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
