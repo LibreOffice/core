@@ -153,6 +153,7 @@ namespace vcl
 size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBitmaps,
                         const size_t nFirstPage, int nPages, const double fResolutionDPI)
 {
+#if HAVE_FEATURE_PDFIUM
     FPDF_LIBRARY_CONFIG aConfig;
     aConfig.version = 2;
     aConfig.m_pUserFontPaths = nullptr;
@@ -211,6 +212,15 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
     FPDF_DestroyLibrary();
 
     return rBitmaps.size();
+#else
+    (void)pBuffer;
+    (void)nSize;
+    (void)rBitmaps;
+    (void)nFirstPage;
+    (void)nPages;
+    (void)fResolutionDPI;
+    return 0;
+#endif // HAVE_FEATURE_PDFIUM
 }
 
 bool ImportPDF(SvStream& rStream, Bitmap& rBitmap, size_t nPageIndex,
@@ -275,6 +285,7 @@ size_t ImportPDF(const OUString& rURL, std::vector<Bitmap>& rBitmaps,
 size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Size>>& rGraphics,
                          const double fResolutionDPI)
 {
+#if HAVE_FEATURE_PDFIUM
     std::unique_ptr<SvStream> xStream(
         ::utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ | StreamMode::SHARE_DENYNONE));
 
@@ -342,6 +353,12 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
     FPDF_DestroyLibrary();
 
     return rGraphics.size();
+#else
+    (void)rURL;
+    (void)rGraphics;
+    (void)fResolutionDPI;
+    return 0;
+#endif // HAVE_FEATURE_PDFIUM
 }
 }
 
