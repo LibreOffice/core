@@ -13,6 +13,9 @@
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <sfx2/sidebar/SidebarModelUpdate.hxx>
+#include "ChartSidebarModifyListener.hxx"
+
 #include <vcl/EnumContext.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -59,11 +62,18 @@ class ChartController;
 
 namespace sidebar
 {
-class ChartStylesPanel : public PanelLayout
+class ChartStylesPanel : public PanelLayout,
+                         public sfx2::sidebar::SidebarModelUpdate,
+                         public ChartSidebarModifyListenerParent
 {
 private:
     css::uno::Reference<css::chart2::XChartDocument> m_xModel;
     css::uno::Reference<css::container::XNameContainer> m_xChartStyles;
+
+    css::uno::Reference<css::util::XModifyListener> m_xListener;
+
+    bool mbUpdate;
+    bool mbModelValid;
 
     VclPtr<ListBox> maStyleList;
     VclPtr<FixedText> maCreateStyleLabel;
@@ -86,6 +96,11 @@ public:
 
     virtual ~ChartStylesPanel() override;
     virtual void dispose() override;
+
+    virtual void updateData() override;
+    virtual void modelInvalid() override;
+
+    virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) override;
 };
 
 } // namespace sidebar

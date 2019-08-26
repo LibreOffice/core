@@ -110,6 +110,9 @@ ChartStylesPanel::ChartStylesPanel(vcl::Window* pParent,
     , m_xModel(css::uno::Reference<css::chart2::XChartDocument>(pController->getModel(),
                                                                 css::uno::UNO_QUERY))
     , m_xChartStyles(::chart::getChartStyles())
+    , m_xListener(new ChartSidebarModifyListener(this))
+    , mbUpdate(true)
+    , mbModelValid(true)
 {
     get(maStyleList, "lb_styles");
     get(maCreateStyleLabel, "label_create_from_chart");
@@ -167,6 +170,33 @@ void ChartStylesPanel::Initialize()
     UpdateList();
 }
 
+void ChartStylesPanel::updateData()
+{
+    if (!mbUpdate || !mbModelValid)
+        return;
+
+    return;
+}
+
+void ChartStylesPanel::modelInvalid() { mbModelValid = false; }
+
+void ChartStylesPanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
+{
+    if (mbModelValid)
+    {
+        css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(m_xModel,
+                                                                        css::uno::UNO_QUERY_THROW);
+        xBroadcaster->removeModifyListener(m_xListener);
+    }
+
+    m_xModel = css::uno::Reference<css::chart2::XChartDocument>(xModel, css::uno::UNO_QUERY);
+    mbModelValid = true;
+
+    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(m_xModel,
+                                                                       css::uno::UNO_QUERY_THROW);
+    xBroadcasterNew->addModifyListener(m_xListener);
+}
+
 IMPL_LINK(ChartStylesPanel, SelHdl, ListBox&, rBox, void)
 {
     OUString aSelectedEntry = rBox.GetSelectedEntry();
@@ -175,7 +205,8 @@ IMPL_LINK(ChartStylesPanel, SelHdl, ListBox&, rBox, void)
     {
         OUString aNewStyleName;
         vcl::Window* pWin = Application::GetDefDialogParent();
-        QueryString aQuery(pWin ? pWin->GetFrameWeld() : nullptr, "Select name for new chart style:", aNewStyleName);
+        QueryString aQuery(pWin ? pWin->GetFrameWeld() : nullptr,
+                           "Select name for new chart style:", aNewStyleName);
 
         int nReturnCode = aQuery.run();
         if (nReturnCode == RET_OK)
