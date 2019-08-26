@@ -378,9 +378,9 @@ OColumnTreeBox::OColumnTreeBox( vcl::Window* pParent )
 
 VCL_BUILDER_FACTORY(OColumnTreeBox)
 
-void OColumnTreeBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind)
+void OColumnTreeBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2)
 {
-    DBTreeListBox::InitEntry(pEntry, rStr, rImg1, rImg2, eButtonKind);
+    DBTreeListBox::InitEntry(pEntry, rStr, rImg1, rImg2);
     pEntry->ReplaceItem(std::make_unique<OColumnString>(rStr,false), pEntry->ItemCount() - 1);
 }
 

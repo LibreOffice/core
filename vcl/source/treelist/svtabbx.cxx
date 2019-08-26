@@ -78,9 +78,9 @@ void SvTabListBox::SetTabs()
 }
 
 void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
-    const Image& rColl, const Image& rExp, SvLBoxButtonKind eButtonKind)
+    const Image& rColl, const Image& rExp)
 {
-    SvTreeListBox::InitEntry(pEntry, rStr, rColl, rExp, eButtonKind);
+    SvTreeListBox::InitEntry(pEntry, rStr, rColl, rExp);
 
     sal_Int32 nIndex = 0;
     // TODO: verify if nTabCount is always >0 here!
@@ -148,8 +148,7 @@ void SvTabListBox::SetTab( sal_uInt16 nTab,long nValue,MapUnit eMapUnit )
 
 SvTreeListEntry* SvTabListBox::InsertEntry( const OUString& rText, SvTreeListEntry* pParent,
                                         bool /*bChildrenOnDemand*/,
-                                        sal_uLong nPos, void* pUserData,
-                                        SvLBoxButtonKind )
+                                        sal_uLong nPos, void* pUserData )
 {
     return InsertEntryToColumn( rText, pParent, nPos, 0xffff, pUserData );
 }
@@ -159,8 +158,7 @@ SvTreeListEntry* SvTabListBox::InsertEntry( const OUString& rText,
                                         const Image& rCollapsedEntryBmp,
                                         SvTreeListEntry* pParent,
                                         bool /*bChildrenOnDemand*/,
-                                        sal_uLong nPos, void* pUserData,
-                                        SvLBoxButtonKind )
+                                        sal_uLong nPos, void* pUserData )
 {
     return InsertEntryToColumn( rText, rExpandedEntryBmp, rCollapsedEntryBmp,
                                 pParent, nPos, 0xffff, pUserData );

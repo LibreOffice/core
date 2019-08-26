@@ -54,12 +54,6 @@ namespace utl {
     class AccessibleStateSetHelper;
 }
 
-enum class SvLBoxButtonKind
-{
-    EnabledCheckbox,
-    DisabledCheckbox
-};
-
 enum class SvButtonState { Unchecked, Checked, Tristate };
 
 // *********************************************************************
@@ -531,7 +525,7 @@ protected:
     SvLBoxTab*      GetTab( SvTreeListEntry const *, SvLBoxItem const * ) const;
     void            ClearTabList();
 
-    virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind);
+    virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&);
 
     virtual void    NotifyEndScroll();
     virtual void    NotifyScrolled();
@@ -589,16 +583,14 @@ public:
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
-                                         sal_uLong nPos=TREELIST_APPEND, void* pUserData = nullptr,
-                                         SvLBoxButtonKind eButtonKind = SvLBoxButtonKind::EnabledCheckbox );
+                                         sal_uLong nPos=TREELIST_APPEND, void* pUserData = nullptr);
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText,
                                          const Image& rExpandedEntryBmp,
                                          const Image& rCollapsedEntryBmp,
                                          SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
-                                         sal_uLong nPos = TREELIST_APPEND, void* pUserData = nullptr,
-                                         SvLBoxButtonKind eButtonKind = SvLBoxButtonKind::EnabledCheckbox );
+                                         sal_uLong nPos = TREELIST_APPEND, void* pUserData = nullptr );
 
     const Image&    GetDefaultExpandedEntryBmp( ) const;
     const Image&    GetDefaultCollapsedEntryBmp( ) const;

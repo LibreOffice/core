@@ -174,7 +174,7 @@ private:
 
     using Window::GetDropTarget;
     virtual SvTreeListEntry* GetDropTarget (const Point& rLocation) override;
-    virtual void InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&,SvLBoxButtonKind) override;
+    virtual void InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&) override;
 
 public:
 

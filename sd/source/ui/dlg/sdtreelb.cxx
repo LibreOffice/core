@@ -288,10 +288,10 @@ OUString SdPageObjsTLB::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
 }
 
 void SdPageObjsTLB::InitEntry(SvTreeListEntry* pEntry,
-    const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind)
+    const OUString& rStr, const Image& rImg1, const Image& rImg2)
 {
     sal_uInt16 nColToHilite = 1; //0==Bitmap;1=="Spalte1";2=="Spalte2"
-    SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
+    SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2 );
     SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nColToHilite ));
     pEntry->ReplaceItem(std::make_unique<SvLBoxString>(rCol.GetText()), nColToHilite );
 }

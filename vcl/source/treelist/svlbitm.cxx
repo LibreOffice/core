@@ -261,11 +261,9 @@ int SvLBoxString::CalcWidth(const SvTreeListBox* pView) const
 // ***************************************************************
 
 
-SvLBoxButton::SvLBoxButton( SvLBoxButtonKind eTheKind,
-                            SvLBoxButtonData* pBData )
+SvLBoxButton::SvLBoxButton( SvLBoxButtonData* pBData )
     : isVis(true)
     , pData(pBData)
-    , eKind(eTheKind)
     , nItemFlags(SvItemStateFlags::NONE)
 {
     SetStateUnchecked();
@@ -275,7 +273,6 @@ SvLBoxButton::SvLBoxButton()
     : SvLBoxItem()
     , isVis(false)
     , pData(nullptr)
-    , eKind(SvLBoxButtonKind::EnabledCheckbox)
     , nItemFlags(SvItemStateFlags::NONE)
 {
     SetStateUnchecked();
@@ -292,15 +289,12 @@ SvLBoxItemType SvLBoxButton::GetType() const
 
 void SvLBoxButton::ClickHdl( SvTreeListEntry* pEntry )
 {
-    if ( CheckModification() )
-    {
-        if ( IsStateChecked() )
-            SetStateUnchecked();
-        else
-            SetStateChecked();
-        pData->StoreButtonState(pEntry, this);
-        pData->CallLink();
-    }
+    if ( IsStateChecked() )
+        SetStateUnchecked();
+    else
+        SetStateChecked();
+    pData->StoreButtonState(pEntry, this);
+    pData->CallLink();
 }
 
 void SvLBoxButton::Paint(
@@ -308,7 +302,7 @@ void SvLBoxButton::Paint(
     const SvViewDataEntry* /*pView*/, const SvTreeListEntry& /*rEntry*/)
 {
     SvBmp nIndex = SvLBoxButtonData::GetIndex(nItemFlags);
-    DrawImageFlags nStyle = eKind != SvLBoxButtonKind::DisabledCheckbox && rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable;
+    DrawImageFlags nStyle = rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable;
 
     //Native drawing
     bool bNativeOK = false;
@@ -389,11 +383,6 @@ void SvLBoxButton::InitViewData(SvTreeListBox* pView,SvTreeListEntry* pEntry, Sv
         ImplAdjustBoxSize(aSize, eCtrlType, *pView);
     pViewData->mnWidth = aSize.Width();
     pViewData->mnHeight = aSize.Height();
-}
-
-bool SvLBoxButton::CheckModification() const
-{
-    return eKind == SvLBoxButtonKind::EnabledCheckbox;
 }
 
 // ***************************************************************

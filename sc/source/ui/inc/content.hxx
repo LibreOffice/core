@@ -109,7 +109,7 @@ protected:
 
     virtual void        Command( const CommandEvent& rCEvt ) override;
     virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
-    virtual void        InitEntry(SvTreeListEntry*,const OUString&,const Image&,const Image&, SvLBoxButtonKind) override;
+    virtual void        InitEntry(SvTreeListEntry*,const OUString&,const Image&,const Image&) override;
 
 public:
     ScContentTree(vcl::Window* pParent, ScNavigatorDlg* pNavigatorDlg);

@@ -138,9 +138,9 @@ void DBTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
     }
 }
 
-void DBTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& aStr, const Image& _rCollEntryBmp, const Image& _rExpEntryBmp, SvLBoxButtonKind eButtonKind)
+void DBTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& aStr, const Image& _rCollEntryBmp, const Image& _rExpEntryBmp)
 {
-    SvTreeListBox::InitEntry( _pEntry, aStr, _rCollEntryBmp,_rExpEntryBmp, eButtonKind);
+    SvTreeListBox::InitEntry( _pEntry, aStr, _rCollEntryBmp,_rExpEntryBmp);
     SvLBoxItem* pTextItem(_pEntry->GetFirstItem(SvLBoxItemType::String));
     _pEntry->ReplaceItem(std::make_unique<OBoldListboxString>(aStr), _pEntry->GetPos(pTextItem));
 }
