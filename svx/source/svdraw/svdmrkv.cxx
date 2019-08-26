@@ -24,6 +24,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdotable.hxx>
 #include "svddrgm1.hxx"
 
 #ifdef DBG_UTIL
@@ -44,6 +45,8 @@
 #include <svx/svdovirt.hxx>
 #include <sdr/overlay/overlayrollingrectangle.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
+#include <svx/sdr/table/tablecontroller.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrhittesthelper.hxx>
@@ -743,7 +746,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     }
 
     SfxViewShell* pViewShell = GetSfxViewShell();
-
+    bool bIsInTextEditMode = false;
     // check if text edit or ole is active and handles need to be suppressed. This may be the case
     // when a single object is selected
     // Using a strict return statement is okay here; no handles means *no* handles.
@@ -759,18 +762,12 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         {
             const SdrTextObj* pSdrTextObj = dynamic_cast< const SdrTextObj* >(mpMarkedObj);
 
-            if(pSdrTextObj && pSdrTextObj->IsInEditMode())
+            if (pSdrTextObj && pSdrTextObj->IsInEditMode())
             {
                 if (bTiledRendering)
-                {
-                    // Suppress handles -> empty graphic selection.
-                    if (pViewShell)
-                    {
-                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
-                        SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY");
-                    }
-                }
-                return;
+                    bIsInTextEditMode = true;
+                else
+                    return;
             }
         }
 
@@ -780,21 +777,6 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         if(pSdrOle2Obj && (pSdrOle2Obj->isInplaceActive() || pSdrOle2Obj->isUiActive()))
         {
             return;
-        }
-
-        if (bTiledRendering && mpMarkedObj->GetObjIdentifier() == OBJ_TABLE)
-        {
-            rtl::Reference<sdr::SelectionController> xController = static_cast<SdrView*>(this)->getSelectionController();
-            if (xController.is() && xController->hasSelectedCells())
-            {
-                // The table shape has selected cells, which provide text selection already -> no graphic selection.
-                if (pViewShell)
-                {
-                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
-                    SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY");
-                }
-                return;
-            }
         }
     }
 
@@ -843,7 +825,22 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
 
         {
             OString sSelectionText;
+            boost::property_tree::ptree aTableJsonTree;
+            bool bTableSelection = false;
+            bool bCellsAreSelected = false;
 
+            if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == OBJ_TABLE)
+            {
+                auto* pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(mpMarkedObj);
+                bTableSelection = pTableObject->createTableEdgesJson(aTableJsonTree);
+
+                rtl::Reference<sdr::SelectionController> xController = static_cast<SdrView*>(this)->getSelectionController();
+                if (xController.is() && xController->hasSelectedCells())
+                {
+                    // The table shape has selected cells, which provide text selection already -> no graphic selection.
+                    bCellsAreSelected = true;
+                }
+            }
             if (GetMarkedObjectCount())
             {
                 SdrMark* pM = GetSdrMarkByIndex(0);
@@ -1000,8 +997,26 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                 }
             }
 
-            if (sSelectionText.isEmpty())
+            if (sSelectionText.isEmpty() || bCellsAreSelected || bIsInTextEditMode)
                 sSelectionText = "EMPTY";
+
+            if (bTableSelection)
+            {
+                boost::property_tree::ptree aTableRectangle;
+                aTableRectangle.put("x", aSelection.Left());
+                aTableRectangle.put("y", aSelection.Top());
+                aTableRectangle.put("width", aSelection.GetWidth());
+                aTableRectangle.put("height", aSelection.GetHeight());
+                aTableJsonTree.push_back(std::make_pair("rectangle", aTableRectangle));
+
+                std::stringstream aStream;
+                boost::property_tree::write_json(aStream, aTableJsonTree);
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, aStream.str().c_str());
+            }
+            else
+            {
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, "{}");
+            }
 
             if (pOtherShell)
             {

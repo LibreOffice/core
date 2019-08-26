@@ -250,6 +250,37 @@ SvxBorderLine* TableLayouter::getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY,
     return pLine;
 }
 
+std::vector<EdgeInfo> TableLayouter::getHorizontalEdges()
+{
+    std::vector<EdgeInfo> aReturn;
+    sal_Int32 nRowSize = sal_Int32(maRows.size());
+    for (sal_Int32 i = 0; i <= nRowSize; i++)
+    {
+        sal_Int32 nEdgeMin = 0;
+        sal_Int32 nEdgeMax = 0;
+        sal_Int32 nEdge = getHorizontalEdge(i, &nEdgeMin, &nEdgeMax);
+        nEdgeMin -= nEdge;
+        nEdgeMax -= nEdge;
+        aReturn.emplace_back(i, nEdge, nEdgeMin, nEdgeMax);
+    }
+    return aReturn;
+}
+
+std::vector<EdgeInfo> TableLayouter::getVerticalEdges()
+{
+    std::vector<EdgeInfo> aReturn;
+    sal_Int32 nColumnSize = sal_Int32(maColumns.size());
+    for (sal_Int32 i = 0; i <= nColumnSize; i++)
+    {
+        sal_Int32 nEdgeMin = 0;
+        sal_Int32 nEdgeMax = 0;
+        sal_Int32 nEdge = getVerticalEdge(i, &nEdgeMin, &nEdgeMax);
+        nEdgeMin -= nEdge;
+        nEdgeMax -= nEdge;
+        aReturn.emplace_back(i, nEdge, nEdgeMin, nEdgeMax);
+    }
+    return aReturn;
+}
 
 sal_Int32 TableLayouter::getHorizontalEdge( int nEdgeY, sal_Int32* pnMin /*= 0*/, sal_Int32* pnMax /*= 0*/ )
 {

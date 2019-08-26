@@ -72,6 +72,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <editeng/editview.hxx>
 
 using ::editeng::SvxBorderLine;
@@ -1047,6 +1048,9 @@ void SvxTableController::Execute( SfxRequest& rReq )
     case SID_TABLE_STYLE_SETTINGS:
         SetTableStyleSettings( rReq.GetArgs() );
         break;
+    case SID_TABLE_CHANGE_CURRENT_BORDER_POSITION:
+        changeTableEdge(rReq);
+        break;
     }
 }
 
@@ -1463,6 +1467,71 @@ bool SvxTableController::SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRe
     return false;
 }
 
+void SvxTableController::changeTableEdge(const SfxRequest& rReq)
+{
+    if (!checkTableObject())
+        return;
+
+    const auto* pType = rReq.GetArg<SfxStringItem>(SID_TABLE_BORDER_TYPE);
+    const auto* pIndex = rReq.GetArg<SfxUInt16Item>(SID_TABLE_BORDER_INDEX);
+    const auto* pOffset = rReq.GetArg<SfxInt32Item>(SID_TABLE_BORDER_OFFSET);
+
+    if (pType && pIndex && pOffset)
+    {
+        const OUString sType = pType->GetValue();
+        const sal_uInt16 nIndex = pIndex->GetValue();
+        const sal_Int32 nOffset = convertTwipToMm100(pOffset->GetValue());
+
+        SdrTableObj& rTableObj(*mxTableObj.get());
+
+        sal_Int32 nEdgeIndex = -1;
+        bool bHorizontal = sType.startsWith("row");
+
+        if (sType == "column-left" || sType == "row-left")
+        {
+            nEdgeIndex = 0;
+        }
+        else if (sType == "column-right")
+        {
+            // Number of edges = number of columns + 1
+            nEdgeIndex = rTableObj.getColumnCount();
+        }
+        else if (sType == "row-right")
+        {
+            // Number of edges = number of rows + 1
+            nEdgeIndex = rTableObj.getRowCount();
+        }
+        else if (sType == "column-middle" || sType == "row-middle")
+        {
+            nEdgeIndex = nIndex + 1;
+        }
+
+        if (nEdgeIndex >= 0)
+        {
+            TableModelNotifyGuard aGuard(mxTable.get());
+            SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
+            const bool bUndo(rModel.IsUndoEnabled());
+            if (bUndo)
+            {
+                auto pUndoObject = rModel.GetSdrUndoFactory().CreateUndoGeoObject(rTableObj);
+                rModel.BegUndo(pUndoObject->GetComment());
+                rModel.AddUndo(std::move(pUndoObject));
+
+                auto* pGeoUndo = static_cast<SdrUndoGeoObj*>(pUndoObject.get());
+                if (pGeoUndo)
+                    pGeoUndo->SetSkipChangeLayout(true);
+            }
+            tools::Rectangle aBoundRect;
+            if (rTableObj.GetUserCall())
+                aBoundRect = rTableObj.GetLastBoundRect();
+            rTableObj.changeEdge(bHorizontal, nEdgeIndex, nOffset);
+            rTableObj.SetChanged();
+            rTableObj.SendUserCall(SdrUserCallType::Resize, aBoundRect);
+            if (bUndo)
+                rModel.EndUndo();
+        }
+    }
+}
 
 // internals
 
@@ -2227,6 +2296,9 @@ void SvxTableController::updateSelectionOverlay()
                 {
                     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, aSelection.toString().getStr());
                     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aSelection.toString().getStr());
+                    OString sSelection("EMPTY");
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelection.getStr());
+                    SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelection);
                 }
             }
         }
@@ -2245,6 +2317,7 @@ void SvxTableController::destroySelectionOverlay()
             // Clear the LOK text selection so far provided by this table.
             if(SfxViewShell* pViewShell = SfxViewShell::Current())
             {
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, "EMPTY");
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, "EMPTY");
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, "EMPTY");
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY");

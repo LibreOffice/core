@@ -78,6 +78,7 @@ public:
     SVX_DLLPRIVATE void DistributeColumns( const bool bOptimize, const bool bMinimize );
     SVX_DLLPRIVATE void DistributeRows( const bool bOptimize, const bool bMinimize );
     SVX_DLLPRIVATE void SetVertical( sal_uInt16 nSId );
+    SVX_DLLPRIVATE void changeTableEdge(const SfxRequest& rReq);
 
     SVX_DLLPRIVATE static rtl::Reference< sdr::SelectionController > create(
         SdrView& rView,
