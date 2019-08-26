@@ -1,12 +1,4 @@
-cui/source/inc/cuihyperdlg.hxx:38
-    enum HyperLinkPageType Internet
-cui/source/inc/cuihyperdlg.hxx:39
-    enum HyperLinkPageType Mail
-cui/source/inc/cuihyperdlg.hxx:40
-    enum HyperLinkPageType Document
-cui/source/inc/cuihyperdlg.hxx:41
-    enum HyperLinkPageType NewDocument
-cui/source/options/optfltr.cxx:37
+cui/source/options/optfltr.cxx:39
     enum MSFltrPg2_CheckBoxEntries InvalidCBEntry
 drawinglayer/source/tools/emfpimage.hxx:31
     emfplushelper::ImageDataType ImageDataTypeUnknown
@@ -28,7 +20,9 @@ framework/inc/xml/imagesdocumenthandler.hxx:54
     enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_HIGHCONTRASTURL
 framework/inc/xml/imagesdocumenthandler.hxx:55
     enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_HIGHCONTRASTMASKURL
-include/connectivity/dbtools.hxx:817
+framework/source/fwe/classes/actiontriggerseparatorpropertyset.cxx:42
+    enum EPROPERTIES PROPERTYCOUNT
+include/connectivity/dbtools.hxx:821
     enum connectivity::dbase::DBFType dBaseIVMemo
 include/desktop/exithelper.h:25
     int EXITHELPER_NO_ERROR
@@ -56,7 +50,9 @@ include/i18nutil/transliteration.hxx:117
     enum TransliterationFlags smallToLarge_ja_JP
 include/i18nutil/transliteration.hxx:119
     enum TransliterationFlags largeToSmall_ja_JP
-include/LibreOfficeKit/LibreOfficeKitEnums.h:668
+include/LibreOfficeKit/LibreOfficeKitEnums.h:56
+    LibreOfficeKitSelectionType LOK_SELTYPE_LARGE_TEXT
+include/LibreOfficeKit/LibreOfficeKitEnums.h:705
     LibreOfficeKitExtTextInputType LOK_EXT_TEXTINPUT_POS
 include/oox/ole/axfontdata.hxx:39
     enum AxFontFlags Disabled
@@ -103,21 +99,19 @@ include/vcl/syswin.hxx:54
 include/vcl/window.hxx:108
     enum TrackingEventFlags Focus
 libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:61
-    enum (anonymous at /media/noel/disk3/libo6/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:59:1) PROP_0
+    enum (anonymous at /home/noel/libo2/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:59:1) PROP_0
 libreofficekit/source/gtk/lokdocview.cxx:289
-    enum (anonymous at /media/noel/disk3/libo6/libreofficekit/source/gtk/lokdocview.cxx:287:1) PROP_0
-sc/source/filter/excel/xiescher.cxx:471
-    enum (anonymous at /media/noel/disk3/libo6/sc/source/filter/excel/xiescher.cxx:471:17) eCreateFromOffice
+    enum (anonymous at /home/noel/libo2/libreofficekit/source/gtk/lokdocview.cxx:287:1) PROP_0
+sc/source/filter/excel/xiescher.cxx:473
+    enum (anonymous at /home/noel/libo2/sc/source/filter/excel/xiescher.cxx:473:17) eCreateFromOffice
 sc/source/filter/inc/decl.h:24
     enum WKTYP eWK4
 sc/source/ui/inc/anyrefdg.hxx:145
-    enum ScRefHdlrControllerImpl<class SfxModelessDialogController, true>::(anonymous at /media/noel/disk3/libo6/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
+    enum ScRefHdlrControllerImpl::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
 sc/source/ui/inc/anyrefdg.hxx:145
-    enum ScRefHdlrControllerImpl<class SfxTabDialogController, false>::(anonymous at /media/noel/disk3/libo6/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
+    enum ScRefHdlrControllerImpl<class SfxModelessDialogController, true>::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
 sc/source/ui/inc/anyrefdg.hxx:145
-    enum ScRefHdlrControllerImpl::(anonymous at /media/noel/disk3/libo6/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
-sc/source/ui/inc/PivotLayoutTreeListBase.hxx:44
-    enum ScPivotLayoutTreeListBase::SvPivotTreeListType DATA_LIST
+    enum ScRefHdlrControllerImpl<class SfxTabDialogController, false>::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
 sc/source/ui/StatisticsDialogs/RegressionDialog.cxx:97
     enum (anonymous namespace)::ScRegType LINEAR
 svx/inc/sxmkitm.hxx:25
@@ -172,12 +166,12 @@ vcl/inc/salptype.hxx:43
     enum SalPrinterError General
 vcl/inc/unx/saldisp.hxx:62
     srv_vendor_t vendor_none
-vcl/source/gdi/CommonSalLayout.cxx:125
+vcl/source/gdi/CommonSalLayout.cxx:126
     enum (anonymous namespace)::VerticalOrientation Rotated
-vcl/unx/gtk3/gtk3gtkinst.cxx:3605
-    enum (anonymous at /media/noel/disk3/libo6/vcl/unx/gtk3/gtk3gtkinst.cxx:3603:1) PROP_0
-vcl/unx/gtk3/gtk3gtkinst.cxx:3610
-    enum (anonymous at /media/noel/disk3/libo6/vcl/unx/gtk3/gtk3gtkinst.cxx:3603:1) PROP_SHADOW_TYPE
+vcl/unx/gtk3/gtk3gtkinst.cxx:3898
+    enum (anonymous at /home/noel/libo2/vcl/unx/gtk3/gtk3gtkinst.cxx:3896:1) PROP_0
+vcl/unx/gtk3/gtk3gtkinst.cxx:3903
+    enum (anonymous at /home/noel/libo2/vcl/unx/gtk3/gtk3gtkinst.cxx:3896:1) PROP_SHADOW_TYPE
 writerfilter/source/ooxml/OOXMLFactory.hxx:36
     enum writerfilter::ooxml::ResourceType NoResource
 writerfilter/source/ooxml/OOXMLFactory.hxx:37
