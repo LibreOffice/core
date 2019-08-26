@@ -34,6 +34,24 @@
       "revId": "8fc9c698ee643dd4363c5ad1daa7bbc0a13982d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_8655cf1f",
+        "filename": "include/com/sun/star/uno/Sequence.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-26T13:13:35Z",
+      "side": 1,
+      "message": "Just a static_cast should be fine; or add an assert for extra clarification.",
+      "parentUuid": "bf659307_0671bfe0",
+      "revId": "8fc9c698ee643dd4363c5ad1daa7bbc0a13982d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
