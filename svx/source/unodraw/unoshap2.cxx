@@ -1475,13 +1475,13 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
     }
 
     case OWN_ATTR_GRAPHIC_URL:
-    {
-        throw uno::RuntimeException("Getting from this property is not supported");
-        break;
-    }
-
     case OWN_ATTR_VALUE_GRAPHIC:
     {
+        if (pProperty->nWID == OWN_ATTR_GRAPHIC_URL)
+        {
+            SAL_WARN("svx", "Getting Graphic by URL is not supported, getting it by value");
+        }
+
         Reference<graphic::XGraphic> xGraphic;
         auto pSdrGraphicObject = static_cast<SdrGrafObj*>(GetSdrObject());
         if (pSdrGraphicObject->GetGraphicObject().GetType() != GraphicType::NONE)
