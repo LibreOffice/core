@@ -612,6 +612,8 @@ SfxAutoRedactDialog::~SfxAutoRedactDialog()
         SvtViewOptions aDlgOpt(EViewType::Dialog,
                                OStringToOUString(GetHelpId(), RTL_TEXTENCODING_UTF8));
         aDlgOpt.Delete();
+
+        disposeOnce();
         return;
     }
 
