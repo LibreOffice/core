@@ -21,7 +21,7 @@ IOSDIRS = $(IOSGEN) \
 		  $(IOSRES)/program \
 		  $(IOSRES)/share \
 		  $(IOSRES)/config \
-		  $(IOSRES)/filter
+		  $(IOSRES)/share/filter
 
 
 #- Top level  -----------------------------------------------------------------
@@ -59,9 +59,9 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	cp -R $(INSTDIR)/program/resource $(IOSRES)/program
 	mkdir -p $(IOSRES)/share/config
 	cp -R $(INSTDIR)/share/config/soffice.cfg $(IOSRES)/share/config
-	cp $(INSTDIR)/share/filter/oox-drawingml-adj-names $(IOSRES)/filter
-	cp $(INSTDIR)/share/filter/oox-drawingml-cs-presets $(IOSRES)/filter
-	cp $(INSTDIR)/share/filter/vml-shape-types $(IOSRES)/filter
+	cp $(INSTDIR)/share/filter/oox-drawingml-adj-names $(IOSRES)/share/filter
+	cp $(INSTDIR)/share/filter/oox-drawingml-cs-presets $(IOSRES)/share/filter
+	cp $(INSTDIR)/share/filter/vml-shape-types $(IOSRES)/share/filter
 	cp -R $(INSTDIR)/share/registry $(IOSRES)
 	cp $(INSTDIR)/share/config/*zip $(IOSRES)/share/config
 	cp -R $(INSTDIR)/share/liblangtag $(IOSRES)/share
