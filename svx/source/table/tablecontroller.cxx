@@ -2169,23 +2169,14 @@ void SvxTableController::updateSelectionOverlay()
             // If tiled rendering, emit callbacks for sdr table selection.
             if (pOutDev && comphelper::LibreOfficeKit::isActive())
             {
-                // Left edge of aStartRect.
-                tools::Rectangle aSelectionStart(aStartRect.Left(), aStartRect.Top(), aStartRect.Left(), aStartRect.Bottom());
-                // Right edge of aEndRect.
-                tools::Rectangle aSelectionEnd(aEndRect.Right(), aEndRect.Top(), aEndRect.Right(), aEndRect.Bottom());
                 tools::Rectangle aSelection(a2DRange.getMinX(), a2DRange.getMinY(), a2DRange.getMaxX(), a2DRange.getMaxY());
 
                 if (pOutDev->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                {
-                    aSelectionStart = OutputDevice::LogicToLogic(aSelectionStart, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
-                    aSelectionEnd = OutputDevice::LogicToLogic(aSelectionEnd, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
                     aSelection = OutputDevice::LogicToLogic(aSelection, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
-                }
 
                 if(SfxViewShell* pViewShell = SfxViewShell::Current())
                 {
-                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aSelectionStart.toString().getStr());
-                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aSelectionEnd.toString().getStr());
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, aSelection.toString().getStr());
                     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aSelection.toString().getStr());
                 }
             }
