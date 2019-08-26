@@ -34,6 +34,7 @@
 #include "../literaltoboolconversion.cxx"
 #include "../logexceptionnicely.cxx"
 #include "../loopvartoosmall.cxx"
+#include "../mapindex.cxx"
 #include "../nestedunnamed.cxx"
 #include "../overrideparam.cxx"
 #include "../overridevirtual.cxx"
@@ -44,13 +45,17 @@
 #include "../redundantfcast.cxx"
 #include "../redundantinline.cxx"
 #include "../redundantpointerops.cxx"
+#include "../referencecasting.cxx"
 #include "../reservedid.cxx"
+#include "../returnconstval.cxx"
 #include "../sallogareas.cxx"
 #include "../salunicodeliteral.cxx"
+#include "../sequenceloop.cxx"
 #include "../sfxpoolitem.cxx"
 #include "../simplifyconstruct.cxx"
 #include "../staticaccess.cxx"
 #include "../staticanonymous.cxx"
+#include "../stringbuffer.cxx"
 #include "../stringconcat.cxx"
 #include "../stringstatic.cxx"
 #include "../subtlezeroinit.cxx"
@@ -105,6 +110,7 @@ public:
         , literalToBoolConversion( nullptr )
         , logExceptionNicely( nullptr )
         , loopVarTooSmall( nullptr )
+        , mapIndex( nullptr )
         , nestedUnnamed( nullptr )
         , overrideParam( nullptr )
         , overrideVirtual( nullptr )
@@ -115,13 +121,17 @@ public:
         , redundantFCast( nullptr )
         , redundantInline( nullptr )
         , redundantPointerOps( nullptr )
+        , referenceCasting( nullptr )
         , reservedId( nullptr )
+        , returnConstVal( nullptr )
         , salLogAreas( nullptr )
         , salUnicodeLiteral( nullptr )
+        , sequenceLoop( nullptr )
         , sfxPoolItem( nullptr )
         , simplifyConstruct( nullptr )
         , staticAccess( nullptr )
         , staticAnonymous( nullptr )
+        , stringBuffer( nullptr )
         , stringConcat( nullptr )
         , stringStatic( nullptr )
         , subtleZeroInit( nullptr )
@@ -185,6 +195,8 @@ public:
             logExceptionNicely = nullptr;
         if( loopVarTooSmall && !loopVarTooSmall->preRun())
             loopVarTooSmall = nullptr;
+        if( mapIndex && !mapIndex->preRun())
+            mapIndex = nullptr;
         if( nestedUnnamed && !nestedUnnamed->preRun())
             nestedUnnamed = nullptr;
         if( overrideParam && !overrideParam->preRun())
@@ -205,12 +217,18 @@ public:
             redundantInline = nullptr;
         if( redundantPointerOps && !redundantPointerOps->preRun())
             redundantPointerOps = nullptr;
+        if( referenceCasting && !referenceCasting->preRun())
+            referenceCasting = nullptr;
         if( reservedId && !reservedId->preRun())
             reservedId = nullptr;
+        if( returnConstVal && !returnConstVal->preRun())
+            returnConstVal = nullptr;
         if( salLogAreas && !salLogAreas->preRun())
             salLogAreas = nullptr;
         if( salUnicodeLiteral && !salUnicodeLiteral->preRun())
             salUnicodeLiteral = nullptr;
+        if( sequenceLoop && !sequenceLoop->preRun())
+            sequenceLoop = nullptr;
         if( sfxPoolItem && !sfxPoolItem->preRun())
             sfxPoolItem = nullptr;
         if( simplifyConstruct && !simplifyConstruct->preRun())
@@ -219,6 +237,8 @@ public:
             staticAccess = nullptr;
         if( staticAnonymous && !staticAnonymous->preRun())
             staticAnonymous = nullptr;
+        if( stringBuffer && !stringBuffer->preRun())
+            stringBuffer = nullptr;
         if( stringConcat && !stringConcat->preRun())
             stringConcat = nullptr;
         if( stringStatic && !stringStatic->preRun())
@@ -297,6 +317,8 @@ public:
             logExceptionNicely->postRun();
         if( loopVarTooSmall )
             loopVarTooSmall->postRun();
+        if( mapIndex )
+            mapIndex->postRun();
         if( nestedUnnamed )
             nestedUnnamed->postRun();
         if( overrideParam )
@@ -317,12 +339,18 @@ public:
             redundantInline->postRun();
         if( redundantPointerOps )
             redundantPointerOps->postRun();
+        if( referenceCasting )
+            referenceCasting->postRun();
         if( reservedId )
             reservedId->postRun();
+        if( returnConstVal )
+            returnConstVal->postRun();
         if( salLogAreas )
             salLogAreas->postRun();
         if( salUnicodeLiteral )
             salUnicodeLiteral->postRun();
+        if( sequenceLoop )
+            sequenceLoop->postRun();
         if( sfxPoolItem )
             sfxPoolItem->postRun();
         if( simplifyConstruct )
@@ -331,6 +359,8 @@ public:
             staticAccess->postRun();
         if( staticAnonymous )
             staticAnonymous->postRun();
+        if( stringBuffer )
+            stringBuffer->postRun();
         if( stringConcat )
             stringConcat->postRun();
         if( stringStatic )
@@ -415,6 +445,8 @@ public:
             logExceptionNicely = static_cast< LogExceptionNicely* >( plugin );
         else if( strcmp( name, "loopvartoosmall" ) == 0 )
             loopVarTooSmall = static_cast< LoopVarTooSmall* >( plugin );
+        else if( strcmp( name, "mapindex" ) == 0 )
+            mapIndex = static_cast< MapIndex* >( plugin );
         else if( strcmp( name, "nestedunnamed" ) == 0 )
             nestedUnnamed = static_cast< NestedUnnamed* >( plugin );
         else if( strcmp( name, "overrideparam" ) == 0 )
@@ -435,12 +467,18 @@ public:
             redundantInline = static_cast< RedundantInline* >( plugin );
         else if( strcmp( name, "redundantpointerops" ) == 0 )
             redundantPointerOps = static_cast< RedundantPointerOps* >( plugin );
+        else if( strcmp( name, "referencecasting" ) == 0 )
+            referenceCasting = static_cast< ReferenceCasting* >( plugin );
         else if( strcmp( name, "reservedid" ) == 0 )
             reservedId = static_cast< ReservedId* >( plugin );
+        else if( strcmp( name, "returnconstval" ) == 0 )
+            returnConstVal = static_cast< ReturnConstVal* >( plugin );
         else if( strcmp( name, "sallogareas" ) == 0 )
             salLogAreas = static_cast< SalLogAreas* >( plugin );
         else if( strcmp( name, "salunicodeliteral" ) == 0 )
             salUnicodeLiteral = static_cast< SalUnicodeLiteral* >( plugin );
+        else if( strcmp( name, "sequenceloop" ) == 0 )
+            sequenceLoop = static_cast< SequenceLoop* >( plugin );
         else if( strcmp( name, "sfxpoolitem" ) == 0 )
             sfxPoolItem = static_cast< SfxPoolItem* >( plugin );
         else if( strcmp( name, "simplifyconstruct" ) == 0 )
@@ -449,6 +487,8 @@ public:
             staticAccess = static_cast< StaticAccess* >( plugin );
         else if( strcmp( name, "staticanonymous" ) == 0 )
             staticAnonymous = static_cast< StaticAnonymous* >( plugin );
+        else if( strcmp( name, "stringbuffer" ) == 0 )
+            stringBuffer = static_cast< StringBuffer* >( plugin );
         else if( strcmp( name, "stringconcat" ) == 0 )
             stringConcat = static_cast< StringConcat* >( plugin );
         else if( strcmp( name, "stringstatic" ) == 0 )
@@ -605,6 +645,11 @@ public:
             if( !redundantFCast->VisitCXXConstructExpr( arg ))
                 redundantFCast = nullptr;
         }
+        if( referenceCasting != nullptr )
+        {
+            if( !referenceCasting->VisitCXXConstructExpr( arg ))
+                referenceCasting = nullptr;
+        }
         if( simplifyConstruct != nullptr )
         {
             if( !simplifyConstruct->VisitCXXConstructExpr( arg ))
@@ -632,6 +677,11 @@ public:
             if( !rangedForCopy->VisitCXXForRangeStmt( arg ))
                 rangedForCopy = nullptr;
         }
+        if( sequenceLoop != nullptr )
+        {
+            if( !sequenceLoop->VisitCXXForRangeStmt( arg ))
+                sequenceLoop = nullptr;
+        }
         return anyPluginActive();
     }
     bool VisitCXXFunctionalCastExpr(const class clang::CXXFunctionalCastExpr * arg)
@@ -654,6 +704,16 @@ public:
     {
         if( ignoreLocation( arg ))
             return true;
+        if( referenceCasting != nullptr )
+        {
+            if( !referenceCasting->VisitCXXMemberCallExpr( arg ))
+                referenceCasting = nullptr;
+        }
+        if( stringBuffer != nullptr )
+        {
+            if( !stringBuffer->VisitCXXMemberCallExpr( arg ))
+                stringBuffer = nullptr;
+        }
         if( unoQuery != nullptr )
         {
             if( !unoQuery->VisitCXXMemberCallExpr( arg ))
@@ -954,6 +1014,11 @@ public:
             if( !redundantPointerOps->VisitFunctionDecl( arg ))
                 redundantPointerOps = nullptr;
         }
+        if( returnConstVal != nullptr )
+        {
+            if( !returnConstVal->VisitFunctionDecl( arg ))
+                returnConstVal = nullptr;
+        }
         if( salLogAreas != nullptr )
         {
             if( !salLogAreas->VisitFunctionDecl( arg ))
@@ -1012,6 +1077,11 @@ public:
             if( !literalToBoolConversion->VisitImplicitCastExpr( arg ))
                 literalToBoolConversion = nullptr;
         }
+        if( mapIndex != nullptr )
+        {
+            if( !mapIndex->VisitImplicitCastExpr( arg ))
+                mapIndex = nullptr;
+        }
         if( unicodeToChar != nullptr )
         {
             if( !unicodeToChar->VisitImplicitCastExpr( arg ))
@@ -1034,6 +1104,11 @@ public:
     {
         if( ignoreLocation( arg ))
             return true;
+        if( mapIndex != nullptr )
+        {
+            if( !mapIndex->VisitMemberExpr( arg ))
+                mapIndex = nullptr;
+        }
         if( redundantPointerOps != nullptr )
         {
             if( !redundantPointerOps->VisitMemberExpr( arg ))
@@ -1458,6 +1533,7 @@ private:
             || literalToBoolConversion != nullptr
             || logExceptionNicely != nullptr
             || loopVarTooSmall != nullptr
+            || mapIndex != nullptr
             || nestedUnnamed != nullptr
             || overrideParam != nullptr
             || overrideVirtual != nullptr
@@ -1468,13 +1544,17 @@ private:
             || redundantFCast != nullptr
             || redundantInline != nullptr
             || redundantPointerOps != nullptr
+            || referenceCasting != nullptr
             || reservedId != nullptr
+            || returnConstVal != nullptr
             || salLogAreas != nullptr
             || salUnicodeLiteral != nullptr
+            || sequenceLoop != nullptr
             || sfxPoolItem != nullptr
             || simplifyConstruct != nullptr
             || staticAccess != nullptr
             || staticAnonymous != nullptr
+            || stringBuffer != nullptr
             || stringConcat != nullptr
             || stringStatic != nullptr
             || subtleZeroInit != nullptr
@@ -1513,6 +1593,7 @@ private:
     LiteralToBoolConversion* literalToBoolConversion;
     LogExceptionNicely* logExceptionNicely;
     LoopVarTooSmall* loopVarTooSmall;
+    MapIndex* mapIndex;
     NestedUnnamed* nestedUnnamed;
     OverrideParam* overrideParam;
     OverrideVirtual* overrideVirtual;
@@ -1523,13 +1604,17 @@ private:
     RedundantFCast* redundantFCast;
     RedundantInline* redundantInline;
     RedundantPointerOps* redundantPointerOps;
+    ReferenceCasting* referenceCasting;
     ReservedId* reservedId;
+    ReturnConstVal* returnConstVal;
     SalLogAreas* salLogAreas;
     SalUnicodeLiteral* salUnicodeLiteral;
+    SequenceLoop* sequenceLoop;
     SfxPoolItem* sfxPoolItem;
     SimplifyConstruct* simplifyConstruct;
     StaticAccess* staticAccess;
     StaticAnonymous* staticAnonymous;
+    StringBuffer* stringBuffer;
     StringConcat* stringConcat;
     StringStatic* stringStatic;
     SubtleZeroInit* subtleZeroInit;

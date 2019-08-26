@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include <cassert>
 #include <string>
@@ -69,8 +70,10 @@ bool SequenceLoop::VisitCXXForRangeStmt(CXXForRangeStmt const* forStmt)
     return true;
 }
 
-loplugin::Plugin::Registration<SequenceLoop> X("sequenceloop");
+loplugin::Plugin::Registration<SequenceLoop> sequenceloop("sequenceloop");
 
 } // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

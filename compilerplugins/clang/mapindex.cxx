@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include <memory>
 #include <cassert>
@@ -98,8 +99,10 @@ bool MapIndex::VisitImplicitCastExpr(const ImplicitCastExpr* implicitCastExpr)
     return true;
 }
 
-loplugin::Plugin::Registration<MapIndex> X("mapindex");
+loplugin::Plugin::Registration<MapIndex> mapindex("mapindex");
 
 } // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

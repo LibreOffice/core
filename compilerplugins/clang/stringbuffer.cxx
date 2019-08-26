@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "check.hxx"
 #include "plugin.hxx"
@@ -23,17 +24,22 @@ public:
     {
     }
 
-    void run() override;
+    bool preRun() override
+    {
+        StringRef fn(handler.getMainFileName());
+        return !loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/qa/");
+    }
+
+    void run() override
+    {
+        if (preRun())
+        {
+            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+        }
+    }
+
     bool VisitCXXMemberCallExpr(CXXMemberCallExpr const*);
 };
-
-void StringBuffer::run()
-{
-    StringRef fn(handler.getMainFileName());
-    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/qa/"))
-        return;
-    TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
-}
 
 bool StringBuffer::VisitCXXMemberCallExpr(CXXMemberCallExpr const* memberCallExpr)
 {
@@ -60,8 +66,10 @@ bool StringBuffer::VisitCXXMemberCallExpr(CXXMemberCallExpr const* memberCallExp
     return true;
 }
 
-loplugin::Plugin::Registration<StringBuffer> X("stringbuffer");
+loplugin::Plugin::Registration<StringBuffer> stringbuffer("stringbuffer");
 
 } // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
