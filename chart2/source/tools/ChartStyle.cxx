@@ -168,6 +168,12 @@ void ChartStyle::register_styles()
         *chart::title::StaticTitleInfo::get(), *chart::title::StaticTitleInfoHelper::get(),
         *chart::title::StaticTitleDefaults::get());
 
+    css::uno::Reference<css::beans::XPropertySet> xTitleStyle
+        = m_xChartStyle[css::chart2::ChartObjectType::TITLE];
+
+    xTitleStyle->setPropertyValue("LineStyle", css::uno::Any(css::drawing::LineStyle_NONE));
+    xTitleStyle->setPropertyValue("FillStyle", css::uno::Any(css::drawing::FillStyle_NONE));
+
     m_xChartStyle[css::chart2::ChartObjectType::WALL] = new ChartObjectStyle(
         *chart::wall::StaticWallInfo::get(), *chart::wall::StaticWallInfoHelper::get(),
         *chart::wall::StaticWallDefaults::get());
@@ -186,10 +192,24 @@ void ChartStyle::register_styles()
         *chart::grid::StaticGridInfo::get(), *chart::grid::StaticGridInfoHelper::get(),
         *chart::grid::StaticGridDefaults::get());
 
+    css::uno::Reference<css::beans::XPropertySet> xGridStyle
+        = m_xChartStyle[css::chart2::ChartObjectType::GRID];
+
+    xGridStyle->setPropertyValue("LineStyle", css::uno::Any(css::drawing::LineStyle_SOLID));
+    xGridStyle->setPropertyValue("LineColor",
+                                 css::uno::Any(static_cast<sal_Int32>(0xb3b3b3))); // gray30
+
     m_xChartStyle[css::chart2::ChartObjectType::PAGE]
         = new ChartObjectStyle(*chart::page::StaticPageBackgroundInfo::get(),
                                *chart::page::StaticPageBackgroundInfoHelper::get(),
                                *chart::page::StaticPageBackgroundDefaults::get());
+
+    css::uno::Reference<css::beans::XPropertySet> xPageStyle
+        = m_xChartStyle[css::chart2::ChartObjectType::PAGE];
+
+    xPageStyle->setPropertyValue("LineStyle", css::uno::Any(css::drawing::LineStyle_NONE));
+    xPageStyle->setPropertyValue("FillStyle", css::uno::Any(css::drawing::FillStyle_SOLID));
+    xPageStyle->setPropertyValue("FillColor", css::uno::Any(static_cast<sal_Int32>(0xffffff)));
 
     m_xChartStyle[css::chart2::ChartObjectType::DIAGRAM] = new ChartObjectStyle(
         *chart::diagram::StaticDiagramInfo::get(), *chart::diagram::StaticDiagramInfoHelper::get(),
