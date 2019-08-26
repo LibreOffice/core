@@ -160,6 +160,14 @@ public:
     const E * SAL_CALL getConstArray() const
         { return reinterpret_cast< const E * >( _pSequence->elements ); }
 
+#if defined LIBO_INTERNAL_ONLY
+    /** This function allows to use Sequence in cases where  std::size is needed, and the like.
+
+        @since LibreOffice 6.4
+    */
+    sal_uInt32 size() const { return static_cast<sal_uInt32>(getLength()); }
+#endif
+
     /** Gets a pointer to elements array for reading and writing.
         In general if the sequence has a handle acquired by other sequences
         (reference count > 1), then a new sequence is created copy constructing
@@ -271,16 +279,6 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
 }
 }
 }
-
-#if defined LIBO_INTERNAL_ONLY
-namespace std
-{
-template <class E> sal_Int32 size(const ::com::sun::star::uno::Sequence<E>& s)
-{
-    return s.getLength();
-}
-}
-#endif
 
 /** Gets the meta type of IDL sequence.
 
