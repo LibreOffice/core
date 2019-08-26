@@ -699,7 +699,9 @@
             </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AutoCorrectDlg"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:RedactDoc"/>
+            <menu:menuitem menu:id=".uno:AutoRedactDoc"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:GoalSeekDialog"/>
             <menu:menuitem menu:id=".uno:SolverDialog"/>

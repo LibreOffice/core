@@ -728,7 +728,9 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:EditGlossary"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:RedactDoc"/>
+      <menu:menuitem menu:id=".uno:AutoRedactDoc"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ChapterNumberingDialog"/>
       <menu:menuitem menu:id=".uno:LineNumberingDialog"/>
