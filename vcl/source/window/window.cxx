@@ -3217,6 +3217,28 @@ void Window::ReleaseLOKNotifier()
     mpWindowImpl->mnLOKWindowId = 0;
 }
 
+ILibreOfficeKitNotifier::~ILibreOfficeKitNotifier()
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        return;
+    }
+
+    for (auto it = GetLOKWindowsMap().begin(); it != GetLOKWindowsMap().end();)
+    {
+        WindowImpl* pWindowImpl = it->second->ImplGetWindowImpl();
+        if (pWindowImpl->mpLOKNotifier == this)
+        {
+            pWindowImpl->mpLOKNotifier = nullptr;
+            pWindowImpl->mnLOKWindowId = 0;
+            it = GetLOKWindowsMap().erase(it);
+            continue;
+        }
+
+        ++it;
+    }
+}
+
 const vcl::ILibreOfficeKitNotifier* Window::GetLOKNotifier() const
 {
     return mpWindowImpl->mpLOKNotifier;

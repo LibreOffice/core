@@ -27,7 +27,7 @@ typedef sal_uInt32 LOKWindowId;
 class VCL_DLLPUBLIC ILibreOfficeKitNotifier
 {
 public:
-    virtual ~ILibreOfficeKitNotifier() {}
+    virtual ~ILibreOfficeKitNotifier();
 
     /// Callbacks
     virtual void notifyWindow(vcl::LOKWindowId nLOKWindowId,
