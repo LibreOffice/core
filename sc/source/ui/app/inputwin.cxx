@@ -74,7 +74,6 @@ namespace com::sun::star::accessibility { class XAccessible; }
 
 const long THESIZE = 1000000;            // Should be more than enough!
 const long INPUTLINE_INSET_MARGIN = 2;   // Space between border and interior widgets of input line
-const long MIN_FONT_SIZE = 16;           // Minimum font size of input line in pixels
 const long LEFT_OFFSET = 5;              // Left offset of input line
 const long BUTTON_OFFSET = 2;            // Space between input line and button to expand/collapse
 const long MULTILINE_BUTTON_WIDTH = 20;  // Width of the button which opens multiline dropdown
@@ -1434,8 +1433,6 @@ ScTextWnd::ScTextWnd(ScTextWndGroup* pParent, ScTabViewShell* pViewSh)
     vcl::Font aAppFont = GetFont();
     aTextFont = aAppFont;
     Size aFontSize = aAppFont.GetFontSize();
-    if (aFontSize.Height() < MIN_FONT_SIZE)
-        aFontSize.setHeight(MIN_FONT_SIZE);
     aTextFont.SetFontSize(PixelToLogic(aFontSize, MapMode(MapUnit::MapTwip)));
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
