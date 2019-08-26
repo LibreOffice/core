@@ -20,6 +20,8 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_SHAPEMANAGERIMPL_HXX
 
 #include <cppuhelper/interfacecontainer.h>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/presentation/XShapeEventListener.hpp>
 
 #include <shape.hxx>
@@ -64,7 +66,8 @@ public:
                       LayerManagerSharedPtr const& rLayerManager,
                       CursorManager&               rCursorManager,
                       const ShapeEventListenerMap& rGlobalListenersMap,
-                      const ShapeCursorMap&        rGlobalCursorMap );
+                      const ShapeCursorMap&        rGlobalCursorMap,
+                      const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage);
 
     /// Forbid copy construction
     ShapeManagerImpl(const ShapeManagerImpl&) = delete;
@@ -154,6 +157,7 @@ private:
 
 
     OUString checkForHyperlink( ::basegfx::B2DPoint const& hitPos )const;
+    OUString checkForImageMap( css::awt::MouseEvent const& evt ) const;
 
 
     typedef std::map<ShapeSharedPtr,
@@ -178,6 +182,7 @@ private:
     AreaSet                             maHyperlinkShapes;
     ImplIntrinsicAnimationEventHandlers maIntrinsicAnimationEventHandlers;
     bool                                mbEnabled;
+    const css::uno::Reference<css::drawing::XDrawPage> mxDrawPage;
 };
 
 } // namespace internal

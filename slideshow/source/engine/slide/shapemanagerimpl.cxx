@@ -17,17 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/presentation/XShapeEventListener.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <svx/unoshape.hxx>
+#include <svx/ImageMapInfo.hxx>
 
 #include "shapemanagerimpl.hxx"
 
 #include <functional>
 
-using namespace com::sun::star;
+using namespace css;
+using namespace css::uno;
+using namespace css::drawing;
+using namespace css::system;
 
 namespace slideshow {
 namespace internal {
@@ -36,7 +45,8 @@ ShapeManagerImpl::ShapeManagerImpl( EventMultiplexer&            rMultiplexer,
                                     LayerManagerSharedPtr const& rLayerManager,
                                     CursorManager&               rCursorManager,
                                     const ShapeEventListenerMap& rGlobalListenersMap,
-                                    const ShapeCursorMap&        rGlobalCursorMap ):
+                                    const ShapeCursorMap&        rGlobalCursorMap,
+                                    const Reference<XDrawPage>& xDrawPage ):
     mrMultiplexer(rMultiplexer),
     mpLayerManager(rLayerManager),
     mrCursorManager(rCursorManager),
@@ -45,7 +55,8 @@ ShapeManagerImpl::ShapeManagerImpl( EventMultiplexer&            rMultiplexer,
     maShapeListenerMap(),
     maShapeCursorMap(),
     maHyperlinkShapes(),
-    mbEnabled(false)
+    mbEnabled(false),
+    mxDrawPage(xDrawPage)
 {
 }
 
@@ -126,6 +137,17 @@ bool ShapeManagerImpl::handleMouseReleased( awt::MouseEvent const& e )
         return true; // event consumed
     }
 
+    // tdf#74045 Handle ImageMaps
+    OUString const imageMapLink(checkForImageMap(e));
+    if (!imageMapLink.isEmpty())
+    {
+        Reference<XSystemShellExecute> exec(
+            SystemShellExecute::create(comphelper::getProcessComponentContext()));
+        exec->execute(imageMapLink, OUString(), SystemShellExecuteFlags::URIS_ONLY);
+
+        return true;
+    }
+
     // find matching shape (scan reversely, to coarsely match
     // paint order)
     auto aCurrBroadcaster = std::find_if(maShapeListenerMap.rbegin(), maShapeListenerMap.rend(),
@@ -172,7 +194,7 @@ bool ShapeManagerImpl::handleMouseMoved( const awt::MouseEvent& e )
     const ::basegfx::B2DPoint aPosition( e.X, e.Y );
     sal_Int16                 nNewCursor(-1);
 
-    if( !checkForHyperlink(aPosition).isEmpty() )
+    if( !checkForHyperlink(aPosition).isEmpty() || !checkForImageMap(e).isEmpty() )
     {
         nNewCursor = awt::SystemPointer::REFHAND;
     }
@@ -359,6 +381,24 @@ OUString ShapeManagerImpl::checkForHyperlink( basegfx::B2DPoint const& hitPos ) 
         }
     }
 
+    return OUString();
+}
+
+OUString ShapeManagerImpl::checkForImageMap( awt::MouseEvent const& evt ) const
+{
+    for (sal_Int32 i = 0; i < mxDrawPage->getCount(); i++)
+    {
+        Reference<XShape> xShape(mxDrawPage->getByIndex(i), UNO_QUERY_THROW);
+        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>(xShape);
+        SdrObject* pObj = pShape ? pShape->GetSdrObject() : nullptr;
+        if (!pObj)
+            continue;
+        const IMapObject* pIMapObj = SvxIMapInfo::GetHitIMapObject(pObj, Point(evt.X, evt.Y));
+        if (pIMapObj && !pIMapObj->GetURL().isEmpty())
+        {
+            return pIMapObj->GetURL();
+        }
+    }
     return OUString();
 }
 
