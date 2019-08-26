@@ -8,6 +8,7 @@
  * License. See LICENSE.TXT for details.
  *
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "plugin.hxx"
 #include "check.hxx"
@@ -25,6 +26,8 @@ This makes the code simpler and cheaper, because UNO_QUERY can be surprisingly e
 
 */
 
+namespace
+{
 class ReferenceCasting : public loplugin::FilteringPlugin<ReferenceCasting>
 {
 public:
@@ -32,15 +35,25 @@ public:
         : FilteringPlugin(data)
     {
     }
-    void run() override
+
+    bool preRun() override
     {
         std::string fn(handler.getMainFileName());
         loplugin::normalizeDotDotInFilePath(fn);
         // macros
         if (fn == SRCDIR "/dbaccess/source/ui/browser/formadapter.cxx")
-            return;
-        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+            return false;
+        return true;
     }
+
+    void run() override
+    {
+        if (preRun())
+        {
+            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+        }
+    }
+
     bool VisitCXXConstructExpr(const CXXConstructExpr* cce);
     bool VisitCXXMemberCallExpr(const CXXMemberCallExpr* mce);
 
@@ -380,6 +393,10 @@ static bool isDerivedFrom(const CXXRecordDecl* subtypeRecord, const CXXRecordDec
     return derivedFromCount(subtypeRecord, baseRecord) == 1;
 }
 
-loplugin::Plugin::Registration<ReferenceCasting> X2("referencecasting");
+loplugin::Plugin::Registration<ReferenceCasting> referencecasting("referencecasting");
+
+} // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

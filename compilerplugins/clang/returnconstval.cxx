@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include <string>
 #include <set>
@@ -70,7 +71,9 @@ bool ReturnConstVal::VisitFunctionDecl(const FunctionDecl* functionDecl)
     return true;
 }
 
-loplugin::Plugin::Registration<ReturnConstVal> X("returnconstval");
+loplugin::Plugin::Registration<ReturnConstVal> returnconstval("returnconstval");
 }
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
