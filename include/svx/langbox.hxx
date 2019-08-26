@@ -65,8 +65,6 @@ public:
     void            AddLanguages( const std::vector< LanguageType >& rLanguageTypes, SvxLanguageListFlags nLangList );
 
     sal_Int32       InsertLanguage( const LanguageType eLangType );
-    void            InsertDefaultLanguage( sal_Int16 nType );
-    void            InsertSystemLanguage();
     void            SelectLanguage( const LanguageType eLangType );
     LanguageType    GetSelectedLanguage() const;
 

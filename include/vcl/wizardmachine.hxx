@@ -462,22 +462,6 @@ namespace vcl
         */
         void                removePageFromHistory( WizardState nToRemove );
 
-        /** skip a state
-
-            The method behaves as if from the current state, <arg>_nSteps</arg> <method>travelNext</method>s were
-            called, but without actually creating or displaying the \EDntermediate pages. Only the
-            (<arg>_nSteps</arg> + 1)th page is created.
-
-            The skipped states appear in the state history, so <method>travelPrevious</method> will make use of them.
-
-            A very essential precondition for using this method is that your <method>determineNextState</method>
-            method is able to determine the next state without actually having the page of the current state.
-
-            @see skipUntil
-            @see skipBackwardUntil
-        */
-        void                    skip();
-
         /** skips one or more states, until a given state is reached
 
             The method behaves as if from the current state, <method>travelNext</method>s were called

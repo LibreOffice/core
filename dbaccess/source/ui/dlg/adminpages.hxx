@@ -41,17 +41,6 @@ namespace dbaui
         virtual void Disable() = 0;
     };
 
-    template < class T > class OSaveValueWrapper : public ISaveValueWrapper
-    {
-        VclPtr<T>  m_pSaveValue;
-    public:
-        explicit OSaveValueWrapper(T* _pSaveValue) : m_pSaveValue(_pSaveValue)
-        { OSL_ENSURE(m_pSaveValue,"Illegal argument!"); }
-
-        virtual void SaveValue() override { m_pSaveValue->SaveValue(); }
-        virtual void Disable() override { m_pSaveValue->Disable(); }
-    };
-
     template < class T > class OSaveValueWidgetWrapper : public ISaveValueWrapper
     {
         T*  m_pSaveValue;
@@ -94,17 +83,6 @@ namespace dbaui
 
         virtual void SaveValue() override {}
         virtual void Disable() override { m_pSaveValue->set_sensitive(false); }
-    };
-
-    template < class T > class ODisableWrapper : public ISaveValueWrapper
-    {
-        VclPtr<T>  m_pSaveValue;
-    public:
-        explicit ODisableWrapper(T* _pSaveValue) : m_pSaveValue(_pSaveValue)
-        { OSL_ENSURE(m_pSaveValue,"Illegal argument!"); }
-
-        virtual void SaveValue() override {}
-        virtual void Disable() override { m_pSaveValue->Disable(); }
     };
 
     // OGenericAdministrationPage

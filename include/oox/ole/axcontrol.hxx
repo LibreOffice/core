@@ -334,8 +334,6 @@ public:
                             PropertySet const & rPropSet,
                             sal_Int32& nOrientation );
 
-    const css::uno::Reference<css::frame::XModel> & GetDocModel() const { return mxDocModel; }
-
 private:
     css::uno::Reference< css::frame::XModel > mxDocModel;
     const GraphicHelper& mrGraphicHelper;

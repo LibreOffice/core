@@ -61,7 +61,6 @@ public:
     void SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton = false);
 
     Color const & GetSelectEntryColor() const { return m_aSelectedColor.first; }
-    NamedColor const & GetSelectedEntry() const { return m_aSelectedColor; }
 
     void SelectEntry(const NamedColor& rColor);
     void SelectEntry(const Color& rColor);
@@ -72,9 +71,6 @@ public:
     void SetAutoDisplayColor(const Color &rColor) { m_aAutoDisplayColor = rColor; }
     void ShowPreview(const NamedColor &rColor);
     void EnsurePaletteManager();
-
-    void SaveValue() { m_aSaveColor = GetSelectEntryColor(); }
-    bool IsValueChangedFromSaved() const { return m_aSaveColor != GetSelectEntryColor(); }
 
     DECL_LINK(WindowEventListener, VclWindowEvent&, void);
 };

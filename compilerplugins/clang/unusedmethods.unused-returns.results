@@ -4,7 +4,7 @@ connectivity/source/inc/odbc/OConnection.hxx:78
     short connectivity::odbc::OConnection::Construct(const class rtl::OUString &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
 connectivity/source/inc/odbc/OStatement.hxx:115
     _Bool connectivity::odbc::OStatement_Base::lockIfNecessary(const class rtl::OUString &)
-cui/source/inc/iconcdlg.hxx:80
+cui/source/inc/iconcdlg.hxx:71
     _Bool IconChoicePage::FillItemSet(class SfxItemSet *)
 extensions/source/scanner/sane.hxx:97
     _Bool Sane::CheckConsistency(const char *,_Bool)
@@ -14,9 +14,9 @@ extensions/source/scanner/sane.hxx:147
     _Bool Sane::ActivateButtonOption(int)
 extensions/source/scanner/sane.hxx:153
     _Bool Sane::Open(int)
-extensions/source/scanner/sanedlg.hxx:89
+extensions/source/scanner/sanedlg.hxx:87
     _Bool SaneDlg::LoadState()
-extensions/source/scanner/sanedlg.hxx:103
+extensions/source/scanner/sanedlg.hxx:101
     _Bool SaneDlg::SetAdjustedNumericalValue(const char *,double,int)
 filter/source/flash/swfexporter.hxx:85
     _Bool swf::FlashExporter::exportAll(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XOutputStream> &,const class com::sun::star::uno::Reference<class com::sun::star::task::XStatusIndicator> &)
@@ -36,6 +36,10 @@ include/basegfx/vector/b3dvector.hxx:171
     class basegfx::B3DVector & basegfx::B3DVector::normalize()
 include/comphelper/backupfilehelper.hxx:204
     _Bool comphelper::BackupFileHelper::tryPush_extensionInfo(const class rtl::OUString &)
+include/comphelper/interfacecontainer3.hxx:165
+    int comphelper::OInterfaceContainerHelper3::addInterface(const Reference<type-parameter-?-?> &)
+include/comphelper/interfacecontainer3.hxx:173
+    int comphelper::OInterfaceContainerHelper3::removeInterface(const Reference<type-parameter-?-?> &)
 include/editeng/editview.hxx:230
     class ErrCode EditView::Read(class SvStream &,enum EETextFormat,class SvKeyValueIterator *)
 include/LibreOfficeKit/LibreOfficeKit.hxx:63
@@ -46,33 +50,39 @@ include/LibreOfficeKit/LibreOfficeKit.hxx:121
     char * lok::Document::getPartHash(int)
 include/LibreOfficeKit/LibreOfficeKit.hxx:349
     char * lok::Document::getTextSelection(const char *,char **)
-include/LibreOfficeKit/LibreOfficeKit.hxx:361
+include/LibreOfficeKit/LibreOfficeKit.hxx:359
+    int lok::Document::getSelectionType()
+include/LibreOfficeKit/LibreOfficeKit.hxx:377
+    _Bool lok::Document::getClipboard(const char **,unsigned long *,char ***,unsigned long **,char ***)
+include/LibreOfficeKit/LibreOfficeKit.hxx:396
+    _Bool lok::Document::setClipboard(const unsigned long,const char **,const unsigned long *,const char **)
+include/LibreOfficeKit/LibreOfficeKit.hxx:411
     _Bool lok::Document::paste(const char *,const char *,unsigned long)
-include/LibreOfficeKit/LibreOfficeKit.hxx:392
+include/LibreOfficeKit/LibreOfficeKit.hxx:442
     char * lok::Document::getCommandValues(const char *)
-include/LibreOfficeKit/LibreOfficeKit.hxx:478
+include/LibreOfficeKit/LibreOfficeKit.hxx:528
     int lok::Document::getView()
-include/LibreOfficeKit/LibreOfficeKit.hxx:486
+include/LibreOfficeKit/LibreOfficeKit.hxx:536
     int lok::Document::getViewsCount()
-include/LibreOfficeKit/LibreOfficeKit.hxx:495
+include/LibreOfficeKit/LibreOfficeKit.hxx:545
     unsigned char * lok::Document::renderFont(const char *,const char *,int *,int *)
-include/LibreOfficeKit/LibreOfficeKit.hxx:534
+include/LibreOfficeKit/LibreOfficeKit.hxx:584
     _Bool lok::Document::getViewIds(int *,unsigned long)
-include/LibreOfficeKit/LibreOfficeKit.hxx:595
+include/LibreOfficeKit/LibreOfficeKit.hxx:645
     _Bool lok::Document::insertCertificate(const unsigned char *,const int,const unsigned char *,const int)
-include/LibreOfficeKit/LibreOfficeKit.hxx:609
+include/LibreOfficeKit/LibreOfficeKit.hxx:659
     _Bool lok::Document::addCertificate(const unsigned char *,const int)
-include/LibreOfficeKit/LibreOfficeKit.hxx:621
+include/LibreOfficeKit/LibreOfficeKit.hxx:671
     int lok::Document::getSignatureState()
-include/LibreOfficeKit/LibreOfficeKit.hxx:631
+include/LibreOfficeKit/LibreOfficeKit.hxx:681
     unsigned long lok::Document::renderShapeSelection(char **)
-include/LibreOfficeKit/LibreOfficeKit.hxx:757
+include/LibreOfficeKit/LibreOfficeKit.hxx:821
     char * lok::Office::getFilterTypes()
-include/LibreOfficeKit/LibreOfficeKit.hxx:811
+include/LibreOfficeKit/LibreOfficeKit.hxx:875
     char * lok::Office::getVersionInfo()
-include/LibreOfficeKit/LibreOfficeKit.hxx:825
+include/LibreOfficeKit/LibreOfficeKit.hxx:889
     _Bool lok::Office::runMacro(const char *)
-include/LibreOfficeKit/LibreOfficeKit.hxx:833
+include/LibreOfficeKit/LibreOfficeKit.hxx:897
     _Bool lok::Office::signDocument(const char *,const unsigned char *,const int,const unsigned char *,const int)
 include/oox/crypto/AgileEngine.hxx:121
     _Bool oox::core::AgileEngine::decryptHmacKey()
@@ -174,13 +184,13 @@ include/svx/framelink.hxx:188
     class svx::frame::Style & svx::frame::Style::MirrorSelf()
 include/svx/SvxColorValueSet.hxx:55
     class Size ColorValueSet::layoutToGivenHeight(unsigned int,unsigned int)
-include/test/helper/form.hxx:38
+include/test/helper/form.hxx:37
     class com::sun::star::uno::Reference<class com::sun::star::drawing::XControlShape> apitest::helper::form::createCommandButton(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
-include/test/helper/shape.hxx:39
+include/test/helper/shape.hxx:38
     class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> apitest::helper::shape::createEllipse(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
-include/test/helper/shape.hxx:53
+include/test/helper/shape.hxx:52
     class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> apitest::helper::shape::createLine(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
-include/test/helper/shape.hxx:67
+include/test/helper/shape.hxx:66
     class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> apitest::helper::shape::createRectangle(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
 include/test/sheet/xcellrangedata.hxx:21
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XCellRangeData::init()
@@ -188,7 +198,7 @@ include/test/sheet/xdocumentauditing.hxx:29
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XDocumentAuditing::getXMSF()
 include/test/sheet/xnamedrange.hxx:22
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XNamedRange::init()
-include/test/sheet/xsheetannotation.hxx:36
+include/test/sheet/xsheetannotation.hxx:35
     class com::sun::star::uno::Reference<class com::sun::star::sheet::XSheetAnnotation> apitest::XSheetAnnotation::getAnnotation(struct com::sun::star::table::CellAddress &)
 include/test/sheet/xspreadsheets2.hxx:40
     class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> apitest::XSpreadsheets2::getComponent()
@@ -220,10 +230,16 @@ include/vcl/texteng.hxx:276
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/toolbox.hxx:515
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:764
+include/vcl/weld.hxx:795
     _Bool weld::TreeView::iter_nth_child(class weld::TreeIter &,int) const
-include/vcl/weld.hxx:1610
+include/vcl/weld.hxx:1643
     _Bool weld::TextView::get_selection_bounds(int &,int &)
+include/vcl/wizardmachine.hxx:448
+    _Bool vcl::WizardMachine::travelNext()
+include/vcl/wizardmachine.hxx:451
+    _Bool vcl::WizardMachine::travelPrevious()
+include/vcl/wizardmachine.hxx:541
+    class TabPage * vcl::WizardMachine::GetOrCreatePage(const short)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
 lotuswordpro/inc/lwpsvstream.hxx:77
@@ -232,7 +248,7 @@ lotuswordpro/inc/lwpsvstream.hxx:78
     class LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
 sc/inc/document.hxx:2151
     const struct ScDocumentThreadSpecific & ScDocument::CalculateInColumnInThread(struct ScInterpreterContext &,const class ScAddress &,unsigned long,unsigned int,unsigned int)
-sc/inc/orcusfilters.hxx:44
+sc/inc/orcusfilters.hxx:45
     _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
 sc/source/core/opencl/formulagroupcl.cxx:1084
     unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(class std::__cxx11::basic_stringstream<char> &,_Bool &)
@@ -300,13 +316,13 @@ sw/inc/authfld.hxx:98
     unsigned short SwAuthorityFieldType::AppendField(const class SwAuthEntry &)
 sw/inc/calc.hxx:114
     class SwSbxValue & SwSbxValue::MakeDouble()
-sw/inc/crsrsh.hxx:549
+sw/inc/crsrsh.hxx:550
     _Bool SwCursorShell::GoNextPrevCursorSetSearchLabel(const _Bool)
-sw/inc/doc.hxx:1081
+sw/inc/doc.hxx:1082
     _Bool SwDoc::ReplaceNumRule(const struct SwPosition &,const class rtl::OUString &,const class rtl::OUString &)
-sw/inc/doc.hxx:1244
+sw/inc/doc.hxx:1245
     _Bool SwDoc::SetColRowWidthHeight(class SwTableBox &,enum TableChgWidthHeightType,long,long)
-sw/inc/doc.hxx:1269
+sw/inc/doc.hxx:1270
     _Bool SwDoc::SplitTable(const struct SwPosition &,enum SplitTable_HeadlineOption,_Bool)
 sw/inc/editsh.hxx:266
     _Bool SwEditShell::GetPaMParAttr(class SwPaM *,class SfxItemSet &) const
@@ -328,9 +344,9 @@ sw/source/filter/ww8/ww8toolbar.hxx:339
     _Bool Tcg::ImportCustomToolBar(class SfxObjectShell &)
 sw/source/uibase/inc/drawbase.hxx:54
     _Bool SwDrawBase::MouseMove(const class MouseEvent &)
-sw/source/uibase/inc/fldmgr.hxx:116
+sw/source/uibase/inc/fldmgr.hxx:117
     const class com::sun::star::uno::Reference<class com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
-sw/source/uibase/inc/mailmergewizard.hxx:79
+sw/source/uibase/inc/mailmergewizard.hxx:77
     _Bool SwMailMergeWizard::skipUntil(unsigned short)
 ucb/source/ucp/webdav-neon/ContentProperties.hxx:169
     _Bool webdav_ucp::CachableContentProperties::containsAllNames(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &) const
