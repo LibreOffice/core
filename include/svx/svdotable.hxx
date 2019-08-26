@@ -26,7 +26,7 @@
 #include <rtl/ref.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svxdllapi.h>
-
+#include <boost/property_tree/json_parser.hpp>
 
 class SvStream;
 class SfxStyleSheet;
@@ -88,7 +88,6 @@ struct SVX_DLLPUBLIC TableStyleSettings
     bool operator==( const TableStyleSettings& r ) const;
 };
 
-
 /// SdrTableObj
 class SdrTableObjImpl;
 
@@ -138,6 +137,11 @@ public:
     void setActiveCell( const sdr::table::CellPos& rPos );
     void getActiveCellPos( sdr::table::CellPos& rPos ) const;
     sal_Int32 getColumnCount() const;
+    sal_Int32 getRowCount() const;
+
+    bool createTableEdgesJson(boost::property_tree::ptree & rJsonRoot);
+    void changeEdge(bool bHorizontal, int nEdge, sal_Int32 nOffset);
+
     void getCellBounds( const sdr::table::CellPos& rPos, ::tools::Rectangle& rCellRect );
 
     const SfxItemSet& GetActiveCellItemSet() const;

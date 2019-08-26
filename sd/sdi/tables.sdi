@@ -155,5 +155,10 @@ shell TableObjectBar
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
+    SID_TABLE_CHANGE_CURRENT_BORDER_POSITION
+    [
+        ExecMethod = Execute;
+    ]
+
 }
 

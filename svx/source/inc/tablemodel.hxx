@@ -87,6 +87,9 @@ public:
 
     void dumpAsXml(struct _xmlTextWriter * pWriter) const;
 
+    /// Get the height of all rows in this table.
+    std::vector<sal_Int32> getRowHeights();
+
     // ICellRange
     virtual sal_Int32 getLeft() override;
     virtual sal_Int32 getTop() override;
