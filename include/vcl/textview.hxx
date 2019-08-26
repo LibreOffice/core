@@ -215,6 +215,9 @@ public:
 
     void                MatchGroup();
 
+    // tdf#49482: Moves the start of the PaM to the center of the textview
+    void                CenterPaM( const TextPaM& rPaM );
+
     bool                Search( const i18nutil::SearchOptions& rSearchOptions, bool bForward );
     sal_uInt16          Replace( const i18nutil::SearchOptions& rSearchOptions, bool bAll, bool bForward );
 

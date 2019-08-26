@@ -2180,6 +2180,20 @@ void TextView::MatchGroup()
         SetSelection( aMatchSel );
 }
 
+void TextView::CenterPaM( const TextPaM& rPaM )
+{
+    // Get textview size and the corresponding y-coordinates
+    Size aOutSz = mpImpl->mpWindow->GetOutputSizePixel();
+    long nVisStartY = mpImpl->maStartDocPos.Y();
+    long nVisEndY = mpImpl->maStartDocPos.Y() + aOutSz.Height();
+
+    // Retrieve the coordinates of the PaM
+    tools::Rectangle aRect = mpImpl->mpTextEngine->PaMtoEditCursor(rPaM);
+
+    // Recalculate the offset of the center y-coordinates and scroll
+    Scroll(0, (nVisStartY + nVisEndY) / 2 - aRect.TopLeft().getY());
+}
+
 bool TextView::Search( const i18nutil::SearchOptions& rSearchOptions, bool bForward )
 {
     bool bFound = false;
@@ -2198,6 +2212,11 @@ bool TextView::Search( const i18nutil::SearchOptions& rSearchOptions, bool bForw
     }
 
     SetSelection( aSel );
+    // tdf#49482: Move the start of the selection to the center of the textview
+    if (bFound)
+    {
+        CenterPaM( aSel.GetStart() );
+    }
     ShowCursor();
 
     return bFound;
