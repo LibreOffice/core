@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_b9791430",
+        "filename": "oox/source/drawingml/shape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1777,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-08-26T19:55:06Z",
+      "side": 1,
+      "message": "I\u0027m not sure that duplicating default values from ctor is a good idea.",
+      "parentUuid": "bf659307_e6228ba4",
+      "range": {
+        "startLine": 1774,
+        "startChar": 16,
+        "endLine": 1777,
+        "endChar": 29
+      },
+      "revId": "8db39e689c36ea008fdc01668b66721f9df58b4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_06269fb8",
         "filename": "oox/source/drawingml/shape.cxx",
         "patchSetId": 1
