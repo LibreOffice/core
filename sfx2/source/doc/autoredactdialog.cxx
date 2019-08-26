@@ -39,6 +39,8 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
+#define FILEDIALOG_FILTER_JSON "*.json"
+
 SvTreeListEntry* TargetsTable::GetRowByTargetName(const OUString& sName)
 {
     SvTreeListEntry* pEntry = First();
@@ -61,11 +63,11 @@ TargetsTable::TargetsTable(SvSimpleTableContainer& rParent)
 
     SetTabs(nTabs, MapUnit::MapPixel);
     SetSelectionMode(SelectionMode::Multiple);
-    InsertHeaderEntry("Target Name");
-    InsertHeaderEntry("Type");
-    InsertHeaderEntry("Content");
-    InsertHeaderEntry("Case Sensitive");
-    InsertHeaderEntry("Whole Words");
+    InsertHeaderEntry(SfxResId(STR_REDACTION_TARGET_NAME));
+    InsertHeaderEntry(SfxResId(STR_REDACTION_TYPE));
+    InsertHeaderEntry(SfxResId(STR_REDACTION_CONTENT));
+    InsertHeaderEntry(SfxResId(STR_REDACTION_CASE_SENSITIVE));
+    InsertHeaderEntry(SfxResId(STR_REDACTION_WHOLE_WORDS));
 
     rParent.SetTable(this);
 }
@@ -74,21 +76,21 @@ namespace
 {
 OUString getTypeName(RedactionTargetType nType)
 {
-    OUString sTypeName("Unknown");
+    OUString sTypeName(SfxResId(STR_REDACTION_TARGET_TYPE_UNKNOWN));
 
     switch (nType)
     {
         case RedactionTargetType::REDACTION_TARGET_TEXT:
-            sTypeName = "Text";
+            sTypeName = SfxResId(STR_REDACTION_TARGET_TYPE_TEXT);
             break;
         case RedactionTargetType::REDACTION_TARGET_REGEX:
-            sTypeName = "Regex";
+            sTypeName = SfxResId(STR_REDACTION_TARGET_TYPE_REGEX);
             break;
         case RedactionTargetType::REDACTION_TARGET_PREDEFINED:
-            sTypeName = "Predefined";
+            sTypeName = SfxResId(STR_REDACTION_TARGET_TYPE_PREDEF);
             break;
         case RedactionTargetType::REDACTION_TARGET_UNKNOWN:
-            sTypeName = "Unknown";
+            sTypeName = SfxResId(STR_REDACTION_TARGET_TYPE_UNKNOWN);
             break;
     }
 
@@ -143,9 +145,11 @@ void TargetsTable::InsertTarget(RedactionTarget* pTarget)
         sContent = sContent.getToken(1, ';');
     }
 
-    OUString sColumnData = pTarget->sName + "\t" + getTypeName(pTarget->sType) + "\t" + sContent
-                           + "\t" + (pTarget->bCaseSensitive ? OUString("Yes") : OUString("No"))
-                           + "\t" + (pTarget->bWholeWords ? OUString("Yes") : OUString("No"));
+    OUString sColumnData
+        = pTarget->sName + "\t" + getTypeName(pTarget->sType) + "\t" + sContent + "\t"
+          + (pTarget->bCaseSensitive ? SfxResId(STR_REDACTION_YES) : SfxResId(STR_REDACTION_NO))
+          + "\t"
+          + (pTarget->bWholeWords ? SfxResId(STR_REDACTION_YES) : SfxResId(STR_REDACTION_NO));
 
     InsertEntryToColumn(sColumnData, TREELIST_APPEND, 0xffff, pTarget);
 }
@@ -173,9 +177,11 @@ void TargetsTable::InsertTargetAtPos(RedactionTarget* pTarget, const sal_uLong& 
         sContent = sContent.getToken(1, ';');
     }
 
-    OUString sColumnData = pTarget->sName + "\t" + getTypeName(pTarget->sType) + "\t" + sContent
-                           + "\t" + (pTarget->bCaseSensitive ? OUString("Yes") : OUString("No"))
-                           + "\t" + (pTarget->bWholeWords ? OUString("Yes") : OUString("No"));
+    OUString sColumnData
+        = pTarget->sName + "\t" + getTypeName(pTarget->sType) + "\t" + sContent + "\t"
+          + (pTarget->bCaseSensitive ? SfxResId(STR_REDACTION_YES) : SfxResId(STR_REDACTION_NO))
+          + "\t"
+          + (pTarget->bWholeWords ? SfxResId(STR_REDACTION_YES) : SfxResId(STR_REDACTION_NO));
 
     InsertEntryToColumn(sColumnData, nPos, 0xffff, pTarget);
 }
@@ -191,8 +197,7 @@ RedactionTarget* TargetsTable::GetTargetByName(const OUString& sName)
 
 OUString TargetsTable::GetNameProposal()
 {
-    //TODO: Define a translatable string
-    OUString sDefaultTargetName("Target");
+    OUString sDefaultTargetName(SfxResId(STR_REDACTION_TARGET));
     sal_Int32 nHighestTargetId = 0;
     SvTreeListEntry* pEntry = First();
 
@@ -216,13 +221,13 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, Load, Button*, void)
 {
     //Load a targets list from a previously saved file (a json file?)
     // ask for filename, where we should load the new config data from
-    StartFileDialog(StartFileDialogType::Open, "Load Targets");
+    StartFileDialog(StartFileDialogType::Open, SfxResId(STR_REDACTION_LOAD_TARGETS));
 }
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, Save, Button*, void)
 {
     //Allow saving the targets into a file
-    StartFileDialog(StartFileDialogType::SaveAs, "Save Targets");
+    StartFileDialog(StartFileDialogType::SaveAs, SfxResId(STR_REDACTION_SAVE_TARGETS));
 }
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, Button*, void)
@@ -243,14 +248,15 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, Button*, void)
             || aAddTargetDialog.getContent().isEmpty())
         {
             bIncomplete = true;
-            ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok, "All fields are required")
+            ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok,
+                                             SfxResId(STR_REDACTION_FIELDS_REQUIRED))
                 ->Execute();
         }
         else if (m_pTargetsBox->GetTargetByName(aAddTargetDialog.getName()))
         {
             bIncomplete = true;
             ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok,
-                                             "There is already a target with this name")
+                                             SfxResId(STR_REDACTION_TARGET_NAME_CLASH))
                 ->Execute();
         }
 
@@ -275,10 +281,9 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, Button*, void)
     // Only one entry should be selected for editing
     if (m_pTargetsBox->GetSelectionCount() > 1)
     {
-        OUString sMsg(
-            "You have selected multiple targets, but only one target can be edited at once.");
         //Warn the user about multiple selections
-        ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok, sMsg)->Execute();
+        ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok, SfxResId(STR_REDACTION_MULTI_EDIT))
+            ->Execute();
         return;
     }
 
@@ -303,7 +308,8 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, Button*, void)
             || aEditTargetDialog.getContent().isEmpty())
         {
             bIncomplete = true;
-            ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok, "All fields are required")
+            ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok,
+                                             SfxResId(STR_REDACTION_FIELDS_REQUIRED))
                 ->Execute();
         }
         else if (aEditTargetDialog.getName() != pTarget->sName
@@ -311,7 +317,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, Button*, void)
         {
             bIncomplete = true;
             ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok,
-                                             "There is already a target with this name")
+                                             SfxResId(STR_REDACTION_TARGET_NAME_CLASH))
                 ->Execute();
         }
 
@@ -342,8 +348,8 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, DeleteHdl, Button*, void)
 
     if (nSelectionCount > 1)
     {
-        OUString sMsg("Are you sure you would like to delete " + OUString::number(nSelectionCount)
-                      + " targets at once?");
+        OUString sMsg(SfxResId(STR_REDACTION_MULTI_DELETE)
+                          .replaceFirst("$(TARGETSCOUNT)", OUString::number(nSelectionCount)));
 
         //Warn the user about multiple deletions
         if (ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::OkCancel, sMsg)->Execute()
@@ -504,7 +510,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, SaveHdl, sfx2::FileDialogHelper*, void)
 void SfxAutoRedactDialog::StartFileDialog(StartFileDialogType nType, const OUString& rTitle)
 {
     OUString aFilterAllStr(SfxResId(STR_SFX_FILTERNAME_ALL));
-    OUString aFilterCfgStr("Target Set (*.json)");
+    OUString aFilterJsonStr(SfxResId(STR_REDACTION_JSON_FILE_FILTER));
 
     bool bSave = nType == StartFileDialogType::SaveAs;
     short nDialogType = bSave ? css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION
@@ -513,8 +519,8 @@ void SfxAutoRedactDialog::StartFileDialog(StartFileDialogType nType, const OUStr
 
     m_pFileDlg->SetTitle(rTitle);
     m_pFileDlg->AddFilter(aFilterAllStr, FILEDIALOG_FILTER_ALL);
-    m_pFileDlg->AddFilter(aFilterCfgStr, "*.json");
-    m_pFileDlg->SetCurrentFilter(aFilterCfgStr);
+    m_pFileDlg->AddFilter(aFilterJsonStr, FILEDIALOG_FILTER_JSON);
+    m_pFileDlg->SetCurrentFilter(aFilterJsonStr);
 
     Link<sfx2::FileDialogHelper*, void> aDlgClosedLink
         = bSave ? LINK(this, SfxAutoRedactDialog, SaveHdl)
@@ -798,7 +804,7 @@ SfxAddTargetDialog::SfxAddTargetDialog(vcl::Window* pParent, const OUString& sNa
     if (bWholeWords)
         m_pWholeWords->SetState(TriState::TRISTATE_TRUE);
 
-    SetText("Edit Target");
+    SetText(SfxResId(STR_REDACTION_EDIT_TARGET));
 }
 
 SfxAddTargetDialog::~SfxAddTargetDialog() { disposeOnce(); }

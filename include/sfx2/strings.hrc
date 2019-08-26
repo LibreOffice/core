@@ -182,6 +182,34 @@
 #define STR_WELCOME_LINE1                       NC_("STR_WELCOME_LINE1", "Welcome to %PRODUCTNAME.")
 #define STR_WELCOME_LINE2                       NC_("STR_WELCOME_LINE2", "Drop a document here or pick an app from the left side to create one.")
 
+// Translators: Target types in Auto-redaction dialog
+#define STR_REDACTION_TARGET_TYPE_TEXT          NC_("STR_REDACTION_TARGET_TYPE_TEXT", "Text")
+#define STR_REDACTION_TARGET_TYPE_REGEX         NC_("STR_REDACTION_TARGET_TYPE_REGEX", "Regex")
+#define STR_REDACTION_TARGET_TYPE_PREDEF        NC_("STR_REDACTION_TARGET_TYPE_PREDEF", "Predefined")
+#define STR_REDACTION_TARGET_TYPE_UNKNOWN       NC_("STR_REDACTION_TARGET_TYPE_UNKNOWN", "Unknown")
+
+// Translators: Column headers in Auto-redaction dialog's targets list
+#define STR_REDACTION_TARGET_NAME               NC_("STR_REDACTION_TARGET_NAME", "Target Name")
+#define STR_REDACTION_TYPE                      NC_("STR_REDACTION_TYPE", "Type")
+#define STR_REDACTION_CONTENT                   NC_("STR_REDACTION_CONTENT", "Content")
+#define STR_REDACTION_CASE_SENSITIVE            NC_("STR_REDACTION_CASE_SENSITIVE", "Case Sensitive")
+#define STR_REDACTION_WHOLE_WORDS               NC_("STR_REDACTION_WHOLE_WORDS", "Whole Words")
+
+// Translators: Values for the Case Sensitive and the Whole Words columns in Auto-redaction dialog
+#define STR_REDACTION_YES                       NC_("STR_REDACTION_YES", "Yes")
+#define STR_REDACTION_NO                        NC_("STR_REDACTION_NO", "No")
+
+// Translators: Misc strings of the Auto Redaction dialog
+#define STR_REDACTION_TARGET                    NC_("STR_REDACTION_TARGET", "Target")
+#define STR_REDACTION_LOAD_TARGETS              NC_("STR_REDACTION_LOAD_TARGETS", "Load Targets")
+#define STR_REDACTION_SAVE_TARGETS              NC_("STR_REDACTION_SAVE_TARGETS", "Save Targets")
+#define STR_REDACTION_FIELDS_REQUIRED           NC_("STR_REDACTION_FIELDS_REQUIRED", "All fields are required")
+#define STR_REDACTION_TARGET_NAME_CLASH         NC_("STR_REDACTION_TARGET_NAME_CLASH", "There is already a target with this name")
+#define STR_REDACTION_MULTI_EDIT                NC_("STR_REDACTION_MULTI_EDIT", "You have selected multiple targets, but only one target can be edited at once.")
+#define STR_REDACTION_MULTI_DELETE              NC_("STR_REDACTION_MULTI_DELETE", "Are you sure you would like to delete $(TARGETSCOUNT) targets at once?")
+#define STR_REDACTION_JSON_FILE_FILTER          NC_("STR_REDACTION_JSON_FILE_FILTER", "Target Set (*.json)")
+#define STR_REDACTION_EDIT_TARGET               NC_("STR_REDACTION_EDIT_TARGET", "Edit Target")
+
 #define STR_SFX_FILEDLG_ACTUALVERSION           NC_("STR_SFX_FILEDLG_ACTUALVERSION", "Current version")
 #define STR_SFX_EXPLORERFILE_EXPORT             NC_("STR_SFX_EXPLORERFILE_EXPORT", "Export")
 #define STR_SFX_EXPLORERFILE_INSERT             NC_("STR_SFX_EXPLORERFILE_INSERT", "Insert")
