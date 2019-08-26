@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_869aaf6b",
+        "filename": "offapi/com/sun/star/style/NumberingType.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-08-26T09:02:36Z",
+      "side": 1,
+      "message": "two separate block comments?",
+      "revId": "9868f2fc5e5ac47180691ca2d5a2dcf76956dbce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
