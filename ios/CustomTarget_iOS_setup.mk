@@ -23,7 +23,7 @@ $(call gb_CustomTarget_get_target,ios/iOS_setup): $(IOSGEN)/native-code.h
 $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS_setup.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
 	mkdir -p $(IOSGEN) $(IOSRES) $(IOSRES)/services \
-	         $(IOSRES)/share/config $(IOSRES)/filter $(IOSRES)/program \
+	         $(IOSRES)/share/config $(IOSRES)/share/filter $(IOSRES)/program \
 	         $(IOSRES)/config
 
 	# generate file with call declarations
@@ -42,9 +42,9 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	mkdir -p $(IOSRES)/share/config
 	cp -R $(INSTDIR)/share/config/soffice.cfg $(IOSRES)/share/config
 	cp $(WORKDIR)/CustomTarget/i18npool/breakiterator/dict_*.data $(IOSRES)/share
-	cp $(INSTDIR)/share/filter/oox-drawingml-adj-names $(IOSRES)/filter
-	cp $(INSTDIR)/share/filter/oox-drawingml-cs-presets $(IOSRES)/filter
-	cp $(INSTDIR)/share/filter/vml-shape-types $(IOSRES)/filter
+	cp $(INSTDIR)/share/filter/oox-drawingml-adj-names $(IOSRES)/share/filter
+	cp $(INSTDIR)/share/filter/oox-drawingml-cs-presets $(IOSRES)/share/filter
+	cp $(INSTDIR)/share/filter/vml-shape-types $(IOSRES)/share/filter
 	cp -R $(INSTDIR)/share/registry $(IOSRES)
 	cp $(INSTDIR)/share/config/*zip $(IOSRES)/share/config
 	cp -R $(INSTDIR)/share/liblangtag $(IOSRES)/share
