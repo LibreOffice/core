@@ -202,7 +202,7 @@ public:
     GDIMetaFile getMetafileFromEmbeddedVectorGraphicData() const;
 
     bool isEmbeddedPdfData() const;
-    std::shared_ptr<std::vector<sal_Int8>> const getEmbeddedPdfData() const;
+    const std::shared_ptr<std::vector<sal_Int8>> & getEmbeddedPdfData() const;
     /// Returns the page number of the embedded data (typically to re-render or import it).
     sal_Int32 getEmbeddedPageNumber() const;
 
