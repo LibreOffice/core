@@ -728,8 +728,10 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:EditGlossary" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:RedactDoc" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ImageMapDialog"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:RedactDoc" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:AutoRedactDoc" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ChapterNumberingDialog"/>
       <menu:menuitem menu:id=".uno:LineNumberingDialog" menu:style="text"/>
