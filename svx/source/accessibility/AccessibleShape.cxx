@@ -140,7 +140,7 @@ void AccessibleShape::Init()
         mpChildrenManager->Update();
 
     // Register at model as document::XEventListener.
-    if (maShapeTreeInfo.GetModelBroadcaster().is())
+    if (mxShape.is() && maShapeTreeInfo.GetModelBroadcaster().is())
         maShapeTreeInfo.GetModelBroadcaster()->addShapeEventListener(mxShape,
             static_cast<document::XShapeEventListener*>(this));
 
@@ -1064,7 +1064,7 @@ void AccessibleShape::disposing()
         pStateSet->RemoveState (AccessibleStateType::FOCUSED);
 
     // Unregister from model.
-    if (maShapeTreeInfo.GetModelBroadcaster().is())
+    if (mxShape.is() && maShapeTreeInfo.GetModelBroadcaster().is())
         maShapeTreeInfo.GetModelBroadcaster()->removeShapeEventListener(mxShape,
             static_cast<document::XShapeEventListener*>(this));
 
