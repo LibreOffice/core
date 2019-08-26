@@ -3671,7 +3671,8 @@ SdXMLCustomShapeContext::SdXMLCustomShapeContext(
             {
                 rtl::Reference<XMLTextImportHelper> xTxtImport = GetImport().GetTextImport();
                 XMLPropStyleContext* pStyle = xTxtImport->FindAutoFrameStyle(aStyleName);
-                if (pStyle && !pStyle->GetParentName().isEmpty())
+                // Note that this an API name, so intentionally not localized.
+                if (pStyle && pStyle->GetParentName() == "Frame")
                 {
                     mbTextBox = true;
                     break;

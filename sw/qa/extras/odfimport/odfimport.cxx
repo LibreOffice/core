@@ -663,6 +663,12 @@ DECLARE_ODFIMPORT_TEST(testSpellmenuRedline, "spellmenu-redline.odt")
     CPPUNIT_ASSERT_EQUAL(OString("prev"), rMenu.GetItemIdent(rMenu.GetItemId(rMenu.GetItemCount() - 1)));
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf107776, "tdf107776.fodt")
+{
+    // Shape with a Graphics parent style name was imported as textbox.
+    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), "TextBox"));
+}
+
 DECLARE_ODFIMPORT_TEST(testAnnotationFormatting, "annotation-formatting.odt")
 {
     uno::Reference<beans::XPropertySet> xTextField = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 1), "TextField");
