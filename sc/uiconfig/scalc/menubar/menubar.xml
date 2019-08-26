@@ -698,8 +698,10 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AutoCorrectDlg" />
       <menu:menuitem menu:id=".uno:AutoComplete" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:RedactDoc" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ImageMapDialog"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:RedactDoc" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:AutoRedactDoc" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:GoalSeekDialog"/>
       <menu:menuitem menu:id=".uno:SolverDialog"/>
