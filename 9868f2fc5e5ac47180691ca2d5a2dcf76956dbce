@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "bf659307_86a70f50",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-08-26T12:45:12Z",
+      "side": 1,
+      "message": "please write this as \"tdf#55436\" so that it can be auto-linked to the bug report.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "9868f2fc5e5ac47180691ca2d5a2dcf76956dbce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_869aaf6b",
         "filename": "offapi/com/sun/star/style/NumberingType.idl",
         "patchSetId": 1
