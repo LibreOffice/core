@@ -492,7 +492,6 @@
 #include <drawdoc.hxx>
 #include <glob.hxx>
 #include <helpids.h>
-#include <imapinfo.hxx>
 #include <notifydocumentevent.hxx>
 #include <sdabstdlg.hxx>
 #include <sdattr.hxx>

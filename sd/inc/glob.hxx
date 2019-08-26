@@ -42,7 +42,7 @@
 
 // Object-Ids for StarDraw UserData
 #define SD_ANIMATIONINFO_ID 1
-#define SD_IMAPINFO_ID      2
+// SVX_IMAPINFO_ID = 2
 
 // Separator between layout name and template name of presentation templates
 #define SD_LT_SEPARATOR "~LT~"

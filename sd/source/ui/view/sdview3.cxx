@@ -49,6 +49,7 @@
 #include <svx/obj3d.hxx>
 #include <svx/e3dundo.hxx>
 #include <svx/unomodel.hxx>
+#include <svx/ImageMapInfo.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/metaact.hxx>
 #include <svx/svxids.hrc>
@@ -65,7 +66,6 @@
 #include <sdmod.hxx>
 #include <sdresid.hxx>
 #include <strings.hrc>
-#include <imapinfo.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <strmname.h>
 #include <unomodel.hxx>
@@ -1004,7 +1004,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     InsertObjectAtView( pObj, *pPV, nOptions );
 
                     if( pImageMap )
-                        pObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new SdIMapInfo( *pImageMap )) );
+                        pObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new SvxIMapInfo( *pImageMap )) );
 
                     if (pObj->IsChart())
                     {
@@ -1180,7 +1180,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     if (bReturn)
                     {
                         if( pImageMap )
-                            pObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new SdIMapInfo( *pImageMap )) );
+                            pObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new SvxIMapInfo( *pImageMap )) );
 
                         // let the object stay in loaded state after insertion
                         pObj->Unload();
