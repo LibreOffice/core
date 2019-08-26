@@ -801,7 +801,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, weld::Button&, void)
         OUString sURL = aDlg.GetPath();
         INetURLObject aURL( sURL );
         OUString sFile = aURL.getFSysPath( FSysStyle::Detect );
-        if ( !IsPathDuplicate( sURL ) )
+        if ( !IsPathDuplicate( sFile ) )
         {
             m_xPathList->append("", sFile, SvFileInformationManager::GetImageId(aURL));
             m_xPathList->select(m_xPathList->n_children() - 1);
@@ -837,7 +837,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl, weld::Button&, void)
         OUString sFolderURL( xFolderPicker->getDirectory() );
         INetURLObject aURL( sFolderURL );
         OUString sNewFolder = aURL.getFSysPath( FSysStyle::Detect );
-        if ( !IsPathDuplicate( sFolderURL ) )
+        if ( !IsPathDuplicate( sNewFolder ) )
         {
             m_xPathList->append("", sNewFolder, SvFileInformationManager::GetImageId(aURL));
             m_xPathList->select(m_xPathList->n_children() - 1);
@@ -880,12 +880,10 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, SelectHdl_Impl, weld::TreeView&, void)
 bool SvxJavaClassPathDlg::IsPathDuplicate( const OUString& _rPath )
 {
     bool bRet = false;
-    INetURLObject aFileObj( _rPath );
     int nCount = m_xPathList->n_children();
     for (int i = 0; i < nCount; ++i)
     {
-        INetURLObject aOtherObj(m_xPathList->get_text(i), FSysStyle::Detect);
-        if ( aOtherObj == aFileObj )
+        if ( m_xPathList->get_text(i) == _rPath )
         {
             bRet = true;
             break;
