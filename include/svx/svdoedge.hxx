@@ -168,8 +168,6 @@ public:
     void SetSuppressDefaultConnect(bool bNew) { mbSuppressDefaultConnect = bNew; }
     bool GetSuppressDefaultConnect() const { return mbSuppressDefaultConnect; }
 
-    virtual bool IsSdrEdgeObj() const override { return true; }
-
 protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
