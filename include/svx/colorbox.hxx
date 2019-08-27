@@ -36,7 +36,6 @@ private:
     Link<SvxColorListBox&, void> m_aSelectedLink;
     SvxListBoxColorWrapper m_aColorWrapper;
     Color m_aAutoDisplayColor;
-    Color m_aSaveColor;
     NamedColor m_aSelectedColor;
     sal_uInt16 m_nSlotId;
     bool m_bShowNoneButton;
