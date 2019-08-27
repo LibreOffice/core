@@ -38,13 +38,10 @@
                                                                                                    \
             /* Get original link */                                                                \
             OUString sOriginalFileName = getProperty<OUString>(xText, "HyperLinkURL");             \
-            INetURLObject aOriginalURL;                                                            \
-            bool bOk = aOriginalURL.setFSysPath(sOriginalFileName, FSysStyle::Detect);             \
-            if (!bOk)                                                                              \
-                aOriginalURL = INetURLObject(sOriginalFileName);                                   \
-            OUString sFileName = aOriginalURL.GetLastName().isEmpty()                              \
-                                     ? sOriginalFileName                                           \
-                                     : aOriginalURL.GetLastName();                                 \
+            INetURLObject aOriginalURL(sOriginalFileName);                                         \
+            CPPUNIT_ASSERT(!aOriginalURL.HasError());                                              \
+            OUString sFileName = aOriginalURL.GetLastName();                                       \
+            CPPUNIT_ASSERT(!sFileName.isEmpty());                                                  \
                                                                                                    \
             /* Get temp path */                                                                    \
             OUString sTempDir = utl::TempFile::GetTempNameBaseDirectory();                         \
