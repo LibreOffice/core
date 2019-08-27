@@ -129,6 +129,7 @@ public:
     void testDataPointInheritedColorDOCX();
     void testExternalStrRefsXLSX();
     void testSourceNumberFormatComplexCategoriesXLS();
+    void testXaxisValues();
     void testTdf123504();
     void testTdf122765();
 
@@ -212,6 +213,7 @@ public:
     CPPUNIT_TEST(testDataPointInheritedColorDOCX);
     CPPUNIT_TEST(testExternalStrRefsXLSX);
     CPPUNIT_TEST(testSourceNumberFormatComplexCategoriesXLS);
+    CPPUNIT_TEST(testXaxisValues);
     CPPUNIT_TEST(testTdf123504);
     CPPUNIT_TEST(testTdf122765);
 
@@ -1890,6 +1892,22 @@ void Chart2ImportTest::testSourceNumberFormatComplexCategoriesXLS()
     chart2::ScaleData aScaleData = xAxis->getScaleData();
     sal_Int32 nNumberFormat =  aScaleData.Categories->getValues()->getNumberFormatKeyByIndex(-1);
     CPPUNIT_ASSERT(nNumberFormat != 0);
+}
+
+void Chart2ImportTest::testXaxisValues()
+{
+    load("/chart2/qa/extras/data/docx/", "tdf124083.docx");
+    uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    const uno::Reference< chart2::data::XDataSequence > xDataSeq = getDataSequenceFromDocByRole(xChartDoc, "values-x");
+    Sequence<uno::Any> xSequence = xDataSeq->getData();
+    // test X values
+    CPPUNIT_ASSERT_EQUAL(uno::Any(0.04), xSequence[0]);
+    CPPUNIT_ASSERT(rtl::math::isNan(*static_cast<const double*>(xSequence[1].getValue())));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(0.16), xSequence[2]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(0.11), xSequence[3]);
+    CPPUNIT_ASSERT(rtl::math::isNan(*static_cast<const double*>(xSequence[4].getValue())));
 }
 
 void Chart2ImportTest::testTdf123504()
