@@ -739,7 +739,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaEllipseAction const & rAct)
 {
     SdrCircObj* pCirc=new SdrCircObj(
         *mpModel,
-        OBJ_CIRC,
+        SdrCircKind::Full,
         rAct.GetRect());
     SetAttributes(pCirc);
     InsertObj(pCirc);
@@ -752,7 +752,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaArcAction const & rAct)
     long nEnd=GetAngle(rAct.GetEndPoint()-aCenter);
     SdrCircObj* pCirc = new SdrCircObj(
         *mpModel,
-        OBJ_CARC,
+        SdrCircKind::Arc,
         rAct.GetRect(),nStart,nEnd);
     SetAttributes(pCirc);
     InsertObj(pCirc);
@@ -765,7 +765,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaPieAction const & rAct)
     long nEnd=GetAngle(rAct.GetEndPoint()-aCenter);
     SdrCircObj* pCirc = new SdrCircObj(
         *mpModel,
-        OBJ_SECT,
+        SdrCircKind::Section,
         rAct.GetRect(),
         nStart,
         nEnd);
@@ -780,7 +780,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaChordAction const & rAct)
     long nEnd=GetAngle(rAct.GetEndPoint()-aCenter);
     SdrCircObj* pCirc = new SdrCircObj(
         *mpModel,
-        OBJ_CCUT,
+        SdrCircKind::Cut,
         rAct.GetRect(),
         nStart,
         nEnd);

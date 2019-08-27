@@ -215,7 +215,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             pSdrObj = static_cast<SdrObject*>(
                 new SdrCircObj(
                     *pModel,
-                    OBJ_CIRC,
+                    SdrCircKind::Full,
                     aCircle,
                     0,
                     36000));
@@ -238,7 +238,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
                 pSdrObj = static_cast<SdrObject*>(
                     new SdrCircObj(
                         *pModel,
-                        OBJ_CIRC,
+                        SdrCircKind::Full,
                         aDrawRect,
                         0,
                         36000));

@@ -107,32 +107,45 @@ std::unique_ptr<sdr::contact::ViewContact> SdrCircObj::CreateObjectSpecificViewC
     return std::make_unique<sdr::contact::ViewContactOfSdrCircObj>(*this);
 }
 
+SdrCircKind ToSdrCircKind(SdrObjKind eKind)
+{
+    switch (eKind)
+    {
+        case OBJ_CIRC: return SdrCircKind::Full;
+        case OBJ_SECT: return SdrCircKind::Section;
+        case OBJ_CARC: return SdrCircKind::Arc;
+        case OBJ_CCUT: return SdrCircKind::Cut;
+        default: assert(false);
+    }
+    return SdrCircKind::Full;
+}
+
 SdrCircObj::SdrCircObj(
     SdrModel& rSdrModel,
-    SdrObjKind eNewKind)
+    SdrCircKind eNewKind)
 :   SdrRectObj(rSdrModel)
 {
     nStartAngle=0;
     nEndAngle=36000;
     meCircleKind=eNewKind;
-    bClosedObj=eNewKind!=OBJ_CARC;
+    bClosedObj=eNewKind!=SdrCircKind::Arc;
 }
 
 SdrCircObj::SdrCircObj(
     SdrModel& rSdrModel,
-    SdrObjKind eNewKind,
+    SdrCircKind eNewKind,
     const tools::Rectangle& rRect)
 :   SdrRectObj(rSdrModel, rRect)
 {
     nStartAngle=0;
     nEndAngle=36000;
     meCircleKind=eNewKind;
-    bClosedObj=eNewKind!=OBJ_CARC;
+    bClosedObj=eNewKind!=SdrCircKind::Arc;
 }
 
 SdrCircObj::SdrCircObj(
     SdrModel& rSdrModel,
-    SdrObjKind eNewKind,
+    SdrCircKind eNewKind,
     const tools::Rectangle& rRect,
     long nNewStartWink,
     long nNewEndWink)
@@ -143,7 +156,7 @@ SdrCircObj::SdrCircObj(
     nEndAngle=NormAngle36000(nNewEndWink);
     if (nAngleDif==36000) nEndAngle+=nAngleDif; // full circle
     meCircleKind=eNewKind;
-    bClosedObj=eNewKind!=OBJ_CARC;
+    bClosedObj=eNewKind!=SdrCircKind::Arc;
 }
 
 SdrCircObj::~SdrCircObj()
@@ -161,7 +174,15 @@ void SdrCircObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
 sal_uInt16 SdrCircObj::GetObjIdentifier() const
 {
-    return sal_uInt16(meCircleKind);
+    switch (meCircleKind)
+    {
+    case SdrCircKind::Full: return OBJ_CIRC;
+    case SdrCircKind::Section: return OBJ_SECT;
+    case SdrCircKind::Cut: return OBJ_CCUT;
+    case SdrCircKind::Arc: return OBJ_CARC;
+    default: assert(false);
+    }
+    return OBJ_CIRC;
 }
 
 bool SdrCircObj::PaintNeedsXPolyCirc() const
@@ -170,9 +191,9 @@ bool SdrCircObj::PaintNeedsXPolyCirc() const
     // ellipse segments.
     // If not WIN, then (for now) also for circle/ellipse segments and circle/
     // ellipse arcs (for precision)
-    bool bNeed=aGeo.nRotationAngle!=0 || aGeo.nShearAngle!=0 || meCircleKind==OBJ_CCUT;
+    bool bNeed=aGeo.nRotationAngle!=0 || aGeo.nShearAngle!=0 || meCircleKind==SdrCircKind::Cut;
     // If not WIN, then for everything except full circle (for now!)
-    if (meCircleKind!=OBJ_CIRC) bNeed = true;
+    if (meCircleKind!=SdrCircKind::Full) bNeed = true;
 
     const SfxItemSet& rSet = GetObjectItemSet();
     if(!bNeed)
@@ -186,7 +207,7 @@ bool SdrCircObj::PaintNeedsXPolyCirc() const
             bNeed = rSet.Get(XATTR_LINEWIDTH).GetValue() != 0;
 
         // XPoly is necessary for circle arcs with line ends
-        if(!bNeed && meCircleKind == OBJ_CARC)
+        if(!bNeed && meCircleKind == SdrCircKind::Arc)
         {
             // start of the line is here if StartPolygon, StartWidth!=0
             bNeed=rSet.Get(XATTR_LINESTART).GetLineStartValue().count() != 0 &&
@@ -202,24 +223,24 @@ bool SdrCircObj::PaintNeedsXPolyCirc() const
     }
 
     // XPoly is necessary if Fill !=None and !=Solid
-    if(!bNeed && meCircleKind != OBJ_CARC)
+    if(!bNeed && meCircleKind != SdrCircKind::Arc)
     {
         drawing::FillStyle eFill=rSet.Get(XATTR_FILLSTYLE).GetValue();
         bNeed = eFill != drawing::FillStyle_NONE && eFill != drawing::FillStyle_SOLID;
     }
 
-    if(!bNeed && meCircleKind != OBJ_CIRC && nStartAngle == nEndAngle)
+    if(!bNeed && meCircleKind != SdrCircKind::Full && nStartAngle == nEndAngle)
         bNeed = true; // otherwise we're drawing a full circle
 
     return bNeed;
 }
 
-basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, const tools::Rectangle& rRect1, long nStart, long nEnd) const
+basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrCircKind eCicrleKind, const tools::Rectangle& rRect1, long nStart, long nEnd) const
 {
     const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(rRect1);
     basegfx::B2DPolygon aCircPolygon;
 
-    if(OBJ_CIRC == eCicrleKind)
+    if(SdrCircKind::Full == eCicrleKind)
     {
         // create full circle. Do not use createPolygonFromEllipse; it's necessary
         // to get the start point to the bottom of the circle to keep compatible to
@@ -247,8 +268,8 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, c
             fStart, fEnd);
 
         // check closing states
-        const bool bCloseSegment(OBJ_CARC != eCicrleKind);
-        const bool bCloseUsingCenter(OBJ_SECT == eCicrleKind);
+        const bool bCloseSegment(SdrCircKind::Arc != eCicrleKind);
+        const bool bCloseUsingCenter(SdrCircKind::Section == eCicrleKind);
 
         if(bCloseSegment)
         {
@@ -299,18 +320,18 @@ OUString SdrCircObj::TakeObjNameSingul() const
     if (maRect.GetWidth() == maRect.GetHeight() && aGeo.nShearAngle==0)
     {
         switch (meCircleKind) {
-            case OBJ_CIRC: pID=STR_ObjNameSingulCIRC; break;
-            case OBJ_SECT: pID=STR_ObjNameSingulSECT; break;
-            case OBJ_CARC: pID=STR_ObjNameSingulCARC; break;
-            case OBJ_CCUT: pID=STR_ObjNameSingulCCUT; break;
+            case SdrCircKind::Full: pID=STR_ObjNameSingulCIRC; break;
+            case SdrCircKind::Section: pID=STR_ObjNameSingulSECT; break;
+            case SdrCircKind::Arc: pID=STR_ObjNameSingulCARC; break;
+            case SdrCircKind::Cut: pID=STR_ObjNameSingulCCUT; break;
             default: break;
         }
     } else {
         switch (meCircleKind) {
-            case OBJ_CIRC: pID=STR_ObjNameSingulCIRCE; break;
-            case OBJ_SECT: pID=STR_ObjNameSingulSECTE; break;
-            case OBJ_CARC: pID=STR_ObjNameSingulCARCE; break;
-            case OBJ_CCUT: pID=STR_ObjNameSingulCCUTE; break;
+            case SdrCircKind::Full: pID=STR_ObjNameSingulCIRCE; break;
+            case SdrCircKind::Section: pID=STR_ObjNameSingulSECTE; break;
+            case SdrCircKind::Arc: pID=STR_ObjNameSingulCARCE; break;
+            case SdrCircKind::Cut: pID=STR_ObjNameSingulCCUTE; break;
             default: break;
         }
     }
@@ -333,18 +354,18 @@ OUString SdrCircObj::TakeObjNamePlural() const
     if (maRect.GetWidth() == maRect.GetHeight() && aGeo.nShearAngle==0)
     {
         switch (meCircleKind) {
-            case OBJ_CIRC: pID=STR_ObjNamePluralCIRC; break;
-            case OBJ_SECT: pID=STR_ObjNamePluralSECT; break;
-            case OBJ_CARC: pID=STR_ObjNamePluralCARC; break;
-            case OBJ_CCUT: pID=STR_ObjNamePluralCCUT; break;
+            case SdrCircKind::Full: pID=STR_ObjNamePluralCIRC; break;
+            case SdrCircKind::Section: pID=STR_ObjNamePluralSECT; break;
+            case SdrCircKind::Arc: pID=STR_ObjNamePluralCARC; break;
+            case SdrCircKind::Cut: pID=STR_ObjNamePluralCCUT; break;
             default: break;
         }
     } else {
         switch (meCircleKind) {
-            case OBJ_CIRC: pID=STR_ObjNamePluralCIRCE; break;
-            case OBJ_SECT: pID=STR_ObjNamePluralSECTE; break;
-            case OBJ_CARC: pID=STR_ObjNamePluralCARCE; break;
-            case OBJ_CCUT: pID=STR_ObjNamePluralCCUTE; break;
+            case SdrCircKind::Full: pID=STR_ObjNamePluralCIRCE; break;
+            case SdrCircKind::Section: pID=STR_ObjNamePluralSECTE; break;
+            case SdrCircKind::Arc: pID=STR_ObjNamePluralCARCE; break;
+            case SdrCircKind::Cut: pID=STR_ObjNamePluralCCUTE; break;
             default: break;
         }
     }
@@ -397,7 +418,7 @@ public:
 
 sal_uInt32 SdrCircObj::GetHdlCount() const
 {
-    if(OBJ_CIRC != meCircleKind)
+    if(SdrCircKind::Full != meCircleKind)
     {
         return 10L;
     }
@@ -409,7 +430,7 @@ sal_uInt32 SdrCircObj::GetHdlCount() const
 
 void SdrCircObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    for (sal_uInt32 nHdlNum=(OBJ_CIRC==meCircleKind)?2:0; nHdlNum<=9; ++nHdlNum)
+    for (sal_uInt32 nHdlNum=(SdrCircKind::Full==meCircleKind)?2:0; nHdlNum<=9; ++nHdlNum)
     {
         Point aPnt;
         SdrHdlKind eLocalKind(SdrHdlKind::Move);
@@ -578,7 +599,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
         OUStringBuffer aBuf(aStr);
         const sal_uInt32 nPointCount(rDrag.GetPointCount());
 
-        if(OBJ_CIRC != meCircleKind && nPointCount > 2)
+        if(SdrCircKind::Full != meCircleKind && nPointCount > 2)
         {
             const ImpCircUser* pU = static_cast<const ImpCircUser*>(rDrag.GetUser());
             sal_Int32 nAngle;
@@ -725,8 +746,8 @@ bool SdrCircObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     ImpSetCreateParams(rStat);
     ImpCircUser* pU=static_cast<ImpCircUser*>(rStat.GetUser());
     bool bRet = false;
-    if (eCmd==SdrCreateCmd::ForceEnd && rStat.GetPointCount()<4) meCircleKind=OBJ_CIRC;
-    if (meCircleKind==OBJ_CIRC) {
+    if (eCmd==SdrCreateCmd::ForceEnd && rStat.GetPointCount()<4) meCircleKind=SdrCircKind::Full;
+    if (meCircleKind==SdrCircKind::Full) {
         bRet=rStat.GetPointCount()>=2;
         if (bRet) {
             maRect = pU->aR;
@@ -743,7 +764,7 @@ bool SdrCircObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
             nEndAngle=pU->nEnd;
         }
     }
-    bClosedObj=meCircleKind!=OBJ_CARC;
+    bClosedObj=meCircleKind!=SdrCircKind::Arc;
     SetRectsDirty();
     SetXPolyDirty();
     ImpSetCircInfoToAttr();
@@ -761,7 +782,7 @@ bool SdrCircObj::BckCreate(SdrDragStat& rStat)
 {
     rStat.SetNoSnap(rStat.GetPointCount()>=3);
     rStat.SetOrtho4Possible(rStat.GetPointCount()<3);
-    return meCircleKind!=OBJ_CIRC;
+    return meCircleKind!=SdrCircKind::Full;
 }
 
 basegfx::B2DPolyPolygon SdrCircObj::TakeCreatePoly(const SdrDragStat& rDrag) const
@@ -771,7 +792,7 @@ basegfx::B2DPolyPolygon SdrCircObj::TakeCreatePoly(const SdrDragStat& rDrag) con
     if(rDrag.GetPointCount() < 4)
     {
         // force to OBJ_CIRC to get full visualisation
-        basegfx::B2DPolyPolygon aRetval(ImpCalcXPolyCirc(OBJ_CIRC, pU->aR, pU->nStart, pU->nEnd));
+        basegfx::B2DPolyPolygon aRetval(ImpCalcXPolyCirc(SdrCircKind::Full, pU->aR, pU->nStart, pU->nEnd));
 
         if(3 == rDrag.GetPointCount())
         {
@@ -794,10 +815,10 @@ basegfx::B2DPolyPolygon SdrCircObj::TakeCreatePoly(const SdrDragStat& rDrag) con
 PointerStyle SdrCircObj::GetCreatePointer() const
 {
     switch (meCircleKind) {
-        case OBJ_CIRC: return PointerStyle::DrawEllipse;
-        case OBJ_SECT: return PointerStyle::DrawPie;
-        case OBJ_CARC: return PointerStyle::DrawArc;
-        case OBJ_CCUT: return PointerStyle::DrawCircleCut;
+        case SdrCircKind::Full: return PointerStyle::DrawEllipse;
+        case SdrCircKind::Section: return PointerStyle::DrawPie;
+        case SdrCircKind::Arc: return PointerStyle::DrawArc;
+        case SdrCircKind::Cut: return PointerStyle::DrawCircleCut;
         default: break;
     } // switch
     return PointerStyle::Cross;
@@ -818,7 +839,7 @@ void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     bool bNoShearRota=(aGeo.nRotationAngle==0 && aGeo.nShearAngle==0);
     SdrTextObj::NbcResize(rRef,xFact,yFact);
     bNoShearRota|=(aGeo.nRotationAngle==0 && aGeo.nShearAngle==0);
-    if (meCircleKind!=OBJ_CIRC) {
+    if (meCircleKind!=SdrCircKind::Full) {
         bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
         bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
         if (bXMirr || bYMirr) {
@@ -872,7 +893,7 @@ void SdrCircObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShea
 
 void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
-    bool bFreeMirr=meCircleKind!=OBJ_CIRC;
+    bool bFreeMirr=meCircleKind!=SdrCircKind::Full;
     Point aTmpPt1;
     Point aTmpPt2;
     if (bFreeMirr) { // some preparations for using an arbitrary axis of reflection
@@ -903,7 +924,7 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         }
     }
     SdrTextObj::NbcMirror(rRef1,rRef2);
-    if (meCircleKind!=OBJ_CIRC) { // adapt starting and finishing angle
+    if (meCircleKind!=SdrCircKind::Full) { // adapt starting and finishing angle
         MirrorPoint(aTmpPt1,rRef1,rRef2);
         MirrorPoint(aTmpPt2,rRef1,rRef2);
         // unrotate:
@@ -965,7 +986,7 @@ static void Union(tools::Rectangle& rR, const Point& rP)
 void SdrCircObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 {
     rRect = maRect;
-    if (meCircleKind!=OBJ_CIRC) {
+    if (meCircleKind!=SdrCircKind::Full) {
         const Point aPntStart(GetAnglePnt(maRect,nStartAngle));
         const Point aPntEnd(GetAnglePnt(maRect,nEndAngle));
         long a=nStartAngle;
@@ -988,7 +1009,7 @@ void SdrCircObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
         if ((a<=9000 && e>=9000) || (a>e && (a<=9000 || e>=9000))) {
             Union(rRect,maRect.TopCenter());
         }
-        if (meCircleKind==OBJ_SECT) {
+        if (meCircleKind==SdrCircKind::Section) {
             Union(rRect,maRect.Center());
         }
         if (aGeo.nRotationAngle!=0) {
@@ -1026,7 +1047,7 @@ void SdrCircObj::RecalcSnapRect()
 
 void SdrCircObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
-    if (aGeo.nRotationAngle!=0 || aGeo.nShearAngle!=0 || meCircleKind!=OBJ_CIRC) {
+    if (aGeo.nRotationAngle!=0 || aGeo.nShearAngle!=0 || meCircleKind!=SdrCircKind::Full) {
         tools::Rectangle aSR0(GetSnapRect());
         long nWdt0=aSR0.Right()-aSR0.Left();
         long nHgt0=aSR0.Bottom()-aSR0.Top();
@@ -1045,7 +1066,7 @@ void SdrCircObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 
 sal_uInt32 SdrCircObj::GetSnapPointCount() const
 {
-    if (meCircleKind==OBJ_CIRC) {
+    if (meCircleKind==SdrCircKind::Full) {
         return 1;
     } else {
         return 3;
@@ -1072,17 +1093,7 @@ void SdrCircObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 void SdrCircObj::ImpSetAttrToCircInfo()
 {
     const SfxItemSet& rSet = GetObjectItemSet();
-    SdrCircKind eNewKindA = rSet.Get(SDRATTR_CIRCKIND).GetValue();
-    SdrObjKind eNewKind = meCircleKind;
-
-    if(eNewKindA == SDRCIRC_FULL)
-        eNewKind = OBJ_CIRC;
-    else if(eNewKindA == SDRCIRC_SECT)
-        eNewKind = OBJ_SECT;
-    else if(eNewKindA == SDRCIRC_ARC)
-        eNewKind = OBJ_CARC;
-    else if(eNewKindA == SDRCIRC_CUT)
-        eNewKind = OBJ_CCUT;
+    SdrCircKind eNewKind = rSet.Get(SDRATTR_CIRCKIND).GetValue();
 
     sal_Int32 nNewStart = rSet.Get(SDRATTR_CIRCSTARTANGLE).GetValue();
     sal_Int32 nNewEnd = rSet.Get(SDRATTR_CIRCENDANGLE).GetValue();
@@ -1096,7 +1107,7 @@ void SdrCircObj::ImpSetAttrToCircInfo()
         nStartAngle = nNewStart;
         nEndAngle = nNewEnd;
 
-        if(bKindChg || (meCircleKind != OBJ_CIRC && bAngleChg))
+        if(bKindChg || (meCircleKind != SdrCircKind::Full && bAngleChg))
         {
             SetXPolyDirty();
             SetRectsDirty();
@@ -1106,27 +1117,19 @@ void SdrCircObj::ImpSetAttrToCircInfo()
 
 void SdrCircObj::ImpSetCircInfoToAttr()
 {
-    SdrCircKind eNewKindA = SDRCIRC_FULL;
     const SfxItemSet& rSet = GetObjectItemSet();
-
-    if(meCircleKind == OBJ_SECT)
-        eNewKindA = SDRCIRC_SECT;
-    else if(meCircleKind == OBJ_CARC)
-        eNewKindA = SDRCIRC_ARC;
-    else if(meCircleKind == OBJ_CCUT)
-        eNewKindA = SDRCIRC_CUT;
 
     SdrCircKind eOldKindA = rSet.Get(SDRATTR_CIRCKIND).GetValue();
     sal_Int32 nOldStartAngle = rSet.Get(SDRATTR_CIRCSTARTANGLE).GetValue();
     sal_Int32 nOldEndAngle = rSet.Get(SDRATTR_CIRCENDANGLE).GetValue();
 
-    if(eNewKindA != eOldKindA || nStartAngle != nOldStartAngle || nEndAngle != nOldEndAngle)
+    if(meCircleKind != eOldKindA || nStartAngle != nOldStartAngle || nEndAngle != nOldEndAngle)
     {
         // since SetItem() implicitly calls ImpSetAttrToCircInfo()
         // setting the item directly is necessary here.
-        if(eNewKindA != eOldKindA)
+        if(meCircleKind != eOldKindA)
         {
-            GetProperties().SetObjectItemDirect(SdrCircKindItem(eNewKindA));
+            GetProperties().SetObjectItemDirect(SdrCircKindItem(meCircleKind));
         }
 
         if(nStartAngle != nOldStartAngle)
@@ -1146,7 +1149,7 @@ void SdrCircObj::ImpSetCircInfoToAttr()
 
 SdrObject* SdrCircObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
-    const bool bFill(meCircleKind != OBJ_CARC);
+    const bool bFill(meCircleKind != SdrCircKind::Arc);
     const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, maRect, nStartAngle, nEndAngle));
     SdrObject* pRet = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aCircPolygon), bFill, bBezier);
 
