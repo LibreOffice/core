@@ -761,7 +761,7 @@ public:
 
         @param eStyle  The notation of rFSysPath.
      */
-    inline INetURLObject(OUString const & rFSysPath, FSysStyle eStyle);
+    inline INetURLObject(OUString const & rFSysPath, FSysStyle eStyle)=delete;
 
     /** Set this INetURLObject to a file URL constructed from a file system
         path.
@@ -1307,13 +1307,6 @@ inline bool INetURLObject::SetMark(OUString const & rTheFragment,
     return rTheFragment.isEmpty() ?
                clearFragment() :
                setFragment(rTheFragment, eMechanism, eCharset);
-}
-
-inline INetURLObject::INetURLObject(OUString const & rFSysPath,
-                                    FSysStyle eStyle):
-    m_eScheme(INetProtocol::NotValid), m_eSmartScheme(INetProtocol::Http)
-{
-    setFSysPath(rFSysPath, eStyle);
 }
 
 // static
