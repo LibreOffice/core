@@ -21,15 +21,11 @@
 
 #include <svx/svddef.hxx>
 #include <svl/eitem.hxx>
-
-enum SdrCircKind {SDRCIRC_FULL,
-                  SDRCIRC_SECT,
-                  SDRCIRC_CUT,
-                  SDRCIRC_ARC};
+#include <svx/svdocirc.hxx>
 
 class SdrCircKindItem: public SfxEnumItem<SdrCircKind> {
 public:
-    SdrCircKindItem(SdrCircKind eKind=SDRCIRC_FULL): SfxEnumItem(SDRATTR_CIRCKIND, eKind) {}
+    SdrCircKindItem(SdrCircKind eKind=SdrCircKind::Full): SfxEnumItem(SDRATTR_CIRCKIND, eKind) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual sal_uInt16   GetValueCount() const override; // { return 4; }
 

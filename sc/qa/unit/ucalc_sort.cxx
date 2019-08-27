@@ -1914,7 +1914,7 @@ void Test::testSortImages()
 
     // Insert graphic in cell B2.
     const tools::Rectangle aOrigRect(1000, 1000, 1200, 1200);
-    SdrCircObj* pObj = new SdrCircObj(*pDrawLayer, OBJ_CIRC, aOrigRect);
+    SdrCircObj* pObj = new SdrCircObj(*pDrawLayer, SdrCircKind::Full, aOrigRect);
     SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT(pPage);
     pPage->InsertObject(pObj);

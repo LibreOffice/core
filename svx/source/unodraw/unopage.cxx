@@ -785,7 +785,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInvent
                     pRet = new SvxTableShape( pObj );
                     break;
                 default: // unknown 2D-object on page
-                    OSL_FAIL("Not implemented Starone-Shape created! [CL]");
+                    assert(false && "Not implemented Starone-Shape created");
                     pRet = new SvxShapeText( pObj );
                     break;
             }
@@ -793,7 +793,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInvent
         }
         default: // unknown inventor
         {
-            OSL_FAIL("AW: Unknown Inventor in SvxDrawPage::CreateShape()");
+            assert(false && "Unknown Inventor in SvxDrawPage::CreateShape()");
             break;
         }
     }

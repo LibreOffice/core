@@ -638,7 +638,7 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
 
     SdrCircObj* pCircle = new SdrCircObj(
         *pModel,
-        OBJ_CIRC,
+        SdrCircKind::Full,
         aRect);
     SfxItemSet& rAttrSet = rData.GetCircleSet();
 
