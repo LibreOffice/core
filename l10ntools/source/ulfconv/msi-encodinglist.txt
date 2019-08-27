@@ -149,6 +149,7 @@ st       0  1072   # Southern Sotho, Sutu
 sv       0  1053
 sw       0  1089   # Swahili
 sw-TZ    0  1089   # Swahili
+szl      0  1689   # Silesian
 so       0  1143
 ta       0  1097   # Tamil
 ta-IN    0  1097   # Tamil
