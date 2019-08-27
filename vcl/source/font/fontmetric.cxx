@@ -485,8 +485,8 @@ void ImplFontMetricData::ImplCalcLineSpacing(const std::vector<uint8_t>& rHheaDa
     if (mnAscent || mnDescent)
         mnIntLeading = mnAscent + mnDescent - mnHeight;
 
-    SAL_INFO("vcl.gdi.fontmetric",
-                  "fsSelection: "   << rInfo.fsSelection
+    SAL_INFO("vcl.gdi.fontmetric", GetFamilyName()
+             << ": fsSelection: "   << rInfo.fsSelection
              << ", typoAscender: "  << rInfo.typoAscender
              << ", typoDescender: " << rInfo.typoDescender
              << ", typoLineGap: "   << rInfo.typoLineGap
