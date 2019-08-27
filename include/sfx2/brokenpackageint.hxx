@@ -37,7 +37,7 @@ public:
     ~RequestPackageReparation();
     RequestPackageReparation( const RequestPackageReparation&) = delete;
     RequestPackageReparation& operator=( const RequestPackageReparation&) = delete;
-    bool    isApproved();
+    bool    isApproved() const;
     css::uno::Reference < css::task::XInteractionRequest > GetRequest();
 };
 

@@ -298,7 +298,7 @@ public:
 
     void FreeDocumentProps();
 
-    uno::Reference< frame::XModel > const & GetModel();
+    uno::Reference< frame::XModel > const & GetModel() const;
     uno::Reference< frame::XStorable > const & GetStorable();
     uno::Reference< frame::XStorable2 > const & GetStorable2();
 
@@ -376,7 +376,7 @@ void ModelData_Impl::FreeDocumentProps()
 }
 
 
-uno::Reference< frame::XModel > const & ModelData_Impl::GetModel()
+uno::Reference< frame::XModel > const & ModelData_Impl::GetModel() const
 {
     if ( !m_xModel.is() )
         throw uno::RuntimeException();

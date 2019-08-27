@@ -142,7 +142,7 @@ public:
     ErrCode             GetErrorCode() const;
     ErrCode             GetError() const
                         { return GetErrorCode().IgnoreWarning(); }
-    ErrCode const &     GetLastStorageCreationState();
+    ErrCode const &     GetLastStorageCreationState() const;
 
     void                SetError(ErrCode nError);
 
@@ -203,8 +203,8 @@ public:
 
     OUString            GetBaseURL( bool bForSaving=false );
     void                SetInCheckIn( bool bInCheckIn );
-    bool                IsInCheckIn( );
-    bool                IsSkipImages( );
+    bool                IsInCheckIn( ) const;
+    bool                IsSkipImages( ) const;
 
     SAL_DLLPRIVATE bool HasStorage_Impl() const;
 
@@ -238,7 +238,7 @@ public:
 
     SAL_DLLPRIVATE void SetLongName(const OUString &rName);
     SAL_DLLPRIVATE const OUString & GetLongName() const;
-    SAL_DLLPRIVATE bool IsPreview_Impl();
+    SAL_DLLPRIVATE bool IsPreview_Impl() const;
     SAL_DLLPRIVATE void ClearBackup_Impl();
     SAL_DLLPRIVATE void SetPhysicalName_Impl(const OUString& rName);
     SAL_DLLPRIVATE void CanDisposeStorage_Impl( bool bDisposeStorage );
@@ -279,7 +279,7 @@ public:
     // the following two methods must be used and make sense only during saving currently
     // TODO/LATER: in future the signature state should be controlled by the medium not by the document
     //             in this case the methods will be used generally, and might need to be renamed
-    SAL_DLLPRIVATE SignatureState GetCachedSignatureState_Impl();
+    SAL_DLLPRIVATE SignatureState GetCachedSignatureState_Impl() const;
     SAL_DLLPRIVATE void       SetCachedSignatureState_Impl( SignatureState nState );
 
     void SetHasEmbeddedObjects(bool bHasEmbeddedObjects);

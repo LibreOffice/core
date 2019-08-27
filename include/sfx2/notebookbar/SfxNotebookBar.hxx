@@ -54,7 +54,7 @@ public:
     /** Show menu bar only in current frame */
     static void ShowMenubar(SfxViewFrame const * pViewFrame, bool bShow);
     static void ToggleMenubar();
-    static void ReloadNotebookBar(OUString& sUIPath);
+    static void ReloadNotebookBar(const OUString& sUIPath);
 
 private:
     static bool m_bLock;

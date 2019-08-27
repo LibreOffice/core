@@ -24,8 +24,8 @@ public:
     SfxCheckinDialog(weld::Window* pParent);
     virtual ~SfxCheckinDialog() override;
 
-    OUString GetComment();
-    bool IsMajor();
+    OUString GetComment() const;
+    bool IsMajor() const;
 };
 
 #endif

@@ -113,7 +113,7 @@ protected:
     void localSearchMoveTo (sal_uInt16 nMenuId);
 
     /// Return filter according to the currently selected application filter.
-    FILTER_APPLICATION getCurrentApplicationFilter();
+    FILTER_APPLICATION getCurrentApplicationFilter() const;
 
 protected:
     std::set<const ThumbnailViewItem*,selection_cmp_fn> maSelTemplates;

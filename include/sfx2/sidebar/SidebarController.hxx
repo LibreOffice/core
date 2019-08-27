@@ -164,7 +164,7 @@ public:
 
     css::uno::Reference<css::frame::XFrame> const & getXFrame() const {return mxFrame;}
 
-    sal_Int32 getMaximumWidth() { return mnMaximumSidebarWidth; }
+    sal_Int32 getMaximumWidth() const { return mnMaximumSidebarWidth; }
     void setMaximumWidth(sal_Int32 nMaximumWidth) { mnMaximumSidebarWidth = nMaximumWidth; }
 
 private:
