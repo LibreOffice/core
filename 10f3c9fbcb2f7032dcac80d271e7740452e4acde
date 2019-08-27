@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_dc5ab6f1",
+        "filename": "vcl/win/gdi/salprn.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1508,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-08-27T10:32:18Z",
+      "side": 1,
+      "message": "Interesting. Didn\u0027t know this existed.\n\nMaybe this also needs SetForceRealTimer handling? Does StartDocW block LO refresh after moving the dialog over LO a bit. Then it needs a call to SetForceRealTimer(true).",
+      "revId": "10f3c9fbcb2f7032dcac80d271e7740452e4acde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
