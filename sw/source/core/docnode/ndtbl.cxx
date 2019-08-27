@@ -218,7 +218,7 @@ SwTableNode* SwDoc::IsIdxInTable(const SwNodeIndex& rIdx)
     SwTableNode* pTableNd = nullptr;
     sal_uLong nIndex = rIdx.GetIndex();
     do {
-        SwNode* pNd = static_cast<SwNode*>(GetNodes()[ nIndex ]->StartOfSectionNode());
+        SwNode* pNd = GetNodes()[ nIndex ]->StartOfSectionNode();
         if( nullptr != ( pTableNd = pNd->GetTableNode() ) )
             break;
 

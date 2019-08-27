@@ -361,7 +361,7 @@ Size NotebookbarTabControl::calculateRequisition() const
 
     for (int i = 0; i < GetPageCount(); i++)
     {
-        vcl::Window* pChild = static_cast<vcl::Window*>(GetTabPage(TabControl::GetPageId(i)));
+        vcl::Window* pChild = GetTabPage(TabControl::GetPageId(i));
 
         if (pChild)
         {

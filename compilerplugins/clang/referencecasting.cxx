@@ -342,46 +342,6 @@ static const RecordType* extractTemplateType(const clang::Type* cceType)
     return dyn_cast<RecordType>(templateParamType);
 }
 
-static int derivedFromCount(QualType qt, const CXXRecordDecl* baseRecord);
-
-static int derivedFromCount(const CXXRecordDecl* subtypeRecord, const CXXRecordDecl* baseRecord)
-{
-    if (!subtypeRecord->hasDefinition())
-        return 0;
-    int derivedCount = 0;
-    for (auto it = subtypeRecord->bases_begin(); it != subtypeRecord->bases_end(); ++it)
-    {
-        derivedCount += derivedFromCount(it->getType(), baseRecord);
-        if (derivedCount > 1)
-            return derivedCount;
-    }
-    for (auto it = subtypeRecord->vbases_begin(); it != subtypeRecord->vbases_end(); ++it)
-    {
-        derivedCount += derivedFromCount(it->getType(), baseRecord);
-        if (derivedCount > 1)
-            return derivedCount;
-    }
-    return derivedCount;
-}
-
-static int derivedFromCount(QualType qt, const CXXRecordDecl* baseRecord)
-{
-    int derivedCount = 0;
-    auto type = qt.getTypePtr();
-    if (auto elaboratedType = dyn_cast<ElaboratedType>(type))
-        type = elaboratedType->desugar().getTypePtr();
-    if (auto recordType = dyn_cast<RecordType>(type))
-    {
-        if (auto cxxRecordDecl = dyn_cast<CXXRecordDecl>(recordType->getDecl()))
-        {
-            if (cxxRecordDecl->Equals(baseRecord))
-                derivedCount++;
-            derivedCount += derivedFromCount(cxxRecordDecl, baseRecord);
-        }
-    }
-    return derivedCount;
-}
-
 /**
   Implement my own isDerived because we can't always see all the definitions of the classes involved.
   which will cause an assert with the normal clang isDerivedFrom code.
@@ -390,7 +350,7 @@ static bool isDerivedFrom(const CXXRecordDecl* subtypeRecord, const CXXRecordDec
 {
     // if there is more than one case, then we have an ambiguous conversion, and we can't change the code
     // to use the upcasting constructor.
-    return derivedFromCount(subtypeRecord, baseRecord) == 1;
+    return loplugin::derivedFromCount(subtypeRecord, baseRecord) == 1;
 }
 
 loplugin::Plugin::Registration<ReferenceCasting> referencecasting("referencecasting");

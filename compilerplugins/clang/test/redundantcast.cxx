@@ -392,6 +392,20 @@ void testArrayDecay() {
     (void) reinterpret_cast<char const *>(u8"");
 }
 
+void testNew() {
+    class A {};
+    class B : public A {};
+    A* p = static_cast<A*>(new B); // expected-error {{redundant static_cast from 'B *' to 'A *' [loplugin:redundantcast]}}
+    (void)p;
+    // no warning expected for resolving-ambiguity cast
+    class C : public A {};
+    class D : public B, public C {};
+    p = static_cast<B*>(new D);
+    // no warning expected for down-cast
+    auto p2 = static_cast<B*>(p);
+    (void)p2;
+}
+
 int main() {
     testConstCast();
     testStaticCast();

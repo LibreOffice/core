@@ -749,7 +749,7 @@ void SwTextAdjuster::CalcDropAdjust()
         if( pPor->InGlueGrp() && pPor->GetNextPortion()
               && pPor->GetNextPortion()->IsDropPortion() )
         {
-            const SwLinePortion *pDropPor = static_cast<SwDropPortion*>( pPor->GetNextPortion() );
+            const SwLinePortion *pDropPor = pPor->GetNextPortion();
             SwGluePortion *pLeft = static_cast<SwGluePortion*>( pPor );
 
             // 4) pRight: Find the GluePor coming after the DropPor

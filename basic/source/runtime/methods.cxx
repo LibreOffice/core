@@ -4245,7 +4245,7 @@ void SbRtl_Load(StarBASIC *, SbxArray & rPar, bool)
     }
 
 
-    SbxBase* pObj = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
+    SbxBase* pObj = rPar.Get(1)->GetObject();
     if ( pObj )
     {
         if (SbUserFormModule* pModule = dynamic_cast<SbUserFormModule*>(pObj))
@@ -4273,7 +4273,7 @@ void SbRtl_Unload(StarBASIC *, SbxArray & rPar, bool)
     }
 
 
-    SbxBase* pObj = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
+    SbxBase* pObj = rPar.Get(1)->GetObject();
     if ( pObj )
     {
         if (SbUserFormModule* pFormModule = dynamic_cast<SbUserFormModule*>(pObj))
@@ -4322,7 +4322,7 @@ void SbRtl_SavePicture(StarBASIC *, SbxArray & rPar, bool)
         return;
     }
 
-    SbxBase* pObj = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
+    SbxBase* pObj = rPar.Get(1)->GetObject();
     if (SbStdPicture *pPicture = dynamic_cast<SbStdPicture*>(pObj))
     {
         SvFileStream aOStream( rPar.Get(2)->GetOUString(), StreamMode::WRITE | StreamMode::TRUNC );

@@ -471,7 +471,7 @@ bool SwCursorShell::bColumnChange()
         if(pParent!=nullptr)
         {
             pCurrCol=static_cast<SwFrame*>(pParent)->FindColFrame();
-            pCurrFrame = static_cast<SwFrame*>(pParent);
+            pCurrFrame = pParent;
         }
         else
         {

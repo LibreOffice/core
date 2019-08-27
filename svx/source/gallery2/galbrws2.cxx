@@ -1139,9 +1139,9 @@ void GalleryBrowser2::Execute(const OString &rIdent)
 
             switch( GetMode() )
             {
-                case GALLERYBROWSERMODE_ICON: pWindow = static_cast<vcl::Window*>(mpIconView); break;
-                case GALLERYBROWSERMODE_LIST: pWindow = static_cast<vcl::Window*>(mpListView); break;
-                case GALLERYBROWSERMODE_PREVIEW: pWindow = static_cast<vcl::Window*>(mpPreview); break;
+                case GALLERYBROWSERMODE_ICON: pWindow = mpIconView; break;
+                case GALLERYBROWSERMODE_LIST: pWindow = mpListView; break;
+                case GALLERYBROWSERMODE_PREVIEW: pWindow = mpPreview; break;
 
                 default:
                     pWindow = nullptr;

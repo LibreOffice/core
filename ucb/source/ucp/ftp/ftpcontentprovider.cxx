@@ -124,8 +124,7 @@ static css::uno::Reference< css::uno::XInterface >
 FTPContentProvider_CreateInstance( const css::uno::Reference<
                                    css::lang::XMultiServiceFactory> & rSMgr )
 {
-    css::lang::XServiceInfo* pX = static_cast<css::lang::XServiceInfo*>(
-        new FTPContentProvider( ucbhelper::getComponentContext(rSMgr) ));
+    css::lang::XServiceInfo* pX = new FTPContentProvider( ucbhelper::getComponentContext(rSMgr) );
     return css::uno::Reference< css::uno::XInterface >::query( pX );
 }
 

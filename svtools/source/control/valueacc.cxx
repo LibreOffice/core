@@ -296,7 +296,7 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueSetAcc::ge
     ThrowIfDisposed();
     SolarMutexGuard g;
     uno::Reference< accessibility::XAccessibleRelationSet > xRelSet;
-    vcl::Window* pWindow = static_cast<vcl::Window*>(mpParent);
+    vcl::Window* pWindow = mpParent;
     if ( pWindow )
     {
         utl::AccessibleRelationSetHelper* pRelationSet = new utl::AccessibleRelationSetHelper;

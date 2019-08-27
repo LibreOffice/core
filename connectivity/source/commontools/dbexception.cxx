@@ -247,7 +247,7 @@ SQLExceptionIteratorHelper::SQLExceptionIteratorHelper( const SQLExceptionInfo& 
 {
     if ( _rChainStart.isValid() )
     {
-        m_pCurrent = static_cast<const SQLException*>(_rChainStart);
+        m_pCurrent = _rChainStart;
         m_eCurrentType = _rChainStart.getType();
     }
 }

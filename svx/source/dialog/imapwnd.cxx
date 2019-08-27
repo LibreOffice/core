@@ -193,10 +193,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             // clipped on CanvasPane
             aDrawRect.Intersection( aClipRect );
 
-            pSdrObj = static_cast<SdrObject*>(
-                new SdrRectObj(
-                    *pModel,
-                    aDrawRect));
+            pSdrObj = new SdrRectObj(*pModel, aDrawRect);
             pCloneIMapObj.reset(static_cast<IMapObject*>(new IMapRectangleObject( *pIMapRectObj )));
         }
         break;
@@ -212,13 +209,12 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             // limited to CanvasPane
             aCircle.Intersection( aClipRect );
 
-            pSdrObj = static_cast<SdrObject*>(
-                new SdrCircObj(
+            pSdrObj = new SdrCircObj(
                     *pModel,
                     SdrCircKind::Full,
                     aCircle,
                     0,
-                    36000));
+                    36000);
             pCloneIMapObj.reset(static_cast<IMapObject*>(new IMapCircleObject( *pIMapCircleObj )));
         }
         break;
@@ -235,13 +231,12 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
                 // clipped on CanvasPane
                 aDrawRect.Intersection( aClipRect );
 
-                pSdrObj = static_cast<SdrObject*>(
-                    new SdrCircObj(
+                pSdrObj = new SdrCircObj(
                         *pModel,
                         SdrCircKind::Full,
                         aDrawRect,
                         0,
-                        36000));
+                        36000);
             }
             else
             {
@@ -253,11 +248,10 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
 
                 basegfx::B2DPolygon aPolygon;
                 aPolygon.append(aDrawPoly.getB2DPolygon());
-                pSdrObj = static_cast<SdrObject*>(
-                    new SdrPathObj(
+                pSdrObj = new SdrPathObj(
                         *pModel,
                         OBJ_POLY,
-                        basegfx::B2DPolyPolygon(aPolygon)));
+                        basegfx::B2DPolyPolygon(aPolygon));
             }
 
             pCloneIMapObj.reset(static_cast<IMapObject*>(new IMapPolygonObject( *pIMapPolyObj )));

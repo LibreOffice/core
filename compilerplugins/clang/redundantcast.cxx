@@ -28,6 +28,7 @@
 #include "check.hxx"
 #include "compat.hxx"
 #include "plugin.hxx"
+#include <iostream>
 
 namespace {
 
@@ -136,8 +137,12 @@ public:
     bool VisitBinNE(BinaryOperator const * expr)
     { return visitBinOp(expr); }
 
+    bool VisitBinAssign(BinaryOperator const * binaryOperator);
+    bool VisitVarDecl(VarDecl const * varDecl);
+
 private:
     bool visitBinOp(BinaryOperator const * expr);
+    void visitAssign(QualType lhs, Expr const * rhs);
     bool isOverloadedFunction(FunctionDecl const * decl);
 };
 
@@ -332,6 +337,55 @@ bool RedundantCast::VisitCStyleCastExpr(CStyleCastExpr const * expr) {
         "redundant cstyle cast from %0 to %1", expr->getExprLoc())
         << t1 << t2 << expr->getSourceRange();
     return true;
+}
+
+bool RedundantCast::VisitBinAssign(BinaryOperator const * binaryOperator) {
+    if (ignoreLocation(binaryOperator)) {
+        return true;
+    }
+    visitAssign(binaryOperator->getLHS()->getType(), binaryOperator->getRHS());
+    return true;
+}
+
+bool RedundantCast::VisitVarDecl(VarDecl const * varDecl) {
+    if (ignoreLocation(varDecl)) {
+        return true;
+    }
+    if (!varDecl->getInit())
+        return true;
+    visitAssign(varDecl->getType(), varDecl->getInit());
+    return true;
+}
+
+void RedundantCast::visitAssign(QualType t1, Expr const * rhs)
+{
+    auto staticCastExpr = dyn_cast<CXXStaticCastExpr>(rhs->IgnoreImplicit());
+    if (!staticCastExpr)
+        return;
+
+    auto const t2 = staticCastExpr->getSubExpr()->IgnoreImplicit()->getType();
+
+    // if there is more than one copy of the LHS, this cast is resolving ambiguity
+    bool foundOne = false;
+    if (t1->isRecordType())
+    {
+        foundOne = loplugin::derivedFromCount(t2, t1) == 1;
+    }
+    else
+    {
+        auto pointee1 = t1->getPointeeCXXRecordDecl();
+        auto pointee2 = t2->getPointeeCXXRecordDecl();
+        if (pointee1 && pointee2)
+            foundOne = loplugin::derivedFromCount(pointee2, pointee1) == 1;
+    }
+
+    if (foundOne)
+    {
+        report(
+            DiagnosticsEngine::Warning, "redundant static_cast from %0 to %1",
+            staticCastExpr->getExprLoc())
+            << t2 << t1 << staticCastExpr->getSourceRange();
+    }
 }
 
 bool RedundantCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {

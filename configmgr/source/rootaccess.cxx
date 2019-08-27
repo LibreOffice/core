@@ -79,7 +79,7 @@ void RootAccess::initBroadcaster(
         css::util::ChangesSet set(comphelper::containerToSequence(changes));
         for (auto const& changesListener : changesListeners_)
         {
-            cppu::OWeakObject* pSource = static_cast< cppu::OWeakObject * >(this);
+            cppu::OWeakObject* pSource = this;
             css::uno::Reference< css::uno::XInterface > xBase( pSource, css::uno::UNO_QUERY );
             broadcaster->addChangesNotification(
                 changesListener,

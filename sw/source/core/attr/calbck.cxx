@@ -283,7 +283,7 @@ SwClient* SwModify::Remove( SwClient* pDepend )
             {
                 // if object being removed is the current or next object in an
                 // iterator, advance this iterator
-                rIter.m_pPosition = static_cast<SwClient*>(pR);
+                rIter.m_pPosition = pR;
             }
         }
     }
