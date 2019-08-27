@@ -67,7 +67,7 @@ namespace
 
 class FontCfgWrapper
 {
-    FcFontSet* m_pOutlineSet;
+    FcFontSet* m_pFontSet;
 
     void addFontSet( FcSetName );
 
@@ -95,17 +95,14 @@ private:
 };
 
 FontCfgWrapper::FontCfgWrapper()
-    : m_pOutlineSet( nullptr )
+    : m_pFontSet( nullptr )
 {
     FcInit();
 }
 
 void FontCfgWrapper::addFontSet( FcSetName eSetName )
 {
-    /*
-      add only acceptable outlined fonts to our config,
-      for future fontconfig use
-    */
+    // Add only acceptable fonts to our config, for future fontconfig use.
     FcFontSet* pOrig = FcConfigGetFonts( FcConfigGetCurrent(), eSetName );
     if( !pOrig )
         return;
@@ -114,10 +111,12 @@ void FontCfgWrapper::addFontSet( FcSetName eSetName )
     for( int i = 0; i < pOrig->nfont; ++i )
     {
         FcPattern* pPattern = pOrig->fonts[i];
-        // #i115131# ignore non-outline fonts
-        FcBool bOutline = FcFalse;
-        FcResult eOutRes = FcPatternGetBool( pPattern, FC_OUTLINE, 0, &bOutline );
-        if( (eOutRes != FcResultMatch) || (bOutline == FcFalse) )
+        // #i115131# ignore non-scalable fonts
+        // Scalable fonts are usually outline fonts, but some bitmaps fonts
+        // (like Noto Color Emoji) are also scalable.
+        FcBool bScalable = FcFalse;
+        FcResult eScalableRes = FcPatternGetBool(pPattern, FC_SCALABLE, 0, &bScalable);
+        if ((eScalableRes != FcResultMatch) || (bScalable == FcFalse))
             continue;
 
         // Ignore Type 1 fonts, too.
@@ -127,7 +126,7 @@ void FontCfgWrapper::addFontSet( FcSetName eSetName )
             continue;
 
         FcPatternReference( pPattern );
-        FcFontSetAdd( m_pOutlineSet, pPattern );
+        FcFontSetAdd( m_pFontSet, pPattern );
     }
 
     // TODO?: FcFontSetDestroy( pOrig );
@@ -218,16 +217,16 @@ namespace
 
 FcFontSet* FontCfgWrapper::getFontSet()
 {
-    if( !m_pOutlineSet )
+    if( !m_pFontSet )
     {
-        m_pOutlineSet = FcFontSetCreate();
+        m_pFontSet = FcFontSetCreate();
         addFontSet( FcSetSystem );
         addFontSet( FcSetApplication );
 
-        ::std::sort(m_pOutlineSet->fonts,m_pOutlineSet->fonts+m_pOutlineSet->nfont,SortFont());
+        ::std::sort(m_pFontSet->fonts,m_pFontSet->fonts+m_pFontSet->nfont,SortFont());
     }
 
-    return m_pOutlineSet;
+    return m_pFontSet;
 }
 
 FontCfgWrapper::~FontCfgWrapper()
@@ -372,10 +371,10 @@ void FontCfgWrapper::clear()
 {
     m_aFontNameToLocalized.clear();
     m_aLocalizedToCanonical.clear();
-    if( m_pOutlineSet )
+    if( m_pFontSet )
     {
-        FcFontSetDestroy( m_pOutlineSet );
-        m_pOutlineSet = nullptr;
+        FcFontSetDestroy( m_pFontSet );
+        m_pFontSet = nullptr;
     }
     m_pLanguageTag.reset();
 }
@@ -506,7 +505,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int>& o
             int width = 0;
             int spacing = 0;
             int nEntryId = -1;
-            FcBool outline = false;
+            FcBool scalable = false;
 
             FcResult eFileRes         = FcPatternGetString(pFSet->fonts[i], FC_FILE, 0, &file);
             FcResult eFamilyRes       = rWrapper.LocalizedElementFromPattern( pFSet->fonts[i], &family, FC_FAMILY, FC_FAMILYLANG );
@@ -517,11 +516,11 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int>& o
             FcResult eWeightRes       = FcPatternGetInteger(pFSet->fonts[i], FC_WEIGHT, 0, &weight);
             FcResult eWidthRes        = FcPatternGetInteger(pFSet->fonts[i], FC_WIDTH, 0, &width);
             FcResult eSpacRes         = FcPatternGetInteger(pFSet->fonts[i], FC_SPACING, 0, &spacing);
-            FcResult eOutRes          = FcPatternGetBool(pFSet->fonts[i], FC_OUTLINE, 0, &outline);
+            FcResult eScalableRes     = FcPatternGetBool(pFSet->fonts[i], FC_SCALABLE, 0, &scalable);
             FcResult eIndexRes        = FcPatternGetInteger(pFSet->fonts[i], FC_INDEX, 0, &nEntryId);
             FcResult eFormatRes       = FcPatternGetString(pFSet->fonts[i], FC_FONTFORMAT, 0, &format);
 
-            if( eFileRes != FcResultMatch || eFamilyRes != FcResultMatch || eOutRes != FcResultMatch )
+            if( eFileRes != FcResultMatch || eFamilyRes != FcResultMatch || eScalableRes != FcResultMatch )
                 continue;
 
             SAL_INFO(
@@ -531,15 +530,15 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int>& o
                 << (eSpacRes == FcResultMatch ? slant : -1) << ", style = \""
                 << (eStyleRes == FcResultMatch ? reinterpret_cast<const char*>(style) : "<nil>")
                 << "\",  width = " << (eWeightRes == FcResultMatch ? width : -1) << ", spacing = "
-                << (eSpacRes == FcResultMatch ? spacing : -1) << ", outline = "
-                << (eOutRes == FcResultMatch ? outline : -1) << ", format "
+                << (eSpacRes == FcResultMatch ? spacing : -1) << ", scalable = "
+                << (eScalableRes == FcResultMatch ? scalable : -1) << ", format "
                 << (eFormatRes == FcResultMatch
                     ? reinterpret_cast<const char*>(format) : "<unknown>"));
 
-//            OSL_ASSERT(eOutRes != FcResultMatch || outline);
+//            OSL_ASSERT(eScalableRes != FcResultMatch || scalable);
 
-            // only outline fonts are usable to psprint anyway
-            if( eOutRes == FcResultMatch && ! outline )
+            // only scalable fonts are usable to psprint anyway
+            if( eScalableRes == FcResultMatch && ! scalable )
                 continue;
 
             if (isPreviouslyDuplicateOrObsoleted(pFSet, i))
