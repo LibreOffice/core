@@ -15,6 +15,8 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,gpgmepp,0))
 
 # * external/gpgmepp/version.patch upstream at <https://dev.gnupg.org/T4168> "gpgme: `make dist`
 #   introduced VERSION can clash with new C++ <version>":
+# * external/gpgmepp/add-gpgme_set_global_flag-wrapper.patch upstreamed and merged at
+#   <https://dev.gnupg.org/T4471> "No gpgmepp API to call gpgme_set_global_flag"
 $(eval $(call gb_UnpackedTarball_add_patches,gpgmepp, \
     external/gpgmepp/find-libgpg-error-libassuan.patch \
     external/gpgmepp/fix-autoconf-macros.patch \
