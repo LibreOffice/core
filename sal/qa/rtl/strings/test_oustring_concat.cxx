@@ -12,6 +12,7 @@
 extern bool rtl_string_unittest_invalid_concat;
 
 #include <sal/types.h>
+#include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -20,18 +21,19 @@ extern bool rtl_string_unittest_invalid_concat;
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 
+#include <string>
 #include <typeinfo>
 
 using namespace rtl;
 
-namespace std
+namespace CppUnit
 {
-template< typename charT, typename traits > static std::basic_ostream<charT, traits> &
-operator <<(
-    std::basic_ostream<charT, traits> & stream, const std::type_info& info )
+template<> struct assertion_traits<std::type_info>
 {
-    return stream << info.name();
-}
+    static bool equal(std::type_info const & x, std::type_info const & y) { return x == y; }
+
+    static std::string toString(std::type_info const & x) { return x.name(); }
+};
 } // namespace
 
 namespace test { namespace oustring {
