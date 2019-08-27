@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_57ed1f23",
+        "filename": "vcl/source/window/NotebookBarAddonsMerger.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-08-27T19:22:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf659307_2bf7f1f7",
+      "revId": "dfee651c93f968a1e3bbb3e9f40d9f75428076fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_0bf46df1",
         "filename": "vcl/source/window/NotebookBarAddonsMerger.cxx",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_37eaeb0e",
+        "filename": "vcl/source/window/NotebookBarAddonsMerger.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-08-27T19:22:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf659307_0bf46df1",
+      "revId": "dfee651c93f968a1e3bbb3e9f40d9f75428076fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_cbdd1571",
         "filename": "vcl/source/window/builder.cxx",
         "patchSetId": 4
@@ -47,6 +83,24 @@
       "writtenOn": "2019-08-22T19:19:02Z",
       "side": 1,
       "message": "aI iterator will be always ok? no dereference errors possible?",
+      "revId": "dfee651c93f968a1e3bbb3e9f40d9f75428076fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_f7f31309",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2177,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-08-27T19:22:51Z",
+      "side": 1,
+      "message": "I don\u0027t think it would. \"aI\" is not being used anywhere else inside the scope.",
+      "parentUuid": "bf659307_cbdd1571",
       "revId": "dfee651c93f968a1e3bbb3e9f40d9f75428076fb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
