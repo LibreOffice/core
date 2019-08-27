@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_b99354a3",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-08-27T13:39:37Z",
+      "side": 1,
+      "message": "who are \"they\"? Sentence before is about \"the grid\" so \"it\".",
+      "range": {
+        "startLine": 612,
+        "startChar": 42,
+        "endLine": 612,
+        "endChar": 50
+      },
+      "revId": "56e31c1570476744847b0dce0a98a844f8933ee8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
