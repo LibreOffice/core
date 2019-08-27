@@ -17,8 +17,6 @@
 class ScOrcusFiltersImpl : public ScOrcusFilters
 {
 public:
-    static OString toSystemPath(const OUString& rPath);
-
     virtual bool importCSV(ScDocument& rDoc, SfxMedium& rMedium) const override;
     virtual bool importGnumeric(ScDocument& rDoc, SfxMedium& rMedium) const override;
     virtual bool importExcel2003XML(ScDocument& rDoc, SfxMedium& rMedium) const override;
