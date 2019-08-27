@@ -16,6 +16,7 @@
 #include <vcl/weld.hxx>
 #include <ucbhelper/content.hxx>
 #include <sal/log.hxx>
+#include <osl/file.hxx>
 
 #include <orcus/xml_structure_tree.hpp>
 #include <orcus/xml_namespace.hpp>
@@ -238,8 +239,14 @@ public:
 void ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
 {
     ScOrcusFactory aFactory(mrDoc, true);
-    OString aSysPath = ScOrcusFiltersImpl::toSystemPath(maPath);
-    const char* path = aSysPath.getStr();
+
+    OUString aSysPath;
+    if (osl::FileBase::getSystemPathFromFileURL(maPath, aSysPath) != osl::FileBase::E_None)
+        return;
+
+    OString aOSysPath = OUStringToOString(aSysPath, RTL_TEXTENCODING_UTF8);
+    const char* path = aOSysPath.getStr();
+
     try
     {
         orcus::orcus_xml filter(maNsRepo, &aFactory, nullptr);
