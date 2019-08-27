@@ -414,7 +414,7 @@ void SfxApplication::Invalidate( sal_uInt16 nId )
 #ifndef DISABLE_DYNLOADING
 
 typedef long (*basicide_handle_basic_error)(void const *);
-typedef void (*basicide_macro_organizer)(void const *, sal_Int16);
+typedef void (*basicide_macro_organizer)(void *, sal_Int16);
 
 extern "C" { static void thisModule() {} }
 
@@ -520,7 +520,7 @@ SfxApplication::ChooseScript(weld::Window *pParent)
     return aScriptURL;
 }
 
-void SfxApplication::MacroOrganizer(const weld::Window* pParent, sal_Int16 nTabId)
+void SfxApplication::MacroOrganizer(weld::Window* pParent, sal_Int16 nTabId)
 {
 #if !HAVE_FEATURE_SCRIPTING
     (void) pParent;
