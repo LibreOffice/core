@@ -16,6 +16,24 @@
       "revId": "3ae1052751d59111deecc36a159b25dc56dd7cb0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_dc14f650",
+        "filename": "editeng/source/editeng/editobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2019-08-27T17:15:27Z",
+      "side": 1,
+      "message": "The algorithm std::equal has no way to check that the third iterator we provide is always valid as long as it is incremented with the first iterator, so it\u0027s the developper\u0027s responsability to check that the two containers have the same number of elements.\n\nIf the second container had less elements than container1, std::equal would make the program crash.",
+      "parentUuid": "bf659307_7c184a74",
+      "revId": "3ae1052751d59111deecc36a159b25dc56dd7cb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
