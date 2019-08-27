@@ -135,17 +135,6 @@ public:
     }
 };
 
-class InsertFieldPath
-{
-    orcus::orcus_xml& mrFilter;
-public:
-    explicit InsertFieldPath(orcus::orcus_xml& rFilter) : mrFilter(rFilter) {}
-    void operator() (const OString& rPath)
-    {
-        mrFilter.append_field_link(rPath.getStr());
-    }
-};
-
 void loadContentFromURL(const OUString& rURL, std::string& rStrm)
 {
     ucbhelper::Content aContent(
@@ -274,7 +263,12 @@ void ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
                 OUStringToOString(aTabName, RTL_TEXTENCODING_UTF8).getStr(),
                 rLink.maPos.Row(), rLink.maPos.Col());
 
-            std::for_each(rLink.maFieldPaths.begin(), rLink.maFieldPaths.end(), InsertFieldPath(filter));
+            std::for_each(rLink.maFieldPaths.begin(), rLink.maFieldPaths.end(),
+                [&filter](const OString& rFieldPath)
+                {
+                    filter.append_field_link(rFieldPath.getStr());
+                }
+            );
 
             std::for_each(rLink.maRowGroups.begin(), rLink.maRowGroups.end(),
                 [&filter] (const OString& rRowGroup)
