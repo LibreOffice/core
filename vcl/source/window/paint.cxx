@@ -298,7 +298,8 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
             // direct painting
             Wallpaper aBackground = m_pWindow->GetBackground();
             m_pWindow->ApplySettings(*m_pWindow);
-            if (aBackground.IsBitmap())
+            // Restore lost bitmap or solid color background.
+            if (aBackground.IsBitmap() || aBackground.GetColor() != COL_TRANSPARENT)
                 m_pWindow->SetBackground(aBackground);
             m_pWindow->PushPaintHelper(this, *m_pWindow);
             m_pWindow->Paint(*m_pWindow, m_aPaintRect);
