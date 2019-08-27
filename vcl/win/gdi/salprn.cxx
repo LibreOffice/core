@@ -52,6 +52,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/processfactory.hxx>
 
+#include <vcl/threadex.hxx>
+
 #include <malloc.h>
 
 #include <winspool.h>
@@ -1502,8 +1504,8 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     else
         aInfo.lpszOutput = nullptr;
 
-    // start Job
-    int nRet = lcl_StartDocW( hDC, &aInfo, this );
+    // start Job, in the main thread
+    int nRet = vcl::solarthread::syncExecute([hDC, this, &aInfo]() -> int { return lcl_StartDocW(hDC, &aInfo, this); });
 
     if ( nRet <= 0 )
     {
