@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_f7a55305",
+        "filename": "editeng/source/editeng/editobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2019-08-27T19:02:27Z",
+      "side": 1,
+      "message": "I realized that comparing the sizes remains mandatory because if the two containers don\u0027t have the same number of elements, so they are not equal, although this version of std::equal will not crash.",
+      "range": {
+        "startLine": 224,
+        "startChar": 14,
+        "endLine": 224,
+        "endChar": 24
+      },
+      "revId": "871a0da014b8437adcf5ea2bec5096f38c0ac0ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
