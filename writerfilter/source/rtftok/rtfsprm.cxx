@@ -202,7 +202,7 @@ static bool isSPRMDeduplicateBlacklist(Id nId)
     }
 }
 
-/// Should this SPRM be removed if all its children is removed?
+/// Should this SPRM be removed if all its children are removed?
 static bool isSPRMChildrenExpected(Id nId)
 {
     switch (nId)
