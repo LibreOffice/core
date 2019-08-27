@@ -22,6 +22,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
+#include <svx/ImageMapInfo.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 
@@ -623,8 +624,8 @@ static bool lcl_UrlHit( const SdrView* pView, const Point& rPosPixel, const vcl:
 
     if ( eHit != SdrHitKind::NONE && aVEvt.pObj != nullptr )
     {
-        if ( ScDrawLayer::GetIMapInfo( aVEvt.pObj ) && ScDrawLayer::GetHitIMapObject(
-                                aVEvt.pObj, pWindow->PixelToLogic(rPosPixel), *pWindow ) )
+        if ( SvxIMapInfo::GetIMapInfo( aVEvt.pObj ) && SvxIMapInfo::GetHitIMapObject(
+                                aVEvt.pObj, pWindow->PixelToLogic(rPosPixel), pWindow ) )
             return true;
 
         if ( aVEvt.eEvent == SdrEventKind::ExecuteUrl )

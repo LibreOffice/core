@@ -27,7 +27,7 @@
 
 // Object IDs for UserData
 #define SC_UD_OBJDATA       1
-#define SC_UD_IMAPDATA      2
+// SVX_IMAPINFO_ID = 2
 #define SC_UD_MACRODATA     3
 
 class SC_DLLPUBLIC ScDrawObjData : public SdrObjUserData
@@ -65,21 +65,6 @@ private:
     tools::Rectangle maLastCellRect;
     // Stores the rect of the shape to which this ScDrawObjData belongs.
     tools::Rectangle maShapeRect;
-};
-
-class ScIMapInfo : public SdrObjUserData
-{
-    ImageMap        aImageMap;
-
-public:
-                    ScIMapInfo( const ImageMap& rImageMap );
-                    ScIMapInfo( const ScIMapInfo& rIMapInfo );
-    virtual         ~ScIMapInfo() override;
-
-    virtual std::unique_ptr<SdrObjUserData> Clone( SdrObject* pObj ) const override;
-
-    void    SetImageMap( const ImageMap& rIMap )    { aImageMap = rIMap; }
-    const ImageMap& GetImageMap() const             { return aImageMap; }
 };
 
 class SAL_DLLPUBLIC_RTTI ScMacroInfo : public SdrObjUserData
