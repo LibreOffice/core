@@ -693,12 +693,11 @@ private:
     SAL_DLLPRIVATE void         SetDeviceClipRegion( const vcl::Region* pRegion );
     ///@}
 
+public:
 
     /** @name Pixel functions
      */
     ///@{
-
-public:
 
     void                        DrawPixel(Point const& rPt);
     void                        DrawPixel(Point const& rPt, const Color& rColor);
@@ -710,8 +709,6 @@ public:
     /** @name Rectangle functions
      */
     ///@{
-
-public:
 
     void                        DrawRect( const tools::Rectangle& rRect );
     void                        DrawRect( const tools::Rectangle& rRect,
@@ -732,7 +729,7 @@ public:
     /** @name Invert functions
      */
     ///@{
-public:
+
     void Invert( const tools::Rectangle& rRect, InvertFlags nFlags = InvertFlags::NONE );
     void Invert( const tools::Polygon& rPoly, InvertFlags nFlags = InvertFlags::NONE );
     ///@}
@@ -741,15 +738,11 @@ public:
      */
     ///@{
 
-public:
-
     void                        DrawLine( const Point& rStartPt, const Point& rEndPt );
 
     void                        DrawLine( const Point& rStartPt, const Point& rEndPt,
                                           const LineInfo& rLineInfo );
 
-protected:
-    virtual void DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint);
     ///@}
 
 
@@ -893,6 +886,9 @@ public:
 #endif
 
     void                        DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf );
+
+protected:
+    virtual void                DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint);
 
 private:
 
