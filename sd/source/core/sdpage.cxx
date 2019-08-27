@@ -917,7 +917,7 @@ void getPresObjProp( const SdPage& rPage, const char* sObjKind, const char* sPag
                     Reference<XNode> obj = objectChildren->item(j);
                     OUString nodename = obj->getNodeName();
 
-                    //check whether children is blank 'text-node' or 'object-prop' node
+                    //check whether child is blank 'text-node' or 'object-prop' node
                     if(nodename == "object-prop")
                     {
                         Reference<XNamedNodeMap> ObjAttributes = obj->getAttributes();
@@ -1383,7 +1383,7 @@ static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* r
         Reference<XNode> presobj = layoutChildren->item(j);
         nodename=presobj->getNodeName();
 
-        //check whether children is blank 'text-node' or 'presobj' node
+        //check whether child is blank 'text-node' or 'presobj' node
         if(nodename == "presobj")
         {
             // TODO: rework sd to permit arbitrary number of presentation objects
