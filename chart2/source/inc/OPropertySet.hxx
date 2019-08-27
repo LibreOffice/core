@@ -69,6 +69,8 @@ protected:
      */
     virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const = 0;
 
+    css::uno::Any GetDefault(sal_Int32 nHandle) const;
+
     /** The InfoHelper table contains all property names and types of
         this object.
 

@@ -105,6 +105,18 @@ Sequence< sal_Int8 > SAL_CALL
     return css::uno::Sequence<sal_Int8>();
 }
 
+Any OPropertySet::GetDefault(sal_Int32 nHandle) const
+{
+    Reference<style::XStyle> xStyle = m_pImplProperties->GetStyle();
+    if (xStyle.is())
+    {
+        css::uno::Reference<css::beans::XFastPropertySet> xStylePropSet(xStyle, css::uno::UNO_QUERY);
+        return xStylePropSet->getFastPropertyValue(nHandle);
+    }
+
+    return GetDefaultValue(nHandle);
+}
+
 // ____ XPropertyState ____
 beans::PropertyState SAL_CALL
     OPropertySet::getPropertyState( const OUString& PropertyName )
@@ -143,7 +155,7 @@ Any SAL_CALL
 {
     cppu::IPropertyArrayHelper & rPH = getInfoHelper();
 
-    return GetDefaultValue( rPH.getHandleByName( aPropertyName ) );
+    return GetDefault( rPH.getHandleByName( aPropertyName ) );
 }
 
 // ____ XMultiPropertyStates ____
@@ -184,7 +196,7 @@ Sequence< Any > SAL_CALL
 
     for( ; nI < nElements; ++nI )
     {
-        pResultArray[ nI ] = GetDefaultValue(
+        pResultArray[ nI ] = GetDefault(
             rPH.getHandleByName( aPropertyNames[ nI ] ));
     }
 
@@ -242,7 +254,7 @@ void SAL_CALL OPropertySet::setFastPropertyValue_NoBroadcast
     Any aDefault;
     try
     {
-        aDefault = GetDefaultValue( nHandle );
+        aDefault = GetDefault( nHandle );
     }
     catch( const beans::UnknownPropertyException& )
     {
@@ -322,7 +334,7 @@ void SAL_CALL OPropertySet::getFastPropertyValue
             // => take the default value
             try
             {
-                rValue = GetDefaultValue( nHandle );
+                rValue = GetDefault( nHandle );
             }
             catch( const beans::UnknownPropertyException& )
             {
