@@ -84,7 +84,7 @@ OString SalGtkPicker::unicodetouri(const OUString &rURL)
     INetURLObject aURL(rURL);
     if (INetProtocol::File == aURL.GetProtocol())
     {
-        OUString aNewURL = uri::ExternalUriReferenceTranslator::create( m_xContext )->translateToInternal(rURL);
+        OUString aNewURL = uri::ExternalUriReferenceTranslator::create( m_xContext )->translateToExternal(rURL);
 
         if( !aNewURL.isEmpty() )
         {
