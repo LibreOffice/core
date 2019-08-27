@@ -27,9 +27,7 @@
 class ScDocument;
 class SfxObjectShell;
 class ScDrawObjData;
-class ScIMapInfo;
 class ScMacroInfo;
-class IMapObject;
 class ScMarkData;
 
 class ScTabDeletedHint : public SfxHint
@@ -208,15 +206,7 @@ public:
     /** Returns the object data, if the passed object is a cell note caption. */
     static ScDrawObjData* GetNoteCaptionData( SdrObject* pObj, SCTAB nTab );
 
-    // Image-Map
-    static ScIMapInfo* GetIMapInfo( const SdrObject* pObj );
-
-    static IMapObject* GetHitIMapObject( const SdrObject* pObject,
-                            const Point& rWinPoint, const vcl::Window& rCmpWnd );
-
     static ScMacroInfo* GetMacroInfo( SdrObject* pObj, bool bCreate = false );
-
-    virtual ImageMap* GetImageMapForObject(SdrObject* pObj) override;
 
 private:
     static SfxObjectShell* pGlobalDrawPersist;          // for AllocModel

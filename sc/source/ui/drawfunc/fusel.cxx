@@ -26,6 +26,7 @@
 #include <svx/svdouno.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/ImageMapInfo.hxx>
 #include <editeng/outlobj.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/ipclient.hxx>
@@ -200,10 +201,10 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     pView->PickAnything( rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt ) != SdrHitKind::NONE &&
                     aVEvt.pObj != nullptr )
                 {
-                    if ( ScDrawLayer::GetIMapInfo( aVEvt.pObj ) )       // ImageMap
+                    if ( SvxIMapInfo::GetIMapInfo( aVEvt.pObj ) )       // ImageMap
                     {
                         const IMapObject* pIMapObj =
-                                ScDrawLayer::GetHitIMapObject( aVEvt.pObj, aMDPos, *pWindow );
+                                SvxIMapInfo::GetHitIMapObject( aVEvt.pObj, aMDPos, pWindow );
                         if ( pIMapObj && !pIMapObj->GetURL().isEmpty() )
                         {
                             sURL = pIMapObj->GetURL();
