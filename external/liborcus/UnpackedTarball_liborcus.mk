@@ -15,6 +15,9 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,liborcus,1))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,liborcus))
 
+# external/liborcus/0001-Blind-fix-attempt-for-older-macOS-builds.patch upstreamed as
+#  <https://gitlab.com/orcus/orcus/commit/a124e3b46f5430fa1c13c5500f3cad6ed147f068> "Blind fix
+#  attempt for older macOS builds":
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/rpath.patch.0 \
 	external/liborcus/gcc9.patch.0 \
