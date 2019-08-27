@@ -124,6 +124,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/drawables/B2DPolyPolygonDrawable \
     vcl/source/drawables/RectangleDrawable \
     vcl/source/drawables/EllipseDrawable \
+    vcl/source/drawables/ArcDrawable \
     vcl/source/drawables/RoundRectDrawable \
     vcl/source/drawables/PolyHairlineDrawable \
     vcl/source/drawables/PolyLineDrawable \

@@ -22,6 +22,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/drawables/EllipseDrawable.hxx>
+#include <vcl/drawables/ArcDrawable.hxx>
 
 #include <salgdi.hxx>
 
@@ -35,42 +36,7 @@ void OutputDevice::DrawEllipse( const tools::Rectangle& rRect )
 void OutputDevice::DrawArc( const tools::Rectangle& rRect,
                             const Point& rStartPt, const Point& rEndPt )
 {
-    assert(!is_double_buffered_window());
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaArcAction( rRect, rStartPt, rEndPt ) );
-
-    if ( !IsDeviceOutputNecessary() || !mbLineColor || ImplIsRecordLayout() )
-        return;
-
-    tools::Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
-    if ( aRect.IsEmpty() )
-        return;
-
-    // we need a graphics
-    if ( !mpGraphics && !AcquireGraphics() )
-        return;
-
-    if ( mbInitClipRegion )
-        InitClipRegion();
-    if ( mbOutputClipped )
-        return;
-
-    if ( mbInitLineColor )
-        InitLineColor();
-
-    const Point     aStart( ImplLogicToDevicePixel( rStartPt ) );
-    const Point     aEnd( ImplLogicToDevicePixel( rEndPt ) );
-    tools::Polygon aArcPoly( aRect, aStart, aEnd, PolyStyle::Arc );
-
-    if ( aArcPoly.GetSize() >= 2 )
-    {
-        SalPoint* pPtAry = reinterpret_cast<SalPoint*>(aArcPoly.GetPointAry());
-        mpGraphics->DrawPolyLine( aArcPoly.GetSize(), pPtAry, this );
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawArc( rRect, rStartPt, rEndPt );
+    Draw(vcl::ArcDrawable(rRect, rStartPt, rEndPt));
 }
 
 void OutputDevice::DrawPie( const tools::Rectangle& rRect,
