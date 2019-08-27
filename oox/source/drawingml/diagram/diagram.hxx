@@ -193,6 +193,7 @@ public:
     const dgm::Point* getRootPoint() const;
     void dump() const;
     OUString getString() const override;
+    std::vector<std::pair<OUString, OUString>> getChildren(const OUString& rParentId) const override;
 
 private:
     void getChildrenString(OUStringBuffer& rBuf, const dgm::Point* pPoint, sal_Int32 nLevel) const;

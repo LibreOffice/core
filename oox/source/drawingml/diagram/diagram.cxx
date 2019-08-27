@@ -138,6 +138,24 @@ OUString DiagramData::getString() const
     return aBuf.makeStringAndClear();
 }
 
+std::vector<std::pair<OUString, OUString>> DiagramData::getChildren(const OUString& rParentId) const
+{
+    const OUString sModelId = rParentId.isEmpty() ? getRootPoint()->msModelId : rParentId;
+    std::vector<std::pair<OUString, OUString>> aChildren;
+    for (const auto& rCxn : maConnections)
+        if (rCxn.mnType == XML_parOf && rCxn.msSourceId == sModelId)
+        {
+            if (rCxn.mnSourceOrder >= static_cast<sal_Int32>(aChildren.size()))
+                aChildren.resize(rCxn.mnSourceOrder + 1);
+            const auto pChild = maPointNameMap.find(rCxn.msDestId);
+            if (pChild != maPointNameMap.end())
+                aChildren[rCxn.mnSourceOrder] = std::make_pair(
+                    pChild->second->msModelId,
+                    pChild->second->mpShape->getTextBody()->getParagraphs().front()->getRuns().front()->getText());
+        }
+    return aChildren;
+}
+
 #ifdef DEBUG_OOX_DIAGRAM
 OString normalizeDotName( const OUString& rStr )
 {
