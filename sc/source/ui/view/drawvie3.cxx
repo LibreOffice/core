@@ -19,6 +19,7 @@
 
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/ImageMapInfo.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <strings.hrc>
@@ -209,7 +210,7 @@ void ScDrawView::UpdateIMap( SdrObject* pObj )
     {
         Graphic     aGraphic;
         TargetList  aTargetList;
-        ScIMapInfo* pIMapInfo = ScDrawLayer::GetIMapInfo( pObj );
+        SvxIMapInfo* pIMapInfo = SvxIMapInfo::GetIMapInfo( pObj );
         const ImageMap* pImageMap = nullptr;
         if ( pIMapInfo )
             pImageMap = &pIMapInfo->GetImageMap();

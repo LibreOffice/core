@@ -23,6 +23,7 @@
 #include <svtools/unoevent.hxx>
 #include <svtools/unoimap.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/ImageMapInfo.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/event.hxx>
 #include <svx/unoshape.hxx>
@@ -447,7 +448,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
             if( !xImageMapInt.is() || !SvUnoImageMap_fillImageMap( xImageMapInt, aImageMap ) )
                 throw lang::IllegalArgumentException();
 
-            ScIMapInfo* pIMapInfo = ScDrawLayer::GetIMapInfo(pObj);
+            SvxIMapInfo* pIMapInfo = SvxIMapInfo::GetIMapInfo(pObj);
             if( pIMapInfo )
             {
                 // replace existing image map
@@ -456,7 +457,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
             else
             {
                 // insert new user data with image map
-                pObj->AppendUserData(std::unique_ptr<SdrObjUserData>(new ScIMapInfo(aImageMap) ));
+                pObj->AppendUserData(std::unique_ptr<SdrObjUserData>(new SvxIMapInfo(aImageMap) ));
             }
         }
     }
@@ -709,7 +710,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
         SdrObject* pObj = GetSdrObject();
         if ( pObj )
         {
-            ScIMapInfo* pIMapInfo = ScDrawLayer::GetIMapInfo(GetSdrObject());
+            SvxIMapInfo* pIMapInfo = SvxIMapInfo::GetIMapInfo(GetSdrObject());
             if( pIMapInfo )
             {
                 const ImageMap& rIMap = pIMapInfo->GetImageMap();
@@ -948,7 +949,7 @@ void SAL_CALL ScShapeObj::setPropertyToDefault( const OUString& aPropertyName )
         SdrObject* pObj = GetSdrObject();
         if ( pObj )
         {
-            ScIMapInfo* pIMapInfo = ScDrawLayer::GetIMapInfo(pObj);
+            SvxIMapInfo* pIMapInfo = SvxIMapInfo::GetIMapInfo(pObj);
             if( pIMapInfo )
             {
                 ImageMap aEmpty;
