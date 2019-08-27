@@ -420,8 +420,8 @@ extern "C" { static void thisModule() {} }
 
 #else
 
-extern "C" long basicide_handle_basic_error(void*);
-extern "C" void basicide_macro_organizer(void*, sal_Int16);
+extern "C" long basicide_handle_basic_error(void const*);
+extern "C" void basicide_macro_organizer(void const*, sal_Int16);
 
 #endif
 
