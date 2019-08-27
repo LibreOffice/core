@@ -90,6 +90,7 @@
 #include <vcl/pngread.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/dibtools.hxx>
+#include <svx/svdograf.hxx>
 
 using namespace ::com::sun::star;
 
