@@ -86,7 +86,7 @@ protected:
 
     // Takes ownership of pHbFace.
     static hb_font_t* InitHbFont(hb_face_t* pHbFace);
-    virtual hb_font_t* ImplInitHbFont() { assert(false); return nullptr; }
+    virtual hb_font_t* ImplInitHbFont() { assert(false); return hb_font_get_empty(); }
     inline void ReleaseHbFont();
 
 private:
