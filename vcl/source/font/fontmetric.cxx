@@ -381,8 +381,8 @@ void ImplFontMetricData::ImplCalcLineSpacing(LogicalFontInstance *pFontInstance)
     if (mnAscent || mnDescent)
         mnIntLeading = mnAscent + mnDescent - mnHeight;
 
-    SAL_INFO("vcl.gdi.fontmetric",
-                  "fsSelection: "   << rInfo.fsSelection
+    SAL_INFO("vcl.gdi.fontmetric", GetFamilyName()
+             << ": fsSelection: "   << rInfo.fsSelection
              << ", typoAscender: "  << rInfo.typoAscender
              << ", typoDescender: " << rInfo.typoDescender
              << ", typoLineGap: "   << rInfo.typoLineGap

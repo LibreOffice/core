@@ -1669,7 +1669,10 @@ static SFErrCodes doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         /* TODO: implement to get subsetting */
         assert(t->goffsets != nullptr);
     } else {
-        return SFErrCodes::TtFormat;
+        // Bitmap font, accept for now.
+        t->goffsets = static_cast<sal_uInt32 *>(calloc(1+t->nglyphs, sizeof(sal_uInt32)));
+        /* TODO: implement to get subsetting */
+        assert(t->goffsets != nullptr);
     }
 
     table = getTable(t, O_hhea);
