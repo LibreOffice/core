@@ -47,12 +47,7 @@
                                      : aOriginalURL.GetLastName();                                 \
                                                                                                    \
             /* Get temp path */                                                                    \
-            OUString sTempDir = utl::TempFile::CreateTempName();                                   \
-            INetURLObject aTempURL;                                                                \
-            aTempURL.setFSysPath(sTempDir, FSysStyle::Detect);                                     \
-            /* remove file name */                                                                 \
-            aTempURL.removeSegment();                                                              \
-            sTempDir = INetURLObject::GetScheme(aTempURL.GetProtocol()) + aTempURL.GetURLPath();   \
+            OUString sTempDir = utl::TempFile::GetTempNameBaseDirectory();                         \
                                                                                                    \
             /* Create & apply new URL */                                                           \
             OUString sOriginalFileInTempDir = sTempDir + sFileName;                                \
