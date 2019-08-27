@@ -671,12 +671,8 @@ bool GenPspGraphics::AddTempDevFontHelper( PhysicalFontCollection* pFontCollecti
                                            GlyphCache &rGC )
 {
     // inform PSP font manager
-    OUString aUSystemPath;
-    OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFileURL, aUSystemPath ) );
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    OString aOFileName( OUStringToOString( aUSystemPath, aEncoding ) );
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    std::vector<psp::fontID> aFontIds = rMgr.addFontFile( aOFileName );
+    std::vector<psp::fontID> aFontIds = rMgr.addFontFile( rFileURL );
     if( aFontIds.empty() )
         return false;
 

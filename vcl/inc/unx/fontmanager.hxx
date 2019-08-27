@@ -199,7 +199,7 @@ public:
     static PrintFontManager& get(); // one instance only
 
     // There may be multiple font ids for font collections
-    std::vector<fontID> addFontFile( const OString& rFileName );
+    std::vector<fontID> addFontFile( const OUString& rFileUrl );
 
     void initialize();
 
