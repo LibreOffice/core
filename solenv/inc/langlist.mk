@@ -115,6 +115,7 @@ ss \
 st \
 sv \
 sw-TZ \
+szl \
 ta \
 te \
 tg \
