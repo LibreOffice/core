@@ -141,7 +141,7 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
                                            pCenterY->GetValue () + pAxisY->GetValue () / 2);
                 SdrCircObj  *pNewCircle = new SdrCircObj(
                     mpView->getSdrModelFromSdrView(),
-                    OBJ_CIRC,
+                    SdrCircKind::Full,
                     aNewRectangle);
                 SdrPageView *pPV = mpView->GetSdrPageView();
 
