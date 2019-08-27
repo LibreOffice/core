@@ -17,9 +17,28 @@ DiagramDialog::DiagramDialog(weld::Window* pWindow,
     , mpDiagramData(pDiagramData)
     , mpBtnOk(m_xBuilder->weld_button("btnOk"))
     , mpBtnCancel(m_xBuilder->weld_button("btnCancel"))
-    , mpTextDiagram(m_xBuilder->weld_text_view("textDiagram"))
+    , mpTreeDiagram(m_xBuilder->weld_tree_view("treeDiagram"))
 {
-    mpTextDiagram->set_text(mpDiagramData->getString());
+    populateTree(nullptr, OUString());
+
+    // expand all items
+    weld::TreeView* pTreeDiagram = mpTreeDiagram.get();
+    pTreeDiagram->all_foreach([pTreeDiagram](weld::TreeIter& rEntry) {
+        pTreeDiagram->expand_row(rEntry);
+        return false;
+    });
+}
+
+void DiagramDialog::populateTree(weld::TreeIter* pParent, const OUString& rParentId)
+{
+    auto aItems = mpDiagramData->getChildren(rParentId);
+    for (auto& aItem : aItems)
+    {
+        std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());
+        mpTreeDiagram->insert(pParent, -1, &aItem.second, &aItem.first, nullptr, nullptr, nullptr,
+                              false, pEntry.get());
+        populateTree(pEntry.get(), aItem.first);
+    }
 }
 
 DiagramDialog::~DiagramDialog() {}

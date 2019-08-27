@@ -26,7 +26,9 @@ private:
     std::shared_ptr<DiagramDataInterface> mpDiagramData;
     std::unique_ptr<weld::Button> mpBtnOk;
     std::unique_ptr<weld::Button> mpBtnCancel;
-    std::unique_ptr<weld::TextView> mpTextDiagram;
+    std::unique_ptr<weld::TreeView> mpTreeDiagram;
+
+    void populateTree(weld::TreeIter* pParent, const OUString& rParentId);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_DIAGRAMDIALOG_HXX

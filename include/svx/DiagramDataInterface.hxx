@@ -22,12 +22,21 @@
 #include <rtl/ustring.h>
 #include <sal/types.h>
 
+#include <utility>
+#include <vector>
+
 /// Interface class to access diagram data for UI
 class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI DiagramDataInterface
 {
 public:
     // get text representation of data tree
     virtual OUString getString() const = 0;
+
+    // get children of provided data node
+    // use empty string for top-level nodes
+    // returns vector of (id, text)
+    virtual std::vector<std::pair<OUString, OUString>>
+    getChildren(const OUString& rParentId) const = 0;
 
 protected:
     ~DiagramDataInterface() throw() {}
