@@ -520,8 +520,8 @@ void SvtFileDialog::dispose()
         batch->commit();
     }
 
-    pImpl.reset();
     _pFileView.disposeAndClear();
+    pImpl.reset();
     _pSplitter.disposeAndClear();
     _pContainer.disposeAndClear();
     _pPrevBmp.disposeAndClear();
