@@ -28,12 +28,6 @@
 #include <orcus/stream.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
-#ifdef _WIN32
-#define SYSTEM_PATH FSysStyle::Dos
-#else
-#define SYSTEM_PATH FSysStyle::Unix
-#endif
-
 using namespace com::sun::star;
 
 namespace {
@@ -79,12 +73,6 @@ bool loadFileContent(SfxMedium& rMedium, orcus::iface::import_filter& filter)
     return true;
 }
 
-}
-
-OString ScOrcusFiltersImpl::toSystemPath(const OUString& rPath)
-{
-    INetURLObject aURL(rPath);
-    return OUStringToOString(aURL.getFSysPath(SYSTEM_PATH), RTL_TEXTENCODING_UTF8);
 }
 
 bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, SfxMedium& rMedium) const
