@@ -70,6 +70,24 @@
       "revId": "3ae1052751d59111deecc36a159b25dc56dd7cb0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_97189775",
+        "filename": "editeng/source/editeng/editobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-08-27T17:52:18Z",
+      "side": 1,
+      "message": "Yes, I\u0027ve written that in first comment.",
+      "parentUuid": "bf659307_d70e0f31",
+      "revId": "3ae1052751d59111deecc36a159b25dc56dd7cb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
