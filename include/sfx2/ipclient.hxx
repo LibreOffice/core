@@ -84,7 +84,7 @@ public:
     ErrCode             DoVerb( long nVerb );
     void                VisAreaChanged();
     void                ResetObject();
-    bool                IsUIActive();
+    bool                IsUIActive() const;
 
     virtual void        FormatChanged(); // object format was changed (used for StarMath formulas aligning)
 };

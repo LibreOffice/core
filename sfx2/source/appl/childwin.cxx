@@ -366,7 +366,7 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
     return aInfo;
 }
 
-sal_uInt16 SfxChildWindow::GetPosition()
+sal_uInt16 SfxChildWindow::GetPosition() const
 {
     return pImpl->pFact->nPos;
 }
@@ -696,7 +696,7 @@ bool SfxChildWindow::QueryClose()
     return bAllow;
 }
 
-const css::uno::Reference< css::frame::XFrame >&  SfxChildWindow::GetFrame()
+const css::uno::Reference< css::frame::XFrame >&  SfxChildWindow::GetFrame() const
 {
     return pImpl->xFrame;
 }

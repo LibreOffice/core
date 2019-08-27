@@ -95,13 +95,13 @@ public:
     ~ClassificationControl() override;
     void dispose() override;
     void Resize() override;
-    const VclPtr<ListBox>& getCategory()
+    const VclPtr<ListBox>& getCategory() const
     {
         return m_pCategory;
     }
     static sfx::ClassificationCreationOrigin getExistingClassificationOrigin();
     void toggleInteractivityOnOrigin();
-    void setCategoryStateFromPolicy(SfxClassificationHelper & rHelper);
+    void setCategoryStateFromPolicy(const SfxClassificationHelper & rHelper);
 };
 
 namespace
@@ -351,7 +351,7 @@ void ClassificationControl::toggleInteractivityOnOrigin()
     }
 }
 
-void ClassificationControl::setCategoryStateFromPolicy(SfxClassificationHelper & rHelper)
+void ClassificationControl::setCategoryStateFromPolicy(const SfxClassificationHelper & rHelper)
 {
     const OUString& rCategoryName = rHelper.GetBACName(SfxClassificationHelper::getPolicyType());
     if (!rCategoryName.isEmpty())

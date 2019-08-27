@@ -73,7 +73,7 @@ public:
      * and inserts the shapes into the newly created draw pages.
      * */
     static void
-    addPagesToDraw(uno::Reference<XComponent>& xComponent, sal_Int32 nPages,
+    addPagesToDraw(const uno::Reference<XComponent>& xComponent, sal_Int32 nPages,
                    const std::vector<GDIMetaFile>& aMetaFiles,
                    const std::vector<::Size>& aPageSizes, const PageMargins& aPageMargins,
                    const std::vector<std::pair<RedactionTarget*, OUString>>& r_aTableTargets,
@@ -83,29 +83,30 @@ public:
      * Meant to be called after converting a document to a Draw doc
      * for redaction purposes.
      * */
-    static void showRedactionToolbar(SfxViewFrame* pViewFrame);
+    static void showRedactionToolbar(const SfxViewFrame* pViewFrame);
 
     /*
      * Used to get the page margins from the original/source Writer document. Then we apply these values to the
      * pages inserted into Draw for redaction.
      * */
-    static PageMargins getPageMarginsForWriter(css::uno::Reference<css::frame::XModel>& xModel);
+    static PageMargins
+    getPageMarginsForWriter(const css::uno::Reference<css::frame::XModel>& xModel);
 
     /*
      * Used to get the page margins from the original/source Calc document. Then we apply these values to the
      * pages inserted into Draw for redaction.
      * */
-    static PageMargins getPageMarginsForCalc(css::uno::Reference<css::frame::XModel>& xModel);
+    static PageMargins getPageMarginsForCalc(const css::uno::Reference<css::frame::XModel>& xModel);
 
     static void searchInMetaFile(const RedactionTarget* pRedactionTarget, const GDIMetaFile& rMtf,
                                  std::vector<tools::Rectangle>& aRedactionRectangles,
-                                 uno::Reference<XComponent>& xComponent);
+                                 const uno::Reference<XComponent>& xComponent);
 
     /*
      * Draws a redaction rectangle on the draw page referenced with its page number (0-based)
      * */
-    static void addRedactionRectToPage(uno::Reference<XComponent>& xComponent,
-                                       uno::Reference<drawing::XDrawPage>& xPage,
+    static void addRedactionRectToPage(const uno::Reference<XComponent>& xComponent,
+                                       const uno::Reference<drawing::XDrawPage>& xPage,
                                        const std::vector<tools::Rectangle>& aNewRectangles);
 
     /*
@@ -114,8 +115,8 @@ public:
      * */
     static void autoRedactPage(const RedactionTarget* pRedactionTarget,
                                const GDIMetaFile& rGDIMetaFile,
-                               uno::Reference<drawing::XDrawPage>& xPage,
-                               uno::Reference<XComponent>& xComponent);
+                               const uno::Reference<drawing::XDrawPage>& xPage,
+                               const uno::Reference<XComponent>& xComponent);
 
     /// Fill the search options based on the given redaction target
     static void fillSearchOptions(i18nutil::SearchOptions2& rSearchOpt,

@@ -226,7 +226,7 @@ public:
     bool            InsertRegion( std::unique_ptr<RegionData_Impl> pData, size_t nPos );
     const OUString& GetRootURL() const { return maRootURL; }
 
-    const uno::Reference< XDocumentTemplates >& getDocTemplates() { return mxTemplates; }
+    const uno::Reference< XDocumentTemplates >& getDocTemplates() const { return mxTemplates; }
 };
 
 
