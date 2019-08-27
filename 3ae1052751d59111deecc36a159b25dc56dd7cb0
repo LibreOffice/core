@@ -34,6 +34,24 @@
       "revId": "3ae1052751d59111deecc36a159b25dc56dd7cb0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_3700ab01",
+        "filename": "editeng/source/editeng/editobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-08-27T17:41:24Z",
+      "side": 1,
+      "message": "std::equal(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2) compares ranges [first1, last1) and [first2, last2).\nMoreover, size mismatch is detected without looking at any elements, see Complexity section in https://en.cppreference.com/w/cpp/algorithm/equal, near \"However, if InputIt1 and InputIt2...\"",
+      "parentUuid": "bf659307_dc14f650",
+      "revId": "3ae1052751d59111deecc36a159b25dc56dd7cb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
