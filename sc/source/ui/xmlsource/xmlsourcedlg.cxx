@@ -496,38 +496,34 @@ void ScXMLSourceDlg::OkPressed()
     ScOrcusImportXMLParam aParam;
 
     // Convert single cell links.
+    for (const auto& rEntry : maCellLinks)
     {
-        for (const auto& rEntry : maCellLinks)
-        {
-            OUString aPath = getXPath(*mxLbTree, *rEntry, aParam.maNamespaces);
-            const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*mxLbTree, *rEntry);
+        OUString aPath = getXPath(*mxLbTree, *rEntry, aParam.maNamespaces);
+        const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*mxLbTree, *rEntry);
 
-            aParam.maCellLinks.emplace_back(
-                    pUserData->maLinkedPos, OUStringToOString(aPath, RTL_TEXTENCODING_UTF8));
-        }
+        aParam.maCellLinks.emplace_back(
+                pUserData->maLinkedPos, OUStringToOString(aPath, RTL_TEXTENCODING_UTF8));
     }
 
     // Convert range links. For now, an element with range link takes all its
     // child elements as its fields.
+    for (const auto& rEntry: maRangeLinks)
     {
-        for (const auto& rEntry: maRangeLinks)
-        {
-            const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*mxLbTree, *rEntry);
+        const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*mxLbTree, *rEntry);
 
-            ScOrcusImportXMLParam::RangeLink aRangeLink;
-            aRangeLink.maPos = pUserData->maLinkedPos;
+        ScOrcusImportXMLParam::RangeLink aRangeLink;
+        aRangeLink.maPos = pUserData->maLinkedPos;
 
-            // Go through all its child elements.
-            getFieldLinks(aRangeLink, aParam.maNamespaces, *mxLbTree, *rEntry);
+        // Go through all its child elements.
+        getFieldLinks(aRangeLink, aParam.maNamespaces, *mxLbTree, *rEntry);
 
-            // Add the reference entry as a row-group node, which will be used
-            // as a row position increment point.
-            OUString aThisEntry = getXPath(*mxLbTree, *rEntry, aParam.maNamespaces);
-            aRangeLink.maRowGroups.push_back(
-                OUStringToOString(aThisEntry, RTL_TEXTENCODING_UTF8));
+        // Add the reference entry as a row-group node, which will be used
+        // as a row position increment point.
+        OUString aThisEntry = getXPath(*mxLbTree, *rEntry, aParam.maNamespaces);
+        aRangeLink.maRowGroups.push_back(
+            OUStringToOString(aThisEntry, RTL_TEXTENCODING_UTF8));
 
-            aParam.maRangeLinks.push_back(aRangeLink);
-        }
+        aParam.maRangeLinks.push_back(aRangeLink);
     }
 
     // Remove duplicate namespace IDs.
