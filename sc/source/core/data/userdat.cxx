@@ -34,27 +34,6 @@ std::unique_ptr<SdrObjUserData> ScDrawObjData::Clone( SdrObject* ) const
     return std::unique_ptr<SdrObjUserData>(new ScDrawObjData( *this ));
 }
 
-ScIMapInfo::ScIMapInfo( const ImageMap& rImageMap ) :
-    SdrObjUserData( SdrInventor::ScOrSwDraw, SC_UD_IMAPDATA ),
-    aImageMap( rImageMap )
-{
-}
-
-ScIMapInfo::ScIMapInfo( const ScIMapInfo& rIMapInfo ) :
-    SdrObjUserData( rIMapInfo ),
-    aImageMap( rIMapInfo.aImageMap )
-{
-}
-
-ScIMapInfo::~ScIMapInfo()
-{
-}
-
-std::unique_ptr<SdrObjUserData> ScIMapInfo::Clone( SdrObject* ) const
-{
-    return std::unique_ptr<SdrObjUserData>(new ScIMapInfo( *this ));
-}
-
 ScMacroInfo::ScMacroInfo() :
     SdrObjUserData( SdrInventor::ScOrSwDraw, SC_UD_MACRODATA )
 {

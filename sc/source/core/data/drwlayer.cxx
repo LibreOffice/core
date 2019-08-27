@@ -2314,74 +2314,6 @@ ScDrawObjData* ScDrawLayer::GetNoteCaptionData( SdrObject* pObj, SCTAB nTab )
     return (pData && pData->meType == ScDrawObjData::CellNote) ? pData : nullptr;
 }
 
-ScIMapInfo* ScDrawLayer::GetIMapInfo( const SdrObject* pObj )
-{
-    return static_cast<ScIMapInfo*>(GetFirstUserDataOfType(pObj, SC_UD_IMAPDATA));
-}
-
-IMapObject* ScDrawLayer::GetHitIMapObject( const SdrObject* pObj,
-                                          const Point& rWinPoint, const vcl::Window& rCmpWnd )
-{
-    const MapMode       aMap100( MapUnit::Map100thMM );
-    MapMode             aWndMode = rCmpWnd.GetMapMode();
-    Point               aRelPoint( rCmpWnd.LogicToLogic( rWinPoint, &aWndMode, &aMap100 ) );
-    tools::Rectangle           aLogRect = rCmpWnd.LogicToLogic( pObj->GetLogicRect(), &aWndMode, &aMap100 );
-    ScIMapInfo*         pIMapInfo = GetIMapInfo( pObj );
-    IMapObject*         pIMapObj = nullptr;
-
-    if ( pIMapInfo )
-    {
-        Size        aGraphSize;
-        ImageMap&   rImageMap = const_cast<ImageMap&>(pIMapInfo->GetImageMap());
-        Graphic     aGraphic;
-        bool        bObjSupported = false;
-
-        if (const SdrGrafObj* pGrafObj = dynamic_cast<const SdrGrafObj*>(pObj)) // Simple Graphics object
-        {
-            const GeoStat&      rGeo = pGrafObj->GetGeoStat();
-            const Graphic&      rGraphic = pGrafObj->GetGraphic();
-
-            // Reverse rotation
-            if ( rGeo.nRotationAngle )
-                RotatePoint( aRelPoint, aLogRect.TopLeft(), -rGeo.nSin, rGeo.nCos );
-
-            // Reverse mirroring
-            if ( static_cast<const SdrGrafObjGeoData*>( pGrafObj->GetGeoData() )->bMirrored )
-                aRelPoint.setX( aLogRect.Right() + aLogRect.Left() - aRelPoint.X() );
-
-            // Possible Unshear:
-            if ( rGeo.nShearAngle )
-                ShearPoint( aRelPoint, aLogRect.TopLeft(), -rGeo.nTan );
-
-            if ( rGraphic.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel )
-                aGraphSize = rCmpWnd.PixelToLogic( rGraphic.GetPrefSize(),
-                                                         aMap100 );
-            else
-                aGraphSize = OutputDevice::LogicToLogic( rGraphic.GetPrefSize(),
-                                                         rGraphic.GetPrefMapMode(),
-                                                         aMap100 );
-
-            bObjSupported = true;
-        }
-        else if (const SdrOle2Obj* pOleObj = dynamic_cast<const SdrOle2Obj*>(pObj)) // OLE object
-        {
-            // TODO/LEAN: working with visual area needs running state
-            aGraphSize = pOleObj->GetOrigObjSize();
-            bObjSupported = true;
-        }
-
-        // If everything has worked out, then perform HitTest
-        if ( bObjSupported )
-        {
-            // Calculate relative mouse point
-            aRelPoint -= aLogRect.TopLeft();
-            pIMapObj = rImageMap.GetHitIMapObject( aGraphSize, aLogRect.GetSize(), aRelPoint );
-        }
-    }
-
-    return pIMapObj;
-}
-
 ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, bool bCreate )
 {
     if (SdrObjUserData *pData = GetFirstUserDataOfType(pObj, SC_UD_MACRODATA))
@@ -2392,16 +2324,6 @@ ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, bool bCreate )
         ScMacroInfo* pData = new ScMacroInfo;
         pObj->AppendUserData(std::unique_ptr<SdrObjUserData>(pData));
         return pData;
-    }
-    return nullptr;
-}
-
-ImageMap* ScDrawLayer::GetImageMapForObject(SdrObject* pObj)
-{
-    ScIMapInfo* pIMapInfo = GetIMapInfo( pObj );
-    if ( pIMapInfo )
-    {
-        return const_cast<ImageMap*>( &(pIMapInfo->GetImageMap()) );
     }
     return nullptr;
 }
