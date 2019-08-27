@@ -890,18 +890,14 @@ OUString AttributeOutputBase::ConvertURL( const OUString& rUrl, bool bAbsoluteOu
             if ( pWW8Export )
             {
                 SwWW8Writer& rWriter = pWW8Export->GetWriter();
-                sExportedDocumentURL = rWriter.GetMedia()->GetURLObject().GetPath();
+                INetURLObject parent(rWriter.GetMedia()->GetURLObject());
+                parent.removeSegment();
+                sExportedDocumentURL = parent.GetMainURL(INetURLObject::DecodeMechanism::NONE);
             }
         }
     }
 
     INetURLObject anAbsoluteParent( sExportedDocumentURL );
-    if ( anAbsoluteParent.GetURLPath().isEmpty() )
-    {
-        // DOC filter returns system path (without file:///)
-        anAbsoluteParent.setFSysPath( sExportedDocumentURL, FSysStyle::Detect );
-        anAbsoluteParent.setFinalSlash();
-    }
     OUString sConvertedParent = INetURLObject::GetScheme( anAbsoluteParent.GetProtocol() ) + anAbsoluteParent.GetURLPath();
     OUString sParentPath = sConvertedParent.isEmpty() ? sExportedDocumentURL : sConvertedParent;
 
