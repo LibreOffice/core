@@ -31,6 +31,7 @@
 #include <dialmgr.hxx>
 
 #include <officecfg/Office/Common.hxx>
+#include <osl/file.hxx>
 #include <svtools/miscopt.hxx>
 
 #include <strings.hrc>
@@ -790,26 +791,37 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, weld::Button&, void)
     OUString sFolder;
     if (m_xPathList->count_selected_rows() > 0)
     {
-        INetURLObject aObj(m_xPathList->get_selected_text(), FSysStyle::Detect);
-        sFolder = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+        osl::FileBase::getFileURLFromSystemPath(m_xPathList->get_selected_text(), sFolder);
+            // best effort
     }
-    else
+    if (sFolder.isEmpty())
          sFolder = SvtPathOptions().GetWorkPath();
     aDlg.SetDisplayDirectory( sFolder );
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
         OUString sURL = aDlg.GetPath();
-        INetURLObject aURL( sURL );
-        OUString sFile = aURL.getFSysPath( FSysStyle::Detect );
-        if ( !IsPathDuplicate( sFile ) )
+        OUString sFile;
+        if (osl::FileBase::getSystemPathFromFileURL(sURL, sFile) == osl::FileBase::E_None)
         {
-            m_xPathList->append("", sFile, SvFileInformationManager::GetImageId(aURL));
-            m_xPathList->select(m_xPathList->n_children() - 1);
+            INetURLObject aURL( sURL );
+            if ( !IsPathDuplicate( sFile ) )
+            {
+                m_xPathList->append("", sFile, SvFileInformationManager::GetImageId(aURL));
+                m_xPathList->select(m_xPathList->n_children() - 1);
+            }
+            else
+            {
+                OUString sMsg( CuiResId( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
+                sMsg = sMsg.replaceFirst( "%1", sFile );
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
+                                                          VclMessageType::Warning, VclButtonsType::Ok, sMsg));
+                xBox->run();
+            }
         }
         else
         {
-            OUString sMsg( CuiResId( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
-            sMsg = sMsg.replaceFirst( "%1", sFile );
+            OUString sMsg( CuiResId( RID_SVXSTR_CANNOTCONVERTURL_ERR ) );
+            sMsg = sMsg.replaceFirst( "%1", sURL );
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                       VclMessageType::Warning, VclButtonsType::Ok, sMsg));
             xBox->run();
@@ -826,26 +838,38 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl, weld::Button&, void)
     OUString sOldFolder;
     if (m_xPathList->count_selected_rows() > 0)
     {
-        INetURLObject aObj(m_xPathList->get_selected_text(), FSysStyle::Detect);
-        sOldFolder = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+        osl::FileBase::getFileURLFromSystemPath(m_xPathList->get_selected_text(), sOldFolder);
+            // best effort
     }
-    else
+    if (sOldFolder.isEmpty())
         sOldFolder = SvtPathOptions().GetWorkPath();
     xFolderPicker->setDisplayDirectory( sOldFolder );
     if ( xFolderPicker->execute() == ExecutableDialogResults::OK )
     {
         OUString sFolderURL( xFolderPicker->getDirectory() );
         INetURLObject aURL( sFolderURL );
-        OUString sNewFolder = aURL.getFSysPath( FSysStyle::Detect );
-        if ( !IsPathDuplicate( sNewFolder ) )
+        OUString sNewFolder;
+        if (osl::FileBase::getSystemPathFromFileURL(sFolderURL, sNewFolder)
+            == osl::FileBase::E_None)
         {
-            m_xPathList->append("", sNewFolder, SvFileInformationManager::GetImageId(aURL));
-            m_xPathList->select(m_xPathList->n_children() - 1);
+            if ( !IsPathDuplicate( sNewFolder ) )
+            {
+                m_xPathList->append("", sNewFolder, SvFileInformationManager::GetImageId(aURL));
+                m_xPathList->select(m_xPathList->n_children() - 1);
+            }
+            else
+            {
+                OUString sMsg( CuiResId( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
+                sMsg = sMsg.replaceFirst( "%1", sNewFolder );
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
+                                                          VclMessageType::Warning, VclButtonsType::Ok, sMsg));
+                xBox->run();
+            }
         }
         else
         {
-            OUString sMsg( CuiResId( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
-            sMsg = sMsg.replaceFirst( "%1", sNewFolder );
+            OUString sMsg( CuiResId( RID_SVXSTR_CANNOTCONVERTURL_ERR ) );
+            sMsg = sMsg.replaceFirst( "%1", sFolderURL );
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                       VclMessageType::Warning, VclButtonsType::Ok, sMsg));
             xBox->run();
@@ -917,9 +941,10 @@ void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
         do
         {
             OUString sToken = _rPath.getToken( 0, CLASSPATH_DELIMITER, nIdx );
-            INetURLObject aURL( sToken, FSysStyle::Detect );
-            OUString sPath = aURL.getFSysPath( FSysStyle::Detect );
-            m_xPathList->append("", sPath, SvFileInformationManager::GetImageId(aURL));
+            OUString sURL;
+            osl::FileBase::getFileURLFromSystemPath(sToken, sURL); // best effort
+            INetURLObject aURL( sURL );
+            m_xPathList->append("", sToken, SvFileInformationManager::GetImageId(aURL));
         }
         while (nIdx>=0);
         // select first entry
