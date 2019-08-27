@@ -500,7 +500,7 @@ std::unique_ptr<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
     sal_Int32  nY;
     if( pDocSh )
     {
-        SdrPage* pPage = static_cast<SdrPage*>(pDoc->GetSdPage(0, PageKind::Standard));
+        SdrPage* pPage = pDoc->GetSdPage(0, PageKind::Standard);
         Size aSize(pPage->GetSize());
         nW = aSize.Width();
         nH = aSize.Height();

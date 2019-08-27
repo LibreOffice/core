@@ -790,7 +790,7 @@ struct StyleSheetDisposerFunctor final : public svl::StyleSheetDisposer
     void
     Dispose(rtl::Reference<SfxStyleSheetBase> styleSheet) override
     {
-        cppu::OWeakObject* weakObject = static_cast< ::cppu::OWeakObject* >(styleSheet.get());
+        cppu::OWeakObject* weakObject = styleSheet.get();
         css::uno::Reference< css::lang::XComponent > xComp( weakObject, css::uno::UNO_QUERY );
         if( xComp.is() ) try
         {

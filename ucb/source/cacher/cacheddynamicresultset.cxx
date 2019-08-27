@@ -200,8 +200,7 @@ XSERVICEINFO_COMMOM_IMPL( CachedDynamicResultSetFactory,
 static css::uno::Reference< css::uno::XInterface >
 CachedDynamicResultSetFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
 {
-    css::lang::XServiceInfo* pX =
-        static_cast<css::lang::XServiceInfo*>(new CachedDynamicResultSetFactory( ucbhelper::getComponentContext(rSMgr) ));
+    css::lang::XServiceInfo* pX = new CachedDynamicResultSetFactory( ucbhelper::getComponentContext(rSMgr) );
     return css::uno::Reference< css::uno::XInterface >::query( pX );
 }
 

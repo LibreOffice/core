@@ -663,8 +663,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
             pTableNode && (&pTableNode->GetTable() != m_pOwnTable))
         {
             // this is a foreign table
-            SwFrameFormat* pTableFormat =
-                static_cast<SwFrameFormat*>(pTableNode->GetTable().GetFrameFormat());
+            SwFrameFormat* pTableFormat = pTableNode->GetTable().GetFrameFormat();
             xRef = SwXTextTable::CreateXTextTable(pTableFormat);
         }
         else
@@ -1146,7 +1145,7 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
         {
             SwTableNode const*const pTableNode = pSttNode->FindTableNode();
             SwFrameFormat *const pTableFormat =
-                static_cast<SwFrameFormat*>(pTableNode->GetTable().GetFrameFormat());
+                pTableNode->GetTable().GetFrameFormat();
             SwTableBox *const  pBox = pSttNode->GetTableBox();
 
             xParentText = pBox

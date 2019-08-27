@@ -1015,7 +1015,7 @@ void SwDoc::DelTextFormatColl( SwTextFormatColl const *pColl, bool bBroadcast )
 
 static bool lcl_SetTextFormatColl( const SwNodePtr& rpNode, void* pArgs )
 {
-    SwContentNode* pCNd = static_cast<SwContentNode*>(rpNode->GetTextNode());
+    SwContentNode* pCNd = rpNode->GetTextNode();
 
     if( pCNd == nullptr)
         return true;

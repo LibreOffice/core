@@ -752,8 +752,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         }
 
         SfxInPlaceClient* pSdClient =
-            static_cast<Client*>(pViewShell->FindIPClient(
-                pObj->GetObjRef(), GetActiveWindow()));
+            pViewShell->FindIPClient(pObj->GetObjRef(), GetActiveWindow());
 
         if ( !pSdClient )
         {

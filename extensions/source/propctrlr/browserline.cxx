@@ -121,7 +121,7 @@ namespace pcr
 
         if(m_pBrowseButton)
         {
-            pRefWindow=static_cast<vcl::Window*>(m_pBrowseButton);
+            pRefWindow = m_pBrowseButton;
         }
         else if ( m_pControlWindow )
         {

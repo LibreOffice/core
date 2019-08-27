@@ -104,8 +104,7 @@ XSERVICEINFO_COMMOM_IMPL( HierarchyContentProvider,
 static css::uno::Reference< css::uno::XInterface >
 HierarchyContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
 {
-    css::lang::XServiceInfo* pX =
-        static_cast<css::lang::XServiceInfo*>(new HierarchyContentProvider( ucbhelper::getComponentContext(rSMgr) ));
+    css::lang::XServiceInfo* pX = new HierarchyContentProvider( ucbhelper::getComponentContext(rSMgr) );
     return css::uno::Reference< css::uno::XInterface >::query( pX );
 }
 

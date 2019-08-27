@@ -1839,8 +1839,8 @@ void SwFEShell::GetConnectableFrameFormats(SwFrameFormat & rFormat,
     StartAction();
 
     SwFormatChain rChain = rFormat.GetChain();
-    SwFrameFormat * pOldChainNext = static_cast<SwFrameFormat *>(rChain.GetNext());
-    SwFrameFormat * pOldChainPrev = static_cast<SwFrameFormat *>(rChain.GetPrev());
+    SwFrameFormat * pOldChainNext = rChain.GetNext();
+    SwFrameFormat * pOldChainPrev = rChain.GetPrev();
 
     if (pOldChainNext)
         mxDoc->Unchain(rFormat);

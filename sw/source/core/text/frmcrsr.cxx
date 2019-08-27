@@ -197,7 +197,7 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                                      bNoScroll );
     pFrame->GetFormatted();
 
-    const SwFrame* pTmpFrame = static_cast<SwFrame*>(pFrame->GetUpper());
+    const SwFrame* pTmpFrame = pFrame->GetUpper();
     if (pTmpFrame->getFrameArea().Top() == FAR_AWAY && !bAllowFarAway)
         return false;
 
@@ -373,7 +373,7 @@ bool SwTextFrame::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
     SwTextFrame* pFrame = &(const_cast<SwTextFrame*>(this)->GetFrameAtOfst( nOffset ));
 
     pFrame->GetFormatted();
-    const SwFrame* pTmpFrame = static_cast<SwFrame*>(pFrame->GetUpper());
+    const SwFrame* pTmpFrame = pFrame->GetUpper();
 
     SwRectFnSet aRectFnSet(pTmpFrame);
     SwTwips nUpperMaxY = aRectFnSet.GetPrtBottom(*pTmpFrame);

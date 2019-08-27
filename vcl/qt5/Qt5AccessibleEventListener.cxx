@@ -40,8 +40,7 @@ Qt5AccessibleEventListener::Qt5AccessibleEventListener(const Reference<XAccessib
 void Qt5AccessibleEventListener::notifyEvent(
     const css::accessibility::AccessibleEventObject& aEvent)
 {
-    QAccessibleInterface* pQAccessibleInterface
-        = static_cast<QAccessibleInterface*>(m_pAccessibleWidget);
+    QAccessibleInterface* pQAccessibleInterface = m_pAccessibleWidget;
 
     Reference<XAccessible> xChild;
     switch (aEvent.EventId)

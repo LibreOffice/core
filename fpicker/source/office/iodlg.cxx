@@ -2301,7 +2301,7 @@ Control* SvtFileDialog::getControl( sal_Int16 _nControlId, bool _bLabelControl )
             break;
 
         case EDIT_FILEURL_LABEL:
-            pReturn = static_cast< Control* >( pImpl->_pFtFileName );
+            pReturn = pImpl->_pFtFileName;
             break;
 
         case CHECKBOX_AUTOEXTENSION:

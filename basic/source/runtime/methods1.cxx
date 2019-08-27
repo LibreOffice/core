@@ -113,7 +113,7 @@ void SbRtl_CallByName(StarBASIC *, SbxArray & rPar, bool)
     }
 
     // 1. parameter is object
-    SbxBase* pObjVar = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
+    SbxBase* pObjVar = rPar.Get(1)->GetObject();
     SbxObject* pObj = nullptr;
     if( pObjVar )
         pObj = dynamic_cast<SbxObject*>( pObjVar );
@@ -852,7 +852,7 @@ void SbRtl_FindPropertyObject(StarBASIC *, SbxArray & rPar, bool)
         return;
     }
 
-    SbxBase* pObjVar = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
+    SbxBase* pObjVar = rPar.Get(1)->GetObject();
     SbxObject* pObj = nullptr;
     if( pObjVar )
     {

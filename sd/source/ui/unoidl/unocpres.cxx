@@ -186,7 +186,7 @@ uno::Any SAL_CALL SdXCustomPresentation::getByIndex( sal_Int32 Index )
         throw lang::IndexOutOfBoundsException();
 
     uno::Any aAny;
-    SdrPage * pPage = static_cast<SdrPage*>(const_cast<SdPage *>(mpSdCustomShow->PagesVector()[Index]));
+    SdrPage * pPage = const_cast<SdPage *>(mpSdCustomShow->PagesVector()[Index]);
 
     if( pPage )
     {

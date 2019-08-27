@@ -2968,7 +2968,7 @@ void DffRecordManager::Consume( SvStream& rIn, sal_uInt32 nStOfs )
     }
     if ( nStOfs )
     {
-        pCList = static_cast<DffRecordList*>(this);
+        pCList = this;
         while ( pCList->pNext )
             pCList = pCList->pNext.get();
         while (rIn.good() && ( ( rIn.Tell() + 8 ) <=  nStOfs ))
@@ -2987,7 +2987,7 @@ void DffRecordManager::Consume( SvStream& rIn, sal_uInt32 nStOfs )
 
 void DffRecordManager::Clear()
 {
-    pCList = static_cast<DffRecordList*>(this);
+    pCList = this;
     pNext.reset();
     nCurrent = 0;
     nCount = 0;
@@ -3004,7 +3004,7 @@ DffRecordHeader* DffRecordManager::Current()
 DffRecordHeader* DffRecordManager::First()
 {
     DffRecordHeader* pRet = nullptr;
-    pCList = static_cast<DffRecordList*>(this);
+    pCList = this;
     if ( pCList->nCount )
     {
         pCList->nCurrent = 0;

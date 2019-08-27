@@ -2779,7 +2779,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
             {
                 if (bUndo)
                     xCell->AddUndo();
-                SdrText* pText = static_cast< SdrText* >( xCell.get() );
+                SdrText* pText = xCell.get();
                 SdrObjEditView::ApplyFormatPaintBrushToText( rFormatSet, rTableObj, pText, bNoCharacterFormats, bNoParagraphFormats );
             }
         }

@@ -395,7 +395,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
         pBack->setOwningFrame( m_xFrame );
 
     // set NotebookBar
-    SystemWindow* pSysWindow = static_cast<SystemWindow*>(pParent);
+    SystemWindow* pSysWindow = pParent;
     if (pSysWindow)
     {
         //sfx2::SfxNotebookBar::StateMethod(pSysWindow, m_xFrame, "sfx/ui/notebookbar.ui");

@@ -647,7 +647,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
             m_pWrtShell->Push();
             SwRect aToFill;
 
-            SwCursorShell *pCursorShell = static_cast<SwCursorShell*>(m_pWrtShell.get());
+            SwCursorShell *pCursorShell = m_pWrtShell.get();
             SwPaM *pCursor = pCursorShell->GetCursor();
             SwPosition aPoint(*pCursor->GetPoint());
             const SwTextNode *pNode = aPoint.nNode.GetNode().GetTextNode();

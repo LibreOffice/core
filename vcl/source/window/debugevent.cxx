@@ -48,7 +48,7 @@ vcl::Window *DebugEventInjector::ChooseWindow()
         long nIdx = Application::GetTopWindowCount() * getRandom();
         pParent = Application::GetTopWindow( nIdx );
         if (!pParent)
-            pParent = static_cast<vcl::Window *>(Application::GetAppWindow());
+            pParent = Application::GetAppWindow();
     }
     assert (pParent != nullptr);
 

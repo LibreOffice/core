@@ -1573,7 +1573,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                     aReplList.push_back(aReplData);
                 }
 
-                pHisSheet = static_cast<SfxStyleSheet*>( pSourceStyleSheetPool->Next() );
+                pHisSheet = pSourceStyleSheetPool->Next();
             }
 
             // If new styles were created: re-create parent chaining of the item

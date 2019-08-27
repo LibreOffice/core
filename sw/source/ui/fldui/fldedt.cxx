@@ -285,7 +285,7 @@ IMPL_LINK(SwFieldEditDlg, NextPrevHdl, weld::Button&, rButton, void)
     SwFieldMgr& rMgr = pTabPage->GetFieldMgr();
     SwField *pCurField = rMgr.GetCurField();
     if (pCurField->GetTypeId() == TYP_DBFLD)
-        pOldTyp = static_cast<SwDBFieldType*>(pCurField->GetTyp());
+        pOldTyp = pCurField->GetTyp();
 
     rMgr.GoNextPrev( bNext, pOldTyp );
     pCurField = rMgr.GetCurField();

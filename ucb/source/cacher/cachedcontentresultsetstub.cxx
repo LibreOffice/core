@@ -546,8 +546,7 @@ XSERVICEINFO_COMMOM_IMPL( CachedContentResultSetStubFactory,
 static css::uno::Reference< css::uno::XInterface >
 CachedContentResultSetStubFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & )
 {
-    css::lang::XServiceInfo* pX =
-        static_cast<css::lang::XServiceInfo*>(new CachedContentResultSetStubFactory);
+    css::lang::XServiceInfo* pX = new CachedContentResultSetStubFactory;
     return css::uno::Reference< css::uno::XInterface >::query( pX );
 }
 css::uno::Sequence< OUString >

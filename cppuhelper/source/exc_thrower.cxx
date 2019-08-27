@@ -134,7 +134,7 @@ Any ExceptionThrower::queryInterface( Type const & type )
     if (type.equals( cppu::UnoType<XInterface>::get() ) ||
         type.equals( ExceptionThrower::getCppuType() ))
     {
-        XExceptionThrower * that = static_cast< XExceptionThrower * >( this );
+        XExceptionThrower * that = this;
         return Any( &that, type );
     }
     return Any();

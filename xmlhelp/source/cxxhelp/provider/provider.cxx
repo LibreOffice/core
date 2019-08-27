@@ -132,8 +132,7 @@ static uno::Reference< uno::XInterface >
 ContentProvider_CreateInstance(
          const uno::Reference< lang::XMultiServiceFactory> & rSMgr )
 {
-    lang::XServiceInfo * pX = static_cast< lang::XServiceInfo * >(
-        new ContentProvider( comphelper::getComponentContext(rSMgr) ) );
+    lang::XServiceInfo * pX = new ContentProvider( comphelper::getComponentContext(rSMgr) );
     return uno::Reference< uno::XInterface >::query( pX );
 }
 

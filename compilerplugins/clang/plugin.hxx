@@ -283,6 +283,12 @@ bool isSamePathname(StringRef pathname, StringRef other);
 // "Language linkage of function type":
 bool hasCLanguageLinkageType(FunctionDecl const * decl);
 
+// Count the number of times the base class is present in the subclass hierarchy
+//
+int derivedFromCount(clang::QualType subclassType, clang::QualType baseclassType);
+int derivedFromCount(const CXXRecordDecl* subtypeRecord, const CXXRecordDecl* baseRecord);
+
+
 } // namespace
 
 #endif // COMPILEPLUGIN_H
