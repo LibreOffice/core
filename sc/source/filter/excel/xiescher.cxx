@@ -1247,7 +1247,7 @@ SdrObjectUniquePtr XclImpOvalObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, 
     SdrObjectUniquePtr xSdrObj(
         new SdrCircObj(
             *GetDoc().GetDrawLayer(),
-            OBJ_CIRC,
+            SdrCircKind::Full,
             rAnchorRect));
     ConvertRectStyle( *xSdrObj );
     rDffConv.Progress();
@@ -1319,7 +1319,7 @@ SdrObjectUniquePtr XclImpArcObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, c
             aNewRect.AdjustTop( -(rAnchorRect.GetHeight()) );
         break;
     }
-    SdrObjKind eObjKind = maFillData.IsFilled() ? OBJ_SECT : OBJ_CARC;
+    SdrCircKind eObjKind = maFillData.IsFilled() ? SdrCircKind::Section : SdrCircKind::Arc;
     SdrObjectUniquePtr xSdrObj(
         new SdrCircObj(
             *GetDoc().GetDrawLayer(),

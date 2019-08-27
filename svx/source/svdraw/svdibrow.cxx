@@ -827,7 +827,7 @@ static bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uIn
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_CIRCKIND,pItem)) {
                 SdrCircKind eKind=static_cast<const SdrCircKindItem*>(pItem)->GetValue();
-                if (eKind==SDRCIRC_FULL) return true;
+                if (eKind==SdrCircKind::Full) return true;
             }
         } break;
     } // switch

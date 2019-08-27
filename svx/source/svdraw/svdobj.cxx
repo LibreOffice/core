@@ -3113,19 +3113,15 @@ SdrObject* SdrObjFactory::MakeNewObject(
             case OBJ_CARC:
             case OBJ_CCUT:
             {
+                SdrCircKind eCircKind = ToSdrCircKind(static_cast<SdrObjKind>(nIdentifier));
                 if(nullptr != pSnapRect)
                 {
-                    pObj = new SdrCircObj(
-                        rSdrModel,
-                        static_cast<SdrObjKind>(nIdentifier),
-                        *pSnapRect);
+                    pObj = new SdrCircObj(rSdrModel, eCircKind, *pSnapRect);
                     bSetSnapRect = false;
                 }
                 else
                 {
-                    pObj = new SdrCircObj(
-                        rSdrModel,
-                        static_cast<SdrObjKind>(nIdentifier));
+                    pObj = new SdrCircObj(rSdrModel, eCircKind);
                 }
             }
             break;

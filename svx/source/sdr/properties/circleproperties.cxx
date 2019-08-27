@@ -94,28 +94,14 @@ namespace sdr
         void CircleProperties::ForceDefaultAttributes()
         {
             SdrCircObj& rObj = static_cast<SdrCircObj&>(GetSdrObject());
-            SdrCircKind eKindA = SDRCIRC_FULL;
-            SdrObjKind eKind = rObj.GetCircleKind();
+            SdrCircKind eKind = rObj.GetCircleKind();
 
-            if(eKind == OBJ_SECT)
-            {
-                eKindA = SDRCIRC_SECT;
-            }
-            else if(eKind == OBJ_CARC)
-            {
-                eKindA = SDRCIRC_ARC;
-            }
-            else if(eKind == OBJ_CCUT)
-            {
-                eKindA = SDRCIRC_CUT;
-            }
-
-            if(eKindA != SDRCIRC_FULL)
+            if(eKind != SdrCircKind::Full)
             {
                 // force ItemSet
                 GetObjectItemSet();
 
-                mpItemSet->Put(SdrCircKindItem(eKindA));
+                mpItemSet->Put(SdrCircKindItem(eKind));
 
                 if(rObj.GetStartAngle())
                 {

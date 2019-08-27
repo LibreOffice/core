@@ -397,7 +397,7 @@ SdrObject* SwWW8ImplReader::ReadElipse(WW8_DPHEAD const * pHd, SfxAllItemSet &rS
 
     SdrObject* pObj = new SdrCircObj(
         *m_pDrawModel,
-        OBJ_CIRC,
+        SdrCircKind::Full,
         tools::Rectangle(aP0, aP1));
 
     SetStdAttr( rSet, aElipse.aLnt, aElipse.aShd );
@@ -432,7 +432,7 @@ SdrObject* SwWW8ImplReader::ReadArc(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet)
 
     SdrObject* pObj = new SdrCircObj(
         *m_pDrawModel,
-        OBJ_SECT,
+        SdrCircKind::Section,
         tools::Rectangle(aP0, aP1),
         nW * 9000,
         ( ( nW + 1 ) & 3 ) * 9000);

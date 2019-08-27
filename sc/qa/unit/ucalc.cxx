@@ -2766,7 +2766,7 @@ void Test::testGraphicsInGroup()
     {
         // Add a circle.
         tools::Rectangle aOrigRect(10,10,210,210); // 200 x 200
-        SdrCircObj* pObj = new SdrCircObj(*pDrawLayer, OBJ_CIRC, aOrigRect);
+        SdrCircObj* pObj = new SdrCircObj(*pDrawLayer, SdrCircKind::Full, aOrigRect);
         pPage->InsertObject(pObj);
         const tools::Rectangle& rNewRect = pObj->GetLogicRect();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Position and size of the circle shouldn't change when inserted into the page.",
