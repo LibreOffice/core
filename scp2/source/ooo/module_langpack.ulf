@@ -718,6 +718,12 @@ en-US = "Sidama"
 [STR_DESC_MODULE_LANGPACK_SID]
 en-US = "Installs the Sidama user interface"
 
+[STR_NAME_MODULE_LANGPACK_SZL]
+en-US = "Silesian"
+
+[STR_DESC_MODULE_LANGPACK_SZL]
+en-US = "Installs the Silesian user interface"
+
 [STR_NAME_MODULE_LANGPACK_QTZ]
 en-US = "KeyID"
 
