@@ -526,7 +526,6 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
             if (bInQuote)
             {
                 // Opening quote.
-                bAllNumeric = false;
                 pElem = nullptr;
             }
             else
@@ -534,6 +533,9 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
                 // Closing quote.
                 if (pElem)
                     aElem = OUString(pElem, p-pElem);
+                // Non empty string
+                if (!aElem.isEmpty())
+                    bAllNumeric = false;
                 aRawElems.push_back(aElem);
                 pElem = nullptr;
                 aElem.clear();
@@ -591,7 +593,12 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
         if (bAllNumeric)
         {
             for (const OUString & aRawElem : aRawElems)
-                aValues.push_back(aRawElem.toDouble());
+            {
+                if (!aRawElem.isEmpty())
+                    aValues.push_back(aRawElem.toDouble());
+                else
+                    aValues.push_back(NAN);
+            }
         }
         else
         {
