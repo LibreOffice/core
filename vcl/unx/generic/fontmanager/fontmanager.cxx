@@ -163,10 +163,10 @@ int PrintFontManager::getDirectoryAtom( const OString& rDirectory )
     return nAtom;
 }
 
-std::vector<fontID> PrintFontManager::addFontFile( const OString& rFileName )
+std::vector<fontID> PrintFontManager::addFontFile( const OUString& rFileUrl )
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    INetURLObject aPath( OStringToOUString( rFileName, aEncoding ), FSysStyle::Detect );
+    INetURLObject aPath( rFileUrl );
     OString aName(OUStringToOString(aPath.GetLastName(INetURLObject::DecodeMechanism::WithCharset, aEncoding), aEncoding));
     OString aDir( OUStringToOString(
         INetURLObject::decode( aPath.GetPath(), INetURLObject::DecodeMechanism::WithCharset, aEncoding ), aEncoding ) );
