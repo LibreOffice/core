@@ -24,6 +24,7 @@
 #include <vcl/drawables/EllipseDrawable.hxx>
 #include <vcl/drawables/ArcDrawable.hxx>
 #include <vcl/drawables/PieDrawable.hxx>
+#include <vcl/drawables/ChordDrawable.hxx>
 
 #include <salgdi.hxx>
 
@@ -49,49 +50,7 @@ void OutputDevice::DrawPie( const tools::Rectangle& rRect,
 void OutputDevice::DrawChord( const tools::Rectangle& rRect,
                               const Point& rStartPt, const Point& rEndPt )
 {
-    assert(!is_double_buffered_window());
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaChordAction( rRect, rStartPt, rEndPt ) );
-
-    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
-        return;
-
-    tools::Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
-    if ( aRect.IsEmpty() )
-        return;
-
-    // we need a graphics
-    if ( !mpGraphics && !AcquireGraphics() )
-        return;
-
-    if ( mbInitClipRegion )
-        InitClipRegion();
-    if ( mbOutputClipped )
-        return;
-
-    if ( mbInitLineColor )
-        InitLineColor();
-
-    const Point     aStart( ImplLogicToDevicePixel( rStartPt ) );
-    const Point     aEnd( ImplLogicToDevicePixel( rEndPt ) );
-    tools::Polygon aChordPoly( aRect, aStart, aEnd, PolyStyle::Chord );
-
-    if ( aChordPoly.GetSize() >= 2 )
-    {
-        SalPoint* pPtAry = reinterpret_cast<SalPoint*>(aChordPoly.GetPointAry());
-        if ( !mbFillColor )
-            mpGraphics->DrawPolyLine( aChordPoly.GetSize(), pPtAry, this );
-        else
-        {
-            if ( mbInitFillColor )
-                InitFillColor();
-            mpGraphics->DrawPolygon( aChordPoly.GetSize(), pPtAry, this );
-        }
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawChord( rRect, rStartPt, rEndPt );
+    Draw(vcl::ChordDrawable(rRect, rStartPt, rEndPt));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -126,6 +126,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/drawables/EllipseDrawable \
     vcl/source/drawables/ArcDrawable \
     vcl/source/drawables/PieDrawable \
+    vcl/source/drawables/ChordDrawable \
     vcl/source/drawables/RoundRectDrawable \
     vcl/source/drawables/PolyHairlineDrawable \
     vcl/source/drawables/PolyLineDrawable \
