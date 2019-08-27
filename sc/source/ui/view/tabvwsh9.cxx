@@ -20,6 +20,7 @@
 #include <svx/imapdlg.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
+#include <svx/ImageMapInfo.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
@@ -131,10 +132,10 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
                 if ( ScIMapDlgGetObj(pDlg) == static_cast<void*>(pSdrObj) )
                 {
                     const ImageMap& rImageMap = ScIMapDlgGetMap(pDlg);
-                    ScIMapInfo*     pIMapInfo = ScDrawLayer::GetIMapInfo( pSdrObj );
+                    SvxIMapInfo*     pIMapInfo = SvxIMapInfo::GetIMapInfo( pSdrObj );
 
                     if ( !pIMapInfo )
-                        pSdrObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new ScIMapInfo( rImageMap )) );
+                        pSdrObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new SvxIMapInfo( rImageMap )) );
                     else
                         pIMapInfo->SetImageMap( rImageMap );
 

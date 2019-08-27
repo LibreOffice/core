@@ -23,9 +23,9 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/unoshape.hxx>
+#include <vcl/imapobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
-#include <vcl/imapobj.hxx>
 
 SvxIMapInfo* SvxIMapInfo::GetIMapInfo(SdrObject const* pObject)
 {
@@ -47,7 +47,8 @@ SvxIMapInfo* SvxIMapInfo::GetIMapInfo(SdrObject const* pObject)
     return pIMapInfo;
 }
 
-IMapObject* SvxIMapInfo::GetHitIMapObject(SdrObject const* pObj, const Point& rWinPoint)
+IMapObject* SvxIMapInfo::GetHitIMapObject(const SdrObject* pObj, const Point& rWinPoint,
+                                          const vcl::Window* rCmpWnd)
 {
     SvxIMapInfo* pIMapInfo = GetIMapInfo(pObj);
     IMapObject* pIMapObj = nullptr;
@@ -58,7 +59,15 @@ IMapObject* SvxIMapInfo::GetHitIMapObject(SdrObject const* pObj, const Point& rW
         Size aGraphSize;
         Point aRelPoint(rWinPoint);
         ImageMap& rImageMap = const_cast<ImageMap&>(pIMapInfo->GetImageMap());
-        const ::tools::Rectangle& rRect = pObj->GetLogicRect();
+        tools::Rectangle& rRect = const_cast<tools::Rectangle&>(pObj->GetLogicRect());
+
+        if (rCmpWnd)
+        {
+            MapMode aWndMode = rCmpWnd->GetMapMode();
+            aRelPoint = rCmpWnd->LogicToLogic(rWinPoint, &aWndMode, &aMap100);
+            rRect = rCmpWnd->LogicToLogic(pObj->GetLogicRect(), &aWndMode, &aMap100);
+        }
+
         bool bObjSupported = false;
 
         // execute HitTest

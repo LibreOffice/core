@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <svx/svxdllapi.h>
 #include <svx/svdobj.hxx>
+#include <svx/svxdllapi.h>
 #include <vcl/imap.hxx>
 
 #define SVX_IMAPINFO_ID 2
@@ -47,8 +47,9 @@ public:
     void SetImageMap(const ImageMap& rIMap) { aImageMap = rIMap; }
     const ImageMap& GetImageMap() const { return aImageMap; }
 
-    static SvxIMapInfo* GetIMapInfo(SdrObject const* pObject);
-    static IMapObject* GetHitIMapObject(SdrObject const* pObj, const Point& rWinPoint);
+    static SvxIMapInfo* GetIMapInfo(const SdrObject* pObject);
+    static IMapObject* GetHitIMapObject(const SdrObject* pObj, const Point& rWinPoint,
+                                        const vcl::Window* rCmpWnd = nullptr);
     static ImageMap* GetImageMapForObject(SdrObject* pObj);
 };
 

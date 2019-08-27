@@ -22,6 +22,7 @@
 #include <svx/fmpage.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/ImageMapInfo.hxx>
 #include <vcl/imapobj.hxx>
 #include <vcl/help.hxx>
 #include <tools/urlobj.hxx>
@@ -254,11 +255,11 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
             if ( eHit != SdrHitKind::NONE && aVEvt.pObj != nullptr )
             {
                 // URL for IMapObject below Pointer is help text
-                if ( ScDrawLayer::GetIMapInfo( aVEvt.pObj ) )
+                if ( SvxIMapInfo::GetIMapInfo( aVEvt.pObj ) )
                 {
                     Point aLogicPos = PixelToLogic( aPosPixel );
-                    IMapObject* pIMapObj = ScDrawLayer::GetHitIMapObject(
-                                                    aVEvt.pObj, aLogicPos, *this );
+                    IMapObject* pIMapObj = SvxIMapInfo::GetHitIMapObject(
+                                                    aVEvt.pObj, aLogicPos, this );
 
                     if ( pIMapObj )
                     {
