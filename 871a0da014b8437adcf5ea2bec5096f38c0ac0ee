@@ -22,6 +22,30 @@
       "revId": "871a0da014b8437adcf5ea2bec5096f38c0ac0ee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_97e2d72e",
+        "filename": "editeng/source/editeng/editobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-08-27T19:31:36Z",
+      "side": 1,
+      "message": "std::equal() returns false if size mismatch.",
+      "parentUuid": "bf659307_f7a55305",
+      "range": {
+        "startLine": 224,
+        "startChar": 14,
+        "endLine": 224,
+        "endChar": 24
+      },
+      "revId": "871a0da014b8437adcf5ea2bec5096f38c0ac0ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
