@@ -16,6 +16,24 @@
       "revId": "10f3c9fbcb2f7032dcac80d271e7740452e4acde",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_3ca5f2b5",
+        "filename": "vcl/win/gdi/salprn.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1508,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2019-08-27T11:15:35Z",
+      "side": 1,
+      "message": "I not understand\nbut look here\nhttps://docs.microsoft.com/en-us/windows/win32/winmsg/about-messages-and-message-queues",
+      "parentUuid": "bf659307_dc5ab6f1",
+      "revId": "10f3c9fbcb2f7032dcac80d271e7740452e4acde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
