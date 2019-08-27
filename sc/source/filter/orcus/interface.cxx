@@ -1457,15 +1457,9 @@ void ScOrcusStyles::number_format::applyToItemSet(SfxItemSet& rSet, const ScDocu
     OUString Code = maCode; /* <-- Done because the SvNumberFormatter::PutEntry demands a non const NumFormat Code*/
     SvNumFormatType type = SvNumFormatType::ALL;
 
-    if (pFormatter->PutEntry(Code, nCheckPos, type, nKey, LANGUAGE_ENGLISH_US))
-    {
-        if (nCheckPos == 0)
-        {
-            rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nKey));
-        }
-    }
-    else
-        SAL_WARN("sc.orcus.style", "Cannot set Number Format");
+    pFormatter->PutEntry(Code, nCheckPos, type, nKey, LANGUAGE_ENGLISH_US);
+    if (!nCheckPos)
+        rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nKey));
 }
 
 ScOrcusStyles::xf::xf():
