@@ -436,9 +436,9 @@ FreetypeFont::FreetypeFont(LogicalFontInstance* pFontInstance, FreetypeFontInfo*
 
     FT_New_Size( maFaceFT, &maSizeFT );
     FT_Activate_Size( maSizeFT );
-    FT_Error rc = FT_Set_Pixel_Sizes( maFaceFT, mnWidth, rFSD.mnHeight );
-    if( rc != FT_Err_Ok )
-        return;
+    /* This might fail for color bitmap fonts, but that is fine since we will
+     * not need any glyph data from FreeType in this case */
+    /*FT_Error rc = */ FT_Set_Pixel_Sizes( maFaceFT, mnWidth, rFSD.mnHeight );
 
     FT_Select_Charmap(maFaceFT, FT_ENCODING_UNICODE);
 
