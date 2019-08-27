@@ -282,11 +282,11 @@ public:
 class SwUndoFlyBase : public SwUndo, private SwUndoSaveSection
 {
 protected:
-    SwFrameFormat* pFrameFormat;          // The saved FlyFormat.
-    sal_uLong nNdPgPos;
-    sal_Int32 nCntPos;         // Page at/in paragraph.
-    RndStdIds nRndId;
-    bool bDelFormat;           // Delete saved format.
+    SwFrameFormat* m_pFrameFormat;          // The saved FlyFormat.
+    sal_uLong m_nNodePagePos;
+    sal_Int32 m_nContentPos;         // Page at/in paragraph.
+    RndStdIds m_nRndId;
+    bool m_bDelFormat;           // Delete saved format.
 
     void InsFly(::sw::UndoRedoContext & rContext, bool bShowSel = true);
     void DelFly( SwDoc* );
