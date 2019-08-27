@@ -17,57 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/drawables/EllipseDrawable.hxx>
 
 #include <salgdi.hxx>
 
+#include <cassert>
+
 void OutputDevice::DrawEllipse( const tools::Rectangle& rRect )
 {
-    assert(!is_double_buffered_window());
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaEllipseAction( rRect ) );
-
-    if  ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
-        return;
-
-    tools::Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
-    if ( aRect.IsEmpty() )
-        return;
-
-    // we need a graphics
-    if ( !mpGraphics && !AcquireGraphics() )
-        return;
-
-    if ( mbInitClipRegion )
-        InitClipRegion();
-    if ( mbOutputClipped )
-        return;
-
-    if ( mbInitLineColor )
-        InitLineColor();
-
-    tools::Polygon aRectPoly( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
-    if ( aRectPoly.GetSize() >= 2 )
-    {
-        SalPoint* pPtAry = reinterpret_cast<SalPoint*>(aRectPoly.GetPointAry());
-        if ( !mbFillColor )
-            mpGraphics->DrawPolyLine( aRectPoly.GetSize(), pPtAry, this );
-        else
-        {
-            if ( mbInitFillColor )
-                InitFillColor();
-            mpGraphics->DrawPolygon( aRectPoly.GetSize(), pPtAry, this );
-        }
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawEllipse( rRect );
+    Draw(vcl::EllipseDrawable(rRect));
 }
 
 void OutputDevice::DrawArc( const tools::Rectangle& rRect,
