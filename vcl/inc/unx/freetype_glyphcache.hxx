@@ -99,6 +99,8 @@ public:
 
     virtual rtl::Reference<LogicalFontInstance> CreateFontInstance( const FontSelectPattern& ) const override;
     virtual sal_IntPtr      GetFontId() const override { return mpFreetypeFontInfo->GetFontId(); }
+
+    hb_blob_t*              GetHbTable(const char* pName) override;
 };
 
 // a class for cache entries for physical font instances that are based on serverfonts

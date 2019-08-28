@@ -232,16 +232,15 @@ bool CoreTextStyle::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rR
     return true;
 }
 
-static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
+hb_blob_t* CoreTextFontFace::GetHbTable(const char* pName)
 {
     sal_uLong nLength = 0;
     unsigned char* pBuffer = nullptr;
-    CoreTextFontFace* pFont = static_cast<CoreTextFontFace*>(pUserData);
-    nLength = pFont->GetFontTable(nTableTag, nullptr);
+    nLength = GetFontTable(pName, nullptr);
     if (nLength > 0)
     {
         pBuffer = new unsigned char[nLength];
-        pFont->GetFontTable(nTableTag, pBuffer);
+        GetFontTable(pName, pBuffer);
     }
 
     hb_blob_t* pBlob = nullptr;
@@ -253,9 +252,7 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
 
 hb_font_t* CoreTextStyle::ImplInitHbFont()
 {
-    hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, const_cast<PhysicalFontFace*>(GetFontFace()), nullptr);
-
-    return InitHbFont(pHbFace);
+    return InitHbFont(GetFontFace()->GetHbFace());
 }
 
 rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
