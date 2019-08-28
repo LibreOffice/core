@@ -108,7 +108,8 @@
     constructor="com_sun_star_comp_Impress_XMLOasisContentImporter_get_implementation">
     <service name="com.sun.star.comp.Impress.XMLOasisContentImporter"/>
   </implementation>
-  <implementation name="XMLImpressExportOOO">
+  <implementation name="XMLImpressExportOOO"
+    constructor="com_sun_star_comp_Impress_XMLExporter_get_implementation">
     <service name="com.sun.star.comp.Impress.XMLExporter"/>
   </implementation>
   <implementation name="XMLImpressExportOasis"

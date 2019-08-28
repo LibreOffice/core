@@ -33,13 +33,6 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XInterface; }
 } } }
 
-// impress OOo export
-OUString XMLImpressExportOOO_getImplementationName() throw();
-css::uno::Sequence<OUString> XMLImpressExportOOO_getSupportedServiceNames() throw();
-/// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> XMLImpressExportOOO_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-
 // draw oasis export
 OUString XMLDrawExportOasis_getImplementationName() throw();
 css::uno::Sequence<OUString> XMLDrawExportOasis_getSupportedServiceNames() throw();
