@@ -45,19 +45,23 @@
 #include <functional>
 #include <memory>
 #include <algorithm>
+#include <utility>
 #include <vector>
 
 using namespace ::com::sun::star;
 
-
-namespace std
+namespace
 {
     // add operator== for weak_ptr, so we can use std::find over lists of them
-    template<typename T> static bool operator==( weak_ptr<T> const& rLHS,
-                                          weak_ptr<T> const& rRHS )
-    {
-        return rLHS.lock().get() == rRHS.lock().get();
-    }
+    struct ViewEventHandlerWeakPtrWrapper final {
+        slideshow::internal::ViewEventHandlerWeakPtr ptr;
+
+        ViewEventHandlerWeakPtrWrapper(slideshow::internal::ViewEventHandlerWeakPtr thePtr):
+            ptr(std::move(thePtr)) {}
+
+        bool operator ==(ViewEventHandlerWeakPtrWrapper const & other) const
+        { return ptr.lock().get() == other.ptr.lock().get(); }
+    };
 }
 
 namespace slideshow {
@@ -209,8 +213,8 @@ struct EventMultiplexerImpl
         PauseEventHandlerSharedPtr,
         std::vector<PauseEventHandlerSharedPtr> >         ImplPauseHandlers;
     typedef ThreadUnsafeListenerContainer<
-        ViewEventHandlerWeakPtr,
-        std::vector<ViewEventHandlerWeakPtr> >            ImplViewHandlers;
+        ViewEventHandlerWeakPtrWrapper,
+        std::vector<ViewEventHandlerWeakPtrWrapper> >     ImplViewHandlers;
     typedef ThreadUnsafeListenerContainer<
         ViewRepaintHandlerSharedPtr,
         std::vector<ViewRepaintHandlerSharedPtr> >        ImplRepaintHandlers;
@@ -1101,8 +1105,8 @@ void EventMultiplexer::notifyViewAdded( const UnoViewSharedPtr& rView )
             mpImpl->mxListener.get() );
 
     mpImpl->maViewHandlers.applyAll(
-        [&rView]( const ViewEventHandlerWeakPtr& pHandler )
-        { return pHandler.lock()->viewAdded( rView ); } );
+        [&rView]( const ViewEventHandlerWeakPtrWrapper& pHandler )
+        { return pHandler.ptr.lock()->viewAdded( rView ); } );
 }
 
 void EventMultiplexer::notifyViewRemoved( const UnoViewSharedPtr& rView )
@@ -1123,15 +1127,15 @@ void EventMultiplexer::notifyViewRemoved( const UnoViewSharedPtr& rView )
             mpImpl->mxListener.get() );
 
     mpImpl->maViewHandlers.applyAll(
-        [&rView]( const ViewEventHandlerWeakPtr& pHandler )
-        { return pHandler.lock()->viewRemoved( rView ); } );
+        [&rView]( const ViewEventHandlerWeakPtrWrapper& pHandler )
+        { return pHandler.ptr.lock()->viewRemoved( rView ); } );
 }
 
 void EventMultiplexer::notifyViewChanged( const UnoViewSharedPtr& rView )
 {
     mpImpl->maViewHandlers.applyAll(
-        [&rView]( const ViewEventHandlerWeakPtr& pHandler )
-        { return pHandler.lock()->viewChanged( rView ); } );
+        [&rView]( const ViewEventHandlerWeakPtrWrapper& pHandler )
+        { return pHandler.ptr.lock()->viewChanged( rView ); } );
 }
 
 void EventMultiplexer::notifyViewChanged( const uno::Reference<presentation::XSlideShowView>& xView )
@@ -1147,7 +1151,8 @@ void EventMultiplexer::notifyViewChanged( const uno::Reference<presentation::XSl
 void EventMultiplexer::notifyViewsChanged()
 {
     mpImpl->maViewHandlers.applyAll(
-        std::mem_fn( &ViewEventHandler::viewsChanged ));
+        []( const ViewEventHandlerWeakPtrWrapper& pHandler )
+        { return pHandler.ptr.lock()->viewsChanged(); } );
 }
 
 void EventMultiplexer::notifyViewClobbered(
