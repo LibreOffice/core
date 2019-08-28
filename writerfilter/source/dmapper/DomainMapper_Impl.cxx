@@ -1527,6 +1527,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         xCur->gotoEnd( false );
                     xCur->goLeft( 1 , true );
                     CheckParaMarkerRedline( xCur );
+                    CheckRedline( xCur );
                 }
 
                 css::uno::Reference<css::beans::XPropertySet> xParaProps(xTextRange, uno::UNO_QUERY);
