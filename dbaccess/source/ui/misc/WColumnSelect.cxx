@@ -138,7 +138,7 @@ void OWizColumnSelect::Reset()
 
 void OWizColumnSelect::ActivatePage( )
 {
-    // if there are no dest columns reset the left side with the origibnal columns
+    // if there are no dest columns reset the left side with the original columns
     if(m_pParent->getDestColumns().empty())
         Reset();
 
