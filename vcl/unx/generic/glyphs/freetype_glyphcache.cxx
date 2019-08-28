@@ -445,9 +445,6 @@ FreetypeFont::FreetypeFont(LogicalFontInstance* pFontInstance, FreetypeFontInfo*
     if( mpFontInfo->IsSymbolFont() )
     {
         FT_Encoding eEncoding = FT_ENCODING_MS_SYMBOL;
-        if (!FT_IS_SFNT(maFaceFT))
-            eEncoding = FT_ENCODING_ADOBE_CUSTOM; // freetype wants this for PS symbol fonts
-
         FT_Select_Charmap(maFaceFT, eEncoding);
     }
 
@@ -707,48 +704,11 @@ bool FreetypeFontInfo::GetFontCodeRanges( CmapResult& rResult ) const
 {
     rResult.mbSymbolic = IsSymbolFont();
 
-    // TODO: is the full CmapResult needed on platforms calling this?
-    if( FT_IS_SFNT( maFaceFT ) )
-    {
-        sal_uLong nLength = 0;
-        const unsigned char* pCmap = GetTable( "cmap", &nLength );
-        if( pCmap && (nLength > 0) )
-            if( ParseCMAP( pCmap, nLength, rResult ) )
-                return true;
-    }
-
-    std::vector<sal_uInt32> aCodes;
-
-    // FT's coverage is available since FT>=2.1.0 (OOo-baseline>=2.1.4 => ok)
-    aCodes.reserve( 0x1000 );
-    FT_UInt nGlyphIndex;
-    for( sal_uInt32 cCode = FT_Get_First_Char( maFaceFT, &nGlyphIndex );; )
-    {
-        if( !nGlyphIndex )
-            break;
-        aCodes.push_back( cCode );  // first code inside range
-        sal_uInt32 cNext;
-        do cNext = FT_Get_Next_Char( maFaceFT, cCode, &nGlyphIndex ); while( cNext == ++cCode );
-        aCodes.push_back( cCode );  // first code outside range
-        cCode = cNext;
-    }
-
-    const int nCount = aCodes.size();
-    if( !nCount) {
-        if( !rResult.mbSymbolic )
-            return false;
-
-        // we usually get here for Type1 symbol fonts
-        aCodes.push_back( 0xF020 );
-        aCodes.push_back( 0xF100 );
-    }
-
-    sal_uInt32* pCodes = new sal_uInt32[ nCount ];
-    for( int i = 0; i < nCount; ++i )
-        pCodes[i] = aCodes[i];
-    rResult.mpRangeCodes = pCodes;
-    rResult.mnRangeCount = nCount / 2;
-    return true;
+    sal_uLong nLength = 0;
+    const unsigned char* pCmap = GetTable( "cmap", &nLength );
+    if( pCmap && (nLength > 0) )
+        if( ParseCMAP( pCmap, nLength, rResult ) )
+            return true;
 }
 
 bool FreetypeFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
