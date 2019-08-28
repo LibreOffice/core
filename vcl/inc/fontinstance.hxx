@@ -77,14 +77,12 @@ public: // TODO: make data members private
     int GetKashidaWidth();
 
     void GetScale(double* nXScale, double* nYScale);
-    static inline void DecodeOpenTypeTag(const uint32_t nTableTag, char* pTagName);
 
 protected:
     explicit LogicalFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
 
     virtual bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const = 0;
 
-    // Takes ownership of pHbFace.
     static hb_font_t* InitHbFont(hb_face_t* pHbFace);
     virtual hb_font_t* ImplInitHbFont() { assert(false); return hb_font_get_empty(); }
     inline void ReleaseHbFont();
@@ -115,15 +113,6 @@ inline void LogicalFontInstance::ReleaseHbFont()
         return;
     hb_font_destroy(m_pHbFont);
     m_pHbFont = nullptr;
-}
-
-inline void LogicalFontInstance::DecodeOpenTypeTag(const uint32_t nTableTag, char* pTagName)
-{
-    pTagName[0] = static_cast<char>(nTableTag >> 24);
-    pTagName[1] = static_cast<char>(nTableTag >> 16);
-    pTagName[2] = static_cast<char>(nTableTag >> 8);
-    pTagName[3] = static_cast<char>(nTableTag);
-    pTagName[4] = 0;
 }
 
 #endif // INCLUDED_VCL_INC_FONTINSTANCE_HXX
