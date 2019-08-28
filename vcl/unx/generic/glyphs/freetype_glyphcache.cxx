@@ -684,8 +684,11 @@ const FontCharMapRef& FreetypeFontInfo::GetFontCharMap()
 
     // get the charmap and cache it
     CmapResult aCmapResult;
-    bool bOK = GetFontCodeRanges( aCmapResult );
-    if( bOK )
+    aCmapResult.mbSymbolic = IsSymbolFont();
+
+    sal_uLong nLength = 0;
+    const unsigned char* pCmap = GetTable("cmap", &nLength);
+    if (pCmap && (nLength > 0) && ParseCMAP(pCmap, nLength, aCmapResult))
     {
         FontCharMapRef xFontCharMap( new FontCharMap ( aCmapResult ) );
         mxFontCharMap = xFontCharMap;
@@ -697,18 +700,6 @@ const FontCharMapRef& FreetypeFontInfo::GetFontCharMap()
     }
     // mxFontCharMap on either branch now has a refcount of 1
     return mxFontCharMap;
-}
-
-// TODO: merge into method GetFontCharMap()
-bool FreetypeFontInfo::GetFontCodeRanges( CmapResult& rResult ) const
-{
-    rResult.mbSymbolic = IsSymbolFont();
-
-    sal_uLong nLength = 0;
-    const unsigned char* pCmap = GetTable( "cmap", &nLength );
-    if( pCmap && (nLength > 0) )
-        if( ParseCMAP( pCmap, nLength, rResult ) )
-            return true;
 }
 
 bool FreetypeFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
