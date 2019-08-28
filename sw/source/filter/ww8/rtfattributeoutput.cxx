@@ -3672,7 +3672,8 @@ bool RtfAttributeOutput::PlaceholderField(const SwField* pField)
 }
 
 RtfAttributeOutput::RtfAttributeOutput(RtfExport& rExport)
-    : m_rExport(rExport)
+    : AttributeOutputBase("") // ConvertURL isn't used now in RTF output
+    , m_rExport(rExport)
     , m_pPrevPageDesc(nullptr)
     , m_nStyleId(0)
     , m_nListId(0)
