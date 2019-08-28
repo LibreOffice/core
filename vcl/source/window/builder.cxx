@@ -2183,10 +2183,12 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "NotebookBarAddonsToolMergePoint")
     {
+#ifndef DISABLE_DYNLOADING
         customMakeWidget pFunction = nullptr;
         ModuleMap::iterator aI = g_aModuleMap.find("libsfxlo.so");
         pFunction = reinterpret_cast<customMakeWidget>(aI->second->getFunctionSymbol("makeNotebookbarToolBox"));
         NotebookBarAddonsMerger::MergeNotebookBarAddons( pParent, pFunction, m_xFrame, m_pNotebookBarAddonsItem, rMap );
+#endif
         return nullptr;
     }
     else if (name == "GtkToolButton" || name == "GtkMenuToolButton" ||
