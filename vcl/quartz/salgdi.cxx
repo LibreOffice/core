@@ -113,7 +113,7 @@ sal_IntPtr CoreTextFontFace::GetFontId() const
     return mnFontId;
 }
 
-const FontCharMapRef CoreTextFontFace::GetFontCharMap() const
+FontCharMapRef CoreTextFontFace::GetFontCharMap() const
 {
     // return the cached charmap
     if( mxCharMap.is() )
