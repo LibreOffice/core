@@ -66,6 +66,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/singlevalfields \
     compilerplugins/clang/test/staticconstfield \
     compilerplugins/clang/test/staticvar \
+    compilerplugins/clang/test/stdfunction \
     compilerplugins/clang/test/stringbuffer \
     compilerplugins/clang/test/stringconcat \
     compilerplugins/clang/test/stringconstant \
