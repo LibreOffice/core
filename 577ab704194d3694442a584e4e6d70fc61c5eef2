@@ -22,6 +22,29 @@
       "revId": "577ab704194d3694442a584e4e6d70fc61c5eef2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_77770304",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-28T09:25:31Z",
+      "side": 1,
+      "message": "It possibly is needed because INetURLObject::GetPath only returns directory path without trailing slash",
+      "range": {
+        "startLine": 51,
+        "startChar": 3,
+        "endLine": 51,
+        "endChar": 14
+      },
+      "revId": "577ab704194d3694442a584e4e6d70fc61c5eef2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
