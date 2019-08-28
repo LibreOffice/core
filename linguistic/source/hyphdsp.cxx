@@ -661,8 +661,7 @@ void HyphenatorDispatcher::SetServiceList( const Locale &rLocale,
 
     LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
 
-    sal_Int32 nLen = rSvcImplNames.getLength();
-    if (0 == nLen)
+    if (!rSvcImplNames.hasElements())
         // remove entry
         aSvcMap.erase( nLanguage );
     else

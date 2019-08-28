@@ -351,11 +351,8 @@ void SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Int32 nLen = rProps.getLength();
-    const PropertyValue *pVal = rProps.getConstArray();
-    for (sal_Int32 i = 0;  i < nLen;  ++i)
+    for (const PropertyValue &rVal : rProps)
     {
-        const PropertyValue &rVal = pVal[i];
         setPropertyValue( rVal.Name, rVal.Value );
     }
 }

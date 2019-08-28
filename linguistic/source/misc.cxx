@@ -37,6 +37,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -197,19 +198,14 @@ bool IsUseDicList( const PropertyValues &rProperties,
 {
     bool bRes = true;
 
-    sal_Int32 nLen = rProperties.getLength();
-    const PropertyValue *pVal = rProperties.getConstArray();
-    sal_Int32 i;
+    const PropertyValue *pVal = std::find_if(rProperties.begin(), rProperties.end(),
+        [](const PropertyValue& rVal) { return UPH_IS_USE_DICTIONARY_LIST == rVal.Handle; });
 
-    for ( i = 0;  i < nLen;  ++i)
+    if (pVal != rProperties.end())
     {
-        if (UPH_IS_USE_DICTIONARY_LIST == pVal[i].Handle)
-        {
-            pVal[i].Value >>= bRes;
-            break;
-        }
+        pVal->Value >>= bRes;
     }
-    if (i >= nLen)  // no temporary value found in 'rProperties'
+    else  // no temporary value found in 'rProperties'
     {
         uno::Reference< XFastPropertySet > xFast( rxProp, UNO_QUERY );
         if (xFast.is())
@@ -224,19 +220,14 @@ bool IsIgnoreControlChars( const PropertyValues &rProperties,
 {
     bool bRes = true;
 
-    sal_Int32 nLen = rProperties.getLength();
-    const PropertyValue *pVal = rProperties.getConstArray();
-    sal_Int32 i;
+    const PropertyValue *pVal = std::find_if(rProperties.begin(), rProperties.end(),
+        [](const PropertyValue& rVal) { return UPH_IS_IGNORE_CONTROL_CHARACTERS == rVal.Handle; });
 
-    for ( i = 0;  i < nLen;  ++i)
+    if (pVal != rProperties.end())
     {
-        if (UPH_IS_IGNORE_CONTROL_CHARACTERS == pVal[i].Handle)
-        {
-            pVal[i].Value >>= bRes;
-            break;
-        }
+        pVal->Value >>= bRes;
     }
-    if (i >= nLen)  // no temporary value found in 'rProperties'
+    else  // no temporary value found in 'rProperties'
     {
         uno::Reference< XFastPropertySet > xFast( rxProp, UNO_QUERY );
         if (xFast.is())
@@ -316,14 +307,12 @@ bool SaveDictionaries( const uno::Reference< XSearchableDictionaryList > &xDicLi
 
     bool bRet = true;
 
-    Sequence< uno::Reference< XDictionary >  > aDics( xDicList->getDictionaries() );
-    const uno::Reference< XDictionary >  *pDic = aDics.getConstArray();
-    sal_Int32 nCount = aDics.getLength();
-    for (sal_Int32 i = 0;  i < nCount;  i++)
+    const Sequence< uno::Reference< XDictionary >  > aDics( xDicList->getDictionaries() );
+    for (const uno::Reference<XDictionary>& rDic : aDics)
     {
         try
         {
-            uno::Reference< frame::XStorable >  xStor( pDic[i], UNO_QUERY );
+            uno::Reference< frame::XStorable >  xStor( rDic, UNO_QUERY );
             if (xStor.is())
             {
                 if (!xStor->isReadonly() && xStor->hasLocation())
@@ -382,15 +371,11 @@ DictionaryError AddEntryToDic(
 std::vector< LanguageType >
     LocaleSeqToLangVec( uno::Sequence< Locale > const &rLocaleSeq )
 {
-    const Locale *pLocale = rLocaleSeq.getConstArray();
-    sal_Int32 nCount = rLocaleSeq.getLength();
-
     std::vector< LanguageType >   aLangs;
-    aLangs.reserve(nCount);
-    for (sal_Int32 i = 0; i < nCount; ++i)
-    {
-        aLangs.push_back( LinguLocaleToLanguage( pLocale[i] ) );
-    }
+    aLangs.reserve(rLocaleSeq.getLength());
+
+    std::transform(rLocaleSeq.begin(), rLocaleSeq.end(), std::back_inserter(aLangs),
+        [](const Locale& rLocale) { return LinguLocaleToLanguage(rLocale); });
 
     return aLangs;
 }
@@ -398,17 +383,13 @@ std::vector< LanguageType >
 uno::Sequence< sal_Int16 >
      LocaleSeqToLangSeq( uno::Sequence< Locale > const &rLocaleSeq )
 {
-    const Locale *pLocale = rLocaleSeq.getConstArray();
-    sal_Int32 nCount = rLocaleSeq.getLength();
+    std::vector<sal_Int16> aLangs;
+    aLangs.reserve(rLocaleSeq.getLength());
 
-    uno::Sequence< sal_Int16 >   aLangs( nCount );
-    sal_Int16 *pLang = aLangs.getArray();
-    for (sal_Int32 i = 0;  i < nCount;  ++i)
-    {
-        pLang[i] = static_cast<sal_uInt16>(LinguLocaleToLanguage( pLocale[i] ));
-    }
+    std::transform(rLocaleSeq.begin(), rLocaleSeq.end(), std::back_inserter(aLangs),
+        [](const Locale& rLocale) { return static_cast<sal_uInt16>(LinguLocaleToLanguage(rLocale)); });
 
-    return aLangs;
+    return comphelper::containerToSequence(aLangs);
 }
 bool    IsReadOnly( const OUString &rURL, bool *pbExist )
 {

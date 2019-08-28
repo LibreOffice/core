@@ -270,15 +270,12 @@ void SAL_CALL LangGuess_Impl::disableLanguages(
 
     EnsureInitialized();
 
-    sal_Int32 nLanguages = rLanguages.getLength();
-    const Locale *pLanguages = rLanguages.getConstArray();
-
-    for (sal_Int32 i = 0;  i < nLanguages;  ++i)
+    for (const Locale& rLanguage : rLanguages)
     {
         string language;
 
-        OString l = OUStringToOString( pLanguages[i].Language, RTL_TEXTENCODING_ASCII_US );
-        OString c = OUStringToOString( pLanguages[i].Country, RTL_TEXTENCODING_ASCII_US );
+        OString l = OUStringToOString( rLanguage.Language, RTL_TEXTENCODING_ASCII_US );
+        OString c = OUStringToOString( rLanguage.Country, RTL_TEXTENCODING_ASCII_US );
 
         language += l.getStr();
         language += "-";
@@ -294,15 +291,12 @@ void SAL_CALL LangGuess_Impl::enableLanguages(
 
     EnsureInitialized();
 
-    sal_Int32 nLanguages = rLanguages.getLength();
-    const Locale *pLanguages = rLanguages.getConstArray();
-
-    for (sal_Int32 i = 0;  i < nLanguages;  ++i)
+    for (const Locale& rLanguage : rLanguages)
     {
         string language;
 
-        OString l = OUStringToOString( pLanguages[i].Language, RTL_TEXTENCODING_ASCII_US );
-        OString c = OUStringToOString( pLanguages[i].Country, RTL_TEXTENCODING_ASCII_US );
+        OString l = OUStringToOString( rLanguage.Language, RTL_TEXTENCODING_ASCII_US );
+        OString c = OUStringToOString( rLanguage.Country, RTL_TEXTENCODING_ASCII_US );
 
         language += l.getStr();
         language += "-";
