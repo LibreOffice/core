@@ -20,6 +20,7 @@
 #include <dsntypes.hxx>
 #include <unotools/confignode.hxx>
 #include <osl/diagnose.h>
+#include <svtools/miscopt.hxx>
 #include <tools/wldcrd.hxx>
 #include <osl/file.hxx>
 #include <stringconstants.hxx>
@@ -286,7 +287,11 @@ bool ODsnTypeCollection::isEmbeddedDatabase( const OUString& _sURL )
 
 OUString ODsnTypeCollection::getEmbeddedDatabase()
 {
-    return "sdbc:embedded:firebird";
+    SvtMiscOptions aMiscOptions;
+    if (aMiscOptions.IsExperimentalMode())
+        return "sdbc:embedded:firebird";
+    else
+        return "sdbc:embedded:hsqldb";
 }
 
 
