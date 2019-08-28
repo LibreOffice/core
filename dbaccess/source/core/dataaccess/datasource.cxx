@@ -63,6 +63,7 @@
 #include <osl/diagnose.h>
 #include <osl/process.h>
 #include <sal/log.hxx>
+#include <svtools/miscopt.hxx>
 #include <tools/urlobj.hxx>
 #include <typelib/typedescription.hxx>
 #include <unotools/confignode.hxx>
@@ -615,6 +616,10 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
         //ignore when we don't have a model. E.g. Mailmerge, data sources, fields...
         bIgnoreMigration = true;
     }
+    SvtMiscOptions aMiscOptions;
+
+    if (!aMiscOptions.IsExperimentalMode())
+        bIgnoreMigration = true;
 
     if(!bIgnoreMigration && m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
     {
