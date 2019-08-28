@@ -52,6 +52,24 @@
       "revId": "10f3c9fbcb2f7032dcac80d271e7740452e4acde",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_37a2ebaf",
+        "filename": "vcl/win/gdi/salprn.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1508,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2019-08-28T05:28:52Z",
+      "side": 1,
+      "message": "okay, i was wondering if you didn\u0027t know the message handling of windows, but i didn\u0027t think you, mean the vcl::solarthread::syncExecute, sorry.\n\nFor going on of this patch i ping you in IRC",
+      "parentUuid": "bf659307_5cc6a64a",
+      "revId": "10f3c9fbcb2f7032dcac80d271e7740452e4acde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
