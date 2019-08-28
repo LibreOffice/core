@@ -60,36 +60,6 @@ namespace tools_urlobj
             CPPUNIT_ASSERT_EQUAL(OUString("file"), aUrl.getExtension());
         }
 
-        void urlobjTest_002(  )
-        {
-            INetURLObject aUrl;
-            aUrl.
-                setFSysPath( "\\\\137.65.170.24\\c$\\Img0001.jpg",
-                             FSysStyle::Detect );
-            CPPUNIT_ASSERT_EQUAL(INetProtocol::File, aUrl.GetProtocol());
-            CPPUNIT_ASSERT_EQUAL(OUString("137.65.170.24"),
-                                 aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
-            CPPUNIT_ASSERT_EQUAL(OUString("/c$/Img0001.jpg"),
-                                 aUrl.GetURLPath(INetURLObject::DecodeMechanism::NONE));
-            CPPUNIT_ASSERT_EQUAL(OUString("Img0001.jpg"), aUrl.getName());
-            CPPUNIT_ASSERT_EQUAL(OUString("Img0001"), aUrl.getBase());
-            CPPUNIT_ASSERT_EQUAL(OUString("jpg"), aUrl.getExtension());
-        }
-
-
-        void urlobjTest_003(  )
-        {
-            INetURLObject aUrl;
-            aUrl.
-                setFSysPath( "\\\\hive-winxp-x86\\pmladek\\test2.odt",
-                             FSysStyle::Detect );
-            CPPUNIT_ASSERT_EQUAL(INetProtocol::File, aUrl.GetProtocol());
-            CPPUNIT_ASSERT_EQUAL(OUString("hive-winxp-x86"),
-                                 aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
-            CPPUNIT_ASSERT_EQUAL(OUString("/pmladek/test2.odt"),
-                                 aUrl.GetURLPath(INetURLObject::DecodeMechanism::NONE));
-        }
-
         void urlobjTest_004(  )
         {
             INetURLObject aUrl( OUString( "smb://10.10.1.1/sampledir/sample.file" ) );
@@ -101,34 +71,6 @@ namespace tools_urlobj
             CPPUNIT_ASSERT_EQUAL(OUString("sample.file"), aUrl.getName());
             CPPUNIT_ASSERT_EQUAL(OUString("sample"), aUrl.getBase());
             CPPUNIT_ASSERT_EQUAL(OUString("file"), aUrl.getExtension());
-        }
-
-        void urlobjTest_005(  )
-        {
-            INetURLObject aUrl;
-            aUrl.setFSysPath( "//137.65.170.24/c$/Img0001.jpg",
-                              FSysStyle::Detect );
-            CPPUNIT_ASSERT_EQUAL(INetProtocol::File, aUrl.GetProtocol());
-            CPPUNIT_ASSERT_EQUAL(OUString("137.65.170.24"),
-                                 aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
-            CPPUNIT_ASSERT_EQUAL(OUString("/c$/Img0001.jpg"),
-                                 aUrl.GetURLPath(INetURLObject::DecodeMechanism::NONE));
-            CPPUNIT_ASSERT_EQUAL(OUString("Img0001.jpg"), aUrl.getName(  ));
-            CPPUNIT_ASSERT_EQUAL(OUString("Img0001"), aUrl.getBase(  ));
-            CPPUNIT_ASSERT_EQUAL(OUString("jpg"), aUrl.getExtension(  ));
-        }
-
-
-        void urlobjTest_006(  )
-        {
-            INetURLObject aUrl;
-            aUrl.setFSysPath( "//hive-winxp-x86/pmladek/test2.odt",
-                              FSysStyle::Detect );
-            CPPUNIT_ASSERT_EQUAL(INetProtocol::File, aUrl.GetProtocol());
-            CPPUNIT_ASSERT_EQUAL(OUString("hive-winxp-x86"),
-                                 aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
-            CPPUNIT_ASSERT_EQUAL(OUString("/pmladek/test2.odt"),
-                                 aUrl.GetURLPath( INetURLObject::DecodeMechanism::NONE));
         }
 
         void urlobjCmisTest(  )
@@ -358,11 +300,7 @@ namespace tools_urlobj
 
         CPPUNIT_TEST_SUITE( urlobjTest );
         CPPUNIT_TEST( urlobjTest_001 );
-        CPPUNIT_TEST( urlobjTest_002 );
-        CPPUNIT_TEST( urlobjTest_003 );
         CPPUNIT_TEST( urlobjTest_004 );
-        CPPUNIT_TEST( urlobjTest_005 );
-        CPPUNIT_TEST( urlobjTest_006 );
         CPPUNIT_TEST( urlobjCmisTest );
         CPPUNIT_TEST( urlobjTest_emptyPath );
         CPPUNIT_TEST( urlobjTest_data );
