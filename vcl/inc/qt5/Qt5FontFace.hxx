@@ -42,9 +42,7 @@ public:
 
     int GetFontTable(const char pTagName[5], unsigned char*) const;
 
-    const FontCharMapRef& GetFontCharMap() const;
     bool GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const;
-    bool HasChar(sal_uInt32 cChar) const;
 
     rtl::Reference<LogicalFontInstance>
     CreateFontInstance(const FontSelectPattern& rFSD) const override;
@@ -57,7 +55,6 @@ protected:
 
 private:
     const QString m_aFontId;
-    mutable FontCharMapRef m_xCharMap;
     mutable vcl::FontCapabilities m_aFontCapabilities;
     mutable bool m_bFontCapabilitiesRead;
 };

@@ -68,12 +68,9 @@ public:
     void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
     void                    UpdateFromHDC( HDC ) const;
 
-    bool                    HasChar( sal_uInt32 cChar ) const;
-
     BYTE                    GetCharSet() const          { return meWinCharSet; }
     BYTE                    GetPitchAndFamily() const   { return mnPitchAndFamily; }
 
-    FontCharMapRef          GetFontCharMap() const;
     bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
 
     hb_blob_t*              GetHbTable(const char* pName) override;
@@ -83,7 +80,6 @@ private:
 
     // some members that are initialized lazily when the font gets selected into a HDC
     mutable bool                    mbFontCapabilitiesRead;
-    mutable FontCharMapRef          mxUnicodeMap;
     mutable vcl::FontCapabilities   maFontCapabilities;
 
     BYTE                    meWinCharSet;
@@ -91,7 +87,6 @@ private:
     bool                    mbAliasSymbolsHigh;
     bool                    mbAliasSymbolsLow;
 
-    void                    ReadCmapTable( HDC ) const;
     void                    GetFontCapabilities( HDC hDC ) const;
 
     mutable HDC             mhDC;
@@ -399,21 +394,6 @@ void    ImplGetLogFontFromFontSelect( HDC, const FontSelectPattern&,
             const PhysicalFontFace*, LOGFONTW& );
 
 #define MAX_64KSALPOINTS    ((((sal_uInt16)0xFFFF)-8)/sizeof(POINTS))
-
-// called extremely often from just one spot => inline
-inline bool WinFontFace::HasChar( sal_uInt32 cChar ) const
-{
-    if( mxUnicodeMap->HasChar( cChar ) )
-        return true;
-    // second chance to allow symbol aliasing
-    if( mbAliasSymbolsLow && ((cChar-0xF000) <= 0xFF) )
-        cChar -= 0xF000;
-    else if( mbAliasSymbolsHigh && (cChar <= 0xFF) )
-        cChar += 0xF000;
-    else
-        return false;
-    return mxUnicodeMap->HasChar( cChar );
-}
 
 #endif // INCLUDED_VCL_INC_WIN_SALGDI_H
 

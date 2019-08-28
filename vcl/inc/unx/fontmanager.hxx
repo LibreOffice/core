@@ -42,6 +42,7 @@ class FontSubsetInfo;
 class FontConfigFontOptions;
 class FontSelectPattern;
 class GenericUnixSalData;
+class PhysicalFontFace;
 
 namespace psp {
 class PPDParser;
@@ -271,7 +272,7 @@ public:
                            sal_Int32* pWidths,
                            int nGlyphs
                            );
-    void getGlyphWidths( fontID nFont,
+    void getGlyphWidths( const PhysicalFontFace* pFace,
                          bool bVertical,
                          std::vector< sal_Int32 >& rWidths,
                          std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc );
