@@ -3865,7 +3865,7 @@ static char* getLanguages(const char* pCommand)
         if (sLanguage.startsWith("{") && sLanguage.endsWith("}"))
             continue;
 
-        sLanguage += ";" + LanguageTag(aLocales[itLocale]).getLanguage();
+        sLanguage += ";" + LanguageTag(aLocales[itLocale]).getBcp47(false);
         aChild.put("", sLanguage.toUtf8());
         aValues.push_back(std::make_pair("", aChild));
     }
