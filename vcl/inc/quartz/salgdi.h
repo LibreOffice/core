@@ -67,7 +67,7 @@ public:
     int                             GetFontTable( uint32_t nTagCode, unsigned char* ) const;
     int                             GetFontTable( const char pTagName[5], unsigned char* ) const;
 
-    const FontCharMapRef            GetFontCharMap() const;
+    FontCharMapRef                  GetFontCharMap() const;
     bool                            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     bool                            HasChar( sal_uInt32 cChar ) const;
 
