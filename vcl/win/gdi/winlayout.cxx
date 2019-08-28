@@ -327,41 +327,16 @@ float WinFontInstance::getHScale() const
     return nWidth / nHeight;
 }
 
-static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
-{
-    sal_uLong nLength = 0;
-    unsigned char* pBuffer = nullptr;
-    WinFontInstance* pFont = static_cast<WinFontInstance*>(pUserData);
-    HDC hDC = pFont->GetGraphics()->getHDC();
-    HFONT hFont = pFont->GetHFONT();
-    assert(hDC);
-    assert(hFont);
-
-    HGDIOBJ hOrigFont = SelectObject(hDC, hFont);
-    nLength = ::GetFontData(hDC, OSL_NETDWORD(nTableTag), 0, nullptr, 0);
-    if (nLength > 0 && nLength != GDI_ERROR)
-    {
-        pBuffer = new unsigned char[nLength];
-        ::GetFontData(hDC, OSL_NETDWORD(nTableTag), 0, pBuffer, nLength);
-    }
-    SelectObject(hDC, hOrigFont);
-
-    hb_blob_t* pBlob = nullptr;
-    if (pBuffer != nullptr)
-        pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY,
-                               pBuffer, [](void* data){ delete[] static_cast<unsigned char*>(data); });
-    return pBlob;
-}
-
 hb_font_t* WinFontInstance::ImplInitHbFont()
 {
     assert(m_pGraphics);
-    hb_font_t* pHbFont = InitHbFont(hb_face_create_for_tables(getFontTable, this, nullptr));
+    hb_face_t* pHbFace = GetFontFace()->GetHbFace();
+    hb_font_t* pHbFont = InitHbFont(pHbFace);
 
     // Calculate the AverageWidthFactor, see LogicalFontInstance::GetScale().
     if (GetFontSelectPattern().mnWidth)
     {
-        double nUPEM = hb_face_get_upem(hb_font_get_face(pHbFont));
+        double nUPEM = hb_face_get_upem(pHbFace);
 
         LOGFONTW aLogFont;
         GetObjectW(m_hFont, sizeof(LOGFONTW), &aLogFont);

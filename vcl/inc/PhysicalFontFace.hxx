@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
 #define INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
 
+#include <hb.h>
+
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/dllapi.h>
@@ -54,6 +56,8 @@ public:
 class VCL_PLUGIN_PUBLIC PhysicalFontFace : public FontAttributes, public salhelper::SimpleReferenceObject
 {
 public:
+    ~PhysicalFontFace();
+
     virtual rtl::Reference<LogicalFontInstance> CreateFontInstance(const FontSelectPattern&) const = 0;
 
     int                     GetHeight() const           { return mnHeight; }
@@ -64,12 +68,17 @@ public:
     sal_Int32               CompareWithSize( const PhysicalFontFace& ) const;
     sal_Int32               CompareIgnoreSize( const PhysicalFontFace& ) const;
 
+    hb_face_t*              GetHbFace() const { return mpHbFace; }
+    virtual hb_blob_t*      GetHbTable(hb_tag_t nTag) = 0;
+
 protected:
     explicit PhysicalFontFace(const FontAttributes&);
     void                    SetBitmapSize( int nW, int nH ) { mnWidth=nW; mnHeight=nH; }
 
     long                    mnWidth;    // Width (in pixels)
     long                    mnHeight;   // Height (in pixels)
+
+    hb_face_t*              mpHbFace;
 };
 
 #endif // INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
