@@ -73,6 +73,8 @@ public:
 
     rtl::Reference<LogicalFontInstance> CreateFontInstance(const FontSelectPattern&) const override;
 
+    hb_blob_t*                      GetHbTable(const char* pName) override;
+
 private:
     const sal_IntPtr                mnFontId;
     mutable FontCharMapRef          mxCharMap;
