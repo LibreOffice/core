@@ -22,6 +22,30 @@
       "revId": "056e1fff2ed232f2a50db933fbade1c71c0c2a65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_721dd164",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-28T13:51:05Z",
+      "side": 1,
+      "message": "I for one didn\u0027t bother to look at that.  (But carefully kept all the variables around that are reused here.  Rather confusing stuff, all this.)",
+      "parentUuid": "bf659307_5203ed0d",
+      "range": {
+        "startLine": 901,
+        "startChar": 4,
+        "endLine": 902,
+        "endChar": 96
+      },
+      "revId": "056e1fff2ed232f2a50db933fbade1c71c0c2a65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
