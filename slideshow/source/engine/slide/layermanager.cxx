@@ -33,10 +33,10 @@
 
 using namespace ::com::sun::star;
 
-namespace std
+namespace
 {
     // add operator!= for weak_ptr
-    static bool operator!=( slideshow::internal::LayerWeakPtr const& rLHS,
+    bool notEqual( slideshow::internal::LayerWeakPtr const& rLHS,
                             slideshow::internal::LayerWeakPtr const& rRHS )
     {
         return rLHS.lock().get() != rRHS.lock().get();
@@ -758,7 +758,7 @@ namespace slideshow
                     bIsBackgroundLayer = false;
 
                     if( aWeakLayers.size() <= nCurrLayerIndex ||
-                        aWeakLayers.at(nCurrLayerIndex) != aCurrShapeEntry->second )
+                        notEqual(aWeakLayers.at(nCurrLayerIndex), aCurrShapeEntry->second) )
                     {
                         // no more layers left, or shape was not
                         // member of this layer - create a new one
@@ -775,7 +775,7 @@ namespace slideshow
                 // above invalidates iterators
                 LayerSharedPtr& rCurrLayer( maLayers.at(nCurrLayerIndex) );
                 LayerWeakPtr& rCurrWeakLayer( aWeakLayers.at(nCurrLayerIndex) );
-                if( rCurrWeakLayer != aCurrShapeEntry->second )
+                if( notEqual(rCurrWeakLayer, aCurrShapeEntry->second) )
                 {
                     // mismatch: shape is not contained in current
                     // layer - move shape to that layer, then.
