@@ -33,6 +33,7 @@
 #include <tools/debug.hxx>
 #include <svl/lngmisc.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <osl/mutex.hxx>
 
 #include "hyphdsp.hxx"
@@ -251,13 +252,13 @@ Sequence< Locale > SAL_CALL HyphenatorDispatcher::getLocales()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Sequence< Locale > aLocales( static_cast< sal_Int32 >(aSvcMap.size()) );
-    Locale *pLocales = aLocales.getArray();
-    for (auto const& elem : aSvcMap)
-    {
-        *pLocales++ = LanguageTag::convertToLocale(elem.first);
-    }
-    return aLocales;
+    std::vector<Locale> aLocales;
+    aLocales.reserve(aSvcMap.size());
+
+    std::transform(aSvcMap.begin(), aSvcMap.end(), std::back_inserter(aLocales),
+        [](HyphSvcByLangMap_t::const_reference elem) { return LanguageTag::convertToLocale(elem.first); });
+
+    return comphelper::containerToSequence(aLocales);
 }
 
 
@@ -661,8 +662,7 @@ void HyphenatorDispatcher::SetServiceList( const Locale &rLocale,
 
     LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
 
-    sal_Int32 nLen = rSvcImplNames.getLength();
-    if (0 == nLen)
+    if (!rSvcImplNames.hasElements())
         // remove entry
         aSvcMap.erase( nLanguage );
     else

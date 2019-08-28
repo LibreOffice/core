@@ -87,15 +87,13 @@ void SearchSimilarText( const OUString &rText, LanguageType nLanguage,
             assert( eType != DictionaryType_MIXED && "unexpected dictionary type" );
 #endif
             const Sequence< Reference< XDictionaryEntry > > aEntries = xDic->getEntries();
-            const Reference< XDictionaryEntry > *pEntries = aEntries.getConstArray();
-            sal_Int32 nLen = aEntries.getLength();
-            for (sal_Int32 k = 0;  k < nLen;  ++k)
+            for (const Reference<XDictionaryEntry>& rEntry : aEntries)
             {
                 OUString aEntryTxt;
-                if (pEntries[k].is())
+                if (rEntry.is())
                 {
                     // remove characters used to determine hyphenation positions
-                    aEntryTxt = pEntries[k]->getDictionaryWord().replaceAll("=", "");
+                    aEntryTxt = rEntry->getDictionaryWord().replaceAll("=", "");
                 }
                 if (!aEntryTxt.isEmpty()  &&  aEntryTxt.getLength() > 1  &&  LevDistance( rText, aEntryTxt ) <= 2)
                     rDicListProps.push_back( aEntryTxt );

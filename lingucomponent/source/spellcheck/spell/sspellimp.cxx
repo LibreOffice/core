@@ -50,6 +50,7 @@
 #include <rtl/textenc.h>
 #include <sal/log.hxx>
 
+#include <numeric>
 #include <utility>
 #include <vector>
 #include <set>
@@ -189,9 +190,9 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             //! it is undefined which dictionary gets used.
             //! In the future the implementation should support using several dictionaries
             //! for one locale.
-            sal_uInt32 nDictSize = 0;
-            for (auto const& dict : aDics)
-                nDictSize += dict.aLocaleNames.getLength();
+            sal_uInt32 nDictSize = std::accumulate(aDics.begin(), aDics.end(), sal_uInt32(0),
+                [](const sal_uInt32 nSum, const SvtLinguConfigDictionaryEntry& dict) {
+                    return nSum + dict.aLocaleNames.getLength(); });
 
             // add dictionary information
             m_DictItems.reserve(nDictSize);

@@ -197,12 +197,13 @@ uno::Sequence< OUString > SAL_CALL ConvDicNameContainer::getElementNames(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Int32 nLen = aConvDics.size();
-    uno::Sequence< OUString > aRes( nLen );
-    OUString *pName = aRes.getArray();
-    for (sal_Int32 i = 0;  i < nLen;  ++i)
-        pName[i] = aConvDics[i]->getName();
-    return aRes;
+    std::vector<OUString> aRes;
+    aRes.reserve(aConvDics.size());
+
+    std::transform(aConvDics.begin(), aConvDics.end(), std::back_inserter(aRes),
+        [](const uno::Reference<XConversionDictionary>& rDic) { return rDic->getName(); });
+
+    return comphelper::containerToSequence(aRes);
 }
 
 sal_Bool SAL_CALL ConvDicNameContainer::hasByName( const OUString& rName )
@@ -281,13 +282,9 @@ void ConvDicNameContainer::AddConvDics(
 {
     const Sequence< OUString > aDirCnt(
                 utl::LocalFileHelper::GetFolderContents( rSearchDirPathURL, false ) );
-    const OUString *pDirCnt = aDirCnt.getConstArray();
-    sal_Int32 nEntries = aDirCnt.getLength();
 
-    for (sal_Int32 i = 0;  i < nEntries;  ++i)
+    for (const OUString& aURL : aDirCnt)
     {
-        OUString aURL( pDirCnt[i] );
-
         sal_Int32 nPos = aURL.lastIndexOf('.');
         OUString aExt( aURL.copy(nPos + 1).toAsciiLowerCase() );
         OUString aSearchExt( rExtension.toAsciiLowerCase() );
@@ -374,12 +371,10 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
         // access list of text conversion dictionaries to activate
         SvtLinguOptions aOpt;
         SvtLinguConfig().GetOptions( aOpt );
-        sal_Int32 nLen = aOpt.aActiveConvDics.getLength();
-        const OUString *pActiveConvDics = aOpt.aActiveConvDics.getConstArray();
-        for (sal_Int32 i = 0;  i < nLen;  ++i)
+        for (const OUString& rActiveConvDic : std::as_const(aOpt.aActiveConvDics))
         {
             uno::Reference< XConversionDictionary > xDic =
-                    mxNameContainer->GetByName( pActiveConvDics[i] );
+                    mxNameContainer->GetByName( rActiveConvDic );
             if (xDic.is())
                 xDic->setActive( true );
         }
@@ -464,15 +459,10 @@ uno::Sequence< OUString > SAL_CALL ConvDicList::queryConversions(
         bSupported |= bMatch;
         if (bMatch  &&  xDic->isActive())
         {
-            Sequence< OUString > aNewConv( xDic->getConversions(
+            const Sequence< OUString > aNewConv( xDic->getConversions(
                                 rText, nStartPos, nLength,
                                 eDirection, nTextConversionOptions ) );
-            sal_Int32 nNewLen = aNewConv.getLength();
-            if (nNewLen > 0)
-            {
-                for (sal_Int32 k = 0;  k < nNewLen;  ++k)
-                    aRes.push_back(aNewConv[k]);
-            }
+            std::copy(aNewConv.begin(), aNewConv.end(), std::back_inserter(aRes));
         }
     }
 
