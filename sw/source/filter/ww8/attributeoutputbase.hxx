@@ -146,6 +146,7 @@ class AttributeOutputBase
 {
 private:
     SvtSaveOptions const m_aSaveOpt;
+    OUString m_sBaseURL; // To be used in ConvertURL
 
     OUString ConvertURL( const OUString& rUrl, bool bAbsoluteOut );
 
@@ -636,7 +637,10 @@ protected:
     ww8::WidthsPtr   GetColumnWidths( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner );
 
 public:
-    AttributeOutputBase() {}
+    AttributeOutputBase(const OUString& sBaseURL)
+        : m_sBaseURL(sBaseURL)
+    {
+    }
     virtual ~AttributeOutputBase() {}
 
     /// Return the right export class.
