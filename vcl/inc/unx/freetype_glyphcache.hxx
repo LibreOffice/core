@@ -75,8 +75,6 @@ public:
 
     void                  AnnounceFont( PhysicalFontCollection* );
 
-    const FontCharMapRef& GetFontCharMap();
-
 private:
     FT_FaceRec_*    maFaceFT;
     FreetypeFontFile* const mpFontFile;
@@ -85,8 +83,6 @@ private:
     int             mnRefCount;
     sal_IntPtr const mnFontId;
     FontAttributes  maDevFontAttributes;
-
-    FontCharMapRef  mxFontCharMap;
 };
 
 class FreetypeFontFace : public PhysicalFontFace

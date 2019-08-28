@@ -71,7 +71,7 @@ FontCharMapRef Qt5Graphics::GetFontCharMap() const
 {
     if (!m_pTextStyle[0])
         return FontCharMapRef(new FontCharMap());
-    return static_cast<const Qt5FontFace*>(m_pTextStyle[0]->GetFontFace())->GetFontCharMap();
+    return m_pTextStyle[0]->GetFontFace()->GetCharMap();
 }
 
 bool Qt5Graphics::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const

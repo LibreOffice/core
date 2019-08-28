@@ -25,6 +25,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/outdev.hxx>
 
 #include "fontattributes.hxx"
 
@@ -68,6 +69,8 @@ public:
     sal_Int32               CompareWithSize( const PhysicalFontFace& ) const;
     sal_Int32               CompareIgnoreSize( const PhysicalFontFace& ) const;
 
+    const FontCharMapRef&   GetCharMap() const;
+
     hb_face_t*              GetHbFace() const { return mpHbFace; }
     virtual hb_blob_t*      GetHbTable(const char* pName) = 0;
 
@@ -79,6 +82,8 @@ protected:
     long                    mnHeight;   // Height (in pixels)
 
     hb_face_t*              mpHbFace;
+
+    mutable FontCharMapRef  mxCharMap;
 };
 
 #endif // INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX

@@ -526,8 +526,7 @@ void CairoTextRender::GetGlyphWidths( const PhysicalFontFace* pFont,
     // export has filtered its list of subsettable fonts (for
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the PhysicalFontFace pFont
-    psp::fontID aFont = pFont->GetFontId();
-    GenPspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
+    GenPspGraphics::DoGetGlyphWidths(pFont, bVertical, rWidths, rUnicodeEnc);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
