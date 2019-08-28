@@ -75,7 +75,6 @@ public:
 
     void                  AnnounceFont( PhysicalFontCollection* );
 
-    bool                  GetFontCodeRanges( CmapResult& ) const;
     const FontCharMapRef& GetFontCharMap();
 
 private:
