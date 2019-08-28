@@ -2376,28 +2376,16 @@ void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequen
     pFS->endElement( FSNS( XML_c, XML_formatCode ) );
     pFS->singleElement(FSNS(XML_c, XML_ptCount), XML_val, OString::number(ptCount));
 
-    bool bIsNumberValue = true;
-    bool bXSeriesValue = false;
-    double Value = 1.0;
-
-    if(nValueType == XML_xVal)
-        bXSeriesValue = true;
-
     for( sal_Int32 i = 0; i < ptCount; i++ )
     {
-        pFS->startElement(FSNS(XML_c, XML_pt), XML_idx, OString::number(i));
-        pFS->startElement(FSNS(XML_c, XML_v));
-        if (bIsNumberValue && !rtl::math::isNan(aValues[i]))
-            pFS->write( aValues[i] );
-        else if(bXSeriesValue)
+        if (!rtl::math::isNan(aValues[i]))
         {
-            //In Case aValues is not a number for X Values...We write X values as 1,2,3....MS Word does the same thing.
-            pFS->write( Value );
-            Value = Value + 1;
-            bIsNumberValue = false;
+            pFS->startElement(FSNS(XML_c, XML_pt), XML_idx, OString::number(i));
+            pFS->startElement(FSNS(XML_c, XML_v));
+            pFS->write(aValues[i]);
+            pFS->endElement(FSNS(XML_c, XML_v));
+            pFS->endElement(FSNS(XML_c, XML_pt));
         }
-        pFS->endElement( FSNS( XML_c, XML_v ) );
-        pFS->endElement( FSNS( XML_c, XML_pt ) );
     }
 
     pFS->endElement( FSNS( XML_c, XML_numCache ) );

@@ -48,6 +48,7 @@ public:
     void testBarChart();
     void testCrosses();
     void testScatterChartTextXValues();
+    void testScatterXAxisValues();
     void testChartDataTable();
     void testChartExternalData();
     void testEmbeddingsGrabBag();
@@ -150,6 +151,7 @@ public:
     CPPUNIT_TEST(testBarChart);
     CPPUNIT_TEST(testCrosses);
     CPPUNIT_TEST(testScatterChartTextXValues);
+    CPPUNIT_TEST(testScatterXAxisValues);
     CPPUNIT_TEST(testChartDataTable);
     CPPUNIT_TEST(testChartExternalData);
     CPPUNIT_TEST(testEmbeddingsGrabBag);
@@ -652,6 +654,20 @@ void Chart2ExportTest::testScatterChartTextXValues()
        return;
 
     assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser[1]/c:xVal[1]/c:numRef[1]/c:numCache[1]/c:pt[1]/c:v[1]", "1");
+}
+
+void Chart2ExportTest::testScatterXAxisValues()
+{
+    load("/chart2/qa/extras/data/odt/", "tdf114657.odt");
+
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "//c:scatterChart/c:ser/c:xVal/c:numRef/c:numCache/c:ptCount", "val", "5");
+    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser/c:xVal/c:numRef/c:numCache/c:pt[1]/c:v", "15");
+    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser/c:xVal/c:numRef/c:numCache/c:pt[2]/c:v", "11");
+    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser/c:xVal/c:numRef/c:numCache/c:pt[3]/c:v", "20");
+    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser/c:xVal/c:numRef/c:numCache/c:pt[4]/c:v", "16");
 }
 
 void Chart2ExportTest::testChartDataTable()
