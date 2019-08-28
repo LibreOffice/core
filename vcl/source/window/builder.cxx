@@ -60,6 +60,7 @@
 #include <strings.hrc>
 #include <aboutdialog.hxx>
 #include <treeglue.hxx>
+#include <tools/svlibrary.h>
 #include <tools/diagnose_ex.h>
 
 #ifdef DISABLE_DYNLOADING
