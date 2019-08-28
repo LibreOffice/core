@@ -1422,7 +1422,20 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 OUString aCurrentLang = "*";
                 nLang = SwLangHelper::GetCurrentLanguage( rSh );
                 if (nLang != LANGUAGE_DONTKNOW)
+                {
                     aCurrentLang = SvtLanguageTable::GetLanguageString( nLang );
+                    if (comphelper::LibreOfficeKit::isActive())
+                    {
+                        if (nLang == LANGUAGE_NONE)
+                        {
+                            aCurrentLang += ";-";
+                        }
+                        else
+                        {
+                            aCurrentLang += ";" + LanguageTag(nLang).getBcp47(false);
+                        }
+                    }
+                }
 
                 // build sequence for status value
                 uno::Sequence< OUString > aSeq( 4 );

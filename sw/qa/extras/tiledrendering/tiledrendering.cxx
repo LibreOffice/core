@@ -42,6 +42,7 @@
 #include <vcl/scheduler.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <svx/svxids.hrc>
 #include <flddat.hxx>
 #include <basesh.hxx>
 
@@ -115,6 +116,7 @@ public:
     void testVisCursorInvalidation();
     void testSemiTransparent();
     void testAnchorTypes();
+    void testLanguageStatus();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -173,6 +175,7 @@ public:
     CPPUNIT_TEST(testVisCursorInvalidation);
     CPPUNIT_TEST(testSemiTransparent);
     CPPUNIT_TEST(testAnchorTypes);
+    CPPUNIT_TEST(testLanguageStatus);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2500,6 +2503,21 @@ void SwTiledRenderingTest::testAnchorTypes()
     // Without the accompanying fix in place, this test would have failed, setting the anchor type
     // to other than as/at-char was possible.
     CPPUNIT_ASSERT(!aSet.HasItem(FN_TOOL_ANCHOR_PAGE));
+}
+
+void SwTiledRenderingTest::testLanguageStatus()
+{
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    SwView* pView = pXTextDocument->GetDocShell()->GetView();
+    std::unique_ptr<SfxPoolItem> pItem;
+    pView->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, pItem);
+    auto pStringListItem = dynamic_cast<SfxStringListItem*>(pItem.get());
+    CPPUNIT_ASSERT(pStringListItem);
+
+    uno::Sequence< OUString > aList;
+    pStringListItem->GetStringList(aList);
+    CPPUNIT_ASSERT_EQUAL(OUString("English (USA);en-US"), aList[0]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
