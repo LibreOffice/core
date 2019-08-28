@@ -66,7 +66,6 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <unx/fontmanager.hxx>
-#include <impfontcharmap.hxx>
 #include <impfontcache.hxx>
 
 static FT_Library aLibFT = nullptr;
@@ -706,39 +705,6 @@ bool FreetypeFont::GetAntialiasAdvice() const
 {
     // TODO: also use GASP info
     return !mpFontInstance->GetFontSelectPattern().mbNonAntialiased && (mnPrioAntiAlias > 0);
-}
-
-// determine unicode ranges in font
-
-FontCharMapRef FreetypeFont::GetFontCharMap() const
-{
-    return mpFontInfo->GetFontCharMap();
-}
-
-const FontCharMapRef& FreetypeFontInfo::GetFontCharMap()
-{
-    // check if the charmap is already cached
-    if( mxFontCharMap.is() )
-        return mxFontCharMap;
-
-    // get the charmap and cache it
-    CmapResult aCmapResult;
-    aCmapResult.mbSymbolic = IsSymbolFont();
-
-    sal_uLong nLength = 0;
-    const unsigned char* pCmap = GetTable("cmap", &nLength);
-    if (pCmap && (nLength > 0) && ParseCMAP(pCmap, nLength, aCmapResult))
-    {
-        FontCharMapRef xFontCharMap( new FontCharMap ( aCmapResult ) );
-        mxFontCharMap = xFontCharMap;
-    }
-    else
-    {
-        FontCharMapRef xFontCharMap( new FontCharMap() );
-        mxFontCharMap = xFontCharMap;
-    }
-    // mxFontCharMap on either branch now has a refcount of 1
-    return mxFontCharMap;
 }
 
 bool FreetypeFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const

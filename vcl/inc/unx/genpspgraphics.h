@@ -55,7 +55,7 @@ public:
     static void             DoFreeEmbedFontData( const void* pData, long nLen );
 
     // helper methods for sharing with X11SalGraphics
-    static void             DoGetGlyphWidths( psp::fontID aFont,
+    static void             DoGetGlyphWidths( const PhysicalFontFace*,
                                               bool bVertical,
                                               std::vector< sal_Int32 >& rWidths,
                                               Ucs2UIntMap& rUnicodeEnc );

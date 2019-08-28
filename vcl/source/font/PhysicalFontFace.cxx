@@ -17,12 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/fontcharmap.hxx>
+
 #include <sal/types.h>
 #include <tools/fontenum.hxx>
 #include <unotools/fontdefs.hxx>
 
 #include <fontattributes.hxx>
 #include <fontselect.hxx>
+#include <impfontcharmap.hxx>
 
 #include <PhysicalFontFace.hxx>
 
@@ -216,6 +219,33 @@ hb_face_t* PhysicalFontFace::GetHbFace() const
         mpHbFace = hb_face_create_for_tables(getTable, const_cast<void*>(pUserData), nullptr);
     }
     return mpHbFace;
+}
+
+const FontCharMapRef& PhysicalFontFace::GetCharMap() const
+{
+    if (mxCharMap.is())
+        return mxCharMap;
+
+    // Get the charmap and cache it.
+    CmapResult aCmapResult;
+    aCmapResult.mbSymbolic = IsSymbolFont();
+
+    hb_blob_t* pBlob = hb_face_reference_table(mpHbFace, HB_TAG('c', 'm', 'a', 'p'));
+    const unsigned char* pData = reinterpret_cast<const unsigned char*>(hb_blob_get_data(pBlob, nullptr));
+    size_t nSize = hb_blob_get_length(pBlob);
+    if (nSize > 0 && ParseCMAP(pData, nSize, aCmapResult))
+    {
+        FontCharMapRef xCharMap(new FontCharMap(aCmapResult));
+        mxCharMap = xCharMap;
+    }
+    else
+    {
+        FontCharMapRef xCharMap(new FontCharMap());
+        mxCharMap = xCharMap;
+    }
+    hb_blob_destroy(pBlob);
+
+    return mxCharMap;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

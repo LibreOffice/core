@@ -57,7 +57,6 @@
 #include <win/saldata.hxx>
 #include <win/salgdi.h>
 #include <win/winlayout.hxx>
-#include <impfontcharmap.hxx>
 #include <impfontmetricdata.hxx>
 #include <impglyphitem.hxx>
 
@@ -174,32 +173,7 @@ private:
 bool WinGlyphFallbackSubstititution::HasMissingChars(PhysicalFontFace* pFace, OUString& rMissingChars) const
 {
     WinFontFace* pWinFont = static_cast< WinFontFace* >(pFace);
-    FontCharMapRef xFontCharMap = pWinFont->GetFontCharMap();
-    if( !xFontCharMap.is() )
-    {
-        // construct a Size structure as the parameter of constructor of class FontSelectPattern
-        const Size aSize( pFace->GetWidth(), pFace->GetHeight() );
-        // create a FontSelectPattern object for getting s LOGFONT
-        const FontSelectPattern aFSD( *pFace, aSize, static_cast<float>(aSize.Height()), 0, false );
-        // construct log font
-        LOGFONTW aLogFont;
-        ImplGetLogFontFromFontSelect( mhDC, aFSD, pFace, aLogFont );
-
-        // create HFONT from log font
-        HFONT hNewFont = ::CreateFontIndirectW( &aLogFont );
-        // select the new font into device
-        HFONT hOldFont = ::SelectFont( mhDC, hNewFont );
-
-        // read CMAP table to update their xFontCharMap
-        pWinFont->UpdateFromHDC( mhDC );
-
-        // cleanup temporary font
-        ::SelectFont( mhDC, hOldFont );
-        ::DeleteFont( hNewFont );
-
-        // get the new charmap
-        xFontCharMap = pWinFont->GetFontCharMap();
-    }
+    FontCharMapRef xFontCharMap = pWinFont->GetCharMap();
 
     // avoid fonts with unknown CMAP subtables for glyph fallback
     if( !xFontCharMap.is() || xFontCharMap->IsDefaultMap() )
@@ -642,7 +616,6 @@ WinFontFace::WinFontFace( const FontAttributes& rDFS,
 
 WinFontFace::~WinFontFace()
 {
-    mxUnicodeMap.clear();
 }
 
 sal_IntPtr WinFontFace::GetFontId() const
@@ -679,51 +652,17 @@ static DWORD CalcTag( const char p[5]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]
 void WinFontFace::UpdateFromHDC( HDC hDC ) const
 {
     // short circuit if already initialized
-    if( mxUnicodeMap.is() )
+    if (mhDC != nullptr)
         return;
 
     mhDC = hDC;
-
-    ReadCmapTable( hDC );
     GetFontCapabilities( hDC );
-}
-
-FontCharMapRef WinFontFace::GetFontCharMap() const
-{
-    return mxUnicodeMap;
 }
 
 bool WinFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     rFontCapabilities = maFontCapabilities;
     return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
-}
-
-void WinFontFace::ReadCmapTable( HDC hDC ) const
-{
-    if( mxUnicodeMap.is() )
-        return;
-
-    bool bIsSymbolFont = (meWinCharSet == SYMBOL_CHARSET);
-    // get the CMAP table from the font which is selected into the DC
-    const DWORD nCmapTag = CalcTag( "cmap" );
-    const RawFontData aRawFontData( hDC, nCmapTag );
-    // parse the CMAP table if available
-    if( aRawFontData.get() ) {
-        CmapResult aResult;
-        ParseCMAP( aRawFontData.get(), aRawFontData.size(), aResult );
-        aResult.mbSymbolic = bIsSymbolFont;
-        if( aResult.mnRangeCount > 0 )
-        {
-            FontCharMapRef pUnicodeMap(new FontCharMap(aResult));
-            mxUnicodeMap = pUnicodeMap;
-        }
-    }
-
-    if( !mxUnicodeMap.is() )
-    {
-        mxUnicodeMap = FontCharMap::GetDefaultMap( bIsSymbolFont );
-    }
 }
 
 void WinFontFace::GetFontCapabilities( HDC hDC ) const
@@ -1003,7 +942,7 @@ FontCharMapRef WinSalGraphics::GetFontCharMap() const
     {
         return FontCharMapRef( new FontCharMap() );
     }
-    return mpWinFontEntry[0]->GetFontFace()->GetFontCharMap();
+    return mpWinFontEntry[0]->GetFontFace()->GetCharMap();
 }
 
 bool WinSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
@@ -1762,7 +1701,7 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
             rUnicodeEnc.clear();
         }
         const WinFontFace* pWinFont = static_cast<const WinFontFace*>(pFont);
-        FontCharMapRef xFCMap = pWinFont->GetFontCharMap();
+        FontCharMapRef xFCMap = pWinFont->GetCharMap();
         SAL_WARN_IF( !xFCMap.is() || !xFCMap->GetCharCount(), "vcl", "no map" );
 
         int nCharCount = xFCMap->GetCharCount();

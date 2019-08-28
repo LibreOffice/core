@@ -26,7 +26,6 @@
 #include <Qt5Tools.hxx>
 
 #include <sft.hxx>
-#include <impfontcharmap.hxx>
 #include <fontinstance.hxx>
 #include <fontselect.hxx>
 #include <PhysicalFontCollection.hxx>
@@ -42,8 +41,6 @@ Qt5FontFace::Qt5FontFace(const Qt5FontFace& rSrc)
     : PhysicalFontFace(rSrc)
     , m_aFontId(rSrc.m_aFontId)
 {
-    if (rSrc.m_xCharMap.is())
-        m_xCharMap = rSrc.m_xCharMap;
 }
 
 static FontWeight fromQFontWeight(int nWeight)
@@ -141,29 +138,6 @@ rtl::Reference<LogicalFontInstance>
 Qt5FontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
     return new Qt5Font(*this, rFSD);
-}
-
-const FontCharMapRef& Qt5FontFace::GetFontCharMap() const
-{
-    if (m_xCharMap.is())
-        return m_xCharMap;
-
-    QFont aFont;
-    aFont.fromString(m_aFontId);
-    QRawFont aRawFont(QRawFont::fromFont(aFont));
-    QByteArray aCMapTable = aRawFont.fontTable("cmap");
-    if (aCMapTable.isEmpty())
-    {
-        m_xCharMap = new FontCharMap();
-        return m_xCharMap;
-    }
-
-    CmapResult aCmapResult;
-    if (ParseCMAP(reinterpret_cast<const unsigned char*>(aCMapTable.data()), aCMapTable.size(),
-                  aCmapResult))
-        m_xCharMap = new FontCharMap(aCmapResult);
-
-    return m_xCharMap;
 }
 
 bool Qt5FontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const
