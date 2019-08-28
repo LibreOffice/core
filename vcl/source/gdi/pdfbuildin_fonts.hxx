@@ -71,6 +71,12 @@ public:
     sal_IntPtr GetFontId() const override { return reinterpret_cast<sal_IntPtr>(&mrBuildin); }
 
     static const BuildinFont& Get(int nId) { return m_aBuildinFonts[nId]; }
+
+    hb_blob_t* GetHbTable(hb_tag_t /*nTag*/) const override
+    {
+        assert(false);
+        return hb_blob_get_empty();
+    }
 };
 
 } // namespace pdf
