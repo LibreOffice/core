@@ -268,6 +268,12 @@ static const sal_uInt32 T_otto = 0x4f54544f;        /* 'OTTO' */
 
 const unsigned char* FreetypeFontInfo::GetTable( const char* pTag, sal_uLong* pLength ) const
 {
+    uint32_t nTag = HB_TAG(pTag[0], pTag[1], pTag[2], pTag[3]);
+    return GetTable(nTag, pLength);
+}
+
+const unsigned char* FreetypeFontInfo::GetTable( uint32_t nTag, sal_uLong* pLength ) const
+{
     const unsigned char* pBuffer = mpFontFile->GetBuffer();
     int nFileSize = mpFontFile->GetFileSize();
     if( !pBuffer || nFileSize<1024 )
@@ -288,7 +294,7 @@ const unsigned char* FreetypeFontInfo::GetTable( const char* pTag, sal_uLong* pL
         return nullptr;
     for( int i = 0; i < nTables; ++i, p+=16 )
     {
-        if( p[0]==pTag[0] && p[1]==pTag[1] && p[2]==pTag[2] && p[3]==pTag[3] )
+        if( HB_TAG(p[0], p[1], p[2], p[3]) == nTag )
         {
             sal_uLong nLength = GetUInt( p + 12 );
             if( pLength != nullptr )
@@ -405,6 +411,19 @@ FreetypeFontFace::FreetypeFontFace( FreetypeFontInfo* pFI, const FontAttributes&
 rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
     return new FreetypeFontInstance(*this, rFSD);
+}
+
+hb_blob_t* FreetypeFontFace::GetHbTable(hb_tag_t nTag) const
+{
+    sal_uLong nLength = 0;
+    const char* pBuffer = reinterpret_cast<const char*>(
+        mpFreetypeFontInfo->GetTable(nTag, &nLength));
+
+    hb_blob_t* pBlob = nullptr;
+    if (pBuffer != nullptr)
+        pBlob = hb_blob_create(pBuffer, nLength, HB_MEMORY_MODE_READONLY, nullptr, nullptr);
+
+    return pBlob;
 }
 
 // FreetypeFont

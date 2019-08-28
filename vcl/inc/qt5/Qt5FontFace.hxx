@@ -49,6 +49,8 @@ public:
     rtl::Reference<LogicalFontInstance>
     CreateFontInstance(const FontSelectPattern& rFSD) const override;
 
+    hb_blob_t* GetHbTable(hb_tag_t nTag) const override;
+
 protected:
     Qt5FontFace(const Qt5FontFace&);
     Qt5FontFace(const FontAttributes& rFA, const QString& rFontID);

@@ -74,8 +74,6 @@ hb_font_t* LogicalFontInstance::InitHbFont(hb_face_t* pHbFace)
     unsigned int nUPEM = hb_face_get_upem(pHbFace);
     hb_font_set_scale(pHbFont, nUPEM, nUPEM);
     hb_ot_font_set_funcs(pHbFont);
-    // hb_font_t keeps a reference to hb_face_t, so destroy this one.
-    hb_face_destroy(pHbFace);
     return pHbFont;
 }
 
