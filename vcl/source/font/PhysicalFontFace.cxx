@@ -26,6 +26,30 @@
 
 #include <PhysicalFontFace.hxx>
 
+namespace {
+
+void DecodeOpenTypeTag(const uint32_t nTableTag, char* pTagName)
+{
+    pTagName[0] = static_cast<char>(nTableTag >> 24);
+    pTagName[1] = static_cast<char>(nTableTag >> 16);
+    pTagName[2] = static_cast<char>(nTableTag >> 8);
+    pTagName[3] = static_cast<char>(nTableTag);
+    pTagName[4] = 0;
+}
+
+hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
+{
+    char pTagName[5];
+    DecodeOpenTypeTag(nTableTag, pTagName);
+
+    PhysicalFontFace* pFontFace = static_cast<PhysicalFontFace*>(pUserData);
+    hb_blob_t* pBlob = pFontFace->GetHbTable(pTagName);
+
+    return pBlob;
+}
+
+}
+
 PhysicalFontFace::PhysicalFontFace( const FontAttributes& rDFA )
     : FontAttributes( rDFA )
     , mnWidth(0)
@@ -35,6 +59,13 @@ PhysicalFontFace::PhysicalFontFace( const FontAttributes& rDFA )
     if( !IsSymbolFont() )
         if ( IsStarSymbol( GetFamilyName() ) )
             SetSymbolFlag( true );
+    mpHbFace = hb_face_create_for_tables(getFontTable, this, nullptr);
+}
+
+PhysicalFontFace::~PhysicalFontFace()
+{
+    if (mpHbFace)
+        hb_face_destroy(mpHbFace);
 }
 
 sal_Int32 PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) const

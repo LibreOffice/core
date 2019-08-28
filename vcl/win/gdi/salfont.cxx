@@ -615,7 +615,8 @@ WinFontFace::WinFontFace( const FontAttributes& rDFS,
     meWinCharSet( eWinCharSet ),
     mnPitchAndFamily( nPitchAndFamily ),
     mbAliasSymbolsHigh( false ),
-    mbAliasSymbolsLow( false )
+    mbAliasSymbolsLow( false ),
+    mhDC( nullptr )
 {
     if( eWinCharSet == SYMBOL_CHARSET )
     {
@@ -649,6 +650,26 @@ sal_IntPtr WinFontFace::GetFontId() const
     return mnId;
 }
 
+hb_blob_t* WinFontFace::GetHbTable(const char* pName)
+{
+    sal_uLong nLength = 0;
+    unsigned char* pBuffer = nullptr;
+
+    const DWORD nTag = CalcTag(pName);
+    nLength = ::GetFontData(hDC, nTag, 0, nullptr, 0);
+    if (nLength > 0 && nLength != GDI_ERROR)
+    {
+        pBuffer = new unsigned char[nLength];
+        ::GetFontData(hDC, nTag, 0, pBuffer, nLength);
+    }
+
+    hb_blob_t* pBlob = nullptr;
+    if (pBuffer != nullptr)
+        pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY,
+                               pBuffer, [](void* data){ delete[] static_cast<unsigned char*>(data); });
+    return pBlob;
+}
+
 rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
     return new WinFontInstance(*this, rFSD);
@@ -661,6 +682,8 @@ void WinFontFace::UpdateFromHDC( HDC hDC ) const
     // short circuit if already initialized
     if( mxUnicodeMap.is() )
         return;
+
+    mhDC = hDC;
 
     ReadCmapTable( hDC );
     GetFontCapabilities( hDC );

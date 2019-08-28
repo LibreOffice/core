@@ -387,6 +387,19 @@ rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const F
     return new FreetypeFontInstance(*this, rFSD);
 }
 
+hb_blob_t* FreetypeFontFace::GetHbTable(const char* pName)
+{
+    sal_uLong nLength = 0;
+    const char* pBuffer = reinterpret_cast<const char*>(
+        mpFreetypeFontInfo->GetTable(pName, &nLength));
+
+    hb_blob_t* pBlob = nullptr;
+    if (pBuffer != nullptr)
+        pBlob = hb_blob_create(pBuffer, nLength, HB_MEMORY_MODE_READONLY, nullptr, nullptr);
+
+    return pBlob;
+}
+
 // FreetypeFont
 
 FreetypeFont::FreetypeFont(LogicalFontInstance* pFontInstance, FreetypeFontInfo* pFI )
