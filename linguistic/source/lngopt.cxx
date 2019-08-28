@@ -26,6 +26,7 @@
 #include <tools/debug.hxx>
 #include <unotools/lingucfg.hxx>
 
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -328,22 +329,16 @@ Sequence< PropertyValue > SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Int32 nLen = aPropertyMap.getSize();
-    Sequence< PropertyValue > aProps( nLen );
-    PropertyValue *pProp = aProps.getArray();
     PropertyEntryVector_t aPropEntries = aPropertyMap.getPropertyEntries();
-    PropertyEntryVector_t::const_iterator aIt = aPropEntries.begin();
-    for (sal_Int32 i = 0;  i < nLen;  ++i, ++aIt)
-    {
-        PropertyValue &rVal = pProp[i];
-        Any aAny( aConfig.GetProperty( aIt->nWID ) );
+    std::vector<PropertyValue> aProps;
+    aProps.reserve(aPropertyMap.getSize());
 
-        rVal.Name   = aIt->sName;
-        rVal.Handle = aIt->nWID;
-        rVal.Value  = aAny;
-        rVal.State  = PropertyState_DIRECT_VALUE ;
-    }
-    return aProps;
+    std::transform(aPropEntries.begin(), aPropEntries.end(), std::back_inserter(aProps),
+        [this](PropertyEntryVector_t::const_reference rPropEntry) {
+            return PropertyValue(rPropEntry.sName, rPropEntry.nWID,
+                                 aConfig.GetProperty(rPropEntry.nWID),
+                                 css::beans::PropertyState_DIRECT_VALUE); });
+    return comphelper::containerToSequence(aProps);
 }
 
 void SAL_CALL
@@ -351,11 +346,8 @@ void SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Int32 nLen = rProps.getLength();
-    const PropertyValue *pVal = rProps.getConstArray();
-    for (sal_Int32 i = 0;  i < nLen;  ++i)
+    for (const PropertyValue &rVal : rProps)
     {
-        const PropertyValue &rVal = pVal[i];
         setPropertyValue( rVal.Name, rVal.Value );
     }
 }

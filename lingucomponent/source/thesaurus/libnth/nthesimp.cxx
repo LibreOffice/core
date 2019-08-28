@@ -30,6 +30,7 @@
 #include <tools/debug.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <unotools/pathoptions.hxx>
@@ -48,6 +49,7 @@
 #include "nthesdta.hxx"
 
 #include <vector>
+#include <numeric>
 #include <set>
 #include <string.h>
 
@@ -113,11 +115,10 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
         uno::Sequence< OUString > aFormatList;
         aLinguCfg.GetSupportedDictionaryFormatsFor( "Thesauri",
                 "org.openoffice.lingu.new.Thesaurus", aFormatList );
-        sal_Int32 nLen = aFormatList.getLength();
-        for (sal_Int32 i = 0;  i < nLen;  ++i)
+        for (const auto& rFormat : std::as_const(aFormatList))
         {
             std::vector< SvtLinguConfigDictionaryEntry > aTmpDic(
-                    aLinguCfg.GetActiveDictionariesByFormat( aFormatList[i] ) );
+                    aLinguCfg.GetActiveDictionariesByFormat( rFormat ) );
             aDics.insert( aDics.end(), aTmpDic.begin(), aTmpDic.end() );
         }
 
@@ -132,61 +133,53 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
         // is not yet supported by the list of new style dictionaries
         MergeNewStyleDicsAndOldStyleDics( aDics, aOldStyleDics );
 
-        sal_Int32 numthes = aDics.size();
-        if (numthes)
+        if (!aDics.empty())
         {
             // get supported locales from the dictionaries-to-use...
-            sal_Int32 k = 0;
             std::set<OUString> aLocaleNamesSet;
             for (auto const& dict : aDics)
             {
-                uno::Sequence< OUString > aLocaleNames(dict.aLocaleNames);
-                sal_Int32 nLen2 = aLocaleNames.getLength();
-                for (k = 0;  k < nLen2;  ++k)
+                for (const auto& rLocaleName : dict.aLocaleNames)
                 {
-                    if (!comphelper::LibreOfficeKit::isWhitelistedLanguage(aLocaleNames[k]))
+                    if (!comphelper::LibreOfficeKit::isWhitelistedLanguage(rLocaleName))
                         continue;
 
-                    aLocaleNamesSet.insert( aLocaleNames[k] );
+                    aLocaleNamesSet.insert( rLocaleName );
                 }
             }
             // ... and add them to the resulting sequence
-            aSuppLocales.realloc( aLocaleNamesSet.size() );
-            std::set<OUString>::const_iterator aItB;
-            k = 0;
-            for (auto const& localeName : aLocaleNamesSet)
-            {
-                Locale aTmp( LanguageTag::convertToLocale(localeName));
-                aSuppLocales[k++] = aTmp;
-            }
+            std::vector<Locale> aLocalesVec;
+            aLocalesVec.reserve(aLocaleNamesSet.size());
+
+            std::transform(aLocaleNamesSet.begin(), aLocaleNamesSet.end(), std::back_inserter(aLocalesVec),
+                [](const OUString& localeName) -> Locale { return LanguageTag::convertToLocale(localeName); });
+
+            aSuppLocales = comphelper::containerToSequence(aLocalesVec);
 
             //! For each dictionary and each locale we need a separate entry.
             //! If this results in more than one dictionary per locale than (for now)
             //! it is undefined which dictionary gets used.
             //! In the future the implementation should support using several dictionaries
             //! for one locale.
-            numthes = 0;
-            for (auto const& dict : aDics)
-                numthes = numthes + dict.aLocaleNames.getLength();
+            sal_Int32 numthes = std::accumulate(aDics.begin(), aDics.end(), 0,
+                [](const sal_Int32 nSum, const SvtLinguConfigDictionaryEntry& dict) {
+                    return nSum + dict.aLocaleNames.getLength(); });
 
             // add dictionary information
             mvThesInfo.resize(numthes);
 
-            k = 0;
+            sal_Int32 k = 0;
             for (auto const& dict : aDics)
             {
                 if (dict.aLocaleNames.hasElements() &&
                     dict.aLocations.hasElements())
                 {
-                    uno::Sequence< OUString > aLocaleNames(dict.aLocaleNames);
-                    sal_Int32 nLocales = aLocaleNames.getLength();
-
                     // currently only one language per dictionary is supported in the actual implementation...
                     // Thus here we work-around this by adding the same dictionary several times.
                     // Once for each of its supported locales.
-                    for (sal_Int32 i = 0;  i < nLocales;  ++i)
+                    for (const auto& rLocaleName : dict.aLocaleNames)
                     {
-                        LanguageTag aLanguageTag(dict.aLocaleNames[i]);
+                        LanguageTag aLanguageTag(rLocaleName);
                         mvThesInfo[k].aEncoding = RTL_TEXTENCODING_DONTKNOW;
                         mvThesInfo[k].aLocale  = aLanguageTag.getLocale();
                         mvThesInfo[k].aCharSetInfo.reset( new CharClass( aLanguageTag ) );
@@ -219,20 +212,10 @@ sal_Bool SAL_CALL Thesaurus::hasLocale(const Locale& rLocale)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    bool bRes = false;
     if (!aSuppLocales.hasElements())
         getLocales();
-    sal_Int32 nLen = aSuppLocales.getLength();
-    for (sal_Int32 i = 0;  i < nLen;  ++i)
-    {
-        const Locale *pLocale = aSuppLocales.getConstArray();
-        if (rLocale == pLocale[i])
-        {
-            bRes = true;
-            break;
-        }
-    }
-    return bRes;
+
+    return comphelper::findValue(aSuppLocales, rLocale) != -1;
 }
 
 Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryMeanings(
