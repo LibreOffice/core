@@ -56,22 +56,9 @@ OUString SalGtkPicker::uritounicode(const gchar* pIn)
     {
         // all the URLs are handled by office in UTF-8
         // so the Gnome FP related URLs should be converted accordingly
-        gchar *pEncodedFileName = g_filename_from_uri(pIn, nullptr, nullptr);
-        if ( pEncodedFileName )
-        {
-            OUString sEncoded(pEncodedFileName, strlen(pEncodedFileName),
-                osl_getThreadTextEncoding());
-            g_free (pEncodedFileName);
-            INetURLObject aCurrentURL(sEncoded, FSysStyle::Unix);
-            aCurrentURL.SetHost(aURL.GetHost());
-            sURL = aCurrentURL.getExternalURL();
-        }
-        else
-        {
-            OUString aNewURL = uri::ExternalUriReferenceTranslator::create( m_xContext )->translateToInternal(sURL);
-            if( !aNewURL.isEmpty() )
-                sURL = aNewURL;
-        }
+        OUString aNewURL = uri::ExternalUriReferenceTranslator::create( m_xContext )->translateToInternal(sURL);
+        if( !aNewURL.isEmpty() )
+            sURL = aNewURL;
     }
     return sURL;
 }
