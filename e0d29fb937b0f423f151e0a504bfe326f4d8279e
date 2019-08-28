@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_d73a8f32",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1591,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-08-28T08:39:05Z",
+      "side": 1,
+      "message": "declared here @stephan .",
+      "range": {
+        "startLine": 1591,
+        "startChar": 7,
+        "endLine": 1591,
+        "endChar": 16
+      },
+      "revId": "e0d29fb937b0f423f151e0a504bfe326f4d8279e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
