@@ -2009,7 +2009,7 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                         if (eLatin == LANGUAGE_NONE)
                             sLanguage += ";-";
                         else
-                            sLanguage += ";" + LanguageTag(eLatin).getLanguage();
+                            sLanguage += ";" + LanguageTag(eLatin).getBcp47(false);
                     }
                     rSet.Put(SfxStringItem(nWhich, sLanguage));
                 }
