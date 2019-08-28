@@ -144,8 +144,8 @@ void AxBinaryPropertyWriter::writePairProperty( AxPairData& orPairData )
 
 void AxBinaryPropertyWriter::writeStringProperty( OUString& orValue )
 {
-    sal_uInt32 nSize = orValue.getLength();
-    setFlag(  nSize, AX_STRING_COMPRESSED );
+    sal_uInt32 nSize = orValue.getLength() * 2;
+    setFlag(  nSize, AX_STRING_COMPRESSED, false );
     maOutStrm.writeAligned< sal_uInt32 >( nSize );
     maLargeProps.push_back( ComplexPropVector::value_type( new StringProperty( orValue, nSize ) ) );
     startNextProperty();
