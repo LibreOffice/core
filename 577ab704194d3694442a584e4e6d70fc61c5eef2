@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_5718bfd1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-28T08:52:59Z",
+      "side": 1,
+      "message": "I can\u0027t answer the questions in general, but to trigger the mentioned block, you may take any of (absolute-link.docx|relative-link.docx) from that commit, open in LO, and manually save as DOC. HTH.",
+      "range": {
+        "startLine": 13,
+        "startChar": 10,
+        "endLine": 13,
+        "endChar": 51
+      },
+      "revId": "577ab704194d3694442a584e4e6d70fc61c5eef2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
