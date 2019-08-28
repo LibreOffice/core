@@ -9029,7 +9029,8 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
 }
 
 DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr& pSerializer, oox::drawingml::DrawingML* pDrawingML )
-    : m_rExport( rExport ),
+    : AttributeOutputBase(rExport.GetFilter().getFileUrl()),
+      m_rExport( rExport ),
       m_pSerializer( pSerializer ),
       m_rDrawingML( *pDrawingML ),
       m_bEndCharSdt(false),

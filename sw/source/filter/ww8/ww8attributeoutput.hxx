@@ -23,6 +23,7 @@
 #include "attributeoutputbase.hxx"
 #include "wrtww8.hxx"
 #include <editeng/boxitem.hxx>
+#include <sfx2/docfile.hxx>
 
 class WW8AttributeOutput : public AttributeOutputBase
 {
@@ -467,7 +468,8 @@ protected:
 
 public:
     explicit WW8AttributeOutput( WW8Export &rWW8Export )
-        : AttributeOutputBase()
+        : AttributeOutputBase(rWW8Export.GetWriter().GetMedia()->GetURLObject().GetMainURL(
+            INetURLObject::DecodeMechanism::NONE))
         , m_rWW8Export(rWW8Export)
         , nPOPosStdLen1(0)
         , nPOPosStdLen2(0)
