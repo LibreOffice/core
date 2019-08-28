@@ -76,6 +76,8 @@ public:
     FontCharMapRef          GetFontCharMap() const;
     bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
 
+    hb_blob_t*              GetHbTable(hb_tag_t nTag) const override;
+
 private:
     sal_IntPtr              mnId;
 
@@ -91,6 +93,8 @@ private:
 
     void                    ReadCmapTable( HDC ) const;
     void                    GetFontCapabilities( HDC hDC ) const;
+
+    mutable HDC             mhDC;
 };
 
 /** Class that creates (and destroys) a compatible Device Context.
