@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_5203ed0d",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-28T13:37:41Z",
+      "side": 1,
+      "message": "And what might be the need for these lines? Do you have an idea?",
+      "range": {
+        "startLine": 901,
+        "startChar": 4,
+        "endLine": 902,
+        "endChar": 96
+      },
+      "revId": "056e1fff2ed232f2a50db933fbade1c71c0c2a65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
