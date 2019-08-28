@@ -729,6 +729,8 @@ private:
 public:
     virtual vcl::Region                 GetActiveClipRegion() const override;
 
+    virtual bool                        UsePolyPolygonForComplexGradient() override;
+
 protected:
     // Single argument ctors shall be explicit.
     explicit                            Window( WindowType nType );
@@ -751,7 +753,6 @@ protected:
 
     virtual void                        CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate) override;
     virtual void                        ClipToPaintRegion( tools::Rectangle& rDstRect ) override;
-    virtual bool                        UsePolyPolygonForComplexGradient() override;
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext);
 public:

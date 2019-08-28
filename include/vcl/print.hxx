@@ -222,15 +222,17 @@ public:
     VCL_DLLPRIVATE void         ImplStartPage();
     VCL_DLLPRIVATE void         ImplEndPage();
 
+    virtual void                ClipAndDrawGradientMetafile ( const Gradient &rGradient,
+                                    const tools::PolyPolygon &rPolyPoly ) override;
+
+    virtual long                GetGradientStepCount( long nMinRect ) override;
+
+    virtual bool                UsePolyPolygonForComplexGradient() override;
+
 protected:
     virtual bool                AcquireGraphics() const override;
     virtual void                ReleaseGraphics( bool bRelease = true ) override;
     virtual void                ImplReleaseFonts() override;
-
-    virtual long                GetGradientStepCount( long nMinRect ) override;
-    virtual bool                UsePolyPolygonForComplexGradient() override;
-    virtual void                ClipAndDrawGradientMetafile ( const Gradient &rGradient,
-                                    const tools::PolyPolygon &rPolyPoly ) override;
 
     void                        ScaleBitmap ( Bitmap&, SalTwoRect& ) override { };
     vcl::Region                 ClipToDeviceBounds(vcl::Region aRegion) const override;

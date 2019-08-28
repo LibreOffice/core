@@ -38,6 +38,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <memory>
 #include <vcl/fontcharmap.hxx>
+#include <vcl/drawables/GradientDrawable.hxx>
 
 // MS Windows defines
 
@@ -1298,10 +1299,10 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case MetaActionType::GRADIENT:
                 {
                     const MetaGradientAction*   pA = static_cast<const MetaGradientAction*>(pMA);
-                    GDIMetaFile                 aTmpMtf;
+                    std::unique_ptr<GDIMetaFile> pTmpMtf(new GDIMetaFile);
 
-                    pVirDev->AddGradientActions( pA->GetRect(), pA->GetGradient(), aTmpMtf );
-                    WriteRecords( aTmpMtf );
+                    pVirDev->Draw(vcl::GradientDrawable(pA->GetRect(), pA->GetGradient(), pTmpMtf.get()));
+                    WriteRecords(*pTmpMtf);
                 }
                 break;
 

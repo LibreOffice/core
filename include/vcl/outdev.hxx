@@ -644,9 +644,11 @@ public:
     const vcl::Font&            GetFont() const { return maFont; }
 
     bool                        IsLineColorInitialized() const { return mbInitLineColor; }
+    void                        FlagLineColorInitialized() { mbInitLineColor = true; }
     SAL_DLLPRIVATE void         InitLineColor();
 
     bool                        IsFillColorInitialized() const { return mbInitFillColor; }
+    void                        FlagFillColorInitialized() { mbFillColor = true; }
     SAL_DLLPRIVATE void         InitFillColor();
 
 protected:
@@ -750,8 +752,6 @@ public:
      */
     ///@{
 
-public:
-
     void                        DrawPolyLine(
                                     const basegfx::B2DPolygon&,
                                     double fLineWidth = 0.0,
@@ -779,7 +779,6 @@ public:
      */
     ///@{
 
-public:
 
     /** Render the given polygon
 
@@ -813,8 +812,6 @@ public:
      */
     ///@{
 
-public:
-
     void                        DrawEllipse( const tools::Rectangle& rRect );
 
     void                        DrawArc(
@@ -836,42 +833,19 @@ public:
      */
     ///@{
 
-public:
     void                        DrawGradient( const tools::Rectangle& rRect, const Gradient& rGradient );
     void                        DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
 
-    void                        AddGradientActions(
-                                    const tools::Rectangle& rRect,
-                                    const Gradient& rGradient,
-                                    GDIMetaFile& rMtf );
-
-protected:
-
     virtual bool                UsePolyPolygonForComplexGradient() = 0;
+    virtual long                GetGradientStepCount(long nMinRect);
+    virtual void                ClipAndDrawGradientMetafile(Gradient const& rGradient, tools::PolyPolygon const& rPolyPoly);
 
-    virtual long                GetGradientStepCount( long nMinRect );
-
-private:
-
-    SAL_DLLPRIVATE void         DrawLinearGradient( const tools::Rectangle& rRect, const Gradient& rGradient, const tools::PolyPolygon* pClipPolyPoly );
-    SAL_DLLPRIVATE void         DrawComplexGradient( const tools::Rectangle& rRect, const Gradient& rGradient, const tools::PolyPolygon* pClipPolyPoly );
-
-    SAL_DLLPRIVATE void         DrawGradientToMetafile( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
-    SAL_DLLPRIVATE void         DrawLinearGradientToMetafile( const tools::Rectangle& rRect, const Gradient& rGradient );
-    SAL_DLLPRIVATE void         DrawComplexGradientToMetafile( const tools::Rectangle& rRect, const Gradient& rGradient );
-
-    SAL_DLLPRIVATE long         GetGradientSteps( const Gradient& rGradient, const tools::Rectangle& rRect, bool bMtf, bool bComplex=false );
-
-    SAL_DLLPRIVATE Color        GetSingleColorGradientFill();
-    SAL_DLLPRIVATE void         SetGrayscaleColors( Gradient &rGradient );
     ///@}
 
 
     /** @name Hatch functions
      */
     ///@{
-
-public:
 
 #ifdef _MSC_VER
     void                        DrawHatch( const tools::PolyPolygon& rPolyPoly, const ::Hatch& rHatch );
@@ -1582,8 +1556,6 @@ protected:
 
     virtual void                EmulateDrawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
     void                        DrawInvisiblePolygon( const tools::PolyPolygon& rPolyPoly );
-
-    virtual void                ClipAndDrawGradientMetafile ( const Gradient &rGradient, const tools::PolyPolygon &rPolyPoly );
 
 private:
 

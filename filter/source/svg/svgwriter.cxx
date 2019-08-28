@@ -27,6 +27,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/drawables/GradientDrawable.hxx>
 #include <tools/helpers.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <sax/tools/converter.hxx>
@@ -2157,12 +2158,14 @@ void SVGActionWriter::ImplWritePattern( const tools::PolyPolygon& rPolyPoly,
                 {
                     SvXMLElementExport aElemG2( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
 
-                    GDIMetaFile aTmpMtf;
-                    if( pHatch )
-                        mpVDev->AddHatchActions( rPolyPoly, *pHatch, aTmpMtf );
-                    else if ( pGradient )
-                        mpVDev->AddGradientActions( rPolyPoly.GetBoundRect(), *pGradient, aTmpMtf );
-                    ImplWriteActions( aTmpMtf, nWriteFlags, nullptr );
+                    std::unique_ptr<GDIMetaFile> pTmpMtf;
+
+                    if (pHatch)
+                        mpVDev->AddHatchActions(rPolyPoly, *pHatch, *pTmpMtf);
+                    else if (pGradient)
+                        mpVDev->Draw(vcl::GradientDrawable(rPolyPoly.GetBoundRect(), *pGradient, pTmpMtf.get()));
+
+                    ImplWriteActions(*pTmpMtf, nWriteFlags, nullptr);
                 }
             }
         }

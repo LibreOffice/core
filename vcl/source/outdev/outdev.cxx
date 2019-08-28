@@ -31,9 +31,10 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/drawables/Drawable.hxx>
 
-#include <salgdi.hxx>
 #include <window.h>
 #include <outdev.h>
+
+#include <salgdi.hxx>
 
 #ifdef DISABLE_DYNLOADING
 // Linking all needed LO code into one .so/executable, these already
@@ -724,6 +725,12 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
         mpAlphaVDev->DrawEPS( rPoint, rSize, rGfxLink, pSubst );
 
     return bDrawn;
+}
+
+bool OutputDevice::is_double_buffered_window() const
+{
+    const vcl::Window *pWindow = dynamic_cast<const vcl::Window*>(this);
+    return pWindow && pWindow->SupportsDoubleBuffering();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

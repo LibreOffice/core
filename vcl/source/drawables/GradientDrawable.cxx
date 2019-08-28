@@ -24,13 +24,6 @@
 
 namespace vcl
 {
-void AddGradientActions(OutputDevice* pRenderContext, tools::Rectangle const& rRect,
-                        Gradient const& rGradient, GDIMetaFile* pMetaFile)
-{
-    vcl::GradientDrawable aGradientDrawable(rRect, rGradient, pMetaFile);
-    aGradientDrawable.execute(pRenderContext);
-}
-
 bool GradientDrawable::DrawCommand(OutputDevice* pRenderContext) const
 {
     if (mbAddToMetaFile)
@@ -46,7 +39,7 @@ bool GradientDrawable::DrawCommand(OutputDevice* pRenderContext) const
 }
 
 bool GradientDrawable::Draw(OutputDevice* pRenderContext, tools::Rectangle const& rRect,
-                            Gradient const& rGradient) const
+                            Gradient const& rGradient)
 {
     tools::Polygon aPolygon(rRect);
     tools::PolyPolygon aPolyPoly(aPolygon);
@@ -158,7 +151,7 @@ bool GradientDrawable::Draw(OutputDevice* pRenderContext, tools::PolyPolygon con
 
 bool GradientDrawable::AddGradientActions(OutputDevice* pRenderContext,
                                           tools::Rectangle const& rRect, Gradient const& rGradient,
-                                          GDIMetaFile* pMetaFile) const
+                                          GDIMetaFile* pMetaFile)
 {
     if (!pMetaFile)
         return false;
@@ -211,7 +204,7 @@ void GradientDrawable::InitLineColor(OutputDevice* const pRenderContext) const
     pRenderContext->FlagLineColorInitialized();
 }
 
-Color GradientDrawable::GetSingleColorGradientFill(OutputDevice* pRenderContext) const
+Color GradientDrawable::GetSingleColorGradientFill(OutputDevice* pRenderContext)
 {
     // we should never call on this function if any of these aren't set!
     assert(pRenderContext->GetDrawMode()
@@ -228,7 +221,7 @@ Color GradientDrawable::GetSingleColorGradientFill(OutputDevice* pRenderContext)
     return Color();
 }
 
-void GradientDrawable::SetGrayscaleColors(OutputDevice* pRenderContext, Gradient& rGradient) const
+void GradientDrawable::SetGrayscaleColors(OutputDevice* pRenderContext, Gradient& rGradient)
 {
     // this should only be called with the drawing mode is for grayscale gradients
     assert(pRenderContext->GetDrawMode() & DrawModeFlags::GrayGradient);
@@ -348,7 +341,7 @@ sal_uInt8 GetGradientColorValue(long nValue)
 
 void GradientDrawable::DrawLinearGradientToMetafile(OutputDevice* pRenderContext,
                                                     tools::Rectangle const& rRect,
-                                                    Gradient const& rGradient) const
+                                                    Gradient const& rGradient)
 {
     GDIMetaFile* pMetaFile = pRenderContext->GetConnectMetaFile();
     if (!pMetaFile)
@@ -541,7 +534,7 @@ void GradientDrawable::DrawLinearGradientToMetafile(OutputDevice* pRenderContext
 
 void GradientDrawable::DrawComplexGradientToMetafile(OutputDevice* pRenderContext,
                                                      tools::Rectangle const& rRect,
-                                                     Gradient const& rGradient) const
+                                                     Gradient const& rGradient)
 {
     GDIMetaFile* pMetaFile = pRenderContext->GetConnectMetaFile();
     if (!pMetaFile)
@@ -694,8 +687,7 @@ void GradientDrawable::DrawComplexGradientToMetafile(OutputDevice* pRenderContex
 }
 
 long GradientDrawable::GetGradientSteps(OutputDevice* pRenderContext, Gradient const& rGradient,
-                                        tools::Rectangle const& rRect, bool bMtf,
-                                        bool bComplex) const
+                                        tools::Rectangle const& rRect, bool bMtf, bool bComplex)
 {
     // calculate step count
     long nStepCount = rGradient.GetSteps();
@@ -800,7 +792,10 @@ void GradientDrawable::DrawLinearGradient(OutputDevice* pRenderContext,
         aPoly[3] = aBorderRect.BottomLeft();
         aPoly.Rotate(aCenter, nAngle);
 
-        pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+        if (pClixPolyPoly)
+            pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+        else
+            pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
 
         if (!bLinear)
         {
@@ -813,7 +808,10 @@ void GradientDrawable::DrawLinearGradient(OutputDevice* pRenderContext,
             aPoly[3] = aBorderRect.BottomLeft();
             aPoly.Rotate(aCenter, nAngle);
 
-            pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+            if (pClixPolyPoly)
+                pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+            else
+                pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
         }
     }
 
@@ -868,7 +866,10 @@ void GradientDrawable::DrawLinearGradient(OutputDevice* pRenderContext,
         aPoly[3] = aRect.BottomLeft();
         aPoly.Rotate(aCenter, nAngle);
 
-        pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+        if (pClixPolyPoly)
+            pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+        else
+            pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
 
         if (!bLinear)
         {
@@ -882,7 +883,10 @@ void GradientDrawable::DrawLinearGradient(OutputDevice* pRenderContext,
             aPoly[3] = aMirrorRect.BottomLeft();
             aPoly.Rotate(aCenter, nAngle);
 
-            pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+            if (pClixPolyPoly)
+                pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+            else
+                pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
         }
     }
     if (bLinear)
@@ -904,7 +908,10 @@ void GradientDrawable::DrawLinearGradient(OutputDevice* pRenderContext,
     aPoly[3] = aRect.BottomLeft();
     aPoly.Rotate(aCenter, nAngle);
 
-    pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+    if (pClixPolyPoly)
+        pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+    else
+        pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
 }
 
 void GradientDrawable::DrawComplexGradient(OutputDevice* pRenderContext,
@@ -999,7 +1006,10 @@ void GradientDrawable::DrawComplexGradient(OutputDevice* pRenderContext,
         aExtRect.AdjustBottom(1);
 
         aPoly = aExtRect;
-        pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+        if (pClixPolyPoly)
+            pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+        else
+            pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
     }
 
     // loop to output Polygon/PolyPolygon sequentially
@@ -1041,7 +1051,10 @@ void GradientDrawable::DrawComplexGradient(OutputDevice* pRenderContext,
             xPolyPoly->Replace(xPolyPoly->GetObject(1), 0);
             xPolyPoly->Replace(aPoly, 1);
 
-            pRenderContext->Draw(vcl::PolyPolygonDrawable(*xPolyPoly, *pClixPolyPoly));
+            if (pClixPolyPoly)
+                pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+            else
+                pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
 
             // #107349# Set fill color _after_ geometry painting:
             // xPolyPoly's geometry is the band from last iteration's
@@ -1057,7 +1070,10 @@ void GradientDrawable::DrawComplexGradient(OutputDevice* pRenderContext,
             // #107349# Set fill color _before_ geometry painting
             mpGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
 
-            pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+            if (pClixPolyPoly)
+                pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+            else
+                pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
         }
     }
 
@@ -1079,7 +1095,10 @@ void GradientDrawable::DrawComplexGradient(OutputDevice* pRenderContext,
             }
 
             mpGraphics->SetFillColor(Color(nRed, nGreen, nBlue));
-            pRenderContext->Draw(vcl::PolygonDrawable(rPoly, *pClixPolyPoly));
+            if (pClixPolyPoly)
+                pRenderContext->Draw(vcl::PolygonDrawable(aPoly, *pClixPolyPoly));
+            else
+                pRenderContext->Draw(vcl::PolygonDrawable(aPoly));
         }
     }
 }

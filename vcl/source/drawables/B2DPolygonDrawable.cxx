@@ -35,7 +35,7 @@ bool B2DPolygonDrawable::DrawCommand(OutputDevice* pRenderContext) const
 }
 
 bool B2DPolygonDrawable::Draw(OutputDevice* pRenderContext,
-                              basegfx::B2DPolygon const& rB2DPolygon) const
+                              basegfx::B2DPolygon const& rB2DPolygon)
 {
     // Do NOT paint empty polygons
     if (rB2DPolygon.count())

@@ -35,7 +35,7 @@ protected:
     virtual bool DrawCommand(OutputDevice* pRenderContext) const override;
 
 private:
-    bool Draw(OutputDevice* pRenderContext, basegfx::B2DPolygon const& rB2DPolygon) const;
+    static bool Draw(OutputDevice* pRenderContext, basegfx::B2DPolygon const& rB2DPolygon);
 
     basegfx::B2DPolygon maB2DPolygon;
 };

@@ -172,11 +172,12 @@ public:
 
     bool IsVirtual() const override;
 
+    virtual bool        UsePolyPolygonForComplexGradient() override;
+
 private:
     SAL_DLLPRIVATE void ImplSetReferenceDevice( RefDevMode, sal_Int32 i_nDPIX, sal_Int32 i_nDPIY );
 
 protected:
-    virtual bool        UsePolyPolygonForComplexGradient() override;
 
     virtual long        GetFontExtLeading() const override;
 

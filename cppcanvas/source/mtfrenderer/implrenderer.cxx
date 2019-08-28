@@ -51,6 +51,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/BitmapPalette.hxx>
+#include <vcl/drawables/GradientDrawable.hxx>
 #include <tools/poly.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <implrenderer.hxx>
@@ -729,12 +730,10 @@ namespace cppcanvas
                     true );
             }
 
-            GDIMetaFile aTmpMtf;
-            rParms.mrVDev.AddGradientActions( rPoly.GetBoundRect(),
-                                              rGradient,
-                                               aTmpMtf );
+            std::unique_ptr<GDIMetaFile> pTmpMtf;
+            rParms.mrVDev.Draw(vcl::GradientDrawable(rPoly.GetBoundRect(), rGradient, pTmpMtf.get()));
 
-            createActions( aTmpMtf, rParms, bSubsettableActions );
+            createActions( *pTmpMtf, rParms, bSubsettableActions );
 
             rParms.mrStates.popState();
         }

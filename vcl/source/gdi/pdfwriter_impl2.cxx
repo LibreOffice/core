@@ -25,6 +25,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/drawables/GradientDrawable.hxx>
 
 #include <unotools/streamwrap.hxx>
 
@@ -57,13 +58,13 @@ static bool lcl_canUsePDFAxialShading(const Gradient& rGradient);
 void PDFWriterImpl::implWriteGradient( const tools::PolyPolygon& i_rPolyPoly, const Gradient& i_rGradient,
                                        VirtualDevice* i_pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& i_rContext )
 {
-    GDIMetaFile        aTmpMtf;
+    std::unique_ptr<GDIMetaFile> pTmpMtf(new GDIMetaFile);
 
-    i_pDummyVDev->AddGradientActions( i_rPolyPoly.GetBoundRect(), i_rGradient, aTmpMtf );
+    i_pDummyVDev->Draw(vcl::GradientDrawable(i_rPolyPoly.GetBoundRect(), i_rGradient, pTmpMtf.get()));
 
     m_rOuterFace.Push();
     m_rOuterFace.IntersectClipRegion( i_rPolyPoly.getB2DPolyPolygon() );
-    playMetafile( aTmpMtf, nullptr, i_rContext, i_pDummyVDev );
+    playMetafile( *pTmpMtf, nullptr, i_rContext, i_pDummyVDev );
     m_rOuterFace.Pop();
 }
 

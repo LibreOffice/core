@@ -40,6 +40,8 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/drawables/GradientDrawable.hxx>
+
 #include <strings.hrc>
 #include <osl/diagnose.h>
 #include <com/sun/star/task/XStatusIndicator.hpp>
@@ -1528,10 +1530,10 @@ void PSWriter::ImplIntersect( const tools::PolyPolygon& rPolyPoly )
 void PSWriter::ImplWriteGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rVDev )
 {
     ScopedVclPtrInstance< VirtualDevice > l_pVDev;
-    GDIMetaFile     aTmpMtf;
+    std::unique_ptr<GDIMetaFile> pTmpMtf;
     l_pVDev->SetMapMode( rVDev.GetMapMode() );
-    l_pVDev->AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );
-    ImplWriteActions( aTmpMtf, rVDev );
+    l_pVDev->Draw(vcl::GradientDrawable(rPolyPoly.GetBoundRect(), rGradient, pTmpMtf.get()));
+    ImplWriteActions(*pTmpMtf, rVDev);
 }
 
 void PSWriter::ImplPolyPoly( const tools::PolyPolygon & rPolyPoly, bool bTextOutline )

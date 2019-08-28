@@ -27,6 +27,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/drawables/GradientDrawable.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/graphictools.hxx>
@@ -333,9 +334,9 @@ void Writer::Impl_writeGradientEx( const tools::PolyPolygon& rPolyPoly, const Gr
 
             // render the gradient filling to simple polygons
             {
-                GDIMetaFile aTmpMtf;
-                mpVDev->AddGradientActions( aPolyPolygon.GetBoundRect(), rGradient, aTmpMtf );
-                Impl_writeActions( aTmpMtf );
+                std::unique_ptr<GDIMetaFile> pTmpMtf;
+                mpVDev->Draw(vcl::GradientDrawable(aPolyPolygon.GetBoundRect(), rGradient,pTmpMtf.get()));
+                Impl_writeActions(*pTmpMtf);
             }
 
             setClipping( nullptr );

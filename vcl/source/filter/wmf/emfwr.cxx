@@ -31,6 +31,8 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/drawables/GradientDrawable.hxx>
+
 #include <memory>
 
 #define WIN_EMR_POLYGON                     3
@@ -1143,7 +1145,10 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 const MetaGradientAction*   pA = static_cast<const MetaGradientAction*>(pAction);
                 GDIMetaFile                 aTmpMtf;
 
-                maVDev->AddGradientActions( pA->GetRect(), pA->GetGradient(), aTmpMtf );
+                std::unique_ptr<GDIMetaFile> pTmpMtf(new GDIMetaFile);
+
+                maVDev->Draw(vcl::GradientDrawable(pA->GetRect(), pA->GetGradient(), pTmpMtf.get()));
+
                 ImplWrite( aTmpMtf );
             }
             break;
