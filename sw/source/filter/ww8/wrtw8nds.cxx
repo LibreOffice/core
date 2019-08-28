@@ -874,32 +874,10 @@ static OUString &TruncateBookmark( OUString &rRet )
 OUString AttributeOutputBase::ConvertURL( const OUString& rUrl, bool bAbsoluteOut )
 {
     OUString sURL = rUrl;
-    OUString sExportedDocumentURL = "";
-    {
-        DocxExport* pDocxExport = dynamic_cast<DocxExport*>(&GetExport());
-        if ( pDocxExport )
-        {
-            // DOCX
-            DocxExportFilter& rFilter = pDocxExport->GetFilter();
-            sExportedDocumentURL = rFilter.getFileUrl();
-        }
-        else
-        {
-            // DOC
-            WW8Export* pWW8Export = dynamic_cast<WW8Export*>(&GetExport());
-            if ( pWW8Export )
-            {
-                SwWW8Writer& rWriter = pWW8Export->GetWriter();
-                INetURLObject parent(rWriter.GetMedia()->GetURLObject());
-                parent.removeSegment();
-                sExportedDocumentURL = parent.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-            }
-        }
-    }
 
-    INetURLObject anAbsoluteParent( sExportedDocumentURL );
+    INetURLObject anAbsoluteParent(m_sBaseURL);
     OUString sConvertedParent = INetURLObject::GetScheme( anAbsoluteParent.GetProtocol() ) + anAbsoluteParent.GetURLPath();
-    OUString sParentPath = sConvertedParent.isEmpty() ? sExportedDocumentURL : sConvertedParent;
+    OUString sParentPath = sConvertedParent.isEmpty() ? m_sBaseURL : sConvertedParent;
 
     if ( bAbsoluteOut )
     {
@@ -907,8 +885,6 @@ OUString AttributeOutputBase::ConvertURL( const OUString& rUrl, bool bAbsoluteOu
 
         if ( anAbsoluteParent.GetNewAbsURL( rUrl, &anAbsoluteNew ) )
             sURL = anAbsoluteNew.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-        else
-            sURL = rUrl;
     }
     else
     {
