@@ -26,6 +26,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
@@ -46,17 +47,9 @@ static bool SvcListHasLanguage(
         const Sequence< Reference< XThesaurus > > &rRefs,
         const Locale &rLocale )
 {
-    bool bHasLanguage = false;
-
-    const Reference< XThesaurus > *pRef = rRefs.getConstArray();
-    sal_Int32 nLen = rRefs.getLength();
-    for (sal_Int32 k = 0;  k < nLen  &&  !bHasLanguage;  ++k)
-    {
-        if (pRef[k].is())
-            bHasLanguage = pRef[k]->hasLocale( rLocale );
-    }
-
-    return bHasLanguage;
+    return std::any_of(rRefs.begin(), rRefs.end(),
+        [&rLocale](const Reference<XThesaurus>& rRef) {
+            return rRef.is() && rRef->hasLocale( rLocale ); });
 }
 
 
@@ -84,13 +77,13 @@ Sequence< Locale > SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Sequence< Locale > aLocales( static_cast< sal_Int32 >(aSvcMap.size()) );
-    Locale *pLocales = aLocales.getArray();
-    for (auto const& elem : aSvcMap)
-    {
-        *pLocales++ = LanguageTag::convertToLocale(elem.first);
-    }
-    return aLocales;
+    std::vector<Locale> aLocales;
+    aLocales.reserve(aSvcMap.size());
+
+    std::transform(aSvcMap.begin(), aSvcMap.end(), std::back_inserter(aLocales),
+        [](ThesSvcByLangMap_t::const_reference elem) { return LanguageTag::convertToLocale(elem.first); });
+
+    return comphelper::containerToSequence(aLocales);
 }
 
 

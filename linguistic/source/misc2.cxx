@@ -110,23 +110,17 @@ static std::vector< OUString > GetMultiPaths_Impl(
         sal_Int32 nMaxEntries = aInternalPaths.getLength() + aUserPaths.getLength();
         if (!aWritablePath.isEmpty())
             ++nMaxEntries;
-        aRes.resize( nMaxEntries );
-        sal_Int32 nCount = 0;   // number of actually added entries
+        aRes.reserve( nMaxEntries );
         if (!aWritablePath.isEmpty())
-            aRes[ nCount++ ] = aWritablePath;
-        for (int i = 0;  i < 2;  ++i)
-        {
-            const uno::Sequence< OUString > &rPathSeq = i == 0 ? aUserPaths : aInternalPaths;
-            const OUString *pPathSeq = rPathSeq.getConstArray();
-            for (sal_Int32 k = 0;  k < rPathSeq.getLength();  ++k)
-            {
-                const bool bAddUser     = &rPathSeq == &aUserPaths     && (nPathFlags & DictionaryPathFlags::USER);
-                const bool bAddInternal = &rPathSeq == &aInternalPaths && (nPathFlags & DictionaryPathFlags::INTERNAL);
-                if ((bAddUser || bAddInternal) && !pPathSeq[k].isEmpty())
-                    aRes[ nCount++ ] = pPathSeq[k];
-            }
-        }
-        aRes.resize( nCount );
+            aRes.push_back(aWritablePath);
+
+        auto lPathIsNotEmpty = [](const OUString& rPath) { return !rPath.isEmpty(); };
+
+        if (nPathFlags & DictionaryPathFlags::USER)
+            std::copy_if(std::cbegin(aUserPaths), std::cend(aUserPaths), std::back_inserter(aRes), lPathIsNotEmpty);
+
+        if (nPathFlags & DictionaryPathFlags::INTERNAL)
+            std::copy_if(std::cbegin(aInternalPaths), std::cend(aInternalPaths), std::back_inserter(aRes), lPathIsNotEmpty);
     }
 
     return aRes;
