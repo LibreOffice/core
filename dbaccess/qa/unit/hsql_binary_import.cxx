@@ -45,6 +45,10 @@ void HsqlBinaryImportTest::setUp()
 
 void HsqlBinaryImportTest::testBinaryImport()
 {
+    SvtMiscOptions aMiscOptions;
+    bool oldValue = aMiscOptions.IsExperimentalMode();
+
+    aMiscOptions.SetExperimentalMode(true);
     // the migration requires the file to be writable
     utl::TempFile const temp(createTempCopy("hsqldb_migration_test.odb"));
     uno::Reference<XOfficeDatabaseDocument> const xDocument = getDocumentForUrl(temp.GetURL());
@@ -87,6 +91,8 @@ void HsqlBinaryImportTest::testBinaryImport()
     CPPUNIT_ASSERT_EQUAL(sal_Int16{ 1998 }, date.Year);
 
     closeDocument(uno::Reference<lang::XComponent>(xDocument, uno::UNO_QUERY));
+    if (!oldValue)
+        aMiscOptions.SetExperimentalMode(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(HsqlBinaryImportTest);

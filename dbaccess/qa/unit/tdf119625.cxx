@@ -63,6 +63,11 @@ static const expect_t expect[]
 
 void Tdf119625Test::testTime()
 {
+    SvtMiscOptions aMiscOptions;
+    bool oldValue = aMiscOptions.IsExperimentalMode();
+
+    aMiscOptions.SetExperimentalMode(true);
+
     // the migration requires the file to be writable
     utl::TempFile const temp(createTempCopy("tdf119625.odb"));
     uno::Reference<XOfficeDatabaseDocument> const xDocument = getDocumentForUrl(temp.GetURL());
@@ -106,6 +111,8 @@ void Tdf119625Test::testTime()
     CPPUNIT_ASSERT(!xRes->next());
 
     closeDocument(uno::Reference<lang::XComponent>(xDocument, uno::UNO_QUERY));
+    if (!oldValue)
+        aMiscOptions.SetExperimentalMode(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Tdf119625Test);
