@@ -279,12 +279,9 @@ void DicList::SearchForDictionaries(
 
     const uno::Sequence< OUString > aDirCnt( utl::LocalFileHelper::
                                         GetFolderContents( rDicDirURL, false ) );
-    const OUString *pDirCnt = aDirCnt.getConstArray();
-    sal_Int32 nEntries = aDirCnt.getLength();
 
-    for (sal_Int32 i = 0;  i < nEntries;  ++i)
+    for (const OUString& aURL : aDirCnt)
     {
-        OUString     aURL( pDirCnt[i] );
         LanguageType nLang = LANGUAGE_NONE;
         bool         bNeg  = false;
         OUString     aDicTitle = "";
@@ -622,13 +619,11 @@ void DicList::CreateDicList()
     //! activation of the dictionaries
     mxDicEvtLstnrHelper->BeginCollectEvents();
     const uno::Sequence< OUString > aActiveDics( aOpt.GetActiveDics() );
-    const OUString *pActiveDic = aActiveDics.getConstArray();
-    sal_Int32 nLen = aActiveDics.getLength();
-    for (sal_Int32 i = 0;  i < nLen;  ++i)
+    for (const OUString& rActiveDic : aActiveDics)
     {
-        if (!pActiveDic[i].isEmpty())
+        if (!rActiveDic.isEmpty())
         {
-            uno::Reference< XDictionary > xDic( getDictionaryByName( pActiveDic[i] ) );
+            uno::Reference< XDictionary > xDic( getDictionaryByName( rActiveDic ) );
             if (xDic.is())
                 xDic->setActive( true );
         }

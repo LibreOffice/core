@@ -46,17 +46,9 @@ static bool SvcListHasLanguage(
         const Sequence< Reference< XThesaurus > > &rRefs,
         const Locale &rLocale )
 {
-    bool bHasLanguage = false;
-
-    const Reference< XThesaurus > *pRef = rRefs.getConstArray();
-    sal_Int32 nLen = rRefs.getLength();
-    for (sal_Int32 k = 0;  k < nLen  &&  !bHasLanguage;  ++k)
-    {
-        if (pRef[k].is())
-            bHasLanguage = pRef[k]->hasLocale( rLocale );
-    }
-
-    return bHasLanguage;
+    return std::any_of(rRefs.begin(), rRefs.end(),
+        [&rLocale](const Reference<XThesaurus>& rRef) {
+            return rRef.is() && rRef->hasLocale( rLocale ); });
 }
 
 

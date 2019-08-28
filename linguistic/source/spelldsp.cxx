@@ -115,11 +115,8 @@ void ProposalList::Append( const std::vector< OUString > &rNew )
 
 void ProposalList::Append( const Sequence< OUString > &rNew )
 {
-    sal_Int32 nLen = rNew.getLength();
-    const OUString *pNew = rNew.getConstArray();
-    for (sal_Int32 i = 0;  i < nLen;  ++i)
+    for (const OUString& rText : rNew)
     {
-        const OUString &rText = pNew[i];
         if (!HasEntry( rText ))
             Append( rText );
     }
@@ -159,22 +156,11 @@ static bool SvcListHasLanguage(
         const LangSvcEntries_Spell &rEntry,
         LanguageType nLanguage )
 {
-    bool bHasLanguage = false;
-    Locale aTmpLocale;
+    Locale aTmpLocale = LanguageTag::convertToLocale( nLanguage );
 
-    const Reference< XSpellChecker >  *pRef  = rEntry.aSvcRefs .getConstArray();
-    sal_Int32 nLen = rEntry.aSvcRefs.getLength();
-    for (sal_Int32 k = 0;  k < nLen  &&  !bHasLanguage;  ++k)
-    {
-        if (pRef[k].is())
-        {
-            if (aTmpLocale.Language.isEmpty())
-                aTmpLocale = LanguageTag::convertToLocale( nLanguage );
-            bHasLanguage = pRef[k]->hasLocale( aTmpLocale );
-        }
-    }
-
-    return bHasLanguage;
+    return std::any_of(rEntry.aSvcRefs.begin(), rEntry.aSvcRefs.end(),
+        [&aTmpLocale](const Reference<XSpellChecker>& rRef) {
+            return rRef.is() && rRef->hasLocale( aTmpLocale ); });
 }
 
 SpellCheckerDispatcher::SpellCheckerDispatcher( LngSvcMgr &rLngSvcMgr ) :
