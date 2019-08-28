@@ -278,27 +278,9 @@ FreetypeFontInstance::~FreetypeFontInstance()
 {
 }
 
-static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
-{
-    char pTagName[5];
-    LogicalFontInstance::DecodeOpenTypeTag( nTableTag, pTagName );
-
-    sal_uLong nLength = 0;
-    FreetypeFontInstance* pFontInstance = static_cast<FreetypeFontInstance*>( pUserData );
-    FreetypeFont* pFont = pFontInstance->GetFreetypeFont();
-    const char* pBuffer = reinterpret_cast<const char*>(
-        pFont->GetTable(pTagName, &nLength) );
-
-    hb_blob_t* pBlob = nullptr;
-    if (pBuffer != nullptr)
-        pBlob = hb_blob_create(pBuffer, nLength, HB_MEMORY_MODE_READONLY, nullptr, nullptr);
-
-    return pBlob;
-}
-
 hb_font_t* FreetypeFontInstance::ImplInitHbFont()
 {
-    hb_font_t* pRet = InitHbFont(hb_face_create_for_tables(getFontTable, this, nullptr));
+    hb_font_t* pRet = InitHbFont(GetFontFace()->GetHbFace());
     assert(mpFreetypeFont);
     mpFreetypeFont->SetFontVariationsOnHBFont(pRet);
     return pRet;

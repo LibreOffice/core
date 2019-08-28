@@ -26,6 +26,15 @@
 
 #include <PhysicalFontFace.hxx>
 
+namespace {
+
+hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTag, void* pUserData)
+{
+    return static_cast<PhysicalFontFace*>(pUserData)->GetHbTable(nTag);
+}
+
+}
+
 PhysicalFontFace::PhysicalFontFace( const FontAttributes& rDFA )
     : FontAttributes( rDFA )
     , mnWidth(0)
@@ -35,6 +44,13 @@ PhysicalFontFace::PhysicalFontFace( const FontAttributes& rDFA )
     if( !IsSymbolFont() )
         if ( IsStarSymbol( GetFamilyName() ) )
             SetSymbolFlag( true );
+
+    mpHbFace = hb_face_create_for_tables(getFontTable, this, nullptr);
+}
+
+PhysicalFontFace::~PhysicalFontFace()
+{
+    hb_face_destroy(mpHbFace);
 }
 
 sal_Int32 PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) const

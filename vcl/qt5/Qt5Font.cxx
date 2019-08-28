@@ -80,26 +80,7 @@ Qt5Font::Qt5Font(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
     }
 }
 
-static hb_blob_t* getFontTable(hb_face_t*, hb_tag_t nTableTag, void* pUserData)
-{
-    char pTagName[5];
-    LogicalFontInstance::DecodeOpenTypeTag(nTableTag, pTagName);
-
-    Qt5Font* pFont = static_cast<Qt5Font*>(pUserData);
-    QRawFont aRawFont(QRawFont::fromFont(*pFont));
-    QByteArray aTable = aRawFont.fontTable(pTagName);
-    const sal_uInt32 nLength = aTable.size();
-
-    hb_blob_t* pBlob = nullptr;
-    if (nLength > 0)
-        pBlob = hb_blob_create(aTable.data(), nLength, HB_MEMORY_MODE_DUPLICATE, nullptr, nullptr);
-    return pBlob;
-}
-
-hb_font_t* Qt5Font::ImplInitHbFont()
-{
-    return InitHbFont(hb_face_create_for_tables(getFontTable, this, nullptr));
-}
+hb_font_t* Qt5Font::ImplInitHbFont() { return InitHbFont(GetFontFace()->GetHbFace()); }
 
 bool Qt5Font::GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const { return false; }
 

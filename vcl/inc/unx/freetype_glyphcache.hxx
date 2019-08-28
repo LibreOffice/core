@@ -61,6 +61,7 @@ public:
                      int nFaceNum, int nFaceVariation, sal_IntPtr nFontId);
     ~FreetypeFontInfo();
 
+    const unsigned char*  GetTable( uint32_t, sal_uLong* pLength) const;
     const unsigned char*  GetTable( const char*, sal_uLong* pLength) const;
 
     FT_FaceRec_*          GetFaceFT();
@@ -99,6 +100,8 @@ public:
 
     virtual rtl::Reference<LogicalFontInstance> CreateFontInstance( const FontSelectPattern& ) const override;
     virtual sal_IntPtr      GetFontId() const override { return mpFreetypeFontInfo->GetFontId(); }
+
+    hb_blob_t*              GetHbTable(hb_tag_t nTag) override;
 };
 
 // a class for cache entries for physical font instances that are based on serverfonts
