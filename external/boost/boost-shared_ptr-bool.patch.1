@@ -1,0 +1,11 @@
+--- boost/boost/date_time/local_time/custom_time_zone.hpp.orig	2019-08-28 11:16:44.660857011 +0200
++++ boost/boost/date_time/local_time/custom_time_zone.hpp	2019-08-28 11:16:49.063758969 +0200
+@@ -64,7 +64,7 @@
+     //! True if zone uses daylight savings adjustments
+     virtual bool has_dst() const
+     {
+-      return (dst_calc_rules_); //if calc_rule is set the tz has dst
++      return (bool(dst_calc_rules_)); //if calc_rule is set the tz has dst
+     }
+     //! Local time that DST starts -- NADT if has_dst is false
+     virtual posix_time::ptime dst_local_start_time(gregorian::greg_year y) const
