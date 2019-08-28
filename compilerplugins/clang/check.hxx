@@ -103,6 +103,9 @@ private:
 
 class ContextCheck {
 public:
+    explicit ContextCheck(clang::DeclContext const * context = nullptr):
+        context_(context) {}
+
     explicit operator bool() const { return context_ != nullptr; }
 
     TerminalCheck GlobalNamespace() const;
@@ -110,6 +113,8 @@ public:
     inline ContextCheck Namespace(llvm::StringRef id) const;
 
     TerminalCheck StdNamespace() const;
+
+    TerminalCheck StdOrNestedNamespace() const;
 
     ContextCheck AnonymousNamespace() const;
 
@@ -120,14 +125,6 @@ public:
     explicit ContextCheck(const clang::NamespaceDecl * decl ) : context_( decl ) {}
 
 private:
-    friend DeclCheck;
-    friend TypeCheck;
-    friend ContextCheck detail::checkRecordDecl(
-        clang::Decl const * decl, clang::TagTypeKind tag, llvm::StringRef id);
-
-    explicit ContextCheck(clang::DeclContext const * context = nullptr):
-        context_(context) {}
-
     clang::DeclContext const * const context_;
 };
 
