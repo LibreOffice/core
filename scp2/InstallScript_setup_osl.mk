@@ -24,6 +24,7 @@ $(eval $(call gb_InstallScript_use_modules,setup_osl,\
 	$(if $(filter WNT,$(OS)),\
 		scp2/activex \
 		scp2/quickstart \
+		scp2/spsupp \
 		scp2/windows \
 		$(if $(filter MSC,$(COM)),\
 			scp2/winexplorerext \
