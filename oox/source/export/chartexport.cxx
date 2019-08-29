@@ -1476,8 +1476,6 @@ void ChartExport::exportBubbleChart( const Reference< chart2::XChartType >& xCha
     bool bPrimaryAxes = true;
     exportAllSeries(xChartType, bPrimaryAxes);
 
-    pFS->singleElement(FSNS(XML_c, XML_bubble3D), XML_val, "0");
-
     exportAxesId(bPrimaryAxes);
 
     pFS->endElement( FSNS( XML_c, XML_bubbleChart ) );
@@ -2028,6 +2026,10 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                     if( eChartType == chart::TYPEID_SCATTER
                             || eChartType == chart::TYPEID_LINE )
                         exportSmooth();
+
+                    // tdf103988: "corrupted" files with Bubble chart opening in MSO
+                    if( eChartType == chart::TYPEID_BUBBLE )
+                        pFS->singleElement(FSNS(XML_c, XML_bubble3D), XML_val, "0");
 
                     pFS->endElement( FSNS( XML_c, XML_ser ) );
                 }
