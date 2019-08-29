@@ -147,7 +147,7 @@ public:
 
     /** Move construction.
      */
-    OStoreDirectory (OStoreDirectory && rhs)
+    OStoreDirectory (OStoreDirectory && rhs) noexcept
         : m_hImpl (rhs.m_hImpl)
     {
         rhs.m_hImpl = nullptr;
@@ -167,7 +167,7 @@ public:
 
     /** Move assignment.
      */
-    OStoreDirectory & operator= (OStoreDirectory && rhs)
+    OStoreDirectory & operator= (OStoreDirectory && rhs) noexcept
     {
         if (m_hImpl)
             (void) store_releaseHandle (m_hImpl);

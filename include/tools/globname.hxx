@@ -60,7 +60,7 @@ public:
         pImp( rObj.pImp )
     {
     }
-    SvGlobalName( SvGlobalName && rObj ) :
+    SvGlobalName( SvGlobalName && rObj ) noexcept :
         pImp( std::move(rObj.pImp) )
     {
     }
@@ -75,7 +75,7 @@ public:
     SvGlobalName( const SvGUID & rId );
 
     SvGlobalName & operator = ( const SvGlobalName & rObj );
-    SvGlobalName & operator = ( SvGlobalName && rObj );
+    SvGlobalName & operator = ( SvGlobalName && rObj ) noexcept;
     ~SvGlobalName();
 
     TOOLS_DLLPUBLIC friend SvStream & operator >> ( SvStream &, SvGlobalName & );
