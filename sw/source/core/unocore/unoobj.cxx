@@ -1308,7 +1308,7 @@ SwXTextCursor::gotoEndOfWord(sal_Bool Expand)
     SwNode      &      rOldNode   = pPoint->nNode.GetNode();
     sal_Int32 const nOldIndex  = pPoint->nContent.GetIndex();
 
-    const sal_Int16 nWordType = i18n::WordType::DICTIONARY_WORD;
+    const sal_Int16 nWordType = i18n::WordType::ANYWORD_IGNOREWHITESPACES;
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     if (!rUnoCursor.IsEndWordWT( nWordType ))
     {
