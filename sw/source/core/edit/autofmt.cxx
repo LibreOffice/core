@@ -139,7 +139,7 @@ class SwAutoFormat
 
     void SetColl( sal_uInt16 nId, bool bHdLineOrText = false );
     void GoNextPara();
-    bool HasObjects(const SwTextFrame &);
+    static bool HasObjects(const SwTextFrame &);
 
     // TextNode methods
     const SwTextFrame * GetNextNode(bool isCheckEnd = true) const;
@@ -349,20 +349,18 @@ bool SwAutoFormat::HasObjects(const SwTextFrame & rFrame)
 {
     // Is there something bound to the paragraph in the paragraph
     // like Frames, DrawObjects, ...
-    bool bRet = false;
-    const SwFrameFormats& rFormats = *m_pDoc->GetSpzFrameFormats();
-    for( auto pFrameFormat : rFormats )
+    SwNodeIndex node(*rFrame.GetTextNodeFirst());
+    do
     {
-        const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-        if ((RndStdIds::FLY_AT_PAGE != rAnchor.GetAnchorId()) &&
-            rAnchor.GetContentAnchor() &&
-            sw::FrameContainsNode(rFrame, rAnchor.GetContentAnchor()->nNode.GetIndex()))
+        if (node.GetNode().GetAnchoredFlys() != nullptr)
         {
-            bRet = true;
-            break;
+            assert(!node.GetNode().GetAnchoredFlys()->empty());
+            return true;
         }
+        ++node;
     }
-    return bRet;
+    while (sw::FrameContainsNode(rFrame, node.GetIndex()));
+    return false;
 }
 
 const SwTextFrame* SwAutoFormat::GetNextNode(bool const isCheckEnd) const
