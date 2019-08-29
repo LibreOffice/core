@@ -1283,10 +1283,10 @@ void SdOOXMLExportTest2::testTdf112552()
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
 
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path", "w", "21600");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path", "h", "21600");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "x", "21600");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "y", "0");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path[1]", "w", "21600");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path[1]", "h", "21600");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path[1]/a:lnTo[1]/a:pt", "x", "21600");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path[1]/a:lnTo[1]/a:pt", "y", "0");
     xDocShRef->DoClose();
 }
 
