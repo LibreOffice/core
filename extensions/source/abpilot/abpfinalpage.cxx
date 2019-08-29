@@ -42,28 +42,30 @@ namespace abp
         return pFilter;
     }
 
-    FinalPage::FinalPage( OAddressBookSourcePilot* _pParent )
-        : AddressBookSourcePage(_pParent, "DataSourcePage",
-            "modules/sabpilot/ui/datasourcepage.ui")
+    FinalPage::FinalPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent)
+        : AddressBookSourcePage(pDialog, pPageParent, "modules/sabpilot/ui/datasourcepage.ui",
+                                "DataSourcePage")
+        , m_xLocation(new URLBox(m_xBuilder->weld_combo_box("location")))
+        , m_xBrowse(m_xBuilder->weld_button("browse"))
+        , m_xRegisterName(m_xBuilder->weld_check_button("available"))
+        , m_xEmbed(m_xBuilder->weld_check_button("embed"))
+        , m_xNameLabel(m_xBuilder->weld_label("nameft"))
+        , m_xLocationLabel(m_xBuilder->weld_label("locationft"))
+        , m_xName(m_xBuilder->weld_entry("name"))
+        , m_xDuplicateNameError(m_xBuilder->weld_label("warning"))
     {
-        get(m_pLocation, "location");
-        get(m_pBrowse, "browse");
-        get(m_pRegisterName, "available");
-        get(m_pEmbed, "embed");
-        get(m_pNameLabel, "nameft");
-        get(m_pLocationLabel, "locationft");
-        get(m_pName, "name");
-        get(m_pDuplicateNameError, "warning");
-        m_pLocationController.reset( new svx::DatabaseLocationInputController(_pParent->getORB(),
-            *m_pLocation, *m_pBrowse) );
+        m_xLocation->SetSmartProtocol(INetProtocol::File);
+        m_xLocation->DisableHistory();
 
-        m_pName->SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
-        m_pLocation->SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
-        m_pRegisterName->SetClickHdl( LINK( this, FinalPage, OnRegister ) );
-        m_pRegisterName->Check();
-        m_pEmbed->SetClickHdl( LINK( this, FinalPage, OnEmbed ) );
-        m_pEmbed->Check();
-        OnEmbed(m_pEmbed);
+        m_xLocationController.reset( new svx::DatabaseLocationInputController(pDialog->getORB(),
+            *m_xLocation, *m_xBrowse, *pPageParent.GetFrameWeld()) );
+
+        m_xName->connect_changed( LINK(this, FinalPage, OnEntryNameModified) );
+        m_xLocation->connect_changed( LINK(this, FinalPage, OnComboNameModified) );
+        m_xRegisterName->connect_clicked( LINK( this, FinalPage, OnRegister ) );
+        m_xRegisterName->set_active(true);
+        m_xEmbed->connect_clicked( LINK( this, FinalPage, OnEmbed ) );
+        m_xEmbed->set_active(true);
     }
 
     FinalPage::~FinalPage()
@@ -73,21 +75,13 @@ namespace abp
 
     void FinalPage::dispose()
     {
-        m_pLocationController.reset();
-        m_pLocation.clear();
-        m_pBrowse.clear();
-        m_pRegisterName.clear();
-        m_pEmbed.clear();
-        m_pNameLabel.clear();
-        m_pLocationLabel.clear();
-        m_pName.clear();
-        m_pDuplicateNameError.clear();
+        m_xLocationController.reset();
         AddressBookSourcePage::dispose();
     }
 
     bool FinalPage::isValidName() const
     {
-        OUString sCurrentName(m_pName->GetText());
+        OUString sCurrentName(m_xName->get_text());
 
         if (sCurrentName.isEmpty())
             // the name must not be empty
@@ -122,16 +116,16 @@ namespace abp
         }
         OSL_ENSURE( aURL.GetProtocol() != INetProtocol::NotValid ,"No valid file name!");
         rSettings.sDataSourceName = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-        m_pLocationController->setURL( rSettings.sDataSourceName );
+        m_xLocationController->setURL( rSettings.sDataSourceName );
         OUString sName = aURL.getName( );
         sal_Int32 nPos = sName.indexOf(aURL.GetFileExtension());
         if ( nPos != -1 )
         {
             sName = sName.replaceAt(nPos-1, 4, "");
         }
-        m_pName->SetText(sName);
+        m_xName->set_text(sName);
 
-        OnRegister(m_pRegisterName);
+        OnRegister(*m_xRegisterName);
     }
 
 
@@ -142,27 +136,25 @@ namespace abp
         setFields();
     }
 
-
     bool FinalPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {
         if (!AddressBookSourcePage::commitPage(_eReason))
             return false;
 
         if  (   ( ::vcl::WizardTypes::eTravelBackward != _eReason )
-            &&  ( !m_pLocationController->prepareCommit() )
+            &&  ( !m_xLocationController->prepareCommit() )
             )
             return false;
 
         AddressSettings& rSettings = getSettings();
-        rSettings.sDataSourceName = m_pLocationController->getURL();
-        rSettings.bRegisterDataSource = m_pRegisterName->IsChecked();
+        rSettings.sDataSourceName = m_xLocationController->getURL();
+        rSettings.bRegisterDataSource = m_xRegisterName->get_active();
         if ( rSettings.bRegisterDataSource )
-            rSettings.sRegisteredDataSourceName = m_pName->GetText();
-        rSettings.bEmbedDataSource = m_pEmbed->IsChecked();
+            rSettings.sRegisteredDataSourceName = m_xName->get_text();
+        rSettings.bEmbedDataSource = m_xEmbed->get_active();
 
         return true;
     }
-
 
     void FinalPage::ActivatePage()
     {
@@ -173,12 +165,13 @@ namespace abp
         aContext.getDataSourceNames( m_aInvalidDataSourceNames );
 
         // give the name edit the focus
-        m_pLocation->GrabFocus();
+        m_xLocation->grab_focus();
 
         // default the finish button
         getDialog()->defaultButton( WizardButtonFlags::FINISH );
-    }
 
+        OnEmbed(*m_xEmbed);
+    }
 
     void FinalPage::DeactivatePage()
     {
@@ -196,41 +189,43 @@ namespace abp
         return false;
     }
 
-
     void FinalPage::implCheckName()
     {
         bool bValidName = isValidName();
-        bool bEmptyName = m_pName->GetText().isEmpty();
-        bool bEmptyLocation = m_pLocation->GetText().isEmpty();
+        bool bEmptyName = m_xName->get_text().isEmpty();
+        bool bEmptyLocation = m_xLocation->get_active_text().isEmpty();
 
         // enable or disable the finish button
-        getDialog()->enableButtons( WizardButtonFlags::FINISH, !bEmptyLocation && (!m_pRegisterName->IsChecked() || bValidName) );
+        getDialog()->enableButtons( WizardButtonFlags::FINISH, !bEmptyLocation && (!m_xRegisterName->get_active() || bValidName) );
 
         // show the error message for an invalid name
-        m_pDuplicateNameError->Show( !bValidName && !bEmptyName );
+        m_xDuplicateNameError->set_visible(!bValidName && !bEmptyName);
     }
 
-
-    IMPL_LINK_NOARG( FinalPage, OnNameModified, Edit&, void )
+    IMPL_LINK_NOARG( FinalPage, OnEntryNameModified, weld::Entry&, void )
     {
         implCheckName();
     }
 
-
-    IMPL_LINK_NOARG(FinalPage, OnRegister, Button*, void)
+    IMPL_LINK_NOARG( FinalPage, OnComboNameModified, weld::ComboBox&, void )
     {
-        bool bEnable = m_pRegisterName->IsChecked();
-        m_pNameLabel->Enable(bEnable);
-        m_pName->Enable(bEnable);
         implCheckName();
     }
 
-    IMPL_LINK_NOARG(FinalPage, OnEmbed, Button*, void)
+    IMPL_LINK_NOARG(FinalPage, OnRegister, weld::Button&, void)
     {
-        bool bEmbed = m_pEmbed->IsChecked();
-        m_pLocationLabel->Enable(!bEmbed);
-        m_pLocation->Enable(!bEmbed);
-        m_pBrowse->Enable(!bEmbed);
+        bool bEnable = m_xRegisterName->get_active();
+        m_xNameLabel->set_sensitive(bEnable);
+        m_xName->set_sensitive(bEnable);
+        implCheckName();
+    }
+
+    IMPL_LINK_NOARG(FinalPage, OnEmbed, weld::Button&, void)
+    {
+        bool bEmbed = m_xEmbed->get_active();
+        m_xLocationLabel->set_sensitive(!bEmbed);
+        m_xLocation->set_sensitive(!bEmbed);
+        m_xBrowse->set_sensitive(!bEmbed);
     }
 
 }   // namespace abp

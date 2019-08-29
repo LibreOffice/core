@@ -21,21 +21,17 @@
 #define INCLUDED_EXTENSIONS_SOURCE_ABPILOT_FIELDMAPPINGPAGE_HXX
 
 #include "abspage.hxx"
-#include <vcl/vclptr.hxx>
-
+#include <vcl/weld.hxx>
 
 namespace abp
 {
-
     class FieldMappingPage final : public AddressBookSourcePage
     {
-        VclPtr<PushButton>     m_pInvokeDialog;
-        VclPtr<FixedText>      m_pHint;
-
+        std::unique_ptr<weld::Button> m_xInvokeDialog;
+        std::unique_ptr<weld::Label> m_xHint;
     public:
-        explicit FieldMappingPage(OAddressBookSourcePilot* _pParent);
+        explicit FieldMappingPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent);
         virtual ~FieldMappingPage() override;
-        virtual void dispose() override;
     private:
         // OWizardPage overridables
         virtual void        initializePage() override;
@@ -43,12 +39,10 @@ namespace abp
         // TabDialog overridables
         virtual void        ActivatePage() override;
 
-        DECL_LINK( OnInvokeDialog, Button*, void );
+        DECL_LINK(OnInvokeDialog, weld::Button&, void);
 
         void implUpdateHint();
     };
-
-
 }   // namespace abp
 
 

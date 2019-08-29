@@ -29,47 +29,48 @@ namespace abp
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-    AddressBookSourcePage::AddressBookSourcePage(OAddressBookSourcePilot* _pParent, const OString& rID, const OUString& rUIXMLDescription)
-        :AddressBookSourcePage_Base(_pParent, rID, rUIXMLDescription)
+    AddressBookSourcePage::AddressBookSourcePage(OAddressBookSourcePilot* pParent, TabPageParent pPageParent, const OUString& rUIXMLDescription, const OString& rID)
+        : AddressBookSourcePage_Base(pPageParent, rUIXMLDescription, rID)
+        , m_pDialog(pParent)
     {
+    }
+
+    void AddressBookSourcePage::ActivatePage()
+    {
+        AddressBookSourcePage_Base::ActivatePage();
+        m_pDialog->updateTravelUI();
     }
 
     void AddressBookSourcePage::DeactivatePage()
     {
         AddressBookSourcePage_Base::DeactivatePage();
-        getDialog()->enableButtons(WizardButtonFlags::NEXT, true);
+        m_pDialog->enableButtons(WizardButtonFlags::NEXT, true);
     }
-
 
     OAddressBookSourcePilot* AddressBookSourcePage::getDialog()
     {
-        return static_cast<OAddressBookSourcePilot*>(GetParent());
+        return m_pDialog;
     }
-
 
     const OAddressBookSourcePilot* AddressBookSourcePage::getDialog() const
     {
-        return static_cast<const OAddressBookSourcePilot*>(GetParent());
+        return m_pDialog;
     }
-
 
     AddressSettings& AddressBookSourcePage::getSettings()
     {
-        return getDialog()->getSettings();
+        return m_pDialog->getSettings();
     }
-
 
     const AddressSettings&  AddressBookSourcePage::getSettings() const
     {
-        return getDialog()->getSettings();
+        return m_pDialog->getSettings();
     }
-
 
     const Reference< XComponentContext > & AddressBookSourcePage::getORB()
     {
-        return getDialog()->getORB();
+        return m_pDialog->getORB();
     }
-
 
 }   // namespace abp
 

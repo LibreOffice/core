@@ -45,8 +45,8 @@ namespace abp
     using namespace ::com::sun::star::sdbc;
 
     OAdminDialogInvokation::OAdminDialogInvokation(const Reference< XComponentContext >& _rxContext,
-                    const css::uno::Reference< css::beans::XPropertySet >& _rxDataSource
-                    , vcl::Window* _pMessageParent)
+                    const css::uno::Reference< css::beans::XPropertySet >& _rxDataSource,
+                    weld::Window* _pMessageParent)
         :m_xContext(_rxContext)
         ,m_xDataSource(_rxDataSource)
         ,m_pMessageParent(_pMessageParent)
@@ -71,7 +71,7 @@ namespace abp
             // the parameters for the call
             Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
             {
-                {"ParentWindow", Any(VCLUnoHelper::GetInterface(m_pMessageParent))},
+                {"ParentWindow", Any(m_pMessageParent->GetXWindow())},
                 {"Title", Any(compmodule::ModuleRes(RID_STR_ADMINDIALOGTITLE))},
                 {"InitialSelection", Any(m_xDataSource)}, // the name of the new data source
             }));
@@ -82,7 +82,7 @@ namespace abp
             {
                 // creating the dialog service is potentially expensive (if all the libraries invoked need to be loaded)
                 // so we display a wait cursor
-                WaitObject aWaitCursor(m_pMessageParent);
+                weld::WaitObject aWaitCursor(m_pMessageParent);
                 Reference<XInterface> x = m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(s_sDataSourceTypeChangeDialog, aArguments, m_xContext);
                 xDialog.set( x, UNO_QUERY );
 
@@ -103,7 +103,7 @@ namespace abp
                     return true;
             }
             else
-                ShowServiceNotAvailableError(m_pMessageParent->GetFrameWeld(), s_sAdministrationServiceName, true);
+                ShowServiceNotAvailableError(m_pMessageParent, s_sAdministrationServiceName, true);
         }
         catch(const Exception&)
         {
