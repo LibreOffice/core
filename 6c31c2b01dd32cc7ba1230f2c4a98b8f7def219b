@@ -16,6 +16,24 @@
       "revId": "6c31c2b01dd32cc7ba1230f2c4a98b8f7def219b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_9c03e90f",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1355,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2019-08-29T08:18:55Z",
+      "side": 0,
+      "message": "That was removed unintentionally together with a comment to myself. It has been restored.",
+      "parentUuid": "bf659307_1b460d23",
+      "revId": "6c31c2b01dd32cc7ba1230f2c4a98b8f7def219b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
