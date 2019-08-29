@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_52352df6",
+        "filename": "include/o3tl/cow_wrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-29T07:12:57Z",
+      "side": 1,
+      "message": "This isn\u0027t a move operator - I guess it is used in some move operation maybe?",
+      "range": {
+        "startLine": 252,
+        "startChar": 49,
+        "endLine": 252,
+        "endChar": 50
+      },
+      "revId": "a5600f18e0e7594fcd812b3da46353d9dc9a5d5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
