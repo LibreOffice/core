@@ -2914,6 +2914,11 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
                     }
                 }
             }
+            if (sMark.indexOf(' ') != -1 && !sMark.endsWith("|table") && !sMark.endsWith("|frame") && !sMark.endsWith("|graphic") && !sMark.endsWith("|ole") && !sMark.endsWith("|region"))
+            {
+                // Spaces are prohibited in bookmark name.
+                sMark = sMark.replace(' ', '_');
+            }
             m_pHyperlinkAttrList->add( FSNS( XML_w, XML_anchor ),
                     OUStringToOString( sMark, RTL_TEXTENCODING_UTF8 ).getStr( ) );
         }
