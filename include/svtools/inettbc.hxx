@@ -123,6 +123,7 @@ public:
     void                clear() { m_xWidget->clear(); }
     void                connect_entry_activate(const Link<weld::ComboBox&, bool>& rLink) { m_xWidget->connect_entry_activate(rLink); }
     void                connect_changed(const Link<weld::ComboBox&, void>& rLink) { aChangeHdl = rLink; }
+    void                trigger_changed() { aChangeHdl.Call(*m_xWidget); }
     void                connect_focus_out(const Link<weld::Widget&, void>& rLink) { aFocusOutHdl = rLink; }
     void                append_text(const OUString& rStr) { m_xWidget->append_text(rStr); }
     int                 find_text(const OUString& rStr) const { return m_xWidget->find_text(rStr); }

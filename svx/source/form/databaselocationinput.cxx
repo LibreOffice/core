@@ -55,8 +55,9 @@ namespace svx
     public:
         DatabaseLocationInputController_Impl(
             const Reference<XComponentContext>&     _rContext,
-            ::svt::OFileURLControl&                 _rLocationInput,
-            PushButton&                             _rBrowseButton
+            URLBox& _rLocationInput,
+            weld::Button& _rBrowseButton,
+            weld::Window& _rDialog
         );
         ~DatabaseLocationInputController_Impl();
 
@@ -73,19 +74,20 @@ namespace svx
 
     private:
         const Reference<XComponentContext>      m_xContext;
-        ::svt::OFileURLControl&                 m_rLocationInput;
-        PushButton&                             m_rBrowseButton;
+        URLBox& m_rLocationInput;
+        weld::Button& m_rBrowseButton;
+        weld::Window& m_rDialog;
         Sequence< OUString >             m_aFilterExtensions;
         OUString                         m_sFilterUIName;
         bool                                    m_bNeedExistenceCheck;
     };
 
-
-    DatabaseLocationInputController_Impl::DatabaseLocationInputController_Impl( const Reference<XComponentContext>& _rContext,
-            ::svt::OFileURLControl& _rLocationInput, PushButton& _rBrowseButton )
+    DatabaseLocationInputController_Impl::DatabaseLocationInputController_Impl(const Reference<XComponentContext>& _rContext,
+            URLBox& _rLocationInput, weld::Button& _rBrowseButton, weld::Window& _rDialog)
         :m_xContext( _rContext )
         ,m_rLocationInput( _rLocationInput )
         ,m_rBrowseButton( _rBrowseButton )
+        ,m_rDialog( _rDialog )
         ,m_aFilterExtensions()
         ,m_sFilterUIName()
         ,m_bNeedExistenceCheck( true )
@@ -100,18 +102,19 @@ namespace svx
             aExtensionList.append( ';' );
         }
         m_rLocationInput.SetFilter( aExtensionList.makeStringAndClear() );
-
+#if 0
         m_rBrowseButton.AddEventListener( LINK( this, DatabaseLocationInputController_Impl, OnControlAction ) );
         m_rLocationInput.AddEventListener( LINK( this, DatabaseLocationInputController_Impl, OnControlAction ) );
+#endif
     }
-
 
     DatabaseLocationInputController_Impl::~DatabaseLocationInputController_Impl()
     {
+#if 0
         m_rBrowseButton.RemoveEventListener( LINK( this, DatabaseLocationInputController_Impl, OnControlAction ) );
         m_rLocationInput.RemoveEventListener( LINK( this, DatabaseLocationInputController_Impl, OnControlAction ) );
+#endif
     }
-
 
     bool DatabaseLocationInputController_Impl::prepareCommit()
     {
@@ -124,7 +127,7 @@ namespace svx
         {
             if ( ::utl::UCBContentHelper::Exists( sURL ) )
             {
-                std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(m_rLocationInput.GetFrameWeld(),
+                std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(m_rLocationInput.getWidget(),
                                                                VclMessageType::Question, VclButtonsType::YesNo,
                                                                SvxResId(RID_STR_ALREADYEXISTOVERWRITE)));
                 if (xQueryBox->run() != RET_YES)
@@ -135,19 +138,16 @@ namespace svx
         return true;
     }
 
-
     void DatabaseLocationInputController_Impl::setURL( const OUString& _rURL )
     {
         ::svt::OFileNotation aTransformer( _rURL );
-        m_rLocationInput.SetText( aTransformer.get( ::svt::OFileNotation::N_SYSTEM ) );
+        m_rLocationInput.set_entry_text( aTransformer.get( ::svt::OFileNotation::N_SYSTEM ) );
     }
-
 
     OUString DatabaseLocationInputController_Impl::getURL() const
     {
         return impl_getCurrentURL();
     }
-
 
     void DatabaseLocationInputController_Impl::impl_initFilterProperties_nothrow()
     {
@@ -193,7 +193,7 @@ namespace svx
         }
     }
 
-
+#if 0
     IMPL_LINK( DatabaseLocationInputController_Impl, OnControlAction, VclWindowEvent&, _rEvent, void )
     {
         if  (   ( _rEvent.GetWindow() == &m_rBrowseButton )
@@ -210,11 +210,11 @@ namespace svx
             m_bNeedExistenceCheck = true;
         }
     }
-
+#endif
 
     OUString DatabaseLocationInputController_Impl::impl_getCurrentURL() const
     {
-        OUString sCurrentFile( m_rLocationInput.GetText() );
+        OUString sCurrentFile( m_rLocationInput.get_active_text() );
         if ( !sCurrentFile.isEmpty() )
         {
             ::svt::OFileNotation aCurrentFile( sCurrentFile );
@@ -229,7 +229,7 @@ namespace svx
         ::sfx2::FileDialogHelper aFileDlg(
             TemplateDescription::FILESAVE_AUTOEXTENSION,
             FileDialogFlags::NONE,
-            m_rLocationInput.GetFrameWeld()
+            &m_rDialog
         );
         aFileDlg.SetDisplayDirectory( impl_getCurrentURL() );
 
@@ -242,46 +242,38 @@ namespace svx
             if( aURL.GetProtocol() != INetProtocol::NotValid )
             {
                 ::svt::OFileNotation aFileNotation( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-                m_rLocationInput.SetText( aFileNotation.get( ::svt::OFileNotation::N_SYSTEM ) );
-                m_rLocationInput.GetModifyHdl().Call( m_rLocationInput );
+                m_rLocationInput.set_entry_text(aFileNotation.get(::svt::OFileNotation::N_SYSTEM));
+                m_rLocationInput.trigger_changed();
                 // the dialog already checked for the file's existence, so we don't need to, again
                 m_bNeedExistenceCheck = false;
             }
         }
     }
 
-
     DatabaseLocationInputController::DatabaseLocationInputController( const Reference<XComponentContext>& _rContext,
-            ::svt::OFileURLControl& _rLocationInput, PushButton& _rBrowseButton )
-        :m_pImpl( new DatabaseLocationInputController_Impl( _rContext, _rLocationInput, _rBrowseButton ) )
+            URLBox& _rLocationInput, weld::Button& _rBrowseButton, weld::Window& _rDialog )
+        :m_pImpl( new DatabaseLocationInputController_Impl( _rContext, _rLocationInput, _rBrowseButton, _rDialog ) )
     {
     }
-
 
     DatabaseLocationInputController::~DatabaseLocationInputController()
     {
     }
-
 
     bool DatabaseLocationInputController::prepareCommit()
     {
         return m_pImpl->prepareCommit();
     }
 
-
     void DatabaseLocationInputController::setURL( const OUString& _rURL )
     {
         m_pImpl->setURL( _rURL );
     }
 
-
     OUString DatabaseLocationInputController::getURL() const
     {
         return m_pImpl->getURL();
     }
-
-
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,9 +22,8 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <vcl/vclptr.hxx>
 
-namespace vcl { class Window; }
+namespace weld { class Window; }
 
 namespace abp
 {
@@ -37,13 +36,13 @@ namespace abp
         css::uno::Reference< css::uno::XComponentContext >
                                                         m_xContext;
         css::uno::Reference< css::beans::XPropertySet > m_xDataSource;
-        VclPtr<vcl::Window>         m_pMessageParent;
+        weld::Window*         m_pMessageParent;
 
     public:
         OAdminDialogInvokation(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const css::uno::Reference< css::beans::XPropertySet >& _rDataSource,
-            vcl::Window* _pMessageParent
+            weld::Window* _pMessageParent
         );
 
         bool invokeAdministration();
