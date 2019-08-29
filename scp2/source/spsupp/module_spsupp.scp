@@ -1,0 +1,26 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "macros.inc"
+
+#include "AutoInstall/spsuppfiles"
+
+#ifdef WNT
+
+Module gid_Module_Optional_SharePointSupport
+    ParentID = gid_Module_Optional;
+    Name = "gid_Module_Optional_SharePointSupport";
+    Description = "gid_Module_Optional_SharePointSupport";
+    Sortkey = "1300";
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
+    Files = (auto_spsuppfiles_ALL);
+End
+
+#endif
+
