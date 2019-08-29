@@ -784,12 +784,25 @@ void SwRedlineExtraData_FormatColl::Reject( SwPaM& rPam ) const
 
     SwPaM aPam( *rPam.GetMark(), *rPam.GetPoint() );
 
-    if ( !m_bFormatAll )
+    const SwPosition* pStt = rPam.Start(),
+                    * pEnd = pStt == rPam.GetPoint() ? rPam.GetMark()
+                                                     : rPam.GetPoint();
+
+    if ( !m_bFormatAll || pEnd->nContent == 0 )
     {
         // don't reject the format of the next paragraph (that is handled by the next redline)
-        aPam.GetPoint()->nNode--;
-        SwContentNode* pNode = aPam.GetPoint()->nNode.GetNode().GetContentNode();
-        aPam.GetPoint()->nContent.Assign( pNode, pNode->Len() );
+        if (aPam.GetPoint()->nNode > aPam.GetMark()->nNode)
+        {
+            aPam.GetPoint()->nNode--;
+            SwContentNode* pNode = aPam.GetPoint()->nNode.GetNode().GetContentNode();
+            aPam.GetPoint()->nContent.Assign( pNode, pNode->Len() );
+        }
+        else if (aPam.GetPoint()->nNode < aPam.GetMark()->nNode)
+        {
+            aPam.GetMark()->nNode--;
+            SwContentNode* pNode = aPam.GetMark()->nNode.GetNode().GetContentNode();
+            aPam.GetMark()->nContent.Assign( pNode, pNode->Len() );
+        }
     }
 
     if( pColl )

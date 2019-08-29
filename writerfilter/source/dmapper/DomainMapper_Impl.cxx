@@ -1527,6 +1527,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         xCur->gotoEnd( false );
                     xCur->goLeft( 1 , true );
                     CheckParaMarkerRedline( xCur );
+                    // Extend the redline ranges for empty paragraphs
+                    if ( !m_bParaChanged && m_previousRedline.get() )
+                        CreateRedline( xCur, m_previousRedline );
+                    m_previousRedline.clear();
                 }
 
                 css::uno::Reference<css::beans::XPropertySet> xParaProps(xTextRange, uno::UNO_QUERY);
@@ -2215,6 +2219,7 @@ void DomainMapper_Impl::StartParaMarkerChange( )
 void DomainMapper_Impl::EndParaMarkerChange( )
 {
     m_bIsParaMarkerChange = false;
+    m_previousRedline = m_currentRedline;
     m_currentRedline.clear();
 }
 
@@ -5844,7 +5849,7 @@ void DomainMapper_Impl::AddNewRedline( sal_uInt32 sprmId )
             GetTopContextOfType( CONTEXT_CHARACTER )->Redlines().push_back( pNew );
         else if( sprmId == NS_ooxml::LN_CT_PPr_pPrChange )
             GetTopContextOfType( CONTEXT_PARAGRAPH )->Redlines().push_back( pNew );
-        else
+        else if( sprmId != NS_ooxml::LN_CT_ParaRPr_rPrChange )
             m_aRedlines.top().push_back( pNew );
     }
     else

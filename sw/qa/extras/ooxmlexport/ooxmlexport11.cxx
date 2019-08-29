@@ -883,6 +883,16 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf126245, "tdf126245.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange/w:pPr/w:numPr/w:numId", "val", "1");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf124491, "tdf124491.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // import format change of empty lines, FIXME: change w:r with w:pPr in export
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/*/w:rPr/w:rPrChange");
+    // empty line without format change
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/*/w:rPrChange", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/*/*/w:rPrChange", 0);
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf105485, "tdf105485.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");

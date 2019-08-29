@@ -503,6 +503,7 @@ private:
     std::stack< std::vector< RedlineParamsPtr > > m_aRedlines;
     // The redline currently read, may be also stored by a context instead of m_aRedlines.
     RedlineParamsPtr                m_currentRedline;
+    RedlineParamsPtr                m_previousRedline;
     RedlineParamsPtr                m_pParaMarkerRedline;
     bool                            m_bIsParaMarkerChange;
     // redline data of the terminating run, if it's a moveFrom deletion
