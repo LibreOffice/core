@@ -16,6 +16,24 @@ namespace i18npool
     additional locale data format codes can be defined starting at this index
     value. */
 constexpr sal_Int16 nFirstFreeFormatIndex = 60;
+
+// tdf#51611 - Moved from sw/inc/hintids.hxx - Special characters added by hints.
+#define CH_TXTATR_BREAKWORD u'\x0001'
+#define CH_TXTATR_INWORD u'\xFFF9'
+
+#define CH_TXT_ATR_INPUTFIELDSTART u'\x0004'
+#define CH_TXT_ATR_INPUTFIELDEND u'\x0005'
+#define CH_TXT_ATR_FORMELEMENT u'\x0006'
+
+#define CH_TXT_ATR_FIELDSTART u'\x0007'
+#define CH_TXT_ATR_FIELDEND u'\x0008'
+
+/**
+* Zero width space - Unicode 4.0.1 changed U+200B ZERO WIDTH SPACE from a Space Separator (Zs)
+* to a Format Control(Cf). Since then, isWhitespace(0x200b) returns false.
+* See http://www.unicode.org/versions/Unicode4.0.1/
+*/
+#define CH_ZERO_WIDTH_SPACE u'\x200B'
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
