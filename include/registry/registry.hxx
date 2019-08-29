@@ -90,7 +90,7 @@ public:
     /// Copy constructor
     inline Registry(const Registry& toCopy);
 
-    Registry(Registry && other): m_pApi(other.m_pApi), m_hImpl(other.m_hImpl)
+    Registry(Registry && other) noexcept : m_pApi(other.m_pApi), m_hImpl(other.m_hImpl)
     { other.m_hImpl = nullptr; }
 
     /// Destructor. The Destructor close the registry if it is open.

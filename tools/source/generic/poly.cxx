@@ -872,7 +872,7 @@ Polygon::Polygon( const tools::Polygon& rPoly ) : mpImplPolygon(rPoly.mpImplPoly
 {
 }
 
-Polygon::Polygon( tools::Polygon&& rPoly)
+Polygon::Polygon( tools::Polygon&& rPoly) noexcept
     : mpImplPolygon(std::move(rPoly.mpImplPolygon))
 {
 }
@@ -1555,7 +1555,7 @@ tools::Polygon& Polygon::operator=( const tools::Polygon& rPoly )
     return *this;
 }
 
-tools::Polygon& Polygon::operator=( tools::Polygon&& rPoly )
+tools::Polygon& Polygon::operator=( tools::Polygon&& rPoly ) noexcept
 {
     mpImplPolygon = std::move(rPoly.mpImplPolygon);
     return *this;

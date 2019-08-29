@@ -105,7 +105,7 @@ SvGlobalName & SvGlobalName::operator = ( const SvGlobalName & rObj )
     return *this;
 }
 
-SvGlobalName & SvGlobalName::operator = ( SvGlobalName && rObj )
+SvGlobalName & SvGlobalName::operator = ( SvGlobalName && rObj ) noexcept
 {
     pImp = std::move(rObj.pImp);
     return *this;

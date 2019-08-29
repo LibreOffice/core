@@ -49,7 +49,7 @@ Font::Font( const vcl::Font& rFont ) : mpImplFont( rFont.mpImplFont )
 {
 }
 
-Font::Font( vcl::Font&& rFont ) : mpImplFont( std::move(rFont.mpImplFont) )
+Font::Font( vcl::Font&& rFont ) noexcept : mpImplFont( std::move(rFont.mpImplFont) )
 {
 }
 
@@ -283,7 +283,7 @@ Font& Font::operator=( const vcl::Font& rFont )
     return *this;
 }
 
-Font& Font::operator=( vcl::Font&& rFont )
+Font& Font::operator=( vcl::Font&& rFont ) noexcept
 {
     mpImplFont = std::move(rFont.mpImplFont);
     return *this;
