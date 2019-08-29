@@ -22,6 +22,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unicode/uchar.h>
 #include <i18nutil/unicode.hxx>
+#include <i18npool/reservedconstants.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/i18n/CharType.hpp>
@@ -66,7 +67,22 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, 
     return LBI->previousCharacters( Text, nStartPos, rLocale, nCharacterIteratorMode, nCount, nDone);
 }
 
-#define isZWSP(c) (ch == 0x200B)
+static bool isSpecialCharacter(UChar32 nChar) {
+    switch (nChar)
+    {
+        case CH_TXTATR_BREAKWORD:
+        case CH_TXTATR_INWORD:
+        case CH_TXT_ATR_INPUTFIELDSTART:
+        case CH_TXT_ATR_INPUTFIELDEND:
+        case CH_TXT_ATR_FORMELEMENT:
+        case CH_TXT_ATR_FIELDSTART:
+        case CH_TXT_ATR_FIELDEND:
+        case CH_ZERO_WIDTH_SPACE:
+            return true;
+        default:
+            return false;
+    }
+}
 
 static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, sal_Int16 rWordType, bool bDirection)
 {
@@ -74,24 +90,27 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
     sal_Int32 pos=nPos;
     switch (rWordType) {
         case WordType::ANYWORD_IGNOREWHITESPACES:
+            // tdf#51611 - Use Unicode White_Space property instead of Java's isWhitespace and skip special characters
             if (bDirection)
-                while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch))) nPos=pos;
+                while (nPos < len && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos)) || isSpecialCharacter(ch))) nPos=pos;
             else
-                while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch))) nPos=pos;
+                while (nPos > 0 && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos, -1)) || isSpecialCharacter(ch))) nPos=pos;
             break;
         case WordType::DICTIONARY_WORD:
+            // tdf#51611 - Use Unicode White_Space property instead of Java's isWhitespace and skip special characters
             if (bDirection)
-                while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch) ||
+                while (nPos < len && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos)) || isSpecialCharacter(ch) ||
                             ! (ch == 0x002E || u_isalnum(ch)))) nPos=pos;
             else
-                while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch) ||
+                while (nPos > 0 && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos, -1)) || isSpecialCharacter(ch) ||
                             ! (ch == 0x002E || u_isalnum(ch)))) nPos=pos;
             break;
         case WordType::WORD_COUNT:
+            // tdf#51611 - Skip special characters
             if (bDirection)
-                while (nPos < len && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch))) nPos=pos;
+                while (nPos < len && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos)) || isSpecialCharacter(ch))) nPos=pos;
             else
-                while (nPos > 0 && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch))) nPos=pos;
+                while (nPos > 0 && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos, -1)) || isSpecialCharacter(ch))) nPos=pos;
             break;
     }
     return nPos;
