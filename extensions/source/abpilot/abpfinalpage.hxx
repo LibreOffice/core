@@ -34,22 +34,22 @@ namespace abp
 
     class FinalPage final : public AddressBookSourcePage
     {
-        VclPtr< ::svt::OFileURLControl>  m_pLocation;
-        VclPtr<PushButton>       m_pBrowse;
-        VclPtr<CheckBox>         m_pRegisterName;
-        VclPtr<CheckBox>         m_pEmbed;
-        VclPtr<FixedText>        m_pNameLabel;
-        VclPtr<FixedText>        m_pLocationLabel;
-        VclPtr<Edit>             m_pName;
-        VclPtr<FixedText>        m_pDuplicateNameError;
+        std::unique_ptr<URLBox> m_xLocation;
+        std::unique_ptr<weld::Button> m_xBrowse;
+        std::unique_ptr<weld::CheckButton> m_xRegisterName;
+        std::unique_ptr<weld::CheckButton> m_xEmbed;
+        std::unique_ptr<weld::Label> m_xNameLabel;
+        std::unique_ptr<weld::Label> m_xLocationLabel;
+        std::unique_ptr<weld::Entry> m_xName;
+        std::unique_ptr<weld::Label> m_xDuplicateNameError;
 
         std::unique_ptr<svx::DatabaseLocationInputController>
-                        m_pLocationController;
+                        m_xLocationController;
 
         StringBag       m_aInvalidDataSourceNames;
 
     public:
-        explicit FinalPage(OAddressBookSourcePilot* _pParent);
+        explicit FinalPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent);
         virtual ~FinalPage() override;
         virtual void dispose() override;
 
@@ -65,18 +65,17 @@ namespace abp
         // OImportPage overridables
         virtual bool        canAdvance() const override;
 
-        DECL_LINK( OnNameModified, Edit&, void );
-        DECL_LINK(OnRegister, Button*, void);
-        DECL_LINK(OnEmbed, Button*, void);
+        DECL_LINK(OnEntryNameModified, weld::Entry&, void);
+        DECL_LINK(OnComboNameModified, weld::ComboBox&, void);
+        DECL_LINK(OnRegister, weld::Button&, void);
+        DECL_LINK(OnEmbed, weld::Button&, void);
 
-        bool    isValidName() const;
-        void        implCheckName();
-        void        setFields();
+        bool isValidName() const;
+        void implCheckName();
+        void setFields();
     };
 
-
 }   // namespace abp
-
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_ABPILOT_ABPFINALPAGE_HXX
 

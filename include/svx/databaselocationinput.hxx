@@ -25,8 +25,8 @@
 
 #include <memory>
 
-class PushButton;
-namespace svt { class OFileURLControl; }
+class URLBox;
+namespace weld { class Button; class Window; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 
@@ -50,8 +50,9 @@ namespace svx
     public:
         DatabaseLocationInputController(
             const css::uno::Reference<css::uno::XComponentContext>& _rContext,
-            ::svt::OFileURLControl&                 _rLocationInput,
-            PushButton&                             _rBrowseButton
+            URLBox& _rLocationInput,
+            weld::Button& _rBrowseButton,
+            weld::Window& _rDialog
         );
         ~DatabaseLocationInputController();
 

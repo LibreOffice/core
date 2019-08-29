@@ -21,21 +21,17 @@
 #define INCLUDED_EXTENSIONS_SOURCE_ABPILOT_TABLESELECTIONPAGE_HXX
 
 #include "abspage.hxx"
-#include <vcl/lstbox.hxx>
-#include <vcl/vclptr.hxx>
-
+#include <vcl/weld.hxx>
 
 namespace abp
 {
-
     class TableSelectionPage final : public AddressBookSourcePage
     {
-        VclPtr<ListBox>        m_pTableList;
+        std::unique_ptr<weld::TreeView> m_xTableList;
 
     public:
-        explicit TableSelectionPage( OAddressBookSourcePilot* _pParent );
+        explicit TableSelectionPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent);
         virtual ~TableSelectionPage() override;
-        virtual void dispose() override;
     private:
         // OWizardPage overridables
         virtual void        initializePage() override;
@@ -47,13 +43,11 @@ namespace abp
         // OImportPage overridables
         virtual bool        canAdvance() const override;
 
-        DECL_LINK( OnTableSelected, ListBox&, void );
-        DECL_LINK( OnTableDoubleClicked, ListBox&, void );
+        DECL_LINK(OnTableSelected, weld::TreeView&, void);
+        DECL_LINK(OnTableDoubleClicked, weld::TreeView&, void);
     };
 
-
 }   // namespace abp
-
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_ABPILOT_TABLESELECTIONPAGE_HXX
 

@@ -25,34 +25,23 @@
 
 namespace abp
 {
-    FieldMappingPage::FieldMappingPage( OAddressBookSourcePilot* _pParent )
-        : AddressBookSourcePage(_pParent, "FieldAssignPage",
-            "modules/sabpilot/ui/fieldassignpage.ui")
+    FieldMappingPage::FieldMappingPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent)
+        : AddressBookSourcePage(pDialog, pPageParent, "modules/sabpilot/ui/fieldassignpage.ui", "FieldAssignPage")
+        , m_xInvokeDialog(m_xBuilder->weld_button("assign"))
+        , m_xHint(m_xBuilder->weld_label("hint"))
     {
-        get(m_pInvokeDialog, "assign");
-        get(m_pHint, "hint");
-
-        m_pInvokeDialog->SetClickHdl( LINK( this, FieldMappingPage, OnInvokeDialog ) );
+        m_xInvokeDialog->connect_clicked(LINK(this, FieldMappingPage, OnInvokeDialog));
     }
 
     FieldMappingPage::~FieldMappingPage()
     {
-        disposeOnce();
-    }
-
-    void FieldMappingPage::dispose()
-    {
-        m_pInvokeDialog.clear();
-        m_pHint.clear();
-        AddressBookSourcePage::dispose();
     }
 
     void FieldMappingPage::ActivatePage()
     {
         AddressBookSourcePage::ActivatePage();
-        m_pInvokeDialog->GrabFocus();
+        m_xInvokeDialog->grab_focus();
     }
-
 
     void FieldMappingPage::initializePage()
     {
@@ -60,23 +49,21 @@ namespace abp
         implUpdateHint();
     }
 
-
     void FieldMappingPage::implUpdateHint()
     {
         const AddressSettings& rSettings = getSettings();
         OUString sHint;
         if ( rSettings.aFieldMapping.empty() )
             sHint = compmodule::ModuleRes(RID_STR_NOFIELDSASSIGNED);
-        m_pHint->SetText( sHint );
+        m_xHint->set_label(sHint);
     }
 
-
-    IMPL_LINK_NOARG( FieldMappingPage, OnInvokeDialog, Button*, void )
+    IMPL_LINK_NOARG( FieldMappingPage, OnInvokeDialog, weld::Button&, void )
     {
         AddressSettings& rSettings = getSettings();
 
         // invoke the dialog doing the mapping
-        if ( fieldmapping::invokeDialog( getORB(), this, getDialog()->getDataSource().getDataSource(), rSettings ) )
+        if ( fieldmapping::invokeDialog( getORB(), getDialog()->getDialog(), getDialog()->getDataSource().getDataSource(), rSettings ) )
         {
             if ( !rSettings.aFieldMapping.empty() )
                 getDialog()->travelNext();
@@ -85,8 +72,6 @@ namespace abp
         }
     }
 
-
 }   // namespace abp
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

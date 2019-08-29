@@ -23,40 +23,34 @@
 
 namespace abp
 {
-    AdminDialogInvokationPage::AdminDialogInvokationPage( OAddressBookSourcePilot* _pParent )
-        : AddressBookSourcePage(_pParent, "InvokeAdminPage",
-            "modules/sabpilot/ui/invokeadminpage.ui")
+    AdminDialogInvokationPage::AdminDialogInvokationPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent)
+        : AddressBookSourcePage(pDialog, pPageParent, "modules/sabpilot/ui/invokeadminpage.ui", "InvokeAdminPage")
+        , m_xInvokeAdminDialog(m_xBuilder->weld_button("settings"))
+        , m_xErrorMessage(m_xBuilder->weld_label("warning"))
     {
-        get(m_pInvokeAdminDialog, "settings");
-        get(m_pErrorMessage, "warning");
-        m_pInvokeAdminDialog->SetClickHdl( LINK(this, AdminDialogInvokationPage, OnInvokeAdminDialog) );
+        m_xInvokeAdminDialog->connect_clicked(LINK(this, AdminDialogInvokationPage, OnInvokeAdminDialog));
     }
+
     AdminDialogInvokationPage::~AdminDialogInvokationPage()
     {
-        disposeOnce();
     }
-    void AdminDialogInvokationPage::dispose()
-    {
-        m_pInvokeAdminDialog.clear();
-        m_pErrorMessage.clear();
-        AddressBookSourcePage::dispose();
-    }
+
     void AdminDialogInvokationPage::ActivatePage()
     {
         AddressBookSourcePage::ActivatePage();
-        m_pInvokeAdminDialog->GrabFocus();
+        m_xInvokeAdminDialog->grab_focus();
     }
 
     void AdminDialogInvokationPage::implUpdateErrorMessage()
     {
         const bool bIsConnected = getDialog()->getDataSource().isConnected();
-        m_pErrorMessage->Show( !bIsConnected );
+        m_xErrorMessage->set_visible( !bIsConnected );
     }
 
     void AdminDialogInvokationPage::initializePage()
     {
         AddressBookSourcePage::initializePage();
-        m_pErrorMessage->Hide();
+        m_xErrorMessage->hide();
             // if we're entering this page, we assume we had no connection trial with this data source
     }
 
@@ -81,9 +75,9 @@ namespace abp
     }
 
     // davido: Do we need it?
-    IMPL_LINK_NOARG( AdminDialogInvokationPage, OnInvokeAdminDialog, Button*, void )
+    IMPL_LINK_NOARG(AdminDialogInvokationPage, OnInvokeAdminDialog, weld::Button&, void)
     {
-        OAdminDialogInvokation aInvokation( getORB(), getDialog()->getDataSource().getDataSource(), getDialog() );
+        OAdminDialogInvokation aInvokation(getORB(), getDialog()->getDataSource().getDataSource(), getDialog()->getDialog());
         if ( aInvokation.invokeAdministration() )
         {
             // try to connect to this data source

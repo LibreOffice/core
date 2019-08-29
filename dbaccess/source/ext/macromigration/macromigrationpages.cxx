@@ -81,8 +81,11 @@ namespace dbmm
         get(m_pStartMigration, "startmigrate");
         get(m_pBrowseSaveAsLocation, "browse");
         get(m_pSaveAsLocation, "location");
+#if 0
+        //TODO
         m_pLocationController.reset( new svx::DatabaseLocationInputController(
             _rParentDialog.getComponentContext(), *m_pSaveAsLocation, *m_pBrowseSaveAsLocation) );
+#endif
 
         m_pSaveAsLocation->SetModifyHdl( LINK( this, SaveDBDocPage, OnLocationModified ) );
         m_pSaveAsLocation->SetDropDownLineCount( 20 );

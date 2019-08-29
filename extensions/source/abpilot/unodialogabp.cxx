@@ -21,7 +21,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include "abspilot.hxx"
 #include <comphelper/sequence.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/svapp.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -116,9 +116,8 @@ namespace abp
 
     svt::OGenericUnoDialog::Dialog OABSPilotUno::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
-        return svt::OGenericUnoDialog::Dialog(VclPtr<OAddressBookSourcePilot>::Create(VCLUnoHelper::GetWindow(rParent), m_aContext));
+        return svt::OGenericUnoDialog::Dialog(std::make_unique<OAddressBookSourcePilot>(Application::GetFrameWeld(rParent), m_aContext));
     }
-
 
     Any SAL_CALL OABSPilotUno::execute( const Sequence< NamedValue >& /*lArgs*/ )
     {
@@ -139,7 +138,7 @@ namespace abp
     {
         if ( _nExecutionResult == RET_OK )
         {
-            const AddressSettings& aSettings = static_cast<OAddressBookSourcePilot*>(m_aDialog.m_xVclDialog.get())->getSettings();
+            const AddressSettings& aSettings = static_cast<OAddressBookSourcePilot*>(m_aDialog.m_xWeldDialog.get())->getSettings();
             m_sDataSourceName = aSettings.bRegisterDataSource ? aSettings.sRegisteredDataSourceName : aSettings.sDataSourceName;
         }
     }

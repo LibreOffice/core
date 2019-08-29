@@ -26,8 +26,8 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <tools/debug.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
 #include <strings.hrc>
 #include <componentmodule.hxx>
@@ -55,12 +55,9 @@ namespace abp
     static const char sDriverSettingsNodeName[] = "/org.openoffice.Office.DataAccess/DriverSettings/com.sun.star.comp.sdbc.MozabDriver";
     static const char sAddressBookNodeName[] = "/org.openoffice.Office.DataAccess/AddressBook";
 
-
     namespace fieldmapping
     {
-
-
-        bool invokeDialog( const Reference< XComponentContext >& _rxORB, class vcl::Window* _pParent,
+        bool invokeDialog( const Reference< XComponentContext >& _rxORB, class weld::Window* _pParent,
             const Reference< XPropertySet >& _rxDataSource, AddressSettings& _rSettings )
         {
             _rSettings.aFieldMapping.clear();
@@ -74,7 +71,7 @@ namespace abp
             {
 
                 // create an instance of the dialog service
-                Reference< XWindow > xDialogParent = VCLUnoHelper::GetInterface( _pParent );
+                Reference< XWindow > xDialogParent = _pParent->GetXWindow();
                 OUString sTitle(compmodule::ModuleRes(RID_STR_FIELDDIALOGTITLE));
                 Reference< XExecutableDialog > xDialog = AddressBookSourceDialog::createWithDataSource(_rxORB,
                                                            // the parent window

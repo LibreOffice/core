@@ -27,33 +27,24 @@
 namespace abp
 {
 
-    TableSelectionPage::TableSelectionPage( OAddressBookSourcePilot* _pParent )
-        :AddressBookSourcePage(_pParent, "SelectTablePage",
-          "modules/sabpilot/ui/selecttablepage.ui")
+    TableSelectionPage::TableSelectionPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent)
+        : AddressBookSourcePage(pDialog, pPageParent, "modules/sabpilot/ui/selecttablepage.ui", "SelectTablePage")
+        , m_xTableList(m_xBuilder->weld_tree_view("table"))
     {
-        get(m_pTableList, "table");
-        m_pTableList->SetSelectHdl( LINK( this, TableSelectionPage, OnTableSelected ) );
-        m_pTableList->SetDoubleClickHdl( LINK( this, TableSelectionPage, OnTableDoubleClicked ) );
+        m_xTableList->connect_changed( LINK( this, TableSelectionPage, OnTableSelected ) );
+        m_xTableList->connect_row_activated( LINK( this, TableSelectionPage, OnTableDoubleClicked ) );
     }
 
     TableSelectionPage::~TableSelectionPage()
     {
-        disposeOnce();
-    }
-
-    void TableSelectionPage::dispose()
-    {
-        m_pTableList.clear();
-        AddressBookSourcePage::dispose();
     }
 
     void TableSelectionPage::ActivatePage()
     {
         AddressBookSourcePage::ActivatePage();
 
-        m_pTableList->GrabFocus();
+        m_xTableList->grab_focus();
     }
-
 
     void TableSelectionPage::initializePage()
     {
@@ -61,7 +52,7 @@ namespace abp
 
         const AddressSettings& rSettings = getSettings();
 
-        m_pTableList->Clear();
+        m_xTableList->clear();
 
         // get the table names
         const StringBag& aTableNames = getDialog()->getDataSource().getTableNames();
@@ -70,25 +61,22 @@ namespace abp
 
         // fill the list
         for (auto const& tableName : aTableNames)
-            m_pTableList->InsertEntry(tableName);
+            m_xTableList->append_text(tableName);
 
         // initially select the proper table
-        m_pTableList->SelectEntry( rSettings.sSelectedTable );
+        m_xTableList->select_text(rSettings.sSelectedTable);
     }
 
-
-    IMPL_LINK_NOARG( TableSelectionPage, OnTableDoubleClicked, ListBox&, void )
+    IMPL_LINK_NOARG( TableSelectionPage, OnTableDoubleClicked, weld::TreeView&, void )
     {
-        if ( 1 == m_pTableList->GetSelectedEntryCount() )
+        if (m_xTableList->count_selected_rows() == 1)
             getDialog()->travelNext();
     }
 
-
-    IMPL_LINK_NOARG( TableSelectionPage, OnTableSelected, ListBox&, void )
+    IMPL_LINK_NOARG( TableSelectionPage, OnTableSelected, weld::TreeView&, void )
     {
         updateDialogTravelUI();
     }
-
 
     bool TableSelectionPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {
@@ -96,20 +84,17 @@ namespace abp
             return false;
 
         AddressSettings& rSettings = getSettings();
-        rSettings.sSelectedTable = m_pTableList->GetSelectedEntry();
+        rSettings.sSelectedTable = m_xTableList->get_selected_text();
 
         return true;
     }
 
-
     bool TableSelectionPage::canAdvance() const
     {
         return  AddressBookSourcePage::canAdvance()
-            &&  ( 0 < m_pTableList->GetSelectedEntryCount() );
+            &&  (m_xTableList->count_selected_rows() > 0);
     }
 
-
 }   // namespace abp
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
