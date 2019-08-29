@@ -3100,11 +3100,11 @@ bool DrawingML::WriteCustomGeometry(
                                       XML_r, "r", XML_b, "b");
                 mpFS->startElementNS(XML_a, XML_pathLst);
 
+                sal_Int32 nWidth, nHeight;
                 if ( aPathSize.hasElements() )
                 {
-                    mpFS->startElementNS( XML_a, XML_path,
-                          XML_w, OString::number(aPathSize[0].Width),
-                          XML_h, OString::number(aPathSize[0].Height) );
+                    nWidth = aPathSize[0].Width;
+                    nHeight = aPathSize[0].Height;
                 }
                 else
                 {
@@ -3128,20 +3128,36 @@ bool DrawingML::WriteCustomGeometry(
                         if (nY > nYMax)
                             nYMax = nY;
                     }
-                    mpFS->startElementNS( XML_a, XML_path,
-                          XML_w, OString::number(nXMax - nXMin),
-                          XML_h, OString::number(nYMax - nYMin) );
+                    nWidth = nXMax - nXMin;
+                    nHeight = nYMax - nYMin;
                 }
 
+                mpFS->startElementNS( XML_a, XML_path,
+                      XML_w, OString::number(nWidth),
+                      XML_h, OString::number(nHeight) );
 
                 int nPairIndex = 0;
                 bool bOK = true;
+                const auto lastSegment = aSegments.end();
                 for (const auto& rSegment : std::as_const(aSegments))
                 {
+                    // Commands without parameters (aSegments[j].Count is equal 0)
                     if ( rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH )
                     {
                         mpFS->singleElementNS(XML_a, XML_close);
                     }
+                    else if ( rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH )
+                    {
+                        // tdf#100390 End subpath to be able display shapes properly
+                        mpFS->endElementNS( XML_a, XML_path );
+                        if (&rSegment != lastSegment)
+                        {
+                            mpFS->startElementNS( XML_a, XML_path,
+                                                  XML_w, OString::number(nWidth),
+                                                  XML_h, OString::number(nHeight) );
+                        }
+                    }
+
                     for (int k = 0; k < rSegment.Count && bOK; ++k)
                     {
                         switch( rSegment.Command )
@@ -3237,7 +3253,8 @@ bool DrawingML::WriteCustomGeometry(
                     if (!bOK)
                         break;
                 }
-                mpFS->endElementNS( XML_a, XML_path );
+                if ( aSegments.end()->Command != drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH )
+                    mpFS->endElementNS( XML_a, XML_path );
                 mpFS->endElementNS( XML_a, XML_pathLst );
                 mpFS->endElementNS( XML_a, XML_custGeom );
                 return bOK;
