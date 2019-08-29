@@ -3,7 +3,7 @@ Function doUnitTest(TestData as String, Driver as String) as String
 Rem Ensure object assignment is by reference
 Rem when object member is used ( as lhs )
 Dim origTimeout As Long
-Dim modifiedTimout As Long
+Dim modifiedTimeout As Long
 Set cn = New ADODB.Connection
 origTimeout = cn.CommandTimeout
 modifiedTimeout = origTimeout * 2
