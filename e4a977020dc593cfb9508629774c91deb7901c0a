@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_4d1832d2",
+        "filename": "compilerplugins/clang/noexceptmove.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-29T11:29:33Z",
+      "side": 1,
+      "message": "all of the above we could probably change to be noexcept for LIBO_INTERNAL_ONLY (but probably better leave for another change); only function types as whitelisted below are problematic to change",
+      "revId": "e4a977020dc593cfb9508629774c91deb7901c0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
