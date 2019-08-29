@@ -95,7 +95,7 @@ public:
     inline Environment( const Environment & rEnv );
 
 #if defined LIBO_INTERNAL_ONLY
-    Environment(Environment && other): _pEnv(other._pEnv)
+    Environment(Environment && other) noexcept : _pEnv(other._pEnv)
     { other._pEnv = nullptr; }
 #endif
 
