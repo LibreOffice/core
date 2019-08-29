@@ -149,7 +149,8 @@ void ValueSet::ApplySettings(vcl::RenderContext& rRenderContext)
         aColor = rStyleSettings.GetWindowColor();
     else
         aColor = rStyleSettings.GetFaceColor();
-    ApplyControlBackground(rRenderContext, aColor);
+    if (GetBackground().GetColor() == COL_TRANSPARENT)
+        ApplyControlBackground(rRenderContext, aColor);
 }
 
 void ValueSet::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
