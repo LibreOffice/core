@@ -83,7 +83,7 @@ struct TItemInfo
     {
     }
 
-    TItemInfo(TItemInfo&& other)
+    TItemInfo(TItemInfo&& other) noexcept
         : pItem(std::move(other.pItem))
         , eItem(other.eItem)
     {

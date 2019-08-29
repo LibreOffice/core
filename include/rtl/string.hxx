@@ -129,7 +129,7 @@ public:
       @param    str         an OString.
       @since LibreOffice 5.2
     */
-    OString( OString && str )
+    OString( OString && str ) noexcept
     {
         pData = str.pData;
         str.pData = nullptr;
@@ -313,7 +313,7 @@ public:
       @param    str         an OString.
       @since LibreOffice 5.2
     */
-    OString & operator=( OString && str )
+    OString & operator=( OString && str ) noexcept
     {
         rtl_string_release( pData );
         pData = str.pData;

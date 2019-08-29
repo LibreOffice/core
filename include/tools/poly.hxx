@@ -98,7 +98,7 @@ public:
                                  sal_uInt16 nPoints );
 
                         Polygon( const tools::Polygon& rPoly );
-                        Polygon( tools::Polygon&& rPoly);
+                        Polygon( tools::Polygon&& rPoly) noexcept;
                         ~Polygon();
 
     void                SetPoint( const Point& rPt, sal_uInt16 nPos );
@@ -155,7 +155,7 @@ public:
     Point&              operator[]( sal_uInt16 nPos );
 
     tools::Polygon&     operator=( const tools::Polygon& rPoly );
-    tools::Polygon&     operator=( tools::Polygon&& rPoly );
+    tools::Polygon&     operator=( tools::Polygon&& rPoly ) noexcept;
     bool                operator==( const tools::Polygon& rPoly ) const;
     bool                operator!=( const tools::Polygon& rPoly ) const
                             { return !(Polygon::operator==( rPoly )); }

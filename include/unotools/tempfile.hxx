@@ -71,7 +71,7 @@ public:
                     TempFile( const OUString& rLeadingChars, bool _bStartWithZero=true, const OUString* pExtension=nullptr,
                               const OUString* pParent=nullptr, bool bCreateParentDirs=false );
 
-                    TempFile(TempFile && other);
+                    TempFile(TempFile && other) noexcept;
 
                     /**
                     TempFile will be removed from disk in dtor if EnableKillingFile(true) was called before.

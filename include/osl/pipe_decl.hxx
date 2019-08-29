@@ -59,7 +59,7 @@ public:
     inline Pipe(const Pipe& pipe);
 
 #if defined LIBO_INTERNAL_ONLY
-    inline Pipe(Pipe && other);
+    inline Pipe(Pipe && other) noexcept;
 #endif
 
     /** Constructs a Pipe reference without acquiring the handle
@@ -108,7 +108,7 @@ public:
     inline Pipe& SAL_CALL operator= (const Pipe& pipe);
 
 #if defined LIBO_INTERNAL_ONLY
-    inline Pipe & operator =(Pipe && other);
+    inline Pipe & operator =(Pipe && other) noexcept;
 #endif
 
     /** Assignment operator. If pipe was already created, the old one will

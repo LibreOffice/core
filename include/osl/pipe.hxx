@@ -51,7 +51,7 @@ namespace osl
     }
 
 #if defined LIBO_INTERNAL_ONLY
-    Pipe::Pipe(Pipe && other): m_handle(other.m_handle) {
+    Pipe::Pipe(Pipe && other) noexcept : m_handle(other.m_handle) {
         other.m_handle = nullptr;
     }
 #endif
@@ -97,7 +97,7 @@ namespace osl
     }
 
 #if defined LIBO_INTERNAL_ONLY
-    Pipe & Pipe::operator =(Pipe && other) {
+    Pipe & Pipe::operator =(Pipe && other) noexcept {
         if (m_handle != nullptr) {
             osl_releasePipe(m_handle);
         }

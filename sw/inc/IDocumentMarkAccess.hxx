@@ -76,8 +76,8 @@ class IDocumentMarkAccess
                 iterator(std::vector<::sw::mark::MarkBase*>::const_iterator const& rIter);
                 iterator(iterator const& rOther);
                 iterator& operator=(iterator const& rOther);
-                iterator(iterator && rOther);
-                iterator& operator=(iterator && rOther);
+                iterator(iterator && rOther) noexcept;
+                iterator& operator=(iterator && rOther) noexcept;
                 ~iterator();
 
                 // FIXME unfortunately there's a requirement on input iterator

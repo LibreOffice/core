@@ -370,7 +370,7 @@ TempFile::TempFile( const OUString& rLeadingChars, bool _bStartWithZero,
                             true, true, bCreateParentDirs );
 }
 
-TempFile::TempFile(TempFile && other):
+TempFile::TempFile(TempFile && other) noexcept :
     aName(std::move(other.aName)), pStream(std::move(other.pStream)), bIsDirectory(other.bIsDirectory),
     bKillingFileEnabled(other.bKillingFileEnabled)
 {
