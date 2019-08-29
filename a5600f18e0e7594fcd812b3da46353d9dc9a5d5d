@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_cd6522e3",
+        "filename": "compilerplugins/clang/noexceptmove.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-08-29T07:28:04Z",
+      "side": 1,
+      "message": "you are correct, I will invert this so that we assume throwing for anything except stuff known to not-throw.",
+      "parentUuid": "bf659307_3232f911",
+      "revId": "a5600f18e0e7594fcd812b3da46353d9dc9a5d5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_521e8d70",
         "filename": "compilerplugins/clang/noexceptmove.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2019-08-29T07:17:19Z",
       "side": 1,
       "message": "What if the called function has an implicitly defined exception specification but which is non-throwing?  I think we just get EST_None here in that case.",
+      "revId": "a5600f18e0e7594fcd812b3da46353d9dc9a5d5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_8d5f2a0d",
+        "filename": "compilerplugins/clang/noexceptmove.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-08-29T07:28:04Z",
+      "side": 1,
+      "message": "how can a function prototype have an implicitly defined exception specification? Can you give an example?",
+      "parentUuid": "bf659307_521e8d70",
       "revId": "a5600f18e0e7594fcd812b3da46353d9dc9a5d5d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -71,6 +107,54 @@
       "side": 1,
       "message": "Yeah, always a bit confusing if such a change contains both \"automated\" changes (which could ideally be done by the plugin itself, it it were a rewriting one), plus additional manual \"scaffolding\" changes.  Maybe split this change up into the trivial part and additional changes for the bLookForStuffWeCanFix\u003dtrue (if that\u0027s what prompted this modification here, IIUC) cases?",
       "parentUuid": "bf659307_52352df6",
+      "range": {
+        "startLine": 252,
+        "startChar": 49,
+        "endLine": 252,
+        "endChar": 50
+      },
+      "revId": "a5600f18e0e7594fcd812b3da46353d9dc9a5d5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_cd3c42c1",
+        "filename": "include/o3tl/cow_wrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-08-29T07:28:04Z",
+      "side": 1,
+      "message": "yes, this was called from another move operator",
+      "parentUuid": "bf659307_52352df6",
+      "range": {
+        "startLine": 252,
+        "startChar": 49,
+        "endLine": 252,
+        "endChar": 50
+      },
+      "revId": "a5600f18e0e7594fcd812b3da46353d9dc9a5d5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_2d9cdebe",
+        "filename": "include/o3tl/cow_wrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-08-29T07:28:04Z",
+      "side": 1,
+      "message": "will do",
+      "parentUuid": "bf659307_0d747a98",
       "range": {
         "startLine": 252,
         "startChar": 49,
