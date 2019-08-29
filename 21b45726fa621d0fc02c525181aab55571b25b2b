@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_4d3272a9",
+        "filename": "cppu/source/uno/lbmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-29T08:58:34Z",
+      "side": 1,
+      "message": "It looks odd that the move ctor is noexcept while this move assignment op isn\u0027t.  Ideally, we would add noexcept to uno_ReleaseMappingFunc (include/uno/mapping.h), but can\u0027t for compatibility reasons.  Maybe have a whitelist in the plugin of function types that should actually be considered noexcept even if they can\u0027t be.",
+      "revId": "21b45726fa621d0fc02c525181aab55571b25b2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
