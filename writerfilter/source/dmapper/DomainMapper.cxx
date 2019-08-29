@@ -2290,6 +2290,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         m_pImpl->StartParaMarkerChange( );
         [[fallthrough]];
     case NS_ooxml::LN_CT_PPr_pPrChange:
+    case NS_ooxml::LN_CT_ParaRPr_rPrChange:
     case NS_ooxml::LN_trackchange:
     case NS_ooxml::LN_EG_RPrContent_rPrChange:
     case NS_ooxml::LN_EG_RangeMarkupElements_customXmlDelRangeStart:
