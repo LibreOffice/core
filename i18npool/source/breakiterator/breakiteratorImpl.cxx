@@ -75,9 +75,9 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
     switch (rWordType) {
         case WordType::ANYWORD_IGNOREWHITESPACES:
             if (bDirection)
-                while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch))) nPos=pos;
+                while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch) || ch == 0x0001)) nPos=pos;
             else
-                while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch))) nPos=pos;
+                while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch)  || ch == 0x0001)) nPos=pos;
             break;
         case WordType::DICTIONARY_WORD:
             if (bDirection)
@@ -89,9 +89,9 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
             break;
         case WordType::WORD_COUNT:
             if (bDirection)
-                while (nPos < len && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch))) nPos=pos;
+                while (nPos < len && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch) || ch == 0x0001)) nPos=pos;
             else
-                while (nPos > 0 && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch))) nPos=pos;
+                while (nPos > 0 && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch) || ch == 0x0001)) nPos=pos;
             break;
     }
     return nPos;
@@ -262,7 +262,7 @@ static sal_Int32 iterateCodePoints(const OUString& Text, sal_Int32 &nStartPos, s
             ch = Text.iterateCodePoints(&nStartPos, inc);
             // Fix for #i80436#.
             // erAck: 2009-06-30T21:52+0200  This logic looks somewhat
-            // suspicious as if it cures a symptom.. anyway, had to add
+            // suspicious as if it cures a symptom... anyway, had to add
             // nStartPos < Text.getLength() to silence the (correct) assertion
             // in rtl_uString_iterateCodePoints() if Text was one character
             // (codepoint) only, made up of a surrogate pair.
