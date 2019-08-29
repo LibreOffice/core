@@ -34,4 +34,6 @@ $(eval $(call gb_Executable_use_system_win32_libs,spsupp_helper,\
     shell32 \
 ))
 
+$(eval $(call gb_Executable_add_nativeres,spsupp_helper,spsupp_helper/default))
+
 # vim:set noet sw=4 ts=4:

@@ -208,7 +208,6 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	) \
 	$(if $(filter WNT,$(OS)), \
 		senddoc \
-		spsupp_helper \
 	) \
 	$(if $(filter OPENCL,$(BUILD_TYPE)),opencltest) \
 ))
@@ -673,17 +672,14 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activexwin6
 ))
 endif
 
-ifneq ($(CXX_X64_BINARY),)
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
-	spsupp_x64 \
+$(eval $(call gb_Helper_register_executables_for_install,OOO,spsuppfiles, \
+	spsupp_helper \
 ))
-endif
 
-ifneq ($(CXX_X86_BINARY),)
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
-	spsupp_x86 \
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,spsuppfiles, \
+	$(if $(CXX_X64_BINARY),spsupp_x64) \
+	$(if $(CXX_X86_BINARY),spsupp_x86) \
 ))
-endif
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooobinarytable, \
 	$(if $(WINDOWS_SDK_HOME),\
