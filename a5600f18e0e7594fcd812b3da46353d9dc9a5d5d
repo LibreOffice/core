@@ -56,6 +56,30 @@
       "revId": "a5600f18e0e7594fcd812b3da46353d9dc9a5d5d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_0d747a98",
+        "filename": "include/o3tl/cow_wrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-29T07:22:39Z",
+      "side": 1,
+      "message": "Yeah, always a bit confusing if such a change contains both \"automated\" changes (which could ideally be done by the plugin itself, it it were a rewriting one), plus additional manual \"scaffolding\" changes.  Maybe split this change up into the trivial part and additional changes for the bLookForStuffWeCanFix\u003dtrue (if that\u0027s what prompted this modification here, IIUC) cases?",
+      "parentUuid": "bf659307_52352df6",
+      "range": {
+        "startLine": 252,
+        "startChar": 49,
+        "endLine": 252,
+        "endChar": 50
+      },
+      "revId": "a5600f18e0e7594fcd812b3da46353d9dc9a5d5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
