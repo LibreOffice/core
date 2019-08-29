@@ -67,6 +67,8 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, 
 }
 
 #define isZWSP(c) (ch == 0x200B)
+// tdf#51611 - Skip SwTextHints CH_TXTATR_BREAKWORD
+#define isCH_TXTATR_BREAKWORD(c) (ch == 0x0001)
 
 static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, sal_Int16 rWordType, bool bDirection)
 {
@@ -74,24 +76,30 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
     sal_Int32 pos=nPos;
     switch (rWordType) {
         case WordType::ANYWORD_IGNOREWHITESPACES:
+            // tdf#51611 - Use Unicode White_Space property instead of Java's isWhitespace
             if (bDirection)
-                while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch))) nPos=pos;
+                while (nPos < len && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch) ||
+                    isCH_TXTATR_BREAKWORD(ch))) nPos=pos;
             else
-                while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch))) nPos=pos;
+                while (nPos > 0 && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch) ||
+                    isCH_TXTATR_BREAKWORD(ch))) nPos=pos;
             break;
         case WordType::DICTIONARY_WORD:
+            // tdf#51611 - Use Unicode White_Space property instead of Java's isWhitespace
             if (bDirection)
-                while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch) ||
+                while (nPos < len && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch) ||
                             ! (ch == 0x002E || u_isalnum(ch)))) nPos=pos;
             else
-                while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch) ||
+                while (nPos > 0 && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch) ||
                             ! (ch == 0x002E || u_isalnum(ch)))) nPos=pos;
             break;
         case WordType::WORD_COUNT:
             if (bDirection)
-                while (nPos < len && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch))) nPos=pos;
+                while (nPos < len && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch) ||
+                    isCH_TXTATR_BREAKWORD(ch))) nPos=pos;
             else
-                while (nPos > 0 && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch))) nPos=pos;
+                while (nPos > 0 && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch) ||
+                    isCH_TXTATR_BREAKWORD(ch))) nPos=pos;
             break;
     }
     return nPos;
