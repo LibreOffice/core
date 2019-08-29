@@ -190,7 +190,7 @@ public:
     */
     inline ByteSequence( const ByteSequence & rSeq );
 #if defined LIBO_INTERNAL_ONLY
-    inline ByteSequence( ByteSequence && rSeq );
+    inline ByteSequence( ByteSequence && rSeq ) noexcept;
 #endif
     /** Copy constructor Creates a copy from the C-Handle.
 
@@ -236,7 +236,7 @@ public:
     */
     inline ByteSequence & SAL_CALL operator = ( const ByteSequence & rSeq );
 #if defined LIBO_INTERNAL_ONLY
-    inline ByteSequence & SAL_CALL operator = ( ByteSequence && rSeq );
+    inline ByteSequence & SAL_CALL operator = ( ByteSequence && rSeq ) noexcept;
 #endif
 
     /** Gets the length of sequence.

@@ -47,8 +47,8 @@ class VCL_DLLPUBLIC Font
 {
 public:
     explicit            Font();
+                        Font( Font&& ) noexcept;
                         Font( const Font& ); // TODO make me explicit
-                        Font( Font&& );
     explicit            Font( const OUString& rFamilyName, const Size& );
     explicit            Font( const OUString& rFamilyName, const OUString& rStyleName, const Size& );
     explicit            Font( FontFamily eFamily, const Size& );
@@ -150,7 +150,7 @@ public:
     void                GetFontAttributes( FontAttributes& rAttrs ) const;
 
     Font&               operator=( const Font& );
-    Font&               operator=( Font&& );
+    Font&               operator=( Font&& ) noexcept;
     bool                operator==( const Font& ) const;
     bool                operator!=( const Font& rFont ) const
                             { return !(Font::operator==( rFont )); }

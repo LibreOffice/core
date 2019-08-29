@@ -249,7 +249,7 @@ int cow_wrapper_client::queryUnmodified() const
         }
 
         /// now sharing rSrc cow_wrapper instance with us
-        cow_wrapper& operator=( const cow_wrapper& rSrc ) // nothrow
+        cow_wrapper& operator=( const cow_wrapper& rSrc ) noexcept(noexcept(std::declval<T>().~T()))
         {
             // this already guards against self-assignment
             MTPolicy::incrementCount( rSrc.m_pimpl->m_ref_count );

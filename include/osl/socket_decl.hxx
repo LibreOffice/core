@@ -51,7 +51,7 @@ namespace osl
         inline SocketAddr(const SocketAddr& Addr);
 
 #if defined LIBO_INTERNAL_ONLY
-        inline SocketAddr(SocketAddr && other);
+        inline SocketAddr(SocketAddr && other) noexcept;
 #endif
 
         /** The SocketAddr takes over the responsibility of the handle (which means

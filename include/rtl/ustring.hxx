@@ -158,7 +158,7 @@ public:
       @param    str         an OUString.
       @since LibreOffice 5.2
     */
-    OUString( OUString && str )
+    OUString( OUString && str ) noexcept
     {
         pData = str.pData;
         str.pData = nullptr;
@@ -462,7 +462,7 @@ public:
       @param    str         an OUString.
       @since LibreOffice 5.2
     */
-    OUString & operator=( OUString && str )
+    OUString & operator=( OUString && str ) noexcept
     {
         rtl_uString_release( pData );
         pData = str.pData;

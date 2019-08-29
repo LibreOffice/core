@@ -60,7 +60,7 @@ class Mapping
 public:
     inline explicit Mapping( uno_Mapping * pMapping = nullptr );
     inline Mapping( const Mapping & rMapping );
-    Mapping(Mapping && other): _pMapping(other._pMapping)
+    Mapping(Mapping && other) noexcept : _pMapping(other._pMapping)
     { other._pMapping = nullptr; }
     inline ~Mapping();
     inline Mapping & operator = ( uno_Mapping * pMapping );

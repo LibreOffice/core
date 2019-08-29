@@ -2819,7 +2819,7 @@ SvxBrushItem::SvxBrushItem(const SvxBrushItem& rItem)
 {
 }
 
-SvxBrushItem::SvxBrushItem(SvxBrushItem&& rItem)
+SvxBrushItem::SvxBrushItem(SvxBrushItem&& rItem) noexcept
     : SfxPoolItem(std::move(rItem))
     , aColor(std::move(rItem.aColor))
     , nShadingValue(std::move(rItem.nShadingValue))

@@ -35,7 +35,7 @@ namespace osl
     }
 
 #if defined LIBO_INTERNAL_ONLY
-    SocketAddr::SocketAddr(SocketAddr && other): m_handle(other.m_handle) {
+    SocketAddr::SocketAddr(SocketAddr && other) noexcept : m_handle(other.m_handle) {
         other.m_handle = nullptr;
     }
 #endif

@@ -341,7 +341,7 @@ PolyPolygon& PolyPolygon::operator=( const tools::PolyPolygon& rPolyPoly )
     return *this;
 }
 
-PolyPolygon& PolyPolygon::operator=( tools::PolyPolygon&& rPolyPoly )
+PolyPolygon& PolyPolygon::operator=( tools::PolyPolygon&& rPolyPoly ) noexcept
 {
     mpImplPolyPolygon = rPolyPoly.mpImplPolyPolygon;
     return *this;

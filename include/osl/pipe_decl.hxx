@@ -59,7 +59,7 @@ public:
     inline Pipe(const Pipe& pipe);
 
 #if defined LIBO_INTERNAL_ONLY
-    inline Pipe(Pipe && other);
+    inline Pipe(Pipe && other) noexcept;
 #endif
 
     /** Constructs a Pipe reference without acquiring the handle

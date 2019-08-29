@@ -127,7 +127,7 @@ inline Any & Any::operator = ( const Any & rAny )
 
 namespace detail {
 
-inline void moveAnyInternals(Any & from, Any & to) {
+inline void moveAnyInternals(Any & from, Any & to) noexcept {
     uno_any_construct(&to, nullptr, nullptr, &cpp_acquire);
     std::swap(from.pType, to.pType);
     std::swap(from.pData, to.pData);
@@ -143,11 +143,11 @@ inline void moveAnyInternals(Any & from, Any & to) {
 
 }
 
-Any::Any(Any && other) {
+Any::Any(Any && other) noexcept {
     detail::moveAnyInternals(other, *this);
 }
 
-Any & Any::operator =(Any && other) {
+Any & Any::operator =(Any && other) noexcept {
     uno_any_destruct(this, &cpp_release);
     detail::moveAnyInternals(other, *this);
     return *this;

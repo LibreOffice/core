@@ -1637,7 +1637,7 @@ PPDContext::PPDContext() :
 {
 }
 
-PPDContext& PPDContext::operator=( PPDContext&& rCopy )
+PPDContext& PPDContext::operator=( PPDContext&& rCopy ) noexcept
 {
     std::swap(m_pParser, rCopy.m_pParser);
     std::swap(m_aCurrentValues, rCopy.m_aCurrentValues);

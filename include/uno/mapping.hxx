@@ -111,7 +111,7 @@ public:
     inline Mapping( const Mapping & rMapping );
 
 #if defined LIBO_INTERNAL_ONLY
-    Mapping(Mapping && other): _pMapping(other._pMapping)
+    Mapping(Mapping && other) noexcept : _pMapping(other._pMapping)
     { other._pMapping = nullptr; }
 #endif
 

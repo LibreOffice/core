@@ -238,7 +238,7 @@ public:
     PPDContext();
     PPDContext( const PPDContext& rContext ) { operator=( rContext ); }
     PPDContext& operator=( const PPDContext& rContext ) = default;
-    PPDContext& operator=( PPDContext&& rContext );
+    PPDContext& operator=( PPDContext&& rContext ) noexcept;
 
     void setParser( const PPDParser* );
     const PPDParser* getParser() const { return m_pParser; }

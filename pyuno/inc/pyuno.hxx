@@ -98,7 +98,7 @@ public:
     }
 
     PyRef(const PyRef &r) : m(r.get()) { Py_XINCREF(m); }
-    PyRef(PyRef &&r) : m(r.get()) { r.scratch(); }
+    PyRef(PyRef &&r) noexcept : m(r.get()) { r.scratch(); }
 
     ~PyRef() { Py_XDECREF( m ); }
 

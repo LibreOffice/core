@@ -365,7 +365,7 @@ Region::Region(const basegfx::B2DPolyPolygon& rPolyPoly)
 
 Region::Region(const vcl::Region&) = default;
 
-Region::Region(vcl::Region&& rRegion)
+Region::Region(vcl::Region&& rRegion) noexcept
 :   mpB2DPolyPolygon(std::move(rRegion.mpB2DPolyPolygon)),
     mpPolyPolygon(std::move(rRegion.mpPolyPolygon)),
     mpRegionBand(std::move(rRegion.mpRegionBand)),
@@ -1425,7 +1425,7 @@ void vcl::Region::SetEmpty()
 
 Region& vcl::Region::operator=( const vcl::Region& ) = default;
 
-Region& vcl::Region::operator=( vcl::Region&& rRegion )
+Region& vcl::Region::operator=( vcl::Region&& rRegion ) noexcept
 {
     mpB2DPolyPolygon = std::move(rRegion.mpB2DPolyPolygon);
     mpPolyPolygon = std::move(rRegion.mpPolyPolygon);

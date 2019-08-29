@@ -307,7 +307,7 @@ public:
 
         @param rRef another reference
     */
-    inline Reference( Reference< interface_type > && rRef );
+    inline Reference( Reference< interface_type > && rRef ) noexcept;
 #endif
 
     /** Up-casting conversion constructor: Copies interface reference.

@@ -398,7 +398,7 @@ struct DbusConnectionHolder {
         connection(theConnection)
     {}
 
-    DbusConnectionHolder(DbusConnectionHolder && other): connection(nullptr)
+    DbusConnectionHolder(DbusConnectionHolder && other) noexcept : connection(nullptr)
     { std::swap(connection, other.connection); }
 
     ~DbusConnectionHolder() {
