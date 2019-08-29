@@ -1198,8 +1198,8 @@ void SmSymbolDialog::FillSymbolSets()
     m_xSymbolSets->clear();
     m_xSymbolSets->set_active(-1);
 
-    std::set< OUString >  aSybolSetNames( rSymbolMgr.GetSymbolSetNames() );
-    for (const auto& rSymbolSetName : aSybolSetNames)
+    std::set< OUString >  aSymbolSetNames( rSymbolMgr.GetSymbolSetNames() );
+    for (const auto& rSymbolSetName : aSymbolSetNames)
         m_xSymbolSets->append_text(rSymbolSetName);
 }
 
@@ -1624,7 +1624,7 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, weld::Button&, rButton, void )
     assert(&rButton == m_xChangeBtn.get() && "Sm : wrong argument");
     assert(m_xChangeBtn->get_sensitive() && "Sm : requirements met ??");
 
-    // get new Sybol to use
+    // get new Symbol to use
     //! get font from symbol-disp lay since charset-display does not keep
     //! the bold attribute.
     const SmSym aNewSymbol(m_xSymbols->get_active_text(), m_xCharsetDisplay->GetFont(),
