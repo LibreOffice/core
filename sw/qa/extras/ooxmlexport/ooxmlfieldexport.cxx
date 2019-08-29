@@ -651,7 +651,7 @@ DECLARE_OOXMLEXPORT_TEST(testToxmarkHyperlink, "toxmarkhyperlink.fodt")
 DECLARE_OOXMLEXPORT_TEST(testOO34469, "ooo34469-1.odt")
 {
     if (xmlDocPtr pXmlDoc = parseExport())
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink[1]", "anchor", "2.9.2.Creating New files|outline");
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink[1]", "anchor", "2.9.2.Creating_New_files|outline");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testOO39845, "ooo39845-7.odt")

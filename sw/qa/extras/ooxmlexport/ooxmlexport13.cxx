@@ -640,6 +640,17 @@ DECLARE_OOXMLEXPORT_TEST(tdf118169, "tdf118169.docx")
     CPPUNIT_ASSERT_EQUAL(OUString(u"őőőőőőőőőőőűűűű"), getProperty<OUString>(xPropertySet, "Label"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf127116, "tdf127116.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:bookmarkStart", "name");
+    OUString anchor = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:hyperlink", "anchor");
+    CPPUNIT_ASSERT_EQUAL(anchor, bookmarkName);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -128,8 +128,11 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo69548, "fdo69548.docx")
 {
+    if (!mbExported)
+        return;
+
     // The problem was that the last space in target URL was removed
-    CPPUNIT_ASSERT_EQUAL(OUString("#this is a bookmark"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
+    CPPUNIT_ASSERT_EQUAL(OUString("#this_is_a_bookmark"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testWpsOnly, "wps-only.docx")
