@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_eda58605",
+        "filename": "lingucomponent/source/hyphenator/hyphen/hyphenimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-29T08:43:17Z",
+      "side": 1,
+      "message": "No problem here, but it\u0027s redundant (the return type is deduced from the only return statement)...",
+      "range": {
+        "startLine": 152,
+        "startChar": 47,
+        "endLine": 152,
+        "endChar": 56
+      },
+      "revId": "c36d65831bfd45bb0ab9ab0a0473278f83fc89a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ed0fc6de",
+        "filename": "linguistic/source/gciterator.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-29T08:43:17Z",
+      "side": 1,
+      "message": "You move pDescriptors here, and it will be used below...",
+      "range": {
+        "startLine": 422,
+        "startChar": 56,
+        "endLine": 422,
+        "endChar": 71
+      },
+      "revId": "c36d65831bfd45bb0ab9ab0a0473278f83fc89a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ed5a66f1",
+        "filename": "linguistic/source/lngsvcmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-29T08:43:17Z",
+      "side": 1,
+      "message": "Why getArray, not getConstArray?",
+      "range": {
+        "startLine": 1170,
+        "startChar": 34,
+        "endLine": 1170,
+        "endChar": 44
+      },
+      "revId": "c36d65831bfd45bb0ab9ab0a0473278f83fc89a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_0d5ebae5",
+        "filename": "linguistic/source/lngsvcmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-29T08:43:17Z",
+      "side": 1,
+      "message": "And here",
+      "range": {
+        "startLine": 1203,
+        "startChar": 34,
+        "endLine": 1203,
+        "endChar": 42
+      },
+      "revId": "c36d65831bfd45bb0ab9ab0a0473278f83fc89a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ad746e69",
+        "filename": "linguistic/source/lngsvcmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1240,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-29T08:43:17Z",
+      "side": 1,
+      "message": "And here",
+      "range": {
+        "startLine": 1240,
+        "startChar": 34,
+        "endLine": 1240,
+        "endChar": 42
+      },
+      "revId": "c36d65831bfd45bb0ab9ab0a0473278f83fc89a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_cd6f6290",
+        "filename": "linguistic/source/lngsvcmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-29T08:43:17Z",
+      "side": 1,
+      "message": "And here",
+      "range": {
+        "startLine": 1277,
+        "startChar": 34,
+        "endLine": 1277,
+        "endChar": 42
+      },
+      "revId": "c36d65831bfd45bb0ab9ab0a0473278f83fc89a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ad4b0e29",
+        "filename": "linguistic/source/misc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-29T08:43:17Z",
+      "side": 1,
+      "message": "Can\u0027t we use\n\n    return comphelper::containerToSequence\u003csal_Int16\u003e(LocaleSeqToLangVec(rLocaleSeq));\n\n? I.e., the version of containerToSequence that explicitly sets output element type, and so allows to copy to different type? Or does it warn?",
+      "range": {
+        "startLine": 386,
+        "startChar": 4,
+        "endLine": 392,
+        "endChar": 51
+      },
+      "revId": "c36d65831bfd45bb0ab9ab0a0473278f83fc89a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
