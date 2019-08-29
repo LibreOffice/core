@@ -1193,8 +1193,9 @@ sal_Bool SAL_CALL SwXTextCursor::isStartOfWord()
 
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
+    // tdf#51611 - Changed WordType from DICTIONARY_WORD to ignore punctuations
     const bool bRet =
-        rUnoCursor.IsStartWordWT( i18n::WordType::DICTIONARY_WORD );
+        rUnoCursor.IsStartWordWT( i18n::WordType::ANYWORD_IGNOREWHITESPACES );
     return bRet;
 }
 
@@ -1204,8 +1205,9 @@ sal_Bool SAL_CALL SwXTextCursor::isEndOfWord()
 
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
+    // tdf#51611 - Changed WordType from DICTIONARY_WORD to ignore punctuations
     const bool bRet =
-        rUnoCursor.IsEndWordWT( i18n::WordType::DICTIONARY_WORD );
+        rUnoCursor.IsEndWordWT( i18n::WordType::ANYWORD_IGNOREWHITESPACES );
     return bRet;
 }
 
@@ -1234,8 +1236,9 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand)
     }
     else
     {
+        // tdf#51611 - Changed WordType from DICTIONARY_WORD to ignore punctuations
         const bool bTmp =
-            rUnoCursor.GoNextWordWT( i18n::WordType::DICTIONARY_WORD );
+            rUnoCursor.GoNextWordWT( i18n::WordType::ANYWORD_IGNOREWHITESPACES );
         // if there is no next word within the current paragraph
         // try to go to the start of the next paragraph
         if (!bTmp)
@@ -1277,7 +1280,8 @@ SwXTextCursor::gotoPreviousWord(sal_Bool Expand)
     }
     else
     {
-        rUnoCursor.GoPrevWordWT( i18n::WordType::DICTIONARY_WORD );
+        // tdf#51611 - Changed WordType from DICTIONARY_WORD to ignore punctuations
+        rUnoCursor.GoPrevWordWT(i18n::WordType::ANYWORD_IGNOREWHITESPACES);
         if (pPoint->nContent == 0)
         {
             rUnoCursor.Left(1);
@@ -1308,7 +1312,7 @@ SwXTextCursor::gotoEndOfWord(sal_Bool Expand)
     SwNode      &      rOldNode   = pPoint->nNode.GetNode();
     sal_Int32 const nOldIndex  = pPoint->nContent.GetIndex();
 
-    const sal_Int16 nWordType = i18n::WordType::DICTIONARY_WORD;
+    const sal_Int16 nWordType = i18n::WordType::ANYWORD_IGNOREWHITESPACES;
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     if (!rUnoCursor.IsEndWordWT( nWordType ))
     {
@@ -1344,7 +1348,8 @@ SwXTextCursor::gotoStartOfWord(sal_Bool Expand)
     SwNode      &      rOldNode   = pPoint->nNode.GetNode();
     sal_Int32 const nOldIndex  = pPoint->nContent.GetIndex();
 
-    const sal_Int16 nWordType = i18n::WordType::DICTIONARY_WORD;
+    // tdf#51611 - Changed WordType from DICTIONARY_WORD to ignore punctuations
+    const sal_Int16 nWordType = i18n::WordType::ANYWORD_IGNOREWHITESPACES;
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     if (!rUnoCursor.IsStartWordWT( nWordType ))
     {

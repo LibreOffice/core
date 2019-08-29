@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_HINTIDS_HXX
 
 #include <sal/types.h>
+#include <i18npool/reservedconstants.hxx>
 #include <svx/xdef.hxx>
 #include "swdllapi.h"
 #include <svl/typedwhich.hxx>
@@ -38,19 +39,11 @@ class SfxBoolItem;
 class SvxColorItem;
 class SvxLRSpaceItem;
 
-// For SwTextHints without end index the following char is added:
+// tdf#51611 - Moved special characters added by hints to i18npool/reservedconstants.hxx.
 
-#define CH_TXTATR_BREAKWORD     u'\x0001'
-#define CH_TXTATR_INWORD        u'\xFFF9'
 #define CH_TXTATR_TAB           u'\t'
 #define CH_TXTATR_NEWLINE       u'\n'
-#define CH_TXT_ATR_INPUTFIELDSTART u'\x0004'
-#define CH_TXT_ATR_INPUTFIELDEND u'\x0005'
 
-#define CH_TXT_ATR_FORMELEMENT u'\x0006'
-
-#define CH_TXT_ATR_FIELDSTART u'\x0007'
-#define CH_TXT_ATR_FIELDEND u'\x0008'
 #define CH_TXT_ATR_SUBST_FIELDSTART ("[")
 #define CH_TXT_ATR_SUBST_FIELDEND ("]")
 
