@@ -1210,7 +1210,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf81345_045Original,"tdf81345.docx")
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
 
-    xCursor->jumpToPage(2);
+    xCursor->jumpToLastPage();
     OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     CPPUNIT_ASSERT(pageStyleName != "Standard");
 
