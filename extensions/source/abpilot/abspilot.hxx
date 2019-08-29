@@ -29,7 +29,7 @@
 namespace abp
 {
 
-    typedef ::vcl::RoadmapWizard OAddressBookSourcePilot_Base;
+    typedef ::vcl::RoadmapWizardMachine OAddressBookSourcePilot_Base;
     class OAddressBookSourcePilot final : public OAddressBookSourcePilot_Base
     {
         css::uno::Reference< css::uno::XComponentContext >
@@ -42,8 +42,10 @@ namespace abp
     public:
         /// ctor
         OAddressBookSourcePilot(
-            vcl::Window* _pParent,
+            weld::Window* _pParent,
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+
+        virtual short run() override;
 
         /// get the service factory which was used to create the dialog
         const css::uno::Reference< css::uno::XComponentContext >&
@@ -69,10 +71,6 @@ namespace abp
 
         // RoadmapWizard
         virtual OUString            getStateDisplayName( WizardState _nState ) const override;
-
-        virtual bool    Close() override;
-
-        DECL_LINK( OnCancelClicked, Button*, void );
 
         /** creates a new data source of the type indicated by m_aSettings
             <p>If another data source has been created before, this one is deleted.</p>

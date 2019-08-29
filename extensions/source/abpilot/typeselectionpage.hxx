@@ -22,30 +22,28 @@
 
 #include "abspage.hxx"
 #include "addresssettings.hxx"
-#include <vcl/edit.hxx>
-#include <vcl/vclptr.hxx>
-
+#include <vcl/weld.hxx>
 
 namespace abp
 {
 
     class TypeSelectionPage final : public AddressBookSourcePage
     {
-        VclPtr<RadioButton> m_pEvolution;
-        VclPtr<RadioButton> m_pEvolutionGroupwise;
-        VclPtr<RadioButton> m_pEvolutionLdap;
-        VclPtr<RadioButton> m_pMORK;
-        VclPtr<RadioButton> m_pThunderbird;
-        VclPtr<RadioButton> m_pKab;
-        VclPtr<RadioButton> m_pMacab;
-        VclPtr<RadioButton> m_pOther;
+        std::unique_ptr<weld::RadioButton> m_xEvolution;
+        std::unique_ptr<weld::RadioButton> m_xEvolutionGroupwise;
+        std::unique_ptr<weld::RadioButton> m_xEvolutionLdap;
+        std::unique_ptr<weld::RadioButton> m_xMORK;
+        std::unique_ptr<weld::RadioButton> m_xThunderbird;
+        std::unique_ptr<weld::RadioButton> m_xKab;
+        std::unique_ptr<weld::RadioButton> m_xMacab;
+        std::unique_ptr<weld::RadioButton> m_xOther;
 
         struct ButtonItem {
-            VclPtr<RadioButton> m_pItem;
+            weld::RadioButton* m_pItem;
             AddressSourceType m_eType;
             bool         m_bVisible;
 
-            ButtonItem( RadioButton *pItem,
+            ButtonItem( weld::RadioButton *pItem,
                         AddressSourceType eType,
                         bool         bVisible ) :
                     m_pItem( pItem ),
@@ -57,7 +55,7 @@ namespace abp
         std::vector< ButtonItem > m_aAllTypes;
 
     public:
-        explicit TypeSelectionPage( OAddressBookSourcePilot* _pParent );
+        explicit TypeSelectionPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent);
         virtual ~TypeSelectionPage() override;
         virtual void        dispose() override;
 
@@ -76,7 +74,7 @@ namespace abp
         // OImportPage overridables
         virtual bool        canAdvance() const override;
 
-        DECL_LINK( OnTypeSelected, Button*, void );
+        DECL_LINK( OnTypeSelected, weld::Button&, void );
 
         void                selectType( AddressSourceType _eType );
     };

@@ -31,19 +31,17 @@ namespace abp
     using namespace ::com::sun::star::sdbc;
 
     // TypeSelectionPage
-    TypeSelectionPage::TypeSelectionPage( OAddressBookSourcePilot* _pParent )
-      : AddressBookSourcePage(_pParent, "SelectTypePage",
-          "modules/sabpilot/ui/selecttypepage.ui")
+    TypeSelectionPage::TypeSelectionPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent)
+      : AddressBookSourcePage(pDialog, pPageParent, "modules/sabpilot/ui/selecttypepage.ui", "SelectTypePage")
+      , m_xEvolution(m_xBuilder->weld_radio_button("evolution"))
+      , m_xEvolutionGroupwise(m_xBuilder->weld_radio_button("groupwise"))
+      , m_xEvolutionLdap(m_xBuilder->weld_radio_button("evoldap"))
+      , m_xMORK(m_xBuilder->weld_radio_button("firefox"))
+      , m_xThunderbird(m_xBuilder->weld_radio_button("thunderbird"))
+      , m_xKab(m_xBuilder->weld_radio_button("kde"))
+      , m_xMacab(m_xBuilder->weld_radio_button("macosx"))
+      , m_xOther(m_xBuilder->weld_radio_button("other"))
     {
-        get(m_pEvolution, "evolution");
-        get(m_pEvolutionGroupwise, "groupwise");
-        get(m_pEvolutionLdap, "evoldap");
-        get(m_pMORK, "firefox");
-        get(m_pThunderbird, "thunderbird");
-        get(m_pKab, "kde");
-        get(m_pMacab, "macosx");
-        get(m_pOther, "other");
-
         //TODO:  For now, try to keep offering the same choices like before the
         // Mozilla/MORK cleanup, even if the status of what driver actually
         // provides which functionality is somewhat unclear, see the discussions
@@ -71,7 +69,7 @@ namespace abp
         bool bHaveKab = false;
         bool bHaveMacab = false;
 
-        Reference< XDriverManager2 > xManager = DriverManager::create( _pParent->getORB() );
+        Reference< XDriverManager2 > xManager = DriverManager::create( pDialog->getORB() );
 
         try
         {
@@ -112,28 +110,27 @@ namespace abp
 #endif
 
         // Items are displayed in list order
-        m_aAllTypes.push_back( ButtonItem( m_pEvolution, AST_EVOLUTION, bHaveEvolution ) );
-        m_aAllTypes.push_back( ButtonItem( m_pEvolutionGroupwise, AST_EVOLUTION_GROUPWISE, bHaveEvolution ) );
-        m_aAllTypes.push_back( ButtonItem( m_pEvolutionLdap, AST_EVOLUTION_LDAP, bHaveEvolution ) );
-        m_aAllTypes.push_back( ButtonItem( m_pMORK, AST_MORK, true ) );
-        m_aAllTypes.push_back( ButtonItem( m_pThunderbird, AST_THUNDERBIRD, true ) );
-        m_aAllTypes.push_back( ButtonItem( m_pKab, AST_KAB, bHaveKab ) );
-        m_aAllTypes.push_back( ButtonItem( m_pMacab, AST_MACAB, bHaveMacab ) );
-        m_aAllTypes.push_back( ButtonItem( m_pOther, AST_OTHER, true ) );
+        m_aAllTypes.push_back( ButtonItem( m_xEvolution.get(), AST_EVOLUTION, bHaveEvolution ) );
+        m_aAllTypes.push_back( ButtonItem( m_xEvolutionGroupwise.get(), AST_EVOLUTION_GROUPWISE, bHaveEvolution ) );
+        m_aAllTypes.push_back( ButtonItem( m_xEvolutionLdap.get(), AST_EVOLUTION_LDAP, bHaveEvolution ) );
+        m_aAllTypes.push_back( ButtonItem( m_xMORK.get(), AST_MORK, true ) );
+        m_aAllTypes.push_back( ButtonItem( m_xThunderbird.get(), AST_THUNDERBIRD, true ) );
+        m_aAllTypes.push_back( ButtonItem( m_xKab.get(), AST_KAB, bHaveKab ) );
+        m_aAllTypes.push_back( ButtonItem( m_xMacab.get(), AST_MACAB, bHaveMacab ) );
+        m_aAllTypes.push_back( ButtonItem( m_xOther.get(), AST_OTHER, true ) );
 
-        Link<Button*,void> aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
+        Link<weld::Button&,void> aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
         for (auto const& elem : m_aAllTypes)
         {
             if (!elem.m_bVisible)
-                elem.m_pItem->Hide();
+                elem.m_pItem->hide();
             else
             {
-                elem.m_pItem->SetClickHdl( aTypeSelectionHandler );
-                elem.m_pItem->Show();
+                elem.m_pItem->connect_clicked( aTypeSelectionHandler );
+                elem.m_pItem->show();
             }
         }
     }
-
 
     TypeSelectionPage::~TypeSelectionPage()
     {
@@ -146,17 +143,8 @@ namespace abp
         {
             elem.m_bVisible = false;
         }
-        m_pEvolution.clear();
-        m_pEvolutionGroupwise.clear();
-        m_pEvolutionLdap.clear();
-        m_pMORK.clear();
-        m_pThunderbird.clear();
-        m_pKab.clear();
-        m_pMacab.clear();
-        m_pOther.clear();
         AddressBookSourcePage::dispose();
     }
-
 
     void TypeSelectionPage::ActivatePage()
     {
@@ -164,9 +152,9 @@ namespace abp
 
         for (auto const& elem : m_aAllTypes)
         {
-            if( elem.m_pItem->IsChecked() && elem.m_bVisible )
+            if( elem.m_pItem->get_active() && elem.m_bVisible )
             {
-                elem.m_pItem->GrabFocus();
+                elem.m_pItem->grab_focus();
                 break;
             }
         }
@@ -174,34 +162,30 @@ namespace abp
         getDialog()->enableButtons(WizardButtonFlags::PREVIOUS, false);
     }
 
-
     void TypeSelectionPage::DeactivatePage()
     {
         AddressBookSourcePage::DeactivatePage();
         getDialog()->enableButtons(WizardButtonFlags::PREVIOUS, true);
     }
 
-
     void TypeSelectionPage::selectType( AddressSourceType _eType )
     {
         for (auto const& elem : m_aAllTypes)
         {
-            elem.m_pItem->Check( _eType == elem.m_eType );
+            elem.m_pItem->set_active( _eType == elem.m_eType );
         }
     }
-
 
     AddressSourceType TypeSelectionPage::getSelectedType() const
     {
         for (auto const& elem : m_aAllTypes)
         {
-            if ( elem.m_pItem->IsChecked() && elem.m_bVisible )
+            if ( elem.m_pItem->get_active() && elem.m_bVisible )
                 return elem.m_eType;
         }
 
         return AST_INVALID;
     }
-
 
     void TypeSelectionPage::initializePage()
     {
@@ -211,7 +195,6 @@ namespace abp
         selectType(rSettings.eType);
     }
 
-
     bool TypeSelectionPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {
         if (!AddressBookSourcePage::commitPage(_eReason))
@@ -219,7 +202,7 @@ namespace abp
 
         if (AST_INVALID == getSelectedType( ))
         {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xContainer.get(),
                                                       VclMessageType::Warning, VclButtonsType::Ok,
                                                       compmodule::ModuleRes(RID_STR_NEEDTYPESELECTION)));
             xBox->run();
@@ -240,7 +223,7 @@ namespace abp
     }
 
 
-    IMPL_LINK_NOARG( TypeSelectionPage, OnTypeSelected, Button*, void )
+    IMPL_LINK_NOARG( TypeSelectionPage, OnTypeSelected, weld::Button&, void )
     {
         getDialog()->typeSelectionChanged( getSelectedType() );
         updateDialogTravelUI();

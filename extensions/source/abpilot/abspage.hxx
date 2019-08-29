@@ -38,19 +38,22 @@ namespace abp
     /// the base class for all tab pages in the address book source wizard
     class AddressBookSourcePage : public AddressBookSourcePage_Base
     {
+        OAddressBookSourcePilot* m_pDialog;
+
     protected:
-        AddressBookSourcePage(OAddressBookSourcePilot *pParent, const OString& rID, const OUString& rUIXMLDescription);
+        AddressBookSourcePage(OAddressBookSourcePilot *pParent, TabPageParent pPageParent, const OUString& rUIXMLDescription, const OString& rID);
 
     protected:
         // helper
         OAddressBookSourcePilot* getDialog();
-        const OAddressBookSourcePilot*   getDialog() const;
+        const OAddressBookSourcePilot* getDialog() const;
         const css::uno::Reference< css::uno::XComponentContext > &
                                 getORB();
         AddressSettings&        getSettings();
         const AddressSettings&  getSettings() const;
 
         // TabDialog overridables
+        virtual void        ActivatePage() override;
         virtual void        DeactivatePage() override;
     };
 
