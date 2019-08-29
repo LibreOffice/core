@@ -80,12 +80,12 @@ auto IDocumentMarkAccess::iterator::operator=(iterator const& rOther) -> iterato
     return *this;
 }
 
-IDocumentMarkAccess::iterator::iterator(iterator && rOther)
+IDocumentMarkAccess::iterator::iterator(iterator && rOther) noexcept
     : m_pIter(std::move(rOther.m_pIter))
 {
 }
 
-auto IDocumentMarkAccess::iterator::operator=(iterator && rOther) -> iterator&
+auto IDocumentMarkAccess::iterator::operator=(iterator && rOther) noexcept -> iterator&
 {
     m_pIter = std::move(rOther.m_pIter);
     return *this;

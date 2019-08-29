@@ -778,7 +778,7 @@ protected:
 public:
     SfxObjectShellLock() { pObj = nullptr; }
     inline               SfxObjectShellLock( const SfxObjectShellLock & rObj );
-    inline               SfxObjectShellLock( SfxObjectShellLock && rObj );
+    inline               SfxObjectShellLock( SfxObjectShellLock && rObj ) noexcept;
     inline               SfxObjectShellLock( SfxObjectShell * pObjP );
     inline void          Clear();
     inline               ~SfxObjectShellLock();
@@ -797,7 +797,7 @@ inline SfxObjectShellLock::SfxObjectShellLock( const SfxObjectShellLock & rObj )
     if( pObj )
         pObj->OwnerLock( true );
 }
-inline SfxObjectShellLock::SfxObjectShellLock( SfxObjectShellLock && rObj )
+inline SfxObjectShellLock::SfxObjectShellLock( SfxObjectShellLock && rObj ) noexcept
 {
     pObj = rObj.pObj;
     rObj.pObj = nullptr;

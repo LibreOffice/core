@@ -77,7 +77,7 @@ public:
 #ifdef LIBO_INTERNAL_ONLY
     /** Move constructor...
      */
-    Reference (Reference<reference_type> && handle)
+    Reference (Reference<reference_type> && handle) noexcept
         : m_pBody (handle.m_pBody)
     {
         handle.m_pBody = nullptr;

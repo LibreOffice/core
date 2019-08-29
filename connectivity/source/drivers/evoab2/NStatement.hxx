@@ -82,7 +82,7 @@ namespace connectivity
                 if (mpQuery)
                     e_book_query_ref(mpQuery);
             }
-            EBookQueryWrapper(EBookQueryWrapper&& rhs)
+            EBookQueryWrapper(EBookQueryWrapper&& rhs) noexcept
                 : mpQuery(rhs.mpQuery)
             {
                 rhs.mpQuery = nullptr;

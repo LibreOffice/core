@@ -41,7 +41,7 @@ inline ByteSequence::ByteSequence( const ByteSequence & rSeq )
 }
 
 #if defined LIBO_INTERNAL_ONLY
-inline ByteSequence::ByteSequence( ByteSequence && rSeq )
+inline ByteSequence::ByteSequence( ByteSequence && rSeq ) noexcept
     : _pSequence(rSeq._pSequence)
 {
     rSeq._pSequence = nullptr;
@@ -95,7 +95,7 @@ inline ByteSequence & ByteSequence::operator = ( const ByteSequence & rSeq )
 }
 
 #if defined LIBO_INTERNAL_ONLY
-inline ByteSequence & ByteSequence::operator = ( ByteSequence && rSeq )
+inline ByteSequence & ByteSequence::operator = ( ByteSequence && rSeq ) noexcept
 {
     ::rtl_byte_sequence_release(_pSequence);
     _pSequence = rSeq._pSequence;

@@ -307,7 +307,7 @@ public:
 
         @param rRef another reference
     */
-    inline Reference( Reference< interface_type > && rRef );
+    inline Reference( Reference< interface_type > && rRef ) noexcept;
 #endif
 
     /** Up-casting conversion constructor: Copies interface reference.
@@ -586,7 +586,7 @@ public:
         @param rRef an interface reference
         @return this reference
     */
-    inline Reference< interface_type > & SAL_CALL operator = ( Reference< interface_type > && rRef );
+    inline Reference< interface_type > & SAL_CALL operator = ( Reference< interface_type > && rRef ) noexcept;
 #endif
     /** Queries given interface reference for type interface_type.
 

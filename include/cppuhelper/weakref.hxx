@@ -64,7 +64,7 @@ public:
     WeakReferenceHelper( const WeakReferenceHelper & rWeakRef );
 
 #if defined LIBO_INTERNAL_ONLY
-    WeakReferenceHelper(WeakReferenceHelper && other): m_pImpl(other.m_pImpl)
+    WeakReferenceHelper(WeakReferenceHelper && other) noexcept : m_pImpl(other.m_pImpl)
     { other.m_pImpl = nullptr; }
 #endif
 
