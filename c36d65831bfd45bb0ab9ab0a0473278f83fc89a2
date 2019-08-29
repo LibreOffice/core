@@ -160,6 +160,30 @@
       "revId": "c36d65831bfd45bb0ab9ab0a0473278f83fc89a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_48d6e051",
+        "filename": "linguistic/source/misc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-08-29T22:16:23Z",
+      "side": 1,
+      "message": "Can\u0027t convert LanguageType which is o3tl::strong_int\u003csal_uInt16, ...\u003e to sal_Int16.",
+      "parentUuid": "bf659307_ad4b0e29",
+      "range": {
+        "startLine": 386,
+        "startChar": 4,
+        "endLine": 392,
+        "endChar": 51
+      },
+      "revId": "c36d65831bfd45bb0ab9ab0a0473278f83fc89a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
