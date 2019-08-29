@@ -75,9 +75,9 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
     switch (rWordType) {
         case WordType::ANYWORD_IGNOREWHITESPACES:
             if (bDirection)
-                while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch))) nPos=pos;
+                while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch) || ch == 0x0001)) nPos=pos;
             else
-                while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch))) nPos=pos;
+                while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch)  || ch == 0x0001)) nPos=pos;
             break;
         case WordType::DICTIONARY_WORD:
             if (bDirection)
@@ -89,9 +89,9 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
             break;
         case WordType::WORD_COUNT:
             if (bDirection)
-                while (nPos < len && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch))) nPos=pos;
+                while (nPos < len && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch) || ch == 0x0001)) nPos=pos;
             else
-                while (nPos > 0 && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch))) nPos=pos;
+                while (nPos > 0 && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch) || ch == 0x0001)) nPos=pos;
             break;
     }
     return nPos;
