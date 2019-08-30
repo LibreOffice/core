@@ -17,4 +17,6 @@ $(eval $(call gb_Executable_add_exception_objects,python,\
     pyuno/zipcore/python \
 ))
 
+$(eval $(call gb_Executable_add_default_nativeres,python))
+
 # vim:set noet sw=4 ts=4:

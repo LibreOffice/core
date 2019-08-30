@@ -30,4 +30,6 @@ $(eval $(call gb_Executable_use_system_win32_libs,twain32shim,\
     shell32 \
 ))
 
+$(eval $(call gb_Executable_add_default_nativeres,twain32shim))
+
 # vim:set noet sw=4 ts=4:

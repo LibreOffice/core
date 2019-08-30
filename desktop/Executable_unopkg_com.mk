@@ -15,4 +15,6 @@ $(eval $(call gb_Executable_add_exception_objects,unopkg_com,\
     desktop/win32/source/guistdio/unopkgio \
 ))
 
+$(eval $(call gb_Executable_add_default_nativeres,unopkg_com))
+
 # vim: set ts=4 sw=4 et:

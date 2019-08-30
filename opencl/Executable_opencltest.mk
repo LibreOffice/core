@@ -27,4 +27,6 @@ $(eval $(call gb_Executable_use_libraries,opencltest,\
     sal \
 ))
 
+$(eval $(call gb_Executable_add_default_nativeres,opencltest))
+
 # vim: set noet sw=4 ts=4:
