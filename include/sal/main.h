@@ -33,6 +33,13 @@
 extern "C" {
 #endif
 
+#if defined LIBO_INTERNAL_ONLY && defined __cplusplus
+// Special token for sal_detail_initialize argc parameter, used by the soffice.bin process to tell
+// SAL that it is running as part of that process (see sal/osl/unx/soffice.hxx); argv should be null
+// in such a sal_detail_initialize call:
+namespace sal::detail { constexpr int InitializeSoffice = -1; }
+#endif
+
 SAL_DLLPUBLIC void SAL_CALL sal_detail_initialize(int argc, char ** argv);
 SAL_DLLPUBLIC void SAL_CALL sal_detail_deinitialize(void);
 

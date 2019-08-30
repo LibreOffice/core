@@ -32,6 +32,10 @@ extern "C" {
 
 void sal_detail_initialize(int argc, char ** argv)
 {
+    if (argc == sal::detail::InitializeSoffice)
+    {
+        return;
+    }
     sal_initGlobalTimer();
 #ifndef _WIN64
     SetProcessDEPPolicy(PROCESS_DEP_ENABLE);

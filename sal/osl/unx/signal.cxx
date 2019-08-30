@@ -23,6 +23,7 @@
 
 #include <config_features.h>
 
+#include "soffice.hxx"
 /* system headers */
 #include "system.hxx"
 
@@ -54,8 +55,6 @@
 
 #include <osl/diagnose.h>
 #include <osl/signal.h>
-#include <osl/process.h>
-#include <osl/thread.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <rtl/bootstrap.h>
@@ -155,41 +154,6 @@ bool bSetILLHandler = false;
 
 void signalHandlerFunction(int, siginfo_t *, void *);
 
-void getExecutableName_Impl (rtl_String ** ppstrProgName)
-{
-    rtl_uString* ustrProgFile = nullptr;
-    osl_getExecutableFile (&ustrProgFile);
-    if (ustrProgFile)
-    {
-        rtl_uString * ustrProgName = nullptr;
-        osl_systemPathGetFileNameOrLastDirectoryPart (ustrProgFile, &ustrProgName);
-        if (ustrProgName != nullptr)
-        {
-            rtl_uString2String (
-                ppstrProgName,
-                rtl_uString_getStr (ustrProgName), rtl_uString_getLength (ustrProgName),
-                osl_getThreadTextEncoding(),
-                OUSTRING_TO_OSTRING_CVTFLAGS);
-            rtl_uString_release (ustrProgName);
-        }
-        rtl_uString_release (ustrProgFile);
-    }
-}
-
-bool is_soffice_Impl()
-{
-    sal_Int32 idx = -1;
-    rtl_String* strProgName = nullptr;
-
-    getExecutableName_Impl (&strProgName);
-    if (strProgName)
-    {
-        idx = rtl_str_indexOfStr (rtl_string_getStr (strProgName), "soffice");
-        rtl_string_release (strProgName);
-    }
-    return (idx != -1);
-}
-
 #if HAVE_FEATURE_BREAKPAD
 bool is_unset_signal(int signal)
 {
@@ -208,7 +172,7 @@ bool is_unset_signal(int signal)
 
 bool onInitSignal()
 {
-    if (is_soffice_Impl())
+    if (sal::detail::isSoffice())
     {
         // WORKAROUND FOR SEGV HANDLER CONFLICT
         //
