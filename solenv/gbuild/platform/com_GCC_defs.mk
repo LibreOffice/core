@@ -103,6 +103,10 @@ gb_CXXFLAGS_COMMON += -ffunction-sections -fdata-sections
 gb_LinkTarget_LDFLAGS += -Wl,--gc-sections
 endif
 
+ifneq ($(ATOMIC_LIB),)
+gb_LinkTarget_LDFLAGS += -Wl,-no-as-needed $(ATOMIC_LIB) -Wl,--as-needed
+endif
+
 ifeq ($(COM_IS_CLANG),TRUE)
 gb_CXXFLAGS_COMMON += -Wimplicit-fallthrough
 else

@@ -1232,8 +1232,14 @@ libo_FUZZ_ARG_ENABLE(cairo-canvas,
 libo_FUZZ_ARG_ENABLE(dbus,
     AS_HELP_STRING([--disable-dbus],
         [Determines whether to enable features that depend on dbus.
-         e.g. Presentation mode screensaver control, bluetooth presentation control, automatic font install]),
+         e.g. Presentation mode screensaver control, bluetooth presentation control]),
 ,test "${enable_dbus+set}" = set || enable_dbus=yes)
+
+AC_ARG_ENABLE(packagekit,
+    AS_HELP_STRING([--enable-packagekit],
+        [Determines whether to enable features using packagekit.
+         Right now that is auto font install]),
+,)
 
 libo_FUZZ_ARG_ENABLE(sdremote,
     AS_HELP_STRING([--disable-sdremote],
@@ -2022,6 +2028,11 @@ AC_ARG_WITH(bffvalidator,
          See https://www.microsoft.com/en-us/download/details.aspx?id=26794]),
 ,with_bffvalidator=no)
 
+libo_FUZZ_ARG_WITH(cppunit,
+    AS_HELP_STRING([--without-cppunit>],
+        [disable building(!) of cppunit stuff also built during make build]),
+,with_cppunit=yes)
+
 libo_FUZZ_ARG_WITH(junit,
     AS_HELP_STRING([--with-junit=<absolute path to JUnit 4 jar>],
         [Specifies the JUnit 4 jar file to use for JUnit-based tests.
@@ -2048,6 +2059,18 @@ libo_FUZZ_ARG_WITH(doxygen,
          documentation. --without-doxygen disables generation of ODK C/C++
          documentation. Not relevant in the --disable-odk case.]),
 ,with_doxygen=yes)
+
+AC_ARG_WITH(
+    [javadoc],
+    AS_HELP_STRING(
+        [--with-javadoc],
+        [Specifies the javadoc executable to use when generating ODK Java
+         documentation. --without-javadoc disables generation of ODK Java
+         documentation. Not relevant in the --disable-odk case.])
+    [
+                          Usage:     --with-javadoc=<absolute path to doxygen executable>
+    ],,
+    [with_javadoc=yes])
 
 AC_ARG_WITH(visual-studio,
     AS_HELP_STRING([--with-visual-studio=<2017>],
@@ -4151,6 +4174,9 @@ fi
 if test "$enable_symbols" = yes; then
     ENABLE_SYMBOLS_FOR=all
     AC_MSG_RESULT([yes])
+elif test "$enable_symbols" = "SMALL" -o "$enable_symbols" = "small"; then
+    ENABLE_SYMBOLS_FOR=all
+    AC_MSG_RESULT([yes, small ones])
 elif test "$enable_symbols" = no; then
     ENABLE_SYMBOLS_FOR=
     AC_MSG_RESULT([no])
@@ -4159,6 +4185,7 @@ else
     ENABLE_SYMBOLS_FOR="$enable_symbols"
     AC_MSG_RESULT([for "$enable_symbols"])
 fi
+AC_SUBST(enable_symbols)
 AC_SUBST(ENABLE_SYMBOLS_FOR)
 
 if test -n "$with_android_ndk" -a \( -n "$ENABLE_SYMBOLS" -o -n "$ENABLE_DEBUG" -o -n "$ENABLE_DBGUTIL" \) -a "$ENABLE_DEBUGINFO_FOR" = "all"; then
@@ -6215,6 +6242,10 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     else
         AC_MSG_RESULT([no])
     fi
+    if test "$GCC" = "yes"; then
+      CHECK_L_ATOMIC
+      AC_SUBST(ATOMIC_LIB)
+    fi
 
     AC_MSG_CHECKING([whether $CC_BASE supports __builtin_ffs])
     AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return __builtin_ffs(1); ]])],[HAVE_GCC_BUILTIN_FFS=TRUE],[])
@@ -7204,7 +7235,7 @@ if test "$ENABLE_JAVA" != ""; then
         JAVAINTERPRETER=`win_short_path_for_make "$JAVAINTERPRETER"`
     elif test "$cross_compiling" != "yes"; then
         case $CPUNAME in
-            AARCH64|AXP|X86_64|HPPA|IA64|POWERPC64|S390X|SPARC64|GODSON64)
+            AARCH64|AXP|X86_64|IA64|POWERPC64|S390X|SPARC64|GODSON64)
                 if test -f "$JAVAINTERPRETER" -a "`$JAVAINTERPRETER -version 2>&1 | $GREP -i 64-bit`" = "" >/dev/null; then
                     AC_MSG_WARN([You are building 64-bit binaries but the JDK $JAVAINTERPRETER is 32-bit])
                     AC_MSG_ERROR([You should pass the --with-jdk-home option pointing to a 64-bit JDK])
@@ -7280,8 +7311,17 @@ you must use the "--with-jdk-home" configure option explicitly])
 
             # set to limit VM usage for JunitTests
             JAVAIFLAGS=-Xmx64M
+            JAVAIFLAGS="$JAVAIFLAGS -Djdk.net.URLClassPath.disableClassPathURLCheck=true"
             # set to limit VM usage for javac
             JAVAFLAGS=-J-Xmx128M
+
+            AC_MSG_CHECKING([whether $JAVAINTERPRETER is using the Zero VM])
+	    if $JAVAINTERPRETER -version 2>&1 | grep -q Zero; then
+		JAVA_HAS_ZERO_VM=y
+               AC_MSG_RESULT([yes])
+           else
+               AC_MSG_RESULT([no])
+            fi
         fi
     else
         AC_MSG_ERROR([Java not found. You need at least JDK 8])
@@ -7291,6 +7331,7 @@ else
     JAVA_HOME=
     export JAVA_HOME
 fi
+AC_SUBST(JAVA_HAS_ZERO_VM)
 
 dnl ===================================================================
 dnl Checks for javac
@@ -7322,33 +7363,43 @@ fi
 dnl ===================================================================
 dnl Checks for javadoc
 dnl ===================================================================
-if test "$ENABLE_JAVA" != ""; then
+if test "$ENABLE_JAVA" != "" -a "$enable_odk" != no; then
     if test -z "$with_jdk_home"; then
         AC_PATH_PROG(JAVADOC, javadoc)
     else
-        _javadoc_path="$with_jdk_home/bin/javadoc"
-        dnl Check if there is a javadoc at all.
-        if test -x "$_javadoc_path"; then
-            JAVADOC=$_javadoc_path
-        else
-            AC_PATH_PROG(JAVADOC, javadoc)
-        fi
-    fi
-    if test -z "$JAVADOC"; then
-        AC_MSG_ERROR([$_javadoc_path not found set with_jdk_home])
-    fi
-    if test "$build_os" = "cygwin"; then
-        if test x`echo "$JAVADOC" | $GREP -i '\.exe$'` = x; then
-            JAVADOC="${JAVADOC}.exe"
-        fi
-        JAVADOC=`win_short_path_for_make "$JAVADOC"`
-    fi
+        if test "$with_javadoc" = "yes"; then
+            _javadoc_path="$with_jdk_home/bin/javadoc"
+            dnl Check if there is a javadoc at all.
+            if test -x "$_javadoc_path"; then
+                JAVADOC=$_javadoc_path
+            else
+                AC_PATH_PROG(JAVADOC, javadoc)
+            fi
+            if test -z "$JAVADOC"; then
+                AC_MSG_ERROR([$_javadoc_path not found set with_jdk_home])
+            fi
+            if test "$build_os" = "cygwin"; then
+                if test x`echo "$JAVADOC" | $GREP -i '\.exe$'` = x; then
+                    JAVADOC="${JAVADOC}.exe"
+                fi
+                JAVADOC=`win_short_path_for_make "$JAVADOC"`
+            fi
 
-    if test `$JAVADOC --version 2>&1 | $GREP -c "gjdoc"` -gt 0; then
-    JAVADOCISGJDOC="yes"
+            if test `$JAVADOC --version 2>&1 | $GREP -c "gjdoc"` -gt 0; then
+            JAVADOCISGJDOC="yes"
+            fi
+        else
+	    unset JAVADOC
+	fi
     fi
+else
+    unset JAVADOC
 fi
 AC_SUBST(JAVADOCISGJDOC)
+
+if test "$JAVADOCISGJDOC" = "yes"; then
+	unset JAVADOC
+fi
 
 if test "$ENABLE_JAVA" != ""; then
     # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
@@ -8364,8 +8415,12 @@ dnl ===================================================================
 dnl Check for system cppunit
 dnl ===================================================================
 if test "$_os" != "Android" ; then
+  if test "$with_cppunit" != "no"; then
     libo_CHECK_SYSTEM_MODULE([cppunit],[CPPUNIT],[cppunit >= 1.14.0])
+    ENABLE_CPPUNIT=TRUE
+  fi
 fi
+AC_SUBST(ENABLE_CPPUNIT)
 
 dnl ===================================================================
 dnl Check whether freetype is available
@@ -9839,67 +9894,6 @@ else
 fi
 
 dnl ===================================================================
-dnl Check for system openssl
-dnl ===================================================================
-DISABLE_OPENSSL=
-AC_MSG_CHECKING([whether to disable OpenSSL usage])
-if test "$enable_openssl" = "yes"; then
-    AC_MSG_RESULT([no])
-    if test "$_os" = Darwin ; then
-        # OpenSSL is deprecated when building for 10.7 or later.
-        #
-        # http://stackoverflow.com/questions/7406946/why-is-apple-deprecating-openssl-in-macos-10-7-lion
-        # http://stackoverflow.com/questions/7475914/libcrypto-deprecated-on-mac-os-x-10-7-lion
-
-        with_system_openssl=no
-        libo_CHECK_SYSTEM_MODULE([openssl],[OPENSSL],[openssl])
-    elif test "$_os" = "NetBSD" -o "$_os" = "OpenBSD" -o "$_os" = "DragonFly" \
-            && test "$with_system_openssl" != "no"; then
-        with_system_openssl=yes
-        SYSTEM_OPENSSL=TRUE
-        OPENSSL_CFLAGS=
-        OPENSSL_LIBS="-lssl -lcrypto"
-    else
-        libo_CHECK_SYSTEM_MODULE([openssl],[OPENSSL],[openssl])
-    fi
-    if test "$with_system_openssl" = "yes"; then
-        AC_MSG_CHECKING([whether openssl supports SHA512])
-        AC_LANG_PUSH([C])
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <openssl/sha.h>]],[[
-            SHA512_CTX context;
-]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no, openssl too old. Need >= 0.9.8.])])
-        AC_LANG_POP(C)
-    fi
-else
-    AC_MSG_RESULT([yes])
-    DISABLE_OPENSSL=TRUE
-
-    # warn that although OpenSSL is disabled, system libraries may depend on it
-    AC_MSG_WARN([OpenSSL has been disabled. No code compiled here will make use of it but system libraries may create indirect dependencies])
-    add_warning "OpenSSL has been disabled. No code compiled here will make use of it but system libraries may create indirect dependencies"
-fi
-
-AC_SUBST([DISABLE_OPENSSL])
-
-if test "$enable_cipher_openssl_backend" = yes && test "$DISABLE_OPENSSL" = TRUE; then
-    if test "$libo_fuzzed_enable_cipher_openssl_backend" = yes; then
-        AC_MSG_NOTICE([Resetting --enable-cipher-openssl-backend=no])
-        enable_cipher_openssl_backend=no
-    else
-        AC_MSG_ERROR([--enable-cipher-openssl-backend needs OpenSSL, but --disable-openssl was given.])
-    fi
-fi
-AC_MSG_CHECKING([whether to enable the OpenSSL backend for rtl/cipher.h])
-ENABLE_CIPHER_OPENSSL_BACKEND=
-if test "$enable_cipher_openssl_backend" = yes; then
-    AC_MSG_RESULT([yes])
-    ENABLE_CIPHER_OPENSSL_BACKEND=TRUE
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST([ENABLE_CIPHER_OPENSSL_BACKEND])
-
-dnl ===================================================================
 dnl Check for building gnutls
 dnl ===================================================================
 AC_MSG_CHECKING([whether to use gnutls])
@@ -10121,8 +10115,9 @@ if test "$ENABLE_LPSOLVE" = TRUE; then
         # some systems need this. Like Ubuntu....
         AC_CHECK_LIB(m, floor)
         AC_CHECK_LIB(dl, dlopen)
+        AC_CHECK_LIB(colamd, colamd)
         AC_CHECK_LIB([lpsolve55], [make_lp], [:],
-            [ AC_MSG_ERROR(lpsolve library not found or too old.)], [])
+            [ AC_MSG_ERROR(lpsolve library not found or too old.)], [-L/usr/lib/lp_solve])
         LIBS=$save_LIBS
     else
         AC_MSG_RESULT([internal])
@@ -10530,6 +10525,20 @@ AC_SUBST(DBUS_GLIB_CFLAGS)
 AC_SUBST(DBUS_GLIB_LIBS)
 AC_SUBST(DBUS_HAVE_GLIB)
 
+AC_MSG_CHECKING([whether to enable font install via packagekit])
+if test "$ENABLE_DBUS" = "TRUE"; then
+    if test -n "$enable_packagekit" -a "$enable_packagekit" != "no"; then
+        ENABLE_PACKAGEKIT=TRUE
+        AC_MSG_RESULT([yes])
+    else
+        ENABLE_PACKAGEKIT=
+        AC_MSG_RESULT([no])
+    fi
+else
+    AC_MSG_RESULT([no, dbus disabled.])
+fi
+AC_SUBST(ENABLE_PACKAGEKIT)
+
 AC_MSG_CHECKING([whether to enable Impress remote control])
 if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
     AC_MSG_RESULT([yes])
@@ -10725,6 +10734,11 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_VLC)
+
+if test -x /usr/bin/dpkg-buildflags; then
+       HARDEN_CPPFLAGS=`dpkg-buildflags --get CPPFLAGS 2>/dev/null`
+fi
+AC_SUBST(HARDEN_CPPFLAGS)
 
 ENABLE_OPENGL_TRANSITIONS=
 ENABLE_OPENGL_CANVAS=
@@ -12710,6 +12724,9 @@ else
 fi
 
 AC_SUBST(ENABLE_FORMULA_LOGGER)
+
+CDEFAULTOPT=`echo $CFLAGS 2>/dev/null | grep -E -o "\-O[[0-3]]"`
+AC_SUBST(CDEFAULTOPT)
 
 dnl ===================================================================
 dnl Setting up the environment.
