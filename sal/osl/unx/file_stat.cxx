@@ -103,10 +103,10 @@ namespace
     {
         pStat->uValidFields |= osl_FileStatus_Mask_Attributes;
 
-        if (access_u(file_path.pData, W_OK) < 0)
+        if (osl::access(file_path, W_OK) < 0)
             pStat->uAttributes |= osl_File_Attribute_ReadOnly;
 
-        if (access_u(file_path.pData, X_OK) == 0)
+        if (osl::access(file_path, X_OK) == 0)
             pStat->uAttributes |= osl_File_Attribute_Executable;
     }
 

@@ -241,11 +241,10 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
                     }
                 }
 #endif
-                rtl_uString * pArg0 = nullptr;
-                if (realpath_u (ppArgs[0], &pArg0))
+                OUString pArg0;
+                if (osl::realpath (OUString::unacquired(&ppArgs[0]), pArg0))
                 {
-                    osl_getFileURLFromSystemPath (pArg0, &(ppArgs[0]));
-                    rtl_uString_release (pArg0);
+                    osl_getFileURLFromSystemPath (pArg0.pData, &(ppArgs[0]));
                 }
             }
             g_command_args.m_nCount = argc;

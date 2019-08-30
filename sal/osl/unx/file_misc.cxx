@@ -371,7 +371,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString* ustrFileURL, oslDirector
 
     osl_systemPathRemoveSeparator(ustrSystemPath);
 
-    if (access_u(ustrSystemPath, F_OK) == -1)
+    if (osl::access(OUString::unacquired(&ustrSystemPath), F_OK) == -1)
     {
         osl_error = oslTranslateFileError(errno);
     }
