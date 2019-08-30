@@ -43,11 +43,8 @@ namespace sal::detail { constexpr int InitializeSoffice = -1; }
 SAL_DLLPUBLIC void SAL_CALL sal_detail_initialize(int argc, char ** argv);
 SAL_DLLPUBLIC void SAL_CALL sal_detail_deinitialize(void);
 
-#if defined IOS || defined ANDROID
-
-#error No code that includes this should be built for iOS or Android
-
-#else
+#if !(defined IOS || defined ANDROID)
+    /* No code that uses this should be built for iOS or Android */
 
 #define SAL_MAIN_WITH_ARGS_IMPL \
 int SAL_DLLPUBLIC_EXPORT SAL_CALL main(int argc, char ** argv) \
