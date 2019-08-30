@@ -6215,6 +6215,8 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     else
         AC_MSG_RESULT([no])
     fi
+    CHECK_L_ATOMIC
+    AC_SUBST(ATOMIC_LIB)
 
     AC_MSG_CHECKING([whether $CC_BASE supports __builtin_ffs])
     AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return __builtin_ffs(1); ]])],[HAVE_GCC_BUILTIN_FFS=TRUE],[])
