@@ -175,6 +175,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/security \
 	sal/osl/unx/signal \
 	sal/osl/unx/socket \
+	sal/osl/unx/soffice \
 	sal/osl/unx/tempfile \
 	sal/osl/unx/thread \
 	sal/osl/unx/time \

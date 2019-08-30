@@ -34,6 +34,7 @@
 #include <sal/types.h>
 
 #include "saltime.hxx"
+#include "soffice.hxx"
 #include <salusesyslog.hxx>
 
 #if HAVE_SYSLOG_H
@@ -45,6 +46,11 @@
 extern "C" {
 
 void sal_detail_initialize(int argc, char ** argv) {
+    if (argc == sal::detail::InitializeSoffice)
+    {
+        sal::detail::setSoffice();
+        return;
+    }
 #if defined MACOSX && !HAVE_FEATURE_MACOSX_SANDBOX
     // On macOS when not sandboxed, soffice can restart itself via exec (see
     // restartOnMac in desktop/source/app/app.cxx), which leaves all file

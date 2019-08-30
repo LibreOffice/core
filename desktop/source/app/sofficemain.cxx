@@ -32,6 +32,7 @@
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
+#include <sal/main.h>
 #include <tools/extendapplicationenvironment.hxx>
 #include <vcl/glxtestprocess.hxx>
 #include <vcl/svmain.hxx>
@@ -108,6 +109,8 @@ static bool dumpCallback(const wchar_t* path, const wchar_t* id,
 #endif
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
+    sal_detail_initialize(sal::detail::InitializeSoffice, nullptr);
+
 #if HAVE_FEATURE_BREAKPAD
 
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
