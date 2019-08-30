@@ -19,7 +19,7 @@
 
 
 #include <vcl/roadmapwizard.hxx>
-#include <vcl/roadmap.hxx>
+#include <vcl/toolkit/roadmap.hxx>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 

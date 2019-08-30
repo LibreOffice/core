@@ -71,7 +71,6 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/textrectinfo.hxx>
 #include <vcl/vclmedit.hxx>
-#include <vcl/roadmap.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/awt/vclxsystemdependentwindow.hxx>
@@ -99,13 +98,11 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/toolkit/group.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/imgctrl.hxx>
 #include <vcl/longcurr.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
-#include <vcl/toolkit/morebtn.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/spin.hxx>
@@ -115,13 +112,16 @@
 #include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/tabctrl.hxx>
-#include <vcl/toolkit/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/throbber.hxx>
+#include <vcl/toolkit/group.hxx>
+#include <vcl/toolkit/morebtn.hxx>
+#include <vcl/toolkit/roadmap.hxx>
+#include <vcl/toolkit/tabdlg.hxx>
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #endif
