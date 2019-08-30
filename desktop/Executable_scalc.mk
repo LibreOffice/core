@@ -25,4 +25,6 @@ $(eval $(call gb_Executable_add_exception_objects,scalc,\
 
 $(eval $(call gb_Executable_add_nativeres,scalc,scalc/launcher))
 
+$(eval $(call gb_Executable_add_default_nativeres,scalc,$(PRODUCTNAME) Calc))
+
 # vim: set ts=4 sw=4 et:

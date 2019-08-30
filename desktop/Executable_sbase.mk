@@ -25,4 +25,6 @@ $(eval $(call gb_Executable_add_exception_objects,sbase,\
 
 $(eval $(call gb_Executable_add_nativeres,sbase,sbase/launcher))
 
+$(eval $(call gb_Executable_add_default_nativeres,sbase,$(PRODUCTNAME) Base))
+
 # vim: set ts=4 sw=4 et:

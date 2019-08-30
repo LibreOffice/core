@@ -15,11 +15,7 @@ $(eval $(call gb_WinResTarget_set_include,soffice/launcher,\
 ))
 
 $(eval $(call gb_WinResTarget_add_defs,soffice/launcher,\
-    -DRES_APP_NAME=soffice \
-    -DRES_APP_FILEDESC="$(PRODUCTNAME)" \
     -DRES_APP_ICON=icons/soffice.ico \
-    -DVERVARIANT=$(LIBO_VERSION_PATCH) \
-    -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
 $(eval $(call gb_WinResTarget_add_dependencies,soffice/launcher,\
