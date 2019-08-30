@@ -45,7 +45,6 @@
 #include <com/sun/star/sdbcx/XRename.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
-#include <com/sun/star/sdb/application/MacroMigrationWizard.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
@@ -669,19 +668,6 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
             case ID_DIRECT_SQL:
                 aReturn.bEnabled = true;
                 break;
-            case ID_MIGRATE_SCRIPTS:
-            {
-                // Our document supports embedding scripts into it, if and only if there are no
-                // forms/reports with macros/scripts into them. So, we need to enable migration
-                // if and only if the database document does *not* support embedding scripts.
-                bool bAvailable =
-                        !Reference< XEmbeddedScripts >( m_xModel, UNO_QUERY ).is()
-                    &&  !Reference< XStorable >( m_xModel, UNO_QUERY_THROW )->isReadonly();
-                aReturn.bEnabled = bAvailable;
-                if ( !bAvailable )
-                    aReturn.bInvisible = true;
-            }
-            break;
             case SID_APP_NEW_FOLDER:
                 aReturn.bEnabled = !isDataSourceReadOnly() && getContainer()->getSelectionCount() <= 1;
                 if ( aReturn.bEnabled )
@@ -1329,9 +1315,6 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         openDialog( SERVICE_SDB_DIRECTSQLDIALOG );
                 }
                 break;
-            case ID_MIGRATE_SCRIPTS:
-                impl_migrateScripts_nothrow();
-                break;
             case SID_DB_APP_VIEW_TABLES:
                 m_aSelectContainerEvent.Call( reinterpret_cast< void* >( E_TABLE ) );
                 break;
@@ -1454,7 +1437,6 @@ void OApplicationController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:DBConvertToView",    SID_DB_APP_CONVERTTOVIEW,  CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:DBRefreshTables",    SID_DB_APP_REFRESH_TABLES, CommandGroup::APPLICATION );
     implDescribeSupportedFeature( ".uno:DBDirectSQL",        ID_DIRECT_SQL,             CommandGroup::APPLICATION );
-    implDescribeSupportedFeature( ".uno:DBMigrateScripts",   ID_MIGRATE_SCRIPTS,        CommandGroup::APPLICATION );
     implDescribeSupportedFeature( ".uno:DBViewTables",       SID_DB_APP_VIEW_TABLES,    CommandGroup::VIEW );
     implDescribeSupportedFeature( ".uno:DBViewQueries",      SID_DB_APP_VIEW_QUERIES,   CommandGroup::VIEW );
     implDescribeSupportedFeature( ".uno:DBViewForms",        SID_DB_APP_VIEW_FORMS,     CommandGroup::VIEW );
@@ -2821,19 +2803,6 @@ Any SAL_CALL OApplicationController::getSelection(  )
         }
     }
     return makeAny( aCurrentSelection );
-}
-
-void OApplicationController::impl_migrateScripts_nothrow()
-{
-    try
-    {
-        Reference< XExecutableDialog > xDialog = css::sdb::application::MacroMigrationWizard::createWithDocument( getORB(), Reference< XOfficeDatabaseDocument >( m_xModel, UNO_QUERY_THROW ) );
-        xDialog->execute();
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION("dbaccess");
-    }
 }
 
 }   // namespace dbaui

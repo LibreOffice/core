@@ -62,7 +62,6 @@
 #define ID_TREE_CLOSE_CONN                   2
     // FREE
 #define ID_TREE_ADMINISTRATE                 4
-#define ID_MIGRATE_SCRIPTS                   5
 
 #define ID_REPORT_NEW_TEXT                  14
 #define ID_FORM_NEW_TEXT                    15
