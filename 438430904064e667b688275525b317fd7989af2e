@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_0ec8f11f",
+        "filename": "sd/source/ui/func/fuolbull.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-30T22:36:02Z",
+      "side": 1,
+      "message": "Is there a reason not to use previous constructor, only changing the range, like\n\n    SfxItemSet aNewAttr( mpViewShell-\u003eGetPool(),\n                             svl::Items\u003cEE_PARA_NUMBULLET, EE_PARA_BULLET\u003e{} );\n\n? They are equivalent, but the previous code was less verbose and more comprehensible imo...",
+      "range": {
+        "startLine": 84,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 6
+      },
+      "revId": "438430904064e667b688275525b317fd7989af2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
