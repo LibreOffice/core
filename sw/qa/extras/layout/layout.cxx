@@ -3017,6 +3017,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testImageComment)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), aPosition.nContent.GetIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf64222)
+{
+    createDoc("tdf64222.docx");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/Special", "nHeight", "560");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
