@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_ce09992c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-08-30T14:59:40Z",
+      "side": 1,
+      "message": "[I thought we could nicely solve that by ditching our CLANG_VERSION in config_clang.h in favor of LLVM\u0027s LLVM_VERSION_MAJOR from llvm/Config/llvm-config.h, as the only places that use CLANG_VERSION are in compilerplugins/clang/.  But there is one use in compilerplugins/clang/test/noexceptmove.cxx, which would require solenv/CompilerTest_compilerplugins_clang.mk to pass along CLANGINCLUDES (as defined in compilerplugins/Makefile-clang.mk), so wouldn\u0027t be much of a gain compared to your approach here.]",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 49
+      },
+      "revId": "e62201280c754553ef8ec70a849fd1f48febb64b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
