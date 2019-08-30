@@ -9,7 +9,9 @@
 
 #include <DiagramDialog.hxx>
 
+#include <comphelper/dispatchcommand.hxx>
 #include <svx/DiagramDataInterface.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 DiagramDialog::DiagramDialog(weld::Window* pWindow,
                              std::shared_ptr<DiagramDataInterface> pDiagramData)
@@ -17,8 +19,12 @@ DiagramDialog::DiagramDialog(weld::Window* pWindow,
     , mpDiagramData(pDiagramData)
     , mpBtnOk(m_xBuilder->weld_button("btnOk"))
     , mpBtnCancel(m_xBuilder->weld_button("btnCancel"))
+    , mpBtnAdd(m_xBuilder->weld_button("btnAdd"))
     , mpTreeDiagram(m_xBuilder->weld_tree_view("treeDiagram"))
+    , mpTextAdd(m_xBuilder->weld_text_view("textAdd"))
 {
+    mpBtnAdd->connect_clicked(LINK(this, DiagramDialog, OnAddClick));
+
     populateTree(nullptr, OUString());
 
     // expand all items
@@ -27,6 +33,20 @@ DiagramDialog::DiagramDialog(weld::Window* pWindow,
         pTreeDiagram->expand_row(rEntry);
         return false;
     });
+}
+
+IMPL_LINK_NOARG(DiagramDialog, OnAddClick, weld::Button&, void)
+{
+    OUString sText = mpTextAdd->get_text();
+    if (!sText.isEmpty())
+    {
+        std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());
+        mpTreeDiagram->insert(nullptr, -1, &sText, nullptr, nullptr, nullptr, nullptr, false,
+                              pEntry.get());
+        mpTreeDiagram->select(*pEntry);
+        mpDiagramData->addNode(sText);
+        comphelper::dispatchCommand(".uno:RegenerateDiagram", {});
+    }
 }
 
 void DiagramDialog::populateTree(weld::TreeIter* pParent, const OUString& rParentId)
