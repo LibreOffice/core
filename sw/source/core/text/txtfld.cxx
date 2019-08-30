@@ -431,10 +431,8 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
         {
             break; // only those at para end are interesting
         }
-        // Formatting for the paragraph mark is set to apply only to the
-        // (non-existent) extra character at end of the text node.
-        if (pHint->Which() == RES_TXTATR_AUTOFMT
-            && pHint->GetStart() == *pHint->End())
+
+        if (pHint->Which() == RES_TXTATR_AUTOFMT)
         {
             std::shared_ptr<SfxItemSet> pSet(pHint->GetAutoFormat().GetStyleHandle());
 
