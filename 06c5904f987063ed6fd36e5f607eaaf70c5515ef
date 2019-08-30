@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_68e5e4a7",
+        "filename": "writerfilter/source/rtftok/rtfsprm.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-08-30T12:27:39Z",
+      "side": 1,
+      "message": "Missing \n\n else\n     m_pSprms-\u003epush_back(std::make_pair(nKeyword, pValue));\n\nhere.",
+      "revId": "06c5904f987063ed6fd36e5f607eaaf70c5515ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
