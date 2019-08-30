@@ -62,6 +62,7 @@ TODO:
 #include <fstream>
 #include <set>
 
+#include "config_clang.h"
 #include "../check.hxx"
 #include "../check.cxx"
 
@@ -552,7 +553,7 @@ int main(int argc, char** argv)
     args.insert(
         args.end(),
         {
-            "-I" STRINGIFY(BUILDDIR) "/config_host", // plugin sources use e.g. config_global.h
+            "-I" BUILDDIR "/config_host", // plugin sources use e.g. config_global.h
             "-I" STRINGIFY(CLANGDIR) "/include", // clang's headers
             "-I" STRINGIFY(CLANGSYSINCLUDE), // clang system headers
             STDOPTION,
@@ -566,7 +567,11 @@ int main(int argc, char** argv)
         if( contents.empty())
             continue;
         foundSomething = false;
+#if CLANG_VERSION >= 10000
+        if( !clang::tooling::runToolOnCodeWithArgs( std::make_unique<FindNamedClassAction>(), contents, args, argv[ i ] ))
+#else
         if( !clang::tooling::runToolOnCodeWithArgs( new FindNamedClassAction, contents, args, argv[ i ] ))
+#endif
         {
             cerr << "Failed to analyze: " << argv[ i ] << endl;
             return 2;
