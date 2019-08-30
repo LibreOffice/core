@@ -15,7 +15,6 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
 	$(if $(filter WNT,$(OS)),Executable_odbcconfig) \
 	Library_dba \
 	Library_dbaxml \
-	Library_dbmm \
 	Library_dbu \
 	Library_sdbt \
 	Library_dbahsql \

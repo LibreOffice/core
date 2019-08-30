@@ -65,7 +65,6 @@ DEFAULTS = \
     'cui.cui'                           : ( 8, EXCLUDE, INCLUDE, EXCLUDE), #  19.7
     'dbaccess.dba'                      : ( 6, EXCLUDE, INCLUDE, INCLUDE), #  13.8
     'dbaccess.dbaxml'                   : ( 2, EXCLUDE, EXCLUDE, EXCLUDE), #   6.5
-    'dbaccess.dbmm'                     : (10, EXCLUDE, INCLUDE, EXCLUDE), #   4.3
     'dbaccess.dbu'                      : (12, EXCLUDE, EXCLUDE, EXCLUDE), #  23.6
     'dbaccess.sdbt'                     : ( 1, EXCLUDE, INCLUDE, EXCLUDE), #   2.9
     'desktop.deployment'                : ( 3, EXCLUDE, EXCLUDE, EXCLUDE), #   6.1
