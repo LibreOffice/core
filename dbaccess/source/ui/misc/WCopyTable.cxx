@@ -35,6 +35,7 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
@@ -1205,7 +1206,18 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
 
         if ( sSchema.isEmpty() && xMetaData->supportsSchemasInTableDefinitions() )
         {
+            // query of current schema is quite inconsistent. In case of some
+            // DBMS's each user has their own schema.
             sSchema = xMetaData->getUserName();
+            // In case of mysql it is not that simple
+            if(xMetaData->getDatabaseProductName() == "MySQL")
+            {
+                Reference< XStatement > xSelect = m_xDestConnection->createStatement();
+                Reference< XResultSet > xRs = xSelect->executeQuery("select database()");
+                xRs->next(); // first and only result
+                Reference< XRow > xRow( xRs, UNO_QUERY_THROW );
+                sSchema = xRow->getString(1);
+            }
         }
 
         xTable->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(sCatalog));
