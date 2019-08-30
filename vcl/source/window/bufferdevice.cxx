@@ -31,8 +31,6 @@ BufferDevice::~BufferDevice()
 vcl::RenderContext* BufferDevice::operator->() { return m_pBuffer.get(); }
 
 vcl::RenderContext& BufferDevice::operator*() { return *m_pBuffer; }
-
-vcl::RenderContext& BufferDevice::GetRenderContext() { return *m_pBuffer; }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
