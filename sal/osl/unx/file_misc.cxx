@@ -317,25 +317,23 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
     if (!pEntry)
         return osl_File_E_NOENT;
 
-#if defined(MACOSX)
+    char const * filename = pEntry->d_name;
 
-    // convert decomposed filename to precomposed unicode
+#if defined(MACOSX)
+    // convert decomposed filename to precomposed UTF-8
     char composed_name[BUFSIZ];
     CFMutableStringRef strRef = CFStringCreateMutable(nullptr, 0 );
-    CFStringAppendCString(strRef, pEntry->d_name, kCFStringEncodingUTF8);  // UTF8 is default on Mac OSX
+    CFStringAppendCString(strRef, filename, kCFStringEncodingUTF8);  // UTF8 is default on Mac OSX
     CFStringNormalize(strRef, kCFStringNormalizationFormC);
     CFStringGetCString(strRef, composed_name, BUFSIZ, kCFStringEncodingUTF8);
     CFRelease(strRef);
-    rtl_string2UString(&ustrFileName, composed_name, strlen(composed_name),
-                       osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
+    filename = composed_name;
+#endif
 
-#else  // not MACOSX
     /* convert file name to unicode */
-    rtl_string2UString(&ustrFileName, pEntry->d_name, strlen(pEntry->d_name),
+    rtl_string2UString(&ustrFileName, filename, strlen(filename),
                        osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
     assert(ustrFileName);
-
-#endif
 
     osl_systemPathMakeAbsolutePath(pDirImpl->ustrPath.pData, ustrFileName, &ustrFilePath);
     rtl_uString_release(ustrFileName);
