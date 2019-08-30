@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_8869588c",
+        "filename": "linguistic/source/misc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-30T05:06:28Z",
+      "side": 1,
+      "message": "In this case, I\u0027d leave the code as you did before. Using sal_uInt16 as intermediate type would call that generic containerToSequence version, which initially allocates sequence, and then copies values (if the same types are used, optimized copying sequence ctor is called instead). Of course, it\u0027s possibly irrelevant for a sequence of primitive types - the copy is cheap; yet there\u0027s another thing to consider. Keeping this new variant might result in some later tests (like Coverity, or some sanitizers, or ...) to warn about signed/unsigned mismatch; and your first approach allows to add another explicit cast (sal_uInt16-\u003esal_Int16) to tell it that everything is OK; but in the new code, there\u0027s nowhere to add such a cast.",
+      "range": {
+        "startLine": 392,
+        "startChar": 43,
+        "endLine": 392,
+        "endChar": 52
+      },
+      "revId": "9053950163883699b7b1326adbe2e0d194366092",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
