@@ -15,11 +15,7 @@ $(eval $(call gb_WinResTarget_set_include,sbase/launcher,\
 ))
 
 $(eval $(call gb_WinResTarget_add_defs,sbase/launcher,\
-    -DRES_APP_NAME=sbase \
-    -DRES_APP_FILEDESC="$(PRODUCTNAME) Base" \
     -DRES_APP_ICON=icons/base_app.ico \
-    -DVERVARIANT=$(LIBO_VERSION_PATCH) \
-    -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
 $(eval $(call gb_WinResTarget_add_dependencies,sbase/launcher,\

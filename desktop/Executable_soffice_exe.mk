@@ -26,4 +26,6 @@ $(eval $(call gb_Executable_add_exception_objects,soffice_exe,\
 
 $(eval $(call gb_Executable_add_nativeres,soffice_exe,soffice/launcher))
 
+$(eval $(call gb_Executable_add_default_nativeres,soffice_exe,$(PRODUCTNAME)))
+
 # vim: set ts=4 sw=4 et:

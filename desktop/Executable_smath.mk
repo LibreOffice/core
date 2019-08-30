@@ -25,4 +25,6 @@ $(eval $(call gb_Executable_add_exception_objects,smath,\
 
 $(eval $(call gb_Executable_add_nativeres,smath,smath/launcher))
 
+$(eval $(call gb_Executable_add_default_nativeres,smath,$(PRODUCTNAME) Math))
+
 # vim: set ts=4 sw=4 et:

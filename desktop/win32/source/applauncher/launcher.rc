@@ -20,45 +20,4 @@
 #include <windows.h>
 #include "version.hrc"
 
-
-//                 version information
-
-
-VS_VERSION_INFO VERSIONINFO
-    FILEVERSION    VERSION, SUBVERSION, MICROVERSION, VERVARIANT
-    PRODUCTVERSION VERSION, SUBVERSION, MICROVERSION, VERVARIANT
-    FILEFLAGSMASK 0x3F
-    FILEFLAGS
-#if defined(DEBUG)
-    VS_FF_DEBUG |
-#endif
-#ifdef VER_PREL
-    VS_FF_PRERELEASE |
-#endif
-    0
-    FILEOS VOS_NT_WINDOWS32
-    FILETYPE VFT_APP
-    {
-        BLOCK "StringFileInfo"
-        {
-            BLOCK "040904E4"
-            {
-                // International StringTable
-                VALUE "CompanyName",      PPS(RES_APP_VENDOR) "\0"
-                VALUE "FileDescription",  PPS(RES_APP_FILEDESC) "\0"
-                VALUE "FileVersion",      PPS(VER_LEVEL) "\0"
-                VALUE "ProductVersion",   PPS(VER_LEVEL) "\0"
-                VALUE "ProductName",      "LibreOffice\0"
-                VALUE "OriginalFilename", PPS(RES_APP_NAME) ".exe\0"
-                VALUE "InternalName",     PPS(RES_APP_NAME) "\0"
-                VALUE "LegalCopyright",   S_CRIGHT " LibreOffice contributors. All rights reserved.\0"
-            }
-        }
-
-        BLOCK "VarFileInfo"
-        {
-            VALUE "Translation", 0x0409, 1252
-        }
-    }
-
 1 ICON PPS(RES_APP_ICON)

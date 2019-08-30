@@ -37,6 +37,8 @@ $(eval $(call gb_Executable_set_targettype_gui,soffice_bin,NO))
 
 $(eval $(call gb_Executable_add_nativeres,soffice_bin,sofficebin/officeloader))
 
+$(eval $(call gb_Executable_add_default_nativeres,soffice_bin,$(PRODUCTNAME)))
+
 ifeq ($(COM),MSC)
 
 $(eval $(call gb_Executable_add_ldflags,soffice_bin,\

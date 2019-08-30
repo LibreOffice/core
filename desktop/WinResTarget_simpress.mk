@@ -15,11 +15,7 @@ $(eval $(call gb_WinResTarget_set_include,simpress/launcher,\
 ))
 
 $(eval $(call gb_WinResTarget_add_defs,simpress/launcher,\
-    -DRES_APP_NAME=simpress \
-    -DRES_APP_FILEDESC="$(PRODUCTNAME) Impress" \
     -DRES_APP_ICON=icons/impress_app.ico \
-    -DVERVARIANT=$(LIBO_VERSION_PATCH) \
-    -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
 $(eval $(call gb_WinResTarget_add_dependencies,simpress/launcher,\
