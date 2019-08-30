@@ -20,7 +20,7 @@
 #include <vector>
 #include <algorithm>
 #include <vcl/event.hxx>
-#include <vcl/roadmap.hxx>
+#include <vcl/toolkit/roadmap.hxx>
 #include <vcl/settings.hxx>
 #include <tools/color.hxx>
 #include <rtl/ustring.hxx>
