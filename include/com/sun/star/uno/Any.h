@@ -138,8 +138,8 @@ public:
     inline Any & SAL_CALL operator = ( const Any & rAny );
 
 #if defined LIBO_INTERNAL_ONLY
-    inline Any(Any && other);
-    inline Any & operator =(Any && other);
+    inline Any(Any && other) noexcept;
+    inline Any & operator =(Any && other) noexcept;
 #endif
 
     /** Gets the type of the set value.
