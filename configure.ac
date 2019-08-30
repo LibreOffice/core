@@ -6490,6 +6490,14 @@ else
 fi
 AC_SUBST(CXXFLAGS_CXX11)
 
+if test "$GCC" = "yes"; then
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+    CHECK_L_ATOMIC
+    CXXFLAGS=$save_CXXFLAGS
+    AC_SUBST(ATOMIC_LIB)
+fi
+
 dnl Test for temporarily incompatible libstdc++ 4.7.{0,1}, where
 dnl <https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=179528> introduced
 dnl an additional member _M_size into C++11 std::list towards 4.7.0 and
