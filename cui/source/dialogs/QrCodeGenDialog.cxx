@@ -259,7 +259,7 @@ OUString QrCodeGenDialog::GenerateQRCode(OUString aQRText, long aQRECC, int aQRB
     }
 
     //OuString to char* qrtext
-    OString o = OUStringToOString(aQRText, RTL_TEXTENCODING_ASCII_US);
+    OString o = OUStringToOString(aQRText, RTL_TEXTENCODING_UTF8);
     const char* qrtext = o.pData->buffer;
 
     //From Qr Code library.
