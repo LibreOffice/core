@@ -120,7 +120,7 @@ bool NoExceptMove::TraverseCXXMethodDecl(CXXMethodDecl* methodDecl)
     {
         StringRef fn = getFileNameOfSpellingLoc(
             compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(methodDecl)));
-        // SfxObjectShellLock::operator= calls SotObject::OwnerLock whichs in turn calls stuff which cannot be noexcept
+        // SfxObjectShellLock::operator= calls SotObject::OwnerLock which in turn calls stuff which cannot be noexcept
         if (loplugin::isSamePathname(fn, SRCDIR "/include/sfx2/objsh.hxx"))
             isMove = false;
     }
@@ -178,7 +178,7 @@ bool NoExceptMove::VisitCallExpr(const CallExpr* callExpr)
         callExpr->dump();
         if (callExpr->getCalleeDecl())
             callExpr->getCalleeDecl()->dump();
-        report(DiagnosticsEngine::Warning, "whats up doc?", callExpr->getSourceRange().getBegin())
+        report(DiagnosticsEngine::Warning, "what's up doc?", callExpr->getSourceRange().getBegin())
             << callExpr->getSourceRange();
         m_ConstructorThrows.back() = true;
         return true;
