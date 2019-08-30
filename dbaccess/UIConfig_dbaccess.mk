@@ -15,7 +15,6 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/applycolpage \
     dbaccess/uiconfig/ui/authentificationpage \
     dbaccess/uiconfig/ui/autocharsetpage \
-    dbaccess/uiconfig/ui/backuppage \
     dbaccess/uiconfig/ui/choosedatasourcedialog \
     dbaccess/uiconfig/ui/collectionviewdialog \
     dbaccess/uiconfig/ui/colwidthdialog \
@@ -46,14 +45,12 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/keymenu \
     dbaccess/uiconfig/ui/ldapconnectionpage \
     dbaccess/uiconfig/ui/ldappage \
-    dbaccess/uiconfig/ui/migratepage \
     dbaccess/uiconfig/ui/mysqlnativepage \
     dbaccess/uiconfig/ui/mysqlnativesettings \
     dbaccess/uiconfig/ui/namematchingpage \
     dbaccess/uiconfig/ui/odbcpage \
     dbaccess/uiconfig/ui/parametersdialog \
     dbaccess/uiconfig/ui/password \
-    dbaccess/uiconfig/ui/preparepage \
     dbaccess/uiconfig/ui/querycolmenu \
     dbaccess/uiconfig/ui/queryfilterdialog \
     dbaccess/uiconfig/ui/queryfuncmenu \
@@ -68,7 +65,6 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/specialsettingspage \
     dbaccess/uiconfig/ui/sortdialog \
     dbaccess/uiconfig/ui/sqlexception \
-    dbaccess/uiconfig/ui/summarypage \
     dbaccess/uiconfig/ui/tabledesignrowmenu \
     dbaccess/uiconfig/ui/tabledesignsavemodifieddialog \
     dbaccess/uiconfig/ui/tablesfilterdialog \

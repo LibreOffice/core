@@ -352,7 +352,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/sdb,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/sdb/application,\
 	CopyTableWizard \
-	MacroMigrationWizard \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/sdb/tools,\
 	ConnectionTools \

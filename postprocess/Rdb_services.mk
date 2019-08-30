@@ -262,7 +262,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	connectivity/source/drivers/mysql_jdbc/mysql_jdbc \
 	connectivity/source/manager/sdbc2 \
 	connectivity/source/drivers/writer/writer \
-	dbaccess/source/ext/macromigration/dbmm \
 	dbaccess/source/filter/xml/dbaxml \
 	dbaccess/util/dba \
 	dbaccess/util/dbu \
