@@ -361,9 +361,19 @@ OUString SAL_CALL ODatabaseMetaData::getURL()
 
 OUString SAL_CALL ODatabaseMetaData::getUserName()
 {
-    // TODO execute "SELECT USER()"
-    SAL_WARN("connectivity.mysqlc", "method not implemented");
-    return OUString();
+    Reference<XStatement> statement = m_rConnection.createStatement();
+    Reference<XResultSet> rs = statement->executeQuery("select user()");
+    Reference<XRow> xRow(rs, UNO_QUERY_THROW);
+    rs->next(); // the first and only result
+    // e.g. root@localhost
+    OUString userWithConnection = xRow->getString(1);
+    sal_Int32 nIndexOfAt = userWithConnection.indexOf("@");
+    if (nIndexOfAt > 0)
+    {
+        OUString user = userWithConnection.copy(0, nIndexOfAt);
+        return user;
+    }
+    return userWithConnection;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getDriverName() { return "MySQL Connector/OO.org"; }
