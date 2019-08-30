@@ -30,6 +30,8 @@ $(eval $(call gb_Executable_add_exception_objects,spsupp_helper,\
 
 $(eval $(call gb_Executable_add_nativeres,spsupp_helper,spsupp_dlg))
 
+$(eval $(call gb_Executable_add_default_nativeres,spsupp_helper))
+
 $(eval $(call gb_Executable_use_system_win32_libs,spsupp_helper,\
     shell32 \
 ))

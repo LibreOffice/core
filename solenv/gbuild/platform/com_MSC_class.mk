@@ -328,6 +328,23 @@ $(call gb_Library_get_clean_target,$(1)) : $(call gb_WinResTarget_get_clean_targ
 
 endef
 
+define gb_Executable_add_default_nativeres
+$(call gb_WinResTarget_WinResTarget_init,$(1)/default)
+$(call gb_WinResTarget_set_rcfile,$(1)/default,include/default)
+$(call gb_WinResTarget_add_defs,$(1)/default,\
+		-DVERVARIANT="$(LIBO_VERSION_PATCH)" \
+		-DRES_APP_VENDOR="$(OOO_VENDOR)" \
+		-DORG_NAME="$(call gb_Executable_get_filename,$(1))"\
+		-DINTERNAL_NAME="$(subst $(gb_Executable_EXT),,$(call gb_Executable_get_filename,$(1)))" \
+		-DADDITIONAL_VERINFO1="" \
+		-DADDITIONAL_VERINFO2="" \
+		-DADDITIONAL_VERINFO3="" \
+)
+$(call gb_Executable_add_nativeres,$(1),$(1)/default)
+$(call gb_Executable_get_clean_target,$(1)) : $(call gb_WinResTarget_get_clean_target,$(1)/default)
+
+endef
+
 define gb_LinkTarget_add_nativeres
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_WinResTarget_get_target,$(2))
 $(call gb_LinkTarget_get_target,$(1)) : NATIVERES += $(call gb_WinResTarget_get_target,$(2))
