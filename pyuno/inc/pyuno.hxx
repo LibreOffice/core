@@ -98,11 +98,11 @@ public:
     }
 
     PyRef(const PyRef &r) : m(r.get()) { Py_XINCREF(m); }
-    PyRef(PyRef &&r) : m(r.get()) { r.scratch(); }
+    PyRef(PyRef &&r) noexcept : m(r.get()) { r.scratch(); }
 
     ~PyRef() { Py_XDECREF( m ); }
 
-    PyObject *get() const { return m; }
+    PyObject *get() const noexcept { return m; }
 
     PyObject * getAcquired() const
     {
@@ -134,7 +134,7 @@ public:
 
     /** clears the reference without decreasing the reference count
         only seldom needed ! */
-    void scratch()
+    void scratch() noexcept
     {
         m = nullptr;
     }
