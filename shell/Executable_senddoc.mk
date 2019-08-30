@@ -25,4 +25,6 @@ $(eval $(call gb_Executable_add_exception_objects,senddoc,\
     shell/source/win32/simplemail/senddoc \
 ))
 
+$(eval $(call gb_Executable_add_default_nativeres,senddoc))
+
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

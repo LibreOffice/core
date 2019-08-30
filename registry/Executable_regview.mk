@@ -29,4 +29,6 @@ $(eval $(call gb_Executable_add_exception_objects,regview,\
     registry/tools/regview \
 ))
 
+$(eval $(call gb_Executable_add_default_nativeres,regview))
+
 # vim:set noet sw=4 ts=4:

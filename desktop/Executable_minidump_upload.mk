@@ -20,4 +20,6 @@ $(eval $(call gb_Executable_add_exception_objects,minidump_upload,\
     desktop/source/minidump/minidump_upload \
 ))
 
+$(eval $(call gb_Executable_add_default_nativeres,minidump_upload))
+
 # vim: set noet sw=4 ts=4:

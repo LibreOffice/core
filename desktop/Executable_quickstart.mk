@@ -39,4 +39,6 @@ $(eval $(call gb_Executable_add_exception_objects,quickstart,\
 
 $(eval $(call gb_Executable_add_nativeres,quickstart,quickstart/QuickStart))
 
+$(eval $(call gb_Executable_add_default_nativeres,quickstart))
+
 # vim: set ts=4 sw=4 et:

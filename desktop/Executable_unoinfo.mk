@@ -17,4 +17,6 @@ $(eval $(call gb_Executable_add_exception_objects,unoinfo,\
     desktop/win32/source/unoinfo \
 ))
 
+$(eval $(call gb_Executable_add_default_nativeres,unoinfo))
+
 # vim: set ts=4 sw=4 et:
