@@ -117,11 +117,11 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/throbber.hxx>
 #include <vcl/toolkit/group.hxx>
 #include <vcl/toolkit/morebtn.hxx>
 #include <vcl/toolkit/roadmap.hxx>
 #include <vcl/toolkit/tabdlg.hxx>
+#include <vcl/toolkit/throbber.hxx>
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #endif

@@ -58,8 +58,8 @@
 #include <vcl/svtabbx.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
-#include <vcl/throbber.hxx>
 #include <vcl/treelistentry.hxx>
+#include <vcl/toolkit/throbber.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/vclmedit.hxx>
