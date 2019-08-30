@@ -21,7 +21,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/controls/animatedimages.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/throbber.hxx>
+#include <vcl/toolkit/throbber.hxx>
 
 using namespace css;
 using namespace css::uno;
