@@ -38,6 +38,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XToolkitExperimental.hpp>
@@ -69,6 +71,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/textrectinfo.hxx>
 #include <vcl/vclmedit.hxx>
+#include <vcl/roadmap.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/awt/vclxsystemdependentwindow.hxx>
@@ -79,6 +82,7 @@
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <toolkit/helper/property.hxx>
 #include <toolkit/helper/servicenames.hxx>
 
 #include <toolkit/helper/macros.hxx>
@@ -1082,6 +1086,311 @@ public:
     }
 };
 
+//  class SVTXRoadmap
+
+struct RMItemData
+{
+    bool            b_Enabled;
+    sal_Int32           n_ID;
+    OUString     Label;
+};
+
+typedef ::cppu::ImplInheritanceHelper  <   VCLXGraphicControl
+                                        ,   css::container::XContainerListener
+                                        ,   css::beans::XPropertyChangeListener
+                                        ,   css::awt::XItemEventBroadcaster
+                                        >   SVTXRoadmap_Base;
+class SVTXRoadmap final : public SVTXRoadmap_Base
+{
+public:
+    SVTXRoadmap();
+
+    void SAL_CALL disposing( const css::lang::EventObject& Source ) override { VCLXWindow::disposing( Source ); }
+
+    // css::awt::XVclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
+
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+
+    // XContainerListener
+    void SAL_CALL elementInserted( const css::container::ContainerEvent& rEvent ) override;
+    void SAL_CALL elementRemoved( const css::container::ContainerEvent& rEvent ) override;
+    void SAL_CALL elementReplaced( const css::container::ContainerEvent& rEvent ) override;
+
+    // XItemEventBroadcaster
+    virtual void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    virtual void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+
+    // XPropertyChangeListener
+    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
+
+private:
+
+    // VCLXGraphicControl overridables
+    virtual void    ImplSetNewImage() override;
+
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
+
+    static RMItemData GetRMItemData( const css::container::ContainerEvent& _rEvent );
+
+    virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
+
+    virtual ~SVTXRoadmap() override;
+
+    ItemListenerMultiplexer     maItemListeners;
+};
+
+
+
+//  class SVTXRoadmap
+
+SVTXRoadmap::SVTXRoadmap() : maItemListeners( *this )
+{
+}
+
+SVTXRoadmap::~SVTXRoadmap()
+{
+}
+
+void SVTXRoadmap::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
+{
+    switch ( rVclWindowEvent.GetId() )
+    {
+        case VclEventId::RoadmapItemSelected:
+        {
+            SolarMutexGuard aGuard;
+            VclPtr<::vcl::ORoadmap> pField = GetAs< vcl::ORoadmap >();
+            if ( pField )
+            {
+                sal_Int16 CurItemID = pField->GetCurrentRoadmapItemID();
+                css::awt::ItemEvent aEvent;
+                aEvent.Selected = CurItemID;
+                aEvent.Highlighted = CurItemID;
+                aEvent.ItemId = CurItemID;
+                maItemListeners.itemStateChanged( aEvent );
+            }
+        }
+        break;
+        default:
+            SVTXRoadmap_Base::ProcessWindowEvent( rVclWindowEvent );
+            break;
+    }
+}
+
+void SVTXRoadmap::propertyChange( const css::beans::PropertyChangeEvent& evt )
+{
+    SolarMutexGuard aGuard;
+    VclPtr<::vcl::ORoadmap> pField = GetAs< vcl::ORoadmap >();
+    if ( !pField )
+        return;
+
+    css::uno::Reference< css::uno::XInterface > xRoadmapItem = evt.Source;
+    sal_Int32 nID = 0;
+    css::uno::Reference< css::beans::XPropertySet > xPropertySet( xRoadmapItem, css::uno::UNO_QUERY );
+    css::uno::Any aValue = xPropertySet->getPropertyValue("ID");
+    aValue >>= nID;
+
+    OUString sPropertyName = evt.PropertyName;
+    if ( sPropertyName == "Enabled" )
+    {
+        bool bEnable = false;
+        evt.NewValue >>= bEnable;
+        pField->EnableRoadmapItem( static_cast<vcl::RoadmapTypes::ItemId>(nID) , bEnable );
+    }
+    else if ( sPropertyName == "Label" )
+    {
+        OUString sLabel;
+        evt.NewValue >>= sLabel;
+        pField->ChangeRoadmapItemLabel( static_cast<vcl::RoadmapTypes::ItemId>(nID) , sLabel );
+    }
+    else if  ( sPropertyName == "ID" )
+    {
+        sal_Int32 nNewID = 0;
+        evt.NewValue >>= nNewID;
+        evt.OldValue >>= nID;
+        pField->ChangeRoadmapItemID( static_cast<vcl::RoadmapTypes::ItemId>(nID), static_cast<vcl::RoadmapTypes::ItemId>(nNewID) );
+    }
+//    else
+        // TODO handle Interactive appropriately
+}
+
+void SVTXRoadmap::addItemListener( const css::uno::Reference< css::awt::XItemListener >& l )
+{
+    maItemListeners.addInterface( l );
+}
+
+void SVTXRoadmap::removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l )
+{
+    maItemListeners.removeInterface( l );
+}
+
+RMItemData SVTXRoadmap::GetRMItemData( const css::container::ContainerEvent& _rEvent )
+{
+    RMItemData aCurRMItemData;
+    css::uno::Reference< css::uno::XInterface > xRoadmapItem;
+    _rEvent.Element >>= xRoadmapItem;
+    css::uno::Reference< css::beans::XPropertySet > xPropertySet( xRoadmapItem, css::uno::UNO_QUERY );
+    if ( xPropertySet.is() )
+    {
+        css::uno::Any aValue = xPropertySet->getPropertyValue("Label");
+        aValue >>= aCurRMItemData.Label;
+        aValue = xPropertySet->getPropertyValue("ID");
+        aValue >>= aCurRMItemData.n_ID;
+        aValue = xPropertySet->getPropertyValue("Enabled");
+        aValue >>= aCurRMItemData.b_Enabled;
+    }
+    else
+    {
+        aCurRMItemData.b_Enabled = false;
+        aCurRMItemData.n_ID = 0;
+    }
+    return aCurRMItemData;
+}
+
+void SVTXRoadmap::elementInserted( const css::container::ContainerEvent& _rEvent )
+{
+    SolarMutexGuard aGuard;
+    VclPtr<::vcl::ORoadmap> pField = GetAs< vcl::ORoadmap >();
+    if ( pField )
+    {
+        RMItemData CurItemData = GetRMItemData(  _rEvent );
+        sal_Int32 InsertIndex = 0;
+        _rEvent.Accessor >>= InsertIndex;
+        pField->InsertRoadmapItem( InsertIndex, CurItemData.Label, static_cast<vcl::RoadmapTypes::ItemId>(CurItemData.n_ID), CurItemData.b_Enabled );
+    }
+}
+
+void SVTXRoadmap::elementRemoved( const css::container::ContainerEvent& _rEvent )
+{
+    SolarMutexGuard aGuard;
+    VclPtr<::vcl::ORoadmap> pField = GetAs< vcl::ORoadmap >();
+    if ( pField )
+    {
+        sal_Int32 DelIndex = 0;
+        _rEvent.Accessor >>= DelIndex;
+        pField->DeleteRoadmapItem(DelIndex);
+    }
+}
+
+void SVTXRoadmap::elementReplaced( const css::container::ContainerEvent& _rEvent )
+{
+    SolarMutexGuard aGuard;
+    VclPtr<::vcl::ORoadmap> pField = GetAs< vcl::ORoadmap >();
+    if ( pField )
+    {
+        RMItemData CurItemData = GetRMItemData(  _rEvent );
+        sal_Int32 ReplaceIndex = 0;
+        _rEvent.Accessor >>= ReplaceIndex;
+        pField->ReplaceRoadmapItem( ReplaceIndex, CurItemData.Label, static_cast<vcl::RoadmapTypes::ItemId>(CurItemData.n_ID), CurItemData.b_Enabled );
+    }
+}
+
+void SVTXRoadmap::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr<::vcl::ORoadmap> pField = GetAs< vcl::ORoadmap >();
+    if ( pField )
+    {
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch (nPropType)
+        {
+            case BASEPROPERTY_COMPLETE:
+            {
+                bool b = false;
+                Value >>= b;
+                pField->SetRoadmapComplete( b);
+            }
+            break;
+
+            case BASEPROPERTY_ACTIVATED:
+            {
+                bool b = false;
+                Value >>= b;
+                pField->SetRoadmapInteractive( b);
+            }
+            break;
+
+            case BASEPROPERTY_CURRENTITEMID:
+            {
+                sal_Int32 nId = 0;
+                Value >>= nId;
+                pField->SelectRoadmapItemByID( static_cast<vcl::RoadmapTypes::ItemId>(nId) );
+            }
+            break;
+
+            case BASEPROPERTY_TEXT:
+            {
+                OUString aStr;
+                Value >>= aStr;
+                pField->SetText( aStr );
+                pField->Invalidate();
+            }
+            break;
+
+            default:
+                SVTXRoadmap_Base::setProperty( PropertyName, Value );
+                break;
+        }
+
+    }
+    else
+        SVTXRoadmap_Base::setProperty( PropertyName, Value );
+}
+
+
+css::uno::Any SVTXRoadmap::getProperty( const OUString& PropertyName )
+{
+    SolarMutexGuard aGuard;
+
+    css::uno::Any aReturn;
+
+    VclPtr<::vcl::ORoadmap> pField = GetAs< vcl::ORoadmap >();
+    if ( pField )
+    {
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch (nPropType)
+        {
+            case BASEPROPERTY_COMPLETE:
+                aReturn <<= pField->IsRoadmapComplete();
+                break;
+            case BASEPROPERTY_ACTIVATED:
+                aReturn <<= pField->IsRoadmapInteractive();
+                break;
+            case BASEPROPERTY_CURRENTITEMID:
+                aReturn <<= pField->GetCurrentRoadmapItemID();
+                break;
+            default:
+                aReturn = SVTXRoadmap_Base::getProperty(PropertyName);
+                break;
+        }
+    }
+    return aReturn;
+}
+
+void SVTXRoadmap::ImplSetNewImage()
+{
+    OSL_PRECOND( GetWindow(), "SVTXRoadmap::ImplSetNewImage: window is required to be not-NULL!" );
+    VclPtr< ::vcl::ORoadmap > pButton = GetAs< ::vcl::ORoadmap >();
+    pButton->SetRoadmapBitmap( GetImage().GetBitmapEx() );
+}
+
+void SVTXRoadmap::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_COMPLETE,
+                     BASEPROPERTY_ACTIVATED,
+                     BASEPROPERTY_CURRENTITEMID,
+                     BASEPROPERTY_TEXT,
+                     0);
+    VCLXWindow::ImplGetPropertyIds( rIds, true );
+    VCLXGraphicControl::ImplGetPropertyIds( rIds );
+}
+
+
+
+
 vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     const css::awt::WindowDescriptor& rDescriptor,
     vcl::Window* pParent, WinBits nWinBits, MessBoxStyle nMessBoxStyle )
@@ -1484,6 +1793,11 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 {
                     pNewWindow = VclPtr<Throbber>::Create( pParent, nWinBits );
                     *ppNewComp = new ::toolkit::AnimatedImagesPeer;
+                }
+                else if (aServiceName == "roadmap")
+                {
+                    pNewWindow = VclPtr<::vcl::ORoadmap>::Create( pParent, WB_TABSTOP );
+                    *ppNewComp = new SVTXRoadmap;
                 }
             break;
             default:
