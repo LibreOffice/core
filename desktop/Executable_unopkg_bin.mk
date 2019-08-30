@@ -27,4 +27,6 @@ $(eval $(call gb_Executable_add_cobjects,unopkg_bin,\
     desktop/source/pkgchk/unopkg/unopkg_main \
 ))
 
+$(eval $(call gb_Executable_add_default_nativeres,unopkg_bin))
+
 # vim: set ts=4 sw=4 et:
