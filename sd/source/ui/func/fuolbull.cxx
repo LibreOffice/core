@@ -81,8 +81,14 @@ void FuBulletAndPosition::DoExecute( SfxRequest& rReq )
     SfxItemSet aEditAttr( mpDoc->GetPool() );
     mpView->GetAttributes( aEditAttr );
 
-    SfxItemSet aNewAttr( mpViewShell->GetPool(),
-                             svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} );
+    static const sal_uInt16 aAttrMap[] =
+    {
+        EE_PARA_NUMBULLET,
+        EE_PARA_BULLET,
+        0
+    };
+
+    SfxItemSet aNewAttr( mpViewShell->GetPool(), aAttrMap );
     aNewAttr.Put( aEditAttr, false );
 
     auto pView = mpView;
