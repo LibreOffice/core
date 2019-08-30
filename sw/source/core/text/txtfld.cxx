@@ -422,6 +422,7 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
     TextFrameIndex const nTextLen(rInf.GetTextFrame()->GetText().getLength());
     SwTextNode const* pNode(nullptr);
     sw::MergedAttrIterReverse iter(*rInf.GetTextFrame());
+    std::shared_ptr<SfxItemSet> pSet;
     for (SwTextAttr const* pHint = iter.PrevAttr(&pNode); pHint;
          pHint = iter.PrevAttr(&pNode))
     {
@@ -431,42 +432,46 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
         {
             break; // only those at para end are interesting
         }
-        // Formatting for the paragraph mark is set to apply only to the
-        // (non-existent) extra character at end of the text node.
-        if (pHint->Which() == RES_TXTATR_AUTOFMT
-            && pHint->GetStart() == *pHint->End())
+        // Formatting for the paragraph mark is usually set to apply only to the
+        // (non-existent) extra character at end of the text node, but there can be
+        // other hints too (ending at nTextLen), so look for all matching hints.
+        // Still the (non-existent) extra character at the end is preferred if it exists.
+        if (pHint->Which() == RES_TXTATR_AUTOFMT)
         {
-            std::shared_ptr<SfxItemSet> pSet(pHint->GetAutoFormat().GetStyleHandle());
-
-            // Check each item and in case it should be ignored, then clear it.
-            std::unique_ptr<SfxItemSet> pCleanedSet;
-            if (pSet.get())
-            {
-                pCleanedSet = pSet->Clone();
-
-                SfxItemIter aIter(*pSet);
-                const SfxPoolItem* pItem = aIter.GetCurItem();
-                while (true)
-                {
-                    if (SwTextNode::IsIgnoredCharFormatForNumbering(pItem->Which()))
-                        pCleanedSet->ClearItem(pItem->Which());
-                    else if (pFormat && pFormat->HasItem(pItem->Which()))
-                        pCleanedSet->ClearItem(pItem->Which());
-
-                    if (aIter.IsAtEnd())
-                        break;
-
-                    pItem = aIter.NextItem();
-                }
-            }
-
-            // Highlightcolor also needed to be untouched, but we can't have that just by clearing the item
-            Color nSaveHighlight = pNumFnt->GetHighlightColor();
-
-            pNumFnt->SetDiffFnt(pCleanedSet.get(), pIDSA);
-            pNumFnt->SetHighlightColor(nSaveHighlight);
+            pSet = pHint->GetAutoFormat().GetStyleHandle();
+            // When we find an empty hint (start == end) we got what we are looking for.
+            if (pHint->GetStart() == *pHint->End())
+                break;
         }
     }
+
+    // Check each item and in case it should be ignored, then clear it.
+    std::unique_ptr<SfxItemSet> pCleanedSet;
+    if (pSet.get())
+    {
+        pCleanedSet = pSet->Clone();
+
+        SfxItemIter aIter(*pSet);
+        const SfxPoolItem* pItem = aIter.GetCurItem();
+        while (true)
+        {
+            if (SwTextNode::IsIgnoredCharFormatForNumbering(pItem->Which()))
+                pCleanedSet->ClearItem(pItem->Which());
+            else if (pFormat && pFormat->HasItem(pItem->Which()))
+                pCleanedSet->ClearItem(pItem->Which());
+
+            if (aIter.IsAtEnd())
+                break;
+
+            pItem = aIter.NextItem();
+        }
+    }
+
+    // Highlightcolor also needed to be untouched, but we can't have that just by clearing the item
+    Color nSaveHighlight = pNumFnt->GetHighlightColor();
+
+    pNumFnt->SetDiffFnt(pCleanedSet.get(), pIDSA);
+    pNumFnt->SetHighlightColor(nSaveHighlight);
 }
 
 
