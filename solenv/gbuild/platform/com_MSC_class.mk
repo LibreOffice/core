@@ -336,7 +336,7 @@ $(call gb_WinResTarget_add_defs,$(1)/default,\
 		-DRES_APP_VENDOR="$(OOO_VENDOR)" \
 		-DORG_NAME="$(call gb_Executable_get_filename,$(1))"\
 		-DINTERNAL_NAME="$(subst $(gb_Executable_EXT),,$(call gb_Executable_get_filename,$(1)))" \
-		-DADDITIONAL_VERINFO1="" \
+		-DADDITIONAL_VERINFO1="$(if $(2),VALUE \"FileDescription\"$(COMMA) \"$(2)\\0\")" \
 		-DADDITIONAL_VERINFO2="" \
 		-DADDITIONAL_VERINFO3="" \
 )
