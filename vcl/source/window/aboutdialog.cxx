@@ -29,7 +29,9 @@ AboutDialog::AboutDialog(vcl::Window* pParent, WinBits nStyle, Dialog::InitFlag 
     m_xBuilder->get(m_xCopyrightText, "copyright");
     m_xBuilder->get(m_xBuildIdLink, "buildIdLink");
 
+#ifndef MACOSX
     m_xVersion->RequestDoubleBuffering(true);
+#endif
 }
 
 void AboutDialog::set_content_area(VclBox* pBox)
