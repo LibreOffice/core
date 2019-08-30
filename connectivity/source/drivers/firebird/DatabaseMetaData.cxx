@@ -598,12 +598,17 @@ OUString SAL_CALL ODatabaseMetaData::getDriverVersion()
 
 OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion(  )
 {
-    return OUString();
+    uno::Reference< XStatement > xSelect = m_pConnection->createStatement();
+
+    uno::Reference< XResultSet > xRs = xSelect->executeQuery("SELECT rdb$get_context('SYSTEM', 'ENGINE_VERSION') as version from rdb$database");
+    xRs->next(); // first and only row
+    uno::Reference< XRow > xRow( xRs, UNO_QUERY_THROW );
+    return xRow->getString(1);
 }
 
 OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName(  )
 {
-    return OUString();
+    return "Firebird (engine12)";
 }
 
 OUString SAL_CALL ODatabaseMetaData::getProcedureTerm(  )
