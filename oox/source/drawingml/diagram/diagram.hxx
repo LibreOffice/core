@@ -194,9 +194,11 @@ public:
     void dump() const;
     OUString getString() const override;
     std::vector<std::pair<OUString, OUString>> getChildren(const OUString& rParentId) const override;
+    void addNode(const OUString& rText) override;
 
 private:
     void getChildrenString(OUStringBuffer& rBuf, const dgm::Point* pPoint, sal_Int32 nLevel) const;
+    void addConnection(sal_Int32 nType, const OUString& sSourceId, const OUString& sDestId);
 
     ::std::vector<OUString>  maExtDrawings;
     FillPropertiesPtr mpFillProperties;

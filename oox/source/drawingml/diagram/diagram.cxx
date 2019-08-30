@@ -40,6 +40,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/DiagramDataInterface.hxx>
+#include <comphelper/xmltools.hxx>
 
 #include "diagramlayoutatoms.hxx"
 #include "layoutatomvisitors.hxx"
@@ -156,6 +157,76 @@ std::vector<std::pair<OUString, OUString>> DiagramData::getChildren(const OUStri
     return aChildren;
 }
 
+void DiagramData::addConnection(sal_Int32 nType, const OUString& sSourceId, const OUString& sDestId)
+{
+    sal_Int32 nMaxOrd = -1;
+    for (const auto& aCxn : maConnections)
+        if (aCxn.mnType == nType && aCxn.msSourceId == sSourceId)
+            nMaxOrd = std::max(nMaxOrd, aCxn.mnSourceOrder);
+
+    dgm::Connection& rCxn = maConnections.emplace_back();
+    rCxn.mnType = nType;
+    rCxn.msSourceId = sSourceId;
+    rCxn.msDestId = sDestId;
+    rCxn.mnSourceOrder = nMaxOrd + 1;
+}
+
+void DiagramData::addNode(const OUString& rText)
+{
+    const dgm::Point& rDataRoot = *getRootPoint();
+    OUString sPresRoot;
+    for (const auto& aCxn : maConnections)
+        if (aCxn.mnType == XML_presOf && aCxn.msSourceId == rDataRoot.msModelId)
+            sPresRoot = aCxn.msDestId;
+
+    if (sPresRoot.isEmpty())
+        return;
+
+    dgm::Point aDataPoint;
+    aDataPoint.mnType = XML_node;
+    aDataPoint.msModelId = OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_UTF8);
+    aDataPoint.mpShape.reset(new Shape());
+    aDataPoint.mpShape->setTextBody(std::make_shared<TextBody>());
+    TextRunPtr pTextRun(new TextRun());
+    pTextRun->getText() = rText;
+    aDataPoint.mpShape->getTextBody()->addParagraph().addRun(pTextRun);
+
+    OUString sDataSibling;
+    for (const auto& aCxn : maConnections)
+        if (aCxn.mnType == XML_parOf && aCxn.msSourceId == rDataRoot.msModelId)
+            sDataSibling = aCxn.msDestId;
+
+    OUString sPresSibling;
+    for (const auto& aCxn : maConnections)
+        if (aCxn.mnType == XML_presOf && aCxn.msSourceId == sDataSibling)
+            sPresSibling = aCxn.msDestId;
+
+    dgm::Point aPresPoint;
+    aPresPoint.mnType = XML_pres;
+    aPresPoint.msModelId = OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_UTF8);
+    aPresPoint.mpShape.reset(new Shape());
+    aPresPoint.msPresentationAssociationId = aDataPoint.msModelId;
+    if (!sPresSibling.isEmpty())
+    {
+        // no idea where to get these values from, so copy from previous sibling
+        const dgm::Point* pSiblingPoint = maPointNameMap[sPresSibling];
+        aPresPoint.msPresentationLayoutName = pSiblingPoint->msPresentationLayoutName;
+        aPresPoint.msPresentationLayoutStyleLabel = pSiblingPoint->msPresentationLayoutStyleLabel;
+        aPresPoint.mnLayoutStyleIndex = pSiblingPoint->mnLayoutStyleIndex;
+        aPresPoint.mnLayoutStyleCount = pSiblingPoint->mnLayoutStyleCount;
+    }
+
+    addConnection(XML_parOf, rDataRoot.msModelId, aDataPoint.msModelId);
+    addConnection(XML_presParOf, sPresRoot, aPresPoint.msModelId);
+    addConnection(XML_presOf, aDataPoint.msModelId, aPresPoint.msModelId);
+
+    // adding at the end, so that references are not invalidated inbetween
+    maPoints.push_back(aDataPoint);
+    maPoints.push_back(aPresPoint);
+
+    build();
+}
+
 #ifdef DEBUG_OOX_DIAGRAM
 OString normalizeDotName( const OUString& rStr )
 {
@@ -239,6 +310,11 @@ static void sortChildrenByZOrder(const ShapePtr& pShape)
 void DiagramData::build()
 {
     // build name-object maps
+    maPointNameMap.clear();
+    maPointsPresNameMap.clear();
+    maConnectionNameMap.clear();
+    maPresOfNameMap.clear();
+
 #ifdef DEBUG_OOX_DIAGRAM
     std::ofstream output("tree.dot");
 
