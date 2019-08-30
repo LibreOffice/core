@@ -172,6 +172,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/profile \
 	sal/osl/unx/random \
 	sal/osl/unx/readwrite_helper \
+	sal/osl/unx/salinit \
 	sal/osl/unx/security \
 	sal/osl/unx/signal \
 	sal/osl/unx/socket \
@@ -179,7 +180,6 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/tempfile \
 	sal/osl/unx/thread \
 	sal/osl/unx/time \
-	$(if $(filter-out ANDROID iOS,$(OS)), sal/osl/unx/salinit) \
 ))
 
 # Note that the uunxapi.mm file just includes the uunxapi.cxx one. Ditto for system.mm
