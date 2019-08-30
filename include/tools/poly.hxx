@@ -197,6 +197,7 @@ public:
                         PolyPolygon( sal_uInt16 nInitSize = 16 );
                         PolyPolygon( const tools::Polygon& rPoly );
                         PolyPolygon( const tools::PolyPolygon& rPolyPoly );
+                        PolyPolygon( tools::PolyPolygon&& rPolyPoly ) noexcept;
                         ~PolyPolygon();
 
     void                Insert( const tools::Polygon& rPoly, sal_uInt16 nPos = POLYPOLY_APPEND );
@@ -242,7 +243,7 @@ public:
     tools::Polygon& operator[]( sal_uInt16 nPos );
 
     tools::PolyPolygon& operator=( const tools::PolyPolygon& rPolyPoly );
-    tools::PolyPolygon& operator=( tools::PolyPolygon&& rPolyPoly );
+    tools::PolyPolygon& operator=( tools::PolyPolygon&& rPolyPoly ) noexcept;
     bool                operator==( const tools::PolyPolygon& rPolyPoly ) const;
     bool                operator!=( const tools::PolyPolygon& rPolyPoly ) const
                             { return !(PolyPolygon::operator==( rPolyPoly )); }

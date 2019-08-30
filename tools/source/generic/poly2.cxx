@@ -45,6 +45,11 @@ PolyPolygon::PolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
 }
 
+PolyPolygon::PolyPolygon( tools::PolyPolygon&& rPolyPoly ) noexcept
+    : mpImplPolyPolygon( std::move(rPolyPoly.mpImplPolyPolygon) )
+{
+}
+
 PolyPolygon::~PolyPolygon()
 {
 }
@@ -341,9 +346,9 @@ PolyPolygon& PolyPolygon::operator=( const tools::PolyPolygon& rPolyPoly )
     return *this;
 }
 
-PolyPolygon& PolyPolygon::operator=( tools::PolyPolygon&& rPolyPoly )
+PolyPolygon& PolyPolygon::operator=( tools::PolyPolygon&& rPolyPoly ) noexcept
 {
-    mpImplPolyPolygon = rPolyPoly.mpImplPolyPolygon;
+    mpImplPolyPolygon = std::move(rPolyPoly.mpImplPolyPolygon);
     return *this;
 }
 
