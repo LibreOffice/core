@@ -53,6 +53,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	mkdir -p $(IOSRES)/share/fonts/truetype
 	cp -R $(INSTDIR)/share/fonts/truetype $(IOSRES)/share/fonts
 	cp -R $(INSTDIR)/share/gallery $(IOSRES)/share
+	cp -R $(INSTDIR)/share/palette $(IOSRES)/share
 
 	# Set up rc, the "inifile". See getIniFileName_Impl().
 	echo '[Bootstrap]' > $(IOSRES)/rc
