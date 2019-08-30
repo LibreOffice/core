@@ -38,6 +38,9 @@ public:
     virtual std::vector<std::pair<OUString, OUString>>
     getChildren(const OUString& rParentId) const = 0;
 
+    // add new top-level node to data model
+    virtual void addNode(const OUString& rText) = 0;
+
 protected:
     ~DiagramDataInterface() throw() {}
 };

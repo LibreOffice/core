@@ -26,7 +26,11 @@ private:
     std::shared_ptr<DiagramDataInterface> mpDiagramData;
     std::unique_ptr<weld::Button> mpBtnOk;
     std::unique_ptr<weld::Button> mpBtnCancel;
+    std::unique_ptr<weld::Button> mpBtnAdd;
     std::unique_ptr<weld::TreeView> mpTreeDiagram;
+    std::unique_ptr<weld::TextView> mpTextAdd;
+
+    DECL_LINK(OnAddClick, weld::Button&, void);
 
     void populateTree(weld::TreeIter* pParent, const OUString& rParentId);
 };
