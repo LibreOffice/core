@@ -28,29 +28,9 @@
 
 #include <rtl/ustring.hxx>
 
-int access_u(const rtl_uString* pustrPath, int mode);
-
-/***********************************
- @descr
- The return value differs from the
- realpath function
-
- @returns sal_True on success else
- sal_False
-
- @see realpath
- **********************************/
-bool realpath_u(
-    const rtl_uString* pustrFileName,
-    rtl_uString** ppustrResolvedName);
-
 int stat_c(const char *cpPath, struct stat* buf);
 
 int lstat_c(const char *cpPath, struct stat* buf);
-
-int lstat_u(const rtl_uString* pustrPath, struct stat* buf);
-
-int mkdir_u(const rtl_uString* path, mode_t mode);
 
 int open_c(const char *cpPath, int oflag, int mode);
 
@@ -60,10 +40,7 @@ int ftruncate_with_name(int fd, sal_uInt64 uSize, rtl_String* path);
 
 namespace osl
 {
-    inline int access(const OUString& ustrPath, int mode)
-    {
-        return access_u(ustrPath.pData, mode);
-    }
+    int access(const OUString& ustrPath, int mode);
 
     /***********************************
      osl::realpath
@@ -78,22 +55,13 @@ namespace osl
      @see realpath
      **********************************/
 
-    inline bool realpath(
+    bool realpath(
         const OUString& ustrFileName,
-        OUString& ustrResolvedName)
-    {
-        return realpath_u(ustrFileName.pData, &ustrResolvedName.pData);
-    }
+        OUString& ustrResolvedName);
 
-    inline int lstat(const OUString& ustrPath, struct stat& buf)
-    {
-        return lstat_u(ustrPath.pData, &buf);
-    }
+    int lstat(const OUString& ustrPath, struct stat& buf);
 
-    inline int mkdir(const OUString& aPath, mode_t aMode)
-    {
-        return mkdir_u(aPath.pData, aMode);
-    }
+    int mkdir(const OUString& aPath, mode_t aMode);
 } // end namespace osl
 
 #endif // INCLUDED_SAL_OSL_UNX_UUNXAPI_HXX
