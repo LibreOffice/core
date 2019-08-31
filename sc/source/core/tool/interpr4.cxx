@@ -1627,7 +1627,7 @@ ScMatrixRef ScInterpreter::PopMatrix()
             case svMatrix:
                 {
                     // ScMatrix itself maintains an im/mutable flag that should
-                    // be obeyed where necessary.. so we can return ScMatrixRef
+                    // be obeyed where necessary... so we can return ScMatrixRef
                     // here instead of ScConstMatrixRef.
                     ScMatrix* pMat = const_cast<FormulaToken*>(p)->GetMatrix();
                     if ( pMat )

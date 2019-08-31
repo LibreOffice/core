@@ -206,7 +206,7 @@ void WorkbookSettings::finalizeImport()
          * 'readOnlyRecommended' is defined as "indicates on open, whether the
          * application alerts the user that the file be marked as read-only",
          * which sounds silly in itself and seems not to be present if the
-         * 'password' attribute isn't present, but.. */
+         * 'password' attribute isn't present, but... */
         if (maFileSharing.mbRecommendReadOnly || !maFileSharing.maHashValue.isEmpty())
             aSettingsProp.setProperty( PROP_LoadReadonly, true );
 

@@ -494,7 +494,7 @@ private:
 
         @descr  Note: Showing of a frame is bound to a special feature...
                 a) If we recycle any existing frame, we must bring it to front.
-                   Showing of such frame is not needed really.. because we recycle
+                   Showing of such frame is not needed really... because we recycle
                    visible frames only!
                 b) If the document was already shown (e.g. by our progress implementation)
                    we do nothing here. The reason behind: The document was already shown...

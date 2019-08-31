@@ -3872,7 +3872,7 @@ bool ScCompiler::IsTableRefColumn( const OUString& rName ) const
     sal_Int32 nOffset = pDBData->GetColumnNameOffset( aName);
     if (nOffset >= 0)
     {
-        // This is sneaky.. we always use the top row of the database range,
+        // This is sneaky... we always use the top row of the database range,
         // regardless of whether it is a header row or not. Code evaluating
         // this reference must take that into account and may have to act
         // differently if it is a header-less table. Which are two places,

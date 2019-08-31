@@ -4975,7 +4975,7 @@ void Test::testFuncIFERROR()
         { "=IFNA(A7;-7)",                          "-7" },
         { "=IFNA(VLOOKUP(\"4\";A8:A10;1;0);-2)",    "4" },
         { "=IFNA(VLOOKUP(\"fop\";A8:A10;1;0);-2)", "-2" },
-        { "{=IFERROR(3*A11:A12;1998)}[0]",       "1998" },  // um.. this is not the correct way to insert a
+        { "{=IFERROR(3*A11:A12;1998)}[0]",       "1998" },  // um... this is not the correct way to insert a
         { "{=IFERROR(3*A11:A12;1998)}[1]",         "69" }   // matrix formula, just a place holder, see below
     };
 
@@ -8096,7 +8096,7 @@ void Test::testFuncMDETERM()
         // 6.34413156928661e-17 instead of 0.0 (tdf#99730) so lower the bar to
         // 10e-14.
         // Then again on aarch64, ppc64* and s390x it also fails.
-        // Sigh.. why do we even test this? The original complaint in tdf#32834
+        // Sigh... why do we even test this? The original complaint in tdf#32834
         // was about -9.51712667007776E-016
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of MDETERM incorrect for singular integer matrix",
                 0.0, m_pDoc->GetValue(aPos), 1e-14);

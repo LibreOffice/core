@@ -1839,7 +1839,7 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
                 xOLEProperties->setPropertyValue(s, xReplacementProperties->getPropertyValue(s));
         }
         else
-            // mimic the treatment of graphics here.. it seems anchoring as character
+            // mimic the treatment of graphics here... it seems anchoring as character
             // gives a better ( visually ) result
             xOLEProperties->setPropertyValue(getPropertyName( PROP_ANCHOR_TYPE ),  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) );
         // remove ( if valid ) associated shape ( used for graphic replacement )
@@ -1905,7 +1905,7 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
                 uno::makeAny( sal_Int32(size.Width())));
             xStarMathProperties->setPropertyValue(getPropertyName( PROP_HEIGHT ),
                 uno::makeAny( sal_Int32(size.Height())));
-            // mimic the treatment of graphics here.. it seems anchoring as character
+            // mimic the treatment of graphics here... it seems anchoring as character
             // gives a better ( visually ) result
             xStarMathProperties->setPropertyValue(getPropertyName( PROP_ANCHOR_TYPE ),
                 uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) );

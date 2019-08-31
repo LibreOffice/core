@@ -1188,7 +1188,7 @@ sal_Int32 DiagramHelper::getPercentNumberFormat( const Reference< util::XNumberF
             {
                 // This *assumes* the sequence is sorted as in
                 // NfIndexTableOffset and the first format is the integer 0%
-                // format by chance.. which usually is the case, but.. anyway,
+                // format by chance... which usually is the case, but... anyway,
                 // we usually also have a number formatter so don't reach here.
                 nRet = aKeySeq[0];
             }

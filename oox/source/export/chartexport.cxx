@@ -594,7 +594,7 @@ OUString ChartExport::parseFormula( const OUString& rRange )
         /* TODO: it would be much better to introduce a
          * getSourceRangeRepresentation(css::sheet::AddressConvention) to
          * return the ranges in a specific convention than converting them with
-         * the overhead of creating an XFormulaParser for each.. */
+         * the overhead of creating an XFormulaParser for each... */
         uno::Sequence<sheet::FormulaToken> aTokens = xParser->parseFormula( rRange, CellAddress( 0, 0, 0 ) );
         if( xParserProps.is() )
         {

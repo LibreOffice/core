@@ -26,7 +26,7 @@ module com { module sun { module star { module i18n {
     ::com::sun::star::i18n::XExtendedCalendar and
     provides additional methods to obtain Calendar2 items
     that include the possessive genitive case month names and sequences 
-    of CalendarItem2 items.. </p>
+    of CalendarItem2 items... </p>
 
     @since LibreOffice 3.5
  */

@@ -1063,7 +1063,7 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
         OUString aUniKey(OStringToOUString(aKey, RTL_TEXTENCODING_MS_1252));
         // handle CUPS extension for globalized PPDs
         /* FIXME-BCP47: really only ISO 639-1 two character language codes?
-         * goodnight.. */
+         * goodnight... */
         bool bIsGlobalizedLine = false;
         css::lang::Locale aTransLocale;
         if( ( aUniKey.getLength() > 3 && aUniKey[ 2 ] == '.' ) ||

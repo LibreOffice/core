@@ -5018,7 +5018,7 @@
                     </xsl:call-template>
                     <xsl:text>cm</xsl:text>
                 </xsl:when>
-                <!-- Note: Specify where this value come from.. -->
+                <!-- Note: Specify where this value come from... -->
                 <xsl:otherwise>2.096cm</xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -6312,13 +6312,13 @@
                     </xsl:choose>
                 </xsl:when>
                 <xsl:otherwise>
-                    <!-- as for the spanned cells no style is taken.. -->
+                    <!-- as for the spanned cells no style is taken... -->
                     <xsl:choose>
                         <!-- inherit style from parent row style-->
                         <xsl:when test="../@ss:StyleID">
                             <xsl:value-of select="../@ss:StyleID"/>
                         </xsl:when>
-                        <!-- if no correspondent column style exisit.. -->
+                        <!-- if no correspondent column style exisit... -->
                         <!-- inherit style from parent table style -->
                         <xsl:when test="../../@ss:StyleID">
                             <!-- function to give in col-pos and get back column style  -->
@@ -6741,7 +6741,7 @@
                             <xsl:value-of select="../@ss:StyleID"/>
                         </xsl:attribute>
                     </xsl:when>
-                    <!-- if no correspondent column style exisit.. -->
+                    <!-- if no correspondent column style exisit... -->
                     <!-- inherit style from parent table style -->
                     <xsl:when test="../../@ss:StyleID">
                         <!-- function to give in col-pos and get back column style  -->

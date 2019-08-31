@@ -1227,7 +1227,7 @@ bool ScViewData::SelectionForbidsCellFill()
 bool ScViewData::SelectionFillDOOM( const ScRange& rRange )
 {
     // Assume that more than 23 full columns (23M cells) will not be
-    // successful.. Even with only 10 bytes per cell that would already be
+    // successful... Even with only 10 bytes per cell that would already be
     // 230MB, formula cells would be 100 bytes and more per cell.
     // rows * columns > 23m => rows > 23m / columns
     // to not overflow in case number of available columns or rows would be

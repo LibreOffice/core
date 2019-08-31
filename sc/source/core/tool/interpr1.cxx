@@ -3750,7 +3750,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
             /* TODO: the awkward "no value is minimum 0.0" is likely the case
              * if a value is numeric_limits::max. Still, that could be a valid
              * minimum value as well, but nVal and nMin had been reset after
-             * the last svRefList.. so we may lie here. */
+             * the last svRefList... so we may lie here. */
             for (SCSIZE i=0; i < nMatRows; ++i)
             {
                 double fVecRes = xResMat->GetDouble(0,i);
@@ -3908,7 +3908,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
             /* TODO: the awkward "no value is maximum 0.0" is likely the case
              * if a value is numeric_limits::lowest. Still, that could be a
              * valid maximum value as well, but nVal and nMax had been reset
-             * after the last svRefList.. so we may lie here. */
+             * after the last svRefList... so we may lie here. */
             for (SCSIZE i=0; i < nMatRows; ++i)
             {
                 double fVecRes = xResMat->GetDouble(0,i);
@@ -6345,7 +6345,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
 
             // end-result calculation
 
-            // This gets weird.. if conditions were calculated using a
+            // This gets weird... if conditions were calculated using a
             // reference list array but the main calculation range is not a
             // reference list array, then the conditions of the array are
             // applied to the main range each in turn to form the array result.
@@ -8169,7 +8169,7 @@ void ScInterpreter::ScIndirect()
                     aComp.SetRefConvention( eConv);     // must be after grammar
                     std::unique_ptr<ScTokenArray> pArr( aComp.CompileString( sRefStr));
 
-                    // Whatever.. use only the specific case.
+                    // Whatever... use only the specific case.
                     if (!pArr->HasOpCode( ocTableRef))
                         break;
 
