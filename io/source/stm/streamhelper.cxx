@@ -118,7 +118,7 @@ void MemRingBuffer::readAt( sal_Int32 nPos, Sequence<sal_Int8> &seq , sal_Int32 
 void MemRingBuffer::writeAt( sal_Int32 nPos, const Sequence<sal_Int8> &seq )
 {
     checkInvariants();
-    sal_Int32 nLen = seq.getLength();
+    const sal_Int32 nLen = seq.getLength();
 
     if( nPos < 0 || nPos > std::numeric_limits< sal_Int32 >::max() - nLen )
     {
@@ -127,7 +127,8 @@ void MemRingBuffer::writeAt( sal_Int32 nPos, const Sequence<sal_Int8> &seq )
     }
 
     if( nPos + nLen - m_nOccupiedBuffer > 0 ) {
-        resizeBuffer( nPos + seq.getLength() );
+        resizeBuffer( nPos + nLen );
+        m_nOccupiedBuffer = nPos + nLen;
     }
 
     sal_Int32 nStartWritingIndex = m_nStart + nPos;
@@ -135,18 +136,16 @@ void MemRingBuffer::writeAt( sal_Int32 nPos, const Sequence<sal_Int8> &seq )
         nStartWritingIndex -= m_nBufferLen;
     }
 
-    if( nLen + nStartWritingIndex > m_nBufferLen ) {
+    if( const sal_Int32 nBufferRestLen = m_nBufferLen-nStartWritingIndex; nLen > nBufferRestLen ) {
         // two area copy
-        memcpy( &(m_p[nStartWritingIndex]) , seq.getConstArray(), m_nBufferLen-nStartWritingIndex );
-        memcpy( m_p , &( seq.getConstArray()[m_nBufferLen-nStartWritingIndex] ),
-                                        nLen - (m_nBufferLen-nStartWritingIndex) );
+        memcpy( &(m_p[nStartWritingIndex]) , seq.getConstArray(), nBufferRestLen );
+        memcpy( m_p , &( seq.getConstArray()[nBufferRestLen] ), nLen - nBufferRestLen );
 
     }
     else {
         // one area copy
         memcpy( &( m_p[nStartWritingIndex]), seq.getConstArray() , nLen );
     }
-    m_nOccupiedBuffer = std::max( nPos + seq.getLength() , m_nOccupiedBuffer );
     checkInvariants();
 }
 
