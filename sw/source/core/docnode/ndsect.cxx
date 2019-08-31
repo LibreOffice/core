@@ -1071,7 +1071,7 @@ void SwSectionNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
                 }
 
                 // if the node is in a section, the sectionframe now
-                // has to be created..
+                // has to be created...
                 // boolean to control <Init()> of a new section frame.
                 bool bInitNewSect = false;
                 if( pS )

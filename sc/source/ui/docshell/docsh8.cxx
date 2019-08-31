@@ -692,7 +692,7 @@ void lcl_GetColumnTypes(
                 bHasMemo = true;
             }
             else
-                nFieldLen = 254;                    // bad luck..
+                nFieldLen = 254;                    // bad luck...
         }
 
         pColNames[nField] = aFieldName;

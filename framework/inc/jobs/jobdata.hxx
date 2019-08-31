@@ -131,7 +131,7 @@ class JobData final
         /**
             the alias name of this job.
             Is used as entry of configuration set for job registration, to find all
-            necessary properties of it..
+            necessary properties of it...
          */
         OUString m_sAlias;
 

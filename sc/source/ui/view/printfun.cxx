@@ -706,7 +706,7 @@ bool ScPrintFunc::AdjustPrintArea( bool bNew )
             SCROW nPAEndRow;
             bFound = pDoc->GetPrintAreaVer( nPrintTab, nStartCol, nEndCol, nPAEndRow, bNotes );
             // Say we don't want to print more than ~1000 empty rows, which are
-            // about 14 pages intentionally left blank..
+            // about 14 pages intentionally left blank...
             const SCROW nFuzzy = 23*42;
             if (nPAEndRow + nFuzzy < nEndRow)
             {

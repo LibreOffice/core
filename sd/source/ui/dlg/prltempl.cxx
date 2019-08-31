@@ -56,7 +56,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg(SfxObjectShell const * pDocSh,
 {
     if( IS_OUTLINE(ePO))
     {
-        // Unfortunately, the Itemsets of our style sheets are not discreet..
+        // Unfortunately, the Itemsets of our style sheets are not discreet...
         const sal_uInt16* pPtr = pOrgSet->GetRanges();
         sal_uInt16 p1, p2;
         while( *pPtr )

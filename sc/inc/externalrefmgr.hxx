@@ -206,7 +206,7 @@ public:
      *
      * @return a new token array instance.  Note that <i>the caller must
      *         manage the life cycle of the returned instance</i>, which is
-     *         guaranteed if the TokenArrayRef is properly used..
+     *         guaranteed if the TokenArrayRef is properly used...
      */
     ScExternalRefCache::TokenArrayRef getCellRangeData(
         sal_uInt16 nFileId, const OUString& rTabName, const ScRange& rRange);

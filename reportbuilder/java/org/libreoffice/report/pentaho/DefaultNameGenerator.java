@@ -99,7 +99,7 @@ public class DefaultNameGenerator
             int counter = 0;
             while (exists)
             {
-                if (counter < 0) // wraparound should not happen..
+                if (counter < 0) // wraparound should not happen...
                 {
                     throw new IOException();
                 }

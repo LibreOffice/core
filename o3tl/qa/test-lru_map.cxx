@@ -146,7 +146,7 @@ void lru_map_test::testLruRemoval()
     o3tl::lru_map<int, int> lru(5);
     CPPUNIT_ASSERT_EQUAL(size_t(0), lru.size());
 
-    // fill up..
+    // fill up...
     lru.insert(std::make_pair<int, int>(1, 100));
     lru.insert(std::make_pair<int, int>(2, 200));
     lru.insert(std::make_pair<int, int>(3, 300));

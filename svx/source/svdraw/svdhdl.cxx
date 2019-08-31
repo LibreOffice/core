@@ -774,7 +774,7 @@ BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, BitmapColorIndex eIndex)
         }
     }
 
-    // if we can't load the marker..
+    // if we can't load the marker...
 
     static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet(new SdrHdlBitmapSet);
     return aModernSet.get()->GetBitmapEx(eKindOfMarker, sal_uInt16(eIndex));

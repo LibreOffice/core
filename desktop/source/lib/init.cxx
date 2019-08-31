@@ -2160,7 +2160,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 
         OUString aFilterOptions = getUString(pFilterOptions);
 
-        // Check if watermark for pdf is passed by filteroptions..
+        // Check if watermark for pdf is passed by filteroptions...
         // It is not a real filter option so it must be filtered out.
         OUString watermarkText;
         int aIndex = -1;

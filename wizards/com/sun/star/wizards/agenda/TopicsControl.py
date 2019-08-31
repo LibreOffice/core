@@ -555,7 +555,7 @@ class TopicsControl(ControlScroller):
             lowerRow = self.ControlGroupVector[guiRow]
         else:
             # if we scrolled we are done...
-            #otherwise..
+            #otherwise...
             lowerRow = self.ControlGroupVector[guiRow + 1]
 
         self.focus(self.getControl(lowerRow, control))

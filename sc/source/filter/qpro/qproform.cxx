@@ -136,7 +136,7 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
     {
         if( eOc == ocRRI )
         {
-            // There should be at least 3 arguments, but with binary crap may not..
+            // There should be at least 3 arguments, but with binary crap may not...
             SAL_WARN_IF( nArgs < 3, "sc.filter","QProToSc::DoFunc - ocRRI expects 3 parameters but got " << nArgs);
             // Store first 3 parameters to pool in order 2,1,0
             if (nArgs > 3)
@@ -144,7 +144,7 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
         }
         else if( eOc == ocIpmt )
         {
-            // There should be at least 4 arguments, but with binary crap may not..
+            // There should be at least 4 arguments, but with binary crap may not...
             SAL_WARN_IF( nArgs < 4, "sc.filter","QProToSc::DoFunc - ocIpmt expects 4 parameters but got " << nArgs);
             // Store first 4 parameters to pool in order 3,2,1,0
             if (nArgs > 4)

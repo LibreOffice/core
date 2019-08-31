@@ -316,7 +316,7 @@ void SwAddressPreview::SelectAddress(sal_uInt16 nSelect)
 {
     OSL_ENSURE(pImpl->nSelectedAddress < pImpl->aAddresses.size(), "selection invalid");
     pImpl->nSelectedAddress = nSelect;
-    // now make it visible..
+    // now make it visible...
     sal_uInt16 nSelectRow = nSelect / pImpl->nColumns;
     sal_uInt16 nStartRow = m_xVScrollBar->vadjustment_get_value();
     if( (nSelectRow < nStartRow) || (nSelectRow >= (nStartRow + pImpl->nRows) ))

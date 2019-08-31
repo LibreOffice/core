@@ -88,7 +88,7 @@ bool ScDocument::LimitRangeToAvailableSheets( const ScRange& rRange, ScRange& o_
         return false;
 
     // Originally BCA_LISTEN_ALWAYS uses an implicit tab 0 and should had been
-    // valid already, but in case that would change..
+    // valid already, but in case that would change...
     if (rRange == BCA_LISTEN_ALWAYS)
         return false;
 
@@ -264,7 +264,7 @@ void ScDocument::PutInFormulaTree( ScFormulaCell* pCell )
     if ( pEOFormulaTree )
         pEOFormulaTree->SetNext( pCell );
     else
-        pFormulaTree = pCell;               // No end, no beginning..
+        pFormulaTree = pCell;               // No end, no beginning...
     pCell->SetPrevious( pEOFormulaTree );
     pCell->SetNext( nullptr );
     pEOFormulaTree = pCell;
@@ -457,7 +457,7 @@ void ScDocument::AppendToFormulaTrack( ScFormulaCell* pCell )
     if ( pEOFormulaTrack )
         pEOFormulaTrack->SetNextTrack( pCell );
     else
-        pFormulaTrack = pCell;              // No end, no beginning..
+        pFormulaTrack = pCell;              // No end, no beginning...
     pCell->SetPreviousTrack( pEOFormulaTrack );
     pCell->SetNextTrack( nullptr );
     pEOFormulaTrack = pCell;

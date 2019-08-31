@@ -99,7 +99,7 @@ enum EventType
 
     mouseout,
     /*
-    The mouseout event occurs when the pointing device is moved away from an element. This event is valid for most elements..
+    The mouseout event occurs when the pointing device is moved away from an element. This event is valid for most elements...
     * Bubbles: Yes
     * Cancelable: Yes
     * Context Info: screenX, screenY, clientX, clientY, altKey, ctrlKey, shiftKey, metaKey, relatedTarget indicates the EventTarget the pointing device is entering.

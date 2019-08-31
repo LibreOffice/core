@@ -519,7 +519,7 @@ bool ScComplexRefData::IncEndColSticky( SCCOL nDelta, const ScAddress& rPos )
             Ref2.SetAbsCol( nCol);
     }
     else
-        Ref2.IncCol( nDelta);   // was greater than MAXCOL, caller should know..
+        Ref2.IncCol( nDelta);   // was greater than MAXCOL, caller should know...
 
     return true;
 }
@@ -548,7 +548,7 @@ bool ScComplexRefData::IncEndRowSticky( SCROW nDelta, const ScAddress& rPos )
             Ref2.SetAbsRow( nRow);
     }
     else
-        Ref2.IncRow( nDelta);   // was greater than MAXROW, caller should know..
+        Ref2.IncRow( nDelta);   // was greater than MAXROW, caller should know...
 
     return true;
 }

@@ -1373,7 +1373,7 @@ void ScInterpreter::PopRefListPushMatrixOrRef()
             {
                 // Only single cells can be stuffed into a column vector.
                 // XXX NOTE: Excel doesn't do this but returns #VALUE! instead.
-                // Though there's no compelling reason not to..
+                // Though there's no compelling reason not to...
                 for (const auto & rRef : *pv)
                 {
                     if (rRef.Ref1 != rRef.Ref2)

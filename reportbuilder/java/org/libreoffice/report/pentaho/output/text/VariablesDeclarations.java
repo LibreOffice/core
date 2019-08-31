@@ -61,7 +61,7 @@ public class VariablesDeclarations
         final String result = nameGenerator.generateName(name);
         if (holder.isEmpty())
         {
-            // create the default mapping as well..
+            // create the default mapping as well...
             holder.put(null, name);
             holder.put("time", name);
             holder.put("date", name);

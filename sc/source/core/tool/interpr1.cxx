@@ -8159,7 +8159,7 @@ void ScInterpreter::ScIndirect()
             // It may be even a TableRef.
             // Anything else that resolves to one reference could be added
             // here, but we don't want to compile every arbitrary string. This
-            // is already nasty enough..
+            // is already nasty enough...
             sal_Int32 nIndex = 0;
             if ((nIndex = sRefStr.indexOf('[')) >= 0 && sRefStr.indexOf(']',nIndex+1) > nIndex)
             {
@@ -9848,7 +9848,7 @@ bool ScInterpreter::MayBeWildcard( const OUString& rStr )
 {
     // Wildcards with '~' escape, if there are no wildcards then an escaped
     // character does not make sense, but it modifies the search pattern in an
-    // Excel compatible wildcard search..
+    // Excel compatible wildcard search...
     static const sal_Unicode cw[] = { '*','?','~', 0 };
     const sal_Unicode* p1 = rStr.getStr();
     sal_Unicode c1;

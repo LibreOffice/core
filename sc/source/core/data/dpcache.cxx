@@ -1226,7 +1226,7 @@ OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem, boo
             return aStr;
         }
 
-        // Last resort..
+        // Last resort...
         return GetLocaleIndependentFormattedNumberString( rItem.GetValue());
     }
 

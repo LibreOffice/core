@@ -32,7 +32,7 @@
 constants AnimationFill
 {
     /**  The fill behavior for the element is determined by the value of the XTiming::FillDefault attribute.
-         This is the default value for the XTiming::Fill..
+         This is the default value for the XTiming::Fill...
          If the application of fillDefault to an element would result in the element having a value
          of fill that is not allowed on that element, the element will instead have a fill value of
          AnimationFill::AUTO.

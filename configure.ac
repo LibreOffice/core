@@ -7373,12 +7373,12 @@ if test "$ENABLE_JAVA" != ""; then
             add_warning "JAVA_HOME is set to /usr - this is very likely to be incorrect"
             add_warning "if this is the case, please inform the correct JAVA_HOME with --with-jdk-home"
         fi
-        dnl now that we probably have the path to the real javac, make a JAVA_HOME out of it..
+        dnl now that we probably have the path to the real javac, make a JAVA_HOME out of it...
         if test "$JAVA_HOME" != "/usr"; then
             if test "$_os" = "Darwin" -o "$OS_FOR_BUILD" = MACOSX; then
                 dnl Leopard returns a non-suitable path with readlink - points to "Current" only
                 JAVA_HOME=$(echo $JAVA_HOME | $SED -e s,/Current/Commands/javac$,/CurrentJDK/Home,)
-                dnl Tiger already returns a JDK path..
+                dnl Tiger already returns a JDK path...
                 JAVA_HOME=$(echo $JAVA_HOME | $SED -e s,/CurrentJDK/Commands/javac$,/CurrentJDK/Home,)
             else
                 JAVA_HOME=$(echo $JAVA_HOME | $SED -e s,/bin/javac$,,)

@@ -78,13 +78,13 @@ public:
         css::uno::Reference<css::awt::XWindow> xDialogParent;
         aDescriptor["ParentWindow"] >>= xDialogParent;
 
-        // An XML import service: what we push sax messages to..
+        // An XML import service: what we push sax messages to...
         css::uno::Reference<css::xml::sax::XDocumentHandler> xInternalHandler(
             mxContext->getServiceManager()->createInstanceWithContext(
                 DocumentHandlerFor<Generator>::name(), mxContext),
             css::uno::UNO_QUERY_THROW);
 
-        // The XImporter sets up an empty target document for XDocumentHandler to write to..
+        // The XImporter sets up an empty target document for XDocumentHandler to write to...
         css::uno::Reference<css::document::XImporter> xImporter(xInternalHandler,
                                                                 css::uno::UNO_QUERY);
         xImporter->setTargetDocument(mxDoc);

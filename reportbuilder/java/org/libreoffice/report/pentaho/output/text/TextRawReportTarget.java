@@ -546,7 +546,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
 
         if (isTableMergeActive() && detailBandProcessingState == DETAIL_SECTION_OTHER_PRINTED && ObjectUtilities.equal(OfficeNamespaces.TABLE_NS, namespace) && ObjectUtilities.equal(OfficeToken.TABLE_COLUMNS, elementType))
         {
-            // Skip the columns section if the tables get merged..
+            // Skip the columns section if the tables get merged...
             startBuffering(getStylesCollection(), true);
         }
         else
@@ -642,7 +642,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                         if (style == null)
                         {
                             style = deriveStyle(OfficeToken.PARAGRAPH, styleName);
-                            // Lets set the 'keep-together' flag..
+                            // Lets set the 'keep-together' flag...
 
                             Element paragraphProps = style.getParagraphProperties();
                             if (paragraphProps == null)
@@ -1070,7 +1070,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             {
                 // if we have a repeating header, then skip the first one ..
                 // if this is a repeating footer, skip the last one. This means,
-                // we have to buffer all group footers and wait for the next section..
+                // we have to buffer all group footers and wait for the next section...
                 startBuffering(getContentStylesCollection(), true);
             }
 

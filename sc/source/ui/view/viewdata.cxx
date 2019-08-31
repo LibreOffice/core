@@ -1233,7 +1233,7 @@ bool ScViewData::SelectionFillDOOM( const ScRange& rRange )
     // to not overflow in case number of available columns or rows would be
     // arbitrarily increased.
     // We could refine this and take some actual cell size into account,
-    // evaluate available memory and what not, but..
+    // evaluate available memory and what not, but...
     const sal_Int32 kMax = 23 * 1024 * 1024;    // current MAXROWCOUNT is 1024*1024=1048576
     return (rRange.aEnd.Row() - rRange.aStart.Row() + 1) > (kMax / (rRange.aEnd.Col() - rRange.aStart.Col() + 1));
 }
