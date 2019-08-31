@@ -2591,7 +2591,7 @@ OpCode FormulaCompiler::NextToken()
                 }
             }
         }
-        // Nasty, ugly, horrific, terrifying.. significant whitespace...
+        // Nasty, ugly, horrific, terrifying... significant whitespace...
         if (eOp == ocSpaces && FormulaGrammar::isExcelSyntax( meGrammar))
         {
             // Fake an intersection op as last op for the next round, but at

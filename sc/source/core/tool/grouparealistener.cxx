@@ -228,7 +228,7 @@ void FormulaGroupAreaListener::collectFormulaCells(
      * newly created, so mpColumn still points to the old column that then has
      * the content of a shifted column. Effectively this workaround has the
      * consequence that the group area listener is fouled up and not all
-     * formula cells are notified.. */
+     * formula cells are notified... */
     if (nBlockSize < static_cast<size_t>(mnGroupLen))
     {
         SAL_WARN("sc.core","FormulaGroupAreaListener::collectFormulaCells() nBlockSize " <<

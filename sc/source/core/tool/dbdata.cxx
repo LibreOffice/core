@@ -906,7 +906,7 @@ void ScDBData::Notify( const SfxHint& rHint )
             // Only one cell of a range is broadcasted per area listener if
             // multiple cells are affected. Expand the range to what this is
             // listening to. Broadcasted address outside should not happen,
-            // but.. let it trigger a refresh if.
+            // but... let it trigger a refresh if.
             ScRange aHeaderRange( GetHeaderArea());
             if (aHeaderRange.IsValid())
             {
@@ -1167,7 +1167,7 @@ bool ScDBCollection::NamedDBs::insert(std::unique_ptr<ScDBData> pData)
         initInserted(p);
 
         /* TODO: shouldn't the import refresh not be setup for
-         * clipboard/undo documents? It was already like this before.. */
+         * clipboard/undo documents? It was already like this before... */
         if (p->HasImportParam() && !p->HasImportSelection())
         {
             p->SetRefreshHandler(mrParent.GetRefreshHandler());

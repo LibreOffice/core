@@ -564,7 +564,7 @@ bool ScDocument::FindRangeNamesReferencingSheet( sc::UpdatedRangeNames& rIndexes
         return false;
 
     bool bRef = !bSameDoc;  // include every name used when copying to other doc
-    if (nRecursion < 126)   // whatever.. 42*3
+    if (nRecursion < 126)   // whatever... 42*3
     {
         formula::FormulaTokenArrayPlainIterator aIter(*pCode);
         for (const formula::FormulaToken* p = aIter.First(); p; p = aIter.Next())

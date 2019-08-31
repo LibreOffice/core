@@ -803,7 +803,7 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 void SbModule::SetSource32( const OUString& r )
 {
-    // Default basic mode to library container mode, but.. allow Option VBASupport 0/1 override
+    // Default basic mode to library container mode, but... allow Option VBASupport 0/1 override
     SetVBACompat( getDefaultVBAMode( static_cast< StarBASIC*>( GetParent() ) ) );
     aOUSource = r;
     StartDefinitions();

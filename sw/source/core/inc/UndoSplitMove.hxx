@@ -46,9 +46,9 @@ public:
 
 class SwUndoMove : public SwUndo, private SwUndRng, private SwUndoSaveContent
 {
-    // nDest.. - destination range of move (after move!)
-    // nIns..  - source Position of move (after move!)
-    // nMv..   - destination position of move (before move!); for REDO
+    // nDest... - destination range of move (after move!)
+    // nIns...  - source Position of move (after move!)
+    // nMv...   - destination position of move (before move!); for REDO
     sal_uLong m_nDestStartNode, m_nDestEndNode, m_nInsPosNode, m_nMoveDestNode;
     sal_Int32 m_nDestStartContent, m_nDestEndContent, m_nInsPosContent, m_nMoveDestContent;
 

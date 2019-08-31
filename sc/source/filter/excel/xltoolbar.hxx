@@ -15,7 +15,7 @@ namespace com { namespace sun { namespace star { namespace container { class XIn
 
 class ScCTBWrapper;
 // hmm I don't normally use these packed structures
-// but.. hey always good to do something different
+// but... hey always good to do something different
 class TBCCmd : public TBBase
 {
 public:

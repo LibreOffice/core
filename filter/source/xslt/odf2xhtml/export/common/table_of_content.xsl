@@ -293,7 +293,7 @@ Scenarios tabstops
 4) first style:type would have no right preceding tabStop
  -> works well with first sceanrios 1 and 3
 
-5) last style:type would be a special case, if it would be left aligned, but this won't happen in our case.. :D
+5) last style:type would be a special case, if it would be left aligned, but this won't happen in our case... :D
 
 Scenarios unmatched:
 - text:styleposition 'center' will not be matched in our case (effort for nothing), there will be only 'right' and not 'right'

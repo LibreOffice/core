@@ -1085,7 +1085,7 @@ bool LanguageTagImpl::canonicalize()
             }
             else
             {
-                // Now this is getting funny.. we only have some BCP47 string
+                // Now this is getting funny... we only have some BCP47 string
                 // and want to determine if parsing it would be possible
                 // without using liblangtag just to see if it is a simple known
                 // locale or could fall back to one.
@@ -2560,7 +2560,7 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
                 rLanguage = "es";
                 rScript.clear();
                 rCountry  = "ES";
-                rVariants = "tradnl";   // this is nonsense, but.. ignored.
+                rVariants = "tradnl";   // this is nonsense, but... ignored.
                 eRet = EXTRACTED_KNOWN_BAD;
             }
         }
@@ -2745,7 +2745,7 @@ OUString LanguageTag::convertToBcp47( const css::lang::Locale& rLocale, bool bRe
 OUString LanguageTag::convertToBcp47( LanguageType nLangID )
 {
     lang::Locale aLocale( LanguageTag::convertToLocale( nLangID ));
-    // If system for some reason (should not happen.. haha) could not be
+    // If system for some reason (should not happen... haha) could not be
     // resolved DO NOT CALL LanguageTag::convertToBcp47(Locale) because that
     // would recurse into this method here!
     if (aLocale.Language.isEmpty())

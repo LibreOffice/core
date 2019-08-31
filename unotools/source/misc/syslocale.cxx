@@ -199,7 +199,7 @@ rtl_TextEncoding SvtSysLocale::GetBestMimeEncoding()
         // 'qlt' to rtl_locale_register() and the underlying system locale
         // stuff, which doesn't know about it nor about BCP47 in the Variant
         // field. So use the real language and for non-pure ISO cases hope for
-        // the best.. the fallback to UTF-8 should solve these cases nowadays.
+        // the best... the fallback to UTF-8 should solve these cases nowadays.
         /* FIXME-BCP47: the script needs to go in here as well, so actually
          * we'd need some variant fiddling or glibc locale string and tweak
          * rtl_locale_register() to know about it! But then again the Windows

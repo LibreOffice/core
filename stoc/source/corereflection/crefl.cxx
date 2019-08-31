@@ -234,7 +234,7 @@ Any IdlReflectionServiceImpl::getByHierarchicalName( const OUString & rName )
                 // if you are interested in a type then CALL forName()!!!
                 // this way is NOT recommended for types, because this method looks for constants first
 
-                // if td manager found some type, it will be in the cache (hopefully.. we just got it)
+                // if td manager found some type, it will be in the cache (hopefully... we just got it)
                 // so the second retrieving via c typelib callback chain should succeed...
 
                 // try to get _type_ by name
