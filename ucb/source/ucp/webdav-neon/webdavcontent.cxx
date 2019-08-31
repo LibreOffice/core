@@ -3979,7 +3979,7 @@ void Content::getResourceOptions(
                     // cache the internal unofficial status code
 
                     aDAVOptions.setHttpResponseStatusCode( USC_CONNECTION_TIMED_OUT );
-                    // used only internally, so the text doesn't really matter..
+                    // used only internally, so the text doesn't really matter...
                     aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
                                                           m_nOptsCacheLifeNotFound );
                     if ( networkAccessAllowed != nullptr )
@@ -3993,7 +3993,7 @@ void Content::getResourceOptions(
                 {
                     SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAVException: DAV_HTTP_LOOKUP for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
                     aDAVOptions.setHttpResponseStatusCode( USC_LOOKUP_FAILED );
-                    // used only internally, so the text doesn't really matter..
+                    // used only internally, so the text doesn't really matter...
                     aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
                                                           m_nOptsCacheLifeNotFound );
                     if ( networkAccessAllowed != nullptr )
@@ -4012,7 +4012,7 @@ void Content::getResourceOptions(
                     //   this is not actually an error, it means only that for current user this is a standard web,
                     //   though possibly DAV enabled
                     aDAVOptions.setHttpResponseStatusCode( USC_AUTH_FAILED );
-                    // used only internally, so the text doesn't really matter..
+                    // used only internally, so the text doesn't really matter...
                     aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
                                                           m_nOptsCacheLifeNotFound );
                     if ( networkAccessAllowed != nullptr )
@@ -4026,7 +4026,7 @@ void Content::getResourceOptions(
                 {
                     SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAVException: DAV_HTTP_AUTHPROXY for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
                     aDAVOptions.setHttpResponseStatusCode( USC_AUTHPROXY_FAILED );
-                    // used only internally, so the text doesn't really matter..
+                    // used only internally, so the text doesn't really matter...
                     aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
                                                           m_nOptsCacheLifeNotFound );
                     if ( networkAccessAllowed != nullptr )

@@ -247,10 +247,10 @@ bool T602ImportFilter::importImpl( const Sequence< css::beans::PropertyValue >& 
         return false;
     }
 
-    // An XML import service: what we push sax messages to..
+    // An XML import service: what we push sax messages to...
     mxHandler.set( mxMSF->createInstance( "com.sun.star.comp.Writer.XMLImporter" ), UNO_QUERY );
 
-    // The XImporter sets up an empty target document for XDocumentHandler to write to..
+    // The XImporter sets up an empty target document for XDocumentHandler to write to...
     Reference < XImporter > xImporter(mxHandler, UNO_QUERY);
     xImporter->setTargetDocument(mxDoc);
 

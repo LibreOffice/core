@@ -222,7 +222,7 @@ OUString UnitConverter::calcErrorString( sal_uInt8 nErrorCode ) const
         if (aIt->second == BIFF_ERR_NA)
             iFail = aIt;
     }
-    assert(iFail != maOoxErrCodes.end());   // BIFF_ERR_NA really should be in the map..
+    assert(iFail != maOoxErrCodes.end());   // BIFF_ERR_NA really should be in the map...
     return iFail != maOoxErrCodes.end() ? iFail->first : OUString();
 }
 

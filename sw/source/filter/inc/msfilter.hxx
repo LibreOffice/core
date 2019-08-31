@@ -131,10 +131,10 @@ namespace sw
             Additionally it then has to avoid name collisions such as
 
             a) styles "Normal" and "Default" in a single document, where
-            we can use the original distinct names "Normal" and "Default" and..
+            we can use the original distinct names "Normal" and "Default" and...
             b) styles "Normal" and "Default" in a single document, where
             we can not use the original names, and must come up with an
-            alternative name for one of them..
+            alternative name for one of them...
 
             And it needs to report to the importer if the style being mapped to
             was already in existence, for the cut and paste/insert file mode we
@@ -188,10 +188,10 @@ namespace sw
             Additionally it then has to avoid name collisions such as
 
             a) styles "Normal" and "Default" in a single document, where
-            we can use the original distinct names "Normal" and "Default" and..
+            we can use the original distinct names "Normal" and "Default" and...
             b) styles "Normal" and "Default" in a single document, where
             we can not use the original names, and must come up with an
-            alternative name for one of them..
+            alternative name for one of them...
 
             And it needs to report to the importer if the style being mapped to
             was already in existence, for the cut and paste/insert file mode we

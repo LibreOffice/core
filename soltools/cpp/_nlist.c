@@ -29,8 +29,8 @@ char wd[128];
 /*
     ER: Table was made extra large, because there seems to be a problem with the
     chaining. An nlist->next is sometimes overwritten somewhere, which
-    results in a SIGSEGV. I canceled the GDB with watchpoint after 2 days, though..
-    It works this way for now..
+    results in a SIGSEGV. I canceled the GDB with watchpoint after 2 days, though...
+    It works this way for now...
  */
 #define NLSIZE 15000
 

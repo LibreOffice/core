@@ -174,7 +174,7 @@ public class FormControlArranger
         int nRightDist = nBaseWidth - (DBControlList[a].getPosition().X - cHoriDistance);
         if (nLeftDist < 0.5 * nRightDist)
         {
-            // Fieldwidths in the line can be made smaller..
+            // Fieldwidths in the line can be made smaller...
             adjustLineWidth(StartA, a, nLeftDist, -1);
             m_currentLabelPosY = m_currentMaxRowHeight + cVertDistance;
             m_currentControlPosY = m_currentLabelPosY + m_LabelHeight;

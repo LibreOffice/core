@@ -16,7 +16,7 @@ namespace sc {
 void UpdatedRangeNames::setUpdatedName(SCTAB nTab, sal_uInt16 nIndex)
 {
     // Map anything <-1 to global names. Unless we really want to come up with
-    // some classification there..
+    // some classification there...
     if (nTab < -1)
         nTab = -1;
 

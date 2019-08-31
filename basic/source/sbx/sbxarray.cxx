@@ -338,7 +338,7 @@ void SbxArray::Merge( SbxArray* p )
 }
 
 // Search of an element by his name and type. If an element is an object,
-// it will also be scanned..
+// it will also be scanned...
 
 SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
 {

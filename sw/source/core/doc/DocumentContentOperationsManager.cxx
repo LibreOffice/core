@@ -256,7 +256,7 @@ namespace
                 vMarksToCopy.push_back(pMark);
             }
         }
-        // We have to count the "non-copied" nodes..
+        // We have to count the "non-copied" nodes...
         sal_uLong nDelCount;
         SwNodeIndex aCorrIdx(InitDelCount(rPam, nDelCount));
         for(const sw::mark::IMark* const pMark : vMarksToCopy)

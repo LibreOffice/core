@@ -61,7 +61,7 @@ bool LotusWordProImportFilter::importImpl( const Sequence< css::beans::PropertyV
     if (!inputStream.good())
          return false;
 
-    // An XML import service: what we push sax messages to..
+    // An XML import service: what we push sax messages to...
     uno::Reference< XDocumentHandler > xInternalHandler(
         mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.comp.Writer.XMLImporter", mxContext ), UNO_QUERY );
     uno::Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);

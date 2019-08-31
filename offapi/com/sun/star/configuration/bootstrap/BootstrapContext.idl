@@ -36,7 +36,7 @@ module com { module sun { module star { module configuration { module bootstrap 
         component context.
     </p>
     <p> The implementation is usually available as a singleton in the context
-        that it wraps..
+        that it wraps...
     </p>
 
     @since OOo 1.1.2

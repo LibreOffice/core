@@ -719,7 +719,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
     if ( aProps.find( BASEPROPERTY_FONTDESCRIPTOR ) != aProps.end() )
     {
         const css::uno::Any* pProp = &maData[ BASEPROPERTY_FONTDESCRIPTOR ];
-        // Until 5.0 export arrives, write old format..
+        // Until 5.0 export arrives, write old format...
         css::awt::FontDescriptor aFD;
         (*pProp) >>= aFD;
 

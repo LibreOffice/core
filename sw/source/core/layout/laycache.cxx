@@ -169,7 +169,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
         // of the first content
         sal_uLong nStartOfContent = rDoc.GetNodes().GetEndOfContent().
                                 StartOfSectionNode()->GetIndex();
-        // The first page..
+        // The first page...
         SwPageFrame* pPage = const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->Lower()));
 
         aIo.OpenRec( SW_LAYCACHE_IO_REC_PAGES );
@@ -590,7 +590,7 @@ sal_uLong SwLayHelper::CalcPageCount()
             //Estimates the number of paragraphs.
             sal_uLong nTmp = mpDoc->GetNodes().GetEndOfContent().GetIndex() -
                         mpDoc->GetNodes().GetEndOfExtras().GetIndex();
-            //Tables have a little overhead..
+            //Tables have a little overhead...
             nTmp -= mpDoc->GetTableFrameFormats()->size() * 25;
             //Fly frames, too ..
             nTmp -= (mpDoc->GetNodes().GetEndOfAutotext().GetIndex() -

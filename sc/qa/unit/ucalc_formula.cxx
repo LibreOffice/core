@@ -3794,7 +3794,7 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     // the named expression because when updating the sheet reference is
     // relative to its base position on sheet 0 (same for the 'MyRange' range,
     // which is the reason why it is not updated either).
-    // This is a tad confusing..
+    // This is a tad confusing...
     aExpr2 = pCode2->CreateString(aCxt2, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$3"), aExpr2);
 
@@ -5493,7 +5493,7 @@ static void runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[DataSize]
     {
         pDoc->SetString(i, 1, 0, OUString::createFromAscii(aChecks[i].pVal));
 
-        // Assume we don't have more than 26 data columns..
+        // Assume we don't have more than 26 data columns...
         OUStringBuffer aBuf;
         aBuf.append("=MATCH(");
         aBuf.append(static_cast<sal_Unicode>('A'+i));
@@ -6666,7 +6666,7 @@ void Test::testExternalRefUnresolved()
     m_pDoc->InsertTab(0, "Test");
 
     // Test error propagation of unresolved (not existing document) external
-    // references. Well, let's hope no build machine has such file with sheet..
+    // references. Well, let's hope no build machine has such file with sheet...
 
     const char* aData[][1] = {
         { "='file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1" },

@@ -120,7 +120,7 @@ public class MessageBox  {
 
             } else {
                 // Note: This method is potentially dangerous and should only be used for debugging
-                // purposes as it relies on the platform dependent window handler..
+                // purposes as it relies on the platform dependent window handler...
                 Object oDesktop = m_xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", m_xContext);
                 XFramesSupplier xFramesSupplier = UnoRuntime.queryInterface(XFramesSupplier.class, oDesktop);
                 xFrame = xFramesSupplier.getActiveFrame();

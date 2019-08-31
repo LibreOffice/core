@@ -325,7 +325,7 @@ void tools::Time::GetClock( double fTimeInDays,
     nSecond = fSeconds;
     fSeconds -= nSecond;
 
-    assert(fSeconds < 1.0);     // or back to the drawing board..
+    assert(fSeconds < 1.0);     // or back to the drawing board...
 
     if (nFractionDecimals > 0)
     {

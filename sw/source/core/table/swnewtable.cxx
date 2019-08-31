@@ -1711,7 +1711,7 @@ void SwTable::CreateSelection( const SwNode* pStartNd, const SwNode* pEndNd,
                     nTop = nRow;
                     lcl_CheckMinMax( nUpperMin, nUpperMax, *pLine, nCol, true );
                     ++nFound;
-                     // If start and end node are identical, we're nearly done..
+                     // If start and end node are identical, we're nearly done...
                     if( pEndNd == pStartNd )
                     {
                         nBottom = nTop;

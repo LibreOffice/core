@@ -167,7 +167,7 @@ long ScColumn::GetNeededSize(
         // If a formula cell needs to be interpreted during aCell.hasNumeric()
         // to determine the type, the pattern may get invalidated because the
         // result may set a number format. In which case there's also the
-        // General format not set anymore..
+        // General format not set anymore...
         bool bMayInvalidatePattern = (aCell.meType == CELLTYPE_FORMULA);
         const ScPatternAttr* pOldPattern = pPattern;
         bool bNumeric = aCell.hasNumeric();

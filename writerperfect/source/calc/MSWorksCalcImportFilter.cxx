@@ -289,13 +289,13 @@ MSWorksCalcImportFilter::filter(const css::uno::Sequence<css::beans::PropertyVal
         return false;
     }
 
-    // An XML import service: what we push sax messages to..
+    // An XML import service: what we push sax messages to...
     css::uno::Reference<css::xml::sax::XDocumentHandler> xInternalHandler(
         getXContext()->getServiceManager()->createInstanceWithContext(
             writerperfect::DocumentHandlerFor<OdsGenerator>::name(), getXContext()),
         css::uno::UNO_QUERY_THROW);
 
-    // The XImporter sets up an empty target document for XDocumentHandler to write to..
+    // The XImporter sets up an empty target document for XDocumentHandler to write to...
     css::uno::Reference<css::document::XImporter> xImporter(xInternalHandler, css::uno::UNO_QUERY);
     xImporter->setTargetDocument(getTargetDocument());
 

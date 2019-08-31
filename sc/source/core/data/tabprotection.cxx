@@ -454,7 +454,7 @@ bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
     // No security descriptor in an enhanced protection means the ranges of
     // that protection are editable. If there is any security descriptor
     // present we assume the permission to edit is not granted. Until we
-    // actually can evaluate the descriptors..
+    // actually can evaluate the descriptors...
 
     auto lIsEditable = [rRange](const ScEnhancedProtection& rEnhancedProtection) {
         return !rEnhancedProtection.hasSecurityDescriptor()

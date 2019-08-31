@@ -157,7 +157,7 @@ BlipContext::BlipContext( ContextHandler2Helper const & rParent,
     {
         // external URL
 
-        // we will embed this link, this is better than just doing nothing..
+        // we will embed this link, this is better than just doing nothing...
         // TODO: import this graphic as real link, but this requires some
         // code rework.
         OUString aRelId = rAttribs.getString( R_TOKEN( link ), OUString() );

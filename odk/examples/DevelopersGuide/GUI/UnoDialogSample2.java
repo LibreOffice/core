@@ -88,7 +88,7 @@ public class UnoDialogSample2 extends UnoDialogSample {
                 System.out.println("Connected to a running office ...");
             XMultiComponentFactory xMCF = xContext.getServiceManager();
             PropertyValue[] aPropertyValues = new PropertyValue[]{};
-            // create an arbitrary Uno-Object - in this case an empty writer document..
+            // create an arbitrary Uno-Object - in this case an empty writer document...
             Object oDesktop =xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", xContext);
             XComponentLoader xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, oDesktop);
             Object oUnoObject = xComponentLoader.loadComponentFromURL("private:factory/swriter", "_default", 0, aPropertyValues);

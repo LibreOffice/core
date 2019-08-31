@@ -266,7 +266,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions )
             break;
     }
     // It would be nice if an inherited struct had a ctor that takes an
-    // instance of the object the struct derived from..
+    // instance of the object the struct derived from...
     SearchOptions2 aOptions2(
             rOptions.algorithmType,
             rOptions.searchFlag,
@@ -278,7 +278,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions )
             rOptions.insertedChars,
             rOptions.transliterateFlags,
             nAlgorithmType2,
-            0   // no wildcard search, no escape character..
+            0   // no wildcard search, no escape character...
             );
     setOptions2( aOptions2);
 }
@@ -1348,7 +1348,7 @@ SearchResult TextSearch::WildcardSrchBkwrd( const OUString& searchStr, sal_Int32
                     {
                         // Copy the escape character code units first in the
                         // unlikely case that it would not be of BMP.
-                        assert(nIndex - nOld == 2);  // it's UTF-16, so..
+                        assert(nIndex - nOld == 2);  // it's UTF-16, so...
                         sal_Unicode buf[2];
                         buf[0] = rPattern[nOld];
                         buf[1] = rPattern[nOld+1];
