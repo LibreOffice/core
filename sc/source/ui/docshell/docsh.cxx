@@ -1476,7 +1476,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             // TODO: Filter should set column widths. Not doing it here, it may
             // result in very narrow or wide columns, depending on content.
             // Setting row heights makes cells with font size attribution or
-            // wrapping enabled look nicer..
+            // wrapping enabled look nicer...
             bSetRowHeights = true;
         }
         else if (aFltName == pFilterRtf)

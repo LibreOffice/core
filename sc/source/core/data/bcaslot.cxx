@@ -53,7 +53,7 @@
 #define BCA_SLOTS_DEFINE (BCA_SLOTS_COL * BCA_SLOTS_ROW)
 // Arbitrary 2**31/8, assuming size_t can hold at least 2^31 values and
 // sizeof_ptr is at most 8 bytes. You'd probably doom your machine's memory
-// anyway, once you reached these values..
+// anyway, once you reached these values...
 #if BCA_SLOTS_DEFINE > 268435456
 #error BCA_SLOTS_DEFINE DOOMed!
 #endif

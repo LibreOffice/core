@@ -841,7 +841,7 @@ namespace sw
             // Force to Japanese when finding one of 'geE'.
             // XXX This actually may not be correct, all era keywords could be
             // used in other locales as well. I just don't know about Word. But
-            // this is how it was for 10 years..
+            // this is how it was for 10 years...
             bool bForceJapanese = (-1 != findUnquoted( rParams, 'g', 0));
             // XXX Why replace? The number formatter does handle them and this
             // effectively changes from Gengou to Gregorian calendar. Legacy

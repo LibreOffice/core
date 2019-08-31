@@ -3232,7 +3232,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
 
 // IDEA: instead of eCodeType pass the index to nTypeArray and restrict
 // inspection of month name around that one, that would enable different month
-// cases in one format. Though probably the most rare use case ever..
+// cases in one format. Though probably the most rare use case ever...
 
 sal_Int32 SvNumberformat::ImpUseMonthCase( int & io_nState, const ImpSvNumFor& rNumFor, NfKeywordIndex eCodeType )
 {

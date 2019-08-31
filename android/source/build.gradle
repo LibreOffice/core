@@ -275,7 +275,7 @@ task createRCfiles {
     }
 }
 
-// creating the UI stuff is cheap, don't bother only applying it for the flavor..
+// creating the UI stuff is cheap, don't bother only applying it for the flavor...
 preBuild.dependsOn 'createRCfiles',
         'createStrippedConfigMain',
         'createStrippedConfigRegistry',

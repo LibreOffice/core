@@ -442,7 +442,7 @@ bool SelectionFunction::KeyInput (const KeyEvent& rEvent)
             bResult = true;
             break;
 
-        // Go to next page.  No wrap around..
+        // Go to next page.  No wrap around...
         case KEY_PAGEDOWN:
             GotoNextPage(+1);
             bResult = true;

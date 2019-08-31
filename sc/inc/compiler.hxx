@@ -98,7 +98,7 @@ struct ScRawToken final
 {
     friend class ScCompiler;
     // Friends that use a temporary ScRawToken on the stack (and therefore need
-    // the private dtor) and know what they're doing..
+    // the private dtor) and know what they're doing...
     friend class ScTokenArray;
     OpCode              eOp;
     formula::StackVar   eType;  // type of data; this determines how the unions are used
@@ -376,7 +376,7 @@ public:
     static void CheckTabQuotes( OUString& aTabName,
                                 const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO );
 
-    /** Analyzes a string for a 'Doc'#Tab construct, or 'Do''c'#Tab etc..
+    /** Analyzes a string for a 'Doc'#Tab construct, or 'Do''c'#Tab etc...
 
         @returns the position of the unquoted # hash mark in 'Doc'#Tab, or
                  -1 if none. */

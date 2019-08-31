@@ -4535,7 +4535,7 @@ static OUString delComment( const OUString& rQuery )
             }
             else
             {
-                // comment can't close anymore, actually an error, but..
+                // comment can't close anymore, actually an error, but...
             }
             continue;
         }

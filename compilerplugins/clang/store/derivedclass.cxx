@@ -51,7 +51,7 @@ bool DerivedClass::VisitCXXRecordDecl(CXXRecordDecl const * decl) {
             !decl->hasAnyDependentBases() &&
             !decl->forallBases(BaseCheck, &BaseClassName)) {
         string warning_msg("class %0 derives from ");
-        // no idea how BaseClassName can be 0 sometimes..
+        // no idea how BaseClassName can be 0 sometimes...
         if (BaseClassName)
             warning_msg += BaseClassName;
         report(

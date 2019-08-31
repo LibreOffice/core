@@ -2297,7 +2297,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
         rBuffer.appendAscii( pInternal[ eOp - ocInternalBegin ] );
     else if (eOp == ocIntersect)
     {
-        // Nasty, ugly, horrific, terrifying..
+        // Nasty, ugly, horrific, terrifying...
         if (FormulaGrammar::isExcelSyntax( meGrammar))
             rBuffer.append(' ');
         else
@@ -2591,7 +2591,7 @@ OpCode FormulaCompiler::NextToken()
                 }
             }
         }
-        // Nasty, ugly, horrific, terrifying.. significant whitespace..
+        // Nasty, ugly, horrific, terrifying... significant whitespace...
         if (eOp == ocSpaces && FormulaGrammar::isExcelSyntax( meGrammar))
         {
             // Fake an intersection op as last op for the next round, but at

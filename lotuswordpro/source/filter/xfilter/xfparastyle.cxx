@@ -243,7 +243,7 @@ void    XFParaStyle::SetLineHeight(enumLHType type, double value)
     case enumLHLeast:
         m_aLineHeight.SetLeastHeight(value);
         break;
-    case enumLHPercent: //perhaps i should redesign the interface here,ohm..
+    case enumLHPercent: //perhaps i should redesign the interface here,ohm...
         m_aLineHeight.SetPercent(static_cast<sal_Int32>(value));
         break;
     case enumLHSpace:

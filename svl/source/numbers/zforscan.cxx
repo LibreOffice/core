@@ -2052,7 +2052,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         {   // #,,,,
                             if ( StringEqualsChar( sOldThousandSep, ' ' ) )
                             {
-                                // strange, those French..
+                                // strange, those French...
                                 bool bFirst = true;
                                 //  set a hard No-Break Space or ConvertMode
                                 const OUString& rSepF = pFormatter->GetNumThousandSep();

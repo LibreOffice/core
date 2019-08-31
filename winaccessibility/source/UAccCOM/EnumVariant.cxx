@@ -229,7 +229,7 @@ static Reference<XAccessibleSelection> GetXAccessibleSelection(XAccessible* pXAc
 /**
    * Put valid UNO XAccessible interface.
    * @param pXSelection XAccessible interface.
-   * @return Result..
+   * @return Result...
    */
 STDMETHODIMP CEnumVariant::PutSelection(hyper pXSelection)
 {

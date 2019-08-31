@@ -385,7 +385,7 @@
                         <xsl:with-param name="globalData" select="$globalData" />
                         <xsl:with-param name="previousFrameWidths" select="0"/>
                         <xsl:with-param name="previousFrameHeights" select="0"/>
-                        <!-- 2DO for me (Svante) - Not used, uncertain 4now..
+                        <!-- 2DO for me (Svante) - Not used, uncertain 4now...
                         <xsl:with-param name="pageMarginLeft">
                             <xsl:call-template name="getPageMarginLeft"/>
                          </xsl:with-param>-->
@@ -1608,7 +1608,7 @@
         |   text:space-before (listlevelstyle)  | text:min-label-width   |
         | + fo:left-margin (firstParagraph)     |                        |
 
-        Further details beyond text:list-list..
+        Further details beyond text:list-list...
     -->
     <xsl:key name="listStyles" match=" /*/office:styles/text:list-style | /*/office:automatic-styles/text:list-style | /*/office:styles/style:graphic-properties/text:list-style | /*/office:automatic-styles/style:graphic-properties/text:list-style | /*/office:styles/text:list-style | /*/office:automatic-styles/text:list-style | /*/office:styles/style:graphic-properties/text:list-style | /*/office:automatic-styles/style:graphic-properties/text:list-style" use="@style:name"/>
 

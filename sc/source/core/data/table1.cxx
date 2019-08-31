@@ -1433,7 +1433,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
         // Add some cols/rows to the print area (which is "content or
         // visually different from empty") to enable travelling through
         // protected forms with empty cells and no visual indicator.
-        // 42 might be good enough and not too much..
+        // 42 might be good enough and not too much...
         nEndCol = std::min<SCCOL>( nEndCol+42, MAXCOL);
         nEndRow = std::min<SCROW>( nEndRow+42, MAXROW);
     }

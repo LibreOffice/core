@@ -604,7 +604,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_MANX,                   "gv", "GB", k0    },
     { LANGUAGE_USER_ARAGONESE,              "an", "ES", k0    },
     { LANGUAGE_USER_KEYID,                 "qtz", ""  , k0    },    // key id pseudolanguage used for UI testing
-    { LANGUAGE_USER_PALI_LATIN,            "pli", ""  , kSAME },    // Pali with Latin script, ISO 639-3 (sigh..) back-compat, Latin is not a default script though..
+    { LANGUAGE_USER_PALI_LATIN,            "pli", ""  , kSAME },    // Pali with Latin script, ISO 639-3 (sigh..) back-compat, Latin is not a default script though...
     { LANGUAGE_USER_KYRGYZ_CHINA,           "ky", "CN", k0    },
     { LANGUAGE_USER_KOMI_ZYRIAN,           "kpv", "RU", k0    },
     { LANGUAGE_USER_KOMI_PERMYAK,          "koi", "RU", k0    },

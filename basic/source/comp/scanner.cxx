@@ -325,7 +325,7 @@ bool SbiScanner::NextSym()
         eScanType = SbxDOUBLE;
         bool bScanError = false;
         bool bBufOverflow = false;
-        // All this because of 'D' or 'd' floating point type, sigh..
+        // All this because of 'D' or 'd' floating point type, sigh...
         while(!bScanError && nCol < aLine.getLength() && strchr("0123456789.DEde", aLine[nCol]))
         {
             // from 4.1.1996: buffer full? -> go on scanning empty

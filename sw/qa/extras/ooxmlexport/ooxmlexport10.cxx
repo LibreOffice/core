@@ -673,7 +673,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo78939, "fdo78939.docx")
     // fdo#78939 : LO hanged while opening issue document
 
     // Whenever a para-style was applied to a Numbering format level,
-    // LO incorrectly also changed the para-style..
+    // LO incorrectly also changed the para-style...
 
     // check that file opens and does not hang while opening and also
     // check that an incorrect numbering style is not applied ...

@@ -36,7 +36,7 @@ enum class ErrorCode
     CantInherit,      // Cannot inherit from non-interface
     IdentNotFound,    // Identifier not found
     CannotInheritFromForward, // Cannot inherit from fwd decl interface
-    ExpectedConstant,       // We got something else..
+    ExpectedConstant,       // We got something else...
     Eval,                   // Error in evaluating expression
     ForwardDeclLookup,      // Tried to lookup in fwd declared intf
     RecursiveType,          // Illegal recursive use of type

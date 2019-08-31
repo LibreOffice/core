@@ -149,7 +149,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
 
         if( !rDest.IsHeaderShared() )
         {
-            // Same procedure for unshared header..
+            // Same procedure for unshared header...
             const SwFormatHeader& rSourceLeftHead = rSource.GetLeft().GetHeader();
             rDest.GetLeft().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem.reset(pItem->Clone());
@@ -162,7 +162,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         }
         if (!rDest.IsFirstShared())
         {
-            // Same procedure for unshared header..
+            // Same procedure for unshared header...
             const SwFormatHeader& rSourceFirstMasterHead = rSource.GetFirstMaster().GetHeader();
             rDest.GetFirstMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem.reset(pItem->Clone());

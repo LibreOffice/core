@@ -1999,7 +1999,7 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
     }
     const LocaleNode * reserveNode = findNode("ReservedWords");
     if (!reserveNode)
-        incError( "No ReservedWords element."); // should not happen if validated..
+        incError( "No ReservedWords element."); // should not happen if validated...
     const LocaleNode * forbidNode = findNode("ForbiddenCharacters");
     const LocaleNode * breakNode = findNode("BreakIteratorRules");
 

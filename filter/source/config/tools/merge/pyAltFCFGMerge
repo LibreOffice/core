@@ -58,7 +58,7 @@ Based on:
 Missing:
 
  - Currently, u\XXXX sequences are escaped when saving, but not unescaped
-   when read..
+   when read...
 
 License: Python License
 

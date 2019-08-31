@@ -577,7 +577,7 @@ void Desktop::DeInit()
             osl_removeSignalHandler( pSignalHandler );
     } catch (const RuntimeException&) {
         // someone threw an exception during shutdown
-        // this will leave some garbage behind..
+        // this will leave some garbage behind...
     }
 }
 

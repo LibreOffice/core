@@ -212,7 +212,7 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
             break;
         default:
             eTbxAlign = WindowAlign::Top;  // some sort of default...
-            break;  // -Wall lots not handled..
+            break;  // -Wall lots not handled...
     }
 
     SetAlign (eTbxAlign);

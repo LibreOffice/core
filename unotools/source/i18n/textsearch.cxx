@@ -155,7 +155,7 @@ i18nutil::SearchOptions2 TextSearch::UpgradeToSearchOptions2( const i18nutil::Se
             for (;;) std::abort();
     }
     // It would be nice if an inherited struct had a ctor that takes an
-    // instance of the object the struct derived from..
+    // instance of the object the struct derived from...
     i18nutil::SearchOptions2 aOptions2(
             rOptions.algorithmType,
             rOptions.searchFlag,
@@ -167,7 +167,7 @@ i18nutil::SearchOptions2 TextSearch::UpgradeToSearchOptions2( const i18nutil::Se
             rOptions.insertedChars,
             rOptions.transliterateFlags,
             nAlgorithmType2,
-            0       // no wildcard search, no escape character..
+            0       // no wildcard search, no escape character...
             );
     return aOptions2;
 }

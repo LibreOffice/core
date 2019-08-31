@@ -63,7 +63,7 @@ namespace slideshow
 
             This class holds all modifiable attributes of a shape, and
             at the same time provides means to layer attributes on top
-            of each other..
+            of each other...
 
             And yes, there's a reason why we even pass bools and ints
             by const reference. Namely, that makes the set* methods

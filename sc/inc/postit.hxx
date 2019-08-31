@@ -82,7 +82,7 @@ public:
 
     /** Forget the SdrCaptionObj pointer in this one instance.
         Decrements a use count but does not destroy the object, it's up to the
-        caller to manage this mess..
+        caller to manage this mess...
      */
     void forget();
 

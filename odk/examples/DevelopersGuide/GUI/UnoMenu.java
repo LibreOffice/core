@@ -143,7 +143,7 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         Object oDesktop = m_xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", m_xContext);
         XFramesSupplier xFramesSupplier = UnoRuntime.queryInterface(XFramesSupplier.class, oDesktop);
         m_xFrame.setCreator(xFramesSupplier);
-        // get the XTopWindow interface..
+        // get the XTopWindow interface...
         xTopWindow = UnoRuntime.queryInterface(XTopWindow.class, xWindow);
     } catch (com.sun.star.lang.IllegalArgumentException ex) {
         ex.printStackTrace();

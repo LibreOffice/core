@@ -426,7 +426,7 @@ void ImportExcel8::FilterMode()
     // The FilterMode record exists: if either the AutoFilter
     // record exists or an Advanced Filter is saved and stored
     // in the sheet. Thus if the FilterMode records only exists
-    // then the latter is true..
+    // then the latter is true...
     if( !pExcRoot->pAutoFilterBuffer ) return;
 
     XclImpAutoFilterData* pData = pExcRoot->pAutoFilterBuffer->GetByTab( GetCurrScTab() );

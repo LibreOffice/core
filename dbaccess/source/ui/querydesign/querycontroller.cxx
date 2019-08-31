@@ -1457,7 +1457,7 @@ static std::vector< CommentStrip > getComment( const OUString& rQuery )
             }
             else
             {
-                // comment can't close anymore, actually an error, but..
+                // comment can't close anymore, actually an error, but...
                 aRet.emplace_back( aBuf.makeStringAndClear(), false);
             }
             continue;

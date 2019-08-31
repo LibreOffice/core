@@ -67,7 +67,7 @@ static const KnownTagSet & getKnowns()
             {
                 // Do not use the BCP47 string here to initialize the
                 // LanguageTag because then canonicalize() would call this
-                // getKnowns() again..
+                // getKnowns() again...
                 ::std::vector< OUString > aFallbacks( LanguageTag( elemDefined.mnLang).getFallbackStrings( true));
                 for (auto const& fallback : aFallbacks)
                 {

@@ -182,7 +182,7 @@ namespace vcl
             // retrieve data via UNO interface
 
             // volatile bitmaps are a bit more complicated to read
-            // from..
+            // from...
 
             // loop a few times, until successfully read (for XVolatileBitmap)
             for( int i=0; i<10; ++i )

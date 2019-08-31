@@ -1256,7 +1256,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
     if( Height() < nMainAscent + nMainDescent )
         Height( nMainAscent + nMainDescent );
 
-    // We calculate the x positions of the characters in both lines..
+    // We calculate the x positions of the characters in both lines...
     sal_uInt16 nTopDiff = 0;
     sal_uInt16 nBotDiff = 0;
     if( nMaxWidth > Width() )

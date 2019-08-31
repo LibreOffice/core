@@ -1180,7 +1180,7 @@ public class TextDocuments {
                 // Insert the text field
                 mxDocText.insertTextContent(mxDocText.getEnd(), xRefContent, false);
 
-                // And some text after the reference..
+                // And some text after the reference...
                 mxDocText.insertString(mxDocText.getEnd(),
                               " contains the sum of some random numbers.", false );
 

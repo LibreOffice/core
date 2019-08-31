@@ -1175,7 +1175,7 @@ std::unique_ptr<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &
                 return pRet;
             if (pTmp ? lcl_Has2Lines(*pTmp, pActiveTwoLinesItem, bTwo)
                      : lcl_Check2Lines(pNodeTwoLinesItem, pActiveTwoLinesItem, bTwo))
-            {   // We have an interesting attribute..
+            {   // We have an interesting attribute...
                 if( bTwo == bOn )
                 {   // .. with the same state, so the last attribute could
                     // be continued.
