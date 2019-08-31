@@ -21,7 +21,6 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
-#include <vcl/hyperlabel.hxx>
 #include <vcl/imgctrl.hxx>
 #include <memory>
 
@@ -37,6 +36,7 @@ public:
     typedef sal_Int32 ItemIndex;
 };
 
+class HyperLabel;
 class RoadmapImpl;
 class RoadmapItem;
 

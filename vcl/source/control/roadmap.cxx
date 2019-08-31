@@ -20,6 +20,7 @@
 #include <vector>
 #include <algorithm>
 #include <vcl/event.hxx>
+#include <vcl/hyperlabel.hxx>
 #include <vcl/toolkit/roadmap.hxx>
 #include <vcl/settings.hxx>
 #include <tools/color.hxx>
