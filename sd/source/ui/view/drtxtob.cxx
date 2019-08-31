@@ -17,26 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
 #include <TextObjectBar.hxx>
 
 #include <svx/svxids.hrc>
 
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 
-#include <i18nlangtag/mslangid.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/editview.hxx>
-#include <editeng/editeng.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/kernitem.hxx>
-#include <vcl/vclenum.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itempool.hxx>
 #include <svl/stritem.hxx>
@@ -45,24 +39,17 @@
 #include <sfx2/tplpitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <svx/svdoutl.hxx>
-#include <svl/intitem.hxx>
 #include <editeng/scripttypeitem.hxx>
-#include <editeng/outlobj.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/fhgtitem.hxx>
 
 #include <sfx2/objface.hxx>
 
-#include <app.hrc>
-
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
 #include <OutlineViewShell.hxx>
-#include <ViewShellBase.hxx>
-#include <ToolBarManager.hxx>
-#include <futempl.hxx>
 #include <Window.hxx>
 #include <OutlineView.hxx>
 

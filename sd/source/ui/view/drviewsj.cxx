@@ -21,36 +21,22 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
-#include <svl/aeitem.hxx>
 #include <svx/svxids.hrc>
-#include <svx/globl3d.hxx>
-#include <editeng/eeitem.hxx>
+#include <svx/sdmetitm.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/sxelditm.hxx>
 #include <svx/sdtfsitm.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/request.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/scene3d.hxx>
-#include <sfx2/event.hxx>
-#include <sfx2/docfile.hxx>
-#include <rtl/ustrbuf.hxx>
 
 #include <app.hrc>
 
 #include <anminfo.hxx>
-#include <Outliner.hxx>
-#include <sdpage.hxx>
-#include <fupoor.hxx>
-#include <fusel.hxx>
 #include <drawdoc.hxx>
-#include <DrawDocShell.hxx>
 #include <drawview.hxx>
-#include <optsitem.hxx>
 
 using namespace com::sun::star;
 

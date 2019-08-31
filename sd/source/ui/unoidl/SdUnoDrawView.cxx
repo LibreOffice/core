@@ -25,7 +25,6 @@
 #include <drawdoc.hxx>
 #include "unolayer.hxx"
 #include <unomodel.hxx>
-#include <unopage.hxx>
 #include <Window.hxx>
 #include <pres.hxx>
 
@@ -34,6 +33,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <com/sun/star/drawing/DrawViewMode.hpp>

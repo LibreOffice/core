@@ -18,7 +18,6 @@
  */
 
 #include <BezierObjectBar.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
@@ -27,7 +26,6 @@
 #include <svl/eitem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svdopath.hxx>
-#include <svl/aeitem.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/dispatch.hxx>
 
@@ -38,8 +36,6 @@
 
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
-#include <Window.hxx>
-#include <drawview.hxx>
 #include <drawdoc.hxx>
 #include <fusel.hxx>
 #include <fuconbez.hxx>

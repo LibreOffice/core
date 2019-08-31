@@ -18,33 +18,17 @@
  */
 
 #include <DrawViewShell.hxx>
-#include <ViewShellImplementation.hxx>
-#include <vcl/waitobj.hxx>
 
-#include <svx/svxids.hrc>
-#include <svx/dialogs.hrc>
 #include <svx/imapdlg.hxx>
-#include <sfx2/request.hxx>
-#include <svx/svdogrp.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/ImageMapInfo.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
-#include <svl/style.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/grafctrl.hxx>
-#include <stlsheet.hxx>
 
 #include <sfx2/viewfrm.hxx>
 
-#include <app.hrc>
-#include <Window.hxx>
 #include <drawdoc.hxx>
-#include <DrawDocShell.hxx>
 #include <drawview.hxx>
-#include <sdabstdlg.hxx>
 #include <memory>
 
 namespace sd {

@@ -19,29 +19,23 @@
 
 #include <OutlineViewShell.hxx>
 
-#include <com/sun/star/beans/PropertyValue.hpp>
-
 #include <app.hrc>
 #include <svx/hlnkitem.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-#include <svl/eitem.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <svx/svxids.hrc>
+#include <svx/svdoutl.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/editstat.hxx>
-#include <optsitem.hxx>
 #include <unotools/useroptions.hxx>
 
 #include <sfx2/viewfrm.hxx>
-#include <Outliner.hxx>
 #include <Window.hxx>
 #include <fubullet.hxx>
 #include <fuolbull.hxx>
-#include <FrameView.hxx>
-#include <fuzoom.hxx>
 #include <fuscale.hxx>
 #include <fuchar.hxx>
 #include <fuinsfil.hxx>
@@ -53,11 +47,7 @@
 #include <fuexpand.hxx>
 #include <fusumry.hxx>
 #include <fucushow.hxx>
-#include <drawdoc.hxx>
-#include <sdattr.hxx>
-#include <ViewShellBase.hxx>
 #include <sdabstdlg.hxx>
-#include <framework/FrameworkHelper.hxx>
 #include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
 #include <OutlineView.hxx>

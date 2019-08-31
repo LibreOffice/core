@@ -20,18 +20,12 @@
 #include <OutlinerIterator.hxx>
 #include <OutlinerIteratorImpl.hxx>
 #include <svx/svditer.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
 #include <Outliner.hxx>
 
 #include <drawdoc.hxx>
 #include <DrawViewShell.hxx>
-#include <drawview.hxx>
 #include <sdpage.hxx>
-#include <FrameView.hxx>
-#include <DrawDocShell.hxx>
-#include <Window.hxx>
 
 namespace sd { namespace outliner {
 

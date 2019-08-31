@@ -20,12 +20,13 @@
 #include <memory>
 #include <sal/config.h>
 
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/svapp.hxx>
 
-#include <svx/unoshape.hxx>
+#include <svx/svdobj.hxx>
 #include <svx/svdpool.hxx>
-#include <svx/unoprov.hxx>
+#include <editeng/unoipset.hxx>
 #include <editeng/unotext.hxx>
 #include <tools/debug.hxx>
 

@@ -30,17 +30,14 @@
 #include <sfx2/sfxsids.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/xfillit0.hxx>
-#include <svx/xoutbmp.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/ImageMapInfo.hxx>
-#include <sot/storage.hxx>
 #include <sfx2/app.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svtools/ehdl.hxx>
@@ -57,15 +54,12 @@
 #include <strings.hrc>
 #include <sdpage.hxx>
 #include <view/SlideSorterView.hxx>
-#include <undo/undoobjects.hxx>
-#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <svtools/soerr.hxx>
 #include <sfx2/ipclient.hxx>
-#include <svx/svdoashp.hxx>
 #include <tools/debug.hxx>
 
 using namespace com::sun::star;

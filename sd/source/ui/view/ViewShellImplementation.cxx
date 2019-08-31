@@ -27,19 +27,10 @@
 #include <unokywds.hxx>
 #include <strings.hrc>
 #include <app.hrc>
-#include <sdattr.hxx>
-#include <sdabstdlg.hxx>
 #include <unmodpg.hxx>
-#include <Window.hxx>
-#include <optsitem.hxx>
 #include <DrawDocShell.hxx>
-#include <DrawController.hxx>
 #include <FactoryIds.hxx>
-#include <slideshow.hxx>
 #include <ViewShellBase.hxx>
-#include <FrameView.hxx>
-#include <DrawViewShell.hxx>
-#include <ViewShellHint.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -47,8 +38,8 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/imapdlg.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sberrors.hxx>

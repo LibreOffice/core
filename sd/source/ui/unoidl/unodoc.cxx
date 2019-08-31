@@ -18,7 +18,6 @@
  */
 
 #include <rtl/ustring.hxx>
-#include <sfx2/docfac.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 

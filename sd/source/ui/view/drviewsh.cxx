@@ -18,24 +18,11 @@
  */
 
 #include <DrawViewShell.hxx>
-#include <svl/aeitem.hxx>
-#include <svl/itemset.hxx>
-#include <sfx2/request.hxx>
-#include <svx/svxids.hrc>
 
 #include <sal/log.hxx>
-#include <svx/fmshell.hxx>
-#include <sfx2/dispatch.hxx>
 #include <comphelper/lok.hxx>
 
-#include <app.hrc>
-#include <sdpage.hxx>
-#include <FrameView.hxx>
-#include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
-#include <Window.hxx>
-#include <GraphicViewShell.hxx>
-#include <drawview.hxx>
 
 #include <slideshow.hxx>
 

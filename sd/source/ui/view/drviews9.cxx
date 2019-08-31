@@ -21,7 +21,6 @@
 
 #include <DrawViewShell.hxx>
 #include <editeng/outlobj.hxx>
-#include <vcl/wrkwin.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xfillit0.hxx>
@@ -36,16 +35,12 @@
 
 #include <sfx2/dispatch.hxx>
 #include <svl/intitem.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xtable.hxx>
-#include <svx/gallery.hxx>
 #include <vcl/graph.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/svdoole2.hxx>
-#include <sot/storage.hxx>
 #include <svl/whiter.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sberrors.hxx>
@@ -59,7 +54,6 @@
 #include <drawview.hxx>
 #include <DrawDocShell.hxx>
 #include <sdresid.hxx>
-#include <fupoor.hxx>
 
 #include <svx/galleryitem.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>

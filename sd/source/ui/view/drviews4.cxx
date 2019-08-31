@@ -27,8 +27,6 @@
 #include <svl/stritem.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/svdundo.hxx>
-#include <svx/fmglob.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/svxids.hrc>
@@ -36,7 +34,6 @@
 #include <svx/globl3d.hxx>
 #include <editeng/outliner.hxx>
 #include <sfx2/ipclient.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdopath.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -51,14 +48,11 @@
 #include <drawdoc.hxx>
 #include <Window.hxx>
 #include <fupoor.hxx>
-#include <fusnapln.hxx>
 #include <sdmod.hxx>
 #include <Ruler.hxx>
 #include <sdresid.hxx>
-#include <GraphicViewShell.hxx>
 #include <sdpage.hxx>
 #include <slideshow.hxx>
-#include <anminfo.hxx>
 #include <sdpopup.hxx>
 #include <drawview.hxx>
 #include <svx/bmpmask.hxx>

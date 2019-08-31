@@ -20,23 +20,15 @@
 #include <TabControl.hxx>
 
 #include <sfx2/viewfrm.hxx>
-#include <svx/svdlayer.hxx>
-#include <svx/svdpagv.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/commandevent.hxx>
 
-#include <sdattr.hxx>
-#include <sdmod.hxx>
 #include <app.hrc>
 
 #include <DrawViewShell.hxx>
-#include <GraphicViewShell.hxx>
 #include <helpids.h>
 #include <View.hxx>
-#include <sdpage.hxx>
 #include <drawdoc.hxx>
-#include <Window.hxx>
-#include <unmodpg.hxx>
 #include <DrawDocShell.hxx>
 
 namespace sd {

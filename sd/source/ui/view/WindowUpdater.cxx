@@ -18,14 +18,11 @@
  */
 
 #include <WindowUpdater.hxx>
-#include <ViewShell.hxx>
-#include <Window.hxx>
 #include <drawdoc.hxx>
-#include <View.hxx>
 
-#include <vcl/split.hxx>
-#include <sfx2/childwin.hxx>
-#include <sfx2/viewfrm.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/window.hxx>
 
 #include <algorithm>
 

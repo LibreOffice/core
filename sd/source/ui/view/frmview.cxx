@@ -20,7 +20,6 @@
 #include <FrameView.hxx>
 
 #include <svx/svxids.hrc>
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <rtl/ustrbuf.hxx>
@@ -34,12 +33,8 @@
 #include <DrawDocShell.hxx>
 #include <optsitem.hxx>
 #include <ViewShellBase.hxx>
-#include <DrawViewShell.hxx>
-#include <OutlineViewShell.hxx>
 #include <sdmod.hxx>
 #include <pres.hxx>
-#include <strings.hrc>
-#include <sdiocmpt.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>

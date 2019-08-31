@@ -25,21 +25,16 @@
 #include <ViewShellManager.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/ui/UIElementType.hpp>
 
 #include <sal/log.hxx>
 #include <osl/mutex.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/enumrange.hxx>
-#include <rtl/ref.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/toolbarids.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>

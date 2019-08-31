@@ -32,7 +32,6 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
@@ -43,7 +42,6 @@
 #include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
-#include <editeng/editeng.hxx>
 #include <editeng/section.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/CustomPropertyField.hxx>
@@ -60,16 +58,10 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/zoomitem.hxx>
 
-#include <svl/aeitem.hxx>
-
-#include <svx/SpellDialogChildWindow.hxx>
 #include <svx/compressgraphicdialog.hxx>
 #include <svx/ClassificationDialog.hxx>
 #include <svx/ClassificationCommon.hxx>
-#include <svx/ClassificationEditView.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/bmpmask.hxx>
-#include <svx/colrctrl.hxx>
 #include <svx/extedit.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/f3dchild.hxx>
@@ -79,8 +71,6 @@
 #include <svx/hlnkitem.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/sdtagitm.hxx>
-#include <svx/sdtmfitm.hxx>
-#include <svx/svdoattr.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdoutl.hxx>
@@ -88,13 +78,8 @@
 #include <svx/svdundo.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
-#include <svx/xfillit0.hxx>
-#include <svx/xflclit.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/xlnedwit.hxx>
-#include <svx/xlnstwit.hxx>
-#include <svx/xlnwtit.hxx>
 #include <svx/sdtfsitm.hxx>
+#include <svx/sdmetitm.hxx>
 
 #include <tools/diagnose_ex.h>
 
@@ -114,31 +99,26 @@
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
-#include <editeng/contouritem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/numitem.hxx>
-#include <svx/xtable.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/SvxColorChildWindow.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/flstitem.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/brushitem.hxx>
 
+#include <svl/poolitem.hxx>
+#include <svl/style.hxx>
 #include <svl/whiter.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>
 
-#include <framework/FrameworkHelper.hxx>
-
 #include <AnimationChildWindow.hxx>
 #include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
-#include <GraphicViewShell.hxx>
 #include <LayerTabBar.hxx>
 #include <Outliner.hxx>
 #include <ViewShellHint.hxx>
@@ -179,17 +159,14 @@
 #include <fuvect.hxx>
 #include <futext.hxx>
 #include <helpids.h>
-#include <optsitem.hxx>
 #include <sdabstdlg.hxx>
 #include <sdattr.hxx>
-#include <sdgrffilter.hxx>
 #include <sdpage.hxx>
 #include <sdresid.hxx>
 #include <unokywds.hxx>
 #include <slideshow.hxx>
-#include <stlpool.hxx>
+#include <stlsheet.hxx>
 #include <undolayer.hxx>
-#include <unmodpg.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <sdmod.hxx>

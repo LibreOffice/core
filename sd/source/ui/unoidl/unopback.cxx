@@ -25,7 +25,6 @@
 #include <svx/xflbstit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unoshprp.hxx>
 

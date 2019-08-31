@@ -461,3 +461,21 @@ blacklist:
     sd/source/ui/slidesorter/view/SlsInsertionIndicatorOverlay.cxx:
     # Needed for instantiation of function template specialization
     - Window.hxx
+    sd/source/ui/view/GraphicObjectBar.cxx:
+    # Needed by a sdslots.hxx constant
+    - svx/svxids.hrc
+    sd/source/ui/view/Outliner.cxx:
+    # comphelper::ScopeGuard is actually used
+    - comphelper/scopeguard.hxx
+    sd/source/ui/view/drviews1.cxx:
+    # comphelper::ScopeGuard is actually used
+    - comphelper/scopeguard.hxx
+    sd/source/ui/view/drviews2.cxx:
+    # comphelper::ScopeGuard is actually used
+    - comphelper/scopeguard.hxx
+    sd/source/ui/view/drvwshrg.cxx:
+    # Needed by a sdslots.hxx constant
+    - app.hrc
+    sd/source/ui/view/presvish.cxx:
+    # Needed by a sdslots.hxx constant
+    - svx/svxids.hrc

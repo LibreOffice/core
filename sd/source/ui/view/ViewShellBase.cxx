@@ -28,8 +28,6 @@
 #include <unokywds.hxx>
 #include <svx/svxids.hrc>
 #include <DrawDocShell.hxx>
-#include <sfx2/app.hxx>
-#include <PaneChildWindows.hxx>
 #include <ViewShellManager.hxx>
 #include <DrawController.hxx>
 #include <FrameView.hxx>
@@ -41,20 +39,14 @@
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
 #include <DrawViewShell.hxx>
-#include <GraphicViewShell.hxx>
-#include <OutlineViewShell.hxx>
-#include <SlideSorterViewShell.hxx>
-#include <PresentationViewShell.hxx>
 #include <FormShellManager.hxx>
 #include <ToolBarManager.hxx>
 #include <Window.hxx>
 #include <framework/ConfigurationController.hxx>
 #include <DocumentRenderer.hxx>
-#include <sdattr.hxx>
 #include <optsitem.hxx>
 #include <sdmod.hxx>
 
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>

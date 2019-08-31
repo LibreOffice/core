@@ -29,20 +29,14 @@
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/svdopath.hxx>
-#include <sfx2/docfile.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svl/eitem.hxx>
 
 #include <sdcommands.h>
-#include <svx/dialogs.hrc>
-#include <svx/extrusionbar.hxx>
 #include <svx/f3dchild.hxx>
-#include <svx/fontworkbar.hxx>
 #include <svx/clipfmtitem.hxx>
 
 #include <sfx2/viewfrm.hxx>
-#include <svx/fmshell.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svx/float3d.hxx>
 #include <svx/extedit.hxx>
@@ -67,7 +61,6 @@
 #include <SdUnoDrawView.hxx>
 #include <ViewShellBase.hxx>
 #include <slideshow.hxx>
-#include <ToolBarManager.hxx>
 #include <annotationmanager.hxx>
 #include <DrawController.hxx>
 #include <tools/diagnose_ex.h>

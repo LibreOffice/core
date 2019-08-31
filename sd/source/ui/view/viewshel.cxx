@@ -22,7 +22,6 @@
 #include <ViewShellImplementation.hxx>
 #include <createtableobjectbar.hxx>
 
-#include <com/sun/star/embed/EmbedStates.hpp>
 #include <ViewShellBase.hxx>
 #include <ShellFactory.hxx>
 #include <DrawController.hxx>
@@ -39,21 +38,18 @@
 #include <svx/svxids.hrc>
 #include <svx/fmshell.hxx>
 #include <WindowUpdater.hxx>
-#include <GraphicViewShell.hxx>
-#include <sfx2/childwin.hxx>
 #include <sdxfer.hxx>
 
 #include <app.hrc>
 
 #include <OutlineView.hxx>
-#include <Client.hxx>
+#include <DrawViewShell.hxx>
 #include <DrawDocShell.hxx>
 #include <slideshow.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <zoomlist.hxx>
 #include <FrameView.hxx>
-#include <optsitem.hxx>
 #include <BezierObjectBar.hxx>
 #include <TextObjectBar.hxx>
 #include <GraphicObjectBar.hxx>
@@ -62,11 +58,9 @@
 #include <SlideSorterViewShell.hxx>
 #include <ViewShellManager.hxx>
 #include <FormShellManager.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <svx/svdoutl.hxx>
-#include <tools/diagnose_ex.h>
 #include <tools/svborder.hxx>
 #include <comphelper/lok.hxx>
 

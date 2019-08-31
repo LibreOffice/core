@@ -22,6 +22,7 @@
 #include <svx/svxids.hrc>
 #include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
+#include <sfx2/childwin.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/bindings.hxx>
@@ -36,7 +37,6 @@
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
 #include <pgjump.hxx>
-#include <NavigatorChildWindow.hxx>
 #include <navigatr.hxx>
 #include <drawview.hxx>
 

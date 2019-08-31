@@ -22,11 +22,9 @@
 #include <DrawController.hxx>
 #include <OutlineViewShell.hxx>
 #include <sdpage.hxx>
-#include <unopage.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/unopage.hxx>
-#include <vcl/svapp.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star;

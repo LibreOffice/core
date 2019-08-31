@@ -24,11 +24,9 @@
 #include <View.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/unolingu.hxx>
-#include <sfx2/request.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/fmview.hxx>
 #include <editeng/outliner.hxx>
-#include <svx/svxids.hrc>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdundo.hxx>
@@ -36,26 +34,16 @@
 #include <vcl/settings.hxx>
 
 #include <sfx2/dispatch.hxx>
-#include <sfx2/app.hxx>
 #include <svx/svdpagv.hxx>
-#include <sfx2/docfile.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 
 #include <svx/svdetc.hxx>
 #include <editeng/editstat.hxx>
 
-#include <svx/dialogs.hrc>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/EnumContext.hxx>
-#include <svx/svdopage.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/xfillit0.hxx>
-#include <svx/xlndsit.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/xlnclit.hxx>
-#include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
-#include <vcl/virdev.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>
@@ -67,12 +55,6 @@
 #include <sdpage.hxx>
 #include <sdresid.hxx>
 #include <unokywds.hxx>
-#include <DrawViewShell.hxx>
-#include <futext.hxx>
-#include <fuinsfil.hxx>
-#include <slideshow.hxx>
-#include <stlpool.hxx>
-#include <FrameView.hxx>
 #include <ViewClipboard.hxx>
 #include <undo/undomanager.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
@@ -80,13 +62,12 @@
 #include <svx/svdotable.hxx>
 #include <EventMultiplexer.hxx>
 #include <ViewShellBase.hxx>
-#include <ViewShellManager.hxx>
+#include <ViewShell.hxx>
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
-#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/table/tablecontroller.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -96,8 +77,6 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <svl/itemiter.hxx>
-#include <editeng/editeng.hxx>
 #include <DrawController.hxx>
 
 #include <memory>

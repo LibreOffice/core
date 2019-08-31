@@ -17,33 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 #include <svx/svdlayer.hxx>
-#include <svx/svxids.hrc>
-#include <sfx2/msgpool.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/hlnkitem.hxx>
-#include <editeng/eeitem.hxx>
-#include <editeng/flditem.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/svdorect.hxx>
-#include <sfx2/docfile.hxx>
-#include <basic/sbstar.hxx>
-#include <basic/sberrors.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
-#include <unotools/useroptions.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <app.hrc>
-#include <strings.hrc>
 
-#include <Outliner.hxx>
-#include <Window.hxx>
-#include <sdmod.hxx>
-#include <sdattr.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
 #include <unokywds.hxx>
@@ -51,11 +32,9 @@
 #include <DrawViewShell.hxx>
 #include <drawview.hxx>
 #include <unmodpg.hxx>
-#include <undolayer.hxx>
 #include <ViewShellBase.hxx>
 #include <FormShellManager.hxx>
 #include <LayerTabBar.hxx>
-#include <sdabstdlg.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <SlideSorter.hxx>
 #include <controller/SlideSorterController.hxx>

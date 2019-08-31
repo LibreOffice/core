@@ -23,20 +23,14 @@
 
 #include <editeng/eeitem.hxx>
 #include <editeng/editview.hxx>
-#include <editeng/editeng.hxx>
-#include <editeng/unolingu.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/numitem.hxx>
-#include <vcl/vclenum.hxx>
-#include <sfx2/app.hxx>
-#include <svl/whiter.hxx>
 #include <svl/itempool.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
-#include <sfx2/tplpitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
@@ -48,16 +42,11 @@
 #include <editeng/contouritem.hxx>
 #include <editeng/shdditem.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/xtable.hxx>
 #include <svx/svdobj.hxx>
-#include <editeng/outlobj.hxx>
 #include <editeng/flstitem.hxx>
-#include <svl/intitem.hxx>
 #include <editeng/scripttypeitem.hxx>
-#include <svx/svdoutl.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <svl/itemiter.hxx>
 #include <editeng/cmapitem.hxx>
 
 #include <app.hrc>
@@ -65,7 +54,6 @@
 #include <sdresid.hxx>
 #include <prlayout.hxx>
 #include <ViewShell.hxx>
-#include <drawview.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <stlpool.hxx>
@@ -74,7 +62,6 @@
 #include <Window.hxx>
 #include <futempl.hxx>
 #include <DrawDocShell.hxx>
-#include <Outliner.hxx>
 #include <futext.hxx>
 
 #include <memory>
