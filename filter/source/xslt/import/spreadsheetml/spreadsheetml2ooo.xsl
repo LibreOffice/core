@@ -5018,7 +5018,7 @@
                     </xsl:call-template>
                     <xsl:text>cm</xsl:text>
                 </xsl:when>
-                <!-- Note: Specify where this value come from.. -->
+                <!-- Note: Specify where this value come from... -->
                 <xsl:otherwise>2.096cm</xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -6312,7 +6312,7 @@
                     </xsl:choose>
                 </xsl:when>
                 <xsl:otherwise>
-                    <!-- as for the spanned cells no style is taken.. -->
+                    <!-- as for the spanned cells no style is taken... -->
                     <xsl:choose>
                         <!-- inherit style from parent row style-->
                         <xsl:when test="../@ss:StyleID">

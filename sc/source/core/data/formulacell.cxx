@@ -103,7 +103,7 @@ struct DebugCalculationEntry
     Either, somewhere set aDC.mbActive=true, or
     aDC.maTrigger=ScAddress(col,row,tab) of interest from where to start.
     This does not work for deep recursion > MAXRECURSION, the results are
-    somewhat.. funny.. ;)
+    somewhat... funny... ;)
  */
 static struct DebugCalculation
 {
@@ -3854,7 +3854,7 @@ static void lcl_FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes, const ScTok
             SCTAB nTab = p->GetSheet();
             rIndexes.setUpdatedName( nTab, nTokenIndex);
 
-            if (nRecursion < 126)   // whatever.. 42*3
+            if (nRecursion < 126)   // whatever... 42*3
             {
                 ScRangeData* pSubName = pDoc->FindRangeNameBySheetAndIndex( nTab, nTokenIndex);
                 if (pSubName)

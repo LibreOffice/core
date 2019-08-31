@@ -253,7 +253,7 @@ bool SotStorageStream::SetProperty( const OUString& rName, const css::uno::Any& 
 /**
  * SotStorage::SotStorage()
  *
- * A I.. object must be passed to SvObject, because otherwise itself will
+ * A I... object must be passed to SvObject, because otherwise itself will
  * create and define an IUnknown, so that all other I... objects would be
  * destroyed with delete (Owner() == true).
  * But IStorage objects are only used and not implemented by ourselves,

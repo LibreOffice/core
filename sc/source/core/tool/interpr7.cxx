@@ -378,7 +378,7 @@ void ScInterpreter::ScWebservice()
              * document (i.e. the formula result could not be influenced by an
              * ONLOAD_MUST or ALWAYS recalc, necessary as we don't track
              * interim results of subexpressions that could be compared), which
-             * also means to track setting ScRecalcMode somehow.. note this is
+             * also means to track setting ScRecalcMode somehow... note this is
              * just a vague idea so far and might or might not work. */
             if (pMyFormulaCell && pMyFormulaCell->HasHybridStringResult())
             {

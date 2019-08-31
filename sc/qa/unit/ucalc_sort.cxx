@@ -1232,8 +1232,8 @@ void Test::testSortRefUpdate4_Impl()
 /* FIXME: this test is not roll-over-midnight safe and will fail then! We may
  * want to have something different, but due to the nature of volatile
  * functions it's not that easy to come up with something reproducible staying
- * stable over sorts.. ;-)  Check for time and don't run test a few seconds
- * before midnight, ermm.. */
+ * stable over sorts... ;-)  Check for time and don't run test a few seconds
+ * before midnight, ermm... */
 void Test::testSortRefUpdate5()
 {
     SortRefUpdateSetter aUpdateSet;

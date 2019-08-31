@@ -2081,7 +2081,7 @@ void FilterCache::impl_readOldFormat()
                 m_lFilters[pItems[i]] = impl_readOldItem(xSet, E_FILTER, pItems[i]);
         }
     }
-    /* corrupt filter addon? Because it's external (optional) code.. we can ignore it. Addon won't work then...
+    /* corrupt filter addon? Because it's external (optional) code... we can ignore it. Addon won't work then...
        but that seems to be acceptable.
        see #139088# for further information
     */

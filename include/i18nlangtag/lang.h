@@ -65,8 +65,8 @@
 
  ! BUT, you can download a PDF document from
  ! http://msdn.microsoft.com/library/cc233965.aspx
- ! that has YET MORE definitions, sigh.. didn't cross-check if any are missing
- ! from that.. however, it also contains a few MS-reserved definitions that use
+ ! that has YET MORE definitions, sigh... didn't cross-check if any are missing
+ ! from that... however, it also contains a few MS-reserved definitions that use
  ! ISO 639-3 codes reserved for local use, such as 'qps-ploc' and 'qps-ploca'
  ! (sic!), or strange things like 'ar-Ploc-SA' and 'ja-Ploc-JP' ('Ploc'??).
  !
@@ -470,7 +470,7 @@ namespace o3tl
 #define LANGUAGE_Neither_defined_nor_reserved_0x1C0C LanguageType(0x1C0C)
 #define LANGUAGE_Neither_defined_nor_reserved_0x2008 LanguageType(0x2008)
 
-/* MS defines these as reserved, whatever that might imply.. */
+/* MS defines these as reserved, whatever that might imply... */
 #define LANGUAGE_reserved_0xEEEE            LanguageType(0xEEEE)  /* primary 0x2ee, sub 0x3b */
 #define LANGUAGE_reserved_0xF2EE            LanguageType(0xF2EE)  /* primary 0x2ee, sub 0x3c */
 
