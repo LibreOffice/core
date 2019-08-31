@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_7144ecb7",
+        "filename": "io/source/stm/odata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-31T18:14:26Z",
+      "side": 1,
+      "message": "Why cast to its own type?\n\nCan\u0027t we simplify it further to be\n\n    writeBytes({ Value });\n\n(and in other places, too)?",
+      "range": {
+        "startLine": 525,
+        "startChar": 30,
+        "endLine": 525,
+        "endChar": 38
+      },
+      "revId": "38a7bd299d2ff54198cc995122b5707e8bdd81bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_1115709c",
+        "filename": "io/source/stm/streamhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-08-31T18:14:26Z",
+      "side": 1,
+      "message": "In these cases (especially in these) I prefer declare variables const, to have it obvious that it can\u0027t change in the code",
+      "range": {
+        "startLine": 130,
+        "startChar": 29,
+        "endLine": 130,
+        "endChar": 33
+      },
+      "revId": "38a7bd299d2ff54198cc995122b5707e8bdd81bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
