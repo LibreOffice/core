@@ -10,21 +10,42 @@
 $(eval $(call gb_CustomTarget_CustomTarget,extras/source/autotext))
 
 extras_AUTOTEXTSHARE_AUTOTEXTS := \
+	ab/standard \
 	af-ZA/standard \
+	af/standard \
+	am/standard \
+	an/standard \
+	ar/standard \
+	as/standard \
+	ast/standard \
+	az/standard \
+	be/standard \
 	bg/crdbus50 \
 	bg/standard \
 	bg/template \
+	bn-IN/standard \
+	bn/standard \
+	bo/standard \
+	br/standard \
+	brx/standard \
+	bs/standard \
+	ca-valencia/standard \
 	ca/standard \
 	cs/crdbus50 \
 	cs/crdbus54 \
 	cs/standard \
 	cs/template \
+	cy/standard \
 	da/crdbus50 \
 	da/standard \
 	da/template \
 	de/crdbus50 \
 	de/standard \
 	de/template \
+	dgo/standard \
+	dsb/standard \
+	dz/standard \
+	el/standard \
 	en-AU/standard \
 	en-GB/crdbus50 \
 	en-GB/standard \
@@ -33,20 +54,33 @@ extras_AUTOTEXTSHARE_AUTOTEXTS := \
 	en-US/standard \
 	en-US/template \
 	en-ZA/standard \
+	eo/standard \
 	es/crdbus50 \
 	es/standard \
 	es/template \
+	et/standard \
+	eu/standard \
 	fa/standard \
 	fi/standard \
 	fr/crdbus50 \
 	fr/standard \
 	fr/template \
+	fy/standard \
 	ga-IE/standard \
+	ga/standard \
+	gd/standard \
+	gl/standard \
+	gu/standard \
+	gug/standard \
+	he/standard \
+	hi/standard \
 	hr/standard \
+	hsb/standard \
 	hu/crdbus50 \
 	hu/crdbus54 \
 	hu/standard \
 	hu/template \
+	id/standard \
 	is/standard \
 	it/crdbus50 \
 	it/standard \
@@ -54,21 +88,49 @@ extras_AUTOTEXTSHARE_AUTOTEXTS := \
 	ja/crdbus50 \
 	ja/standard \
 	ja/template \
+	jv/standard \
+	ka/standard \
+	kab/standard \
+	kk/standard \
+	kl/standard \
 	km/crdbus50 \
 	km/standard \
 	km/template \
+	kmr-Latn/standard \
+	kn/standard \
 	ko/crdbus50 \
 	ko/standard \
 	ko/template \
+	kok/standard \
+	ks/standard \
+	ky/standard \
 	lb-LU/standard \
+	lb/standard \
+	lo/standard \
 	lt/standard \
+	lv/standard \
+	mai/standard \
+	mk/standard \
+	ml/standard \
 	mn/crdbus50 \
 	mn/standard \
 	mn/template \
+	mni/standard \
+	mr/standard \
+	my/standard \
+	nb/standard \
+	ne/standard \
 	nl-BE/standard \
 	nl/crdbus50 \
 	nl/standard \
 	nl/template \
+	nn/standard \
+	nr/standard \
+	nso/standard \
+	oc/standard \
+	om/standard \
+	or/standard \
+	pa-IN/standard \
 	pl/crdbus50 \
 	pl/standard \
 	pl/template \
@@ -82,6 +144,13 @@ extras_AUTOTEXTSHARE_AUTOTEXTS := \
 	ru/crdbus50 \
 	ru/standard \
 	ru/template \
+	rw/standard \
+	sa-IN/standard \
+	sah/standard \
+	sat/standard \
+	sd/standard \
+	si/standard \
+	sid/standard \
 	sk/crdbus50 \
 	sk/crdbus54 \
 	sk/standard \
@@ -90,28 +159,57 @@ extras_AUTOTEXTSHARE_AUTOTEXTS := \
 	sl/crdbus54 \
 	sl/standard \
 	sl/template \
+	sq/standard \
 	sr-CS/standard \
 	sr-Latn-CS/standard \
 	sr-Latn-ME/standard \
 	sr-Latn-RS/standard \
 	sr-ME/standard \
 	sr-RS/standard \
+	ss/standard \
+	st/standard \
 	sv/crdbus50 \
 	sv/standard \
 	sv/template \
+	sw-TZ/standard \
+	szl/standard \
+	ta/standard \
+	te/standard \
+	tg/standard \
+	th/standard \
+	ti/standard \
+	tn/standard \
 	tr/crdbus50 \
 	tr/standard \
 	tr/template \
+	ts/standard \
+	tt/standard \
+	ug/standard \
+	uk/standard \
+	ur/standard \
+	uz/standard \
+	ve/standard \
+	vec/standard \
 	vi/standard \
+	xh/standard \
 	zh-CN/crdbus50 \
 	zh-CN/standard \
 	zh-CN/template \
 	zh-TW/crdbus50 \
 	zh-TW/standard \
 	zh-TW/template \
+	zu/standard \
 
 
 extras_AUTOTEXTSHARE_XMLFILES := \
+	ab/standard/BlockList.xml \
+	ab/standard/FN/content.xml \
+	ab/standard/FN/manifest.rdf \
+	ab/standard/FN/Object_1/content.xml \
+	ab/standard/FN/Object_1/settings.xml \
+	ab/standard/FN/styles.xml \
+	ab/standard/LOREM/LOREM.xml \
+	ab/standard/META-INF/manifest.xml \
 	af-ZA/standard/BlockList.xml \
 	af-ZA/standard/FN/content.xml \
 	af-ZA/standard/FN/manifest.rdf \
@@ -120,6 +218,70 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	af-ZA/standard/FN/styles.xml \
 	af-ZA/standard/LOREM/LOREM.xml \
 	af-ZA/standard/META-INF/manifest.xml \
+	af/standard/BlockList.xml \
+	af/standard/FN/content.xml \
+	af/standard/FN/manifest.rdf \
+	af/standard/FN/Object_1/content.xml \
+	af/standard/FN/Object_1/settings.xml \
+	af/standard/FN/styles.xml \
+	af/standard/LOREM/LOREM.xml \
+	af/standard/META-INF/manifest.xml \
+	am/standard/BlockList.xml \
+	am/standard/FN/content.xml \
+	am/standard/FN/manifest.rdf \
+	am/standard/FN/Object_1/content.xml \
+	am/standard/FN/Object_1/settings.xml \
+	am/standard/FN/styles.xml \
+	am/standard/LOREM/LOREM.xml \
+	am/standard/META-INF/manifest.xml \
+	an/standard/BlockList.xml \
+	an/standard/FN/content.xml \
+	an/standard/FN/manifest.rdf \
+	an/standard/FN/Object_1/content.xml \
+	an/standard/FN/Object_1/settings.xml \
+	an/standard/FN/styles.xml \
+	an/standard/LOREM/LOREM.xml \
+	an/standard/META-INF/manifest.xml \
+	ar/standard/BlockList.xml \
+	ar/standard/FN/content.xml \
+	ar/standard/FN/manifest.rdf \
+	ar/standard/FN/Object_1/content.xml \
+	ar/standard/FN/Object_1/settings.xml \
+	ar/standard/FN/styles.xml \
+	ar/standard/LOREM/LOREM.xml \
+	ar/standard/META-INF/manifest.xml \
+	as/standard/BlockList.xml \
+	as/standard/FN/content.xml \
+	as/standard/FN/manifest.rdf \
+	as/standard/FN/Object_1/content.xml \
+	as/standard/FN/Object_1/settings.xml \
+	as/standard/FN/styles.xml \
+	as/standard/LOREM/LOREM.xml \
+	as/standard/META-INF/manifest.xml \
+	ast/standard/BlockList.xml \
+	ast/standard/FN/content.xml \
+	ast/standard/FN/manifest.rdf \
+	ast/standard/FN/Object_1/content.xml \
+	ast/standard/FN/Object_1/settings.xml \
+	ast/standard/FN/styles.xml \
+	ast/standard/LOREM/LOREM.xml \
+	ast/standard/META-INF/manifest.xml \
+	az/standard/BlockList.xml \
+	az/standard/FN/content.xml \
+	az/standard/FN/manifest.rdf \
+	az/standard/FN/Object_1/content.xml \
+	az/standard/FN/Object_1/settings.xml \
+	az/standard/FN/styles.xml \
+	az/standard/LOREM/LOREM.xml \
+	az/standard/META-INF/manifest.xml \
+	be/standard/BlockList.xml \
+	be/standard/FN/content.xml \
+	be/standard/FN/manifest.rdf \
+	be/standard/FN/Object_1/content.xml \
+	be/standard/FN/Object_1/settings.xml \
+	be/standard/FN/styles.xml \
+	be/standard/LOREM/LOREM.xml \
+	be/standard/META-INF/manifest.xml \
 	bg/crdbus50/+BBUEGwQV-1/atevent.xml \
 	bg/crdbus50/+BBUEGwQV-1/content.xml \
 	bg/crdbus50/+BBUEGwQV-1/manifest.rdf \
@@ -331,6 +493,62 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	bg/template/+BBoEGAQRBBs-/styles.xml \
 	bg/template/BlockList.xml \
 	bg/template/META-INF/manifest.xml \
+	bn-IN/standard/BlockList.xml \
+	bn-IN/standard/FN/content.xml \
+	bn-IN/standard/FN/manifest.rdf \
+	bn-IN/standard/FN/Object_1/content.xml \
+	bn-IN/standard/FN/Object_1/settings.xml \
+	bn-IN/standard/FN/styles.xml \
+	bn-IN/standard/LOREM/LOREM.xml \
+	bn-IN/standard/META-INF/manifest.xml \
+	bn/standard/BlockList.xml \
+	bn/standard/FN/content.xml \
+	bn/standard/FN/manifest.rdf \
+	bn/standard/FN/Object_1/content.xml \
+	bn/standard/FN/Object_1/settings.xml \
+	bn/standard/FN/styles.xml \
+	bn/standard/LOREM/LOREM.xml \
+	bn/standard/META-INF/manifest.xml \
+	bo/standard/BlockList.xml \
+	bo/standard/FN/content.xml \
+	bo/standard/FN/manifest.rdf \
+	bo/standard/FN/Object_1/content.xml \
+	bo/standard/FN/Object_1/settings.xml \
+	bo/standard/FN/styles.xml \
+	bo/standard/LOREM/LOREM.xml \
+	bo/standard/META-INF/manifest.xml \
+	br/standard/BlockList.xml \
+	br/standard/FN/content.xml \
+	br/standard/FN/manifest.rdf \
+	br/standard/FN/Object_1/content.xml \
+	br/standard/FN/Object_1/settings.xml \
+	br/standard/FN/styles.xml \
+	br/standard/LOREM/LOREM.xml \
+	br/standard/META-INF/manifest.xml \
+	brx/standard/BlockList.xml \
+	brx/standard/FN/content.xml \
+	brx/standard/FN/manifest.rdf \
+	brx/standard/FN/Object_1/content.xml \
+	brx/standard/FN/Object_1/settings.xml \
+	brx/standard/FN/styles.xml \
+	brx/standard/LOREM/LOREM.xml \
+	brx/standard/META-INF/manifest.xml \
+	bs/standard/BlockList.xml \
+	bs/standard/FN/content.xml \
+	bs/standard/FN/manifest.rdf \
+	bs/standard/FN/Object_1/content.xml \
+	bs/standard/FN/Object_1/settings.xml \
+	bs/standard/FN/styles.xml \
+	bs/standard/LOREM/LOREM.xml \
+	bs/standard/META-INF/manifest.xml \
+	ca-valencia/standard/BlockList.xml \
+	ca-valencia/standard/FN/content.xml \
+	ca-valencia/standard/FN/manifest.rdf \
+	ca-valencia/standard/FN/Object_1/content.xml \
+	ca-valencia/standard/FN/Object_1/settings.xml \
+	ca-valencia/standard/FN/styles.xml \
+	ca-valencia/standard/LOREM/LOREM.xml \
+	ca-valencia/standard/META-INF/manifest.xml \
 	ca/standard/BlockList.xml \
 	ca/standard/FN/content.xml \
 	ca/standard/FN/manifest.rdf \
@@ -541,6 +759,14 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	cs/template/PT1/styles.xml \
 	cs/template/PT2/content.xml \
 	cs/template/PT2/styles.xml \
+	cy/standard/BlockList.xml \
+	cy/standard/FN/content.xml \
+	cy/standard/FN/manifest.rdf \
+	cy/standard/FN/Object_1/content.xml \
+	cy/standard/FN/Object_1/settings.xml \
+	cy/standard/FN/styles.xml \
+	cy/standard/LOREM/LOREM.xml \
+	cy/standard/META-INF/manifest.xml \
 	da/crdbus50/BlockList.xml \
 	da/crdbus50/CON1/atevent.xml \
 	da/crdbus50/CON1/content.xml \
@@ -855,6 +1081,38 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	de/template/PT2/atevent.xml \
 	de/template/PT2/content.xml \
 	de/template/PT2/styles.xml \
+	dgo/standard/BlockList.xml \
+	dgo/standard/FN/content.xml \
+	dgo/standard/FN/manifest.rdf \
+	dgo/standard/FN/Object_1/content.xml \
+	dgo/standard/FN/Object_1/settings.xml \
+	dgo/standard/FN/styles.xml \
+	dgo/standard/LOREM/LOREM.xml \
+	dgo/standard/META-INF/manifest.xml \
+	dsb/standard/BlockList.xml \
+	dsb/standard/FN/content.xml \
+	dsb/standard/FN/manifest.rdf \
+	dsb/standard/FN/Object_1/content.xml \
+	dsb/standard/FN/Object_1/settings.xml \
+	dsb/standard/FN/styles.xml \
+	dsb/standard/LOREM/LOREM.xml \
+	dsb/standard/META-INF/manifest.xml \
+	dz/standard/BlockList.xml \
+	dz/standard/FN/content.xml \
+	dz/standard/FN/manifest.rdf \
+	dz/standard/FN/Object_1/content.xml \
+	dz/standard/FN/Object_1/settings.xml \
+	dz/standard/FN/styles.xml \
+	dz/standard/LOREM/LOREM.xml \
+	dz/standard/META-INF/manifest.xml \
+	el/standard/BlockList.xml \
+	el/standard/FN/content.xml \
+	el/standard/FN/manifest.rdf \
+	el/standard/FN/Object_1/content.xml \
+	el/standard/FN/Object_1/settings.xml \
+	el/standard/FN/styles.xml \
+	el/standard/LOREM/LOREM.xml \
+	el/standard/META-INF/manifest.xml \
 	en-AU/standard/BlockList.xml \
 	en-AU/standard/FN/content.xml \
 	en-AU/standard/FN/manifest.rdf \
@@ -1227,6 +1485,14 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	en-ZA/standard/FN/styles.xml \
 	en-ZA/standard/LOREM/LOREM.xml \
 	en-ZA/standard/META-INF/manifest.xml \
+	eo/standard/BlockList.xml \
+	eo/standard/FN/content.xml \
+	eo/standard/FN/manifest.rdf \
+	eo/standard/FN/Object_1/content.xml \
+	eo/standard/FN/Object_1/settings.xml \
+	eo/standard/FN/styles.xml \
+	eo/standard/LOREM/LOREM.xml \
+	eo/standard/META-INF/manifest.xml \
 	es/crdbus50/BlockList.xml \
 	es/crdbus50/CLA1/atevent.xml \
 	es/crdbus50/CLA1/content.xml \
@@ -1355,6 +1621,22 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	es/template/PT1/styles.xml \
 	es/template/PT2/content.xml \
 	es/template/PT2/styles.xml \
+	et/standard/BlockList.xml \
+	et/standard/FN/content.xml \
+	et/standard/FN/manifest.rdf \
+	et/standard/FN/Object_1/content.xml \
+	et/standard/FN/Object_1/settings.xml \
+	et/standard/FN/styles.xml \
+	et/standard/LOREM/LOREM.xml \
+	et/standard/META-INF/manifest.xml \
+	eu/standard/BlockList.xml \
+	eu/standard/FN/content.xml \
+	eu/standard/FN/manifest.rdf \
+	eu/standard/FN/Object_1/content.xml \
+	eu/standard/FN/Object_1/settings.xml \
+	eu/standard/FN/styles.xml \
+	eu/standard/LOREM/LOREM.xml \
+	eu/standard/META-INF/manifest.xml \
 	fa/standard/BlockList.xml \
 	fa/standard/FN/content.xml \
 	fa/standard/FN/manifest.rdf \
@@ -1507,6 +1789,14 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	fr/template/PT1/styles.xml \
 	fr/template/PT2/content.xml \
 	fr/template/PT2/styles.xml \
+	fy/standard/BlockList.xml \
+	fy/standard/FN/content.xml \
+	fy/standard/FN/manifest.rdf \
+	fy/standard/FN/Object_1/content.xml \
+	fy/standard/FN/Object_1/settings.xml \
+	fy/standard/FN/styles.xml \
+	fy/standard/LOREM/LOREM.xml \
+	fy/standard/META-INF/manifest.xml \
 	ga-IE/standard/BlockList.xml \
 	ga-IE/standard/FN/content.xml \
 	ga-IE/standard/FN/manifest.rdf \
@@ -1515,6 +1805,62 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	ga-IE/standard/FN/styles.xml \
 	ga-IE/standard/LOREM/LOREM.xml \
 	ga-IE/standard/META-INF/manifest.xml \
+	ga/standard/BlockList.xml \
+	ga/standard/FN/content.xml \
+	ga/standard/FN/manifest.rdf \
+	ga/standard/FN/Object_1/content.xml \
+	ga/standard/FN/Object_1/settings.xml \
+	ga/standard/FN/styles.xml \
+	ga/standard/LOREM/LOREM.xml \
+	ga/standard/META-INF/manifest.xml \
+	gd/standard/BlockList.xml \
+	gd/standard/FN/content.xml \
+	gd/standard/FN/manifest.rdf \
+	gd/standard/FN/Object_1/content.xml \
+	gd/standard/FN/Object_1/settings.xml \
+	gd/standard/FN/styles.xml \
+	gd/standard/LOREM/LOREM.xml \
+	gd/standard/META-INF/manifest.xml \
+	gl/standard/BlockList.xml \
+	gl/standard/FN/content.xml \
+	gl/standard/FN/manifest.rdf \
+	gl/standard/FN/Object_1/content.xml \
+	gl/standard/FN/Object_1/settings.xml \
+	gl/standard/FN/styles.xml \
+	gl/standard/LOREM/LOREM.xml \
+	gl/standard/META-INF/manifest.xml \
+	gu/standard/BlockList.xml \
+	gu/standard/FN/content.xml \
+	gu/standard/FN/manifest.rdf \
+	gu/standard/FN/Object_1/content.xml \
+	gu/standard/FN/Object_1/settings.xml \
+	gu/standard/FN/styles.xml \
+	gu/standard/LOREM/LOREM.xml \
+	gu/standard/META-INF/manifest.xml \
+	gug/standard/BlockList.xml \
+	gug/standard/FN/content.xml \
+	gug/standard/FN/manifest.rdf \
+	gug/standard/FN/Object_1/content.xml \
+	gug/standard/FN/Object_1/settings.xml \
+	gug/standard/FN/styles.xml \
+	gug/standard/LOREM/LOREM.xml \
+	gug/standard/META-INF/manifest.xml \
+	he/standard/BlockList.xml \
+	he/standard/FN/content.xml \
+	he/standard/FN/manifest.rdf \
+	he/standard/FN/Object_1/content.xml \
+	he/standard/FN/Object_1/settings.xml \
+	he/standard/FN/styles.xml \
+	he/standard/LOREM/LOREM.xml \
+	he/standard/META-INF/manifest.xml \
+	hi/standard/BlockList.xml \
+	hi/standard/FN/content.xml \
+	hi/standard/FN/manifest.rdf \
+	hi/standard/FN/Object_1/content.xml \
+	hi/standard/FN/Object_1/settings.xml \
+	hi/standard/FN/styles.xml \
+	hi/standard/LOREM/LOREM.xml \
+	hi/standard/META-INF/manifest.xml \
 	hr/standard/BlockList.xml \
 	hr/standard/FN/content.xml \
 	hr/standard/FN/manifest.rdf \
@@ -1523,6 +1869,14 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	hr/standard/FN/styles.xml \
 	hr/standard/LOREM/LOREM.xml \
 	hr/standard/META-INF/manifest.xml \
+	hsb/standard/BlockList.xml \
+	hsb/standard/FN/content.xml \
+	hsb/standard/FN/manifest.rdf \
+	hsb/standard/FN/Object_1/content.xml \
+	hsb/standard/FN/Object_1/settings.xml \
+	hsb/standard/FN/styles.xml \
+	hsb/standard/LOREM/LOREM.xml \
+	hsb/standard/META-INF/manifest.xml \
 	hu/crdbus50/BlockList.xml \
 	hu/crdbus50/CLE1/atevent.xml \
 	hu/crdbus50/CLE1/content.xml \
@@ -1688,6 +2042,14 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	hu/template/PT1/styles.xml \
 	hu/template/PT2/content.xml \
 	hu/template/PT2/styles.xml \
+	id/standard/BlockList.xml \
+	id/standard/FN/content.xml \
+	id/standard/FN/manifest.rdf \
+	id/standard/FN/Object_1/content.xml \
+	id/standard/FN/Object_1/settings.xml \
+	id/standard/FN/styles.xml \
+	id/standard/LOREM/LOREM.xml \
+	id/standard/META-INF/manifest.xml \
 	is/standard/BlockList.xml \
 	is/standard/FN/content.xml \
 	is/standard/FN/manifest.rdf \
@@ -1918,6 +2280,46 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	ja/template/PT1/styles.xml \
 	ja/template/PT2/content.xml \
 	ja/template/PT2/styles.xml \
+	jv/standard/BlockList.xml \
+	jv/standard/FN/content.xml \
+	jv/standard/FN/manifest.rdf \
+	jv/standard/FN/Object_1/content.xml \
+	jv/standard/FN/Object_1/settings.xml \
+	jv/standard/FN/styles.xml \
+	jv/standard/LOREM/LOREM.xml \
+	jv/standard/META-INF/manifest.xml \
+	ka/standard/BlockList.xml \
+	ka/standard/FN/content.xml \
+	ka/standard/FN/manifest.rdf \
+	ka/standard/FN/Object_1/content.xml \
+	ka/standard/FN/Object_1/settings.xml \
+	ka/standard/FN/styles.xml \
+	ka/standard/LOREM/LOREM.xml \
+	ka/standard/META-INF/manifest.xml \
+	kab/standard/BlockList.xml \
+	kab/standard/FN/content.xml \
+	kab/standard/FN/manifest.rdf \
+	kab/standard/FN/Object_1/content.xml \
+	kab/standard/FN/Object_1/settings.xml \
+	kab/standard/FN/styles.xml \
+	kab/standard/LOREM/LOREM.xml \
+	kab/standard/META-INF/manifest.xml \
+	kk/standard/BlockList.xml \
+	kk/standard/FN/content.xml \
+	kk/standard/FN/manifest.rdf \
+	kk/standard/FN/Object_1/content.xml \
+	kk/standard/FN/Object_1/settings.xml \
+	kk/standard/FN/styles.xml \
+	kk/standard/LOREM/LOREM.xml \
+	kk/standard/META-INF/manifest.xml \
+	kl/standard/BlockList.xml \
+	kl/standard/FN/content.xml \
+	kl/standard/FN/manifest.rdf \
+	kl/standard/FN/Object_1/content.xml \
+	kl/standard/FN/Object_1/settings.xml \
+	kl/standard/FN/styles.xml \
+	kl/standard/LOREM/LOREM.xml \
+	kl/standard/META-INF/manifest.xml \
 	km/crdbus50/BlockList.xml \
 	km/crdbus50/CON1/atevent.xml \
 	km/crdbus50/CON1/content.xml \
@@ -2092,6 +2494,22 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	km/template/PT1/styles.xml \
 	km/template/PT2/content.xml \
 	km/template/PT2/styles.xml \
+	kmr-Latn/standard/BlockList.xml \
+	kmr-Latn/standard/FN/content.xml \
+	kmr-Latn/standard/FN/manifest.rdf \
+	kmr-Latn/standard/FN/Object_1/content.xml \
+	kmr-Latn/standard/FN/Object_1/settings.xml \
+	kmr-Latn/standard/FN/styles.xml \
+	kmr-Latn/standard/LOREM/LOREM.xml \
+	kmr-Latn/standard/META-INF/manifest.xml \
+	kn/standard/BlockList.xml \
+	kn/standard/FN/content.xml \
+	kn/standard/FN/manifest.rdf \
+	kn/standard/FN/Object_1/content.xml \
+	kn/standard/FN/Object_1/settings.xml \
+	kn/standard/FN/styles.xml \
+	kn/standard/LOREM/LOREM.xml \
+	kn/standard/META-INF/manifest.xml \
 	ko/crdbus50/+1gSzAA-1/content.xml \
 	ko/crdbus50/+1gSzAA-1/styles.xml \
 	ko/crdbus50/+1gSzAA-2/content.xml \
@@ -2187,6 +2605,30 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	ko/template/PT1/styles.xml \
 	ko/template/PT2/content.xml \
 	ko/template/PT2/styles.xml \
+	kok/standard/BlockList.xml \
+	kok/standard/FN/content.xml \
+	kok/standard/FN/manifest.rdf \
+	kok/standard/FN/Object_1/content.xml \
+	kok/standard/FN/Object_1/settings.xml \
+	kok/standard/FN/styles.xml \
+	kok/standard/LOREM/LOREM.xml \
+	kok/standard/META-INF/manifest.xml \
+	ks/standard/BlockList.xml \
+	ks/standard/FN/content.xml \
+	ks/standard/FN/manifest.rdf \
+	ks/standard/FN/Object_1/content.xml \
+	ks/standard/FN/Object_1/settings.xml \
+	ks/standard/FN/styles.xml \
+	ks/standard/LOREM/LOREM.xml \
+	ks/standard/META-INF/manifest.xml \
+	ky/standard/BlockList.xml \
+	ky/standard/FN/content.xml \
+	ky/standard/FN/manifest.rdf \
+	ky/standard/FN/Object_1/content.xml \
+	ky/standard/FN/Object_1/settings.xml \
+	ky/standard/FN/styles.xml \
+	ky/standard/LOREM/LOREM.xml \
+	ky/standard/META-INF/manifest.xml \
 	lb-LU/standard/BlockList.xml \
 	lb-LU/standard/FN/content.xml \
 	lb-LU/standard/FN/manifest.rdf \
@@ -2195,6 +2637,22 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	lb-LU/standard/FN/styles.xml \
 	lb-LU/standard/LOREM/LOREM.xml \
 	lb-LU/standard/META-INF/manifest.xml \
+	lb/standard/BlockList.xml \
+	lb/standard/FN/content.xml \
+	lb/standard/FN/manifest.rdf \
+	lb/standard/FN/Object_1/content.xml \
+	lb/standard/FN/Object_1/settings.xml \
+	lb/standard/FN/styles.xml \
+	lb/standard/LOREM/LOREM.xml \
+	lb/standard/META-INF/manifest.xml \
+	lo/standard/BlockList.xml \
+	lo/standard/FN/content.xml \
+	lo/standard/FN/manifest.rdf \
+	lo/standard/FN/Object_1/content.xml \
+	lo/standard/FN/Object_1/settings.xml \
+	lo/standard/FN/styles.xml \
+	lo/standard/LOREM/LOREM.xml \
+	lo/standard/META-INF/manifest.xml \
 	lt/standard/BlockList.xml \
 	lt/standard/FN/content.xml \
 	lt/standard/FN/manifest.rdf \
@@ -2203,6 +2661,38 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	lt/standard/FN/styles.xml \
 	lt/standard/LOREM/LOREM.xml \
 	lt/standard/META-INF/manifest.xml \
+	lv/standard/BlockList.xml \
+	lv/standard/FN/content.xml \
+	lv/standard/FN/manifest.rdf \
+	lv/standard/FN/Object_1/content.xml \
+	lv/standard/FN/Object_1/settings.xml \
+	lv/standard/FN/styles.xml \
+	lv/standard/LOREM/LOREM.xml \
+	lv/standard/META-INF/manifest.xml \
+	mai/standard/BlockList.xml \
+	mai/standard/FN/content.xml \
+	mai/standard/FN/manifest.rdf \
+	mai/standard/FN/Object_1/content.xml \
+	mai/standard/FN/Object_1/settings.xml \
+	mai/standard/FN/styles.xml \
+	mai/standard/LOREM/LOREM.xml \
+	mai/standard/META-INF/manifest.xml \
+	mk/standard/BlockList.xml \
+	mk/standard/FN/content.xml \
+	mk/standard/FN/manifest.rdf \
+	mk/standard/FN/Object_1/content.xml \
+	mk/standard/FN/Object_1/settings.xml \
+	mk/standard/FN/styles.xml \
+	mk/standard/LOREM/LOREM.xml \
+	mk/standard/META-INF/manifest.xml \
+	ml/standard/BlockList.xml \
+	ml/standard/FN/content.xml \
+	ml/standard/FN/manifest.rdf \
+	ml/standard/FN/Object_1/content.xml \
+	ml/standard/FN/Object_1/settings.xml \
+	ml/standard/FN/styles.xml \
+	ml/standard/LOREM/LOREM.xml \
+	ml/standard/META-INF/manifest.xml \
 	mn/crdbus50/+BCEEHgQd-1/atevent.xml \
 	mn/crdbus50/+BCEEHgQd-1/content.xml \
 	mn/crdbus50/+BCEEHgQd-1/meta.xml \
@@ -2377,6 +2867,46 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	mn/template/PT1/styles.xml \
 	mn/template/PT2/content.xml \
 	mn/template/PT2/styles.xml \
+	mni/standard/BlockList.xml \
+	mni/standard/FN/content.xml \
+	mni/standard/FN/manifest.rdf \
+	mni/standard/FN/Object_1/content.xml \
+	mni/standard/FN/Object_1/settings.xml \
+	mni/standard/FN/styles.xml \
+	mni/standard/LOREM/LOREM.xml \
+	mni/standard/META-INF/manifest.xml \
+	mr/standard/BlockList.xml \
+	mr/standard/FN/content.xml \
+	mr/standard/FN/manifest.rdf \
+	mr/standard/FN/Object_1/content.xml \
+	mr/standard/FN/Object_1/settings.xml \
+	mr/standard/FN/styles.xml \
+	mr/standard/LOREM/LOREM.xml \
+	mr/standard/META-INF/manifest.xml \
+	my/standard/BlockList.xml \
+	my/standard/FN/content.xml \
+	my/standard/FN/manifest.rdf \
+	my/standard/FN/Object_1/content.xml \
+	my/standard/FN/Object_1/settings.xml \
+	my/standard/FN/styles.xml \
+	my/standard/LOREM/LOREM.xml \
+	my/standard/META-INF/manifest.xml \
+	nb/standard/BlockList.xml \
+	nb/standard/FN/content.xml \
+	nb/standard/FN/manifest.rdf \
+	nb/standard/FN/Object_1/content.xml \
+	nb/standard/FN/Object_1/settings.xml \
+	nb/standard/FN/styles.xml \
+	nb/standard/LOREM/LOREM.xml \
+	nb/standard/META-INF/manifest.xml \
+	ne/standard/BlockList.xml \
+	ne/standard/FN/content.xml \
+	ne/standard/FN/manifest.rdf \
+	ne/standard/FN/Object_1/content.xml \
+	ne/standard/FN/Object_1/settings.xml \
+	ne/standard/FN/styles.xml \
+	ne/standard/LOREM/LOREM.xml \
+	ne/standard/META-INF/manifest.xml \
 	nl-BE/standard/BlockList.xml \
 	nl-BE/standard/FN/content.xml \
 	nl-BE/standard/FN/manifest.rdf \
@@ -2502,6 +3032,62 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	nl/template/PT1/styles.xml \
 	nl/template/PT2/content.xml \
 	nl/template/PT2/styles.xml \
+	nn/standard/BlockList.xml \
+	nn/standard/FN/content.xml \
+	nn/standard/FN/manifest.rdf \
+	nn/standard/FN/Object_1/content.xml \
+	nn/standard/FN/Object_1/settings.xml \
+	nn/standard/FN/styles.xml \
+	nn/standard/LOREM/LOREM.xml \
+	nn/standard/META-INF/manifest.xml \
+	nr/standard/BlockList.xml \
+	nr/standard/FN/content.xml \
+	nr/standard/FN/manifest.rdf \
+	nr/standard/FN/Object_1/content.xml \
+	nr/standard/FN/Object_1/settings.xml \
+	nr/standard/FN/styles.xml \
+	nr/standard/LOREM/LOREM.xml \
+	nr/standard/META-INF/manifest.xml \
+	nso/standard/BlockList.xml \
+	nso/standard/FN/content.xml \
+	nso/standard/FN/manifest.rdf \
+	nso/standard/FN/Object_1/content.xml \
+	nso/standard/FN/Object_1/settings.xml \
+	nso/standard/FN/styles.xml \
+	nso/standard/LOREM/LOREM.xml \
+	nso/standard/META-INF/manifest.xml \
+	oc/standard/BlockList.xml \
+	oc/standard/FN/content.xml \
+	oc/standard/FN/manifest.rdf \
+	oc/standard/FN/Object_1/content.xml \
+	oc/standard/FN/Object_1/settings.xml \
+	oc/standard/FN/styles.xml \
+	oc/standard/LOREM/LOREM.xml \
+	oc/standard/META-INF/manifest.xml \
+	om/standard/BlockList.xml \
+	om/standard/FN/content.xml \
+	om/standard/FN/manifest.rdf \
+	om/standard/FN/Object_1/content.xml \
+	om/standard/FN/Object_1/settings.xml \
+	om/standard/FN/styles.xml \
+	om/standard/LOREM/LOREM.xml \
+	om/standard/META-INF/manifest.xml \
+	or/standard/BlockList.xml \
+	or/standard/FN/content.xml \
+	or/standard/FN/manifest.rdf \
+	or/standard/FN/Object_1/content.xml \
+	or/standard/FN/Object_1/settings.xml \
+	or/standard/FN/styles.xml \
+	or/standard/LOREM/LOREM.xml \
+	or/standard/META-INF/manifest.xml \
+	pa-IN/standard/BlockList.xml \
+	pa-IN/standard/FN/content.xml \
+	pa-IN/standard/FN/manifest.rdf \
+	pa-IN/standard/FN/Object_1/content.xml \
+	pa-IN/standard/FN/Object_1/settings.xml \
+	pa-IN/standard/FN/styles.xml \
+	pa-IN/standard/LOREM/LOREM.xml \
+	pa-IN/standard/META-INF/manifest.xml \
 	pl/crdbus50/BlockList.xml \
 	pl/crdbus50/KLAS1/content.xml \
 	pl/crdbus50/KLAS1/styles.xml \
@@ -2992,6 +3578,62 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	ru/template/PT1/styles.xml \
 	ru/template/PT2/content.xml \
 	ru/template/PT2/styles.xml \
+	rw/standard/BlockList.xml \
+	rw/standard/FN/content.xml \
+	rw/standard/FN/manifest.rdf \
+	rw/standard/FN/Object_1/content.xml \
+	rw/standard/FN/Object_1/settings.xml \
+	rw/standard/FN/styles.xml \
+	rw/standard/LOREM/LOREM.xml \
+	rw/standard/META-INF/manifest.xml \
+	sa-IN/standard/BlockList.xml \
+	sa-IN/standard/FN/content.xml \
+	sa-IN/standard/FN/manifest.rdf \
+	sa-IN/standard/FN/Object_1/content.xml \
+	sa-IN/standard/FN/Object_1/settings.xml \
+	sa-IN/standard/FN/styles.xml \
+	sa-IN/standard/LOREM/LOREM.xml \
+	sa-IN/standard/META-INF/manifest.xml \
+	sah/standard/BlockList.xml \
+	sah/standard/FN/content.xml \
+	sah/standard/FN/manifest.rdf \
+	sah/standard/FN/Object_1/content.xml \
+	sah/standard/FN/Object_1/settings.xml \
+	sah/standard/FN/styles.xml \
+	sah/standard/LOREM/LOREM.xml \
+	sah/standard/META-INF/manifest.xml \
+	sat/standard/BlockList.xml \
+	sat/standard/FN/content.xml \
+	sat/standard/FN/manifest.rdf \
+	sat/standard/FN/Object_1/content.xml \
+	sat/standard/FN/Object_1/settings.xml \
+	sat/standard/FN/styles.xml \
+	sat/standard/LOREM/LOREM.xml \
+	sat/standard/META-INF/manifest.xml \
+	sd/standard/BlockList.xml \
+	sd/standard/FN/content.xml \
+	sd/standard/FN/manifest.rdf \
+	sd/standard/FN/Object_1/content.xml \
+	sd/standard/FN/Object_1/settings.xml \
+	sd/standard/FN/styles.xml \
+	sd/standard/LOREM/LOREM.xml \
+	sd/standard/META-INF/manifest.xml \
+	si/standard/BlockList.xml \
+	si/standard/FN/content.xml \
+	si/standard/FN/manifest.rdf \
+	si/standard/FN/Object_1/content.xml \
+	si/standard/FN/Object_1/settings.xml \
+	si/standard/FN/styles.xml \
+	si/standard/LOREM/LOREM.xml \
+	si/standard/META-INF/manifest.xml \
+	sid/standard/BlockList.xml \
+	sid/standard/FN/content.xml \
+	sid/standard/FN/manifest.rdf \
+	sid/standard/FN/Object_1/content.xml \
+	sid/standard/FN/Object_1/settings.xml \
+	sid/standard/FN/styles.xml \
+	sid/standard/LOREM/LOREM.xml \
+	sid/standard/META-INF/manifest.xml \
 	sk/crdbus50/BlockList.xml \
 	sk/crdbus50/CON1/atevent.xml \
 	sk/crdbus50/CON1/content.xml \
@@ -3395,6 +4037,14 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	sl/template/PT1/styles.xml \
 	sl/template/PT2/content.xml \
 	sl/template/PT2/styles.xml \
+	sq/standard/BlockList.xml \
+	sq/standard/FN/content.xml \
+	sq/standard/FN/manifest.rdf \
+	sq/standard/FN/Object_1/content.xml \
+	sq/standard/FN/Object_1/settings.xml \
+	sq/standard/FN/styles.xml \
+	sq/standard/LOREM/LOREM.xml \
+	sq/standard/META-INF/manifest.xml \
 	sr-CS/standard/BlockList.xml \
 	sr-CS/standard/FN/content.xml \
 	sr-CS/standard/FN/manifest.rdf \
@@ -3443,6 +4093,22 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	sr-RS/standard/FN/styles.xml \
 	sr-RS/standard/LOREM/LOREM.xml \
 	sr-RS/standard/META-INF/manifest.xml \
+	ss/standard/BlockList.xml \
+	ss/standard/FN/content.xml \
+	ss/standard/FN/manifest.rdf \
+	ss/standard/FN/Object_1/content.xml \
+	ss/standard/FN/Object_1/settings.xml \
+	ss/standard/FN/styles.xml \
+	ss/standard/LOREM/LOREM.xml \
+	ss/standard/META-INF/manifest.xml \
+	st/standard/BlockList.xml \
+	st/standard/FN/content.xml \
+	st/standard/FN/manifest.rdf \
+	st/standard/FN/Object_1/content.xml \
+	st/standard/FN/Object_1/settings.xml \
+	st/standard/FN/styles.xml \
+	st/standard/LOREM/LOREM.xml \
+	st/standard/META-INF/manifest.xml \
 	sv/crdbus50/BlockList.xml \
 	sv/crdbus50/KLA1/atevent.xml \
 	sv/crdbus50/KLA1/content.xml \
@@ -3566,6 +4232,70 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	sv/template/PT1/styles.xml \
 	sv/template/PT2/content.xml \
 	sv/template/PT2/styles.xml \
+	sw-TZ/standard/BlockList.xml \
+	sw-TZ/standard/FN/content.xml \
+	sw-TZ/standard/FN/manifest.rdf \
+	sw-TZ/standard/FN/Object_1/content.xml \
+	sw-TZ/standard/FN/Object_1/settings.xml \
+	sw-TZ/standard/FN/styles.xml \
+	sw-TZ/standard/LOREM/LOREM.xml \
+	sw-TZ/standard/META-INF/manifest.xml \
+	szl/standard/BlockList.xml \
+	szl/standard/FN/content.xml \
+	szl/standard/FN/manifest.rdf \
+	szl/standard/FN/Object_1/content.xml \
+	szl/standard/FN/Object_1/settings.xml \
+	szl/standard/FN/styles.xml \
+	szl/standard/LOREM/LOREM.xml \
+	szl/standard/META-INF/manifest.xml \
+	ta/standard/BlockList.xml \
+	ta/standard/FN/content.xml \
+	ta/standard/FN/manifest.rdf \
+	ta/standard/FN/Object_1/content.xml \
+	ta/standard/FN/Object_1/settings.xml \
+	ta/standard/FN/styles.xml \
+	ta/standard/LOREM/LOREM.xml \
+	ta/standard/META-INF/manifest.xml \
+	te/standard/BlockList.xml \
+	te/standard/FN/content.xml \
+	te/standard/FN/manifest.rdf \
+	te/standard/FN/Object_1/content.xml \
+	te/standard/FN/Object_1/settings.xml \
+	te/standard/FN/styles.xml \
+	te/standard/LOREM/LOREM.xml \
+	te/standard/META-INF/manifest.xml \
+	tg/standard/BlockList.xml \
+	tg/standard/FN/content.xml \
+	tg/standard/FN/manifest.rdf \
+	tg/standard/FN/Object_1/content.xml \
+	tg/standard/FN/Object_1/settings.xml \
+	tg/standard/FN/styles.xml \
+	tg/standard/LOREM/LOREM.xml \
+	tg/standard/META-INF/manifest.xml \
+	th/standard/BlockList.xml \
+	th/standard/FN/content.xml \
+	th/standard/FN/manifest.rdf \
+	th/standard/FN/Object_1/content.xml \
+	th/standard/FN/Object_1/settings.xml \
+	th/standard/FN/styles.xml \
+	th/standard/LOREM/LOREM.xml \
+	th/standard/META-INF/manifest.xml \
+	ti/standard/BlockList.xml \
+	ti/standard/FN/content.xml \
+	ti/standard/FN/manifest.rdf \
+	ti/standard/FN/Object_1/content.xml \
+	ti/standard/FN/Object_1/settings.xml \
+	ti/standard/FN/styles.xml \
+	ti/standard/LOREM/LOREM.xml \
+	ti/standard/META-INF/manifest.xml \
+	tn/standard/BlockList.xml \
+	tn/standard/FN/content.xml \
+	tn/standard/FN/manifest.rdf \
+	tn/standard/FN/Object_1/content.xml \
+	tn/standard/FN/Object_1/settings.xml \
+	tn/standard/FN/styles.xml \
+	tn/standard/LOREM/LOREM.xml \
+	tn/standard/META-INF/manifest.xml \
 	tr/crdbus50/BlockList.xml \
 	tr/crdbus50/C+AR4-D1/atevent.xml \
 	tr/crdbus50/C+AR4-D1/content.xml \
@@ -3611,6 +4341,70 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	tr/template/PT2/atevent.xml \
 	tr/template/PT2/content.xml \
 	tr/template/PT2/styles.xml \
+	ts/standard/BlockList.xml \
+	ts/standard/FN/content.xml \
+	ts/standard/FN/manifest.rdf \
+	ts/standard/FN/Object_1/content.xml \
+	ts/standard/FN/Object_1/settings.xml \
+	ts/standard/FN/styles.xml \
+	ts/standard/LOREM/LOREM.xml \
+	ts/standard/META-INF/manifest.xml \
+	tt/standard/BlockList.xml \
+	tt/standard/FN/content.xml \
+	tt/standard/FN/manifest.rdf \
+	tt/standard/FN/Object_1/content.xml \
+	tt/standard/FN/Object_1/settings.xml \
+	tt/standard/FN/styles.xml \
+	tt/standard/LOREM/LOREM.xml \
+	tt/standard/META-INF/manifest.xml \
+	ug/standard/BlockList.xml \
+	ug/standard/FN/content.xml \
+	ug/standard/FN/manifest.rdf \
+	ug/standard/FN/Object_1/content.xml \
+	ug/standard/FN/Object_1/settings.xml \
+	ug/standard/FN/styles.xml \
+	ug/standard/LOREM/LOREM.xml \
+	ug/standard/META-INF/manifest.xml \
+	uk/standard/BlockList.xml \
+	uk/standard/FN/content.xml \
+	uk/standard/FN/manifest.rdf \
+	uk/standard/FN/Object_1/content.xml \
+	uk/standard/FN/Object_1/settings.xml \
+	uk/standard/FN/styles.xml \
+	uk/standard/LOREM/LOREM.xml \
+	uk/standard/META-INF/manifest.xml \
+	ur/standard/BlockList.xml \
+	ur/standard/FN/content.xml \
+	ur/standard/FN/manifest.rdf \
+	ur/standard/FN/Object_1/content.xml \
+	ur/standard/FN/Object_1/settings.xml \
+	ur/standard/FN/styles.xml \
+	ur/standard/LOREM/LOREM.xml \
+	ur/standard/META-INF/manifest.xml \
+	uz/standard/BlockList.xml \
+	uz/standard/FN/content.xml \
+	uz/standard/FN/manifest.rdf \
+	uz/standard/FN/Object_1/content.xml \
+	uz/standard/FN/Object_1/settings.xml \
+	uz/standard/FN/styles.xml \
+	uz/standard/LOREM/LOREM.xml \
+	uz/standard/META-INF/manifest.xml \
+	ve/standard/BlockList.xml \
+	ve/standard/FN/content.xml \
+	ve/standard/FN/manifest.rdf \
+	ve/standard/FN/Object_1/content.xml \
+	ve/standard/FN/Object_1/settings.xml \
+	ve/standard/FN/styles.xml \
+	ve/standard/LOREM/LOREM.xml \
+	ve/standard/META-INF/manifest.xml \
+	vec/standard/BlockList.xml \
+	vec/standard/FN/content.xml \
+	vec/standard/FN/manifest.rdf \
+	vec/standard/FN/Object_1/content.xml \
+	vec/standard/FN/Object_1/settings.xml \
+	vec/standard/FN/styles.xml \
+	vec/standard/LOREM/LOREM.xml \
+	vec/standard/META-INF/manifest.xml \
 	vi/standard/BlockList.xml \
 	vi/standard/FN/content.xml \
 	vi/standard/FN/manifest.rdf \
@@ -3619,6 +4413,14 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	vi/standard/FN/styles.xml \
 	vi/standard/LOREM/LOREM.xml \
 	vi/standard/META-INF/manifest.xml \
+	xh/standard/BlockList.xml \
+	xh/standard/FN/content.xml \
+	xh/standard/FN/manifest.rdf \
+	xh/standard/FN/Object_1/content.xml \
+	xh/standard/FN/Object_1/settings.xml \
+	xh/standard/FN/styles.xml \
+	xh/standard/LOREM/LOREM.xml \
+	xh/standard/META-INF/manifest.xml \
 	zh-CN/crdbus50/BlockList.xml \
 	zh-CN/crdbus50/KLA1/content.xml \
 	zh-CN/crdbus50/KLA1/styles.xml \
@@ -3804,6 +4606,14 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	zh-TW/template/PT1/styles.xml \
 	zh-TW/template/PT2/content.xml \
 	zh-TW/template/PT2/styles.xml \
+	zu/standard/BlockList.xml \
+	zu/standard/FN/content.xml \
+	zu/standard/FN/manifest.rdf \
+	zu/standard/FN/Object_1/content.xml \
+	zu/standard/FN/Object_1/settings.xml \
+	zu/standard/FN/styles.xml \
+	zu/standard/LOREM/LOREM.xml \
+	zu/standard/META-INF/manifest.xml \
 
 
 extras_AUTOTEXTSHARE_MIMETYPEFILES := $(foreach atexts,$(extras_AUTOTEXTSHARE_AUTOTEXTS),$(atexts)/mimetype)
