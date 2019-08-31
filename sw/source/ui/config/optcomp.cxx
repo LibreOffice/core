@@ -34,13 +34,11 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <vcl/treelistentry.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <vector>
 #include <svtools/restartdialog.hxx>
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Compatibility.hxx>
-#include <vcl/svlbitm.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 

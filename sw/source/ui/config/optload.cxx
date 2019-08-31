@@ -44,9 +44,7 @@
 
 #include <svtools/insdlg.hxx>
 #include <svtools/unitconv.hxx>
-#include <vcl/treelistentry.hxx>
 #include <tools/resary.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 
 #include <comphelper/classids.hxx>
