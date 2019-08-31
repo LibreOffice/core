@@ -25,9 +25,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/beans/PropertyValues.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/style.hxx>
@@ -42,9 +40,7 @@
 #include <comphelper/extract.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/svditer.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdopath.hxx>
@@ -54,7 +50,6 @@
 #include <filter/msfilter/msdffimp.hxx>
 #include <svl/instrm.hxx>
 #include <editeng/outlobj.hxx>
-#include <CustomAnimationPreset.hxx>
 #include <Outliner.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 #include <svx/svdogrp.hxx>
@@ -70,11 +65,8 @@
 #include <sdmod.hxx>
 #include <sdpage.hxx>
 #include <ViewShell.hxx>
-#include <unokywds.hxx>
 #include <unopage.hxx>
 #include <DrawDocShell.hxx>
-#include <glob.hxx>
-#include "unolayer.hxx"
 #include <EffectMigration.hxx>
 
 using namespace ::sd;

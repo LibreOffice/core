@@ -32,13 +32,11 @@
 #include <svx/svdotable.hxx>
 #include <editeng/numitem.hxx>
 #include <svx/rulritem.hxx>
-#include <sfx2/zoomitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <tools/urlobj.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/rectitem.hxx>
 #include <svl/stritem.hxx>
@@ -51,28 +49,21 @@
 #include <svx/f3dchild.hxx>
 #include <svx/float3d.hxx>
 #include <svx/sdmetitm.hxx>
-#include <optsitem.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>
 
 #include <sdundogr.hxx>
 #include <undopage.hxx>
-#include <glob.hxx>
-#include <sdmod.hxx>
 #include <fupoor.hxx>
 #include <slideshow.hxx>
-#include <FrameView.hxx>
 #include <sdpage.hxx>
 #include <Window.hxx>
 #include <sdresid.hxx>
 #include <unokywds.hxx>
 #include <drawview.hxx>
 #include <drawdoc.hxx>
-#include <Ruler.hxx>
 #include <DrawDocShell.hxx>
-#include <headerfooterdlg.hxx>
-#include <masterlayoutdlg.hxx>
 #include <sdabstdlg.hxx>
 #include <sfx2/ipclient.hxx>
 #include <tools/diagnose_ex.h>

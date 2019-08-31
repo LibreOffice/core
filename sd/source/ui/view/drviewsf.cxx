@@ -22,7 +22,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/string.hxx>
 #include <svx/svxids.hrc>
-#include <svx/globl3d.hxx>
 #include <svx/hlnkitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
@@ -33,17 +32,12 @@
 #include <svl/itempool.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/templdlg.hxx>
 #include <svx/xdef.hxx>
-#include <svx/svddef.hxx>
-#include <svx/fmglob.hxx>
+#include <svx/svdoutl.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/fmshell.hxx>
 #include <svl/cjkoptions.hxx>
 
-#include <FrameView.hxx>
-#include <Outliner.hxx>
 #include <app.hrc>
 
 #include <sdmod.hxx>

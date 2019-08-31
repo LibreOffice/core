@@ -25,10 +25,7 @@
 #include <utility>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <svx/fmglob.hxx>
-#include <svx/globl3d.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/svdouno.hxx>
@@ -36,23 +33,17 @@
 #include <editeng/flditem.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/sizeitem.hxx>
-#include <editeng/ulspitem.hxx>
-#include <editeng/lrspitem.hxx>
-#include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>
 #include <svx/clipfmtitem.hxx>
-#include <svx/fmshell.hxx>
 #include <svl/eitem.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
-#include <sfx2/dispatch.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -64,35 +55,29 @@
 #include <svx/fontworkbar.hxx>
 
 // #UndoRedo#
-#include <svl/slstitm.hxx>
-#include <sfx2/app.hxx>
 #include <svtools/insdlg.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svl/languageoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/request.hxx>
 
-#include <svx/grafctrl.hxx>
 #include <svtools/cliplistener.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <app.hrc>
-#include <strings.hrc>
 
 #include <PresentationViewShell.hxx>
 
-#include <Outliner.hxx>
 #include <drawdoc.hxx>
 #include <DrawViewShell.hxx>
 #include <sdmod.hxx>
 #include <unokywds.hxx>
 #include <sdpage.hxx>
-#include <Client.hxx>
 #include <DrawDocShell.hxx>
 #include <zoomlist.hxx>
 #include <slideshow.hxx>
 #include <drawview.hxx>
-#include <View.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
 #include <LayerTabBar.hxx>
@@ -103,8 +88,6 @@
 #include <fuconcs.hxx>
 #include <fuformatpaintbrush.hxx>
 #include <stlsheet.hxx>
-
-#include <config_features.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

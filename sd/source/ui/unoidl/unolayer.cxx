@@ -41,11 +41,9 @@
 #include <DrawViewShell.hxx>
 #include <View.hxx>
 #include <ViewShell.hxx>
-#include <app.hrc>
 #include <strings.hrc>
 #include <sdresid.hxx>
 
-#include <unokywds.hxx>
 #include "unowcntr.hxx"
 #include <vcl/svapp.hxx>
 

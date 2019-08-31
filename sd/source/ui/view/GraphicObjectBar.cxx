@@ -19,30 +19,19 @@
 
 #include <GraphicObjectBar.hxx>
 
-#include <limits.h>
-#include <svl/whiter.hxx>
-#include <svl/itempool.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/shell.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/request.hxx>
-#include <sfx2/basedlgs.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/grfflt.hxx>
-#include <svl/aeitem.hxx>
 #include <svx/grafctrl.hxx>
 
 #include <sfx2/objface.hxx>
 
-#include <app.hrc>
-
 #include <strings.hrc>
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
-#include <Window.hxx>
-#include <drawview.hxx>
 #include <sdresid.hxx>
-#include <drawdoc.hxx>
 
 using namespace sd;
 #define ShellClass_GraphicObjectBar

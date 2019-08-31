@@ -21,9 +21,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <PresentationViewShell.hxx>
-#include <optsitem.hxx>
-#include <sddll.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -32,13 +29,8 @@
 #include <FrameView.hxx>
 #include <DrawDocShell.hxx>
 #include <slideshow.hxx>
-#include <sdattr.hxx>
-#include <sdpage.hxx>
-#include <drawdoc.hxx>
-#include <drawview.hxx>
 #include <app.hrc>
 #include <ViewShellBase.hxx>
-#include <FactoryIds.hxx>
 
 #include <fupoor.hxx>
 #include <Window.hxx>

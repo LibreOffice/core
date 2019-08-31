@@ -27,7 +27,6 @@
 #include <controller/SlsPageSelector.hxx>
 #include <controller/SlsCurrentSlideManager.hxx>
 #include <model/SlsPageEnumerationProvider.hxx>
-#include <model/SlideSorterModel.hxx>
 #include <model/SlsPageDescriptor.hxx>
 #include <sdpage.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
