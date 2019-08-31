@@ -577,7 +577,7 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
             xRes = new ScDoubleRefToken( (*pRefList)[0] );
         }
         if (!xRes)
-            return nullptr;    // shouldn't happen..
+            return nullptr;    // shouldn't happen...
         StackVar sv[2] = { sv1, sv2 };
         formula::FormulaToken* pt[2] = { &rTok1, &rTok2 };
         ScComplexRefData& rRef = *xRes->GetDoubleRef();
@@ -1112,7 +1112,7 @@ ScHybridCellToken::ScHybridCellToken(
         maFormula( rFormula ),
         mbEmptyDisplayedAsString( bEmptyDisplayedAsString)
 {
-    // caller, make up your mind..
+    // caller, make up your mind...
     assert( !bEmptyDisplayedAsString || (f == 0.0 && rStr.getString().isEmpty()));
 }
 
@@ -1621,7 +1621,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
                 // ScFormulaCell::InterpretFormulaGroup() and below.
 
             case ocDBArea:
-                // Certainly not a vectorization of the entire area..
+                // Certainly not a vectorization of the entire area...
 
             case ocTableRef:
                 // May result in a single cell or range reference, depending on

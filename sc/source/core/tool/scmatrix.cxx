@@ -358,7 +358,7 @@ static size_t GetElementsMax( size_t nMemory )
 {
     // Arbitrarily assuming 12 bytes per element, 8 bytes double plus
     // overhead. Stored as an array in an mdds container it's less, but for
-    // strings or mixed matrix it can be much more..
+    // strings or mixed matrix it can be much more...
     constexpr size_t nPerElem = 12;
     if (nMemory)
         return nMemory / nPerElem;

@@ -172,7 +172,7 @@ public interface TileProvider {
     void setGraphicSelectionStart(PointF documentCoordinate);
 
     /**
-     * Send a request to change end the change of graphic selection..
+     * Send a request to change end the change of graphic selection...
      */
     void setGraphicSelectionEnd(PointF documentCoordinate);
 

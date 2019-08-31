@@ -57,7 +57,7 @@
    http://msdn.microsoft.com/en-us/library/ms776294.aspx
 
  ! Hey, yet another list, maybe this one will not move around? It seems to be
- ! quite complete..
+ ! quite complete...
  ! Language Identifier Constants and Strings (Windows)
  ! http://msdn.microsoft.com/en-us/library/dd318693.aspx
  !

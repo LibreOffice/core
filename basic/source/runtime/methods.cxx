@@ -1874,7 +1874,7 @@ void SbRtl_CDateToIso(StarBASIC *, SbxArray & rPar, bool)
 }
 
 // Function to convert date from ISO 8601 date format YYYYMMDD or YYYY-MM-DD
-// And even YYMMDD for compatibility, sigh..
+// And even YYMMDD for compatibility, sigh...
 void SbRtl_CDateFromIso(StarBASIC *, SbxArray & rPar, bool)
 {
     if ( rPar.Count() == 2 )

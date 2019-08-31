@@ -713,7 +713,7 @@ void StatusBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
 
         // draw items
 
-        // Do offscreen only when we are not recording layout..
+        // Do offscreen only when we are not recording layout...
         bool bOffscreen = !rRenderContext.ImplIsRecordLayout();
 
         // tdf#94213 - un-necessary virtual-device in GL mode

@@ -83,7 +83,7 @@ public class SystemDialog  {
             Object oFilePicker = m_xMCF.createInstanceWithContext("com.sun.star.ui.dialogs.FilePicker", m_xContext);
             XFilePicker xFilePicker = UnoRuntime.queryInterface(XFilePicker.class, oFilePicker);
 
-            // the defaultname is the initially proposed filename..
+            // the defaultname is the initially proposed filename...
             xFilePicker.setDefaultName("MyExampleDocument");
 
             // set the initial displaydirectory. In this example the user template directory is used

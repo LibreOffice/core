@@ -1323,7 +1323,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
                     new Object[] {Boolean.FALSE, Integer.valueOf(nDialogHeight - 26), sRoadmapName, Integer.valueOf(0), Integer.valueOf(0), "Steps", Integer.valueOf(85)});
             m_xRMPSet = UnoRuntime.queryInterface(XPropertySet.class, oRoadmapModel);
 
-            // add the roadmapmodel to the dialog container..
+            // add the roadmapmodel to the dialog container...
             m_xDlgModelNameContainer.insertByName(sRoadmapName, oRoadmapModel);
 
             // the roadmapmodel is a SingleServiceFactory to instantiate the roadmapitems...

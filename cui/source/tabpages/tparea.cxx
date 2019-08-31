@@ -116,7 +116,7 @@ void SvxAreaTabPage::SetOptimalSize(weld::DialogController* pController)
     if (!aFillTab.pController)
         aFillTab.pParent = GetParentDialog();
 
-    // Calculate optimal size of all pages..
+    // Calculate optimal size of all pages...
     m_pFillTabPage.disposeAndReset(SvxColorTabPage::Create(aFillTab, &m_rXFSet));
     Size aSize(m_xFillTab->get_preferred_size());
 

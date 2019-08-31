@@ -4850,7 +4850,7 @@ void ScXMLExport::WriteExternalRefCaches()
             }
 
             // Determine maximum column count of used area, for repeated cells.
-            SCCOL nMaxColsUsed = 1;     // assume that there is at least one cell somewhere..
+            SCCOL nMaxColsUsed = 1;     // assume that there is at least one cell somewhere...
             vector<SCROW> aRows;
             pTable->getAllRows(aRows);
             for (SCROW nRow : aRows)

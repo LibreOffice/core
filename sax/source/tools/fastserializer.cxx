@@ -226,7 +226,7 @@ namespace sax_fastparser {
                                         // sequence that was not unescaped and
                                         // shall be written as is, to not end
                                         // up with "_x005F_x005F_xHHHH_" and
-                                        // repeated..
+                                        // repeated...
                                         if (c1 == '0' && c2 == '0' && c3 == '5' && (c4 | 0x20) == 'f' &&
                                                 i + kXescapeLen <= nLen - 6 &&
                                                 pStr[i+kXescapeLen+5] == '_' &&

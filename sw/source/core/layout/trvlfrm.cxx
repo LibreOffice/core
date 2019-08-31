@@ -1865,7 +1865,7 @@ bool SwRootFrame::MakeTableCursors( SwTableCursor& rTableCursor )
 
     bool bRet = false;
 
-    // For new table models there's no need to ask the layout..
+    // For new table models there's no need to ask the layout...
     if( rTableCursor.NewTableSelection() )
         return true;
 

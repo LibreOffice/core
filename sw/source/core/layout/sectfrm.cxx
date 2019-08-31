@@ -746,7 +746,7 @@ void SwSectionFrame::MoveContentAndDelete( SwSectionFrame* pDel, bool bSave )
             pPrvSct = nullptr; // Such that nothing will be merged
         }
     }
-    // The content is going to be inserted..
+    // The content is going to be inserted...
     if( pSave )
     {
         lcl_InvalidateInfFlags( pSave, bSize );

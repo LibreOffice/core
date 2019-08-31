@@ -286,7 +286,7 @@ static void* pool_alloc(struct pool* pool)
 /* ===============================================
  * Hash implementation customized to be just tracking
  * a unique list of string (i.e no data associated
- * with the key, no need for retrieval, etc..
+ * with the key, no need for retrieval, etc...
  *
  * This is tuned for the particular use-case we have here
  * measures in tail_build showed that

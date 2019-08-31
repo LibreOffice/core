@@ -173,7 +173,7 @@ import com.sun.star.uno.XComponentContext;
                     }
                 }
             }
-            // ReturnObject of method node == null..
+            // ReturnObject of method node == null...
             else{
                 if (!bHasParameters){
                     _oUnoMethodNode.setLabel(_oUnoMethodNode.getLabel() + " = null");

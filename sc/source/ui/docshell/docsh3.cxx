@@ -634,7 +634,7 @@ void ScDocShell::SetChangeComment( ScChangeAction* pAction, const OUString& rCom
 
 void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, weld::Window* pParent, bool bPrevNext)
 {
-    if (!pAction) return;           // without action is nothing..
+    if (!pAction) return;           // without action is nothing...
 
     OUString aComment = pAction->GetComment();
     OUString aAuthor = pAction->GetUser();

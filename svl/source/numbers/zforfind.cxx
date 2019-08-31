@@ -1360,7 +1360,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                         OUStringBuffer aBuf(sStrArray[nNext]);
                         aBuf.stripEnd();
                         // Expand again in case of pattern "M. D. " and
-                        // input "M. D.  ", maybe fetched far, but..
+                        // input "M. D.  ", maybe fetched far, but...
                         padToLength(aBuf, rPat.getLength() - nPat, ' ');
                         OUString aStr = aBuf.makeStringAndClear();
                         bOk = (rPat.indexOf( aStr, nPat) == nPat);

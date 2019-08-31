@@ -68,7 +68,7 @@ public:
        themself for concurrent access, no additional guarding is necessary.
 
        Remark: The copy is on demand. The iterator copy the elements only if the container
-       change the contents..
+       change the contents...
 
        @param rCont the container of the elements.
      */

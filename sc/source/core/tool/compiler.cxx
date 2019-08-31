@@ -1501,7 +1501,7 @@ struct ConventionXL_OOX : public ConventionXL_A1
         // Actually Excel writes '[N]Sheet One:Sheet Two'!A1:B2 but reads the
         // simpler to produce and more logical form with independently quoted
         // sheet names as well. The [N] having to be within the quoted sheet
-        // name is ugly enough..
+        // name is ugly enough...
 
         ScRange aAbsRef = rRef.toAbs(rPos);
 
@@ -3532,7 +3532,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
                     // Don't crash if cell (via CompileNameFormula) encounters
                     // a formula cell without code and
                     // HasStringData/Interpret/Compile is executed and all that
-                    // recursive..
+                    // recursively...
                     // Furthermore, *this* cell won't be touched, since no RPN exists yet.
                     CellType eType = aIter.getType();
                     bool bOk = false;

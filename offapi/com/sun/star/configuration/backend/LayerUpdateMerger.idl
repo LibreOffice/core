@@ -35,7 +35,7 @@ module com { module sun { module star { module configuration { module backend {
     </p>
 
     @see com::sun::star::configuration::backend::UpdatableLayer
-        Service describes a layer and accepts a changed layer..
+        Service describes a layer and accepts a changed layer...
 
     @since OOo 1.1.2
 */
