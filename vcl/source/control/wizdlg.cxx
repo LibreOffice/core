@@ -374,6 +374,29 @@ void WizardDialog::Resize()
     Dialog::Resize();
 }
 
+void WizardDialog::CalcAndSetSize()
+{
+    Size aDlgSize = GetPageSizePixel();
+    if ( !aDlgSize.Width() || !aDlgSize.Height() )
+    {
+        ImplWizPageData*  pPageData = mpFirstPage;
+        while ( pPageData )
+        {
+            if ( pPageData->mpPage )
+            {
+                Size aPageSize = pPageData->mpPage->GetSizePixel();
+                if ( aPageSize.Width() > aDlgSize.Width() )
+                    aDlgSize.setWidth( aPageSize.Width() );
+                if ( aPageSize.Height() > aDlgSize.Height() )
+                    aDlgSize.setHeight( aPageSize.Height() );
+            }
+
+            pPageData = pPageData->mpNext;
+        }
+    }
+    ImplCalcSize( aDlgSize );
+    SetOutputSizePixel( aDlgSize );
+}
 
 void WizardDialog::StateChanged( StateChangedType nType )
 {
@@ -381,26 +404,7 @@ void WizardDialog::StateChanged( StateChangedType nType )
     {
         if ( IsDefaultSize() )
         {
-            Size aDlgSize = GetPageSizePixel();
-            if ( !aDlgSize.Width() || !aDlgSize.Height() )
-            {
-                ImplWizPageData*  pPageData = mpFirstPage;
-                while ( pPageData )
-                {
-                    if ( pPageData->mpPage )
-                    {
-                        Size aPageSize = pPageData->mpPage->GetSizePixel();
-                        if ( aPageSize.Width() > aDlgSize.Width() )
-                            aDlgSize.setWidth( aPageSize.Width() );
-                        if ( aPageSize.Height() > aDlgSize.Height() )
-                            aDlgSize.setHeight( aPageSize.Height() );
-                    }
-
-                    pPageData = pPageData->mpNext;
-                }
-            }
-            ImplCalcSize( aDlgSize );
-            SetOutputSizePixel( aDlgSize );
+            CalcAndSetSize();
         }
 
         ImplPosCtrls();

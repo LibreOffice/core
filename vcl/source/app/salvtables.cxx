@@ -1704,6 +1704,8 @@ IMPL_LINK_NOARG(SalInstanceAssistant, UpdateRoadmap_Hdl, Timer*, void)
 
     m_xWizard->SelectRoadmapItemByID(m_aIds[get_current_page()]);
 
+    m_xWizard->ShowRoadmap(nPos != 0);
+
     enable_notify_events();
 }
 

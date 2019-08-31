@@ -80,6 +80,7 @@ namespace vcl
         int             GetCurrentRoadmapItemID() const;
         void            SelectRoadmapItemByID(int nId);
         void            SetItemSelectHdl( const Link<LinkParamNone*,void>& _rHdl );
+        void            ShowRoadmap(bool bShow);
 
         // returns whether a given state is enabled
         bool            isStateEnabled( WizardState _nState ) const;

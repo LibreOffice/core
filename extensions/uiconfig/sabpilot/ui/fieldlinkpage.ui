@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="pcr">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="FieldLinkPage">
@@ -14,14 +14,17 @@
       <object class="GtkLabel" id="desc">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">0</property>
-        <property name="yalign">0</property>
         <property name="label" translatable="yes" context="fieldlinkpage|desc">This is where you select fields with matching contents so that the value from the display field will be shown.</property>
         <property name="wrap">True</property>
-        <property name="max_width_chars">90</property>
-        <accessibility>
-          <role type="static"/>
-        </accessibility>
+        <property name="width_chars">70</property>
+        <property name="max_width_chars">70</property>
+        <property name="xalign">0</property>
+        <property name="yalign">0</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="desc-atkobject">
+            <property name="AtkObject::accessible-role" translatable="no">static</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -60,7 +63,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBox" id="valuefield">
+              <object class="GtkComboBoxText" id="valuefield">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
@@ -68,6 +71,7 @@
                 <child internal-child="entry">
                   <object class="GtkEntry" id="combobox-entry2">
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                 </child>
               </object>
@@ -108,7 +112,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBox" id="listtable">
+              <object class="GtkComboBoxText" id="listtable">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
@@ -116,6 +120,7 @@
                 <child internal-child="entry">
                   <object class="GtkEntry" id="combobox-entry4">
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                 </child>
               </object>
