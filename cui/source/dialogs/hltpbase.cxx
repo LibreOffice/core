@@ -37,7 +37,6 @@
 #include <strings.hrc>
 #include <dialmgr.hxx>
 #include <bitmaps.hlst>
-#include <comphelper/lok.hxx>
 
 using namespace ::ucbhelper;
 
