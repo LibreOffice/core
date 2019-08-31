@@ -638,12 +638,15 @@ OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape(  )
 
 OUString SAL_CALL ODatabaseMetaData::getStringFunctions(  )
 {
-    return OUString();
+    return "ASCII_CHAR,ASCII_VAL,BIT_LENGTH,CHAR_LENGTH,CHAR_TO_UUID,CHARACTER_LENGTH,"
+           "GEN_UUID,HASH,LEFT,LOWER,LPAD,OCTET_LENGTH,OVERLAY,POSITION,REPLACE,REVERSE,"
+           "RIGHT,RPAD,SUBSTRING,TRIM,UPPER,UUID_TO_CHAR";
 }
 
 OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions(  )
 {
-    return OUString();
+    return "CURRENT_DATE,CURRENT_TIME,CURRENT_TIMESTAMP,DATEADD, DATEDIFF,"
+           "EXTRACT,'NOW','TODAY','TOMORROW','YESTERDAY'";
 }
 
 OUString SAL_CALL ODatabaseMetaData::getSystemFunctions(  )
@@ -653,7 +656,9 @@ OUString SAL_CALL ODatabaseMetaData::getSystemFunctions(  )
 
 OUString SAL_CALL ODatabaseMetaData::getNumericFunctions(  )
 {
-    return OUString();
+    return "ABS,ACOS,ASIN,ATAN,ATAN2,BIN_AND,BIN_NOT,BIN_OR,BIN_SHL,"
+           "BIN_SHR,BIN_XOR,CEIL,CEILING,COS,COSH,COT,EXP,FLOOR,LN,"
+           "LOG,LOG10,MOD,PI,POWER,RAND,ROUND,SIGN,SIN,SINH,SQRT,TAN,TANH,TRUNC";
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar(  )
