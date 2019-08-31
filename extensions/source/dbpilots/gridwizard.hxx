@@ -37,11 +37,9 @@ namespace dbp
         bool        m_bHadDataSelection : 1;
 
     public:
-        OGridWizard(
-            vcl::Window* _pParent,
+        OGridWizard(weld::Window* _pParent,
             const css::uno::Reference< css::beans::XPropertySet >& _rxObjectModel,
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
-        );
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
         OGridSettings& getSettings() { return m_aSettings; }
 
@@ -61,25 +59,26 @@ namespace dbp
     class OGridPage : public OControlWizardPage
     {
     public:
-        OGridPage( OGridWizard* _pParent, const OString& _rID, const OUString& _rUIXMLDescription ) : OControlWizardPage(_pParent, _rID, _rUIXMLDescription) { }
-
+        OGridPage(OGridWizard* pParent, TabPageParent pPageParent, const OUString& rUIXMLDescription, const OString& rID)
+            : OControlWizardPage(pParent, pPageParent, rUIXMLDescription, rID)
+        {
+        }
     protected:
         OGridSettings& getSettings() { return static_cast<OGridWizard*>(getDialog())->getSettings(); }
     };
 
     class OGridFieldsSelection final : public OGridPage
     {
-        VclPtr<ListBox>         m_pExistFields;
-        VclPtr<PushButton>      m_pSelectOne;
-        VclPtr<PushButton>      m_pSelectAll;
-        VclPtr<PushButton>      m_pDeselectOne;
-        VclPtr<PushButton>      m_pDeselectAll;
-        VclPtr<ListBox>         m_pSelFields;
+        std::unique_ptr<weld::TreeView> m_xExistFields;
+        std::unique_ptr<weld::Button> m_xSelectOne;
+        std::unique_ptr<weld::Button> m_xSelectAll;
+        std::unique_ptr<weld::Button> m_xDeselectOne;
+        std::unique_ptr<weld::Button> m_xDeselectAll;
+        std::unique_ptr<weld::TreeView> m_xSelFields;
 
     public:
-        explicit OGridFieldsSelection( OGridWizard* _pParent );
+        explicit OGridFieldsSelection(OGridWizard* pParent, TabPageParent pPageParent);
         virtual ~OGridFieldsSelection() override;
-        virtual void dispose() override;
 
     private:
         // TabPage overridables
@@ -90,15 +89,13 @@ namespace dbp
         virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
         virtual bool        canAdvance() const override;
 
-        DECL_LINK(OnMoveOneEntry, Button*, void);
-        DECL_LINK(OnMoveAllEntries, Button*, void);
-        DECL_LINK(OnEntrySelected, ListBox&, void);
-        DECL_LINK(OnEntryDoubleClicked, ListBox&, void);
+        DECL_LINK(OnMoveOneEntry, weld::Button&, void);
+        DECL_LINK(OnMoveAllEntries, weld::Button&, void);
+        DECL_LINK(OnEntrySelected, weld::TreeView&, void);
+        DECL_LINK(OnEntryDoubleClicked, weld::TreeView&, void);
 
         void implCheckButtons();
     };
-
-
 }   // namespace dbp
 
 

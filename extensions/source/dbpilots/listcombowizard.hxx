@@ -50,7 +50,7 @@ namespace dbp
 
     public:
         OListComboWizard(
-            vcl::Window* _pParent,
+            weld::Window* _pParent,
             const css::uno::Reference< css::beans::XPropertySet >& _rxObjectModel,
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
@@ -77,8 +77,8 @@ namespace dbp
     class OLCPage : public OControlWizardPage
     {
     public:
-        OLCPage(OListComboWizard* _pParent, const OString& rID, const OUString& rUIXMLDescription)
-            : OControlWizardPage(_pParent, rID, rUIXMLDescription)
+        OLCPage(OListComboWizard* pParent, TabPageParent pPageParent, const OUString& rUIXMLDescription, const OString& rID)
+            : OControlWizardPage(pParent, pPageParent, rUIXMLDescription, rID)
     {
     }
 
@@ -93,12 +93,11 @@ namespace dbp
 
     class OContentTableSelection final : public OLCPage
     {
-        VclPtr<ListBox>         m_pSelectTable;
+        std::unique_ptr<weld::TreeView> m_xSelectTable;
 
     public:
-        explicit OContentTableSelection( OListComboWizard* _pParent );
+        explicit OContentTableSelection(OListComboWizard* pParent, TabPageParent pPageParent);
         virtual ~OContentTableSelection() override;
-        virtual void dispose() override;
 
     private:
         // TabPage overridables
@@ -109,25 +108,23 @@ namespace dbp
         virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
         virtual bool        canAdvance() const override;
 
-        DECL_LINK( OnTableDoubleClicked, ListBox&, void );
-        DECL_LINK( OnTableSelected, ListBox&, void );
+        DECL_LINK( OnTableDoubleClicked, weld::TreeView&, void );
+        DECL_LINK( OnTableSelected, weld::TreeView&, void );
     };
 
     class OContentFieldSelection final : public OLCPage
     {
-        VclPtr<ListBox>         m_pSelectTableField;
-        VclPtr<Edit>            m_pDisplayedField;
-        VclPtr<FixedText>       m_pInfo;
-
+        std::unique_ptr<weld::TreeView> m_xSelectTableField;
+        std::unique_ptr<weld::Entry> m_xDisplayedField;
+        std::unique_ptr<weld::Label> m_xInfo;
 
     public:
-        explicit OContentFieldSelection( OListComboWizard* _pParent );
+        explicit OContentFieldSelection(OListComboWizard* pParent, TabPageParent pPageParent);
         virtual ~OContentFieldSelection() override;
-        virtual void dispose() override;
 
     private:
-        DECL_LINK( OnFieldSelected, ListBox&, void );
-        DECL_LINK( OnTableDoubleClicked, ListBox&, void );
+        DECL_LINK( OnFieldSelected, weld::TreeView&, void );
+        DECL_LINK( OnTableDoubleClicked, weld::TreeView&, void );
 
         // OWizardPage overridables
         virtual void        initializePage() override;
@@ -137,14 +134,12 @@ namespace dbp
 
     class OLinkFieldsPage final : public OLCPage
     {
-        VclPtr<ComboBox>        m_pValueListField;
-        VclPtr<ComboBox>        m_pTableField;
-
+        std::unique_ptr<weld::ComboBox> m_xValueListField;
+        std::unique_ptr<weld::ComboBox> m_xTableField;
 
     public:
-        explicit OLinkFieldsPage( OListComboWizard* _pParent );
+        explicit OLinkFieldsPage(OListComboWizard* pParent, TabPageParent pPageParent);
         virtual ~OLinkFieldsPage() override;
-        virtual void dispose() override;
 
     private:
         // TabPage overridables
@@ -157,14 +152,13 @@ namespace dbp
 
         void implCheckFinish();
 
-        DECL_LINK(OnSelectionModified, Edit&, void);
-        DECL_LINK(OnSelectionModifiedCombBox, ComboBox&, void);
+        DECL_LINK(OnSelectionModified, weld::ComboBox&, void);
     };
 
     class OComboDBFieldPage : public ODBFieldPage
     {
     public:
-        explicit OComboDBFieldPage( OControlWizard* _pParent );
+        explicit OComboDBFieldPage(OControlWizard* pParent, TabPageParent pPageParent);
 
     protected:
         // TabPage overridables
