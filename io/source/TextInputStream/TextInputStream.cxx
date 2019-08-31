@@ -19,6 +19,7 @@
 
 #include <string.h>
 
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -167,8 +168,6 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
     bool bFound = false;
     bool bFoundFirstLineEndChar = false;
     sal_Unicode cFirstLineEndChar = 0;
-    const sal_Unicode* pDelims = Delimiters.getConstArray();
-    const sal_Int32 nDelimCount = Delimiters.getLength();
     while( !bFound )
     {
         // Still characters available?
@@ -213,18 +212,12 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
                 cFirstLineEndChar = c;
             }
         }
-        else
+        else if( comphelper::findValue(Delimiters, c) != -1 )
         {
-            for( sal_Int32 i = 0 ; i < nDelimCount ; i++ )
-            {
-                if( c == pDelims[ i ] )
-                {
-                    bFound = true;
-                    nCopyLen = nBufferReadPos;
-                    if( bRemoveDelimiter )
-                        nCopyLen--;
-                }
-            }
+            bFound = true;
+            nCopyLen = nBufferReadPos;
+            if( bRemoveDelimiter )
+                nCopyLen--;
         }
     }
 

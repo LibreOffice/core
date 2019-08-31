@@ -167,7 +167,7 @@ sal_Int8 ODataInputStream::readByte()
     {
         throw UnexpectedEOFException();
     }
-    return aTmp.getArray()[0];
+    return aTmp.getConstArray()[0];
 }
 
 sal_Unicode ODataInputStream::readChar()
@@ -522,54 +522,40 @@ void ODataOutputStream::writeBoolean(sal_Bool Value)
 
 void ODataOutputStream::writeByte(sal_Int8 Value)
 {
-    Sequence<sal_Int8> aTmp( 1 );
-    aTmp.getArray()[0] = Value;
-    writeBytes( aTmp );
+    writeBytes( { Value } );
 }
 
 void ODataOutputStream::writeChar(sal_Unicode Value)
 {
-    Sequence<sal_Int8> aTmp( 2 );
-    sal_Int8 * pBytes = aTmp.getArray();
-    pBytes[0] = sal_Int8(Value >> 8);
-    pBytes[1] = sal_Int8(Value);
-    writeBytes( aTmp );
+    writeBytes( { sal_Int8(Value >> 8),
+                  sal_Int8(Value) } );
 }
 
 
 void ODataOutputStream::writeShort(sal_Int16 Value)
 {
-    Sequence<sal_Int8> aTmp( 2 );
-    sal_Int8 * pBytes = aTmp.getArray();
-    pBytes[0] = sal_Int8(Value >> 8);
-    pBytes[1] = sal_Int8(Value);
-    writeBytes( aTmp );
+    writeBytes( { sal_Int8(Value >> 8),
+                  sal_Int8(Value) } );
 }
 
 void ODataOutputStream::writeLong(sal_Int32 Value)
 {
-    Sequence<sal_Int8> aTmp( 4 );
-    sal_Int8 * pBytes = aTmp.getArray();
-    pBytes[0] = sal_Int8(Value >> 24);
-    pBytes[1] = sal_Int8(Value >> 16);
-    pBytes[2] = sal_Int8(Value >> 8);
-    pBytes[3] = sal_Int8(Value);
-    writeBytes( aTmp );
+    writeBytes( { sal_Int8(Value >> 24),
+                  sal_Int8(Value >> 16),
+                  sal_Int8(Value >> 8),
+                  sal_Int8(Value) } );
 }
 
 void ODataOutputStream::writeHyper(sal_Int64 Value)
 {
-    Sequence<sal_Int8> aTmp( 8 );
-    sal_Int8 * pBytes = aTmp.getArray();
-    pBytes[0] = sal_Int8(Value >> 56);
-    pBytes[1] = sal_Int8(Value >> 48);
-    pBytes[2] = sal_Int8(Value >> 40);
-    pBytes[3] = sal_Int8(Value >> 32);
-    pBytes[4] = sal_Int8(Value >> 24);
-    pBytes[5] = sal_Int8(Value >> 16);
-    pBytes[6] = sal_Int8(Value >> 8);
-    pBytes[7] = sal_Int8(Value);
-    writeBytes( aTmp );
+    writeBytes( { sal_Int8(Value >> 56),
+                  sal_Int8(Value >> 48),
+                  sal_Int8(Value >> 40),
+                  sal_Int8(Value >> 32),
+                  sal_Int8(Value >> 24),
+                  sal_Int8(Value >> 16),
+                  sal_Int8(Value >> 8),
+                  sal_Int8(Value) } );
 }
 
 
