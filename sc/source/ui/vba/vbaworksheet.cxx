@@ -956,7 +956,7 @@ ScVbaWorksheet::getControlShape( const OUString& sName )
     // thiscomponent.currentcontroller.getControl( controlModel ) )
     // and the thing to realise is that it is only possible to get an XControl
     // for a currently displayed control :-( often we would want to modify
-    // a control not on the active sheet. But.. you can always access the
+    // a control not on the active sheet. But... you can always access the
     // XControlShape from the DrawPage whether that is the active drawpage or not
 
     uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( getSheet(), uno::UNO_QUERY_THROW );

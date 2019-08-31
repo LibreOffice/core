@@ -653,7 +653,7 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
         {
             // Brutal hack for German locales that know "Januar" or "Jänner".
             /* TODO: add alternative month names to locale data? if there are
-             * more languages.. */
+             * more languages... */
             const LanguageTag& rLanguageTag = pFormatter->GetLanguageTag();
             if (rLanguageTag.getLanguage() == "de")
             {

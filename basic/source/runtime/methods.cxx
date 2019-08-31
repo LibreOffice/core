@@ -3052,7 +3052,7 @@ void SbRtl_FileDateTime(StarBASIC *, SbxArray & rPar, bool)
         // An empty date shall not result in a formatted null-date (1899-12-30
         // or 1900-01-01) or even worse -0001-12-03 or some such due to how
         // GetDayDiff() treats things. There should be an error set in this
-        // case anyway because of a missing file or other error above, but.. so
+        // case anyway because of a missing file or other error above, but... so
         // do not even bother to use the number formatter.
         OUString aRes;
         if (aDate.IsEmpty())
@@ -4743,7 +4743,7 @@ bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
     /* TODO: we could enable the same rollover mechanism for StarBASIC to be
      * compatible with VBA (just with our wider supported date range), then
      * documentation would need to be adapted. As is, the DateSerial() runtime
-     * function works as dumb as documented.. (except that the resulting date
+     * function works as dumb as documented... (except that the resulting date
      * is checked for validity now and not just day<=31 and month<=12).
      * If change wanted then simply remove overriding RollOver here and adapt
      * documentation.*/

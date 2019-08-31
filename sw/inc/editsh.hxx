@@ -841,7 +841,7 @@ public:
 
     sal_uInt16 GetLineCount();
 
-    /// Query and set footnote-text/number. Set.. to current SSelection!
+    /// Query and set footnote-text/number. Set... to current SSelection!
     bool GetCurFootnote( SwFormatFootnote* pToFillFootnote = nullptr );
     bool SetCurFootnote( const SwFormatFootnote& rFillFootnote );
     bool HasFootnotes( bool bEndNotes = false ) const;

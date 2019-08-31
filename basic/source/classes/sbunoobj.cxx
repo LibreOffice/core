@@ -2066,7 +2066,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         Any aRetAny;
                         if ( bCanBeConsideredAMethod && nParamCount )
                         {
-                            // Automation properties have methods, so.. we need to invoke this through
+                            // Automation properties have methods, so... we need to invoke this through
                             // XInvocation
                             Sequence<Any> args;
                             processAutomationParams( pParams, args, nParamCount );

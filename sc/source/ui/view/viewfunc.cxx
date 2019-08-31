@@ -478,7 +478,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         // If the array has an error, (it) must be RPN-erased in the newly generated
         // cells and the error be set explicitly, so that
         // via FormulaCell copy-ctor and Interpreter it will be, when possible,
-        // ironed out again, too intelligent.. e.g.: =1))
+        // ironed out again, too intelligent... e.g.: =1))
         FormulaError nError = pArr->GetCodeError();
         if ( nError == FormulaError::NONE )
         {
@@ -546,7 +546,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 {
                     // Reset to General so the actual format can be determined
                     // after the cell has been interpreted. A sticky boolean
-                    // number format is highly likely unwanted.. see tdf#75650.
+                    // number format is highly likely unwanted... see tdf#75650.
                     // General of same locale as current number format.
                     const SvNumberformat* pEntry = pFormatter->GetEntry( nIndex);
                     const LanguageType nLang = (pEntry ? pEntry->GetLanguage() : ScGlobal::eLnge);

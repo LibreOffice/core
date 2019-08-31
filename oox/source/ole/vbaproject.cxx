@@ -163,7 +163,7 @@ bool VbaProject::importVbaProject( StorageBase& rVbaPrjStrg )
    }
    StorageRef noStorage;
    // if the GraphicHelper tries to use noStorage it will of course crash
-   // but.. this shouldn't happen as there is no reason for GraphicHelper
+   // but... this shouldn't happen as there is no reason for GraphicHelper
    // to do that when importing VBA projects
    GraphicHelper grfHlp( mxContext, xFrame, noStorage );
    importVbaProject( rVbaPrjStrg, grfHlp );

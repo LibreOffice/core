@@ -1891,7 +1891,7 @@ bool ScQueryCellIterator::BinarySearch()
         // If all hits didn't result in a moving limit there's something
         // strange, e.g. data range not properly sorted, or only identical
         // values encountered, which doesn't mean there aren't any others in
-        // between.. leave it to GetThis(). The condition for this would be
+        // between... leave it to GetThis(). The condition for this would be
         // if (nLastInRange == nFirstLastInRange) nLo = nFirstLastInRange;
         // Else, in case no exact match was found, we step back for a
         // subsequent GetThis() to find the last in range. Effectively this is

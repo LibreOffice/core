@@ -358,7 +358,7 @@ sal_Int32 ResultSetMetaData::getScale( sal_Int32 column )
 
 OUString ResultSetMetaData::getTableName( sal_Int32 )
 {
-// LEM TODO This is very fishy.. Should probably return the table to which that column belongs!
+// LEM TODO This is very fishy... Should probably return the table to which that column belongs!
     return m_tableName;
 }
 

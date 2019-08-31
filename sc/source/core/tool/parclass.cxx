@@ -688,7 +688,7 @@ void ScParameterClassification::GenerateDocumentation()
                 default:
                     aStr.append(" (-> ???, classification error?)");
             }
-            /* We could add yet another log domain for this, if we wanted.. but
+            /* We could add yet another log domain for this, if we wanted... but
              * as it more seldom than rarely used it's not actually necessary,
              * just grep output. */
             SAL_INFO( "sc.core", "CALC_GENPARCLASSDOC: " << aStr.makeStringAndClear());

@@ -1986,7 +1986,7 @@ static bool lcl_IsNextFootnoteBoss( const SwFrame *pFrame, const SwFrame* pNxt )
     // If pNxt is a first column, we use the page instead.
     while( pNxt && pNxt->IsColumnFrame() && !pNxt->GetPrev() )
         pNxt = pNxt->GetUpper()->FindFootnoteBossFrame();
-    // So.. now pFrame and pNxt are either two adjacent pages or columns.
+    // So... now pFrame and pNxt are either two adjacent pages or columns.
     return pFrame && pNxt && pFrame->GetNext() == pNxt;
 }
 

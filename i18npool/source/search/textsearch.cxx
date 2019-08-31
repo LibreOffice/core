@@ -867,7 +867,7 @@ void TextSearch::RESrchPrepare( const css::util::SearchOptions2& rOptions)
         // of the processor and the details of the specific pattern, but will
         // typically be on the order of milliseconds."
         // Just what is a good value? 42 is always an answer ... the 23 enigma
-        // as well.. which on the dev's machine is roughly 50 seconds with the
+        // as well... which on the dev's machine is roughly 50 seconds with the
         // pattern of fdo#70627.
         /* TODO: make this a configuration settable value and possibly take
          * complexity of expression into account and maybe even length of text

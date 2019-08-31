@@ -3011,7 +3011,7 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
         throw uno::RuntimeException("Range::Replace, missing params" );
     OUString sWhat = VBAToRegexp( What);
     // #TODO #FIXME SearchFormat & ReplacesFormat are not processed
-    // What do we do about MatchByte.. we don't seem to support that
+    // What do we do about MatchByte... we don't seem to support that
     const SvxSearchItem& globalSearchOptions = ScGlobal::GetSearchItem();
     SvxSearchItem newOptions( globalSearchOptions );
 

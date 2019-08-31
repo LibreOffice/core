@@ -444,7 +444,7 @@ Any SAL_CALL IUnknownWrapper::getValue( const OUString& aPropertyName )
         o2u_attachCurrentThread();
         ITypeInfo * pInfo = getTypeInfo();
         // I was going to implement an XServiceInfo interface to allow the type
-        // of the automation object to be exposed.. but it seems
+        // of the automation object to be exposed... but it seems
         // from looking at comments in the code that it is possible for
         // this object to actually wrap a UNO object ( I guess if automation is
         // used from MSO to create Openoffice objects ) Therefore, those objects
