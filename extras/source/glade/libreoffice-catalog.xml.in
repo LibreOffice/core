@@ -203,10 +203,6 @@
                         generic-name="URLBox" parent="VclComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>
 
-    <glade-widget-class title="OFileURLControl" name="svtlo-OFileURLControl"
-                        generic-name="URLBox" parent="svtlo-SvtURLBox"
-                        icon-name="widget-gtk-comboboxtext"/>
-
     <glade-widget-class title="PropertyControl" name="sdlo-PropertyControl"
                         generic-name="PropertyControl" parent="VclComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>
