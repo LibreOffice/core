@@ -150,6 +150,12 @@ namespace vcl
         m_pImpl->pRoadmap->Show();
     }
 
+    void RoadmapWizard::ShowRoadmap(bool bShow)
+    {
+        m_pImpl->pRoadmap->Show(bShow);
+        CalcAndSetSize();
+    }
+
     RoadmapWizard::~RoadmapWizard()
     {
         disposeOnce();

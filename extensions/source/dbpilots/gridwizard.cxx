@@ -49,17 +49,17 @@ namespace dbp
     using namespace ::com::sun::star::awt;
     using namespace ::svt;
 
-    OGridWizard::OGridWizard( vcl::Window* _pParent,
+    OGridWizard::OGridWizard(weld::Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
-        :OControlWizard(_pParent, _rxObjectModel, _rxContext)
-        ,m_bHadDataSelection(true)
+        : OControlWizard(_pParent, _rxObjectModel, _rxContext)
+        , m_bHadDataSelection(true)
     {
         initControlSettings(&m_aSettings);
 
-        m_pPrevPage->SetHelpId(HID_GRIDWIZARD_PREVIOUS);
-        m_pNextPage->SetHelpId(HID_GRIDWIZARD_NEXT);
-        m_pCancel->SetHelpId(HID_GRIDWIZARD_CANCEL);
-        m_pFinish->SetHelpId(HID_GRIDWIZARD_FINISH);
+        m_xPrevPage->set_help_id(HID_GRIDWIZARD_PREVIOUS);
+        m_xNextPage->set_help_id(HID_GRIDWIZARD_NEXT);
+        m_xCancel->set_help_id(HID_GRIDWIZARD_CANCEL);
+        m_xFinish->set_help_id(HID_GRIDWIZARD_FINISH);
         setTitleBase(compmodule::ModuleRes(RID_STR_GRIDWIZARD_TITLE));
 
         // if we do not need the data source selection page ...
@@ -70,7 +70,6 @@ namespace dbp
         }
     }
 
-
     bool OGridWizard::approveControl(sal_Int16 _nClassId)
     {
         if (FormComponentType::GRIDCONTROL != _nClassId)
@@ -79,7 +78,6 @@ namespace dbp
         Reference< XGridColumnFactory > xColumnFactory(getContext().xObjectModel, UNO_QUERY);
         return xColumnFactory.is();
     }
-
 
     void OGridWizard::implApplySettings()
     {
@@ -220,13 +218,19 @@ namespace dbp
 
     VclPtr<TabPage> OGridWizard::createPage(WizardState _nState)
     {
+        OString sIdent(OString::number(_nState));
+        weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
+        // TODO eventually pass DialogController as distinct argument instead of bundling into TabPageParent
+        TabPageParent aParent(pPageContainer, this);
+
         switch (_nState)
         {
             case GW_STATE_DATASOURCE_SELECTION:
-                return VclPtr<OTableSelectionPage>::Create(this);
+                return VclPtr<OTableSelectionPage>::Create(this, aParent);
             case GW_STATE_FIELDSELECTION:
-                return VclPtr<OGridFieldsSelection>::Create(this);
+                return VclPtr<OGridFieldsSelection>::Create(this, aParent);
         }
+
         return VclPtr<TabPage>();
     }
 
@@ -279,51 +283,37 @@ namespace dbp
         return true;
     }
 
-    OGridFieldsSelection::OGridFieldsSelection( OGridWizard* _pParent )
-        :OGridPage(_pParent, "GridFieldsSelection", "modules/sabpilot/ui/gridfieldsselectionpage.ui")
+    OGridFieldsSelection::OGridFieldsSelection(OGridWizard* pParent, TabPageParent pPageParent)
+        : OGridPage(pParent, pPageParent, "modules/sabpilot/ui/gridfieldsselectionpage.ui", "GridFieldsSelection")
+        , m_xExistFields(m_xBuilder->weld_tree_view("existingfields"))
+        , m_xSelectOne(m_xBuilder->weld_button("fieldright"))
+        , m_xSelectAll(m_xBuilder->weld_button("allfieldsright"))
+        , m_xDeselectOne(m_xBuilder->weld_button("fieldleft"))
+        , m_xDeselectAll(m_xBuilder->weld_button("allfieldsleft"))
+        , m_xSelFields(m_xBuilder->weld_tree_view("selectedfields"))
     {
-        get(m_pExistFields,"existingfields");
-        get(m_pSelectOne,"fieldright");
-        get(m_pSelectAll,"allfieldsright");
-        get(m_pDeselectOne,"fieldleft");
-        get(m_pDeselectAll,"allfieldsleft");
-        get(m_pSelFields,"selectedfields");
-
         enableFormDatasourceDisplay();
 
-        m_pSelectOne->SetClickHdl(LINK(this, OGridFieldsSelection, OnMoveOneEntry));
-        m_pSelectAll->SetClickHdl(LINK(this, OGridFieldsSelection, OnMoveAllEntries));
-        m_pDeselectOne->SetClickHdl(LINK(this, OGridFieldsSelection, OnMoveOneEntry));
-        m_pDeselectAll->SetClickHdl(LINK(this, OGridFieldsSelection, OnMoveAllEntries));
+        m_xSelectOne->connect_clicked(LINK(this, OGridFieldsSelection, OnMoveOneEntry));
+        m_xSelectAll->connect_clicked(LINK(this, OGridFieldsSelection, OnMoveAllEntries));
+        m_xDeselectOne->connect_clicked(LINK(this, OGridFieldsSelection, OnMoveOneEntry));
+        m_xDeselectAll->connect_clicked(LINK(this, OGridFieldsSelection, OnMoveAllEntries));
 
-        m_pExistFields->SetSelectHdl(LINK(this, OGridFieldsSelection, OnEntrySelected));
-        m_pSelFields->SetSelectHdl(LINK(this, OGridFieldsSelection, OnEntrySelected));
-        m_pExistFields->SetDoubleClickHdl(LINK(this, OGridFieldsSelection, OnEntryDoubleClicked));
-        m_pSelFields->SetDoubleClickHdl(LINK(this, OGridFieldsSelection, OnEntryDoubleClicked));
+        m_xExistFields->connect_changed(LINK(this, OGridFieldsSelection, OnEntrySelected));
+        m_xSelFields->connect_changed(LINK(this, OGridFieldsSelection, OnEntrySelected));
+        m_xExistFields->connect_row_activated(LINK(this, OGridFieldsSelection, OnEntryDoubleClicked));
+        m_xSelFields->connect_row_activated(LINK(this, OGridFieldsSelection, OnEntryDoubleClicked));
     }
 
     OGridFieldsSelection::~OGridFieldsSelection()
     {
-        disposeOnce();
-    }
-
-    void OGridFieldsSelection::dispose()
-    {
-        m_pExistFields.clear();
-        m_pSelectOne.clear();
-        m_pSelectAll.clear();
-        m_pDeselectOne.clear();
-        m_pDeselectAll.clear();
-        m_pSelFields.clear();
-        OGridPage::dispose();
     }
 
     void OGridFieldsSelection::ActivatePage()
     {
         OGridPage::ActivatePage();
-        m_pExistFields->GrabFocus();
+        m_xExistFields->grab_focus();
     }
-
 
     bool OGridFieldsSelection::canAdvance() const
     {
@@ -331,27 +321,25 @@ namespace dbp
             // we're the last page in our wizard
     }
 
-
     void OGridFieldsSelection::initializePage()
     {
         OGridPage::initializePage();
 
         const OControlWizardContext& rContext = getContext();
-        fillListBox(*m_pExistFields, rContext.aFieldNames);
+        fillListBox(*m_xExistFields, rContext.aFieldNames);
 
-        m_pSelFields->Clear();
+        m_xSelFields->clear();
         const OGridSettings& rSettings = getSettings();
         const OUString* pSelected = rSettings.aSelectedFields.getConstArray();
         const OUString* pEnd = pSelected + rSettings.aSelectedFields.getLength();
         for (; pSelected < pEnd; ++pSelected)
         {
-            m_pSelFields->InsertEntry(*pSelected);
-            m_pExistFields->RemoveEntry(*pSelected);
+            m_xSelFields->append_text(*pSelected);
+            m_xExistFields->remove_text(*pSelected);
         }
 
         implCheckButtons();
     }
-
 
     bool OGridFieldsSelection::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {
@@ -359,110 +347,103 @@ namespace dbp
             return false;
 
         OGridSettings& rSettings = getSettings();
-        const sal_Int32 nSelected = m_pSelFields->GetEntryCount();
+        const sal_Int32 nSelected = m_xSelFields->n_children();
 
         rSettings.aSelectedFields.realloc(nSelected);
         OUString* pSelected = rSettings.aSelectedFields.getArray();
 
         for (sal_Int32 i=0; i<nSelected; ++i, ++pSelected)
-            *pSelected = m_pSelFields->GetEntry(i);
+            *pSelected = m_xSelFields->get_text(i);
 
         return true;
     }
 
-
     void OGridFieldsSelection::implCheckButtons()
     {
-        m_pSelectOne->Enable(m_pExistFields->GetSelectedEntryCount() != 0);
-        m_pSelectAll->Enable(m_pExistFields->GetEntryCount() != 0);
+        m_xSelectOne->set_sensitive(m_xExistFields->count_selected_rows() != 0);
+        m_xSelectAll->set_sensitive(m_xExistFields->n_children() != 0);
 
-        m_pDeselectOne->Enable(m_pSelFields->GetSelectedEntryCount() != 0);
-        m_pDeselectAll->Enable(m_pSelFields->GetEntryCount() != 0);
+        m_xDeselectOne->set_sensitive(m_xSelFields->count_selected_rows() != 0);
+        m_xDeselectAll->set_sensitive(m_xSelFields->n_children() != 0);
 
-        getDialog()->enableButtons(WizardButtonFlags::FINISH, 0 != m_pSelFields->GetEntryCount());
+        getDialog()->enableButtons(WizardButtonFlags::FINISH, 0 != m_xSelFields->n_children());
     }
 
-
-    IMPL_LINK(OGridFieldsSelection, OnEntryDoubleClicked, ListBox&, _rList, void)
+    IMPL_LINK(OGridFieldsSelection, OnEntryDoubleClicked, weld::TreeView&, rList, void)
     {
-        PushButton* pSimulateButton = m_pExistFields == &_rList ? m_pSelectOne.get() : m_pDeselectOne.get();
-        if (pSimulateButton->IsEnabled())
+        weld::Button* pSimulateButton = m_xExistFields.get() == &rList ? m_xSelectOne.get() : m_xDeselectOne.get();
+        if (pSimulateButton->get_sensitive())
         {
-            OnMoveOneEntry( pSimulateButton );
+            OnMoveOneEntry(*pSimulateButton);
         }
     }
 
-
-    IMPL_LINK_NOARG(OGridFieldsSelection, OnEntrySelected, ListBox&, void)
+    IMPL_LINK_NOARG(OGridFieldsSelection, OnEntrySelected, weld::TreeView&, void)
     {
         implCheckButtons();
     }
 
-
-    IMPL_LINK(OGridFieldsSelection, OnMoveOneEntry, Button*, _pButton, void)
+    IMPL_LINK(OGridFieldsSelection, OnMoveOneEntry, weld::Button&, rButton, void)
     {
-        bool bMoveRight = (m_pSelectOne == _pButton);
-        ListBox& rMoveTo = bMoveRight ? *m_pSelFields : *m_pExistFields;
+        bool bMoveRight = (m_xSelectOne.get() == &rButton);
+        weld::TreeView& rMoveTo = bMoveRight ? *m_xSelFields : *m_xExistFields;
 
         // the index of the selected entry
-        const sal_Int32 nSelected = bMoveRight ? m_pExistFields->GetSelectedEntryPos() : m_pSelFields->GetSelectedEntryPos();
+        const sal_Int32 nSelected = bMoveRight ? m_xExistFields->get_selected_index() : m_xSelFields->get_selected_index();
         // the (original) relative position of the entry
-        sal_IntPtr nRelativeIndex = reinterpret_cast<sal_IntPtr>(bMoveRight ? m_pExistFields->GetEntryData(nSelected) : m_pSelFields->GetEntryData(nSelected));
+        int nRelativeIndex = bMoveRight ? m_xExistFields->get_id(nSelected).toInt32() : m_xSelFields->get_id(nSelected).toInt32();
 
-        sal_Int32 nInsertPos = LISTBOX_APPEND;
+        sal_Int32 nInsertPos = -1;
         if (!bMoveRight)
         {   // need to determine an insert pos which reflects the original
             nInsertPos = 0;
-            while (nInsertPos < rMoveTo.GetEntryCount())
+            while (nInsertPos < rMoveTo.n_children())
             {
-                if (reinterpret_cast<sal_IntPtr>(rMoveTo.GetEntryData(nInsertPos)) > nRelativeIndex)
+                if (rMoveTo.get_id(nInsertPos).toInt32() > nRelativeIndex)
                     break;
                 ++nInsertPos;
             }
         }
 
         // the text of the entry to move
-        OUString sMovingEntry = bMoveRight ? m_pExistFields->GetEntry(nSelected) : m_pSelFields->GetEntry(nSelected);
+        OUString sMovingEntry = bMoveRight ? m_xExistFields->get_text(nSelected) : m_xSelFields->get_text(nSelected);
 
-        // insert the entry
-        nInsertPos = rMoveTo.InsertEntry(sMovingEntry, nInsertPos);
-        // preserve it's "relative position" entry data
-        rMoveTo.SetEntryData(nInsertPos, reinterpret_cast<void*>(nRelativeIndex));
+        // insert the entry preserving it's "relative position" entry data
+        OUString sId(OUString::number(nRelativeIndex));
+        rMoveTo.insert(nullptr, nInsertPos, &sMovingEntry, &sId, nullptr, nullptr, nullptr, false, nullptr);
 
         // remove the entry from its old list
         if (bMoveRight)
         {
-            sal_Int32 nSelectPos = m_pExistFields->GetSelectedEntryPos();
-            m_pExistFields->RemoveEntry(nSelected);
-            if ((LISTBOX_ENTRY_NOTFOUND != nSelectPos) && (nSelectPos < m_pExistFields->GetEntryCount()))
-                m_pExistFields->SelectEntryPos(nSelectPos);
+            sal_Int32 nSelectPos = m_xExistFields->get_selected_index();
+            m_xExistFields->remove(nSelected);
+            if ((nSelectPos != -1) && (nSelectPos < m_xExistFields->n_children()))
+                m_xExistFields->select(nSelectPos);
 
-            m_pExistFields->GrabFocus();
+            m_xExistFields->grab_focus();
         }
         else
         {
-            sal_Int32 nSelectPos = m_pSelFields->GetSelectedEntryPos();
-            m_pSelFields->RemoveEntry(nSelected);
-            if ((LISTBOX_ENTRY_NOTFOUND != nSelectPos) && (nSelectPos < m_pSelFields->GetEntryCount()))
-                m_pSelFields->SelectEntryPos(nSelectPos);
+            sal_Int32 nSelectPos = m_xSelFields->get_selected_index();
+            m_xSelFields->remove(nSelected);
+            if ((nSelectPos != -1) && (nSelectPos < m_xSelFields->n_children()))
+                m_xSelFields->select(nSelectPos);
 
-            m_pSelFields->GrabFocus();
+            m_xSelFields->grab_focus();
         }
 
         implCheckButtons();
     }
 
-
-    IMPL_LINK(OGridFieldsSelection, OnMoveAllEntries, Button*, _pButton, void)
+    IMPL_LINK(OGridFieldsSelection, OnMoveAllEntries, weld::Button&, rButton, void)
     {
-        bool bMoveRight = (m_pSelectAll == _pButton);
-        m_pExistFields->Clear();
-        m_pSelFields->Clear();
-        fillListBox(bMoveRight ? *m_pSelFields : *m_pExistFields, getContext().aFieldNames);
+        bool bMoveRight = (m_xSelectAll.get() == &rButton);
+        m_xExistFields->clear();
+        m_xSelFields->clear();
+        fillListBox(bMoveRight ? *m_xSelFields : *m_xExistFields, getContext().aFieldNames);
 
         implCheckButtons();
     }
-
 
 }   // namespace dbp
 

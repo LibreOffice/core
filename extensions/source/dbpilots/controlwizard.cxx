@@ -74,127 +74,97 @@ namespace dbp
         OAccessRegulator() { }
     };
 
-    OControlWizardPage::OControlWizardPage( vcl::Window* _pParent, const OString& rID, const OUString& rUIXMLDescription )
-        :OControlWizardPage_Base( _pParent, rID, rUIXMLDescription )
-        ,m_pFormDatasourceLabel(nullptr)
-        ,m_pFormDatasource(nullptr)
-        ,m_pFormContentTypeLabel(nullptr)
-        ,m_pFormContentType(nullptr)
-        ,m_pFormTableLabel(nullptr)
-        ,m_pFormTable(nullptr)
+    OControlWizardPage::OControlWizardPage(OControlWizard* pDialog, TabPageParent pPageParent, const OUString& rUIXMLDescription, const OString& rID)
+        : OControlWizardPage_Base(pPageParent, rUIXMLDescription, rID)
+        , m_pDialog(pDialog)
     {
+        ::Size aPageSize(LogicToPixel(::Size(WINDOW_SIZE_X, WINDOW_SIZE_Y), MapMode(MapUnit::MapAppFont)));
+        m_xContainer->set_size_request(aPageSize.Width(), aPageSize.Height());
     }
 
     OControlWizardPage::~OControlWizardPage()
     {
-        disposeOnce();
-    }
-
-    void OControlWizardPage::dispose()
-    {
-        m_pFormDatasourceLabel.clear();
-        m_pFormDatasource.clear();
-        m_pFormContentTypeLabel.clear();
-        m_pFormContentType.clear();
-        m_pFormTableLabel.clear();
-        m_pFormTable.clear();
-        OControlWizardPage_Base::dispose();
     }
 
     OControlWizard* OControlWizardPage::getDialog()
     {
-        return static_cast< OControlWizard* >(GetParent());
+        return m_pDialog;
     }
 
     const OControlWizard* OControlWizardPage::getDialog() const
     {
-        return static_cast< OControlWizard* >(GetParent());
+        return m_pDialog;
     }
-
 
     bool OControlWizardPage::updateContext()
     {
-        return getDialog()->updateContext(OAccessRegulator());
+        return m_pDialog->updateContext(OAccessRegulator());
     }
-
 
     Reference< XConnection > OControlWizardPage::getFormConnection() const
     {
-        return getDialog()->getFormConnection(OAccessRegulator());
+        return m_pDialog->getFormConnection(OAccessRegulator());
     }
-
 
     void OControlWizardPage::setFormConnection( const Reference< XConnection >& _rxConn, bool _bAutoDispose )
     {
-        getDialog()->setFormConnection( OAccessRegulator(), _rxConn, _bAutoDispose );
+        m_pDialog->setFormConnection( OAccessRegulator(), _rxConn, _bAutoDispose );
     }
-
 
     const OControlWizardContext& OControlWizardPage::getContext()
     {
-        return getDialog()->getContext();
+        return m_pDialog->getContext();
     }
 
-
-    void OControlWizardPage::fillListBox(ListBox& _rList, const Sequence< OUString >& _rItems)
+    void OControlWizardPage::fillListBox(weld::TreeView& _rList, const Sequence< OUString >& _rItems)
     {
-        _rList.Clear();
+        _rList.clear();
         const OUString* pItems = _rItems.getConstArray();
         const OUString* pEnd = pItems + _rItems.getLength();
-        ::vcl::WizardTypes::WizardState nPos;
         sal_Int32 nIndex = 0;
         for (;pItems < pEnd; ++pItems, ++nIndex)
         {
-            nPos = _rList.InsertEntry(*pItems);
-            _rList.SetEntryData(nPos, reinterpret_cast<void*>(nIndex));
+            _rList.append(OUString::number(nIndex), *pItems);
         }
     }
 
-
-    void OControlWizardPage::fillListBox(ComboBox& _rList, const Sequence< OUString >& _rItems)
+    void OControlWizardPage::fillListBox(weld::ComboBox& _rList, const Sequence< OUString >& _rItems)
     {
-        _rList.Clear();
+        _rList.clear();
         const OUString* pItems = _rItems.getConstArray();
         const OUString* pEnd = pItems + _rItems.getLength();
-        ::vcl::WizardTypes::WizardState nPos;
         for (;pItems < pEnd; ++pItems)
         {
-            nPos = _rList.InsertEntry(*pItems);
-            _rList.SetEntryData(nPos, nullptr);
+            _rList.append_text(*pItems);
         }
     }
-
 
     void OControlWizardPage::enableFormDatasourceDisplay()
     {
-        if (m_pFormContentType)
+        if (m_xFormContentType)
             // nothing to do
             return;
 
-        VclFrame *_pFrame = get<VclFrame>("sourceframe");
-        _pFrame->Show();
-        get(m_pFormContentType,"contenttype");
-        get(m_pFormContentTypeLabel,"contenttypelabel");
-        get(m_pFormDatasource, "datasource");
-        get(m_pFormDatasourceLabel, "datasourcelabel");
-        get(m_pFormTable,"formtable");
-        get(m_pFormTableLabel,"formtablelabel");
+        m_xFrame = m_xBuilder->weld_frame("sourceframe");
+        m_xFrame->show();
+        m_xFormContentType = m_xBuilder->weld_label("contenttype");
+        m_xFormContentTypeLabel = m_xBuilder->weld_label("contenttypelabel");
+        m_xFormDatasource = m_xBuilder->weld_label("datasource");
+        m_xFormDatasourceLabel = m_xBuilder->weld_label("datasourcelabel");
+        m_xFormTable = m_xBuilder->weld_label("formtable");
+        m_xFormTableLabel = m_xBuilder->weld_label("formtablelabel");
 
         const OControlWizardContext& rContext = getContext();
         if ( rContext.bEmbedded )
         {
-            m_pFormDatasourceLabel->Hide();
-            m_pFormDatasource->Hide();
-            m_pFormContentTypeLabel->SetPosPixel(m_pFormDatasourceLabel->GetPosPixel());
-            m_pFormContentType->SetPosPixel(m_pFormDatasource->GetPosPixel());
-            m_pFormTableLabel->SetPosPixel(::Point(m_pFormDatasourceLabel->GetPosPixel().X(),m_pFormTableLabel->GetPosPixel().Y()));
-            m_pFormTable->SetPosPixel(::Point(m_pFormDatasource->GetPosPixel().X(),m_pFormTable->GetPosPixel().Y()));
+            m_xFormDatasourceLabel->hide();
+            m_xFormDatasource->hide();
         }
     }
 
     void OControlWizardPage::initializePage()
     {
-        if (m_pFormDatasource && m_pFormContentTypeLabel && m_pFormTable)
+        if (m_xFormDatasource && m_xFormContentTypeLabel && m_xFormTable)
         {
             const OControlWizardContext& rContext = getContext();
             OUString sDataSource;
@@ -214,8 +184,8 @@ namespace dbp
             INetURLObject aURL( sDataSource );
             if( aURL.GetProtocol() != INetProtocol::NotValid )
                 sDataSource = aURL.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
-            m_pFormDatasource->SetText(sDataSource);
-            m_pFormTable->SetText(sCommand);
+            m_xFormDatasource->set_label(sDataSource);
+            m_xFormTable->set_label(sCommand);
 
             const char* pCommandTypeResourceId = nullptr;
             switch (nCommandType)
@@ -232,21 +202,20 @@ namespace dbp
                     pCommandTypeResourceId = RID_STR_TYPE_COMMAND;
                     break;
             }
-            m_pFormContentType->SetText(compmodule::ModuleRes(pCommandTypeResourceId));
+            m_xFormContentType->set_label(compmodule::ModuleRes(pCommandTypeResourceId));
         }
 
         OControlWizardPage_Base::initializePage();
     }
 
-    OControlWizard::OControlWizard( vcl::Window* _pParent,
+    OControlWizard::OControlWizard(weld::Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
-        :OWizardMachine(_pParent, WizardButtonFlags::CANCEL | WizardButtonFlags::PREVIOUS | WizardButtonFlags::NEXT | WizardButtonFlags::FINISH)
-        ,m_xContext(_rxContext)
+        : WizardMachine(_pParent, WizardButtonFlags::CANCEL | WizardButtonFlags::PREVIOUS | WizardButtonFlags::NEXT | WizardButtonFlags::FINISH)
+        , m_xContext(_rxContext)
     {
         m_aContext.xObjectModel = _rxObjectModel;
         initContext();
 
-        SetPageSizePixel(LogicToPixel(::Size(WINDOW_SIZE_X, WINDOW_SIZE_Y), MapMode(MapUnit::MapAppFont)));
         defaultButton(WizardButtonFlags::NEXT);
         enableButtons(WizardButtonFlags::FINISH, false);
     }
@@ -255,7 +224,7 @@ namespace dbp
     {
     }
 
-    short OControlWizard::Execute()
+    short OControlWizard::run()
     {
         // get the class id of the control we're dealing with
         sal_Int16 nClassId = FormComponentType::CONTROL;
@@ -275,9 +244,10 @@ namespace dbp
 
         ActivatePage();
 
-        return OControlWizard_Base::Execute();
-    }
+        m_xAssistant->set_current_page(0);
 
+        return OControlWizard_Base::run();
+    }
 
     void OControlWizard::implDetermineShape()
     {
@@ -612,7 +582,7 @@ namespace dbp
             aContext.NextException = aSQLException;
 
             // create an interaction handler to display this exception
-            Reference< XInteractionHandler > xHandler = getInteractionHandler(GetFrameWeld());
+            Reference< XInteractionHandler > xHandler = getInteractionHandler(m_xAssistant.get());
             if ( !xHandler.is() )
                 return false;
 

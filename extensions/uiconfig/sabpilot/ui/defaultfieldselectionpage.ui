@@ -17,9 +17,11 @@
         <property name="halign">start</property>
         <property name="label" translatable="yes" context="defaultfieldselectionpage|label1">Should one option field be selected as a default?</property>
         <property name="wrap">True</property>
-        <accessibility>
-          <role type="static"/>
-        </accessibility>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="label1-atkobject">
+            <property name="AtkObject::accessible-role" translatable="no">static</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>

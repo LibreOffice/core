@@ -207,6 +207,8 @@ protected:
     */
     void                SetEmptyViewMargin();
 
+    void                CalcAndSetSize();
+
 private:
     VCL_DLLPRIVATE void             ImplInitData();
     VCL_DLLPRIVATE void             ImplCalcSize( Size& rSize );
