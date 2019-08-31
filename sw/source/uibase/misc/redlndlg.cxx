@@ -26,7 +26,6 @@
 #include <svx/ctredlin.hxx>
 #include <svx/postattr.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/lstbox.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
@@ -272,7 +271,7 @@ void SwRedlineAcceptDlg::InitAuthors()
     for (auto const & i: aStrings)
         pFilterPage->InsertAuthor(i);
 
-    if (pFilterPage->SelectAuthor(sOldAuthor) == LISTBOX_ENTRY_NOTFOUND && !aStrings.empty())
+    if (pFilterPage->SelectAuthor(sOldAuthor) == -1 && !aStrings.empty())
         pFilterPage->SelectAuthor(aStrings[0]);
 
     weld::TreeView& rTreeView = m_pTable->GetWidget();

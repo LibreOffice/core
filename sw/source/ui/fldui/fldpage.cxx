@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/lstbox.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/htmlmode.hxx>
@@ -49,8 +48,8 @@ SwFieldPage::SwFieldPage(TabPageParent pParent, const OUString& rUIXMLDescriptio
     : SfxTabPage(pParent, rUIXMLDescription, rID, pAttrSet)
     , m_pCurField(nullptr)
     , m_pWrtShell(nullptr)
-    , m_nTypeSel(LISTBOX_ENTRY_NOTFOUND)
-    , m_nSelectionSel(LISTBOX_ENTRY_NOTFOUND)
+    , m_nTypeSel(-1)
+    , m_nSelectionSel(-1)
     , m_bFieldEdit(false)
     , m_bInsert(true)
     , m_bFieldDlgHtmlMode(false)
@@ -107,11 +106,9 @@ void SwFieldPage::ActivatePage()
 // complete reset; edit new field
 void SwFieldPage::EditNewField( bool bOnlyActivate )
 {
-    if( !bOnlyActivate )
-    {
-        m_nTypeSel = LISTBOX_ENTRY_NOTFOUND;
-    }
-    m_nSelectionSel = LISTBOX_ENTRY_NOTFOUND;
+    if (!bOnlyActivate)
+        m_nTypeSel = -1;
+    m_nSelectionSel = -1;
     m_bRefresh = true;
     Reset(nullptr);
     m_bRefresh = false;

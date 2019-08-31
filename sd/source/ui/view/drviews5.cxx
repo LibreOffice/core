@@ -24,8 +24,8 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdpagv.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <sdcommands.h>
 #include <sal/log.hxx>
 

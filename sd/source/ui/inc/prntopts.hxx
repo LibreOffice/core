@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_PRNTOPTS_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_PRNTOPTS_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/layout.hxx>
 #include <sfx2/tabdlg.hxx>
 
 class SdPrintOptions : public SfxTabPage

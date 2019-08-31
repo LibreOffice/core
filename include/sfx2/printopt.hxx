@@ -22,13 +22,9 @@
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <sal/types.h>
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/print.hxx>
-
 #include <sfx2/tabdlg.hxx>
+#include <sal/types.h>
+#include <vcl/print.hxx>
 
 
 class SFX2_DLLPUBLIC SfxCommonPrintOptionsTabPage : public SfxTabPage
