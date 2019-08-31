@@ -16,7 +16,7 @@
     <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
     <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
    </text:sequence-decls>
-   <text:p text:style-name="Standard">Nous remercions pour l’intérêt que vous avez exprimé concernant un emploi chez &lt;field:company&gt;.</text:p>
+   <text:p text:style-name="Standard">Nous vous remercions pour l’intérêt que vous avez exprimé concernant un emploi chez &lt;field:company&gt;.</text:p>
    <text:p text:style-name="Standard">Cependant, nous ne sommes pas actuellement en mesure de vous offrir un poste correspondant à vos souhaits et à votre qualification. Mais cette situation est susceptible de changer dans un très proche avenir.</text:p>
    <text:p text:style-name="Standard">Si vous n’y voyez pas d’inconvénient, nous aimerions donc conserver votre dossier pour un éventuel usage ultérieur. Si, dans un proche avenir, nous devions avoir un poste à pourvoir correspondant à votre profil, c’est avec plaisir que nous vous recontacterons.</text:p>
   </office:text>
