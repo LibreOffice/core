@@ -1096,7 +1096,6 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
 
     const OCopyTableWizard& rWizard             = impl_getDialog_throw();
     ODatabaseExport::TPositions aColumnPositions = rWizard.GetColumnPositions();
-    bool bAutoIncrement                         = rWizard.shouldCreatePrimaryKey();
 
     Reference< XRow > xRow              ( _rxSourceResultSet, UNO_QUERY_THROW );
     Reference< XRowLocate > xRowLocate  ( _rxSourceResultSet, UNO_QUERY_THROW );
@@ -1168,7 +1167,6 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
         aCopyEvent.Error.clear();
         try
         {
-            bool bInsertAutoIncrement = true;
             // notify listeners
             m_aCopyTableListeners.notifyEach( &XCopyTableListener::copyingRow, aCopyEvent );
 
@@ -1188,16 +1186,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                 else if( xMeta->isAutoIncrement( rColumnPos.second ) )
                 {
                     // it is auto incremented. Let the DBMS deal with it.
-                    // TODO initial value could be set when defining the
-                    // table
                     ++nSourceColumn;
-                    continue;
-                }
-
-                if ( bAutoIncrement && bInsertAutoIncrement )
-                {
-                    xStatementParams->setInt( 1, nRowCount );
-                    bInsertAutoIncrement = false;
                     continue;
                 }
 
