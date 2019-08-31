@@ -29,7 +29,7 @@ namespace vcl
 {
     class HyperLabelImpl;
 
-    class VCL_DLLPUBLIC HyperLabel final : public FixedText
+    class HyperLabel final : public FixedText
     {
         std::unique_ptr<HyperLabelImpl>     m_pImpl;
         Link<HyperLabel*,void>  maClickHdl;

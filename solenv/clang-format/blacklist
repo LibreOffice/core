@@ -7819,7 +7819,6 @@ include/vcl/graphictools.hxx
 include/vcl/hatch.hxx
 include/vcl/headbar.hxx
 include/vcl/help.hxx
-include/vcl/hyperlabel.hxx
 include/vcl/i18nhelp.hxx
 include/vcl/idle.hxx
 include/vcl/image.hxx
@@ -17279,6 +17278,7 @@ vcl/inc/headless/svpinst.hxx
 vcl/inc/headless/svpprn.hxx
 vcl/inc/headless/svpvd.hxx
 vcl/inc/helpwin.hxx
+vcl/inc/hyperlabel.hxx
 vcl/inc/image.h
 vcl/inc/impanmvw.hxx
 vcl/inc/impdel.hxx
