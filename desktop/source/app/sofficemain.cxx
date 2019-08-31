@@ -28,6 +28,9 @@
 #include "cmdlineargs.hxx"
 #include "cmdlinehelp.hxx"
 
+// needed before sal/main.h to avoid redefinition of macros
+#include <prewin.h>
+
 #include <desktop/exithelper.h>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
@@ -62,6 +65,7 @@
 
 #endif
 
+#include <postwin.h>
 
 #ifdef ANDROID
 #  include <jni.h>
