@@ -7095,7 +7095,6 @@ include/svx/fmsrcimp.hxx
 include/svx/fmtools.hxx
 include/svx/fmview.hxx
 include/svx/fntctrl.hxx
-include/svx/fontlb.hxx
 include/svx/fontwork.hxx
 include/svx/fontworkbar.hxx
 include/svx/fontworkgallery.hxx
@@ -13986,7 +13985,6 @@ svx/source/dialog/dlgunit.hxx
 svx/source/dialog/dlgutil.cxx
 svx/source/dialog/docrecovery.cxx
 svx/source/dialog/fntctrl.cxx
-svx/source/dialog/fontlb.cxx
 svx/source/dialog/fontwork.cxx
 svx/source/dialog/framelink.cxx
 svx/source/dialog/framelinkarray.cxx
