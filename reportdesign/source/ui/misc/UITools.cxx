@@ -626,7 +626,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         { SID_ATTR_CHAR_SCALEWIDTH, true },
         { SID_ATTR_CHAR_RELIEF, true },
         { SID_ATTR_CHAR_HIDDEN, true },
-        { SID_ATTR_BRUSH, true },
+        { SID_ATTR_BRUSH_CHAR, true },
         { SID_ATTR_ALIGN_HOR_JUSTIFY, true },
         { SID_ATTR_ALIGN_VER_JUSTIFY, true },
 
