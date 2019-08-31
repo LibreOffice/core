@@ -49,12 +49,14 @@ namespace dbp
     typedef ::vcl::OWizardPage OControlWizardPage_Base;
     class OControlWizardPage : public OControlWizardPage_Base
     {
-        VclPtr<FixedText>      m_pFormDatasourceLabel;
-        VclPtr<FixedText>      m_pFormDatasource;
-        VclPtr<FixedText>      m_pFormContentTypeLabel;
-        VclPtr<FixedText>      m_pFormContentType;
-        VclPtr<FixedText>      m_pFormTableLabel;
-        VclPtr<FixedText>      m_pFormTable;
+        OControlWizard* m_pDialog;
+        std::unique_ptr<weld::Label> m_xFormDatasourceLabel;
+        std::unique_ptr<weld::Label> m_xFormDatasource;
+        std::unique_ptr<weld::Label> m_xFormContentTypeLabel;
+        std::unique_ptr<weld::Label> m_xFormContentType;
+        std::unique_ptr<weld::Label> m_xFormTableLabel;
+        std::unique_ptr<weld::Label> m_xFormTable;
+        std::unique_ptr<weld::Frame> m_xFrame;
 
     protected:
         OControlWizard*                 getDialog();
@@ -65,16 +67,15 @@ namespace dbp
         css::uno::Reference< css::sdbc::XConnection >
                                         getFormConnection() const;
     public:
-        OControlWizardPage( vcl::Window* _pParent, const OString& rID, const OUString& rUIXMLDescription );
+        OControlWizardPage(OControlWizard* pDialog, TabPageParent pPageParent, const OUString& rUIXMLDescription, const OString& rID);
         virtual ~OControlWizardPage() override;
-        virtual void dispose() override;
 
     protected:
         static void fillListBox(
-            ListBox& _rList,
+            weld::TreeView& _rList,
             const css::uno::Sequence< OUString >& _rItems);
         static void fillListBox(
-            ComboBox& _rList,
+            weld::ComboBox& _rList,
             const css::uno::Sequence< OUString >& _rItems);
 
     protected:
@@ -87,7 +88,7 @@ namespace dbp
 
     struct OAccessRegulator;
 
-    typedef ::vcl::OWizardMachine OControlWizard_Base;
+    typedef ::vcl::WizardMachine OControlWizard_Base;
     class OControlWizard : public OControlWizard_Base
     {
     private:
@@ -97,7 +98,7 @@ namespace dbp
 
     public:
         OControlWizard(
-            vcl::Window* _pParent,
+            weld::Window* _pParent,
             const css::uno::Reference< css::beans::XPropertySet >& _rxObjectModel,
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
@@ -135,8 +136,7 @@ namespace dbp
 
         virtual bool approveControl(sal_Int16 _nClassId) = 0;
 
-        // ModalDialog overridables
-        virtual short   Execute() override;
+        virtual short  run() override;
 
     private:
         bool initContext();
