@@ -10,21 +10,42 @@
 $(eval $(call gb_AllLangPackage_AllLangPackage,autotextshare,$(call gb_CustomTarget_get_workdir,extras/source/autotext)))
 
 $(eval $(call gb_AllLangPackage_add_files,autotextshare,$(LIBO_SHARE_FOLDER)/autotext,\
+	ab/standard.bau \
 	af-ZA/standard.bau \
+	af/standard.bau \
+	am/standard.bau \
+	an/standard.bau \
+	ar/standard.bau \
+	as/standard.bau \
+	ast/standard.bau \
+	az/standard.bau \
+	be/standard.bau \
 	bg/crdbus50.bau \
 	bg/standard.bau \
 	bg/template.bau \
+	bn-IN/standard.bau \
+	bn/standard.bau \
+	bo/standard.bau \
+	br/standard.bau \
+	brx/standard.bau \
+	bs/standard.bau \
+	ca-valencia/standard.bau \
 	ca/standard.bau \
 	cs/crdbus50.bau \
 	cs/crdbus54.bau \
 	cs/standard.bau \
 	cs/template.bau \
+	cy/standard.bau \
 	da/crdbus50.bau \
 	da/standard.bau \
 	da/template.bau \
 	de/crdbus50.bau \
 	de/standard.bau \
 	de/template.bau \
+	dgo/standard.bau \
+	dsb/standard.bau \
+	dz/standard.bau \
+	el/standard.bau \
 	en-AU/standard.bau \
 	en-GB/crdbus50.bau \
 	en-GB/standard.bau \
@@ -33,20 +54,33 @@ $(eval $(call gb_AllLangPackage_add_files,autotextshare,$(LIBO_SHARE_FOLDER)/aut
 	en-US/standard.bau \
 	en-US/template.bau \
 	en-ZA/standard.bau \
+	eo/standard.bau \
 	es/crdbus50.bau \
 	es/standard.bau \
 	es/template.bau \
+	et/standard.bau \
+	eu/standard.bau \
 	fa/standard.bau \
 	fi/standard.bau \
 	fr/crdbus50.bau \
 	fr/standard.bau \
 	fr/template.bau \
+	fy/standard.bau \
 	ga-IE/standard.bau \
+	ga/standard.bau \
+	gd/standard.bau \
+	gl/standard.bau \
+	gu/standard.bau \
+	gug/standard.bau \
+	he/standard.bau \
+	hi/standard.bau \
 	hr/standard.bau \
+	hsb/standard.bau \
 	hu/crdbus50.bau \
 	hu/crdbus54.bau \
 	hu/standard.bau \
 	hu/template.bau \
+	id/standard.bau \
 	is/standard.bau \
 	it/crdbus50.bau \
 	it/standard.bau \
@@ -54,21 +88,49 @@ $(eval $(call gb_AllLangPackage_add_files,autotextshare,$(LIBO_SHARE_FOLDER)/aut
 	ja/crdbus50.bau \
 	ja/standard.bau \
 	ja/template.bau \
+	jv/standard.bau \
+	ka/standard.bau \
+	kab/standard.bau \
+	kk/standard.bau \
+	kl/standard.bau \
 	km/crdbus50.bau \
 	km/standard.bau \
 	km/template.bau \
+	kmr-Latn/standard.bau \
+	kn/standard.bau \
 	ko/crdbus50.bau \
 	ko/standard.bau \
 	ko/template.bau \
+	kok/standard.bau \
+	ks/standard.bau \
+	ky/standard.bau \
 	lb-LU/standard.bau \
+	lb/standard.bau \
+	lo/standard.bau \
 	lt/standard.bau \
+	lv/standard.bau \
+	mai/standard.bau \
+	mk/standard.bau \
+	ml/standard.bau \
 	mn/crdbus50.bau \
 	mn/standard.bau \
 	mn/template.bau \
+	mni/standard.bau \
+	mr/standard.bau \
+	my/standard.bau \
+	nb/standard.bau \
+	ne/standard.bau \
 	nl-BE/standard.bau \
 	nl/crdbus50.bau \
 	nl/standard.bau \
 	nl/template.bau \
+	nn/standard.bau \
+	nr/standard.bau \
+	nso/standard.bau \
+	oc/standard.bau \
+	om/standard.bau \
+	or/standard.bau \
+	pa-IN/standard.bau \
 	pl/crdbus50.bau \
 	pl/standard.bau \
 	pl/template.bau \
@@ -82,6 +144,13 @@ $(eval $(call gb_AllLangPackage_add_files,autotextshare,$(LIBO_SHARE_FOLDER)/aut
 	ru/crdbus50.bau \
 	ru/standard.bau \
 	ru/template.bau \
+	rw/standard.bau \
+	sa-IN/standard.bau \
+	sah/standard.bau \
+	sat/standard.bau \
+	sd/standard.bau \
+	si/standard.bau \
+	sid/standard.bau \
 	sk/crdbus50.bau \
 	sk/crdbus54.bau \
 	sk/standard.bau \
@@ -90,25 +159,46 @@ $(eval $(call gb_AllLangPackage_add_files,autotextshare,$(LIBO_SHARE_FOLDER)/aut
 	sl/crdbus54.bau \
 	sl/standard.bau \
 	sl/template.bau \
+	sq/standard.bau \
 	sr-CS/standard.bau \
 	sr-Latn-CS/standard.bau \
 	sr-Latn-ME/standard.bau \
 	sr-Latn-RS/standard.bau \
 	sr-ME/standard.bau \
 	sr-RS/standard.bau \
+	ss/standard.bau \
+	st/standard.bau \
 	sv/crdbus50.bau \
 	sv/standard.bau \
 	sv/template.bau \
+	sw-TZ/standard.bau \
+	szl/standard.bau \
+	ta/standard.bau \
+	te/standard.bau \
+	tg/standard.bau \
+	th/standard.bau \
+	ti/standard.bau \
+	tn/standard.bau \
 	tr/crdbus50.bau \
 	tr/standard.bau \
 	tr/template.bau \
+	ts/standard.bau \
+	tt/standard.bau \
+	ug/standard.bau \
+	uk/standard.bau \
+	ur/standard.bau \
+	uz/standard.bau \
+	ve/standard.bau \
+	vec/standard.bau \
 	vi/standard.bau \
+	xh/standard.bau \
 	zh-CN/crdbus50.bau \
 	zh-CN/standard.bau \
 	zh-CN/template.bau \
 	zh-TW/crdbus50.bau \
 	zh-TW/standard.bau \
 	zh-TW/template.bau \
+	zu/standard.bau \
 ))
 
 # vim: set noet sw=4 ts=4:
