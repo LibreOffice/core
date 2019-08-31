@@ -23,11 +23,9 @@
 #include "abspage.hxx"
 #include "abptypes.hxx"
 
-#include <svtools/urlcontrol.hxx>
 #include <svx/databaselocationinput.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/vclptr.hxx>
-
 
 namespace abp
 {

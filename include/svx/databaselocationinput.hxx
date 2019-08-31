@@ -26,7 +26,6 @@
 #include <memory>
 
 class PushButton;
-namespace svt { class OFileURLControl; }
 
 class URLBox;
 namespace weld { class Button; class Window; }
@@ -40,7 +39,7 @@ namespace svx
     /** helper class to control controls needed to input a database location
 
         If you allow, in your dialog, to save a database document, then you usually
-        have a OFileURLControl for inputting the actual location, and a push button
+        have an URLBox for inputting the actual location, and a push button
         to browse for a location.
 
         This helper class controls such two UI elements.

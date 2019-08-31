@@ -30,8 +30,8 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <svtools/urlcontrol.hxx>
 #include <svl/filenotation.hxx>
+#include <svtools/inettbc.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/confignode.hxx>
 #include <unotools/ucbhelper.hxx>

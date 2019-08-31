@@ -6993,7 +6993,6 @@ include/svtools/toolboxcontroller.hxx
 include/svtools/unitconv.hxx
 include/svtools/unoevent.hxx
 include/svtools/unoimap.hxx
-include/svtools/urlcontrol.hxx
 include/svtools/valueset.hxx
 include/svx/AccessibleControlShape.hxx
 include/svx/AccessibleGraphicShape.hxx
@@ -13717,7 +13716,6 @@ svtools/source/control/tabbar.cxx
 svtools/source/control/toolbarmenu.cxx
 svtools/source/control/toolbarmenuacc.cxx
 svtools/source/control/toolbarmenuimp.hxx
-svtools/source/control/urlcontrol.cxx
 svtools/source/control/valueacc.cxx
 svtools/source/control/valueimp.hxx
 svtools/source/control/valueset.cxx

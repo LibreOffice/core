@@ -22,12 +22,12 @@
 #include "abspilot.hxx"
 #include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
+#include <svtools/inettbc.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/filenotation.hxx>
 #include <sfx2/docfilt.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-
 
 namespace abp
 {
