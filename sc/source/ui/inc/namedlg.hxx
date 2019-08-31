@@ -20,9 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_NAMEDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_NAMEDLG_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-
 #include "anyrefdg.hxx"
 #include "namemgrtable.hxx"
 

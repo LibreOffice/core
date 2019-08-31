@@ -10,10 +10,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CONDFORMATDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CONDFORMATDLG_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/fixed.hxx>
-
 #include <rangelst.hxx>
 #include "condformatdlgitem.hxx"
 #include "condformatdlgentry.hxx"

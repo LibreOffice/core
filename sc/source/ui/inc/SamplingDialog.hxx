@@ -15,8 +15,6 @@
 #include "anyrefdg.hxx"
 #include "viewdata.hxx"
 
-#include <vcl/fixed.hxx>
-
 class ScSamplingDialog : public ScAnyRefDlgController
 {
 public:

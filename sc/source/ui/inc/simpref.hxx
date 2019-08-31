@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_SIMPREF_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_SIMPREF_HXX
 
-#include <vcl/fixed.hxx>
 #include "anyrefdg.hxx"
 
 class ScDocument;

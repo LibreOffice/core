@@ -15,9 +15,6 @@
 #include "anyrefdg.hxx"
 #include "viewdata.hxx"
 
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-
 namespace boost { template <typename T> class optional; }
 
 class ScRandomNumberGeneratorDialog : public ScAnyRefDlgController

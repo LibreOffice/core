@@ -23,8 +23,6 @@
 #include <address.hxx>
 #include "anyrefdg.hxx"
 
-#include <vcl/fixed.hxx>
-
 enum ScSolverErr
     {
         SOLVERR_NOFORMULA,

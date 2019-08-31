@@ -24,13 +24,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <strings.hrc>
 #include <componentmodule.hxx>
-#include <vcl/fixed.hxx>
-
 
 namespace abp
 {
-
-
     class OAddressBookSourcePilot;
     struct AddressSettings;
 
@@ -56,10 +52,7 @@ namespace abp
         virtual void        ActivatePage() override;
         virtual void        DeactivatePage() override;
     };
-
-
 }   // namespace abp
-
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_ABPILOT_ABSPAGE_HXX
 

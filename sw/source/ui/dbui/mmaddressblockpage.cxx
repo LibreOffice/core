@@ -24,14 +24,9 @@
 #include <editeng/eeitem.hxx>
 #include <svl/grabbagitem.hxx>
 #include <svl/itemset.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/txtattr.hxx>
-#include <vcl/xtextedt.hxx>
-#include <vcl/textview.hxx>
-#include <vcl/builderfactory.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/treelistentry.hxx>
 #include <mmconfigitem.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>

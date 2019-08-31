@@ -15,8 +15,6 @@
 #include "anyrefdg.hxx"
 #include "viewdata.hxx"
 
-#include <vcl/fixed.hxx>
-
 class ScStatisticsTwoVariableDialog : public ScAnyRefDlgController
 {
 public:
