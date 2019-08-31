@@ -22,13 +22,10 @@
 
 #include <vcl/roadmapwizard.hxx>
 #include "addresssettings.hxx"
-#include <vcl/fixed.hxx>
 #include "datasourcehandling.hxx"
-
 
 namespace abp
 {
-
     typedef ::vcl::RoadmapWizardMachine OAddressBookSourcePilot_Base;
     class OAddressBookSourcePilot final : public OAddressBookSourcePilot_Base
     {
@@ -116,10 +113,7 @@ namespace abp
 
         void impl_updateRoadmap( AddressSourceType _eType );
     };
-
-
 }   // namespace abp
-
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_ABPILOT_ABSPILOT_HXX
 

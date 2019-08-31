@@ -26,10 +26,8 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/configitem.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>

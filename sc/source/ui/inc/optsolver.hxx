@@ -22,8 +22,6 @@
 
 #include <address.hxx>
 #include "anyrefdg.hxx"
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <vector>

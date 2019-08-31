@@ -22,8 +22,6 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/colorbox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
 
 class ScViewOptions;
 

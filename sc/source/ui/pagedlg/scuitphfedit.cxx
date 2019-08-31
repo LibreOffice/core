@@ -27,8 +27,6 @@
 #include <osl/time.h>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/fixed.hxx>
 
 #include <unotools/useroptions.hxx>
 
