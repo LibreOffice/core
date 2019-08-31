@@ -27,9 +27,6 @@
 #include <connectivity/dbtools.hxx>
 #include <UITools.hxx>
 #include <SqlNameEdit.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>

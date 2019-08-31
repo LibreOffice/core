@@ -23,10 +23,6 @@
 #include "adminpages.hxx"
 #include <charsets.hxx>
 #include <charsetlistbox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/button.hxx>
 #include "TextConnectionHelper.hxx"
 #include "admincontrols.hxx"
 

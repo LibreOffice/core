@@ -24,7 +24,7 @@
 #include <vcl/button.hxx>
 #include <mailmergehelper.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/textfilter.hxx>
 #include <vcl/layout.hxx>
 #include <svl/lstner.hxx>
 #include <o3tl/typed_flags_set.hxx>

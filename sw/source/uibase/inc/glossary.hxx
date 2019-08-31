@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_GLOSSARY_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_GLOSSARY_HXX
 
-#include <vcl/edit.hxx>
 #include <vcl/customweld.hxx>
+#include <vcl/textfilter.hxx>
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/text/XAutoTextContainer2.hpp>

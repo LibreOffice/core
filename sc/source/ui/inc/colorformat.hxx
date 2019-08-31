@@ -13,7 +13,6 @@
 #include <vcl/weld.hxx>
 #include <svx/colorbox.hxx>
 #include <address.hxx>
-#include <vcl/edit.hxx>
 
 struct ScDataBarFormatData;
 class ScDocument;

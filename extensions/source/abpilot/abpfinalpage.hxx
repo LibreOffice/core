@@ -24,7 +24,6 @@
 #include "abptypes.hxx"
 
 #include <svx/databaselocationinput.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace abp

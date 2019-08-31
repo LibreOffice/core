@@ -34,10 +34,6 @@
 
 #include <comphelper/types.hxx>
 #include <osl/file.hxx>
-#include <vcl/accel.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/field.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
