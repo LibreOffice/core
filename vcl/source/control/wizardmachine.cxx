@@ -705,9 +705,9 @@ namespace vcl
         // create the buttons according to the wizard button flags
         // the help button
         if (nButtonFlags & WizardButtonFlags::HELP)
-        {
             m_xHelp->show();
-        }
+        else
+            m_xHelp->hide();
 
         // the previous button
         if (nButtonFlags & WizardButtonFlags::PREVIOUS)
@@ -717,6 +717,8 @@ namespace vcl
 
             m_xPrevPage->connect_clicked( LINK( this, WizardMachine, OnPrevPage ) );
         }
+        else
+            m_xPrevPage->hide();
 
         // the next button
         if (nButtonFlags & WizardButtonFlags::NEXT)
@@ -726,6 +728,8 @@ namespace vcl
 
             m_xNextPage->connect_clicked( LINK( this, WizardMachine, OnNextPage ) );
         }
+        else
+            m_xNextPage->hide();
 
         // the finish button
         if (nButtonFlags & WizardButtonFlags::FINISH)
@@ -734,6 +738,8 @@ namespace vcl
 
             m_xFinish->connect_clicked( LINK( this, WizardMachine, OnFinish ) );
         }
+        else
+            m_xFinish->hide();
 
         // the cancel button
         if (nButtonFlags & WizardButtonFlags::CANCEL)
@@ -741,6 +747,8 @@ namespace vcl
             m_xCancel->show();
             m_xCancel->connect_clicked( LINK( this, WizardMachine, OnCancel ) );
         }
+        else
+            m_xCancel->hide();
     }
 
     WizardMachine::~WizardMachine()
@@ -991,6 +999,38 @@ namespace vcl
         return true;
     }
 
+    void WizardMachine::skip()
+    {
+        // allowed to leave the current page?
+        if ( !prepareLeaveCurrentState( eTravelForward ) )
+            return;
+
+        WizardState nCurrentState = getCurrentState();
+        WizardState nNextState = determineNextState(nCurrentState);
+
+        if (WZS_INVALID_STATE == nNextState)
+            return;
+
+        // remember the skipped state in the history
+        m_pImpl->aStateHistory.push(nCurrentState);
+
+        // get the next state
+        nCurrentState = nNextState;
+
+        // show the (n+1)th page
+        if (!ShowPage(nCurrentState))
+        {
+            // TODO: this leaves us in a state where we have no current page and an inconsistent state history.
+            // Perhaps we should rollback the skipping here ....
+            OSL_FAIL("OWizardMachine::skip: very unpolite ....");
+                // if somebody does a skip and then does not allow to leave ...
+                // (can't be a commit error, as we've already committed the current page. So if ShowPage fails here,
+                // somebody behaves really strange ...)
+            return;
+        }
+
+        // all fine
+    }
 
     bool WizardMachine::travelNext()
     {

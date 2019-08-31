@@ -3752,7 +3752,15 @@ public:
 
     virtual void set_current_page(int nPage) override
     {
+        OString sDialogTitle(gtk_window_get_title(GTK_WINDOW(m_pAssistant)));
+
         gtk_assistant_set_current_page(m_pAssistant, nPage);
+
+        // if the page doesn't have a title, then the dialog will now have no
+        // title, so restore the original title as a fallback
+        GtkWidget* pPage = gtk_assistant_get_nth_page(m_pAssistant, nPage);
+        if (!gtk_assistant_get_page_title(m_pAssistant, pPage))
+            gtk_window_set_title(GTK_WINDOW(m_pAssistant), sDialogTitle.getStr());
     }
 
     virtual void set_current_page(const OString& rIdent) override

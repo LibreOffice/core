@@ -21,28 +21,25 @@
 #define INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_COMMONPAGESDBP_HXX
 
 #include "controlwizard.hxx"
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/sdb/XDatabaseContext.hpp>
-
 
 namespace dbp
 {
-
     class OTableSelectionPage final : public OControlWizardPage
     {
-        VclPtr<FixedText>       m_pDatasourceLabel;
-        VclPtr<ListBox>         m_pDatasource;
-        VclPtr<PushButton>      m_pSearchDatabase;
-        VclPtr<ListBox>         m_pTable;
+        std::unique_ptr<weld::TreeView> m_xTable;
+        std::unique_ptr<weld::TreeView> m_xDatasource;
+        std::unique_ptr<weld::Label> m_xDatasourceLabel;
+        std::unique_ptr<weld::Button> m_xSearchDatabase;
+        std::unique_ptr<weld::Container> m_xSourceBox;
 
         css::uno::Reference< css::sdb::XDatabaseContext >
                                 m_xDSContext;
 
     public:
-        explicit OTableSelectionPage(OControlWizard* _pParent);
+        explicit OTableSelectionPage(OControlWizard* pParent, TabPageParent pPageParent);
         virtual ~OTableSelectionPage() override;
-        virtual void dispose() override;
 
     private:
         // TabPage overridables
@@ -52,9 +49,9 @@ namespace dbp
         virtual void        initializePage() override;
         virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
 
-        DECL_LINK( OnListboxSelection, ListBox&, void );
-        DECL_LINK( OnListboxDoubleClicked, ListBox&, void );
-        DECL_LINK( OnSearchClicked, Button*, void );
+        DECL_LINK( OnListboxSelection, weld::TreeView&, void );
+        DECL_LINK( OnListboxDoubleClicked, weld::TreeView&, void );
+        DECL_LINK( OnSearchClicked, weld::Button&, void );
 
         void implFillTables(const css::uno::Reference< css::sdbc::XConnection >&
                         _rxConn = css::uno::Reference< css::sdbc::XConnection >());
@@ -65,26 +62,25 @@ namespace dbp
 
     class OMaybeListSelectionPage : public OControlWizardPage
     {
-        VclPtr<RadioButton>    m_pYes;
-        VclPtr<RadioButton>    m_pNo;
-        VclPtr<ListBox>        m_pList;
+        weld::RadioButton* m_pYes;
+        weld::RadioButton* m_pNo;
+        weld::ComboBox* m_pList;
 
     public:
-        OMaybeListSelectionPage( OControlWizard* _pParent, const OString& _rID, const OUString& _rUIXMLDescription );
+        OMaybeListSelectionPage(OControlWizard* pParent, TabPageParent pPageParent, const OUString& rUIXMLDescription, const OString& rID);
         virtual ~OMaybeListSelectionPage() override;
-        virtual void dispose() override;
 
     protected:
-        DECL_LINK( OnRadioSelected, Button*, void );
+        DECL_LINK( OnRadioSelected, weld::Button&, void );
 
         // TabPage overridables
         void ActivatePage() override;
 
         // own helper
         void    announceControls(
-            RadioButton& _rYesButton,
-            RadioButton& _rNoButton,
-            ListBox& _rSelection);
+            weld::RadioButton& _rYesButton,
+            weld::RadioButton& _rNoButton,
+            weld::ComboBox& _rSelection);
 
         void implEnableWindows();
 
@@ -95,34 +91,19 @@ namespace dbp
     class ODBFieldPage : public OMaybeListSelectionPage
     {
     protected:
-        VclPtr<FixedText>      m_pDescription;
-        VclPtr<RadioButton>    m_pStoreYes;
-        VclPtr<RadioButton>    m_pStoreNo;
-        VclPtr<ListBox>        m_pStoreWhere;
+        std::unique_ptr<weld::Label> m_xDescription;
+        std::unique_ptr<weld::RadioButton> m_xStoreYes;
+        std::unique_ptr<weld::RadioButton> m_xStoreNo;
+        std::unique_ptr<weld::ComboBox> m_xStoreWhere;
 
     public:
-        explicit ODBFieldPage( OControlWizard* _pParent );
+        explicit ODBFieldPage(OControlWizard* pParent, TabPageParent pPageParent);
         virtual ~ODBFieldPage() override;
-        virtual void dispose() override;
 
     protected:
         void setDescriptionText(const OUString& rDesc)
         {
-            m_pDescription->set_width_request(-1);
-            m_pDescription->set_height_request(-1);
-
-            auto nWidthAvail = GetParent()->GetSizePixel().Width();
-
-            m_pDescription->SetText(rDesc);
-
-            //tdf#122307 wrap based on current wizard width
-            Size aPrefSize(m_pDescription->get_preferred_size());
-            Size aSize(m_pDescription->CalcMinimumSize(nWidthAvail));
-            if (aSize.Height() > aPrefSize.Height())
-            {
-                m_pDescription->set_width_request(aSize.Width());
-                m_pDescription->set_height_request(aSize.Height());
-            }
+            m_xDescription->set_label(rDesc);
         }
 
         // OWizardPage overridables

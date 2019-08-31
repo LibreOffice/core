@@ -56,68 +56,54 @@ namespace dbp
     using namespace ::com::sun::star::task;
     using namespace ::comphelper;
 
-    OTableSelectionPage::OTableSelectionPage(OControlWizard* _pParent)
-        :OControlWizardPage(_pParent, "TableSelectionPage", "modules/sabpilot/ui/tableselectionpage.ui")
+    OTableSelectionPage::OTableSelectionPage(OControlWizard* pParent, TabPageParent pPageParent)
+        : OControlWizardPage(pParent, pPageParent, "modules/sabpilot/ui/tableselectionpage.ui", "TableSelectionPage")
+        , m_xTable(m_xBuilder->weld_tree_view("table"))
+        , m_xDatasource(m_xBuilder->weld_tree_view("datasource"))
+        , m_xDatasourceLabel(m_xBuilder->weld_label("datasourcelabel"))
+        , m_xSearchDatabase(m_xBuilder->weld_button("search"))
+        , m_xSourceBox(m_xBuilder->weld_container("sourcebox"))
     {
-        get(m_pTable,"table");
-        get(m_pDatasource, "datasource");
-        get(m_pDatasourceLabel, "datasourcelabel");
-        get(m_pSearchDatabase, "search");
-
         try
         {
             m_xDSContext = getContext().xDatasourceContext;
             if (m_xDSContext.is())
-                fillListBox(*m_pDatasource, m_xDSContext->getElementNames());
+                fillListBox(*m_xDatasource, m_xDSContext->getElementNames());
         }
         catch (const Exception&)
         {
             OSL_FAIL("OTableSelectionPage::OTableSelectionPage: could not collect the data source names!");
         }
 
-        m_pDatasource->SetSelectHdl(LINK(this, OTableSelectionPage, OnListboxSelection));
-        m_pTable->SetSelectHdl(LINK(this, OTableSelectionPage, OnListboxSelection));
-        m_pTable->SetDoubleClickHdl(LINK(this, OTableSelectionPage, OnListboxDoubleClicked));
-        m_pSearchDatabase->SetClickHdl(LINK(this, OTableSelectionPage, OnSearchClicked));
-
-        m_pDatasource->SetDropDownLineCount(10);
+        m_xDatasource->connect_changed(LINK(this, OTableSelectionPage, OnListboxSelection));
+        m_xTable->connect_changed(LINK(this, OTableSelectionPage, OnListboxSelection));
+        m_xTable->connect_row_activated(LINK(this, OTableSelectionPage, OnListboxDoubleClicked));
+        m_xSearchDatabase->connect_clicked(LINK(this, OTableSelectionPage, OnSearchClicked));
     }
 
     OTableSelectionPage::~OTableSelectionPage()
     {
-        disposeOnce();
-    }
-
-    void OTableSelectionPage::dispose()
-    {
-        m_pDatasourceLabel.clear();
-        m_pDatasource.clear();
-        m_pSearchDatabase.clear();
-        m_pTable.clear();
-        OControlWizardPage::dispose();
     }
 
     void OTableSelectionPage::ActivatePage()
     {
         OControlWizardPage::ActivatePage();
-        m_pDatasource->GrabFocus();
+        m_xDatasource->grab_focus();
     }
-
 
     bool OTableSelectionPage::canAdvance() const
     {
         if (!OControlWizardPage::canAdvance())
             return false;
 
-        if (0 == m_pDatasource->GetSelectedEntryCount())
+        if (0 == m_xDatasource->count_selected_rows())
             return false;
 
-        if (0 == m_pTable->GetSelectedEntryCount())
+        if (0 == m_xTable->count_selected_rows())
             return false;
 
         return true;
     }
-
 
     void OTableSelectionPage::initializePage()
     {
@@ -133,11 +119,10 @@ namespace dbp
             bool bEmbedded = ::dbtools::isEmbeddedInDatabase( rContext.xForm, xConnection );
             if ( bEmbedded )
             {
-                VclVBox *_pSourceBox = get<VclVBox>("sourcebox");
-                _pSourceBox->Hide();
-                m_pDatasource->InsertEntry(sDataSourceName);
+                m_xSourceBox->hide();
+                m_xDatasource->append_text(sDataSourceName);
             }
-            m_pDatasource->SelectEntry(sDataSourceName);
+            m_xDatasource->select_text(sDataSourceName);
 
             implFillTables(xConnection);
 
@@ -147,13 +132,13 @@ namespace dbp
             OSL_VERIFY( rContext.xForm->getPropertyValue("CommandType") >>= nCommandType );
 
             // search the entry of the given type with the given name
-            for ( sal_Int32 nLookup = 0; nLookup < m_pTable->GetEntryCount(); ++nLookup )
+            for (sal_Int32 nLookup = 0; nLookup < m_xTable->n_children(); ++nLookup)
             {
-                if (sCommand == m_pTable->GetEntry(nLookup))
+                if (sCommand == m_xTable->get_text(nLookup))
                 {
-                    if ( reinterpret_cast< sal_IntPtr >( m_pTable->GetEntryData( nLookup ) ) == nCommandType )
+                    if (m_xTable->get_id(nLookup).toInt32() == nCommandType)
                     {
-                        m_pTable->SelectEntryPos( nLookup );
+                        m_xTable->select( nLookup );
                         break;
                     }
                 }
@@ -164,7 +149,6 @@ namespace dbp
             OSL_FAIL("OTableSelectionPage::initializePage: caught an exception!");
         }
     }
-
 
     bool OTableSelectionPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {
@@ -179,11 +163,11 @@ namespace dbp
             {
                 xOldConn = getFormConnection();
 
-                OUString sDataSource = m_pDatasource->GetSelectedEntry();
+                OUString sDataSource = m_xDatasource->get_selected_text();
                 rContext.xForm->setPropertyValue("DataSourceName", makeAny( sDataSource ) );
             }
-            OUString sCommand = m_pTable->GetSelectedEntry();
-            sal_Int32 nCommandType = reinterpret_cast< sal_IntPtr >( m_pTable->GetSelectedEntryData() );
+            OUString sCommand = m_xTable->get_selected_text();
+            sal_Int32 nCommandType = m_xTable->get_selected_id().toInt32();
 
             rContext.xForm->setPropertyValue("Command", makeAny( sCommand ) );
             rContext.xForm->setPropertyValue("CommandType", makeAny( nCommandType ) );
@@ -202,8 +186,7 @@ namespace dbp
         return true;
     }
 
-
-    IMPL_LINK_NOARG( OTableSelectionPage, OnSearchClicked, Button*, void )
+    IMPL_LINK_NOARG( OTableSelectionPage, OnSearchClicked, weld::Button&, void )
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
@@ -222,22 +205,21 @@ namespace dbp
             OUString sDataSourceName = aFileDlg.GetPath();
             ::svt::OFileNotation aFileNotation(sDataSourceName);
             sDataSourceName = aFileNotation.get(::svt::OFileNotation::N_SYSTEM);
-            m_pDatasource->InsertEntry(sDataSourceName);
-            m_pDatasource->SelectEntry(sDataSourceName);
-            LINK(this, OTableSelectionPage, OnListboxSelection).Call(*m_pDatasource);
+            m_xDatasource->append_text(sDataSourceName);
+            m_xDatasource->select_text(sDataSourceName);
+            LINK(this, OTableSelectionPage, OnListboxSelection).Call(*m_xDatasource);
         }
     }
 
-    IMPL_LINK( OTableSelectionPage, OnListboxDoubleClicked, ListBox&, _rBox, void )
+    IMPL_LINK(OTableSelectionPage, OnListboxDoubleClicked, weld::TreeView&, _rBox, void)
     {
-        if (_rBox.GetSelectedEntryCount())
+        if (_rBox.count_selected_rows())
             getDialog()->travelNext();
     }
 
-
-    IMPL_LINK( OTableSelectionPage, OnListboxSelection, ListBox&, _rBox, void )
+    IMPL_LINK(OTableSelectionPage, OnListboxSelection, weld::TreeView&, _rBox, void)
     {
-        if (m_pDatasource == &_rBox)
+        if (m_xDatasource.get() == &_rBox)
         {   // new data source selected
             implFillTables();
         }
@@ -245,23 +227,20 @@ namespace dbp
         updateDialogTravelUI();
     }
 
-
     namespace
     {
-        void lcl_fillEntries( ListBox& _rListBox, const Sequence< OUString >& _rNames, const Image& _rImage, sal_Int32 _nCommandType )
+        void lcl_fillEntries(weld::TreeView& rListBox, const Sequence<OUString>& rNames, const OUString& rImage, sal_Int32 nCommandType)
         {
-            for ( auto const & name : _rNames )
+            for (auto const & name : rNames)
             {
-                const sal_Int32 nPos = _rListBox.InsertEntry( name, _rImage );
-                _rListBox.SetEntryData( nPos, reinterpret_cast< void* >( _nCommandType ) );
+                rListBox.append(OUString::number(nCommandType), name, rImage);
             }
         }
     }
 
-
     void OTableSelectionPage::implFillTables(const Reference< XConnection >& _rxConn)
     {
-        m_pTable->Clear();
+        m_xTable->clear();
 
         WaitObject aWaitCursor(this);
 
@@ -279,7 +258,7 @@ namespace dbp
             // connect to the data source
             try
             {
-                OUString sCurrentDatasource = m_pDatasource->GetSelectedEntry();
+                OUString sCurrentDatasource = m_xDatasource->get_selected_text();
                 if (!sCurrentDatasource.isEmpty())
                 {
                     // obtain the DS object
@@ -362,112 +341,84 @@ namespace dbp
             return;
         }
 
-        Image aTableImage(StockImage::Yes, BMP_TABLE);
-        Image aQueryImage(StockImage::Yes, BMP_QUERY);
-
-        lcl_fillEntries( *m_pTable, aTableNames, aTableImage, CommandType::TABLE );
-        lcl_fillEntries( *m_pTable, aQueryNames, aQueryImage, CommandType::QUERY );
+        lcl_fillEntries(*m_xTable, aTableNames, BMP_TABLE, CommandType::TABLE);
+        lcl_fillEntries(*m_xTable, aQueryNames, BMP_QUERY, CommandType::QUERY);
     }
 
-
-    OMaybeListSelectionPage::OMaybeListSelectionPage( OControlWizard* _pParent, const OString& _rID, const OUString& _rUIXMLDescription )
-        :OControlWizardPage(_pParent, _rID, _rUIXMLDescription)
-        ,m_pYes(nullptr)
-        ,m_pNo(nullptr)
-        ,m_pList(nullptr)
+    OMaybeListSelectionPage::OMaybeListSelectionPage(OControlWizard* pParent, TabPageParent pPageParent, const OUString& rUIXMLDescription, const OString& rID)
+        : OControlWizardPage(pParent, pPageParent, rUIXMLDescription, rID)
+        , m_pYes(nullptr)
+        , m_pNo(nullptr)
+        , m_pList(nullptr)
     {
     }
 
     OMaybeListSelectionPage::~OMaybeListSelectionPage()
     {
-        disposeOnce();
     }
 
-    void OMaybeListSelectionPage::dispose()
-    {
-        m_pYes.clear();
-        m_pNo.clear();
-        m_pList.clear();
-        OControlWizardPage::dispose();
-    }
-
-    void OMaybeListSelectionPage::announceControls(RadioButton& _rYesButton, RadioButton& _rNoButton, ListBox& _rSelection)
+    void OMaybeListSelectionPage::announceControls(weld::RadioButton& _rYesButton, weld::RadioButton& _rNoButton, weld::ComboBox& _rSelection)
     {
         m_pYes = &_rYesButton;
         m_pNo = &_rNoButton;
         m_pList = &_rSelection;
 
-        m_pYes->SetClickHdl(LINK(this, OMaybeListSelectionPage, OnRadioSelected));
-        m_pNo->SetClickHdl(LINK(this, OMaybeListSelectionPage, OnRadioSelected));
+        m_pYes->connect_clicked(LINK(this, OMaybeListSelectionPage, OnRadioSelected));
+        m_pNo->connect_clicked(LINK(this, OMaybeListSelectionPage, OnRadioSelected));
         implEnableWindows();
     }
 
-    IMPL_LINK_NOARG( OMaybeListSelectionPage, OnRadioSelected, Button*, void )
+    IMPL_LINK_NOARG( OMaybeListSelectionPage, OnRadioSelected, weld::Button&, void )
     {
         implEnableWindows();
     }
-
 
     void OMaybeListSelectionPage::implInitialize(const OUString& _rSelection)
     {
         DBG_ASSERT(m_pYes, "OMaybeListSelectionPage::implInitialize: no controls announced!");
         bool bIsSelection = ! _rSelection.isEmpty();
-        m_pYes->Check(bIsSelection);
-        m_pNo->Check(!bIsSelection);
-        m_pList->Enable(bIsSelection);
+        m_pYes->set_active(bIsSelection);
+        m_pNo->set_active(!bIsSelection);
+        m_pList->set_sensitive(bIsSelection);
 
-        m_pList->SelectEntry(bIsSelection ? _rSelection : OUString());
+        m_pList->set_active_text(bIsSelection ? _rSelection : OUString());
     }
-
 
     void OMaybeListSelectionPage::implCommit(OUString& _rSelection)
     {
-        _rSelection = m_pYes->IsChecked() ? m_pList->GetSelectedEntry() : OUString();
+        _rSelection = m_pYes->get_active() ? m_pList->get_active_text() : OUString();
     }
-
 
     void OMaybeListSelectionPage::implEnableWindows()
     {
-        m_pList->Enable(m_pYes->IsChecked());
+        m_pList->set_sensitive(m_pYes->get_active());
     }
-
 
     void OMaybeListSelectionPage::ActivatePage()
     {
         OControlWizardPage::ActivatePage();
 
         DBG_ASSERT(m_pYes, "OMaybeListSelectionPage::ActivatePage: no controls announced!");
-        if (m_pYes->IsChecked())
-            m_pList->GrabFocus();
+        if (m_pYes->get_active())
+            m_pList->grab_focus();
         else
-            m_pNo->GrabFocus();
+            m_pNo->grab_focus();
     }
 
-    ODBFieldPage::ODBFieldPage( OControlWizard* _pParent )
-        :OMaybeListSelectionPage(_pParent, "OptionDBField", "modules/sabpilot/ui/optiondbfieldpage.ui")
+    ODBFieldPage::ODBFieldPage(OControlWizard* pParent, TabPageParent pPageParent)
+        : OMaybeListSelectionPage(pParent, pPageParent, "modules/sabpilot/ui/optiondbfieldpage.ui", "OptionDBField")
+        , m_xDescription(m_xBuilder->weld_label("explLabel"))
+        , m_xStoreYes(m_xBuilder->weld_radio_button("yesRadiobutton"))
+        , m_xStoreNo(m_xBuilder->weld_radio_button("noRadiobutton"))
+        , m_xStoreWhere(m_xBuilder->weld_combo_box("storeInFieldCombobox"))
     {
-        get(m_pDescription, "explLabel");
-        get(m_pStoreYes, "yesRadiobutton");
-        get(m_pStoreNo, "noRadiobutton");
-        get(m_pStoreWhere, "storeInFieldCombobox");
         SetText(compmodule::ModuleRes(RID_STR_OPTION_DB_FIELD_TITLE));
 
-        announceControls(*m_pStoreYes, *m_pStoreNo, *m_pStoreWhere);
-        m_pStoreWhere->SetDropDownLineCount(10);
+        announceControls(*m_xStoreYes, *m_xStoreNo, *m_xStoreWhere);
     }
 
     ODBFieldPage::~ODBFieldPage()
     {
-        disposeOnce();
-    }
-
-    void ODBFieldPage::dispose()
-    {
-        m_pDescription.clear();
-        m_pStoreYes.clear();
-        m_pStoreNo.clear();
-        m_pStoreWhere.clear();
-        OMaybeListSelectionPage::dispose();
     }
 
     void ODBFieldPage::initializePage()
@@ -475,7 +426,7 @@ namespace dbp
         OMaybeListSelectionPage::initializePage();
 
         // fill the fields page
-        fillListBox(*m_pStoreWhere, getContext().aFieldNames);
+        fillListBox(*m_xStoreWhere, getContext().aFieldNames);
 
         implInitialize(getDBFieldSetting());
     }
