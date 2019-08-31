@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_EDIT_HXX
 
 #include <vcl/ctrl.hxx>
+#include <vcl/textfilter.hxx>
 
 #include <memory>
 
@@ -51,19 +52,6 @@ struct Impl_IMEInfos;
 #define EDIT_UPDATEDATA_TIMEOUT     350
 
 typedef OUString (*FncGetSpecialChars)( weld::Widget* pWin, const vcl::Font& rFont );
-
-class VCL_DLLPUBLIC TextFilter
-{
-private:
-    OUString sForbiddenChars;
-public:
-    void SetForbiddenChars(const OUString& rSet) { sForbiddenChars = rSet; }
-
-    virtual OUString filter(const OUString &rText);
-
-    TextFilter(const OUString &rForbiddenChars = OUString(" "));
-    virtual ~TextFilter();
-};
 
 class Timer;
 

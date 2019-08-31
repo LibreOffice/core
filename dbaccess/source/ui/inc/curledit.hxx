@@ -20,8 +20,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_CURLEDIT_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_CURLEDIT_HXX
 
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/weld.hxx>
 #include <dsntypes.hxx>
 

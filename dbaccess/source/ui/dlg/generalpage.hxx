@@ -22,9 +22,6 @@
 
 #include "adminpages.hxx"
 #include <opendoccontrols.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/edit.hxx>
 
 namespace dbaui
 {

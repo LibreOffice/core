@@ -23,7 +23,7 @@
 #include <sfx2/tabdlg.hxx>
 
 #include <vcl/customweld.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/textfilter.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/basedlgs.hxx>
 

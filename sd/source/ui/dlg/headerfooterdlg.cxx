@@ -27,11 +27,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
 
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-
 #include <Outliner.hxx>
 #include <headerfooterdlg.hxx>
 #include <DrawDocShell.hxx>
@@ -40,13 +35,12 @@
 #include <sdmod.hxx>
 
 // preview control for presentation layout
-#include <vcl/ctrl.hxx>
 #include <tools/color.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/builderfactory.hxx>
+#include <vcl/svapp.hxx>
 
 #include <undoheaderfooter.hxx>
 #include <sdundogr.hxx>
