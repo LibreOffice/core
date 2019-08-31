@@ -22,7 +22,6 @@
 #include <ViewShellBase.hxx>
 #include <Window.hxx>
 #include <DrawDocShell.hxx>
-#include <FormShellManager.hxx>
 
 #include <sal/log.hxx>
 #include <sfx2/dispatch.hxx>

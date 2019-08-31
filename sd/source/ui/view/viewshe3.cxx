@@ -20,62 +20,33 @@
 #include <config_features.h>
 
 #include <ViewShell.hxx>
-#include <GraphicViewShell.hxx>
-#include <GraphicViewShellBase.hxx>
+#include <ViewShellBase.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <svtools/strings.hrc>
-#include <com/sun/star/lang/Locale.hpp>
 #include <svtools/svtresid.hxx>
-#include <utility>
-#include <vector>
 
 #include <app.hrc>
 #include <strings.hrc>
 
-#include <sdabstdlg.hxx>
-
 #include <sal/log.hxx>
-#include <fupoor.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/svdopage.hxx>
-#include <sfx2/progress.hxx>
-#include <svx/svdobj.hxx>
 #include <sfx2/bindings.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svdetc.hxx>
 #include <svx/svdundo.hxx>
-#include <editeng/outliner.hxx>
-#include <editeng/editstat.hxx>
-#include <tools/multisel.hxx>
 #include <svl/intitem.hxx>
 #include <svl/style.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <rtl/ustrbuf.hxx>
+#include <svl/stritem.hxx>
 #include <stlsheet.hxx>
-#include <WindowUpdater.hxx>
 #include <DrawViewShell.hxx>
-#include <OutlineViewShell.hxx>
-#include <drawview.hxx>
 
-#include <sdattr.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
-#include <unoaprms.hxx>
-#include <sdundogr.hxx>
-#include <Window.hxx>
 #include <DrawDocShell.hxx>
-#include <FrameView.hxx>
-#include <framework/FrameworkHelper.hxx>
-#include <optsitem.hxx>
 #include <sdresid.hxx>
 #include <unokywds.hxx>
-#include <undo/undomanager.hxx>
 
 #include <svx/svxids.hrc>
 #include <sfx2/request.hxx>
-#include <sfx2/templdlg.hxx>
-#include <svl/aeitem.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sberrors.hxx>
 #include <xmloff/autolayout.hxx>

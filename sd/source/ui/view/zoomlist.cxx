@@ -22,7 +22,6 @@
 #include <svx/svxids.hrc>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/viewsh.hxx>
 
 #include <ViewShell.hxx>
 

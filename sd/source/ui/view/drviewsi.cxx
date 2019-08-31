@@ -19,32 +19,18 @@
 
 #include <DrawViewShell.hxx>
 #include <svx/xfillit0.hxx>
-#include <svx/xtable.hxx>
-#include <sdattr.hxx>
-#include <svl/aeitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <sfx2/request.hxx>
-#include <svx/svditer.hxx>
-#include <editeng/colritem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svxids.hrc>
-#include <svx/svdundo.hxx>
-#include <svx/view3d.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/float3d.hxx>
 #include <svx/f3dchild.hxx>
-#include <svx/dialogs.hrc>
 #include <vcl/weld.hxx>
 
-#include <app.hrc>
 #include <strings.hrc>
 
 #include <drawdoc.hxx>
-#include <DrawDocShell.hxx>
-#include <anminfo.hxx>
-#include <unoaprms.hxx>
-#include <sdundogr.hxx>
-#include <drawview.hxx>
 #include <Window.hxx>
 #include <sdresid.hxx>
 

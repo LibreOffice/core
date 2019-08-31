@@ -18,7 +18,7 @@
  */
 
 #include <Window.hxx>
-#include <sfx2/dispatch.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 
 #include <sfx2/viewfrm.hxx>
@@ -37,7 +37,6 @@
 #include <FrameView.hxx>
 #include <OutlineViewShell.hxx>
 #include <drawdoc.hxx>
-#include <AccessibleDrawDocumentView.hxx>
 #include <WindowUpdater.hxx>
 #include <ViewShellBase.hxx>
 #include <uiobject.hxx>
@@ -45,9 +44,7 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 

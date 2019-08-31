@@ -23,14 +23,9 @@
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <comphelper/sequenceashashmap.hxx>
 #include <tools/urlobj.hxx>
-#include <svx/svdetc.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/svdograf.hxx>
-#include <vcl/graph.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 #include <sfx2/docfile.hxx>
-#include <sfx2/childwin.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdpagv.hxx>
 #include <svl/urlbmk.hxx>
@@ -38,19 +33,16 @@
 #include <svx/xflclit.hxx>
 #include <sot/formats.hxx>
 #include <editeng/editeng.hxx>
-#include <svx/svditer.hxx>
-#include <svx/obj3d.hxx>
-#include <svx/scene3d.hxx>
 
-#include <sfx2/objsh.hxx>
 #include <svtools/embedtransfer.hxx>
+#include <tools/debug.hxx>
 
-#include <navigatr.hxx>
 #include <anminfo.hxx>
 #include <strings.hrc>
 #include <sdxfer.hxx>
 #include <sdresid.hxx>
 #include <sdmod.hxx>
+#include <sdtreelb.hxx>
 #include <DrawViewShell.hxx>
 #include <DrawDocShell.hxx>
 #include <fudraw.hxx>
@@ -58,7 +50,6 @@
 #include <Window.hxx>
 #include <sdpage.hxx>
 #include <unoaprms.hxx>
-#include <drawview.hxx>
 #include <helpids.h>
 #include <vcl/svapp.hxx>
 

@@ -26,7 +26,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -45,17 +44,13 @@
 #include <notifydocumentevent.hxx>
 #include <unomodel.hxx>
 #include "unopool.hxx"
-#include <sfx2/dispatch.hxx>
-#include <sfx2/bindings.hxx>
 #include <sfx2/lokhelper.hxx>
-#include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <svx/svdoutl.hxx>
-#include <editeng/forbiddencharacterstable.hxx>
 #include <o3tl/safeint.hxx>
 #include <svx/UnoNamespaceMap.hxx>
 #include <svx/svdlayer.hxx>
@@ -63,13 +58,10 @@
 #include <svx/svdundo.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unofill.hxx>
-#include <svx/unopool.hxx>
-#include <svx/svdorect.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/fontitem.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <svx/svdpool.hxx>
-#include <editeng/unolingu.hxx>
 #include <svx/svdpagv.hxx>
 #include <svtools/unoimap.hxx>
 #include <svx/unoshape.hxx>
@@ -95,7 +87,6 @@
 #include <strings.hrc>
 #include <strings.hxx>
 #include "unolayer.hxx"
-#include <unoprnms.hxx>
 #include <unopage.hxx>
 #include "unocpres.hxx"
 #include "unoobj.hxx"
@@ -108,7 +99,6 @@
 #include <DrawViewShell.hxx>
 #include <ViewShell.hxx>
 #include <Window.hxx>
-#include <app.hrc>
 #include <optsitem.hxx>
 
 #include <vcl/pdfextoutdevdata.hxx>

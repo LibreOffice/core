@@ -21,7 +21,6 @@
 
 #include <memory>
 #include <utility>
-#include <vector>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -46,10 +45,8 @@
 #include <optsitem.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <sdattr.hxx>
+#include <sdattr.hrc>
 #include <sdmod.hxx>
-#include <ViewShell.hxx>
-#include <FrameView.hxx>
 #include <Outliner.hxx>
 #include <xmloff/settingsstore.hxx>
 #include <editeng/editstat.hxx>
