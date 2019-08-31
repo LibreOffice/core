@@ -18,7 +18,6 @@
  */
 
 #include <editeng/hangulhanja.hxx>
-#include <vcl/button.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 
@@ -33,7 +32,6 @@
 #include <com/sun/star/i18n/TextConversionType.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/charclass.hxx>
 #include <sal/log.hxx>

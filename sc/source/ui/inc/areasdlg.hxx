@@ -21,7 +21,6 @@
 
 #include <address.hxx>
 
-#include <vcl/lstbox.hxx>
 #include "anyrefdg.hxx"
 
 class ScDocument;

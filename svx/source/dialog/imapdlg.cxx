@@ -36,8 +36,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/dialmgr.hxx>
