@@ -17,40 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/dispatch.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <svx/svdpagv.hxx>
-#include <sfx2/request.hxx>
 #include <svl/style.hxx>
 #include <editeng/outliner.hxx>
-#include <svx/view3d.hxx>
-#include <svx/svxids.hrc>
 #include <svx/svdotext.hxx>
-#include <svx/svdograf.hxx>
-#include <svx/svdogrp.hxx>
-#include <svx/svdorect.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/bulletitem.hxx>
-#include <svl/itempool.hxx>
 #include <editeng/numitem.hxx>
 #include <svl/whiter.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/objface.hxx>
-#include <stlsheet.hxx>
-
-#include <svx/svdoutl.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
 #include <strings.hrc>
 #include <View.hxx>
-#include <sdattr.hxx>
 #include <drawview.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
@@ -59,16 +43,8 @@
 #include <DrawViewShell.hxx>
 #include <pres.hxx>
 #include <sdresid.hxx>
-#include <Window.hxx>
 #include <unchss.hxx>
-#include <FrameView.hxx>
-#include <anminfo.hxx>
 #include <slideshow.hxx>
-#include <vcl/virdev.hxx>
-#include <svx/sdrpaintwindow.hxx>
-#include <svx/sdr/contact/viewobjectcontact.hxx>
-#include <svx/sdr/contact/viewcontact.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
 
 #include <undo/undomanager.hxx>
 

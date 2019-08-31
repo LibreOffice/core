@@ -21,14 +21,10 @@
 #include <ViewShellImplementation.hxx>
 
 #include <DrawController.hxx>
-#include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
-#include <comphelper/anytostring.hxx>
 #include <comphelper/scopeguard.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ref.hxx>
-#include <sal/log.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>
@@ -36,31 +32,21 @@
 #include <sfx2/bindings.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/module.hxx>
 #include <vcl/scrbar.hxx>
-#include <svx/svdograf.hxx>
 #include <svx/svdopage.hxx>
-#include <sot/storage.hxx>
 #include <svx/fmshell.hxx>
-#include <svx/globl3d.hxx>
-#include <svx/fmglob.hxx>
-#include <editeng/outliner.hxx>
-#include <svx/dialogs.hrc>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <view/viewoverlaymanager.hxx>
 
-#include <strings.hrc>
 #include <app.hrc>
 
-#include <sdmod.hxx>
 #include <fupoor.hxx>
-#include <sdresid.hxx>
 #include <unokywds.hxx>
-#include <fusel.hxx>
 #include <sdpage.hxx>
 #include <FrameView.hxx>
-#include <stlpool.hxx>
 #include <Window.hxx>
 #include <drawview.hxx>
 #include <drawdoc.hxx>
@@ -68,11 +54,7 @@
 #include <Ruler.hxx>
 #include <Client.hxx>
 #include <slideshow.hxx>
-#include <optsitem.hxx>
-#include <fusearch.hxx>
-#include <Outliner.hxx>
 #include <AnimationChildWindow.hxx>
-#include <SdUnoDrawView.hxx>
 #include <ToolBarManager.hxx>
 #include <FormShellManager.hxx>
 #include <ViewShellBase.hxx>
@@ -84,7 +66,6 @@
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsPageSelector.hxx>
 
-#include <sfx2/request.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/uitest/logger.hxx>

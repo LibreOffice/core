@@ -20,7 +20,6 @@
 #include <DrawController.hxx>
 #include <DrawDocShell.hxx>
 
-#include <DrawSubController.hxx>
 #include <sdpage.hxx>
 #include <ViewShell.hxx>
 #include <ViewShellBase.hxx>
@@ -31,14 +30,13 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/framework/ConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/ModuleController.hpp>
+#include <com/sun/star/drawing/XDrawSubController.hpp>
 #include <com/sun/star/drawing/XLayer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 

@@ -19,25 +19,17 @@
 
 #include <DrawViewShell.hxx>
 
-#include <ViewShellHint.hxx>
-
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <editeng/outlobj.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
-#include <svx/svddef.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpagv.hxx>
 
-#include <app.hrc>
-
 #include <Window.hxx>
 #include <drawview.hxx>
-#include <zoomlist.hxx>
 #include <tools/helpers.hxx>
 #include <vcl/svapp.hxx>
 

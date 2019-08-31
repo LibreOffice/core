@@ -20,22 +20,16 @@
 #include <MediaObjectBar.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <sfx2/msg.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
 #include <svl/whiter.hxx>
-#include <svl/itempool.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
-
-#include <app.hrc>
 
 #include <strings.hrc>
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
-#include <Window.hxx>
-#include <drawview.hxx>
 #include <sdresid.hxx>
 #include <drawdoc.hxx>
 #include <memory>

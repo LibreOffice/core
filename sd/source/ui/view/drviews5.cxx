@@ -18,21 +18,20 @@
  */
 
 #include <DrawViewShell.hxx>
-#include <PresentationViewShell.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/svdoutl.hxx>
+
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <sdcommands.h>
 #include <sal/log.hxx>
 
-#include <tools/poly.hxx>
 #include <svx/fmshell.hxx>
 #include <editeng/eeitem.hxx>
-#include <svtools/colorcfg.hxx>
 #include <AccessibleDrawDocumentView.hxx>
 
 #include <sfx2/viewfrm.hxx>
@@ -43,16 +42,10 @@
 #include <optsitem.hxx>
 #include <sdmod.hxx>
 #include <FrameView.hxx>
-#include <sdattr.hxx>
-#include <futext.hxx>
-#include <sdpage.hxx>
-#include <stlpool.hxx>
-#include <prntopts.hxx>
 #include <Window.hxx>
 #include <drawview.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
-#include <Outliner.hxx>
 #include <Client.hxx>
 #include <slideshow.hxx>
 #include <unokywds.hxx>

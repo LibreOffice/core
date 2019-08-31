@@ -25,11 +25,8 @@
 
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
-#include <optsitem.hxx>
 #include <sdresid.hxx>
 #include <strings.hrc>
-#include <sdattr.hxx>
-#include <Window.hxx>
 #include <drawview.hxx>
 #include <DrawViewShell.hxx>
 #include <FrameView.hxx>
@@ -44,7 +41,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <sfx2/printer.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/svdetc.hxx>
@@ -56,6 +52,7 @@
 #include <svx/xlnclit.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/moduleoptions.hxx>

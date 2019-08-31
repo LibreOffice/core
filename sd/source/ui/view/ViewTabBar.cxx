@@ -19,10 +19,7 @@
 
 #include <ViewTabBar.hxx>
 
-#include <ViewShell.hxx>
 #include <ViewShellBase.hxx>
-#include <DrawViewShell.hxx>
-#include <FrameView.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/Pane.hxx>
 #include <DrawController.hxx>

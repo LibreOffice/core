@@ -19,7 +19,6 @@
 
 #include <OutlineViewShell.hxx>
 
-#include <ViewShellImplementation.hxx>
 #include <helpids.h>
 #include <app.hrc>
 #include <svx/hyperdlg.hxx>
@@ -28,18 +27,15 @@
 
 #include <sfx2/infobar.hxx>
 #include <sfx2/objface.hxx>
-#include <sot/exchange.hxx>
-#include <svx/ruler.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <sfx2/shell.hxx>
-#include <sfx2/templdlg.hxx>
-#include <sfx2/viewfac.hxx>
 #include <sfx2/request.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdoutl.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/commandevent.hxx>
@@ -54,7 +50,6 @@
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <vcl/EnumContext.hxx>
-#include <svx/svdorect.hxx>
 #include <sot/formats.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <editeng/unolingu.hxx>
@@ -64,13 +59,10 @@
 #include <svl/srchitem.hxx>
 #include <editeng/editobj.hxx>
 #include <fubullet.hxx>
-#include <optsitem.hxx>
 
 #include <strings.hrc>
 
-#include <Outliner.hxx>
 #include <Window.hxx>
-#include <TextObjectBar.hxx>
 #include <drawdoc.hxx>
 #include <sdresid.hxx>
 #include <sdpage.hxx>
@@ -78,13 +70,11 @@
 #include <FrameView.hxx>
 #include <zoomlist.hxx>
 #include <stlsheet.hxx>
-#include <slideshow.hxx>
 #include <SdUnoOutlineView.hxx>
 #include <SpellDialogChildWindow.hxx>
 
 #include <AccessibleOutlineView.hxx>
 #include <ViewShellBase.hxx>
-#include <ViewShellManager.hxx>
 #include <DrawController.hxx>
 #include <DrawDocShell.hxx>
 #include <OutlineView.hxx>

@@ -17,19 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <facreg.hxx>
 #include <sddll.hxx>
 
-#include <cppuhelper/factory.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <sal/types.h>
 
-#include <string.h>
-#include <memory>
 #include <unordered_map>
 
 using namespace com::sun::star;

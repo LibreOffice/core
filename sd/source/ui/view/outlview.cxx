@@ -18,39 +18,28 @@
  */
 
 #include <OutlineView.hxx>
-#include <editeng/forbiddencharacterstable.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/outliner.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svx/svdotext.hxx>
-#include <sfx2/printer.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/itempool.hxx>
 #include <svl/style.hxx>
-#include <svx/svdorect.hxx>
 #include <svx/svdundo.hxx>
-#include <editeng/adjustitem.hxx>
-#include <editeng/tstpitem.hxx>
-#include <editeng/lspcitem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editeng.hxx>
 #include <xmloff/autolayout.hxx>
+#include <tools/debug.hxx>
 
 #include <editeng/editobj.hxx>
 #include <editeng/editund2.hxx>
 
 #include <editeng/editview.hxx>
-#include <editeng/svxfont.hxx>
-#include <editeng/fhgtitem.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 
@@ -68,7 +57,6 @@
 #include <EventMultiplexer.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
-#include <undo/undoobjects.hxx>
 #include <undo/undomanager.hxx>
 #include <stlsheet.hxx>
 

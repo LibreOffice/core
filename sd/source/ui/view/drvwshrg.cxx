@@ -20,8 +20,6 @@
 #include <config_features.h>
 
 #include <DrawViewShell.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/templdlg.hxx>
 #include <sfx2/infobar.hxx>
 
 #include <svx/fontwork.hxx>
@@ -39,11 +37,8 @@
 #include <app.hrc>
 
 #include <SpellDialogChildWindow.hxx>
-#include <DrawDocShell.hxx>
-#include <GraphicDocShell.hxx>
 #include <GraphicViewShell.hxx>
 #include <AnimationChildWindow.hxx>
-#include <NavigatorChildWindow.hxx>
 
 using namespace sd;
 #define ShellClass_DrawViewShell

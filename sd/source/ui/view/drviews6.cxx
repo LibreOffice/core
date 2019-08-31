@@ -20,9 +20,7 @@
 #include <config_features.h>
 
 #include <DrawViewShell.hxx>
-#include <vcl/metaact.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/dispatch.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -33,29 +31,18 @@
 #include <svx/imapdlg.hxx>
 #include <svx/SvxColorChildWindow.hxx>
 #include <svx/f3dchild.hxx>
-#include <optsitem.hxx>
-#include <svx/extrusionbar.hxx>
-#include <svx/fontworkbar.hxx>
 #include <avmedia/mediaplayer.hxx>
 #include <svl/intitem.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>
 
-#include <sdmod.hxx>
 #include <animobjs.hxx>
 #include <AnimationChildWindow.hxx>
-#include <NavigatorChildWindow.hxx>
 #include <sdresid.hxx>
 #include <drawdoc.hxx>
 #include <drawview.hxx>
-#include <FrameView.hxx>
-#include <Window.hxx>
-#include <DrawDocShell.hxx>
-#include <sdabstdlg.hxx>
-#include <framework/FrameworkHelper.hxx>
 #include <svx/svdoashp.hxx>
-#include <sfx2/sidebar/Sidebar.hxx>
 
 namespace sd {
 
