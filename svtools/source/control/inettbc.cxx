@@ -1878,12 +1878,6 @@ bool SvtURLBox_Impl::TildeParsing(
     return true;
 }
 
-void SvtURLBox::SetFilter(const OUString& _sFilter)
-{
-    pImpl->m_aFilters.clear();
-    FilterMatch::createWildCardFilterList(_sFilter,pImpl->m_aFilters);
-}
-
 //--
 
 OUString URLBox::ParseSmart( const OUString& _aText, const OUString& _aBaseURL )

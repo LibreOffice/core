@@ -79,8 +79,6 @@ public:
 
     static OUString                 ParseSmart( const OUString& aText, const OUString& aBaseURL );
 
-    void                            SetFilter(const OUString& _sFilter);
-
     void                            EnableAutocompletion( bool _bEnable )
                                         { bIsAutoCompleteEnabled = _bEnable; }
     void                            SetPlaceHolder( const OUString& sPlaceHolder )
