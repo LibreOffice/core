@@ -2478,6 +2478,8 @@ void SdOOXMLExportTest2::testTdf126741()
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
 
     // dash dot dot line style import fix
+    // The original fixed values are replaced with the percent values, because
+    // with fix for tdf#127166 the MS Office preset styles are correctly detected.
     const SdrPage *pPage = GetPage( 1, xDocShRef );
     SdrObject *const pObj = pPage->GetObj(0);
     CPPUNIT_ASSERT(pObj);
@@ -2489,10 +2491,10 @@ void SdOOXMLExportTest2::testTdf126741()
 
     CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_DASH, rStyleItem.GetValue());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), rDashItem.GetDashValue().GetDots());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(280), rDashItem.GetDashValue().GetDotLen());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(800), rDashItem.GetDashValue().GetDotLen());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), rDashItem.GetDashValue().GetDashes());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(35), rDashItem.GetDashValue().GetDashLen());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(105), rDashItem.GetDashValue().GetDistance());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(100), rDashItem.GetDashValue().GetDashLen());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(300), rDashItem.GetDashValue().GetDistance());
 
     xDocShRef->DoClose();
 }

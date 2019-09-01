@@ -63,7 +63,7 @@ static constexpr sal_Int64 TwipsToEMU( sal_Int32 nTwips )
 template <typename T>
 OString write1000thOfAPercent(T number)
 {
-    return OString::number( number * 1000 );
+    return OString::number( lround(number * 1000.0) );
 }
 
 namespace oox { namespace drawingml {
