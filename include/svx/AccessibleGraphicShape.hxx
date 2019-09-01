@@ -86,8 +86,7 @@ public:
 
     virtual css::uno::Sequence< css::uno::Type> SAL_CALL
         getTypes() override;
-/// Return this object's role.
-    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
+
 protected:
     /// Create a name string that contains the accessible name.
     virtual OUString
