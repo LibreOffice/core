@@ -43,6 +43,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xmlexchg.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
@@ -1058,7 +1059,9 @@ IMPL_LINK_NOARG( FmXFormView, OnStartControlWizard, void*, void )
     {
         // build the argument list
         ::comphelper::NamedValueCollection aWizardArgs;
-        aWizardArgs.put( "ObjectModel", m_xLastCreatedControlModel );
+        aWizardArgs.put("ObjectModel", m_xLastCreatedControlModel);
+        const vcl::Window* pCurrentWindow = m_pView ? dynamic_cast<const vcl::Window*>(m_pView->GetActualOutDev()) : nullptr;
+        aWizardArgs.put("ParentWindow", VCLUnoHelper::GetInterface(const_cast<vcl::Window*>(pCurrentWindow)));
 
         // create the wizard object
         Reference< XExecutableDialog > xWizard;
