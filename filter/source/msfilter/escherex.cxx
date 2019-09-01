@@ -1028,6 +1028,11 @@ void EscherPropertyContainer::CreateLineProperties(
         }
     }
 
+    sal_uInt32 nLineWidth = ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "LineWidth" ) )
+        ? *o3tl::doAccess<sal_uInt32>(aAny) : 0;
+    if ( nLineWidth > 1 )
+        AddOpt( ESCHER_Prop_lineWidth, nLineWidth * 360 );       // 100TH MM -> PT , 1PT = 12700 EMU
+
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "LineStyle" ) )
     {
         drawing::LineStyle eLS;
@@ -1045,7 +1050,6 @@ void EscherPropertyContainer::CreateLineProperties(
                     {
                         ESCHER_LineDashing eDash = ESCHER_LineSolid;
                         auto pLineDash = o3tl::doAccess<drawing::LineDash>(aAny);
-                        sal_Int32 nDistance = pLineDash->Distance << 1;
                         switch ( pLineDash->Style )
                         {
                             case drawing::DashStyle_ROUND :
@@ -1054,35 +1058,86 @@ void EscherPropertyContainer::CreateLineProperties(
                             break;
                             default : break;
                         }
-                        if ( ((!(pLineDash->Dots )) || (!(pLineDash->Dashes )) ) || ( pLineDash->DotLen == pLineDash->DashLen ) )
-                        {
-                            sal_Int32 nLen = pLineDash->DotLen;
-                            if ( pLineDash->Dashes )
-                                nLen = pLineDash->DashLen;
+                        // Try to detect exact prstDash styles. Use a similar method as in oox export.
+                        // Map it to a roughly fitting prstDash in outher cases.
+                        bool bIsConverted = false;
+                        bool bIsRelative = pLineDash->Style == drawing::DashStyle_RECTRELATIVE
+                                            || pLineDash->Style == drawing::DashStyle_ROUNDRELATIVE;
+                        sal_Int16 nDashes = pLineDash->Dashes;
+                        sal_Int16 nDots = pLineDash->Dots;
+                        sal_Int32 nDashLen = pLineDash->DashLen;
+                        sal_Int32 nDotLen = pLineDash->DotLen;
+                        sal_Int32 nDistance = pLineDash->Distance;
 
-                            if ( nLen >= nDistance )
-                                eDash = ESCHER_LineLongDashGEL;
-                            else if ( pLineDash->Dots )
-                                eDash = ESCHER_LineDotSys;
-                            else
+                        // Caution! The names are misleading. "dot" is always the first dash and "dash"
+                        // the second one, regardless of the actual length. All prstDash
+                        // definitions start with the longer dash and have exact one longer dash.
+                        // Preset line style definitions for binary format are the same as for OOXML.
+                        if (bIsRelative && nDots == 1)
+                        {
+                            // I'm not sure that LO always uses 100%, because in case of absolute values, LO
+                            // sets length to 0 but treats it as 100%, if the attribute is missing in ODF.
+                            // So to be sure set 100% explicitly in case of relative too.
+                            if (nDashes > 0 && nDashLen == 0)
+                                nDashLen = 100;
+                            if (nDotLen == 0)
+                                nDotLen = 100;
+                            bIsConverted = true;
+                            if (nDotLen == 100 && nDashes == 0 && nDashLen == 0 && nDistance == 300)
+                                eDash = ESCHER_LineDotGEL;
+                            else if (nDotLen == 400 && nDashes == 0 && nDashLen == 0 && nDistance == 300)
                                 eDash = ESCHER_LineDashGEL;
+                            else if (nDotLen == 400 && nDashes == 1 && nDashLen == 100 && nDistance == 300)
+                                eDash = ESCHER_LineDashDotGEL;
+                            else if (nDotLen == 800 && nDashes == 0 && nDashLen == 0 && nDistance == 300)
+                                eDash = ESCHER_LineLongDashGEL;
+                            else if (nDotLen == 800 && nDashes == 1 && nDashLen == 100 && nDistance == 300)
+                                eDash = ESCHER_LineLongDashDotGEL;
+                            else if (nDotLen == 800 && nDashes == 2 && nDashLen == 100 && nDistance == 300)
+                                eDash = ESCHER_LineLongDashDotDotGEL;
+                            else if (nDotLen == 100 && nDashes == 0 && nDashLen == 0 && nDistance == 100)
+                                eDash = ESCHER_LineDotSys;
+                            else if (nDotLen == 300 && nDashes == 0 && nDashLen == 0 && nDistance == 100)
+                                eDash = ESCHER_LineDashSys;
+                            else if (nDotLen == 300 && nDashes == 1 && nDashLen == 100 && nDistance == 100)
+                                eDash = ESCHER_LineDashDotSys;
+                            else if (nDotLen == 300 && nDashes == 2 && nDashLen == 100 && nDistance == 100)
+                                eDash = ESCHER_LineDashDotDotSys;
+                            else
+                                bIsConverted = false;
                         }
-                        else                                                            // X Y
-                        {
-                            if ( pLineDash->Dots != pLineDash->Dashes )
-                            {
-                                if ( ( pLineDash->DashLen > nDistance ) || ( pLineDash->DotLen > nDistance ) )
-                                    eDash = ESCHER_LineLongDashDotDotGEL;
-                                else
-                                    eDash = ESCHER_LineDashDotDotSys;
-                            }
-                            else                                                        // X Y Y
-                            {
-                                if ( ( pLineDash->DashLen > nDistance ) || ( pLineDash->DotLen > nDistance ) )
-                                    eDash = ESCHER_LineLongDashDotGEL;
-                                else
-                                    eDash = ESCHER_LineDashDotGEL;
 
+                        if (!bIsConverted)
+                        {   // Map the style roughly to preset line styles.
+                            if (((!(pLineDash->Dots)) || (!(pLineDash->Dashes)))
+                                || (pLineDash->DotLen == pLineDash->DashLen))
+                            {
+                                sal_Int32 nLen = pLineDash->DotLen;
+                                if (pLineDash->Dashes)
+                                    nLen = pLineDash->DashLen;
+                                if (nLen >= nDistance)
+                                    eDash = ESCHER_LineLongDashGEL;
+                                else if (pLineDash->Dots)
+                                    eDash = ESCHER_LineDotSys;
+                                else
+                                 eDash = ESCHER_LineDashGEL;
+                            }
+                            else                                                            // X Y
+                            {
+                                if (pLineDash->Dots != pLineDash->Dashes)
+                                {
+                                    if ((pLineDash->DashLen > nDistance) || (pLineDash->DotLen > nDistance))
+                                        eDash = ESCHER_LineLongDashDotDotGEL;
+                                    else
+                                        eDash = ESCHER_LineDashDotDotSys;
+                                }
+                                else                                                        // X Y Y
+                                {
+                                    if ((pLineDash->DashLen > nDistance) || (pLineDash->DotLen > nDistance))
+                                        eDash = ESCHER_LineLongDashDotGEL;
+                                    else
+                                        eDash = ESCHER_LineDashDotGEL;
+                                }
                             }
                         }
                         AddOpt( ESCHER_Prop_lineDashing, eDash );
@@ -1104,11 +1159,6 @@ void EscherPropertyContainer::CreateLineProperties(
             AddOpt( ESCHER_Prop_lineBackColor, nLineColor ^ 0xffffff );
         }
     }
-
-    sal_uInt32 nLineSize = ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "LineWidth" ) )
-        ? *o3tl::doAccess<sal_uInt32>(aAny) : 0;
-    if ( nLineSize > 1 )
-        AddOpt( ESCHER_Prop_lineWidth, nLineSize * 360 );       // 100TH MM -> PT , 1PT = 12700 EMU
 
     ESCHER_LineJoin eLineJoin = ESCHER_LineJoinMiter;
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "LineJoint", true ) )

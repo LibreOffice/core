@@ -57,74 +57,143 @@ void lclSetDashData( LineDash& orLineDash, sal_Int16 nDots, sal_Int32 nDotLen,
 
 /** Converts the specified preset dash to API dash.
  */
-void lclConvertPresetDash(LineDash& orLineDash, sal_Int32 nPresetDash, sal_Int32 nLineWidth)
+void lclConvertPresetDash(LineDash& orLineDash, sal_Int32 nPresetDash)
 {
     switch( nPresetDash )
     {
         case XML_dot:           lclSetDashData( orLineDash, 1, 1, 0, 0, 3 );    break;
-        case XML_dash:          lclSetDashData( orLineDash, 0, 0, 1, 4, 3 );    break;
-        case XML_dashDot:       lclSetDashData( orLineDash, 1, 1, 1, 4, 3 );    break;
+        case XML_dash:          lclSetDashData( orLineDash, 1, 4, 0, 0, 3 );    break;
+        case XML_dashDot:       lclSetDashData( orLineDash, 1, 4, 1, 1, 3 );    break;
 
-        case XML_lgDash:        lclSetDashData( orLineDash, 0, 0, 1, 8, 3 );    break;
-        case XML_lgDashDot:     lclSetDashData( orLineDash, 1, 1, 1, 8, 3 );    break;
+        case XML_lgDash:        lclSetDashData( orLineDash, 1, 8, 0, 0, 3 );    break;
+        case XML_lgDashDot:     lclSetDashData( orLineDash, 1, 8, 1, 1, 3 );    break;
         case XML_lgDashDotDot:  lclSetDashData( orLineDash, 1, 8, 2, 1, 3 );    break;
 
         case XML_sysDot:        lclSetDashData( orLineDash, 1, 1, 0, 0, 1 );    break;
-        case XML_sysDash:       lclSetDashData( orLineDash, 0, 0, 1, 3, 1 );    break;
-        case XML_sysDashDot:    lclSetDashData( orLineDash, 1, 1, 1, 3, 1 );    break;
-        case XML_sysDashDotDot: lclSetDashData( orLineDash, 2, 1, 1, 3, 1 );    break;
+        case XML_sysDash:       lclSetDashData( orLineDash, 1, 3, 0, 0, 1 );    break;
+        case XML_sysDashDot:    lclSetDashData( orLineDash, 1, 3, 1, 1, 1 );    break;
+        case XML_sysDashDotDot: lclSetDashData( orLineDash, 1, 3, 2, 1, 1 );    break;
 
         default:
             OSL_FAIL( "lclConvertPresetDash - unsupported preset dash" );
-            lclSetDashData( orLineDash, 0, 0, 1, 4, 3 );
+            lclSetDashData( orLineDash, 1, 4, 0, 0, 3 );
     }
-    // convert relative dash/dot length to absolute length
-    orLineDash.DotLen *= nLineWidth;
-    orLineDash.DashLen *= nLineWidth;
-    orLineDash.Distance *= nLineWidth;
+    orLineDash.DotLen *= 100;
+    orLineDash.DashLen *= 100;
+    orLineDash.Distance *= 100;
 }
 
 /** Converts the passed custom dash to API dash. rCustomDash should not be empty.
+ * We assume, that there exist only two lenght values and the distance is the same
+ * for all dashes. Other kind of dash stop sequences cannot be represented, neither
+ * in model nor in ODF.
  */
-void lclConvertCustomDash(LineDash& orLineDash, const LineProperties::DashStopVector& rCustomDash, sal_Int32 nLineWidth)
+void lclConvertCustomDash(LineDash& orLineDash, const LineProperties::DashStopVector& rCustomDash)
 {
     OSL_ASSERT(!rCustomDash.empty());
-    orLineDash.Dashes = 0;
-    // Follow the order we export custDash: dashes first.
-    orLineDash.DashLen = rCustomDash[0].first;
-    // Also assume dash and dot have the same sp values.
+    // Assume all dash stops have the same sp values.
     orLineDash.Distance = rCustomDash[0].second;
-    orLineDash.DotLen = 0;
-
+    // First kind of dashes go to "Dots"
+    orLineDash.DotLen = rCustomDash[0].first;
+    orLineDash.Dots = 0;
     for(const auto& rIt : rCustomDash)
     {
-        sal_Int32 nLen = rIt.first;
-        if (nLen != orLineDash.DashLen)
-        {
-            orLineDash.DotLen = nLen;
+        if (rIt.first != orLineDash.DotLen)
             break;
-        }
-        ++orLineDash.Dashes;
+        ++orLineDash.Dots;
     }
-    // TODO: verify the assumption and approximate complex line patterns.
+    // All others go to "Dashes", we cannot handle more than two kinds.
+    orLineDash.Dashes = rCustomDash.size() - orLineDash.Dots;
+    if (orLineDash.Dashes > 0)
+        orLineDash.DashLen = rCustomDash[orLineDash.Dots].first;
+    else
+        orLineDash.DashLen = 0;
 
-    // Assume we only have two types of dash stops, the rest are all dots.
-    orLineDash.Dots = rCustomDash.size() - orLineDash.Dashes;
-    orLineDash.DashLen = orLineDash.DashLen / 100000.0 * nLineWidth;
-    orLineDash.DotLen = orLineDash.DotLen / 100000.0 * nLineWidth;
-    orLineDash.Distance = orLineDash.Distance / 100000.0 * nLineWidth;
+    // convert to API, e.g. 123% is 123000 in MS Office and 123 in our API
+    orLineDash.DotLen = orLineDash.DotLen / 1000;
+    orLineDash.DashLen = orLineDash.DashLen / 1000;
+    orLineDash.Distance = orLineDash.Distance / 1000;
+}
+
+/** LibreOffice uses value 0, if a length attribute is missing in the
+ * style definition, but treats it as 100%.
+ * LibreOffice uses absolute values in some style definitions. Try to
+ * reconstruct them from the imported relative values.
+ */
+void lclRecoverStandardDashStyles(LineDash& orLineDash, sal_Int32 nLineWidth)
+{
+    sal_uInt16 nDots = orLineDash.Dots;
+    sal_uInt16 nDashes = orLineDash.Dashes;
+    sal_uInt32 nDotLen = orLineDash.DotLen;
+    sal_uInt32 nDashLen = orLineDash.DashLen;
+    sal_uInt32 nDistance = orLineDash.Distance;
+    // Use same ersatz for hairline as in export.
+    double fWidthHelp = nLineWidth == 0 ? 26.95/100.0 : nLineWidth / 100.0;
+    // start with (var) cases, because they have no rounding problems
+    // "Fine Dashed", "Line Style 9" and "Dashed (var)" need no recover
+    if (nDots == 3 && nDotLen == 197 &&nDashes == 3 && nDashLen == 100 && nDistance == 100)
+    {   // "3 Dashes 3 Dots (var)"
+        orLineDash.DashLen = 0;
+    }
+    else if (nDots == 1 && nDotLen == 100 && nDashes == 0 && nDistance == 50)
+    {   // "Ultrafine Dotted (var)"
+        orLineDash.DotLen = 0;
+    }
+    else if (nDots == 2 && nDashes == 0 && nDotLen == nDistance
+        && std::abs(nDistance * fWidthHelp - 51.0) < fWidthHelp)
+    {   // "Ultrafine Dashed"
+        orLineDash.Dots = 1;
+        orLineDash.DotLen = 51;
+        orLineDash.Dashes = 1;
+        orLineDash.DashLen = 51;
+        orLineDash.Distance = 51;
+        orLineDash.Style = orLineDash.Style == DashStyle_ROUNDRELATIVE ? DashStyle_ROUND : DashStyle_RECT;
+    }
+    else if (nDots == 2 && nDashes == 3 && std::abs(nDotLen * fWidthHelp - 51.0) < fWidthHelp
+        && std::abs(nDashLen * fWidthHelp - 254.0) < fWidthHelp
+        && std::abs(nDistance * fWidthHelp - 127.0) < fWidthHelp)
+    {   // "Ultrafine 2 Dots 3 Dashes"
+        orLineDash.DotLen = 51;
+        orLineDash.DashLen = 254;
+        orLineDash.Distance = 127;
+        orLineDash.Style = orLineDash.Style == DashStyle_ROUNDRELATIVE ? DashStyle_ROUND : DashStyle_RECT;
+    }
+    else if (nDots == 1 && nDotLen == 100 && nDashes == 0
+        && std::abs(nDistance * fWidthHelp - 457.0) < fWidthHelp)
+    {    // "Fine Dotted"
+        orLineDash.DotLen = 0;
+        orLineDash.Distance = 457;
+        orLineDash.Style = orLineDash.Style == DashStyle_ROUNDRELATIVE ? DashStyle_ROUND : DashStyle_RECT;
+    }
+    else if (nDots == 1 && nDashes == 10 && nDashLen == 100
+        && std::abs(nDistance * fWidthHelp - 152.0) < fWidthHelp)
+    {   // "Line with Fine Dots"
+        orLineDash.DotLen = 2007;
+        orLineDash.DashLen = 0;
+        orLineDash.Distance = 152;
+        orLineDash.Style = orLineDash.Style == DashStyle_ROUNDRELATIVE ? DashStyle_ROUND : DashStyle_RECT;
+    }
+    else if (nDots == 2 && nDotLen == 100 && nDashes == 1 && nDashLen == nDistance
+        && std::abs(nDistance * fWidthHelp - 203.0) < fWidthHelp)
+    {   // "2 Dots 1 Dash"
+        orLineDash.DotLen = 0;
+        orLineDash.DashLen = 203;
+        orLineDash.Distance = 203;
+        orLineDash.Style = orLineDash.Style == DashStyle_ROUNDRELATIVE ? DashStyle_ROUND : DashStyle_RECT;
+    }
 }
 
 DashStyle lclGetDashStyle( sal_Int32 nToken )
 {
     OSL_ASSERT((nToken & sal_Int32(0xFFFF0000))==0);
+    // MS Office dashing is always relative to line width
     switch( nToken )
     {
         case XML_rnd:   return DashStyle_ROUNDRELATIVE;
-        case XML_sq:    return DashStyle_RECTRELATIVE;
-        case XML_flat:  return DashStyle_RECT;
+        case XML_sq:    return DashStyle_RECTRELATIVE; // default in OOXML
+        case XML_flat:  return DashStyle_RECTRELATIVE; // default in MS Office
     }
-    return DashStyle_ROUNDRELATIVE;
+    return DashStyle_RECTRELATIVE;
 }
 
 LineCap lclGetLineCap( sal_Int32 nToken )
@@ -133,8 +202,8 @@ LineCap lclGetLineCap( sal_Int32 nToken )
     switch( nToken )
     {
         case XML_rnd:   return LineCap_ROUND;
-        case XML_sq:    return LineCap_SQUARE;
-        case XML_flat:  return LineCap_BUTT;
+        case XML_sq:    return LineCap_SQUARE; // default in OOXML
+        case XML_flat:  return LineCap_BUTT; // default in MS Office
     }
     return LineCap_BUTT;
 }
@@ -373,25 +442,23 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         // line style (our core only supports none and solid)
         drawing::LineStyle eLineStyle = (maLineFill.moFillType.get() == XML_noFill) ? drawing::LineStyle_NONE : drawing::LineStyle_SOLID;
 
-        // convert line width from EMUs to 1/100mm
-        sal_Int32 nLineWidth = getLineWidth();
+        // line width in 1/100mm
+        sal_Int32 nLineWidth = getLineWidth(); // includes convertion from EMUs to 1/100mm
+        rPropMap.setProperty( ShapeProperty::LineWidth, nLineWidth );
 
-        // create line dash from preset dash token (not for invisible line)
+        // create line dash from preset dash token or dash stop vector (not for invisible line)
         if( (eLineStyle != drawing::LineStyle_NONE) && (moPresetDash.differsFrom( XML_solid ) || !maCustomDash.empty()) )
         {
             LineDash aLineDash;
-            aLineDash.Style = lclGetDashStyle( moLineCap.get( XML_rnd ) );
+            aLineDash.Style = lclGetDashStyle( moLineCap.get( XML_flat ) );
 
-            // convert preset dash or custom dash
-            if(moPresetDash.differsFrom(XML_solid) || maCustomDash.empty())
+            if(moPresetDash.differsFrom(XML_solid))
+                lclConvertPresetDash(aLineDash, moPresetDash.get(XML_dash));
+            else // !maCustomDash.empty()
             {
-                sal_Int32 nBaseLineWidth = ::std::max<sal_Int32>(nLineWidth, 35);
-                lclConvertPresetDash(aLineDash, moPresetDash.get(XML_dash), nBaseLineWidth);
+                lclConvertCustomDash(aLineDash, maCustomDash);
+                lclRecoverStandardDashStyles(aLineDash, nLineWidth);
             }
-            else
-                lclConvertCustomDash(aLineDash, maCustomDash, nLineWidth);
-
-
             if( rPropMap.setProperty( ShapeProperty::LineDash, aLineDash ) )
                 eLineStyle = drawing::LineStyle_DASH;
         }
@@ -405,9 +472,6 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         // line joint type
         if( moLineJoint.has() )
             rPropMap.setProperty( ShapeProperty::LineJoint, lclGetLineJoint( moLineJoint.get() ) );
-
-        // line width in 1/100mm
-        rPropMap.setProperty( ShapeProperty::LineWidth, nLineWidth );
 
         // line color and transparence
         Color aLineColor = maLineFill.getBestSolidColor();

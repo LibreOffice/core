@@ -934,7 +934,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
         sal_Int32 nLineWidth = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_lineWidth, 9525 ));
 
         // support LineCap
-        const MSO_LineCap eLineCap(static_cast<MSO_LineCap>(GetPropertyValue(DFF_Prop_lineEndCapStyle, mso_lineEndCapSquare)));
+        const MSO_LineCap eLineCap(static_cast<MSO_LineCap>(GetPropertyValue(DFF_Prop_lineEndCapStyle, mso_lineEndCapFlat)));
 
         switch(eLineCap)
         {
@@ -961,63 +961,97 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
             rSet.Put(XLineStyleItem( drawing::LineStyle_SOLID ) );
         else
         {
-            sal_uInt16  nDots = 1;
-            sal_uInt32  nDotLen = nLineWidth / 360;
-            sal_uInt16  nDashes = 0;
-            const bool bHugeWidth = static_cast<sal_uInt32>(nLineWidth) >= SAL_MAX_UINT32/8U; //then rougher approx is fine
-            sal_uInt32  nDashLen = bHugeWidth ? (nDotLen * 8U) : ((8U * nLineWidth) / 360);
-            sal_uInt32  nDistance = bHugeWidth ? (nDotLen * 3U) : ((3U * nLineWidth) / 360);
+            // Despite of naming "dot" and "dash", that are all dashes and a "dot" can be longer
+            // than a "dash". The naming indicates the order, "dot" is always the first dash and
+            // "dash" is always the second dash. MS Office always starts with the longer dash, so
+            // set it here accordingly.
+            // The preset from binary is essentially the same as from OOXML. So here the same
+            // setting is used as in oox import. The comment corrensponds to
+            // "dots, dotLen, dashes, dashLen, distance" there.
+            // MS Office uses always relative length, so no need to consider nLineWidth
+            // here. Values are of kind 300 for 300% in css::drawing::DashStyle, for example.
 
+            sal_uInt16  nDots = 1; // in all cases, "solid" is treated above
+            // initalize, will be changened if necessary
+            sal_uInt32  nDotLen = 300;
+            sal_uInt16  nDashes = 0;
+            sal_uInt32  nDashLen = 0;
+            sal_uInt32  nDistance = 300;
             switch ( eLineDashing )
             {
                 default:
-                case mso_lineDotSys :
+                case mso_lineDotSys : // 1 1 0 0 1
                 {
-                    nDots = 1;
-                    nDashes = 0;
-                    nDistance = nDotLen;
+                    nDotLen =100;
+                    nDistance = 100;
                 }
                 break;
 
-                case mso_lineDashGEL :
+                case mso_lineDashGEL : // 1 4 0 0 3
                 {
-                    nDots = 0;
-                    nDashes = 1;
-                    nDashLen = bHugeWidth ? (nDotLen * 4U) : ((4U * nLineWidth) / 360);
+                    nDotLen = 400;
                 }
                 break;
 
-                case mso_lineDashDotGEL :
+                case mso_lineDashDotGEL : // 1 4 1 1 3
                 {
-                    nDots = 1;
+                    nDotLen = 400;
                     nDashes = 1;
-                    nDashLen = bHugeWidth ? (nDotLen * 4U) : ((4U * nLineWidth) / 360);
+                    nDashLen = 100;
                 }
                 break;
 
-                case mso_lineLongDashGEL :
+                case mso_lineLongDashGEL : // 1 8 0 0 3
                 {
-                    nDots = 0;
-                    nDashes = 1;
+                    nDotLen = 800;
                 }
                 break;
 
-                case mso_lineLongDashDotGEL :
+                case mso_lineLongDashDotGEL : // 1 8 1 1 3
                 {
-                    nDots = 1;
+                    nDotLen = 800;
                     nDashes = 1;
+                    nDashLen = 100;
                 }
                 break;
 
-                case mso_lineLongDashDotDotGEL:
+                case mso_lineLongDashDotDotGEL: // 1 8 2 1 3
                 {
-                    nDots = 2;
+                    nDotLen = 800;
+                    nDashes = 2;
+                    nDashLen = 100;
+                }
+                break;
+
+                case mso_lineDotGEL: // 1 1 0 0 3
+                {
+                    nDotLen = 100;
+                }
+                break;
+
+                case mso_lineDashSys: // 1 3 0 0 1
+                {
+                    nDistance = 100;
+                }
+                break;
+
+                case mso_lineDashDotSys: // 1 3 1 1 1
+                {
                     nDashes = 1;
+                    nDashLen = 100;
+                    nDistance = 100;
+                }
+                break;
+
+                case mso_lineDashDotDotSys: // 1 3 2 1 1
+                {
+                    nDashes = 2;
+                    nDashLen = 100;
+                    nDistance = 100;
                 }
                 break;
             }
-
-            rSet.Put( XLineDashItem( OUString(), XDash( css::drawing::DashStyle_RECT, nDots, nDotLen, nDashes, nDashLen, nDistance ) ) );
+            rSet.Put( XLineDashItem( OUString(), XDash( css::drawing::DashStyle_RECTRELATIVE, nDots, nDotLen, nDashes, nDashLen, nDistance ) ) );
             rSet.Put( XLineStyleItem( drawing::LineStyle_DASH ) );
         }
         rSet.Put( XLineColorItem( OUString(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_lineColor, 0 ) ) ) );
