@@ -36,4 +36,5 @@ X-KDE-Protocols=file,http,ftp,webdav,webdavs
 Actions=NewDocument;
 [Desktop Action NewDocument]
 UnityQuickList=New Spreadsheet
+Icon=document-new
 Exec=${UNIXBASISROOTNAME} --calc
