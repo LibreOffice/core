@@ -50,7 +50,6 @@ public:
     static SvxIMapInfo* GetIMapInfo(const SdrObject* pObject);
     static IMapObject* GetHitIMapObject(const SdrObject* pObj, const Point& rWinPoint,
                                         const vcl::Window* rCmpWnd = nullptr);
-    static ImageMap* GetImageMapForObject(SdrObject* pObj);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

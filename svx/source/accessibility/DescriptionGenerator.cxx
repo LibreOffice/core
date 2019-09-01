@@ -226,39 +226,6 @@ void DescriptionGenerator::AddInteger (const OUString& sPropertyName,
     }
 }
 
-
-void DescriptionGenerator::AddString (const OUString& sPropertyName,
-    const OUString& sLocalizedName, sal_uInt16 nWhichId)
-{
-    msDescription.append(sLocalizedName);
-    msDescription.append('=');
-
-    try
-    {
-        if (mxSet.is())
-        {
-            uno::Any aValue = mxSet->getPropertyValue (sPropertyName);
-            OUString sValue;
-            aValue >>= sValue;
-
-            if (nWhichId != 0xffff)
-            {
-                SolarMutexGuard aGuard;
-                OUString sLocalizedValue =
-                    SvxUnogetInternalNameForItem(nWhichId, sValue);
-                msDescription.append (sLocalizedValue);
-            }
-            else
-                msDescription.append (sValue);
-        }
-    }
-    catch (const css::beans::UnknownPropertyException &)
-    {
-        msDescription.append ("<unknown>");
-    }
-}
-
-
 } // end of namespace accessibility
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

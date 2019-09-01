@@ -204,13 +204,6 @@ namespace vcl
             implUpdateRoadmap( );
     }
 
-    void RoadmapWizard::describeState( WizardState _nState, const OUString& _rStateDisplayName, RoadmapPageFactory _pPageFactory )
-    {
-        OSL_ENSURE( m_pImpl->aStateDescriptors.find( _nState ) == m_pImpl->aStateDescriptors.end(),
-            "RoadmapWizard::describeState: there already is a descriptor for this state!" );
-        m_pImpl->aStateDescriptors[ _nState ] = StateDescriptions::mapped_type( _rStateDisplayName, _pPageFactory );
-    }
-
     void RoadmapWizard::activatePath( PathId _nPathId, bool _bDecideForIt )
     {
 

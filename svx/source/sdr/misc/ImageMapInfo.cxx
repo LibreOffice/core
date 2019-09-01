@@ -119,13 +119,3 @@ IMapObject* SvxIMapInfo::GetHitIMapObject(const SdrObject* pObj, const Point& rW
 
     return pIMapObj;
 }
-
-ImageMap* SvxIMapInfo::GetImageMapForObject(SdrObject* pObj)
-{
-    SvxIMapInfo* pIMapInfo = GetIMapInfo(pObj);
-    if (pIMapInfo)
-    {
-        return const_cast<ImageMap*>(&(pIMapInfo->GetImageMap()));
-    }
-    return nullptr;
-}

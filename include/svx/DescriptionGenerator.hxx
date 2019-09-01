@@ -148,13 +148,6 @@ private:
     */
     SVX_DLLPRIVATE void AddInteger (const OUString& sPropertyName,
         const OUString& sLocalizedName);
-
-    /** Add a property value formatted as string to the description string.
-        @param sPropertyName
-            Name of the property.
-    */
-    SVX_DLLPRIVATE void AddString (const OUString& sPropertyName,
-        const OUString& sLocalizedName, sal_uInt16 nWhichId);
 };
 
 

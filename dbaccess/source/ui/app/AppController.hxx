@@ -346,11 +346,6 @@ namespace dbaui
         /// determines whether the given table name denotes a view which can be altered
         bool    impl_isAlterableView_nothrow( const OUString& _rTableOrViewName ) const;
 
-        /** does the macro/script migration, where macros/scripts in forms/reports are moved
-            to the database document itself.
-        */
-        void    impl_migrateScripts_nothrow();
-
         /** verifies the object type denotes a valid DatabaseObject, and the object name denotes an existing
             object of this type. Throws if not.
         */
