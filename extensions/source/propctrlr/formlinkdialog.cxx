@@ -25,10 +25,8 @@
 #include "formstrings.hxx"
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/waitobj.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>

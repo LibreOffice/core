@@ -34,8 +34,6 @@
 #include <comphelper/interaction.hxx>
 #include <connectivity/dbtools.hxx>
 #include <vcl/stdtext.hxx>
-#include <vcl/waitobj.hxx>
-#include <vcl/layout.hxx>
 #include <sfx2/docfilt.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -190,7 +188,7 @@ namespace dbp
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                FileDialogFlags::NONE, GetFrameWeld());
+                FileDialogFlags::NONE, getDialog()->getDialog());
         aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
 
         std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");
@@ -242,7 +240,7 @@ namespace dbp
     {
         m_xTable->clear();
 
-        WaitObject aWaitCursor(this);
+        weld::WaitObject aWaitCursor(getDialog()->getDialog());
 
         // will be the table tables of the selected data source
         Sequence< OUString > aTableNames;
@@ -273,7 +271,7 @@ namespace dbp
                     if (m_xDSContext->getByName(sCurrentDatasource) >>= xDatasource)
                     {   // connect
                         // get the default SDB interaction handler
-                        Reference< XInteractionHandler > xHandler = getDialog()->getInteractionHandler(GetFrameWeld());
+                        Reference< XInteractionHandler > xHandler = getDialog()->getInteractionHandler(getDialog()->getDialog());
                         if (!xHandler.is() )
                             return;
                         xConn = xDatasource->connectWithCompletion(xHandler);
@@ -333,7 +331,7 @@ namespace dbp
             try
             {
                 // get the default SDB interaction handler
-                Reference< XInteractionHandler > xHandler = getDialog()->getInteractionHandler(GetFrameWeld());
+                Reference< XInteractionHandler > xHandler = getDialog()->getInteractionHandler(getDialog()->getDialog());
                 if ( xHandler.is() )
                     xHandler->handle(xRequest);
             }
