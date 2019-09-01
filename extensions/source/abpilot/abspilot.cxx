@@ -27,7 +27,6 @@
 #include "tableselectionpage.hxx"
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/waitobj.hxx>
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>
 #include "abpfinalpage.hxx"

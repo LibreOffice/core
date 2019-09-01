@@ -41,7 +41,6 @@
 #include <connectivity/conncleanup.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <tools/urlobj.hxx>
-#include <vcl/layout.hxx>
 #include <osl/diagnose.h>
 
 #define WINDOW_SIZE_X   240

@@ -24,14 +24,11 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <comphelper/propertysequence.hxx>
-#include <vcl/stdtext.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <strings.hrc>
 #include <componentmodule.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/waitobj.hxx>
 #include <osl/diagnose.h>
-
 
 namespace abp
 {
