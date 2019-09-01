@@ -171,7 +171,6 @@ class FontPrevWin_Impl
 
     bool mbSelection : 1;
     bool mbGetSelection : 1;
-    bool mbUseResText : 1;
     bool mbTwoLines : 1;
     bool mbUseFontNameAsText : 1;
     bool mbTextInited : 1;
@@ -190,7 +189,6 @@ public:
         mnFontWidthScale(100),
         mbSelection(false),
         mbGetSelection(false),
-        mbUseResText(false),
         mbTwoLines(false),
         mbUseFontNameAsText(false),
         mbTextInited(false)
@@ -595,9 +593,7 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
     }
     else
     {
-        if (pImpl->mbUseResText)
-            pImpl->maText = GetText();
-        else if (!pImpl->mbSelection && !pImpl->mbTextInited)
+        if (!pImpl->mbSelection && !pImpl->mbTextInited)
         {
             using namespace css::i18n::ScriptType;
 
@@ -958,9 +954,7 @@ void FontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     }
     else
     {
-        if (pImpl->mbUseResText)
-            pImpl->maText = OUString();
-        else if (!pImpl->mbSelection && !pImpl->mbTextInited)
+        if (!pImpl->mbSelection && !pImpl->mbTextInited)
         {
             using namespace css::i18n::ScriptType;
 
