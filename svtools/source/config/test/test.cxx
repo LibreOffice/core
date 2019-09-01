@@ -199,7 +199,7 @@ void TestApplication::impl_testDynamicMenuOptions()
 
 
 // create new uno servicemanager by using normal applicat.rdb and user.rdb of an office installation!
-// Don't use this application at same time like the office!
+// Don't use this application at the same time like the office!
 
 Reference< XMultiServiceFactory > TestApplication::getUNOServiceManager()
 {

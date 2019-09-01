@@ -129,7 +129,7 @@ protected:
     SdrObject* ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea);
 
     // set both flags: bToTopPossible and bToBtmPossible.
-    // bToTopPossibleDirty and bToBtmPossibleDirty are reset at same time
+    // bToTopPossibleDirty and bToBtmPossibleDirty are reset at the same time
     void ImpCheckToTopBtmPossible();
 
     // for CombineMarkedObjects and DismantleMarkedObjects
