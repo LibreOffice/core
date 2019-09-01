@@ -208,35 +208,35 @@ cui/source/inc/backgrnd.hxx:132
     SvxBackgroundTabPage m_xBackgroundColorSetWin std::unique_ptr<weld::CustomWeld>
 cui/source/inc/backgrnd.hxx:133
     SvxBackgroundTabPage m_xPreviewWin1 std::unique_ptr<weld::CustomWeld>
-cui/source/inc/border.hxx:133
+cui/source/inc/border.hxx:131
     SvxBorderTabPage m_xWndPresetsWin std::unique_ptr<weld::CustomWeld>
-cui/source/inc/border.hxx:154
+cui/source/inc/border.hxx:152
     SvxBorderTabPage m_xWndShadowsWin std::unique_ptr<weld::CustomWeld>
 cui/source/inc/chardlg.hxx:39
     SvxCharBasePage m_xPreviewWin std::unique_ptr<weld::CustomWeld>
 cui/source/inc/connect.hxx:52
     SvxConnectionPage m_xCtlPreview std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuihyperdlg.hxx:57
+cui/source/inc/cuihyperdlg.hxx:46
     SvxHlinkCtrl aRdOnlyForwarder class SfxStatusForwarder
-cui/source/inc/cuihyperdlg.hxx:88
+cui/source/inc/cuihyperdlg.hxx:77
     SvxHpLinkDlg maCtrl class SvxHlinkCtrl
-cui/source/inc/cuitabarea.hxx:327
+cui/source/inc/cuitabarea.hxx:325
     SvxShadowTabPage m_xCtlXRectPreview std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuitabarea.hxx:393
+cui/source/inc/cuitabarea.hxx:391
     SvxGradientTabPage m_xGradientLBWin std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuitabarea.hxx:613
+cui/source/inc/cuitabarea.hxx:611
     SvxPatternTabPage m_xCtlPixelWin std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuitabarea.hxx:615
+cui/source/inc/cuitabarea.hxx:613
     SvxPatternTabPage m_xPatternLBWin std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuitabarea.hxx:715
+cui/source/inc/cuitabarea.hxx:713
     SvxColorTabPage m_xValSetColorListWin std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuitabarea.hxx:716
+cui/source/inc/cuitabarea.hxx:714
     SvxColorTabPage m_xValSetRecentListWin std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuitabline.hxx:152
+cui/source/inc/cuitabline.hxx:156
     SvxLineTabPage m_xCtlPreview std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuitabline.hxx:273
+cui/source/inc/cuitabline.hxx:277
     SvxLineDefTabPage m_xCtlPreview std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuitabline.hxx:349
+cui/source/inc/cuitabline.hxx:353
     SvxLineEndDefTabPage m_xCtlPreview std::unique_ptr<weld::CustomWeld>
 cui/source/inc/grfpage.hxx:87
     SvxGrfCropPage m_xExampleWN std::unique_ptr<weld::CustomWeld>
@@ -244,22 +244,24 @@ cui/source/inc/measure.hxx:56
     SvxMeasurePage m_xCtlPosition std::unique_ptr<weld::CustomWeld>
 cui/source/inc/measure.hxx:57
     SvxMeasurePage m_xCtlPreview std::unique_ptr<weld::CustomWeld>
-cui/source/inc/numfmt.hxx:122
+cui/source/inc/numfmt.hxx:120
     SvxNumberFormatTabPage m_xWndPreview std::unique_ptr<weld::CustomWeld>
-cui/source/inc/numpages.hxx:74
+cui/source/inc/numpages.hxx:73
     SvxSingleNumPickTabPage m_xExamplesVSWin std::unique_ptr<weld::CustomWeld>
-cui/source/inc/numpages.hxx:108
+cui/source/inc/numpages.hxx:107
     SvxBulletPickTabPage m_xExamplesVSWin std::unique_ptr<weld::CustomWeld>
-cui/source/inc/numpages.hxx:149
+cui/source/inc/numpages.hxx:148
     SvxNumPickTabPage m_xExamplesVSWin std::unique_ptr<weld::CustomWeld>
-cui/source/inc/numpages.hxx:191
+cui/source/inc/numpages.hxx:190
     SvxBitmapPickTabPage m_xExamplesVSWin std::unique_ptr<weld::CustomWeld>
-cui/source/inc/numpages.hxx:273
+cui/source/inc/numpages.hxx:272
     SvxNumOptionsTabPage m_xPreviewWIN std::unique_ptr<weld::CustomWeld>
-cui/source/inc/numpages.hxx:369
+cui/source/inc/numpages.hxx:368
     SvxNumPositionTabPage m_xPreviewWIN std::unique_ptr<weld::CustomWeld>
 cui/source/inc/screenshotannotationdlg.hxx:30
     ScreenshotAnnotationDlg m_pImpl std::unique_ptr<ScreenshotAnnotationDlg_Impl>
+cui/source/options/optchart.hxx:50
+    SvxDefaultColorOptPage m_xValSetColorBoxWin std::unique_ptr<weld::CustomWeld>
 dbaccess/source/core/dataaccess/databasedocument.hxx:176
     dbaccess::ODatabaseDocument m_pEventExecutor ::rtl::Reference<DocumentEventExecutor>
 dbaccess/source/core/dataaccess/documentdefinition.cxx:287
@@ -276,7 +278,7 @@ dbaccess/source/ui/browser/dbloader.cxx:69
     DBContentLoader m_xListener Reference<class com::sun::star::frame::XLoadEventListener>
 dbaccess/source/ui/inc/RelationController.hxx:33
     dbaui::ORelationController m_pWaitObject std::unique_ptr<WaitObject>
-desktop/qa/desktop_lib/test_desktop_lib.cxx:216
+desktop/qa/desktop_lib/test_desktop_lib.cxx:218
     DesktopLOKTest m_bModified _Bool
 desktop/source/app/app.cxx:1228
     desktop::ExecuteGlobals pLanguageOptions std::unique_ptr<SvtLanguageOptions>
@@ -334,7 +336,7 @@ emfio/inc/mtftools.hxx:512
     emfio::MtfTools mrclBounds tools::Rectangle
 extensions/source/propctrlr/genericpropertyhandler.hxx:63
     pcr::GenericPropertyHandler m_xComponentIntrospectionAccess css::uno::Reference<css::beans::XIntrospectionAccess>
-extensions/source/scanner/scanner.hxx:45
+extensions/source/scanner/scanner.hxx:48
     ScannerManager mpData void *
 framework/inc/services/layoutmanager.hxx:259
     framework::LayoutManager m_bGlobalSettings _Bool
@@ -346,16 +348,6 @@ framework/inc/uielement/langselectionmenucontroller.hxx:83
     framework::LanguageSelectionMenuController m_xMenuDispatch_Font css::uno::Reference<css::frame::XDispatch>
 framework/inc/uielement/langselectionmenucontroller.hxx:85
     framework::LanguageSelectionMenuController m_xMenuDispatch_CharDlgForParagraph css::uno::Reference<css::frame::XDispatch>
-framework/inc/xml/imagesdocumenthandler.hxx:99
-    framework::OReadImagesDocumentHandler m_bExternalImagesStartFound _Bool
-framework/inc/xml/imagesdocumenthandler.hxx:100
-    framework::OReadImagesDocumentHandler m_bExternalImageStartFound _Bool
-framework/inc/xml/imagesdocumenthandler.hxx:101
-    framework::OReadImagesDocumentHandler m_nHashMaskModeBitmap sal_Int32
-framework/inc/xml/imagesdocumenthandler.hxx:102
-    framework::OReadImagesDocumentHandler m_nHashMaskModeColor sal_Int32
-framework/inc/xml/imagesdocumenthandler.hxx:133
-    framework::OWriteImagesDocumentHandler m_aXMLXlinkNS class rtl::OUString
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:280
     framework::ToolbarLayoutManager m_pGlobalSettings std::unique_ptr<GlobalSettings>
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:284
@@ -468,13 +460,15 @@ include/test/beans/xpropertyset.hxx:56
     apitest::XPropertySet::PropsToTest constrained std::vector<OUString>
 include/unotools/fontcfg.hxx:158
     utl::FontSubstConfiguration maSubstHash utl::FontSubstConfiguration::UniqueSubstHash
-include/vcl/NotebookBarAddonsMerger.hxx:52
-    AddonNotebookBarItem sTarget class rtl::OUString
+include/vcl/button.hxx:284
+    RadioButton mbSaveValue _Bool
 include/vcl/NotebookBarAddonsMerger.hxx:53
-    AddonNotebookBarItem sContext class rtl::OUString
+    AddonNotebookBarItem sTarget class rtl::OUString
 include/vcl/NotebookBarAddonsMerger.hxx:54
-    AddonNotebookBarItem sControlType class rtl::OUString
+    AddonNotebookBarItem sContext class rtl::OUString
 include/vcl/NotebookBarAddonsMerger.hxx:55
+    AddonNotebookBarItem sControlType class rtl::OUString
+include/vcl/NotebookBarAddonsMerger.hxx:56
     AddonNotebookBarItem nWidth sal_uInt16
 include/vcl/opengl/OpenGLContext.hxx:32
     GLWindow bMultiSampleSupported _Bool
@@ -538,7 +532,7 @@ sal/rtl/alloc_arena.hxx:35
     rtl_arena_stat_type m_mem_total sal_Size
 sal/rtl/alloc_arena.hxx:36
     rtl_arena_stat_type m_mem_alloc sal_Size
-sal/rtl/math.cxx:1015
+sal/rtl/math.cxx:1025
      md union sal_math_Double
 sal/textenc/tcvtutf7.cxx:96
     ImplUTF7ToUCContextData mbShifted _Bool
@@ -580,7 +574,7 @@ sc/source/core/data/column.cxx:1397
     (anonymous namespace)::CopyByCloneHandler meListenType sc::StartListeningType
 sc/source/core/data/column.cxx:1398
     (anonymous namespace)::CopyByCloneHandler mnFormulaCellCloneFlags const enum ScCloneFlags
-sc/source/core/data/table2.cxx:3598
+sc/source/core/data/table2.cxx:3647
     (anonymous namespace)::OutlineArrayFinder mpArray class ScOutlineArray *
 sc/source/filter/excel/xltoolbar.hxx:25
     TBCCmd A _Bool
@@ -608,11 +602,11 @@ sc/source/filter/inc/namebuff.hxx:36
     StringHashEntry aString const class rtl::OUString
 sc/source/filter/inc/namebuff.hxx:37
     StringHashEntry nHash const sal_uInt32
-sc/source/filter/inc/orcusinterface.hxx:376
+sc/source/filter/inc/orcusinterface.hxx:378
     ScOrcusStyles::fill maBgColor class Color
-sc/source/filter/inc/orcusinterface.hxx:446
+sc/source/filter/inc/orcusinterface.hxx:448
     ScOrcusStyles::xf mnStyleXf size_t
-sc/source/filter/inc/orcusinterface.hxx:466
+sc/source/filter/inc/orcusinterface.hxx:468
     ScOrcusStyles::cell_style mnBuiltInId size_t
 sc/source/filter/inc/root.hxx:91
     LOTUS_ROOT eActType enum Lotus123Typ
@@ -652,7 +646,7 @@ sc/source/ui/inc/PivotLayoutTreeListData.hxx:38
     ScPivotLayoutTreeListData maDataItemValues std::vector<std::unique_ptr<ScItemValue> >
 sc/source/ui/inc/preview.hxx:47
     ScPreview nTabPage long
-sc/source/ui/inc/tabvwsh.hxx:120
+sc/source/ui/inc/tabvwsh.hxx:121
     ScTabViewShell xDisProvInterceptor css::uno::Reference<css::frame::XDispatchProviderInterceptor>
 sc/source/ui/inc/transobj.hxx:47
     ScTransferObj m_aDrawPersistRef SfxObjectShellRef
@@ -664,6 +658,8 @@ sc/source/ui/vba/vbachartobject.hxx:44
     ScVbaChartObject oShapeHelper std::unique_ptr<ov::ShapeHelper>
 sd/inc/sdmod.hxx:132
     SdModule mpErrorHdl std::unique_ptr<SfxErrorHandler>
+sd/source/ui/dlg/RemoteDialogClientBox.hxx:68
+    sd::ClientBox m_vEntries std::vector<TClientBoxEntry>
 sd/source/ui/framework/module/ToolBarModule.hxx:75
     sd::framework::ToolBarModule mpToolBarManagerLock std::unique_ptr<ToolBarManager::UpdateLock, o3tl::default_delete<ToolBarManager::UpdateLock> >
 sd/source/ui/inc/AccessibleDocumentViewBase.hxx:245
@@ -676,6 +672,10 @@ sd/source/ui/inc/navigatr.hxx:124
     SdNavigatorWin mpNavigatorCtrlItem std::unique_ptr<SdNavigatorControllerItem>
 sd/source/ui/inc/navigatr.hxx:125
     SdNavigatorWin mpPageNameCtrlItem std::unique_ptr<SdPageNameControllerItem>
+sd/source/ui/inc/pubdlg.hxx:126
+    SdPublishingDlg m_xPage5_ButtonsWnd std::unique_ptr<weld::CustomWeld>
+sd/source/ui/inc/pubdlg.hxx:140
+    SdPublishingDlg m_xPage6_PreviewWnd std::unique_ptr<weld::CustomWeld>
 sd/source/ui/inc/tools/TimerBasedTaskExecution.hxx:73
     sd::tools::TimerBasedTaskExecution mpSelf std::shared_ptr<TimerBasedTaskExecution>
 sd/source/ui/inc/unopage.hxx:279
@@ -704,7 +704,7 @@ sdext/source/presenter/PresenterTimer.cxx:106
     sdext::presenter::(anonymous namespace)::TimerScheduler mpLateDestroy std::shared_ptr<TimerScheduler>
 sfx2/source/appl/fileobj.hxx:37
     SvFileObject mxDelMed tools::SvRef<SfxMedium>
-sfx2/source/doc/sfxbasemodel.cxx:447
+sfx2/source/doc/sfxbasemodel.cxx:449
     SfxSaveGuard m_pFramesLock std::unique_ptr<SfxOwnFramesLocker>
 sfx2/source/inc/appdata.hxx:76
     SfxAppData_Impl pDocTopics std::unique_ptr<SfxDdeDocTopics_Impl>
@@ -830,15 +830,15 @@ sw/inc/unoframe.hxx:314
     SwXOLEListener m_xOLEModel css::uno::Reference<css::frame::XModel>
 sw/inc/view.hxx:184
     SwView m_xGlueDocShell std::unique_ptr<SwViewGlueDocShell>
-sw/source/core/inc/swfont.hxx:983
-    SvStatistics nGetTextSize sal_uInt16
-sw/source/core/inc/swfont.hxx:984
-    SvStatistics nDrawText sal_uInt16
-sw/source/core/inc/swfont.hxx:985
-    SvStatistics nGetStretchTextSize sal_uInt16
 sw/source/core/inc/swfont.hxx:986
-    SvStatistics nDrawStretchText sal_uInt16
+    SvStatistics nGetTextSize sal_uInt16
 sw/source/core/inc/swfont.hxx:987
+    SvStatistics nDrawText sal_uInt16
+sw/source/core/inc/swfont.hxx:988
+    SvStatistics nGetStretchTextSize sal_uInt16
+sw/source/core/inc/swfont.hxx:989
+    SvStatistics nDrawStretchText sal_uInt16
+sw/source/core/inc/swfont.hxx:990
     SvStatistics nChangeFont sal_uInt16
 sw/source/core/inc/unoflatpara.hxx:140
     SwXFlatParagraphIterator m_aFlatParaList std::set<css::uno::Reference<css::text::XFlatParagraph> >
@@ -857,7 +857,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk3/libo6/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/disk2/libo7/sw/source/filter/inc/rtf.hxx:27:9)
 sw/source/uibase/inc/column.hxx:131
     SwColumnPage m_xDefaultVS std::unique_ptr<weld::CustomWeld>
 sw/source/uibase/inc/frmpage.hxx:224
@@ -870,11 +870,19 @@ sw/source/uibase/inc/maildispatcher.hxx:146
     MailDispatcher m_aListenerVector std::vector< ::rtl::Reference<IMailDispatcherListener> >
 sw/source/uibase/inc/maildispatcher.hxx:152
     MailDispatcher m_xSelfReference ::rtl::Reference<MailDispatcher>
-sw/source/uibase/inc/redlndlg.hxx:66
+sw/source/uibase/inc/optpage.hxx:297
+    SwRedlineOptionsTabPage m_xInsertedPreview std::unique_ptr<weld::CustomWeld>
+sw/source/uibase/inc/optpage.hxx:302
+    SwRedlineOptionsTabPage m_xDeletedPreview std::unique_ptr<weld::CustomWeld>
+sw/source/uibase/inc/optpage.hxx:307
+    SwRedlineOptionsTabPage m_xChangedPreview std::unique_ptr<weld::CustomWeld>
+sw/source/uibase/inc/optpage.hxx:312
+    SwRedlineOptionsTabPage m_xMarkPreview std::unique_ptr<weld::CustomWeld>
+sw/source/uibase/inc/redlndlg.hxx:62
     SwRedlineAcceptDlg m_aUsedSeqNo class SwRedlineDataParentSortArr
-sw/source/uibase/inc/swuicnttab.hxx:79
+sw/source/uibase/inc/swuicnttab.hxx:80
     SwMultiTOXTabDialog m_xExampleFrameWin std::unique_ptr<weld::CustomWeld>
-testtools/source/bridgetest/cppobj.cxx:149
+testtools/source/bridgetest/cppobj.cxx:148
     bridge_object::Test_Impl _arStruct Sequence<struct test::testtools::bridgetest::TestElement>
 ucb/source/ucp/gio/gio_mount.hxx:74
     OOoMountOperationClass parent_class GMountOperationClass
@@ -938,9 +946,9 @@ unotools/source/config/defaultoptions.cxx:90
     SvtDefaultOptions_Impl m_aWorkPath class rtl::OUString
 unotools/source/config/defaultoptions.cxx:91
     SvtDefaultOptions_Impl m_aClassificationPath class rtl::OUString
-unoxml/source/rdf/librdf_repository.cxx:471
+unoxml/source/rdf/librdf_repository.cxx:472
     (anonymous namespace)::librdf_GraphResult m_pQuery const std::shared_ptr<librdf_query>
-unoxml/source/rdf/librdf_repository.cxx:621
+unoxml/source/rdf/librdf_repository.cxx:625
     (anonymous namespace)::librdf_QuerySelectResult m_pQuery const std::shared_ptr<librdf_query>
 unoxml/source/xpath/nodelist.hxx:52
     XPath::CNodeList m_pXPathObj std::shared_ptr<xmlXPathObject>
@@ -954,9 +962,7 @@ vcl/inc/opengl/RenderList.hxx:29
     Vertex color glm::vec4
 vcl/inc/opengl/RenderList.hxx:30
     Vertex lineData glm::vec4
-vcl/inc/qt5/Qt5DragAndDrop.hxx:80
-    Qt5DropTarget mnDropAction sal_Int8
-vcl/inc/qt5/Qt5Frame.hxx:95
+vcl/inc/qt5/Qt5Frame.hxx:97
     Qt5Frame m_pSalMenu class Qt5Menu *
 vcl/inc/qt5/Qt5Graphics.hxx:53
     Qt5Graphics m_pFontCollection class PhysicalFontCollection *
@@ -1018,7 +1024,7 @@ vcl/inc/WidgetThemeLibrary.hxx:92
     vcl::ControlDrawParameters bIsAction _Bool
 vcl/inc/WidgetThemeLibrary.hxx:93
     vcl::ControlDrawParameters nValue int64_t
-vcl/opengl/salbmp.cxx:446
+vcl/opengl/salbmp.cxx:445
     (anonymous namespace)::ScanlineWriter mpCurrentScanline sal_uInt8 *
 vcl/source/filter/graphicfilter.cxx:653
     ImpFilterLibCacheEntry maFiltername const class rtl::OUString
@@ -1052,16 +1058,16 @@ vcl/unx/generic/gdi/cairotextrender.cxx:55
     (anonymous namespace)::CairoFontsCache::CacheId mbEmbolden _Bool
 vcl/unx/generic/gdi/cairotextrender.cxx:56
     (anonymous namespace)::CairoFontsCache::CacheId mbVerticalMetrics _Bool
-vcl/unx/gtk3/gtk3gtkinst.cxx:1167
+vcl/unx/gtk3/gtk3gtkinst.cxx:1168
      in char *
-vcl/unx/gtk3/gtk3gtkinst.cxx:3105
+vcl/unx/gtk3/gtk3gtkinst.cxx:3156
     GtkInstanceDialog m_xDialogController std::shared_ptr<weld::DialogController>
 vcl/unx/gtk/a11y/atkutil.cxx:142
     DocumentFocusListener m_aRefList std::set<uno::Reference<uno::XInterface> >
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent const AtkObject
-vcl/unx/gtk/a11y/atkwrapper.hxx:78
-    AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
+vcl/unx/gtk/a11y/atkwrapper.hxx:80
+    AtkObjectWrapperClass aParentClass const AtkObjectClass
 vcl/unx/gtk/gloactiongroup.cxx:30
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20
@@ -1070,7 +1076,7 @@ vcl/unx/gtk/hudawareness.cxx:20
     HudAwarenessHandle connection GDBusConnection *
 vcl/unx/gtk/hudawareness.cxx:23
     HudAwarenessHandle notify GDestroyNotify
-vcl/workben/vcldemo.cxx:1741
+vcl/workben/vcldemo.cxx:1740
     DemoWin mxThread rtl::Reference<RenderThread>
 writerfilter/source/dmapper/PropertyMap.hxx:198
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
@@ -1092,7 +1098,7 @@ xmloff/source/forms/elementexport.hxx:104
     xmloff::OControlExport m_pOuterElement std::unique_ptr<SvXMLElementExport>
 xmloff/source/forms/officeforms.hxx:65
     xmloff::OFormsRootExport m_pImplElement std::unique_ptr<SvXMLElementExport>
-xmloff/source/text/txtimp.cxx:523
+xmloff/source/text/txtimp.cxx:524
     XMLTextImportHelper::Impl m_xFrameImpPrMap rtl::Reference<SvXMLImportPropertyMapper>
 xmlsecurity/inc/certificatechooser.hxx:55
     CertificateChooser mvUserData std::vector<std::shared_ptr<UserData> >

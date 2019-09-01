@@ -74,7 +74,6 @@ namespace svx
     private:
         const Reference<XComponentContext>      m_xContext;
         URLBox& m_rLocationInput;
-        weld::Button& m_rBrowseButton;
         weld::Window& m_rDialog;
         Sequence< OUString >             m_aFilterExtensions;
         OUString                         m_sFilterUIName;
@@ -85,7 +84,6 @@ namespace svx
             URLBox& _rLocationInput, weld::Button& _rBrowseButton, weld::Window& _rDialog)
         :m_xContext( _rContext )
         ,m_rLocationInput( _rLocationInput )
-        ,m_rBrowseButton( _rBrowseButton )
         ,m_rDialog( _rDialog )
         ,m_aFilterExtensions()
         ,m_sFilterUIName()
@@ -101,7 +99,7 @@ namespace svx
             aExtensionList.append( ';' );
         }
         m_rLocationInput.SetFilter( aExtensionList.makeStringAndClear() );
-        m_rBrowseButton.connect_clicked(LINK(this, DatabaseLocationInputController_Impl, OnButtonAction));
+        _rBrowseButton.connect_clicked(LINK(this, DatabaseLocationInputController_Impl, OnButtonAction));
     }
 
     bool DatabaseLocationInputController_Impl::prepareCommit()

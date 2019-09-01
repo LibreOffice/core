@@ -49,7 +49,6 @@ OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxCo
         ,m_bExecuting(false)
         ,m_bTitleAmbiguous(true)
         ,m_bInitialized( false )
-        ,m_bNeedInitialization( false )
         ,m_aContext(_rxContext)
 {
     registerProperty(UNODIALOG_PROPERTY_TITLE, UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
