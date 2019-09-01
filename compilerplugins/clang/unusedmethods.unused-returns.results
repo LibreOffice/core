@@ -160,6 +160,8 @@ include/sax/fshelper.hxx:135
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
 include/sax/fshelper.hxx:136
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
+include/sax/fshelper.hxx:137
+    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(double)
 include/sax/fshelper.hxx:139
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(const char *)
 include/sfx2/linkmgr.hxx:63
@@ -234,11 +236,11 @@ include/vcl/weld.hxx:795
     _Bool weld::TreeView::iter_nth_child(class weld::TreeIter &,int) const
 include/vcl/weld.hxx:1643
     _Bool weld::TextView::get_selection_bounds(int &,int &)
-include/vcl/wizardmachine.hxx:448
+include/vcl/wizardmachine.hxx:447
     _Bool vcl::WizardMachine::travelNext()
-include/vcl/wizardmachine.hxx:451
+include/vcl/wizardmachine.hxx:450
     _Bool vcl::WizardMachine::travelPrevious()
-include/vcl/wizardmachine.hxx:541
+include/vcl/wizardmachine.hxx:524
     class TabPage * vcl::WizardMachine::GetOrCreatePage(const short)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)

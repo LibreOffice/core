@@ -108,13 +108,6 @@ namespace vcl
         */
         void    declarePath( PathId _nPathId, const WizardPath& _lWizardStates);
 
-        /** provides basic information about a state
-
-            The given display name is used in the default implementation of getStateDisplayName,
-            and the given factory is used in the default implementation of createPage.
-        */
-        void    describeState( WizardState _nState, const OUString& _rStateDisplayName, RoadmapPageFactory _pPageFactory );
-
         /** activates a path which has previously been declared with <member>declarePath</member>
 
             You can only activate paths which share the first <code>k</code> states with the path

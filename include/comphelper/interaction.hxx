@@ -84,25 +84,6 @@ namespace comphelper
     typedef OInteraction< css::task::XInteractionRetry >   OInteractionRetry;
 
 
-    //= OInteractionPassword
-
-    class COMPHELPER_DLLPUBLIC OInteractionPassword : public OInteraction< css::task::XInteractionPassword >
-    {
-    public:
-        OInteractionPassword( const OUString& _rInitialPassword )
-            :m_sPassword( _rInitialPassword )
-        {
-        }
-
-        // XInteractionPassword
-        virtual void SAL_CALL setPassword( const OUString& Password ) override;
-        virtual OUString SAL_CALL getPassword(  ) override;
-
-    private:
-        OUString m_sPassword;
-    };
-
-
     //= OInteractionRequest
 
     typedef ::cppu::WeakImplHelper <   css::task::XInteractionRequest
