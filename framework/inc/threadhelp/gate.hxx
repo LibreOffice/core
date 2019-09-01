@@ -27,7 +27,7 @@
 namespace framework{
 
 /*-************************************************************************************************************
-    @short          implement a gate to block multiple threads at same time or unblock all
+    @short          implement a gate to block multiple threads at the same time or unblock all
     @descr          A gate can be used as a negative-condition! You can open a "door" - wait() will not block ...
                     or you can close it - wait() blocks till open() is called again.
                     Then all currently waiting threads are running immediately - but new ones are blocked!
