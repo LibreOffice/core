@@ -150,13 +150,4 @@ OUString
     return sName;
 }
 
-//  Return this object's role.
-sal_Int16 SAL_CALL AccessibleGraphicShape::getAccessibleRole()
-{
-    if( m_pShape->getSdrModelFromSdrObject().GetImageMapForObject(m_pShape) != nullptr )
-        return AccessibleRole::IMAGE_MAP;
-    else
-        return AccessibleShape::getAccessibleRole();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
