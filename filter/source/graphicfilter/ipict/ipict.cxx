@@ -1335,7 +1335,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         // I do that because the clipping is often used to clean a region,
         //   before drawing some text and also to draw this text.
         // So using a too small region can lead to clip the end of the text ;
-        //   but this can be discutable...
+        //   but this can be discussable...
         aRect.setWidth(aRect.getWidth()+1);
         aRect.setHeight(aRect.getHeight()+1);
         pVirDev->SetClipRegion( vcl::Region( aRect ) );
