@@ -1816,7 +1816,6 @@ void HelpButton::StateChanged( StateChangedType nStateChange )
 void RadioButton::ImplInitRadioButtonData()
 {
     mbChecked       = false;
-    mbSaveValue     = false;
     mbRadioCheck    = true;
     mbStateChanged  = false;
 }
