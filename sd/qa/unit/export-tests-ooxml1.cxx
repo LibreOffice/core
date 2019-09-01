@@ -40,6 +40,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/XTable.hpp>
@@ -83,6 +84,9 @@ public:
     void testTdf94238();
     void testPictureTransparency();
     void testTdf125554();
+    void testRoundtripOwnLineStyles();
+    void testRoundtripPrstDash();
+    void testDashOnHairline();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -116,6 +120,9 @@ public:
     CPPUNIT_TEST(testTdf94238);
     CPPUNIT_TEST(testTdf125554);
     CPPUNIT_TEST(testPictureTransparency);
+    CPPUNIT_TEST(testRoundtripOwnLineStyles);
+    CPPUNIT_TEST(testRoundtripPrstDash);
+    CPPUNIT_TEST(testDashOnHairline);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -903,6 +910,112 @@ void SdOOXMLExportTest1::testTdf125554()
     CPPUNIT_ASSERT(!aFillTransparenceGradientName.get<OUString>().isEmpty());
 
     xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest1::testRoundtripOwnLineStyles()
+{
+    // Load odp document and read the LineDash values.
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/LineStylesOwn.odp"), ODP);
+    uno::Reference<drawing::XDrawPagesSupplier> xDocodp(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDocodp.is());
+    uno::Reference<drawing::XDrawPage> xPageodp(xDocodp->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPageodp.is());
+    drawing::LineDash aLineDashodp[10];
+    for (sal_uInt16 i= 0; i < 10; i++)
+    {
+        uno::Reference<beans::XPropertySet> xShapeodp(getShape(i, xPageodp));
+        CPPUNIT_ASSERT(xShapeodp.is());
+        xShapeodp->getPropertyValue("LineDash") >>= aLineDashodp[i];
+    }
+
+    // Save to pptx, reload and compare the LineDash values
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    uno::Reference<drawing::XDrawPagesSupplier> xDocpptx(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDocpptx.is());
+    uno::Reference<drawing::XDrawPage> xPagepptx(xDocpptx->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPagepptx.is());
+
+    for (sal_uInt16 i = 0; i < 10; i++)
+    {
+        drawing::LineDash aLineDashpptx;
+        uno::Reference<beans::XPropertySet> xShapepptx(getShape(i, xPagepptx));
+        CPPUNIT_ASSERT(xShapepptx.is());
+        xShapepptx->getPropertyValue("LineDash") >>= aLineDashpptx;
+        bool bIsSameLineDash = (aLineDashodp[i].Style == aLineDashpptx.Style
+                                && aLineDashodp[i].Dots == aLineDashpptx.Dots
+                                && aLineDashodp[i].DotLen == aLineDashpptx.DotLen
+                                && aLineDashodp[i].Dashes == aLineDashpptx.Dashes
+                                && aLineDashodp[i].DashLen == aLineDashpptx.DashLen
+                                && aLineDashodp[i].Distance == aLineDashpptx.Distance);
+        CPPUNIT_ASSERT_MESSAGE("LineDash differ", bIsSameLineDash);
+    }
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest1::testRoundtripPrstDash()
+{
+    // load and save document, compare prstDash values in saved document with original.
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/presetDashDot.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    const OUString sOriginal[] = {
+        "dash",
+        "dashDot",
+        "dot",
+        "lgDash",
+        "lgDashDot",
+        "lgDashDotDot",
+        "sysDash",
+        "sysDashDot",
+        "sysDashDotDot",
+        "sysDot"
+    };
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    const OString sStart = "/p:sld/p:cSld/p:spTree/p:sp[";
+    const OString sEnd = "]/p:spPr/a:ln/a:prstDash";
+    for (sal_uInt16 i = 0; i < 10; i++)
+    {
+        OString sXmlPath = sStart + OString::number(i+1) + sEnd;
+        OUString sResaved = getXPath(pXmlDoc, sXmlPath, "val");
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong prstDash", sOriginal[i], sResaved);
+    }
+
+    // tdf#126746: Make sure that dash-dot pattern starts with the longer dash, as defined in OOXML
+    // Make sure Style is drawing::DashStyle_RECTRELATIVE
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDoc.is());
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPage.is());
+    for (sal_uInt16 i = 0; i < 10; i++)
+    {
+        drawing::LineDash aLineDash;
+        uno::Reference<beans::XPropertySet> xShape(getShape(i, xPage));
+        CPPUNIT_ASSERT(xShape.is());
+        xShape->getPropertyValue("LineDash") >>= aLineDash;
+        CPPUNIT_ASSERT_MESSAGE("First dash is short", aLineDash.DotLen >= aLineDash.DashLen);
+        bool bIsRectRelative = aLineDash.Style == drawing::DashStyle_RECTRELATIVE;
+        CPPUNIT_ASSERT_MESSAGE("not RECTRELATIVE", bIsRectRelative);
+    }
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest1::testDashOnHairline()
+{
+    // load and save document, make sure the custDash has 11 child elements.
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf127267DashOnHairline.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    const OString sXmlPath = "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:ln/a:custDash/a:ds";
+    assertXPath(pXmlDoc, sXmlPath, 11);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest1);
