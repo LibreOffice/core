@@ -13,6 +13,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
@@ -306,6 +307,41 @@ DECLARE_WW8EXPORT_TEST(testBtlrFrame, "btlr-frame.odt")
     // resulted in a conversion to a Writer text frame.
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9000), getProperty<sal_Int32>(xFrame, "RotateAngle"));
+}
+
+DECLARE_WW8EXPORT_TEST(testPresetDash, "tdf127166_prstDash_Word97.doc")
+{
+    // Error was, that the 'sys' preset dash styles were neither imported not
+    // exported, the mixed styles had wrong dash-dot order, they were imported
+    // with absolute values.
+    const drawing::LineDash dashParams[] =
+    {
+        {drawing::DashStyle_RECTRELATIVE, 1, 400, 0, 0, 300}, // dash
+        {drawing::DashStyle_RECTRELATIVE, 1, 400, 1, 100, 300}, // dashDot
+        {drawing::DashStyle_RECTRELATIVE, 1, 100, 0, 0, 300}, // dot
+        {drawing::DashStyle_RECTRELATIVE, 1, 800, 0, 0, 300}, // lgDash
+        {drawing::DashStyle_RECTRELATIVE, 1, 800, 1, 100, 300}, // lgDashDot
+        {drawing::DashStyle_RECTRELATIVE, 1, 800, 2, 100, 300}, // lgDashDotDot
+        {drawing::DashStyle_RECTRELATIVE, 1, 300, 0, 0, 100}, // sysDash
+        {drawing::DashStyle_RECTRELATIVE, 1, 300, 1, 100, 100}, // sysDashDot
+        {drawing::DashStyle_RECTRELATIVE, 1, 300, 2, 100, 100}, // sysDashDotDot
+        {drawing::DashStyle_RECTRELATIVE, 1, 100, 0, 0, 100} // sysDot
+    };
+    drawing::LineDash aPresetLineDash;
+    drawing::LineDash aShapeLineDash;
+    for (sal_uInt16 i = 0; i < 10; i++)
+    {
+        aPresetLineDash = dashParams[i];
+        uno::Reference<drawing::XShape> xShape = getShape(i+1);
+        aShapeLineDash = getProperty<drawing::LineDash>(xShape, "LineDash");
+        bool bIsEqual = aPresetLineDash.Style == aShapeLineDash.Style
+                        && aPresetLineDash.Dots == aShapeLineDash.Dots
+                        && aPresetLineDash.DotLen == aShapeLineDash.DotLen
+                        && aPresetLineDash.Dashes == aShapeLineDash.Dashes
+                        && aPresetLineDash.DashLen == aShapeLineDash.DashLen
+                        && aPresetLineDash.Distance == aShapeLineDash.Distance;
+        CPPUNIT_ASSERT_MESSAGE("LineDash differ", bIsEqual);
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
