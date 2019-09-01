@@ -182,7 +182,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
                     {
                         pDirImpl->eKind = DirectoryImpl::KIND_ASSETS;
                         pDirImpl->pApkDirStruct = pdir;
-                        pDirImpl->ustrPath = OUString::unacquired(&ustrSystemPath);
+                        pDirImpl->ustrPath = OUString(ustrSystemPath, SAL_NO_ACQUIRE);
 
                         *pDirectory = (oslDirectory) pDirImpl;
                         return osl_File_E_None;
@@ -210,7 +210,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
                 if( pDirImpl )
                 {
                     pDirImpl->pDirStruct = pdir;
-                    pDirImpl->ustrPath = OUString::unacquired(&ustrSystemPath);
+                    pDirImpl->ustrPath = OUString(ustrSystemPath, SAL_NO_ACQUIRE);
 #ifdef ANDROID
                     pDirImpl->eKind = DirectoryImpl::KIND_DIRENT;
 #endif
