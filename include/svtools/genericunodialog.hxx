@@ -118,7 +118,6 @@ namespace svt
         bool                        m_bExecuting : 1;           /// we're currently executing the dialog
         bool                        m_bTitleAmbiguous : 1;      /// m_sTitle has not been set yet
         bool                        m_bInitialized : 1;         /// has "initialize" been called?
-        bool                        m_bNeedInitialization : 1;  /// do we need to be initialized before any other API call is allowed?
 
         // <properties>
         OUString                                         m_sTitle;   /// title of the dialog
@@ -128,7 +127,7 @@ namespace svt
         css::uno::Reference<css::uno::XComponentContext> m_aContext;
 
     public:
-        bool needInitialization() const { return m_bNeedInitialization && !m_bInitialized; }
+        bool needInitialization() const { return !m_bInitialized; }
 
     protected:
         OGenericUnoDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);

@@ -281,7 +281,6 @@ private:
     tools::Rectangle       maMouseRect;
     Image           maImage;
     bool            mbChecked;
-    bool            mbSaveValue;
     bool            mbRadioCheck;
     bool            mbStateChanged;
     Link<RadioButton&,void> maToggleHdl;
