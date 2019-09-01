@@ -76,7 +76,7 @@ namespace
 
         if(nSteps)
         {
-            // calc discrete length to change color each disctete unit (pixel)
+            // calc discrete length to change color each discrete unit (pixel)
             const sal_uInt32 nDistSteps(basegfx::fround(fDelta / fDiscreteUnit));
 
             nSteps = std::min(nSteps, nDistSteps);

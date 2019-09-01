@@ -194,7 +194,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
                 bDelPrinter = true;
             }
 
-            // get the set of disctinct available family names
+            // get the set of distinct available family names
             std::set< OUString > aFontNames;
             int nFontNames = pPrt->GetDevFontCount();
             for( int i = 0; i < nFontNames; i++ )
