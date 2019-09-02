@@ -638,7 +638,7 @@ private:
 
         @param  bStopListening
                 sal_False: must be used in case this method is called within disposing() of the document,
-                       where it make no sense to deregister our listener. The container dies...
+                       where it makes no sense to deregister our listener. The container dies...
                 sal_True : must be used in case this method is used on "deregistration" of this document, where
                        we must deregister our listener .-)
 
@@ -1371,7 +1371,7 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
     bool bWasUserAutoSaveActive =
         ((eJob & AutoRecovery::E_USER_AUTO_SAVE) == AutoRecovery::E_USER_AUTO_SAVE);
 
-    // On the other side it make no sense to reactivate the AutoSave operation
+    // On the other side it makes no sense to reactivate the AutoSave operation
     // if the new dispatch indicates a final decision ...
     // E.g. an EmergencySave/SessionSave indicates the end of life of the current office session.
     // It make no sense to reactivate an AutoSave then.
@@ -2515,7 +2515,7 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
     } /* SAFE */
 
     /* This method is called within disposing() of the document too. But there it's not a good idea to
-       deregister us as listener. Further it make no sense - because the broadcaster dies.
+       deregister us as listener. Further it makes no sense - because the broadcaster dies.
        So we suppress deregistration in such case...
     */
     if (bStopListening)

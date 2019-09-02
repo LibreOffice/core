@@ -274,7 +274,7 @@ DomainMapper_Impl::DomainMapper_Impl(
     m_aTextAppendStack.push(TextAppendContext(xBodyTextAppend,
                 m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(m_xInsertTextRange)));
 
-    //todo: does it make sense to set the body text as static text interface?
+    //todo: does it makes sense to set the body text as static text interface?
     uno::Reference< text::XTextAppendAndConvert > xBodyTextAppendAndConvert( m_xBodyText, uno::UNO_QUERY );
     m_pTableHandler = new DomainMapperTableHandler(xBodyTextAppendAndConvert, *this);
     getTableManager( ).setHandler(m_pTableHandler);

@@ -535,7 +535,7 @@ class Merger:
         sBuffer = sBuffer + generateFooter()
 
         # Attention!
-        # If the package seem to be empty, it make no sense to generate a
+        # If the package seem to be empty, it makes no sense to generate a
         # corresponding xml file. We should suppress writing of this file on 
         # disk completely ...
         if nItemCount < 1:

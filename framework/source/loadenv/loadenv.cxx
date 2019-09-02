@@ -554,7 +554,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     //      load request will fail.
 
     /* Attention: The following code can't work on such special URLs!
-                  It should not break the office .. but it make no sense
+                  It should not break the office .. but it makes no sense
                   to start expensive object creations and complex search
                   algorithm if its clear, that such URLs must be handled
                   in a special way .-)

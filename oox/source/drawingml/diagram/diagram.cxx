@@ -220,7 +220,7 @@ void DiagramData::addNode(const OUString& rText)
     addConnection(XML_presParOf, sPresRoot, aPresPoint.msModelId);
     addConnection(XML_presOf, aDataPoint.msModelId, aPresPoint.msModelId);
 
-    // adding at the end, so that references are not invalidated inbetween
+    // adding at the end, so that references are not invalidated in between
     maPoints.push_back(aDataPoint);
     maPoints.push_back(aPresPoint);
 
