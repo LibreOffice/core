@@ -2170,14 +2170,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     {
         xWindow = VclPtr<ToolBox>::Create(pParent, WB_3DLOOK | WB_TABSTOP);
     }
-    else if (name == "NotebookBarAddonsToolMergePoint")
-    {
-        customMakeWidget pFunction = nullptr;
-        ModuleMap::iterator aI = g_aModuleMap.find("libsfxlo.so");
-        pFunction = reinterpret_cast<customMakeWidget>(aI->second->getFunctionSymbol("makeNotebookbarToolBox"));
-        NotebookBarAddonsMerger::MergeNotebookBarAddons( pParent, pFunction, m_xFrame, m_pNotebookBarAddonsItem, rMap );
-        return nullptr;
-    }
     else if (name == "GtkToolButton" || name == "GtkMenuToolButton" ||
              name == "GtkToggleToolButton" || name == "GtkRadioToolButton")
     {
@@ -2262,15 +2254,22 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     else
     {
         sal_Int32 nDelim = name.indexOf('-');
-        if (nDelim != -1)
+        if (nDelim != -1 || name == "NotebookBarAddonsToolMergePoint")
         {
-            OUString sFunction(OStringToOUString(OString("make") + name.copy(nDelim+1), RTL_TEXTENCODING_UTF8));
+            OUString sFunction;
+            if(name == "NotebookBarAddonsToolMergePoint")
+                sFunction = "makeNotebookbarToolBox";
+            else
+                sFunction= OStringToOUString(OString("make") + name.copy(nDelim+1), RTL_TEXTENCODING_UTF8);
 
             customMakeWidget pFunction = nullptr;
 #ifndef DISABLE_DYNLOADING
             OUStringBuffer sModuleBuf;
             sModuleBuf.append(SAL_DLLPREFIX);
-            sModuleBuf.append(OStringToOUString(name.copy(0, nDelim), RTL_TEXTENCODING_UTF8));
+            if(name == "NotebookBarAddonsToolMergePoint")
+                sModuleBuf.append("sfxlo");
+            else
+                sModuleBuf.append(OStringToOUString(name.copy(0, nDelim), RTL_TEXTENCODING_UTF8));
             sModuleBuf.append(SAL_DLLEXTENSION);
 
             OUString sModule = sModuleBuf.makeStringAndClear();
@@ -2307,7 +2306,9 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             {
                 VclPtr<vcl::Window> xParent(pParent);
                 pFunction(xWindow, xParent, rMap);
-                if (xWindow->GetType() == WindowType::PUSHBUTTON)
+                if( name == "NotebookBarAddonsToolMergePoint")
+                    NotebookBarAddonsMerger::MergeNotebookBarAddons( pParent, pFunction, m_xFrame, m_pNotebookBarAddonsItem, rMap );
+                else if (xWindow->GetType() == WindowType::PUSHBUTTON)
                     setupFromActionName(static_cast<Button*>(xWindow.get()), rMap, m_xFrame);
                 else if (xWindow->GetType() == WindowType::MENUBUTTON)
                 {
