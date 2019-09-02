@@ -31,6 +31,7 @@
 #include <vcl/vclevent.hxx>
 #include <comphelper/accessiblewrapper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
@@ -93,7 +94,7 @@ namespace
         sal_Int32    getIndexInParent() const                    { return m_nIndexInParent; }
         void         setIndexInParent( sal_Int32 _nNewIndex )    { m_nIndexInParent = _nNewIndex; }
 
-        static  bool    isWindowItem( const Reference< XAccessible >& _rxAcc, OToolBoxWindowItem** /* [out] */ _ppImplementation );
+        static Sequence< sal_Int8 > getUnoTunnelId();
 
     public:
         OToolBoxWindowItem(sal_Int32 _nIndexInParent,
@@ -120,7 +121,6 @@ namespace
 
         // XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const Sequence< sal_Int8 >& aIdentifier ) override;
-        static Sequence< sal_Int8 > getUnoTunnelImplementationId();
     };
 
     IMPLEMENT_FORWARD_XINTERFACE2( OToolBoxWindowItem, OAccessibleWrapper, OToolBoxWindowItem_Base )
@@ -132,21 +132,7 @@ namespace
         return new OToolBoxWindowItemContext( m_nIndexInParent, getComponentContext(), _rxInnerContext, this, getParent() );
     }
 
-    bool OToolBoxWindowItem::isWindowItem( const Reference< XAccessible >& _rxAcc, OToolBoxWindowItem** /* [out] */ _ppImplementation )
-    {
-        OToolBoxWindowItem* pImplementation = nullptr;
-
-        Reference< XUnoTunnel > xTunnel( _rxAcc, UNO_QUERY );
-        if ( xTunnel.is() )
-            pImplementation = reinterpret_cast< OToolBoxWindowItem* >( xTunnel->getSomething( getUnoTunnelImplementationId() ) );
-
-        if ( _ppImplementation )
-            *_ppImplementation = pImplementation;
-
-        return pImplementation != nullptr;
-    }
-
-    Sequence< sal_Int8 > OToolBoxWindowItem::getUnoTunnelImplementationId()
+    Sequence< sal_Int8 > OToolBoxWindowItem::getUnoTunnelId()
     {
         static ::cppu::OImplementationId implId;
 
@@ -155,9 +141,7 @@ namespace
 
     sal_Int64 SAL_CALL OToolBoxWindowItem::getSomething( const Sequence< sal_Int8 >& _rId )
     {
-        if  (   ( _rId.getLength() == 16 )
-            &&  ( memcmp( getUnoTunnelImplementationId().getConstArray(),  _rId.getConstArray(), 16 ) == 0 )
-            )
+        if (isUnoTunnelId<OToolBoxWindowItem>(_rId))
             return reinterpret_cast< sal_Int64>( this );
 
         return 0;
@@ -316,19 +300,16 @@ void VCLXAccessibleToolBox::implReleaseToolboxItem( ToolBoxItemsMap::iterator co
         NotifyAccessibleEvent( AccessibleEventId::CHILD, Any( xItemAcc ), Any() );
     }
 
-    OToolBoxWindowItem* pWindowItem = nullptr;
-    if ( !OToolBoxWindowItem::isWindowItem( xItemAcc, &pWindowItem ) )
+    auto pWindowItem = comphelper::getUnoTunnelImplementation<OToolBoxWindowItem>(xItemAcc);
+    if ( !pWindowItem )
     {
         static_cast< VCLXAccessibleToolBoxItem* >( xItemAcc.get() )->ReleaseToolBox();
         ::comphelper::disposeComponent( xItemAcc );
     }
     else
     {
-        if ( pWindowItem )
-        {
-            Reference< XAccessibleContext > xContext( pWindowItem->getContextNoCreate() );
-            ::comphelper::disposeComponent( xContext );
-        }
+        Reference< XAccessibleContext > xContext( pWindowItem->getContextNoCreate() );
+        ::comphelper::disposeComponent( xContext );
     }
 }
 
@@ -350,8 +331,8 @@ void VCLXAccessibleToolBox::UpdateItem_Impl( ToolBox::ImplToolItems::size_type _
         {
             Reference< XAccessible > xItemAcc( aIndexAdjust->second );
 
-            OToolBoxWindowItem* pWindowItem = nullptr;
-            if ( !OToolBoxWindowItem::isWindowItem( xItemAcc, &pWindowItem ) )
+            auto pWindowItem = comphelper::getUnoTunnelImplementation<OToolBoxWindowItem>(xItemAcc);
+            if ( !pWindowItem )
             {
                 VCLXAccessibleToolBoxItem* pItem = static_cast< VCLXAccessibleToolBoxItem* >( xItemAcc.get() );
                 if ( pItem )
@@ -363,12 +344,9 @@ void VCLXAccessibleToolBox::UpdateItem_Impl( ToolBox::ImplToolItems::size_type _
             }
             else
             {
-                if ( pWindowItem )
-                {
-                    sal_Int32 nIndex = pWindowItem->getIndexInParent( );
-                    nIndex++;
-                    pWindowItem->setIndexInParent( nIndex );
-                }
+                sal_Int32 nIndex = pWindowItem->getIndexInParent( );
+                nIndex++;
+                pWindowItem->setIndexInParent( nIndex );
             }
 
             ++aIndexAdjust;
