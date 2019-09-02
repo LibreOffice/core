@@ -1648,7 +1648,7 @@ sal_Int32 SAL_CALL SmEditAccessible::getAccessibleChildCount(  )
 {
     SolarMutexGuard aGuard;
     if (!pTextHelper)
-        throw RuntimeException();
+        return 0;
     return pTextHelper->GetChildCount();
 }
 
@@ -1688,7 +1688,7 @@ sal_Int32 SAL_CALL SmEditAccessible::getAccessibleIndexInParent(  )
 
 sal_Int16 SAL_CALL SmEditAccessible::getAccessibleRole(  )
 {
-    return AccessibleRole::PANEL /*TEXT ?*/;
+    return AccessibleRole::TEXT_FRAME;
 }
 
 OUString SAL_CALL SmEditAccessible::getAccessibleDescription(  )
@@ -1723,6 +1723,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL SmEditAccessible::getAccessibleSt
     {
         pStateSet->AddState( AccessibleStateType::MULTI_LINE );
         pStateSet->AddState( AccessibleStateType::ENABLED );
+        pStateSet->AddState( AccessibleStateType::EDITABLE );
         pStateSet->AddState( AccessibleStateType::FOCUSABLE );
         if (pWin->HasFocus())
             pStateSet->AddState( AccessibleStateType::FOCUSED );
