@@ -444,11 +444,11 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools:
         nMaxTitleWidth -= nLinkWidth + (2 * SPACE_BETWEEN);
     }
     long aVersionWidth = rRenderContext.GetTextWidth(rEntry->m_sVersion);
-    long aTitleWidth = rRenderContext.GetTextWidth(rEntry->m_sTitle) + (aTextHeight / 3);
 
     aPos = rRect.TopLeft() + Point(ICON_OFFSET, TOP_OFFSET);
 
     rRenderContext.SetFont(aBoldFont);
+    long aTitleWidth = rRenderContext.GetTextWidth(rEntry->m_sTitle) + (aTextHeight / 3);
     if (aTitleWidth > nMaxTitleWidth - aVersionWidth)
     {
         aTitleWidth = nMaxTitleWidth - aVersionWidth - (aTextHeight / 3);
