@@ -12,6 +12,4 @@ gb_CPUDEFS += -DPPC
 
 include $(GBUILDDIR)/platform/linux.mk
 
-gb_LinkTarget_LDFLAGS += -latomic
-
 # vim: set noet sw=4:
