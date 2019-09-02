@@ -21,4 +21,8 @@ ifeq ($(DISABLE_DYNLOADING),TRUE)
 gb_STDLIBS := -ldl
 endif
 
+ifneq ($(ATOMIC_LIB),)
+gb_STDLIBS_CXX := $(ATOMIC_LIB)
+endif
+
 # vim: set noet sw=4 ts=4:
