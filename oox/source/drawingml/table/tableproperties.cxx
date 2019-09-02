@@ -99,7 +99,7 @@ namespace
 }
 
 //for pptx just has table style id
-static void SetTableStyleProperties(std::unique_ptr<TableStyle> &pTableStyle , sal_Int32 tblFillClr, sal_Int32 tblTextClr, sal_Int32 lineBdrClr)
+static void SetTableStyleProperties(const std::unique_ptr<TableStyle> &pTableStyle , sal_Int32 tblFillClr, sal_Int32 tblTextClr, sal_Int32 lineBdrClr)
 {
     //whole table fill style and color
     oox::drawingml::FillPropertiesPtr pWholeTabFillProperties( new oox::drawingml::FillProperties );

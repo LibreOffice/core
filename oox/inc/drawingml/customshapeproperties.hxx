@@ -105,7 +105,7 @@ public:
     sal_Int32 getShapePresetType() const { return mnShapePresetType; }
     css::uno::Sequence< sal_Int8 > const & getShapePresetTypeName() const;
     void setShapePresetType( sal_Int32 nShapePresetType ){ mnShapePresetType = nShapePresetType; };
-    bool                                getShapeTypeOverride(){ return mbShapeTypeOverride; };
+    bool                                getShapeTypeOverride() const { return mbShapeTypeOverride; };
     void                                setShapeTypeOverride( bool bShapeTypeOverride ) { mbShapeTypeOverride = bShapeTypeOverride; };
 
     std::vector< CustomShapeGuide >&    getAdjustmentGuideList(){ return maAdjustmentGuideList; };
