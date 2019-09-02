@@ -63,7 +63,7 @@ public class SmEditAccessible extends TestCase {
 
     /**
      * Creates a <code>StarMath</code> document and obtains an accessibility
-     * component with the role <code>AccessibleRole.PANEL</code>.
+     * component with the role <code>AccessibleRole.TEXT_FRAME</code>.
      */
     @Override
     protected TestEnvironment createTestEnvironment(final TestParameters Param, PrintWriter log) throws Exception {
@@ -86,7 +86,7 @@ public class SmEditAccessible extends TestCase {
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         oObj = AccessibilityTools.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.PANEL, "", "SmEditAccessible");
+            (xRoot, AccessibleRole.TEXT_FRAME, "", "SmEditAccessible");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
         AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
