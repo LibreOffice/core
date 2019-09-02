@@ -855,7 +855,7 @@ void SdrObject::SetGrabBagItem(const css::uno::Any& rVal)
     BroadcastObjectChange();
 }
 
-sal_uInt32 SdrObject::GetNavigationPosition()
+sal_uInt32 SdrObject::GetNavigationPosition() const
 {
     if (nullptr != getParentSdrObjListFromSdrObject() && getParentSdrObjListFromSdrObject()->RecalcNavigationPositions())
     {

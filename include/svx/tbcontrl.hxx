@@ -197,7 +197,7 @@ private:
 friend class SfxStyleControllerItem_Impl;
 
     SVX_DLLPRIVATE void SetFamilyState(sal_uInt16 nIdx, const SfxTemplateItem* pItem);
-    SVX_DLLPRIVATE SfxStyleFamily GetActFamily();
+    SVX_DLLPRIVATE SfxStyleFamily GetActFamily() const;
 };
 
 typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunction;

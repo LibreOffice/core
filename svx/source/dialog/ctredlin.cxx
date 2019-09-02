@@ -649,7 +649,7 @@ void SvxTPFilter::SetDateMode(sal_uInt16 nMode)
     SelDateHdl(*m_xLbDate);
 }
 
-SvxRedlinDateMode SvxTPFilter::GetDateMode()
+SvxRedlinDateMode SvxTPFilter::GetDateMode() const
 {
     return static_cast<SvxRedlinDateMode>(m_xLbDate->get_active());
 }
@@ -721,27 +721,27 @@ OUString SvxTPFilter::GetComment()const
     return m_xEdComment->get_text();
 }
 
-bool SvxTPFilter::IsDate()
+bool SvxTPFilter::IsDate() const
 {
     return m_xCbDate->get_active();
 }
 
-bool SvxTPFilter::IsAuthor()
+bool SvxTPFilter::IsAuthor() const
 {
     return m_xCbAuthor->get_active();
 }
 
-bool SvxTPFilter::IsRange()
+bool SvxTPFilter::IsRange() const
 {
     return m_xCbRange->get_active();
 }
 
-bool SvxTPFilter::IsAction()
+bool SvxTPFilter::IsAction() const
 {
     return m_xCbAction->get_active();
 }
 
-bool SvxTPFilter::IsComment()
+bool SvxTPFilter::IsComment() const
 {
     return m_xCbComment->get_active();
 }
