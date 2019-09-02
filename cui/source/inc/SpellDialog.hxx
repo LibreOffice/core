@@ -39,7 +39,7 @@
 #include <vcl/xtextedt.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/customweld.hxx>
-#include <editeng/weldeditview.hxx>
+#include <svx/weldeditview.hxx>
 #include <editeng/SpellPortions.hxx>
 
 #include <set>

@@ -106,6 +106,7 @@ public:
     virtual void set_can_focus(bool bCanFocus) = 0;
     virtual void grab_focus() = 0;
     virtual bool has_focus() const = 0;
+    virtual bool is_active() const = 0; //if this widget has the focus within the active window
     virtual void set_has_default(bool has_default) = 0;
     virtual bool get_has_default() const = 0;
     virtual void set_size_request(int nWidth, int nHeight) = 0;
