@@ -51,10 +51,11 @@ using namespace ::com::sun::star::uno;
 struct TabPageImpl
 {
     bool                        mbStandard;
-    SfxOkDialogController*      mpDialogController;
+    weld::DialogController*     mpDialogController;
+    SfxOkDialogController*      mpSfxDialogController;
     css::uno::Reference< css::frame::XFrame > mxFrame;
 
-    TabPageImpl() : mbStandard(false), mpDialogController(nullptr) {}
+    TabPageImpl() : mbStandard(false), mpDialogController(nullptr), mpSfxDialogController(nullptr) {}
 };
 
 struct Data_Impl
@@ -155,7 +156,8 @@ SfxTabPage::SfxTabPage(TabPageParent pParent, const OUString& rUIXMLDescription,
                                : Application::CreateInterimBuilder(this, rUIXMLDescription))
     , m_xContainer(m_xBuilder->weld_container(rID))
 {
-    pImpl->mpDialogController = dynamic_cast<SfxOkDialogController*>(pParent.pController);
+    pImpl->mpDialogController = pParent.pController;
+    pImpl->mpSfxDialogController = dynamic_cast<SfxOkDialogController*>(pImpl->mpDialogController);
 }
 
 SfxTabPage::~SfxTabPage()
@@ -291,12 +293,13 @@ void SfxTabPage::ChangesApplied()
 
 void SfxTabPage::SetDialogController(SfxOkDialogController* pDialog)
 {
-    pImpl->mpDialogController = pDialog;
+    pImpl->mpSfxDialogController = pDialog;
+    pImpl->mpDialogController = pImpl->mpSfxDialogController;
 }
 
 SfxOkDialogController* SfxTabPage::GetDialogController() const
 {
-    return pImpl->mpDialogController;
+    return pImpl->mpSfxDialogController;
 }
 
 OString SfxTabPage::GetConfigId() const
@@ -318,8 +321,8 @@ weld::Window* SfxTabPage::GetDialogFrameWeld() const
 
 const SfxItemSet* SfxTabPage::GetDialogExampleSet() const
 {
-    if (pImpl->mpDialogController)
-        return pImpl->mpDialogController->GetExampleSet();
+    if (pImpl->mpSfxDialogController)
+        return pImpl->mpSfxDialogController->GetExampleSet();
     return nullptr;
 }
 
