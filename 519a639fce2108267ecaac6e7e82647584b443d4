@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_94a3ae9e",
+        "filename": "solenv/gbuild/LinkTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-09-02T09:27:27Z",
+      "side": 1,
+      "message": "hmm actually why is this target local even needed, when it\u0027s always set to the same value that is just another variable...",
+      "revId": "519a639fce2108267ecaac6e7e82647584b443d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
