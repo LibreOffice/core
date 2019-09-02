@@ -504,7 +504,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             if( mbIsLocked )
             {
                 const_cast<EditEngine*>(&(mpOutliner->GetEditEngine()))->SetUpdateMode( false );
-                mbOldUndoMode = const_cast<EditEngine*>(&(mpOutliner->GetEditEngine()))->IsUndoEnabled();
+                mbOldUndoMode = mpOutliner->GetEditEngine().IsUndoEnabled();
                 const_cast<EditEngine*>(&(mpOutliner->GetEditEngine()))->EnableUndo( false );
             }
 
@@ -809,7 +809,7 @@ void SvxTextEditSourceImpl::lock()
     if( mpOutliner )
     {
         const_cast<EditEngine*>(&(mpOutliner->GetEditEngine()))->SetUpdateMode( false );
-        mbOldUndoMode = const_cast<EditEngine*>(&(mpOutliner->GetEditEngine()))->IsUndoEnabled();
+        mbOldUndoMode = mpOutliner->GetEditEngine().IsUndoEnabled();
         const_cast<EditEngine*>(&(mpOutliner->GetEditEngine()))->EnableUndo( false );
     }
 }
