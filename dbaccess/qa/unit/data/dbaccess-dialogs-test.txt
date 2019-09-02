@@ -61,10 +61,6 @@ dbaccess/ui/applycolpage.ui
 dbaccess/ui/copytablepage.ui
 dbaccess/ui/namematchingpage.ui
 dbaccess/ui/typeselectpage.ui
-dbaccess/ui/preparepage.ui
-dbaccess/ui/backuppage.ui
-dbaccess/ui/migratepage.ui
-dbaccess/ui/summarypage.ui
 dbaccess/ui/specialsettingspage.ui
 dbaccess/ui/generatedvaluespage.ui
 dbaccess/ui/ldapconnectionpage.ui
