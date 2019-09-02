@@ -54,6 +54,7 @@ public:
     void                                setBandRow(bool b)  { mbBandRow = b; };
     bool                                isBandCol() const   { return mbBandCol; };
     void                                setBandCol(bool b)  { mbBandCol = b; };
+    Color&                              getBgColor(){ return maBgColor; };
 
     void pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
         const css::uno::Reference < css::beans::XPropertySet > & xPropSet,
@@ -70,6 +71,7 @@ private:
     std::shared_ptr< TableStyle >       mpTableStyle;           // or the complete TableStyle
     std::vector< sal_Int32 >            mvTableGrid;
     std::vector< TableRow >             mvTableRows;
+    Color                               maBgColor;
 
     bool                                mbFirstRow;
     bool                                mbFirstCol;
