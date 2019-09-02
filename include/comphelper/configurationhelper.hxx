@@ -159,7 +159,7 @@ public:
      *  all operations are made relative to this access point.
      *
      *  Further this method must be used only with configuration set's.
-     *  Atomic keys can't be "created" ... they "exists every time".
+     *  Atomic keys can't be "created"... they "exist every time".
      *
      *  @param  xCFG
      *          the configuration root, where sRelPathToSet should be interpreted

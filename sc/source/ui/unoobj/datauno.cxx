@@ -533,7 +533,7 @@ ScSubTotalDescriptorBase::~ScSubTotalDescriptorBase()
 {
 }
 
-// XSubTotalDesctiptor
+// XSubTotalDescriptor
 
 ScSubTotalFieldObj* ScSubTotalDescriptorBase::GetObjectByIndex_Impl(sal_uInt16 nIndex)
 {

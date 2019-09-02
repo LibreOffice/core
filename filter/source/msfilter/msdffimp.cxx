@@ -2866,7 +2866,7 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
         nChgColors ^= 1;
     }
     //if the type is linear or axial, just save focus to nFocusX and nFocusY for export
-    //Core function does no need them. They serves for rect gradient(CenterXY).
+    //Core function does no need them. They serve for rect gradient(CenterXY).
     sal_uInt16 nFocusX = static_cast<sal_uInt16>(nFocus);
     sal_uInt16 nFocusY = static_cast<sal_uInt16>(nFocus);
 
