@@ -182,6 +182,7 @@ public:
     void testTdf127372();
     void testTdf127379();
     void testTdf98603();
+    void testTdf127237();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -282,6 +283,7 @@ public:
     CPPUNIT_TEST(testTdf127372);
     CPPUNIT_TEST(testTdf127379);
     CPPUNIT_TEST(testTdf98603);
+    CPPUNIT_TEST(testTdf127237);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2538,6 +2540,26 @@ void SdOOXMLExportTest2::testTdf126741()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), rDashItem.GetDashValue().GetDashes());
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(100), rDashItem.GetDashValue().GetDashLen());
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(300), rDashItem.GetDashValue().GetDistance());
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf127237()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf127237.pptx"), PPTX );
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP);
+
+    const SdrPage* pPage = GetPage(1, xDocShRef);
+    CPPUNIT_ASSERT(pPage != nullptr);
+
+    sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTableObj != nullptr);
+    uno::Reference< table::XCellRange > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+
+    sal_Int32 nFillColor = 0;
+    uno::Reference< beans::XPropertySet > xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("FillColor") >>= nFillColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0070C0), nFillColor);
 
     xDocShRef->DoClose();
 }
