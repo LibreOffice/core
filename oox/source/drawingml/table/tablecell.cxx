@@ -424,6 +424,12 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
     applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesTopLeftToBottomRight, PROP_DiagonalTLBR );
     applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesBottomLeftToTopRight, PROP_DiagonalBLTR );
 
+    if (rProperties.getBgColor().isUsed() && !maFillProperties.maFillColor.isUsed() && maFillProperties.moFillType.get() == XML_noFill)
+    {
+        maFillProperties.moFillType = XML_solidFill;
+        maFillProperties.maFillColor = rProperties.getBgColor();
+    }
+
     aFillProperties.assignUsed( maFillProperties );
     ShapePropertyMap aPropMap( rFilterBase.getModelObjectHelper() );
 
