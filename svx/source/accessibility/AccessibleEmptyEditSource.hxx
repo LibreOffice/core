@@ -28,7 +28,7 @@
 
 class SdrObject;
 class SdrView;
-namespace vcl { class Window; }
+class OutputDevice;
 
 namespace accessibility
 {
@@ -49,7 +49,7 @@ namespace accessibility
             Make sure you only create such an object if the shape _really_
             does not contain text.
         */
-        AccessibleEmptyEditSource(  SdrObject& rObj, SdrView& rView, const vcl::Window& rViewWindow );
+        AccessibleEmptyEditSource(  SdrObject& rObj, SdrView& rView, const OutputDevice& rViewWindow );
         virtual ~AccessibleEmptyEditSource() override;
 
         // from the SvxEditSource interface
@@ -81,7 +81,7 @@ namespace accessibility
 
         SdrObject&                      mrObj;
         SdrView&                        mrView;
-        const vcl::Window&                   mrViewWindow;
+        const OutputDevice&             mrViewWindow;
 
         bool                            mbEditSourceEmpty;
     };
