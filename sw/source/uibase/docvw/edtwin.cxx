@@ -3775,7 +3775,8 @@ bool SwEditWin::changeMousePointer(Point const & rDocPoint)
 
         if ( PointerStyle::Null != nPointer &&
             // i#35543 - Enhanced table selection is explicitly allowed in table mode
-            ( !bChkTableSel || !rShell.IsTableMode() ) )
+            ( !bChkTableSel || !rShell.IsTableMode() ) &&
+            !comphelper::LibreOfficeKit::isActive() )
         {
             SetPointer( nPointer );
         }
