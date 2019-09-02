@@ -3873,11 +3873,12 @@ static char* getLanguages(const char* pCommand)
     OUString sLanguage;
     for ( sal_Int32 itLocale = 0; itLocale < aLocales.getLength(); itLocale++ )
     {
-        sLanguage = SvtLanguageTable::GetLanguageString(LanguageTag::convertToLanguageType(aLocales[itLocale]));
+        const LanguageTag aLanguageTag( aLocales[itLocale]);
+        sLanguage = SvtLanguageTable::GetLanguageString(aLanguageTag.getLanguageType());
         if (sLanguage.startsWith("{") && sLanguage.endsWith("}"))
             continue;
 
-        sLanguage += ";" + LanguageTag(aLocales[itLocale]).getBcp47(false);
+        sLanguage += ";" + aLanguageTag.getBcp47(false);
         aChild.put("", sLanguage.toUtf8());
         aValues.push_back(std::make_pair("", aChild));
     }
