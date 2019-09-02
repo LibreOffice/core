@@ -49,6 +49,7 @@ TableProperties::TableProperties()
 , mbBandRow( false )
 , mbBandCol( false )
 {
+    maBgColor.setUnused();
 }
 
 static void CreateTableRows( const uno::Reference< XTableRows >& xTableRows, const std::vector< TableRow >& rvTableRows )
