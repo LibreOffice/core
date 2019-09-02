@@ -4910,7 +4910,7 @@ fi
 if test "$test_kf5" = "yes" -a "$enable_kde5" = "yes"; then
     AC_MSG_WARN([The kde5 VCL plugin was renamed to kf5. Please update your configuration to use --enable-kf5, as --enable-kde5 will be removed after the next major release!])
     add_warning "The kde5 VCL plugin was renamed to kf5. Please update your configuration to use --enable-kf5, as --enable-kde5 will be removed after the next major release!"
-    test_kf5=yes
+    enable_kf5=yes
 fi
 
 if test "$test_kf5" = "yes"; then
