@@ -84,7 +84,7 @@ published service StorageStream
 
         <p>
         When a stream is disposed all the changes that were done for it are
-        automatically flashed, so that they becomes visible from parent
+        automatically flashed, so that they become visible from parent
         storage. It is also possible to flash the stream explicitly.
         </p>
 

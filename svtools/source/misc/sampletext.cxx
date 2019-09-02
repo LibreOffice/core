@@ -93,12 +93,12 @@ static UScriptCode lcl_getHardCodedScriptNameForFont (const OutputDevice &rDevic
     }
     else if (rName == "Hannotate TC" || rName == "HanziPen TC" || rName == "Heiti TC" || rName == "Weibei TC")
     {
-        // These fonts claim support for ARMENIAN and a bunch of other stuff they doesn't support
+        // These fonts claim support for ARMENIAN and a bunch of other stuff they don't support
         return USCRIPT_TRADITIONAL_HAN;
     }
     else if (rName == "Hannotate SC" || rName == "HanziPen SC" || rName == "Heiti SC" || rName == "Weibei SC")
     {
-        // These fonts claim support for ARMENIAN and a bunch of other stuff they doesn't support
+        // These fonts claim support for ARMENIAN and a bunch of other stuff they don't support
         return USCRIPT_SIMPLIFIED_HAN;
     }
 

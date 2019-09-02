@@ -127,7 +127,7 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentArray()
         }
     }
     // that's a Bug, that this assertion comes; the API Reference says, that
-    // if there is no Matrix, the Range is left unchanged; they says nothing
+    // if there is no Matrix, the Range is left unchanged; they say nothing
     // about an exception
     /*if (!bFound)
     {

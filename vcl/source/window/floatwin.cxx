@@ -444,7 +444,7 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
         if (pW->IsMapModeEnabled() || pW->GetMapMode().GetMapUnit() == MapUnit::MapPixel)
         {
             // if we use pW->LogicToLogic(aPos, pW->GetMapMode(), MapMode(MapUnit::MapTwip)),
-            // for pixel conversions when map mode is not enabled, we gets
+            // for pixel conversions when map mode is not enabled, we get
             // a 20 twips per pixel conversion since LogicToLogic uses
             // a fixed 72 dpi value, instead of a correctly computed output
             // device dpi or at least the most commonly used 96 dpi value;
