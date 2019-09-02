@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_d4d126cf",
+        "filename": "sc/source/ui/docshell/docsh4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2010,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-09-02T11:50:37Z",
+      "side": 1,
+      "message": "Why invent this extra case and not just use the ISO \"zxx\" code provided by LanguageTag(LANGUAGE_NONE).getLanguage() (or rather getBcp47() as the code does now since https://gerrit.libreoffice.org/78227)?",
+      "range": {
+        "startLine": 2010,
+        "startChar": 43,
+        "endLine": 2010,
+        "endChar": 44
+      },
+      "revId": "efb5973ad31735212a165f6ec72467ae6b6ebd43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
