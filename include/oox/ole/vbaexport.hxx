@@ -39,12 +39,12 @@ public:
 private:
 
     css::uno::Reference<css::container::XNameContainer>
-        getBasicLibrary();
+        getBasicLibrary() const;
 
     css::uno::Reference<css::script::XLibraryContainer>
-        getLibraryContainer();
+        getLibraryContainer() const;
 
-    OUString getProjectName();
+    OUString getProjectName() const;
 
     css::uno::Reference<css::frame::XModel> mxModel;
 };
