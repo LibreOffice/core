@@ -106,10 +106,10 @@ public:
     }
 
     const css::uno::Reference< css::form::runtime::XFormController >&
-        GetController() { return m_xController; }
+        GetController() const { return m_xController; }
 
     const css::uno::Reference< css::form::runtime::XFilterController >&
-        GetFilterController() { return m_xFilterController; }
+        GetFilterController() const { return m_xFilterController; }
 
     virtual Image GetImage() const override;
 };

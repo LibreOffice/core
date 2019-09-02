@@ -189,8 +189,8 @@ public:
     sal_uInt16  GetActColumn() const { return nActColumn;}
     bool        IsFirstAct() const;
     bool        IsLastAct() const;
-    long        GetLeft() { return nLeft;}
-    long        GetRight() { return nRight;}
+    long        GetLeft() const { return nLeft;}
+    long        GetRight() const { return nRight;}
     bool        IsTable() const { return bTable;}
     bool        CalcOrtho() const;
     void        SetOrtho(bool bVal);
