@@ -1628,6 +1628,59 @@ void VclBuilder::preload()
 extern "C" VclBuilder::customMakeWidget lo_get_custom_widget_func(const char* name);
 #endif
 
+namespace
+{
+// Takes a string like "sfxlo-SidebarToolBox"
+VclBuilder::customMakeWidget GetCustomMakeWidget(const OString& name)
+{
+    VclBuilder::customMakeWidget pFunction = nullptr;
+    if (sal_Int32 nDelim = name.indexOf('-'); nDelim != -1)
+    {
+        const OUString sFunction("make"
+                                 + OStringToOUString(name.copy(nDelim + 1), RTL_TEXTENCODING_UTF8));
+
+#ifndef DISABLE_DYNLOADING
+        const OUString sModule = SAL_DLLPREFIX
+                                 + OStringToOUString(name.copy(0, nDelim), RTL_TEXTENCODING_UTF8)
+                                 + SAL_DLLEXTENSION;
+        ModuleMap::iterator aI = g_aModuleMap.find(sModule);
+        if (aI == g_aModuleMap.end())
+        {
+            std::shared_ptr<NoAutoUnloadModule> pModule;
+#if ENABLE_MERGELIBS
+            if (!g_pMergedLib->is())
+                g_pMergedLib->loadRelative(&thisModule, SVLIBRARY("merged"));
+            if ((pFunction = reinterpret_cast<VclBuilder::customMakeWidget>(
+                     g_pMergedLib->getFunctionSymbol(sFunction))))
+                pModule = g_pMergedLib;
+#endif
+            if (!pFunction)
+            {
+                pModule.reset(new NoAutoUnloadModule);
+                bool ok = pModule->loadRelative(&thisModule, sModule);
+                assert(ok && "bad module name in .ui");
+                (void)ok;
+                pFunction = reinterpret_cast<VclBuilder::customMakeWidget>(
+                    pModule->getFunctionSymbol(sFunction));
+            }
+            g_aModuleMap.insert(std::make_pair(sModule, pModule));
+        }
+        else
+            pFunction = reinterpret_cast<VclBuilder::customMakeWidget>(
+                aI->second->getFunctionSymbol(sFunction));
+#elif !HAVE_FEATURE_DESKTOP
+        pFunction = lo_get_custom_widget_func(sFunction.toUtf8().getStr());
+        SAL_WARN_IF(!pFunction, "vcl.layout", "Could not find " << sFunction);
+        assert(pFunction);
+#else
+        pFunction = reinterpret_cast<customMakeWidget>(
+            osl_getFunctionSymbol((oslModule)RTLD_DEFAULT, sFunction.pData));
+#endif
+    }
+    return pFunction;
+}
+}
+
 VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &name, const OString &id,
     stringmap &rMap)
 {
@@ -2275,61 +2328,18 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else
     {
-        sal_Int32 nDelim = name.indexOf('-');
-        if (nDelim != -1)
+        if (customMakeWidget pFunction = GetCustomMakeWidget(name))
         {
-            OUString sFunction(OStringToOUString(OString("make") + name.copy(nDelim+1), RTL_TEXTENCODING_UTF8));
-
-            customMakeWidget pFunction = nullptr;
-#ifndef DISABLE_DYNLOADING
-            OUStringBuffer sModuleBuf;
-            sModuleBuf.append(SAL_DLLPREFIX);
-            sModuleBuf.append(OStringToOUString(name.copy(0, nDelim), RTL_TEXTENCODING_UTF8));
-            sModuleBuf.append(SAL_DLLEXTENSION);
-
-            OUString sModule = sModuleBuf.makeStringAndClear();
-            ModuleMap::iterator aI = g_aModuleMap.find(sModule);
-            if (aI == g_aModuleMap.end())
+            VclPtr<vcl::Window> xParent(pParent);
+            pFunction(xWindow, xParent, rMap);
+            if (xWindow->GetType() == WindowType::PUSHBUTTON)
+                setupFromActionName(static_cast<Button*>(xWindow.get()), rMap, m_xFrame);
+            else if (xWindow->GetType() == WindowType::MENUBUTTON)
             {
-                std::shared_ptr<NoAutoUnloadModule> pModule;
-#if ENABLE_MERGELIBS
-                if (!g_pMergedLib->is())
-                    g_pMergedLib->loadRelative(&thisModule, SVLIBRARY("merged"));
-                if ((pFunction = reinterpret_cast<customMakeWidget>(g_pMergedLib->getFunctionSymbol(sFunction))))
-                    pModule = g_pMergedLib;
-#endif
-                if (!pFunction)
-                {
-                    pModule.reset(new NoAutoUnloadModule);
-                    bool ok = pModule->loadRelative(&thisModule, sModule);
-                    assert(ok && "bad module name in .ui");
-                    (void) ok;
-                    pFunction = reinterpret_cast<customMakeWidget>(pModule->getFunctionSymbol(sFunction));
-                }
-                g_aModuleMap.insert(std::make_pair(sModule, pModule));
-            }
-            else
-                pFunction = reinterpret_cast<customMakeWidget>(aI->second->getFunctionSymbol(sFunction));
-#elif !HAVE_FEATURE_DESKTOP
-            pFunction = lo_get_custom_widget_func(sFunction.toUtf8().getStr());
-            SAL_WARN_IF(!pFunction, "vcl.layout", "Could not find " << sFunction);
-            assert(pFunction);
-#else
-            pFunction = reinterpret_cast<customMakeWidget>(osl_getFunctionSymbol((oslModule) RTLD_DEFAULT, sFunction.pData));
-#endif
-            if (pFunction)
-            {
-                VclPtr<vcl::Window> xParent(pParent);
-                pFunction(xWindow, xParent, rMap);
-                if (xWindow->GetType() == WindowType::PUSHBUTTON)
-                    setupFromActionName(static_cast<Button*>(xWindow.get()), rMap, m_xFrame);
-                else if (xWindow->GetType() == WindowType::MENUBUTTON)
-                {
-                    OUString sMenu = BuilderUtils::extractCustomProperty(rMap);
-                    if (!sMenu.isEmpty())
-                        m_pParserState->m_aButtonMenuMaps.emplace_back(id, sMenu);
-                    setupFromActionName(static_cast<Button*>(xWindow.get()), rMap, m_xFrame);
-                }
+                OUString sMenu = BuilderUtils::extractCustomProperty(rMap);
+                if (!sMenu.isEmpty())
+                    m_pParserState->m_aButtonMenuMaps.emplace_back(id, sMenu);
+                setupFromActionName(static_cast<Button*>(xWindow.get()), rMap, m_xFrame);
             }
         }
     }
