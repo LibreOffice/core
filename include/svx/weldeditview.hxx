@@ -8,17 +8,19 @@
  *
  */
 
-#ifndef INCLUDED_EDITENG_WELDEDITVIEW_HXX
-#define INCLUDED_EDITENG_WELDEDITVIEW_HXX
+#ifndef INCLUDED_SVX_WELDEDITVIEW_HXX
+#define INCLUDED_SVX_WELDEDITVIEW_HXX
 
 #include <sal/config.h>
-#include <editeng/editengdllapi.h>
+#include <svx/svxdllapi.h>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/outdev.hxx>
 
-class EDITENG_DLLPUBLIC WeldEditView : public weld::CustomWidgetController, public EditViewCallbacks
+class WeldEditAccessible;
+
+class SVX_DLLPUBLIC WeldEditView : public weld::CustomWidgetController, public EditViewCallbacks
 {
 public:
     WeldEditView();
@@ -28,6 +30,7 @@ public:
 protected:
     std::unique_ptr<EditEngine> m_xEditEngine;
     std::unique_ptr<EditView> m_xEditView;
+    rtl::Reference<WeldEditAccessible> m_xAccessible;
 
     virtual void makeEditEngine();
 
@@ -39,6 +42,8 @@ protected:
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
     virtual void Resize() override;
+
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
     virtual void EditViewInvalidate(const tools::Rectangle& rRect) const override
     {
@@ -59,6 +64,6 @@ protected:
     }
 };
 
-#endif // INCLUDED_EDITENG_WELDEDITVIEW_HXX
+#endif // INCLUDED_SVX_WELDEDITVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

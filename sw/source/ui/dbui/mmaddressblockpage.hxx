@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UI_DBUI_MMADDRESSBLOCKPAGE_HXX
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMADDRESSBLOCKPAGE_HXX
 
-#include <editeng/weldeditview.hxx>
+#include <svx/weldeditview.hxx>
 #include <vcl/wizardmachine.hxx>
 #include <vcl/button.hxx>
 #include <mailmergehelper.hxx>
