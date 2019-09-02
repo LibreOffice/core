@@ -91,7 +91,7 @@ void OutlinerEditEng::ParagraphDeleted( sal_Int32 nDeletedParagraph )
 
 void OutlinerEditEng::ParagraphConnected( sal_Int32 /*nLeftParagraph*/, sal_Int32 nRightParagraph )
 {
-    if( pOwner && pOwner->IsUndoEnabled() && !const_cast<EditEngine&>(pOwner->GetEditEngine()).IsInUndo() )
+    if( pOwner && pOwner->IsUndoEnabled() && !pOwner->GetEditEngine().IsInUndo() )
     {
         Paragraph* pPara = pOwner->GetParagraph( nRightParagraph );
         if( pPara && Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) )
