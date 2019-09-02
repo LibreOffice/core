@@ -21,4 +21,6 @@ ifeq ($(DISABLE_DYNLOADING),TRUE)
 gb_STDLIBS := -ldl
 endif
 
+gb_STDLIBS_CXX := -latomic
+
 # vim: set noet sw=4 ts=4:
