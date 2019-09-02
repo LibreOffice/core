@@ -900,8 +900,6 @@ static const sal_Unicode* lcl_a1_get_col( const sal_Unicode* p,
                                                  ScRefFlags* nFlags,
                                                  const OUString* pErrRef )
 {
-    SCCOL nCol;
-
     if( *p == '$' )
     {
         *nFlags |= ScRefFlags::COL_ABS;
@@ -919,9 +917,10 @@ static const sal_Unicode* lcl_a1_get_col( const sal_Unicode* p,
     if( !rtl::isAsciiAlpha( *p ) )
         return nullptr;
 
-    nCol = sal::static_int_cast<SCCOL>( rtl::toAsciiUpperCase( *p++ ) - 'A' );
+    // use Int32 to avoid negative wrap-around
+    sal_Int32 nCol = sal::static_int_cast<SCCOL>( rtl::toAsciiUpperCase( *p++ ) - 'A' );
     while (nCol <= MAXCOL && rtl::isAsciiAlpha(*p))
-        nCol = sal::static_int_cast<SCCOL>( ((nCol + 1) * 26) + rtl::toAsciiUpperCase( *p++ ) - 'A' );
+        nCol = ((nCol + 1) * 26) + rtl::toAsciiUpperCase( *p++ ) - 'A';
     if( nCol > MAXCOL || rtl::isAsciiAlpha( *p ) )
         return nullptr;
 
@@ -1277,9 +1276,11 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, const ScDocumen
         {
             if (rtl::isAsciiAlpha( *p ))
             {
-                nCol = sal::static_int_cast<SCCOL>( rtl::toAsciiUpperCase( *p++ ) - 'A' );
-                while (nCol < MAXCOL && rtl::isAsciiAlpha(*p))
-                    nCol = sal::static_int_cast<SCCOL>( ((nCol + 1) * 26) + rtl::toAsciiUpperCase( *p++ ) - 'A' );
+                // use Int32 to avoid negative wrap-around
+                sal_Int32 nTmp = sal::static_int_cast<SCCOL>( rtl::toAsciiUpperCase( *p++ ) - 'A' );
+                while (nTmp <= MAXCOL && rtl::isAsciiAlpha(*p))
+                    nTmp = ((nTmp + 1) * 26) + rtl::toAsciiUpperCase( *p++ ) - 'A';
+                nCol = nTmp > MAXCOL ? MAXCOL + 1 : nTmp; // otherwise truncation gives a valid col, which is not what we want
             }
             else
                 nBits = ScRefFlags::ZERO;
@@ -2440,7 +2441,7 @@ void ScRange::IncEndColSticky( SCCOL nDelta )
         return;
 
     if (nCol < MAXCOL)
-        aEnd.SetCol( ::std::min( static_cast<SCCOL>(nCol + nDelta), MAXCOL));
+        aEnd.SetCol( ::std::min<SCCOL>(nCol + nDelta, MAXCOL) );
     else
         aEnd.IncCol( nDelta);   // was greater than MAXCOL, caller should know...
 }

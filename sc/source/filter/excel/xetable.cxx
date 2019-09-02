@@ -1720,20 +1720,21 @@ void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes )
 
     size_t nPos, nSize;
 
-    // do not cache the record list size, it may change in the loop
     for( nPos = 0; nPos < maColInfos.GetSize(); ++nPos )
     {
         XclExpColinfoRef xRec = maColInfos.GetRecord( nPos );
         xRec->ConvertXFIndexes();
+    }
 
+    // work backwards because its faster to erase at the end of a vector
+    for( nPos = maColInfos.GetSize() - 1; nPos > 0; )
+    {
+        XclExpColinfoRef xRec = maColInfos.GetRecord( nPos );
         // try to merge with previous record
-        if( nPos > 0 )
-        {
-            XclExpColinfoRef xPrevRec = maColInfos.GetRecord( nPos - 1 );
-            if( xPrevRec->TryMerge( *xRec ) )
-                // adjust nPos to get the next COLINFO record at the same position
-                maColInfos.RemoveRecord( nPos-- );
-        }
+        XclExpColinfoRef xPrevRec = maColInfos.GetRecord( nPos - 1 );
+        if( xPrevRec->TryMerge( *xRec ) )
+            maColInfos.RemoveRecord( nPos );
+        nPos--;
     }
 
     // put XF indexes into passed vector, collect use count of all different widths

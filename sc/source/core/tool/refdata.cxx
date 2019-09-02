@@ -512,7 +512,7 @@ bool ScComplexRefData::IncEndColSticky( SCCOL nDelta, const ScAddress& rPos )
 
     if (nCol2 < MAXCOL)
     {
-        SCCOL nCol = ::std::min( static_cast<SCCOL>(nCol2 + nDelta), MAXCOL);
+        SCCOL nCol = ::std::min<SCCOL>(nCol2 + nDelta, MAXCOL);
         if (Ref2.IsColRel())
             Ref2.SetRelCol( nCol - rPos.Col());
         else
