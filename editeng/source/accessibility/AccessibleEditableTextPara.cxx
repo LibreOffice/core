@@ -2043,7 +2043,7 @@ namespace accessibility
                 if( nIndex <= aBoundary.endPos )
                 {
                     nextWord =  aBoundary.endPos;
-                    if( sText[nextWord] == u' ' ) nextWord++;
+                    if (nextWord < sText.getLength() && sText[nextWord] == u' ') nextWord++;
                     bWord = implGetWordBoundary( sText, aBoundary, nextWord );
                 }
 
