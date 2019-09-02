@@ -53,7 +53,7 @@ namespace accessibility
          */
         AccessibleProxyEditSource_Impl( SdrObject&      rObj,
                                         SdrView&        rView,
-                                        const vcl::Window&   rViewWindow );
+                                        const OutputDevice&   rViewWindow );
 
         // from the SvxEditSource interface
         SvxTextForwarder*       GetTextForwarder() override;
@@ -169,7 +169,7 @@ namespace accessibility
 
     AccessibleProxyEditSource_Impl::AccessibleProxyEditSource_Impl( SdrObject&      rObj,
                                                                     SdrView&        rView,
-                                                                    const vcl::Window&   rViewWindow ) :
+                                                                    const OutputDevice&   rViewWindow ) :
         maEditSource( rObj, nullptr, rView, rViewWindow )
     {
     }
@@ -210,7 +210,7 @@ namespace accessibility
 
     AccessibleEmptyEditSource::AccessibleEmptyEditSource( SdrObject&    rObj,
                                                           SdrView&      rView,
-                                                          const vcl::Window& rViewWindow ) :
+                                                          const OutputDevice& rViewWindow ) :
         mpEditSource( new AccessibleEmptyEditSource_Impl() ),
         mrObj(rObj),
         mrView(rView),
