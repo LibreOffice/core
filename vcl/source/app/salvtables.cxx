@@ -345,6 +345,11 @@ public:
         return m_xWidget->HasFocus();
     }
 
+    virtual bool is_active() const override
+    {
+        return m_xWidget->IsActive();
+    }
+
     virtual void set_has_default(bool has_default) override
     {
         m_xWidget->set_property("has-default", OUString::boolean(has_default));

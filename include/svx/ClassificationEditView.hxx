@@ -13,7 +13,7 @@
 
 #include <sal/config.h>
 #include <svx/svxdllapi.h>
-#include <editeng/weldeditview.hxx>
+#include <svx/weldeditview.hxx>
 #include <editeng/svxenum.hxx>
 #include <vcl/customweld.hxx>
 

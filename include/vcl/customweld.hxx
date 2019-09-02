@@ -57,6 +57,7 @@ public:
     bool IsVisible() const { return m_pDrawingArea->get_visible(); }
     bool IsReallyVisible() const { return m_pDrawingArea->is_visible(); }
     bool IsEnabled() const { return m_pDrawingArea->get_sensitive(); }
+    bool IsActive() const { return m_pDrawingArea->is_active(); }
     int GetTextHeight() const { return m_pDrawingArea->get_text_height(); }
     OUString GetAccessibleName() const { return m_pDrawingArea->get_accessible_name(); }
     OUString GetAccessibleDescription() const

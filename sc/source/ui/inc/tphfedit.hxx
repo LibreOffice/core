@@ -23,7 +23,7 @@
 #include <scdllapi.h>
 #include <cppuhelper/weakref.hxx>
 #include <tools/wintypes.hxx>
-#include <editeng/weldeditview.hxx>
+#include <svx/weldeditview.hxx>
 #include <editeng/svxenum.hxx>
 #include <vcl/customweld.hxx>
 

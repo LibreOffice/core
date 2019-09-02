@@ -1677,6 +1677,12 @@ public:
         return gtk_widget_has_focus(m_pWidget);
     }
 
+    virtual bool is_active() const override
+    {
+        GtkWindow* pTopLevel = GTK_WINDOW(gtk_widget_get_toplevel(m_pWidget));
+        return pTopLevel && gtk_window_is_active(pTopLevel) && has_focus();
+    }
+
     virtual void set_has_default(bool has_default) override
     {
         g_object_set(G_OBJECT(m_pWidget), "has-default", has_default, nullptr);
