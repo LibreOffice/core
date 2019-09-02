@@ -253,7 +253,7 @@ public:
         const OUString& rOldName, SfxStyleFamily eOldFamily, const OUString& rNewName, SfxStyleFamily eNewFamily);
     void ChangeStyleSheetName(SfxStyleFamily eFamily, const OUString& rOldName, const OUString& rNewName);
 
-    editeng::FieldUpdater GetFieldUpdater() { return editeng::FieldUpdater(*mpFront);}
+    editeng::FieldUpdater GetFieldUpdater() const { return editeng::FieldUpdater(*mpFront);}
 
     bool HasMetric() const { return nMetric != 0xFFFF; }
     sal_uInt16                  GetMetric() const           { return nMetric; }
