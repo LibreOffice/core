@@ -45,6 +45,7 @@
 #include <functional>
 #include <memory>
 #include <algorithm>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -63,6 +64,67 @@ namespace
         { return ptr.lock().get() == other.ptr.lock().get(); }
     };
 }
+
+// Needed by ImplViewHandlers; see the ListenerOperations<std::weak_ptr<ListenerTargetT>> partial
+// specialization in slideshow/source/inc/listenercontainer.hxx:
+template<>
+struct slideshow::internal::ListenerOperations<ViewEventHandlerWeakPtrWrapper>
+{
+    template< typename ContainerT,
+              typename FuncT >
+    static bool notifySingleListener( ContainerT& rContainer,
+                                      FuncT       func )
+    {
+        for( const auto& rCurr : rContainer )
+        {
+            std::shared_ptr<ViewEventHandler> pListener( rCurr.ptr.lock() );
+
+            if( pListener && func(pListener) )
+                return true;
+        }
+
+        return false;
+    }
+
+    template< typename ContainerT,
+              typename FuncT >
+    static bool notifyAllListeners( ContainerT& rContainer,
+                                    FuncT       func )
+    {
+        bool bRet(false);
+        for( const auto& rCurr : rContainer )
+        {
+            std::shared_ptr<ViewEventHandler> pListener( rCurr.ptr.lock() );
+
+            if( pListener.get() &&
+                FunctionApply<typename ::std::result_of<FuncT (std::shared_ptr<ViewEventHandler> const&)>::type,
+                               std::shared_ptr<ViewEventHandler> >::apply(func,pListener) )
+            {
+                bRet = true;
+            }
+        }
+
+        return bRet;
+    }
+    template< typename ContainerT >
+    static void pruneListeners( ContainerT& rContainer,
+                                size_t      nSizeThreshold )
+    {
+        if( rContainer.size() <= nSizeThreshold )
+            return;
+
+        ContainerT aAliveListeners;
+        aAliveListeners.reserve(rContainer.size());
+
+        for( const auto& rCurr : rContainer )
+        {
+            if( !rCurr.ptr.expired() )
+                aAliveListeners.push_back( rCurr );
+        }
+
+        std::swap( rContainer, aAliveListeners );
+    }
+};
 
 namespace slideshow {
 namespace internal {
@@ -1105,8 +1167,8 @@ void EventMultiplexer::notifyViewAdded( const UnoViewSharedPtr& rView )
             mpImpl->mxListener.get() );
 
     mpImpl->maViewHandlers.applyAll(
-        [&rView]( const ViewEventHandlerWeakPtrWrapper& pHandler )
-        { return pHandler.ptr.lock()->viewAdded( rView ); } );
+        [&rView]( const ViewEventHandlerWeakPtr& pHandler )
+        { return pHandler.lock()->viewAdded( rView ); } );
 }
 
 void EventMultiplexer::notifyViewRemoved( const UnoViewSharedPtr& rView )
@@ -1127,15 +1189,15 @@ void EventMultiplexer::notifyViewRemoved( const UnoViewSharedPtr& rView )
             mpImpl->mxListener.get() );
 
     mpImpl->maViewHandlers.applyAll(
-        [&rView]( const ViewEventHandlerWeakPtrWrapper& pHandler )
-        { return pHandler.ptr.lock()->viewRemoved( rView ); } );
+        [&rView]( const ViewEventHandlerWeakPtr& pHandler )
+        { return pHandler.lock()->viewRemoved( rView ); } );
 }
 
 void EventMultiplexer::notifyViewChanged( const UnoViewSharedPtr& rView )
 {
     mpImpl->maViewHandlers.applyAll(
-        [&rView]( const ViewEventHandlerWeakPtrWrapper& pHandler )
-        { return pHandler.ptr.lock()->viewChanged( rView ); } );
+        [&rView]( const ViewEventHandlerWeakPtr& pHandler )
+        { return pHandler.lock()->viewChanged( rView ); } );
 }
 
 void EventMultiplexer::notifyViewChanged( const uno::Reference<presentation::XSlideShowView>& xView )
@@ -1151,8 +1213,7 @@ void EventMultiplexer::notifyViewChanged( const uno::Reference<presentation::XSl
 void EventMultiplexer::notifyViewsChanged()
 {
     mpImpl->maViewHandlers.applyAll(
-        []( const ViewEventHandlerWeakPtrWrapper& pHandler )
-        { return pHandler.ptr.lock()->viewsChanged(); } );
+        std::mem_fn( &ViewEventHandler::viewsChanged ));
 }
 
 void EventMultiplexer::notifyViewClobbered(
