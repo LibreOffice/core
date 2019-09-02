@@ -2226,7 +2226,7 @@ bool SwTransferable::PasteTargetURL( TransferableDataHelper& rData,
             OUString sURL( aINetImg.GetImageURL() );
             SwTransferable::CheckForURLOrLNKFile( rData, sURL );
 
-            //!!! check at FileSystem - only then it make sense to test graphics !!!
+            //!!! check at FileSystem - only then it makes sense to test graphics !!!
             Graphic aGraphic;
             GraphicFilter &rFlt = GraphicFilter::GetGraphicFilter();
             bRet = ERRCODE_NONE == GraphicFilter::LoadGraphic(sURL, OUString(), aGraphic, &rFlt);

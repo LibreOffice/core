@@ -812,7 +812,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                 if( pCurrent )
                 {
                     pCurrent->Add(std::move(pOld));
-                    // split up and create new entry, because it make no sense
+                    // split up and create new entry, because it makes no sense
                     // to create a "so long" depend list. Bug 95010
                     if (bCrsrBack && 50 < pCurrent->m_pChildList->size())
                     {
