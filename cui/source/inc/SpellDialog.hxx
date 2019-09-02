@@ -27,7 +27,7 @@
 #include <memory>
 #include <svl/undo.hxx>
 #include <vcl/customweld.hxx>
-#include <editeng/weldeditview.hxx>
+#include <svx/weldeditview.hxx>
 #include <editeng/SpellPortions.hxx>
 
 #include <set>

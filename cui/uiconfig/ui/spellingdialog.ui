@@ -156,7 +156,7 @@
                 <child>
                   <object class="GtkViewport">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <object class="GtkDrawingArea" id="sentence">
                         <property name="visible">True</property>
