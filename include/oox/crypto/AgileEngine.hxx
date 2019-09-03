@@ -123,13 +123,15 @@ public:
 
     // Encryption
 
-    void writeEncryptionInfo(BinaryXOutputStream& rStream) override;
+    void writeEncryptionInfo(oox::ole::OleStorage& rOleStorage) override;
 
     void encrypt(css::uno::Reference<css::io::XInputStream>&  rxInputStream,
                  css::uno::Reference<css::io::XOutputStream>& rxOutputStream,
                  sal_uInt32 nSize) override;
 
-    bool setupEncryption(OUString const & rPassword) override;
+    bool setupEncryption(css::uno::Sequence<css::beans::NamedValue>& rMediaEncData) override;
+
+    virtual void createEncryptionData(comphelper::SequenceAsHashMap & aEncryptionData, const OUString rPassword) override;
 
     bool generateAndEncryptVerifierHash(OUString const & rPassword);
 

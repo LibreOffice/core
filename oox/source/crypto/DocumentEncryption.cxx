@@ -9,6 +9,8 @@
  */
 
 #include <oox/crypto/DocumentEncryption.hxx>
+#include <oox/crypto/Standard2007Engine.hxx>
+#include <oox/crypto/IRMEngine.hxx>
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -27,11 +29,29 @@ using namespace css::uno;
 
 DocumentEncryption::DocumentEncryption(Reference<XStream> const & xDocumentStream,
                                        oox::ole::OleStorage& rOleStorage,
-                                       const OUString& rPassword)
+                                       Sequence<css::beans::NamedValue>& rMediaEncData)
     : mxDocumentStream(xDocumentStream)
     , mrOleStorage(rOleStorage)
-    , maPassword(rPassword)
-{}
+    , mMediaEncData(rMediaEncData)
+{
+    // Select engine
+    for (int i = 0; i < rMediaEncData.getLength(); i++)
+    {
+        if (rMediaEncData[i].Name == "CryptoType")
+        {
+            OUString sCryptoType;
+            rMediaEncData[i].Value >>= sCryptoType;
+            if (sCryptoType == "IRM")
+            {
+                mEngine.reset(new IRMEngine);
+            }
+            else
+            {
+                mEngine.reset(new Standard2007Engine);
+            }
+        }
+    }
+}
 
 bool DocumentEncryption::encrypt()
 {
@@ -47,23 +67,14 @@ bool DocumentEncryption::encrypt()
     if (!mrOleStorage.isStorage())
         return false;
 
-    mEngine.setupEncryption(maPassword);
+    mEngine->setupEncryption(mMediaEncData);
 
     Reference<XOutputStream> xOutputStream(mrOleStorage.openOutputStream("EncryptedPackage"), UNO_SET_THROW);
-
-    mEngine.encrypt(xInputStream, xOutputStream, aLength);
-
+    mEngine->encrypt(xInputStream, xOutputStream, aLength);
     xOutputStream->flush();
     xOutputStream->closeOutput();
 
-    Reference<XOutputStream> xEncryptionInfo(mrOleStorage.openOutputStream("EncryptionInfo"), UNO_SET_THROW);
-    BinaryXOutputStream aEncryptionInfoBinaryOutputStream(xEncryptionInfo, false);
-
-    mEngine.writeEncryptionInfo(aEncryptionInfoBinaryOutputStream);
-
-    aEncryptionInfoBinaryOutputStream.close();
-    xEncryptionInfo->flush();
-    xEncryptionInfo->closeOutput();
+    mEngine->writeEncryptionInfo(mrOleStorage);
 
     return true;
 }
