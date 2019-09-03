@@ -1,0 +1,52 @@
+--- src/engine-gpg.c
++++ src/engine-gpg.c
+@@ -60,6 +60,15 @@
+ 		      building command line to this location.  */
+   char arg[1];     /* Used if data above is not used.  */
+ };
++struct arg_without_data_s
++{
++  struct arg_and_data_s *next;
++  gpgme_data_t data;
++  int inbound;
++  int dup_to;
++  int print_fd;
++  int *arg_locp;
++};
+ 
+ 
+ struct fd_data_map_s
+@@ -299,23 +308,24 @@
+   a = malloc (sizeof *a - 1);
+   if (!a)
+     return gpg_error_from_syserror ();
+-  a->next = NULL;
+-  a->data = data;
+-  a->inbound = inbound;
+-  a->arg_locp = NULL;
++  struct arg_without_data_s *a2 = (struct arg_without_data_s *)a;
++  a2->next = NULL;
++  a2->data = data;
++  a2->inbound = inbound;
++  a2->arg_locp = NULL;
+ 
+   if (dup_to == -2)
+     {
+-      a->print_fd = 1;
+-      a->dup_to = -1;
++      a2->print_fd = 1;
++      a2->dup_to = -1;
+     }
+   else
+     {
+-      a->print_fd = 0;
+-      a->dup_to = dup_to;
++      a2->print_fd = 0;
++      a2->dup_to = dup_to;
+     }
+   *gpg->argtail = a;
+-  gpg->argtail = &a->next;
++  gpg->argtail = &a2->next;
+   return 0;
+ }
+ 
