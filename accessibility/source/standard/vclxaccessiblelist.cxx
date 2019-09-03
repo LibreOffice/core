@@ -586,11 +586,8 @@ OUString VCLXAccessibleList::getImplementationName()
 
 Sequence< OUString > VCLXAccessibleList::getSupportedServiceNames()
 {
-    Sequence< OUString > aNames = VCLXAccessibleComponent::getSupportedServiceNames();
-    sal_Int32 nLength = aNames.getLength();
-    aNames.realloc( nLength + 1 );
-    aNames[nLength] = "com.sun.star.accessibility.AccessibleList";
-    return aNames;
+    return comphelper::concatSequences(VCLXAccessibleComponent::getSupportedServiceNames(),
+                                       Sequence<OUString>{"com.sun.star.accessibility.AccessibleList"});
 }
 
 void VCLXAccessibleList::UpdateVisibleLineCount()

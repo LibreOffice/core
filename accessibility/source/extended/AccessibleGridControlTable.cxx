@@ -165,17 +165,8 @@ sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleRowSelected( sal_Int32
 
     ensureIsAlive();
     ensureIsValidRow( nRow );
-    bool bSelected = false;
     Sequence< sal_Int32 > selectedRows = getSelectedAccessibleRows();
-    for(int i=0; i<selectedRows.getLength(); i++)
-    {
-        if(nRow == selectedRows[i])
-        {
-            bSelected = true;
-            break;
-        }
-    }
-    return bSelected;
+    return comphelper::findValue(selectedRows, nRow) != -1;
 }
 
 //columns aren't selectable
