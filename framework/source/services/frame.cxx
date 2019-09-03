@@ -1610,6 +1610,9 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL XFrameImpl::getComponentWindow
 css::uno::Reference< css::frame::XController > SAL_CALL XFrameImpl::getController()
 {
     SolarMutexGuard g;
+    // TODO: IRM:UNOLOCK
+    // TODO: not all frames should returl nullptr, since it is used wider
+    // return nullptr
     return m_xController;
 }
 
