@@ -43,7 +43,7 @@ using namespace css::xml::sax;
 using namespace css::xml;
 
 namespace oox {
-namespace core {
+namespace crypto {
 
 namespace {
 
@@ -583,7 +583,7 @@ bool AgileEngine::encryptHmacKey()
         return false;
 
     // Encrypted salt must be multiple of block size
-    sal_Int32 nEncryptedSaltSize = oox::core::roundUp(mInfo.hashSize, mInfo.blockSize);
+    sal_Int32 nEncryptedSaltSize = oox::crypto::roundUp(mInfo.hashSize, mInfo.blockSize);
 
     // We need to extend hmacSalt to multiple of block size, padding with 0x36
     std::vector<sal_uInt8> extendedSalt(mInfo.hmacKey);
@@ -757,7 +757,7 @@ void AgileEngine::writeEncryptionInfo(BinaryXOutputStream & rStream)
     rStream.writeMemory(aMemStream.GetData(), aMemStream.GetSize());
 }
 
-void AgileEngine::encrypt(css::uno::Reference<css::io::XInputStream> &  rxInputStream,
+void AgileEngine::encrypt(const css::uno::Reference<css::io::XInputStream> &  rxInputStream,
                           css::uno::Reference<css::io::XOutputStream> & rxOutputStream,
                           sal_uInt32 nSize)
 {
@@ -797,7 +797,7 @@ void AgileEngine::encrypt(css::uno::Reference<css::io::XInputStream> &  rxInputS
     while ((inputLength = aBinaryInputStream.readMemory(inputBuffer.data(), inputBuffer.size())) > 0)
     {
         sal_uInt32 correctedInputLength = inputLength % mInfo.blockSize == 0 ?
-                        inputLength : oox::core::roundUp(inputLength, sal_uInt32(mInfo.blockSize));
+                        inputLength : oox::crypto::roundUp(inputLength, sal_uInt32(mInfo.blockSize));
 
         // Update Key
         sal_uInt8* segmentBegin = reinterpret_cast<sal_uInt8*>(&nSegment);
@@ -820,7 +820,7 @@ void AgileEngine::encrypt(css::uno::Reference<css::io::XInputStream> &  rxInputS
     encryptHmacValue();
 }
 
-} // namespace core
+} // namespace crypto
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
