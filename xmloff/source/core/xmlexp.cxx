@@ -2262,7 +2262,7 @@ bool SvXMLExport::writeOutlineStyleAsNormalListStyle() const
     return mpImpl->mbOutlineStyleAsNormalListStyle;
 }
 
-uno::Reference< embed::XStorage > const & SvXMLExport::GetTargetStorage()
+uno::Reference< embed::XStorage > const & SvXMLExport::GetTargetStorage() const
 {
     return mpImpl->mxTargetStorage;
 }
