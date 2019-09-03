@@ -66,7 +66,7 @@ void CryptoTest::testCryptoHash()
                                     aContentString.getStr() + aContentString.getLength());
     std::vector<sal_uInt8> aKey = { 'k', 'e', 'y' };
     {
-        oox::core::CryptoHash aCryptoHash(aKey, oox::core::CryptoHashType::SHA1);
+        oox::crypto::CryptoHash aCryptoHash(aKey, oox::crypto::CryptoHashType::SHA1);
         aCryptoHash.update(aContent);
         std::vector<sal_uInt8> aHash = aCryptoHash.finalize();
         CPPUNIT_ASSERT_EQUAL(std::string("de7c9b85b8b78aa6bc8a7a36f70a90701c9db4d9"),
@@ -74,7 +74,7 @@ void CryptoTest::testCryptoHash()
     }
 
     {
-        oox::core::CryptoHash aCryptoHash(aKey, oox::core::CryptoHashType::SHA256);
+        oox::crypto::CryptoHash aCryptoHash(aKey, oox::crypto::CryptoHashType::SHA256);
         aCryptoHash.update(aContent);
         std::vector<sal_uInt8> aHash = aCryptoHash.finalize();
         CPPUNIT_ASSERT_EQUAL(
@@ -83,7 +83,7 @@ void CryptoTest::testCryptoHash()
     }
 
     {
-        oox::core::CryptoHash aCryptoHash(aKey, oox::core::CryptoHashType::SHA512);
+        oox::crypto::CryptoHash aCryptoHash(aKey, oox::crypto::CryptoHashType::SHA512);
         aCryptoHash.update(aContent);
         std::vector<sal_uInt8> aHash = aCryptoHash.finalize();
         CPPUNIT_ASSERT_EQUAL(
@@ -95,18 +95,18 @@ void CryptoTest::testCryptoHash()
 
 void CryptoTest::testRoundUp()
 {
-    CPPUNIT_ASSERT_EQUAL(16, oox::core::roundUp(16, 16));
-    CPPUNIT_ASSERT_EQUAL(32, oox::core::roundUp(32, 16));
-    CPPUNIT_ASSERT_EQUAL(64, oox::core::roundUp(64, 16));
+    CPPUNIT_ASSERT_EQUAL(16, oox::crypto::roundUp(16, 16));
+    CPPUNIT_ASSERT_EQUAL(32, oox::crypto::roundUp(32, 16));
+    CPPUNIT_ASSERT_EQUAL(64, oox::crypto::roundUp(64, 16));
 
-    CPPUNIT_ASSERT_EQUAL(16, oox::core::roundUp(01, 16));
-    CPPUNIT_ASSERT_EQUAL(32, oox::core::roundUp(17, 16));
-    CPPUNIT_ASSERT_EQUAL(32, oox::core::roundUp(31, 16));
+    CPPUNIT_ASSERT_EQUAL(16, oox::crypto::roundUp(01, 16));
+    CPPUNIT_ASSERT_EQUAL(32, oox::crypto::roundUp(17, 16));
+    CPPUNIT_ASSERT_EQUAL(32, oox::crypto::roundUp(31, 16));
 }
 
 void CryptoTest::testStandard2007()
 {
-    oox::core::Standard2007Engine aEngine;
+    oox::crypto::Standard2007Engine aEngine;
     {
         aEngine.setupEncryption("Password");
 
@@ -173,7 +173,7 @@ void CryptoTest::testStandard2007()
 
 void CryptoTest::testAgileEncryptionVerifier()
 {
-    oox::core::AgileEngine aEngine;
+    oox::crypto::AgileEngine aEngine;
 
     OUString aPassword("Password");
 
@@ -200,9 +200,9 @@ void CryptoTest::testAgileEncrpytionInfoWritingAndParsing()
     { // Preset AES128 - SHA1
         SvMemoryStream aEncryptionInfo;
         {
-            oox::core::AgileEngine aEngine;
+            oox::crypto::AgileEngine aEngine;
 
-            aEngine.setPreset(oox::core::AgileEncryptionPreset::AES_128_SHA1);
+            aEngine.setPreset(oox::crypto::AgileEncryptionPreset::AES_128_SHA1);
             aEngine.setupEncryption(aPassword);
             aKeyDataSalt = aEngine.getInfo().keyDataSalt;
 
@@ -218,7 +218,7 @@ void CryptoTest::testAgileEncrpytionInfoWritingAndParsing()
         aEncryptionInfo.Seek(STREAM_SEEK_TO_BEGIN);
 
         {
-            oox::core::AgileEngine aEngine;
+            oox::crypto::AgileEngine aEngine;
 
             uno::Reference<io::XInputStream> xInputStream(
                 new utl::OSeekableInputStreamWrapper(aEncryptionInfo));
@@ -227,7 +227,7 @@ void CryptoTest::testAgileEncrpytionInfoWritingAndParsing()
 
             CPPUNIT_ASSERT(aEngine.readEncryptionInfo(xInputStream));
 
-            oox::core::AgileEncryptionInfo& rInfo = aEngine.getInfo();
+            oox::crypto::AgileEncryptionInfo& rInfo = aEngine.getInfo();
             CPPUNIT_ASSERT_EQUAL(sal_Int32(100000), rInfo.spinCount);
             CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.saltSize);
             CPPUNIT_ASSERT_EQUAL(sal_Int32(128), rInfo.keyBits);
@@ -246,9 +246,9 @@ void CryptoTest::testAgileEncrpytionInfoWritingAndParsing()
     { // Preset AES256 - SHA512
         SvMemoryStream aEncryptionInfo;
         {
-            oox::core::AgileEngine aEngine;
+            oox::crypto::AgileEngine aEngine;
 
-            aEngine.setPreset(oox::core::AgileEncryptionPreset::AES_256_SHA512);
+            aEngine.setPreset(oox::crypto::AgileEncryptionPreset::AES_256_SHA512);
             aEngine.setupEncryption(aPassword);
             aKeyDataSalt = aEngine.getInfo().keyDataSalt;
 
@@ -264,7 +264,7 @@ void CryptoTest::testAgileEncrpytionInfoWritingAndParsing()
         aEncryptionInfo.Seek(STREAM_SEEK_TO_BEGIN);
 
         {
-            oox::core::AgileEngine aEngine;
+            oox::crypto::AgileEngine aEngine;
 
             uno::Reference<io::XInputStream> xInputStream(
                 new utl::OSeekableInputStreamWrapper(aEncryptionInfo));
@@ -273,7 +273,7 @@ void CryptoTest::testAgileEncrpytionInfoWritingAndParsing()
 
             CPPUNIT_ASSERT(aEngine.readEncryptionInfo(xInputStream));
 
-            oox::core::AgileEncryptionInfo& rInfo = aEngine.getInfo();
+            oox::crypto::AgileEncryptionInfo& rInfo = aEngine.getInfo();
             CPPUNIT_ASSERT_EQUAL(sal_Int32(100000), rInfo.spinCount);
             CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.saltSize);
             CPPUNIT_ASSERT_EQUAL(sal_Int32(256), rInfo.keyBits);
@@ -301,7 +301,7 @@ void CryptoTest::testAgileDataIntegrityHmacKey()
 
     SvMemoryStream aEncryptionInfo;
     {
-        oox::core::AgileEngine aEngine;
+        oox::crypto::AgileEngine aEngine;
         aEngine.setupEncryption(aPassword);
         oox::BinaryXOutputStream aBinaryEncryptionInfoOutputStream(
             new utl::OSeekableOutputStreamWrapper(aEncryptionInfo), true);
@@ -316,7 +316,7 @@ void CryptoTest::testAgileDataIntegrityHmacKey()
     aEncryptionInfo.Seek(STREAM_SEEK_TO_BEGIN);
 
     {
-        oox::core::AgileEngine aEngine;
+        oox::crypto::AgileEngine aEngine;
 
         uno::Reference<io::XInputStream> xInputStream(
             new utl::OSeekableInputStreamWrapper(aEncryptionInfo));
@@ -346,7 +346,7 @@ void CryptoTest::testAgileEncryptingAndDecrypting()
     OString aTestString = OUStringToOString("1234567890ABCDEFGH", RTL_TEXTENCODING_UTF8);
 
     {
-        oox::core::AgileEngine aEngine;
+        oox::crypto::AgileEngine aEngine;
 
         // Setup input
         SvMemoryStream aUnencryptedInput;
@@ -381,7 +381,7 @@ void CryptoTest::testAgileEncryptingAndDecrypting()
     aEncryptionInfo.Seek(STREAM_SEEK_TO_BEGIN);
 
     {
-        oox::core::AgileEngine aEngine;
+        oox::crypto::AgileEngine aEngine;
 
         // Read encryption info
         uno::Reference<io::XInputStream> xEncryptionInfo(
