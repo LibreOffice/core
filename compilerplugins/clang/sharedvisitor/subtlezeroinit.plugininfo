@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:SubtleZeroInit
+VisitFunctionStart
+VisitFunctionName:VisitCXXNewExpr
+VisitFunctionArgument:const class clang::CXXNewExpr *
+VisitFunctionEnd
+InfoEnd

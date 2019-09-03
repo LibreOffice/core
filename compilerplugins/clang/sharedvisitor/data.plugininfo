@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:Data
+VisitFunctionStart
+VisitFunctionName:VisitUnaryOperator
+VisitFunctionArgument:const class clang::UnaryOperator *
+VisitFunctionEnd
+InfoEnd

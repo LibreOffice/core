@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:DoubleConvert
+VisitFunctionStart
+VisitFunctionName:VisitMaterializeTemporaryExpr
+VisitFunctionArgument:const class clang::MaterializeTemporaryExpr *
+VisitFunctionEnd
+InfoEnd

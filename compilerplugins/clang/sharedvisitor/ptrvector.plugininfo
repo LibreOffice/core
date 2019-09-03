@@ -1,0 +1,8 @@
+InfoVersion:1
+ClassName:PtrVector
+ShouldVisitTemplateInstantiations:1
+VisitFunctionStart
+VisitFunctionName:VisitCXXOperatorCallExpr
+VisitFunctionArgument:const class clang::CXXOperatorCallExpr *
+VisitFunctionEnd
+InfoEnd

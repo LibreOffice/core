@@ -7,71 +7,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/*
-This tool generates another "plugin" which in fact only dispatches Visit* and Traverse*
-calls to all other plugins registered with it. This means that there is just one
-RecursiveASTVisitor pass for all those plugins instead of one per each, which
-with the current number of plugins actually makes a performance difference.
-
-If you work on a plugin, comment out LO_CLANG_SHARED_PLUGINS in Makefile-clang.mk in order
-to disable the feature (re-generating takes time).
-
-Requirements for plugins:
-- Can use Visit* and Traverse* functions, but not WalkUp*.
-- Visit* functions can generally remain unmodified.
-- run() function must be split into preRun() and postRun() if there's any additional functionality
-  besides calling TraverseDecl(). The shared visitor will call the preRun() and postRun() functions
-  as necessary while calling its own run(). The run() function of the plugin must stay
-  (in case of a non-shared build) but should generally look like this:
-    if( preRun())
-        if( TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()))
-            postRun();
-- Traverse* functions must be split into PreTraverse* and PostTraverse*, similarly to how run()
-  is handled, the Traverse* function should generally look like this:
-        bool ret = true;
-        if( PreTraverse*(decl))
-        {
-            ret = RecursiveASTVisitor::Traverse*(decl);
-            PostTraverse*(decl, ret);
-        }
-        return ret;
-
-
-TODO:
-- Create macros for the standardized layout of run(), Traverse*, etc.?
-- Possibly check plugin sources more thoroughly (e.g. that run() doesn't actually do more).
-- Have one tool that extracts info from plugin .cxx files into some .txt file and another tool
-  that generates sharedvisitor.cxx based on those files? That would generally make the generation
-  faster when doing incremental changes. The .txt file could also contain some checksum of the .cxx
-  to avoid the analysing pass completely if just the timestamp has changed.
-- Do not re-compile sharedvisitor.cxx if its contents have not actually changed.
-- Is it possible to make the clang code analyze just the .cxx without also parsing all the headers?
-- Instead of having to comment out LO_CLANG_SHARED_PLUGINS, implement --enable-compiler-plugins=debug .
-
-*/
-
-#include "clang/AST/ASTConsumer.h"
-#include "clang/AST/RecursiveASTVisitor.h"
-#include "clang/Frontend/CompilerInstance.h"
-#include "clang/Frontend/FrontendAction.h"
-#include "clang/Tooling/Tooling.h"
-
+#include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <cstring>
 #include <iostream>
 #include <fstream>
 #include <memory>
 #include <set>
-
-#include "config_clang.h"
-#include "../check.hxx"
-#include "../check.cxx"
+#include <vector>
 
 using namespace std;
-
-using namespace clang;
-
-using namespace loplugin;
 
 // Info about a Visit* function in a plugin.
 struct VisitFunctionInfo
@@ -360,55 +306,37 @@ void generateVisitor( PluginType type )
 "\n";
 }
 
-class CheckFileVisitor
-    : public RecursiveASTVisitor< CheckFileVisitor >
+static string getValue( const string& line, const char* tag )
 {
-public:
-    bool VisitCXXRecordDecl(CXXRecordDecl *Declaration);
-
-    bool TraverseNamespaceDecl(NamespaceDecl * decl)
-    {
-        // Skip non-LO namespaces the same way FilteringPlugin does.
-        if( !ContextCheck( decl ).Namespace( "loplugin" ).GlobalNamespace()
-            && !ContextCheck( decl ).AnonymousNamespace())
-        {
-            return true;
-        }
-        return RecursiveASTVisitor<CheckFileVisitor>::TraverseNamespaceDecl(decl);
-    }
-};
-
-static bool inheritsPluginClassCheck( const Decl* decl )
-{
-    return bool( DeclCheck( decl ).Class( "FilteringPlugin" ).Namespace( "loplugin" ).GlobalNamespace())
-        || bool( DeclCheck( decl ).Class( "FilteringRewritePlugin" ).Namespace( "loplugin" ).GlobalNamespace());
+    size_t taglen = strlen( tag );
+    if( line.size() < taglen + 2 )
+        return string();
+    if( line.compare( 0, taglen, tag ) != 0 )
+        return string();
+    if( line[ taglen ] != ':' )
+        return string();
+    return line.substr( taglen + 1 );
 }
 
-static TraverseFunctionInfo findOrCreateTraverseFunctionInfo( PluginInfo& pluginInfo, StringRef name )
+static bool readFile( const string& fileName )
 {
-    TraverseFunctionInfo info;
-    info.name = name;
-    auto foundInfo = pluginInfo.traverseFunctions.find( info );
-    if( foundInfo != pluginInfo.traverseFunctions.end())
+    ifstream file( fileName );
+    if( !file )
     {
-        info = move( *foundInfo );
-        pluginInfo.traverseFunctions.erase( foundInfo );
+        cerr << "Cannot open file " << fileName << endl;
+        return false;
     }
-    return info;
-}
-
-static bool foundSomething;
-
-bool CheckFileVisitor::VisitCXXRecordDecl( CXXRecordDecl* decl )
-{
-    if( !isDerivedFrom( decl, inheritsPluginClassCheck ))
-        return true;
-
-    if( decl->getName() == "FilteringPlugin" || decl->getName() == "FilteringRewritePlugin" )
-        return true;
-
     PluginInfo pluginInfo;
-    pluginInfo.className = decl->getName().str();
+    string line;
+    getline( file, line );
+    string version = getValue( line, "InfoVersion" );
+    if( version != "1" )
+    {
+        cerr << "Incorrect version '" << version << "'" << endl;
+        return false;
+    }
+    getline( file, line );
+    pluginInfo.className = getValue( line, "ClassName" );
     pluginInfo.variableName = pluginInfo.className;
     assert( pluginInfo.variableName.size() > 0 );
     pluginInfo.variableName[ 0 ] = tolower( pluginInfo.variableName[ 0 ] );
@@ -417,63 +345,78 @@ bool CheckFileVisitor::VisitCXXRecordDecl( CXXRecordDecl* decl )
         c = tolower( c );
     pluginInfo.shouldVisitTemplateInstantiations = false;
     pluginInfo.shouldVisitImplicitCode = false;
-    for( const CXXMethodDecl* method : decl->methods())
+    bool endOk = false;
+    for(;;)
     {
-        if( !method->getDeclName().isIdentifier())
-            continue;
-        if( method->isStatic() || method->getAccess() != AS_public )
-            continue;
-        if( method->getName().startswith( "Visit" ))
+        string line;
+        getline( file, line );
+        if( file.eof() || !file )
         {
-            if( method->getNumParams() == 1 )
+            cerr << "Unexpected end of file" << endl;
+            return false;
+        }
+        if( line.empty())
+            continue;
+        if( line == "InfoEnd" )
+        {
+            endOk = true;
+            break;
+        }
+        else if( line == "VisitFunctionStart" )
+        {
+            VisitFunctionInfo visitInfo;
+            getline( file, line );
+            visitInfo.name = getValue( line, "VisitFunctionName" );
+            getline( file, line );
+            visitInfo.argument = getValue( line, "VisitFunctionArgument" );
+            getline( file, line );
+            if( line != "VisitFunctionEnd" )
             {
-                VisitFunctionInfo visitInfo;
-                visitInfo.name = method->getName().str();
-                visitInfo.argument = method->getParamDecl( 0 )->getTypeSourceInfo()->getType().getAsString();
-                pluginInfo.visitFunctions.insert( move( visitInfo ));
+                cerr << "Missing VisitFunctionEnd" << endl;
+                return false;
             }
+            pluginInfo.visitFunctions.insert( move( visitInfo ));
+        }
+        else if( line == "TraverseFunctionStart" )
+        {
+            TraverseFunctionInfo traverseInfo;
+            getline( file, line );
+            traverseInfo.name = getValue( line, "TraverseFunctionName" );
+            getline( file, line );
+            traverseInfo.argument = getValue( line, "TraverseFunctionArgument" );
+            getline( file, line );
+            traverseInfo.hasPre = getValue( line, "TraverseFunctionHasPre" ) == "1";
+            getline( file, line );
+            traverseInfo.hasPost = getValue( line, "TraverseFunctionHasPost" ) == "1";
+            getline( file, line );
+            if( line != "TraverseFunctionEnd" )
+            {
+                cerr << "Missing TraverseFunctionEnd" << endl;
+                return false;
+            }
+            pluginInfo.traverseFunctions.insert( move( traverseInfo ));
+        }
+        else
+        {
+            string value;
+            value = getValue( line, "ShouldVisitTemplateInstantiations" );
+            if( value == "1" )
+                pluginInfo.shouldVisitTemplateInstantiations = true;
             else
             {
-                cerr << "Unhandled Visit* function: " << pluginInfo.className << "::" << method->getName().str() << endl;
-                abort();
+                value = getValue( line, "ShouldVisitImplicitCode" );
+                if( value == "1" )
+                    pluginInfo.shouldVisitImplicitCode = true;
+                else
+                {
+                    cerr << "Unknown line " << line << endl;
+                    return false;
+                }
             }
-        }
-        else if( method->getName().startswith( "Traverse" ))
-        {
-            if( method->getNumParams() == 1 )
-            {
-                TraverseFunctionInfo traverseInfo = findOrCreateTraverseFunctionInfo( pluginInfo, method->getName());
-                traverseInfo.argument = method->getParamDecl( 0 )->getTypeSourceInfo()->getType().getAsString();
-                pluginInfo.traverseFunctions.insert( move( traverseInfo ));
-            }
-            else
-            {
-                cerr << "Unhandled Traverse* function: " << pluginInfo.className << "::" << method->getName().str() << endl;
-                abort();
-            }
-        }
-        else if( method->getName().startswith( "PreTraverse" ))
-        {
-                TraverseFunctionInfo traverseInfo = findOrCreateTraverseFunctionInfo( pluginInfo, method->getName(). substr( 3 ));
-                traverseInfo.hasPre = true;
-                pluginInfo.traverseFunctions.insert( move( traverseInfo ));
-        }
-        else if( method->getName().startswith( "PostTraverse" ))
-        {
-                TraverseFunctionInfo traverseInfo = findOrCreateTraverseFunctionInfo( pluginInfo, method->getName().substr( 4 ));
-                traverseInfo.hasPost = true;
-                pluginInfo.traverseFunctions.insert( move( traverseInfo ));
-        }
-        else if( method->getName() == "shouldVisitTemplateInstantiations" )
-            pluginInfo.shouldVisitTemplateInstantiations = true;
-        else if( method->getName() == "shouldVisitImplicitCode" )
-            pluginInfo.shouldVisitImplicitCode = true;
-        else if( method->getName().startswith( "WalkUp" ))
-        {
-            cerr << "WalkUp function not supported for shared visitor: " << pluginInfo.className << "::" << method->getName().str() << endl;
-            abort();
         }
     }
+
+    assert( endOk );
 
     if( pluginInfo.shouldVisitTemplateInstantiations && pluginInfo.shouldVisitImplicitCode )
         plugins[ PluginVisitTemplatesImplicit ].push_back( move( pluginInfo ));
@@ -484,104 +427,17 @@ bool CheckFileVisitor::VisitCXXRecordDecl( CXXRecordDecl* decl )
     else
         plugins[ PluginBasic ].push_back( move( pluginInfo ));
 
-    foundSomething = true;
     return true;
-}
-
-
-class FindNamedClassConsumer
-    : public ASTConsumer
-{
-public:
-    virtual void HandleTranslationUnit(ASTContext& context) override
-    {
-        visitor.TraverseDecl( context.getTranslationUnitDecl());
-    }
-private:
-    CheckFileVisitor visitor;
-};
-
-class FindNamedClassAction
-    : public ASTFrontendAction
-    {
-public:
-    virtual unique_ptr<ASTConsumer> CreateASTConsumer( CompilerInstance&, StringRef ) override
-    {
-        return unique_ptr<ASTConsumer>( new FindNamedClassConsumer );
-    }
-};
-
-
-string readSourceFile( const char* filename )
-{
-    string contents;
-    ifstream stream( filename );
-    if( !stream )
-    {
-        cerr << "Failed to open: " << filename << endl;
-        exit( 1 );
-    }
-    string line;
-    bool hasIfdef = false;
-    while( getline( stream, line ))
-    {
-        // TODO add checks that it's e.g. not "#ifdef" ?
-        if( line.find( "#ifndef LO_CLANG_SHARED_PLUGINS" ) == 0 )
-            hasIfdef = true;
-        contents += line;
-        contents += '\n';
-    }
-    if( stream.eof() && hasIfdef )
-        return contents;
-    return "";
 }
 
 int main(int argc, char** argv)
 {
-    vector< string > args;
-    int i = 1;
-    for( ; i < argc; ++ i )
+    for( int i = 1 ; i < argc; ++i )
     {
-        constexpr std::size_t prefixlen = 5; // strlen("-arg=");
-        if (std::strncmp(argv[i], "-arg=", prefixlen) != 0)
+        if( !readFile( argv[ i ] ))
         {
-            break;
-        }
-        args.push_back(argv[i] + prefixlen);
-    }
-#define STRINGIFY2(a) #a
-#define STRINGIFY(a) STRINGIFY2(a)
-    args.insert(
-        args.end(),
-        {
-            "-I" BUILDDIR "/config_host", // plugin sources use e.g. config_global.h
-            "-I" STRINGIFY(CLANGDIR) "/include", // clang's headers
-            "-I" STRINGIFY(CLANGSYSINCLUDE), // clang system headers
-            STDOPTION,
-            "-D__STDC_CONSTANT_MACROS", // Clang headers require these.
-            "-D__STDC_FORMAT_MACROS",
-            "-D__STDC_LIMIT_MACROS",
-        });
-    for( ; i < argc; ++ i )
-    {
-        string contents = readSourceFile(argv[i]);
-        if( contents.empty())
-            continue;
-        foundSomething = false;
-#if CLANG_VERSION >= 100000
-        if( !clang::tooling::runToolOnCodeWithArgs( std::unique_ptr<FindNamedClassAction>(new FindNamedClassAction), contents, args, argv[ i ] ))
-#else
-        if( !clang::tooling::runToolOnCodeWithArgs( new FindNamedClassAction, contents, args, argv[ i ] ))
-#endif
-        {
-            cerr << "Failed to analyze: " << argv[ i ] << endl;
-            return 2;
-        }
-        if( !foundSomething )
-        {
-            // there's #ifndef LO_CLANG_SHARED_PLUGINS in the source, but no class matched
-            cerr << "Failed to find code: " << argv[ i ] << endl;
-            return 2;
+            cerr << "Error reading " << argv[ i ] << endl;
+            return 1;
         }
     }
     for( int type = Plugin_Begin; type < Plugin_End; ++type )

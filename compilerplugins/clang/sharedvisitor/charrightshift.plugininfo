@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:CharRightShift
+VisitFunctionStart
+VisitFunctionName:VisitBinShr
+VisitFunctionArgument:const class clang::BinaryOperator *
+VisitFunctionEnd
+InfoEnd

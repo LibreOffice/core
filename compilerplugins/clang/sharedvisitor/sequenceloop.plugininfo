@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:SequenceLoop
+VisitFunctionStart
+VisitFunctionName:VisitCXXForRangeStmt
+VisitFunctionArgument:const class clang::CXXForRangeStmt *
+VisitFunctionEnd
+InfoEnd

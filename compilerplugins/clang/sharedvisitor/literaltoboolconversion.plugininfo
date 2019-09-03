@@ -1,0 +1,13 @@
+InfoVersion:1
+ClassName:LiteralToBoolConversion
+VisitFunctionStart
+VisitFunctionName:VisitImplicitCastExpr
+VisitFunctionArgument:const class clang::ImplicitCastExpr *
+VisitFunctionEnd
+TraverseFunctionStart
+TraverseFunctionName:TraverseLinkageSpecDecl
+TraverseFunctionArgument:class clang::LinkageSpecDecl *
+TraverseFunctionHasPre:1
+TraverseFunctionHasPost:1
+TraverseFunctionEnd
+InfoEnd

@@ -1,0 +1,11 @@
+InfoVersion:1
+ClassName:FinalProtected
+VisitFunctionStart
+VisitFunctionName:VisitCXXMethodDecl
+VisitFunctionArgument:const class clang::CXXMethodDecl *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitFieldDecl
+VisitFunctionArgument:const class clang::FieldDecl *
+VisitFunctionEnd
+InfoEnd

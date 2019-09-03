@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:WeakObject
+VisitFunctionStart
+VisitFunctionName:VisitCXXMethodDecl
+VisitFunctionArgument:const class clang::CXXMethodDecl *const
+VisitFunctionEnd
+InfoEnd

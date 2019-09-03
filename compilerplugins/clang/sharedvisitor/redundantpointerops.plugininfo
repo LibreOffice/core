@@ -1,0 +1,15 @@
+InfoVersion:1
+ClassName:RedundantPointerOps
+VisitFunctionStart
+VisitFunctionName:VisitFunctionDecl
+VisitFunctionArgument:const class clang::FunctionDecl *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitMemberExpr
+VisitFunctionArgument:const class clang::MemberExpr *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitUnaryOperator
+VisitFunctionArgument:const class clang::UnaryOperator *
+VisitFunctionEnd
+InfoEnd

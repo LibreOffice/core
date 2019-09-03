@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:ExternVar
+VisitFunctionStart
+VisitFunctionName:VisitVarDecl
+VisitFunctionArgument:const class clang::VarDecl *
+VisitFunctionEnd
+InfoEnd

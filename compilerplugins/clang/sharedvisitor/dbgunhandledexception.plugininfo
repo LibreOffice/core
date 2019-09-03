@@ -1,0 +1,13 @@
+InfoVersion:1
+ClassName:DbgUnhandledException
+VisitFunctionStart
+VisitFunctionName:VisitCallExpr
+VisitFunctionArgument:const class clang::CallExpr *
+VisitFunctionEnd
+TraverseFunctionStart
+TraverseFunctionName:TraverseCXXCatchStmt
+TraverseFunctionArgument:class clang::CXXCatchStmt *
+TraverseFunctionHasPre:1
+TraverseFunctionHasPost:1
+TraverseFunctionEnd
+InfoEnd

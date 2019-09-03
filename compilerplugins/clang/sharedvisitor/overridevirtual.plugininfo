@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:OverrideVirtual
+VisitFunctionStart
+VisitFunctionName:VisitCXXMethodDecl
+VisitFunctionArgument:const class clang::CXXMethodDecl *
+VisitFunctionEnd
+InfoEnd

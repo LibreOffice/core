@@ -1,0 +1,27 @@
+InfoVersion:1
+ClassName:Empty
+VisitFunctionStart
+VisitFunctionName:VisitBinLT
+VisitFunctionArgument:const class clang::BinaryOperator *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitBinGT
+VisitFunctionArgument:const class clang::BinaryOperator *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitBinLE
+VisitFunctionArgument:const class clang::BinaryOperator *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitBinGE
+VisitFunctionArgument:const class clang::BinaryOperator *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitBinEQ
+VisitFunctionArgument:const class clang::BinaryOperator *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitBinNE
+VisitFunctionArgument:const class clang::BinaryOperator *
+VisitFunctionEnd
+InfoEnd

@@ -1,0 +1,19 @@
+InfoVersion:1
+ClassName:RedundantFCast
+VisitFunctionStart
+VisitFunctionName:VisitReturnStmt
+VisitFunctionArgument:const class clang::ReturnStmt *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitCallExpr
+VisitFunctionArgument:const class clang::CallExpr *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitCXXConstructExpr
+VisitFunctionArgument:const class clang::CXXConstructExpr *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitCXXFunctionalCastExpr
+VisitFunctionArgument:const class clang::CXXFunctionalCastExpr *
+VisitFunctionEnd
+InfoEnd

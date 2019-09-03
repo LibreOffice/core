@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:DllPrivate
+VisitFunctionStart
+VisitFunctionName:VisitNamedDecl
+VisitFunctionArgument:const class clang::NamedDecl *
+VisitFunctionEnd
+InfoEnd

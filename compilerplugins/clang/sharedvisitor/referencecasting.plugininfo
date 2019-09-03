@@ -1,0 +1,11 @@
+InfoVersion:1
+ClassName:ReferenceCasting
+VisitFunctionStart
+VisitFunctionName:VisitCXXConstructExpr
+VisitFunctionArgument:const class clang::CXXConstructExpr *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitCXXMemberCallExpr
+VisitFunctionArgument:const class clang::CXXMemberCallExpr *
+VisitFunctionEnd
+InfoEnd

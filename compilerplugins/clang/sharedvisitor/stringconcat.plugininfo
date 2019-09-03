@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:StringConcat
+VisitFunctionStart
+VisitFunctionName:VisitCallExpr
+VisitFunctionArgument:const class clang::CallExpr *
+VisitFunctionEnd
+InfoEnd

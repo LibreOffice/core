@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:DataMemberShadow
+VisitFunctionStart
+VisitFunctionName:VisitFieldDecl
+VisitFunctionArgument:const class clang::FieldDecl *
+VisitFunctionEnd
+InfoEnd

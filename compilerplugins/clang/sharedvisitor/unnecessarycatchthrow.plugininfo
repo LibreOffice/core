@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:UnnecessaryCatchThrow
+VisitFunctionStart
+VisitFunctionName:VisitCXXTryStmt
+VisitFunctionArgument:const class clang::CXXTryStmt *
+VisitFunctionEnd
+InfoEnd

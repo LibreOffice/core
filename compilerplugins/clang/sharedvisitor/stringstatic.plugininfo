@@ -1,0 +1,11 @@
+InfoVersion:1
+ClassName:StringStatic
+VisitFunctionStart
+VisitFunctionName:VisitVarDecl
+VisitFunctionArgument:const class clang::VarDecl *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitReturnStmt
+VisitFunctionArgument:const class clang::ReturnStmt *
+VisitFunctionEnd
+InfoEnd

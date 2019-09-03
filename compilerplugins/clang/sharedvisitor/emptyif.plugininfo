@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:EmptyIf
+VisitFunctionStart
+VisitFunctionName:VisitIfStmt
+VisitFunctionArgument:const class clang::IfStmt *
+VisitFunctionEnd
+InfoEnd

@@ -1,0 +1,11 @@
+InfoVersion:1
+ClassName:TypedefParam
+VisitFunctionStart
+VisitFunctionName:VisitFunctionDecl
+VisitFunctionArgument:const class clang::FunctionDecl *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitCXXMethodDecl
+VisitFunctionArgument:const class clang::CXXMethodDecl *
+VisitFunctionEnd
+InfoEnd

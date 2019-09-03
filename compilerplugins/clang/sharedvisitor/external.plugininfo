@@ -1,0 +1,27 @@
+InfoVersion:1
+ClassName:External
+VisitFunctionStart
+VisitFunctionName:VisitTagDecl
+VisitFunctionArgument:const class clang::TagDecl *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitFunctionDecl
+VisitFunctionArgument:const class clang::FunctionDecl *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitVarDecl
+VisitFunctionArgument:const class clang::VarDecl *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitClassTemplateDecl
+VisitFunctionArgument:const class clang::ClassTemplateDecl *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitFunctionTemplateDecl
+VisitFunctionArgument:const class clang::FunctionTemplateDecl *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitVarTemplateDecl
+VisitFunctionArgument:const class clang::VarTemplateDecl *
+VisitFunctionEnd
+InfoEnd

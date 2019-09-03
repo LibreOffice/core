@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:NestedUnnamed
+VisitFunctionStart
+VisitFunctionName:VisitNamespaceDecl
+VisitFunctionArgument:const class clang::NamespaceDecl *
+VisitFunctionEnd
+InfoEnd

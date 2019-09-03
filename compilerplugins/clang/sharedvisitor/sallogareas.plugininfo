@@ -1,0 +1,11 @@
+InfoVersion:1
+ClassName:SalLogAreas
+VisitFunctionStart
+VisitFunctionName:VisitFunctionDecl
+VisitFunctionArgument:const class clang::FunctionDecl *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitCallExpr
+VisitFunctionArgument:const class clang::CallExpr *
+VisitFunctionEnd
+InfoEnd

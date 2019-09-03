@@ -1,0 +1,17 @@
+InfoVersion:1
+ClassName:Indentation
+VisitFunctionStart
+VisitFunctionName:VisitCompoundStmt
+VisitFunctionArgument:const class clang::CompoundStmt *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitSwitchStmt
+VisitFunctionArgument:const class clang::SwitchStmt *
+VisitFunctionEnd
+TraverseFunctionStart
+TraverseFunctionName:TraverseSwitchStmt
+TraverseFunctionArgument:class clang::SwitchStmt *
+TraverseFunctionHasPre:1
+TraverseFunctionHasPost:1
+TraverseFunctionEnd
+InfoEnd

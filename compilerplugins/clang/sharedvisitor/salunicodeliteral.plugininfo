@@ -1,0 +1,15 @@
+InfoVersion:1
+ClassName:SalUnicodeLiteral
+VisitFunctionStart
+VisitFunctionName:VisitCXXStaticCastExpr
+VisitFunctionArgument:const class clang::CXXStaticCastExpr *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitCXXFunctionalCastExpr
+VisitFunctionArgument:const class clang::CXXFunctionalCastExpr *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitCStyleCastExpr
+VisitFunctionArgument:const class clang::CStyleCastExpr *
+VisitFunctionEnd
+InfoEnd

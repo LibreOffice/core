@@ -1,0 +1,15 @@
+InfoVersion:1
+ClassName:LoopVarTooSmall
+VisitFunctionStart
+VisitFunctionName:VisitForStmt
+VisitFunctionArgument:const class clang::ForStmt *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitWhileStmt
+VisitFunctionArgument:const class clang::WhileStmt *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitDoStmt
+VisitFunctionArgument:const class clang::DoStmt *
+VisitFunctionEnd
+InfoEnd

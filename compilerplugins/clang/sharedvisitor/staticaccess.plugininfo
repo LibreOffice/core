@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:StaticAccess
+VisitFunctionStart
+VisitFunctionName:VisitMemberExpr
+VisitFunctionArgument:const class clang::MemberExpr *
+VisitFunctionEnd
+InfoEnd

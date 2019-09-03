@@ -1,0 +1,67 @@
+InfoVersion:1
+ClassName:UnnecessaryParen
+VisitFunctionStart
+VisitFunctionName:VisitParenExpr
+VisitFunctionArgument:const class clang::ParenExpr *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitIfStmt
+VisitFunctionArgument:const class clang::IfStmt *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitDoStmt
+VisitFunctionArgument:const class clang::DoStmt *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitWhileStmt
+VisitFunctionArgument:const class clang::WhileStmt *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitForStmt
+VisitFunctionArgument:const class clang::ForStmt *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitSwitchStmt
+VisitFunctionArgument:const class clang::SwitchStmt *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitCaseStmt
+VisitFunctionArgument:const class clang::CaseStmt *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitReturnStmt
+VisitFunctionArgument:const class clang::ReturnStmt *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitCallExpr
+VisitFunctionArgument:const class clang::CallExpr *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitVarDecl
+VisitFunctionArgument:const class clang::VarDecl *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitCXXOperatorCallExpr
+VisitFunctionArgument:const class clang::CXXOperatorCallExpr *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitUnaryExprOrTypeTraitExpr
+VisitFunctionArgument:const class clang::UnaryExprOrTypeTraitExpr *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitConditionalOperator
+VisitFunctionArgument:const class clang::ConditionalOperator *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitBinaryConditionalOperator
+VisitFunctionArgument:const class clang::BinaryConditionalOperator *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitMemberExpr
+VisitFunctionArgument:const class clang::MemberExpr *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitCXXDeleteExpr
+VisitFunctionArgument:const class clang::CXXDeleteExpr *
+VisitFunctionEnd
+InfoEnd

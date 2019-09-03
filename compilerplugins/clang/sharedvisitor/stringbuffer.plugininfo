@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:StringBuffer
+VisitFunctionStart
+VisitFunctionName:VisitCXXMemberCallExpr
+VisitFunctionArgument:const class clang::CXXMemberCallExpr *
+VisitFunctionEnd
+InfoEnd

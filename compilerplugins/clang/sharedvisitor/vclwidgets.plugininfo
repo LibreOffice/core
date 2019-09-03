@@ -1,0 +1,44 @@
+InfoVersion:1
+ClassName:VCLWidgets
+ShouldVisitTemplateInstantiations:1
+VisitFunctionStart
+VisitFunctionName:VisitVarDecl
+VisitFunctionArgument:const class clang::VarDecl *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitFieldDecl
+VisitFunctionArgument:const class clang::FieldDecl *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitParmVarDecl
+VisitFunctionArgument:const class clang::ParmVarDecl *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitFunctionDecl
+VisitFunctionArgument:const class clang::FunctionDecl *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitCXXDestructorDecl
+VisitFunctionArgument:const class clang::CXXDestructorDecl *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitCXXDeleteExpr
+VisitFunctionArgument:const class clang::CXXDeleteExpr *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitCallExpr
+VisitFunctionArgument:const class clang::CallExpr *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitDeclRefExpr
+VisitFunctionArgument:const class clang::DeclRefExpr *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitCXXConstructExpr
+VisitFunctionArgument:const class clang::CXXConstructExpr *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitBinaryOperator
+VisitFunctionArgument:const class clang::BinaryOperator *
+VisitFunctionEnd
+InfoEnd

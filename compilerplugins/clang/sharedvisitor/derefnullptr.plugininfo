@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:DerefNullPtr
+VisitFunctionStart
+VisitFunctionName:VisitUnaryDeref
+VisitFunctionArgument:const class clang::UnaryOperator *
+VisitFunctionEnd
+InfoEnd

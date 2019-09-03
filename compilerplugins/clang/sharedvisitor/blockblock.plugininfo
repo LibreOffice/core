@@ -1,0 +1,11 @@
+InfoVersion:1
+ClassName:BlockBlock
+VisitFunctionStart
+VisitFunctionName:VisitCompoundStmt
+VisitFunctionArgument:const class clang::CompoundStmt *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitCaseStmt
+VisitFunctionArgument:const class clang::CaseStmt *
+VisitFunctionEnd
+InfoEnd

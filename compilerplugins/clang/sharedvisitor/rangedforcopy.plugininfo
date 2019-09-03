@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:RangedForCopy
+VisitFunctionStart
+VisitFunctionName:VisitCXXForRangeStmt
+VisitFunctionArgument:const class clang::CXXForRangeStmt *
+VisitFunctionEnd
+InfoEnd

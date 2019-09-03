@@ -1,0 +1,13 @@
+InfoVersion:1
+ClassName:UnrefFun
+VisitFunctionStart
+VisitFunctionName:VisitFunctionDecl
+VisitFunctionArgument:const class clang::FunctionDecl *
+VisitFunctionEnd
+TraverseFunctionStart
+TraverseFunctionName:TraverseFriendDecl
+TraverseFunctionArgument:class clang::FriendDecl *
+TraverseFunctionHasPre:1
+TraverseFunctionHasPost:1
+TraverseFunctionEnd
+InfoEnd

@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:ReservedId
+VisitFunctionStart
+VisitFunctionName:VisitNamedDecl
+VisitFunctionArgument:const class clang::NamedDecl *
+VisitFunctionEnd
+InfoEnd

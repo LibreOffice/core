@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:PrivateBase
+VisitFunctionStart
+VisitFunctionName:VisitCXXRecordDecl
+VisitFunctionArgument:const class clang::CXXRecordDecl *
+VisitFunctionEnd
+InfoEnd

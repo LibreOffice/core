@@ -1,0 +1,11 @@
+InfoVersion:1
+ClassName:MapIndex
+VisitFunctionStart
+VisitFunctionName:VisitImplicitCastExpr
+VisitFunctionArgument:const class clang::ImplicitCastExpr *
+VisitFunctionEnd
+VisitFunctionStart
+VisitFunctionName:VisitMemberExpr
+VisitFunctionArgument:const class clang::MemberExpr *
+VisitFunctionEnd
+InfoEnd

@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:UnoAny
+VisitFunctionStart
+VisitFunctionName:VisitCXXOperatorCallExpr
+VisitFunctionArgument:const class clang::CXXOperatorCallExpr *
+VisitFunctionEnd
+InfoEnd

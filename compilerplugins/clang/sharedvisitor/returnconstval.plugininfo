@@ -1,0 +1,7 @@
+InfoVersion:1
+ClassName:ReturnConstVal
+VisitFunctionStart
+VisitFunctionName:VisitFunctionDecl
+VisitFunctionArgument:const class clang::FunctionDecl *
+VisitFunctionEnd
+InfoEnd

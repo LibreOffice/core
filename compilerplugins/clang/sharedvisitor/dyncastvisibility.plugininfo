@@ -1,0 +1,8 @@
+InfoVersion:1
+ClassName:DynCastVisibility
+ShouldVisitTemplateInstantiations:1
+VisitFunctionStart
+VisitFunctionName:VisitCXXDynamicCastExpr
+VisitFunctionArgument:const class clang::CXXDynamicCastExpr *
+VisitFunctionEnd
+InfoEnd

@@ -1,0 +1,45 @@
+These tools generate another "plugin" which in fact only dispatches Visit* and Traverse*
+calls to all other plugins registered with it. This means that there is just one
+RecursiveASTVisitor pass for all those plugins instead of one per each, which
+with the current number of plugins actually makes a performance difference.
+
+If you work on a plugin, comment out LO_CLANG_SHARED_PLUGINS in Makefile-clang.mk in order
+to disable the feature (re-generating takes time).
+
+There are two tools:
+- analyzer, which analyses one .cxx file (one plugins) and writes info about it to a .plugininfo
+  file, this allows parallelising this part, since it can take some time
+- generator, which reads all the .plugininfo files and generates sharedvisitor.cxx
+
+Requirements for plugins:
+- Can use Visit* and Traverse* functions, but not WalkUp*.
+- Visit* functions can generally remain unmodified.
+- run() function must be split into preRun() and postRun() if there's any additional functionality
+  besides calling TraverseDecl(). The shared visitor will call the preRun() and postRun() functions
+  as necessary while calling its own run(). The run() function of the plugin must stay
+  (in case of a non-shared build) but should generally look like this:
+    if( preRun())
+        if( TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()))
+            postRun();
+- Traverse* functions must be split into PreTraverse* and PostTraverse*, similarly to how run()
+  is handled, the Traverse* function should generally look like this:
+        bool ret = true;
+        if( PreTraverse*(decl))
+        {
+            ret = RecursiveASTVisitor::Traverse*(decl);
+            PostTraverse*(decl, ret);
+        }
+        return ret;
+
+
+TODO:
+- Create macros for the standardized layout of run(), Traverse*, etc.?
+- Possibly check plugin sources more thoroughly (e.g. that run() doesn't actually do more).
+- Have one tool that extracts info from plugin .cxx files into some .txt file and another tool
+  that generates sharedvisitor.cxx based on those files? That would generally make the generation
+  faster when doing incremental changes. The .txt file could also contain some checksum of the .cxx
+  to avoid the analysing pass completely if just the timestamp has changed.
+- Do not re-compile sharedvisitor.cxx if its contents have not actually changed.
+- Is it possible to make the clang code analyze just the .cxx without also parsing all the headers?
+- Instead of having to comment out LO_CLANG_SHARED_PLUGINS, implement --enable-compiler-plugins=debug .
+- Try make analyzer use a precompiled header of Clang headers, for better performance.
