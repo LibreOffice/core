@@ -81,7 +81,7 @@ public:
                             // nVer is set to version
                             // of image
     bool Save( SvStream&, sal_uInt32 = B_CURVERSION );
-    bool IsError()                  { return bError;    }
+    bool IsError() const            { return bError;    }
 
     const char* GetCode() const     { return pCode.get();     }
     sal_uInt32  GetCodeSize() const { return nCodeSize; }
@@ -89,7 +89,7 @@ public:
     OUString    GetString( short nId ) const;
     const SbxObject* FindType (const OUString& aTypeName) const;
 
-    const SbxArrayRef& GetEnums()          { return rEnums; }
+    const SbxArrayRef& GetEnums() const { return rEnums; }
 
     void        SetFlag( SbiImageFlags n ) { nFlags |= n;      }
     bool        IsFlag( SbiImageFlags n ) const { return bool(nFlags & n); }
