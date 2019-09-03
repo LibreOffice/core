@@ -2485,6 +2485,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
 //merged
 SvxNumPositionTabPage::SvxNumPositionTabPage(TabPageParent pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "cui/ui/numberingpositionpage.ui", "NumberingPositionPage", &rSet)
+    , m_pLevelHdlEvent(nullptr)
     , nActNumLvl(1)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , bModified(false)
@@ -2996,17 +2997,29 @@ IMPL_LINK_NOARG(SvxNumPositionTabPage, EditModifyHdl_Impl, weld::ComboBox&, void
     SetModified();
 }
 
-IMPL_LINK(SvxNumPositionTabPage, LevelHdl_Impl, weld::TreeView&, rBox, void)
+IMPL_LINK_NOARG(SvxNumPositionTabPage, LevelHdl_Impl, weld::TreeView&, void)
 {
+    if (m_pLevelHdlEvent)
+        return;
+    // tdf#127120 multiselection may be implemented by deselect follow by select so
+    // fire off the handler to happen on next event loop and only process the
+    // final state
+    m_pLevelHdlEvent = Application::PostUserEvent(LINK(this, SvxNumPositionTabPage, LevelHdl));
+}
+
+IMPL_LINK_NOARG(SvxNumPositionTabPage, LevelHdl, void*, void)
+{
+    m_pLevelHdlEvent = nullptr;
+
     sal_uInt16 nSaveNumLvl = nActNumLvl;
     nActNumLvl = 0;
-    std::vector<int> aSelectedRows = rBox.get_selected_rows();
+    std::vector<int> aSelectedRows = m_xLevelLB->get_selected_rows();
     if (std::find(aSelectedRows.begin(), aSelectedRows.end(), pActNum->GetLevelCount()) != aSelectedRows.end() &&
             (aSelectedRows.size() == 1 || nSaveNumLvl != 0xffff))
     {
         nActNumLvl = 0xFFFF;
         for( sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++ )
-            rBox.unselect(i);
+            m_xLevelLB->unselect(i);
     }
     else if (!aSelectedRows.empty())
     {
@@ -3017,7 +3030,7 @@ IMPL_LINK(SvxNumPositionTabPage, LevelHdl_Impl, weld::TreeView&, rBox, void)
                 nActNumLvl |= nMask;
             nMask <<= 1;
         }
-        rBox.unselect(pActNum->GetLevelCount());
+        m_xLevelLB->unselect(pActNum->GetLevelCount());
     }
     else
     {
@@ -3027,7 +3040,7 @@ IMPL_LINK(SvxNumPositionTabPage, LevelHdl_Impl, weld::TreeView&, rBox, void)
         {
             if(nActNumLvl & nMask)
             {
-                rBox.select(i);
+                m_xLevelLB->select(i);
                 break;
             }
             nMask <<=1;
