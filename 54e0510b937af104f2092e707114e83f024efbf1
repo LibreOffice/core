@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_5722f801",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2257,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-03T04:31:28Z",
+      "side": 1,
+      "message": "Better do it like this: declare here a dedicated variable before line 2256\n\n    OUString actualName \u003d name;\n    if (name \u003d\u003d \"NotebookBarAddonsToolMergePoint\")\n        actualName \u003d \"sfxlo-makeNotebookbarToolBox\";\n\nand then use this actualName instead of the name below.\n\nAnd again: *why can\u0027t we use that \"sfxlo-makeNotebookbarToolBox\"* in the XML in the first place instead of that \"NotebookBarAddonsToolMergePoint\" (which is even longer monster), to follow the universal contract here?",
+      "range": {
+        "startLine": 2257,
+        "startChar": 28,
+        "endLine": 2257,
+        "endChar": 70
+      },
+      "revId": "54e0510b937af104f2092e707114e83f024efbf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
