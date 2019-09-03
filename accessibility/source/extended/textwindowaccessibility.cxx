@@ -907,19 +907,6 @@ Document::retrieveCharacterBounds(Paragraph const * pParagraph,
         // XXX  numeric overflow
 }
 
-struct IndexCompare
-{
-    const css::beans::PropertyValue* pValues;
-    explicit IndexCompare(const css::beans::PropertyValue* pVals)
-        : pValues(pVals)
-    {
-    }
-    bool operator() ( sal_Int32 a, sal_Int32 b ) const
-    {
-        return pValues[a].Name < pValues[b].Name;
-    }
-};
-
 css::uno::Sequence< css::beans::PropertyValue >
 Document::retrieveCharacterAttributes(
     Paragraph const * pParagraph, ::sal_Int32 nIndex,
@@ -929,81 +916,65 @@ Document::retrieveCharacterAttributes(
 
     vcl::Font aFont = m_rEngine.GetFont();
     const sal_Int32 AttributeCount = 9;
-    sal_Int32 i = 0;
-    css::uno::Sequence< css::beans::PropertyValue > aAttribs( AttributeCount );
+    std::vector< css::beans::PropertyValue > aAttribs;
+    aAttribs.reserve(AttributeCount);
+
+    css::beans::PropertyValue aAttrib;
+    aAttrib.Handle = -1;
+    aAttrib.State = css::beans::PropertyState_DIRECT_VALUE;
 
     //character background color
-    aAttribs[i].Name = "CharBackColor";
-    aAttribs[i].Handle = -1;
-    aAttribs[i].Value = mapFontColor( aFont.GetFillColor() );
-    aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
-    i++;
+    aAttrib.Name = "CharBackColor";
+    aAttrib.Value = mapFontColor( aFont.GetFillColor() );
+    aAttribs.push_back(aAttrib);
 
     //character color
-    aAttribs[i].Name = "CharColor";
-    aAttribs[i].Handle = -1;
-    //aAttribs[i].Value = mapFontColor( aFont.GetColor() );
-    aAttribs[i].Value = mapFontColor( m_rEngine.GetTextColor() );
-    aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
-    i++;
+    aAttrib.Name = "CharColor";
+    //aAttrib.Value = mapFontColor( aFont.GetColor() );
+    aAttrib.Value = mapFontColor( m_rEngine.GetTextColor() );
+    aAttribs.push_back(aAttrib);
 
     //character font name
-    aAttribs[i].Name = "CharFontName";
-    aAttribs[i].Handle = -1;
-    aAttribs[i].Value <<= aFont.GetFamilyName();
-    aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
-    i++;
+    aAttrib.Name = "CharFontName";
+    aAttrib.Value <<= aFont.GetFamilyName();
+    aAttribs.push_back(aAttrib);
 
     //character height
-    aAttribs[i].Name = "CharHeight";
-    aAttribs[i].Handle = -1;
-    aAttribs[i].Value <<= static_cast<sal_Int16>(aFont.GetFontHeight());
-    aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
-    i++;
+    aAttrib.Name = "CharHeight";
+    aAttrib.Value <<= static_cast<sal_Int16>(aFont.GetFontHeight());
+    aAttribs.push_back(aAttrib);
 
     //character posture
-    aAttribs[i].Name = "CharPosture";
-    aAttribs[i].Handle = -1;
-    aAttribs[i].Value <<= static_cast<sal_Int16>(aFont.GetItalic());
-    aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
-    i++;
+    aAttrib.Name = "CharPosture";
+    aAttrib.Value <<= static_cast<sal_Int16>(aFont.GetItalic());
+    aAttribs.push_back(aAttrib);
 
     //character relief
     /*
-    aAttribs[i].Name = "CharRelief";
-    aAttribs[i].Handle = -1;
-    aAttribs[i].Value = css::uno::Any( (sal_Int16)aFont.GetRelief() );
-    aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
-    i++;
+    aAttrib.Name = "CharRelief";
+    aAttrib.Value = css::uno::Any( (sal_Int16)aFont.GetRelief() );
+    aAttribs.push_back(aAttrib);
     */
 
     //character strikeout
-    aAttribs[i].Name = "CharStrikeout";
-    aAttribs[i].Handle = -1;
-    aAttribs[i].Value <<= static_cast<sal_Int16>(aFont.GetStrikeout());
-    aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
-    i++;
+    aAttrib.Name = "CharStrikeout";
+    aAttrib.Value <<= static_cast<sal_Int16>(aFont.GetStrikeout());
+    aAttribs.push_back(aAttrib);
 
     //character underline
-    aAttribs[i].Name = "CharUnderline";
-    aAttribs[i].Handle = -1;
-    aAttribs[i].Value <<= static_cast<sal_Int16>(aFont.GetUnderline());
-    aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
-    i++;
+    aAttrib.Name = "CharUnderline";
+    aAttrib.Value <<= static_cast<sal_Int16>(aFont.GetUnderline());
+    aAttribs.push_back(aAttrib);
 
     //character weight
-    aAttribs[i].Name = "CharWeight";
-    aAttribs[i].Handle = -1;
-    aAttribs[i].Value <<= static_cast<float>(aFont.GetWeight());
-    aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
-    i++;
+    aAttrib.Name = "CharWeight";
+    aAttrib.Value <<= static_cast<float>(aFont.GetWeight());
+    aAttribs.push_back(aAttrib);
 
     //character alignment
-    aAttribs[i].Name = "ParaAdjust";
-    aAttribs[i].Handle = -1;
-    aAttribs[i].Value <<= static_cast<sal_Int16>(m_rEngine.GetTextAlign());
-    aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
-    i++;
+    aAttrib.Name = "ParaAdjust";
+    aAttrib.Value <<= static_cast<sal_Int16>(m_rEngine.GetTextAlign());
+    aAttribs.push_back(aAttrib);
 
     ::osl::MutexGuard aInternalGuard(GetMutex());
     ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >(pParagraph->getNumber());
@@ -1020,30 +991,27 @@ Document::retrieveCharacterAttributes(
     tPropValMap aCharAttrSeq;
     retrieveRunAttributesImpl( pParagraph, nIndex, aRequestedAttributes, aCharAttrSeq );
 
-    css::beans::PropertyValue* pValues = aAttribs.getArray();
-    for (i = 0; i < AttributeCount; i++,pValues++)
+    for (const css::beans::PropertyValue& rAttrib : aAttribs)
     {
-        aCharAttrSeq[ pValues->Name ] = *pValues;
+        aCharAttrSeq[ rAttrib.Name ] = rAttrib;
     }
 
-    css::uno::Sequence< css::beans::PropertyValue > aRes = comphelper::mapValuesToSequence( aCharAttrSeq );
+    const css::uno::Sequence< css::beans::PropertyValue > aRes = comphelper::mapValuesToSequence( aCharAttrSeq );
 
     // sort the attributes
-    sal_Int32 nLength = aRes.getLength();
-    const css::beans::PropertyValue* pPairs = aRes.getConstArray();
+    auto nLength = static_cast<size_t>(aRes.getLength());
     std::unique_ptr<sal_Int32[]> pIndices( new sal_Int32[nLength] );
-    for( i = 0; i < nLength; i++ )
-        pIndices[i] = i;
-    std::sort( &pIndices[0], &pIndices[nLength], IndexCompare(pPairs) );
-    // create sorted sequences according to index array
-    css::uno::Sequence< css::beans::PropertyValue > aNewValues( nLength );
-    css::beans::PropertyValue* pNewValues = aNewValues.getArray();
-    for( i = 0; i < nLength; i++ )
-    {
-        pNewValues[i] = pPairs[pIndices[i]];
-    }
+    std::iota(&pIndices[0], &pIndices[nLength], 0);
+    std::sort(&pIndices[0], &pIndices[nLength],
+        [&aRes](sal_Int32 a, sal_Int32 b) { return aRes[a].Name < aRes[b].Name; });
 
-    return aNewValues;
+    // create sorted sequences according to index array
+    std::vector<css::beans::PropertyValue> aNewValues;
+    aNewValues.reserve(nLength);
+    std::transform(&pIndices[0], &pIndices[nLength], std::back_inserter(aNewValues),
+        [&aRes](const sal_Int32 nIdx) { return aRes[nIdx]; });
+
+    return comphelper::containerToSequence(aNewValues);
 }
 
 void Document::retrieveRunAttributesImpl(
@@ -1085,11 +1053,9 @@ void Document::retrieveRunAttributesImpl(
     }
     else
     {
-        const OUString* pReqAttrs = RequestedAttributes.getConstArray();
-        const ::sal_Int32 nLength = RequestedAttributes.getLength();
-        for ( ::sal_Int32 i = 0; i < nLength; ++i )
+        for ( const OUString& rReqAttr : RequestedAttributes )
         {
-            tPropValMap::iterator aIter = aRunAttrSeq.find( pReqAttrs[i] );
+            tPropValMap::iterator aIter = aRunAttrSeq.find( rReqAttr );
             if ( aIter != aRunAttrSeq.end() )
             {
                 rRunAttrSeq[ (*aIter).first ] = (*aIter).second;
@@ -1194,15 +1160,15 @@ void Document::changeParagraphAttributes(
         // FIXME  The new attributes are added to any attributes already set,
         // they do not replace the old attributes as required by
         // XAccessibleEditableText.setAttributes:
-        for (::sal_Int32 i = 0; i < rAttributeSet.getLength(); ++i)
-            if ( rAttributeSet[i].Name == "CharColor" )
+        for (const auto& rAttr : rAttributeSet)
+            if ( rAttr.Name == "CharColor" )
                 m_rEngine.SetAttrib(::TextAttribFontColor(
-                                        mapFontColor(rAttributeSet[i].Value)),
+                                        mapFontColor(rAttr.Value)),
                                         nNumber, nBegin, nEnd);
                     // XXX  numeric overflow (2x)
-            else if ( rAttributeSet[i].Name == "CharWeight" )
+            else if ( rAttr.Name == "CharWeight" )
                 m_rEngine.SetAttrib(::TextAttribFontWeight(
-                                        mapFontWeight(rAttributeSet[i].Value)),
+                                        mapFontWeight(rAttr.Value)),
                                         nNumber, nBegin, nEnd);
                     // XXX  numeric overflow (2x)
     }

@@ -662,11 +662,8 @@ OUString VCLXAccessibleToolBox::getImplementationName()
 
 Sequence< OUString > VCLXAccessibleToolBox::getSupportedServiceNames()
 {
-    Sequence< OUString > aNames = VCLXAccessibleComponent::getSupportedServiceNames();
-    sal_Int32 nLength = aNames.getLength();
-    aNames.realloc( nLength + 1 );
-    aNames[nLength] = "com.sun.star.accessibility.AccessibleToolBox";
-    return aNames;
+    return comphelper::concatSequences(VCLXAccessibleComponent::getSupportedServiceNames(),
+                                       Sequence<OUString>{"com.sun.star.accessibility.AccessibleToolBox"});
 }
 
 // XAccessibleContext
