@@ -49,9 +49,11 @@ public:
                  css::uno::Reference<css::io::XOutputStream>& rxOutputStream,
                  sal_uInt32 nSize) override;
 
-    virtual void writeEncryptionInfo(BinaryXOutputStream& rStream) override;
+    virtual void writeEncryptionInfo(oox::ole::OleStorage& rOleStorage) override;
 
-    virtual bool setupEncryption(OUString const & rPassword) override;
+    virtual void createEncryptionData(comphelper::SequenceAsHashMap & aEncryptionData, const OUString rPassword) override;
+
+    virtual bool setupEncryption(css::uno::Sequence<css::beans::NamedValue>& rMediaEncData) override;
 
 };
 
