@@ -67,7 +67,7 @@ private:
         enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID ) override;
 
     /// does the document have any events ?
-    bool hasEvents();
+    bool hasEvents() const;
 
     /// export the events element
     void exportEvents();

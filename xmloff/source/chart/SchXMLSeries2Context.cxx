@@ -784,7 +784,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
         , const SvXMLStylesContext* pStylesCtxt
         , const SvXMLStyleContext*& rpStyle
         , OUString& rCurrStyleName
-        , SchXMLImportHelper& rImportHelper
+        , const SchXMLImportHelper& rImportHelper
         , const SvXMLImport& rImport
         , bool bIsStockChart
         , tSchXMLLSequencesPerIndex & rInOutLSequencesPerIndex )
@@ -1008,7 +1008,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
         , const SvXMLStylesContext* pStylesCtxt
         , const SvXMLStyleContext*& rpStyle
         , OUString& rCurrStyleName
-        , SchXMLImportHelper& rImportHelper
+        , const SchXMLImportHelper& rImportHelper
         , const SvXMLImport& rImport
         , bool bIsStockChart, bool bIsDonutChart, bool bSwitchOffLinesForScatter )
 {

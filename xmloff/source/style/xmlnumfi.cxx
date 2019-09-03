@@ -2240,7 +2240,7 @@ void SvXMLNumFormatContext::UpdateCalendar( const OUString& rNewCalendar, bool b
     }
 }
 
-bool SvXMLNumFormatContext::IsSystemLanguage()
+bool SvXMLNumFormatContext::IsSystemLanguage() const
 {
     return nFormatLang == LANGUAGE_SYSTEM;
 }

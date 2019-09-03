@@ -96,7 +96,7 @@ public:
     /// Fill in the autostyle.
     void FillAutoStyle(const OUString& rAutoStyleName, const css::uno::Reference<css::beans::XPropertySet>& rProp);
 
-    const css::uno::Reference< css::chart::XChartDocument >& GetChartDocument()
+    const css::uno::Reference< css::chart::XChartDocument >& GetChartDocument() const
         { return mxChartDoc; }
 
     const SvXMLTokenMap& GetDocElemTokenMap();

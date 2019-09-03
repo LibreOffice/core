@@ -1041,7 +1041,7 @@ bool XMLShapeImportHelper::IsHandleProgressBarEnabled() const
 }
 
 /** queries the capability of the current model to create presentation shapes */
-bool XMLShapeImportHelper::IsPresentationShapesSupported()
+bool XMLShapeImportHelper::IsPresentationShapesSupported() const
 {
     return mpImpl->mbIsPresentationShapesSupported;
 }
