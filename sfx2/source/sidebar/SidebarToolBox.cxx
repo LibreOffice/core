@@ -333,6 +333,8 @@ public:
 
 extern "C" SAL_DLLPUBLIC_EXPORT void makeSidebarToolBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
+    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
+                                 decltype(makeSidebarToolBox)>);
     VclPtrInstance<SidebarToolBox> pBox(pParent);
     pBox->InitToolBox(rMap);
     rRet = pBox;
@@ -340,6 +342,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT void makeSidebarToolBox(VclPtr<vcl::Window> & rR
 
 extern "C" SAL_DLLPUBLIC_EXPORT void makeNotebookbarToolBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
+    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
+                                 decltype(makeNotebookbarToolBox)>);
     VclPtrInstance<NotebookbarToolBox> pBox(pParent);
     pBox->InitToolBox(rMap);
     rRet = pBox;
