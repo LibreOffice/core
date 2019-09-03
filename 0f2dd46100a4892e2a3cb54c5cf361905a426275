@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_68e2bd31",
+        "filename": "accessibility/source/extended/textwindowaccessibility.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1002,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-03T19:52:34Z",
+      "side": 1,
+      "message": "Why? The following use of nLength is related to aRes (yes, the numbers are same, but logically strange)",
+      "range": {
+        "startLine": 1002,
+        "startChar": 4,
+        "endLine": 1002,
+        "endChar": 41
+      },
+      "revId": "0f2dd46100a4892e2a3cb54c5cf361905a426275",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_68fe3daf",
+        "filename": "accessibility/source/standard/vclxaccessiblecombobox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-03T19:52:34Z",
+      "side": 1,
+      "message": "I hoped it to be enough to use simple initializer list {\"com.sun.star.accessibility.AccessibleComboBox\"} here, without creating sequence... doesn\u0027t it work like that?",
+      "range": {
+        "startLine": 56,
+        "startChar": 39,
+        "endLine": 56,
+        "endChar": 108
+      },
+      "revId": "0f2dd46100a4892e2a3cb54c5cf361905a426275",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_082f813f",
+        "filename": "accessibility/source/standard/vclxaccessibleradiobutton.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-03T19:52:34Z",
+      "side": 1,
+      "message": "Are you creating a vector of aGroup.size() empty references, and then append some more references?",
+      "range": {
+        "startLine": 84,
+        "startChar": 57,
+        "endLine": 84,
+        "endChar": 70
+      },
+      "revId": "0f2dd46100a4892e2a3cb54c5cf361905a426275",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
