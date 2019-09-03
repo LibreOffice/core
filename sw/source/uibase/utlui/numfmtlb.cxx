@@ -63,6 +63,8 @@ NumFormatListBox::NumFormatListBox(vcl::Window* pWin, WinBits nStyle) :
 
 extern "C" SAL_DLLPUBLIC_EXPORT void makeNumFormatListBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
+    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
+                                 decltype(makeNumFormatListBox)>);
     WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
 
     bool bDropdown = BuilderUtils::extractDropdown(rMap);

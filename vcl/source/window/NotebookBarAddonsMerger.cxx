@@ -110,9 +110,9 @@ NotebookBarAddonsMerger::NotebookBarAddonsMerger() {}
 NotebookBarAddonsMerger::~NotebookBarAddonsMerger() {}
 
 void NotebookBarAddonsMerger::MergeNotebookBarAddons(
-    vcl::Window* pParent, const customMakeWidget& pFunction,
+    vcl::Window* pParent, const VclBuilder::customMakeWidget& pFunction,
     const css::uno::Reference<css::frame::XFrame>& m_xFrame,
-    const NotebookBarAddonsItem& aNotebookBarAddonsItem, NotebookBarAddonsMerger::stringmap rMap)
+    const NotebookBarAddonsItem& aNotebookBarAddonsItem, VclBuilder::stringmap& rMap)
 {
     std::vector<Image> aImageVec = aNotebookBarAddonsItem.aImageValues;
     unsigned long nIter = 0;
