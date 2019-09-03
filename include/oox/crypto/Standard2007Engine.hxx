@@ -23,7 +23,7 @@ namespace oox {
 }
 
 namespace oox {
-namespace core {
+namespace crypto {
 
 class OOX_DLLPUBLIC Standard2007Engine final : public CryptoEngine
 {
@@ -33,7 +33,7 @@ class OOX_DLLPUBLIC Standard2007Engine final : public CryptoEngine
     bool calculateEncryptionKey(const OUString& rPassword);
 
 public:
-    Standard2007Engine() = default;
+    Standard2007Engine();
 
     bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream) override;
 
@@ -45,7 +45,7 @@ public:
 
     bool checkDataIntegrity() override;
 
-    void encrypt(css::uno::Reference<css::io::XInputStream>&  rxInputStream,
+    void encrypt(const css::uno::Reference<css::io::XInputStream>&  rxInputStream,
                  css::uno::Reference<css::io::XOutputStream>& rxOutputStream,
                  sal_uInt32 nSize) override;
 
@@ -55,7 +55,7 @@ public:
 
 };
 
-} // namespace core
+} // namespace crypto
 } // namespace oox
 
 #endif
