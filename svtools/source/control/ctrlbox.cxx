@@ -341,6 +341,8 @@ FontNameBox::FontNameBox( vcl::Window* pParent, WinBits nWinStyle ) :
 
 extern "C" SAL_DLLPUBLIC_EXPORT void makeFontNameBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
+    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
+                                 decltype(makeFontNameBox)>);
     bool bDropdown = BuilderUtils::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
@@ -727,6 +729,8 @@ Size FontStyleBox::GetOptimalSize() const
 
 extern "C" SAL_DLLPUBLIC_EXPORT void makeFontStyleBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
+    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
+                                 decltype(makeFontStyleBox)>);
     bool bDropdown = BuilderUtils::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
@@ -927,6 +931,8 @@ FontSizeBox::FontSizeBox( vcl::Window* pParent, WinBits nWinSize ) :
 
 extern "C" SAL_DLLPUBLIC_EXPORT void makeFontSizeBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
+    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
+                                 decltype(makeFontSizeBox)>);
     bool bDropdown = BuilderUtils::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)

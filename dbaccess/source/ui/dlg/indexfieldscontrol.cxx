@@ -81,6 +81,8 @@ static constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | Br
 
     extern "C" SAL_DLLPUBLIC_EXPORT void makeDbaIndexFieldsControl(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
     {
+        static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
+                                     decltype(makeDbaIndexFieldsControl)>);
         rRet = VclPtr<IndexFieldsControl>::Create(pParent, WB_BORDER | WB_NOTABSTOP);
     }
 
