@@ -16,6 +16,8 @@
 #define VCL_BUILDER_FACTORY(typeName) \
     extern "C" SAL_DLLPUBLIC_EXPORT void make##typeName(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap) \
     { \
+        static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,          \
+                                     decltype(make##typeName)>);                                   \
         (void)rMap; \
         rRet = VclPtr<typeName>::Create(pParent); \
     }
@@ -23,6 +25,8 @@
 #define VCL_BUILDER_FACTORY_ARGS(typeName,arg1) \
     extern "C" SAL_DLLPUBLIC_EXPORT void make##typeName(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap) \
     { \
+        static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,          \
+                                     decltype(make##typeName)>);                                   \
         (void)rMap; \
         rRet = VclPtr<typeName>::Create(pParent,arg1); \
     }
@@ -30,6 +34,8 @@
 #define VCL_BUILDER_FACTORY_CONSTRUCTOR(typeName,arg2) \
     extern "C" SAL_DLLPUBLIC_EXPORT void make##typeName(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap) \
     { \
+        static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,          \
+                                     decltype(make##typeName)>);                                   \
         OUString sBorder = BuilderUtils::extractCustomProperty(rMap); \
         WinBits wb = arg2; \
         if (!sBorder.isEmpty()) \
