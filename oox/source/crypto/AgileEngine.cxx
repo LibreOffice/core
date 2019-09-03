@@ -21,6 +21,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <filter/msfilter/mscodec.hxx>
 #include <tools/stream.hxx>
@@ -149,13 +150,13 @@ public:
                 comphelper::Base64::decode(encryptedKeyValue, rAttribute.Value);
                 mInfo.encryptedKeyValue = comphelper::sequenceToContainer<std::vector<sal_uInt8>>(encryptedKeyValue);
             }
-            if (rAttrLocalName == "encryptedHmacKey")
+            else if (rAttrLocalName == "encryptedHmacKey")
             {
                 Sequence<sal_Int8> aValue;
                 comphelper::Base64::decode(aValue, rAttribute.Value);
                 mInfo.hmacEncryptedKey = comphelper::sequenceToContainer<std::vector<sal_uInt8>>(aValue);
             }
-            if (rAttrLocalName == "encryptedHmacValue")
+            else if (rAttrLocalName == "encryptedHmacValue")
             {
                 Sequence<sal_Int8> aValue;
                 comphelper::Base64::decode(aValue, rAttribute.Value);
@@ -659,14 +660,29 @@ bool AgileEngine::encryptEncryptionKey(OUString const & rPassword)
     return true;
 }
 
-bool AgileEngine::setupEncryption(OUString const & rPassword)
+bool AgileEngine::setupEncryption(css::uno::Sequence<css::beans::NamedValue>& rMediaEncData)
 {
     if (meEncryptionPreset == AgileEncryptionPreset::AES_128_SHA1)
         setupEncryptionParameters({ 100000, 16, 128, 20, 16, OUString("AES"), OUString("ChainingModeCBC"), OUString("SHA1") });
     else
         setupEncryptionParameters({ 100000, 16, 256, 64, 16, OUString("AES"), OUString("ChainingModeCBC"), OUString("SHA512") });
 
-    return setupEncryptionKey(rPassword);
+    OUString sPassword;
+    for (int i = 0; i < rMediaEncData.getLength(); i++)
+    {
+        if (rMediaEncData[i].Name == "Password")
+        {
+            OUString sCryptoType;
+            rMediaEncData[i].Value >>= sPassword;
+        }
+    }
+
+    return setupEncryptionKey(sPassword);
+}
+
+void AgileEngine::createEncryptionData(comphelper::SequenceAsHashMap & aEncryptionData, const OUString rPassword)
+{
+    aEncryptionData["OOXPassword"] <<= rPassword;
 }
 
 void AgileEngine::setupEncryptionParameters(AgileEncryptionParameters const & rAgileEncryptionParameters)
@@ -700,8 +716,11 @@ bool AgileEngine::setupEncryptionKey(OUString const & rPassword)
     return true;
 }
 
-void AgileEngine::writeEncryptionInfo(BinaryXOutputStream & rStream)
+void AgileEngine::writeEncryptionInfo(oox::ole::OleStorage& rOleStorage)
 {
+    Reference<XOutputStream> xEncryptionInfo(rOleStorage.openOutputStream("EncryptionInfo"), UNO_SET_THROW);
+    BinaryXOutputStream rStream(xEncryptionInfo, false);
+
     rStream.WriteUInt32(msfilter::VERSION_INFO_AGILE);
     rStream.WriteUInt32(msfilter::AGILE_ENCRYPTION_RESERVED);
 
@@ -755,6 +774,10 @@ void AgileEngine::writeEncryptionInfo(BinaryXOutputStream & rStream)
         aXmlWriter.endDocument();
     }
     rStream.writeMemory(aMemStream.GetData(), aMemStream.GetSize());
+
+    rStream.close();
+    xEncryptionInfo->flush();
+    xEncryptionInfo->closeOutput();
 }
 
 void AgileEngine::encrypt(css::uno::Reference<css::io::XInputStream> &  rxInputStream,

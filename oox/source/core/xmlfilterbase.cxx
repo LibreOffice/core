@@ -912,25 +912,13 @@ bool XmlFilterBase::implFinalizeExport( MediaDescriptor& rMediaDescriptor )
                                         MediaDescriptor::PROP_ENCRYPTIONDATA(),
                                         Sequence< NamedValue >() );
 
-    OUString aPassword;
-
-    for (int i=0; i<aMediaEncData.getLength(); i++)
-    {
-        if (aMediaEncData[i].Name == "OOXPassword")
-        {
-            Any& any = aMediaEncData[i].Value;
-            any >>= aPassword;
-            break;
-        }
-    }
-
-    if (!aPassword.isEmpty())
+    if (aMediaEncData.getLength())
     {
         commitStorage();
 
         Reference< XStream> xDocumentStream (FilterBase::implGetOutputStream(rMediaDescriptor));
         oox::ole::OleStorage aOleStorage( getComponentContext(), xDocumentStream, true );
-        DocumentEncryption encryptor(getMainDocumentStream(), aOleStorage, aPassword);
+        DocumentEncryption encryptor(getMainDocumentStream(), aOleStorage, aMediaEncData);
         bRet = encryptor.encrypt();
         if (bRet)
             aOleStorage.commit();
