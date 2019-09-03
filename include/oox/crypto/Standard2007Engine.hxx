@@ -51,7 +51,9 @@ public:
 
     virtual void writeEncryptionInfo(BinaryXOutputStream& rStream) override;
 
-    virtual bool setupEncryption(OUString const & rPassword) override;
+    virtual void createEncryptionData(comphelper::SequenceAsHashMap & aEncryptionData, const OUString rPassword) override;
+
+    virtual bool setupEncryption(css::uno::Sequence<css::beans::NamedValue>& rMediaEncData) override;
 
 };
 

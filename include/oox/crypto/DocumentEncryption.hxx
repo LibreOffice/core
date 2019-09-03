@@ -14,7 +14,8 @@
 #include <oox/dllapi.h>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <oox/crypto/Standard2007Engine.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <oox/crypto/CryptoEngine.hxx>
 #include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -31,15 +32,14 @@ class OOX_DLLPUBLIC DocumentEncryption
 private:
     css::uno::Reference< css::io::XStream > mxDocumentStream;
     oox::ole::OleStorage& mrOleStorage;
-    OUString const maPassword;
-
-    Standard2007Engine mEngine;
+    std::unique_ptr<CryptoEngine>   mEngine;
+    css::uno::Sequence< css::beans::NamedValue >& mMediaEncData;
 
 public:
     DocumentEncryption(
         css::uno::Reference< css::io::XStream > const & xDocumentStream,
         oox::ole::OleStorage& rOleStorage,
-        const OUString& aPassword);
+        css::uno::Sequence< css::beans::NamedValue >& rMediaEncData);
 
     bool encrypt();
 

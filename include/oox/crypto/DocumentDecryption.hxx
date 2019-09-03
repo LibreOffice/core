@@ -35,16 +35,12 @@ namespace core {
 class OOX_DLLPUBLIC DocumentDecryption
 {
 private:
-    enum CryptoType
-    {
-        UNKNOWN,
-        STANDARD_2007,
-        AGILE
-    };
-
     oox::ole::OleStorage&           mrOleStorage;
     std::unique_ptr<CryptoEngine>   mEngine;
-    CryptoType                      mCryptoType;
+    OUString                        msEngineName;
+
+    bool readStrongEncryptionInfo();
+    bool readIRMEncryptionInfo();
 
 public:
     DocumentDecryption(oox::ole::OleStorage& rOleStorage);
