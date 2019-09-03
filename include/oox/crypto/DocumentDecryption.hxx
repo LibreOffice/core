@@ -39,12 +39,16 @@ private:
     {
         UNKNOWN,
         STANDARD_2007,
-        AGILE
+        AGILE,
+        IRM
     };
 
     oox::ole::OleStorage&           mrOleStorage;
     std::unique_ptr<CryptoEngine>   mEngine;
     CryptoType                      mCryptoType;
+
+    bool readStrongEncryptionInfo();
+    bool readIRMEncryptionInfo();
 
 public:
     DocumentDecryption(oox::ole::OleStorage& rOleStorage);
