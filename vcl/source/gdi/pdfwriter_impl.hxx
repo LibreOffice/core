@@ -25,6 +25,7 @@
 #include <memory>
 #include <vector>
 
+#include <salgdi.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/uno/Sequence.h>
@@ -45,7 +46,6 @@
 #include <tools/stream.hxx>
 
 #include <outdata.hxx>
-#include "pdffontcache.hxx"
 #include "pdfbuildin_fonts.hxx"
 
 class StyleSettings;
@@ -564,19 +564,17 @@ public:
     struct PDFGlyph
     {
         Point const       m_aPos;
-        const GlyphItem* m_pGlyph;
-        sal_Int32 const   m_nNativeWidth;
+        const GlyphItem*  m_pGlyph;
         sal_Int32 const   m_nMappedFontId;
         sal_uInt8 const   m_nMappedGlyphId;
         int const         m_nCharPos;
 
         PDFGlyph( const Point& rPos,
                   const GlyphItem* pGlyph,
-                  sal_Int32 nNativeWidth,
                   sal_Int32 nFontId,
                   sal_uInt8 nMappedGlyphId,
                   int nCharPos )
-        : m_aPos( rPos ), m_pGlyph(pGlyph), m_nNativeWidth( nNativeWidth ),
+        : m_aPos( rPos ), m_pGlyph(pGlyph),
           m_nMappedFontId( nFontId ), m_nMappedGlyphId( nMappedGlyphId ),
           m_nCharPos(nCharPos)
         {}
@@ -674,7 +672,6 @@ private:
     FontSubsetData                      m_aSubsets;
     FontEmbedData                       m_aSystemFonts;
     sal_Int32                           m_nNextFID;
-    PDFFontCache                        m_aFontCache;
 
     static constexpr sal_Int32          g_nInheritedPageWidth = 595;  // default A4 in inch/72
     static constexpr sal_Int32          g_nInheritedPageHeight = 842; // default A4 in inch/72

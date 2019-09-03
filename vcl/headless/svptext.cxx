@@ -84,14 +84,6 @@ void SvpSalGraphics::FreeEmbedFontData( const void* pData, long nLen )
     m_aTextRenderImpl.FreeEmbedFontData(pData, nLen);
 }
 
-void SvpSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
-                                   bool bVertical,
-                                   std::vector< sal_Int32 >& rWidths,
-                                   Ucs2UIntMap& rUnicodeEnc )
-{
-    m_aTextRenderImpl.GetGlyphWidths(pFont, bVertical, rWidths, rUnicodeEnc);
-}
-
 std::unique_ptr<GenericSalLayout> SvpSalGraphics::GetTextLayout(int nFallbackLevel)
 {
     if (utl::ConfigManager::IsFuzzing())

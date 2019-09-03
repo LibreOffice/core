@@ -90,6 +90,7 @@ public:
     inline bool GetGlyphBoundRect(tools::Rectangle&) const;
     inline bool GetGlyphOutline(basegfx::B2DPolyPolygon&) const;
     inline void dropGlyph();
+    inline double nativeWidth(bool bPS) const; // Unshaped width from the font.
 
     sal_GlyphId glyphId() const { return m_aGlyphId; }
     int charCount() const { return m_nCharCount; }
@@ -112,6 +113,11 @@ void GlyphItem::dropGlyph()
 {
     m_nCharPos = -1;
     m_nFlags |= GlyphItemFlags::IS_DROPPED;
+}
+
+double GlyphItem::nativeWidth(bool bPS) const
+{
+    return m_pFontInstance->GetGlyphWidth(m_aGlyphId, IsVertical(), bPS);
 }
 
 class SalLayoutGlyphsImpl : public std::vector<GlyphItem>

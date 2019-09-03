@@ -2429,17 +2429,12 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
     aInfo.m_nCapHeight = 1000;
     aInfo.m_aFontBBox = tools::Rectangle( Point( -200, -200 ), Size( 1700, 1700 ) );
     aInfo.m_aPSName = pFont->GetFamilyName();
-    sal_Int32 pWidths[256];
-    memset( pWidths, 0, sizeof(pWidths) );
 
     SalGraphics *pGraphics = GetGraphics();
 
     assert(pGraphics);
 
     aSubType = OString( "/TrueType" );
-    std::vector< sal_Int32 > aGlyphWidths;
-    Ucs2UIntMap aUnicodeMap;
-    pGraphics->GetGlyphWidths( pFont, false, aGlyphWidths, aUnicodeMap );
 
     OUString aTmpName;
     osl_createTempFile( nullptr, nullptr, &aTmpName.pData );
@@ -2451,17 +2446,12 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
     memset( pEncoding, 0, sizeof( pEncoding ) );
     memset( pDuWidths, 0, sizeof( pDuWidths ) );
 
-    for( sal_Ucs c = 32; c < 256; c++ )
+    FontCharMapRef xFontCharMap = pFont->GetCharMap();
+    for( int c = 32; c < 256; c++ )
     {
         pEncoding[c] = c;
-        aGlyphIds[c] = 0;
-        if( aUnicodeMap.find( c ) != aUnicodeMap.end() )
-            pWidths[ c ] = aGlyphWidths[ aUnicodeMap[ c ] ];
+        aGlyphIds[c] = xFontCharMap->GetGlyphIndex(c);
     }
-    //TODO: surely this is utterly broken because aGlyphIds is just all zeros, if we
-    //had the right glyphids here then I imagine we could replace pDuWidths with
-    //pWidths and remove pWidths assignment above. i.e. start with the glyph ids
-    //and map those to unicode rather than try and reverse map them ?
     pGraphics->CreateFontSubset( aTmpName, pFont, aGlyphIds, pEncoding, pDuWidths, 256, aInfo );
     osl_removeFile( aTmpName.pData );
 
@@ -2487,7 +2477,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
                           "/Widths[" );
             for( int i = 32; i < 256; i++ )
             {
-                aLine.append( pWidths[i] );
+                aLine.append( pDuWidths[i] );
                 aLine.append( ((i&15) == 15) ? "\n" : " " );
             }
             aLine.append( "]\n"
@@ -6093,8 +6083,9 @@ void PDFWriterImpl::drawHorizontalGlyphs(
             const Point aThisPos = aMat.transform( rGlyphs[nPos].m_aPos );
             const Point aPrevPos = aMat.transform( rGlyphs[nPos-1].m_aPos );
             double fAdvance = aThisPos.X() - aPrevPos.X();
+            double fNativeWidth = rGlyphs[nPos-1].m_pGlyph->nativeWidth(true);
             fAdvance *= 1000.0 / nPixelFontHeight;
-            const double fAdjustment = rGlyphs[nPos-1].m_nNativeWidth - fAdvance + 0.5;
+            const double fAdjustment = fNativeWidth - fAdvance + 0.5;
             SAL_WARN_IF(
                 fAdjustment < SAL_MIN_INT32 || fAdjustment > SAL_MAX_INT32, "vcl.pdfwriter",
                 "adjustment " << fAdjustment << " outside 32-bit int");
@@ -6320,21 +6311,12 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         sal_Int32 nMappedFontObject;
         registerGlyph(pGlyph, pFont, aCodeUnits, nMappedGlyph, nMappedFontObject);
 
-        sal_Int32 nGlyphWidth = 0;
-        SalGraphics *pGraphics = GetGraphics();
-        if (pGraphics)
-            nGlyphWidth = m_aFontCache.getGlyphWidth(pFont,
-                                                     pGlyph->glyphId(),
-                                                     pGlyph->IsVertical(),
-                                                     pGraphics);
-
         int nCharPos = -1;
         if (bUseActualText || pGlyph->IsInCluster())
             nCharPos = pGlyph->charPos();
 
         aGlyphs.emplace_back(aPos,
                              pGlyph,
-                             nGlyphWidth,
                              nMappedFontObject,
                              nMappedGlyph,
                              nCharPos);
