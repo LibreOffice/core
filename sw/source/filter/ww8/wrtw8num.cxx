@@ -62,15 +62,15 @@ sal_uInt16 MSWordExportBase::DuplicateNumRule( const SwNumRule *pRule, sal_uInt8
     aNumFormat.SetStart( nVal );
     pMyNumRule->Set( nLevel, aNumFormat );
 
-    nNumId = GetId( *pMyNumRule );
+    nNumId = GetNumberingId( *pMyNumRule );
 
     // Map the old list to our new list
-    m_aRuleDuplicates[GetId( *pRule )] = nNumId;
+    m_aRuleDuplicates[GetNumberingId( *pRule )] = nNumId;
 
     return nNumId;
 }
 
-sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
+sal_uInt16 MSWordExportBase::GetNumberingId( const SwNumRule& rNumRule )
 {
     if ( !m_pUsedNumTable )
     {

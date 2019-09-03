@@ -720,7 +720,7 @@ void WW8AttributeOutput::OutlineNumbering(sal_uInt8 nLvl)
     m_rWW8Export.pO->push_back( nLvl );
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmPIlfo );
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO,
-            1 + m_rWW8Export.GetId( *m_rWW8Export.m_pDoc->GetOutlineNumRule() ) );
+        1 + m_rWW8Export.GetNumberingId(*m_rWW8Export.m_pDoc->GetOutlineNumRule()) );
 }
 
 // #i77805#
@@ -3526,7 +3526,8 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
     {
         const SwNumRule* pRule = GetExport().m_pDoc->FindNumRulePtr(
                                         rNumRule.GetValue() );
-        if ( pRule && USHRT_MAX != ( nNumId = GetExport().GetId( *pRule ) ) )
+        nNumId = pRule ? GetExport().GetNumberingId(*pRule) : USHRT_MAX;
+        if (USHRT_MAX != nNumId)
         {
             ++nNumId;
             if ( GetExport().m_pOutFormatNode )
