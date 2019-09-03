@@ -18,6 +18,7 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 namespace oox {
     class BinaryXInputStream;
@@ -49,9 +50,11 @@ public:
                     BinaryXOutputStream& aOutputStream) = 0;
 
     // Encryption
-    virtual void writeEncryptionInfo(BinaryXOutputStream & rStream) = 0;
+    virtual void writeEncryptionInfo(oox::ole::OleStorage& rOleStorage) = 0;
 
-    virtual bool setupEncryption(const OUString& rPassword) = 0;
+    virtual void createEncryptionData(comphelper::SequenceAsHashMap & aEncryptionData, const OUString rPassword) = 0;
+
+    virtual bool setupEncryption(css::uno::Sequence<css::beans::NamedValue>& rMediaEncData) = 0;
 
     virtual void encrypt(css::uno::Reference<css::io::XInputStream> & rxInputStream,
                          css::uno::Reference<css::io::XOutputStream> & rxOutputStream,
