@@ -144,11 +144,6 @@ const void* Qt5Graphics::GetEmbedFontData(const PhysicalFontFace*, long* /*pData
 
 void Qt5Graphics::FreeEmbedFontData(const void* /*pData*/, long /*nDataLen*/) {}
 
-void Qt5Graphics::GetGlyphWidths(const PhysicalFontFace* /*pPFF*/, bool /*bVertical*/,
-                                 std::vector<sal_Int32>& /*rWidths*/, Ucs2UIntMap& /*rUnicodeEnc*/)
-{
-}
-
 class Qt5CommonSalLayout : public GenericSalLayout
 {
 public:

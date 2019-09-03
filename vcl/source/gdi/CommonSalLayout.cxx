@@ -37,6 +37,8 @@
 
 #include <fontselect.hxx>
 
+#include <map>
+
 #if !HB_VERSION_ATLEAST(1, 1, 0)
 // Disabled Unicode compatibility decomposition, see fdo#66715
 static unsigned int unicodeDecomposeCompatibility(hb_unicode_funcs_t* /*ufuncs*/,

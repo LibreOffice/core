@@ -42,7 +42,6 @@
 
 #include <langboost.hxx>
 #include <PhysicalFontCollection.hxx>
-#include <sft.hxx>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
