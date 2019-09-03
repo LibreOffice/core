@@ -130,7 +130,7 @@ public class XMLContentExporter extends TestCase {
         XCell xCell = xSheet.getCellByPosition(0, 0);
         xCell.setFormula(CELL_TEXT);
 
-        log.println("fill sheet 1 with contnet...");
+        log.println("fill sheet 1 with content...");
         util.CalcTools.fillCalcSheetWithContent(xSheetDoc, 1, 1, 1, 5, 5);
 
         // adding tags which must be contained in XML output

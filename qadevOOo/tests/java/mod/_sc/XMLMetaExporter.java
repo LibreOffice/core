@@ -133,7 +133,7 @@ public class XMLMetaExporter extends TestCase {
         final XDocumentProperties xDocProps = xPropSup.getDocumentProperties();
         xDocProps.setTitle("TestDocument");
 
-        log.println("fill sheet 1 with contnet...");
+        log.println("fill sheet 1 with content...");
         util.CalcTools.fillCalcSheetWithContent(xSheetDoc,1, 3, 3, 50, 50);
 
         // create testobject here
