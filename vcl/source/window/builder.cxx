@@ -408,8 +408,11 @@ namespace weld
 
 VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUString& sUIFile,
                        const OString& sID, const css::uno::Reference<css::frame::XFrame>& rFrame,
-                       bool bLegacy, const NotebookBarAddonsItem& aNotebookBarAddonsItem)
-    : m_sID(sID)
+                       bool bLegacy, const NotebookBarAddonsItem* pNotebookBarAddonsItem)
+    : m_pNotebookBarAddonsItem(pNotebookBarAddonsItem
+                                   ? new NotebookBarAddonsItem(*pNotebookBarAddonsItem)
+                                   : new NotebookBarAddonsItem())
+    , m_sID(sID)
     , m_sHelpRoot(OUStringToOString(sUIFile, RTL_TEXTENCODING_UTF8))
     , m_pStringReplace(Translate::GetReadStringHook())
     , m_pParent(pParent)
@@ -418,7 +421,6 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
     , m_pParserState(new ParserState)
     , m_xFrame(rFrame)
 {
-    m_pNotebookBarAddonsItem = aNotebookBarAddonsItem;
     m_bToplevelHasDeferredInit = pParent &&
         ((pParent->IsSystemWindow() && static_cast<SystemWindow*>(pParent)->isDeferredInit()) ||
          (pParent->IsDockingWindow() && static_cast<DockingWindow*>(pParent)->isDeferredInit()));
@@ -2241,7 +2243,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         customMakeWidget pFunction = nullptr;
         ModuleMap::iterator aI = g_aModuleMap.find(SAL_DLLPREFIX "sfxlo" SAL_DLLEXTENSION);
         pFunction = reinterpret_cast<customMakeWidget>(aI->second->getFunctionSymbol("makeNotebookbarToolBox"));
-        NotebookBarAddonsMerger::MergeNotebookBarAddons( pParent, pFunction, m_xFrame, m_pNotebookBarAddonsItem, rMap );
+        NotebookBarAddonsMerger::MergeNotebookBarAddons( pParent, pFunction, m_xFrame, *m_pNotebookBarAddonsItem, rMap );
 #endif
         return nullptr;
     }
@@ -3542,7 +3544,7 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, PopupMenu *pSubMenu, const
 
     if(rClass == "NotebookBarAddonsMenuMergePoint")
     {
-        NotebookBarAddonsMerger::MergeNotebookBarMenuAddons(pParent, nNewId, rID, m_pNotebookBarAddonsItem);
+        NotebookBarAddonsMerger::MergeNotebookBarMenuAddons(pParent, nNewId, rID, *m_pNotebookBarAddonsItem);
         m_pParserState->m_nLastMenuItemId = pParent->GetItemCount();
     }
     else if (rClass == "GtkMenuItem")

@@ -59,11 +59,15 @@ enum
 
 extern "C" SAL_DLLPUBLIC_EXPORT void makePrintPreviewWindow(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
+    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
+                                 decltype(makePrintPreviewWindow)>);
     rRet = VclPtr<PrintDialog::PrintPreviewWindow>::Create(pParent);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void makeShowNupOrderWindow(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
+    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
+                                 decltype(makeShowNupOrderWindow)>);
     rRet = VclPtr<PrintDialog::ShowNupOrderWindow>::Create(pParent);
 }
 

@@ -15,7 +15,6 @@
 #include <unotools/resmgr.hxx>
 #include <tools/fldunit.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
 #include <tools/wintypes.hxx>
@@ -45,6 +44,7 @@ class DateField;
 class TimeField;
 class VclExpander;
 class VclMultiLineEdit;
+struct NotebookBarAddonsItem;
 namespace xmlreader { class XmlReader; }
 namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
 
@@ -73,11 +73,10 @@ public:
                const css::uno::Reference<css::frame::XFrame>& rFrame
                = css::uno::Reference<css::frame::XFrame>(),
                bool bLegacy = true,
-               const NotebookBarAddonsItem& aNotebookBarAddonsItem = NotebookBarAddonsItem());
+               const NotebookBarAddonsItem* pNotebookBarAddonsItem = nullptr);
     ~VclBuilder();
     ///releases references and disposes all children.
     void disposeBuilder();
-    NotebookBarAddonsItem m_pNotebookBarAddonsItem;
     //sID must exist and be of type T
     template <typename T> T* get(VclPtr<T>& ret, const OString& sID);
 
@@ -120,6 +119,8 @@ private:
     //are collected here and need to be set afterwards, e.g. during
     //Show or Execute
     stringmap      m_aDeferredProperties;
+
+    std::unique_ptr<NotebookBarAddonsItem> m_pNotebookBarAddonsItem;
 
     struct PackingData
     {

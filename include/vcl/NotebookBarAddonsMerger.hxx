@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_NOTEBOOKBARADDONSMERGER_HXX
 #define INCLUDED_VCL_NOTEBOOKBARADDONSMERGER_HXX
 
+#include <vcl/builder.hxx>
 #include <vcl/window.hxx>
 #include <vcl/image.hxx>
 #include <vcl/menu.hxx>
@@ -60,15 +61,13 @@ struct AddonNotebookBarItem
 class NotebookBarAddonsMerger
 {
 public:
-    typedef std::map<OString, OUString> stringmap;
-    typedef void (*customMakeWidget)(VclPtr<vcl::Window>& rRet, const VclPtr<vcl::Window>& pParent,
-                                     stringmap& rVec);
     NotebookBarAddonsMerger();
     ~NotebookBarAddonsMerger();
-    static void MergeNotebookBarAddons(vcl::Window* pParent, const customMakeWidget& pFunction,
+    static void MergeNotebookBarAddons(vcl::Window* pParent,
+                                       const VclBuilder::customMakeWidget& pFunction,
                                        const css::uno::Reference<css::frame::XFrame>& rFrame,
                                        const NotebookBarAddonsItem& aNotebookBarAddonsItem,
-                                       stringmap rVec);
+                                       VclBuilder::stringmap& rVec);
     static void MergeNotebookBarMenuAddons(PopupMenu* pPopupMenu, sal_Int16 nItemId,
                                            const OString& sItemIdName,
                                            NotebookBarAddonsItem& aNotebookBarAddonsItem);
