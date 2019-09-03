@@ -10,6 +10,7 @@
 
 #include <oox/crypto/Standard2007Engine.hxx>
 
+#include <com/sun/star/io/XStream.hpp>
 #include <oox/crypto/CryptTools.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/binaryoutputstream.hxx>
@@ -17,6 +18,10 @@
 #include <rtl/random.h>
 
 #include <comphelper/hash.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+
+using namespace css::io;
+using namespace css::uno;
 
 namespace oox {
 namespace core {
@@ -188,7 +193,12 @@ bool Standard2007Engine::checkDataIntegrity()
     return true;
 }
 
-bool Standard2007Engine::setupEncryption(OUString const & password)
+void Standard2007Engine::createEncryptionData(comphelper::SequenceAsHashMap & aEncryptionData, const OUString rPassword)
+{
+    aEncryptionData["OOXPassword"] <<= rPassword;
+}
+
+bool Standard2007Engine::setupEncryption(css::uno::Sequence<css::beans::NamedValue>& rMediaEncData)
 {
     mInfo.header.flags        = msfilter::ENCRYPTINFO_AES | msfilter::ENCRYPTINFO_CRYPTOAPI;
     mInfo.header.algId        = msfilter::ENCRYPT_ALGO_AES128;
@@ -202,7 +212,17 @@ bool Standard2007Engine::setupEncryption(OUString const & password)
     mKey.clear();
     mKey.resize(keyLength, 0);
 
-    if (!calculateEncryptionKey(password))
+    OUString sPassword;
+    for (int i = 0; i < rMediaEncData.getLength(); i++)
+    {
+        if (rMediaEncData[i].Name == "Password")
+        {
+            OUString sCryptoType;
+            rMediaEncData[i].Value >>= sPassword;
+        }
+    }
+
+    if (!calculateEncryptionKey(sPassword))
         return false;
 
     if (!generateVerifier())
@@ -211,8 +231,11 @@ bool Standard2007Engine::setupEncryption(OUString const & password)
     return true;
 }
 
-void Standard2007Engine::writeEncryptionInfo(BinaryXOutputStream& rStream)
+void Standard2007Engine::writeEncryptionInfo(oox::ole::OleStorage& rOleStorage)
 {
+    Reference<XOutputStream> xEncryptionInfo(rOleStorage.openOutputStream("EncryptionInfo"), UNO_SET_THROW);
+    BinaryXOutputStream rStream(xEncryptionInfo, false);
+
     rStream.WriteUInt32(msfilter::VERSION_INFO_2007_FORMAT);
 
     sal_uInt32 cspNameSize = (lclCspName.getLength() * 2) + 2;
@@ -228,6 +251,10 @@ void Standard2007Engine::writeEncryptionInfo(BinaryXOutputStream& rStream)
     rStream.WriteUInt16(0);
 
     rStream.writeMemory(&mInfo.verifier, sizeof(msfilter::EncryptionVerifierAES));
+
+    rStream.close();
+    xEncryptionInfo->flush();
+    xEncryptionInfo->closeOutput();
 }
 
 void Standard2007Engine::encrypt(css::uno::Reference<css::io::XInputStream> &  rxInputStream,
