@@ -2330,8 +2330,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     {
         if (customMakeWidget pFunction = GetCustomMakeWidget(name))
         {
-            VclPtr<vcl::Window> xParent(pParent);
-            pFunction(xWindow, xParent, rMap);
+            pFunction(xWindow, pParent, rMap);
             if (xWindow->GetType() == WindowType::PUSHBUTTON)
                 setupFromActionName(static_cast<Button*>(xWindow.get()), rMap, m_xFrame);
             else if (xWindow->GetType() == WindowType::MENUBUTTON)
