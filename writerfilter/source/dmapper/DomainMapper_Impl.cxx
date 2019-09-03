@@ -1228,15 +1228,17 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( GetCurrentParaStyleName() );
     OSL_ENSURE( pEntry.get(), "no style sheet found" );
     const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
+    bool isNumberingViaStyle(false);
     //apply numbering to paragraph if it was set at the style, but only if the paragraph itself
     //does not specify the numbering
     if ( !bRemove && pStyleSheetProperties && pParaContext && !pParaContext->isSet(PROP_NUMBERING_RULES) )
     {
 
         sal_Int32 nListId = pEntry ? lcl_getListId(pEntry, GetStyleSheetTable()) : -1;
-        if ( nListId >= 0 )
+        if (nListId >= 0 && !pParaContext->isSet(PROP_NUMBERING_STYLE_NAME))
         {
             pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny( ListDef::GetStyleName( nListId ) ), false);
+            isNumberingViaStyle = true;
 
             // Indent properties from the paragraph style have priority
             // over the ones from the numbering styles in Word
@@ -1492,6 +1494,29 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
                     xTextRange = xTextAppend->finishParagraph( comphelper::containerToSequence(aProperties) );
                     m_xPreviousParagraph.set(xTextRange, uno::UNO_QUERY);
+
+                    if (isNumberingViaStyle || itNumberingRules != aProperties.end())
+                    {
+                        assert(dynamic_cast<ParagraphPropertyMap*>(pPropertyMap.get()));
+                        sal_Int32 const nListId( isNumberingViaStyle
+                            ? pStyleSheetProperties->GetListId()
+                            : static_cast<ParagraphPropertyMap*>(pPropertyMap.get())->GetListId());
+                        if (ListDef::Pointer const& pList = m_pListTable->GetList(nListId))
+                        {   // styles could refer to non-existing lists...
+                            if (AbstractListDef::Pointer const& pAbsList =
+                                    pList->GetAbstractDefinition())
+                            {
+                                OUString paraId;
+                                m_xPreviousParagraph->getPropertyValue("ListId") >>= paraId;
+                                assert(!paraId.isEmpty()); // must be on some list?
+                                OUString const listId = pAbsList->MapListId(paraId);
+                                if (listId != paraId)
+                                {
+                                    m_xPreviousParagraph->setPropertyValue("ListId", uno::makeAny(listId));
+                                }
+                            }
+                        }
+                    }
 
                     if (!rAppendContext.m_aAnchoredObjects.empty() && !IsInHeaderFooter())
                     {

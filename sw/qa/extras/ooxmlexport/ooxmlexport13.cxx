@@ -66,6 +66,40 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121374_sectionHF2, "tdf121374_sectionHF2.doc")
     CPPUNIT_ASSERT( xHeaderText->getString().startsWith("virkamatka-anomus") );
 }
 
+// TODO export has the same wrong assumption that abstractNum = SwNumRule
+DECLARE_SW_EXPORT_TEST(testTdf95848, "tdf95848.docx", nullptr, Test)
+{
+    OUString listId;
+    OUString listStyle;
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), getProperty<sal_Int16>(xPara, "NumberingLevel"));
+        CPPUNIT_ASSERT(xPara->getPropertyValue("NumberingStyleName") >>= listStyle);
+        CPPUNIT_ASSERT(listStyle.startsWith("WWNum"));
+        CPPUNIT_ASSERT(xPara->getPropertyValue("ListId") >>= listId);
+        CPPUNIT_ASSERT_EQUAL(OUString("1.1.1"), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), getProperty<sal_Int16>(xPara, "NumberingLevel"));
+        CPPUNIT_ASSERT_EQUAL(listStyle, getProperty<OUString>(xPara, "NumberingStyleName"));
+        CPPUNIT_ASSERT_EQUAL(listId, getProperty<OUString>(xPara, "ListId"));
+        CPPUNIT_ASSERT_EQUAL(OUString("1.1.2"), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(3), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), getProperty<sal_Int16>(xPara, "NumberingLevel"));
+        // different numbering style
+        OUString listStyle3;
+        CPPUNIT_ASSERT(xPara->getPropertyValue("NumberingStyleName") >>= listStyle3);
+        CPPUNIT_ASSERT(listStyle3.startsWith("WWNum"));
+        CPPUNIT_ASSERT(listStyle3 != listStyle);
+        // but same list
+        CPPUNIT_ASSERT_EQUAL(OUString("1.1.3"), getProperty<OUString>(xPara, "ListLabelString"));
+        CPPUNIT_ASSERT_EQUAL(listId, getProperty<OUString>(xPara, "ListId"));
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf126723, "tdf126723.docx")
 {
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraph(2), "ParaLeftMargin"));

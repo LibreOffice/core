@@ -131,6 +131,9 @@ private:
     // The style name linked to.
     OUString                      m_sNumStyleLink;
 
+    /// list id to use for all derived numbering definitions
+    boost::optional<OUString> m_oListId;
+
 public:
     typedef tools::SvRef< AbstractListDef > Pointer;
 
@@ -154,6 +157,8 @@ public:
 
     void                  SetNumStyleLink(const OUString& sValue) { m_sNumStyleLink = sValue; };
     const OUString&       GetNumStyleLink() { return m_sNumStyleLink; };
+
+    OUString MapListId(OUString const& rId);
 };
 
 class ListDef : public AbstractListDef
