@@ -2697,7 +2697,8 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
                 if (bOOXML)
                 {
                     ::comphelper::SequenceAsHashMap aHashData;
-                    aHashData[ OUString( "OOXPassword"  ) ] <<= pPasswordRequest->getPassword();
+                    aHashData[ OUString( "OOXPassword" ) ] <<= pPasswordRequest->getPassword();
+                    aHashData[ OUString( "CryptoType" ) ] <<= OUString( "Standard" );
                     aEncryptionData = aHashData.getAsConstNamedValueList();
                 }
                 else

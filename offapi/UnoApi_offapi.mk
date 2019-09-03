@@ -2934,6 +2934,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/packages,\
 	NoRawFormatException \
 	WrongPasswordException \
 	XDataSinkEncrSupport \
+	XPackageEncryption \
+	PackageEncryption \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/packages/manifest,\
 	XManifestReader \
