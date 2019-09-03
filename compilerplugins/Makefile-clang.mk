@@ -42,6 +42,9 @@ ifeq ($(OS),WNT)
 LO_CLANG_SHARED_PLUGINS=
 endif
 
+# Whether to use precompiled headers for the analyzer too. Does not apply to compiling sources.
+LO_CLANG_USE_ANALYZER_PCH=1
+
 # The uninteresting rest.
 
 include $(SRCDIR)/solenv/gbuild/gbuild.mk
@@ -207,7 +210,9 @@ ifdef LO_CLANG_SHARED_PLUGINS
 SHARED_SOURCES := $(shell grep -l "LO_CLANG_SHARED_PLUGINS" $(CLANGINDIR)/*.cxx)
 SHARED_SOURCE_INFOS := $(foreach source,$(SHARED_SOURCES),$(patsubst $(CLANGINDIR)/%.cxx,$(CLANGOUTDIR)/sharedvisitor/%.plugininfo,$(source)))
 
-$(CLANGOUTDIR)/sharedvisitor/%.plugininfo: $(CLANGINDIR)/%.cxx $(CLANGOUTDIR)/sharedvisitor/analyzer$(CLANG_EXE_EXT)
+$(CLANGOUTDIR)/sharedvisitor/%.plugininfo: $(CLANGINDIR)/%.cxx \
+            $(CLANGOUTDIR)/sharedvisitor/analyzer$(CLANG_EXE_EXT) \
+            $(CLANGOUTDIR)/sharedvisitor/clang.pch
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,1)
 	$(QUIET)$(ICECREAM_RUN) $(CLANGOUTDIR)/sharedvisitor/analyzer$(CLANG_EXE_EXT) \
         $(COMPILER_PLUGINS_TOOLING_ARGS:%=-arg=%) $< > $@
@@ -222,7 +227,8 @@ CLANGTOOLLIBS = -lclangTooling -lclangDriver -lclangFrontend -lclangParse -lclan
 # Path to the clang system headers (no idea if there's a better way to get it).
 CLANGTOOLDEFS = -DCLANGSYSINCLUDE=$(shell $(LLVMCONFIG) --libdir)/clang/$(shell $(LLVMCONFIG) --version | sed 's/svn//')/include
 # -std=c++11 is in line with the default value for COMPILER_PLUGINS_CXX in configure.ac:
-CLANGTOOLDEFS += -DSTDOPTION=\"$(or $(filter -std=%,$(COMPILER_PLUGINS_CXX)),-std=c++11)\"
+CLANGSTDOPTION := $(or $(filter -std=%,$(COMPILER_PLUGINS_CXX)),-std=c++11)
+CLANGTOOLDEFS += -DSTDOPTION=\"$(CLANGSTDOPTION)\"
 ifneq ($(filter-out MACOSX WNT,$(OS)),)
 ifneq ($(CLANGDIR),/usr)
 # Help the generator find Clang shared libs, if Clang is built so and installed in a non-standard prefix.
@@ -235,6 +241,7 @@ $(CLANGOUTDIR)/sharedvisitor/analyzer$(CLANG_EXE_EXT): $(CLANGINDIR)/sharedvisit
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,1)
 	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) $(CLANGTOOLDEFS) $(CLANGINCLUDES) \
         -DCLANGDIR=$(CLANGDIR) -I$(BUILDDIR)/config_host \
+        -DLO_CLANG_USE_ANALYZER_PCH=$(LO_CLANG_USE_ANALYZER_PCH) \
         -c $< -o $(CLANGOUTDIR)/sharedvisitor/analyzer.o -MMD -MT $@ -MP \
         -MF $(CLANGOUTDIR)/sharedvisitor/analyzer.d
 	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGOUTDIR)/sharedvisitor/analyzer.o \
@@ -259,6 +266,22 @@ $(CLANGOUTDIR)/sharedvisitor:
 -include $(CLANGOUTDIR)/sharedvisitor/analyzer.d
 -include $(CLANGOUTDIR)/sharedvisitor/generator.d
 # TODO WNT version
+endif
+
+ifdef LO_CLANG_USE_ANALYZER_PCH
+
+# these are from the invocation in analyzer.cxx
+LO_CLANG_ANALYZER_PCH_CXXFLAGS := -I$(BUILDDIR)/config_host -I$(CLANGDIR)/include $(CLANGTOOLDEFS) $(CLANGSTDOPTION) \
+    -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS
+
+$(CLANGOUTDIR)/sharedvisitor/clang.pch: $(CLANGINDIR)/sharedvisitor/precompiled_clang.hxx \
+        $(CLANGOUTDIR)/clang-timestamp \
+        | $(CLANGOUTDIR)/sharedvisitor
+	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),PCH,1)
+	$(QUIET)$(CLANGDIR)/bin/clang -x c++-header $(LO_CLANG_ANALYZER_PCH_CXXFLAGS) $< -o $@
+else
+$(CLANGOUTDIR)/sharedvisitor/clang.pch:
+	touch $@
 endif
 
 # vim: set noet sw=4 ts=4:
