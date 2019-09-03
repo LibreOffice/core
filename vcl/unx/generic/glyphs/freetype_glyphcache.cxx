@@ -427,7 +427,7 @@ FreetypeFont::FreetypeFont(LogicalFontInstance* pFontInstance, FreetypeFontInfo*
     if( !mnWidth )
         mnWidth = rFSD.mnHeight;
     mfStretch = static_cast<double>(mnWidth) / rFSD.mnHeight;
-    // sanity check (e.g. #i66394#, #i66244#, #66537#)
+    // sanity check (e.g. #i66394#, #i66244#, #i66537#)
     if( (mnWidth < 0) || (mfStretch > +64.0) || (mfStretch < -64.0) )
         return;
 
