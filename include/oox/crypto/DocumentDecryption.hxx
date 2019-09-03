@@ -17,7 +17,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <oox/crypto/CryptoEngine.hxx>
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star {
@@ -25,29 +24,24 @@ namespace com::sun::star {
     namespace io { class XInputStream; }
     namespace io { class XStream; }
     namespace uno { class XComponentContext; }
+    namespace packages { class XPackageEncryption; }
 }
 
 namespace oox::ole { class OleStorage; }
 
 namespace oox {
-namespace core {
+namespace crypto {
 
 class DocumentDecryption
 {
 private:
-    enum CryptoType
-    {
-        UNKNOWN,
-        STANDARD_2007,
-        AGILE
-    };
-
-    oox::ole::OleStorage&           mrOleStorage;
-    std::unique_ptr<CryptoEngine>   mEngine;
-    CryptoType                      mCryptoType;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    oox::ole::OleStorage&                      mrOleStorage;
+    css::uno::Sequence<css::beans::NamedValue> maStreamsSequence;
+    css::uno::Reference< css::packages::XPackageEncryption > mxPackageEncryption;
 
 public:
-    DocumentDecryption(oox::ole::OleStorage& rOleStorage);
+    DocumentDecryption(const css::uno::Reference< css::uno::XComponentContext >& rxContext, oox::ole::OleStorage& rOleStorage);
 
     bool decrypt(const css::uno::Reference< css::io::XStream >& xDocumentStream);
     bool readEncryptionInfo();
@@ -57,7 +51,7 @@ public:
 
 };
 
-} // namespace core
+} // namespace crypto
 } // namespace oox
 
 #endif

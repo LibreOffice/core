@@ -13,26 +13,81 @@
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include <oox/crypto/AgileEngine.hxx>
-#include <oox/crypto/Standard2007Engine.hxx>
-#include <oox/helper/binaryinputstream.hxx>
-#include <oox/helper/binaryoutputstream.hxx>
+#include <com/sun/star/packages/XPackageEncryption.hpp>
 #include <oox/ole/olestorage.hxx>
+#include <oox/helper/binaryinputstream.hxx>
+#include <filter/msfilter/mscodec.hxx>
 
-namespace oox::core {
+#include <com/sun/star/task/PasswordRequestMode.hpp>
+#include <comphelper/docpasswordrequest.hxx>
+#include <comphelper/stillreadwriteinteraction.hxx>
+#include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/task/PasswordContainer.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+
+#include <sal/log.hxx>
+
+namespace {
+
+void lcl_getListOfStreams(oox::StorageBase* pStorage, std::vector<OUString>& rElementNames)
+{
+    std::vector< OUString > oElementNames;
+    pStorage->getElementNames(oElementNames);
+    for (const auto & sName : oElementNames)
+    {
+        oox::StorageRef rSubStorage = pStorage->openSubStorage(sName, false);
+        if (rSubStorage && rSubStorage->isStorage())
+        {
+            lcl_getListOfStreams(rSubStorage.get(), rElementNames);
+        }
+        else
+        {
+            if (pStorage->isRootStorage())
+                rElementNames.push_back(sName);
+            else
+                rElementNames.push_back(pStorage->getPath() + "/" + sName);
+        }
+    }
+}
+
+}
+
+namespace oox::crypto {
 
 using namespace css;
 
-DocumentDecryption::DocumentDecryption(oox::ole::OleStorage& rOleStorage) :
-    mrOleStorage(rOleStorage),
-    mCryptoType(UNKNOWN)
-{}
+DocumentDecryption::DocumentDecryption(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    oox::ole::OleStorage& rOleStorage) :
+    mxContext(rxContext),
+    mrOleStorage(rOleStorage)
+{
+    // Get OLE streams into sequences for later use in CryptoEngine
+    std::vector< OUString > aStreamNames;
+    lcl_getListOfStreams(&mrOleStorage, aStreamNames);
+
+    comphelper::SequenceAsHashMap aStreamsData;
+    for (const auto & sStreamName : aStreamNames)
+    {
+        uno::Reference<io::XInputStream> xStream = mrOleStorage.openInputStream(sStreamName);
+        assert(xStream.is());
+        BinaryXInputStream aBinaryInputStream(xStream, true);
+
+        css::uno::Sequence< sal_Int8 > oData;
+        sal_Int32 nStreamSize = aBinaryInputStream.size();
+        sal_Int32 nReadBytes = aBinaryInputStream.readData(oData, nStreamSize);
+
+        assert(nStreamSize == nReadBytes);
+        aStreamsData[sStreamName] <<= oData;
+    }
+    maStreamsSequence = aStreamsData.getAsConstNamedValueList();
+}
 
 bool DocumentDecryption::generateEncryptionKey(const OUString& rPassword)
 {
-    if (mEngine)
-        return mEngine->generateEncryptionKey(rPassword);
+    if (mxPackageEncryption.is())
+        return mxPackageEncryption->generateEncryptionKey(rPassword);
     return false;
 }
 
@@ -41,45 +96,67 @@ bool DocumentDecryption::readEncryptionInfo()
     if (!mrOleStorage.isStorage())
         return false;
 
-    uno::Reference<io::XInputStream> xEncryptionInfo = mrOleStorage.openInputStream("EncryptionInfo");
+    // Read 0x6DataSpaces/DataSpaceMap
+    uno::Reference<io::XInputStream> xDataSpaceMap = mrOleStorage.openInputStream("\006DataSpaces/DataSpaceMap");
+    OUString sDataSpaceName;
 
-    BinaryXInputStream aBinaryInputStream(xEncryptionInfo, true);
-    sal_uInt32 aVersion = aBinaryInputStream.readuInt32();
-
-    switch (aVersion)
+    if (xDataSpaceMap.is())
     {
-        case msfilter::VERSION_INFO_2007_FORMAT:
-        case msfilter::VERSION_INFO_2007_FORMAT_SP2:
-            mCryptoType = STANDARD_2007; // Set encryption info format
-            mEngine.reset(new Standard2007Engine);
-            break;
-        case msfilter::VERSION_INFO_AGILE:
-            mCryptoType = AGILE; // Set encryption info format
-            mEngine.reset(new AgileEngine);
-            break;
-        default:
-            break;
+        BinaryXInputStream aDataSpaceStream(xDataSpaceMap, true);
+        sal_uInt32 aHeaderLength = aDataSpaceStream.readuInt32();
+        SAL_WARN_IF(aHeaderLength != 8, "oox", "DataSpaceMap length != 8 is not supported. Some content may be skipped");
+        sal_uInt32 aEntryCount = aDataSpaceStream.readuInt32();
+        SAL_WARN_IF(aEntryCount != 1, "oox", "DataSpaceMap contains more than one entry. Some content may be skipped");
+
+        // Read each DataSpaceMapEntry (MS-OFFCRYPTO 2.1.6.1)
+        for (sal_uInt32 i = 0; i < aEntryCount; i++)
+        {
+            sal_uInt32 entryLen = aDataSpaceStream.readuInt32 ();
+
+            // Read each DataSpaceReferenceComponent (MS-OFFCRYPTO 2.1.6.2)
+            sal_uInt32 aReferenceComponentCount = aDataSpaceStream.readuInt32();
+            for (sal_uInt32 j = 0; j < aReferenceComponentCount; j++)
+            {
+                // Read next reference component
+                sal_uInt32 refComponentType = aDataSpaceStream.readuInt32();
+                sal_uInt32 aReferenceComponentNameLength = aDataSpaceStream.readuInt32();
+                OUString sReferenceComponentName = aDataSpaceStream.readUnicodeArray(aReferenceComponentNameLength / 2);
+                aDataSpaceStream.skip((4 - (aReferenceComponentNameLength & 3)) & 3);  // Skip padding
+            }
+
+            sal_uInt32 aDataSpaceNameLength = aDataSpaceStream.readuInt32();
+            sDataSpaceName = aDataSpaceStream.readUnicodeArray(aDataSpaceNameLength / 2);
+            aDataSpaceStream.skip((4 - (aDataSpaceNameLength & 3)) & 3);  // Skip padding
+        }
     }
-    if (mEngine)
-        return mEngine->readEncryptionInfo(xEncryptionInfo);
-    return false;
+    else
+    {
+        // Fallback for documents generated by LO: they sometimes do not have all
+        // required by MS-OFFCRYPTO specification streams (0x6DataSpaces/DataSpaceMap and others)
+        SAL_WARN("oox", "Encrypted package does not contain DataSpaceMap");
+        sDataSpaceName = "StrongEncryptionDataSpace";
+    }
+
+    uno::Sequence< uno::Any > aArguments;
+    mxPackageEncryption.set(
+        mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            "com.sun.star.comp.oox.crypto." + sDataSpaceName, aArguments, mxContext), css::uno::UNO_QUERY);
+
+    if (!mxPackageEncryption.is())
+    {
+        // we do not know how to decrypt this document
+        return false;
+    }
+
+    return mxPackageEncryption->readEncryptionInfo(maStreamsSequence);
 }
 
 uno::Sequence<beans::NamedValue> DocumentDecryption::createEncryptionData(const OUString& rPassword)
 {
-    comphelper::SequenceAsHashMap aEncryptionData;
+    if (!mxPackageEncryption.is())
+        return uno::Sequence<beans::NamedValue>();
 
-    if (mCryptoType == AGILE)
-    {
-        aEncryptionData["CryptoType"] <<= OUString("Agile");
-    }
-    else if (mCryptoType == STANDARD_2007)
-    {
-        aEncryptionData["CryptoType"] <<= OUString("Standard");
-    }
-
-    aEncryptionData["OOXPassword"] <<= rPassword;
-    return aEncryptionData.getAsConstNamedValueList();
+    return mxPackageEncryption->createEncryptionData(rPassword);
 }
 
 bool DocumentDecryption::decrypt(const uno::Reference<io::XStream>& xDocumentStream)
@@ -89,25 +166,26 @@ bool DocumentDecryption::decrypt(const uno::Reference<io::XStream>& xDocumentStr
     if (!mrOleStorage.isStorage())
         return false;
 
+    if (!mxPackageEncryption.is())
+        return false;
+
     // open the required input streams in the encrypted package
     uno::Reference<io::XInputStream> xEncryptedPackage = mrOleStorage.openInputStream("EncryptedPackage");
 
     // create temporary file for unencrypted package
     uno::Reference<io::XOutputStream> xDecryptedPackage = xDocumentStream->getOutputStream();
-    BinaryXOutputStream aDecryptedPackage(xDecryptedPackage, true);
-    BinaryXInputStream aEncryptedPackage(xEncryptedPackage, true);
 
-    bResult = mEngine->decrypt(aEncryptedPackage, aDecryptedPackage);
+    bResult = mxPackageEncryption->decrypt(xEncryptedPackage, xDecryptedPackage);
 
-    xDecryptedPackage->flush();
-    aDecryptedPackage.seekToStart();
+    css::uno::Reference<io::XSeekable> xSeekable(xDecryptedPackage, css::uno::UNO_QUERY);
+    xSeekable->seek(0);
 
     if (bResult)
-        return mEngine->checkDataIntegrity();
+        return mxPackageEncryption->checkDataIntegrity();
 
     return bResult;
 }
 
-} // namespace oox::core
+} // namespace oox::crypto
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

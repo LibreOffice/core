@@ -881,13 +881,7 @@ Reference<XStream> XmlFilterBase::implGetOutputStream( MediaDescriptor& rMediaDe
                                         MediaDescriptor::PROP_ENCRYPTIONDATA(),
                                         Sequence< NamedValue >() );
 
-    OUString aPassword;
-    auto pProp = std::find_if(aMediaEncData.begin(), aMediaEncData.end(),
-        [](const NamedValue& rProp) { return rProp.Name == "OOXPassword"; });
-    if (pProp != aMediaEncData.end())
-        pProp->Value >>= aPassword;
-
-    if (aPassword.isEmpty())
+    if (aMediaEncData.getLength() == 0)
     {
         return FilterBase::implGetOutputStream( rMediaDescriptor );
     }
@@ -908,20 +902,13 @@ bool XmlFilterBase::implFinalizeExport( MediaDescriptor& rMediaDescriptor )
                                         MediaDescriptor::PROP_ENCRYPTIONDATA(),
                                         Sequence< NamedValue >() );
 
-    OUString aPassword;
-
-    auto pProp = std::find_if(aMediaEncData.begin(), aMediaEncData.end(),
-        [](const NamedValue& rProp) { return rProp.Name == "OOXPassword"; });
-    if (pProp != aMediaEncData.end())
-        pProp->Value >>= aPassword;
-
-    if (!aPassword.isEmpty())
+    if (aMediaEncData.getLength())
     {
         commitStorage();
 
         Reference< XStream> xDocumentStream (FilterBase::implGetOutputStream(rMediaDescriptor));
         oox::ole::OleStorage aOleStorage( getComponentContext(), xDocumentStream, true );
-        DocumentEncryption encryptor(getMainDocumentStream(), aOleStorage, aPassword);
+        crypto::DocumentEncryption encryptor( getComponentContext(), getMainDocumentStream(), aOleStorage, aMediaEncData );
         bRet = encryptor.encrypt();
         if (bRet)
             aOleStorage.commit();

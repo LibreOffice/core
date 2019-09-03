@@ -808,6 +808,7 @@ protected:
             {
                 OUString sPassword = OUString::createFromAscii(pPassword);
                 css::uno::Sequence<css::beans::NamedValue> aEncryptionData {
+                    { "CryptoType", css::uno::makeAny(OUString("Standard")) },
                     { "OOXPassword", css::uno::makeAny(sPassword) }
                 };
                 aMediaDescriptor[utl::MediaDescriptor::PROP_ENCRYPTIONDATA()] <<= aEncryptionData;

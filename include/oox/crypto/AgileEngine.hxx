@@ -25,7 +25,7 @@ namespace oox {
 }
 
 namespace oox {
-namespace core {
+namespace crypto {
 
 struct OOX_DLLPUBLIC AgileEncryptionInfo
 {
@@ -125,7 +125,7 @@ public:
 
     void writeEncryptionInfo(BinaryXOutputStream& rStream) override;
 
-    void encrypt(css::uno::Reference<css::io::XInputStream>&  rxInputStream,
+    void encrypt(const css::uno::Reference<css::io::XInputStream>&  rxInputStream,
                  css::uno::Reference<css::io::XOutputStream>& rxOutputStream,
                  sal_uInt32 nSize) override;
 
@@ -141,7 +141,7 @@ public:
     bool setupEncryptionKey(OUString const & rPassword);
 };
 
-} // namespace core
+} // namespace crypto
 } // namespace oox
 
 #endif

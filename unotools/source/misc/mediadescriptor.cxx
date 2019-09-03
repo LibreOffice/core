@@ -473,8 +473,9 @@ css::uno::Sequence< css::beans::NamedValue > MediaDescriptor::requestAndVerifyDo
     erase( PROP_PASSWORD() );
     erase( PROP_ENCRYPTIONDATA() );
 
-    // insert valid password into media descriptor (but not a default password)
-    if( aEncryptionData.hasElements() && !bIsDefaultPassword )
+    // insert encryption info into media descriptor
+    // TODO
+    if( aEncryptionData.hasElements() )
         (*this)[ PROP_ENCRYPTIONDATA() ] <<= aEncryptionData;
 
     return aEncryptionData;

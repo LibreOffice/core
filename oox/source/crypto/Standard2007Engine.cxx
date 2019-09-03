@@ -17,7 +17,7 @@
 
 #include <comphelper/hash.hxx>
 
-namespace oox::core {
+namespace oox::crypto {
 
 /* =========================================================================== */
 /*  Kudos to Caolan McNamara who provided the core decryption implementations. */
@@ -228,7 +228,7 @@ void Standard2007Engine::writeEncryptionInfo(BinaryXOutputStream& rStream)
     rStream.writeMemory(&mInfo.verifier, sizeof(msfilter::EncryptionVerifierAES));
 }
 
-void Standard2007Engine::encrypt(css::uno::Reference<css::io::XInputStream> &  rxInputStream,
+void Standard2007Engine::encrypt(const css::uno::Reference<css::io::XInputStream> &  rxInputStream,
                                  css::uno::Reference<css::io::XOutputStream> & rxOutputStream,
                                  sal_uInt32 nSize)
 {
@@ -316,6 +316,6 @@ bool Standard2007Engine::readEncryptionInfo(css::uno::Reference<css::io::XInputS
     return !aBinaryStream.isEof();
 }
 
-} // namespace oox::core
+} // namespace oox::crypto
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

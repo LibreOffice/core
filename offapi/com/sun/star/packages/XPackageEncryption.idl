@@ -1,0 +1,134 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef __com_sun_star_packages_XPackageEncryption_idl__
+#define __com_sun_star_packages_XPackageEncryption_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/io/XInputStream.idl>
+#include <com/sun/star/io/XOutputStream.idl>
+
+
+module com {  module sun {  module star {  module packages {
+
+
+/** Allows to transparently plug-in crypto for PackageStreams.
+
+    @since LibreOffice 6.5
+ */
+interface XPackageEncryption: com::sun::star::uno::XInterface
+{
+    /** Read package crypto information
+
+        @param rStreams
+        Substreams of the package (in the case of MS encryption, those
+        are OLE substorage streams).
+
+        @returns
+        True if crypto info could be retrieved, and engine initialised. False otherwise.
+     */
+    boolean readEncryptionInfo([in] sequence < com::sun::star::beans::NamedValue > rStreams);
+
+    /** Set or refresh encrytion key
+
+        @param rPassword
+        Optional password to use for generating encryption key.
+
+        @returns
+        True if key setup was successful. False otherwise.
+     */
+    boolean generateEncryptionKey([in] string rPassword);
+
+    /** Decrypt document content
+
+        After crypto setup via readEncryptionInfo(), pipe package bits through
+        encryption engine.
+
+        @param rxInputStream
+        Input data (encrypted)
+
+        @param rxOutputStream
+        Output data (decrypted)
+
+        @returns
+        True if decryption finished without error. False otherwise.
+     */
+    boolean decrypt([in] com::sun::star::io::XInputStream rxInputStream,
+                    [out] com::sun::star::io::XOutputStream rxOutputStream);
+
+    /** Create key-value list of encryption meta data
+
+        After generateEncryptionKey() succeeded in setting up crypto,
+        use this method to create requisite meta data. Depending on
+        underlying crypto, this can be a salt, init vector, or other
+        algorithm-specific information that needs to be stored
+        alongside an encrypted document
+
+        @param rPassword
+        Same password as provided to generateEncryptionKey
+
+        @returns
+        Sequence of opaque key-value pairs needed for decrypting this
+        setup. Can be passed back into other instances of this service
+        via setupEncryption()
+     */
+    sequence<com::sun::star::beans::NamedValue> createEncryptionData([in] string rPassword);
+
+    /** Set key-value list of encryption meta data
+
+        Use this method to setup requisite encryption meta
+        data. Depending on the underlying crypto, this can be a salt, init
+        vector, or other algorithm-specific information that needs to
+        be stored alongside an encrypted document
+
+        @returns
+        True if encryption algo setup finished without error. False otherwise.
+     */
+    boolean setupEncryption([in] sequence<com::sun::star::beans::NamedValue> rMediaEncData);
+
+    /** Encrypt given stream
+
+        After setting up crypto via setupEncryption(), use this method to encrypt content.
+
+        @returns
+        Sequence of named output streams, specific to the crypto
+        provider. The names of sequence entry denote the substream
+        identifiers, if any. In the case of MS OLE storage, it's the
+        substorage names.
+     */
+    sequence<com::sun::star::beans::NamedValue> encrypt([in] com::sun::star::io::XInputStream rxInputStream);
+
+    /** Check if decryption meta data is valid
+
+        Some implementations might for example check HMAC values
+        here. Call this before trusting encrypted data.
+
+        @returns
+        True if decryption algo setup finished without error and
+        consistency checks have passed. False otherwise.
+     */
+    boolean checkDataIntegrity();
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

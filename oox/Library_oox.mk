@@ -102,6 +102,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/crypto/DocumentEncryption \
     oox/source/crypto/DocumentDecryption \
     oox/source/crypto/Standard2007Engine \
+    oox/source/crypto/StrongEncryptionDataSpace \
     oox/source/docprop/docprophandler \
     oox/source/docprop/ooxmldocpropimport \
     oox/source/drawingml/chart/axiscontext \
