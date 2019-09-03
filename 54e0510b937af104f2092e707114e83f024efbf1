@@ -22,6 +22,29 @@
       "revId": "54e0510b937af104f2092e707114e83f024efbf1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_02de8010",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2310,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-03T06:09:02Z",
+      "side": 1,
+      "message": "Oh, and this should be before line 2309 - because for your case, you need not call the found function, only pass it to the NotebookBarAddonsMerger::MergeNotebookBarAddons",
+      "range": {
+        "startLine": 2309,
+        "startChar": 18,
+        "endLine": 2310,
+        "endChar": 132
+      },
+      "revId": "54e0510b937af104f2092e707114e83f024efbf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
