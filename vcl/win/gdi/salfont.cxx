@@ -585,7 +585,6 @@ WinFontFace::WinFontFace( const FontAttributes& rDFS,
     BYTE eWinCharSet, BYTE nPitchAndFamily )
 :   PhysicalFontFace( rDFS ),
     mnId( 0 ),
-    mbFontCapabilitiesRead( false ),
     meWinCharSet( eWinCharSet ),
     mnPitchAndFamily( nPitchAndFamily ),
     mbAliasSymbolsHigh( false ),
@@ -656,33 +655,6 @@ void WinFontFace::UpdateFromHDC( HDC hDC ) const
         return;
 
     mhDC = hDC;
-    GetFontCapabilities( hDC );
-}
-
-bool WinFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
-{
-    rFontCapabilities = maFontCapabilities;
-    return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
-}
-
-void WinFontFace::GetFontCapabilities( HDC hDC ) const
-{
-    // read this only once per font
-    if( mbFontCapabilitiesRead )
-        return;
-
-    mbFontCapabilitiesRead = true;
-
-    // OS/2 table
-    const DWORD OS2Tag = CalcTag( "OS/2" );
-    DWORD nLength = ::GetFontData( hDC, OS2Tag, 0, nullptr, 0 );
-    if( (nLength != GDI_ERROR) && nLength )
-    {
-        std::vector<unsigned char> aTable( nLength );
-        unsigned char* pTable = &aTable[0];
-        ::GetFontData( hDC, OS2Tag, 0, pTable, nLength );
-        vcl::getTTCoverage(maFontCapabilities.oUnicodeRange, maFontCapabilities.oCodePageRange, pTable, nLength);
-    }
 }
 
 void WinSalGraphics::SetTextColor( Color nColor )
@@ -949,7 +921,7 @@ bool WinSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilitie
 {
     if (!mpWinFontEntry[0])
         return false;
-    return mpWinFontEntry[0]->GetFontFace()->GetFontCapabilities(rFontCapabilities);
+    return mpWinFontEntry[0]->GetFontFace()->GetCapabilities(rFontCapabilities);
 }
 
 static int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,

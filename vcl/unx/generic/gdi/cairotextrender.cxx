@@ -378,7 +378,7 @@ bool CairoTextRender::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCap
 {
     if (!mpFreetypeFont[0])
         return false;
-    return mpFreetypeFont[0]->GetFontCapabilities(rGetImplFontCapabilities);
+    return mpFreetypeFont[0]->GetFontInstance()->GetFontFace()->GetCapabilities(rGetImplFontCapabilities);
 }
 
 // SalGraphics

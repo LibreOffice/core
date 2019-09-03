@@ -128,7 +128,6 @@ Qt5FontFace* Qt5FontFace::fromQFontDatabase(const QString& aFamily, const QStrin
 Qt5FontFace::Qt5FontFace(const FontAttributes& rFA, const QString& rFontID)
     : PhysicalFontFace(rFA)
     , m_aFontId(rFontID)
-    , m_bFontCapabilitiesRead(false)
 {
 }
 
@@ -138,31 +137,6 @@ rtl::Reference<LogicalFontInstance>
 Qt5FontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
     return new Qt5Font(*this, rFSD);
-}
-
-bool Qt5FontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const
-{
-    // read this only once per font
-    if (m_bFontCapabilitiesRead)
-    {
-        rFontCapabilities = m_aFontCapabilities;
-        return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
-    }
-    m_bFontCapabilitiesRead = true;
-
-    QFont aFont;
-    aFont.fromString(m_aFontId);
-    QRawFont aRawFont(QRawFont::fromFont(aFont));
-    QByteArray aOS2Table = aRawFont.fontTable("OS/2");
-    if (!aOS2Table.isEmpty())
-    {
-        vcl::getTTCoverage(m_aFontCapabilities.oUnicodeRange, m_aFontCapabilities.oCodePageRange,
-                           reinterpret_cast<const unsigned char*>(aOS2Table.data()),
-                           aOS2Table.size());
-    }
-
-    rFontCapabilities = m_aFontCapabilities;
-    return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
 }
 
 hb_blob_t* Qt5FontFace::GetHbTable(hb_tag_t nTag) const
