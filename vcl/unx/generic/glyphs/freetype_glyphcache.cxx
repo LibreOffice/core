@@ -689,21 +689,7 @@ FontCharMapRef FreetypeFont::GetFontCharMap() const
 
 bool FreetypeFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
-    bool bRet = false;
-
-    sal_uLong nLength = 0;
-
-    // load OS/2 table
-    const FT_Byte* pOS2 = mpFontInfo->GetTable("OS/2", &nLength);
-    if (pOS2)
-    {
-        bRet = vcl::getTTCoverage(
-            rFontCapabilities.oUnicodeRange,
-            rFontCapabilities.oCodePageRange,
-            pOS2, nLength);
-    }
-
-    return bRet;
+    return mpFontInstance->GetFontFace()->GetCapabilities(rFontCapabilities);
 }
 
 // outline stuff
