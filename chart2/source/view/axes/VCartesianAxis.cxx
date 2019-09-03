@@ -752,8 +752,8 @@ bool VCartesianAxis::createTextShapes(
         }
     }
 
-     // Stores an array of text label strings in case of a normal
-     // (non-complex) category axis.
+    // Stores an array of text label strings in case of a normal
+    // (non-complex) category axis.
     const uno::Sequence<OUString>* pCategories = nullptr;
     if( m_bUseTextLabels && !m_aAxisProperties.m_bComplexCategories )
         pCategories = &m_aTextLabels;
@@ -1646,6 +1646,13 @@ void VCartesianAxis::createLabels()
                 aComplexProps.bLineBreakAllowed = true;
                 aComplexProps.bOverlapAllowed = aComplexProps.fRotationAngleDegree != 0.0;
 
+                if( nTextLevel > 0 )
+                {
+                    if( m_aAxisProperties.m_bSwapXAndY )
+                        aComplexProps.fRotationAngleDegree = 90.0;
+                    else
+                        aComplexProps.fRotationAngleDegree = 0.0;
+                }
             }
             AxisLabelProperties& rAxisLabelProperties =  m_aAxisProperties.m_bComplexCategories ? aComplexProps : m_aAxisLabelProperties;
             while (!createTextShapes(m_xTextTarget, *apTickIter, rAxisLabelProperties,
