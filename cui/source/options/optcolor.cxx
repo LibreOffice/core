@@ -861,6 +861,8 @@ void ColorConfigCtrl_Impl::dispose()
 
 extern "C" SAL_DLLPUBLIC_EXPORT void makeColorConfigCtrl(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
+    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
+                                 decltype(makeColorConfigCtrl)>);
     rRet = VclPtr<ColorConfigCtrl_Impl>::Create(pParent);
 }
 

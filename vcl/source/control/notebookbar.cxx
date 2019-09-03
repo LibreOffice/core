@@ -62,7 +62,7 @@ NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rU
     if ( doesCustomizedUIExist )
         sUIDir = getCustomizedUIRootDir();
     m_pUIBuilder.reset(
-        new VclBuilder(this, sUIDir, rUIXMLDescription, rID, rFrame, true, aNotebookBarAddonsItem));
+        new VclBuilder(this, sUIDir, rUIXMLDescription, rID, rFrame, true, &aNotebookBarAddonsItem));
     mxFrame = rFrame;
     // In the Notebookbar's .ui file must exist control handling context
     // - implementing NotebookbarContextControl interface with id "ContextContainer"
