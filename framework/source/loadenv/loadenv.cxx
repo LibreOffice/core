@@ -202,6 +202,9 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
         }
     }
 
+    // TODO IRM:UNOLOCK
+    // return nullptr;
+
     return xComponent;
 }
 
