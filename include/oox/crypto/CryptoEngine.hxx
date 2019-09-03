@@ -25,7 +25,7 @@ namespace oox {
 }
 
 namespace oox {
-namespace core {
+namespace crypto {
 
 class CryptoEngine
 {
@@ -53,14 +53,14 @@ public:
 
     virtual bool setupEncryption(const OUString& rPassword) = 0;
 
-    virtual void encrypt(css::uno::Reference<css::io::XInputStream> & rxInputStream,
+    virtual void encrypt(const css::uno::Reference<css::io::XInputStream> & rxInputStream,
                          css::uno::Reference<css::io::XOutputStream> & rxOutputStream,
                          sal_uInt32 nSize) = 0;
 
     virtual bool checkDataIntegrity() = 0;
 };
 
-} // namespace core
+} // namespace crypto
 } // namespace oox
 
 #endif
