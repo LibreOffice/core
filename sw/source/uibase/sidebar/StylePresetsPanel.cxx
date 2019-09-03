@@ -19,6 +19,7 @@
 #include <svx/svxids.hrc>
 #include <svx/dlgutil.hxx>
 #include <svx/rulritem.hxx>
+#include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 
