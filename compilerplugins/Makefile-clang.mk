@@ -79,7 +79,8 @@ LLVMCONFIG=$(CLANGDIR)/bin/llvm-config
 CLANGINDIR=$(SRCDIR)/compilerplugins/clang
 # Cannot use $(WORKDIR), the plugin should survive even 'make clean', otherwise the rebuilt
 # plugin will cause cache misses with ccache.
-CLANGOUTDIR=$(BUILDDIR)/compilerplugins/obj
+CLANGOUTDIR=$(BUILDDIR)/compilerplugins/clang
+CLANGOBJDIR=$(CLANGOUTDIR)/obj
 
 ifdef LO_CLANG_SHARED_PLUGINS
 CLANGCXXFLAGS+=-DLO_CLANG_SHARED_PLUGINS
@@ -106,10 +107,12 @@ compilerplugins: compilerplugins-build
 
 ifdef LO_CLANG_SHARED_PLUGINS
 # The shared source, intentionally put first in the list because it takes the longest to build.
-CLANGSRC=sharedvisitor/sharedvisitor.cxx
+CLANGSRCOUTDIR=$(CLANGOUTDIR)/sharedvisitor/sharedvisitor.cxx
+CLANGSRC+=$(CLANGSRCOUTDIR)
 endif
 # The list of source files, generated automatically (all files in clang/, but not subdirs).
-CLANGSRC+=$(foreach src,$(wildcard $(CLANGINDIR)/*.cxx), $(notdir $(src)))
+CLANGSRCINDIR=$(foreach src,$(wildcard $(CLANGINDIR)/*.cxx), $(notdir $(src)))
+CLANGSRC+=$(CLANGSRCINDIR)
 
 # Remember the sources and if they have changed, force plugin relinking.
 CLANGSRCCHANGED= \
@@ -132,7 +135,7 @@ $(CLANGOUTDIR)/plugin$(CLANG_DL_EXT): $(CLANGOUTDIR)/sources.txt
 $(CLANGOUTDIR)/sources.txt:
 	touch $@
 
-compilerplugins-build: $(CLANGOUTDIR) $(CLANGOUTDIR)/plugin$(CLANG_DL_EXT)
+compilerplugins-build: $(CLANGOUTDIR) $(CLANGOBJDIR) $(CLANGOUTDIR)/plugin$(CLANG_DL_EXT)
 
 compilerplugins-clean:
 	rm -rf $(CLANGOUTDIR)
@@ -140,39 +143,47 @@ compilerplugins-clean:
 $(CLANGOUTDIR):
 	mkdir -p $(CLANGOUTDIR)
 
+$(CLANGOBJDIR):
+	mkdir -p $(CLANGOBJDIR)
+
 CLANGOBJS=
 
 ifeq ($(OS),WNT)
 
+# clangbuildsrc cxxfile objfile dfile
 define clangbuildsrc
-$(3): $(2) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
-	$$(call gb_Output_announce,$(subst $(SRCDIR)/,,$(2)),$(true),CXX,3)
+$(2): $(1) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
+	$$(call gb_Output_announce,$(subst $(SRCDIR)/,,$(subst $(BUILDDIR)/,,$(1))),$(true),CXX,3)
 	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) \
-        $(CLANGINCLUDES) /I$(BUILDDIR)/config_host $(2) /MD \
-        /c /Fo: $(3)
+        $(CLANGINCLUDES) /I$(BUILDDIR)/config_host /I$(CLANGINDIR) $(1) /MD \
+        /c /Fo: $(2)
 
--include $(CLANGOUTDIR)/$(1).d #TODO
+-include $(3) #TODO
 
-$(CLANGOUTDIR)/plugin$(CLANG_DL_EXT): $(3)
-$(CLANGOUTDIR)/plugin$(CLANG_DL_EXT): CLANGOBJS += $(3)
+$(CLANGOUTDIR)/plugin$(CLANG_DL_EXT): $(2)
+$(CLANGOUTDIR)/plugin$(CLANG_DL_EXT): CLANGOBJS += $(2)
 endef
 
 else
 
+# clangbuildsrc cxxfile ofile dfile
 define clangbuildsrc
-$(3): $(2) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
-	$$(call gb_Output_announce,$(subst $(SRCDIR)/,,$(2)),$(true),CXX,3)
-	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) $(CLANGINCLUDES) -I$(BUILDDIR)/config_host $(2) -fPIC -c -o $(3) -MMD -MT $(3) -MP -MF $(CLANGOUTDIR)/$(1).d
+$(2): $(1) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
+	$$(call gb_Output_announce,$(subst $(SRCDIR)/,,$(subst $(BUILDDIR)/,,$(1))),$(true),CXX,3)
+	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) \
+	$(CLANGINCLUDES) -I$(BUILDDIR)/config_host -I$(CLANGINDIR) $(1) \
+	-fPIC -c -o $(2) -MMD -MT $(2) -MP -MF $(3)
 
--include $(CLANGOUTDIR)/$(1).d
+-include $(3)
 
-$(CLANGOUTDIR)/plugin$(CLANG_DL_EXT): $(3)
-$(CLANGOUTDIR)/plugin$(CLANG_DL_EXT): CLANGOBJS += $(3)
+$(CLANGOUTDIR)/plugin$(CLANG_DL_EXT): $(2)
+$(CLANGOUTDIR)/plugin$(CLANG_DL_EXT): CLANGOBJS += $(2)
 endef
 
 endif
 
-$(foreach src, $(CLANGSRC), $(eval $(call clangbuildsrc,$(src),$(CLANGINDIR)/$(src),$(CLANGOUTDIR)/$(src:.cxx=.o))))
+$(foreach src, $(CLANGSRCOUTDIR), $(eval $(call clangbuildsrc,$(src),$(src:.cxx=.o),$(src:.cxx=.d))))
+$(foreach src, $(CLANGSRCINDIR), $(eval $(call clangbuildsrc,$(CLANGINDIR)/$(src),$(CLANGOBJDIR)/$(src:.cxx=.o),$(CLANGOBJDIR)/$(src:.cxx=.d))))
 
 $(CLANGOUTDIR)/plugin$(CLANG_DL_EXT): $(CLANGOBJS)
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),LNK,4)
@@ -193,16 +204,18 @@ $(CLANGOUTDIR)/clang-timestamp: $(CLANGDIR)/bin/clang$(CLANG_EXE_EXT) $(BUILDDIR
 
 
 ifdef LO_CLANG_SHARED_PLUGINS
-# Update the shared visitor source if needed. It is intentionally included in the sources and generated only when
-# needed, because the generating takes a while.
-# If you want to remake the source with LO_CLANG_SHARED_PLUGINS disabled, run 'make LO_CLANG_SHARED_PLUGINS=1'.
-$(CLANGINDIR)/sharedvisitor/sharedvisitor.cxx: $(shell grep -l "LO_CLANG_SHARED_PLUGINS" $(CLANGINDIR)/*.cxx)
-$(CLANGINDIR)/sharedvisitor/sharedvisitor.cxx: $(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT)
-	$(call gb_Output_announce,$(subst $(SRCDIR)/,,$@),$(true),GEN,1)
-	$(QUIET)$(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT) \
-        $(COMPILER_PLUGINS_TOOLING_ARGS:%=-arg=%) \
-        $(shell grep -l "LO_CLANG_SHARED_PLUGINS" $(CLANGINDIR)/*.cxx) \
-        > $(CLANGINDIR)/sharedvisitor/sharedvisitor.cxx
+SHARED_SOURCES := $(shell grep -l "LO_CLANG_SHARED_PLUGINS" $(CLANGINDIR)/*.cxx)
+SHARED_SOURCE_INFOS := $(foreach source,$(SHARED_SOURCES),$(patsubst $(CLANGINDIR)/%.cxx,$(CLANGOUTDIR)/sharedvisitor/%.plugininfo,$(source)))
+
+$(CLANGOUTDIR)/sharedvisitor/%.plugininfo: $(CLANGINDIR)/%.cxx $(CLANGOUTDIR)/sharedvisitor/analyzer$(CLANG_EXE_EXT)
+	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,1)
+	$(QUIET)$(ICECREAM_RUN) $(CLANGOUTDIR)/sharedvisitor/analyzer$(CLANG_EXE_EXT) \
+        $(COMPILER_PLUGINS_TOOLING_ARGS:%=-arg=%) $< > $@
+
+$(CLANGOUTDIR)/sharedvisitor/sharedvisitor.cxx: $(SHARED_SOURCE_INFOS) $(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT)
+	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,1)
+	$(QUIET)$(ICECREAM_RUN) $(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT) \
+        $(COMPILER_PLUGINS_TOOLING_ARGS:%=-arg=%) $(SHARED_SOURCE_INFOS) > $@
 
 CLANGTOOLLIBS = -lclangTooling -lclangDriver -lclangFrontend -lclangParse -lclangSema -lclangEdit -lclangAnalysis \
         -lclangAST -lclangLex -lclangSerialization -lclangBasic $(shell $(LLVMCONFIG) --ldflags --libs --system-libs)
@@ -217,21 +230,33 @@ CLANGTOOLLIBS += -Wl,--rpath,$(shell $(LLVMCONFIG) --libdir)
 endif
 endif
 
-$(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT): $(CLANGINDIR)/sharedvisitor/generator.cxx \
+$(CLANGOUTDIR)/sharedvisitor/analyzer$(CLANG_EXE_EXT): $(CLANGINDIR)/sharedvisitor/analyzer.cxx \
         | $(CLANGOUTDIR)/sharedvisitor
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,1)
 	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) $(CLANGTOOLDEFS) $(CLANGINCLUDES) \
         -DCLANGDIR=$(CLANGDIR) -I$(BUILDDIR)/config_host \
+        -c $< -o $(CLANGOUTDIR)/sharedvisitor/analyzer.o -MMD -MT $@ -MP \
+        -MF $(CLANGOUTDIR)/sharedvisitor/analyzer.d
+	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGOUTDIR)/sharedvisitor/analyzer.o \
+        -o $@ $(CLANGTOOLLIBS)
+
+$(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT): $(CLANGINDIR)/sharedvisitor/generator.cxx \
+        | $(CLANGOUTDIR)/sharedvisitor
+	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,1)
+	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) \
         -c $< -o $(CLANGOUTDIR)/sharedvisitor/generator.o -MMD -MT $@ -MP \
         -MF $(CLANGOUTDIR)/sharedvisitor/generator.d
 	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGOUTDIR)/sharedvisitor/generator.o \
-        -o $@ $(CLANGTOOLLIBS)
+        -o $@
 
-$(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT): $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
+$(CLANGOUTDIR)/sharedvisitor/analyzer$(CLANG_EXE_EXT): $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
+
+$(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT): $(SRCDIR)/compilerplugins/Makefile-clang.mk
 
 $(CLANGOUTDIR)/sharedvisitor:
 	mkdir -p $(CLANGOUTDIR)/sharedvisitor
 
+-include $(CLANGOUTDIR)/sharedvisitor/analyzer.d
 -include $(CLANGOUTDIR)/sharedvisitor/generator.d
 # TODO WNT version
 endif
