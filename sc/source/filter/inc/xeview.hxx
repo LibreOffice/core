@@ -159,6 +159,7 @@ private:
 private:
     XclTabViewData      maData;             /// All view settings for a sheet.
     sal_uInt32          mnGridColorId;      /// Color identifier for grid color.
+    bool                mbHasTabSettings;   /// It's false for embedded OLE spreadsheets.
 };
 
 #endif
