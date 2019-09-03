@@ -2756,12 +2756,13 @@ void MSWordExportBase::WriteText()
                 ;
             else if ( aIdx.GetNode().IsSectionNode() )
                 ;
-            else if ( !IsInTable()
-                && (rSect.GetType() != TOX_CONTENT_SECTION && rSect.GetType() != TOX_HEADER_SECTION )) //No sections in table
+            else if ( !IsInTable() )    //No sections in table
             {
                 //#120140# Do not need to insert a page/section break after a section end. Check this case first
                 bool bNeedExportBreakHere = true;
-                if ( aIdx.GetNode().IsTextNode() )
+                if ( rSect.GetType() == TOX_CONTENT_SECTION || rSect.GetType() == TOX_HEADER_SECTION )
+                    bNeedExportBreakHere = false;
+                else if ( aIdx.GetNode().IsTextNode() )
                 {
                     SwTextNode *pTempNext = aIdx.GetNode().GetTextNode();
                     if ( pTempNext )
