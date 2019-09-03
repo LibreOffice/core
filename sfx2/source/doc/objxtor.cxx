@@ -887,11 +887,14 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
     if ( _rxComponent == xOldCurrentComp )
         // nothing to do
         return;
+
+    // TODO IRM:UNOLOCK
+    // return;
+
     // note that "_rxComponent.get() == s_xCurrentComponent.get().get()" is /sufficient/, but not
     // /required/ for "_rxComponent == s_xCurrentComponent.get()".
     // In other words, it's still possible that we here do something which is not necessary,
     // but we should have filtered quite some unnecessary calls already.
-
 #if HAVE_FEATURE_SCRIPTING
     BasicManager* pAppMgr = SfxApplication::GetBasicManager();
     rTheCurrentComponent = _rxComponent;

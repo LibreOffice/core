@@ -552,6 +552,10 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::getCurrentCompone
     {
         xComponent = impl_getFrameComponent( xCurrentFrame );
     }
+
+    // TODO: IRM:UNOLOCK
+    //return nullptr;
+
     return xComponent;
 }
 
