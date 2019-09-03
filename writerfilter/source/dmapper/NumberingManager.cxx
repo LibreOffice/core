@@ -428,6 +428,15 @@ uno::Sequence<uno::Sequence<beans::PropertyValue>> AbstractListDef::GetPropertyV
     return result;
 }
 
+OUString AbstractListDef::MapListId(OUString const& rId)
+{
+    if (!m_oListId)
+    {
+        m_oListId = rId;
+    }
+    return *m_oListId;
+}
+
 //----------------------------------------------  ListDef implementation
 
 ListDef::ListDef( ) : AbstractListDef( )

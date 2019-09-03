@@ -408,6 +408,7 @@ private:
 
     css::uno::Reference< css::text::XTextRange > m_xStartingRange; // start of a frame
     css::uno::Reference< css::text::XTextRange > m_xEndingRange;   // end of the frame
+    sal_Int32 m_nListId = -1;
 
 public:
     ParagraphProperties();
@@ -419,6 +420,9 @@ public:
 
     // Does not compare the starting/ending range, m_sParaStyleName and m_nDropCapLength
     bool operator==( const ParagraphProperties& );
+
+    sal_Int32 GetListId() const          { return m_nListId; }
+    void      SetListId( sal_Int32 nId ) { m_nListId = nId; }
 
     bool IsFrameMode() const             { return m_bFrameMode; }
     void SetFrameMode( bool set = true ) { m_bFrameMode = set; }
@@ -496,16 +500,12 @@ class StyleSheetPropertyMap
     , public ParagraphProperties
 {
 private:
-    sal_Int32 mnListId;
     sal_Int16 mnListLevel;
     sal_Int16 mnOutlineLevel;
     sal_Int32 mnNumId;
 
 public:
     explicit StyleSheetPropertyMap();
-
-    sal_Int32 GetListId() const          { return mnListId; }
-    void      SetListId( sal_Int32 nId ) { mnListId = nId; }
 
     sal_Int16 GetListLevel() const             { return mnListLevel; }
     void      SetListLevel( sal_Int16 nLevel ) { mnListLevel = nLevel; }
