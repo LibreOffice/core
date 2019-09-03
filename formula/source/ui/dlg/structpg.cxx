@@ -61,7 +61,7 @@ void StructPage::ClearStruct()
     m_xTlbStruct->clear();
 }
 
-bool StructPage::InsertEntry(const OUString& rText, weld::TreeIter* pParent,
+bool StructPage::InsertEntry(const OUString& rText, const weld::TreeIter* pParent,
                              sal_uInt16 nFlag, int nPos,
                              const FormulaToken* pIFormulaToken,
                              weld::TreeIter& rRet)
@@ -98,7 +98,7 @@ bool StructPage::InsertEntry(const OUString& rText, weld::TreeIter* pParent,
     return bEntry;
 }
 
-OUString StructPage::GetEntryText(weld::TreeIter* pEntry) const
+OUString StructPage::GetEntryText(const weld::TreeIter* pEntry) const
 {
     OUString aString;
     if (pEntry)
@@ -106,7 +106,7 @@ OUString StructPage::GetEntryText(weld::TreeIter* pEntry) const
     return aString;
 }
 
-const FormulaToken* StructPage::GetFunctionEntry(weld::TreeIter* pEntry)
+const FormulaToken* StructPage::GetFunctionEntry(const weld::TreeIter* pEntry)
 {
     if (pEntry)
     {
