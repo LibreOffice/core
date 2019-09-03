@@ -196,7 +196,8 @@ void OConnection::construct(const OUString& url, const Sequence<PropertyValue>& 
                            *this, OUString(), 0, Any());
     }
 
-    lcl_executeUpdate(&m_mysql, OString{ "SET session sql_mode='ANSI_QUOTES'" });
+    lcl_executeUpdate(&m_mysql,
+                      OString{ "SET session sql_mode='ANSI_QUOTES,NO_AUTO_VALUE_ON_ZERO'" });
     lcl_executeUpdate(&m_mysql, OString{ "SET NAMES utf8" });
 }
 
