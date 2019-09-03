@@ -276,23 +276,31 @@ bool lclIsZipPackage( const Reference< XComponentContext >& rxContext, const Ref
 class PasswordVerifier : public IDocPasswordVerifier
 {
 public:
-    explicit PasswordVerifier( DocumentDecryption& aDecryptor );
+    explicit PasswordVerifier( crypto::DocumentDecryption& aDecryptor );
 
     virtual DocPasswordVerifierResult verifyPassword( const OUString& rPassword, Sequence<NamedValue>& rEncryptionData ) override;
 
     virtual DocPasswordVerifierResult verifyEncryptionData( const Sequence<NamedValue>& rEncryptionData ) override;
 private:
-    DocumentDecryption& mDecryptor;
+    crypto::DocumentDecryption& mDecryptor;
 };
 
-PasswordVerifier::PasswordVerifier( DocumentDecryption& aDecryptor ) :
+PasswordVerifier::PasswordVerifier( crypto::DocumentDecryption& aDecryptor ) :
     mDecryptor(aDecryptor)
 {}
 
 comphelper::DocPasswordVerifierResult PasswordVerifier::verifyPassword( const OUString& rPassword, Sequence<NamedValue>& rEncryptionData )
 {
-    if(mDecryptor.generateEncryptionKey(rPassword))
-        rEncryptionData = mDecryptor.createEncryptionData(rPassword);
+    try
+    {
+        if (mDecryptor.generateEncryptionKey(rPassword))
+            rEncryptionData = mDecryptor.createEncryptionData(rPassword);
+    }
+    catch (...)
+    {
+        // Any exception is a reason to abort
+        return comphelper::DocPasswordVerifierResult::Abort;
+    }
 
     return rEncryptionData.hasElements() ? comphelper::DocPasswordVerifierResult::OK : comphelper::DocPasswordVerifierResult::WrongPassword;
 }
@@ -326,7 +334,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
     {
         try
         {
-            DocumentDecryption aDecryptor(aOleStorage);
+            crypto::DocumentDecryption aDecryptor(mxContext, aOleStorage);
 
             if( aDecryptor.readEncryptionInfo() )
             {
