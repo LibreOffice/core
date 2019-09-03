@@ -377,7 +377,7 @@ public:
 
     static BasicLibInfo*    Create( SotStorageStream& rSStream );
 
-    const uno::Reference< script::XLibraryContainer >& GetLibraryContainer()
+    const uno::Reference< script::XLibraryContainer >& GetLibraryContainer() const
         { return mxScriptCont; }
     void SetLibraryContainer( const uno::Reference< script::XLibraryContainer >& xScriptCont )
         { mxScriptCont = xScriptCont; }

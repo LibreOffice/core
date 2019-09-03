@@ -123,15 +123,15 @@ public:
     bool     HasExeCode();
     bool     IsVBACompat() const { return mbVBACompat;}
     void     SetVBACompat( bool bCompat );
-    sal_Int32 GetModuleType() { return mnType; }
+    sal_Int32 GetModuleType() const { return mnType; }
     void     SetModuleType( sal_Int32 nType ) { mnType = nType; }
-    bool     isProxyModule() { return bIsProxyModule; }
+    bool     isProxyModule() const { return bIsProxyModule; }
     void     AddVarName( const OUString& aName );
     void     RemoveVars();
     css::uno::Reference< css::script::XInvocation > const & GetUnoModule();
     bool     createCOMWrapperForIface( css::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
     void     GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache);
-    const SbxArrayRef& GetMethods() { return pMethods;}
+    const SbxArrayRef& GetMethods() const { return pMethods;}
     SbMethod*       FindMethod( const OUString&, SbxClassType );
     static OUString GetKeywordCase( const OUString& sKeyword );
 };
