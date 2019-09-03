@@ -149,13 +149,13 @@ public:
                 comphelper::Base64::decode(encryptedKeyValue, rAttribute.Value);
                 mInfo.encryptedKeyValue = comphelper::sequenceToContainer<std::vector<sal_uInt8>>(encryptedKeyValue);
             }
-            if (rAttrLocalName == "encryptedHmacKey")
+            else if (rAttrLocalName == "encryptedHmacKey")
             {
                 Sequence<sal_Int8> aValue;
                 comphelper::Base64::decode(aValue, rAttribute.Value);
                 mInfo.hmacEncryptedKey = comphelper::sequenceToContainer<std::vector<sal_uInt8>>(aValue);
             }
-            if (rAttrLocalName == "encryptedHmacValue")
+            else if (rAttrLocalName == "encryptedHmacValue")
             {
                 Sequence<sal_Int8> aValue;
                 comphelper::Base64::decode(aValue, rAttribute.Value);
