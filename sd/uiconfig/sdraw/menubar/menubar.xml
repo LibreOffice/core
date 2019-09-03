@@ -200,6 +200,7 @@
       <menu:menu menu:id=".uno:ObjectMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertMath"/>
+          <menu:menuitem menu:id=".uno:InsertQrCode"/>
           <menu:menuitem menu:id=".uno:InsertObject"/>
         </menu:menupopup>
       </menu:menu>
@@ -211,7 +212,6 @@
       <menu:menuitem menu:id=".uno:InsertAnnotation"/>
       <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame" menu:style="text"/>
       <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
-      <menu:menuitem menu:id=".uno:InsertQrCode"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
       <menu:menuitem menu:id=".uno:InsertSymbol" menu:style="text"/>
