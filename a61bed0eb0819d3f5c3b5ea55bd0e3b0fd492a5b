@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_6203bc10",
+        "filename": "cui/source/tabpages/numpages.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3007,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-09-03T10:20:37Z",
+      "side": 1,
+      "message": "I think you have to do \n\n    if (m_pLevelHdlEvent)\n        RemoveUserEvent\n\nin the destructor, or theoretically we could end up calling into code after it has been destructed if the dialog is closed fast enough after a selection.",
+      "revId": "a61bed0eb0819d3f5c3b5ea55bd0e3b0fd492a5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
