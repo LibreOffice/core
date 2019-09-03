@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_62d65cf4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-09-03T07:03:31Z",
+      "side": 1,
+      "message": "Though note that since \u003chttps://gerrit.libreoffice.org/#/c/78336/5..6/m4/l_atomic.m4\u003e the underlying \"add -latomic configure check...\" only sets ATOMIC_LIB\u003d-latomic if it considers it really necessary, so in effect we still include -latomic only for some Linux architectures.",
+      "range": {
+        "startLine": 24,
+        "startChar": 24,
+        "endLine": 25,
+        "endChar": 42
+      },
+      "revId": "32a96e44b4c073c7c61c94a7f0fe6108dde663bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
