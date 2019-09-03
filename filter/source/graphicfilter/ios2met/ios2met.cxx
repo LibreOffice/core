@@ -378,7 +378,7 @@ private:
     Color GetPaletteColor(sal_uInt32 nIndex);
 
 
-    bool    IsLineInfo();
+    bool        IsLineInfo() const;
     void        DrawPolyLine( const tools::Polygon& rPolygon );
     void        DrawPolygon( const tools::Polygon& rPolygon );
     void        DrawPolyPolygon( const tools::PolyPolygon& rPolygon );
@@ -491,7 +491,7 @@ OS2METReader::~OS2METReader()
     }
 }
 
-bool OS2METReader::IsLineInfo()
+bool OS2METReader::IsLineInfo() const
 {
     return ( ! ( aLineInfo.IsDefault() || ( aLineInfo.GetStyle() == LineStyle::NONE ) || ( pVirDev->GetLineColor() == COL_TRANSPARENT ) ) );
 }
