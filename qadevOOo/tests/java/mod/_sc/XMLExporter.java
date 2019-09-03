@@ -129,7 +129,7 @@ public class XMLExporter extends TestCase {
         XNamed xSheetNamed = UnoRuntime.queryInterface(XNamed.class, xSheet);
         xSheetNamed.setName(SHEET_NAME);
 
-        log.println("fill sheet with contnet...");
+        log.println("fill sheet with content...");
         util.CalcTools.fillCalcSheetWithContent(xSheet, 3, 3, 50, 50);
 
         // adding tags which must be contained in XML output
