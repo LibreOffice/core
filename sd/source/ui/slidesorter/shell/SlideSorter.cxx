@@ -19,6 +19,8 @@
 
 #include <SlideSorter.hxx>
 
+#include <com/sun/star/frame/XController.hpp>
+
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsScrollBarManager.hxx>
 #include <controller/SlsProperties.hxx>
