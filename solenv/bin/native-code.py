@@ -357,6 +357,7 @@ core_constructor_list = [
     "com_sun_star_comp_oox_docprop_DocumentPropertiesImporter_get_implementation",
     "com_sun_star_comp_oox_ppt_PowerPointImport_get_implementation",
     "com_sun_star_comp_oox_ShapeContextHandler_get_implementation",
+    "com_sun_star_comp_oox_crypto_StrongEncryptionDataSpace_get_implementation",
     ]
 
 # edit group for apps, where you can edit documents
