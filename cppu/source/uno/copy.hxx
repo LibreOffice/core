@@ -22,7 +22,9 @@
 #include "prim.hxx"
 #include "constr.hxx"
 #include <cassert>
+#include <cstddef>
 #include <cstdlib>
+#include <type_traits>
 
 namespace cppu
 {
@@ -30,6 +32,22 @@ namespace cppu
 
 //#### copy construction ###########################################################################
 
+namespace {
+
+// The non-dynamic prefix of sal_Sequence (aka uno_Sequence):
+struct SequencePrefix {
+    sal_Int32 nRefCount;
+    sal_Int32 nElements;
+};
+static_assert(sizeof (SequencePrefix) < sizeof (uno_Sequence));
+static_assert(offsetof(SequencePrefix, nRefCount) == offsetof(uno_Sequence, nRefCount));
+static_assert(
+    std::is_same_v<decltype(SequencePrefix::nRefCount), decltype(uno_Sequence::nRefCount)>);
+static_assert(offsetof(SequencePrefix, nElements) == offsetof(uno_Sequence, nElements));
+static_assert(
+    std::is_same_v<decltype(SequencePrefix::nElements), decltype(uno_Sequence::nElements)>);
+
+}
 
 inline uno_Sequence * allocSeq(
     sal_Int32 nElementSize, sal_Int32 nElements )
@@ -42,9 +60,11 @@ inline uno_Sequence * allocSeq(
         pSeq = static_cast<uno_Sequence *>(std::malloc( nSize ));
         if (pSeq != nullptr)
         {
-            // header init
-            pSeq->nRefCount = 1;
-            pSeq->nElements = nElements;
+            // header init, going via SequencePrefix to avoid UBSan insufficient-object-size
+            // warnings when `nElements == 0` and thus `nSize < sizeof (uno_Sequence)`:
+            auto const header = reinterpret_cast<SequencePrefix *>(pSeq);
+            header->nRefCount = 1;
+            header->nElements = nElements;
         }
     }
     return pSeq;
