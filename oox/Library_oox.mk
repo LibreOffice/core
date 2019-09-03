@@ -16,7 +16,18 @@ $(eval $(call gb_Library_use_custom_headers,oox,oox/generated))
 $(eval $(call gb_Library_set_include,oox,\
     $$(INCLUDE) \
     -I$(SRCDIR)/oox/inc \
+	-I"C:\Program Files\Active Directory Rights Management Services SDK 2.1\inc"\
 ))
+
+$(eval $(call gb_Library_add_libs,oox,\
+	msipc_s.lib \
+	msipc.lib \
+))
+
+$(eval $(call gb_Library_add_ldflags,oox,\
+	-LIBPATH:"C:\Program Files\Active Directory Rights Management Services SDK 2.1\lib\x64"\
+))
+
 
 ifeq ($(COM)-$(OS)-$(CPUNAME),GCC-LINUX-IA64)
 # at least Debian Linux ia64 fails at compile time on
@@ -98,6 +109,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/core/relationshandler \
     oox/source/core/xmlfilterbase \
     oox/source/crypto/AgileEngine \
+    oox/source/crypto/IRMEngine \
     oox/source/crypto/CryptTools \
     oox/source/crypto/DocumentEncryption \
     oox/source/crypto/DocumentDecryption \
