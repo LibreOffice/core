@@ -127,7 +127,7 @@ bool SbxDecimal::neg()
     return bRet;
 }
 
-bool SbxDecimal::isZero()
+bool SbxDecimal::isZero() const
 {
     SbxDecimal aZeroDec;
     aZeroDec.setLong( 0 );
@@ -310,7 +310,7 @@ bool SbxDecimal::neg()
     return false;
 }
 
-bool SbxDecimal::isZero()
+bool SbxDecimal::isZero() const
 {
     return false;
 }

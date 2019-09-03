@@ -45,7 +45,7 @@ public:
     bool operator += (sal_uInt32);      // save integer
     void operator += (sal_Int32);       // save integer
     char*  GetBuffer();             // give out buffer (delete yourself!)
-    sal_uInt32 GetSize()                { return nOff; }
+    sal_uInt32 GetSize() const { return nOff; }
 };
 
 #endif

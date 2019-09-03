@@ -45,8 +45,8 @@ public:
     void BackChain( sal_uInt32 off )    { aCode.Chain( off );  }
     void Statement();
     void GenStmnt();            // create statement-opcode maybe
-    sal_uInt32 GetPC();
-    sal_uInt32 GetOffset()              { return GetPC() + 1; }
+    sal_uInt32 GetPC() const;
+    sal_uInt32 GetOffset() const { return GetPC() + 1; }
     void Save();
 
     // #29955 service for-loop-level

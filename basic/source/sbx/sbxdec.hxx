@@ -93,7 +93,7 @@ public:
     bool operator *= ( const SbxDecimal &r );
     bool neg();
 
-    bool isZero();
+    bool isZero() const;
 
     // must match the return values of the Microsoft VarDecCmp Automation function
     enum class CmpResult { LT, EQ, GT };
