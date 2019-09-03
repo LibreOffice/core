@@ -61,9 +61,6 @@ namespace dbaui
     public:
         typedef std::map<OUString, OFieldDescription*, ::comphelper::UStringMixLess> TColumns;
         typedef std::vector<TColumns::const_iterator>             TColumnVector;
-
-        // first value is the position in the destination table. The second
-        // value is the position of the column in the source table.
         typedef std::vector< std::pair<sal_Int32,sal_Int32> >   TPositions;
 
     protected:
