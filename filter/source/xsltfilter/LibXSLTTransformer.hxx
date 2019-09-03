@@ -162,13 +162,13 @@ namespace XSLT
         error(const OUString& msg);
 
         const OString&
-        getStyleSheetURL() { return m_styleSheetURL; }
+        getStyleSheetURL() const { return m_styleSheetURL; }
 
         const ::std::map<const char*, OString>&
-        getParameters() { return m_parameters; }
+        getParameters() const { return m_parameters; }
 
         const css::uno::Reference<css::uno::XComponentContext>&
-        getComponentContext() {
+        getComponentContext() const {
             return m_xContext;
         }
 
