@@ -1183,12 +1183,6 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                     // otherwise we don't get the correct value when only the 2nd source column was selected
                     continue;
                 }
-                else if( xMeta->isAutoIncrement( rColumnPos.second ) )
-                {
-                    // it is auto incremented. Let the DBMS deal with it.
-                    ++nSourceColumn;
-                    continue;
-                }
 
                 if ( ( nSourceColumn < 1 ) || ( nSourceColumn >= static_cast<sal_Int32>(aSourceColTypes.size()) ) )
                 {   // ( we have to check here against 1 because the parameters are 1 based)
