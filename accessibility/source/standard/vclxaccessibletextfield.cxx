@@ -106,11 +106,8 @@ OUString VCLXAccessibleTextField::getImplementationName()
 
 Sequence< OUString > VCLXAccessibleTextField::getSupportedServiceNames()
 {
-    Sequence< OUString > aNames = VCLXAccessibleTextComponent::getSupportedServiceNames();
-    sal_Int32 nLength = aNames.getLength();
-    aNames.realloc( nLength + 1 );
-    aNames[nLength] = "com.sun.star.accessibility.AccessibleTextField";
-    return aNames;
+    return comphelper::concatSequences(VCLXAccessibleTextComponent::getSupportedServiceNames(),
+                                       Sequence<OUString>{"com.sun.star.accessibility.AccessibleTextField"});
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
