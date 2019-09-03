@@ -391,6 +391,22 @@ published service ParagraphProperties
             @since LibreOffice 6.1
          */
         [optional, property] com::sun::star::graphic::XGraphic ParaBackGraphic;
+
+        /** specifies that a child node of a parent node that is not counted
+            is continuing the numbering of parent's previous node's sub tree.
+
+            @since OOo 3.0.1
+
+            @note misspelling retained for compatibility
+         */
+        [optional, property, readonly] boolean ContinueingPreviousSubTree;
+
+        /** allows reading the generated numbering list label.
+
+            @since OOo 3.0.1
+         */
+        [optional, property, readonly] string ListLabelString;
+
 };
 
 
