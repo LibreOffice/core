@@ -119,9 +119,9 @@ for caller in definitionSet:
     if "::~" in caller:
         to_be_removed.add(caller)
     # dyload entry points for VCL builder
-    if "(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)" in caller:
+    if "(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)" in caller:
         to_be_removed.add(caller)
-    if "(VclPtr<vcl::Window> &,VclPtr<vcl::Window> &,std::::map<rtl::OString, rtl::OUString, std::less<rtl::OString>, std::allocator<std::pair<const rtl::OString, rtl::OUString> > > &)" in caller:
+    if "(VclPtr<vcl::Window> &,const VclPtr<vcl::Window> &,std::::map<rtl::OString, rtl::OUString, std::less<rtl::OString>, std::allocator<std::pair<const rtl::OString, rtl::OUString> > > &)" in caller:
         to_be_removed.add(caller)
 # find all the UNO load-by-symbol-name entrypoints
 uno_constructor_entrypoints = set()

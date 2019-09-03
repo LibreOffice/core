@@ -339,7 +339,7 @@ FontNameBox::FontNameBox( vcl::Window* pParent, WinBits nWinStyle ) :
     InitFontMRUEntriesFile();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void makeFontNameBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeFontNameBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     bool bDropdown = BuilderUtils::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
@@ -725,7 +725,7 @@ Size FontStyleBox::GetOptimalSize() const
     return ComboBox::GetOptimalSize();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void makeFontStyleBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeFontStyleBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     bool bDropdown = BuilderUtils::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
@@ -925,7 +925,7 @@ FontSizeBox::FontSizeBox( vcl::Window* pParent, WinBits nWinSize ) :
     ImplInit();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void makeFontSizeBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeFontSizeBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     bool bDropdown = BuilderUtils::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;

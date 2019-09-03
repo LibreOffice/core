@@ -859,7 +859,7 @@ void ColorConfigCtrl_Impl::dispose()
     VclVBox::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void makeColorConfigCtrl(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT void makeColorConfigCtrl(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
     rRet = VclPtr<ColorConfigCtrl_Impl>::Create(pParent);
 }

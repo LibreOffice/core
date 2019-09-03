@@ -65,7 +65,7 @@ public:
     typedef std::map<OString, OUString> stringmap;
     typedef std::map<OString, std::pair<OString, OString>> accelmap;
     /// These functions create a new widget with parent pParent and return it in rRet
-    typedef void (*customMakeWidget)(VclPtr<vcl::Window> &rRet, VclPtr<vcl::Window> &pParent, stringmap &rVec);
+    typedef void (*customMakeWidget)(VclPtr<vcl::Window> &rRet, const VclPtr<vcl::Window> &pParent, stringmap &rVec);
 
 public:
     VclBuilder(vcl::Window* pParent, const OUString& sUIRootDir, const OUString& sUIFile,

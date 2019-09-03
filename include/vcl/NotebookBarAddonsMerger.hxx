@@ -61,7 +61,7 @@ class NotebookBarAddonsMerger
 {
 public:
     typedef std::map<OString, OUString> stringmap;
-    typedef void (*customMakeWidget)(VclPtr<vcl::Window>& rRet, VclPtr<vcl::Window>& pParent,
+    typedef void (*customMakeWidget)(VclPtr<vcl::Window>& rRet, const VclPtr<vcl::Window>& pParent,
                                      stringmap& rVec);
     NotebookBarAddonsMerger();
     ~NotebookBarAddonsMerger();
