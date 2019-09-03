@@ -95,7 +95,9 @@ static bool lcl_SeqHasLang( const Sequence< sal_Int16 > & rLangSeq, sal_Int16 nL
 
 extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxLanguageBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
-    WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
+    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
+                                 decltype(makeSvxLanguageBox)>);
+    WinBits nBits = WB_LEFT | WB_VCENTER | WB_3DLOOK | WB_TABSTOP;
     bool bDropdown = BuilderUtils::extractDropdown(rMap);
     if (bDropdown)
         nBits |= WB_DROPDOWN;
@@ -108,7 +110,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxLanguageBox(VclPtr<vcl::Window> & rR
 
 extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxLanguageComboBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
-    WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
+    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
+                                 decltype(makeSvxLanguageComboBox)>);
+    WinBits nBits = WB_LEFT | WB_VCENTER | WB_3DLOOK | WB_TABSTOP;
     bool bDropdown = BuilderUtils::extractDropdown(rMap);
     if (bDropdown)
         nBits |= WB_DROPDOWN;

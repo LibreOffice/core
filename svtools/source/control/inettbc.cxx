@@ -1414,7 +1414,9 @@ SvtURLBox::SvtURLBox( vcl::Window* pParent, WinBits _nStyle, INetProtocol eSmart
 
 extern "C" SAL_DLLPUBLIC_EXPORT void makeSvtURLBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
-    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|
+    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
+                                 decltype(makeSvtURLBox)>);
+    WinBits nWinBits = WB_LEFT | WB_VCENTER | WB_3DLOOK | WB_TABSTOP |
                        WB_DROPDOWN|WB_AUTOHSCROLL;
     VclPtrInstance<SvtURLBox> pListBox(pParent, nWinBits, INetProtocol::NotValid, false);
     pListBox->EnableAutoSize(true);
