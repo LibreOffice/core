@@ -358,15 +358,18 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
                                 = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
                         }
                     }
-
-                    /* Write char to unicode buffer */
-                    if ( pDestBuf >= pEndDestBuf )
+                    else
                     {
-                        *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
-                        break;
+                        /* Write char to unicode buffer */
+                        if ( pDestBuf >= pEndDestBuf )
+                        {
+                            *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
+                            break;
+                        }
+                        *pDestBuf = c;
+                        pDestBuf++;
+
                     }
-                    *pDestBuf = c;
-                    pDestBuf++;
                 }
             }
 
