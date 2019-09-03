@@ -49,6 +49,11 @@ DECLARE_SW_EXPORT_TEST(testFlyInFly, "ooo39250-1-min.rtf", nullptr, Test)
     CPPUNIT_ASSERT_EQUAL(OUString("Frame2"), uno::Reference<container::XNamed>(xAnchorFrame, uno::UNO_QUERY_THROW)->getName());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf126994_lostPageBreak, "tdf126994_lostPageBreak.docx")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 3, getPages() );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf121374_sectionHF, "tdf121374_sectionHF.odt")
 {
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
