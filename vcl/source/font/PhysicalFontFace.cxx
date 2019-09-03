@@ -27,6 +27,7 @@
 #include <fontselect.hxx>
 #include <impfontcharmap.hxx>
 
+#include <sft.hxx>
 #include <PhysicalFontFace.hxx>
 
 namespace {
@@ -57,6 +58,7 @@ PhysicalFontFace::PhysicalFontFace( const FontAttributes& rDFA )
     : FontAttributes( rDFA )
     , mnWidth(0)
     , mnHeight(0)
+    , mbCapabilitiesRead(false)
 {
     // StarSymbol is a unicode font, but it still deserves the symbol flag
     if( !IsSymbolFont() )
@@ -255,6 +257,32 @@ const FontCharMapRef& PhysicalFontFace::GetCharMap() const
     hb_blob_destroy(pBlob);
 
     return mxCharMap;
+}
+
+bool PhysicalFontFace::GetCapabilities(vcl::FontCapabilities &rCapabilities) const
+{
+    // Read this only once.
+    if (mbCapabilitiesRead)
+    {
+        rCapabilities = maCapabilities;
+        return rCapabilities.oUnicodeRange || rCapabilities.oCodePageRange;
+    }
+
+    mbCapabilitiesRead = true;
+
+    hb_blob_t* pBlob = hb_face_reference_table(mpHbFace, HB_TAG('O', 'S', '/', '2'));
+    const unsigned char* pData = reinterpret_cast<const unsigned char*>(hb_blob_get_data(pBlob, nullptr));
+    size_t nSize = hb_blob_get_length(pBlob);
+    if (nSize > 0)
+    {
+        vcl::getTTCoverage(maCapabilities.oUnicodeRange,
+                           maCapabilities.oCodePageRange,
+                           pData, nSize);
+    }
+    hb_blob_destroy(pBlob);
+
+    rCapabilities = maCapabilities;
+    return rCapabilities.oUnicodeRange || rCapabilities.oCodePageRange;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

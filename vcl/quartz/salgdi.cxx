@@ -99,7 +99,6 @@ bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& 
 CoreTextFontFace::CoreTextFontFace( const FontAttributes& rDFA, sal_IntPtr nFontId )
   : PhysicalFontFace( rDFA )
   , mnFontId( nFontId )
-  , mbFontCapabilitiesRead( false )
 {
 }
 
@@ -110,35 +109,6 @@ CoreTextFontFace::~CoreTextFontFace()
 sal_IntPtr CoreTextFontFace::GetFontId() const
 {
     return mnFontId;
-}
-
-bool CoreTextFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
-{
-    // read this only once per font
-    if( mbFontCapabilitiesRead )
-    {
-        rFontCapabilities = maFontCapabilities;
-        return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
-    }
-    mbFontCapabilitiesRead = true;
-
-    int nBufSize = GetFontTable( "OS/2", nullptr );
-    if( nBufSize > 0 )
-    {
-        // allocate a buffer for the OS/2 raw data
-        std::vector<unsigned char> aBuffer( nBufSize );
-        // get the OS/2 raw data
-        const int nRawLength = GetFontTable( "OS/2", aBuffer.data() );
-        if( nRawLength > 0 )
-        {
-            const unsigned char* pOS2Table = aBuffer.data();
-            vcl::getTTCoverage( maFontCapabilities.oUnicodeRange,
-                                maFontCapabilities.oCodePageRange,
-                                pOS2Table, nRawLength);
-        }
-    }
-    rFontCapabilities = maFontCapabilities;
-    return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
 }
 
 AquaSalGraphics::AquaSalGraphics()
@@ -483,7 +453,7 @@ bool AquaSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabiliti
     if (!mpTextStyle[0])
         return false;
 
-    return static_cast<const CoreTextFontFace*>(mpTextStyle[0]->GetFontFace())->GetFontCapabilities(rFontCapabilities);
+    return mpTextStyle[0]->GetFontFace()->GetCapabilities(rFontCapabilities);
 }
 
 // fake a SFNT font directory entry for a font table

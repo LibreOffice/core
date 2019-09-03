@@ -78,8 +78,7 @@ bool Qt5Graphics::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) 
 {
     if (!m_pTextStyle[0])
         return false;
-    return static_cast<const Qt5FontFace*>(m_pTextStyle[0]->GetFontFace())
-        ->GetFontCapabilities(rFontCapabilities);
+    return m_pTextStyle[0]->GetFontFace()->GetCapabilities(rFontCapabilities);
 }
 
 void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)

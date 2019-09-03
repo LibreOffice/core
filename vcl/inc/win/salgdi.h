@@ -71,23 +71,15 @@ public:
     BYTE                    GetCharSet() const          { return meWinCharSet; }
     BYTE                    GetPitchAndFamily() const   { return mnPitchAndFamily; }
 
-    bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
-
     hb_blob_t*              GetHbTable(const char* pName) override;
 
 private:
     sal_IntPtr              mnId;
 
-    // some members that are initialized lazily when the font gets selected into a HDC
-    mutable bool                    mbFontCapabilitiesRead;
-    mutable vcl::FontCapabilities   maFontCapabilities;
-
     BYTE                    meWinCharSet;
     BYTE                    mnPitchAndFamily;
     bool                    mbAliasSymbolsHigh;
     bool                    mbAliasSymbolsLow;
-
-    void                    GetFontCapabilities( HDC hDC ) const;
 
     mutable HDC             mhDC;
 };

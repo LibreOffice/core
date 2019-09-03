@@ -42,8 +42,6 @@ public:
 
     int GetFontTable(const char pTagName[5], unsigned char*) const;
 
-    bool GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const;
-
     rtl::Reference<LogicalFontInstance>
     CreateFontInstance(const FontSelectPattern& rFSD) const override;
 
@@ -55,8 +53,6 @@ protected:
 
 private:
     const QString m_aFontId;
-    mutable vcl::FontCapabilities m_aFontCapabilities;
-    mutable bool m_bFontCapabilitiesRead;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
