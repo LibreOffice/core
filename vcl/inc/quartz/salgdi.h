@@ -377,11 +377,6 @@ public:
     // frees the font data again
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen ) override;
 
-    virtual void            GetGlyphWidths( const PhysicalFontFace*,
-                                            bool bVertical,
-                                            std::vector< sal_Int32 >& rWidths,
-                                            Ucs2UIntMap& rUnicodeEnc ) override;
-
     virtual std::unique_ptr<GenericSalLayout>
                             GetTextLayout(int nFallbackLevel) override;
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;

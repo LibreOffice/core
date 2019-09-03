@@ -142,6 +142,22 @@ void LogicalFontInstance::IgnoreFallbackForUnicode( sal_UCS4 cChar, FontWeight e
         mpUnicodeFallbackList->erase( it );
 }
 
+double LogicalFontInstance::GetGlyphWidth(sal_GlyphId nID, bool bVertical, bool bPS)
+{
+    hb_font_t* pHbFont = GetHbFont();
+    double fWidth;
+    if (bVertical)
+        fWidth = hb_font_get_glyph_v_advance(pHbFont, nID);
+    else
+        fWidth = hb_font_get_glyph_h_advance(pHbFont, nID);
+
+    // Translate to PostScript units (standard 1/1000)
+    if (bPS)
+        fWidth = (fWidth * 1000) / hb_face_get_upem(hb_font_get_face(pHbFont));
+
+    return fWidth;
+}
+
 bool LogicalFontInstance::GetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &rRect, bool bVertical)
 {
     if (mpFontCache && mpFontCache->GetCachedGlyphBoundRect(this, nID, rRect))

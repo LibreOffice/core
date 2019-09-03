@@ -52,10 +52,6 @@
 #include <i18nlangtag/applelangid.hxx>
 #include <i18nlangtag/mslangid.hxx>
 
-#include <sft.hxx>
-
-#include <PhysicalFontFace.hxx>
-
 #if OSL_DEBUG_LEVEL > 1
 #include <sys/times.h>
 #include <stdio.h>
@@ -1103,59 +1099,6 @@ bool PrintFontManager::createFontSubset(
     CloseTTFont( pTTFont );
 
     return bSuccess;
-}
-
-void PrintFontManager::getGlyphWidths( const PhysicalFontFace* pFace,
-                                       bool bVertical,
-                                       std::vector< sal_Int32 >& rWidths,
-                                       std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc )
-{
-    PrintFont* pFont = getFont(pFace->GetFontId());
-    if (!pFont)
-        return;
-    TrueTypeFont* pTTFont = nullptr;
-    OString aFromFile = getFontFile( pFont );
-    if( OpenTTFontFile( aFromFile.getStr(), pFont->m_nCollectionEntry, &pTTFont ) != SFErrCodes::Ok )
-        return;
-    int nGlyphs = GetTTGlyphCount(pTTFont);
-    if (nGlyphs > 0)
-    {
-        rWidths.resize(nGlyphs);
-        std::vector<sal_uInt16> aGlyphIds(nGlyphs);
-        for (int i = 0; i < nGlyphs; i++)
-            aGlyphIds[i] = sal_uInt16(i);
-        std::unique_ptr<sal_uInt16[]> pMetrics = GetTTSimpleGlyphMetrics(pTTFont,
-                                                                 aGlyphIds.data(),
-                                                                 nGlyphs,
-                                                                 bVertical);
-        if (pMetrics)
-        {
-            for (int i = 0; i< nGlyphs; i++)
-                rWidths[i] = pMetrics[i];
-            pMetrics.reset();
-            rUnicodeEnc.clear();
-        }
-
-        // fill the unicode map
-        FontCharMapRef xFontCharMap = pFace->GetCharMap();
-        for (sal_uInt32 cOld = 0;;)
-        {
-            // get next unicode covered by font
-            const sal_uInt32 c = xFontCharMap->GetNextChar(cOld);
-            if (c == cOld)
-                break;
-            cOld = c;
-#if 1 // TODO: remove when sal_Unicode covers all of unicode
-            if (c > sal_Unicode(~0))
-                break;
-#endif
-            // get the matching glyph index
-            const sal_GlyphId aGlyphId = xFontCharMap->GetGlyphIndex(c);
-            // update the requested map
-            rUnicodeEnc[static_cast<sal_Unicode>(c)] = aGlyphId;
-        }
-    }
-    CloseTTFont(pTTFont);
 }
 
 /// used by online unit tests via dlopen.

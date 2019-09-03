@@ -55,10 +55,6 @@ public:
     static void             DoFreeEmbedFontData( const void* pData, long nLen );
 
     // helper methods for sharing with X11SalGraphics
-    static void             DoGetGlyphWidths( const PhysicalFontFace*,
-                                              bool bVertical,
-                                              std::vector< sal_Int32 >& rWidths,
-                                              Ucs2UIntMap& rUnicodeEnc );
 
     static FontAttributes Info2FontAttributes( const psp::FastPrintFontInfo& );
     static void             AnnounceFonts( PhysicalFontCollection*,
@@ -106,10 +102,6 @@ public:
                                               FontSubsetInfo& rInfo ) override;
     virtual const void*     GetEmbedFontData(const PhysicalFontFace*, long* pDataLen) override;
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen ) override;
-    virtual void            GetGlyphWidths( const PhysicalFontFace*,
-                                            bool bVertical,
-                                            std::vector< sal_Int32 >& rWidths,
-                                            Ucs2UIntMap& rUnicodeEnc ) override;
     virtual std::unique_ptr<GenericSalLayout>
                             GetTextLayout(int nFallbackLevel) override;
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;

@@ -536,17 +536,4 @@ void CairoTextRender::FreeEmbedFontData( const void* pData, long nLen )
     GenPspGraphics::DoFreeEmbedFontData( pData, nLen );
 }
 
-void CairoTextRender::GetGlyphWidths( const PhysicalFontFace* pFont,
-                                   bool bVertical,
-                                   std::vector< sal_Int32 >& rWidths,
-                                   Ucs2UIntMap& rUnicodeEnc )
-{
-    // in this context the pFont->GetFontId() is a valid PSP
-    // font since they are the only ones left after the PDF
-    // export has filtered its list of subsettable fonts (for
-    // which this method was created). The correct way would
-    // be to have the GlyphCache search for the PhysicalFontFace pFont
-    GenPspGraphics::DoGetGlyphWidths(pFont, bVertical, rWidths, rUnicodeEnc);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

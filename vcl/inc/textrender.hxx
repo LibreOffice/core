@@ -53,11 +53,6 @@ public:
 
     virtual const void*             GetEmbedFontData(const PhysicalFontFace*, long* pDataLen) = 0;
     virtual void                    FreeEmbedFontData( const void* pData, long nDataLen ) = 0;
-    virtual void                    GetGlyphWidths(
-                                        const PhysicalFontFace*,
-                                        bool bVertical,
-                                        std::vector< sal_Int32 >& rWidths,
-                                        Ucs2UIntMap& rUnicodeEnc ) = 0;
 
     virtual std::unique_ptr<GenericSalLayout>
                                     GetTextLayout(int nFallbackLevel) = 0;
