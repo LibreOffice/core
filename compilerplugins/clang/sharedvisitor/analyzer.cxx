@@ -244,14 +244,19 @@ int main(int argc, char** argv)
 #define STRINGIFY(a) STRINGIFY2(a)
     args.insert(
         args.end(),
-        {
+        {   // These must match LO_CLANG_ANALYZER_PCH_CXXFLAGS in Makefile-clang.mk .
             "-I" BUILDDIR "/config_host", // plugin sources use e.g. config_global.h
             "-I" STRINGIFY(CLANGDIR) "/include", // clang's headers
             "-I" STRINGIFY(CLANGSYSINCLUDE), // clang system headers
             STDOPTION,
             "-D__STDC_CONSTANT_MACROS", // Clang headers require these.
             "-D__STDC_FORMAT_MACROS",
-            "-D__STDC_LIMIT_MACROS",
+            "-D__STDC_LIMIT_MACROS"
+#ifdef LO_CLANG_USE_ANALYZER_PCH
+            ,
+            "-include-pch", // use PCH with Clang headers to speed up parsing/analysing
+            BUILDDIR "/compilerplugins/obj/sharedvisitor/clang.pch"
+#endif
         });
     for( ; i < argc; ++ i )
     {
