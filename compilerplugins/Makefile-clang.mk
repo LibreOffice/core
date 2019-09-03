@@ -193,16 +193,20 @@ $(CLANGOUTDIR)/clang-timestamp: $(CLANGDIR)/bin/clang$(CLANG_EXE_EXT) $(BUILDDIR
 
 
 ifdef LO_CLANG_SHARED_PLUGINS
-# Update the shared visitor source if needed. It is intentionally included in the sources and generated only when
-# needed, because the generating takes a while.
+SHARED_SOURCES := $(shell grep -l "LO_CLANG_SHARED_PLUGINS" $(CLANGINDIR)/*.cxx)
+SHARED_SOURCE_INFOS := $(foreach source,$(SHARED_SOURCES),$(patsubst $(CLANGINDIR)/%.cxx,$(CLANGINDIR)/sharedvisitor/%.plugininfo,$(source)))
+# Update the shared visitor source or .plugininfo files if needed.
+# They are all intentionally included in the sources and generated only when needed, because the generating takes a while.
 # If you want to remake the source with LO_CLANG_SHARED_PLUGINS disabled, run 'make LO_CLANG_SHARED_PLUGINS=1'.
-$(CLANGINDIR)/sharedvisitor/sharedvisitor.cxx: $(shell grep -l "LO_CLANG_SHARED_PLUGINS" $(CLANGINDIR)/*.cxx)
-$(CLANGINDIR)/sharedvisitor/sharedvisitor.cxx: $(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT)
+$(CLANGINDIR)/sharedvisitor/%.plugininfo: $(CLANGINDIR)/%.cxx $(CLANGOUTDIR)/sharedvisitor/analyzer$(CLANG_EXE_EXT)
 	$(call gb_Output_announce,$(subst $(SRCDIR)/,,$@),$(true),GEN,1)
-	$(QUIET)$(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT) \
-        $(COMPILER_PLUGINS_TOOLING_ARGS:%=-arg=%) \
-        $(shell grep -l "LO_CLANG_SHARED_PLUGINS" $(CLANGINDIR)/*.cxx) \
-        > $(CLANGINDIR)/sharedvisitor/sharedvisitor.cxx
+	$(QUIET)$(ICECREAM_RUN) $(CLANGOUTDIR)/sharedvisitor/analyzer$(CLANG_EXE_EXT) \
+        $(COMPILER_PLUGINS_TOOLING_ARGS:%=-arg=%) $< > $@
+
+$(CLANGINDIR)/sharedvisitor/sharedvisitor.cxx: $(SHARED_SOURCE_INFOS) $(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT)
+	$(call gb_Output_announce,$(subst $(SRCDIR)/,,$@),$(true),GEN,1)
+	$(QUIET)$(ICECREAM_RUN) $(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT) \
+        $(COMPILER_PLUGINS_TOOLING_ARGS:%=-arg=%) $(SHARED_SOURCE_INFOS) > $@
 
 CLANGTOOLLIBS = -lclangTooling -lclangDriver -lclangFrontend -lclangParse -lclangSema -lclangEdit -lclangAnalysis \
         -lclangAST -lclangLex -lclangSerialization -lclangBasic $(shell $(LLVMCONFIG) --ldflags --libs --system-libs)
@@ -217,21 +221,33 @@ CLANGTOOLLIBS += -Wl,--rpath,$(shell $(LLVMCONFIG) --libdir)
 endif
 endif
 
-$(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT): $(CLANGINDIR)/sharedvisitor/generator.cxx \
+$(CLANGOUTDIR)/sharedvisitor/analyzer$(CLANG_EXE_EXT): $(CLANGINDIR)/sharedvisitor/analyzer.cxx \
         | $(CLANGOUTDIR)/sharedvisitor
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,1)
 	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) $(CLANGTOOLDEFS) $(CLANGINCLUDES) \
         -DCLANGDIR=$(CLANGDIR) -I$(BUILDDIR)/config_host \
+        -c $< -o $(CLANGOUTDIR)/sharedvisitor/analyzer.o -MMD -MT $@ -MP \
+        -MF $(CLANGOUTDIR)/sharedvisitor/analyzer.d
+	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGOUTDIR)/sharedvisitor/analyzer.o \
+        -o $@ $(CLANGTOOLLIBS)
+
+$(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT): $(CLANGINDIR)/sharedvisitor/generator.cxx \
+        | $(CLANGOUTDIR)/sharedvisitor
+	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,1)
+	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) \
         -c $< -o $(CLANGOUTDIR)/sharedvisitor/generator.o -MMD -MT $@ -MP \
         -MF $(CLANGOUTDIR)/sharedvisitor/generator.d
 	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGOUTDIR)/sharedvisitor/generator.o \
-        -o $@ $(CLANGTOOLLIBS)
+        -o $@
 
-$(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT): $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
+$(CLANGOUTDIR)/sharedvisitor/analyzer$(CLANG_EXE_EXT): $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
+
+$(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT): $(SRCDIR)/compilerplugins/Makefile-clang.mk
 
 $(CLANGOUTDIR)/sharedvisitor:
 	mkdir -p $(CLANGOUTDIR)/sharedvisitor
 
+-include $(CLANGOUTDIR)/sharedvisitor/analyzer.d
 -include $(CLANGOUTDIR)/sharedvisitor/generator.d
 # TODO WNT version
 endif
