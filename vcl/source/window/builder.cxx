@@ -1673,7 +1673,7 @@ VclBuilder::customMakeWidget GetCustomMakeWidget(const OString& name)
         SAL_WARN_IF(!pFunction, "vcl.layout", "Could not find " << sFunction);
         assert(pFunction);
 #else
-        pFunction = reinterpret_cast<customMakeWidget>(
+        pFunction = reinterpret_cast<VclBuilder::customMakeWidget>(
             osl_getFunctionSymbol((oslModule)RTLD_DEFAULT, sFunction.pData));
 #endif
     }
