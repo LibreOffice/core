@@ -2960,7 +2960,7 @@ void RtfAttributeOutput::ParaNumRule_Impl(const SwTextNode* pTextNd, sal_Int32 n
         else
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB "}");
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LS);
-        m_aStyles.append(static_cast<sal_Int32>(m_rExport.GetId(*pRule)) + 1);
+        m_aStyles.append(static_cast<sal_Int32>(m_rExport.GetNumberingId(*pRule)) + 1);
         m_aStyles.append(' ');
     }
     FormatLRSpace(aLR);

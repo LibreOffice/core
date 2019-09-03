@@ -599,7 +599,7 @@ public:
     void ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 nScript, const SvxFontItem *pFont, bool bWriteCombChars = false );
 
     /// Return the numeric id of the numbering rule
-    sal_uInt16 GetId( const SwNumRule& rNumRule );
+    sal_uInt16 GetNumberingId( const SwNumRule& rNumRule );
 
     /// Return the numeric id of the style.
     sal_uInt16 GetId( const SwTextFormatColl& rColl ) const;
