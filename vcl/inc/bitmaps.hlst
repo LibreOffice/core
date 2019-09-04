@@ -216,6 +216,8 @@
 #define RID_CURSOR_HIDE_WHITESPACE   "vcl/res/hide_whitespace.png"
 #define RID_CURSOR_SHOW_WHITESPACE   "vcl/res/show_whitespace.png"
 
+#define CHEVRON                      "sfx2/res/chevron.png"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

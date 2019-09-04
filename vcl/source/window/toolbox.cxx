@@ -31,6 +31,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/vclstatuslistener.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <bitmaps.hlst>
 
 #include <tools/poly.hxx>
 #include <svl/imageitm.hxx>
@@ -2358,70 +2359,16 @@ IMPL_LINK_NOARG(ToolBox, ImplUpdateHdl, Timer *, void)
 
 static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, bool bRotate )
 {
-    rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
-    rRenderContext.SetLineColor();
+    if (bRotate) (void)0; //previously, the chevron was manually drawn and rotated on vertical toolbars
 
-    if (rRenderContext.GetSettings().GetStyleSettings().GetFaceColor().IsDark())
-        rRenderContext.SetFillColor(COL_WHITE);
-    else
-        rRenderContext.SetFillColor(COL_BLACK);
-    float fScaleFactor = rRenderContext.GetDPIScaleFactor();
+    const Image pImage = Image(StockImage::Yes, CHEVRON);
+    Size aImageSize = pImage.GetSizePixel();
 
-    int linewidth = 1 * fScaleFactor;
-    int space = 4 * fScaleFactor;
+    long x = rRect.Left() + (rRect.getWidth() - aImageSize.Width())/2;
+    long y = rRect.Top() + (rRect.getHeight() - aImageSize.Height())/2;
 
-    if( !bRotate )
-    {
-        long width = 8 * fScaleFactor;
-        long height = 5 * fScaleFactor;
-
-        //Keep odd b/c drawing code works better
-        if ( height % 2 == 0 )
-            height--;
-
-        long heightOrig = height;
-
-        long x = rRect.Left() + (rRect.getWidth() - width)/2 + 1;
-        long y = rRect.Top() + (rRect.getHeight() - height)/2 + 1;
-        while( height >= 1)
-        {
-            rRenderContext.DrawRect( tools::Rectangle( x, y, x + linewidth, y ) );
-            x += space;
-            rRenderContext.DrawRect( tools::Rectangle( x, y, x + linewidth, y ) );
-            x -= space;
-            y++;
-            if( height <= heightOrig / 2 + 1) x--;
-            else            x++;
-            height--;
-        }
-    }
-    else
-    {
-        long width = 5 * fScaleFactor;
-        long height = 8 * fScaleFactor;
-
-        //Keep odd b/c drawing code works better
-        if (width % 2 == 0)
-            width--;
-
-        long widthOrig = width;
-
-        long x = rRect.Left() + (rRect.getWidth() - width)/2 + 1;
-        long y = rRect.Top() + (rRect.getHeight() - height)/2 + 1;
-        while( width >= 1)
-        {
-            rRenderContext.DrawRect( tools::Rectangle( x, y, x, y + linewidth ) );
-            y += space;
-            rRenderContext.DrawRect( tools::Rectangle( x, y, x, y + linewidth ) );
-            y -= space;
-            x++;
-            if( width <= widthOrig / 2 + 1) y--;
-            else           y++;
-            width--;
-        }
-    }
-
-    rRenderContext.Pop();
+    DrawImageFlags nImageStyle = DrawImageFlags::NONE;
+    rRenderContext.DrawImage(Point(x,y), pImage, nImageStyle);
 }
 
 static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rDropDownRect, bool bSetColor, bool bRotate )
