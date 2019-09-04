@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkMessageDialog" id="onlinehelpmanual">
@@ -18,6 +18,26 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="btnbox">
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkCheckButton" id="hidedialog">
+                <property name="label" translatable="yes" context="helpmanual|hidedialog">_Do not show again</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="tooltip_text" translatable="yes" context="helpmanual|hidedialog">Enable the dialog again at Tools &gt; Options &amp;&gt; General</property>
+                <property name="use_underline">True</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
             <child>
               <object class="GtkButton" id="website">
                 <property name="label" translatable="yes" context="helpmanual|website">Read Help Online</property>
@@ -27,9 +47,9 @@
                 <property name="use_underline">True</property>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -43,34 +63,17 @@
                 <property name="use_stock">True</property>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkCheckButton" id="hidedialog">
-            <property name="label" translatable="yes" context="helpmanual|hidedialog">Do not show this dialog again</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="halign">start</property>
-            <property name="margin_left">100</property>
-            <property name="hexpand">False</property>
-            <property name="xalign">0</property>
-            <property name="draw_indicator">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </object>
