@@ -57,7 +57,7 @@ void DlgSize::SetValue( sal_Int32 nVal )
     m_xMF_VALUE->set_value(nVal, FieldUnit::CM );
 }
 
-sal_Int32 DlgSize::GetValue()
+sal_Int32 DlgSize::GetValue() const
 {
     if (m_xCB_STANDARD->get_active())
         return -1;

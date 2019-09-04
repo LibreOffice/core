@@ -283,7 +283,7 @@ using namespace ::com::sun::star;
         return true;
     }
 
-    OMySQLIntroPageSetup::ConnectionType OMySQLIntroPageSetup::getMySQLMode()
+    OMySQLIntroPageSetup::ConnectionType OMySQLIntroPageSetup::getMySQLMode() const
     {
         if (m_xJDBCDatabase->get_active())
             return VIA_JDBC;
@@ -758,17 +758,17 @@ using namespace ::com::sun::star;
     {
     }
 
-    bool OFinalDBPageSetup::IsDatabaseDocumentToBeRegistered()
+    bool OFinalDBPageSetup::IsDatabaseDocumentToBeRegistered() const
     {
         return m_xRBRegisterDataSource->get_active() && m_xRBRegisterDataSource->get_sensitive();
     }
 
-    bool OFinalDBPageSetup::IsDatabaseDocumentToBeOpened()
+    bool OFinalDBPageSetup::IsDatabaseDocumentToBeOpened() const
     {
         return m_xCBOpenAfterwards->get_active() && m_xCBOpenAfterwards->get_sensitive();
     }
 
-    bool OFinalDBPageSetup::IsTableWizardToBeStarted()
+    bool OFinalDBPageSetup::IsTableWizardToBeStarted() const
     {
         return m_xCBStartTableWizard->get_active() && m_xCBStartTableWizard->get_sensitive();
     }

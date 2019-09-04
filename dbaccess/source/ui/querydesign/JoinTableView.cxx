@@ -236,7 +236,7 @@ void OJoinTableView::Resize()
     }
 }
 
-sal_uLong OJoinTableView::GetTabWinCount()
+sal_uLong OJoinTableView::GetTabWinCount() const
 {
     return m_aTableMap.size();
 }

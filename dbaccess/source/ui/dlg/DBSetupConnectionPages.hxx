@@ -204,7 +204,7 @@ namespace dbaui
         virtual ~OMySQLIntroPageSetup() override;
 
         static VclPtr<OMySQLIntroPageSetup> CreateMySQLIntroTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
-        ConnectionType      getMySQLMode();
+        ConnectionType      getMySQLMode() const;
         void                SetClickHdl( const Link<OMySQLIntroPageSetup *, void>& rLink ) { maClickHdl = rLink; }
 
     protected:
@@ -252,9 +252,9 @@ namespace dbaui
 
         OFinalDBPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OFinalDBPageSetup() override;
-        bool IsDatabaseDocumentToBeRegistered();
-        bool IsDatabaseDocumentToBeOpened();
-        bool IsTableWizardToBeStarted();
+        bool IsDatabaseDocumentToBeRegistered() const;
+        bool IsDatabaseDocumentToBeOpened() const;
+        bool IsTableWizardToBeStarted() const;
         void enableTableWizardCheckBox( bool _bSupportsTableCreation);
 
         DECL_LINK(OnOpenSelected, weld::ToggleButton&, void);

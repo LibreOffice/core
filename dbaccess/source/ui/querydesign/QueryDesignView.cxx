@@ -2569,7 +2569,7 @@ void OQueryDesignView::copy()
         m_pSelectionBox->copy();
 }
 
-bool OQueryDesignView::isCutAllowed()
+bool OQueryDesignView::isCutAllowed() const
 {
     bool bAllowed = false;
     if ( SELECTION == m_eChildFocus )
@@ -2577,7 +2577,7 @@ bool OQueryDesignView::isCutAllowed()
     return bAllowed;
 }
 
-bool OQueryDesignView::isPasteAllowed()
+bool OQueryDesignView::isPasteAllowed() const
 {
     bool bAllowed = false;
     if ( SELECTION == m_eChildFocus )
@@ -2585,7 +2585,7 @@ bool OQueryDesignView::isPasteAllowed()
     return bAllowed;
 }
 
-bool OQueryDesignView::isCopyAllowed()
+bool OQueryDesignView::isCopyAllowed() const
 {
     bool bAllowed = false;
     if ( SELECTION == m_eChildFocus )
