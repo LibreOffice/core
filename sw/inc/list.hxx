@@ -24,6 +24,8 @@
 #include <rtl/ustring.hxx>
 #include <memory>
 
+#include "swdllapi.h"
+
 class SwNumRule;
 class SwNodes;
 class SwNodeNum;
@@ -40,7 +42,7 @@ class SwList
 
         const OUString & GetListId() const;
 
-        const OUString & GetDefaultListStyleName() const;
+        SW_DLLPUBLIC const OUString & GetDefaultListStyleName() const;
         void SetDefaultListStyleName(OUString const&);
 
         void InsertListItem( SwNodeNum& rNodeNum,

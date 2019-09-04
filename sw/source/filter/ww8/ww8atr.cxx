@@ -94,6 +94,8 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
+#include <IDocumentListsAccess.hxx>
+#include <list.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <paratr.hxx>
@@ -3554,6 +3556,28 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
                             nNumId = GetExport().DuplicateNumRule( pRule, nLvl, nStartWith );
                             if ( USHRT_MAX != nNumId )
                                 ++nNumId;
+                        }
+                        else if (GetExport().GetExportFormat() == MSWordExportBase::DOCX) // FIXME
+                        {
+                            // tdf#95848 find the abstract list definition
+                            OUString const listId(pTextNd->GetListId());
+                            if (!listId.isEmpty()
+                                && listId != pRule->GetDefaultListId())
+                            {
+                                SwList const*const pList(
+                                    GetExport().m_pDoc->getIDocumentListsAccess().getListByName(listId));
+                                if (pList)
+                                {
+                                    SwNumRule const*const pAbstractRule(
+                                        GetExport().m_pDoc->FindNumRulePtr(
+                                            pList->GetDefaultListStyleName()));
+                                    assert(pAbstractRule);
+                                    nNumId = GetExport().OverrideNumRule(
+                                            *pRule, *pAbstractRule);
+                                    assert(nNumId != USHRT_MAX);
+                                    ++nNumId;
+                                }
+                            }
                         }
                     }
                     else

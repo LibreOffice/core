@@ -70,6 +70,31 @@ sal_uInt16 MSWordExportBase::DuplicateNumRule( const SwNumRule *pRule, sal_uInt8
     return nNumId;
 }
 
+// Ideally we want to map SwList to w:abstractNum and SwNumRule to w:num
+// The current approach is to keep exporting every SwNumRule to
+// 1 w:abstractNum and 1 w:num, and then add extra w:num via this function
+// that reference an existing w:abstractNum and may override its formatting;
+// of course this will end up exporting some w:num that aren't actually used.
+sal_uInt16 MSWordExportBase::OverrideNumRule(
+        SwNumRule const& rExistingRule,
+        SwNumRule const& rAbstractRule)
+{
+    assert(&rExistingRule != &rAbstractRule);
+    auto const numdef = GetNumberingId(rExistingRule);
+    auto const absnumdef = GetNumberingId(rAbstractRule);
+    auto const mapping = std::make_pair(numdef, absnumdef);
+
+    auto it = m_OverridingNumsR.find(mapping);
+    if (it == m_OverridingNumsR.end())
+    {
+        it = m_OverridingNumsR.insert(std::make_pair(mapping, m_pUsedNumTable->size())).first;
+        m_OverridingNums.insert(std::make_pair(m_pUsedNumTable->size(), mapping));
+        m_pUsedNumTable->push_back(nullptr); // dummy, it's unique_ptr...
+        ++m_nUniqueList; // counter for DuplicateNumRule...
+    }
+    return it->second;
+}
+
 sal_uInt16 MSWordExportBase::GetNumberingId( const SwNumRule& rNumRule )
 {
     if ( !m_pUsedNumTable )
@@ -179,9 +204,17 @@ void MSWordExportBase::NumberingDefinitions()
     // Write static data of SwNumRule - LSTF
     for ( sal_uInt16 n = 0; n < nCount; ++n )
     {
-        const SwNumRule& rRule = *(*m_pUsedNumTable)[ n ];
-
-        AttrOutput().NumberingDefinition( n + 1, rRule );
+        const SwNumRule *const pRule = (*m_pUsedNumTable)[ n ];
+        if (pRule)
+        {
+            AttrOutput().NumberingDefinition(n + 1, *pRule);
+        }
+        else
+        {
+            auto it = m_OverridingNums.find(n);
+            assert(it != m_OverridingNums.end());
+            AttrOutput().OverrideNumberingDefinition(n + 1, it->second.second + 1);
+        }
     }
 }
 
@@ -357,6 +390,11 @@ void MSWordExportBase::AbstractNumberingDefinitions()
 
     for( n = 0; n < nCount; ++n )
     {
+        if (nullptr == (*m_pUsedNumTable)[ n ])
+        {
+            continue;
+        }
+
         AttrOutput().StartAbstractNumbering( n + 1 );
 
         const SwNumRule& rRule = *(*m_pUsedNumTable)[ n ];
