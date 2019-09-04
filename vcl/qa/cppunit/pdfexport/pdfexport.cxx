@@ -659,13 +659,14 @@ void PdfExportTest::testSofthyphenPos()
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
-    DocumentHolder pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
-    if (!pPdfDocument.get())
+    if (aFile.bad() || !aMemory.GetSize())
     {
         // Printing to PDF failed in a non-interesting way, e.g. CUPS is not
         // running, there is no printer defined, etc.
         return;
     }
+    DocumentHolder pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
