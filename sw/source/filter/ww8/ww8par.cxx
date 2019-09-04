@@ -2886,7 +2886,7 @@ void SwWW8ImplReader::PostProcessAttrs()
 }
 
 /*
- #i9241#
+ #i9240#
  It appears that some documents that are in a baltic 8 bit encoding which has
  some undefined characters can have use made of those characters, in which
  case they default to CP1252. If not then it's perhaps that the font encoding
