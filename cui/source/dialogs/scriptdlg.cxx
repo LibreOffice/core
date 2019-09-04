@@ -67,7 +67,7 @@ static void ShowErrorDialog( const Any& aException )
     pDlg->Execute();
 }
 
-void SvxScriptOrgDialog::delUserData(weld::TreeIter& rIter)
+void SvxScriptOrgDialog::delUserData(const weld::TreeIter& rIter)
 {
     SFEntry* pUserData = reinterpret_cast<SFEntry*>(m_xScriptsBox->get_id(rIter).toInt64());
     if (pUserData)
@@ -881,7 +881,7 @@ void SvxScriptOrgDialog::createEntry(weld::TreeIter& rEntry)
     }
 }
 
-void SvxScriptOrgDialog::renameEntry(weld::TreeIter& rEntry)
+void SvxScriptOrgDialog::renameEntry(const weld::TreeIter& rEntry)
 {
 
     Reference< browse::XBrowseNode >  aChildNode;

@@ -32,7 +32,7 @@ private:
 
     DECL_LINK(OnAddClick, weld::Button&, void);
 
-    void populateTree(weld::TreeIter* pParent, const OUString& rParentId);
+    void populateTree(const weld::TreeIter* pParent, const OUString& rParentId);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_DIAGRAMDIALOG_HXX

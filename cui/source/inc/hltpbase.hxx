@@ -129,7 +129,7 @@ protected:
 
     SfxDispatcher* GetDispatcher() const;
 
-    HyperDialogEvent   GetMacroEvents();
+    HyperDialogEvent   GetMacroEvents() const;
     SvxMacroTableDtor* GetMacroTable();
 };
 

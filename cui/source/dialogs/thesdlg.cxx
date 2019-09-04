@@ -332,7 +332,7 @@ void SvxThesaurusDialog::SetWindowTitle( LanguageType nLanguage )
     m_xDialog->set_title(aStr);    // set window title
 }
 
-OUString SvxThesaurusDialog::GetWord()
+OUString SvxThesaurusDialog::GetWord() const
 {
     return m_xReplaceEdit->get_text();
 }

@@ -112,18 +112,18 @@ public:
     sal_uInt16              GetId() const;
 
     void                    SetEnableChangePB(){m_bEnableChangePB = true;}
-    bool                    IsEnableChangePB(){return m_bEnableChangePB;}
+    bool                    IsEnableChangePB() const {return m_bEnableChangePB;}
 
     void                    SetEnableChangeAllPB(){m_bEnableChangeAllPB = true;}
-    bool                    IsEnableChangeAllPB(){return m_bEnableChangeAllPB;}
+    bool                    IsEnableChangeAllPB() const {return m_bEnableChangeAllPB;}
 
     void                    SetErrorMove(long nOldStart, long nOldEnd)
                                 {
                                         m_nOldErrorStart = nOldStart;
                                         m_nOldErrorEnd = nOldEnd;
                                 }
-    long                    GetOldErrorStart() { return m_nOldErrorStart;}
-    long                    GetOldErrorEnd() { return m_nOldErrorEnd;}
+    long                    GetOldErrorStart() const { return m_nOldErrorStart;}
+    long                    GetOldErrorEnd() const { return m_nOldErrorEnd;}
 
     void                    SetErrorLanguageSelected(bool bSet){ m_bIsErrorLanguageSelected = bSet;}
     bool                    IsErrorLanguageSelected() const {return m_bIsErrorLanguageSelected;}
@@ -1982,7 +1982,7 @@ void SentenceEditWindow_Impl::AddUndoAction( std::unique_ptr<SfxUndoAction> pAct
     GetSpellDialog()->m_xUndoPB->set_sensitive(true);
 }
 
-size_t SentenceEditWindow_Impl::GetUndoActionCount()
+size_t SentenceEditWindow_Impl::GetUndoActionCount() const
 {
     return m_xEditEngine->GetUndoManager().GetUndoActionCount();
 }

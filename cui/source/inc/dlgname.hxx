@@ -85,7 +85,7 @@ public:
     SvxObjectNameDialog(weld::Window* pWindow, const OUString& rName);
 
     // data access
-    OUString GetName() { return m_xEdtName->get_text(); }
+    OUString GetName() const { return m_xEdtName->get_text(); }
 
     // set handler
     void SetCheckNameHdl(const Link<SvxObjectNameDialog&,bool>& rLink)
