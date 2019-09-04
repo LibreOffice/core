@@ -331,15 +331,15 @@ public:
     ViewElementListProvider getViewElementListProvider();
     DrawModelWrapper* GetDrawModelWrapper();
     DrawViewWrapper* GetDrawViewWrapper();
-    VclPtr<ChartWindow> GetChartWindow();
+    VclPtr<ChartWindow> GetChartWindow() const;
     weld::Window* GetChartFrame();
-    bool isAdditionalShapeSelected();
+    bool isAdditionalShapeSelected() const;
     void SetAndApplySelection(const css::uno::Reference<css::drawing::XShape>& rxShape);
     void StartTextEdit( const Point* pMousePixel = nullptr );
 
     void NotifyUndoActionHdl( std::unique_ptr<SdrUndoAction> );
 
-    css::uno::Reference<css::uno::XInterface> const & getChartView();
+    css::uno::Reference<css::uno::XInterface> const & getChartView() const;
 
 private:
     class TheModel : public salhelper::SimpleReferenceObject

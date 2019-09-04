@@ -32,7 +32,7 @@ public:
     explicit PopupRequest();
     virtual ~PopupRequest() override;
 
-    css::uno::Reference<css::awt::XCallback> const & getCallback()
+    css::uno::Reference<css::awt::XCallback> const & getCallback() const
     {
         return m_xCallback;
     }
