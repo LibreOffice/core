@@ -64,7 +64,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no ax_cv_c_float_words_bigendian=no)) \
 		$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 	&& cp cairo-version.h src/cairo-version.h \
-	&& cd src && $(MAKE) \
+	&& cd src && $(MAKE) && chrpath -r '$$ORIGIN' .libs/libcairo.so.2.1160$(CAIRO_VERSION_MICRO).0 \
 	)
 
 endif
