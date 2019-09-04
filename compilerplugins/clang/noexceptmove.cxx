@@ -206,6 +206,13 @@ bool NoExceptMove::VisitCXXConstructExpr(const CXXConstructExpr* constructExpr)
         ; // ok, non-throwing
     else if (IsCallThrowsSpec(est))
     {
+        if (bLookForStuffWeCanFix)
+        {
+            if (est == EST_None && !ignoreLocation(constructorDecl))
+                m_Exclusions.back().push_back(constructorDecl);
+            else
+                m_CannotFix.back() = true;
+        }
         m_ConstructorThrows.back() = true;
     }
     return true;
@@ -232,6 +239,13 @@ bool NoExceptMove::VisitVarDecl(const VarDecl* varDecl)
         ; // ok, non-throwing
     else if (IsCallThrowsSpec(est))
     {
+        if (bLookForStuffWeCanFix)
+        {
+            if (est == EST_None && !ignoreLocation(destructorDecl))
+                m_Exclusions.back().push_back(destructorDecl);
+            else
+                m_CannotFix.back() = true;
+        }
         m_ConstructorThrows.back() = true;
     }
     return true;
