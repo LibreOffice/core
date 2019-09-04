@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_23edc624",
+        "filename": "external/cairo/ExternalProject_cairo.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-09-04T12:59:32Z",
+      "side": 1,
+      "message": "what\u0027s this?\n\ni dont have chrpath installed",
+      "revId": "03d991d27ed0dbbb4d56286448be62c1f57f0070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
