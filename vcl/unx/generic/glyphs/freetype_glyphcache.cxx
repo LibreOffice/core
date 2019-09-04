@@ -282,6 +282,26 @@ void GlyphCache::InitFreetype()
     (void)vclFontFileList::get();
 }
 
+namespace
+{
+    bool DoesAlmostHorizontalDrainRenderingPool()
+    {
+        FT_Int nMajor, nMinor, nPatch;
+        FT_Library_Version(aLibFT, &nMajor, &nMinor, &nPatch);
+        if (nMajor > 2)
+            return false;
+        if (nMajor == 2 && nMinor <= 8)
+            return true;
+        return false;
+    }
+}
+
+bool FreetypeFont::AlmostHorizontalDrainsRenderingPool()
+{
+    static bool bAlmostHorizontalDrainsRenderingPool = DoesAlmostHorizontalDrainRenderingPool();
+    return bAlmostHorizontalDrainsRenderingPool;
+}
+
 FT_Face FreetypeFont::GetFtFace() const
 {
     FT_Activate_Size( maSizeFT );

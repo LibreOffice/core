@@ -205,6 +205,22 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     if (nWidth == 0 || nHeight == 0)
         return;
 
+    int nRatio = nWidth * 10 / nHeight;
+    if (nRatio > 100 && rFSD.maTargetName == "OpenSymbol" && FreetypeFont::AlmostHorizontalDrainsRenderingPool())
+    {
+        // tdf#127189 FreeType <= 2.8 will fail to render stretched horizontal
+        // brace glyphs in starmath at a fairly low stretch ratio. The failure
+        // will set CAIRO_STATUS_FREETYPE_ERROR on the surface which cannot be
+        // cleared, so all further painting to the surface fails.
+
+        // This appears fixed in >= freetype 2.9
+
+        // Restrict this bodge to a stretch ratio > ~10 of the OpenSymbol font
+        // where it has been seen in practice.
+        SAL_WARN("vcl", "rendering text would fail with stretch ratio of: " << nRatio << ", with FreeType <= 2.8");
+        return;
+    }
+
     /*
      * It might be ideal to cache surface and cairo context between calls and
      * only destroy it when the drawable changes, but to do that we need to at
@@ -331,6 +347,10 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
 
         cairo_set_font_matrix(cr, &m);
         cairo_show_glyphs(cr, &cairo_glyphs[nStartIndex], nLen);
+        if (cairo_status(cr) != CAIRO_STATUS_SUCCESS)
+        {
+            SAL_WARN("vcl", "rendering text failed with stretch ratio of: " << nRatio << ", " << cairo_status_to_string(cairo_status(cr)));
+        }
 
 #if OSL_DEBUG_LEVEL > 2
         //draw origin
