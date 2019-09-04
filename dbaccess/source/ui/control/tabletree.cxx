@@ -457,7 +457,7 @@ void TableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConne
     m_xTreeView->make_sorted();
 }
 
-bool TableTreeListBox::isWildcardChecked(weld::TreeIter& rEntry)
+bool TableTreeListBox::isWildcardChecked(const weld::TreeIter& rEntry)
 {
     return m_xTreeView->get_text_emphasis(rEntry, m_nTextColumn);
 }
@@ -902,7 +902,7 @@ void OTableTreeListBox::removedTable( const OUString& _rName )
     }
 }
 
-std::unique_ptr<weld::TreeIter> TableTreeListBox::GetEntryPosByName(const OUString& aName, weld::TreeIter* pStart, const IEntryFilter* _pFilter) const
+std::unique_ptr<weld::TreeIter> TableTreeListBox::GetEntryPosByName(const OUString& aName, const weld::TreeIter* pStart, const IEntryFilter* _pFilter) const
 {
     auto xEntry(m_xTreeView->make_iterator(pStart));
     if (!pStart && !m_xTreeView->get_iter_first(*xEntry))

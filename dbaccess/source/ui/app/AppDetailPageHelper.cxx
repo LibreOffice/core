@@ -500,7 +500,7 @@ sal_Int32 OAppDetailPageHelper::getSelectionCount()
     return nCount;
 }
 
-sal_Int32 OAppDetailPageHelper::getElementCount()
+sal_Int32 OAppDetailPageHelper::getElementCount() const
 {
     sal_Int32 nCount = 0;
     int nPos = getVisibleControlIndex();
@@ -933,7 +933,7 @@ void OAppDetailPageHelper::Resize()
 }
 
 
-bool OAppDetailPageHelper::isPreviewEnabled()
+bool OAppDetailPageHelper::isPreviewEnabled() const
 {
     return m_ePreviewMode != E_PREVIEWNONE;
 }

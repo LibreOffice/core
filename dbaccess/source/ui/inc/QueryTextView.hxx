@@ -35,7 +35,7 @@ namespace dbaui
 
         virtual void GetFocus() override;
 
-        bool isCutAllowed();
+        bool isCutAllowed() const;
         void copy();
         void cut();
         void paste();
@@ -43,7 +43,7 @@ namespace dbaui
         void clear();
         // set the statement for representation
         void setStatement(const OUString& _rsStatement);
-        OUString getStatement();
+        OUString getStatement() const;
         // allow access to our edit
         OSqlEdit* getSqlEdit() const { return m_pEdit; }
 

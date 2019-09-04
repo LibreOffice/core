@@ -174,10 +174,10 @@ namespace dbaui
         ElementType getElementType() const;
 
         /// returns the count of entries
-        sal_Int32 getElementCount();
+        sal_Int32 getElementCount() const;
 
         /// returns the count of selected entries
-        sal_Int32 getSelectionCount();
+        sal_Int32 getSelectionCount() const;
 
         /** clears the detail page and the selection on the left side.
             The task window will also be cleared.
@@ -258,10 +258,10 @@ namespace dbaui
         void selectContainer(ElementType _eType);
 
         /// returns the preview mode
-        PreviewMode getPreviewMode();
+        PreviewMode getPreviewMode() const;
 
         /// <TRUE/> if the preview is enabled
-        bool isPreviewEnabled();
+        bool isPreviewEnabled() const;
 
         /** switches to the given preview mode
             @param  _eMode

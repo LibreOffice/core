@@ -2550,7 +2550,7 @@ bool SbaXDataBrowserController::isValidCursor() const
     return bIsValid;
 }
 
-sal_Int16 SbaXDataBrowserController::getCurrentColumnPosition()
+sal_Int16 SbaXDataBrowserController::getCurrentColumnPosition() const
 {
     Reference< css::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
     sal_Int16 nViewPos = -1;

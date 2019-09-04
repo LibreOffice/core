@@ -86,7 +86,7 @@ namespace dbaui
         void        fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList);
         void        fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList);
         void        SetClickHandler(const Link<OTextConnectionHelper*, void>& _rHandler) { m_aGetExtensionHandler = _rHandler; }
-        OUString    GetExtension();
+        OUString    GetExtension() const;
         bool        FillItemSet( SfxItemSet& rSet, const bool bChangedSomething );
         bool        prepareLeave();
     };

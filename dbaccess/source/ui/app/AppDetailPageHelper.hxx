@@ -247,7 +247,7 @@ namespace dbaui
         sal_Int32 getSelectionCount();
 
         /// returns the count of entries
-        sal_Int32 getElementCount();
+        sal_Int32 getElementCount() const;
 
         /** returns if an entry is a leaf
             @param _pEntry
@@ -311,10 +311,10 @@ namespace dbaui
                             ,const OUString& _rName );
 
         /// returns the preview mode
-        PreviewMode getPreviewMode() { return m_ePreviewMode;}
+        PreviewMode getPreviewMode() const { return m_ePreviewMode;}
 
         /// <TRUE/> if the preview is enabled
-        bool isPreviewEnabled();
+        bool isPreviewEnabled() const;
 
         /** switches to the given preview mode
             @param  _eMode

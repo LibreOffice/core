@@ -777,7 +777,7 @@ sal_Int32 OApplicationDetailView::getSelectionCount()
     return m_pControlHelper->getSelectionCount();
 }
 
-sal_Int32 OApplicationDetailView::getElementCount()
+sal_Int32 OApplicationDetailView::getElementCount() const
 {
     return m_pControlHelper->getElementCount();
 }
@@ -842,12 +842,12 @@ void OApplicationDetailView::elementReplaced(ElementType _eType
     m_pControlHelper->elementReplaced( _eType, _rOldName, _rNewName );
 }
 
-PreviewMode OApplicationDetailView::getPreviewMode()
+PreviewMode OApplicationDetailView::getPreviewMode() const
 {
     return m_pControlHelper->getPreviewMode();
 }
 
-bool OApplicationDetailView::isPreviewEnabled()
+bool OApplicationDetailView::isPreviewEnabled() const
 {
     return m_pControlHelper->isPreviewEnabled();
 }
