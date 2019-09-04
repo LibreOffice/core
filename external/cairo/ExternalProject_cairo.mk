@@ -49,11 +49,14 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		LIBS="$(ZLIB_LIBS)" \
 		$(if $(filter -fsanitize=%,$(LDFLAGS)),LDFLAGS="$(LDFLAGS) -fuse-ld=bfd") \
 		pixman_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,pixman)/pixman" \
-		pixman_LIBS="-L$(call gb_UnpackedTarball_get_dir,pixman)/pixman/.libs -lpixman-1" \
+		pixman_LIBS="-L$(call gb_UnpackedTarball_get_dir,pixman)/pixman/.libs -lpixman-1 \
+			$(if $(filter LINUX,$(OS)),-Wl$(COMMA)-z$(COMMA)origin \
+					-Wl$(COMMA)-rpath$(COMMA)\\\$$\$$ORIGIN)" \
 		png_REQUIRES="trick_configure_into_using_png_CFLAGS_and_LIBS" \
 		png_CFLAGS="$(LIBPNG_CFLAGS)" png_LIBS="$(LIBPNG_LIBS)" \
 		$(if $(SYSTEM_FREETYPE),,FREETYPE_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,freetype)/include") \
 		$(if $(SYSTEM_FONTCONFIG),,FONTCONFIG_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,fontconfig)") \
+		$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,$(if $(filter ANDROID,$(OS)),--disable-shared,--disable-static)) \
 		$(if $(filter ANDROID iOS,$(OS)),--disable-xlib --disable-xcb,$(if $(filter TRUE,$(DISABLE_GUI)),--disable-xlib --disable-xcb,--enable-xlib --enable-xcb)) \
 		$(if $(filter iOS,$(OS)),--enable-quartz --enable-quartz-font) \
