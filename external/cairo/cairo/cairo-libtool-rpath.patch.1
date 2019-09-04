@@ -1,0 +1,12 @@
+Prevent libtool from adding annoying stuff to RPATH
+
+--- cairo/configure.orig	2018-10-19 22:20:08.000000000 +0200
++++ cairo/configure	2019-09-04 17:53:00.927539686 +0200
+@@ -16592,6 +16592,7 @@
+ 	    esac
+ 	    ;;
+ 	esac
++hardcode_libdir_flag_spec=
+ 	;;
+ 
+       lynxos*)
