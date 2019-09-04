@@ -19,6 +19,9 @@
 
 #include <sal/config.h>
 
+#include <cassert>
+
+#include <rtl/character.hxx>
 #include <rtl/textcvt.h>
 #include <sal/types.h>
 
@@ -342,6 +345,11 @@ sal_Size ImplConvertUnicodeToEucTw(void const * pData,
                 nHighSurrogate = static_cast<sal_Unicode>(nChar);
                 continue;
             }
+            else if (ImplIsLowSurrogate(nChar))
+            {
+                bUndefined = false;
+                goto bad_input;
+            }
         }
         else if (ImplIsLowSurrogate(nChar))
             nChar = ImplCombineSurrogates(nHighSurrogate, nChar);
@@ -351,11 +359,7 @@ sal_Size ImplConvertUnicodeToEucTw(void const * pData,
             goto bad_input;
         }
 
-        if (ImplIsLowSurrogate(nChar) || ImplIsNoncharacter(nChar))
-        {
-            bUndefined = false;
-            goto bad_input;
-        }
+        assert(rtl::isUnicodeScalarValue(nChar));
 
         if (nChar < 0x80)
             if (pDestBufPtr != pDestBufEnd)
