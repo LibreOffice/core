@@ -6552,6 +6552,18 @@ void DocxAttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &
     m_pSerializer->endElementNS( XML_w, XML_num );
 }
 
+void DocxAttributeOutput::OverrideNumberingDefinition(
+        sal_uInt16 const nNum, sal_uInt16 const nAbstractNum)
+{
+    m_pSerializer->startElementNS(XML_w, XML_num, FSNS(XML_w, XML_numId), OString::number(nNum));
+
+    m_pSerializer->singleElementNS(XML_w, XML_abstractNumId, FSNS(XML_w, XML_val), OString::number(nAbstractNum));
+
+    // TODO: write SwNumRule into w:lvlOverride
+
+    m_pSerializer->endElementNS( XML_w, XML_num );
+}
+
 void DocxAttributeOutput::StartAbstractNumbering( sal_uInt16 nId )
 {
     const SwNumRule* pRule = (*m_rExport.m_pUsedNumTable)[nId - 1];

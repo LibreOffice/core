@@ -66,8 +66,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121374_sectionHF2, "tdf121374_sectionHF2.doc")
     CPPUNIT_ASSERT( xHeaderText->getString().startsWith("virkamatka-anomus") );
 }
 
-// TODO export has the same wrong assumption that abstractNum = SwNumRule
-DECLARE_SW_EXPORT_TEST(testTdf95848, "tdf95848.docx", nullptr, Test)
+DECLARE_OOXMLEXPORT_TEST(testTdf95848, "tdf95848.docx")
 {
     OUString listId;
     OUString listStyle;
