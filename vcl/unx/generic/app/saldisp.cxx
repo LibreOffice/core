@@ -21,8 +21,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <sys/time.h>
-#include <pthread.h>
 #include <unistd.h>
 
 #if defined(__sun) || defined(AIX)
@@ -48,11 +46,11 @@
 
 #include <opengl/zone.hxx>
 
+#include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <unx/salunx.h>
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <unx/i18n_im.hxx>
@@ -60,12 +58,10 @@
 #include <unx/saldisp.hxx>
 #include <unx/saldata.hxx>
 #include <salinst.hxx>
-#include <unx/salgdi.h>
 #include <unx/salframe.h>
 #include <vcl/keycodes.hxx>
 #include <unx/salbmp.h>
 #include <osl/diagnose.h>
-#include <osl/mutex.h>
 #include <unx/salobj.h>
 #include <unx/sm.hxx>
 #include <unx/wmadaptor.hxx>
@@ -74,12 +70,9 @@
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 
-#include <osl/socket.h>
 #include <poll.h>
 #include <memory>
 #include <vector>
-
-#include <officecfg/Office/Common.hxx>
 
 /* From <X11/Intrinsic.h> */
 typedef unsigned long Pixel;

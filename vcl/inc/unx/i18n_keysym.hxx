@@ -20,6 +20,10 @@
 #ifndef INCLUDED_VCL_INC_UNX_I18N_KEYSYM_HXX
 #define INCLUDED_VCL_INC_UNX_I18N_KEYSYM_HXX
 
+#include <X11/X.h>
+
+#include <sal/types.h>
+
 /*
  convert a keysym as defined in /usr/{X11R6|openwin}/include/X11/keysymdef.h
  to unicode

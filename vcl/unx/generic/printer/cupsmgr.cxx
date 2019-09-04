@@ -27,8 +27,7 @@
 #include <unx/cupsmgr.hxx>
 
 #include <osl/thread.h>
-#include <osl/diagnose.h>
-#include <osl/file.hxx>
+#include <osl/file.h>
 #include <osl/conditn.hxx>
 
 #include <rtl/ustrbuf.hxx>

@@ -28,12 +28,10 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
-#include <sys/types.h>
 
 #include <i18nlangtag/mslangid.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/jobdata.hxx>
-#include <printerinfomanager.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
@@ -45,7 +43,6 @@
 #include <unx/geninst.h>
 #include <unx/genpspgraphics.h>
 #include <unx/printergfx.hxx>
-#include <impfont.hxx>
 #include <langboost.hxx>
 #include <fontinstance.hxx>
 #include <fontattributes.hxx>
@@ -53,7 +50,6 @@
 #include <PhysicalFontCollection.hxx>
 #include <PhysicalFontFace.hxx>
 #include <salbmp.hxx>
-#include <salprn.hxx>
 #include <sallayout.hxx>
 
 using namespace psp;

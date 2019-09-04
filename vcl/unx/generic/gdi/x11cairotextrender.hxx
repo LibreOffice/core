@@ -21,9 +21,7 @@
 #define INCLUDED_VCL_UNX_GENERIC_GDI_X11CAIROTEXTRENDER_HXX
 
 #include <unx/cairotextrender.hxx>
-#include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
-#include <salframe.hxx>
 
 class X11CairoTextRender : public CairoTextRender
 {

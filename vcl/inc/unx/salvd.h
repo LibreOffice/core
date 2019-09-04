@@ -21,10 +21,12 @@
 #define INCLUDED_VCL_INC_UNX_SALVD_H
 
 #include <X11/Xlib.h>
-#include <X11/Xutil.h>
 
+#include <unx/saldisp.hxx>
 #include <unx/saltype.h>
 #include <salvd.hxx>
+
+#include <memory>
 
 class SalDisplay;
 class X11SalGraphics;

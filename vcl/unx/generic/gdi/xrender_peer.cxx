@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/ustring.hxx>
-#include <unx/salunx.h>
 #include <unx/saldisp.hxx>
 
 #include <unx/x11/xrender_peer.hxx>

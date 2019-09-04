@@ -20,11 +20,7 @@
 #ifdef USE_RANDR
 
 #include <X11/Xlib.h>
-#include <X11/Xutil.h>
 #include <X11/extensions/Xrandr.h>
-
-#include <osl/module.h>
-#include <rtl/ustring.hxx>
 
 namespace
 {

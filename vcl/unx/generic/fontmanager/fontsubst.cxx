@@ -18,8 +18,8 @@
  */
 
 #include <unx/geninst.h>
-#include <unx/genpspgraphics.h>
 #include <outdev.h>
+#include <unx/fontmanager.hxx>
 #include <PhysicalFontCollection.hxx>
 
 // platform specific font substitution hooks

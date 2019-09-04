@@ -19,6 +19,8 @@
 #ifndef INCLUDED_VCL_INC_UNX_I18N_CB_HXX
 #define INCLUDED_VCL_INC_UNX_I18N_CB_HXX
 
+#include <X11/Xlib.h>
+
 #include <salwtype.hxx>
 #include <vector>
 

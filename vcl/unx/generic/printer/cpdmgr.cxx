@@ -21,8 +21,7 @@
 
 #include <unx/cpdmgr.hxx>
 
-#include <osl/diagnose.h>
-#include <osl/file.hxx>
+#include <osl/file.h>
 #include <osl/thread.h>
 
 #include <rtl/ustrbuf.hxx>
@@ -30,8 +29,6 @@
 
 #include <config_dbus.h>
 #include <config_gio.h>
-
-#include <algorithm>
 
 using namespace psp;
 using namespace osl;

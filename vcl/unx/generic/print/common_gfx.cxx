@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <cstdlib>
-
 #include "psputil.hxx"
 #include "glyphset.hxx"
 
@@ -33,7 +31,6 @@
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
 #include <tools/stream.hxx>
-#include <tools/debug.hxx>
 
 using namespace psp ;
 

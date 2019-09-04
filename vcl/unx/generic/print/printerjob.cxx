@@ -18,13 +18,11 @@
  */
 
 #include <stdio.h>
-#include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
 
 #include "psputil.hxx"
-#include "glyphset.hxx"
 
 #include <unx/printerjob.hxx>
 #include <unx/printergfx.hxx>
@@ -38,7 +36,6 @@
 
 #include <osl/thread.h>
 #include <osl/security.hxx>
-#include <sal/macros.h>
 
 #include <algorithm>
 #include <deque>

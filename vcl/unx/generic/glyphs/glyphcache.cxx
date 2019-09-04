@@ -18,17 +18,12 @@
  */
 
 #include <stdlib.h>
-#include <math.h>
 #include <unx/freetype_glyphcache.hxx>
 #include <unx/gendata.hxx>
 
-#include <vcl/svapp.hxx>
-#include <vcl/bitmap.hxx>
 #include <fontinstance.hxx>
-#include <fontattributes.hxx>
 
 #include <rtl/ustring.hxx>
-#include <osl/file.hxx>
 #include <sal/log.hxx>
 
 GlyphCache::GlyphCache()

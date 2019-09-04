@@ -20,16 +20,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <sal/alloca.h>
 #include <osl/thread.h>
 
 #include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xlocale.h>
 
 #include <vcl/commandevent.hxx>
-#include <unx/salunx.h>
-#include <unx/XIM.h>
 #include <unx/i18n_cb.hxx>
 #include <unx/i18n_ic.hxx>
 #include <unx/i18n_im.hxx>

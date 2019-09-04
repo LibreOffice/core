@@ -30,12 +30,11 @@
 #include <vcl/event.hxx>
 #include <sal/log.hxx>
 
-#include <unx/salunx.h>
 #include <unx/salinst.h>
 #include <unx/saldisp.hxx>
-#include <unx/salframe.h>
 #include <unx/salobj.h>
 
+#include <salframe.hxx>
 #include <salwtype.hxx>
 
 // SalInstance member to create and destroy a SalObject

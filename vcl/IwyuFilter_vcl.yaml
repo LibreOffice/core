@@ -56,3 +56,18 @@ blacklist:
     vcl/source/window/event.cxx:
     # comphelper::ScopeGuard is actually used
     - comphelper/scopeguard.hxx
+    vcl/unx/generic/app/saldisp.cxx:
+    # needed for transitive cursor includes
+    - unx/x11_cursors/salcursors.h
+    vcl/unx/generic/gdi/font.cxx:
+    # Complete type needed for implicit dtor
+    - vcl/fontcharmap.hxx
+    vcl/unx/generic/gdi/salbmp.cxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h
+    vcl/unx/generic/glyphs/freetype_glyphcache.cxx:
+    # Needed for FreeType header macros
+    - ft2build.h
+    vcl/unx/generic/print/genpspgraphics.cxx:
+    # Complete type needed for implicit dtor
+    - vcl/fontcharmap.hxx

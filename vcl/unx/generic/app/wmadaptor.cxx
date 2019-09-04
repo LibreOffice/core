@@ -18,10 +18,9 @@
  */
 
 #include <string.h>
-#include <stdio.h>
 #include <stdlib.h>
 
-#include <sal/alloca.h>
+#include <i18nlangtag/languagetag.hxx>
 #include <rtl/locale.h>
 
 #include <osl/thread.h>
@@ -31,15 +30,11 @@
 
 #include <unx/wmadaptor.hxx>
 #include <unx/saldisp.hxx>
-#include <unx/salinst.h>
 #include <unx/salframe.h>
-
-#include <salgdi.hxx>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
-#include <X11/Xresource.h>
 
 namespace vcl_sal {
 

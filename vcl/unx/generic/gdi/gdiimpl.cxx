@@ -28,7 +28,6 @@
 #include <vcl/gradient.hxx>
 #include <sal/log.hxx>
 
-#include <unx/salunx.h>
 #include <unx/saldisp.hxx>
 #include <unx/salbmp.h>
 #include <unx/salgdi.h>
@@ -36,8 +35,6 @@
 #include <unx/x11/xlimits.hxx>
 #include <salframe.hxx>
 #include <unx/x11/xrender_peer.hxx>
-
-#include <outdata.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -47,7 +44,6 @@
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dtrapezoid.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <ControlCacheKey.hxx>

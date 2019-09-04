@@ -18,7 +18,6 @@
  */
 
 #include "glyphset.hxx"
-#include "psputil.hxx"
 
 #include <sft.hxx>
 
@@ -30,15 +29,11 @@
 
 #include <osl/thread.h>
 
-#include <sal/alloca.h>
-
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 
 #include <unotools/tempfile.hxx>
 
-#include <set>
-#include <map>
 #include <algorithm>
 
 using namespace vcl;

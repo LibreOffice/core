@@ -21,21 +21,13 @@
 
 #include <unx/gensys.h>
 
-#include <vcl/button.hxx>
-
 #include <svdata.hxx>
 
-#include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <unotools/configmgr.hxx>
-
-#include <vcl/unohelp.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 using namespace com::sun::star;
 
