@@ -6559,13 +6559,28 @@ void DocxAttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &
 }
 
 void DocxAttributeOutput::OverrideNumberingDefinition(
+        SwNumRule const& rRule,
         sal_uInt16 const nNum, sal_uInt16 const nAbstractNum)
 {
     m_pSerializer->startElementNS(XML_w, XML_num, FSNS(XML_w, XML_numId), OString::number(nNum));
 
     m_pSerializer->singleElementNS(XML_w, XML_abstractNumId, FSNS(XML_w, XML_val), OString::number(nAbstractNum));
 
-    // TODO: write SwNumRule into w:lvlOverride
+    SwNumRule const& rAbstractRule = *(*m_rExport.m_pUsedNumTable)[nAbstractNum - 1];
+    sal_uInt8 const nLevels = static_cast<sal_uInt8>(rRule.IsContinusNum()
+        ? WW8ListManager::nMinLevel : WW8ListManager::nMaxLevel);
+    for (sal_uInt8 nLevel = 0; nLevel < nLevels; ++nLevel)
+    {
+        // only export it if it differs from abstract numbering definition
+        if (rRule.Get(nLevel) != rAbstractRule.Get(nLevel))
+        {
+            m_pSerializer->startElementNS(XML_w, XML_lvlOverride, FSNS(XML_w, XML_ilvl), OString::number(nLevel));
+
+            GetExport().NumberingLevel(rRule, nLevel);
+
+            m_pSerializer->endElementNS(XML_w, XML_lvlOverride);
+        }
+    }
 
     m_pSerializer->endElementNS( XML_w, XML_num );
 }

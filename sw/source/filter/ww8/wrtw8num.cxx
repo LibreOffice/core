@@ -39,6 +39,8 @@
 #include "wrtww8.hxx"
 #include "ww8par.hxx"
 
+#include <mutex>
+
 using namespace ::com::sun::star;
 using namespace sw::types;
 using namespace sw::util;
@@ -204,7 +206,7 @@ void MSWordExportBase::NumberingDefinitions()
     // Write static data of SwNumRule - LSTF
     for ( sal_uInt16 n = 0; n < nCount; ++n )
     {
-        const SwNumRule *const pRule = (*m_pUsedNumTable)[ n ];
+        const SwNumRule * pRule = (*m_pUsedNumTable)[ n ];
         if (pRule)
         {
             AttrOutput().NumberingDefinition(n + 1, *pRule);
@@ -213,7 +215,9 @@ void MSWordExportBase::NumberingDefinitions()
         {
             auto it = m_OverridingNums.find(n);
             assert(it != m_OverridingNums.end());
-            AttrOutput().OverrideNumberingDefinition(n + 1, it->second.second + 1);
+            pRule = (*m_pUsedNumTable)[it->second.first];
+            assert(pRule);
+            AttrOutput().OverrideNumberingDefinition(*pRule, n + 1, it->second.second + 1);
         }
     }
 }
@@ -383,11 +387,6 @@ void MSWordExportBase::AbstractNumberingDefinitions()
     sal_uInt16 nCount = m_pUsedNumTable->size();
     sal_uInt16 n;
 
-    // prepare the NodeNum to generate the NumString
-    SwNumberTree::tNumberVector aNumVector;
-    for ( n = 0; n < WW8ListManager::nMaxLevel; ++n )
-        aNumVector.push_back( n );
-
     for( n = 0; n < nCount; ++n )
     {
         if (nullptr == (*m_pUsedNumTable)[ n ])
@@ -403,180 +402,198 @@ void MSWordExportBase::AbstractNumberingDefinitions()
             WW8ListManager::nMinLevel : WW8ListManager::nMaxLevel);
         for( nLvl = 0; nLvl < nLevels; ++nLvl )
         {
-            // write the static data of the SwNumFormat of this level
-            sal_uInt8 aNumLvlPos[WW8ListManager::nMaxLevel] = { 0,0,0,0,0,0,0,0,0 };
-
-            const SwNumFormat& rFormat = rRule.Get( nLvl );
-
-            sal_uInt8 nFollow = 0;
-            // #i86652#
-            if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
-            {
-                nFollow = 2;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
-            }
-            else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
-            {
-                switch ( rFormat.GetLabelFollowedBy() )
-                {
-                    case SvxNumberFormat::LISTTAB:
-                    {
-            // 0 (tab) unless there would be no content before the tab, in which case 2 (nothing)
-            nFollow = (SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType()) ? 0 : 2;
-                    }
-                    break;
-                    case SvxNumberFormat::SPACE:
-                    {
-            // 1 (space) unless there would be no content before the space in which case 2 (nothing)
-            nFollow = (SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType()) ? 1 : 2;
-                    }
-                    break;
-                    case SvxNumberFormat::NOTHING:
-                    {
-                        nFollow = 2;
-                    }
-                    break;
-                    default:
-                    {
-                        nFollow = 0;
-                        OSL_FAIL( "unknown GetLabelFollowedBy() return value" );
-                    }
-                }
-            }
-
-            // Build the NumString for this Level
-            OUString sNumStr;
-            OUString sFontName;
-            bool bWriteBullet = false;
-            const vcl::Font* pBulletFont=nullptr;
-            rtl_TextEncoding eChrSet=0;
-            FontFamily eFamily=FAMILY_DECORATIVE;
-            if( SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType() ||
-                SVX_NUM_BITMAP == rFormat.GetNumberingType() )
-            {
-                sNumStr = OUString(rFormat.GetBulletChar());
-                bWriteBullet = true;
-
-                pBulletFont = rFormat.GetBulletFont();
-                if (!pBulletFont)
-                {
-                    pBulletFont = &numfunc::GetDefBulletFont();
-                }
-
-                eChrSet = pBulletFont->GetCharSet();
-                sFontName = pBulletFont->GetFamilyName();
-                eFamily = pBulletFont->GetFamilyType();
-
-                if ( IsStarSymbol(sFontName) )
-                    SubstituteBullet( sNumStr, eChrSet, sFontName );
-
-                // #i86652#
-                if ( rFormat.GetPositionAndSpaceMode() ==
-                                        SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
-                {
-                    // <nFollow = 2>, if minimum label width equals 0 and
-                    // minimum distance between label and text equals 0
-                    nFollow = ( rFormat.GetFirstLineOffset() == 0 &&
-                                rFormat.GetCharTextDistance() == 0 )
-                              ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
-                }
-            }
-            else
-            {
-                if (SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType())
-                {
-                    sal_uInt8* pLvlPos = aNumLvlPos;
-                    // the numbering string has to be restrict
-                    // to the level currently working on.
-                    sNumStr = rRule.MakeNumString(aNumVector, false, true, nLvl);
-
-                    // now search the nums in the string
-                    for( sal_uInt8 i = 0; i <= nLvl; ++i )
-                    {
-                        OUString sSrch( OUString::number( i ));
-                        sal_Int32 nFnd = sNumStr.indexOf( sSrch );
-                        if( -1 != nFnd )
-                        {
-                            *pLvlPos = static_cast<sal_uInt8>(nFnd + rFormat.GetPrefix().getLength() + 1 );
-                            ++pLvlPos;
-                            sNumStr = sNumStr.replaceAt( nFnd, 1, OUString(static_cast<char>(i)) );
-                        }
-                    }
-                    // #i86652#
-                    if ( rFormat.GetPositionAndSpaceMode() ==
-                                            SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
-                    {
-                        // <nFollow = 2>, if minimum label width equals 0 and
-                        // minimum distance between label and text equals 0
-                        nFollow = ( rFormat.GetFirstLineOffset() == 0 &&
-                                    rFormat.GetCharTextDistance() == 0 )
-                                  ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
-                    }
-                }
-
-                if( !rFormat.GetPrefix().isEmpty() )
-                    sNumStr = rFormat.GetPrefix() + sNumStr;
-                sNumStr += rFormat.GetSuffix();
-            }
-
-            // Attributes of the numbering
-            std::unique_ptr<wwFont> pPseudoFont;
-            const SfxItemSet* pOutSet = nullptr;
-
-            // cbGrpprlChpx
-            SfxItemSet aSet( m_pDoc->GetAttrPool(), svl::Items<RES_CHRATR_BEGIN,
-                                                  RES_CHRATR_END>{} );
-            if ( rFormat.GetCharFormat() || bWriteBullet )
-            {
-                if ( bWriteBullet )
-                {
-                    pOutSet = &aSet;
-
-                    if ( rFormat.GetCharFormat() )
-                        aSet.Put( rFormat.GetCharFormat()->GetAttrSet() );
-                    aSet.ClearItem( RES_CHRATR_CJK_FONT );
-                    aSet.ClearItem( RES_CHRATR_FONT );
-
-                    if ( sFontName.isEmpty() )
-                        sFontName = pBulletFont->GetFamilyName();
-
-                    pPseudoFont.reset(new wwFont( sFontName, pBulletFont->GetPitch(),
-                        eFamily, eChrSet));
-                }
-                else
-                    pOutSet = &rFormat.GetCharFormat()->GetAttrSet();
-            }
-
-            sal_Int16 nIndentAt = 0;
-            sal_Int16 nFirstLineIndex = 0;
-            sal_Int16 nListTabPos = 0;
-
-            // #i86652#
-            if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
-            {
-                nIndentAt = nListTabPos = rFormat.GetAbsLSpace(); //TODO: overflow
-                nFirstLineIndex = GetWordFirstLineOffset(rFormat);
-            }
-            else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
-            {
-                nIndentAt = static_cast<sal_Int16>(rFormat.GetIndentAt());
-                nFirstLineIndex = static_cast<sal_Int16>(rFormat.GetFirstLineIndent());
-                nListTabPos = rFormat.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB?
-                              static_cast<sal_Int16>( rFormat.GetListtabPos() ) : 0;
-            }
-
-            AttrOutput().NumberingLevel( nLvl,
-                    rFormat.GetStart(),
-                    rFormat.GetNumberingType(),
-                    rFormat.GetNumAdjust(),
-                    aNumLvlPos,
-                    nFollow,
-                    pPseudoFont.get(), pOutSet,
-                    nIndentAt, nFirstLineIndex, nListTabPos,
-                    sNumStr,
-                    rFormat.GetNumberingType()==SVX_NUM_BITMAP ? rFormat.GetBrush():nullptr);
+            NumberingLevel(rRule, nLvl);
         }
+
         AttrOutput().EndAbstractNumbering();
     }
+}
+
+void MSWordExportBase::NumberingLevel(
+        SwNumRule const& rRule, sal_uInt8 const nLvl)
+{
+    // prepare the NodeNum to generate the NumString
+    static SwNumberTree::tNumberVector aNumVector;
+    static std::once_flag aInitOnce;
+    std::call_once(aInitOnce, []
+        {
+            for (int n = 0; n < WW8ListManager::nMaxLevel; ++n)
+            {
+                aNumVector.push_back( n );
+            }
+        });
+
+    // write the static data of the SwNumFormat of this level
+    sal_uInt8 aNumLvlPos[WW8ListManager::nMaxLevel] = { 0,0,0,0,0,0,0,0,0 };
+
+    const SwNumFormat& rFormat = rRule.Get( nLvl );
+
+    sal_uInt8 nFollow = 0;
+    // #i86652#
+    if (rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
+    {
+        nFollow = 2;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
+    }
+    else if (rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT)
+    {
+        switch (rFormat.GetLabelFollowedBy())
+        {
+            case SvxNumberFormat::LISTTAB:
+            {
+                // 0 (tab) unless there would be no content before the tab, in which case 2 (nothing)
+                nFollow = (SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType()) ? 0 : 2;
+            }
+            break;
+            case SvxNumberFormat::SPACE:
+            {
+                // 1 (space) unless there would be no content before the space in which case 2 (nothing)
+                nFollow = (SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType()) ? 1 : 2;
+            }
+            break;
+            case SvxNumberFormat::NOTHING:
+            {
+                nFollow = 2;
+            }
+            break;
+            default:
+            {
+                nFollow = 0;
+                OSL_FAIL( "unknown GetLabelFollowedBy() return value" );
+            }
+        }
+    }
+
+    // Build the NumString for this Level
+    OUString sNumStr;
+    OUString sFontName;
+    bool bWriteBullet = false;
+    const vcl::Font* pBulletFont=nullptr;
+    rtl_TextEncoding eChrSet=0;
+    FontFamily eFamily=FAMILY_DECORATIVE;
+    if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType() ||
+        SVX_NUM_BITMAP == rFormat.GetNumberingType())
+    {
+        sNumStr = OUString(rFormat.GetBulletChar());
+        bWriteBullet = true;
+
+        pBulletFont = rFormat.GetBulletFont();
+        if (!pBulletFont)
+        {
+            pBulletFont = &numfunc::GetDefBulletFont();
+        }
+
+        eChrSet = pBulletFont->GetCharSet();
+        sFontName = pBulletFont->GetFamilyName();
+        eFamily = pBulletFont->GetFamilyType();
+
+        if (IsStarSymbol(sFontName))
+            SubstituteBullet( sNumStr, eChrSet, sFontName );
+
+        // #i86652#
+        if (rFormat.GetPositionAndSpaceMode() ==
+                                SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
+        {
+            // <nFollow = 2>, if minimum label width equals 0 and
+            // minimum distance between label and text equals 0
+            nFollow = (rFormat.GetFirstLineOffset() == 0 &&
+                       rFormat.GetCharTextDistance() == 0)
+                      ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
+        }
+    }
+    else
+    {
+        if (SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType())
+        {
+            sal_uInt8* pLvlPos = aNumLvlPos;
+            // the numbering string has to be restrict
+            // to the level currently working on.
+            sNumStr = rRule.MakeNumString(aNumVector, false, true, nLvl);
+
+            // now search the nums in the string
+            for (sal_uInt8 i = 0; i <= nLvl; ++i)
+            {
+                OUString sSrch( OUString::number( i ));
+                sal_Int32 nFnd = sNumStr.indexOf( sSrch );
+                if( -1 != nFnd )
+                {
+                    *pLvlPos = static_cast<sal_uInt8>(nFnd + rFormat.GetPrefix().getLength() + 1 );
+                    ++pLvlPos;
+                    sNumStr = sNumStr.replaceAt( nFnd, 1, OUString(static_cast<char>(i)) );
+                }
+            }
+            // #i86652#
+            if (rFormat.GetPositionAndSpaceMode() ==
+                                    SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
+            {
+                // <nFollow = 2>, if minimum label width equals 0 and
+                // minimum distance between label and text equals 0
+                nFollow = (rFormat.GetFirstLineOffset() == 0 &&
+                           rFormat.GetCharTextDistance() == 0)
+                          ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
+            }
+        }
+
+        if (!rFormat.GetPrefix().isEmpty())
+            sNumStr = rFormat.GetPrefix() + sNumStr;
+        sNumStr += rFormat.GetSuffix();
+    }
+
+    // Attributes of the numbering
+    std::unique_ptr<wwFont> pPseudoFont;
+    const SfxItemSet* pOutSet = nullptr;
+
+    // cbGrpprlChpx
+    SfxItemSet aSet( m_pDoc->GetAttrPool(), svl::Items<RES_CHRATR_BEGIN,
+                                          RES_CHRATR_END>{} );
+    if (rFormat.GetCharFormat() || bWriteBullet)
+    {
+        if (bWriteBullet)
+        {
+            pOutSet = &aSet;
+
+            if (rFormat.GetCharFormat())
+                aSet.Put( rFormat.GetCharFormat()->GetAttrSet() );
+            aSet.ClearItem( RES_CHRATR_CJK_FONT );
+            aSet.ClearItem( RES_CHRATR_FONT );
+
+            if (sFontName.isEmpty())
+                sFontName = pBulletFont->GetFamilyName();
+
+            pPseudoFont.reset(new wwFont( sFontName, pBulletFont->GetPitch(),
+                eFamily, eChrSet));
+        }
+        else
+            pOutSet = &rFormat.GetCharFormat()->GetAttrSet();
+    }
+
+    sal_Int16 nIndentAt = 0;
+    sal_Int16 nFirstLineIndex = 0;
+    sal_Int16 nListTabPos = 0;
+
+    // #i86652#
+    if (rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
+    {
+        nIndentAt = nListTabPos = rFormat.GetAbsLSpace(); //TODO: overflow
+        nFirstLineIndex = GetWordFirstLineOffset(rFormat);
+    }
+    else if (rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT)
+    {
+        nIndentAt = static_cast<sal_Int16>(rFormat.GetIndentAt());
+        nFirstLineIndex = static_cast<sal_Int16>(rFormat.GetFirstLineIndent());
+        nListTabPos = rFormat.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB?
+                      static_cast<sal_Int16>( rFormat.GetListtabPos() ) : 0;
+    }
+
+    AttrOutput().NumberingLevel( nLvl,
+            rFormat.GetStart(),
+            rFormat.GetNumberingType(),
+            rFormat.GetNumAdjust(),
+            aNumLvlPos,
+            nFollow,
+            pPseudoFont.get(), pOutSet,
+            nIndentAt, nFirstLineIndex, nListTabPos,
+            sNumStr,
+            rFormat.GetNumberingType()==SVX_NUM_BITMAP ? rFormat.GetBrush() : nullptr);
 }
 
 void WW8Export::OutOverrideListTab()

@@ -99,6 +99,71 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95848, "tdf95848.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf95848_2, "tdf95848_2.docx")
+{
+    OUString listId;
+    OUString listStyle;
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), getProperty<sal_Int16>(xPara, "NumberingLevel"));
+        CPPUNIT_ASSERT(xPara->getPropertyValue("NumberingStyleName") >>= listStyle);
+        CPPUNIT_ASSERT(listStyle.startsWith("WWNum"));
+        CPPUNIT_ASSERT(xPara->getPropertyValue("ListId") >>= listId);
+        CPPUNIT_ASSERT_EQUAL(OUString("1)"), getProperty<OUString>(xPara, "ListLabelString"));
+        // check indent of list style
+        auto xLevels = getProperty<uno::Reference<container::XIndexAccess>>(xPara, "NumberingRules");
+        uno::Sequence<beans::PropertyValue> aLevel;
+        xLevels->getByIndex(0) >>= aLevel; // top level
+        sal_Int32 nIndent = std::find_if(aLevel.begin(), aLevel.end(), [](const beans::PropertyValue& rValue) { return rValue.Name == "FirstLineIndent"; })->Value.get<sal_Int32>();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-635), nIndent);
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), getProperty<sal_Int16>(xPara, "NumberingLevel"));
+        // different numbering style
+        OUString listStyle2;
+        CPPUNIT_ASSERT(xPara->getPropertyValue("NumberingStyleName") >>= listStyle2);
+        CPPUNIT_ASSERT(listStyle2.startsWith("WWNum"));
+        CPPUNIT_ASSERT(listStyle2 != listStyle);
+        // but same list
+        CPPUNIT_ASSERT_EQUAL(OUString("2)"), getProperty<OUString>(xPara, "ListLabelString"));
+        CPPUNIT_ASSERT_EQUAL(listId, getProperty<OUString>(xPara, "ListId"));
+        // check indent of list style - override
+        auto xLevels = getProperty<uno::Reference<container::XIndexAccess>>(xPara, "NumberingRules");
+        uno::Sequence<beans::PropertyValue> aLevel;
+        xLevels->getByIndex(0) >>= aLevel; // top level
+        sal_Int32 nIndent = std::find_if(aLevel.begin(), aLevel.end(), [](const beans::PropertyValue& rValue) { return rValue.Name == "FirstLineIndent"; })->Value.get<sal_Int32>();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9366), nIndent);
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(3), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), getProperty<sal_Int16>(xPara, "NumberingLevel"));
+        // different numbering style
+        OUString listStyle3;
+        CPPUNIT_ASSERT(xPara->getPropertyValue("NumberingStyleName") >>= listStyle3);
+        CPPUNIT_ASSERT(listStyle3.startsWith("WWNum"));
+        CPPUNIT_ASSERT(listStyle3 != listStyle);
+        // and different list
+        CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(xPara, "ListLabelString"));
+        CPPUNIT_ASSERT(listId !=  getProperty<OUString>(xPara, "ListId"));
+    }
+    {
+        // continue the first list
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(4), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), getProperty<sal_Int16>(xPara, "NumberingLevel"));
+        CPPUNIT_ASSERT_EQUAL(listStyle, getProperty<OUString>(xPara, "NumberingStyleName"));
+        CPPUNIT_ASSERT_EQUAL(listId, getProperty<OUString>(xPara, "ListId"));
+        CPPUNIT_ASSERT_EQUAL(OUString("3)"), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(5), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), getProperty<sal_Int16>(xPara, "NumberingLevel"));
+        CPPUNIT_ASSERT_EQUAL(listStyle, getProperty<OUString>(xPara, "NumberingStyleName"));
+        CPPUNIT_ASSERT_EQUAL(listId, getProperty<OUString>(xPara, "ListId"));
+        CPPUNIT_ASSERT_EQUAL(OUString("4)"), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf126723, "tdf126723.docx")
 {
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraph(2), "ParaLeftMargin"));

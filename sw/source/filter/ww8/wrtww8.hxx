@@ -758,6 +758,9 @@ public:
     /// Write all Levels for all SwNumRules - LVLF
     void AbstractNumberingDefinitions();
 
+    /// Write one numbering level
+    void NumberingLevel(SwNumRule const& rRule, sal_uInt8 nLvl);
+
     // Convert the bullet according to the font.
     void SubstituteBullet( OUString& rNumStr, rtl_TextEncoding& rChrSet,
         OUString& rFontName ) const;
