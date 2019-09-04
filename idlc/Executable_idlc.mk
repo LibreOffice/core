@@ -63,4 +63,10 @@ $(eval $(call gb_Executable_add_exception_objects,idlc,\
     idlc/source/astservice \
 ))
 
+# Without this, e.g. CustomTarget_idlc/parser_test or CustomTarget_registry/regcompare_test
+# may fail in 'make clean; make check' if the library is not built yet
+$(call gb_Executable_add_runtime_dependencies,idlc, \
+    $(call gb_Library_get_target,sal_textenc) \
+)
+
 # vim:set noet sw=4 ts=4:
