@@ -38,10 +38,12 @@
 class SdrMarkList;
 class SdrView;
 class SwDoc;
+class SwXShape;
 
 class SwFmDrawPage : public SvxFmDrawPage
 {
     SdrPageView*        pPageView;
+    std::vector<SwXShape*> m_vShapes;
 public:
     SwFmDrawPage( SdrPage* pPage );
     virtual ~SwFmDrawPage() throw () override;
@@ -52,12 +54,19 @@ public:
     SdrView*            GetDrawView() {return mpView.get();}
     SdrPageView*        GetPageView();
     void                RemovePageView();
-    static css::uno::Reference< css::uno::XInterface >       GetInterface( SdrObject* pObj );
+    static css::uno::Reference<css::drawing::XShape> GetShape(SdrObject* pObj);
+    static css::uno::Reference<css::drawing::XShapeGroup> GetShapeGroup(SdrObject* pObj);
 
     // The following method is called when a SvxShape-object is to be created.
     // Derived classes may obtain at this point a derivation or an object
     // that is aggregating a SvxShape.
     virtual css::uno::Reference< css::drawing::XShape >  CreateShape( SdrObject *pObj ) const override;
+    void RemoveShape(const SwXShape* pShape)
+    {
+        auto ppShape = find(m_vShapes.begin(), m_vShapes.end(), pShape);
+        assert(ppShape != m_vShapes.end());
+        m_vShapes.erase(ppShape);
+    };
 };
 
 typedef cppu::WeakAggImplHelper4
@@ -121,12 +130,12 @@ cppu::WeakAggImplHelper6
     css::drawing::XShape
 >
 SwXShapeBaseClass;
-class SwXShape : public SwXShapeBaseClass,
-    public SwClient
+class SwXShape : public SwXShapeBaseClass, public SwClient
 {
     friend class SwXGroupShape;
     friend class SwXDrawPage;
     friend class SwFmDrawPage;
+    const SwFmDrawPage* m_pPage;
 
     css::uno::Reference< css::uno::XAggregation > xShapeAgg;
     // reference to <XShape>, determined in the
@@ -191,11 +200,9 @@ class SwXShape : public SwXShapeBaseClass,
 
 protected:
     virtual ~SwXShape() override;
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
-
+    void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 public:
-    SwXShape(css::uno::Reference<css::uno::XInterface> & xShape, SwDoc const* pDoc);
+    SwXShape(css::uno::Reference<css::uno::XInterface> & xShape, SwDoc const*const pDoc);
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;

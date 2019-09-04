@@ -255,6 +255,9 @@ SwFmDrawPage::SwFmDrawPage( SdrPage* pPage ) :
 
 SwFmDrawPage::~SwFmDrawPage() throw ()
 {
+    for(auto pShape : m_vShapes)
+        pShape->dispose();
+    m_vShapes.clear();
     RemovePageView();
 }
 
@@ -284,37 +287,26 @@ void    SwFmDrawPage::RemovePageView()
     pPageView = nullptr;
 }
 
-uno::Reference< uno::XInterface >   SwFmDrawPage::GetInterface( SdrObject* pObj )
+uno::Reference<drawing::XShape> SwFmDrawPage::GetShape(SdrObject* pObj)
 {
-    uno::Reference< XInterface >  xShape;
-    if( pObj )
+    if(!pObj)
+        return nullptr;
+    SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
+    SwFmDrawPage* pPage = dynamic_cast<SwFmDrawPage*>(pFormat);
+    if(!pPage || pPage->m_vShapes.empty())
+        return uno::Reference<drawing::XShape>(pObj->getUnoShape(), uno::UNO_QUERY);
+    for(auto pShape : pPage->m_vShapes)
     {
-        SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
-
-        SwIterator<SwXShape,SwFormat> aIter(*pFormat);
-        SwXShape* pxShape = aIter.First();
-        if (pxShape)
-        {
-            //tdf#113615 when mapping from SdrObject to XShape via
-            //SwFrameFormat check all the SdrObjects belonging to this
-            //SwFrameFormat to find the right one. In the case of Grouped
-            //objects there can be both the group and the elements of the group
-            //registered here so the first one isn't necessarily the right one
-            while (SwXShape* pNext = aIter.Next())
-            {
-                SvxShape* pSvxShape = pNext->GetSvxShape();
-                if (pSvxShape && pSvxShape->GetSdrObject() == pObj)
-                {
-                    pxShape = pNext;
-                    break;
-                }
-            }
-            xShape =  *static_cast<cppu::OWeakObject*>(pxShape);
-        }
-        else
-            xShape = pObj->getUnoShape();
+        SvxShape* pSvxShape = pShape->GetSvxShape();
+        if (pSvxShape && pSvxShape->GetSdrObject() == pObj)
+            return uno::Reference<drawing::XShape>(static_cast<::cppu::OWeakObject*>(pShape), uno::UNO_QUERY);
     }
-    return xShape;
+    return nullptr;
+}
+
+uno::Reference<drawing::XShapeGroup> SwFmDrawPage::GetShapeGroup(SdrObject* pObj)
+{
+    return uno::Reference<drawing::XShapeGroup>(GetShape(pObj), uno::UNO_QUERY);
 }
 
 uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) const
@@ -375,13 +367,15 @@ uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) c
             xShapeTunnel = nullptr;
             uno::Reference< uno::XInterface > xCreate(xRet, uno::UNO_QUERY);
             xRet = nullptr;
-            uno::Reference< beans::XPropertySet >  xPrSet;
             if ( pObj->IsGroupObject() && (!pObj->Is3DObj() || (dynamic_cast<const E3dScene*>( pObj) !=  nullptr)) )
-                xPrSet = new SwXGroupShape(xCreate, nullptr);
+                pShape = new SwXGroupShape(xCreate, nullptr);
             else
-                xPrSet = new SwXShape(xCreate, nullptr);
+                pShape = new SwXShape(xCreate, nullptr);
+            uno::Reference<beans::XPropertySet> xPrSet = pShape;
             xRet.set(xPrSet, uno::UNO_QUERY);
         }
+        const_cast<std::vector<SwXShape*>*>(&m_vShapes)->push_back(pShape);
+        pShape->m_pPage = this;
     }
     return xRet;
 }
@@ -582,7 +576,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
                                     static_cast< cppu::OWeakObject * > ( this ) );
 
     // we're already registered in the model / SwXDrawPage::add() already called
-    if(pShape->GetRegisteredIn() || !pShape->m_bDescriptor )
+    if(pShape->m_pPage || pShape->GetRegisteredIn() || !pShape->m_bDescriptor )
         return;
 
     // we're inserted elsewhere already
@@ -771,10 +765,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
 
                 pPage->GetDrawView()->UnmarkAll();
                 if(pContact)
-                {
-                    uno::Reference< uno::XInterface >  xInt = SwFmDrawPage::GetInterface( pContact->GetMaster() );
-                    xRet.set(xInt, uno::UNO_QUERY);
-                }
+                    xRet = SwFmDrawPage::GetShapeGroup( pContact->GetMaster() );
                 pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
             }
             pPage->RemovePageView();
@@ -877,13 +868,14 @@ namespace
     }
 }
 
-SwXShape::SwXShape(uno::Reference<uno::XInterface> & xShape,
-                   SwDoc const*const pDoc)
-    :
-    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_SHAPE)),
-    m_pPropertyMapEntries(aSwMapProvider.GetPropertyMapEntries(PROPERTY_MAP_TEXT_SHAPE)),
-    pImpl(new SwShapeDescriptor_Impl(pDoc)),
-    m_bDescriptor(true)
+SwXShape::SwXShape(
+        uno::Reference<uno::XInterface> & xShape,
+        SwDoc const*const pDoc)
+    : m_pPage(nullptr)
+    , m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_SHAPE))
+    , m_pPropertyMapEntries(aSwMapProvider.GetPropertyMapEntries(PROPERTY_MAP_TEXT_SHAPE))
+    , pImpl(new SwShapeDescriptor_Impl(pDoc))
+    , m_bDescriptor(true)
 {
     if(!xShape.is())  // default Ctor
         return;
@@ -970,6 +962,9 @@ SwXShape::~SwXShape()
     }
     pImpl.reset();
     EndListeningAll();
+    if(m_pPage)
+       const_cast<SwFmDrawPage*>(m_pPage)->RemoveShape(this);
+    m_pPage = nullptr;
 }
 
 uno::Any SwXShape::queryInterface( const uno::Type& aType )
@@ -2124,6 +2119,9 @@ void SwXShape::dispose()
         if(xComp.is())
             xComp->dispose();
     }
+    if(m_pPage)
+        const_cast<SwFmDrawPage*>(m_pPage)->RemoveShape(this);
+    m_pPage = nullptr;
 }
 
 void SwXShape::addEventListener(
