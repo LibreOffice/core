@@ -798,6 +798,11 @@ namespace
 #endif
     }
 
+    bool isEmoji(sal_uInt32 nCurrentChar)
+    {
+        return u_hasBinaryProperty(nCurrentChar, UCHAR_EMOJI);
+    }
+
     //returns true if the given code-point couldn't possibly be in rLangTag.
     bool isImpossibleCodePointForLang(const LanguageTag &rLangTag, sal_uInt32 currentChar)
     {
@@ -846,6 +851,8 @@ namespace
 
     OUString getExemplarLangTagForCodePoint(sal_uInt32 currentChar)
     {
+        if (isEmoji(currentChar))
+            return "und-zsye";
         int32_t script = u_getIntPropertyValue(currentChar, UCHAR_SCRIPT);
         UScriptCode eScript = static_cast<UScriptCode>(script);
         OStringBuffer aBuf(unicode::getExemplarLanguageForUScriptCode(eScript));
@@ -904,7 +911,7 @@ void PrintFontManager::Substitute(FontSelectPattern &rPattern, OUString& rMissin
             FcCharSetAddChar( codePoints, nCode );
             //if the codepoint is impossible for this lang tag, then clear it
             //and autodetect something useful
-            if (!aLangAttrib.isEmpty() && isImpossibleCodePointForLang(aLangTag, nCode))
+            if (!aLangAttrib.isEmpty() && (isImpossibleCodePointForLang(aLangTag, nCode) || isEmoji(nCode)))
                 aLangAttrib.clear();
             //#i105784#/rhbz#527719  improve selection of fallback font
             if (aLangAttrib.isEmpty())
