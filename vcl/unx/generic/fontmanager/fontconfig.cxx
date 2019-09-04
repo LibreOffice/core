@@ -20,14 +20,10 @@
 #include <memory>
 #include <unx/fontmanager.hxx>
 #include <unx/helper.hxx>
-#include <impfont.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/sysdata.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/wrkwin.hxx>
-#include <fontinstance.hxx>
-#include <sallayout.hxx>
+#include <fontselect.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/unicode.hxx>
 #include <rtl/strbuf.hxx>
@@ -41,19 +37,12 @@
 using namespace psp;
 
 #include <fontconfig/fontconfig.h>
-#include <ft2build.h>
-#include <fontconfig/fcfreetype.h>
 
 #include <cstdio>
-#include <cstdarg>
 
 #include <unotools/configmgr.hxx>
 
-#include <osl/module.h>
-#include <osl/thread.h>
 #include <osl/process.h>
-
-#include <rtl/ustrbuf.hxx>
 
 #include <utility>
 #include <algorithm>

@@ -22,22 +22,15 @@
 
 #include <unx/freetype_glyphcache.hxx>
 
-#include <vcl/svapp.hxx>
 #include <fontinstance.hxx>
-#include <impglyphitem.hxx>
-#include <impfont.hxx>
 #include <fontattributes.hxx>
 
-#include <config_features.h>
 #include <unotools/fontdefs.hxx>
 
 #include <tools/poly.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-#include <osl/file.hxx>
-#include <osl/thread.hxx>
 #include <sal/log.hxx>
 
 #include <langboost.hxx>
@@ -52,8 +45,6 @@
 #include FT_SIZES_H
 #include FT_SYNTHESIS_H
 #include FT_TRUETYPE_TABLES_H
-#include FT_TRUETYPE_TAGS_H
-#include FT_TRUETYPE_IDS_H
 
 #include <rtl/instance.hxx>
 
@@ -67,7 +58,6 @@
 #include <sys/mman.h>
 #include <unx/fontmanager.hxx>
 #include <impfontcharmap.hxx>
-#include <impfontcache.hxx>
 
 static FT_Library aLibFT = nullptr;
 

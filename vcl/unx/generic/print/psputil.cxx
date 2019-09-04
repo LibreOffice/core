@@ -18,7 +18,6 @@
  */
 
 #include <string.h>
-#include <rtl/instance.hxx>
 #include "psputil.hxx"
 
 namespace psp {

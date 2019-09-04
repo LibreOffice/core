@@ -20,17 +20,13 @@
 #include <vcl/sysdata.hxx>
 
 #include <X11/Xlib.h>
-#include <X11/Xutil.h>
 #include <X11/extensions/Xrender.h>
 
 #include <unx/saldisp.hxx>
 #include <unx/salinst.h>
 #include <unx/salgdi.h>
-#include <unx/salunx.h>
 #include <unx/salvd.h>
 #include <unx/x11/xlimits.hxx>
-
-#include <salinst.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <opengl/x11/salvd.hxx>

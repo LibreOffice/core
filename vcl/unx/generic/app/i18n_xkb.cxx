@@ -17,12 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
+#include <stdlib.h>
 
 #include <X11/Xlib.h>
 #include <X11/XKBlib.h>
 
-#include <unx/saldisp.hxx>
 #include <unx/i18n_xkb.hxx>
 
 SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )

@@ -23,7 +23,6 @@
 #include "X11_selection.hxx"
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <cppuhelper/implbase.hxx>
 
 namespace x11 {

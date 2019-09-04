@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_UNX_I18N_IM_HXX
 #define INCLUDED_VCL_INC_UNX_I18N_IM_HXX
 
+#include <X11/Xlib.h>
+
 #include <vclpluginapi.h>
 
 #define bUseInputMethodDefault True

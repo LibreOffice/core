@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_INC_UNX_I18N_IC_HXX
 #define INCLUDED_VCL_INC_UNX_I18N_IC_HXX
 
-#include <i18nlangtag/lang.h>
 #include "i18n_cb.hxx"
 
 enum class EndExtTextInputFlags;

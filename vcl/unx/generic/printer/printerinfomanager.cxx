@@ -17,30 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <unistd.h>
-#include <sys/wait.h>
-#include <signal.h>
-
 #include <unx/cpdmgr.hxx>
 #include <unx/cupsmgr.hxx>
 #include <unx/helper.hxx>
-#include <vcl/strhelper.hxx>
 
 #include <saldatabasic.hxx>
 
 #include <tools/urlobj.hxx>
-#include <tools/stream.hxx>
 #include <tools/config.hxx>
 
 #include <i18nutil/paper.hxx>
 #include <rtl/strbuf.hxx>
-#include <sal/macros.h>
 #include <sal/log.hxx>
 
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
-#include <osl/process.h>
 
 // filename of configuration files
 #define PRINT_FILENAME  "psprint.conf"

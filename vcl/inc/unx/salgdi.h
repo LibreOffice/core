@@ -24,19 +24,16 @@
 #include <X11/Xutil.h>
 #include <X11/extensions/Xrender.h>
 
-#include <tools/fract.hxx>
-
 #include <vcl/salgtype.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/metric.hxx>
 
+#include <unx/saldisp.hxx>
 #include <salgdi.hxx>
 #include <salgeom.hxx>
 #include <sallayout.hxx>
 #include <vclpluginapi.h>
 #include <ControlCacheKey.hxx>
 
-#include <deque>
 #include <memory>
 
 /* From <X11/Intrinsic.h> */

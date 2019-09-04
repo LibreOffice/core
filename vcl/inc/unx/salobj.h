@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_UNX_SALOBJ_H
 #define INCLUDED_VCL_INC_UNX_SALOBJ_H
 
+#include <X11/Xlib.h>
+
 #include <salobj.hxx>
 #include <vcl/sysdata.hxx>
 #include <vclpluginapi.h>

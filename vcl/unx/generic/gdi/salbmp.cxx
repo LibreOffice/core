@@ -18,7 +18,6 @@
  */
 
 #include <string.h>
-#include <errno.h>
 
 #ifdef FREEBSD
 #include <sys/types.h>
@@ -26,7 +25,6 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <X11/Xproto.h>
 
 #include <osl/endian.h>
 #include <sal/log.hxx>
@@ -36,9 +34,7 @@
 #include <vcl/bitmap.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
-#include <unx/salunx.h>
 #include <unx/saldisp.hxx>
-#include <unx/salgdi.h>
 #include <unx/salbmp.h>
 #include <unx/salinst.h>
 #include <unx/x11/xlimits.hxx>
@@ -48,7 +44,7 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 #if defined HAVE_VALGRIND_HEADERS
-#include <valgrind/memcheck.h>
+#include <valgrind/valgrind.h>
 #endif
 
 #include <memory>

@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <utility>
-
 #include <X11/Xlib.h>
-#include <X11/Xutil.h>
 #include <X11/extensions/Xrender.h>
 
 #include "cairo_xlib_cairo.hxx"
@@ -28,8 +25,6 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/window.hxx>
-#include <basegfx/vector/b2isize.hxx>
 #include <sal/log.hxx>
 
 #include <cairo-xlib.h>

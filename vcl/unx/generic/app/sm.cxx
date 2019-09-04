@@ -24,7 +24,7 @@
 
 #include <string.h>
 #include <unistd.h>
-#include <sys/poll.h>
+#include <poll.h>
 #include <fcntl.h>
 
 #include <rtl/strbuf.hxx>
@@ -32,20 +32,18 @@
 
 #include <rtl/process.h>
 #include <osl/security.h>
-#include <osl/conditn.h>
 
 #include <X11/Xlib.h>
-#include <X11/Xutil.h>
 #include <X11/Xatom.h>
 
 #include <unx/sm.hxx>
 #include <unx/saldisp.hxx>
-#include <unx/salframe.h>
 #include <unx/salinst.h>
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
+#include <salframe.hxx>
 #include <salsession.hxx>
 
 namespace {

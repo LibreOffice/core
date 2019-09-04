@@ -21,10 +21,7 @@
 #define INCLUDED_VCL_GENERIC_GDI_GDIIMPL_HXX
 
 #include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/extensions/Xrender.h>
 
-#include <unx/saltype.h>
 #include <unx/x11/x11gdiimpl.h>
 
 #include <salgdiimpl.hxx>

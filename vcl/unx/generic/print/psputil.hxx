@@ -26,10 +26,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
-#include <rtl/tencinfo.h>
-#include <rtl/textcvt.h>
-
-#include <map>
 
 namespace psp {
 

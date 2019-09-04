@@ -17,18 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <math.h>
-
 #include "psputil.hxx"
 #include "glyphset.hxx"
 
 #include <unx/printergfx.hxx>
 #include <unx/fontmanager.hxx>
-#include <unx/helper.hxx>
-
-#include <osl/thread.h>
-
-#include <sal/alloca.h>
 
 using namespace psp ;
 

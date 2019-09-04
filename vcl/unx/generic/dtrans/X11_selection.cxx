@@ -25,7 +25,6 @@
 #include <unx/saldisp.hxx>
 
 #include <unistd.h>
-#include <stdio.h>
 #include <string.h>
 #include <sys/time.h>
 
@@ -35,12 +34,12 @@
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 
-#if defined(LINUX) || defined(NETBSD) || defined (FREEBSD) || defined(OPENBSD)
+#if defined(NETBSD) || defined (FREEBSD) || defined(OPENBSD)
 #include <sys/poll.h>
 #else
 #include <poll.h>
 #endif
-#include <sal/alloca.h>
+
 #include <sal/macros.h>
 
 #include "X11_selection.hxx"
@@ -65,7 +64,6 @@
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <rtl/tencinfo.h>
-#include <osl/process.h>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/solarmutex.hxx>

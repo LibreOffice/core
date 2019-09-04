@@ -18,11 +18,11 @@
  */
 
 #include "x11cairotextrender.hxx"
-#include <unx/saldisp.hxx>
-#include <unx/salvd.h>
 #include <unx/glyphcache.hxx>
 #include <X11/Xregion.h>
 #include <cairo.h>
+#include <salframe.hxx>
+#include <salvd.hxx>
 
 X11CairoTextRender::X11CairoTextRender(X11SalGraphics& rParent)
     : mrParent(rParent)

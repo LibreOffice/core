@@ -19,7 +19,6 @@
 
 #include <salframe.hxx>
 #include <unx/gendisp.hxx>
-#include <unx/geninst.h>
 
 SalGenericDisplay::SalGenericDisplay()
 {

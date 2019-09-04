@@ -20,17 +20,10 @@
 #include <X11/Xatom.h>
 #include "X11_clipboard.hxx"
 #include "X11_transferable.hxx"
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/datatransfer/clipboard/RenderingCapabilities.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <uno/dispatcher.h>
-#include <uno/mapping.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/tencinfo.h>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>

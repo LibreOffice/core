@@ -17,21 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <signal.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 #include <tools/debug.hxx>
 
-#include <sal/alloca.h>
-
+#include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/keycodes.hxx>
-#include <vcl/layout.hxx>
-#include <printerinfomanager.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
@@ -43,22 +37,17 @@
 #include <X11/keysym.h>
 #include <X11/extensions/shape.h>
 
-#include <unx/salunx.h>
 #include <saldatabasic.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
 #include <unx/salframe.h>
-#include <unx/sm.hxx>
 #include <unx/wmadaptor.hxx>
-#include <unx/genprn.h>
 #include <unx/salbmp.h>
 #include <unx/i18n_ic.hxx>
 #include <unx/i18n_keysym.hxx>
-#include <unx/x11/xlimits.hxx>
 #include <opengl/zone.hxx>
 
 #include <unx/gensys.h>
-#include <sallayout.hxx>
 #include <window.h>
 
 #include <sal/macros.h>
@@ -66,7 +55,6 @@
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <svdata.hxx>
-#include <strings.hrc>
 #include <bitmaps.hlst>
 
 #include <boost/optional.hpp>

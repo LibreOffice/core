@@ -19,7 +19,6 @@
 
 #include <unx/cairotextrender.hxx>
 
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
@@ -27,14 +26,12 @@
 #include <vcl/fontcharmap.hxx>
 #include <sal/log.hxx>
 
-#include <unx/printergfx.hxx>
 #include <unx/genpspgraphics.h>
 #include <unx/geninst.h>
 #include <unx/glyphcache.hxx>
 #include <unx/fc_fontoptions.hxx>
 #include <unx/freetype_glyphcache.hxx>
 #include <PhysicalFontFace.hxx>
-#include <impfont.hxx>
 #include <impfontmetricdata.hxx>
 
 #include <cairo.h>

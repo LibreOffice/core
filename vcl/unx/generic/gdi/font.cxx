@@ -20,9 +20,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/fontcharmap.hxx>
 
-#include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
-#include <unx/salvd.h>
 #include <textrender.hxx>
 #include <sallayout.hxx>
 

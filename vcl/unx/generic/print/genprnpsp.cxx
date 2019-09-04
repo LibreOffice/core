@@ -55,7 +55,6 @@
 #include <jobset.h>
 #include <print.h>
 #include "prtsetup.hxx"
-#include <salframe.hxx>
 #include <salptype.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cstdio>
 #include <o3tl/any.hxx>
 #include <unotools/configitem.hxx>
 

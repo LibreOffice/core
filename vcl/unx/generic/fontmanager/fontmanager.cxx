@@ -19,31 +19,19 @@
 
 #include <memory>
 #include <unistd.h>
-#include <sys/stat.h>
-#include <dirent.h>
-#include <stdlib.h>
 #include <osl/thread.h>
-#include <config_gio.h>
 
 #include <unx/fontmanager.hxx>
 #include <fontsubset.hxx>
 #include <impfontcharmap.hxx>
-#include <svdata.hxx>
-#include <unx/geninst.h>
 #include <unx/gendata.hxx>
 #include <unx/helper.hxx>
-#include <vcl/strhelper.hxx>
-#include <vcl/ppdparser.hxx>
-#include <vcl/embeddedfontshelper.hxx>
 #include <vcl/fontcharmap.hxx>
 
 #include <tools/urlobj.hxx>
-#include <tools/stream.hxx>
 
 #include <osl/file.hxx>
-#include <osl/process.h>
 
-#include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 
@@ -51,7 +39,6 @@
 #include <sal/log.hxx>
 
 #include <i18nlangtag/applelangid.hxx>
-#include <i18nlangtag/mslangid.hxx>
 
 #include <sft.hxx>
 
@@ -68,7 +55,6 @@
 #endif
 
 #include <com/sun/star/beans/XMaterialHolder.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 
 using namespace vcl;
 using namespace utl;

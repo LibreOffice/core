@@ -19,16 +19,10 @@
 
 #include <sal/config.h>
 
-#include <cassert>
-#include <string.h>
-#include <stdlib.h>
-
 #if defined(LINUX)
 #  include <stdio.h>
 #endif
 
-#include <osl/module.hxx>
-#include <comphelper/solarmutex.hxx>
 #include <config_features.h>
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLContext.hxx>

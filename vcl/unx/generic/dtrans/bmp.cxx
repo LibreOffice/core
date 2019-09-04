@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/macros.h>
 #include <tools/stream.hxx>
 
 #include <vcl/dibtools.hxx>
@@ -29,11 +28,6 @@
 #include <unx/x11/xlimits.hxx>
 
 #include "bmp.hxx"
-#include "X11_selection.hxx"
-
-#include <unistd.h>
-#include <cstdio>
-#include <cstring>
 
 using namespace x11;
 

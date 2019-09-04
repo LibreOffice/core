@@ -19,11 +19,8 @@
 
 #include <config_folders.h>
 
-#include <cstring>
 #include <sys/stat.h>
-#include <unistd.h>
 #include <limits.h>
-#include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <rtl/bootstrap.hxx>
@@ -31,8 +28,6 @@
 #include <sal/log.hxx>
 #include <tools/urlobj.hxx>
 #include <unx/helper.hxx>
-#include <vcl/ppdparser.hxx>
-#include <memory>
 
 using ::rtl::Bootstrap;
 
