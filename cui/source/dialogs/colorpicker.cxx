@@ -209,8 +209,8 @@ public:
     void Modify();
 
     void SetValues(Color aColor, ColorMode eMode, double x, double y);
-    double GetX() { return mdX;}
-    double GetY() { return mdY;}
+    double GetX() const { return mdX;}
+    double GetY() const { return mdY;}
 
     void SetModifyHdl(const Link<ColorFieldControl&,void>& rLink) { maModifyHdl = rLink; }
 

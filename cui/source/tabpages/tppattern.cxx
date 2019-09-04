@@ -57,7 +57,7 @@ public:
     }
 
     // BitmapCtl: Returns the Bitmap
-    BitmapEx GetBitmapEx()
+    BitmapEx GetBitmapEx() const
     {
         if (!pBmpArray)
             return BitmapEx();

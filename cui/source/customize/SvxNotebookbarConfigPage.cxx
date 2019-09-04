@@ -48,8 +48,8 @@ namespace container = com::sun::star::container;
 namespace beans = com::sun::star::beans;
 namespace graphic = com::sun::star::graphic;
 
-static bool isCategoryAvailable(OUString& sClassId, OUString& sUIItemId, OUString& sActiveCategory,
-                                bool& isCategory)
+static bool isCategoryAvailable(const OUString& sClassId, const OUString& sUIItemId,
+                                const OUString& sActiveCategory, bool& isCategory)
 {
     if (sUIItemId == sActiveCategory)
         return true;
@@ -218,8 +218,9 @@ short SvxNotebookbarConfigPage::QueryReset()
     return nValue;
 }
 
-void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(OUString& sClassId, OUString& sUIItemId,
-                                                    OUString& sUIItemCommand, int nPos,
+void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(const OUString& sClassId,
+                                                    const OUString& sUIItemId,
+                                                    const OUString& sUIItemCommand, int nPos,
                                                     int nStartCol)
 {
     OUString sAppName, sFileName;
@@ -519,8 +520,8 @@ SvxNotebookbarEntriesListBox::SvxNotebookbarEntriesListBox(std::unique_ptr<weld:
 
 SvxNotebookbarEntriesListBox::~SvxNotebookbarEntriesListBox() {}
 
-static void EditRegistryFile(OUString& sUIItemId, OUString& sSetEntry,
-                             OUString& sNotebookbarInterface)
+static void EditRegistryFile(const OUString& sUIItemId, const OUString& sSetEntry,
+                             const OUString& sNotebookbarInterface)
 {
     int nFlag = 0;
     Sequence<OUString> aOldEntries

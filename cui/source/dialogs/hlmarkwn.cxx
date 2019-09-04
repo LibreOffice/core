@@ -277,7 +277,7 @@ bool SvxHlinkDlgMarkWnd::RefreshFromDoc(const OUString& aURL)
 }
 
 // Fill Tree-Control
-int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >& xLinks, weld::TreeIter* pParentEntry )
+int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >& xLinks, const weld::TreeIter* pParentEntry )
 {
     int nEntries=0;
     const uno::Sequence< OUString > aNames( xLinks->getElementNames() );

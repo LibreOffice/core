@@ -73,10 +73,10 @@ public:
                               sal_uInt16 nLonger);
     virtual ~SvxSearchSimilarityDialog() override;
 
-    sal_uInt16  GetOther()      { return static_cast<sal_uInt16>(m_xOtherFld->get_value()); }
-    sal_uInt16  GetShorter()    { return static_cast<sal_uInt16>(m_xShorterFld->get_value()); }
-    sal_uInt16  GetLonger()     { return static_cast<sal_uInt16>(m_xLongerFld->get_value()); }
-    bool    IsRelaxed()     { return m_xRelaxBox->get_active(); }
+    sal_uInt16  GetOther() const      { return static_cast<sal_uInt16>(m_xOtherFld->get_value()); }
+    sal_uInt16  GetShorter() const    { return static_cast<sal_uInt16>(m_xShorterFld->get_value()); }
+    sal_uInt16  GetLonger() const     { return static_cast<sal_uInt16>(m_xLongerFld->get_value()); }
+    bool        IsRelaxed() const     { return m_xRelaxBox->get_active(); }
 };
 
 #endif

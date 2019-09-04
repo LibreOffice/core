@@ -49,7 +49,7 @@ IMPL_LINK_NOARG(DiagramDialog, OnAddClick, weld::Button&, void)
     }
 }
 
-void DiagramDialog::populateTree(weld::TreeIter* pParent, const OUString& rParentId)
+void DiagramDialog::populateTree(const weld::TreeIter* pParent, const OUString& rParentId)
 {
     auto aItems = mpDiagramData->getChildren(rParentId);
     for (auto& aItem : aItems)

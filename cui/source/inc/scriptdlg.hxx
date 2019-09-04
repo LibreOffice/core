@@ -70,8 +70,8 @@ public:
                     SFEntry( const css::uno::Reference< css::script::browse::XBrowseNode >& entryNodes ,
                              const css::uno::Reference< css::frame::XModel >& entryModel) { nodes = entryNodes; loaded=false; model = entryModel; }
                     SFEntry( const SFEntry& r ) { nodes = r.nodes; loaded = r.loaded; }
-    const css::uno::Reference< css::script::browse::XBrowseNode >& GetNode() { return nodes ;}
-    const css::uno::Reference< css::frame::XModel >& GetModel() { return model ;};
+    const css::uno::Reference< css::script::browse::XBrowseNode >& GetNode() const { return nodes ;}
+    const css::uno::Reference< css::frame::XModel >& GetModel() const { return model ;};
     bool            isLoaded() const                    { return loaded; }
     void            setLoaded()                         { loaded=true; }
 };
@@ -108,7 +108,7 @@ protected:
     void                CheckButtons(  css::uno::Reference< css::script::browse::XBrowseNode > const & node );
 
     void        createEntry(weld::TreeIter& rEntry);
-    void        renameEntry(weld::TreeIter& rEntry);
+    void        renameEntry(const weld::TreeIter& rEntry);
     void        deleteEntry(weld::TreeIter& rEntry);
     css::uno::Reference<css::script::browse::XBrowseNode> getBrowseNode(const weld::TreeIter& rEntry);
     css::uno::Reference<css::frame::XModel> getModel(const weld::TreeIter& rEntry);
@@ -117,7 +117,7 @@ protected:
     void        RestorePreviousSelection();
 
     void        Init(const OUString& language);
-    void        delUserData(weld::TreeIter& rIter);
+    void        delUserData(const weld::TreeIter& rIter);
     void        deleteTree(weld::TreeIter& rIter);
     void        deleteAllTree();
     void        insertEntry(OUString const & rText, OUString const & rBitmap,
