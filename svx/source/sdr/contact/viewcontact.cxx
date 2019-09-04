@@ -235,13 +235,13 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewContact::getViewInde
     if(!xNew.empty())
     {
         // allow evtl. embedding in object-specific infos, e.g. Name, Title, Description
-        xNew = embedToObjectSpecificInformation(xNew);
+        xNew = embedToObjectSpecificInformation(std::move(xNew));
     }
 
     if(mxViewIndependentPrimitive2DSequence != xNew)
     {
         // has changed, copy content
-        const_cast< ViewContact* >(this)->mxViewIndependentPrimitive2DSequence = xNew;
+        const_cast< ViewContact* >(this)->mxViewIndependentPrimitive2DSequence = std::move(xNew);
     }
 
     // return current Primitive2DContainer
@@ -255,10 +255,10 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContact::createGluePointPrim
     return drawinglayer::primitive2d::Primitive2DContainer();
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContact::embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DContainer& rSource) const
+drawinglayer::primitive2d::Primitive2DContainer ViewContact::embedToObjectSpecificInformation(drawinglayer::primitive2d::Primitive2DContainer aSource) const
 {
     // nothing to do for default
-    return rSource;
+    return aSource;
 }
 
 basegfx::B2DRange ViewContact::getRange( const drawinglayer::geometry::ViewInformation2D& /*rViewInfo2D*/ ) const

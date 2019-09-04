@@ -135,7 +135,7 @@ namespace sdr
                 // only visible when transparency involved, but runtime-expensive).
                 // Thus: Just do not iterate, will check behaviour deeply.
                 b3DShape = (nullptr != dynamic_cast< const E3dObject* >(pSdrObjRepresentation));
-                const drawinglayer::primitive2d::Primitive2DContainer xNew(
+                const drawinglayer::primitive2d::Primitive2DContainer& xNew(
                     pSdrObjRepresentation->GetViewContact().getViewIndependentPrimitive2DContainer());
                 xGroup.insert(xGroup.end(), xNew.begin(), xNew.end());
             }

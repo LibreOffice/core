@@ -1543,7 +1543,7 @@ namespace sdr { namespace contact {
             // use the default mechanism. This will create a ControlPrimitive2D without
             // handing over a XControl. If not even a XControlModel exists, it will
             // create the SdrObject fallback visualisation
-            drawinglayer::primitive2d::Primitive2DContainer aTmp = rViewContactOfUnoControl.getViewIndependentPrimitive2DContainer();
+            const drawinglayer::primitive2d::Primitive2DContainer& aTmp = rViewContactOfUnoControl.getViewIndependentPrimitive2DContainer();
             rContainer.insert(rContainer.end(), aTmp.begin(), aTmp.end());
             return;
         }

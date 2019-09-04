@@ -174,16 +174,16 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObj::createGlueP
     return xRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObj::embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DContainer& rSource) const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObj::embedToObjectSpecificInformation(drawinglayer::primitive2d::Primitive2DContainer aSource) const
 {
-    if(!rSource.empty() &&
+    if(!aSource.empty() &&
         (!GetSdrObject().GetName().isEmpty() ||
          !GetSdrObject().GetTitle().isEmpty() ||
          !GetSdrObject().GetDescription().isEmpty()))
     {
         const drawinglayer::primitive2d::Primitive2DReference xRef(
             new drawinglayer::primitive2d::ObjectInfoPrimitive2D(
-                rSource,
+                aSource,
                 GetSdrObject().GetName(),
                 GetSdrObject().GetTitle(),
                 GetSdrObject().GetDescription()));
@@ -191,7 +191,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObj::embedToObje
         return drawinglayer::primitive2d::Primitive2DContainer { xRef };
     }
 
-    return rSource;
+    return aSource;
 }
 
 }}

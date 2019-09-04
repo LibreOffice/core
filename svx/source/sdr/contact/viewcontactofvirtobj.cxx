@@ -72,7 +72,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfVirtObj::createView
     }
 
     // use method from referenced object to get the Primitive2DContainer
-    const drawinglayer::primitive2d::Primitive2DContainer xSequenceVirtual(
+    const drawinglayer::primitive2d::Primitive2DContainer& xSequenceVirtual(
         GetVirtObj().GetReferencedObj().GetViewContact().getViewIndependentPrimitive2DContainer());
 
     if(!xSequenceVirtual.empty())
