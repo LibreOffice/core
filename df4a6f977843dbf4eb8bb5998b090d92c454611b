@@ -16,6 +16,24 @@
       "revId": "df4a6f977843dbf4eb8bb5998b090d92c454611b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_233b869c",
+        "filename": "sal/textenc/convertbig5hkscs.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-09-04T13:54:46Z",
+      "side": 0,
+      "message": "Oops, I wanted to respond that the ImplIsLowSurrogate(nChar) check could never have been true anyway, if you look at the preceding code (so I had replaced it with the assert).  But if you /do/ actually look at the preceding code close enough (which I apparently hadn\u0027t done), you notice that lone low surrogates do fall through it to here.  So this needs some fixing (in all the sal/textenc/convert*.cxx files covered by this change).  Thanks for spotting!",
+      "parentUuid": "bf659307_83c6129a",
+      "revId": "df4a6f977843dbf4eb8bb5998b090d92c454611b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
