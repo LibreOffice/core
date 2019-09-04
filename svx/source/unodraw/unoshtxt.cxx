@@ -255,11 +255,11 @@ void SvxTextEditSourceImpl::release()
 
 void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    // #i105988 keep reference to this object
-    rtl::Reference< SvxTextEditSourceImpl > xThis( this );
-
     if (SfxHintId::Dying == rHint.GetId())
     {
+        // #i105988 keep reference to this object
+        rtl::Reference< SvxTextEditSourceImpl > xThis( this );
+
         if (&rBC == mpView)
         {
             mpView = nullptr;

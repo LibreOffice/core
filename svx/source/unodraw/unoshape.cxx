@@ -1006,16 +1006,14 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxShape::getImplementationId()
 void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 {
     DBG_TESTSOLARMUTEX();
-    if( !HasSdrObject() )
-        return;
 
-    // #i55919# SdrHintKind::ObjectChange is only interesting if it's for this object
     if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
         return;
-    SdrObject* pSdrObject(GetSdrObject());
     const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
-    if ((pSdrHint->GetKind() != SdrHintKind::ModelCleared) &&
-         (pSdrHint->GetKind() != SdrHintKind::ObjectChange || pSdrHint->GetObject() != pSdrObject ))
+    if (pSdrHint->GetKind() != SdrHintKind::ModelCleared)
+        return;
+    SdrObject* pSdrObject(GetSdrObject());
+    if (!pSdrObject)
         return;
 
     uno::Reference< uno::XInterface > xSelf( pSdrObject->getWeakUnoShape() );
@@ -1026,49 +1024,21 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
         return;
     }
 
-    bool bClearMe = false;
-
-    switch( pSdrHint->GetKind() )
+    if(!HasSdrObjectOwnership())
     {
-        case SdrHintKind::ObjectChange:
-        {
-            updateShapeKind();
-            break;
-        }
-        case SdrHintKind::ModelCleared:
-        {
-            bClearMe = true;
-            break;
-        }
-        default:
-            break;
-    };
+        EndListening(pSdrObject->getSdrModelFromSdrObject());
+        pSdrObject->setUnoShape(nullptr);
 
-    if( bClearMe )
-    {
-        if(!HasSdrObjectOwnership())
-        {
-            if(nullptr != pSdrObject)
-            {
-                EndListening(pSdrObject->getSdrModelFromSdrObject());
-                pSdrObject->setUnoShape(nullptr);
-            }
+        mpSdrObjectWeakReference.reset(nullptr);
 
-            mpSdrObjectWeakReference.reset(nullptr);
-
-            // SdrModel *is* going down, try to Free SdrObject even
-            // when !HasSdrObjectOwnership
-            if(nullptr != pSdrObject && !pSdrObject->IsInserted())
-            {
-                SdrObject::Free(pSdrObject);
-            }
-        }
-
-        if(!mpImpl->mbDisposing)
-        {
-            dispose();
-        }
+        // SdrModel *is* going down, try to Free SdrObject even
+        // when !HasSdrObjectOwnership
+        if(!pSdrObject->IsInserted())
+            SdrObject::Free(pSdrObject);
     }
+
+    if(!mpImpl->mbDisposing)
+        dispose();
 }
 
 // XShape
@@ -1158,6 +1128,9 @@ awt::Point SAL_CALL SvxShape::getPosition()
 void SAL_CALL SvxShape::setPosition( const awt::Point& Position )
 {
     ::SolarMutexGuard aGuard;
+
+    if (maPosition == Position)
+        return;
 
     if(HasSdrObject())
     {

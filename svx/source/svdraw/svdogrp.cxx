@@ -628,7 +628,7 @@ void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fractio
 
 void SdrObjGroup::Rotate(const Point& rRef, long nAngle, double sn, double cs)
 {
-    if (nAngle==0)
+    if (nAngle == 0 || nAngle == -36000)
         return;
 
     SetGlueReallyAbsolute(true);
