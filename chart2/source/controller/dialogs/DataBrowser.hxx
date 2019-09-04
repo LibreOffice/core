@@ -133,8 +133,8 @@ public:
 
     sal_uInt32 GetNumberFormatKey( sal_uInt16 nCol ) const;
 
-    bool IsEnableItem() { return m_bDataValid;}
-    bool IsDataValid();
+    bool IsEnableItem() const { return m_bDataValid;}
+    bool IsDataValid() const;
     void ShowWarningBox();
     bool ShowQueryBox();
 

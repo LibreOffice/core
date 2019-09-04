@@ -1284,7 +1284,7 @@ bool ChartModel::isDataFromSpreadsheet()
     return !isDataFromPivotTable() && !hasInternalDataProvider();
 }
 
-bool ChartModel::isDataFromPivotTable()
+bool ChartModel::isDataFromPivotTable() const
 {
     uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(m_xDataProvider, uno::UNO_QUERY);
     return xPivotTableDataProvider.is();

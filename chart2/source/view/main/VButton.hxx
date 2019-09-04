@@ -72,7 +72,7 @@ public:
     {
         m_aPosition = rPosition;
     }
-    css::awt::Size const & getSize()
+    css::awt::Size const & getSize() const
     {
         return m_aSize;
     }

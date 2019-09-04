@@ -61,7 +61,7 @@ void TitleResources::connect_changed( const Link<weld::Entry&,void>& rLink )
     m_xEd_SecondaryYAxis->connect_changed( rLink );
 }
 
-bool TitleResources::get_value_changed_from_saved()
+bool TitleResources::get_value_changed_from_saved() const
 {
     return m_xEd_Main->get_value_changed_from_saved()
         || m_xEd_Sub->get_value_changed_from_saved()

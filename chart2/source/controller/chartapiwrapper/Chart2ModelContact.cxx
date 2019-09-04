@@ -121,7 +121,7 @@ ExplicitValueProvider* Chart2ModelContact::getExplicitValueProvider() const
     return pProvider;
 }
 
-uno::Reference< drawing::XDrawPage > Chart2ModelContact::getDrawPage()
+uno::Reference< drawing::XDrawPage > Chart2ModelContact::getDrawPage() const
 {
     uno::Reference< drawing::XDrawPage > xResult;
     ExplicitValueProvider* pProvider( getExplicitValueProvider() );
