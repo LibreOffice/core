@@ -43,6 +43,7 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
     const ImplDBCSToUniLeadTab* pLeadTab = pConvertData->mpToUniLeadTab;
     sal_Unicode*                pEndDestBuf;
     const char*             pEndSrcBuf;
+    char const * startOfCurrentChar = pSrcBuf;
 
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestChars;
@@ -65,12 +66,18 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
                 *pInfo |= RTL_TEXTTOUNICODE_INFO_UNDEFINED;
                 if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MASK) == RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR )
                 {
+                    if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0) {
+                        ++pSrcBuf;
+                    } else {
+                        pSrcBuf = startOfCurrentChar;
+                    }
                     *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
                     break;
                 }
                 if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MASK) == RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE )
                 {
                     pSrcBuf++;
+                    startOfCurrentChar = pSrcBuf;
                     continue;
                 }
                 cConv = ImplGetUndefinedUnicodeChar(cLead, nFlags);
@@ -158,12 +165,18 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
                             *pInfo |= RTL_TEXTTOUNICODE_INFO_INVALID;
                             if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) == RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR )
                             {
+                                if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0) {
+                                    ++pSrcBuf;
+                                } else {
+                                    pSrcBuf = startOfCurrentChar;
+                                }
                                 *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
                                 break;
                             }
                             if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) == RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE )
                             {
                                 pSrcBuf++;
+                                startOfCurrentChar = pSrcBuf;
                                 continue;
                             }
                             cConv = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
@@ -176,12 +189,18 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
                 *pInfo |= RTL_TEXTTOUNICODE_INFO_MBUNDEFINED;
                 if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_MASK) == RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR )
                 {
+                    if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0) {
+                        ++pSrcBuf;
+                    } else {
+                        pSrcBuf = startOfCurrentChar;
+                    }
                     *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
                     break;
                 }
                 if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_MASK) == RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_IGNORE )
                 {
                     pSrcBuf++;
+                    startOfCurrentChar = pSrcBuf;
                     continue;
                 }
                 cConv = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
@@ -197,6 +216,7 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
         *pDestBuf = cConv;
         pDestBuf++;
         pSrcBuf++;
+        startOfCurrentChar = pSrcBuf;
     }
 
     *pSrcCvtBytes = nSrcBytes - (pEndSrcBuf-pSrcBuf);
@@ -372,6 +392,7 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
     const ImplEUCJPConvertData* pConvertData = static_cast<const ImplEUCJPConvertData*>(pData);
     sal_Unicode*                pEndDestBuf;
     const char*             pEndSrcBuf;
+    char const * startOfCurrentChar = pSrcBuf;
 
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestChars;
@@ -471,18 +492,29 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
                     *pInfo |= RTL_TEXTTOUNICODE_INFO_INVALID;
                     if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) == RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR )
                     {
+                        if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0) {
+                            ++pSrcBuf;
+                        } else {
+                            pSrcBuf = startOfCurrentChar;
+                        }
                         *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
                         break;
                     }
                     if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) == RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE )
                     {
                         pSrcBuf++;
+                        startOfCurrentChar = pSrcBuf;
                         continue;
                     }
                     cConv = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
                 }
                 else
                 {
+                    if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0) {
+                        ++pSrcBuf;
+                    } else {
+                        pSrcBuf = startOfCurrentChar;
+                    }
                     *pInfo |= RTL_TEXTTOUNICODE_INFO_MBUNDEFINED;
                     if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_MASK) == RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR )
                     {
@@ -492,6 +524,7 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
                     if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_MASK) == RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_IGNORE )
                     {
                         pSrcBuf++;
+                        startOfCurrentChar = pSrcBuf;
                         continue;
                     }
                     cConv = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
@@ -508,6 +541,7 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
         *pDestBuf = cConv;
         pDestBuf++;
         pSrcBuf++;
+        startOfCurrentChar = pSrcBuf;
     }
 
     *pSrcCvtBytes = nSrcBytes - (pEndSrcBuf-pSrcBuf);

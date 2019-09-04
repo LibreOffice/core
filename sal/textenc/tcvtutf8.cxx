@@ -76,6 +76,7 @@ sal_Size ImplConvertUtf8ToUnicode(
     unsigned char const * pSrcBufEnd = pSrcBufPtr + nSrcBytes;
     sal_Unicode * pDestBufPtr = pDestBuf;
     sal_Unicode * pDestBufEnd = pDestBufPtr + nDestChars;
+    unsigned char const * startOfCurrentChar = pSrcBufPtr;
 
     if (pContext != nullptr)
     {
@@ -200,6 +201,7 @@ sal_Size ImplConvertUtf8ToUnicode(
         }
         nShift = -1;
         bCheckBom = false;
+        startOfCurrentChar = pSrcBufPtr;
         continue;
 
     bad_input:
@@ -210,8 +212,12 @@ sal_Size ImplConvertUtf8ToUnicode(
         case sal::detail::textenc::BAD_INPUT_STOP:
             nShift = -1;
             bCheckBom = false;
-            if (!bConsume)
-                --pSrcBufPtr;
+            if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0) {
+                if (!bConsume)
+                    --pSrcBufPtr;
+            } else {
+                pSrcBufPtr = startOfCurrentChar;
+            }
             break;
 
         case sal::detail::textenc::BAD_INPUT_CONTINUE:
@@ -219,6 +225,7 @@ sal_Size ImplConvertUtf8ToUnicode(
             bCheckBom = false;
             if (!bConsume)
                 --pSrcBufPtr;
+            startOfCurrentChar = pSrcBufPtr;
             continue;
 
         case sal::detail::textenc::BAD_INPUT_NO_OUTPUT:
@@ -245,6 +252,10 @@ sal_Size ImplConvertUtf8ToUnicode(
                         &nInfo))
             {
             case sal::detail::textenc::BAD_INPUT_STOP:
+                if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) != 0) {
+                    pSrcBufPtr = startOfCurrentChar;
+                }
+                [[fallthrough]];
             case sal::detail::textenc::BAD_INPUT_CONTINUE:
                 nShift = -1;
                 bCheckBom = false;

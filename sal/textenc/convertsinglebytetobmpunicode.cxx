@@ -58,6 +58,9 @@ sal_Size rtl_textenc_convertSingleByteToBmpUnicode(
                     &infoFlags))
         {
         case sal::detail::textenc::BAD_INPUT_STOP:
+            if ((flags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0) {
+                ++converted;
+            }
             break;
 
         case sal::detail::textenc::BAD_INPUT_CONTINUE:

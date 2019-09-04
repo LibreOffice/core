@@ -254,6 +254,13 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
                         *pInfo |= RTL_TEXTTOUNICODE_INFO_INVALID;
                         if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) == RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR )
                         {
+                            if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0) {
+                                if (!bEnd) {
+                                    ++pSrcBuf;
+                                }
+                            } else {
+                                //TODO: move pSrcBuf back to a reasonable starting place
+                            }
                             *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
                             break;
                         }
@@ -303,6 +310,13 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
                         *pInfo |= RTL_TEXTTOUNICODE_INFO_INVALID;
                         if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) == RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR )
                         {
+                            if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0) {
+                                if (!bEnd) {
+                                    ++pSrcBuf;
+                                }
+                            } else {
+                                //TODO: move pSrcBuf back to a reasonable starting place
+                            }
                             *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
                             break;
                         }
@@ -344,6 +358,9 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
                         *pInfo |= RTL_TEXTTOUNICODE_INFO_INVALID;
                         if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) == RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR )
                         {
+                            if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0) {
+                                ++pSrcBuf;
+                            }
                             *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
                             break;
                         }
