@@ -35,4 +35,10 @@ $(eval $(call gb_Library_add_exception_objects,salhelper,\
 
 $(eval $(call gb_Library_set_soversion_script,salhelper,$(SRCDIR)/salhelper/source/gcc3.map))
 
+# This is a hack to declare run-time dependency of *sal* on san_textenc. Since sal_textenc
+# has a link-time dependency on sal, the run-time dependency can't be specified in sal (or I don't
+# know how); so declare dependency of this one on sal_textenc instead as a workaround, since most
+# executables using sal also use salhelper, and that guarantees that sal_textenc will be built.
+$(call gb_Library_get_target,salhelper) :| $(call gb_Library_get_target,sal_textenc)
+
 # vim: set noet sw=4 ts=4:
