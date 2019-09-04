@@ -4026,6 +4026,29 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
             sal_attr |= ExtTextInputAttr::Underline;
         g_slist_free (attr_list);
 
+        // rhbz#1648281 make underline work with the UCS-4 positions we're given
+        if (!pThis->m_aInputEvent.maText.isEmpty())
+        {
+            sal_Int32 i(0), nLen = pThis->m_aInputEvent.maText.getLength();
+
+            sal_Int32 nUTF16Start(0);
+            while (i < start && nUTF16Start < nLen)
+            {
+                pThis->m_aInputEvent.maText.iterateCodePoints(&nUTF16Start);
+                ++i;
+            }
+
+            sal_Int32 nUTF16End(nUTF16Start);
+            while (i < end && nUTF16End < nLen)
+            {
+                pThis->m_aInputEvent.maText.iterateCodePoints(&nUTF16End);
+                ++i;
+            }
+
+            start = nUTF16Start;
+            end = nUTF16End;
+        }
+
         // Set the sal attributes on our text
         for (int i = start; i < end; ++i)
         {
