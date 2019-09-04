@@ -63,4 +63,11 @@ $(eval $(call gb_Executable_add_exception_objects,idlc,\
     idlc/source/astservice \
 ))
 
+# Without this, e.g. 'make clean; make CustomTarget_idlc/parser_test' may fail on Windows localized
+# to something other than listed in Impl_getTextEncodingData, because osl_getThreadTextEncoding()
+# returns Windows ACP, calling FullTextEncodingData ctor which loads the not-yet-built library
+$(call gb_Executable_add_runtime_dependencies,idlc, \
+    $(call gb_Library_get_target,sal_textenc) \
+)
+
 # vim:set noet sw=4 ts=4:
