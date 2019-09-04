@@ -638,7 +638,7 @@ void PdfExportTest::testSofthyphenPos()
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
-    if (aFile.bad())
+    if (aFile.bad() || !aMemory.GetSize())
     {
         // Printing to PDF failed in a non-interesting way, e.g. CUPS is not
         // running, there is no printer defined, etc.
