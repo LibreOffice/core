@@ -86,6 +86,7 @@ sal_Size ImplConvertGb18030ToUnicode(void const * pData,
     sal_Size nConverted = 0;
     sal_Unicode * pDestBufPtr = pDestBuf;
     sal_Unicode * pDestBufEnd = pDestBuf + nDestChars;
+    sal_Size startOfCurrentChar = 0;
 
     if (pContext)
     {
@@ -101,9 +102,10 @@ sal_Size ImplConvertGb18030ToUnicode(void const * pData,
         {
         case IMPL_GB_18030_TO_UNICODE_STATE_0:
             if (nChar < 0x80)
-                if (pDestBufPtr != pDestBufEnd)
+                if (pDestBufPtr != pDestBufEnd) {
                     *pDestBufPtr++ = static_cast<sal_Unicode>(nChar);
-                else
+                    startOfCurrentChar = nConverted + 1;
+                } else
                     goto no_output;
             else if (nChar == 0x80)
                 goto bad_input;
@@ -130,9 +132,10 @@ sal_Size ImplConvertGb18030ToUnicode(void const * pData,
             {
                 nCode = nCode * 190 + (nChar <= 0x7E ? nChar - 0x40 :
                                                        nChar - 0x80 + 63);
-                if (pDestBufPtr != pDestBufEnd)
+                if (pDestBufPtr != pDestBufEnd) {
                     *pDestBufPtr++ = pGb18030Data[nCode];
-                else
+                    startOfCurrentChar = nConverted + 1;
+                } else
                     goto no_output;
                 eState = IMPL_GB_18030_TO_UNICODE_STATE_0;
             }
@@ -170,6 +173,7 @@ sal_Size ImplConvertGb18030ToUnicode(void const * pData,
                             = static_cast<sal_Unicode>(ImplGetHighSurrogate(nCode));
                         *pDestBufPtr++
                             = static_cast<sal_Unicode>(ImplGetLowSurrogate(nCode));
+                        startOfCurrentChar = nConverted + 1;
                     }
                     else
                         goto no_output;
@@ -184,24 +188,26 @@ sal_Size ImplConvertGb18030ToUnicode(void const * pData,
                             goto bad_input;
                         else if (nCode < pRange->m_nFirstLinear)
                         {
-                            if (pDestBufPtr != pDestBufEnd)
+                            if (pDestBufPtr != pDestBufEnd) {
                                 *pDestBufPtr++
                                     = pGb18030Data[
                                           pRange->m_nNonRangeDataIndex
                                               + (nCode - nFirstNonRange)];
-                            else
+                                startOfCurrentChar = nConverted + 1;
+                            } else
                                 goto no_output;
                             break;
                         }
                         else if (nCode < pRange->m_nPastLinear)
                         {
-                            if (pDestBufPtr != pDestBufEnd)
+                            if (pDestBufPtr != pDestBufEnd) {
                                 *pDestBufPtr++
                                     = static_cast<sal_Unicode>(pRange->m_nFirstUnicode
                                                + (nCode
                                                       - pRange->
                                                             m_nFirstLinear));
-                            else
+                                startOfCurrentChar = nConverted + 1;
+                            } else
                                 goto no_output;
                             break;
                         }
@@ -226,10 +232,16 @@ sal_Size ImplConvertGb18030ToUnicode(void const * pData,
         {
         case sal::detail::textenc::BAD_INPUT_STOP:
             eState = IMPL_GB_18030_TO_UNICODE_STATE_0;
+            if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0) {
+                ++nConverted;
+            } else {
+                nConverted = startOfCurrentChar;
+            }
             break;
 
         case sal::detail::textenc::BAD_INPUT_CONTINUE:
             eState = IMPL_GB_18030_TO_UNICODE_STATE_0;
+            startOfCurrentChar = nConverted + 1;
             continue;
 
         case sal::detail::textenc::BAD_INPUT_NO_OUTPUT:
@@ -256,6 +268,10 @@ sal_Size ImplConvertGb18030ToUnicode(void const * pData,
                         &nInfo))
             {
             case sal::detail::textenc::BAD_INPUT_STOP:
+                if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) != 0) {
+                    nConverted = startOfCurrentChar;
+                }
+                [[fallthrough]];
             case sal::detail::textenc::BAD_INPUT_CONTINUE:
                 eState = IMPL_GB_18030_TO_UNICODE_STATE_0;
                 break;

@@ -92,6 +92,15 @@ SAL_DLLPUBLIC void SAL_CALL rtl_resetTextToUnicodeContext( rtl_TextToUnicodeConv
 #define RTL_TEXTTOUNICODE_INFO_INVALID                      ((sal_uInt32)0x0020)
 
 /** see http://udk.openoffice.org/cpp/man/spec/textconversion.html
+
+    Deviating from the linked specification, the behavior of
+    RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR, RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR, and
+    RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR is as follows:  When RTL_TEXTTOUNICODE_FLAGS_FLUSH is not
+    set, the erroneous input bytes are consumed as required by the linked specification.  But if
+    RTL_TEXTTOUNICODE_FLAGS_FLUSH is set, any of those erroneous input bytes that would have been
+    consumed by this invocation of rtl_convertTextToUnicode (i.e., which had not already been
+    captured in hContext from a previous invocation with RTL_TEXTTOUNICODE_FLAGS_FLUSH unset) are
+    not consumed.
  */
 SAL_DLLPUBLIC sal_Size SAL_CALL rtl_convertTextToUnicode(
                                             rtl_TextToUnicodeConverter hConverter,

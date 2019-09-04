@@ -165,7 +165,7 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet) {
 
             CPPUNIT_ASSERT_EQUAL(sal_Size(0), nSize);
             CPPUNIT_ASSERT_EQUAL(nExpectedInfo, nInfo);
-            CPPUNIT_ASSERT_EQUAL(sal_Size(0), nConverted);
+            CPPUNIT_ASSERT_EQUAL(sal_Size(1), nConverted);
 
             rtl_destroyTextToUnicodeContext(aConverter, aContext);
             rtl_destroyTextToUnicodeConverter(aConverter);

@@ -540,6 +540,9 @@ sal_Size sal::detail::textenc::convertCharToUnicode(
                 *pInfo |= RTL_TEXTTOUNICODE_INFO_UNDEFINED;
                 if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MASK) == RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR )
                 {
+                    if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0) {
+                        ++pSrcBuf;
+                    }
                     *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
                     break;
                 }

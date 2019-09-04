@@ -94,6 +94,7 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
     sal_Size nConverted = 0;
     sal_Unicode * pDestBufPtr = pDestBuf;
     sal_Unicode * pDestBufEnd = pDestBuf + nDestChars;
+    sal_Size startOfCurrentChar = 0;
 
     if (pContext)
     {
@@ -111,9 +112,10 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
             if (nChar == 0x1B) // ESC
                 eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_ESC;
             else if (nChar < 0x80)
-                if (pDestBufPtr != pDestBufEnd)
+                if (pDestBufPtr != pDestBufEnd) {
                     *pDestBufPtr++ = static_cast<sal_Unicode>(nChar);
-                else
+                    startOfCurrentChar = nConverted + 1;
+                } else
                     goto no_output;
             else
             {
@@ -139,6 +141,7 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
                         break;
                     }
                     *pDestBufPtr++ = static_cast<sal_Unicode>(nChar);
+                    startOfCurrentChar = nConverted + 1;
                 }
                 else
                     goto no_output;
@@ -178,6 +181,7 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
                     {
                         *pDestBufPtr++ = static_cast<sal_Unicode>(nUnicode);
                         eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_0208;
+                        startOfCurrentChar = nConverted + 1;
                     }
                     else
                         goto no_output;
@@ -248,10 +252,16 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
         {
         case sal::detail::textenc::BAD_INPUT_STOP:
             eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_ASCII;
+            if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0) {
+                ++nConverted;
+            } else {
+                nConverted = startOfCurrentChar;
+            }
             break;
 
         case sal::detail::textenc::BAD_INPUT_CONTINUE:
             eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_ASCII;
+            startOfCurrentChar = nConverted + 1;
             continue;
 
         case sal::detail::textenc::BAD_INPUT_NO_OUTPUT:
@@ -278,6 +288,10 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
                         &nInfo))
             {
             case sal::detail::textenc::BAD_INPUT_STOP:
+                if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) != 0) {
+                    nConverted = startOfCurrentChar;
+                }
+                [[fallthrough]];
             case sal::detail::textenc::BAD_INPUT_CONTINUE:
                 eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_ASCII;
                 break;
