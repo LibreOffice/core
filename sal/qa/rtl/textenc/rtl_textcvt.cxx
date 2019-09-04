@@ -457,6 +457,8 @@ public:
 
     void testInvalidUtf8();
 
+    void testInvalidUnicode();
+
     void testSRCBUFFERTOSMALL();
 
     void testMime();
@@ -471,6 +473,7 @@ public:
     CPPUNIT_TEST(testComplexCut);
     CPPUNIT_TEST(testInvalidUtf7);
     CPPUNIT_TEST(testInvalidUtf8);
+    CPPUNIT_TEST(testInvalidUnicode);
     CPPUNIT_TEST(testSRCBUFFERTOSMALL);
     CPPUNIT_TEST(testMime);
     CPPUNIT_TEST(testWindows);
@@ -2336,6 +2339,15 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
+            { RTL_TEXTENCODING_UTF8,
+              RTL_CONSTASCII_STRINGPARAM("\xEF\xBF\xBF"),
+              {0xFFFF},
+              1,
+              false,
+              true,
+              true,
+              false,
+              RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
 
             // Test Java UTF-8:
 
@@ -2958,6 +2970,24 @@ void Test::testInvalidUtf8() {
         CPPUNIT_ASSERT_EQUAL(sal_Size(4), converted);
         rtl_destroyTextToUnicodeConverter(converter);
     }
+}
+
+void Test::testInvalidUnicode() {
+    auto const converter = rtl_createUnicodeToTextConverter(RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT(converter != nullptr);
+    sal_Unicode const input[] = {0xDC00}; // lone low surrogate
+    char buf[TEST_STRING_SIZE];
+    sal_uInt32 info;
+    sal_Size converted;
+    auto const size = rtl_convertUnicodeToText(
+        converter, nullptr, input, SAL_N_ELEMENTS(input), buf, TEST_STRING_SIZE,
+        (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR
+         | RTL_UNICODETOTEXT_FLAGS_FLUSH),
+        &info, &converted);
+    CPPUNIT_ASSERT_EQUAL(sal_Size(0), size);
+    CPPUNIT_ASSERT_EQUAL(RTL_UNICODETOTEXT_INFO_ERROR | RTL_UNICODETOTEXT_INFO_INVALID, info);
+    CPPUNIT_ASSERT_EQUAL(sal_Size(1), converted);
+    rtl_destroyTextToUnicodeConverter(converter);
 }
 
 void Test::testSRCBUFFERTOSMALL() {

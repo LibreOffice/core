@@ -29,14 +29,6 @@
 
 #define RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER 0xFFFD
 
-inline bool ImplIsNoncharacter(sal_uInt32 nUtf32)
-{
-    return (nUtf32 >= 0xFDD0 && nUtf32 <= 0xFDEF)
-           || (nUtf32 & 0xFFFF) >= 0xFFFE
-           || !rtl::isUnicodeCodePoint(nUtf32);
-}
-    // All code points that are noncharacters, as of Unicode 3.1.1.
-
 bool ImplIsControlOrFormat(sal_uInt32 nUtf32);
 
 inline bool ImplIsHighSurrogate(sal_uInt32 nUtf32)
