@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_c3e72ae4",
+        "filename": "accessibility/source/standard/vclxaccessiblecombobox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-09-04T18:12:33Z",
+      "side": 1,
+      "message": "I get compilation errors: https://pastebin.com/raw/bVHRusYg",
+      "parentUuid": "bf659307_68fe3daf",
+      "range": {
+        "startLine": 56,
+        "startChar": 39,
+        "endLine": 56,
+        "endChar": 108
+      },
+      "revId": "0f2dd46100a4892e2a3cb54c5cf361905a426275",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_082f813f",
         "filename": "accessibility/source/standard/vclxaccessibleradiobutton.cxx",
         "patchSetId": 2
