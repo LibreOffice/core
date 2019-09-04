@@ -2336,6 +2336,15 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
+            { RTL_TEXTENCODING_UTF8,
+              RTL_CONSTASCII_STRINGPARAM("\xEF\xBF\xBF"),
+              {0xFFFF},
+              1,
+              false,
+              true,
+              true,
+              false,
+              RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
 
             // Test Java UTF-8:
 

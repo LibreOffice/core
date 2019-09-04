@@ -19,6 +19,9 @@
 
 #include <sal/config.h>
 
+#include <cassert>
+
+#include <rtl/character.hxx>
 #include <rtl/textcvt.h>
 #include <sal/types.h>
 
@@ -341,11 +344,7 @@ sal_Size ImplConvertUnicodeToGb18030(void const * pData,
             goto bad_input;
         }
 
-        if (ImplIsLowSurrogate(nChar) || ImplIsNoncharacter(nChar))
-        {
-            bUndefined = false;
-            goto bad_input;
-        }
+        assert(rtl::isUnicodeScalarValue(nChar));
 
         if (nChar < 0x80)
             if (pDestBufPtr != pDestBufEnd)

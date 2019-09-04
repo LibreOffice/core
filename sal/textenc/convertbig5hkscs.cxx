@@ -21,6 +21,7 @@
 
 #include <cassert>
 
+#include <rtl/character.hxx>
 #include <rtl/textcvt.h>
 #include <sal/types.h>
 
@@ -342,11 +343,7 @@ sal_Size ImplConvertUnicodeToBig5Hkscs(void const * pData,
             goto bad_input;
         }
 
-        if (ImplIsLowSurrogate(nChar) || ImplIsNoncharacter(nChar))
-        {
-            bUndefined = false;
-            goto bad_input;
-        }
+        assert(rtl::isUnicodeScalarValue(nChar));
 
         if (nChar < 0x80)
             if (pDestBufPtr != pDestBufEnd)

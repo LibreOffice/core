@@ -7,10 +7,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include "converter.hxx"
 #include "unichars.hxx"
 #include "convertisciidevangari.hxx"
 #include "convertsinglebytetobmpunicode.hxx"
+
+#include <rtl/character.hxx>
 #include <rtl/textcvt.h>
 
 using namespace sal::detail::textenc;
@@ -271,11 +277,7 @@ sal_Size UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, sal_Size 
             bUndefined = false;
             goto bad_input;
         }
-        if (ImplIsLowSurrogate(c) || ImplIsNoncharacter(c))
-        {
-            bUndefined = false;
-            goto bad_input;
-        }
+        assert(rtl::isUnicodeScalarValue(c));
 
         //halant + halant     E8 E8  -> halant + ZWNJ   094D 200C
         //halant + nukta    E8 E9   halant + ZWJ    094D 200D

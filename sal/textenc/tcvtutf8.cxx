@@ -19,7 +19,10 @@
 
 #include <sal/config.h>
 
+#include <cassert>
+
 #include <sal/types.h>
+#include <rtl/character.hxx>
 #include <rtl/textcvt.h>
 
 #include "converter.hxx"
@@ -353,9 +356,7 @@ sal_Size ImplConvertUnicodeToUtf8(
         else
             goto bad_input;
 
-        if ((ImplIsLowSurrogate(nChar) && !bJavaUtf8)
-            || ImplIsNoncharacter(nChar))
-            goto bad_input;
+        assert(bJavaUtf8 ? nChar <= 0xFFFF : rtl::isUnicodeScalarValue(nChar));
 
         if (nChar <= 0x7F && (!bJavaUtf8 || nChar != 0))
             if (pDestBufPtr != pDestBufEnd)
