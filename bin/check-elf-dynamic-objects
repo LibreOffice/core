@@ -112,6 +112,9 @@ local file="$1"
             # skip the majority of files, no ELF binaries here
             skip=1
         ;;
+        */libcairo.so.2)
+            whitelist="${whitelist} ${x11whitelist} libxcb-shm.so.0 libxcb.so.1 libxcb-render.so.0"
+        ;;
         */libcairocanvaslo.so)
             whitelist="${whitelist} libcairo.so.2"
         ;;
