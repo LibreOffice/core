@@ -31,6 +31,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/vclstatuslistener.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <bitmaps.hlst>
 
 #include <tools/poly.hxx>
 #include <svl/imageitm.hxx>
@@ -2356,72 +2357,15 @@ IMPL_LINK_NOARG(ToolBox, ImplUpdateHdl, Timer *, void)
         ImplFormat();
 }
 
-static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, bool bRotate )
+static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
-    rRenderContext.SetLineColor();
+    const Image pImage = Image(StockImage::Yes, CHEVRON);
+    Size aImageSize = pImage.GetSizePixel();
+    long x = rRect.Left() + (rRect.getWidth() - aImageSize.Width())/2;
+    long y = rRect.Top() + (rRect.getHeight() - aImageSize.Height())/2;
+    DrawImageFlags nImageStyle = DrawImageFlags::NONE;
 
-    if (rRenderContext.GetSettings().GetStyleSettings().GetFaceColor().IsDark())
-        rRenderContext.SetFillColor(COL_WHITE);
-    else
-        rRenderContext.SetFillColor(COL_BLACK);
-    float fScaleFactor = rRenderContext.GetDPIScaleFactor();
-
-    int linewidth = 1 * fScaleFactor;
-    int space = 4 * fScaleFactor;
-
-    if( !bRotate )
-    {
-        long width = 8 * fScaleFactor;
-        long height = 5 * fScaleFactor;
-
-        //Keep odd b/c drawing code works better
-        if ( height % 2 == 0 )
-            height--;
-
-        long heightOrig = height;
-
-        long x = rRect.Left() + (rRect.getWidth() - width)/2 + 1;
-        long y = rRect.Top() + (rRect.getHeight() - height)/2 + 1;
-        while( height >= 1)
-        {
-            rRenderContext.DrawRect( tools::Rectangle( x, y, x + linewidth, y ) );
-            x += space;
-            rRenderContext.DrawRect( tools::Rectangle( x, y, x + linewidth, y ) );
-            x -= space;
-            y++;
-            if( height <= heightOrig / 2 + 1) x--;
-            else            x++;
-            height--;
-        }
-    }
-    else
-    {
-        long width = 5 * fScaleFactor;
-        long height = 8 * fScaleFactor;
-
-        //Keep odd b/c drawing code works better
-        if (width % 2 == 0)
-            width--;
-
-        long widthOrig = width;
-
-        long x = rRect.Left() + (rRect.getWidth() - width)/2 + 1;
-        long y = rRect.Top() + (rRect.getHeight() - height)/2 + 1;
-        while( width >= 1)
-        {
-            rRenderContext.DrawRect( tools::Rectangle( x, y, x, y + linewidth ) );
-            y += space;
-            rRenderContext.DrawRect( tools::Rectangle( x, y, x, y + linewidth ) );
-            y -= space;
-            x++;
-            if( width <= widthOrig / 2 + 1) y--;
-            else           y++;
-            width--;
-        }
-    }
-
-    rRenderContext.Pop();
+    rRenderContext.DrawImage(Point(x,y), pImage, nImageStyle);
 }
 
 static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rDropDownRect, bool bSetColor, bool bRotate )
@@ -2496,7 +2440,7 @@ void ToolBox::ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighl
             ImplDrawButton(rRenderContext, mpData->maMenubuttonItem.maRect, 2, false, true, false );
 
         if (ImplHasClippedItems())
-            ImplDrawMoreIndicator(rRenderContext, mpData->maMenubuttonItem.maRect, !mbHorz);
+            ImplDrawMoreIndicator(rRenderContext, mpData->maMenubuttonItem.maRect);
 
         // store highlight state
         mpData->mbMenubuttonSelected = bHighlight;
