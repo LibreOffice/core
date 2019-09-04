@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_03076284",
+        "filename": "accessibility/source/standard/vclxaccessibleradiobutton.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-04T18:51:02Z",
+      "side": 1,
+      "message": "Actually I have a feeling that specifically this change has little sense - you change an initial creation of N empty references and following population of them with creation of a vector, pushing N references, and then creation of a sequence from them ... :-)\n\nI have no strong feeling about either way. No objections, please push if you think this variant has benefits.",
+      "range": {
+        "startLine": 84,
+        "startChar": 12,
+        "endLine": 89,
+        "endChar": 100
+      },
+      "revId": "a6a5e28d3a6f291ffe104f8ccd5f61841a4b38ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
