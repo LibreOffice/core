@@ -54,22 +54,20 @@ void osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
     }
 }
 
-void osl_systemPathEnsureSeparator(rtl_uString** ppustrPath)
+void osl_systemPathEnsureSeparator(OUString* ppustrPath)
 {
-    OSL_PRECOND((nullptr != ppustrPath) && (nullptr != *ppustrPath), "osl_systemPathEnsureSeparator: Invalid parameter");
-    if ((ppustrPath != nullptr) && (*ppustrPath != nullptr))
+    OSL_PRECOND(nullptr != ppustrPath, "osl_systemPathEnsureSeparator: Invalid parameter");
+    if (ppustrPath != nullptr)
     {
-        OUString path(*ppustrPath);
-        sal_Int32    lp = path.getLength();
-        sal_Int32    i  = path.lastIndexOf(FPH_CHAR_PATH_SEPARATOR);
+        sal_Int32    lp = ppustrPath->getLength();
+        sal_Int32    i  = ppustrPath->lastIndexOf(FPH_CHAR_PATH_SEPARATOR);
 
         if ((lp > 1 && i != (lp - 1)) || ((lp < 2) && i < 0))
         {
-            path += FPH_PATH_SEPARATOR;
-            rtl_uString_assign(ppustrPath, path.pData);
+            *ppustrPath += FPH_PATH_SEPARATOR;
         }
 
-        SAL_WARN_IF( !path.endsWith(FPH_PATH_SEPARATOR),
+        SAL_WARN_IF( !ppustrPath->endsWith(FPH_PATH_SEPARATOR),
                      "sal.osl",
                      "osl_systemPathEnsureSeparator: Post condition failed");
     }
@@ -90,7 +88,7 @@ void osl_systemPathMakeAbsolutePath(
     OUString rel(const_cast<rtl_uString*>(pustrRelPath));
 
     if (!base.isEmpty())
-        osl_systemPathEnsureSeparator(&base.pData);
+        osl_systemPathEnsureSeparator(&base);
 
     base += rel;
 
