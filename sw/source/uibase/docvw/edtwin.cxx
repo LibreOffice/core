@@ -3885,6 +3885,9 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     SwTab nMouseTabCol;
     if( !bIsDocReadOnly && bInsWin && !m_pApplyTempl && !rSh.IsInSelect() )
     {
+        if (comphelper::LibreOfficeKit::isActive())
+            return;
+
         if ( SwTab::COL_NONE != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPt ) ) &&
              !rSh.IsObjSelectable( aDocPt ) )
         {
