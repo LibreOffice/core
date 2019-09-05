@@ -193,7 +193,7 @@ namespace dbaui
     bool OIndexCollection::drop(const Indexes::iterator& _rPos)
     {
         OSL_ENSURE((_rPos >= m_aIndexes.begin()) && (_rPos < m_aIndexes.end()),
-            "OIndexCollection::drop: invalid position (fasten your seatbelt .... this will crash)!");
+            "OIndexCollection::drop: invalid position (fasten your seatbelt... this will crash)!");
 
         if (!_rPos->isNew())
             if (!dropNoRemove(_rPos))

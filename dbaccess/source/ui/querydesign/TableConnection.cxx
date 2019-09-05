@@ -155,7 +155,7 @@ namespace dbaui
         // I believe Invalidate and Draw(Rectangle) do not behave consistent: in any case it
         // could explain, why without the fake here when deleting a connection a dash remains at the lower end:
         // Invalidate records obviously one pixel line less as Draw.
-        // Or everything works differently .....  in any case it works ....
+        // Or everything works differently... in any case it works...
         m_pParent->Invalidate( rcBounding, InvalidateFlags::NoChildren );
     }
 

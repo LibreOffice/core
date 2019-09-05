@@ -240,7 +240,7 @@ void SAL_CALL OQueryContainer::elementInserted( const css::container::ContainerE
             return;
 
         OSL_ENSURE(!sElementName.isEmpty(), "OQueryContainer::elementInserted : invalid name !");
-        OSL_ENSURE(m_aDocumentMap.find(sElementName) == m_aDocumentMap.end(), "OQueryContainer::elementInserted         : oops .... we're inconsistent with our master container !");
+        OSL_ENSURE(m_aDocumentMap.find(sElementName) == m_aDocumentMap.end(), "OQueryContainer::elementInserted         : oops... we're inconsistent with our master container !");
         if (sElementName.isEmpty() || hasByName(sElementName))
             return;
 
@@ -256,7 +256,7 @@ void SAL_CALL OQueryContainer::elementRemoved( const css::container::ContainerEv
     _rEvent.Accessor >>= sAccessor;
     {
         OSL_ENSURE(!sAccessor.isEmpty(), "OQueryContainer::elementRemoved : invalid name !");
-        OSL_ENSURE(m_aDocumentMap.find(sAccessor) != m_aDocumentMap.end(), "OQueryContainer::elementRemoved : oops .... we're inconsistent with our master container !");
+        OSL_ENSURE(m_aDocumentMap.find(sAccessor) != m_aDocumentMap.end(), "OQueryContainer::elementRemoved : oops... we're inconsistent with our master container !");
         if ( sAccessor.isEmpty() || !hasByName(sAccessor) )
             return;
     }
@@ -272,7 +272,7 @@ void SAL_CALL OQueryContainer::elementReplaced( const css::container::ContainerE
     {
         MutexGuard aGuard(m_aMutex);
         OSL_ENSURE(!sAccessor.isEmpty(), "OQueryContainer::elementReplaced : invalid name !");
-        OSL_ENSURE(m_aDocumentMap.find(sAccessor) != m_aDocumentMap.end(), "OQueryContainer::elementReplaced         : oops .... we're inconsistent with our master container !");
+        OSL_ENSURE(m_aDocumentMap.find(sAccessor) != m_aDocumentMap.end(), "OQueryContainer::elementReplaced         : oops... we're inconsistent with our master container !");
         if (sAccessor.isEmpty() || !hasByName(sAccessor))
             return;
 
@@ -320,7 +320,7 @@ void SAL_CALL OQueryContainer::disposing( const css::lang::EventObject& _rSource
     else
     {
         Reference< XContent > xSource(_rSource.Source, UNO_QUERY);
-        // it's one of our documents ....
+        // it's one of our documents...
         for (auto const& document : m_aDocumentMap)
         {
             if ( xSource == document.second.get() )

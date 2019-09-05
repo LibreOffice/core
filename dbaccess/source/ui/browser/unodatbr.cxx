@@ -497,7 +497,7 @@ void SbaTableQueryBrowser::impl_sanitizeRowSetClauses_nothrow()
         //     ...
         //   }
         //   enum SQLFilterOperand { Column, Literal, ... }
-        // ... or something like this ....
+        // ... or something like this...
     }
     catch( const Exception& )
     {
@@ -1015,7 +1015,7 @@ void SbaTableQueryBrowser::checkDocumentDataSource()
         {   // at least the data source is known
             if (nullptr != pContainerEntry)
                 bKnownDocDataSource = true; // assume we know it.
-                // TODO: should we expand the object container? This may be too expensive just for checking ....
+                // TODO: should we expand the object container? This may be too expensive just for checking...
             else
             {
                 if (m_aDocumentDataSource.has(DataAccessDescriptorProperty::CommandType)

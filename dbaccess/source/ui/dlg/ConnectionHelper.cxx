@@ -668,7 +668,7 @@ namespace dbaui
             if ( ( sURL != sOldPath ) && !sURL.isEmpty() )
             {   // the text changed since entering the control
 
-                // the path may be in system notation ....
+                // the path may be in system notation...
                 OFileNotation aTransformer(sURL);
                 sURL = aTransformer.get(OFileNotation::N_URL);
 

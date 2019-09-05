@@ -34,7 +34,7 @@
     <p>Usually, the columns used are the columns as supplied by the grid control model.</p>
 
     <p>You should use this interface only if you know exactly what you are doing. Tampering
-    with the columns of a grid control which is part of a complex form can really hurt ....</p>
+    with the columns of a grid control which is part of a complex form can really hurt...</p>
 
     @deprecated
     @see com::sun::star::awt::XWindowPeer

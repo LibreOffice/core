@@ -45,7 +45,7 @@ published service ImageButton
 
     /** allows external instances to register as veto listener for the button's actions.
 
-        <p>An com::sun::star::form::XApproveActionListener returning false on
+        <p>A com::sun::star::form::XApproveActionListener returning false on
         it's approve-method will prevent any action which would usually be triggered - this includes
         not only submitting or resetting forms, but also calling the
         com::sun::star::awt::XActionListeners of the super service<br/>

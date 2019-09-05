@@ -2710,8 +2710,8 @@ sal_Int16 SAL_CALL XFrameImpl::resetActionLocks()
     }
 
     // Attention:
-    // external lock count is 0 here every time ... but if
-    // member m_bSelfClose is set to true too .... we call our own close()/dispose().
+    // external lock count is 0 here every time... but if
+    // member m_bSelfClose is set to true too... we call our own close()/dispose().
     // See close() for further information
     implts_checkSuicide();
 
