@@ -1584,7 +1584,11 @@ void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabel
                 if( nTextLevel>0 )
                 {
                     lcl_shiftLabels(*apTickIter, aCummulatedLabelsDistance);
-                    fRotationAngleDegree = 0.0;
+                    //multilevel labels: 0 or 90 by default
+                    if( m_aAxisProperties.m_bSwapXAndY )
+                        fRotationAngleDegree = 90.0;
+                    else
+                        fRotationAngleDegree = 0.0;
                 }
                 aCummulatedLabelsDistance += lcl_getLabelsDistance(
                     *apTickIter, pTickFactory2D->getDistanceAxisTickToText(m_aAxisProperties),
@@ -1648,6 +1652,7 @@ void VCartesianAxis::createLabels()
 
                 if( nTextLevel > 0 )
                 {
+                    //multilevel labels: 0 or 90 by default
                     if( m_aAxisProperties.m_bSwapXAndY )
                         aComplexProps.fRotationAngleDegree = 90.0;
                     else
@@ -1735,7 +1740,7 @@ void VCartesianAxis::updatePositions()
                 double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
                 if( nDepth > 0 )
                 {
-                    /* Multi-level Labels: default to 0 or 90 */
+                    //multilevel labels: 0 or 90 by default
                     if( pTickFactory2D->isHorizontalAxis() )
                         fRotationAngleDegree = 0.0;
                     else
@@ -1829,6 +1834,14 @@ void VCartesianAxis::createShapes()
                 if( apTickIter )
                 {
                     double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
+                    if( nTextLevel > 0 )
+                    {
+                        //Multi-level Labels: default to 0 or 90
+                        if( m_aAxisProperties.m_bSwapXAndY )
+                            fRotationAngleDegree = 90.0;
+                        else
+                            fRotationAngleDegree = 0.0;
+                    }
                     B2DVector aLabelsDistance(lcl_getLabelsDistance(
                         *apTickIter, pTickFactory2D->getDistanceAxisTickToText(m_aAxisProperties),
                         fRotationAngleDegree));

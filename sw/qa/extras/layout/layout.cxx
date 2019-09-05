@@ -2427,6 +2427,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf127304)
                 "0");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testHorizontal_multilevel)
+{
+    SwDoc* pDoc = createDoc("horizontal_multilevel.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Test the Y position of horizontal category axis label.
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/textarray[7]", "y",
+                "7945");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124796)
 {
     SwDoc* pDoc = createDoc("tdf124796.odt");
