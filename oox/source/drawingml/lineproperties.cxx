@@ -84,7 +84,7 @@ void lclConvertPresetDash(LineDash& orLineDash, sal_Int32 nPresetDash)
 }
 
 /** Converts the passed custom dash to API dash. rCustomDash should not be empty.
- * We assume, that there exist only two lenght values and the distance is the same
+ * We assume, that there exist only two length values and the distance is the same
  * for all dashes. Other kind of dash stop sequences cannot be represented, neither
  * in model nor in ODF.
  */
@@ -443,7 +443,7 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         drawing::LineStyle eLineStyle = (maLineFill.moFillType.get() == XML_noFill) ? drawing::LineStyle_NONE : drawing::LineStyle_SOLID;
 
         // line width in 1/100mm
-        sal_Int32 nLineWidth = getLineWidth(); // includes convertion from EMUs to 1/100mm
+        sal_Int32 nLineWidth = getLineWidth(); // includes conversion from EMUs to 1/100mm
         rPropMap.setProperty( ShapeProperty::LineWidth, nLineWidth );
 
         // create line dash from preset dash token or dash stop vector (not for invisible line)

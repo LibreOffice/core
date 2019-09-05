@@ -966,13 +966,13 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
             // "dash" is always the second dash. MS Office always starts with the longer dash, so
             // set it here accordingly.
             // The preset from binary is essentially the same as from OOXML. So here the same
-            // setting is used as in oox import. The comment corrensponds to
+            // setting is used as in oox import. The comment corresponds to
             // "dots, dotLen, dashes, dashLen, distance" there.
             // MS Office uses always relative length, so no need to consider nLineWidth
             // here. Values are of kind 300 for 300% in css::drawing::DashStyle, for example.
 
             sal_uInt16  nDots = 1; // in all cases, "solid" is treated above
-            // initalize, will be changened if necessary
+            // initialize, will be changed if necessary
             sal_uInt32  nDotLen = 300;
             sal_uInt16  nDashes = 0;
             sal_uInt32  nDashLen = 0;

@@ -1059,7 +1059,7 @@ void EscherPropertyContainer::CreateLineProperties(
                             default : break;
                         }
                         // Try to detect exact prstDash styles. Use a similar method as in oox export.
-                        // Map it to a roughly fitting prstDash in outher cases.
+                        // Map it to a roughly fitting prstDash in other cases.
                         bool bIsConverted = false;
                         bool bIsRelative = pLineDash->Style == drawing::DashStyle_RECTRELATIVE
                                             || pLineDash->Style == drawing::DashStyle_ROUNDRELATIVE;
