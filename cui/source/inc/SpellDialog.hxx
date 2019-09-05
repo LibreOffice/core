@@ -80,6 +80,7 @@ private:
 
 protected:
     virtual bool    KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void    makeEditEngine() override;
 
 public:
     SentenceEditWindow_Impl();
