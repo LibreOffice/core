@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
 <interface domain="dba">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="liststore2">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkBox" id="NameMatching">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -89,8 +106,10 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="xalign">0</property>
             <property name="label" translatable="yes" context="namematchingpage|leftlabel">Source table: </property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">left</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -99,13 +118,39 @@
           </packing>
         </child>
         <child>
-          <object class="dbulo-OColumnTreeBox" id="left:border">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <child internal-child="selection">
-              <object class="GtkTreeSelection" id="treeview-selection1"/>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkTreeView" id="left">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="model">liststore1</property>
+                <property name="headers_visible">False</property>
+                <property name="search_column">1</property>
+                <property name="show_expanders">False</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn5">
+                    <property name="resizable">True</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderer4"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+              </object>
             </child>
           </object>
           <packing>
@@ -134,8 +179,10 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="xalign">0</property>
             <property name="label" translatable="yes" context="namematchingpage|rightlabel">Destination table: </property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">right</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -144,13 +191,39 @@
           </packing>
         </child>
         <child>
-          <object class="dbulo-OColumnTreeBox" id="right:border">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <child internal-child="selection">
-              <object class="GtkTreeSelection" id="treeview-selection3"/>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkTreeView" id="right">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="model">liststore1</property>
+                <property name="headers_visible">False</property>
+                <property name="search_column">1</property>
+                <property name="show_expanders">False</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn6">
+                    <property name="resizable">True</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderer5"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+              </object>
             </child>
           </object>
           <packing>

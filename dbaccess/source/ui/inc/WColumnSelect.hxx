@@ -35,21 +35,21 @@ namespace dbaui
 
     class OWizColumnSelect : public OWizardPage
     {
-        VclPtr<ListBox>      m_pOrgColumnNames; // left side
-        VclPtr<PushButton>   m_pColumn_RH;
-        VclPtr<PushButton>   m_pColumns_RH;
-        VclPtr<PushButton>   m_pColumn_LH;
-        VclPtr<PushButton>   m_pColumns_LH;
-        VclPtr<ListBox>      m_pNewColumnNames; // right side
+        std::unique_ptr<weld::TreeView> m_xOrgColumnNames; // left side
+        std::unique_ptr<weld::Button> m_xColumn_RH;
+        std::unique_ptr<weld::Button> m_xColumns_RH;
+        std::unique_ptr<weld::Button> m_xColumn_LH;
+        std::unique_ptr<weld::Button> m_xColumns_LH;
+        std::unique_ptr<weld::TreeView> m_xNewColumnNames; // right side
 
-        DECL_LINK( ButtonClickHdl, Button *, void );
-        DECL_LINK( ListDoubleClickHdl, ListBox&, void );
+        DECL_LINK( ButtonClickHdl, weld::Button&, void );
+        DECL_LINK( ListDoubleClickHdl, weld::TreeView&, void );
 
-        static void clearListBox(ListBox& _rListBox);
-        static void fillColumns( ListBox const * pRight,
+        static void clearListBox(weld::TreeView& _rListBox);
+        static void fillColumns(weld::TreeView const * pRight,
                                 std::vector< OUString> &_rRightColumns);
 
-        void createNewColumn(   ListBox* _pListbox,
+        void createNewColumn(   weld::TreeView* _pListbox,
                                 OFieldDescription const * _pSrcField,
                                 std::vector< OUString>& _rRightColumns,
                                 const OUString&  _sColumnName,
@@ -57,8 +57,8 @@ namespace dbaui
                                 sal_Int32               _nMaxNameLen,
                                 const ::comphelper::UStringMixEqual& _aCase);
 
-        void moveColumn(        ListBox* _pRight,
-                                ListBox const * _pLeft,
+        void moveColumn(        weld::TreeView* _pRight,
+                                weld::TreeView const * _pLeft,
                                 std::vector< OUString>& _rRightColumns,
                                 const OUString&  _sColumnName,
                                 const OUString&  _sExtraChars,
@@ -67,7 +67,7 @@ namespace dbaui
 
         void enableButtons();
 
-        sal_Int32 adjustColumnPosition(ListBox const * _pLeft,
+        sal_Int32 adjustColumnPosition(weld::TreeView const * _pLeft,
                                     const OUString&  _sColumnName,
                                     ODatabaseExport::TColumnVector::size_type nCurrentPos,
                                     const ::comphelper::UStringMixEqual& _aCase);
@@ -78,9 +78,8 @@ namespace dbaui
         virtual bool            LeavePage() override;
         virtual OUString        GetTitle() const override ;
 
-        OWizColumnSelect(vcl::Window* pParent);
+        OWizColumnSelect(OCopyTableWizard* pWizard, TabPageParent pParent);
         virtual ~OWizColumnSelect() override;
-        virtual void dispose() override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WCOLUMNSELECT_HXX

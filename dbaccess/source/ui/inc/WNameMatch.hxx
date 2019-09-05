@@ -38,7 +38,6 @@ namespace dbaui
     public:
         OColumnTreeBox( vcl::Window* pParent );
 
-        void FillListBox( const ODatabaseExport::TColumnVector& _rList);
         void SetReadOnly() { m_bReadOnly = true; }
         virtual bool Select( SvTreeListEntry* pEntry, bool bSelect=true ) override;
 
@@ -50,24 +49,26 @@ namespace dbaui
     // Name matching for data appending
     class OWizNameMatching : public OWizardPage
     {
-        VclPtr<FixedText>           m_pTABLE_LEFT;
-        VclPtr<FixedText>           m_pTABLE_RIGHT;
-        VclPtr<OColumnTreeBox>      m_pCTRL_LEFT;    // left side
-        VclPtr<OColumnTreeBox>      m_pCTRL_RIGHT;   // right side
-        VclPtr<PushButton>          m_pColumn_up;
-        VclPtr<PushButton>          m_pColumn_down;
-        VclPtr<PushButton>          m_pColumn_up_right;
-        VclPtr<PushButton>          m_pColumn_down_right;
-        VclPtr<PushButton>          m_pAll;
-        VclPtr<PushButton>          m_pNone;
+        std::unique_ptr<weld::Label> m_xTABLE_LEFT;
+        std::unique_ptr<weld::Label> m_xTABLE_RIGHT;
+        std::unique_ptr<weld::TreeView> m_xCTRL_LEFT;    // left side
+        std::unique_ptr<weld::TreeView> m_xCTRL_RIGHT;   // right side
+        std::unique_ptr<weld::Button> m_xColumn_up;
+        std::unique_ptr<weld::Button> m_xColumn_down;
+        std::unique_ptr<weld::Button> m_xColumn_up_right;
+        std::unique_ptr<weld::Button> m_xColumn_down_right;
+        std::unique_ptr<weld::Button> m_xAll;
+        std::unique_ptr<weld::Button> m_xNone;
         OUString            m_sSourceText;
         OUString            m_sDestText;
 
-        DECL_LINK( ButtonClickHdl, Button *, void );
-        DECL_LINK( RightButtonClickHdl, Button *, void );
-        DECL_LINK( AllNoneClickHdl, Button *, void );
-        DECL_LINK( TableListClickHdl, SvTreeListBox*, void );
-        DECL_LINK( TableListRightSelectHdl, SvTreeListBox*, void );
+        DECL_LINK( ButtonClickHdl, weld::Button&, void );
+        DECL_LINK( RightButtonClickHdl, weld::Button&, void );
+        DECL_LINK( AllNoneClickHdl, weld::Button&, void );
+        DECL_LINK( TableListClickHdl, weld::TreeView&, void );
+        DECL_LINK( TableListRightSelectHdl, weld::TreeView&, void );
+
+        void FillListBox(weld::TreeView& rTreeView, const ODatabaseExport::TColumnVector& rList);
 
     public:
         virtual void            Reset ( ) override;
@@ -75,9 +76,8 @@ namespace dbaui
         virtual bool            LeavePage() override;
         virtual OUString        GetTitle() const override ;
 
-        OWizNameMatching(vcl::Window* pParent);
+        OWizNameMatching(OCopyTableWizard* pWizard, TabPageParent pParent);
         virtual ~OWizNameMatching() override;
-        virtual void dispose() override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WNAMEMATCH_HXX

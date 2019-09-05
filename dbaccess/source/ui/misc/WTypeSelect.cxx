@@ -114,7 +114,8 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
     {
         case FIELD_PROPERTY_COLUMNNAME:
             {
-                OCopyTableWizard* pWiz = static_cast<OCopyTableWizard*>(GetParentDialog());
+//TODO                OCopyTableWizard* pWiz = static_cast<OCopyTableWizard*>(GetParentDialog());
+                OCopyTableWizard* pWiz = reinterpret_cast<OCopyTableWizard*>(GetParentDialog());
                 // first we have to check if this name already exists
                 bool bDoubleName = false;
                 bool bCase = true;
@@ -214,13 +215,13 @@ OUString OWizTypeSelectControl::getAutoIncrementValue() const
     return static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->m_sAutoIncrementValue;
 }
 
-OWizTypeSelect::OWizTypeSelect( vcl::Window* pParent, SvStream* _pStream )
-               :OWizardPage( pParent, "TypeSelect", "dbaccess/ui/typeselectpage.ui")
-               ,m_pTypeControl(VclPtr<OWizTypeSelectControl>::Create(get<VclVBox>("control_container"), this) )
-               ,m_pParserStream( _pStream )
-               ,m_nDisplayRow(0)
-               ,m_bAutoIncrementEnabled(false)
-               ,m_bDuplicateName(false)
+OWizTypeSelect::OWizTypeSelect(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream* pStream)
+    : OWizardPage(pWizard, pParent, "TypeSelect", "dbaccess/ui/typeselectpage.ui")
+    , m_pTypeControl(VclPtr<OWizTypeSelectControl>::Create(get<VclVBox>("control_container"), this) )
+    , m_pParserStream(pStream)
+    , m_nDisplayRow(0)
+    , m_bAutoIncrementEnabled(false)
+    , m_bDuplicateName(false)
 {
     get(m_pColumnNames, "columnnames");
     m_pColumnNames->SetParentTabPage(this);
