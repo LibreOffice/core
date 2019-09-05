@@ -116,7 +116,7 @@ namespace dbaui
         virtual bool            LeavePage() override;
         virtual OUString        GetTitle() const override;
 
-        OWizTypeSelect(vcl::Window* pParent, SvStream* _pStream = nullptr );
+        OWizTypeSelect(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream* pStream = nullptr);
         virtual ~OWizTypeSelect() override;
         virtual void dispose() override;
 
@@ -124,7 +124,7 @@ namespace dbaui
         void setDuplicateName(bool _bDuplicateName) { m_bDuplicateName = _bDuplicateName; }
     };
 
-    typedef VclPtr<OWizTypeSelect> (*TypeSelectionPageFactory)( vcl::Window*, SvStream& );
+    typedef VclPtr<OWizTypeSelect> (*TypeSelectionPageFactory)(OCopyTableWizard*, TabPageParent, SvStream&);
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WTYPESELECT_HXX
 
