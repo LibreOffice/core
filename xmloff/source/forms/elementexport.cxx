@@ -1476,7 +1476,7 @@ namespace xmloff
                         // if the EchoChar string is not empty, it is a password field
                         sal_Int16 nEchoChar = 0;
                         if (m_xPropertyInfo->hasPropertyByName(PROPERTY_ECHOCHAR))
-                            // grid columns do not have this property ....
+                            // grid columns do not have this property...
                             m_xProps->getPropertyValue(PROPERTY_ECHOCHAR) >>= nEchoChar;
                         if (nEchoChar)
                         {
@@ -1488,7 +1488,7 @@ namespace xmloff
                             // if the MultiLine property is sal_True, it is a TextArea
                             bool bMultiLine = false;
                             if (m_xPropertyInfo->hasPropertyByName(PROPERTY_MULTILINE))
-                                // grid columns do not have this property ....
+                                // grid columns do not have this property...
                                 bMultiLine = ::cppu::any2bool(m_xProps->getPropertyValue(PROPERTY_MULTILINE));
 
                             if ( bMultiLine )

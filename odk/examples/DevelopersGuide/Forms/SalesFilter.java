@@ -362,7 +362,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
         // the current string items
         String[] aOldFilterItems = (String[])m_xFilterList.getPropertyValue( "StringItemList" );
 
-        // translate this into a vector - much more comfort to work with a vector than with an array ....
+        // translate this into a vector - much more comfort to work with a vector than with an array...
         java.util.ArrayList aFilterItems = new java.util.ArrayList();
         for ( int i=0; i<aOldFilterItems.length; ++i )
             aFilterItems.add( aOldFilterItems[i] );

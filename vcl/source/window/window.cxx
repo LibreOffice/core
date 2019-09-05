@@ -2237,7 +2237,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
     else
     {
         // inherit native widget flag for form controls
-        // required here, because frames never show up in the child hierarchy - which should be fixed....
+        // required here, because frames never show up in the child hierarchy - which should be fixed...
         // eg, the drop down of a combobox which is a system floating window
         if( mpWindowImpl->mbFrame && GetParent() && GetParent()->IsCompoundControl() &&
             GetParent()->IsNativeWidgetEnabled() != IsNativeWidgetEnabled() &&

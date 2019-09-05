@@ -561,7 +561,7 @@ bool XPMReader::ImplGetPara ( sal_uLong nNumb )
 
 // The next string is read and stored in mpStringBuf (terminated with 0);
 // mnStringSize contains the size of the string read.
-// Comments like '//' and '/*....*/' are skipped.
+// Comments like '//' and '/*...*/' are skipped.
 
 bool XPMReader::ImplGetString()
 {

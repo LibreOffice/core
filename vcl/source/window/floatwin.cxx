@@ -240,7 +240,7 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
     tools::Rectangle   aScreenRect = pWindow->ImplGetFrameWindow()->GetDesktopRectPixel();
     FloatingWindow *pFloatingWindow = dynamic_cast<FloatingWindow*>( pWindow );
 
-    // convert....
+    // convert...
     vcl::Window* pW = pWindow;
     if ( pW->mpWindowImpl->mpRealParent )
         pW = pW->mpWindowImpl->mpRealParent;

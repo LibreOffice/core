@@ -384,7 +384,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
 
         <p>The check is made using a SELECT statement, so even if the connection
         is a n SDB-level connection, which may filter tables in its table
-        supplier, the result may be reliable ....</p>
+        supplier, the result may be reliable...</p>
     */
     protected boolean existsInvisibleTable( XConnection xConn, String sTableName ) throws java.lang.Exception
     {

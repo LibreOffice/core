@@ -1186,7 +1186,7 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS, short nLen)
                         = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_RIGHT ] ));
                         // apply right border to previous cell
                         // bExist must not be set to false, because WW
-                        // does not count this cells in text boxes....
+                        // does not count this cells in text boxes...
                 }
             }
         }

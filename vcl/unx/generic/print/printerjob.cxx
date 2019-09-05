@@ -190,7 +190,7 @@ removeSpoolDir (const OUString& rSpoolDir)
     if( osl::File::E_None != osl::File::getSystemPathFromFileURL( rSpoolDir, aSysPath ) )
     {
         // Conversion did not work, as this is quite a dangerous action,
-        // we should abort here ....
+        // we should abort here...
         OSL_FAIL( "psprint: couldn't remove spool directory" );
         return;
     }

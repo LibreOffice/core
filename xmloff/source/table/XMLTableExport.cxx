@@ -455,7 +455,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
 // ODF export of the text contents of a table cell.
 // Remarks: Up to now we only export text contents!
-// TODO: Check against nested tables ....
+// TODO: Check against nested tables...
 
  void XMLTableExport::ImpExportText( const Reference< XCell >& xCell )
  {

@@ -760,7 +760,7 @@ SvTreeListEntry* SvImpLBox::GetClickedEntry( const Point& rPoint ) const
     if ( !m_pView->GetModel() )
         // this is quite impossible. Nevertheless, stack traces from the crash reporter
         // suggest it isn't. Okay, make it safe, and wait for somebody to reproduce it
-        // reliably :-\ ....
+        // reliably :-\ ...
         // #122359# / 2005-05-23 / frank.schoenheit@sun.com
         return nullptr;
     if( m_pView->GetEntryCount() == 0 || !m_pStartEntry || !m_pView->GetEntryHeight())

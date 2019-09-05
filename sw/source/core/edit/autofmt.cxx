@@ -410,7 +410,7 @@ bool SwAutoFormat::IsEnumericChar(const SwTextFrame& rFrame) const
             return true;
     }
 
-    // 1.) / 1. / 1.1.1 / (1). / (1) / ....
+    // 1.) / 1. / 1.1.1 / (1). / (1) / ...
     return USHRT_MAX != GetDigitLevel(rFrame, nBlanks);
 }
 
@@ -479,7 +479,7 @@ sal_uInt16 SwAutoFormat::CalcLevel(const SwTextFrame & rFrame,
                     break;
         default:
             if( pDigitLvl )
-                // test 1.) / 1. / 1.1.1 / (1). / (1) / ....
+                // test 1.) / 1. / 1.1.1 / (1). / (1) / ...
                 *pDigitLvl = GetDigitLevel(rFrame, n);
             return nLvl;
         }
@@ -759,7 +759,7 @@ SwAutoFormat::GetDigitLevel(const SwTextFrame& rFrame, TextFrameIndex& rPos,
         OUString* pPrefix, OUString* pPostfix, OUString* pNumTypes ) const
 {
 
-    // check for 1.) / 1. / 1.1.1 / (1). / (1) / ....
+    // check for 1.) / 1. / 1.1.1 / (1). / (1) / ...
     const OUString& rText = rFrame.GetText();
     sal_Int32 nPos(rPos);
     int eScan = NONE;

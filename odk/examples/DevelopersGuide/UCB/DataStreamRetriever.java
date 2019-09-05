@@ -74,7 +74,7 @@ public class DataStreamRetriever {
 
     /**
      *  Read the document data stream of a document content using a
-     *  XActiveDataSink implementation as data sink....
+     *  XActiveDataSink implementation as data sink...
      *
      *@return     XInputStream  Returns input stream if stream successfully retrieved,
      *                          null otherwise

@@ -486,8 +486,8 @@ namespace vcl
         if ( !ShowPage( nCurrentState ) )
         {
             // argh! prepareLeaveCurrentPage succeeded, determineNextState succeeded,
-            // but ShowPage doesn't? Somebody behaves very strange here ....
-            OSL_FAIL( "OWizardMachine::skipUntil: very unpolite ...." );
+            // but ShowPage doesn't? Somebody behaves very strange here...
+            OSL_FAIL( "OWizardMachine::skipUntil: very unpolite..." );
             m_pImpl->aStateHistory = aOldStateHistory;
             return false;
         }
@@ -517,11 +517,11 @@ namespace vcl
         if (!ShowPage(nCurrentState))
         {
             // TODO: this leaves us in a state where we have no current page and an inconsistent state history.
-            // Perhaps we should rollback the skipping here ....
-            OSL_FAIL("OWizardMachine::skip: very unpolite ....");
-                // if somebody does a skip and then does not allow to leave ...
+            // Perhaps we should rollback the skipping here...
+            OSL_FAIL("OWizardMachine::skip: very unpolite...");
+                // if somebody does a skip and then does not allow to leave...
                 // (can't be a commit error, as we've already committed the current page. So if ShowPage fails here,
-                // somebody behaves really strange ...)
+                // somebody behaves really strange...)
             return;
         }
 
@@ -991,8 +991,8 @@ namespace vcl
         if ( !ShowPage( nCurrentState ) )
         {
             // argh! prepareLeaveCurrentPage succeeded, determineNextState succeeded,
-            // but ShowPage doesn't? Somebody behaves very strange here ....
-            OSL_FAIL( "WizardMachine::skipUntil: very unpolite ...." );
+            // but ShowPage doesn't? Somebody behaves very strange here...
+            OSL_FAIL( "WizardMachine::skipUntil: very unpolite..." );
             m_pImpl->aStateHistory = aOldStateHistory;
             return false;
         }
@@ -1021,9 +1021,9 @@ namespace vcl
         if (!ShowPage(nCurrentState))
         {
             // TODO: this leaves us in a state where we have no current page and an inconsistent state history.
-            // Perhaps we should rollback the skipping here ....
-            OSL_FAIL("OWizardMachine::skip: very unpolite ....");
-                // if somebody does a skip and then does not allow to leave ...
+            // Perhaps we should rollback the skipping here...
+            OSL_FAIL("OWizardMachine::skip: very unpolite...");
+                // if somebody does a skip and then does not allow to leave...
                 // (can't be a commit error, as we've already committed the current page. So if ShowPage fails here,
                 // somebody behaves really strange ...)
             return;

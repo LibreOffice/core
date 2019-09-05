@@ -386,7 +386,7 @@ SwDocShell::~SwDocShell()
     m_pFontList.reset();
 
     // we, as BroadCaster also become our own Listener
-    // (for DocInfo/FileNames/....)
+    // (for DocInfo/FileNames/...)
     EndListening( *this );
 
     m_pOLEChildList.reset();
@@ -397,7 +397,7 @@ void  SwDocShell::Init_Impl()
     SetPool(&SW_MOD()->GetPool());
     SetBaseModel(new SwXTextDocument(this));
     // we, as BroadCaster also become our own Listener
-    // (for DocInfo/FileNames/....)
+    // (for DocInfo/FileNames/...)
     StartListening( *this );
     //position of the "Automatic" style filter for the stylist (app.src)
     SetAutoStyleFilterIndex(3);

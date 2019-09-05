@@ -142,7 +142,7 @@ void PipeClientMain::testPipe( const Reference< XInterface > & rxInterface )
 
 sal_Int32 PipeClientMain::run( const Sequence< OUString > & aArguments ) throw ( RuntimeException )
 {
-    printf( "Connecting ....\n" );
+    printf( "Connecting...\n" );
 
     if( aArguments.getLength() == 1 )
     {

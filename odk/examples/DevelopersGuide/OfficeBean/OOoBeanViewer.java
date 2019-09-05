@@ -47,7 +47,7 @@ import java.io.*;
  * When initially loaded the applet has two buttons
  * one for opening an existent file and one to open
  * a blank document of a given type supported by
- * OpenOffice.org eg. Writer, Calc, Impress, .....
+ * OpenOffice.org eg. Writer, Calc, Impress, ...
  *
  */
 

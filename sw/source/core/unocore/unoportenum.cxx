@@ -413,7 +413,7 @@ lcl_ExportFieldMark(
 {
     uno::Reference<text::XTextRange> xRef;
     SwDoc* pDoc = pUnoCursor->GetDoc();
-    // maybe it's a good idea to add a special hint to the hints array and rely on the hint segmentation....
+    // maybe it's a good idea to add a special hint to the hints array and rely on the hint segmentation...
     const sal_Int32 start = pUnoCursor->Start()->nContent.GetIndex();
     OSL_ENSURE(pUnoCursor->End()->nContent.GetIndex() == start,
                "hmm --- why is this different");

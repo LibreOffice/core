@@ -703,7 +703,7 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, c
         bNativeOK = rRenderContext.DrawNativeControl(aCtrlType, aCtrlPart, aCtrlRegion, nState, aControlValue, OUString());
 
         // if the native theme draws the spinbuttons in one call, make sure the proper settings
-        // are passed, this might force a redraw though.... (TODO: improve)
+        // are passed, this might force a redraw though... (TODO: improve)
         if ((aCtrlType == ControlType::Spinbox) && !pCtrl->IsNativeControlSupported(ControlType::Spinbox, ControlPart::ButtonUp))
         {
             Edit* pEdit = static_cast<Edit*>(pCtrl)->GetSubEdit();
