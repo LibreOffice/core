@@ -2802,7 +2802,7 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::TakeContour() const
 SdrObject* SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     // #i37011#
-    SdrObject* pRetval = nullptr;
+    SdrObjectUniquePtr pRetval;
     SdrObject* pRenderedCustomShape = nullptr;
 
     if ( !mXRenderedCustomShape.is() )
@@ -2821,7 +2821,7 @@ SdrObject* SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bool bAddText) co
         // Clone to same SdrModel
         SdrObject* pCandidate(pRenderedCustomShape->CloneSdrObject(pRenderedCustomShape->getSdrModelFromSdrObject()));
         DBG_ASSERT(pCandidate, "SdrObjCustomShape::DoConvertToPolyObj: Could not clone SdrObject (!)");
-        pRetval = pCandidate->DoConvertToPolyObj(bBezier, bAddText);
+        pRetval.reset(pCandidate->DoConvertToPolyObj(bBezier, bAddText));
         SdrObject::Free( pCandidate );
 
         if(pRetval)
@@ -2835,11 +2835,11 @@ SdrObject* SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bool bAddText) co
 
         if(bAddText && HasText() && !IsTextPath())
         {
-            pRetval = ImpConvertAddText(pRetval, bBezier);
+            pRetval = ImpConvertAddText(std::move(pRetval), bBezier);
         }
     }
 
-    return pRetval;
+    return pRetval.release();
 }
 
 void SdrObjCustomShape::NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr )

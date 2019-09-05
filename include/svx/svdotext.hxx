@@ -264,7 +264,7 @@ private:
                                        Fraction&        aFitXCorrection ) const;
     void ImpAutoFitText( SdrOutliner& rOutliner ) const;
     static void ImpAutoFitText( SdrOutliner& rOutliner, const Size& rShapeSize, bool bIsVerticalWriting );
-    SVX_DLLPRIVATE SdrObject* ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const;
+    SVX_DLLPRIVATE SdrObjectUniquePtr ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const;
     SVX_DLLPRIVATE void ImpRegisterLink();
     SVX_DLLPRIVATE void ImpDeregisterLink();
     SVX_DLLPRIVATE ImpSdrObjTextLinkUserData* GetLinkUserData() const;
@@ -278,7 +278,7 @@ private:
 protected:
     bool ImpCanConvTextToCurve() const;
     SdrPathObjUniquePtr ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed, bool bBezier) const;
-    SdrObject* ImpConvertAddText(SdrObject* pObj, bool bBezier) const;
+    SdrObjectUniquePtr ImpConvertAddText(SdrObjectUniquePtr pObj, bool bBezier) const;
     void ImpSetTextStyleSheetListeners();
     static void ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, Fraction& rFitXCorrection);
     static void ImpJustifyRect(tools::Rectangle& rRect);

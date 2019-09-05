@@ -2405,14 +2405,14 @@ SdrObject* SdrEdgeObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     basegfx::B2DPolyPolygon aPolyPolygon;
     aPolyPolygon.append(pEdgeTrack->getB2DPolygon());
-    SdrObject* pRet = ImpConvertMakeObj(aPolyPolygon, false, bBezier).release();
+    SdrObjectUniquePtr pRet = ImpConvertMakeObj(aPolyPolygon, false, bBezier);
 
     if(bAddText)
     {
-        pRet = ImpConvertAddText(pRet, bBezier);
+        pRet = ImpConvertAddText(std::move(pRet), bBezier);
     }
 
-    return pRet;
+    return pRet.release();
 }
 
 sal_uInt32 SdrEdgeObj::GetSnapPointCount() const

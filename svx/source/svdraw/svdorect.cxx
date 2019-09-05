@@ -564,22 +564,22 @@ SdrObject* SdrRectObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 
     basegfx::B2DPolyPolygon aPolyPolygon(aXP.getB2DPolygon());
     aPolyPolygon.removeDoublePoints();
-    SdrObject* pRet = nullptr;
+    SdrObjectUniquePtr pRet;
 
     // small correction: Do not create something when no fill and no line. To
     // be sure to not damage something with non-text frames, do this only
     // when used with bAddText==false from other converters
     if((bAddText && !IsTextFrame()) || HasFill() || HasLine())
     {
-        pRet = ImpConvertMakeObj(aPolyPolygon, true, bBezier).release();
+        pRet = ImpConvertMakeObj(aPolyPolygon, true, bBezier);
     }
 
     if(bAddText)
     {
-        pRet = ImpConvertAddText(pRet, bBezier);
+        pRet = ImpConvertAddText(std::move(pRet), bBezier);
     }
 
-    return pRet;
+    return pRet.release();
 }
 
 void SdrRectObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)

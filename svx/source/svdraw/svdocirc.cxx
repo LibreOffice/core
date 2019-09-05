@@ -1151,14 +1151,14 @@ SdrObject* SdrCircObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     const bool bFill(meCircleKind != SdrCircKind::Arc);
     const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, maRect, nStartAngle, nEndAngle));
-    SdrObject* pRet = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aCircPolygon), bFill, bBezier).release();
+    SdrObjectUniquePtr pRet = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aCircPolygon), bFill, bBezier);
 
     if(bAddText)
     {
-        pRet = ImpConvertAddText(pRet, bBezier);
+        pRet = ImpConvertAddText(std::move(pRet), bBezier);
     }
 
-    return pRet;
+    return pRet.release();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
