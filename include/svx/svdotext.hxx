@@ -42,6 +42,7 @@
 class OutlinerParaObject;
 class OverflowingText;
 class SdrOutliner;
+class SdrPathObj;
 class SdrTextObj;
 class SdrTextObjTest;
 class SvxFieldItem;
@@ -49,6 +50,7 @@ class ImpSdrObjTextLink;
 class EditStatus;
 class TextChain;
 class TextChainFlow;
+
 enum class EEAnchorMode;
 enum class EETextFormat;
 
@@ -128,9 +130,9 @@ namespace sdr
     } // end of namespace properties
 } // end of namespace sdr
 
-
 //   SdrTextObj
 
+typedef std::unique_ptr<SdrPathObj, SdrObjectFreeOp> SdrPathObjUniquePtr;
 
 class SVX_DLLPUBLIC SdrTextObj : public SdrAttrObj, public svx::ITextProvider
 {
@@ -275,7 +277,7 @@ private:
 
 protected:
     bool ImpCanConvTextToCurve() const;
-    SdrObject* ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed, bool bBezier) const;
+    SdrPathObjUniquePtr ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed, bool bBezier) const;
     SdrObject* ImpConvertAddText(SdrObject* pObj, bool bBezier) const;
     void ImpSetTextStyleSheetListeners();
     static void ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, Fraction& rFitXCorrection);

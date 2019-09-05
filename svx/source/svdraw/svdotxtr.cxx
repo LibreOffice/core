@@ -430,7 +430,7 @@ bool SdrTextObj::ImpCanConvTextToCurve() const
     return !IsOutlText();
 }
 
-SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed, bool bBezier) const
+SdrPathObjUniquePtr SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed, bool bBezier) const
 {
     SdrObjKind ePathKind = bClosed ? OBJ_PATHFILL : OBJ_PATHLINE;
     basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPolygon);
@@ -442,10 +442,10 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
         ePathKind = bClosed ? OBJ_POLY : OBJ_PLIN;
     }
 
-    SdrPathObj* pPathObj = new SdrPathObj(
+    SdrPathObjUniquePtr pPathObj(new SdrPathObj(
         getSdrModelFromSdrObject(),
         ePathKind,
-        aB2DPolyPolygon);
+        aB2DPolyPolygon));
 
     if(bBezier)
     {

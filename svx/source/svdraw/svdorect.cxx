@@ -571,7 +571,7 @@ SdrObject* SdrRectObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
     // when used with bAddText==false from other converters
     if((bAddText && !IsTextFrame()) || HasFill() || HasLine())
     {
-        pRet = ImpConvertMakeObj(aPolyPolygon, true, bBezier);
+        pRet = ImpConvertMakeObj(aPolyPolygon, true, bBezier).release();
     }
 
     if(bAddText)
