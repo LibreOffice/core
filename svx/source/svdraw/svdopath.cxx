@@ -2676,14 +2676,12 @@ SdrObject* SdrPathObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
     const bool bHideContour(
         !aText.isDefault() && !aText.getSdrFormTextAttribute().isDefault() && aText.isHideContour());
 
-    SdrObject* pRet = bHideContour ?
-        nullptr :
-        ImpConvertMakeObj(GetPathPoly(), IsClosed(), bBezier);
+    SdrObject* pRet = nullptr;
 
-    SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pRet );
-
-    if(pPath)
+    if(!bHideContour)
     {
+        SdrPathObjUniquePtr pPath = ImpConvertMakeObj(GetPathPoly(), IsClosed(), bBezier);
+
         if(pPath->GetPathPoly().areControlPointsUsed())
         {
             if(!bBezier)
@@ -2700,6 +2698,7 @@ SdrObject* SdrPathObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
                 pPath->SetPathPoly(basegfx::utils::expandToCurve(pPath->GetPathPoly()));
             }
         }
+        pRet = pPath.release();
     }
 
     if(bAddText)

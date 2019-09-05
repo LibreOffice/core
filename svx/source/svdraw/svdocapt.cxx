@@ -43,6 +43,7 @@
 #include <svx/svdhdl.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdocapt.hxx>
+#include <svx/svdopath.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpool.hxx>
@@ -696,7 +697,7 @@ void SdrCaptionObj::RestGeoData(const SdrObjGeoData& rGeo)
 SdrObject* SdrCaptionObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     SdrObject* pRect=SdrRectObj::DoConvertToPolyObj(bBezier, bAddText);
-    SdrObject* pTail = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aTailPoly.getB2DPolygon()), false, bBezier);
+    SdrObject* pTail = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aTailPoly.getB2DPolygon()), false, bBezier).release();
     SdrObject* pRet=(pTail!=nullptr) ? pTail : pRect;
     if (pTail!=nullptr && pRect!=nullptr) {
         bool bInsRect = true;

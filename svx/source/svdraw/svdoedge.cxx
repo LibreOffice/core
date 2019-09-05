@@ -37,6 +37,7 @@
 #include <svx/svdhdl.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdoedge.hxx>
+#include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpool.hxx>
@@ -2404,7 +2405,7 @@ SdrObject* SdrEdgeObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     basegfx::B2DPolyPolygon aPolyPolygon;
     aPolyPolygon.append(pEdgeTrack->getB2DPolygon());
-    SdrObject* pRet = ImpConvertMakeObj(aPolyPolygon, false, bBezier);
+    SdrObject* pRet = ImpConvertMakeObj(aPolyPolygon, false, bBezier).release();
 
     if(bAddText)
     {
