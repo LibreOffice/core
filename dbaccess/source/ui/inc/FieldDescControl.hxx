@@ -20,6 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_FIELDDESCCONTROL_HXX
 
 #include <vcl/tabpage.hxx>
+#include <vcl/weld.hxx>
 #include "QEnumTypes.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
@@ -65,40 +66,40 @@ namespace dbaui
     class OFieldDescControl : public TabPage
     {
     private:
+        std::unique_ptr<weld::Builder> m_xBuilder;
+        std::unique_ptr<weld::Container> m_xContainer;
+
         VclPtr<OTableDesignHelpBar>    pHelp;
-        VclPtr<vcl::Window>            pLastFocusWindow;
-        VclPtr<vcl::Window>            m_pActFocusWindow;
+        weld::Widget* m_pLastFocusWindow;
+        weld::Widget* m_pActFocusWindow;
 
-        VclPtr<FixedText>              pDefaultText;
-        VclPtr<FixedText>              pRequiredText;
-        VclPtr<FixedText>              pAutoIncrementText;
-        VclPtr<FixedText>              pTextLenText;
-        VclPtr<FixedText>              pNumTypeText;
-        VclPtr<FixedText>              pLengthText;
-        VclPtr<FixedText>              pScaleText;
-        VclPtr<FixedText>              pFormatText;
-        VclPtr<FixedText>              pBoolDefaultText;
-        VclPtr<FixedText>              m_pColumnNameText;
-        VclPtr<FixedText>              m_pTypeText;
-        VclPtr<FixedText>              m_pAutoIncrementValueText;
+        std::unique_ptr<weld::Label>   m_xDefaultText;
+        std::unique_ptr<weld::Label>   m_xRequiredText;
+        std::unique_ptr<weld::Label>   m_xAutoIncrementText;
+        std::unique_ptr<weld::Label>   m_xTextLenText;
+        std::unique_ptr<weld::Label>   m_xNumTypeText;
+        std::unique_ptr<weld::Label>   m_xLengthText;
+        std::unique_ptr<weld::Label>   m_xScaleText;
+        std::unique_ptr<weld::Label>   m_xFormatText;
+        std::unique_ptr<weld::Label>   m_xBoolDefaultText;
+        std::unique_ptr<weld::Label>   m_xColumnNameText;
+        std::unique_ptr<weld::Label>   m_xTypeText;
+        std::unique_ptr<weld::Label>   m_xAutoIncrementValueText;
 
-        VclPtr<OPropListBoxCtrl>       pRequired;
-        VclPtr<OPropListBoxCtrl>       pNumType;
-        VclPtr<OPropListBoxCtrl>       pAutoIncrement;
-        VclPtr<OPropEditCtrl>          pDefault;
-        VclPtr<OPropNumericEditCtrl>   pTextLen;
-        VclPtr<OPropNumericEditCtrl>   pLength;
-        VclPtr<OPropNumericEditCtrl>   pScale;
-        VclPtr<OPropEditCtrl>          pFormatSample;
-        VclPtr<OPropListBoxCtrl>       pBoolDefault;
-        VclPtr<OPropColumnEditCtrl>    m_pColumnName;
-        VclPtr<OPropListBoxCtrl>       m_pType;
-        VclPtr<OPropEditCtrl>          m_pAutoIncrementValue;
+        std::unique_ptr<OPropListBoxCtrl> m_xRequired;
+        std::unique_ptr<OPropListBoxCtrl> m_xNumType;
+        std::unique_ptr<OPropListBoxCtrl> m_xAutoIncrement;
+        std::unique_ptr<OPropEditCtrl> m_xDefault;
+        std::unique_ptr<OPropNumericEditCtrl> m_xTextLen;
+        std::unique_ptr<OPropNumericEditCtrl> m_xLength;
+        std::unique_ptr<OPropNumericEditCtrl> m_xScale;
+        std::unique_ptr<OPropEditCtrl> m_xFormatSample;
+        std::unique_ptr<OPropListBoxCtrl> m_xBoolDefault;
+        std::unique_ptr<OPropColumnEditCtrl> m_xColumnName;
+        std::unique_ptr<OPropListBoxCtrl> m_xType;
+        std::unique_ptr<OPropEditCtrl> m_xAutoIncrementValue;
 
-        VclPtr<PushButton>             pFormat;
-
-        VclPtr<ScrollBar>              m_pVertScroll;
-        VclPtr<ScrollBar>              m_pHorzScroll;
+        std::unique_ptr<weld::Button>  m_xFormat;
 
         TOTypeInfoSP            m_pPreviousType;
         short                   m_nPos;
@@ -114,28 +115,22 @@ namespace dbaui
 
         OFieldDescription*      pActFieldDescr;
 
-        DECL_LINK( OnScroll, ScrollBar*, void);
+        DECL_LINK(OnScroll, weld::ScrolledWindow&, void);
 
-        DECL_LINK( FormatClickHdl, Button *, void );
-        DECL_LINK( ChangeHdl, ListBox&, void );
+        DECL_LINK(FormatClickHdl, weld::Button&, void);
+        DECL_LINK(ChangeHdl, weld::ComboBox&, void);
 
         // used by ActivatePropertyField
-        DECL_LINK( OnControlFocusLost, Control&, void );
-        DECL_LINK( OnControlFocusGot, Control&, void );
+        DECL_LINK( OnControlFocusLost, weld::Widget&, void );
+        DECL_LINK( OnControlFocusGot, weld::Widget&, void );
 
         void                UpdateFormatSample(OFieldDescription const * pFieldDescr);
-        void                ArrangeAggregates();
-
-        void                SetPosSize( VclPtr<Control> const & rControl, long nRow, sal_uInt16 nCol );
-
-        static void         ScrollAggregate(Control* pText, Control* pInput, Control* pButton, long nDeltaX, long nDeltaY);
-        void                ScrollAllAggregates();
 
         bool                isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const;
         void                Construct();
-        VclPtr<OPropNumericEditCtrl> CreateNumericControl(const char* pHelpId, short _nProperty, const OString& _sHelpId);
-        VclPtr<FixedText>   CreateText(const char* pTextRes);
-        void                InitializeControl(Control* _pControl,const OString& _sHelpId,bool _bAddChangeHandler);
+        std::unique_ptr<OPropNumericEditCtrl> CreateNumericControl(const OString& rId, const char* pHelpId, short _nProperty, const OString& _sHelpId);
+        void                InitializeControl(weld::Widget* _pControl,const OString& _sHelpId);
+        void                InitializeControl(OPropListBoxCtrl* _pControl,const OString& _sHelpId,bool _bAddChangeHandler);
 
     protected:
         void    setRightAligned()       { m_bRightAligned = true; }
@@ -146,7 +141,6 @@ namespace dbaui
         void                setCurrentFieldDescData( OFieldDescription* _pDesc ) { pActFieldDescr = _pDesc; }
 
         sal_uInt16          CountActiveAggregates() const;
-        sal_Int32           GetMaxControlHeight() const;
 
         virtual void        ActivateAggregate( EControlType eType );
         virtual void        DeactivateAggregate( EControlType eType );
@@ -168,12 +162,12 @@ namespace dbaui
         OUString                                BoolStringPersistent(const OUString& rUIString) const;
         OUString                                BoolStringUI(const OUString& rPersistentString) const;
 
-        const OPropColumnEditCtrl*              getColumnCtrl() const { return m_pColumnName; }
+        const OPropColumnEditCtrl*              getColumnCtrl() const { return m_xColumnName.get(); }
 
-        void    implFocusLost(vcl::Window* _pWhich);
+        void    implFocusLost(weld::Widget* _pWhich);
 
     public:
-        OFieldDescControl( vcl::Window* pParent, OTableDesignHelpBar* pHelpBar);
+        OFieldDescControl(TabPageParent pParent, OTableDesignHelpBar* pHelpBar);
         virtual ~OFieldDescControl() override;
         virtual void        dispose() override;
 
@@ -185,7 +179,6 @@ namespace dbaui
         void                SetReadOnly( bool bReadOnly );
 
         // when resize is called
-        void                CheckScrollBars();
         bool                isCutAllowed() const;
         bool                isCopyAllowed() const;
         bool                isPasteAllowed() const;
@@ -197,7 +190,6 @@ namespace dbaui
         void                Init();
         virtual void        GetFocus() override;
         virtual void        LoseFocus() override;
-        virtual void        Resize() override;
 
         virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() = 0;
         virtual css::uno::Reference< css::sdbc::XConnection> getConnection() = 0;

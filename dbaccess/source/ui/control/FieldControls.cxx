@@ -25,54 +25,36 @@
 
 namespace dbaui {
 
-namespace {
-
-void lcl_setSpecialReadOnly( bool _bReadOnly, vcl::Window* _pWin )
-{
-    StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
-    const Color& rNewColor = _bReadOnly ? aSystemStyle.GetDialogColor() : aSystemStyle.GetFieldColor();
-    _pWin->SetBackground(Wallpaper(rNewColor));
-    _pWin->SetControlBackground(rNewColor);
-}
-
-}
-
-OPropColumnEditCtrl::OPropColumnEditCtrl(vcl::Window* pParent,
+OPropColumnEditCtrl::OPropColumnEditCtrl(std::unique_ptr<weld::Entry> xEntry,
                                          OUString const & _rAllowedChars,
                                          const char* pHelpId,
-                                         short nPosition,
-                                         WinBits nWinStyle)
-    :OSQLNameEdit(pParent, nWinStyle, _rAllowedChars)
-    ,m_nPos(nPosition)
+                                         short nPosition)
+    : OSQLNameEntry(std::move(xEntry), _rAllowedChars)
+    , m_nPos(nPosition)
 {
     m_strHelpText = DBA_RES(pHelpId);
 }
 
-OPropEditCtrl::OPropEditCtrl(vcl::Window* pParent, const char* pHelpId, short nPosition, WinBits nWinStyle)
-    :Edit(pParent, nWinStyle)
-    ,m_nPos(nPosition)
+OPropEditCtrl::OPropEditCtrl(std::unique_ptr<weld::Entry> xEntry, const char* pHelpId, short nPosition)
+    : OWidgetBase(xEntry.get())
+    , m_xEntry(std::move(xEntry))
+    , m_nPos(nPosition)
 {
     m_strHelpText = DBA_RES(pHelpId);
 }
 
-void
-OPropNumericEditCtrl::SetSpecialReadOnly(bool _bReadOnly)
-{
-    SetReadOnly(_bReadOnly);
-    lcl_setSpecialReadOnly(_bReadOnly,this);
-}
-
-
-OPropNumericEditCtrl::OPropNumericEditCtrl(vcl::Window* pParent, const char* pHelpId, short nPosition, WinBits nWinStyle)
-    :NumericField(pParent, nWinStyle)
-    ,m_nPos(nPosition)
+OPropNumericEditCtrl::OPropNumericEditCtrl(std::unique_ptr<weld::SpinButton> xSpinButton, const char* pHelpId, short nPosition)
+    : OWidgetBase(xSpinButton.get())
+    , m_xSpinButton(std::move(xSpinButton))
+    , m_nPos(nPosition)
 {
     m_strHelpText = DBA_RES(pHelpId);
 }
 
-OPropListBoxCtrl::OPropListBoxCtrl(vcl::Window* pParent, const char* pHelpId, short nPosition, WinBits nWinStyle)
-    :ListBox(pParent, nWinStyle)
-    ,m_nPos(nPosition)
+OPropListBoxCtrl::OPropListBoxCtrl(std::unique_ptr<weld::ComboBox> xComboBox, const char* pHelpId, short nPosition)
+    : OWidgetBase(xComboBox.get())
+    , m_xComboBox(std::move(xComboBox))
+    , m_nPos(nPosition)
 {
     m_strHelpText = DBA_RES(pHelpId);
 }

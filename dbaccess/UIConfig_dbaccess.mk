@@ -32,6 +32,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/directsqldialog  \
     dbaccess/uiconfig/ui/emptypage \
     dbaccess/uiconfig/ui/fielddialog \
+    dbaccess/uiconfig/ui/fielddescpage \
     dbaccess/uiconfig/ui/finalpagewizard \
     dbaccess/uiconfig/ui/generalpagedialog \
     dbaccess/uiconfig/ui/generalpagewizard \
@@ -57,8 +58,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/querypropertiesdialog  \
     dbaccess/uiconfig/ui/relationdialog \
     dbaccess/uiconfig/ui/rowheightdialog \
-    dbaccess/uiconfig/ui/rtfcopytabledialog \
-	dbaccess/uiconfig/ui/saveindexdialog \
+    dbaccess/uiconfig/ui/saveindexdialog \
     dbaccess/uiconfig/ui/savedialog \
     dbaccess/uiconfig/ui/savemodifieddialog \
     dbaccess/uiconfig/ui/specialjdbcconnectionpage \
