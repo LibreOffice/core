@@ -22,6 +22,30 @@
       "revId": "2c0d3ce5292b45a8897758508ee61801e4e8340d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_b546e97b",
+        "filename": "sw/source/core/text/txtfld.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-09-05T12:13:01Z",
+      "side": 1,
+      "message": "it depends on the type, AUTOFMT always has an end",
+      "parentUuid": "bf659307_557c2db4",
+      "range": {
+        "startLine": 443,
+        "startChar": 45,
+        "endLine": 443,
+        "endChar": 48
+      },
+      "revId": "2c0d3ce5292b45a8897758508ee61801e4e8340d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
