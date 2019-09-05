@@ -100,18 +100,18 @@ com::sun::star::uno::XInterface * CppInterfaceProxy::create(
 {
     typelib_typedescription_complete(
         reinterpret_cast< typelib_TypeDescription ** >(&pTypeDescr));
-    bridges::cpp_uno::shared::VtableFactory::Vtables aVtables(
+    const bridges::cpp_uno::shared::VtableFactory::Vtables& rVtables(
         getVtableFactory()->getVtables(pTypeDescr));
     std::unique_ptr< char[] > pMemory(
         new char[
             sizeof (CppInterfaceProxy)
-            + (aVtables.count - 1) * sizeof (void **)]);
+            + (rVtables.count - 1) * sizeof (void **)]);
     new(pMemory.get()) CppInterfaceProxy(pBridge, pUnoI, pTypeDescr, rOId);
     CppInterfaceProxy * pProxy = reinterpret_cast< CppInterfaceProxy * >(
         pMemory.release());
-    for (sal_Int32 i = 0; i < aVtables.count; ++i) {
+    for (sal_Int32 i = 0; i < rVtables.count; ++i) {
         pProxy->vtables[i] = VtableFactory::mapBlockToVtable(
-            aVtables.blocks[i].start);
+            rVtables.blocks[i].start);
     }
     return castProxyToInterface(pProxy);
 }
