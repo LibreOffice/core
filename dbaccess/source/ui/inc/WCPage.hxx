@@ -32,23 +32,23 @@ namespace dbaui
     class OWizNormalExtend;
     class OCopyTable final : public OWizardPage
     {
-        VclPtr<Edit>              m_pEdTableName;
-        VclPtr<RadioButton>       m_pRB_DefData;
-        VclPtr<RadioButton>       m_pRB_Def;
-        VclPtr<RadioButton>       m_pRB_View;
-        VclPtr<RadioButton>       m_pRB_AppendData;
-        VclPtr<CheckBox>          m_pCB_UseHeaderLine;
-        VclPtr<CheckBox>          m_pCB_PrimaryColumn;
-        VclPtr<FixedText>         m_pFT_KeyName;
-        VclPtr<Edit>              m_pEdKeyName;
-        sal_Int16          m_nOldOperation;
-
         bool               m_bPKeyAllowed;
         bool               m_bUseHeaderAllowed;
+        sal_Int16          m_nOldOperation;
 
-        DECL_LINK( AppendDataClickHdl, Button*, void );
-        DECL_LINK( RadioChangeHdl, Button*, void );
-        DECL_LINK( KeyClickHdl, Button*, void );
+        std::unique_ptr<weld::Entry> m_xEdTableName;
+        std::unique_ptr<weld::RadioButton> m_xRB_DefData;
+        std::unique_ptr<weld::RadioButton> m_xRB_Def;
+        std::unique_ptr<weld::RadioButton> m_xRB_View;
+        std::unique_ptr<weld::RadioButton> m_xRB_AppendData;
+        std::unique_ptr<weld::CheckButton> m_xCB_UseHeaderLine;
+        std::unique_ptr<weld::CheckButton> m_xCB_PrimaryColumn;
+        std::unique_ptr<weld::Label> m_xFT_KeyName;
+        std::unique_ptr<weld::Entry> m_xEdKeyName;
+
+        DECL_LINK( AppendDataClickHdl, weld::Button&, void );
+        DECL_LINK( RadioChangeHdl, weld::Button&, void );
+        DECL_LINK( KeyClickHdl, weld::Button&, void );
 
         bool checkAppendData();
         void SetAppendDataRadio();
@@ -59,24 +59,23 @@ namespace dbaui
         virtual bool            LeavePage() override;
         virtual OUString        GetTitle() const override ;
 
-        OCopyTable( vcl::Window * pParent );
+        OCopyTable(OCopyTableWizard* pWizard, TabPageParent pParent);
         virtual ~OCopyTable() override;
-        virtual void dispose() override;
 
-        bool IsOptionDefData() const { return m_pRB_DefData->IsChecked(); }
-        bool IsOptionDef() const { return m_pRB_Def->IsChecked(); }
-        bool IsOptionView() const { return m_pRB_View->IsChecked(); }
-        OUString GetKeyName() const { return m_pEdKeyName->GetText(); }
+        bool IsOptionDefData() const { return m_xRB_DefData->get_active(); }
+        bool IsOptionDef() const { return m_xRB_Def->get_active(); }
+        bool IsOptionView() const { return m_xRB_View->get_active(); }
+        OUString GetKeyName() const { return m_xEdKeyName->get_text(); }
 
         void setCreateStyleAction();
         void disallowViews()
         {
-            m_pRB_View->Disable();
+            m_xRB_View->set_sensitive(false);
         }
         void disallowUseHeaderLine()
         {
             m_bUseHeaderAllowed = false;
-            m_pCB_UseHeaderLine->Disable();
+            m_xCB_UseHeaderLine->set_sensitive(false);
         }
 
         void setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggestedName );

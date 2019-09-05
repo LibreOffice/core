@@ -26,6 +26,7 @@
 #include <WCopyTable.hxx>
 #include <dbaccess/genericcontroller.hxx>
 #include <WCPage.hxx>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
@@ -114,7 +115,9 @@ void OTableCopyHelper::insertTable( const OUString& i_rSourceDataSource, const R
         Reference< XPropertySet > xDest( xFactory->createDataAccessDescriptor(), UNO_SET_THROW );
         xDest->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( i_rDestConnection ) );
 
-        Reference< XCopyTableWizard > xWizard( CopyTableWizard::create( aContext, xSource, xDest ), UNO_SET_THROW );
+        auto xInteractionHandler = InteractionHandler::createWithParent(aContext, VCLUnoHelper::GetInterface(m_pController->getView()));
+
+        Reference<XCopyTableWizard> xWizard(CopyTableWizard::createWithInteractionHandler(aContext, xSource, xDest, xInteractionHandler), UNO_SET_THROW);
 
         OUString sTableNameForAppend( GetTableNameForAppend() );
         xWizard->setDestinationTableName( GetTableNameForAppend() );

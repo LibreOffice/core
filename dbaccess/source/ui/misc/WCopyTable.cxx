@@ -57,7 +57,6 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/waitobj.hxx>
 
 #include <functional>
 
@@ -487,25 +486,25 @@ namespace
 }
 
 // OCopyTableWizard
-OCopyTableWizard::OCopyTableWizard( vcl::Window * pParent, const OUString& _rDefaultName, sal_Int16 _nOperation,
+OCopyTableWizard::OCopyTableWizard(weld::Window* pParent, const OUString& _rDefaultName, sal_Int16 _nOperation,
         const ICopyTableSourceObject& _rSourceObject, const Reference< XConnection >& _xSourceConnection,
         const Reference< XConnection >& _xConnection, const Reference< XComponentContext >& _rxContext,
-        const Reference< XInteractionHandler>&   _xInteractionHandler)
-    : WizardDialog( pParent, "RTFCopyTable", "dbaccess/ui/rtfcopytabledialog.ui")
-    ,m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
-    ,m_xDestConnection( _xConnection )
-    ,m_rSourceObject( _rSourceObject )
-    ,m_xFormatter( getNumberFormatter( _xConnection, _rxContext ) )
-    ,m_xContext(_rxContext)
-    ,m_xInteractionHandler(_xInteractionHandler)
-    ,m_sTypeNames(DBA_RES(STR_TABLEDESIGN_DBFIELDTYPES))
-    ,m_nPageCount(0)
-    ,m_bDeleteSourceColumns(true)
-    ,m_bInterConnectionCopy( _xSourceConnection != _xConnection )
-    ,m_sName( _rDefaultName )
-    ,m_nOperation( _nOperation )
-    ,m_ePressed( WIZARD_NONE )
-    ,m_bCreatePrimaryKeyColumn(false)
+        const Reference< XInteractionHandler>& _xInteractionHandler)
+    : vcl::RoadmapWizardMachine(pParent)
+    , m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
+    , m_xDestConnection( _xConnection )
+    , m_rSourceObject( _rSourceObject )
+    , m_xFormatter( getNumberFormatter( _xConnection, _rxContext ) )
+    , m_xContext(_rxContext)
+    , m_xInteractionHandler(_xInteractionHandler)
+    , m_sTypeNames(DBA_RES(STR_TABLEDESIGN_DBFIELDTYPES))
+    , m_nPageCount(0)
+    , m_bDeleteSourceColumns(true)
+    , m_bInterConnectionCopy( _xSourceConnection != _xConnection )
+    , m_sName( _rDefaultName )
+    , m_nOperation( _nOperation )
+    , m_ePressed( WIZARD_NONE )
+    , m_bCreatePrimaryKeyColumn(false)
 {
     construct();
 
@@ -566,38 +565,45 @@ OCopyTableWizard::OCopyTableWizard( vcl::Window * pParent, const OUString& _rDef
         m_sName = ::dbtools::composeTableName(m_xDestConnection->getMetaData(),sCatalog,sSchema,sTable,false,::dbtools::EComposeRule::InTableDefinitions);
     }
 
-    VclPtrInstance<OCopyTable> pPage1( this );
+    VclPtrInstance<OCopyTable> pPage1(this, CreatePageContainer());
     pPage1->disallowUseHeaderLine();
     if ( !bAllowViews )
         pPage1->disallowViews();
     pPage1->setCreateStyleAction();
     AddWizardPage(pPage1);
 
-    AddWizardPage( VclPtr<OWizNameMatching>::Create( this ) );
-    AddWizardPage( VclPtr<OWizColumnSelect>::Create( this ) );
-    AddWizardPage( VclPtr<OWizNormalExtend>::Create( this ) );
+    AddWizardPage( VclPtr<OWizNameMatching>::Create(this, CreatePageContainer() ) );
+    AddWizardPage( VclPtr<OWizColumnSelect>::Create(this, CreatePageContainer() ) );
+    AddWizardPage( VclPtr<OWizNormalExtend>::Create(this, CreatePageContainer() ) );
     ActivatePage();
 }
 
-OCopyTableWizard::OCopyTableWizard( vcl::Window* pParent, const OUString& _rDefaultName, sal_Int16 _nOperation,
+TabPageParent OCopyTableWizard::CreatePageContainer()
+{
+    OString sIdent(OString::number(m_nPageCount));
+    weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
+    return TabPageParent(pPageContainer, this);
+}
+
+OCopyTableWizard::OCopyTableWizard( weld::Window* pParent, const OUString& _rDefaultName, sal_Int16 _nOperation,
         const ODatabaseExport::TColumns& _rSourceColumns, const ODatabaseExport::TColumnVector& _rSourceColVec,
         const Reference< XConnection >& _xConnection, const Reference< XNumberFormatter >&  _xFormatter,
         TypeSelectionPageFactory _pTypeSelectionPageFactory, SvStream& _rTypeSelectionPageArg, const Reference< XComponentContext >& _rxContext )
-    :WizardDialog( pParent, "RTFCopyTable", "dbaccess/ui/rtfcopytabledialog.ui")
-    ,m_vSourceColumns(_rSourceColumns)
-    ,m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
-    ,m_xDestConnection( _xConnection )
-    ,m_rSourceObject( DummyCopySource::Instance() )
-    ,m_xFormatter(_xFormatter)
-    ,m_xContext(_rxContext)
-    ,m_sTypeNames(DBA_RES(STR_TABLEDESIGN_DBFIELDTYPES))
-    ,m_nPageCount(0)
-    ,m_bDeleteSourceColumns(false)
-    ,m_bInterConnectionCopy( false )
-    ,m_sName(_rDefaultName)
-    ,m_nOperation( _nOperation )
-    ,m_ePressed( WIZARD_NONE )
-    ,m_bCreatePrimaryKeyColumn(false)
+    : vcl::RoadmapWizardMachine(pParent)
+    , m_vSourceColumns(_rSourceColumns)
+    , m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
+    , m_xDestConnection( _xConnection )
+    , m_rSourceObject( DummyCopySource::Instance() )
+    , m_xFormatter(_xFormatter)
+    , m_xContext(_rxContext)
+    , m_sTypeNames(DBA_RES(STR_TABLEDESIGN_DBFIELDTYPES))
+    , m_nPageCount(0)
+    , m_bDeleteSourceColumns(false)
+    , m_bInterConnectionCopy( false )
+    , m_sName(_rDefaultName)
+    , m_nOperation( _nOperation )
+    , m_ePressed( WIZARD_NONE )
+    , m_bCreatePrimaryKeyColumn(false)
 {
     construct();
     for (auto const& sourceCol : _rSourceColVec)
@@ -610,65 +616,43 @@ OCopyTableWizard::OCopyTableWizard( vcl::Window* pParent, const OUString& _rDefa
 
     m_xInteractionHandler = InteractionHandler::createWithParent(m_xContext, nullptr);
 
-    VclPtrInstance<OCopyTable> pPage1( this );
+    VclPtrInstance<OCopyTable> pPage1( this, CreatePageContainer() );
     pPage1->disallowViews();
     pPage1->setCreateStyleAction();
     AddWizardPage( pPage1 );
 
-    AddWizardPage( VclPtr<OWizNameMatching>::Create( this ) );
-    AddWizardPage( VclPtr<OWizColumnSelect>::Create( this ) );
-    AddWizardPage( (*_pTypeSelectionPageFactory)( this, _rTypeSelectionPageArg ) );
+    AddWizardPage( VclPtr<OWizNameMatching>::Create( this, CreatePageContainer() ) );
+    AddWizardPage( VclPtr<OWizColumnSelect>::Create( this, CreatePageContainer() ) );
+    AddWizardPage( (*_pTypeSelectionPageFactory)( this, CreatePageContainer(), _rTypeSelectionPageArg ) );
 
     ActivatePage();
 }
 
 void OCopyTableWizard::construct()
 {
-    SetSizePixel(Size(700, 350));
+//TODO    SetSizePixel(Size(700, 350));
 
-    m_pbHelp = VclPtr<HelpButton>::Create(this, WB_TABSTOP);
-    AddButton(m_pbHelp);
-    m_pbCancel = VclPtr<CancelButton>::Create(this, WB_TABSTOP);
-    AddButton(m_pbCancel);
-    m_pbPrev = VclPtr<PushButton>::Create(this, WB_TABSTOP);
-    AddButton(m_pbPrev);
-    m_pbNext = VclPtr<PushButton>::Create(this, WB_TABSTOP);
-    AddButton(m_pbNext);
-    m_pbFinish = VclPtr<PushButton>::Create(this, WB_TABSTOP);
-    AddButton(m_pbFinish);
+    m_xPrevPage->set_label(DBA_RES(STR_WIZ_PB_PREV));
+    m_xNextPage->set_label(DBA_RES(STR_WIZ_PB_NEXT));
+    m_xFinish->set_label(DBA_RES(STR_WIZ_PB_OK));
 
-    m_pbHelp->SetSizePixel( LogicToPixel(Size(50, 14), MapMode(MapUnit::MapAppFont)) );
-    m_pbCancel->SetSizePixel( LogicToPixel(Size(50, 14), MapMode(MapUnit::MapAppFont)) );
-    m_pbPrev->SetSizePixel( LogicToPixel(Size(50, 14), MapMode(MapUnit::MapAppFont)) );
-    m_pbNext->SetSizePixel( LogicToPixel(Size(50, 14), MapMode(MapUnit::MapAppFont)) );
-    m_pbFinish->SetSizePixel( LogicToPixel(Size(50, 14), MapMode(MapUnit::MapAppFont)) );
+    m_xHelp->show();
+    m_xCancel->show();
+    m_xPrevPage->show();
+    m_xNextPage->show();
+    m_xFinish->show();
 
-    m_pbPrev->SetText(DBA_RES(STR_WIZ_PB_PREV));
-    m_pbNext->SetText(DBA_RES(STR_WIZ_PB_NEXT));
-    m_pbFinish->SetText(DBA_RES(STR_WIZ_PB_OK));
+    m_xPrevPage->connect_clicked( LINK( this, OCopyTableWizard, ImplPrevHdl ) );
+    m_xNextPage->connect_clicked( LINK( this, OCopyTableWizard, ImplNextHdl ) );
+    m_xFinish->connect_clicked( LINK( this, OCopyTableWizard, ImplOKHdl ) );
 
-    m_pbHelp->Show();
-    m_pbCancel->Show();
-    m_pbPrev->Show();
-    m_pbNext->Show();
-    m_pbFinish->Show();
-
-    m_pbPrev->SetClickHdl( LINK( this, OCopyTableWizard, ImplPrevHdl ) );
-    m_pbNext->SetClickHdl( LINK( this, OCopyTableWizard, ImplNextHdl ) );
-    m_pbFinish->SetClickHdl( LINK( this, OCopyTableWizard, ImplOKHdl ) );
-
-    SetActivatePageHdl( LINK( this, OCopyTableWizard, ImplActivateHdl ) );
-
-    SetPrevButton( m_pbPrev );
-    SetNextButton( m_pbNext );
-
-    m_pbNext->GrabFocus();
+    m_xNextPage->grab_focus();
 
     if (!m_vDestColumns.empty())
         // source is a html or rtf table
-        m_pbNext->SetStyle(m_pbFinish->GetStyle() | WB_DEFBUTTON);
+        m_xNextPage->set_has_default(true);
     else
-        m_pbFinish->SetStyle(m_pbFinish->GetStyle() | WB_DEFBUTTON);
+        m_xFinish->set_has_default(true);
 
     m_pTypeInfo = std::make_shared<OTypeInfo>();
     m_pTypeInfo->aUIName = m_sTypeNames.getToken(TYPE_OTHER, ';');
@@ -677,20 +661,6 @@ void OCopyTableWizard::construct()
 
 OCopyTableWizard::~OCopyTableWizard()
 {
-    disposeOnce();
-}
-
-void OCopyTableWizard::dispose()
-{
-    for ( ;; )
-    {
-        VclPtr<TabPage> pPage = GetPage(0);
-        if ( pPage == nullptr )
-            break;
-        RemovePage( pPage );
-        pPage.disposeAndClear();
-    }
-
     if ( m_bDeleteSourceColumns )
         clearColumns(m_vSourceColumns,m_vSourceVec);
 
@@ -700,16 +670,9 @@ void OCopyTableWizard::dispose()
     m_aTypeInfoIndex.clear();
     m_aTypeInfo.clear();
     m_aDestTypeInfoIndex.clear();
-
-    m_pbHelp.disposeAndClear();
-    m_pbCancel.disposeAndClear();
-    m_pbPrev.disposeAndClear();
-    m_pbNext.disposeAndClear();
-    m_pbFinish.disposeAndClear();
-    WizardDialog::dispose();
 }
 
-IMPL_LINK_NOARG(OCopyTableWizard, ImplPrevHdl, Button*, void)
+IMPL_LINK_NOARG(OCopyTableWizard, ImplPrevHdl, weld::Button&, void)
 {
     m_ePressed = WIZARD_PREV;
     if ( GetCurLevel() )
@@ -726,7 +689,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplPrevHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(OCopyTableWizard, ImplNextHdl, Button*, void)
+IMPL_LINK_NOARG(OCopyTableWizard, ImplNextHdl, weld::Button&, void)
 {
     m_ePressed = WIZARD_NEXT;
     if ( GetCurLevel() < MAX_PAGES )
@@ -831,14 +794,14 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
     return bRet;
 }
 
-IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl, Button*, void)
+IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl, weld::Button&, void)
 {
     m_ePressed = WIZARD_FINISH;
     bool bFinish = DeactivatePage();
 
     if(bFinish)
     {
-        WaitObject aWait(this);
+        weld::WaitObject aWait(m_xAssistant.get());
         switch(getOperation())
         {
             case CopyTableOperation::CopyDefinitionAndData:
@@ -917,10 +880,9 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl, Button*, void)
             }
         }
 
-        EndDialog(RET_OK);
+        m_xAssistant->response(RET_OK);
     }
 }
-
 
 void OCopyTableWizard::setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggestedName )
 {
@@ -934,10 +896,10 @@ void OCopyTableWizard::setCreatePrimaryKey( bool _bDoCreate, const OUString& _rS
         pSettingsPage->setCreatePrimaryKey( _bDoCreate, _rSuggestedName );
 }
 
-IMPL_LINK_NOARG(OCopyTableWizard, ImplActivateHdl, WizardDialog*, void)
+void OCopyTableWizard::ActivatePage()
 {
     OWizardPage* pCurrent = static_cast<OWizardPage*>(GetPage(GetCurLevel()));
-    if(pCurrent)
+    if (pCurrent)
     {
         bool bFirstTime = pCurrent->IsFirstTime();
         if(bFirstTime)
@@ -945,9 +907,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplActivateHdl, WizardDialog*, void)
 
         CheckButtons();
 
-        SetText(pCurrent->GetTitle());
-
-        Invalidate();
+        m_xAssistant->set_title(pCurrent->GetTitle());
     }
 }
 
@@ -956,27 +916,27 @@ void OCopyTableWizard::CheckButtons()
     if(GetCurLevel() == 0) // the first page has no back button
     {
         if(m_nPageCount > 1)
-            m_pbNext->Enable();
+            m_xNextPage->set_sensitive(true);
         else
-            m_pbNext->Enable(false);
+            m_xNextPage->set_sensitive(false);
 
-        m_pbPrev->Enable(false);
+        m_xPrevPage->set_sensitive(false);
     }
     else if(GetCurLevel() == m_nPageCount-1) // the last page has no next button
     {
-        m_pbNext->Enable(false);
-        m_pbPrev->Enable();
+        m_xNextPage->set_sensitive(false);
+        m_xPrevPage->set_sensitive(true);
     }
     else
     {
-        m_pbPrev->Enable();
+        m_xPrevPage->set_sensitive(true);
         // next already has its state
     }
 }
 
 void OCopyTableWizard::EnableNextButton(bool bEnable)
 {
-    m_pbNext->Enable(bEnable);
+    m_xNextPage->set_sensitive(bEnable);
 }
 
 bool OCopyTableWizard::DeactivatePage()
@@ -1256,7 +1216,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
         {
             xSuppDestinationColumns.set( xTable, UNO_QUERY_THROW );
             // insert new table name into table filter
-            ::dbaui::appendToFilter(m_xDestConnection, m_sName, GetComponentContext(), GetFrameWeld());
+            ::dbaui::appendToFilter(m_xDestConnection, m_sName, GetComponentContext(), m_xAssistant.get());
 
             // copy ui settings
             m_rSourceObject.copyUISettingsTo( xTable );

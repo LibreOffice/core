@@ -677,7 +677,7 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
 {
     bool bHaveDefaultTable =  !m_sDefaultTableName.isEmpty();
     OUString sTableName( bHaveDefaultTable ? m_sDefaultTableName : _rTableName );
-    ScopedVclPtrInstance<OCopyTableWizard> aWizard(
+    OCopyTableWizard aWizard(
         nullptr,
         sTableName,
         bHaveDefaultTable ? CopyTableOperation::AppendData : CopyTableOperation::CopyDefinitionAndData,
@@ -693,14 +693,14 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
     bool bError = false;
     try
     {
-        if (aWizard->Execute())
+        if (aWizard.run())
         {
-            switch(aWizard->getOperation())
+            switch(aWizard.getOperation())
             {
                 case CopyTableOperation::CopyDefinitionAndData:
                 case CopyTableOperation::AppendData:
                     {
-                        m_xTable = aWizard->createTable();
+                        m_xTable = aWizard.createTable();
                         bError = !m_xTable.is();
                         if(m_xTable.is())
                         {
@@ -708,10 +708,10 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
                             if(_aTextColor.hasValue())
                                 m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,_aTextColor);
                         }
-                        m_bIsAutoIncrement  = aWizard->shouldCreatePrimaryKey();
-                        m_vColumnPositions  = aWizard->GetColumnPositions();
-                        m_vColumnTypes      = aWizard->GetColumnTypes();
-                        m_bAppendFirstLine  = !aWizard->UseHeaderLine();
+                        m_bIsAutoIncrement  = aWizard.shouldCreatePrimaryKey();
+                        m_vColumnPositions  = aWizard.GetColumnPositions();
+                        m_vColumnTypes      = aWizard.GetColumnTypes();
+                        m_bAppendFirstLine  = !aWizard.UseHeaderLine();
                     }
                     break;
                 default:
@@ -726,7 +726,7 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
     }
     catch( const SQLException&)
     {
-        ::dbtools::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), VCLUnoHelper::GetInterface(aWizard.get()), m_xContext );
+        ::dbtools::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), aWizard.getDialog()->GetXWindow(), m_xContext );
         bError = true;
     }
     catch( const Exception& )
