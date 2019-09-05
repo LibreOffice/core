@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_7813685d",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4039,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-09-05T12:56:50Z",
+      "side": 1,
+      "message": "Though webcontent is wrong, I\u0027m not sure if it shouldn\u0027t be web-content instead, see https://www.dict.cc/?s\u003dweb-content",
+      "revId": "4489edb69c0a285bae0014d7f8f75f5cd44f29fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
