@@ -156,7 +156,7 @@ public:
 
     ~ClassFile();
 
-    Code * newCode();
+    std::unique_ptr<Code> newCode();
 
     sal_uInt16 addIntegerInfo(sal_Int32 value);
     sal_uInt16 addFloatInfo(float value);

@@ -479,8 +479,8 @@ ClassFile::ClassFile(
 
 ClassFile::~ClassFile() {}
 
-ClassFile::Code * ClassFile::newCode() {
-    return new Code(*this);
+std::unique_ptr<ClassFile::Code> ClassFile::newCode() {
+    return std::unique_ptr<Code>(new Code(*this));
 }
 
 sal_uInt16 ClassFile::addIntegerInfo(sal_Int32 value) {
