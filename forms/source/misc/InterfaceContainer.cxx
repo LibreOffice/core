@@ -431,7 +431,7 @@ void SAL_CALL OInterfaceContainer::readEvents(const Reference<XObjectInputStream
         sal_Int32 i=0;
         for (auto const& item : m_aItems)
         {
-            Reference< XInterface > xAsIFace( item, UNO_QUERY );    // important to normalize this ....
+            Reference< XInterface > xAsIFace( item, UNO_QUERY );    // important to normalize this...
             Reference< XPropertySet > xAsSet( xAsIFace, UNO_QUERY );
             m_xEventAttacher->attach( i++, xAsIFace, makeAny( xAsSet ) );
         }

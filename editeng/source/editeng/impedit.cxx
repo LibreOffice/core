@@ -1736,7 +1736,7 @@ bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
 
     // Can be optimized: first go through the lines within a paragraph for PAM,
     // then again with the PaM for the Rect, even though the line is already
-    // known .... This must not be, though!
+    // known... This must not be, though!
     EditPaM aPaM = pEditEngine->GetPaM(aDocPos);
     bool bGotoCursor = DoAutoScroll();
 

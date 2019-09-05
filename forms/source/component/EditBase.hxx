@@ -35,7 +35,7 @@
     // version handling therein may want to clear this flag in getPersistenceFlags.
     // If done so, this class will write a version without a call to writeCommonEditProperties.
 #define PF_FAKE_FORMATTED_FIELD 0x4000
-    // .... hmmm .... a fake, as the name suggests. see OFormattedFieldWrapper
+    // ... hmmm... a fake, as the name suggests. see OFormattedFieldWrapper
 
 #define PF_SPECIAL_FLAGS        0xFF00
 
@@ -90,7 +90,7 @@ protected:
 
     virtual sal_uInt16 getPersistenceFlags() const;
     // derived classes may use this if they want this base class to write additional version flags
-    // (one of the PF_.... constants). After ::read they may ask for that flags with getLastReadVersion
+    // (one of the PF_... constants). After ::read they may ask for that flags with getLastReadVersion
 };
 
 

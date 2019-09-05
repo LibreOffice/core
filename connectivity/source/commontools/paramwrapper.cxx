@@ -194,7 +194,7 @@ namespace param
         {
             try
             {
-                // TODO : aParamType & nScale can be obtained within the constructor ....
+                // TODO : aParamType & nScale can be obtained within the constructor...
                 sal_Int32 nParamType = DataType::VARCHAR;
                 OSL_VERIFY( m_xDelegator->getPropertyValue("Type") >>= nParamType );
 

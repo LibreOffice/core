@@ -418,7 +418,7 @@ sal_Bool ResultSetMetaData::isWritable( sal_Int32 column )
 
 sal_Bool ResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
 {
-    return isWritable(column); // uhh, now it becomes really esoteric ....
+    return isWritable(column); // uhh, now it becomes really esoteric...
 }
 OUString ResultSetMetaData::getColumnServiceName( sal_Int32 )
 {

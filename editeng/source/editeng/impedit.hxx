@@ -492,7 +492,7 @@ private:
     OnDemandLocaleDataWrapper       xLocaleDataWrapper;
     OnDemandTransliterationWrapper  xTransliterationWrapper;
 
-    // For Formatting / Update ....
+    // For Formatting / Update...
     std::vector<std::unique_ptr<DeletedNodeInfo> > aDeletedNodes;
     tools::Rectangle           aInvalidRect;
     sal_uInt32          nCurTextHeight;

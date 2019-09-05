@@ -513,7 +513,7 @@ const SfxItemSet& EditView::GetEmptyItemSet()
 
 void EditView::SetAttribs( const SfxItemSet& rSet )
 {
-    DBG_ASSERT( !pImpEditView->aEditSelection.IsInvalid(), "Blind Selection in ...." );
+    DBG_ASSERT( !pImpEditView->aEditSelection.IsInvalid(), "Blind Selection in..." );
 
     pImpEditView->DrawSelectionXOR();
     pImpEditView->pEditEngine->SetAttribs( pImpEditView->GetEditSelection(), rSet, SetAttribsMode::WholeWord );
@@ -560,7 +560,7 @@ void EditView::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich )
 
 SfxItemSet EditView::GetAttribs()
 {
-    DBG_ASSERT( !pImpEditView->aEditSelection.IsInvalid(), "Blind Selection in ...." );
+    DBG_ASSERT( !pImpEditView->aEditSelection.IsInvalid(), "Blind Selection in..." );
     return pImpEditView->pEditEngine->pImpEditEngine->GetAttribs( pImpEditView->GetEditSelection() );
 }
 

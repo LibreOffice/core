@@ -261,7 +261,7 @@ public:
     // position will be ignored in case of m_bWildCard==sal_True
 
 public:
-    /** two constructs, both analogical to FmSearchDialog, therefore look this up for explanations ....
+    /** two constructs, both analogical to FmSearchDialog, therefore look this up for explanations...
         xCursor has to implement css::data::DatabaseCursor service  each time.
         If eMode == SM_USETHREAD, a ProgressHandler should be set, because in this case the result forwarding will be done
         by this handler.

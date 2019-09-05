@@ -1427,7 +1427,7 @@ bool ODbaseTable::Drop_Static(const OUString& _sUrl, bool _bHasMemoFields, OColl
             }
             catch(const Exception&)
             {
-                // silently ignore this ....
+                // silently ignore this...
             }
         }
     }

@@ -30,7 +30,7 @@ enum class EEControlBits
     DOIDLEFORMAT       = 0x00000008,  // Formatting idle
     PASTESPECIAL       = 0x00000010,  // Allow PasteSpecial
     AUTOINDENTING      = 0x00000020,  // Automatic indenting
-    UNDOATTRIBS        = 0x00000040,  // Undo for Attributes....
+    UNDOATTRIBS        = 0x00000040,  // Undo for Attributes...
     ONECHARPERLINE     = 0x00000080,  // One character per line
     NOCOLORS           = 0x00000100,  // Engine: No Color
     OUTLINER           = 0x00000200,  // Special treatment Outliner/Outline mode

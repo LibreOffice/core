@@ -99,13 +99,13 @@
     <p>
     regcomp -env:UNO_JAVA_JFW_JREHOME=file:///d:/j2re1.4.2
     -env:&quot;UNO_JAVA_JFW_CLASSPATH=d:\\solver\\bin\\classes.jar;d:\\solver\\bin\\jurt.jar&quot;
-    -register ....
+    -register...
     </p>
     <p>If UNO_JAVA_JFW_VENDOR_SETTINGS is not set then a plugin library must be specified. For example:</p>
     <p>
     regcomp -env:UNO_JAVA_JFW_JREHOME=file:///d:/j2re1.4.2
     -env:&quot;UNO_JAVA_JFW_CLASSPATH=d:\\solver\\bin\\classes.jar;d:\\solver\\bin\\jurt.jar&quot;
-    -register ....
+    -register...
     </p>
     <p>Additional parameters for the Java VM can be provided. For every parameter
     a separate bootstrap parameter must be specified. The names are
@@ -115,7 +115,7 @@
     -env:UNO_JAVA_JFW_PARAMETER_2=-Xrunjdwp:transport=dt_socket,server=y,address=8100
     -env:UNO_JAVA_JFW_JREHOME=file:///d:/j2re1.4.2
     -env:&quot;UNO_JAVA_JFW_CLASSPATH=d:\\solver\\bin\\classes.jar;d:\\solver\\bin\\jurt.jar&quot;
-    -register ....</p>
+    -register...</p>
     <p>
     Here is a complete list of the bootstrap parameter for the direct mode:
     </p>

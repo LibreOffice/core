@@ -265,7 +265,7 @@ void Tables::appendByDescriptor(
     // execute the creation !
     transaction.executeUpdate( buf.makeStringAndClear() );
 
-    // description ....
+    // description...
     OUString description = extractStringProperty( descriptor, st.DESCRIPTION );
     if( !description.isEmpty() )
     {

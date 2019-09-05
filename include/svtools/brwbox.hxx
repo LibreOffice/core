@@ -164,7 +164,7 @@ public:
 
 
 // TODO
-// The whole selection thingie in this class is somewhat .... suspicious to me.
+// The whole selection thingie in this class is somewhat... suspicious to me.
 // some oddities:
 // * method parameters named like members (and used in both semantics within the method!)
 // * the multi selection flag is sometimes used as if it is for row selection, sometimes as if
