@@ -110,6 +110,15 @@ BitmapReadAccess::~BitmapReadAccess()
 {
 }
 
+namespace
+{
+    bool Bitmap32IsPreMultipled()
+    {
+        auto pBackendCapabilities = ImplGetSVData()->mpDefInst->GetBackendCapabilities();
+        return pBackendCapabilities->mbSupportsBitmap32;
+    }
+}
+
 bool BitmapReadAccess::ImplSetAccessPointers( ScanlineFormat nFormat )
 {
     bool bRet = true;
@@ -178,26 +187,58 @@ bool BitmapReadAccess::ImplSetAccessPointers( ScanlineFormat nFormat )
         break;
         case ScanlineFormat::N32BitTcAbgr:
         {
-            mFncGetPixel = GetPixelForN32BitTcAbgr;
-            mFncSetPixel = SetPixelForN32BitTcAbgr;
+            if (Bitmap32IsPreMultipled())
+            {
+                mFncGetPixel = GetPixelForN32BitTcAbgr;
+                mFncSetPixel = SetPixelForN32BitTcAbgr;
+            }
+            else
+            {
+                mFncGetPixel = GetPixelForN32BitTcXbgr;
+                mFncSetPixel = SetPixelForN32BitTcXbgr;
+            }
         }
         break;
         case ScanlineFormat::N32BitTcArgb:
         {
-            mFncGetPixel = GetPixelForN32BitTcArgb;
-            mFncSetPixel = SetPixelForN32BitTcArgb;
+            if (Bitmap32IsPreMultipled())
+            {
+                mFncGetPixel = GetPixelForN32BitTcArgb;
+                mFncSetPixel = SetPixelForN32BitTcArgb;
+            }
+            else
+            {
+                mFncGetPixel = GetPixelForN32BitTcXrgb;
+                mFncSetPixel = SetPixelForN32BitTcXrgb;
+            }
         }
         break;
         case ScanlineFormat::N32BitTcBgra:
         {
-            mFncGetPixel = GetPixelForN32BitTcBgra;
-            mFncSetPixel = SetPixelForN32BitTcBgra;
+            if (Bitmap32IsPreMultipled())
+            {
+                mFncGetPixel = GetPixelForN32BitTcBgra;
+                mFncSetPixel = SetPixelForN32BitTcBgra;
+            }
+            else
+            {
+                mFncGetPixel = GetPixelForN32BitTcBgrx;
+                mFncSetPixel = SetPixelForN32BitTcBgrx;
+            }
         }
         break;
         case ScanlineFormat::N32BitTcRgba:
         {
-            mFncGetPixel = GetPixelForN32BitTcRgba;
-            mFncSetPixel = SetPixelForN32BitTcRgba;
+            if (Bitmap32IsPreMultipled())
+            {
+                mFncGetPixel = GetPixelForN32BitTcRgba;
+                mFncSetPixel = SetPixelForN32BitTcRgba;
+            }
+            else
+            {
+                mFncGetPixel = GetPixelForN32BitTcRgbx;
+                mFncSetPixel = SetPixelForN32BitTcRgbx;
+            }
         }
         break;
         case ScanlineFormat::N32BitTcMask:
@@ -390,10 +431,30 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
                 case ScanlineFormat::N16BitTcLsbMask:   pFncGetPixel = GetPixelForN16BitTcLsbMask; break;
                 case ScanlineFormat::N24BitTcBgr:    pFncGetPixel = GetPixelForN24BitTcBgr; break;
                 case ScanlineFormat::N24BitTcRgb:    pFncGetPixel = GetPixelForN24BitTcRgb; break;
-                case ScanlineFormat::N32BitTcAbgr:   pFncGetPixel = GetPixelForN32BitTcAbgr; break;
-                case ScanlineFormat::N32BitTcArgb:   pFncGetPixel = GetPixelForN32BitTcArgb; break;
-                case ScanlineFormat::N32BitTcBgra:   pFncGetPixel = GetPixelForN32BitTcBgra; break;
-                case ScanlineFormat::N32BitTcRgba:   pFncGetPixel = GetPixelForN32BitTcRgba; break;
+                case ScanlineFormat::N32BitTcAbgr:
+                    if (Bitmap32IsPreMultipled())
+                        pFncGetPixel = GetPixelForN32BitTcAbgr;
+                    else
+                        pFncGetPixel = GetPixelForN32BitTcXbgr;
+                    break;
+                case ScanlineFormat::N32BitTcArgb:
+                    if (Bitmap32IsPreMultipled())
+                        pFncGetPixel = GetPixelForN32BitTcArgb;
+                    else
+                        pFncGetPixel = GetPixelForN32BitTcXrgb;
+                    break;
+                case ScanlineFormat::N32BitTcBgra:
+                    if (Bitmap32IsPreMultipled())
+                        pFncGetPixel = GetPixelForN32BitTcBgra;
+                    else
+                        pFncGetPixel = GetPixelForN32BitTcBgrx;
+                    break;
+                case ScanlineFormat::N32BitTcRgba:
+                    if (Bitmap32IsPreMultipled())
+                        pFncGetPixel = GetPixelForN32BitTcRgba;
+                    else
+                        pFncGetPixel = GetPixelForN32BitTcRgbx;
+                    break;
                 case ScanlineFormat::N32BitTcMask:   pFncGetPixel = GetPixelForN32BitTcMask; break;
 
                 default:
