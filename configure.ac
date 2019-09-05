@@ -436,6 +436,13 @@ if test -n "$with_android_ndk"; then
         # minimum android version that supports aarch64
         ANDROID_API_LEVEL=21
         ANDROID_APP_ABI=arm64-v8a
+    elif test $host_cpu = x86_64; then
+        android_platform_prefix=x86_64-linux-android
+        android_gnu_prefix=$android_platform_prefix
+        LLVM_TRIPLE=$android_platform_prefix
+        # minimum android version that supports x86_64
+        ANDROID_API_LEVEL=21
+        ANDROID_APP_ABI=x86_64
     else
         # host_cpu is something like "i386" or "i686" I guess, NDK uses
         # "x86" in some contexts
@@ -4519,6 +4526,11 @@ linux-android*)
         CPUNAME=INTEL
         RTL_ARCH=x86
         PLATFORMID=android_x86
+        ;;
+    x86_64)
+        CPUNAME=X86_64
+        RTL_ARCH=X86_64
+        PLATFORMID=android_x86_64
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
