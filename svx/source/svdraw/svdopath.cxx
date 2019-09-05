@@ -2676,7 +2676,7 @@ SdrObject* SdrPathObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
     const bool bHideContour(
         !aText.isDefault() && !aText.getSdrFormTextAttribute().isDefault() && aText.isHideContour());
 
-    SdrObject* pRet = nullptr;
+    SdrObjectUniquePtr pRet;
 
     if(!bHideContour)
     {
@@ -2698,15 +2698,15 @@ SdrObject* SdrPathObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
                 pPath->SetPathPoly(basegfx::utils::expandToCurve(pPath->GetPathPoly()));
             }
         }
-        pRet = pPath.release();
+        pRet = std::move(pPath);
     }
 
     if(bAddText)
     {
-        pRet = ImpConvertAddText(pRet, bBezier);
+        pRet = ImpConvertAddText(std::move(pRet), bBezier);
     }
 
-    return pRet;
+    return pRet.release();
 }
 
 SdrObjGeoData* SdrPathObj::NewGeoData() const

@@ -957,7 +957,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
 
                 if(bAddText)
                 {
-                    pRetval = ImpConvertAddText(pRetval, bBezier);
+                    pRetval = ImpConvertAddText(SdrObjectUniquePtr(pRetval), bBezier).release();
                 }
 
                 // convert all children

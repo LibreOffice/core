@@ -1141,7 +1141,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
     SfxStyleSheet* pStyleSheet = GetStyleSheet();
 
     // prepare group
-    SdrObjGroup* pGroup = new SdrObjGroup(getSdrModelFromSdrObject());
+    std::unique_ptr<SdrObjGroup,SdrObjectFreeOp> pGroup(new SdrObjGroup(getSdrModelFromSdrObject()));
 
     // prepare parameters
     basegfx::B2DPolyPolygon aPolyPoly;
@@ -1259,11 +1259,11 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 
     if(bAddText)
     {
-        return ImpConvertAddText(pGroup, bBezier);
+        return ImpConvertAddText(std::move(pGroup), bBezier).release();
     }
     else
     {
-        return pGroup;
+        return pGroup.release();
     }
 }
 
