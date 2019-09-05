@@ -28,24 +28,24 @@ endef
 # forward the call to the gb_LinkTarget implementation
 # (note: because the function name is in $(1), the other args are shifted by 1)
 define gb_CompilerTest__forward_to_Linktarget
-$(call gb_LinkTarget_$(1),$(call gb_CompilerTest_get_linktarget,$(2)),$(3),$(4),CompilerTest_$(2))
+$(call gb_LinkTarget_$(subst gb_CompilerTest_,,$(1)),$(call gb_CompilerTest_get_linktarget,$(2)),$(3),$(4),CompilerTest_$(2))
 
 endef
 
 # copy pasta for forwarding: this could be (and was) done more elegantly, but
 # these here can be found by both git grep and ctags
-gb_CompilerTest_add_cobject = $(call gb_CompilerTest__forward_to_Linktarget,$(subst gb_CompilerTest_,,$(0)),$(1),$(2),$(3))
-gb_CompilerTest_add_cobjects = $(call gb_CompilerTest__forward_to_Linktarget,$(subst gb_CompilerTest_,,$(0)),$(1),$(2),$(3))
-gb_CompilerTest_add_cxxobject = $(call gb_CompilerTest__forward_to_Linktarget,$(subst gb_CompilerTest_,,$(0)),$(1),$(2),$(3))
-gb_CompilerTest_add_cxxobjects = $(call gb_CompilerTest__forward_to_Linktarget,$(subst gb_CompilerTest_,,$(0)),$(1),$(2),$(3))
-gb_CompilerTest_add_exception_objects = $(call gb_CompilerTest__forward_to_Linktarget,$(subst gb_CompilerTest_,,$(0)),$(1),$(2),$(3))
-gb_CompilerTest_add_objcobject = $(call gb_CompilerTest__forward_to_Linktarget,$(subst gb_CompilerTest_,,$(0)),$(1),$(2),$(3))
-gb_CompilerTest_add_objcobjects = $(call gb_CompilerTest__forward_to_Linktarget,$(subst gb_CompilerTest_,,$(0)),$(1),$(2),$(3))
-gb_CompilerTest_add_objcxxobject = $(call gb_CompilerTest__forward_to_Linktarget,$(subst gb_CompilerTest_,,$(0)),$(1),$(2),$(3))
-gb_CompilerTest_add_objcxxobjects = $(call gb_CompilerTest__forward_to_Linktarget,$(subst gb_CompilerTest_,,$(0)),$(1),$(2),$(3))
-gb_CompilerTest_add_cxxclrobject = $(call gb_CompilerTest__forward_to_Linktarget,$(subst gb_CompilerTest_,,$(0)),$(1),$(2),$(3))
-gb_CompilerTest_add_cxxclrobjects = $(call gb_CompilerTest__forward_to_Linktarget,$(subst gb_CompilerTest_,,$(0)),$(1),$(2),$(3))
-gb_CompilerTest_use_externals = $(call gb_CompilerTest__forward_to_Linktarget,$(subst gb_CompilerTest_,,$(0)),$(1),$(2),$(3))
-gb_CompilerTest_use_udk_api = $(call gb_CompilerTest__forward_to_Linktarget,$(subst gb_CompilerTest_,,$(0)),$(1),$(2),$(3))
+gb_CompilerTest_add_cobject = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_CompilerTest_add_cobjects = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_CompilerTest_add_cxxobject = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_CompilerTest_add_cxxobjects = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_CompilerTest_add_exception_objects = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_CompilerTest_add_objcobject = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_CompilerTest_add_objcobjects = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_CompilerTest_add_objcxxobject = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_CompilerTest_add_objcxxobjects = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_CompilerTest_add_cxxclrobject = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_CompilerTest_add_cxxclrobjects = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_CompilerTest_use_externals = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_CompilerTest_use_udk_api = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 
 # vim: set noet sw=4 ts=4:
