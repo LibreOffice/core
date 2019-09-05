@@ -125,9 +125,7 @@ sal_Int64 SAL_CALL OGridColumn::getSomething( const Sequence<sal_Int8>& _rIdenti
 {
     sal_Int64 nReturn(0);
 
-    if  (   (_rIdentifier.getLength() == 16)
-        &&  (0 == memcmp( getUnoTunnelId().getConstArray(), _rIdentifier.getConstArray(), 16 ))
-        )
+    if ( isUnoTunnelId<OGridColumn>(_rIdentifier) )
     {
         nReturn = reinterpret_cast<sal_Int64>(this);
     }

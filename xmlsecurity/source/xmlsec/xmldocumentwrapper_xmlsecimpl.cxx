@@ -380,7 +380,7 @@ xmlNodePtr XMLDocumentWrapper_XmlSecImpl::checkElement( const uno::Reference< cs
             = reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
                 sal::static_int_cast<sal_uIntPtr>(
                     xNodTunnel->getSomething(
-                        XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() ))) ;
+                        XMLElementWrapper_XmlSecImpl::getUnoTunnelId() ))) ;
 
         if( pElement == nullptr ) {
             throw uno::RuntimeException() ;

@@ -20,6 +20,7 @@
 #include <string.h>
 
 #include "xmlelementwrapper_xmlsecimpl.hxx"
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
@@ -33,7 +34,7 @@ XMLElementWrapper_XmlSecImpl::XMLElementWrapper_XmlSecImpl(const xmlNodePtr pNod
 }
 
 /* XUnoTunnel */
-uno::Sequence< sal_Int8 > XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId()
+uno::Sequence< sal_Int8 > XMLElementWrapper_XmlSecImpl::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 
@@ -42,18 +43,12 @@ uno::Sequence< sal_Int8 > XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementati
 
 sal_Int64 SAL_CALL XMLElementWrapper_XmlSecImpl::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
 {
-    if (aIdentifier.getLength() == 16 &&
-        0 == memcmp(
-            getUnoTunnelImplementationId().getConstArray(),
-            aIdentifier.getConstArray(),
-            16 ))
+    if (isUnoTunnelId<XMLElementWrapper_XmlSecImpl>(aIdentifier))
     {
         return reinterpret_cast < sal_Int64 > ( this );
     }
-    else
-    {
-        return 0;
-    }
+
+    return 0;
 }
 
 /* XServiceInfo */

@@ -40,6 +40,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/property.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -733,7 +734,7 @@ Any SAL_CALL ODbaseTable::queryInterface( const Type & rType )
 }
 
 
-Sequence< sal_Int8 > ODbaseTable::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > ODbaseTable::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 
@@ -744,7 +745,7 @@ Sequence< sal_Int8 > ODbaseTable::getUnoTunnelImplementationId()
 
 sal_Int64 ODbaseTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    return (isUnoTunnelId<ODbaseTable>(rId))
                 ? reinterpret_cast< sal_Int64 >( this )
                 : ODbaseTable_BASE::getSomething(rId);
 }
@@ -1567,7 +1568,7 @@ bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
 
                 Reference<XUnoTunnel> xTunnel(xIndex,UNO_QUERY);
                 OSL_ENSURE(xTunnel.is(),"No TunnelImplementation!");
-                ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId()) );
+                ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelId()) );
                 OSL_ENSURE(pIndex,"ODbaseTable::DeleteRow: No Index returned!");
 
                 OSQLColumns::Vector::const_iterator aIter = std::find_if(_rCols.get().begin(), _rCols.get().end(),
@@ -1673,7 +1674,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
             {
                 Reference<XUnoTunnel> xTunnel(xIndex,UNO_QUERY);
                 OSL_ENSURE(xTunnel.is(),"No TunnelImplementation!");
-                ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId()) );
+                ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelId()) );
                 OSL_ENSURE(pIndex,"ODbaseTable::UpdateBuffer: No Index returned!");
 
                 if (pIndex->Find(0,*rRow.get()[nPos]))
@@ -1781,7 +1782,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
         {
             Reference<XUnoTunnel> xTunnel(aIndexedCols[i],UNO_QUERY);
             OSL_ENSURE(xTunnel.is(),"No TunnelImplementation!");
-            ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId()) );
+            ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelId()) );
             OSL_ENSURE(pIndex,"ODbaseTable::UpdateBuffer: No Index returned!");
             // Update !!
             if (pOrgRow.is() && !thisColIsNull)

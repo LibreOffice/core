@@ -46,6 +46,7 @@
 #include "wrapstreamforshare.hxx"
 
 #include <comphelper/seekableinput.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -76,7 +77,7 @@ using namespace cppu;
 
 namespace { struct lcl_CachedImplId : public rtl::Static< cppu::OImplementationId, lcl_CachedImplId > {}; }
 
-css::uno::Sequence < sal_Int8 > ZipPackageStream::static_getImplementationId()
+css::uno::Sequence < sal_Int8 > ZipPackageStream::getUnoTunnelId()
 {
     return lcl_CachedImplId::get().getImplementationId();
 }
@@ -1119,8 +1120,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getPlainRawStream(
 sal_Int64 SAL_CALL ZipPackageStream::getSomething( const Sequence< sal_Int8 >& aIdentifier )
 {
     sal_Int64 nMe = 0;
-    if ( aIdentifier.getLength() == 16 &&
-         0 == memcmp( static_getImplementationId().getConstArray(), aIdentifier.getConstArray(), 16 ) )
+    if ( isUnoTunnelId<ZipPackageStream>(aIdentifier) )
         nMe = reinterpret_cast < sal_Int64 > ( this );
     return nMe;
 }

@@ -50,6 +50,7 @@ namespace dbaui
         virtual void SAL_CALL release(  ) throw() override;
 
         // XUnoTunnel
+        static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
         virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& _rIdentifier ) override;
 
         void StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions, IDragTransferableListener* _pListener );
@@ -61,8 +62,6 @@ namespace dbaui
         virtual void                AddSupportedFormats() override;
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
         virtual void                DragFinished( sal_Int8 nDropAction ) override;
-
-        static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
         using TransferableHelper::StartDrag;
     };

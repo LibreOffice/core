@@ -46,6 +46,7 @@
 #include <rtl/math.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbconversion.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
@@ -617,7 +618,7 @@ void SAL_CALL OCalcTable::disposing()
 
 }
 
-Sequence< sal_Int8 > OCalcTable::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > OCalcTable::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 
@@ -628,7 +629,7 @@ Sequence< sal_Int8 > OCalcTable::getUnoTunnelImplementationId()
 
 sal_Int64 OCalcTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    return (isUnoTunnelId<OCalcTable>(rId))
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OCalcTable_BASE::getSomething(rId);
 }

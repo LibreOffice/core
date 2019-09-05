@@ -345,7 +345,7 @@ namespace connectivity
                     Reference< XUnoTunnel> xTunnel(xOrig,UNO_QUERY);
                     if ( xTunnel.is() )
                     {
-                        OMetaConnection* pMetaConnection = reinterpret_cast<OMetaConnection*>(xTunnel->getSomething( OMetaConnection::getUnoTunnelImplementationId() ));
+                        OMetaConnection* pMetaConnection = reinterpret_cast<OMetaConnection*>(xTunnel->getSomething( OMetaConnection::getUnoTunnelId() ));
                         if ( pMetaConnection )
                             pMetaConnection->setURL(url);
                     }
