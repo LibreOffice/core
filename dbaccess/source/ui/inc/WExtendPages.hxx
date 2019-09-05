@@ -24,18 +24,20 @@
 class SvStream;
 namespace dbaui
 {
+    class OCopyTableWizard;
+
     // Wizard Page: OWizHTMLExtend
     class OWizHTMLExtend : public OWizTypeSelect
     {
     protected:
         virtual void createReaderAndCallParser(sal_Int32 _nRows) override;
     public:
-        OWizHTMLExtend(vcl::Window* pParent, SvStream& _rStream)
-            : OWizTypeSelect( pParent, &_rStream )
+        OWizHTMLExtend(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream& rStream)
+            : OWizTypeSelect(pWizard, pParent, &rStream)
         {
         }
 
-        static VclPtr<OWizTypeSelect> Create( vcl::Window* _pParent, SvStream& _rInput ) { return VclPtr<OWizHTMLExtend>::Create( _pParent, _rInput ); }
+        static VclPtr<OWizTypeSelect> Create(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream& rInput ) { return VclPtr<OWizHTMLExtend>::Create(pWizard, pParent, rInput); }
     };
     // Wizard Page: OWizRTFExtend
     class OWizRTFExtend : public OWizTypeSelect
@@ -43,12 +45,12 @@ namespace dbaui
     protected:
         virtual void createReaderAndCallParser(sal_Int32 _nRows) override;
     public:
-        OWizRTFExtend(vcl::Window* pParent,SvStream& _rStream)
-            : OWizTypeSelect( pParent, &_rStream )
+        OWizRTFExtend(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream& rStream)
+            : OWizTypeSelect(pWizard, pParent, &rStream)
         {
         }
 
-        static VclPtr<OWizTypeSelect> Create( vcl::Window* _pParent, SvStream& _rInput ) { return VclPtr<OWizRTFExtend>::Create( _pParent, _rInput ); }
+        static VclPtr<OWizTypeSelect> Create(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream& rInput) { return VclPtr<OWizRTFExtend>::Create(pWizard, pParent, rInput); }
     };
 
     // Wizard Page: OWizNormalExtend
@@ -57,7 +59,11 @@ namespace dbaui
     protected:
         virtual void createReaderAndCallParser(sal_Int32 _nRows) override;
     public:
-        OWizNormalExtend(vcl::Window* pParent);
+        OWizNormalExtend(OCopyTableWizard* pWizard, TabPageParent pParent)
+            : OWizTypeSelect(pWizard, pParent)
+        {
+            EnableAuto(false);
+        }
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WEXTENDPAGES_HXX

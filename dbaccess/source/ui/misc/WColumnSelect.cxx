@@ -28,6 +28,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
+#include <vcl/svapp.hxx>
 #include <stringconstants.hxx>
 #include <functional>
 
@@ -42,51 +43,40 @@ namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOper
 
 OUString OWizColumnSelect::GetTitle() const { return DBA_RES(STR_WIZ_COLUMN_SELECT_TITEL); }
 
-OWizardPage::OWizardPage(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
-    : TabPage(pParent, rID, rUIXMLDescription)
-     ,m_pParent(static_cast<OCopyTableWizard*>(pParent))
-     ,m_bFirstTime(true)
+OWizardPage::OWizardPage(OCopyTableWizard* pWizard, TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID)
+    : TabPage(pParent.pPage ? Application::GetDefDialogParent() : pParent.pParent.get()) //just drag this along hidden in this scenario
+    , m_xBuilder(pParent.pPage ? Application::CreateBuilder(pParent.pPage, rUIXMLDescription)
+                               : Application::CreateInterimBuilder(this, rUIXMLDescription))
+    , m_xContainer(m_xBuilder->weld_container(rID))
+    , m_pParent(pWizard)
+    , m_bFirstTime(true)
 {
 }
 
 OWizardPage::~OWizardPage()
 {
-    disposeOnce();
-}
-
-void OWizardPage::dispose()
-{
-    m_pParent.clear();
-    TabPage::dispose();
 }
 
 // OWizColumnSelect
-OWizColumnSelect::OWizColumnSelect( vcl::Window* pParent)
-    :OWizardPage( pParent, "ApplyColPage", "dbaccess/ui/applycolpage.ui")
+OWizColumnSelect::OWizColumnSelect(OCopyTableWizard* pWizard, TabPageParent pParent)
+    : OWizardPage(pWizard, pParent, "dbaccess/ui/applycolpage.ui", "ApplyColPage")
+    , m_xOrgColumnNames(m_xBuilder->weld_tree_view("from"))
+    , m_xColumn_RH(m_xBuilder->weld_button("colrh"))
+    , m_xColumns_RH(m_xBuilder->weld_button("colsrh"))
+    , m_xColumn_LH(m_xBuilder->weld_button("collh"))
+    , m_xColumns_LH(m_xBuilder->weld_button("colslh"))
+    , m_xNewColumnNames(m_xBuilder->weld_tree_view("to"))
 {
-    get(m_pOrgColumnNames, "from");
-    get(m_pColumn_RH, "colrh");
-    get(m_pColumns_RH, "colsrh");
-    get(m_pColumn_LH, "collh");
-    get(m_pColumns_LH, "colslh");
-    get(m_pNewColumnNames, "to");
+    m_xColumn_RH->connect_clicked(LINK(this,OWizColumnSelect,ButtonClickHdl));
+    m_xColumn_LH->connect_clicked(LINK(this,OWizColumnSelect,ButtonClickHdl));
+    m_xColumns_RH->connect_clicked(LINK(this,OWizColumnSelect,ButtonClickHdl));
+    m_xColumns_LH->connect_clicked(LINK(this,OWizColumnSelect,ButtonClickHdl));
 
-    Size aSize(approximate_char_width() * 30, GetTextHeight() * 40);
-    m_pOrgColumnNames->set_width_request(aSize.Width());
-    m_pOrgColumnNames->set_height_request(aSize.Height());
-    m_pNewColumnNames->set_width_request(aSize.Width());
-    m_pNewColumnNames->set_height_request(aSize.Height());
+    m_xOrgColumnNames->set_selection_mode(SelectionMode::Multiple);
+    m_xNewColumnNames->set_selection_mode(SelectionMode::Multiple);
 
-    m_pColumn_RH->SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
-    m_pColumn_LH->SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
-    m_pColumns_RH->SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
-    m_pColumns_LH->SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
-
-    m_pOrgColumnNames->EnableMultiSelection(true);
-    m_pNewColumnNames->EnableMultiSelection(true);
-
-    m_pOrgColumnNames->SetDoubleClickHdl(LINK(this,OWizColumnSelect,ListDoubleClickHdl));
-    m_pNewColumnNames->SetDoubleClickHdl(LINK(this,OWizColumnSelect,ListDoubleClickHdl));
+    m_xOrgColumnNames->connect_row_activated(LINK(this,OWizColumnSelect,ListDoubleClickHdl));
+    m_xNewColumnNames->connect_row_activated(LINK(this,OWizColumnSelect,ListDoubleClickHdl));
 }
 
 OWizColumnSelect::~OWizColumnSelect()
@@ -96,29 +86,19 @@ OWizColumnSelect::~OWizColumnSelect()
 
 void OWizColumnSelect::dispose()
 {
-    while ( m_pNewColumnNames->GetEntryCount() )
+    while (m_xNewColumnNames->n_children())
     {
-        void* pData = m_pNewColumnNames->GetEntryData(0);
-        if ( pData )
-            delete static_cast<OFieldDescription*>(pData);
-
-        m_pNewColumnNames->RemoveEntry(0);
+        delete reinterpret_cast<OFieldDescription*>(m_xNewColumnNames->get_id(0).toInt64());
+        m_xNewColumnNames->remove(0);
     }
-    m_pNewColumnNames->Clear();
-    m_pOrgColumnNames.clear();
-    m_pColumn_RH.clear();
-    m_pColumns_RH.clear();
-    m_pColumn_LH.clear();
-    m_pColumns_LH.clear();
-    m_pNewColumnNames.clear();
     OWizardPage::dispose();
 }
 
 void OWizColumnSelect::Reset()
 {
     // restore original state
-    clearListBox(*m_pOrgColumnNames);
-    clearListBox(*m_pNewColumnNames);
+    clearListBox(*m_xOrgColumnNames);
+    clearListBox(*m_xNewColumnNames);
     m_pParent->m_mNameMapping.clear();
 
     // insert the source columns in the left listbox
@@ -126,12 +106,12 @@ void OWizColumnSelect::Reset()
 
     for (auto const& column : rSrcColumns)
     {
-        const sal_Int32 nPos = m_pOrgColumnNames->InsertEntry(column->first);
-        m_pOrgColumnNames->SetEntryData(nPos,column->second);
+        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(column->second)));
+        m_xOrgColumnNames->append(sId, column->first);
     }
 
-    if(m_pOrgColumnNames->GetEntryCount())
-        m_pOrgColumnNames->SelectEntryPos(0);
+    if (m_xOrgColumnNames->n_children())
+        m_xOrgColumnNames->select(0);
 
     m_bFirstTime = false;
 }
@@ -142,7 +122,7 @@ void OWizColumnSelect::ActivatePage( )
     if(m_pParent->getDestColumns().empty())
         Reset();
 
-    clearListBox(*m_pNewColumnNames);
+    clearListBox(*m_xNewColumnNames);
 
     const ODatabaseExport::TColumnVector& rDestColumns = m_pParent->getDestVector();
 
@@ -157,14 +137,14 @@ void OWizColumnSelect::ActivatePage( )
     {
         if (rSrcColumns.find(column->first) != rSrcColumns.end())
         {
-            const sal_Int32 nPos = m_pNewColumnNames->InsertEntry(column->first);
-            m_pNewColumnNames->SetEntryData(nPos,new OFieldDescription(*(column->second)));
-            m_pOrgColumnNames->RemoveEntry(column->first);
+            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(new OFieldDescription(*(column->second)))));
+            m_xNewColumnNames->append(sId, column->first);
+            m_xOrgColumnNames->remove_text(column->first);
         }
     }
-    m_pParent->GetOKButton().Enable(m_pNewColumnNames->GetEntryCount() != 0);
-    m_pParent->EnableNextButton(m_pNewColumnNames->GetEntryCount() && m_pParent->getOperation() != CopyTableOperation::AppendData);
-    m_pColumns_RH->GrabFocus();
+    m_pParent->GetOKButton().set_sensitive(m_xNewColumnNames->n_children() != 0);
+    m_pParent->EnableNextButton(m_xNewColumnNames->n_children() && m_pParent->getOperation() != CopyTableOperation::AppendData);
+    m_xColumns_RH->grab_focus();
 }
 
 bool OWizColumnSelect::LeavePage()
@@ -172,14 +152,14 @@ bool OWizColumnSelect::LeavePage()
 
     m_pParent->clearDestColumns();
 
-    for(sal_Int32 i=0 ; i< m_pNewColumnNames->GetEntryCount();++i)
+    for(sal_Int32 i=0 ; i< m_xNewColumnNames->n_children();++i)
     {
-        OFieldDescription* pField = static_cast<OFieldDescription*>(m_pNewColumnNames->GetEntryData(i));
+        OFieldDescription* pField = reinterpret_cast<OFieldDescription*>(m_xNewColumnNames->get_id(i).toInt64());
         OSL_ENSURE(pField,"The field information can not be null!");
         m_pParent->insertColumn(i,pField);
     }
 
-    clearListBox(*m_pNewColumnNames);
+    clearListBox(*m_xNewColumnNames);
 
     if  (   m_pParent->GetPressedButton() == OCopyTableWizard::WIZARD_NEXT
         ||  m_pParent->GetPressedButton() == OCopyTableWizard::WIZARD_FINISH
@@ -189,32 +169,32 @@ bool OWizColumnSelect::LeavePage()
         return true;
 }
 
-IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton, void )
+IMPL_LINK(OWizColumnSelect, ButtonClickHdl, weld::Button&, rButton, void)
 {
-    ListBox *pLeft = nullptr;
-    ListBox *pRight = nullptr;
+    weld::TreeView *pLeft = nullptr;
+    weld::TreeView *pRight = nullptr;
     bool bAll = false;
 
-    if (pButton == m_pColumn_RH)
+    if (&rButton == m_xColumn_RH.get())
     {
-        pLeft  = m_pOrgColumnNames;
-        pRight = m_pNewColumnNames;
+        pLeft  = m_xOrgColumnNames.get();
+        pRight = m_xNewColumnNames.get();
     }
-    else if(pButton == m_pColumn_LH)
+    else if (&rButton == m_xColumn_LH.get())
     {
-        pLeft  = m_pNewColumnNames;
-        pRight = m_pOrgColumnNames;
+        pLeft  = m_xNewColumnNames.get();
+        pRight = m_xOrgColumnNames.get();
     }
-    else if(pButton == m_pColumns_RH)
+    else if (&rButton == m_xColumns_RH.get())
     {
-        pLeft  = m_pOrgColumnNames;
-        pRight = m_pNewColumnNames;
+        pLeft  = m_xOrgColumnNames.get();
+        pRight = m_xNewColumnNames.get();
         bAll   = true;
     }
-    else if(pButton == m_pColumns_LH)
+    else if (&rButton == m_xColumns_LH.get())
     {
-        pLeft  = m_pNewColumnNames;
-        pRight = m_pOrgColumnNames;
+        pLeft  = m_xNewColumnNames.get();
+        pRight = m_xOrgColumnNames.get();
         bAll   = true;
     }
 
@@ -231,39 +211,42 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton, void )
 
     if(!bAll)
     {
-        for(sal_Int32 i=0; i < pLeft->GetSelectedEntryCount(); ++i)
-            moveColumn(pRight,pLeft,aRightColumns,pLeft->GetSelectedEntry(i),sExtraChars,nMaxNameLen,aCase);
+        auto aRows = pLeft->get_selected_rows();
+        std::sort(aRows.begin(), aRows.end());
 
-        for(sal_Int32 j=pLeft->GetSelectedEntryCount(); j ; --j)
-            pLeft->RemoveEntry(pLeft->GetSelectedEntry(j-1));
+        for (auto it = aRows.begin(); it != aRows.end(); ++it)
+            moveColumn(pRight,pLeft,aRightColumns,pLeft->get_text(*it),sExtraChars,nMaxNameLen,aCase);
+
+        for (auto it = aRows.rbegin(); it != aRows.rend(); ++it)
+            pLeft->remove(*it);
     }
     else
     {
-        const sal_Int32 nEntries = pLeft->GetEntryCount();
+        const sal_Int32 nEntries = pLeft->n_children();
         for(sal_Int32 i=0; i < nEntries; ++i)
-            moveColumn(pRight,pLeft,aRightColumns,pLeft->GetEntry(i),sExtraChars,nMaxNameLen,aCase);
-        for(sal_Int32 j=pLeft->GetEntryCount(); j ; )
-            pLeft->RemoveEntry(--j);
+            moveColumn(pRight,pLeft,aRightColumns,pLeft->get_text(i),sExtraChars,nMaxNameLen,aCase);
+        for(sal_Int32 j=pLeft->n_children(); j ; )
+            pLeft->remove(--j);
     }
 
     enableButtons();
 
-    if(m_pOrgColumnNames->GetEntryCount())
-        m_pOrgColumnNames->SelectEntryPos(0);
+    if (m_xOrgColumnNames->n_children())
+        m_xOrgColumnNames->select(0);
 }
 
-IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, ListBox&, rListBox, void )
+IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, weld::TreeView&, rListBox, void )
 {
-    ListBox *pLeft,*pRight;
-    if(&rListBox == m_pOrgColumnNames)
+    weld::TreeView *pLeft,*pRight;
+    if (&rListBox == m_xOrgColumnNames.get())
     {
-        pLeft  = m_pOrgColumnNames;
-        pRight = m_pNewColumnNames;
+        pLeft  = m_xOrgColumnNames.get();
+        pRight = m_xNewColumnNames.get();
     }
     else
     {
-        pRight = m_pOrgColumnNames;
-        pLeft  = m_pNewColumnNames;
+        pRight = m_xOrgColumnNames.get();
+        pLeft  = m_xNewColumnNames.get();
     }
 
     // If database is able to process PrimaryKeys, set PrimaryKey
@@ -275,30 +258,32 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, ListBox&, rListBox, void )
     std::vector< OUString> aRightColumns;
     fillColumns(pRight,aRightColumns);
 
-    for(sal_Int32 i=0; i < pLeft->GetSelectedEntryCount(); ++i)
-        moveColumn(pRight,pLeft,aRightColumns,pLeft->GetSelectedEntry(i),sExtraChars,nMaxNameLen,aCase);
-    for(sal_Int32 j=pLeft->GetSelectedEntryCount(); j ; )
-        pLeft->RemoveEntry(pLeft->GetSelectedEntry(--j));
+    auto aRows = pLeft->get_selected_rows();
+    std::sort(aRows.begin(), aRows.end());
+
+    for (auto it = aRows.begin(); it != aRows.end(); ++it)
+        moveColumn(pRight,pLeft,aRightColumns,pLeft->get_text(*it),sExtraChars,nMaxNameLen,aCase);
+
+    for (auto it = aRows.rbegin(); it != aRows.rend(); ++it)
+        pLeft->remove(*it);
 
     enableButtons();
 }
 
-void OWizColumnSelect::clearListBox(ListBox& _rListBox)
+void OWizColumnSelect::clearListBox(weld::TreeView& rListBox)
 {
-    while(_rListBox.GetEntryCount())
-        _rListBox.RemoveEntry(0);
-    _rListBox.Clear();
+    rListBox.clear();
 }
 
-void OWizColumnSelect::fillColumns(ListBox const * pRight,std::vector< OUString> &_rRightColumns)
+void OWizColumnSelect::fillColumns(weld::TreeView const * pRight,std::vector< OUString> &_rRightColumns)
 {
-    const sal_Int32 nCount = pRight->GetEntryCount();
+    const sal_Int32 nCount = pRight->n_children();
     _rRightColumns.reserve(nCount);
-    for(sal_Int32 i=0; i < nCount; ++i)
-        _rRightColumns.push_back(pRight->GetEntry(i));
+    for (sal_Int32 i=0; i < nCount; ++i)
+        _rRightColumns.push_back(pRight->get_text(i));
 }
 
-void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
+void OWizColumnSelect::createNewColumn( weld::TreeView* _pListbox,
                                         OFieldDescription const * _pSrcField,
                                         std::vector< OUString>& _rRightColumns,
                                         const OUString&  _sColumnName,
@@ -317,25 +302,25 @@ void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
     if ( !m_pParent->supportsPrimaryKey() )
         pNewField->SetPrimaryKey(false);
 
-    _pListbox->SetEntryData(_pListbox->InsertEntry(sConvertedName),pNewField);
+    _pListbox->append(OUString::number(reinterpret_cast<sal_Int64>(pNewField)), sConvertedName);
     _rRightColumns.push_back(sConvertedName);
 
     if ( !bNotConvert )
         m_pParent->showColumnTypeNotSupported(sConvertedName);
 }
 
-void OWizColumnSelect::moveColumn(  ListBox* _pRight,
-                                    ListBox const * _pLeft,
+void OWizColumnSelect::moveColumn(  weld::TreeView* _pRight,
+                                    weld::TreeView const * _pLeft,
                                     std::vector< OUString>& _rRightColumns,
                                     const OUString&  _sColumnName,
                                     const OUString&  _sExtraChars,
                                     sal_Int32               _nMaxNameLen,
                                     const ::comphelper::UStringMixEqual& _aCase)
 {
-    if(_pRight == m_pNewColumnNames)
+    if(_pRight == m_xNewColumnNames.get())
     {
         // we copy the column into the new format for the dest
-        OFieldDescription* pSrcField = static_cast<OFieldDescription*>(_pLeft->GetEntryData(_pLeft->GetEntryPos(_sColumnName)));
+        OFieldDescription* pSrcField = reinterpret_cast<OFieldDescription*>(_pLeft->get_id(_pLeft->find_text(_sColumnName)).toInt64());
         createNewColumn(_pRight,pSrcField,_rRightColumns,_sColumnName,_sExtraChars,_nMaxNameLen,_aCase);
     }
     else
@@ -359,8 +344,10 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
             OSL_ENSURE( aPos != rSrcVector.end(),"Invalid position for the iterator here!");
             ODatabaseExport::TColumnVector::size_type nPos = (aPos - rSrcVector.begin()) - adjustColumnPosition(_pLeft, _sColumnName, (aPos - rSrcVector.begin()), _aCase);
 
-            _pRight->SetEntryData( _pRight->InsertEntry( (*aIter).first, sal::static_int_cast< sal_uInt16 >(nPos)),aSrcIter->second );
-            _rRightColumns.push_back((*aIter).first);
+            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aSrcIter->second)));
+            const OUString& rStr = (*aIter).first;
+            _pRight->insert(nullptr, nPos, &rStr, &sId, nullptr, nullptr, nullptr, false, nullptr);
+            _rRightColumns.push_back(rStr);
             m_pParent->removeColumnNameFromNameMap(_sColumnName);
         }
     }
@@ -370,23 +357,23 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
 // not enough. We need to take into account what fields have
 // been removed earlier and adjust accordingly. Based on the
 // algorithm employed in moveColumn().
-sal_Int32 OWizColumnSelect::adjustColumnPosition( ListBox const * _pLeft,
-                                               const OUString&   _sColumnName,
-                                               ODatabaseExport::TColumnVector::size_type nCurrentPos,
-                                               const ::comphelper::UStringMixEqual& _aCase)
+sal_Int32 OWizColumnSelect::adjustColumnPosition(weld::TreeView const * _pLeft,
+                                                 const OUString&   _sColumnName,
+                                                 ODatabaseExport::TColumnVector::size_type nCurrentPos,
+                                                 const ::comphelper::UStringMixEqual& _aCase)
 {
     sal_Int32 nAdjustedPos = 0;
 
     // if returning all entries to their original position,
     // then there is no need to adjust the positions.
-    if (m_pColumns_LH->HasFocus())
+    if (m_xColumns_LH->has_focus())
         return nAdjustedPos;
 
-    const sal_Int32 nCount = _pLeft->GetEntryCount();
+    const sal_Int32 nCount = _pLeft->n_children();
     OUString sColumnString;
     for(sal_Int32 i=0; i < nCount; ++i)
     {
-        sColumnString = _pLeft->GetEntry(i);
+        sColumnString = _pLeft->get_text(i);
         if(_sColumnName != sColumnString)
         {
             // find the new column in the dest name mapping to obtain the old column
@@ -417,11 +404,11 @@ sal_Int32 OWizColumnSelect::adjustColumnPosition( ListBox const * _pLeft,
 
 void OWizColumnSelect::enableButtons()
 {
-    bool bEntries = m_pNewColumnNames->GetEntryCount() != 0;
-    if(!bEntries)
+    bool bEntries = m_xNewColumnNames->n_children() != 0;
+    if (!bEntries)
         m_pParent->m_mNameMapping.clear();
 
-    m_pParent->GetOKButton().Enable(bEntries);
+    m_pParent->GetOKButton().set_sensitive(bEntries);
     m_pParent->EnableNextButton(bEntries && m_pParent->getOperation() != CopyTableOperation::AppendData);
 }
 

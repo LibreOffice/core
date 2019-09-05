@@ -64,6 +64,21 @@ namespace dbaui
         }
         Edit::Modify();
     }
+
+    IMPL_LINK_NOARG(OSQLNameEntry, ModifyHdl, weld::Entry&, void)
+    {
+        OUString sCorrected;
+        if (checkString(m_xEntry->get_text(), sCorrected))
+        {
+            int nStartPos, nEndPos;
+            m_xEntry->get_selection_bounds(nStartPos, nEndPos);
+            int nMin = std::min(nStartPos, nEndPos);
+            m_xEntry->select_region(nMin, nMin);
+            m_xEntry->replace_selection(sCorrected);
+
+            m_xEntry->save_value();
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

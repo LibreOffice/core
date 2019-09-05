@@ -21,6 +21,7 @@
 
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/weld.hxx>
 
 namespace dbaui
 {
@@ -45,21 +46,71 @@ namespace dbaui
         }
         bool checkString(const OUString& _sToCheck,OUString& _rsCorrected);
     };
+
     class OSQLNameEdit : public Edit
                         ,public OSQLNameChecker
     {
     public:
         OSQLNameEdit(vcl::Window* _pParent,WinBits nStyle = WB_BORDER, const OUString& _rAllowedChars = OUString())
             : Edit(_pParent,nStyle)
-            ,OSQLNameChecker(_rAllowedChars)
+            , OSQLNameChecker(_rAllowedChars)
         {
         }
 
-        // Window overrides
-        //  virtual bool PreNotify( NotifyEvent& rNEvt );
-        // Edit
+        // Edit overrides
         virtual void Modify() override;
     };
+
+    class OWidgetBase
+    {
+    private:
+        weld::Widget* m_pWidget;
+    public:
+        OWidgetBase(weld::Widget *pWidget)
+            : m_pWidget(pWidget)
+        {
+        }
+
+        void hide() { m_pWidget->hide(); }
+        void show() { m_pWidget->show(); }
+        void set_sensitive(bool bSensitive) { m_pWidget->set_sensitive(bSensitive); }
+
+        weld::Widget* GetWidget() { return m_pWidget; }
+
+        virtual bool get_value_changed_from_saved() const = 0;
+        virtual void save_value() = 0;
+
+        virtual ~OWidgetBase() {}
+    };
+
+    class OSQLNameEntry : public OWidgetBase
+                        , public OSQLNameChecker
+    {
+    private:
+        std::unique_ptr<weld::Entry> m_xEntry;
+
+        DECL_LINK(ModifyHdl, weld::Entry&, void);
+
+    public:
+        OSQLNameEntry(std::unique_ptr<weld::Entry> xEntry, const OUString& _rAllowedChars = OUString())
+            : OWidgetBase(xEntry.get())
+            , OSQLNameChecker(_rAllowedChars)
+            , m_xEntry(std::move(xEntry))
+        {
+            m_xEntry->connect_changed(LINK(this, OSQLNameEntry, ModifyHdl));
+        }
+
+        OUString get_text() const { return m_xEntry->get_text(); }
+        void set_text(const OUString& rText) { m_xEntry->set_text(rText); }
+        void set_max_length(int nLen) { m_xEntry->set_max_length(nLen); }
+        void set_sensitive(bool bSensitive) { m_xEntry->set_sensitive(bSensitive); }
+        virtual void save_value() override { m_xEntry->save_value(); }
+        virtual bool get_value_changed_from_saved() const override
+        {
+            return m_xEntry->get_value_changed_from_saved();
+        }
+    };
+
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_SQLNAMEEDIT_HXX
 
