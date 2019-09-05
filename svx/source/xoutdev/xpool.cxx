@@ -40,7 +40,6 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
     const Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING); // #i121448# Use defined default color
     const Color aNullShadowCol(RGB_Color(COL_LIGHTGRAY));
     const XDash aNullDash;
-    const XGradient aNullGrad(RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
     const XHatch aNullHatch(aNullLineCol);
 
     // get master pointer, evtl. add myself to the end of the pools
@@ -77,7 +76,7 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
     rPoolDefaults[XATTR_LINECAP            -XATTR_START] = new XLineCapItem;
     rPoolDefaults[XATTR_FILLSTYLE                -XATTR_START] = new XFillStyleItem;
     rPoolDefaults[XATTR_FILLCOLOR                -XATTR_START] = new XFillColorItem   (aNullStr,aNullFillCol);
-    rPoolDefaults[XATTR_FILLGRADIENT         -XATTR_START] = new XFillGradientItem(aNullGrad);
+    rPoolDefaults[XATTR_FILLGRADIENT         -XATTR_START] = new XFillGradientItem(XGradient(RGB_Color(COL_BLACK), RGB_Color(COL_WHITE)));
     rPoolDefaults[XATTR_FILLHATCH                -XATTR_START] = new XFillHatchItem   (aNullHatch);
     rPoolDefaults[XATTR_FILLBITMAP               -XATTR_START] = new XFillBitmapItem  (aNullGraphic);
     rPoolDefaults[XATTR_FILLTRANSPARENCE     -XATTR_START] = new XFillTransparenceItem;
@@ -92,7 +91,7 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
     rPoolDefaults[XATTR_FILLBMP_STRETCH      -XATTR_START] = new XFillBmpStretchItem;
     rPoolDefaults[XATTR_FILLBMP_POSOFFSETX       -XATTR_START] = new XFillBmpPosOffsetXItem;
     rPoolDefaults[XATTR_FILLBMP_POSOFFSETY       -XATTR_START] = new XFillBmpPosOffsetYItem;
-    rPoolDefaults[XATTR_FILLFLOATTRANSPARENCE    -XATTR_START] = new XFillFloatTransparenceItem( aNullGrad, false );
+    rPoolDefaults[XATTR_FILLFLOATTRANSPARENCE    -XATTR_START] = new XFillFloatTransparenceItem( XGradient(RGB_Color(COL_BLACK), RGB_Color(COL_BLACK)), false );
     rPoolDefaults[XATTR_SECONDARYFILLCOLOR       -XATTR_START] = new XSecondaryFillColorItem(aNullStr, aNullFillCol);
     rPoolDefaults[XATTR_FILLBACKGROUND           -XATTR_START] = new XFillBackgroundItem;
     rPoolDefaults[XATTR_FORMTXTSTYLE       -XATTR_START] = new XFormTextStyleItem;

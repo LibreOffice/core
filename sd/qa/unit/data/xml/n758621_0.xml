@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <XShapes>
  <XShape positionX="12042" positionY="1904" sizeX="12087" sizeY="9521" type="com.sun.star.presentation.TitleTextShape" fontHeight="60.000000" fontColor="004990" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="RIGHT" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="130" textLowerDistance="130" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="9261" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
-  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
   <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
   <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
   <FillBitmap/>
@@ -15,7 +15,7 @@
   </Transformation>
  </XShape>
  <XShape positionX="14176" positionY="13123" sizeX="9953" sizeY="3810" type="com.sun.star.presentation.SubtitleShape" fontHeight="36.000000" fontColor="92d050" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="RIGHT" textVerticalAdjust="TOP" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="3810" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
-  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
   <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
   <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
   <FillBitmap/>
