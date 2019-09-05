@@ -36,6 +36,7 @@ ifneq ($(ENABLE_DBGUTIL),TRUE)
 	$(PERL) $(SRCDIR)/postprocess/signing/signing.pl \
 			-e $$EXCLUDELIST \
 			-l $(subst .done,_log.txt,$@) \
+			$(if $(verbose),-v) \
 			$(if $(PFXFILE),-f $(PFXFILE)) \
 			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
 			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
