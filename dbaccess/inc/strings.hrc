@@ -257,7 +257,6 @@
 #define STR_VALUE_NO                                NC_("STR_VALUE_NO", "No" )
 // Note: should somehow fit to the word "value" in other languages as well: value - none ....
 #define STR_VALUE_NONE                              NC_("STR_VALUE_NONE", "<none>")
-#define STR_TAB_FIELD_NAME                          NC_("STR_TAB_FIELD_NAME", "Field name" )
 #define STR_TAB_FIELD_COLUMN_NAME                   NC_("STR_TAB_FIELD_COLUMN_NAME", "Field Name" )
 #define STR_TAB_FIELD_DATATYPE                      NC_("STR_TAB_FIELD_DATATYPE", "Field ~type" )
 #define STR_TAB_FIELD_COLUMN_DATATYPE               NC_("STR_TAB_FIELD_COLUMN_DATATYPE", "Field Type" )

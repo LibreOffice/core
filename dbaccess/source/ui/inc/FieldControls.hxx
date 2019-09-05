@@ -27,14 +27,12 @@
 namespace dbaui
 {
 
-    class OPropColumnEditCtrl : public OSQLNameEdit
+    class OPropColumnEditCtrl : public OSQLNameEntry
     {
         short                m_nPos;
         OUString             m_strHelpText;
     public:
-        OPropColumnEditCtrl(vcl::Window* pParent, OUString const & _rAllowedChars, const char* pHelpId, short nPosition, WinBits nWinStyle);
-
-        virtual bool IsModified() const override { return IsValueChangedFromSaved(); }
+        OPropColumnEditCtrl(std::unique_ptr<weld::Entry> xEntry, OUString const & _rAllowedChars, const char* pHelpId, short nPosition);
 
         short GetPos() const { return m_nPos; }
         const OUString& GetHelp() const { return m_strHelpText; }

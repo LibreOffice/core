@@ -37,13 +37,12 @@ void lcl_setSpecialReadOnly( bool _bReadOnly, vcl::Window* _pWin )
 
 }
 
-OPropColumnEditCtrl::OPropColumnEditCtrl(vcl::Window* pParent,
+OPropColumnEditCtrl::OPropColumnEditCtrl(std::unique_ptr<weld::Entry> xEntry,
                                          OUString const & _rAllowedChars,
                                          const char* pHelpId,
-                                         short nPosition,
-                                         WinBits nWinStyle)
-    :OSQLNameEdit(pParent, nWinStyle, _rAllowedChars)
-    ,m_nPos(nPosition)
+                                         short nPosition)
+    : OSQLNameEntry(std::move(xEntry), _rAllowedChars)
+    , m_nPos(nPosition)
 {
     m_strHelpText = DBA_RES(pHelpId);
 }

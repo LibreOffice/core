@@ -3407,6 +3407,12 @@ public:
         enable_notify_events();
     }
 
+    virtual bool is_selected(int pos) const override
+    {
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+        return m_xTreeView->IsSelected(pEntry);
+    }
+
     virtual void unselect(int pos) override
     {
         assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");

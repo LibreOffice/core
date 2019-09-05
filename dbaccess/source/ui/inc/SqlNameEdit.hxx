@@ -21,6 +21,7 @@
 
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/weld.hxx>
 
 namespace dbaui
 {
@@ -45,21 +46,44 @@ namespace dbaui
         }
         bool checkString(const OUString& _sToCheck,OUString& _rsCorrected);
     };
+
     class OSQLNameEdit : public Edit
                         ,public OSQLNameChecker
     {
     public:
         OSQLNameEdit(vcl::Window* _pParent,WinBits nStyle = WB_BORDER, const OUString& _rAllowedChars = OUString())
             : Edit(_pParent,nStyle)
-            ,OSQLNameChecker(_rAllowedChars)
+            , OSQLNameChecker(_rAllowedChars)
         {
         }
 
-        // Window overrides
-        //  virtual bool PreNotify( NotifyEvent& rNEvt );
-        // Edit
+        // Edit overrides
         virtual void Modify() override;
     };
+
+    class OSQLNameEntry : public OSQLNameChecker
+    {
+    private:
+        std::unique_ptr<weld::Entry> m_xEntry;
+    public:
+        OSQLNameEntry(std::unique_ptr<weld::Entry> xEntry, const OUString& _rAllowedChars = OUString())
+            : OSQLNameChecker(_rAllowedChars)
+            , m_xEntry(std::move(xEntry))
+        {
+        }
+
+        weld::Widget* GetWidget() { return m_xEntry.get(); }
+
+        OUString get_text() const { return m_xEntry->get_text(); }
+        void set_text(const OUString& rText) { m_xEntry->set_text(rText); }
+        void set_max_length(int nLen) { m_xEntry->set_max_length(nLen); }
+        void hide() { m_xEntry->hide(); }
+        void show() { m_xEntry->show(); }
+        void save_value() { m_xEntry->save_value(); }
+
+        //TODO virtual void Modify() override;
+    };
+
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_SQLNAMEEDIT_HXX
 
