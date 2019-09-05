@@ -1,12 +1,13 @@
 diff -ur nss.org/nspr/build/autoconf/config.sub nss/nspr/build/autoconf/config.sub
 --- nss.org/nspr/build/autoconf/config.sub	2017-09-07 15:29:45.031246453 +0200
 +++ nss/nspr/build/autoconf/config.sub	2017-09-07 15:32:13.087235423 +0200
-@@ -111,6 +111,9 @@
+@@ -111,6 +111,10 @@
      exit 1;;
  esac
  
 +if test $1 = "arm-unknown-linux-androideabi"; then echo $1; exit; fi
 +if test $1 = "i686-pc-linux-android"; then echo $1; exit; fi
++if test $1 = "x86_64-pc-linux-android"; then echo $1; exit; fi
 +
  # Separate what the user gave into CPU-COMPANY and OS or KERNEL-OS (if any).
  # Here we must recognize all the valid KERNEL-OS combinations.
