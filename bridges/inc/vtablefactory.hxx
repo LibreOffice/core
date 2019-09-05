@@ -26,6 +26,7 @@
 #include <sal/types.h>
 #include <typelib/typedescription.hxx>
 
+#include <memory>
 #include <unordered_map>
 
 /*See: http://people.redhat.com/drepper/selinux-mem.html*/
@@ -92,10 +93,10 @@ public:
             mapBlockToVtable).  Also, the block contains any generated code
             snippets, after the vtable itself.</p>
          */
-        Block * blocks;
+        std::unique_ptr<Block[]> blocks;
+
         Vtables()
             : count(0)
-            , blocks(nullptr)
         {
         }
     };
@@ -107,7 +108,7 @@ public:
     /** Given an interface type description, return its corresponding vtable
         structure.
      */
-    Vtables getVtables(typelib_InterfaceTypeDescription * type);
+    const Vtables& getVtables(typelib_InterfaceTypeDescription * type);
 
     // This function is not defined in the generic part, but instead has to be
     // defined individually for each CPP--UNO bridge:

@@ -186,13 +186,12 @@ VtableFactory::~VtableFactory() {
             for (sal_Int32 j = 0; j < rEntry.second.count; ++j) {
                 freeBlock(rEntry.second.blocks[j]);
             }
-            delete[] rEntry.second.blocks;
         }
     }
     rtl_arena_destroy(m_arena);
 }
 
-VtableFactory::Vtables VtableFactory::getVtables(
+const VtableFactory::Vtables& VtableFactory::getVtables(
     typelib_InterfaceTypeDescription * type)
 {
     OUString name(type->aBase.pTypeName);
@@ -204,14 +203,11 @@ VtableFactory::Vtables VtableFactory::getVtables(
         Vtables vtables;
         assert(blocks.size() <= SAL_MAX_INT32);
         vtables.count = static_cast< sal_Int32 >(blocks.size());
-        std::unique_ptr< Block[] > guardedBlocks(
-            new Block[vtables.count]);
-        vtables.blocks = guardedBlocks.get();
+        vtables.blocks.reset(new Block[vtables.count]);
         for (sal_Int32 j = 0; j < vtables.count; ++j) {
             vtables.blocks[j] = blocks[j];
         }
-        i = m_map.emplace(name, vtables).first;
-        guardedBlocks.release();
+        i = m_map.emplace(name, std::move(vtables)).first;
         blocks.unguard();
     }
     return i->second;
