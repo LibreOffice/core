@@ -755,12 +755,14 @@ namespace vcl
     {
         if (m_pImpl)
         {
-            for (WizardState i = 0; i < m_pImpl->nFirstUnknownPage; ++i)
+            while (m_pFirstPage)
             {
-                TabPage *pPage = GetPage(i);
+                VclPtr<TabPage> pPage = m_pFirstPage->mpPage;
+                RemovePage(m_pFirstPage->mpPage);
                 if (pPage)
-                    pPage->disposeOnce();
+                    pPage.disposeAndClear();
             }
+
             m_pImpl.reset();
         }
     }
@@ -1078,6 +1080,18 @@ namespace vcl
         return false;
     }
 
+    bool WizardMachine::ShowNextPage()
+    {
+        return ShowPage(m_nCurState + 1);
+    }
+
+    bool WizardMachine::ShowPrevPage()
+    {
+        if (!m_nCurState)
+            return false;
+        return ShowPage(m_nCurState - 1);
+    }
+
     bool WizardMachine::travelPrevious()
     {
         DBG_ASSERT(!m_pImpl->aStateHistory.empty(), "WizardMachine::travelPrevious: have no previous page!");
@@ -1234,6 +1248,31 @@ namespace vcl
                 pPageData = pPageData->mpNext;
             pPageData->mpNext = pNewPageData;
         }
+    }
+
+    void WizardMachine::RemovePage( TabPage* pPage )
+    {
+        ImplWizPageData*  pPrevPageData = nullptr;
+        ImplWizPageData*  pPageData = m_pFirstPage;
+        while ( pPageData )
+        {
+            if ( pPageData->mpPage == pPage )
+            {
+                if (pPrevPageData)
+                    pPrevPageData->mpNext = pPageData->mpNext;
+                else
+                    m_pFirstPage = pPageData->mpNext;
+                if (pPage == m_xCurTabPage)
+                    m_xCurTabPage.clear();
+                delete pPageData;
+                return;
+            }
+
+            pPrevPageData = pPageData;
+            pPageData = pPageData->mpNext;
+        }
+
+        OSL_FAIL( "WizardMachine::RemovePage() - Page not in list" );
     }
 
     void WizardMachine::SetPage(WizardState nLevel, TabPage* pPage)

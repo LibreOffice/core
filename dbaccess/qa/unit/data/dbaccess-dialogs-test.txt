@@ -49,7 +49,6 @@
 #     GetColumnId( static_cast<sal_uInt16>(mvCols.size()) - 1 );
 #   in BrowseBox::AutoSizeLastColumn (svtools/source/brwbox/brwbox1.cxx) with Clang
 #   -fsanitize=implicit-signed-integer-truncation
-# dbaccess/ui/rtfcopytabledialog.ui -> hangs execution, seems to wait for interaction somehow (?)
 
 dbaccess/ui/advancedsettingsdialog.ui
 dbaccess/ui/admindialog.ui

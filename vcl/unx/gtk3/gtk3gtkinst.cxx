@@ -3678,6 +3678,17 @@ private:
             gtk_container_forall(GTK_CONTAINER(pWidget), find_sidebar, user_data);
     }
 
+    static void signalHelpClicked(GtkButton*, gpointer widget)
+    {
+        GtkInstanceAssistant* pThis = static_cast<GtkInstanceAssistant*>(widget);
+        pThis->signal_help_clicked();
+    }
+
+    void signal_help_clicked()
+    {
+        help();
+    }
+
 public:
     GtkInstanceAssistant(GtkAssistant* pAssistant, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceDialog(GTK_WINDOW(pAssistant), pBuilder, bTakeOwnership)
@@ -3709,6 +3720,7 @@ public:
 
         m_pHelp = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(Button::GetStandardText(StandardButtonType::Help)).getStr()));
         gtk_widget_set_can_default(GTK_WIDGET(m_pHelp), true);
+        g_signal_connect(m_pHelp, "clicked", G_CALLBACK(signalHelpClicked), this);
         gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pHelp), false, false, 0);
 
         gtk_assistant_add_action_widget(pAssistant, GTK_WIDGET(m_pButtonBox));
