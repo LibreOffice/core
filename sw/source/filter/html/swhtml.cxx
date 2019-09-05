@@ -857,7 +857,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
         }
 
         // adjust AutoLoad in DocumentProperties
-        if( IsNewDoc() )
+        if (!utl::ConfigManager::IsFuzzing() && IsNewDoc())
         {
             SwDocShell *pDocShell(m_xDoc->GetDocShell());
             OSL_ENSURE(pDocShell, "no SwDocShell");
