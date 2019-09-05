@@ -715,6 +715,8 @@ public:
                             const ScPatternAttr& rPattern, SvNumFormatType nNewType );
     void        AddCondFormatData( const ScRangeList& rRange, sal_uInt32 nIndex );
     void        RemoveCondFormatData( const ScRangeList& rRange, sal_uInt32 nIndex );
+    void        SetPatternAreaCondFormat( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
+                    const ScPatternAttr& rAttr, const ScCondFormatIndexes& rCondFormatIndexes );
 
     void        ApplyStyle( SCCOL nCol, SCROW nRow, const ScStyleSheet* rStyle );
     void        ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, const ScStyleSheet& rStyle );
