@@ -64,30 +64,6 @@ bool osl_systemPathIsRelativePath(
     const rtl_uString* pustrPath);
 
 /**
-   Append a relative path to a base path
-
-   @param  pustrBasePath [in]   a system path that will be considered as
-                                base path pustrBasePath must not be NULL
-
-   @param  pustrRelPath [in]    a system path that will be considered as
-                                relative path pustrBasePath must not be NULL
-
-   @param  ppustrAbsolutePath [out] the resulting path which is a concatenation
-                                of the base and the relative path if base path
-                                is empty the resulting absolute path is the
-                                relative path if relative path is empty the
-                                resulting absolute path is the base path if base
-                                and relative path are empty the resulting absolute
-                                path is also empty ppustrAbsolutePath must not be
-                                NULL and *ppustrAbsolutePath must be 0 or point to
-                                a valid rtl_uString
-*/
-void osl_systemPathMakeAbsolutePath(
-    const rtl_uString* pustrBasePath,
-    const rtl_uString* pustrRelPath,
-    rtl_uString**      ppustrAbsolutePath);
-
-/**
    Returns the file or the directory part of the given path
 
    @param pustrPath [in]        a system path, must not be NULL
@@ -233,17 +209,15 @@ namespace osl
     systemPathMakeAbsolutePath
     Append a relative path to a base path
 
-    @param  pustrBasePath [in] a system
+    @param  BasePath [in] a system
             path that will be considered as
             base path
-            pustrBasePath must not be NULL
 
-    @param  pustrRelPath [in] a system path
+    @param  RelPath [in] a system path
             that will be considered as
             relative path
-            pustrBasePath must not be NULL
 
-    @param  ppustrAbsolutePath [out] the
+    @return the
             resulting path which is a
             concatenation of the base and
             the relative path
@@ -256,21 +230,12 @@ namespace osl
             if base and relative path are
             empty the resulting absolute
             path is also empty
-            ppustrAbsolutePath must not be
-            NULL and *ppustrAbsolutePath
-            must be 0 or point to a valid
-            rtl_uString
 
   *****************************************/
 
- inline void systemPathMakeAbsolutePath(
+ OUString systemPathMakeAbsolutePath(
      const OUString& BasePath,
-    const OUString& RelPath,
-    OUString&       AbsolutePath)
- {
-    osl_systemPathMakeAbsolutePath(
-        BasePath.pData, RelPath.pData, &AbsolutePath.pData);
- }
+    const OUString& RelPath);
 
  /********************************************
      systemPathIsHiddenFileOrDirectoryEntry

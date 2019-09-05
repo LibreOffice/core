@@ -614,10 +614,7 @@ oslFileError osl_getAbsoluteFileURL(
         if (rc != osl_File_E_None)
             return rc;
 
-        OUString abs_path;
-        systemPathMakeAbsolutePath(base_path, unresolved_path, abs_path);
-
-        unresolved_path = abs_path;
+        unresolved_path = systemPathMakeAbsolutePath(base_path, unresolved_path);
     }
 
     OUString resolved_path;

@@ -80,21 +80,16 @@ bool osl_systemPathIsRelativePath(const rtl_uString* pustrPath)
     return ((pustrPath == nullptr) || (pustrPath->length == 0) || (pustrPath->buffer[0] != FPH_CHAR_PATH_SEPARATOR));
 }
 
-void osl_systemPathMakeAbsolutePath(
-    const rtl_uString* pustrBasePath,
-    const rtl_uString* pustrRelPath,
-    rtl_uString**      ppustrAbsolutePath)
+OUString osl::systemPathMakeAbsolutePath(
+    const OUString& BasePath,
+    const OUString& RelPath)
 {
-    OUString base(rtl_uString_getStr(const_cast<rtl_uString*>(pustrBasePath)));
-    OUString rel(const_cast<rtl_uString*>(pustrRelPath));
+    OUString base(BasePath);
 
     if (!base.isEmpty())
         osl_systemPathEnsureSeparator(&base);
 
-    base += rel;
-
-    rtl_uString_acquire(base.pData);
-    *ppustrAbsolutePath = base.pData;
+    return base + RelPath;
 }
 
 void osl_systemPathGetFileNameOrLastDirectoryPart(
