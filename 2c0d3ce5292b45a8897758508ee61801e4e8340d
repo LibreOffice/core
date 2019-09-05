@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_557c2db4",
+        "filename": "sw/source/core/text/txtfld.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-05T12:11:35Z",
+      "side": 1,
+      "message": "Note that End() may return nullptr; GetAnyEnd() was used above.",
+      "range": {
+        "startLine": 443,
+        "startChar": 45,
+        "endLine": 443,
+        "endChar": 48
+      },
+      "revId": "2c0d3ce5292b45a8897758508ee61801e4e8340d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
