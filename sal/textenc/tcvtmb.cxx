@@ -320,7 +320,7 @@ sal_Size ImplUnicodeToDBCS( const void* pData, SAL_UNUSED_PARAMETER void*,
             }
         }
 
-        if ( !cConv )
+        if (cConv == 0 && c != 0)
         {
             if ( nFlags & RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE )
             {

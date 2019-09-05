@@ -1765,6 +1765,15 @@ void Test::testComplex() {
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
 #if WITH_LOCALE_ALL || WITH_LOCALE_ja
             { RTL_TEXTENCODING_SHIFT_JIS,
+              RTL_CONSTASCII_STRINGPARAM("\x00"),
+              {0x0000},
+              1,
+              true,
+              true,
+              true,
+              false,
+              RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
+            { RTL_TEXTENCODING_SHIFT_JIS,
               RTL_CONSTASCII_STRINGPARAM(
                   "\x87\x40\x87\x41\x87\x42\x87\x43\x87\x44\x87\x45\x87\x46"
                   "\x87\x47\x87\x48\x87\x49\x87\x4A\x87\x4B\x87\x4C\x87\x4D"
