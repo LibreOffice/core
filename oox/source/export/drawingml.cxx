@@ -946,7 +946,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
             if ( aLineDash.Dashes > 0 )
             {
                 double fD = bIsRelative ? aLineDash.DashLen : aLineDash.DashLen * 100.0 / fLineWidth;
-                // LO sets length to 0, if attribute is missing in ODF. Then a relataive length of 100% is intended.
+                // LO sets length to 0, if attribute is missing in ODF. Then a relative length of 100% is intended.
                 if (aLineDash.DashLen == 0)
                     fD = 100.0;
                 for( i = 0; i < aLineDash.Dashes; i ++ )
