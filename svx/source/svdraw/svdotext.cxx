@@ -2034,10 +2034,10 @@ bool SdrTextObj::GetPreventChainable() const
     return mbIsUnchainableClone || (GetNextLinkInChain() && GetNextLinkInChain()->IsInEditMode());
 }
 
- SdrObject* SdrTextObj::getFullDragClone() const
- {
-    SdrObject *pClone = SdrAttrObj::getFullDragClone();
-    SdrTextObj *pTextObjClone = dynamic_cast<SdrTextObj *>(pClone);
+SdrObjectUniquePtr SdrTextObj::getFullDragClone() const
+{
+    SdrObjectUniquePtr pClone = SdrAttrObj::getFullDragClone();
+    SdrTextObj *pTextObjClone = dynamic_cast<SdrTextObj *>(pClone.get());
     if (pTextObjClone != nullptr) {
         // Avoid transferring of text for chainable object during dragging
         pTextObjClone->mbIsUnchainableClone = true;

@@ -1184,10 +1184,10 @@ long SwVirtFlyDrawObj::GetRotateAngle() const
     }
 }
 
-SdrObject* SwVirtFlyDrawObj::getFullDragClone() const
+SdrObjectUniquePtr SwVirtFlyDrawObj::getFullDragClone() const
 {
     // call parent
-    SdrObject* pRetval = SdrVirtObj::getFullDragClone();
+    SdrObjectUniquePtr pRetval = SdrVirtObj::getFullDragClone();
 
     if(pRetval && GetFlyFrame() && ContainsSwGrfNode())
     {

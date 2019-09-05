@@ -223,7 +223,7 @@ public:
     css::uno::Reference< css::io::XInputStream > getInputStream() const;
 
     // #i103116# FullDrag support
-    virtual SdrObject* getFullDragClone() const override;
+    virtual SdrObjectUniquePtr getFullDragClone() const override;
 
     // add handles for crop mode when selected
     virtual void addCropHandles(SdrHdlList& rTarget) const override;

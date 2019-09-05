@@ -914,13 +914,13 @@ DlgEdObj* DlgEdObj::CloneSdrObject(SdrModel& rTargetModel) const
     return pDlgEdObj;
 }
 
-SdrObject* DlgEdObj::getFullDragClone() const
+SdrObjectUniquePtr DlgEdObj::getFullDragClone() const
 {
     // no need to really add the clone for dragging, it's a temporary
     // object
-    SdrObject* pObj = new SdrUnoObj(
+    SdrObjectUniquePtr pObj( new SdrUnoObj(
         getSdrModelFromSdrObject(),
-        OUString());
+        OUString()) );
     *pObj = *static_cast<const SdrUnoObj*>(this);
 
     return pObj;

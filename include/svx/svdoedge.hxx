@@ -236,7 +236,7 @@ public:
     virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const override;
 
     // FullDrag support
-    virtual SdrObject* getFullDragClone() const override;
+    virtual SdrObjectUniquePtr getFullDragClone() const override;
 
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
     virtual void NbcMove(const Size& aSize) override;

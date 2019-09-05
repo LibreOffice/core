@@ -89,7 +89,7 @@ public:
 
     // FullDrag support
     virtual bool supportsFullDrag() const override;
-    virtual SdrObject* getFullDragClone() const override;
+    virtual SdrObjectUniquePtr getFullDragClone() const override;
 
     virtual bool BegCreate(SdrDragStat& rStat) override;
     virtual bool MovCreate(SdrDragStat& rStat) override;

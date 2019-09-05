@@ -118,7 +118,7 @@ public:
     virtual       void       Rotate(const Point& rRef, long nAngle, double sn, double cs) override;
 
     // FullDrag support
-    virtual SdrObject* getFullDragClone() const override;
+    virtual SdrObjectUniquePtr getFullDragClone() const override;
 
     const SwFrameFormat *GetFormat() const;
           SwFrameFormat *GetFormat();

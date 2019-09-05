@@ -65,7 +65,7 @@ class SdrDragEntrySdrObject : public SdrDragEntry
 {
 private:
     const SdrObject&                                maOriginal;
-    SdrObject*                                      mpClone;
+    SdrObjectUniquePtr                              mxClone;
     bool const                                      mbModify;
 
 public:
@@ -78,7 +78,7 @@ public:
     // added accessors to original and clone
     void prepareCurrentState(SdrDragMethod& rDragMethod);
     const SdrObject& getOriginal() const { return maOriginal; }
-    SdrObject* getClone() { return mpClone; }
+    SdrObject* getClone() { return mxClone.get(); }
 
     virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
 };
@@ -284,7 +284,7 @@ private:
     // mechanism to modify wireframe visualisations, but uses the
     // SdrObject::applySpecialDrag() method to change a clone of the
     // SdrObject
-    SdrObject*                  mpClone;
+    SdrObjectUniquePtr               mxClone;
 
 protected:
     virtual void createSdrDragEntries() override;

@@ -1166,7 +1166,7 @@ void SdrOle2Obj::Disconnect_Impl()
     mpImpl->mbConnected = false;
 }
 
-SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText) const
+SdrObjectUniquePtr SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText) const
 {
     const Graphic* pOLEGraphic = GetGraphic();
 
@@ -1199,7 +1199,7 @@ SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText) const
             }
         }
 
-        return pClone;
+        return SdrObjectUniquePtr(pClone);
     }
     else
     {
@@ -1221,20 +1221,18 @@ SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText) const
         pClone->SetMergedItem(XFillBmpTileItem(false));
         pClone->SetMergedItem(XFillBmpStretchItem(false));
 
-        return pClone;
+        return SdrObjectUniquePtr(pClone);
     }
 }
 
 SdrObject* SdrOle2Obj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     // #i118485# missing converter added
-    SdrObject* pRetval = createSdrGrafObjReplacement(true);
+    SdrObjectUniquePtr pRetval = createSdrGrafObjReplacement(true);
 
     if(pRetval)
     {
         SdrObject* pRetval2 = pRetval->DoConvertToPolyObj(bBezier, bAddText);
-        SdrObject::Free(pRetval);
-
         return pRetval2;
     }
 
@@ -1305,7 +1303,7 @@ void SdrOle2Obj::SetClosedObj( bool bIsClosed )
     bClosedObj = bIsClosed;
 }
 
-SdrObject* SdrOle2Obj::getFullDragClone() const
+SdrObjectUniquePtr SdrOle2Obj::getFullDragClone() const
 {
     // #i118485# use central replacement generator
     return createSdrGrafObjReplacement(false);
