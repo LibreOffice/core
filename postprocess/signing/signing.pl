@@ -23,11 +23,11 @@ use strict;
 use Getopt::Long;
 
 my $debug = 0;
-my $max_files = 20;           # sign $max_files with one command line
+my $max_files = 400;          # sign $max_files with one command line
 
 #### globals #####
 my $myname      = "";
-my $opt_dir     = "";
+my $opt_desc    = "";
 my $opt_exclude = "";         # file with a list of not signable dll and exe files
 my $opt_verbose = 0;
 my $opt_help    = 0;
@@ -72,7 +72,7 @@ sub parse_options       #09.07.2007 08:13
     # e exclude list file
     # v verbose
     my $success = GetOptions('h' => \$opt_help,
-         'd=s' => \$opt_dir, 'e=s'=>\$opt_exclude, 'f=s'=>\$opt_pfxfile, 'l=s'=>\$opt_log,
+         'd=s' => \$opt_desc, 'e=s'=>\$opt_exclude, 'f=s'=>\$opt_pfxfile, 'l=s'=>\$opt_log,
          'p=s'=>\$opt_pass,'v'=>\$opt_verbose, 't=s'=>\$opt_timestamp_url);
     if ( !$success || $opt_help ) {
         usage();
@@ -150,6 +150,7 @@ sub sign_files      #09.07.2007 10:36
     $commandline_base .= " -f $opt_pfxfile" if ($opt_pfxfile ne "");
     $commandline_base .= " -p $opt_pass" if ($opt_pass ne "");
     $commandline_base .= " -t $opt_timestamp_url" if ($opt_timestamp_url ne "");
+    $commandline_base .= " -d \"$opt_desc\"" if ($opt_desc ne "");
 
     # Here switch between:
     # one command line for multiple files (all doesn't work, too much) / for each file one command line
