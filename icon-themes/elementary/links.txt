@@ -264,7 +264,6 @@ cmd/lc_pickthrough.png cmd/lc_doubleclicktextedit.png
 cmd/sc_textfittosizetool.png cmd/sc_text_marquee.png
 cmd/sc_texttoolbox.png cmd/sc_text.png
 cmd/sc_drawtext.png cmd/sc_text.png
-cmd/sc_edit.png cmd/sc_text.png
 cmd/sc_fontworkcharacterspacingfloater.png cmd/sc_spacing.png
 cmd/sc_fontheight.png cmd/sc_scaletext.png
 cmd/sc_pickthrough.png cmd/sc_doubleclicktextedit.png
@@ -985,6 +984,16 @@ cmd/lc_insertframemenu.png cmd/lc_insertframe.png
 
 cmd/sc_indexesmenu.png cmd/sc_insertindexesentry.png
 cmd/sc_insertframemenu.png cmd/sc_insertframe.png
+
+# Writer menu: MSO compatible Form menu
+cmd/sc_textformfield.png cmd/sc_edit.png
+cmd/lc_textformfield.png cmd/lc_edit.png
+cmd/sc_checkboxformfield.png cmd/sc_checkbox.png
+cmd/lc_checkboxformfield.png cmd/lc_checkbox.png
+cmd/sc_dropdownformfield.png cmd/sc_combobox.png
+cmd/lc_dropdownformfield.png cmd/lc_combobox.png
+cmd/sc_datepickerformfield.png cmd/sc_datefield.png
+cmd/lc_datepickerformfield.png cmd/lc_datefield.png
 
 # Format
 cmd/32/fillcolor.png cmd/32/backgroundcolor.png

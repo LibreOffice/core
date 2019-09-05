@@ -651,6 +651,7 @@ cmd/lc_charactermenu.png cmd/lc_fontdialog.png
 cmd/lc_charbackcolor.png cmd/lc_backcolor.png
 cmd/lc_charmapcontrol.png cmd/lc_insertsymbol.png
 cmd/lc_charttitlemenu.png cmd/lc_toggletitle.png
+cmd/lc_checkboxformfield.png cmd/lc_checkbox.png
 cmd/lc_circle.png cmd/lc_basicshapes.circle.png
 cmd/lc_circlepie.png cmd/lc_basicshapes.circle-pie.png
 cmd/lc_closedocs.png cmd/lc_closedoc.png
@@ -672,6 +673,7 @@ cmd/lc_convertmenu.png cmd/lc_bezierconvert.png
 cmd/lc_currentfootnotedialog.png cmd/lc_footnotedialog.png
 cmd/lc_datafilterhideautofilter.png cmd/lc_removefiltersort.png
 cmd/lc_datapilotmenu.png cmd/lc_datadatapilotrun.png
+cmd/lc_datepickerformfield.png cmd/lc_datefield.png
 cmd/lc_dbdtableedit.png cmd/lc_dbtableedit.png
 cmd/lc_dbviewfunctions.png cmd/lc_insertformula.png
 cmd/lc_defaultcellstyles.png cmd/lc_defaultcharstyle.png
@@ -687,6 +689,7 @@ cmd/lc_diagramgridmenu.png cmd/lc_togglegridhorizontal.png
 cmd/lc_draw.png cmd/lc_reload.png
 cmd/lc_drawselect.png cmd/lc_selectobject.png
 cmd/lc_drawtext.png cmd/lc_text.png
+cmd/lc_dropdownformfield.png cmd/lc_combobox.png
 cmd/lc_dsbdocumentdatasource.png cmd/lc_insertexternaldatasource.png
 cmd/lc_dsbeditdoc.png cmd/lc_editdoc.png
 cmd/lc_dsbformletter.png cmd/lc_mergedialog.png
@@ -947,6 +950,7 @@ cmd/lc_tablesort.png cmd/lc_datasort.png
 cmd/lc_templatemenu.png cmd/lc_templatemanager.png
 cmd/lc_textalign.png cmd/lc_alignblock.png
 cmd/lc_textattributes.png cmd/lc_fontdialog.png
+cmd/lc_textformfield.png cmd/lc_edit.png
 cmd/lc_texttoolbox.png cmd/lc_text.png
 cmd/lc_thesaurusdialog.png cmd/lc_thesaurus.png
 cmd/lc_toggleformula.png cmd/lc_insertformula.png
@@ -1038,6 +1042,7 @@ cmd/sc_charactermenu.png cmd/sc_fontdialog.png
 cmd/sc_charbackcolor.png cmd/sc_backcolor.png
 cmd/sc_charmapcontrol.png cmd/sc_insertsymbol.png
 cmd/sc_charttitlemenu.png cmd/sc_toggletitle.png
+cmd/sc_checkboxformfield.png cmd/sc_checkbox.png
 cmd/sc_circle.png cmd/sc_basicshapes.circle.png
 cmd/sc_circlepie.png cmd/sc_basicshapes.circle-pie.png
 cmd/sc_closedocs.png cmd/sc_closedoc.png
@@ -1059,6 +1064,7 @@ cmd/sc_convertmenu.png cmd/sc_bezierconvert.pngs
 cmd/sc_currentfootnotedialog.png cmd/sc_footnotedialog.png
 cmd/sc_datafilterhideautofilter.png cmd/sc_removefiltersort.png
 cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
+cmd/sc_datepickerformfield.png cmd/sc_datefield.png
 cmd/sc_dbdtableedit.png cmd/sc_dbtableedit.png
 cmd/sc_dbviewfunctions.png cmd/sc_insertformula.png
 cmd/sc_defaultcellstyles.png cmd/sc_defaultcharstyle.png
@@ -1074,6 +1080,7 @@ cmd/sc_diagramgridmenu.png cmd/sc_togglegridhorizontal.png
 cmd/sc_draw.png cmd/sc_reload.png
 cmd/sc_drawselect.png cmd/sc_selectobject.png
 cmd/sc_drawtext.png cmd/sc_text.png
+cmd/sc_dropdownformfield.png cmd/sc_combobox.png
 cmd/sc_dsbdocumentdatasource.png cmd/sc_insertexternaldatasource.png
 cmd/sc_dsbeditdoc.png cmd/sc_editdoc.png
 cmd/sc_dsbformletter.png cmd/sc_mergedialog.png
@@ -1335,6 +1342,7 @@ cmd/sc_tablesort.png cmd/sc_datasort.png
 cmd/sc_templatemenu.png cmd/sc_templatemanager.png
 cmd/sc_textalign.png cmd/sc_alignblock.png
 cmd/sc_textattributes.png cmd/sc_fontdialog.png
+cmd/sc_textformfield.png cmd/sc_edit.png
 cmd/sc_texttoolbox.png cmd/sc_text.png
 cmd/sc_thesaurusdialog.png cmd/sc_thesaurus.png
 cmd/sc_toggleformula.png cmd/sc_insertformula.png
