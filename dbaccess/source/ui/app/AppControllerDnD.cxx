@@ -653,7 +653,7 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
                     if (!bSuccess)
                     {
                         OSL_FAIL("OApplicationController::paste: could not extract the source query object!");
-                        // TODO: maybe this is worth an error message to be displayed to the user ....
+                        // TODO: maybe this is worth an error message to be displayed to the user...
                         return false;
                     }
                 }
@@ -666,7 +666,7 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
                     return false;
                 }
 
-                // here we have everything needed to create a new query object ...
+                // here we have everything needed to create a new query object...
                 // ... ehm, except a new name
                 ensureConnection();
 

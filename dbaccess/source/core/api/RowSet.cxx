@@ -1253,7 +1253,7 @@ void SAL_CALL ORowSet::moveToCurrentRow(  )
         return;
 
     if ( rowDeleted() )
-        // this would perhaps even justify a RuntimeException ....
+        // this would perhaps even justify a RuntimeException...
         // if the current row is deleted, then no write access to this row should be possible. So,
         // m_bModified should be true. Also, as soon as somebody calls moveToInsertRow,
         // our current row should not be deleted anymore. So, we should not have survived the above

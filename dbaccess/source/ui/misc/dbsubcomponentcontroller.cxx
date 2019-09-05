@@ -253,7 +253,7 @@ namespace dbaui
                 if ( xConnAsChild.is() )
                     xDS.set( xConnAsChild->getParent(), UNO_QUERY );
 
-                // (take the indirection through XDataSource to ensure we have a correct object ....)
+                // (take the indirection through XDataSource to ensure we have a correct object...)
                 m_pImpl->m_aDataSource = DataSourceHolder(xDS);
             }
             SAL_WARN_IF( !m_pImpl->m_aDataSource.is(), "dbaccess.ui", "DBSubComponentController::initializeConnection: unable to obtain the data source object!" );

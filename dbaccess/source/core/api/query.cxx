@@ -291,7 +291,7 @@ void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _r
         m_xCommandDefinition->setPropertyValue(sAggPropName, _rValue);
 
         if ( PROPERTY_ID_COMMAND == _nHandle )
-            // the columns are out of date if we are based on a new statement ....
+            // the columns are out of date if we are based on a new statement...
             setColumnsOutOfDate();
     }
 }

@@ -140,7 +140,7 @@
   reference type library is taken from the release source tree OOG680 m5.
 
 03/17/08 (TL, JSC): TaskID=i85576
-  remove two never implemented properties 'TopMargin' and 'ButtomMargin' from
+  remove two never implemented properties 'TopMargin' and 'BottomMargin' from
   com.sun.star.text.CellRange. 
   
 06/26/08 (TL, JSC): TaskID=i86515
