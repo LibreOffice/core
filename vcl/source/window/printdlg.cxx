@@ -533,6 +533,8 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     get(mpPageLayoutFrame, "layoutframe");
     get(mpForwardBtn, "forward");
     get(mpBackwardBtn, "backward");
+    get(mpFirstBtn, "btnFirst");
+    get(mpLastBtn, "btnLast");
     get(mpNumPagesText, "totalnumpages");
     get(mpPageEdit, "pageedit-nospin");
     get(mpPreviewWindow, "preview");
@@ -572,6 +574,8 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     // setup preview controls
     mpForwardBtn->SetStyle( mpForwardBtn->GetStyle() | WB_BEVELBUTTON );
     mpBackwardBtn->SetStyle( mpBackwardBtn->GetStyle() | WB_BEVELBUTTON );
+    mpFirstBtn->SetStyle( mpFirstBtn->GetStyle() | WB_BEVELBUTTON );
+    mpLastBtn->SetStyle( mpLastBtn->GetStyle() | WB_BEVELBUTTON );
 
     maPageStr = mpNumPagesText->GetText();
 
@@ -661,6 +665,8 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     mpMoreOptionsBtn->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     mpBackwardBtn->SetClickHdl(LINK(this, PrintDialog, ClickHdl));
     mpForwardBtn->SetClickHdl(LINK(this, PrintDialog, ClickHdl));
+    mpFirstBtn->SetClickHdl(LINK(this, PrintDialog, ClickHdl));
+    mpLastBtn->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     mpPreviewBox->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     mpBorderCB->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
 
@@ -704,6 +710,8 @@ void PrintDialog::dispose()
     mpNumPagesText.clear();
     mpBackwardBtn.clear();
     mpForwardBtn.clear();
+    mpFirstBtn.clear();
+    mpLastBtn.clear();
     mpPreviewBox.clear();
     mpOKButton.clear();
     mpCancelButton.clear();
@@ -954,6 +962,9 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
 
         mpForwardBtn->Enable( false );
         mpBackwardBtn->Enable( false );
+        mpFirstBtn->Enable( false );
+        mpLastBtn->Enable( false );
+
         mpPageEdit->Enable( false );
 
         return;
@@ -986,6 +997,8 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
 
     mpForwardBtn->Enable( mnCurPage < nPages-1 );
     mpBackwardBtn->Enable( mnCurPage != 0 );
+    mpFirstBtn->Enable( mnCurPage != 0 );
+    mpLastBtn->Enable( mnCurPage < nPages-1 );
     mpPageEdit->Enable( nPages > 1 );
 }
 
@@ -1825,6 +1838,14 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
     {
         previewBackward();
     }
+    else if( pButton == mpFirstBtn )
+    {
+        previewFirst();
+    }
+    else if( pButton == mpLastBtn )
+    {
+        previewLast();
+    }
     else if( pButton == mpBrochureBtn )
     {
         PropertyValue* pVal = getValueForWindow( pButton );
@@ -2124,6 +2145,16 @@ void PrintDialog::previewForward()
 void PrintDialog::previewBackward()
 {
     mpPageEdit->Down();
+}
+
+void PrintDialog::previewFirst()
+{
+    mpPageEdit->First();
+}
+
+void PrintDialog::previewLast()
+{
+    mpPageEdit->Last();
 }
 
 // PrintProgressDialog

@@ -17,17 +17,27 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkImage" id="image1">
+  <object class="GtkImage" id="imgBack">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-media-previous</property>
+    <property name="stock">gtk-go-back</property>
     <property name="icon_size">1</property>
   </object>
-  <object class="GtkImage" id="image2">
+  <object class="GtkImage" id="imgFirst">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-media-next</property>
+    <property name="stock">gtk-goto-first</property>
+  </object>
+  <object class="GtkImage" id="imgForward">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-go-forward</property>
     <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="imgLast">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-goto-last</property>
   </object>
   <object class="GtkListStore" id="liststore1">
     <columns>
@@ -255,18 +265,33 @@
                             <property name="margin_right">10</property>
                             <property name="spacing">6</property>
                             <child>
+                              <object class="GtkButton" id="btnLast">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="tooltip_text" translatable="yes" context="printdialog|lastpage">Last page</property>
+                                <property name="image">imgLast</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="pack_type">end</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkButton" id="forward">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="tooltip_text" translatable="yes" context="printdialog|forward">Next page</property>
-                                <property name="image">image2</property>
+                                <property name="image">imgForward</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
                                 <property name="pack_type">end</property>
-                                <property name="position">0</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                             <child>
@@ -279,7 +304,7 @@
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
                                 <property name="pack_type">end</property>
-                                <property name="position">1</property>
+                                <property name="position">2</property>
                               </packing>
                             </child>
                             <child>
@@ -291,7 +316,7 @@
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
                                 <property name="pack_type">end</property>
-                                <property name="position">2</property>
+                                <property name="position">3</property>
                               </packing>
                             </child>
                             <child>
@@ -300,13 +325,28 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="tooltip_text" translatable="yes" context="printdialog|backward">Previous page</property>
-                                <property name="image">image1</property>
+                                <property name="image">imgBack</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
                                 <property name="pack_type">end</property>
-                                <property name="position">3</property>
+                                <property name="position">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="btnFirst">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="tooltip_text" translatable="yes" context="printdialog|firstpage">First page</property>
+                                <property name="image">imgFirst</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="pack_type">end</property>
+                                <property name="position">5</property>
                               </packing>
                             </child>
                           </object>

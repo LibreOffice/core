@@ -122,6 +122,8 @@ namespace vcl
         void setPaperSizes();
         void previewForward();
         void previewBackward();
+        void previewFirst();
+        void previewLast();
 
     private:
 
@@ -153,6 +155,9 @@ namespace vcl
 
         VclPtr<PushButton>                      mpBackwardBtn;
         VclPtr<PushButton>                      mpForwardBtn;
+        VclPtr<PushButton>                      mpFirstBtn;
+        VclPtr<PushButton>                      mpLastBtn;
+
         VclPtr<CheckBox>                        mpPreviewBox;
         VclPtr<FixedText>                       mpNumPagesText;
         VclPtr<PrintPreviewWindow>              mpPreviewWindow;
