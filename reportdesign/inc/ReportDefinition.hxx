@@ -192,6 +192,7 @@ namespace reportdesign
 
     public:
         //TTTT Needed? Or same as above?
+        static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
         static std::shared_ptr<rptui::OReportModel> getSdrModel(const css::uno::Reference< css::report::XReportDefinition >& _xReportDefinition);
 
     private:
@@ -354,7 +355,6 @@ namespace reportdesign
 
         // css::lang::XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-        static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
         // SvxUnoDrawMSFactory
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;

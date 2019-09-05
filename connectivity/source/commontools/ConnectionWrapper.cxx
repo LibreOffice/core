@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/uno3.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/hash.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -157,7 +158,7 @@ Sequence< Type > SAL_CALL OConnectionWrapper::getTypes(  )
 // css::lang::XUnoTunnel
 sal_Int64 SAL_CALL OConnectionWrapper::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    if (isUnoTunnelId<OConnectionWrapper>(rId))
         return reinterpret_cast< sal_Int64 >( this );
 
     if(m_xUnoTunnel.is())
@@ -166,7 +167,7 @@ sal_Int64 SAL_CALL OConnectionWrapper::getSomething( const Sequence< sal_Int8 >&
 }
 
 
-Sequence< sal_Int8 > OConnectionWrapper::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > OConnectionWrapper::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 

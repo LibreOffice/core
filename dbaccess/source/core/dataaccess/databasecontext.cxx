@@ -54,6 +54,7 @@
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -731,13 +732,13 @@ void ODatabaseContext::databaseDocumentURLChange( const OUString& _rOldURL, cons
 
 sal_Int64 SAL_CALL ODatabaseContext::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    if (isUnoTunnelId<ODatabaseContext>(rId))
         return reinterpret_cast<sal_Int64>(this);
 
     return 0;
 }
 
-Sequence< sal_Int8 > ODatabaseContext::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > ODatabaseContext::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 

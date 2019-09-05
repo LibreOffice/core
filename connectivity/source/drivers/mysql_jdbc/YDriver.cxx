@@ -271,7 +271,7 @@ Reference<XConnection> SAL_CALL ODriverDelegator::connect(const OUString& url,
                 if (xTunnel.is())
                 {
                     pMetaConnection = reinterpret_cast<OMetaConnection*>(
-                        xTunnel->getSomething(OMetaConnection::getUnoTunnelImplementationId()));
+                        xTunnel->getSomething(OMetaConnection::getUnoTunnelId()));
                     if (pMetaConnection)
                         pMetaConnection->setURL(url);
                 }
@@ -344,7 +344,7 @@ ODriverDelegator::getDataDefinitionByConnection(const Reference<XConnection>& co
     if (xTunnel.is())
     {
         OMetaConnection* pConnection = reinterpret_cast<OMetaConnection*>(
-            xTunnel->getSomething(OMetaConnection::getUnoTunnelImplementationId()));
+            xTunnel->getSomething(OMetaConnection::getUnoTunnelId()));
         if (pConnection)
         {
             TWeakPairVector::iterator i

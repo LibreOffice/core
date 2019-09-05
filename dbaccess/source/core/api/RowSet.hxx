@@ -259,7 +259,7 @@ namespace dbaccess
 
     // css::lang::XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-        static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+        static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
 
     // css::uno::XAggregation
         virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) override;
@@ -491,7 +491,7 @@ namespace dbaccess
 
     // css::lang::XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-        static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+        static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
 
     // OComponentHelper
         virtual void SAL_CALL disposing() override;

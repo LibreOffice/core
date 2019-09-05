@@ -56,7 +56,7 @@ public:
     /* css::lang::XUnoTunnel */
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
     /// @throws css::uno::RuntimeException
-    static css::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId();
+    static css::uno::Sequence < sal_Int8 > getUnoTunnelId();
 
     /* css::lang::XServiceInfo */
     virtual OUString SAL_CALL getImplementationName(  ) override;

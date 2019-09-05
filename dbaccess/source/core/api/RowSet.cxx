@@ -59,6 +59,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/BlobHelper.hxx>
@@ -443,13 +444,13 @@ void SAL_CALL ORowSet::release() throw()
 // css::XUnoTunnel
 sal_Int64 SAL_CALL ORowSet::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    if (isUnoTunnelId<ORowSet>(rId))
         return reinterpret_cast<sal_Int64>(this);
 
     return 0;
 }
 
-Sequence< sal_Int8 > ORowSet::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > ORowSet::getUnoTunnelId()
 {
     static ::cppu::OImplementationId s_Id;
 
@@ -2146,7 +2147,7 @@ void ORowSet::notifyRowSetAndClonesRowDelete( const Any& _rBookmark )
         Reference< XUnoTunnel > xTunnel(elem.get(),UNO_QUERY);
         if(xTunnel.is())
         {
-            ORowSetClone* pClone = reinterpret_cast<ORowSetClone*>(xTunnel->getSomething(ORowSetClone::getUnoTunnelImplementationId()));
+            ORowSetClone* pClone = reinterpret_cast<ORowSetClone*>(xTunnel->getSomething(ORowSetClone::getUnoTunnelId()));
             if(pClone)
                 pClone->onDeleteRow( _rBookmark );
         }
@@ -2163,7 +2164,7 @@ void ORowSet::notifyRowSetAndClonesRowDeleted( const Any& _rBookmark, sal_Int32 
         Reference< XUnoTunnel > xTunnel(clone.get(),UNO_QUERY);
         if(xTunnel.is())
         {
-            ORowSetClone* pClone = reinterpret_cast<ORowSetClone*>(xTunnel->getSomething(ORowSetClone::getUnoTunnelImplementationId()));
+            ORowSetClone* pClone = reinterpret_cast<ORowSetClone*>(xTunnel->getSomething(ORowSetClone::getUnoTunnelId()));
             if(pClone)
                 pClone->onDeletedRow( _rBookmark, _nPos );
         }
@@ -2909,7 +2910,7 @@ void ORowSetClone::close()
     return *::comphelper::OPropertyArrayUsageHelper<ORowSetClone>::getArrayHelper();
 }
 
-Sequence< sal_Int8 > ORowSetClone::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > ORowSetClone::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 
@@ -2919,7 +2920,7 @@ Sequence< sal_Int8 > ORowSetClone::getUnoTunnelImplementationId()
 // css::XUnoTunnel
 sal_Int64 SAL_CALL ORowSetClone::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    if (isUnoTunnelId<ORowSetClone>(rId))
         return reinterpret_cast<sal_Int64>(this);
 
     return 0;

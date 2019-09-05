@@ -80,6 +80,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace std;
 using namespace osl;
@@ -245,7 +246,7 @@ void ZipPackage::parseManifest()
                                 uno::Reference < XUnoTunnel > xUnoTunnel;
                                 aAny >>= xUnoTunnel;
                                 sal_Int64 nTest=0;
-                                if ( (nTest = xUnoTunnel->getSomething( ZipPackageFolder::static_getImplementationId() )) != 0 )
+                                if ( (nTest = xUnoTunnel->getSomething( ZipPackageFolder::getUnoTunnelId() )) != 0 )
                                 {
                                     pFolder = reinterpret_cast < ZipPackageFolder* > ( nTest );
                                     pFolder->SetMediaType ( sMediaType );
@@ -253,7 +254,7 @@ void ZipPackage::parseManifest()
                                 }
                                 else
                                 {
-                                    pStream = reinterpret_cast < ZipPackageStream* > ( xUnoTunnel->getSomething( ZipPackageStream::static_getImplementationId() ));
+                                    pStream = reinterpret_cast < ZipPackageStream* > ( xUnoTunnel->getSomething( ZipPackageStream::getUnoTunnelId() ));
                                     pStream->SetMediaType ( sMediaType );
                                     pStream->SetFromManifest( true );
 
@@ -491,7 +492,7 @@ void ZipPackage::parseContentType()
                             uno::Any aIterAny = getByHierarchicalName( aPath );
                             uno::Reference < lang::XUnoTunnel > xIterTunnel;
                             aIterAny >>= xIterTunnel;
-                            sal_Int64 nTest = xIterTunnel->getSomething( ZipPackageStream::static_getImplementationId() );
+                            sal_Int64 nTest = xIterTunnel->getSomething( ZipPackageStream::getUnoTunnelId() );
                             if ( nTest != 0 )
                             {
                                 // this is a package stream, in OFOPXML format only streams can have mediatype
@@ -1706,7 +1707,7 @@ uno::Reference < XSingleServiceFactory > ZipPackage::createServiceFactory( uno::
                                            static_getSupportedServiceNames() );
 }
 
-Sequence< sal_Int8 > ZipPackage::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > ZipPackage::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 
@@ -1715,7 +1716,7 @@ Sequence< sal_Int8 > ZipPackage::getUnoTunnelImplementationId()
 
 sal_Int64 SAL_CALL ZipPackage::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
 {
-    if ( aIdentifier.getLength() == 16 && 0 == memcmp( getUnoTunnelImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
+    if ( isUnoTunnelId<ZipPackage>(aIdentifier) )
         return reinterpret_cast < sal_Int64 > ( this );
     return 0;
 }
