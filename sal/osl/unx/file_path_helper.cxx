@@ -58,7 +58,9 @@ void osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
     }
 }
 
-void osl_systemPathEnsureSeparator(OUString* ppustrPath)
+namespace {
+
+void systemPathEnsureSeparator(OUString* ppustrPath)
 {
     assert(nullptr != ppustrPath);
     sal_Int32    lp = ppustrPath->getLength();
@@ -71,7 +73,9 @@ void osl_systemPathEnsureSeparator(OUString* ppustrPath)
 
     SAL_WARN_IF( !ppustrPath->endsWith(FPH_PATH_SEPARATOR),
                  "sal.osl",
-                 "osl_systemPathEnsureSeparator: Post condition failed");
+                 "systemPathEnsureSeparator: Post condition failed");
+}
+
 }
 
 bool osl_systemPathIsRelativePath(const rtl_uString* pustrPath)
@@ -87,7 +91,7 @@ OUString osl::systemPathMakeAbsolutePath(
     OUString base(BasePath);
 
     if (!base.isEmpty())
-        osl_systemPathEnsureSeparator(&base);
+        systemPathEnsureSeparator(&base);
 
     return base + RelPath;
 }
@@ -224,7 +228,7 @@ bool osl_searchPath(
     while (!pli.done())
     {
         OUString p = pli.get_current_item();
-        osl::systemPathEnsureSeparator(p);
+        systemPathEnsureSeparator(&p);
         p += fp;
 
         if (osl::access(p, F_OK) > -1)
