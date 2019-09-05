@@ -70,6 +70,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
 
 namespace dbaui
@@ -1302,7 +1303,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
     {
         OCopyTableWizard& rWizard( impl_getDialog_throw() );
 
-        WaitObject aWO( rWizard.GetParent() );
+        weld::WaitObject aWO(rWizard.getDialog());
         Reference< XPropertySet > xTable;
 
         switch ( rWizard.getOperation() )
@@ -1503,20 +1504,19 @@ svt::OGenericUnoDialog::Dialog CopyTableWizard::createDialog(const css::uno::Ref
     OSL_PRECOND( isInitialized(), "CopyTableWizard::createDialog: not initialized!" );
         // this should have been prevented in ::execute already
 
-    VclPtrInstance<OCopyTableWizard> pWizard(
-        VCLUnoHelper::GetWindow(rParent),
+    auto xWizard = std::make_unique<OCopyTableWizard>(
+        Application::GetFrameWeld(rParent),
         m_sDestinationTable,
         m_nOperation,
         *m_pSourceObject,
         m_xSourceConnection.getTyped(),
         m_xDestConnection.getTyped(),
         m_xContext,
-        m_xInteractionHandler
-    );
+        m_xInteractionHandler);
 
-    impl_attributesToDialog_nothrow( *pWizard );
+    impl_attributesToDialog_nothrow(*xWizard);
 
-    return svt::OGenericUnoDialog::Dialog(pWizard);
+    return svt::OGenericUnoDialog::Dialog(std::move(xWizard));
 }
 
 void CopyTableWizard::executedDialog( sal_Int16 _nExecutionResult )
