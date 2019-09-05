@@ -207,6 +207,7 @@ public:
     void testTdf125360_1();
     void testTdf125360_2();
     void testTdf125551();
+    void testTdf127372();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -296,6 +297,7 @@ public:
     CPPUNIT_TEST(testTdf125360_1);
     CPPUNIT_TEST(testTdf125360_2);
     CPPUNIT_TEST(testTdf125551);
+    CPPUNIT_TEST(testTdf127372);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2374,6 +2376,16 @@ void SdOOXMLExportTest2::testTdf125551()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8587), xShapeBg->getSize().Height);
 }
 
+void SdOOXMLExportTest2::testTdf127372()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf127372.odp"), ODP);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+    awt::Gradient aTransparenceGradient;
+    xShape->getPropertyValue("FillTransparenceGradient") >>= aTransparenceGradient;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aTransparenceGradient.StartColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aTransparenceGradient.EndColor);
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
