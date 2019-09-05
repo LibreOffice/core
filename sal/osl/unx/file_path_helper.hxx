@@ -44,13 +44,12 @@ void osl_systemPathRemoveSeparator(rtl_uString* pustrPath);
 
    @param  pustrPath [inout]    a system path if the path is not the root path
                                 '/' and has no trailing separator a separator
-                                will be added ppustrPath must not be NULL and
-                                must point to a valid rtl_uString
+                                will be added ppustrPath must not be NULL
 
    @returns nothing
 
 */
-void osl_systemPathEnsureSeparator(rtl_uString** ppustrPath);
+void osl_systemPathEnsureSeparator(OUString* ppustrPath);
 
 /**
    Returns true if the given path is a relative path and so starts not with '/'
@@ -208,7 +207,7 @@ namespace osl
 
  inline void systemPathEnsureSeparator(/*inout*/ OUString& Path)
  {
-     osl_systemPathEnsureSeparator(&Path.pData);
+     osl_systemPathEnsureSeparator(&Path);
  }
 
  /*******************************************
