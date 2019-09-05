@@ -530,6 +530,16 @@ cmd/sc_macrosmenu.png cmd/sc_trackchanges.png
 cmd/sc_showannotations.png cmd/sc_insertannotation.png
 cmd/sc_sheetcommentmenu.png cmd/sc_insertannotation.png
 
+# Writer menu: MSO compatible Form menu
+cmd/sc_textformfield.png cmd/sc_insertedit.png
+cmd/lc_textformfield.png cmd/lc_insertedit.png
+cmd/sc_checkboxformfield.png cmd/sc_insertformcheck.png
+cmd/lc_checkboxformfield.png cmd/lc_insertformcheck.png
+cmd/sc_dropdownformfield.png cmd/sc_insertformcombo.png
+cmd/lc_dropdownformfield.png cmd/lc_insertformcombo.png
+cmd/sc_datepickerformfield.png cmd/sc_insertdatefield.png
+cmd/lc_datepickerformfield.png cmd/lc_datefield.png
+
 # text background colour Impress/Draw
 cmd/sc_charbackcolor.png cmd/sc_backcolor.png
 cmd/lc_charbackcolor.png cmd/lc_backcolor.png

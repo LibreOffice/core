@@ -1791,6 +1791,20 @@ cmd/sc_chartmenu.png cmd/sc_drawchart.png
 cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
 cmd/lc_addtextbox.png cmd/lc_insertfixedtext.png
 
+# Writer menu: MSO compatible Form menu
+cmd/32/textformfield.png cmd/32/edit.png
+cmd/32/checkboxformfield.png cmd/32/checkbox.png
+cmd/32/dropdownformfield.png cmd/32/combobox.png
+cmd/32/datepickerformfield.png cmd/32/datefield.png
+cmd/lc_textformfield.png cmd/lc_edit.png
+cmd/lc_checkboxformfield.png cmd/lc_checkbox.png
+cmd/lc_dropdownformfield.png cmd/lc_combobox.png
+cmd/lc_datepickerformfield.png cmd/lc_datefield.png
+cmd/sc_textformfield.png cmd/sc_edit.png
+cmd/sc_checkboxformfield.png cmd/sc_checkbox.png
+cmd/sc_dropdownformfield.png cmd/sc_combobox.png
+cmd/sc_datepickerformfield.png cmd/sc_datefield.png
+
 # draw
 # ===============================================
 # Sheet
