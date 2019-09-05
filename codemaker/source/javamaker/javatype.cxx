@@ -718,7 +718,7 @@ void handleEnumType(
         ClassFile::ACC_PRIVATE,
         "<init>", "(I)V", code.get(),
         std::vector< OString >(), "");
-    code.reset(cf->newCode());
+    code = cf->newCode();
     code->instrGetstatic(
         className,
         codemaker::convertString(entity->getMembers()[0].name),
@@ -730,7 +730,7 @@ void handleEnumType(
             ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC),
         "getDefault", "()" + classDescriptor,
         code.get(), std::vector< OString >(), "");
-    code.reset(cf->newCode());
+    code = cf->newCode();
     code->loadLocalInteger(0);
     std::map< sal_Int32, OString > map;
     sal_Int32 min = SAL_MAX_INT32;
@@ -793,7 +793,7 @@ void handleEnumType(
             ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC),
         "fromInt", "(I)" + classDescriptor, code.get(),
         std::vector< OString >(), "");
-    code.reset(cf->newCode());
+    code = cf->newCode();
     for (const unoidl::EnumTypeEntity::Member& member : entity->getMembers())
     {
         code->instrNew(className);
@@ -1405,7 +1405,7 @@ void handlePlainStructType(
         ClassFile::ACC_PUBLIC, "<init>", "()V", code.get(),
         std::vector< OString >(), "");
     MethodDescriptor desc(manager, dependencies, "void", nullptr, nullptr);
-    code.reset(cf->newCode());
+    code = cf->newCode();
     code->loadLocalReference(0);
     sal_uInt16 index2 = 1;
     if (!entity->getDirectBase().isEmpty()) {
@@ -1495,7 +1495,7 @@ void handlePolyStructType(
         ClassFile::ACC_PUBLIC, "<init>", "()V", code.get(),
         std::vector< OString >(), "");
     MethodDescriptor desc(manager, dependencies, "void", nullptr, nullptr);
-    code.reset(cf->newCode());
+    code = cf->newCode();
     code->loadLocalReference(0);
     sal_uInt16 index2 = 1;
     code->instrInvokespecial(
@@ -1632,7 +1632,7 @@ void handleExceptionType(
 
 
     // create (Throwable Cause) constructor
-    code.reset(cf->newCode());
+    code = cf->newCode();
     code->loadLocalReference(0);
     code->loadLocalReference(1);
     code->instrInvokespecial(superClass, "<init>", "(Ljava/lang/Throwable;)V");
@@ -1663,7 +1663,7 @@ void handleExceptionType(
         std::vector< OString >(), "");
 
     // create (Throwable Cause, String Message) constructor
-    code.reset(cf->newCode());
+    code = cf->newCode();
     code->loadLocalReference(0);
     if (baseException || baseRuntimeException) {
         code->loadLocalReference(2);
@@ -1701,7 +1701,7 @@ void handleExceptionType(
         std::vector< OString >(), "");
 
     // create (String Message) constructor
-    code.reset(cf->newCode());
+    code = cf->newCode();
     code->loadLocalReference(0);
     code->loadLocalReference(1);
     code->instrInvokespecial(superClass, "<init>", "(Ljava/lang/String;)V");
@@ -1734,7 +1734,7 @@ void handleExceptionType(
 
     // create (String Message, Object Context, T1 m1, ..., Tn mn) constructor
     MethodDescriptor desc1(manager, dependencies, "void", nullptr, nullptr);
-    code.reset(cf->newCode());
+    code = cf->newCode();
     code->loadLocalReference(0);
     sal_uInt16 index2 = 1;
     code->loadLocalReference(index2++);
@@ -1774,7 +1774,7 @@ void handleExceptionType(
 
     // create (Throwable Cause, String Message, Object Context, T1 m1, ..., Tn mn) constructor
     MethodDescriptor desc2(manager, dependencies, "void", nullptr, nullptr);
-    code.reset(cf->newCode());
+    code = cf->newCode();
     code->loadLocalReference(0);
     sal_uInt16 index3 = 3;
     // Note that we hack in the java.lang.Throwable parameter further down,
