@@ -88,8 +88,8 @@ bool SimplifyConstruct::VisitVarDecl(VarDecl const* varDecl)
         return true;
 
     auto init = varDecl->getInit();
-    if (!isa<CXXFunctionalCastExpr>(init->IgnoreImplicit()) && !isa<CXXTemporaryObjectExpr>(init)
-        && !isa<CXXTemporaryObjectExpr>(init->IgnoreImplicit()))
+    auto const e1 = compat::IgnoreImplicit(init);
+    if (!isa<CXXFunctionalCastExpr>(e1) && !isa<CXXTemporaryObjectExpr>(e1))
         return true;
 
     // e.g. the LANGUAGE_DONTKNOW defines
