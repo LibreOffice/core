@@ -32,11 +32,12 @@ class SvStream;
 
 namespace dbaui
 {
+    class OWizTypeSelect;
     class OTableDesignHelpBar;
     // OWizTypeSelectControl
     class OWizTypeSelectControl final : public OFieldDescControl
     {
-        VclPtr<vcl::Window> m_pParentTabPage;
+        OWizTypeSelect* m_pParentTabPage;
         virtual void        ActivateAggregate( EControlType eType ) override;
         virtual void        DeactivateAggregate( EControlType eType ) override;
 
@@ -50,9 +51,8 @@ namespace dbaui
         virtual OUString            getAutoIncrementValue() const override;
 
     public:
-        OWizTypeSelectControl(vcl::Window* pParent, vcl::Window* pParentTabPage);
+        OWizTypeSelectControl(weld::Container* pParent, OWizTypeSelect* pParentTabPage);
         virtual ~OWizTypeSelectControl() override;
-        virtual void dispose() override;
 
         virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() override;
         virtual css::uno::Reference< css::sdbc::XConnection> getConnection() override;
@@ -60,25 +60,39 @@ namespace dbaui
 
     // Wizard Page: OWizTypeSelectList
     // just defines the css::ucb::Command for the Contextmenu
-    class OWizTypeSelectList final : public MultiListBox
+    class OWizTypeSelectList
     {
+        std::unique_ptr<weld::TreeView> m_xControl;
         bool                    m_bPKey;
         bool                    IsPrimaryKeyAllowed() const;
         void                    setPrimaryKey(  OFieldDescription* _pFieldDescr,
                                                 sal_uInt16 _nPos,
                                                 bool _bSet = false);
-        virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+//TODo        virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
         VclPtr<vcl::Window>     m_pParentTabPage;
     public:
-        OWizTypeSelectList( vcl::Window* pParent )
-            : MultiListBox(pParent, WB_BORDER | WB_SIMPLEMODE)
+        OWizTypeSelectList(std::unique_ptr<weld::TreeView> xControl)
+            : m_xControl(std::move(xControl))
             , m_bPKey(false)
             , m_pParentTabPage(nullptr)
             {}
-        virtual ~OWizTypeSelectList() override;
-        virtual void dispose() override;
-        void                    SetPKey(bool bPKey) { m_bPKey = bPKey; }
-        void                    SetParentTabPage(vcl::Window* pParentTabPage) { m_pParentTabPage = pParentTabPage; }
+        void SetPKey(bool bPKey) { m_bPKey = bPKey; }
+        void SetParentTabPage(vcl::Window* pParentTabPage) { m_pParentTabPage = pParentTabPage; }
+        weld::TreeView* GetWidget() { return m_xControl.get(); }
+        OUString get_selected_id() const { return m_xControl->get_selected_id(); }
+        void show() { m_xControl->show(); }
+        void clear() { m_xControl->clear(); }
+        void append(const OUString& rId, const OUString& rStr)
+        {
+            m_xControl->append(rId, rStr);
+        }
+        void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
+        {
+            m_xControl->append(rId, rStr, rImage);
+        }
+        void set_selection_mode(SelectionMode eMode) { m_xControl->set_selection_mode(eMode); }
+        int count_selected_rows() const { return m_xControl->count_selected_rows(); }
+        void select(int pos) { m_xControl->select(pos); }
     };
 
     // Wizard Page: OWizTypeSelect
@@ -89,18 +103,18 @@ namespace dbaui
         friend class OWizTypeSelectControl;
         friend class OWizTypeSelectList;
 
-        DECL_LINK( ColumnSelectHdl, ListBox&, void );
-        DECL_LINK( ButtonClickHdl, Button *, void );
+        DECL_LINK( ColumnSelectHdl, weld::TreeView&, void );
+        DECL_LINK( ButtonClickHdl, weld::Button&, void );
     protected:
-        VclPtr<OWizTypeSelectList>      m_pColumnNames;
-        VclPtr<FixedText>               m_pColumns;
-        VclPtr<OWizTypeSelectControl>   m_pTypeControl;
-        VclPtr<FixedText>               m_pAutoType;
-        VclPtr<FixedText>               m_pAutoFt;
-        VclPtr<NumericField>            m_pAutoEt;
-        VclPtr<PushButton>              m_pAutoPb;
+        std::unique_ptr<OWizTypeSelectList> m_xColumnNames;
+        std::unique_ptr<weld::Label> m_xColumns;
+        std::unique_ptr<weld::Container> m_xControlContainer;
+        std::unique_ptr<OWizTypeSelectControl> m_xTypeControl;
+        std::unique_ptr<weld::Label> m_xAutoType;
+        std::unique_ptr<weld::Label> m_xAutoFt;
+        std::unique_ptr<weld::SpinButton> m_xAutoEt;
+        std::unique_ptr<weld::Button> m_xAutoPb;
 
-        Image                   m_imgPKey;
         SvStream*               m_pParserStream; // stream to read the tokens from or NULL
         OUString                m_sAutoIncrementValue;
         sal_Int32               m_nDisplayRow;
@@ -116,15 +130,14 @@ namespace dbaui
         virtual bool            LeavePage() override;
         virtual OUString        GetTitle() const override;
 
-        OWizTypeSelect(vcl::Window* pParent, SvStream* _pStream = nullptr );
+        OWizTypeSelect(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream* pStream = nullptr);
         virtual ~OWizTypeSelect() override;
-        virtual void dispose() override;
 
         void setDisplayRow(sal_Int32 _nRow) { m_nDisplayRow = _nRow - 1; }
         void setDuplicateName(bool _bDuplicateName) { m_bDuplicateName = _bDuplicateName; }
     };
 
-    typedef VclPtr<OWizTypeSelect> (*TypeSelectionPageFactory)( vcl::Window*, SvStream& );
+    typedef VclPtr<OWizTypeSelect> (*TypeSelectionPageFactory)(OCopyTableWizard*, TabPageParent, SvStream&);
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WTYPESELECT_HXX
 

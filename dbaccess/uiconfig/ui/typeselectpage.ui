@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="dba">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkBox" id="TypeSelect">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -11,13 +23,40 @@
     <property name="border_width">6</property>
     <property name="spacing">12</property>
     <child>
-      <object class="dbulo-OWizTypeSelectList" id="columnnames">
-        <property name="width_request">150</property>
+      <object class="GtkScrolledWindow">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
+        <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <child internal-child="selection">
-          <object class="GtkTreeSelection" id="treeview-selection1"/>
+        <property name="shadow_type">in</property>
+        <child>
+          <object class="GtkTreeView" id="columnnames">
+            <property name="width_request">150</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="model">liststore1</property>
+            <property name="headers_visible">False</property>
+            <property name="search_column">1</property>
+            <property name="show_expanders">False</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn5">
+                <property name="resizable">True</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderer4"/>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+          </object>
         </child>
       </object>
       <packing>
@@ -106,10 +145,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="typeselectpage|autolabel">Lines (ma_x.):</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">auto</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -134,6 +173,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
