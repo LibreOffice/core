@@ -28,6 +28,8 @@
 #include <unotools/lingucfg.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/splwrap.hxx>
 #include <editeng/unolingu.hxx>
@@ -1114,6 +1116,24 @@ SentenceEditWindow_Impl::SentenceEditWindow_Impl()
     , m_nErrorEnd(0)
     , m_bIsUndoEditMode(false)
 {
+}
+
+// tdf#127033 want to use UI font so override makeEditEngine to enable that
+void SentenceEditWindow_Impl::makeEditEngine()
+{
+    SfxItemPool* pItemPool = EditEngine::CreatePool();
+
+    vcl::Font aAppFont(Application::GetSettings().GetStyleSettings().GetAppFont());
+
+    pItemPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamilyType(),aAppFont.GetFamilyName(),"",PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
+    pItemPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamilyType(),aAppFont.GetFamilyName(),"",PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO_CJK));
+    pItemPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamilyType(),aAppFont.GetFamilyName(),"",PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO_CTL));
+
+    pItemPool->SetPoolDefaultItem(SvxFontHeightItem(aAppFont.GetFontHeight() * 20, 100, EE_CHAR_FONTHEIGHT));
+    pItemPool->SetPoolDefaultItem(SvxFontHeightItem(aAppFont.GetFontHeight() * 20, 100, EE_CHAR_FONTHEIGHT_CJK));
+    pItemPool->SetPoolDefaultItem(SvxFontHeightItem(aAppFont.GetFontHeight() * 20, 100, EE_CHAR_FONTHEIGHT_CTL));
+
+    m_xEditEngine.reset(new EditEngine(pItemPool));
 }
 
 void SentenceEditWindow_Impl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
