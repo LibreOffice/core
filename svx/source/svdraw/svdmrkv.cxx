@@ -826,8 +826,8 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
 
             if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == OBJ_TABLE)
             {
-                auto* pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(mpMarkedObj);
-                bTableSelection = pTableObject->createTableEdgesJson(aTableJsonTree);
+                auto& rTableObject = dynamic_cast<sdr::table::SdrTableObj&>(*mpMarkedObj);
+                bTableSelection = rTableObject.createTableEdgesJson(aTableJsonTree);
 
                 rtl::Reference<sdr::SelectionController> xController = static_cast<SdrView*>(this)->getSelectionController();
                 if (xController.is() && xController->hasSelectedCells())
