@@ -442,7 +442,6 @@ void PowerPointExport::ImplWriteBackground(const FSHelperPtr& pFS, const Referen
         mAny >>= aFillStyle;
 
     if (aFillStyle == FillStyle_NONE ||
-            aFillStyle == FillStyle_GRADIENT ||
             aFillStyle == FillStyle_HATCH)
         return;
 
