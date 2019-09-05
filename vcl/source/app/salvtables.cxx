@@ -2962,6 +2962,21 @@ public:
         signal_changed();
     }
 
+    virtual void cut_clipboard() override
+    {
+        m_xEntry->Cut();
+    }
+
+    virtual void copy_clipboard() override
+    {
+        m_xEntry->Copy();
+    }
+
+    virtual void paste_clipboard() override
+    {
+        m_xEntry->Paste();
+    }
+
     virtual ~SalInstanceEntry() override
     {
         if (m_aCursorPositionHdl.IsSet())
@@ -3405,6 +3420,12 @@ public:
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
         m_xTreeView->MakeVisible(pEntry);
         enable_notify_events();
+    }
+
+    virtual bool is_selected(int pos) const override
+    {
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+        return m_xTreeView->IsSelected(pEntry);
     }
 
     virtual void unselect(int pos) override
