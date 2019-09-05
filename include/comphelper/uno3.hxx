@@ -161,7 +161,7 @@ namespace comphelper
         usage:<br/>
             Reference<XFoo> xFoo;<br/>
             if (query_aggregation(xAggregatedObject, xFoo))<br/>
-                ....
+                ...
     */
     template <class iface>
     bool query_aggregation(const css::uno::Reference< css::uno::XAggregation >& _rxAggregate, css::uno::Reference<iface>& _rxOut)

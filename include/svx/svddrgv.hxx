@@ -223,7 +223,7 @@ public:
     // it must be taken into account that because of subsequent
     // recalculation of the SnapRect (on Resize), rounding errors can
     // occur, because of which the LimitRect might be exceeded by a
-    // very small extent....
+    // very small extent...
     // Implemented for Move and Resize
     virtual bool TakeDragLimit(SdrDragMode eMode, tools::Rectangle& rRect) const;
 };

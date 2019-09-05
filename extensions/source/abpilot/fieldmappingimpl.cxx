@@ -200,7 +200,7 @@ namespace abp
             catch( const Exception& )
             {
                 OSL_FAIL("fieldmapping::defaultMapping: code is assumed to throw no exceptions!");
-                    // the config nodes we're using herein should not do this ....
+                    // the config nodes we're using herein should not do this...
             }
         }
 
@@ -234,7 +234,7 @@ namespace abp
                      != *pExistentFields),
                     "extensions.abpilot",
                     "fieldmapping::writeTemplateAddressFieldMapping: inconsistent config data!");
-                    // there should be a redundancy in the config data .... if this asserts, there isn't anymore!
+                    // there should be a redundancy in the config data... if this asserts, there isn't anymore!
 
                 // do we have a new alias for the programmatic?
                 MapString2String::iterator aPos = aFieldAssignment.find( *pExistentFields );

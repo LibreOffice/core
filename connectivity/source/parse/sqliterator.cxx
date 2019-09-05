@@ -267,7 +267,7 @@ namespace
         Sequence< OUString > sTableTypes(3);
         sTableTypes[0] = "VIEW";
         sTableTypes[1] = "TABLE";
-        sTableTypes[2] = s_sWildcard;   // just to be sure to include anything else ....
+        sTableTypes[2] = s_sWildcard;   // just to be sure to include anything else...
 
         if ( _rxDBMeta.is() )
         {

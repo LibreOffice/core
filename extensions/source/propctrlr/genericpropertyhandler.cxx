@@ -531,7 +531,7 @@ namespace pcr
     {
         // no superseded properties at all. This handler offers the very basic PropertyHandler
         // functionality, so it's much more likely that other handlers want to supersede
-        // *our* properties ....
+        // *our* properties...
         return Sequence< OUString >( );
     }
 

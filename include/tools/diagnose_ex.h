@@ -54,7 +54,7 @@ inline css::uno::Any DbgGetCaughtException()
 /** reports a caught UNO exception via OSL diagnostics
 
     Note that whenever you use this, it might be an indicator that your error
-    handling is not correct ....
+    handling is not correct...
     This takes two optional parameters: area and explanatory
 */
 #define DBG_UNHANDLED_EXCEPTION_0_ARGS() \

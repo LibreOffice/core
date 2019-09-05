@@ -49,7 +49,7 @@ namespace svxform
     protected:
         TransliterationFlags
                     nTransliterationFlags;
-            // they're way too sensitive for direct access ....
+            // they're way too sensitive for direct access...
 
     public:
         // no bit fields at all (want to pass the addresses to the OConfigurationValueContainer)

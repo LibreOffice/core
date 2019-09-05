@@ -42,7 +42,7 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
         // we want all catalogues, all schemas, all tables
         sTableTypes[0] = "VIEW";
         sTableTypes[1] = "TABLE";
-        sTableTypes[2] = "%"; // just to be sure to include anything else ....
+        sTableTypes[2] = "%"; // just to be sure to include anything else...
         try
         {
             m_xTables = _rxMeta->getTables(catalog,schemaPattern,tableNamePattern,sTableTypes);

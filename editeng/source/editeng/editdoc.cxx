@@ -1450,7 +1450,7 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
     {
         if ( pAttrib->GetEnd() < nCut )
         {
-            // remain unchanged ....
+            // remain unchanged...
             ;
         }
         else if ( pAttrib->GetEnd() == nCut )
@@ -2524,7 +2524,7 @@ void EditDoc::InsertAttrib( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd
         EditCharAttrib* pAttr = rAttrList.FindEmptyAttrib( rPoolItem.Which(), nStart );
         if ( pAttr )
         {
-            // Remove attribute....
+            // Remove attribute...
             rAttrList.Remove(pAttr);
         }
 

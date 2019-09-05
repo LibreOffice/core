@@ -2439,7 +2439,7 @@ EditPaM ImpEditEngine::ImpDeleteSelection(const EditSelection& rCurSel)
     OSL_ENSURE( nEndNode != EE_PARA_NOT_FOUND, "Start > End ?!" );
     OSL_ENSURE( nStartNode <= nEndNode, "Start > End ?!" );
 
-    // Remove all nodes in between ....
+    // Remove all nodes in between...
     for ( sal_Int32 z = nStartNode+1; z < nEndNode; z++ )
     {
         // Always nStartNode+1, due to Remove()!
@@ -2454,14 +2454,14 @@ EditPaM ImpEditEngine::ImpDeleteSelection(const EditSelection& rCurSel)
         OSL_ENSURE( pPortion, "Blind Portion in ImpDeleteSelection(3)" );
         pPortion->MarkSelectionInvalid( aStartPaM.GetIndex() );
 
-        // The beginning of the EndNodes....
+        // The beginning of the EndNodes...
         const sal_Int32 nChars = aEndPaM.GetIndex();
         aEndPaM.SetIndex( 0 );
         ImpRemoveChars( aEndPaM, nChars );
         pPortion = FindParaPortion( aEndPaM.GetNode() );
         OSL_ENSURE( pPortion, "Blind Portion in ImpDeleteSelection(4)" );
         pPortion->MarkSelectionInvalid( 0 );
-        // Join together....
+        // Join together...
         aStartPaM = ImpConnectParagraphs( aStartPaM.GetNode(), aEndPaM.GetNode() );
     }
     else
@@ -4214,7 +4214,7 @@ tools::Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 
      GetCursorFlags::EndOfLine: If after the last character of a wrapped line, remaining
      at the end of the line, not the beginning of the next one.
      Purpose:   - END => really after the last character
-                - Selection....
+                - Selection...
     */
 
     long nY = pPortion->GetFirstLineOffset();

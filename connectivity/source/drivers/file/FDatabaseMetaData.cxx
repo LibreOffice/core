@@ -126,7 +126,7 @@ namespace
             if ( bCanAccess )
             {
                 // here we have two contents whose URLs differ by case only.
-                // Now let's check if both really refer to the same object ....
+                // Now let's check if both really refer to the same object...
                 Reference< XContent > xContent1 = aContent1.get();
                 Reference< XContent > xContent2 = aContent2.get();
                 OSL_ENSURE( xContent1.is() && xContent2.is(), "isCaseSensitiveParentFolder: invalid content interfaces!" );
@@ -140,7 +140,7 @@ namespace
                                   comphelper::getProcessComponentContext() )->
                               compareContentIds( xID1, xID2 ) == 0 ) )
                     {
-                        // finally, we know that the folder is not case-sensitive ....
+                        // finally, we know that the folder is not case-sensitive...
                         nIsCS = 0;
                     }
                 }

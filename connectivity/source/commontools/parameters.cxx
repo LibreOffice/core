@@ -479,10 +479,10 @@ namespace dbtools
             if ( nAlreadyVisited == aParam.second.aInnerIndexes.size() )
                 continue;
 
-            // need a wrapper for this .... the "inner parameters" as supplied by a result set don't have a "Value"
+            // need a wrapper for this... the "inner parameters" as supplied by a result set don't have a "Value"
             // property, but the parameter listeners expect such a property. So we need an object "aggregating"
             // xParam and supplying an additional property ("Value")
-            // (it's no real aggregation of course ...)
+            // (it's no real aggregation of course...)
             m_pOuterParameters->push_back( new param::ParameterWrapper( aParam.second.xComposerColumn, m_xInnerParamUpdate, aParam.second.aInnerIndexes ) );
         }
 

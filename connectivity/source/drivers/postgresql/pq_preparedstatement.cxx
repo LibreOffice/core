@@ -170,7 +170,7 @@ PreparedStatement::PreparedStatement(
     int elements = 0;
     for(const OString & str : m_splittedStatement)
     {
-        // ignore quoted strings ....
+        // ignore quoted strings...
         if( ! isQuoted( str ) )
         {
             // the ':' cannot be the first or the last part of the

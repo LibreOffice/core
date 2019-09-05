@@ -33,7 +33,7 @@ namespace o3tl {
 ///  Use like this:
 ///     enum class COLOR { RED, GREEN, BLUE, LAST=BLUE };
 ///     for( auto e : o3tl::enumrange<Color>() )
-///        .....;
+///        ....;
 ///
 /// \param T the 'enum class' type.
 template< typename T>

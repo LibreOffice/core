@@ -389,7 +389,7 @@ namespace frm
     {
         if ( !m_bHasEverBeenShown )
             // no need to do anything. Especially, no need to set the paper size on the
-            // EditEngine to anything ....
+            // EditEngine to anything...
             return;
 
         const StyleSettings& rStyleSettings = m_pAntiImpl->GetSettings().GetStyleSettings();
@@ -439,7 +439,7 @@ namespace frm
         {
             m_pVScroll->SetVisibleSize( aViewportPlaygroundLogic.Height() );
 
-            // the default height of a text line ....
+            // the default height of a text line...
             long nFontHeight = m_pEngine->GetStandardFont(0).GetFontSize().Height();
             // ... is the scroll size for the vertical scrollbar
             m_pVScroll->SetLineSize( nFontHeight );

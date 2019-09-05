@@ -1131,8 +1131,8 @@ public:
 
                 // features during the creation of the following Containers:
 
-                //      ESCHER_DggContainer:    a EscherDgg Atom is automatically being created and managed
-                //      ESCHER_DgContainer:     a EscherDg Atom is automatically being created and managed
+                //      ESCHER_DggContainer:    an EscherDgg Atom is automatically being created and managed
+                //      ESCHER_DgContainer:     an EscherDg Atom is automatically being created and managed
                 //      ESCHER_SpgrContainer:
                 //      ESCHER_SpContainer:
 

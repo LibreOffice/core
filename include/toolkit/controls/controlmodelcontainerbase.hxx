@@ -62,7 +62,7 @@ class ControlModelContainerBase :   public ControlModelContainer_IBase
 public:
     enum ChildOperation { Insert = 0, Remove };
     // would like to make this typedef private, too, but the Forte 7 compiler does have
-    // problems with this .....
+    // problems with this...
     typedef ::std::pair< css::uno::Reference< css::awt::XControlModel >, OUString >
                                                         UnoControlModelHolder;
 private:
