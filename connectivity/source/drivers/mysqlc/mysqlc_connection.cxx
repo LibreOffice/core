@@ -88,6 +88,8 @@ void OConnection::construct(const rtl::OUString& url, const Sequence<PropertyVal
     // use TCP as connection
     mysql_protocol_type protocol = MYSQL_PROTOCOL_TCP;
     mysql_options(&m_mysql, MYSQL_OPT_PROTOCOL, &protocol);
+    OString charset_name{ "utf8mb4" };
+    mysql_options(&m_mysql, MYSQL_SET_CHARSET_NAME, charset_name.getStr());
 
     sal_Int32 nIndex;
     rtl::OUString token;
@@ -198,8 +200,9 @@ void OConnection::construct(const rtl::OUString& url, const Sequence<PropertyVal
                            *this, rtl::OUString(), 0, Any());
     }
 
-    lcl_executeUpdate(&m_mysql, rtl::OString{ "SET session sql_mode='ANSI_QUOTES'" });
-    lcl_executeUpdate(&m_mysql, rtl::OString{ "SET NAMES utf8" });
+    lcl_executeUpdate(&m_mysql,
+                      OString{ "SET session sql_mode='ANSI_QUOTES,NO_AUTO_VALUE_ON_ZERO'" });
+    lcl_executeUpdate(&m_mysql, OString{ "SET NAMES utf8mb4" });
 }
 
 rtl::OUString OConnection::getImplementationName()
