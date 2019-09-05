@@ -439,7 +439,7 @@ void SAL_CALL ODefinitionContainer::disposing( const EventObject& _rSource )
 {
     MutexGuard aGuard(m_aMutex);
     Reference< XContent > xSource(_rSource.Source, UNO_QUERY);
-    // it's one of our documents ....
+    // it's one of our documents...
     for (auto & elem : m_aDocumentMap)
     {
         if ( xSource == elem.second.get() )

@@ -266,7 +266,7 @@ void ODbAdminDialog::clearPassword()
 
 void ODbAdminDialog::createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, SfxItemPool*& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults, ::dbaccess::ODsnTypeCollection* _pTypeCollection)
 {
-    // just to be sure ....
+    // just to be sure...
     _rpSet = nullptr;
     _rpPool = nullptr;
     _rpDefaults = nullptr;

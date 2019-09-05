@@ -78,7 +78,7 @@ class StatusIndicator : public  ::cppu::WeakImplHelper< css::task::XStatusIndica
          */
         StatusIndicator(StatusIndicatorFactory* pFactory);
 
-        /** @short  does nothing real ....
+        /** @short  does nothing real...
          */
         virtual ~StatusIndicator() override;
 

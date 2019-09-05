@@ -2342,7 +2342,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     if ( !pView || pView->getElementType() == E_NONE )
     {
         OSL_FAIL("OApplicationController::executeDrop: what the hell did queryDrop do?");
-            // queryDrop should not have allowed us to reach this situation ....
+            // queryDrop should not have allowed us to reach this situation...
         return DND_ACTION_NONE;
     }
 
@@ -2361,7 +2361,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     m_aAsyncDrop.bHtml          = false;
     m_aAsyncDrop.aUrl.clear();
 
-    // loop through the available formats and see what we can do ...
+    // loop through the available formats and see what we can do...
     // first we have to check if it is our own format, if not we have to copy the stream :-(
     if ( ODataAccessObjectTransferable::canExtractObjectDescriptor(aDroppedData.GetDataFlavorExVector()) )
     {

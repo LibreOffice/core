@@ -191,7 +191,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper<
                     Otherwise e.g. the XController->suspend()
                     call is not made and no UI warn the user about
                     losing document changes. Because the
-                    frame is closed ....
+                    frame is closed...
 
             @return [bool]
                     sal_True if closing was successful.

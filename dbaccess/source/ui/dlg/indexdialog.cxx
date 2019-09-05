@@ -540,7 +540,7 @@ namespace dbaui
         {
             OSL_ENSURE(!m_bEditAgain, "DbaIndexDialog::OnCloseDialog: somebody was faster than hell!");
                 // this means somebody entered a new name, which was invalid, which cause us to posted us an event,
-                // and before the event arrived the user clicked onto "close". VERY fast, this user ....
+                // and before the event arrived the user clicked onto "close". VERY fast, this user...
             m_pIndexList->EndEditing();
             if (m_bEditAgain)
                 // could not commit the new name (started a new - asynchronous - edit trial)
@@ -618,7 +618,7 @@ namespace dbaui
         if (aPosition->isNew())
         {
             updateToolbox();
-            // no commitment needed here ....
+            // no commitment needed here...
             return true;
         }
 

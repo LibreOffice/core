@@ -98,7 +98,7 @@ namespace dbaui
         // check if we're a table or query container
         SvTreeListEntry* pHitEntry = m_pTreeView->getListBox().GetEntry( _rEvt.maPosPixel );
 
-        if ( pHitEntry ) // no drop if no entry was hit ....
+        if ( pHitEntry ) // no drop if no entry was hit...
         {
             // it must be a container
             EntryType eEntryType = getEntryType( pHitEntry );
@@ -124,7 +124,7 @@ namespace dbaui
         if (!isContainer(eEntryType))
         {
             OSL_FAIL("SbaTableQueryBrowser::executeDrop: what the hell did queryDrop do?");
-                // queryDrop should not have allowed us to reach this situation ....
+                // queryDrop should not have allowed us to reach this situation...
             return DND_ACTION_NONE;
         }
         // a TransferableDataHelper for accessing the dropped data
@@ -179,7 +179,7 @@ namespace dbaui
         // ensure that the entry which the user clicked at is selected
         SvTreeListEntry* pHitEntry = m_pTreeView->getListBox().GetEntry( _rPosPixel );
         if (!pHitEntry)
-            // no drag of no entry was hit ....
+            // no drag of no entry was hit...
             return false;
 
         // it must be a query/table

@@ -233,7 +233,7 @@ namespace dbaui
     void BasicInteractionHandler::implHandle(const DocumentSaveRequest& _rDocuRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
         SolarMutexGuard aGuard;
-        // want to open a dialog ....
+        // want to open a dialog...
 
         sal_Int32 nApprovePos = getContinuation(APPROVE, _rContinuations);
         sal_Int32 nDisApprovePos = getContinuation(DISAPPROVE, _rContinuations);

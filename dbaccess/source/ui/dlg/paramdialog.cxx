@@ -206,7 +206,7 @@ namespace dbaui
     {
         if (m_xCancelBtn.get() == &rButton)
         {
-            // no interpreting of the given values anymore ....
+            // no interpreting of the given values anymore...
             m_xParam->connect_focus_out(Link<weld::Widget&, void>()); // no direct call from the control anymore ...
             m_bNeedErrorOnCurrent = false;      // in case of any indirect calls -> no error message
             m_xDialog->response(RET_CANCEL);
@@ -218,8 +218,8 @@ namespace dbaui
             {   // there was an error interpreting the current text
                 m_bNeedErrorOnCurrent = true;
                     // we're are out of the complex web :) of direct and indirect calls to OnValueLoseFocus now,
-                    // so the next time it is called we need an error message, again ....
-                    // (TODO : there surely are better solutions for this ...)
+                    // so the next time it is called we need an error message, again...
+                    // (TODO : there surely are better solutions for this...)
                 return;
             }
 
@@ -267,8 +267,8 @@ namespace dbaui
                 OnEntrySelected();
                 m_bNeedErrorOnCurrent = true;
                     // we're are out of the complex web :) of direct and indirect calls to OnValueLoseFocus now,
-                    // so the next time it is called we need an error message, again ....
-                    // (TODO : there surely are better solutions for this ...)
+                    // so the next time it is called we need an error message, again...
+                    // (TODO : there surely are better solutions for this...)
             }
         }
     }

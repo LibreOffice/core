@@ -41,7 +41,7 @@ OComponentEnumeration::OComponentEnumeration( const std::vector< css::uno::Refer
 
 OComponentEnumeration::~OComponentEnumeration()
 {
-    // Reset instance, free memory ....
+    // Reset instance, free memory...
     impl_resetObject();
 }
 
@@ -100,7 +100,7 @@ void OComponentEnumeration::impl_resetObject()
     // Attention:
     // Write this for multiple calls - NOT AT THE SAME TIME - but for more than one call again)!
     // It exist two ways to call this method. From destructor and from disposing().
-    // I can't say, which one is the first. Normally the disposing-call - but other way ....
+    // I can't say, which one is the first. Normally the disposing-call - but other way...
 
     // Delete list of components.
     m_seqComponents.clear();

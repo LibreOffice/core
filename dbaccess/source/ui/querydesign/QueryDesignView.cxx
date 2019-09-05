@@ -1957,7 +1957,7 @@ namespace
                     }
                     else
                     {
-                        // there already exists a window for this alias ....
+                        // there already exists a window for this alias...
                         if ( !aKeyComp( pExistentWin->GetData()->GetComposedName(), sComposedName ) )
                             // ... but for another complete table name -> new window
                             pTableView->AddTabWin(sComposedName, sAlias);

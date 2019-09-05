@@ -1022,7 +1022,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         @throws SQLException
             if a database access error occurs.
 <!-- JRH: Unclear on the intent of these many support questions.
-        If asking, it should state, "Does the Database support both ....?
+        If asking, it should state, "Does the Database support both...?
         If declaring, it should state something like the following:
 
         metadata:   supportsDataDefinitionAndDataManipulationTransactions

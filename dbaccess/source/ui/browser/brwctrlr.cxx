@@ -802,7 +802,7 @@ bool SbaXDataBrowserController::Construct(vcl::Window* pParent)
     OSL_ENSURE(pVclGrid, "SbaXDataBrowserController::Construct : have no VCL control !");
     pVclGrid->SetMasterListener(this);
 
-    // add listeners ...
+    // add listeners...
 
     // ... to the form model
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
@@ -843,7 +843,7 @@ bool SbaXDataBrowserController::LoadForm()
 
 void SbaXDataBrowserController::AddColumnListener(const Reference< XPropertySet > & /*xCol*/)
 {
-    // we're not interested in any column properties ...
+    // we're not interested in any column properties...
 }
 
 void SbaXDataBrowserController::RemoveColumnListener(const Reference< XPropertySet > & /*xCol*/)
@@ -2116,7 +2116,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                     // no need to reset the grid model after we moved to the insert row, this is done implicitly by the
                     // form
                     // (and in some cases it may be deadly to do the reset explicitly after the form did it implicitly,
-                    // cause the form's reset may be async, and this leads to some nice deadlock scenarios ....)
+                    // cause the form's reset may be async, and this leads to some nice deadlock scenarios...)
                 }
                 else
                 {
@@ -2262,7 +2262,7 @@ IMPL_LINK(SbaXDataBrowserController, OnInvalidateClipboard, Timer*, _pTimer, voi
     // The timer is only for checking the CUT/COPY slots regularly, which depend on the
     // selection state of the active cell
     // TODO: get a callback at the Edit which allows to be notified when the selection
-    // changes. This would be much better than this cycle-eating polling mechanism here ....
+    // changes. This would be much better than this cycle-eating polling mechanism here...
     if ( _pTimer != &m_aInvalidateClipboard )
         InvalidateFeature(ID_BROWSER_PASTE);
 }
@@ -2485,7 +2485,7 @@ void SbaXDataBrowserController::unloaded(const EventObject& /*aEvent*/)
         // (it's a little hack : the grid columns are listening to this event, too, and their bound field may
         // change as a reaction on that event. as we have no chance to be notified of this change (which is
         // the one we're interested in) we give them time to do what they want to before invalidating our
-        // bound-field-dependent slots ....
+        // bound-field-dependent slots...
 }
 
 void SbaXDataBrowserController::reloading(const EventObject& /*aEvent*/)
@@ -2500,7 +2500,7 @@ void SbaXDataBrowserController::reloaded(const EventObject& /*aEvent*/)
         // (it's a little hack : the grid columns are listening to this event, too, and their bound field may
         // change as a reaction on that event. as we have no chance to be notified of this change (which is
         // the one we're interested in) we give them time to do what they want to before invalidating our
-        // bound-field-dependent slots ....
+        // bound-field-dependent slots...
 }
 
 void SbaXDataBrowserController::enterFormAction()
