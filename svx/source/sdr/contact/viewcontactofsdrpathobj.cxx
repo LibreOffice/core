@@ -19,6 +19,7 @@
 
 
 #include <sdr/contact/viewcontactofsdrpathobj.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
@@ -104,11 +105,14 @@ namespace sdr
                 //would not over flow into a tiny clip region
                 if (nPageWidth < SAL_MAX_INT32/2 && nPageHeight < SAL_MAX_INT32/2)
                 {
-                    //But, see tdf#97276 and tdf#98366. Don't clip too much if the
+                    //But, see tdf#97276, tdf#126184 and tdf#98366. Don't clip too much if the
                     //underlying page dimension is unknown or a paste document
                     //where the page sizes use the odd default of 10x10
-                    nPageWidth = std::max<sal_Int32>(21000, nPageWidth);
-                    nPageHeight = std::max<sal_Int32>(29700, nPageHeight);
+                    const SvtOptionsDrawinglayer aDrawinglayerOpt;
+                    const sal_Int32 nMaxPaperWidth = aDrawinglayerOpt.GetMaximumPaperWidth() * 1000;
+                    const sal_Int32 nMaxPaperHeight = aDrawinglayerOpt.GetMaximumPaperHeight() * 1000;
+                    nPageWidth = std::max<sal_Int32>(nPageWidth, nMaxPaperWidth);
+                    nPageHeight = std::max<sal_Int32>(nPageHeight, nMaxPaperHeight);
                     basegfx::B2DRange aClipRange(-nPageWidth, -nPageHeight,
                                                  nPageWidth*2, nPageHeight*2);
 
