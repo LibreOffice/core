@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_75b29196",
+        "filename": "sw/source/ui/table/tabledlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-09-05T11:53:20Z",
+      "side": 1,
+      "message": "aOrigSize reports 541px while my window is ~800. And it works with some arbitrary hard-coded value of aOrigSize \u003d Size(800,1), at least for gtk2. What can I do?",
+      "range": {
+        "startLine": 741,
+        "startChar": 0,
+        "endLine": 741,
+        "endChar": 53
+      },
+      "revId": "f70d46aeabedffdd9db104ede85badc57d83b933",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
