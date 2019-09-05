@@ -173,7 +173,8 @@ namespace dbaui
         void    implFocusLost(vcl::Window* _pWhich);
 
     public:
-        OFieldDescControl( vcl::Window* pParent, OTableDesignHelpBar* pHelpBar);
+        OFieldDescControl(vcl::Window* pParent, OTableDesignHelpBar* pHelpBar);
+        OFieldDescControl(weld::Container* pParent, OTableDesignHelpBar* pHelpBar);
         virtual ~OFieldDescControl() override;
         virtual void        dispose() override;
 

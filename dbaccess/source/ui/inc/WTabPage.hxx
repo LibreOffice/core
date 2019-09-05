@@ -29,14 +29,16 @@ namespace dbaui
     class OWizardPage       : public TabPage
     {
     protected:
-        VclPtr<OCopyTableWizard>           m_pParent;
+        std::unique_ptr<weld::Builder> m_xBuilder;
+        std::unique_ptr<weld::Container> m_xContainer;
+
+        OCopyTableWizard*       m_pParent;
         bool                    m_bFirstTime;   // Page is called the first time; should be set in the reset method
 
-        OWizardPage( vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription );
+        OWizardPage(OCopyTableWizard* pWizard, TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID);
 
     public:
         virtual ~OWizardPage() override;
-        virtual void dispose() override;
         virtual void        Reset ( )           = 0;
         virtual bool    LeavePage()         = 0;
         virtual OUString    GetTitle() const    = 0;
