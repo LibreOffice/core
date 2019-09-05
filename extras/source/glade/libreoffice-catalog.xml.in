@@ -258,12 +258,6 @@
     <glade-widget-class title="DbaIndexList" name="dbulo-DbaIndexList"
                         generic-name="DbaIndexList" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="ColumnTreeBox" name="dbulo-OColumnTreeBox"
-                        generic-name="ColumnTreeBox" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="TypeSelectList" name="dbulo-OWizTypeSelectList"
-                        generic-name="TypeSelectList" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
 
     <glade-widget-class title="Recent Documents View" name="sfxlo-RecentDocsView"
                         generic-name="Icon View" parent="GtkIconView"
