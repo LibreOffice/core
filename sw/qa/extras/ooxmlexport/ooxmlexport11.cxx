@@ -915,6 +915,13 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125546, "tdf125546.docx")
     assertXPath(pXmlDoc, "//w:rPrChange", 2);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf124604, "tdf124604.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // If the numbering comes from a base style, indentation of the base style has also priority.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "start", "0");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf118691, "tdf118691.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
