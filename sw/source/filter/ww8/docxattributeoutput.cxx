@@ -4843,7 +4843,6 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     XFastAttributeListRef docPrAttrListRef( docPrattrList );
     m_pSerializer->startElementNS( XML_wp, XML_docPr, docPrAttrListRef );
 
-    //TODO: internal hyperlink
     OUString sURL, sRelId;
     if(pSdrObj)
     {
@@ -4854,7 +4853,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         {
             sRelId = GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
                         oox::getRelationship(Relationship::HYPERLINK),
-                        sURL, true );
+                        sURL, !sURL.startsWith("#") );
             m_pSerializer->singleElementNS( XML_a, XML_hlinkClick,
                 FSNS( XML_xmlns, XML_a ), "http://schemas.openxmlformats.org/drawingml/2006/main",
                 FSNS( XML_r, XML_id ), sRelId.toUtf8());

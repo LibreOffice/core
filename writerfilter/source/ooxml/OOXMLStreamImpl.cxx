@@ -111,7 +111,7 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
                     bExternal = true;
             }
             // Only cache external targets, internal ones are more complex (see below)
-            if (bExternal)
+            if (bExternal || aTarget.startsWith("#"))
                 maIdCache[aId] = aTarget;
         }
     }
