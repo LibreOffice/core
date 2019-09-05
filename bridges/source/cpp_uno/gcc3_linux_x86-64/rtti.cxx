@@ -80,7 +80,9 @@ class RTTI
     std::vector<OString> m_rttiNames;
     std::unordered_map<OUString, std::unique_ptr<Generated>> m_generatedRttis;
 
+#if !defined ANDROID
     void * m_hApp;
+#endif
 
 public:
     RTTI();
@@ -90,13 +92,17 @@ public:
 };
 
 RTTI::RTTI()
+#if !defined ANDROID
     : m_hApp( dlopen( nullptr, RTLD_LAZY ) )
+#endif
 {
 }
 
 RTTI::~RTTI()
 {
+#if !defined ANDROID
     dlclose( m_hApp );
+#endif
 }
 
 std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
@@ -124,7 +130,11 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
         buf.append( 'E' );
 
         OString symName( buf.makeStringAndClear() );
+#if !defined ANDROID
         rtti = static_cast<std::type_info *>(dlsym( m_hApp, symName.getStr() ));
+#else
+        rtti = static_cast<std::type_info *>(dlsym( RTLD_DEFAULT, symName.getStr() ));
+#endif
 
         if (rtti)
         {
