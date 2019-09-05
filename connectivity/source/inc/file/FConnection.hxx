@@ -107,7 +107,7 @@ namespace connectivity
             virtual void SAL_CALL clearWarnings(  ) override;
             //XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-            static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
 
             // no interface methods
             css::uno::Reference< css::ucb::XDynamicResultSet > getDir() const;

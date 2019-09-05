@@ -158,7 +158,7 @@ bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xInde
     Reference<XUnoTunnel> xTunnel(_xIndex,UNO_QUERY);
     if(xTunnel.is())
     {
-        dbase::ODbaseIndex* pIndex = reinterpret_cast< dbase::ODbaseIndex* >( xTunnel->getSomething(dbase::ODbaseIndex::getUnoTunnelImplementationId()) );
+        dbase::ODbaseIndex* pIndex = reinterpret_cast< dbase::ODbaseIndex* >( xTunnel->getSomething(dbase::ODbaseIndex::getUnoTunnelId()) );
         if(pIndex)
         {
             std::unique_ptr<dbase::OIndexIterator> pIter = pIndex->createIterator();

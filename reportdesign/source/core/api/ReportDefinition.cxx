@@ -96,6 +96,7 @@
 #include <comphelper/propertystatecontainer.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
@@ -1937,7 +1938,7 @@ uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableMimeTypes(  )
 sal_Int64 SAL_CALL OReportDefinition::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
     sal_Int64 nRet = 0;
-    if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    if (isUnoTunnelId<OReportDefinition>(rId) )
         nRet = reinterpret_cast<sal_Int64>(this);
     else
     {
@@ -1961,7 +1962,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OReportDefinition::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
-uno::Sequence< sal_Int8 > OReportDefinition::getUnoTunnelImplementationId()
+uno::Sequence< sal_Int8 > OReportDefinition::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 
@@ -1982,7 +1983,7 @@ std::shared_ptr<rptui::OReportModel> OReportDefinition::getSdrModel(const uno::R
     if( xUT.is() )
         pReportModel = reinterpret_cast<OReportDefinition*>(
                            sal::static_int_cast<sal_uIntPtr>(
-                               xUT->getSomething( OReportDefinition::getUnoTunnelImplementationId()))
+                               xUT->getSomething( OReportDefinition::getUnoTunnelId()))
                         )->m_pImpl->m_pReportModel;
     return pReportModel;
 }

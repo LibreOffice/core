@@ -165,7 +165,7 @@ Reference< XIndexAccess > ConstItemContainer::deepCopyContainer( const Reference
 // XUnoTunnel
 sal_Int64 ConstItemContainer::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
 {
-    if( ( rIdentifier.getLength() == 16 ) && ( 0 == memcmp( ConstItemContainer::getUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
+    if( isUnoTunnelId<ConstItemContainer>(rIdentifier) )
     {
         return reinterpret_cast< sal_Int64 >( this );
     }

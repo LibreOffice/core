@@ -20,6 +20,7 @@
 #include <string.h>
 #include <TConnection.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 
@@ -57,12 +58,12 @@ void OMetaConnection::disposing()
 //XUnoTunnel
 sal_Int64 SAL_CALL OMetaConnection::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-    return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    return (isUnoTunnelId<OMetaConnection>(rId))
         ? reinterpret_cast< sal_Int64 >( this )
         : sal_Int64(0);
 }
 
-Sequence< sal_Int8 > OMetaConnection::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > OMetaConnection::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 

@@ -49,7 +49,7 @@ namespace connectivity
         // css::lang::XUnoTunnel
         sal_Int64 SAL_CALL ODescriptor::getSomething( const Sequence< sal_Int8 >& rId )
         {
-            return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelId().getConstArray(),  rId.getConstArray(), 16 ) )
+            return (isUnoTunnelId<ODescriptor>(rId))
                 ? reinterpret_cast< sal_Int64 >( this )
                 : 0;
         }
