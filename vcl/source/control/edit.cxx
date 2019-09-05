@@ -2945,7 +2945,7 @@ void Edit::dragOver( const css::datatransfer::dnd::DropTargetDragEvent& rDTDE )
     if ( ( aMousePos.X() < 0 ) || ( aMousePos.X() > aOutSize.Width() ) )
     {
         // Scroll?
-        // No, I will not receive events in this case....
+        // No, I will not receive events in this case...
     }
     */
 

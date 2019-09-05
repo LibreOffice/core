@@ -90,7 +90,7 @@ class LockControlModels extends ComponentTreeTraversal
             xPSI = xCompProps.getPropertySetInfo();
 
         if ( ( null != xPSI ) && xPSI.hasPropertyByName( "DataField" ) )
-        {   // indeed it has ....
+        {   // indeed it has...
             String sDataField = (String)xCompProps.getPropertyValue( "DataField" );
             if ( sDataField.equals( m_sDataField ) )
             {   // we found a control model which is bound to what we're looking for

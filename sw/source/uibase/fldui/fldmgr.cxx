@@ -524,7 +524,7 @@ sal_uInt16 SwFieldMgr::GetGroup(sal_uInt16 nTypeId, sal_uInt16 nSubType)
 }
 
 // determine names to TypeId
-//  ACCESS over TYP_....
+//  ACCESS over TYP_...
 sal_uInt16 SwFieldMgr::GetTypeId(sal_uInt16 nPos)
 {
     OSL_ENSURE(nPos < ::GetPackCount(), "forbidden Pos");
@@ -673,7 +673,7 @@ void SwFieldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
 }
 
 // determine format
-//  ACCESS over TYP_....
+//  ACCESS over TYP_...
 sal_uInt16 SwFieldMgr::GetFormatCount(sal_uInt16 nTypeId, bool bHtmlMode) const
 {
     OSL_ENSURE(nTypeId < TYP_END, "forbidden TypeId");

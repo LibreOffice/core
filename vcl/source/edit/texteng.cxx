@@ -174,7 +174,7 @@ void TextEngine::SetFont( const vcl::Font& rFont )
     maFont = rFont;
     // #i40221# As the font's color now defaults to transparent (since i35764)
     //  we have to choose a useful textcolor in this case.
-    // Otherwise maTextColor and maFont.GetColor() are both transparent....
+    // Otherwise maTextColor and maFont.GetColor() are both transparent...
     if( rFont.GetColor() == COL_TRANSPARENT )
         maTextColor = COL_BLACK;
     else
@@ -559,7 +559,7 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
             pPortion->MarkSelectionInvalid( aStartPaM.GetIndex() );
         }
 
-        // the beginning of EndNodes....
+        // the beginning of EndNodes...
         nEndNode = nStartNode+1;    // the other paragraphs were deleted
         nChars = aEndPaM.GetIndex();
         if ( nChars )
@@ -572,7 +572,7 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
             pPortion->MarkSelectionInvalid( 0 );
         }
 
-        // connect....
+        // connect...
         aStartPaM = ImpConnectParagraphs( nStartNode, nEndNode );
     }
     else

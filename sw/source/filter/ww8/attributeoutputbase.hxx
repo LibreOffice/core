@@ -346,7 +346,7 @@ public:
     /// Definition of a numbering instance.
     virtual void NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule ) = 0;
 
-    /// Numbering defintion that overrides abstract numbering definition
+    /// Numbering definition that overrides abstract numbering definition
     virtual void OverrideNumberingDefinition(SwNumRule const&, sal_uInt16 /*nNum*/, sal_uInt16 /*nAbstractNum*/)
     { assert(false); } // TODO implement for WW8/RTF
 

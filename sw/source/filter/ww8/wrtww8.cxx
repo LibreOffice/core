@@ -3046,7 +3046,7 @@ void WW8Export::StoreDoc1()
 
     pFib->m_fcMac = Strm().Tell();        // End of all texts
 
-    WriteFkpPlcUsw();                   // FKP, PLC, .....
+    WriteFkpPlcUsw();                   // FKP, PLC, ...
 }
 
 void MSWordExportBase::AddLinkTarget(const OUString& rURL)

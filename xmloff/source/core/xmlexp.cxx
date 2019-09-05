@@ -2062,7 +2062,7 @@ void SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent > const & rComp
 OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
 {
     OUString sValue( rValue );
-    // #i65474# handling of fragment URLs ("#....") is undefined
+    // #i65474# handling of fragment URLs ("#...") is undefined
     // they are stored 'as is'
     uno::Reference< uri::XUriReference > xUriRef;
     if(!sValue.isEmpty() && sValue[0] != '#')

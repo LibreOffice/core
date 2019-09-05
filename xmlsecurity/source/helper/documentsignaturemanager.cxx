@@ -649,7 +649,7 @@ void DocumentSignatureManager::write(bool bXAdESCompliantIfODF)
                                                    maCurrentSignatureInformations[i], i + 1);
     }
 
-    // If stream was not provided, we are responsible for committing it....
+    // If stream was not provided, we are responsible for committing it...
     if (!mxSignatureStream.is() && aStreamHelper.xSignatureStorage.is())
     {
         uno::Reference<embed::XTransactedObject> xTrans(aStreamHelper.xSignatureStorage,

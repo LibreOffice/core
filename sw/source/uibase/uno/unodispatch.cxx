@@ -286,7 +286,7 @@ void SwXDispatch::addStatusListener(
     aEvent.Source = *static_cast<cppu::OWeakObject*>(this);
     aEvent.FeatureURL = aURL;
 
-    // one of the URLs requires a special state ....
+    // one of the URLs requires a special state...
     if (aURL.Complete == cURLDocumentDataSource)
     {
         const SwDBData& rData = m_pView->GetWrtShell().GetDBDesc();

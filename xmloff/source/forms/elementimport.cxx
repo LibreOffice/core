@@ -438,11 +438,11 @@ namespace xmloff
             return sUnnamedName;
         Sequence< OUString > aNames = m_xParentContainer->getElementNames();
 
-        for (sal_Int32 i=0; i<32768; ++i)   // the limit is nearly arbitrary ...
+        for (sal_Int32 i=0; i<32768; ++i)   // the limit is nearly arbitrary...
         {
             // assemble the new name (suggestion)
             OUString sReturn = sUnnamedName + OUString::number(i);
-            // check the existence (this is the bad performance part ....)
+            // check the existence (this is the bad performance part...)
             if (comphelper::findValue(aNames, sReturn) == -1)
                 // not found the name
                 return sReturn;

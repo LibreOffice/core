@@ -1366,7 +1366,7 @@ vcl::Window* Application::GetDefDialogParent()
         return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
     }
 
-    // first visible top window (may be totally wrong....)
+    // first visible top window (may be totally wrong...)
     pWin = pSVData->maWinData.mpFirstFrame;
     while (pWin)
     {

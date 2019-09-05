@@ -558,7 +558,7 @@ namespace xmloff
             }
             break;
             default:
-            {   // hmmm .... what else do we know?
+            {   // hmmm... what else do we know?
                 double fValue = 0;
                 css::util::Date aDate;
                 css::util::Time aTime;

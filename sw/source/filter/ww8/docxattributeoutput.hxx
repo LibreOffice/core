@@ -323,7 +323,7 @@ public:
     /// Definition of a numbering instance.
     virtual void NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule ) override;
 
-    /// Numbering defintion that overrides abstract numbering definition
+    /// Numbering definition that overrides abstract numbering definition
     virtual void OverrideNumberingDefinition(SwNumRule const& rRule,
             sal_uInt16 nNum, sal_uInt16 nAbstractNum) override;
 
