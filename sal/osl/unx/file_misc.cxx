@@ -297,7 +297,6 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
 
     DirectoryImpl* pDirImpl = static_cast<DirectoryImpl*>(pDirectory);
     OUString ustrFileName;
-    OUString ustrFilePath;
     struct dirent* pEntry;
 
     if ((pDirectory == nullptr) || (pItem == nullptr))
@@ -335,7 +334,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
                        osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
     assert(ustrFileName.pData);
 
-    osl::systemPathMakeAbsolutePath(pDirImpl->ustrPath, ustrFileName, ustrFilePath);
+    auto const ustrFilePath = osl::systemPathMakeAbsolutePath(pDirImpl->ustrPath, ustrFileName);
 
     DirectoryItem_Impl* pImpl = static_cast< DirectoryItem_Impl* >(*pItem);
     if (pImpl)
