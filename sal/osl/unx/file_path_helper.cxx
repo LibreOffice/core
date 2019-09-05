@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include "file_path_helper.hxx"
 #include "uunxapi.hxx"
 
@@ -56,21 +60,18 @@ void osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
 
 void osl_systemPathEnsureSeparator(OUString* ppustrPath)
 {
-    OSL_PRECOND(nullptr != ppustrPath, "osl_systemPathEnsureSeparator: Invalid parameter");
-    if (ppustrPath != nullptr)
+    assert(nullptr != ppustrPath);
+    sal_Int32    lp = ppustrPath->getLength();
+    sal_Int32    i  = ppustrPath->lastIndexOf(FPH_CHAR_PATH_SEPARATOR);
+
+    if ((lp > 1 && i != (lp - 1)) || ((lp < 2) && i < 0))
     {
-        sal_Int32    lp = ppustrPath->getLength();
-        sal_Int32    i  = ppustrPath->lastIndexOf(FPH_CHAR_PATH_SEPARATOR);
-
-        if ((lp > 1 && i != (lp - 1)) || ((lp < 2) && i < 0))
-        {
-            *ppustrPath += FPH_PATH_SEPARATOR;
-        }
-
-        SAL_WARN_IF( !ppustrPath->endsWith(FPH_PATH_SEPARATOR),
-                     "sal.osl",
-                     "osl_systemPathEnsureSeparator: Post condition failed");
+        *ppustrPath += FPH_PATH_SEPARATOR;
     }
+
+    SAL_WARN_IF( !ppustrPath->endsWith(FPH_PATH_SEPARATOR),
+                 "sal.osl",
+                 "osl_systemPathEnsureSeparator: Post condition failed");
 }
 
 bool osl_systemPathIsRelativePath(const rtl_uString* pustrPath)
