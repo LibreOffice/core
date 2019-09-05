@@ -46,6 +46,30 @@
       "revId": "2c0d3ce5292b45a8897758508ee61801e4e8340d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_5846a451",
+        "filename": "sw/source/core/text/txtfld.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-05T13:31:03Z",
+      "side": 1,
+      "message": "Ah, thanks. So this relies on MakeTextAttr only creating SwTextAttrEnd for that id? (/me feels it\u0027s an assumption that needs documenting and possibly an assert not only at one place of creation, but also where that assumption plays role...)",
+      "parentUuid": "bf659307_b546e97b",
+      "range": {
+        "startLine": 443,
+        "startChar": 45,
+        "endLine": 443,
+        "endChar": 48
+      },
+      "revId": "2c0d3ce5292b45a8897758508ee61801e4e8340d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
