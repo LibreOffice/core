@@ -22,6 +22,30 @@
       "revId": "916ffc8617ca4b6ef1b6a9eab6cb8fc13d800928",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_95c72546",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-09-05T10:07:18Z",
+      "side": 1,
+      "message": "no, that looks like a thinko on my part",
+      "parentUuid": "bf659307_d5b59dce",
+      "range": {
+        "startLine": 9,
+        "startChar": 48,
+        "endLine": 10,
+        "endChar": 78
+      },
+      "revId": "916ffc8617ca4b6ef1b6a9eab6cb8fc13d800928",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
