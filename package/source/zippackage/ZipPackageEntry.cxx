@@ -94,7 +94,7 @@ void SAL_CALL ZipPackageEntry::setParent( const uno::Reference< XInterface >& xN
 {
     sal_Int64 nTest(0);
     uno::Reference < XUnoTunnel > xTunnel ( xNewParent, UNO_QUERY );
-    if ( !xNewParent.is() || ( nTest = xTunnel->getSomething ( ZipPackageFolder::static_getImplementationId () ) ) == 0 )
+    if ( !xNewParent.is() || ( nTest = xTunnel->getSomething ( ZipPackageFolder::getUnoTunnelId () ) ) == 0 )
         throw NoSupportException(THROW_WHERE );
 
     ZipPackageFolder *pNewParent = reinterpret_cast < ZipPackageFolder * > ( nTest );

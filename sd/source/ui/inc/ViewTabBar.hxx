@@ -110,6 +110,8 @@ public:
 
     //----- XUnoTunnel --------------------------------------------------------
 
+    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
+
     virtual sal_Int64 SAL_CALL getSomething (const css::uno::Sequence<sal_Int8>& rId) override;
 
     /** The returned value is calculated as the difference between the
@@ -159,7 +161,6 @@ private:
     static vcl::Window* GetAnchorWindow(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewTabBarId,
         const css::uno::Reference<css::frame::XController>& rxController);
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
 };
 
 } // end of namespace sd

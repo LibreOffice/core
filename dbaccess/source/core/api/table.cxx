@@ -28,6 +28,7 @@
 
 #include <osl/diagnose.h>
 #include <cppuhelper/typeprovider.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/XRefreshListener.hpp>
@@ -306,7 +307,7 @@ void SAL_CALL ODBTable::alterColumnByName( const OUString& _rName, const Referen
 sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId )
 {
     sal_Int64 nRet(0);
-    if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    if (isUnoTunnelId<ODBTable>(rId))
         nRet = reinterpret_cast<sal_Int64>(this);
     else
         nRet = OTable_Base::getSomething(rId);
@@ -314,7 +315,7 @@ sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId )
     return nRet;
 }
 
-Sequence< sal_Int8 > ODBTable::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > ODBTable::getUnoTunnelId()
 {
     static ::cppu::OImplementationId s_Id;
 

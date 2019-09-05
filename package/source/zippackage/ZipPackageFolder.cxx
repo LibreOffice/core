@@ -28,6 +28,7 @@
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
@@ -155,7 +156,7 @@ void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& 
     }
 }
 
-css::uno::Sequence < sal_Int8 > ZipPackageFolder::static_getImplementationId()
+css::uno::Sequence < sal_Int8 > ZipPackageFolder::getUnoTunnelId()
 {
     return lcl_CachedImplId::get().getImplementationId();
 }
@@ -173,12 +174,12 @@ void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const uno::
 
     sal_Int64 nTest;
     ZipPackageEntry *pEntry;
-    if ( ( nTest = xRef->getSomething ( ZipPackageFolder::static_getImplementationId() ) ) != 0 )
+    if ( ( nTest = xRef->getSomething ( ZipPackageFolder::getUnoTunnelId() ) ) != 0 )
     {
         ZipPackageFolder *pFolder = reinterpret_cast < ZipPackageFolder * > ( nTest );
         pEntry = static_cast < ZipPackageEntry * > ( pFolder );
     }
-    else if ( ( nTest = xRef->getSomething ( ZipPackageStream::static_getImplementationId() ) ) != 0 )
+    else if ( ( nTest = xRef->getSomething ( ZipPackageStream::getUnoTunnelId() ) ) != 0 )
     {
         ZipPackageStream *pStream = reinterpret_cast < ZipPackageStream * > ( nTest );
         pEntry = static_cast < ZipPackageEntry * > ( pStream );
@@ -357,8 +358,7 @@ void ZipPackageFolder::saveContents(
 sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
 {
     sal_Int64 nMe = 0;
-    if ( aIdentifier.getLength() == 16 &&
-         0 == memcmp(static_getImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
+    if ( isUnoTunnelId<ZipPackageFolder>(aIdentifier) )
         nMe = reinterpret_cast < sal_Int64 > ( this );
     return nMe;
 }

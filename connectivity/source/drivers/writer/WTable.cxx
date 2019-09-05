@@ -28,6 +28,7 @@
 #include <writer/WConnection.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <sal/log.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 namespace com
@@ -222,7 +223,7 @@ void SAL_CALL OWriterTable::disposing()
     m_pWriterConnection = nullptr;
 }
 
-uno::Sequence<sal_Int8> OWriterTable::getUnoTunnelImplementationId()
+uno::Sequence<sal_Int8> OWriterTable::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 
@@ -231,10 +232,8 @@ uno::Sequence<sal_Int8> OWriterTable::getUnoTunnelImplementationId()
 
 sal_Int64 OWriterTable::getSomething(const uno::Sequence<sal_Int8>& rId)
 {
-    return (rId.getLength() == 16
-            && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(), rId.getConstArray(), 16))
-               ? reinterpret_cast<sal_Int64>(this)
-               : OWriterTable_BASE::getSomething(rId);
+    return (isUnoTunnelId<OWriterTable>(rId)) ? reinterpret_cast<sal_Int64>(this)
+                                              : OWriterTable_BASE::getSomething(rId);
 }
 
 bool OWriterTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData)

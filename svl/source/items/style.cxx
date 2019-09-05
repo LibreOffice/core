@@ -917,7 +917,7 @@ SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const css::uno::Reference<
     {
         css::uno::Reference< css::lang::XUnoTunnel > xUT( xStyle, css::uno::UNO_QUERY );
         if( xUT.is() )
-            pRet = reinterpret_cast<SfxUnoStyleSheet*>(sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( SfxUnoStyleSheet::getIdentifier())));
+            pRet = reinterpret_cast<SfxUnoStyleSheet*>(sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( SfxUnoStyleSheet::getUnoTunnelId())));
     }
     return pRet;
 }
@@ -927,14 +927,12 @@ SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const css::uno::Reference<
  */
 ::sal_Int64 SAL_CALL SfxUnoStyleSheet::getSomething( const css::uno::Sequence< ::sal_Int8 >& rId )
 {
-    if( rId.getLength() == 16 && 0 == memcmp( getIdentifier().getConstArray(), rId.getConstArray(), 16 ) )
+    if( isUnoTunnelId<SfxUnoStyleSheet>(rId) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }
-    else
-    {
-        return 0;
-    }
+
+    return 0;
 }
 
 void
@@ -948,7 +946,7 @@ namespace
     class theSfxUnoStyleSheetIdentifier : public rtl::Static< UnoTunnelIdInit, theSfxUnoStyleSheetIdentifier > {};
 }
 
-const css::uno::Sequence< ::sal_Int8 >& SfxUnoStyleSheet::getIdentifier()
+const css::uno::Sequence< ::sal_Int8 >& SfxUnoStyleSheet::getUnoTunnelId()
 {
     return theSfxUnoStyleSheetIdentifier::get().getSeq();
 }

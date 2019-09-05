@@ -75,7 +75,7 @@ namespace connectivity
 
         //XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-        static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+        static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
     };
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_TCONNECTION_HXX

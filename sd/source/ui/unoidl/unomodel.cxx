@@ -350,13 +350,13 @@ const css::uno::Sequence< sal_Int8 > & SdXImpressDocument::getUnoTunnelId() thro
 
 sal_Int64 SAL_CALL SdXImpressDocument::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
 {
-    if( rIdentifier.getLength() == 16 )
-    {
-        if( 0 == memcmp( SdXImpressDocument::getUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) )
-            return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
+    if( isUnoTunnelId<SdXImpressDocument>(rIdentifier) )
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
 
-        if( 0 == memcmp( SdrModel::getUnoTunnelImplementationId().getConstArray(), rIdentifier.getConstArray(), 16 ) )
-            return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(mpDoc));
+    if( (rIdentifier.getLength() == 16) &&
+        (0 == memcmp( SdrModel::getUnoTunnelImplementationId().getConstArray(), rIdentifier.getConstArray(), 16 )))
+    {
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(mpDoc));
     }
 
     return SfxBaseModel::getSomething( rIdentifier );

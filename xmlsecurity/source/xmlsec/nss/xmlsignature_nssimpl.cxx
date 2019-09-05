@@ -105,7 +105,7 @@ SAL_CALL XMLSignature_NssImpl::generate(
     XMLElementWrapper_XmlSecImpl* pElement =
         reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
             sal::static_int_cast<sal_uIntPtr>(
-                xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() )));
+                xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelId() )));
     if( pElement == nullptr ) {
         throw RuntimeException() ;
     }
@@ -193,7 +193,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
     XMLElementWrapper_XmlSecImpl* pElement =
         reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
             sal::static_int_cast<sal_uIntPtr>(
-                xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() )));
+                xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelId() )));
     if( pElement == nullptr )
         throw RuntimeException() ;
 

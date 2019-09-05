@@ -2205,7 +2205,7 @@ com_sun_star_comp_dba_ODatabaseDocument(css::uno::XComponentContext* context,
     Reference<XUnoTunnel> xDBContextTunnel(DatabaseContext::create(context), UNO_QUERY_THROW);
     dbaccess::ODatabaseContext* pContext = reinterpret_cast<dbaccess::ODatabaseContext*>(
         xDBContextTunnel->getSomething(
-            dbaccess::ODatabaseContext::getUnoTunnelImplementationId()));
+            dbaccess::ODatabaseContext::getUnoTunnelId()));
 
     rtl::Reference pImpl(
             new dbaccess::ODatabaseModelImpl(context, *pContext));

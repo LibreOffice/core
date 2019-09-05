@@ -356,10 +356,8 @@ public:
     static SfxUnoStyleSheet* getUnoStyleSheet( const css::uno::Reference< css::style::XStyle >& xStyle );
 
     // XUnoTunnel
+    static const css::uno::Sequence< ::sal_Int8 >& getUnoTunnelId();
     virtual ::sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< ::sal_Int8 >& aIdentifier ) override;
-
-private:
-    static const css::uno::Sequence< ::sal_Int8 >& getIdentifier();
 };
 
 #endif

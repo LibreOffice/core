@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <file/FConnection.hxx>
 #include <file/FDatabaseMetaData.hxx>
@@ -405,12 +406,12 @@ Reference< XDynamicResultSet > OConnection::getDir() const
 
 sal_Int64 SAL_CALL OConnection::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    return (isUnoTunnelId<OConnection>(rId))
         ? reinterpret_cast< sal_Int64 >( this )
         : sal_Int64(0);
 }
 
-Sequence< sal_Int8 > OConnection::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > OConnection::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 

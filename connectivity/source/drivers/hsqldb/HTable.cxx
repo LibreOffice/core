@@ -30,6 +30,7 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <comphelper/property.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
@@ -126,7 +127,7 @@ sdbcx::OCollection* OHSQLTable::createIndexes(const ::std::vector< OUString>& _r
     return new OIndexesHelper(this,m_aMutex,_rNames);
 }
 
-Sequence< sal_Int8 > OHSQLTable::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > OHSQLTable::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 
@@ -137,7 +138,7 @@ Sequence< sal_Int8 > OHSQLTable::getUnoTunnelImplementationId()
 
 sal_Int64 OHSQLTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    return (isUnoTunnelId<OHSQLTable>(rId))
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OTable_TYPEDEF::getSomething(rId);
 }

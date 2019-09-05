@@ -32,6 +32,7 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include "myucp_resultset.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <sdbcoretools.hxx>
 #include <stringconstants.hxx>
 
@@ -541,7 +542,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
 // css::lang::XUnoTunnel
 sal_Int64 OContentHelper::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelId().getConstArray(),  rId.getConstArray(), 16 ) )
+    if (isUnoTunnelId<OContentHelper>(rId))
         return reinterpret_cast<sal_Int64>(this);
 
     return 0;

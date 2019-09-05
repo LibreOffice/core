@@ -19,6 +19,7 @@
 
 #include <JoinExchange.hxx>
 #include <sot/formats.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 namespace dbaui
@@ -70,14 +71,14 @@ namespace dbaui
         Reference< XUnoTunnel > xTunnel(_rxObject, UNO_QUERY);
         if (xTunnel.is())
         {
-            OJoinExchObj* pImplementation = reinterpret_cast<OJoinExchObj*>(xTunnel->getSomething(getUnoTunnelImplementationId()));
+            OJoinExchObj* pImplementation = reinterpret_cast<OJoinExchObj*>(xTunnel->getSomething(getUnoTunnelId()));
             if (pImplementation)
                 aReturn = pImplementation->m_jxdSourceDescription;
         }
         return aReturn;
     }
 
-    Sequence< sal_Int8 > OJoinExchObj::getUnoTunnelImplementationId()
+    Sequence< sal_Int8 > OJoinExchObj::getUnoTunnelId()
     {
         static ::cppu::OImplementationId implId;
 
@@ -86,7 +87,7 @@ namespace dbaui
 
     sal_Int64 SAL_CALL OJoinExchObj::getSomething( const Sequence< sal_Int8 >& _rIdentifier )
     {
-        if (_rIdentifier.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  _rIdentifier.getConstArray(), 16 ) )
+        if (isUnoTunnelId<OJoinExchObj>(_rIdentifier))
             return reinterpret_cast<sal_Int64>(this);
 
         return 0;
