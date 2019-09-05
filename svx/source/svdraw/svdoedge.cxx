@@ -1854,7 +1854,7 @@ bool SdrEdgeObj::hasSpecialDrag() const
     return true;
 }
 
-SdrObject* SdrEdgeObj::getFullDragClone() const
+SdrObjectUniquePtr SdrEdgeObj::getFullDragClone() const
 {
     // use Clone operator
     SdrEdgeObj* pRetval(CloneSdrObject(getSdrModelFromSdrObject()));
@@ -1863,7 +1863,7 @@ SdrObject* SdrEdgeObj::getFullDragClone() const
     pRetval->ConnectToNode(true, GetConnectedNode(true));
     pRetval->ConnectToNode(false, GetConnectedNode(false));
 
-    return pRetval;
+    return SdrObjectUniquePtr(pRetval);
 }
 
 bool SdrEdgeObj::beginSpecialDrag(SdrDragStat& rDrag) const

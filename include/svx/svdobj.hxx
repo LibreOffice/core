@@ -104,6 +104,12 @@ namespace svx
 }
 
 class SvxShape;
+class SdrObject;
+struct SVX_DLLPUBLIC SdrObjectFreeOp;
+
+// helper for constructing std::unique_ptr for SdrObjects where a
+// deleter is needed - here, SdrObject::Free needs to be used.
+typedef std::unique_ptr< SdrObject, SdrObjectFreeOp > SdrObjectUniquePtr;
 
 enum SdrObjKind {
     OBJ_NONE       = 0,  /// abstract object (SdrObject)
@@ -543,7 +549,7 @@ public:
     // part of the model, thus not changing anything since it's only a temporary
     // helper object for interaction
     virtual bool supportsFullDrag() const;
-    virtual SdrObject* getFullDragClone() const;
+    virtual SdrObjectUniquePtr getFullDragClone() const;
 
     /// Every object must be able to create itself interactively.
     /// On MouseDown first an object is created, and its BegCreate() method
@@ -1025,8 +1031,6 @@ private:
     SdrObject( const SdrObject& ) = delete;
 };
 
-// helper for constructing std::unique_ptr for SdrObjects where a
-// deleter is needed - here, SdrObject::Free needs to be used.
 struct SVX_DLLPUBLIC SdrObjectFreeOp
 {
     void operator()(SdrObject* obj)
@@ -1034,7 +1038,6 @@ struct SVX_DLLPUBLIC SdrObjectFreeOp
         SdrObject::Free(obj);
     }
 };
-typedef std::unique_ptr< SdrObject, SdrObjectFreeOp > SdrObjectUniquePtr;
 
 struct SdrObjCreatorParams
 {

@@ -702,17 +702,17 @@ OUString SdrGrafObj::TakeObjNamePlural() const
     return sName.makeStringAndClear();
 }
 
-SdrObject* SdrGrafObj::getFullDragClone() const
+SdrObjectUniquePtr SdrGrafObj::getFullDragClone() const
 {
     // call parent
-    SdrGrafObj* pRetval = static_cast< SdrGrafObj* >(SdrRectObj::getFullDragClone());
+    SdrObjectUniquePtr pRetval = SdrRectObj::getFullDragClone();
 
     // #i103116# the full drag clone leads to problems
     // with linked graphics, so reset the link in this
     // temporary interaction object and load graphic
     if(pRetval && IsLinkedGraphic())
     {
-        pRetval->ReleaseGraphicLink();
+        static_cast< SdrGrafObj* >(pRetval.get())->ReleaseGraphicLink();
     }
 
     return pRetval;

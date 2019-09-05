@@ -143,7 +143,6 @@ SdrDragEntrySdrObject::SdrDragEntrySdrObject(
     bool bModify)
 :   SdrDragEntry(),
     maOriginal(rOriginal),
-    mpClone(nullptr),
     mbModify(bModify)
 {
     // add SdrObject parts to transparent overlay stuff
@@ -152,10 +151,6 @@ SdrDragEntrySdrObject::SdrDragEntrySdrObject(
 
 SdrDragEntrySdrObject::~SdrDragEntrySdrObject()
 {
-    if(mpClone)
-    {
-        SdrObject::Free(mpClone);
-    }
 }
 
 void SdrDragEntrySdrObject::prepareCurrentState(SdrDragMethod& rDragMethod)
@@ -164,18 +159,14 @@ void SdrDragEntrySdrObject::prepareCurrentState(SdrDragMethod& rDragMethod)
     // out when clone and original have the same class, so that i can use operator=
     // in those cases
 
-    if(mpClone)
-    {
-        SdrObject::Free(mpClone);
-        mpClone = nullptr;
-    }
+    mxClone.reset();
 
     if(mbModify)
     {
-        mpClone = maOriginal.getFullDragClone();
+        mxClone = maOriginal.getFullDragClone();
 
         // apply original transformation, implemented at the DragMethods
-        rDragMethod.applyCurrentTransformationToSdrObject(*mpClone);
+        rDragMethod.applyCurrentTransformationToSdrObject(*mxClone);
     }
 }
 
@@ -183,10 +174,10 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntrySdrObject::createPri
 {
     const SdrObject* pSource = &maOriginal;
 
-    if(mbModify && mpClone)
+    if(mbModify && mxClone)
     {
         // choose source for geometry data
-        pSource = mpClone;
+        pSource = mxClone.get();
     }
 
     // use the view-independent primitive representation (without
@@ -1172,8 +1163,7 @@ PointerStyle SdrDragMovHdl::GetSdrDragPointer() const
 
 
 SdrDragObjOwn::SdrDragObjOwn(SdrDragView& rNewView)
-:   SdrDragMethod(rNewView),
-    mpClone(nullptr)
+:   SdrDragMethod(rNewView)
 {
     const SdrObject* pObj = GetDragObj();
 
@@ -1186,15 +1176,11 @@ SdrDragObjOwn::SdrDragObjOwn(SdrDragView& rNewView)
 
 SdrDragObjOwn::~SdrDragObjOwn()
 {
-    if(mpClone)
-    {
-        SdrObject::Free(mpClone);
-    }
 }
 
 void SdrDragObjOwn::createSdrDragEntries()
 {
-    if(mpClone)
+    if(mxClone)
     {
         basegfx::B2DPolyPolygon aDragPolyPolygon;
         bool bAddWireframe(true);
@@ -1205,7 +1191,7 @@ void SdrDragObjOwn::createSdrDragEntries()
 
             if(pPV && pPV->PageWindowCount())
             {
-                addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntrySdrObject(*mpClone, false)));
+                addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntrySdrObject(*mxClone, false)));
 
                 // potentially no wireframe needed, full drag works
                 bAddWireframe = false;
@@ -1216,7 +1202,7 @@ void SdrDragObjOwn::createSdrDragEntries()
         {
             // check for extra conditions for wireframe, e.g. no border at
             // objects
-            if(!mpClone->HasLineStyle())
+            if(!mxClone->HasLineStyle())
             {
                 bAddWireframe = true;
             }
@@ -1225,11 +1211,11 @@ void SdrDragObjOwn::createSdrDragEntries()
         if(bAddWireframe)
         {
             // use wireframe poly when full drag is off or did not work
-            aDragPolyPolygon = mpClone->TakeXorPoly();
+            aDragPolyPolygon = mxClone->TakeXorPoly();
         }
 
         // add evtl. extra DragPolyPolygon
-        const basegfx::B2DPolyPolygon aSpecialDragPolyPolygon(mpClone->getSpecialDragPoly(DragStat()));
+        const basegfx::B2DPolyPolygon aSpecialDragPolyPolygon(mxClone->getSpecialDragPoly(DragStat()));
 
         if(aSpecialDragPolyPolygon.count())
         {
@@ -1247,9 +1233,9 @@ void SdrDragObjOwn::TakeSdrDragComment(OUString& rStr) const
 {
     // #i103058# get info string from the clone preferred, the original will
     // not be changed. For security, use original as fallback
-    if(mpClone)
+    if(mxClone)
     {
-        rStr = mpClone->getSpecialDragComment(DragStat());
+        rStr = mxClone->getSpecialDragComment(DragStat());
     }
     else
     {
@@ -1264,7 +1250,7 @@ void SdrDragObjOwn::TakeSdrDragComment(OUString& rStr) const
 
 bool SdrDragObjOwn::BeginSdrDrag()
 {
-    if(!mpClone)
+    if(!mxClone)
     {
         const SdrObject* pObj = GetDragObj();
 
@@ -1273,8 +1259,8 @@ bool SdrDragObjOwn::BeginSdrDrag()
             if(pObj->beginSpecialDrag(DragStat()))
             {
                 // create initial clone to have a start visualization
-                mpClone = pObj->getFullDragClone();
-                mpClone->applySpecialDrag(DragStat());
+                mxClone = pObj->getFullDragClone();
+                mxClone->applySpecialDrag(DragStat());
 
                 return true;
             }
@@ -1329,15 +1315,11 @@ void SdrDragObjOwn::MoveSdrDrag(const Point& rNoSnapPnt)
     clearSdrDragEntries();
 
     // delete current clone (after the last reference to it is deleted above)
-    if(mpClone)
-    {
-        SdrObject::Free(mpClone);
-        mpClone = nullptr;
-    }
+    mxClone.reset();
 
     // create a new clone and modify to current drag state
-    mpClone = pObj->getFullDragClone();
-    mpClone->applySpecialDrag(DragStat());
+    mxClone = pObj->getFullDragClone();
+    mxClone->applySpecialDrag(DragStat());
 
     // AutoGrowWidth may change for SdrTextObj due to the automatism used
     // with bDisableAutoWidthOnDragging, so not only geometry changes but
@@ -1345,7 +1327,7 @@ void SdrDragObjOwn::MoveSdrDrag(const Point& rNoSnapPnt)
     // changed, it needs to be copied to the original since nothing will
     // happen when it only changes in the drag clone
     const bool bOldAutoGrowWidth(pObj->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH).GetValue());
-    const bool bNewAutoGrowWidth(mpClone->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH).GetValue());
+    const bool bNewAutoGrowWidth(mxClone->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH).GetValue());
 
     if (bOldAutoGrowWidth != bNewAutoGrowWidth)
     {
@@ -3600,7 +3582,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     // there are currently no easy mechanisms to plug an alternative interaction
     // from there
     SdrObject* pSdrObject = rMarkList.GetMark(0)->GetMarkedSdrObj();
-    std::unique_ptr< SdrObject, SdrObjectFreeOp > pFullDragClone;
+    SdrObjectUniquePtr pFullDragClone;
     bool bExternal(false);
     SdrObject* pExternalSdrObject(nullptr);
 
@@ -3613,7 +3595,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         // real transformation. That SdrObject is owned and has to be deleted,
         // so use a std::unique_ptr with special handling for the protected
         // SDrObject destructor
-        pFullDragClone.reset(pSdrObject->getFullDragClone());
+        pFullDragClone = pSdrObject->getFullDragClone();
 
         if(dynamic_cast< SdrGrafObj* >(pFullDragClone.get()))
         {

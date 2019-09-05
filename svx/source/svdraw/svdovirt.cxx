@@ -234,13 +234,13 @@ bool SdrVirtObj::supportsFullDrag() const
     return false;
 }
 
-SdrObject* SdrVirtObj::getFullDragClone() const
+SdrObjectUniquePtr SdrVirtObj::getFullDragClone() const
 {
     SdrObject& rReferencedObject = const_cast<SdrVirtObj*>(this)->ReferencedObj();
-    return new SdrGrafObj(
+    return SdrObjectUniquePtr(new SdrGrafObj(
         getSdrModelFromSdrObject(),
         SdrDragView::GetObjGraphic(rReferencedObject),
-        GetLogicRect());
+        GetLogicRect()));
 }
 
 bool SdrVirtObj::beginSpecialDrag(SdrDragStat& rDrag) const

@@ -107,7 +107,7 @@ public:
     void clonedFrom(const DlgEdObj* _pSource);                          // not working yet
 
     // FullDrag support
-    virtual SdrObject* getFullDragClone() const override;
+    virtual SdrObjectUniquePtr getFullDragClone() const override;
 
     bool supportsService( OUString const & serviceName ) const;
     OUString GetDefaultName() const;

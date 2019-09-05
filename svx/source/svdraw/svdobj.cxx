@@ -1300,10 +1300,10 @@ bool SdrObject::supportsFullDrag() const
     return true;
 }
 
-SdrObject* SdrObject::getFullDragClone() const
+SdrObjectUniquePtr SdrObject::getFullDragClone() const
 {
     // default uses simple clone
-    return CloneSdrObject(getSdrModelFromSdrObject());
+    return SdrObjectUniquePtr(CloneSdrObject(getSdrModelFromSdrObject()));
 }
 
 bool SdrObject::beginSpecialDrag(SdrDragStat& rDrag) const

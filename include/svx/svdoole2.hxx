@@ -56,7 +56,7 @@ private:
     SVX_DLLPRIVATE void GetObjRef_Impl();
 
     // #i118485# helper added
-    SVX_DLLPRIVATE SdrObject* createSdrGrafObjReplacement(bool bAddText) const;
+    SVX_DLLPRIVATE SdrObjectUniquePtr createSdrGrafObjReplacement(bool bAddText) const;
     SVX_DLLPRIVATE void ImpSetVisAreaSize();
 
     SVX_DLLPRIVATE void Init();
@@ -131,7 +131,7 @@ public:
     void SetClosedObj( bool bIsClosed );
 
     // FullDrag support
-    virtual SdrObject* getFullDragClone() const override;
+    virtual SdrObjectUniquePtr getFullDragClone() const override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;

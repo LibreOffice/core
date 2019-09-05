@@ -207,7 +207,7 @@ protected:
     // and maintaining the OutlinerView.
     Point                       maTextEditOffset;
 
-    virtual SdrObject* getFullDragClone() const override;
+    virtual SdrObjectUniquePtr getFullDragClone() const override;
 
 
 public:
