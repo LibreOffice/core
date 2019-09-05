@@ -22,8 +22,10 @@
 #include <HtmlReader.hxx>
 #include <WCopyTable.hxx>
 
-using namespace dbaui;
 using namespace com::sun::star;
+
+namespace dbaui
+{
 
 void OWizHTMLExtend::createReaderAndCallParser(sal_Int32 _nRows)
 {
@@ -51,13 +53,10 @@ void OWizRTFExtend::createReaderAndCallParser(sal_Int32 _nRows)
     xParser->CallParser();
 }
 
-OWizNormalExtend::OWizNormalExtend(vcl::Window* pParent) : OWizTypeSelect( pParent )
-{
-    EnableAuto(false);
-}
-
 void OWizNormalExtend::createReaderAndCallParser(sal_Int32 /*_nRows*/)
 {
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

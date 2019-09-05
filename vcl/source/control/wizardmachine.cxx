@@ -1078,6 +1078,18 @@ namespace vcl
         return false;
     }
 
+    bool WizardMachine::ShowNextPage()
+    {
+        return ShowPage(m_nCurState + 1);
+    }
+
+    bool WizardMachine::ShowPrevPage()
+    {
+        if (!m_nCurState)
+            return false;
+        return ShowPage(m_nCurState - 1);
+    }
+
     bool WizardMachine::travelPrevious()
     {
         DBG_ASSERT(!m_pImpl->aStateHistory.empty(), "WizardMachine::travelPrevious: have no previous page!");

@@ -135,6 +135,52 @@ OFieldDescControl::OFieldDescControl( vcl::Window* pParent, OTableDesignHelpBar*
     Construct();
 }
 
+OFieldDescControl::OFieldDescControl(weld::Container* /*pParent*/, OTableDesignHelpBar* pHelpBar)
+    :TabPage(nullptr, WB_3DLOOK | WB_DIALOGCONTROL)
+    ,pHelp( pHelpBar )
+    ,pLastFocusWindow(nullptr)
+    ,m_pActFocusWindow(nullptr)
+    ,pDefaultText(nullptr)
+    ,pRequiredText(nullptr)
+    ,pAutoIncrementText(nullptr)
+    ,pTextLenText(nullptr)
+    ,pNumTypeText(nullptr)
+    ,pLengthText(nullptr)
+    ,pScaleText(nullptr)
+    ,pFormatText(nullptr)
+    ,pBoolDefaultText(nullptr)
+    ,m_pColumnNameText(nullptr)
+    ,m_pTypeText(nullptr)
+    ,m_pAutoIncrementValueText(nullptr)
+    ,pRequired(nullptr)
+    ,pNumType(nullptr)
+    ,pAutoIncrement(nullptr)
+    ,pDefault(nullptr)
+    ,pTextLen(nullptr)
+    ,pLength(nullptr)
+    ,pScale(nullptr)
+    ,pFormatSample(nullptr)
+    ,pBoolDefault(nullptr)
+    ,m_pColumnName(nullptr)
+    ,m_pType(nullptr)
+    ,m_pAutoIncrementValue(nullptr)
+    ,pFormat(nullptr)
+    ,m_pVertScroll( nullptr )
+    ,m_pHorzScroll( nullptr )
+    ,m_pPreviousType()
+    ,m_nPos(-1)
+    ,aYes(DBA_RES(STR_VALUE_YES))
+    ,aNo(DBA_RES(STR_VALUE_NO))
+    ,m_nOldVThumb( 0 )
+    ,m_nOldHThumb( 0 )
+    ,m_nWidth(50)
+    ,m_bAdded(false)
+    ,m_bRightAligned(false)
+    ,pActFieldDescr(nullptr)
+{
+    Construct();
+}
+
 void OFieldDescControl::Construct()
 {
     m_pVertScroll = VclPtr<ScrollBar>::Create(this, WB_VSCROLL | WB_REPEAT | WB_DRAG);

@@ -366,6 +366,9 @@ namespace vcl
         bool Finish(short nResult = RET_CANCEL);
         bool ShowPage(WizardState nState);
 
+        bool ShowNextPage();
+        bool ShowPrevPage();
+
         void                AddPage( TabPage* pPage );
         void                SetPage( WizardState nLevel, TabPage* pPage );
         TabPage*            GetPage( WizardState eState ) const;
