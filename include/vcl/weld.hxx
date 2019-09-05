@@ -751,6 +751,7 @@ public:
     virtual std::vector<int> get_selected_rows() const = 0;
     virtual void set_font_color(int pos, const Color& rColor) const = 0;
     virtual void scroll_to_row(int pos) = 0;
+    virtual bool is_selected(int pos) const = 0;
     virtual int get_cursor_index() const = 0;
     virtual void set_cursor(int pos) = 0;
 
@@ -1161,6 +1162,10 @@ public:
     {
         m_aCursorPositionHdl = rLink;
     }
+
+    virtual void cut_clipboard() = 0;
+    virtual void copy_clipboard() = 0;
+    virtual void paste_clipboard() = 0;
 
     void save_value() { m_sSavedValue = get_text(); }
     OUString const& get_saved_value() const { return m_sSavedValue; }
