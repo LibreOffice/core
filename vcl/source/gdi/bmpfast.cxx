@@ -379,7 +379,7 @@ static bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
     TrueColorPixelPtr<SRCFMT> aSrcType; aSrcType.SetRawPtr( rSrc.mpBits );
 
     // select the matching instantiation for the destination's bitmap format
-    switch( rDst.mnFormat & ~ScanlineFormat::TopDown )
+    switch (RemoveScanline(rDst.mnFormat))
     {
         case ScanlineFormat::N1BitMsbPal:
         case ScanlineFormat::N1BitLsbPal:
@@ -460,8 +460,8 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
     if( rDst.mnHeight < rTR.mnDestY + rTR.mnDestHeight )
         return false;
 
-    const ScanlineFormat nSrcFormat = rSrc.mnFormat & ~ScanlineFormat::TopDown;
-    const ScanlineFormat nDstFormat = rDst.mnFormat & ~ScanlineFormat::TopDown;
+    const ScanlineFormat nSrcFormat = RemoveScanline(rSrc.mnFormat);
+    const ScanlineFormat nDstFormat = RemoveScanline(rDst.mnFormat);
 
     // TODO: also implement conversions for 16bit colormasks with non-565 format
     if( nSrcFormat & (ScanlineFormat::N16BitTcLsbMask | ScanlineFormat::N16BitTcMsbMask) )
@@ -610,7 +610,7 @@ static bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, c
     TrueColorPixelPtr<SRCFMT> aSrcType; aSrcType.SetRawPtr( rSrc.mpBits );
 
     // select the matching instantiation for the destination's bitmap format
-    switch( rDst.mnFormat & ~ScanlineFormat::TopDown )
+    switch (RemoveScanline(rDst.mnFormat))
     {
         case ScanlineFormat::N1BitMsbPal:
         case ScanlineFormat::N1BitLsbPal:
@@ -707,8 +707,8 @@ bool ImplFastBitmapBlending( BitmapWriteAccess const & rDstWA,
     const BitmapBuffer& rSrc = *rSrcRA.ImplGetBitmapBuffer();
     const BitmapBuffer& rMsk = *rMskRA.ImplGetBitmapBuffer();
 
-    const ScanlineFormat nSrcFormat = rSrc.mnFormat & ~ScanlineFormat::TopDown;
-    const ScanlineFormat nDstFormat = rDst.mnFormat & ~ScanlineFormat::TopDown;
+    const ScanlineFormat nSrcFormat = RemoveScanline(rSrc.mnFormat);
+    const ScanlineFormat nDstFormat = RemoveScanline(rDst.mnFormat);
 
     // accelerated conversions for 16bit colormasks with non-565 format are not yet implemented
     if( nSrcFormat & (ScanlineFormat::N16BitTcLsbMask | ScanlineFormat::N16BitTcMsbMask) )
@@ -769,7 +769,7 @@ bool ImplFastBitmapBlending( BitmapWriteAccess const & rDstWA,
 
 bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
 {
-    const ScanlineFormat nDstFormat = rDst.mnFormat & ~ScanlineFormat::TopDown;
+    const ScanlineFormat nDstFormat = RemoveScanline(rDst.mnFormat);
 
     // erasing a bitmap is often just a byte-wise memory fill
     bool bByteFill = true;
