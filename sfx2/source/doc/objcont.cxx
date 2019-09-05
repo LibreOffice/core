@@ -256,7 +256,7 @@ void SfxObjectShell::UpdateTime_Impl(
         }
         else if (nDays<=31)
         {
-            // If time of working without save greater then 1 month (!) ....
+            // If time of working without save greater then 1 month (!)...
             // we add 0 to aOldTime!
 
             // If 1 or up to 31 days between now and last editing - calculate time indirectly.

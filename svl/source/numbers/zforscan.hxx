@@ -190,7 +190,7 @@ private: // Private section
     sal_uInt16 nResultStringsCnt;               // Result symbol count
     SvNumFormatType eScannedType;               // Type according to scan
     bool bThousand;                             // With thousands marker
-    sal_uInt16 nThousand;                       // Counts .... series
+    sal_uInt16 nThousand;                       // Counts ... series
     sal_uInt16 nCntPre;                         // Counts digits of integral part
     sal_uInt16 nCntPost;                        // Counts digits of fractional part
     sal_uInt16 nCntExp;                         // Counts exponent digits AM/PM

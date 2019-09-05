@@ -349,7 +349,7 @@ void SvtModuleOptions_Impl::ImplCommit()
     OUString                                 sBasePath;
     for( FactoryInfo & rInfo : m_lFactories )
     {
-        // These path is used to build full qualified property names ....
+        // These path is used to build full qualified property names...
         // See pInfo->getChangedProperties() for further information
         sBasePath  = PATHSEPARATOR + rInfo.getFactory() + PATHSEPARATOR;
 
@@ -358,7 +358,7 @@ void SvtModuleOptions_Impl::ImplCommit()
         nRealCount += lChangedProperties.getLength();
     }
     // Resize commit list to real size.
-    // If nothing to do - suppress calling of configuration ...
+    // If nothing to do - suppress calling of configuration...
     // It could be too expensive :-)
     if( nRealCount > 0 )
     {

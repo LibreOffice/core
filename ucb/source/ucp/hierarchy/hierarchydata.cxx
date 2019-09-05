@@ -951,7 +951,7 @@ bool HierarchyEntry::next( iterator const & it )
 OUString HierarchyEntry::createPathFromHierarchyURL(
     const HierarchyUri& rURI )
 {
-    // Transform path....
+    // Transform path...
     // folder/subfolder/subsubfolder
     //      --> ['folder']/Children/['subfolder']/Children/['subsubfolder']
 

@@ -455,8 +455,8 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
     DBG_ASSERT(/*(0 == m_nPeerCreationLevel) && */!mbCreatingPeer, "FmXGridControl::createPeer : recursion!");
         // I think this should never assert, now that we're using the base class' mbCreatingPeer in addition to
         // our own m_nPeerCreationLevel
-        // But I'm not sure as I don't _fully_ understand the underlying toolkit implementations ....
-        // (if this asserts, we still need m_nPeerCreationLevel. If not, we could omit it ....)
+        // But I'm not sure as I don't _fully_ understand the underlying toolkit implementations...
+        // (if this asserts, we still need m_nPeerCreationLevel. If not, we could omit it...)
         // 14.05.2001 - 86836 - frank.schoenheit@germany.sun.com
 
     // TODO: why the hell this whole class does not use any mutex?
@@ -1558,8 +1558,8 @@ void FmXGridPeer::addColumnListeners(const Reference< XPropertySet >& xCol)
 
 void FmXGridPeer::removeColumnListeners(const Reference< XPropertySet >& xCol)
 {
-    // the same props as in addColumnListeners ... linux has problems with global static UStrings, so
-    // we have to do it this way ....
+    // the same props as in addColumnListeners... linux has problems with global static UStrings, so
+    // we have to do it this way...
     static const OUStringLiteral aPropsListenedTo[] =
     {
         FM_PROP_LABEL, FM_PROP_WIDTH, FM_PROP_HIDDEN, FM_PROP_ALIGN,

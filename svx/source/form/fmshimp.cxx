@@ -514,7 +514,7 @@ bool IsSearchableControl( const css::uno::Reference< css::uno::XInterface>& _rxC
 bool FmXBoundFormFieldIterator::ShouldStepInto(const Reference< XInterface>& _rContainer) const
 {
     if (_rContainer == m_xStartingPoint)
-        // would be quite stupid to step over the root ....
+        // would be quite stupid to step over the root...
         return true;
 
     return Reference< XControlModel>(_rContainer, UNO_QUERY).is();
@@ -3438,7 +3438,7 @@ void FmXFormShell::CreateExternalView_Lock()
                     "FmXFormShell::CreateExternalView : inconsistent radio descriptions !");
                 sal_Int16 nPosition = (*aOffset).second;
                 nPosition = nPosition + nOffset;
-                    // we already inserted nOffset additional columns ....
+                    // we already inserted nOffset additional columns...
                 pDispatchArgs->Value <<= nPosition;
                 ++pDispatchArgs;
 

@@ -5399,7 +5399,7 @@ void Test::testFuncVLOOKUP()
     // Start over again.
     clearSheet(m_pDoc, 0);
 
-    // Set A,B,....,G to A1:A7.
+    // Set A,B,...,G to A1:A7.
     m_pDoc->SetString(ScAddress(0,0,0), "A");
     m_pDoc->SetString(ScAddress(0,1,0), "B");
     m_pDoc->SetString(ScAddress(0,2,0), "C");

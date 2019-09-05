@@ -30,7 +30,7 @@ module com { module sun { module star { module script {
     <p>For example where ExampleObject is an instance of an Object that
     supports this interface which returns the default method name
     "defaultMethod".A scripting engine could use this information to support
-    syntax like <p>"ExampleObject( Param1 .... ParamN )"</p>
+    syntax like <p>"ExampleObject( Param1 ... ParamN )"</p>
     which would be equivalent to writing
     <p>"ExampleObject.defaultMethod( Param1 ... ParamN )"</p>
 */

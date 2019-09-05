@@ -43,12 +43,12 @@ namespace toolkit
 
 
 static void lcl_throwIllegalArgumentException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
+{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this...
     throw IllegalArgumentException();
 }
 
 static void lcl_throwIndexOutOfBoundsException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
+{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this...
     throw IndexOutOfBoundsException();
 }
 

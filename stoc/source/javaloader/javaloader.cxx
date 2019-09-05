@@ -337,7 +337,7 @@ static css::uno::Reference<XInterface> JavaComponentLoader_CreateInstance(const 
     try {
         MutexGuard guard( getInitMutex() );
         // The javaloader is never destroyed and there can be only one!
-        // Note that the first context wins ....
+        // Note that the first context wins...
         static css::uno::Reference< XInterface > xStaticRef = *new JavaComponentLoader(xCtx);
         xRet = xStaticRef;
     }

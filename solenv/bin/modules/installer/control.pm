@@ -38,7 +38,7 @@ sub check_needed_files_in_path
 
     foreach $onefile ( @{$filesref} )
     {
-        installer::logger::print_message( "...... searching $onefile ..." );
+        installer::logger::print_message( "... searching $onefile ..." );
 
         my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$onefile, $installer::globals::patharray , 0);
 
@@ -105,7 +105,7 @@ sub check_system_path
 
     foreach $onefile ( @needed_files_in_path )
     {
-        installer::logger::print_message( "...... searching $onefile ..." );
+        installer::logger::print_message( "... searching $onefile ..." );
 
         my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$onefile, $patharrayref , 0);
 

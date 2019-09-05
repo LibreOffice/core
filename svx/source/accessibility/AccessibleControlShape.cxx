@@ -186,7 +186,7 @@ void AccessibleControlShape::Init()
         // for any component, which supports _exactly_ the same interfaces as the component. In addition, it can
         // be aggregated, as by definition the proxy's ref count is exactly 1 when returned from the factory.
         // Sounds better. Though this yields the problem of slightly degraded performance, it's the only solution
-        // I'm aware of at the moment .....
+        // I'm aware of at the moment...
 
         // get the control which belongs to our model (relative to our view)
         const OutputDevice* pViewWindow = maShapeTreeInfo.GetDevice();
@@ -631,7 +631,7 @@ void SAL_CALL AccessibleControlShape::disposing()
     m_xModelPropsMeta.clear();
     m_aControlContext = WeakReference< XAccessibleContext >();
 
-    // stop listening at the control container (should never be necessary here, but who knows ....)
+    // stop listening at the control container (should never be necessary here, but who knows...)
     if ( m_bWaitingForControl )
     {
         OSL_FAIL( "AccessibleControlShape::disposing: this should never happen!" );

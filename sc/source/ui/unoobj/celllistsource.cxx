@@ -117,7 +117,7 @@ namespace calc
     void SAL_CALL OCellListSource::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         OSL_ENSURE( _nHandle == PROP_HANDLE_RANGE_ADDRESS, "OCellListSource::getFastPropertyValue: invalid handle!" );
-            // we only have this one property ....
+            // we only have this one property...
 
         _rValue <<= getRangeAddress( );
     }

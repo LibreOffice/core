@@ -592,7 +592,7 @@ void XclExpXmlPivotTableManager::Initialize()
         // Get the cache ID for this pivot table.
         CacheIdMapType::iterator itCache = maCacheIdMap.find(&rDPObj);
         if (itCache == maCacheIdMap.end())
-            // No cache ID found.  Something is wrong here....
+            // No cache ID found.  Something is wrong here...
             continue;
 
         sal_Int32 nCacheId = itCache->second;

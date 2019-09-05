@@ -95,7 +95,7 @@ namespace svx
             OSL_FAIL("OColumnTransferable::OColumnTransferable: could not collect essential data source attributes !");
         }
 
-        // If the data source is an SQL-statement and simple enough (means "select <field list> from <table> where ....")
+        // If the data source is an SQL-statement and simple enough (means "select <field list> from <table> where...")
         // we are able to fake the drag information we are about to create.
         if (bTryToParse && (CommandType::COMMAND == nCommandType))
         {
@@ -309,7 +309,7 @@ namespace svx
             return true;
         }
 
-        // check if we have a (string) format we can use ....
+        // check if we have a (string) format we can use...
         SotClipboardFormatId   nRecognizedFormat = SotClipboardFormatId::NONE;
         if (_rData.HasFormat(SotClipboardFormatId::SBA_FIELDDATAEXCHANGE))
             nRecognizedFormat = SotClipboardFormatId::SBA_FIELDDATAEXCHANGE;

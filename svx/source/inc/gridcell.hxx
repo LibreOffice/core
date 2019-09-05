@@ -86,7 +86,7 @@ private:
     sal_Int16               m_nTypeId;
     sal_uInt16 const        m_nId;
     sal_Int16               m_nFieldPos;
-    sal_Int16               m_nAlign;                       // specified with TXT_ALIGN_LEFT ....
+    sal_Int16               m_nAlign;                       // specified with TXT_ALIGN_LEFT...
     bool                m_bReadOnly : 1;
     bool                m_bAutoValue : 1;
     bool                m_bInSave : 1;

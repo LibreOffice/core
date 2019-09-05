@@ -38,7 +38,7 @@ import static org.junit.Assert.*;
 /** Start up and shut down an OOo instance.
 
     Details about the OOo instance are tunneled in via
-    org.openoffice.test.arg.... system properties.
+    org.openoffice.test.arg... system properties.
 */
 
 

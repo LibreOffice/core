@@ -270,7 +270,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
                                   static_cast<FmGridControl*>(GetParent())->getContext(), nullptr );
             }
             catch(NoSuchElementException&)
-            {   // allowed, means sDatasource isn't a valid data source name ....
+            {   // allowed, means sDatasource isn't a valid data source name...
             }
             catch(Exception&)
             {
@@ -901,7 +901,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);
             xCurCol->setPropertyValue(FM_PROP_HIDDEN, makeAny(false));
         }
-        // TODO : there must be a more clever way to do this ....
+        // TODO : there must be a more clever way to do this...
         // with the above the view is updated after every single model update ...
     }
     else if (nExecutionResult>0 && nExecutionResult<=16)
@@ -1852,11 +1852,11 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
     }
     SetUpdateMode(true);
 
-    // if one of the SeekCursor-calls failed ....
+    // if one of the SeekCursor-calls failed...
     aBookmarks.realloc(i);
 
     // (the alternative : while collecting the bookmarks lock our propertyChanged, this should resolve both our problems.
-    // but this would be incompatible as we need a locking flag, then ...)
+    // but this would be incompatible as we need a locking flag, then...)
 
     return aBookmarks;
 }

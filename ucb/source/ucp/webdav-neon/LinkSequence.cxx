@@ -195,7 +195,7 @@ bool LinkSequence::createFromXML( const OString & rInData,
 bool LinkSequence::toXML( const uno::Sequence< ucb::Link > & rInData,
                           OUString & rOutData )
 {
-    // <link><src>value</src><dst>value</dst></link><link><src>....
+    // <link><src>value</src><dst>value</dst></link><link><src>...
 
     for ( const auto& rLink : rInData )
     {

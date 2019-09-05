@@ -347,7 +347,7 @@ endef
 # around or delete files (typically because the file causes build
 # problems in the original location, c.f. clucene). This is doable by
 # using -E with patch (we use GNU patch anyway), but it would mean an
-# additional patch to maintain....
+# additional patch to maintain...
 #
 # gb_UnpackedTarball_set_post_action unpacked shell-command
 define gb_UnpackedTarball_set_post_action

@@ -137,7 +137,7 @@ namespace svxform
         SAL_WARN( "svx", "lcl_implMapIntValue: could not convert the integer value "
                     << _nValue <<  " !");
         static const sal_Char* const s_pDummy = "";
-            // just as a fallback ....
+            // just as a fallback...
         return s_pDummy;
     }
 

@@ -628,7 +628,7 @@ namespace svt { namespace table
                     WB_DRAG | ( _bHorizontal ? WB_HSCROLL : WB_VSCROLL )
                 );
                 _rpBar->SetScrollHdl( _rScrollHandler );
-                // get some speed into the scrolling ....
+                // get some speed into the scrolling...
                 lcl_setButtonRepeat( *_rpBar );
             }
 
