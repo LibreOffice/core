@@ -296,8 +296,8 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
     SAL_WARN_IF(!pItem, "sal.file", "pItem is nullptr");
 
     DirectoryImpl* pDirImpl = static_cast<DirectoryImpl*>(pDirectory);
-    rtl_uString* ustrFileName = nullptr;
-    rtl_uString* ustrFilePath = nullptr;
+    OUString ustrFileName;
+    OUString ustrFilePath;
     struct dirent* pEntry;
 
     if ((pDirectory == nullptr) || (pItem == nullptr))
@@ -331,12 +331,11 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
 #endif
 
     /* convert file name to unicode */
-    rtl_string2UString(&ustrFileName, filename, strlen(filename),
+    rtl_string2UString(&ustrFileName.pData, filename, strlen(filename),
                        osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
-    assert(ustrFileName);
+    assert(ustrFileName.pData);
 
-    osl_systemPathMakeAbsolutePath(pDirImpl->ustrPath.pData, ustrFileName, &ustrFilePath);
-    rtl_uString_release(ustrFileName);
+    osl::systemPathMakeAbsolutePath(pDirImpl->ustrPath, ustrFileName, ustrFilePath);
 
     DirectoryItem_Impl* pImpl = static_cast< DirectoryItem_Impl* >(*pItem);
     if (pImpl)
@@ -345,12 +344,11 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
         pImpl = nullptr;
     }
 #ifdef _DIRENT_HAVE_D_TYPE
-    pImpl = new DirectoryItem_Impl(ustrFilePath, pEntry->d_type);
+    pImpl = new DirectoryItem_Impl(ustrFilePath.pData, pEntry->d_type);
 #else
-    pImpl = new DirectoryItem_Impl(ustrFilePath);
+    pImpl = new DirectoryItem_Impl(ustrFilePath.pData);
 #endif /* _DIRENT_HAVE_D_TYPE */
     *pItem = pImpl;
-    rtl_uString_release(ustrFilePath);
 
     return osl_File_E_None;
 }
