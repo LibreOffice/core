@@ -465,7 +465,7 @@ namespace pcr
 
     void ControlCharacterDialog::createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, SfxItemPool*& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults)
     {
-        // just to be sure ....
+        // just to be sure...
         _rpSet = nullptr;
         _rpPool = nullptr;
         _rpDefaults = nullptr;

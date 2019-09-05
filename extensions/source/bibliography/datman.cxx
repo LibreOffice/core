@@ -149,7 +149,7 @@ static Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
         xReturn = xSupplyCols->getColumns();
 
     if (!xReturn.is() || !xReturn->getElementNames().hasElements())
-    {   // no ....
+    {   // no...
         xReturn = nullptr;
         // -> get the table the form is bound to and ask it for their columns
         Reference< XTablesSupplier >  xSupplyTables( getConnection( _rxForm ), UNO_QUERY );

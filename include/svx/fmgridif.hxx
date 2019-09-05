@@ -364,7 +364,7 @@ private:
     std::unique_ptr<css::uno::Reference< css::frame::XDispatch >[]>   m_pDispatchers;
         // one dispatcher for each supported url
         // (I would like to have a vector here but including the stl in an exported file seems
-        // very risky to me ....)
+        // very risky to me...)
 
     class GridListenerDelegator;
     friend class GridListenerDelegator;

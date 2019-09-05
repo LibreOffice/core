@@ -2352,7 +2352,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                             aClipRect.Intersection( pView->GetVisArea() );
                             if ( !aClipRect.IsEmpty() )
                             {
-                                // convert to window coordinates ....
+                                // convert to window coordinates...
                                 aClipRect.SetPos( pView->pImpEditView->GetWindowPos( aClipRect.TopLeft() ) );
                                 pView->pImpEditView->InvalidateAtWindow(aClipRect);
                             }
@@ -2365,7 +2365,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                     aInvalidRect = tools::Rectangle();
                 }
             }
-            // After two corrected nodes give up the control ...
+            // After two corrected nodes give up the control...
             nInvalids++;
             if ( bInterruptible && ( nInvalids >= 2 ) )
             {

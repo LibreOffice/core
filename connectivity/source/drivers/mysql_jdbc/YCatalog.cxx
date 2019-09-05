@@ -55,7 +55,7 @@ void OMySQLCatalog::refreshTables()
     Sequence<OUString> sTableTypes(3);
     sTableTypes[0] = "VIEW";
     sTableTypes[1] = "TABLE";
-    sTableTypes[2] = "%"; // just to be sure to include anything else ....
+    sTableTypes[2] = "%"; // just to be sure to include anything else...
 
     refreshObjects(sTableTypes, aVector);
 

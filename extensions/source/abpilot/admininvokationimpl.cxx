@@ -90,7 +90,7 @@ namespace abp
                 // As this wizard is intended to run on the first office start, it is very likely that the
                 // context needs to be freshly created
                 // Thus, we access the context here (within the WaitCursor), which means the user sees a waitcursor
-                // while his/her office blocks a few seconds ....
+                // while his/her office blocks a few seconds...
                 DriverManager::create( m_xContext );
             }
 

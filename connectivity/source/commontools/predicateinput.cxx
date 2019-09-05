@@ -276,7 +276,7 @@ namespace dbtools
         if ( _rxField.is() )
         {
             // The following is mostly stolen from the former implementation in the parameter dialog
-            // (dbaccess/source/ui/dlg/paramdialog.cxx). I do not fully understand this .....
+            // (dbaccess/source/ui/dlg/paramdialog.cxx). I do not fully understand this...
 
             OUString sError;
             std::unique_ptr<OSQLParseNode> pParseNode = implPredicateTree( sError, _rPredicateValue, _rxField );
@@ -340,7 +340,7 @@ namespace dbtools
         if ( _rxField.is() )
         {
             // The following is mostly stolen from the former implementation in the parameter dialog
-            // (dbaccess/source/ui/dlg/paramdialog.cxx). I do not fully understand this .....
+            // (dbaccess/source/ui/dlg/paramdialog.cxx). I do not fully understand this...
 
             OUString sError;
             std::unique_ptr<OSQLParseNode> pParseNode = implPredicateTree( sError, _rPredicateValue, _rxField );

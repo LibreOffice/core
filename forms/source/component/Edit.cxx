@@ -276,7 +276,7 @@ OEditModel::OEditModel( const OEditModel* _pOriginal, const Reference<XComponent
     // Things as the format key, it's type, and such, depend on the field being part of a loaded form
     // (they're initialized in onConnectedDbColumn). Even if the original object _is_ part of such a form, we ourself
     // certainly aren't, so these members are defaulted. If we're inserted into a form which is already loaded,
-    // they will be set to new values, anyway ....
+    // they will be set to new values, anyway...
 }
 
 

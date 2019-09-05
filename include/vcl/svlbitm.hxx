@@ -65,7 +65,7 @@ private:
     long                    nHeight;
     std::unique_ptr<SvLBoxButtonData_Impl> pImpl;
     bool                    bDataOk;
-    std::vector<Image>      aBmps;  // indices s. constants BMP_ ....
+    std::vector<Image>      aBmps;  // indices s. constants BMP_...
 
     VCL_DLLPRIVATE void     SetWidthAndHeight();
     VCL_DLLPRIVATE void     InitData( bool _bRadioBtn, const Control* pControlForSettings );

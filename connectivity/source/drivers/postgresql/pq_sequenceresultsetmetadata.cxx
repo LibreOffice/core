@@ -167,7 +167,7 @@ sal_Bool SequenceResultSetMetaData::isWritable( sal_Int32 column )
 
 sal_Bool SequenceResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
 {
-    return isWritable(column); // uhh, now it becomes really esoteric ....
+    return isWritable(column); // uhh, now it becomes really esoteric...
 }
 OUString SequenceResultSetMetaData::getColumnServiceName( sal_Int32 /* column */ )
 {

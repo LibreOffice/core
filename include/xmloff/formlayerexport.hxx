@@ -122,7 +122,7 @@ namespace xmloff
             expect the forms collection to be stored like
                 <listing>
                     &lt;Forms&gt;
-                        ....    // all the forms stuff here
+                        ...    // all the forms stuff here
                     &lt;/Forms&gt;
                 </listing>
             you have to start the Forms element yourself.</p>

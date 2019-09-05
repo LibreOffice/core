@@ -3015,7 +3015,7 @@ void SAL_CALL ODatabaseForm::rowSetChanged(const EventObject& /*event*/)
     // if our parent is an ODatabaseForm, too, then after this rowSetChanged we'll get a "reloaded"
     // or a "loaded" event.
     // If somebody gave us another parent which is an XRowSet but doesn't handle an execute as
-    // "load" respectively "reload" ... can't do anything ....
+    // "load" respectively "reload"... can't do anything...
 }
 
 

@@ -2383,7 +2383,7 @@ sal_Int32 EditEngine::FindParagraph( long nDocPosY )
 EPosition EditEngine::FindDocPosition( const Point& rDocPos ) const
 {
     EPosition aPos;
-    // From the point of the API, this is const....
+    // From the point of the API, this is const...
     EditPaM aPaM = const_cast<EditEngine*>(this)->pImpEditEngine->GetPaM( rDocPos, false );
     if ( aPaM.GetNode() )
     {
@@ -2716,7 +2716,7 @@ bool EditEngine::HasValidData( const css::uno::Reference< css::datatransfer::XTr
 
     if ( rTransferable.is() )
     {
-        // Every application that copies rtf or any other text format also copies plain text into the clipboard....
+        // Every application that copies rtf or any other text format also copies plain text into the clipboard...
         datatransfer::DataFlavor aFlavor;
         SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
         bValidData = rTransferable->isDataFlavorSupported( aFlavor );

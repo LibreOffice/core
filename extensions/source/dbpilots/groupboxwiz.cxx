@@ -136,7 +136,7 @@ namespace dbp
                 break;
         }
 
-        // setting the def button .... to be done before the base class is called, too, 'cause the base class
+        // setting the def button... to be done before the base class is called, too, 'cause the base class
         // calls the pages, which are allowed to override our def button behaviour
         defaultButton(GBW_STATE_FINALIZE == _nState ? WizardButtonFlags::FINISH : WizardButtonFlags::NEXT);
 

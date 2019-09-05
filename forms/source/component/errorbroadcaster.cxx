@@ -44,7 +44,7 @@ namespace frm
     {
         SAL_WARN_IF( !m_rBHelper.bDisposed && !m_rBHelper.bInDispose, "forms.component",
             "OErrorBroadcaster::~OErrorBroadcaster: not disposed!" );
-        // herein, we don't have a chance to do the dispose ourself ....
+        // herein, we don't have a chance to do the dispose ourself...
 
         SAL_WARN_IF( m_aErrorListeners.getLength(), "forms.component",
             "OErrorBroadcaster::~OErrorBroadcaster: still have listeners!" );

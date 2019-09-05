@@ -1062,7 +1062,7 @@ try
             bool bIsString = aEffectiveDefault.getValueType().getTypeClass() == TypeClass_STRING;
             OSL_ENSURE(bIsString || aEffectiveDefault.getValueType().getTypeClass() == TypeClass_DOUBLE,
                 "TransferFormComponentProperties : invalid property type !");
-                // The Effective-Properties should always be void or string or double ....
+                // The Effective-Properties should always be void or string or double...
 
             if (hasProperty(sPropDefaultDate, xNewProps) && !bIsString)
             {   // (to convert an OUString into a date will not always succeed, because it might be bound to a text-column,
