@@ -203,6 +203,7 @@ public:
     void testTdf125360_2();
     void testSmartArtPreserve();
     void testTdf127372();
+    void testTdf127379();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -289,6 +290,7 @@ public:
     CPPUNIT_TEST(testTdf125360_2);
     CPPUNIT_TEST(testSmartArtPreserve);
     CPPUNIT_TEST(testTdf127372);
+    CPPUNIT_TEST(testTdf127379);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2260,6 +2262,32 @@ void SdOOXMLExportTest2::testTdf127372()
     xShape->getPropertyValue("FillTransparenceGradient") >>= aTransparenceGradient;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aTransparenceGradient.StartColor);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aTransparenceGradient.EndColor);
+}
+
+void SdOOXMLExportTest2::testTdf127379()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf127379.odp"), ODP);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+    xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDoc->getDrawPages()->getCount() );
+
+    uno::Reference< drawing::XDrawPage > xPage( getPage( 0, xDocShRef ) );
+    uno::Reference< beans::XPropertySet > xPropSet( xPage, uno::UNO_QUERY );
+
+    uno::Any aAny = xPropSet->getPropertyValue( "Background" );
+    CPPUNIT_ASSERT_MESSAGE("Slide background is missing", aAny.hasValue());
+    uno::Reference< beans::XPropertySet > aXBackgroundPropSet;
+    aAny >>= aXBackgroundPropSet;
+
+    drawing::FillStyle aFillStyle(drawing::FillStyle_NONE);
+    aXBackgroundPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, aFillStyle);
+
+    awt::Gradient aGradient;
+    CPPUNIT_ASSERT(aXBackgroundPropSet->getPropertyValue("FillGradient") >>= aGradient);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF0000), aGradient.StartColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x2A6099), aGradient.EndColor);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
