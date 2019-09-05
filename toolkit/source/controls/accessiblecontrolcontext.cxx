@@ -67,7 +67,7 @@ namespace toolkit
         OContextEntryGuard aGuard( this );
 
         // retrieve the model of the control
-        OSL_ENSURE( !m_xControlModel.is(), "OAccessibleControlContext::Init: already know a control model....!???" );
+        OSL_ENSURE( !m_xControlModel.is(), "OAccessibleControlContext::Init: already know a control model...!???" );
 
         Reference< awt::XControl > xControl( _rxCreator, UNO_QUERY );
         if ( xControl.is() )
@@ -257,7 +257,7 @@ namespace toolkit
         awt::Rectangle aBounds( 0, 0, 0, 0 );
         if ( xWindow.is() )
         {
-            // ugly, but .... though the XWindow has a getPosSize, it is impossible to determine the
+            // ugly, but... though the XWindow has a getPosSize, it is impossible to determine the
             // parent which this position/size is relative to. This means we must tunnel UNO and ask the
             // implementation
             vcl::Window* pVCLParent = pVCLWindow ? pVCLWindow->GetParent() : nullptr;

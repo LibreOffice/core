@@ -2859,7 +2859,7 @@ void ScExportTest::testSharedFormulaExportXLSX()
                 }
             }
 
-            // C2:C7 should show 10,20,....,60.
+            // C2:C7 should show 10,20,...,60.
             fExpected = 10.0;
             for (SCROW i = 1; i <= 6; ++i, fExpected+=10.0)
             {
@@ -2924,7 +2924,7 @@ void ScExportTest::testSharedFormulaStringResultExportXLSX()
         bool checkContent( const ScDocument& rDoc )
         {
             {
-                // B2:B7 should show A,B,....,F.
+                // B2:B7 should show A,B,...,F.
                 const char* const expected[] = { "A", "B", "C", "D", "E", "F" };
                 for (SCROW i = 0; i <= 5; ++i)
                 {
@@ -2940,7 +2940,7 @@ void ScExportTest::testSharedFormulaStringResultExportXLSX()
             }
 
             {
-                // C2:C7 should show AA,BB,....,FF.
+                // C2:C7 should show AA,BB,...,FF.
                 const char* const expected[] = { "AA", "BB", "CC", "DD", "EE", "FF" };
                 for (SCROW i = 0; i <= 5; ++i)
                 {

@@ -1485,7 +1485,7 @@ ScVbaRange::getValue( ValueGetter& valueGetter)
 uno::Any SAL_CALL
 ScVbaRange::getValue()
 {
-    // #TODO code within the test below "if ( m_Areas.... " can be removed
+    // #TODO code within the test below "if ( m_Areas... " can be removed
     // Test is performed only because m_xRange is NOT set to be
     // the first range in m_Areas ( to force failure while
     // the implementations for each method are being updated )
@@ -1564,7 +1564,7 @@ ScVbaRange::Clear()
 void
 ScVbaRange::ClearContents( sal_Int32 nFlags, bool bFireEvent )
 {
-    // #TODO code within the test below "if ( m_Areas.... " can be removed
+    // #TODO code within the test below "if ( m_Areas... " can be removed
     // Test is performed only because m_xRange is NOT set to be
     // the first range in m_Areas ( to force failure while
     // the implementations for each method are being updated )
@@ -1629,7 +1629,7 @@ ScVbaRange::setFormulaValue( const uno::Any& rFormula, formula::FormulaGrammar::
 uno::Any
 ScVbaRange::getFormulaValue( formula::FormulaGrammar::Grammar eGram )
 {
-    // #TODO code within the test below "if ( m_Areas.... " can be removed
+    // #TODO code within the test below "if ( m_Areas... " can be removed
     // Test is performed only because m_xRange is NOT set to be
     // the first range in m_Areas ( to force failure while
     // the implementations for each method are being updated )
@@ -1695,7 +1695,7 @@ ScVbaRange::getCount()
 sal_Int32
 ScVbaRange::getRow()
 {
-    // #TODO code within the test below "if ( m_Areas.... " can be removed
+    // #TODO code within the test below "if ( m_Areas... " can be removed
     // Test is performed only because m_xRange is NOT set to be
     // the first range in m_Areas ( to force failure while
     // the implementations for each method are being updated )
@@ -1711,7 +1711,7 @@ ScVbaRange::getRow()
 sal_Int32
 ScVbaRange::getColumn()
 {
-    // #TODO code within the test below "if ( m_Areas.... " can be removed
+    // #TODO code within the test below "if ( m_Areas... " can be removed
     // Test is performed only because m_xRange is NOT set to be
     // the first range in m_Areas ( to force failure while
     // the implementations for each method are being updated )
@@ -1819,7 +1819,7 @@ ScVbaRange::FillDown()
 OUString
 ScVbaRange::getText()
 {
-    // #TODO code within the test below "if ( m_Areas.... " can be removed
+    // #TODO code within the test below "if ( m_Areas... " can be removed
     // Test is performed only because m_xRange is NOT set to be
     // the first range in m_Areas ( to force failure while
     // the implementations for each method are being updated )
@@ -1871,7 +1871,7 @@ ScVbaRange::Offset( const ::uno::Any &nRowOff, const uno::Any &nColOff )
 uno::Reference< excel::XRange >
 ScVbaRange::CurrentRegion()
 {
-    // #TODO code within the test below "if ( m_Areas.... " can be removed
+    // #TODO code within the test below "if ( m_Areas... " can be removed
     // Test is performed only because m_xRange is NOT set to be
     // the first range in m_Areas ( to force failure while
     // the implementations for each method are being updated )
@@ -1892,7 +1892,7 @@ ScVbaRange::CurrentRegion()
 uno::Reference< excel::XRange >
 ScVbaRange::CurrentArray()
 {
-    // #TODO code within the test below "if ( m_Areas.... " can be removed
+    // #TODO code within the test below "if ( m_Areas... " can be removed
     // Test is performed only because m_xRange is NOT set to be
     // the first range in m_Areas ( to force failure while
     // the implementations for each method are being updated )
@@ -1912,7 +1912,7 @@ ScVbaRange::CurrentArray()
 uno::Any
 ScVbaRange::getFormulaArray()
 {
-    // #TODO code within the test below "if ( m_Areas.... " can be removed
+    // #TODO code within the test below "if ( m_Areas... " can be removed
     // Test is performed only because m_xRange is NOT set to be
     // the first range in m_Areas ( to force failure while
     // the implementations for each method are being updated )
@@ -1950,7 +1950,7 @@ ScVbaRange::getFormulaArray()
 void
 ScVbaRange::setFormulaArray(const uno::Any& rFormula)
 {
-    // #TODO code within the test below "if ( m_Areas.... " can be removed
+    // #TODO code within the test below "if ( m_Areas... " can be removed
     // Test is performed only because m_xRange is NOT set to be
     // the first range in m_Areas ( to force failure while
     // the implementations for each method are being updated )
@@ -1986,7 +1986,7 @@ ScVbaRange::setFormulaArray(const uno::Any& rFormula)
 OUString
 ScVbaRange::Characters(const uno::Any& Start, const uno::Any& Length)
 {
-    // #TODO code within the test below "if ( m_Areas.... " can be removed
+    // #TODO code within the test below "if ( m_Areas... " can be removed
     // Test is performed only because m_xRange is NOT set to be
     // the first range in m_Areas ( to force failure while
     // the implementations for each method are being updated )
@@ -2109,7 +2109,7 @@ ScVbaRange::Font()
 uno::Reference< excel::XRange >
 ScVbaRange::Cells( const uno::Any &nRowIndex, const uno::Any &nColumnIndex )
 {
-    // #TODO code within the test below "if ( m_Areas.... " can be removed
+    // #TODO code within the test below "if ( m_Areas... " can be removed
     // Test is performed only because m_xRange is NOT set to be
     // the first range in m_Areas ( to force failure while
     // the implementations for each method are being updated )

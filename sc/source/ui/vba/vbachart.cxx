@@ -547,7 +547,7 @@ void SAL_CALL
 ScVbaChart::Activate()
 {
     // #TODO how are Chart sheets handled ( I know we don't even consider
-    // them in the worksheets/sheets collections ), but.....???
+    // them in the worksheets/sheets collections ), but...???
     // note: in vba for excel the parent of a Chart sheet is a workbook,
     // e.g. 'ThisWorkbook'
     uno::Reference< XHelperInterface > xParent( getParent() );

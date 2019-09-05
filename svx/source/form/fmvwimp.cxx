@@ -692,7 +692,7 @@ IMPL_LINK_NOARG(FmXFormView, OnActivate, void*, void)
 
     if ( !m_pView )
     {
-        OSL_FAIL( "FmXFormView::OnActivate: well .... seems we have a timing problem (the view already died)!" );
+        OSL_FAIL( "FmXFormView::OnActivate: well... seems we have a timing problem (the view already died)!" );
         return;
     }
 

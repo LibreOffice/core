@@ -44,7 +44,7 @@ static StringHashTable * getHashTable()
     return pInternPool;
 }
 
-// Better / smaller / faster hash set ....
+// Better / smaller / faster hash set...
 
 // TODO: add bottom bit-set list terminator to string list
 

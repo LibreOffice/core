@@ -1109,7 +1109,7 @@ void PPTWriter::ImplWriteNotes( sal_uInt32 nPageNum )
     mpPptEscherEx->OpenContainer( EPP_Notes );
     mpPptEscherEx->AddAtom( 8, EPP_NotesAtom, 1 );
     mpStrm->WriteUInt32( nPageNum + 0x100 )
-           .WriteUInt16( 3 )                                        // follow master ....
+           .WriteUInt16( 3 )                                        // follow master...
            .WriteUInt16( 0 );
 
     ImplCreateHeaderFooters( mXPagePropSet );

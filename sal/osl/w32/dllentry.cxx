@@ -44,7 +44,7 @@ startup and shutdown sequence looks like this:
 _pRawDllMain()
 _CRT_INIT()
 DllMain()
-....
+...
 DllMain()
 _CRT_INIT()
 _pRawDllMain()

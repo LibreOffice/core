@@ -219,7 +219,7 @@ sub check_system_path
 
     foreach $onefile ( @needed_files_in_path )
     {
-        print("...... searching $onefile ...");
+        print("... searching $onefile ...");
 
         my $fileref = get_sourcepath_from_filename_and_includepath(\$onefile, $patharrayref);
 
@@ -240,7 +240,7 @@ sub check_system_path
 
     foreach $onefile ( @optional_files_in_path )
     {
-        print("...... searching $onefile ...");
+        print("... searching $onefile ...");
 
         my $fileref = get_sourcepath_from_filename_and_includepath(\$onefile, $patharrayref);
 

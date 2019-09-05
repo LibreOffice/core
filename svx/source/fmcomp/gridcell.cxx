@@ -1307,7 +1307,7 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
                 // So if our LoadListener is called before the LoadListener of the model, this "else case" is
                 // allowed.
                 // Of course our property listener for the FormatKey property will notify us if the prop is changed,
-                // so this here isn't really bad ....
+                // so this here isn't really bad...
                 nFormatKey = 0;
             }
         }

@@ -57,12 +57,12 @@ namespace sfx2
 
     /**
 
-    Some general words about what's going on here ....
+    Some general words about what's going on here...
 
     <p>In our file open dialog, usually we display every filter we know. That's how it was before: every filter
     lead to an own line in the filter list box, e.g. "StarWriter 5.0 Document" or "Microsoft Word 97".</p>
 
-    <p>But then the PM came. And everything changed ....</p>
+    <p>But then the PM came. And everything changed...</p>
 
     <p>A basic idea are groups: Why simply listing all the single filters? Couldn't we draw nice separators
     between the filters which logically belong together? I.e. all the filters which open a document in StarWriter:
@@ -209,7 +209,7 @@ namespace sfx2
                 // we do not know this global class
                 OSL_FAIL( "ReadGlobalFilter::operator(): unknown filter name!" );
                 // TODO: perhaps we should be more tolerant - at the moment, the filter is dropped
-                // We could silently push_back it to the container ....
+                // We could silently push_back it to the container...
             }
             else
             {
@@ -487,7 +487,7 @@ namespace sfx2
             }
         }
         if ( pTokenLoop > pTokenStart )
-            // the last one ....
+            // the last one...
             aWildCards.emplace_back( pTokenStart, pTokenLoop - pTokenStart );
     }
 

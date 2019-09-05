@@ -255,10 +255,10 @@ public class UnoPkgContainer extends ParcelContainer {
             XTruncate xTrc = UnoRuntime.queryInterface(XTruncate.class, xos);
 
             if (xTrc != null) {
-                LogUtils.DEBUG("In writeUnoPackageDB() Truncating....");
+                LogUtils.DEBUG("In writeUnoPackageDB() Truncating...");
                 xTrc.truncate();
             } else {
-                LogUtils.DEBUG("In writeUnoPackageDB() CAN'T Truncate....");
+                LogUtils.DEBUG("In writeUnoPackageDB() CAN'T Truncate...");
             }
 
             os = new XOutputStreamWrapper(xos);

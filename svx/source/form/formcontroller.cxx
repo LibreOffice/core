@@ -3985,7 +3985,7 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent)
 void SAL_CALL FormController::invalidateFeatures( const Sequence< ::sal_Int16 >& Features )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    // for now, just copy the ids of the features, because ....
+    // for now, just copy the ids of the features, because...
     ::std::copy( Features.begin(), Features.end(),
         ::std::insert_iterator< ::std::set< sal_Int16 > >( m_aInvalidFeatures, m_aInvalidFeatures.begin() )
     );

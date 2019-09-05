@@ -104,7 +104,7 @@ public:
             This can be a node returned by GetConfigurationNode().
         @param rArguments
             The functor is called with arguments that are children of each
-            element of the container.  The set of children is specified  this
+            element of the container.  The set of children is specified in this
             list.
         @param rFunctor
             The functor to be executed for some or all of the elements in

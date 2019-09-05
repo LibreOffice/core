@@ -148,7 +148,7 @@ namespace sd { namespace colortoolpanel
         (void)i_rParentAccessible;
         return Reference< XAccessible >( m_xWindow, UNO_QUERY );
         // TODO: this is, strictly, not correct, as we ignore i_ParentAccessible here. If you are not doing a sample
-        // extension only, you'll want to do this correctly ....
+        // extension only, you'll want to do this correctly...
     }
 
     Reference< XResourceId > SAL_CALL SingleColorPanel::getResourceId(  ) throw (RuntimeException)

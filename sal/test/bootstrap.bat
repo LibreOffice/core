@@ -37,7 +37,7 @@ echo 6
 
 echo 7
 set MYBOOTSTRAPTESTVALUE=
-rem simply ignore the file ....
+rem simply ignore the file...
 .\testbootstrap default -env:INIFILENAME=
 
 echo 8

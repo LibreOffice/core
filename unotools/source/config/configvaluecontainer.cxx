@@ -125,7 +125,7 @@ namespace utl
         switch ( _rAccessor.getLocType() )
         {
             case LocationType::SimplyObjectInstance:
-                // a simple setValue ....
+                // a simple setValue...
                 _rData.setValue( _rAccessor.getLocation(), _rAccessor.getDataType() );
                 break;
 
@@ -224,7 +224,7 @@ namespace utl
     void OConfigurationValueContainer::registerExchangeLocation( const sal_Char* _pRelativePath,
         void* _pContainer, const Type& _rValueType )
     {
-        // checks ....
+        // checks...
         SAL_WARN_IF(!_pContainer, "unotools.config",
             "OConfigurationValueContainer::registerExchangeLocation: invalid container location!");
         SAL_WARN_IF(!( (TypeClass_CHAR      ==  _rValueType.getTypeClass( ) )

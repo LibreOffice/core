@@ -2262,7 +2262,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY )
             // #i40647# don't draw here if this is a recursive call
             // sometimes this is called recursively, because the Update call on the parent
             // (strangely) triggers another paint. Prevent a stack overflow here
-            // Yes, this is only fixing symptoms for the moment ....
+            // Yes, this is only fixing symptoms for the moment...
             // #i40647# / 2005-01-18 / frank.schoenheit@sun.com
             if ( !mpImpl->getDrawingOntoParent_ref() )
             {

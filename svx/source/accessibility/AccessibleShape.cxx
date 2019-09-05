@@ -1287,7 +1287,7 @@ OUString AccessibleShape::getObjectLink( const uno::Any& )
 sal_Int32 SAL_CALL AccessibleShape::getHyperLinkCount()
 {
     // MT: Introduced with IA2 CWS, but SvxAccessibleHyperlink was redundant to svx::AccessibleHyperlink which we introduced meanwhile.
-    // Code need to be adapted....
+    // Code need to be adapted...
     return 0;
 
     /*
@@ -1303,7 +1303,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
 {
     uno::Reference< XAccessibleHyperlink > xRet;
     // MT: Introduced with IA2 CWS, but SvxAccessibleHyperlink was redundant to svx::AccessibleHyperlink which we introduced meanwhile.
-    // Code need to be adapted....
+    // Code need to be adapted...
     /*
     SvxAccessibleHyperlink* pLink = new SvxAccessibleHyperlink(m_pShape,this);
     if (pLink->IsValidHyperlink())

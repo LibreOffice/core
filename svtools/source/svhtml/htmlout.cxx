@@ -889,7 +889,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
         if( JAVASCRIPT != eScriptType )
         {
             // MIB/MM: if it is not StarBasic, a // could be wrong.
-            // As the comment is removed during reading, it is not helping us....
+            // As the comment is removed during reading, it is not helping us...
             rStrm.WriteCharPtr( STARBASIC == eScriptType ? "' -->" : "// -->" )
                  .WriteCharPtr( SAL_NEWLINE_STRING );
         }

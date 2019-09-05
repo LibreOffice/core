@@ -3119,7 +3119,7 @@ bool DbGridControl::SaveModified()
     }
     else
     {
-        // reset the modified flag ....
+        // reset the modified flag...
         Controller()->SetModified();
     }
 
@@ -3401,7 +3401,7 @@ sal_uInt16 DbGridControl::GetColumnIdFromModelPos( sal_uInt16 nPos ) const
                 --nViewPos;
 
         DBG_ASSERT(pCol && GetColumnIdFromViewPos(nViewPos) == pCol->GetId(),
-            "DbGridControl::GetColumnIdFromModelPos : this isn't consistent .... did I misunderstand something ?");
+            "DbGridControl::GetColumnIdFromModelPos : this isn't consistent... did I misunderstand something ?");
     }
 #endif
     return pCol->GetId();
