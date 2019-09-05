@@ -553,10 +553,10 @@ public class _XTreeControl extends MultiMethodTest {
 
         boolean bOK = true;
 
-        log.println("add EditListener 1....");
+        log.println("add EditListener 1...");
         oObj.addTreeEditListener(mTreeEditListener1);
 
-        log.println("add EditListener 2....");
+        log.println("add EditListener 2...");
         oObj.addTreeEditListener(mTreeEditListener2);
 
         try {

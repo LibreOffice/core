@@ -64,7 +64,7 @@ typedef ::cppu::WeakComponentImplHelper<
  * the internal data table.
  *
  * <p>A range representation can be either '0', '1', '2', ..., or 'label 1',
- * 'label 2', ....</p>
+ * 'label 2', ...</p>
  */
 class UncachedDataSequence final :
         public ::comphelper::OMutexAndBroadcastHelper,

@@ -117,7 +117,7 @@ OUndoContainerAction::OUndoContainerAction(SdrModel& _rMod
 
 OUndoContainerAction::~OUndoContainerAction()
 {
-    // if we own the object ....
+    // if we own the object...
     Reference< XComponent > xComp( m_xOwnElement, UNO_QUERY );
     if ( xComp.is() )
     {

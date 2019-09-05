@@ -796,7 +796,7 @@ void WriteOnlyVars::checkIfWrittenTo(const VarDecl* varDecl, const Expr* memberE
 {
     // if we're inside a block that looks like
     //   if (varDecl)
-    //       ....
+    //       ...
     // then writes to this var don't matter, because unless we find another write to this var, this var is dead
     if (std::find(insideConditionalCheckOfMemberSet.begin(),
                   insideConditionalCheckOfMemberSet.end(), varDecl)

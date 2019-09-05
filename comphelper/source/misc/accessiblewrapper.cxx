@@ -409,7 +409,7 @@ namespace comphelper
     {
         return m_xInnerContext->getAccessibleRelationSet();
             // TODO: if this relation set would contain relations to siblings, we would normally need
-            // to wrap them, too ....
+            // to wrap them, too...
     }
 
 

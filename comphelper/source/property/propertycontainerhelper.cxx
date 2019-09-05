@@ -386,7 +386,7 @@ void OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const An
                 reinterpret_cast< uno_ReleaseFunc >( cpp_release ) );
 
             OSL_ENSURE( bSuccess,
-                "OPropertyContainerHelper::setFastPropertyValue: ooops .... the value could not be assigned!");
+                "OPropertyContainerHelper::setFastPropertyValue: ooops... the value could not be assigned!");
 
             break;
     }

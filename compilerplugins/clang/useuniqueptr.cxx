@@ -352,7 +352,7 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
     if (fn == SRCDIR "/vcl/unx/gtk3/gtk3gtkdata.cxx"
         || fn == SRCDIR "/vcl/unx/gtk/gtkdata.cxx")
         return;
-    // sometimes this stuff is held by tools::SvRef, sometimes by std::unique_ptr .....
+    // sometimes this stuff is held by tools::SvRef, sometimes by std::unique_ptr...
     if (fn == SRCDIR "/sot/source/unoolestorage/xolesimplestorage.cxx")
         return;
     // don't feel like messing with this chunk of sfx2

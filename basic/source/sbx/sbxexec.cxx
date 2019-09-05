@@ -80,7 +80,7 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
     return p;
 }
 
-// Qualified name. Element.Element....
+// Qualified name. Element.Element...
 
 static SbxVariableRef QualifiedName
     ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf, SbxClassType t )

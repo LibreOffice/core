@@ -226,7 +226,7 @@ namespace svt
                 }
 
                 // _and_ add as event listener to the parent - in case the parent is destroyed
-                // before we are disposed, our disposal would access dead VCL windows then ....
+                // before we are disposed, our disposal would access dead VCL windows then...
                 m_xDialogParent = VCLUnoHelper::GetInterface( m_pDlg->GetParent() );
                 OSL_ENSURE( m_xDialogParent.is() || !m_pDlg->GetParent(), "OCommonPicker::createFileDialog: invalid window component (the parent this time)!" );
                 if ( m_xDialogParent.is() )
@@ -377,11 +377,11 @@ namespace svt
         // Thus we post ourself a message for cancelling the dialog. This way, the message
         // is either handled in the thread which opened the dialog (which may even be
         // this thread here), or, if no dialog is open, in the thread doing scheduling
-        // currently. Both is okay for us ....
+        // currently. Both is okay for us...
 
         // Note that we could do check if we are really executing the dialog currently.
         // but the information would be potentially obsolete at the moment our event
-        // arrives, so we need to check it there, anyway ...
+        // arrives, so we need to check it there, anyway...
         m_nCancelEvent = Application::PostUserEvent( LINK( this, OCommonPicker, OnCancelPicker ) );
     }
 

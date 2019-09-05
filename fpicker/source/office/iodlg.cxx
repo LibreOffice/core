@@ -184,7 +184,7 @@ namespace
 
     void lcl_autoUpdateFileExtension( SvtFileDialog* _pDialog, const OUString& _rLastFilterExt )
     {
-        // if auto extension is enabled ....
+        // if auto extension is enabled...
         if ( _pDialog->isAutoExtensionEnabled() )
         {
             // automatically switch to the extension of the (maybe just newly selected) extension
@@ -862,7 +862,7 @@ void SvtFileDialog::OpenHdl_Impl(void const * pVoid)
 
     if ( aFileName.isEmpty() )
     {
-        // if an entry is selected in the view ....
+        // if an entry is selected in the view...
         if ( _pFileView->GetSelectionCount() )
         {   // -> use this one. This will allow us to step down this folder
             aFileName = _pFileView->GetCurrentURL();
