@@ -2359,7 +2359,7 @@ IMPL_LINK_NOARG(ToolBox, ImplUpdateHdl, Timer *, void)
 
 static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    const Image pImage = Image(StockImage::Yes, CHEVRON);
+    const Image pImage(StockImage::Yes, CHEVRON);
     Size aImageSize = pImage.GetSizePixel();
     long x = rRect.Left() + (rRect.getWidth() - aImageSize.Width())/2;
     long y = rRect.Top() + (rRect.getHeight() - aImageSize.Height())/2;
