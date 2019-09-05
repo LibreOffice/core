@@ -43,6 +43,18 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment8">
+    <property name="lower">0.01</property>
+    <property name="upper">56</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment9">
+    <property name="lower">0.01</property>
+    <property name="upper">56</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkImage" id="image7">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -139,6 +151,7 @@
           <object class="GtkAlignment" id="alignment7">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="halign">start</property>
             <property name="hexpand">True</property>
             <property name="top_padding">6</property>
             <property name="left_padding">12</property>
@@ -146,9 +159,10 @@
               <object class="GtkGrid" id="grid17">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
                 <property name="hexpand">True</property>
                 <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="column_spacing">2</property>
                 <child>
                   <object class="GtkSpinButton" id="width2">
                     <property name="sensitive">False</property>
@@ -266,6 +280,7 @@
                   <packing>
                     <property name="left_attach">10</property>
                     <property name="top_attach">0</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
@@ -389,8 +404,79 @@
                     <property name="always_show_image">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">11</property>
+                    <property name="left_attach">15</property>
                     <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="width7">
+                    <property name="sensitive">False</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">center</property>
+                    <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
+                    <property name="adjustment">adjustment8</property>
+                    <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="width7-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="tablecolumnpage|width7-atkobject">Column 7 Width</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">12</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="7">
+                    <property name="sensitive">False</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">_7</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">width7</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">12</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="8">
+                    <property name="sensitive">False</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">_8</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">width8</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">14</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="width8">
+                    <property name="sensitive">False</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">center</property>
+                    <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
+                    <property name="adjustment">adjustment9</property>
+                    <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="width8-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="tablecolumnpage|width8-atkobject">Column 8 Width</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">14</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
               </object>
