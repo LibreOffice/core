@@ -22,6 +22,30 @@
       "revId": "05bf5b97a5466dbfef7e087a9ca9d44e3e154826",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_151eb56f",
+        "filename": "sc/source/ui/optdlg/tpformula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-09-05T12:41:18Z",
+      "side": 1,
+      "message": "I don\u0027t think that is good UX. There is no indication why the button is disabled, furthermore if at least one of the options is not locked and was changed it leads to not being able to reset all values.",
+      "parentUuid": "bf659307_b91e496e",
+      "range": {
+        "startLine": 364,
+        "startChar": 4,
+        "endLine": 364,
+        "endChar": 26
+      },
+      "revId": "05bf5b97a5466dbfef7e087a9ca9d44e3e154826",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
