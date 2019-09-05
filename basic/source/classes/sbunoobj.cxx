@@ -4591,7 +4591,7 @@ void StructRefInfo::setValue( const Any& rValue )
        reinterpret_cast< uno_AcquireFunc >(cpp_acquire),
        reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
     OSL_ENSURE(bSuccess,
-        "StructRefInfo::setValue: ooops .... the value could not be assigned!");
+        "StructRefInfo::setValue: ooops... the value could not be assigned!");
 }
 
 OUString StructRefInfo::getTypeName() const

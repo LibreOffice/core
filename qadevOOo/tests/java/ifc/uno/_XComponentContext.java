@@ -44,7 +44,7 @@ public class _XComponentContext extends MultiMethodTest {
                 log.println("try to instantiate found servicename " +
                             names[i]);
                 directly.createInstanceWithContext(names[i], oObj);
-                log.println("worked .... ok");
+                log.println("worked... ok");
                 res &= true;
             } catch (com.sun.star.uno.Exception e) {
                 log.println("Exception occurred " + e.getMessage());

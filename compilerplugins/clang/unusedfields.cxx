@@ -733,7 +733,7 @@ void UnusedFields::checkIfWrittenTo(const FieldDecl* fieldDecl, const Expr* memb
 
     // if we're inside a block that looks like
     //   if (fieldDecl)
-    //       ....
+    //       ...
     // then writes to this field don't matter, because unless we find another write to this field, this field is dead
     if (std::find(insideConditionalCheckOfMemberSet.begin(), insideConditionalCheckOfMemberSet.end(), fieldDecl) != insideConditionalCheckOfMemberSet.end())
         return;

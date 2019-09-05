@@ -235,7 +235,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     if (objectPos == m_pImpl->m_aPropertySetCache.end())
     {
         objectPos = m_pImpl->m_aPropertySetCache.emplace( xSet, ObjectInfo() ).first;
-        DBG_ASSERT(objectPos != m_pImpl->m_aPropertySetCache.end(), "OXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
+        DBG_ASSERT(objectPos != m_pImpl->m_aPropertySetCache.end(), "OXUndoEnvironment::propertyChange : just inserted it... why it's not there?");
     }
     if ( objectPos == m_pImpl->m_aPropertySetCache.end() )
         return;
@@ -245,7 +245,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     ObjectInfo& rObjectInfo = objectPos->second;
     PropertiesInfo::const_iterator aPropertyPos = rObjectInfo.aProperties.find( _rEvent.PropertyName );
     if ( aPropertyPos == rObjectInfo.aProperties.end() )
-    {   // nothing 'til now ... have to change this ....
+    {   // nothing 'til now... have to change this...
         // the attributes
         Reference< XPropertySetInfo > xPSI( xSet->getPropertySetInfo(), UNO_SET_THROW );
         sal_Int32 nPropertyAttributes = 0;

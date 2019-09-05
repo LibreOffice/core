@@ -161,7 +161,7 @@ enum class FileOffset {
 
 // SBX-objects:
 // sal_uInt16 number of objects
-// ....   object data
+// ...   object data
 
 // user defined types B_USERTYPES :
 //  sal_uInt16  identifier UT

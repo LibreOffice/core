@@ -165,7 +165,7 @@ void SAL_CALL OSequenceOutputStream::writeBytes( const Sequence< sal_Int8 >& _rD
             nNewLength = nCurrentLength + m_nMinimumResize;
 
         if (nNewLength < m_nSize + _rData.getLength())
-        {   // it's not enough .... the data would not fit
+        {   // it's not enough... the data would not fit
 
             // let's take the double amount of the length of the data to be written, as the next write
             // request could be as large as this one
@@ -173,7 +173,7 @@ void SAL_CALL OSequenceOutputStream::writeBytes( const Sequence< sal_Int8 >& _rD
             nNewLength = nCurrentLength + nNewGrowth;
         }
 
-        // round it off to the next multiple of 4 ...
+        // round it off to the next multiple of 4...
         nNewLength = (nNewLength + 3) / 4 * 4;
 
         m_rSequence.realloc(nNewLength);
