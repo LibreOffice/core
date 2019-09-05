@@ -13,14 +13,9 @@
       <menu:menuitem menu:id=".uno:SwitchControlDesignMode"/>
       <menu:menuitem menu:id=".uno:ControlProperties"/>
       <menu:menuseparator/>
-      <menu:menu menu:id=".uno:MSCompatActiveXControls">
+      <menu:menu menu:id=".uno:MSCompatContentControls">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:Label"/>
-          <menu:menuitem menu:id=".uno:Edit"/>
-          <menu:menuitem menu:id=".uno:CheckBox"/>
-          <menu:menuitem menu:id=".uno:RadioButton"/>
-          <menu:menuitem menu:id=".uno:ListBox"/>
-          <menu:menuitem menu:id=".uno:Pushbutton"/>
+          <menu:menuitem menu:id=".uno:DatePickerFormField"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:MSCompatLegacyControls">
@@ -30,9 +25,14 @@
           <menu:menuitem menu:id=".uno:DropDownFormField"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menu menu:id=".uno:MSCompatContentControls">
+      <menu:menu menu:id=".uno:MSCompatActiveXControls">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:DatePickerFormField"/>
+          <menu:menuitem menu:id=".uno:Label"/>
+          <menu:menuitem menu:id=".uno:Edit"/>
+          <menu:menuitem menu:id=".uno:CheckBox"/>
+          <menu:menuitem menu:id=".uno:RadioButton"/>
+          <menu:menuitem menu:id=".uno:ListBox"/>
+          <menu:menuitem menu:id=".uno:Pushbutton"/>
         </menu:menupopup>
       </menu:menu>
     </menu:menupopup>
