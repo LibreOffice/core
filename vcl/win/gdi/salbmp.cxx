@@ -246,7 +246,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
     BitmapBuffer* pRGB = pSalRGB->AcquireBuffer(BitmapAccessMode::Read);
     std::unique_ptr<BitmapBuffer> pExtraRGB;
 
-    if(pRGB && ScanlineFormat::N24BitTcBgr != (pRGB->mnFormat & ~ScanlineFormat::TopDown))
+    if(pRGB && ScanlineFormat::N24BitTcBgr != RemoveScanline(pRGB->mnFormat))
     {
         // convert source bitmap to BMP_FORMAT_24BIT_TC_BGR format if not yet in that format
         SalTwoRect aSalTwoRect(0, 0, pRGB->mnWidth, pRGB->mnHeight, 0, 0, pRGB->mnWidth, pRGB->mnHeight);
@@ -262,7 +262,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
     if(pRGB
         && pRGB->mnWidth > 0
         && pRGB->mnHeight > 0
-        && ScanlineFormat::N24BitTcBgr == (pRGB->mnFormat & ~ScanlineFormat::TopDown))
+        && ScanlineFormat::N24BitTcBgr == RemoveScanline(pRGB->mnFormat))
     {
         const sal_uInt32 nW(pRGB->mnWidth);
         const sal_uInt32 nH(pRGB->mnHeight);
@@ -334,7 +334,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
     BitmapBuffer* pRGB = pSalRGB->AcquireBuffer(BitmapAccessMode::Read);
     std::unique_ptr<BitmapBuffer> pExtraRGB;
 
-    if(pRGB && ScanlineFormat::N24BitTcBgr != (pRGB->mnFormat & ~ScanlineFormat::TopDown))
+    if(pRGB && ScanlineFormat::N24BitTcBgr != RemoveScanline(pRGB->mnFormat))
     {
         // convert source bitmap to canlineFormat::N24BitTcBgr format if not yet in that format
         SalTwoRect aSalTwoRect(0, 0, pRGB->mnWidth, pRGB->mnHeight, 0, 0, pRGB->mnWidth, pRGB->mnHeight);
@@ -361,7 +361,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
     BitmapBuffer* pA = pSalA->AcquireBuffer(BitmapAccessMode::Read);
     std::unique_ptr<BitmapBuffer> pExtraA;
 
-    if(pA && ScanlineFormat::N8BitPal != (pA->mnFormat & ~ScanlineFormat::TopDown))
+    if(pA && ScanlineFormat::N8BitPal != RemoveScanline(pA->mnFormat))
     {
         // convert alpha bitmap to ScanlineFormat::N8BitPal format if not yet in that format
         SalTwoRect aSalTwoRect(0, 0, pA->mnWidth, pA->mnHeight, 0, 0, pA->mnWidth, pA->mnHeight);
@@ -383,8 +383,8 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
         && pRGB->mnHeight > 0
         && pRGB->mnWidth == pA->mnWidth
         && pRGB->mnHeight == pA->mnHeight
-        && ScanlineFormat::N24BitTcBgr == (pRGB->mnFormat & ~ScanlineFormat::TopDown)
-        && ScanlineFormat::N8BitPal == (pA->mnFormat & ~ScanlineFormat::TopDown))
+        && ScanlineFormat::N24BitTcBgr == RemoveScanline(pRGB->mnFormat)
+        && ScanlineFormat::N8BitPal == RemoveScanline(pA->mnFormat))
     {
         // we have alpha and bitmap in known formats, create GdiPlus Bitmap as 32bit ARGB
         const sal_uInt32 nW(pRGB->mnWidth);
