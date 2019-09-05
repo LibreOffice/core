@@ -20,11 +20,14 @@ $(eval $(call gb_CustomTarget_CustomTarget,instsetoo_native/install))
 
 $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/install,\
 	install.phony \
+	$(if $(WINDOWS_BUILD_SIGNING),msi_signing.done) \
 	$(if $(filter-out WNT,$(OS)),\
 	bin/find-requires-gnome.sh \
 	bin/find-requires-x11.sh) \
 	$(foreach ulf,$(instsetoo_ULFLIST),win_ulffiles/$(ulf).ulf) \
 ))
+
+.PHONY: $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony: \
 	$(SRCDIR)/solenv/bin/make_installer.pl \
@@ -126,5 +129,55 @@ ifneq (WNT,$(OS))
 		$(call instsetoo_native_install_command,ooolangpack,$(lang),,-languagepack,$(PKGFORMAT)))
 endif
 endif # LIBO_TEST_INSTALL
+	touch $@
+
+TIMESTAMPURL ?= "http://timestamp.globalsign.com/scripts/timestamp.dll"
+$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_signing.done: \
+        $(if $(filter HELP,$(BUILD_TYPE)),$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_helppack_signing.done) \
+        $(if $(filter ODK,$(BUILD_TYPE)),$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_sdk_signing.done) \
+        $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_main_signing.done
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
+	touch $@
+
+$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_helppack_signing.done \
+$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_sdk_signing.done \
+$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_main_signing.done \
+    : $(SRCDIR)/postprocess/signing/signing.pl $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony
+
+$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_main_signing.done:
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
+	$(PERL) $(SRCDIR)/postprocess/signing/signing.pl \
+			-l $(subst .done,_log.txt,$@) \
+			$(if $(verbose),-v) \
+			$(if $(PFXFILE),-f $(PFXFILE)) \
+			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
+			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
+			-d $(PRODUCTNAME)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH) \
+			$(WORKDIR)/installation/$(PRODUCTNAME)/msi/install/*/*.msi \
+	&& touch $@
+
+$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_helppack_signing.done:
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
+	$(PERL) $(SRCDIR)/postprocess/signing/signing.pl \
+			-l $(subst .done,_log.txt,$@) \
+			$(if $(verbose),-v) \
+			$(if $(PFXFILE),-f $(PFXFILE)) \
+			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
+			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
+			-d $(PRODUCTNAME)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\ Helppack \
+			$(WORKDIR)/installation/$(PRODUCTNAME)_helppack/msi/install/*/*.msi \
+	&& touch $@
+
+$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_sdk_signing.done:
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
+	$(PERL) $(SRCDIR)/postprocess/signing/signing.pl \
+			-l $(subst .done,_log.txt,$@) \
+			$(if $(verbose),-v) \
+			$(if $(PFXFILE),-f $(PFXFILE)) \
+			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
+			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
+			-d $(PRODUCTNAME)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\ SDK \
+			$(WORKDIR)/installation/$(PRODUCTNAME)_SDK/msi/install/*/*.msi \
+	&& touch $@
 
 # vim: set noet sw=4 ts=4:
