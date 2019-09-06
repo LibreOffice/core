@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_58a78450",
+        "filename": "offapi/type_reference/typelibrary_history.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-09-06T06:18:21Z",
+      "side": 1,
+      "message": "* This involves neither \"..\" nor \"....\" as advertised in the commit message.\n* This shall apparently be \"Bottom\", not \"Button\", see \u003cbadbb3b39b9f4ca85157fd79119001ba08cf475b\u003e \"INTEGRATION: CWS tl50: #i85576# unused properties removed\" accompanying \u003c9a1cfa9650452e5eb0790161e2ca7f988d03e109\u003e \"INTEGRATION: CWS tl50: #i85576# removed not implemented properties\".",
+      "range": {
+        "startLine": 143,
+        "startChar": 59,
+        "endLine": 143,
+        "endChar": 71
+      },
+      "revId": "fe82eda132c03dcef72844e5c27add7f01d2b289",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
