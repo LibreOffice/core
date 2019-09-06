@@ -498,6 +498,7 @@
 #define FN_UNO_PARA_STYLE           (FN_EXTRA2 + 9)  // starting here are UNI-Ids for the PropertyMap listed
 #define FN_UNO_PAGE_STYLE           (FN_EXTRA2 + 10)
 
+#define FN_UNO_PARA_NUM_AUTO_FORMAT (FN_EXTRA2 + 11)
 #define FN_UNO_FRAME_STYLE_NAME     (FN_EXTRA2 + 12)
 #define FN_UNO_NUM_START_VALUE      (FN_EXTRA2 + 13)
 #define FN_UNO_NUM_LEVEL            (FN_EXTRA2 + 14)

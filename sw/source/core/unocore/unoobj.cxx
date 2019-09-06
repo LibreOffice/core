@@ -102,6 +102,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <sortopt.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <memory>
 #include <unoparaframeenum.hxx>
@@ -512,6 +513,7 @@ SwUnoCursorHelper::SetCursorPropertyValue(
         // #i91601#
         case FN_UNO_LIST_ID:
         case FN_UNO_IS_NUMBER:
+        case FN_UNO_PARA_NUM_AUTO_FORMAT:
         {
             // multi selection is not considered
             SwTextNode *const pTextNd = rPam.GetNode().GetTextNode();
@@ -547,6 +549,39 @@ SwUnoCursorHelper::SetCursorPropertyValue(
                 if ((rValue >>= bIsNumber) && !bIsNumber)
                 {
                     pTextNd->SetCountedInList( false );
+                }
+            }
+            else if (FN_UNO_PARA_NUM_AUTO_FORMAT == rEntry.nWID)
+            {
+                uno::Sequence<beans::NamedValue> props;
+                if (rValue >>= props)
+                {
+                    // TODO create own map for this, it contains UNO_NAME_DISPLAY_NAME? or make property readable so ODF export can map it to a automatic style?
+                    SfxItemPropertySet const& rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE));
+                    SfxItemPropertyMap const& rMap(rPropSet.getPropertyMap());
+                    SfxItemSet items{rPam.GetDoc()->GetAttrPool(), aCharAutoFormatSetRange};
+
+                    for (sal_Int32 i = 0; i < props.getLength(); ++i)
+                    {
+                        SfxItemPropertySimpleEntry const*const pEntry =
+                            rMap.getByName(props[i].Name);
+                        if (!pEntry)
+                        {
+                            throw beans::UnknownPropertyException(
+                                "Unknown property: " + props[i].Name);
+                        }
+                        if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
+                        {
+                            throw beans::PropertyVetoException(
+                                "Property is read-only: " + props[i].Name);
+                        }
+                        rPropSet.setPropertyValue(*pEntry, props[i].Value, items);
+                    }
+
+                    SwFormatAutoFormat item(RES_PARATR_LIST_AUTOFMT);
+                    // TODO: for ODF export we'd need to add it to the autostyle pool
+                    item.SetStyleHandle(std::make_shared<SfxItemSet>(items));
+                    pTextNd->SetAttr(item);
                 }
             }
             //PROPERTY_MAYBEVOID!

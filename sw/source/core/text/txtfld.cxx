@@ -21,6 +21,7 @@
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <charfmt.hxx>
+#include <fmtautofmt.hxx>
 
 #include <viewsh.hxx>
 #include <doc.hxx>
@@ -419,37 +420,45 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
 {
     if( !pIDSA->get(DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING ))
         return;
-    TextFrameIndex const nTextLen(rInf.GetTextFrame()->GetText().getLength());
-    SwTextNode const* pNode(nullptr);
-    sw::MergedAttrIterReverse iter(*rInf.GetTextFrame());
-    std::shared_ptr<SfxItemSet> pSet;
-    for (SwTextAttr const* pHint = iter.PrevAttr(&pNode); pHint;
-         pHint = iter.PrevAttr(&pNode))
+
+    SwFormatAutoFormat const& rListAutoFormat(static_cast<SwFormatAutoFormat const&>(rInf.GetTextFrame()->GetTextNodeForParaProps()->GetAttr(RES_PARATR_LIST_AUTOFMT)));
+    std::shared_ptr<SfxItemSet> pSet(rListAutoFormat.GetStyleHandle());
+
+    // TODO remove this fallback (for WW8/RTF)
+    if (!pSet)
     {
-        TextFrameIndex const nHintEnd(
-            rInf.GetTextFrame()->MapModelToView(pNode, pHint->GetAnyEnd()));
-        if (nHintEnd < nTextLen)
+        TextFrameIndex const nTextLen(rInf.GetTextFrame()->GetText().getLength());
+        SwTextNode const* pNode(nullptr);
+        sw::MergedAttrIterReverse iter(*rInf.GetTextFrame());
+        for (SwTextAttr const* pHint = iter.PrevAttr(&pNode); pHint;
+             pHint = iter.PrevAttr(&pNode))
         {
-            break; // only those at para end are interesting
-        }
-        // Formatting for the paragraph mark is usually set to apply only to the
-        // (non-existent) extra character at end of the text node, but there can be
-        // other hints too (ending at nTextLen), so look for all matching hints.
-        // Still the (non-existent) extra character at the end is preferred if it exists.
-        if (pHint->Which() == RES_TXTATR_AUTOFMT)
-        {
-            pSet = pHint->GetAutoFormat().GetStyleHandle();
-            // When we find an empty hint (start == end) we got what we are looking for.
-            if (pHint->GetStart() == *pHint->End())
+            TextFrameIndex const nHintEnd(
+                rInf.GetTextFrame()->MapModelToView(pNode, pHint->GetAnyEnd()));
+            if (nHintEnd < nTextLen)
+            {
+                break; // only those at para end are interesting
+            }
+            // Formatting for the paragraph mark is usually set to apply only to the
+            // (non-existent) extra character at end of the text node, but there can be
+            // other hints too (ending at nTextLen), so look for all matching hints.
+            // Still the (non-existent) extra character at the end is preferred if it exists.
+            if (pHint->Which() == RES_TXTATR_AUTOFMT
+                && pHint->GetStart() == *pHint->End())
+            {
+                pSet = pHint->GetAutoFormat().GetStyleHandle();
+                // When we find an empty hint (start == end) we got what we are looking for.
                 break;
+            }
         }
     }
 
+    // TODO: apparently Word can apply Character Style too, see testParagraphMark
+
     // Check each item and in case it should be ignored, then clear it.
-    std::unique_ptr<SfxItemSet> pCleanedSet;
     if (pSet.get())
     {
-        pCleanedSet = pSet->Clone();
+        std::unique_ptr<SfxItemSet> const pCleanedSet = pSet->Clone();
 
         SfxItemIter aIter(*pSet);
         const SfxPoolItem* pItem = aIter.GetCurItem();

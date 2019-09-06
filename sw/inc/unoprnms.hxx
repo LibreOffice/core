@@ -808,6 +808,7 @@
 #define UNO_NAME_STREAM_NAME "StreamName"
 #define UNO_NAME_PARA_CONTINUEING_PREVIOUS_SUB_TREE "ContinueingPreviousSubTree"
 #define UNO_NAME_PARA_LIST_LABEL_STRING "ListLabelString"
+#define UNO_NAME_PARA_LIST_AUTO_FORMAT "ListAutoFormat"
 #define UNO_NAME_CHAR_OVERLINE "CharOverline"
 #define UNO_NAME_CHAR_OVERLINE_COLOR "CharOverlineColor"
 #define UNO_NAME_CHAR_OVERLINE_HAS_COLOR "CharOverlineHasColor"

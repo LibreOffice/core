@@ -2968,6 +2968,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         }
 
         // The formatting of the paragraph marker has two sources:
+        // 0) If there is a RES_PARATR_LIST_AUTOFMT, then use that.
         // 1) If there are hints at the end of the paragraph, then use that.
         // 2) Else use the RES_CHRATR_BEGIN..RES_TXTATR_END range of the paragraph
         // properties.
@@ -2977,7 +2978,15 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         // set as a hint.
         SfxItemSet aParagraphMarkerProperties(m_pDoc->GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_TXTATR_END>{});
         bool bCharFormatOnly = true;
-        if(const SwpHints* pTextAttrs = rNode.GetpSwpHints())
+
+        SwFormatAutoFormat const& rListAutoFormat(static_cast<SwFormatAutoFormat const&>(rNode.GetAttr(RES_PARATR_LIST_AUTOFMT)));
+        if (std::shared_ptr<SfxItemSet> const& pSet = rListAutoFormat.GetStyleHandle())
+        {
+            aParagraphMarkerProperties.Put(*pSet);
+            bCharFormatOnly = false;
+            // TODO: still need to check for a RES_TXTATR_CHARFMT hint...
+        }
+        if (const SwpHints* pTextAttrs = rNode.GetpSwpHints())
         {
             for( size_t i = 0; i < pTextAttrs->Count(); ++i )
             {
@@ -2992,8 +3001,11 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     SAL_INFO( "sw.ww8", startPos << "startPos == endPos" << *endPos);
                     sal_uInt16 nWhich = pHt->GetAttr().Which();
                     SAL_INFO( "sw.ww8", "nWhich" << nWhich);
-                    if (nWhich == RES_TXTATR_AUTOFMT || nWhich == RES_TXTATR_CHARFMT)
+                    if ((nWhich == RES_TXTATR_AUTOFMT && bCharFormatOnly)
+                        || nWhich == RES_TXTATR_CHARFMT)
+                    {
                         aParagraphMarkerProperties.Put(pHt->GetAttr());
+                    }
                     if (nWhich != RES_TXTATR_CHARFMT)
                         bCharFormatOnly = false;
                 }
