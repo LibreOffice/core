@@ -24,6 +24,7 @@
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <ado/AConnection.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <ado/Awrapado.hxx>
 #include <connectivity/dbexception.hxx>
@@ -57,7 +58,7 @@ Reference< XPropertySet > OKeys::createDescriptor()
 // XAppend
 sdbcx::ObjectType OKeys::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
-    OAdoKey* pKey = getImplementation<OAdoKey>( descriptor );
+    OAdoKey* pKey = getUnoTunnelImplementation<OAdoKey>( descriptor );
     if ( pKey == nullptr)
         m_pConnection->throwGenericSQLException( STR_INVALID_KEY_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 

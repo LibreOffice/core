@@ -164,7 +164,7 @@ void SAL_CALL OAdoTable::alterColumnByName( const OUString& colName, const Refer
     checkDisposed(OTableDescriptor_BASE_TYPEDEF::rBHelper.bDisposed);
 
     bool bError = true;
-    OAdoColumn* pColumn = ::comphelper::getImplementation<OAdoColumn>(descriptor);
+    OAdoColumn* pColumn = comphelper::getUnoTunnelImplementation<OAdoColumn>(descriptor);
     if(pColumn != nullptr)
     {
         WpADOColumns aColumns = m_aTable.get_Columns();

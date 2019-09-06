@@ -28,6 +28,7 @@
 #include <ado/AConnection.hxx>
 #include <ado/Awrapado.hxx>
 #include <TConnection.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <connectivity/dbexception.hxx>
@@ -64,7 +65,7 @@ Reference< XPropertySet > OTables::createDescriptor()
 // XAppend
 sdbcx::ObjectType OTables::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
-    OAdoTable* pTable = getImplementation<OAdoTable>( descriptor );
+    OAdoTable* pTable = getUnoTunnelImplementation<OAdoTable>( descriptor );
     if ( pTable == nullptr )
         m_pCatalog->getConnection()->throwGenericSQLException( STR_INVALID_TABLE_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 
