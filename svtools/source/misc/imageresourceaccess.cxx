@@ -111,9 +111,9 @@ bool isSupportedURL(OUString const & rURL)
         || rURL.startsWith("vnd.sun.star.extension://");
 }
 
-SvStream* getImageStream(uno::Reference<uno::XComponentContext> const & rxContext, OUString const & rImageResourceURL)
+std::unique_ptr<SvStream> getImageStream(uno::Reference<uno::XComponentContext> const & rxContext, OUString const & rImageResourceURL)
 {
-    SvStream* pReturn = nullptr;
+    std::unique_ptr<SvMemoryStream> pMemBuffer;
 
     try
     {
@@ -128,10 +128,10 @@ SvStream* getImageStream(uno::Reference<uno::XComponentContext> const & rxContex
 
         OSL_ENSURE(xGraphic.is(), "GraphicAccess::getImageStream: the provider did not give us a graphic object!");
         if (!xGraphic.is())
-            return pReturn;
+            return pMemBuffer;
 
         // copy the graphic to an in-memory buffer
-        SvMemoryStream* pMemBuffer = new SvMemoryStream;
+        pMemBuffer.reset(new SvMemoryStream);
         uno::Reference<io::XStream> xBufferAccess = new StreamSupplier(
             new OSeekableInputStreamWrapper(*pMemBuffer),
             new OSeekableOutputStreamWrapper(*pMemBuffer));
@@ -144,19 +144,19 @@ SvStream* getImageStream(uno::Reference<uno::XComponentContext> const & rxContex
         xProvider->storeGraphic(xGraphic, aMediaProperties);
 
         pMemBuffer->Seek(0);
-        pReturn = pMemBuffer;
     }
     catch (const uno::Exception&)
     {
         OSL_FAIL("GraphicAccess::getImageStream: caught an exception!");
+        pMemBuffer.reset();
     }
 
-    return pReturn;
+    return pMemBuffer;
 }
 
 uno::Reference<io::XInputStream> getImageXStream(uno::Reference<uno::XComponentContext> const & rxContext, OUString const & rImageResourceURL)
 {
-    return new OSeekableInputStreamWrapper(getImageStream(rxContext, rImageResourceURL), true);   // take ownership
+    return new OSeekableInputStreamWrapper(getImageStream(rxContext, rImageResourceURL).release(), true);   // take ownership
 }
 
 } // namespace GraphicAccess
