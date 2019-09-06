@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_2b503c5d",
+        "filename": "sd/source/filter/eppt/pptx-epptooxml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2019-09-06T12:30:55Z",
+      "side": 0,
+      "message": "Interesting. I wonder why Gradient was blacklisted. Maybe we didn\u0027t support it back then? I wonder if Hatch is now supported too or not.",
+      "revId": "9417aa85ec265151c45c63f0b6da3467e710ec7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
