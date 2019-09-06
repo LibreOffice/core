@@ -29,14 +29,12 @@ struct OctreeNode
     sal_uLong nRed;
     sal_uLong nGreen;
     sal_uLong nBlue;
-    OctreeNode* pChild[8];
+    std::unique_ptr<OctreeNode> pChild[8];
     OctreeNode* pNext;
-    OctreeNode* pNextInCache;
     sal_uInt16 nPalIndex;
     bool bLeaf;
 };
 
-class ImpNodeCache;
 class BitmapReadAccess;
 
 class VCL_PLUGIN_PUBLIC Octree
@@ -45,17 +43,15 @@ private:
     void CreatePalette(OctreeNode* pNode);
     void GetPalIndex(OctreeNode* pNode);
 
-    SAL_DLLPRIVATE void deleteOctree(OctreeNode** ppNode);
-    SAL_DLLPRIVATE void add(OctreeNode** ppNode);
+    SAL_DLLPRIVATE void add(std::unique_ptr<OctreeNode>& rpNode);
     SAL_DLLPRIVATE void reduce();
 
     BitmapPalette maPalette;
     sal_uLong mnLeafCount;
     sal_uLong mnLevel;
-    OctreeNode* pTree;
+    std::unique_ptr<OctreeNode> pTree;
     std::vector<OctreeNode*> mpReduce;
     BitmapColor const* mpColor;
-    std::unique_ptr<ImpNodeCache> mpNodeCache;
     const BitmapReadAccess* mpAccess;
     sal_uInt16 mnPalIndex;
 
