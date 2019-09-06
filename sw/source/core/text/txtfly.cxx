@@ -1015,6 +1015,11 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
             SwRectFnSet aRectFnSet(m_pCurrFrame);
             if( aRectFnSet.GetLeft(aRect) > aRectFnSet.GetRight(rRect) )
                 break;
+
+            // tdf#127235
+            if( aRectFnSet.GetHeight(pPage->getFrameArea()) < aRectFnSet.GetHeight(rRect))
+                break;
+
             // #i68520#
             if ( mpCurrAnchoredObj != pAnchoredObj && aRect.IsOver( rRect ) )
             {
