@@ -617,9 +617,9 @@ std::unique_ptr<EditPosition> EditPosition::Clone() const
     return std::unique_ptr<EditPosition>(new EditPosition(mpEditEngine, mpCurSel));
 }
 
-EditNodeIdx* EditPosition::MakeNodeIdx() const
+std::unique_ptr<EditNodeIdx> EditPosition::MakeNodeIdx() const
 {
-    return new EditNodeIdx(mpEditEngine, mpCurSel->Max().GetNode());
+    return std::make_unique<EditNodeIdx>(mpEditEngine, mpCurSel->Max().GetNode());
 }
 
 sal_Int32 EditPosition::GetNodeIdx() const

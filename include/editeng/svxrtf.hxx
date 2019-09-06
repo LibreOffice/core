@@ -71,7 +71,7 @@ public:
     std::unique_ptr<EditPosition> Clone() const;
 
     // clone NodeIndex
-    EditNodeIdx* MakeNodeIdx() const;
+    std::unique_ptr<EditNodeIdx> MakeNodeIdx() const;
 };
 
 typedef std::map<short, std::unique_ptr<vcl::Font>> SvxRTFFontTbl;
