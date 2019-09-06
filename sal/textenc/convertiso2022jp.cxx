@@ -218,7 +218,7 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
         case IMPL_ISO_2022_JP_TO_UNICODE_STATE_ESC_LPAREN:
             switch (nChar)
             {
-            case 0x42: // A
+            case 0x42: // B
                 eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_ASCII;
                 break;
 
