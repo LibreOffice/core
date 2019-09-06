@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_eb76c4a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-09-06T08:00:00Z",
+      "side": 1,
+      "message": "That\u0027s\n\n\u003e     OUString uFileName(fileName.getStr(), fileName.getLength(), osl_getThreadTextEncoding());\n\nin convertToAbsoluteSystemPath (idlc/source/idlccompile.cxx), and on Windows osl_getThreadTextEncoding() isn\u0027t controlled by LC_CTYPE.  (Which probably makes sense here in case the LO SRCDIR/BUILDDIR is a pathname containing non-ASCII chars.)\n\nSo, yeah, at least on Windows, executing idlc during CustomTarget_idlc/parser_test apparently legitimately needs the sal_textenc library.",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 79
+      },
+      "revId": "d08bb77b80022e6bf2bd94762aa1d0e53e7a2908",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
