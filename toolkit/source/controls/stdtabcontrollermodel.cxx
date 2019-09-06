@@ -23,11 +23,8 @@
 #include <toolkit/controls/stdtabcontrollermodel.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/servicenames.hxx>
-#include <toolkit/helper/property.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <rtl/uuid.h>
 
 #include <tools/debug.hxx>
 

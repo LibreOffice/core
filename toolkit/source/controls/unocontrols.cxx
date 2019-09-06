@@ -20,22 +20,17 @@
 #include <com/sun/star/awt/XTextArea.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <com/sun/star/graphic/GraphicObject.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 
 
 #include <toolkit/controls/formattedcontrol.hxx>
-#include <toolkit/controls/roadmapcontrol.hxx>
 #include <toolkit/controls/unocontrols.hxx>
-#include <toolkit/controls/stdtabcontroller.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/macros.hxx>
@@ -45,18 +40,8 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/combobox.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/date.hxx>
-#include <tools/time.hxx>
-#include <sal/log.hxx>
 
 #include <algorithm>
 

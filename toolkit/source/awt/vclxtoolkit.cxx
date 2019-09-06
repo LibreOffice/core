@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
 #ifdef _WIN32
 #include <prewin.h>
 #include <postwin.h>
@@ -44,22 +43,17 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XToolkitExperimental.hpp>
 #include <com/sun/star/awt/XToolkitRobot.hpp>
-#include <com/sun/star/awt/XMessageBoxFactory.hpp>
 
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <osl/conditn.hxx>
 #include <osl/module.h>
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/uuid.h>
 #include <rtl/process.h>
 #include <sal/log.hxx>
 #include <tools/link.hxx>
-#include <tools/fract.hxx>
 #include <tools/wintypes.hxx>
 
 #ifdef MACOSX
@@ -82,11 +76,8 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/property.hxx>
-#include <toolkit/helper/servicenames.hxx>
 
-#include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <vcl/unohelp.hxx>
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/ctrl.hxx>

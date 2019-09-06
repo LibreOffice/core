@@ -18,20 +18,9 @@
  */
 
 #include <toolkit/helper/property.hxx>
-#include <toolkit/helper/macros.hxx>
-#include <osl/mutex.hxx>
 
-#include <stdlib.h>
 #include <tools/debug.hxx>
-#include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/awt/FontSlant.hpp>
-#include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/awt/FontWidth.hpp>
-#include <com/sun/star/awt/FontType.hpp>
-#include <com/sun/star/awt/FontUnderline.hpp>
-#include <com/sun/star/awt/FontStrikeout.hpp>
-#include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/tree/XTreeDataModel.hpp>
 #include <com/sun/star/awt/grid/XGridDataModel.hpp>

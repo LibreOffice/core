@@ -19,36 +19,25 @@
 
 
 #include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
-#include <vcl/wall.hxx>
 #include <osl/mutex.hxx>
 #include <toolkit/controls/dialogcontrol.hxx>
 #include <toolkit/controls/geometrycontrolmodel.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/servicenames.hxx>
-#include <toolkit/controls/stdtabcontroller.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakagg.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
 #include <comphelper/sequence.hxx>
 #include <vcl/outdev.hxx>
 
-#include <vcl/graph.hxx>
 #include <vcl/image.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <algorithm>
-#include <functional>
-#include <map>
 #include <unordered_map>
-#include <osl/file.hxx>
 
 #include <vcl/tabctrl.hxx>
 #include <toolkit/awt/vclxwindows.hxx>

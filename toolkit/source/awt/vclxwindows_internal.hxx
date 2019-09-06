@@ -20,6 +20,8 @@
 #ifndef INCLUDED_TOOLKIT_SOURCE_AWT_VCLXWINDOWS_INTERNAL_HXX
 #define INCLUDED_TOOLKIT_SOURCE_AWT_VCLXWINDOWS_INTERNAL_HXX
 
+#include <vcl/window.hxx>
+
 namespace toolkit
 {
     void           setButtonLikeFaceColor( vcl::Window* _pWindow, const css::uno::Any& _rColorValue );

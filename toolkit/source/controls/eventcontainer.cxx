@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 
 #include <toolkit/controls/eventcontainer.hxx>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>

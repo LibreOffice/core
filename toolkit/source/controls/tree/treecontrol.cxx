@@ -24,12 +24,12 @@
 #include <com/sun/star/awt/tree/XTreeDataModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
+#include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/helper/property.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/implbase.hxx>
 
 #include <helper/unopropertyarrayhelper.hxx>
-#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

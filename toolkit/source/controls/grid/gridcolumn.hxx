@@ -21,7 +21,6 @@
 #define INCLUDED_TOOLKIT_SOURCE_CONTROLS_GRID_GRIDCOLUMN_HXX
 
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/style/HorizontalAlignment.hpp>
@@ -29,10 +28,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/componentguard.hxx>
-#include <rtl/ref.hxx>
-#include <toolkit/helper/mutexandbroadcasthelper.hxx>
-
-#include <vector>
 
 namespace toolkit
 {

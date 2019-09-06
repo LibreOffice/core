@@ -21,7 +21,6 @@
 #define INCLUDED_TOOLKIT_SOURCE_CONTROLS_GRID_GRIDEVENTFORWARDER_HXX
 
 #include <com/sun/star/awt/grid/XGridDataListener.hpp>
-#include <com/sun/star/awt/grid/XGridColumnListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 
 #include <cppuhelper/implbase2.hxx>

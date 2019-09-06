@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/awt/WindowEvent.hpp>
-
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/helper/convert.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/awt/vclxcontainer.hxx>
@@ -28,8 +25,6 @@
 #include <toolkit/awt/vclxgraphics.hxx>
 
 #include <toolkit/dllapi.h>
-#include <vcl/svapp.hxx>
-#include <vcl/syswin.hxx>
 #include <vcl/menu.hxx>
 
 #include <tools/debug.hxx>

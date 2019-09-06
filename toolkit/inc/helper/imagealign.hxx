@@ -21,8 +21,7 @@
 #define INCLUDED_TOOLKIT_INC_HELPER_IMAGEALIGN_HXX
 
 #include <sal/types.h>
-#include <vcl/button.hxx>
-
+#include <tools/wintypes.hxx>
 
 namespace toolkit
 {

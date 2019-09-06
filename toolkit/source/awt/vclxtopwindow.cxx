@@ -29,14 +29,11 @@
 #include <postmac.h>
 #endif
 
-#include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
-#include <toolkit/helper/macros.hxx>
 
 #include <vcl/wrkwin.hxx>
 #include <vcl/syswin.hxx>

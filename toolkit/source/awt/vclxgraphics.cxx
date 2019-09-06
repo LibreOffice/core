@@ -21,12 +21,9 @@
 #include <memory>
 #include <toolkit/awt/vclxgraphics.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
-#include <toolkit/awt/vclxfont.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <rtl/uuid.h>
 
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>

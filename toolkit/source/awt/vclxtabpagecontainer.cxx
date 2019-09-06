@@ -25,9 +25,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/svapp.hxx>
-#include <toolkit/helper/property.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 #include <helper/tkresmgr.hxx>
 

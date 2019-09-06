@@ -464,6 +464,7 @@ blacklist:
     include/toolkit/helper/macros.hxx:
     # Needed for macros
     - comphelper/servicehelper.hxx
+    - tools/diagnose_ex.h
     include/xmloff/XMLEmbeddedObjectExportFilter.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XInitialization.hpp

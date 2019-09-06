@@ -20,7 +20,6 @@
 
 #include "gridcolumn.hxx"
 
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/awt/grid/XGridColumnModel.hpp>
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -34,6 +33,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>

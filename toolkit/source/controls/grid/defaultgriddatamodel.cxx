@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/awt/grid/XMutableGridDataModel.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -26,12 +27,8 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <toolkit/helper/servicenames.hxx>
-#include <tools/diagnose_ex.h>
-#include <toolkit/helper/mutexandbroadcasthelper.hxx>
 
 #include <algorithm>
-#include <functional>
 #include <vector>
 
 using namespace ::com::sun::star;

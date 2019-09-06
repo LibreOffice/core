@@ -24,8 +24,8 @@
 
 #include <com/sun/star/lang/DisposedException.hpp>
 
-#include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer2.hxx>
+#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <vcl/event.hxx>
 #include <vcl/window.hxx>
