@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_ab0f6cdf",
+        "filename": "sw/source/core/text/txtfly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1021,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-06T09:46:26Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this only prevent vertical relocation? E.g., with a tall vertical line, text could flow at its sides, but not below... (no idea how to change code to handle that, honestly speaking)\n\nIt seems unnecessary to check this at each iteration of the for() loop - this check may be done once before the loop? I assume m_pCurrFrame wouldn\u0027t change in the function, so creating SwRectFnSet could be also done once (or am I wrong?)",
+      "range": {
+        "startLine": 1021,
+        "startChar": 16,
+        "endLine": 1021,
+        "endChar": 21
+      },
+      "revId": "02917efea11b49e3f96045009e9d5b004bb09368",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
