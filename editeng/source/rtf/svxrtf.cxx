@@ -793,7 +793,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                     }
                 }
 
-                pOld->pEndNd = pInsPos->MakeNodeIdx();
+                pOld->pEndNd = pInsPos->MakeNodeIdx().release();
                 pOld->nEndCnt = pInsPos->GetCntIdx();
 
                 /*
@@ -939,7 +939,7 @@ SvxRTFItemStackType::SvxRTFItemStackType(
     : aAttrSet( rPool, pWhichRange )
     , nStyleNo( 0 )
 {
-    pSttNd.reset( rPos.MakeNodeIdx() );
+    pSttNd = rPos.MakeNodeIdx();
     nSttCnt = rPos.GetCntIdx();
     pEndNd = pSttNd.get();
     nEndCnt = nSttCnt;
@@ -952,7 +952,7 @@ SvxRTFItemStackType::SvxRTFItemStackType(
     : aAttrSet( *rCpy.aAttrSet.GetPool(), rCpy.aAttrSet.GetRanges() )
     , nStyleNo( rCpy.nStyleNo )
 {
-    pSttNd.reset( rPos.MakeNodeIdx() );
+    pSttNd = rPos.MakeNodeIdx();
     nSttCnt = rPos.GetCntIdx();
     pEndNd = pSttNd.get();
     nEndCnt = nSttCnt;
@@ -1017,7 +1017,7 @@ void SvxRTFItemStackType::SetStartPos( const EditPosition& rPos )
 {
     if (pSttNd.get() != pEndNd)
         delete pEndNd;
-    pSttNd.reset(rPos.MakeNodeIdx() );
+    pSttNd = rPos.MakeNodeIdx();
     pEndNd = pSttNd.get();
     nSttCnt = rPos.GetCntIdx();
 }
