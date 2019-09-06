@@ -30,67 +30,11 @@ constexpr sal_uLong gnBits = 8 - OCTREE_BITS;
 
 } // end anonymous namespace
 
-class ImpNodeCache
-{
-private:
-    OctreeNode* mpActNode;
-
-public:
-    ImpNodeCache(const sal_uLong nInitSize)
-        : mpActNode(nullptr)
-    {
-        const sal_uLong nSize = nInitSize + 4;
-
-        for (sal_uLong i = 0; i < nSize; i++)
-        {
-            OctreeNode* pNewNode = new OctreeNode;
-
-            pNewNode->pNextInCache = mpActNode;
-            mpActNode = pNewNode;
-        }
-    }
-
-    ~ImpNodeCache()
-    {
-        while (mpActNode)
-        {
-            OctreeNode* pNode = mpActNode;
-
-            mpActNode = pNode->pNextInCache;
-            delete pNode;
-        }
-    }
-
-    OctreeNode* ImplGetFreeNode()
-    {
-        OctreeNode* pNode;
-
-        if (!mpActNode)
-        {
-            mpActNode = new OctreeNode;
-            mpActNode->pNextInCache = nullptr;
-        }
-
-        pNode = mpActNode;
-        mpActNode = pNode->pNextInCache;
-        memset(pNode, 0, sizeof(OctreeNode));
-
-        return pNode;
-    }
-    void ImplReleaseNode(OctreeNode* pNode)
-    {
-        pNode->pNextInCache = mpActNode;
-        mpActNode = pNode;
-    }
-};
-
 Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
     : mnLeafCount(0)
     , mnLevel(0)
-    , pTree(nullptr)
     , mpReduce(OCTREE_BITS + 1, nullptr)
     , mpColor(nullptr)
-    , mpNodeCache(std::make_unique<ImpNodeCache>(nColors))
     , mpAccess(&rReadAcc)
     , mnPalIndex(0)
 {
@@ -110,7 +54,7 @@ Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
                 {
                     mpColor = &mpAccess->GetPaletteColor(mpAccess->GetIndexFromData(pScanline, nX));
                     mnLevel = 0;
-                    add(&pTree);
+                    add(pTree);
 
                     while (mnLeafCount > nMax)
                         reduce();
@@ -130,7 +74,7 @@ Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
                 {
                     aColor = mpAccess->GetPixelFromData(pScanline, nX);
                     mnLevel = 0;
-                    add(&pTree);
+                    add(pTree);
 
                     while (mnLeafCount > nMax)
                         reduce();
@@ -140,43 +84,31 @@ Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
     }
 }
 
-Octree::~Octree() { deleteOctree(&pTree); }
+Octree::~Octree() {}
 
-void Octree::deleteOctree(OctreeNode** ppNode)
-{
-    for (OctreeNode* i : (*ppNode)->pChild)
-    {
-        if (i)
-            deleteOctree(&i);
-    }
-
-    mpNodeCache->ImplReleaseNode(*ppNode);
-    *ppNode = nullptr;
-}
-
-void Octree::add(OctreeNode** ppNode)
+void Octree::add(std::unique_ptr<OctreeNode>& rpNode)
 {
     // possibly generate new nodes
-    if (!*ppNode)
+    if (!rpNode)
     {
-        *ppNode = mpNodeCache->ImplGetFreeNode();
-        (*ppNode)->bLeaf = (OCTREE_BITS == mnLevel);
+        rpNode.reset(new OctreeNode);
+        rpNode->bLeaf = (OCTREE_BITS == mnLevel);
 
-        if ((*ppNode)->bLeaf)
+        if (rpNode->bLeaf)
             mnLeafCount++;
         else
         {
-            (*ppNode)->pNext = mpReduce[mnLevel];
-            mpReduce[mnLevel] = *ppNode;
+            rpNode->pNext = mpReduce[mnLevel];
+            mpReduce[mnLevel] = rpNode.get();
         }
     }
 
-    if ((*ppNode)->bLeaf)
+    if (rpNode->bLeaf)
     {
-        (*ppNode)->nCount++;
-        (*ppNode)->nRed += mpColor->GetRed();
-        (*ppNode)->nGreen += mpColor->GetGreen();
-        (*ppNode)->nBlue += mpColor->GetBlue();
+        rpNode->nCount++;
+        rpNode->nRed += mpColor->GetRed();
+        rpNode->nGreen += mpColor->GetGreen();
+        rpNode->nBlue += mpColor->GetBlue();
     }
     else
     {
@@ -187,7 +119,7 @@ void Octree::add(OctreeNode** ppNode)
                                  | ((mpColor->GetBlue() & cMask) >> nShift);
 
         mnLevel++;
-        add(&(*ppNode)->pChild[nIndex]);
+        add(rpNode->pChild[nIndex]);
     }
 }
 
@@ -212,15 +144,14 @@ void Octree::reduce()
     {
         if (pNode->pChild[i])
         {
-            OctreeNode* pChild = pNode->pChild[i];
+            OctreeNode* pChild = pNode->pChild[i].get();
 
             nRedSum += pChild->nRed;
             nGreenSum += pChild->nGreen;
             nBlueSum += pChild->nBlue;
             pNode->nCount += pChild->nCount;
 
-            mpNodeCache->ImplReleaseNode(pNode->pChild[i]);
-            pNode->pChild[i] = nullptr;
+            pNode->pChild[i].reset();
             nChildren++;
         }
     }
@@ -243,11 +174,11 @@ void Octree::CreatePalette(OctreeNode* pNode)
     }
     else
     {
-        for (OctreeNode* i : pNode->pChild)
+        for (auto const& i : pNode->pChild)
         {
             if (i)
             {
-                CreatePalette(i);
+                CreatePalette(i.get());
             }
         }
     }
@@ -266,7 +197,7 @@ void Octree::GetPalIndex(OctreeNode* pNode)
                                  | (((mpColor->GetGreen() & cMask) >> nShift) << 1)
                                  | ((mpColor->GetBlue() & cMask) >> nShift);
 
-        GetPalIndex(pNode->pChild[nIndex]);
+        GetPalIndex(pNode->pChild[nIndex].get());
     }
 }
 
@@ -274,7 +205,7 @@ const BitmapPalette& Octree::GetPalette()
 {
     maPalette.SetEntryCount(sal_uInt16(mnLeafCount));
     mnPalIndex = 0;
-    CreatePalette(pTree);
+    CreatePalette(pTree.get());
     return maPalette;
 }
 
@@ -283,7 +214,7 @@ sal_uInt16 Octree::GetBestPaletteIndex(const BitmapColor& rColor)
     mpColor = &rColor;
     mnPalIndex = 65535;
     mnLevel = 0;
-    GetPalIndex(pTree);
+    GetPalIndex(pTree.get());
     return mnPalIndex;
 }
 
