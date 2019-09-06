@@ -1283,9 +1283,9 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
-            if( dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr)
+            if( auto pTextPbj = dynamic_cast< const SdrTextObj *>( pObj ))
             {
-                mxTextObj.reset( static_cast< SdrTextObj* >( pObj ) );
+                mxTextObj.reset( pTextObj );
             }
         }
     }
