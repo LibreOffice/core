@@ -665,6 +665,15 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 rReq.AppendItem( SfxBoolItem( SID_HELPBALLOONS, bOn) );
             break;
         }
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        case SID_TIPOFTHEDAY:
+        {
+            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateTipOfTheDayDialog(rReq.GetFrameWeld()));
+            pDlg->Execute();
+            bDone = true;
+            break;
+        }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_ABOUT:
