@@ -20,6 +20,7 @@
 #include <ado/AKey.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <ado/AColumns.hxx>
 #include <ado/AConnection.hxx>
@@ -66,7 +67,7 @@ void OAdoKey::refreshColumns()
         m_pColumns.reset(new OColumns(*this, m_aMutex, aVector, aColumns, isCaseSensitive(), m_pConnection));
 }
 
-Sequence< sal_Int8 > OAdoKey::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > OAdoKey::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 
@@ -77,7 +78,7 @@ Sequence< sal_Int8 > OAdoKey::getUnoTunnelImplementationId()
 
 sal_Int64 OAdoKey::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    return isUnoTunnelId<OAdoKey>(rId)
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OKey_ADO::getSomething(rId);
 }

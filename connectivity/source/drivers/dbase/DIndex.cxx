@@ -574,7 +574,7 @@ void ODbaseIndex::CreateImpl()
     if(xSet->last())
     {
         Reference< XUnoTunnel> xTunnel(xSet, UNO_QUERY_THROW);
-        ODbaseResultSet* pDbaseRes = reinterpret_cast< ODbaseResultSet* >( xTunnel->getSomething(ODbaseResultSet::getUnoTunnelImplementationId()) );
+        ODbaseResultSet* pDbaseRes = reinterpret_cast< ODbaseResultSet* >( xTunnel->getSomething(ODbaseResultSet::getUnoTunnelId()) );
         assert(pDbaseRes); //"No dbase resultset found? What's going on here!
         nRowsLeft = xSet->getRow();
 

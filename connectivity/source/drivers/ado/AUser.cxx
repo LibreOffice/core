@@ -20,6 +20,7 @@
 #include <ado/AUser.hxx>
 #include <ado/ACatalog.hxx>
 #include <ado/AGroups.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -65,7 +66,7 @@ void OAdoUser::refreshGroups()
         m_pGroups.reset(new OGroups(m_pCatalog, m_aMutex, aVector, aGroups, isCaseSensitive()));
 }
 
-Sequence< sal_Int8 > OAdoUser::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > OAdoUser::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 
@@ -76,7 +77,7 @@ Sequence< sal_Int8 > OAdoUser::getUnoTunnelImplementationId()
 
 sal_Int64 OAdoUser::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    return isUnoTunnelId<OAdoUser>(rId)
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OUser_TYPEDEF::getSomething(rId);
 }

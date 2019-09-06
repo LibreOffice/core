@@ -404,7 +404,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
                     Reference<XUnoTunnel> xTunnel(xTable,UNO_QUERY);
                     if(xTunnel.is())
                     {
-                        OFileTable* pTable = reinterpret_cast< OFileTable* >( xTunnel->getSomething(OFileTable::getUnoTunnelImplementationId()) );
+                        OFileTable* pTable = reinterpret_cast< OFileTable* >( xTunnel->getSomething(OFileTable::getUnoTunnelId()) );
                         if(pTable && !pTable->isReadOnly())
                         {
                             aRow[6] = ODatabaseMetaDataResultSet::getInsertValue();

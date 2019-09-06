@@ -90,7 +90,7 @@ namespace connectivity
                 // m_pFileStream && !m_pFileStream->IsWritable(); }
             // css::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-            static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
 
 
             sal_Int32 getFilePos() const { return m_nFilePos; }

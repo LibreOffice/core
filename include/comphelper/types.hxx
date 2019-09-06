@@ -56,7 +56,7 @@ namespace comphelper
     {
         css::uno::Reference< css::lang::XUnoTunnel > xTunnel(_rxIFace, css::uno::UNO_QUERY);
         if (xTunnel.is())
-            return reinterpret_cast< TYPE* >(xTunnel->getSomething(TYPE::getUnoTunnelImplementationId()));
+            return reinterpret_cast< TYPE* >(xTunnel->getSomething(TYPE::getUnoTunnelId()));
 
         return nullptr;
     }

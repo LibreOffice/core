@@ -403,7 +403,7 @@ void OStatement_Base::construct(const OUString& sql)
     Reference< css::lang::XUnoTunnel> xTunnel(rTabs.begin()->second,UNO_QUERY);
     if(xTunnel.is())
     {
-        m_pTable = reinterpret_cast<OFileTable*>(xTunnel->getSomething(OFileTable::getUnoTunnelImplementationId()));
+        m_pTable = reinterpret_cast<OFileTable*>(xTunnel->getSomething(OFileTable::getUnoTunnelId()));
     }
     OSL_ENSURE(m_pTable.is(),"No table!");
     if ( m_pTable.is() )

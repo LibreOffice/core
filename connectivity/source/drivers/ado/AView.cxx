@@ -22,6 +22,7 @@
 #include <ado/adoimp.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <ado/Awrapado.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <TConnection.hxx>
 
@@ -40,7 +41,7 @@ OAdoView::OAdoView(bool _bCase,ADOView* _pView) : OView_ADO(_bCase,nullptr)
 {
 }
 
-Sequence< sal_Int8 > OAdoView::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > OAdoView::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 
@@ -51,7 +52,7 @@ Sequence< sal_Int8 > OAdoView::getUnoTunnelImplementationId()
 
 sal_Int64 OAdoView::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    return isUnoTunnelId<OAdoView>(rId)
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OView_ADO::getSomething(rId);
 }

@@ -23,6 +23,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <comphelper/extract.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <ado/ACatalog.hxx>
 
@@ -74,7 +75,7 @@ OAdoColumn::OAdoColumn(bool _bCase,OConnection* _pConnection)
 }
 
 
-Sequence< sal_Int8 > OAdoColumn::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > OAdoColumn::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 
@@ -85,7 +86,7 @@ Sequence< sal_Int8 > OAdoColumn::getUnoTunnelImplementationId()
 
 sal_Int64 OAdoColumn::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    return isUnoTunnelId<OAdoColumn>(rId)
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OColumn_ADO::getSomething(rId);
 }

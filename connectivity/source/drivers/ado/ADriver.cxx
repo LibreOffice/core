@@ -199,7 +199,7 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
     Reference< css::lang::XUnoTunnel> xTunnel(connection,UNO_QUERY);
     if(xTunnel.is())
     {
-        OConnection* pSearchConnection = reinterpret_cast< OConnection* >( xTunnel->getSomething(OConnection::getUnoTunnelImplementationId()) );
+        OConnection* pSearchConnection = reinterpret_cast< OConnection* >( xTunnel->getSomething(OConnection::getUnoTunnelId()) );
 
         auto foundConnection = std::any_of(m_xConnections.begin(), m_xConnections.end(),
             [&pSearchConnection](const css::uno::WeakReferenceHelper& rxConnection) {
