@@ -733,8 +733,8 @@ public:
     void            SetParaRemovingHdl(const Link<ParagraphHdlParam,void>& rLink){aParaRemovingHdl=rLink;}
     const Link<ParagraphHdlParam,void>& GetParaRemovingHdl() const { return aParaRemovingHdl; }
 
-    NonOverflowingText *GetNonOverflowingText() const;
-    OverflowingText *GetOverflowingText() const;
+    std::unique_ptr<NonOverflowingText> GetNonOverflowingText() const;
+    std::unique_ptr<OverflowingText> GetOverflowingText() const;
     void ClearOverflowingParaNum();
     bool IsPageOverflow();
 

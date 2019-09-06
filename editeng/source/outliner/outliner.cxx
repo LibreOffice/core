@@ -2012,7 +2012,7 @@ bool Outliner::IsPageOverflow()
     return pEditEngine->IsPageOverflow();
 }
 
-NonOverflowingText *Outliner::GetNonOverflowingText() const
+std::unique_ptr<NonOverflowingText> Outliner::GetNonOverflowingText() const
 {
     /* XXX:
      * nCount should be the number of paragraphs of the non overflowing text
@@ -2076,7 +2076,7 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
         ESelection aEmptySel(0,0,0,0);
         //EditTextObject *pTObj = pEditEngine->CreateTextObject(aEmptySel);
         bool const bLastParaInterrupted = true; // Last Para was interrupted since everything overflew
-        return new NonOverflowingText(aEmptySel, bLastParaInterrupted);
+        return std::make_unique<NonOverflowingText>(aEmptySel, bLastParaInterrupted);
     } else { // Get the lines that of the overflowing para fit in the box
 
         sal_Int32 nOverflowingPara = nCount;
@@ -2113,7 +2113,7 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
         bool bLastParaInterrupted =
             pEditEngine->GetOverflowingLineNum() > 0;
 
-        return new NonOverflowingText(aOverflowingTextSelection, bLastParaInterrupted);
+        return std::make_unique<NonOverflowingText>(aOverflowingTextSelection, bLastParaInterrupted);
     }
 }
 
@@ -2125,7 +2125,7 @@ std::unique_ptr<OutlinerParaObject> Outliner::GetEmptyParaObject() const
     return pPObj;
 }
 
-OverflowingText *Outliner::GetOverflowingText() const
+std::unique_ptr<OverflowingText> Outliner::GetOverflowingText() const
 {
     if ( pEditEngine->GetOverflowingParaNum() < 0)
         return nullptr;
@@ -2156,7 +2156,7 @@ OverflowingText *Outliner::GetOverflowingText() const
     sal_Int32 nLastParaLen = GetText(GetParagraph(nLastPara)).getLength();
     aOverflowingTextSel = ESelection(nOverflowingPara, nLen,
                                      nLastPara, nLastParaLen);
-    return new OverflowingText(pEditEngine->CreateTransferable(aOverflowingTextSel));
+    return std::make_unique<OverflowingText>(pEditEngine->CreateTransferable(aOverflowingTextSel));
 
 }
 
