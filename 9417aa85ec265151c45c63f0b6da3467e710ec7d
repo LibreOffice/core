@@ -16,6 +16,24 @@
       "revId": "9417aa85ec265151c45c63f0b6da3467e710ec7d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ebf0046a",
+        "filename": "sd/source/filter/eppt/pptx-epptooxml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2019-09-06T12:41:00Z",
+      "side": 0,
+      "message": "I think that\u0027s the reason. It was not supported. Hatch might be supported now too, I did not test it. I tested the gradient with different attributes and it seemed to work. It\u0027s not perfect, but better than ignore it completely.",
+      "parentUuid": "bf659307_2b503c5d",
+      "revId": "9417aa85ec265151c45c63f0b6da3467e710ec7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
