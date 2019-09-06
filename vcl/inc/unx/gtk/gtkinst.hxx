@@ -224,7 +224,7 @@ public:
     // impossible to handle correctly, as "main thread" depends on the dispatch mutex
     virtual bool                IsMainThread() const override { return false; }
 
-    virtual GenPspGraphics     *CreatePrintGraphics() override;
+    virtual std::unique_ptr<GenPspGraphics> CreatePrintGraphics() override;
 
     virtual bool hasNativeFileSelection() const override { return true; }
 

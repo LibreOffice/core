@@ -216,9 +216,9 @@ void X11SalInstance::PostPrintersChanged()
         pDisp->PostEvent( pSalFrame, nullptr, SalEvent::PrinterChanged );
 }
 
-GenPspGraphics *X11SalInstance::CreatePrintGraphics()
+std::unique_ptr<GenPspGraphics> X11SalInstance::CreatePrintGraphics()
 {
-    return new GenPspGraphics();
+    return std::make_unique<GenPspGraphics>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

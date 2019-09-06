@@ -124,6 +124,9 @@ OUString Qt5Instance::GetDefaultPrinter()
 
 void Qt5Instance::PostPrintersChanged() {}
 
-GenPspGraphics* Qt5Instance::CreatePrintGraphics() { return new GenPspGraphics(); }
+std::unique_ptr<GenPspGraphics> Qt5Instance::CreatePrintGraphics()
+{
+    return std::make_unique<GenPspGraphics>();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

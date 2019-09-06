@@ -61,7 +61,7 @@ public:
     virtual void                jobStartedPrinterUpdate() override;
     virtual void                jobEndedPrinterUpdate() override;
     bool isPrinterInit() const { return mbPrinterInit; }
-    virtual GenPspGraphics     *CreatePrintGraphics() = 0;
+    virtual std::unique_ptr<GenPspGraphics> CreatePrintGraphics() = 0;
 
     virtual OUString            getOSVersion() override;
 
