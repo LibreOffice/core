@@ -76,6 +76,7 @@ public:
     void testTdf122878();
     void testTdf115094();
     void testTdf118719();
+    void testTdf127235();
     void testTdf123651();
     void testBtlrCell();
     void testImageComment();
@@ -118,6 +119,7 @@ public:
     CPPUNIT_TEST(testTdf122878);
     CPPUNIT_TEST(testTdf115094);
     CPPUNIT_TEST(testTdf118719);
+    CPPUNIT_TEST(testTdf127235)
     CPPUNIT_TEST(testTdf123651);
     CPPUNIT_TEST(testBtlrCell);
     CPPUNIT_TEST(testImageComment);
@@ -2741,6 +2743,13 @@ void SwLayoutWriter::testTdf118719()
     sal_Int32 nOther = parseDump("/root/page[1]/infos/bounds", "height").toInt32();
     sal_Int32 nLast = parseDump("/root/page[2]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(nOther, nLast);
+}
+
+void SwLayoutWriter::testTdf127235()
+{
+    SwDoc* pDoc = createDoc("tdf127235.odt");
+    // This resulted in a layout loop.
+    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
 }
 
 void SwLayoutWriter::testTdf123651()
