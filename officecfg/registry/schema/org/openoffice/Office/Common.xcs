@@ -5513,6 +5513,12 @@
           <info>
               <desc>The last time when the Tip-of-the-day dialog was shown.</desc>
           </info>
+          <value>-1</value> <!-- +1 every 24h -->
+      </prop>
+      <prop oor:name="LastTipOfTheDayID" oor:type="xs:int" oor:nillable="false">
+          <info>
+              <desc>The last shown Tip-of-the-day.</desc>
+          </info>
           <value>0</value>
       </prop>
       <prop oor:name="UseOpenCL" oor:type="xs:boolean" oor:nillable="false">

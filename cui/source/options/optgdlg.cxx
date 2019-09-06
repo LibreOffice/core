@@ -70,6 +70,9 @@
 #include <vcl/settings.hxx>
 #include <vcl/IconThemeInfo.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld.hxx>
+#include <dialmgr.hxx>
+
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #endif
@@ -231,6 +234,7 @@ OfaMiscTabPage::OfaMiscTabPage(TabPageParent pParent, const SfxItemSet& rSet)
     , m_xExtHelpCB(m_xBuilder->weld_check_button("exthelp"))
     , m_xPopUpNoHelpCB(m_xBuilder->weld_check_button("popupnohelp"))
     , m_xShowTipOfTheDay(m_xBuilder->weld_check_button("cbShowTipOfTheDay"))
+    , m_xShowTip(m_xBuilder->weld_button("btnShowTip"))
     , m_xFileDlgFrame(m_xBuilder->weld_widget("filedlgframe"))
     , m_xPrintDlgFrame(m_xBuilder->weld_widget("printdlgframe"))
     , m_xFileDlgROImage(m_xBuilder->weld_widget("lockimage"))
@@ -275,6 +279,8 @@ OfaMiscTabPage::OfaMiscTabPage(TabPageParent pParent, const SfxItemSet& rSet)
 
     m_aStrDateInfo = m_xToYearFT->get_label();
     m_xYearValueField->connect_value_changed( LINK( this, OfaMiscTabPage, TwoFigureHdl ) );
+
+    m_xShowTip->connect_clicked(LINK(this, OfaMiscTabPage, ShowTipHdl));
 
     SetExchangeSupport();
 }
@@ -425,6 +431,12 @@ IMPL_LINK_NOARG( OfaMiscTabPage, TwoFigureHdl, weld::SpinButton&, void )
         aOutput += OUString::number( nNum );
     }
     m_xToYearFT->set_label( aOutput );
+}
+IMPL_LINK_NOARG(OfaMiscTabPage, ShowTipHdl, weld::Button&, void)
+{
+    VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+    VclPtr<VclAbstractDialog> pDlg = pFact->CreateTipOfTheDayDialog( GetDialogFrameWeld() );
+    pDlg->Execute();
 }
 
 class CanvasSettings
