@@ -3092,6 +3092,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTabOverMargin)
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/LineBreak", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf127235)
+{
+    SwDoc* pDoc = createDoc("tdf127235.odt");
+    // This resulted in a layout loop.
+    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
