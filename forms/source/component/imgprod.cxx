@@ -206,7 +206,7 @@ void ImageProducer::SetImage( const OUString& rPath )
 
     if ( ::svt::GraphicAccess::isSupportedURL( maURL ) )
     {
-        mpStm.reset( ::svt::GraphicAccess::getImageStream( ::comphelper::getProcessComponentContext(), maURL ) );
+        mpStm = ::svt::GraphicAccess::getImageStream( ::comphelper::getProcessComponentContext(), maURL );
     }
     else if( !maURL.isEmpty() )
     {
