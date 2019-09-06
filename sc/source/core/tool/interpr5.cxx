@@ -350,7 +350,108 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
     if (!pMat || nGlobalError != FormulaError::NONE)
         return nullptr;
 
-    pDok->FillMatrix(*pMat, nTab1, nCol1, nRow1, nCol2, nRow2);
+    if (!bCalcAsShown)
+    {
+        // Use fast array fill.
+        pDok->FillMatrix(*pMat, nTab1, nCol1, nRow1, nCol2, nRow2);
+    }
+    else
+    {
+        // Use slower ScCellIterator to round values.
+
+        // TODO: this probably could use CellBucket for faster storage, see
+        // sc/source/core/data/column2.cxx and FillMatrixHandler, and then be
+        // moved to a function on its own, and/or squeeze the rounding into a
+        // similar FillMatrixHandler that would need to keep track of the cell
+        // position then.
+
+        // Set position where the next entry is expected.
+        SCROW nNextRow = nRow1;
+        SCCOL nNextCol = nCol1;
+        // Set last position as if there was a previous entry.
+        SCROW nThisRow = nRow2;
+        SCCOL nThisCol = nCol1 - 1;
+
+        ScCellIterator aCellIter( pDok, ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
+        for (bool bHas = aCellIter.first(); bHas; bHas = aCellIter.next())
+        {
+            nThisCol = aCellIter.GetPos().Col();
+            nThisRow = aCellIter.GetPos().Row();
+            if (nThisCol != nNextCol || nThisRow != nNextRow)
+            {
+                // Fill empty between iterator's positions.
+                for ( ; nNextCol <= nThisCol; ++nNextCol)
+                {
+                    const SCSIZE nC = nNextCol - nCol1;
+                    const SCSIZE nMatStopRow = ((nNextCol < nThisCol) ? nMatRows : nThisRow - nRow1);
+                    for (SCSIZE nR = nNextRow - nRow1; nR < nMatStopRow; ++nR)
+                    {
+                        pMat->PutEmpty( nC, nR);
+                    }
+                    nNextRow = nRow1;
+                }
+            }
+            if (nThisRow == nRow2)
+            {
+                nNextCol = nThisCol + 1;
+                nNextRow = nRow1;
+            }
+            else
+            {
+                nNextCol = nThisCol;
+                nNextRow = nThisRow + 1;
+            }
+
+            const SCSIZE nMatCol = static_cast<SCSIZE>(nThisCol - nCol1);
+            const SCSIZE nMatRow = static_cast<SCSIZE>(nThisRow - nRow1);
+            ScRefCellValue aCell( aCellIter.getRefCellValue());
+            if (aCellIter.isEmpty() || aCell.hasEmptyValue())
+            {
+                pMat->PutEmpty( nMatCol, nMatRow);
+            }
+            else if (aCell.hasError())
+            {
+                pMat->PutError( aCell.mpFormula->GetErrCode(), nMatCol, nMatRow);
+            }
+            else if (aCell.hasNumeric())
+            {
+                double fVal = aCell.getValue();
+                // CELLTYPE_FORMULA already stores the rounded value.
+                if (aCell.meType == CELLTYPE_VALUE)
+                {
+                    // TODO: this could be moved to ScCellIterator to take
+                    // advantage of the faster ScAttrArray_IterGetNumberFormat.
+                    const ScAddress aAdr( nThisCol, nThisRow, nTab1);
+                    const sal_uInt32 nNumFormat = pDok->GetNumberFormat( mrContext, aAdr);
+                    fVal = pDok->RoundValueAsShown( fVal, nNumFormat, &mrContext);
+                }
+                pMat->PutDouble( fVal, nMatCol, nMatRow);
+            }
+            else if (aCell.hasString())
+            {
+                pMat->PutString( mrStrPool.intern( aCell.getString( pDok)), nMatCol, nMatRow);
+            }
+            else
+            {
+                assert(!"aCell.what?");
+                pMat->PutEmpty( nMatCol, nMatRow);
+            }
+        }
+
+        // Fill empty if iterator's last position wasn't the end.
+        if (nThisCol != nCol2 || nThisRow != nRow2)
+        {
+            for ( ; nNextCol <= nCol2; ++nNextCol)
+            {
+                SCSIZE nC = nNextCol - nCol1;
+                for (SCSIZE nR = nNextRow - nRow1; nR < nMatRows; ++nR)
+                {
+                    pMat->PutEmpty( nC, nR);
+                }
+                nNextRow = nRow1;
+            }
+        }
+    }
 
     if (pToken && pTokenMatrixMap)
         pTokenMatrixMap->emplace(pToken, new ScMatrixToken( pMat));
