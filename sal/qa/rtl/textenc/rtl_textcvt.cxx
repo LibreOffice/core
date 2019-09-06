@@ -1765,9 +1765,9 @@ void Test::testComplex() {
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
 #if WITH_LOCALE_ALL || WITH_LOCALE_ja
             { RTL_TEXTENCODING_SHIFT_JIS,
-              RTL_CONSTASCII_STRINGPARAM("\x00"),
-              {0x0000},
-              1,
+              RTL_CONSTASCII_STRINGPARAM("\x00\xFA\x6F\xFA\x71"),
+              {0x0000, 0x4F92, 0x4F9A},
+              3,
               true,
               true,
               true,
