@@ -47,10 +47,11 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="popupnohelp">
-                    <property name="label" translatable="yes" context="optgeneralpage|popupnohelp">Show "No offline help installed" popup</property>
+                    <property name="label" translatable="yes" context="optgeneralpage|popupnohelp">Show "No _offline help installed" popup</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -61,10 +62,11 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="cbShowTipOfTheDay">
-                    <property name="label" translatable="yes" context="optgeneralpage|TipOfTheDayCheckbox">Show "Tip of the Day" dialog on start-up</property>
+                    <property name="label" translatable="yes" context="optgeneralpage|TipOfTheDayCheckbox">Show "_Tip of the Day" dialog on start-up</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -333,7 +335,7 @@
                 <property name="can_focus">False</property>
                 <child>
                   <object class="GtkCheckButton" id="collectusageinfo">
-                    <property name="label" translatable="yes" context="optgeneralpage|collectusageinfo">Collect usage data and send it to The Document Foundation</property>
+                    <property name="label" translatable="yes" context="optgeneralpage|collectusageinfo">_Collect usage data and send it to The Document Foundation</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -349,7 +351,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="crashreport">
-                    <property name="label" translatable="yes" context="optgeneralpage|crashreport">Sen_d crash reports to The Document Foundation</property>
+                    <property name="label" translatable="yes" context="optgeneralpage|crashreport">Send crash _reports to The Document Foundation</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>

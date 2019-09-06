@@ -70,6 +70,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/IconThemeInfo.hxx>
 #include <vcl/toolbox.hxx>
+
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #endif
