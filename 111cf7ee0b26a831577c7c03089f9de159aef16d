@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_aef3fa09",
+        "filename": "sw/source/ui/dbui/mmresultdialogs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-06T17:32:51Z",
+      "side": 0,
+      "message": "Is there a reason to remove the const? (I really consider those \"const\" which allow later to see that \"yes, it\u0027s here where the value is assigned, and no change happens later\")",
+      "range": {
+        "startLine": 753,
+        "startChar": 4,
+        "endLine": 753,
+        "endChar": 9
+      },
+      "revId": "111cf7ee0b26a831577c7c03089f9de159aef16d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
