@@ -128,7 +128,7 @@ E3dLatheObj& E3dLatheObj::operator=(const E3dLatheObj& rObj)
 
 // Convert the object to group object consisting of n polygons
 
-SdrObject *E3dLatheObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
+SdrObjectUniquePtr E3dLatheObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
 {
     return nullptr;
 }

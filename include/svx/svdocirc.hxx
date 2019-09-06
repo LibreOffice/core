@@ -131,7 +131,7 @@ public:
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
     virtual void NbcShear (const Point& rRef, long nAngle, double tn, bool bVShear) override;
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
 private:
     virtual SdrObjGeoData* NewGeoData() const override;

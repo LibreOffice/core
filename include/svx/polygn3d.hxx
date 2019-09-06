@@ -56,7 +56,7 @@ public:
     const basegfx::B2DPolyPolygon& GetPolyTexture2D() const { return aPolyTexture2D; }
 
     virtual sal_uInt16 GetObjIdentifier() const override;
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual E3dPolygonObj* CloneSdrObject(SdrModel& rTargetModel) const override;
 

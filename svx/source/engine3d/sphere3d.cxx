@@ -87,7 +87,7 @@ sal_uInt16 E3dSphereObj::GetObjIdentifier() const
 
 // Convert the object into a group object consisting of n polygons
 
-SdrObject *E3dSphereObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
+SdrObjectUniquePtr E3dSphereObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
 {
     return nullptr;
 }

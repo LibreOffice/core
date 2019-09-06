@@ -632,7 +632,7 @@ basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj)
     }
     else
     {
-        SdrObject* pConvObj = pObj->ConvertToPolyObj(true/*bCombine*/, false);
+        SdrObjectUniquePtr pConvObj = pObj->ConvertToPolyObj(true/*bCombine*/, false);
 
         if(pConvObj)
         {
@@ -655,15 +655,13 @@ basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj)
             }
             else
             {
-                pPath = dynamic_cast<SdrPathObj*>( pConvObj );
+                pPath = dynamic_cast<SdrPathObj*>( pConvObj.get() );
 
                 if(pPath)
                 {
                     aRetval = pPath->GetPathPoly();
                 }
             }
-
-            SdrObject::Free( pConvObj );
         }
     }
 
@@ -1970,24 +1968,20 @@ void SdrEditView::UnGroupMarked()
 
 SdrObject* SdrEditView::ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea)
 {
-    SdrObject* pNewObj = pObj->ConvertToPolyObj(bPath, bLineToArea);
-    if (pNewObj!=nullptr)
+    SdrObjectUniquePtr pNewObj = pObj->ConvertToPolyObj(bPath, bLineToArea);
+    if (pNewObj)
     {
-        SdrObjList* pOL=pObj->getParentSdrObjListFromSdrObject();
-        DBG_ASSERT(pOL!=nullptr,"ConvertTo: Object doesn't return object list");
-        if (pOL!=nullptr)
-        {
-            const bool bUndo = IsUndoEnabled();
-            if( bUndo )
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoReplaceObject(*pObj,*pNewObj));
+        SdrObjList* pOL = pObj->getParentSdrObjListFromSdrObject();
+        const bool bUndo = IsUndoEnabled();
+        if( bUndo )
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoReplaceObject(*pObj,*pNewObj));
 
-            pOL->ReplaceObject(pNewObj,pObj->GetOrdNum());
+        pOL->ReplaceObject(pNewObj.get(), pObj->GetOrdNum());
 
-            if( !bUndo )
-                SdrObject::Free(pObj);
-        }
+        if( !bUndo )
+            SdrObject::Free(pObj);
     }
-    return pNewObj;
+    return pNewObj.release();
 }
 
 void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)

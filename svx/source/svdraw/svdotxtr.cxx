@@ -415,11 +415,11 @@ SdrObjectUniquePtr SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly
 }
 
 
-SdrObject* SdrTextObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
+SdrObjectUniquePtr SdrTextObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     if(bAddText)
     {
-        return ImpConvertContainedTextToSdrPathObjs(!bBezier).release();
+        return ImpConvertContainedTextToSdrPathObjs(!bBezier);
     }
 
     return nullptr;

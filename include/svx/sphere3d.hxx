@@ -67,7 +67,7 @@ public:
         { return GetObjectItemSet().Get(SDRATTR_3DOBJ_VERT_SEGS).GetValue(); }
 
     virtual sal_uInt16 GetObjIdentifier() const override;
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual E3dSphereObj* CloneSdrObject(SdrModel& rTargetModel) const override;
 

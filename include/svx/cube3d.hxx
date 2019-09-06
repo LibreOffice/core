@@ -68,7 +68,7 @@ public:
     E3dCubeObj(SdrModel& rSdrModel);
 
     virtual sal_uInt16 GetObjIdentifier() const override;
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual E3dCubeObj* CloneSdrObject(SdrModel& rTargetModel) const override;
 

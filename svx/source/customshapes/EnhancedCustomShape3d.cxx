@@ -459,11 +459,10 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
             }
             else
             {
-                SdrObject* pNewObj = pNext->ConvertToPolyObj( false, false );
-                SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pNewObj  );
+                SdrObjectUniquePtr pNewObj = pNext->ConvertToPolyObj( false, false );
+                SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pNewObj.get() );
                 if ( pPath )
                     aPolyPoly = pPath->GetPathPoly();
-                SdrObject::Free( pNewObj );
             }
 
             if( aPolyPoly.count() )

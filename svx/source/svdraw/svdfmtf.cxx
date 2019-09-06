@@ -500,7 +500,7 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
 
                 // here text needs to be clipped; to do so, convert to SdrObjects with polygons
                 // and add these recursively. Delete original object, do not add in this run
-                SdrObject* pConverted = pSdrTextObj->ConvertToPolyObj(true, true);
+                SdrObject* pConverted = pSdrTextObj->ConvertToPolyObj(true, true).release();
                 SdrObject::Free(pObj);
 
                 if(pConverted)

@@ -105,7 +105,7 @@ public:
     // implemented mainly for the purposes of Clone()
     E3dLatheObj& operator=(const E3dLatheObj& rObj);
 
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual OUString TakeObjNameSingul() const override;

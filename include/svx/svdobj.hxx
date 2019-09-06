@@ -767,8 +767,8 @@ public:
     // In the case of the conversion from TextObj to PathObj,
     // both modi (bLineToArea=true/false) would be identical.
     // The methods' default implementations report "I'm unable to do this" (false/null).
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const;
-    SdrObject* ConvertToPolyObj(bool bBezier, bool bLineToArea) const;
+    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const;
+    SdrObjectUniquePtr ConvertToPolyObj(bool bBezier, bool bLineToArea) const;
 
     // convert this path object to contour object; bForceLineDash converts even
     // when there is no filled new polygon created from line-to-polygon conversion,

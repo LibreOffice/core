@@ -1131,7 +1131,7 @@ void SdrMeasureObj::RestGeoData(const SdrObjGeoData& rGeo)
     SetTextDirty();
 }
 
-SdrObject* SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
+SdrObjectUniquePtr SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     // get XOR Poly as base
     XPolyPolygon aTmpPolyPolygon(TakeXorPoly());
@@ -1259,11 +1259,11 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 
     if(bAddText)
     {
-        return ImpConvertAddText(std::move(pGroup), bBezier).release();
+        return ImpConvertAddText(std::move(pGroup), bBezier);
     }
     else
     {
-        return pGroup.release();
+        return pGroup;
     }
 }
 

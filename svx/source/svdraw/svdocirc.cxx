@@ -1147,7 +1147,7 @@ void SdrCircObj::ImpSetCircInfoToAttr()
     }
 }
 
-SdrObject* SdrCircObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
+SdrObjectUniquePtr SdrCircObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     const bool bFill(meCircleKind != SdrCircKind::Arc);
     const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, maRect, nStartAngle, nEndAngle));
@@ -1158,7 +1158,7 @@ SdrObject* SdrCircObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
         pRet = ImpConvertAddText(std::move(pRet), bBezier);
     }
 
-    return pRet.release();
+    return pRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

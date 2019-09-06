@@ -58,7 +58,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
 
     const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     const SdrObject* pNewObj;
-    SdrObject* pConvPolyObj = nullptr;
+    SdrObjectUniquePtr pConvPolyObj;
 
     if( dynamic_cast< const SdrPathObj *>( pObj ) !=  nullptr )
     {
@@ -75,7 +75,8 @@ void FuLineEnd::DoExecute( SfxRequest& )
             // bCanConvToPath is sal_True for group objects,
             // but it crashes on ConvertToPathObj()!
         {
-            pNewObj = pConvPolyObj = pObj->ConvertToPolyObj( true, false );
+            pConvPolyObj = pObj->ConvertToPolyObj( true, false );
+            pNewObj = pConvPolyObj.get();
 
             if( !pNewObj || dynamic_cast< const SdrPathObj *>( pNewObj ) ==  nullptr )
                 return; // Cancel, additional security, but it does not help
@@ -87,7 +88,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
     const ::basegfx::B2DPolyPolygon aPolyPolygon = static_cast<const SdrPathObj*>(pNewObj)->GetPathPoly();
 
     // Delete the created poly-object
-    SdrObject::Free( pConvPolyObj );
+    pConvPolyObj.reset();
 
     XLineEndListRef pLineEndList = mpDoc->GetLineEndList();
 

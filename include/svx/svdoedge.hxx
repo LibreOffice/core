@@ -257,7 +257,7 @@ public:
     virtual void BrkCreate(SdrDragStat& rStat) override;
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const override;
     virtual PointerStyle GetCreatePointer() const override;
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual sal_uInt32 GetSnapPointCount() const override;
     virtual Point GetSnapPoint(sal_uInt32 i) const override;

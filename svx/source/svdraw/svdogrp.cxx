@@ -775,19 +775,19 @@ void SdrObjGroup::NbcReformatText()
     NbcReformatAllTextObjects();
 }
 
-SdrObject* SdrObjGroup::DoConvertToPolyObj(bool bBezier, bool bAddText) const
+SdrObjectUniquePtr SdrObjGroup::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
-    SdrObject* pGroup = new SdrObjGroup(getSdrModelFromSdrObject());
+    SdrObjectUniquePtr pGroup( new SdrObjGroup(getSdrModelFromSdrObject()) );
     const size_t nObjCount(GetObjCount());
 
     for(size_t a=0; a < nObjCount; ++a)
     {
         SdrObject* pIterObj(GetObj(a));
-        SdrObject* pResult(pIterObj->DoConvertToPolyObj(bBezier, bAddText));
+        SdrObjectUniquePtr pResult(pIterObj->DoConvertToPolyObj(bBezier, bAddText));
 
         // pResult can be NULL e.g. for empty objects
         if( pResult )
-            pGroup->GetSubList()->NbcInsertObject(pResult);
+            pGroup->GetSubList()->NbcInsertObject(pResult.release());
     }
 
     return pGroup;

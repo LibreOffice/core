@@ -127,7 +127,7 @@ public:
     virtual Point GetPoint(sal_uInt32 i) const override;
     virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i) override;
 
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual bool BegTextEdit(SdrOutliner& rOutl) override;
     virtual const Size& GetTextSize() const override;

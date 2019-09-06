@@ -2668,7 +2668,7 @@ SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
     return pNewObj;
 }
 
-SdrObject* SdrPathObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
+SdrObjectUniquePtr SdrPathObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     // #i89784# check for FontWork with activated HideContour
     const drawinglayer::attribute::SdrTextAttribute aText(
@@ -2706,7 +2706,7 @@ SdrObject* SdrPathObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
         pRet = ImpConvertAddText(std::move(pRet), bBezier);
     }
 
-    return pRet.release();
+    return pRet;
 }
 
 SdrObjGeoData* SdrPathObj::NewGeoData() const
