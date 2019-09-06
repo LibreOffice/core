@@ -317,7 +317,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
         case OBJ_CIRC:
         {
             SdrCircObj* pCircObj = const_cast<SdrCircObj*>( static_cast<const SdrCircObj*>(&rObj) );
-            SdrPathObj* pPathObj = static_cast<SdrPathObj*>( pCircObj->ConvertToPolyObj( false, false ) );
+            SdrPathObj* pPathObj = static_cast<SdrPathObj*>( pCircObj->ConvertToPolyObj( false, false ).release() );
             tools::Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0));
 
             // always use SdrObject::Free(...) for SdrObjects (!)
@@ -386,7 +386,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
             case OBJ_CIRC:
             {
                 const SdrCircObj& rCircObj = static_cast<const SdrCircObj&>(rObj);
-                SdrPathObj* pPathObj = static_cast<SdrPathObj*>( rCircObj.ConvertToPolyObj( false, false ) );
+                SdrPathObj* pPathObj = static_cast<SdrPathObj*>( rCircObj.ConvertToPolyObj( false, false ).release() );
                 tools::Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0));
 
                 IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, "", bActive, false );

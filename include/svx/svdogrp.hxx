@@ -104,7 +104,7 @@ public:
 
     virtual void NbcReformatText() override;
 
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

@@ -917,7 +917,7 @@ sal_Int32 SdrGrafObj::getEmbeddedPageNumber() const
    return mpGraphicObject->GetGraphic().getPageNumber();
 }
 
-SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
+SdrObjectUniquePtr SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
 {
     SdrObject* pRetval = nullptr;
     GraphicType aGraphicType(GetGraphicType());
@@ -964,7 +964,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
                 if( pRetval )
                 {
                     SdrObject* pHalfDone = pRetval;
-                    pRetval = pHalfDone->DoConvertToPolyObj(bBezier, bAddText);
+                    pRetval = pRetval->DoConvertToPolyObj(bBezier, bAddText).release();
                     SdrObject::Free( pHalfDone ); // resulting object is newly created
 
                     if( pRetval )
@@ -987,7 +987,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
             }
 
             // #i118485# convert line and fill
-            SdrObject* pLineFill = SdrRectObj::DoConvertToPolyObj(bBezier, false);
+            SdrObjectUniquePtr pLineFill = SdrRectObj::DoConvertToPolyObj(bBezier, false);
 
             if(pLineFill)
             {
@@ -1002,11 +1002,11 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
                         pGrp->GetSubList()->NbcInsertObject(pRetval);
                     }
 
-                    pGrp->GetSubList()->NbcInsertObject(pLineFill, 0);
+                    pGrp->GetSubList()->NbcInsertObject(pLineFill.release(), 0);
                 }
                 else
                 {
-                    pRetval = pLineFill;
+                    pRetval = pLineFill.release();
                 }
             }
 
@@ -1015,7 +1015,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
         case GraphicType::Bitmap:
         {
             // create basic object and add fill
-            pRetval = SdrRectObj::DoConvertToPolyObj(bBezier, bAddText);
+            pRetval = SdrRectObj::DoConvertToPolyObj(bBezier, bAddText).release();
 
             // save bitmap as an attribute
             if(pRetval)
@@ -1035,12 +1035,12 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
         case GraphicType::NONE:
         case GraphicType::Default:
         {
-            pRetval = SdrRectObj::DoConvertToPolyObj(bBezier, bAddText);
+            pRetval = SdrRectObj::DoConvertToPolyObj(bBezier, bAddText).release();
             break;
         }
     }
 
-    return pRetval;
+    return SdrObjectUniquePtr(pRetval);
 }
 
 void SdrGrafObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )

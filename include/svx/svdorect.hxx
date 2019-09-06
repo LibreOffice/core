@@ -119,7 +119,7 @@ public:
     virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const override;
     virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const override;
 
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 };

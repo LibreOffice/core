@@ -2401,7 +2401,7 @@ void SdrEdgeObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShea
     }
 }
 
-SdrObject* SdrEdgeObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
+SdrObjectUniquePtr SdrEdgeObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     basegfx::B2DPolyPolygon aPolyPolygon;
     aPolyPolygon.append(pEdgeTrack->getB2DPolygon());
@@ -2412,7 +2412,7 @@ SdrObject* SdrEdgeObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
         pRet = ImpConvertAddText(std::move(pRet), bBezier);
     }
 
-    return pRet.release();
+    return pRet;
 }
 
 sal_uInt32 SdrEdgeObj::GetSnapPointCount() const

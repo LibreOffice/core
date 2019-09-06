@@ -789,7 +789,7 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude
             ImpChangeSomeAttributesFor3DConversion(pObj);
 
         // convert completely to path objects
-        SdrObject* pNewObj1 = pObj->ConvertToPolyObj(false, false);
+        SdrObject* pNewObj1 = pObj->ConvertToPolyObj(false, false).release();
 
         if(pNewObj1)
         {

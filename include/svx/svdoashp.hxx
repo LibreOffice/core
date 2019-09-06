@@ -222,7 +222,7 @@ public:
 
     virtual void NbcSetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextObject) override;
 
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     // react on model/page change
     virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage) override;

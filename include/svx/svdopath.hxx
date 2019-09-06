@@ -133,7 +133,7 @@ private:
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
 
 public:
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     // Bezier-polygon getter/setter
     const basegfx::B2DPolyPolygon& GetPathPoly() const { return maPathPolygon; }

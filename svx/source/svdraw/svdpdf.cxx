@@ -527,7 +527,7 @@ void ImpSdrPdfImport::InsertObj(SdrObject* pObj, bool bScale)
 
                 // here text needs to be clipped; to do so, convert to SdrObjects with polygons
                 // and add these recursively. Delete original object, do not add in this run
-                SdrObject* pConverted = pSdrTextObj->ConvertToPolyObj(true, true);
+                SdrObjectUniquePtr pConverted = pSdrTextObj->ConvertToPolyObj(true, true);
                 SdrObject::Free(pObj);
 
                 if (pConverted)
@@ -557,9 +557,6 @@ void ImpSdrPdfImport::InsertObj(SdrObject* pObj, bool bScale)
                             OSL_ENSURE(false, "SdrObject::Clone() failed (!)");
                         }
                     }
-
-                    // cleanup temporary conversion objects
-                    SdrObject::Free(pConverted);
                 }
 
                 break;

@@ -1225,15 +1225,14 @@ SdrObjectUniquePtr SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText) const
     }
 }
 
-SdrObject* SdrOle2Obj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
+SdrObjectUniquePtr SdrOle2Obj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     // #i118485# missing converter added
     SdrObjectUniquePtr pRetval = createSdrGrafObjReplacement(true);
 
     if(pRetval)
     {
-        SdrObject* pRetval2 = pRetval->DoConvertToPolyObj(bBezier, bAddText);
-        return pRetval2;
+        return pRetval->DoConvertToPolyObj(bBezier, bAddText);
     }
 
     return nullptr;

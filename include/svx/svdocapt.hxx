@@ -140,7 +140,7 @@ protected:
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
 
 public:
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     const Point& GetTailPos() const;
     void SetTailPos(const Point& rPos);

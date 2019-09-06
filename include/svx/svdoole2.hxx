@@ -182,7 +182,7 @@ public:
     void SetWindow(const css::uno::Reference < css::awt::XWindow >& _xWindow);
 
     // #i118485# missing converter added
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 };
 
 class SVX_DLLPUBLIC SdrEmbedObjectLink : public sfx2::SvBaseLink

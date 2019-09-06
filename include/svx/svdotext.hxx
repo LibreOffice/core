@@ -499,7 +499,7 @@ public:
     virtual bool CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos,
         bool bEdit, boost::optional<Color>& rpTxtColor, boost::optional<Color>& rpFldColor, OUString& rRet) const;
 
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     void SetTextEditOutliner(SdrOutliner* pOutl) { pEdtOutl=pOutl; }
 

@@ -2531,15 +2531,14 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, bool bForceLineDash) 
 }
 
 
-SdrObject* SdrObject::ConvertToPolyObj(bool bBezier, bool bLineToArea) const
+SdrObjectUniquePtr SdrObject::ConvertToPolyObj(bool bBezier, bool bLineToArea) const
 {
-    SdrObject* pRet = DoConvertToPolyObj(bBezier, true);
+    SdrObjectUniquePtr pRet = DoConvertToPolyObj(bBezier, true);
 
     if(pRet && bLineToArea)
     {
-        SdrObject* pNewRet = ConvertToContourObj(pRet);
-        delete pRet;
-        pRet = pNewRet;
+        SdrObject* pNewRet = ConvertToContourObj(pRet.get());
+        pRet.reset(pNewRet);
     }
 
     // #i73441# preserve LayerID
@@ -2552,7 +2551,7 @@ SdrObject* SdrObject::ConvertToPolyObj(bool bBezier, bool bLineToArea) const
 }
 
 
-SdrObject* SdrObject::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
+SdrObjectUniquePtr SdrObject::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
 {
     return nullptr;
 }

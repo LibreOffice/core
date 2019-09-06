@@ -459,7 +459,6 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
 
             while ( aIter.IsMore() )
             {
-                SdrObject* pNewObj = nullptr;
                 basegfx::B2DPolyPolygon aPP;
                 const SdrObject* pNext = aIter.Next();
 
@@ -469,16 +468,14 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
                 }
                 else
                 {
-                    pNewObj = pNext->ConvertToPolyObj( false, false );
-                    SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pNewObj  );
+                    SdrObjectUniquePtr pNewObj = pNext->ConvertToPolyObj( false, false );
+                    SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pNewObj.get() );
                     if ( pPath )
                         aPP = pPath->GetPathPoly();
                 }
 
                 if ( aPP.count() )
                     aPolyPolygon.append(aPP);
-
-                SdrObject::Free( pNewObj );
             }
             SdrObject::Free( pObj );
             basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords( aPolyPolygon,
