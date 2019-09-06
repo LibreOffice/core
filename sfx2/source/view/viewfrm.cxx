@@ -1315,13 +1315,9 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 if (bShowTipOfTheDay && !Application::IsHeadlessModeEnabled() && !bIsUITest) {
                     const sal_Int32 nLastTipOfTheDay = officecfg::Office::Common::Misc::LastTipOfTheDayShown::get();
                     const sal_Int32 nDay = std::chrono::duration_cast<std::chrono::hours>(t0).count()/24; // days since 1970-01-01
-                    if (nDay-nLastTipOfTheDay > 0) { //only once per day
-                        VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-                        ScopedVclPtr<VclAbstractDialog> pDlg(
-                            pFact->CreateTipOfTheDayDialog(GetWindow().GetFrameWeld()));
-                        pDlg->Execute();
-                    }
-                }
+                    if (nDay-nLastTipOfTheDay > 0) //only once per day
+                        GetDispatcher()->Execute(SID_TIPOFTHEDAY);
+                } //bShowTipOfTheDay
 
                 // inform about the community involvement
                 const sal_Int64 nLastGetInvolvedShown = officecfg::Setup::Product::LastTimeGetInvolvedShown::get();
