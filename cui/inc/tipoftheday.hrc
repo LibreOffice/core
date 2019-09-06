@@ -263,6 +263,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
 
 #define STR_HELP_LINK                   NC_("STR_HELP_LINK", "%PRODUCTNAME Help")
 #define STR_MORE_LINK                   NC_("STR_MORE_LINK", "More info")
+#define STR_TITLE                       NC_("STR_TITLE", "Tip of the Day")
 
 #endif //INCLUDED_CUI_INC_TIPOFTHEDAY_HRC
 
