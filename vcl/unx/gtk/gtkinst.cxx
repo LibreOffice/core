@@ -438,10 +438,10 @@ bool GtkInstance::AnyInput( VclInputFlags nType )
     return bRet;
 }
 
-GenPspGraphics *GtkInstance::CreatePrintGraphics()
+std::unique_ptr<GenPspGraphics> GtkInstance::CreatePrintGraphics()
 {
     EnsureInit();
-    return new GenPspGraphics();
+    return std::make_unique<GenPspGraphics>();
 }
 
 std::shared_ptr<vcl::unx::GtkPrintWrapper> const &

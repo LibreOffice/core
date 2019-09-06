@@ -64,7 +64,7 @@ public:
                                                      long &nDX, long &nDY,
                                                      DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr ) override;
     virtual void                PostPrintersChanged() override;
-    virtual GenPspGraphics     *CreatePrintGraphics() override;
+    virtual std::unique_ptr<GenPspGraphics> CreatePrintGraphics() override;
 
     virtual SalTimer*           CreateSalTimer() override;
     virtual SalSystem*          CreateSalSystem() override;

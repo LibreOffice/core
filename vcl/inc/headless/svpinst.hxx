@@ -176,7 +176,7 @@ public:
 
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 
-    virtual GenPspGraphics *CreatePrintGraphics() override;
+    virtual std::unique_ptr<GenPspGraphics> CreatePrintGraphics() override;
 };
 
 inline void SvpSalInstance::registerFrame( SalFrame* pFrame )

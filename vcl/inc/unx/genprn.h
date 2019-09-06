@@ -59,7 +59,7 @@ public:
     OUString                  m_aFileName;
     OUString                  m_aTmpFile;
     SalInfoPrinter*         m_pInfoPrinter;
-    GenPspGraphics*         m_pGraphics;
+    std::unique_ptr<GenPspGraphics> m_xGraphics;
     psp::PrinterJob         m_aPrintJob;
     psp::JobData            m_aJobData;
     psp::PrinterGfx         m_aPrinterGfx;

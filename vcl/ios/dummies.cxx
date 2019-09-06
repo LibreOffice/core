@@ -37,9 +37,9 @@ OUString SvpSalInstance::GetDefaultPrinter()
     return OUString();
 }
 
-GenPspGraphics *SvpSalInstance::CreatePrintGraphics()
+std::unique_ptr<GenPspGraphics> SvpSalInstance::CreatePrintGraphics()
 {
-    return NULL;
+    return nullptr;
 }
 
 void SvpSalInstance::PostPrintersChanged()
