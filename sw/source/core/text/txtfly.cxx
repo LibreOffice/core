@@ -998,6 +998,24 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
 {
     SwSwapIfSwapped swap(const_cast<SwTextFrame *>(m_pCurrFrame));
 
+    // Optimization
+    SwRectFnSet aRectFnSet(m_pCurrFrame);
+
+    // tdf#127235 stop if the area is larger than the page
+    if( aRectFnSet.GetHeight(pPage->getFrameArea()) < aRectFnSet.GetHeight(rRect))
+    {
+        // get the doc model description
+        const SwPageDesc* pPageDesc = pPage->GetPageDesc();
+
+        // if there is no next page style or it is the same as the current
+        // => stop trying to place the frame (it would end in an infinite loop)
+        if( pPageDesc &&
+            ( !pPageDesc->GetFollow() || pPageDesc->GetFollow() == pPageDesc) )
+        {
+            return false;
+        }
+    }
+
     bool bRet = false;
     // #i68520#
     const SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
@@ -1010,10 +1028,9 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
 
             SwRect aRect( pAnchoredObj->GetObjRectWithSpaces() );
 
-            // Optimization
-            SwRectFnSet aRectFnSet(m_pCurrFrame);
             if( aRectFnSet.GetLeft(aRect) > aRectFnSet.GetRight(rRect) )
                 break;
+
             // #i68520#
             if ( mpCurrAnchoredObj != pAnchoredObj && aRect.IsOver( rRect ) )
             {
