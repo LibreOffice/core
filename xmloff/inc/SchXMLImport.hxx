@@ -21,10 +21,7 @@
 
 #include <xmloff/SchXMLImportHelper.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlictxt.hxx>
-#include <xmloff/prhdlfac.hxx>
-#include <xmloff/families.hxx>
 
 /*
    these enums are used for the

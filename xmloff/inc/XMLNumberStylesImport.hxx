@@ -21,7 +21,6 @@
 #define INCLUDED_XMLOFF_INC_XMLNUMBERSTYLESIMPORT_HXX
 
 #include <xmloff/xmlnumfi.hxx>
-#include <com/sun/star/container/XNameAccess.hpp>
 
 // presentations:animations
 

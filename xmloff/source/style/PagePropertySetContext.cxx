@@ -24,6 +24,7 @@
 #include <xmloff/PageMasterStyleMap.hxx>
 #include "XMLFootnoteSeparatorImport.hxx"
 #include <xmloff/xmlimppr.hxx>
+#include <xmloff/xmlprmap.hxx>
 
 
 using namespace ::com::sun::star::uno;

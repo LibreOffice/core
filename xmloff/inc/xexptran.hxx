@@ -21,12 +21,7 @@
 #define INCLUDED_XMLOFF_INC_XEXPTRAN_HXX
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
-#include <com/sun/star/drawing/PointSequence.hpp>
-#include <com/sun/star/drawing/FlagSequence.hpp>
-#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
-#include <tools/mapunit.hxx>
 
 #include <memory>
 #include <vector>

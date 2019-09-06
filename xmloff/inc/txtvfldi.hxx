@@ -27,7 +27,6 @@
 
 #include "txtfldi.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 
 
 /** helper class: parses value-type and associated value attributes */

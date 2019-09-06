@@ -1,0 +1,9 @@
+---
+assumeFilename: xmloff/source/core/xmlexp.cxx
+blacklist:
+    xmloff/inc/XMLImageMapExport.hxx:
+    # Needed for css shortcut
+    - sal/types.h
+    xmloff/inc/XMLTextColumnsExport.hxx:
+    # Needed for css shortcut
+    - sal/types.h

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_XMLOFF_INC_XMLREPLACEMENTIMAGECONTEXT_HXX
 #define INCLUDED_XMLOFF_INC_XMLREPLACEMENTIMAGECONTEXT_HXX
 
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <xmloff/xmlictxt.hxx>
 
 

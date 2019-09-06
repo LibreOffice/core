@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustring.hxx>
 
 

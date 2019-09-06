@@ -20,7 +20,6 @@
 #ifndef INCLUDED_XMLOFF_INC_XMLMULTIIMAGEHELPER_HXX
 #define INCLUDED_XMLOFF_INC_XMLMULTIIMAGEHELPER_HXX
 
-#include <sal/types.h>
 #include <xmloff/xmlimp.hxx>
 
 

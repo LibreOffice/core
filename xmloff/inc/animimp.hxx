@@ -23,7 +23,6 @@
 #include <memory>
 
 #include <xmloff/xmlictxt.hxx>
-#include <com/sun/star/drawing/XShapes.hpp>
 
 class AnimImpImpl;
 

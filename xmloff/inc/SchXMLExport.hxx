@@ -23,7 +23,6 @@
 #include "SchXMLAutoStylePoolP.hxx"
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlprmap.hxx>
-#include <xmloff/prhdlfac.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace task {

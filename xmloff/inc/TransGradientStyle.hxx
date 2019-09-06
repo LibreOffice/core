@@ -21,7 +21,6 @@
 #define INCLUDED_XMLOFF_INC_TRANSGRADIENTSTYLE_HXX
 
 
-#include <sal/types.h>
 #include <rtl/ustring.hxx>
 
 class SvXMLImport;

@@ -27,9 +27,9 @@
 #define INCLUDED_XMLOFF_INC_TXTFLDI_HXX
 
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/util/Date.hpp>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmltkmap.hxx>

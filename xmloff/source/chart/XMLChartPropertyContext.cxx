@@ -23,6 +23,7 @@
 #include "XMLSymbolImageContext.hxx"
 #include "XMLLabelSeparatorContext.hxx"
 #include <xmloff/xmlimppr.hxx>
+#include <xmloff/xmlprmap.hxx>
 
 
 using namespace ::com::sun::star;

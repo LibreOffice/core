@@ -24,6 +24,7 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/animations/XAnimationNode.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 // presentations:animations
 
