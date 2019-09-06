@@ -34,7 +34,7 @@ constexpr long ROADMAP_ITEM_DISTANCE_Y = 6;
 namespace vcl
 {
 
-typedef std::vector< RoadmapItem* > HL_Vector;
+typedef std::vector< std::unique_ptr<RoadmapItem> > HL_Vector;
 
 //= ColorChanger
 
@@ -101,6 +101,7 @@ protected:
     Size                m_aItemSizePixel;
 public:
     bool                m_bPaintInitialized : 1;
+    std::unique_ptr<RoadmapItem> InCompleteHyperLabel;
 
 public:
     explicit RoadmapImpl(const ORoadmap& rAntiImpl)
@@ -109,19 +110,16 @@ public:
         , m_bInteractive(true)
         , m_bComplete(true)
         , m_bPaintInitialized(false)
-        , InCompleteHyperLabel(nullptr)
     {}
-
-    RoadmapItem* InCompleteHyperLabel;
 
     HL_Vector& getHyperLabels()
     {
         return m_aRoadmapSteps;
     }
 
-    void insertHyperLabel(ItemIndex Index, RoadmapItem* _rRoadmapStep)
+    void insertHyperLabel(ItemIndex Index, std::unique_ptr<RoadmapItem> _rRoadmapStep)
     {
-        m_aRoadmapSteps.insert(m_aRoadmapSteps.begin() + Index, _rRoadmapStep);
+        m_aRoadmapSteps.insert(m_aRoadmapSteps.begin() + Index, std::move(_rRoadmapStep));
     }
 
     ItemIndex getItemCount() const
@@ -182,11 +180,7 @@ public:
 
     void removeHyperLabel(ItemIndex Index)
     {
-        if ((Index > -1) && (Index < getItemCount()))
-        {
-            delete m_aRoadmapSteps[Index];
-            m_aRoadmapSteps.erase(m_aRoadmapSteps.begin() + Index);
-        }
+        m_aRoadmapSteps.erase(m_aRoadmapSteps.begin() + Index);
     }
 };
 
@@ -237,14 +231,6 @@ ORoadmap::~ORoadmap()
 
 void ORoadmap::dispose()
 {
-    HL_Vector aItemsCopy = m_pImpl->getHyperLabels();
-    m_pImpl->getHyperLabels().clear();
-    for (auto const& itemCopy : aItemsCopy)
-    {
-        delete itemCopy;
-    }
-    if ( ! m_pImpl->isComplete() )
-        delete m_pImpl->InCompleteHyperLabel;
     m_pImpl.reset();
     Control::dispose();
 }
@@ -258,7 +244,7 @@ RoadmapItem* ORoadmap::GetPreviousHyperLabel(ItemIndex Index)
 {
     RoadmapItem* pOldItem = nullptr;
     if ( Index > 0 )
-        pOldItem = m_pImpl->getHyperLabels().at( Index - 1 );
+        pOldItem = m_pImpl->getHyperLabels().at( Index - 1 ).get();
     return pOldItem;
 }
 
@@ -278,7 +264,7 @@ RoadmapItem* ORoadmap::InsertHyperLabel(ItemIndex Index, const OUString& _sLabel
     else
     {
         pItem->SetInteractive( m_pImpl->isInteractive() );
-        m_pImpl->insertHyperLabel( Index, pItem );
+        m_pImpl->insertHyperLabel( Index, std::unique_ptr<RoadmapItem>(pItem) );
     }
     pItem->SetPosition( pOldItem );
     pItem->Update( Index, _sLabel );
@@ -318,14 +304,10 @@ void ORoadmap::SetRoadmapComplete(bool _bComplete)
     m_pImpl->setComplete( _bComplete );
     if (_bComplete)
     {
-        if (m_pImpl->InCompleteHyperLabel != nullptr)
-        {
-            delete m_pImpl->InCompleteHyperLabel;
-            m_pImpl->InCompleteHyperLabel = nullptr;
-        }
+        m_pImpl->InCompleteHyperLabel.reset();
     }
     else if (bWasComplete)
-        m_pImpl->InCompleteHyperLabel = InsertHyperLabel(m_pImpl->getItemCount(), "...", -1, true/*bEnabled*/, true/*bIncomplete*/ );
+        m_pImpl->InCompleteHyperLabel.reset(InsertHyperLabel(m_pImpl->getItemCount(), "...", -1, true/*bEnabled*/, true/*bIncomplete*/ ));
 }
 
 void ORoadmap::UpdatefollowingHyperLabels(ItemIndex _nIndex)
@@ -338,7 +320,7 @@ void ORoadmap::UpdatefollowingHyperLabels(ItemIndex _nIndex)
               ++i, ++_nIndex
             )
         {
-            RoadmapItem* pItem = *i;
+            RoadmapItem* pItem = i->get();
 
             pItem->SetIndex( _nIndex );
             pItem->SetPosition( GetPreviousHyperLabel( _nIndex ) );
@@ -437,7 +419,7 @@ RoadmapItem* ORoadmap::GetByID(ItemId _nID)
     {
         nLocID = item->GetID();
         if ( nLocID == _nID )
-            return item;
+            return item.get();
     }
     return nullptr;
 }
@@ -450,11 +432,7 @@ const RoadmapItem* ORoadmap::GetByID(ItemId _nID) const
 RoadmapItem* ORoadmap::GetByIndex(ItemIndex _nItemIndex)
 {
     const HL_Vector& rItems = m_pImpl->getHyperLabels();
-    if ( ( _nItemIndex > -1 ) && ( _nItemIndex < static_cast<ItemIndex>(rItems.size()) ) )
-    {
-        return rItems.at( _nItemIndex );
-    }
-    return nullptr;
+    return rItems.at( _nItemIndex ).get();
 }
 
 const RoadmapItem* ORoadmap::GetByIndex(ItemIndex _nItemIndex) const
@@ -586,7 +564,7 @@ RoadmapItem* ORoadmap::GetByPointer(vcl::Window const * pWindow)
     for (auto const& item : rItems)
     {
         if ( item->Contains( pWindow ) )
-            return item;
+            return item.get();
     }
     return nullptr;
 }
