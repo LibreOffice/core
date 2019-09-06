@@ -1315,6 +1315,12 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     const sal_Int32 nLastTipOfTheDay = officecfg::Office::Common::Misc::LastTipOfTheDayShown::get();
                     const sal_Int32 nDay = std::chrono::duration_cast<std::chrono::hours>(t0).count()/24; // days since 1970-01-01
                     if (nDay-nLastTipOfTheDay > 0) { //only once per day
+                        //update tip after 24h
+                        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+                        sal_Int32 nTipID = officecfg::Office::Common::Misc::LastTipOfTheDayID::get();
+                        officecfg::Office::Common::Misc::LastTipOfTheDayID::set(nTipID, batch);
+                        batch->commit();
+
                         VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
                         ScopedVclPtr<VclAbstractDialog> pDlg(
                             pFact->CreateTipOfTheDayDialog(GetWindow().GetFrameWeld()));
