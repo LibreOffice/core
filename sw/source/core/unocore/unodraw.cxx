@@ -72,7 +72,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <calbck.hxx>
 
 using namespace ::com::sun::star;
 
@@ -575,7 +574,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
                                     static_cast< cppu::OWeakObject * > ( this ) );
 
     // we're already registered in the model / SwXDrawPage::add() already called
-    if(pShape->m_pPage || pShape->GetRegisteredIn() || !pShape->m_bDescriptor )
+    if(pShape->m_pPage || pShape->m_pFormat || !pShape->m_bDescriptor )
         return;
 
     // we're inserted elsewhere already
@@ -711,7 +710,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     pDoc->getIDocumentContentOperations().InsertDrawObj( *pTemp, *pObj, aSet );
     SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
     if(pFormat)
-        pFormat->Add(pShape);
+        pShape->SetFrameFormat(pFormat);
     pShape->m_bDescriptor = false;
 
     pPam.reset();
@@ -871,6 +870,7 @@ SwXShape::SwXShape(
         uno::Reference<uno::XInterface> & xShape,
         SwDoc const*const pDoc)
     : m_pPage(nullptr)
+    , m_pFormat(nullptr)
     , m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_SHAPE))
     , m_pPropertyMapEntries(aSwMapProvider.GetPropertyMapEntries(PROPERTY_MAP_TEXT_SHAPE))
     , pImpl(new SwShapeDescriptor_Impl(pDoc))
@@ -907,9 +907,9 @@ SwXShape::SwXShape(
     SdrObject* pObj = pShape ? pShape->GetSdrObject() : nullptr;
     if(pObj)
     {
-        SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
+        auto pFormat = ::FindFrameFormat( pObj );
         if(pFormat)
-            pFormat->Add(this);
+            SetFrameFormat(pFormat);
 
         lcl_addShapePropertyEventFactories( *pObj, *this );
         pImpl->bInitializedPropertyNotifier = true;
@@ -936,9 +936,9 @@ void SwXShape::AddExistingShapeToFormat( SdrObject const & _rObj )
         {
             if ( pSwShape->m_bDescriptor )
             {
-                SwFrameFormat* pFormat = ::FindFrameFormat( pCurrent );
+                auto pFormat = ::FindFrameFormat( pCurrent );
                 if ( pFormat )
-                    pFormat->Add( pSwShape );
+                    pSwShape->SetFrameFormat(pFormat);
                 pSwShape->m_bDescriptor = false;
             }
 
@@ -1984,9 +1984,13 @@ void SwXShape::removeVetoableChangeListener(
     OSL_FAIL("not implemented");
 }
 
-void SwXShape::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXShape::Notify(const SfxHint& rHint)
 {
-    ClientModify(this, pOld, pNew);
+    if(rHint.GetId() == SfxHintId::Dying)
+    {
+        m_pFormat = nullptr;
+        EndListeningAll();
+    }
 }
 
 void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
@@ -2754,8 +2758,9 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape )
         pSwShape->m_bDescriptor = false;
         //add the group member to the format of the group
         SwFrameFormat* pShapeFormat = ::FindFrameFormat( pSvxShape->GetSdrObject() );
+
         if(pShapeFormat)
-            pFormat->Add(pSwShape);
+            pSwShape->SetFrameFormat(pShapeFormat);
     }
 
 }
