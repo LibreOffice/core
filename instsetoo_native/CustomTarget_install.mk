@@ -20,7 +20,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,instsetoo_native/install))
 
 $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/install,\
 	install.phony \
-	$(if $(WINDOWS_BUILD_SIGNING),msi_signing.done) \
+	$(if $(filter TRUE,$(WINDOWS_BUILD_SIGNING)),msi_signing.done) \
 	$(if $(filter-out WNT,$(OS)),\
 	bin/find-requires-gnome.sh \
 	bin/find-requires-x11.sh) \
