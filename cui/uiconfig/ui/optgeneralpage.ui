@@ -349,7 +349,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="crashreport">
-                    <property name="label" translatable="yes" context="optgeneralpage|crashreport">Sen_d crash reports to The Document Foundation</property>
+                    <property name="label" translatable="yes" context="optgeneralpage|crashreport">Send crash reports to The Document Foundation</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
