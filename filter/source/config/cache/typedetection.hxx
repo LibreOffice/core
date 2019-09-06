@@ -129,7 +129,7 @@ private:
                     enable/disable using of a might existing deep detection service.
 
         @return     The internal name of a detected type.
-                    An empty value if detection failed. .... but see rLastChance
+                    An empty value if detection failed. ... but see rLastChance
                     for additional returns!
      */
     OUString impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& rDescriptor   ,
@@ -142,8 +142,8 @@ private:
     /** @short      seek a might existing stream to position 0.
 
         @descr      This is an optional action to be more robust
-                    in case any detect service doesn't make this seek ...
-                    Normally it's part of any called detect service or filter ...
+                    in case any detect service doesn't make this seek...
+                    Normally it's part of any called detect service or filter...
                     but sometimes it's not done there.
 
         @param      rDescriptor

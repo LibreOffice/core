@@ -55,7 +55,7 @@ case "$1" in
         echo "             pull CHANGEID           pull (and merge) the changes on current branch"
         echo "             cherry-pick CHANGEID    cherry-pick the change on current branch"
         echo "             patch CHANGEID          show the change as a patch"
-        echo "             query ....              query for changes for review on project core"
+        echo "             query ...               query for changes for review on project core"
         echo "             <any other gerrit command>"
         echo
         echo "advanced users should consider using git review instead:"

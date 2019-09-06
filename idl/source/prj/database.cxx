@@ -242,7 +242,7 @@ bool SvIdlDataBase::ReadIdFile( const OString& rOFileName )
                 if (aName == "sfx2/groupid.hxx")
                 {
                     // contains C++ code which we cannot parse
-                    // we special-case this by defining a macro internally in ....
+                    // we special-case this by defining a macro internally in...
                 }
                 else if (aName == "svl/typedwhich.hxx")
                 {

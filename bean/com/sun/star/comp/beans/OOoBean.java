@@ -720,7 +720,7 @@ public class OOoBean
     {
         // wrap Java stream into UNO stream
 
-                 // copy stream....
+                 // copy stream...
                  int s = 4096;
                  int r=0 ,n = 0;
                  byte[] buffer = new byte[s];

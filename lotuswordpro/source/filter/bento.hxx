@@ -113,7 +113,7 @@ enum BenError
     BenErr_NotBentoContainer = 22,
     BenErr_PropertyWithMoreThanOneValue = 23
 
-    // IMPORTANT - UtStream errors (UtErr_....) are also valid Bento
+    // IMPORTANT - UtStream errors (UtErr_...) are also valid Bento
     // errors.  They have codes of 100 and higher.  When, say, a Bento
     // container open fails due to an access violation (somebody else, say,
     // has it open exclusive), will get a UtErr code.  If define own

@@ -305,7 +305,7 @@ Which services are combined in the android lib is determined by
 
 lo_dlneeds: Could not read ELF header of /data/data/org.libreoffice...libfoo.so
         This (most likely) means that the install quietly failed, and that
-the file is truncated; check it out with adb shell ls -l /data/data/....
+the file is truncated; check it out with adb shell ls -l /data/data/...
 
 * Startup details
 

@@ -603,7 +603,7 @@ void ModulWindow::BasicErrorHdl( StarBASIC const * pBasic )
 
     // Return value: BOOL
     //  FALSE:  cancel
-    //  TRUE:   go on....
+    //  TRUE:   go on...
     sal_uInt16 nErrorLine = StarBASIC::GetLine() - 1;
     sal_uInt16 nErrCol1 = StarBASIC::GetCol1();
     sal_uInt16 nErrCol2 = StarBASIC::GetCol2();
