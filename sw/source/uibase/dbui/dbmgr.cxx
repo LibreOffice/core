@@ -1020,6 +1020,10 @@ static SfxObjectShell* lcl_CreateWorkingDocument(
     pWorkDoc->GetIDocumentUndoRedo().DoUndo( false );
     pWorkDoc->ReplaceDocumentProperties( *pSourceDoc );
 
+    // import print settings
+    const SwPrintData &rPrintData = pSourceDoc->getIDocumentDeviceAccess().getPrintData();
+    pWorkDoc->getIDocumentDeviceAccess().setPrintData(rPrintData);
+
     if( aType == WorkingDocType::TARGET )
     {
         assert( !ppDBManager );
@@ -1299,10 +1303,6 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             xTargetDocShell = lcl_CreateWorkingDocument( WorkingDocType::TARGET,
                 *pSourceShell, bMT_SHELL ? pSourceWindow : nullptr,
                 nullptr, &pTargetView, &pTargetShell, &pTargetDoc );
-
-            // import current print settings
-            const SwPrintData &rPrintData = pSourceShell->getIDocumentDeviceAccess().getPrintData();
-            pTargetDoc->getIDocumentDeviceAccess().setPrintData(rPrintData);
 
             if (nMaxDumpDocs)
                 lcl_SaveDebugDoc( xTargetDocShell.get(), "MergeDoc" );
