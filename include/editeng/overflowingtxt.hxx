@@ -68,27 +68,25 @@ public:
 class OverflowingText
 {
 public:
+    OverflowingText(css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent);
+
     std::unique_ptr<OutlinerParaObject> JuxtaposeParaObject(Outliner *, OutlinerParaObject const *);
     std::unique_ptr<OutlinerParaObject> DeeplyMergeParaObject(Outliner *, OutlinerParaObject const *);
 
 private:
-    friend class Outliner;
-    OverflowingText(css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent);
-
     css::uno::Reference< css::datatransfer::XTransferable > mxOverflowingContent;
 };
 
 class NonOverflowingText
 {
 public:
+    NonOverflowingText(const ESelection &aSel, bool bLastParaInterrupted);
+
     std::unique_ptr<OutlinerParaObject> RemoveOverflowingText(Outliner *) const;
     ESelection GetOverflowPointSel() const;
     bool IsLastParaInterrupted() const;
 
 private:
-    NonOverflowingText(const ESelection &aSel, bool bLastParaInterrupted);
-
-    friend class Outliner;
     const ESelection maContentSel;
     const bool mbLastParaInterrupted;
 };

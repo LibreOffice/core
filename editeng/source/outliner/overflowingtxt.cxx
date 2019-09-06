@@ -159,8 +159,8 @@ std::unique_ptr<OutlinerParaObject> OverflowingText::DeeplyMergeParaObject(Outli
 
 OFlowChainedText::OFlowChainedText(Outliner const *pOutl, bool bIsDeepMerge)
 {
-    mpOverflowingTxt.reset( pOutl->GetOverflowingText() );
-    mpNonOverflowingTxt.reset( pOutl->GetNonOverflowingText() );
+    mpOverflowingTxt = pOutl->GetOverflowingText();
+    mpNonOverflowingTxt = pOutl->GetNonOverflowingText();
 
     mbIsDeepMerge = bIsDeepMerge;
 }
