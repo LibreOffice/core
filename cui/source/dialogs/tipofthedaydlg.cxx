@@ -28,7 +28,6 @@
 #include <vcl/help.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
-#include <comphelper/random.hxx>
 
 TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/tipofthedaydialog.ui", "TipOfTheDayDialog")
@@ -38,11 +37,22 @@ TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     , m_pNext(m_xBuilder->weld_button("btnNext"))
     , m_pLink(m_xBuilder->weld_link_button("btnLink"))
 {
-    m_pShowTip->connect_toggled(LINK(this, TipOfTheDayDialog, OnShowTipToggled));
+    m_pShowTip->set_active(officecfg::Office::Common::Misc::ShowTipOfTheDay::get());
     m_pNext->connect_clicked(LINK(this, TipOfTheDayDialog, OnNextClick));
 
     nNumberOfTips = SAL_N_ELEMENTS(TIPOFTHEDAY_STRINGARRAY);
-    nCurrentTip = comphelper::rng::uniform_int_distribution(0, nNumberOfTips - 1);
+    nCurrentTip = officecfg::Office::Common::Misc::LastTipOfTheDayID::get();
+    if (nCurrentTip < 0)
+        nCurrentTip = 0;
+  
+    if (std::chrono::duration_cast<std::chrono::hours>(
+            std::chrono::system_clock::now().time_since_epoch())
+                    .count()
+                / 24 
+            - officecfg::Office::Common::Misc::LastTipOfTheDayShown::get() 
+        > 0)
+        nCurrentTip++;
+
     UpdateTip();
 }
 
@@ -54,6 +64,8 @@ TipOfTheDayDialog::~TipOfTheDayDialog()
     const sal_Int32 nDay
         = std::chrono::duration_cast<std::chrono::hours>(t0).count() / 24; // days since 1970-01-01
     officecfg::Office::Common::Misc::LastTipOfTheDayShown::set(nDay, xChanges);
+    officecfg::Office::Common::Misc::LastTipOfTheDayID::set(nCurrentTip, xChanges);
+    officecfg::Office::Common::Misc::ShowTipOfTheDay::set(m_pShowTip->get_active(), xChanges);
     xChanges->commit();
 }
 
@@ -65,6 +77,11 @@ static bool file_exists(const OUString& fileName)
 
 void TipOfTheDayDialog::UpdateTip()
 {
+    if (nCurrentTip + 1 > nNumberOfTips)
+        nCurrentTip = 0;
+    m_xDialog->set_title(CuiResId(STR_TITLE) + ": " + OUString::number(nCurrentTip + 1) + "/"
+                         + OUString::number(nNumberOfTips));
+
     // text
     OUString aText = CuiResId(std::get<0>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]));
     m_pText->set_label(aText);
@@ -110,14 +127,6 @@ void TipOfTheDayDialog::UpdateTip()
     }
 }
 
-IMPL_STATIC_LINK(TipOfTheDayDialog, OnShowTipToggled, weld::ToggleButton&, rButton, void)
-{
-    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::ShowTipOfTheDay::set(rButton.get_active(), xChanges);
-    xChanges->commit();
-}
-
 IMPL_LINK_NOARG(TipOfTheDayDialog, OnLinkClick, weld::LinkButton&, void)
 {
     Application::GetHelp()->Start(aLink, static_cast<weld::Widget*>(nullptr));
@@ -125,7 +134,7 @@ IMPL_LINK_NOARG(TipOfTheDayDialog, OnLinkClick, weld::LinkButton&, void)
 
 IMPL_LINK_NOARG(TipOfTheDayDialog, OnNextClick, weld::Button&, void)
 {
-    nCurrentTip = (nCurrentTip + 1) % nNumberOfTips;
+    nCurrentTip++; //zeroed at updatetip when out of range
     UpdateTip();
 }
 
