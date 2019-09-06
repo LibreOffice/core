@@ -31,22 +31,16 @@
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <rtl/uuid.h>
 #include <osl/mutex.hxx>
-#include <tools/date.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <toolkit/helper/property.hxx>
-#include <toolkit/helper/servicenames.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/controls/accessiblecontrolcontext.hxx>
 
 #include <algorithm>
 #include <map>
-#include <set>
 #include <vector>
 
 using namespace ::com::sun::star;

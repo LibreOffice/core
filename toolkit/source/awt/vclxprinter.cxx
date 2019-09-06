@@ -19,10 +19,7 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <toolkit/awt/vclxprinter.hxx>
-#include <toolkit/helper/macros.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <rtl/uuid.h>
 
 
 #include <vcl/print.hxx>

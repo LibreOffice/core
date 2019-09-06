@@ -26,8 +26,6 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -43,7 +41,6 @@
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/outdev.hxx>
 
-#include <functional>
 #include <algorithm>
 #include <iterator>
 

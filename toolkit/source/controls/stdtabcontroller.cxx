@@ -23,14 +23,11 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <toolkit/controls/stdtabcontroller.hxx>
-#include <toolkit/controls/stdtabcontrollermodel.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <rtl/uuid.h>
 
 #include <sal/log.hxx>
 #include <tools/debug.hxx>

@@ -27,10 +27,7 @@
 #include <toolkit/awt/vclxbitmap.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/macros.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
-
-#include <rtl/uuid.h>
 
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
@@ -38,7 +35,6 @@
 #include <vcl/print.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/font.hxx>
 #include <vcl/metric.hxx>
 
 //  class VCLXDevice

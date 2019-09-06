@@ -20,26 +20,17 @@
 #include <toolkit/controls/tabpagemodel.hxx>
 
 #include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
-#include <vcl/wall.hxx>
 #include <toolkit/helper/property.hxx>
-#include <toolkit/controls/stdtabcontroller.hxx>
 #include <com/sun/star/awt/UnoControlDialogModelProvider.hpp>
 #include <com/sun/star/awt/tab/XTabPage.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
 #include <vcl/outdev.hxx>
 
-#include <vcl/graph.hxx>
-#include <vcl/image.hxx>
-#include <toolkit/controls/geometrycontrolmodel.hxx>
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
 #include <toolkit/controls/unocontrolcontainer.hxx>
-#include <cppuhelper/basemutex.hxx>
 
 #include <helper/unopropertyarrayhelper.hxx>
 

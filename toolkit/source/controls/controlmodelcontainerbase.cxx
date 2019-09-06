@@ -20,10 +20,9 @@
 
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
-#include <vcl/wall.hxx>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/property.hxx>
+#include <toolkit/helper/servicenames.hxx>
 #include <toolkit/controls/geometrycontrolmodel.hxx>
 #include <toolkit/controls/unocontrols.hxx>
 #include <toolkit/controls/formattedcontrol.hxx>
@@ -32,11 +31,8 @@
 #include <toolkit/controls/tabpagemodel.hxx>
 #include <toolkit/controls/stdtabcontroller.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
@@ -44,9 +40,6 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/outdev.hxx>
 #include <comphelper/types.hxx>
-
-#include <vcl/graph.hxx>
-#include <vcl/image.hxx>
 
 #include "tree/treecontrol.hxx"
 #include "grid/gridcontrol.hxx"
@@ -59,7 +52,6 @@
 #include <sal/log.hxx>
 #include <toolkit/controls/dialogcontrol.hxx>
 
-#include <helper/tkresmgr.hxx>
 #include <helper/unopropertyarrayhelper.hxx>
 #include "controlmodelcontainerbase_internal.hxx"
 

@@ -18,7 +18,7 @@
  */
 
 #include <toolkit/awt/vclxwindows.hxx>
-#include <helper/scrollabledialog.hxx>
+#include <toolkit/helper/accessiblefactory.hxx>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
@@ -30,14 +30,12 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/XItemList.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
-#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sal/log.hxx>
@@ -51,7 +49,6 @@
 #include <vcl/longcurr.hxx>
 #include <vcl/imgctrl.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
@@ -59,7 +56,6 @@
 #include <vcl/settings.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <helper/accessibilityclient.hxx>
 #include <helper/imagealign.hxx>
 #include <helper/msgbox.hxx>
 #include <helper/tkresmgr.hxx>

@@ -23,18 +23,12 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <rtl/uuid.h>
 
 #include <toolkit/controls/unocontrolcontainer.hxx>
-#include <toolkit/helper/property.hxx>
-#include <toolkit/helper/servicenames.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <tools/debug.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
 
 #include <limits>
 #include <map>

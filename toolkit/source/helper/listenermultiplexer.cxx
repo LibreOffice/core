@@ -18,9 +18,9 @@
  */
 
 #include <toolkit/helper/listenermultiplexer.hxx>
+#include <toolkit/helper/macros.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/queryinterface.hxx>
-#include <tools/diagnose_ex.h>
 
 //  class ListenerMultiplexerBase
 

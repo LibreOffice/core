@@ -22,7 +22,6 @@
 
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
 #include <com/sun/star/awt/tab/XTabPage.hpp>
-#include <toolkit/controls/unocontrolcontainer.hxx>
 #include <cppuhelper/implbase2.hxx>
 
 class UnoControlTabPageModel :  public ControlModelContainerBase

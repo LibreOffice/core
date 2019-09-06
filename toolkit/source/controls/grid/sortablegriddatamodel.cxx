@@ -36,7 +36,6 @@
 #include <comphelper/anycompare.hxx>
 #include <comphelper/componentguard.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <tools/diagnose_ex.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
