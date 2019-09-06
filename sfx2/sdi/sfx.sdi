@@ -1889,6 +1889,23 @@ SfxBoolItem HelpTip SID_HELPTIPS
     GroupId = SfxGroupId::Application;
 ]
 
+SfxVoidItem TipOfTheDay SID_TIPOFTHEDAY
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Application;
+]
 
 SfxVoidItem EmojiControl SID_EMOJI_CONTROL
 

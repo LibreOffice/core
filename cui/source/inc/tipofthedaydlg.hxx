@@ -32,9 +32,9 @@ private:
 
     sal_uInt32 nCurrentTip;
     sal_uInt32 nNumberOfTips;
+    sal_Int32 nDay;
     OUString aLink;
     void UpdateTip();
-    DECL_STATIC_LINK(TipOfTheDayDialog, OnShowTipToggled, weld::ToggleButton&, void);
     DECL_LINK(OnNextClick, weld::Button&, void);
     DECL_LINK(OnLinkClick, weld::LinkButton&, void);
 
