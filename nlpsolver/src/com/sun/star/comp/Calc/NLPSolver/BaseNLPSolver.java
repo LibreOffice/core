@@ -503,7 +503,7 @@ public abstract class BaseNLPSolver extends WeakBase
     }
 
     public static String nanoTimeToString(ResourceManager resourceManager, long nanoseconds) {
-        if (nanoseconds < 0) return null; //shouldn't happen .... but if it does, throw an error!
+        if (nanoseconds < 0) return null; // shouldn't happen... but if it does, throw an error!
 
         if (nanoseconds == 0) return "0";
 

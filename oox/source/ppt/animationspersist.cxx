@@ -101,7 +101,7 @@ namespace oox { namespace ppt {
                 switch(mnRangeType)
                 {
                 case XML_charRg:
-                    // TODO calculate the corresponding paragraph for the text range....
+                    // TODO calculate the corresponding paragraph for the text range...
                     SAL_INFO("oox.ppt", "OOX: TODO calculate the corresponding paragraph for the text range..." );
                     break;
                 case XML_pRg:

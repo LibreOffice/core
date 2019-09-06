@@ -309,7 +309,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
                 outputChannel = new FileOutputStream(mTempFile).getChannel();
                 long bytesTransferred = 0;
-                // might not  copy all at once, so make sure everything gets copied....
+                // might not  copy all at once, so make sure everything gets copied...
                 while (bytesTransferred < inputChannel.size()) {
                     bytesTransferred += outputChannel.transferFrom(inputChannel, bytesTransferred, inputChannel.size());
                 }
@@ -898,7 +898,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                 source = Channels.newChannel(assetManager.open(fromAssetPath));
                 dest = new FileOutputStream(toPath).getChannel();
                 long bytesTransferred = 0;
-                // might not copy all at once, so make sure everything gets copied....
+                // might not copy all at once, so make sure everything gets copied...
                 ByteBuffer buffer = ByteBuffer.allocate(4096);
                 while (source.read(buffer) > 0) {
                     buffer.flip();

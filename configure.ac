@@ -10126,7 +10126,7 @@ if test "$ENABLE_LPSOLVE" = TRUE; then
         AC_CHECK_HEADER(lpsolve/lp_lib.h, [],
            [ AC_MSG_ERROR(lpsolve headers not found.)], [])
         save_LIBS=$LIBS
-        # some systems need this. Like Ubuntu....
+        # some systems need this. Like Ubuntu...
         AC_CHECK_LIB(m, floor)
         AC_CHECK_LIB(dl, dlopen)
         AC_CHECK_LIB([lpsolve55], [make_lp], [:],

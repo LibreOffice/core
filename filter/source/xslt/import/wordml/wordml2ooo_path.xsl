@@ -435,7 +435,7 @@
                     <xsl:with-param name="current-y" select=" $current-y"/>
                 </xsl:call-template>
             </xsl:when>
-            <!--Code below is for the support of h-command like ha,hb....hi, maybe still need to revise-->
+            <!--Code below is for the support of h-command like ha,hb...hi, maybe still need to revise-->
             <xsl:when test="$command = 'ha' ">
                 <xsl:variable name="new-svg-path" select="$svg-path"/>
                 <!--simply did nothing which might be wrong-->
@@ -842,7 +842,7 @@
                     <xsl:with-param name="current-y" select=" $val_y "/>
                 </xsl:call-template>
             </xsl:when>
-            <!--Code below is for the support of h-command like ha,hb....hi, maybe still need to revise-->
+            <!--Code below is for the support of h-command like ha,hb...hi, maybe still need to revise-->
             <xsl:when test="$command = 'ha' ">
                 <xsl:variable name="new-enhanced-path" select="$enhanced-path"/>
                 <!--simply did nothing which might be wrong-->

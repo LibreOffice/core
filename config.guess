@@ -1481,7 +1481,7 @@ main ()
 #if defined (sony)
 #if defined (MIPSEB)
   /* BFD wants "bsd" instead of "newsos".  Perhaps BFD should be changed,
-     I don't know....  */
+     I don't know...  */
   printf ("mips-sony-bsd\n"); exit (0);
 #else
 #include <sys/param.h>
