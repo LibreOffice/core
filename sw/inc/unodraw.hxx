@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_UNODRAW_HXX
 
 #include <svl/itemprop.hxx>
+#include <svl/listener.hxx>
 #include <svx/fmdpage.hxx>
 #include "calbck.hxx"
 #include "frmfmt.hxx"
@@ -130,12 +131,13 @@ cppu::WeakAggImplHelper6
     css::drawing::XShape
 >
 SwXShapeBaseClass;
-class SwXShape : public SwXShapeBaseClass, public SwClient
+class SwXShape : public SwXShapeBaseClass, public SvtListener
 {
     friend class SwXGroupShape;
     friend class SwXDrawPage;
     friend class SwFmDrawPage;
     const SwFmDrawPage* m_pPage;
+    SwFrameFormat* m_pFormat;
 
     css::uno::Reference< css::uno::XAggregation > xShapeAgg;
     // reference to <XShape>, determined in the
@@ -197,13 +199,19 @@ class SwXShape : public SwXShapeBaseClass, public SwClient
         @throws css::uno::RuntimeException
     */
     css::uno::Any _getPropAtAggrObj( const OUString& _rPropertyName );
+    void SetFrameFormat(SwFrameFormat* pFormat)
+    {
+        EndListeningAll();
+        StartListening(pFormat->GetNotifier());
+        m_pFormat = pFormat;
+    }
 
 protected:
     virtual ~SwXShape() override;
-    void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 public:
     SwXShape(css::uno::Reference<css::uno::XInterface> & xShape, SwDoc const*const pDoc);
 
+    virtual void Notify(const SfxHint&) override;
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
@@ -248,7 +256,7 @@ public:
     virtual OUString SAL_CALL getShapeType(  ) override;
 
     SwShapeDescriptor_Impl*     GetDescImpl() {return pImpl.get();}
-    SwFrameFormat*               GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
+    SwFrameFormat* GetFrameFormat() const { return m_pFormat; }
     const css::uno::Reference< css::uno::XAggregation >& GetAggregationInterface() {return xShapeAgg;}
 
     // helper
