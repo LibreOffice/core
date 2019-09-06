@@ -23,6 +23,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <ado/AColumns.hxx>
 #include <TConnection.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 
 using namespace ::comphelper;
@@ -70,7 +71,7 @@ void OAdoIndex::refreshColumns()
 }
 
 
-Sequence< sal_Int8 > OAdoIndex::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > OAdoIndex::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 
@@ -81,7 +82,7 @@ Sequence< sal_Int8 > OAdoIndex::getUnoTunnelImplementationId()
 
 sal_Int64 OAdoIndex::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    return isUnoTunnelId<OAdoIndex>(rId)
                 ? reinterpret_cast< sal_Int64 >( this )
                 : sdbcx::OIndex::getSomething(rId);
 }

@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
@@ -1387,7 +1388,7 @@ void OResultSet::OpenImpl()
     m_nFilePos  = 0;
 }
 
-Sequence< sal_Int8 > OResultSet::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > OResultSet::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 
@@ -1398,7 +1399,7 @@ Sequence< sal_Int8 > OResultSet::getUnoTunnelImplementationId()
 
 sal_Int64 OResultSet::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    return isUnoTunnelId<OResultSet>(rId)
                 ? reinterpret_cast< sal_Int64 >( this )
                 : 0;
 }
@@ -1538,7 +1539,7 @@ Reference< css::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInf
 void OResultSet::doTableSpecials(const OSQLTable& _xTable)
 {
     Reference<css::lang::XUnoTunnel> xTunnel(_xTable, UNO_QUERY_THROW);
-    m_pTable = reinterpret_cast< OFileTable* >(xTunnel->getSomething(OFileTable::getUnoTunnelImplementationId()));
+    m_pTable = reinterpret_cast< OFileTable* >(xTunnel->getSomething(OFileTable::getUnoTunnelId()));
     assert(m_pTable.is());
 }
 

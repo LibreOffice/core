@@ -58,7 +58,7 @@ namespace connectivity
             virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const override;
             // css::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-            static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
 
             // XRename
             virtual void SAL_CALL rename( const OUString& newName ) override;

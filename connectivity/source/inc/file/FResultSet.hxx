@@ -250,7 +250,7 @@ namespace connectivity
             virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName ) override;
             // css::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-            static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
             //XEventlistener
             virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 

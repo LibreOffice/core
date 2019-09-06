@@ -22,6 +22,7 @@
 #include <file/FColumns.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
@@ -120,7 +121,7 @@ void SAL_CALL OFileTable::disposing()
     FileClose();
 }
 
-Sequence< sal_Int8 > OFileTable::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > OFileTable::getUnoTunnelId()
 {
     static ::cppu::OImplementationId s_Id;
 
@@ -131,7 +132,7 @@ Sequence< sal_Int8 > OFileTable::getUnoTunnelImplementationId()
 
 sal_Int64 OFileTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    return isUnoTunnelId<OFileTable>(rId)
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OTable_TYPEDEF::getSomething(rId);
 }

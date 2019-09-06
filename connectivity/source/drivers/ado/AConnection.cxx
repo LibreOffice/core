@@ -28,6 +28,7 @@
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
 #include <osl/file.hxx>
@@ -487,14 +488,14 @@ void OConnection::disposing()
 
 sal_Int64 SAL_CALL OConnection::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-    return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    return isUnoTunnelId<OConnection>(rId)
                 ?
             reinterpret_cast< sal_Int64 >( this )
                 :
             OConnection_BASE::getSomething(rId);
 }
 
-Sequence< sal_Int8 > OConnection::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > OConnection::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 
