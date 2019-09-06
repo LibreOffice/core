@@ -22,6 +22,7 @@
 #include <mmconfigitem.hxx>
 #include <mailconfigpage.hxx>
 #include "mmgreetingspage.hxx"
+#include <printdata.hxx>
 #include <swmessdialog.hxx>
 #include <cmdid.h>
 #include <swtypes.hxx>
@@ -751,7 +752,8 @@ IMPL_LINK_NOARG(SwMMResultPrintDialog, PrintHdl_Impl, weld::Button&, void)
 
     // If we skip autoinserted blanks, then the page numbers used in the print range string
     // refer to the non-blank pages as they appear in the document (see tdf#89708).
-    const bool bIgnoreEmptyPages = !officecfg::Office::Writer::Print::EmptyPages::get();
+    const bool bIgnoreEmptyPages =
+            !pTargetView->GetDocShell()->GetDoc()->getIDocumentDeviceAccess().getPrintData().IsPrintEmptyPages();
     const int nStartPage = documentStartPageNumber(xConfigItem.get(), nBegin, bIgnoreEmptyPages);
     const int nEndPage = documentEndPageNumber(xConfigItem.get(), nEnd - 1, bIgnoreEmptyPages);
 
