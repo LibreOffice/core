@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_4b73304e",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-09-06T10:52:36Z",
+      "side": 1,
+      "message": "This string should be title case: https://hig.kde.org/style/writing/capitalization.html#title-capitalization",
+      "revId": "d6988a5c421fcb28c9c5cc6a452ec17bc491d754",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_eb8fa420",
+        "filename": "cui/uiconfig/ui/optgeneralpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-09-06T10:52:36Z",
+      "side": 1,
+      "message": "Likewise, title case for push buttons.",
+      "revId": "d6988a5c421fcb28c9c5cc6a452ec17bc491d754",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
