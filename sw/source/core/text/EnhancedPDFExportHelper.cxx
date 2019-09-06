@@ -78,6 +78,7 @@
 #include <calbck.hxx>
 #include <stack>
 #include <frmtool.hxx>
+#include <strings.hrc>
 
 #include <tools/globname.hxx>
 #include <svx/svdobj.hxx>
@@ -1590,7 +1591,10 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             pNumFormatter->GetOutputString( aDateDiff.GetDate(), nFormat, sDate, &pColor );
 
                             // The title should consist of the author and the date:
-                            aNote.Title = pField->GetPar1() + ", " + sDate;
+                            if(pField->GetResolved())
+                                aNote.Title = pField->GetPar1() + ", " + sDate + ", " + SwResId(STR_RESOLVED);
+                            else
+                                aNote.Title = pField->GetPar1() + ", " + sDate;
                             // Guess what the contents contains...
                             aNote.Contents = pField->GetText();
 

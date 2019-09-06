@@ -305,6 +305,18 @@ void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz
         mpMetadataDate->SetControlFont( aOrigFont );
     }
 
+    if (mpMetadataResolved->IsVisible())
+    {
+        vcl::Font aOrigFont(mpMetadataResolved->GetControlFont());
+        Size aSize(PixelToLogic(mpMetadataResolved->GetSizePixel()));
+        Point aPos(PixelToLogic(mpMetadataResolved->GetPosPixel()));
+        aPos += rPt;
+        vcl::Font aFont( mpMetadataResolved->GetSettings().GetStyleSettings().GetFieldFont() );
+        mpMetadataResolved->SetControlFont( aFont );
+        mpMetadataResolved->Draw(pDev, aPos, aSize, nInFlags);
+        mpMetadataResolved->SetControlFont( aOrigFont );
+    }
+
     mpSidebarTextControl->Draw(pDev, rPt, rSz, nInFlags);
 
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
