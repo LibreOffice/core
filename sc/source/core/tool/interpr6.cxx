@@ -817,8 +817,12 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     if ( nGlobalError != FormulaError::NONE )
                         nGlobalError = FormulaError::NONE;
                 }
-                else if ( ( eFunc == ifSUM || eFunc == ifCOUNT ) && mnSubTotalFlags == SubtotalFlags::NONE )
+                else if (((eFunc == ifSUM && !bCalcAsShown) || eFunc == ifCOUNT )
+                        && mnSubTotalFlags == SubtotalFlags::NONE)
                 {
+                    // Use fast span set array method.
+                    // ifSUM with bCalcAsShown has to use the slow bells and
+                    // whistles ScValueIterator below.
                     sc::RangeColumnSpanSet aSet( aRange );
 
                     if ( eFunc == ifSUM )
