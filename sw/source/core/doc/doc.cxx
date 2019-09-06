@@ -616,6 +616,8 @@ static void lcl_FormatPostIt(
     aStr += " ";
     SvtSysLocale aSysLocale;
     aStr += /*(LocaleDataWrapper&)*/aSysLocale.GetLocaleData().getDate( pField->GetDate() );
+    if(pField->GetResolved())
+        aStr += " " + SwResId(STR_RESOLVED);
     pIDCO->InsertString( aPam, aStr );
 
     pIDCO->SplitNode( *aPam.GetPoint(), false );
