@@ -999,6 +999,17 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
 {
     SwSwapIfSwapped swap(const_cast<SwTextFrame *>(m_pCurrFrame));
 
+    // Optimization
+    SwRectFnSet aRectFnSet(m_pCurrFrame);
+
+    // tdf#127235 stop if the area is larger than the page
+    // but exclude the first page which may have different geometry
+    if(    pPage->GetPhyPageNum() > 1
+        && aRectFnSet.GetHeight(pPage->getFrameArea()) < aRectFnSet.GetHeight(rRect))
+    {
+        return false;
+    }
+
     bool bRet = false;
     // #i68520#
     const SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
@@ -1011,10 +1022,9 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
 
             SwRect aRect( pAnchoredObj->GetObjRectWithSpaces() );
 
-            // Optimization
-            SwRectFnSet aRectFnSet(m_pCurrFrame);
             if( aRectFnSet.GetLeft(aRect) > aRectFnSet.GetRight(rRect) )
                 break;
+
             // #i68520#
             if ( mpCurrAnchoredObj != pAnchoredObj && aRect.IsOver( rRect ) )
             {
