@@ -3732,9 +3732,6 @@ bool SwEditWin::changeMousePointer(Point const & rDocPoint)
 {
     SwWrtShell & rShell = m_rView.GetWrtShell();
 
-    if (comphelper::LibreOfficeKit::isActive())
-        return false;
-
     SwTab nMouseTabCol;
     if ( SwTab::COL_NONE != (nMouseTabCol = rShell.WhichMouseTabCol( rDocPoint ) ) &&
          !rShell.IsObjSelectable( rDocPoint ) )
