@@ -3045,6 +3045,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf64222)
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/Special", "nHeight", "560");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf127235)
+{
+    SwDoc* pDoc = createDoc("tdf127235.odt");
+    // This resulted in a layout loop.
+    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
