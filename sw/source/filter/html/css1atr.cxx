@@ -3587,6 +3587,7 @@ static SwAttrFnTab const aCSS1AttrFnTab = {
 /* RES_PARATR_LIST_ISRESTART */     nullptr, // new
 /* RES_PARATR_LIST_RESTARTVALUE */  nullptr, // new
 /* RES_PARATR_LIST_ISCOUNTED */     nullptr, // new
+/* RES_PARATR_LIST_AUTOFMT */       nullptr, // new
 
 /* RES_FILL_ORDER   */              nullptr,
 /* RES_FRM_SIZE */                  nullptr,
@@ -3654,6 +3655,8 @@ static SwAttrFnTab const aCSS1AttrFnTab = {
 /* RES_BOXATR_FORMULA */            nullptr,
 /* RES_BOXATR_VALUE */              nullptr
 };
+
+static_assert(SAL_N_ELEMENTS(aCSS1AttrFnTab) == RES_BOXATR_END);
 
 void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
                                        bool bDeep )

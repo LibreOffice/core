@@ -1408,7 +1408,37 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             }
             std::vector<beans::PropertyValue> aProperties;
             if (pPropertyMap.get())
+            {
                 aProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(pPropertyMap->GetPropertyValues());
+            }
+            // TODO: this *should* work for RTF but there are test failures, maybe rtftok doesn't distinguish between formatting for the paragraph marker and for the paragraph as a whole; needs investigation
+            if (pPropertyMap.get() && IsOOXMLImport())
+            {
+                // tdf#64222 filter out the "paragraph marker" formatting and
+                // set it as a separate paragraph property, not a empty hint at
+                // end of paragraph
+                std::vector<beans::NamedValue> charProperties;
+                for (auto it = aProperties.begin(); it != aProperties.end(); )
+                {
+                    // this condition isn't ideal but as it happens all
+                    // RES_CHRATR_* have names that start with "Char"
+                    if (it->Name.startsWith("Char")
+// TODO testParagraphMark *wants* this but it's some effort to create a real SwFormatCharFormat...
+                        && !it->Name.startsWith("CharStyleName"))
+                    {
+                        charProperties.emplace_back(it->Name, it->Value);
+                        // as testN793262 demonstrates, font size in rPr must
+                        // affect the paragraph size => also insert empty hint!
+//                        it = aProperties.erase(it);
+                    }
+                    ++it;
+                }
+                if (!charProperties.empty())
+                {
+                    aProperties.push_back(beans::PropertyValue("ListAutoFormat",
+                        0, uno::makeAny(comphelper::containerToSequence(charProperties)), beans::PropertyState_DIRECT_VALUE));
+                }
+            }
             if( !bIsDropCap )
             {
                 if( aDrop.Lines > 1 )

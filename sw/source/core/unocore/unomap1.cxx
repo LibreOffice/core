@@ -203,6 +203,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetAutoParaStyleProper
         { OUString(UNO_NAME_PARA_CHAPTER_NUMBERING_LEVEL), FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL,cppu::UnoType<sal_Int8>::get(), PROPERTY_NONE, 0},
         { OUString(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME), RES_FRMATR_CONDITIONAL_STYLE_NAME,        cppu::UnoType<OUString>::get(),         PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
         { OUString(UNO_NAME_PARA_IS_NUMBERING_RESTART), FN_NUMBER_NEWSTART,     cppu::UnoType<bool>::get(),     PropertyAttribute::MAYBEVOID, 0 },
+        // TODO add RES_PARATR_LIST_AUTOFMT?
         { OUString(UNO_NAME_OUTLINE_LEVEL), RES_PARATR_OUTLINELEVEL,        cppu::UnoType<sal_Int16>::get(),                PropertyAttribute::MAYBEVOID,     0},
         COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN
         TABSTOPS_MAP_ENTRY

@@ -359,6 +359,7 @@ SfxItemInfo aSlotTab[] =
     { 0, true },                           // RES_PARATR_LIST_ISRESTART
     { 0, true },                           // RES_PARATR_LIST_RESTARTVALUE
     { 0, true },                           // RES_PARATR_LIST_ISCOUNTED
+    { 0, true },                           // RES_PARATR_LIST_AUTOFMT
 
     { 0, true },                           // RES_FILL_ORDER
     { 0, true },                           // RES_FRM_SIZE
@@ -561,6 +562,7 @@ void InitCore()
     aAttrTab[ RES_PARATR_LIST_ISRESTART - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_LIST_ISRESTART, false );
     aAttrTab[ RES_PARATR_LIST_RESTARTVALUE - POOLATTR_BEGIN ] = new SfxInt16Item( RES_PARATR_LIST_RESTARTVALUE, 1 );
     aAttrTab[ RES_PARATR_LIST_ISCOUNTED - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, true );
+    aAttrTab[ RES_PARATR_LIST_AUTOFMT - POOLATTR_BEGIN ] = new SwFormatAutoFormat(RES_PARATR_LIST_AUTOFMT);//new SfxSetItem(RES_PARATR_LIST_AUTOFMT, std::make_unique<SfxItemSet>(aCharAutoFormatSetRange));
 
     aAttrTab[ RES_FILL_ORDER- POOLATTR_BEGIN ] =            new SwFormatFillOrder;
     aAttrTab[ RES_FRM_SIZE- POOLATTR_BEGIN ] =              new SwFormatFrameSize;
