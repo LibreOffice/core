@@ -20,7 +20,6 @@
 #ifndef INCLUDED_XMLOFF_INC_XMLELEMENTPROPERTYCONTEXT_HXX
 #define INCLUDED_XMLOFF_INC_XMLELEMENTPROPERTYCONTEXT_HXX
 
-#include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/maptype.hxx>
 

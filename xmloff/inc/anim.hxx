@@ -22,7 +22,6 @@
 
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
 #include <xmloff/xmlement.hxx>
 
 enum XMLEffect

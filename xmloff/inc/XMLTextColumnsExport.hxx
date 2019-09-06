@@ -19,6 +19,8 @@
 #ifndef INCLUDED_XMLOFF_INC_XMLTEXTCOLUMNSEXPORT_HXX
 #define INCLUDED_XMLOFF_INC_XMLTEXTCOLUMNSEXPORT_HXX
 
+#include <sal/types.h>
+
 namespace com { namespace sun { namespace star { namespace uno {
     class Any; } } } }
 class SvXMLExport;

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLOFF_INC_XMLIMAGEMAPEXPORT_HXX
 #define INCLUDED_XMLOFF_INC_XMLIMAGEMAPEXPORT_HXX
 
-#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
     namespace uno { template<class X> class Reference; }

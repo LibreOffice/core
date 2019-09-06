@@ -20,6 +20,8 @@
 #ifndef INCLUDED_XMLOFF_INC_XMLTEXTCOLUMNSCONTEXT_HXX
 #define INCLUDED_XMLOFF_INC_XMLTEXTCOLUMNSCONTEXT_HXX
 
+#include <xmloff/xmltkmap.hxx>
+
 #include <memory>
 
 #include "XMLElementPropertyContext.hxx"

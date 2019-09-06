@@ -24,8 +24,6 @@
 #include <rtl/ustring.hxx>
 #include <xmloff/xmlevent.hxx>
 
-#include <map>
-
 class SvXMLExport;
 namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }

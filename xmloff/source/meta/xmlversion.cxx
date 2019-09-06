@@ -20,6 +20,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <unotools/streamwrap.hxx>
 #include <xmlversion.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlmetae.hxx>
 #include <osl/diagnose.h>
 
