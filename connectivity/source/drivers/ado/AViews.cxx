@@ -24,6 +24,7 @@
 #include <ado/AConnection.hxx>
 #include <ado/Awrapado.hxx>
 #include <TConnection.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <strings.hrc>
@@ -59,7 +60,7 @@ Reference< XPropertySet > OViews::createDescriptor()
 // XAppend
 sdbcx::ObjectType OViews::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    OAdoView* pView = getImplementation<OAdoView>( descriptor );
+    OAdoView* pView = getUnoTunnelImplementation<OAdoView>( descriptor );
     if ( pView == nullptr )
         m_pCatalog->getConnection()->throwGenericSQLException( STR_INVALID_VIEW_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 

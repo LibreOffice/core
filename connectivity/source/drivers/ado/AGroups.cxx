@@ -25,6 +25,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #include <TConnection.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <strings.hrc>
@@ -57,7 +58,7 @@ Reference< XPropertySet > OGroups::createDescriptor()
 // XAppend
 sdbcx::ObjectType OGroups::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    OAdoGroup* pGroup = getImplementation<OAdoGroup>(descriptor);
+    OAdoGroup* pGroup = getUnoTunnelImplementation<OAdoGroup>(descriptor);
     if ( pGroup == nullptr )
         m_pCatalog->getConnection()->throwGenericSQLException( STR_INVALID_GROUP_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 

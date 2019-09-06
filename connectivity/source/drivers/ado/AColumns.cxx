@@ -26,6 +26,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <comphelper/property.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <algorithm>
@@ -59,7 +60,7 @@ Reference< XPropertySet > OColumns::createDescriptor()
 // XAppend
 sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
-    OAdoColumn* pColumn = getImplementation<OAdoColumn>( descriptor );
+    OAdoColumn* pColumn = getUnoTunnelImplementation<OAdoColumn>( descriptor );
     Reference< XPropertySet > xColumn;
     if ( pColumn == nullptr )
     {
