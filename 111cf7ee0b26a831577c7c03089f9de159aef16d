@@ -22,6 +22,30 @@
       "revId": "111cf7ee0b26a831577c7c03089f9de159aef16d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ae0f7adf",
+        "filename": "sw/source/ui/dbui/mmresultdialogs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-09-06T20:47:20Z",
+      "side": 0,
+      "message": "Thanks for spotting this. No, there was no reason, that removal must have been from some temporary local change and I most have overlooked when pushing to gerrit... Fixed in patch set 3.",
+      "parentUuid": "bf659307_aef3fa09",
+      "range": {
+        "startLine": 753,
+        "startChar": 4,
+        "endLine": 753,
+        "endChar": 9
+      },
+      "revId": "111cf7ee0b26a831577c7c03089f9de159aef16d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
