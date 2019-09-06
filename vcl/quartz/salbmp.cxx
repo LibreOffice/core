@@ -296,7 +296,7 @@ bool QuartzSalBitmap::AllocateUserData()
     if (!alloc)
     {
         SAL_WARN( "vcl.quartz", "bad_alloc: " << mnWidth << "x" << mnHeight << " (" << mnBytesPerRow * mnHeight << " bytes)");
-        m_pUserBuffer.reset( static_cast<sal_uInt8*>(nullptr) );
+        m_pUserBuffer.reset();
         mnBytesPerRow = 0;
     }
 
