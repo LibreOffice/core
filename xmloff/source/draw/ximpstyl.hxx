@@ -20,7 +20,10 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSTYL_HXX
 #define INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSTYL_HXX
 
+#include <svl/zforlist.hxx>
 #include <xmloff/xmlictxt.hxx>
+#include <xmloff/xmlimppr.hxx>
+#include <xmloff/xmlnumfi.hxx>
 #include "sdxmlimp_impl.hxx"
 #include "ximppage.hxx"
 #include <xmloff/xmlstyle.hxx>

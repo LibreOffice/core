@@ -22,7 +22,6 @@
 
 #include <xmloff/xmlexp.hxx>
 
-#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 

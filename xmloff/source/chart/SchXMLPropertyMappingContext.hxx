@@ -11,7 +11,6 @@
 #define INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLPROPERTYMAPPINGCONTEXT_HXX
 
 #include "transporttypes.hxx"
-#include "SchXMLChartContext.hxx"
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/SchXMLImportHelper.hxx>
 

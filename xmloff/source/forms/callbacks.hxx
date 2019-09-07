@@ -21,7 +21,6 @@
 #define INCLUDED_XMLOFF_SOURCE_FORMS_CALLBACKS_HXX
 
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <rtl/ref.hxx>

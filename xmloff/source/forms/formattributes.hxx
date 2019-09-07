@@ -24,9 +24,9 @@
 
 #include <map>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/uno/Type.hxx>
+#include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <o3tl/typed_flags_set.hxx>
 

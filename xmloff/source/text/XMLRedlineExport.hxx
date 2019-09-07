@@ -20,7 +20,6 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLREDLINEEXPORT_HXX
 #define INCLUDED_XMLOFF_SOURCE_TEXT_XMLREDLINEEXPORT_HXX
 
-#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 

@@ -36,6 +36,7 @@
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlimppr.hxx>
 
+#include <xmlsdtypes.hxx>
 #include "sdpropls.hxx"
 
 using namespace ::com::sun::star;

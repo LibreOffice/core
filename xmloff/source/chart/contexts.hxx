@@ -20,9 +20,7 @@
 #define INCLUDED_XMLOFF_SOURCE_CHART_CONTEXTS_HXX
 
 #include <SchXMLImport.hxx>
-#include "SchXMLTableContext.hxx"
 #include <xmloff/xmlictxt.hxx>
-#include <xmloff/xmltkmap.hxx>
 
 #include <xmloff/xmlmetai.hxx>
 

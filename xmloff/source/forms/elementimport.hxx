@@ -31,7 +31,6 @@
 
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <osl/diagnose.h>

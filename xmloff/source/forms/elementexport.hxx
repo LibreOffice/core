@@ -26,7 +26,6 @@
 #include <set>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include "propertyexport.hxx"
 #include "callbacks.hxx"

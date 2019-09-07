@@ -25,12 +25,10 @@
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <xmloff/xmlnume.hxx>
 #include <xmloff/maptype.hxx>
-#include <xmloff/xmltypes.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexppr.hxx>
-#include <xmlsdtypes.hxx>
 
 // entry list for graphic properties
 

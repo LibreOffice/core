@@ -20,6 +20,8 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_FORMS_OFFICEFORMS_HXX
 #define INCLUDED_XMLOFF_SOURCE_FORMS_OFFICEFORMS_HXX
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 #include "formattributes.hxx"
 #include <xmloff/xmlictxt.hxx>
 #include <memory>

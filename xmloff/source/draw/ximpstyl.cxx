@@ -23,6 +23,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "ximpnote.hxx"
+#include <xmlsdtypes.hxx>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

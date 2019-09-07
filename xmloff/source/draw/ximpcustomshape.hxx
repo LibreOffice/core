@@ -28,7 +28,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XIndexContainer; }

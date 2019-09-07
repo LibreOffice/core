@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_EVENTMAP_HXX
 #define INCLUDED_XMLOFF_SOURCE_TRANSFORM_EVENTMAP_HXX
 
-#include "TransformerContext.hxx"
+#include <sal/types.h>
 
 struct XMLTransformerEventMapEntry
 {
