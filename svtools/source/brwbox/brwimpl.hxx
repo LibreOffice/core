@@ -19,8 +19,10 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_BRWBOX_BRWIMPL_HXX
 #define INCLUDED_SVTOOLS_SOURCE_BRWBOX_BRWIMPL_HXX
 
+#include <vcl/accessibletableprovider.hxx>
 #include <vcl/svtaccessiblefactory.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <osl/diagnose.h>
 
 #include <map>

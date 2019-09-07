@@ -20,7 +20,6 @@
 
 #include <svtools/tabbar.hxx>
 #include <tools/time.hxx>
-#include <tools/debug.hxx>
 #include <tools/poly.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
@@ -28,7 +27,6 @@
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/event.hxx>
-#include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svtaccessiblefactory.hxx>

@@ -18,15 +18,11 @@
  */
 
 #include <svtools/printoptions.hxx>
-#include <unotools/configmgr.hxx>
-#include <unotools/configitem.hxx>
 #include <vcl/print.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>

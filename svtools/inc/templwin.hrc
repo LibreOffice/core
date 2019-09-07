@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_INC_TEMPLWIN_HRC
 #define INCLUDED_SVTOOLS_INC_TEMPLWIN_HRC
 
-#include <svtools/controldims.hxx>
+#include <utility>
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 

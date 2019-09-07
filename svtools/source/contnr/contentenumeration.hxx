@@ -21,7 +21,6 @@
 #define INCLUDED_SVTOOLS_SOURCE_CONTNR_CONTENTENUMERATION_HXX
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <salhelper/thread.hxx>
 #include <ucbhelper/content.hxx>
 #include <rtl/ustring.hxx>

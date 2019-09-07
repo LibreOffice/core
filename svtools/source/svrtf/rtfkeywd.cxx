@@ -23,7 +23,6 @@
 
 #include <algorithm>
 #include <string.h>
-#include <stdlib.h>
 
 // the table is still to be sorted
 struct RTF_TokenEntry

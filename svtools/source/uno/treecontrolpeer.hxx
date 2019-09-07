@@ -25,13 +25,11 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 
 #include <toolkit/awt/vclxwindow.hxx>
-#include <toolkit/awt/vclxwindows.hxx>
+#include <toolkit/helper/listenermultiplexer.hxx>
 
 #include <vcl/image.hxx>
 
 #include <cppuhelper/implbase.hxx>
-
-#include <tools/contnr.hxx>
 
 #include <map>
 

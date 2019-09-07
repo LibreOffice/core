@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_CONTNR_TEMPLWIN_HXX
 #define INCLUDED_SVTOOLS_SOURCE_CONTNR_TEMPLWIN_HXX
 
+#include <rtl/ustring.hxx>
+
 namespace SvtDocInfoTable_Impl
 {
     OUString GetString(int nId);

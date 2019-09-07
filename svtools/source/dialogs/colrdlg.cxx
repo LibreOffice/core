@@ -19,14 +19,11 @@
 
 
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/cui/ColorPicker.hpp>
 
 #include <comphelper/processfactory.hxx>
-
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include <svtools/colrdlg.hxx>
 #include <vcl/weld.hxx>

@@ -23,7 +23,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ref.hxx>
 #include <vcl/svapp.hxx>
 
 #include <hatchwindow.hxx>

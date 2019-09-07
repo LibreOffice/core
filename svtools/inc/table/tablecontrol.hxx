@@ -23,7 +23,6 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/table/tablemodel.hxx>
 #include <vcl/accessibletable.hxx>
-#include <vcl/accessiblefactory.hxx>
 
 #include <vcl/ctrl.hxx>
 #include <vcl/seleng.hxx>
