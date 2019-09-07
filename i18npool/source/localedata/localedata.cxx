@@ -22,6 +22,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <localedata.hxx>
@@ -361,11 +362,10 @@ namespace i18npool {
 // static
 Sequence< CalendarItem > LocaleDataImpl::downcastCalendarItems( const Sequence< CalendarItem2 > & rCi )
 {
-    Sequence< CalendarItem > aCi(rCi.getLength());
-    CalendarItem* p1 = aCi.getArray();
-    for (const CalendarItem2& r2 : rCi)
-        *p1++ = r2;
-    return aCi;
+    std::vector<CalendarItem> aCi;
+    aCi.reserve(rCi.getLength());
+    std::copy(rCi.begin(), rCi.end(), std::back_inserter(aCi));
+    return comphelper::containerToSequence(aCi);
 }
 
 
@@ -666,19 +666,16 @@ Sequence< CalendarItem2 > &LocaleDataImpl::getCalendarItemByName(const OUString&
         } else {
             cals = getAllCalendars2(loc);
         }
-        sal_Int32 index;
-        for (index = 0; index < cals.getLength(); index++) {
-            if (id == cals[index].Name) {
-                ref_cal = cals[index];
-                break;
-            }
-        }
-        // Referred locale not found, return name for en_US locale.
-        if (index == cals.getLength()) {
+        auto pCal = std::find_if(std::cbegin(cals), std::cend(cals),
+            [&id](const Calendar2& rCal) { return id == rCal.Name; });
+        if (pCal != std::cend(cals))
+            ref_cal = *pCal;
+        else {
+            // Referred locale not found, return name for en_US locale.
             cals = getAllCalendars2( Locale("en", "US", OUString()) );
             if (!cals.hasElements())
                 throw RuntimeException();
-            ref_cal = cals[0];
+            ref_cal = cals.getConstArray()[0];
         }
         ref_name = name;
     }
@@ -796,13 +793,11 @@ Sequence< Calendar > SAL_CALL
 LocaleDataImpl::getAllCalendars( const Locale& rLocale )
 {
     const Sequence< Calendar2 > aCal2( getAllCalendars2( rLocale));
-    Sequence< Calendar > aCal1( aCal2.getLength());
-    Calendar* p1 = aCal1.getArray();
-    for (const Calendar2& r2 : aCal2)
-    {
-        *p1++ = downcastCalendar( r2);
-    }
-    return aCal1;
+    std::vector<Calendar> aCal1;
+    aCal1.reserve(aCal2.getLength());
+    std::transform(aCal2.begin(), aCal2.end(), std::back_inserter(aCal1),
+        [](const Calendar2& rCal2) { return downcastCalendar(rCal2); });
+    return comphelper::containerToSequence(aCal1);
 }
 
 
@@ -842,13 +837,10 @@ Sequence< Currency > SAL_CALL
 LocaleDataImpl::getAllCurrencies( const Locale& rLocale )
 {
     const Sequence< Currency2 > aCur2( getAllCurrencies2( rLocale));
-    Sequence< Currency > aCur1( aCur2.getLength());
-    Currency* p1 = aCur1.getArray();
-    for (const Currency2& r2 : aCur2)
-    {
-        *p1 = r2;
-    }
-    return aCur1;
+    std::vector<Currency> aCur1;
+    aCur1.reserve(aCur2.getLength());
+    std::copy(aCur2.begin(), aCur2.end(), std::back_inserter(aCur1));
+    return comphelper::containerToSequence(aCur1);
 }
 
 
