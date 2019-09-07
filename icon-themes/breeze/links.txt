@@ -1205,12 +1205,15 @@ cmd/sc_lastpage.png cmd/sc_lastrecord.png
 # |<
 cmd/32/gotostartofdoc.png cmd/32/firstrecord.png
 cmd/32/gotostartoftable.png cmd/32/firstrecord.png
+cmd/32/firstpage.png cmd/32/firstrecord.png
 
 cmd/lc_gotostartofdoc.png cmd/lc_firstrecord.png
 cmd/lc_gotostartoftable.png cmd/lc_firstrecord.png
+cmd/lc_firstpage.png cmd/lc_firstrecord.png
 
 cmd/sc_gotostartofdoc.png cmd/sc_firstrecord.png
 cmd/sc_gotostartoftable.png cmd/sc_firstrecord.png
+cmd/sc_firstpage.png cmd/sc_firstrecord.png
 
 # Hyperlink
 cmd/lc_hyperlinkdialog.png cmd/lc_inserthyperlink.png
@@ -1875,7 +1878,7 @@ cmd/sc_showpropbrowser.png cmd/sc_controlproperties.png
 # Slide command aliases
 cmd/32/deleteslide.png cmd/32/deletepage.png
 cmd/32/duplicateslide.png cmd/32/duplicatepage.png
-cmd/32/firstslide.png cmd/32/firstpage.png
+cmd/32/firstslide.png cmd/32/firstrecord.png
 cmd/32/insertdatefieldfix.png cmd/32/datefield.png
 cmd/32/insertdatefieldvar.png cmd/32/datefield.png
 cmd/32/insertfilefield.png cmd/32/open.png
@@ -1899,7 +1902,7 @@ cmd/32/nextslide.png cmd/32/nextrecord.png
 
 cmd/lc_deleteslide.png cmd/lc_deletepage.png
 cmd/lc_duplicateslide.png cmd/lc_duplicatepage.png
-cmd/lc_firstslide.png cmd/lc_firstpage.png
+cmd/lc_firstslide.png cmd/lc_firstrecord.png
 cmd/lc_insertdatefieldfix.png cmd/lc_datefield.png
 cmd/lc_insertdatefieldvar.png cmd/lc_datefield.png
 cmd/lc_insertfilefield.png cmd/lc_open.png
@@ -1922,7 +1925,7 @@ cmd/lc_nextslide.png cmd/lc_nextrecord.png
 
 cmd/sc_deleteslide.png cmd/sc_deletepage.png
 cmd/sc_duplicateslide.png cmd/sc_duplicatepage.png
-cmd/sc_firstslide.png cmd/sc_firstpage.png
+cmd/sc_firstslide.png cmd/sc_firstrecord.png
 cmd/sc_insertdatefieldfix.png cmd/sc_datefield.png
 cmd/sc_insertdatefieldvar.png cmd/sc_datefield.png
 cmd/sc_insertfilefield.png cmd/sc_open.png
@@ -2010,7 +2013,6 @@ formula/res/fx.png cmd/sc_dbviewfunctions.png
 
 # fpicker
 # ==============================================
-fpicker/res/fp011.png cmd/sc_firstpage.png
 fpicker/res/fp014.png cmd/sc_open.png
 fpicker/res/fp015.png cmd/sc_starshapes.png
 fpicker/res/fp016.png desktop/res/shared_16.png
@@ -2058,7 +2060,7 @@ res/lc05711.png cmd/lc_copy.png
 res/lc05961.png cmd/lc_recsearch.png
 res/lc06300.png cmd/lc_nextrecord.png
 res/lc06301.png cmd/lc_prevrecord.png
-res/lc06303.png cmd/lc_firstpage.png
+res/lc06303.png cmd/lc_firstrecord.png
 res/lc10711.png cmd/lc_removefiltersort.png
 res/lc10715.png cmd/lc_datafilterstandardfilter.png
 res/lc10716.png cmd/lc_datafilterautofilter.png
