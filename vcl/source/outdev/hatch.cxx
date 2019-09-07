@@ -144,17 +144,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
     if(rPolyPoly.Count())
     {
         // #i115630# DrawHatch does not work with beziers included in the polypolygon, take care of that
-        bool bIsCurve(false);
-
-        for(sal_uInt16 a(0); !bIsCurve && a < rPolyPoly.Count(); a++)
-        {
-            if(rPolyPoly[a].HasFlags())
-            {
-                bIsCurve = true;
-            }
-        }
-
-        if(bIsCurve)
+        if(rPolyPoly.HasCurve())
         {
             OSL_ENSURE(false, "DrawHatch does *not* support curves, falling back to AdaptiveSubdivide()...");
             tools::PolyPolygon aPolyPoly;

@@ -115,7 +115,7 @@ public:
 
     void                Clear();
 
-    tools::Rectangle           GetBoundRect() const;
+    tools::Rectangle    GetBoundRect() const;
     bool                IsInside( const Point& rPt ) const;
     double              CalcDistance( sal_uInt16 nPt1, sal_uInt16 nPt2 ) const;
     void                Clip( const tools::Rectangle& rRect );
@@ -206,6 +206,8 @@ public:
     const tools::Polygon& GetObject( sal_uInt16 nPos ) const;
 
     bool                IsRect() const;
+
+    bool                HasCurve() const;
 
     void                Clear();
 
