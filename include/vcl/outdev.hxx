@@ -869,7 +869,8 @@ protected:
 
 private:
 
-    SAL_DLLPRIVATE void         CalcHatchValues( const tools::Rectangle& rRect, long nDist, sal_uInt16 nAngle10, Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 );
+    SAL_DLLPRIVATE Size         GetHatchIncrement(long nDist, sal_uInt16 nAngle10);
+    SAL_DLLPRIVATE void         CalcHatchValues( const tools::Rectangle& rRect, long nDist, sal_uInt16 nAngle10, Point& rPt1, Point& rPt2, Point& rEndPt1 );
     SAL_DLLPRIVATE void         DrawHatchLine( const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly, Point* pPtBuffer, bool bMtf );
     ///@}
 

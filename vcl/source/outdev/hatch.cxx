@@ -183,18 +183,46 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
 void OutputDevice::DrawHatchLines( const tools::PolyPolygon& rPolyPoly, const tools::Rectangle& rRect, long nDist, sal_uInt16 nAngle,
                                    Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1, Point* pPtBuffer, bool bMtf )
 {
-    CalcHatchValues( rRect, nDist, nAngle, rPt1, rPt2, rInc, rEndPt1 );
+    rInc = GetHatchIncrement(nDist, nAngle);
+    CalcHatchValues(rRect, nDist, nAngle, rPt1, rPt2, rEndPt1);
     do
     {
-        DrawHatchLine( tools::Line( rPt1, rPt2 ), rPolyPoly, pPtBuffer, bMtf );
+        DrawHatchLine(tools::Line(rPt1, rPt2), rPolyPoly, pPtBuffer, bMtf);
         rPt1.AdjustX(rInc.Width() ); rPt1.AdjustY(rInc.Height() );
         rPt2.AdjustX(rInc.Width() ); rPt2.AdjustY(rInc.Height() );
     }
     while( ( rPt1.X() <= rEndPt1.X() ) && ( rPt1.Y() <= rEndPt1.Y() ) );
 }
 
+Size OutputDevice::GetHatchIncrement(long nDist, sal_uInt16 nAngle10)
+{
+    long nAngle = nAngle10 % 1800;
+    double fAngle = 0.0;
+
+    if( nAngle > 900 )
+        nAngle -= 1800;
+
+    switch(nAngle)
+    {
+        case 0:
+            return Size(0, nDist);
+
+        case 900:
+            return Size(nDist, 0);
+
+        case -450:
+        case 450:
+            fAngle = F_PI1800 * labs(nAngle);
+            return Size(0, nDist = FRound(nDist / cos(fAngle)));
+
+        default:
+            fAngle = F_PI1800 * labs( nAngle );
+            return Size( 0, FRound(nDist / cos(fAngle)));
+    }
+}
+
 void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, long nDist, sal_uInt16 nAngle10,
-                                    Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 )
+                                    Point& rPt1, Point& rPt2, Point& rEndPt1 )
 {
     Point   aRef;
     long    nAngle = nAngle10 % 1800;
@@ -207,7 +235,6 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, long nDist, s
 
     if( 0 == nAngle )
     {
-        rInc = Size( 0, nDist );
         rPt1 = rRect.TopLeft();
         rPt2 = rRect.TopRight();
         rEndPt1 = rRect.BottomLeft();
@@ -222,7 +249,6 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, long nDist, s
     }
     else if( 900 == nAngle )
     {
-        rInc = Size( nDist, 0 );
         rPt1 = rRect.TopLeft();
         rPt2 = rRect.BottomLeft();
         rEndPt1 = rRect.TopRight();
@@ -241,8 +267,6 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, long nDist, s
         const double    fTan = tan( fAngle );
         const long      nYOff = FRound( ( rRect.Right() - rRect.Left() ) * fTan );
         long            nPY;
-
-        rInc = Size( 0, nDist = FRound( nDist / cos( fAngle ) ) );
 
         if( nAngle > 0 )
         {
@@ -273,8 +297,6 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, long nDist, s
         const double fTan = tan( fAngle );
         const long   nXOff = FRound( ( rRect.Bottom() - rRect.Top() ) / fTan );
         long         nPX;
-
-        rInc = Size( nDist = FRound( nDist / sin( fAngle ) ), 0 );
 
         if( nAngle > 0 )
         {
