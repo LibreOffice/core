@@ -24,6 +24,7 @@
 #include <com/sun/star/linguistic2/ConversionDirection.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryList.hpp>
+#include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unicode/uchar.h>
 #include <memory>
@@ -191,21 +192,9 @@ static Sequence< OUString >& operator += (Sequence< OUString > &rSeq1, Sequence<
 {
     if (! rSeq1.hasElements() && rSeq2.hasElements())
         rSeq1 = rSeq2;
-    else if (rSeq2.hasElements()) {
-        sal_Int32 i, j, k, l;
-        k = l = rSeq1.getLength();
-        rSeq1.realloc(l + rSeq2.getLength());
+    else if (rSeq2.hasElements())
+        rSeq1 = comphelper::combineSequences(rSeq1, rSeq2);
 
-        for (i = 0; i < rSeq2.getLength(); i++) {
-            for (j = 0; j < l; j++)
-                if (rSeq1[j] == rSeq2[i])
-                    break;
-            if (j == l)
-                rSeq1[k++] = rSeq2[i];
-        }
-        if (rSeq1.getLength() > k)
-            rSeq1.realloc(k);
-    }
     return rSeq1;
 }
 

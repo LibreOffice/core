@@ -25,11 +25,13 @@
 #include <com/sun/star/i18n/TransliterationType.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
 
 #include <algorithm>
+#include <numeric>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
@@ -256,8 +258,8 @@ TransliterationImpl::loadModulesByImplNames(const Sequence< OUString >& implName
         throw ERROR;
 
     clear();
-    for (sal_Int32 i = 0; i < implNameList.getLength(); i++)
-        if (loadModuleByName(implNameList[i], bodyCascade[numCascade], rLocale))
+    for (const auto& rName : implNameList)
+        if (loadModuleByName(rName, bodyCascade[numCascade], rLocale))
             numCascade++;
 }
 
@@ -266,19 +268,18 @@ Sequence<OUString> SAL_CALL
 TransliterationImpl::getAvailableModules( const Locale& rLocale, sal_Int16 sType )
 {
     const Sequence<OUString> &translist = mxLocaledata->getTransliterations(rLocale);
-    Sequence<OUString> r(translist.getLength());
+    std::vector<OUString> r;
+    r.reserve(translist.getLength());
     Reference<XExtendedTransliteration> body;
-    sal_Int32 n = 0;
-    for (sal_Int32 i = 0; i < translist.getLength(); i++)
+    for (const auto& rTrans : translist)
     {
-        if (loadModuleByName(translist[i], body, rLocale)) {
+        if (loadModuleByName(rTrans, body, rLocale)) {
             if (body->getType() & sType)
-                r[n++] = translist[i];
+                r.push_back(rTrans);
             body.clear();
         }
     }
-    r.realloc(n);
-    return r;
+    return comphelper::containerToSequence(r);
 }
 
 
@@ -310,9 +311,8 @@ TransliterationImpl::transliterate( const OUString& inStr, sal_Int32 startPos, s
     else
     {
         OUString tmpStr = inStr.copy(startPos, nCount);
-        sal_Int32 * pArr = offset.getArray();
-        for (sal_Int32 j = 0; j < nCount; j++)
-            pArr[j] = startPos + j;
+
+        std::iota(offset.begin(), offset.end(), startPos);
 
         sal_Int16 from = 0, to = 1;
         Sequence<sal_Int32> off[2];
@@ -370,11 +370,10 @@ TransliterationImpl::folding( const OUString& inStr, sal_Int32 startPos, sal_Int
     else
     {
         OUString tmpStr = inStr.copy(startPos, nCount);
-        sal_Int32 * pArr = offset.getArray();
-        for (sal_Int32 j = 0; j < nCount; j++)
-            pArr[j] = startPos + j;
 
-        sal_Int16 from = 0, to = 1, tmp;
+        std::iota(offset.begin(), offset.end(), startPos);
+
+        sal_Int16 from = 0, to = 1;
         Sequence<sal_Int32> off[2];
 
         off[to] = offset;
@@ -383,7 +382,7 @@ TransliterationImpl::folding( const OUString& inStr, sal_Int32 startPos, sal_Int
 
             nCount = tmpStr.getLength();
 
-            tmp = from; from = to; to = tmp;
+            std::swap(from, to);
             for (sal_Int32 j = 0; j < nCount; j++)
                 off[to][j] = off[from][off[to][j]];
         }
@@ -476,16 +475,16 @@ TransliterationImpl::equals(
     for (i = 0; i < nLen; ++i, ++p1, ++p2 ) {
         if (*p1 != *p2) {
             // return number of matched code points so far
-            nMatch1 = (i < offset1.getLength()) ? offset1[i] : i;
-            nMatch2 = (i < offset2.getLength()) ? offset2[i] : i;
+            nMatch1 = (i < offset1.getLength()) ? offset1.getConstArray()[i] : i;
+            nMatch2 = (i < offset2.getLength()) ? offset2.getConstArray()[i] : i;
             return false;
         }
     }
     // i==nLen
     if ( tmpStr1.getLength() != tmpStr2.getLength() ) {
         // return number of matched code points so far
-        nMatch1 = (i <= offset1.getLength()) ? offset1[i-1] + 1 : i;
-        nMatch2 = (i <= offset2.getLength()) ? offset2[i-1] + 1 : i;
+        nMatch1 = (i <= offset1.getLength()) ? offset1.getConstArray()[i-1] + 1 : i;
+        nMatch2 = (i <= offset2.getLength()) ? offset2.getConstArray()[i-1] + 1 : i;
         return false;
     } else {
         nMatch1 = nCount1;
@@ -493,8 +492,6 @@ TransliterationImpl::equals(
         return true;
     }
 }
-
-#define MaxOutput 2
 
 Sequence< OUString >
 TransliterationImpl::getRange(const Sequence< OUString > &inStrs,
@@ -504,18 +501,20 @@ TransliterationImpl::getRange(const Sequence< OUString > &inStrs,
         return inStrs;
 
     sal_Int32 j_tmp = 0;
-    Sequence< OUString > ostr(MaxOutput*length);
+    constexpr sal_Int32 nMaxOutput = 2;
+    const sal_Int32 nMaxOutputLength = nMaxOutput*length;
+    std::vector<OUString> ostr;
+    ostr.reserve(nMaxOutputLength);
     for (sal_Int32 j = 0; j < length; j+=2) {
         const Sequence< OUString >& temp = bodyCascade[_numCascade]->transliterateRange(inStrs[j], inStrs[j+1]);
 
-        for ( sal_Int32 k = 0; k < temp.getLength(); k++) {
-            if ( j_tmp >= MaxOutput*length ) throw ERROR;
-            ostr[j_tmp++]  = temp[k];
+        for (const auto& rStr : temp) {
+            if ( j_tmp++ >= nMaxOutputLength ) throw ERROR;
+            ostr.push_back(rStr);
         }
     }
-    ostr.realloc(j_tmp);
 
-    return getRange(ostr, j_tmp, ++_numCascade);
+    return getRange(comphelper::containerToSequence(ostr), j_tmp, ++_numCascade);
 }
 
 

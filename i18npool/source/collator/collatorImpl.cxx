@@ -21,7 +21,9 @@
 #include <localedata.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/i18n/LocaleData2.hpp>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <numeric>
 
 using namespace com::sun::star;
 using namespace com::sun::star::i18n;
@@ -69,9 +71,10 @@ sal_Int32 SAL_CALL
 CollatorImpl::loadDefaultCollator(const lang::Locale& rLocale, sal_Int32 collatorOptions)
 {
     const Sequence< Implementation > &imp = mxLocaleData->getCollatorImplementations(rLocale);
-    for (sal_Int32 i = 0; i < imp.getLength(); i++)
-        if (imp[i].isDefault)
-            return loadCollatorAlgorithm(imp[i].unoID, rLocale, collatorOptions);
+    auto pImpl = std::find_if(imp.begin(), imp.end(),
+        [](const Implementation& rImp) { return rImp.isDefault; });
+    if (pImpl != imp.end())
+        return loadCollatorAlgorithm(pImpl->unoID, rLocale, collatorOptions);
 
     throw RuntimeException(); // not default is defined
     //return 0;
@@ -95,9 +98,8 @@ void SAL_CALL
 CollatorImpl::loadCollatorAlgorithmWithEndUserOption(const OUString& impl, const lang::Locale& rLocale,
     const Sequence< sal_Int32 >& collatorOptions)
 {
-    sal_Int32 options = 0;
-    for (sal_Int32 i = 0; i < collatorOptions.getLength(); i++)
-        options |= collatorOptions[i];
+    sal_Int32 options = std::accumulate(collatorOptions.begin(), collatorOptions.end(),
+        sal_Int32(0), [](sal_Int32 nSum, sal_Int32 nOpt) { return nSum | nOpt; });
     loadCollatorAlgorithm(impl, rLocale, options);
 }
 
@@ -107,15 +109,15 @@ CollatorImpl::listCollatorAlgorithms( const lang::Locale& rLocale )
     nLocale = rLocale;
     const Sequence< Implementation > &imp = mxLocaleData->getCollatorImplementations(rLocale);
     Sequence< OUString > list(imp.getLength());
+    auto pBegin = list.begin();
+    auto pId = pBegin;
 
-    for (sal_Int32 i = 0; i < imp.getLength(); i++) {
+    for (const auto& rImpl : imp) {
+        *pId = rImpl.unoID;
         //if the current algorithm is default and the position is not on the first one, then switch
-        if (imp[i].isDefault && i) {
-            list[i] = list[0];
-            list[0] = imp[i].unoID;
-        }
-        else
-            list[i] = imp[i].unoID;
+        if (rImpl.isDefault && pId != pBegin)
+            std::swap(*pBegin, *pId);
+        ++pId;
     }
     return list;
 }
@@ -123,14 +125,13 @@ CollatorImpl::listCollatorAlgorithms( const lang::Locale& rLocale )
 Sequence< sal_Int32 > SAL_CALL
 CollatorImpl::listCollatorOptions( const OUString& /*collatorAlgorithmName*/ )
 {
-    Sequence< OUString > option_str = mxLocaleData->getCollationOptions(nLocale);
+    const Sequence< OUString > option_str = mxLocaleData->getCollationOptions(nLocale);
     Sequence< sal_Int32 > option_int(option_str.getLength());
 
-    for (sal_Int32 i = 0; i < option_str.getLength(); i++)
-        option_int[i] =
-            option_str[i] == "IGNORE_CASE" ?  CollatorOptions::CollatorOptions_IGNORE_CASE :
-            option_str[i] == "IGNORE_KANA" ?  CollatorOptions::CollatorOptions_IGNORE_KANA :
-            option_str[i] == "IGNORE_WIDTH" ?  CollatorOptions::CollatorOptions_IGNORE_WIDTH : 0;
+    std::transform(option_str.begin(), option_str.end(), option_int.begin(), [](const OUString& rOpt) {
+        return rOpt == "IGNORE_CASE" ?  CollatorOptions::CollatorOptions_IGNORE_CASE :
+               rOpt == "IGNORE_KANA" ?  CollatorOptions::CollatorOptions_IGNORE_KANA :
+               rOpt == "IGNORE_WIDTH" ?  CollatorOptions::CollatorOptions_IGNORE_WIDTH : 0; });
 
     return option_int;
 }
