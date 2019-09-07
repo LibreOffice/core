@@ -19,7 +19,6 @@
 
 #include <svtools/generictoolboxcontroller.hxx>
 
-#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

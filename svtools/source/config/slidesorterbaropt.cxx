@@ -18,7 +18,6 @@
  */
 
 #include <svtools/slidesorterbaropt.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>

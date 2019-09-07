@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include "templwin.hxx"
 #include <templwin.hrc>

@@ -32,16 +32,15 @@
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 
 #include <comphelper/flagguard.hxx>
+#include <vcl/accessiblefactory.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/seleng.hxx>
 #include <vcl/settings.hxx>
-#include <rtl/ref.hxx>
 #include <vcl/image.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 
 #include <cstdlib>
-#include <functional>
 #include <numeric>
 
 #define MIN_COLUMN_WIDTH_PIXEL  4

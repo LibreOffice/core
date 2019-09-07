@@ -21,7 +21,6 @@
 #define INCLUDED_SVTOOLS_SOURCE_TABLE_TABLEDATAWINDOW_HXX
 
 #include <vcl/window.hxx>
-#include <vcl/seleng.hxx>
 
 
 namespace svt { namespace table

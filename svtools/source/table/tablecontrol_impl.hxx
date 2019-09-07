@@ -24,7 +24,7 @@
 #include <table/tablecontrolinterface.hxx>
 
 #include <vcl/svtaccessiblefactory.hxx>
-#include <vcl/accessiblefactory.hxx>
+#include <vcl/accessibletable.hxx>
 
 #include <vcl/seleng.hxx>
 

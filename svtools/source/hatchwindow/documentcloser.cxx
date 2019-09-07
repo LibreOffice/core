@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -30,8 +29,6 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
-#include <osl/thread.hxx>
-#include <rtl/ref.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/dialog.hxx>
 #include <tools/link.hxx>

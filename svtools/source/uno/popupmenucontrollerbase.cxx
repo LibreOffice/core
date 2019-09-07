@@ -19,17 +19,13 @@
 
 #include <svtools/popupmenucontrollerbase.hxx>
 
-#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

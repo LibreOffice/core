@@ -42,13 +42,11 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
-#include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStateChangeListener.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
-#include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/svapp.hxx>

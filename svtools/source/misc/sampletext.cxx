@@ -10,7 +10,6 @@
 #include <vcl/font.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/metric.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <i18nutil/unicode.hxx>
 #include <sal/log.hxx>

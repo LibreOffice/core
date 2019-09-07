@@ -21,17 +21,13 @@
 #include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/settings.hxx>
 #include <sal/log.hxx>
 
 #include <svtools/ehdl.hxx>
-#include <svtools/soerr.hxx>
 #include <svtools/svtresid.hxx>
-#include <svtools/strings.hrc>
 #include <svtools/sfxecode.hxx>
 #include <memory>
 #include <errtxt.hrc>
-#include <strings.hxx>
 
 static DialogMask aWndFunc(
     weld::Window *pWin,            // Parent of the dialog

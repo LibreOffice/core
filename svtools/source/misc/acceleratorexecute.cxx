@@ -26,17 +26,13 @@
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <cppuhelper/implbase.hxx>
 
 #include <vcl/evntpost.hxx>
-#include <vcl/window.hxx>
-#include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
 namespace svt

@@ -18,7 +18,6 @@
  */
 
 #include <svtools/menuoptions.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -27,8 +26,6 @@
 #include <vcl/settings.hxx>
 
 #include "itemholder2.hxx"
-
-#include <list>
 
 //  namespaces
 
@@ -53,8 +50,6 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYHANDLE_SHOWICONSINMENUES        2
 #define PROPERTYHANDLE_SYSTEMICONSINMENUES      3
 #define PROPERTYHANDLE_SHORTCUTSINCONTEXMENU    4
-
-#include <tools/link.hxx>
 
 //  private declarations!
 

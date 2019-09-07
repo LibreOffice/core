@@ -21,11 +21,9 @@
 #include <table/defaultinputhandler.hxx>
 #include <table/tablecontrolinterface.hxx>
 
-#include "tabledatawindow.hxx"
 #include "mousefunction.hxx"
 
 #include <vcl/event.hxx>
-#include <vcl/cursor.hxx>
 #include <osl/diagnose.h>
 
 

@@ -17,12 +17,9 @@
  */
 
 #include <svtools/editbrowsebox.hxx>
-#include <vcl/decoview.hxx>
 #include <vcl/fmtfield.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>
-
-#include <algorithm>
 
 
 namespace svt

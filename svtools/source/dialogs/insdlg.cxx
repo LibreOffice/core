@@ -22,12 +22,10 @@
 #include <svtools/svtresid.hxx>
 
 #include <unotools/configmgr.hxx>
-#include <comphelper/classids.hxx>
 #include <sot/stg.hxx>
 #include <sal/macros.h>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
