@@ -1359,6 +1359,9 @@ callback (gpointer pData)
         break;
     case LOK_CALLBACK_CLIPBOARD_CHANGED:
     case LOK_CALLBACK_CONTEXT_CHANGED:
+    case LOK_CALLBACK_CELL_SELECTION_AREA:
+    case LOK_CALLBACK_CELL_AUTO_FILL_AREA:
+    case LOK_CALLBACK_TABLE_SELECTED:
         break; // TODO
     default:
         g_assert(false);
