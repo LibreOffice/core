@@ -163,42 +163,34 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
 
             // Single hatch
             aRect.AdjustLeft( -nLogPixelWidth ); aRect.AdjustTop( -nLogPixelWidth ); aRect.AdjustRight(nLogPixelWidth ); aRect.AdjustBottom(nLogPixelWidth );
-            CalcHatchValues( aRect, nWidth, rHatch.GetAngle(), aPt1, aPt2, aInc, aEndPt1 );
-            do
-            {
-                DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
-                aPt1.AdjustX(aInc.Width() ); aPt1.AdjustY(aInc.Height() );
-                aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
-            }
-            while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
+            DrawHatchLines( rPolyPoly, aRect, nWidth, rHatch.GetAngle(), aPt1, aPt2, aInc, aEndPt1, pPtBuffer.get(), bMtf );
 
             if( ( rHatch.GetStyle() == HatchStyle::Double ) || ( rHatch.GetStyle() == HatchStyle::Triple ) )
             {
                 // Double hatch
-                CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 900, aPt1, aPt2, aInc, aEndPt1 );
-                do
-                {
-                    DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
-                    aPt1.AdjustX(aInc.Width() ); aPt1.AdjustY(aInc.Height() );
-                    aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
-                }
-                while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
+                DrawHatchLines( rPolyPoly, aRect, nWidth, rHatch.GetAngle() + 900, aPt1, aPt2, aInc, aEndPt1, pPtBuffer.get(), bMtf );
 
                 if( rHatch.GetStyle() == HatchStyle::Triple )
                 {
                     // Triple hatch
-                    CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 450, aPt1, aPt2, aInc, aEndPt1 );
-                    do
-                    {
-                        DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
-                        aPt1.AdjustX(aInc.Width() ); aPt1.AdjustY(aInc.Height() );
-                        aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
-                    }
-                    while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
+                    DrawHatchLines( rPolyPoly, aRect, nWidth, rHatch.GetAngle() + 450, aPt1, aPt2, aInc, aEndPt1, pPtBuffer.get(), bMtf );
                 }
             }
         }
     }
+}
+
+void OutputDevice::DrawHatchLines( const tools::PolyPolygon& rPolyPoly, const tools::Rectangle& rRect, long nDist, sal_uInt16 nAngle,
+                                   Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1, Point* pPtBuffer, bool bMtf )
+{
+    CalcHatchValues( rRect, nDist, nAngle, rPt1, rPt2, rInc, rEndPt1 );
+    do
+    {
+        DrawHatchLine( tools::Line( rPt1, rPt2 ), rPolyPoly, pPtBuffer, bMtf );
+        rPt1.AdjustX(rInc.Width() ); rPt1.AdjustY(rInc.Height() );
+        rPt2.AdjustX(rInc.Width() ); rPt2.AdjustY(rInc.Height() );
+    }
+    while( ( rPt1.X() <= rEndPt1.X() ) && ( rPt1.Y() <= rEndPt1.Y() ) );
 }
 
 void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, long nDist, sal_uInt16 nAngle10,

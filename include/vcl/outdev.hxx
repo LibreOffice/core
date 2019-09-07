@@ -861,6 +861,9 @@ public:
 
     void                        DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf );
 
+    void                        DrawHatchLines( const tools::PolyPolygon& rPolyPoly, const tools::Rectangle& rRect, long nDist, sal_uInt16 nAngle10,
+                                                Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1, Point* pPtBuffer, bool bMtf );
+
 protected:
     virtual void                DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint);
 
