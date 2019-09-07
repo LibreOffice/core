@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <transliteration_Ignore.hxx>
 #include <unicode/translit.h>
@@ -59,10 +60,11 @@ ignoreDiacritics_CTL::foldingImpl(const OUString& rInStr, sal_Int32 nStartPos,
     if (useOffset)
     {
         OUStringBuffer aOutBuf(nCount);
-        rOffset.realloc(nCount);
+
+        std::vector<sal_Int32> aOffset;
+        aOffset.reserve(nCount);
 
         sal_Int32 nPosition = nStartPos;
-        sal_Int32 nOffset = 0;
         while (nPosition < nStartPos + nCount)
         {
             sal_Int32 nIndex = nPosition;
@@ -70,19 +72,14 @@ ignoreDiacritics_CTL::foldingImpl(const OUString& rInStr, sal_Int32 nStartPos,
             icu::UnicodeString aUStr(nChar);
             m_transliterator->transliterate(aUStr);
 
-            if (nOffset + aUStr.length() > rOffset.getLength())
-                rOffset.realloc(rOffset.getLength() + aUStr.length());
-            sal_Int32* pOffset = rOffset.getArray();
-
             aOutBuf.append(reinterpret_cast<const sal_Unicode*>(aUStr.getBuffer()), aUStr.length());
 
-            for (const sal_Int32 nOffsetEnd = nOffset+aUStr.length(); nOffset < nOffsetEnd; nOffset++)
-                pOffset[nOffset] = nPosition;
+            std::fill_n(std::back_inserter(aOffset), aUStr.length(), nPosition);
 
             nPosition = nIndex;
         }
 
-        rOffset.realloc(aOutBuf.getLength());
+        rOffset = comphelper::containerToSequence(aOffset);
         return aOutBuf.makeStringAndClear();
     }
     else

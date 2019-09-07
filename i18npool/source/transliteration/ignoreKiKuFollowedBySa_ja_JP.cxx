@@ -19,6 +19,8 @@
 
 #include <transliteration_Ignore.hxx>
 
+#include <numeric>
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
@@ -33,13 +35,10 @@ ignoreKiKuFollowedBySa_ja_JP::foldingImpl( const OUString& inStr, sal_Int32 star
     sal_Unicode * dst = newStr->buffer;
     const sal_Unicode * src = inStr.getStr() + startPos;
 
-    sal_Int32 *p = nullptr;
-    sal_Int32 position = 0;
     if (useOffset) {
         // Allocate nCount length to offset argument.
         offset.realloc( nCount );
-        p = offset.getArray();
-        position = startPos;
+        std::iota(offset.begin(), offset.end(), startPos);
     }
 
 
@@ -54,10 +53,6 @@ ignoreKiKuFollowedBySa_ja_JP::foldingImpl( const OUString& inStr, sal_Int32 star
         if (previousChar == 0x30AF ) { // KATAKANA LETTER KU
             if (0x30B5 <= currentChar && // KATAKANA LETTER SA
                     currentChar <= 0x30BE) { // KATAKANA LETTER ZO
-                if (useOffset) {
-                    *p ++ = position++;
-                    *p ++ = position++;
-                }
                 *dst ++ = 0x30AD;          // KATAKANA LETTER KI
                 *dst ++ = currentChar;
                 previousChar = *src ++;
@@ -66,15 +61,11 @@ ignoreKiKuFollowedBySa_ja_JP::foldingImpl( const OUString& inStr, sal_Int32 star
             }
         }
 
-        if (useOffset)
-            *p ++ = position++;
         *dst ++ = previousChar;
         previousChar = currentChar;
     }
 
     if (nCount == 0) {
-        if (useOffset)
-            *p = position;
         *dst ++ = previousChar;
     }
 
