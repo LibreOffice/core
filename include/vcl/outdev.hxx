@@ -861,8 +861,8 @@ public:
 
     void                        DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf );
 
-    void                        DrawHatchLines( const tools::PolyPolygon& rPolyPoly, const tools::Rectangle& rRect, long nDist, sal_uInt16 nAngle10,
-                                                Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1, Point* pPtBuffer, bool bMtf );
+    void                        DrawHatchLines(const tools::PolyPolygon& rPolyPoly,
+                                               const tools::Rectangle& rRect, long nDist, sal_uInt16 nAngle10, bool bMtf);
 
 protected:
     virtual void                DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint);
@@ -874,7 +874,7 @@ private:
     SAL_DLLPRIVATE Point        GetPt2(tools::Rectangle const& rRect, long nDist, sal_uInt16 nAngle10);
     SAL_DLLPRIVATE Point        GetEndPt1(tools::Rectangle const& rRect, sal_uInt16 nAngle10);
 
-    SAL_DLLPRIVATE void         DrawHatchLine( const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly, Point* pPtBuffer, bool bMtf );
+    SAL_DLLPRIVATE void         DrawHatchLine( const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly, bool bMtf );
     ///@}
 
 

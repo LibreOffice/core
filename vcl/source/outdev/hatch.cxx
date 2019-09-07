@@ -157,43 +157,43 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
             tools::Rectangle   aRect( rPolyPoly.GetBoundRect() );
             const long  nLogPixelWidth = ImplDevicePixelToLogicWidth( 1 );
             const long  nWidth = ImplDevicePixelToLogicWidth( std::max( ImplLogicWidthToDevicePixel( rHatch.GetDistance() ), 3L ) );
-            std::unique_ptr<Point[]> pPtBuffer(new Point[ HATCH_MAXPOINTS ]);
-            Point       aPt1, aPt2, aEndPt1;
-            Size        aInc;
 
             // Single hatch
             aRect.AdjustLeft( -nLogPixelWidth ); aRect.AdjustTop( -nLogPixelWidth ); aRect.AdjustRight(nLogPixelWidth ); aRect.AdjustBottom(nLogPixelWidth );
-            DrawHatchLines( rPolyPoly, aRect, nWidth, rHatch.GetAngle(), aPt1, aPt2, aInc, aEndPt1, pPtBuffer.get(), bMtf );
+            DrawHatchLines(rPolyPoly, aRect, nWidth, rHatch.GetAngle(), bMtf);
 
-            if( ( rHatch.GetStyle() == HatchStyle::Double ) || ( rHatch.GetStyle() == HatchStyle::Triple ) )
+            if ((rHatch.GetStyle() == HatchStyle::Double) || (rHatch.GetStyle() == HatchStyle::Triple))
             {
                 // Double hatch
-                DrawHatchLines( rPolyPoly, aRect, nWidth, rHatch.GetAngle() + 900, aPt1, aPt2, aInc, aEndPt1, pPtBuffer.get(), bMtf );
+                DrawHatchLines(rPolyPoly, aRect, nWidth, rHatch.GetAngle() + 900, bMtf);
 
-                if( rHatch.GetStyle() == HatchStyle::Triple )
+                if (rHatch.GetStyle() == HatchStyle::Triple)
                 {
                     // Triple hatch
-                    DrawHatchLines( rPolyPoly, aRect, nWidth, rHatch.GetAngle() + 450, aPt1, aPt2, aInc, aEndPt1, pPtBuffer.get(), bMtf );
+                    DrawHatchLines(rPolyPoly, aRect, nWidth, rHatch.GetAngle() + 450, bMtf);
                 }
             }
         }
     }
 }
 
-void OutputDevice::DrawHatchLines( const tools::PolyPolygon& rPolyPoly, const tools::Rectangle& rRect, long nDist, sal_uInt16 nAngle,
-                                   Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1, Point* pPtBuffer, bool bMtf )
+void OutputDevice::DrawHatchLines(tools::PolyPolygon const& rPolyPoly, tools::Rectangle const& rRect, long nDist, sal_uInt16 nAngle, bool bMtf)
 {
-    rInc = GetHatchIncrement(nDist, nAngle);
-    rPt1 = GetPt1(rRect, nDist, nAngle);
-    rPt2 = GetPt2(rRect, nDist, nAngle);
-    rEndPt1 = GetEndPt1(rRect, nAngle);
+    Size aInc = GetHatchIncrement(nDist, nAngle);
+    Point aPt1 = GetPt1(rRect, nDist, nAngle);
+    Point aPt2 = GetPt2(rRect, nDist, nAngle);
+    Point aEndPt1 = GetEndPt1(rRect, nAngle);
+
     do
     {
-        DrawHatchLine(tools::Line(rPt1, rPt2), rPolyPoly, pPtBuffer, bMtf);
-        rPt1.AdjustX(rInc.Width() ); rPt1.AdjustY(rInc.Height() );
-        rPt2.AdjustX(rInc.Width() ); rPt2.AdjustY(rInc.Height() );
+        DrawHatchLine(tools::Line(aPt1, aPt2), rPolyPoly, bMtf);
+
+        aPt1.AdjustX(aInc.Width());
+        aPt1.AdjustY(aInc.Height());
+        aPt2.AdjustX(aInc.Width());
+        aPt2.AdjustY(aInc.Height());
     }
-    while( ( rPt1.X() <= rEndPt1.X() ) && ( rPt1.Y() <= rEndPt1.Y() ) );
+    while((aPt1.X() <= aEndPt1.X()) && (aPt1.Y() <= aEndPt1.Y()));
 }
 
 Size OutputDevice::GetHatchIncrement(long nDist, sal_uInt16 nAngle10)
@@ -450,13 +450,14 @@ Point OutputDevice::GetEndPt1(tools::Rectangle const& rRect, sal_uInt16 nAngle10
     }
 }
 
-void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly,
-                                      Point* pPtBuffer, bool bMtf )
+void OutputDevice::DrawHatchLine(const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly, bool bMtf)
 {
     assert(!is_double_buffered_window());
 
     double  fX, fY;
     long    nAdd, nPCounter = 0;
+
+    std::unique_ptr<Point[]> pPtBuffer(new Point[HATCH_MAXPOINTS]);
 
     for( long nPoly = 0, nPolyCount = rPolyPoly.Count(); nPoly < nPolyCount; nPoly++ )
     {
@@ -511,7 +512,7 @@ void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPol
 
     if( nPCounter > 1 )
     {
-        qsort( pPtBuffer, nPCounter, sizeof( Point ), HatchCmpFnc );
+        qsort(pPtBuffer.get(), nPCounter, sizeof( Point ), HatchCmpFnc );
 
         if( nPCounter & 1 )
             nPCounter--;
@@ -519,7 +520,7 @@ void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPol
         if( bMtf )
         {
             for( long i = 0; i < nPCounter; i += 2 )
-                mpMetaFile->AddAction( new MetaLineAction( pPtBuffer[ i ], pPtBuffer[ i + 1 ] ) );
+                mpMetaFile->AddAction(new MetaLineAction( pPtBuffer[i], pPtBuffer[i+1]));
         }
         else
         {
