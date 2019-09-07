@@ -24,17 +24,12 @@
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
-#include <cppuhelper/typeprovider.hxx>
-
 #include <com/sun/star/awt/XProgressBar.hpp>
 #include <com/sun/star/awt/XTextArea.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
 #include <tools/lineend.hxx>
-#include <vcl/fmtfield.hxx>
-
-#include <cppuhelper/implbase.hxx>
-#include <com/sun/star/awt/XItemEventBroadcaster.hpp>
+#include <vcl/edit.hxx>
 
 
 namespace com { namespace sun { namespace star { namespace util {

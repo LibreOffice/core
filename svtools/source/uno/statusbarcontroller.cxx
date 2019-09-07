@@ -19,7 +19,6 @@
 
 #include <svtools/statusbarcontroller.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -30,11 +29,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/status.hxx>
-#include <svtools/imgdef.hxx>
-#include <svtools/miscopt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 
 using namespace ::cppu;
 using namespace css::awt;

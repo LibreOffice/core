@@ -20,7 +20,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
-#include <rtl/ustrbuf.hxx>
 #include <sfx2/event.hxx>
 #include <svtools/unoevent.hxx>
 #include <svl/macitem.hxx>

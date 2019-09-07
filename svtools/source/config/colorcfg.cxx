@@ -21,7 +21,6 @@
 #include <svtools/colorcfg.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/configitem.hxx>
@@ -34,9 +33,6 @@
 
 #include "itemholder2.hxx"
 
- /* #100822# ----
-#include <vcl/wrkwin.hxx>
- ------------- */
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>

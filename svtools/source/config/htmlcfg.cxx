@@ -25,10 +25,7 @@
 #include <svtools/parhtml.hxx>
 #include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
-#include <tools/link.hxx>
-#include <sal/macros.h>
 #include <rtl/instance.hxx>
-#include <list>
 #include <o3tl/typed_flags_set.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 

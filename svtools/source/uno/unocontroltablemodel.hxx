@@ -22,18 +22,12 @@
 
 #include <svtools/table/tablemodel.hxx>
 #include <svtools/table/tablesort.hxx>
-#include <table/tablecontrol.hxx>
 
-#include <com/sun/star/awt/grid/XGridControl.hpp>
 #include <com/sun/star/awt/grid/GridDataEvent.hpp>
 #include <com/sun/star/awt/grid/XGridColumnModel.hpp>
 #include <com/sun/star/awt/grid/XGridDataModel.hpp>
-#include <com/sun/star/awt/grid/XGridSelectionListener.hpp>
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
-#include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
-
-#include <rtl/ref.hxx>
 
 #include <memory>
 

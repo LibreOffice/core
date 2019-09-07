@@ -21,8 +21,8 @@
 #define INCLUDED_SVTOOLS_SOURCE_CONTROL_TOOLBARMENUIMP_HXX
 
 #include <osl/mutex.hxx>
+#include <vcl/ctrl.hxx>
 #include <vcl/image.hxx>
-#include <vcl/menu.hxx>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -32,7 +32,6 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 
 #include <rtl/ref.hxx>
 

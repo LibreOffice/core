@@ -27,7 +27,6 @@
 #include <i18nlangtag/languagetag.hxx>
 
 #include <sal/log.hxx>
-#include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <svtools/langtab.hxx>
 #include <unotools/syslocale.hxx>

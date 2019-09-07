@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -28,19 +27,14 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/ustring.hxx>
-#include <svl/inettype.hxx>
 #include <svtools/DocumentInfoPreview.hxx>
-#include <svtools/imagemgr.hxx>
 #include <svtools/svmedit2.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
 #include <tools/datetime.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/urlobj.hxx>
-#include <unotools/ucbhelper.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 #include <templwin.hrc>

@@ -24,10 +24,12 @@
 #include <FltCallDialogParameter.hxx>
 #include <vcl/weld.hxx>
 #include <tools/stream.hxx>
-#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 #include <memory>
 
 /*************************************************************************

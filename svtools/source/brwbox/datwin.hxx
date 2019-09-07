@@ -23,9 +23,7 @@
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/image.hxx>
 #include <vcl/transfer.hxx>
-#include <memory>
 #include <vector>
 
 

@@ -42,7 +42,6 @@
 #include <comphelper/processfactory.hxx>
 
 #include <vector>
-#include <list>
 #include <algorithm>
 
 

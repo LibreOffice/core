@@ -19,7 +19,6 @@
 
 #include <svtools/addresstemplate.hxx>
 #include <svtools/genericunodialog.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -27,7 +26,6 @@
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <vcl/svapp.hxx>
-#include <rtl/ref.hxx>
 
 using namespace svt;
 

@@ -17,12 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
 #include <tools/debug.hxx>
-#include <vcl/svapp.hxx>
 #include <tools/poly.hxx>
 #include <vcl/event.hxx>
-#include <vcl/i18nhelp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/vcllayout.hxx>
 #include <vcl/virdev.hxx>

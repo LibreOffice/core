@@ -24,7 +24,6 @@
 #include <tools/debug.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <sal/macros.h>
 
 #include <com/sun/star/uno/Sequence.hxx>
 

@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <svtools/simptabl.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
 class SvSimpleTable;

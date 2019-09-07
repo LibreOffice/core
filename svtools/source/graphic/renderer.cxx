@@ -18,8 +18,6 @@
  */
 
 
-#include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -34,7 +32,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <rtl/ref.hxx>
-#include <svl/itemprop.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/outdev.hxx>
 

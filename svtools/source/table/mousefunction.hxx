@@ -22,7 +22,6 @@
 
 #include <svtools/table/tabletypes.hxx>
 
-#include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
 class MouseEvent;

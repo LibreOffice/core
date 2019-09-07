@@ -21,7 +21,6 @@
 #define INCLUDED_SVTOOLS_SOURCE_TABLE_CELLVALUECONVERSION_HXX
 
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <memory>
 

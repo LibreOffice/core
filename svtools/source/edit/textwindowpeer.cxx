@@ -25,7 +25,6 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <sal/types.h>
 #include <svtools/textwindowpeer.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/texteng.hxx>

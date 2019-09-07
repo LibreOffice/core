@@ -23,18 +23,15 @@
 #include <table/gridtablerenderer.hxx>
 #include <table/tablecontrol.hxx>
 #include "unocontroltablemodel.hxx"
-#include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <toolkit/helper/property.hxx>
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
-#include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/grid/GridInvalidDataException.hpp>
 #include <com/sun/star/awt/grid/GridInvalidModelException.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/util/Color.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <vcl/svapp.hxx>
