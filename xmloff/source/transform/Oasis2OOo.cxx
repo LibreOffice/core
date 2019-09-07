@@ -1926,19 +1926,20 @@ namespace
     class theOasis2OOoTransformerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theOasis2OOoTransformerUnoTunnelId> {};
 }
 
+const css::uno::Sequence<sal_Int8>& Oasis2OOoTransformer::getUnoTunnelId() throw()
+{
+    return theOasis2OOoTransformerUnoTunnelId::get().getSeq();
+}
+
 // XUnoTunnel
 sal_Int64 SAL_CALL Oasis2OOoTransformer::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if( rId.getLength() == 16
-        && 0 == memcmp( theOasis2OOoTransformerUnoTunnelId::get().getSeq().getConstArray(),
-                        rId.getConstArray(), 16 ) )
+    if( isUnoTunnelId<Oasis2OOoTransformer>(rId) )
     {
         return reinterpret_cast< sal_Int64 >( this );
     }
-    else
-    {
-        return sal_Int64(0);
-    }
+
+    return sal_Int64(0);
 }
 
 // XServiceInfo
