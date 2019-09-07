@@ -1,0 +1,12 @@
+---
+assumeFilename: svtools/source/control/ruler.cxx
+blacklist:
+    svtools/source/dialogs/insdlg.cxx:
+    # Needed on WIN
+    - comphelper/classids.hxx
+    include/svtools/statusbarcontroller.hxx:
+    # Silence warning while checking statusbarcontroller.cxx
+    - cppuhelper/interfacecontainer.hxx
+    include/svtools/toolboxcontroller.hxx:
+    # Silence warning while checking toolboxcontroller.cxx
+    - cppuhelper/interfacecontainer.hxx

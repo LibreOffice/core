@@ -18,12 +18,10 @@
 #include <officecfg/System.hxx>
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <svtools/langhelp.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/sysdata.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/window.hxx>
 #include <config_langs.h>

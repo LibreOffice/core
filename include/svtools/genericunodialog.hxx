@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/lang/NotInitializedException.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>

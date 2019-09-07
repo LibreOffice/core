@@ -19,7 +19,6 @@
 
 #ifdef UNX
 #include <pwd.h>
-#include <sys/types.h>
 #endif
 
 #include <svtools/inettbc.hxx>
@@ -28,7 +27,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -42,20 +40,14 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/instance.hxx>
-#include <sal/log.hxx>
 #include <salhelper/thread.hxx>
 #include <tools/debug.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
-#include <vcl/builderfactory.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/toolbox.hxx>
 #include <unotools/historyoptions.hxx>
-#include <svl/eitem.hxx>
-#include <svl/stritem.hxx>
-#include <svl/itemset.hxx>
-#include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>

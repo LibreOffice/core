@@ -28,9 +28,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/virdev.hxx>
 
-#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>

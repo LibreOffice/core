@@ -34,7 +34,6 @@
 #include <com/sun/star/graphic/PrimitiveFactory2D.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <unotools/streamwrap.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>

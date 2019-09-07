@@ -25,7 +25,7 @@
 
 #include <toolkit/helper/convert.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <osl/mutex.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 

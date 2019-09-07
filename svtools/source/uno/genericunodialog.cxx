@@ -25,10 +25,8 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 
-#include <toolkit/awt/vclxwindow.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <osl/mutex.hxx>
