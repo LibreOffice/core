@@ -46,13 +46,12 @@ Sequence < OUString > SAL_CALL IndexEntrySupplier::getAlgorithmList( const Local
 sal_Bool SAL_CALL IndexEntrySupplier::loadAlgorithm( const Locale& rLocale, const OUString& SortAlgorithm,
         sal_Int32 collatorOptions )
 {
-    Sequence < OUString > algorithmList = getAlgorithmList( rLocale );
-    for (sal_Int32 i = 0; i < algorithmList.getLength(); i++) {
-        if (algorithmList[i] == SortAlgorithm) {
-            if (getLocaleSpecificIndexEntrySupplier(rLocale, SortAlgorithm).is())
-                return xIES->loadAlgorithm(rLocale, SortAlgorithm, collatorOptions);
-        }
-    }
+    const Sequence < OUString > algorithmList = getAlgorithmList( rLocale );
+    if (std::any_of(algorithmList.begin(), algorithmList.end(),
+            [this, &SortAlgorithm, &rLocale](const OUString& rAlgorithm) {
+                return rAlgorithm == SortAlgorithm
+                    && getLocaleSpecificIndexEntrySupplier(rLocale, SortAlgorithm).is(); }))
+        return xIES->loadAlgorithm(rLocale, SortAlgorithm, collatorOptions);
     return false;
 }
 

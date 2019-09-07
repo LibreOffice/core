@@ -23,11 +23,13 @@
 #include <com/sun/star/i18n/MultipleCharsOutputException.hpp>
 #include <com/sun/star/i18n/TransliterationType.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <characterclassificationImpl.hxx>
 
 #include <transliteration_body.hxx>
 #include <memory>
+#include <numeric>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
@@ -92,30 +94,32 @@ Transliteration_body::transliterateImpl(
 {
     const sal_Unicode *in = inStr.getStr() + startPos;
 
+    // We could assume that most calls result in identical string lengths,
+    // thus using a preallocated OUStringBuffer could be an easy way
+    // to assemble the return string without too much hassle. However,
+    // for single characters the OUStringBuffer::append() method is quite
+    // expensive compared to a simple array operation, so it pays here
+    // to copy the final result instead.
+
+    // Allocate the max possible buffer. Try to use stack instead of heap,
+    // which would have to be reallocated most times anyways.
+    const sal_Int32 nLocalBuf = 2048;
+    sal_Unicode aLocalBuf[ nLocalBuf * NMAPPINGMAX ], *out = aLocalBuf;
+    std::unique_ptr<sal_Unicode[]> pHeapBuf;
+    if ( nCount > nLocalBuf ) {
+        pHeapBuf.reset(new sal_Unicode[ nCount * NMAPPINGMAX ]);
+        out = pHeapBuf.get();
+    }
+
+    sal_Int32 j = 0;
     // Two different blocks to eliminate the if(useOffset) condition inside the
     // inner k loop. Yes, on massive use even such small things do count.
     if ( useOffset )
     {
-        sal_Int32 nOffCount = 0, i;
-        for (i = 0; i < nCount; i++)
-        {
-            // take care of TOGGLE_CASE transliteration:
-            MappingType nTmpMappingType = nMappingType;
-            if (nMappingType == (MappingType::LowerToUpper | MappingType::UpperToLower))
-                nTmpMappingType = lcl_getMappingTypeForToggleCase( nMappingType, in[i] );
+        std::vector<sal_Int32> aVec;
+        aVec.reserve(std::max(nLocalBuf, nCount) * NMAPPINGMAX);
 
-            const i18nutil::Mapping &map = i18nutil::casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
-            nOffCount += map.nmap;
-        }
-        rtl_uString* pStr = rtl_uString_alloc(nOffCount);
-        sal_Unicode* out = pStr->buffer;
-
-        if ( nOffCount != offset.getLength() )
-            offset.realloc( nOffCount );
-
-        sal_Int32 j = 0;
-        sal_Int32 * pArr = offset.getArray();
-        for (i = 0; i < nCount; i++)
+        for (sal_Int32 i = 0; i < nCount; i++)
         {
             // take care of TOGGLE_CASE transliteration:
             MappingType nTmpMappingType = nMappingType;
@@ -125,36 +129,15 @@ Transliteration_body::transliterateImpl(
             const i18nutil::Mapping &map = i18nutil::casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
             for (sal_Int32 k = 0; k < map.nmap; k++)
             {
-                pArr[j] = i + startPos;
+                aVec.push_back(i + startPos);
                 out[j++] = map.map[k];
             }
         }
-        out[j] = 0;
 
-        return OUString( pStr, SAL_NO_ACQUIRE );
+        offset = comphelper::containerToSequence(aVec);
     }
     else
     {
-        // In the simple case of no offset sequence used we can eliminate the
-        // first getValue() loop. We could also assume that most calls result
-        // in identical string lengths, thus using a preallocated
-        // OUStringBuffer could be an easy way to assemble the return string
-        // without too much hassle. However, for single characters the
-        // OUStringBuffer::append() method is quite expensive compared to a
-        // simple array operation, so it pays here to copy the final result
-        // instead.
-
-        // Allocate the max possible buffer. Try to use stack instead of heap,
-        // which would have to be reallocated most times anyways.
-        const sal_Int32 nLocalBuf = 2048;
-        sal_Unicode aLocalBuf[ nLocalBuf * NMAPPINGMAX ], *out = aLocalBuf;
-        std::unique_ptr<sal_Unicode[]> pHeapBuf;
-        if ( nCount > nLocalBuf ) {
-            pHeapBuf.reset(new sal_Unicode[ nCount * NMAPPINGMAX ]);
-            out = pHeapBuf.get();
-        }
-
-        sal_Int32 j = 0;
         for ( sal_Int32 i = 0; i < nCount; i++)
         {
             // take care of TOGGLE_CASE transliteration:
@@ -168,10 +151,10 @@ Transliteration_body::transliterateImpl(
                 out[j++] = map.map[k];
             }
         }
-
-        OUString aRet( out, j );
-        return aRet;
     }
+
+    OUString aRet( out, j );
+    return aRet;
 }
 
 OUString SAL_CALL
@@ -285,15 +268,8 @@ static OUString transliterate_titlecase_Impl(
         aRes += xCharClassImpl->toLower( aText, 1, aText.getLength() - 1, rLocale );
         offset.realloc( aRes.getLength() );
 
-        sal_Int32 *pOffset = offset.getArray();
-        sal_Int32 nLen = offset.getLength();
-        for (sal_Int32 i = 0; i < nLen; ++i)
-        {
-            sal_Int32 nIdx = 0;
-            if (i >= nResolvedLen)
-                nIdx = i - nResolvedLen + 1;
-            pOffset[i] = nIdx;
-        }
+        sal_Int32* pOffset = std::fill_n(offset.begin(), nResolvedLen, 0);
+        std::iota(pOffset, offset.end(), 1);
     }
     return aRes;
 }

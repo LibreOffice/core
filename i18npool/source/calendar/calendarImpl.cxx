@@ -20,6 +20,7 @@
 #include <calendarImpl.hxx>
 #include <calendar_gregorian.hxx>
 #include <localedata.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -42,12 +43,11 @@ CalendarImpl::~CalendarImpl()
 void SAL_CALL
 CalendarImpl::loadDefaultCalendarTZ( const css::lang::Locale& rLocale, const OUString& rTimeZone )
 {
-    Sequence< Calendar2 > xC = LocaleDataImpl::get()->getAllCalendars2(rLocale);
-    for (sal_Int32 i = 0; i < xC.getLength(); i++) {
-        if (xC[i].Default) {
-            loadCalendarTZ(xC[i].Name, rLocale, rTimeZone);
-            return;
-        }
+    const Sequence< Calendar2 > xC = LocaleDataImpl::get()->getAllCalendars2(rLocale);
+    auto pCal = std::find_if(xC.begin(), xC.end(), [](const Calendar2& rCal) { return rCal.Default; });
+    if (pCal != xC.end()) {
+        loadCalendarTZ(pCal->Name, rLocale, rTimeZone);
+        return;
     }
     throw ERROR;
 }
@@ -74,13 +74,9 @@ CalendarImpl::loadCalendarTZ( const OUString& uniqueID, const css::lang::Locale&
 
         if ( ! xI.is() ) {
             // check if the calendar is defined in localedata, load gregorian calendar service.
-            Sequence< Calendar2 > xC = LocaleDataImpl::get()->getAllCalendars2(rLocale);
-            for (i = 0; i < xC.getLength(); i++) {
-                if (uniqueID == xC[i].Name) {
-                    xI = m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.i18n.Calendar_gregorian", m_xContext);
-                    break;
-                }
-            }
+            const Sequence< Calendar2 > xC = LocaleDataImpl::get()->getAllCalendars2(rLocale);
+            if (std::any_of(xC.begin(), xC.end(), [&uniqueID](const Calendar2& rCal) { return uniqueID == rCal.Name; }))
+                xI = m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.i18n.Calendar_gregorian", m_xContext);
         }
 
         if ( !xI.is() )
@@ -139,12 +135,12 @@ CalendarImpl::getLoadedCalendar()
 Sequence< OUString > SAL_CALL
 CalendarImpl::getAllCalendars( const css::lang::Locale& rLocale )
 {
-    Sequence< Calendar2 > xC = LocaleDataImpl::get()->getAllCalendars2(rLocale);
-    sal_Int32 nLen = xC.getLength();
-    Sequence< OUString > xSeq( nLen );
-    for (sal_Int32 i = 0; i < nLen; i++)
-        xSeq[i] = xC[i].Name;
-    return xSeq;
+    const Sequence< Calendar2 > xC = LocaleDataImpl::get()->getAllCalendars2(rLocale);
+    std::vector<OUString> xVec;
+    xVec.reserve(xC.getLength());
+    std::transform(xC.begin(), xC.end(), std::back_inserter(xVec),
+        [](const Calendar2& rCal) { return rCal.Name; });
+    return comphelper::containerToSequence(xVec);
 }
 
 void SAL_CALL

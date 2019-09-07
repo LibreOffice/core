@@ -20,6 +20,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/languagetagicu.hxx>
 #include <sal/log.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <ordinalsuffix.hxx>
 
@@ -95,6 +96,8 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffixService::getOrdinalSuffix( sal_I
         return retValue;
 
     int32_t nRuleSets = formatter.getNumberOfRuleSetNames( );
+    std::vector<OUString> retVec;
+    retVec.reserve(nRuleSets);
     for (int32_t i = 0; i < nRuleSets; ++i)
     {
         icu::UnicodeString ruleSet = formatter.getRuleSetName(i);
@@ -125,13 +128,10 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffixService::getOrdinalSuffix( sal_I
 
         // Remove the number to get the prefix
         sal_Int32 len = sValueWithNoOrdinal.getLength();
-
-        sal_Int32 newLength = retValue.getLength() + 1;
-        retValue.realloc( newLength );
-        retValue[ newLength - 1 ] = sValueWithOrdinal.copy( len );
+        retVec.push_back(sValueWithOrdinal.copy(len));
     }
 
-    return retValue;
+    return comphelper::containerToSequence(retVec);
 }
 
 const sal_Char cOrdinalSuffix[] = "com.sun.star.i18n.OrdinalSuffix";

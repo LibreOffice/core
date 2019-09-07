@@ -260,12 +260,12 @@ Calendar_gregorian::loadCalendar( const OUString& uniqueID, const css::lang::Loc
     getValue();
 
     aLocale = rLocale;
-    Sequence< Calendar2 > xC = LocaleDataImpl::get()->getAllCalendars2(rLocale);
-    for (sal_Int32 i = 0; i < xC.getLength(); i++)
+    const Sequence< Calendar2 > xC = LocaleDataImpl::get()->getAllCalendars2(rLocale);
+    for (const auto& rCal : xC)
     {
-        if (uniqueID == xC[i].Name)
+        if (uniqueID == rCal.Name)
         {
-            aCalendar = xC[i];
+            aCalendar = rCal;
             // setup minimalDaysInFirstWeek
             setMinimumNumberOfDaysForFirstWeek(
                     aCalendar.MinimumNumberOfDaysForFirstWeek);

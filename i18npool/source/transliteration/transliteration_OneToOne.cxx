@@ -22,6 +22,8 @@
 #include <transliteration_OneToOne.hxx>
 #include <i18nutil/oneToOneMapping.hxx>
 
+#include <numeric>
+
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
 
@@ -64,20 +66,15 @@ transliteration_OneToOne::transliterateImpl( const OUString& inStr, sal_Int32 st
     const sal_Unicode * src = inStr.getStr() + startPos;
 
     // Allocate nCount length to offset argument.
-    sal_Int32 *p = nullptr;
-    sal_Int32 position = 0;
     if (useOffset) {
         offset.realloc( nCount );
-        p = offset.getArray();
-        position = startPos;
+        std::iota(offset.begin(), offset.end(), startPos);
     }
 
     // Translation
     while (nCount -- > 0) {
     sal_Unicode c = *src++;
     *dst ++ = func ? func( c) : (*table)[ c ];
-    if (useOffset)
-        *p ++ = position ++;
     }
     *dst = u'\0';
 
