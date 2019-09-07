@@ -556,9 +556,10 @@ static
 Any getPropertyByName( const Sequence<beans::PropertyValue>& aProperties,
                                                 const char* name, bool bRequired )
 {
-        for( int i=0; i<aProperties.getLength(); i++ )
-                if( aProperties[i].Name.equalsAscii(name) )
-                        return aProperties[i].Value;
+        auto pProp = std::find_if(aProperties.begin(), aProperties.end(),
+            [&name](const beans::PropertyValue& rProp) { return rProp.Name.equalsAscii(name); });
+        if (pProp != aProperties.end())
+            return pProp->Value;
         if(bRequired)
             throw IllegalArgumentException();
         return Any();
