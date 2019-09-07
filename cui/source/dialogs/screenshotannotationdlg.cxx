@@ -172,7 +172,7 @@ private:
     // all detected children
     ControlDataCollection       maAllChildren;
 
-    // hilighted/selected children
+    // highlighted/selected children
     ControlDataEntry*           mpHilighted;
     std::set< ControlDataEntry* >
                                 maSelected;
@@ -515,7 +515,7 @@ void ScreenshotAnnotationDlg_Impl::RepaintToBuffer(
             PaintControlDataEntry(*rCandidate, COL_LIGHTRED, fLineWidthEntries, fTransparence * 0.2);
         }
 
-        // paint hilighted entry
+        // paint highlighted entry
         if (mpHilighted && bPaintHilight)
         {
             static const double fLineWidthHilight(7.0);
@@ -533,7 +533,7 @@ void ScreenshotAnnotationDlg_Impl::RepaintPictureElement()
 {
     if (mpPicture && mpVirtualBufferDevice)
     {
-        // reset image in buffer, use dimmed version and allow hilight
+        // reset image in buffer, use dimmed version and allow highlight
         RepaintToBuffer(true, true);
 
         // copy new content to picture control (hard paint)
