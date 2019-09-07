@@ -222,7 +222,8 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
                 break;
             case KEY_RETURN:
                 EndPopupMode( FloatWinPopupEndFlags::CloseAll );
-                break;
+                GrabFocusToDocument();
+                return;
             case KEY_TAB:
                 CloseAndShowTableDialog();
                 break;
@@ -237,6 +238,8 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
     else if(KEY_MOD1 == nModifier && KEY_RETURN == nKey)
     {
         EndPopupMode( FloatWinPopupEndFlags::CloseAll );
+        GrabFocusToDocument();
+        return;
     }
 
     if(!bHandled)
@@ -248,6 +251,7 @@ void TableWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     SfxPopupWindow::MouseButtonUp( rMEvt );
     EndPopupMode( FloatWinPopupEndFlags::CloseAll );
+    GrabFocusToDocument();
 }
 
 
