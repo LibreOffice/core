@@ -21,7 +21,7 @@
 
 #include <i18nutil/unicode.hxx>
 #include <tools/stream.hxx>
-#include <vcl/builderfactory.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -46,13 +46,9 @@
 #include <svtools/borderhelper.hxx>
 #include <svtools/valueset.hxx>
 
-#include <vcl/i18nhelp.hxx>
-#include <vcl/fontcapabilities.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <editeng/borderline.hxx>
-
-#include <com/sun/star/table/BorderLineStyle.hpp>
 
 #include <rtl/bootstrap.hxx>
 

@@ -23,7 +23,6 @@
 #include <svtools/brwbox.hxx>
 #include "datwin.hxx"
 #include <svtools/colorcfg.hxx>
-#include <vcl/salgtype.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/ptrstyle.hxx>

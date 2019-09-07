@@ -17,16 +17,13 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <officecfg/Office/Common.hxx>
 #include <rtl/uri.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <tools/diagnose_ex.h>
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include <svtools/PlaceEditDialog.hxx>
 #include <svtools/ServerDetailsControls.hxx>
-#include <sal/log.hxx>
 
 #include <config_oauth2.h>
 

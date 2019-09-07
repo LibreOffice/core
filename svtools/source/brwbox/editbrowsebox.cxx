@@ -24,13 +24,11 @@
 #include <vcl/window.hxx>
 
 #include <vcl/edit.hxx>
-#include <vcl/spinfld.hxx>
 #include <vcl/settings.hxx>
 
 #include <bitmaps.hlst>
 
 #include <algorithm>
-#include <tools/multisel.hxx>
 #include "editbrowseboximpl.hxx"
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 

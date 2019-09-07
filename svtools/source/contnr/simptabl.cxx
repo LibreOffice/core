@@ -22,8 +22,6 @@
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/builderfactory.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/event.hxx>
 #include <uitest/uiobject.hxx>
 

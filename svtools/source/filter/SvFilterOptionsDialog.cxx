@@ -21,20 +21,12 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/file.hxx>
-#include <osl/module.hxx>
-#include <rtl/ref.hxx>
-#include <svl/solar.hrc>
 #include <FltCallDialogParameter.hxx>
-#include <vcl/settings.hxx>
 #include "exportdialog.hxx"
-#include <uno/mapping.hxx>
 #include <tools/fldunit.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/document/XViewDataSupplier.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -47,7 +39,6 @@
 #include <unotools/syslocale.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <memory>
 
 using namespace ::com::sun::star;
 

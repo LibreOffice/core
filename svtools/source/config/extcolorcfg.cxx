@@ -24,14 +24,11 @@
 #include <svtools/extcolorcfg.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <tools/color.hxx>
 #include <unotools/configitem.hxx>
-#include <unotools/configpaths.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <comphelper/sequence.hxx>
-#include <svl/poolitem.hxx>
 #include <svl/hint.hxx>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
@@ -41,7 +38,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
 #include <rtl/instance.hxx>
-#include <rtl/strbuf.hxx>
 
 
 using namespace utl;

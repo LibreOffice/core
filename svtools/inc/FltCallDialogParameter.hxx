@@ -19,16 +19,15 @@
 
 #ifndef INCLUDED_SVTOOLS_INC_FTLCALLDIALOGPARAMETER_HXX
 #define INCLUDED_SVTOOLS_INC_FTLCALLDIALOGPARAMETER_HXX
-#include <sal/types.h>
-#include <vcl/field.hxx>
-#include <com/sun/star/uno/Sequence.h>
+
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <vcl/FilterConfigItem.hxx>
+#include <tools/fldunit.hxx>
 
 class FilterConfigItem;
 class SvStream;
 class Graphic;
-namespace vcl
+namespace weld
 {
 class Window;
 }

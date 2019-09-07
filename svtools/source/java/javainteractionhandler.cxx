@@ -34,7 +34,6 @@
 #include <svtools/restartdialog.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/javainteractionhandler.hxx>
-#include <svtools/javacontext.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::task;

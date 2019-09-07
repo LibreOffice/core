@@ -28,15 +28,11 @@
 #include <unotools/configitem.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/waitobj.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
 #include <com/sun/star/ui/dialogs/AddressBookSourcePilot.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
@@ -47,7 +43,6 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
 #include <svl/filenotation.hxx>
 #include <tools/urlobj.hxx>
 #include <algorithm>

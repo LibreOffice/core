@@ -17,29 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/strbuf.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/help.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/decoview.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/event.hxx>
-#include <vcl/commandevent.hxx>
-#include <comphelper/processfactory.hxx>
-#include <unotools/calendarwrapper.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <com/sun/star/i18n/Weekdays.hpp>
-#include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
-#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
-#include <sal/log.hxx>
 
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <svtools/calendar.hxx>
-#include <memory>
 
 #define CALFIELD_EXTRA_BUTTON_WIDTH         14
 #define CALFIELD_EXTRA_BUTTON_HEIGHT        8

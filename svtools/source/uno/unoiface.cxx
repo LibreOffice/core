@@ -26,16 +26,14 @@
 #include <svtools/svmedit.hxx>
 #include <unoiface.hxx>
 #include <svtools/filectrl.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/property.hxx>
 #include <vcl/fmtfield.hxx>
 #include <svl/numuno.hxx>
 #include <svtools/calendar.hxx>
-#include <vcl/treelistbox.hxx>
 #include "treecontrolpeer.hxx"
 #include "svtxgridcontrol.hxx"
 #include <table/tablecontrol.hxx>

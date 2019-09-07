@@ -18,7 +18,6 @@
  */
 
 #include "contentenumeration.hxx"
-#include <svtools/inettbc.hxx>
 #include <svtools/imagemgr.hxx>
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -27,7 +26,6 @@
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -36,6 +34,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
+#include <tools/urlobj.hxx>
 
 namespace svt
 {

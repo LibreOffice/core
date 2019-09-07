@@ -21,11 +21,11 @@
 #define INCLUDED_SVTOOLS_SOURCE_UNO_FPICKER_HXX
 
 #include <sal/config.h>
-#include <sal/types.h>
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }

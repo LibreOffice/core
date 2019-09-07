@@ -23,7 +23,6 @@
 #include <tools/debug.hxx>
 #include <tools/color.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/character.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
@@ -38,7 +37,6 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 
-#include <memory>
 #include <utility>
 
 using namespace ::com::sun::star;

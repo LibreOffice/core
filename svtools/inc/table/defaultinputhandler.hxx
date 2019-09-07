@@ -21,7 +21,6 @@
 #define INCLUDED_SVTOOLS_INC_TABLE_DEFAULTINPUTHANDLER_HXX
 
 #include <svtools/table/tableinputhandler.hxx>
-#include <svtools/table/tabletypes.hxx>
 
 #include <memory>
 

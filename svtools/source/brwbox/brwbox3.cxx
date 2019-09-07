@@ -24,10 +24,8 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/multisel.hxx>
-#include "datwin.hxx"
 #include "brwimpl.hxx"
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 
 // Accessibility ==============================================================
 

@@ -29,8 +29,8 @@
 #include <vcl/settings.hxx>
 #include <tools/debug.hxx>
 
-#include <svtools/framestatuslistener.hxx>
 #include <svtools/toolbarmenu.hxx>
+#include <svtools/framestatuslistener.hxx>
 
 #include "toolbarmenuimp.hxx"
 

@@ -19,14 +19,11 @@
 
 
 #include <algorithm>
-#include <limits.h>
 #include <sal/types.h>
-#include <stdlib.h>
 #include <string.h>
 #include <rtl/ustring.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
-#include <sal/log.hxx>
 
 template<typename T>
 struct TokenEntry

@@ -23,7 +23,6 @@
 #include <com/sun/star/embed/XHatchWindow.hpp>
 
 #include <toolkit/awt/vclxwindow.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 class SvResizeWindow;
 class VCLXHatchWindow : public css::embed::XHatchWindow,

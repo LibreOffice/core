@@ -26,14 +26,9 @@
 #include <com/sun/star/awt/grid/XGridRowSelection.hpp>
 #include <com/sun/star/awt/grid/XGridDataListener.hpp>
 #include <com/sun/star/awt/grid/GridDataEvent.hpp>
-#include <com/sun/star/awt/grid/GridColumnEvent.hpp>
-#include <com/sun/star/awt/grid/XGridColumnModel.hpp>
-#include <com/sun/star/awt/grid/XGridDataModel.hpp>
 #include <com/sun/star/awt/grid/XGridSelectionListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <toolkit/awt/vclxwindow.hxx>
-#include <toolkit/awt/vclxwindows.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 

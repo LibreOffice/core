@@ -30,8 +30,6 @@
 
 #include <svl/hint.hxx>
 
-#include <svtools/colorcfg.hxx>
-
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/instance.hxx>

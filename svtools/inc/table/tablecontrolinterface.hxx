@@ -21,7 +21,6 @@
 #define INCLUDED_SVTOOLS_INC_TABLE_TABLECONTROLINTERFACE_HXX
 
 #include <sal/types.h>
-#include <vcl/event.hxx>
 #include <vcl/seleng.hxx>
 
 #include <svtools/table/tabletypes.hxx>
