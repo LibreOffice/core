@@ -9,10 +9,12 @@
 
 #include "sal/config.h"
 
-#include <memory>
-
 #include "rtl/ustring.hxx"
 #include "tools/color.hxx"
+
+#include <functional>
+#include <memory>
+
 
 void method1(OUString const&); // expected-note {{in call to method here [loplugin:redundantfcast]}}
 
@@ -56,7 +58,6 @@ int main()
     OUString s1;
     method1(OUString(
         s1)); // expected-error@-1 {{redundant functional cast from 'rtl::OUString' to 'rtl::OUString' [loplugin:redundantfcast]}}
-    // expected-error@-2 {{redundant functional cast from 'rtl::OUString' to 'rtl::OUString' [loplugin:redundantfcast]}}
     OUString s2;
     s2 = OUString(
         s1); // expected-error@-1 {{redundant functional cast from 'rtl::OUString' to 'rtl::OUString' [loplugin:redundantfcast]}}
@@ -68,11 +69,11 @@ int main()
 
     Foo foo(1);
     func1(Foo(
-        foo)); // expected-error@-1 {{redundant functional cast from 'Foo' to 'Foo' [loplugin:redundantfcast]}} expected-error@-1 {{redundant functional cast from 'Foo' to 'Foo' [loplugin:redundantfcast]}}
+        foo)); // expected-error@-1 {{redundant functional cast from 'Foo' to 'Foo' [loplugin:redundantfcast]}}
 
     const tools::Polygon aPolygon;
     ImplWritePolyPolygonRecord(tools::PolyPolygon(tools::Polygon(
-        aPolygon))); // expected-error@-1 {{redundant functional cast from 'const tools::Polygon' to 'tools::Polygon' [loplugin:redundantfcast]}} expected-error@-1 {{redundant functional cast from 'const tools::Polygon' to 'tools::Polygon' [loplugin:redundantfcast]}}
+        aPolygon))); // expected-error@-1 {{redundant functional cast from 'const tools::Polygon' to 'tools::Polygon' [loplugin:redundantfcast]}}
 }
 
 class Class1
@@ -81,7 +82,19 @@ class Class1
     Foo func2()
     {
         return Foo(
-            foo); // expected-error@-1 {{redundant functional cast from 'Foo' to 'Foo' [loplugin:redundantfcast]}} expected-error@-1 {{redundant functional cast from 'Foo' to 'Foo' [loplugin:redundantfcast]}}
+            foo); // expected-error@-1 {{redundant functional cast from 'Foo' to 'Foo' [loplugin:redundantfcast]}}
     }
 };
+
+// casting of lambdas
+namespace test5
+{
+void f1(std::function<void()> x);
+void f2()
+{
+    // expected-error-re@+1 {{redundant functional cast {{.+}} [loplugin:redundantfcast]}}
+    f1(std::function([&]() {}));
+}
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
