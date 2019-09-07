@@ -6547,9 +6547,9 @@ fi
 
 dnl Test for temporarily incompatible libstdc++ 4.7.{0,1}, where
 dnl <https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=179528> introduced
-dnl an additional member _M_size into C++11 std::list towards 4.7.0 and
+dnl an additional member _M_size into C++11 std::list torwards 4.7.0 and
 dnl <https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=189186> removed it
-dnl again towards 4.7.2:
+dnl again torwards 4.7.2:
 if test $CPP_LIBRARY = GLIBCXX; then
     AC_MSG_CHECKING([whether using C++11 causes libstdc++ 4.7.0/4.7.1 ABI breakage])
     AC_LANG_PUSH([C++])
