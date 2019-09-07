@@ -413,7 +413,7 @@ Qt5Instance::createPicker(css::uno::Reference<css::uno::XComponentContext> const
     {
         SolarMutexGuard g;
         Qt5FilePicker* pPicker;
-        RunInMainThread(std::function([&, this]() { pPicker = createPicker(context, eMode); }));
+        RunInMainThread([&, this]() { pPicker = createPicker(context, eMode); });
         assert(pPicker);
         return pPicker;
     }
