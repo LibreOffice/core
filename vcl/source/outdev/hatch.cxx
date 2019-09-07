@@ -184,7 +184,9 @@ void OutputDevice::DrawHatchLines( const tools::PolyPolygon& rPolyPoly, const to
                                    Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1, Point* pPtBuffer, bool bMtf )
 {
     rInc = GetHatchIncrement(nDist, nAngle);
-    CalcHatchValues(rRect, nDist, nAngle, rPt1, rPt2, rEndPt1);
+    rPt1 = GetPt1(rRect, nDist, nAngle);
+    rPt2 = GetPt2(rRect, nDist, nAngle);
+    rEndPt1 = GetEndPt1(rRect, nAngle);
     do
     {
         DrawHatchLine(tools::Line(rPt1, rPt2), rPolyPoly, pPtBuffer, bMtf);
@@ -221,105 +223,230 @@ Size OutputDevice::GetHatchIncrement(long nDist, sal_uInt16 nAngle10)
     }
 }
 
-void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, long nDist, sal_uInt16 nAngle10,
-                                    Point& rPt1, Point& rPt2, Point& rEndPt1 )
+Point OutputDevice::GetPt1(tools::Rectangle const& rRect, long nDist, sal_uInt16 nAngle10)
 {
-    Point   aRef;
-    long    nAngle = nAngle10 % 1800;
-    long    nOffset = 0;
-
+    long nAngle = nAngle10 % 1800;
     if( nAngle > 900 )
         nAngle -= 1800;
 
+    Point aRef;
+    Point aPt;
+    long nOffset = 0;
+
     aRef = ( !IsRefPoint() ? rRect.TopLeft() : GetRefPoint() );
 
-    if( 0 == nAngle )
+    double fAngle = 0.0;
+    double fTan = 0.0;
+
+    switch(nAngle)
     {
-        rPt1 = rRect.TopLeft();
-        rPt2 = rRect.TopRight();
-        rEndPt1 = rRect.BottomLeft();
+        case 0:
+            aPt = rRect.TopLeft();
 
-        if( aRef.Y() <= rRect.Top() )
-            nOffset = ( ( rRect.Top() - aRef.Y() ) % nDist );
-        else
-            nOffset = ( nDist - ( ( aRef.Y() - rRect.Top() ) % nDist ) );
+            if (aRef.Y() <= rRect.Top())
+                nOffset = (rRect.Top() - aRef.Y()) % nDist;
+            else
+                nOffset = nDist - ((aRef.Y() - rRect.Top()) % nDist);
 
-        rPt1.AdjustY( -nOffset );
-        rPt2.AdjustY( -nOffset );
+            aPt.AdjustY(-nOffset);
+
+            return aPt;
+
+        case 900:
+            aPt = rRect.TopLeft();
+
+            if (aRef.X() <= rRect.Left())
+                nOffset = (rRect.Left() - aRef.X()) % nDist;
+            else
+                nOffset = nDist - ((aRef.X() - rRect.Left()) % nDist);
+
+            aPt.AdjustX(-nOffset);
+
+            return aPt;
+
+        case -450:
+        case 450:
+            fAngle = F_PI1800 * labs(nAngle);
+            fTan = tan( fAngle );
+
+            long nPY;
+
+            if (nAngle > 0)
+            {
+                aPt = rRect.TopLeft();
+                nPY = FRound(aRef.Y() - ((aPt.X() - aRef.X()) * fTan));
+            }
+            else
+            {
+                aPt = rRect.TopRight();
+                nPY = FRound(aRef.Y() + ((aPt.X() - aRef.X()) * fTan));
+            }
+
+            if (nPY <= aPt.Y())
+                nOffset = (aPt.Y() - nPY) % nDist;
+            else
+                nOffset = nDist - ((nPY - aPt.Y()) % nDist);
+
+            aPt.AdjustY(-nOffset);
+
+            return aPt;
+
+        default:
+            fAngle = F_PI1800 * labs(nAngle);
+            fTan = tan(fAngle);
+
+            long nPX;
+
+            if (nAngle > 0)
+            {
+                aPt = rRect.TopLeft();
+                nPX = FRound(aRef.X() - ((aPt.Y() - aRef.Y()) / fTan));
+            }
+            else
+            {
+                aPt = rRect.BottomLeft();
+                nPX = FRound(aRef.X() + ((aPt.Y() - aRef.Y()) / fTan));
+            }
+
+            if (nPX <= aPt.X())
+                nOffset = (aPt.X() - nPX) % nDist;
+            else
+                nOffset = nDist - ((nPX - aPt.X()) % nDist);
+
+            aPt.AdjustX(-nOffset);
+
+            return aPt;
     }
-    else if( 900 == nAngle )
+}
+
+Point OutputDevice::GetPt2(tools::Rectangle const& rRect, long nDist, sal_uInt16 nAngle10)
+{
+    long nAngle = nAngle10 % 1800;
+    if (nAngle > 900)
+        nAngle -= 1800;
+
+    Point aRef;
+    long nOffset = 0;
+
+    aRef = ( !IsRefPoint() ? rRect.TopLeft() : GetRefPoint() );
+
+    double fAngle = 0.0;
+    double fTan = 0.0;
+
+    Point aPt1;
+    Point aPt2;
+    long nPX = 0;
+    long nPY = 0;
+    long nYOff = 0;
+    long nXOff = 0;
+
+    switch(nAngle)
     {
-        rPt1 = rRect.TopLeft();
-        rPt2 = rRect.BottomLeft();
-        rEndPt1 = rRect.TopRight();
+        case 0:
+            aPt2 = rRect.TopRight();
 
-        if( aRef.X() <= rRect.Left() )
-            nOffset = ( rRect.Left() - aRef.X() ) % nDist;
-        else
-            nOffset = nDist - ( ( aRef.X() - rRect.Left() ) % nDist );
+            if (aRef.Y() <= rRect.Top())
+                nOffset = ((rRect.Top() - aRef.Y()) % nDist);
+            else
+                nOffset = (nDist - ((aRef.Y() - rRect.Top()) % nDist));
 
-        rPt1.AdjustX( -nOffset );
-        rPt2.AdjustX( -nOffset );
+            aPt2.AdjustY(-nOffset);
+
+            return aPt2;
+
+        case 900:
+            aPt2 = rRect.BottomLeft();
+
+            if (aRef.X() <= rRect.Left())
+                nOffset = (rRect.Left() - aRef.X()) % nDist;
+            else
+                nOffset = nDist - ((aRef.X() - rRect.Left()) % nDist);
+
+            aPt2.AdjustX(-nOffset);
+
+            return aPt2;
+
+        case -450:
+        case 450:
+            fAngle = F_PI1800 * labs(nAngle);
+            fTan = tan(fAngle);
+            nYOff = FRound((rRect.Right() - rRect.Left()) * fTan);
+
+            if (nAngle > 0)
+            {
+                aPt1 = rRect.TopLeft();
+                aPt2 = Point(rRect.Right(), rRect.Top() - nYOff);
+                nPY = FRound(aRef.Y() - ((aPt1.X() - aRef.X()) * fTan));
+            }
+            else
+            {
+                aPt1 = rRect.TopRight();
+                aPt2 = Point(rRect.Left(), rRect.Top() - nYOff);
+                nPY = FRound(aRef.Y() + ((aPt1.X() - aRef.X()) * fTan ) );
+            }
+
+            if (nPY <= aPt1.Y())
+                nOffset = (aPt1.Y() - nPY) % nDist;
+            else
+                nOffset = nDist - ((nPY - aPt1.Y()) % nDist);
+
+            aPt2.AdjustY(-nOffset);
+
+            return aPt2;
+
+        default:
+            fAngle = F_PI1800 * labs(nAngle);
+            fTan = tan(fAngle);
+            nXOff = FRound((rRect.Bottom() - rRect.Top()) / fTan);
+
+            if (nAngle > 0)
+            {
+                aPt1 = rRect.TopLeft();
+                aPt2 = Point(rRect.Left() - nXOff, rRect.Top());
+                nPX = FRound(aRef.Y() - ((aPt1.X() - aRef.X()) * fTan));
+            }
+            else
+            {
+                aPt1 = rRect.TopRight();
+                aPt2 = Point(rRect.Left() - nXOff, rRect.Bottom());
+                nPX = FRound(aRef.Y() + ((aPt1.X() - aRef.X()) * fTan));
+            }
+
+            if (nPX <= aPt1.X())
+                nOffset = (aPt1.X() - nPX) % nDist;
+            else
+                nOffset = nDist - ((nPX - aPt1.X()) % nDist);
+
+            aPt2.AdjustX(-nOffset);
+
+            return aPt2;
     }
-    else if( nAngle >= -450 && nAngle <= 450 )
+}
+
+Point OutputDevice::GetEndPt1(tools::Rectangle const& rRect, sal_uInt16 nAngle10)
+{
+    long nAngle = nAngle10 % 1800;
+    const double fAngle = F_PI1800 * labs(nAngle);
+    const double fTan = tan(fAngle);
+    const long nXOff = FRound((rRect.Bottom() - rRect.Top()) / fTan);
+    const long nYOff = FRound((rRect.Right() - rRect.Left()) * fTan);
+
+    if (nAngle > 900)
+        nAngle -= 1800;
+
+    switch(nAngle)
     {
-        const double    fAngle = F_PI1800 * labs( nAngle );
-        const double    fTan = tan( fAngle );
-        const long      nYOff = FRound( ( rRect.Right() - rRect.Left() ) * fTan );
-        long            nPY;
-
-        if( nAngle > 0 )
-        {
-            rPt1 = rRect.TopLeft();
-            rPt2 = Point( rRect.Right(), rRect.Top() - nYOff );
-            rEndPt1 = Point( rRect.Left(), rRect.Bottom() + nYOff );
-            nPY = FRound( aRef.Y() - ( ( rPt1.X() - aRef.X() ) * fTan ) );
-        }
-        else
-        {
-            rPt1 = rRect.TopRight();
-            rPt2 = Point( rRect.Left(), rRect.Top() - nYOff );
-            rEndPt1 = Point( rRect.Right(), rRect.Bottom() + nYOff );
-            nPY = FRound( aRef.Y() + ( ( rPt1.X() - aRef.X() ) * fTan ) );
-        }
-
-        if( nPY <= rPt1.Y() )
-            nOffset = ( rPt1.Y() - nPY ) % nDist;
-        else
-            nOffset = nDist - ( ( nPY - rPt1.Y() ) % nDist );
-
-        rPt1.AdjustY( -nOffset );
-        rPt2.AdjustY( -nOffset );
-    }
-    else
-    {
-        const double fAngle = F_PI1800 * labs( nAngle );
-        const double fTan = tan( fAngle );
-        const long   nXOff = FRound( ( rRect.Bottom() - rRect.Top() ) / fTan );
-        long         nPX;
-
-        if( nAngle > 0 )
-        {
-            rPt1 = rRect.TopLeft();
-            rPt2 = Point( rRect.Left() - nXOff, rRect.Bottom() );
-            rEndPt1 = Point( rRect.Right() + nXOff, rRect.Top() );
-            nPX = FRound( aRef.X() - ( ( rPt1.Y() - aRef.Y() ) / fTan ) );
-        }
-        else
-        {
-            rPt1 = rRect.BottomLeft();
-            rPt2 = Point( rRect.Left() - nXOff, rRect.Top() );
-            rEndPt1 = Point( rRect.Right() + nXOff, rRect.Bottom() );
-            nPX = FRound( aRef.X() + ( ( rPt1.Y() - aRef.Y() ) / fTan ) );
-        }
-
-        if( nPX <= rPt1.X() )
-            nOffset = ( rPt1.X() - nPX ) % nDist;
-        else
-            nOffset = nDist - ( ( nPX - rPt1.X() ) % nDist );
-
-        rPt1.AdjustX( -nOffset );
-        rPt2.AdjustX( -nOffset );
+        case 0:
+            return rRect.BottomLeft();
+        case 900:
+            return rRect.TopRight();
+        case 450:
+        case -450:
+            return nAngle > 0 ?  Point(rRect.Left(), rRect.Bottom() + nYOff) :
+                Point(rRect.Right(), rRect.Bottom() + nYOff);
+        default:
+            return nAngle > 0 ? Point(rRect.Right() + nXOff, rRect.Top()) :
+                Point(rRect.Right() + nXOff, rRect.Bottom());
     }
 }
 
