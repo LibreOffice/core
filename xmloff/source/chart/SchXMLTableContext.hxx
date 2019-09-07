@@ -20,7 +20,7 @@
 #define INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLTABLECONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
-#include <SchXMLImport.hxx>
+#include <xmloff/SchXMLImportHelper.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>

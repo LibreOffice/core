@@ -20,6 +20,7 @@
 #include "SchXMLLegendContext.hxx"
 #include "SchXMLEnumConverter.hxx"
 
+#include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/prstylei.hxx>

@@ -20,6 +20,7 @@
 #define INCLUDED_XMLOFF_SOURCE_TEXT_TXTPARAI_HXX
 
 
+#include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <xmloff/xmlictxt.hxx>
 

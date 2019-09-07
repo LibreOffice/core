@@ -32,6 +32,7 @@
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 
+#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
 #include <com/sun/star/chart/ChartSymbolType.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>

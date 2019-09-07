@@ -21,6 +21,8 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLPROPERTYBACKPATCHER_HXX
 #define INCLUDED_XMLOFF_SOURCE_TEXT_XMLPROPERTYBACKPATCHER_HXX
 
+#include <rtl/ustring.hxx>
+
 #include <map>
 #include <memory>
 #include <vector>

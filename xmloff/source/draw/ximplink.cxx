@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include<xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlimp.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include "ximplink.hxx"
 #include <xmloff/xmltoken.hxx>
 

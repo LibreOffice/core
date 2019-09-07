@@ -20,6 +20,7 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_CHART_MULTIPROPERTYSETHANDLER_HXX
 #define INCLUDED_XMLOFF_SOURCE_CHART_MULTIPROPERTYSETHANDLER_HXX
 
+#include <map>
 #include <memory>
 
 #include <rtl/ustring.hxx>

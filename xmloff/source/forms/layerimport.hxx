@@ -29,9 +29,7 @@
 #include <com/sun/star/form/XFormsSupplier2.hpp>
 #include <rtl/ref.hxx>
 #include "formattributes.hxx"
-#include "callbacks.hxx"
 #include "eventimport.hxx"
-#include <tools/ref.hxx>
 
 class SvXMLImport;
 class SvXMLImportContext;

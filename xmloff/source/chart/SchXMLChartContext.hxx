@@ -22,12 +22,10 @@
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/awt/Size.hpp>
 
 #include "transporttypes.hxx"
 
-#include <list>
 #include <vector>
 
 class SchXMLImportHelper;

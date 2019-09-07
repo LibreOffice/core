@@ -7,3 +7,26 @@ blacklist:
     xmloff/inc/XMLTextColumnsExport.hxx:
     # Needed for css shortcut
     - sal/types.h
+    xmloff/source/chart/PropertyMap.hxx:
+    # Needed for constants used in arrays
+    - xmloff/maptype.hxx
+    - xmloff/xmlnmspe.hxx
+    - xmloff/xmlement.hxx
+    - com/sun/star/chart/ChartAxisArrangeOrderType.hpp
+    - com/sun/star/chart/ChartAxisLabelPosition.hpp
+    - com/sun/star/chart/ChartAxisMarkPosition.hpp
+    - com/sun/star/chart/ErrorBarStyle.hpp
+    - com/sun/star/chart/ChartSolidType.hpp
+    - com/sun/star/chart/ChartDataRowSource.hpp
+    - com/sun/star/chart/DataLabelPlacement.hpp
+    - com/sun/star/chart/MissingValueTreatment.hpp
+    xmloff/source/forms/logging.hxx:
+    # Used after #ifdef TIMELOG
+    - stack
+    - sal/types.h
+    xmloff/source/forms/propertyexport.hxx:
+    # Used after #ifdef in non-DBG_UTIL builds
+    - xmloff/xmlexp.hxx
+    xmloff/source/xforms/XFormsModelExport.hxx:
+    # Needed for css shortcut
+    - sal/types.h
