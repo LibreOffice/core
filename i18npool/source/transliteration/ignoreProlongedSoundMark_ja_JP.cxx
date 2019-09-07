@@ -19,6 +19,8 @@
 
 #include <transliteration_Ignore.hxx>
 
+#include <numeric>
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
@@ -295,14 +297,10 @@ ignoreProlongedSoundMark_ja_JP::foldingImpl( const OUString& inStr, sal_Int32 st
     sal_Unicode * dst = newStr->buffer;
     const sal_Unicode * src = inStr.getStr() + startPos;
 
-    sal_Int32 *p = nullptr;
-    sal_Int32 position = 0;
-
     if (useOffset) {
         // Allocate nCount length to offset argument.
         offset.realloc( nCount );
-        p = offset.getArray();
-        position = startPos;
+        std::iota(offset.begin(), offset.end(), startPos);
     }
 
 
@@ -324,15 +322,11 @@ ignoreProlongedSoundMark_ja_JP::foldingImpl( const OUString& inStr, sal_Int32 st
             }
         }
 
-        if (useOffset)
-            *p ++ = position ++;
         *dst ++ = previousChar;
         previousChar = currentChar;
     }
 
     if (nCount == 0) {
-        if (useOffset)
-            *p = position;
         *dst ++ = previousChar;
     }
 

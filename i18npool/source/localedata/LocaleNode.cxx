@@ -2303,10 +2303,13 @@ Attr::Attr (const Reference< XAttributeList > & attr) {
 }
 
 OUString Attr::getValueByName (const sal_Char *str) const {
-    sal_Int32 len = name.getLength();
-    for (sal_Int32 i = 0;i<len;i++)
-        if (name[i].equalsAscii(str))
-            return value[i];
+    auto pName = std::find_if(std::cbegin(name), std::cend(name),
+        [&str](const OUString& rName) { return rName.equalsAscii(str); });
+    if (pName != std::cend(name))
+    {
+        auto i = static_cast<sal_Int32>(std::distance(std::cbegin(name), pName));
+        return value[i];
+    }
     return OUString();
 }
 
