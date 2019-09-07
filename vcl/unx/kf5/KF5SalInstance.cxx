@@ -43,9 +43,9 @@ KF5SalInstance::KF5SalInstance(std::unique_ptr<QApplication>& pQApp)
 SalFrame* KF5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nState)
 {
     SalFrame* pRet(nullptr);
-    RunInMainThread(std::function([&pRet, pParent, nState]() {
+    RunInMainThread([&pRet, pParent, nState]() {
         pRet = new KF5SalFrame(static_cast<KF5SalFrame*>(pParent), nState, true);
-    }));
+    });
     assert(pRet);
     return pRet;
 }
@@ -65,7 +65,7 @@ KF5SalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> co
     {
         SolarMutexGuard g;
         Qt5FilePicker* pPicker;
-        RunInMainThread(std::function([&, this]() { pPicker = createPicker(context, eMode); }));
+        RunInMainThread([&, this]() { pPicker = createPicker(context, eMode); });
         assert(pPicker);
         return pPicker;
     }

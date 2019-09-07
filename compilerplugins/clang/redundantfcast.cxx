@@ -13,6 +13,7 @@
 #include "plugin.hxx"
 #include <iostream>
 #include <fstream>
+#include <unordered_set>
 
 namespace
 {
@@ -53,9 +54,10 @@ public:
         {
             return true;
         }
-        report(DiagnosticsEngine::Warning, "redundant functional cast from %0 to %1",
-               cxxFunctionalCastExpr->getExprLoc())
-            << t2 << t1 << cxxFunctionalCastExpr->getSourceRange();
+        if (m_Seen.insert(cxxFunctionalCastExpr->getExprLoc()).second)
+            report(DiagnosticsEngine::Warning, "redundant functional cast from %0 to %1",
+                   cxxFunctionalCastExpr->getExprLoc())
+                << t2 << t1 << cxxFunctionalCastExpr->getSourceRange();
         return true;
     }
 
@@ -103,11 +105,14 @@ public:
             if (t1.getCanonicalType().getTypePtr() != paramClassOrStructType)
                 continue;
 
-            report(DiagnosticsEngine::Warning, "redundant functional cast from %0 to %1",
-                   arg->getExprLoc())
-                << t2 << t1 << arg->getSourceRange();
-            report(DiagnosticsEngine::Note, "in call to method here", param->getLocation())
-                << param->getSourceRange();
+            if (m_Seen.insert(arg->getExprLoc()).second)
+            {
+                report(DiagnosticsEngine::Warning, "redundant functional cast from %0 to %1",
+                       arg->getExprLoc())
+                    << t2 << t1 << arg->getSourceRange();
+                report(DiagnosticsEngine::Note, "in call to method here", param->getLocation())
+                    << param->getSourceRange();
+            }
         }
         return true;
     }
@@ -146,13 +151,26 @@ public:
             if (t1.getCanonicalType().getTypePtr() != paramClassOrStructType)
                 continue;
 
-            report(DiagnosticsEngine::Warning, "redundant functional cast from %0 to %1",
-                   arg->getExprLoc())
-                << t2 << t1 << arg->getSourceRange();
-            report(DiagnosticsEngine::Note, "in call to method here", param->getLocation())
-                << param->getSourceRange();
+            if (m_Seen.insert(arg->getExprLoc()).second)
+            {
+                report(DiagnosticsEngine::Warning, "redundant functional cast from %0 to %1",
+                       arg->getExprLoc())
+                    << t2 << t1 << arg->getSourceRange();
+                report(DiagnosticsEngine::Note, "in call to method here", param->getLocation())
+                    << param->getSourceRange();
+            }
         }
         return true;
+    }
+
+    // Find redundant cast to std::function, where clang reports
+    // two different types for the inner and outer
+    static bool isRedundantStdFunctionCast(CXXFunctionalCastExpr const* expr)
+    {
+        auto cxxConstruct = dyn_cast<CXXConstructExpr>(compat::IgnoreImplicit(expr->getSubExpr()));
+        if (!cxxConstruct)
+            return false;
+        return isa<LambdaExpr>(cxxConstruct->getArg(0));
     }
 
     bool VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const* expr)
@@ -166,7 +184,8 @@ public:
             return true;
         auto const t1 = expr->getTypeAsWritten();
         auto const t2 = compat::getSubExprAsWritten(expr)->getType();
-        if (t1.getCanonicalType().getTypePtr() != t2.getCanonicalType().getTypePtr())
+        if (!(t1.getCanonicalType().getTypePtr() == t2.getCanonicalType().getTypePtr()
+              || isRedundantStdFunctionCast(expr)))
         {
             return true;
         }
@@ -191,9 +210,10 @@ public:
         if (tc.Typedef("sal_Int32").GlobalNamespace())
             return true;
 
-        report(DiagnosticsEngine::Warning, "redundant functional cast from %0 to %1",
-               expr->getExprLoc())
-            << t2 << t1 << expr->getSourceRange();
+        if (m_Seen.insert(expr->getExprLoc()).second)
+            report(DiagnosticsEngine::Warning, "redundant functional cast from %0 to %1",
+                   expr->getExprLoc())
+                << t2 << t1 << expr->getSourceRange();
         //getParentStmt(expr)->dump();
         return true;
     }
@@ -218,6 +238,8 @@ public:
         if (preRun())
             TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
+
+    std::unordered_set<SourceLocation> m_Seen;
 };
 
 static loplugin::Plugin::Registration<RedundantFCast> redundantfcast("redundantfcast");
