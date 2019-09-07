@@ -21,8 +21,6 @@
 #define INCLUDED_XMLOFF_SOURCE_DRAW_XIMP3DSCENE_HXX
 
 #include <xmloff/xmlictxt.hxx>
-#include "sdxmlimp_impl.hxx"
-#include <xmloff/nmspmap.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include "ximpshap.hxx"
 

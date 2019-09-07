@@ -20,9 +20,6 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_PERSMIXEDCONTENTTCONTEXT_HXX
 #define INCLUDED_XMLOFF_SOURCE_TRANSFORM_PERSMIXEDCONTENTTCONTEXT_HXX
 
-#include <rtl/ref.hxx>
-
-#include <vector>
 #include "DeepTContext.hxx"
 
 class XMLPersMixedContentTContext : public XMLPersElemContentTContext

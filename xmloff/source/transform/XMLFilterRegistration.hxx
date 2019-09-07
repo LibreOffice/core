@@ -22,6 +22,8 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
 OUString OOo2OasisTransformer_getImplementationName() throw();
 css::uno::Sequence< OUString > OOo2OasisTransformer_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception

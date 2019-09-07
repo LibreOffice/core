@@ -22,8 +22,6 @@
 
 #include <xmloff/xmlexp.hxx>
 
-#include <set>
-
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameAccess; }

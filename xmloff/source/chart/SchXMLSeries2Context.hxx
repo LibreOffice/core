@@ -26,7 +26,6 @@
 #include <xmloff/xmlstyle.hxx>
 
 #include <vector>
-#include <list>
 
 namespace com { namespace sun { namespace star {
     namespace chart2 {

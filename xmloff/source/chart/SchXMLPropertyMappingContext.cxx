@@ -19,6 +19,7 @@
 #include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

@@ -65,6 +65,7 @@
 #include <xmloff/xmlprhdl.hxx>
 #include <anim.hxx>
 #include <facreg.hxx>
+#include <xmlsdtypes.hxx>
 
 #include <animations.hxx>
 #include <animationimport.hxx>

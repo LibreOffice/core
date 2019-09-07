@@ -20,9 +20,8 @@
 #define INCLUDED_XMLOFF_SOURCE_TEXT_TXTPARAIMPHINT_HXX
 
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <xmloff/xmlimp.hxx>
 #include "XMLTextFrameContext.hxx"
+#include "XMLTextFrameHyperlinkContext.hxx"
 #include <xmloff/XMLEventsImportContext.hxx>
 
 #define XML_HINT_STYLE 1

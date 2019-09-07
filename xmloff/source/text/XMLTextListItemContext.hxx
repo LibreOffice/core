@@ -20,6 +20,8 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTLISTITEMCONTEXT_HXX
 #define INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTLISTITEMCONTEXT_HXX
 
+#include <com/sun/star/container/XIndexReplace.hpp>
+
 #include <xmloff/xmlictxt.hxx>
 
 class XMLTextImportHelper;

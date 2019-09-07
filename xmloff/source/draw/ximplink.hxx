@@ -21,10 +21,8 @@
 #define INCLUDED_XMLOFF_SOURCE_DRAW_XIMPLINK_HXX
 
 #include <xmloff/xmlictxt.hxx>
-#include "sdxmlimp_impl.hxx"
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/shapeimport.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include "ximpshap.hxx"
 
 // draw:a context
 

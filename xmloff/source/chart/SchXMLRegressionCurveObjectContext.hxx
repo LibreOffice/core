@@ -19,12 +19,9 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLREGRESSIONCURVEOBJECTCONTEXT_HXX
 #define INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLREGRESSIONCURVEOBJECTCONTEXT_HXX
 
-#include <SchXMLImport.hxx>
-
 #include <com/sun/star/awt/Size.hpp>
 #include <xmloff/xmlictxt.hxx>
-#include <xmloff/shapeimport.hxx>
-#include <list>
+#include <xmloff/SchXMLImportHelper.hxx>
 
 #include "transporttypes.hxx"
 

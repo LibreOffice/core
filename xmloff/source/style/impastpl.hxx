@@ -26,15 +26,11 @@
 #include <set>
 #include <memory>
 #include <vector>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <comphelper/stl_types.hxx>
 
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlexppr.hxx>
-#include <xmloff/xmlprmap.hxx>
 #include <xmloff/AutoStyleEntry.hxx>
 
 class SvXMLAutoStylePoolP;

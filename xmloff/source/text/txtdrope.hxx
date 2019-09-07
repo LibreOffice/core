@@ -20,6 +20,8 @@
 #define INCLUDED_XMLOFF_SOURCE_TEXT_TXTDROPE_HXX
 
 
+#include <rtl/ustring.hxx>
+
 class SvXMLExport;
 namespace com { namespace sun { namespace star { namespace uno {
     class Any; } } } }

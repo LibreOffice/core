@@ -21,7 +21,6 @@
 #define INCLUDED_XMLOFF_SOURCE_STYLE_XMLBAHDL_HXX
 
 #include <xmloff/xmlprhdl.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <xmloff/xmltoken.hxx>
 
 

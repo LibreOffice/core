@@ -20,9 +20,7 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_DRAW_XIMPNOTE_HXX
 #define INCLUDED_XMLOFF_SOURCE_DRAW_XIMPNOTE_HXX
 
-#include <xmloff/xmlictxt.hxx>
 #include "sdxmlimp_impl.hxx"
-#include <xmloff/nmspmap.hxx>
 #include "ximppage.hxx"
 
 // presentation:notes context

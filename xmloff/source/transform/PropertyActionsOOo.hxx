@@ -20,7 +20,6 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_PROPERTYACTIONSOOO_HXX
 #define INCLUDED_XMLOFF_SOURCE_TRANSFORM_PROPERTYACTIONSOOO_HXX
 
-#include "TransformerAction.hxx"
 #include "TransformerActionInit.hxx"
 #include "AttrTransformerAction.hxx"
 

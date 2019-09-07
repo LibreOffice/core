@@ -23,7 +23,6 @@
 #include "XMLIndexSourceBaseContext.hxx"
 #include <xmloff/languagetagodf.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/lang/Locale.hpp>
 
 
 namespace com { namespace sun { namespace star {

@@ -22,6 +22,7 @@
 #include "SchXMLAxisContext.hxx"
 #include "SchXMLChartContext.hxx"
 #include "SchXMLTools.hxx"
+#include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmlstyle.hxx>
@@ -41,6 +42,7 @@
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart/XAxis.hpp>
 #include <com/sun/star/chart/XAxisSupplier.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>

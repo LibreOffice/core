@@ -25,8 +25,6 @@
 #include <vector>
 #include <memory>
 
-#include <com/sun/star/xml/sax/SAXParseException.hpp>
-#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

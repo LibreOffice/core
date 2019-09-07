@@ -21,7 +21,6 @@
 
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmltoken.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/contextid.hxx>
 #include <xmloff/xmlement.hxx>
@@ -29,7 +28,6 @@
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
-#include <com/sun/star/chart/ChartErrorIndicatorType.hpp>
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>

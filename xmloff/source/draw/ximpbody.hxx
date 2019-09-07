@@ -22,7 +22,6 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include "sdxmlimp_impl.hxx"
-#include <xmloff/nmspmap.hxx>
 #include "ximppage.hxx"
 
 // draw:page context

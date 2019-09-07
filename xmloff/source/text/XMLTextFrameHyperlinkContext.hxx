@@ -20,8 +20,9 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
 #define INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
 
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#include <com/sun/star/text/XTextFrame.hpp>
 #include <xmloff/xmlictxt.hxx>
 
 namespace com { namespace sun { namespace star {

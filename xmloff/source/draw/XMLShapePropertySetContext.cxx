@@ -21,6 +21,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumi.hxx>
 #include <xmltabi.hxx>
+#include <xmlsdtypes.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlimppr.hxx>
 

@@ -20,8 +20,6 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSHAP_HXX
 #define INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSHAP_HXX
 
-#include <config_features.h>
-
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/drawing/Alignment.hpp>
@@ -30,8 +28,6 @@
 #include <com/sun/star/drawing/EscapeDirection.hpp>
 #include <com/sun/star/container/XIdentifierContainer.hpp>
 #include <xmloff/xmlictxt.hxx>
-#include "sdxmlimp_impl.hxx"
-#include <xmloff/nmspmap.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/awt/Point.hpp>

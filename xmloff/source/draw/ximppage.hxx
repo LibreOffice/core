@@ -22,10 +22,8 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include "sdxmlimp_impl.hxx"
-#include <xmloff/nmspmap.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
-#include "ximpshap.hxx"
 
 // draw:g context (RECURSIVE)
 
