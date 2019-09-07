@@ -60,6 +60,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <memory>
 
 using namespace css;
@@ -427,7 +428,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                         {
                             MenuConfiguration aMenuCfg( m_xContext );
                             Reference< XIndexAccess > xContainer( aMenuCfg.CreateMenuBarConfigurationFromXML( xInputStream ));
-                            RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xContainer );
+                            auto pRootItemContainer = comphelper::getUnoTunnelImplementation<RootItemContainer>( xContainer );
                             if ( pRootItemContainer )
                                 aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, true ) ), UNO_QUERY );
                             else
@@ -446,7 +447,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                         {
                             Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
                             ToolBoxConfiguration::LoadToolBox( m_xContext, xInputStream, xIndexContainer );
-                            RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xIndexContainer );
+                            auto pRootItemContainer = comphelper::getUnoTunnelImplementation<RootItemContainer>( xIndexContainer );
                             aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, true ) ), UNO_QUERY );
                             return;
                         }
@@ -463,7 +464,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                         {
                             Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
                             StatusBarConfiguration::LoadStatusBar( m_xContext, xInputStream, xIndexContainer );
-                            RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xIndexContainer );
+                            auto pRootItemContainer = comphelper::getUnoTunnelImplementation<RootItemContainer>( xIndexContainer );
                             aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, true ) ), UNO_QUERY );
                             return;
                         }

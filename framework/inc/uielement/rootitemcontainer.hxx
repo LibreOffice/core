@@ -69,8 +69,7 @@ class RootItemContainer final : private cppu::BaseMutex,
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
         // XUnoTunnel
-        static FWI_DLLPUBLIC const css::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
-        static FWI_DLLPUBLIC RootItemContainer*                                   GetImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace ) throw();
+        static FWI_DLLPUBLIC const css::uno::Sequence< sal_Int8 >&   getUnoTunnelId() throw();
         sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) override;
 
         // XIndexContainer

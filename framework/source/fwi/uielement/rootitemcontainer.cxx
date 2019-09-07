@@ -142,7 +142,7 @@ Reference< XIndexAccess > RootItemContainer::deepCopyContainer( const Reference<
 // XUnoTunnel
 sal_Int64 RootItemContainer::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
 {
-    if( ( rIdentifier.getLength() == 16 ) && ( 0 == memcmp( RootItemContainer::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
+    if( isUnoTunnelId<RootItemContainer>(rIdentifier) )
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
     return 0;
 }
@@ -152,16 +152,9 @@ namespace
     class theRootItemContainerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theRootItemContainerUnoTunnelId > {};
 }
 
-const Sequence< sal_Int8 >& RootItemContainer::GetUnoTunnelId() throw()
+const Sequence< sal_Int8 >& RootItemContainer::getUnoTunnelId() throw()
 {
     return theRootItemContainerUnoTunnelId::get().getSeq();
-}
-
-RootItemContainer* RootItemContainer::GetImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace ) throw()
-{
-    css::uno::Reference< css::lang::XUnoTunnel > xUT( rxIFace, css::uno::UNO_QUERY );
-    return xUT.is() ? reinterpret_cast< RootItemContainer* >(sal::static_int_cast< sal_IntPtr >(
-                          xUT->getSomething( RootItemContainer::GetUnoTunnelId() ))) : nullptr;
 }
 
 // XElementAccess
