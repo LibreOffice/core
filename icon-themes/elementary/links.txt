@@ -784,12 +784,15 @@ cmd/sc_lastpage.png cmd/sc_lastrecord.png
 # |<
 cmd/32/gotostartofdoc.png cmd/32/firstrecord.png
 cmd/32/gotostartoftable.png cmd/32/firstrecord.png
+cmd/32/firstpage.png cmd/32/firstrecord.png
 
 cmd/lc_gotostartofdoc.png cmd/lc_firstrecord.png
 cmd/lc_gotostartoftable.png cmd/lc_firstrecord.png
+cmd/lc_firstpage.png cmd/lc_firstrecord.png
 
 cmd/sc_gotostartofdoc.png cmd/sc_firstrecord.png
 cmd/sc_gotostartoftable.png cmd/sc_firstrecord.png
+cmd/sc_firstpage.png cmd/sc_firstrecord.png
 
 # Hyperlink
 cmd/32/hyperlinkdialog.png cmd/32/inserthyperlink.png
@@ -1541,7 +1544,7 @@ cmd/tr/sc_underlinedouble.png cmd/hu/sc_underlinedouble.png
 cmd/tr/sc_underlinesimple.png cmd/hu/sc_underline.png
 
 # Slide command aliases
-cmd/32/firstslide.png cmd/32/firstpage.png
+cmd/32/firstslide.png cmd/32/firstrecord.png
 cmd/32/lastslide.png cmd/32/lastrecord.png
 cmd/32/moveslidefirst.png cmd/32/movepagefirst.png
 cmd/32/moveslidelast.png cmd/32/movepagelast.png
@@ -1551,7 +1554,7 @@ cmd/32/nextslide.png cmd/32/nextrecord.png
 cmd/32/previousslide.png cmd/32/prevrecord.png
 cmd/32/slidesetup.png cmd/32/pagesetup.png
 
-cmd/lc_firstslide.png cmd/lc_firstpage.png
+cmd/lc_firstslide.png cmd/lc_firstrecord.png
 cmd/lc_lastslide.png cmd/lc_lastrecord.png
 cmd/lc_moveslidefirst.png cmd/lc_movepagefirst.png
 cmd/lc_moveslidelast.png cmd/lc_movepagelast.png
@@ -1561,7 +1564,7 @@ cmd/lc_nextslide.png cmd/lc_nextrecord.png
 cmd/lc_previousslide.png cmd/lc_prevrecord.png
 cmd/lc_slidesetup.png cmd/lc_pagesetup.png
 
-cmd/sc_firstslide.png cmd/sc_firstpage.png
+cmd/sc_firstslide.png cmd/sc_firstrecord.png
 cmd/sc_lastslide.png cmd/sc_lastrecord.png
 cmd/sc_moveslidefirst.png cmd/sc_movepagefirst.png
 cmd/sc_moveslidelast.png cmd/sc_movepagelast.png
@@ -1632,7 +1635,6 @@ formula/res/fx.png cmd/sc_dbviewfunctions.png
 
 # fpicker
 # ==============================================
-fpicker/res/fp011.png cmd/sc_firstpage.png
 fpicker/res/fp014.png cmd/sc_open.png
 fpicker/res/fp015.png cmd/sc_starshapes.star5.png
 fpicker/res/fp016.png desktop/res/shared_16.png
@@ -1782,8 +1784,8 @@ res/sx10728.png cmd/sc_formattedfield.png
 res/sx10757.png cmd/sc_timefield.png
 res/sx10768.png cmd/sc_scrollbar.png
 res/sx10769.png cmd/sc_spinbutton.png
-res/sx18002.png res/minus.png
-res/sx18003.png res/plus.png
+res/sx18002.png res/plus.png
+res/sx18003.png res/minus.png
 res/sx18013.png res/dialogfolder_16.png
 
 # sc
