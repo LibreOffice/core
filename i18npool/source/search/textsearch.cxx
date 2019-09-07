@@ -285,9 +285,9 @@ void TextSearch::setOptions( const SearchOptions& rOptions )
 
 static sal_Int32 FindPosInSeq_Impl( const Sequence <sal_Int32>& rOff, sal_Int32 nPos )
 {
-    sal_Int32 nRet = 0, nEnd = rOff.getLength();
-    while( nRet < nEnd && nPos > rOff[ nRet ] ) ++nRet;
-    return nRet;
+    auto pOff = std::find_if(rOff.begin(), rOff.end(),
+        [nPos](const sal_Int32 nOff) { return nOff >= nPos; });
+    return static_cast<sal_Int32>(std::distance(rOff.begin(), pOff));
 }
 
 bool TextSearch::isCellStart(const OUString& searchStr, sal_Int32 nPos)
