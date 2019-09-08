@@ -988,7 +988,8 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
     if (bNativeOK)
         return;
 
-    bool bRollOver = (IsMouseOver() && aInRect.IsInside(GetPointerPosPixel()));
+    bool bRollOver = (IsMouseOver() && aInRect.IsInside(GetPointerPosPixel())) |
+                     (mpWindowImpl->mbUseNativeFocus && IsNativeWidgetEnabled() && HasFocus());
     if (bRollOver)
         nButtonStyle |= DrawButtonFlags::Highlight;
     bool bDrawMenuSep = mnDDStyle == PushButtonDropdownStyle::SplitMenuButton;
