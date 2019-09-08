@@ -74,21 +74,11 @@ bool HatchDrawable::Draw(OutputDevice* pRenderContext, tools::PolyPolygon const&
     if (rPolyPolygon.Count())
     {
         tools::PolyPolygon aPolyPoly(pRenderContext->LogicToPixel(rPolyPolygon));
-        GDIMetaFile* pOldMetaFile = pRenderContext->GetConnectMetaFile();
-        bool bOldMap = pRenderContext->IsMapModeEnabled();
-
         aPolyPoly.Optimize(PolyOptimizeFlags::NO_SAME);
         aHatch.SetDistance(pRenderContext->ImplLogicWidthToDevicePixel(aHatch.GetDistance()));
 
-        pRenderContext->SetConnectMetaFile(nullptr);
-        pRenderContext->EnableMapMode(false);
-        pRenderContext->Push(PushFlags::LINECOLOR);
-        pRenderContext->SetLineColor(aHatch.GetColor());
-        pRenderContext->InitLineColor();
+        vcl::RenderContextLineColorGuard aGuard(pRenderContext, aHatch.GetColor());
         pRenderContext->DrawHatch(aPolyPoly, aHatch, false);
-        pRenderContext->Pop();
-        pRenderContext->EnableMapMode(bOldMap);
-        pRenderContext->SetConnectMetaFile(pOldMetaFile);
     }
 
     DrawAlphaVirtDev(pRenderContext);

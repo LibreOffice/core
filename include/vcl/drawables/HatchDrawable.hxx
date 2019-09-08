@@ -65,6 +65,34 @@ private:
     bool mbScaffolding;
 };
 
+class RenderContextLineColorGuard
+{
+public:
+    RenderContextLineColorGuard(OutputDevice* pRenderContext, Color aLineColor)
+        : mpRenderContext(pRenderContext)
+        , mbMapMode(pRenderContext->IsMapModeEnabled())
+        , mpMetaFile(pRenderContext->GetConnectMetaFile())
+    {
+        mpRenderContext->SetConnectMetaFile(nullptr);
+        mpRenderContext->EnableMapMode(false);
+        mpRenderContext->Push(PushFlags::LINECOLOR);
+        mpRenderContext->SetLineColor(aLineColor);
+        mpRenderContext->InitLineColor();
+    }
+
+    ~RenderContextLineColorGuard()
+    {
+        mpRenderContext->Pop();
+        mpRenderContext->EnableMapMode(mbMapMode);
+        mpRenderContext->SetConnectMetaFile(mpMetaFile);
+    }
+
+private:
+    OutputDevice* mpRenderContext;
+    bool mbMapMode;
+    GDIMetaFile* mpMetaFile;
+};
+
 } // namespace vcl
 #endif
 
