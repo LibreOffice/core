@@ -860,15 +860,7 @@ public:
 #endif
 
     void                        DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf );
-
-    void                        DrawHatchLines(const tools::PolyPolygon& rPolyPoly,
-                                               const tools::Rectangle& rRect, long nDist, sal_uInt16 nAngle10, bool bMtf);
-
-protected:
     virtual void                DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint);
-
-private:
-    SAL_DLLPRIVATE void         DrawHatchLine( const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly, bool bMtf );
     ///@}
 
 
