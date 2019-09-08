@@ -492,7 +492,9 @@ static PointArray GetHatchLinePoints(tools::Line const& rLine,
                         }
                     }
                     else
+                    {
                         nAdd = 1;
+                    }
 
                     if (nAdd)
                         pPtBuffer[nPCounter++] = Point(FRound(fX), FRound(fY));
@@ -537,6 +539,8 @@ void HatchDrawable::DrawHatchLine(OutputDevice* pRenderContext, const tools::Lin
                 pRenderContext->DrawHatchLine_DrawLine(aPtBuffer.mpPoints[i],
                                                        aPtBuffer.mpPoints[i + 1]);
             }
+
+            delete[] aPtBuffer.mpPoints;
         }
     }
 }
