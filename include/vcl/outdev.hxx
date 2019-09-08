@@ -868,12 +868,6 @@ protected:
     virtual void                DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint);
 
 private:
-
-    SAL_DLLPRIVATE Size         GetHatchIncrement(long nDist, sal_uInt16 nAngle10);
-    SAL_DLLPRIVATE Point        GetPt1(tools::Rectangle const& rRect, long nDist, sal_uInt16 nAngle10);
-    SAL_DLLPRIVATE Point        GetPt2(tools::Rectangle const& rRect, long nDist, sal_uInt16 nAngle10);
-    SAL_DLLPRIVATE Point        GetEndPt1(tools::Rectangle const& rRect, sal_uInt16 nAngle10);
-
     SAL_DLLPRIVATE void         DrawHatchLine( const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly, bool bMtf );
     ///@}
 

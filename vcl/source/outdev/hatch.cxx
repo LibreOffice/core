@@ -182,27 +182,7 @@ void OutputDevice::DrawHatch(const tools::PolyPolygon& rPolyPoly, const Hatch& r
     }
 }
 
-void OutputDevice::DrawHatchLines(tools::PolyPolygon const& rPolyPoly,
-                                  tools::Rectangle const& rRect, long nDist, sal_uInt16 nAngle,
-                                  bool bMtf)
-{
-    Size aInc = GetHatchIncrement(nDist, nAngle);
-    Point aPt1 = GetPt1(rRect, nDist, nAngle);
-    Point aPt2 = GetPt2(rRect, nDist, nAngle);
-    Point aEndPt1 = GetEndPt1(rRect, nAngle);
-
-    do
-    {
-        DrawHatchLine(tools::Line(aPt1, aPt2), rPolyPoly, bMtf);
-
-        aPt1.AdjustX(aInc.Width());
-        aPt1.AdjustY(aInc.Height());
-        aPt2.AdjustX(aInc.Width());
-        aPt2.AdjustY(aInc.Height());
-    } while ((aPt1.X() <= aEndPt1.X()) && (aPt1.Y() <= aEndPt1.Y()));
-}
-
-Size OutputDevice::GetHatchIncrement(long nDist, sal_uInt16 nAngle10)
+static Size GetHatchIncrement(long nDist, sal_uInt16 nAngle10)
 {
     long nAngle = nAngle10 % 1800;
     double fAngle = 0.0;
@@ -229,17 +209,14 @@ Size OutputDevice::GetHatchIncrement(long nDist, sal_uInt16 nAngle10)
     }
 }
 
-Point OutputDevice::GetPt1(tools::Rectangle const& rRect, long nDist, sal_uInt16 nAngle10)
+static Point GetPt1(tools::Rectangle const& rRect, long nDist, sal_uInt16 nAngle10, Point aRef)
 {
     long nAngle = nAngle10 % 1800;
     if (nAngle > 900)
         nAngle -= 1800;
 
-    Point aRef;
     Point aPt;
     long nOffset = 0;
-
-    aRef = (!IsRefPoint() ? rRect.TopLeft() : GetRefPoint());
 
     double fAngle = 0.0;
     double fTan = 0.0;
@@ -325,16 +302,13 @@ Point OutputDevice::GetPt1(tools::Rectangle const& rRect, long nDist, sal_uInt16
     }
 }
 
-Point OutputDevice::GetPt2(tools::Rectangle const& rRect, long nDist, sal_uInt16 nAngle10)
+static Point GetPt2(tools::Rectangle const& rRect, long nDist, sal_uInt16 nAngle10, Point aRef)
 {
     long nAngle = nAngle10 % 1800;
     if (nAngle > 900)
         nAngle -= 1800;
 
-    Point aRef;
     long nOffset = 0;
-
-    aRef = (!IsRefPoint() ? rRect.TopLeft() : GetRefPoint());
 
     double fAngle = 0.0;
     double fTan = 0.0;
@@ -429,7 +403,7 @@ Point OutputDevice::GetPt2(tools::Rectangle const& rRect, long nDist, sal_uInt16
     }
 }
 
-Point OutputDevice::GetEndPt1(tools::Rectangle const& rRect, sal_uInt16 nAngle10)
+static Point GetEndPt1(tools::Rectangle const& rRect, sal_uInt16 nAngle10)
 {
     long nAngle = nAngle10 % 1800;
     const double fAngle = F_PI1800 * labs(nAngle);
@@ -454,6 +428,28 @@ Point OutputDevice::GetEndPt1(tools::Rectangle const& rRect, sal_uInt16 nAngle10
             return nAngle > 0 ? Point(rRect.Right() + nXOff, rRect.Top())
                               : Point(rRect.Right() + nXOff, rRect.Bottom());
     }
+}
+
+void OutputDevice::DrawHatchLines(tools::PolyPolygon const& rPolyPoly,
+                                  tools::Rectangle const& rRect, long nDist, sal_uInt16 nAngle,
+                                  bool bMtf)
+{
+    Point aRef = (!IsRefPoint() ? rRect.TopLeft() : GetRefPoint());
+
+    Size aInc = GetHatchIncrement(nDist, nAngle);
+    Point aPt1 = GetPt1(rRect, nDist, nAngle, aRef);
+    Point aPt2 = GetPt2(rRect, nDist, nAngle, aRef);
+    Point aEndPt1 = GetEndPt1(rRect, nAngle);
+
+    do
+    {
+        DrawHatchLine(tools::Line(aPt1, aPt2), rPolyPoly, bMtf);
+
+        aPt1.AdjustX(aInc.Width());
+        aPt1.AdjustY(aInc.Height());
+        aPt2.AdjustX(aInc.Width());
+        aPt2.AdjustY(aInc.Height());
+    } while ((aPt1.X() <= aEndPt1.X()) && (aPt1.Y() <= aEndPt1.Y()));
 }
 
 struct PointArray
