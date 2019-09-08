@@ -35,19 +35,6 @@
 
 #define HATCH_MAXPOINTS 1024
 
-extern "C"
-{
-    static int HatchCmpFnc(const void* p1, const void* p2)
-    {
-        const long nX1 = static_cast<Point const*>(p1)->X();
-        const long nX2 = static_cast<Point const*>(p2)->X();
-        const long nY1 = static_cast<Point const*>(p1)->Y();
-        const long nY2 = static_cast<Point const*>(p2)->Y();
-
-        return (nX1 > nX2 ? 1 : nX1 == nX2 ? nY1 > nY2 ? 1 : nY1 == nY2 ? 0 : -1 : -1);
-    }
-}
-
 void OutputDevice::DrawHatch(const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch)
 {
     assert(!is_double_buffered_window());
@@ -463,6 +450,19 @@ struct PointArray
     long mnCountPoints;
     Point *mpPoints;
 };
+
+extern "C"
+{
+    static int HatchCmpFnc(const void* p1, const void* p2)
+    {
+        const long nX1 = static_cast<Point const*>(p1)->X();
+        const long nX2 = static_cast<Point const*>(p2)->X();
+        const long nY1 = static_cast<Point const*>(p1)->Y();
+        const long nY2 = static_cast<Point const*>(p2)->Y();
+
+        return (nX1 > nX2 ? 1 : nX1 == nX2 ? nY1 > nY2 ? 1 : nY1 == nY2 ? 0 : -1 : -1);
+    }
+}
 
 static PointArray GetHatchLinePoints(tools::Line const& rLine, tools::PolyPolygon const& rPolyPoly)
 {
