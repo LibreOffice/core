@@ -418,6 +418,9 @@ void HatchDrawable::DrawHatchLines(OutputDevice* pRenderContext,
     } while ((aPt1.X() <= aEndPt1.X()) && (aPt1.Y() <= aEndPt1.Y()));
 }
 
+// FIXME: I have used this structure for now as a refactoring tool, and kept a pointer to
+// Point objects, mainly due to the qsort. It would be far better if this was a vector.
+
 struct PointArray
 {
     PointArray(long nCountPoints, Point* pPoints)
