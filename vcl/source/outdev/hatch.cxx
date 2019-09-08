@@ -456,15 +456,23 @@ Point OutputDevice::GetEndPt1(tools::Rectangle const& rRect, sal_uInt16 nAngle10
     }
 }
 
-void OutputDevice::DrawHatchLine(const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly,
-                                 bool bMtf)
+struct PointArray
 {
-    assert(!is_double_buffered_window());
+    PointArray(long nCountPoints, Point* pPoints)
+        : mnCountPoints(nCountPoints)
+        , mpPoints(pPoints)
+    {
+    }
 
+    long mnCountPoints;
+    Point *mpPoints;
+};
+
+static PointArray GetHatchLinePoints(tools::Line const& rLine, tools::PolyPolygon const& rPolyPoly)
+{
     double fX, fY;
     long nAdd, nPCounter = 0;
-
-    std::unique_ptr<Point[]> pPtBuffer(new Point[HATCH_MAXPOINTS]);
+    Point *pPtBuffer(new Point[HATCH_MAXPOINTS]);
 
     for (long nPoly = 0, nPolyCount = rPolyPoly.Count(); nPoly < nPolyCount; nPoly++)
     {
@@ -522,20 +530,31 @@ void OutputDevice::DrawHatchLine(const tools::Line& rLine, const tools::PolyPoly
 
     if (nPCounter > 1)
     {
-        qsort(pPtBuffer.get(), nPCounter, sizeof(Point), HatchCmpFnc);
+        qsort(pPtBuffer, nPCounter, sizeof(Point), HatchCmpFnc);
 
         if (nPCounter & 1)
             nPCounter--;
+    }
 
+    return PointArray(nPCounter, pPtBuffer);
+}
+
+void OutputDevice::DrawHatchLine(const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly,
+                                 bool bMtf)
+{
+    PointArray aPtBuffer = GetHatchLinePoints(rLine, rPolyPoly);
+
+    if (aPtBuffer.mnCountPoints > 1)
+    {
         if (bMtf)
         {
-            for (long i = 0; i < nPCounter; i += 2)
-                mpMetaFile->AddAction(new MetaLineAction(pPtBuffer[i], pPtBuffer[i + 1]));
+            for (long i = 0; i < aPtBuffer.mnCountPoints; i += 2)
+                mpMetaFile->AddAction(new MetaLineAction(aPtBuffer.mpPoints[i], aPtBuffer.mpPoints[i+1]));
         }
         else
         {
-            for (long i = 0; i < nPCounter; i += 2)
-                DrawHatchLine_DrawLine(pPtBuffer[i], pPtBuffer[i + 1]);
+            for (long i = 0; i < aPtBuffer.mnCountPoints; i += 2)
+                DrawHatchLine_DrawLine(aPtBuffer.mpPoints[i], aPtBuffer.mpPoints[i+1]);
         }
     }
 }
