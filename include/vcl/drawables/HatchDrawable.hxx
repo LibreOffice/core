@@ -11,8 +11,9 @@
 #ifndef INCLUDED_INCLUDE_VCL_DRAWABLES_HATCHDRAWABLE_HXX
 #define INCLUDED_INCLUDE_VCL_DRAWABLES_HATCHDRAWABLE_HXX
 
-#include <vcl/hatch.hxx>
+#include <tools/poly.hxx>
 
+#include <vcl/hatch.hxx>
 #include <vcl/drawables/Drawable.hxx>
 
 class OutputDevice;
@@ -22,11 +23,12 @@ namespace vcl
 class VCL_DLLPUBLIC HatchDrawable : public Drawable
 {
 public:
-    HatchDrawable(tools::Hatch aHatch)
-        : maHatch(aHatch)
-        , mMtf(false)
+    HatchDrawable(tools::PolyPolygon aPolyPolygon, Hatch aHatch)
+        : Drawable(false)
+        , maPolyPolygon(aPolyPolygon)
+        , maHatch(aHatch)
+        , mbMtf(false)
     {
-        mpMetaAction = new MetaHatchAction(aHatch);
     }
 
 protected:
@@ -34,6 +36,10 @@ protected:
     bool DrawCommand(OutputDevice* pRenderContext) const override;
 
 private:
+    bool Draw(OutputDevice* pRenderContext, tools::PolyPolygon const& rPolyPolygon,
+              Hatch const& rHatch) const;
+
+    tools::PolyPolygon maPolyPolygon;
     Hatch maHatch;
     bool mbMtf;
 };

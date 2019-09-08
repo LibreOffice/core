@@ -57,7 +57,7 @@ protected:
     mutable SalGraphics* mpGraphics;
     bool mbUsesScaffolding;
 
-    MetaAction* mpMetaAction;
+    mutable MetaAction* mpMetaAction;
 };
 }
 

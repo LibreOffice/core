@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
 #include <osl/diagnose.h>
 #include <tools/line.hxx>
 #include <tools/helpers.hxx>
@@ -28,79 +26,18 @@
 #include <vcl/settings.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/drawables/HatchDrawable.hxx>
 
 #include <salgdi.hxx>
 
+#include <cassert>
 #include <memory>
 
 #define HATCH_MAXPOINTS 1024
 
 void OutputDevice::DrawHatch(const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch)
 {
-    assert(!is_double_buffered_window());
-
-    Hatch aHatch(rHatch);
-
-    if (mnDrawMode
-        & (DrawModeFlags::BlackLine | DrawModeFlags::WhiteLine | DrawModeFlags::GrayLine
-           | DrawModeFlags::SettingsLine))
-    {
-        Color aColor(rHatch.GetColor());
-
-        if (mnDrawMode & DrawModeFlags::BlackLine)
-            aColor = COL_BLACK;
-        else if (mnDrawMode & DrawModeFlags::WhiteLine)
-            aColor = COL_WHITE;
-        else if (mnDrawMode & DrawModeFlags::GrayLine)
-        {
-            const sal_uInt8 cLum = aColor.GetLuminance();
-            aColor = Color(cLum, cLum, cLum);
-        }
-        else if (mnDrawMode & DrawModeFlags::SettingsLine)
-        {
-            aColor = GetSettings().GetStyleSettings().GetFontColor();
-        }
-
-        aHatch.SetColor(aColor);
-    }
-
-    if (mpMetaFile)
-        mpMetaFile->AddAction(new MetaHatchAction(rPolyPoly, aHatch));
-
-    if (!IsDeviceOutputNecessary() || ImplIsRecordLayout())
-        return;
-
-    if (!mpGraphics && !AcquireGraphics())
-        return;
-
-    if (mbInitClipRegion)
-        InitClipRegion();
-
-    if (mbOutputClipped)
-        return;
-
-    if (rPolyPoly.Count())
-    {
-        tools::PolyPolygon aPolyPoly(LogicToPixel(rPolyPoly));
-        GDIMetaFile* pOldMetaFile = mpMetaFile;
-        bool bOldMap = mbMap;
-
-        aPolyPoly.Optimize(PolyOptimizeFlags::NO_SAME);
-        aHatch.SetDistance(ImplLogicWidthToDevicePixel(aHatch.GetDistance()));
-
-        mpMetaFile = nullptr;
-        EnableMapMode(false);
-        Push(PushFlags::LINECOLOR);
-        SetLineColor(aHatch.GetColor());
-        InitLineColor();
-        DrawHatch(aPolyPoly, aHatch, false);
-        Pop();
-        EnableMapMode(bOldMap);
-        mpMetaFile = pOldMetaFile;
-    }
-
-    if (mpAlphaVDev)
-        mpAlphaVDev->DrawHatch(rPolyPoly, rHatch);
+    Draw(vcl::HatchDrawable(rPolyPoly, rHatch));
 }
 
 void OutputDevice::AddHatchActions(const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch,
