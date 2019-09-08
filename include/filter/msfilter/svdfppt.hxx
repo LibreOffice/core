@@ -555,25 +555,25 @@ protected:
     friend struct PPTStyleSheet;
     friend class PPTNumberFormatCreator;
 
-    bool                    bOk;
-    PptUserEditAtom         aUserEditAtom;
-    PptColorSchemeAtom      aPageColors;
-    ::std::vector< SdHyperlinkEntry > aHyperList;
+    bool                    m_bOk;
+    PptUserEditAtom         m_aUserEditAtom;
+    PptColorSchemeAtom      m_aPageColors;
+    ::std::vector< SdHyperlinkEntry > m_aHyperList;
     std::unique_ptr<sal_uInt32[]>
-                            pPersistPtr;
-    sal_uInt32              nPersistPtrCnt;
+                            m_pPersistPtr;
+    sal_uInt32              m_nPersistPtrCnt;
 
-    const PPTStyleSheet*    pPPTStyleSheet; // this is the current stylesheet;
-    const PPTStyleSheet*    pDefaultSheet;  // this is a sheet we are using if no masterpage can be found, but that should
+    const PPTStyleSheet*    m_pPPTStyleSheet; // this is the current stylesheet;
+    const PPTStyleSheet*    m_pDefaultSheet;  // this is a sheet we are using if no masterpage can be found, but that should
                                             // never happen just preventing a crash
     std::unique_ptr<PptSlidePersistList> m_pMasterPages;
     std::unique_ptr<PptSlidePersistList> m_pSlidePages;
     std::unique_ptr<PptSlidePersistList> m_pNotePages;
-    sal_uInt16              nCurrentPageNum;
-    sal_uLong               nDocStreamPos;
-    sal_uInt16              nPageColorsNum;
-    PptPageKind             ePageColorsKind;
-    PptPageKind             eCurrentPageKind;
+    sal_uInt16              m_nCurrentPageNum;
+    sal_uLong               m_nDocStreamPos;
+    sal_uInt16              m_nPageColorsNum;
+    PptPageKind             m_ePageColorsKind;
+    PptPageKind             m_eCurrentPageKind;
 
 protected:
     using SdrEscherImport::ReadObjText;
