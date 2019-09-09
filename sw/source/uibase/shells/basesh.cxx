@@ -118,6 +118,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <poolfmt.hxx>
 #include <shellres.hxx>
+#include <UndoTable.hxx>
 
 FlyMode SwBaseShell::eFrameMode = FLY_DRAG_END;
 
@@ -2746,7 +2747,12 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 {
                     SwTableNode* pTableNode = const_cast<SwTableNode*>( rSh.IsCursorInTable() );
                     if ( pTableNode )
+                    {
                         pTableNode->GetTable().SetTableStyleName( aAutoName );
+                        SwUndoTableAutoFormat* pUndo = new SwUndoTableAutoFormat( *pTableNode, *pTAFormat );
+                        if ( pUndo )
+                            rSh.GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
+                    }
                 }
 
                 rSh.EndAllAction();
