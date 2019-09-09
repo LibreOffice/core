@@ -239,16 +239,16 @@ GetFlysAnchoredAt(SwDoc & rDoc, sal_uLong nSttNode);
 // base class for insertion of Document, Glossaries and Copy
 class SwUndoInserts : public SwUndo, public SwUndRng, private SwUndoSaveContent
 {
-    SwTextFormatColl *pTextFormatColl, *pLastNdColl;
-    std::unique_ptr<std::vector<SwFrameFormat*>> pFrameFormats;
+    SwTextFormatColl *m_pTextFormatColl, *m_pLastNodeColl;
+    std::unique_ptr<std::vector<SwFrameFormat*>> m_pFrameFormats;
     std::vector< std::shared_ptr<SwUndoInsLayFormat> > m_FlyUndos;
-    std::unique_ptr<SwRedlineData> pRedlData;
-    bool bSttWasTextNd;
+    std::unique_ptr<SwRedlineData> m_pRedlineData;
+    bool m_bStartWasTextNode;
 protected:
-    sal_uLong nNdDiff;
+    sal_uLong m_nNodeDiff;
     /// start of Content in UndoNodes for Redo
     std::unique_ptr<SwNodeIndex> m_pUndoNodeIndex;
-    sal_uInt16 nSetPos;                 // Start in the history list.
+    sal_uInt16 m_nSetPos;                 // Start in the history list.
 
     SwUndoInserts( SwUndoId nUndoId, const SwPaM& );
 public:
@@ -264,7 +264,7 @@ public:
 
     static bool IsCreateUndoForNewFly(SwFormatAnchor const& rAnchor,
         sal_uLong const nStartNode, sal_uLong const nEndNode);
-    std::vector<SwFrameFormat*> * GetFlysAnchoredAt() { return pFrameFormats.get(); }
+    std::vector<SwFrameFormat*> * GetFlysAnchoredAt() { return m_pFrameFormats.get(); }
 };
 
 class SwUndoInsDoc : public SwUndoInserts
