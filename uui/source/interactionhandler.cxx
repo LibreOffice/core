@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -38,9 +39,10 @@ using namespace com::sun::star;
 namespace {
 
 class UUIInteractionHandler:
-    public cppu::WeakImplHelper< css::lang::XServiceInfo,
-                                  css::lang::XInitialization,
-                                  css::task::XInteractionHandler2 >
+    public cppu::WeakImplHelper<css::lang::XServiceInfo,
+                                css::lang::XInitialization,
+                                css::task::XInteractionHandler2,
+                                css::beans::XPropertySet>
 {
 private:
     std::unique_ptr<UUIInteractionHelper> m_pImpl;
@@ -69,6 +71,57 @@ public:
         handleInteractionRequest(
             const css::uno::Reference< css::task::XInteractionRequest >& Request
         ) override;
+
+    virtual void SAL_CALL
+        addPropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ ) override
+    {
+        assert(false);
+    }
+
+    virtual void SAL_CALL
+        removePropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ ) override
+    {
+        assert(false);
+    }
+
+    virtual void SAL_CALL
+        addVetoableChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XVetoableChangeListener >& /*xListener*/ ) override
+    {
+        assert(false);
+    }
+
+    virtual void SAL_CALL
+        removeVetoableChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XVetoableChangeListener >& /*xListener*/ ) override
+    {
+        assert(false);
+    }
+
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+        getPropertySetInfo() override
+    {
+        assert(false);
+    }
+
+    virtual void SAL_CALL setPropertyValue(const OUString& rPropertyName, const css::uno::Any& rValue) override
+    {
+        if (rPropertyName == "ParentWindow")
+        {
+            css::uno::Reference<css::awt::XWindow> xWindow;
+            rValue >>= xWindow;
+            m_pImpl->SetParentWindow(xWindow);
+            return;
+        }
+        throw css::beans::UnknownPropertyException();
+    }
+
+    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& rPropertyName) override
+    {
+        if (rPropertyName == "ParentWindow")
+        {
+            return uno::Any(m_pImpl->GetParentWindow());
+        }
+        throw css::beans::UnknownPropertyException();
+    }
 };
 
 UUIInteractionHandler::UUIInteractionHandler(

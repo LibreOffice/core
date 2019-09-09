@@ -74,10 +74,10 @@ typedef std::unordered_map< OUString, OUString >    StringHashMap;
 class UUIInteractionHelper
 {
 private:
-            css::uno::Reference< css::uno::XComponentContext >      m_xContext;
-            css::uno::Reference< css::awt::XWindow >                m_xWindowParam;
-            const OUString                                          m_aContextParam;
-            StringHashMap                                           m_aTypedCustomHandlers;
+    css::uno::Reference< css::uno::XComponentContext >      m_xContext;
+    css::uno::Reference< css::awt::XWindow >                m_xWindowParam;
+    const OUString                                          m_aContextParam;
+    StringHashMap                                           m_aTypedCustomHandlers;
     UUIInteractionHelper(UUIInteractionHelper const &) = delete;
     UUIInteractionHelper& operator =(UUIInteractionHelper const &) = delete;
 
@@ -88,6 +88,9 @@ public:
         const OUString & rContextParam);
     explicit UUIInteractionHelper(
         css::uno::Reference< css::uno::XComponentContext > const & rxContext);
+
+    css::uno::Reference<css::awt::XWindow> GetParentWindow() const { return m_xWindowParam; }
+    void SetParentWindow(css::uno::Reference<css::awt::XWindow>& rWindow) { m_xWindowParam = rWindow; }
 
     ~UUIInteractionHelper();
 
