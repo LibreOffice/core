@@ -32,8 +32,18 @@ inline OUString GetUnitString( long nVal_100, FieldUnit eFieldUnit, sal_Unicode 
         aVal.insert( 0, "0" );
 
     aVal.insert( aVal.getLength() - 2, cSep );
-    aVal.append(" ");
-    aVal.append(SdrFormatter::GetUnitStr( eFieldUnit ));
+    OUString aSuffix = SdrFormatter::GetUnitStr(eFieldUnit);
+    if (eFieldUnit != FieldUnit::NONE && eFieldUnit != FieldUnit::DEGREE && eFieldUnit != FieldUnit::INCH)
+        aVal.append(" ");
+    if (eFieldUnit == FieldUnit::INCH)
+    {
+        OUString sDoublePrime = u"\u2033";
+        if (aSuffix != "\"" && aSuffix != sDoublePrime)
+            aVal.append(" ");
+        else
+            aSuffix = sDoublePrime;
+    }
+    aVal.append(aSuffix);
 
     return aVal.makeStringAndClear();
 }
