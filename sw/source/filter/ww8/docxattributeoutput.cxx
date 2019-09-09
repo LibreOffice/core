@@ -4851,6 +4851,12 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         xPropSet->getPropertyValue("HyperLinkURL") >>= sURL;
         if(!sURL.isEmpty())
         {
+            if (sURL.startsWith("#") && sURL.indexOf(' ') != -1 && !sURL.endsWith("|outline") && !sURL.endsWith("|table") &&
+                !sURL.endsWith("|frame") && !sURL.endsWith("|graphic") && !sURL.endsWith("|ole") && !sURL.endsWith("|region"))
+            {
+                // Spaces are prohibited in bookmark name.
+                sURL = sURL.replace(' ', '_');
+            }
             sRelId = GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
                         oox::getRelationship(Relationship::HYPERLINK),
                         sURL, !sURL.startsWith("#") );
