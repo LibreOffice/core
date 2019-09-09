@@ -383,6 +383,12 @@
                     "dest-filename": "external/tarballs/postgresql-9.2.24.tar.bz2"
                 },
                 {
+                    "url": "https://dev-www.libreoffice.org/src/QR-Code-generator-1.4.0.tar.gz",
+                    "sha256": "fcdf9fd69fde07ae4dca2351d84271a9de8093002f733b77c70f52f1630f6e4a",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/QR-Code-generator-1.4.0.tar.gz"
+                },
+                {
                     "url": "https://dev-www.libreoffice.org/src/a39f6c07ddb20d7dd2ff1f95fa21e2cd-raptor2-2.0.15.tar.gz",
                     "sha256": "ada7f0ba54787b33485d090d3d2680533520cd4426d2f7fb4782dd4a6a1480ed",
                     "type": "file",
