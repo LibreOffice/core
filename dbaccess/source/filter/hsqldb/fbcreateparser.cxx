@@ -184,7 +184,11 @@ OUString FbCreateStmtParser::compose() const
             // start with 0:
             // HSQLDB: first value will be 0.
             // Firebird: first value will be 1.
-            sSql.append(columnIter->getStartValue() - 1);
+            // but we can't put -1 for Firebird in case HSQLDB begins to 0
+            sal_Int32 nStartValue = columnIter->getStartValue();
+            if (nStartValue)
+                --nStartValue;
+            sSql.append(nStartValue);
             sSql.append(")");
         }
         else if (!columnIter->isNullable())
