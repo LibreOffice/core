@@ -224,13 +224,13 @@ gb_LinkTarget_INCLUDE :=\
 ifeq ($(COM_IS_CLANG),TRUE)
 gb_COMPILER_TEST_FLAGS := -Xclang -plugin-arg-loplugin -Xclang --unit-test-mode
 ifeq ($(COMPILER_PLUGIN_TOOL),)
-gb_COMPILER_PLUGINS := -Xclang -load -Xclang $(BUILDDIR)/compilerplugins/obj/plugin.so -Xclang -add-plugin -Xclang loplugin
+gb_COMPILER_PLUGINS := -Xclang -load -Xclang $(BUILDDIR)/compilerplugins/clang/plugin.so -Xclang -add-plugin -Xclang loplugin
 ifneq ($(COMPILER_PLUGIN_WARNINGS_ONLY),)
 gb_COMPILER_PLUGINS += -Xclang -plugin-arg-loplugin -Xclang \
     --warnings-only='$(COMPILER_PLUGIN_WARNINGS_ONLY)'
 endif
 else
-gb_COMPILER_PLUGINS := -Xclang -load -Xclang $(BUILDDIR)/compilerplugins/obj/plugin.so -Xclang -plugin -Xclang loplugin $(foreach plugin,$(COMPILER_PLUGIN_TOOL), -Xclang -plugin-arg-loplugin -Xclang $(plugin))
+gb_COMPILER_PLUGINS := -Xclang -load -Xclang $(BUILDDIR)/compilerplugins/clang/plugin.so -Xclang -plugin -Xclang loplugin $(foreach plugin,$(COMPILER_PLUGIN_TOOL), -Xclang -plugin-arg-loplugin -Xclang $(plugin))
 ifneq ($(UPDATE_FILES),)
 gb_COMPILER_PLUGINS += -Xclang -plugin-arg-loplugin -Xclang --scope=$(UPDATE_FILES)
 endif
