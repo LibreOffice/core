@@ -119,13 +119,18 @@ void OutputDevice::Erase()
         mpAlphaVDev->Erase();
 }
 
+static BitmapEx GetWallpaperBitmap(Wallpaper const& rWallpaper)
+{
+    const BitmapEx* pCached = rWallpaper.ImplGetCachedBitmap();
+    return (pCached) ? *pCached : rWallpaper.GetBitmap();
+}
+
 void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
                                             long nWidth, long nHeight,
                                             const Wallpaper& rWallpaper )
 {
     assert(!is_double_buffered_window());
 
-    BitmapEx aBmpEx;
     const BitmapEx* pCached = rWallpaper.ImplGetCachedBitmap();
     Point aPos;
     Size aSize;
@@ -136,10 +141,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
     bool bDrawGradientBackground = false;
     bool bDrawColorBackground = false;
 
-    if( pCached )
-        aBmpEx = *pCached;
-    else
-        aBmpEx = rWallpaper.GetBitmap();
+    BitmapEx aBmpEx = GetWallpaperBitmap(rWallpaper);
 
     const long nBmpWidth = aBmpEx.GetSizePixel().Width();
     const long nBmpHeight = aBmpEx.GetSizePixel().Height();
