@@ -729,6 +729,21 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127339, "tdf127339.docx")
     assertXPathNoAttribute(pXmlRels, "/rels:Relationships/rels:Relationship[@Target='#bookmark']", "TargetMode");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf127362, "tdf127362.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    xmlDocPtr pXmlRels = parseExport("word/_rels/document.xml.rels");
+    if (!pXmlRels)
+        return;
+
+    OUString bookmarkName = "#" + getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:bookmarkStart", "name");
+    OUString anchor = getXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId3']", "Target");
+    CPPUNIT_ASSERT_EQUAL(anchor, bookmarkName);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
