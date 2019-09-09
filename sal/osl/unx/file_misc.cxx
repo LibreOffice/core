@@ -620,7 +620,38 @@ oslFileError SAL_CALL osl_moveFile( rtl_uString* ustrFileURL, rtl_uString* ustrD
 
 oslFileError SAL_CALL osl_replaceFile(rtl_uString* ustrFileURL, rtl_uString* ustrDestURL)
 {
-    return osl_moveFile(ustrFileURL, ustrDestURL);
+    int nGid = -1;
+    char destPath[PATH_MAX];
+    oslFileError eRet = FileURLToPath(destPath, PATH_MAX, ustrDestURL);
+    if (eRet == osl_File_E_None)
+    {
+        struct stat aFileStat;
+        int nRet = stat(destPath, &aFileStat);
+        if (nRet == -1)
+        {
+            nRet = errno;
+            SAL_INFO("sal.file", "stat(" << destPath << "): " << UnixErrnoString(nRet));
+        }
+        else
+        {
+            nGid = aFileStat.st_gid;
+        }
+    }
+
+    eRet = osl_moveFile(ustrFileURL, ustrDestURL);
+
+    if (eRet == osl_File_E_None && nGid != -1)
+    {
+        int nRet = chown(destPath, -1, nGid);
+        if (nRet == -1)
+        {
+            nRet = errno;
+            SAL_INFO("sal.file",
+                     "chown(" << destPath << "-1, " << nGid << "): " << UnixErrnoString(nRet));
+        }
+    }
+
+    return eRet;
 }
 
 oslFileError SAL_CALL osl_copyFile( rtl_uString* ustrFileURL, rtl_uString* ustrDestURL )
