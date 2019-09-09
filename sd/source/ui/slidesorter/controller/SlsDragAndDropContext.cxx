@@ -96,7 +96,7 @@ void DragAndDropContext::UpdatePosition (
     bool bDoAutoScroll = bAllowAutoScroll
             && mpTargetSlideSorter->GetController().GetScrollBarManager().AutoScroll(
                 rMousePosition,
-                [this, eMode, &rMousePosition] () {
+                [this, eMode, rMousePosition] () {
                     return this->UpdatePosition(rMousePosition, eMode, false);
                 });
 
