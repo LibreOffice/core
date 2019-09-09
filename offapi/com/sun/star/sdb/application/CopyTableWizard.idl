@@ -182,7 +182,7 @@ service CopyTableWizard : XCopyTableWizard
 
         @param Source
             the com::sun::star::sdb::DataAccessDescriptor describing the
-            target for the copy operation.
+            source for the copy operation.
 
         @param Destination
             the com::sun::star::sdb::DataAccessDescriptor describing the
