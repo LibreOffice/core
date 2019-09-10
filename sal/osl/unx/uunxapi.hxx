@@ -32,6 +32,8 @@ int stat_c(const char *cpPath, struct stat* buf);
 
 int lstat_c(const char *cpPath, struct stat* buf);
 
+int mkdir_c(OString const & path, mode_t mode);
+
 int open_c(const char *cpPath, int oflag, int mode);
 
 int utime_c(const char *cpPath, struct utimbuf *times);
@@ -40,7 +42,9 @@ int ftruncate_with_name(int fd, sal_uInt64 uSize, rtl_String* path);
 
 namespace osl
 {
-    int access(const OUString& ustrPath, int mode);
+    OString OUStringToOString(const OUString& s);
+
+    int access(const OString& strPath, int mode);
 
     /***********************************
      osl::realpath
@@ -59,9 +63,15 @@ namespace osl
         const OUString& ustrFileName,
         OUString& ustrResolvedName);
 
+    bool realpath(
+        const OString& strFileName,
+        OString& strResolvedName);
+
     int lstat(const OUString& ustrPath, struct stat& buf);
 
-    int mkdir(const OUString& aPath, mode_t aMode);
+    int lstat(const OString& strPath, struct stat& buf);
+
+    int mkdir(const OString& aPath, mode_t aMode);
 } // end namespace osl
 
 #endif // INCLUDED_SAL_OSL_UNX_UUNXAPI_HXX
