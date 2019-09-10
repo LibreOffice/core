@@ -187,7 +187,7 @@ OUString SAL_CALL NumberedCollection::getUntitledPrefix()
     ::sal_Int32                  c = static_cast<::sal_Int32>(m_lComponents.size ());
     ::sal_Int32                  i = 1;
 
-    // c can't be less then 0 ... otherwise hash.size() has an error :-)
+    // c can't be less than 0 ... otherwise hash.size() has an error :-)
     // But we need at least n+1 numbers here.
     c += 1;
 

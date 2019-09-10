@@ -59,7 +59,7 @@ awt::Rectangle GetRectangleInterception( const awt::Rectangle& aRect1, const awt
     awt::Rectangle aResult;
 
     OSL_ENSURE( aRect1.Width >= 0 && aRect2.Width >= 0 && aRect1.Height >= 0 && aRect2.Height >= 0,
-                "Offset must not be less then zero!" );
+                "Offset must not be less than zero!" );
 
     aResult.X = std::max(aRect1.X, aRect2.X);
     aResult.Y = std::max(aRect1.Y, aRect2.Y);

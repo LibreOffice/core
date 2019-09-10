@@ -127,7 +127,7 @@ namespace XSLT
             return "invalid oleLength";
         }
         Sequence<sal_Int8> content(oleLength);
-        //Read all bytes. The compressed length should less then the uncompressed length
+        //Read all bytes. The compressed length should be less than the uncompressed length
         readbytes = subStream->readBytes(content, oleLength);
         if (oleLength < readbytes)
         {
