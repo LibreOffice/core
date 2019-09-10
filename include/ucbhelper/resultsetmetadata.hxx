@@ -84,7 +84,7 @@ public:
     /**
       * Constructor. ResultSet is readonly by default.
       *
-      * @param rxSMgr is a Servive Manager.
+      * @param rxSMgr is a Service Manager.
       * @param rProps is a sequence of properties (partially) describing the
       *        columns of a resultset.
       */
@@ -95,7 +95,7 @@ public:
     /**
       * Constructor.
       *
-      * @param rxSMgr is a Servive Manager.
+      * @param rxSMgr is a Service Manager.
       * @param rProps is a sequence of properties (partially) describing the
       *        columns of a resultset.
       * @param rColumnData contains additional meta data for the columns of
