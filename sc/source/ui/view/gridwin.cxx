@@ -5208,7 +5208,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
 
     std::shared_ptr<ScFieldEditEngine> pEngine = createEditEngine(pDocSh, *pPattern);
 
-    MapMode aEditMode = pViewData->GetLogicMode(eWhich);            // without draw scaleing
+    MapMode aEditMode = pViewData->GetLogicMode(eWhich);            // without draw scaling
     tools::Rectangle aLogicEdit = PixelToLogic( aEditRect, aEditMode );
     long nThisColLogic = aLogicEdit.Right() - aLogicEdit.Left() + 1;
     Size aPaperSize( 1000000, 1000000 );

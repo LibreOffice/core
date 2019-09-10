@@ -368,7 +368,7 @@ oslFileError osl_getSystemPathFromFileURL_Ex(
 namespace
 {
 
-    /** Helper function, return a pinter to the final '\0'
+    /** Helper function, return a pointer to the final '\0'
         of a string
     */
 
