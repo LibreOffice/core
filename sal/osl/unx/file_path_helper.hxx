@@ -28,15 +28,15 @@
    Removes the last separator from the given system path if any and if the path
    is not the root path '/'
 
-   @param  ppustrPath[inout]    a system path if the path is not the root path
+   @param  ppstrPath[inout]    a system path if the path is not the root path
                                 and the last character is a path separator it
-                                will be cut off ppustrPath must not be NULL and
-                                must point to a valid rtl_uString
+                                will be cut off ppstrPath must not be NULL and
+                                must point to a valid rtl_String
 
    @returns nothing
 
 */
-void osl_systemPathRemoveSeparator(rtl_uString* pustrPath);
+void osl_systemPathRemoveSeparator(rtl_String* pstrPath);
 
 /**
    Returns true if the given path is a relative path and so starts not with '/'
@@ -53,12 +53,12 @@ bool osl_systemPathIsRelativePath(
 /**
    Returns the file or the directory part of the given path
 
-   @param pustrPath [in]        a system path, must not be NULL
+   @param pstrPath [in]        a system path, must not be NULL
 
-   @param ppustrFileOrDirPart [out] on return receives the last part of the
-                                given directory or the file name if pustrPath is the
+   @param ppstrFileOrDirPart [out] on return receives the last part of the
+                                given directory or the file name if pstrPath is the
                                 root path '/' an empty string will be returned if
-                                pustrPath has a trailing '/' the last part before the
+                                pstrPath has a trailing '/' the last part before the
                                 '/' will be returned else the part after the last '/'
                                 will be returned
 
@@ -66,8 +66,8 @@ bool osl_systemPathIsRelativePath(
 
 */
 void osl_systemPathGetFileNameOrLastDirectoryPart(
-    const rtl_uString*  pustrPath,
-    rtl_uString**       ppustrFileNameOrLastDirPart);
+    const rtl_String*  pstrPath,
+    rtl_String**       ppstrFileNameOrLastDirPart);
 
 /**
    @param   pustrPath [in] a system path, must not be NULL
@@ -78,7 +78,7 @@ void osl_systemPathGetFileNameOrLastDirectoryPart(
 
 */
 bool osl_systemPathIsHiddenFileOrDirectoryEntry(
-    const rtl_uString* pustrPath);
+    const rtl_String* pustrPath);
 
 /************************************************
    osl_systemPathIsLocalOrParentDirectoryEntry
@@ -86,7 +86,7 @@ bool osl_systemPathIsHiddenFileOrDirectoryEntry(
    system path is the local directory entry '.'
    or the parent directory entry '..'
 
-   @param   pustrPath [in] a system path,
+   @param   pstrPath [in] a system path,
             must not be NULL
 
    @returns sal_True if the last part of the
@@ -96,7 +96,7 @@ bool osl_systemPathIsHiddenFileOrDirectoryEntry(
 ************************************************/
 
 bool osl_systemPathIsLocalOrParentDirectoryEntry(
-    const rtl_uString* pustrPath);
+    const rtl_String* pstrPath);
 
 /************************************************
    osl_searchPath
@@ -146,7 +146,7 @@ namespace osl
 
   ******************************************/
 
- inline void systemPathRemoveSeparator(/*inout*/ OUString& Path)
+ inline void systemPathRemoveSeparator(/*inout*/ OString& Path)
  {
      osl_systemPathRemoveSeparator(Path.pData);
  }
@@ -198,6 +198,10 @@ namespace osl
 
   *****************************************/
 
+ OString systemPathMakeAbsolutePath(
+     const OString& BasePath,
+    const OString& RelPath);
+
  OUString systemPathMakeAbsolutePath(
      const OUString& BasePath,
     const OUString& RelPath);
@@ -220,7 +224,7 @@ namespace osl
  *********************************************/
 
  inline bool systemPathIsHiddenFileOrDirectoryEntry(
-     const OUString& Path)
+     const OString& Path)
  {
     return osl_systemPathIsHiddenFileOrDirectoryEntry(Path.pData);
  }

@@ -29,6 +29,8 @@
 #include <sal/types.h>
 #include <sal/macros.h>
 
+#include <uri_internal.hxx>
+
 #include <algorithm>
 #include <cstddef>
 
@@ -60,12 +62,9 @@ void writeUnicode(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
     rtl_uStringbuffer_insert(pBuffer, pCapacity, (*pBuffer)->length, &cChar, 1);
 }
 
-enum EscapeType
-{
-    EscapeNo,
-    EscapeChar,
-    EscapeOctet
-};
+}
+
+namespace rtl::uri::detail {
 
 /** Read any of the following:
 
@@ -213,6 +212,10 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
            && rtl::isLowSurrogate(**pBegin) ?
                rtl::combineSurrogates(nChar, *(*pBegin)++) : nChar;
 }
+
+}
+
+namespace {
 
 void writeUcs4(rtl_uString ** pBuffer, sal_Int32 * pCapacity, sal_uInt32 nUtf32)
 {
@@ -640,8 +643,8 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
 
     while (p < pEnd)
     {
-        EscapeType eType;
-        sal_uInt32 nUtf32 = readUcs4(
+        rtl::uri::detail::EscapeType eType;
+        sal_uInt32 nUtf32 = rtl::uri::detail::readUcs4(
             &p, pEnd,
             (eMechanism == rtl_UriEncodeKeepEscapes
              || eMechanism == rtl_UriEncodeCheckEscapes
@@ -650,7 +653,7 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
 
         switch (eType)
         {
-        case EscapeNo:
+        case rtl::uri::detail::EscapeNo:
             if (isValid(pCharClass, nUtf32)) // implies nUtf32 <= 0x7F
             {
                 writeUnicode(pResult, &nCapacity,
@@ -666,7 +669,7 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
             }
             break;
 
-        case EscapeChar:
+        case rtl::uri::detail::EscapeChar:
             if (eMechanism == rtl_UriEncodeCheckEscapes
                 && isValid(pCharClass, nUtf32)) // implies nUtf32 <= 0x7F
             {
@@ -683,7 +686,7 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
             }
             break;
 
-        case EscapeOctet:
+        case rtl::uri::detail::EscapeOctet:
             writeEscapeOctet(pResult, &nCapacity, nUtf32);
             break;
         }
@@ -714,11 +717,11 @@ void SAL_CALL rtl_uriDecode(rtl_uString * pText,
 
             while (p < pEnd)
             {
-                EscapeType eType;
-                sal_uInt32 nUtf32 = readUcs4(&p, pEnd, true, eCharset, &eType);
+                rtl::uri::detail::EscapeType eType;
+                sal_uInt32 nUtf32 = rtl::uri::detail::readUcs4(&p, pEnd, true, eCharset, &eType);
                 switch (eType)
                 {
-                case EscapeChar:
+                case rtl::uri::detail::EscapeChar:
                     if (nUtf32 <= 0x7F && eMechanism == rtl_UriDecodeToIuri)
                     {
                         writeEscapeOctet(pResult, &nCapacity, nUtf32);
@@ -726,11 +729,11 @@ void SAL_CALL rtl_uriDecode(rtl_uString * pText,
                     }
                     [[fallthrough]];
 
-                case EscapeNo:
+                case rtl::uri::detail::EscapeNo:
                     writeUcs4(pResult, &nCapacity, nUtf32);
                     break;
 
-                case EscapeOctet:
+                case rtl::uri::detail::EscapeOctet:
                     if (eMechanism == rtl_UriDecodeStrict)
                     {
                         rtl_uString_new(pResult);

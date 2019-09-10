@@ -21,8 +21,12 @@
 
 #include "system.hxx"
 
+#include <algorithm>
 #include <cassert>
+#include <cstring>
 #include <stdexcept>
+#include <string_view>
+#include <type_traits>
 #include <limits.h>
 #include <errno.h>
 #include <strings.h>
@@ -36,12 +40,16 @@
 #include <osl/process.h>
 
 #include <rtl/character.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.h>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/textcvt.h>
 #include <sal/log.hxx>
+
+#include <uri_internal.hxx>
 
 #include "file_error_transl.hxx"
 #include "file_path_helper.hxx"
@@ -99,8 +107,106 @@ oslFileError SAL_CALL osl_getCanonicalName( rtl_uString* ustrFileURL, rtl_uStrin
 
 namespace {
 
-oslFileError getSystemPathFromFileUrl(
-    OUString const & url, OUString * path, bool resolveHome)
+    class UnicodeToTextConverter_Impl
+    {
+        rtl_UnicodeToTextConverter const m_converter;
+
+        UnicodeToTextConverter_Impl()
+            : m_converter (rtl_createUnicodeToTextConverter (osl_getThreadTextEncoding()))
+        {}
+
+        ~UnicodeToTextConverter_Impl()
+        {
+            rtl_destroyUnicodeToTextConverter (m_converter);
+        }
+    public:
+        static UnicodeToTextConverter_Impl & getInstance()
+        {
+            static UnicodeToTextConverter_Impl g_theConverter;
+            return g_theConverter;
+        }
+
+        sal_Size convert(
+            sal_Unicode const * pSrcBuf, sal_Size nSrcChars, sal_Char * pDstBuf, sal_Size nDstBytes,
+            sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtChars)
+        {
+            OSL_ASSERT(m_converter != nullptr);
+            return rtl_convertUnicodeToText (
+                m_converter, nullptr, pSrcBuf, nSrcChars, pDstBuf, nDstBytes, nFlags, pInfo, pSrcCvtChars);
+        }
+    };
+
+bool convert(OUStringBuffer const & in, OStringBuffer * append) {
+    assert(append != nullptr);
+    for (sal_Size convert = in.getLength();;) {
+        auto const oldLen = append->getLength();
+        auto n = std::min(
+            std::max(convert, sal_Size(PATH_MAX)),
+            sal_Size(std::numeric_limits<sal_Int32>::max() - oldLen));
+            // approximation of required converted size
+        auto s = append->appendUninitialized(n);
+        sal_uInt32 info;
+        sal_Size converted;
+        //TODO: context, for reliable treatment of DESTBUFFERTOSMALL:
+        n = UnicodeToTextConverter_Impl::getInstance().convert(
+            in.getStr() + in.getLength() - convert, convert, s, n,
+            (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR
+             | RTL_UNICODETOTEXT_FLAGS_FLUSH),
+            &info, &converted);
+        if ((info & RTL_UNICODETOTEXT_INFO_ERROR) != 0) {
+            return false;
+        }
+        append->setLength(oldLen + n);
+        assert(converted <= convert);
+        convert -= converted;
+        assert((convert == 0) == ((info & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL) == 0));
+        if ((info & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL) == 0) {
+            break;
+        }
+    }
+    return true;
+}
+
+bool decodeFromUtf8(std::u16string_view text, OString * result) {
+    assert(result != nullptr);
+    auto p = text.data();
+    auto const end = p + text.size();
+    OUStringBuffer ubuf;
+    OStringBuffer bbuf;
+    while (p < end) {
+        rtl::uri::detail::EscapeType t;
+        sal_uInt32 c = rtl::uri::detail::readUcs4(&p, end, true, RTL_TEXTENCODING_UTF8, &t);
+        switch (t) {
+        case rtl::uri::detail::EscapeNo:
+            if (c == '%') {
+                return false;
+            }
+            [[fallthrough]];
+        case rtl::uri::detail::EscapeChar:
+            if (rtl::isSurrogate(c)) {
+                return false;
+            }
+            ubuf.appendUtf32(c);
+            break;
+        case rtl::uri::detail::EscapeOctet:
+            if (!convert(ubuf, &bbuf)) {
+                return false;
+            }
+            ubuf.setLength(0);
+            assert(c <= 0xFF);
+            bbuf.append(char(c));
+            break;
+        }
+    }
+    if (!convert(ubuf, &bbuf)) {
+        return false;
+    }
+    *result = bbuf.makeStringAndClear();
+    return true;
+}
+
+template<typename T> oslFileError getSystemPathFromFileUrl(
+    OUString const & url, T * path, bool resolveHome)
 {
     assert(path != nullptr);
     // For compatibility with assumptions in other parts of the code base,
@@ -178,8 +284,16 @@ oslFileError getSystemPathFromFileUrl(
     if (url.indexOf("%2F", i) != -1 || url.indexOf("%2f", i) != -1)
         return osl_File_E_INVAL;
 
-    *path = rtl::Uri::decode(
-        url.copy(i), rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
+    if constexpr (std::is_same_v<T, rtl::OString>) {
+        if (!decodeFromUtf8(std::u16string_view(url).substr(i), path)) {
+            return osl_File_E_INVAL;
+        }
+    } else if constexpr (std::is_same_v<T, rtl::OUString>) {
+        *path = rtl::Uri::decode(
+            url.copy(i), rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
+    } else {
+        static_assert(std::is_same_v<T, rtl::OString> || std::is_same_v<T, rtl::OUString>);
+    }
     // Path must not contain %2F:
     if (path->indexOf('\0') != -1)
         return osl_File_E_INVAL;
@@ -711,53 +825,21 @@ oslFileError osl_searchFileURL(rtl_uString* ustrFilePath, rtl_uString* ustrSearc
 
 oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileURL)
 {
-    rtl_uString* ustrSystemPath = nullptr;
-    oslFileError osl_error      = osl_getSystemPathFromFileURL(ustrFileURL, &ustrSystemPath);
+    OString strSystemPath;
+    oslFileError osl_error      = osl::detail::convertUrlToPathname(
+        OUString::unacquired(&ustrFileURL), &strSystemPath);
 
     if(osl_error != osl_File_E_None)
         return osl_error;
 
-    osl_systemPathRemoveSeparator(ustrSystemPath);
+    osl_systemPathRemoveSeparator(strSystemPath.pData);
 
-    /* convert unicode path to text */
-    if(!UnicodeToText( buffer, bufLen, ustrSystemPath->buffer, ustrSystemPath->length))
-        osl_error = oslTranslateFileError(errno);
-
-    rtl_uString_release(ustrSystemPath);
+    if (sal_uInt32(strSystemPath.getLength()) >= bufLen) {
+        return osl_File_E_OVERFLOW;
+    }
+    std::strcpy(buffer, strSystemPath.getStr());
 
     return osl_error;
-}
-
-namespace
-{
-    class UnicodeToTextConverter_Impl
-    {
-        rtl_UnicodeToTextConverter const m_converter;
-
-        UnicodeToTextConverter_Impl()
-            : m_converter (rtl_createUnicodeToTextConverter (osl_getThreadTextEncoding()))
-        {}
-
-        ~UnicodeToTextConverter_Impl()
-        {
-            rtl_destroyUnicodeToTextConverter (m_converter);
-        }
-    public:
-        static UnicodeToTextConverter_Impl & getInstance()
-        {
-            static UnicodeToTextConverter_Impl g_theConverter;
-            return g_theConverter;
-        }
-
-        sal_Size convert(
-            sal_Unicode const * pSrcBuf, sal_Size nSrcChars, sal_Char * pDstBuf, sal_Size nDstBytes,
-            sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtChars)
-        {
-            OSL_ASSERT(m_converter != nullptr);
-            return rtl_convertUnicodeToText (
-                m_converter, nullptr, pSrcBuf, nSrcChars, pDstBuf, nDstBytes, nFlags, pInfo, pSrcCvtChars);
-        }
-    };
 }
 
 int UnicodeToText( char * buffer, size_t bufLen, const sal_Unicode * uniText, sal_Int32 uniTextLen )
@@ -835,6 +917,70 @@ int TextToUnicode(
     /* ensure trailing '\0' */
     unic_text[nDestBytes] = '\0';
     return nDestBytes;
+}
+
+oslFileError osl::detail::convertUrlToPathname(OUString const & url, OString * pathname) {
+    assert(pathname != nullptr);
+    oslFileError e;
+    try {
+        e = getSystemPathFromFileUrl(url, pathname, true);
+    } catch (std::length_error &) {
+        e = osl_File_E_RANGE;
+    }
+    if (e == osl_File_E_None && !pathname->startsWith("/")) {
+        e = osl_File_E_INVAL;
+    }
+    return e;
+}
+
+oslFileError osl::detail::convertPathnameToUrl(OString const & pathname, OUString * url) {
+    assert(url != nullptr);
+    OUStringBuffer buf("file:");
+    if (pathname.startsWith("/")) {
+        buf.append("//");
+            // so if pathname should ever start with "//" that isn't mistaken for an authority
+            // component
+    }
+    for (sal_Size convert = pathname.getLength();;) {
+        OUStringBuffer ubuf;
+        auto n = std::max(convert, sal_Size(PATH_MAX)); // approximation of required converted size
+        auto s = ubuf.appendUninitialized(n);
+        sal_uInt32 info;
+        sal_Size converted;
+        //TODO: context, for reliable treatment of DESTBUFFERTOSMALL:
+        n = TextToUnicodeConverter_Impl::getInstance().convert(
+            pathname.getStr() + pathname.getLength() - convert, convert, s, n,
+            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+             | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR | RTL_TEXTTOUNICODE_FLAGS_FLUSH),
+            &info, &converted);
+        ubuf.setLength(n);
+        buf.append(
+            rtl::Uri::encode(
+                ubuf.makeStringAndClear(), uriCharClass, rtl_UriEncodeIgnoreEscapes,
+                RTL_TEXTENCODING_UTF8));
+        assert(converted <= convert);
+        convert -= converted;
+        if ((info & RTL_TEXTTOUNICODE_INFO_ERROR) != 0) {
+            assert(convert > 0);
+            //TODO: see writeEscapeOctet in sal/rtl/uri.cxx
+            buf.append("%");
+            unsigned char c = pathname[pathname.getLength() - convert];
+            assert(c >= 0x80);
+            static sal_Unicode const aHex[16]
+                = { 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39,
+                    0x41, 0x42, 0x43, 0x44, 0x45, 0x46 }; /* '0'--'9', 'A'--'F' */
+            buf.append(aHex[c >> 4]);
+            buf.append(aHex[c & 15]);
+            --convert;
+            continue;
+        }
+        assert((convert == 0) == ((info & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL) == 0));
+        if ((info & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL) == 0) {
+            break;
+        }
+    }
+    *url = buf.makeStringAndClear();
+    return osl_File_E_None;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

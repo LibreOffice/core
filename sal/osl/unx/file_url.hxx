@@ -22,7 +22,10 @@
 
 #include <osl/file.h>
 
-namespace rtl { class OUString; }
+namespace rtl {
+    class OString;
+    class OUString;
+}
 
 oslFileError osl_getSystemPathFromFileURL_Ex(rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath);
 
@@ -33,6 +36,10 @@ int UnicodeToText(char * buffer, size_t bufLen, const sal_Unicode * uniText, sal
 int TextToUnicode(const char* text, size_t text_buffer_size, sal_Unicode* unic_text, sal_Int32 unic_text_buffer_size);
 
 namespace osl { namespace detail {
+
+oslFileError convertUrlToPathname(rtl::OUString const & url, rtl::OString * pathname);
+
+oslFileError convertPathnameToUrl(rtl::OString const & pathname, rtl::OUString * url);
 
 bool find_in_PATH(const rtl::OUString& file_path, rtl::OUString& result);
 
