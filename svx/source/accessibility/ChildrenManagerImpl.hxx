@@ -93,7 +93,7 @@ public:
         @param rShapeTreeInfo
             Bundle of information passed down the shape tree.
         @param rContext
-            An accessible context object that is called for fireing events
+            An accessible context object that is called for firing events
             for new and deleted children, i.e. that holds a list of
             listeners to be informed.
     */

@@ -1650,7 +1650,7 @@ void WMFWriter::WriteHeader( bool bPlaceable )
          .WriteUInt16( 0x0009 )           // header length in words
          .WriteUInt16( 0x0300 )           // Version as BCD number
          .WriteUInt32( 0x00000000 )      // file length (without 1st header), is later corrected by UpdateHeader()
-         .WriteUInt16( MAXOBJECTHANDLES ) // maxmimum number of simultaneous objects
+         .WriteUInt16( MAXOBJECTHANDLES ) // maximum number of simultaneous objects
          .WriteUInt32( 0x00000000 )      // maximum record length, is later corrected by UpdateHeader()
          .WriteUInt16( 0x0000 );          // reserved
 }
