@@ -3045,6 +3045,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf64222)
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/Special", "nHeight", "560");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf113014)
+{
+    SwDoc* pDoc = createDoc("tdf113014.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // This failed, if the text position is the old 2184.
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/textarray[1]", "x", "2544");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
