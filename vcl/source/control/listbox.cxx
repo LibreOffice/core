@@ -1222,7 +1222,7 @@ Size ListBox::CalcSubEditSize() const
     else
     {
         aSz.setHeight( mpImplLB->GetEntryHeight() );
-        // Size to maxmimum entry width
+        // Size to maximum entry width
         aSz.setWidth( mpImplLB->GetMaxEntryWidth() );
 
         if (m_nMaxWidthChars != -1)

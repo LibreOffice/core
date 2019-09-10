@@ -360,7 +360,7 @@ bool isTableBoundariesEnabled()
 /**
  * Set borders alignment statics
  * Adjustment for 'small' twip-to-pixel relations:
- * For 'small' twip-to-pixel relations (less then 2:1)
+ * For 'small' twip-to-pixel relations (less than 2:1)
  * values of <gProp.nSHalfPixelSzW> and <gProp.nSHalfPixelSzH> are set to ZERO
  */
 void SwCalcPixStatics( vcl::RenderContext const *pOut )

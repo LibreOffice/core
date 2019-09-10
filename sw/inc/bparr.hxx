@@ -43,7 +43,7 @@ public:
     inline BigPtrArray& GetArray() const;
 };
 
-// 1000 entries per Block = a bit less then 4K
+// 1000 entries per Block = a bit less than 4K
 #define MAXENTRY 1000
 
 // number of entries that may remain free during compression

@@ -479,7 +479,7 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
                 ->SwContentNode::GetAttr( RES_UL_SPACE ));
 
         // The top paragraph padding becomes the padding
-        // to headline or footer if it is greater then the
+        // to headline or footer if it is greater than the
         // bottom padding of the paragraph beforehand
         if( rULSpace.GetUpper() > nSpace )
             nSpace = rULSpace.GetUpper();
@@ -669,7 +669,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         }
     }
 
-    // If there are less then 2 columns, no section is inserted.
+    // If there are less than 2 columns, no section is inserted.
     if( nCols >= 2 )
     {
         if( !bAppended )
