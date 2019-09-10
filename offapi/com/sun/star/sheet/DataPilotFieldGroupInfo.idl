@@ -97,7 +97,7 @@ published struct DataPilotFieldGroupInfo
         #Start set to 2, and #Step set to 3,
         the first group will contain all values greater than or equal to 2 and
         less than 5. The second group will contain all values greater than or
-        equal to 5 and less then 8, and so on.</p>
+        equal to 5 and less than 8, and so on.</p>
      */
     double Step;
 

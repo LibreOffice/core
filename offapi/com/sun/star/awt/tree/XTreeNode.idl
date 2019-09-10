@@ -37,7 +37,7 @@ interface XTreeNode
     /** Returns the child tree node at <var>Index</var>.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if <var>Index</var> is less than 0 or equal or greater then getChildCount().
+            if <var>Index</var> is less than 0 or equal or greater than getChildCount().
     */
     XTreeNode getChildAt( [in] long Index )
         raises( com::sun::star::lang::IndexOutOfBoundsException );

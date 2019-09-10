@@ -62,7 +62,7 @@ struct DocumentSignatureInformation
      *  OOo 3.0 signed everything, except mimetype and the META-INF folder.
      *  <p>
      *  If PartialDocumentSignature is true, then the signature was created by OOo
-     *  with a version less then 3.2. In this case, not all files are signed. The
+     *  with a version lower than 3.2. In this case, not all files are signed. The
      *  signature can still be regarded as valid, as long as SignatureIsValid is true
      *  and the certificate could be validated. However, users should be notified about
      *  the fact, that not everything in this document is signed.
