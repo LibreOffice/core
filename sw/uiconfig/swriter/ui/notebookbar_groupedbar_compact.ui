@@ -4982,48 +4982,21 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Default-Section-Extension">
+                      <object class="GtkBox" id="ExtensionSection1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
+                        <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkSeparator" id="separator47">
+                          <object class="GtkBox" id="ExtensionSection2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_top">5</property>
-                            <property name="margin_bottom">5</property>
-                            <property name="orientation">vertical</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="padding">5</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox" id="Section54">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="orientation">vertical</property>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="SectionBottom58">
+                              <object class="NotebookBarAddonsToolMergePoint" id="AddonCommand">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="toolbar_style">icons</property>
                                 <property name="show_arrow">False</property>
                                 <property name="icon_size">2</property>
-                                <child>
-                                  <object class="NotebookBarAddonsToolMergePoint" id="AddonCommand">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="action_name">AddonCommand</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
-                                  </packing>
-                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -5031,33 +5004,30 @@
                                 <property name="position">0</property>
                               </packing>
                             </child>
-                            <child>
-                              <object class="svtlo-ManagedMenuButton" id="Extension-ExtensionButton:MenuAddons">
-                                <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|ExtensionMenuButton">E_xtension</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="focus_on_click">False</property>
-                                <property name="receives_default">False</property>
-                                <property name="halign">start</property>
-                                <property name="relief">none</property>
-                                <property name="use_underline">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="svtlo-ManagedMenuButton" id="Extension-ExtensionButton:MenuAddons">
+                            <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|ExtensionMenuButton">E_xtension</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
+                            <property name="receives_default">False</property>
+                            <property name="halign">start</property>
+                            <property name="relief">none</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
-                        <style>
-                          <class name="priority-1"/>
-                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
