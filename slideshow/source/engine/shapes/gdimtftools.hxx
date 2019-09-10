@@ -46,7 +46,7 @@ namespace slideshow
             MTF_LOAD_NONE = 0,
             /// the source of the metafile might be a foreign
             /// application. The metafile is checked against unsupported
-            /// content, and, if necessary, returned as a pre-rendererd
+            /// content, and, if necessary, returned as a pre-rendered
             /// bitmap.
             MTF_LOAD_FOREIGN_SOURCE = 2,
             /// retrieve a meta file for the page background only

@@ -7805,7 +7805,7 @@ void Test::testFuncGCD()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 10.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue(0, 0, 0, -2.0); // A1
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for values less then 0",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for values less than 0",
             OUString("Err:502"), aVal);
     m_pDoc->SetString(0, 0, 0, "a"); // A1
     aVal = m_pDoc->GetString(aPos);
@@ -7816,7 +7816,7 @@ void Test::testFuncGCD()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 0.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue(0, 1, 0, -12.0); // B1
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for a matrix with values less then 0",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for a matrix with values less than 0",
             OUString("Err:502"), aVal);
     m_pDoc->SetValue(0, 0, 0, 15.0); // A1
     m_pDoc->SetValue(0, 1, 0, 0.0); // B1
@@ -7854,7 +7854,7 @@ void Test::testFuncGCD()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 150.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetString(aPos, "=GCD({-3;6;9})");
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for an array with values less then 0",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for an array with values less than 0",
             OUString("Err:502"), aVal);
     m_pDoc->SetString(aPos, "=GCD({\"a\";6;9})");
     aVal = m_pDoc->GetString(aPos);
@@ -7868,7 +7868,7 @@ void Test::testFuncGCD()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 150.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetString(aPos,"=GCD({3;6;9};{3;-6;9})");
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for an array with values less then 0",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for an array with values less than 0",
             OUString("Err:502"), aVal);
     m_pDoc->SetString(aPos, "=GCD({3;6;9};{\"a\";6;9})");
     aVal = m_pDoc->GetString(aPos);
@@ -7903,7 +7903,7 @@ void Test::testFuncLCM()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 10.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue(0, 0, 0, -2.0); // A1
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for values less then 0",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for values less than 0",
             OUString("Err:502"), aVal);
     m_pDoc->SetString(0, 0, 0, "a"); // A1
     aVal = m_pDoc->GetString(aPos);
@@ -7914,7 +7914,7 @@ void Test::testFuncLCM()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 1.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue(0, 1, 0, -12.0); // B1
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for a matrix with values less then 0",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for a matrix with values less than 0",
             OUString("Err:502"), aVal);
     m_pDoc->SetValue(0, 0, 0, 15.0); // A1
     m_pDoc->SetValue(0, 1, 0, 0.0); // A2
@@ -7951,7 +7951,7 @@ void Test::testFuncLCM()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 0.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetString(aPos, "=LCM({-3;6;9})");
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for an array with values less then 0",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for an array with values less than 0",
             OUString("Err:502"), aVal);
     m_pDoc->SetString(aPos, "=LCM({\"a\";6;9})");
     aVal = m_pDoc->GetString(aPos);
@@ -7965,7 +7965,7 @@ void Test::testFuncLCM()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 0.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetString(aPos,"=LCM({3;6;9};{3;-6;9})");
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for an array with values less then 0",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for an array with values less than 0",
             OUString("Err:502"), aVal);
     m_pDoc->SetString(aPos, "=LCM({3;6;9};{\"a\";6;9})");
     aVal = m_pDoc->GetString(aPos);

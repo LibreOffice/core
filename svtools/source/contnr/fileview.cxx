@@ -1729,7 +1729,7 @@ static bool                     gbAscending = true;
 static sal_Int16                gnColumn = COLUMN_TITLE;
 static const CollatorWrapper*   pCollatorWrapper = nullptr;
 
-/* this function returns true, if aOne is less then aTwo
+/* this function returns true, if aOne is less than aTwo
 */
 static bool CompareSortingData_Impl( std::unique_ptr<SortingData_Impl> const & aOne, std::unique_ptr<SortingData_Impl> const & aTwo )
 {
