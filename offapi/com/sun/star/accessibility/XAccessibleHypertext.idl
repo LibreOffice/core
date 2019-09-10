@@ -84,7 +84,7 @@ interface XAccessibleHypertext
             Index of the character for which to return the link index.  If
             the XAccessibleText interface is used to represent
             the text containing the link, then the character index is only
-            valid if it is greater than or equal to zero and lower then the
+            valid if it is greater than or equal to zero and lower than the
             number of characters in the text.  See that interface's
             documentation for more details.
 

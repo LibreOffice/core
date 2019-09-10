@@ -43,7 +43,7 @@ published interface XTextSearch : com::sun::star::uno::XInterface
     */
     SearchResult  searchForward  ([in] string searchStr, [in] long startPos, [in] long endPos );
     /** search backward in the searchStr, starts at startPos and ends by endpos.
-        The endpos must be lower then the startpos, because the function searches backward!
+        The endpos must be lower than the startpos, because the function searches backward!
         The result is returned in the SearchResult.
 
     */

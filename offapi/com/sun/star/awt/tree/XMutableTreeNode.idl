@@ -52,7 +52,7 @@ interface XMutableTreeNode : XTreeNode
             if <var>ChildNode</var> is not a valid node of the corresponding XTreeDataModel.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if <var>Index</var> is less than 0 or greater then XTreeNode::getChildCount().
+            if <var>Index</var> is less than 0 or greater than XTreeNode::getChildCount().
     */
     void insertChildByIndex( [in] long Index, [in] XMutableTreeNode ChildNode )
         raises( com::sun::star::lang::IllegalArgumentException,
