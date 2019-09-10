@@ -126,7 +126,7 @@ public:
         When true, the source of the metafile might be a
         foreign application. The metafile is checked
         against unsupported content, and, if necessary,
-        returned as a pre-rendererd bitmap.
+        returned as a pre-rendered bitmap.
     */
     GDIMetaFileSharedPtr getMtf( bool bForeignSource ) const
     {

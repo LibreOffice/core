@@ -88,7 +88,7 @@ published service DataPilotField
         <p>An empty sequence means no subtotals. The same effect can be
         achieved by setting the property #Function to the
         value GeneralFunction::NONE. If the length of the
-        sequence is greater then 1, then the sequence MUST NOT contain one of
+        sequence is greater than 1, then the sequence MUST NOT contain one of
         the values GeneralFunction::NONE or
         GeneralFunction::AUTO.</p>
 
