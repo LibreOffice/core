@@ -173,11 +173,11 @@ public class _XMarkableStream extends MultiMethodTest {
             int offset = oObj.offsetToMark(mark);
             res = offset == 0;
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Couldn't get offser to mark");
+            log.println("Couldn't get offset to mark");
             e.printStackTrace(log);
             res = false;
         } catch(com.sun.star.io.IOException e) {
-            log.println("Couldn't get offser to mark");
+            log.println("Couldn't get offset to mark");
             e.printStackTrace(log);
             res = false;
         }
