@@ -160,12 +160,8 @@ $(eval $(call gb_AllLangPackage_add_files,autotextshare,$(LIBO_SHARE_FOLDER)/aut
 	sl/standard.bau \
 	sl/template.bau \
 	sq/standard.bau \
-	sr-CS/standard.bau \
-	sr-Latn-CS/standard.bau \
-	sr-Latn-ME/standard.bau \
-	sr-Latn-RS/standard.bau \
-	sr-ME/standard.bau \
-	sr-RS/standard.bau \
+	sr/standard.bau \
+	sr-Latn/standard.bau \
 	ss/standard.bau \
 	st/standard.bau \
 	sv/crdbus50.bau \
