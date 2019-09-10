@@ -32,27 +32,21 @@ const sal_Unicode FPH_CHAR_PATH_SEPARATOR = '/';
 const sal_Unicode FPH_CHAR_DOT            = '.';
 const sal_Unicode FPH_CHAR_COLON          = ':';
 
-static const OUStringLiteral FPH_PATH_SEPARATOR("/");
-
-static const OUStringLiteral FPH_LOCAL_DIR_ENTRY(".");
-
-static const OUStringLiteral FPH_PARENT_DIR_ENTRY("..");
-
-void osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
+void osl_systemPathRemoveSeparator(rtl_String* pstrPath)
 {
-    OSL_PRECOND(nullptr != pustrPath, "osl_systemPathRemoveSeparator: Invalid parameter");
-    if (pustrPath != nullptr)
+    OSL_PRECOND(nullptr != pstrPath, "osl_systemPathRemoveSeparator: Invalid parameter");
+    if (pstrPath != nullptr)
     {
         // maybe there are more than one separator at end
         // so we run in a loop
-        while ((pustrPath->length > 1) && (pustrPath->buffer[pustrPath->length - 1] == FPH_CHAR_PATH_SEPARATOR))
+        while ((pstrPath->length > 1) && (pstrPath->buffer[pstrPath->length - 1] == FPH_CHAR_PATH_SEPARATOR))
         {
-            pustrPath->length--;
-            pustrPath->buffer[pustrPath->length] = '\0';
+            pstrPath->length--;
+            pstrPath->buffer[pstrPath->length] = '\0';
         }
 
-        SAL_WARN_IF( !((0 == pustrPath->length) || (1 == pustrPath->length) ||
-                     (pustrPath->length > 1 && pustrPath->buffer[pustrPath->length - 1] != FPH_CHAR_PATH_SEPARATOR)),
+        SAL_WARN_IF( !((0 == pstrPath->length) || (1 == pstrPath->length) ||
+                     (pstrPath->length > 1 && pstrPath->buffer[pstrPath->length - 1] != FPH_CHAR_PATH_SEPARATOR)),
                      "sal.osl",
                      "osl_systemPathRemoveSeparator: Post condition failed");
     }
@@ -60,18 +54,18 @@ void osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
 
 namespace {
 
-void systemPathEnsureSeparator(OUString* ppustrPath)
+template<typename T> void systemPathEnsureSeparator(T* ppstrPath)
 {
-    assert(nullptr != ppustrPath);
-    sal_Int32    lp = ppustrPath->getLength();
-    sal_Int32    i  = ppustrPath->lastIndexOf(FPH_CHAR_PATH_SEPARATOR);
+    assert(nullptr != ppstrPath);
+    sal_Int32    lp = ppstrPath->getLength();
+    sal_Int32    i  = ppstrPath->lastIndexOf(FPH_CHAR_PATH_SEPARATOR);
 
     if ((lp > 1 && i != (lp - 1)) || ((lp < 2) && i < 0))
     {
-        *ppustrPath += FPH_PATH_SEPARATOR;
+        *ppstrPath += "/";
     }
 
-    SAL_WARN_IF( !ppustrPath->endsWith(FPH_PATH_SEPARATOR),
+    SAL_WARN_IF( !ppstrPath->endsWith("/"),
                  "sal.osl",
                  "systemPathEnsureSeparator: Post condition failed");
 }
@@ -84,11 +78,13 @@ bool osl_systemPathIsRelativePath(const rtl_uString* pustrPath)
     return ((pustrPath == nullptr) || (pustrPath->length == 0) || (pustrPath->buffer[0] != FPH_CHAR_PATH_SEPARATOR));
 }
 
-OUString osl::systemPathMakeAbsolutePath(
-    const OUString& BasePath,
-    const OUString& RelPath)
+namespace {
+
+template<typename T> T systemPathMakeAbsolutePath_(
+    const T& BasePath,
+    const T& RelPath)
 {
-    OUString base(BasePath);
+    T base(BasePath);
 
     if (!base.isEmpty())
         systemPathEnsureSeparator(&base);
@@ -96,18 +92,34 @@ OUString osl::systemPathMakeAbsolutePath(
     return base + RelPath;
 }
 
-void osl_systemPathGetFileNameOrLastDirectoryPart(
-    const rtl_uString*     pustrPath,
-    rtl_uString**       ppustrFileNameOrLastDirPart)
+}
+
+OString osl::systemPathMakeAbsolutePath(
+    const OString& BasePath,
+    const OString& RelPath)
 {
-    OSL_PRECOND(pustrPath && ppustrFileNameOrLastDirPart,
+    return systemPathMakeAbsolutePath_(BasePath, RelPath);
+}
+
+OUString osl::systemPathMakeAbsolutePath(
+    const OUString& BasePath,
+    const OUString& RelPath)
+{
+    return systemPathMakeAbsolutePath_(BasePath, RelPath);
+}
+
+void osl_systemPathGetFileNameOrLastDirectoryPart(
+    const rtl_String*     pstrPath,
+    rtl_String**       ppstrFileNameOrLastDirPart)
+{
+    OSL_PRECOND(pstrPath && ppstrFileNameOrLastDirPart,
                 "osl_systemPathGetFileNameOrLastDirectoryPart: Invalid parameter");
 
-    OUString path(const_cast<rtl_uString*>(pustrPath));
+    OString path(const_cast<rtl_String*>(pstrPath));
 
     osl_systemPathRemoveSeparator(path.pData);
 
-    OUString last_part;
+    OString last_part;
 
     if (path.getLength() > 1 || (path.getLength() == 1 && path[0] != FPH_CHAR_PATH_SEPARATOR))
     {
@@ -115,18 +127,18 @@ void osl_systemPathGetFileNameOrLastDirectoryPart(
         idx_ps++; // always right to increment by one even if idx_ps == -1!
         last_part = path.copy(idx_ps);
     }
-    rtl_uString_assign(ppustrFileNameOrLastDirPart, last_part.pData);
+    rtl_string_assign(ppstrFileNameOrLastDirPart, last_part.pData);
 }
 
 bool osl_systemPathIsHiddenFileOrDirectoryEntry(
-    const rtl_uString* pustrPath)
+    const rtl_String* pstrPath)
 {
-    OSL_PRECOND(nullptr != pustrPath, "osl_systemPathIsHiddenFileOrDirectoryEntry: Invalid parameter");
-    if ((pustrPath == nullptr) || (pustrPath->length == 0))
+    OSL_PRECOND(nullptr != pstrPath, "osl_systemPathIsHiddenFileOrDirectoryEntry: Invalid parameter");
+    if ((pstrPath == nullptr) || (pstrPath->length == 0))
         return false;
 
-    OUString fdp;
-    osl_systemPathGetFileNameOrLastDirectoryPart(pustrPath, &fdp.pData);
+    OString fdp;
+    osl_systemPathGetFileNameOrLastDirectoryPart(pstrPath, &fdp.pData);
 
     return ((fdp.pData->length > 0) &&
             (fdp.pData->buffer[0] == FPH_CHAR_DOT) &&
@@ -134,16 +146,16 @@ bool osl_systemPathIsHiddenFileOrDirectoryEntry(
 }
 
 bool osl_systemPathIsLocalOrParentDirectoryEntry(
-    const rtl_uString* pustrPath)
+    const rtl_String* pstrPath)
 {
-    OSL_PRECOND(pustrPath, "osl_systemPathIsLocalOrParentDirectoryEntry: Invalid parameter");
+    OSL_PRECOND(pstrPath, "osl_systemPathIsLocalOrParentDirectoryEntry: Invalid parameter");
 
-    OUString dirent;
+    OString dirent;
 
-    osl_systemPathGetFileNameOrLastDirectoryPart(pustrPath, &dirent.pData);
+    osl_systemPathGetFileNameOrLastDirectoryPart(pstrPath, &dirent.pData);
 
-    return (dirent == FPH_LOCAL_DIR_ENTRY ||
-            dirent == FPH_PARENT_DIR_ENTRY);
+    return (dirent == "." ||
+            dirent == "..");
 }
 
 /** Simple iterator for a path list separated by the specified character
@@ -231,7 +243,7 @@ bool osl_searchPath(
         systemPathEnsureSeparator(&p);
         p += fp;
 
-        if (osl::access(p, F_OK) > -1)
+        if (osl::access(osl::OUStringToOString(p), F_OK) > -1)
         {
             bfound = true;
             rtl_uString_assign(ppustrPathFound, p.pData);

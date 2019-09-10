@@ -28,11 +28,11 @@ struct DirectoryItem_Impl
 {
     sal_Int32     m_RefCount;
 
-    rtl_uString * const m_ustrFilePath;       /* holds native file name */
+    rtl_String * const m_strFilePath;       /* holds native file name */
     unsigned char const m_DType;
 
     explicit DirectoryItem_Impl(
-        rtl_uString * ustrFilePath, unsigned char DType = 0);
+        rtl_String * strFilePath, unsigned char DType = 0);
     ~DirectoryItem_Impl();
 
     static void * operator new(size_t n);
