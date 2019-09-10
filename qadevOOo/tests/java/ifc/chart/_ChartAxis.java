@@ -60,7 +60,7 @@ public class _ChartAxis extends MultiPropertyTest {
     public void _Max() {
         try {
             //if AutoOrigin isn't true then this property works only when
-            //current Origin is less then new value of Max
+            //current Origin is less than new value of Max
             oObj.setPropertyValue("AutoOrigin", Boolean.TRUE);
             oObj.setPropertyValue("AutoMax",Boolean.FALSE);
         } catch(com.sun.star.lang.WrappedTargetException e) {
@@ -92,7 +92,7 @@ public class _ChartAxis extends MultiPropertyTest {
     public void _Min() {
         try {
             //if AutoOrigin isn't true then this property works only when
-            //current Origin is greater then new value of Min
+            //current Origin is greater than new value of Min
             oObj.setPropertyValue("AutoOrigin", Boolean.TRUE);
             oObj.setPropertyValue("AutoMin", Boolean.FALSE);
         } catch(com.sun.star.lang.WrappedTargetException e) {

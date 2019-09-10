@@ -104,7 +104,7 @@ public class _XUnoControlContainer extends MultiMethodTest {
 
     /**
     * Test calls the method, then checks returned value.<p>
-    * Has <b> OK </b> status if method returns a value that greater then zerro.<p>
+    * Has <b> OK </b> status if method returns a value that greater than zero.<p>
     *
     * The following method tests are to be completed successfully before :
     * <ul>
