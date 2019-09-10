@@ -132,13 +132,13 @@
       </prop>
       <prop oor:name="MinSpaceDocSave" oor:type="xs:int" oor:nillable="false">
         <info>
-          <desc>Define the minimum space in [MB], which must be available on disc to save backups for open documents. Note: values less then 1 will be ignored.</desc>
+          <desc>Define the minimum space in [MB], which must be available on disc to save backups for open documents. Note: values less than 1 will be ignored.</desc>
         </info>
         <value>5</value>
       </prop>
       <prop oor:name="MinSpaceConfigSave" oor:type="xs:int" oor:nillable="false">
         <info>
-          <desc>Define the minimum space in [MB], which must be available on disc to store the recovery configuration. Note: values less then 1 will be ignored.</desc>
+          <desc>Define the minimum space in [MB], which must be available on disc to store the recovery configuration. Note: values less than 1 will be ignored.</desc>
         </info>
         <value>1</value>
       </prop>
