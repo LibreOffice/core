@@ -160,12 +160,8 @@ extras_AUTOTEXTSHARE_AUTOTEXTS := \
 	sl/standard \
 	sl/template \
 	sq/standard \
-	sr-CS/standard \
-	sr-Latn-CS/standard \
-	sr-Latn-ME/standard \
-	sr-Latn-RS/standard \
-	sr-ME/standard \
-	sr-RS/standard \
+	sr/standard \
+	sr-Latn/standard \
 	ss/standard \
 	st/standard \
 	sv/crdbus50 \
@@ -4045,54 +4041,22 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	sq/standard/FN/styles.xml \
 	sq/standard/LOREM/LOREM.xml \
 	sq/standard/META-INF/manifest.xml \
-	sr-CS/standard/BlockList.xml \
-	sr-CS/standard/FN/content.xml \
-	sr-CS/standard/FN/manifest.rdf \
-	sr-CS/standard/FN/Object_1/content.xml \
-	sr-CS/standard/FN/Object_1/settings.xml \
-	sr-CS/standard/FN/styles.xml \
-	sr-CS/standard/LOREM/LOREM.xml \
-	sr-CS/standard/META-INF/manifest.xml \
-	sr-Latn-CS/standard/BlockList.xml \
-	sr-Latn-CS/standard/FN/content.xml \
-	sr-Latn-CS/standard/FN/manifest.rdf \
-	sr-Latn-CS/standard/FN/Object_1/content.xml \
-	sr-Latn-CS/standard/FN/Object_1/settings.xml \
-	sr-Latn-CS/standard/FN/styles.xml \
-	sr-Latn-CS/standard/LOREM/LOREM.xml \
-	sr-Latn-CS/standard/META-INF/manifest.xml \
-	sr-Latn-ME/standard/BlockList.xml \
-	sr-Latn-ME/standard/FN/content.xml \
-	sr-Latn-ME/standard/FN/manifest.rdf \
-	sr-Latn-ME/standard/FN/Object_1/content.xml \
-	sr-Latn-ME/standard/FN/Object_1/settings.xml \
-	sr-Latn-ME/standard/FN/styles.xml \
-	sr-Latn-ME/standard/LOREM/LOREM.xml \
-	sr-Latn-ME/standard/META-INF/manifest.xml \
-	sr-Latn-RS/standard/BlockList.xml \
-	sr-Latn-RS/standard/FN/content.xml \
-	sr-Latn-RS/standard/FN/manifest.rdf \
-	sr-Latn-RS/standard/FN/Object_1/content.xml \
-	sr-Latn-RS/standard/FN/Object_1/settings.xml \
-	sr-Latn-RS/standard/FN/styles.xml \
-	sr-Latn-RS/standard/LOREM/LOREM.xml \
-	sr-Latn-RS/standard/META-INF/manifest.xml \
-	sr-ME/standard/BlockList.xml \
-	sr-ME/standard/FN/content.xml \
-	sr-ME/standard/FN/manifest.rdf \
-	sr-ME/standard/FN/Object_1/content.xml \
-	sr-ME/standard/FN/Object_1/settings.xml \
-	sr-ME/standard/FN/styles.xml \
-	sr-ME/standard/LOREM/LOREM.xml \
-	sr-ME/standard/META-INF/manifest.xml \
-	sr-RS/standard/BlockList.xml \
-	sr-RS/standard/FN/content.xml \
-	sr-RS/standard/FN/manifest.rdf \
-	sr-RS/standard/FN/Object_1/content.xml \
-	sr-RS/standard/FN/Object_1/settings.xml \
-	sr-RS/standard/FN/styles.xml \
-	sr-RS/standard/LOREM/LOREM.xml \
-	sr-RS/standard/META-INF/manifest.xml \
+	sr/standard/BlockList.xml \
+	sr/standard/FN/content.xml \
+	sr/standard/FN/manifest.rdf \
+	sr/standard/FN/Object_1/content.xml \
+	sr/standard/FN/Object_1/settings.xml \
+	sr/standard/FN/styles.xml \
+	sr/standard/LOREM/LOREM.xml \
+	sr/standard/META-INF/manifest.xml \
+	sr-Latn/standard/BlockList.xml \
+	sr-Latn/standard/FN/content.xml \
+	sr-Latn/standard/FN/manifest.rdf \
+	sr-Latn/standard/FN/Object_1/content.xml \
+	sr-Latn/standard/FN/Object_1/settings.xml \
+	sr-Latn/standard/FN/styles.xml \
+	sr-Latn/standard/LOREM/LOREM.xml \
+	sr-Latn/standard/META-INF/manifest.xml \
 	ss/standard/BlockList.xml \
 	ss/standard/FN/content.xml \
 	ss/standard/FN/manifest.rdf \

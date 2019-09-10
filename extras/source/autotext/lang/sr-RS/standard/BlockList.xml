@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Standard">
-  <block-list:block block-list:abbreviated-name="FN" block-list:package-name="FN" block-list:name="Formula Numbering" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="LOREM" block-list:package-name="LOREM" block-list:name="Lorem Ipsum" block-list:unformatted-text="true"/>
-</block-list:block-list>
