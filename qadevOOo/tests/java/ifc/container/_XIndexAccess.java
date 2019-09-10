@@ -50,7 +50,7 @@ public class _XIndexAccess extends MultiMethodTest {
     public void _getCount() {
         boolean result = true;
         log.println("getting the number of the elements");
-        // hope we haven't a count lower than zerro ;-)
+        // hope we haven't a count lower than zero ;-)
         count = -1;
         count = oObj.getCount();
         result = (count != -1);

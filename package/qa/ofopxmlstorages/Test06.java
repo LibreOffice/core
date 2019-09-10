@@ -74,7 +74,7 @@ public class Test06 implements StorageTest {
             {}
             catch( Exception e )
             {
-                m_aTestHelper.Error( "Unexpected excepion because of illegal parameter : " + e );
+                m_aTestHelper.Error( "Unexpected exception because of illegal parameter : " + e );
                 return false;
             }
 
@@ -102,7 +102,7 @@ public class Test06 implements StorageTest {
             {}
             catch( Exception e )
             {
-                m_aTestHelper.Error( "Unexpected excepion in case of try to open nonexistent stream for reading : " + e );
+                m_aTestHelper.Error( "Unexpected exception in case of try to open nonexistent stream for reading : " + e );
                 return false;
             }
 
@@ -117,7 +117,7 @@ public class Test06 implements StorageTest {
             {}
             catch( Exception e )
             {
-                m_aTestHelper.Error( "Unexpected excepion in case of try to open nonexistent storage for reading : " + e );
+                m_aTestHelper.Error( "Unexpected exception in case of try to open nonexistent storage for reading : " + e );
                 return false;
             }
 
@@ -132,7 +132,7 @@ public class Test06 implements StorageTest {
             {}
             catch( Exception e )
             {
-                m_aTestHelper.Error( "Unexpected excepion in case of try to remove nonexistent element : " + e );
+                m_aTestHelper.Error( "Unexpected exception in case of try to remove nonexistent element : " + e );
                 return false;
             }
 
@@ -147,7 +147,7 @@ public class Test06 implements StorageTest {
             {}
             catch( Exception e )
             {
-                m_aTestHelper.Error( "Unexpected excepion in case of try to rename nonexistent element : " + e );
+                m_aTestHelper.Error( "Unexpected exception in case of try to rename nonexistent element : " + e );
                 return false;
             }
 
@@ -162,7 +162,7 @@ public class Test06 implements StorageTest {
             {}
             catch( Exception e )
             {
-                m_aTestHelper.Error( "Unexpected excepion in case of try to rename to the name of existent element : " + e );
+                m_aTestHelper.Error( "Unexpected exception in case of try to rename to the name of existent element : " + e );
                 return false;
             }
 
@@ -179,7 +179,7 @@ public class Test06 implements StorageTest {
             {}
             catch( Exception e )
             {
-                m_aTestHelper.Error( "Unexpected excepion in case empty reference is provieded as target for copying : " + e );
+                m_aTestHelper.Error( "Unexpected exception in case empty reference is provided as target for copying : " + e );
                 return false;
             }
 
@@ -196,7 +196,7 @@ public class Test06 implements StorageTest {
             {}
             catch( Exception e )
             {
-                m_aTestHelper.Error( "Unexpected excepion in case empty reference is provieded as target for moving : " + e );
+                m_aTestHelper.Error( "Unexpected exception in case empty reference is provided as target for moving : " + e );
                 return false;
             }
 
@@ -232,7 +232,7 @@ public class Test06 implements StorageTest {
             {}
             catch( Exception e )
             {
-                m_aTestHelper.Error( "Unexpected excepion in case of copying of nonexistent element: " + e );
+                m_aTestHelper.Error( "Unexpected exception in case of copying of nonexistent element: " + e );
                 return false;
             }
 
@@ -247,7 +247,7 @@ public class Test06 implements StorageTest {
             {}
             catch( Exception e )
             {
-                m_aTestHelper.Error( "Unexpected excepion in case of moving of nonexistent element: " + e );
+                m_aTestHelper.Error( "Unexpected exception in case of moving of nonexistent element: " + e );
                 return false;
             }
 
@@ -262,7 +262,7 @@ public class Test06 implements StorageTest {
             {}
             catch( Exception e )
             {
-                m_aTestHelper.Error( "Unexpected excepion in case target for copying already exists: " + e );
+                m_aTestHelper.Error( "Unexpected exception in case target for copying already exists: " + e );
                 return false;
             }
 
@@ -277,7 +277,7 @@ public class Test06 implements StorageTest {
             {}
             catch( Exception e )
             {
-                m_aTestHelper.Error( "Unexpected excepion in case target for moving already exists: " + e );
+                m_aTestHelper.Error( "Unexpected exception in case target for moving already exists: " + e );
                 return false;
             }
 

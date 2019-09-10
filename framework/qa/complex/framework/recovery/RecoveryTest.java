@@ -530,7 +530,7 @@ public class RecoveryTest extends ComplexTestCase {
         int height = rand.nextInt(maxHeight + 1);
         int width = rand.nextInt((windowMaxSize.Width-posSize.Y) + 1);
 
-        // be sure that the new size his greater then the half of windowMaxSize
+        // be sure that the new size his greater than the half of windowMaxSize
         posSize.Height = (height < (maxHeight / 2)) ? height + (maxHeight / 2) : height;
         posSize.Width =  (width < (maxWidth / 2)) ? width + (maxWidth / 2) : width;
 
