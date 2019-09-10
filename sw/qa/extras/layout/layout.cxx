@@ -3060,6 +3060,25 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf64222)
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/Special", "nHeight", "560");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf113014)
+{
+    SwDoc* pDoc = createDoc("tdf113014.fodt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // This failed, if numbering of cell A1 is missing
+    // (A1: left indent: 3 cm, first line indent: -3 cm
+    // A2: left indent: 0 cm, first line indent: 0 cm)
+    assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/textarray[1]/text", "1.");
+    assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/textarray[3]/text", "2.");
+    assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/textarray[5]/text", "3.");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

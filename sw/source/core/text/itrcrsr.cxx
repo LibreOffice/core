@@ -133,11 +133,11 @@ static void lcl_GetCharRectInsideField( SwTextSizeInfo& rInf, SwRect& rOrig,
 
 // #i111284#
 namespace {
-    bool AreListLevelIndentsApplicableAndLabelAlignmentActive( const SwTextNode& rTextNode )
+    bool IsLabelAlignmentActive( const SwTextNode& rTextNode )
     {
         bool bRet( false );
 
-        if ( rTextNode.GetNumRule() && rTextNode.AreListLevelIndentsApplicable() )
+        if ( rTextNode.GetNumRule() )
         {
             int nListLevel = rTextNode.GetActualListLevel();
 
@@ -170,8 +170,10 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
     const SvxLRSpaceItem &rSpace = pNode->GetSwAttrSet().GetLRSpace();
     // #i95907#
     // #i111284#
-    const bool bListLevelIndentsApplicableAndLabelAlignmentActive(
-        AreListLevelIndentsApplicableAndLabelAlignmentActive( *(m_pFrame->GetTextNodeForParaProps()) ) );
+    const SwTextNode *pTextNode = m_pFrame->GetTextNodeForParaProps();
+    const bool bLabelAlignmentActive = IsLabelAlignmentActive( *pTextNode );
+    const bool bListLevelIndentsApplicable = pTextNode->AreListLevelIndentsApplicable();
+    const bool bListLevelIndentsApplicableAndLabelAlignmentActive = bListLevelIndentsApplicable && bLabelAlignmentActive;
 
     // Carefully adjust the text formatting ranges.
 
@@ -232,7 +234,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
          // paras inside cells inside new documents:
         ( pNode->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) ||
           !m_pFrame->IsInTab() ||
-          !nLMWithNum ) )
+          ( !nLMWithNum && !(bLabelAlignmentActive && !bListLevelIndentsApplicable) ) ) )
     {
         nLeft = m_pFrame->getFramePrintArea().Left() + m_pFrame->getFrameArea().Left();
         if( nLeft >= nRight )   // e.g. with large paragraph indentations in slim table columns
