@@ -78,7 +78,6 @@
 #include <core/fpdfapi/cmaps/Japan1/cmaps_japan1.h>
 #include <core/fpdfapi/cmaps/Korea1/cmaps_korea1.h>
 #include <core/fpdfapi/cmaps/cmap_int.h>
-#include <core/fpdfapi/cpdf_modulemgr.h>
 #include <core/fpdfapi/edit/cpdf_contentstream_write_utils.h>
 #include <core/fpdfapi/edit/cpdf_creator.h>
 #include <core/fpdfapi/edit/cpdf_pagecontentgenerator.h>
@@ -101,6 +100,7 @@
 #include <core/fpdfapi/font/cpdf_type3char.h>
 #include <core/fpdfapi/font/cpdf_type3font.h>
 #include <core/fpdfapi/page/cpdf_allstates.h>
+#include <core/fpdfapi/page/cpdf_annotcontext.h>
 #include <core/fpdfapi/page/cpdf_clippath.h>
 #include <core/fpdfapi/page/cpdf_color.h>
 #include <core/fpdfapi/page/cpdf_colorspace.h>
@@ -109,6 +109,8 @@
 #include <core/fpdfapi/page/cpdf_contentmarks.h>
 #include <core/fpdfapi/page/cpdf_contentparser.h>
 #include <core/fpdfapi/page/cpdf_devicecs.h>
+#include <core/fpdfapi/page/cpdf_dibbase.h>
+#include <core/fpdfapi/page/cpdf_dibtransferfunc.h>
 #include <core/fpdfapi/page/cpdf_docpagedata.h>
 #include <core/fpdfapi/page/cpdf_expintfunc.h>
 #include <core/fpdfapi/page/cpdf_form.h>
@@ -125,7 +127,6 @@
 #include <core/fpdfapi/page/cpdf_pagemodule.h>
 #include <core/fpdfapi/page/cpdf_pageobject.h>
 #include <core/fpdfapi/page/cpdf_pageobjectholder.h>
-#include <core/fpdfapi/page/cpdf_pagerendercontext.h>
 #include <core/fpdfapi/page/cpdf_path.h>
 #include <core/fpdfapi/page/cpdf_pathobject.h>
 #include <core/fpdfapi/page/cpdf_pattern.h>
@@ -141,6 +142,7 @@
 #include <core/fpdfapi/page/cpdf_textobject.h>
 #include <core/fpdfapi/page/cpdf_textstate.h>
 #include <core/fpdfapi/page/cpdf_tilingpattern.h>
+#include <core/fpdfapi/page/cpdf_transferfunc.h>
 #include <core/fpdfapi/page/cpdf_transparency.h>
 #include <core/fpdfapi/parser/cfdf_document.h>
 #include <core/fpdfapi/parser/cpdf_array.h>
@@ -177,22 +179,20 @@
 #include <core/fpdfapi/parser/fpdf_parser_utility.h>
 #include <core/fpdfapi/render/cpdf_charposlist.h>
 #include <core/fpdfapi/render/cpdf_devicebuffer.h>
-#include <core/fpdfapi/render/cpdf_dibbase.h>
-#include <core/fpdfapi/render/cpdf_dibtransferfunc.h>
 #include <core/fpdfapi/render/cpdf_docrenderdata.h>
 #include <core/fpdfapi/render/cpdf_imagecacheentry.h>
 #include <core/fpdfapi/render/cpdf_imageloader.h>
 #include <core/fpdfapi/render/cpdf_imagerenderer.h>
 #include <core/fpdfapi/render/cpdf_pagerendercache.h>
+#include <core/fpdfapi/render/cpdf_pagerendercontext.h>
 #include <core/fpdfapi/render/cpdf_progressiverenderer.h>
 #include <core/fpdfapi/render/cpdf_rendercontext.h>
 #include <core/fpdfapi/render/cpdf_renderoptions.h>
 #include <core/fpdfapi/render/cpdf_renderstatus.h>
 #include <core/fpdfapi/render/cpdf_scaledrenderbuffer.h>
 #include <core/fpdfapi/render/cpdf_textrenderer.h>
-#include <core/fpdfapi/render/cpdf_transferfunc.h>
 #include <core/fpdfapi/render/cpdf_type3cache.h>
-#include <core/fpdfapi/render/cpdf_type3glyphs.h>
+#include <core/fpdfapi/render/cpdf_type3glyphmap.h>
 #include <core/fpdfdoc/cba_fontmap.h>
 #include <core/fpdfdoc/cline.h>
 #include <core/fpdfdoc/cpdf_aaction.h>
@@ -276,6 +276,7 @@
 #include <core/fxcrt/cfx_memorystream.h>
 #include <core/fxcrt/cfx_readonlymemorystream.h>
 #include <core/fxcrt/cfx_seekablestreamproxy.h>
+#include <core/fxcrt/cfx_timer.h>
 #include <core/fxcrt/cfx_utf8decoder.h>
 #include <core/fxcrt/cfx_utf8encoder.h>
 #include <core/fxcrt/cfx_widetextbuf.h>
@@ -369,13 +370,12 @@
 #include <core/fxge/systemfontinfo_iface.h>
 #include <core/fxge/text_char_pos.h>
 #include <core/fxge/text_glyph_pos.h>
-#include <fpdfsdk/cfx_systemhandler.h>
-#include <fpdfsdk/cpdf_annotcontext.h>
 #include <fpdfsdk/cpdfsdk_actionhandler.h>
 #include <fpdfsdk/cpdfsdk_annot.h>
 #include <fpdfsdk/cpdfsdk_annothandlermgr.h>
 #include <fpdfsdk/cpdfsdk_annotiteration.h>
 #include <fpdfsdk/cpdfsdk_annotiterator.h>
+#include <fpdfsdk/cpdfsdk_appstream.h>
 #include <fpdfsdk/cpdfsdk_baannot.h>
 #include <fpdfsdk/cpdfsdk_baannothandler.h>
 #include <fpdfsdk/cpdfsdk_customaccess.h>
@@ -385,6 +385,7 @@
 #include <fpdfsdk/cpdfsdk_helpers.h>
 #include <fpdfsdk/cpdfsdk_interactiveform.h>
 #include <fpdfsdk/cpdfsdk_pageview.h>
+#include <fpdfsdk/cpdfsdk_pauseadapter.h>
 #include <fpdfsdk/cpdfsdk_widget.h>
 #include <fpdfsdk/cpdfsdk_widgethandler.h>
 #include <fpdfsdk/formfiller/cffl_button.h>
@@ -398,8 +399,6 @@
 #include <fpdfsdk/formfiller/cffl_textfield.h>
 #include <fpdfsdk/formfiller/cffl_textobject.h>
 #include <fpdfsdk/ipdfsdk_annothandler.h>
-#include <fpdfsdk/ipdfsdk_pauseadapter.h>
-#include <fpdfsdk/pwl/cpwl_appstream.h>
 #include <fpdfsdk/pwl/cpwl_button.h>
 #include <fpdfsdk/pwl/cpwl_caret.h>
 #include <fpdfsdk/pwl/cpwl_combo_box.h>
@@ -411,9 +410,8 @@
 #include <fpdfsdk/pwl/cpwl_list_impl.h>
 #include <fpdfsdk/pwl/cpwl_scroll_bar.h>
 #include <fpdfsdk/pwl/cpwl_special_button.h>
-#include <fpdfsdk/pwl/cpwl_timer.h>
-#include <fpdfsdk/pwl/cpwl_timer_handler.h>
 #include <fpdfsdk/pwl/cpwl_wnd.h>
+#include <fpdfsdk/pwl/ipwl_systemhandler.h>
 #include <fxjs/cjs_event_context_stub.h>
 #include <fxjs/cjs_runtimestub.h>
 #include <fxjs/ijs_event_context.h>
