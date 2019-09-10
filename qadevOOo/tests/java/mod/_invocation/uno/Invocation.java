@@ -53,7 +53,7 @@ public class Invocation extends TestCase {
     *   has <code>Object[]</code> type. This relation is used as
     *   a parameter for <code>createInstanceWithArguments</code>
     *   method call. If this relation doesn't exist test pass
-    *   zerro length array as argument. Here
+    *   zero length array as argument. Here
     *   <code>com.sun.star.io.Pipe</code> instance is passed.</li>
     *  <li> <code>'XSingleServiceFactory.MustSupport'</code> :
     *   for interface {@link _ifc.lang.XSingleServiceFactory}.

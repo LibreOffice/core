@@ -67,7 +67,7 @@ public class _XCachedContentResultSetStubFactory extends MultiMethodTest {
     * of rows in cached result set created and its source set are retrieved
     * and comared. <p>
     * Has <b>OK</b> status if numbers of rows are equal and they are
-    * greater then 0 (because JAR file contains at least one entry).
+    * greater than 0 (because JAR file contains at least one entry).
     */
     public void _createCachedContentResultSetStub() {
         boolean result = true ;

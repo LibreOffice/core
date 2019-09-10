@@ -70,7 +70,7 @@ public class _XCachedDynamicResultSetFactory extends MultiMethodTest {
     * of rows from result set created and its stub are retrieved
     * using their static representations and comared. <p>
     * Has <b>OK</b> status if numbers of rows are equal and they are
-    * greater then 0 (because JAR file contains at least one entry).
+    * greater than 0 (because JAR file contains at least one entry).
     */
     public void _createCachedDynamicResultSet() {
         boolean result = true ;

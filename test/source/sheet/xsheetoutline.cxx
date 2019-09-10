@@ -139,7 +139,7 @@ void XSheetOutline::testShowLevel()
 
     aSheetOutline->showLevel(2, table::TableOrientation_COLUMNS);
 
-    std::cout << " verifiy showLevel col apres" << getVisibleAdress(aSheet, "OutlineSheet.A1:Z30") << std::endl;
+    std::cout << " verify showLevel col apres" << getVisibleAdress(aSheet, "OutlineSheet.A1:Z30") << std::endl;
 
     // verify that level 2 and level 1 are shown --> column 0..3 & column 22..26
     // level 3 & 4 are hidden --> column 4..19
@@ -161,18 +161,18 @@ void XSheetOutline::testShowLevel()
     aSheetOutline->showDetail(getAddressFromRangeString(rowLevel1));
     aSheetOutline->showDetail(getAddressFromRangeString(rowLevel2));
 
-    std::cout << " verifiy showLevel row avant" << OUStringToOString(getVisibleAdress("OutlineSheet.A1:Z30"), RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << " verify showLevel row avant" << OUStringToOString(getVisibleAdress("OutlineSheet.A1:Z30"), RTL_TEXTENCODING_UTF8).getStr() << std::endl;
 
     aSheetOutline->hideDetail(aLevel1);
     aSheetOutline->hideDetail(aLevel2);
     aSheetOutline->hideDetail(aLevel3);
     aSheetOutline->hideDetail(aLevel4);
 
-    std::cout << " verifiy showLevel row juste avant" << OUStringToOString(getVisibleAdress("OutlineSheet.A1:Z30"), RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << " verify showLevel row juste avant" << OUStringToOString(getVisibleAdress("OutlineSheet.A1:Z30"), RTL_TEXTENCODING_UTF8).getStr() << std::endl;
 
     aSheetOutline->showLevel(2, table::TableOrientation_ROWS);
 
-    std::cout << " verifiy showLevel row apres" << OUStringToOString(getVisibleAdress("OutlineSheet.A1:Z30"), RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << " verify showLevel row apres" << OUStringToOString(getVisibleAdress("OutlineSheet.A1:Z30"), RTL_TEXTENCODING_UTF8).getStr() << std::endl;
 
     // verify rows visible 0..3 & 24..29
     // verfiy rows hidden 4..23

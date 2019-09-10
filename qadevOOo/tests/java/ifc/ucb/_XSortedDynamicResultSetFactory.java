@@ -64,7 +64,7 @@ public class _XSortedDynamicResultSetFactory extends MultiMethodTest {
      * a dynamic result set is to be created. It is created by
      * retrieving content list from JAR archive.
      * Has <b>OK</b> status if numbers of rows are equal and they are
-     * greater then 0 (because JAR file contains at least one entry).
+     * greater than 0 (because JAR file contains at least one entry).
      */
     public void _createSortedDynamicResultSet() {
         boolean result = true ;

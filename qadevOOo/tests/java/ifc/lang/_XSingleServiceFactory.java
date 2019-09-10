@@ -42,7 +42,7 @@ import com.sun.star.uno.UnoRuntime;
 *   has <code>Object[]</code> type. This relation is used as
 *   a parameter for <code>createInstanceWithArguments</code>
 *   method call. If this relation doesn't exist test pass
-*   zerro length array as argument. </li>
+*   zero length array as argument. </li>
 *  <li> <code>'XSingleServiceFactory.MustSupport'</code> <b>(optional)</b>:
 *   of type <code>java.lang.Class[]</code>. This is an array of UNO
 *   interface classes which must be supported by created instance.
@@ -114,7 +114,7 @@ public class _XSingleServiceFactory extends MultiMethodTest {
 
     /**
     * Calls the method and checks the value returned. If relation
-    * with method argument doesn't exist new zerro length array
+    * with method argument doesn't exist new zero length array
     * is created. <p>
     * Has <b>OK</b> status if non null value is returned.
     * If the relation exists which specifies required interfaces

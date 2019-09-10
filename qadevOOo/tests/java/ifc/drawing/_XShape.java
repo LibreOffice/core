@@ -132,7 +132,7 @@ public class _XShape extends MultiMethodTest {
         log.println("Expected: "+sNew.Height+";"+sNew.Width);
         log.println("Getting: "+gSize.Height+";"+gSize.Width);
 
-        //errors in calculation from points/twips less then 1 are acceptable
+        //errors in calculation from points/twips less than 1 are acceptable
         result &= (sNew.Height-gSize.Height <= 2) && (sNew.Width-gSize.Width <= 2);
 
         if (result && ((sNew.Height-gSize.Height != 0) || (sNew.Width-gSize.Width != 0))){
