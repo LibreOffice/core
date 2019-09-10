@@ -42,7 +42,6 @@ $(eval $(call gb_Library_set_generated_cxx_suffix,pdfium,cpp))
 
 # pdfium
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/fpdfsdk/cfx_systemhandler \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_annot \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_annothandlermgr \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_annotiteration \
@@ -78,8 +77,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/fpdf_save \
     UnpackedTarball/pdfium/fpdfsdk/fpdf_text \
     UnpackedTarball/pdfium/fpdfsdk/fpdf_view \
-    UnpackedTarball/pdfium/fpdfsdk/ipdfsdk_pauseadapter \
-    UnpackedTarball/pdfium/fpdfsdk/cpdf_annotcontext \
+    UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_pauseadapter \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_interactiveform \
 ))
 
@@ -168,8 +166,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Korea1/UniKS-UTF16-H_0 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Korea1/cmaps_korea1 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/fpdf_cmaps \
-    UnpackedTarball/pdfium/core/fpdfapi/cpdf_modulemgr \
-    UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_pagerendercontext \
     UnpackedTarball/pdfium/core/fpdfapi/edit/cpdf_pagecontentgenerator \
     UnpackedTarball/pdfium/core/fpdfapi/font/cpdf_cidfont \
     UnpackedTarball/pdfium/core/fpdfapi/font/cpdf_font \
@@ -237,7 +233,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_read_validator \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_charposlist \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_devicebuffer \
-    UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_dibtransferfunc \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_docrenderdata \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_imagecacheentry \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_imageloader \
@@ -249,9 +244,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_renderstatus \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_scaledrenderbuffer \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_textrenderer \
-    UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_transferfunc \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_type3cache \
-    UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_type3glyphs \
+    UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_type3glyphmap \
     UnpackedTarball/pdfium/core/fpdfapi/edit/cpdf_creator \
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_encryptor \
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_flateencoder \
@@ -277,12 +271,16 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_cross_ref_avail \
     UnpackedTarball/pdfium/core/fpdfapi/edit/cpdf_pagecontentmanager \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_transparency \
-    UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_dibbase \
+    UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_dibbase \
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_object_stream \
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_cross_ref_table \
     UnpackedTarball/pdfium/core/fpdfapi/edit/cpdf_stringarchivestream \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_occontext \
     UnpackedTarball/pdfium/core/fpdfapi/edit/cpdf_contentstream_write_utils \
+    UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_annotcontext \
+    UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_pagerendercontext \
+    UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_dibtransferfunc \
+    UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_transferfunc \
 ))
 
 # fpdfdoc
@@ -489,7 +487,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 
 # pwl
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_appstream \
+    UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_appstream \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_button \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_caret \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_combo_box \
@@ -501,8 +499,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_list_impl \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_scroll_bar \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_special_button \
-    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_timer \
-    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_timer_handler \
+    UnpackedTarball/pdfium/core/fxcrt/cfx_timer \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_wnd \
 ))
 
@@ -637,6 +634,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/win32/fx_win32_print \
     UnpackedTarball/pdfium/core/fxcrt/cfx_fileaccess_windows \
     UnpackedTarball/pdfium/third_party/base/win/win_util \
+    UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_windowsrenderdevice \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,pdfium,\
