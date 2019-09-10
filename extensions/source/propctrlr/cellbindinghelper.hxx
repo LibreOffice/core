@@ -214,7 +214,7 @@ namespace pcr
         */
         bool            isSpreadsheetDocumentWhichSupplies( const OUString& _rService ) const;
 
-        /** checks whether a given component supports a given servive
+        /** checks whether a given component supports a given service
         */
         static bool     doesComponentSupport(
                             const css::uno::Reference< css::uno::XInterface >& _rxComponent,

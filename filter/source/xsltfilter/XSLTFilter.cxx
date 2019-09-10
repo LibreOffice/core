@@ -329,7 +329,7 @@ namespace XSLT
                         if (xSeek.is())
                             xSeek->seek(0);
 
-                        // we want to be notfied when the processing is done...
+                        // we want to be notified when the processing is done...
                         m_tcontrol->addListener(css::uno::Reference<XStreamListener> (
                                 this));
 
@@ -468,7 +468,7 @@ namespace XSLT
         OSL_ASSERT(m_tcontrol.is());
         if (m_tcontrol.is() && m_rOutputStream.is())
             {
-                // we want to be notfied when the processing is done...
+                // we want to be notified when the processing is done...
                 m_tcontrol->addListener(css::uno::Reference<XStreamListener> (this));
 
                 // create pipe

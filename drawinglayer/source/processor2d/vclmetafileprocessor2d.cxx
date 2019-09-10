@@ -76,7 +76,7 @@
 using namespace com::sun::star;
 
 // #112245# definition for maximum allowed point count due to Metafile target.
-// To be on the safe side with the old tools polygon, use slightly less then
+// To be on the safe side with the old tools polygon, use slightly less than
 // the theoretical maximum (bad experiences with tools polygon)
 
 #define MAX_POLYGON_POINT_COUNT_METAFILE    (0x0000fff0)
