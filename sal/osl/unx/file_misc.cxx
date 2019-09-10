@@ -48,6 +48,8 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstring>
+#include <memory>
 #include <new>
 
 #ifdef ANDROID
@@ -66,7 +68,7 @@ namespace {
 
 struct DirectoryImpl
 {
-    OUString ustrPath;           /* holds native directory path */
+    OString strPath;           /* holds native directory path */
     DIR*         pDirStruct;
 #ifdef ANDROID
     enum Kind
@@ -82,18 +84,18 @@ struct DirectoryImpl
 }
 
 DirectoryItem_Impl::DirectoryItem_Impl(
-    rtl_uString * ustrFilePath, unsigned char DType)
+    rtl_String * strFilePath, unsigned char DType)
     : m_RefCount     (1),
-      m_ustrFilePath (ustrFilePath),
+      m_strFilePath (strFilePath),
       m_DType        (DType)
 {
-    if (m_ustrFilePath != nullptr)
-        rtl_uString_acquire(m_ustrFilePath);
+    if (m_strFilePath != nullptr)
+        rtl_string_acquire(m_strFilePath);
 }
 DirectoryItem_Impl::~DirectoryItem_Impl()
 {
-    if (m_ustrFilePath != nullptr)
-        rtl_uString_release(m_ustrFilePath);
+    if (m_strFilePath != nullptr)
+        rtl_string_release(m_strFilePath);
 }
 
 void * DirectoryItem_Impl::operator new(size_t n)
@@ -146,91 +148,92 @@ static oslFileError osl_psz_removeDirectory(const sal_Char* pszPath);
 
 oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirectory* pDirectory)
 {
-    rtl_uString* ustrSystemPath = nullptr;
     oslFileError eRet;
 
-    char path[PATH_MAX];
+    OString path;
 
     if ((ustrDirectoryURL == nullptr) || (ustrDirectoryURL->length == 0) || (pDirectory == nullptr))
         return osl_File_E_INVAL;
 
     /* convert file URL to system path */
-    eRet = osl_getSystemPathFromFileURL_Ex(ustrDirectoryURL, &ustrSystemPath);
+    eRet = osl::detail::convertUrlToPathname(OUString::unacquired(&ustrDirectoryURL), &path);
 
     if( eRet != osl_File_E_None )
         return eRet;
 
-    osl_systemPathRemoveSeparator(ustrSystemPath);
+    osl_systemPathRemoveSeparator(path.pData);
 
-    /* convert unicode path to text */
-    if ( UnicodeToText( path, PATH_MAX, ustrSystemPath->buffer, ustrSystemPath->length )
 #ifdef MACOSX
-     && macxp_resolveAlias( path, PATH_MAX ) == 0
-#endif /* MACOSX */
-     )
     {
-#ifdef ANDROID
-        if( strncmp( path, "/assets/", sizeof( "/assets/" ) - 1) == 0 )
-        {
-            lo_apk_dir *pdir = lo_apk_opendir( path );
-
-            if( pdir )
-            {
-                DirectoryImpl* pDirImpl = new(std::nothrow) DirectoryImpl;
-
-                if( pDirImpl )
-                    {
-                        pDirImpl->eKind = DirectoryImpl::KIND_ASSETS;
-                        pDirImpl->pApkDirStruct = pdir;
-                        pDirImpl->ustrPath = OUString(ustrSystemPath, SAL_NO_ACQUIRE);
-
-                        *pDirectory = (oslDirectory) pDirImpl;
-                        return osl_File_E_None;
-                    }
-                else
-                    {
-                        errno = ENOMEM;
-                        lo_apk_closedir( pdir );
-                    }
-            }
+        auto const n = std::max(int(path.getLength() + 1), int(PATH_MAX));
+        auto const tmp = std::make_unique<char[]>(n);
+        std::strcpy(tmp.get(), path.getStr());
+        if (macxp_resolveAlias(tmp.get(), n) != 0) {
+            return oslTranslateFileError(errno);
         }
-        else
-#endif
-        {
-            /* open directory */
-            DIR *pdir = opendir( path );
+        path = OString(tmp.get(), std::strlen(tmp.get()));
+    }
+#endif /* MACOSX */
 
-            if( pdir )
-            {
-                SAL_INFO("sal.file", "opendir(" << path << ") => " << pdir);
-
-                /* create and initialize impl structure */
-                DirectoryImpl* pDirImpl = new(std::nothrow) DirectoryImpl;
-
-                if( pDirImpl )
-                {
-                    pDirImpl->pDirStruct = pdir;
-                    pDirImpl->ustrPath = OUString(ustrSystemPath, SAL_NO_ACQUIRE);
 #ifdef ANDROID
-                    pDirImpl->eKind = DirectoryImpl::KIND_DIRENT;
-#endif
-                    *pDirectory = static_cast<oslDirectory>(pDirImpl);
-                    return osl_File_E_None;
-                }
-                errno = ENOMEM;
-                closedir( pdir );
+    if( strncmp( path.getStr(), "/assets/", sizeof( "/assets/" ) - 1) == 0 )
+    {
+        lo_apk_dir *pdir = lo_apk_opendir( path.getStr() );
+
+        if( pdir )
+        {
+            DirectoryImpl* pDirImpl = new(std::nothrow) DirectoryImpl;
+
+            if( pDirImpl )
+            {
+                pDirImpl->eKind = DirectoryImpl::KIND_ASSETS;
+                pDirImpl->pApkDirStruct = pdir;
+                pDirImpl->strPath = path;
+
+                *pDirectory = (oslDirectory) pDirImpl;
+                return osl_File_E_None;
             }
             else
             {
-                int e = errno;
-                SAL_INFO("sal.file", "opendir(" << path << "): " << UnixErrnoString(e));
-                // Restore errno after possible modification by SAL_INFO above
-                errno = e;
+                errno = ENOMEM;
+                lo_apk_closedir( pdir );
             }
         }
     }
+    else
+#endif
+    {
+        /* open directory */
+        DIR *pdir = opendir( path.getStr() );
 
-    rtl_uString_release( ustrSystemPath );
+        if( pdir )
+        {
+            SAL_INFO("sal.file", "opendir(" << path << ") => " << pdir);
+
+            /* create and initialize impl structure */
+            DirectoryImpl* pDirImpl = new(std::nothrow) DirectoryImpl;
+
+            if( pDirImpl )
+            {
+                pDirImpl->pDirStruct = pdir;
+                pDirImpl->strPath = path;
+#ifdef ANDROID
+                pDirImpl->eKind = DirectoryImpl::KIND_DIRENT;
+#endif
+                *pDirectory = static_cast<oslDirectory>(pDirImpl);
+                return osl_File_E_None;
+            }
+            errno = ENOMEM;
+            closedir( pdir );
+        }
+        else
+        {
+            int e = errno;
+            SAL_INFO("sal.file", "opendir(" << path << "): " << UnixErrnoString(e));
+            // Restore errno after possible modification by SAL_INFO above
+            errno = e;
+        }
+    }
 
     return oslTranslateFileError(errno);
 }
@@ -296,7 +299,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
     SAL_WARN_IF(!pItem, "sal.file", "pItem is nullptr");
 
     DirectoryImpl* pDirImpl = static_cast<DirectoryImpl*>(pDirectory);
-    OUString ustrFileName;
+    OString strFileName;
     struct dirent* pEntry;
 
     if ((pDirectory == nullptr) || (pItem == nullptr))
@@ -329,12 +332,9 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
     filename = composed_name;
 #endif
 
-    /* convert file name to unicode */
-    rtl_string2UString(&ustrFileName.pData, filename, strlen(filename),
-                       osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
-    assert(ustrFileName.pData);
+    strFileName = OString(filename, strlen(filename));
 
-    auto const ustrFilePath = osl::systemPathMakeAbsolutePath(pDirImpl->ustrPath, ustrFileName);
+    auto const strFilePath = osl::systemPathMakeAbsolutePath(pDirImpl->strPath, strFileName);
 
     DirectoryItem_Impl* pImpl = static_cast< DirectoryItem_Impl* >(*pItem);
     if (pImpl)
@@ -343,9 +343,9 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
         pImpl = nullptr;
     }
 #ifdef _DIRENT_HAVE_D_TYPE
-    pImpl = new DirectoryItem_Impl(ustrFilePath.pData, pEntry->d_type);
+    pImpl = new DirectoryItem_Impl(strFilePath.pData, pEntry->d_type);
 #else
-    pImpl = new DirectoryItem_Impl(ustrFilePath.pData);
+    pImpl = new DirectoryItem_Impl(strFilePath.pData);
 #endif /* _DIRENT_HAVE_D_TYPE */
     *pItem = pImpl;
 
@@ -354,27 +354,26 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
 
 oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString* ustrFileURL, oslDirectoryItem* pItem)
 {
-    rtl_uString* ustrSystemPath = nullptr;
+    OString strSystemPath;
     oslFileError osl_error = osl_File_E_INVAL;
 
     if ((!ustrFileURL) || (ustrFileURL->length == 0) || (!pItem))
         return osl_File_E_INVAL;
 
-    osl_error = osl_getSystemPathFromFileURL_Ex(ustrFileURL, &ustrSystemPath);
+    osl_error = osl::detail::convertUrlToPathname(OUString::unacquired(&ustrFileURL), &strSystemPath);
     if (osl_error != osl_File_E_None)
         return osl_error;
 
-    osl_systemPathRemoveSeparator(ustrSystemPath);
+    osl_systemPathRemoveSeparator(strSystemPath.pData);
 
-    if (osl::access(OUString::unacquired(&ustrSystemPath), F_OK) == -1)
+    if (osl::access(strSystemPath, F_OK) == -1)
     {
         osl_error = oslTranslateFileError(errno);
     }
     else
     {
-        *pItem = new DirectoryItem_Impl(ustrSystemPath);
+        *pItem = new DirectoryItem_Impl(strSystemPath.pData);
     }
-    rtl_uString_release(ustrSystemPath);
 
     return osl_error;
 }
@@ -493,9 +492,9 @@ static oslFileError osl_psz_removeDirectory( const sal_Char* pszPath )
     return osl_File_E_None;
 }
 
-static int path_make_parent(sal_Unicode* path)
+static int path_make_parent(char* path)
 {
-    int i = rtl_ustr_lastIndexOfChar(path, '/');
+    int i = rtl_str_lastIndexOfChar(path, '/');
 
     if (i > 0)
     {
@@ -506,7 +505,7 @@ static int path_make_parent(sal_Unicode* path)
 }
 
 static int create_dir_with_callback(
-    sal_Unicode* directory_path,
+    char* directory_path,
     oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc,
     void* pData)
 {
@@ -515,7 +514,7 @@ static int create_dir_with_callback(
         if (aDirectoryCreationCallbackFunc)
         {
             OUString url;
-            osl::FileBase::getFileURLFromSystemPath(directory_path, url);
+            osl::detail::convertPathnameToUrl(directory_path, &url);
             aDirectoryCreationCallbackFunc(pData, url.pData);
         }
         return 0;
@@ -524,11 +523,11 @@ static int create_dir_with_callback(
 }
 
 static oslFileError create_dir_recursively_(
-    sal_Unicode* dir_path,
+    char* dir_path,
     oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc,
     void* pData)
 {
-    OSL_PRECOND((rtl_ustr_getLength(dir_path) > 0) && ((dir_path + (rtl_ustr_getLength(dir_path) - 1)) != (dir_path + rtl_ustr_lastIndexOfChar(dir_path, '/'))),
+    OSL_PRECOND((rtl_str_getLength(dir_path) > 0) && ((dir_path + (rtl_str_getLength(dir_path) - 1)) != (dir_path + rtl_str_lastIndexOfChar(dir_path, '/'))),
     "Path must not end with a slash");
 
     int native_err = create_dir_with_callback(
@@ -565,8 +564,9 @@ oslFileError SAL_CALL osl_createDirectoryPath(
     if (aDirectoryUrl == nullptr)
         return osl_File_E_INVAL;
 
-    OUString sys_path;
-    oslFileError osl_error = osl_getSystemPathFromFileURL_Ex(aDirectoryUrl, &sys_path.pData);
+    OString sys_path;
+    oslFileError osl_error = osl::detail::convertUrlToPathname(
+        OUString::unacquired(&aDirectoryUrl), &sys_path);
 
     if (osl_error != osl_File_E_None)
         return osl_error;
