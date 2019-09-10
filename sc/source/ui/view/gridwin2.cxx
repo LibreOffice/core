@@ -1015,7 +1015,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                     }
                     if ( bGrow )
                     {
-                        // change last break to hard, and change scaleing
+                        // change last break to hard, and change scaling
                         bool bManualBreak(rDoc.HasRowBreak(nPagebreakPrev, nTab) & ScBreakType::Manual);
                         if ( nPagebreakPrev > aPagebreakSource.aStart.Row() && !bManualBreak )
                         {
