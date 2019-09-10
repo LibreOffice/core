@@ -220,7 +220,7 @@ namespace slideshow
                 When true, the source of the shape metafile might be a
                 foreign application. The metafile is checked against
                 unsupported content, and, if necessary, returned as a
-                pre-rendererd bitmap.
+                pre-rendered bitmap.
              */
             DrawShape( const css::uno::Reference<
                             css::drawing::XShape >&    xShape,

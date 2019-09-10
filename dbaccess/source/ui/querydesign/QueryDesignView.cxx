@@ -2915,7 +2915,7 @@ std::unique_ptr<OSQLParseNode> OQueryDesignView::getPredicateTreeFromEntry(const
     // special handling for functions
     if ( pEntry->GetFunctionType() & (FKT_OTHER | FKT_AGGREGATE | FKT_NUMERIC) )
     {
-        // we have a function here so we have to distinguish the type of return vOUalue
+        // we have a function here so we have to distinguish the type of return value
         OUString sFunction;
         if ( pEntry->isNumericOrAggregateFunction() )
             sFunction = pEntry->GetFunction().getToken(0, '(');

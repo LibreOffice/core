@@ -856,7 +856,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL XFrameImpl::getContainerWindow
     @seealso    getCreator()
     @seealso    findFrame()
     @seealso    isTop()
-    @seealos    m_bIsFrameTop
+    @seealso    m_bIsFrameTop
 
     @param      xCreator
                     valid reference to our new owner frame, which should implement a supplier interface
@@ -2539,7 +2539,7 @@ void SAL_CALL XFrameImpl::windowClosing( const css::lang::EventObject& )
     deactivate();
 
     // ... and try to close it
-    // But do it asynchron inside the main thread.
+    // But do it asynchronous inside the main thread.
     // VCL has no fun to do such things outside his main thread :-(
     // Note: The used dispatch make it asynchronous for us .-)
 
@@ -2660,8 +2660,8 @@ void SAL_CALL XFrameImpl::disposing( const css::lang::EventObject& aEvent )
                 Otherwise task couldn't die anymore!!!
 
     @seealso    interface XActionLockable
-    @seeelso    method BaseDispatcher::implts_loadIt()
-    @seeelso    method Desktop::loadComponentFromURL()
+    @seealso    method BaseDispatcher::implts_loadIt()
+    @seealso    method Desktop::loadComponentFromURL()
     @return     true if frame/task is locked
                 false otherwise
     @threadsafe yes
@@ -3073,10 +3073,10 @@ void XFrameImpl::implts_setIconOnWindow()
 }
 
 /*-************************************************************************************************************
-    @short      helper to start/stop listeneing for window events on container window
+    @short      helper to start/stop listening for window events on container window
     @descr      If we get a new container window, we must set it on internal member ...
                 and stop listening at old one ... and start listening on new one!
-                But sometimes (in dispose() call!) it's necessary to stop listeneing without starting
+                But sometimes (in dispose() call!) it's necessary to stop listening without starting
                 on new connections. So we split this functionality to make it easier at use.
 
     @seealso    method initialize()
@@ -3273,7 +3273,7 @@ void XFrameImpl::impl_checkMenuCloser()
     // But we can enable this closer only, if one of these two tasks includes the help module.
     // The "other frame" couldn't be the help. Because then it wouldn't be part of this "other list".
     // In such case it will be separated to the reference aAnalyzer.m_xHelp!
-    // But we must check, if weself includes the help...
+    // But we must check, if we include ourself the help...
     // Check aAnalyzer.m_bReferenceIsHelp!
     if (
         (aAnalyzer.m_lOtherVisibleFrames.size()==1)   &&
@@ -3289,8 +3289,8 @@ void XFrameImpl::impl_checkMenuCloser()
     }
 
     // b)
-    // There is no other frame ... means no other document frame. The help module
-    // will be handled separately and must(!) be ignored here ... excepting weself includes the help.
+    // There is no other frame... means no other document frame. The help module
+    // will be handled separately and must(!) be ignored here... excepting if we include ourself the help.
     else if (
         (aAnalyzer.m_lOtherVisibleFrames.empty()) &&
         (!aAnalyzer.m_bReferenceIsHelp) &&
