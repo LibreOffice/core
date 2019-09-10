@@ -192,7 +192,20 @@ void HTMLFetchThread::execute()
     OString aID = OUStringToOString(maID, RTL_TEXTENCODING_UTF8);
     xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pHtmlPtr);
     xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aID.getStr()), pXmlXpathCtx);
+
+    if (!pXmlXpathObj)
+    {
+        xmlXPathFreeContext(pXmlXpathCtx);
+        return;
+    }
     xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
+
+    if (!pXmlNodes)
+    {
+        xmlXPathFreeNodeSetList(pXmlXpathObj);
+        xmlXPathFreeContext(pXmlXpathCtx);
+        return;
+    }
 
     if (pXmlNodes->nodeNr == 0)
     {
