@@ -8,7 +8,7 @@ How-to add a new gallery:
 	+ add a new GALLERY_FILELIST statement in scp2/
 
 How-to add a new autotext category
-	+ create a directory extras/source/autotext/lang/xx/foo/ where xx is your lang code
+	+ create a directory extras/source/autotext/lang/xx/foo/ where xx is your lang code. xx must exactly fit with an UI lang code.
 	+ unzip your foo.bau autotext file in this directory (including an empty mimetype file)
 	+ add xx/foo.bau in extras/AllLangPackage_autotextshare.mk
 	+ in extras/CustomTarget_autotextshare.mk:
