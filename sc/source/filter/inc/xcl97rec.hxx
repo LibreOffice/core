@@ -218,7 +218,9 @@ public:
                                 XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObject* pCaption );
 
     void                 SetHorAlign( sal_uInt8 nHorAlign ) { mnHorAlign = nHorAlign; }
+    sal_uInt8            GetHorAlign()                      { return mnHorAlign; }
     void                 SetVerAlign( sal_uInt8 nVerAlign ) { mnVerAlign = nVerAlign; }
+    sal_uInt8            GetVerAlign()                      { return mnVerAlign; }
 
     virtual void                Save( XclExpStream& rStrm ) override;
 

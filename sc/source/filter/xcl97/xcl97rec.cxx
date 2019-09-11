@@ -624,6 +624,24 @@ sal_Int32 VmlCommentExporter::StartShape()
     return nId;
 }
 
+    // Comment text converters for XML output
+static const char* HorAlignConverter( sal_uInt8 anAlignment )
+{
+    const char* HA = "Left";
+    if         ( anAlignment == EXC_OBJ_HOR_CENTER )    { HA = "Center"; }
+    else if    ( anAlignment == EXC_OBJ_HOR_RIGHT )     { HA = "Right"; }
+    else if    ( anAlignment == EXC_OBJ_HOR_JUSTIFY )   { HA = "Justify"; }
+    return HA;
+}
+static const char* VerAlignConverter(sal_uInt8 anAlignment)
+{
+    const char* VA = "Top";
+    if         ( anAlignment == EXC_OBJ_VER_CENTER )    { VA = "Center"; }
+    else if    ( anAlignment == EXC_OBJ_VER_BOTTOM )    { VA = "Bottom"; }
+    else if    ( anAlignment == EXC_OBJ_VER_JUSTIFY )   { VA = "Justify"; }
+    return VA;
+}
+
 void VmlCommentExporter::EndShape( sal_Int32 nShapeElement )
 {
     char pAnchor[100];
@@ -632,15 +650,21 @@ void VmlCommentExporter::EndShape( sal_Int32 nShapeElement )
                   maFrom.Left(), maFrom.Top(), maFrom.Right(), maFrom.Bottom(),
                   maTo.Left(), maTo.Top(), maTo.Right(), maTo.Bottom() );
 
+    // Getting comment text alignments
+    const char* THA = HorAlignConverter(mpCaption->GetTHA());
+    const char* TVA = VerAlignConverter(mpCaption->GetTVA());
+
     pVmlDrawing->startElement(FSNS(XML_x, XML_ClientData), XML_ObjectType, "Note");
     pVmlDrawing->singleElement(FSNS(XML_x, XML_MoveWithCells));
     pVmlDrawing->singleElement(FSNS(XML_x, XML_SizeWithCells));
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Anchor ), pAnchor );
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_AutoFill ), "False" );
+    XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_TextHAlign ), THA );
+    XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_TextVAlign ), TVA );
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Row ), maScPos.Row() );
-    XclXmlUtils::WriteElement( pVmlDrawing, FSNS(XML_x, XML_Column), sal_Int32(maScPos.Col()));
+    XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Column ), sal_Int32( maScPos.Col() ) );
     if(mbVisible)
-        pVmlDrawing->singleElement(FSNS(XML_x, XML_Visible));
+        pVmlDrawing->singleElement( FSNS( XML_x, XML_Visible ) );
     pVmlDrawing->endElement( FSNS( XML_x, XML_ClientData ) );
 
     VMLExport::EndShape( nShapeElement );
@@ -800,9 +824,11 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObje
 
         // horizontal alignment
         SetHorAlign( lcl_GetHorAlignFromItemSet( rItemSet ) );
+        pCaption->SetTHA( GetHorAlign() );
 
         // vertical alignment
         SetVerAlign( lcl_GetVerAlignFromItemSet( rItemSet ) );
+        pCaption->SetTVA( GetVerAlign() );
 
         // orientation alignment
         const SvxWritingModeItem& rItem = rItemSet.Get( SDRATTR_TEXTDIRECTION );
