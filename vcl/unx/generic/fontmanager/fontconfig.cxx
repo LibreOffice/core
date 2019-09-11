@@ -800,7 +800,11 @@ namespace
 
     bool isEmoji(sal_uInt32 nCurrentChar)
     {
+#if U_ICU_VERSION_MAJOR_NUM >= 57
         return u_hasBinaryProperty(nCurrentChar, UCHAR_EMOJI);
+#else
+	return false;
+#endif
     }
 
     //returns true if the given code-point couldn't possibly be in rLangTag.
