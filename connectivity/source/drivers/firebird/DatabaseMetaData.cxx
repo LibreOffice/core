@@ -1460,19 +1460,18 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
-    const Any&, const OUString&, const OUString& )
+    const Any&, const OUString&, const OUString& table )
 {
-    // List the columns in a table which are foreign keys. This is actually
-    // never used anywhere in the LO codebase currently. Retrieval from firebird
-    // requires using a 5-table join.
-    SAL_WARN("connectivity.firebird", "Not yet implemented");
-    OSL_FAIL("Not implemented yet!");
-    // TODO implement
-    return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eExportedKeys);
+    return ODatabaseMetaData::lcl_getKeys(false, table);
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     const Any&, const OUString&, const OUString& table )
+{
+    return ODatabaseMetaData::lcl_getKeys(true, table);
+}
+
+uno::Reference< XResultSet > ODatabaseMetaData::lcl_getKeys(const bool& bIsImport, const OUString& table )
 {
     ODatabaseMetaDataResultSet* pResultSet = new
         ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eImportedKeys);
@@ -1501,8 +1500,11 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
            "ON PRIM.RDB$INDEX_NAME = PRIMARY_INDEX.RDB$INDEX_NAME "
            "INNER JOIN RDB$INDEX_SEGMENTS AS FOREIGN_INDEX "
            "ON FOREI.RDB$INDEX_NAME = FOREIGN_INDEX.RDB$INDEX_NAME "
-           "WHERE FOREI.RDB$CONSTRAINT_TYPE = 'FOREIGN KEY' "
-           "AND FOREI.RDB$RELATION_NAME = '"+ table +"'";
+           "WHERE FOREI.RDB$CONSTRAINT_TYPE = 'FOREIGN KEY' ";
+    if (bIsImport)
+        sSQL = sSQL + "AND FOREI.RDB$RELATION_NAME = '"+ table +"'";
+    else
+        sSQL = sSQL + "AND PRIM.RDB$RELATION_NAME = '"+ table +"'";
 
     uno::Reference< XResultSet > rs = statement->executeQuery(sSQL);
     uno::Reference< XRow > xRow( rs, UNO_QUERY_THROW );
