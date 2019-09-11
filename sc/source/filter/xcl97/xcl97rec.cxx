@@ -624,6 +624,20 @@ sal_Int32 VmlCommentExporter::StartShape()
     return nId;
 }
 
+static const char* lcl_GetVerAlignFromItemSetChar( const SfxItemSet& rItemSet )
+{
+    const char* nVerAlign = "Top";
+
+    switch( rItemSet.Get( SDRATTR_TEXT_VERTADJUST ).GetValue() )
+    {
+        case SDRTEXTVERTADJUST_TOP:     nVerAlign = "Top";       break;
+        case SDRTEXTVERTADJUST_CENTER:  nVerAlign = "Center";    break;
+        case SDRTEXTVERTADJUST_BOTTOM:  nVerAlign = "Bottom";    break;
+        case SDRTEXTVERTADJUST_BLOCK:   nVerAlign = "Justify";   break;
+    }
+    return nVerAlign;
+}
+
 void VmlCommentExporter::EndShape( sal_Int32 nShapeElement )
 {
     char pAnchor[100];
@@ -632,15 +646,19 @@ void VmlCommentExporter::EndShape( sal_Int32 nShapeElement )
                   maFrom.Left(), maFrom.Top(), maFrom.Right(), maFrom.Bottom(),
                   maTo.Left(), maTo.Top(), maTo.Right(), maTo.Bottom() );
 
+    // Getting comment text alignments
+    const char* TVA = lcl_GetVerAlignFromItemSetChar(mpCaption->GetMergedItemSet());
+
     pVmlDrawing->startElement(FSNS(XML_x, XML_ClientData), XML_ObjectType, "Note");
     pVmlDrawing->singleElement(FSNS(XML_x, XML_MoveWithCells));
     pVmlDrawing->singleElement(FSNS(XML_x, XML_SizeWithCells));
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Anchor ), pAnchor );
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_AutoFill ), "False" );
-    XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Row ), maScPos.Row() );
-    XclXmlUtils::WriteElement( pVmlDrawing, FSNS(XML_x, XML_Column), sal_Int32(maScPos.Col()));
+    XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_TextVAlign ), TVA );
+    XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Row ), maScPos.Row());
+    XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Column ), sal_Int32( maScPos.Col() ) );
     if(mbVisible)
-        pVmlDrawing->singleElement(FSNS(XML_x, XML_Visible));
+        pVmlDrawing->singleElement(FSNS( XML_x, XML_Visible ));
     pVmlDrawing->endElement( FSNS( XML_x, XML_ClientData ) );
 
     VMLExport::EndShape( nShapeElement );
@@ -710,7 +728,7 @@ static sal_uInt8 lcl_GetHorAlignFromItemSet( const SfxItemSet& rItemSet )
 {
     sal_uInt8 nHorAlign = EXC_OBJ_HOR_LEFT;
 
-    switch( rItemSet.Get( EE_PARA_JUST ).GetAdjust() )
+    switch ( rItemSet.Get( EE_PARA_JUST ).GetAdjust() )
     {
         case SvxAdjust::Left:   nHorAlign = EXC_OBJ_HOR_LEFT;      break;
         case SvxAdjust::Center: nHorAlign = EXC_OBJ_HOR_CENTER;    break;
@@ -731,6 +749,7 @@ static sal_uInt8 lcl_GetVerAlignFromItemSet( const SfxItemSet& rItemSet )
         case SDRTEXTVERTADJUST_CENTER:  nVerAlign = EXC_OBJ_VER_CENTER;    break;
         case SDRTEXTVERTADJUST_BOTTOM:  nVerAlign = EXC_OBJ_VER_BOTTOM;    break;
         case SDRTEXTVERTADJUST_BLOCK:   nVerAlign = EXC_OBJ_VER_JUSTIFY;   break;
+        default:;
     }
     return nVerAlign;
 }
