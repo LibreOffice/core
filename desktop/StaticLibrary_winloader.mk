@@ -10,6 +10,10 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,winloader))
 
+$(eval $(call gb_StaticLibrary_use_externals,winloader,\
+    boost_headers \
+))
+
 $(eval $(call gb_StaticLibrary_add_exception_objects,winloader,\
     desktop/win32/source/loader \
 ))
