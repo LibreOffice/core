@@ -54,6 +54,12 @@ static sal_Int32 lcl_ToHorizAlign( sal_Int32 nAlign )
             return SDRTEXTHORZADJUST_RIGHT;
         case XML_center:
             return SDRTEXTHORZADJUST_CENTER;
+        case XML_Left:
+            return SDRTEXTHORZADJUST_LEFT;
+        case XML_Right:
+            return SDRTEXTHORZADJUST_RIGHT;
+        case XML_Center:
+            return SDRTEXTHORZADJUST_CENTER;
         default:
             return SDRTEXTHORZADJUST_BLOCK;
     }
@@ -68,6 +74,12 @@ static sal_Int32 lcl_ToVertAlign( sal_Int32 nAlign )
         case XML_center:
             return SDRTEXTVERTADJUST_CENTER;
         case XML_bottom:
+            return SDRTEXTVERTADJUST_BOTTOM;
+        case XML_Top:
+            return SDRTEXTVERTADJUST_TOP;
+        case XML_Center:
+            return SDRTEXTVERTADJUST_CENTER;
+        case XML_Bottom:
             return SDRTEXTVERTADJUST_BOTTOM;
         default:
             return SDRTEXTVERTADJUST_BLOCK;
@@ -164,6 +176,11 @@ void Comment::finalizeImport()
             pNoteShape->convertFormatting( xAnnoShape );
             // visibility
             bVisible = pNoteShape->getTypeModel().mbVisible;
+
+            // Setting comment text alignment
+            const ::oox::vml::ClientData* xClientData = pNoteShape->getClientData();
+            aCommentPr.setProperty(PROP_TextHorizontalAdjust, lcl_ToHorizAlign(xClientData->mnTextHAlign));
+            aCommentPr.setProperty(PROP_TextVerticalAdjust, lcl_ToVertAlign(xClientData->mnTextVAlign));
         }
         xAnno->setIsVisible( bVisible );
 
