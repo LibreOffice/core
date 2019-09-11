@@ -38,6 +38,8 @@ namespace connectivity
         class ODatabaseMetaData : public ODatabaseMetaData_BASE
         {
             ::rtl::Reference<Connection> m_pConnection;
+        private:
+            css::uno::Reference< css::sdbc::XResultSet > lcl_getKeys( const bool& bIsImport, const OUString& table );
         public:
 
             explicit ODatabaseMetaData(Connection* _pCon);
