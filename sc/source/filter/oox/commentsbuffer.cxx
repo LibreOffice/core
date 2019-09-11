@@ -164,6 +164,11 @@ void Comment::finalizeImport()
             pNoteShape->convertFormatting( xAnnoShape );
             // visibility
             bVisible = pNoteShape->getTypeModel().mbVisible;
+
+            // Setting comment text alignment
+            const ::oox::vml::ClientData* xClientData = pNoteShape->getClientData();
+            aCommentPr.setProperty(PROP_TextHorizontalAdjust, lcl_ToHorizAlign(xClientData->mnTextHAlign));
+            aCommentPr.setProperty(PROP_TextVerticalAdjust, lcl_ToVertAlign(xClientData->mnTextVAlign));
         }
         xAnno->setIsVisible( bVisible );
 
