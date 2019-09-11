@@ -11,6 +11,10 @@ $(eval $(call gb_Executable_Executable,soffice))
 
 $(eval $(call gb_Executable_set_targettype_gui,soffice,YES))
 
+$(eval $(call gb_Executable_use_externals,soffice,\
+    boost_headers \
+))
+
 $(eval $(call gb_Executable_use_system_win32_libs,soffice,\
     advapi32 \
     shell32 \
