@@ -22,7 +22,7 @@
 using namespace css::uno;
 
 /// A clipboard implementation for LibreOfficeKit.
-class LOKClipboard
+class LOKClipboard final
     : public cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
                                            css::lang::XServiceInfo>
 {
