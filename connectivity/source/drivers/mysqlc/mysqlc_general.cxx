@@ -202,8 +202,10 @@ sal_Int32 mysqlStrToOOOType(const OUString& sType)
         return css::sdbc::DataType::BLOB;
     if (sType.equalsIgnoreAsciiCase("varbinary"))
         return css::sdbc::DataType::VARBINARY;
-    if (sType.equalsIgnoreAsciiCase("text") || sType.equalsIgnoreAsciiCase("char"))
+    if (sType.equalsIgnoreAsciiCase("char"))
         return css::sdbc::DataType::CHAR;
+    if (sType.equalsIgnoreAsciiCase("text"))
+        return css::sdbc::DataType::CLOB;
     if (sType.equalsIgnoreAsciiCase("binary"))
         return css::sdbc::DataType::BINARY;
     if (sType.equalsIgnoreAsciiCase("time"))
