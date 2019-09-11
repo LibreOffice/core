@@ -1023,6 +1023,19 @@ private:
     SvxShape* getSvxShape();
 
     SdrObject( const SdrObject& ) = delete;
+
+    //Comment text alignment
+private:
+    sal_uInt8 THA; // Comment text horizontal alignment
+    sal_uInt8 TVA; // Comment text vertical alignment
+
+public:
+    // Comment text horizontal setter/getter
+    void      SetTHA(sal_uInt8 aTHA) { THA = aTHA; }
+    sal_uInt8 GetTHA()               { return THA; }
+    // Comment text vertical setter/getter
+    void      SetTVA(sal_uInt8 aTVA) { TVA = aTVA; }
+    sal_uInt8 GetTVA()               { return TVA; }
 };
 
 // helper for constructing std::unique_ptr for SdrObjects where a
