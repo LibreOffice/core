@@ -61,6 +61,7 @@ enum SdrTextHorzAdjust {SDRTEXTHORZADJUST_LEFT,     // left adjusted
 class SVX_DLLPUBLIC SdrTextHorzAdjustItem: public SfxEnumItem<SdrTextHorzAdjust> {
 public:
     SdrTextHorzAdjustItem(SdrTextHorzAdjust eAdj=SDRTEXTHORZADJUST_BLOCK): SfxEnumItem(SDRATTR_TEXT_HORZADJUST, eAdj) {}
+    SdrTextHorzAdjustItem(SdrTextHorzAdjust eAdj, sal_uInt16 nWhich): SfxEnumItem(nWhich, eAdj) {}
     virtual SfxPoolItem*      Clone(SfxItemPool* pPool=nullptr) const override;
     virtual sal_uInt16        GetValueCount() const override;
 
