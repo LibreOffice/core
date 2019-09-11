@@ -23,6 +23,10 @@
 #include <stdlib.h>
 #include <desktop/exithelper.h>
 
+#include <fstream>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ini_parser.hpp>
+
 #include "../loader.hxx"
 
 static LPWSTR *GetCommandArgs( int *pArgc )
@@ -63,6 +67,47 @@ int WINAPI wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
     DWORD cwdLen = GetCurrentDirectoryW(MAX_PATH, cwd);
     if (cwdLen >= MAX_PATH) {
         cwdLen = 0;
+    }
+
+    // read limit values from bootstrap.ini
+    unsigned int nMaxMemoryInMB = 0;
+    bool bExcludeChildProcesses = true;
+
+    const WCHAR* szIniFile = L"\\bootstrap.ini";
+    const size_t nDirLen = wcslen(szIniDirectory);
+    if (wcslen(szIniFile) + nDirLen < MAX_PATH)
+    {
+        WCHAR szBootstrapIni[MAX_PATH];
+        wcscpy(szBootstrapIni, szIniDirectory);
+        wcscpy(&szBootstrapIni[nDirLen], szIniFile);
+
+        try
+        {
+            boost::property_tree::ptree pt;
+            std::ifstream aFile(szBootstrapIni);
+            boost::property_tree::ini_parser::read_ini(aFile, pt);
+            nMaxMemoryInMB = pt.get("Win32.LimitMaximumMemoryInMB", nMaxMemoryInMB);
+            bExcludeChildProcesses = pt.get("Win32.ExcludeChildProcessesFromLimit", bExcludeChildProcesses);
+        }
+        catch (...)
+        {
+            nMaxMemoryInMB = 0;
+        }
+    }
+
+    // create a Windows JobObject with a memory limit
+    HANDLE hJobObject = NULL;
+    if (nMaxMemoryInMB > 0)
+    {
+        JOBOBJECT_EXTENDED_LIMIT_INFORMATION aJobLimit;
+        aJobLimit.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_JOB_MEMORY;
+        if (bExcludeChildProcesses)
+            aJobLimit.BasicLimitInformation.LimitFlags |= JOB_OBJECT_LIMIT_SILENT_BREAKAWAY_OK;
+        aJobLimit.JobMemoryLimit = nMaxMemoryInMB * 1024 * 1024;
+        hJobObject = CreateJobObjectW(NULL, NULL);
+        if (hJobObject != NULL)
+            SetInformationJobObject(hJobObject, JobObjectExtendedLimitInformation, &aJobLimit,
+                                    sizeof(JOBOBJECT_EXTENDED_LIMIT_INFORMATION));
     }
 
     do
@@ -157,6 +202,9 @@ int WINAPI wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
         {
             DWORD   dwWaitResult;
 
+            if (hJobObject)
+                AssignProcessToJobObject(hJobObject, aProcessInfo.hProcess);
+
             do
             {
                 // On Windows XP it seems as the desktop calls WaitForInputIdle after "OpenWidth" so we have to do so
@@ -180,6 +228,10 @@ int WINAPI wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
         }
     } while ( fSuccess
               && ( EXITHELPER_CRASH_WITH_RESTART == dwExitCode || EXITHELPER_NORMAL_RESTART == dwExitCode ));
+
+    if (hJobObject)
+        CloseHandle(hJobObject);
+
     delete[] lpCommandLine;
     LocalFree(argv);
 
