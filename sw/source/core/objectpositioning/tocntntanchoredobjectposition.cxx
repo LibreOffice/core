@@ -45,6 +45,10 @@
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <sortedobjs.hxx>
 #include <textboxhelper.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <svx/sdgcpitm.hxx>
+#include <svx/svdview.hxx>
+
 
 using namespace objectpositioning;
 using namespace ::com::sun::star;
@@ -585,6 +589,50 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                     aRelPos.setX( nRelPosY );
                 else
                     aRelPos.setY( nRelPosY );
+
+                // Crop the image if it overflows
+                SwVirtFlyDrawObj *p = static_cast<SwVirtFlyDrawObj*>(GetAnchoredObj().DrawObj());
+
+                if(p->ContainsSwGrfNode())
+                {
+//SOLUTION 1
+/*
+                    SwViewShell *pSh = GetAnchorFrame().getRootFrame()->GetCurrShellNC();
+                    SfxItemSet aGrfAttr( pSh->GetAttrPool(), svl::Items<SDRATTR_GRAFCROP, SDRATTR_GRAFCROP>{} );
+                    aGrfAttr.Put(SdrGrafCropItem(0,0,0,7000));
+                    pSh->GetDrawView()->SetAttributes( aGrfAttr );
+*/
+
+//SOLUTION 2
+/*
+                    SwViewShell *pSh = GetAnchorFrame().getRootFrame()->GetCurrShellNC();
+                    SwRect aRect(11560, 284, 3908, 4334);
+
+                    pSh->MakeVisible(aRect); // no way to get non cost SwViewShell should i write a new non-const get func? (i did. It didn't works again.)
+                    pSh->Reformat();
+*/
+
+//SOLUTION 3 (i think it needs an invalidation for new attributes but couldn't a way)
+/*
+                    GraphicAttr aGraphicAttr;
+
+                    aGraphicAttr = p->GetGrfNode()->GetGrfObject().GetAttr();
+                    aGraphicAttr.SetCrop(0,0,0,7000);
+
+                    Graphic aGrf = p->GetGrfNode()->GetGrfObject().GetTransformedGraphic(&aGraphicAttr);
+                    p->GetGrfNode()->GetGrfObject().SetGraphic(aGrf);
+*/
+
+
+//SOLUTION 4 (i think it needs an invalidation for new attributes but couldn't a way)
+/*
+                    GraphicAttr aGraphicAttr;
+                    aGraphicAttr = p->GetGrfNode()->GetGrfObject().GetAttr();
+
+                    aGraphicAttr.SetCrop(0,0,0,7000);
+                    p->GetGrfNode()->GetGrfObject().SetAttr(aGraphicAttr);
+*/
+                }
             }
             else
             {

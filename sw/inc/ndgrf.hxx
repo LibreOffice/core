@@ -78,6 +78,7 @@ public:
     virtual ~SwGrfNode() override;
     const Graphic&          GetGrf(bool bWait = false) const;
     const GraphicObject&    GetGrfObj(bool bWait = false) const;
+    GraphicObject&          GetGrfObject(bool bWait = false);
     const GraphicObject* GetReplacementGrfObj() const;
 
     /// isolated only way to set GraphicObject to allow more actions when doing so

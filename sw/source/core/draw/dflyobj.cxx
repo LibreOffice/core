@@ -51,7 +51,6 @@
 #include <rootfrm.hxx>
 #include <textboxhelper.hxx>
 #include <wrtsh.hxx>
-#include <ndgrf.hxx>
 #include <frmmgr.hxx>
 
 #include <svx/sdr/properties/defaultproperties.hxx>
@@ -373,6 +372,16 @@ bool SwVirtFlyDrawObj::ContainsSwGrfNode() const
     }
 
     return false;
+}
+
+SwGrfNode* SwVirtFlyDrawObj::GetGrfNode()
+{
+    // Gets if there is a SwGrfNode
+    SwFlyFrame* pFlyFrame(GetFlyFrame());
+
+    SwGrfNode  *pGrfNd(static_cast<SwNoTextFrame*>(pFlyFrame->Lower())->GetNode()->GetGrfNode());
+
+    return pGrfNd;
 }
 
 bool SwVirtFlyDrawObj::HasLimitedRotation() const

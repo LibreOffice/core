@@ -22,6 +22,7 @@
 
 #include <svx/svdovirt.hxx>
 #include <svx/svdobj.hxx>
+#include <ndgrf.hxx>
 
 namespace drawinglayer::geometry { class ViewInformation2D; }
 
@@ -84,6 +85,7 @@ public:
 
     // RotGrfFlyFrame: Check if this is a SwGrfNode
     bool ContainsSwGrfNode() const;
+    SwGrfNode* GetGrfNode();
 
     SwVirtFlyDrawObj(
         SdrModel& rSdrModel,

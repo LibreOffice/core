@@ -296,6 +296,7 @@ public:
 
     void                    SetAttr( const GraphicAttr& rAttr );
     const GraphicAttr&      GetAttr() const { return maAttr; }
+    GraphicAttr&            GetGrfAttr() { return maAttr; }
 
     bool                    HasUserData() const { return !maUserData.isEmpty(); }
     void                    SetUserData();

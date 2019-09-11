@@ -202,6 +202,7 @@ public:
     void Init(SwFrameFormat*);
 
     SwViewShell *GetCurrShell() const { return mpCurrShell; }
+    SwViewShell *GetCurrShellNC() { return mpCurrShell; } // NC means Non-Const
     void DeRegisterShell( SwViewShell *pSh );
 
     /**

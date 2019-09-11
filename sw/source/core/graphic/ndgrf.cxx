@@ -377,6 +377,12 @@ const GraphicObject& SwGrfNode::GetGrfObj(bool bWait) const
     return maGrfObj;
 }
 
+GraphicObject& SwGrfNode::GetGrfObject(bool bWait)
+{
+    const_cast<SwGrfNode*>(this)->SwapIn(bWait);
+    return maGrfObj;
+}
+
 const GraphicObject* SwGrfNode::GetReplacementGrfObj() const
 {
     if(!mpReplacementGraphic)
