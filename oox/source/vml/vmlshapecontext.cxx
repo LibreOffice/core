@@ -187,6 +187,28 @@ void ClientDataContext::onCharacters( const OUString& rChars )
     maElementText = rChars;
 }
 
+    // Comment text alignment.
+    // If the first letter of the input is upper case, this method converts
+    // it into lower case.
+    // The converted value is saved into a ClientData object below,
+    // and accessed later in the finalizer.
+static OUString toLowerCase(OUString someText)
+{
+    int length = someText.getLength();
+    char* thisText = new char[length];
+    for (int i = 0; i < length; i++)
+    {
+        thisText[i] = someText[i];
+    }
+    thisText[0] += 32;
+    OUString theText;
+    for (int j = 0; j < length; j++)
+    {
+        theText = theText + OUString(thisText[j]);
+    }
+    return theText;
+}
+
 void ClientDataContext::onEndElement()
 {
     switch( getCurrentElement() )
@@ -197,8 +219,22 @@ void ClientDataContext::onEndElement()
         case VMLX_TOKEN( FmlaLink ):    mrClientData.maFmlaLink = maElementText;                                        break;
         case VMLX_TOKEN( FmlaRange ):   mrClientData.maFmlaRange = maElementText;                                       break;
         case VMLX_TOKEN( FmlaGroup ):   mrClientData.maFmlaGroup = maElementText;                                       break;
-        case VMLX_TOKEN( TextHAlign ):  mrClientData.mnTextHAlign = AttributeConversion::decodeToken( maElementText );  break;
-        case VMLX_TOKEN( TextVAlign ):  mrClientData.mnTextVAlign = AttributeConversion::decodeToken( maElementText );  break;
+        case VMLX_TOKEN( TextHAlign ):  if (maElementText[0] >= 'A' && maElementText[0] <= 'Z')
+                                        {
+                                            mrClientData.mnTextHAlign = AttributeConversion::decodeToken( toLowerCase( maElementText ) );
+                                        }
+                                        else
+                                        {
+                                            mrClientData.mnTextHAlign = AttributeConversion::decodeToken(maElementText);
+                                        }                                                                               break;
+        case VMLX_TOKEN( TextVAlign ):  if (maElementText[0] >= 'A' && maElementText[0] <= 'Z')
+                                        {
+                                            mrClientData.mnTextVAlign = AttributeConversion::decodeToken( toLowerCase( maElementText ) );
+                                        }
+                                        else
+                                        {
+                                            mrClientData.mnTextVAlign = AttributeConversion::decodeToken(maElementText);
+                                        }                                                                               break;
         case VMLX_TOKEN( Column ):      mrClientData.mnCol = maElementText.toInt32();                                   break;
         case VMLX_TOKEN( Row ):         mrClientData.mnRow = maElementText.toInt32();                                   break;
         case VMLX_TOKEN( Checked ):     mrClientData.mnChecked = maElementText.toInt32();                               break;
