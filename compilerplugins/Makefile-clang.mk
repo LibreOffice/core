@@ -141,7 +141,16 @@ $(CLANGOUTDIR)/sources.txt:
 compilerplugins-build: $(CLANGOUTDIR) $(CLANGOBJDIR) $(CLANGOUTDIR)/plugin$(CLANG_DL_EXT)
 
 compilerplugins-clean:
-	rm -rf $(CLANGOUTDIR)
+	rm -rf \
+        $(CLANGOBJDIR) \
+        $(CLANGOUTDIR)/clang-timestamp \
+        $(CLANGOUTDIR)/plugin$(CLANG_DL_EXT) \
+        $(CLANGOUTDIR)/sharedvisitor/*.plugininfo \
+        $(CLANGOUTDIR)/sharedvisitor/clang.pch \
+        $(CLANGOUTDIR)/sharedvisitor/sharedvisitor.{cxx,d,o} \
+        $(CLANGOUTDIR)/sharedvisitor/{analyzer,generator}{$(CLANG_EXE_EXT),.d,.o} \
+        $(CLANGOUTDIR)/sources-new.txt \
+        $(CLANGOUTDIR)/sources.txt
 
 $(CLANGOUTDIR):
 	mkdir -p $(CLANGOUTDIR)
