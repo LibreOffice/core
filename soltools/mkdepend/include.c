@@ -243,13 +243,13 @@ int issymbolic(char *dir, char *component)
     struct stat st;
     char    buf[ BUFSIZ ], **pp;
 
-#if defined __GNUC__ && __GNUC__ == 8 && (__GNUC_MINOR__ == 2 || __GNUC_MINOR__ == 3) && !defined __clang__
+#if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-truncation"
-    // silence "‘snprintf’ output may be truncated before the last format character"
+    // silence "‘snprintf’ output may be truncated before the last format character", from gcc 8.3 to at least 9.2.1
 #endif
     int n = snprintf(buf, BUFSIZ, "%s%s%s", dir, *dir ? "/" : "", component);
-#if defined __GNUC__ && __GNUC__ == 8 && (__GNUC_MINOR__ == 2 || __GNUC_MINOR__ == 3) && !defined __clang__
+#if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic pop
 #endif
     assert(n < BUFSIZ);
