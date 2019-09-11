@@ -10,15 +10,11 @@
 $(eval $(call gb_CustomTarget_CustomTarget,extras/source/autotext))
 
 extras_AUTOTEXTSHARE_AUTOTEXTS := \
-	ab/standard \
-	af-ZA/standard \
 	af/standard \
 	am/standard \
-	an/standard \
 	ar/standard \
 	as/standard \
 	ast/standard \
-	az/standard \
 	be/standard \
 	bg/crdbus50 \
 	bg/standard \
@@ -46,7 +42,6 @@ extras_AUTOTEXTSHARE_AUTOTEXTS := \
 	dsb/standard \
 	dz/standard \
 	el/standard \
-	en-AU/standard \
 	en-GB/crdbus50 \
 	en-GB/standard \
 	en-GB/template \
@@ -66,7 +61,6 @@ extras_AUTOTEXTSHARE_AUTOTEXTS := \
 	fr/standard \
 	fr/template \
 	fy/standard \
-	ga-IE/standard \
 	ga/standard \
 	gd/standard \
 	gl/standard \
@@ -88,11 +82,9 @@ extras_AUTOTEXTSHARE_AUTOTEXTS := \
 	ja/crdbus50 \
 	ja/standard \
 	ja/template \
-	jv/standard \
 	ka/standard \
 	kab/standard \
 	kk/standard \
-	kl/standard \
 	km/crdbus50 \
 	km/standard \
 	km/template \
@@ -103,8 +95,6 @@ extras_AUTOTEXTSHARE_AUTOTEXTS := \
 	ko/template \
 	kok/standard \
 	ks/standard \
-	ky/standard \
-	lb-LU/standard \
 	lb/standard \
 	lo/standard \
 	lt/standard \
@@ -120,7 +110,6 @@ extras_AUTOTEXTSHARE_AUTOTEXTS := \
 	my/standard \
 	nb/standard \
 	ne/standard \
-	nl-BE/standard \
 	nl/crdbus50 \
 	nl/standard \
 	nl/template \
@@ -146,7 +135,6 @@ extras_AUTOTEXTSHARE_AUTOTEXTS := \
 	ru/template \
 	rw/standard \
 	sa-IN/standard \
-	sah/standard \
 	sat/standard \
 	sd/standard \
 	si/standard \
@@ -177,7 +165,6 @@ extras_AUTOTEXTSHARE_AUTOTEXTS := \
 	te/standard \
 	tg/standard \
 	th/standard \
-	ti/standard \
 	tn/standard \
 	tr/crdbus50 \
 	tr/standard \
@@ -186,7 +173,6 @@ extras_AUTOTEXTSHARE_AUTOTEXTS := \
 	tt/standard \
 	ug/standard \
 	uk/standard \
-	ur/standard \
 	uz/standard \
 	ve/standard \
 	vec/standard \
@@ -202,22 +188,6 @@ extras_AUTOTEXTSHARE_AUTOTEXTS := \
 
 
 extras_AUTOTEXTSHARE_XMLFILES := \
-	ab/standard/BlockList.xml \
-	ab/standard/FN/content.xml \
-	ab/standard/FN/manifest.rdf \
-	ab/standard/FN/Object_1/content.xml \
-	ab/standard/FN/Object_1/settings.xml \
-	ab/standard/FN/styles.xml \
-	ab/standard/LOREM/LOREM.xml \
-	ab/standard/META-INF/manifest.xml \
-	af-ZA/standard/BlockList.xml \
-	af-ZA/standard/FN/content.xml \
-	af-ZA/standard/FN/manifest.rdf \
-	af-ZA/standard/FN/Object_1/content.xml \
-	af-ZA/standard/FN/Object_1/settings.xml \
-	af-ZA/standard/FN/styles.xml \
-	af-ZA/standard/LOREM/LOREM.xml \
-	af-ZA/standard/META-INF/manifest.xml \
 	af/standard/BlockList.xml \
 	af/standard/FN/content.xml \
 	af/standard/FN/manifest.rdf \
@@ -234,14 +204,6 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	am/standard/FN/styles.xml \
 	am/standard/LOREM/LOREM.xml \
 	am/standard/META-INF/manifest.xml \
-	an/standard/BlockList.xml \
-	an/standard/FN/content.xml \
-	an/standard/FN/manifest.rdf \
-	an/standard/FN/Object_1/content.xml \
-	an/standard/FN/Object_1/settings.xml \
-	an/standard/FN/styles.xml \
-	an/standard/LOREM/LOREM.xml \
-	an/standard/META-INF/manifest.xml \
 	ar/standard/BlockList.xml \
 	ar/standard/FN/content.xml \
 	ar/standard/FN/manifest.rdf \
@@ -266,14 +228,6 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	ast/standard/FN/styles.xml \
 	ast/standard/LOREM/LOREM.xml \
 	ast/standard/META-INF/manifest.xml \
-	az/standard/BlockList.xml \
-	az/standard/FN/content.xml \
-	az/standard/FN/manifest.rdf \
-	az/standard/FN/Object_1/content.xml \
-	az/standard/FN/Object_1/settings.xml \
-	az/standard/FN/styles.xml \
-	az/standard/LOREM/LOREM.xml \
-	az/standard/META-INF/manifest.xml \
 	be/standard/BlockList.xml \
 	be/standard/FN/content.xml \
 	be/standard/FN/manifest.rdf \
@@ -1113,14 +1067,6 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	el/standard/FN/styles.xml \
 	el/standard/LOREM/LOREM.xml \
 	el/standard/META-INF/manifest.xml \
-	en-AU/standard/BlockList.xml \
-	en-AU/standard/FN/content.xml \
-	en-AU/standard/FN/manifest.rdf \
-	en-AU/standard/FN/Object_1/content.xml \
-	en-AU/standard/FN/Object_1/settings.xml \
-	en-AU/standard/FN/styles.xml \
-	en-AU/standard/LOREM/LOREM.xml \
-	en-AU/standard/META-INF/manifest.xml \
 	en-GB/crdbus50/BlockList.xml \
 	en-GB/crdbus50/CON1/atevent.xml \
 	en-GB/crdbus50/CON1/content.xml \
@@ -1797,14 +1743,6 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	fy/standard/FN/styles.xml \
 	fy/standard/LOREM/LOREM.xml \
 	fy/standard/META-INF/manifest.xml \
-	ga-IE/standard/BlockList.xml \
-	ga-IE/standard/FN/content.xml \
-	ga-IE/standard/FN/manifest.rdf \
-	ga-IE/standard/FN/Object_1/content.xml \
-	ga-IE/standard/FN/Object_1/settings.xml \
-	ga-IE/standard/FN/styles.xml \
-	ga-IE/standard/LOREM/LOREM.xml \
-	ga-IE/standard/META-INF/manifest.xml \
 	ga/standard/BlockList.xml \
 	ga/standard/FN/content.xml \
 	ga/standard/FN/manifest.rdf \
@@ -2280,14 +2218,6 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	ja/template/PT1/styles.xml \
 	ja/template/PT2/content.xml \
 	ja/template/PT2/styles.xml \
-	jv/standard/BlockList.xml \
-	jv/standard/FN/content.xml \
-	jv/standard/FN/manifest.rdf \
-	jv/standard/FN/Object_1/content.xml \
-	jv/standard/FN/Object_1/settings.xml \
-	jv/standard/FN/styles.xml \
-	jv/standard/LOREM/LOREM.xml \
-	jv/standard/META-INF/manifest.xml \
 	ka/standard/BlockList.xml \
 	ka/standard/FN/content.xml \
 	ka/standard/FN/manifest.rdf \
@@ -2312,14 +2242,6 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	kk/standard/FN/styles.xml \
 	kk/standard/LOREM/LOREM.xml \
 	kk/standard/META-INF/manifest.xml \
-	kl/standard/BlockList.xml \
-	kl/standard/FN/content.xml \
-	kl/standard/FN/manifest.rdf \
-	kl/standard/FN/Object_1/content.xml \
-	kl/standard/FN/Object_1/settings.xml \
-	kl/standard/FN/styles.xml \
-	kl/standard/LOREM/LOREM.xml \
-	kl/standard/META-INF/manifest.xml \
 	km/crdbus50/BlockList.xml \
 	km/crdbus50/CON1/atevent.xml \
 	km/crdbus50/CON1/content.xml \
@@ -2621,22 +2543,6 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	ks/standard/FN/styles.xml \
 	ks/standard/LOREM/LOREM.xml \
 	ks/standard/META-INF/manifest.xml \
-	ky/standard/BlockList.xml \
-	ky/standard/FN/content.xml \
-	ky/standard/FN/manifest.rdf \
-	ky/standard/FN/Object_1/content.xml \
-	ky/standard/FN/Object_1/settings.xml \
-	ky/standard/FN/styles.xml \
-	ky/standard/LOREM/LOREM.xml \
-	ky/standard/META-INF/manifest.xml \
-	lb-LU/standard/BlockList.xml \
-	lb-LU/standard/FN/content.xml \
-	lb-LU/standard/FN/manifest.rdf \
-	lb-LU/standard/FN/Object_1/content.xml \
-	lb-LU/standard/FN/Object_1/settings.xml \
-	lb-LU/standard/FN/styles.xml \
-	lb-LU/standard/LOREM/LOREM.xml \
-	lb-LU/standard/META-INF/manifest.xml \
 	lb/standard/BlockList.xml \
 	lb/standard/FN/content.xml \
 	lb/standard/FN/manifest.rdf \
@@ -2907,14 +2813,6 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	ne/standard/FN/styles.xml \
 	ne/standard/LOREM/LOREM.xml \
 	ne/standard/META-INF/manifest.xml \
-	nl-BE/standard/BlockList.xml \
-	nl-BE/standard/FN/content.xml \
-	nl-BE/standard/FN/manifest.rdf \
-	nl-BE/standard/FN/Object_1/content.xml \
-	nl-BE/standard/FN/Object_1/settings.xml \
-	nl-BE/standard/FN/styles.xml \
-	nl-BE/standard/LOREM/LOREM.xml \
-	nl-BE/standard/META-INF/manifest.xml \
 	nl/crdbus50/ACT1/atevent.xml \
 	nl/crdbus50/ACT1/content.xml \
 	nl/crdbus50/ACT1/Pictures/2000001B00000CD200000CED63AA5866.svm \
@@ -3595,13 +3493,6 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	sa-IN/standard/LOREM/LOREM.xml \
 	sa-IN/standard/META-INF/manifest.xml \
 	sah/standard/BlockList.xml \
-	sah/standard/FN/content.xml \
-	sah/standard/FN/manifest.rdf \
-	sah/standard/FN/Object_1/content.xml \
-	sah/standard/FN/Object_1/settings.xml \
-	sah/standard/FN/styles.xml \
-	sah/standard/LOREM/LOREM.xml \
-	sah/standard/META-INF/manifest.xml \
 	sat/standard/BlockList.xml \
 	sat/standard/FN/content.xml \
 	sat/standard/FN/manifest.rdf \
@@ -4280,14 +4171,6 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	th/standard/FN/styles.xml \
 	th/standard/LOREM/LOREM.xml \
 	th/standard/META-INF/manifest.xml \
-	ti/standard/BlockList.xml \
-	ti/standard/FN/content.xml \
-	ti/standard/FN/manifest.rdf \
-	ti/standard/FN/Object_1/content.xml \
-	ti/standard/FN/Object_1/settings.xml \
-	ti/standard/FN/styles.xml \
-	ti/standard/LOREM/LOREM.xml \
-	ti/standard/META-INF/manifest.xml \
 	tn/standard/BlockList.xml \
 	tn/standard/FN/content.xml \
 	tn/standard/FN/manifest.rdf \
@@ -4373,14 +4256,6 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	uk/standard/FN/styles.xml \
 	uk/standard/LOREM/LOREM.xml \
 	uk/standard/META-INF/manifest.xml \
-	ur/standard/BlockList.xml \
-	ur/standard/FN/content.xml \
-	ur/standard/FN/manifest.rdf \
-	ur/standard/FN/Object_1/content.xml \
-	ur/standard/FN/Object_1/settings.xml \
-	ur/standard/FN/styles.xml \
-	ur/standard/LOREM/LOREM.xml \
-	ur/standard/META-INF/manifest.xml \
 	uz/standard/BlockList.xml \
 	uz/standard/FN/content.xml \
 	uz/standard/FN/manifest.rdf \

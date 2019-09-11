@@ -10,15 +10,11 @@
 $(eval $(call gb_AllLangPackage_AllLangPackage,autotextshare,$(call gb_CustomTarget_get_workdir,extras/source/autotext)))
 
 $(eval $(call gb_AllLangPackage_add_files,autotextshare,$(LIBO_SHARE_FOLDER)/autotext,\
-	ab/standard.bau \
-	af-ZA/standard.bau \
 	af/standard.bau \
 	am/standard.bau \
-	an/standard.bau \
 	ar/standard.bau \
 	as/standard.bau \
 	ast/standard.bau \
-	az/standard.bau \
 	be/standard.bau \
 	bg/crdbus50.bau \
 	bg/standard.bau \
@@ -46,7 +42,6 @@ $(eval $(call gb_AllLangPackage_add_files,autotextshare,$(LIBO_SHARE_FOLDER)/aut
 	dsb/standard.bau \
 	dz/standard.bau \
 	el/standard.bau \
-	en-AU/standard.bau \
 	en-GB/crdbus50.bau \
 	en-GB/standard.bau \
 	en-GB/template.bau \
@@ -66,7 +61,6 @@ $(eval $(call gb_AllLangPackage_add_files,autotextshare,$(LIBO_SHARE_FOLDER)/aut
 	fr/standard.bau \
 	fr/template.bau \
 	fy/standard.bau \
-	ga-IE/standard.bau \
 	ga/standard.bau \
 	gd/standard.bau \
 	gl/standard.bau \
@@ -88,11 +82,9 @@ $(eval $(call gb_AllLangPackage_add_files,autotextshare,$(LIBO_SHARE_FOLDER)/aut
 	ja/crdbus50.bau \
 	ja/standard.bau \
 	ja/template.bau \
-	jv/standard.bau \
 	ka/standard.bau \
 	kab/standard.bau \
 	kk/standard.bau \
-	kl/standard.bau \
 	km/crdbus50.bau \
 	km/standard.bau \
 	km/template.bau \
@@ -103,8 +95,6 @@ $(eval $(call gb_AllLangPackage_add_files,autotextshare,$(LIBO_SHARE_FOLDER)/aut
 	ko/template.bau \
 	kok/standard.bau \
 	ks/standard.bau \
-	ky/standard.bau \
-	lb-LU/standard.bau \
 	lb/standard.bau \
 	lo/standard.bau \
 	lt/standard.bau \
@@ -120,7 +110,6 @@ $(eval $(call gb_AllLangPackage_add_files,autotextshare,$(LIBO_SHARE_FOLDER)/aut
 	my/standard.bau \
 	nb/standard.bau \
 	ne/standard.bau \
-	nl-BE/standard.bau \
 	nl/crdbus50.bau \
 	nl/standard.bau \
 	nl/template.bau \
@@ -146,7 +135,6 @@ $(eval $(call gb_AllLangPackage_add_files,autotextshare,$(LIBO_SHARE_FOLDER)/aut
 	ru/template.bau \
 	rw/standard.bau \
 	sa-IN/standard.bau \
-	sah/standard.bau \
 	sat/standard.bau \
 	sd/standard.bau \
 	si/standard.bau \
@@ -177,7 +165,6 @@ $(eval $(call gb_AllLangPackage_add_files,autotextshare,$(LIBO_SHARE_FOLDER)/aut
 	te/standard.bau \
 	tg/standard.bau \
 	th/standard.bau \
-	ti/standard.bau \
 	tn/standard.bau \
 	tr/crdbus50.bau \
 	tr/standard.bau \
@@ -186,7 +173,6 @@ $(eval $(call gb_AllLangPackage_add_files,autotextshare,$(LIBO_SHARE_FOLDER)/aut
 	tt/standard.bau \
 	ug/standard.bau \
 	uk/standard.bau \
-	ur/standard.bau \
 	uz/standard.bau \
 	ve/standard.bau \
 	vec/standard.bau \
