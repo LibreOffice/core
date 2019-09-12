@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_9fabbe87",
+        "filename": "desktop/win32/source/loader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-09-12T10:59:46Z",
+      "side": 1,
+      "message": "do we need a \"if hJobObject\" check here?",
+      "revId": "50e816319e2891e4b45b5ff525432869e35222a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
