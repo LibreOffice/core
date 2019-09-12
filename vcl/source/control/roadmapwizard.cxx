@@ -33,25 +33,27 @@
 
 namespace vcl
 {
+    using namespace RoadmapWizardTypes;
+
     namespace
     {
         typedef ::std::set< WizardTypes::WizardState > StateSet;
 
         typedef ::std::map<
-                    RoadmapWizardTypes::PathId,
-                    RoadmapWizardTypes::WizardPath
+                    PathId,
+                    WizardPath
                 > Paths;
 
         typedef ::std::map<
                     WizardTypes::WizardState,
                     ::std::pair<
                         OUString,
-                        RoadmapWizardTypes::RoadmapPageFactory
+                        RoadmapPageFactory
                     >
                 > StateDescriptions;
     }
 
-    struct RoadmapWizardImpl : public RoadmapWizardTypes
+    struct RoadmapWizardImpl
     {
         ScopedVclPtr<ORoadmap> pRoadmap;
         Paths               aPaths;

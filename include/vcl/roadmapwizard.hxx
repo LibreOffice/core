@@ -29,9 +29,8 @@ namespace vcl
     struct RoadmapWizardImpl;
     class RoadmapWizard;
 
-    struct RoadmapWizardTypes
+    namespace RoadmapWizardTypes
     {
-    public:
         typedef sal_Int16                                   PathId;
         typedef ::std::vector< vcl::WizardTypes::WizardState >   WizardPath;
         typedef VclPtr<TabPage> (* RoadmapPageFactory)( RoadmapWizard& );
@@ -59,7 +58,7 @@ namespace vcl
         <code>n2</code>, which share at least the first <code>k</code> states (where <code>k</code>
         is at least 1), and an arbitrary number of other states.
     */
-    class VCL_DLLPUBLIC RoadmapWizard : public vcl::OWizardMachine, public RoadmapWizardTypes
+    class VCL_DLLPUBLIC RoadmapWizard : public vcl::OWizardMachine
     {
     private:
         std::unique_ptr<RoadmapWizardImpl>  m_pImpl;
@@ -107,7 +106,7 @@ namespace vcl
                 the unique id you wish to give this path. This id can later on be used
                 to refer to the path which you just declared
         */
-        void    declarePath( PathId _nPathId, const WizardPath& _lWizardStates);
+        void    declarePath( RoadmapWizardTypes::PathId _nPathId, const RoadmapWizardTypes::WizardPath& _lWizardStates);
 
         /** activates a path which has previously been declared with <member>declarePath</member>
 
@@ -140,7 +139,7 @@ namespace vcl
                 already declared), then only steps <code>0</code> and <code>1</code> are activated,
                 since they are common to both paths.
         */
-        void    activatePath( PathId _nPathId, bool _bDecideForIt = false );
+        void    activatePath( RoadmapWizardTypes::PathId _nPathId, bool _bDecideForIt = false );
 
         /** determine the next state to travel from the given one
 
@@ -208,7 +207,7 @@ namespace vcl
         VCL_DLLPRIVATE void impl_construct();
     };
 
-    class VCL_DLLPUBLIC RoadmapWizardMachine : public vcl::WizardMachine, public RoadmapWizardTypes
+    class VCL_DLLPUBLIC RoadmapWizardMachine : public vcl::WizardMachine
     {
     private:
         std::unique_ptr<RoadmapWizardImpl>  m_pImpl;
@@ -244,7 +243,7 @@ namespace vcl
                 the unique id you wish to give this path. This id can later on be used
                 to refer to the path which you just declared
         */
-        void    declarePath( PathId _nPathId, const WizardPath& _lWizardStates);
+        void    declarePath( RoadmapWizardTypes::PathId _nPathId, const RoadmapWizardTypes::WizardPath& _lWizardStates);
 
         /** activates a path which has previously been declared with <member>declarePath</member>
 
@@ -277,7 +276,7 @@ namespace vcl
                 already declared), then only steps <code>0</code> and <code>1</code> are activated,
                 since they are common to both paths.
         */
-        void    activatePath( PathId _nPathId, bool _bDecideForIt = false );
+        void    activatePath( RoadmapWizardTypes::PathId _nPathId, bool _bDecideForIt = false );
 
         /** determine the next state to travel from the given one
 

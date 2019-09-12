@@ -26,7 +26,6 @@
 #include <map>
 #include <memory>
 
-
 namespace svt { namespace uno
 {
 
@@ -76,7 +75,7 @@ namespace svt { namespace uno
 
         void        activatePath( const sal_Int16 i_nPathID, const bool i_bFinal )
         {
-            WizardShell_Base::activatePath( PathId( i_nPathID ), i_bFinal );
+            WizardShell_Base::activatePath( vcl::RoadmapWizardTypes::PathId( i_nPathID ), i_bFinal );
         }
 
         css::uno::Reference< css::ui::dialogs::XWizardPage >
