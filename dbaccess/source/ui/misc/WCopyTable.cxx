@@ -1178,7 +1178,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
             {
                 Reference< XStatement > xSelect = m_xDestConnection->createStatement();
                 Reference< XResultSet > xRs = xSelect->executeQuery("select database()");
-                xRs->next(); // first and only result
+                (void)xRs->next(); // first and only result
                 Reference< XRow > xRow( xRs, UNO_QUERY_THROW );
                 sSchema = xRow->getString(1);
             }
