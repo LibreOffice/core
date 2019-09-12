@@ -479,8 +479,7 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
                 }
                 else if (nSrcBitCount == 4)
                 {
-                    Convert( BmpConversion::N4BitColors );
-                    nNextIndex = 2;
+                    assert(false);
                 }
 
                 if( nNextIndex )

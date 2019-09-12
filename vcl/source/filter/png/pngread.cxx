@@ -1271,7 +1271,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 else
                 {
                     if ( mnPngDepth == 4 )  // maybe the source is a two bitmap graphic
-                    {   // ScanlineFormat::N4BitLsnPal
+                    {
                         for ( long nX = nXStart, nXIndex = 0; nX < maOrigSize.Width(); nX += nXAdd, nXIndex++ )
                         {
                             if( nXIndex & 1 )
