@@ -43,7 +43,7 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
             If the curve is not polynomial, this property has no effect.
 
         @param period
-            Period of a moving average regression curve, value should greater or equal to 2
+            Period of a moving average regression curve, value should be greater or equal to 2
             If the curve is not moving average regression curve, this property has no effect.
 
         @param forceIntercept
