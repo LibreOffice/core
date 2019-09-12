@@ -50,48 +50,6 @@ void BitmapReadAccess::SetPixelForN1BitLsbPal(const Scanline pScanline, long nX,
         rByte &= ~( 1 << ( nX & 7 ) );
 }
 
-BitmapColor BitmapReadAccess::GetPixelForN4BitMsnPal(ConstScanline pScanline, long nX, const ColorMask&)
-{
-    return BitmapColor( ( pScanline[ nX >> 1 ] >> ( nX & 1 ? 0 : 4 ) ) & 0x0f );
-}
-
-void BitmapReadAccess::SetPixelForN4BitMsnPal(const Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask&)
-{
-    sal_uInt8& rByte = pScanline[ nX >> 1 ];
-
-    if ( nX & 1 )
-    {
-        rByte &= 0xf0;
-        rByte |= ( rBitmapColor.GetIndex() & 0x0f );
-    }
-    else
-    {
-        rByte &= 0x0f;
-        rByte |= ( rBitmapColor.GetIndex() << 4 );
-    }
-}
-
-BitmapColor BitmapReadAccess::GetPixelForN4BitLsnPal(ConstScanline pScanline, long nX, const ColorMask&)
-{
-    return BitmapColor( ( pScanline[ nX >> 1 ] >> ( nX & 1 ? 4 : 0 ) ) & 0x0f );
-}
-
-void BitmapReadAccess::SetPixelForN4BitLsnPal(const Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask&)
-{
-    sal_uInt8& rByte = pScanline[ nX >> 1 ];
-
-    if ( nX & 1 )
-    {
-        rByte &= 0x0f;
-        rByte |= ( rBitmapColor.GetIndex() << 4 );
-    }
-    else
-    {
-        rByte &= 0xf0;
-        rByte |= ( rBitmapColor.GetIndex() & 0x0f );
-    }
-}
-
 BitmapColor BitmapReadAccess::GetPixelForN8BitPal(ConstScanline pScanline, long nX, const ColorMask&)
 {
     return BitmapColor( pScanline[ nX ] );

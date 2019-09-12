@@ -269,7 +269,6 @@ namespace vcl
                 // normalize bitcount
                 nDepth =
                     ( nDepth <= 1 ) ? 1 :
-                    ( nDepth <= 4 ) ? 4 :
                     ( nDepth <= 8 ) ? 8 : 24;
 
                 ::Bitmap aBitmap( aPixelSize,
