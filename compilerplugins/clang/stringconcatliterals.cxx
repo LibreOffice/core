@@ -47,11 +47,11 @@ Expr const * stripCtor(Expr const * expr) {
     return e2->getArg(0)->IgnoreParenImpCasts();
 }
 
-class StringConcat:
-    public loplugin::FilteringPlugin<StringConcat>
+class StringConcatLiterals:
+    public loplugin::FilteringPlugin<StringConcatLiterals>
 {
 public:
-    explicit StringConcat(loplugin::InstantiationData const & data):
+    explicit StringConcatLiterals(loplugin::InstantiationData const & data):
         FilteringPlugin(data) {}
 
     void run() override
@@ -63,7 +63,7 @@ private:
     bool isStringLiteral(Expr const * expr);
 };
 
-bool StringConcat::VisitCallExpr(CallExpr const * expr) {
+bool StringConcatLiterals::VisitCallExpr(CallExpr const * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
@@ -135,7 +135,7 @@ bool StringConcat::VisitCallExpr(CallExpr const * expr) {
     return true;
 }
 
-bool StringConcat::isStringLiteral(Expr const * expr) {
+bool StringConcatLiterals::isStringLiteral(Expr const * expr) {
     expr = stripCtor(expr);
     if (!isa<clang::StringLiteral>(expr)) {
         return false;
@@ -153,7 +153,7 @@ bool StringConcat::isStringLiteral(Expr const * expr) {
             != "OSL_THIS_FUNC");
 }
 
-loplugin::Plugin::Registration<StringConcat> stringconcat("stringconcat");
+loplugin::Plugin::Registration<StringConcatLiterals> stringconcatliterals("stringconcatliterals");
 
 } // namespace
 

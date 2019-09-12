@@ -1778,7 +1778,8 @@ compilerplugins/clang/store/tutorial/tutorial3.cxx
 compilerplugins/clang/store/tutorial/tutorial3.hxx
 compilerplugins/clang/store/unusedcode.cxx
 compilerplugins/clang/store/valueof.cxx
-compilerplugins/clang/stringconcat.cxx
+compilerplugins/clang/stringconcatauto.cxx
+compilerplugins/clang/stringconcatliterals.cxx
 compilerplugins/clang/stringconstant.cxx
 compilerplugins/clang/stringstatic.cxx
 compilerplugins/clang/subtlezeroinit.cxx
@@ -1815,6 +1816,7 @@ compilerplugins/clang/test/refcounting.cxx
 compilerplugins/clang/test/salbool.cxx
 compilerplugins/clang/test/salunicodeliteral.cxx
 compilerplugins/clang/test/salunicodeliteral.hxx
+compilerplugins/clang/test/stringconcatauto.cxx
 compilerplugins/clang/test/stringconstant.cxx
 compilerplugins/clang/test/unnecessarycatchthrow.cxx
 compilerplugins/clang/test/unnecessaryoverride-dtor.cxx
