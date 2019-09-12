@@ -463,7 +463,12 @@ namespace sax_fastparser {
 
             writeBytes(sEqualSignAndQuote, N_CHARS(sEqualSignAndQuote));
 
-            write(rAttrList.getFastAttributeValue(j), rAttrList.AttributeValueLength(j), true);
+            const char* pAttributeValue = rAttrList.getFastAttributeValue(j);
+
+            // tdf#127274 don't escape the special VML shape type id "#_x0000_t202"
+            bool bEscape = !(pAttributeValue && strcmp(pAttributeValue, "#_x0000_t202") == 0);
+
+            write(pAttributeValue, rAttrList.AttributeValueLength(j), bEscape);
 
             writeBytes(sQuote, N_CHARS(sQuote));
         }
