@@ -1289,7 +1289,6 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
         switch(rAcc.GetScanlineFormat())
         {
             case ScanlineFormat::N1BitMsbPal:
-            case ScanlineFormat::N4BitMsnPal:
             case ScanlineFormat::N8BitPal:
             case ScanlineFormat::N24BitTcBgr:
             {

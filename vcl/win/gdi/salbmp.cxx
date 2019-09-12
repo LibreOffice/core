@@ -838,12 +838,12 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
             pBuffer = new BitmapBuffer;
 
             pBuffer->mnFormat = pBIH->biBitCount == 1 ? ScanlineFormat::N1BitMsbPal :
-                                pBIH->biBitCount == 4 ? ScanlineFormat::N4BitMsnPal :
                                 pBIH->biBitCount == 8 ? ScanlineFormat::N8BitPal :
                                 pBIH->biBitCount == 16 ? ScanlineFormat::N16BitTcLsbMask :
                                 pBIH->biBitCount == 24 ? ScanlineFormat::N24BitTcBgr :
                                 pBIH->biBitCount == 32 ? ScanlineFormat::N32BitTcMask :
                                 ScanlineFormat::NONE;
+            assert( pBuffer->mnFormat != ScanlineFormat::NONE );
 
             if( RemoveScanline( pBuffer->mnFormat ) != ScanlineFormat::NONE )
             {

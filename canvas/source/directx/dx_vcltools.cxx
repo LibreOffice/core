@@ -178,7 +178,6 @@ namespace dxcanvas
                     // one of the following formats:
 
                     //    ScanlineFormat::N1BitMsbPal
-                    //    ScanlineFormat::N4BitMsnPal
                     //    ScanlineFormat::N8BitPal
                     //    ScanlineFormat::N16BitTcLsbMask
                     //    ScanlineFormat::N24BitTcBgr
@@ -252,7 +251,6 @@ namespace dxcanvas
                             // to hand-formulate the following
                             // formats, too.
                             case ScanlineFormat::N1BitMsbPal:
-                            case ScanlineFormat::N4BitMsnPal:
                             case ScanlineFormat::N16BitTcLsbMask:
                             case ScanlineFormat::N32BitTcMask:
                             {
@@ -278,7 +276,6 @@ namespace dxcanvas
                             break;
 
                             case ScanlineFormat::N1BitLsbPal:
-                            case ScanlineFormat::N4BitLsnPal:
                             case ScanlineFormat::N8BitTcMask:
                             case ScanlineFormat::N24BitTcRgb:
                             case ScanlineFormat::N16BitTcMsbMask:
@@ -304,7 +301,6 @@ namespace dxcanvas
                     // one of the following formats:
 
                     //    ScanlineFormat::N1BitMsbPal
-                    //    ScanlineFormat::N4BitMsnPal
                     //    ScanlineFormat::N8BitPal
                     //    ScanlineFormat::N16BitTcLsbMask
                     //    ScanlineFormat::N24BitTcBgr
@@ -391,7 +387,6 @@ namespace dxcanvas
                             // to hand-formulate the following
                             // formats, too.
                             case ScanlineFormat::N1BitMsbPal:
-                            case ScanlineFormat::N4BitMsnPal:
                             case ScanlineFormat::N16BitTcLsbMask:
                             case ScanlineFormat::N32BitTcMask:
                             {
@@ -416,7 +411,6 @@ namespace dxcanvas
                             break;
 
                             case ScanlineFormat::N1BitLsbPal:
-                            case ScanlineFormat::N4BitLsnPal:
                             case ScanlineFormat::N8BitTcMask:
                             case ScanlineFormat::N24BitTcRgb:
                             case ScanlineFormat::N16BitTcMsbMask:
