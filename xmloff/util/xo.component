@@ -58,7 +58,8 @@
   <implementation name="XMLDrawContentExportOasis">
     <service name="com.sun.star.comp.Draw.XMLOasisContentExporter"/>
   </implementation>
-  <implementation name="XMLDrawExportOOO">
+  <implementation name="XMLDrawExportOOO"
+    constructor="com_sun_star_comp_Draw_XMLExporter_get_implementation">
     <service name="com.sun.star.comp.Draw.XMLExporter"/>
   </implementation>
   <implementation name="XMLDrawExportOasis">
