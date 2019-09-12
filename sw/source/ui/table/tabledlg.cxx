@@ -702,6 +702,7 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 SwTableColumnPage::SwTableColumnPage(TabPageParent pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/tablecolumnpage.ui", "TableColumnPage", &rSet)
     , pTableData(nullptr)
+    , m_pSizeHdlEvent(nullptr)
     , nTableWidth(0)
     , nMinWidth(MINLAY)
     , nMetFields(MET_FIELDS)
@@ -731,9 +732,19 @@ SwTableColumnPage::SwTableColumnPage(TabPageParent pParent, const SfxItemSet& rS
 {
     SetExchangeSupport();
 
+    // fire off this handler to happen on next event loop when all the rest of
+    // the pages are instantiated and the dialog preferred size is that of the
+    // all the pages that currently exist and the rest to come after this one
+    m_pSizeHdlEvent = Application::PostUserEvent(LINK(this, SwTableColumnPage, SizeHdl));
+}
+
+IMPL_LINK_NOARG(SwTableColumnPage, SizeHdl, void*, void)
+{
+    m_pSizeHdlEvent = nullptr;
+
     //tdf#120420 keeping showing column width fields unless
     //the dialog begins to grow, then stop adding them
-    weld::Window* pTopLevel = pParent.GetFrameWeld();
+    weld::Window* pTopLevel = GetDialogFrameWeld();
     Size aOrigSize = pTopLevel->get_preferred_size();
     for (sal_uInt16 i = 0; i < MET_FIELDS; ++i)
     {
@@ -750,12 +761,23 @@ SwTableColumnPage::SwTableColumnPage(TabPageParent pParent, const SfxItemSet& rS
     }
 
     const SfxPoolItem* pItem;
-    Init(SfxItemState::SET == rSet.GetItemState( SID_HTML_MODE, false,&pItem )
+    Init(SfxItemState::SET == GetItemSet().GetItemState(SID_HTML_MODE, false, &pItem)
          && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
 }
 
 SwTableColumnPage::~SwTableColumnPage()
 {
+    disposeOnce();
+}
+
+void SwTableColumnPage::dispose()
+{
+    if (m_pSizeHdlEvent)
+    {
+        Application::RemoveUserEvent(m_pSizeHdlEvent);
+        m_pSizeHdlEvent = nullptr;
+    }
+    SfxTabPage::dispose();
 }
 
 VclPtr<SfxTabPage> SwTableColumnPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
