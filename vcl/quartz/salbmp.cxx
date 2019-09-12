@@ -734,9 +734,6 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
         case 1:
             pBuffer->mnFormat = ScanlineFormat::N1BitMsbPal;
             break;
-        case 4:
-            pBuffer->mnFormat = ScanlineFormat::N4BitMsnPal;
-            break;
         case 8:
             pBuffer->mnFormat = ScanlineFormat::N8BitPal;
             break;
@@ -767,6 +764,7 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
             pBuffer->maColorMask  = ColorMask(aRedMask, aGreenMask, aBlueMask);
             break;
         }
+        default: assert(false); break;
     }
 
     // some BitmapBuffer users depend on a complete palette

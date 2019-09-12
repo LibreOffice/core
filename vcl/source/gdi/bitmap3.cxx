@@ -255,21 +255,6 @@ bool Bitmap::Convert( BmpConversion eConversion )
         }
         break;
 
-        case BmpConversion::N4BitGreys:
-            bRet = ImplMakeGreyscales( 16 );
-        break;
-
-        case BmpConversion::N4BitColors:
-        {
-            if( nBitCount < 4 )
-                bRet = ImplConvertUp( 4 );
-            else if( nBitCount > 4 )
-                bRet = ImplConvertDown( 4 );
-            else
-                bRet = true;
-        }
-        break;
-
         case BmpConversion::N8BitGreys:
             bRet = ImplMakeGreyscales( 256 );
         break;
@@ -853,18 +838,6 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
                 rNew.Convert(BmpConversion::N1BitThreshold);
                 break;
             }
-            case 4:
-            {
-                if(HasGreyPalette())
-                {
-                    rNew.Convert(BmpConversion::N4BitGreys);
-                }
-                else
-                {
-                    rNew.Convert(BmpConversion::N4BitColors);
-                }
-                break;
-            }
             case 8:
             {
                 if(HasGreyPalette())
@@ -884,7 +857,7 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
             }
             default:
             {
-                OSL_ENSURE(false, "BitDepth adaptation failed (!)");
+                assert(false);
                 break;
             }
         }

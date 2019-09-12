@@ -273,48 +273,6 @@ void BitmapTest::testMonochrome()
                                  aBmpReadAccess.GetColor(3, 3));
 }
 
-void BitmapTest::testN4Greyscale()
-{
-    Bitmap aBmp = createTestBitmap();
-    BitmapPalette aGreyscalePalette = Bitmap::GetGreyPalette(16);
-
-    aBmp.Convert(BmpConversion::N4BitGreys);
-    BitmapReadAccess aBmpReadAccess(aBmp);
-
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Black pixel wrong 8-bit greyscale value", aGreyscalePalette[0],
-                                 aBmpReadAccess.GetColor(0, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Blue pixel wrong 8-bit greyscale value", aGreyscalePalette[0],
-                                 aBmpReadAccess.GetColor(0, 1));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Green pixel wrong 8-bit greyscale value", aGreyscalePalette[4],
-                                 aBmpReadAccess.GetColor(0, 2));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cyan pixel wrong 8-bit greyscale value", aGreyscalePalette[5],
-                                 aBmpReadAccess.GetColor(0, 3));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Red pixel wrong 8-bit greyscale value", aGreyscalePalette[2],
-                                 aBmpReadAccess.GetColor(1, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Magenta pixel wrong 8-bit greyscale value", aGreyscalePalette[3],
-                                 aBmpReadAccess.GetColor(1, 1));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Brown pixel wrong 8-bit greyscale value", aGreyscalePalette[7],
-                                 aBmpReadAccess.GetColor(1, 2));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Gray pixel wrong 8-bit greyscale value", aGreyscalePalette[8],
-                                 aBmpReadAccess.GetColor(1, 3));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light gray pixel wrong 8-bit greyscale value",
-                                 aGreyscalePalette[12], aBmpReadAccess.GetColor(2, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light blue pixel wrong 8-bit greyscale value",
-                                 aGreyscalePalette[1], aBmpReadAccess.GetColor(2, 1));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light green pixel wrong 8-bit greyscale value",
-                                 aGreyscalePalette[9], aBmpReadAccess.GetColor(2, 2));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light cyan pixel wrong 8-bit greyscale value",
-                                 aGreyscalePalette[11], aBmpReadAccess.GetColor(2, 3));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light red pixel wrong 8-bit greyscale value",
-                                 aGreyscalePalette[4], aBmpReadAccess.GetColor(3, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light magenta pixel wrong 8-bit greyscale value",
-                                 aGreyscalePalette[6], aBmpReadAccess.GetColor(3, 1));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Yellow pixel wrong 8-bit greyscale value", aGreyscalePalette[14],
-                                 aBmpReadAccess.GetColor(3, 2));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("White pixel wrong 8-bit greyscale value", aGreyscalePalette[15],
-                                 aBmpReadAccess.GetColor(3, 3));
-}
-
 void BitmapTest::testN8Greyscale()
 {
     Bitmap aBmp = createTestBitmap();
