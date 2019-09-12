@@ -93,6 +93,7 @@ public:
 class SwTableColumnPage : public SfxTabPage
 {
     SwTableRep*     pTableData;
+    ImplSVEvent*    m_pSizeHdlEvent;
     SwTwips         nTableWidth;
     SwTwips         nMinWidth;
     sal_uInt16      nMetFields;
@@ -121,12 +122,14 @@ class SwTableColumnPage : public SfxTabPage
     void        UpdateCols( sal_uInt16 nCurrentPos );
     SwTwips     GetVisibleWidth(sal_uInt16 nPos);
     void        SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth);
+    DECL_LINK(SizeHdl, void*, void);
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
 public:
     SwTableColumnPage(TabPageParent pParent, const SfxItemSet& rSet);
+    virtual void dispose() override;
     virtual ~SwTableColumnPage() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
