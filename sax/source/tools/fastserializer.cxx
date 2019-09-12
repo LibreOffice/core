@@ -51,6 +51,7 @@ static const char sQuote[] = "\"";
 static const char sEqualSignAndQuote[] = "=\"";
 static const char sSpace[] = " ";
 static const char sXmlHeader[] = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
+static const char sVMLCommentShapeTypeId[] = "_x0000_t202";
 
 namespace sax_fastparser {
     FastSaxSerializer::FastSaxSerializer( const css::uno::Reference< css::io::XOutputStream >& xOutputStream )
@@ -130,7 +131,19 @@ namespace sax_fastparser {
         if (nLen == -1)
             nLen = pStr ? strlen(pStr) : 0;
 
-        if (!bEscape)
+        bool bVMLShapeType = false;
+        sal_Int32 nIdLen = strlen(sVMLCommentShapeTypeId);
+        if ( nIdLen < nLen )
+        {
+            sal_Int32 i = 0;
+
+            while (i < nIdLen && sVMLCommentShapeTypeId[i] == pStr[nLen - nIdLen + i]) i++;
+
+            if (i == nIdLen)
+                bVMLShapeType = true;
+        }
+
+        if (!bEscape || bVMLShapeType)
         {
             writeBytes( pStr, nLen );
             return;
