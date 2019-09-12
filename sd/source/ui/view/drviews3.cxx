@@ -510,7 +510,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 if (oox::drawingml::DrawingML::IsDiagram(xShape))
                 {
                     VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-                    VclPtr<VclAbstractDialog> pDlg
+                    ScopedVclPtr<VclAbstractDialog> pDlg
                         = pFact->CreateDiagramDialog(GetFrameWeld(), pObj->GetDiagramData());
                     pDlg->Execute();
                 }
