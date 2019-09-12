@@ -74,7 +74,7 @@ bool determineTextureFormat(sal_uInt16 nBits, GLenum& nFormat, GLenum& nType)
 
 bool isValidBitCount( sal_uInt16 nBitCount )
 {
-    return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) || (nBitCount == 24) || (nBitCount == 32);
+    return (nBitCount == 1) || (nBitCount == 8) || (nBitCount == 24) || (nBitCount == 32);
 }
 
 sal_uInt32 lclBytesPerRow(sal_uInt16 nBits, int nWidth)
@@ -82,7 +82,6 @@ sal_uInt32 lclBytesPerRow(sal_uInt16 nBits, int nWidth)
     switch(nBits)
     {
     case 1:  return (nWidth + 7) >> 3;
-    case 4:  return (nWidth + 1) >> 1;
     case 8:  return  nWidth;
     case 24: return  nWidth * 3;
     case 32: return  nWidth * 4;
@@ -426,8 +425,8 @@ bool OpenGLSalBitmap::ReadTexture()
 #endif
         return true;
     }
-    else if (mnBits == 1 || mnBits == 4 || mnBits == 8)
-    {   // convert buffers from 24-bit RGB to 1,4 or 8-bit buffer
+    else if (mnBits == 1 || mnBits == 8)
+    {   // convert buffers from 24-bit RGB to 1 or 8-bit buffer
         std::vector<sal_uInt8> aBuffer(mnWidth * mnHeight * 3);
 
         sal_uInt8* pBuffer = aBuffer.data();
@@ -605,9 +604,6 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
     {
         case 1:
             pBuffer->mnFormat = ScanlineFormat::N1BitMsbPal;
-            break;
-        case 4:
-            pBuffer->mnFormat = ScanlineFormat::N4BitMsnPal;
             break;
         case 8:
             pBuffer->mnFormat = ScanlineFormat::N8BitPal;

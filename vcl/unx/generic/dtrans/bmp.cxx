@@ -85,10 +85,6 @@ static void X11_writeScanlinePixel( unsigned long nColor, sal_uInt8* pScanline, 
             pScanline[ x/8 ] &= ~(1 << (x&7));
             pScanline[ x/8 ] |= ((nColor & 1) << (x&7));
             break;
-        case 4:
-            pScanline[ x/2 ] &= ((x&1) ? 0x0f : 0xf0);
-            pScanline[ x/2 ] |= ((x&1) ? (nColor & 0x0f) : ((nColor & 0x0f) << 4));
-            break;
         default:
         case 8:
             pScanline[ x ] = (nColor & 0xff);
@@ -117,11 +113,6 @@ static sal_uInt8* X11_getPaletteBmpFromImage(
             nHeaderSize = 64;
             nScanlineSize = (pImage->width+31)/32;
             nBitCount = 1;
-            break;
-        case 4:
-            nHeaderSize = 72;
-            nScanlineSize = (pImage->width+1)/2;
-            nBitCount = 4;
             break;
         default:
         case 8:
@@ -473,9 +464,6 @@ void PixmapHolder::setBitmapDataPalette( const sal_uInt8* pData, XImage* pImage 
         case 1:
             nScanlineSize = (nWidth+31)/32;
             break;
-        case 4:
-            nScanlineSize = (nWidth+1)/2;
-            break;
         case 8:
             nScanlineSize = nWidth;
             break;
@@ -497,12 +485,6 @@ void PixmapHolder::setBitmapDataPalette( const sal_uInt8* pData, XImage* pImage 
             switch( nDepth )
             {
                 case 1: nCol = (pScanline[ x/8 ] & (0x80 >> (x&7))) != 0 ? 0 : 1; break;
-                case 4:
-                    if( x & 1 )
-                        nCol = static_cast<int>(pScanline[ x/2 ] >> 4);
-                    else
-                        nCol = static_cast<int>(pScanline[ x/2 ] & 0x0f);
-                    break;
                 case 8: nCol = static_cast<int>(pScanline[x]);
             }
             XPutPixel( pImage, x, y, aPalette[nCol].pixel );
@@ -723,10 +705,8 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
 css::uno::Sequence<sal_Int8> x11::convertBitmapDepth(
     css::uno::Sequence<sal_Int8> const & data, int depth)
 {
-    if (depth < 4) {
+    if (depth < 8) {
         depth = 1;
-    } else if (depth < 8) {
-        depth = 4;
     } else if (depth > 8 && depth < 24) {
         depth = 24;
     }
@@ -744,13 +724,6 @@ css::uno::Sequence<sal_Int8> x11::convertBitmapDepth(
         case 1:
             bm.Convert(BmpConversion::N1BitThreshold);
             break;
-        case 4:
-        {
-            BitmapEx aBmpEx(bm);
-            BitmapFilter::Filter(aBmpEx, BitmapSimpleColorQuantizationFilter(1<<4));
-            bm = aBmpEx.GetBitmap();
-        }
-        break;
 
         case 8:
         {
@@ -763,6 +736,8 @@ css::uno::Sequence<sal_Int8> x11::convertBitmapDepth(
         case 24:
             bm.Convert(BmpConversion::N24Bit);
             break;
+
+        default: assert(false);
         }
     }
     SvMemoryStream out;

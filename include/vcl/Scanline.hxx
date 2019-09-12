@@ -31,9 +31,6 @@ enum class ScanlineFormat {
     N1BitMsbPal       = 0x00000001,
     N1BitLsbPal       = 0x00000002,
 
-    N4BitMsnPal       = 0x00000004,
-    N4BitLsnPal       = 0x00000008,
-
     N8BitPal          = 0x00000010,
     N8BitTcMask       = 0x00000020,
 
@@ -51,7 +48,7 @@ enum class ScanlineFormat {
 
 namespace o3tl
 {
-    template<> struct typed_flags<ScanlineFormat> : is_typed_flags<ScanlineFormat, 0x0001fb3f> {};
+    template<> struct typed_flags<ScanlineFormat> : is_typed_flags<ScanlineFormat, 0x0001fb33> {};
 }
 
 inline ScanlineFormat RemoveScanline(ScanlineFormat nFormat)

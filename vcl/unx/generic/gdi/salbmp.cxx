@@ -129,7 +129,6 @@ std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
 {
     DBG_ASSERT(
            nBitCount ==  1
-        || nBitCount ==  4
         || nBitCount ==  8
         || nBitCount == 24
         , "Unsupported BitCount!"
@@ -156,14 +155,15 @@ std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
     switch( nBitCount )
     {
         case 1: pDIB->mnFormat |= ScanlineFormat::N1BitMsbPal; break;
-        case 4: pDIB->mnFormat |= ScanlineFormat::N4BitMsnPal; break;
         case 8: pDIB->mnFormat |= ScanlineFormat::N8BitPal; break;
-        case 24: pDIB->mnFormat |= ScanlineFormat::N24BitTcBgr; break;
-        default:
-            SAL_WARN("vcl.gdi", "32-bit images not supported, converting to 24-bit");
+        case 24:
             nBitCount = 24;
+            pDIB->mnFormat |= ScanlineFormat::N24BitTcBgr; break;
+        default:
+            assert(false);
+            SAL_WARN("vcl.gdi", "32-bit images not supported, converting to 24-bit");
             pDIB->mnFormat |= ScanlineFormat::N24BitTcBgr;
-        break;
+            break;
     }
 
     pDIB->mnWidth = rSize.Width();
@@ -259,15 +259,6 @@ std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
                 }
                 break;
 
-                case 4:
-                {
-                    aSrcBuf.mnFormat |= ( LSBFirst == pImage->bitmap_bit_order
-                                            ? ScanlineFormat::N4BitLsnPal
-                                            : ScanlineFormat::N4BitMsnPal
-                                        );
-                }
-                break;
-
                 case 8:
                 {
                     aSrcBuf.mnFormat |= ScanlineFormat::N8BitPal;
@@ -298,7 +289,7 @@ std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
                 }
                 break;
 
-                default: assert(false);
+                default: assert(false);break;
             }
 
             BitmapPalette& rPal = aSrcBuf.maPalette;
@@ -405,13 +396,6 @@ XImage* X11SalBitmap::ImplCreateXImage(
                                     );
                 break;
 
-                case 4:
-                    nDstFormat |=   ( LSBFirst == pImage->bitmap_bit_order
-                                        ? ScanlineFormat::N4BitLsnPal
-                                        : ScanlineFormat::N4BitMsnPal
-                                    );
-                break;
-
                 case 8:
                     nDstFormat |= ScanlineFormat::N8BitPal;
                 break;
@@ -440,7 +424,7 @@ XImage* X11SalBitmap::ImplCreateXImage(
                 }
                 break;
 
-                default: assert(false);
+                default: assert(false);break;
             }
 
             if( pImage->depth == 1 )

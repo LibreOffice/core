@@ -9277,8 +9277,6 @@ const BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx& i_rBitmap, co
     {
         BmpConversion eConv = BmpConversion::N8BitGreys;
         int nDepth = aBitmap.GetBitmap().GetBitCount();
-        if( nDepth <= 4 )
-            eConv = BmpConversion::N4BitGreys;
         if( nDepth > 1 )
             aBitmap.Convert( eConv );
     }

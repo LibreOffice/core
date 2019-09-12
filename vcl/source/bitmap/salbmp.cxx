@@ -30,7 +30,13 @@ void SalBitmap::updateChecksum() const
     if (pBuf)
     {
         nCrc = pBuf->maPalette.GetChecksum();
-        nCrc = vcl_get_checksum(nCrc, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
+        // do calculation line by line so we avoid the trailing bytes which may contain random data
+        auto pScanline = pBuf->mpBits;
+        for (long i=0; i<pBuf->mnHeight; i++)
+        {
+            nCrc = vcl_get_checksum(nCrc, pScanline, pBuf->mnWidth * pBuf->mnBitCount / 8);
+            pScanline += pBuf->mnScanlineSize;
+        }
         pThis->ReleaseBuffer(pBuf, BitmapAccessMode::Read);
         pThis->mnChecksum = nCrc;
         pThis->mbChecksumValid = true;
@@ -73,37 +79,6 @@ public:
     }
 };
 
-class ImplPixelFormat4 : public ImplPixelFormat
-{
-private:
-    const BitmapPalette& mrPalette;
-    sal_uInt32 mnX;
-    sal_uInt32 mnShift;
-
-public:
-    explicit ImplPixelFormat4( const BitmapPalette& rPalette )
-        : mrPalette( rPalette )
-        , mnX(0)
-        , mnShift(4)
-    {
-    }
-    virtual void StartLine( const sal_uInt8* pLine ) override
-    {
-        mpData = pLine;
-        mnX = 0;
-        mnShift = 4;
-    }
-    virtual const BitmapColor& ReadPixel() override
-    {
-        sal_uInt32 nIdx = ( mpData[mnX >> 1] >> mnShift) & 0x0f;
-        assert( mrPalette.GetEntryCount() > nIdx );
-        const BitmapColor& rColor = mrPalette[nIdx];
-        mnX++;
-        mnShift ^= 4;
-        return rColor;
-    }
-};
-
 class ImplPixelFormat1 : public ImplPixelFormat
 {
 private:
@@ -134,7 +109,6 @@ ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalet
     switch( nBits )
     {
     case 1: return new ImplPixelFormat1( rPalette );
-    case 4: return new ImplPixelFormat4( rPalette );
     case 8: return new ImplPixelFormat8( rPalette );
     }
 
