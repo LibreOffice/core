@@ -35,8 +35,6 @@ BitmapEx BitmapSimpleColorQuantizationFilter::execute(BitmapEx const& aBitmapEx)
 
         if (nColorCount <= 2)
             nBitCount = 1;
-        else if (nColorCount <= 16)
-            nBitCount = 4;
         else
             nBitCount = 8;
 

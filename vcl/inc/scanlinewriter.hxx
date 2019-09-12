@@ -53,8 +53,6 @@ public:
         {
             case 1:
                 return std::make_unique<ScanlineWriter>(aPalette, 8);
-            case 4:
-                return std::make_unique<ScanlineWriter>(aPalette, 2);
             case 8:
                 return std::make_unique<ScanlineWriter>(aPalette, 1);
             default:

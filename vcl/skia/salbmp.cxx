@@ -267,7 +267,7 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
             buffer->mnFormat = ScanlineFormat::N1BitMsbPal;
             break;
         case 4:
-            buffer->mnFormat = ScanlineFormat::N4BitMsnPal;
+            assert(false);
             break;
         case 8:
             buffer->mnFormat = ScanlineFormat::N8BitPal;

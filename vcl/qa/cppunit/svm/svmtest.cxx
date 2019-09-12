@@ -104,7 +104,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkBitmaps(const GDIMetaFile& rMetaFile);
     void testBitmaps();
 
-    void checkBitmapExs(const GDIMetaFile& rMetaFile);
+    void checkBitmapExs(const GDIMetaFile& rMetaFile, bool bSvm);
     void testBitmapExs();
 
     void checkMasks(const GDIMetaFile& rMetaFile);
@@ -979,7 +979,7 @@ void SvmTest::testBitmaps()
     }
 }
 
-void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
+void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile, bool bSvm)
 {
     xmlDocPtr pDoc = dumpMeta(rMetaFile);
 
@@ -998,7 +998,6 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
             "b8dee5da",
             "4df0e464",
             "7d3a8da3",
-            "1426653b",
             "4fd547df",
             "71efc447",
         });
@@ -1012,10 +1011,9 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
             "281fc589",
             "5e01ddcc",
             "4df0e464",
-            "34434a50",
-            "d1736327",
-            "b37875c2",
-            "a85d44b8",
+            "2ce165e9",
+            "3c80d829",
+            "71efc447",
         });
     }
 
@@ -1039,15 +1037,27 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
     assertXPathAttrs(pDoc, "/metafile/bmpex[3]", {
         {"x", "0"}, {"y", "6"}, {"crc", aExpectedCRC[4]}, {"transparenttype", "bitmap"}
     });
-    assertXPathAttrs(pDoc, "/metafile/bmpex[4]", {
-        {"x", "2"}, {"y", "6"}, {"crc", aExpectedCRC[5]}, {"transparenttype", "bitmap"}
-    });
-    assertXPathAttrs(pDoc, "/metafile/bmpex[5]", {
-        {"x", "0"}, {"y", "8"}, {"crc", aExpectedCRC[6]}, {"transparenttype", "bitmap"}
-    });
-    assertXPathAttrs(pDoc, "/metafile/bmpex[6]", {
-        {"x", "2"}, {"y", "8"}, {"crc", aExpectedCRC[7]}, {"transparenttype", "bitmap"}
-    });
+    if (bSvm)
+    {
+        assertXPathAttrs(pDoc, "/metafile/bmpex[4]", {
+            {"x", "2"}, {"y", "6"}, {"crc", aExpectedCRC[5]}, {"transparenttype", "bitmap"}
+        });
+        assertXPathAttrs(pDoc, "/metafile/bmpex[5]", {
+            {"x", "0"}, {"y", "8"}, {"crc", aExpectedCRC[5]}, {"transparenttype", "bitmap"}
+        });
+        assertXPathAttrs(pDoc, "/metafile/bmpex[6]", {
+            {"x", "2"}, {"y", "8"}, {"crc", aExpectedCRC[6]}, {"transparenttype", "bitmap"}
+        });
+    }
+    else
+    {
+        assertXPathAttrs(pDoc, "/metafile/bmpex[4]", {
+            {"x", "0"}, {"y", "8"}, {"crc", aExpectedCRC[5]}, {"transparenttype", "bitmap"}
+        });
+        assertXPathAttrs(pDoc, "/metafile/bmpex[5]", {
+            {"x", "2"}, {"y", "8"}, {"crc", aExpectedCRC[6]}, {"transparenttype", "bitmap"}
+        });
+    }
 #endif
 }
 
@@ -1113,17 +1123,6 @@ void SvmTest::testBitmapExs()
         pVirtualDev->DrawBitmapEx(Point(0, 6), BitmapEx(aBitmap, COL_WHITE));
     }
 
-    // DrawBitmapEx - 4-bit
-    {
-        Bitmap aBitmap(Size(2, 2), 24);
-        {
-            BitmapScopedWriteAccess pAccess(aBitmap);
-            pAccess->Erase(COL_MAGENTA);
-        }
-        aBitmap.Convert(BmpConversion::N4BitColors);
-        pVirtualDev->DrawBitmapEx(Point(2, 6), BitmapEx(aBitmap, COL_WHITE));
-    }
-
     // DrawBitmapEx - 8-bit Color
     {
         Bitmap aBitmap(Size(2, 2), 24);
@@ -1148,12 +1147,12 @@ void SvmTest::testBitmapExs()
 
     {
         GDIMetaFile aReloadedGDIMetaFile = writeAndReadStream(aGDIMetaFile);
-        checkBitmapExs(aReloadedGDIMetaFile);
+        checkBitmapExs(aReloadedGDIMetaFile, /*bSvm*/false);
         checkRendering(pVirtualDev, aReloadedGDIMetaFile);
     }
     {
         GDIMetaFile aFileGDIMetaFile = readFile("bitmapexs.svm");
-        checkBitmapExs(aFileGDIMetaFile);
+        checkBitmapExs(aFileGDIMetaFile, /*bSvm*/true);
         checkRendering(pVirtualDev, aFileGDIMetaFile);
     }
 }
