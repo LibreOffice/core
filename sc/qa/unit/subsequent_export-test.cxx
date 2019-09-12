@@ -787,6 +787,10 @@ void ScExportTest::testCommentExportXLSX()
     assertXPath(pVmlDrawing, "/xml/v:shape", "type", sShapeTypeId);
     assertXPath(pVmlDrawing, "/xml/v:shape/v:shadow", "color", "black");
     assertXPath(pVmlDrawing, "/xml/v:shape/v:shadow", "obscured", "t");
+
+    //tdf#117274 fix MSO interoperability with the secret VML shape type id
+    assertXPath(pVmlDrawing, "/xml/v:shapetype", "id", "_x0000_t202");
+    assertXPath(pVmlDrawing, "/xml/v:shape", "type", "#_x0000_t202");
 }
 
 void ScExportTest::testCommentExportXLSX_2_XLSX()
