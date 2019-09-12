@@ -47,7 +47,6 @@ static std::unique_ptr<BitmapBuffer> ImplCreateDIB(
     assert(
           (nBitCount ==  0
         || nBitCount ==  1
-        || nBitCount ==  4
         || nBitCount ==  8
         || nBitCount == 24
         || nBitCount == 32)
@@ -74,21 +73,16 @@ static std::unique_ptr<BitmapBuffer> ImplCreateDIB(
         case 1:
             pDIB->mnFormat = ScanlineFormat::N1BitLsbPal;
             break;
-        case 4:
-            pDIB->mnFormat = ScanlineFormat::N4BitMsnPal;
-            break;
         case 8:
             pDIB->mnFormat = ScanlineFormat::N8BitPal;
             break;
         case 24:
             pDIB->mnFormat = SVP_24BIT_FORMAT;
             break;
-        default:
-            nBitCount = 32;
-            [[fallthrough]];
         case 32:
             pDIB->mnFormat = SVP_CAIRO_FORMAT;
             break;
+        default: assert(false);
     }
 
     pDIB->mnFormat |= ScanlineFormat::TopDown;

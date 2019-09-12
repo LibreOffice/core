@@ -330,8 +330,6 @@ static bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
     {
         case ScanlineFormat::N1BitMsbPal:
         case ScanlineFormat::N1BitLsbPal:
-        case ScanlineFormat::N4BitMsnPal:
-        case ScanlineFormat::N4BitLsnPal:
         case ScanlineFormat::N8BitPal:
             break;
 
@@ -419,8 +417,6 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
     {
         case ScanlineFormat::N1BitMsbPal:
         case ScanlineFormat::N1BitLsbPal:
-        case ScanlineFormat::N4BitMsnPal:
-        case ScanlineFormat::N4BitLsnPal:
         case ScanlineFormat::N8BitPal:
             break;
 
@@ -539,8 +535,6 @@ static bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, c
     {
         case ScanlineFormat::N1BitMsbPal:
         case ScanlineFormat::N1BitLsbPal:
-        case ScanlineFormat::N4BitMsnPal:
-        case ScanlineFormat::N4BitLsnPal:
         case ScanlineFormat::N8BitPal:
             break;
 
@@ -634,8 +628,6 @@ bool ImplFastBitmapBlending( BitmapWriteAccess const & rDstWA,
     {
         case ScanlineFormat::N1BitMsbPal:
         case ScanlineFormat::N1BitLsbPal:
-        case ScanlineFormat::N4BitMsnPal:
-        case ScanlineFormat::N4BitLsnPal:
         case ScanlineFormat::N8BitPal:
             break;
 
@@ -683,12 +675,6 @@ bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
         case ScanlineFormat::N1BitLsbPal:
             nFillByte = rColor.GetIndex();
             nFillByte = static_cast<sal_uInt8>( -(nFillByte & 1) ); // 0x00 or 0xFF
-            break;
-        case ScanlineFormat::N4BitMsnPal:
-        case ScanlineFormat::N4BitLsnPal:
-            nFillByte = rColor.GetIndex();
-            nFillByte &= 0x0F;
-            nFillByte |= (nFillByte << 4);
             break;
         case ScanlineFormat::N8BitPal:
         case ScanlineFormat::N8BitTcMask:

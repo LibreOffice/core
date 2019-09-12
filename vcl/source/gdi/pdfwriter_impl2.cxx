@@ -157,8 +157,6 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         {
             BmpConversion eConv = BmpConversion::N8BitGreys;
             int nDepth = aBitmapEx.GetBitmap().GetBitCount();
-            if( nDepth <= 4 )
-                eConv = BmpConversion::N4BitGreys;
             if( nDepth > 1 )
                 aBitmapEx.Convert( eConv );
         }
