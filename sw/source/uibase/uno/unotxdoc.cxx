@@ -3503,7 +3503,7 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
     SwViewOption aOption(*(pWrtViewShell->GetViewOptions()));
     double fScale = aOption.GetZoom() / (TWIPS_PER_PIXEL * 100.0);
 
-    // check if user hit a chart which is being edited by him
+    // check if the user hit a chart which is being edited by this view
     SfxViewShell* pViewShell = pDocShell->GetView();
     LokChartHelper aChartHelper(pViewShell);
     if (aChartHelper.postMouseEvent(nType, nX, nY,

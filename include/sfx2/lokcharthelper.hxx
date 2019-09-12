@@ -20,6 +20,7 @@ namespace com::sun::star::frame { class XDispatch; }
 class SfxViewShell;
 class VirtualDevice;
 
+/// A class for chart editing support via LibreOfficeKit.
 class SFX2_DLLPUBLIC LokChartHelper
 {
 private:
