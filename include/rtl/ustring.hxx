@@ -3345,6 +3345,41 @@ public:
         return aTarget;
     }
 
+#ifndef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+
+    static OUStringConcatNumber< int > number( int i, sal_Int16 radix = 10 )
+    {
+        return OUStringConcatNumber< int >( i, radix );
+    }
+    static OUStringConcatNumber< long long > number( long long ll, sal_Int16 radix = 10 )
+    {
+        return OUStringConcatNumber< long long >( ll, radix );
+    }
+    static OUStringConcatNumber< unsigned long long > number( unsigned long long ll, sal_Int16 radix = 10 )
+    {
+        return OUStringConcatNumber< unsigned long long >( ll, radix );
+    }
+    static OUStringConcatNumber< unsigned long long > number( unsigned int i, sal_Int16 radix = 10 )
+    {
+        return number( static_cast< unsigned long long >( i ), radix );
+    }
+    static OUStringConcatNumber< long long > number( long i, sal_Int16 radix = 10)
+    {
+        return number( static_cast< long long >( i ), radix );
+    }
+    static OUStringConcatNumber< unsigned long long > number( unsigned long i, sal_Int16 radix = 10 )
+    {
+        return number( static_cast< unsigned long long >( i ), radix );
+    }
+    static OUStringConcatNumber< float > number( float f )
+    {
+        return OUStringConcatNumber< float >( f );
+    }
+    static OUStringConcatNumber< double > number( double d )
+    {
+        return OUStringConcatNumber< double >( f );
+    }
+#else
     /**
       Returns the string representation of the integer argument.
 
@@ -3364,24 +3399,6 @@ public:
     }
     /// @overload
     /// @since LibreOffice 4.1
-    static OUString number( unsigned int i, sal_Int16 radix = 10 )
-    {
-        return number( static_cast< unsigned long long >( i ), radix );
-    }
-    /// @overload
-    /// @since LibreOffice 4.1
-    static OUString number( long i, sal_Int16 radix = 10)
-    {
-        return number( static_cast< long long >( i ), radix );
-    }
-    /// @overload
-    /// @since LibreOffice 4.1
-    static OUString number( unsigned long i, sal_Int16 radix = 10 )
-    {
-        return number( static_cast< unsigned long long >( i ), radix );
-    }
-    /// @overload
-    /// @since LibreOffice 4.1
     static OUString number( long long ll, sal_Int16 radix = 10 )
     {
         sal_Unicode aBuf[RTL_STR_MAX_VALUEOFINT64];
@@ -3397,6 +3414,24 @@ public:
         rtl_uString* pNewData = NULL;
         rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfUInt64( aBuf, ll, radix ) );
         return OUString( pNewData, SAL_NO_ACQUIRE );
+    }
+    /// @overload
+    /// @since LibreOffice 4.1
+    static OUString number( unsigned int i, sal_Int16 radix = 10 )
+    {
+        return number( static_cast< unsigned long long >( i ), radix );
+    }
+    /// @overload
+    /// @since LibreOffice 4.1
+    static OUString number( long i, sal_Int16 radix = 10)
+    {
+        return number( static_cast< long long >( i ), radix );
+    }
+    /// @overload
+    /// @since LibreOffice 4.1
+    static OUString number( unsigned long i, sal_Int16 radix = 10 )
+    {
+        return number( static_cast< unsigned long long >( i ), radix );
     }
 
     /**
@@ -3432,7 +3467,7 @@ public:
         rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfDouble( aBuf, d ) );
         return OUString( pNewData, SAL_NO_ACQUIRE );
     }
-
+#endif
     /**
       Returns the string representation of the sal_Bool argument.
 
