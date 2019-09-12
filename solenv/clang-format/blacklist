@@ -1778,7 +1778,8 @@ compilerplugins/clang/store/tutorial/tutorial3.cxx
 compilerplugins/clang/store/tutorial/tutorial3.hxx
 compilerplugins/clang/store/unusedcode.cxx
 compilerplugins/clang/store/valueof.cxx
-compilerplugins/clang/stringconcat.cxx
+compilerplugins/clang/stringconcatauto.cxx
+compilerplugins/clang/stringconcatliterals.cxx
 compilerplugins/clang/stringconstant.cxx
 compilerplugins/clang/stringstatic.cxx
 compilerplugins/clang/subtlezeroinit.cxx
