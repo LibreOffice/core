@@ -24,6 +24,7 @@
 #include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/syswin.hxx>
+#include <vcl/drawables/WallpaperDrawable.hxx>
 
 #include <sal/types.h>
 #include <sal/log.hxx>
@@ -1643,7 +1644,7 @@ void Window::Erase(vcl::RenderContext& rRenderContext)
         RasterOp eRasterOp = GetRasterOp();
         if (eRasterOp != RasterOp::OverPaint)
             SetRasterOp(RasterOp::OverPaint);
-        rRenderContext.DrawWallpaper(0, 0, mnOutWidth, mnOutHeight, maBackground);
+        rRenderContext.Draw(vcl::WallpaperDrawable(tools::Rectangle(0, 0, mnOutWidth, mnOutHeight), maBackground, false));
         if (eRasterOp != RasterOp::OverPaint)
             rRenderContext.SetRasterOp(eRasterOp);
     }

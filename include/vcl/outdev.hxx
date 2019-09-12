@@ -869,18 +869,9 @@ public:
     ///@{
 
 public:
-    void                        DrawWallpaper( const tools::Rectangle& rRect, const Wallpaper& rWallpaper );
-
+    void                        DrawWallpaper(const tools::Rectangle& rRect, const Wallpaper& rWallpaper);
     void                        Erase();
     void                        Erase( const tools::Rectangle& rRect ) { DrawWallpaper( rRect, GetBackground() ); }
-
-protected:
-    void                        DrawGradientWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
-
-private:
-    SAL_DLLPRIVATE void         DrawWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
-    SAL_DLLPRIVATE void         DrawColorWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
-    SAL_DLLPRIVATE void         DrawBitmapWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
     ///@}
 
 
