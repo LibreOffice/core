@@ -23,10 +23,11 @@
 #include "controlwizard.hxx"
 #include "commonpagesdbp.hxx"
 
+using vcl::WizardTypes::WizardState;
+using vcl::WizardTypes::CommitPageReason;
 
 namespace dbp
 {
-
 
 #define LCW_STATE_DATASOURCE_SELECTION  0
 #define LCW_STATE_TABLESELECTION        1
