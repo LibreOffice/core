@@ -29,11 +29,10 @@ namespace vcl
     struct RoadmapWizardImpl;
     class RoadmapWizard;
 
-    struct RoadmapWizardTypes
+    namespace RoadmapWizardTypes
     {
-    public:
         typedef sal_Int16                                   PathId;
-        typedef ::std::vector< vcl::WizardTypes::WizardState >   WizardPath;
+        typedef ::std::vector< WizardTypes::WizardState >   WizardPath;
         typedef VclPtr<TabPage> (* RoadmapPageFactory)( RoadmapWizard& );
     };
 
@@ -59,7 +58,7 @@ namespace vcl
         <code>n2</code>, which share at least the first <code>k</code> states (where <code>k</code>
         is at least 1), and an arbitrary number of other states.
     */
-    class VCL_DLLPUBLIC RoadmapWizard : public vcl::OWizardMachine, public RoadmapWizardTypes
+    class VCL_DLLPUBLIC RoadmapWizard : public vcl::OWizardMachine
     {
     private:
         std::unique_ptr<RoadmapWizardImpl>  m_pImpl;
@@ -83,7 +82,7 @@ namespace vcl
         void            ShowRoadmap(bool bShow);
 
         // returns whether a given state is enabled
-        bool            isStateEnabled( WizardState _nState ) const;
+        bool            isStateEnabled( WizardTypes::WizardState _nState ) const;
 
         // WizardDialog overridables
         virtual bool    canAdvance() const override;
@@ -107,7 +106,7 @@ namespace vcl
                 the unique id you wish to give this path. This id can later on be used
                 to refer to the path which you just declared
         */
-        void    declarePath( PathId _nPathId, const WizardPath& _lWizardStates);
+        void    declarePath( RoadmapWizardTypes::PathId _nPathId, const RoadmapWizardTypes::WizardPath& _lWizardStates);
 
         /** activates a path which has previously been declared with <member>declarePath</member>
 
@@ -140,7 +139,7 @@ namespace vcl
                 already declared), then only steps <code>0</code> and <code>1</code> are activated,
                 since they are common to both paths.
         */
-        void    activatePath( PathId _nPathId, bool _bDecideForIt = false );
+        void    activatePath( RoadmapWizardTypes::PathId _nPathId, bool _bDecideForIt = false );
 
         /** determine the next state to travel from the given one
 
@@ -149,7 +148,7 @@ namespace vcl
 
             @see activatePath
         */
-        virtual WizardState     determineNextState( WizardState _nCurrentState ) const override;
+        virtual WizardTypes::WizardState determineNextState(WizardTypes::WizardState nCurrentState) const override;
 
         /** en- or disables a state
 
@@ -171,14 +170,14 @@ namespace vcl
 
             @see declarePath
         */
-        void    enableState( WizardState _nState, bool _bEnable = true );
+        void    enableState(WizardTypes::WizardState nState, bool _bEnable = true);
 
         /** returns true if and only if the given state is known in at least one declared path
         */
-        bool    knowsState( WizardState _nState ) const;
+        bool    knowsState(WizardTypes::WizardState nState) const;
 
         // OWizardMachine overriables
-        virtual void            enterState( WizardState _nState ) override;
+        virtual void            enterState(WizardTypes::WizardState nState) override;
 
         /** returns a human readable name for a given state
 
@@ -187,14 +186,14 @@ namespace vcl
             this is worth an assertion in a non-product build, and then an empty string is
             returned.
         */
-        virtual OUString  getStateDisplayName( WizardState _nState ) const;
+        virtual OUString  getStateDisplayName(WizardTypes::WizardState nState) const;
 
         /** creates a page for a given state
 
             This member is inherited from OWizardMachine, and default-implemented in this class
             for all states which have been described using describeState.
         */
-        virtual VclPtr<TabPage> createPage( WizardState _nState ) override;
+        virtual VclPtr<TabPage> createPage(WizardTypes::WizardState nState) override;
 
     private:
         DECL_DLLPRIVATE_LINK( OnRoadmapItemSelected, LinkParamNone*, void );
@@ -208,7 +207,7 @@ namespace vcl
         VCL_DLLPRIVATE void impl_construct();
     };
 
-    class VCL_DLLPUBLIC RoadmapWizardMachine : public vcl::WizardMachine, public RoadmapWizardTypes
+    class VCL_DLLPUBLIC RoadmapWizardMachine : public vcl::WizardMachine
     {
     private:
         std::unique_ptr<RoadmapWizardImpl>  m_pImpl;
@@ -220,7 +219,7 @@ namespace vcl
         void            SetRoadmapHelpId( const OString& _rId );
 
         // returns whether a given state is enabled
-        bool            isStateEnabled( WizardState _nState ) const;
+        bool            isStateEnabled(WizardTypes::WizardState nState) const;
 
         // WizardDialog overridables
         virtual bool    canAdvance() const override;
@@ -244,7 +243,7 @@ namespace vcl
                 the unique id you wish to give this path. This id can later on be used
                 to refer to the path which you just declared
         */
-        void    declarePath( PathId _nPathId, const WizardPath& _lWizardStates);
+        void    declarePath( RoadmapWizardTypes::PathId _nPathId, const RoadmapWizardTypes::WizardPath& _lWizardStates);
 
         /** activates a path which has previously been declared with <member>declarePath</member>
 
@@ -277,7 +276,7 @@ namespace vcl
                 already declared), then only steps <code>0</code> and <code>1</code> are activated,
                 since they are common to both paths.
         */
-        void    activatePath( PathId _nPathId, bool _bDecideForIt = false );
+        void    activatePath( RoadmapWizardTypes::PathId _nPathId, bool _bDecideForIt = false );
 
         /** determine the next state to travel from the given one
 
@@ -286,7 +285,7 @@ namespace vcl
 
             @see activatePath
         */
-        virtual WizardState     determineNextState( WizardState _nCurrentState ) const override;
+        virtual WizardTypes::WizardState determineNextState(WizardTypes::WizardState nCurrentState) const override;
 
         /** en- or disables a state
 
@@ -308,10 +307,10 @@ namespace vcl
 
             @see declarePath
         */
-        void    enableState( WizardState _nState, bool _bEnable = true );
+        void    enableState(WizardTypes::WizardState nState, bool _bEnable = true);
 
         // OWizardMachine overriables
-        virtual void            enterState( WizardState _nState ) override;
+        virtual void            enterState(WizardTypes::WizardState nState) override;
 
         /** returns a human readable name for a given state
 
@@ -320,7 +319,7 @@ namespace vcl
             this is worth an assertion in a non-product build, and then an empty string is
             returned.
         */
-        virtual OUString  getStateDisplayName( WizardState _nState ) const;
+        virtual OUString  getStateDisplayName(WizardTypes::WizardState nState) const;
 
     private:
         DECL_DLLPRIVATE_LINK( OnRoadmapItemSelected, const OString&, bool );

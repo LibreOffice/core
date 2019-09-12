@@ -24,6 +24,9 @@
 #include "addresssettings.hxx"
 #include "datasourcehandling.hxx"
 
+using vcl::WizardTypes::WizardState;
+using vcl::WizardTypes::CommitPageReason;
+
 namespace abp
 {
     typedef ::vcl::RoadmapWizardMachine OAddressBookSourcePilot_Base;
