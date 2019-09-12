@@ -130,7 +130,9 @@ namespace sax_fastparser {
         if (nLen == -1)
             nLen = pStr ? strlen(pStr) : 0;
 
-        if (!bEscape)
+        if ( !bEscape ||
+            // tdf#127274 don't escape the special VML shape type id "#_x0000_t202"
+            (pStr && strcmp(pStr, "#_x0000_t202") == 0) )
         {
             writeBytes( pStr, nLen );
             return;
