@@ -1056,7 +1056,7 @@ IAccSelectionList& AccObject::GetSelection()
 
 
 /**
-   * Set self to focus object in parant child list
+   * Set self to focus object in parent child list
    * @param
    * @return
    */
@@ -1072,7 +1072,7 @@ void AccObject::setFocus()
 }
 
 /**
-   * Unset self from focus object in parant child list.
+   * Unset self from focus object in parent child list.
    * @param
    * @return
    */

@@ -90,7 +90,7 @@ public:
      */
     virtual OUString   GetParentStyleName() = 0;
     /**
-     * @descr:  Parant paragraph style.
+     * @descr:  Parent paragraph style.
      */
     virtual void    SetParentStyleName(const OUString& parent) = 0;
     /**
