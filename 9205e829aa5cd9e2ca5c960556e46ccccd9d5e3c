@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_7a6598e0",
+        "filename": "compilerplugins/clang/stringconcatauto.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-09-12T20:52:16Z",
+      "side": 1,
+      "message": "might need\n   bool shouldVisitTemplateInstantiations() { return true; }\nhere?",
+      "revId": "9205e829aa5cd9e2ca5c960556e46ccccd9d5e3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
