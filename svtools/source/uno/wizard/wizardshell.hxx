@@ -26,6 +26,8 @@
 #include <map>
 #include <memory>
 
+using vcl::WizardTypes::WizardState;
+using vcl::WizardTypes::CommitPageReason;
 
 namespace svt { namespace uno
 {
@@ -76,7 +78,7 @@ namespace svt { namespace uno
 
         void        activatePath( const sal_Int16 i_nPathID, const bool i_bFinal )
         {
-            WizardShell_Base::activatePath( PathId( i_nPathID ), i_bFinal );
+            WizardShell_Base::activatePath( vcl::RoadmapWizardTypes::PathId( i_nPathID ), i_bFinal );
         }
 
         css::uno::Reference< css::ui::dialogs::XWizardPage >
@@ -95,14 +97,14 @@ namespace svt { namespace uno
         }
 
     private:
-        sal_Int16   impl_stateToPageId( const WizardTypes::WizardState i_nState ) const
+        sal_Int16   impl_stateToPageId( const WizardState i_nState ) const
         {
             return static_cast< sal_Int16 >( i_nState + m_nFirstPageID );
         }
 
         WizardState impl_pageIdToState( const sal_Int16 i_nPageId ) const
         {
-            return static_cast< WizardState >( i_nPageId - m_nFirstPageID );
+            return static_cast<WizardState>(i_nPageId - m_nFirstPageID);
         }
 
         PWizardPageController impl_getController( TabPage* i_pPage ) const;
