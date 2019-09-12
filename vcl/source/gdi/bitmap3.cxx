@@ -255,21 +255,6 @@ bool Bitmap::Convert( BmpConversion eConversion )
         }
         break;
 
-        case BmpConversion::N4BitGreys:
-            bRet = ImplMakeGreyscales( 16 );
-        break;
-
-        case BmpConversion::N4BitColors:
-        {
-            if( nBitCount < 4 )
-                bRet = ImplConvertUp( 4 );
-            else if( nBitCount > 4 )
-                bRet = ImplConvertDown( 4 );
-            else
-                bRet = true;
-        }
-        break;
-
         case BmpConversion::N8BitGreys:
             bRet = ImplMakeGreyscales( 256 );
         break;
@@ -335,7 +320,7 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
 
         if( bPalDiffers )
         {
-            Bitmap aNewBmp( GetSizePixel(), ( nGreys == 16 ) ? 4 : 8, &rPal );
+            Bitmap aNewBmp( GetSizePixel(), 8, &rPal );
             BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
             if( pWriteAcc )
@@ -851,18 +836,6 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
             case 1:
             {
                 rNew.Convert(BmpConversion::N1BitThreshold);
-                break;
-            }
-            case 4:
-            {
-                if(HasGreyPalette())
-                {
-                    rNew.Convert(BmpConversion::N4BitGreys);
-                }
-                else
-                {
-                    rNew.Convert(BmpConversion::N4BitColors);
-                }
                 break;
             }
             case 8:

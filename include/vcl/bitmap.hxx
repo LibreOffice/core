@@ -66,8 +66,6 @@ enum class BmpConversion
 {
     NNONE,
     N1BitThreshold,
-    N4BitGreys,
-    N4BitColors,
     N8BitGreys,
     N8BitColors,
     N24Bit,

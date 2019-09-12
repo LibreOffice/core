@@ -620,7 +620,7 @@ public:
 
 void CanvasBitmapTest::runTest()
 {
-    static const sal_Int8 lcl_depths[]={1,4,8,16,24};
+    static const sal_Int8 lcl_depths[]={1,8,16,24};
 
     // Testing VclCanvasBitmap wrapper
 

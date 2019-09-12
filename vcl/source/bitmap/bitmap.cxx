@@ -267,8 +267,6 @@ sal_uInt16 Bitmap::GetBitCount() const
     sal_uInt16 nBitCount = mxSalBmp->GetBitCount();
     if (nBitCount <= 1)
         return 1;
-    if (nBitCount <= 4)
-        return 4;
     if (nBitCount <= 8)
         return 8;
     if (nBitCount <= 24)
@@ -479,8 +477,7 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
                 }
                 else if (nSrcBitCount == 4)
                 {
-                    Convert( BmpConversion::N4BitColors );
-                    nNextIndex = 2;
+                    assert(false);
                 }
 
                 if( nNextIndex )

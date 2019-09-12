@@ -77,7 +77,7 @@ bool determineTextureFormat(sal_uInt16 nBits, GLenum& nFormat, GLenum& nType)
 
 bool isValidBitCount( sal_uInt16 nBitCount )
 {
-    return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) || (nBitCount == 16) || (nBitCount == 24) || (nBitCount == 32);
+    return (nBitCount == 1) || (nBitCount == 8) || (nBitCount == 16) || (nBitCount == 24) || (nBitCount == 32);
 }
 
 sal_uInt32 lclBytesPerRow(sal_uInt16 nBits, int nWidth)
@@ -85,7 +85,6 @@ sal_uInt32 lclBytesPerRow(sal_uInt16 nBits, int nWidth)
     switch(nBits)
     {
     case 1:  return (nWidth + 7) >> 3;
-    case 4:  return (nWidth + 1) >> 1;
     case 8:  return  nWidth;
     case 16: return  nWidth * 2;
     case 24: return  nWidth * 3;
@@ -341,37 +340,6 @@ public:
     }
 };
 
-class ImplPixelFormat4 : public ImplPixelFormat
-{
-private:
-    const BitmapPalette& mrPalette;
-    sal_uInt32 mnX;
-    sal_uInt32 mnShift;
-
-public:
-    explicit ImplPixelFormat4( const BitmapPalette& rPalette )
-        : mrPalette( rPalette )
-        , mnX(0)
-        , mnShift(4)
-    {
-    }
-    virtual void StartLine( sal_uInt8* pLine ) override
-    {
-        mpData = pLine;
-        mnX = 0;
-        mnShift = 4;
-    }
-    virtual const BitmapColor& ReadPixel() override
-    {
-        sal_uInt32 nIdx = ( mpData[mnX >> 1] >> mnShift) & 0x0f;
-        assert( mrPalette.GetEntryCount() > nIdx );
-        const BitmapColor& rColor = mrPalette[nIdx];
-        mnX++;
-        mnShift ^= 4;
-        return rColor;
-    }
-};
-
 class ImplPixelFormat1 : public ImplPixelFormat
 {
 private:
@@ -402,7 +370,6 @@ ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalet
     switch( nBits )
     {
     case 1: return new ImplPixelFormat1( rPalette );
-    case 4: return new ImplPixelFormat4( rPalette );
     case 8: return new ImplPixelFormat8( rPalette );
     }
 
@@ -602,8 +569,8 @@ bool OpenGLSalBitmap::ReadTexture()
 #endif
         return true;
     }
-    else if (mnBits == 1 || mnBits == 4 || mnBits == 8)
-    {   // convert buffers from 24-bit RGB to 1,4 or 8-bit buffer
+    else if (mnBits == 1 || mnBits == 8)
+    {   // convert buffers from 24-bit RGB to 1 or 8-bit buffer
         std::vector<sal_uInt8> aBuffer(mnWidth * mnHeight * 3);
 
         sal_uInt8* pBuffer = aBuffer.data();
@@ -616,9 +583,6 @@ bool OpenGLSalBitmap::ReadTexture()
         {
             case 1:
                 pWriter.reset(new ScanlineWriter(maPalette, 8));
-                break;
-            case 4:
-                pWriter.reset(new ScanlineWriter(maPalette, 2));
                 break;
             case 8:
                 pWriter.reset(new ScanlineWriter(maPalette, 1));
@@ -797,9 +761,6 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
         case 1:
             pBuffer->mnFormat = ScanlineFormat::N1BitMsbPal;
             break;
-        case 4:
-            pBuffer->mnFormat = ScanlineFormat::N4BitMsnPal;
-            break;
         case 8:
             pBuffer->mnFormat = ScanlineFormat::N8BitPal;
             break;
@@ -832,6 +793,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
             pBuffer->maColorMask  = ColorMask(aRedMask, aGreenMask, aBlueMask);
             break;
         }
+        default: assert(false);
     }
 
     return pBuffer;

@@ -112,7 +112,13 @@ protected:
         if (pBuf)
         {
             nCrc = pBuf->maPalette.GetChecksum();
-            nCrc = vcl_get_checksum(nCrc, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
+            // do calculation line by line so we avoid the trailing bytes which may contain random data
+            auto pScanline = pBuf->mpBits;
+            for (long i=0; i<pBuf->mnHeight; i++)
+            {
+                nCrc = vcl_get_checksum(nCrc, pScanline, pBuf->mnWidth * pBuf->mnBitCount / 8);
+                pScanline += pBuf->mnScanlineSize;
+            }
             pThis->ReleaseBuffer(pBuf, BitmapAccessMode::Read);
             pThis->mnChecksum = nCrc;
             pThis->mbChecksumValid = true;

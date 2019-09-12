@@ -35,43 +35,22 @@ Qt5Bitmap::Qt5Bitmap(const QImage& rImage) { m_pImage.reset(new QImage(rImage));
 
 bool Qt5Bitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal)
 {
-    assert((nBitCount == 1 || nBitCount == 4 || nBitCount == 8 || nBitCount == 16 || nBitCount == 24
-            || nBitCount == 32)
-           && "Unsupported BitCount!");
+    assert(
+        (nBitCount == 1 || nBitCount == 8 || nBitCount == 16 || nBitCount == 24 || nBitCount == 32)
+        && "Unsupported BitCount!");
 
     if (nBitCount == 1)
         assert(2 >= rPal.GetEntryCount());
-    if (nBitCount == 4)
-        assert(16 >= rPal.GetEntryCount());
     if (nBitCount == 8)
         assert(256 >= rPal.GetEntryCount());
 
-    if (nBitCount == 4)
-    {
-        m_pImage.reset();
-        m_aSize = rSize;
-        bool bFail = o3tl::checked_multiply<sal_uInt32>(rSize.Width(), nBitCount, m_nScanline);
-        if (bFail)
-        {
-            SAL_WARN("vcl.gdi", "checked multiply failed");
-            return false;
-        }
-        m_nScanline = AlignedWidth4Bytes(m_nScanline);
-        sal_uInt8* pBuffer = nullptr;
-        if (0 != m_nScanline && 0 != rSize.Height())
-            pBuffer = new sal_uInt8[m_nScanline * rSize.Height()];
-        m_pBuffer.reset(pBuffer);
-    }
-    else
-    {
-        m_pImage.reset(new QImage(toQSize(rSize), getBitFormat(nBitCount)));
-        m_pImage->fill(Qt::transparent);
-        m_pBuffer.reset();
-    }
+    m_pImage.reset(new QImage(toQSize(rSize), getBitFormat(nBitCount)));
+    m_pImage->fill(Qt::transparent);
+    m_pBuffer.reset();
     m_aPalette = rPal;
 
     auto count = rPal.GetEntryCount();
-    if (nBitCount != 4 && count && m_pImage.get())
+    if (count && m_pImage.get())
     {
         QVector<QRgb> aColorTable(count);
         for (unsigned i = 0; i < count; ++i)
@@ -119,8 +98,8 @@ bool Qt5Bitmap::Create(const SalBitmap& rSalBmp, SalGraphics* pSalGraphics)
 
 bool Qt5Bitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
 {
-    assert((nNewBitCount == 1 || nNewBitCount == 4 || nNewBitCount == 8 || nNewBitCount == 16
-            || nNewBitCount == 24 || nNewBitCount == 32)
+    assert((nNewBitCount == 1 || nNewBitCount == 8 || nNewBitCount == 16 || nNewBitCount == 24
+            || nNewBitCount == 32)
            && "Unsupported BitCount!");
 
     const Qt5Bitmap* pBitmap = static_cast<const Qt5Bitmap*>(&rSalBmp);
@@ -198,7 +177,7 @@ Size Qt5Bitmap::GetSize() const
 sal_uInt16 Qt5Bitmap::GetBitCount() const
 {
     if (m_pBuffer.get())
-        return 4;
+        return 8;
     else if (m_pImage.get())
         return getFormatBits(m_pImage->format());
     return 0;
@@ -217,7 +196,7 @@ BitmapBuffer* Qt5Bitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
     {
         pBuffer->mnWidth = m_aSize.Width();
         pBuffer->mnHeight = m_aSize.Height();
-        pBuffer->mnBitCount = 4;
+        pBuffer->mnBitCount = 8;
         pBuffer->mpBits = m_pBuffer.get();
         pBuffer->mnScanlineSize = m_nScanline;
     }
@@ -234,10 +213,6 @@ BitmapBuffer* Qt5Bitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
     {
         case 1:
             pBuffer->mnFormat = ScanlineFormat::N1BitMsbPal | ScanlineFormat::TopDown;
-            pBuffer->maPalette = m_aPalette;
-            break;
-        case 4:
-            pBuffer->mnFormat = ScanlineFormat::N4BitMsnPal | ScanlineFormat::TopDown;
             pBuffer->maPalette = m_aPalette;
             break;
         case 8:
@@ -275,6 +250,8 @@ BitmapBuffer* Qt5Bitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
             pBuffer->maPalette = aEmptyPalette;
             break;
         }
+        default:
+            assert(false);
     }
 
     return pBuffer;
@@ -284,7 +261,7 @@ void Qt5Bitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
 {
     m_aPalette = pBuffer->maPalette;
     auto count = m_aPalette.GetEntryCount();
-    if (pBuffer->mnBitCount != 4 && count)
+    if (count)
     {
         QVector<QRgb> aColorTable(count);
         for (unsigned i = 0; i < count; ++i)

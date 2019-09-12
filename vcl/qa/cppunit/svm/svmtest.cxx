@@ -967,10 +967,10 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
             "281fc589",
             "5e01ddcc",
             "4df0e464",
-            "34434a50",
+            "2ce165e9",
             "d1736327",
-            "b37875c2",
-            "a85d44b8",
+            "3c80d829",
+            "71efc447",
         });
     }
 
@@ -995,12 +995,9 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
         {"x", "0"}, {"y", "6"}, {"crc", aExpectedCRC[4]}, {"transparenttype", "bitmap"}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpex[4]", {
-        {"x", "2"}, {"y", "6"}, {"crc", aExpectedCRC[5]}, {"transparenttype", "bitmap"}
-    });
-    assertXPathAttrs(pDoc, "/metafile/bmpex[5]", {
         {"x", "0"}, {"y", "8"}, {"crc", aExpectedCRC[6]}, {"transparenttype", "bitmap"}
     });
-    assertXPathAttrs(pDoc, "/metafile/bmpex[6]", {
+    assertXPathAttrs(pDoc, "/metafile/bmpex[5]", {
         {"x", "2"}, {"y", "8"}, {"crc", aExpectedCRC[7]}, {"transparenttype", "bitmap"}
     });
 #endif
@@ -1066,17 +1063,6 @@ void SvmTest::testBitmapExs()
         }
         aBitmap.Convert(BmpConversion::N1BitThreshold);
         pVirtualDev->DrawBitmapEx(Point(0, 6), BitmapEx(aBitmap, COL_WHITE));
-    }
-
-    // DrawBitmapEx - 4-bit
-    {
-        Bitmap aBitmap(Size(2, 2), 24);
-        {
-            BitmapScopedWriteAccess pAccess(aBitmap);
-            pAccess->Erase(COL_MAGENTA);
-        }
-        aBitmap.Convert(BmpConversion::N4BitColors);
-        pVirtualDev->DrawBitmapEx(Point(2, 6), BitmapEx(aBitmap, COL_WHITE));
     }
 
     // DrawBitmapEx - 8-bit Color

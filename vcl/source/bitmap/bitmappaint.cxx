@@ -56,15 +56,6 @@ bool Bitmap::Erase(const Color& rFillColor)
             }
             break;
 
-            case ScanlineFormat::N4BitMsnPal:
-            case ScanlineFormat::N4BitLsnPal:
-            {
-                cIndex = static_cast<sal_uInt8>(pWriteAcc->GetBestPaletteIndex(rFillColor));
-                cIndex = cIndex | (cIndex << 4);
-                bFast = true;
-            }
-            break;
-
             case ScanlineFormat::N8BitPal:
             {
                 cIndex = static_cast<sal_uInt8>(pWriteAcc->GetBestPaletteIndex(rFillColor));
@@ -442,48 +433,7 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
         {
             const BitmapColor aTest(pReadAcc->GetBestMatchingColor(rTransColor));
 
-            if (pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitMsnPal
-                || pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitLsnPal)
-            {
-                // optimized for 4Bit-MSN/LSN source palette
-                const sal_uInt8 cTest = aTest.GetIndex();
-                const long nShiftInit
-                    = ((pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitMsnPal) ? 4 : 0);
-
-                if (pWriteAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal
-                    && aWhite.GetIndex() == 1)
-                {
-                    // optimized for 1Bit-MSB destination palette
-                    for (long nY = 0; nY < nHeight; ++nY)
-                    {
-                        Scanline pSrc = pReadAcc->GetScanline(nY);
-                        Scanline pDst = pWriteAcc->GetScanline(nY);
-                        for (long nX = 0, nShift = nShiftInit; nX < nWidth; nX++, nShift ^= 4)
-                        {
-                            if (cTest == ((pSrc[nX >> 1] >> nShift) & 0x0f))
-                                pDst[nX >> 3] |= 1 << (7 - (nX & 7));
-                            else
-                                pDst[nX >> 3] &= ~(1 << (7 - (nX & 7)));
-                        }
-                    }
-                }
-                else
-                {
-                    for (long nY = 0; nY < nHeight; ++nY)
-                    {
-                        Scanline pSrc = pReadAcc->GetScanline(nY);
-                        Scanline pDst = pWriteAcc->GetScanline(nY);
-                        for (long nX = 0, nShift = nShiftInit; nX < nWidth; nX++, nShift ^= 4)
-                        {
-                            if (cTest == ((pSrc[nX >> 1] >> nShift) & 0x0f))
-                                pWriteAcc->SetPixelOnData(pDst, nX, aWhite);
-                            else
-                                pWriteAcc->SetPixelOnData(pDst, nX, aBlack);
-                        }
-                    }
-                }
-            }
-            else if (pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal)
+            if (pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal)
             {
                 // optimized for 8Bit source palette
                 const sal_uInt8 cTest = aTest.GetIndex();
@@ -875,7 +825,7 @@ bool Bitmap::Replace(const Color& rSearchColor, const Color& rReplaceColor, sal_
     // Bitmaps with 1 bit color depth can cause problems if they have other entries than black/white
     // in their palette
     if (GetBitCount() == 1)
-        Convert(BmpConversion::N4BitColors);
+        Convert(BmpConversion::N8BitColors);
 
     BitmapScopedWriteAccess pAcc(*this);
     bool bRet = false;
@@ -938,7 +888,7 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, sa
     // Bitmaps with 1 bit color depth can cause problems if they have other entries than black/white
     // in their palette
     if (GetBitCount() == 1)
-        Convert(BmpConversion::N4BitColors);
+        Convert(BmpConversion::N8BitColors);
 
     BitmapScopedWriteAccess pAcc(*this);
     bool bRet = false;

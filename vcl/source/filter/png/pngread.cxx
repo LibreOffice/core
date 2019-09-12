@@ -495,15 +495,15 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
         {
             switch ( mnPngDepth )
             {
-                case 2 : // 2bit target not available -> use four bits
-                    mnTargetDepth = 4;  // we have to expand the bitmap
+                case 2 : // 2/4 bit target not available -> use 8 bits
+                case 4 :
+                    mnTargetDepth = 8;  // we have to expand the bitmap
                     mbGrayScale = true;
                     break;
                 case 16 :
                     mnTargetDepth = 8;  // we have to reduce the bitmap
                     [[fallthrough]];
                 case 1 :
-                case 4 :
                 case 8 :
                     mbGrayScale = true;
                     break;
@@ -534,11 +534,11 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
             switch ( mnPngDepth )
             {
                 case 2 :
-                    mnTargetDepth = 4;  // we have to expand the bitmap
+                case 4 :
+                    mnTargetDepth = 8;  // we have to expand the bitmap
                     mbPalette = false;
                     break;
                 case 1 :
-                case 4 :
                 case 8 :
                     mbPalette = false;
                     break;
@@ -1271,7 +1271,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 else
                 {
                     if ( mnPngDepth == 4 )  // maybe the source is a two bitmap graphic
-                    {   // ScanlineFormat::N4BitLsnPal
+                    {
                         for ( long nX = nXStart, nXIndex = 0; nX < maOrigSize.Width(); nX += nXAdd, nXIndex++ )
                         {
                             if( nXIndex & 1 )

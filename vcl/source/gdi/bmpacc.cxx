@@ -137,18 +137,6 @@ bool BitmapReadAccess::ImplSetAccessPointers( ScanlineFormat nFormat )
             mFncSetPixel = SetPixelForN1BitLsbPal;
         }
         break;
-        case ScanlineFormat::N4BitMsnPal:
-        {
-            mFncGetPixel = GetPixelForN4BitMsnPal;
-            mFncSetPixel = SetPixelForN4BitMsnPal;
-        }
-        break;
-        case ScanlineFormat::N4BitLsnPal:
-        {
-            mFncGetPixel = GetPixelForN4BitLsnPal;
-            mFncSetPixel = SetPixelForN4BitLsnPal;
-        }
-        break;
         case ScanlineFormat::N8BitPal:
         {
             mFncGetPixel = GetPixelForN8BitPal;
@@ -423,8 +411,6 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
             {
                 case ScanlineFormat::N1BitMsbPal:    pFncGetPixel = GetPixelForN1BitMsbPal; break;
                 case ScanlineFormat::N1BitLsbPal:    pFncGetPixel = GetPixelForN1BitLsbPal; break;
-                case ScanlineFormat::N4BitMsnPal:    pFncGetPixel = GetPixelForN4BitMsnPal; break;
-                case ScanlineFormat::N4BitLsnPal:    pFncGetPixel = GetPixelForN4BitLsnPal; break;
                 case ScanlineFormat::N8BitPal:        pFncGetPixel = GetPixelForN8BitPal; break;
                 case ScanlineFormat::N8BitTcMask:    pFncGetPixel = GetPixelForN8BitTcMask; break;
                 case ScanlineFormat::N16BitTcMsbMask:   pFncGetPixel = GetPixelForN16BitTcMsbMask; break;

@@ -139,7 +139,6 @@ struct DIBV5Header : public DIBInfoHeader
 sal_uInt16 discretizeBitcount( sal_uInt16 nInputCount )
 {
     return ( nInputCount <= 1 ) ? 1 :
-           ( nInputCount <= 4 ) ? 4 :
            ( nInputCount <= 8 ) ? 8 : 24;
 }
 
@@ -1289,7 +1288,6 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
         switch(rAcc.GetScanlineFormat())
         {
             case ScanlineFormat::N1BitMsbPal:
-            case ScanlineFormat::N4BitMsnPal:
             case ScanlineFormat::N8BitPal:
             case ScanlineFormat::N24BitTcBgr:
             {
@@ -1344,35 +1342,6 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
                             cTmp |= rAcc.GetIndexFromData( pScanline, nX ) << --nShift;
                         }
 
-                        *pTmp = cTmp;
-                        rOStm.WriteBytes(aBuf.data(), nAlignedWidth);
-                    }
-                }
-                break;
-
-                case 4:
-                {
-                    //valgrind, zero out the trailing unused alignment bytes
-                    size_t nUnusedBytes = nAlignedWidth - ((nWidth+1) / 2);
-                    memset(aBuf.data() + nAlignedWidth - nUnusedBytes, 0, nUnusedBytes);
-
-                    for( long nY = nHeight - 1; nY >= 0; nY-- )
-                    {
-                        sal_uInt8* pTmp = aBuf.data();
-                        sal_uInt8 cTmp = 0;
-                        Scanline pScanline = rAcc.GetScanline( nY );
-
-                        for( long nX = 0, nShift = 2; nX < nWidth; nX++ )
-                        {
-                            if( !nShift )
-                            {
-                                nShift = 2;
-                                *pTmp++ = cTmp;
-                                cTmp = 0;
-                            }
-
-                            cTmp |= rAcc.GetIndexFromData( pScanline, nX ) << ( --nShift << 2 );
-                        }
                         *pTmp = cTmp;
                         rOStm.WriteBytes(aBuf.data(), nAlignedWidth);
                     }
@@ -1470,23 +1439,14 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess c
         // problem might cause trouble at other places - the
         // introduction of 32 bit RGBA bitmaps is relatively
         // recent.
-        // #i59239# discretize bitcount to 1,4,8,24 (other cases
+        // #i59239# discretize bitcount to 1,8,24 (other cases
         // are not written below)
         const sal_uInt16 nBitCount(pAccAlpha ? 32 : discretizeBitcount(rAcc.GetBitCount()));
         aHeader.nBitCount = nBitCount;
         aHeader.nSizeImage = rAcc.Height() * AlignedWidth4Bytes(rAcc.Width() * aHeader.nBitCount);
 
-        if(bCompressed)
-        {
-            if(4 == nBitCount)
-            {
-                nCompression = RLE_4;
-            }
-            else if(8 == nBitCount)
-            {
-                nCompression = RLE_8;
-            }
-        }
+        if(bCompressed && 8 == nBitCount)
+            nCompression = RLE_8;
     }
 
     if((rOStm.GetCompressMode() & SvStreamCompressFlags::ZBITMAP) && (rOStm.GetVersion() >= SOFFICE_FILEFORMAT_40))
