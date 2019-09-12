@@ -99,6 +99,8 @@ using namespace ::com::sun::star::document;
 using namespace ::comphelper;
 using namespace ::cppu;
 
+using vcl::RoadmapWizardTypes::WizardPath;
+
 // ODbTypeWizDialogSetup
 ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(weld::Window* _pParent
                                ,SfxItemSet const * _pItems
@@ -152,7 +154,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(weld::Window* _pParent
     for(PathId i = 1;aIter != aEnd;++aIter,++i)
     {
         const OUString& sURLPrefix = aIter.getURLPrefix();
-        vcl::RoadmapWizardTypes::WizardPath aPath;
+        WizardPath aPath;
         aPath.push_back(PAGE_DBSETUPWIZARD_INTRO);
         m_pCollection->fillPageIds(sURLPrefix,aPath);
         aPath.push_back(PAGE_DBSETUPWIZARD_AUTHENTIFICATION);
@@ -161,7 +163,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(weld::Window* _pParent
         declareAuthDepPath(sURLPrefix,i,aPath);
     }
 
-    vcl::RoadmapWizardTypes::WizardPath aPath;
+    WizardPath aPath;
     aPath.push_back(PAGE_DBSETUPWIZARD_INTRO);
     declarePath( static_cast<PathId>(m_pCollection->size()+1), aPath);
 
@@ -174,7 +176,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(weld::Window* _pParent
     m_xAssistant->set_current_page(0);
 }
 
-void ODbTypeWizDialogSetup::declareAuthDepPath( const OUString& _sURL, PathId _nPathId, const vcl::RoadmapWizardTypes::WizardPath& _rPaths)
+void ODbTypeWizDialogSetup::declareAuthDepPath( const OUString& _sURL, PathId _nPathId, const WizardPath& _rPaths)
 {
     bool bHasAuthentication = DataSourceMetaData::getAuthentication( _sURL ) != AuthNone;
 
@@ -191,7 +193,7 @@ void ODbTypeWizDialogSetup::declareAuthDepPath( const OUString& _sURL, PathId _n
     ::vcl::RoadmapWizardMachine::declarePath( _nPathId, aPath );
 }
 
-OUString ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
+OUString ODbTypeWizDialogSetup::getStateDisplayName(WizardState _nState) const
 {
     OUString sRoadmapItem;
     switch( _nState )
@@ -596,7 +598,7 @@ IMPL_LINK_NOARG(ODbTypeWizDialogSetup, OnRecentDocumentSelected, OGeneralPageWiz
 
 IMPL_LINK_NOARG(ODbTypeWizDialogSetup, OnSingleDocumentChosen, OGeneralPageWizard&, void)
 {
-    if ( prepareLeaveCurrentState( eFinish ) )
+    if (prepareLeaveCurrentState(WizardTypes::eFinish))
         onFinish();
 }
 

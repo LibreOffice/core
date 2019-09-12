@@ -25,6 +25,8 @@
 
 #include <com/sun/star/ui/dialogs/WizardTravelType.hpp>
 
+using vcl::RoadmapWizardTypes::WizardPath;
+
 namespace svt { namespace uno
 {
 

@@ -33,6 +33,7 @@
 #include "fieldmappingpage.hxx"
 #include "fieldmappingimpl.hxx"
 
+using vcl::RoadmapWizardTypes::PathId;
 
 namespace abp
 {
@@ -215,7 +216,7 @@ namespace abp
         if ( !OAddressBookSourcePilot_Base::prepareLeaveCurrentState( _eReason ) )
             return false;
 
-        if ( _eReason == eTravelBackward )
+        if ( _eReason == vcl::WizardTypes::eTravelBackward )
             return true;
 
         bool bAllow = true;

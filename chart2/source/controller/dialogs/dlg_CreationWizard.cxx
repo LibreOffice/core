@@ -33,6 +33,8 @@
 
 using namespace css;
 
+using vcl::RoadmapWizardTypes::WizardPath;
+
 namespace chart
 {
 #define PATH_FULL   1

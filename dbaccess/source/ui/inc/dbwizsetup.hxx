@@ -40,6 +40,10 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
+using vcl::WizardTypes::WizardState;
+using vcl::WizardTypes::CommitPageReason;
+using vcl::RoadmapWizardTypes::PathId;
+
 namespace dbaui
 {
 

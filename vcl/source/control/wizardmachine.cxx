@@ -102,12 +102,12 @@ namespace vcl
         return true;
     }
 
-    struct WizardMachineImplData : public WizardTypes
+    struct WizardMachineImplData
     {
         OUString                        sTitleBase;         // the base for the title
-        ::std::stack< WizardState >     aStateHistory;      // the history of all states (used for implementing "Back")
+        std::stack<WizardTypes::WizardState> aStateHistory;      // the history of all states (used for implementing "Back")
 
-        WizardState                     nFirstUnknownPage;
+        WizardTypes::WizardState nFirstUnknownPage;
             // the WizardDialog does not allow non-linear transitions (e.g. it's
             // not possible to add pages in a non-linear order), so we need some own maintenance data
 
@@ -504,7 +504,7 @@ namespace vcl
 
         if (m_pImpl)
         {
-            for (WizardState i = 0; i < m_pImpl->nFirstUnknownPage; ++i)
+            for (WizardTypes::WizardState i = 0; i < m_pImpl->nFirstUnknownPage; ++i)
             {
                 TabPage *pPage = GetPage(i);
                 if (pPage)
@@ -647,7 +647,7 @@ namespace vcl
     }
 
 
-    TabPage* OWizardMachine::GetOrCreatePage( const WizardState i_nState )
+    TabPage* OWizardMachine::GetOrCreatePage( const WizardTypes::WizardState i_nState )
     {
         if ( nullptr == GetPage( i_nState ) )
         {
@@ -678,7 +678,7 @@ namespace vcl
     {
         maActivateHdl.Call( this );
 
-        WizardState nCurrentLevel = GetCurLevel();
+        WizardTypes::WizardState nCurrentLevel = GetCurLevel();
         GetOrCreatePage( nCurrentLevel );
 
         enterState( nCurrentLevel );
@@ -686,7 +686,7 @@ namespace vcl
 
     bool OWizardMachine::DeactivatePage()
     {
-        WizardState nCurrentState = getCurrentState();
+        WizardTypes::WizardState nCurrentState = getCurrentState();
         return leaveState(nCurrentState);
     }
 
@@ -927,10 +927,10 @@ namespace vcl
             m_pCancel->Enable(_bEnable);
     }
 
-    void OWizardMachine::enterState(WizardState _nState)
+    void OWizardMachine::enterState(WizardTypes::WizardState nState)
     {
         // tell the page
-        IWizardPageController* pController = getPageController( GetPage( _nState ) );
+        IWizardPageController* pController = getPageController( GetPage( nState ) );
         if (!pController)
             return;
         pController->initializePage();
@@ -944,7 +944,7 @@ namespace vcl
         implUpdateTitle();
     }
 
-    bool OWizardMachine::leaveState(WizardState)
+    bool OWizardMachine::leaveState(WizardTypes::WizardState)
     {
         // no need to ask the page here.
         // If we reach this point, we already gave the current page the chance to commit it's data,
@@ -965,21 +965,19 @@ namespace vcl
         if ( isTravelingSuspended() )
             return;
         WizardTravelSuspension aTravelGuard( *this );
-        if ( !prepareLeaveCurrentState( eFinish ) )
+        if (!prepareLeaveCurrentState(WizardTypes::eFinish))
         {
             return;
         }
         onFinish();
     }
 
-
-    OWizardMachine::WizardState OWizardMachine::determineNextState( WizardState _nCurrentState ) const
+    WizardTypes::WizardState OWizardMachine::determineNextState( WizardTypes::WizardState _nCurrentState ) const
     {
         return _nCurrentState + 1;
     }
 
-
-    bool OWizardMachine::prepareLeaveCurrentState( CommitPageReason _eReason )
+    bool OWizardMachine::prepareLeaveCurrentState( WizardTypes::CommitPageReason _eReason )
     {
         IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
         ENSURE_OR_RETURN( pController != nullptr, "OWizardMachine::prepareLeaveCurrentState: no controller for the current page!", true );
@@ -987,17 +985,17 @@ namespace vcl
     }
 
 
-    bool OWizardMachine::skipBackwardUntil( WizardState _nTargetState )
+    bool OWizardMachine::skipBackwardUntil( WizardTypes::WizardState _nTargetState )
     {
         // allowed to leave the current page?
-        if ( !prepareLeaveCurrentState( eTravelBackward ) )
+        if (!prepareLeaveCurrentState(WizardTypes::eTravelBackward))
             return false;
 
         // don't travel directly on m_pImpl->aStateHistory, in case something goes wrong
-        ::std::stack< WizardState > aTravelVirtually = m_pImpl->aStateHistory;
-        ::std::stack< WizardState > aOldStateHistory = m_pImpl->aStateHistory;
+        std::stack< WizardTypes::WizardState > aTravelVirtually = m_pImpl->aStateHistory;
+        std::stack< WizardTypes::WizardState > aOldStateHistory = m_pImpl->aStateHistory;
 
-        WizardState nCurrentRollbackState = getCurrentState();
+        WizardTypes::WizardState nCurrentRollbackState = getCurrentState();
         while ( nCurrentRollbackState != _nTargetState )
         {
             DBG_ASSERT( !aTravelVirtually.empty(), "OWizardMachine::skipBackwardUntil: this target state does not exist in the history!" );
@@ -1014,20 +1012,20 @@ namespace vcl
     }
 
 
-    bool OWizardMachine::skipUntil( WizardState _nTargetState )
+    bool OWizardMachine::skipUntil( WizardTypes::WizardState _nTargetState )
     {
-        WizardState nCurrentState = getCurrentState();
+        WizardTypes::WizardState nCurrentState = getCurrentState();
 
         // allowed to leave the current page?
-        if ( !prepareLeaveCurrentState( nCurrentState < _nTargetState ? eTravelForward : eTravelBackward ) )
+        if ( !prepareLeaveCurrentState( nCurrentState < _nTargetState ? WizardTypes::eTravelForward : WizardTypes::eTravelBackward ) )
             return false;
 
         // don't travel directly on m_pImpl->aStateHistory, in case something goes wrong
-        ::std::stack< WizardState > aTravelVirtually = m_pImpl->aStateHistory;
-        ::std::stack< WizardState > aOldStateHistory = m_pImpl->aStateHistory;
+        std::stack< WizardTypes::WizardState > aTravelVirtually = m_pImpl->aStateHistory;
+        std::stack< WizardTypes::WizardState > aOldStateHistory = m_pImpl->aStateHistory;
         while ( nCurrentState != _nTargetState )
         {
-            WizardState nNextState = determineNextState( nCurrentState );
+            WizardTypes::WizardState nNextState = determineNextState( nCurrentState );
             if ( WZS_INVALID_STATE == nNextState )
             {
                 OSL_FAIL( "OWizardMachine::skipUntil: the given target state does not exist!" );
@@ -1057,11 +1055,11 @@ namespace vcl
     void OWizardMachine::skip()
     {
         // allowed to leave the current page?
-        if ( !prepareLeaveCurrentState( eTravelForward ) )
+        if ( !prepareLeaveCurrentState( WizardTypes::eTravelForward ) )
             return;
 
-        WizardState nCurrentState = getCurrentState();
-        WizardState nNextState = determineNextState(nCurrentState);
+        WizardTypes::WizardState nCurrentState = getCurrentState();
+        WizardTypes::WizardState nNextState = determineNextState(nCurrentState);
 
         if (WZS_INVALID_STATE == nNextState)
             return;
@@ -1090,12 +1088,12 @@ namespace vcl
     bool OWizardMachine::travelNext()
     {
         // allowed to leave the current page?
-        if ( !prepareLeaveCurrentState( eTravelForward ) )
+        if ( !prepareLeaveCurrentState( WizardTypes::eTravelForward ) )
             return false;
 
         // determine the next state to travel to
-        WizardState nCurrentState = getCurrentState();
-        WizardState nNextState = determineNextState(nCurrentState);
+        WizardTypes::WizardState nCurrentState = getCurrentState();
+        WizardTypes::WizardState nNextState = determineNextState(nCurrentState);
         if (WZS_INVALID_STATE == nNextState)
             return false;
 
@@ -1117,11 +1115,11 @@ namespace vcl
         DBG_ASSERT(!m_pImpl->aStateHistory.empty(), "OWizardMachine::travelPrevious: have no previous page!");
 
         // allowed to leave the current page?
-        if ( !prepareLeaveCurrentState( eTravelBackward ) )
+        if ( !prepareLeaveCurrentState( WizardTypes::eTravelBackward ) )
             return false;
 
         // the next state to switch to
-        WizardState nPreviousState = m_pImpl->aStateHistory.top();
+        WizardTypes::WizardState nPreviousState = m_pImpl->aStateHistory.top();
 
         // the state history is used by the enterState method
         m_pImpl->aStateHistory.pop();
@@ -1137,13 +1135,13 @@ namespace vcl
     }
 
 
-    void  OWizardMachine::removePageFromHistory( WizardState nToRemove )
+    void  OWizardMachine::removePageFromHistory( WizardTypes::WizardState nToRemove )
     {
 
-        ::std::stack< WizardState > aTemp;
+        std::stack< WizardTypes::WizardState > aTemp;
         while(!m_pImpl->aStateHistory.empty())
         {
-            WizardState nPreviousState = m_pImpl->aStateHistory.top();
+            WizardTypes::WizardState nPreviousState = m_pImpl->aStateHistory.top();
             m_pImpl->aStateHistory.pop();
             if(nPreviousState != nToRemove)
                 aTemp.push( nPreviousState );
@@ -1195,9 +1193,9 @@ namespace vcl
     }
 
 
-    void OWizardMachine::getStateHistory( ::std::vector< WizardState >& _out_rHistory )
+    void OWizardMachine::getStateHistory( std::vector< WizardTypes::WizardState >& _out_rHistory )
     {
-        ::std::stack< WizardState > aHistoryCopy( m_pImpl->aStateHistory );
+        std::stack< WizardTypes::WizardState > aHistoryCopy( m_pImpl->aStateHistory );
         while ( !aHistoryCopy.empty() )
         {
             _out_rHistory.push_back( aHistoryCopy.top() );
@@ -1346,7 +1344,7 @@ namespace vcl
         implUpdateTitle();
     }
 
-    TabPage* WizardMachine::GetOrCreatePage( const WizardState i_nState )
+    TabPage* WizardMachine::GetOrCreatePage( const WizardTypes::WizardState i_nState )
     {
         if ( nullptr == GetPage( i_nState ) )
         {
@@ -1375,7 +1373,7 @@ namespace vcl
 
     void WizardMachine::ActivatePage()
     {
-        WizardState nCurrentLevel = m_nCurState;
+        WizardTypes::WizardState nCurrentLevel = m_nCurState;
         GetOrCreatePage( nCurrentLevel );
 
         enterState( nCurrentLevel );
@@ -1383,7 +1381,7 @@ namespace vcl
 
     bool WizardMachine::DeactivatePage()
     {
-        WizardState nCurrentState = getCurrentState();
+        WizardTypes::WizardState nCurrentState = getCurrentState();
         return leaveState(nCurrentState);
     }
 
@@ -1433,7 +1431,7 @@ namespace vcl
             m_xCancel->set_sensitive(_bEnable);
     }
 
-    void WizardMachine::enterState(WizardState _nState)
+    void WizardMachine::enterState(WizardTypes::WizardState _nState)
     {
         // tell the page
         IWizardPageController* pController = getPageController( GetPage( _nState ) );
@@ -1450,7 +1448,7 @@ namespace vcl
         implUpdateTitle();
     }
 
-    bool WizardMachine::leaveState(WizardState)
+    bool WizardMachine::leaveState(WizardTypes::WizardState)
     {
         // no need to ask the page here.
         // If we reach this point, we already gave the current page the chance to commit it's data,
@@ -1469,7 +1467,7 @@ namespace vcl
         if ( isTravelingSuspended() )
             return;
         WizardTravelSuspension aTravelGuard( *this );
-        if ( !prepareLeaveCurrentState( eFinish ) )
+        if (!prepareLeaveCurrentState(WizardTypes::eFinish))
         {
             return;
         }
@@ -1481,30 +1479,29 @@ namespace vcl
         m_xAssistant->response(RET_CANCEL);
     }
 
-    WizardMachine::WizardState WizardMachine::determineNextState( WizardState _nCurrentState ) const
+    WizardTypes::WizardState WizardMachine::determineNextState(WizardTypes::WizardState _nCurrentState ) const
     {
         return _nCurrentState + 1;
     }
 
-    bool WizardMachine::prepareLeaveCurrentState( CommitPageReason _eReason )
+    bool WizardMachine::prepareLeaveCurrentState( WizardTypes::CommitPageReason _eReason )
     {
         IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
         ENSURE_OR_RETURN( pController != nullptr, "WizardMachine::prepareLeaveCurrentState: no controller for the current page!", true );
         return pController->commitPage( _eReason );
     }
 
-
-    bool WizardMachine::skipBackwardUntil( WizardState _nTargetState )
+    bool WizardMachine::skipBackwardUntil(WizardTypes::WizardState _nTargetState)
     {
         // allowed to leave the current page?
-        if ( !prepareLeaveCurrentState( eTravelBackward ) )
+        if ( !prepareLeaveCurrentState( WizardTypes::eTravelBackward ) )
             return false;
 
         // don't travel directly on m_pImpl->aStateHistory, in case something goes wrong
-        ::std::stack< WizardState > aTravelVirtually = m_pImpl->aStateHistory;
-        ::std::stack< WizardState > aOldStateHistory = m_pImpl->aStateHistory;
+        std::stack< WizardTypes::WizardState > aTravelVirtually = m_pImpl->aStateHistory;
+        std::stack< WizardTypes::WizardState > aOldStateHistory = m_pImpl->aStateHistory;
 
-        WizardState nCurrentRollbackState = getCurrentState();
+        WizardTypes::WizardState nCurrentRollbackState = getCurrentState();
         while ( nCurrentRollbackState != _nTargetState )
         {
             DBG_ASSERT( !aTravelVirtually.empty(), "WizardMachine::skipBackwardUntil: this target state does not exist in the history!" );
@@ -1520,21 +1517,20 @@ namespace vcl
         return true;
     }
 
-
-    bool WizardMachine::skipUntil( WizardState _nTargetState )
+    bool WizardMachine::skipUntil( WizardTypes::WizardState _nTargetState )
     {
-        WizardState nCurrentState = getCurrentState();
+        WizardTypes::WizardState nCurrentState = getCurrentState();
 
         // allowed to leave the current page?
-        if ( !prepareLeaveCurrentState( nCurrentState < _nTargetState ? eTravelForward : eTravelBackward ) )
+        if ( !prepareLeaveCurrentState( nCurrentState < _nTargetState ? WizardTypes::eTravelForward : WizardTypes::eTravelBackward ) )
             return false;
 
         // don't travel directly on m_pImpl->aStateHistory, in case something goes wrong
-        ::std::stack< WizardState > aTravelVirtually = m_pImpl->aStateHistory;
-        ::std::stack< WizardState > aOldStateHistory = m_pImpl->aStateHistory;
+        std::stack< WizardTypes::WizardState > aTravelVirtually = m_pImpl->aStateHistory;
+        std::stack< WizardTypes::WizardState > aOldStateHistory = m_pImpl->aStateHistory;
         while ( nCurrentState != _nTargetState )
         {
-            WizardState nNextState = determineNextState( nCurrentState );
+            WizardTypes::WizardState nNextState = determineNextState( nCurrentState );
             if ( WZS_INVALID_STATE == nNextState )
             {
                 OSL_FAIL( "WizardMachine::skipUntil: the given target state does not exist!" );
@@ -1563,11 +1559,11 @@ namespace vcl
     void WizardMachine::skip()
     {
         // allowed to leave the current page?
-        if ( !prepareLeaveCurrentState( eTravelForward ) )
+        if ( !prepareLeaveCurrentState( WizardTypes::eTravelForward ) )
             return;
 
-        WizardState nCurrentState = getCurrentState();
-        WizardState nNextState = determineNextState(nCurrentState);
+        WizardTypes::WizardState nCurrentState = getCurrentState();
+        WizardTypes::WizardState nNextState = determineNextState(nCurrentState);
 
         if (WZS_INVALID_STATE == nNextState)
             return;
@@ -1596,12 +1592,12 @@ namespace vcl
     bool WizardMachine::travelNext()
     {
         // allowed to leave the current page?
-        if ( !prepareLeaveCurrentState( eTravelForward ) )
+        if ( !prepareLeaveCurrentState( WizardTypes::eTravelForward ) )
             return false;
 
         // determine the next state to travel to
-        WizardState nCurrentState = getCurrentState();
-        WizardState nNextState = determineNextState(nCurrentState);
+        WizardTypes::WizardState nCurrentState = getCurrentState();
+        WizardTypes::WizardState nNextState = determineNextState(nCurrentState);
         if (WZS_INVALID_STATE == nNextState)
             return false;
 
@@ -1617,7 +1613,7 @@ namespace vcl
         return true;
     }
 
-    bool WizardMachine::ShowPage(WizardState nState)
+    bool WizardMachine::ShowPage(WizardTypes::WizardState nState)
     {
         if (DeactivatePage())
         {
@@ -1656,11 +1652,11 @@ namespace vcl
         DBG_ASSERT(!m_pImpl->aStateHistory.empty(), "WizardMachine::travelPrevious: have no previous page!");
 
         // allowed to leave the current page?
-        if ( !prepareLeaveCurrentState( eTravelBackward ) )
+        if ( !prepareLeaveCurrentState( WizardTypes::eTravelBackward ) )
             return false;
 
         // the next state to switch to
-        WizardState nPreviousState = m_pImpl->aStateHistory.top();
+        WizardTypes::WizardState nPreviousState = m_pImpl->aStateHistory.top();
 
         // the state history is used by the enterState method
         m_pImpl->aStateHistory.pop();
@@ -1676,13 +1672,13 @@ namespace vcl
     }
 
 
-    void  WizardMachine::removePageFromHistory( WizardState nToRemove )
+    void  WizardMachine::removePageFromHistory( WizardTypes::WizardState nToRemove )
     {
 
-        ::std::stack< WizardState > aTemp;
+        std::stack< WizardTypes::WizardState > aTemp;
         while(!m_pImpl->aStateHistory.empty())
         {
-            WizardState nPreviousState = m_pImpl->aStateHistory.top();
+            WizardTypes::WizardState nPreviousState = m_pImpl->aStateHistory.top();
             m_pImpl->aStateHistory.pop();
             if(nPreviousState != nToRemove)
                 aTemp.push( nPreviousState );
@@ -1730,10 +1726,9 @@ namespace vcl
         return pController;
     }
 
-
-    void WizardMachine::getStateHistory( ::std::vector< WizardState >& _out_rHistory )
+    void WizardMachine::getStateHistory( std::vector< WizardTypes::WizardState >& _out_rHistory )
     {
-        ::std::stack< WizardState > aHistoryCopy( m_pImpl->aStateHistory );
+        std::stack< WizardTypes::WizardState > aHistoryCopy( m_pImpl->aStateHistory );
         while ( !aHistoryCopy.empty() )
         {
             _out_rHistory.push_back( aHistoryCopy.top() );
@@ -1741,12 +1736,10 @@ namespace vcl
         }
     }
 
-
     bool WizardMachine::canAdvance() const
     {
         return WZS_INVALID_STATE != determineNextState( getCurrentState() );
     }
-
 
     void WizardMachine::updateTravelUI()
     {
@@ -1759,12 +1752,10 @@ namespace vcl
         enableButtons( WizardButtonFlags::NEXT, bCanAdvance );
     }
 
-
     bool WizardMachine::isTravelingSuspended() const
     {
         return m_pImpl->m_bTravelingSuspended;
     }
-
 
     void WizardMachine::suspendTraveling( AccessGuard )
     {
@@ -1834,7 +1825,7 @@ namespace vcl
         OSL_FAIL( "WizardMachine::RemovePage() - Page not in list" );
     }
 
-    void WizardMachine::SetPage(WizardState nLevel, TabPage* pPage)
+    void WizardMachine::SetPage(WizardTypes::WizardState nLevel, TabPage* pPage)
     {
         sal_uInt16              nTempLevel = 0;
         ImplWizPageData*    pPageData = m_pFirstPage;
@@ -1855,7 +1846,7 @@ namespace vcl
         }
     }
 
-    TabPage* WizardMachine::GetPage(WizardState nLevel) const
+    TabPage* WizardMachine::GetPage(WizardTypes::WizardState nLevel) const
     {
         sal_uInt16 nTempLevel = 0;
 

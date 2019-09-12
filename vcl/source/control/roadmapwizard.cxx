@@ -33,25 +33,27 @@
 
 namespace vcl
 {
+    using namespace RoadmapWizardTypes;
+
     namespace
     {
         typedef ::std::set< WizardTypes::WizardState > StateSet;
 
         typedef ::std::map<
-                    RoadmapWizardTypes::PathId,
-                    RoadmapWizardTypes::WizardPath
+                    PathId,
+                    WizardPath
                 > Paths;
 
         typedef ::std::map<
                     WizardTypes::WizardState,
                     ::std::pair<
                         OUString,
-                        RoadmapWizardTypes::RoadmapPageFactory
+                        RoadmapPageFactory
                     >
                 > StateDescriptions;
     }
 
-    struct RoadmapWizardImpl : public RoadmapWizardTypes
+    struct RoadmapWizardImpl
     {
         ScopedVclPtr<ORoadmap> pRoadmap;
         Paths               aPaths;
@@ -362,7 +364,7 @@ namespace vcl
                     // there is an item with this index in the roadmap - does it match what is requested by
                     // the respective state in the active path?
                     RoadmapTypes::ItemId nPresentItemId = m_pImpl->pRoadmap->GetItemID( nItemIndex );
-                    WizardState nRequiredState = rActivePath[ nItemIndex ];
+                    WizardTypes::WizardState nRequiredState = rActivePath[ nItemIndex ];
                     if ( nPresentItemId != nRequiredState )
                     {
                         m_pImpl->pRoadmap->DeleteRoadmapItem( nItemIndex );
@@ -376,7 +378,7 @@ namespace vcl
                 bInsertItem = bNeedItem;
             }
 
-            WizardState nState( rActivePath[ nItemIndex ] );
+            WizardTypes::WizardState nState( rActivePath[ nItemIndex ] );
             if ( bInsertItem )
             {
                 m_pImpl->pRoadmap->InsertRoadmapItem(
@@ -470,7 +472,7 @@ namespace vcl
                     // there is an item with this index in the roadmap - does it match what is requested by
                     // the respective state in the active path?
                     RoadmapTypes::ItemId nPresentItemId = m_xAssistant->get_page_ident(nItemIndex).toInt32();
-                    WizardState nRequiredState = rActivePath[ nItemIndex ];
+                    WizardTypes::WizardState nRequiredState = rActivePath[ nItemIndex ];
                     if ( nPresentItemId != nRequiredState )
                     {
                         m_xAssistant->set_page_title(OString::number(nPresentItemId), "");
@@ -484,7 +486,7 @@ namespace vcl
                 bInsertItem = bNeedItem;
             }
 
-            WizardState nState( rActivePath[ nItemIndex ] );
+            WizardTypes::WizardState nState( rActivePath[ nItemIndex ] );
 
             if ( bInsertItem )
             {
@@ -505,7 +507,7 @@ namespace vcl
         }
     }
 
-    WizardTypes::WizardState RoadmapWizard::determineNextState( WizardState _nCurrentState ) const
+    WizardTypes::WizardState RoadmapWizard::determineNextState( WizardTypes::WizardState _nCurrentState ) const
     {
 
         sal_Int32 nCurrentStatePathIndex = -1;
@@ -534,7 +536,7 @@ namespace vcl
         return aActivePathPos->second[ nNextStateIndex ];
     }
 
-    WizardTypes::WizardState RoadmapWizardMachine::determineNextState( WizardState _nCurrentState ) const
+    WizardTypes::WizardState RoadmapWizardMachine::determineNextState( WizardTypes::WizardState _nCurrentState ) const
     {
         sal_Int32 nCurrentStatePathIndex = -1;
 
@@ -627,7 +629,7 @@ namespace vcl
         OWizardMachine::updateTravelUI();
 
         // disable the "Previous" button if all states in our history are disabled
-        ::std::vector< WizardState > aHistory;
+        std::vector< WizardTypes::WizardState > aHistory;
         getStateHistory( aHistory );
         bool bHaveEnabledState = false;
         for (auto const& state : aHistory)
@@ -649,7 +651,7 @@ namespace vcl
         WizardMachine::updateTravelUI();
 
         // disable the "Previous" button if all states in our history are disabled
-        ::std::vector< WizardState > aHistory;
+        std::vector< WizardTypes::WizardState > aHistory;
         getStateHistory( aHistory );
         bool bHaveEnabledState = false;
         for (auto const& state : aHistory)
@@ -692,8 +694,8 @@ namespace vcl
         bool bResult = true;
         if ( nNewIndex > nCurrentIndex )
         {
-            bResult = skipUntil( static_cast<WizardState>(nCurItemId) );
-            WizardState nTemp = static_cast<WizardState>(nCurItemId);
+            bResult = skipUntil( static_cast<WizardTypes::WizardState>(nCurItemId) );
+            WizardTypes::WizardState nTemp = static_cast<WizardTypes::WizardState>(nCurItemId);
             while( nTemp )
             {
                 if( m_pImpl->aDisabledStates.find( --nTemp ) != m_pImpl->aDisabledStates.end() )
@@ -701,7 +703,7 @@ namespace vcl
             }
         }
         else
-            bResult = skipBackwardUntil( static_cast<WizardState>(nCurItemId) );
+            bResult = skipBackwardUntil( static_cast<WizardTypes::WizardState>(nCurItemId) );
 
         if ( !bResult )
             m_pImpl->pRoadmap->SelectRoadmapItemByID( getCurrentState() );
@@ -733,8 +735,8 @@ namespace vcl
         bool bResult = true;
         if ( nNewIndex > nCurrentIndex )
         {
-            bResult = skipUntil( static_cast<WizardState>(nCurItemId) );
-            WizardState nTemp = static_cast<WizardState>(nCurItemId);
+            bResult = skipUntil( static_cast<WizardTypes::WizardState>(nCurItemId) );
+            WizardTypes::WizardState nTemp = static_cast<WizardTypes::WizardState>(nCurItemId);
             while( nTemp )
             {
                 if( m_pImpl->aDisabledStates.find( --nTemp ) != m_pImpl->aDisabledStates.end() )
@@ -742,12 +744,12 @@ namespace vcl
             }
         }
         else
-            bResult = skipBackwardUntil( static_cast<WizardState>(nCurItemId) );
+            bResult = skipBackwardUntil( static_cast<WizardTypes::WizardState>(nCurItemId) );
 
         return bResult;
     }
 
-    void RoadmapWizard::enterState( WizardState _nState )
+    void RoadmapWizard::enterState( WizardTypes::WizardState _nState )
     {
         OWizardMachine::enterState( _nState );
 
@@ -756,7 +758,7 @@ namespace vcl
         m_pImpl->pRoadmap->SelectRoadmapItemByID( getCurrentState() );
     }
 
-    void RoadmapWizardMachine::enterState( WizardState _nState )
+    void RoadmapWizardMachine::enterState( WizardTypes::WizardState _nState )
     {
         WizardMachine::enterState( _nState );
 
@@ -764,7 +766,7 @@ namespace vcl
         implUpdateRoadmap();
     }
 
-    OUString RoadmapWizard::getStateDisplayName( WizardState _nState ) const
+    OUString RoadmapWizard::getStateDisplayName( WizardTypes::WizardState _nState ) const
     {
         OUString sDisplayName;
 
@@ -777,7 +779,7 @@ namespace vcl
         return sDisplayName;
     }
 
-    OUString RoadmapWizardMachine::getStateDisplayName( WizardState _nState ) const
+    OUString RoadmapWizardMachine::getStateDisplayName( WizardTypes::WizardState _nState ) const
     {
         OUString sDisplayName;
 
@@ -790,7 +792,7 @@ namespace vcl
         return sDisplayName;
     }
 
-    VclPtr<TabPage> RoadmapWizard::createPage( WizardState _nState )
+    VclPtr<TabPage> RoadmapWizard::createPage( WizardTypes::WizardState _nState )
     {
         VclPtr<TabPage> pPage;
 
@@ -806,7 +808,7 @@ namespace vcl
         return pPage;
     }
 
-    void RoadmapWizard::enableState( WizardState _nState, bool _bEnable )
+    void RoadmapWizard::enableState( WizardTypes::WizardState _nState, bool _bEnable )
     {
 
         // remember this (in case the state appears in the roadmap later on)
@@ -822,7 +824,7 @@ namespace vcl
         m_pImpl->pRoadmap->EnableRoadmapItem( static_cast<RoadmapTypes::ItemId>(_nState), _bEnable );
     }
 
-    void RoadmapWizardMachine::enableState( WizardState _nState, bool _bEnable )
+    void RoadmapWizardMachine::enableState( WizardTypes::WizardState _nState, bool _bEnable )
     {
         // remember this (in case the state appears in the roadmap later on)
         if ( _bEnable )
@@ -837,7 +839,7 @@ namespace vcl
         m_xAssistant->set_page_sensitive(OString::number(_nState), _bEnable);
     }
 
-    bool RoadmapWizard::knowsState( WizardState i_nState ) const
+    bool RoadmapWizard::knowsState( WizardTypes::WizardState i_nState ) const
     {
         for (auto const& path : m_pImpl->aPaths)
         {
@@ -850,12 +852,12 @@ namespace vcl
         return false;
     }
 
-    bool RoadmapWizard::isStateEnabled( WizardState _nState ) const
+    bool RoadmapWizard::isStateEnabled( WizardTypes::WizardState _nState ) const
     {
         return m_pImpl->aDisabledStates.find( _nState ) == m_pImpl->aDisabledStates.end();
     }
 
-    bool RoadmapWizardMachine::isStateEnabled( WizardState _nState ) const
+    bool RoadmapWizardMachine::isStateEnabled( WizardTypes::WizardState _nState ) const
     {
         return m_pImpl->aDisabledStates.find( _nState ) == m_pImpl->aDisabledStates.end();
     }

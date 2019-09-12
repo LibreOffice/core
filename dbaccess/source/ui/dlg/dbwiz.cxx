@@ -105,9 +105,9 @@ IMPL_LINK(ODbTypeWizDialog, OnTypeSelected, OGeneralPage&, _rTabPage, void)
     enableButtons(WizardButtonFlags::FINISH,!bURLRequired);
 }
 
-vcl::WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCurrentState ) const
+WizardState ODbTypeWizDialog::determineNextState( WizardState _nCurrentState ) const
 {
-    WizardTypes::WizardState nNextState = WZS_INVALID_STATE;
+    WizardState nNextState = WZS_INVALID_STATE;
     switch(_nCurrentState)
     {
         case START_PAGE:

@@ -34,17 +34,13 @@ namespace weld {
 struct ImplWizPageData;
 struct ImplWizButtonData;
 
+// wizard states
+#define WZS_INVALID_STATE (::vcl::WizardTypes::WizardState(-1))
+
 namespace vcl
 {
-
-
-// wizard states
-#define WZS_INVALID_STATE       (WizardState(-1))
-
-
     //= WizardTypes
-
-    struct WizardTypes
+    namespace WizardTypes
     {
         typedef sal_Int16  WizardState;
         enum CommitPageReason
@@ -82,12 +78,9 @@ namespace vcl
         ~IWizardPageController() {}
     };
 
-
     //= OWizardPage
-
     class VCL_DLLPUBLIC OWizardPage : public TabPage, public IWizardPageController
     {
-
     public:
         /** @param _pParent
                 if the OWizardPage is used in an OWizardMachine, this parameter
@@ -118,9 +111,7 @@ namespace vcl
         void                updateDialogTravelUI();
     };
 
-
     //= OWizardMachine
-
     struct WizardMachineImplData;
     /** implements some kind of finite automata, where the states of the automata exactly correlate
         with tab pages.
@@ -137,8 +128,7 @@ namespace vcl
         on the actual data presented in the wizard (e.g. checkboxes checked, or something like this),
         they can implement non-linear traveling this way.
     */
-
-    class VCL_DLLPUBLIC OWizardMachine : public ModalDialog, public WizardTypes
+    class VCL_DLLPUBLIC OWizardMachine : public ModalDialog
     {
     private:
         Idle                    maWizardLayoutIdle;
@@ -257,10 +247,10 @@ namespace vcl
         // our own overridables
 
         /// to override to create new pages
-        virtual VclPtr<TabPage> createPage(WizardState _nState) = 0;
+        virtual VclPtr<TabPage> createPage(WizardTypes::WizardState _nState) = 0;
 
         /// will be called when a new page is about to be displayed
-        virtual void        enterState(WizardState _nState);
+        virtual void        enterState(WizardTypes::WizardState _nState);
 
         /** will be called when the current state is about to be left for the given reason
 
@@ -272,7 +262,7 @@ namespace vcl
             @return
                 <TRUE/> if and only if the page is allowed to be left
         */
-        virtual bool        prepareLeaveCurrentState( CommitPageReason _eReason );
+        virtual bool        prepareLeaveCurrentState( WizardTypes::CommitPageReason eReason );
 
         /** will be called when the given state is left
 
@@ -286,7 +276,7 @@ namespace vcl
             @return
                 <TRUE/> if and only if the page is allowed to be left
         */
-        virtual bool        leaveState( WizardState _nState );
+        virtual bool        leaveState(WizardTypes::WizardState _nState);
 
         /** determine the next state to travel from the given one
 
@@ -294,7 +284,7 @@ namespace vcl
 
             Return WZS_INVALID_STATE to prevent traveling.
         */
-        virtual WizardState determineNextState( WizardState _nCurrentState ) const;
+        virtual WizardTypes::WizardState determineNextState(WizardTypes::WizardState nCurrentState) const;
 
         /** called when the finish button is pressed
             <p>By default, only the base class' Finish method (which is not virtual) is called</p>
@@ -317,7 +307,7 @@ namespace vcl
 
         /** removes a page from the history. Should be called when the page is being disabled
         */
-        void                removePageFromHistory( WizardState nToRemove );
+        void                removePageFromHistory(WizardTypes::WizardState nToRemove);
 
         /** skip a state
 
@@ -349,7 +339,7 @@ namespace vcl
             @see skip
             @see skipBackwardUntil
         */
-        bool                    skipUntil( WizardState _nTargetState );
+        bool                    skipUntil(WizardTypes::WizardState nTargetState);
 
         /** moves back one or more states, until a given state is reached
 
@@ -367,20 +357,20 @@ namespace vcl
             @see skipUntil
             @see skip
         */
-        bool                    skipBackwardUntil( WizardState _nTargetState );
+        bool                    skipBackwardUntil(WizardTypes::WizardState nTargetState);
 
         /** returns the current state of the machine
 
             Vulgo, this is the identifier of the current tab page :)
         */
-        WizardState             getCurrentState() const { return GetCurLevel(); }
+        WizardTypes::WizardState getCurrentState() const { return GetCurLevel(); }
 
         virtual IWizardPageController*
                                 getPageController( TabPage* _pCurrentPage ) const;
 
         /** retrieves a copy of the state history, i.e. all states we already visited
         */
-        void                    getStateHistory( ::std::vector< WizardState >& _out_rHistory );
+        void                    getStateHistory(std::vector<WizardTypes::WizardState>& out_rHistory);
 
     public:
         class AccessGuard
@@ -395,7 +385,7 @@ namespace vcl
         bool                   isTravelingSuspended() const;
 
     protected:
-        TabPage* GetOrCreatePage( const WizardState i_nState );
+        TabPage* GetOrCreatePage(const WizardTypes::WizardState i_nState);
 
     private:
         VCL_DLLPRIVATE void             ImplInitData();
@@ -415,12 +405,12 @@ namespace vcl
         VCL_DLLPRIVATE void     implConstruct( const WizardButtonFlags _nButtonFlags );
     };
 
-    class VCL_DLLPUBLIC WizardMachine : public weld::AssistantController, public WizardTypes
+    class VCL_DLLPUBLIC WizardMachine : public weld::AssistantController
     {
     private:
         VclPtr<TabPage> m_xCurTabPage;
 
-        WizardState m_nCurState;
+        WizardTypes::WizardState m_nCurState;
         ImplWizPageData* m_pFirstPage;
 
     protected:
@@ -439,15 +429,15 @@ namespace vcl
         virtual ~WizardMachine() override;
 
         bool Finish(short nResult = RET_CANCEL);
-        bool ShowPage(WizardState nState);
+        bool ShowPage(WizardTypes::WizardState nState);
 
         bool ShowNextPage();
         bool ShowPrevPage();
 
         void                AddPage( TabPage* pPage );
         void                RemovePage( TabPage* pPage );
-        void                SetPage( WizardState nLevel, TabPage* pPage );
-        TabPage*            GetPage( WizardState eState ) const;
+        void                SetPage( WizardTypes::WizardState nLevel, TabPage* pPage );
+        TabPage*            GetPage( WizardTypes::WizardState eState ) const;
 
         /// enable (or disable) buttons
         void                enableButtons(WizardButtonFlags _nWizardButtonFlags, bool _bEnable);
@@ -477,10 +467,10 @@ namespace vcl
         // our own overridables
 
         /// to override to create new pages
-        virtual VclPtr<TabPage> createPage(WizardState _nState) = 0;
+        virtual VclPtr<TabPage> createPage(WizardTypes::WizardState _nState) = 0;
 
         /// will be called when a new page is about to be displayed
-        virtual void        enterState(WizardState _nState);
+        virtual void        enterState(WizardTypes::WizardState _nState);
 
         /** will be called when the current state is about to be left for the given reason
 
@@ -492,7 +482,7 @@ namespace vcl
             @return
                 <TRUE/> if and only if the page is allowed to be left
         */
-        virtual bool        prepareLeaveCurrentState( CommitPageReason _eReason );
+        virtual bool        prepareLeaveCurrentState( WizardTypes::CommitPageReason eReason );
 
         /** will be called when the given state is left
 
@@ -506,7 +496,7 @@ namespace vcl
             @return
                 <TRUE/> if and only if the page is allowed to be left
         */
-        virtual bool        leaveState( WizardState _nState );
+        virtual bool        leaveState(WizardTypes::WizardState nState);
 
         /** determine the next state to travel from the given one
 
@@ -514,7 +504,7 @@ namespace vcl
 
             Return WZS_INVALID_STATE to prevent traveling.
         */
-        virtual WizardState determineNextState( WizardState _nCurrentState ) const;
+        virtual WizardTypes::WizardState determineNextState(WizardTypes::WizardState nCurrentState) const;
 
         /** called when the finish button is pressed
             <p>By default, only the base class' Finish method (which is not virtual) is called</p>
@@ -537,7 +527,7 @@ namespace vcl
 
         /** removes a page from the history. Should be called when the page is being disabled
         */
-        void                removePageFromHistory( WizardState nToRemove );
+        void                removePageFromHistory(WizardTypes::WizardState nToRemove);
 
         /** skip a state
 
@@ -569,7 +559,7 @@ namespace vcl
             @see skip
             @see skipBackwardUntil
         */
-        bool                    skipUntil( WizardState _nTargetState );
+        bool                    skipUntil(WizardTypes::WizardState nTargetState);
 
         /** moves back one or more states, until a given state is reached
 
@@ -587,20 +577,20 @@ namespace vcl
             @see skipUntil
             @see skip
         */
-        bool                    skipBackwardUntil( WizardState _nTargetState );
+        bool                    skipBackwardUntil(WizardTypes::WizardState nTargetState);
 
         /** returns the current state of the machine
 
             Vulgo, this is the identifier of the current tab page :)
         */
-        WizardState             getCurrentState() const { return m_nCurState; }
+        WizardTypes::WizardState getCurrentState() const { return m_nCurState; }
 
         virtual IWizardPageController*
                                 getPageController( TabPage* _pCurrentPage ) const;
 
         /** retrieves a copy of the state history, i.e. all states we already visited
         */
-        void                    getStateHistory( ::std::vector< WizardState >& _out_rHistory );
+        void                    getStateHistory(std::vector<WizardTypes::WizardState>& out_rHistory);
 
     public:
         class AccessGuard
@@ -615,7 +605,7 @@ namespace vcl
         bool                   isTravelingSuspended() const;
 
     protected:
-        TabPage* GetOrCreatePage( const WizardState i_nState );
+        TabPage* GetOrCreatePage(const WizardTypes::WizardState i_nState);
 
     private:
         DECL_DLLPRIVATE_LINK(OnNextPage, weld::Button&, void);
