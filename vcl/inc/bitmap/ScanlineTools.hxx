@@ -215,8 +215,6 @@ std::unique_ptr<ScanlineTransformer> getScanlineTransformer(sal_uInt16 nBits,
     {
         case 1:
             return std::make_unique<ScanlineTransformer_1BitPalette>(rPalette);
-        case 4:
-            return std::make_unique<ScanlineTransformer_4BitPalette>(rPalette);
         case 8:
             return std::make_unique<ScanlineTransformer_8BitPalette>(rPalette);
         case 24:
