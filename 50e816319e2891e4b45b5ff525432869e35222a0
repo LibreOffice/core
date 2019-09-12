@@ -16,6 +16,24 @@
       "revId": "50e816319e2891e4b45b5ff525432869e35222a0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ff8d1a31",
+        "filename": "desktop/win32/source/loader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-09-12T11:54:10Z",
+      "side": 1,
+      "message": "It seems to \"work\" with a NULL ptr, but the docs say the argument should be \"A valid handle to an open object.\". I\u0027ll adapt it.",
+      "parentUuid": "bf659307_9fabbe87",
+      "revId": "50e816319e2891e4b45b5ff525432869e35222a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
