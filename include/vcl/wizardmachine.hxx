@@ -21,14 +21,18 @@
 
 #include <memory>
 #include <vcl/dllapi.h>
-#include <vcl/wizdlg.hxx>
 #include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/tabpage.hxx>
 
 namespace weld {
     class Builder;
     class Container;
 }
+
+struct ImplWizPageData;
+struct ImplWizButtonData;
 
 namespace vcl
 {
@@ -134,16 +138,49 @@ namespace vcl
         they can implement non-linear traveling this way.
     */
 
-    class VCL_DLLPUBLIC OWizardMachine : public WizardDialog, public WizardTypes
+    class VCL_DLLPUBLIC OWizardMachine : public ModalDialog, public WizardTypes
     {
     private:
-        //  TabPage*            GetPage( sal_uInt16 nLevel ) const { return WizardDialog::GetPage(nLevel); }
+        Idle                    maWizardLayoutIdle;
+        Size                    maPageSize;
+        ImplWizPageData*        mpFirstPage;
+        ImplWizButtonData*      mpFirstBtn;
+        VclPtr<TabPage>         mpCurTabPage;
+        VclPtr<PushButton>      mpPrevBtn;
+        VclPtr<PushButton>      mpNextBtn;
+        VclPtr<vcl::Window>     mpViewWindow;
+        sal_uInt16              mnCurLevel;
+        WindowAlign             meViewAlign;
+        Link<OWizardMachine*,void>  maActivateHdl;
+        sal_Int16               mnLeftAlignCount;
+        bool                    mbEmptyViewMargin;
+
+        DECL_DLLPRIVATE_LINK( ImplHandleWizardLayoutTimerHdl, Timer*, void );
+
+        //  TabPage*            GetPage( sal_uInt16 nLevel ) const { return OWizardMachine::GetPage(nLevel); }
         // TODO: probably the complete page handling (next, previous etc.) should be prohibited ...
 
         // IMPORTANT:
         // traveling pages should not be done by calling these base class member, some mechanisms of this class
         // here (e.g. committing page data) depend on having full control over page traveling.
         // So use the travelXXX methods if you need to travel
+
+    protected:
+        long                LogicalCoordinateToPixel(int iCoordinate);
+        /**sets the number of buttons which should be left-aligned. Normally, buttons are right-aligned.
+
+            only to be used during construction, before any layouting happened
+        */
+        void                SetLeftAlignedButtonCount( sal_Int16 _nCount );
+        /** declares the view area to have an empty margin
+
+            Normally, the view area has a certain margin to the top/left/bottom/right of the
+            dialog. By calling this method, you can reduce this margin to 0.
+        */
+        void                SetEmptyViewMargin();
+
+        void                CalcAndSetSize();
+
 
     public:
         VclPtr<OKButton>       m_pFinish;
@@ -160,6 +197,40 @@ namespace vcl
         OWizardMachine(vcl::Window* _pParent, WizardButtonFlags _nButtonFlags );
         virtual ~OWizardMachine() override;
         virtual void dispose() override;
+
+        virtual void        Resize() override;
+        virtual void        StateChanged( StateChangedType nStateChange ) override;
+        virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
+
+        virtual void        ActivatePage();
+        virtual bool        DeactivatePage();
+
+        virtual void        queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
+
+        bool                ShowPrevPage();
+        bool                ShowNextPage();
+        bool                ShowPage( sal_uInt16 nLevel );
+        bool                Finish( long nResult = 0 );
+        sal_uInt16          GetCurLevel() const { return mnCurLevel; }
+
+        void                AddPage( TabPage* pPage );
+        void                RemovePage( TabPage* pPage );
+        void                SetPage( sal_uInt16 nLevel, TabPage* pPage );
+        TabPage*            GetPage( sal_uInt16 nLevel ) const;
+
+        void                AddButton( Button* pButton, long nOffset = 0 );
+        void                RemoveButton( Button* pButton );
+
+        void                SetPrevButton( PushButton* pButton ) { mpPrevBtn = pButton; }
+        void                SetNextButton( PushButton* pButton ) { mpNextBtn = pButton; }
+
+        void                SetViewWindow( vcl::Window* pWindow ) { mpViewWindow = pWindow; }
+        void                SetViewAlign( WindowAlign eAlign ) { meViewAlign = eAlign; }
+
+        void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
+        const Size&         GetPageSizePixel() const { return maPageSize; }
+
+        void                SetActivatePageHdl( const Link<OWizardMachine*,void>& rLink ) { maActivateHdl = rLink; }
 
         /// enable (or disable) buttons
         void                enableButtons(WizardButtonFlags _nWizardButtonFlags, bool _bEnable);
@@ -183,10 +254,6 @@ namespace vcl
         virtual void        updateTravelUI();
 
     protected:
-        // WizardDialog overridables
-        virtual void        ActivatePage() override;
-        virtual bool        DeactivatePage() override;
-
         // our own overridables
 
         /// to override to create new pages
@@ -306,7 +373,7 @@ namespace vcl
 
             Vulgo, this is the identifier of the current tab page :)
         */
-        WizardState             getCurrentState() const { return WizardDialog::GetCurLevel(); }
+        WizardState             getCurrentState() const { return GetCurLevel(); }
 
         virtual IWizardPageController*
                                 getPageController( TabPage* _pCurrentPage ) const;
@@ -331,6 +398,14 @@ namespace vcl
         TabPage* GetOrCreatePage( const WizardState i_nState );
 
     private:
+        VCL_DLLPRIVATE void             ImplInitData();
+        VCL_DLLPRIVATE void             ImplCalcSize( Size& rSize );
+        VCL_DLLPRIVATE void             ImplPosCtrls();
+        VCL_DLLPRIVATE void             ImplPosTabPage();
+        VCL_DLLPRIVATE void             ImplShowTabPage( TabPage* pPage );
+        VCL_DLLPRIVATE TabPage*         ImplGetPage( sal_uInt16 nLevel ) const;
+
+
         DECL_DLLPRIVATE_LINK(OnNextPage, Button*, void);
         DECL_DLLPRIVATE_LINK(OnPrevPage, Button*, void);
         DECL_DLLPRIVATE_LINK(OnFinish, Button*, void);
@@ -396,7 +471,6 @@ namespace vcl
         virtual void        updateTravelUI();
 
     protected:
-        // WizardDialog overridables
         virtual void        ActivatePage();
         virtual bool        DeactivatePage();
 
@@ -588,6 +662,8 @@ namespace vcl
 
 }   // namespace vcl
 
+#define WIZARDDIALOG_BUTTON_STDOFFSET_X         6
+#define WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X    3
 
 #endif // INCLUDED_SVTOOLS_WIZARDMACHINE_HXX
 

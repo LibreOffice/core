@@ -7946,7 +7946,6 @@ include/vcl/waitobj.hxx
 include/vcl/wall.hxx
 include/vcl/window.hxx
 include/vcl/wizardmachine.hxx
-include/vcl/wizdlg.hxx
 include/vcl/wmf.hxx
 include/vcl/wmfexternal.hxx
 include/vcl/wrkwin.hxx
@@ -17765,7 +17764,6 @@ vcl/source/control/tabctrl.cxx
 vcl/source/control/throbber.cxx
 vcl/source/control/thumbpos.hxx
 vcl/source/control/wizardmachine.cxx
-vcl/source/control/wizdlg.cxx
 vcl/source/edit/textdat2.hxx
 vcl/source/edit/textdata.cxx
 vcl/source/edit/textdoc.cxx
