@@ -742,7 +742,7 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
     if( !bWasRemoved )
         return;
 
-    // Adapt all styles which have this style as parant
+    // Adapt all styles which have this style as parent
     ChangeParent( p->GetName(), p->GetParent() );
 
     // #120015# Do not dispose, the removed StyleSheet may still be used in

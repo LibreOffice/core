@@ -454,7 +454,7 @@ int AccObjectWinManager::UpdateAccSelection(XAccessible* pXAcc)
 
 /**
    * Delete child element from children list.
-   * @param pObj Child element that should be removed from parant child list.
+   * @param pObj Child element that should be removed from parent child list.
    * @return
    */
 void AccObjectWinManager::DeleteAccChildNode( AccObject* pObj )
@@ -619,7 +619,7 @@ bool AccObjectWinManager::InsertChildrenAccObj( css::accessibility::XAccessible*
 /**
    * Insert child object.
    * @param pCurObj The child object
-   * @param pParentObj The parant object
+   * @param pParentObj The parent object
    * @param pWnd Top window handle.
    * @return
    */
@@ -641,7 +641,7 @@ void AccObjectWinManager::InsertAccChildNode( AccObject* pCurObj, AccObject* pPa
 /**
    * Insert child object.
    * @param pCurObj The child object
-   * @param pParentObj The parant object
+   * @param pParentObj The parent object
    * @param pWnd Top window handle.
    * @return
    */

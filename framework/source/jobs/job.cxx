@@ -189,7 +189,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
         if (!xSJob.is())
             xAJob.set(m_xJob, css::uno::UNO_QUERY);
 
-        // execute it asynchron
+        // execute it asynchronous
         if (xAJob.is())
         {
             m_aAsyncWait.reset();
@@ -713,7 +713,7 @@ void SAL_CALL Job::notifyTermination( /*IN*/ const css::lang::EventObject& )
                 describes the broadcaster and must be the frame instance
 
     @param  bGetsOwnership
-                If it's set to <sal_True> and we throw the right veto excepion, we have to close this frame later
+                If it's set to <sal_True> and we throw the right veto exception, we have to close this frame later
                 if our internal processes will be finished. If it's set to <FALSE/> we can ignore it.
 
     @throw  CloseVetoException

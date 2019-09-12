@@ -526,7 +526,7 @@ public class _XAccessibleText {
         try {
             System.out.println("setSelection(0, chCount+1):");
             locRes = oObj.setSelection(0, chCount + 1);
-            System.out.println(locRes + " excepion was expected");
+            System.out.println(locRes + " exception was expected");
             res &= !locRes;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             System.out.println("Expected exception");
