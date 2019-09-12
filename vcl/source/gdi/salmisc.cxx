@@ -129,26 +129,6 @@ static void ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer const & rD
             DOUBLE_SCANLINES();
         }
     }
-    else if( RemoveScanline( rSrcBuffer.mnFormat ) == ScanlineFormat::N4BitMsnPal )
-    {
-        long nMapX;
-
-        for (long nActY = 0; nActY < rDstBuffer.mnHeight; ++nActY)
-        {
-            long nMapY = pMapY[nActY];
-            Scanline pSrcScan(pSrcScanMap[nMapY]), pDstScan(pDstScanMap[nActY]);
-
-            for (long nX = 0; nX < rDstBuffer.mnWidth;)
-            {
-                nMapX = pMapX[ nX ];
-                pFncSetPixel( pDstScan, nX++,
-                              pColBuf[ ( pSrcScan[ nMapX >> 1 ] >> ( nMapX & 1 ? 0 : 4 ) ) & 0x0f ],
-                              rDstMask );
-            }
-
-            DOUBLE_SCANLINES();
-        }
-    }
     else if( RemoveScanline( rSrcBuffer.mnFormat ) == ScanlineFormat::N8BitPal )
     {
         for (long nActY = 0; nActY < rDstBuffer.mnHeight; ++nActY)
@@ -275,8 +255,6 @@ std::unique_ptr<BitmapBuffer> StretchAndConvert(
     {
         IMPL_CASE_GET_FORMAT( N1BitMsbPal );
         IMPL_CASE_GET_FORMAT( N1BitLsbPal );
-        IMPL_CASE_GET_FORMAT( N4BitMsnPal );
-        IMPL_CASE_GET_FORMAT( N4BitLsnPal );
         IMPL_CASE_GET_FORMAT( N8BitPal );
         IMPL_CASE_GET_FORMAT( N8BitTcMask );
         IMPL_CASE_GET_FORMAT( N16BitTcMsbMask );
@@ -304,8 +282,6 @@ std::unique_ptr<BitmapBuffer> StretchAndConvert(
     {
         IMPL_CASE_SET_FORMAT( N1BitMsbPal, 1 );
         IMPL_CASE_SET_FORMAT( N1BitLsbPal, 1 );
-        IMPL_CASE_SET_FORMAT( N4BitMsnPal, 1 );
-        IMPL_CASE_SET_FORMAT( N4BitLsnPal, 4 );
         IMPL_CASE_SET_FORMAT( N8BitPal, 8 );
         IMPL_CASE_SET_FORMAT( N8BitTcMask, 8 );
         IMPL_CASE_SET_FORMAT( N16BitTcMsbMask, 16 );
@@ -361,8 +337,6 @@ std::unique_ptr<BitmapBuffer> StretchAndConvert(
     // do we need a destination palette or color mask?
     if( ( nDstScanlineFormat == ScanlineFormat::N1BitMsbPal ) ||
         ( nDstScanlineFormat == ScanlineFormat::N1BitLsbPal ) ||
-        ( nDstScanlineFormat == ScanlineFormat::N4BitMsnPal ) ||
-        ( nDstScanlineFormat == ScanlineFormat::N4BitLsnPal ) ||
         ( nDstScanlineFormat == ScanlineFormat::N8BitPal ) )
     {
         assert(pDstPal && "destination buffer requires palette");

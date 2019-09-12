@@ -139,7 +139,6 @@ struct DIBV5Header : public DIBInfoHeader
 sal_uInt16 discretizeBitcount( sal_uInt16 nInputCount )
 {
     return ( nInputCount <= 1 ) ? 1 :
-           ( nInputCount <= 4 ) ? 4 :
            ( nInputCount <= 8 ) ? 8 : 24;
 }
 
@@ -1289,7 +1288,6 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
         switch(rAcc.GetScanlineFormat())
         {
             case ScanlineFormat::N1BitMsbPal:
-            case ScanlineFormat::N4BitMsnPal:
             case ScanlineFormat::N8BitPal:
             case ScanlineFormat::N24BitTcBgr:
             {
