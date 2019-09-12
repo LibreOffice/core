@@ -364,7 +364,7 @@ OUString SAL_CALL ODatabaseMetaData::getUserName()
     Reference<XStatement> statement = m_rConnection.createStatement();
     Reference<XResultSet> rs = statement->executeQuery("select user()");
     Reference<XRow> xRow(rs, UNO_QUERY_THROW);
-    rs->next(); // the first and only result
+    (void)rs->next(); // the first and only result
     // e.g. root@localhost
     OUString userWithConnection = xRow->getString(1);
     sal_Int32 nIndexOfAt = userWithConnection.indexOf("@");

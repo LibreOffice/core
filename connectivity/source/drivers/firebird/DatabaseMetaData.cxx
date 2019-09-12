@@ -601,7 +601,7 @@ OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion(  )
     uno::Reference< XStatement > xSelect = m_pConnection->createStatement();
 
     uno::Reference< XResultSet > xRs = xSelect->executeQuery("SELECT rdb$get_context('SYSTEM', 'ENGINE_VERSION') as version from rdb$database");
-    xRs->next(); // first and only row
+    (void)xRs->next(); // first and only row
     uno::Reference< XRow > xRow( xRs, UNO_QUERY_THROW );
     return xRow->getString(1);
 }
