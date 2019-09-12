@@ -23,6 +23,8 @@
 #include "controlwizard.hxx"
 #include "commonpagesdbp.hxx"
 
+using vcl::WizardTypes::WizardState;
+using vcl::WizardTypes::CommitPageReason;
 
 namespace dbp
 {
