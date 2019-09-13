@@ -30,6 +30,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
+#include <TypeSerializer.hxx>
 #include <svmconverter.hxx>
 #include <memory>
 #include <stack>
@@ -1080,7 +1081,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 ReadGDIMetaFile( rIStm, aMtf );
                 ReadPair( rIStm, aPos );
                 ReadPair( rIStm, aSize );
-                ReadGradient( rIStm, aGradient );
+                TypeSerializer aSerializer(rIStm);
+                aSerializer.readGradient(aGradient);
                 rIStm.ReadInt32( nFollowingActionCount );
                 ImplSkipActions( rIStm, nFollowingActionCount );
                 rMtf.AddAction( new MetaFloatTransparentAction( aMtf, aPos, aSize, aGradient ) );
@@ -1169,7 +1171,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 sal_Int32 nFollowingActionCount(0);
 
                 ReadPolyPolygon( rIStm, aPolyPoly );
-                ReadGradient( rIStm, aGradient );
+                TypeSerializer aSerializer(rIStm);
+                aSerializer.readGradient(aGradient);
                 rIStm.ReadInt32( nFollowingActionCount );
                 ImplSkipActions( rIStm, nFollowingActionCount );
                 rMtf.AddAction( new MetaGradientExAction( aPolyPoly, aGradient ) );

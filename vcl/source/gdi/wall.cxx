@@ -28,6 +28,8 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/settings.hxx>
 
+#include <TypeSerializer.hxx>
+
 ImplWallpaper::ImplWallpaper() :
     maColor( COL_TRANSPARENT ), meStyle( WallpaperStyle::NONE )
 {
@@ -62,7 +64,7 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
     rImplWallpaper.mpBitmap.reset();
 
     // version 1
-    tools::GenericTypeSerializer aSerializer(rIStm);
+    TypeSerializer aSerializer(rIStm);
     aSerializer.readColor(rImplWallpaper.maColor);
     sal_uInt16 nTmp16(0);
     rIStm.ReadUInt16(nTmp16);
@@ -84,7 +86,7 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
         if( bGrad )
         {
             rImplWallpaper.mpGradient = std::make_unique<Gradient>();
-            ReadGradient( rIStm, *rImplWallpaper.mpGradient );
+            aSerializer.readGradient(*rImplWallpaper.mpGradient);
         }
 
         if( bBmp )
@@ -112,7 +114,7 @@ SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpap
     bool            bDummy = false;
 
     // version 1
-    tools::GenericTypeSerializer aSerializer(rOStm);
+    TypeSerializer aSerializer(rOStm);
     aSerializer.writeColor(rImplWallpaper.maColor);
 
     rOStm.WriteUInt16( static_cast<sal_uInt16>(rImplWallpaper.meStyle) );
@@ -123,8 +125,10 @@ SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpap
     if( bRect )
         WriteRectangle( rOStm, *rImplWallpaper.mpRect );
 
-    if( bGrad )
-        WriteGradient( rOStm, *rImplWallpaper.mpGradient );
+    if (bGrad)
+    {
+        aSerializer.writeGradient(*rImplWallpaper.mpGradient);
+    }
 
     if( bBmp )
         WriteDIBBitmapEx(*rImplWallpaper.mpBitmap, rOStm);
