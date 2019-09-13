@@ -22,9 +22,9 @@
 #include <sal/types.h>
 #include <com/sun/star/uno/Sequence.h>
 
-namespace com { namespace sun { namespace star { namespace accessibility {
-struct TextSegment;
-} } } }
+namespace com::sun::star::accessibility {
+    struct TextSegment;
+}
 
 class SwAccessiblePortionData;
 class SwTextFrame;
