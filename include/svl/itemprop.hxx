@@ -28,6 +28,9 @@
 #include <vector>
 #include <memory>
 
+// values from com/sun/star/beans/PropertyAttribute
+#define PROPERTY_NONE 0
+
 /// map a property between beans::XPropertySet and SfxPoolItem
 struct SfxItemPropertyMapEntry
 {
