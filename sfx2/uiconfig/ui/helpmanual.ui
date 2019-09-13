@@ -22,7 +22,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkCheckButton" id="hidedialog">
-                <property name="label" translatable="yes" context="helpmanual|hidedialog">>Do not show this dialog again</property>
+                <property name="label" translatable="yes" context="helpmanual|hidedialog">Do not show this dialog again</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
