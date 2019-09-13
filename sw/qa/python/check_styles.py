@@ -27,6 +27,15 @@ class CheckStyle(unittest.TestCase):
     def tearDownClass(cls):
         cls._uno.tearDown()
 
+    def test_TextRangeProperties(self):
+        xDoc = CheckStyle._uno.openEmptyWriterDoc()
+        xBodyText = xDoc.getText()
+        xCursor = xBodyText.createTextCursor()
+        xBodyText.insertString(xCursor, "Hello world", 0)
+        xTextRange = list(xBodyText)[0]
+        pnames = [p.Name for p in xTextRange.PropertySetInfo.Properties]
+        xTextRange.getPropertyValues(pnames)
+
     def test_StyleFamilies(self):
         xDoc = CheckStyle._uno.openEmptyWriterDoc()
         xStyleFamilies = xDoc.StyleFamilies
