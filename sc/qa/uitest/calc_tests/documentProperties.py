@@ -48,12 +48,12 @@ class CalcDocumentProperties(UITestCase):
         xCommentsText.executeAction("TYPE", mkPropertyValues({"TEXT":"Comments text"}))
 
 #Font tab
-        select_pos(xTabs, "5")     #tab Fonts
+        select_pos(xTabs, "4")     #tab Fonts
         xFontEmbedCheckbox = xDialog.getChild("embedFonts")
         xFontEmbedCheckbox.executeAction("CLICK", tuple())
 
 #Security tab
-        select_pos(xTabs, "4")     #tab Security
+        select_pos(xTabs, "3")     #tab Security
         xReadOnlyCheckbox = xDialog.getChild("readonly")
         xReadOnlyCheckbox.executeAction("CLICK", tuple())
         xRecordChangesCheckbox = xDialog.getChild("recordchanges")
@@ -74,7 +74,7 @@ class CalcDocumentProperties(UITestCase):
         xAddBtn = xDialog.getChild("add")
         xAddBtn.executeAction("CLICK", tuple())
 
-        select_pos(xTabs, "6")     #tab Statistics
+        select_pos(xTabs, "5")     #tab Statistics
 
         xOkBtn = xDialog.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())
