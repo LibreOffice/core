@@ -95,5 +95,14 @@ void f2()
     f1(std::function([&]() {}));
 }
 };
+namespace test6
+{
+void f1(std::function<void(int)>);
+void f1(std::function<void(long)>);
+void f2()
+{
+    f1(std::function<void(long)>([&](int) {})); // should not warn here
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
