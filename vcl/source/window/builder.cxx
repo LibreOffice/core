@@ -2062,6 +2062,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         }
         else
         {
+            assert(rMap.find(OString("model")) != rMap.end() && "GtkTreeView must have a model");
+
             VclPtr<SvTabListBox> xBox;
             bool bHeadersVisible = extractHeadersVisible(rMap);
             if (bHeadersVisible)
