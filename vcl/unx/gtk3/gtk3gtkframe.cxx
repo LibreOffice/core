@@ -3970,34 +3970,59 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
     pThis->m_bPreeditJustChanged = true;
 
     bool bEndPreedit = (!pText || !*pText) && pThis->m_aInputEvent.mpTextAttr != nullptr;
-    pThis->m_aInputEvent.maText             = pText ? OUString( pText, strlen(pText), RTL_TEXTENCODING_UTF8 ) : OUString();
-    pThis->m_aInputEvent.mnCursorPos        = nCursorPos;
-    pThis->m_aInputEvent.mnCursorFlags      = 0;
+    gint nUtf8Len = pText ? strlen(pText) : 0;
+    pThis->m_aInputEvent.maText             = pText ? OUString(pText, nUtf8Len, RTL_TEXTENCODING_UTF8) : OUString();
+    const OUString& rText = pThis->m_aInputEvent.maText;
 
-    pThis->m_aInputFlags = std::vector<ExtTextInputAttr>( std::max( 1, static_cast<int>(pThis->m_aInputEvent.maText.getLength()) ), ExtTextInputAttr::NONE );
+    std::vector<sal_Int32> aUtf16Offsets;
+    for (sal_Int32 nUtf16Offset = 0; nUtf16Offset < rText.getLength(); rText.iterateCodePoints(&nUtf16Offset))
+        aUtf16Offsets.push_back(nUtf16Offset);
+
+    int nUtf32Len = aUtf16Offsets.size();
+    aUtf16Offsets.push_back(rText.getLength());
+
+    // sanitize the CurPos which is in utf-32
+    if (nCursorPos < 0)
+        nCursorPos = 0;
+    else if (nCursorPos > nUtf32Len)
+        nCursorPos = nUtf32Len;
+
+    pThis->m_aInputEvent.mnCursorPos = aUtf16Offsets[nCursorPos];
+    pThis->m_aInputEvent.mnCursorFlags = 0;
+
+    pThis->m_aInputFlags = std::vector<ExtTextInputAttr>( std::max( 1, static_cast<int>(rText.getLength()) ), ExtTextInputAttr::NONE );
 
     PangoAttrIterator *iter = pango_attr_list_get_iterator(pAttrs);
     do
     {
         GSList *attr_list = nullptr;
         GSList *tmp_list = nullptr;
-        gint start, end;
+        gint nUtf8Start, nUtf8End;
         ExtTextInputAttr sal_attr = ExtTextInputAttr::NONE;
 
-        pango_attr_iterator_range (iter, &start, &end);
-        if (start == G_MAXINT || end == G_MAXINT)
-        {
-            auto len = pText ? g_utf8_strlen(pText, -1) : 0;
-            if (end == G_MAXINT)
-                end = len;
-            if (start == G_MAXINT)
-                start = len;
-        }
-        if (end == start)
+        // docs say... "Get the range of the current segment ... the stored
+        // return values are signed, not unsigned like the values in
+        // PangoAttribute", which implies that the units are otherwise the same
+        // as that of PangoAttribute whose docs state these units are "in
+        // bytes"
+        // so this is the utf8 range
+        pango_attr_iterator_range(iter, &nUtf8Start, &nUtf8End);
+
+        // sanitize the utf8 range
+        nUtf8Start = std::min(nUtf8Start, nUtf8Len);
+        nUtf8End = std::min(nUtf8End, nUtf8Len);
+        if (nUtf8Start >= nUtf8End)
             continue;
 
-        start = g_utf8_pointer_to_offset (pText, pText + start);
-        end = g_utf8_pointer_to_offset (pText, pText + end);
+        // get the utf32 range
+        sal_Int32 nUtf32Start = g_utf8_pointer_to_offset(pText, pText + nUtf8Start);
+        sal_Int32 nUtf32End = g_utf8_pointer_to_offset(pText, pText + nUtf8End);
+
+        // sanitize the utf32 range
+        nUtf32Start = std::min(nUtf32Start, nUtf32Len);
+        nUtf32End = std::min(nUtf32End, nUtf32Len);
+        if (nUtf32Start >= nUtf32End)
+            continue;
 
         tmp_list = attr_list = pango_attr_iterator_get_attrs (iter);
         while (tmp_list)
@@ -4026,35 +4051,13 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
             sal_attr |= ExtTextInputAttr::Underline;
         g_slist_free (attr_list);
 
-        // rhbz#1648281 make underline work with the UCS-4 positions we're given
-        if (!pThis->m_aInputEvent.maText.isEmpty())
-        {
-            sal_Int32 i(0), nLen = pThis->m_aInputEvent.maText.getLength();
-
-            sal_Int32 nUTF16Start(0);
-            while (i < start && nUTF16Start < nLen)
-            {
-                pThis->m_aInputEvent.maText.iterateCodePoints(&nUTF16Start);
-                ++i;
-            }
-
-            sal_Int32 nUTF16End(nUTF16Start);
-            while (i < end && nUTF16End < nLen)
-            {
-                pThis->m_aInputEvent.maText.iterateCodePoints(&nUTF16End);
-                ++i;
-            }
-
-            start = nUTF16Start;
-            end = nUTF16End;
-        }
-
         // Set the sal attributes on our text
-        for (int i = start; i < end; ++i)
+        // rhbz#1648281 apply over our utf-16 range derived from the input utf-32 range
+        for (sal_Int32 i = aUtf16Offsets[nUtf32Start]; i < aUtf16Offsets[nUtf32End]; ++i)
         {
             SAL_WARN_IF(i >= static_cast<int>(pThis->m_aInputFlags.size()),
                 "vcl.gtk3", "pango attrib out of range. Broken range: "
-                << start << "," << end << " Legal range: 0,"
+                << aUtf16Offsets[nUtf32Start] << "," << aUtf16Offsets[nUtf32End] << " Legal range: 0,"
                 << pThis->m_aInputFlags.size());
             if (i >= static_cast<int>(pThis->m_aInputFlags.size()))
                 continue;
