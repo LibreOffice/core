@@ -1179,6 +1179,25 @@ void SvmTest::checkGradient(const GDIMetaFile& rMetaFile)
         {"right", "4"},
         {"bottom", "6"},
     });
+
+    assertXPathAttrs(pDoc, "/metafile/gradient[2]", {
+        {"style", "Radial"},
+        {"startcolor", "#ff0000"},
+        {"endcolor", "#00ff00"},
+        {"angle", "55"},
+        {"border", "10"},
+        {"offsetx", "22"},
+        {"offsety", "24"},
+        {"startintensity", "4"},
+        {"endintensity", "14"},
+        {"steps", "64"},
+    });
+    assertXPathAttrs(pDoc, "/metafile/gradient[2]/rectangle", {
+        {"left", "3"},
+        {"top", "4"},
+        {"right", "3"},
+        {"bottom", "5"},
+    });
 }
 
 void SvmTest::testGradient()
@@ -1191,6 +1210,21 @@ void SvmTest::testGradient()
 
     Gradient aGradient(GradientStyle::Linear, COL_WHITE, COL_BLACK);
     pVirtualDev->DrawGradient(aRectangle, aGradient);
+
+    tools::Rectangle aRectangle2(Point(3, 4), Size(1,2));
+
+    Gradient aGradient2;
+    aGradient2.SetStyle(GradientStyle::Radial);
+    aGradient2.SetStartColor(COL_LIGHTRED);
+    aGradient2.SetEndColor(COL_LIGHTGREEN);
+    aGradient2.SetAngle(55);
+    aGradient2.SetBorder(10);
+    aGradient2.SetOfsX(22);
+    aGradient2.SetOfsY(24);
+    aGradient2.SetStartIntensity(4);
+    aGradient2.SetEndIntensity(14);
+    aGradient2.SetSteps(64);
+    pVirtualDev->DrawGradient(aRectangle2, aGradient2);
 
     checkGradient(writeAndRead(aGDIMetaFile, "gradient.svm"));
 }
