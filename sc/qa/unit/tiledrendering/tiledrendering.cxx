@@ -444,7 +444,7 @@ public:
     bool m_bGraphicViewSelection;
     bool m_bFullInvalidateTiles;
     bool m_bInvalidateTiles;
-    tools::Rectangle m_aInvalidation;
+    std::vector<tools::Rectangle> m_aInvalidations;
     bool m_bViewLock;
     OString m_sCellFormula;
     boost::property_tree::ptree m_aCommentCallbackResult;
@@ -526,15 +526,14 @@ public:
             }
             else
             {
-                if (m_aInvalidation.IsEmpty())
-                {
-                    uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
-                    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
-                    m_aInvalidation.setX(aSeq[0].toInt32());
-                    m_aInvalidation.setY(aSeq[1].toInt32());
-                    m_aInvalidation.setWidth(aSeq[2].toInt32());
-                    m_aInvalidation.setHeight(aSeq[3].toInt32());
-                }
+                uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
+                CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
+                tools::Rectangle aInvalidationRect;
+                aInvalidationRect.setX(aSeq[0].toInt32());
+                aInvalidationRect.setY(aSeq[1].toInt32());
+                aInvalidationRect.setWidth(aSeq[2].toInt32());
+                aInvalidationRect.setHeight(aSeq[3].toInt32());
+                m_aInvalidations.push_back(aInvalidationRect);
                 m_bInvalidateTiles = true;
             }
         }
@@ -1011,11 +1010,12 @@ void ScTiledRenderingTest::testInvalidateOnInserRowCol()
 
     // insert row
     aView.m_bInvalidateTiles = false;
-    aView.m_aInvalidation = tools::Rectangle();
+    aView.m_aInvalidations.clear();
     comphelper::dispatchCommand(".uno:InsertRows", aArgs);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(-75, 50985, 32212230, 63990), aView.m_aInvalidation);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aView.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(-75, 50985, 32212230, 63990), aView.m_aInvalidations[0]);
 
     // move on the right
     for (int i = 0; i < 200; ++i)
@@ -1027,11 +1027,12 @@ void ScTiledRenderingTest::testInvalidateOnInserRowCol()
 
     // insert column
     aView.m_bInvalidateTiles = false;
-    aView.m_aInvalidation = tools::Rectangle();
+    aView.m_aInvalidations.clear();
     comphelper::dispatchCommand(".uno:InsertColumns", aArgs);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(253650, -15, 32212230, 63990), aView.m_aInvalidation);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aView.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(253650, -15, 32212230, 63990), aView.m_aInvalidations[0]);
 }
 
 void ScTiledRenderingTest::testCommentCallback()
@@ -1663,12 +1664,13 @@ void ScTiledRenderingTest::testPageDownInvalidation()
 
     SfxLokHelper::setView(nView1);
     aView1.m_bInvalidateTiles = false;
-    aView1.m_aInvalidation = tools::Rectangle();
+    aView1.m_aInvalidations.clear();
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, awt::Key::PAGEDOWN, 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, awt::Key::PAGEDOWN, 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(15, 15, 1230, 225), aView1.m_aInvalidation);
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(15, 15, 1230, 225), aView1.m_aInvalidations[0]);
 }
 
 void ScTiledRenderingTest::testSheetChangeInvalidation()
@@ -1685,12 +1687,13 @@ void ScTiledRenderingTest::testSheetChangeInvalidation()
 
     SfxLokHelper::setView(nView1);
     aView1.m_bInvalidateTiles = false;
-    aView1.m_aInvalidation = tools::Rectangle();
+    aView1.m_aInvalidations.clear();
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1310720, 268435456), aView1.m_aInvalidation);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1310720, 268435456), aView1.m_aInvalidations[0]);
 }
 
 }
