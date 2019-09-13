@@ -36,9 +36,9 @@ class SwAccessibleTableData_Impl;
 class SwTableBox;
 class SwSelBoxes;
 
-namespace sw { namespace access {
+namespace sw::access {
     class SwAccessibleChild;
-} }
+}
 
 class SwAccessibleTable :
         public SwAccessibleContext,
