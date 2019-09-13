@@ -103,9 +103,6 @@ public:
     bool            operator==( const Gradient& rGradient ) const;
     bool            operator!=( const Gradient& rGradient ) const
                         { return !(Gradient::operator==( rGradient )); }
-
-    friend VCL_DLLPUBLIC SvStream& ReadGradient( SvStream& rIStm, Gradient& rGradient );
-    friend VCL_DLLPUBLIC SvStream& WriteGradient( SvStream& rOStm, const Gradient& rGradient );
 };
 
 #endif // INCLUDED_VCL_GRADIENT_HXX
