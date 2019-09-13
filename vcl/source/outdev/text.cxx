@@ -1451,6 +1451,11 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
     return nRetVal;
 }
 
+static bool IsTextDisabled(DrawTextFlags const eStyle, MetricVector const* const pVector)
+{
+    return ((eStyle & DrawTextFlags::Disable) && !pVector);
+}
+
 void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
                                  const OUString& rOrigStr, DrawTextFlags nStyle,
                                  MetricVector* pVector, OUString* pDisplayText,
@@ -1460,7 +1465,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
     Color aOldTextColor;
     Color aOldTextFillColor;
     bool  bRestoreFillColor = false;
-    if ( (nStyle & DrawTextFlags::Disable) && ! pVector )
+    if (IsTextDisabled(nStyle, pVector))
     {
         bool  bHighContrastBlack = false;
         bool  bHighContrastWhite = false;
