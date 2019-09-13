@@ -1489,6 +1489,11 @@ static Color GetDisabledTextColor(OutputDevice const& rTargetDevice)
     return rTargetDevice.GetSettings().GetStyleSettings().GetDisableColor();
 }
 
+static bool CanDrawClippedText(long nWidth, long nHeight, DrawTextFlags eStyle)
+{
+    return !((nWidth <= 0 || nHeight <= 0) && (eStyle & DrawTextFlags::Clip));
+}
+
 void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
                                  const OUString& rOrigStr, DrawTextFlags nStyle,
                                  MetricVector* pVector, OUString* pDisplayText,
@@ -1511,10 +1516,10 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
         rTargetDevice.SetTextColor(GetDisabledTextColor(rTargetDevice));
     }
 
-    long        nWidth          = rRect.GetWidth();
-    long        nHeight         = rRect.GetHeight();
+    long nWidth = rRect.GetWidth();
+    long nHeight = rRect.GetHeight();
 
-    if ( ((nWidth <= 0) || (nHeight <= 0)) && (nStyle & DrawTextFlags::Clip) )
+    if (!CanDrawClippedText(nWidth, nHeight, nStyle))
         return;
 
     Point       aPos            = rRect.TopLeft();
