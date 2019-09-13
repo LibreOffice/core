@@ -1009,9 +1009,11 @@ void ScTiledRenderingTest::testInvalidateOnInserRowCol()
 
     // insert row
     aView.m_bInvalidateTiles = false;
+    aView.m_aInvalidation = tools::Rectangle();
     comphelper::dispatchCommand(".uno:InsertRows", aArgs);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(-75, 50985, 32212230, 63990), aView.m_aInvalidation);
 
     // move on the right
     for (int i = 0; i < 200; ++i)
@@ -1023,9 +1025,11 @@ void ScTiledRenderingTest::testInvalidateOnInserRowCol()
 
     // insert column
     aView.m_bInvalidateTiles = false;
+    aView.m_aInvalidation = tools::Rectangle();
     comphelper::dispatchCommand(".uno:InsertColumns", aArgs);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(253650, -15, 32212230, 63990), aView.m_aInvalidation);
 }
 
 void ScTiledRenderingTest::testCommentCallback()
