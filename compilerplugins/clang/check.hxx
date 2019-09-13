@@ -87,6 +87,8 @@ public:
 
     inline ContextCheck Struct(llvm::StringRef id) const;
 
+    inline ContextCheck ClassOrStruct(llvm::StringRef id) const;
+
     inline ContextCheck Union(llvm::StringRef id) const;
 
     inline ContextCheck Function(llvm::StringRef id) const;
@@ -210,6 +212,15 @@ ContextCheck DeclCheck::Class(llvm::StringRef id) const
 ContextCheck DeclCheck::Struct(llvm::StringRef id) const
 {
     return detail::checkRecordDecl(decl_, clang::TTK_Struct, id);
+}
+
+ContextCheck DeclCheck::ClassOrStruct(llvm::StringRef id) const
+{
+    auto const c1 = Class(id);
+    if (c1) {
+        return c1;
+    }
+    return Struct(id);
 }
 
 ContextCheck DeclCheck::Union(llvm::StringRef id) const

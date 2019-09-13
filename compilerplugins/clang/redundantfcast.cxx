@@ -14,6 +14,7 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_set>
+#include <vector>
 
 namespace
 {
@@ -165,12 +166,87 @@ public:
 
     // Find redundant cast to std::function, where clang reports
     // two different types for the inner and outer
-    static bool isRedundantStdFunctionCast(CXXFunctionalCastExpr const* expr)
+    bool isRedundantStdFunctionCast(CXXFunctionalCastExpr const* expr)
     {
+        bool deduced = false;
+        QualType target;
+        auto const written = expr->getTypeAsWritten();
+        if (auto const t1 = written->getAs<DeducedTemplateSpecializationType>())
+        {
+            auto const decl = t1->getTemplateName().getAsTemplateDecl();
+            if (!decl)
+            {
+                return false;
+            }
+            if (!loplugin::DeclCheck(decl->getTemplatedDecl())
+                     .ClassOrStruct("function")
+                     .StdNamespace())
+            {
+                return false;
+            }
+            deduced = true;
+        }
+        else if (auto const t2 = written->getAs<TemplateSpecializationType>())
+        {
+            auto const decl = t2->getTemplateName().getAsTemplateDecl();
+            if (!decl)
+            {
+                return false;
+            }
+            if (!loplugin::DeclCheck(decl->getTemplatedDecl())
+                     .ClassOrStruct("function")
+                     .StdNamespace())
+            {
+                return false;
+            }
+            if (t2->getNumArgs() != 1)
+            {
+                if (isDebugMode())
+                {
+                    report(DiagnosticsEngine::Fatal,
+                           "TODO: unexpected std::function with %0 template arguments",
+                           expr->getExprLoc())
+                        << t2->getNumArgs() << expr->getSourceRange();
+                }
+                return false;
+            }
+            if (t2->getArg(0).getKind() != TemplateArgument::Type)
+            {
+                if (isDebugMode())
+                {
+                    report(DiagnosticsEngine::Fatal,
+                           "TODO: unexpected std::function with non-type template argument",
+                           expr->getExprLoc())
+                        << expr->getSourceRange();
+                }
+                return false;
+            }
+            target = t2->getArg(0).getAsType();
+        }
+        else
+        {
+            return false;
+        }
         auto cxxConstruct = dyn_cast<CXXConstructExpr>(compat::IgnoreImplicit(expr->getSubExpr()));
         if (!cxxConstruct)
             return false;
-        return isa<LambdaExpr>(cxxConstruct->getArg(0));
+        auto const lambda = dyn_cast<LambdaExpr>(cxxConstruct->getArg(0));
+        if (!lambda)
+            return false;
+        if (deduced)
+            // std::function([...](Args)->Ret{...}) should always be redundant:
+            return true;
+        auto const decl = lambda->getCallOperator();
+        std::vector<QualType> args;
+        for (unsigned i = 0; i != decl->getNumParams(); ++i)
+        {
+            args.push_back(decl->getParamDecl(i)->getType());
+        }
+        auto const source
+            = compiler.getASTContext().getFunctionType(decl->getReturnType(), args, {});
+        // std::function<Ret1(Args1)>([...](Args2)->Ret2{...}) is redundant if target Ret1(Args1)
+        // matches source Ret2(Args2):
+        return target.getCanonicalType() == source.getCanonicalType();
     }
 
     bool VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const* expr)
