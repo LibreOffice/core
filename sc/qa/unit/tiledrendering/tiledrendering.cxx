@@ -98,6 +98,7 @@ public:
     void testFilterDlg();
     void testVbaRangeCopyPaste();
     void testPageDownInvalidation();
+    void testSheetChangeInvalidation();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -132,6 +133,7 @@ public:
     CPPUNIT_TEST(testFilterDlg);
     CPPUNIT_TEST(testVbaRangeCopyPaste);
     CPPUNIT_TEST(testPageDownInvalidation);
+    CPPUNIT_TEST(testSheetChangeInvalidation);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1711,6 +1713,33 @@ void ScTiledRenderingTest::testPageDownInvalidation()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(15, 15, 1230, 225), aView1.m_aInvalidation);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testSheetChangeInvalidation()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("two_sheets.ods");
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    int nView1 = SfxLokHelper::getView();
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
+
+    SfxLokHelper::setView(nView1);
+    aView1.m_bInvalidateTiles = false;
+    aView1.m_aInvalidation = tools::Rectangle();
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1310720, 268435456), aView1.m_aInvalidation);
 
     mxComponent->dispose();
     mxComponent.clear();
