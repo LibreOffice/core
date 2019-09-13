@@ -21,6 +21,7 @@
 #include <tools/vcompat.hxx>
 #include <tools/gen.hxx>
 #include <tools/GenericTypeSerializer.hxx>
+#include <TypeSerializer.hxx>
 #include <vcl/gradient.hxx>
 
 Impl_Gradient::Impl_Gradient() :
@@ -217,46 +218,6 @@ Gradient& Gradient::operator=( Gradient&& ) = default;
 bool Gradient::operator==( const Gradient& rGradient ) const
 {
     return mpImplGradient == rGradient.mpImplGradient;
-}
-
-SvStream& ReadGradient( SvStream& rIStm, Gradient& rGradient )
-{
-    VersionCompat   aCompat( rIStm, StreamMode::READ );
-    sal_uInt16          nTmp16;
-
-    rIStm.ReadUInt16( nTmp16 ); rGradient.mpImplGradient->meStyle = static_cast<GradientStyle>(nTmp16);
-
-    tools::GenericTypeSerializer aSerializer(rIStm);
-    aSerializer.readColor(rGradient.mpImplGradient->maStartColor);
-    aSerializer.readColor(rGradient.mpImplGradient->maEndColor);
-    rIStm.ReadUInt16( rGradient.mpImplGradient->mnAngle )
-         .ReadUInt16( rGradient.mpImplGradient->mnBorder )
-         .ReadUInt16( rGradient.mpImplGradient->mnOfsX )
-         .ReadUInt16( rGradient.mpImplGradient->mnOfsY )
-         .ReadUInt16( rGradient.mpImplGradient->mnIntensityStart )
-         .ReadUInt16( rGradient.mpImplGradient->mnIntensityEnd )
-         .ReadUInt16( rGradient.mpImplGradient->mnStepCount );
-
-    return rIStm;
-}
-
-SvStream& WriteGradient( SvStream& rOStm, const Gradient& rGradient )
-{
-    VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
-
-    rOStm.WriteUInt16( static_cast<sal_uInt16>(rGradient.mpImplGradient->meStyle) );
-    tools::GenericTypeSerializer aSerializer(rOStm);
-    aSerializer.writeColor(rGradient.mpImplGradient->maStartColor);
-    aSerializer.writeColor(rGradient.mpImplGradient->maEndColor);
-    rOStm.WriteUInt16( rGradient.mpImplGradient->mnAngle )
-         .WriteUInt16( rGradient.mpImplGradient->mnBorder )
-         .WriteUInt16( rGradient.mpImplGradient->mnOfsX )
-         .WriteUInt16( rGradient.mpImplGradient->mnOfsY )
-         .WriteUInt16( rGradient.mpImplGradient->mnIntensityStart )
-         .WriteUInt16( rGradient.mpImplGradient->mnIntensityEnd )
-         .WriteUInt16( rGradient.mpImplGradient->mnStepCount );
-
-    return rOStm;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

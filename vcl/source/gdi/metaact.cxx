@@ -29,6 +29,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/graphictools.hxx>
 #include <unotools/fontdefs.hxx>
+#include <TypeSerializer.hxx>
 
 namespace
 {
@@ -1987,14 +1988,16 @@ void MetaGradientAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     WriteRectangle( rOStm, maRect );
-    WriteGradient( rOStm, maGradient );
+    TypeSerializer aSerializer(rOStm);
+    aSerializer.writeGradient(maGradient);
 }
 
 void MetaGradientAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadRectangle( rIStm, maRect );
-    ReadGradient( rIStm, maGradient );
+    TypeSerializer aSerializer(rIStm);
+    aSerializer.readGradient(maGradient);
 }
 
 MetaGradientExAction::MetaGradientExAction() :
@@ -2044,14 +2047,16 @@ void MetaGradientExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     maPolyPoly.AdaptiveSubdivide(aNoCurvePolyPolygon);
 
     WritePolyPolygon( rOStm, aNoCurvePolyPolygon );
-    WriteGradient( rOStm, maGradient );
+    TypeSerializer aSerializer(rOStm);
+    aSerializer.writeGradient(maGradient);
 }
 
 void MetaGradientExAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadPolyPolygon( rIStm, maPolyPoly );
-    ReadGradient( rIStm, maGradient );
+    TypeSerializer aSerializer(rIStm);
+    aSerializer.readGradient(maGradient);
 }
 
 MetaHatchAction::MetaHatchAction() :
@@ -2947,7 +2952,9 @@ void MetaFloatTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pDat
     maMtf.Write( rOStm );
     WritePair( rOStm,  maPoint );
     WritePair( rOStm, maSize );
-    WriteGradient( rOStm, maGradient );
+
+    TypeSerializer aSerializer(rOStm);
+    aSerializer.writeGradient(maGradient);
 }
 
 void MetaFloatTransparentAction::Read(SvStream& rIStm, ImplMetaReadData* pData)
@@ -2956,7 +2963,8 @@ void MetaFloatTransparentAction::Read(SvStream& rIStm, ImplMetaReadData* pData)
     ReadGDIMetaFile(rIStm, maMtf, pData);
     ReadPair( rIStm, maPoint );
     ReadPair( rIStm, maSize );
-    ReadGradient( rIStm, maGradient );
+    TypeSerializer aSerializer(rIStm);
+    aSerializer.readGradient(maGradient);
 }
 
 MetaEPSAction::MetaEPSAction() :
