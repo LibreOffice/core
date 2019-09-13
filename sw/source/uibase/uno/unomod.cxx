@@ -17,9 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <swtypes.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/view/DocumentZoomType.hpp>
+#include <comphelper/ChainablePropertySetInfo.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
+#include <svl/itemprop.hxx>
+#include <tools/urlobj.hxx>
+#include <vcl/svapp.hxx>
+
+#include <swtypes.hxx>
 #include <unomod.hxx>
 #include <unomid.h>
 #include <unoprnms.hxx>
@@ -31,16 +40,9 @@
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
-#include <vcl/svapp.hxx>
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/view/DocumentZoomType.hpp>
-#include <comphelper/ChainablePropertySetInfo.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <edtwin.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <tools/urlobj.hxx>
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

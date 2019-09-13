@@ -24,8 +24,6 @@
 class SfxItemPropertySet;
 struct SfxItemPropertyMapEntry;
 
-#define PROPERTY_NONE 0
-
 #define PROPERTY_MAP_TEXT_CURSOR            0
 #define PROPERTY_MAP_CHAR_STYLE             1
 #define PROPERTY_MAP_PARA_STYLE             2
