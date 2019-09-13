@@ -5270,13 +5270,15 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
         aMetadataStream.append( "  <rdf:Description rdf:about=\"\"\n" );
         aMetadataStream.append( "      xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">\n" );
         if( m_bIsPDF_A2 )
+        {
             aMetadataStream.append( "   <pdfaid:part>2</pdfaid:part>\n" );
-        else
-            aMetadataStream.append( "   <pdfaid:part>1</pdfaid:part>\n" );
-        if( m_bIsPDF_A2 )
             aMetadataStream.append( "   <pdfaid:conformance>B</pdfaid:conformance>\n" );
+        }
         else
+        {
+            aMetadataStream.append( "   <pdfaid:part>1</pdfaid:part>\n" );
             aMetadataStream.append( "   <pdfaid:conformance>A</pdfaid:conformance>\n" );
+        }
         aMetadataStream.append( "  </rdf:Description>\n" );
         //... Dublin Core properties go here
         if( !m_aContext.DocumentInfo.Title.isEmpty() ||
