@@ -104,11 +104,9 @@ using std::max;
 using std::min;
 using std::sort;
 
-namespace com { namespace sun { namespace star {
-    namespace text {
-        class XText;
-    }
-} } }
+namespace com::sun::star::text {
+    class XText;
+}
 
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleParagraphView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleParagraphView";
