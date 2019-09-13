@@ -1467,6 +1467,8 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
     bool  bRestoreFillColor = false;
     if (IsTextDisabled(nStyle, pVector))
     {
+        aOldTextColor = rTargetDevice.GetTextColor();
+
         bool  bHighContrastBlack = false;
         bool  bHighContrastWhite = false;
         const StyleSettings& rStyleSettings( rTargetDevice.GetSettings().GetStyleSettings() );
@@ -1485,7 +1487,6 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             bHighContrastWhite = aCol.IsBright();
         }
 
-        aOldTextColor = rTargetDevice.GetTextColor();
         if ( rTargetDevice.IsTextFillColor() )
         {
             bRestoreFillColor = true;
