@@ -245,7 +245,7 @@ ALNUM {DIGIT}|{ALPHA}
     yyextra->errorMessage = c >= ' ' && c <= '~'
         ? OUString("invalid character \"" + OUStringLiteral1(c) + "\"")
         : OUString(
-            "invalid byte x" + OUString::number(c, 16).toAsciiUpperCase());
+            "invalid byte x" + OUString(OUString::number(c, 16)).toAsciiUpperCase());
     return TOK_ERROR;
 }
 

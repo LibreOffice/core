@@ -709,7 +709,7 @@ OUString ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase
     if( bNeg )
         nNum = sal_Int64( pow( double( nBase ), double( nMaxPlaces ) ) ) + nNum;
 
-    OUString          aRet( OUString::number( nNum, nBase ).toAsciiUpperCase() );
+    OUString          aRet( OUString( OUString::number( nNum, nBase )).toAsciiUpperCase() );
 
 
     if( bUsePlaces )

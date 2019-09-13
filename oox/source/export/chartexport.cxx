@@ -3137,7 +3137,7 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
         {
             pFS->startElement(FSNS(XML_a, XML_solidFill));
 
-            OString aStr = OString::number(nLabelBorderColor, 16).toAsciiUpperCase();
+            OString aStr = OString(OString::number(nLabelBorderColor, 16)).toAsciiUpperCase();
             pFS->singleElement(FSNS(XML_a, XML_srgbClr), XML_val, aStr);
 
             pFS->endElement(FSNS(XML_a, XML_solidFill));

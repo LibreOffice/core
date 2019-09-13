@@ -53,7 +53,8 @@ void XmlWalkerTest::testReadXML()
         {
             nNumberOfChildNodes++;
 
-            CPPUNIT_ASSERT_EQUAL(OString::number(nNumberOfChildNodes), aWalker.attribute("number"));
+            CPPUNIT_ASSERT_EQUAL(OString(OString::number(nNumberOfChildNodes)),
+                                 aWalker.attribute("number"));
 
             if (nNumberOfChildNodes == 1) // only the first node has the attribute
                 CPPUNIT_ASSERT_EQUAL(OString("123"), aWalker.attribute("attribute"));

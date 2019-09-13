@@ -5162,7 +5162,8 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
         pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_START, nullptr, pLib->mpCallbackData);
         break;
     case comphelper::LibreOfficeKit::statusIndicatorCallbackType::SetValue:
-        pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE, OUString::number(percent).toUtf8().getStr(), pLib->mpCallbackData);
+        pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE,
+            OUString(OUString::number(percent)).toUtf8().getStr(), pLib->mpCallbackData);
         break;
     case comphelper::LibreOfficeKit::statusIndicatorCallbackType::Finish:
         pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_FINISH, nullptr, pLib->mpCallbackData);

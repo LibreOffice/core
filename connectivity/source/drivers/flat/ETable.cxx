@@ -681,7 +681,7 @@ bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool 
 
                     // #99178# OJ
                     if ( DataType::DECIMAL == nType || DataType::NUMERIC == nType )
-                        *(_rRow->get())[i] = OUString::number(nVal);
+                        *(_rRow->get())[i] = OUString(OUString::number(nVal));
                     else
                         *(_rRow->get())[i] = nVal;
                 } break;

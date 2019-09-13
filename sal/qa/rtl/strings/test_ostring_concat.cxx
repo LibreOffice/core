@@ -81,6 +81,19 @@ void test::ostring::StringConcat::checkConcat()
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, const char* > )), typeid( OString( "foo" ) + d3 ));
     CPPUNIT_ASSERT_EQUAL( OString( "fooabc" ), OString( OString( "foo" ) + d4 ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, char* > )), typeid( OString( "foo" ) + d4 ));
+    CPPUNIT_ASSERT_EQUAL( OString( "fooabc" ), OString( OString( "foo" ) + d4 ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, char* > )), typeid( OString( "foo" ) + d4 ));
+
+    CPPUNIT_ASSERT_EQUAL( OString( "num10" ), OString( OString( "num" ) + OString::number( 10 )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, OStringNumber< int > > )), typeid( OString( "num" ) + OString::number( 10 )));
+    CPPUNIT_ASSERT_EQUAL( OString( "num10" ), OString( OString( "num" ) + OString::number( 10L )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, OStringNumber< long long > > )), typeid( OString( "num" ) + OString::number( 10L )));
+    CPPUNIT_ASSERT_EQUAL( OString( "num10" ), OString( OString( "num" ) + OString::number( 10ULL )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, OStringNumber< unsigned long long > > )), typeid( OString( "num" ) + OString::number( 10ULL )));
+    CPPUNIT_ASSERT_EQUAL( OString( "num10.5" ), OString( OString( "num" ) + OString::number( 10.5f )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, OStringNumber< float > > )), typeid( OString( "num" ) + OString::number( 10.5f )));
+    CPPUNIT_ASSERT_EQUAL( OString( "num10.5" ), OString( OString( "num" ) + OString::number( 10.5 )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, OStringNumber< double > > )), typeid( OString( "num" ) + OString::number( 10.5 )));
 }
 
 void test::ostring::StringConcat::checkEnsureCapacity()
@@ -149,6 +162,8 @@ void test::ostring::StringConcat::checkInvalid()
     rtl_uString* rus = nullptr;
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) + rs ));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) + rus ));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OUString::number( 10 )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OString::number( 0 ) + OUString::number( 10 )));
 
 #if 0
     // Should fail to compile, to avoid use of OStringConcat lvalues that

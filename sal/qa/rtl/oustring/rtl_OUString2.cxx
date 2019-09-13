@@ -896,11 +896,11 @@ public:
         std::unique_ptr<OUString[]> pStrs(new OUString[nSequence]);
         for (i = 0; i < nSequence; i++)
         {
-            pStrs[i] = OUString::number( sqrt( static_cast<double>(i) ) ).intern();
+            pStrs[i] = OUString( OUString::number( sqrt( static_cast<double>(i) ) ) ).intern();
         }
         for (i = 0; i < nSequence; i++)
         {
-            OUString aNew = OUString::number( sqrt( static_cast<double>(i) ) ).intern();
+            OUString aNew = OUString( OUString::number( sqrt( static_cast<double>(i) ) ) ).intern();
             CPPUNIT_ASSERT_EQUAL_MESSAGE("double intern failed",
                                    pStrs[i].pData, aNew.pData);
         }
