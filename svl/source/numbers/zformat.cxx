@@ -1165,7 +1165,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                             ((eLanguage = MsLangId::getRealLanguage( eLan)) == LANGUAGE_THAI) &&
                             NumFor[nIndex].GetNatNum().GetLang() == LANGUAGE_DONTKNOW)
                         {
-                            sStr = "[$-" + OUString::number( sal_uInt16(eLanguage), 16 ).toAsciiUpperCase() + "]" + sStr;
+                            sStr = "[$-" + OUString(OUString::number( sal_uInt16(eLanguage), 16 )).toAsciiUpperCase() + "]" + sStr;
                             NumFor[nIndex].SetNatNumLang( eLanguage);
                         }
                         sBuff.remove(nPosOld, nPos - nPosOld);
@@ -5085,7 +5085,7 @@ static void lcl_insertLCID( OUStringBuffer& rFormatStr, sal_uInt32 nLCID, sal_In
         // No format code, no locale.
         return;
 
-    OUStringBuffer aLCIDString = OUString::number( nLCID , 16 ).toAsciiUpperCase();
+    OUStringBuffer aLCIDString = OUString(OUString::number( nLCID , 16 )).toAsciiUpperCase();
     // Search for only last DBNum which is the last element before insertion position
     if ( bDBNumInserted && nPosInsertLCID >= 8
         && aLCIDString.getLength() > 4

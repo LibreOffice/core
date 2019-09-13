@@ -409,6 +409,15 @@ public:
             // TODO realloc in case pData->length is noticeably smaller than l?
         }
     }
+
+    /**
+     @overload
+     @internal
+    */
+    template< typename T >
+    OUString( OUStringNumber< T >&& n )
+        : OUString( n.buf, n.length )
+    {}
 #endif
 
 #if defined LIBO_INTERNAL_ONLY
@@ -632,6 +641,25 @@ public:
     }
     template<typename T1, typename T2> void operator +=(
         OUStringConcat<T1, T2> &&) && = delete;
+
+    /**
+     @overload
+     @internal
+    */
+    template< typename T >
+    OUString& operator+=( OUStringNumber< T >&& n ) & {
+        sal_Int32 l = n.length;
+        if( l == 0 )
+            return *this;
+        l += pData->length;
+        rtl_uString_ensureCapacity( &pData, l );
+        sal_Unicode* end = addDataHelper( pData->buffer + pData->length, n.buf, n.length );
+        *end = '\0';
+        pData->length = l;
+        return *this;
+    }
+    template<typename T> void operator +=(
+        OUStringNumber<T> &&) && = delete;
 #endif
 
     /**
@@ -3345,6 +3373,41 @@ public:
         return aTarget;
     }
 
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+
+    static OUStringNumber< int > number( int i, sal_Int16 radix = 10 )
+    {
+        return OUStringNumber< int >( i, radix );
+    }
+    static OUStringNumber< long long > number( long long ll, sal_Int16 radix = 10 )
+    {
+        return OUStringNumber< long long >( ll, radix );
+    }
+    static OUStringNumber< unsigned long long > number( unsigned long long ll, sal_Int16 radix = 10 )
+    {
+        return OUStringNumber< unsigned long long >( ll, radix );
+    }
+    static OUStringNumber< unsigned long long > number( unsigned int i, sal_Int16 radix = 10 )
+    {
+        return number( static_cast< unsigned long long >( i ), radix );
+    }
+    static OUStringNumber< long long > number( long i, sal_Int16 radix = 10)
+    {
+        return number( static_cast< long long >( i ), radix );
+    }
+    static OUStringNumber< unsigned long long > number( unsigned long i, sal_Int16 radix = 10 )
+    {
+        return number( static_cast< unsigned long long >( i ), radix );
+    }
+    static OUStringNumber< float > number( float f )
+    {
+        return OUStringNumber< float >( f );
+    }
+    static OUStringNumber< double > number( double d )
+    {
+        return OUStringNumber< double >( d );
+    }
+#else
     /**
       Returns the string representation of the integer argument.
 
@@ -3432,6 +3495,7 @@ public:
         rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfDouble( aBuf, d ) );
         return OUString( pNewData, SAL_NO_ACQUIRE );
     }
+#endif
 
     /**
       Returns the string representation of the sal_Bool argument.

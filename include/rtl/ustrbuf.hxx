@@ -224,6 +224,18 @@ public:
         pData->length = l;
         // TODO realloc in case pData->>length is noticeably smaller than l ?
     }
+
+    /**
+     @overload
+     @internal
+    */
+    template< typename T >
+    OUStringBuffer( OUStringNumber< T >&& n )
+        : pData(NULL)
+        , nCapacity( n.length + 16 )
+    {
+        rtl_uStringbuffer_newFromStr_WithLength( &pData, n.buf, n.length );
+    }
 #endif
     /** Assign to this a copy of value.
      */
@@ -327,6 +339,13 @@ public:
         *concat.addData(pData->buffer) = 0;
         pData->length = n;
         return *this;
+    }
+
+    /** @overload @internal */
+    template<typename T>
+    OUStringBuffer & operator =(OUStringNumber<T> && n)
+    {
+        return *this = OUStringBuffer( std::move( n ));
     }
 #endif
 
@@ -657,6 +676,16 @@ public:
         *end = '\0';
         pData->length = l;
         return *this;
+    }
+
+    /**
+     @overload
+     @internal
+    */
+    template< typename T >
+    OUStringBuffer& append( OUStringNumber< T >&& c )
+    {
+        return append( c.buf, c.length );
     }
 #endif
 

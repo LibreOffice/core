@@ -50,7 +50,7 @@
     else \
         { \
             OString sTestFileName = OUStringToOString(getTestFileName(), RTL_TEXTENCODING_UTF8); \
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("Failing test file is: " + sTestFileName).getStr(), readExpected(#aActual), OUString::number(aActual)); \
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("Failing test file is: " + sTestFileName).getStr(), readExpected(#aActual), OUString(OUString::number(aActual))); \
         }
 
 #define CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aActual, EPS_) \

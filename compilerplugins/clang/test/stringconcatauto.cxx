@@ -23,10 +23,14 @@ void foo()
     const auto str4 = "str4" + OString::number( 40 );
     // expected-error-re@-1 {{creating a variable of type 'const rtl::OStringConcat<{{.*}}>' will make it reference temporaries}}
     // expected-note@-2 {{use OString instead}}
+    auto str5 = OUString::number( 50 );
+    // expected-error-re@-1 {{creating a variable of type 'rtl::OUStringNumber<{{.*}}>' will make it reference temporaries}}
+    // expected-note@-2 {{use OUString instead}}
     (void) str1;
     (void) str2;
     (void) str3;
     (void) str4;
+    (void) str5;
 }
 
 struct A
@@ -36,6 +40,12 @@ struct A
     // expected-note@-2 {{use OString instead}}
     {
         return "bar" + OString::number( 110 );
+    }
+    auto baz()
+    // expected-error-re@-1 {{returning a variable of type 'rtl::OStringNumber<{{.*}}>' will make it reference temporaries}}
+    // expected-note@-2 {{use OString instead}}
+    {
+        return OString::number( 120 );
     }
 };
 

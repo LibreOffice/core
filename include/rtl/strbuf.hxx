@@ -222,6 +222,15 @@ public:
         *end = '\0';
         pData->length = l;
     }
+
+    /**
+     @overload
+     @internal
+    */
+    template< typename T >
+    OStringBuffer( OStringNumber< T >&& n )
+        : OStringBuffer( OString( n ))
+    {}
 #endif
 
     /** Assign to this a copy of value.
@@ -286,6 +295,13 @@ public:
         *concat.addData(pData->buffer) = 0;
         pData->length = n;
         return *this;
+    }
+
+    /** @overload @internal */
+    template<typename T>
+    OStringBuffer & operator =(OStringNumber<T> && n)
+    {
+        return *this = OStringBuffer( std::move ( n ));
     }
 #endif
 
@@ -560,6 +576,17 @@ public:
         pData->length = l;
         return *this;
     }
+
+    /**
+     @overload
+     @internal
+    */
+    template< typename T >
+    OStringBuffer& append( OStringNumber< T >&& c )
+    {
+        return append( c.buf, c.length );
+    }
+
 #endif
 
     /**

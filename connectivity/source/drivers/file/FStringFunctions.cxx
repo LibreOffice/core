@@ -103,7 +103,7 @@ ORowSetValue OOp_Locate::operate(const std::vector<ORowSetValue>& lhs) const
         return ORowSetValue();
 
     if ( lhs.size() == 2 )
-        return OUString::number(lhs[0].getString().indexOf(lhs[1].getString())+1);
+        return OUString(OUString::number(lhs[0].getString().indexOf(lhs[1].getString())+1));
 
     else if ( lhs.size() != 3 )
         return ORowSetValue();
