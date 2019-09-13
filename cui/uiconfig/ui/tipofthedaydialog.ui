@@ -140,7 +140,6 @@
                     <property name="can_focus">False</property>
                     <property name="vexpand">True</property>
                     <property name="wrap">True</property>
-                    <property name="selectable">True</property>
                     <property name="max_width_chars">50</property>
                   </object>
                   <packing>
