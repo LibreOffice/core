@@ -16,6 +16,24 @@
       "revId": "81fd3bb4d76a0e57a4e8464cb1c5813115ea28f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f6a8fd7_f73ce0c0",
+        "filename": "compilerplugins/clang/test/redundantfcast.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-09-13T06:34:10Z",
+      "side": 1,
+      "message": "see \u003chttps://gerrit.libreoffice.org/78860/\u003e \"Avoid some false loplugin:redundantfcast involving std::function and lambdas\"",
+      "parentUuid": "bf659307_bf2b222e",
+      "revId": "81fd3bb4d76a0e57a4e8464cb1c5813115ea28f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
