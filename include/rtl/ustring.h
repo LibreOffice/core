@@ -1000,7 +1000,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_valueOfInt64(
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_valueOfUInt64(
         sal_Unicode * str, sal_uInt64 l, sal_Int16 radix ) SAL_THROW_EXTERN_C();
-#define RTL_USTR_MAX_VALUEOFINT64 RTL_STR_MAX_VALUEOFINT64
+#define RTL_USTR_MAX_VALUEOFUINT64 RTL_STR_MAX_VALUEOFUINT64
 
 /** Create the string representation of a float.
 

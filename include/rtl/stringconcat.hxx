@@ -11,6 +11,8 @@
 #define INCLUDED_RTL_STRINGCONCAT_HXX
 
 #include "rtl/stringutils.hxx"
+#include "rtl/string.h"
+#include "rtl/ustring.h"
 
 #include <cstddef>
 #include <string.h>
@@ -168,6 +170,9 @@ template<> struct ToStringHelper<OUStringLiteral1_> {
 
 Objects returned by operator+, instead of OString. These objects (possibly recursively) keep a representation of the whole
 concatenation operation.
+
+If you get a build error related to this class, you most probably need to explicitly convert the result of a string
+concatenation to OString.
 */
 template< typename T1, typename T2 >
 struct OStringConcat
@@ -189,6 +194,9 @@ struct OStringConcat
 
 Objects returned by operator+, instead of OUString. These objects (possibly recursively) keep a representation of the whole
 concatenation operation.
+
+If you get a build error related to this class, you most probably need to explicitly convert the result of a string
+concatenation to OUString.
 */
 template< typename T1, typename T2 >
 struct OUStringConcat
@@ -301,6 +309,156 @@ int operator+( const StringConcatInvalid&, const T& )
     return 0; // doesn't matter
     }
 #endif
+
+/**
+ @internal
+
+Objects returned by OString::number(), instead of OString. These objects keep a representation of the number() operation.
+
+If you get a build error related to this class, you most probably need to explicitly convert the result of calling
+OString::number() to OString.
+*/
+template< typename T >
+struct OStringNumber;
+
+template<>
+struct OStringNumber< int >
+{
+    OStringNumber( int i, sal_Int16 radix )
+        : length( rtl_str_valueOfInt32( buf, i, radix ))
+    {}
+    const sal_Char * getStr() const SAL_RETURNS_NONNULL { return buf; }
+    sal_Char buf[RTL_STR_MAX_VALUEOFINT32];
+    const sal_Int32 length;
+};
+
+template<>
+struct OStringNumber< long long >
+{
+    OStringNumber( long long ll, sal_Int16 radix )
+        : length( rtl_str_valueOfInt64( buf, ll, radix ))
+    {}
+    // OString::number(value).getStr() is very common (writing xml code, ...),
+    // so implement that one also here, to avoid having to explicitly to convert
+    // to OString in all such places
+    const sal_Char * getStr() const SAL_RETURNS_NONNULL { return buf; }
+    sal_Char buf[RTL_STR_MAX_VALUEOFINT64];
+    const sal_Int32 length;
+};
+
+template<>
+struct OStringNumber< unsigned long long >
+{
+    OStringNumber( unsigned long long ll, sal_Int16 radix )
+        : length( rtl_str_valueOfUInt64( buf, ll, radix ))
+    {}
+    const sal_Char * getStr() const SAL_RETURNS_NONNULL { return buf; }
+    sal_Char buf[RTL_STR_MAX_VALUEOFUINT64];
+    const sal_Int32 length;
+};
+
+template<>
+struct OStringNumber< float >
+{
+    OStringNumber( float f )
+        : length( rtl_str_valueOfFloat( buf, f ))
+    {}
+    const sal_Char * getStr() const SAL_RETURNS_NONNULL { return buf; }
+    sal_Char buf[RTL_STR_MAX_VALUEOFFLOAT];
+    const sal_Int32 length;
+};
+
+template<>
+struct OStringNumber< double >
+{
+    OStringNumber( double d )
+        : length( rtl_str_valueOfDouble( buf, d ))
+    {}
+    const sal_Char * getStr() const SAL_RETURNS_NONNULL { return buf; }
+    sal_Char buf[RTL_STR_MAX_VALUEOFDOUBLE];
+    const sal_Int32 length;
+};
+
+template< typename T >
+struct ToStringHelper< OStringNumber< T > >
+    {
+    static int length( const OStringNumber< T >& n ) { return n.length; }
+    static sal_Char* addData( sal_Char* buffer, const OStringNumber< T >& n ) SAL_RETURNS_NONNULL { return addDataHelper( buffer, n.buf, n.length ); }
+    static const bool allowOStringConcat = true;
+    static const bool allowOUStringConcat = false;
+    };
+
+
+/**
+ @internal
+
+Objects returned by OUString::number(), instead of OUString. These objects keep a representation of the number() operation.
+
+If you get a build error related to this class, you most probably need to explicitly convert the result of calling
+OUString::number() to OUString.
+*/
+template< typename T >
+struct OUStringNumber;
+
+template<>
+struct OUStringNumber< int >
+{
+    OUStringNumber( int i, sal_Int16 radix )
+        : length( rtl_ustr_valueOfInt32( buf, i, radix ))
+    {}
+    sal_Unicode buf[RTL_USTR_MAX_VALUEOFINT32];
+    const sal_Int32 length;
+};
+
+template<>
+struct OUStringNumber< long long >
+{
+    OUStringNumber( long long ll, sal_Int16 radix )
+        : length( rtl_ustr_valueOfInt64( buf, ll, radix ))
+    {}
+    sal_Unicode buf[RTL_USTR_MAX_VALUEOFINT64];
+    const sal_Int32 length;
+};
+
+template<>
+struct OUStringNumber< unsigned long long >
+{
+    OUStringNumber( unsigned long long ll, sal_Int16 radix )
+        : length( rtl_ustr_valueOfUInt64( buf, ll, radix ))
+    {}
+    sal_Unicode buf[RTL_USTR_MAX_VALUEOFUINT64];
+    const sal_Int32 length;
+};
+
+template<>
+struct OUStringNumber< float >
+{
+    OUStringNumber( float f )
+        : length( rtl_ustr_valueOfFloat( buf, f ))
+    {}
+    sal_Unicode buf[RTL_USTR_MAX_VALUEOFFLOAT];
+    const sal_Int32 length;
+};
+
+template<>
+struct OUStringNumber< double >
+{
+    OUStringNumber( double d )
+        : length( rtl_ustr_valueOfDouble( buf, d ))
+    {}
+    sal_Unicode buf[RTL_USTR_MAX_VALUEOFDOUBLE];
+    const sal_Int32 length;
+};
+
+template< typename T >
+struct ToStringHelper< OUStringNumber< T > >
+    {
+    static int length( const OUStringNumber< T >& n ) { return n.length; }
+    static sal_Unicode* addData( sal_Unicode* buffer, const OUStringNumber< T >& n ) SAL_RETURNS_NONNULL { return addDataHelper( buffer, n.buf, n.length ); }
+    static const bool allowOStringConcat = false;
+    static const bool allowOUStringConcat = true;
+    };
+
 
 } // namespace
 

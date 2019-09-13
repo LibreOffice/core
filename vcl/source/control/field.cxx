@@ -814,12 +814,12 @@ namespace
         OUStringBuffer aBuf;
         sal_Int32 nTextLen;
 
-        nTextLen = OUString::number(rFormatter.GetMin()).getLength();
+        nTextLen = OUString(OUString::number(rFormatter.GetMin())).getLength();
         string::padToLength(aBuf, nTextLen, '9');
         Size aMinTextSize = rSpinField.CalcMinimumSizeForText(
             rFormatter.CreateFieldText(aBuf.makeStringAndClear().toInt64()));
 
-        nTextLen = OUString::number(rFormatter.GetMax()).getLength();
+        nTextLen = OUString(OUString::number(rFormatter.GetMax())).getLength();
         string::padToLength(aBuf, nTextLen, '9');
         Size aMaxTextSize = rSpinField.CalcMinimumSizeForText(
             rFormatter.CreateFieldText(aBuf.makeStringAndClear().toInt64()));

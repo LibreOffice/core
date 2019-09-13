@@ -873,7 +873,7 @@ IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView*, rView, void)
     OUString charValue = rView->GetText();
     sal_Int32 tmp = 1;
     sal_UCS4 cChar = charValue.iterateCodePoints(&tmp, -1);
-    OUString aHexText = OUString::number(cChar, 16).toAsciiUpperCase();
+    OUString aHexText = OUString(OUString::number(cChar, 16)).toAsciiUpperCase();
 
     // Get the decimal code
     OUString aDecimalText = OUString::number(cChar);
@@ -961,7 +961,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
         // using the new UCS4 constructor
         aText = OUString( &cChar, 1 );
         // Get the hexadecimal code
-        aHexText = OUString::number(cChar, 16).toAsciiUpperCase();
+        aHexText = OUString(OUString::number(cChar, 16)).toAsciiUpperCase();
         // Get the decimal code
         aDecimalText = OUString::number(cChar);
         setCharName(cChar);
@@ -1001,7 +1001,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchCharHighlightHdl, SvxShowCharSet*, void)
     {
         aText = OUString( &cChar, 1 );
         // Get the hexadecimal code
-        aHexText = OUString::number(cChar, 16).toAsciiUpperCase();
+        aHexText = OUString(OUString::number(cChar, 16)).toAsciiUpperCase();
         // Get the decimal code
         aDecimalText = OUString::number(cChar);
         setCharName(cChar);

@@ -437,7 +437,7 @@ void ScInterpreter::ScEncodeURL()
             else
             {
                 aUrlBuf.append( '%' );
-                OString convertedChar = OString::number( static_cast<unsigned char>( c ), 16 ).toAsciiUpperCase();
+                OString convertedChar = OString( OString::number( static_cast<unsigned char>( c ), 16 )).toAsciiUpperCase();
                 // RFC 3986 indicates:
                 // "A percent-encoded octet is encoded as a character triplet,
                 // consisting of the percent character "%" followed by the two hexadecimal digits

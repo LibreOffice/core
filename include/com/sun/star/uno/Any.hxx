@@ -249,6 +249,14 @@ template<typename T1, typename T2>
 Any toAny(rtl::OUStringConcat<T1, T2> && value)
 { return makeAny(std::move(value)); }
 
+template<typename T>
+Any makeAny(rtl::OUStringNumber<T> && value)
+{ return Any(OUString(std::move(value))); }
+
+template<typename T>
+Any toAny(rtl::OUStringNumber<T> && value)
+{ return makeAny(std::move(value)); }
+
 template<typename T> bool fromAny(Any const & any, T * value) {
     assert(value != nullptr);
     return any >>= *value;
@@ -295,6 +303,17 @@ inline void SAL_CALL operator <<= ( Any & rAny, rtl::OUStringConcat< C1, C2 >&& 
 }
 template<typename T1, typename T2>
 void operator <<=(Any &, rtl::OUStringConcat<T1, T2> const &) = delete;
+template< class C >
+inline void SAL_CALL operator <<= ( Any & rAny, rtl::OUStringNumber< C >&& value )
+{
+    const rtl::OUString str( std::move(value) );
+    const Type & rType = ::cppu::getTypeFavourUnsigned(&str);
+    ::uno_type_any_assign(
+        &rAny, const_cast< rtl::OUString * >( &str ), rType.getTypeLibType(),
+        cpp_acquire, cpp_release );
+}
+template<typename T>
+void operator <<=(Any &, rtl::OUStringNumber<T> const &) = delete;
 #endif
 
 #if defined LIBO_INTERNAL_ONLY

@@ -280,6 +280,15 @@ public:
             *end = '\0';
         }
     }
+
+    /**
+     @overload
+     @internal
+    */
+    template< typename T >
+    OString( OStringNumber< T >&& n )
+        : OString( n.buf, n.length )
+    {}
 #endif
 
 #ifdef LIBO_INTERNAL_ONLY
@@ -383,6 +392,25 @@ public:
     }
     template<typename T1, typename T2> void operator +=(
         OStringConcat<T1, T2> &&) && = delete;
+
+    /**
+     @overload
+     @internal
+    */
+    template< typename T >
+    OString& operator+=( OStringNumber< T >&& n ) & {
+        sal_Int32 l = n.length;
+        if( l == 0 )
+            return *this;
+        l += pData->length;
+        rtl_string_ensureCapacity( &pData, l );
+        char* end = addDataHelper( pData->buffer + pData->length, n.buf, n.length );
+        *end = '\0';
+        pData->length = l;
+        return *this;
+    }
+    template<typename T> void operator +=(
+        OStringNumber<T> &&) && = delete;
 #endif
 
     /**
@@ -1602,6 +1630,41 @@ public:
         return rtl_str_toDouble( pData->buffer );
     }
 
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+
+    static OStringNumber< int > number( int i, sal_Int16 radix = 10 )
+    {
+        return OStringNumber< int >( i, radix );
+    }
+    static OStringNumber< long long > number( long long ll, sal_Int16 radix = 10 )
+    {
+        return OStringNumber< long long >( ll, radix );
+    }
+    static OStringNumber< unsigned long long > number( unsigned long long ll, sal_Int16 radix = 10 )
+    {
+        return OStringNumber< unsigned long long >( ll, radix );
+    }
+    static OStringNumber< unsigned long long > number( unsigned int i, sal_Int16 radix = 10 )
+    {
+        return number( static_cast< unsigned long long >( i ), radix );
+    }
+    static OStringNumber< long long > number( long i, sal_Int16 radix = 10)
+    {
+        return number( static_cast< long long >( i ), radix );
+    }
+    static OStringNumber< unsigned long long > number( unsigned long i, sal_Int16 radix = 10 )
+    {
+        return number( static_cast< unsigned long long >( i ), radix );
+    }
+    static OStringNumber< float > number( float f )
+    {
+        return OStringNumber< float >( f );
+    }
+    static OStringNumber< double > number( double d )
+    {
+        return OStringNumber< double >( d );
+    }
+#else
     /**
       Returns the string representation of the integer argument.
 
@@ -1686,6 +1749,7 @@ public:
         rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfDouble( aBuf, d ) );
         return OString( pNewData, SAL_NO_ACQUIRE );
     }
+#endif
 
     /**
       Returns the string representation of the sal_Bool argument.

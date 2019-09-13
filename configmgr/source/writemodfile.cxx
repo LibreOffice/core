@@ -155,19 +155,19 @@ void writeValueContent_(TempFile &handle, sal_Bool value) {
 }
 
 void writeValueContent_(TempFile &handle, sal_Int16 value) {
-    handle.writeString(OString::number(value));
+    handle.writeString(OString::number(value).getStr());
 }
 
 void writeValueContent_(TempFile &handle, sal_Int32 value) {
-    handle.writeString(OString::number(value));
+    handle.writeString(OString::number(value).getStr());
 }
 
 void writeValueContent_(TempFile &handle, sal_Int64 value) {
-    handle.writeString(OString::number(value));
+    handle.writeString(OString::number(value).getStr());
 }
 
 void writeValueContent_(TempFile &handle, double value) {
-    handle.writeString(OString::number(value));
+    handle.writeString(OString::number(value).getStr());
 }
 
 void writeValueContent_(TempFile &handle, const OUString& value) {
@@ -530,7 +530,7 @@ void writeValueContent(TempFile &handle, std::u16string_view value) {
         {
             handle.writeString(convertToUtf8(value.substr(i, j - i)));
             handle.writeString("<unicode oor:scalar=\"");
-            handle.writeString(OString::number(c));
+            handle.writeString(OString::number(c).getStr());
             handle.writeString("\"/>");
             i = j + 1;
         } else if (c == '\x0D') {

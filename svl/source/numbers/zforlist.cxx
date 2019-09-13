@@ -4210,7 +4210,7 @@ OUString NfCurrencyEntry::BuildSymbolString(bool bBank,
         if ( !bWithoutExtension && eLanguage != LANGUAGE_DONTKNOW && eLanguage != LANGUAGE_SYSTEM )
         {
             sal_Int32 nLang = static_cast<sal_uInt16>(eLanguage);
-            aBuf.append('-').append( OUString::number(nLang, 16).toAsciiUpperCase());
+            aBuf.append('-').append( OUString( OUString::number(nLang, 16)).toAsciiUpperCase());
         }
     }
     aBuf.append(']');

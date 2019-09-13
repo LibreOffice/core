@@ -3807,8 +3807,7 @@ static void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< OUStr
     sal_Int32 i;
     for ( i = 0; i < rEquations.getLength(); i++ )
     {
-        OUString aStr('f');
-        aStr += OUString::number( i );
+        OUString aStr = "f" + OUString::number( i );
         rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aStr );
 
         aStr = rEquations[ i ];

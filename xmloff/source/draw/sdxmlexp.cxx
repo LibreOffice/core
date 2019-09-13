@@ -698,10 +698,8 @@ bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUStr
                 {
                     pNew = new ImpXMLAutoLayoutInfo(nType, pInfo);
                     mvAutoLayoutInfoList.emplace_back( pNew );
-                    OUString sNewName = "AL";
-                    sNewName += OUString::number(mvAutoLayoutInfoList.size() - 1);
-                    sNewName += "T";
-                    sNewName += OUString::number(nType);
+                    OUString sNewName = "AL" + OUString::number(mvAutoLayoutInfoList.size() - 1)
+                        + "T" + OUString::number(nType);
                     pNew->SetLayoutName(sNewName);
                 }
 
@@ -1228,9 +1226,7 @@ void SdXMLExport::ImpWritePageMasterInfos()
         if(pInfo)
         {
             // create name
-            OUString sNewName("PM");
-
-            sNewName += OUString::number(nCnt);
+            OUString sNewName = "PM" + OUString::number(nCnt);
             pInfo->SetName(sNewName);
 
             // prepare page-master attributes
@@ -1339,9 +1335,7 @@ static OUString findOrAppendImpl( std::vector< OUString >& rVector, const OUStri
 
     // create a reference string with pPrefix and the index of the
     // found or created rText
-    OUString aStr( OUString::createFromAscii( pPrefix ) );
-    aStr += OUString::number( nIndex );
-    return aStr;
+    return OUString::createFromAscii( pPrefix ) + OUString::number( nIndex );
 }
 
 static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, const OUString& rText, bool bFixed, sal_Int32 nFormat, const sal_Char* pPrefix )
@@ -1367,9 +1361,7 @@ static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, cons
 
     // create a reference string with pPrefix and the index of the
     // found or created DateTimeDeclImpl
-    OUString aStr( OUString::createFromAscii( pPrefix ) );
-    aStr += OUString::number( nIndex );
-    return aStr;
+    return OUString::createFromAscii( pPrefix ) + OUString::number( nIndex );
 }
 
 static const sal_Char gpStrHeaderTextPrefix[] = "hdr";

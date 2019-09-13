@@ -701,16 +701,16 @@ void SvxNumRule::Store( SvStream &rStream )
 void SvxNumRule::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxNumRule"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("levelCount"), BAD_CAST(OUString::number(nLevelCount).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("continuousNumbering"), BAD_CAST(OUString::boolean(bContinuousNumbering).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("numberingType"), BAD_CAST(OUString::number(static_cast<int>(eNumberingType)).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("featureFlags"), BAD_CAST(OUString::number(static_cast<int>(nFeatureFlags)).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("levelCount"), BAD_CAST(OString::number(nLevelCount).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("continuousNumbering"), BAD_CAST(OString::boolean(bContinuousNumbering).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("numberingType"), BAD_CAST(OString::number(static_cast<int>(eNumberingType)).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("featureFlags"), BAD_CAST(OString::number(static_cast<int>(nFeatureFlags)).getStr()));
     for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
         if(aFmts[i])
         {
             xmlTextWriterStartElement(pWriter, BAD_CAST("aFmts"));
-            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("i"), BAD_CAST(OUString::number(i).getStr()));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("i"), BAD_CAST(OString::number(i).getStr()));
             xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", aFmts[i].get());
             xmlTextWriterEndElement(pWriter);
         }
