@@ -24,9 +24,9 @@
 #include <map>
 
 class SwTextAttr;
-namespace com { namespace sun { namespace star {
-    namespace accessibility { class XAccessibleHyperlink; }
-} } }
+namespace com::sun::star::accessibility {
+    class XAccessibleHyperlink;
+}
 
 class SwAccessibleHyperTextData
 {
