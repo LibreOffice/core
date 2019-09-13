@@ -1129,10 +1129,9 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog(weld::Window* pParent, const SfxIte
     AddTabPage("customprops", SfxCustomPropertiesPage::Create, nullptr);
     AddTabPage("cmisprops", SfxCmisPropertiesPage::Create, nullptr);
     if (!rInfoItem.isCmisDocument())
-        m_xTabCtrl->get_page("cmisprops")->hide();
+        RemoveTabPage("cmisprops");
     AddTabPage("security", SfxSecurityPage::Create, nullptr);
 }
-
 
 void SfxDocumentInfoDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
 {

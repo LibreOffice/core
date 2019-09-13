@@ -52,12 +52,12 @@ class ImpressDocumentProperties(UITestCase):
         xCommentsText.executeAction("TYPE", mkPropertyValues({"TEXT":"Comments text"}))
 
         #Font tab
-        select_pos(xTabs, "5")     #tab Fonts
+        select_pos(xTabs, "4")     #tab Fonts
         xFontEmbedCheckbox = xDialog.getChild("embedFonts")
         xFontEmbedCheckbox.executeAction("CLICK", tuple())
 
         #Security tab
-        select_pos(xTabs, "4")     #tab Security
+        select_pos(xTabs, "3")     #tab Security
         xReadOnlyCheckbox = xDialog.getChild("readonly")
         xReadOnlyCheckbox.executeAction("CLICK", tuple())
 
