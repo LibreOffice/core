@@ -153,10 +153,6 @@ SmPrintUIOptions::SmPrintUIOptions()
 
 // class SmModel
 
-
-// values from com/sun/star/beans/PropertyAttribute
-#define PROPERTY_NONE        0
-
 enum SmModelPropertyHandles
 {
     HANDLE_FORMULA,
