@@ -1456,6 +1456,39 @@ static bool IsTextDisabled(DrawTextFlags const eStyle, MetricVector const* const
     return ((eStyle & DrawTextFlags::Disable) && !pVector);
 }
 
+static Color GetDisabledTextColor(OutputDevice const& rTargetDevice)
+{
+    bool  bHighContrastBlack = false;
+    bool  bHighContrastWhite = false;
+
+    StyleSettings const& rStyleSettings(rTargetDevice.GetSettings().GetStyleSettings());
+
+    if (rStyleSettings.GetHighContrastMode())
+    {
+        Color aCol;
+        if (rTargetDevice.IsBackground())
+            aCol = rTargetDevice.GetBackground().GetColor();
+        else
+            // best guess is the face color here
+            // but it may be totally wrong. the background color
+            // was typically already reset
+            aCol = rStyleSettings.GetFaceColor();
+
+        bHighContrastBlack = aCol.IsDark();
+        bHighContrastWhite = aCol.IsBright();
+    }
+
+
+    if (bHighContrastBlack)
+        return COL_GREEN;
+    else if (bHighContrastWhite)
+        return COL_LIGHTGREEN;
+
+    // draw disabled text always without shadow
+    // as it fits better with native look
+    return rTargetDevice.GetSettings().GetStyleSettings().GetDisableColor();
+}
+
 void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
                                  const OUString& rOrigStr, DrawTextFlags nStyle,
                                  MetricVector* pVector, OUString* pDisplayText,
@@ -1469,39 +1502,13 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
     {
         aOldTextColor = rTargetDevice.GetTextColor();
 
-        bool  bHighContrastBlack = false;
-        bool  bHighContrastWhite = false;
-        const StyleSettings& rStyleSettings( rTargetDevice.GetSettings().GetStyleSettings() );
-        if( rStyleSettings.GetHighContrastMode() )
-        {
-            Color aCol;
-            if( rTargetDevice.IsBackground() )
-                aCol = rTargetDevice.GetBackground().GetColor();
-            else
-                // best guess is the face color here
-                // but it may be totally wrong. the background color
-                // was typically already reset
-                aCol = rStyleSettings.GetFaceColor();
-
-            bHighContrastBlack = aCol.IsDark();
-            bHighContrastWhite = aCol.IsBright();
-        }
-
-        if ( rTargetDevice.IsTextFillColor() )
+        if (rTargetDevice.IsTextFillColor())
         {
             bRestoreFillColor = true;
             aOldTextFillColor = rTargetDevice.GetTextFillColor();
         }
-        if( bHighContrastBlack )
-            rTargetDevice.SetTextColor( COL_GREEN );
-        else if( bHighContrastWhite )
-            rTargetDevice.SetTextColor( COL_LIGHTGREEN );
-        else
-        {
-            // draw disabled text always without shadow
-            // as it fits better with native look
-            rTargetDevice.SetTextColor( rTargetDevice.GetSettings().GetStyleSettings().GetDisableColor() );
-        }
+
+        rTargetDevice.SetTextColor(GetDisabledTextColor(rTargetDevice));
     }
 
     long        nWidth          = rRect.GetWidth();
