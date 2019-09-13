@@ -1936,6 +1936,16 @@ protected:
     std::unique_ptr<weld::Container> m_xOrigParent;
 
 public:
+    /* @param rRelocateId - optional argument of the name of a widget in the .ui file
+                            which should be relocated into the content area of the dialog.
+
+                            e.g. a checkbox for a "Never show this again" option.
+
+                            This results in the named widget relocating to the same container
+                            as the messages.  This enables aligning the extra widget with the
+                            message labels in the content area container which doesn't
+                            explicitly exist in the ui description, but is only implied.
+    */
     MessageDialogController(weld::Widget* pParent, const OUString& rUIFile,
                             const OString& rDialogId, const OString& rRelocateId = OString());
     virtual Dialog* getDialog() override;
