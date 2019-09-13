@@ -187,12 +187,12 @@ OUString XMLTextListsHelper::GetContinueListIdOfProcessedList(
 OUString XMLTextListsHelper::GenerateNewListId() const
 {
     static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
-    OUString sTmpStr( "list" );
+    OUString sTmpStr;
 
     if (bHack)
     {
         static sal_Int64 nIdCounter = SAL_CONST_INT64(5000000000);
-        sTmpStr += OUString::number(nIdCounter++);
+        sTmpStr = "list" + OUString::number(nIdCounter++);
     }
     else
     {
@@ -202,7 +202,7 @@ OUString XMLTextListsHelper::GenerateNewListId() const
         n += aDateTime.GetDateUnsigned();
         n += comphelper::rng::uniform_int_distribution(0, std::numeric_limits<int>::max());
         // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
-        sTmpStr += OUString::number( n );
+        sTmpStr = "list" + OUString::number( n );
     }
 
     OUString sNewListId( sTmpStr );

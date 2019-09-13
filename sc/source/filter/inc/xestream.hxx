@@ -287,12 +287,12 @@ public:
     sax_fastparser::FSHelperPtr     GetStreamForPath( const OUString& rPath );
 
     template <typename Str, typename... Args>
-    void WriteAttributes(sal_Int32 nAttribute, const Str& value, Args... rest)
+    void WriteAttributes(sal_Int32 nAttribute, Str&& value, Args&&... rest)
     {
-        WriteAttribute(nAttribute, value);
+        WriteAttribute(nAttribute, std::forward<Str>(value));
         // coverity[stray_semicolon : FALSE] - coverity parse error
         if constexpr(sizeof...(rest) > 0)
-            WriteAttributes(rest...);
+            WriteAttributes(std::forward<Args>(rest)...);
     }
 
     sax_fastparser::FSHelperPtr     CreateOutputStream (

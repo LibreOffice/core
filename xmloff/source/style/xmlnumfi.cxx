@@ -1474,7 +1474,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
         {
             aFormatCode.append( "][$-" );
             // language code in upper hex:
-            aFormatCode.append(OUString::number(static_cast<sal_uInt16>(eLang), 16).toAsciiUpperCase());
+            aFormatCode.append(OUString(OUString::number(static_cast<sal_uInt16>(eLang), 16)).toAsciiUpperCase());
         }
         aFormatCode.append( ']' );
     }
@@ -2029,7 +2029,7 @@ void SvXMLNumFormatContext::AddCurrency( const OUString& rContent, LanguageType 
         if ( nLang != LANGUAGE_SYSTEM )
         {
             //  '-' sign and language code in hex:
-            aFormatCode.append("-").append(OUString::number(sal_uInt16(nLang), 16).toAsciiUpperCase());
+            aFormatCode.append("-").append(OUString(OUString::number(sal_uInt16(nLang), 16)).toAsciiUpperCase());
         }
 
         aFormatCode.append( ']' );    // end of "new" currency symbol

@@ -170,7 +170,7 @@ STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long 
             unsigned long nColor;
             pValue.Value >>= nColor;
             strAttrs.append('#');
-            auto const hex = OUString::number(nColor, 16).toAsciiUpperCase();
+            auto const hex = OUString(OUString::number(nColor, 16)).toAsciiUpperCase();
             for (sal_Int32 j = hex.getLength(); j < 8; ++j) {
                 strAttrs.append('0');
             }

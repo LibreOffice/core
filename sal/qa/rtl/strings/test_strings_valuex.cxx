@@ -58,30 +58,30 @@ void test::strings::valueX::testOUBoolean() {
 
 template< typename T >
 static void testInt() {
-    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T::number( 30039062 ));
+    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T( T::number( 30039062 )));
 
     // test the overloading resolution
 
-    CPPUNIT_ASSERT_EQUAL( T( "30" ), T::number( static_cast< signed char >( 30 )));
-    CPPUNIT_ASSERT_EQUAL( T( "30" ), T::number( static_cast< unsigned char >( 30 )));
-    CPPUNIT_ASSERT_EQUAL( T( "30039" ), T::number( static_cast< short >( 30039 )));
-    CPPUNIT_ASSERT_EQUAL( T( "30039" ), T::number( static_cast< unsigned short >( 30039 )));
-    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T::number( static_cast< int >( 30039062 )));
-    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T::number( static_cast< unsigned int >( 30039062 )));
-    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T::number( static_cast< long >( 30039062 )));
-    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T::number( static_cast< unsigned long >( 30039062 )));
-    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T::number( static_cast< long long >( 30039062 )));
+    CPPUNIT_ASSERT_EQUAL( T( "30" ), T( T::number( static_cast< signed char >( 30 ))));
+    CPPUNIT_ASSERT_EQUAL( T( "30" ), T( T::number( static_cast< unsigned char >( 30 ))));
+    CPPUNIT_ASSERT_EQUAL( T( "30039" ), T( T::number( static_cast< short >( 30039 ))));
+    CPPUNIT_ASSERT_EQUAL( T( "30039" ), T( T::number( static_cast< unsigned short >( 30039 ))));
+    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T( T::number( static_cast< int >( 30039062 ))));
+    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T( T::number( static_cast< unsigned int >( 30039062 ))));
+    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T( T::number( static_cast< long >( 30039062 ))));
+    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T( T::number( static_cast< unsigned long >( 30039062 ))));
+    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T( T::number( static_cast< long long >( 30039062 ))));
     // The highest bit set in unsigned long long may not actually work.
-    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T::number( static_cast< unsigned long long >( 30039062 )));
+    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T( T::number( static_cast< unsigned long long >( 30039062 ))));
 
-    CPPUNIT_ASSERT_EQUAL( T( "30" ), T::number( static_cast< sal_Int8 >( 30 )));
-    CPPUNIT_ASSERT_EQUAL( T( "30" ), T::number( static_cast< sal_uInt8 >( 30 )));
-    CPPUNIT_ASSERT_EQUAL( T( "30039" ), T::number( static_cast< sal_Int16 >( 30039 )));
-    CPPUNIT_ASSERT_EQUAL( T( "30039" ), T::number( static_cast< sal_uInt16 >( 30039 )));
-    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T::number( static_cast< sal_Int32 >( 30039062 )));
-    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T::number( static_cast< sal_uInt32 >( 30039062 )));
-    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T::number( static_cast< sal_Int64 >( 30039062 )));
-    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T::number( static_cast< sal_uInt64 >( 30039062 )));
+    CPPUNIT_ASSERT_EQUAL( T( "30" ), T( T::number( static_cast< sal_Int8 >( 30 ))));
+    CPPUNIT_ASSERT_EQUAL( T( "30" ), T( T::number( static_cast< sal_uInt8 >( 30 ))));
+    CPPUNIT_ASSERT_EQUAL( T( "30039" ), T( T::number( static_cast< sal_Int16 >( 30039 ))));
+    CPPUNIT_ASSERT_EQUAL( T( "30039" ), T( T::number( static_cast< sal_uInt16 >( 30039 ))));
+    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T( T::number( static_cast< sal_Int32 >( 30039062 ))));
+    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T( T::number( static_cast< sal_uInt32 >( 30039062 ))));
+    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T( T::number( static_cast< sal_Int64 >( 30039062 ))));
+    CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T( T::number( static_cast< sal_uInt64 >( 30039062 ))));
 
     // The implementation internally uses sal_Int64 etc. types, so check ranges.
     assert( sizeof( int ) <= sizeof( sal_Int32 ));
@@ -100,8 +100,8 @@ void test::strings::valueX::testOInt() {
 
 template< typename T >
 static void testFloat() {
-    CPPUNIT_ASSERT_EQUAL( T( "39062.2" ), T::number( 39062.2f ));
-    CPPUNIT_ASSERT_EQUAL( T( "30039062.2" ), T::number( 30039062.2 ));
+    CPPUNIT_ASSERT_EQUAL( T( "39062.2" ), T( T::number( 39062.2f )));
+    CPPUNIT_ASSERT_EQUAL( T( "30039062.2" ), T( T::number( 30039062.2 )));
     // long double not supported
 }
 
