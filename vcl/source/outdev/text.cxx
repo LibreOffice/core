@@ -1494,6 +1494,11 @@ static bool CanDrawClippedText(long nWidth, long nHeight, DrawTextFlags eStyle)
     return !((nWidth <= 0 || nHeight <= 0) && (eStyle & DrawTextFlags::Clip));
 }
 
+static bool CanDrawMnemonics(OutputDevice const& rTargetDevice, MetricVector const* const pVector)
+{
+    return !(rTargetDevice.GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics) && !pVector;
+}
+
 void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
                                  const OUString& rOrigStr, DrawTextFlags nStyle,
                                  MetricVector* pVector, OUString* pDisplayText,
@@ -1522,17 +1527,15 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
     if (!CanDrawClippedText(nWidth, nHeight, nStyle))
         return;
 
-    Point       aPos            = rRect.TopLeft();
+    Point aPos = rRect.TopLeft();
 
-    long        nTextHeight     = rTargetDevice.GetTextHeight();
-    TextAlign   eAlign          = rTargetDevice.GetTextAlign();
-    sal_Int32   nMnemonicPos    = -1;
+    long nTextHeight = rTargetDevice.GetTextHeight();
+    TextAlign eAlign = rTargetDevice.GetTextAlign();
+    sal_Int32 nMnemonicPos = -1;
 
     OUString aStr = rOrigStr;
-    if ( nStyle & DrawTextFlags::Mnemonic )
-        aStr = GetNonMnemonicString( aStr, nMnemonicPos );
-
-    const bool bDrawMnemonics = !(rTargetDevice.GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics) && !pVector;
+    if (nStyle & DrawTextFlags::Mnemonic)
+        aStr = GetNonMnemonicString(aStr, nMnemonicPos);
 
     // We treat multiline text differently
     if ( nStyle & DrawTextFlags::MultiLine )
@@ -1615,7 +1618,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
                 sal_Int32 nIndex   = pLineInfo->GetIndex();
                 sal_Int32 nLineLen = pLineInfo->GetLen();
                 _rLayout.DrawText( aPos, aStr, nIndex, nLineLen, pVector, pDisplayText );
-                if ( bDrawMnemonics )
+                if ( CanDrawMnemonics(rTargetDevice, pVector) )
                 {
                     if ( (nMnemonicPos >= nIndex) && (nMnemonicPos < nIndex+nLineLen) )
                     {
@@ -1708,14 +1711,14 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             rTargetDevice.Push( PushFlags::CLIPREGION );
             rTargetDevice.IntersectClipRegion( rRect );
             _rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
-            if ( bDrawMnemonics && nMnemonicPos != -1 )
+            if (CanDrawMnemonics(rTargetDevice, pVector) && nMnemonicPos != -1)
                 rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
             rTargetDevice.Pop();
         }
         else
         {
             _rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
-            if ( bDrawMnemonics && nMnemonicPos != -1 )
+            if (CanDrawMnemonics(rTargetDevice, pVector) && nMnemonicPos != -1)
                 rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
         }
     }
