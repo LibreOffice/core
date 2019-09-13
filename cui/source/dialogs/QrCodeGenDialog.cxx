@@ -73,6 +73,10 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
 {
     if (!bEditExisting)
     {
+        Reference<container::XIndexAccess> xSelections(m_xModel->getCurrentSelection(),
+                                                       UNO_QUERY_THROW);
+        uno::Reference<text::XTextRange> xSelection(xSelections->getByIndex(0), uno::UNO_QUERY);
+        m_xEdittext->set_text(xSelection->getString());
         return;
     }
 
