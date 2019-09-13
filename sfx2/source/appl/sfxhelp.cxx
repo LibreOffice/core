@@ -998,6 +998,25 @@ namespace
     }
 }
 
+class HelpManualMessage : public weld::MessageDialogController
+{
+private:
+    std::unique_ptr<weld::CheckButton> m_xHideOfflineHelpCB;
+
+public:
+    HelpManualMessage(weld::Widget* pParent)
+        : MessageDialogController(pParent, "sfx/ui/helpmanual.ui", "onlinehelpmanual", "hidedialog")
+        , m_xHideOfflineHelpCB(m_xBuilder->weld_check_button("hidedialog"))
+    {
+        LanguageTag aLangTag = Application::GetSettings().GetUILanguageTag();
+        OUString sLocaleString = SvtLanguageTable::GetLanguageString(aLangTag.getLanguageType());
+        OUString sPrimText = get_primary_text();
+        set_primary_text(sPrimText.replaceAll("$UILOCALE", sLocaleString));
+    }
+
+    bool GetOfflineHelpPopUp() const { return !m_xHideOfflineHelpCB->get_active(); }
+};
+
 bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const OUString& rKeyword)
 {
     OUStringBuffer aHelpRootURL("vnd.sun.star.help://");
@@ -1126,16 +1145,10 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
             {
                 weld::Window* pWeldWindow = pWindow ? pWindow->GetFrameWeld() : nullptr;
                 aBusy.incBusy(pWeldWindow);
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWeldWindow, "sfx/ui/helpmanual.ui"));
-                std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("onlinehelpmanual"));
-                std::unique_ptr<weld::CheckButton> m_xHideOfflineHelpCB(xBuilder->weld_check_button("hidedialog"));
-                LanguageTag aLangTag = Application::GetSettings().GetUILanguageTag();
-                OUString sLocaleString = SvtLanguageTable::GetLanguageString( aLangTag.getLanguageType() );
-                OUString sPrimText = xQueryBox->get_primary_text();
-                xQueryBox->set_primary_text(sPrimText.replaceAll("$UILOCALE", sLocaleString));
-                short OnlineHelpBox = xQueryBox->run();
+                HelpManualMessage aQueryBox(pWeldWindow);
+                short OnlineHelpBox = aQueryBox.run();
                 bShowOfflineHelpPopUp = OnlineHelpBox != RET_OK;
-                aHelpOptions.SetOfflineHelpPopUp(!m_xHideOfflineHelpCB->get_state());
+                aHelpOptions.SetOfflineHelpPopUp(aQueryBox.GetOfflineHelpPopUp());
                 aBusy.decBusy();
             }
             if(!bShowOfflineHelpPopUp)
@@ -1284,16 +1297,10 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
             if(bShowOfflineHelpPopUp)
             {
                 aBusy.incBusy(pWidget);
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWidget, "sfx/ui/helpmanual.ui"));
-                std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("onlinehelpmanual"));
-                std::unique_ptr<weld::CheckButton> m_xHideOfflineHelpCB(xBuilder->weld_check_button("hidedialog"));
-                LanguageTag aLangTag = Application::GetSettings().GetUILanguageTag();
-                OUString sLocaleString = SvtLanguageTable::GetLanguageString( aLangTag.getLanguageType() );
-                OUString sPrimText = xQueryBox->get_primary_text();
-                xQueryBox->set_primary_text(sPrimText.replaceAll("$UILOCALE", sLocaleString));
-                short OnlineHelpBox = xQueryBox->run();
+                HelpManualMessage aQueryBox(pWidget);
+                short OnlineHelpBox = aQueryBox.run();
                 bShowOfflineHelpPopUp = OnlineHelpBox != RET_OK;
-                aHelpOptions.SetOfflineHelpPopUp(!m_xHideOfflineHelpCB->get_state());
+                aHelpOptions.SetOfflineHelpPopUp(aQueryBox.GetOfflineHelpPopUp());
                 aBusy.decBusy();
             }
             if(!bShowOfflineHelpPopUp)
