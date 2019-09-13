@@ -73,6 +73,14 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
 {
     if (!bEditExisting)
     {
+        // TODO: This only works in Writer doc. Should also work in shapes
+        Reference<XIndexAccess> xSelections(m_xModel->getCurrentSelection(), UNO_QUERY);
+        if (xSelections.is())
+        {
+            Reference<XTextRange> xSelection(xSelections->getByIndex(0), UNO_QUERY);
+            if (xSelection.is())
+                m_xEdittext->set_text(xSelection->getString());
+        }
         return;
     }
 
