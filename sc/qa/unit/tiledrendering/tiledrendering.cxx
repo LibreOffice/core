@@ -37,6 +37,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/unohelp2.hxx>
 #include <sc.hrc>
+#include <comphelper/string.hxx>
 
 #include <chrono>
 #include <cstddef>
@@ -98,6 +99,7 @@ public:
     void testFilterDlg();
     void testVbaRangeCopyPaste();
     void testInvalidationLoop();
+    void testPageDownInvalidation();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -132,6 +134,7 @@ public:
     CPPUNIT_TEST(testFilterDlg);
     CPPUNIT_TEST(testVbaRangeCopyPaste);
     CPPUNIT_TEST(testInvalidationLoop);
+    CPPUNIT_TEST(testPageDownInvalidation);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -439,6 +442,7 @@ public:
     bool m_bGraphicViewSelection;
     bool m_bFullInvalidateTiles;
     bool m_bInvalidateTiles;
+    tools::Rectangle m_aInvalidation;
     bool m_bViewLock;
     OString m_sCellFormula;
     boost::property_tree::ptree m_aCommentCallbackResult;
@@ -520,6 +524,15 @@ public:
             }
             else
             {
+                if (m_aInvalidation.IsEmpty())
+                {
+                    uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
+                    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
+                    m_aInvalidation.setX(aSeq[0].toInt32());
+                    m_aInvalidation.setY(aSeq[1].toInt32());
+                    m_aInvalidation.setWidth(aSeq[2].toInt32());
+                    m_aInvalidation.setHeight(aSeq[3].toInt32());
+                }
                 m_bInvalidateTiles = true;
             }
         }
@@ -1628,6 +1641,28 @@ void ScTiledRenderingTest::testInvalidationLoop()
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // invalidation loop between ScGridWindow::Paint() and vcl::Window::ImplPosSizeWindow().
     Scheduler::ProcessEventsToIdle();
+}
+
+void ScTiledRenderingTest::testPageDownInvalidation()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    int nView1 = SfxLokHelper::getView();
+    ViewCallback aView1;
+    CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
+
+    SfxLokHelper::setView(nView1);
+    aView1.m_bInvalidateTiles = false;
+    aView1.m_aInvalidation = tools::Rectangle();
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, awt::Key::PAGEDOWN, 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, awt::Key::PAGEDOWN, 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(15, 15, 1230, 225), aView1.m_aInvalidation);
 }
 
 }
