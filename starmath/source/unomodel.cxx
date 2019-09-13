@@ -24,6 +24,7 @@
 
 #include <o3tl/any.hxx>
 #include <sfx2/printer.hxx>
+#include <svl/itemprop.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -152,10 +153,6 @@ SmPrintUIOptions::SmPrintUIOptions()
 
 
 // class SmModel
-
-
-// values from com/sun/star/beans/PropertyAttribute
-#define PROPERTY_NONE        0
 
 enum SmModelPropertyHandles
 {
