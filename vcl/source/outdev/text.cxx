@@ -1506,8 +1506,6 @@ void OutputDevice::DrawMultilineText(OutputDevice& rTargetDevice, const tools::R
 {
     OUString aLastLine;
     ImplMultiTextLineInfo aMultiLineInfo;
-    ImplTextLineInfo* pLineInfo;
-
     long nTextHeight = rTargetDevice.GetTextHeight();
 
     if (nTextHeight)
@@ -1533,7 +1531,7 @@ void OutputDevice::DrawMultilineText(OutputDevice& rTargetDevice, const tools::R
                 // Create last line and shorten it
                 nFormatLines = nLines-1;
 
-                pLineInfo = aMultiLineInfo.GetLine(nFormatLines);
+                ImplTextLineInfo* pLineInfo = aMultiLineInfo.GetLine(nFormatLines);
                 aLastLine = convertLineEnd(aStr.copy(pLineInfo->GetIndex()), LINEEND_LF);
 
                 // Replace all LineFeeds with Spaces
@@ -1546,6 +1544,7 @@ void OutputDevice::DrawMultilineText(OutputDevice& rTargetDevice, const tools::R
                         aLastLineBuffer[i] = ' ';
                 }
 
+                // add ellipsis to string
                 aLastLine = aLastLineBuffer.makeStringAndClear();
                 aLastLine = ImplGetEllipsisString(rTargetDevice, aLastLine, nWidth, eStyle, _rLayout);
                 eStyle &= ~DrawTextFlags(DrawTextFlags::VCenter | DrawTextFlags::Bottom);
@@ -1588,7 +1587,7 @@ void OutputDevice::DrawMultilineText(OutputDevice& rTargetDevice, const tools::R
         // Output all lines except for the last one
         for (sal_Int32 i = 0; i < nFormatLines; i++)
         {
-            pLineInfo = aMultiLineInfo.GetLine(i);
+            ImplTextLineInfo* pLineInfo = aMultiLineInfo.GetLine(i);
 
             if (eStyle & DrawTextFlags::Right)
                 aPos.AdjustX(nWidth-pLineInfo->GetWidth());
