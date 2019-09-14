@@ -314,126 +314,130 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
         ImplDrawEmphasisMarks( rSalLayout );
 }
 
-void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
+void OutputDevice::ImplDrawReliefText(SalLayout& rSalLayout)
 {
     Color       aOldColor           = GetTextColor();
     Color       aOldTextLineColor   = GetTextLineColor();
     Color       aOldOverlineColor   = GetOverlineColor();
     FontRelief  eRelief             = maFont.GetRelief();
 
-    Point aOrigPos = rSalLayout.DrawBase();
-    if ( eRelief != FontRelief::NONE )
+    Color   aReliefColor( COL_LIGHTGRAY );
+    Color   aTextColor( aOldColor );
+
+    Color   aTextLineColor( aOldTextLineColor );
+    Color   aOverlineColor( aOldOverlineColor );
+
+    // we don't have an automatic color, so black is always drawn on white
+    if ( aTextColor == COL_BLACK )
+        aTextColor = COL_WHITE;
+    if ( aTextLineColor == COL_BLACK )
+        aTextLineColor = COL_WHITE;
+    if ( aOverlineColor == COL_BLACK )
+        aOverlineColor = COL_WHITE;
+
+    // relief-color is black for white text, in all other cases
+    // we set this to LightGray
+    if ( aTextColor == COL_WHITE )
+        aReliefColor = COL_BLACK;
+    SetTextLineColor( aReliefColor );
+    SetOverlineColor( aReliefColor );
+    SetTextColor( aReliefColor );
+    ImplInitTextColor();
+
+    // calculate offset - for high resolution printers the offset
+    // should be greater so that the effect is visible
+    long nOff = 1;
+    nOff += mnDPIX/300;
+
+    if ( eRelief == FontRelief::Engraved )
+        nOff = -nOff;
+    rSalLayout.DrawOffset() += Point( nOff, nOff);
+    ImplDrawTextDirect( rSalLayout, mbTextLines );
+    rSalLayout.DrawOffset() -= Point( nOff, nOff);
+
+    SetTextLineColor( aTextLineColor );
+    SetOverlineColor( aOverlineColor );
+    SetTextColor( aTextColor );
+    ImplInitTextColor();
+    ImplDrawTextDirect( rSalLayout, mbTextLines );
+
+    SetTextLineColor( aOldTextLineColor );
+    SetOverlineColor( aOldOverlineColor );
+
+    if ( aTextColor != aOldColor )
     {
-        Color   aReliefColor( COL_LIGHTGRAY );
-        Color   aTextColor( aOldColor );
-
-        Color   aTextLineColor( aOldTextLineColor );
-        Color   aOverlineColor( aOldOverlineColor );
-
-        // we don't have an automatic color, so black is always drawn on white
-        if ( aTextColor == COL_BLACK )
-            aTextColor = COL_WHITE;
-        if ( aTextLineColor == COL_BLACK )
-            aTextLineColor = COL_WHITE;
-        if ( aOverlineColor == COL_BLACK )
-            aOverlineColor = COL_WHITE;
-
-        // relief-color is black for white text, in all other cases
-        // we set this to LightGray
-        if ( aTextColor == COL_WHITE )
-            aReliefColor = COL_BLACK;
-        SetTextLineColor( aReliefColor );
-        SetOverlineColor( aReliefColor );
-        SetTextColor( aReliefColor );
+        SetTextColor( aOldColor );
         ImplInitTextColor();
-
-        // calculate offset - for high resolution printers the offset
-        // should be greater so that the effect is visible
-        long nOff = 1;
-        nOff += mnDPIX/300;
-
-        if ( eRelief == FontRelief::Engraved )
-            nOff = -nOff;
-        rSalLayout.DrawOffset() += Point( nOff, nOff);
-        ImplDrawTextDirect( rSalLayout, mbTextLines );
-        rSalLayout.DrawOffset() -= Point( nOff, nOff);
-
-        SetTextLineColor( aTextLineColor );
-        SetOverlineColor( aOverlineColor );
-        SetTextColor( aTextColor );
-        ImplInitTextColor();
-        ImplDrawTextDirect( rSalLayout, mbTextLines );
-
-        SetTextLineColor( aOldTextLineColor );
-        SetOverlineColor( aOldOverlineColor );
-
-        if ( aTextColor != aOldColor )
-        {
-            SetTextColor( aOldColor );
-            ImplInitTextColor();
-        }
-    }
-    else
-    {
-        if ( maFont.IsShadow() )
-        {
-            long nOff = 1 + ((mpFontInstance->mnLineHeight-24)/24);
-            if ( maFont.IsOutline() )
-                nOff++;
-            SetTextLineColor();
-            SetOverlineColor();
-            if ( (GetTextColor() == COL_BLACK)
-            ||   (GetTextColor().GetLuminance() < 8) )
-                SetTextColor( COL_LIGHTGRAY );
-            else
-                SetTextColor( COL_BLACK );
-            ImplInitTextColor();
-            rSalLayout.DrawBase() += Point( nOff, nOff );
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() -= Point( nOff, nOff );
-            SetTextColor( aOldColor );
-            SetTextLineColor( aOldTextLineColor );
-            SetOverlineColor( aOldOverlineColor );
-            ImplInitTextColor();
-
-            if ( !maFont.IsOutline() )
-                ImplDrawTextDirect( rSalLayout, mbTextLines );
-        }
-
-        if ( maFont.IsOutline() )
-        {
-            rSalLayout.DrawBase() = aOrigPos + Point(-1,-1);
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + Point(+1,+1);
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + Point(-1,+0);
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + Point(-1,+1);
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + Point(+0,+1);
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + Point(+0,-1);
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + Point(+1,-1);
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + Point(+1,+0);
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos;
-
-            SetTextColor( COL_WHITE );
-            SetTextLineColor( COL_WHITE );
-            SetOverlineColor( COL_WHITE );
-            ImplInitTextColor();
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
-            SetTextColor( aOldColor );
-            SetTextLineColor( aOldTextLineColor );
-            SetOverlineColor( aOldOverlineColor );
-            ImplInitTextColor();
-        }
     }
 }
 
-void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
+void OutputDevice::ImplDrawShadowedText(SalLayout& rSalLayout)
+{
+    Color       aOldColor           = GetTextColor();
+    Color       aOldTextLineColor   = GetTextLineColor();
+    Color       aOldOverlineColor   = GetOverlineColor();
+
+    long nOff = 1 + ((mpFontInstance->mnLineHeight-24)/24);
+    if ( maFont.IsOutline() )
+        nOff++;
+    SetTextLineColor();
+    SetOverlineColor();
+    if ( (GetTextColor() == COL_BLACK)
+    ||   (GetTextColor().GetLuminance() < 8) )
+        SetTextColor( COL_LIGHTGRAY );
+    else
+        SetTextColor( COL_BLACK );
+    ImplInitTextColor();
+    rSalLayout.DrawBase() += Point( nOff, nOff );
+    ImplDrawTextDirect( rSalLayout, mbTextLines );
+    rSalLayout.DrawBase() -= Point( nOff, nOff );
+    SetTextColor( aOldColor );
+    SetTextLineColor( aOldTextLineColor );
+    SetOverlineColor( aOldOverlineColor );
+    ImplInitTextColor();
+
+    if ( !maFont.IsOutline() )
+        ImplDrawTextDirect( rSalLayout, mbTextLines );
+}
+
+void OutputDevice::ImplDrawOutlinedText(SalLayout& rSalLayout)
+{
+    Color       aOldColor           = GetTextColor();
+    Color       aOldTextLineColor   = GetTextLineColor();
+    Color       aOldOverlineColor   = GetOverlineColor();
+
+    Point aOrigPos = rSalLayout.DrawBase();
+
+    rSalLayout.DrawBase() = aOrigPos + Point(-1,-1);
+    ImplDrawTextDirect( rSalLayout, mbTextLines );
+    rSalLayout.DrawBase() = aOrigPos + Point(+1,+1);
+    ImplDrawTextDirect( rSalLayout, mbTextLines );
+    rSalLayout.DrawBase() = aOrigPos + Point(-1,+0);
+    ImplDrawTextDirect( rSalLayout, mbTextLines );
+    rSalLayout.DrawBase() = aOrigPos + Point(-1,+1);
+    ImplDrawTextDirect( rSalLayout, mbTextLines );
+    rSalLayout.DrawBase() = aOrigPos + Point(+0,+1);
+    ImplDrawTextDirect( rSalLayout, mbTextLines );
+    rSalLayout.DrawBase() = aOrigPos + Point(+0,-1);
+    ImplDrawTextDirect( rSalLayout, mbTextLines );
+    rSalLayout.DrawBase() = aOrigPos + Point(+1,-1);
+    ImplDrawTextDirect( rSalLayout, mbTextLines );
+    rSalLayout.DrawBase() = aOrigPos + Point(+1,+0);
+    ImplDrawTextDirect( rSalLayout, mbTextLines );
+    rSalLayout.DrawBase() = aOrigPos;
+
+    SetTextColor( COL_WHITE );
+    SetTextLineColor( COL_WHITE );
+    SetOverlineColor( COL_WHITE );
+    ImplInitTextColor();
+    ImplDrawTextDirect( rSalLayout, mbTextLines );
+    SetTextColor( aOldColor );
+    SetTextLineColor( aOldTextLineColor );
+    SetOverlineColor( aOldOverlineColor );
+    ImplInitTextColor();
+}
+
+void OutputDevice::ImplDrawText2( SalLayout& rSalLayout )
 {
 
     if( mbInitClipRegion )
@@ -448,10 +452,25 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
     if( IsTextFillColor() )
         ImplDrawTextBackground( rSalLayout );
 
-    if( mbTextSpecial )
-        ImplDrawSpecialText( rSalLayout );
+    if (maFont.IsShadow() || maFont.IsOutline() || (maFont.GetRelief() != FontRelief::NONE))
+    {
+        if ( maFont.GetRelief() != FontRelief::NONE )
+        {
+            ImplDrawReliefText(rSalLayout);
+        }
+        else
+        {
+            if ( maFont.IsShadow() )
+                ImplDrawShadowedText(rSalLayout);
+
+            if ( maFont.IsOutline() )
+                ImplDrawOutlinedText(rSalLayout);
+        }
+    }
     else
+    {
         ImplDrawTextDirect( rSalLayout, mbTextLines );
+    }
 }
 
 long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
@@ -869,7 +888,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, nullptr, SalLayoutFlags::NONE, nullptr, pLayoutCache);
     if(pSalLayout)
     {
-        ImplDrawText( *pSalLayout );
+        ImplDrawText2(*pSalLayout);
     }
 
     if( mpAlphaVDev )
@@ -939,7 +958,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry, flags, nullptr, pSalLayoutCache);
     if( pSalLayout )
     {
-        ImplDrawText( *pSalLayout );
+        ImplDrawText2( *pSalLayout );
     }
 
     if( mpAlphaVDev )
@@ -1130,7 +1149,7 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, nWidth);
     if( pSalLayout )
     {
-        ImplDrawText( *pSalLayout );
+        ImplDrawText2( *pSalLayout );
     }
 
     if( mpAlphaVDev )

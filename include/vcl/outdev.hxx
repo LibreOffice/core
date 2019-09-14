@@ -392,7 +392,6 @@ private:
     mutable bool                    mbClipRegionSet : 1;
     mutable bool                    mbNewFont : 1;
     mutable bool                    mbTextLines : 1;
-    mutable bool                    mbTextSpecial : 1;
     mutable bool                    mbRefPoint : 1;
     mutable bool                    mbEnableRTL : 1;
 
@@ -895,7 +894,7 @@ public:
                                               const OUString& rOrigStr, DrawTextFlags nStyle,
                                               MetricVector* pVector, OUString* pDisplayText, vcl::ITextLayout& _rLayout );
 
-    void                        ImplDrawText( SalLayout& );
+    void                        ImplDrawText2( SalLayout& );
 
     void                        ImplDrawTextBackground( const SalLayout& );
 
@@ -1108,7 +1107,10 @@ private:
     SAL_DLLPRIVATE void         ImplInitTextColor();
 
     SAL_DLLPRIVATE void         ImplDrawTextDirect( SalLayout&, bool bTextLines);
-    SAL_DLLPRIVATE void         ImplDrawSpecialText( SalLayout& );
+    SAL_DLLPRIVATE void         ImplDrawReliefText(SalLayout& rSalLayout);
+    SAL_DLLPRIVATE void         ImplDrawShadowedText(SalLayout& rSalLayout);
+    SAL_DLLPRIVATE void         ImplDrawOutlinedText(SalLayout& rSalLayout);
+
     SAL_DLLPRIVATE void         ImplDrawTextRect( long nBaseX, long nBaseY, long nX, long nY, long nWidth, long nHeight );
 
     SAL_DLLPRIVATE static void  ImplDrawWavePixel( long nOriginX, long nOriginY, long nCurX, long nCurY, short nOrientation, SalGraphics* pGraphics, OutputDevice const * pOutDev,

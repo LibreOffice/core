@@ -1107,9 +1107,6 @@ bool OutputDevice::ImplNewFont() const
     mbTextLines     = ((maFont.GetUnderline() != LINESTYLE_NONE) && (maFont.GetUnderline() != LINESTYLE_DONTKNOW)) ||
                       ((maFont.GetOverline()  != LINESTYLE_NONE) && (maFont.GetOverline()  != LINESTYLE_DONTKNOW)) ||
                       ((maFont.GetStrikeout() != STRIKEOUT_NONE) && (maFont.GetStrikeout() != STRIKEOUT_DONTKNOW));
-    mbTextSpecial   = maFont.IsShadow() || maFont.IsOutline() ||
-                      (maFont.GetRelief() != FontRelief::NONE);
-
 
     bool bRet = true;
 
