@@ -262,7 +262,7 @@ static std::vector<OUString> lcl_convertSeparated(const OUString& rString, sal_U
 static void lcl_convertRectangle(const OUString& rString, ::tools::Rectangle& rRectangle)
 {
     uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(rString);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
+    CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
     rRectangle.setX(aSeq[0].toInt32());
     rRectangle.setY(aSeq[1].toInt32());
     rRectangle.setWidth(aSeq[2].toInt32());

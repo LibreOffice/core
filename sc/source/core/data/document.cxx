@@ -98,6 +98,7 @@
 #include <vcl/uitest/eventdescription.hxx>
 
 #include <mtvelements.hxx>
+#include <sfx2/lokhelper.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -586,7 +587,8 @@ bool ScDocument::InsertTab(
             SfxViewShell* pViewShell = SfxViewShell::GetFirst();
             while (pViewShell)
             {
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(pViewShell->GetCurrentDocument());
+                SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pModel);
                 pViewShell = SfxViewShell::GetNext(*pViewShell);
             }
         }
@@ -756,7 +758,8 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
                     while (pViewShell)
                     {
-                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                        ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(pViewShell->GetCurrentDocument());
+                        SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pModel);
                         pViewShell = SfxViewShell::GetNext(*pViewShell);
                     }
                 }
@@ -852,7 +855,8 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
                     while (pViewShell)
                     {
-                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                        ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(pViewShell->GetCurrentDocument());
+                        SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pModel);
                         pViewShell = SfxViewShell::GetNext(*pViewShell);
                     }
                 }
@@ -903,7 +907,8 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDoc
                     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
                     while (pViewShell)
                     {
-                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                        ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(pViewShell->GetCurrentDocument());
+                        SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pModel);
                         pViewShell = SfxViewShell::GetNext(*pViewShell);
                     }
                 }
