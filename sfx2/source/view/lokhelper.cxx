@@ -222,6 +222,26 @@ void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const OStri
     pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aBuf.makeStringAndClear().getStr());
 }
 
+void SfxLokHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    if (!pDoc)
+        return;
+
+    if (bInvalidateAll)
+    {
+        for (int i = 0; i < pDoc->getParts(); ++i)
+        {
+            tools::Rectangle aRectangle(0, 0, 1000000000, 1000000000);
+            OString sPayload = aRectangle.toString() + OString(", ") + OString::number(i);
+            pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sPayload.getStr());
+        }
+    }
+    pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, rPayload.getStr());
+}
+
 void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisView, const OString& rRectangle)
 {
     OString sPayload;

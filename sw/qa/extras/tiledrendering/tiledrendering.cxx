@@ -264,7 +264,7 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
             if (OString("EMPTY") == pPayload)
                 return;
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
+            CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
             m_aInvalidation.setX(aSeq[0].toInt32());
             m_aInvalidation.setY(aSeq[1].toInt32());
             m_aInvalidation.setWidth(aSeq[2].toInt32());
