@@ -38,6 +38,8 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
+#include <com/sun/star/sdbc/XRowUpdate.hpp>
+#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 
 namespace connectivity
 {
@@ -48,6 +50,8 @@ namespace connectivity
         */
         typedef ::cppu::WeakComponentImplHelper<       css::sdbc::XResultSet,
                                                        css::sdbc::XRow,
+                                                       css::sdbc::XResultSetUpdate,
+                                                       css::sdbc::XRowUpdate,
                                                        css::sdbc::XResultSetMetaDataSupplier,
                                                        css::util::XCancellable,
                                                        css::sdbc::XCloseable,
@@ -174,6 +178,43 @@ namespace connectivity
             virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL getBlob( sal_Int32 columnIndex ) override;
             virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL getClob( sal_Int32 columnIndex ) override;
             virtual css::uno::Reference< css::sdbc::XArray > SAL_CALL getArray( sal_Int32 columnIndex ) override;
+
+            // XResultSetUpdate
+            virtual void SAL_CALL insertRow() override;
+            virtual void SAL_CALL updateRow() override;
+            virtual void SAL_CALL deleteRow() override;
+            virtual void SAL_CALL cancelRowUpdates() override;
+            virtual void SAL_CALL moveToInsertRow() override;
+            virtual void SAL_CALL moveToCurrentRow() override;
+
+            // XRowUpdate
+            void openBlobForWriting(isc_blob_handle& rBlobHandle, ISC_QUAD& rBlobId);
+            void closeBlobAfterWriting(isc_blob_handle& rBlobHandle);
+            void updateParameterNull(sal_Int32 nParameterIndex, bool bSetNull);
+            void updateClob( sal_Int32 column, const OUString& rStr );
+            template <typename T> void updateValue(sal_Int32 nIndex, const T& nValue, ISC_SHORT nType);
+            virtual void SAL_CALL updateNull(sal_Int32 column) override;
+            virtual void SAL_CALL updateBoolean(sal_Int32 column, sal_Bool x) override;
+            virtual void SAL_CALL updateByte(sal_Int32 column, sal_Int8 x) override;
+            virtual void SAL_CALL updateShort(sal_Int32 column, sal_Int16 x) override;
+            virtual void SAL_CALL updateInt(sal_Int32 column, sal_Int32 x) override;
+            virtual void SAL_CALL updateLong(sal_Int32 column, sal_Int64 x) override;
+            virtual void SAL_CALL updateFloat(sal_Int32 column, float x) override;
+            virtual void SAL_CALL updateDouble(sal_Int32 column, double x) override;
+            virtual void SAL_CALL updateString(sal_Int32 column, const OUString& x) override;
+            virtual void SAL_CALL updateBytes(sal_Int32 column, const css::uno::Sequence<sal_Int8>& x) override;
+            virtual void SAL_CALL updateDate(sal_Int32 column, const css::util::Date& x) override;
+            virtual void SAL_CALL updateTime(sal_Int32 column, const css::util::Time& x) override;
+            virtual void SAL_CALL updateTimestamp(sal_Int32 column, const css::util::DateTime& x) override;
+            virtual void SAL_CALL updateBinaryStream(sal_Int32 column,
+                                     const css::uno::Reference<css::io::XInputStream>& x,
+                                     sal_Int32 length) override;
+            virtual void SAL_CALL updateCharacterStream(sal_Int32 column,
+                                        const css::uno::Reference<css::io::XInputStream>& x,
+                                        sal_Int32 length) override;
+            virtual void SAL_CALL updateObject(sal_Int32 column, const css::uno::Any& x) override;
+            virtual void SAL_CALL updateNumericObject(sal_Int32 column, const css::uno::Any& x, sal_Int32 scale) override;
+
             // XResultSetMetaDataSupplier
             virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) override;
             // XCancellable
