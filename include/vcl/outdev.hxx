@@ -1093,7 +1093,13 @@ protected:
     SAL_DLLPRIVATE void         ImplInitAboveTextLineSize();
     static
     SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const OUString& rStr, DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout );
+
 private:
+    static void                 DrawMultilineText(OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
+                                      const OUString& rOrigStr, DrawTextFlags eStyle,
+                                      MetricVector* pVector, OUString* pDisplayText,
+                                      vcl::ITextLayout& _rLayout, sal_Int32 nMnemonicPos);
+
     SAL_DLLPRIVATE void         ImplInitTextColor();
 
     SAL_DLLPRIVATE void         ImplDrawTextDirect( SalLayout&, bool bTextLines);
