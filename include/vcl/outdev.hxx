@@ -1100,6 +1100,11 @@ private:
                                       MetricVector* pVector, OUString* pDisplayText,
                                       vcl::ITextLayout& _rLayout, sal_Int32 nMnemonicPos);
 
+    static void                 DrawSinglelineText(OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
+                                      const OUString& rOrigStr, DrawTextFlags eStyle,
+                                      MetricVector* pVector, OUString* pDisplayText,
+                                      vcl::ITextLayout& _rLayout, sal_Int32 nMnemonicPos);
+
     SAL_DLLPRIVATE void         ImplInitTextColor();
 
     SAL_DLLPRIVATE void         ImplDrawTextDirect( SalLayout&, bool bTextLines);

@@ -1638,6 +1638,94 @@ void OutputDevice::DrawMultilineText(OutputDevice& rTargetDevice, const tools::R
     }
 }
 
+void OutputDevice::DrawSinglelineText(OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
+                              const OUString& rOrigStr, DrawTextFlags eStyle,
+                              MetricVector* pVector, OUString* pDisplayText,
+                              vcl::ITextLayout& _rLayout, sal_Int32 nMnemonicPos)
+{
+    OUString aStr = rOrigStr;
+
+    long nTextWidth = _rLayout.GetTextWidth( aStr, 0, -1 );
+    long nTextHeight = rTargetDevice.GetTextHeight();
+    long nWidth = rRect.GetWidth();
+    long nHeight = rRect.GetHeight();
+
+    // Clip text if needed
+    if ( nTextWidth > nWidth )
+    {
+        if ( eStyle & TEXT_DRAW_ELLIPSIS )
+        {
+            aStr = ImplGetEllipsisString( rTargetDevice, aStr, nWidth, eStyle, _rLayout );
+            eStyle &= ~DrawTextFlags(DrawTextFlags::Center | DrawTextFlags::Right);
+            eStyle |= DrawTextFlags::Left;
+            nTextWidth = _rLayout.GetTextWidth( aStr, 0, aStr.getLength() );
+        }
+    }
+    else
+    {
+        if ( nTextHeight <= nHeight )
+            eStyle &= ~DrawTextFlags::Clip;
+    }
+
+    Point aPos = rRect.TopLeft();
+
+    // horizontal text alignment
+    if ( eStyle & DrawTextFlags::Right )
+        aPos.AdjustX(nWidth-nTextWidth );
+    else if ( eStyle & DrawTextFlags::Center )
+        aPos.AdjustX((nWidth-nTextWidth)/2 );
+
+    // vertical font alignment
+    TextAlign eAlign = rTargetDevice.GetTextAlign();
+
+    if ( eAlign == ALIGN_BOTTOM )
+        aPos.AdjustY(nTextHeight );
+    else if ( eAlign == ALIGN_BASELINE )
+        aPos.AdjustY(rTargetDevice.GetFontMetric().GetAscent() );
+
+    if ( eStyle & DrawTextFlags::Bottom )
+        aPos.AdjustY(nHeight-nTextHeight );
+    else if ( eStyle & DrawTextFlags::VCenter )
+        aPos.AdjustY((nHeight-nTextHeight)/2 );
+
+    long nMnemonicX = 0;
+    long nMnemonicY = 0;
+    DeviceCoordinate nMnemonicWidth = 0;
+
+    if ( nMnemonicPos != -1 )
+    {
+        std::unique_ptr<long[]> const pCaretXArray(new long[2 * aStr.getLength()]);
+        /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray.get(), 0, aStr.getLength() );
+        long lc_x1 = pCaretXArray[2*nMnemonicPos];
+        long lc_x2 = pCaretXArray[2*nMnemonicPos+1];
+        nMnemonicWidth = rTargetDevice.LogicWidthToDeviceCoordinate( std::abs(lc_x1 - lc_x2) );
+
+        Point aTempPos = rTargetDevice.LogicToPixel( aPos );
+        nMnemonicX = rTargetDevice.GetOutOffXPixel() + aTempPos.X() + rTargetDevice.ImplLogicWidthToDevicePixel( std::min(lc_x1, lc_x2) );
+        nMnemonicY = rTargetDevice.GetOutOffYPixel() + aTempPos.Y() + rTargetDevice.ImplLogicWidthToDevicePixel( rTargetDevice.GetFontMetric().GetAscent() );
+    }
+
+    if ( eStyle & DrawTextFlags::Clip )
+    {
+        rTargetDevice.Push( PushFlags::CLIPREGION );
+        rTargetDevice.IntersectClipRegion( rRect );
+
+        _rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
+
+        if (CanDrawMnemonics(rTargetDevice, pVector) && nMnemonicPos != -1)
+            rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
+
+        rTargetDevice.Pop();
+    }
+    else
+    {
+        _rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
+
+        if (CanDrawMnemonics(rTargetDevice, pVector) && nMnemonicPos != -1)
+            rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
+    }
+}
+
 void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
                                  const OUString& rOrigStr, DrawTextFlags nStyle,
                                  MetricVector* pVector, OUString* pDisplayText,
@@ -1666,13 +1754,9 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
     if (!CanDrawClippedText(nWidth, nHeight, nStyle))
         return;
 
-    Point aPos = rRect.TopLeft();
-
-    long nTextHeight = rTargetDevice.GetTextHeight();
-    TextAlign eAlign = rTargetDevice.GetTextAlign();
     sal_Int32 nMnemonicPos = -1;
-
     OUString aStr = rOrigStr;
+
     if (nStyle & DrawTextFlags::Mnemonic)
         aStr = GetNonMnemonicString(aStr, nMnemonicPos);
 
@@ -1680,75 +1764,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
     if (nStyle & DrawTextFlags::MultiLine)
         DrawMultilineText(rTargetDevice, rRect, aStr, nStyle, pVector, pDisplayText, _rLayout, nMnemonicPos);
     else
-    {
-        long nTextWidth = _rLayout.GetTextWidth( aStr, 0, -1 );
-
-        // Clip text if needed
-        if ( nTextWidth > nWidth )
-        {
-            if ( nStyle & TEXT_DRAW_ELLIPSIS )
-            {
-                aStr = ImplGetEllipsisString( rTargetDevice, aStr, nWidth, nStyle, _rLayout );
-                nStyle &= ~DrawTextFlags(DrawTextFlags::Center | DrawTextFlags::Right);
-                nStyle |= DrawTextFlags::Left;
-                nTextWidth = _rLayout.GetTextWidth( aStr, 0, aStr.getLength() );
-            }
-        }
-        else
-        {
-            if ( nTextHeight <= nHeight )
-                nStyle &= ~DrawTextFlags::Clip;
-        }
-
-        // horizontal text alignment
-        if ( nStyle & DrawTextFlags::Right )
-            aPos.AdjustX(nWidth-nTextWidth );
-        else if ( nStyle & DrawTextFlags::Center )
-            aPos.AdjustX((nWidth-nTextWidth)/2 );
-
-        // vertical font alignment
-        if ( eAlign == ALIGN_BOTTOM )
-            aPos.AdjustY(nTextHeight );
-        else if ( eAlign == ALIGN_BASELINE )
-            aPos.AdjustY(rTargetDevice.GetFontMetric().GetAscent() );
-
-        if ( nStyle & DrawTextFlags::Bottom )
-            aPos.AdjustY(nHeight-nTextHeight );
-        else if ( nStyle & DrawTextFlags::VCenter )
-            aPos.AdjustY((nHeight-nTextHeight)/2 );
-
-        long nMnemonicX = 0;
-        long nMnemonicY = 0;
-        DeviceCoordinate nMnemonicWidth = 0;
-        if ( nMnemonicPos != -1 )
-        {
-            std::unique_ptr<long[]> const pCaretXArray(new long[2 * aStr.getLength()]);
-            /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray.get(), 0, aStr.getLength() );
-            long lc_x1 = pCaretXArray[2*nMnemonicPos];
-            long lc_x2 = pCaretXArray[2*nMnemonicPos+1];
-            nMnemonicWidth = rTargetDevice.LogicWidthToDeviceCoordinate( std::abs(lc_x1 - lc_x2) );
-
-            Point aTempPos = rTargetDevice.LogicToPixel( aPos );
-            nMnemonicX = rTargetDevice.GetOutOffXPixel() + aTempPos.X() + rTargetDevice.ImplLogicWidthToDevicePixel( std::min(lc_x1, lc_x2) );
-            nMnemonicY = rTargetDevice.GetOutOffYPixel() + aTempPos.Y() + rTargetDevice.ImplLogicWidthToDevicePixel( rTargetDevice.GetFontMetric().GetAscent() );
-        }
-
-        if ( nStyle & DrawTextFlags::Clip )
-        {
-            rTargetDevice.Push( PushFlags::CLIPREGION );
-            rTargetDevice.IntersectClipRegion( rRect );
-            _rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
-            if (CanDrawMnemonics(rTargetDevice, pVector) && nMnemonicPos != -1)
-                rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
-            rTargetDevice.Pop();
-        }
-        else
-        {
-            _rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
-            if (CanDrawMnemonics(rTargetDevice, pVector) && nMnemonicPos != -1)
-                rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
-        }
-    }
+        DrawSinglelineText(rTargetDevice, rRect, aStr, nStyle, pVector, pDisplayText, _rLayout, nMnemonicPos);
 
     if ( nStyle & DrawTextFlags::Disable && !pVector )
     {
