@@ -518,7 +518,7 @@ void ORptExport::collectStyleNames(sal_Int32 _nFamily, const ::std::vector< sal_
         // note: there cannot be 0-height rows, because a call to std::unique has removed them
         // it cannot be predicted that the size of _aSizeAutoGrow has any relation to the size of
         // _aSize, because of the same std::unique operation (and _aSizeAutoGrow wasn't even the same
-        // size before that), so the matching elemenent in _aSizeAutoGrow has to be found by lookup.
+        // size before that), so the matching element in _aSizeAutoGrow has to be found by lookup.
         ::std::vector<sal_Int32>::const_iterator aAutoGrow = ::std::find(_aSizeAutoGrow.begin(), _aSizeAutoGrow.end(), *aIter2);
         bool bAutoGrow = aAutoGrow != _aSizeAutoGrow.end();
         // the mnIndex is into the array returned by OXMLHelper::GetRowStyleProps()
@@ -593,7 +593,7 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
 
     // note: the aRowPos contains top and bottom position of every report control; we now compute the
     // top of every row in the resulting table, by sorting and eliminating unnecessary duplicate
-    // positions. (the same for the colums in the preceding lines.)
+    // positions. (the same for the columns in the preceding lines.)
     ::std::sort(aRowPos.begin(),aRowPos.end(),::std::less<sal_Int32>());
     aRowPos.erase(::std::unique(aRowPos.begin(),aRowPos.end()),aRowPos.end());
 
