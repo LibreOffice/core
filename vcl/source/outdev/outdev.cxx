@@ -107,7 +107,6 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mbInitClipRegion                = true;
     mbClipRegionSet                 = false;
     mbNewFont                       = true;
-    mbTextLines                     = false;
     mbRefPoint                      = false;
     mbEnableRTL                     = false;    // mirroring must be explicitly allowed (typically for windows only)
 

@@ -144,6 +144,13 @@ bool Font::IsSymbolFont() const
     return mpImplFont->IsSymbolFont();
 }
 
+bool Font::HasLines() const
+{
+    return ((GetUnderline() != LINESTYLE_NONE) && (GetUnderline() != LINESTYLE_DONTKNOW)) ||
+            ((GetOverline() != LINESTYLE_NONE) && (GetOverline() != LINESTYLE_DONTKNOW)) ||
+            ((GetStrikeout() != STRIKEOUT_NONE) && (GetStrikeout() != STRIKEOUT_DONTKNOW));
+}
+
 void Font::SetSymbolFlag( bool bSymbol )
 {
     mpImplFont->SetSymbolFlag( bSymbol );

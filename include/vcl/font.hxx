@@ -146,6 +146,8 @@ public:
     void                SetWordLineMode( bool bWordLine );
     bool                IsWordLineMode() const;
 
+    bool                HasLines() const;
+
     void                Merge( const Font& rFont );
     void                GetFontAttributes( FontAttributes& rAttrs ) const;
 
