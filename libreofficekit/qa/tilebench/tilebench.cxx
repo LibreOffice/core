@@ -35,6 +35,7 @@ static int help( const char *error = nullptr )
     fprintf( stderr, "\trenders a selection of small tiles from the document, checksums them and times the process based on options:\n" );
     fprintf( stderr, "\t--tile\t[max parts|-1] [max tiles|-1]\n" );
     fprintf( stderr, "\t--dialog\t<.uno:Command>\n" );
+    fprintf( stderr, "\t--join\trun tile joining tests\n" );
     return 1;
 }
 
@@ -60,12 +61,22 @@ struct TimeRecord {
 };
 static std::vector< TimeRecord > aTimes;
 
-/// Dump an array of RGBA or BGRA to an RGB PPM file.
-static void dumpTile(const int nWidth, const int nHeight, const int mode, const unsigned char* pBufferU)
+/// Dump an array (or sub-array) of RGBA or BGRA to an RGB PPM file.
+static void dumpTile(const char *pNameStem,
+                     const int nWidth, const int nHeight,
+                     const int mode, const unsigned char* pBufferU,
+                     const int nOffX = 0, const int nOffY = 0,
+                     int nTotalWidth = -1)
 {
+    if (nTotalWidth < 0)
+        nTotalWidth = nWidth;
+
     auto pBuffer = reinterpret_cast<const char *>(pBufferU);
+    std::string aName = "/tmp/dump_tile";
+    aName += pNameStem;
+    aName += ".ppm";
 #ifndef IOS
-    std::ofstream ofs("/tmp/dump_tile.ppm");
+    std::ofstream ofs(aName);
 #else
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -79,9 +90,14 @@ static void dumpTile(const int nWidth, const int nHeight, const int mode, const 
         << nHeight << "\n"
         << 255 << "\n" ;
 
+    bool dumpText = false;
+
+    if (dumpText)
+        fprintf(stderr, "Stream %s - %dx%d:\n", pNameStem, nWidth, nHeight);
+
     for (int y = 0; y < nHeight; ++y)
     {
-        const char* row = pBuffer + y * nWidth * 4;
+        const char* row = pBuffer + (y + nOffY) * nTotalWidth * 4 + nOffX * 4;
         for (int x = 0; x < nWidth; ++x)
         {
             const char* pixel = row + x * 4;
@@ -108,13 +124,20 @@ static void dumpTile(const int nWidth, const int nHeight, const int mode, const 
 
                 ofs.write(buf, 3);
             }
+            if (dumpText)
+            {
+                int lowResI = (pixel[0] + pixel[1] + pixel[2])/(3*16);
+                fprintf(stderr,"%1x", lowResI);
+            }
         }
+        if (dumpText)
+            fprintf(stderr,"\n");
     }
     ofs.close();
 }
 
 static void testTile( Document *pDocument, int max_parts,
-               int max_tiles, bool dump )
+                      int max_tiles, bool dump )
 {
     const int mode = pDocument->getTileMode();
 
@@ -170,7 +193,7 @@ static void testTile( Document *pDocument, int max_parts,
                                  nWidth/2, 2000, 1000, 1000);
             aTimes.emplace_back();
             if (dump)
-                dumpTile(nTilePixelWidth, nTilePixelHeight, mode, pPixels);
+                dumpTile("tile", nTilePixelWidth, nTilePixelHeight, mode, pPixels);
         }
 
         { // 1:1
@@ -224,6 +247,114 @@ static void testTile( Document *pDocument, int max_parts,
     }
 }
 
+static bool subTileIdentical( const std::vector<unsigned char> &vBase,
+                              long nBaseRowStride,
+                              const std::vector<unsigned char> &vCompare,
+                              long nCompareRowStride,
+                              long nTilePixelHeight,
+                              long nPosX, long nPosY )
+{
+    for (long y = 0; y < nTilePixelHeight; ++y)
+    {
+        long nBaseOffset = nBaseRowStride * (y + nPosY) + nPosX * nCompareRowStride;
+        long nCompareOffset = nCompareRowStride * y;
+        for (long x = 0; x < nCompareRowStride; ++x)
+        {
+            if (vBase[nBaseOffset + x] != vCompare[nCompareOffset + x])
+            {
+                fprintf (stderr, "Mismatching pixel at %ld (bytes) into row %ld\n", x, y);
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+static bool testJoinsAt( Document *pDocument, long nX, long nY,
+                         long const nTilePixelSize,
+                         long const nTileTwipSize )
+{
+    const int mode = pDocument->getTileMode();
+
+    long const nTilePixelWidth = nTilePixelSize;
+    long const nTilePixelHeight = nTilePixelSize;
+    long const nTileTwipWidth = nTileTwipSize;
+    long const nTileTwipHeight = nTileTwipSize;
+
+    // Get a base image 4x the size
+    long initPosX = nX * nTileTwipWidth, initPosY = nY * nTileTwipHeight;
+    std::vector<unsigned char> vBase( nTilePixelWidth * nTilePixelHeight * 4 * 4 );
+
+    pDocument->paintTile( vBase.data(), nTilePixelWidth * 2, nTilePixelHeight * 2,
+                          initPosX, initPosY, nTileTwipWidth * 2, nTileTwipHeight * 2 );
+
+    const struct {
+        long X;
+        long Y;
+    } aCompare[] = {
+        { 0, 0 },
+        { 1, 0 },
+        { 0, 1 },
+        { 1, 1 }
+    };
+
+    // Compare each of the 4x tiles with a sub-tile of the larger image
+    for( auto &rPos : aCompare )
+    {
+        std::vector<unsigned char> vCompare( nTilePixelWidth * nTilePixelHeight * 4 );
+        pDocument->paintTile( vCompare.data(), nTilePixelWidth, nTilePixelHeight,
+                              initPosX + rPos.X * nTileTwipWidth,
+                              initPosY + rPos.Y * nTileTwipHeight,
+                              nTileTwipWidth, nTileTwipHeight );
+        if ( !subTileIdentical( vBase, nTilePixelWidth * 2 * 4,
+                                vCompare, nTilePixelWidth * 4,
+                                nTilePixelHeight,
+                                rPos.X, rPos.Y * nTilePixelHeight ) )
+        {
+            fprintf( stderr, "  sub-tile pixel mismatch at %ld, %ld at offset %ld, %ld (twips)\n",
+                     rPos.X, rPos.Y, initPosX, initPosY );
+            dumpTile("_base", nTilePixelWidth * 2, nTilePixelHeight * 2,
+                     mode, vBase.data());
+            dumpTile("_sub", nTilePixelWidth, nTilePixelHeight,
+                     mode, vBase.data(),
+                     rPos.X*nTilePixelWidth, rPos.Y*nTilePixelHeight,
+                     nTilePixelWidth * 2);
+            dumpTile("_compare", nTilePixelWidth, nTilePixelHeight,
+                     mode, vCompare.data());
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// Check that our tiles join nicely ...
+static void testJoin( Document *pDocument)
+{
+    // Ignore parts - just the first for now ...
+    long nWidth = 0, nHeight = 0;
+    pDocument->getDocumentSize(&nWidth, &nHeight);
+    fprintf (stderr, "Width is %ld, %ld (twips)\n", nWidth, nHeight);
+
+    // Use realistic dimensions, similar to the Online client.
+    long const nTilePixelSize = 256;
+    long const nTileTwipSize = 1852;
+
+    for( long y = 0; y < 5; ++y )
+    {
+        for( long x = 0; x < 5; ++x )
+        {
+            if ( !testJoinsAt( pDocument, x, y, nTilePixelSize, nTileTwipSize ) )
+            {
+                fprintf( stderr, "failed\n" );
+                return;
+            }
+        }
+    }
+
+    fprintf( stderr, "All joins compared correctly\n" );
+}
+
 static std::atomic<bool> bDialogRendered(false);
 static std::atomic<int> nDialogId(-1);
 
@@ -259,7 +390,7 @@ static void kitCallback(int nType, const char* pPayload, void* pData)
 
             aTimes.emplace_back("render dialog");
             pDocument->paintWindow(nDialogId, pBuffer, 0, 0, nWidth, nHeight);
-            dumpTile(nWidth, nHeight, pDocument->getTileMode(), pBuffer);
+            dumpTile("dialog", nWidth, nHeight, pDocument->getTileMode(), pBuffer);
             aTimes.emplace_back();
 
             delete[] pBuffer;
@@ -295,6 +426,11 @@ static void testDialog( Document *pDocument, const char *uno_cmd )
 static void documentCallback(const int type, const char* p, void*)
 {
     std::cerr << "Document callback " << type << ": " << (p ? p : "(null)") << "\n";
+}
+
+// Avoid excessive dbgutil churn.
+static void ignoreCallback(const int /*type*/, const char* /*p*/, void* /*data*/)
+{
 }
 
 int main( int argc, char* argv[] )
@@ -356,6 +492,7 @@ int main( int argc, char* argv[] )
         return 1;
     }
     aTimes.emplace_back();
+    pOffice->registerCallback(ignoreCallback, nullptr);
 
     Document *pDocument = nullptr;
 
@@ -377,6 +514,10 @@ int main( int argc, char* argv[] )
             const bool dump = true;
 
             testTile (pDocument, max_parts, max_tiles, dump);
+        }
+        else if (!strcmp(mode, "--join"))
+        {
+            testJoin (pDocument);
         }
         else if (!strcmp (mode, "--dialog"))
         {
