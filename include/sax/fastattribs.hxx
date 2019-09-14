@@ -78,6 +78,11 @@ public:
     virtual ~FastAttributeList() override;
 
     void clear();
+    void reserve( sal_Int32 nNumTokens )
+    {
+        maAttributeValues.reserve(nNumTokens+1);
+        maAttributeTokens.reserve(nNumTokens);
+    }
     void add( sal_Int32 nToken, const sal_Char* pValue );
     void add( sal_Int32 nToken, const sal_Char* pValue, size_t nValueLength );
     void add( sal_Int32 nToken, const OString& rValue );

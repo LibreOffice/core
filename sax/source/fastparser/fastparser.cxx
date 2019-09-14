@@ -1164,6 +1164,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
         if ( rEntity.mxTokenHandler.is() )
         {
             // #158414# second: fill attribute list with other attributes
+            rEvent.mxAttributes->reserve( numAttributes );
             for (int i = 0; i < numAttributes * 5; i += 5)
             {
                 // attributes[] is ( localname / prefix / nsURI / valueBegin / valueEnd )
