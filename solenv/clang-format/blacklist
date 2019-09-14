@@ -9973,7 +9973,6 @@ sc/qa/extras/macros-test.cxx
 sc/qa/extras/new_cond_format.cxx
 sc/qa/extras/recordchanges-test.cxx
 sc/qa/extras/regression-test.cxx
-sc/qa/extras/scannotationshapeobj.cxx
 sc/qa/extras/scannotationsobj.cxx
 sc/qa/extras/scarealinkobj.cxx
 sc/qa/extras/sccellcursorobj.cxx
