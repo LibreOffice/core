@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/progress.hxx>
 #include <svx/srchdlg.hxx>
@@ -74,6 +75,7 @@
 #include <wrtsh.hxx>
 #include <DocumentSettingManager.hxx>
 
+#include <unotxdoc.hxx>
 #include <view.hxx>
 #include <PostItMgr.hxx>
 #include <unotools/configmgr.hxx>
@@ -85,6 +87,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <prevwpage.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #if !HAVE_FEATURE_DESKTOP
 #include <vcl/sysdata.hxx>
@@ -1073,7 +1076,14 @@ void SwViewShell::SizeChgNotify()
                     std::stringstream ss;
                     ss << aDocSize.Width() + 2 * DOCUMENTBORDER << ", " << aDocSize.Height() + 2 * DOCUMENTBORDER;
                     OString sSize = ss.str().c_str();
-                    GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sSize.getStr());
+
+                    uno::Reference< css::lang::XUnoTunnel > xTunnel(GetSfxViewShell()->GetCurrentDocument(), uno::UNO_QUERY);
+                    if(xTunnel.is())
+                    {
+                        SwXTextDocument* pXDoc = reinterpret_cast< SwXTextDocument * >(
+                                sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(SwXTextDocument::getUnoTunnelId())));
+                        SfxLokHelper::notifyDocumentSizeChanged(GetSfxViewShell(), sSize, pXDoc);
+                    }
                 }
             }
         }
