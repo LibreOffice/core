@@ -2020,8 +2020,9 @@ public:
 
     virtual void append_page(const OString& rIdent, const OUString& rLabel) override
     {
-        sal_uInt16 nNewPageCount = m_xNotebook->GetPageCount() + 1;
-        sal_uInt16 nNewPageId = nNewPageCount;
+        sal_uInt16 nPageCount = m_xNotebook->GetPageCount();
+        sal_uInt16 nLastPageId = nPageCount ? m_xNotebook->GetPageId(nPageCount - 1) : 0;
+        sal_uInt16 nNewPageId = nLastPageId + 1;
         m_xNotebook->InsertPage(nNewPageId, rLabel);
         VclPtrInstance<TabPage> xPage(m_xNotebook);
         VclPtrInstance<VclGrid> xGrid(xPage);
