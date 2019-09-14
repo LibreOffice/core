@@ -394,7 +394,7 @@ namespace oglcanvas
 
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maFunction = std::bind(&lcl_drawLine,
-                                          _1, _2, _3, _4, _5,
+                                          std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
                                           aStartPoint, aEndPoint);
         }
     }
@@ -414,7 +414,7 @@ namespace oglcanvas
 
             // TODO(F2): subdivide&render whole curve
             rAct.maFunction = std::bind(&lcl_drawLine,
-                                            _1,_2,_3,_4,_5,
+                                            std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
                                             geometry::RealPoint2D(
                                                 aBezierSegment.Px,
                                                 aBezierSegment.Py),
@@ -567,10 +567,10 @@ namespace oglcanvas
                         pGradient->getValues() );
 
                     rAct.maFunction = std::bind(&lcl_fillGradientPolyPolygon,
-                                                    _1,_2,_3,_4,
+                                                    std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4,
                                                     rValues,
                                                     textures[0],
-                                                    _6);
+                                                    std::placeholders::_6);
                 }
                 else
                 {
@@ -610,14 +610,14 @@ namespace oglcanvas
                                 canvas::tools::getStdColorSpace()));
 
                         rAct.maFunction = std::bind(&lcl_fillTexturedPolyPolygon,
-                                                        _1,_2,_3,_4,
+                                                        std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4,
                                                         textures[0],
                                                         aSize,
                                                         aARGBBytes,
                                                         rtl_crc32(0,
                                                                   aARGBBytes.getConstArray(),
                                                                   aARGBBytes.getLength()),
-                                                        _6);
+                                                        std::placeholders::_6);
                     }
                     // TODO(F1): handle non-integer case
                 }
@@ -790,7 +790,7 @@ namespace oglcanvas
 
                 setupGraphicsState( rAct, viewState, renderState );
                 rAct.maFunction = std::bind(&lcl_drawOwnBitmap,
-                                                _1,_2,_3,_4,_5,
+                                                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
                                                 *pOwnBitmap);
             }
             else
@@ -819,7 +819,7 @@ namespace oglcanvas
 
                     setupGraphicsState( rAct, viewState, renderState );
                     rAct.maFunction = std::bind(&lcl_drawGenericBitmap,
-                                                    _1,_2,_3,_4,_5,
+                                                    std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
                                                     aSize, aARGBBytes,
                                                     rtl_crc32(0,
                                                               aARGBBytes.getConstArray(),
