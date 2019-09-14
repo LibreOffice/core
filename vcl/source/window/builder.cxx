@@ -35,7 +35,6 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/prgsbar.hxx>
-#include <vcl/roadmapwizard.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/svtabbx.hxx>
@@ -49,6 +48,7 @@
 #include <vcl/slider.hxx>
 #include <vcl/listctrl.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/wizdlg.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <svdata.hxx>
 #include <bitmaps.hlst>

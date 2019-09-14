@@ -19,7 +19,7 @@
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/roadmapwizard.hxx>
+#include <vcl/wizdlg.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <strings.hrc>

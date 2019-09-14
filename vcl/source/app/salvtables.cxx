@@ -49,7 +49,7 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/prgsbar.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <vcl/roadmapwizard.hxx>
+#include <vcl/wizdlg.hxx>
 #include <vcl/slider.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svimpbox.hxx>

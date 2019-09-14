@@ -18,7 +18,7 @@
  */
 
 
-#include <vcl/roadmapwizard.hxx>
+#include <vcl/wizdlg.hxx>
 #include <vcl/toolkit/roadmap.hxx>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
