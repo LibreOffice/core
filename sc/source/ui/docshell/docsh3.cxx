@@ -68,6 +68,7 @@
 
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <sfx2/lokhelper.hxx>
 
 //          Redraw - Notifications
 
@@ -173,7 +174,8 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
         while (pViewShell)
         {
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+            ScModelObj* pModel = ScModelObj::getImplementation(pViewShell->GetCurrentDocument());
+            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pModel);
             pViewShell = SfxViewShell::GetNext(*pViewShell);
         }
     }

@@ -74,6 +74,8 @@
 #include <svl/itemset.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <unomodel.hxx>
+#include <sfx2/lokhelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1026,7 +1028,8 @@ IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
         while (pViewShell)
         {
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+            SdXImpressDocument* pModel = SdXImpressDocument::getImplementation(pViewShell->GetCurrentDocument());
+            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pModel);
             pViewShell = SfxViewShell::GetNext(*pViewShell);
         }
     }

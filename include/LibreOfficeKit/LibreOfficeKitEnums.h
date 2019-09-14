@@ -262,6 +262,10 @@ typedef enum
      *
      * Payload format is "width, height", i.e. clients get the new size without
      * having to do an explicit lok::Document::getDocumentSize() call.
+     *
+     * A size change is always preceeded by a series of
+     * LOK_CALLBACK_INVALIDATE_TILES events invalidating any areas
+     * need re-rendering to adapt.
      */
     LOK_CALLBACK_DOCUMENT_SIZE_CHANGED = 13,
 
