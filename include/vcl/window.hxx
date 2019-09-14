@@ -34,6 +34,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
 
+#include <boost/property_tree/ptree.hpp>
+
 class VirtualDevice;
 struct ImplSVEvent;
 struct ImplWinData;
@@ -1212,6 +1214,9 @@ public:
 
     /// Find an existing Window based on the LOKWindowId.
     static VclPtr<vcl::Window>          FindLOKWindow(vcl::LOKWindowId nWindowId);
+
+    /// Dumps itself and potentially its children to a property tree, to be written easily to JSON.
+    virtual boost::property_tree::ptree DumpAsPropertyTree();
 
     /// Dialog / window tunneling related methods.
     Size PaintActiveFloatingWindow(VirtualDevice& rDevice) const;
