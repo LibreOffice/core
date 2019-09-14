@@ -53,6 +53,8 @@
 #include <stlpool.hxx>
 #include <anminfo.hxx>
 #include <undo/undomanager.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <unomodel.hxx>
 
 #include <DrawDocShell.hxx>
 
@@ -399,7 +401,8 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
         while (pViewShell)
         {
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+            SdXImpressDocument* pModel = comphelper::getUnoTunnelImplementation<SdXImpressDocument>(this->getUnoModel());
+            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pModel);
             pViewShell = SfxViewShell::GetNext(*pViewShell);
         }
     }
@@ -432,7 +435,8 @@ SdrPage* SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
         while (pViewShell)
         {
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+            SdXImpressDocument* pModel = comphelper::getUnoTunnelImplementation<SdXImpressDocument>(this->getUnoModel());
+            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pModel);
             pViewShell = SfxViewShell::GetNext(*pViewShell);
         }
     }

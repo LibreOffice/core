@@ -404,7 +404,8 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
                     std::stringstream ss;
                     ss << aNewSize.Width() << ", " << aNewSize.Height();
                     OString sSize = ss.str().c_str();
-                    aViewData.GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sSize.getStr());
+                    ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(aViewData.GetViewShell()->GetCurrentDocument());
+                    SfxLokHelper::notifyDocumentSizeChanged(aViewData.GetViewShell(), sSize, pModel);
 
                     // New area extended to the right of the sheet after last column
                     // including overlapping area with aNewRowArea

@@ -527,7 +527,7 @@ public:
             else
             {
                 uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
-                CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
+                CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
                 tools::Rectangle aInvalidationRect;
                 aInvalidationRect.setX(aSeq[0].toInt32());
                 aInvalidationRect.setY(aSeq[1].toInt32());
@@ -1014,7 +1014,7 @@ void ScTiledRenderingTest::testInvalidateOnInserRowCol()
     comphelper::dispatchCommand(".uno:InsertRows", aArgs);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aView.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aView.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(-75, 50985, 32212230, 63990), aView.m_aInvalidations[0]);
 
     // move on the right
@@ -1031,7 +1031,7 @@ void ScTiledRenderingTest::testInvalidateOnInserRowCol()
     comphelper::dispatchCommand(".uno:InsertColumns", aArgs);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aView.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aView.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(253650, -15, 32212230, 63990), aView.m_aInvalidations[0]);
 }
 
@@ -1692,7 +1692,7 @@ void ScTiledRenderingTest::testSheetChangeInvalidation()
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aView1.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1310720, 268435456), aView1.m_aInvalidations[0]);
 }
 

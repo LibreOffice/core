@@ -327,7 +327,8 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
             ss << aDocSize.Width() << ", " << aDocSize.Height();
             OString sRect = ss.str().c_str();
             ScTabViewShell* pViewShell = aViewData.GetViewShell();
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sRect.getStr());
+            ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(pViewShell->GetCurrentDocument());
+            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, sRect, pModel);
         }
     }
 }
