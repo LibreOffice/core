@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_WIZARDMACHINE_HXX
-#define INCLUDED_SVTOOLS_WIZARDMACHINE_HXX
+#ifndef INCLUDED_VCL_WIZARDMACHINE_HXX
+#define INCLUDED_VCL_WIZARDMACHINE_HXX
 
 #include <memory>
 #include <vcl/dllapi.h>
@@ -128,283 +128,6 @@ namespace vcl
         on the actual data presented in the wizard (e.g. checkboxes checked, or something like this),
         they can implement non-linear traveling this way.
     */
-    class VCL_DLLPUBLIC OWizardMachine : public ModalDialog
-    {
-    private:
-        Idle                    maWizardLayoutIdle;
-        Size                    maPageSize;
-        ImplWizPageData*        mpFirstPage;
-        ImplWizButtonData*      mpFirstBtn;
-        VclPtr<TabPage>         mpCurTabPage;
-        VclPtr<PushButton>      mpPrevBtn;
-        VclPtr<PushButton>      mpNextBtn;
-        VclPtr<vcl::Window>     mpViewWindow;
-        sal_uInt16              mnCurLevel;
-        WindowAlign             meViewAlign;
-        Link<OWizardMachine*,void>  maActivateHdl;
-        sal_Int16               mnLeftAlignCount;
-        bool                    mbEmptyViewMargin;
-
-        DECL_DLLPRIVATE_LINK( ImplHandleWizardLayoutTimerHdl, Timer*, void );
-
-        //  TabPage*            GetPage( sal_uInt16 nLevel ) const { return OWizardMachine::GetPage(nLevel); }
-        // TODO: probably the complete page handling (next, previous etc.) should be prohibited ...
-
-        // IMPORTANT:
-        // traveling pages should not be done by calling these base class member, some mechanisms of this class
-        // here (e.g. committing page data) depend on having full control over page traveling.
-        // So use the travelXXX methods if you need to travel
-
-    protected:
-        long                LogicalCoordinateToPixel(int iCoordinate);
-        /**sets the number of buttons which should be left-aligned. Normally, buttons are right-aligned.
-
-            only to be used during construction, before any layouting happened
-        */
-        void                SetLeftAlignedButtonCount( sal_Int16 _nCount );
-        /** declares the view area to have an empty margin
-
-            Normally, the view area has a certain margin to the top/left/bottom/right of the
-            dialog. By calling this method, you can reduce this margin to 0.
-        */
-        void                SetEmptyViewMargin();
-
-        void                CalcAndSetSize();
-
-
-    public:
-        VclPtr<OKButton>       m_pFinish;
-        VclPtr<CancelButton>   m_pCancel;
-        VclPtr<PushButton>     m_pNextPage;
-        VclPtr<PushButton>     m_pPrevPage;
-        VclPtr<HelpButton>     m_pHelp;
-
-    private:
-        // hold members in this structure to allow keeping compatible when members are added
-        std::unique_ptr<WizardMachineImplData>  m_pImpl;
-
-    public:
-        OWizardMachine(vcl::Window* _pParent, WizardButtonFlags _nButtonFlags );
-        virtual ~OWizardMachine() override;
-        virtual void dispose() override;
-
-        virtual void        Resize() override;
-        virtual void        StateChanged( StateChangedType nStateChange ) override;
-        virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
-
-        virtual void        ActivatePage();
-        virtual bool        DeactivatePage();
-
-        virtual void        queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
-
-        bool                ShowPrevPage();
-        bool                ShowNextPage();
-        bool                ShowPage( sal_uInt16 nLevel );
-        bool                Finish( long nResult = 0 );
-        sal_uInt16          GetCurLevel() const { return mnCurLevel; }
-
-        void                AddPage( TabPage* pPage );
-        void                RemovePage( TabPage* pPage );
-        void                SetPage( sal_uInt16 nLevel, TabPage* pPage );
-        TabPage*            GetPage( sal_uInt16 nLevel ) const;
-
-        void                AddButton( Button* pButton, long nOffset = 0 );
-        void                RemoveButton( Button* pButton );
-
-        void                SetPrevButton( PushButton* pButton ) { mpPrevBtn = pButton; }
-        void                SetNextButton( PushButton* pButton ) { mpNextBtn = pButton; }
-
-        void                SetViewWindow( vcl::Window* pWindow ) { mpViewWindow = pWindow; }
-        void                SetViewAlign( WindowAlign eAlign ) { meViewAlign = eAlign; }
-
-        void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
-        const Size&         GetPageSizePixel() const { return maPageSize; }
-
-        void                SetActivatePageHdl( const Link<OWizardMachine*,void>& rLink ) { maActivateHdl = rLink; }
-
-        /// enable (or disable) buttons
-        void                enableButtons(WizardButtonFlags _nWizardButtonFlags, bool _bEnable);
-        /// set the default style for a button
-        void                defaultButton(WizardButtonFlags _nWizardButtonFlags);
-        /// set the default style for a button
-        void                defaultButton(PushButton* _pNewDefButton);
-
-        /// set the base of the title to use - the title of the current page is appended
-        void                setTitleBase(const OUString& _rTitleBase);
-
-        /// determines whether there is a next state to which we can advance
-        virtual bool        canAdvance() const;
-
-        /** updates the user interface which deals with traveling in the wizard
-
-            The default implementation simply checks whether both the current page and the wizard
-            itself allow to advance to the next state (<code>canAdvance</code>), and enables the "Next"
-            button if and only if this is the case.
-        */
-        virtual void        updateTravelUI();
-
-    protected:
-        // our own overridables
-
-        /// to override to create new pages
-        virtual VclPtr<TabPage> createPage(WizardTypes::WizardState _nState) = 0;
-
-        /// will be called when a new page is about to be displayed
-        virtual void        enterState(WizardTypes::WizardState _nState);
-
-        /** will be called when the current state is about to be left for the given reason
-
-            The base implementation in this class will simply call <member>OWizardPage::commitPage</member>
-            for the current page, and return whatever this call returns.
-
-            @param _eReason
-                The reason why the state is to be left.
-            @return
-                <TRUE/> if and only if the page is allowed to be left
-        */
-        virtual bool        prepareLeaveCurrentState( WizardTypes::CommitPageReason eReason );
-
-        /** will be called when the given state is left
-
-            This is the very last possibility for derived classes to veto the deactivation
-            of a page.
-
-            @todo Normally, we would not need the return value here - derived classes now have
-            the possibility to veto page deactivations in <member>prepareLeaveCurrentState</member>. However,
-            changing this return type is too incompatible at the moment ...
-
-            @return
-                <TRUE/> if and only if the page is allowed to be left
-        */
-        virtual bool        leaveState(WizardTypes::WizardState _nState);
-
-        /** determine the next state to travel from the given one
-
-            The default behaviour is linear traveling, overwrite this to change it
-
-            Return WZS_INVALID_STATE to prevent traveling.
-        */
-        virtual WizardTypes::WizardState determineNextState(WizardTypes::WizardState nCurrentState) const;
-
-        /** called when the finish button is pressed
-            <p>By default, only the base class' Finish method (which is not virtual) is called</p>
-        */
-        virtual bool        onFinish();
-
-        /// travel to the next state
-        bool                travelNext();
-
-        /// travel to the previous state
-        bool                travelPrevious();
-
-        /** enables the automatic enabled/disabled state of the "Next" button
-
-            If this is <TRUE/>, then upon entering a new state, the "Next" button will automatically be
-            enabled if and only if determineNextState does not return WZS_INVALID_STATE.
-        */
-        void                enableAutomaticNextButtonState();
-        bool                isAutomaticNextButtonStateEnabled() const;
-
-        /** removes a page from the history. Should be called when the page is being disabled
-        */
-        void                removePageFromHistory(WizardTypes::WizardState nToRemove);
-
-        /** skip a state
-
-            The method behaves as if from the current state, <arg>_nSteps</arg> <method>travelNext</method>s were
-            called, but without actually creating or displaying the \EDntermediate pages. Only the
-            (<arg>_nSteps</arg> + 1)th page is created.
-
-            The skipped states appear in the state history, so <method>travelPrevious</method> will make use of them.
-
-            A very essential precondition for using this method is that your <method>determineNextState</method>
-            method is able to determine the next state without actually having the page of the current state.
-
-            @see skipUntil
-            @see skipBackwardUntil
-        */
-        void                    skip();
-
-        /** skips one or more states, until a given state is reached
-
-            The method behaves as if from the current state, <method>travelNext</method>s were called
-            successively, until <arg>_nTargetState</arg> is reached, but without actually creating or
-            displaying the \EDntermediate pages.
-
-            The skipped states appear in the state history, so <method>travelPrevious</method> will make use of them.
-
-            @return
-                <TRUE/> if and only if traveling was successful
-
-            @see skip
-            @see skipBackwardUntil
-        */
-        bool                    skipUntil(WizardTypes::WizardState nTargetState);
-
-        /** moves back one or more states, until a given state is reached
-
-            This method allows traveling backwards more than one state without actually showing the intermediate
-            states.
-
-            For instance, if you want to travel two steps backward at a time, you could used
-            two travelPrevious calls, but this would <em>show</em> both pages, which is not necessary,
-            since you're interested in the target page only. Using <member>skipBackwardUntil</member> relieves
-            you of this.
-
-            @return
-                <TRUE/> if and only if traveling was successful
-
-            @see skipUntil
-            @see skip
-        */
-        bool                    skipBackwardUntil(WizardTypes::WizardState nTargetState);
-
-        /** returns the current state of the machine
-
-            Vulgo, this is the identifier of the current tab page :)
-        */
-        WizardTypes::WizardState getCurrentState() const { return GetCurLevel(); }
-
-        virtual IWizardPageController*
-                                getPageController( TabPage* _pCurrentPage ) const;
-
-        /** retrieves a copy of the state history, i.e. all states we already visited
-        */
-        void                    getStateHistory(std::vector<WizardTypes::WizardState>& out_rHistory);
-
-    public:
-        class AccessGuard
-        {
-            friend class WizardTravelSuspension;
-        private:
-            AccessGuard() { }
-        };
-
-        void                   suspendTraveling( AccessGuard );
-        void                   resumeTraveling( AccessGuard );
-        bool                   isTravelingSuspended() const;
-
-    protected:
-        TabPage* GetOrCreatePage(const WizardTypes::WizardState i_nState);
-
-    private:
-        VCL_DLLPRIVATE void             ImplInitData();
-        VCL_DLLPRIVATE void             ImplCalcSize( Size& rSize );
-        VCL_DLLPRIVATE void             ImplPosCtrls();
-        VCL_DLLPRIVATE void             ImplPosTabPage();
-        VCL_DLLPRIVATE void             ImplShowTabPage( TabPage* pPage );
-        VCL_DLLPRIVATE TabPage*         ImplGetPage( sal_uInt16 nLevel ) const;
-
-
-        DECL_DLLPRIVATE_LINK(OnNextPage, Button*, void);
-        DECL_DLLPRIVATE_LINK(OnPrevPage, Button*, void);
-        DECL_DLLPRIVATE_LINK(OnFinish, Button*, void);
-
-        VCL_DLLPRIVATE void     implResetDefault(vcl::Window const * _pWindow);
-        VCL_DLLPRIVATE void     implUpdateTitle();
-        VCL_DLLPRIVATE void     implConstruct( const WizardButtonFlags _nButtonFlags );
-    };
-
     class VCL_DLLPUBLIC WizardMachine : public weld::AssistantController
     {
     private:
@@ -622,39 +345,25 @@ namespace vcl
     class WizardTravelSuspension
     {
     public:
-        WizardTravelSuspension(OWizardMachine& rWizard)
-            : m_pOWizard(&rWizard)
-            , m_pWizard(nullptr)
-        {
-            m_pOWizard->suspendTraveling(OWizardMachine::AccessGuard());
-        }
-
         WizardTravelSuspension(WizardMachine& rWizard)
-            : m_pOWizard(nullptr)
-            , m_pWizard(&rWizard)
+            : m_pWizard(&rWizard)
         {
             m_pWizard->suspendTraveling(WizardMachine::AccessGuard());
         }
 
         ~WizardTravelSuspension()
         {
-            if (m_pOWizard)
-                m_pOWizard->resumeTraveling(OWizardMachine::AccessGuard());
-            if (m_pWizard)
-                m_pWizard->resumeTraveling(WizardMachine::AccessGuard());
+            m_pWizard->resumeTraveling(WizardMachine::AccessGuard());
         }
 
     private:
-        VclPtr<OWizardMachine> m_pOWizard;
         WizardMachine* m_pWizard;
     };
-
-
 }   // namespace vcl
 
 #define WIZARDDIALOG_BUTTON_STDOFFSET_X         6
 #define WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X    3
 
-#endif // INCLUDED_SVTOOLS_WIZARDMACHINE_HXX
+#endif // INCLUDED_VCL_WIZARDMACHINE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

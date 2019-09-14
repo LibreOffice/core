@@ -17763,6 +17763,7 @@ vcl/source/control/spinfld.cxx
 vcl/source/control/tabctrl.cxx
 vcl/source/control/throbber.cxx
 vcl/source/control/thumbpos.hxx
+vcl/source/control/wizimpldata.hxx
 vcl/source/control/wizardmachine.cxx
 vcl/source/edit/textdat2.hxx
 vcl/source/edit/textdata.cxx
