@@ -19,12 +19,13 @@
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wizardmachine.hxx>
+#include <vcl/roadmapwizard.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <strings.hrc>
 #include <svdata.hxx>
 #include <stack>
+#include "wizimpldata.hxx"
 
 #define HID_WIZARD_NEXT                                        "SVT_HID_WIZARD_NEXT"
 #define HID_WIZARD_PREVIOUS                                    "SVT_HID_WIZARD_PREVIOUS"
@@ -33,19 +34,6 @@
 #define WIZARDDIALOG_BUTTON_DLGOFFSET_X     6
 #define WIZARDDIALOG_VIEW_DLGOFFSET_X       6
 #define WIZARDDIALOG_VIEW_DLGOFFSET_Y       6
-
-struct ImplWizPageData
-{
-    ImplWizPageData*    mpNext;
-    VclPtr<TabPage>     mpPage;
-};
-
-struct ImplWizButtonData
-{
-    ImplWizButtonData*  mpNext;
-    VclPtr<Button>      mpButton;
-    long                mnOffset;
-};
 
 namespace vcl
 {
@@ -87,7 +75,7 @@ namespace vcl
 
     void OWizardPage::updateDialogTravelUI()
     {
-        OWizardMachine* pWizardMachine = dynamic_cast< OWizardMachine* >( GetParent() );
+        RoadmapWizard* pWizardMachine = dynamic_cast<RoadmapWizard*>(GetParent());
         if ( pWizardMachine )
             pWizardMachine->updateTravelUI();
     }
@@ -102,28 +90,7 @@ namespace vcl
         return true;
     }
 
-    struct WizardMachineImplData
-    {
-        OUString                        sTitleBase;         // the base for the title
-        std::stack<WizardTypes::WizardState> aStateHistory;      // the history of all states (used for implementing "Back")
-
-        WizardTypes::WizardState nFirstUnknownPage;
-            // the WizardDialog does not allow non-linear transitions (e.g. it's
-            // not possible to add pages in a non-linear order), so we need some own maintenance data
-
-        bool                            m_bAutoNextButtonState;
-
-        bool                            m_bTravelingSuspended;
-
-        WizardMachineImplData()
-            :nFirstUnknownPage( 0 )
-            ,m_bAutoNextButtonState( false )
-            ,m_bTravelingSuspended( false )
-        {
-        }
-    };
-
-    void OWizardMachine::ImplInitData()
+    void RoadmapWizard::ImplInitData()
     {
         mpFirstPage     = nullptr;
         mpFirstBtn      = nullptr;
@@ -137,20 +104,20 @@ namespace vcl
         mnLeftAlignCount = 0;
 
         maWizardLayoutIdle.SetPriority(TaskPriority::RESIZE);
-        maWizardLayoutIdle.SetInvokeHandler( LINK( this, OWizardMachine, ImplHandleWizardLayoutTimerHdl ) );
+        maWizardLayoutIdle.SetInvokeHandler( LINK( this, RoadmapWizard, ImplHandleWizardLayoutTimerHdl ) );
     }
 
-    void OWizardMachine::SetLeftAlignedButtonCount( sal_Int16 _nCount )
+    void RoadmapWizard::SetLeftAlignedButtonCount( sal_Int16 _nCount )
     {
         mnLeftAlignCount = _nCount;
     }
 
-    void OWizardMachine::SetEmptyViewMargin()
+    void RoadmapWizard::SetEmptyViewMargin()
     {
         mbEmptyViewMargin = true;
     }
 
-    void OWizardMachine::ImplCalcSize( Size& rSize )
+    void RoadmapWizard::ImplCalcSize( Size& rSize )
     {
         // calculate ButtonBar height
         long                nMaxHeight = 0;
@@ -181,7 +148,7 @@ namespace vcl
         }
     }
 
-    void OWizardMachine::queue_resize(StateChangedType /*eReason*/)
+    void RoadmapWizard::queue_resize(StateChangedType /*eReason*/)
     {
         if (maWizardLayoutIdle.IsActive())
             return;
@@ -190,13 +157,13 @@ namespace vcl
         maWizardLayoutIdle.Start();
     }
 
-    IMPL_LINK_NOARG(OWizardMachine, ImplHandleWizardLayoutTimerHdl, Timer*, void)
+    IMPL_LINK_NOARG(RoadmapWizard, ImplHandleWizardLayoutTimerHdl, Timer*, void)
     {
         ImplPosCtrls();
         ImplPosTabPage();
     }
 
-    void OWizardMachine::ImplPosCtrls()
+    void RoadmapWizard::ImplPosCtrls()
     {
         Size    aDlgSize = GetOutputSizePixel();
         long    nBtnWidth = 0;
@@ -304,13 +271,13 @@ namespace vcl
                                        nViewPosFlags );
     }
 
-    long OWizardMachine::LogicalCoordinateToPixel(int iCoordinate){
+    long RoadmapWizard::LogicalCoordinateToPixel(int iCoordinate){
         Size aLocSize = LogicToPixel(Size(iCoordinate, 0), MapMode(MapUnit::MapAppFont));
         int iPixelCoordinate =  aLocSize.Width();
         return iPixelCoordinate;
     }
 
-    void OWizardMachine::ImplPosTabPage()
+    void RoadmapWizard::ImplPosTabPage()
     {
         if ( !mpCurTabPage )
             return;
@@ -364,7 +331,7 @@ namespace vcl
         mpCurTabPage->SetPosSizePixel( aPos, aDlgSize );
     }
 
-    void OWizardMachine::ImplShowTabPage( TabPage* pTabPage )
+    void RoadmapWizard::ImplShowTabPage( TabPage* pTabPage )
     {
         if ( mpCurTabPage == pTabPage )
             return;
@@ -385,7 +352,7 @@ namespace vcl
             pOldTabPage->Hide();
     }
 
-    TabPage* OWizardMachine::ImplGetPage( sal_uInt16 nLevel ) const
+    TabPage* RoadmapWizard::ImplGetPage( sal_uInt16 nLevel ) const
     {
         sal_uInt16              nTempLevel = 0;
         ImplWizPageData*    pPageData = mpFirstPage;
@@ -403,23 +370,9 @@ namespace vcl
         return nullptr;
     }
 
-    OWizardMachine::OWizardMachine(vcl::Window* pParent, WizardButtonFlags _nButtonFlags)
-        :ModalDialog(pParent, "WizardDialog", "svt/ui/wizarddialog.ui")
-        ,m_pFinish(nullptr)
-        ,m_pCancel(nullptr)
-        ,m_pNextPage(nullptr)
-        ,m_pPrevPage(nullptr)
-        ,m_pHelp(nullptr)
-        ,m_pImpl( new WizardMachineImplData )
+    void RoadmapWizard::implConstruct( const WizardButtonFlags _nButtonFlags )
     {
-        ImplInitData();
-
-        implConstruct( _nButtonFlags );
-    }
-
-    void OWizardMachine::implConstruct( const WizardButtonFlags _nButtonFlags )
-    {
-        m_pImpl->sTitleBase = GetText();
+        m_xWizardImpl->sTitleBase = GetText();
 
         // create the buttons according to the wizard button flags
         // the help button
@@ -446,7 +399,7 @@ namespace vcl
             else
                 AddButton( m_pPrevPage, WIZARDDIALOG_BUTTON_STDOFFSET_X );
             SetPrevButton( m_pPrevPage );
-            m_pPrevPage->SetClickHdl( LINK( this, OWizardMachine, OnPrevPage ) );
+            m_pPrevPage->SetClickHdl( LINK( this, RoadmapWizard, OnPrevPage ) );
         }
 
         // the next button
@@ -461,7 +414,7 @@ namespace vcl
 
             AddButton( m_pNextPage, WIZARDDIALOG_BUTTON_STDOFFSET_X );
             SetNextButton( m_pNextPage );
-            m_pNextPage->SetClickHdl( LINK( this, OWizardMachine, OnNextPage ) );
+            m_pNextPage->SetClickHdl( LINK( this, RoadmapWizard, OnNextPage ) );
         }
 
         // the finish button
@@ -474,7 +427,7 @@ namespace vcl
             m_pFinish->set_id("finish");
 
             AddButton( m_pFinish, WIZARDDIALOG_BUTTON_STDOFFSET_X );
-            m_pFinish->SetClickHdl( LINK( this, OWizardMachine, OnFinish ) );
+            m_pFinish->SetClickHdl( LINK( this, RoadmapWizard, OnFinish ) );
         }
 
         // the cancel button
@@ -488,49 +441,7 @@ namespace vcl
         }
     }
 
-
-    OWizardMachine::~OWizardMachine()
-    {
-        disposeOnce();
-    }
-
-    void OWizardMachine::dispose()
-    {
-        m_pFinish.disposeAndClear();
-        m_pCancel.disposeAndClear();
-        m_pNextPage.disposeAndClear();
-        m_pPrevPage.disposeAndClear();
-        m_pHelp.disposeAndClear();
-
-        if (m_pImpl)
-        {
-            for (WizardTypes::WizardState i = 0; i < m_pImpl->nFirstUnknownPage; ++i)
-            {
-                TabPage *pPage = GetPage(i);
-                if (pPage)
-                    pPage->disposeOnce();
-            }
-            m_pImpl.reset();
-        }
-
-        maWizardLayoutIdle.Stop();
-
-        // Remove all buttons
-        while ( mpFirstBtn )
-            RemoveButton( mpFirstBtn->mpButton );
-
-        // Remove all pages
-        while ( mpFirstPage )
-            RemovePage( mpFirstPage->mpPage );
-
-        mpCurTabPage.clear();
-        mpPrevBtn.clear();
-        mpNextBtn.clear();
-        mpViewWindow.clear();
-        ModalDialog::dispose();
-    }
-
-    void OWizardMachine::Resize()
+    void RoadmapWizard::Resize()
     {
         if ( IsReallyShown() && !IsInInitShow() )
         {
@@ -541,9 +452,9 @@ namespace vcl
         ModalDialog::Resize();
     }
 
-    void OWizardMachine::implUpdateTitle()
+    void RoadmapWizard::implUpdateTitle()
     {
-        OUString sCompleteTitle(m_pImpl->sTitleBase);
+        OUString sCompleteTitle(m_xWizardImpl->sTitleBase);
 
         // append the page title
         TabPage* pCurrentPage = GetPage(getCurrentState());
@@ -555,7 +466,7 @@ namespace vcl
         SetText(sCompleteTitle);
     }
 
-    void OWizardMachine::CalcAndSetSize()
+    void RoadmapWizard::CalcAndSetSize()
     {
         Size aDlgSize = GetPageSizePixel();
         if ( !aDlgSize.Width() || !aDlgSize.Height() )
@@ -579,7 +490,7 @@ namespace vcl
         SetOutputSizePixel( aDlgSize );
     }
 
-    void OWizardMachine::StateChanged( StateChangedType nType )
+    void RoadmapWizard::StateChanged( StateChangedType nType )
     {
         if ( nType == StateChangedType::InitShow )
         {
@@ -596,7 +507,7 @@ namespace vcl
         ModalDialog::StateChanged( nType );
     }
 
-    bool OWizardMachine::EventNotify( NotifyEvent& rNEvt )
+    bool RoadmapWizard::EventNotify( NotifyEvent& rNEvt )
     {
         if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && mpPrevBtn && mpNextBtn )
         {
@@ -640,32 +551,31 @@ namespace vcl
         return ModalDialog::EventNotify( rNEvt );
     }
 
-    void OWizardMachine::setTitleBase(const OUString& _rTitleBase)
+    void RoadmapWizard::setTitleBase(const OUString& _rTitleBase)
     {
-        m_pImpl->sTitleBase = _rTitleBase;
+        m_xWizardImpl->sTitleBase = _rTitleBase;
         implUpdateTitle();
     }
 
-
-    TabPage* OWizardMachine::GetOrCreatePage( const WizardTypes::WizardState i_nState )
+    TabPage* RoadmapWizard::GetOrCreatePage( const WizardTypes::WizardState i_nState )
     {
         if ( nullptr == GetPage( i_nState ) )
         {
             VclPtr<TabPage> pNewPage = createPage( i_nState );
-            DBG_ASSERT( pNewPage, "OWizardMachine::GetOrCreatePage: invalid new page (NULL)!" );
+            DBG_ASSERT( pNewPage, "RoadmapWizard::GetOrCreatePage: invalid new page (NULL)!" );
 
             // fill up the page sequence of our base class (with dummies)
-            while ( m_pImpl->nFirstUnknownPage < i_nState )
+            while ( m_xWizardImpl->nFirstUnknownPage < i_nState )
             {
                 AddPage( nullptr );
-                ++m_pImpl->nFirstUnknownPage;
+                ++m_xWizardImpl->nFirstUnknownPage;
             }
 
-            if ( m_pImpl->nFirstUnknownPage == i_nState )
+            if ( m_xWizardImpl->nFirstUnknownPage == i_nState )
             {
                 // encountered this page number the first time
                 AddPage( pNewPage );
-                ++m_pImpl->nFirstUnknownPage;
+                ++m_xWizardImpl->nFirstUnknownPage;
             }
             else
                 // already had this page - just change it
@@ -674,7 +584,7 @@ namespace vcl
         return GetPage( i_nState );
     }
 
-    void OWizardMachine::ActivatePage()
+    void RoadmapWizard::ActivatePage()
     {
         maActivateHdl.Call( this );
 
@@ -684,13 +594,13 @@ namespace vcl
         enterState( nCurrentLevel );
     }
 
-    bool OWizardMachine::DeactivatePage()
+    bool RoadmapWizard::DeactivatePage()
     {
         WizardTypes::WizardState nCurrentState = getCurrentState();
         return leaveState(nCurrentState);
     }
 
-    void OWizardMachine::defaultButton(WizardButtonFlags _nWizardButtonFlags)
+    void RoadmapWizard::defaultButton(WizardButtonFlags _nWizardButtonFlags)
     {
         // the new default button
         PushButton* pNewDefButton = nullptr;
@@ -711,19 +621,19 @@ namespace vcl
             implResetDefault( this );
     }
 
-    bool OWizardMachine::ShowNextPage()
+    bool RoadmapWizard::ShowNextPage()
     {
         return ShowPage( mnCurLevel+1 );
     }
 
-    bool OWizardMachine::ShowPrevPage()
+    bool RoadmapWizard::ShowPrevPage()
     {
         if ( !mnCurLevel )
             return false;
         return ShowPage( mnCurLevel-1 );
     }
 
-    bool OWizardMachine::ShowPage( sal_uInt16 nLevel )
+    bool RoadmapWizard::ShowPage( sal_uInt16 nLevel )
     {
         if ( DeactivatePage() )
         {
@@ -736,7 +646,7 @@ namespace vcl
             return false;
     }
 
-    bool OWizardMachine::Finish( long nResult )
+    bool RoadmapWizard::Finish( long nResult )
     {
         if ( DeactivatePage() )
         {
@@ -753,7 +663,7 @@ namespace vcl
             return false;
     }
 
-    void OWizardMachine::AddPage( TabPage* pPage )
+    void RoadmapWizard::AddPage( TabPage* pPage )
     {
         ImplWizPageData* pNewPageData = new ImplWizPageData;
         pNewPageData->mpNext    = nullptr;
@@ -770,7 +680,7 @@ namespace vcl
         }
     }
 
-    void OWizardMachine::RemovePage( TabPage* pPage )
+    void RoadmapWizard::RemovePage( TabPage* pPage )
     {
         ImplWizPageData*  pPrevPageData = nullptr;
         ImplWizPageData*  pPageData = mpFirstPage;
@@ -792,10 +702,10 @@ namespace vcl
             pPageData = pPageData->mpNext;
         }
 
-        OSL_FAIL( "OWizardMachine::RemovePage() - Page not in list" );
+        OSL_FAIL( "RoadmapWizard::RemovePage() - Page not in list" );
     }
 
-    void OWizardMachine::SetPage( sal_uInt16 nLevel, TabPage* pPage )
+    void RoadmapWizard::SetPage( sal_uInt16 nLevel, TabPage* pPage )
     {
         sal_uInt16              nTempLevel = 0;
         ImplWizPageData*    pPageData = mpFirstPage;
@@ -816,7 +726,7 @@ namespace vcl
         }
     }
 
-    TabPage* OWizardMachine::GetPage( sal_uInt16 nLevel ) const
+    TabPage* RoadmapWizard::GetPage( sal_uInt16 nLevel ) const
     {
         sal_uInt16 nTempLevel = 0;
 
@@ -831,7 +741,7 @@ namespace vcl
         return nullptr;
     }
 
-    void OWizardMachine::AddButton( Button* pButton, long nOffset )
+    void RoadmapWizard::AddButton( Button* pButton, long nOffset )
     {
         ImplWizButtonData* pNewBtnData = new ImplWizButtonData;
         pNewBtnData->mpNext     = nullptr;
@@ -849,7 +759,7 @@ namespace vcl
         }
     }
 
-    void OWizardMachine::RemoveButton( Button* pButton )
+    void RoadmapWizard::RemoveButton( Button* pButton )
     {
         ImplWizButtonData*  pPrevBtnData = nullptr;
         ImplWizButtonData*  pBtnData = mpFirstBtn;
@@ -869,10 +779,10 @@ namespace vcl
             pBtnData = pBtnData->mpNext;
         }
 
-        OSL_FAIL( "OWizardMachine::RemoveButton() - Button not in list" );
+        OSL_FAIL( "RoadmapWizard::RemoveButton() - Button not in list" );
     }
 
-    void OWizardMachine::implResetDefault(vcl::Window const * _pWindow)
+    void RoadmapWizard::implResetDefault(vcl::Window const * _pWindow)
     {
         vcl::Window* pChildLoop = _pWindow->GetWindow(GetWindowType::FirstChild);
         while (pChildLoop)
@@ -900,8 +810,7 @@ namespace vcl
         }
     }
 
-
-    void OWizardMachine::defaultButton(PushButton* _pNewDefButton)
+    void RoadmapWizard::defaultButton(PushButton* _pNewDefButton)
     {
         // loop through all (direct and indirect) descendants which participate in our tabbing order, and
         // reset the WB_DEFBUTTON for every window which is a button
@@ -912,8 +821,7 @@ namespace vcl
             _pNewDefButton->SetStyle(_pNewDefButton->GetStyle() | WB_DEFBUTTON);
     }
 
-
-    void OWizardMachine::enableButtons(WizardButtonFlags _nWizardButtonFlags, bool _bEnable)
+    void RoadmapWizard::enableButtons(WizardButtonFlags _nWizardButtonFlags, bool _bEnable)
     {
         if (m_pFinish && (_nWizardButtonFlags & WizardButtonFlags::FINISH))
             m_pFinish->Enable(_bEnable);
@@ -927,24 +835,7 @@ namespace vcl
             m_pCancel->Enable(_bEnable);
     }
 
-    void OWizardMachine::enterState(WizardTypes::WizardState nState)
-    {
-        // tell the page
-        IWizardPageController* pController = getPageController( GetPage( nState ) );
-        if (!pController)
-            return;
-        pController->initializePage();
-
-        if ( isAutomaticNextButtonStateEnabled() )
-            enableButtons( WizardButtonFlags::NEXT, canAdvance() );
-
-        enableButtons( WizardButtonFlags::PREVIOUS, !m_pImpl->aStateHistory.empty() );
-
-        // set the new title - it depends on the current page (i.e. state)
-        implUpdateTitle();
-    }
-
-    bool OWizardMachine::leaveState(WizardTypes::WizardState)
+    bool RoadmapWizard::leaveState(WizardTypes::WizardState)
     {
         // no need to ask the page here.
         // If we reach this point, we already gave the current page the chance to commit it's data,
@@ -953,18 +844,16 @@ namespace vcl
         return true;
     }
 
-
-    bool OWizardMachine::onFinish()
+    bool RoadmapWizard::onFinish()
     {
         return Finish( RET_OK );
     }
 
-
-    IMPL_LINK_NOARG(OWizardMachine, OnFinish, Button*, void)
+    IMPL_LINK_NOARG(RoadmapWizard, OnFinish, Button*, void)
     {
         if ( isTravelingSuspended() )
             return;
-        WizardTravelSuspension aTravelGuard( *this );
+        RoadmapWizardTravelSuspension aTravelGuard( *this );
         if (!prepareLeaveCurrentState(WizardTypes::eFinish))
         {
             return;
@@ -972,47 +861,40 @@ namespace vcl
         onFinish();
     }
 
-    WizardTypes::WizardState OWizardMachine::determineNextState( WizardTypes::WizardState _nCurrentState ) const
-    {
-        return _nCurrentState + 1;
-    }
-
-    bool OWizardMachine::prepareLeaveCurrentState( WizardTypes::CommitPageReason _eReason )
+    bool RoadmapWizard::prepareLeaveCurrentState( WizardTypes::CommitPageReason _eReason )
     {
         IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
-        ENSURE_OR_RETURN( pController != nullptr, "OWizardMachine::prepareLeaveCurrentState: no controller for the current page!", true );
+        ENSURE_OR_RETURN( pController != nullptr, "RoadmapWizard::prepareLeaveCurrentState: no controller for the current page!", true );
         return pController->commitPage( _eReason );
     }
 
-
-    bool OWizardMachine::skipBackwardUntil( WizardTypes::WizardState _nTargetState )
+    bool RoadmapWizard::skipBackwardUntil( WizardTypes::WizardState _nTargetState )
     {
         // allowed to leave the current page?
         if (!prepareLeaveCurrentState(WizardTypes::eTravelBackward))
             return false;
 
-        // don't travel directly on m_pImpl->aStateHistory, in case something goes wrong
-        std::stack< WizardTypes::WizardState > aTravelVirtually = m_pImpl->aStateHistory;
-        std::stack< WizardTypes::WizardState > aOldStateHistory = m_pImpl->aStateHistory;
+        // don't travel directly on m_xWizardImpl->aStateHistory, in case something goes wrong
+        std::stack< WizardTypes::WizardState > aTravelVirtually = m_xWizardImpl->aStateHistory;
+        std::stack< WizardTypes::WizardState > aOldStateHistory = m_xWizardImpl->aStateHistory;
 
         WizardTypes::WizardState nCurrentRollbackState = getCurrentState();
         while ( nCurrentRollbackState != _nTargetState )
         {
-            DBG_ASSERT( !aTravelVirtually.empty(), "OWizardMachine::skipBackwardUntil: this target state does not exist in the history!" );
+            DBG_ASSERT( !aTravelVirtually.empty(), "RoadmapWizard::skipBackwardUntil: this target state does not exist in the history!" );
             nCurrentRollbackState = aTravelVirtually.top();
             aTravelVirtually.pop();
         }
-        m_pImpl->aStateHistory = aTravelVirtually;
+        m_xWizardImpl->aStateHistory = aTravelVirtually;
         if ( !ShowPage( _nTargetState ) )
         {
-            m_pImpl->aStateHistory = aOldStateHistory;
+            m_xWizardImpl->aStateHistory = aOldStateHistory;
             return false;
         }
         return true;
     }
 
-
-    bool OWizardMachine::skipUntil( WizardTypes::WizardState _nTargetState )
+    bool RoadmapWizard::skipUntil( WizardTypes::WizardState _nTargetState )
     {
         WizardTypes::WizardState nCurrentState = getCurrentState();
 
@@ -1020,15 +902,15 @@ namespace vcl
         if ( !prepareLeaveCurrentState( nCurrentState < _nTargetState ? WizardTypes::eTravelForward : WizardTypes::eTravelBackward ) )
             return false;
 
-        // don't travel directly on m_pImpl->aStateHistory, in case something goes wrong
-        std::stack< WizardTypes::WizardState > aTravelVirtually = m_pImpl->aStateHistory;
-        std::stack< WizardTypes::WizardState > aOldStateHistory = m_pImpl->aStateHistory;
+        // don't travel directly on m_xWizardImpl->aStateHistory, in case something goes wrong
+        std::stack< WizardTypes::WizardState > aTravelVirtually = m_xWizardImpl->aStateHistory;
+        std::stack< WizardTypes::WizardState > aOldStateHistory = m_xWizardImpl->aStateHistory;
         while ( nCurrentState != _nTargetState )
         {
             WizardTypes::WizardState nNextState = determineNextState( nCurrentState );
             if ( WZS_INVALID_STATE == nNextState )
             {
-                OSL_FAIL( "OWizardMachine::skipUntil: the given target state does not exist!" );
+                OSL_FAIL( "RoadmapWizard::skipUntil: the given target state does not exist!" );
                 return false;
             }
 
@@ -1038,21 +920,20 @@ namespace vcl
             // get the next state
             nCurrentState = nNextState;
         }
-        m_pImpl->aStateHistory = aTravelVirtually;
+        m_xWizardImpl->aStateHistory = aTravelVirtually;
         // show the target page
         if ( !ShowPage( nCurrentState ) )
         {
             // argh! prepareLeaveCurrentPage succeeded, determineNextState succeeded,
             // but ShowPage doesn't? Somebody behaves very strange here...
-            OSL_FAIL( "OWizardMachine::skipUntil: very unpolite..." );
-            m_pImpl->aStateHistory = aOldStateHistory;
+            OSL_FAIL( "RoadmapWizard::skipUntil: very unpolite..." );
+            m_xWizardImpl->aStateHistory = aOldStateHistory;
             return false;
         }
         return true;
     }
 
-
-    void OWizardMachine::skip()
+    void RoadmapWizard::skip()
     {
         // allowed to leave the current page?
         if ( !prepareLeaveCurrentState( WizardTypes::eTravelForward ) )
@@ -1065,7 +946,7 @@ namespace vcl
             return;
 
         // remember the skipped state in the history
-        m_pImpl->aStateHistory.push(nCurrentState);
+        m_xWizardImpl->aStateHistory.push(nCurrentState);
 
         // get the next state
         nCurrentState = nNextState;
@@ -1075,7 +956,7 @@ namespace vcl
         {
             // TODO: this leaves us in a state where we have no current page and an inconsistent state history.
             // Perhaps we should rollback the skipping here...
-            OSL_FAIL("OWizardMachine::skip: very unpolite...");
+            OSL_FAIL("RoadmapWizard::skip: very unpolite...");
                 // if somebody does a skip and then does not allow to leave...
                 // (can't be a commit error, as we've already committed the current page. So if ShowPage fails here,
                 // somebody behaves really strange...)
@@ -1085,7 +966,7 @@ namespace vcl
         // all fine
     }
 
-    bool OWizardMachine::travelNext()
+    bool RoadmapWizard::travelNext()
     {
         // allowed to leave the current page?
         if ( !prepareLeaveCurrentState( WizardTypes::eTravelForward ) )
@@ -1099,34 +980,33 @@ namespace vcl
 
         // the state history is used by the enterState method
         // all fine
-        m_pImpl->aStateHistory.push(nCurrentState);
+        m_xWizardImpl->aStateHistory.push(nCurrentState);
         if (!ShowPage(nNextState))
         {
-            m_pImpl->aStateHistory.pop();
+            m_xWizardImpl->aStateHistory.pop();
             return false;
         }
 
         return true;
     }
 
-
-    bool OWizardMachine::travelPrevious()
+    bool RoadmapWizard::travelPrevious()
     {
-        DBG_ASSERT(!m_pImpl->aStateHistory.empty(), "OWizardMachine::travelPrevious: have no previous page!");
+        DBG_ASSERT(!m_xWizardImpl->aStateHistory.empty(), "RoadmapWizard::travelPrevious: have no previous page!");
 
         // allowed to leave the current page?
         if ( !prepareLeaveCurrentState( WizardTypes::eTravelBackward ) )
             return false;
 
         // the next state to switch to
-        WizardTypes::WizardState nPreviousState = m_pImpl->aStateHistory.top();
+        WizardTypes::WizardState nPreviousState = m_xWizardImpl->aStateHistory.top();
 
         // the state history is used by the enterState method
-        m_pImpl->aStateHistory.pop();
+        m_xWizardImpl->aStateHistory.pop();
         // show this page
         if (!ShowPage(nPreviousState))
         {
-            m_pImpl->aStateHistory.push(nPreviousState);
+            m_xWizardImpl->aStateHistory.push(nPreviousState);
             return false;
         }
 
@@ -1134,15 +1014,14 @@ namespace vcl
         return true;
     }
 
-
-    void  OWizardMachine::removePageFromHistory( WizardTypes::WizardState nToRemove )
+    void  RoadmapWizard::removePageFromHistory( WizardTypes::WizardState nToRemove )
     {
 
         std::stack< WizardTypes::WizardState > aTemp;
-        while(!m_pImpl->aStateHistory.empty())
+        while(!m_xWizardImpl->aStateHistory.empty())
         {
-            WizardTypes::WizardState nPreviousState = m_pImpl->aStateHistory.top();
-            m_pImpl->aStateHistory.pop();
+            WizardTypes::WizardState nPreviousState = m_xWizardImpl->aStateHistory.top();
+            m_xWizardImpl->aStateHistory.pop();
             if(nPreviousState != nToRemove)
                 aTemp.push( nPreviousState );
             else
@@ -1150,52 +1029,46 @@ namespace vcl
         }
         while(!aTemp.empty())
         {
-            m_pImpl->aStateHistory.push( aTemp.top() );
+            m_xWizardImpl->aStateHistory.push( aTemp.top() );
             aTemp.pop();
         }
     }
 
-
-    void OWizardMachine::enableAutomaticNextButtonState()
+    void RoadmapWizard::enableAutomaticNextButtonState()
     {
-        m_pImpl->m_bAutoNextButtonState = true;
+        m_xWizardImpl->m_bAutoNextButtonState = true;
     }
 
-
-    bool OWizardMachine::isAutomaticNextButtonStateEnabled() const
+    bool RoadmapWizard::isAutomaticNextButtonStateEnabled() const
     {
-        return m_pImpl->m_bAutoNextButtonState;
+        return m_xWizardImpl->m_bAutoNextButtonState;
     }
 
-
-    IMPL_LINK_NOARG(OWizardMachine, OnPrevPage, Button*, void)
+    IMPL_LINK_NOARG(RoadmapWizard, OnPrevPage, Button*, void)
     {
         if ( isTravelingSuspended() )
             return;
-        WizardTravelSuspension aTravelGuard( *this );
+        RoadmapWizardTravelSuspension aTravelGuard( *this );
         travelPrevious();
     }
 
-
-    IMPL_LINK_NOARG(OWizardMachine, OnNextPage, Button*, void)
+    IMPL_LINK_NOARG(RoadmapWizard, OnNextPage, Button*, void)
     {
         if ( isTravelingSuspended() )
             return;
-        WizardTravelSuspension aTravelGuard( *this );
+        RoadmapWizardTravelSuspension aTravelGuard( *this );
         travelNext();
     }
 
-
-    IWizardPageController* OWizardMachine::getPageController( TabPage* _pCurrentPage ) const
+    IWizardPageController* RoadmapWizard::getPageController( TabPage* _pCurrentPage ) const
     {
         IWizardPageController* pController = dynamic_cast< IWizardPageController* >( _pCurrentPage );
         return pController;
     }
 
-
-    void OWizardMachine::getStateHistory( std::vector< WizardTypes::WizardState >& _out_rHistory )
+    void RoadmapWizard::getStateHistory( std::vector< WizardTypes::WizardState >& _out_rHistory )
     {
-        std::stack< WizardTypes::WizardState > aHistoryCopy( m_pImpl->aStateHistory );
+        std::stack< WizardTypes::WizardState > aHistoryCopy( m_xWizardImpl->aStateHistory );
         while ( !aHistoryCopy.empty() )
         {
             _out_rHistory.push_back( aHistoryCopy.top() );
@@ -1203,42 +1076,21 @@ namespace vcl
         }
     }
 
-
-    bool OWizardMachine::canAdvance() const
+    bool RoadmapWizard::isTravelingSuspended() const
     {
-        return WZS_INVALID_STATE != determineNextState( getCurrentState() );
+        return m_xWizardImpl->m_bTravelingSuspended;
     }
 
-
-    void OWizardMachine::updateTravelUI()
+    void RoadmapWizard::suspendTraveling( AccessGuard )
     {
-        const IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
-        OSL_ENSURE( pController != nullptr, "RoadmapWizard::updateTravelUI: no controller for the current page!" );
-
-        bool bCanAdvance =
-                ( !pController || pController->canAdvance() )   // the current page allows to advance
-            &&  canAdvance();                                   // the dialog as a whole allows to advance
-        enableButtons( WizardButtonFlags::NEXT, bCanAdvance );
+        DBG_ASSERT( !m_xWizardImpl->m_bTravelingSuspended, "RoadmapWizard::suspendTraveling: already suspended!" );
+        m_xWizardImpl->m_bTravelingSuspended = true;
     }
 
-
-    bool OWizardMachine::isTravelingSuspended() const
+    void RoadmapWizard::resumeTraveling( AccessGuard )
     {
-        return m_pImpl->m_bTravelingSuspended;
-    }
-
-
-    void OWizardMachine::suspendTraveling( AccessGuard )
-    {
-        DBG_ASSERT( !m_pImpl->m_bTravelingSuspended, "OWizardMachine::suspendTraveling: already suspended!" );
-        m_pImpl->m_bTravelingSuspended = true;
-    }
-
-
-    void OWizardMachine::resumeTraveling( AccessGuard )
-    {
-        DBG_ASSERT( m_pImpl->m_bTravelingSuspended, "OWizardMachine::resumeTraveling: nothing to resume!" );
-        m_pImpl->m_bTravelingSuspended = false;
+        DBG_ASSERT( m_xWizardImpl->m_bTravelingSuspended, "RoadmapWizard::resumeTraveling: nothing to resume!" );
+        m_xWizardImpl->m_bTravelingSuspended = false;
     }
 
     WizardMachine::WizardMachine(weld::Window* pParent, WizardButtonFlags nButtonFlags)
@@ -1579,7 +1431,7 @@ namespace vcl
         {
             // TODO: this leaves us in a state where we have no current page and an inconsistent state history.
             // Perhaps we should rollback the skipping here...
-            OSL_FAIL("OWizardMachine::skip: very unpolite...");
+            OSL_FAIL("RoadmapWizard::skip: very unpolite...");
                 // if somebody does a skip and then does not allow to leave...
                 // (can't be a commit error, as we've already committed the current page. So if ShowPage fails here,
                 // somebody behaves really strange ...)
