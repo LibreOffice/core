@@ -82,11 +82,6 @@ namespace vcl
     class VCL_DLLPUBLIC OWizardPage : public TabPage, public IWizardPageController
     {
     public:
-        /** @param _pParent
-                if the OWizardPage is used in an OWizardMachine, this parameter
-                must be the OWizardMachine (which is derived from Window)
-         */
-        OWizardPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
         OWizardPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID);
         virtual void dispose() override;
         virtual ~OWizardPage() override;

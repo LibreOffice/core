@@ -38,12 +38,6 @@
 namespace vcl
 {
     //= WizardPageImplData
-    OWizardPage::OWizardPage(vcl::Window *pParent, const OString& rID,
-        const OUString& rUIXMLDescription)
-        : TabPage(pParent, rID, rUIXMLDescription)
-    {
-    }
-
     OWizardPage::OWizardPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID)
         : TabPage(pParent.pPage ? Application::GetDefDialogParent() : pParent.pParent.get()) //just drag this along hidden in this scenario
         , m_xBuilder(pParent.pPage ? Application::CreateBuilder(pParent.pPage, rUIXMLDescription)
