@@ -107,7 +107,7 @@ namespace vcl
         std::unique_ptr<RoadmapWizardImpl> m_xRoadmapImpl;
 
     public:
-        RoadmapWizard(vcl::Window* pParent);
+        RoadmapWizard(vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG, InitFlag eFlag = InitFlag::Default);
         virtual ~RoadmapWizard( ) override;
         virtual void dispose() override;
 

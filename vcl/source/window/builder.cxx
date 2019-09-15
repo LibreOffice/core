@@ -1744,15 +1744,13 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         WinBits nBits = WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
+        Dialog::InitFlag eInit = !pParent ? Dialog::InitFlag::NoParent : Dialog::InitFlag::Default;
         if (name == "GtkAssistant")
-        {
-            //TODO when no bare OWizardMachine pass nBits down instead of using empty .ui
-            xWindow = VclPtr<vcl::RoadmapWizard>::Create(pParent);
-        }
+            xWindow = VclPtr<vcl::RoadmapWizard>::Create(pParent, nBits, eInit);
         else if (name == "GtkAboutDialog")
-            xWindow = VclPtr<vcl::AboutDialog>::Create(pParent, nBits, !pParent ? Dialog::InitFlag::NoParent : Dialog::InitFlag::Default);
+            xWindow = VclPtr<vcl::AboutDialog>::Create(pParent, nBits, eInit);
         else
-            xWindow = VclPtr<Dialog>::Create(pParent, nBits, !pParent ? Dialog::InitFlag::NoParent : Dialog::InitFlag::Default);
+            xWindow = VclPtr<Dialog>::Create(pParent, nBits, eInit);
 #if HAVE_FEATURE_DESKTOP
         if (!m_bLegacy && !extractModal(rMap))
             xWindow->SetType(WindowType::MODELESSDIALOG);
