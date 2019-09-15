@@ -216,8 +216,6 @@
 "ScAnnotationShapeObj";"com::sun::star::beans::XPropertySet";"removePropertyChangeListener()"
 "ScAnnotationShapeObj";"com::sun::star::beans::XPropertySet";"addVetoableChangeListener()"
 "ScAnnotationShapeObj";"com::sun::star::beans::XPropertySet";"removeVetoableChangeListener()"
-"ScAnnotationShapeObj";"com::sun::star::text::XText";"insertTextContent()"
-"ScAnnotationShapeObj";"com::sun::star::text::XText";"removeTextContent()"
 "ScAnnotationShapeObj";"com::sun::star::style::ParagraphPropertiesAsian#optional";"ParaIsHangingPunctuation"
 "ScAnnotationShapeObj";"com::sun::star::style::ParagraphPropertiesAsian#optional";"ParaIsCharacterDistance"
 "ScAnnotationShapeObj";"com::sun::star::style::ParagraphPropertiesAsian#optional";"ParaIsForbiddenRules"
