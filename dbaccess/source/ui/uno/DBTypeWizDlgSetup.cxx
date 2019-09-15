@@ -107,16 +107,16 @@ Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialogSetup::getPropertySetInfo(
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-svt::OGenericUnoDialog::Dialog ODBTypeWizDialogSetup::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+std::unique_ptr<weld::DialogController> ODBTypeWizDialogSetup::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    return svt::OGenericUnoDialog::Dialog(std::make_unique<ODbTypeWizDialogSetup>(Application::GetFrameWeld(rParent), m_pDatasourceItems.get(), m_aContext, m_aInitialSelection));
+    return std::make_unique<ODbTypeWizDialogSetup>(Application::GetFrameWeld(rParent), m_pDatasourceItems.get(), m_aContext, m_aInitialSelection);
 }
 
 void ODBTypeWizDialogSetup::executedDialog(sal_Int16 nExecutionResult)
 {
     if (nExecutionResult == css::ui::dialogs::ExecutableDialogResults::OK)
     {
-        const ODbTypeWizDialogSetup* pDialog = static_cast<ODbTypeWizDialogSetup*>(m_aDialog.m_xWeldDialog.get());
+        const ODbTypeWizDialogSetup* pDialog = static_cast<ODbTypeWizDialogSetup*>(m_xDialog.get());
         m_bOpenDatabase = pDialog->IsDatabaseDocumentToBeOpened();
         m_bStartTableWizard = pDialog->IsTableWizardToBeStarted();
     }

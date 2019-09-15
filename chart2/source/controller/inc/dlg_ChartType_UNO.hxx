@@ -40,7 +40,7 @@ private:
 
     // OGenericUnoDialog overridables
     virtual void implInitialize(const css::uno::Any& _rValue) override;
-    virtual svt::OGenericUnoDialog::Dialog createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+    virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
 
     // XTypeProvider
     virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;

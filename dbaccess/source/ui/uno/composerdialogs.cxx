@@ -80,7 +80,7 @@ namespace dbaui
 
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ComposerDialog )
 
-    svt::OGenericUnoDialog::Dialog ComposerDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+    std::unique_ptr<weld::DialogController> ComposerDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
         // obtain all the objects needed for the dialog
         Reference< XConnection > xConnection;
@@ -123,10 +123,10 @@ namespace dbaui
         if ( !xConnection.is() || !xColumns.is() || !m_xComposer.is() )
         {
             // can't create the dialog if I have improper settings
-            return svt::OGenericUnoDialog::Dialog();
+            return nullptr;
         }
 
-        return svt::OGenericUnoDialog::Dialog(createComposerDialog(Application::GetFrameWeld(rParent), xConnection, xColumns));
+        return createComposerDialog(Application::GetFrameWeld(rParent), xConnection, xColumns);
     }
 
     // RowsetFilterDialog
@@ -173,8 +173,8 @@ namespace dbaui
     {
         ComposerDialog::executedDialog( _nExecutionResult );
 
-        if ( _nExecutionResult && m_aDialog )
-            static_cast<DlgFilterCrit*>(m_aDialog.m_xWeldDialog.get())->BuildWherePart();
+        if ( _nExecutionResult && m_xDialog )
+            static_cast<DlgFilterCrit*>(m_xDialog.get())->BuildWherePart();
     }
 
     // RowsetOrderDialog
@@ -223,13 +223,13 @@ namespace dbaui
     {
         ComposerDialog::executedDialog( _nExecutionResult );
 
-        if ( !m_aDialog )
+        if ( !m_xDialog )
             return;
 
         if ( _nExecutionResult )
-            static_cast< DlgOrderCrit* >( m_aDialog.m_xWeldDialog.get() )->BuildOrderPart();
+            static_cast<DlgOrderCrit*>(m_xDialog.get())->BuildOrderPart();
         else if ( m_xComposer.is() )
-            m_xComposer->setOrder( static_cast< DlgOrderCrit* >( m_aDialog.m_xWeldDialog.get() )->GetOriginalOrder() );
+            m_xComposer->setOrder(static_cast<DlgOrderCrit*>(m_xDialog.get())->GetOriginalOrder());
     }
 
 }   // namespace dbaui

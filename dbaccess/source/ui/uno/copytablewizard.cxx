@@ -194,7 +194,7 @@ namespace dbaui
         virtual ~CopyTableWizard() override;
 
         // OGenericUnoDialog overridables
-        virtual svt::OGenericUnoDialog::Dialog createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+        virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
         virtual void executedDialog( sal_Int16 _nExecutionResult ) override;
 
     private:
@@ -548,7 +548,7 @@ void SAL_CALL CopyTableWizard::setTitle( const OUString& _rTitle )
 
 OCopyTableWizard& CopyTableWizard::impl_getDialog_throw()
 {
-    OCopyTableWizard* pWizard = dynamic_cast<OCopyTableWizard*>(m_aDialog.m_xWeldDialog.get());
+    OCopyTableWizard* pWizard = dynamic_cast<OCopyTableWizard*>(m_xDialog.get());
     if ( !pWizard )
         throw DisposedException( OUString(), *this );
     return *pWizard;
@@ -1506,7 +1506,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments )
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
 
-svt::OGenericUnoDialog::Dialog CopyTableWizard::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+std::unique_ptr<weld::DialogController> CopyTableWizard::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
     OSL_PRECOND( isInitialized(), "CopyTableWizard::createDialog: not initialized!" );
         // this should have been prevented in ::execute already
@@ -1523,7 +1523,7 @@ svt::OGenericUnoDialog::Dialog CopyTableWizard::createDialog(const css::uno::Ref
 
     impl_attributesToDialog_nothrow(*xWizard);
 
-    return svt::OGenericUnoDialog::Dialog(std::move(xWizard));
+    return xWizard;
 }
 
 void CopyTableWizard::executedDialog( sal_Int16 _nExecutionResult )
