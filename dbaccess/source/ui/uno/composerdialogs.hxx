@@ -68,7 +68,7 @@ namespace dbaui
 
     private:
         // OGenericUnoDialog overridables
-        virtual svt::OGenericUnoDialog::Dialog createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+        virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
     };
 
     // RowsetFilterDialog
