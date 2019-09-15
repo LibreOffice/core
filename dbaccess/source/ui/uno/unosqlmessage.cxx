@@ -147,14 +147,14 @@ Reference<XPropertySetInfo>  SAL_CALL OSQLMessageDialog::getPropertySetInfo()
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-svt::OGenericUnoDialog::Dialog OSQLMessageDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+std::unique_ptr<weld::DialogController> OSQLMessageDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
     weld::Window* pParent = Application::GetFrameWeld(rParent);
     if ( m_aException.hasValue() )
-        return svt::OGenericUnoDialog::Dialog(std::make_unique<OSQLMessageBox>(pParent, SQLExceptionInfo(m_aException), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, m_sHelpURL));
+        return std::make_unique<OSQLMessageBox>(pParent, SQLExceptionInfo(m_aException), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, m_sHelpURL);
 
     OSL_FAIL("OSQLMessageDialog::createDialog : You should use the SQLException property to specify the error to display!");
-    return svt::OGenericUnoDialog::Dialog(std::make_unique<OSQLMessageBox>(pParent, SQLException()));
+    return std::make_unique<OSQLMessageBox>(pParent, SQLException());
 }
 
 }   // namespace dbaui

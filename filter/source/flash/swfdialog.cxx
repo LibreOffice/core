@@ -114,7 +114,7 @@ Sequence< OUString > SAL_CALL SWFDialog::getSupportedServiceNames()
     return SWFDialog_getSupportedServiceNames();
 }
 
-svt::OGenericUnoDialog::Dialog SWFDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+std::unique_ptr<weld::DialogController> SWFDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
     std::unique_ptr<weld::DialogController> xRet;
 
@@ -143,13 +143,13 @@ svt::OGenericUnoDialog::Dialog SWFDialog::createDialog(const css::uno::Reference
         xRet.reset(new ImpSWFDialog(Application::GetFrameWeld(rParent), maFilterData));
     }
 
-    return svt::OGenericUnoDialog::Dialog(std::move(xRet));
+    return xRet;
 }
 
 void SWFDialog::executedDialog( sal_Int16 nExecutionResult )
 {
-    if (nExecutionResult && m_aDialog)
-        maFilterData = static_cast<ImpSWFDialog*>(m_aDialog.m_xWeldDialog.get())->GetFilterData();
+    if (nExecutionResult && m_xDialog)
+        maFilterData = static_cast<ImpSWFDialog*>(m_xDialog.get())->GetFilterData();
 
     destroyDialog();
 }
