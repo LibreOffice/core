@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_WIZDLG_HXX
 
 #include <memory>
-#include <vcl/dllapi.h>
 #include <vcl/roadmapwizard.hxx>
 
 namespace vcl
@@ -54,7 +53,7 @@ namespace vcl
         <code>n2</code>, which share at least the first <code>k</code> states (where <code>k</code>
         is at least 1), and an arbitrary number of other states.
     */
-    class VCL_DLLPUBLIC RoadmapWizard : public Dialog
+    class RoadmapWizard : public Dialog
     {
     private:
         Idle                    maWizardLayoutIdle;
@@ -71,7 +70,7 @@ namespace vcl
         sal_Int16               mnLeftAlignCount;
         bool                    mbEmptyViewMargin;
 
-        DECL_DLLPRIVATE_LINK( ImplHandleWizardLayoutTimerHdl, Timer*, void );
+        DECL_LINK( ImplHandleWizardLayoutTimerHdl, Timer*, void );
 
         // IMPORTANT:
         // traveling pages should not be done by calling these base class member, some mechanisms of this class
@@ -398,14 +397,14 @@ namespace vcl
         virtual OUString  getStateDisplayName(WizardTypes::WizardState nState) const;
 
     private:
-        DECL_DLLPRIVATE_LINK( OnRoadmapItemSelected, LinkParamNone*, void );
+        DECL_LINK( OnRoadmapItemSelected, LinkParamNone*, void );
 
         /** updates the roadmap control to show the given path, as far as possible
             (modulo conflicts with other paths)
         */
-        VCL_DLLPRIVATE void implUpdateRoadmap( );
+        void implUpdateRoadmap( );
 
-        VCL_DLLPRIVATE void impl_construct();
+        void impl_construct();
 
     public:
         class AccessGuard
@@ -423,21 +422,21 @@ namespace vcl
         TabPage* GetOrCreatePage(const WizardTypes::WizardState i_nState);
 
     private:
-        VCL_DLLPRIVATE void             ImplInitData();
-        VCL_DLLPRIVATE void             ImplCalcSize( Size& rSize );
-        VCL_DLLPRIVATE void             ImplPosCtrls();
-        VCL_DLLPRIVATE void             ImplPosTabPage();
-        VCL_DLLPRIVATE void             ImplShowTabPage( TabPage* pPage );
-        VCL_DLLPRIVATE TabPage*         ImplGetPage( sal_uInt16 nLevel ) const;
+        void             ImplInitData();
+        void             ImplCalcSize( Size& rSize );
+        void             ImplPosCtrls();
+        void             ImplPosTabPage();
+        void             ImplShowTabPage( TabPage* pPage );
+        TabPage*         ImplGetPage( sal_uInt16 nLevel ) const;
 
 
-        DECL_DLLPRIVATE_LINK(OnNextPage, Button*, void);
-        DECL_DLLPRIVATE_LINK(OnPrevPage, Button*, void);
-        DECL_DLLPRIVATE_LINK(OnFinish, Button*, void);
+        DECL_LINK(OnNextPage, Button*, void);
+        DECL_LINK(OnPrevPage, Button*, void);
+        DECL_LINK(OnFinish, Button*, void);
 
-        VCL_DLLPRIVATE void     implResetDefault(vcl::Window const * _pWindow);
-        VCL_DLLPRIVATE void     implUpdateTitle();
-        VCL_DLLPRIVATE void     implConstruct( const WizardButtonFlags _nButtonFlags );
+        void     implResetDefault(vcl::Window const * _pWindow);
+        void     implUpdateTitle();
+        void     implConstruct( const WizardButtonFlags _nButtonFlags );
     };
 
     /// helper class to temporarily suspend any traveling in the wizard

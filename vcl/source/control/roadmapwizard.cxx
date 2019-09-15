@@ -18,13 +18,13 @@
  */
 
 
-#include <vcl/wizdlg.hxx>
 #include <vcl/toolkit/roadmap.hxx>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
 #include <strings.hrc>
 #include <svdata.hxx>
+#include <wizdlg.hxx>
 
 #include <vector>
 #include <map>

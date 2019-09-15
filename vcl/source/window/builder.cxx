@@ -48,7 +48,6 @@
 #include <vcl/slider.hxx>
 #include <vcl/listctrl.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/wizdlg.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <svdata.hxx>
 #include <bitmaps.hlst>
@@ -62,6 +61,7 @@
 #include <treeglue.hxx>
 #include <tools/svlibrary.h>
 #include <tools/diagnose_ex.h>
+#include <wizdlg.hxx>
 
 #ifdef DISABLE_DYNLOADING
 #include <dlfcn.h>
