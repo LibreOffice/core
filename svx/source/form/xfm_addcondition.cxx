@@ -139,19 +139,19 @@ namespace svxform
         return new ::cppu::OPropertyArrayHelper( aProperties );
     }
 
-    svt::OGenericUnoDialog::Dialog OAddConditionDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+    std::unique_ptr<weld::DialogController> OAddConditionDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
         if ( !m_xBinding.is() || m_sFacetName.isEmpty() )
             throw RuntimeException( OUString(), *this );
 
-        return svt::OGenericUnoDialog::Dialog(std::make_unique<AddConditionDialog>(Application::GetFrameWeld(rParent), m_sFacetName, m_xBinding));
+        return std::make_unique<AddConditionDialog>(Application::GetFrameWeld(rParent), m_sFacetName, m_xBinding);
     }
 
     void OAddConditionDialog::executedDialog( sal_Int16 _nExecutionResult )
     {
         OAddConditionDialogBase::executedDialog( _nExecutionResult );
         if ( _nExecutionResult == RET_OK )
-            m_sConditionValue = static_cast< AddConditionDialog* >( m_aDialog.m_xWeldDialog.get() )->GetCondition();
+            m_sConditionValue = static_cast<AddConditionDialog*>(m_xDialog.get())->GetCondition();
     }
 }
 

@@ -104,9 +104,9 @@ namespace dbp
 
     private:
         // OGenericUnoDialog overridables
-        virtual svt::OGenericUnoDialog::Dialog createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override
+        virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override
         {
-            return svt::OGenericUnoDialog::Dialog(std::make_unique<TYPE>(Application::GetFrameWeld(rParent), m_xObjectModel, m_aContext));
+            return std::make_unique<TYPE>(Application::GetFrameWeld(rParent), m_xObjectModel, m_aContext);
         }
 
         virtual void implInitialize(const css::uno::Any& _rValue) override

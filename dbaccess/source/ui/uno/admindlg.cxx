@@ -93,7 +93,7 @@ Reference<XPropertySetInfo>  SAL_CALL ODataSourcePropertyDialog::getPropertySetI
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-svt::OGenericUnoDialog::Dialog ODataSourcePropertyDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+std::unique_ptr<weld::DialogController> ODataSourcePropertyDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
     std::unique_ptr<ODbAdminDialog> xDialog(new ODbAdminDialog(Application::GetFrameWeld(rParent), m_pDatasourceItems.get(), m_aContext));
 
@@ -101,7 +101,7 @@ svt::OGenericUnoDialog::Dialog ODataSourcePropertyDialog::createDialog(const css
     if ( m_aInitialSelection.hasValue() )
         xDialog->selectDataSource(m_aInitialSelection);
 
-    return svt::OGenericUnoDialog::Dialog(std::move(xDialog));
+    return xDialog;
 }
 
 }   // namespace dbaui

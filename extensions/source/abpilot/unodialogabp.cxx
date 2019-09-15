@@ -114,9 +114,9 @@ namespace abp
         }
     }
 
-    svt::OGenericUnoDialog::Dialog OABSPilotUno::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+    std::unique_ptr<weld::DialogController> OABSPilotUno::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
-        return svt::OGenericUnoDialog::Dialog(std::make_unique<OAddressBookSourcePilot>(Application::GetFrameWeld(rParent), m_aContext));
+        return std::make_unique<OAddressBookSourcePilot>(Application::GetFrameWeld(rParent), m_aContext);
     }
 
     Any SAL_CALL OABSPilotUno::execute( const Sequence< NamedValue >& /*lArgs*/ )
@@ -138,7 +138,7 @@ namespace abp
     {
         if ( _nExecutionResult == RET_OK )
         {
-            const AddressSettings& aSettings = static_cast<OAddressBookSourcePilot*>(m_aDialog.m_xWeldDialog.get())->getSettings();
+            const AddressSettings& aSettings = static_cast<OAddressBookSourcePilot*>(m_xDialog.get())->getSettings();
             m_sDataSourceName = aSettings.bRegisterDataSource ? aSettings.sRegisteredDataSourceName : aSettings.sDataSourceName;
         }
     }

@@ -56,7 +56,7 @@ namespace svxform
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // OGenericUnoDialog overridables
-        virtual svt::OGenericUnoDialog::Dialog createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+        virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
         virtual void executedDialog(sal_Int16 _nExecutionResult) override;
 
         css::uno::Reference< css::beans::XPropertySet >

@@ -83,17 +83,17 @@ Sequence< OUString > SAL_CALL PDFDialog::getSupportedServiceNames()
     return PDFDialog_getSupportedServiceNames();
 }
 
-svt::OGenericUnoDialog::Dialog PDFDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+std::unique_ptr<weld::DialogController> PDFDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
     if( mxSrcDoc.is() )
-        return svt::OGenericUnoDialog::Dialog(std::make_unique<ImpPDFTabDialog>(Application::GetFrameWeld(rParent), maFilterData, mxSrcDoc));
-    return svt::OGenericUnoDialog::Dialog();
+        return std::make_unique<ImpPDFTabDialog>(Application::GetFrameWeld(rParent), maFilterData, mxSrcDoc);
+    return nullptr;
 }
 
 void PDFDialog::executedDialog( sal_Int16 nExecutionResult )
 {
-    if (nExecutionResult && m_aDialog)
-        maFilterData = static_cast<ImpPDFTabDialog*>(m_aDialog.m_xWeldDialog.get())->GetFilterData();
+    if (nExecutionResult && m_xDialog)
+        maFilterData = static_cast<ImpPDFTabDialog*>(m_xDialog.get())->GetFilterData();
     destroyDialog();
 }
 

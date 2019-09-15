@@ -100,11 +100,11 @@ namespace pcr
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
 
-    svt::OGenericUnoDialog::Dialog MasterDetailLinkDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+    std::unique_ptr<weld::DialogController> MasterDetailLinkDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
-        return svt::OGenericUnoDialog::Dialog(std::make_unique<FormLinkDialog>(Application::GetFrameWeld(rParent), m_xDetail,
-                                                                               m_xMaster, m_aContext, m_sExplanation,
-                                                                               m_sDetailLabel, m_sMasterLabel));
+        return std::make_unique<FormLinkDialog>(Application::GetFrameWeld(rParent), m_xDetail,
+                                                m_xMaster, m_aContext, m_sExplanation,
+                                                m_sDetailLabel, m_sMasterLabel);
     }
 
     void MasterDetailLinkDialog::implInitialize(const Any& _rValue)
