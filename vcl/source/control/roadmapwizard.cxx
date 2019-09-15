@@ -909,6 +909,19 @@ namespace vcl
         return false;
     }
 
+    bool RoadmapWizardMachine::knowsState( WizardTypes::WizardState i_nState ) const
+    {
+        for (auto const& path : m_pImpl->aPaths)
+        {
+            for (auto const& state : path.second)
+            {
+                if ( state == i_nState )
+                    return true;
+            }
+        }
+        return false;
+    }
+
     bool RoadmapWizard::isStateEnabled( WizardTypes::WizardState _nState ) const
     {
         return m_xRoadmapImpl->aDisabledStates.find( _nState ) == m_xRoadmapImpl->aDisabledStates.end();

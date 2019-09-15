@@ -157,6 +157,10 @@ namespace vcl
         */
         void    enableState(WizardTypes::WizardState nState, bool _bEnable = true);
 
+        /** returns true if and only if the given state is known in at least one declared path
+        */
+        bool    knowsState(WizardTypes::WizardState nState) const;
+
         // WizardMachine overriables
         virtual void            enterState(WizardTypes::WizardState nState) override;
 

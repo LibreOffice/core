@@ -53,10 +53,8 @@ namespace svt { namespace uno
         ENSURE_OR_THROW( m_xController.is(), "no controller" );
         try
         {
-            m_xWizardPage.set( m_xController->createPage(
-                Reference< XWindow >( i_rParent.GetComponentInterface(), UNO_QUERY_THROW ),
-                i_nPageId
-            ), UNO_SET_THROW );
+            // TODO, I think here we'll do something like plug a toplevel SalFrame into the native page
+            m_xWizardPage.set(m_xController->createPage(i_rParent.getDialog()->GetXWindow(), i_nPageId), UNO_SET_THROW);
 
             Reference< XWindow > xPageWindow( m_xWizardPage->getWindow(), UNO_SET_THROW );
             xPageWindow->setVisible( true );
