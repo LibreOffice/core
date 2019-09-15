@@ -249,10 +249,10 @@ namespace {
 
     svt::OGenericUnoDialog::Dialog Wizard::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
-        VclPtrInstance<WizardShell> pDialog(VCLUnoHelper::GetWindow(rParent), m_xController, m_aWizardSteps);
-        pDialog->SetHelpId(  lcl_getHelpId( m_sHelpURL ) );
-        pDialog->setTitleBase( m_sTitle );
-        return OGenericUnoDialog::Dialog(pDialog);
+        auto xDialog = std::make_unique<WizardShell>(Application::GetFrameWeld(rParent), m_xController, m_aWizardSteps);
+        xDialog->set_help_id(lcl_getHelpId(m_sHelpURL));
+        xDialog->setTitleBase( m_sTitle );
+        return OGenericUnoDialog::Dialog(std::move(xDialog));
     }
 
     OUString SAL_CALL Wizard::getImplementationName()
@@ -260,25 +260,21 @@ namespace {
         return "com.sun.star.comp.svtools.uno.Wizard";
     }
 
-
     Sequence< OUString > SAL_CALL Wizard::getSupportedServiceNames()
     {
         Sequence< OUString > aServices { "com.sun.star.ui.dialogs.Wizard" };
         return aServices;
     }
 
-
     Reference< XPropertySetInfo > SAL_CALL Wizard::getPropertySetInfo()
     {
         return createPropertySetInfo( getInfoHelper() );
     }
 
-
     ::cppu::IPropertyArrayHelper& SAL_CALL Wizard::getInfoHelper()
     {
         return *getArrayHelper();
     }
-
 
     ::cppu::IPropertyArrayHelper* Wizard::createArrayHelper( ) const
     {
@@ -286,7 +282,6 @@ namespace {
         describeProperties( aProps );
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
-
 
     OUString SAL_CALL Wizard::getHelpURL()
     {
@@ -299,7 +294,6 @@ namespace {
         return lcl_getHelpURL(m_aDialog.get_help_id());
     }
 
-
     void SAL_CALL Wizard::setHelpURL( const OUString& i_HelpURL )
     {
         SolarMutexGuard aSolarGuard;
@@ -311,71 +305,65 @@ namespace {
             m_aDialog.set_help_id(lcl_getHelpId(i_HelpURL));
     }
 
-
     Reference< XWindow > SAL_CALL Wizard::getDialogWindow()
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        ENSURE_OR_RETURN( m_aDialog.m_xVclDialog, "Wizard::getDialogWindow: illegal call (execution did not start, yet)!", nullptr );
-        return Reference< XWindow >( m_aDialog.m_xVclDialog->GetComponentInterface(), UNO_QUERY );
+        ENSURE_OR_RETURN( m_aDialog.m_xWeldDialog, "Wizard::getDialogWindow: illegal call (execution did not start, yet)!", nullptr );
+        return m_aDialog.m_xWeldDialog->getDialog()->GetXWindow();
     }
-
 
     void SAL_CALL Wizard::enableButton( ::sal_Int16 i_WizardButton, sal_Bool i_Enable )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xVclDialog.get() );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xWeldDialog.get() );
         ENSURE_OR_RETURN_VOID( pWizardImpl, "Wizard::enableButtons: invalid dialog implementation!" );
 
         pWizardImpl->enableButtons( lcl_convertWizardButtonToWZB( i_WizardButton ), i_Enable );
     }
-
 
     void SAL_CALL Wizard::setDefaultButton( ::sal_Int16 i_WizardButton )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xVclDialog.get() );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xWeldDialog.get() );
         ENSURE_OR_RETURN_VOID( pWizardImpl, "Wizard::setDefaultButton: invalid dialog implementation!" );
 
         pWizardImpl->defaultButton( lcl_convertWizardButtonToWZB( i_WizardButton ) );
     }
-
 
     sal_Bool SAL_CALL Wizard::travelNext(  )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xVclDialog.get() );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xWeldDialog.get() );
         ENSURE_OR_RETURN_FALSE( pWizardImpl, "Wizard::travelNext: invalid dialog implementation!" );
 
         return pWizardImpl->travelNext();
     }
-
 
     sal_Bool SAL_CALL Wizard::travelPrevious(  )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xVclDialog.get() );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xWeldDialog.get() );
         ENSURE_OR_RETURN_FALSE( pWizardImpl, "Wizard::travelPrevious: invalid dialog implementation!" );
 
         return pWizardImpl->travelPrevious();
     }
-
 
     void SAL_CALL Wizard::enablePage( ::sal_Int16 i_PageID, sal_Bool i_Enable )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xVclDialog.get() );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xWeldDialog.get() );
         ENSURE_OR_RETURN_VOID( pWizardImpl, "Wizard::enablePage: invalid dialog implementation!" );
 
         if ( !pWizardImpl->knowsPage( i_PageID ) )
@@ -387,54 +375,49 @@ namespace {
         pWizardImpl->enablePage( i_PageID, i_Enable );
     }
 
-
     void SAL_CALL Wizard::updateTravelUI(  )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xVclDialog.get() );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xWeldDialog.get() );
         ENSURE_OR_RETURN_VOID( pWizardImpl, "Wizard::updateTravelUI: invalid dialog implementation!" );
 
         pWizardImpl->updateTravelUI();
     }
-
 
     sal_Bool SAL_CALL Wizard::advanceTo( ::sal_Int16 i_PageId )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xVclDialog.get() );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xWeldDialog.get() );
         ENSURE_OR_RETURN_FALSE( pWizardImpl, "Wizard::advanceTo: invalid dialog implementation!" );
 
         return pWizardImpl->advanceTo( i_PageId );
     }
-
 
     sal_Bool SAL_CALL Wizard::goBackTo( ::sal_Int16 i_PageId )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xVclDialog.get() );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xWeldDialog.get() );
         ENSURE_OR_RETURN_FALSE( pWizardImpl, "Wizard::goBackTo: invalid dialog implementation!" );
 
         return pWizardImpl->goBackTo( i_PageId );
     }
-
 
     Reference< XWizardPage > SAL_CALL Wizard::getCurrentPage(  )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xVclDialog.get() );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xWeldDialog.get() );
         ENSURE_OR_RETURN( pWizardImpl, "Wizard::getCurrentPage: invalid dialog implementation!", Reference< XWizardPage >() );
 
         return pWizardImpl->getCurrentWizardPage();
     }
-
 
     void SAL_CALL Wizard::activatePath( ::sal_Int16 i_PathIndex, sal_Bool i_Final )
     {
@@ -444,12 +427,11 @@ namespace {
         if ( ( i_PathIndex < 0 ) || ( i_PathIndex >= m_aWizardSteps.getLength() ) )
             throw NoSuchElementException( OUString(), *this );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xVclDialog.get() );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_aDialog.m_xWeldDialog.get() );
         ENSURE_OR_RETURN_VOID( pWizardImpl, "Wizard::activatePath: invalid dialog implementation!" );
 
         pWizardImpl->activatePath( i_PathIndex, i_Final );
     }
-
 
     void SAL_CALL Wizard::setTitle( const OUString& i_Title )
     {
@@ -457,12 +439,10 @@ namespace {
         Wizard_Base::OGenericUnoDialog::setTitle( i_Title );
     }
 
-
     ::sal_Int16 SAL_CALL Wizard::execute(  )
     {
         return Wizard_Base::OGenericUnoDialog::execute();
     }
-
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
