@@ -476,7 +476,6 @@ custom_widgets = [
     'IndexBox',
     'IndexBox',
     'ManagedMenuButton',
-    'MultiLineEditSyntaxHighlight',
     'OptionalBox',
     'PageNumberListBox',
     'PaperSizeListBox',

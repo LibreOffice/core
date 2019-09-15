@@ -21,18 +21,104 @@
 #include <directsql.hxx>
 #include <dbu_dlg.hxx>
 #include <strings.hrc>
-#include <vcl/weld.hxx>
 #include <comphelper/types.hxx>
-#include <vcl/svapp.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <osl/mutex.hxx>
+#include <svl/itemset.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/strbuf.hxx>
+#include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XMultipleResults.hpp>
 
 namespace dbaui
 {
+    SQLEditView::SQLEditView()
+    {
+    }
+
+    void SQLEditView::DoBracketHilight(sal_uInt16 nKey)
+    {
+        ESelection aCurrentPos = m_xEditView->GetSelection();
+        sal_Int32 nStartPos = aCurrentPos.nStartPos;
+        const sal_uInt32 nStartPara = aCurrentPos.nStartPara;
+        sal_uInt16 nCount = 0;
+        int nChar = -1;
+
+        switch (nKey)
+        {
+            case '\'':  // no break
+            case '"':
+            {
+                nChar = nKey;
+                break;
+            }
+            case '}' :
+            {
+                nChar = '{';
+                break;
+            }
+            case ')':
+            {
+                nChar = '(';
+                break;
+            }
+            case ']':
+            {
+                nChar = '[';
+                break;
+            }
+        }
+
+        if (nChar == -1)
+            return;
+
+        sal_uInt32 nPara = nStartPara;
+        do
+        {
+            if (nPara == nStartPara && nStartPos == 0)
+                continue;
+
+            OUString aLine( m_xEditEngine->GetText( nPara ) );
+
+            if (aLine.isEmpty())
+                continue;
+
+            for (sal_Int32 i = (nPara==nStartPara) ? nStartPos-1 : aLine.getLength()-1; i>0; --i)
+            {
+                if (aLine[i] == nChar)
+                {
+                    if (!nCount)
+                    {
+                        SfxItemSet aSet(m_xEditEngine->GetEmptyItemSet());
+                        aSet.Put(SvxColorItem(Color(0,0,0), EE_CHAR_COLOR));
+                        aSet.Put(SvxWeightItem(WEIGHT_ULTRABOLD, EE_CHAR_WEIGHT));
+                        aSet.Put(SvxWeightItem(WEIGHT_ULTRABOLD, EE_CHAR_WEIGHT_CJK));
+                        aSet.Put(SvxWeightItem(WEIGHT_ULTRABOLD, EE_CHAR_WEIGHT_CTL));
+
+                        m_xEditEngine->QuickSetAttribs(aSet, ESelection(nPara, i, nPara, i + 1));
+                        m_xEditEngine->QuickSetAttribs(aSet, ESelection(nStartPara, nStartPos, nStartPara, nStartPos));
+                        return;
+                    }
+                    else
+                        --nCount;
+                }
+                if (aLine[i] == nKey)
+                    ++nCount;
+            }
+        } while (nPara--);
+    }
+
+    bool SQLEditView::KeyInput(const KeyEvent& rKEvt)
+    {
+        DoBracketHilight(rKEvt.GetCharCode());
+        return WeldEditView::KeyInput(rKEvt);
+    }
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
@@ -41,33 +127,34 @@ namespace dbaui
     constexpr sal_Int32 g_nHistoryLimit = 20;
 
     // DirectSQLDialog
-    DirectSQLDialog::DirectSQLDialog( vcl::Window* _pParent, const Reference< XConnection >& _rxConn )
-        :ModalDialog(_pParent, "DirectSQLDialog" , "dbaccess/ui/directsqldialog.ui")
-        ,m_nStatusCount(1)
-        ,m_xConnection(_rxConn)
+    DirectSQLDialog::DirectSQLDialog(weld::Window* _pParent, const Reference< XConnection >& _rxConn)
+        : GenericDialogController(_pParent, "dbaccess/ui/directsqldialog.ui", "DirectSQLDialog")
+        , m_xExecute(m_xBuilder->weld_button("execute"))
+        , m_xSQLHistory(m_xBuilder->weld_combo_box("sqlhistory"))
+        , m_xStatus(m_xBuilder->weld_text_view("status"))
+        , m_xShowOutput(m_xBuilder->weld_check_button("showoutput"))
+        , m_xOutput(m_xBuilder->weld_text_view("output"))
+        , m_xClose(m_xBuilder->weld_button("close"))
+        , m_xSQL(new SQLEditView)
+        , m_xSQLEd(new weld::CustomWeld(*m_xBuilder, "sql", *m_xSQL))
+        , m_aHighlighter(HighlighterLanguage::SQL)
+        , m_nStatusCount(1)
+        , m_bInUpdate(false)
+        , m_xConnection(_rxConn)
+        , m_pClosingEvent(nullptr)
     {
-        get(m_pSQL,"sql");
-        Size aSize(m_pSQL->CalcBlockSize(60, 7));
-        m_pSQL->set_width_request(aSize.Width());
-        m_pSQL->set_height_request(aSize.Height());
-        get(m_pExecute,"execute");
-        get(m_pSQLHistory,"sqlhistory");
-        get(m_pStatus,"status");
-        aSize  = m_pStatus->CalcBlockSize(60, 5);
-        m_pStatus->set_height_request(aSize.Height());
-        get(m_pShowOutput,"showoutput");
-        get(m_pOutput,"output");
-        aSize  = m_pOutput->CalcBlockSize(60, 5);
-        m_pOutput->set_height_request(aSize.Height());
-        get(m_pClose,"close");
+        int nWidth = m_xStatus->get_approximate_digit_width() * 60;
+        int nHeight = m_xStatus->get_height_rows(7);
 
+        m_xSQLEd->set_size_request(nWidth, nHeight);
+        m_xStatus->set_size_request(-1, nHeight);
+        m_xOutput->set_size_request(-1, nHeight);
 
-        m_pSQL->GrabFocus();
+        m_xSQL->GrabFocus();
 
-        m_pExecute->SetClickHdl(LINK(this, DirectSQLDialog, OnExecute));
-        m_pClose->SetClickHdl(LINK(this, DirectSQLDialog, OnCloseClick));
-        m_pSQLHistory->SetSelectHdl(LINK(this, DirectSQLDialog, OnListEntrySelected));
-        m_pSQLHistory->SetDropDownLineCount(10);
+        m_xExecute->connect_clicked(LINK(this, DirectSQLDialog, OnExecute));
+        m_xClose->connect_clicked(LINK(this, DirectSQLDialog, OnCloseClick));
+        m_xSQLHistory->connect_changed(LINK(this, DirectSQLDialog, OnListEntrySelected));
 
         // add a dispose listener to the connection
         Reference< XComponent > xConnComp(m_xConnection, UNO_QUERY);
@@ -75,29 +162,19 @@ namespace dbaui
         if (xConnComp.is())
             startComponentListening(xConnComp);
 
-        m_pSQL->SetModifyHdl(LINK(this, DirectSQLDialog, OnStatementModified));
-        OnStatementModified(*m_pSQL);
+        m_xSQL->SetModifyHdl(LINK(this, DirectSQLDialog, OnStatementModified));
+        OnStatementModified(nullptr);
+
+        m_aUpdateDataTimer.SetTimeout(300);
+        m_aUpdateDataTimer.SetInvokeHandler(LINK(this, DirectSQLDialog, ImplUpdateDataHdl));
     }
 
     DirectSQLDialog::~DirectSQLDialog()
     {
-        disposeOnce();
-    }
-
-    void DirectSQLDialog::dispose()
-    {
-        {
-            ::osl::MutexGuard aGuard(m_aMutex);
-            stopAllComponentListening();
-        }
-        m_pSQL.clear();
-        m_pExecute.clear();
-        m_pSQLHistory.clear();
-        m_pStatus.clear();
-        m_pShowOutput.clear();
-        m_pOutput.clear();
-        m_pClose.clear();
-        ModalDialog::dispose();
+        ::osl::MutexGuard aGuard(m_aMutex);
+        if (m_pClosingEvent)
+            Application::RemoveUserEvent(m_pClosingEvent);
+        stopAllComponentListening();
     }
 
     void DirectSQLDialog::_disposing( const EventObject& _rSource )
@@ -105,18 +182,20 @@ namespace dbaui
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard(m_aMutex);
 
+        assert(!m_pClosingEvent);
+
         OSL_ENSURE(Reference< XConnection >(_rSource.Source, UNO_QUERY).get() == m_xConnection.get(),
             "DirectSQLDialog::_disposing: where does this come from?");
 
         {
             OUString sMessage(DBA_RES(STR_DIRECTSQL_CONNECTIONLOST));
-            std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(m_xDialog.get(),
                                                         VclMessageType::Warning, VclButtonsType::Ok,
                                                         sMessage));
             xError->run();
         }
 
-        PostUserEvent(LINK(this, DirectSQLDialog, OnClose), nullptr, true);
+        m_pClosingEvent = Application::PostUserEvent(LINK(this, DirectSQLDialog, OnClose));
     }
 
     sal_Int32 DirectSQLDialog::getHistorySize() const
@@ -138,7 +217,7 @@ namespace dbaui
         {
             m_aStatementHistory.pop_front();
             m_aNormalizedHistory.pop_front();
-            m_pSQLHistory->RemoveEntry(sal_uInt16(0));
+            m_xSQLHistory->remove(0);
         }
     }
 
@@ -154,7 +233,7 @@ namespace dbaui
         m_aNormalizedHistory.push_back(sNormalized);
 
         // add the normalized version to the list box
-        m_pSQLHistory->InsertEntry(sNormalized);
+        m_xSQLHistory->append_text(sNormalized);
 
         // ensure that we don't exceed the history limit
         implEnsureHistoryLimit();
@@ -166,10 +245,10 @@ namespace dbaui
         if (m_aStatementHistory.size() != m_aNormalizedHistory.size())
             return "statement history is inconsistent!";
 
-        if (!m_pSQLHistory)
+        if (!m_xSQLHistory)
             return "invalid listbox!";
 
-        if (m_aStatementHistory.size() != static_cast<size_t>(m_pSQLHistory->GetEntryCount()))
+        if (m_aStatementHistory.size() != static_cast<size_t>(m_xSQLHistory->get_count()))
             return "invalid listbox entry count!";
 
         if (!m_xConnection.is())
@@ -188,7 +267,7 @@ namespace dbaui
         OUString sStatus;
 
         // clear the output box
-        m_pOutput->SetText(OUString());
+        m_xOutput->set_text(OUString());
         try
         {
             // create a statement
@@ -203,7 +282,7 @@ namespace dbaui
                 if(hasRS)
                 {
                     css::uno::Reference< css::sdbc::XResultSet > xRS (xMR->getResultSet());
-                    if (m_pShowOutput->IsChecked())
+                    if (m_xShowOutput->get_active())
                         display(xRS);
                 }
                 else
@@ -213,7 +292,7 @@ namespace dbaui
                     if(hasRS)
                     {
                         css::uno::Reference< css::sdbc::XResultSet > xRS (xMR->getResultSet());
-                        if (m_pShowOutput->IsChecked())
+                        if (m_xShowOutput->get_active())
                             display(xRS);
                     }
                 }
@@ -223,7 +302,7 @@ namespace dbaui
                 if (_rStatement.toAsciiUpperCase().startsWith("SELECT"))
                 {
                     css::uno::Reference< css::sdbc::XResultSet > xRS = xStatement->executeQuery(_rStatement);
-                    if(m_pShowOutput->IsChecked())
+                    if (m_xShowOutput->get_active())
                         display(xRS);
                 }
                 else
@@ -284,25 +363,25 @@ namespace dbaui
     {
         OUString sAppendMessage = OUString::number(m_nStatusCount++) + ": " + _rMessage + "\n\n";
 
-        OUString sCompleteMessage = m_pStatus->GetText() + sAppendMessage;
-        m_pStatus->SetText(sCompleteMessage);
+        OUString sCompleteMessage = m_xStatus->get_text() + sAppendMessage;
+        m_xStatus->set_text(sCompleteMessage);
 
-        m_pStatus->SetSelection(Selection(sCompleteMessage.getLength(), sCompleteMessage.getLength()));
+        m_xStatus->select_region(sCompleteMessage.getLength(), sCompleteMessage.getLength());
     }
 
     void DirectSQLDialog::addOutputText(const OUString& _rMessage)
     {
         OUString sAppendMessage = _rMessage + "\n";
 
-        OUString sCompleteMessage = m_pOutput->GetText() + sAppendMessage;
-        m_pOutput->SetText(sCompleteMessage);
+        OUString sCompleteMessage = m_xOutput->get_text() + sAppendMessage;
+        m_xOutput->set_text(sCompleteMessage);
     }
 
     void DirectSQLDialog::executeCurrent()
     {
         CHECK_INVARIANTS("DirectSQLDialog::executeCurrent");
 
-        OUString sStatement = m_pSQL->GetText();
+        OUString sStatement = m_xSQL->GetText();
 
         // execute
         implExecuteStatement(sStatement);
@@ -310,8 +389,7 @@ namespace dbaui
         // add the statement to the history
         implAddToStatementHistory(sStatement);
 
-        m_pSQL->SetSelection(Selection());
-        m_pSQL->GrabFocus();
+        m_xSQL->GrabFocus();
     }
 
     void DirectSQLDialog::switchToHistory(sal_Int32 _nHistoryPos)
@@ -322,43 +400,89 @@ namespace dbaui
         {
             // set the text in the statement editor
             OUString sStatement = m_aStatementHistory[_nHistoryPos];
-            m_pSQL->SetText(sStatement);
-            OnStatementModified(*m_pSQL);
+            m_xSQL->SetText(sStatement);
+            UpdateData();
+            OnStatementModified(nullptr);
 
-            m_pSQL->GrabFocus();
-            m_pSQL->SetSelection(Selection(sStatement.getLength(), sStatement.getLength()));
+            m_xSQL->GrabFocus();
         }
         else
             OSL_FAIL("DirectSQLDialog::switchToHistory: invalid position!");
     }
 
-    IMPL_LINK_NOARG( DirectSQLDialog, OnStatementModified, Edit&, void )
+    IMPL_LINK_NOARG( DirectSQLDialog, OnStatementModified, LinkParamNone*, void )
     {
-        m_pExecute->Enable(!m_pSQL->GetText().isEmpty());
+        if (m_bInUpdate)
+            return;
+
+        m_xExecute->set_sensitive(!m_xSQL->GetText().isEmpty());
+        m_aUpdateDataTimer.Start();
     }
 
-    IMPL_LINK_NOARG( DirectSQLDialog, OnCloseClick, Button*, void )
+    IMPL_LINK_NOARG( DirectSQLDialog, OnCloseClick, weld::Button&, void )
     {
-        EndDialog( RET_OK );
+        m_xDialog->response(RET_OK);
     }
+
     IMPL_LINK_NOARG( DirectSQLDialog, OnClose, void*, void )
     {
-        EndDialog( RET_OK );
+        assert(m_pClosingEvent);
+        Application::RemoveUserEvent(m_pClosingEvent);
+        m_pClosingEvent = nullptr;
+
+        m_xDialog->response(RET_OK);
     }
 
-    IMPL_LINK_NOARG( DirectSQLDialog, OnExecute, Button*, void )
+    IMPL_LINK_NOARG( DirectSQLDialog, OnExecute, weld::Button&, void )
     {
         executeCurrent();
     }
 
-    IMPL_LINK_NOARG( DirectSQLDialog, OnListEntrySelected, ListBox&, void )
+    IMPL_LINK_NOARG( DirectSQLDialog, OnListEntrySelected, weld::ComboBox&, void )
     {
-        if (!m_pSQLHistory->IsTravelSelect())
+        const sal_Int32 nSelected = m_xSQLHistory->get_active();
+        if (nSelected != -1)
+            switchToHistory(nSelected);
+    }
+
+    Color DirectSQLDialog::GetColorValue(TokenType aToken)
+    {
+        return MultiLineEditSyntaxHighlight::GetSyntaxHighlightColor(m_aColorConfig, m_aHighlighter.GetLanguage(), aToken);
+    }
+
+    IMPL_LINK_NOARG(DirectSQLDialog, ImplUpdateDataHdl, Timer*, void)
+    {
+        UpdateData();
+    }
+
+    void DirectSQLDialog::UpdateData()
+    {
+        m_bInUpdate = true;
+        EditEngine& rEditEngine = m_xSQL->GetEditEngine();
+        // syntax highlighting
+        bool bOrigModified = rEditEngine.IsModified();
+        for (sal_Int32 nLine=0; nLine < rEditEngine.GetParagraphCount(); ++nLine)
         {
-            const sal_Int32 nSelected = m_pSQLHistory->GetSelectedEntryPos();
-            if (LISTBOX_ENTRY_NOTFOUND != nSelected)
-                switchToHistory(nSelected);
+            OUString aLine( rEditEngine.GetText( nLine ) );
+
+            ESelection aAllLine(nLine, 0, nLine, EE_TEXTPOS_ALL);
+            rEditEngine.RemoveAttribs(aAllLine, false, EE_CHAR_COLOR);
+            rEditEngine.RemoveAttribs(aAllLine, false, EE_CHAR_WEIGHT);
+            rEditEngine.RemoveAttribs(aAllLine, false, EE_CHAR_WEIGHT_CJK);
+            rEditEngine.RemoveAttribs(aAllLine, false, EE_CHAR_WEIGHT_CTL);
+
+            std::vector<HighlightPortion> aPortions;
+            m_aHighlighter.getHighlightPortions( aLine, aPortions );
+            for (auto const& portion : aPortions)
+            {
+                SfxItemSet aSet(rEditEngine.GetEmptyItemSet());
+                aSet.Put(SvxColorItem(GetColorValue(portion.tokenType), EE_CHAR_COLOR));
+                rEditEngine.QuickSetAttribs(aSet, ESelection(nLine, portion.nBegin, nLine, portion.nEnd));
+            }
         }
+        if (!bOrigModified)
+            rEditEngine.ClearModifyFlag();
+        m_bInUpdate = false;
     }
 
 }   // namespace dbaui

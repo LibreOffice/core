@@ -25,6 +25,18 @@ class SVX_DLLPUBLIC WeldEditView : public weld::CustomWidgetController, public E
 public:
     WeldEditView();
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+
+    void SetText(const OUString& rStr) { m_xEditEngine->SetText(rStr); }
+
+    OUString GetText() const { return m_xEditEngine->GetText(); }
+
+    void SetModifyHdl(const Link<LinkParamNone*, void>& rLink)
+    {
+        m_xEditEngine->SetModifyHdl(rLink);
+    }
+
+    EditEngine& GetEditEngine() { return *m_xEditEngine; }
+
     virtual ~WeldEditView() override;
 
 protected:
