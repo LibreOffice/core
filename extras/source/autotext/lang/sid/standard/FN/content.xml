@@ -34,13 +34,13 @@
     <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
     <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
    </text:sequence-decls>
-   <table:table table:name="Tabel1" table:style-name="FormulaTable">
+   <table:table table:name="Shae1" table:style-name="FormulaTable">
     <table:table-column table:style-name="FormulaTable.A"/>
     <table:table-column table:style-name="FormulaTable.B"/>
     <table:table-header-rows>
      <table:table-row>
       <table:table-cell table:style-name="FormulaTable.A1" office:value-type="string">
-       <text:p text:style-name="P1"><draw:frame draw:style-name="fr1" draw:name="Objek1" text:anchor-type="as-char" draw:z-index="0"><draw:object xlink:href="./Object_1" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+       <text:p text:style-name="P1"><draw:frame draw:style-name="fr1" draw:name="Koricho1" text:anchor-type="as-char" draw:z-index="0"><draw:object xlink:href="./Object_1" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
          <svg:desc>formula</svg:desc>
         </draw:frame></text:p>
       </table:table-cell>
