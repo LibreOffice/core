@@ -176,12 +176,6 @@ bool OGenericUnoDialog::impl_ensureDialog_lck()
     if (!m_bTitleAmbiguous)
         aDialog.set_title(sTitle);
 
-    if (aDialog.m_xVclDialog)
-    {
-        // be notified when the dialog is killed by somebody else #i65958#
-        aDialog.m_xVclDialog->AddEventListener(LINK(this, OGenericUnoDialog, OnDialogDying));
-    }
-
     m_aDialog = std::move(aDialog);
 
     return true;
@@ -192,7 +186,6 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute()
     // both creation and execution of the dialog must be guarded with the SolarMutex, so be generous here
     SolarMutexGuard aSolarGuard;
 
-    ::Dialog* pVclDialogToExecute = nullptr;
     // create the dialog, if necessary
     {
         UnoDialogEntryGuard aGuard( *this );
@@ -207,15 +200,11 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute()
 
         if ( !impl_ensureDialog_lck() )
             return 0;
-
-        pVclDialogToExecute = m_aDialog.m_xVclDialog;
     }
 
     // start execution
     sal_Int16 nReturn(0);
-    if (pVclDialogToExecute)
-        nReturn = pVclDialogToExecute->Execute();
-    else if (m_aDialog.m_xWeldDialog)
+    if (m_aDialog.m_xWeldDialog)
         nReturn = m_aDialog.m_xWeldDialog->run();
 
     {
@@ -252,7 +241,6 @@ void OGenericUnoDialog::implInitialize(const Any& _rValue)
     }
 }
 
-
 void SAL_CALL OGenericUnoDialog::initialize( const Sequence< Any >& aArguments )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -265,22 +253,11 @@ void SAL_CALL OGenericUnoDialog::initialize( const Sequence< Any >& aArguments )
     m_bInitialized = true;
 }
 
-
 void OGenericUnoDialog::destroyDialog()
 {
     SolarMutexGuard aSolarGuard;
-    m_aDialog.m_xVclDialog.disposeAndClear();
     m_aDialog.m_xWeldDialog.reset();
 }
-
-
-IMPL_LINK( OGenericUnoDialog, OnDialogDying, VclWindowEvent&, _rEvent, void )
-{
-    OSL_ENSURE( _rEvent.GetWindow() == m_aDialog.m_xVclDialog, "OGenericUnoDialog::OnDialogDying: where does this come from?" );
-    if ( _rEvent.GetId() == VclEventId::ObjectDying )
-        m_aDialog.m_xVclDialog = nullptr;
-}
-
 
 }   // namespace svt
 

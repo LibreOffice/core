@@ -66,15 +66,9 @@ namespace svt
     public:
         struct Dialog
         {
-            VclPtr<::Dialog> m_xVclDialog;
             std::unique_ptr<weld::DialogController> m_xWeldDialog;
 
             Dialog()
-            {
-            }
-
-            Dialog(const VclPtr<::Dialog>& rVclDialog)
-                : m_xVclDialog(rVclDialog)
             {
             }
 
@@ -85,32 +79,22 @@ namespace svt
 
             explicit operator bool() const
             {
-                return m_xVclDialog || m_xWeldDialog;
+                return static_cast<bool>(m_xWeldDialog);
             }
 
             void set_title(const OUString& rTitle)
             {
-                if (m_xWeldDialog)
-                    m_xWeldDialog->set_title(rTitle);
-                else if (m_xVclDialog)
-                    m_xVclDialog->SetText(rTitle);
+                m_xWeldDialog->set_title(rTitle);
             }
 
             OString get_help_id() const
             {
-                if (m_xWeldDialog)
-                    return m_xWeldDialog->get_help_id();
-                else if (m_xVclDialog)
-                    return m_xVclDialog->GetHelpId();
-                return OString();
+                return m_xWeldDialog->get_help_id();
             }
 
             void set_help_id(const OString& rHelpId)
             {
-                if (m_xWeldDialog)
-                    return m_xWeldDialog->set_help_id(rHelpId);
-                else if (m_xVclDialog)
-                    return m_xVclDialog->SetHelpId(rHelpId);
+                return m_xWeldDialog->set_help_id(rHelpId);
             }
         };
     protected:
@@ -179,7 +163,6 @@ namespace svt
         virtual void implInitialize(const css::uno::Any& _rValue);
 
     private:
-        DECL_LINK( OnDialogDying, VclWindowEvent&, void );
 
         /** ensures that m_pDialog is not <NULL/>
 
