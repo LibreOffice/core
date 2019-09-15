@@ -17,6 +17,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -82,6 +83,7 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Handles">
       <Handles/>
@@ -165,6 +167,7 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Handles">
       <Handles/>
@@ -255,6 +258,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -318,6 +322,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -381,6 +386,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -444,6 +450,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -507,6 +514,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -570,6 +578,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -633,6 +642,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -696,6 +706,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -759,6 +770,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -822,6 +834,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -885,6 +898,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -948,6 +962,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -1011,6 +1026,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -1074,6 +1090,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -1137,6 +1154,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -1200,6 +1218,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -1263,6 +1282,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -1326,6 +1346,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -1389,6 +1410,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -1452,6 +1474,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -1515,6 +1538,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -1578,6 +1602,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -1641,6 +1666,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -1704,6 +1730,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -1767,6 +1794,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -1830,6 +1858,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -1893,6 +1922,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -1956,6 +1986,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -2019,6 +2050,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -2082,6 +2114,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -2145,6 +2178,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -2208,6 +2242,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -2271,6 +2306,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -2334,6 +2370,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -2397,6 +2434,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -2460,6 +2498,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -2523,6 +2562,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -2586,6 +2626,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -2649,6 +2690,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -2712,6 +2754,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -2775,6 +2818,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -2838,6 +2882,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -2901,6 +2946,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -2964,6 +3010,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -3027,6 +3074,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -3090,6 +3138,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -3153,6 +3202,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>
@@ -3216,6 +3266,7 @@
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles">
     <Handles/>

@@ -516,14 +516,32 @@ void SdrObjCustomShape::SetMirroredY( const bool bMirrorY )
 double SdrObjCustomShape::GetExtraTextRotation( const bool bPreRotation ) const
 {
     const css::uno::Any* pAny;
+    double fExtraTextRotateAngle = 0.0;
     const SdrCustomShapeGeometryItem& rGeometryItem = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     const OUString sTextRotateAngle( "TextRotateAngle" );
     const OUString sTextPreRotateAngle( "TextPreRotateAngle" );
+
     pAny = rGeometryItem.GetPropertyValueByName( bPreRotation ? sTextPreRotateAngle : sTextRotateAngle );
-    double fExtraTextRotateAngle = 0.0;
+
     if ( pAny )
         *pAny >>= fExtraTextRotateAngle;
+
     return fExtraTextRotateAngle;
+}
+
+double SdrObjCustomShape::GetCameraRotation() const
+{
+    const css::uno::Any* pAny;
+    double fCameraRotateAngle = 0.0;
+    const SdrCustomShapeGeometryItem& rGeometryItem = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+    const OUString sCameraRotateAngle( "CameraRotateAngle" );
+
+    pAny = rGeometryItem.GetPropertyValueByName(sCameraRotateAngle);
+
+    if ( pAny )
+        *pAny >>= fCameraRotateAngle;
+
+    return fCameraRotateAngle;
 }
 
 bool SdrObjCustomShape::GetTextBounds( tools::Rectangle& rTextBound ) const

@@ -162,14 +162,14 @@ namespace sdr
                         basegfx::B2DVector aTranslation(0.5, 0.5);
                         aTextBoxMatrix.translate( -aTranslation.getX(), -aTranslation.getY() );
                         aTextBoxMatrix.rotate(basegfx::deg2rad(
-                            360.0 - GetCustomShapeObj().GetExtraTextRotation(true)));
+                            360.0 - GetCustomShapeObj().GetExtraTextRotation(true) - GetCustomShapeObj().GetCameraRotation()));
                         aTextBoxMatrix.translate( aTranslation.getX(), aTranslation.getY() );
                     }
                     // give text object a size
                     aTextBoxMatrix.scale(aTextRange.getWidth(), aTextRange.getHeight());
 
                     // check if we have a rotation/shear at all to take care of
-                    const double fExtraTextRotation(GetCustomShapeObj().GetExtraTextRotation());
+                    const double fExtraTextRotation(GetCustomShapeObj().GetExtraTextRotation() + GetCustomShapeObj().GetCameraRotation());
                     const GeoStat& rGeoStat(GetCustomShapeObj().GetGeoStat());
 
                     if(rGeoStat.nShearAngle || rGeoStat.nRotationAngle || !basegfx::fTools::equalZero(fExtraTextRotation))

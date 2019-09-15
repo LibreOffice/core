@@ -19,6 +19,7 @@
      <EnhancedCustomShapeAdjustmentValue value="16667" propertyState="DIRECT_VALUE"/>
     </AdjustmentValues>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
@@ -120,6 +121,7 @@
      <EnhancedCustomShapeAdjustmentValue value="16667" propertyState="DIRECT_VALUE"/>
     </AdjustmentValues>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
@@ -221,6 +223,7 @@
      <EnhancedCustomShapeAdjustmentValue value="16667" propertyState="DIRECT_VALUE"/>
     </AdjustmentValues>
    </PropertyValue>
+   <PropertyValue name="CameraRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>

@@ -46,6 +46,7 @@ CustomShapeProperties::CustomShapeProperties()
 , mbMirroredX   ( false )
 , mbMirroredY   ( false )
 , mnTextRotateAngle ( 0 )
+, mnCameraRotateAngle ( 0 )
 , mnArcNum ( 0 )
 {
 }
@@ -150,6 +151,7 @@ void CustomShapeProperties::pushToPropSet(
         aPropertyMap.setProperty( PROP_MirroredX, mbMirroredX );
         aPropertyMap.setProperty( PROP_MirroredY, mbMirroredY );
         aPropertyMap.setProperty( PROP_TextPreRotateAngle, mnTextRotateAngle );
+        aPropertyMap.setProperty( PROP_CameraRotateAngle, mnCameraRotateAngle );
         Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
         aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
 

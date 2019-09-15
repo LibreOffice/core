@@ -1376,8 +1376,13 @@ Reference< XShape > const & Shape::createAndInsert(
                 mpCustomShapePropertiesPtr->setMirroredY( true );
             if( getTextBody() )
             {
+                sal_Int32 nCameraRotation = static_cast< sal_Int32 >(get3DProperties().maCameraRotation.mnRevolution.use());
+                mpCustomShapePropertiesPtr->setCameraRotateAngle( nCameraRotation / 60000 );
+
+
                 sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.get( 0 ) );
                 nTextRotateAngle -= mnDiagramRotation;
+
                 /* OOX measures text rotation clockwise in 1/60000th degrees,
                    relative to the containing shape. setTextRotateAngle wants
                    degrees anticlockwise. */
