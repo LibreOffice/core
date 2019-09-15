@@ -33,8 +33,6 @@ MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( vcl::Window* pParent
     EnableUpdateData(300);
 }
 
-VCL_BUILDER_FACTORY(MultiLineEditSyntaxHighlight)
-
 void MultiLineEditSyntaxHighlight::SetText(const OUString& rNewText)
 {
     MultiLineEdit::SetText(rNewText);

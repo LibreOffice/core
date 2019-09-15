@@ -107,9 +107,6 @@
     <glade-widget-class title="Svx 3D Preview Control" name="svxlo-Svx3DPreviewControl"
                         generic-name="3D Preview Control" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="MultiLine Edit" name="svtlo-MultiLineEditSyntaxHighlight"
-                        generic-name="MultiLineEdit" parent="GtkTextView"
-                        icon-name="widget-gtk-textview"/>
     <glade-widget-class title="SvtValueSet" name="svtlo-ValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
