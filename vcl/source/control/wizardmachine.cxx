@@ -19,11 +19,11 @@
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wizdlg.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <strings.hrc>
 #include <svdata.hxx>
+#include <wizdlg.hxx>
 #include <stack>
 #include "wizimpldata.hxx"
 

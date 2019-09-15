@@ -7946,7 +7946,6 @@ include/vcl/waitobj.hxx
 include/vcl/wall.hxx
 include/vcl/window.hxx
 include/vcl/wizardmachine.hxx
-include/vcl/wizdlg.hxx
 include/vcl/wmf.hxx
 include/vcl/wmfexternal.hxx
 include/vcl/wrkwin.hxx
@@ -17588,6 +17587,7 @@ vcl/inc/win/svsys.h
 vcl/inc/win/wincomp.hxx
 vcl/inc/win/winlayout.hxx
 vcl/inc/window.h
+vcl/inc/wizdlg.hxx
 vcl/ios/dummies.cxx
 vcl/ios/iosinst.cxx
 vcl/null/printerinfomanager.cxx
