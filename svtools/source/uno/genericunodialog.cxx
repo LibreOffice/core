@@ -60,11 +60,11 @@ OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxCo
 
 OGenericUnoDialog::~OGenericUnoDialog()
 {
-    if (m_aDialog)
+    if (m_xDialog)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
-        if (m_aDialog)
+        if (m_xDialog)
             destroyDialog();
     }
 }
@@ -110,8 +110,8 @@ void OGenericUnoDialog::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
         // from now on m_sTitle is valid
         m_bTitleAmbiguous = false;
 
-        if (m_aDialog)
-            m_aDialog.set_title(m_sTitle);
+        if (m_xDialog)
+            m_xDialog->set_title(m_sTitle);
     }
 }
 
@@ -159,7 +159,7 @@ void SAL_CALL OGenericUnoDialog::setTitle( const OUString& _rTitle )
 
 bool OGenericUnoDialog::impl_ensureDialog_lck()
 {
-    if (m_aDialog)
+    if (m_xDialog)
         return true;
 
     // get the parameters for the dialog from the current settings
@@ -167,16 +167,16 @@ bool OGenericUnoDialog::impl_ensureDialog_lck()
     // the title
     OUString sTitle = m_sTitle;
 
-    OGenericUnoDialog::Dialog aDialog(createDialog(m_xParent));
-    OSL_ENSURE(aDialog, "OGenericUnoDialog::impl_ensureDialog_lck: createDialog returned nonsense!");
-    if (!aDialog)
+    auto xDialog(createDialog(m_xParent));
+    OSL_ENSURE(xDialog, "OGenericUnoDialog::impl_ensureDialog_lck: createDialog returned nonsense!");
+    if (!xDialog)
         return false;
 
     // do some initialisations
     if (!m_bTitleAmbiguous)
-        aDialog.set_title(sTitle);
+        xDialog->set_title(sTitle);
 
-    m_aDialog = std::move(aDialog);
+    m_xDialog = std::move(xDialog);
 
     return true;
 }
@@ -204,8 +204,8 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute()
 
     // start execution
     sal_Int16 nReturn(0);
-    if (m_aDialog.m_xWeldDialog)
-        nReturn = m_aDialog.m_xWeldDialog->run();
+    if (m_xDialog)
+        nReturn = m_xDialog->run();
 
     {
         ::osl::MutexGuard aGuard(m_aMutex);
@@ -256,7 +256,7 @@ void SAL_CALL OGenericUnoDialog::initialize( const Sequence< Any >& aArguments )
 void OGenericUnoDialog::destroyDialog()
 {
     SolarMutexGuard aSolarGuard;
-    m_aDialog.m_xWeldDialog.reset();
+    m_xDialog.reset();
 }
 
 }   // namespace svt

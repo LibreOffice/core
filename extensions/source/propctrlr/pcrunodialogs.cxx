@@ -63,10 +63,10 @@ namespace pcr
 
     OTabOrderDialog::~OTabOrderDialog()
     {
-        if (m_aDialog)
+        if (m_xDialog)
         {
             ::osl::MutexGuard aGuard( m_aMutex );
-            if (m_aDialog)
+            if (m_xDialog)
                 destroyDialog();
         }
     }
@@ -113,12 +113,10 @@ namespace pcr
         return xInfo;
     }
 
-
     ::cppu::IPropertyArrayHelper& OTabOrderDialog::getInfoHelper()
     {
         return *getArrayHelper();
     }
-
 
     ::cppu::IPropertyArrayHelper* OTabOrderDialog::createArrayHelper( ) const
     {
@@ -127,9 +125,9 @@ namespace pcr
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
 
-    svt::OGenericUnoDialog::Dialog OTabOrderDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+    std::unique_ptr<weld::DialogController> OTabOrderDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
-        return svt::OGenericUnoDialog::Dialog(std::make_unique<TabOrderDialog>(Application::GetFrameWeld(rParent), m_xTabbingModel, m_xControlContext, m_aContext));
+        return std::make_unique<TabOrderDialog>(Application::GetFrameWeld(rParent), m_xTabbingModel, m_xControlContext, m_aContext);
     }
 
     void OTabOrderDialog::initialize( const Sequence< Any >& aArguments )

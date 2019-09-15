@@ -37,10 +37,10 @@ ChartTypeUnoDlg::~ChartTypeUnoDlg()
 {
     // we do this here cause the base class' call to destroyDialog won't reach us anymore: we're within a dtor,
     // so this virtual-method-call the base class does not work, we're already dead then...
-    if (m_aDialog)
+    if (m_xDialog)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        if (m_aDialog)
+        if (m_xDialog)
             destroyDialog();
     }
 }
@@ -71,10 +71,12 @@ void ChartTypeUnoDlg::implInitialize(const uno::Any& _rValue)
     else
         ChartTypeUnoDlg_BASE::implInitialize(_rValue);
 }
-svt::OGenericUnoDialog::Dialog ChartTypeUnoDlg::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+
+std::unique_ptr<weld::DialogController> ChartTypeUnoDlg::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    return svt::OGenericUnoDialog::Dialog(std::make_unique<ChartTypeDialog>(Application::GetFrameWeld(rParent), m_xChartModel));
+    return std::make_unique<ChartTypeDialog>(Application::GetFrameWeld(rParent), m_xChartModel);
 }
+
 uno::Reference<beans::XPropertySetInfo>  SAL_CALL ChartTypeUnoDlg::getPropertySetInfo()
 {
     return createPropertySetInfo( getInfoHelper() );

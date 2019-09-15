@@ -78,7 +78,7 @@ namespace dbaui
 
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ODirectSQLDialog )
 
-    svt::OGenericUnoDialog::Dialog ODirectSQLDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+    std::unique_ptr<weld::DialogController> ODirectSQLDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
         // obtain all the objects needed for the dialog
         Reference< XConnection > xConnection = m_xActiveConnection;
@@ -99,10 +99,10 @@ namespace dbaui
         if (!xConnection.is())
         {
             // can't create the dialog if I have improper settings
-            return svt::OGenericUnoDialog::Dialog();
+            return nullptr;
         }
 
-        return svt::OGenericUnoDialog::Dialog(std::make_unique<DirectSQLDialog>(pParent, xConnection));
+        return std::make_unique<DirectSQLDialog>(pParent, xConnection);
     }
 
     void ODirectSQLDialog::implInitialize(const Any& _rValue)

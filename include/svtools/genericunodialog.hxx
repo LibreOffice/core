@@ -63,42 +63,8 @@ namespace svt
             ,public ::comphelper::OMutexAndBroadcastHelper
             ,public ::comphelper::OPropertyContainer
     {
-    public:
-        struct Dialog
-        {
-            std::unique_ptr<weld::DialogController> m_xWeldDialog;
-
-            Dialog()
-            {
-            }
-
-            Dialog(std::unique_ptr<weld::DialogController> pWeldDialog)
-                : m_xWeldDialog(std::move(pWeldDialog))
-            {
-            }
-
-            explicit operator bool() const
-            {
-                return static_cast<bool>(m_xWeldDialog);
-            }
-
-            void set_title(const OUString& rTitle)
-            {
-                m_xWeldDialog->set_title(rTitle);
-            }
-
-            OString get_help_id() const
-            {
-                return m_xWeldDialog->get_help_id();
-            }
-
-            void set_help_id(const OString& rHelpId)
-            {
-                return m_xWeldDialog->set_help_id(rHelpId);
-            }
-        };
     protected:
-        OGenericUnoDialog::Dialog   m_aDialog;                  /// the dialog to execute
+        std::unique_ptr<weld::DialogController> m_xDialog;      /// the dialog to execute
         bool                        m_bExecuting : 1;           /// we're currently executing the dialog
         bool                        m_bTitleAmbiguous : 1;      /// m_sTitle has not been set yet
         bool                        m_bInitialized : 1;         /// has "initialize" been called?
@@ -144,7 +110,7 @@ namespace svt
             but the application-wide solar mutex is (to guard the not thread-safe ctor of the dialog).
             @param      pParent     the parent window for the new dialog
         */
-        virtual OGenericUnoDialog::Dialog createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) = 0;
+        virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) = 0;
 
         /// called to destroy the dialog used. deletes m_pDialog and resets it to NULL
         void destroyDialog();

@@ -93,9 +93,9 @@ Reference<XPropertySetInfo>  SAL_CALL OUserSettingsDialog::getPropertySetInfo()
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-svt::OGenericUnoDialog::Dialog OUserSettingsDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+std::unique_ptr<weld::DialogController> OUserSettingsDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    return svt::OGenericUnoDialog::Dialog(std::make_unique<OUserAdminDlg>(Application::GetFrameWeld(rParent), m_pDatasourceItems.get(), m_aContext, m_aInitialSelection, m_xActiveConnection));
+    return std::make_unique<OUserAdminDlg>(Application::GetFrameWeld(rParent), m_pDatasourceItems.get(), m_aContext, m_aInitialSelection, m_xActiveConnection);
 }
 
 }   // namespace dbaui
