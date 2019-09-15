@@ -120,15 +120,15 @@ namespace vcl
     }
 
     //= RoadmapWizard
-    RoadmapWizard::RoadmapWizard(vcl::Window* pParent)
-        :Dialog(pParent)
-        ,m_pFinish(nullptr)
-        ,m_pCancel(nullptr)
-        ,m_pNextPage(nullptr)
-        ,m_pPrevPage(nullptr)
-        ,m_pHelp(nullptr)
-        ,m_xWizardImpl(new WizardMachineImplData)
-        ,m_xRoadmapImpl(new RoadmapWizardImpl)
+    RoadmapWizard::RoadmapWizard(vcl::Window* pParent, WinBits nStyle, InitFlag eFlag)
+        : Dialog(pParent, nStyle, eFlag)
+        , m_pFinish(nullptr)
+        , m_pCancel(nullptr)
+        , m_pNextPage(nullptr)
+        , m_pPrevPage(nullptr)
+        , m_pHelp(nullptr)
+        , m_xWizardImpl(new WizardMachineImplData)
+        , m_xRoadmapImpl(new RoadmapWizardImpl)
     {
         ImplInitData();
 
