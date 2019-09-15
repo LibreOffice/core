@@ -3101,18 +3101,15 @@ SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
                 bResult = true;
             else
             {
-                OUString aStr;
+                OUStringBuffer aStr;
                 for (SCCOL k=aParam.nCol1; k <= aParam.nCol2; k++)
                 {
                     OUString aCellStr;
                     GetString(k, j, aCellStr);
-                    OUStringBuffer aBuf(aStr);
-                    aBuf.append(aCellStr);
-                    aBuf.append(u'\x0001');
-                    aStr = aBuf.makeStringAndClear();
+                    aStr.append(aCellStr + u"\x0001");
                 }
 
-                bResult = aStrSet.insert(aStr).second; // unique if inserted.
+                bResult = aStrSet.insert(aStr.makeStringAndClear()).second; // unique if inserted.
             }
         }
         else
