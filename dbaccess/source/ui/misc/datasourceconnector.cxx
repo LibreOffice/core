@@ -35,6 +35,7 @@
 #include <UITools.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 #include <svl/filenotation.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
@@ -56,13 +57,13 @@ namespace dbaui
     using namespace ::dbtools;
 
     // ODatasourceConnector
-    ODatasourceConnector::ODatasourceConnector(const Reference< XComponentContext >& _rxContext, vcl::Window* _pMessageParent)
+    ODatasourceConnector::ODatasourceConnector(const Reference< XComponentContext >& _rxContext, weld::Window* _pMessageParent)
         :m_pErrorMessageParent(_pMessageParent)
         ,m_xContext(_rxContext)
     {
     }
 
-    ODatasourceConnector::ODatasourceConnector( const Reference< XComponentContext >& _rxContext, vcl::Window* _pMessageParent,
+    ODatasourceConnector::ODatasourceConnector( const Reference< XComponentContext >& _rxContext, weld::Window* _pMessageParent,
         const OUString& _rContextInformation )
         :m_pErrorMessageParent(_pMessageParent)
         ,m_xContext(_rxContext)
@@ -127,7 +128,7 @@ namespace dbaui
                 if ( !xHandler.is() )
                 {
                     // instantiate the default SDB interaction handler
-                    xHandler = InteractionHandler::createWithParent(m_xContext, VCLUnoHelper::GetInterface(m_pErrorMessageParent));
+                    xHandler = InteractionHandler::createWithParent(m_xContext, m_pErrorMessageParent ? m_pErrorMessageParent->GetXWindow() : nullptr);
                 }
 
                 xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
@@ -195,7 +196,7 @@ namespace dbaui
             }
             else
             {
-                showError(aInfo, VCLUnoHelper::GetInterface(m_pErrorMessageParent), m_xContext);
+                showError(aInfo, m_pErrorMessageParent ? m_pErrorMessageParent->GetXWindow() : nullptr, m_xContext);
             }
         }
         return xConnection;

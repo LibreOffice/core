@@ -635,7 +635,7 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
                     {
                         // the concrete query
                         Reference< XQueryDefinitionsSupplier > xSourceQuerySup(
-                            getDataSourceByName( sDataSourceName, getView(), getORB(), nullptr ),
+                            getDataSourceByName( sDataSourceName, getFrameWeld(), getORB(), nullptr ),
                             UNO_QUERY_THROW );
                         Reference< XNameAccess > xQueries( xSourceQuerySup->getQueryDefinitions(), UNO_SET_THROW );
                         if ( xQueries->hasByName( sCommand ) )
