@@ -212,7 +212,7 @@ SQLExceptionInfo createConnection(  const Reference< css::beans::XPropertySet>& 
 }
 
 Reference< XDataSource > getDataSourceByName( const OUString& _rDataSourceName,
-    vcl::Window* _pErrorMessageParent, const Reference< XComponentContext >& _rxContext, ::dbtools::SQLExceptionInfo* _pErrorInfo )
+    weld::Window* _pErrorMessageParent, const Reference< XComponentContext >& _rxContext, ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
     Reference< XDatabaseContext > xDatabaseContext = DatabaseContext::create(_rxContext);
 
@@ -260,7 +260,7 @@ Reference< XDataSource > getDataSourceByName( const OUString& _rDataSourceName,
         }
         else
         {
-            showError( aSQLError, VCLUnoHelper::GetInterface(_pErrorMessageParent), _rxContext );
+            showError( aSQLError, _pErrorMessageParent ? _pErrorMessageParent->GetXWindow() : nullptr, _rxContext );
         }
     }
 

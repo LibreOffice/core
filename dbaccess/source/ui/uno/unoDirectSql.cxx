@@ -32,6 +32,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
+#include <vcl/svapp.hxx>
 
 extern "C" void createRegistryInfo_ODirectSQLDialog()
 {
@@ -88,7 +89,7 @@ namespace dbaui
             try
             {
                 // the connection the row set is working with
-                ODatasourceConnector aDSConnector(m_aContext, _pParent);
+                ODatasourceConnector aDSConnector(m_aContext, Application::GetFrameWeld(rParent));
                 xConnection = aDSConnector.connect( m_sInitialSelection, nullptr );
             }
             catch( const Exception& )
