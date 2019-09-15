@@ -11,6 +11,7 @@
 #include <test/drawing/captionshape.hxx>
 #include <test/drawing/xshape.hxx>
 #include <test/drawing/xshapedescriptor.hxx>
+#include <test/text/xsimpletext.hxx>
 #include <test/text/xtext.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -38,6 +39,7 @@ class ScAnnotationShapeObj : public CalcUnoApiTest,
                              public apitest::CaptionShape,
                              public apitest::XShape,
                              public apitest::XShapeDescriptor,
+                             public apitest::XSimpleText,
                              public apitest::XText
 {
 public:
@@ -59,6 +61,12 @@ public:
 
     // XShapeDescriptor
     CPPUNIT_TEST(testGetShapeType);
+
+    // XSimpleText
+    CPPUNIT_TEST(testCreateTextCursor);
+    CPPUNIT_TEST(testCreateTextCursorByRange);
+    CPPUNIT_TEST(testInsertControlCharacter);
+    CPPUNIT_TEST(testInsertString);
 
     // XText
     CPPUNIT_TEST(testInsertRemoveTextContent);
