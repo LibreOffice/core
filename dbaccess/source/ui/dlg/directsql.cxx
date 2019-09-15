@@ -41,11 +41,12 @@ namespace dbaui
     constexpr sal_Int32 g_nHistoryLimit = 20;
 
     // DirectSQLDialog
-    DirectSQLDialog::DirectSQLDialog( vcl::Window* _pParent, const Reference< XConnection >& _rxConn )
-        :ModalDialog(_pParent, "DirectSQLDialog" , "dbaccess/ui/directsqldialog.ui")
-        ,m_nStatusCount(1)
-        ,m_xConnection(_rxConn)
+    DirectSQLDialog::DirectSQLDialog(weld::Window* _pParent, const Reference< XConnection >& _rxConn)
+        : GenericDialogController(_pParent, "dbaccess/ui/directsqldialog.ui", "DirectSQLDialog")
+        , m_nStatusCount(1)
+        , m_xConnection(_rxConn)
     {
+#if 0
         get(m_pSQL,"sql");
         Size aSize(m_pSQL->CalcBlockSize(60, 7));
         m_pSQL->set_width_request(aSize.Width());
@@ -60,7 +61,7 @@ namespace dbaui
         aSize  = m_pOutput->CalcBlockSize(60, 5);
         m_pOutput->set_height_request(aSize.Height());
         get(m_pClose,"close");
-
+#endif
 
         m_pSQL->GrabFocus();
 
@@ -81,11 +82,6 @@ namespace dbaui
 
     DirectSQLDialog::~DirectSQLDialog()
     {
-        disposeOnce();
-    }
-
-    void DirectSQLDialog::dispose()
-    {
         {
             ::osl::MutexGuard aGuard(m_aMutex);
             stopAllComponentListening();
@@ -97,7 +93,6 @@ namespace dbaui
         m_pShowOutput.clear();
         m_pOutput.clear();
         m_pClose.clear();
-        ModalDialog::dispose();
     }
 
     void DirectSQLDialog::_disposing( const EventObject& _rSource )
@@ -110,13 +105,13 @@ namespace dbaui
 
         {
             OUString sMessage(DBA_RES(STR_DIRECTSQL_CONNECTIONLOST));
-            std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(m_xDialog.get(),
                                                         VclMessageType::Warning, VclButtonsType::Ok,
                                                         sMessage));
             xError->run();
         }
 
-        PostUserEvent(LINK(this, DirectSQLDialog, OnClose), nullptr, true);
+        //TODO Application::PostUserEvent(LINK(this, DirectSQLDialog, OnClose));
     }
 
     sal_Int32 DirectSQLDialog::getHistorySize() const
@@ -339,11 +334,12 @@ namespace dbaui
 
     IMPL_LINK_NOARG( DirectSQLDialog, OnCloseClick, Button*, void )
     {
-        EndDialog( RET_OK );
+        m_xDialog->response(RET_OK);
     }
+
     IMPL_LINK_NOARG( DirectSQLDialog, OnClose, void*, void )
     {
-        EndDialog( RET_OK );
+        m_xDialog->response(RET_OK);
     }
 
     IMPL_LINK_NOARG( DirectSQLDialog, OnExecute, Button*, void )
