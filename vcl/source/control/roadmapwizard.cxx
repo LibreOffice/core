@@ -121,7 +121,7 @@ namespace vcl
 
     //= RoadmapWizard
     RoadmapWizard::RoadmapWizard(vcl::Window* pParent)
-        :ModalDialog(pParent, "WizardDialog", "svt/ui/wizarddialog.ui")
+        :Dialog(pParent)
         ,m_pFinish(nullptr)
         ,m_pCancel(nullptr)
         ,m_pNextPage(nullptr)
@@ -213,7 +213,7 @@ namespace vcl
         mpPrevBtn.clear();
         mpNextBtn.clear();
         mpViewWindow.clear();
-        ModalDialog::dispose();
+        Dialog::dispose();
     }
 
     void RoadmapWizard::SetRoadmapHelpId( const OString& _rId )

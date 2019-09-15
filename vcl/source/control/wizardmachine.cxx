@@ -443,7 +443,7 @@ namespace vcl
             ImplPosTabPage();
         }
 
-        ModalDialog::Resize();
+        Dialog::Resize();
     }
 
     void RoadmapWizard::implUpdateTitle()
@@ -498,7 +498,7 @@ namespace vcl
             ImplShowTabPage( ImplGetPage( mnCurLevel ) );
         }
 
-        ModalDialog::StateChanged( nType );
+        Dialog::StateChanged( nType );
     }
 
     bool RoadmapWizard::EventNotify( NotifyEvent& rNEvt )
@@ -542,7 +542,7 @@ namespace vcl
             }
         }
 
-        return ModalDialog::EventNotify( rNEvt );
+        return Dialog::EventNotify( rNEvt );
     }
 
     void RoadmapWizard::setTitleBase(const OUString& _rTitleBase)
