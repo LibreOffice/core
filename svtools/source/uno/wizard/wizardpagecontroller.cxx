@@ -45,7 +45,7 @@ namespace svt { namespace uno
     //= WizardPageController
 
 
-    WizardPageController::WizardPageController( WizardShell& i_rParent, const Reference< XWizardController >& i_rController,
+    WizardPageController::WizardPageController( TabPageParent aParent, const Reference< XWizardController >& i_rController,
             const sal_Int16 i_nPageId )
         :m_xController( i_rController )
         ,m_xWizardPage()
@@ -53,10 +53,8 @@ namespace svt { namespace uno
         ENSURE_OR_THROW( m_xController.is(), "no controller" );
         try
         {
-            m_xWizardPage.set( m_xController->createPage(
-                Reference< XWindow >( i_rParent.GetComponentInterface(), UNO_QUERY_THROW ),
-                i_nPageId
-            ), UNO_SET_THROW );
+            // Plug a toplevel SalFrame into the native page which can host our awt widgetry
+            m_xWizardPage.set(m_xController->createPage(aParent.pPage->CreateChildFrame(), i_nPageId), UNO_SET_THROW);
 
             Reference< XWindow > xPageWindow( m_xWizardPage->getWindow(), UNO_SET_THROW );
             xPageWindow->setVisible( true );

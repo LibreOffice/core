@@ -12,6 +12,7 @@ $(eval $(call gb_UIConfig_UIConfig,svt))
 $(eval $(call gb_UIConfig_add_uifiles,svt,\
 	svtools/uiconfig/ui/addresstemplatedialog \
 	svtools/uiconfig/ui/datewindow \
+	svtools/uiconfig/ui/emptypage \
 	svtools/uiconfig/ui/fileviewmenu \
 	svtools/uiconfig/ui/graphicexport \
 	svtools/uiconfig/ui/inputbox \
