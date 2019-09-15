@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_WIZDLG_HXX
 
 #include <memory>
-#include <vcl/dllapi.h>
 #include <vcl/roadmapwizard.hxx>
 
 namespace vcl
@@ -54,7 +53,7 @@ namespace vcl
         <code>n2</code>, which share at least the first <code>k</code> states (where <code>k</code>
         is at least 1), and an arbitrary number of other states.
     */
-    class VCL_DLLPUBLIC RoadmapWizard : public Dialog
+    class RoadmapWizard : public Dialog
     {
     private:
         Idle                    maWizardLayoutIdle;

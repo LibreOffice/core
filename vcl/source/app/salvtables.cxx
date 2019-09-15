@@ -49,7 +49,6 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/prgsbar.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <vcl/wizdlg.hxx>
 #include <vcl/slider.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svimpbox.hxx>
@@ -66,6 +65,7 @@
 #include <vcl/virdev.hxx>
 #include <aboutdialog.hxx>
 #include <bitmaps.hlst>
+#include <wizdlg.hxx>
 
 SalFrame::SalFrame()
     : m_pWindow(nullptr)

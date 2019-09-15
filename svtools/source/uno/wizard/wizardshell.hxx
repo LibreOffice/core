@@ -22,7 +22,7 @@
 
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
 #include <com/sun/star/ui/dialogs/XWizard.hpp>
-#include <vcl/wizdlg.hxx>
+#include <vcl/roadmapwizard.hxx>
 #include <map>
 #include <memory>
 
