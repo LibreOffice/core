@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/drawing/captionshape.hxx>
 #include <test/drawing/xshape.hxx>
+#include <test/drawing/xshapedescriptor.hxx>
 #include <test/text/xtext.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -36,6 +37,7 @@ namespace sc_apitest
 class ScAnnotationShapeObj : public CalcUnoApiTest,
                              public apitest::CaptionShape,
                              public apitest::XShape,
+                             public apitest::XShapeDescriptor,
                              public apitest::XText
 {
 public:
@@ -55,6 +57,9 @@ public:
     CPPUNIT_TEST(testGetSetSize);
     CPPUNIT_TEST(testGetSetPosition);
 
+    // XShapeDescriptor
+    CPPUNIT_TEST(testGetShapeType);
+
     // XText
     CPPUNIT_TEST(testInsertRemoveTextContent);
 
@@ -69,6 +74,7 @@ uno::Reference<text::XTextContent> ScAnnotationShapeObj::m_xField;
 
 ScAnnotationShapeObj::ScAnnotationShapeObj()
     : CalcUnoApiTest("sc/qa/extras/testdocuments")
+    , XShapeDescriptor("com.sun.star.drawing.CaptionShape")
 {
 }
 

@@ -86,7 +86,6 @@
 "ScAnnotationShapeObj";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharFontPitchComplex"
 "ScAnnotationShapeObj";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharPostureComplex"
 "ScAnnotationShapeObj";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharLocaleComplex"
-"ScAnnotationShapeObj";"com::sun::star::drawing::XShapeDescriptor";"getShapeType()"
 "ScAnnotationShapeObj";"com::sun::star::drawing::RotationDescriptor";"RotateAngle"
 "ScAnnotationShapeObj";"com::sun::star::drawing::RotationDescriptor";"ShearAngle#optional"
 "ScAnnotationShapeObj";"com::sun::star::drawing::LineProperties";"LineStyle"
