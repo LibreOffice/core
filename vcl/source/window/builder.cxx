@@ -1952,7 +1952,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "GtkLinkButton")
         xWindow = VclPtr<FixedHyperlink>::Create(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK|WB_NOLABEL);
-    else if ((name == "GtkComboBox") || (name == "GtkComboBoxText") || (name == "VclComboBoxText"))
+    else if (name == "GtkComboBox" || name == "GtkComboBoxText")
     {
         OUString sPattern = BuilderUtils::extractCustomProperty(rMap);
         extractModel(id, rMap);

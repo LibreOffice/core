@@ -140,7 +140,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclComboBoxText" id="sqlhistory">
+                      <object class="GtkComboBoxText" id="sqlhistory">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="max_width_chars">60</property>
