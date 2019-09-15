@@ -147,6 +147,8 @@ void OFieldDescControl::dispose()
     m_xType.reset();
     m_xAutoIncrementValue.reset();
     m_xFormat.reset();
+    m_xContainer.reset();
+    m_xBuilder.reset();
     TabPage::dispose();
 }
 
@@ -421,7 +423,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         m_xDefaultText = m_xBuilder->weld_label("DefaultValueText");
         m_xDefaultText->show();
         m_xDefault = std::make_unique<OPropEditCtrl>(
-                m_xBuilder->weld_spin_button("DefaultValue"), STR_HELP_DEFAULT_VALUE, FIELD_PROPERTY_DEFAULT);
+                m_xBuilder->weld_entry("DefaultValue"), STR_HELP_DEFAULT_VALUE, FIELD_PROPERTY_DEFAULT);
         InitializeControl(m_xDefault->GetWidget(),HID_TAB_ENT_DEFAULT);
         m_xDefault->show();
         break;
@@ -581,7 +583,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             m_xFormatText->show();
 
             m_xFormatSample = std::make_unique<OPropEditCtrl>(
-                    m_xBuilder->weld_spin_button("FormatText"), STR_HELP_FORMAT_CODE, -1);
+                    m_xBuilder->weld_entry("FormatText"), STR_HELP_FORMAT_CODE, -1);
             m_xFormatSample->set_editable(false);
             m_xFormatSample->set_sensitive(false);
             InitializeControl(m_xFormatSample->GetWidget(),HID_TAB_ENT_FORMAT_SAMPLE);
