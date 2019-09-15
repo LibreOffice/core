@@ -159,7 +159,7 @@ namespace dbaui
     css::uno::Reference< css::sdbc::XDataSource >
         getDataSourceByName(
                 const OUString& _rDataSourceName,
-                vcl::Window* _pErrorMessageParent,
+                weld::Window* _pErrorMessageParent,
                 const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo
             );

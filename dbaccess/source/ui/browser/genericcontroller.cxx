@@ -897,7 +897,7 @@ Reference< XConnection > OGenericUnoController::connect( const Reference< XDataS
 {
     WaitObject aWaitCursor( getView() );
 
-    ODatasourceConnector aConnector( getORB(), getView(), OUString() );
+    ODatasourceConnector aConnector( getORB(), getFrameWeld(), OUString() );
     Reference< XConnection > xConnection = aConnector.connect( _xDataSource, nullptr );
     startConnectionListening( xConnection );
 
@@ -909,7 +909,7 @@ Reference< XConnection > OGenericUnoController::connect( const OUString& _rDataS
 {
     WaitObject aWaitCursor( getView() );
 
-    ODatasourceConnector aConnector( getORB(), getView(), _rContextInformation );
+    ODatasourceConnector aConnector( getORB(), getFrameWeld(), _rContextInformation );
     Reference<XConnection> xConnection = aConnector.connect( _rDataSourceName, _pErrorInfo );
     startConnectionListening( xConnection );
 
