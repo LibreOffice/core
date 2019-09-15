@@ -39,18 +39,18 @@ namespace svt { namespace uno
 
     //= WizardShell
 
-    typedef ::vcl::RoadmapWizard    WizardShell_Base;
+    typedef ::vcl::RoadmapWizardMachine WizardShell_Base;
     class WizardShell : public WizardShell_Base
     {
     public:
         WizardShell(
-            vcl::Window* _pParent,
+            weld::Window* pParent,
             const css::uno::Reference< css::ui::dialogs::XWizardController >& i_rController,
             const css::uno::Sequence< css::uno::Sequence< sal_Int16 > >& i_rPaths
         );
 
         // Dialog overridables
-        virtual short   Execute() override;
+        virtual short   run() override;
 
         // OWizardMachine overridables
         virtual VclPtr<TabPage> createPage( WizardState i_nState ) override;

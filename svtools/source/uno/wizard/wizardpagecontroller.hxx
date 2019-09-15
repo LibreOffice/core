@@ -38,7 +38,7 @@ namespace svt { namespace uno
     {
     public:
         WizardPageController(
-            WizardShell& i_rParent,
+            TabPageParent aParent,
             const css::uno::Reference< css::ui::dialogs::XWizardController >& i_rController,
             const sal_Int16 i_nPageId
         );
