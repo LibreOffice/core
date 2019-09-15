@@ -29,7 +29,6 @@
 #include <directsql.hxx>
 #include <stringconstants.hxx>
 #include <datasourceconnector.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
@@ -83,13 +82,13 @@ namespace dbaui
     {
         // obtain all the objects needed for the dialog
         Reference< XConnection > xConnection = m_xActiveConnection;
-        auto _pParent = VCLUnoHelper::GetWindow(rParent);
+        weld::Window* pParent = Application::GetFrameWeld(rParent);
         if ( !xConnection.is() )
         {
             try
             {
                 // the connection the row set is working with
-                ODatasourceConnector aDSConnector(m_aContext, Application::GetFrameWeld(rParent));
+                ODatasourceConnector aDSConnector(m_aContext, pParent);
                 xConnection = aDSConnector.connect( m_sInitialSelection, nullptr );
             }
             catch( const Exception& )
@@ -103,7 +102,7 @@ namespace dbaui
             return svt::OGenericUnoDialog::Dialog();
         }
 
-        return svt::OGenericUnoDialog::Dialog(VclPtr<DirectSQLDialog>::Create(_pParent, xConnection));
+        return svt::OGenericUnoDialog::Dialog(std::make_unique<DirectSQLDialog>(pParent, xConnection));
     }
 
     void ODirectSQLDialog::implInitialize(const Any& _rValue)

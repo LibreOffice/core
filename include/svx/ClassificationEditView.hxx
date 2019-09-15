@@ -52,11 +52,6 @@ public:
     {
         return *m_xEditView.get();
     }
-
-    void SetModifyHdl(const Link<LinkParamNone*,void>& rLink)
-    {
-        m_xEditEngine->SetModifyHdl(rLink);
-    }
 };
 
 } // end svx namespace
