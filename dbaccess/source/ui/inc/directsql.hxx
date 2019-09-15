@@ -24,6 +24,7 @@
 
 #include <sal/log.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/editsyntaxhighlighter.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
@@ -41,8 +42,8 @@ namespace dbaui
 
     // DirectSQLDialog
     class DirectSQLDialog final
-            :public ModalDialog
-            ,public ::utl::OEventListenerAdapter
+            : public weld::GenericDialogController
+            , public ::utl::OEventListenerAdapter
     {
         ::osl::Mutex    m_aMutex;
 
@@ -65,10 +66,9 @@ namespace dbaui
 
     public:
         DirectSQLDialog(
-            vcl::Window* _pParent,
+            weld::Window* _pParent,
             const css::uno::Reference< css::sdbc::XConnection >& _rxConn);
         virtual ~DirectSQLDialog() override;
-        virtual void dispose() override;
 
         /// number of history entries
         sal_Int32 getHistorySize() const;
