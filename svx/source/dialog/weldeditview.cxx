@@ -26,6 +26,8 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/unoedhlp.hxx>
 #include <editeng/unoedsrc.hxx>
@@ -44,9 +46,31 @@
 
 WeldEditView::WeldEditView() {}
 
+// tdf#127033 want to use UI font so override makeEditEngine to enable that
 void WeldEditView::makeEditEngine()
 {
-    m_xEditEngine.reset(new EditEngine(EditEngine::CreatePool()));
+    SfxItemPool* pItemPool = EditEngine::CreatePool();
+
+    vcl::Font aAppFont(Application::GetSettings().GetStyleSettings().GetAppFont());
+
+    pItemPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
+                                              "", PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
+                                              EE_CHAR_FONTINFO));
+    pItemPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
+                                              "", PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
+                                              EE_CHAR_FONTINFO_CJK));
+    pItemPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
+                                              "", PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
+                                              EE_CHAR_FONTINFO_CTL));
+
+    pItemPool->SetPoolDefaultItem(
+        SvxFontHeightItem(aAppFont.GetFontHeight() * 20, 100, EE_CHAR_FONTHEIGHT));
+    pItemPool->SetPoolDefaultItem(
+        SvxFontHeightItem(aAppFont.GetFontHeight() * 20, 100, EE_CHAR_FONTHEIGHT_CJK));
+    pItemPool->SetPoolDefaultItem(
+        SvxFontHeightItem(aAppFont.GetFontHeight() * 20, 100, EE_CHAR_FONTHEIGHT_CTL));
+
+    m_xEditEngine.reset(new EditEngine(pItemPool));
 }
 
 void WeldEditView::Resize()
@@ -126,6 +150,20 @@ bool WeldEditView::KeyInput(const KeyEvent& rKEvt)
     }
     else if (!m_xEditView->PostKeyEvent(rKEvt))
     {
+        if (rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsMod2())
+        {
+            if (nKey == KEY_A)
+            {
+                sal_Int32 nPar = m_xEditEngine->GetParagraphCount();
+                if (nPar)
+                {
+                    sal_Int32 nLen = m_xEditEngine->GetTextLen(nPar - 1);
+                    m_xEditView->SetSelection(ESelection(0, 0, nPar - 1, nLen));
+                }
+                return true;
+            }
+        }
+
         return false;
     }
 

@@ -33,8 +33,6 @@ MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( vcl::Window* pParent
     EnableUpdateData(300);
 }
 
-VCL_BUILDER_FACTORY(MultiLineEditSyntaxHighlight)
-
 void MultiLineEditSyntaxHighlight::SetText(const OUString& rNewText)
 {
     MultiLineEdit::SetText(rNewText);
@@ -117,22 +115,22 @@ bool MultiLineEditSyntaxHighlight::PreNotify( NotifyEvent& rNEvt )
     return MultiLineEdit::PreNotify(rNEvt);
 }
 
-Color MultiLineEditSyntaxHighlight::GetColorValue(TokenType aToken)
+Color MultiLineEditSyntaxHighlight::GetSyntaxHighlightColor(const svtools::ColorConfig& rColorConfig, HighlighterLanguage eLanguage, TokenType aToken)
 {
     Color aColor;
-    switch (aHighlighter.GetLanguage())
+    switch (eLanguage)
     {
         case HighlighterLanguage::SQL:
         {
             switch (aToken)
             {
-                case TokenType::Identifier: aColor = m_aColorConfig.GetColorValue(svtools::SQLIDENTIFIER).nColor; break;
-                case TokenType::Number:     aColor = m_aColorConfig.GetColorValue(svtools::SQLNUMBER).nColor; break;
-                case TokenType::String:     aColor = m_aColorConfig.GetColorValue(svtools::SQLSTRING).nColor; break;
-                case TokenType::Operator:   aColor = m_aColorConfig.GetColorValue(svtools::SQLOPERATOR).nColor; break;
-                case TokenType::Keywords:   aColor = m_aColorConfig.GetColorValue(svtools::SQLKEYWORD).nColor; break;
-                case TokenType::Parameter:  aColor = m_aColorConfig.GetColorValue(svtools::SQLPARAMETER).nColor; break;
-                case TokenType::Comment:    aColor = m_aColorConfig.GetColorValue(svtools::SQLCOMMENT).nColor; break;
+                case TokenType::Identifier: aColor = rColorConfig.GetColorValue(svtools::SQLIDENTIFIER).nColor; break;
+                case TokenType::Number:     aColor = rColorConfig.GetColorValue(svtools::SQLNUMBER).nColor; break;
+                case TokenType::String:     aColor = rColorConfig.GetColorValue(svtools::SQLSTRING).nColor; break;
+                case TokenType::Operator:   aColor = rColorConfig.GetColorValue(svtools::SQLOPERATOR).nColor; break;
+                case TokenType::Keywords:   aColor = rColorConfig.GetColorValue(svtools::SQLKEYWORD).nColor; break;
+                case TokenType::Parameter:  aColor = rColorConfig.GetColorValue(svtools::SQLPARAMETER).nColor; break;
+                case TokenType::Comment:    aColor = rColorConfig.GetColorValue(svtools::SQLCOMMENT).nColor; break;
                 default:            aColor = Color(0,0,0);
             }
             break;
@@ -156,6 +154,11 @@ Color MultiLineEditSyntaxHighlight::GetColorValue(TokenType aToken)
 
     }
     return aColor;
+}
+
+Color MultiLineEditSyntaxHighlight::GetColorValue(TokenType aToken)
+{
+    return GetSyntaxHighlightColor(m_aColorConfig, aHighlighter.GetLanguage(), aToken);
 }
 
 void MultiLineEditSyntaxHighlight::UpdateData()

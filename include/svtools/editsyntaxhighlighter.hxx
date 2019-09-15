@@ -45,6 +45,8 @@ class SVT_DLLPUBLIC MultiLineEditSyntaxHighlight : public MultiLineEdit
         virtual void SetText( const OUString& rStr, const Selection& rNewSelection ) override
                     { SetText( rStr ); SetSelection( rNewSelection ); }
 
+        static Color GetSyntaxHighlightColor(const svtools::ColorConfig& rColorConfig, HighlighterLanguage eLanguage, TokenType aToken);
+
         Color GetColorValue(TokenType aToken);
 };
 
