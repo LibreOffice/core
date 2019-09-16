@@ -80,19 +80,8 @@ static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell const & rShe
         return;
 
     const SwTableLine* pLine = pRow->GetTabLine( );
-    // Avoid redrawing the complete row if there are no nested tables
-    for (SwFrame *pCell = pRow->GetLower(); pCell; pCell = pCell->GetNext())
-    {
-        for (SwFrame *pContent = pCell->GetLower(); pContent; pContent = pContent->GetNext())
-        {
-            if (pContent->GetType() == SwFrameType::Tab)
-            {
-                SwFormatFrameSize aSize = pLine->GetFrameFormat()->GetFrameSize();
-                pRow->ModifyNotification(nullptr, &aSize);
-                return;
-            }
-        }
-    }
+    SwFormatFrameSize aSize = pLine->GetFrameFormat()->GetFrameSize();
+    pRow->ModifyNotification(nullptr, &aSize);
 }
 
 SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
