@@ -17,7 +17,7 @@
 
 #include <config_features.h>
 
-#include <map>
+#include <vector>
 #include <string>
 
 namespace google_breakpad
@@ -41,39 +41,49 @@ CRASHREPORT_DLLPUBLIC
 /*class*/ CrashReporter
 {
 public:
-    static void AddKeyValue(const OUString& rKey, const OUString& rValue);
+    typedef enum {AddItem, Write, Create} tAddKeyHandling;
+#if HAVE_FEATURE_BREAKPAD
+    static void AddKeyValue(const OUString& rKey, const OUString& rValue, tAddKeyHandling AddKeyHandling);
+
+    static void StoreExceptionHandler(google_breakpad::ExceptionHandler* pExceptionHandler);
+
+    static bool CrashReportInfoExists();
+
+    static bool ReadSendConfig(std::string& response);
+
+private:
+    static osl::Mutex maMutex;
+    static bool mbInit;
+    typedef  struct _mpair
+    {
+        OUString first;
+        OUString second;
+        _mpair(const OUString& First, const OUString& Second)
+        {
+            first  = First;
+            second = Second;
+        };
+    } mpair;
+
+    typedef std::vector<mpair> vmaKeyValues;
+    static vmaKeyValues maKeyValues; // used to temporarily save entries before the old info has been uploaded
+
+    static google_breakpad::ExceptionHandler* mpExceptionHandler;
 
     static std::string getIniFileName();
-
-    static void writeCommonInfo();
-
-    static void storeExceptionHandler(google_breakpad::ExceptionHandler* pExceptionHandler);
-
+    static void WriteCommonInfo();
+    static void WriteToFile(std::ios_base::openmode Openmode);
     // when we create the ExceptionHandler we have no access to the user
     // profile yet, so update when we have access
     static void updateMinidumpLocation();
 
-private:
-
-    static osl::Mutex maMutex;
-
-    static bool mbInit;
-
-    static std::map<OUString, OUString> maKeyValues; // used to temporarily save entries before the old info has been uploaded
-
-    static google_breakpad::ExceptionHandler* mpExceptionHandler;
-};
-
-// Add dummy methods for the non-breakpad case. That allows us to use
-// the code without linking to the lib and without adding HAVE_FEATURE_BREAKPAD
-// everywhere we want to log something to the crash report system.
-#if HAVE_FEATURE_BREAKPAD
 #else
-inline void CrashReporter::AddKeyValue(SAL_UNUSED_PARAMETER const OUString& /*rKey*/, SAL_UNUSED_PARAMETER const OUString& /*rValue*/)
-{
-}
+    // Add dummy methods for the non-breakpad case. That allows us to use
+    // // the code without linking to the lib and without adding HAVE_FEATURE_BREAKPAD
+    // // everywhere we want to log something to the crash report system.
+    static void AddKeyValue(SAL_UNUSED_PARAMETER const OUString& /*rKey*/, SAL_UNUSED_PARAMETER const OUString& /*rValue*/, SAL_UNUSED_PARAMETER tAddKeyHandling /*AddKeyHandling*/) {};
 #endif
-
+};
 
 #endif
 

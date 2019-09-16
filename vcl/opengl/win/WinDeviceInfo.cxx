@@ -531,9 +531,9 @@ void writeToLog(SvStream& rStrm, const char* pKey, const OUString & rVal)
 
 bool WinOpenGLDeviceInfo::isDeviceBlocked()
 {
-    CrashReporter::AddKeyValue("OpenGLVendor", maAdapterVendorID);
-    CrashReporter::AddKeyValue("OpenGLDevice", maAdapterDeviceID);
-    CrashReporter::AddKeyValue("OpenGLDriver", maDriverVersion);
+    CrashReporter::AddKeyValue("OpenGLVendor", maAdapterVendorID, CrashReporter::AddItem);
+    CrashReporter::AddKeyValue("OpenGLDevice", maAdapterDeviceID, CrashReporter::AddItem);
+    CrashReporter::AddKeyValue("OpenGLDriver", maDriverVersion, CrashReporter::Write);
 
     SAL_INFO("vcl.opengl", maDriverVersion);
     SAL_INFO("vcl.opengl", maDriverDate);

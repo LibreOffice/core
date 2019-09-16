@@ -16,7 +16,7 @@
 
 namespace crashreport {
 
-CRASHREPORT_DLLPUBLIC bool readConfig(const std::string& iniPath, std::string& response);
+CRASHREPORT_DLLPUBLIC bool readConfig(const std::string& iniPath, std::string * response);
 
 }
 
