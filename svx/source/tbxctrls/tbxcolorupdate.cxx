@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+
 #include <svx/tbxcolorupdate.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xdef.hxx>
@@ -70,14 +71,7 @@ namespace svx
     {
         Image aImage(mpTbx->GetItemImage(mnBtnId));
         Size aItemSize(mbWideButton ? mpTbx->GetItemContentSize(mnBtnId) : aImage.GetSizePixel());
-#ifdef IOS // tdf#126966
-        // Oddly enough, it is in the "not wide button" case that we want the larger ones, hmm.
-        if (!mbWideButton)
-        {
-            aItemSize.setWidth(aItemSize.getWidth() * 3);
-            aItemSize.setHeight(aItemSize.getHeight() * 3);
-        }
-#endif
+
         const bool bSizeChanged = (maBmpSize != aItemSize);
         const bool bDisplayModeChanged = (mbWasHiContrastMode != mpTbx->GetSettings().GetStyleSettings().GetHighContrastMode());
         Color aColor(rColor);
@@ -98,17 +92,9 @@ namespace svx
         long nWidth = std::min(aItemSize.Width(), aSource.GetSizePixel().Width());
         long nHeight = std::min(aItemSize.Height(), aSource.GetSizePixel().Height());
 
-        // Be sure to center the image if necessary.
-        Point aDestination(0, 0);
-        if (aItemSize.getWidth() > aSource.GetSizePixel().getWidth())
-            aDestination.Move((aItemSize.getWidth() - aSource.GetSizePixel().getWidth()) / 2, 0);
-        if (aItemSize.getHeight() > aSource.GetSizePixel().getHeight())
-            aDestination.Move(0, (aItemSize.getHeight() - aSource.GetSizePixel().getHeight()) / 2);
+        tools::Rectangle aRect(Point(0, 0), Size(nWidth, nHeight));
 
-        tools::Rectangle aRectDestination(aDestination, Size(nWidth, nHeight));
-        tools::Rectangle aRectSource(Point(0, 0), Size(nWidth, nHeight));
-
-        aBmpEx.CopyPixel( aRectDestination, aRectSource, &aSource );
+        aBmpEx.CopyPixel( aRect, aRect, &aSource );
 
         Bitmap              aBmp( aBmpEx.GetBitmap() );
         BitmapWriteAccess*  pBmpAcc = aBmp.IsEmpty() ? nullptr : aBmp.AcquireWriteAccess();
