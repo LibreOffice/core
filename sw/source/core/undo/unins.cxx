@@ -607,41 +607,41 @@ SwUndoReplace::Impl::Impl(
     SwTextNode* pNd = pStt->nNode.GetNode().GetTextNode();
     OSL_ENSURE( pNd, "Dude, where's my TextNode?" );
 
-    pHistory.reset( new SwHistory );
+    m_pHistory.reset( new SwHistory );
     DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
 
-    m_nSetPos = pHistory->Count();
+    m_nSetPos = m_pHistory->Count();
 
     sal_uLong nNewPos = pStt->nNode.GetIndex();
     m_nOffset = m_nSttNd - nNewPos;
 
     if ( pNd->GetpSwpHints() )
     {
-        pHistory->CopyAttr( pNd->GetpSwpHints(), nNewPos, 0,
+        m_pHistory->CopyAttr( pNd->GetpSwpHints(), nNewPos, 0,
                             pNd->GetText().getLength(), true );
     }
 
     if ( m_bSplitNext )
     {
         if( pNd->HasSwAttrSet() )
-            pHistory->CopyFormatAttr( *pNd->GetpSwAttrSet(), nNewPos );
-        pHistory->Add( pNd->GetTextColl(), nNewPos, SwNodeType::Text );
+            m_pHistory->CopyFormatAttr( *pNd->GetpSwAttrSet(), nNewPos );
+        m_pHistory->Add( pNd->GetTextColl(), nNewPos, SwNodeType::Text );
 
         SwTextNode* pNext = pEnd->nNode.GetNode().GetTextNode();
         sal_uLong nTmp = pNext->GetIndex();
-        pHistory->CopyAttr( pNext->GetpSwpHints(), nTmp, 0,
+        m_pHistory->CopyAttr( pNext->GetpSwpHints(), nTmp, 0,
                             pNext->GetText().getLength(), true );
         if( pNext->HasSwAttrSet() )
-            pHistory->CopyFormatAttr( *pNext->GetpSwAttrSet(), nTmp );
-        pHistory->Add( pNext->GetTextColl(),nTmp, SwNodeType::Text );
+            m_pHistory->CopyFormatAttr( *pNext->GetpSwAttrSet(), nTmp );
+        m_pHistory->Add( pNext->GetTextColl(),nTmp, SwNodeType::Text );
         // METADATA: store
         m_pMetadataUndoStart = pNd  ->CreateUndo();
         m_pMetadataUndoEnd   = pNext->CreateUndo();
     }
 
-    if( !pHistory->Count() )
+    if( !m_pHistory->Count() )
     {
-        pHistory.reset();
+        m_pHistory.reset();
     }
 
     const sal_Int32 nECnt = m_bSplitNext ? pNd->GetText().getLength()
@@ -705,27 +705,27 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
         (void) ins;
     }
 
-    if( pHistory )
+    if( m_pHistory )
     {
         if( pNd->GetpSwpHints() )
             pNd->ClearSwpHintsArr( true );
 
-        pHistory->TmpRollback( pDoc, m_nSetPos, false );
+        m_pHistory->TmpRollback( pDoc, m_nSetPos, false );
         if ( m_nSetPos ) // there were footnotes/FlyFrames
         {
             // are there others than these?
-            if( m_nSetPos < pHistory->Count() )
+            if( m_nSetPos < m_pHistory->Count() )
             {
                 // than save those attributes as well
                 SwHistory aHstr;
-                aHstr.Move( 0, pHistory.get(), m_nSetPos );
-                pHistory->Rollback( pDoc );
-                pHistory->Move( 0, &aHstr );
+                aHstr.Move( 0, m_pHistory.get(), m_nSetPos );
+                m_pHistory->Rollback( pDoc );
+                m_pHistory->Move( 0, &aHstr );
             }
             else
             {
-                pHistory->Rollback( pDoc );
-                pHistory.reset();
+                m_pHistory->Rollback( pDoc );
+                m_pHistory.reset();
             }
         }
     }
@@ -752,25 +752,25 @@ void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     rPam.GetPoint()->nContent.Assign( pNd, m_nSelEnd );
 
-    if( pHistory )
+    if( m_pHistory )
     {
         auto xSave = std::make_unique<SwHistory>();
-        std::swap(pHistory, xSave);
+        std::swap(m_pHistory, xSave);
 
         DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
-        m_nSetPos = pHistory->Count();
+        m_nSetPos = m_pHistory->Count();
 
-        std::swap(xSave, pHistory);
-        pHistory->Move(0, xSave.get());
+        std::swap(xSave, m_pHistory);
+        m_pHistory->Move(0, xSave.get());
     }
     else
     {
-        pHistory.reset( new SwHistory );
+        m_pHistory.reset( new SwHistory );
         DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
-        m_nSetPos = pHistory->Count();
+        m_nSetPos = m_pHistory->Count();
         if( !m_nSetPos )
         {
-            pHistory.reset();
+            m_pHistory.reset();
         }
     }
 

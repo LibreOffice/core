@@ -69,10 +69,10 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     if( nSttContent < nTextNdLen )     // no pure insert?
     {
         aDelStr += OUStringLiteral1( pTextNd->GetText()[nSttContent] );
-        if( !pHistory )
-            pHistory.reset( new SwHistory );
-        SwRegHistory aRHst( *pTextNd, pHistory.get() );
-        pHistory->CopyAttr( pTextNd->GetpSwpHints(), nSttNode, 0,
+        if( !m_pHistory )
+            m_pHistory.reset( new SwHistory );
+        SwRegHistory aRHst( *pTextNd, m_pHistory.get() );
+        m_pHistory->CopyAttr( pTextNd->GetpSwpHints(), nSttNode, 0,
                             nTextNdLen, false );
         ++rPos.nContent;
         bInsChar = false;
@@ -224,11 +224,11 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
         --rIdx;
     }
 
-    if( pHistory )
+    if( m_pHistory )
     {
         if( pTextNd->GetpSwpHints() )
             pTextNd->ClearSwpHintsArr( false );
-        pHistory->TmpRollback( pDoc, 0, false );
+        m_pHistory->TmpRollback( pDoc, 0, false );
     }
 
     if( pCurrentPam->GetMark()->nContent.GetIndex() != nSttContent )
@@ -299,8 +299,8 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     pTextNd->SetIgnoreDontExpand( bOldExpFlg );
 
     // get back old start position from UndoNodes array
-    if( pHistory )
-        pHistory->SetTmpEnd( pHistory->Count() );
+    if( m_pHistory )
+        m_pHistory->SetTmpEnd( m_pHistory->Count() );
     if( pCurrentPam->GetMark()->nContent.GetIndex() != nSttContent )
     {
         pCurrentPam->SetMark();

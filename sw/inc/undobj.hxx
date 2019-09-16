@@ -153,7 +153,7 @@ class SwUndoSaveContent
 {
 protected:
 
-    std::unique_ptr<SwHistory> pHistory;
+    std::unique_ptr<SwHistory> m_pHistory;
 
     // Needed for deletion of content. For Redo content is moved into the
     // UndoNodesArray. These methods always create a new node to insert
@@ -189,13 +189,13 @@ public:
 class SwUndoSaveSection : private SwUndoSaveContent
 {
     std::unique_ptr<SwNodeIndex> m_pMovedStart;
-    std::unique_ptr<SwRedlineSaveDatas> pRedlSaveData;
-    sal_uLong nMvLen;           // Index into UndoNodes-Array.
-    sal_uLong nStartPos;
+    std::unique_ptr<SwRedlineSaveDatas> m_pRedlineSaveData;
+    sal_uLong m_nMoveLen;           // Index into UndoNodes-Array.
+    sal_uLong m_nStartPos;
 
 protected:
     SwNodeIndex* GetMvSttIdx() const { return m_pMovedStart.get(); }
-    sal_uLong GetMvNodeCnt() const { return nMvLen; }
+    sal_uLong GetMvNodeCnt() const { return m_nMoveLen; }
 
 public:
     SwUndoSaveSection();
@@ -206,8 +206,8 @@ public:
     void RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx, sal_uInt16 nSectType );
     void RestoreSection(SwDoc* pDoc, const SwNodeIndex& rInsPos, bool bForceCreateFrames = false);
 
-    const SwHistory* GetHistory() const { return pHistory.get(); }
-          SwHistory* GetHistory()       { return pHistory.get(); }
+    const SwHistory* GetHistory() const { return m_pHistory.get(); }
+          SwHistory* GetHistory()       { return m_pHistory.get(); }
 };
 
 // This class saves the PaM as sal_uInt16's and is able to restore it
