@@ -25,7 +25,6 @@ $(eval $(call gb_StaticLibrary_add_defs,expat_x64,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_x64_generated_cobjects,expat_x64,\
-	UnpackedTarball/expat/lib/loadlibrary_x64 \
 	UnpackedTarball/expat/lib/xmlparse_x64 \
 	UnpackedTarball/expat/lib/xmltok_x64 \
 	UnpackedTarball/expat/lib/xmlrole_x64 \
