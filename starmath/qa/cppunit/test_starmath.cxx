@@ -66,7 +66,7 @@ public:
     void replacePlaceholder();
     void viewZoom();
 
-#ifdef HAVE_MORE_FONTS
+#if HAVE_MORE_FONTS
     void testSmTmpDeviceRestoreFont();
 #endif
 
@@ -89,7 +89,7 @@ public:
     CPPUNIT_TEST(ParseErrorDoubleSubsupscript);
     CPPUNIT_TEST(replacePlaceholder);
     CPPUNIT_TEST(viewZoom);
-#ifdef HAVE_MORE_FONTS
+#if HAVE_MORE_FONTS
     CPPUNIT_TEST(testSmTmpDeviceRestoreFont);
 #endif
     CPPUNIT_TEST_SUITE_END();
@@ -145,7 +145,7 @@ void Test::tearDown()
     BootstrapFixture::tearDown();
 }
 
-#ifdef HAVE_MORE_FONTS
+#if HAVE_MORE_FONTS
 void Test::testSmTmpDeviceRestoreFont()
 {
     ScopedVclPtrInstance<Printer> pPrinter;
