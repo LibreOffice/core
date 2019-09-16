@@ -66,7 +66,9 @@ public:
     void replacePlaceholder();
     void viewZoom();
 
+#ifdef HAVE_MORE_FONTS
     void testSmTmpDeviceRestoreFont();
+#endif
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(editUndoRedo);
@@ -87,7 +89,9 @@ public:
     CPPUNIT_TEST(ParseErrorDoubleSubsupscript);
     CPPUNIT_TEST(replacePlaceholder);
     CPPUNIT_TEST(viewZoom);
+#ifdef HAVE_MORE_FONTS
     CPPUNIT_TEST(testSmTmpDeviceRestoreFont);
+#endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -141,6 +145,7 @@ void Test::tearDown()
     BootstrapFixture::tearDown();
 }
 
+#ifdef HAVE_MORE_FONTS
 void Test::testSmTmpDeviceRestoreFont()
 {
     ScopedVclPtrInstance<Printer> pPrinter;
@@ -169,6 +174,7 @@ void Test::testSmTmpDeviceRestoreFont()
     CPPUNIT_ASSERT(aNewFont != pPrinter->GetFont());
     CPPUNIT_ASSERT_EQUAL(COL_RED, pPrinter->GetTextColor());
 }
+#endif
 
 void Test::editMarker()
 {
