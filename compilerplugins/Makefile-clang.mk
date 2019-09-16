@@ -229,7 +229,7 @@ $(CLANGOUTDIR)/sharedvisitor/%.plugininfo: $(CLANGINDIR)/%.cxx \
 $(CLANGOUTDIR)/sharedvisitor/sharedvisitor.cxx: $(SHARED_SOURCE_INFOS) $(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT)
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,1)
 	$(QUIET)$(ICECREAM_RUN) $(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT) \
-        $(COMPILER_PLUGINS_TOOLING_ARGS:%=-arg=%) $(SHARED_SOURCE_INFOS) > $@
+        $(SHARED_SOURCE_INFOS) > $@
 
 CLANGTOOLLIBS = -lclangTooling -lclangDriver -lclangFrontend -lclangParse -lclangSema -lclangEdit -lclangAnalysis \
         -lclangAST -lclangLex -lclangSerialization -lclangBasic $(shell $(LLVMCONFIG) --ldflags --libs --system-libs)
@@ -287,7 +287,8 @@ $(CLANGOUTDIR)/sharedvisitor/clang.pch: $(CLANGINDIR)/sharedvisitor/precompiled_
         $(CLANGOUTDIR)/clang-timestamp \
         | $(CLANGOUTDIR)/sharedvisitor
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),PCH,1)
-	$(QUIET)$(CLANGDIR)/bin/clang -x c++-header $(LO_CLANG_ANALYZER_PCH_CXXFLAGS) $< -o $@
+	$(QUIET)$(CLANGDIR)/bin/clang -x c++-header $(LO_CLANG_ANALYZER_PCH_CXXFLAGS) \
+        $(COMPILER_PLUGINS_TOOLING_ARGS) $< -o $@
 else
 $(CLANGOUTDIR)/sharedvisitor/clang.pch:
 	touch $@
