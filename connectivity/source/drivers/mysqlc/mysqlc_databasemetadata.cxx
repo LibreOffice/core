@@ -1049,13 +1049,9 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getBestRowIdentifier(const Any
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTablePrivileges(
     const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*tableNamePattern*/)
 {
-    Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
-                                         "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
-                                     UNO_QUERY);
     // TODO
     SAL_WARN("connectivity.mysqlc", "method not implemented");
     throw SQLException("getTablePrivileges method not implemented", *this, "IM001", 0, Any());
-    return xResultSet;
 }
 
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getCrossReference(
