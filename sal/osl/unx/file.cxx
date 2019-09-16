@@ -1181,13 +1181,13 @@ oslFileError SAL_CALL osl_mapFile(
             volatile sal_uInt8 c = 0;
             while (nSize > nPageSize)
             {
-                c ^= pData[0];
+                c = c ^ pData[0];
                 pData += nPageSize;
                 nSize -= nPageSize;
             }
 
             if (nSize > 0)
-                c^= pData[0];
+                c = c ^ pData[0];
         }
     }
 
