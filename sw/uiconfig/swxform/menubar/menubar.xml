@@ -330,9 +330,9 @@
       </menu:menu>
       <menu:menu menu:id=".uno:IndexesMenu">
         <menu:menupopup>
+          <menu:menuitem menu:id=".uno:InsertMultiIndex"/>
           <menu:menuitem menu:id=".uno:InsertIndexesEntry"/>
           <menu:menuitem menu:id=".uno:InsertAuthoritiesEntry"/>
-          <menu:menuitem menu:id=".uno:InsertMultiIndex"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
