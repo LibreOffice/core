@@ -152,7 +152,7 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 
     inline void ResetInvalidRect();
 
-    SAL_DLLPRIVATE void Reformat();          // Invalidates complete Layout (ApplyViewOption).
+    void Reformat();          // Invalidates complete Layout (ApplyViewOption).
 
     SAL_DLLPRIVATE void PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect&);  // Collect values for painting of desktop
                                                         // and calling.

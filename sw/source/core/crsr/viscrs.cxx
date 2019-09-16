@@ -243,6 +243,11 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
     }
 }
 
+const vcl::Cursor& SwVisibleCursor::GetTextCursor() const
+{
+    return m_aTextCursor;
+}
+
 SwSelPaintRects::SwSelPaintRects( const SwCursorShell& rCSh )
     : SwRects()
     , m_pCursorShell( &rCSh )
