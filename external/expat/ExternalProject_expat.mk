@@ -15,7 +15,7 @@ $(eval $(call gb_ExternalProject_register_targets,expat,\
 
 $(call gb_ExternalProject_get_state_target,expat,configure) :
 	$(call gb_ExternalProject_run,configure,\
-		./configure \
+		./configure --without-docbook \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	,,expat_configure.log)
 
