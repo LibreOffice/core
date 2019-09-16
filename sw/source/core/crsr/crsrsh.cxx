@@ -2601,6 +2601,11 @@ bool SwCursorShell::SetVisibleCursor( const Point &rPt )
     return bRet;
 }
 
+SwVisibleCursor* SwCursorShell::GetVisibleCursor() const
+{
+    return m_pVisibleCursor;
+}
+
 bool SwCursorShell::IsOverReadOnlyPos( const Point& rPt ) const
 {
     Point aPt( rPt );
