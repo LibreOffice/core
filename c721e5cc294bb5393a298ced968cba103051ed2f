@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_bc03a90f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-09-16T13:48:32Z",
+      "side": 1,
+      "message": "Right, yes.",
+      "parentUuid": "7f7f9b97_1ce65dea",
+      "range": {
+        "startLine": 16,
+        "startChar": 50,
+        "endLine": 16,
+        "endChar": 62
+      },
+      "revId": "c721e5cc294bb5393a298ced968cba103051ed2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_9cc4ad42",
         "filename": "configmgr/source/writemodfile.cxx",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2019-09-16T11:37:52Z",
       "side": 1,
       "message": "there should be a better way to convert from rtl::OStringNumber to std::string_view",
+      "revId": "c721e5cc294bb5393a298ced968cba103051ed2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_1f088f26",
+        "filename": "configmgr/source/writemodfile.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-09-16T13:48:32Z",
+      "side": 1,
+      "message": "Which is ... :) ? IIRC these are the only cases where it\u0027s needed, so I didn\u0027t care, the only other reasonable alternative I see is explicitly converting the result to OString, which IMO is about the same.",
+      "parentUuid": "7f7f9b97_9cc4ad42",
       "revId": "c721e5cc294bb5393a298ced968cba103051ed2f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_3f0d4b37",
+        "filename": "include/rtl/stringconcat.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-09-16T13:48:32Z",
+      "side": 1,
+      "message": "Ok.",
+      "parentUuid": "7f7f9b97_fcccc162",
+      "revId": "c721e5cc294bb5393a298ced968cba103051ed2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_3cb6b9db",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 2
@@ -70,6 +130,24 @@
       "writtenOn": "2019-09-16T11:37:52Z",
       "side": 1,
       "message": "any reason to move this section around?",
+      "revId": "c721e5cc294bb5393a298ced968cba103051ed2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_df11b755",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3462,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-09-16T13:48:32Z",
+      "side": 1,
+      "message": "I ordered them by actually-implements-something before just-a-forwarding-overload, but I can order them back by the type.",
+      "parentUuid": "7f7f9b97_3cb6b9db",
       "revId": "c721e5cc294bb5393a298ced968cba103051ed2f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
