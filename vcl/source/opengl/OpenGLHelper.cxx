@@ -1024,7 +1024,7 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
         if (!getenv("SAL_DISABLE_GL_WATCHDOG"))
             OpenGLWatchdogThread::start();
     }
-    CrashReporter::AddKeyValue("UseOpenGL", OUString::boolean(bRet));
+    CrashReporter::AddKeyValue("UseOpenGL", OUString::boolean(bRet), CrashReporter::Write);
 
     return bRet;
 }

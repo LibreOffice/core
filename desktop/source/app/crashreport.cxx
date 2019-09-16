@@ -14,6 +14,7 @@
 #include <ucbhelper/proxydecider.hxx>
 #include <unotools/bootstrap.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <desktop/minidump.hxx>
 
 #include <config_version.h>
 #include <config_folders.h>
@@ -40,39 +41,41 @@ osl::Mutex CrashReporter::maMutex;
 
 google_breakpad::ExceptionHandler* CrashReporter::mpExceptionHandler = nullptr;
 bool CrashReporter::mbInit = false;
-std::map<OUString, OUString> CrashReporter::maKeyValues;
+CrashReporter::vmaKeyValues CrashReporter::maKeyValues;
 
-namespace {
 
-void writeToStream(std::ofstream& strm, const OUString& rKey, const OUString& rValue)
+void CrashReporter::WriteToFile(std::ios_base::openmode Openmode)
 {
-    strm << OUStringToOString(rKey, RTL_TEXTENCODING_UTF8).getStr() << "=";
-    strm << OUStringToOString(rValue, RTL_TEXTENCODING_UTF8).getStr() << "\n";
-}
+    std::ofstream ini_file(getIniFileName(), Openmode);
 
-}
-
-void CrashReporter::AddKeyValue(const OUString& rKey, const OUString& rValue)
-{
-    osl::MutexGuard aGuard(maMutex);
-    if (mbInit)
+    for (auto& keyValue : maKeyValues)
     {
-        std::string ini_path = getIniFileName();
-        std::ofstream ini_file(ini_path, std::ios_base::app);
-        writeToStream(ini_file, rKey, rValue);
+        ini_file << OUStringToOString(keyValue.first, RTL_TEXTENCODING_UTF8).getStr() << "=";
+        ini_file << OUStringToOString(keyValue.second, RTL_TEXTENCODING_UTF8).getStr() << "\n";
     }
-    else
-    {
-        maKeyValues.insert(std::pair<OUString, OUString>(rKey, rValue));
-    }
+
+    maKeyValues.clear();
+    ini_file.close();
 }
 
-#endif
-
-void CrashReporter::writeCommonInfo()
+void CrashReporter::AddKeyValue(const OUString& rKey, const OUString& rValue, tAddKeyHandling AddKeyHandling)
 {
     osl::MutexGuard aGuard(maMutex);
 
+    if(!rKey.isEmpty())
+        maKeyValues.push_back(mpair(rKey, rValue));
+
+    if(AddKeyHandling != AddItem)
+    {
+        if(mbInit)
+            WriteToFile(std::ios_base::app);
+        else if (AddKeyHandling == Create)
+            WriteCommonInfo();
+    }
+}
+
+void CrashReporter::WriteCommonInfo()
+{
     ucbhelper::InternetProxyDecider proxy_decider(::comphelper::getProcessComponentContext());
 
     const OUString protocol = "https";
@@ -81,30 +84,30 @@ void CrashReporter::writeCommonInfo()
 
     const ucbhelper::InternetProxyServer proxy_server = proxy_decider.getProxy(protocol, url, port);
 
+    // save the Keys
+    vmaKeyValues atlast = maKeyValues;
+    maKeyValues.clear();
+
     // limit the amount of code that needs to be executed before the crash reporting
-    std::string ini_path = CrashReporter::getIniFileName();
-    std::ofstream minidump_file(ini_path, std::ios_base::trunc);
-    minidump_file << "ProductName=LibreOffice\n";
-    minidump_file << "Version=" LIBO_VERSION_DOTTED "\n";
-    minidump_file << "BuildID=" << utl::Bootstrap::getBuildIdData("") << "\n";
-    minidump_file << "URL=" << protocol << "://" << url << "/submit/\n";
+    AddKeyValue("ProductName", "LibreOffice", AddItem);
+    AddKeyValue("Version", LIBO_VERSION_DOTTED, AddItem);
+    AddKeyValue("BuildID", utl::Bootstrap::getBuildIdData(""), AddItem);
+    AddKeyValue("URL", protocol + "://" + url + "/submit/", AddItem);
 
     if (proxy_server.aName != OUString())
     {
-        minidump_file << "Proxy=" << proxy_server.aName << ":" << proxy_server.nPort << "\n";
+        AddKeyValue("Proxy", proxy_server.aName + ":" + OUString::number(proxy_server.nPort), AddItem);
     }
 
-    for (auto& keyValue : maKeyValues)
-    {
-        writeToStream(minidump_file, keyValue.first, keyValue.second);
-    }
-    maKeyValues.clear();
-    minidump_file.close();
+    maKeyValues.insert(maKeyValues.end(), atlast.begin(), atlast.end());
 
     mbInit = true;
 
+    WriteToFile(std::ios_base::trunc);
+
     updateMinidumpLocation();
 }
+
 
 namespace {
 
@@ -131,6 +134,16 @@ OUString getCrashDirectory()
 
 }
 
+
+std::string CrashReporter::getIniFileName()
+{
+    OUString url = getCrashDirectory() + "dump.ini";
+    OString aUrl = OUStringToOString(url, RTL_TEXTENCODING_UTF8);
+    std::string aRet(aUrl.getStr());
+    return aRet;
+}
+
+
 void CrashReporter::updateMinidumpLocation()
 {
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
@@ -144,17 +157,26 @@ void CrashReporter::updateMinidumpLocation()
 #endif
 }
 
-void CrashReporter::storeExceptionHandler(google_breakpad::ExceptionHandler* pExceptionHandler)
+bool CrashReporter::CrashReportInfoExists()
+{
+    return crashreport::readConfig(CrashReporter::getIniFileName(), nullptr);
+}
+
+bool CrashReporter::ReadSendConfig(std::string& response)
+{
+    return crashreport::readConfig(CrashReporter::getIniFileName(), &response);
+}
+
+void CrashReporter::StoreExceptionHandler(google_breakpad::ExceptionHandler* pExceptionHandler)
 {
     mpExceptionHandler = pExceptionHandler;
 }
 
-std::string CrashReporter::getIniFileName()
-{
-    OUString url = getCrashDirectory() + "dump.ini";
-    OString aUrl = OUStringToOString(url, RTL_TEXTENCODING_UTF8);
-    std::string aRet(aUrl.getStr());
-    return aRet;
-}
+
+#endif
+
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
