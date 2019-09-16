@@ -1,13 +1,13 @@
 --- misc/expat-2.1.0/lib/expat_external.h	2009-11-16 08:53:17.375000000 +0000
 +++ misc/build/expat-2.1.0/lib/expat_external.h	2009-11-16 08:53:34.703125000 +0000
-@@ -7,10 +7,6 @@
+@@ -81,10 +81,6 @@
+ #  ifndef XML_BUILDING_EXPAT
+ /* using Expat from an application */
  
- /* External API definitions */
- 
--#if defined(_MSC_EXTENSIONS) && !defined(__BEOS__) && !defined(__CYGWIN__)
--# define XML_USE_MSC_EXTENSIONS 1
--#endif
+-#    if defined(_MSC_EXTENSIONS) && ! defined(__BEOS__) && ! defined(__CYGWIN__)
+-#      define XMLIMPORT __declspec(dllimport)
+-#    endif
 -
- /* Expat tries very hard to make the API boundary very specifically
-    defined.  There are two macros defined to control this boundary;
-    each of these can be defined before including this header to
+ #  endif
+ #endif /* not defined XML_STATIC */
+ 
