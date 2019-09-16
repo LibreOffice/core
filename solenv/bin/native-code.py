@@ -364,7 +364,6 @@ draw_constructor_list = [
 
 writer_factory_list = [
     ("libswlo.a", "sw_component_getFactory"),
-    ("libmswordlo.a", "msword_component_getFactory"),
     ]
 
 writer_constructor_list = [
