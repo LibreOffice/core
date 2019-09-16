@@ -23,7 +23,9 @@ static std::map<std::string, std::string> readStrings(std::istream& file)
 {
     std::map<std::string, std::string> parameters;
 
-    while (!file.eof())
+    // when file is not readable, the status eof would not be set
+    // better test of state is okay
+    while (file)
     {
         std::string line;
         std::getline(file, line);
@@ -189,7 +191,7 @@ static bool uploadContent(std::map<std::string, std::string>& parameters, std::s
 
 namespace crashreport {
 
-bool readConfig(const std::string& iniPath, std::string& response)
+bool readConfig(const std::string& iniPath, std::string * response)
 {
     std::ifstream file(iniPath);
     std::map<std::string, std::string> parameters = readStrings(file);
@@ -197,17 +199,29 @@ bool readConfig(const std::string& iniPath, std::string& response)
     // make sure that at least the mandatory parameters are in there
     if (parameters.find("DumpFile") == parameters.end())
     {
-        response = "ini file needs to contain a key DumpFile!";
+        if(response != nullptr)
+            *response = "ini file needs to contain a key DumpFile!";
         return false;
     }
 
     if (parameters.find("Version") == parameters.end())
     {
-        response = "ini file needs to contain a key Version!";
+        if (response != nullptr)
+            *response = "ini file needs to contain a key Version!";
         return false;
     }
 
-    return uploadContent(parameters, response);
+    if (parameters.find("URL") == parameters.end())
+    {
+        if (response != nullptr)
+            *response = "ini file needs to contain a key URL!";
+        return false;
+    }
+
+    if (response != nullptr)
+        return uploadContent(parameters, *response);
+
+    return true;
 }
 
 }
