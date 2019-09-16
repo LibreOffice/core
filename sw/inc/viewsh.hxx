@@ -152,8 +152,6 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 
     inline void ResetInvalidRect();
 
-
-
     SAL_DLLPRIVATE void PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect&);  // Collect values for painting of desktop
                                                         // and calling.
     // PaintDesktop split. This pars is also used by PreviewPage.

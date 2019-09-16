@@ -25,13 +25,14 @@
 #include "swcrsr.hxx"
 #include "swrect.hxx"
 #include "swregion.hxx"
+#include "swdllapi.h"
 
 class SwCursorShell;
 class SfxViewShell;
 
 // From here classes/methods for non-text cursor.
 
-class SwVisibleCursor
+class SW_DLLPUBLIC SwVisibleCursor
 {
     friend void InitCore();
     friend void FinitCore();
@@ -55,6 +56,7 @@ public:
     bool IsVisible() const { return m_bIsVisible; }
     void SetDragCursor( bool bFlag = true ) { m_bIsDragCursor = bFlag; }
     void SetPosAndShow(SfxViewShell const * pViewShell);
+    const vcl::Cursor& GetTextCursor() const;
 };
 
 // From here classes/methods for selections.
