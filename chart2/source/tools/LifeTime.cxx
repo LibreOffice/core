@@ -35,11 +35,6 @@ LifeTimeManager::LifeTimeManager( lang::XComponent* pComponent )
     : m_aListenerContainer( m_aAccessMutex )
     , m_pComponent(pComponent)
 {
-    impl_init();
-}
-
-void LifeTimeManager::impl_init()
-{
     m_bDisposed = false;
     m_bInDispose = false;
     m_nAccessCount = 0;
@@ -164,7 +159,10 @@ CloseableLifeTimeManager::CloseableLifeTimeManager( css::util::XCloseable* pClos
         : LifeTimeManager( pComponent )
         , m_pCloseable(pCloseable)
 {
-    impl_init();
+    m_bClosed = false;
+    m_bInTryClose = false;
+    m_bOwnership = false;
+    m_aEndTryClosingCondition.set();
 }
 
 CloseableLifeTimeManager::~CloseableLifeTimeManager()
