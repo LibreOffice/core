@@ -62,6 +62,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void test47446b();
     void testMaskText();
     void testTdf99994();
+    void testTdf99115();
     void testTdf101237();
     void testBehaviourWhenWidthAndHeightIsOrIsNotSet();
 
@@ -92,6 +93,7 @@ public:
     CPPUNIT_TEST(test47446b);
     CPPUNIT_TEST(testMaskText);
     CPPUNIT_TEST(testTdf99994);
+    CPPUNIT_TEST(testTdf99115);
     CPPUNIT_TEST(testTdf101237);
     CPPUNIT_TEST(testBehaviourWhenWidthAndHeightIsOrIsNotSet);
     CPPUNIT_TEST_SUITE_END();
@@ -527,15 +529,15 @@ void Test::testi125329()
 
     CPPUNIT_ASSERT (pDocument);
 
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "color", "#c0c0c0"); // rect background color
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "height", "30"); // rect background height
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "width", "50"); // rect background width
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "minx", "15");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "miny", "15");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "maxx", "65");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "maxy", "45");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygonstroke/line", "color", "#008000"); // rect stroke color
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygonstroke/line", "width", "1"); // rect stroke width
+    assertXPath(pDocument, "/primitive2D/transform/transform/objectinfo/polypolygoncolor", "color", "#c0c0c0"); // rect background color
+    assertXPath(pDocument, "/primitive2D/transform/transform/objectinfo/polypolygoncolor/polypolygon", "height", "30"); // rect background height
+    assertXPath(pDocument, "/primitive2D/transform/transform/objectinfo/polypolygoncolor/polypolygon", "width", "50"); // rect background width
+    assertXPath(pDocument, "/primitive2D/transform/transform/objectinfo/polypolygoncolor/polypolygon", "minx", "15");
+    assertXPath(pDocument, "/primitive2D/transform/transform/objectinfo/polypolygoncolor/polypolygon", "miny", "15");
+    assertXPath(pDocument, "/primitive2D/transform/transform/objectinfo/polypolygoncolor/polypolygon", "maxx", "65");
+    assertXPath(pDocument, "/primitive2D/transform/transform/objectinfo/polypolygoncolor/polypolygon", "maxy", "45");
+    assertXPath(pDocument, "/primitive2D/transform/transform/objectinfo/polypolygonstroke/line", "color", "#008000"); // rect stroke color
+    assertXPath(pDocument, "/primitive2D/transform/transform/objectinfo/polypolygonstroke/line", "width", "1"); // rect stroke width
 }
 
 void Test::testMaskingPath07b()
@@ -615,6 +617,54 @@ void Test::testTdf99994()
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "16");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "test");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Sans");
+}
+
+void Test::testTdf99115()
+{
+    //Check that styles are resolved correctly where there is a * css selector
+    Primitive2DSequence aSequenceTdf99115 = parseSvg("/svgio/qa/cppunit/data/tdf99115.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf99115.getLength()));
+
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf99115) );
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "red 1");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "fontcolor", "#ff0000");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "18");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", "red 2");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "fontcolor", "#ff0000");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "height", "18");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "text", "red 3");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "fontcolor", "#ff0000");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "height", "18");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[4]", "text", "blue 4");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[4]", "fontcolor", "#0000ff");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[4]", "height", "18");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[5]", "text", "blue 5");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[5]", "fontcolor", "#0000ff");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[5]", "height", "18");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[6]", "text", "blue 6");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[6]", "fontcolor", "#0000ff");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[6]", "height", "18");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[7]", "text", "green 7");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[7]", "fontcolor", "#008000");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[7]", "height", "18");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[8]", "text", "green 8");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[8]", "fontcolor", "#008000");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[8]", "height", "18");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[9]", "text", "green 9");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[9]", "fontcolor", "#008000");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[9]", "height", "18");
 }
 
 void Test::testTdf101237()

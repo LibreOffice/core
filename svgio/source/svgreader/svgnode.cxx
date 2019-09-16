@@ -174,6 +174,7 @@ namespace svgio
             // - 'id' CssStyle
             // - 'class' CssStyle(s)
             // - type-dependent elements (e..g. 'rect' for all rect elements)
+            // - Css selector '*'
             // - local attributes (rOriginal)
             // - inherited attributes (up the hierarchy)
             // The first four will be collected in maCssStyleVector for the current element
@@ -191,13 +192,20 @@ namespace svgio
             // check the hierarchy for concatenated patterns of Selectors
             fillCssStyleVectorUsingHierarchyAndSelectors(rClassStr, *this, OUString());
 
-            // #i125329# find Css selector '*', add as last element if found
-            const SvgStyleAttributes* pNew = getDocument().findGlobalCssStyleAttributes("*");
+            // tdf#99115, Add css selector '*' style only if the element is on top of the hierarchy
+            // meaning its parent is <svg>
+            const SvgNode* pParent = this->getParent();
 
-            if(pNew)
+            if(pParent && pParent->getType() == SVGTokenSvg)
             {
-                // add CssStyle for selector '*' if found
-                maCssStyleVector.push_back(pNew);
+                // #i125329# find Css selector '*', add as last element if found
+                const SvgStyleAttributes* pNew = getDocument().findGlobalCssStyleAttributes("*");
+
+                if(pNew)
+                {
+                    // add CssStyle for selector '*' if found
+                    maCssStyleVector.push_back(pNew);
+                }
             }
 
             //local attributes
