@@ -48,7 +48,6 @@ $(eval $(call gb_StaticLibrary_add_cflags,expat,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,expat,\
-	UnpackedTarball/expat/lib/loadlibrary \
 	UnpackedTarball/expat/lib/xmlparse \
 	UnpackedTarball/expat/lib/xmlrole \
 	UnpackedTarball/expat/lib/xmltok \
