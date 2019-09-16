@@ -11,6 +11,7 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <swdtflvr.hxx>
 #include <wrtsh.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 namespace
 {
@@ -56,5 +57,29 @@ void SwUiWriterTest2::testTdf101534()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf105330)
+{
+    load(DATA_DIRECTORY, "tdf105330.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+    uno::Sequence<beans::PropertyValue> aTableArgs = {
+        comphelper::makePropertyValue("Rows", static_cast<sal_uInt16>(1)),
+        comphelper::makePropertyValue("Columns", static_cast<sal_uInt16>(1)),
+    };
+    lcl_dispatchCommand(mxComponent, ".uno:InsertTable", aTableArgs);
+
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    rUndoManager.Undo();
+
+    //  Without the accompanying fix in place, height was only 1 twips (practically invisible).
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(276),
+                         pWrtShell->GetVisibleCursor()->GetTextCursor().GetSize().getHeight());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
