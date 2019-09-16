@@ -2525,6 +2525,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf118672)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf117923)
 {
     createDoc("tdf117923.doc");
+    // Ensure that all text portions are calculated before testing.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwViewShell* pViewShell
+        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
     xmlDocPtr pXmlDoc = parseLayoutDump();
 
     // Check that we actually test the line we need
