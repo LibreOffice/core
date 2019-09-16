@@ -632,7 +632,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl, weld::TreeView&, void)
     while (nSelectPos != -1 && nSelectPos < nCnt && m_xLbRange->get_id(nSelectPos).toInt32() == nEntryDataDelim)
     {   // skip Delimiter
         ++nMoves;
-        m_xLbRange->select( ++nSelectPos );
+        ++nSelectPos;
     }
     OUString aRangeStr = m_xLbRange->get_selected_text();
     if ( nMoves )
@@ -641,7 +641,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl, weld::TreeView&, void)
         {   // if entries exist before the " --- Row --- " Delimiter then
             // do not stop at the delimiter
             nSelectPos = nCnt - 2;
-            m_xLbRange->select( nSelectPos );
+            m_xLbRange->select(nSelectPos);
             aRangeStr = m_xLbRange->get_selected_text();
         }
         else if ( nSelectPos > 2 && nSelectPos < nCnt && !aRangeStr.isEmpty()
@@ -651,6 +651,8 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl, weld::TreeView&, void)
             m_xLbRange->select( nSelectPos );
             aRangeStr = m_xLbRange->get_selected_text();
         }
+        else
+            m_xLbRange->select(nSelectPos);
     }
     NameRangeMap::const_iterator itr = aRangeMap.find(aRangeStr);
     if ( itr != aRangeMap.end() )
