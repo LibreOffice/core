@@ -4040,8 +4040,8 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
         sal_Int32 nUtf32End = g_utf8_pointer_to_offset(pText, pText + nUtf8End);
 
         // sanitize the utf32 range
-        nUtf32Start = std::min(nUtf32Start, nUtf32Len);
-        nUtf32End = std::min(nUtf32End, nUtf32Len);
+        nUtf32Start = std::min(nUtf32Start, sal_Int32(nUtf32Len));
+        nUtf32End = std::min(nUtf32End, sal_Int32(nUtf32Len));
         if (nUtf32Start >= nUtf32End)
             continue;
 
