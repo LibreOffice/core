@@ -691,6 +691,7 @@ public:
     // (This is needed for displaying the Drag&Drop/Copy-Cursor.)
     bool SetVisibleCursor( const Point &rPt );
     inline void UnSetVisibleCursor();
+    SwVisibleCursor* GetVisibleCursor() const;
 
     // jump to the next or previous field of the corresponding type
     bool MoveFieldType(
