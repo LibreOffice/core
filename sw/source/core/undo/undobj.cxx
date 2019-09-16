@@ -887,13 +887,13 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 // will be problems with TextNode because the index will be
                 // deleted in the DTOR of SwFootnote!
                 SwTextNode* pTextNd = const_cast<SwTextNode*>(static_cast<const SwTextNode*>(pFootnoteNd));
-                if( !pHistory )
-                    pHistory.reset( new SwHistory );
+                if( !m_pHistory )
+                    m_pHistory.reset( new SwHistory );
                 SwTextAttr* const pFootnoteHint =
                     pTextNd->GetTextAttrForCharAt( nFootnoteSttIdx );
                 assert(pFootnoteHint);
                 SwIndex aIdx( pTextNd, nFootnoteSttIdx );
-                pHistory->Add( pFootnoteHint, pTextNd->GetIndex(), false );
+                m_pHistory->Add( pFootnoteHint, pTextNd->GetIndex(), false );
                 pTextNd->EraseText( aIdx, 1 );
             }
 
@@ -912,13 +912,13 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 // will be problems with TextNode because the index will be
                 // deleted in the DTOR of SwFootnote!
                 SwTextNode* pTextNd = const_cast<SwTextNode*>(static_cast<const SwTextNode*>(pFootnoteNd));
-                if( !pHistory )
-                    pHistory.reset( new SwHistory );
+                if( !m_pHistory )
+                    m_pHistory.reset( new SwHistory );
                 SwTextAttr* const pFootnoteHint =
                     pTextNd->GetTextAttrForCharAt( nFootnoteSttIdx );
                 assert(pFootnoteHint);
                 SwIndex aIdx( pTextNd, nFootnoteSttIdx );
-                pHistory->Add( pFootnoteHint, pTextNd->GetIndex(), false );
+                m_pHistory->Add( pFootnoteHint, pTextNd->GetIndex(), false );
                 pTextNd->EraseText( aIdx, 1 );
             }
         }
@@ -927,7 +927,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
     // 2. Flys
     if( DelContentType::Fly & nDelContentType )
     {
-        sal_uInt16 nChainInsPos = pHistory ? pHistory->Count() : 0;
+        sal_uInt16 nChainInsPos = m_pHistory ? m_pHistory->Count() : 0;
         const SwFrameFormats& rSpzArr = *pDoc->GetSpzFrameFormats();
         if( !rSpzArr.empty() )
         {
@@ -950,14 +950,14 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                             pAPos->nNode < pEnd->nNode )
                         : ( *pStt <= *pAPos && *pAPos < *pEnd )) )
                     {
-                        if( !pHistory )
-                            pHistory.reset( new SwHistory );
+                        if( !m_pHistory )
+                            m_pHistory.reset( new SwHistory );
                         SwTextNode *const pTextNd =
                             pAPos->nNode.GetNode().GetTextNode();
                         SwTextAttr* const pFlyHint = pTextNd->GetTextAttrForCharAt(
                             pAPos->nContent.GetIndex());
                         assert(pFlyHint);
-                        pHistory->Add( pFlyHint, 0, false );
+                        m_pHistory->Add( pFlyHint, 0, false );
                         // reset n so that no Format is skipped
                         n = n >= rSpzArr.size() ? rSpzArr.size() : n+1;
                     }
@@ -982,8 +982,8 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
 
                             if (bTmp)
                             {
-                                if( !pHistory )
-                                    pHistory.reset( new SwHistory );
+                                if( !m_pHistory )
+                                    m_pHistory.reset( new SwHistory );
 
                                 // Moving the anchor?
                                 if( !( DelContentType::CheckNoCntnt & nDelContentType ) &&
@@ -991,7 +991,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                                     // Do not try to move the anchor to a table!
                                     && rMark.nNode.GetNode().IsTextNode())
                                 {
-                                    pHistory->Add( *pFormat );
+                                    m_pHistory->Add( *pFormat );
                                     SwFormatAnchor aAnch( *pAnchor );
                                     SwPosition aPos( rMark.nNode );
                                     aAnch.SetAnchor( &aPos );
@@ -999,7 +999,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                                 }
                                 else
                                 {
-                                    pHistory->Add( *static_cast<SwFlyFrameFormat *>(pFormat), nChainInsPos );
+                                    m_pHistory->Add( *static_cast<SwFlyFrameFormat *>(pFormat), nChainInsPos );
                                     // reset n so that no Format is skipped
                                     n = n >= rSpzArr.size() ?
                                         rSpzArr.size() : n+1;
@@ -1012,12 +1012,12 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                     if( nullptr != (pAPos = pAnchor->GetContentAnchor() ) &&
                         ( pStt->nNode <= pAPos->nNode && pAPos->nNode <= pEnd->nNode ) )
                     {
-                        if( !pHistory )
-                            pHistory.reset( new SwHistory );
+                        if( !m_pHistory )
+                            m_pHistory.reset( new SwHistory );
                         if (IsDestroyFrameAnchoredAtChar(
                                 *pAPos, *pStt, *pEnd, nDelContentType))
                         {
-                            pHistory->Add( *static_cast<SwFlyFrameFormat *>(pFormat), nChainInsPos );
+                            m_pHistory->Add( *static_cast<SwFlyFrameFormat *>(pFormat), nChainInsPos );
                             n = n >= rSpzArr.size() ? rSpzArr.size() : n+1;
                         }
                         else if (!((DelContentType::CheckNoCntnt |
@@ -1031,7 +1031,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                                 // Do not try to move the anchor to a table!
                                 if( rMark.nNode.GetNode().GetTextNode() )
                                 {
-                                    pHistory->Add( *pFormat );
+                                    m_pHistory->Add( *pFormat );
                                     SwFormatAnchor aAnch( *pAnchor );
                                     aAnch.SetAnchor( &rMark );
                                     pFormat->SetFormatAttr( aAnch );
@@ -1045,10 +1045,10 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                     if( nullptr != (pAPos = pAnchor->GetContentAnchor() ) &&
                         pStt->nNode == pAPos->nNode )
                     {
-                        if( !pHistory )
-                            pHistory.reset( new SwHistory );
+                        if( !m_pHistory )
+                            m_pHistory.reset( new SwHistory );
 
-                        pHistory->Add( *static_cast<SwFlyFrameFormat *>(pFormat), nChainInsPos );
+                        m_pHistory->Add( *static_cast<SwFlyFrameFormat *>(pFormat), nChainInsPos );
 
                         // reset n so that no Format is skipped
                         n = n >= rSpzArr.size() ? rSpzArr.size() : n+1;
@@ -1164,9 +1164,9 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 {
                     if( IDocumentMarkAccess::GetType(*pBkmk) != IDocumentMarkAccess::MarkType::UNO_BOOKMARK )
                     {
-                        if( !pHistory )
-                            pHistory.reset( new SwHistory );
-                        pHistory->Add( *pBkmk, bSavePos, bSaveOtherPos );
+                        if( !m_pHistory )
+                            m_pHistory.reset( new SwHistory );
+                        m_pHistory->Add( *pBkmk, bSavePos, bSaveOtherPos );
                     }
                     if ( bSavePos
                          && ( bSaveOtherPos
@@ -1183,7 +1183,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
 
 // save a complete section into UndoNodes array
 SwUndoSaveSection::SwUndoSaveSection()
-    : nMvLen( 0 ), nStartPos( ULONG_MAX )
+    : m_nMoveLen( 0 ), m_nStartPos( ULONG_MAX )
 {
 }
 
@@ -1193,11 +1193,11 @@ SwUndoSaveSection::~SwUndoSaveSection()
     {
         // SaveSection saves the content in the PostIt section.
         SwNodes& rUNds = m_pMovedStart->GetNode().GetNodes();
-        rUNds.Delete( *m_pMovedStart, nMvLen );
+        rUNds.Delete( *m_pMovedStart, m_nMoveLen );
 
         m_pMovedStart.reset();
     }
-    pRedlSaveData.reset();
+    m_pRedlineSaveData.reset();
 }
 
 void SwUndoSaveSection::SaveSection( const SwNodeIndex& rSttIdx )
@@ -1217,10 +1217,10 @@ void SwUndoSaveSection::SaveSection(
     // redlines *before* CorrAbs, because DelBookmarks will make them 0-length
     // but *after* DelContentIndex because that also may use FillSaveData (in
     // flys) and that will be restored *after* this one...
-    pRedlSaveData.reset( new SwRedlineSaveDatas );
-    if (!SwUndo::FillSaveData( aPam, *pRedlSaveData ))
+    m_pRedlineSaveData.reset( new SwRedlineSaveDatas );
+    if (!SwUndo::FillSaveData( aPam, *m_pRedlineSaveData ))
     {
-        pRedlSaveData.reset();
+        m_pRedlineSaveData.reset();
     }
 
     {
@@ -1231,7 +1231,7 @@ void SwUndoSaveSection::SaveSection(
         SwDoc::CorrAbs( aSttIdx, aEndIdx, SwPosition( aMvStt ), true );
     }
 
-    nStartPos = rRange.aStart.GetIndex();
+    m_nStartPos = rRange.aStart.GetIndex();
 
     if (bExpandNodes)
     {
@@ -1249,16 +1249,16 @@ void SwUndoSaveSection::SaveSection(
     sal_uLong nEnd;
     m_pMovedStart.reset(new SwNodeIndex(rRange.aStart));
     MoveToUndoNds(aPam, m_pMovedStart.get(), &nEnd);
-    nMvLen = nEnd - m_pMovedStart->GetIndex() + 1;
+    m_nMoveLen = nEnd - m_pMovedStart->GetIndex() + 1;
 }
 
 void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
                                         sal_uInt16 nSectType )
 {
-    if( ULONG_MAX != nStartPos )        // was there any content?
+    if( ULONG_MAX != m_nStartPos )        // was there any content?
     {
         // check if the content is at the old position
-        SwNodeIndex aSttIdx( pDoc->GetNodes(), nStartPos );
+        SwNodeIndex aSttIdx( pDoc->GetNodes(), m_nStartPos );
 
         // move the content from UndoNodes array into Fly
         SwStartNode* pSttNd = SwNodes::MakeEmptySection( aSttIdx,
@@ -1274,20 +1274,20 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
 void SwUndoSaveSection::RestoreSection(
         SwDoc *const pDoc, const SwNodeIndex& rInsPos, bool bForceCreateFrames)
 {
-    if( ULONG_MAX != nStartPos )        // was there any content?
+    if( ULONG_MAX != m_nStartPos )        // was there any content?
     {
         SwPosition aInsPos( rInsPos );
-        sal_uLong nEnd = m_pMovedStart->GetIndex() + nMvLen - 1;
+        sal_uLong nEnd = m_pMovedStart->GetIndex() + m_nMoveLen - 1;
         MoveFromUndoNds(*pDoc, m_pMovedStart->GetIndex(), aInsPos, &nEnd, bForceCreateFrames);
 
         // destroy indices again, content was deleted from UndoNodes array
         m_pMovedStart.reset();
-        nMvLen = 0;
+        m_nMoveLen = 0;
 
-        if( pRedlSaveData )
+        if( m_pRedlineSaveData )
         {
-            SwUndo::SetSaveData( *pDoc, *pRedlSaveData );
-            pRedlSaveData.reset();
+            SwUndo::SetSaveData( *pDoc, *m_pRedlineSaveData );
+            m_pRedlineSaveData.reset();
         }
     }
 }

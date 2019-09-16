@@ -65,17 +65,17 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     m_pTextFormatColl( nullptr ), m_pLastNodeColl(nullptr),
     m_bStartWasTextNode( true ), m_nNodeDiff( 0 ), m_nSetPos( 0 )
 {
-    pHistory.reset( new SwHistory );
+    m_pHistory.reset( new SwHistory );
     SwDoc* pDoc = rPam.GetDoc();
 
     SwTextNode* pTextNd = rPam.GetPoint()->nNode.GetNode().GetTextNode();
     if( pTextNd )
     {
         m_pTextFormatColl = pTextNd->GetTextColl();
-        pHistory->CopyAttr( pTextNd->GetpSwpHints(), m_nSttNode,
+        m_pHistory->CopyAttr( pTextNd->GetpSwpHints(), m_nSttNode,
                             0, pTextNd->GetText().getLength(), false );
         if( pTextNd->HasSwAttrSet() )
-            pHistory->CopyFormatAttr( *pTextNd->GetpSwAttrSet(), m_nSttNode );
+            m_pHistory->CopyFormatAttr( *pTextNd->GetpSwAttrSet(), m_nSttNode );
 
         // We may have some flys anchored to paragraph where we inserting.
         // These flys will be saved in pFrameFormats array (only flys which exist BEFORE insertion!)
@@ -263,7 +263,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
     if (m_nSttNode != m_nEndNode || m_nSttContent != m_nEndContent)
     {
         // are there Footnotes or ContentFlyFrames in text?
-        m_nSetPos = pHistory->Count();
+        m_nSetPos = m_pHistory->Count();
         sal_uLong nTmp = rPam.GetMark()->nNode.GetIndex();
         DelContentIndex(*rPam.GetMark(), *rPam.GetPoint(),
             DelContentType::AllMask|DelContentType::ExcludeAtCharFlyAtStartEnd);
@@ -314,8 +314,8 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
             if (rDoc.GetTextFormatColls()->IsAlive(m_pTextFormatColl))
                 m_pTextFormatColl = static_cast<SwTextFormatColl*>(pTextNode->ChgFormatColl( m_pTextFormatColl )) ;
 
-            pHistory->SetTmpEnd( m_nSetPos );
-            pHistory->TmpRollback(&rDoc, 0, false);
+            m_pHistory->SetTmpEnd( m_nSetPos );
+            m_pHistory->TmpRollback(&rDoc, 0, false);
         }
     }
 }
@@ -337,7 +337,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
     if( m_pTextFormatColl && pCNd && pCNd->IsTextNode() )
         pSavTextFormatColl = static_cast<SwTextNode*>(pCNd)->GetTextColl();
 
-    pHistory->SetTmpEnd( m_nSetPos );
+    m_pHistory->SetTmpEnd( m_nSetPos );
 
     // retrieve start position for rollback
     if( ( m_nSttNode != m_nEndNode || m_nSttContent != m_nEndContent ) && m_pUndoNodeIndex)
@@ -390,7 +390,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
 
     // tdf#108124 the SwHistoryChangeFlyAnchor/SwHistoryFlyCnt must run before
     // m_FlyUndos as they were created by DelContentIndex()
-    pHistory->Rollback( pDoc, m_nSetPos );
+    m_pHistory->Rollback( pDoc, m_nSetPos );
 
     // tdf#108124 (10/25/2017)
     // During UNDO we call SwUndoInsLayFormat::UndoImpl in reverse order,

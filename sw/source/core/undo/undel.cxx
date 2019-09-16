@@ -205,8 +205,8 @@ SwUndoDelete::SwUndoDelete(
         }
     }
 
-    if( !pHistory )
-        pHistory.reset( new SwHistory );
+    if( !m_pHistory )
+        m_pHistory.reset( new SwHistory );
 
     // delete all footnotes for now
     const SwPosition *pStt = rPam.Start(),
@@ -235,7 +235,7 @@ SwUndoDelete::SwUndoDelete(
         }
     }
 
-    m_nSetPos = pHistory ? pHistory->Count() : 0;
+    m_nSetPos = m_pHistory ? m_pHistory->Count() : 0;
 
     // Is already anything deleted?
     m_nNdDiff = m_nSttNode - pStt->nNode.GetIndex();
@@ -262,8 +262,8 @@ SwUndoDelete::SwUndoDelete(
     if( pSttTextNd && pEndTextNd && pSttTextNd != pEndTextNd )
     {
         // two different TextNodes, thus save also the TextFormatCollection
-        pHistory->Add( pSttTextNd->GetTextColl(),pStt->nNode.GetIndex(), SwNodeType::Text );
-        pHistory->Add( pEndTextNd->GetTextColl(),pEnd->nNode.GetIndex(), SwNodeType::Text );
+        m_pHistory->Add( pSttTextNd->GetTextColl(),pStt->nNode.GetIndex(), SwNodeType::Text );
+        m_pHistory->Add( pEndTextNd->GetTextColl(),pEnd->nNode.GetIndex(), SwNodeType::Text );
 
         if( !m_bJoinNext )        // Selection from bottom to top
         {
@@ -272,7 +272,7 @@ SwUndoDelete::SwUndoDelete(
             // EndNode needs to be reset. Same for PageDesc and ColBreak.
             if( pEndTextNd->HasSwAttrSet() )
             {
-                SwRegHistory aRegHist( *pEndTextNd, pHistory.get() );
+                SwRegHistory aRegHist( *pEndTextNd, m_pHistory.get() );
                 if( SfxItemState::SET == pEndTextNd->GetpSwAttrSet()->GetItemState(
                         RES_BREAK, false ) )
                     pEndTextNd->ResetAttr( RES_BREAK );
@@ -432,8 +432,8 @@ SwUndoDelete::SwUndoDelete(
         rPam.GetPoint()->nContent.Assign( nullptr, 0 );
 
     // is a history necessary here at all?
-    if( pHistory && !pHistory->Count() )
-        pHistory.reset();
+    if( m_pHistory && !m_pHistory->Count() )
+        m_pHistory.reset();
 }
 
 bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
@@ -444,13 +444,13 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
     if( pSttTextNd )
     {
         bool bOneNode = m_nSttNode == m_nEndNode;
-        SwRegHistory aRHst( *pSttTextNd, pHistory.get() );
+        SwRegHistory aRHst( *pSttTextNd, m_pHistory.get() );
         // always save all text atttibutes because of possibly overlapping
         // areas of on/off
-        pHistory->CopyAttr( pSttTextNd->GetpSwpHints(), nNdIdx,
+        m_pHistory->CopyAttr( pSttTextNd->GetpSwpHints(), nNdIdx,
                             0, pSttTextNd->GetText().getLength(), true );
         if( !bOneNode && pSttTextNd->HasSwAttrSet() )
-                pHistory->CopyFormatAttr( *pSttTextNd->GetpSwAttrSet(), nNdIdx );
+                m_pHistory->CopyFormatAttr( *pSttTextNd->GetpSwAttrSet(), nNdIdx );
 
         // the length might have changed (!!Fields!!)
         sal_Int32 nLen = (bOneNode
@@ -483,15 +483,15 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
     {
         SwIndex aEndIdx( pEndTextNd );
         nNdIdx = pEnd->nNode.GetIndex();
-        SwRegHistory aRHst( *pEndTextNd, pHistory.get() );
+        SwRegHistory aRHst( *pEndTextNd, m_pHistory.get() );
 
         // always save all text atttibutes because of possibly overlapping
         // areas of on/off
-        pHistory->CopyAttr( pEndTextNd->GetpSwpHints(), nNdIdx, 0,
+        m_pHistory->CopyAttr( pEndTextNd->GetpSwpHints(), nNdIdx, 0,
                             pEndTextNd->GetText().getLength(), true );
 
         if( pEndTextNd->HasSwAttrSet() )
-            pHistory->CopyFormatAttr( *pEndTextNd->GetpSwAttrSet(), nNdIdx );
+            m_pHistory->CopyFormatAttr( *pEndTextNd->GetpSwAttrSet(), nNdIdx );
 
         // delete now also the text (all attribute changes are added to
         // UNDO history)
@@ -794,9 +794,9 @@ SwRewriter SwUndoDelete::GetRewriter() const
         }
 
         aStr = ShortenString(aStr, nUndoStringLength, SwResId(STR_LDOTS));
-        if (pHistory)
+        if (m_pHistory)
         {
-            SwRewriter aRewriter = lcl_RewriterFromHistory(*pHistory);
+            SwRewriter aRewriter = lcl_RewriterFromHistory(*m_pHistory);
             aStr = aRewriter.Apply(aStr);
         }
 
@@ -999,24 +999,24 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             }
         }
 
-        if( pHistory )
+        if( m_pHistory )
         {
-            pHistory->TmpRollback(&rDoc, m_nSetPos, false);
+            m_pHistory->TmpRollback(&rDoc, m_nSetPos, false);
             if( m_nSetPos )       // there were Footnodes/FlyFrames
             {
                 // are there others than these ones?
-                if( m_nSetPos < pHistory->Count() )
+                if( m_nSetPos < m_pHistory->Count() )
                 {
                     // if so save the attributes of the others
                     SwHistory aHstr;
-                    aHstr.Move( 0, pHistory.get(), m_nSetPos );
-                    pHistory->Rollback(&rDoc);
-                    pHistory->Move( 0, &aHstr );
+                    aHstr.Move( 0, m_pHistory.get(), m_nSetPos );
+                    m_pHistory->Rollback(&rDoc);
+                    m_pHistory->Move( 0, &aHstr );
                 }
                 else
                 {
-                    pHistory->Rollback(&rDoc);
-                    pHistory.reset();
+                    m_pHistory->Rollback(&rDoc);
+                    m_pHistory.reset();
                 }
             }
         }
@@ -1159,11 +1159,11 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
             rPam.Exchange();
     }
 
-    if( pHistory )      // are the attributes saved?
+    if( m_pHistory )      // are the attributes saved?
     {
-        pHistory->SetTmpEnd( pHistory->Count() );
+        m_pHistory->SetTmpEnd( m_pHistory->Count() );
         SwHistory aHstr;
-        aHstr.Move( 0, pHistory.get() );
+        aHstr.Move( 0, m_pHistory.get() );
 
         if( m_bDelFullPara )
         {
@@ -1175,9 +1175,9 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         }
         else
             DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
-        m_nSetPos = pHistory ? pHistory->Count() : 0;
+        m_nSetPos = m_pHistory ? m_pHistory->Count() : 0;
 
-        pHistory->Move( m_nSetPos, &aHstr );
+        m_pHistory->Move( m_nSetPos, &aHstr );
     }
     else
     {
@@ -1191,7 +1191,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         }
         else
             DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
-        m_nSetPos = pHistory ? pHistory->Count() : 0;
+        m_nSetPos = m_pHistory ? m_pHistory->Count() : 0;
     }
 
     if( !m_aSttStr && !m_aEndStr )
