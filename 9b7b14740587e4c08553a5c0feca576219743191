@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_bcbba90c",
+        "filename": "i18npool/source/calendar/calendarImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-16T11:23:34Z",
+      "side": 1,
+      "message": "Not something to change, just sharing my preference in case it\u0027s interesting to someone ;-) - I\u0027d slightly reorder it to avoid two explicit exit points here (since it\u0027s easy) - to throw *if pCal \u003d\u003d xC.end()*, then simply loadCalendarTZ. And also two lines less ;-)",
+      "range": {
+        "startLine": 50,
+        "startChar": 8,
+        "endLine": 50,
+        "endChar": 15
+      },
+      "revId": "9b7b14740587e4c08553a5c0feca576219743191",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_5c3615b7",
+        "filename": "i18npool/source/calendar/calendarImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-16T11:23:34Z",
+      "side": 1,
+      "message": "Again, here I doubt the usefulness of using a vector as an intermediate container. Creating a sequence first (thus calling default OUString ctors) then using std::transform on it would be at least as efficient IMO as the vector manipulations without default ctors but *then construction of the sequence from it then calling OUString dtors*, but would look more clean without this optimization...",
+      "range": {
+        "startLine": 139,
+        "startChar": 4,
+        "endLine": 140,
+        "endChar": 33
+      },
+      "revId": "9b7b14740587e4c08553a5c0feca576219743191",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_dc49c532",
+        "filename": "i18npool/source/collator/collatorImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-16T11:23:34Z",
+      "side": 1,
+      "message": "Range-based for? And then just check the current vector size below (instead of checking i) to decide if you need a swap.\n\nMy thoughts about usefulness of the intermediate container with rather cheap default ctor also apply here.",
+      "range": {
+        "startLine": 114,
+        "startChar": 9,
+        "endLine": 114,
+        "endChar": 50
+      },
+      "revId": "9b7b14740587e4c08553a5c0feca576219743191",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_bca88977",
+        "filename": "i18npool/source/localedata/localedata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-16T11:23:34Z",
+      "side": 1,
+      "message": "Could we possibly just use\n\n    return containerToSequence\u003cCurrency\u003e(getAllCurrencies2(rLocale));\n\n?",
+      "range": {
+        "startLine": 839,
+        "startChar": 4,
+        "endLine": 843,
+        "endChar": 50
+      },
+      "revId": "9b7b14740587e4c08553a5c0feca576219743191",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_3c9d5959",
+        "filename": "i18npool/source/localedata/saxparser.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-16T11:23:34Z",
+      "side": 1,
+      "message": "This is virtual - both performance penalty and possible change of meaning in children?",
+      "range": {
+        "startLine": 64,
+        "startChar": 50,
+        "endLine": 64,
+        "endChar": 59
+      },
+      "revId": "9b7b14740587e4c08553a5c0feca576219743191",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_5c8e1528",
+        "filename": "i18npool/source/search/textsearch.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-16T11:23:34Z",
+      "side": 1,
+      "message": "std::lower_bound requires that the range is partitioned wrt \"\u003c\" - is that guaranteed here (I didn\u0027t check)?",
+      "range": {
+        "startLine": 288,
+        "startChar": 16,
+        "endLine": 288,
+        "endChar": 32
+      },
+      "revId": "9b7b14740587e4c08553a5c0feca576219743191",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_fcf4c1d1",
+        "filename": "i18npool/source/transliteration/transliteration_body.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-16T11:23:34Z",
+      "side": 1,
+      "message": "Using vector here for the storage instead of the unique_ptr seems more consistent :-)",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 20
+      },
+      "revId": "9b7b14740587e4c08553a5c0feca576219743191",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
