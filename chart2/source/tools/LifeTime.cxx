@@ -109,7 +109,7 @@ bool LifeTimeManager::dispose()
 {
     //hold no mutex
     {
-        osl::Guard< osl::Mutex > aGuard( m_aAccessMutex );
+        osl::MutexGuard aGuard( m_aAccessMutex );
 
         if( m_bDisposed || m_bInDispose )
         {
@@ -137,10 +137,9 @@ bool LifeTimeManager::dispose()
 
     //no mutex is acquired
     {
-        osl::ClearableGuard< osl::Mutex > aGuard( m_aAccessMutex );
+        osl::MutexGuard aGuard( m_aAccessMutex );
         OSL_ENSURE( !m_bDisposed, "dispose was called already" );
         m_bDisposed = true;
-        aGuard.clear();
     }
     //no mutex is acquired
 
@@ -189,7 +188,7 @@ bool CloseableLifeTimeManager::g_close_startTryClose(bool bDeliverOwnership)
 {
     //no mutex is allowed to be acquired
     {
-        osl::ResettableGuard< osl::Mutex > aGuard( m_aAccessMutex );
+        osl::MutexGuard aGuard( m_aAccessMutex );
         if( impl_isDisposedOrClosed(false) )
             return false;
 
@@ -245,7 +244,7 @@ bool CloseableLifeTimeManager::g_close_startTryClose(bool bDeliverOwnership)
 void CloseableLifeTimeManager::g_close_endTryClose(bool bDeliverOwnership )
 {
     //this method is called, if the try to close was not successful
-    osl::Guard< osl::Mutex > aGuard( m_aAccessMutex );
+    osl::MutexGuard aGuard( m_aAccessMutex );
     impl_setOwnership( bDeliverOwnership, false );
 
     m_bInTryClose = false;
@@ -263,7 +262,7 @@ void CloseableLifeTimeManager::g_close_isNeedToCancelLongLastingCalls( bool bDel
     //it returns true, if some longlasting calls are running, which might be cancelled
     //it throws the given exception, if long calls are running but not cancelable
 
-    osl::Guard< osl::Mutex > aGuard( m_aAccessMutex );
+    osl::MutexGuard aGuard( m_aAccessMutex );
     //this count cannot grow after try of close has started, because we wait in all those methods for end of try closing
     if( !m_nLongLastingCallCount )
         return;
@@ -283,7 +282,7 @@ void CloseableLifeTimeManager::g_close_isNeedToCancelLongLastingCalls( bool bDel
 void CloseableLifeTimeManager::g_close_endTryClose_doClose()
 {
     //this method is called, if the try to close was successful
-    osl::ResettableGuard< osl::Mutex > aGuard( m_aAccessMutex );
+    osl::MutexGuard aGuard( m_aAccessMutex );
 
     m_bInTryClose       = false;
     m_aEndTryClosingCondition.set();
@@ -362,7 +361,7 @@ void CloseableLifeTimeManager::impl_doClose()
 
 void CloseableLifeTimeManager::g_addCloseListener( const uno::Reference< util::XCloseListener > & xListener )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aAccessMutex );
+    osl::MutexGuard aGuard( m_aAccessMutex );
     //Mutex needs to be acquired exactly once; will be released inbetween
     if( !impl_canStartApiCall() )
         return;
