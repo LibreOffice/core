@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_9f49ff61",
+        "filename": "configmgr/source/writemodfile.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-09-16T14:21:58Z",
+      "side": 1,
+      "message": "I think adding a non-explicit\n\n  operator std::string_view\n\nto the OStringNumber specializations is the best option here.",
+      "parentUuid": "7f7f9b97_1f088f26",
+      "revId": "c721e5cc294bb5393a298ced968cba103051ed2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_fcccc162",
         "filename": "include/rtl/stringconcat.hxx",
         "patchSetId": 2
@@ -148,6 +166,24 @@
       "side": 1,
       "message": "I ordered them by actually-implements-something before just-a-forwarding-overload, but I can order them back by the type.",
       "parentUuid": "7f7f9b97_3cb6b9db",
+      "revId": "c721e5cc294bb5393a298ced968cba103051ed2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_3f5b0b2f",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3462,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-09-16T14:21:58Z",
+      "side": 1,
+      "message": "It always puzzles me when such cosmetic changes are mixed in with actual content changes, but I don\u0027t care much about the order beyond that.",
+      "parentUuid": "7f7f9b97_df11b755",
       "revId": "c721e5cc294bb5393a298ced968cba103051ed2f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
