@@ -59,13 +59,13 @@ protected:
     css::lang::XComponent*     m_pComponent;
 
     ::osl::Condition        m_aNoAccessCountCondition;
-    sal_Int32 volatile      m_nAccessCount;
+    sal_Int32               m_nAccessCount;
 
     bool volatile       m_bDisposed;
     bool volatile       m_bInDispose;
 
     ::osl::Condition        m_aNoLongLastingCallCountCondition;
-    sal_Int32 volatile      m_nLongLastingCallCount;
+    sal_Int32               m_nLongLastingCallCount;
 };
 
 class CloseableLifeTimeManager final : public LifeTimeManager
