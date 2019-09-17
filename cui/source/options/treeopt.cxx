@@ -463,46 +463,37 @@ struct OptionsGroupInfo
 };
 
 #define INI_LIST() \
-    m_pParent           ( pParent ),\
-    pCurrentPageEntry   ( nullptr ),\
-    sTitle              ( GetText() ),\
-    bForgetSelection    ( false ),\
-    bIsFromExtensionManager( false ), \
-    bIsForSetDocumentLanguage( false ), \
-    bNeedsRestart ( false ), \
-    eRestartReason( svtools::RESTART_REASON_NONE )
+    , m_pParent           ( pParent )\
+    , xCurrentPageEntry   ( nullptr )\
+    , sTitle              ( m_xDialog->get_title() )\
+    , bForgetSelection    ( false )\
+    , bIsFromExtensionManager( false ) \
+    , bIsForSetDocumentLanguage( false ) \
+    , bNeedsRestart ( false ) \
+    , eRestartReason( svtools::RESTART_REASON_NONE )
 
 
 void OfaTreeOptionsDialog::InitWidgets()
 {
-    VclButtonBox *pButtonBox = get_action_area();
-    pButtonBox->sort_native_button_order();
-
-    get(pOkPB, "ok");
-    get(pApplyPB, "apply");
-    get(pBackPB, "revert");
-    get(pTreeLB, "pages");
-    get(pTabBox, "box");
-    Size aSize(pTabBox->LogicToPixel(Size(278, 259), MapMode(MapUnit::MapAppFont)));
-    pTabBox->set_width_request(aSize.Width());
+    xOkPB = m_xBuilder->weld_button("ok");
+    xApplyPB = m_xBuilder->weld_button("apply");
+    xBackPB = m_xBuilder->weld_button("revert");
+    xTreeLB = m_xBuilder->weld_tree_view("pages");
+    xTabBox = m_xBuilder->weld_container("box");
+    Size aSize(xTreeLB->get_approximate_digit_width() * 70, xTreeLB->get_height_rows(32));
 #if HAVE_FEATURE_GPGME
     // tdf#115015: make enough space for crypto settings (approx. 14 text edits + padding)
-    pTabBox->set_height_request((Edit::GetMinimumEditSize().Height() + 6) * 14);
+    aSize.setHeight((Edit::GetMinimumEditSize().Height() + 6) * 14);
 #else
-    pTabBox->set_height_request(aSize.Height() - get_action_area()->get_preferred_size().Height());
+    aSize.setHeight(aSize.Height() - get_action_area()->get_preferred_size().Height());
 #endif
-    pTreeLB->set_width_request(pTreeLB->approximate_char_width() * 25);
-    pTreeLB->set_height_request(pTabBox->get_height_request());
-
+    xTabBox->set_size_request(aSize.Width(), aSize.Height());
+    xTreeLB->set_size_request(xTreeLB->get_approximate_digit_width() * 25, aSize.Height());
 }
 
 // Ctor() with Frame -----------------------------------------------------
-OfaTreeOptionsDialog::OfaTreeOptionsDialog(
-    vcl::Window* pParent,
-    const Reference< XFrame >& _xFrame,
-    bool bActivateLastSelection ) :
-
-    SfxModalDialog( pParent, "OptionsDialog", "cui/ui/optionsdialog.ui" ),
+OfaTreeOptionsDialog::OfaTreeOptionsDialog(weld::Window* pParent, const Reference< XFrame >& _xFrame, bool bActivateLastSelection)
+    : SfxOkDialogController(pParent, "cui/ui/optionsdialog.ui", "OptionsDialog")
     INI_LIST()
 {
     InitWidgets();
@@ -513,13 +504,12 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(
     if (bActivateLastSelection)
         ActivateLastSelection();
 
-    pTreeLB->SetAccessibleName(GetDisplayText());
+    xTreeLB->set_accessible_name(m_xDialog->get_title());
 }
 
 // Ctor() with ExtensionId -----------------------------------------------
-OfaTreeOptionsDialog::OfaTreeOptionsDialog( vcl::Window* pParent, const OUString& rExtensionId ) :
-
-    SfxModalDialog( pParent, "OptionsDialog", "cui/ui/optionsdialog.ui" ),
+OfaTreeOptionsDialog::OfaTreeOptionsDialog(weld::Window* pParent, const OUString& rExtensionId)
+    : SfxOkDialogController(pParent, "cui/ui/optionsdialog.ui", "OptionsDialog")
     INI_LIST()
 {
     InitWidgets();
@@ -532,20 +522,17 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog( vcl::Window* pParent, const OUString
 
 OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
 {
-    disposeOnce();
-}
+    xCurrentPageEntry.reset();
 
-void OfaTreeOptionsDialog::dispose()
-{
-    pCurrentPageEntry = nullptr;
-    SvTreeListEntry* pEntry = pTreeLB ? pTreeLB->First() : nullptr;
+    std::unique_ptr<weld::TreeIter> xEntry = xTreeLB->make_iterator();
+    bool bEntry = xTreeLB->get_iter_first(*xEntry);
     // first children
-    while(pEntry)
+    while (bEntry)
     {
         // if Child (has parent), then OptionsPageInfo
-        if(pTreeLB->GetParent(pEntry))
+        if (xTreeLB->get_iter_depth(*xEntry))
         {
-            OptionsPageInfo *pPageInfo = static_cast<OptionsPageInfo *>(pEntry->GetUserData());
+            OptionsPageInfo *pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xEntry).toInt64());
             if(pPageInfo->m_pPage)
             {
                 pPageInfo->m_pPage->FillUserData();
@@ -572,38 +559,35 @@ void OfaTreeOptionsDialog::dispose()
 
             delete pPageInfo;
         }
-        pEntry = pTreeLB->Next(pEntry);
+        bEntry = xTreeLB->iter_next(*xEntry);
     }
 
     // and parents
-    pEntry = pTreeLB ? pTreeLB->First() : nullptr;
-    while(pEntry)
+    bEntry = xTreeLB->get_iter_first(*xEntry);
+    while (bEntry)
     {
-        if(!pTreeLB->GetParent(pEntry))
+        if (!xTreeLB->get_iter_depth(*xEntry))
         {
-            OptionsGroupInfo* pGroupInfo = static_cast<OptionsGroupInfo*>(pEntry->GetUserData());
+            OptionsGroupInfo* pGroupInfo = reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xEntry).toInt64());
             delete pGroupInfo;
         }
-        pEntry = pTreeLB->Next(pEntry);
+        bEntry = xTreeLB->iter_next(*xEntry);
     }
     deleteGroupNames();
-    m_pParent.clear();
-    pOkPB.clear();
-    pApplyPB.clear();
-    pBackPB.clear();
-    pTreeLB.clear();
-    pTabBox.clear();
-    SfxModalDialog::dispose();
 }
 
 OptionsPageInfo* OfaTreeOptionsDialog::AddTabPage(
     sal_uInt16 nId, const OUString& rPageName, sal_uInt16 nGroup )
 {
     OptionsPageInfo* pPageInfo = new OptionsPageInfo( nId );
-    SvTreeListEntry* pParent = pTreeLB->GetEntry( nullptr, nGroup );
-    DBG_ASSERT( pParent, "OfaTreeOptionsDialog::AddTabPage(): no group found" );
-    SvTreeListEntry* pEntry = pTreeLB->InsertEntry( rPageName, pParent );
-    pEntry->SetUserData( pPageInfo );
+
+    std::unique_ptr<weld::TreeIter> xParent = xTreeLB->make_iterator();
+    xTreeLB->get_iter_first(*xParent);
+    xTreeLB->iter_nth_sibling(*xParent, nGroup);
+
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pPageInfo)));;
+    xTreeLB->insert(xParent.get(), -1, &rPageName, &sId, nullptr, nullptr, nullptr, false, nullptr);
+
     return pPageInfo;
 }
 
@@ -613,35 +597,39 @@ sal_uInt16  OfaTreeOptionsDialog::AddGroup(const OUString& rGroupName,
                                         SfxModule* pCreateModule,
                                         sal_uInt16 nDialogId )
 {
-    SvTreeListEntry* pEntry = pTreeLB->InsertEntry(rGroupName);
     OptionsGroupInfo* pInfo =
         new OptionsGroupInfo( pCreateShell, pCreateModule, nDialogId );
-    pEntry->SetUserData(pInfo);
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pInfo)));;
+    xTreeLB->append(sId, rGroupName);
+
     sal_uInt16 nRet = 0;
-    pEntry = pTreeLB->First();
-    while(pEntry)
+    std::unique_ptr<weld::TreeIter> xEntry = xTreeLB->make_iterator();
+    bool bEntry = xTreeLB->get_iter_first(*xEntry);
+    while (bEntry)
     {
-        if(!pTreeLB->GetParent(pEntry))
+        if (!xTreeLB->get_iter_depth(*xEntry))
             nRet++;
-        pEntry = pTreeLB->Next(pEntry);
+        bEntry = xTreeLB->iter_next(*xEntry);
     }
     return nRet - 1;
 }
 
-IMPL_LINK_NOARG(OfaTreeOptionsDialog, ShowPageHdl_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(OfaTreeOptionsDialog, ShowPageHdl_Impl, weld::TreeView&, void)
 {
     SelectHdl_Impl();
 }
 
-IMPL_LINK_NOARG(OfaTreeOptionsDialog, BackHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(OfaTreeOptionsDialog, BackHdl_Impl, weld::Button&, void)
 {
-    if ( pCurrentPageEntry && pTreeLB->GetParent( pCurrentPageEntry ) )
+    if (xCurrentPageEntry && xTreeLB->get_iter_depth(*xCurrentPageEntry))
     {
-        OptionsPageInfo* pPageInfo = static_cast<OptionsPageInfo*>(pCurrentPageEntry->GetUserData());
-        if ( pPageInfo->m_pPage )
+        OptionsPageInfo* pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry).toInt64());
+        if (pPageInfo->m_pPage)
         {
+            std::unique_ptr<weld::TreeIter> xParent = xTreeLB->make_iterator(xCurrentPageEntry.get());
+            xTreeLB->iter_parent(*xParent);
             OptionsGroupInfo* pGroupInfo =
-                static_cast<OptionsGroupInfo*>(pTreeLB->GetParent( pCurrentPageEntry )->GetUserData());
+                reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xParent).toInt64());
             pPageInfo->m_pPage->Reset( pGroupInfo->m_pInItemSet.get() );
         }
         else if ( pPageInfo->m_pExtPage )
@@ -651,16 +639,19 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, BackHdl_Impl, Button*, void)
 
 void OfaTreeOptionsDialog::ApplyOptions(bool deactivate)
 {
-    SvTreeListEntry* pEntry = pTreeLB->First();
-    while ( pEntry )
+    std::unique_ptr<weld::TreeIter> xEntry = xTreeLB->make_iterator();
+    bool bEntry = xTreeLB->get_iter_first(*xEntry);
+    while (bEntry)
     {
-        if ( pTreeLB->GetParent( pEntry ) )
+        if (xTreeLB->get_iter_depth(*xEntry))
         {
-            OptionsPageInfo* pPageInfo = static_cast<OptionsPageInfo *>(pEntry->GetUserData());
+            OptionsPageInfo* pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xEntry).toInt64());
             if ( pPageInfo->m_pPage && !pPageInfo->m_pPage->HasExchangeSupport() )
             {
+                std::unique_ptr<weld::TreeIter> xParent = xTreeLB->make_iterator(xEntry.get());
+                xTreeLB->iter_parent(*xParent);
                 OptionsGroupInfo* pGroupInfo =
-                    static_cast<OptionsGroupInfo*>(pTreeLB->GetParent(pEntry)->GetUserData());
+                    reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xParent).toInt64());
                 pPageInfo->m_pPage->FillItemSet(pGroupInfo->m_pOutItemSet.get());
             }
 
@@ -678,11 +669,11 @@ void OfaTreeOptionsDialog::ApplyOptions(bool deactivate)
                 pPage->SaveChartOptions();
             }
         }
-        pEntry = pTreeLB->Next(pEntry);
+        bEntry = xTreeLB->iter_next(*xEntry);
     }
 }
 
-IMPL_LINK_NOARG(OfaTreeOptionsDialog, ApplyHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(OfaTreeOptionsDialog, ApplyHdl_Impl, weld::Button&, void)
 {
     ApplyOptions(/*deactivate =*/false);
 
@@ -690,21 +681,23 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, ApplyHdl_Impl, Button*, void)
     {
         SolarMutexGuard aGuard;
         if (svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
-                                        GetFrameWeld(), eRestartReason))
-            EndDialog(RET_OK);
+                                        m_xDialog.get(), eRestartReason))
+            m_xDialog->response(RET_OK);
     }
 }
 
-IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl, weld::Button&, void)
 {
-    pTreeLB->EndSelection();
-    if ( pCurrentPageEntry && pTreeLB->GetParent( pCurrentPageEntry ) )
+//TODO    xTreeLB->EndSelection();
+    if (xCurrentPageEntry && xTreeLB->get_iter_depth(*xCurrentPageEntry))
     {
-        OptionsPageInfo* pPageInfo = static_cast<OptionsPageInfo *>(pCurrentPageEntry->GetUserData());
+        OptionsPageInfo* pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry).toInt64());
         if ( pPageInfo->m_pPage )
         {
-            OptionsGroupInfo* pGroupInfo =
-                static_cast<OptionsGroupInfo *>(pTreeLB->GetParent(pCurrentPageEntry)->GetUserData());
+            std::unique_ptr<weld::TreeIter> xParent = xTreeLB->make_iterator(xCurrentPageEntry.get());
+            xTreeLB->iter_parent(*xParent);
+
+            OptionsGroupInfo* pGroupInfo = reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xParent).toInt64());
             if ( RID_SVXPAGE_COLOR != pPageInfo->m_nPageId
                 && pPageInfo->m_pPage->HasExchangeSupport() )
             {
@@ -712,68 +705,34 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl, Button*, void)
                 if ( nLeave == DeactivateRC::KeepPage )
                 {
                     // the page mustn't be left
-                    pTreeLB->Select(pCurrentPageEntry);
+                    xTreeLB->select(*xCurrentPageEntry);
                     return;
                 }
             }
-            pPageInfo->m_pPage->Hide();
+            pPageInfo->m_pPage->set_visible(false);
         }
     }
 
     ApplyOptions(/*deactivate =*/ true);
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 
     if ( bNeedsRestart )
     {
         SolarMutexGuard aGuard;
         ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
-                                        m_pParent->GetFrameWeld(), eRestartReason);
-    }
-}
-
-// an opened group shall be completely visible
-IMPL_STATIC_LINK(
-    OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox*, pBox, void )
-{
-    pBox->Update();
-    pBox->InitStartEntry();
-    SvTreeListEntry* pEntry = pBox->GetHdlEntry();
-    if(pEntry && pBox->IsExpanded(pEntry))
-    {
-        sal_uInt32 nChildCount = pBox->GetChildCount( pEntry );
-
-        SvTreeListEntry* pNext = pEntry;
-        for(sal_uInt32 i = 0; i < nChildCount;i++)
-        {
-            pNext = pBox->GetNextEntryInView(pNext);
-            if(!pNext)
-            {
-                pBox->ScrollOutputArea( -static_cast<short>(nChildCount - i + 1) );
-                break;
-            }
-            else
-            {
-                Size aSz(pBox->GetOutputSizePixel());
-                int nHeight = pBox->GetEntryHeight();
-                Point aPos(pBox->GetEntryPosition(pNext));
-                if(aPos.Y()+nHeight > aSz.Height())
-                {
-                    pBox->ScrollOutputArea( -static_cast<short>(nChildCount - i + 1) );
-                    break;
-                }
-            }
-        }
+                                        m_pParent, eRestartReason);
     }
 }
 
 void OfaTreeOptionsDialog::ApplyItemSets()
 {
-    SvTreeListEntry* pEntry = pTreeLB->First();
-    while(pEntry)
+    std::unique_ptr<weld::TreeIter> xEntry = xTreeLB->make_iterator();
+    bool bEntry = xTreeLB->get_iter_first(*xEntry);
+    while (bEntry)
     {
-        if(!pTreeLB->GetParent(pEntry))
+        if (!xTreeLB->get_iter_depth(*xEntry))
         {
-            OptionsGroupInfo* pGroupInfo = static_cast<OptionsGroupInfo *>(pEntry->GetUserData());
+            OptionsGroupInfo* pGroupInfo = reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xEntry).toInt64());
             if(pGroupInfo->m_pOutItemSet)
             {
                 if(pGroupInfo->m_pShell)
@@ -782,28 +741,17 @@ void OfaTreeOptionsDialog::ApplyItemSets()
                     ApplyItemSet( pGroupInfo->m_nDialogId, *pGroupInfo->m_pOutItemSet);
             }
         }
-        pEntry = pTreeLB->Next(pEntry);
+        bEntry = xTreeLB->iter_next(*xEntry);
     }
 }
 
 void OfaTreeOptionsDialog::InitTreeAndHandler()
 {
-    pTreeLB->SetNodeDefaultImages();
-
-    pTreeLB->SetHelpId( HID_OFADLG_TREELISTBOX );
-    pTreeLB->SetStyle( pTreeLB->GetStyle()|WB_HASBUTTONS | WB_HASBUTTONSATROOT |
-                           WB_HASLINES | WB_HASLINESATROOT |
-                           WB_CLIPCHILDREN | WB_HSCROLL );
-    pTreeLB->SetForceMakeVisible(true);
-    pTreeLB->SetQuickSearch(true);
-    pTreeLB->SetSpaceBetweenEntries( 0 );
-    pTreeLB->SetSelectionMode( SelectionMode::Single );
-    pTreeLB->SetSublistOpenWithLeftRight();
-    pTreeLB->SetExpandedHdl( LINK( this, OfaTreeOptionsDialog, ExpandedHdl_Impl ) );
-    pTreeLB->SetSelectHdl( LINK( this, OfaTreeOptionsDialog, ShowPageHdl_Impl ) );
-    pBackPB->SetClickHdl( LINK( this, OfaTreeOptionsDialog, BackHdl_Impl ) );
-    pApplyPB->SetClickHdl( LINK( this, OfaTreeOptionsDialog, ApplyHdl_Impl ) );
-    pOkPB->SetClickHdl( LINK( this, OfaTreeOptionsDialog, OKHdl_Impl ) );
+    xTreeLB->set_help_id(HID_OFADLG_TREELISTBOX);
+    xTreeLB->connect_changed( LINK( this, OfaTreeOptionsDialog, ShowPageHdl_Impl ) );
+    xBackPB->connect_clicked( LINK( this, OfaTreeOptionsDialog, BackHdl_Impl ) );
+    xApplyPB->connect_clicked( LINK( this, OfaTreeOptionsDialog, ApplyHdl_Impl ) );
+    xOkPB->connect_clicked( LINK( this, OfaTreeOptionsDialog, OKHdl_Impl ) );
 }
 
 void OfaTreeOptionsDialog::ActivatePage( sal_uInt16 nResId )
@@ -838,8 +786,9 @@ void OfaTreeOptionsDialog::ActivatePage( const OUString& rPageURL )
 
 void OfaTreeOptionsDialog::ActivateLastSelection()
 {
-    SvTreeListEntry* pEntry = nullptr;
-    if ( pLastPageSaver )
+    std::unique_ptr<weld::TreeIter> xEntry;
+
+    if (pLastPageSaver)
     {
         OUString sLastURL = bIsFromExtensionManager ? pLastPageSaver->m_sLastPageURL_ExtMgr
                                                   : pLastPageSaver->m_sLastPageURL_Tools;
@@ -851,13 +800,14 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
 
         bool bMustExpand = ( INetURLObject( sLastURL ).GetProtocol() == INetProtocol::File );
 
-        SvTreeListEntry* pTemp = pTreeLB->First();
-        while( !pEntry && pTemp )
+        std::unique_ptr<weld::TreeIter> xTemp = xTreeLB->make_iterator();
+        bool bTemp = xTreeLB->get_iter_first(*xTemp);
+        while (!bTemp)
         {
             // restore only selection of a leaf
-            if ( pTreeLB->GetParent( pTemp ) && pTemp->GetUserData() )
+            if (xTreeLB->get_iter_depth(*xTemp) && xTreeLB->get_id(*xTemp).toInt64())
             {
-                OptionsPageInfo* pPageInfo = static_cast<OptionsPageInfo*>(pTemp->GetUserData());
+                OptionsPageInfo* pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xTemp).toInt64());
                 OUString sPageURL = pPageInfo->m_sPageURL;
                 if ( bMustExpand )
                 {
@@ -868,29 +818,37 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
                 if ( ( !bIsFromExtensionManager
                         && pPageInfo->m_nPageId && pPageInfo->m_nPageId == pLastPageSaver->m_nLastPageId )
                             || ( !pPageInfo->m_nPageId && sLastURL == sPageURL ) )
-                    pEntry = pTemp;
+                {
+                    xEntry = xTreeLB->make_iterator(xTemp.get());
+                    break;
+                }
             }
-            pTemp = pTreeLB->Next(pTemp);
+            bTemp = xTreeLB->iter_next(*xTemp);
         }
     }
 
-    if ( !pEntry )
+    if (!xEntry)
     {
-        pEntry = pTreeLB->First();
-        pEntry = pTreeLB->Next(pEntry);
+        xEntry = xTreeLB->make_iterator();
+        if (!xTreeLB->get_iter_first(*xEntry) || !xTreeLB->iter_next(*xEntry))
+            xEntry.reset();
     }
 
-    if ( !pEntry )
+    if (!xEntry)
         return;
 
-    SvTreeListEntry* pParent = pTreeLB->GetParent(pEntry);
-    pTreeLB->Expand(pParent);
-    pTreeLB->MakeVisible(pParent);
-    pTreeLB->MakeVisible(pEntry);
-    pTreeLB->Select(pEntry);
-    pTreeLB->GrabFocus();
+    std::unique_ptr<weld::TreeIter> xParent(xTreeLB->make_iterator(xEntry.get()));
+    xTreeLB->iter_parent(*xParent);
+    xTreeLB->expand_row(*xParent);
+    xTreeLB->scroll_to_row(*xParent);
+    xTreeLB->scroll_to_row(*xEntry);
+    xTreeLB->set_cursor(*xEntry);
+    xTreeLB->select(*xEntry);
+    xTreeLB->grab_focus();
+    SelectHdl_Impl();
 }
 
+#if 0
 bool OfaTreeOptionsDialog::EventNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
@@ -901,69 +859,77 @@ bool OfaTreeOptionsDialog::EventNotify( NotifyEvent& rNEvt )
         if( aKeyCode.GetCode() == KEY_PAGEUP ||
                 aKeyCode.GetCode() == KEY_PAGEDOWN)
         {
-            SvTreeListEntry* pCurEntry = pTreeLB->FirstSelected();
+            SvTreeListEntry* pCurEntry = xTreeLB->FirstSelected();
             SvTreeListEntry*  pTemp = nullptr;
             if(aKeyCode.GetCode() == KEY_PAGEDOWN)
             {
-                pTemp =  pTreeLB->Next( pCurEntry ) ;
-                if(pTemp && !pTreeLB->GetParent(pTemp))
+                pTemp =  xTreeLB->Next( pCurEntry ) ;
+                if(pTemp && !xTreeLB->GetParent(pTemp))
                 {
-                    pTemp =  pTreeLB->Next( pTemp ) ;
-                    pTreeLB->Select(pTemp);
+                    pTemp =  xTreeLB->Next( pTemp ) ;
+                    xTreeLB->Select(pTemp);
                 }
             }
             else
             {
-                pTemp =  pTreeLB->Prev( pCurEntry ) ;
-                if(pTemp && !pTreeLB->GetParent(pTemp))
+                pTemp =  xTreeLB->Prev( pCurEntry ) ;
+                if(pTemp && !xTreeLB->GetParent(pTemp))
                 {
-                    pTemp =  pTreeLB->Prev( pTemp ) ;
+                    pTemp =  xTreeLB->Prev( pTemp ) ;
                 }
             }
             if(pTemp)
             {
-                if(!pTreeLB->IsExpanded(pTreeLB->GetParent(pTemp)))
-                    pTreeLB->Expand(pTreeLB->GetParent(pTemp));
-                pTreeLB->MakeVisible(pTemp);
-                pTreeLB->Select(pTemp);
+                if(!xTreeLB->IsExpanded(xTreeLB->GetParent(pTemp)))
+                    xTreeLB->Expand(xTreeLB->GetParent(pTemp));
+                xTreeLB->MakeVisible(pTemp);
+                xTreeLB->Select(pTemp);
             }
         }
     }
     return SfxModalDialog::EventNotify(rNEvt);
 }
+#endif
 
 void OfaTreeOptionsDialog::SelectHdl_Impl()
 {
-    SvTreeListBox* pBox = pTreeLB;
-
-    if(pCurrentPageEntry == pBox->GetCurEntry())
+#if 0
+    if (xCurrentPageEntry == xTreeLB->GetCurEntry())
     {
-        pBox->EndSelection();
+        xTreeLB->EndSelection();
         return;
     }
+#endif
 
-    SvTreeListEntry* pEntry = pBox->GetCurEntry();
-    SvTreeListEntry* pParent = pBox->GetParent(pEntry);
+    std::unique_ptr<weld::TreeIter> xEntry(xTreeLB->make_iterator());
+
+    xTreeLB->get_cursor(xEntry.get());
+    std::unique_ptr<weld::TreeIter> xParent(xTreeLB->make_iterator(xEntry.get()));
+    bool bParent = xTreeLB->iter_parent(*xParent);
 
     // If the user has selected a category, automatically switch to a suitable
     // default sub-page instead.
-    if (!pParent)
+    if (!bParent)
     {
-        pBox->EndSelection();
+//TODO        xTreeLB->EndSelection();
         return;
     }
 
-    pBox->EndSelection();
+//TODO    xTreeLB->EndSelection();
 
     TabPage* pOldPage = nullptr;
     TabPage* pNewPage = nullptr;
-    OptionsPageInfo* pOptPageInfo = ( pCurrentPageEntry && pTreeLB->GetParent( pCurrentPageEntry ) )
-        ? static_cast<OptionsPageInfo*>(pCurrentPageEntry->GetUserData()) : nullptr;
+    OptionsPageInfo* pOptPageInfo = (xCurrentPageEntry && xTreeLB->get_iter_depth(*xCurrentPageEntry))
+        ? reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry).toInt64()) : nullptr;
 
     if ( pOptPageInfo && pOptPageInfo->m_pPage && pOptPageInfo->m_pPage->IsVisible() )
     {
         pOldPage = pOptPageInfo->m_pPage;
-        OptionsGroupInfo* pGroupInfo = static_cast<OptionsGroupInfo*>(pTreeLB->GetParent(pCurrentPageEntry)->GetUserData());
+
+        std::unique_ptr<weld::TreeIter> xCurParent(xTreeLB->make_iterator(xCurrentPageEntry.get()));
+        xTreeLB->iter_parent(*xCurParent);
+
+        OptionsGroupInfo* pGroupInfo = reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xCurParent).toInt64());
         DeactivateRC nLeave = DeactivateRC::LeavePage;
         if ( RID_SVXPAGE_COLOR != pOptPageInfo->m_nPageId && pOptPageInfo->m_pPage->HasExchangeSupport() )
            nLeave = pOptPageInfo->m_pPage->DeactivatePage( pGroupInfo->m_pOutItemSet.get() );
@@ -971,11 +937,11 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         if ( nLeave == DeactivateRC::KeepPage )
         {
             // we cannot leave this page
-            pBox->Select( pCurrentPageEntry );
+            xTreeLB->select(*xCurrentPageEntry);
             return;
         }
         else
-            pOptPageInfo->m_pPage->Hide();
+            pOptPageInfo->m_pPage->set_visible(false);
     }
     else if ( pOptPageInfo && pOptPageInfo->m_pExtPage )
     {
@@ -983,8 +949,8 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         pOptPageInfo->m_pExtPage->DeactivatePage();
     }
 
-    OptionsPageInfo *pPageInfo = static_cast<OptionsPageInfo *>(pEntry->GetUserData());
-    OptionsGroupInfo* pGroupInfo = static_cast<OptionsGroupInfo *>(pParent->GetUserData());
+    OptionsPageInfo *pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xEntry).toInt64());
+    OptionsGroupInfo* pGroupInfo = reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xParent).toInt64());
     if(!pPageInfo->m_pPage && pPageInfo->m_nPageId > 0)
     {
         if(!pGroupInfo->m_pInItemSet)
@@ -996,7 +962,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
                 *pGroupInfo->m_pInItemSet->GetPool(),
                 pGroupInfo->m_pInItemSet->GetRanges());
 
-        TabPageParent pPageParent(pTabBox);
+        TabPageParent pPageParent(xTabBox.get(), this);
 
         pPageInfo->m_pPage.disposeAndReset( ::CreateGeneralTabPage(pPageInfo->m_nPageId, pPageParent, *pGroupInfo->m_pInItemSet ) );
 
@@ -1013,14 +979,15 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     }
     else if ( 0 == pPageInfo->m_nPageId && !pPageInfo->m_pExtPage )
     {
+#if 0
         if ( !m_xContainerWinProvider.is() )
         {
             m_xContainerWinProvider = awt::ContainerWindowProvider::create( ::comphelper::getProcessComponentContext() );
         }
 
         pPageInfo->m_pExtPage = VclPtr<ExtensionsTabPage>::Create(
-
-            pTabBox, 0, pPageInfo->m_sPageURL, pPageInfo->m_sEventHdl, m_xContainerWinProvider );
+            xTabBox, 0, pPageInfo->m_sPageURL, pPageInfo->m_sEventHdl, m_xContainerWinProvider );
+#endif
     }
 
     if ( pPageInfo->m_pPage )
@@ -1030,7 +997,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         {
             pPageInfo->m_pPage->ActivatePage(*pGroupInfo->m_pOutItemSet);
         }
-        pPageInfo->m_pPage->Show();
+        pPageInfo->m_pPage->set_visible(true);
     }
     else if ( pPageInfo->m_pExtPage )
     {
@@ -1040,12 +1007,13 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
 
     {
         OUString sTitleText = sTitle
-                            + " - " + pTreeLB->GetEntryText(pParent)
-                            + " - " + pTreeLB->GetEntryText(pEntry);
-        SetText(sTitleText);
+                            + " - " + xTreeLB->get_text(*xParent)
+                            + " - " + xTreeLB->get_text(*xEntry);
+        m_xDialog->set_title(sTitleText);
     }
 
-    pCurrentPageEntry = pEntry;
+    xCurrentPageEntry = std::move(xEntry);
+
     if ( !bForgetSelection )
     {
         if ( !pLastPageSaver )
@@ -1062,12 +1030,14 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     }
     pNewPage = pPageInfo->m_pPage;
 
+#if 0
     // restore lost focus, if necessary
     vcl::Window* pFocusWin = Application::GetFocusWindow();
     // if the focused window is not the options treebox and the old page has the focus
-    if ( pFocusWin && pFocusWin != pBox && pOldPage && pOldPage->HasChildPathFocus() )
+    if ( pFocusWin && pFocusWin != xTreeLB && pOldPage && pOldPage->HasChildPathFocus() )
         // then set the focus to the new page or if we are on a group set the focus to the options treebox
-        pNewPage ? pNewPage->GrabFocus() : pBox->GrabFocus();
+        pNewPage ? pNewPage->GrabFocus() : xTreeLB->grab_focus();
+#endif
 
     //fdo#58170 use current page's layout child HelpId, unless there isn't a
     //current page
@@ -1078,7 +1048,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         assert(pFirstChild);
         sHelpId = pFirstChild->GetHelpId();
     }
-    pBox->SetHelpId(sHelpId);
+    xTreeLB->set_help_id(sHelpId);
 }
 
 std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
@@ -1946,27 +1916,29 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
     return aOutNodeList;
 }
 
-static sal_uInt16 lcl_getGroupId( const OUString& rGroupName, const SvTreeListBox& rTreeLB )
+static sal_uInt16 lcl_getGroupId( const OUString& rGroupName, const weld::TreeView& rTreeLB )
 {
     sal_uInt16 nRet = 0;
-    SvTreeListEntry* pEntry = rTreeLB.First();
-    while( pEntry )
+
+    std::unique_ptr<weld::TreeIter> xEntry = rTreeLB.make_iterator();
+    bool bEntry = rTreeLB.get_iter_first(*xEntry);
+    while (bEntry)
     {
-        if ( !rTreeLB.GetParent( pEntry ) )
+        if (!rTreeLB.get_iter_depth(*xEntry))
         {
-            OUString sTemp( rTreeLB.GetEntryText( pEntry ) );
-            if ( sTemp == rGroupName )
+            OUString sTemp(rTreeLB.get_text(*xEntry));
+            if (sTemp == rGroupName)
                 return nRet;
             nRet++;
         }
-        pEntry = rTreeLB.Next( pEntry );
+        bEntry = rTreeLB.iter_next(*xEntry);
     }
 
     return USHRT_MAX;
 }
 
 static void lcl_insertLeaf(
-    OfaTreeOptionsDialog* pDlg, OptionsNode const * pNode, OptionsLeaf const * pLeaf, const SvTreeListBox& rTreeLB )
+    OfaTreeOptionsDialog* pDlg, OptionsNode const * pNode, OptionsLeaf const * pLeaf, const weld::TreeView& rTreeLB )
 {
     sal_uInt16 nGrpId = lcl_getGroupId( pNode->m_sLabel, rTreeLB );
     if ( USHRT_MAX == nGrpId )
@@ -1989,13 +1961,13 @@ void  OfaTreeOptionsDialog::InsertNodes( const VectorOfNodes& rNodeList )
             {
                 for ( size_t k = 0; k < j.size(); ++k )
                 {
-                    lcl_insertLeaf( this, node.get(), j[k].get(), *pTreeLB );
+                    lcl_insertLeaf( this, node.get(), j[k].get(), *xTreeLB );
                 }
             }
 
             for ( auto const & j: node->m_aLeaves )
             {
-                lcl_insertLeaf( this, node.get(), j.get(), *pTreeLB );
+                lcl_insertLeaf( this, node.get(), j.get(), *xTreeLB );
             }
         }
     }
@@ -2007,7 +1979,7 @@ void OfaTreeOptionsDialog::SetNeedsRestart( svtools::RestartReason eReason)
     eRestartReason = eReason;
 }
 
-short OfaTreeOptionsDialog::Execute()
+short OfaTreeOptionsDialog::run()
 {
     std::unique_ptr< SvxDicListChgClamp > pClamp;
     if ( !bIsFromExtensionManager )
@@ -2016,7 +1988,8 @@ short OfaTreeOptionsDialog::Execute()
         Reference<css::linguistic2::XSearchableDictionaryList> xDictionaryList(LinguMgr::GetDictionaryList());
         pClamp.reset( new SvxDicListChgClamp( xDictionaryList ) );
     }
-    short nRet = SfxModalDialog::Execute();
+
+    short nRet = SfxOkDialogController::run();
 
     if( RET_OK == nRet )
     {

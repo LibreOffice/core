@@ -1178,7 +1178,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                     ScTabViewShell* pSh = GetBestViewShell();
-                    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog(pSh ? pSh->GetLegacyDialogParent() : nullptr, SID_LANGUAGE_OPTIONS));
+                    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog(pSh ? pSh->GetDialogParent() : nullptr, SID_LANGUAGE_OPTIONS));
                     pDlg->Execute();
 
                     rDoc.GetLanguage( eLang, eCjk, eCtl );
