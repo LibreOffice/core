@@ -2842,9 +2842,11 @@ void ScPrintFunc::CalcZoom( sal_uInt16 nRangeNo )                       // calcu
     }
     else if (aTableParam.bScaleTo)
     {
-        nZoom = 100;
         sal_uInt16 nW = aTableParam.nScaleWidth;
         sal_uInt16 nH = aTableParam.nScaleHeight;
+        // tdf#103516 apply slightly smaller zoom for better interoperability
+        sal_uInt16 nPortableZoom = (nW > 0 && nH == 0) ? 98 : 100;
+        nZoom = nPortableZoom;
 
         // If manual breaks are forced, calculate minimum # pages required
         if (aTableParam.bForceBreaks)
@@ -2874,7 +2876,7 @@ void ScPrintFunc::CalcZoom( sal_uInt16 nRangeNo )                       // calcu
 
             if (bFitsPage)
             {
-                if (nZoom == 100)
+                if (nZoom == nPortableZoom)
                     // If it fits at 100%, it's good enough for me.
                     break;
 
