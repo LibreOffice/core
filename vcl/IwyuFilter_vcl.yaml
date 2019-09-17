@@ -71,3 +71,6 @@ blacklist:
     vcl/unx/generic/print/genpspgraphics.cxx:
     # Complete type needed for implicit dtor
     - vcl/fontcharmap.hxx
+    vcl/source/app/svdata.cxx:
+    # Needed on WIN32
+    - salframe.hxx
