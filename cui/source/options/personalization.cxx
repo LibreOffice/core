@@ -20,6 +20,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/virdev.hxx>
 
 #include <vector>
 
@@ -36,7 +37,7 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage(TabPageParent pParent, cons
     for (sal_uInt32 i = 0; i < MAX_DEFAULT_PERSONAS; ++i)
     {
         OString sDefaultId("default" + OString::number(i));
-        m_vDefaultPersonaImages[i] = m_xBuilder->weld_button(sDefaultId);
+        m_vDefaultPersonaImages[i] = m_xBuilder->weld_toggle_button(sDefaultId);
         m_vDefaultPersonaImages[i]->connect_clicked(
             LINK(this, SvxPersonalizationTabPage, DefaultPersona));
     }
@@ -137,7 +138,17 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
 
         INetURLObject aURLObj(gallery + aPreviewFile);
         aFilter.ImportGraphic(aGraphic, aURLObj);
-        m_vDefaultPersonaImages[nIndex]->set_image(aGraphic.GetXGraphic());
+
+        Size aSize(aGraphic.GetSizePixel());
+        aSize.setWidth(aSize.Width() / 4);
+        aSize.setHeight(aSize.Height() / 1.5);
+        ScopedVclPtr<VirtualDevice> xVirDev
+            = m_vDefaultPersonaImages[nIndex]->create_virtual_device();
+        xVirDev->SetOutputSizePixel(aSize);
+        aGraphic.Draw(xVirDev.get(), Point(0, 0));
+        m_vDefaultPersonaImages[nIndex]->set_image(xVirDev.get());
+        xVirDev.disposeAndClear();
+
         m_vDefaultPersonaImages[nIndex]->set_tooltip_text(aName);
         m_vDefaultPersonaImages[nIndex++]->show();
         foundOne = true;
@@ -153,6 +164,8 @@ IMPL_LINK(SvxPersonalizationTabPage, DefaultPersona, weld::Button&, rButton, voi
     {
         if (&rButton == m_vDefaultPersonaImages[nIndex].get())
             m_aPersonaSettings = m_vDefaultPersonaSettings[nIndex];
+        else
+            m_vDefaultPersonaImages[nIndex]->set_active(false);
     }
 }
 

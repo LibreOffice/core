@@ -1009,6 +1009,12 @@ public:
     {
         implResetDefault(m_xContainer.get());
     }
+    virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() override
+    {
+        auto xPage = VclPtr<VclBin>::Create(m_xContainer.get());
+        xPage->Show();
+        return css::uno::Reference<css::awt::XWindow>(xPage->GetComponentInterface(), css::uno::UNO_QUERY);
+    }
 };
 
 std::unique_ptr<weld::Container> SalInstanceWidget::weld_parent() const
