@@ -1359,7 +1359,7 @@ static GtkWidgetPath* buildRTLComboSiblingsPath(gtk_widget_path_iter_set_object_
 GtkStyleContext* GtkSalGraphics::makeContext(GtkWidgetPath *pPath, GtkStyleContext *pParent)
 {
     GtkStyleContext* context = gtk_style_context_new();
-    gtk_style_context_set_screen(context, gtk_window_get_screen(GTK_WINDOW(mpWindow)));
+    gtk_style_context_set_screen(context, gtk_widget_get_screen(mpWindow));
     gtk_style_context_set_path(context, pPath);
     gtk_style_context_set_parent(context, pParent);
     gtk_widget_path_unref(pPath);
@@ -3000,7 +3000,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     // tooltip colors
     {
         GtkStyleContext *pCStyle = gtk_style_context_new();
-        gtk_style_context_set_screen( pCStyle, gtk_window_get_screen( GTK_WINDOW( mpWindow ) ) );
+        gtk_style_context_set_screen(pCStyle, gtk_widget_get_screen(mpWindow));
         GtkWidgetPath *pCPath = gtk_widget_path_new();
         guint pos = gtk_widget_path_append_type(pCPath, GTK_TYPE_WINDOW);
         gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_TOOLTIP);
@@ -3023,7 +3023,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     {
         // construct style context for text view
         GtkStyleContext *pCStyle = gtk_style_context_new();
-        gtk_style_context_set_screen( pCStyle, gtk_window_get_screen( GTK_WINDOW( mpWindow ) ) );
+        gtk_style_context_set_screen(pCStyle, gtk_widget_get_screen(mpWindow));
         GtkWidgetPath *pCPath = gtk_widget_path_new();
         gtk_widget_path_append_type( pCPath, GTK_TYPE_TEXT_VIEW );
         gtk_widget_path_iter_add_class( pCPath, -1, GTK_STYLE_CLASS_VIEW );
