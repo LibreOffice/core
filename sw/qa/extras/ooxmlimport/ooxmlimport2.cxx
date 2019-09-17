@@ -132,6 +132,17 @@ DECLARE_OOXMLIMPORT_TEST(testGroupShapeFontName, "groupshape-fontname.docx")
         getProperty<OUString>(getRun(getParagraphOfText(1, xText), 1), "CharFontNameAsian"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf124600, "tdf124600.docx")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 318
+    // i.e. the shape had an unexpected left margin, but not in Word.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                         getProperty<sal_Int32>(xShape, "HoriOrientPosition"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf120548, "tdf120548.docx")
 {
     // Without the accompanying fix in place, this test would have failed with 'Expected: 00ff0000;
