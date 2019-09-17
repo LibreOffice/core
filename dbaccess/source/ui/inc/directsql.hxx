@@ -23,12 +23,8 @@
 #include <sal/config.h>
 
 #include <sal/log.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/editsyntaxhighlighter.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
 #include <deque>
 
 #include <com/sun/star/sdbc/XConnection.hpp>
