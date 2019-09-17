@@ -9961,9 +9961,13 @@ public:
             gtk_widget_set_size_request(m_pWidget, min, -1);
             int nNonCellWidth = get_preferred_size().Width() - min;
 
-            // now set the cell to the max width which it can be within the
-            // requested widget width
-            gtk_cell_renderer_set_fixed_size(cell, nWidth - nNonCellWidth, -1);
+            int nCellWidth = nWidth - nNonCellWidth;
+            if (nCellWidth >= 0)
+            {
+                // now set the cell to the max width which it can be within the
+                // requested widget width
+                gtk_cell_renderer_set_fixed_size(cell, nWidth - nNonCellWidth, -1);
+            }
         }
         else
         {
