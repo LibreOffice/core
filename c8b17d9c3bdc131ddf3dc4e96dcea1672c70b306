@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_0a212bb5",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-09-17T13:37:00Z",
+      "side": 1,
+      "message": "better clamp the nCurrentTip obtained from the configuration to \u003e\u003d 0 (here or down at the top of UpdateTip, where it is clamped to \u003c nNumberOfTips)",
+      "revId": "c8b17d9c3bdc131ddf3dc4e96dcea1672c70b306",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
