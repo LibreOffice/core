@@ -462,9 +462,7 @@ TableManager::TableManager()
     m_bCellLastParaAfterAutospacing = false;
 }
 
-TableManager::~TableManager()
-{
-}
+TableManager::~TableManager() = default;
 
 }
 
