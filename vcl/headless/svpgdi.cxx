@@ -189,6 +189,8 @@ namespace
             pDst->mpBits = nullptr;
             return nullptr;
         }
+        // divide by 8 to go from bits to bytes, and round up
+        nScanlineBase = (nScanlineBase + 7) / 8;
 
         pDst->mnScanlineSize = AlignedWidth4Bytes(nScanlineBase);
         if (pDst->mnScanlineSize < nScanlineBase/8)

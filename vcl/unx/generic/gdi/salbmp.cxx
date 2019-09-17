@@ -192,6 +192,8 @@ std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
         SAL_WARN("vcl.gdi", "checked multiply failed");
         return nullptr;
     }
+    // divide by 8 to go from bits to bytes, and round up
+    nScanlineBase = (nScanlineBase + 7) / 8;
     pDIB->mnScanlineSize = AlignedWidth4Bytes(nScanlineBase);
     if (pDIB->mnScanlineSize < nScanlineBase/8)
     {

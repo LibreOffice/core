@@ -50,12 +50,15 @@ bool Qt5Bitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPale
     {
         m_pImage.reset();
         m_aSize = rSize;
+        // round up
         bool bFail = o3tl::checked_multiply<sal_uInt32>(rSize.Width(), nBitCount, m_nScanline);
         if (bFail)
         {
             SAL_WARN("vcl.gdi", "checked multiply failed");
             return false;
         }
+        // divide by 8 to go from bits to bytes, and round up
+        m_nScanline = (m_nScanline + 7) / 8;
         m_nScanline = AlignedWidth4Bytes(m_nScanline);
         sal_uInt8* pBuffer = nullptr;
         if (0 != m_nScanline && 0 != rSize.Height())
