@@ -29,11 +29,11 @@ class VCL_DLLPUBLIC OpenGLZone {
     /// how many times have we left a new GL zone
     static volatile sal_uInt64 gnLeaveCount;
 
-    static void enter();
-    static void leave();
+    static void enter() { gnEnterCount++; }
+    static void leave() { gnLeaveCount++; }
 public:
-     OpenGLZone() { gnEnterCount++; }
-    ~OpenGLZone() { gnLeaveCount++; }
+     OpenGLZone() { enter(); }
+    ~OpenGLZone() { leave(); }
     static bool isInZone() { return gnEnterCount != gnLeaveCount; }
     static void hardDisable();
     static void relaxWatchdogTimings();

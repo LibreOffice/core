@@ -794,9 +794,6 @@ bool OpenGLHelper::supportsVCLOpenGL()
     return !bDisableGL && !bBlacklisted;
 }
 
-void OpenGLZone::enter() { gnEnterCount++; }
-void OpenGLZone::leave() { gnLeaveCount++; }
-
 namespace {
     static volatile bool gbWatchdogFiring = false;
     static osl::Condition* gpWatchdogExit = nullptr;
