@@ -450,6 +450,19 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                         break;
                 }
                 break;
+            case RES_LR_SPACE:
+            {
+                switch (nMemberID)
+                {
+                    case MID_L_MARGIN:
+                        aPropertyName = UNO_NAME_LEFT_MARGIN;
+                        break;
+                    case MID_R_MARGIN:
+                        aPropertyName = UNO_NAME_RIGHT_MARGIN;
+                        break;
+                }
+                break;
+            }
             case RES_VERT_ORIENT:
                 switch (nMemberID)
                 {
