@@ -22,6 +22,7 @@
 #include "querydescriptor.hxx"
 #include <apitools.hxx>
 #include <stringconstants.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -142,16 +143,13 @@ OQueryDescriptor_Base::~OQueryDescriptor_Base()
 
 sal_Int64 SAL_CALL OQueryDescriptor_Base::getSomething( const Sequence< sal_Int8 >& _rIdentifier )
 {
-    if (_rIdentifier.getLength() != 16)
-        return 0;
-
-    if (0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  _rIdentifier.getConstArray(), 16 ) )
+    if (isUnoTunnelId<OQueryDescriptor_Base>(_rIdentifier))
         return reinterpret_cast<sal_Int64>(this);
 
     return 0;
 }
 
-css::uno::Sequence<sal_Int8> OQueryDescriptor_Base::getUnoTunnelImplementationId()
+css::uno::Sequence<sal_Int8> OQueryDescriptor_Base::getUnoTunnelId()
 {
     static cppu::OImplementationId aId;
     return aId.getImplementationId();
