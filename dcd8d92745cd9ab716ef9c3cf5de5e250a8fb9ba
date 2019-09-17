@@ -45,6 +45,30 @@
       "revId": "dcd8d92745cd9ab716ef9c3cf5de5e250a8fb9ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_aa06f71f",
+        "filename": "vcl/unx/generic/gdi/salbmp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-09-17T13:44:15Z",
+      "side": 1,
+      "message": "no, that is a check for wraparound",
+      "parentUuid": "7f7f9b97_ca2a538f",
+      "range": {
+        "startLine": 198,
+        "startChar": 31,
+        "endLine": 198,
+        "endChar": 46
+      },
+      "revId": "dcd8d92745cd9ab716ef9c3cf5de5e250a8fb9ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
