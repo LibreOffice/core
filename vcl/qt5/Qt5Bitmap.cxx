@@ -50,7 +50,9 @@ bool Qt5Bitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPale
     {
         m_pImage.reset();
         m_aSize = rSize;
-        bool bFail = o3tl::checked_multiply<sal_uInt32>(rSize.Width(), nBitCount, m_nScanline);
+        // round up
+        bool bFail
+            = o3tl::checked_multiply<sal_uInt32>((rSize.Width() + 7) / 8, nBitCount, m_nScanline);
         if (bFail)
         {
             SAL_WARN("vcl.gdi", "checked multiply failed");

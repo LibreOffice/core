@@ -186,7 +186,8 @@ std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
     pDIB->mnWidth = rSize.Width();
     pDIB->mnHeight = rSize.Height();
     long nScanlineBase;
-    bool bFail = o3tl::checked_multiply<long>(pDIB->mnWidth, nBitCount, nScanlineBase);
+    // round up
+    bool bFail = o3tl::checked_multiply<long>((pDIB->mnWidth + 7) / 8, nBitCount, nScanlineBase);
     if (bFail)
     {
         SAL_WARN("vcl.gdi", "checked multiply failed");
