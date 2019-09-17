@@ -208,7 +208,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="deleted">
+                  <object class="GtkComboBoxText" id="deleted">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
@@ -343,7 +343,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="changed">
+                  <object class="GtkComboBoxText" id="changed">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
