@@ -79,7 +79,7 @@ public:
 // css::lang::XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
     virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
-    static css::uno::Sequence< sal_Int8 >  getUnoTunnelImplementationId();
+    static css::uno::Sequence< sal_Int8 >  getUnoTunnelId();
 
 
 // css::lang::XServiceInfo
