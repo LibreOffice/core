@@ -196,6 +196,12 @@ public:
     virtual             ~SfxTabPage() override;
     virtual void        dispose() override;
 
+    void set_visible(bool bVisible)
+    {
+        m_xContainer->set_visible(bVisible);
+        Show(bVisible);
+    }
+
     const SfxItemSet&   GetItemSet() const { return *pSet; }
 
     virtual bool        FillItemSet( SfxItemSet* );
