@@ -2898,6 +2898,24 @@ void ScPrintFunc::CalcZoom( sal_uInt16 nRangeNo )                       // calcu
                 nZoom = (nLastFitZoom + nZoom) / 2;
             }
         }
+        // tdf#103516 remove the almost blank page(s) for better
+        // interoperability by using slightly smaller zoom
+        if (nW > 0 && nH == 0 && m_aRanges.m_nPagesY > 1)
+        {
+            sal_uInt32 nLastPagesY = m_aRanges.m_nPagesY;
+            nLastFitZoom = nZoom;
+            nZoom *= 0.98;
+            if (nZoom < nLastFitZoom)
+            {
+                CalcPages();
+                // same page count with smaller zoom: use the original zoom
+                if (m_aRanges.m_nPagesY == nLastPagesY)
+                {
+                    nZoom = nLastFitZoom;
+                    CalcPages();
+                }
+            }
+        }
     }
     else if (aTableParam.bScaleAll)
     {
