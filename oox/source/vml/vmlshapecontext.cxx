@@ -187,6 +187,26 @@ void ClientDataContext::onCharacters( const OUString& rChars )
     maElementText = rChars;
 }
 
+    // Comment text alignment.
+    // These methods convert the alignment input from OUString to sal_Int32.
+    // The converted value is saved into a ClientData object below,
+    // and accessed later in the finalizer.
+static sal_Int32 HorAlignConverter(OUString anAlignment)
+{
+    sal_Int32 HA = XML_left;
+    if             (anAlignment == "Center"  || anAlignment == "center")    { HA = XML_center; }
+    else if        (anAlignment == "Right"   || anAlignment == "right")     { HA = XML_right; }
+    else if        (anAlignment == "Justify" || anAlignment == "justify")   { HA = XML_block; }
+    return HA;
+}
+static sal_Int32 VerAlignConverter(OUString anAlignment)
+{
+    sal_Int32 VA = XML_top;
+    if             (anAlignment == "Center"  || anAlignment == "center")    { VA = XML_center; }
+    else if        (anAlignment == "Bottom"  || anAlignment == "bottom")    { VA = XML_bottom; }
+    else if        (anAlignment == "Justify" || anAlignment == "justify")   { VA = XML_block; }
+    return VA;
+}
 void ClientDataContext::onEndElement()
 {
     switch( getCurrentElement() )
@@ -197,8 +217,8 @@ void ClientDataContext::onEndElement()
         case VMLX_TOKEN( FmlaLink ):    mrClientData.maFmlaLink = maElementText;                                        break;
         case VMLX_TOKEN( FmlaRange ):   mrClientData.maFmlaRange = maElementText;                                       break;
         case VMLX_TOKEN( FmlaGroup ):   mrClientData.maFmlaGroup = maElementText;                                       break;
-        case VMLX_TOKEN( TextHAlign ):  mrClientData.mnTextHAlign = AttributeConversion::decodeToken( maElementText );  break;
-        case VMLX_TOKEN( TextVAlign ):  mrClientData.mnTextVAlign = AttributeConversion::decodeToken( maElementText );  break;
+        case VMLX_TOKEN( TextHAlign ):  mrClientData.mnTextHAlign = HorAlignConverter( maElementText );                 break;
+        case VMLX_TOKEN( TextVAlign ):  mrClientData.mnTextVAlign = VerAlignConverter( maElementText );                 break;
         case VMLX_TOKEN( Column ):      mrClientData.mnCol = maElementText.toInt32();                                   break;
         case VMLX_TOKEN( Row ):         mrClientData.mnRow = maElementText.toInt32();                                   break;
         case VMLX_TOKEN( Checked ):     mrClientData.mnChecked = maElementText.toInt32();                               break;
