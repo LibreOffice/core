@@ -2352,8 +2352,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testHorizontal_multilevel)
     xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     // Test the Y position of horizontal category axis label.
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/textarray[7]", "y",
-                "7945");
+    sal_Int32 nYposition = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/textarray[7]", "y").toInt32();
+    CPPUNIT_ASSERT(nYposition > 7943 && nYposition < 7947);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124796)
