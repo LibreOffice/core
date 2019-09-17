@@ -971,16 +971,19 @@ void GtkSalFrame::InitCommon()
     m_aSystemData.pWidget       = m_pWindow;
     m_aSystemData.nScreen       = m_nXScreen.getXScreen();
     m_aSystemData.pToolkit      = "gtk3";
-    GdkScreen* pScreen = gtk_window_get_screen(GTK_WINDOW(m_pWindow));
-    GdkVisual* pVisual = gdk_screen_get_system_visual(pScreen);
 
 #if defined(GDK_WINDOWING_X11)
     GdkDisplay *pDisplay = getGdkDisplay();
     if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
     {
         m_aSystemData.pDisplay = gdk_x11_display_get_xdisplay(pDisplay);
-        m_aSystemData.pVisual = gdk_x11_visual_get_xvisual(pVisual);
         m_aSystemData.pPlatformName = "xcb";
+        if (GTK_IS_WINDOW(m_pWindow))
+        {
+            GdkScreen* pScreen = gtk_window_get_screen(GTK_WINDOW(m_pWindow));
+            GdkVisual* pVisual = gdk_screen_get_system_visual(pScreen);
+            m_aSystemData.pVisual = gdk_x11_visual_get_xvisual(pVisual);
+        }
     }
 #endif
 #if defined(GDK_WINDOWING_WAYLAND)
@@ -1073,17 +1076,20 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     if( m_pParent && m_pParent->m_pWindow && ! isChild() )
         gtk_window_set_screen( GTK_WINDOW(m_pWindow), gtk_window_get_screen( GTK_WINDOW(m_pParent->m_pWindow) ) );
 
-    if (m_pParent)
+    if (GTK_IS_WINDOW(m_pWindow))
     {
-        if (!(m_pParent->m_nStyle & SalFrameStyleFlags::PLUG))
-            gtk_window_set_transient_for( GTK_WINDOW(m_pWindow), GTK_WINDOW(m_pParent->m_pWindow) );
-        m_pParent->m_aChildren.push_back( this );
-        gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(m_pParent->m_pWindow)), GTK_WINDOW(m_pWindow));
-    }
-    else
-    {
-        gtk_window_group_add_window(gtk_window_group_new(), GTK_WINDOW(m_pWindow));
-        g_object_unref(gtk_window_get_group(GTK_WINDOW(m_pWindow)));
+        if (m_pParent)
+        {
+            if (!(m_pParent->m_nStyle & SalFrameStyleFlags::PLUG))
+                gtk_window_set_transient_for( GTK_WINDOW(m_pWindow), GTK_WINDOW(m_pParent->m_pWindow) );
+            m_pParent->m_aChildren.push_back( this );
+            gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(m_pParent->m_pWindow)), GTK_WINDOW(m_pWindow));
+        }
+        else
+        {
+            gtk_window_group_add_window(gtk_window_group_new(), GTK_WINDOW(m_pWindow));
+            g_object_unref(gtk_window_get_group(GTK_WINDOW(m_pWindow)));
+        }
     }
 
     // set window type
@@ -1279,6 +1285,8 @@ void GtkSalFrame::DrawMenuBar()
 
 void GtkSalFrame::Center()
 {
+    if (!GTK_IS_WINDOW(m_pWindow))
+        return;
     if (m_pParent)
         gtk_window_set_position(GTK_WINDOW(m_pWindow), GTK_WIN_POS_CENTER_ON_PARENT);
     else
