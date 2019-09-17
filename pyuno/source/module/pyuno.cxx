@@ -41,6 +41,7 @@
 #include <com/sun/star/script/XInvocation2.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <comphelper/servicehelper.hxx>
 
 #include "pyuno_impl.hxx"
 
@@ -1711,14 +1712,10 @@ PyRef PyUNO_new (
         xInvocation.set(
             ssf->createInstanceWithArguments( Sequence<Any>( &targetInterface, 1 ) ), css::uno::UNO_QUERY_THROW );
 
-        Reference<XUnoTunnel> xUnoTunnel (
-            xInvocation->getIntrospection()->queryAdapter(cppu::UnoType<XUnoTunnel>::get()), UNO_QUERY );
-        if( xUnoTunnel.is() )
-        {
-            sal_Int64 that = xUnoTunnel->getSomething( ::pyuno::Adapter::getUnoTunnelImplementationId() );
-            if( that )
-                return reinterpret_cast<Adapter*>(that)->getWrappedObject();
-        }
+        auto that = comphelper::getUnoTunnelImplementation<Adapter>(
+            xInvocation->getIntrospection()->queryAdapter(cppu::UnoType<XUnoTunnel>::get()));
+        if( that )
+            return that->getWrappedObject();
     }
     if( !Py_IsInitialized() )
         throw RuntimeException();

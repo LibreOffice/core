@@ -68,7 +68,7 @@ Adapter::~Adapter()
 
 static cppu::OImplementationId g_id( false );
 
-Sequence<sal_Int8> Adapter::getUnoTunnelImplementationId()
+Sequence<sal_Int8> Adapter::getUnoTunnelId()
 {
     return g_id.getImplementationId();
 }
