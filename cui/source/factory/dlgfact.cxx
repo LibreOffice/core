@@ -108,8 +108,6 @@ short CuiAbstractSingleTabController_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(CuiVclAbstractDialog_Impl)
-
 short AbstractSvxDistributeDialog_Impl::Execute()
 {
     return m_xDlg->run();
@@ -948,9 +946,9 @@ bool AbstractPasswordToOpenModifyDialog_Impl::IsRecommendToOpenReadonly() const
 }
 
 // Create dialogs with simplest interface
-VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateVclDialog( vcl::Window* pParent, sal_uInt32 nResId )
+VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateVclDialog(weld::Window* pParent, sal_uInt32 nResId)
 {
-    VclPtr<Dialog> pDlg;
+    std::unique_ptr<OfaTreeOptionsDialog> xDlg;
     switch ( nResId )
     {
         case SID_OPTIONS_TREEDIALOG :
@@ -961,25 +959,24 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateVclDialog( vcl::Wind
             if (nResId == SID_OPTIONS_TREEDIALOG)
                 bActivateLastSelection = true;
             Reference< frame::XFrame > xFrame;
-            VclPtrInstance<OfaTreeOptionsDialog> pOptDlg( pParent, xFrame, bActivateLastSelection );
+            xDlg = std::make_unique<OfaTreeOptionsDialog>(pParent, xFrame, bActivateLastSelection);
             if (nResId == SID_OPTIONS_DATABASES)
             {
-                pOptDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
+                xDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
             }
             else if (nResId == SID_LANGUAGE_OPTIONS)
             {
                 //open the tab page "tools/options/languages"
-                pOptDlg->ActivatePage(OFA_TP_LANGUAGES_FOR_SET_DOCUMENT_LANGUAGE);
+                xDlg->ActivatePage(OFA_TP_LANGUAGES_FOR_SET_DOCUMENT_LANGUAGE);
             }
-            pDlg.reset(pOptDlg);
         }
         break;
         default:
             break;
     }
 
-    if ( pDlg )
-        return VclPtr<CuiVclAbstractDialog_Impl>::Create( pDlg );
+    if (xDlg)
+        return VclPtr<CuiAbstractController_Impl>::Create(std::move(xDlg));
     return nullptr;
 }
 
@@ -988,26 +985,24 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateAboutDialog(weld::Wi
     return VclPtr<CuiAbstractController_Impl>::Create(std::make_unique<AboutDialog>(pParent));
 }
 
-VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateFrameDialog(vcl::Window* pParent, const Reference< frame::XFrame >& rxFrame,
+VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateFrameDialog(weld::Window* pParent, const Reference< frame::XFrame >& rxFrame,
     sal_uInt32 nResId, const OUString& rParameter )
 {
-    VclPtr<Dialog> pDlg;
-    if ( SID_OPTIONS_TREEDIALOG == nResId || SID_OPTIONS_DATABASES == nResId )
+    std::unique_ptr<OfaTreeOptionsDialog> xDlg;
+    if (SID_OPTIONS_TREEDIALOG == nResId || SID_OPTIONS_DATABASES == nResId)
     {
         // only activate last page if we don't want to activate a special page
         bool bActivateLastSelection = ( nResId != SID_OPTIONS_DATABASES && rParameter.isEmpty() );
-        VclPtrInstance<OfaTreeOptionsDialog> pOptDlg(pParent, rxFrame, bActivateLastSelection);
+        xDlg = std::make_unique<OfaTreeOptionsDialog>(pParent, rxFrame, bActivateLastSelection);
         if ( nResId == SID_OPTIONS_DATABASES )
-            pOptDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
+            xDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
         else if ( !rParameter.isEmpty() )
-            pOptDlg->ActivatePage( rParameter );
-        pDlg.reset(pOptDlg);
+            xDlg->ActivatePage( rParameter );
     }
 
-    if ( pDlg )
-        return VclPtr<CuiVclAbstractDialog_Impl>::Create( pDlg );
-    else
-        return nullptr;
+    if (xDlg)
+        return VclPtr<CuiAbstractController_Impl>::Create(std::move(xDlg));
+    return nullptr;
 }
 
 // TabDialog outside the drawing layer
@@ -1594,10 +1589,9 @@ VclPtr<SvxAbstractNewTableDialog> AbstractDialogFactory_Impl::CreateSvxNewTableD
     return VclPtr<SvxNewTableDialog>::Create(pParent);
 }
 
-VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateOptionsDialog(
-    weld::Window* /*pParent*/, const OUString& rExtensionId )
+VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateOptionsDialog(weld::Window* pParent, const OUString& rExtensionId)
 {
-    return VclPtr<CuiVclAbstractDialog_Impl>::Create( VclPtr<OfaTreeOptionsDialog>::Create(nullptr /* TODO: pParent*/, rExtensionId ) );
+    return VclPtr<CuiAbstractController_Impl>::Create(std::make_unique<OfaTreeOptionsDialog>(pParent, rExtensionId));
 }
 
 VclPtr<SvxAbstractInsRowColDlg> AbstractDialogFactory_Impl::CreateSvxInsRowColDlg(weld::Window* pParent, bool bCol, const OString& rHelpId)

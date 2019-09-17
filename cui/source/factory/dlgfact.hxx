@@ -112,11 +112,6 @@ bool Class::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) \
     return pDlg->StartExecuteAsync(rCtx);           \
 }
 
-class CuiVclAbstractDialog_Impl : public VclAbstractDialog
-{
-    DECL_ABSTDLG_BASE(CuiVclAbstractDialog_Impl,Dialog)
-};
-
 class CuiAbstractController_Impl : public VclAbstractDialog
 {
     std::unique_ptr<weld::DialogController> m_xDlg;
@@ -761,7 +756,7 @@ public:
 class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
 {
 public:
-    virtual VclPtr<VclAbstractDialog>    CreateVclDialog( vcl::Window* pParent, sal_uInt32 nResId ) override;
+    virtual VclPtr<VclAbstractDialog>    CreateVclDialog(weld::Window* pParent, sal_uInt32 nResId) override;
 
     virtual VclPtr<VclAbstractDialog>    CreateAboutDialog(weld::Window* pParent) override;
 
@@ -775,7 +770,7 @@ public:
     virtual VclPtr<SfxAbstractDialog>    CreateEventConfigDialog(weld::Widget* pParent,
                                                                  const SfxItemSet& rAttr,
                                                                  const css::uno::Reference< css::frame::XFrame >& rFrame) override;
-    virtual VclPtr<VclAbstractDialog>    CreateFrameDialog(vcl::Window* pParent, const css::uno::Reference< css::frame::XFrame >& rxFrame,
+    virtual VclPtr<VclAbstractDialog>    CreateFrameDialog(weld::Window* pParent, const css::uno::Reference< css::frame::XFrame >& rxFrame,
                                                            sal_uInt32 nResId,
                                                            const OUString& rParameter ) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateAutoCorrTabDialog(weld::Window* pParent, const SfxItemSet* pAttrSet) override;
