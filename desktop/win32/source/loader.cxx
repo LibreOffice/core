@@ -26,6 +26,7 @@
 #include <desktop/exithelper.h>
 #include <tools/pathutils.hxx>
 
+#include <fstream>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 
@@ -178,7 +179,7 @@ int officeloader_impl(bool bAllowConsole)
         try
         {
             boost::property_tree::ptree pt;
-            std::fstream aFile(szBootstrapIni);
+            std::ifstream aFile(szBootstrapIni);
             boost::property_tree::ini_parser::read_ini(aFile, pt);
             nMaxMemoryInMB = pt.get("Win32.LimitMaximumMemoryInMB", nMaxMemoryInMB);
             bExcludeChildProcesses = pt.get("Win32.ExcludeChildProcessesFromLimit", bExcludeChildProcesses);
