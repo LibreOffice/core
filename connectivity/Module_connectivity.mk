@@ -22,6 +22,7 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_flat \
 	Configuration_mysql_jdbc \
 	Configuration_odbc \
+	Configuration_mysql_jdbc \
 	Configuration_writer \
 	Library_calc \
 	Library_dbase \
