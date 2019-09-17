@@ -975,7 +975,6 @@ void GraphicImport::ProcessShapeOptions(Value const & rValue)
     switch( m_pImpl->nShapeOptionType )
     {
         case NS_ooxml::LN_CT_Anchor_distL:
-            //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustLRWrapForWordMargins()
             m_pImpl->nLeftMargin = nIntValue / 360;
         break;
         case NS_ooxml::LN_CT_Anchor_distT:
@@ -1070,6 +1069,16 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
                     m_pImpl->nHoriRelation = pHandler->relation();
                     m_pImpl->nHoriOrient = pHandler->orientation();
                     m_pImpl->nLeftPosition = pHandler->position();
+
+                    // Left adjustments: if horizontally aligned to left of margin, then remove the
+                    // left wrapping.
+                    if (m_pImpl->nHoriOrient == text::HoriOrientation::LEFT)
+                    {
+                        if (m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA)
+                        {
+                            m_pImpl->nLeftMargin = 0;
+                        }
+                    }
                 }
             }
         }
