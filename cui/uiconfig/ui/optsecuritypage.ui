@@ -337,15 +337,25 @@ Do you want to delete password list and reset master password?</property>
                   <object class="GtkGrid" id="grid6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="row_homogeneous">True</property>
                     <child>
-                      <object class="GtkButton" id="connections">
-                        <property name="label" translatable="yes" context="optsecuritypage|connections">Connect_ions...</property>
+                      <object class="GtkGrid" id="grid9">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="use_underline">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkButton" id="connections">
+                            <property name="label" translatable="yes" context="optsecuritypage|connections">Connect_ions...</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="valign">center</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -353,14 +363,23 @@ Do you want to delete password list and reset master password?</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="masterpassword">
-                        <property name="label" translatable="yes" context="optsecuritypage|masterpassword">_Master Password...</property>
+                      <object class="GtkGrid" id="grid10">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="use_underline">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkButton" id="masterpassword">
+                            <property name="label" translatable="yes" context="optsecuritypage|masterpassword">_Master Password...</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="valign">center</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -466,12 +485,12 @@ Do you want to delete password list and reset master password?</property>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
-      <widget name="options"/>
+      <widget name="tsas"/>
+      <widget name="cert"/>
+      <widget name="macro"/>
       <widget name="connections"/>
       <widget name="masterpassword"/>
-      <widget name="macro"/>
-      <widget name="cert"/>
-      <widget name="tsas"/>
+      <widget name="options"/>
     </widgets>
   </object>
 </interface>
