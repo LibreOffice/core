@@ -102,6 +102,24 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_e5ad00eb",
+        "filename": "configmgr/source/writemodfile.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-09-17T15:26:51Z",
+      "side": 1,
+      "message": "I wonder, why do you consider string_view this important? Writing the operator is probably more code than what it saves in these 5 places, while there are many more uses of toAsciiUpperCase(), which is not there either.",
+      "parentUuid": "7f7f9b97_9f49ff61",
+      "revId": "c721e5cc294bb5393a298ced968cba103051ed2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_fcccc162",
         "filename": "include/rtl/stringconcat.hxx",
         "patchSetId": 2
