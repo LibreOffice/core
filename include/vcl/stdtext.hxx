@@ -21,11 +21,13 @@
 #define INCLUDED_VCL_STDTEXT_HXX
 
 #include <rtl/ustring.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/dllapi.h>
 
 namespace weld { class Widget; }
 
 void VCL_DLLPUBLIC ShowServiceNotAvailableError(weld::Widget* pParent, const OUString& rServiceName, bool bError);
+OUString VCL_DLLPUBLIC GetStandardText(StandardButtonType eButton);
 
 #endif // INCLUDED_VCL_STDTEXT_HXX
 

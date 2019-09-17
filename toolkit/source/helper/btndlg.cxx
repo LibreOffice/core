@@ -20,6 +20,7 @@
 #include <memory>
 
 #include <vcl/button.hxx>
+#include <vcl/stdtext.hxx>
 #include <helper/btndlg.hxx>
 #include <sal/log.hxx>
 
@@ -279,7 +280,7 @@ void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
         auto itr = mapButtonTypeToID.find(eType);
         if (itr != mapButtonTypeToID.end())
             pItem->mpPushButton->set_id(itr->second);
-        pItem->mpPushButton->SetText( Button::GetStandardText( eType ) );
+        pItem->mpPushButton->SetText( GetStandardText( eType ) );
     }
 
     if ( nBtnFlags & ButtonDialogFlags::Focus )

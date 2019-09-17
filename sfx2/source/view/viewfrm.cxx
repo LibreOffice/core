@@ -44,6 +44,7 @@
 #include <svl/slstitm.hxx>
 #include <svl/whiter.hxx>
 #include <svl/undo.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/miscopt.hxx>
@@ -191,7 +192,7 @@ public:
         m_xQueryBox->add_button(SfxResId(STR_QUERY_OPENASTEMPLATE_OPENCOPY_BTN), RET_YES);
         if (bAllowIgnoreLock)
             m_xQueryBox->add_button(SfxResId(STR_QUERY_OPENASTEMPLATE_OPEN_BTN), RET_IGNORE);
-        m_xQueryBox->add_button(Button::GetStandardText( StandardButtonType::Cancel ), RET_CANCEL);
+        m_xQueryBox->add_button(GetStandardText( StandardButtonType::Cancel ), RET_CANCEL);
         m_xQueryBox->set_default_response(RET_YES);
     }
     short run() { return m_xQueryBox->run(); }

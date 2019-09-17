@@ -76,8 +76,6 @@ public:
     void                SetCommandHandler(const OUString& aCommand);
     OUString const &    GetCommand() const { return maCommand; }
 
-    static OUString     GetStandardText( StandardButtonType eButton );
-
     void                SetModeImage( const Image& rImage );
     Image const &       GetModeImage( ) const;
     bool                HasImage() const;

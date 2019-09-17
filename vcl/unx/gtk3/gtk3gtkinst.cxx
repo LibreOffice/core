@@ -43,6 +43,7 @@
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/pngwrite.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
@@ -3699,26 +3700,26 @@ public:
         gtk_button_box_set_layout(m_pButtonBox, GTK_BUTTONBOX_END);
         gtk_box_set_spacing(GTK_BOX(m_pButtonBox), 6);
 
-        m_pBack = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(Button::GetStandardText(StandardButtonType::Back)).getStr()));
+        m_pBack = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Back)).getStr()));
         gtk_widget_set_can_default(GTK_WIDGET(m_pBack), true);
         gtk_buildable_set_name(GTK_BUILDABLE(m_pBack), "previous");
         gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pBack), false, false, 0);
 
-        m_pNext = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(Button::GetStandardText(StandardButtonType::Next)).getStr()));
+        m_pNext = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Next)).getStr()));
         gtk_widget_set_can_default(GTK_WIDGET(m_pNext), true);
         gtk_buildable_set_name(GTK_BUILDABLE(m_pNext), "next");
         gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pNext), false, false, 0);
 
-        m_pCancel = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(Button::GetStandardText(StandardButtonType::Cancel)).getStr()));
+        m_pCancel = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Cancel)).getStr()));
         gtk_widget_set_can_default(GTK_WIDGET(m_pCancel), true);
         gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pCancel), false, false, 0);
 
-        m_pFinish = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(Button::GetStandardText(StandardButtonType::Finish)).getStr()));
+        m_pFinish = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Finish)).getStr()));
         gtk_widget_set_can_default(GTK_WIDGET(m_pFinish), true);
         gtk_buildable_set_name(GTK_BUILDABLE(m_pFinish), "finish");
         gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pFinish), false, false, 0);
 
-        m_pHelp = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(Button::GetStandardText(StandardButtonType::Help)).getStr()));
+        m_pHelp = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Help)).getStr()));
         gtk_widget_set_can_default(GTK_WIDGET(m_pHelp), true);
         g_signal_connect(m_pHelp, "clicked", G_CALLBACK(signalHelpClicked), this);
         gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pHelp), false, false, 0);

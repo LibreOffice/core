@@ -52,7 +52,6 @@
 #include <connectivity/dbexception.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/stdtext.hxx>
-#include <vcl/button.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 #include <tools/diagnose_ex.h>
@@ -440,7 +439,7 @@ namespace frm
                 std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
                                                                VclMessageType::Question, VclButtonsType::YesNo,
                                                                FRM_RES_STRING(RID_STR_QUERY_SAVE_MODIFIED_ROW)));
-                xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+                xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
                 xQueryBox->set_default_response(RET_YES);
 
                 switch (xQueryBox->run())

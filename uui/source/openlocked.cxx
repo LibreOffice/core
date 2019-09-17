@@ -20,7 +20,7 @@
 #include <strings.hrc>
 #include "openlocked.hxx"
 #include <unotools/resmgr.hxx>
-#include <vcl/button.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 
 OpenLockedQueryBox::OpenLockedQueryBox(weld::Window* pParent, const std::locale& rResLocale, const OUString& rMessage, bool bEnableOverride)
@@ -34,7 +34,7 @@ OpenLockedQueryBox::OpenLockedQueryBox(weld::Window* pParent, const std::locale&
         // Present option to ignore the (stale?) lock file and open the document
         m_xQueryBox->add_button(Translate::get(STR_ALREADYOPEN_OPEN_BTN, rResLocale), RET_IGNORE);
     }
-    m_xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+    m_xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

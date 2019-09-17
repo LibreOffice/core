@@ -26,6 +26,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
 #include <formula/errorcodes.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
@@ -864,8 +865,8 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetActiveDialogParent(),
                                                                                        VclMessageType::Warning, VclButtonsType::NONE,
                                                                                        aMessage));
-                                            xWarn->add_button(Button::GetStandardText(StandardButtonType::Retry), RET_RETRY);
-                                            xWarn->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+                                            xWarn->add_button(GetStandardText(StandardButtonType::Retry), RET_RETRY);
+                                            xWarn->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
                                             xWarn->set_default_response(RET_RETRY);
                                             if (xWarn->run() == RET_RETRY)
                                             {

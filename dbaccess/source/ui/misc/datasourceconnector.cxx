@@ -159,7 +159,7 @@ namespace dbaui
                     if ( aWarnings.hasValue() )
                     {
                         OUString sMessage( DBA_RES( STR_WARNINGS_DURING_CONNECT ) );
-                        sMessage = sMessage.replaceFirst( "$buttontext$", Button::GetStandardText( StandardButtonType::More ) );
+                        sMessage = sMessage.replaceFirst( "$buttontext$", GetStandardText( StandardButtonType::More ) );
                         sMessage = OutputDevice::GetNonMnemonicString( sMessage );
 
                         SQLWarning aContext;

@@ -22,9 +22,9 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
-#include <vcl/button.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
@@ -63,7 +63,7 @@ AboutDialog::AboutDialog(weld::Window* pParent)
     , m_xDialog(m_xBuilder->weld_about_dialog("AboutDialog"))
     , m_xContentArea(m_xDialog->weld_content_area())
 {
-    m_xDialog->add_button(Button::GetStandardText(StandardButtonType::Close), RET_CLOSE);
+    m_xDialog->add_button(GetStandardText(StandardButtonType::Close), RET_CLOSE);
     m_xDialog->add_button(CuiResId(RID_SVXSTR_ABOUT_CREDITS), 101);
     m_xDialog->add_button(CuiResId(RID_SVXSTR_ABOUT_WEBSITE), 102);
     m_xDialog->add_button(CuiResId(RID_SVXSTR_ABOUT_RELEASE_NOTES), 103);

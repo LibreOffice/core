@@ -24,11 +24,12 @@
 #include <basic/sbuno.hxx>
 #include <osl/process.h>
 #include <vcl/dibtools.hxx>
+#include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sound.hxx>
 #include <tools/wintypes.hxx>
-#include <vcl/button.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
 #include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>
@@ -4401,11 +4402,11 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
     {
         case 0: // MB_OK
         default:
-            xBox->add_button(Button::GetStandardText(StandardButtonType::OK), BasicResponse::Ok);
+            xBox->add_button(GetStandardText(StandardButtonType::OK), BasicResponse::Ok);
             break;
         case 1: // MB_OKCANCEL
-            xBox->add_button(Button::GetStandardText(StandardButtonType::OK), BasicResponse::Ok);
-            xBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), BasicResponse::Cancel);
+            xBox->add_button(GetStandardText(StandardButtonType::OK), BasicResponse::Ok);
+            xBox->add_button(GetStandardText(StandardButtonType::Cancel), BasicResponse::Cancel);
 
             if (nType & 256 || nType & 512)
                 xBox->set_default_response(BasicResponse::Cancel);
@@ -4414,9 +4415,9 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
 
             break;
         case 2: // MB_ABORTRETRYIGNORE
-            xBox->add_button(Button::GetStandardText(StandardButtonType::Abort), BasicResponse::Abort);
-            xBox->add_button(Button::GetStandardText(StandardButtonType::Retry), BasicResponse::Retry);
-            xBox->add_button(Button::GetStandardText(StandardButtonType::Ignore), BasicResponse::Ignore);
+            xBox->add_button(GetStandardText(StandardButtonType::Abort), BasicResponse::Abort);
+            xBox->add_button(GetStandardText(StandardButtonType::Retry), BasicResponse::Retry);
+            xBox->add_button(GetStandardText(StandardButtonType::Ignore), BasicResponse::Ignore);
 
             if (nType & 256)
                 xBox->set_default_response(BasicResponse::Retry);
@@ -4427,9 +4428,9 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
 
             break;
         case 3: // MB_YESNOCANCEL
-            xBox->add_button(Button::GetStandardText(StandardButtonType::Yes), BasicResponse::Yes);
-            xBox->add_button(Button::GetStandardText(StandardButtonType::No), BasicResponse::No);
-            xBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), BasicResponse::Cancel);
+            xBox->add_button(GetStandardText(StandardButtonType::Yes), BasicResponse::Yes);
+            xBox->add_button(GetStandardText(StandardButtonType::No), BasicResponse::No);
+            xBox->add_button(GetStandardText(StandardButtonType::Cancel), BasicResponse::Cancel);
 
             if (nType & 256 || nType & 512)
                 xBox->set_default_response(BasicResponse::Cancel);
@@ -4438,8 +4439,8 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
 
             break;
         case 4: // MB_YESNO
-            xBox->add_button(Button::GetStandardText(StandardButtonType::Yes), BasicResponse::Yes);
-            xBox->add_button(Button::GetStandardText(StandardButtonType::No), BasicResponse::No);
+            xBox->add_button(GetStandardText(StandardButtonType::Yes), BasicResponse::Yes);
+            xBox->add_button(GetStandardText(StandardButtonType::No), BasicResponse::No);
 
             if (nType & 256 || nType & 512)
                 xBox->set_default_response(BasicResponse::No);
@@ -4448,8 +4449,8 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
 
             break;
         case 5: // MB_RETRYCANCEL
-            xBox->add_button(Button::GetStandardText(StandardButtonType::Retry), BasicResponse::Retry);
-            xBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), BasicResponse::Cancel);
+            xBox->add_button(GetStandardText(StandardButtonType::Retry), BasicResponse::Retry);
+            xBox->add_button(GetStandardText(StandardButtonType::Cancel), BasicResponse::Cancel);
 
             if (nType & 256 || nType & 512)
                 xBox->set_default_response(BasicResponse::Cancel);

@@ -39,7 +39,7 @@
 #include <svl/urihelper.hxx>
 #include <vcl/transfer.hxx>
 #include <sot/formats.hxx>
-#include <vcl/button.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -164,8 +164,8 @@ ErrCode SvxOpenGraphicDialog::Execute()
                 std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(nullptr,
                                                            VclMessageType::Warning, VclButtonsType::NONE,
                                                            SfxResId(SvxOpenGrfErr2ResId(nImpRet))));
-                xWarn->add_button(Button::GetStandardText(StandardButtonType::Retry), RET_RETRY);
-                xWarn->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+                xWarn->add_button(GetStandardText(StandardButtonType::Retry), RET_RETRY);
+                xWarn->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
                 bQuitLoop = xWarn->run() != RET_RETRY;
             }
             else

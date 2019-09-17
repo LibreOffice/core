@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/errinf.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/button.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/task/XInteractionAbort.hpp>
@@ -26,7 +27,6 @@
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
 
-#include <vcl/errinf.hxx>
 #include <svx/svxerr.hxx>
 #include <svx/dialogs.hrc>
 #include <unotools/resmgr.hxx>
@@ -99,24 +99,24 @@ executeErrorDialog(
         case MessageBoxStyle::NONE:
             break;
         case MessageBoxStyle::Ok:
-            xBox->add_button(Button::GetStandardText(StandardButtonType::OK), static_cast<int>(DialogMask::ButtonsOk));
+            xBox->add_button(GetStandardText(StandardButtonType::OK), static_cast<int>(DialogMask::ButtonsOk));
             break;
         case MessageBoxStyle::OkCancel:
-            xBox->add_button(Button::GetStandardText(StandardButtonType::OK), static_cast<int>(DialogMask::ButtonsOk));
-            xBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), static_cast<int>(DialogMask::ButtonsCancel));
+            xBox->add_button(GetStandardText(StandardButtonType::OK), static_cast<int>(DialogMask::ButtonsOk));
+            xBox->add_button(GetStandardText(StandardButtonType::Cancel), static_cast<int>(DialogMask::ButtonsCancel));
             break;
         case MessageBoxStyle::YesNo:
-            xBox->add_button(Button::GetStandardText(StandardButtonType::Yes), static_cast<int>(DialogMask::ButtonsYes));
-            xBox->add_button(Button::GetStandardText(StandardButtonType::No), static_cast<int>(DialogMask::ButtonsNo));
+            xBox->add_button(GetStandardText(StandardButtonType::Yes), static_cast<int>(DialogMask::ButtonsYes));
+            xBox->add_button(GetStandardText(StandardButtonType::No), static_cast<int>(DialogMask::ButtonsNo));
             break;
         case MessageBoxStyle::YesNoCancel:
-            xBox->add_button(Button::GetStandardText(StandardButtonType::Yes), static_cast<int>(DialogMask::ButtonsYes));
-            xBox->add_button(Button::GetStandardText(StandardButtonType::No), static_cast<int>(DialogMask::ButtonsNo));
-            xBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), static_cast<int>(DialogMask::ButtonsCancel));
+            xBox->add_button(GetStandardText(StandardButtonType::Yes), static_cast<int>(DialogMask::ButtonsYes));
+            xBox->add_button(GetStandardText(StandardButtonType::No), static_cast<int>(DialogMask::ButtonsNo));
+            xBox->add_button(GetStandardText(StandardButtonType::Cancel), static_cast<int>(DialogMask::ButtonsCancel));
             break;
         case MessageBoxStyle::RetryCancel:
-            xBox->add_button(Button::GetStandardText(StandardButtonType::Retry), static_cast<int>(DialogMask::ButtonsRetry));
-            xBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), static_cast<int>(DialogMask::ButtonsCancel));
+            xBox->add_button(GetStandardText(StandardButtonType::Retry), static_cast<int>(DialogMask::ButtonsRetry));
+            xBox->add_button(GetStandardText(StandardButtonType::Cancel), static_cast<int>(DialogMask::ButtonsCancel));
             break;
     }
 

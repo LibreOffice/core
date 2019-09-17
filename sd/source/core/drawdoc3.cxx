@@ -30,7 +30,7 @@
 #include <svl/style.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
-#include <vcl/button.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <xmloff/autolayout.hxx>
@@ -451,7 +451,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
                                                            VclMessageType::Question, VclButtonsType::YesNo,
                                                            aStr));
-            xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+            xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
             sal_uInt16 nBut = xQueryBox->run();
 
             bScaleObjects = nBut == RET_YES;
