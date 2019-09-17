@@ -277,8 +277,9 @@ ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 postprocess_FILES_main += \
 	$(call gb_XcuModuleTarget_get_target,connectivity/registry/dbase)/org/openoffice/Office/DataAccess/Drivers-dbase.xcu \
 	$(call gb_XcuModuleTarget_get_target,connectivity/registry/flat)/org/openoffice/Office/DataAccess/Drivers-flat.xcu \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/odbc)/org/openoffice/Office/DataAccess/Drivers-odbc.xcu
-postprocess_DRIVERS += dbase flat odbc
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/odbc)/org/openoffice/Office/DataAccess/Drivers-odbc.xcu \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/mysql_jdbc)/org/openoffice/Office/DataAccess/Drivers-mysql_jdbc.xcu
+postprocess_DRIVERS += dbase flat odbc mysql_jdbc
 ifeq (WNT,$(OS))
 else ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
@@ -331,9 +332,8 @@ endif
 ifeq ($(ENABLE_JAVA),TRUE)
 postprocess_FILES_main += \
 	$(call gb_XcuModuleTarget_get_target,connectivity/registry/hsqldb)/org/openoffice/Office/DataAccess/Drivers-hsqldb.xcu \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/jdbc)/org/openoffice/Office/DataAccess/Drivers-jdbc.xcu \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/mysql_jdbc)/org/openoffice/Office/DataAccess/Drivers-mysql_jdbc.xcu
-postprocess_DRIVERS += hsqldb jdbc mysql_jdbc
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/jdbc)/org/openoffice/Office/DataAccess/Drivers-jdbc.xcu
+postprocess_DRIVERS += hsqldb jdbc
 endif
 ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
 postprocess_FILES_main += \
