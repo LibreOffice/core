@@ -965,7 +965,7 @@ OUString ToggleUnicodeCodepoint::StringToReplace()
     if( nUPlus != -1 )
     {
         maInput.remove(0, nUPlus);
-        sIn = maInput.copy(2).toString();
+        sIn = maInput.copy(2).makeStringAndClear();
         nUPlus = sIn.indexOf("U+");
     }
     else
