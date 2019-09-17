@@ -18,8 +18,9 @@
  */
 
 #include "diagramdefinitioncontext.hxx"
-#include "layoutnodecontext.hxx"
+#include "datamodel.hxx"
 #include "datamodelcontext.hxx"
+#include "layoutnodecontext.hxx"
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 

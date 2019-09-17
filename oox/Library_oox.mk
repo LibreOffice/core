@@ -139,6 +139,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/customshapepresetdata \
     oox/source/drawingml/customshapeproperties \
     oox/source/drawingml/diagram/constraintlistcontext \
+    oox/source/drawingml/diagram/datamodel \
     oox/source/drawingml/diagram/datamodelcontext \
     oox/source/drawingml/diagram/diagram \
     oox/source/drawingml/diagram/diagramdefinitioncontext \

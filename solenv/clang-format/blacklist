@@ -8903,6 +8903,8 @@ oox/source/drawingml/customshapepresetdata.cxx
 oox/source/drawingml/customshapeproperties.cxx
 oox/source/drawingml/diagram/constraintlistcontext.cxx
 oox/source/drawingml/diagram/constraintlistcontext.hxx
+oox/source/drawingml/diagram/datamodel.cxx
+oox/source/drawingml/diagram/datamodel.hxx
 oox/source/drawingml/diagram/datamodelcontext.cxx
 oox/source/drawingml/diagram/datamodelcontext.hxx
 oox/source/drawingml/diagram/diagram.cxx
