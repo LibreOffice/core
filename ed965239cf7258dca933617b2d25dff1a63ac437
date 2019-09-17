@@ -52,6 +52,24 @@
       "revId": "ed965239cf7258dca933617b2d25dff1a63ac437",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_5f94c7e8",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3109,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-17T07:23:09Z",
+      "side": 1,
+      "message": "Oh - sorry: I meant the failed buildbot at https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/41663/consoleFull#21391513172a810015-1db5-427c-9ce2-83b5f06a5284",
+      "parentUuid": "7f7f9b97_9ffc9f3f",
+      "revId": "ed965239cf7258dca933617b2d25dff1a63ac437",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
