@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_2a13c768",
+        "filename": "vcl/headless/svpgdi.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-09-17T13:38:01Z",
+      "side": 1,
+      "message": "Idem",
+      "range": {
+        "startLine": 196,
+        "startChar": 35,
+        "endLine": 196,
+        "endChar": 50
+      },
+      "revId": "dcd8d92745cd9ab716ef9c3cf5de5e250a8fb9ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_ca2a538f",
+        "filename": "vcl/unx/generic/gdi/salbmp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-09-17T13:38:01Z",
+      "side": 1,
+      "message": "so nScanlineBase would be again divided by 8?",
+      "range": {
+        "startLine": 198,
+        "startChar": 31,
+        "endLine": 198,
+        "endChar": 46
+      },
+      "revId": "dcd8d92745cd9ab716ef9c3cf5de5e250a8fb9ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
