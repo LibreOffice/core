@@ -69,6 +69,30 @@
       "revId": "dcd8d92745cd9ab716ef9c3cf5de5e250a8fb9ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_e5118055",
+        "filename": "vcl/unx/generic/gdi/salbmp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-09-17T13:54:33Z",
+      "side": 1,
+      "message": "I mean since \"nScanlineBase\" will be already divided by 8 + round up with your patch, shouldn\u0027t the test be now:\nif (pDIB-\u003emnScanlineSize \u003c nScanlineBase)\n{...",
+      "parentUuid": "7f7f9b97_aa06f71f",
+      "range": {
+        "startLine": 198,
+        "startChar": 31,
+        "endLine": 198,
+        "endChar": 46
+      },
+      "revId": "dcd8d92745cd9ab716ef9c3cf5de5e250a8fb9ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
