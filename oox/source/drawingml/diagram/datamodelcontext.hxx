@@ -20,10 +20,8 @@
 #ifndef INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_DATAMODELCONTEXT_HXX
 #define INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_DATAMODELCONTEXT_HXX
 
-#include <com/sun/star/drawing/XShapes.hpp>
-
 #include <oox/core/contexthandler2.hxx>
-#include "diagram.hxx"
+#include "datamodel.hxx"
 
 namespace oox { namespace drawingml {
 
