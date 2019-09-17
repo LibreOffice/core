@@ -121,8 +121,8 @@ IMPL_LINK(SvxFontSubstTabPage, HeaderBarClick, int, nColumn, void)
 
 void SvxFontSubstTabPage::setColSizes()
 {
-    int nW1 = m_xCheckLB->get_pixel_size(m_xCheckLB->get_column_title(4)).Width();
-    int nW2 = m_xCheckLB->get_pixel_size(m_xCheckLB->get_column_title(5)).Width();
+    int nW1 = m_xCheckLB->get_pixel_size(m_xCheckLB->get_column_title(3)).Width();
+    int nW2 = m_xCheckLB->get_pixel_size(m_xCheckLB->get_column_title(4)).Width();
     int nMax = std::max( nW1, nW2 ) + 6; // width of the longest header + a little offset
     int nMin = m_xCheckLB->get_checkbox_column_width();
     nMax = std::max(nMax, nMin);

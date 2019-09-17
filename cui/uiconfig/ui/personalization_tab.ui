@@ -66,16 +66,16 @@
                   <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">center</property>
                     <property name="margin_left">24</property>
                     <property name="margin_right">6</property>
-                    <property name="row_spacing">1</property>
-                    <property name="column_spacing">1</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">6</property>
                     <child>
-                      <object class="GtkButton" id="default1">
+                      <object class="GtkToggleButton" id="default1">
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
+                        <property name="always_show_image">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -83,11 +83,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="default0">
+                      <object class="GtkToggleButton" id="default0">
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
+                        <property name="always_show_image">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -95,11 +94,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="default2">
+                      <object class="GtkToggleButton" id="default2">
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
+                        <property name="always_show_image">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -107,11 +105,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="default3">
+                      <object class="GtkToggleButton" id="default3">
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
+                        <property name="always_show_image">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -119,11 +116,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="default4">
+                      <object class="GtkToggleButton" id="default4">
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
+                        <property name="always_show_image">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -131,11 +127,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="default5">
+                      <object class="GtkToggleButton" id="default5">
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
+                        <property name="always_show_image">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -143,11 +138,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="default6">
+                      <object class="GtkToggleButton" id="default6">
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
+                        <property name="always_show_image">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -155,11 +149,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="default7">
+                      <object class="GtkToggleButton" id="default7">
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
+                        <property name="always_show_image">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -167,11 +160,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="default8">
+                      <object class="GtkToggleButton" id="default8">
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
+                        <property name="always_show_image">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>

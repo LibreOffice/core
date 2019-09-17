@@ -470,16 +470,15 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 
 void SvxJavaOptionsPage::RequestRestart(svtools::RestartReason eReason)
 {
-    VclPtr<OfaTreeOptionsDialog> xParentDlg(static_cast<OfaTreeOptionsDialog*>(GetParentDialog()));
-    if (xParentDlg)
-        xParentDlg->SetNeedsRestart(eReason);
+    OfaTreeOptionsDialog* pParentDlg(static_cast<OfaTreeOptionsDialog*>(GetDialogController()));
+    if (pParentDlg)
+        pParentDlg->SetNeedsRestart(eReason);
 }
 
 VclPtr<SfxTabPage> SvxJavaOptionsPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<SvxJavaOptionsPage>::Create( pParent, *rAttrSet );
 }
-
 
 bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
 {
