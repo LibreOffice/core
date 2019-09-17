@@ -2248,9 +2248,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf105330)
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     rUndoManager.Undo();
 
-    //  Without the accompanying fix in place, height was only 1 twips (practically invisible).
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(276),
-                         pWrtShell->GetVisibleCursor()->GetTextCursor().GetSize().getHeight());
+    //  Without the accompanying fix in place, height was only 1 twips (practically invisible), with
+    // the fix in place it is seen to be either 271 or 276 for different builds:
+    CPPUNIT_ASSERT_GREATEREQUAL(
+        static_cast<long>(271),
+        pWrtShell->GetVisibleCursor()->GetTextCursor().GetSize().getHeight());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
