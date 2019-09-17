@@ -39,15 +39,16 @@
 #include <unx/gstsink.hxx>
 #include <vcl/ImageTree.hxx>
 #include <vcl/button.hxx>
+#include <vcl/event.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/syswin.hxx>
-#include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/event.hxx>
+#include <vcl/weld.hxx>
+#include <vcl/wrkwin.hxx>
 #include <window.h>
 #include <numeric>
 
@@ -2663,6 +2664,32 @@ public:
     virtual void recursively_unset_default_buttons() override
     {
         implResetDefault(GTK_WIDGET(m_pContainer), nullptr);
+    }
+
+    virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() override
+    {
+        // This will cause a GtkSalFrame to be created. With WB_SYSTEMCHILDWINDOW set it
+        // will create a toplevel GtkEventBox window
+        auto xEmbedWindow = VclPtr<WorkWindow>::Create(ImplGetDefaultWindow(), WB_SYSTEMCHILDWINDOW | WB_DIALOGCONTROL | WB_CHILDDLGCTRL);
+        SalFrame* pFrame = xEmbedWindow->ImplGetFrame();
+        GtkSalFrame* pGtkFrame = dynamic_cast<GtkSalFrame*>(pFrame);
+
+        // relocate that toplevel GtkEventBox into this widget
+        GtkWidget* pWindow = pGtkFrame->getWindow();
+
+        GtkWidget* pParent = gtk_widget_get_parent(pWindow);
+
+        g_object_ref(pWindow);
+        gtk_container_remove(GTK_CONTAINER(pParent), pWindow);
+        gtk_container_add(m_pContainer, pWindow);
+        gtk_container_child_set(m_pContainer, pWindow, "expand", true, "fill", true, nullptr);
+        gtk_widget_set_hexpand(pWindow, true);
+        gtk_widget_set_vexpand(pWindow, true);
+        g_object_unref(pWindow);
+
+        xEmbedWindow->Show();
+        css::uno::Reference<css::awt::XWindow> xWindow(xEmbedWindow->GetComponentInterface(), css::uno::UNO_QUERY);
+        return xWindow;
     }
 };
 
@@ -9961,9 +9988,13 @@ public:
             gtk_widget_set_size_request(m_pWidget, min, -1);
             int nNonCellWidth = get_preferred_size().Width() - min;
 
-            // now set the cell to the max width which it can be within the
-            // requested widget width
-            gtk_cell_renderer_set_fixed_size(cell, nWidth - nNonCellWidth, -1);
+            int nCellWidth = nWidth - nNonCellWidth;
+            if (nCellWidth >= 0)
+            {
+                // now set the cell to the max width which it can be within the
+                // requested widget width
+                gtk_cell_renderer_set_fixed_size(cell, nWidth - nNonCellWidth, -1);
+            }
         }
         else
         {
