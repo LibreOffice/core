@@ -3999,7 +3999,8 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
     for (sal_Int32 nUtf16Offset = 0; nUtf16Offset < rText.getLength(); rText.iterateCodePoints(&nUtf16Offset))
         aUtf16Offsets.push_back(nUtf16Offset);
 
-    int nUtf32Len = aUtf16Offsets.size();
+    sal_Int32 nUtf32Len = aUtf16Offsets.size();
+        // from the above loop filling aUtf16Offsets, we know that its size() fits into sal_Int32
     aUtf16Offsets.push_back(rText.getLength());
 
     // sanitize the CurPos which is in utf-32
@@ -4040,8 +4041,8 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
         sal_Int32 nUtf32End = g_utf8_pointer_to_offset(pText, pText + nUtf8End);
 
         // sanitize the utf32 range
-        nUtf32Start = std::min(nUtf32Start, sal_Int32(nUtf32Len));
-        nUtf32End = std::min(nUtf32End, sal_Int32(nUtf32Len));
+        nUtf32Start = std::min(nUtf32Start, nUtf32Len);
+        nUtf32End = std::min(nUtf32End, nUtf32Len);
         if (nUtf32Start >= nUtf32End)
             continue;
 
