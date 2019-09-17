@@ -2892,6 +2892,13 @@ void RadioButton::ShowFocus(const tools::Rectangle& rRect)
     Button::ShowFocus(rRect);
 }
 
+boost::property_tree::ptree RadioButton::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(Button::DumpAsPropertyTree());
+    aTree.put("checked", IsChecked());
+    return aTree;
+}
+
 FactoryFunction RadioButton::GetUITestFactory() const
 {
     return RadioButtonUIObject::create;
@@ -3709,6 +3716,13 @@ void CheckBox::ShowFocus(const tools::Rectangle& rRect)
                           ControlState::FOCUSED, aControlValue, OUString());
     }
     Button::ShowFocus(rRect);
+}
+
+boost::property_tree::ptree CheckBox::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(Button::DumpAsPropertyTree());
+    aTree.put("checked", IsChecked());
+    return aTree;
 }
 
 FactoryFunction CheckBox::GetUITestFactory() const
