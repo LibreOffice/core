@@ -120,6 +120,24 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_a5b7083b",
+        "filename": "configmgr/source/writemodfile.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-09-17T15:36:15Z",
+      "side": 1,
+      "message": "I think there\u0027s a difference between providing a conversion from OStringNumber to string_view and duplicating OString::toAsciiUpperCase for OStringNumber.  But I in no way meant to be anal on this topic.  It was just what occurred to me when I browsed through this change.",
+      "parentUuid": "7f7f9b97_e5ad00eb",
+      "revId": "c721e5cc294bb5393a298ced968cba103051ed2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_fcccc162",
         "filename": "include/rtl/stringconcat.hxx",
         "patchSetId": 2
