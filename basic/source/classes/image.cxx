@@ -57,8 +57,6 @@ void SbiImage::Clear()
     pStrings.reset();
     pCode.reset();
     pLegacyPCode.reset();
-    pStrings   = nullptr;
-    pCode      = nullptr;
     nFlags     = SbiImageFlags::NONE;
     nStringSize= 0;
     nLegacyCodeSize  = 0;
