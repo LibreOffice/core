@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_5fefe786",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3109,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-09-17T07:12:23Z",
+      "side": 1,
+      "message": "this can be \n    aStr.append(aCellStr).append( u\"\\x0001\");",
+      "revId": "ed965239cf7258dca933617b2d25dff1a63ac437",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
