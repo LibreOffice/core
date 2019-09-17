@@ -66,7 +66,7 @@ bool StringBuffer::VisitCXXMemberCallExpr(CXXMemberCallExpr const* memberCallExp
     return true;
 }
 
-loplugin::Plugin::Registration<StringBuffer> stringbuffer("stringbuffer");
+loplugin::Plugin::Registration<StringBuffer> stringbuffer("stringbuffer", false);
 
 } // namespace
 
