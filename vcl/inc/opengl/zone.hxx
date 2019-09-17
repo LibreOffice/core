@@ -14,7 +14,6 @@
 #include <sal/types.h>
 #include <vcl/dllapi.h>
 
-class OpenGLZoneTest;
 class OpenGLWatchdogThread;
 
 /**
@@ -22,7 +21,6 @@ class OpenGLWatchdogThread;
  * from the OpenGL code, so use this helper to track that.
  */
 class VCL_DLLPUBLIC OpenGLZone {
-    friend class OpenGLZoneTest;
     friend class OpenGLWatchdogThread;
     friend class OpenGLSalGraphicsImpl;
 

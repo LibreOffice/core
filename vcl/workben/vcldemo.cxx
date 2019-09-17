@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <config_features.h>
 
 #include <math.h>
@@ -2019,12 +2023,6 @@ public:
     }
 };
 
-class OpenGLZoneTest {
-public:
-    static void enter() { OpenGLZone::enter(); }
-    static void leave() { OpenGLZone::leave(); }
-};
-
 IMPL_LINK_NOARG(DemoWidgets, GLTestClick, Button*, void)
 {
     sal_Int32 nSelected = mpGLCombo->GetSelectedEntryPos();
@@ -2045,14 +2043,13 @@ IMPL_LINK_NOARG(DemoWidgets, GLTestClick, Button*, void)
         break;
     }
 
-    bool bEnterLeave = mpGLCheck->IsChecked();
-    if (bEnterLeave)
-        OpenGLZoneTest::enter();
+    // Only create OpenGLZone RAII object if asked for:
+    std::unique_ptr<OpenGLZone> zone;
+    if (mpGLCheck->IsChecked()) {
+        zone.reset(new OpenGLZone);
+    }
 
     osl::Thread::wait(std::chrono::seconds(nDelaySeconds));
-
-    if (bEnterLeave)
-        OpenGLZoneTest::leave();
 }
 
 IMPL_LINK(DemoWidgets, CursorButtonClick, Button*, pButton, void)
