@@ -2079,14 +2079,18 @@ struct DialogRunner
 
     void inc_modal_count()
     {
-        if (m_xFrameWindow)
+        if (m_xFrameWindow) {
             m_xFrameWindow->IncModalCount();
+            m_xFrameWindow->ImplGetFrame()->NotifyModalHierarchy(true);
+        }
     }
 
     void dec_modal_count()
     {
-        if (m_xFrameWindow)
+        if (m_xFrameWindow) {
             m_xFrameWindow->DecModalCount();
+            m_xFrameWindow->ImplGetFrame()->NotifyModalHierarchy(false);
+        }
     }
 
     // same as gtk_dialog_run except that unmap doesn't auto-respond
