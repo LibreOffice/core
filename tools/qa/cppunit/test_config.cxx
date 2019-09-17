@@ -27,10 +27,9 @@ public:
         maOriginalConfigFile = m_directories.getURLFromSrc("/tools/qa/data/");
         maOriginalConfigFile += "testconfig.ini";
 
-        if (osl::FileBase::getTempDirURL(maConfigFile) == osl::File::RC::E_None)
-            maConfigFile += "/config.ini";
-        else
-            assert(false && "cannot create temp folder");
+        auto const e = osl::FileBase::getTempDirURL(maConfigFile);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("cannot create temp folder", osl::File::RC::E_None, e);
+        maConfigFile += "/config.ini";
 
         osl::File::copy(maOriginalConfigFile, maConfigFile);
     }
