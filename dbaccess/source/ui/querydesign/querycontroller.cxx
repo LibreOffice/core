@@ -75,7 +75,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include <vcl/button.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <osl/mutex.hxx>
@@ -1613,7 +1613,7 @@ short OQueryController::saveModified()
         std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(getFrameWeld(),
                                                        VclMessageType::Question, VclButtonsType::YesNo,
                                                        sMessageText));
-        xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+        xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
         xQueryBox->set_default_response(RET_YES);
 
         nRet = xQueryBox->run();

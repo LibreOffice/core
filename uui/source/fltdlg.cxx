@@ -25,7 +25,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <tools/urlobj.hxx>
 
-#include <vcl/button.hxx>
 #include <osl/file.hxx>
 #include <vcl/svapp.hxx>
 

@@ -495,8 +495,8 @@ namespace dbaui
                             std::unique_ptr<weld::MessageDialog> xWhatToDo(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                            VclMessageType::Question, VclButtonsType::NONE,
                                                                            sQuery));
-                            xWhatToDo->add_button(Button::GetStandardText(StandardButtonType::Retry), RET_RETRY);
-                            xWhatToDo->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+                            xWhatToDo->add_button(GetStandardText(StandardButtonType::Retry), RET_RETRY);
+                            xWhatToDo->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
                             xWhatToDo->set_default_response(RET_RETRY);
                             nQueryResult = xWhatToDo->run();
                             m_bUserGrabFocus = true;

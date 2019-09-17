@@ -18,9 +18,9 @@
  */
 
 #include <tools/debug.hxx>
-#include <vcl/button.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/app.hxx>
 #include <svx/fmsrccfg.hxx>
@@ -71,7 +71,7 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
 FmSearchDialog::FmSearchDialog(weld::Window* pParent, const OUString& sInitialText, const std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
     const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier)
     : GenericDialogController(pParent, "cui/ui/fmsearchdialog.ui", "RecordSearchDialog")
-    , m_sCancel( Button::GetStandardText( StandardButtonType::Cancel ) )
+    , m_sCancel( GetStandardText( StandardButtonType::Cancel ) )
     , m_lnkContextSupplier(lnkContextSupplier)
     , m_prbSearchForText(m_xBuilder->weld_radio_button("rbSearchForText"))
     , m_prbSearchForNull(m_xBuilder->weld_radio_button("rbSearchForNull"))

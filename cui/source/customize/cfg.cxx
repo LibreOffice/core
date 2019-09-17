@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <typeinfo>
 
-#include <vcl/button.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/event.hxx>
@@ -2981,11 +2981,11 @@ namespace
             : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Warning, VclButtonsType::NONE, ReplaceIconName(rMessage)))
         {
             m_xQueryBox->set_title(CuiResId(RID_SVXSTR_REPLACE_ICON_CONFIRM));
-            m_xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Yes), 2);
+            m_xQueryBox->add_button(GetStandardText(StandardButtonType::Yes), 2);
             if (bYestoAll)
                 m_xQueryBox->add_button(CuiResId(RID_SVXSTR_YESTOALL), 5);
-            m_xQueryBox->add_button(Button::GetStandardText(StandardButtonType::No), 4);
-            m_xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), 6);
+            m_xQueryBox->add_button(GetStandardText(StandardButtonType::No), 4);
+            m_xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), 6);
             m_xQueryBox->set_default_response(2);
         }
         short run() { return m_xQueryBox->run(); }

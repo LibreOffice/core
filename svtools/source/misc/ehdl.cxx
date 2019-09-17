@@ -18,7 +18,7 @@
  */
 
 #include <unotools/resmgr.hxx>
-#include <vcl/button.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
@@ -98,7 +98,7 @@ static DialogMask aWndFunc(
                                               eMessageType, eButtonsType, aErr));
 
     if (bAddRetry)
-        xBox->add_button(Button::GetStandardText(StandardButtonType::Retry), RET_RETRY);
+        xBox->add_button(GetStandardText(StandardButtonType::Retry), RET_RETRY);
 
     switch(nFlags & DialogMask(0x0f00))
     {

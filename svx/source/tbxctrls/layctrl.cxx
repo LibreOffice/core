@@ -18,8 +18,9 @@
  */
 
 #include <string>
-#include <vcl/toolbox.hxx>
 #include <vcl/button.hxx>
+#include <vcl/toolbox.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -660,7 +661,7 @@ void ColumnsWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     if (nCol)
         aText = OUString::number(nCol);
     else
-        aText = Button::GetStandardText(StandardButtonType::Cancel).replaceAll("~", "");
+        aText = GetStandardText(StandardButtonType::Cancel).replaceAll("~", "");
 
     Size aTextSize(rRenderContext.GetTextWidth(aText), rRenderContext.GetTextHeight());
     rRenderContext.DrawText(Point((aSize.Width() - aTextSize.Width()) / 2, aSize.Height() - nTextHeight + 2), aText);
