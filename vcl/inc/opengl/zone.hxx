@@ -14,6 +14,10 @@
 #include <sal/types.h>
 #include <vcl/dllapi.h>
 
+#include <atomic>
+#include <csignal>
+#include <type_traits>
+
 class OpenGLWatchdogThread;
 
 /**
@@ -24,10 +28,20 @@ class VCL_DLLPUBLIC OpenGLZone {
     friend class OpenGLWatchdogThread;
     friend class OpenGLSalGraphicsImpl;
 
+    // gnEnterCount and gnLeaveCount are accessed both from multiple threads (cf.
+    // OpenGLWatchdogThread::execute; so need to be of atomic type) and from signal handlers (cf.
+    // VCLExceptionSignal_impl; so need to be of lock-free atomic type).  sig_atomic_t is chosen as
+    // the underlying type under the assumption that it is most likely to lead to an atomic type
+    // that is actually lock-free.  However, gnEnterCount and gnLeaveCount are both monotonically
+    // increasing, so will eventually overflow, so the underlying type better be unsigned, which
+    // sig_atomic_t is not guaranteed to be:
+    using AtomicCounter = std::atomic<std::make_unsigned_t<std::sig_atomic_t>>;
+    static_assert(AtomicCounter::is_always_lock_free);
+
     /// how many times have we entered a GL zone
-    static volatile sal_uInt64 gnEnterCount;
+    static AtomicCounter gnEnterCount;
     /// how many times have we left a new GL zone
-    static volatile sal_uInt64 gnLeaveCount;
+    static AtomicCounter gnLeaveCount;
 
     static void enter() { gnEnterCount++; }
     static void leave() { gnLeaveCount++; }

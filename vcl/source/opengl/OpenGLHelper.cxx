@@ -44,8 +44,8 @@
 #endif
 
 static bool volatile gbInShaderCompile = false;
-sal_uInt64 volatile OpenGLZone::gnEnterCount = 0;
-sal_uInt64 volatile OpenGLZone::gnLeaveCount = 0;
+OpenGLZone::AtomicCounter OpenGLZone::gnEnterCount = 0;
+OpenGLZone::AtomicCounter OpenGLZone::gnLeaveCount = 0;
 
 namespace {
 
