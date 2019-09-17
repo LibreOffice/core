@@ -2238,13 +2238,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf105330)
 
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
-    uno::Sequence<beans::PropertyValue> aTableArgs = {
-        comphelper::makePropertyValue("Rows", static_cast<sal_uInt16>(1)),
-        comphelper::makePropertyValue("Columns", static_cast<sal_uInt16>(1)),
-    };
-    lcl_dispatchCommand(mxComponent, ".uno:InsertTable", aTableArgs);
-
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    SfxUInt16Item aRows(SID_ATTR_TABLE_ROW, 1);
+    SfxUInt16Item aColumns(SID_ATTR_TABLE_COLUMN, 1);
+    pView->GetViewFrame()->GetDispatcher()->ExecuteList(FN_INSERT_TABLE, SfxCallMode::SYNCHRON,
+                                                        { &aRows, &aColumns });
+
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     rUndoManager.Undo();
 
