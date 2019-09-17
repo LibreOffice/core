@@ -16,6 +16,24 @@
       "revId": "ed965239cf7258dca933617b2d25dff1a63ac437",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_1fe96f7f",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3109,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-17T07:16:58Z",
+      "side": 1,
+      "message": "Yes this can; but that is less efficient than what I wrote: the \u0027aCellStr + \"\"u\"\\x0001\"\u0027 expression gives an OUStringConcat which holds the references to the strings and doesn\u0027t allocate any memory; the OUStringBuffer has a dedicated overload of append() for the OUStringConcat, which allocates only once for the combined concat length and then copies everything from the concat, instead of doing the append twice for each element... why the strange warning for a more efficient method?",
+      "parentUuid": "7f7f9b97_5fefe786",
+      "revId": "ed965239cf7258dca933617b2d25dff1a63ac437",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
