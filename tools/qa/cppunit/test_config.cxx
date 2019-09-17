@@ -30,7 +30,7 @@ public:
         if (osl::FileBase::getTempDirURL(maConfigFile) == osl::File::RC::E_None)
             maConfigFile += "/config.ini";
         else
-            assert("cannot create temp folder");
+            assert(false && "cannot create temp folder");
 
         osl::File::copy(maOriginalConfigFile, maConfigFile);
     }
