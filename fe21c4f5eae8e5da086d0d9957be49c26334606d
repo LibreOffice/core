@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_aa4ef7be",
+        "filename": "desktop/win32/source/loader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-09-17T12:33:58Z",
+      "side": 1,
+      "message": "From the std:\n\nbasic_fstream( const char* filename,std::ios_base::openmode mode \u003d ios_base::in|ios_base::out);\n\nSo it\u0027s not really \"For odd reasons\". Maybe easier to just override the default openmode?",
+      "revId": "fe21c4f5eae8e5da086d0d9957be49c26334606d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
