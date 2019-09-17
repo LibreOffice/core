@@ -44,37 +44,34 @@ static const sal_Unicode cDelimiter = ',';
 
 // Benutzerdefinierte Listen:
 
-ScTpUserLists::ScTpUserLists( vcl::Window*               pParent,
+ScTpUserLists::ScTpUserLists( TabPageParent pParent,
                               const SfxItemSet&     rCoreAttrs )
-
-    :   SfxTabPage      ( pParent,
-                          "OptSortLists", "modules/scalc/ui/optsortlists.ui",
-                          &rCoreAttrs ),
-        aStrQueryRemove ( ScResId( STR_QUERYREMOVE ) ),
-        aStrCopyList    ( ScResId( STR_COPYLIST ) ),
-        aStrCopyFrom    ( ScResId( STR_COPYFROM ) ),
-        aStrCopyErr     ( ScResId( STR_COPYERR ) ),
-        nWhichUserLists ( GetWhich( SID_SCUSERLISTS ) ),
-        pDoc            ( nullptr ),
-        pViewData       ( nullptr ),
-        bModifyMode     ( false ),
-        bCancelMode     ( false ),
-        bCopyDone       ( false ),
-        nCancelPos      ( 0 )
+    : SfxTabPage(pParent, "modules/scalc/ui/optsortlists.ui", "OptSortLists",
+                          &rCoreAttrs )
+    , mxFtLists(m_xBuilder->weld_label("listslabel"))
+    , mxLbLists(m_xBuilder->weld_tree_view("lists"))
+    , mxFtEntries(m_xBuilder->weld_label("entrieslabel"))
+    , mxEdEntries(m_xBuilder->weld_text_view("entries"))
+    , mxFtCopyFrom(m_xBuilder->weld_label("copyfromlabel"))
+    , mxEdCopyFrom(m_xBuilder->weld_entry("copyfrom"))
+    , mxBtnNew(m_xBuilder->weld_button("new"))
+    , mxBtnDiscard(m_xBuilder->weld_button("discard"))
+    , mxBtnAdd(m_xBuilder->weld_button("add"))
+    , mxBtnModify(m_xBuilder->weld_button("modify"))
+    , mxBtnRemove(m_xBuilder->weld_button("delete"))
+    , mxBtnCopy(m_xBuilder->weld_button("copy"))
+    , aStrQueryRemove ( ScResId( STR_QUERYREMOVE ) )
+    , aStrCopyList    ( ScResId( STR_COPYLIST ) )
+    , aStrCopyFrom    ( ScResId( STR_COPYFROM ) )
+    , aStrCopyErr     ( ScResId( STR_COPYERR ) )
+    , nWhichUserLists ( GetWhich( SID_SCUSERLISTS ) )
+    , pDoc            ( nullptr )
+    , pViewData       ( nullptr )
+    , bModifyMode     ( false )
+    , bCancelMode     ( false )
+    , bCopyDone       ( false )
+    , nCancelPos      ( 0 )
 {
-    get(mpFtLists, "listslabel");
-    get(mpLbLists, "lists");
-    get(mpFtEntries, "entrieslabel");
-    get(mpEdEntries, "entries");
-    get(mpFtCopyFrom, "copyfromlabel");
-    get(mpEdCopyFrom, "copyfrom");
-    get(mpBtnNew, "new");
-    get(mpBtnDiscard, "discard");
-    get(mpBtnAdd, "add");
-    get(mpBtnModify, "modify");
-    get(mpBtnRemove, "delete");
-    get(mpBtnCopy, "copy");
-
     SetExchangeSupport();
     Init();
     Reset(&rCoreAttrs);
@@ -82,25 +79,6 @@ ScTpUserLists::ScTpUserLists( vcl::Window*               pParent,
 
 ScTpUserLists::~ScTpUserLists()
 {
-    disposeOnce();
-}
-
-void ScTpUserLists::dispose()
-{
-    pUserLists.reset();
-    mpFtLists.clear();
-    mpLbLists.clear();
-    mpFtEntries.clear();
-    mpEdEntries.clear();
-    mpFtCopyFrom.clear();
-    mpEdCopyFrom.clear();
-    mpBtnNew.clear();
-    mpBtnDiscard.clear();
-    mpBtnAdd.clear();
-    mpBtnModify.clear();
-    mpBtnRemove.clear();
-    mpBtnCopy.clear();
-    SfxTabPage::dispose();
 }
 
 void ScTpUserLists::Init()
@@ -108,13 +86,13 @@ void ScTpUserLists::Init()
     SfxViewShell*   pSh = SfxViewShell::Current();
     ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( pSh );
 
-    mpLbLists->SetSelectHdl   ( LINK( this, ScTpUserLists, LbSelectHdl ) );
-    mpBtnNew->SetClickHdl     ( LINK( this, ScTpUserLists, BtnClickHdl ) );
-    mpBtnDiscard->SetClickHdl ( LINK( this, ScTpUserLists, BtnClickHdl ) );
-    mpBtnAdd->SetClickHdl     ( LINK( this, ScTpUserLists, BtnClickHdl ) );
-    mpBtnModify->SetClickHdl  ( LINK( this, ScTpUserLists, BtnClickHdl ) );
-    mpBtnRemove->SetClickHdl  ( LINK( this, ScTpUserLists, BtnClickHdl ) );
-    mpEdEntries->SetModifyHdl ( LINK( this, ScTpUserLists, EdEntriesModHdl ) );
+    mxLbLists->connect_changed   ( LINK( this, ScTpUserLists, LbSelectHdl ) );
+    mxBtnNew->connect_clicked     ( LINK( this, ScTpUserLists, BtnClickHdl ) );
+    mxBtnDiscard->connect_clicked ( LINK( this, ScTpUserLists, BtnClickHdl ) );
+    mxBtnAdd->connect_clicked     ( LINK( this, ScTpUserLists, BtnClickHdl ) );
+    mxBtnModify->connect_clicked  ( LINK( this, ScTpUserLists, BtnClickHdl ) );
+    mxBtnRemove->connect_clicked  ( LINK( this, ScTpUserLists, BtnClickHdl ) );
+    mxEdEntries->connect_changed ( LINK( this, ScTpUserLists, EdEntriesModHdl ) );
 
     if ( pViewSh )
     {
@@ -138,21 +116,21 @@ void ScTpUserLists::Init()
         aStrSelectedArea = ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab
                 ).Format(ScRefFlags::RANGE_ABS_3D, pDoc);
 
-        mpBtnCopy->SetClickHdl ( LINK( this, ScTpUserLists, BtnClickHdl ) );
-        mpBtnCopy->Enable();
+        mxBtnCopy->connect_clicked ( LINK( this, ScTpUserLists, BtnClickHdl ) );
+        mxBtnCopy->set_sensitive(true);
     }
     else
     {
-        mpBtnCopy->Disable();
-        mpFtCopyFrom->Disable();
-        mpEdCopyFrom->Disable();
+        mxBtnCopy->set_sensitive(false);
+        mxFtCopyFrom->set_sensitive(false);
+        mxEdCopyFrom->set_sensitive(false);
     }
 
 }
 
 VclPtr<SfxTabPage> ScTpUserLists::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<ScTpUserLists>::Create( pParent.pParent, *rAttrSet );
+    return VclPtr<ScTpUserLists>::Create(pParent, *rAttrSet);
 }
 
 void ScTpUserLists::Reset( const SfxItemSet* rCoreAttrs )
@@ -172,36 +150,36 @@ void ScTpUserLists::Reset( const SfxItemSet* rCoreAttrs )
 
         if ( UpdateUserListBox() > 0 )
         {
-            mpLbLists->SelectEntryPos( 0 );
+            mxLbLists->select( 0 );
             UpdateEntries( 0 );
         }
     }
     else if ( !pUserLists )
         pUserLists.reset( new ScUserList );
 
-    mpEdCopyFrom->SetText( aStrSelectedArea );
+    mxEdCopyFrom->set_text( aStrSelectedArea );
 
-    if ( mpLbLists->GetEntryCount() == 0 )
+    if ( mxLbLists->n_children() == 0 )
     {
-        mpFtLists->Disable();
-        mpLbLists->Disable();
-        mpFtEntries->Disable();
-        mpEdEntries->Disable();
-        mpBtnRemove->Disable();
+        mxFtLists->set_sensitive(false);
+        mxLbLists->set_sensitive(false);
+        mxFtEntries->set_sensitive(false);
+        mxEdEntries->set_sensitive(false);
+        mxBtnRemove->set_sensitive(false);
     }
 
-    mpBtnNew->Show();
-    mpBtnDiscard->Hide();
-    mpBtnAdd->Show();
-    mpBtnModify->Hide();
-    mpBtnAdd->Disable();
-    mpBtnModify->Disable();
+    mxBtnNew->show();
+    mxBtnDiscard->hide();
+    mxBtnAdd->show();
+    mxBtnModify->hide();
+    mxBtnAdd->set_sensitive(false);
+    mxBtnModify->set_sensitive(false);
 
     if ( !bCopyDone && pViewData )
     {
-        mpFtCopyFrom->Enable();
-        mpEdCopyFrom->Enable();
-        mpBtnCopy->Enable();
+        mxFtCopyFrom->set_sensitive(true);
+        mxEdCopyFrom->set_sensitive(true);
+        mxBtnCopy->set_sensitive(true);
     }
 }
 
@@ -211,7 +189,7 @@ bool ScTpUserLists::FillItemSet( SfxItemSet* rCoreAttrs )
     // -> simulate click of Add-Button
 
     if ( bModifyMode || bCancelMode )
-        BtnClickHdl( mpBtnAdd );
+        BtnClickHdl(*mxBtnAdd);
 
     const ScUserListItem& rUserListItem = static_cast<const ScUserListItem&>(
                                            GetItemSet().Get( nWhichUserLists ));
@@ -254,7 +232,7 @@ DeactivateRC ScTpUserLists::DeactivatePage( SfxItemSet* pSetP )
 
 size_t ScTpUserLists::UpdateUserListBox()
 {
-    mpLbLists->Clear();
+    mxLbLists->clear();
 
     if ( !pUserLists ) return 0;
 
@@ -265,7 +243,7 @@ size_t ScTpUserLists::UpdateUserListBox()
     {
         aEntry = (*pUserLists)[i].GetString();
         OSL_ENSURE( !aEntry.isEmpty(), "Empty UserList-entry :-/" );
-        mpLbLists->InsertEntry( aEntry );
+        mxLbLists->append_text( aEntry );
     }
 
     return nCount;
@@ -288,7 +266,7 @@ void ScTpUserLists::UpdateEntries( size_t nList )
             aEntryListStr.append(rList.GetSubStr(i));
         }
 
-        mpEdEntries->SetText(convertLineEnd(aEntryListStr.makeStringAndClear(), GetSystemLineEnd()));
+        mxEdEntries->set_text(convertLineEnd(aEntryListStr.makeStringAndClear(), GetSystemLineEnd()));
     }
     else
     {
@@ -454,20 +432,20 @@ void ScTpUserLists::RemoveList( size_t nList )
 
 // Handler:
 
-IMPL_LINK( ScTpUserLists, LbSelectHdl, ListBox&, rLb, void )
+IMPL_LINK( ScTpUserLists, LbSelectHdl, weld::TreeView&, rLb, void )
 {
-    if ( &rLb == mpLbLists )
+    if ( &rLb == mxLbLists.get() )
     {
-        sal_Int32 nSelPos = mpLbLists->GetSelectedEntryPos();
-        if ( nSelPos != LISTBOX_ENTRY_NOTFOUND )
+        sal_Int32 nSelPos = mxLbLists->get_selected_index();
+        if ( nSelPos != -1 )
         {
-            if ( !mpFtEntries->IsEnabled() )  mpFtEntries->Enable();
-            if ( !mpEdEntries->IsEnabled() )  mpEdEntries->Enable();
-            if ( !mpBtnRemove->IsEnabled() )  mpBtnRemove->Enable();
-            if ( mpBtnAdd->IsEnabled() )
+            if ( !mxFtEntries->get_sensitive() )  mxFtEntries->set_sensitive(true);
+            if ( !mxEdEntries->get_sensitive() )  mxEdEntries->set_sensitive(true);
+            if ( !mxBtnRemove->get_sensitive() )  mxBtnRemove->set_sensitive(true);
+            if ( mxBtnAdd->get_sensitive() )
             {
-                mpBtnAdd->Disable();
-                mpBtnModify->Disable();
+                mxBtnAdd->set_sensitive(false);
+                mxBtnModify->set_sensitive(false);
             }
 
             UpdateEntries( nSelPos );
@@ -475,70 +453,70 @@ IMPL_LINK( ScTpUserLists, LbSelectHdl, ListBox&, rLb, void )
     }
 }
 
-IMPL_LINK( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
+IMPL_LINK( ScTpUserLists, BtnClickHdl, weld::Button&, rBtn, void )
 {
-    if ( pBtn == mpBtnNew || pBtn == mpBtnDiscard )
+    if (&rBtn == mxBtnNew.get() || &rBtn == mxBtnDiscard.get())
     {
         if ( !bCancelMode )
         {
-            nCancelPos = ( mpLbLists->GetEntryCount() > 0 )
-                            ? mpLbLists->GetSelectedEntryPos()
+            nCancelPos = ( mxLbLists->n_children() > 0 )
+                            ? mxLbLists->get_selected_index()
                             : 0;
-            mpLbLists->SetNoSelection();
-            mpFtLists->Disable();
-            mpLbLists->Disable();
-            mpFtEntries->Enable();
-            mpEdEntries->Enable();
-            mpEdEntries->SetText( EMPTY_OUSTRING );
-            mpEdEntries->GrabFocus();
-            mpBtnAdd->Disable();
-            mpBtnModify->Disable();
-            mpBtnRemove->Disable();
+            mxLbLists->unselect_all();
+            mxFtLists->set_sensitive(false);
+            mxLbLists->set_sensitive(false);
+            mxFtEntries->set_sensitive(true);
+            mxEdEntries->set_sensitive(true);
+            mxEdEntries->set_text( EMPTY_OUSTRING );
+            mxEdEntries->grab_focus();
+            mxBtnAdd->set_sensitive(false);
+            mxBtnModify->set_sensitive(false);
+            mxBtnRemove->set_sensitive(false);
 
-            if ( mpBtnCopy->IsEnabled() )
+            if ( mxBtnCopy->get_sensitive() )
             {
-                mpBtnCopy->Disable();
-                mpFtCopyFrom->Disable();
-                mpEdCopyFrom->Disable();
+                mxBtnCopy->set_sensitive(false);
+                mxFtCopyFrom->set_sensitive(false);
+                mxEdCopyFrom->set_sensitive(false);
             }
-            mpBtnNew->Hide();
-            mpBtnDiscard->Show();
+            mxBtnNew->hide();
+            mxBtnDiscard->show();
             bCancelMode = true;
         }
         else // if ( bCancelMode )
         {
-            if ( mpLbLists->GetEntryCount() > 0 )
+            if ( mxLbLists->n_children() > 0 )
             {
-                mpLbLists->SelectEntryPos( nCancelPos );
-                LbSelectHdl( *mpLbLists );
-                mpFtLists->Enable();
-                mpLbLists->Enable();
+                mxLbLists->select( nCancelPos );
+                LbSelectHdl( *mxLbLists );
+                mxFtLists->set_sensitive(true);
+                mxLbLists->set_sensitive(true);
             }
             else
             {
-                mpFtEntries->Disable();
-                mpEdEntries->Disable();
-                mpEdEntries->SetText( EMPTY_OUSTRING );
-                mpBtnRemove->Disable();
+                mxFtEntries->set_sensitive(false);
+                mxEdEntries->set_sensitive(false);
+                mxEdEntries->set_text( EMPTY_OUSTRING );
+                mxBtnRemove->set_sensitive(false);
             }
-            mpBtnAdd->Disable();
-            mpBtnModify->Disable();
+            mxBtnAdd->set_sensitive(false);
+            mxBtnModify->set_sensitive(false);
 
             if ( pViewData && !bCopyDone )
             {
-                mpBtnCopy->Enable();
-                mpFtCopyFrom->Enable();
-                mpEdCopyFrom->Enable();
+                mxBtnCopy->set_sensitive(true);
+                mxFtCopyFrom->set_sensitive(true);
+                mxEdCopyFrom->set_sensitive(true);
             }
-            mpBtnNew->Show();
-            mpBtnDiscard->Hide();
+            mxBtnNew->show();
+            mxBtnDiscard->hide();
             bCancelMode = false;
             bModifyMode = false;
         }
     }
-    else if (pBtn == mpBtnAdd || pBtn == mpBtnModify)
+    else if (&rBtn == mxBtnAdd.get() || &rBtn == mxBtnModify.get())
     {
-        OUString theEntriesStr( mpEdEntries->GetText() );
+        OUString theEntriesStr( mxEdEntries->get_text() );
 
         if ( !bModifyMode )
         {
@@ -546,74 +524,74 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
             {
                 AddNewList( theEntriesStr );
                 UpdateUserListBox();
-                mpLbLists->SelectEntryPos( mpLbLists->GetEntryCount()-1 );
-                LbSelectHdl( *mpLbLists );
-                mpFtLists->Enable();
-                mpLbLists->Enable();
+                mxLbLists->select( mxLbLists->n_children()-1 );
+                LbSelectHdl( *mxLbLists );
+                mxFtLists->set_sensitive(true);
+                mxLbLists->set_sensitive(true);
             }
             else
             {
-                if ( mpLbLists->GetEntryCount() > 0 )
+                if ( mxLbLists->n_children() > 0 )
                 {
-                    mpLbLists->SelectEntryPos( nCancelPos );
-                    LbSelectHdl( *mpLbLists );
-                    mpLbLists->Enable();
-                    mpLbLists->Enable();
+                    mxLbLists->select( nCancelPos );
+                    LbSelectHdl( *mxLbLists );
+                    mxLbLists->set_sensitive(true);
+                    mxLbLists->set_sensitive(true);
                 }
             }
 
-            mpBtnAdd->Disable();
-            mpBtnModify->Disable();
-            mpBtnRemove->Enable();
-            mpBtnNew->Show();
-            mpBtnDiscard->Hide();
+            mxBtnAdd->set_sensitive(false);
+            mxBtnModify->set_sensitive(false);
+            mxBtnRemove->set_sensitive(true);
+            mxBtnNew->show();
+            mxBtnDiscard->hide();
             bCancelMode = false;
         }
         else // if ( bModifyMode )
         {
-            sal_Int32 nSelList = mpLbLists->GetSelectedEntryPos();
+            sal_Int32 nSelList = mxLbLists->get_selected_index();
 
-            OSL_ENSURE( nSelList != LISTBOX_ENTRY_NOTFOUND, "Modify without List :-/" );
+            OSL_ENSURE( nSelList != -1 , "Modify without List :-/" );
 
             if ( !theEntriesStr.isEmpty() )
             {
                 ModifyList( nSelList, theEntriesStr );
                 UpdateUserListBox();
-                mpLbLists->SelectEntryPos( nSelList );
+                mxLbLists->select( nSelList );
             }
             else
             {
-                mpLbLists->SelectEntryPos( 0 );
-                LbSelectHdl( *mpLbLists );
+                mxLbLists->select( 0 );
+                LbSelectHdl( *mxLbLists );
             }
 
-            mpBtnNew->Show();
-            mpBtnDiscard->Hide();
+            mxBtnNew->show();
+            mxBtnDiscard->hide();
             bCancelMode = false;
-            mpBtnAdd->Show();
-            mpBtnModify->Show();
-            mpBtnAdd->Disable();
-            mpBtnModify->Disable();
+            mxBtnAdd->show();
+            mxBtnModify->show();
+            mxBtnAdd->set_sensitive(false);
+            mxBtnModify->set_sensitive(false);
             bModifyMode = false;
-            mpBtnRemove->Enable();
-            mpFtLists->Enable();
-            mpLbLists->Enable();
+            mxBtnRemove->set_sensitive(true);
+            mxFtLists->set_sensitive(true);
+            mxLbLists->set_sensitive(true);
         }
 
         if ( pViewData && !bCopyDone )
         {
-            mpBtnCopy->Enable();
-            mpFtCopyFrom->Enable();
-            mpEdCopyFrom->Enable();
+            mxBtnCopy->set_sensitive(true);
+            mxFtCopyFrom->set_sensitive(true);
+            mxEdCopyFrom->set_sensitive(true);
         }
     }
-    else if ( pBtn == mpBtnRemove )
+    else if ( &rBtn == mxBtnRemove.get() )
     {
-        if ( mpLbLists->GetEntryCount() > 0 )
+        if ( mxLbLists->n_children() > 0 )
         {
-            sal_Int32 nRemovePos   = mpLbLists->GetSelectedEntryPos();
+            sal_Int32 nRemovePos   = mxLbLists->get_selected_index();
             OUString aMsg = aStrQueryRemove.getToken( 0, '#' )
-                          + mpLbLists->GetEntry( nRemovePos )
+                          + mxLbLists->get_text( nRemovePos )
                           + aStrQueryRemove.getToken( 1, '#' );
 
             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
@@ -626,41 +604,41 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
                 RemoveList( nRemovePos );
                 UpdateUserListBox();
 
-                if ( mpLbLists->GetEntryCount() > 0 )
+                if ( mxLbLists->n_children() > 0 )
                 {
-                    mpLbLists->SelectEntryPos(
-                        ( nRemovePos >= mpLbLists->GetEntryCount() )
-                            ? mpLbLists->GetEntryCount()-1
+                    mxLbLists->select(
+                        ( nRemovePos >= mxLbLists->n_children() )
+                            ? mxLbLists->n_children()-1
                             : nRemovePos );
-                    LbSelectHdl( *mpLbLists );
+                    LbSelectHdl( *mxLbLists );
                 }
                 else
                 {
-                    mpFtLists->Disable();
-                    mpLbLists->Disable();
-                    mpFtEntries->Disable();
-                    mpEdEntries->Disable();
-                    mpEdEntries->SetText( EMPTY_OUSTRING );
-                    mpBtnRemove->Disable();
+                    mxFtLists->set_sensitive(false);
+                    mxLbLists->set_sensitive(false);
+                    mxFtEntries->set_sensitive(false);
+                    mxEdEntries->set_sensitive(false);
+                    mxEdEntries->set_text( EMPTY_OUSTRING );
+                    mxBtnRemove->set_sensitive(false);
                 }
             }
 
-            if ( pViewData && !bCopyDone && !mpBtnCopy->IsEnabled() )
+            if ( pViewData && !bCopyDone && !mxBtnCopy->get_sensitive() )
             {
-                mpBtnCopy->Enable();
-                mpFtCopyFrom->Enable();
-                mpEdCopyFrom->Enable();
+                mxBtnCopy->set_sensitive(true);
+                mxFtCopyFrom->set_sensitive(true);
+                mxEdCopyFrom->set_sensitive(true);
             }
         }
     }
-    else if ( pViewData && (pBtn == mpBtnCopy) )
+    else if ( pViewData && (&rBtn == mxBtnCopy.get()) )
     {
         if ( bCopyDone )
             return;
 
         ScRefAddress theStartPos;
         ScRefAddress theEndPos;
-        OUString     theAreaStr( mpEdCopyFrom->GetText() );
+        OUString     theAreaStr( mxEdCopyFrom->get_text() );
         bool     bAreaOk = false;
 
         if ( !theAreaStr.isEmpty() )
@@ -688,69 +666,69 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
         {
             CopyListFromArea( theStartPos, theEndPos );
             UpdateUserListBox();
-            mpLbLists->SelectEntryPos( mpLbLists->GetEntryCount()-1 );
-            LbSelectHdl( *mpLbLists );
-            mpEdCopyFrom->SetText( theAreaStr );
-            mpEdCopyFrom->Disable();
-            mpBtnCopy->Disable();
-            mpFtCopyFrom->Disable();
-        }
-        else
-        {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
-                        VclMessageType::Warning, VclButtonsType::Ok,
-                        ScResId(STR_INVALID_TABREF)));
+                mxLbLists->select( mxLbLists->n_children()-1 );
+                LbSelectHdl( *mxLbLists );
+                mxEdCopyFrom->set_text( theAreaStr );
+                mxEdCopyFrom->set_sensitive(false);
+                mxBtnCopy->set_sensitive(false);
+                mxFtCopyFrom->set_sensitive(false);
+            }
+            else
+            {
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                            VclMessageType::Warning, VclButtonsType::Ok,
+                            ScResId(STR_INVALID_TABREF)));
 
-            xBox->run();
-            mpEdCopyFrom->GrabFocus();
-            mpEdCopyFrom->SetSelection( Selection( 0, SELECTION_MAX ) );
+                xBox->run();
+                mxEdCopyFrom->grab_focus();
+                mxEdCopyFrom->select_region(0, -1);
         }
     }
 }
 
-IMPL_LINK( ScTpUserLists, EdEntriesModHdl, Edit&, rEd, void )
+IMPL_LINK( ScTpUserLists, EdEntriesModHdl, weld::TextView&, rEd, void )
 {
-    if ( &rEd != mpEdEntries )
+    if ( &rEd != mxEdEntries.get() )
         return;
 
-    if ( mpBtnCopy->IsEnabled() )
+    if ( mxBtnCopy->get_sensitive() )
     {
-        mpBtnCopy->Disable();
-        mpFtCopyFrom->Disable();
-        mpEdCopyFrom->Disable();
+        mxBtnCopy->set_sensitive(false);
+        mxFtCopyFrom->set_sensitive(false);
+        mxEdCopyFrom->set_sensitive(false);
     }
 
-    if ( !mpEdEntries->GetText().isEmpty() )
+    if ( !mxEdEntries->get_text().isEmpty() )
     {
         if ( !bCancelMode && !bModifyMode )
         {
-            mpBtnNew->Hide();
-            mpBtnDiscard->Show();
+            mxBtnNew->hide();
+            mxBtnDiscard->show();
             bCancelMode = true;
-            mpBtnAdd->Hide();
-            mpBtnAdd->Enable();
-            mpBtnModify->Show();
-            mpBtnModify->Enable();
+            mxBtnAdd->hide();
+            mxBtnAdd->set_sensitive(true);
+            mxBtnModify->show();
+            mxBtnModify->set_sensitive(true);
             bModifyMode = true;
-            mpBtnRemove->Disable();
-            mpFtLists->Disable();
-            mpLbLists->Disable();
+            mxBtnRemove->set_sensitive(false);
+            mxFtLists->set_sensitive(false);
+            mxLbLists->set_sensitive(false);
         }
         else // if ( bCancelMode || bModifyMode )
         {
-            if ( !mpBtnAdd->IsEnabled() )
+            if ( !mxBtnAdd->get_sensitive() )
             {
-                mpBtnAdd->Enable();
-                mpBtnModify->Enable();
+                mxBtnAdd->set_sensitive(true);
+                mxBtnModify->set_sensitive(true);
             }
         }
     }
     else
     {
-        if ( mpBtnAdd->IsEnabled() )
+        if ( mxBtnAdd->get_sensitive() )
         {
-            mpBtnAdd->Disable();
-            mpBtnModify->Disable();
+            mxBtnAdd->set_sensitive(false);
+            mxBtnModify->set_sensitive(false);
         }
     }
 }
