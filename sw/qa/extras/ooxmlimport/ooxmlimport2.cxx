@@ -141,6 +141,17 @@ DECLARE_OOXMLIMPORT_TEST(testTdf124600, "tdf124600.docx")
     // i.e. the shape had an unexpected left margin, but not in Word.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
                          getProperty<sal_Int32>(xShape, "HoriOrientPosition"));
+
+    // Make sure that "Shape 1 text" (anchored in the header) has the same left margin as the body
+    // text.
+    OUString aShapeTextLeft = parseDump("/root/page/header/txt/anchored/fly/infos/bounds", "left");
+    OUString aBodyTextLeft = parseDump("/root/page/body/txt/infos/bounds", "left");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1701
+    // - Actual  : 1815
+    // i.e. there was a >0 left margin on the text of the shape, resulting in incorrect horizontal
+    // position.
+    CPPUNIT_ASSERT_EQUAL(aBodyTextLeft, aShapeTextLeft);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf120548, "tdf120548.docx")
