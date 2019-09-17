@@ -34,6 +34,24 @@
       "revId": "ed965239cf7258dca933617b2d25dff1a63ac437",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_9ffc9f3f",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3109,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-09-17T07:21:48Z",
+      "side": 1,
+      "message": "good point, can you paste the warning are seeing please?",
+      "parentUuid": "7f7f9b97_1fe96f7f",
+      "revId": "ed965239cf7258dca933617b2d25dff1a63ac437",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
