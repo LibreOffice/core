@@ -2029,7 +2029,7 @@ bool TimeFormatter::TextToTime(const OUString& rStr, tools::Time& rTime, TimeFie
     }
     else
     {
-        nSecond = static_cast<short>(aStr.copy( 0, nSepPos ).toString().toInt32());
+        nSecond = static_cast<short>(aStr.copy( 0, nSepPos ).makeStringAndClear().toInt32());
         aStr.remove( 0, nSepPos+1 );
 
         nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
@@ -2038,7 +2038,7 @@ bool TimeFormatter::TextToTime(const OUString& rStr, tools::Time& rTime, TimeFie
         if ( nSepPos >= 0 )
         {
             nMinute = nSecond;
-            nSecond = static_cast<short>(aStr.copy( 0, nSepPos ).toString().toInt32());
+            nSecond = static_cast<short>(aStr.copy( 0, nSepPos ).makeStringAndClear().toInt32());
             aStr.remove( 0, nSepPos+1 );
 
             nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
@@ -2048,7 +2048,7 @@ bool TimeFormatter::TextToTime(const OUString& rStr, tools::Time& rTime, TimeFie
             {
                 nHour   = nMinute;
                 nMinute = nSecond;
-                nSecond = static_cast<short>(aStr.copy( 0, nSepPos ).toString().toInt32());
+                nSecond = static_cast<short>(aStr.copy( 0, nSepPos ).makeStringAndClear().toInt32());
                 aStr.remove( 0, nSepPos+1 );
             }
             else
