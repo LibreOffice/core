@@ -40,6 +40,7 @@
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <vector>
@@ -832,11 +833,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
             if( adapterObject.is() )
             {
                 // object got already bridged !
-                Reference< css::lang::XUnoTunnel > tunnel( adapterObject, UNO_QUERY );
-
-                Adapter *pAdapter = reinterpret_cast<Adapter*>(
-                        tunnel->getSomething(
-                            ::pyuno::Adapter::getUnoTunnelImplementationId() ) );
+                auto pAdapter = comphelper::getUnoTunnelImplementation<Adapter>(adapterObject);
 
                 mappedObject = impl->cargo->xAdapterFactory->createAdapter(
                     adapterObject, pAdapter->getWrappedTypes() );

@@ -347,7 +347,7 @@ public:
     Adapter( const PyRef &obj,
              const css::uno::Sequence< css::uno::Type > & types );
 
-    static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+    static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
     const PyRef& getWrappedObject() const { return mWrappedObject; }
     const css::uno::Sequence< css::uno::Type >& getWrappedTypes() const { return mTypes; }
     virtual ~Adapter() override;
