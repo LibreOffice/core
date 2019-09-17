@@ -4,7 +4,7 @@
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
-       <!-- column-name image -->
+      <!-- column-name image -->
       <column type="GdkPixbuf"/>
       <!-- column-name text -->
       <column type="gchararray"/>
@@ -76,23 +76,20 @@
                           <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn5">
+                            <property name="resizable">True</property>
+                            <property name="spacing">6</property>
+                            <property name="title" translatable="yes" context="optpathspage|type">Type</property>
                             <child>
                               <object class="GtkCellRendererPixbuf" id="cellrenderertext1"/>
                               <attributes>
                                 <attribute name="pixbuf">0</attribute>
                               </attributes>
                             </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn5">
-                            <property name="resizable">True</property>
-                            <property name="spacing">6</property>
-                            <property name="title" translatable="yes" context="optpathspage|type">Type</property>
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderer4"/>
                               <attributes>
+                                <attribute name="sensitive">8</attribute>
                                 <attribute name="text">1</attribute>
                               </attributes>
                             </child>
@@ -107,13 +104,14 @@
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderer9"/>
                               <attributes>
+                                <attribute name="sensitive">9</attribute>
                                 <attribute name="text">2</attribute>
                               </attributes>
                             </child>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn2">
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
                             <property name="title" translatable="yes" context="optpathspage|internal_paths">Internal Paths</property>
@@ -121,6 +119,7 @@
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderer1"/>
                               <attributes>
+                                <attribute name="sensitive">10</attribute>
                                 <attribute name="text">3</attribute>
                               </attributes>
                             </child>

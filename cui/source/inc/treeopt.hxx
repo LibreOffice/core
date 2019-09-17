@@ -116,19 +116,19 @@ struct Module;
 class ExtensionsTabPage;
 class SvxColorTabPage;
 
-class OfaTreeOptionsDialog final: public SfxModalDialog
+class OfaTreeOptionsDialog final: public SfxOkDialogController
 {
 private:
-    VclPtr<OKButton>       pOkPB;
-    VclPtr<PushButton>     pApplyPB;
-    VclPtr<PushButton>     pBackPB;
+    std::unique_ptr<weld::Button> xOkPB;
+    std::unique_ptr<weld::Button> xApplyPB;
+    std::unique_ptr<weld::Button> xBackPB;
 
-    VclPtr<SvTreeListBox>  pTreeLB;
-    VclPtr<VclBox>         pTabBox;
+    std::unique_ptr<weld::TreeView> xTreeLB;
+    std::unique_ptr<weld::Container> xTabBox;
 
-    VclPtr<vcl::Window>    m_pParent;
+    weld::Window*    m_pParent;
 
-    SvTreeListEntry*       pCurrentPageEntry;
+    std::unique_ptr<weld::TreeIter> xCurrentPageEntry;
 
     OUString               sTitle;
 
@@ -161,23 +161,23 @@ private:
 
     void            ApplyOptions( bool deactivate );
 
-    DECL_STATIC_LINK(OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK(ShowPageHdl_Impl, SvTreeListBox*, void);
-    DECL_LINK(BackHdl_Impl, Button*, void);
-    DECL_LINK(ApplyHdl_Impl, Button*, void);
-    DECL_LINK(OKHdl_Impl, Button*, void);
+    DECL_LINK(ShowPageHdl_Impl, weld::TreeView&, void);
+    DECL_LINK(BackHdl_Impl, weld::Button&, void);
+    DECL_LINK(ApplyHdl_Impl, weld::Button&, void);
+    DECL_LINK(OKHdl_Impl, weld::Button&, void);
     void SelectHdl_Impl();
 
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
-    virtual short   Execute() override;
+    virtual short run() override;
+
+    virtual weld::Button& GetOKButton() const override { return *xOkPB; }
+    virtual const SfxItemSet* GetExampleSet() const override { return nullptr; }
 
 public:
-    OfaTreeOptionsDialog( vcl::Window* pParent,
+    OfaTreeOptionsDialog(weld::Window* pParent,
         const css::uno::Reference< css::frame::XFrame >& _xFrame,
-        bool bActivateLastSelection );
-    OfaTreeOptionsDialog( vcl::Window* pParent, const OUString& rExtensionId );
+        bool bActivateLastSelection);
+    OfaTreeOptionsDialog(weld::Window* pParent, const OUString& rExtensionId);
     virtual ~OfaTreeOptionsDialog() override;
-    virtual void dispose() override;
 
     OptionsPageInfo*    AddTabPage( sal_uInt16 nId, const OUString& rPageName, sal_uInt16 nGroup );
     sal_uInt16              AddGroup(   const OUString& rGroupName,  SfxShell* pCreateShell,
@@ -199,12 +199,13 @@ public:
 namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
 namespace com { namespace sun { namespace star { namespace awt { class XContainerWindowEventHandler; } } } }
 
-class ExtensionsTabPage : public TabPage
+class ExtensionsTabPage
 {
 private:
+    weld::Container* m_pContainer;
     OUString       m_sPageURL;
-    css::uno::Reference< css::awt::XWindow >
-                        m_xPage;
+    css::uno::Reference<css::awt::XWindow> m_xPageParent;
+    css::uno::Reference<css::awt::XWindow> m_xPage;
     OUString       m_sEventHdl;
     css::uno::Reference< css::awt::XContainerWindowEventHandler >
                         m_xEventHdl;
@@ -216,16 +217,18 @@ private:
 
 public:
     ExtensionsTabPage(
-        vcl::Window* pParent, WinBits nStyle,
+        weld::Container* pParent,
         const OUString& rPageURL, const OUString& rEvtHdl,
         const css::uno::Reference<
             css::awt::XContainerWindowProvider >& rProvider );
 
-    virtual ~ExtensionsTabPage() override;
-    virtual void dispose() override;
+    ~ExtensionsTabPage();
 
-    virtual void    ActivatePage() override;
-    virtual void    DeactivatePage() override;
+    void Show();
+    void Hide();
+
+    void    ActivatePage();
+    void    DeactivatePage();
 
     void            ResetPage();
     void            SavePage();

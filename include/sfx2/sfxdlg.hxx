@@ -119,7 +119,7 @@ class SFX2_DLLPUBLIC SfxAbstractDialogFactory : virtual public VclAbstractDialog
 public:
                                         virtual ~SfxAbstractDialogFactory() override;    // needed for export of vtable
     static SfxAbstractDialogFactory*    Create();
-    virtual VclPtr<VclAbstractDialog>          CreateFrameDialog(vcl::Window* pParent, const css::uno::Reference< css::frame::XFrame >& rFrame, sal_uInt32 nResId, const OUString& rParameter ) = 0;
+    virtual VclPtr<VclAbstractDialog>          CreateFrameDialog(weld::Window* pParent, const css::uno::Reference< css::frame::XFrame >& rFrame, sal_uInt32 nResId, const OUString& rParameter) = 0;
     virtual VclPtr<SfxAbstractTabDialog>       CreateAutoCorrTabDialog(weld::Window* pParent, const SfxItemSet* pAttrSet) = 0;
     virtual VclPtr<SfxAbstractTabDialog>       CreateCustomizeTabDialog(weld::Window* pParent,
                                             const SfxItemSet* pAttrSet,
