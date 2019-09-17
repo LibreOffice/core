@@ -25,8 +25,8 @@
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/button.hxx>
 #include <vcl/oldprintadaptor.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/prnmon.hxx>
@@ -165,7 +165,7 @@ namespace
 
             m_xQueryBox->add_button(SvxResId(RID_SVXSTR_QRY_PRINT_SELECTION), RET_OK);
             m_xQueryBox->add_button(SvxResId(RID_SVXSTR_QRY_PRINT_ALL), 2);
-            m_xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+            m_xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
             m_xQueryBox->set_default_response(RET_OK);
         }
         short run() { return m_xQueryBox->run(); }

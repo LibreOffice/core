@@ -42,6 +42,7 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/printer.hxx>
@@ -843,7 +844,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
         std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                        VclMessageType::Question, VclButtonsType::YesNo,
                                                        m_sConfigureMail));
-        xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+        xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
         sal_uInt16 nRet = xQueryBox->run();
         if (RET_YES == nRet )
         {

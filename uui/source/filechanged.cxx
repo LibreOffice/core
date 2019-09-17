@@ -19,7 +19,7 @@
 
 #include <strings.hrc>
 #include <unotools/resmgr.hxx>
-#include <vcl/button.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include "filechanged.hxx"
 
@@ -29,7 +29,7 @@ FileChangedQueryBox::FileChangedQueryBox(weld::Window* pParent, const std::local
 {
     m_xQueryBox->set_title(Translate::get(STR_FILECHANGED_TITLE, rLocale));
     m_xQueryBox->add_button(Translate::get(STR_FILECHANGED_SAVEANYWAY_BTN, rLocale), RET_YES);
-    m_xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+    m_xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
     m_xQueryBox->set_default_response(RET_YES);
 }
 

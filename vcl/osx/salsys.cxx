@@ -70,7 +70,7 @@ static NSString* getStandardString( StandardButtonType nButtonId, bool bUseResou
     OUString aText;
     if( bUseResources )
     {
-        aText = Button::GetStandardText( nButtonId );
+        aText = GetStandardText( nButtonId );
     }
     if( aText.isEmpty() ) // this is for bad cases, we might be missing the vcl resource
     {

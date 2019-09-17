@@ -31,6 +31,7 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/vclstatuslistener.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
@@ -122,7 +123,7 @@ void Button::Click()
     ImplCallEventListenersAndHandler( VclEventId::ButtonClick, [this] () { maClickHdl.Call(this); } );
 }
 
-OUString Button::GetStandardText(StandardButtonType eButton)
+OUString GetStandardText(StandardButtonType eButton)
 {
     static const char* aResIdAry[static_cast<int>(StandardButtonType::Count)] =
     {
@@ -1671,7 +1672,7 @@ void OKButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
     set_id("ok");
     PushButton::ImplInit( pParent, nStyle );
 
-    SetText( Button::GetStandardText( StandardButtonType::OK ) );
+    SetText( GetStandardText( StandardButtonType::OK ) );
 }
 
 OKButton::OKButton( vcl::Window* pParent, WinBits nStyle ) :
@@ -1717,7 +1718,7 @@ void CancelButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
     set_id("cancel");
     PushButton::ImplInit( pParent, nStyle );
 
-    SetText( Button::GetStandardText( StandardButtonType::Cancel ) );
+    SetText( GetStandardText( StandardButtonType::Cancel ) );
 }
 
 CancelButton::CancelButton( vcl::Window* pParent, WinBits nStyle ) :
@@ -1761,7 +1762,7 @@ void CancelButton::Click()
 CloseButton::CloseButton( vcl::Window* pParent, WinBits nStyle )
     : CancelButton(pParent, nStyle)
 {
-    SetText( Button::GetStandardText( StandardButtonType::Close ) );
+    SetText( GetStandardText( StandardButtonType::Close ) );
 }
 
 void HelpButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
@@ -1769,7 +1770,7 @@ void HelpButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
     set_id("help");
     PushButton::ImplInit( pParent, nStyle | WB_NOPOINTERFOCUS );
 
-    SetText( Button::GetStandardText( StandardButtonType::Help ) );
+    SetText( GetStandardText( StandardButtonType::Help ) );
 }
 
 HelpButton::HelpButton( vcl::Window* pParent, WinBits nStyle ) :

@@ -18,6 +18,7 @@
  */
 
 #include <vcl/toolkit/morebtn.hxx>
+#include <vcl/stdtext.hxx>
 
 struct ImplMoreButtonData
 {
@@ -32,8 +33,8 @@ void MoreButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     PushButton::ImplInit( pParent, nStyle );
 
-    mpMBData->maMoreText = Button::GetStandardText( StandardButtonType::More );
-    mpMBData->maLessText = Button::GetStandardText( StandardButtonType::Less );
+    mpMBData->maMoreText = GetStandardText( StandardButtonType::More );
+    mpMBData->maLessText = GetStandardText( StandardButtonType::Less );
 
     ShowState();
 

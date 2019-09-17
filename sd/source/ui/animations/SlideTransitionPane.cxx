@@ -38,6 +38,7 @@
 #include <tools/debug.hxx>
 #include <svx/gallery.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <tools/urlobj.hxx>
@@ -770,8 +771,8 @@ void SlideTransitionPane::openSoundFileDialog()
                 std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(nullptr,
                                                            VclMessageType::Warning, VclButtonsType::NONE,
                                                            aStrWarning));
-                xWarn->add_button(Button::GetStandardText(StandardButtonType::Retry), RET_RETRY);
-                xWarn->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+                xWarn->add_button(GetStandardText(StandardButtonType::Retry), RET_RETRY);
+                xWarn->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
                 bQuitLoop = (xWarn->run() != RET_RETRY);
 
                 bValidSoundFile = false;

@@ -16,6 +16,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/stdtext.hxx>
 #include <messagedialog.hxx>
 #include <window.h>
 #include <boost/multi_array.hpp>
@@ -2249,13 +2250,13 @@ void MessageDialog::create_message_area()
                 break;
             case VclButtonsType::YesNo:
                 pBtn = VclPtr<PushButton>::Create(pButtonBox);
-                pBtn->SetText(Button::GetStandardText(StandardButtonType::Yes));
+                pBtn->SetText(GetStandardText(StandardButtonType::Yes));
                 pBtn->Show();
                 pBtn->set_id("yes");
                 add_button(pBtn, RET_YES, true);
 
                 pBtn.set( VclPtr<PushButton>::Create(pButtonBox) );
-                pBtn->SetText(Button::GetStandardText(StandardButtonType::No));
+                pBtn->SetText(GetStandardText(StandardButtonType::No));
                 pBtn->Show();
                 pBtn->set_id("no");
                 add_button(pBtn, RET_NO, true);

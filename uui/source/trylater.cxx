@@ -18,7 +18,7 @@
  */
 
 #include <unotools/resmgr.hxx>
-#include <vcl/button.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <strings.hrc>
 #include "trylater.hxx"
@@ -34,14 +34,14 @@ TryLaterQueryBox::TryLaterQueryBox(weld::Window* pParent, const std::locale& rRe
     if (bEnableOverride)
     {
         m_xQueryBox->add_button(Translate::get(STR_FILECHANGED_SAVEANYWAY_BTN, rResLocale), RET_IGNORE);
-        m_xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+        m_xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
         m_xQueryBox->set_default_response(RET_IGNORE);
     }
     else
     {
         m_xQueryBox->add_button(Translate::get(STR_TRYLATER_RETRYSAVING_BTN, rResLocale), RET_YES);
         m_xQueryBox->add_button(Translate::get(STR_TRYLATER_SAVEAS_BTN, rResLocale), RET_NO);
-        m_xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+        m_xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
         m_xQueryBox->set_default_response(RET_YES);
     }
 }
