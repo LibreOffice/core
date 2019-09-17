@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkListStore" id="liststore1">
@@ -62,10 +62,10 @@
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="optlanguagespage|label4">_User interface:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">userinterface</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -76,10 +76,10 @@
                   <object class="GtkLabel" id="localesettingFT">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="optlanguagespage|localesettingFT">Locale setting:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">localesetting</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -90,10 +90,10 @@
                   <object class="GtkLabel" id="label6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="optlanguagespage|label6">Decimal separator key:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">decimalseparator</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -104,10 +104,10 @@
                   <object class="GtkLabel" id="defaultcurrency">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="optlanguagespage|defaultcurrency">_Default currency:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">currencylb</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -118,10 +118,10 @@
                   <object class="GtkLabel" id="dataaccpatterns">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="optlanguagespage|dataaccpatterns">Date acceptance _patterns:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">datepatterns</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -270,13 +270,13 @@
                     <property name="entry_text_column">0</property>
                     <property name="id_column">1</property>
                     <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                      <object class="GtkCellRendererText" id="cellrenderertext3"/>
                       <attributes>
                         <attribute name="text">0</attribute>
                       </attributes>
                     </child>
                     <child>
-                      <object class="GtkCellRendererPixbuf" id="cellrenderertext2"/>
+                      <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
                       <attributes>
                         <attribute name="pixbuf">2</attribute>
                       </attributes>
@@ -297,13 +297,13 @@
                     <property name="entry_text_column">0</property>
                     <property name="id_column">1</property>
                     <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                      <object class="GtkCellRendererText" id="cellrenderertext5"/>
                       <attributes>
                         <attribute name="text">0</attribute>
                       </attributes>
                     </child>
                     <child>
-                      <object class="GtkCellRendererPixbuf" id="cellrenderertext2"/>
+                      <object class="GtkCellRendererPixbuf" id="cellrenderertext6"/>
                       <attributes>
                         <attribute name="pixbuf">2</attribute>
                       </attributes>
@@ -320,8 +320,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
                     <property name="halign">start</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -364,15 +364,18 @@
                   <object class="GtkLabel" id="western">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="optlanguagespage|western">Western:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">westernlanguage</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
             </child>
