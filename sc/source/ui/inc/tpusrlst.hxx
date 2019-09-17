@@ -42,28 +42,22 @@ public:
     virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;
 
 private:
-            ScTpUserLists( vcl::Window*              pParent,
-                           const SfxItemSet&    rArgSet );
-            virtual ~ScTpUserLists() override;
-    virtual void dispose() override;
+    ScTpUserLists(TabPageParent pParent, const SfxItemSet& rArgSet);
+    virtual ~ScTpUserLists() override;
 
 private:
-    VclPtr<FixedText>          mpFtLists;
-    VclPtr<ListBox>            mpLbLists;
-    VclPtr<FixedText>          mpFtEntries;
-    VclPtr<VclMultiLineEdit>   mpEdEntries;
-    VclPtr<FixedText>          mpFtCopyFrom;
-    VclPtr<Edit>               mpEdCopyFrom;
-
-    VclPtr<PushButton>         mpBtnNew;
-    VclPtr<PushButton>         mpBtnDiscard;
-
-    VclPtr<PushButton>         mpBtnAdd;
-    VclPtr<PushButton>         mpBtnModify;
-
-    VclPtr<PushButton>         mpBtnRemove;
-
-    VclPtr<PushButton>         mpBtnCopy;
+    std::unique_ptr<weld::Label> mxFtLists;
+    std::unique_ptr<weld::TreeView> mxLbLists;
+    std::unique_ptr<weld::Label> mxFtEntries;
+    std::unique_ptr<weld::TextView> mxEdEntries;
+    std::unique_ptr<weld::Label> mxFtCopyFrom;
+    std::unique_ptr<weld::Entry> mxEdCopyFrom;
+    std::unique_ptr<weld::Button> mxBtnNew;
+    std::unique_ptr<weld::Button> mxBtnDiscard;
+    std::unique_ptr<weld::Button> mxBtnAdd;
+    std::unique_ptr<weld::Button> mxBtnModify;
+    std::unique_ptr<weld::Button> mxBtnRemove;
+    std::unique_ptr<weld::Button> mxBtnCopy;
 
     const OUString      aStrQueryRemove;
     const OUString      aStrCopyList;
@@ -94,9 +88,9 @@ private:
                                   const ScRefAddress& rEndPos );
 
     // Handler:
-    DECL_LINK( LbSelectHdl, ListBox&, void );
-    DECL_LINK( BtnClickHdl, Button*, void );
-    DECL_LINK( EdEntriesModHdl, Edit&, void);
+    DECL_LINK( LbSelectHdl, weld::TreeView&, void );
+    DECL_LINK( BtnClickHdl, weld::Button&, void );
+    DECL_LINK( EdEntriesModHdl, weld::TextView&, void);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TPUSRLST_HXX
