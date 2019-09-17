@@ -1009,6 +1009,13 @@ public:
     {
         implResetDefault(m_xContainer.get());
     }
+    virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() override
+    {
+        auto xPage = VclPtr<TabPage>::Create(m_xContainer.get(), WB_DIALOGCONTROL | WB_CHILDDLGCTRL);
+        xPage->Show();
+        css::uno::Reference<css::awt::XWindow> xWindow(xPage->GetComponentInterface(), css::uno::UNO_QUERY);
+        return xWindow;
+    }
 };
 
 std::unique_ptr<weld::Container> SalInstanceWidget::weld_parent() const

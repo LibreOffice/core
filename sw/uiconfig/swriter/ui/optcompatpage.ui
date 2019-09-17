@@ -88,7 +88,7 @@
                             <child>
                               <object class="GtkCellRendererToggle" id="cellrenderer5"/>
                               <attributes>
-                                <attribute name="visible">4</attribute>
+                                <attribute name="visible">3</attribute>
                                 <attribute name="active">0</attribute>
                               </attributes>
                             </child>
@@ -227,7 +227,7 @@
                             <child>
                               <object class="GtkCellRendererToggle" id="cellrenderer7"/>
                               <attributes>
-                                <attribute name="visible">4</attribute>
+                                <attribute name="visible">3</attribute>
                                 <attribute name="active">0</attribute>
                               </attributes>
                             </child>
