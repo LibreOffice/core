@@ -377,6 +377,9 @@ public:
     void group(RadioButton &rOther);
     virtual void ShowFocus(const tools::Rectangle& rRect) override;
 
+    /// Button hes additional stuff that we need to dump too.
+    boost::property_tree::ptree DumpAsPropertyTree() override;
+
     virtual FactoryFunction GetUITestFactory() const override;
 };
 
@@ -464,6 +467,9 @@ public:
 
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
     virtual void ShowFocus(const tools::Rectangle& rRect) override;
+
+    /// Button hes additional stuff that we need to dump too.
+    boost::property_tree::ptree DumpAsPropertyTree() override;
 
     virtual FactoryFunction GetUITestFactory() const override;
 };
