@@ -249,10 +249,13 @@ public:
 class VCL_DLLPUBLIC Container : virtual public Widget
 {
 public:
-    //remove and add in one go
+    // remove and add in one go
     virtual void move(weld::Widget* pWidget, weld::Container* pNewParent) = 0;
-    //recursively unset has-default on any buttons in the widget hierarchy
+    // recursively unset has-default on any buttons in the widget hierarchy
     virtual void recursively_unset_default_buttons() = 0;
+    // create an XWindow as a child of this container. The XWindow is
+    // suitable to contain css::awt::XControl items
+    virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() = 0;
 };
 
 class VCL_DLLPUBLIC ScrolledWindow : virtual public Container
