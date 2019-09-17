@@ -21,6 +21,7 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_dbase \
 	Configuration_flat \
 	Configuration_odbc \
+	Configuration_mysql_jdbc \
 	Configuration_writer \
 	Library_calc \
 	Library_dbase \
@@ -28,6 +29,7 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_file \
 	Library_flat \
 	$(if $(filter ANDROID iOS,$(OS)),,Library_odbc) \
+	Library_mysql_jdbc \
 	Library_sdbc2 \
 	Library_writer \
 ))
@@ -40,8 +42,6 @@ ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_hsqldb \
 	Configuration_jdbc \
-	Configuration_mysql_jdbc \
-	Library_mysql_jdbc \
 	Jar_sdbc_hsqldb \
 	Library_hsqldb \
 	Library_jdbc \
