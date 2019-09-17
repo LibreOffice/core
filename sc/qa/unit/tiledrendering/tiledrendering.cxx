@@ -101,6 +101,7 @@ public:
     void testInvalidationLoop();
     void testPageDownInvalidation();
     void testSheetChangeInvalidation();
+    void testInsertDeletePageInvalidation();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -137,6 +138,7 @@ public:
     CPPUNIT_TEST(testInvalidationLoop);
     CPPUNIT_TEST(testPageDownInvalidation);
     CPPUNIT_TEST(testSheetChangeInvalidation);
+    CPPUNIT_TEST(testInsertDeletePageInvalidation);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1694,6 +1696,49 @@ void ScTiledRenderingTest::testSheetChangeInvalidation()
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(3), aView1.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1310720, 268435456), aView1.m_aInvalidations[0]);
+}
+
+void ScTiledRenderingTest::testInsertDeletePageInvalidation()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("insert_delete_sheet.ods");
+    // the document has 1 sheet
+    CPPUNIT_ASSERT_EQUAL(1, pModelObj->getParts());
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    int nView1 = SfxLokHelper::getView();
+    ViewCallback aView1;
+    CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
+
+    SfxLokHelper::setView(nView1);
+    aView1.m_bInvalidateTiles = false;
+    aView1.m_aInvalidations.clear();
+
+    uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+            { "Name", uno::Any(OUString("")) },
+            { "Index", uno::Any(sal_Int32(1)) }
+        }));
+    comphelper::dispatchCommand(".uno:Insert", aArgs);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
+    CPPUNIT_ASSERT_EQUAL(size_t(8), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
+    CPPUNIT_ASSERT_EQUAL(2, pModelObj->getParts());
+
+    // Delete sheet
+    aView1.m_bInvalidateTiles = false;
+    aView1.m_aInvalidations.clear();
+    uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
+            { "Index", uno::Any(sal_Int32(1)) }
+        }));
+    comphelper::dispatchCommand(".uno:Remove", aArgs2);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
+    CPPUNIT_ASSERT_EQUAL(1, pModelObj->getParts());
 }
 
 }
