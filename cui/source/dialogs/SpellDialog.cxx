@@ -1561,7 +1561,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
 
     //create a cursor behind the end of the last error
     //- or at 0 at the start of the sentence
-    int nCursor(m_nErrorEnd ? m_nErrorEnd + 1 : 0);
+    sal_Int32 nCursor(m_nErrorEnd ? m_nErrorEnd + 1 : 0);
 
     //search for SpellErrorDescription
     SpellErrorDescription aSpellErrorDescription;
@@ -1600,7 +1600,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
             pSpellErrorDescription = &aSpellErrorDescription;
         }
 
-        nCursor = nMinPos;
+        nCursor = std::max(nCursor, nMinPos); // move forward if possible
 
         // maybe the error found here is already in the ChangeAllList and has to be replaced
         Reference<XDictionary> xChangeAll( LinguMgr::GetChangeAllList(), UNO_QUERY );
