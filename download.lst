@@ -315,6 +315,11 @@ FONT_SCHEHERAZADE_TARBALL := Scheherazade-2.100.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+FONT_OPENDYSLEXIC_SHA256SUM := b92d7fcb9409f2bcfd23b65ac71647256eb49c429f4fbb1cc870381fc93eb486
+FONT_OPENDYSLEXIC_TARBALL := opendyslexic-0.910.12-rc2-2019.10.17.zip
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 FREEHAND_SHA256SUM := 0e422d1564a6dbf22a9af598535425271e583514c0f7ba7d9091676420de34ac
 FREEHAND_TARBALL := libfreehand-0.1.2.tar.xz
 # three static lines
