@@ -343,11 +343,8 @@ sal_Int64 SAL_CALL SdXImpressDocument::getSomething( const css::uno::Sequence< s
     if( isUnoTunnelId<SdXImpressDocument>(rIdentifier) )
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
 
-    if( (rIdentifier.getLength() == 16) &&
-        (0 == memcmp( SdrModel::getUnoTunnelImplementationId().getConstArray(), rIdentifier.getConstArray(), 16 )))
-    {
+    if( isUnoTunnelId<SdrModel>(rIdentifier) )
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(mpDoc));
-    }
 
     return SfxBaseModel::getSomething( rIdentifier );
 }
