@@ -46,22 +46,19 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC ZCodec
     sal_uInt8*      mpOutBuf;
     size_t const    mnOutBufSize;
 
-    sal_uInt32      mnCRC;
     int             mnCompressLevel;
-    bool            mbUpdateCrc;
     bool            mbGzLib;
     void*           mpsC_Stream;
 
     void            InitCompress();
     void            InitDecompress(SvStream & inStream);
     void            ImplWriteBack();
-    void            UpdateCRC( sal_uInt8 const * pSource, long nDatSize );
 
 public:
                     ZCodec( size_t nInBufSize = 32768, size_t nOutBufSize = 32768 );
                     ~ZCodec();
 
-    void            BeginCompression( int nCompressLevel = ZCODEC_DEFAULT_COMPRESSION, bool updateCrc = false, bool gzLib = false );
+    void            BeginCompression( int nCompressLevel = ZCODEC_DEFAULT_COMPRESSION, bool gzLib = false );
     long            EndCompression();
 
     void            Compress( SvStream& rIStm, SvStream& rOStm );
@@ -74,8 +71,6 @@ public:
 
     void            SetBreak( size_t );
     size_t          GetBreak() const;
-    void            SetCRC( sal_uInt32 nCurrentCRC );
-    sal_uInt32      GetCRC() const { return mnCRC;}
 };
 
 #endif
