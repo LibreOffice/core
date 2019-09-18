@@ -41,8 +41,8 @@ CRASHREPORT_DLLPUBLIC
 /*class*/ CrashReporter
 {
 public:
-#if HAVE_FEATURE_BREAKPAD
     typedef enum {AddItem, Write, Create} tAddKeyHandling;
+#if HAVE_FEATURE_BREAKPAD
     static void AddKeyValue(const OUString& rKey, const OUString& rValue, tAddKeyHandling AddKeyHandling);
 
     static void StoreExceptionHandler(google_breakpad::ExceptionHandler* pExceptionHandler);
@@ -50,6 +50,8 @@ public:
     static bool CrashReportInfoExists();
 
     static bool ReadSendConfig(std::string& response);
+
+    static bool IsDump();
 
 private:
     static osl::Mutex maMutex;
@@ -81,9 +83,7 @@ private:
     // Add dummy methods for the non-breakpad case. That allows us to use
     // // the code without linking to the lib and without adding HAVE_FEATURE_BREAKPAD
     // // everywhere we want to log something to the crash report system.
-    typedef enum {AddItem, Write, InitWrite} tAddKeyHandling;
-    template<typename T1, typename T2>
-    static void AddKeyValue(SAL_UNUSED_PARAMETER const T1& /*rKey*/, SAL_UNUSED_PARAMETER const T2& /*rValue*/, SAL_UNUSED_PARAMETER tAddKeyHandling /*AddKeyHandling*/) {};
+    static void AddKeyValue(SAL_UNUSED_PARAMETER const OUString& /*rKey*/, SAL_UNUSED_PARAMETER const OUString& /*rValue*/, SAL_UNUSED_PARAMETER tAddKeyHandling /*AddKeyHandling*/) {};
 #endif
 };
 
