@@ -62,15 +62,18 @@ void CrashReporter::addKeyValue(const OUString& rKey, const OUString& rValue, tA
 {
     osl::MutexGuard aGuard(maMutex);
 
-    if(!rKey.isEmpty())
-        maKeyValues.push_back(mpair(rKey, rValue));
-
-    if(AddKeyHandling != AddItem)
+    if (IsDumpEnable())
     {
-        if(mbInit)
-            writeToFile(std::ios_base::app);
-        else if (AddKeyHandling == Create)
-            writeCommonInfo();
+        if (!rKey.isEmpty())
+            maKeyValues.push_back(mpair(rKey, rValue));
+
+        if (AddKeyHandling != AddItem)
+        {
+            if (mbInit)
+                writeToFile(std::ios_base::app);
+            else if (AddKeyHandling == Create)
+                writeCommonInfo();
+        }
     }
 }
 
@@ -84,8 +87,9 @@ void CrashReporter::writeCommonInfo()
 
     const ucbhelper::InternetProxyServer proxy_server = proxy_decider.getProxy(protocol, url, port);
 
-    // save the Keys
+    // save the new Keys
     vmaKeyValues atlast = maKeyValues;
+    // clear the keys, the following Keys should be at the begin
     maKeyValues.clear();
 
     // limit the amount of code that needs to be executed before the crash reporting
@@ -99,6 +103,7 @@ void CrashReporter::writeCommonInfo()
         addKeyValue("Proxy", proxy_server.aName + ":" + OUString::number(proxy_server.nPort), AddItem);
     }
 
+    // write the new keys at the end
     maKeyValues.insert(maKeyValues.end(), atlast.begin(), atlast.end());
 
     mbInit = true;
@@ -168,8 +173,26 @@ bool CrashReporter::readSendConfig(std::string& response)
 
 void CrashReporter::storeExceptionHandler(google_breakpad::ExceptionHandler* pExceptionHandler)
 {
-    mpExceptionHandler = pExceptionHandler;
+    if(IsDumpEnable())
+        mpExceptionHandler = pExceptionHandler;
 }
+
+
+
+bool CrashReporter::IsDumpEnable()
+{
+    OUString sToken;
+    OString  sEnvVar(std::getenv("CRASH_DUMP_ENABLE"));
+    bool     bEnable = true;   // default, always on
+    // read configuration item 'CrashDumpEnable' -> bool on/off
+    if (rtl::Bootstrap::get("CrashDumpEnable", sToken) && sEnvVar.isEmpty())
+    {
+        bEnable = sToken.toBoolean();
+    }
+
+    return bEnable;
+}
+
 
 std::string CrashReporter::getIniFileName()
 {
