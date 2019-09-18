@@ -1484,10 +1484,6 @@ static void verifyUnitSourceDest( MapUnit eUnitSource, MapUnit eUnitDest )
                 && eUnitDest != MapUnit::MapAppFont
                 && eUnitDest != MapUnit::MapRelative,
                 "Destination MapUnit is not permitted" );
-    SAL_WARN_IF( eUnitSource == MapUnit::MapPixel, "vcl.gdi",
-                       "MapUnit::MapPixel approximated with 72dpi" );
-    SAL_WARN_IF( eUnitDest == MapUnit::MapPixel, "vcl.gdi",
-                       "MapUnit::MapPixel approximated with 72dpi" );
 }
 
 #define ENTER3( eUnitSource, eUnitDest )                                \
