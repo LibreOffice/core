@@ -20,6 +20,8 @@
 #ifndef INCLUDED_DESKTOP_INC_APP_HXX
 #define INCLUDED_DESKTOP_INC_APP_HXX
 
+#include <config_features.h>
+
 #include <boost/optional.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <sal/log.hxx>
@@ -181,7 +183,7 @@ OUString ReplaceStringHookProc(const OUString& rStr);
 
 }
 
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined LIBO_HEADLESS
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && HAVE_FEATURE_UI
 bool fire_glxtest_process();
 void reap_glxtest_process();
 #endif

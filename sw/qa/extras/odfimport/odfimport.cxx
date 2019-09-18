@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_features.h>
+
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -611,7 +613,7 @@ DECLARE_ODFIMPORT_TEST(testFdo37606Copy, "fdo37606.odt")
     // Previously copy&paste failed to copy the table in case it was the document-starting one.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
-#if !defined(MACOSX) && !defined(LIBO_HEADLESS) // FIXME
+#if !defined(MACOSX) && HAVE_FEATURE_UI
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
 #endif
 }
