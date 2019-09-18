@@ -52,7 +52,7 @@ define NEWLINE
 endef
 
 define WHITESPACE
- 
+
 endef
 
 COMMA :=,
@@ -243,11 +243,6 @@ ifneq ($(gb_DEBUGLEVEL),1) # 2 or more
 gb_GLOBALDEFS += -DDEBUG \
 
 endif
-endif
-
-ifeq ($(DISABLE_GUI),TRUE)
-gb_GLOBALDEFS += -DLIBO_HEADLESS \
-
 endif
 
 gb_GLOBALDEFS += \

@@ -22,18 +22,18 @@ struct VCL_DLLPUBLIC OpenGLWrapper
     /**
      * Returns true if VCL has OpenGL rendering enabled
      */
-#ifdef LIBO_HEADLESS
-    static bool isVCLOpenGLEnabled()
-    {
-        return false;
-    }
-#else
+#if HAVE_FEATURE_UI
     static bool isVCLOpenGLEnabled();
 
     /**
      * Returns the number of times OpenGL buffers have been swapped.
      */
     static sal_Int64 getBufferSwapCounter();
+#else
+    static bool isVCLOpenGLEnabled()
+    {
+        return false;
+    }
 #endif
 };
 

@@ -695,12 +695,12 @@ void CommandLineArgs::InitParamValues()
 {
     m_minimized = false;
     m_norestore = false;
-#ifdef LIBO_HEADLESS
-    m_invisible = true;
-    m_headless = true;
-#else
+#if HAVE_FEATURE_UI
     m_invisible = false;
     m_headless = false;
+#else
+    m_invisible = true;
+    m_headless = true;
 #endif
     m_eventtesting = false;
     m_quickstart = false;

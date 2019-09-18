@@ -29,7 +29,7 @@
 #elif defined ANDROID
 #include "android/svsys.h"
 #elif defined HAIKU
-#elif defined LIBO_HEADLESS
+#elif !HAVE_FEATURE_UI
 #else
 #include "unx/svsys.h"
 #endif
