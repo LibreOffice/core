@@ -54,7 +54,7 @@ class SvTreeListEntry;
 
 namespace accessibility
 {
-
+    class AccessibleListBox;
 
 // class AccessibleListBoxEntry ------------------------------------------
     typedef ::cppu::WeakAggComponentImplHelper9< css::accessibility::XAccessible
@@ -84,8 +84,8 @@ namespace accessibility
         /// client id in the AccessibleEventNotifier queue
         sal_uInt32                          m_nClientId;
 
-        css::uno::WeakReference< css::accessibility::XAccessible >
-                                            m_aParent;
+        css::uno::WeakReference<css::accessibility::XAccessible> m_wListBox;
+        AccessibleListBox & m_rListBox;
 
         tools::Rectangle               GetBoundingBox_Impl() const;
         tools::Rectangle               GetBoundingBoxOnScreen_Impl() const;
@@ -121,13 +121,14 @@ namespace accessibility
         /** Ctor()
             @param  _rListBox
                 the view control
-            @param  _pEntry
+            @param  rEntry
                 the entry
-            @param  _xParent
-                is our parent accessible object
+            @param rListBox
+                the a11y object for _rListBox
         */
-        AccessibleListBoxEntry( SvTreeListBox& _rListBox, SvTreeListEntry* _pEntry,
-                                const css::uno::Reference< css::accessibility::XAccessible >& _xParent );
+        AccessibleListBoxEntry( SvTreeListBox& _rListBox,
+                                SvTreeListEntry& rEntry,
+                                AccessibleListBox & rListBox);
 
         SvTreeListEntry* GetSvLBoxEntry() const { return m_pSvLBoxEntry; }
 

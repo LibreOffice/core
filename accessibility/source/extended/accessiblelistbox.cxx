@@ -137,18 +137,7 @@ namespace accessibility
                             uno::Any aOldValue;
                             aOldValue <<= m_xFocusedChild;
 
-                            MAP_ENTRY::iterator mi = m_mapEntry.find(pEntry);
-                            if(mi != m_mapEntry.end())
-                            {
-                                OSL_ASSERT(mi->second.get() != nullptr);
-                                m_xFocusedChild = mi->second;
-                            }
-                            else
-                            {
-                                AccessibleListBoxEntry *pEntNew = new AccessibleListBoxEntry( *getListBox(), pEntry, nullptr );
-                                m_xFocusedChild = pEntNew;
-                                m_mapEntry.emplace(pEntry,pEntNew);
-                            }
+                            m_xFocusedChild.set(implGetAccessible(*pEntry).get());
 
                             aNewValue <<= m_xFocusedChild;
                             NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
@@ -175,8 +164,12 @@ namespace accessibility
                         {
                             uno::Any aNewValue;
                             uno::Any aOldValue;
-                            aOldValue <<= entry.second;
+                            aOldValue <<= uno::Reference<XAccessible>(entry.second.get());
                             NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
+                        }
+                        for (auto const& entry : m_mapEntry)
+                        {   // release references ...
+                            entry.second->dispose();
                         }
                         m_mapEntry.clear();
                     }
@@ -190,9 +183,7 @@ namespace accessibility
                     SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
                     if ( pEntry )
                     {
-                        AccessibleListBoxEntry* pAccListBoxEntry =
-                            new AccessibleListBoxEntry( *getListBox(), pEntry, this );
-                        Reference< XAccessible > xChild = pAccListBoxEntry;
+                        Reference<XAccessible> const xChild(implGetAccessible(*pEntry).get());
                         const short nAccEvent =
                                 ( rVclWindowEvent.GetId() == VclEventId::ItemExpanded )
                                 ? AccessibleEventId::LISTBOX_ENTRY_EXPANDED
@@ -222,21 +213,9 @@ namespace accessibility
         AccessibleListBoxEntry* pEntryFocus =static_cast< AccessibleListBoxEntry* >(m_xFocusedChild.get());
         if (pEntryFocus && pEntry && pEntry != pEntryFocus->GetSvLBoxEntry())
         {
-            AccessibleListBoxEntry *pAccCurOptionEntry =nullptr;
-            MAP_ENTRY::iterator mi = m_mapEntry.find(pEntry);
-            if (mi != m_mapEntry.end())
-            {
-                pAccCurOptionEntry= static_cast< AccessibleListBoxEntry* >(mi->second.get());
-            }
-            else
-            {
-                pAccCurOptionEntry =new AccessibleListBoxEntry( *getListBox(), pEntry, nullptr );
-                std::pair<MAP_ENTRY::iterator, bool> pairMi = m_mapEntry.emplace(pAccCurOptionEntry->GetSvLBoxEntry(), pAccCurOptionEntry);
-                mi = pairMi.first;
-            }
-
+            AccessibleListBoxEntry *const pAccCurOptionEntry = implGetAccessible(*pEntry).get();
             uno::Any aNewValue;
-            aNewValue <<= mi->second;//xAcc
+            aNewValue <<= uno::Reference<XAccessible>(pAccCurOptionEntry);
             NotifyAccessibleEvent( AccessibleEventId::CHILD, uno::Any(), aNewValue );//Add
 
             return pAccCurOptionEntry;
@@ -254,7 +233,7 @@ namespace accessibility
         {
             uno::Any aNewValue;
             uno::Any aOldValue;
-            aOldValue <<= mi->second;
+            aOldValue <<= uno::Reference<XAccessible>(mi->second.get());
             NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
 
             m_mapEntry.erase(mi);
@@ -350,7 +329,8 @@ namespace accessibility
 
         // Solution: Set the parameter of the parent to null to let entry determine the parent by itself
         //return new AccessibleListBoxEntry( *getListBox(), pEntry, this );
-        return new AccessibleListBoxEntry( *getListBox(), pEntry, nullptr );
+        //return new AccessibleListBoxEntry( *getListBox(), pEntry, nullptr );
+        return implGetAccessible(*pEntry).get();
     }
 
     Reference< XAccessible > SAL_CALL AccessibleListBox::getAccessibleParent(  )
@@ -496,7 +476,8 @@ namespace accessibility
             {
                 // Solution: Set the parameter of the parent to null to let entry determine the parent by itself
                 //xChild = new AccessibleListBoxEntry( *getListBox(), pEntry, this );
-                xChild = new AccessibleListBoxEntry( *getListBox(), pEntry, nullptr );
+                //xChild = new AccessibleListBoxEntry( *getListBox(), pEntry, nullptr );
+                xChild = implGetAccessible(*pEntry).get();
                 break;
             }
         }
@@ -525,6 +506,25 @@ namespace accessibility
             if ( getListBox()->GetSelectionMode() == SelectionMode::Multiple )
                 rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
         }
+    }
+
+    rtl::Reference<AccessibleListBoxEntry> AccessibleListBox::implGetAccessible(SvTreeListEntry & rEntry)
+    {
+        rtl::Reference<AccessibleListBoxEntry> pAccessible;
+        auto const it = m_mapEntry.find(&rEntry);
+        if (it != m_mapEntry.end())
+        {
+            pAccessible = it->second;
+        }
+        else
+        {
+            AccessibleListBoxEntry *const pAccListBoxEntry =
+                new AccessibleListBoxEntry(*getListBox(), rEntry, *this);
+            pAccessible = pAccListBoxEntry;
+            m_mapEntry.emplace(&rEntry, pAccessible);
+        }
+        assert(pAccessible.is());
+        return pAccessible;
     }
 
     VclPtr< SvTreeListBox > AccessibleListBox::getListBox() const
