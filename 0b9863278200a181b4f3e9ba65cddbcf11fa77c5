@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_e55e6044",
+        "filename": "include/svx/svdobj.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-09-18T12:44:13Z",
+      "side": 1,
+      "message": "we don\u0027t want to extend the base class with redundant data of its successor (where the object has already contained these data as properties)",
+      "range": {
+        "startLine": 1026,
+        "startChar": 0,
+        "endLine": 1039,
+        "endChar": 2
+      },
+      "revId": "0b9863278200a181b4f3e9ba65cddbcf11fa77c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_d018c476",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-09-18T12:44:13Z",
+      "side": 1,
+      "message": "copy and modify lcl_GetHorAlignFromItemSet()",
+      "range": {
+        "startLine": 628,
+        "startChar": 0,
+        "endLine": 635,
+        "endChar": 1
+      },
+      "revId": "0b9863278200a181b4f3e9ba65cddbcf11fa77c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_90032c0e",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-09-18T12:44:13Z",
+      "side": 1,
+      "message": "copy and modify lcl_GetVertAlignFromItemSet(), maybe re-using also ToVertAlign() (moving that from xeescher.cxx to xehelper.cxx)",
+      "range": {
+        "startLine": 636,
+        "startChar": 0,
+        "endLine": 643,
+        "endChar": 1
+      },
+      "revId": "0b9863278200a181b4f3e9ba65cddbcf11fa77c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_253a18e7",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-09-18T12:44:13Z",
+      "side": 1,
+      "message": "use mpCaption-\u003eGetMergedItemSet() to access to the aligment data",
+      "range": {
+        "startLine": 654,
+        "startChar": 0,
+        "endLine": 655,
+        "endChar": 61
+      },
+      "revId": "0b9863278200a181b4f3e9ba65cddbcf11fa77c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
