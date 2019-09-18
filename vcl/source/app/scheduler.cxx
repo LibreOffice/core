@@ -347,7 +347,6 @@ bool Scheduler::ProcessTaskScheduling()
     sal_uInt64 nTime = tools::Time::GetSystemTicks();
     if ( nTime < rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod )
     {
-        SAL_WARN( "vcl.schedule", "we're too early by " << (rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod - nTime) << " ticks, restart the timer" );
         UpdateSystemTimer( rSchedCtx,
                            rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod - nTime,
                            true, nTime );
