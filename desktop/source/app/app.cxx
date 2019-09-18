@@ -1578,7 +1578,7 @@ int Desktop::Main()
         // In headless mode, reap the process started by fire_glxtest_process() early in soffice_main
         // (desktop/source/app/sofficemain.cxx), in a code block that needs to be covered by the same
         // #if condition as this code block:
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS) && HAVE_FEATURE_OPENGL
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && HAVE_FEATURE_UI && HAVE_FEATURE_OPENGL
         if (rCmdLineArgs.IsHeadless()) {
             reap_glxtest_process();
         }

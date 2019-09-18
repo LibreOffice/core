@@ -9,7 +9,7 @@
 
 #include "splashx.h"
 
-#if defined(ENABLE_QUICKSTART_LIBPNG) && !defined(LIBO_HEADLESS)
+#if defined(ENABLE_QUICKSTART_LIBPNG) && HAVE_FEATURE_UI
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
