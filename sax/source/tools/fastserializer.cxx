@@ -20,7 +20,7 @@
 #include "fastserializer.hxx"
 
 #include <com/sun/star/xml/sax/FastTokenHandler.hpp>
-#include <rtl/math.hxx>
+#include <rtl/math.h>
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
