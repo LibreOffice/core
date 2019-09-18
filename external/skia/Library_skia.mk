@@ -29,6 +29,8 @@ $(eval $(call gb_Library_add_defs,skia,\
 	-DGR_RELEASE=1 \
 	-DNDEBUG \
 	-DSKIA_DLL \
+	-DSK_HAS_JPEG_LIBRARY=1 \
+	-DSK_HAS_PNG_LIBRARY=1 \
 ))
 
 # TODO
@@ -41,6 +43,7 @@ $(eval $(call gb_Library_use_externals,skia,\
 	fontconfig \
 	zlib \
 	libjpeg \
+	libpng \
 ))
 
 ifeq ($(OS),LINUX)
@@ -71,6 +74,31 @@ $(eval $(call gb_Library_add_exception_objects,skia,\
 $(eval $(call gb_Library_set_generated_cxx_suffix,skia,cpp))
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
+       UnpackedTarball/skia/src/codec/SkAndroidCodecAdapter \
+       UnpackedTarball/skia/src/codec/SkAndroidCodec \
+       UnpackedTarball/skia/src/codec/SkBmpBaseCodec \
+       UnpackedTarball/skia/src/codec/SkBmpCodec \
+       UnpackedTarball/skia/src/codec/SkBmpMaskCodec \
+       UnpackedTarball/skia/src/codec/SkBmpRLECodec \
+       UnpackedTarball/skia/src/codec/SkBmpStandardCodec \
+       UnpackedTarball/skia/src/codec/SkCodec \
+       UnpackedTarball/skia/src/codec/SkCodecImageGenerator \
+       UnpackedTarball/skia/src/codec/SkColorTable \
+       UnpackedTarball/skia/src/codec/SkEncodedInfo \
+       UnpackedTarball/skia/src/codec/SkGifCodec \
+       UnpackedTarball/skia/src/codec/SkIcoCodec \
+       UnpackedTarball/skia/src/codec/SkJpegCodec \
+       UnpackedTarball/skia/src/codec/SkJpegDecoderMgr \
+       UnpackedTarball/skia/src/codec/SkJpegUtility \
+       UnpackedTarball/skia/src/codec/SkMasks \
+       UnpackedTarball/skia/src/codec/SkMaskSwizzler \
+       UnpackedTarball/skia/src/codec/SkOrientationMarker \
+       UnpackedTarball/skia/src/codec/SkPngCodec \
+       UnpackedTarball/skia/src/codec/SkSampledCodec \
+       UnpackedTarball/skia/src/codec/SkSampler \
+       UnpackedTarball/skia/src/codec/SkStreamBuffer \
+       UnpackedTarball/skia/src/codec/SkSwizzler \
+       UnpackedTarball/skia/src/codec/SkWbmpCodec \
        UnpackedTarball/skia/src/core/SkAAClip \
        UnpackedTarball/skia/src/core/SkAlphaRuns \
        UnpackedTarball/skia/src/core/SkAnalyticEdge \
@@ -475,33 +503,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 #       UnpackedTarball/skia/src/android/SkBitmapRegionCodec \
 #       UnpackedTarball/skia/src/android/SkBitmapRegionDecoder \
 
-#       UnpackedTarball/skia/src/codec/SkAndroidCodecAdapter \
-#       UnpackedTarball/skia/src/codec/SkAndroidCodec \
-#       UnpackedTarball/skia/src/codec/SkBmpBaseCodec \
-#       UnpackedTarball/skia/src/codec/SkBmpCodec \
-#       UnpackedTarball/skia/src/codec/SkBmpMaskCodec \
-#       UnpackedTarball/skia/src/codec/SkBmpRLECodec \
-#       UnpackedTarball/skia/src/codec/SkBmpStandardCodec \
-#       UnpackedTarball/skia/src/codec/SkCodec \
-#       UnpackedTarball/skia/src/codec/SkCodecImageGenerator \
-#       UnpackedTarball/skia/src/codec/SkColorTable \
-#       UnpackedTarball/skia/src/codec/SkEncodedInfo \
-#       UnpackedTarball/skia/src/codec/SkGifCodec \
 #       UnpackedTarball/skia/src/codec/SkHeifCodec \
-#       UnpackedTarball/skia/src/codec/SkIcoCodec \
-#       UnpackedTarball/skia/src/codec/SkJpegCodec \
-#       UnpackedTarball/skia/src/codec/SkJpegDecoderMgr \
-#       UnpackedTarball/skia/src/codec/SkJpegUtility \
-#       UnpackedTarball/skia/src/codec/SkMasks \
-#       UnpackedTarball/skia/src/codec/SkMaskSwizzler \
-#       UnpackedTarball/skia/src/codec/SkOrientationMarker \
-#       UnpackedTarball/skia/src/codec/SkPngCodec \
 #       UnpackedTarball/skia/src/codec/SkRawCodec \
-#       UnpackedTarball/skia/src/codec/SkSampledCodec \
-#       UnpackedTarball/skia/src/codec/SkSampler \
-#       UnpackedTarball/skia/src/codec/SkStreamBuffer \
-#       UnpackedTarball/skia/src/codec/SkSwizzler \
-#       UnpackedTarball/skia/src/codec/SkWbmpCodec \
 #       UnpackedTarball/skia/src/codec/SkWebpCodec \
 #       UnpackedTarball/skia/src/codec/SkWuffsCodec \
 #       UnpackedTarball/skia/src/utils/SkAnimCodecPlayer \
@@ -896,6 +899,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 #       UnpackedTarball/skia/src/image/SkSurface_Gpu \
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
+       UnpackedTarball/skia/third_party/gif/SkGifImageReader \
        UnpackedTarball/skia/third_party/skcms/skcms \
 ))
 
