@@ -14,6 +14,13 @@ The most recent version reviewed by MIMO can be downloaded at <https://www.mim.o
 
 ## Release notes
 
+### `6.1.6.3.M13`
+
+* Fix [acim#1418](https://acim.08000linux.com/issues/1418): Nouvelles failles dans libreoffice by fixing two CVE:
+	- CVE-2019-9855
+	- CVE-2019-9854
+
+
 ### `6.1.6.3.M12`
 
 * Fix [acim#1408](https://acim.08000linux.com/issues/1404): Demande d'intégration du patch de sécurité pour LibreOffice by fixing two CVE:
