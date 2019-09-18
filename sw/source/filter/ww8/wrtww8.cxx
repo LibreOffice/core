@@ -3066,22 +3066,40 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
         return;
 
     sCmp = sCmp.toAsciiLowerCase();
+    OUString aName;
+    sal_uLong nIdx = 0;
+    bool noBookmark = false;
 
     if( sCmp == "outline" )
     {
         SwPosition aPos( *m_pCurPam->GetPoint() );
-        OUString aOutline( BookmarkToWriter(aURL.copy( 0, nPos )) );
+        aName = BookmarkToWriter(aURL.copy(0, nPos));
         // If we can find the outline this bookmark refers to
         // save the name of the bookmark and the
         // node index number of where it points to
-        if( m_pDoc->GotoOutline( aPos, aOutline ) )
+        if( m_pDoc->GotoOutline( aPos, aName ) )
         {
-            sal_uLong nIdx = aPos.nNode.GetIndex();
-            aBookmarkPair aImplicitBookmark;
-            aImplicitBookmark.first = aOutline;
-            aImplicitBookmark.second = nIdx;
-            m_aImplicitBookmarks.push_back(aImplicitBookmark);
+            nIdx = aPos.nNode.GetIndex();
+            noBookmark = true;
         }
+    }
+    else if( sCmp == "graphic" )
+    {
+        SwNodeIndex* pIdx;
+        aName = BookmarkToWriter(aURL.copy( 0, nPos ));
+        const SwFlyFrameFormat* pFormat = m_pDoc->FindFlyByName(aName, SwNodeType::Grf);
+        if (pFormat && nullptr != (pIdx = const_cast<SwNodeIndex*>(pFormat->GetContent().GetContentIdx())))
+        {
+            nIdx = pIdx->GetNext()->GetIndex();
+            noBookmark = true;
+        }
+    }
+    if (noBookmark)
+    {
+        aBookmarkPair aImplicitBookmark;
+        aImplicitBookmark.first = aName;
+        aImplicitBookmark.second = nIdx;
+        m_aImplicitBookmarks.push_back(aImplicitBookmark);
     }
 }
 

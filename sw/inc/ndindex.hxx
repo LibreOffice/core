@@ -115,6 +115,7 @@ public:
     inline const SwNodes& GetNodes() const;
     inline       SwNodes& GetNodes();
 
+    SwNodeIndex* GetNext() { return GetNextInRing(); }
     SwNode& GetNode() const { return *m_pNode; }
 };
 
