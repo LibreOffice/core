@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <framework/titlehelper.hxx>
 #include <classes/fwkresid.hxx>
 #include <strings.hrc>
@@ -577,7 +579,7 @@ void TitleHelper::impl_appendDebugVersion (OUStringBuffer& sTitle)
     OUString sVersion = ::utl::Bootstrap::getBuildIdData("development");
     sTitle.append(" [");
     sTitle.append(sVersion);
-#ifndef LIBO_HEADLESS
+#if HAVE_FEATURE_UI
     if (OpenGLWrapper::isVCLOpenGLEnabled())
         sTitle.append("-GL");
 #endif
