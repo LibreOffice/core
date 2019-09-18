@@ -585,7 +585,7 @@ public:
 
     bool IsInDestruction() const { return mbInDestruction;}
 
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelImplementationId();
+    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
     /** enables (true) or disables (false) recording of undo actions
         If undo actions are added while undo is disabled, they are deleted.

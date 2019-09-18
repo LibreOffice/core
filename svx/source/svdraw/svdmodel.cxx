@@ -2004,7 +2004,7 @@ namespace
     class theSdrModelUnoTunnelImplementationId : public rtl::Static< UnoTunnelIdInit, theSdrModelUnoTunnelImplementationId > {};
 }
 
-const css::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImplementationId()
+const css::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelId()
 {
     return theSdrModelUnoTunnelImplementationId::get().getSeq();
 }

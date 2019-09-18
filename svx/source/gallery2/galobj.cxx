@@ -405,7 +405,7 @@ SvxGalleryDrawModel::SvxGalleryDrawModel()
         if( xTunnel.is() )
         {
             mpFormModel = dynamic_cast< FmFormModel* >(
-                reinterpret_cast<SdrModel*>(xTunnel->getSomething(SdrModel::getUnoTunnelImplementationId())));
+                reinterpret_cast<SdrModel*>(xTunnel->getSomething(SdrModel::getUnoTunnelId())));
             if( mpFormModel )
             {
                 mpFormModel->InsertPage( mpFormModel->AllocPage( false ) );
