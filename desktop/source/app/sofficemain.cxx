@@ -129,7 +129,7 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 #endif
 #endif
 
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS) && HAVE_FEATURE_OPENGL
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && HAVE_FEATURE_UI && HAVE_FEATURE_OPENGL
     /* Run test for OpenGL support in own process to avoid crash with broken
      * OpenGL drivers. Start process as early as possible.
      * In non-headless mode, the process will be reaped in X11OpenGLDeviceInfo::GetData

@@ -75,7 +75,6 @@ End
 #endif
 #endif
 
-#ifndef LIBO_HEADLESS
 Module gid_Module_Root_Files_Images
     PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
@@ -87,7 +86,6 @@ Module gid_Module_Root_Files_Images
 	Styles = (HIDDEN_ROOT);
 	Files = (auto_ooo_images_ALL);
 End
-#endif
 
 #ifndef WITHOUT_FONTS
 Module gid_Module_Root_Fonts_OOo_Hidden
