@@ -125,11 +125,22 @@ sal_Int16 SwFormatWrapInfluenceOnObjPos::GetWrapInfluenceOnObjPos(
     return nWrapInfluenceOnPosition;
 }
 
+void SwFormatWrapInfluenceOnObjPos::SetAllowOverlap(bool bAllowOverlap)
+{
+    mbAllowOverlap = bAllowOverlap;
+}
+
+bool SwFormatWrapInfluenceOnObjPos::GetAllowOverlap() const
+{
+    return mbAllowOverlap;
+}
+
 void SwFormatWrapInfluenceOnObjPos::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatWrapInfluenceOnObjPos"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWrapInfluenceOnPosition"), BAD_CAST(OString::number(mnWrapInfluenceOnPosition).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mbAllowOverlap"), BAD_CAST(OString::boolean(mbAllowOverlap).getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 
