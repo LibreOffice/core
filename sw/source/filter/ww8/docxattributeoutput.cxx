@@ -2914,7 +2914,7 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
                     }
                 }
             }
-            if (sMark.indexOf(' ') != -1 && !sMark.endsWith("|table") && !sMark.endsWith("|frame") && !sMark.endsWith("|graphic") && !sMark.endsWith("|ole") && !sMark.endsWith("|region"))
+            if (sMark.indexOf(' ') != -1 && !sMark.endsWith("|table") && !sMark.endsWith("|frame") && !sMark.endsWith("|ole") && !sMark.endsWith("|region"))
             {
                 // Spaces are prohibited in bookmark name.
                 sMark = sMark.replace(' ', '_');
