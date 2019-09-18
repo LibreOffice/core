@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <config_features.h>
 
 #include <cstdlib>
 
@@ -28,12 +29,12 @@
 
 #include <salinst.hxx>
 
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined LIBO_HEADLESS && !defined HAIKU
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && HAVE_FEATURE_UI && !defined HAIKU
 #include <opengl/x11/glxtest.hxx>
 #endif
 
 SAL_IMPLEMENT_MAIN() {
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined LIBO_HEADLESS && !defined HAIKU
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && HAVE_FEATURE_UI && !defined HAIKU
     fire_glxtest_process();
 #endif
     tools::extendApplicationEnvironment();
