@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_a5aaa816",
+        "filename": "oox/source/vml/vmlshapecontext.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-09-18T11:16:27Z",
+      "side": 1,
+      "message": "Does this really need? The task of the replaced decodeToken is the same.",
+      "range": {
+        "startLine": 190,
+        "startChar": 0,
+        "endLine": 209,
+        "endChar": 1
+      },
+      "revId": "39cd071a05d31986382b6db46c85a87ef7ceed53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
