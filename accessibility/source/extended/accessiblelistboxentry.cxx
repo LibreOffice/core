@@ -18,6 +18,7 @@
  */
 
 #include <extended/accessiblelistboxentry.hxx>
+#include <extended/accessiblelistbox.hxx>
 #include <vcl/treelistbox.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <vcl/svlbitm.hxx>
@@ -71,18 +72,17 @@ namespace accessibility
     // Ctor() and Dtor()
 
     AccessibleListBoxEntry::AccessibleListBoxEntry( SvTreeListBox& _rListBox,
-                                                    SvTreeListEntry* _pEntry,
-                                                    const Reference< XAccessible >& _xParent ) :
+                                                    SvTreeListEntry& rEntry,
+                                                    AccessibleListBox & rListBox)
+        : AccessibleListBoxEntry_BASE( m_aMutex )
+        , ListBoxAccessibleBase( _rListBox )
 
-        AccessibleListBoxEntry_BASE ( m_aMutex ),
-        ListBoxAccessibleBase( _rListBox ),
-
-        m_pSvLBoxEntry  ( _pEntry ),
-        m_nClientId     ( 0 ),
-        m_aParent       ( _xParent )
-
+        , m_pSvLBoxEntry(&rEntry)
+        , m_nClientId( 0 )
+        , m_wListBox(&rListBox)
+        , m_rListBox(rListBox)
     {
-        _rListBox.FillEntryPath( _pEntry, m_aEntryPath );
+        _rListBox.FillEntryPath( m_pSvLBoxEntry, m_aEntryPath );
     }
 
     AccessibleListBoxEntry::~AccessibleListBoxEntry()
@@ -246,7 +246,7 @@ namespace accessibility
 
             ListBoxAccessibleBase::disposing();
         }
-        m_aParent.clear();
+        m_wListBox.clear();
     }
 
     // XServiceInfo
@@ -302,13 +302,15 @@ namespace accessibility
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
-        return new AccessibleListBoxEntry( *getListBox(), pEntry, this );
-    }
+        uno::Reference<XAccessible> xListBox(m_wListBox);
+        assert(xListBox.is());
 
+        return m_rListBox.implGetAccessible(*pEntry).get();
+    }
 
     Reference< XAccessible > AccessibleListBoxEntry::implGetParentAccessible( ) const
     {
-        Reference< XAccessible > xParent(m_aParent);
+        Reference< XAccessible > xParent;
         if ( !xParent.is() )
         {
             OSL_ENSURE( m_aEntryPath.size(), "AccessibleListBoxEntry::getAccessibleParent: invalid path!" );
@@ -332,10 +334,13 @@ namespace accessibility
                 if ( pParentEntry )
                     pParentEntry = getListBox()->GetParent(pParentEntry);
                 if ( pParentEntry )
-                    xParent = new AccessibleListBoxEntry( *getListBox(), pParentEntry, nullptr );
-                    // note that we pass NULL here as parent-accessible:
-                    // this is allowed, as the AccessibleListBoxEntry class will create its parent
+                {
+                    uno::Reference<XAccessible> xListBox(m_wListBox);
+                    assert(xListBox.is());
+                    return m_rListBox.implGetAccessible(*pParentEntry).get();
+                    // the AccessibleListBoxEntry class will create its parent
                     // when needed
+                }
             }
         }
 
@@ -555,10 +560,12 @@ namespace accessibility
             throw RuntimeException();
 
         Reference< XAccessible > xAcc;
-        AccessibleListBoxEntry* pAccEntry = new AccessibleListBoxEntry( *getListBox(), pEntry, this );
+        uno::Reference<XAccessible> xListBox(m_wListBox);
+        assert(xListBox.is());
+        auto pAccEntry = m_rListBox.implGetAccessible(*pEntry);
         tools::Rectangle aRect = pAccEntry->GetBoundingBox_Impl();
         if ( aRect.IsInside( VCLPoint( _aPoint ) ) )
-            xAcc = pAccEntry;
+            xAcc = pAccEntry.get();
         return xAcc;
     }
 
@@ -948,7 +955,9 @@ namespace accessibility
 
             if ( nSelCount == ( nSelectedChildIndex + 1 ) )
             {
-                xChild = new AccessibleListBoxEntry( *getListBox(), pEntry, this );
+                uno::Reference<XAccessible> xListBox(m_wListBox);
+                assert(xListBox.is());
+                xChild = m_rListBox.implGetAccessible(*pEntry).get();
                 break;
             }
         }

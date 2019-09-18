@@ -75,6 +75,8 @@ namespace accessibility
         AccessibleListBox( SvTreeListBox const & _rListBox,
                            const css::uno::Reference< css::accessibility::XAccessible >& _xParent );
 
+        rtl::Reference<AccessibleListBoxEntry> implGetAccessible(SvTreeListEntry & rEntry);
+
         // XTypeProvider
         DECLARE_XTYPEPROVIDER()
 
@@ -108,7 +110,7 @@ namespace accessibility
 
     private:
 
-        typedef std::map< SvTreeListEntry*, css::uno::Reference< css::accessibility::XAccessible > > MAP_ENTRY;
+        typedef std::map<SvTreeListEntry*, rtl::Reference<AccessibleListBoxEntry>> MAP_ENTRY;
         MAP_ENTRY m_mapEntry;
 
         css::uno::Reference< css::accessibility::XAccessible > m_xFocusedChild;
