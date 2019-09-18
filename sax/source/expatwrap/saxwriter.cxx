@@ -28,12 +28,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
-#include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/SAXInvalidCharacterException.hpp>
 #include <com/sun/star/xml/sax/XWriter.hpp>
-
-#include <com/sun/star/io/XActiveDataSource.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/weak.hxx>
@@ -42,8 +38,6 @@
 
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
-#include <rtl/ref.hxx>
-#include <rtl/ustrbuf.hxx>
 
 using namespace ::std;
 using namespace ::osl;
@@ -54,7 +48,6 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
 
-#include <xml2utf.hxx>
 #include <memory>
 
 #define LINEFEED 10

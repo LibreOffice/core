@@ -22,11 +22,8 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/DateTimeWithTimezone.hpp>
-#include <com/sun/star/util/DateWithTimezone.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <boost/optional.hpp>
 
 #include <rtl/ustrbuf.hxx>

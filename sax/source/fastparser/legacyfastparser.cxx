@@ -20,14 +20,12 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>
-#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/Pair.hpp>
 #include <comphelper/attributelist.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ref.hxx>
-#include <sax/fastparser.hxx>
 #include <memory>
 #include <vector>
 

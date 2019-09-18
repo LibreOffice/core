@@ -22,31 +22,23 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <test/bootstrapfixture.hxx>
-#include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/Pair.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
+#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
-#include <com/sun/star/xml/sax/FastParser.hpp>
-#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
-#include <com/sun/star/xml/Attribute.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <osl/file.hxx>
-#include <osl/conditn.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <sax/fastattribs.hxx>
-#include <string>
 #include <stack>
 #include <deque>
-#include <sax/fastparser.hxx>
 #include <rtl/ref.hxx>
 
 

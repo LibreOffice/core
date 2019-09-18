@@ -16,7 +16,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <cstring>
-#include <cstdlib>
 #include <memory>
 
 namespace sax_fastparser {

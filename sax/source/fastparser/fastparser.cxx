@@ -21,7 +21,6 @@
 #include <sax/fastattribs.hxx>
 #include <xml2utf.hxx>
 
-#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

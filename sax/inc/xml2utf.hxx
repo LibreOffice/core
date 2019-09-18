@@ -25,6 +25,9 @@
 #include <memory>
 
 #include <sal/types.h>
+#include <rtl/string.hxx>
+
+#include <com/sun/star/io/XInputStream.hpp>
 
 namespace sax_expatwrap {
 
