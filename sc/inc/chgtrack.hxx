@@ -426,7 +426,7 @@ public:
     short               GetCutOffTo() const { return nCutOffTo; }
 };
 
-class ScChangeActionDel : public ScChangeAction
+class ScChangeActionDel final : public ScChangeAction
 {
     friend class ScChangeTrack;
     friend void ScChangeAction::Accept();
@@ -499,7 +499,7 @@ public:
 };
 
 //  ScChangeActionMove
-class ScChangeActionMove : public ScChangeAction
+class ScChangeActionMove final : public ScChangeAction
 {
     friend class ScChangeTrack;
     friend struct std::default_delete<ScChangeActionMove>; // for std::unique_ptr

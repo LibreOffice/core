@@ -267,7 +267,7 @@ class SwSectionFrameMoveAndDeleteHint : public SfxHint
 
 enum class SectionSort { Not, Pos };
 
-class SW_DLLPUBLIC SwSectionFormat
+class SW_DLLPUBLIC SwSectionFormat final
     : public SwFrameFormat
     , public ::sfx2::Metadatable
 {
@@ -281,7 +281,6 @@ class SW_DLLPUBLIC SwSectionFormat
 
     SAL_DLLPRIVATE void UpdateParent();      // Parent has been changed.
 
-protected:
     SwSectionFormat( SwFrameFormat* pDrvdFrame, SwDoc *pDoc );
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 

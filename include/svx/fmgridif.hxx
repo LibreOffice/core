@@ -382,7 +382,7 @@ public:
 
 // css::form::XGridPeer
     virtual css::uno::Reference< css::container::XIndexContainer > SAL_CALL getColumns(  ) override;
-    virtual void SAL_CALL setColumns( const css::uno::Reference< css::container::XIndexContainer >& aColumns ) override;
+    virtual void SAL_CALL setColumns( const css::uno::Reference< css::container::XIndexContainer >& aColumns ) override final;
 
 // css::lang::XComponent
     virtual void SAL_CALL dispose() override;
@@ -446,7 +446,7 @@ public:
 
 // css::sdb::XRowSetSupplier
     virtual css::uno::Reference< css::sdbc::XRowSet >  SAL_CALL getRowSet() override;
-    virtual void SAL_CALL setRowSet(const css::uno::Reference< css::sdbc::XRowSet >& xDataSource) override;
+    virtual void SAL_CALL setRowSet(const css::uno::Reference< css::sdbc::XRowSet >& xDataSource) override final;
 
 // css::util::XModifyBroadcaster
     virtual void SAL_CALL addModifyListener(const css::uno::Reference< css::util::XModifyListener >& l) override;

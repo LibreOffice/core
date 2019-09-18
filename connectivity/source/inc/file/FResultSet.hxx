@@ -163,7 +163,7 @@ namespace connectivity
             OResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator& _aSQLIterator);
 
             // ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing() override;
+            virtual void SAL_CALL disposing() override final;
             // XInterface
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
             virtual void SAL_CALL acquire() throw() override;

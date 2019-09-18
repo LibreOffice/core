@@ -47,7 +47,7 @@ namespace connectivity
 
         typedef connectivity::OMetaConnection               OConnection_BASE; // implements basics and text encoding
 
-        class OEvoabConnection  :public OConnection_BASE
+        class OEvoabConnection final :public OConnection_BASE
         {
         private:
             const OEvoabDriver&             m_rDriver;

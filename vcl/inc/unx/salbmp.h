@@ -34,7 +34,7 @@ class   ImplSalDDB;
 class   ImplSalBitmapCache;
 
 
-class VCLPLUG_GEN_PUBLIC X11SalBitmap : public SalBitmap
+class VCLPLUG_GEN_PUBLIC X11SalBitmap final : public SalBitmap
 {
 private:
 
