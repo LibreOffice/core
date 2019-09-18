@@ -600,7 +600,7 @@ void TitleHelper::impl_appendDebugVersion (OUStringBuffer& sTitle)
     OUString sVersion = ::utl::Bootstrap::getBuildIdData("development");
     sTitle.append(" [");
     sTitle.append(sVersion);
-#ifndef LIBO_HEADLESS
+#if HAVE_FEATURE_UI
     if (OpenGLWrapper::isVCLOpenGLEnabled())
         sTitle.append("-GL");
 #endif

@@ -245,11 +245,6 @@ gb_GLOBALDEFS += -DDEBUG \
 endif
 endif
 
-ifeq ($(DISABLE_GUI),TRUE)
-gb_GLOBALDEFS += -DLIBO_HEADLESS \
-
-endif
-
 gb_GLOBALDEFS += \
 	$(call gb_Helper_define_if_set,\
 		DISABLE_DYNLOADING \

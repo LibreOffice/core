@@ -34,7 +34,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/inputtypes.hxx>
 #include <vcl/lok.hxx>
-#ifndef LIBO_HEADLESS
+#if HAVE_FEATURE_UI
 # include <vcl/opengl/OpenGLContext.hxx>
 #endif
 
@@ -562,18 +562,7 @@ std::shared_ptr<vcl::BackendCapabilities> SvpSalInstance::GetBackendCapabilities
 
 //obviously doesn't actually do anything, it's just a nonfunctional stub
 
-#ifdef LIBO_HEADLESS
-
-class SvpOpenGLContext
-{
-};
-
-OpenGLContext* SvpSalInstance::CreateOpenGLContext()
-{
-    return nullptr;
-}
-
-#else
+#if HAVE_FEATURE_UI
 
 class SvpOpenGLContext : public OpenGLContext
 {
@@ -587,6 +576,18 @@ OpenGLContext* SvpSalInstance::CreateOpenGLContext()
 {
     return new SvpOpenGLContext;
 }
+
+#else
+
+class SvpOpenGLContext
+{
+};
+
+OpenGLContext* SvpSalInstance::CreateOpenGLContext()
+{
+    return nullptr;
+}
+
 
 #endif
 
