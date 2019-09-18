@@ -313,20 +313,32 @@ namespace
 
     class LicenseDialog : public weld::GenericDialogController
     {
+    private:
+        std::unique_ptr<weld::Button> m_xBtnEula;
+
+        DECL_LINK(EulaHdl, weld::Button&, void);
+
     public:
         LicenseDialog(weld::Window* pParent)
             : GenericDialogController(pParent, "sfx/ui/licensedialog.ui",  "LicenseDialog")
+            , m_xBtnEula(m_xBuilder->weld_button("eula"))
         {
+            m_xBtnEula->connect_clicked( LINK(this, LicenseDialog, EulaHdl) );
         }
 
         virtual short run() override
         {
             short nRet = GenericDialogController::run();
-            if (nRet == RET_OK)
-                showDocument("LICENSE");
             return nRet;
         }
     };
+
+    IMPL_LINK_NOARG(LicenseDialog, EulaHdl, weld::Button&, void)
+    {
+        response(RET_OK);
+        showDocument("EULA.odt");
+    }
+
 
     class SafeModeQueryDialog : public weld::MessageDialogController
     {

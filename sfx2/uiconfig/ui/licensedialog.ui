@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="LicenseDialog">
@@ -11,6 +11,9 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -21,7 +24,7 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="ok">
+              <object class="GtkButton" id="eula">
                 <property name="label" translatable="yes" context="licensedialog|show">_Show License</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -88,11 +91,8 @@ This product was created by %OOOVENDOR, based on OpenOffice.org, which is Copyri
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-5">ok</action-widget>
+      <action-widget response="-5">eula</action-widget>
       <action-widget response="-7">close</action-widget>
     </action-widgets>
-    <child>
-      <placeholder/>
-    </child>
   </object>
 </interface>
