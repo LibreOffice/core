@@ -120,6 +120,8 @@ SwVbaDocuments::Close( const uno::Any& /*SaveChanges*/, const uno::Any& /*Origin
 uno::Any SAL_CALL
 SwVbaDocuments::Open( const OUString& Filename, const uno::Any& /*ConfirmConversions*/, const uno::Any& ReadOnly, const uno::Any& /*AddToRecentFiles*/, const uno::Any& /*PasswordDocument*/, const uno::Any& /*PasswordTemplate*/, const uno::Any& /*Revert*/, const uno::Any& /*WritePasswordDocument*/, const uno::Any& /*WritePasswordTemplate*/, const uno::Any& /*Format*/, const uno::Any& /*Encoding*/, const uno::Any& /*Visible*/, const uno::Any& /*OpenAndRepair*/, const uno::Any& /*DocumentDirection*/, const uno::Any& /*NoEncodingDialog*/, const uno::Any& /*XMLTransform*/ )
 {
+    SAL_INFO("sw.vba", "Documents.Open(Filename:=" << Filename << ",ReadOnly:=" << ReadOnly << ")");
+
     // we need to detect if this is a URL, if not then assume it's a file path
     OUString aURL;
     INetURLObject aObj;
