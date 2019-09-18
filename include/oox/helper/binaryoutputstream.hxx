@@ -125,7 +125,7 @@ void BinaryOutputStream::writeValue( Type nValue )
 
     The binary data in the stream is written in little-endian format.
  */
-class OOX_DLLPUBLIC BinaryXOutputStream : public BinaryXSeekableStream, public BinaryOutputStream
+class OOX_DLLPUBLIC BinaryXOutputStream final : public BinaryXSeekableStream, public BinaryOutputStream
 {
 public:
     /** Constructs the wrapper object for the passed output stream.

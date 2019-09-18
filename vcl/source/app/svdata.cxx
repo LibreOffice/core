@@ -94,7 +94,7 @@ namespace
 {
     typedef ::std::map< basegfx::SystemDependentData_SharedPtr, sal_uInt32 > EntryMap;
 
-    class SystemDependentDataBuffer : public basegfx::SystemDependentDataManager, protected cppu::BaseMutex
+    class SystemDependentDataBuffer final : public basegfx::SystemDependentDataManager, protected cppu::BaseMutex
     {
     private:
         std::unique_ptr<AutoTimer> maTimer;

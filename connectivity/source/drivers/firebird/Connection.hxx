@@ -66,7 +66,7 @@ namespace connectivity
         typedef std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
         typedef std::vector< css::uno::WeakReferenceHelper > OWeakRefArray;
 
-        class Connection : public Connection_BASE
+        class Connection final : public Connection_BASE
         {
             ::osl::Mutex        m_aMutex;
 

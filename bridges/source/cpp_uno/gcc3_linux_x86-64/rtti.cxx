@@ -64,7 +64,7 @@ public:
 
     ~GeneratedPad() override { get()->~type_info(); }
 
-    std::type_info * get() const override
+    std::type_info * get() const override final
     { return reinterpret_cast<std::type_info *>(pad_.get()); }
 
 private:

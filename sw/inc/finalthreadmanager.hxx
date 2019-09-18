@@ -36,7 +36,7 @@ class CancelJobsThread;
 class TerminateOfficeThread;
 class SwPauseThreadStarting;
 
-class FinalThreadManager : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,
+class FinalThreadManager final : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,
                                                            css::util::XJobManager,
                                                            css::frame::XTerminateListener2 >
 {

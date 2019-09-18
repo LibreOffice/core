@@ -31,7 +31,7 @@
 namespace gio
 {
 
-class InputStream: public cppu::WeakImplHelper<css::io::XInputStream>
+class InputStream final : public cppu::WeakImplHelper<css::io::XInputStream>
 {
 private:
     GFileInputStream * const mpStream;
