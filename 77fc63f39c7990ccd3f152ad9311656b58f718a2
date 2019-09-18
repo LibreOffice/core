@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_b06c289d",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 7824,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-09-18T14:37:00Z",
+      "side": 1,
+      "message": "this expression \n   m_aSensitiveMap[col]\nwill create an entry if none exists, and give it a default value of zero.\n\nIs that OK?\n\n(And similarly lower down)",
+      "revId": "77fc63f39c7990ccd3f152ad9311656b58f718a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
