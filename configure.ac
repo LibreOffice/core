@@ -1050,6 +1050,11 @@ libo_FUZZ_ARG_ENABLE(breakpad,
         [Enables breakpad for crash reporting.])
 )
 
+libo_FUZZ_ARG_ENABLE(crashdump,
+    AS_HELP_STRING([--disable-crashdump],
+        [Disable dump.ini and dump-file, when --enable-breakpad])
+)
+
 AC_ARG_ENABLE(fetch-external,
     AS_HELP_STRING([--disable-fetch-external],
         [Disables fetching external tarballs from web sources.])
@@ -9515,6 +9520,7 @@ AC_SUBST(ICU_UCHAR_TYPE)
 dnl ==================================================================
 dnl Breakpad
 dnl ==================================================================
+DEFAULT_CRASHDUMP_VALUE="true"
 AC_MSG_CHECKING([whether to enable breakpad])
 if test "$enable_breakpad" != yes; then
     AC_MSG_RESULT([no])
@@ -9524,6 +9530,14 @@ else
     AC_DEFINE(ENABLE_BREAKPAD)
     AC_DEFINE(HAVE_FEATURE_BREAKPAD, 1)
     BUILD_TYPE="$BUILD_TYPE BREAKPAD"
+
+    AC_MSG_CHECKING([for disable crash dump])
+    if test "$enable_crashdump" = no; then
+        DEFAULT_CRASHDUMP_VALUE="false"
+        AC_MSG_RESULT([yes])
+    else
+       AC_MSG_RESULT([no])
+    fi
 
     AC_MSG_CHECKING([for crashreport config])
     if test "$with_symbol_config" = "no"; then
@@ -9537,6 +9551,7 @@ else
     AC_SUBST(BREAKPAD_SYMBOL_CONFIG)
 fi
 AC_SUBST(ENABLE_BREAKPAD)
+AC_SUBST(DEFAULT_CRASHDUMP_VALUE)
 
 dnl ==================================================================
 dnl libfuzzer
