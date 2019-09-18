@@ -28,6 +28,8 @@ class SW_DLLPUBLIC SwFormatWrapInfluenceOnObjPos: public SfxPoolItem
 {
 private:
     sal_Int16 mnWrapInfluenceOnPosition;
+    /// Allow objects to overlap, permitted by default.
+    bool mbAllowOverlap = true;
 
 public:
 
@@ -54,6 +56,9 @@ public:
     /// to control, if value <ITERATIVE> has to be treated as <ONCE_CONCURRENT>
     sal_Int16 GetWrapInfluenceOnObjPos(
                         const bool _bIterativeAsOnceConcurrent = false ) const;
+
+    void SetAllowOverlap(bool bAllowOverlap);
+    bool GetAllowOverlap() const;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
