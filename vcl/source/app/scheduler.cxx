@@ -367,7 +367,6 @@ bool Scheduler::ProcessTaskScheduling()
     if ( nTime < rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod -1)
     {
         int nSleep = rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod - nTime;
-        SAL_WARN("vcl.schedule", "we're too early - restart the timer (" << nSleep << "ms)!");
         UpdateSystemTimer(rSchedCtx, nSleep, true, nTime);
         return false;
     }
