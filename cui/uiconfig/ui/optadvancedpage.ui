@@ -196,7 +196,7 @@
                                                 <property name="radio">True</property>
                                               </object>
                                               <attributes>
-                                                <attribute name="visible">4</attribute>
+                                                <attribute name="visible">5</attribute>
                                                 <attribute name="active">0</attribute>
                                               </attributes>
                                             </child>

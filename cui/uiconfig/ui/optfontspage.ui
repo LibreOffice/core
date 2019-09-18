@@ -28,13 +28,13 @@
       <column type="gchararray"/>
       <!-- column-name checkvis1 -->
       <column type="gboolean"/>
-      <!-- column-name checktri1 -->
-      <column type="gboolean"/>
       <!-- column-name checkvis2 -->
       <column type="gboolean"/>
-      <!-- column-name checktri2 -->
-      <column type="gboolean"/>
       <!-- column-name checkvis3 -->
+      <column type="gboolean"/>
+      <!-- column-name checktri1 -->
+      <column type="gboolean"/>
+      <!-- column-name checktri2 -->
       <column type="gboolean"/>
       <!-- column-name checktri3 -->
       <column type="gboolean"/>
@@ -134,7 +134,7 @@
                                 <child>
                                   <object class="GtkCellRendererToggle" id="cellrenderer1"/>
                                   <attributes>
-                                    <attribute name="visible">4</attribute>
+                                    <attribute name="visible">6</attribute>
                                     <attribute name="active">0</attribute>
                                   </attributes>
                                 </child>
@@ -148,7 +148,7 @@
                                 <child>
                                   <object class="GtkCellRendererToggle" id="cellrenderer5"/>
                                   <attributes>
-                                    <attribute name="visible">5</attribute>
+                                    <attribute name="visible">7</attribute>
                                     <attribute name="active">1</attribute>
                                   </attributes>
                                 </child>
@@ -162,7 +162,7 @@
                                 <child>
                                   <object class="GtkCellRendererToggle" id="cellrenderer7"/>
                                   <attributes>
-                                    <attribute name="visible">6</attribute>
+                                    <attribute name="visible">8</attribute>
                                     <attribute name="active">2</attribute>
                                   </attributes>
                                 </child>

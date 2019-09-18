@@ -17,6 +17,8 @@
       <column type="gchararray"/>
       <!-- column-name text2 -->
       <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkGrid" id="ConnPoolPage">
