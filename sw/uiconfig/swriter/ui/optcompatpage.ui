@@ -163,7 +163,7 @@
                     <property name="entry_text_column">0</property>
                     <property name="id_column">1</property>
                     <items>
-                      <item translatable="yes" context="optcompatpage|globalcompatoptions">Reorganize Forms menu to have it MS compatible</item>
+                      <item translatable="yes" context="optcompatpage|globalcompatoptions">Reorganize Form menu to have it MS compatible</item>
                     </items>
                   </object>
                   <packing>
