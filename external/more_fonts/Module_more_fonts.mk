@@ -38,6 +38,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_noto_serif_lao \
 	ExternalPackage_reem \
 	ExternalPackage_scheherazade \
+	ExternalPackage_opendyslexic \
 	$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_agdasima,) \
 	$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_bacasime_antique,) \
 	$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_belanosima,) \
@@ -73,6 +74,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	UnpackedTarball_noto_serif_lao \
 	UnpackedTarball_reem \
 	UnpackedTarball_scheherazade \
+	UnpackedTarball_opendyslexic \
 	$(if $(WITH_DOCREPAIR_FONTS),UnpackedTarball_agdasima,) \
 	$(if $(WITH_DOCREPAIR_FONTS),UnpackedTarball_bacasime_antique,) \
 	$(if $(WITH_DOCREPAIR_FONTS),UnpackedTarball_belanosima,) \

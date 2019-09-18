@@ -782,5 +782,12 @@
         "type": "file",
         "dest": "external/tarballs",
         "dest-filename": "@OPENSYMBOL_TTF@"
+    },
+    {
+        "url": "https://github.com/antijingoist/opendyslexic/releases/download/v0.9.10/@FONT_OPENDYSLEXIC_TARBALL@",
+        "sha256": "@FONT_OPENDYSLEXIC_SHA256SUM@",
+        "type": "file",
+        "dest": "external/tarballs",
+        "dest-filename": "@FONT_OPENDYSLEXIC_TARBALL@"
     }
 ]

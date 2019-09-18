@@ -315,6 +315,11 @@ FONT_SCHEHERAZADE_TARBALL := Scheherazade-2.100.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+FONT_OPENDYSLEXIC_SHA256SUM := b92d7fcb9409f2bcfd23b65ac71647256eb49c429f4fbb1cc870381fc93eb486
+FONT_OPENDYSLEXIC_TARBALL := opendyslexic-0.910.12-rc2-2019.10.17.zip
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 FONT_AGDASIMA_TARBALL := Agdasima-2.002.zip
 FONT_AGDASIMA_SHA256SUM := b4c17499f8bc183320ffdcf1f8491c778dd68a237adc056dc08e1fcb2da488f3
 # three static lines

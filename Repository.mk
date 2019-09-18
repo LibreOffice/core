@@ -1076,6 +1076,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 		fonts_noto_serif_georgian \
 		fonts_noto_serif_hebrew \
 		fonts_noto_serif_lao \
+		fonts_opendyslexic \
 		fonts_reem \
 		fonts_scheherazade \
 		$(if $(WITH_DOCREPAIR_FONTS),fonts_agdasima,) \
