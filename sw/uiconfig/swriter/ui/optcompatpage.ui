@@ -258,7 +258,7 @@
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
                     <items>
-                      <item translatable="yes" context="optcompatpage|globalcompatoptions">Reorganize Forms menu to have it MS compatible</item>
+                      <item translatable="yes" context="optcompatpage|globalcompatoptions">Reorganize Form menu to have it MS compatible</item>
                     </items>
                   </object>
                   <packing>
