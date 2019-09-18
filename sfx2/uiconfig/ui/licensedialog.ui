@@ -21,7 +21,7 @@
             <property name="can-focus">False</property>
             <property name="layout-style">end</property>
             <child>
-              <object class="GtkButton" id="ok">
+              <object class="GtkButton" id="license">
                 <property name="label" translatable="yes" context="licensedialog|show">_Show License</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -33,6 +33,23 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="eula">
+                <property name="label" translatable="yes" context="licensedialog|eula">_EULA</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
                 <property name="secondary">True</property>
               </packing>
             </child>
@@ -50,7 +67,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
@@ -58,6 +75,24 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="pack-type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label2">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="licensedialog|label2">%PRODUCTNAME binary package is made available subject to the terms of the End User License and Subscription Agreement; choose EULA to see exact details in English.</property>
+            <property name="use-underline">True</property>
+            <property name="wrap">True</property>
+            <property name="mnemonic-widget">eula</property>
+            <property name="max-width-chars">80</property>
+            <property name="xalign">0</property>
+            <property name="yalign">0</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
@@ -88,7 +123,7 @@ This product was created by %OOOVENDOR, based on OpenOffice.org, which is Copyri
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-5">ok</action-widget>
+      <action-widget response="-5">license</action-widget>
       <action-widget response="-7">close</action-widget>
     </action-widgets>
   </object>
