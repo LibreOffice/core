@@ -62,15 +62,18 @@ void CrashReporter::AddKeyValue(const OUString& rKey, const OUString& rValue, tA
 {
     osl::MutexGuard aGuard(maMutex);
 
-    if(!rKey.isEmpty())
-        maKeyValues.push_back(mpair(rKey, rValue));
-
-    if(AddKeyHandling != AddItem)
+    if (IsDump())
     {
-        if(mbInit)
-            WriteToFile(std::ios_base::app);
-        else if (AddKeyHandling == Create)
-            WriteCommonInfo();
+        if (!rKey.isEmpty())
+            maKeyValues.push_back(mpair(rKey, rValue));
+
+        if (AddKeyHandling != AddItem)
+        {
+            if (mbInit)
+                WriteToFile(std::ios_base::app);
+            else if (AddKeyHandling == Create)
+                WriteCommonInfo();
+        }
     }
 }
 
@@ -84,8 +87,9 @@ void CrashReporter::WriteCommonInfo()
 
     const ucbhelper::InternetProxyServer proxy_server = proxy_decider.getProxy(protocol, url, port);
 
-    // save the Keys
+    // save the new Keys
     vmaKeyValues atlast = maKeyValues;
+    // clear the keys, the following Keys should be at the begin
     maKeyValues.clear();
 
     // limit the amount of code that needs to be executed before the crash reporting
@@ -99,6 +103,7 @@ void CrashReporter::WriteCommonInfo()
         AddKeyValue("Proxy", proxy_server.aName + ":" + OUString::number(proxy_server.nPort), AddItem);
     }
 
+    // write the new keys at the end
     maKeyValues.insert(maKeyValues.end(), atlast.begin(), atlast.end());
 
     mbInit = true;
@@ -169,13 +174,28 @@ bool CrashReporter::ReadSendConfig(std::string& response)
 
 void CrashReporter::StoreExceptionHandler(google_breakpad::ExceptionHandler* pExceptionHandler)
 {
-    mpExceptionHandler = pExceptionHandler;
+    if(IsDump())
+        mpExceptionHandler = pExceptionHandler;
 }
 
 
-#endif
+
+bool CrashReporter::IsDump()
+{
+    OUString sToken;
+    OString  sEnvVar(std::getenv("CRASH_DUMP_ENABLE"));
+    bool     bEnable = true;   // default, always on
+    // read configuration item 'CrashDumpEnable' -> bool on/off
+    if (rtl::Bootstrap::get("CrashDump", sToken) && sEnvVar.isEmpty())
+    {
+        bEnable = sToken.toBoolean();
+    }
+
+    return bEnable;
+}
 
 
+#endif   // HAVE_FEATURE_BREAKPAD
 
 
 

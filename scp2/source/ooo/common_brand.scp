@@ -439,6 +439,15 @@ ProfileItem gid_Brand_Profileitem_Soffice_CrashDirectory
     Value = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/crash";
 End
 
+ProfileItem gid_Brand_Profileitem_Soffice_CrashDump
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Key = "CrashDump";
+    Value = "true";
+End
+
+
 ProfileItem gid_Brand_Profileitem_Soffice_SecureUserConfig
     ProfileID = gid_Brand_Profile_Soffice_Ini;
     ModuleID = gid_Module_Root_Brand;

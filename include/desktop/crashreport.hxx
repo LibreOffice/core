@@ -51,6 +51,8 @@ public:
 
     static bool ReadSendConfig(std::string& response);
 
+    static bool IsDump();
+
 private:
     static osl::Mutex maMutex;
     static bool mbInit;
