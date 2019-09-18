@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_f0e5c00b",
+        "filename": "compilerplugins/clang/test/fragiledestructor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-18T16:06:13Z",
+      "side": 1,
+      "message": "Supposedly this should be removed? This presumably tests calling explicit qualified method name, so it should not warn even when the method/class isn\u0027t final?",
+      "range": {
+        "startLine": 84,
+        "startChar": 20,
+        "endLine": 84,
+        "endChar": 35
+      },
+      "revId": "4670b868661952443f0d44045b84d5e6ae1e5767",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
