@@ -234,7 +234,7 @@ sal_Int32 BinaryInputStream::readArray( ::std::vector< Type >& orVector, sal_Int
 
     The binary data in the stream is assumed to be in little-endian format.
  */
-class OOX_DLLPUBLIC BinaryXInputStream : public BinaryXSeekableStream, public BinaryInputStream
+class OOX_DLLPUBLIC BinaryXInputStream final : public BinaryXSeekableStream, public BinaryInputStream
 {
 public:
     /** Constructs the wrapper object for the passed input stream.

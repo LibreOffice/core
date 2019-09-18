@@ -340,7 +340,7 @@ namespace uno
 
 //-- OWeakRefListener -----------------------------------------------------
 
-class OWeakRefListener: public XReference
+class OWeakRefListener final : public XReference
 {
 public:
     explicit OWeakRefListener(const Reference< XInterface >& xInt);

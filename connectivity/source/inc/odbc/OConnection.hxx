@@ -43,12 +43,10 @@ namespace connectivity
         typedef connectivity::OMetaConnection OConnection_BASE;
         typedef std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
 
-        class OOO_DLLPUBLIC_ODBCBASE OConnection :
+        class OOO_DLLPUBLIC_ODBCBASE OConnection final :
                             public OConnection_BASE,
                             public OAutoRetrievingBase
         {
-        protected:
-
             // Data attributes
 
             std::map< SQLHANDLE, rtl::Reference<OConnection>> m_aConnections; // holds all connections which are need for several statements

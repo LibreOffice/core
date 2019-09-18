@@ -1717,7 +1717,7 @@ class DemoWin : public WorkWindow
     bool underTesting;
     bool testThreads;
 
-    class RenderThread : public salhelper::Thread {
+    class RenderThread final : public salhelper::Thread {
         DemoWin  &mrWin;
         sal_uInt32 const mnDelaySecs = 0;
     public:

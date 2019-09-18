@@ -58,7 +58,7 @@ enum class WMWindowType
     Dock
 };
 
-class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandleProvider
+class VCLPLUG_GEN_PUBLIC X11SalFrame final : public SalFrame, public NativeWindowHandleProvider
 {
     friend class vcl_sal::WMAdaptor;
     friend class vcl_sal::NetWMAdaptor;

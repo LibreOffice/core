@@ -127,7 +127,7 @@ private:
 
 typedef ::cppu::WeakComponentImplHelper< css::presentation::XSlideShowController, css::container::XIndexAccess > SlideshowImplBase;
 
-class SlideshowImpl : private ::cppu::BaseMutex, public SlideshowImplBase
+class SlideshowImpl final : private ::cppu::BaseMutex, public SlideshowImplBase
 {
 friend class SlideShow;
 friend class SlideShowView;

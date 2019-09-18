@@ -34,7 +34,7 @@ namespace fileaccess {
 
     class TaskManager;
 
-    class XInputStream_impl
+    class XInputStream_impl final
         : public cppu::OWeakObject,
           public css::lang::XTypeProvider,
           public css::io::XInputStream,

@@ -3535,7 +3535,7 @@ public:
     }
 };
 
-class GtkInstanceAboutDialog : public GtkInstanceDialog, public virtual weld::AboutDialog
+class GtkInstanceAboutDialog final : public GtkInstanceDialog, public virtual weld::AboutDialog
 {
 private:
     GtkAboutDialog* m_pAboutDialog;
@@ -4154,7 +4154,7 @@ static GtkSelectionMode VclToGtk(SelectionMode eType)
     return eRet;
 }
 
-class GtkInstanceScrolledWindow : public GtkInstanceContainer, public virtual weld::ScrolledWindow
+class GtkInstanceScrolledWindow final : public GtkInstanceContainer, public virtual weld::ScrolledWindow
 {
 private:
     GtkScrolledWindow* m_pScrolledWindow;

@@ -46,7 +46,7 @@ using namespace osl;
 
 namespace psp
 {
-    class SystemQueueInfo : public Thread
+    class SystemQueueInfo final : public Thread
     {
         mutable Mutex               m_aMutex;
         bool                        m_bChanged;

@@ -33,7 +33,7 @@
 namespace gio
 {
 
-class OutputStream :
+class OutputStream final :
     public css::io::XOutputStream,
     public Seekable
 {

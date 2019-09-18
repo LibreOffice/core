@@ -577,7 +577,7 @@ FormulaTokenArray::FormulaTokenArray( const FormulaTokenArray& rArr )
 
 FormulaTokenArray::~FormulaTokenArray()
 {
-    Clear();
+    FormulaTokenArray::Clear();
 }
 
 void FormulaTokenArray::Finalize()
