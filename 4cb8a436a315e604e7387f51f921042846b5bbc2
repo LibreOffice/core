@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_45af1494",
+        "filename": "i18npool/source/transliteration/transliteration_body.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-18T06:19:55Z",
+      "side": 1,
+      "message": "You have eliminated the stack-based buffer. That is most possibly just fine; yet, it would be great if you could make some benchmarking for massive amount of small string transliteration. I hope that it wouldn\u0027t result in significant loss.",
+      "range": {
+        "startLine": 104,
+        "startChar": 4,
+        "endLine": 104,
+        "endChar": 40
+      },
+      "revId": "4cb8a436a315e604e7387f51f921042846b5bbc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
