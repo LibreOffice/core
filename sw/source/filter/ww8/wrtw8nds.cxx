@@ -917,7 +917,7 @@ bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rT
                                 OUString());
 
         // #i21465# Only interested in outline references
-        if ( sRefType == "outline" )
+        if ( sRefType == "outline" || sRefType == "graphic" )
         {
             OUString sLink = sMark.copy(0, nPos);
             for ( const auto& rBookmarkPair : GetExport().m_aImplicitBookmarks )
@@ -925,6 +925,7 @@ bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rT
                 if ( rBookmarkPair.first == sLink )
                 {
                     sMark = "_toc" + OUString::number( rBookmarkPair.second );
+                    break;
                 }
             }
         }
