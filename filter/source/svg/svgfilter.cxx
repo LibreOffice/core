@@ -696,10 +696,7 @@ private:
         {
             ZCodec aCodec;
 
-            aCodec.BeginCompression(
-                ZCODEC_DEFAULT_COMPRESSION,
-                false,
-                true);
+            aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/true);
             mnFirstRead = aCodec.Read(
                 *aStream,
                 reinterpret_cast< sal_uInt8* >(mnFirstBytes.getArray()),
