@@ -259,6 +259,9 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,NOTO_FONT,FONT_NOTO_SERIF_SC_TARBALL) \
 		$(call fetch_Optional,NOTO_FONT,FONT_NOTO_SERIF_TC_TARBALL) \
 	,$(call fetch_Download_item,https://noto-website-2.storage.googleapis.com/pkgs,$(item)))
+	$(foreach item, \
+		$(call fetch_Optional,MORE_FONTS,FONT_OPENDYSLEXIC_TARBALL) \
+	,$(call fetch_Download_item,https://github.com/antijingoist/opendyslexic/releases/download/v0.91.12,$(item)))
 	@mkdir -p $(dir $@) && touch $@
 	@mkdir -p $(dir $@)/Executable
 
