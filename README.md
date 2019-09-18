@@ -14,6 +14,12 @@ The most recent version reviewed by MIMO can be downloaded at <https://www.mim.o
 
 ## Release notes
 
+### `6.1.6.3.M12`
+
+* Fix [acim#1408](https://acim.08000linux.com/issues/1404): Demande d'intégration du patch de sécurité pour LibreOffice by fixing two CVE:
+	- CVE-2019-9848
+	- CVE-2019-9849
+
 ### `6.1.6.3.M11`
 
 * Revert `tosca#24996: Recolor the shadow in the renderer`: the patch generated regressions
