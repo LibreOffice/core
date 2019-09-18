@@ -459,6 +459,8 @@ SwVbaDocument::Frames( const uno::Any& index )
 void SAL_CALL
 SwVbaDocument::SaveAs2000( const uno::Any& FileName, const uno::Any& FileFormat, const uno::Any& /*LockComments*/, const uno::Any& /*Password*/, const uno::Any& /*AddToRecentFiles*/, const uno::Any& /*WritePassword*/, const uno::Any& /*ReadOnlyRecommended*/, const uno::Any& /*EmbedTrueTypeFonts*/, const uno::Any& /*SaveNativePictureFormat*/, const uno::Any& /*SaveFormsData*/, const uno::Any& /*SaveAsAOCELetter*/ )
 {
+    SAL_INFO("sw.vba", "Document.SaveAs2000(FileName:=" << FileName << ",FileFormat:=" << FileFormat << ")");
+
     // Based on ScVbaWorkbook::SaveAs.
     OUString sFileName;
     FileName >>= sFileName;
