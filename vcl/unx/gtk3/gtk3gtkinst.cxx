@@ -6816,6 +6816,8 @@ private:
     std::map<int, int> m_aToggleTriStateMap;
     // map from text column to text weight column
     std::map<int, int> m_aWeightMap;
+    // map from text column to sensitive column
+    std::map<int, int> m_aSensitiveMap;
     std::vector<GtkSortType> m_aSavedSortTypes;
     std::vector<int> m_aSavedSortColumns;
     std::vector<int> m_aViewColToModelCol;
@@ -7193,19 +7195,6 @@ private:
         g_DragSource = nullptr;
     }
 
-    int get_sensitive_model_col(int col)
-    {
-        if (col == -1)
-            col = m_nTextCol;
-        else
-            col = get_model_col(col);
-        col += m_nIdCol + 1; // skip over id column
-        col += m_aToggleVisMap.size(); // skip over toggle columns
-        col += m_aToggleTriStateMap.size(); // skip over tristate columns
-        col += m_aWeightMap.size(); // skip over weight columns
-        return col;
-    }
-
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), pBuilder, bTakeOwnership)
@@ -7240,6 +7229,7 @@ public:
                     if (m_nTextCol == -1)
                         m_nTextCol = nIndex;
                     m_aWeightMap[nIndex] = -1;
+                    m_aSensitiveMap[nIndex] = -1;
                     g_signal_connect(G_OBJECT(pCellRenderer), "editing-started", G_CALLBACK(signalCellEditingStarted), this);
                     g_signal_connect(G_OBJECT(pCellRenderer), "edited", G_CALLBACK(signalCellEdited), this);
                 }
@@ -7271,6 +7261,8 @@ public:
         for (auto& a : m_aToggleTriStateMap)
             a.second = nIndex++;
         for (auto& a : m_aWeightMap)
+            a.second = nIndex++;
+        for (auto& a : m_aSensitiveMap)
             a.second = nIndex++;
 
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
@@ -7825,13 +7817,21 @@ public:
 
     virtual void set_sensitive(int pos, bool bSensitive, int col) override
     {
-        set(pos, get_sensitive_model_col(col), bSensitive);
+        if (col == -1)
+            col = m_nTextCol;
+        else
+            col = get_model_col(col);
+        set(pos, m_aSensitiveMap[col], bSensitive);
     }
 
     virtual void set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col) override
     {
+        if (col == -1)
+            col = m_nTextCol;
+        else
+            col = get_model_col(col);
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        set(rGtkIter.iter, get_sensitive_model_col(col), bSensitive);
+        set(rGtkIter.iter, m_aSensitiveMap[col], bSensitive);
     }
 
     void set_image(const GtkTreeIter& iter, int col, GdkPixbuf* pixbuf)
