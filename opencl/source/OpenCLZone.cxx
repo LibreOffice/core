@@ -19,8 +19,7 @@
 
 // FIXME: templatize me vs. OpenGLZone.
 
-sal_uInt64 volatile OpenCLZone::gnEnterCount = 0;
-sal_uInt64 volatile OpenCLZone::gnLeaveCount = 0;
+std::sig_atomic_t volatile OpenCLZone::gnEnterCount = 0;
 bool volatile OpenCLZone::gbInInitialTest = false;
 
 /**

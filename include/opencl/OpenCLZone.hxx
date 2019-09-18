@@ -10,33 +10,37 @@
 #ifndef INCLUDED_OPENCL_INC_OPENCL_ZONE_HXX
 #define INCLUDED_OPENCL_INC_OPENCL_ZONE_HXX
 
+#include <sal/config.h>
+
+#include <cassert>
+#include <csignal>
+
 #include <opencl/opencldllapi.h>
 
 // FIXME: post back-port, templatize me and share with OpenGLZone.
 class OPENCL_DLLPUBLIC OpenCLZone
 {
-    /// how many times have we entered a CL zone
-    static volatile sal_uInt64 gnEnterCount;
-    /// how many times have we left a new CL zone
-    static volatile sal_uInt64 gnLeaveCount;
+    /// how many times have we entered a CL zone and not yet left it
+    static volatile std::sig_atomic_t gnEnterCount;
     static volatile bool gbInInitialTest;
 
 public:
     OpenCLZone()
     {
-        gnEnterCount++;
+        gnEnterCount = gnEnterCount + 1; //TODO: overflow
     }
 
     ~OpenCLZone()
     {
-        gnLeaveCount++;
+        assert(gnEnterCount > 0);
+        gnEnterCount = gnEnterCount - 1;
         if (!isInZone())
             gbInInitialTest = false;
     }
 
     static bool isInZone()
     {
-        return gnEnterCount != gnLeaveCount;
+        return gnEnterCount > 0;
     }
 
     static bool isInInitialTest()
