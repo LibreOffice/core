@@ -2550,7 +2550,7 @@ void LayoutManager::implts_createMSCompatibleMenuBar( const OUString& aName )
 {
     SolarMutexClearableGuard aWriteLock;
 
-    // Find Forms menu in the original menubar
+    // Find Form menu in the original menubar
     m_xMenuBar = implts_createElement( aName );
     uno::Reference< XUIElementSettings > xMenuBarSettings(m_xMenuBar, UNO_QUERY);
     uno::Reference< container::XIndexReplace > xMenuIndex(xMenuBarSettings->getSettings(true), UNO_QUERY);
@@ -2575,12 +2575,12 @@ void LayoutManager::implts_createMSCompatibleMenuBar( const OUString& aName )
     }
     assert(nFormsMenu != -1);
 
-    // Create the MS compatible Forms menu
+    // Create the MS compatible Form menu
     css::uno::Reference< css::ui::XUIElement > xFormsMenu = implts_createElement( "private:resource/menubar/mscompatibleformsmenu" );
     if(!xFormsMenu.is())
         return;
 
-    // Merge the MS compatible Forms menu into the menubar
+    // Merge the MS compatible Form menu into the menubar
     uno::Reference< XUIElementSettings > xFormsMenuSettings(xFormsMenu, UNO_QUERY);
     uno::Reference< container::XIndexAccess > xFormsMenuIndex(xFormsMenuSettings->getSettings(true));
 
