@@ -41,9 +41,9 @@ public:
     }
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
     static Sequence<OUString> getSupportedServiceNames_static();
 
     // XClipboard
@@ -72,11 +72,11 @@ class LOKTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransfer
     css::uno::Sequence<css::datatransfer::DataFlavor> m_aFlavors;
     std::vector<css::uno::Any> m_aContent;
 
-    static void initFlavourFromMime(css::datatransfer::DataFlavor& rFlavor, OUString sMimeType);
+    static void initFlavourFromMime(css::datatransfer::DataFlavor& rFlavor, OUString aMimeType);
 
 public:
     LOKTransferable();
-    LOKTransferable(const size_t nInCount, const char** pInMimeTypes, const size_t* pInSizes,
+    LOKTransferable(size_t nInCount, const char** pInMimeTypes, const size_t* pInSizes,
                     const char** pInStreams);
     LOKTransferable(const OUString& sMimeType, const css::uno::Sequence<sal_Int8>& aSequence);
 
