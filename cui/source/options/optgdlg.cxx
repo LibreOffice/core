@@ -69,6 +69,8 @@
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <comphelper/configuration.hxx>
+#include <tools/diagnose_ex.h>
+#include <desktop/crashreport.hxx>
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -427,8 +429,8 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_pCollectUsageInfo->SaveValue();
 
 #if HAVE_FEATURE_BREAKPAD
-    m_xCrashReport->Check(officecfg::Office::Common::Misc::CrashReport::get());
-    m_xCrashReport->Enable(!officecfg::Office::Common::Misc::CrashReport::isReadOnly());
+    m_xCrashReport->Check(officecfg::Office::Common::Misc::CrashReport::get() && CrashReporter::IsDumpEnable());
+    m_xCrashReport->Enable(!officecfg::Office::Common::Misc::CrashReport::isReadOnly() && CrashReporter::IsDumpEnable());
     m_xCrashReport->SaveValue();
 #else
     m_xCrashReport->Hide();
