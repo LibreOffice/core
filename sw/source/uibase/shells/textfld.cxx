@@ -70,7 +70,6 @@
 #include <app.hrc>
 #include <edtwin.hxx>
 #include <PostItMgr.hxx>
-#include <calbck.hxx>
 #include <cstddef>
 #include <memory>
 #include <swmodule.hxx>
