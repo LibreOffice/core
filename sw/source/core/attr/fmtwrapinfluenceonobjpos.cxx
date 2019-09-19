@@ -21,6 +21,7 @@
 #include <unomid.h>
 #include <osl/diagnose.h>
 #include <libxml/xmlwriter.h>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -39,9 +40,10 @@ SwFormatWrapInfluenceOnObjPos::~SwFormatWrapInfluenceOnObjPos()
 bool SwFormatWrapInfluenceOnObjPos::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return ( mnWrapInfluenceOnPosition ==
-                    static_cast<const SwFormatWrapInfluenceOnObjPos&>(rAttr).
-                                                GetWrapInfluenceOnObjPos() );
+    const SwFormatWrapInfluenceOnObjPos& rAttribute
+        = static_cast<const SwFormatWrapInfluenceOnObjPos&>(rAttr);
+    return (mnWrapInfluenceOnPosition == rAttribute.GetWrapInfluenceOnObjPos()
+            && mbAllowOverlap == rAttribute.mbAllowOverlap);
 }
 
 SfxPoolItem* SwFormatWrapInfluenceOnObjPos::Clone( SfxItemPool * ) const
@@ -56,6 +58,10 @@ bool SwFormatWrapInfluenceOnObjPos::QueryValue( Any& rVal, sal_uInt8 nMemberId )
     if( nMemberId == MID_WRAP_INFLUENCE )
     {
         rVal <<= GetWrapInfluenceOnObjPos();
+    }
+    else if( nMemberId == MID_ALLOW_OVERLAP )
+    {
+        rVal <<= GetAllowOverlap();
     }
     else
     {
@@ -85,6 +91,19 @@ bool SwFormatWrapInfluenceOnObjPos::PutValue( const Any& rVal, sal_uInt8 nMember
         else
         {
             OSL_FAIL( "<SwFormatWrapInfluenceOnObjPos::PutValue(..)> - invalid attribute value" );
+        }
+    }
+    else if( nMemberId == MID_ALLOW_OVERLAP )
+    {
+        bool bAllowOverlap = true;
+        if (rVal >>= bAllowOverlap)
+        {
+            SetAllowOverlap(bAllowOverlap);
+            bRet = true;
+        }
+        else
+        {
+            SAL_WARN("sw.core", "SwFormatWrapInfluenceOnObjPos::PutValue: invalid AllowOverlap type");
         }
     }
     else

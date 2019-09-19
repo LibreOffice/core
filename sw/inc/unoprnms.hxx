@@ -869,6 +869,7 @@
 #define UNO_NAME_TABLE_LAST_ROW_START_COLUMN "LastRowStartColumn"
 
 #define UNO_NAME_RESOLVED "Resolved"
+#define UNO_NAME_ALLOW_OVERLAP "AllowOverlap"
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

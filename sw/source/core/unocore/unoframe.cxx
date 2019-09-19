@@ -942,10 +942,15 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     // #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
     const ::uno::Any* pWrapInfluenceOnObjPos = nullptr;
     GetProperty(RES_WRAP_INFLUENCE_ON_OBJPOS, MID_WRAP_INFLUENCE, pWrapInfluenceOnObjPos);
-    if ( pWrapInfluenceOnObjPos )
+    const ::uno::Any* pAllowOverlap = nullptr;
+    GetProperty(RES_WRAP_INFLUENCE_ON_OBJPOS, MID_ALLOW_OVERLAP, pAllowOverlap);
+    if ( pWrapInfluenceOnObjPos || pAllowOverlap )
     {
         SwFormatWrapInfluenceOnObjPos aFormatWrapInfluenceOnObjPos;
-        aFormatWrapInfluenceOnObjPos.PutValue( *pWrapInfluenceOnObjPos, MID_WRAP_INFLUENCE );
+        if (pWrapInfluenceOnObjPos)
+            aFormatWrapInfluenceOnObjPos.PutValue( *pWrapInfluenceOnObjPos, MID_WRAP_INFLUENCE );
+        if (pAllowOverlap)
+            aFormatWrapInfluenceOnObjPos.PutValue( *pAllowOverlap, MID_ALLOW_OVERLAP );
         rToSet.Put(aFormatWrapInfluenceOnObjPos);
     }
 
