@@ -1596,7 +1596,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
         if ( !GetViewOptions()->IsShowHiddenChar() )
         {
             lcl_CheckHiddenPara( *pPos );
-            lcl_CheckHiddenPara( *pITmpCursor->GetMark() );
+            //lcl_CheckHiddenPara( *pITmpCursor->GetMark() );
         }
 
         std::pair<Point, bool> const tmp(aTmpPt, false);
@@ -1639,7 +1639,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             if ( bInRepeatedHeadline )
             {
                 pTableFrame = nullptr;
-
+                *m_pCurrentCursor->GetPoint() = *m_pCurrentCursor->GetMark();
+                /*
                 SwMoveFnCollection const & fnPosSect = *pPos <  *pITmpCursor->GetMark()
                                             ? fnSectionStart
                                             : fnSectionEnd;
@@ -1656,6 +1657,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 
                 *m_pCurrentCursor->GetPoint() = *m_pCurrentCursor->GetMark();
                 GoCurrSection( *m_pCurrentCursor, fnPosSect );
+                */
             }
         }
 
