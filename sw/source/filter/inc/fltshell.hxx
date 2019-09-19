@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_FILTER_INC_FLTSHELL_HXX
 
 #include <hintids.hxx>
+#include <svl/listener.hxx>
 #include <tools/datetime.hxx>
 #include <mdiexp.hxx>
 #include <ndindex.hxx>
@@ -177,12 +178,12 @@ public:
     void DeleteAndDestroy(Entries::size_type nCnt);
 };
 
-class SwFltAnchorClient;
+class SwFltAnchorListener;
 
-class SW_DLLPUBLIC SwFltAnchor : public SfxPoolItem
+class SW_DLLPUBLIC SwFltAnchor: public SfxPoolItem
 {
     SwFrameFormat* pFrameFormat;
-    std::unique_ptr<SwFltAnchorClient> pClient;
+    std::unique_ptr<SwFltAnchorListener> pListener;
 
 public:
     SwFltAnchor(SwFrameFormat* pFlyFormat);
@@ -192,19 +193,17 @@ public:
     // "purely virtual methods" of SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;
     virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
-    void SetFrameFormat(SwFrameFormat * _pFrameFormat);
-    const SwFrameFormat* GetFrameFormat() const { return pFrameFormat;}
-          SwFrameFormat* GetFrameFormat() { return pFrameFormat;}
+    void SetFrameFormat(SwFrameFormat* _pFrameFormat);
+    const SwFrameFormat* GetFrameFormat() const { return pFrameFormat; }
+          SwFrameFormat* GetFrameFormat() { return pFrameFormat; }
 };
 
-class SwFltAnchorClient : public SwClient
+class SwFltAnchorListener : public SvtListener
 {
-    SwFltAnchor * m_pFltAnchor;
-
-public:
-    SwFltAnchorClient(SwFltAnchor * pFltAnchor);
-
-    virtual void Modify (const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
+    SwFltAnchor* m_pFltAnchor;
+    public:
+        SwFltAnchorListener(SwFltAnchor* pFltAnchor);
+        virtual void Notify(const SfxHint&) override;
 };
 
 class SW_DLLPUBLIC SwFltRedline : public SfxPoolItem
