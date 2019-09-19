@@ -187,6 +187,11 @@ published service Shape
         @since OOo 2.0
     */
     [optional, readonly, property] com::sun::star::awt::Point EndPositionInHoriL2R;
+
+    /** This defines if the shape is allowed to overlap with other anchored objects.
+        @since LibreOffice 6.4
+    */
+    [optional, property] boolean AllowOverlap;
 };
 
 

@@ -146,6 +146,7 @@
 
 // SwFormatWrapInfluenceOnObjPos
 #define MID_WRAP_INFLUENCE      0
+#define MID_ALLOW_OVERLAP       1
 
 // SwFormatFollowTextFlow
 #define MID_FOLLOW_TEXT_FLOW    0

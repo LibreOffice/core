@@ -644,6 +644,32 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXTextCursor_setPropertyValues)
                          getProperty<OUString>(xCursorProps, "CharStyleName"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testShapeAllowOverlap)
+{
+    // Test the AllowOverlap frame/shape property.
+
+    // Create a new document and insert a rectangle.
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
+    awt::Point aPoint(1000, 1000);
+    awt::Size aSize(10000, 10000);
+    uno::Reference<drawing::XShape> xShape(
+        xDocument->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShape->setPosition(aPoint);
+    xShape->setSize(aSize);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xDocument, uno::UNO_QUERY);
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+
+    // The property is on by default, turn it off & verify.
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+    xShapeProperties->setPropertyValue("AllowOverlap", uno::makeAny(false));
+    CPPUNIT_ASSERT(!getProperty<bool>(xShapeProperties, "AllowOverlap"));
+
+    // Turn it back to on & verify.
+    xShapeProperties->setPropertyValue("AllowOverlap", uno::makeAny(true));
+    CPPUNIT_ASSERT(getProperty<bool>(xShapeProperties, "AllowOverlap"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
