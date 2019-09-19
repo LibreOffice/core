@@ -38,8 +38,10 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/calloutpage \
 	cui/uiconfig/ui/cellalignment \
 	cui/uiconfig/ui/certdialog \
+	cui/uiconfig/ui/chapterfragment \
 	cui/uiconfig/ui/charnamepage \
 	cui/uiconfig/ui/colorconfigwin \
+	cui/uiconfig/ui/colorfragment \
 	cui/uiconfig/ui/colorpage \
 	cui/uiconfig/ui/colorpickerdialog \
 	cui/uiconfig/ui/comment \
