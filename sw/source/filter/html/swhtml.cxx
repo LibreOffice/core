@@ -261,7 +261,6 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
                             bool bNoHTMLComments,
                             const OUString& rNamespace )
     : SfxHTMLParser( rIn, bReadNewDoc, pMed ),
-    SwClient( nullptr ),
     m_aPathToFile( rPath ),
     m_sBaseURL( rBaseURL ),
     m_xAttrTab(new HTMLAttrTable),
@@ -575,7 +574,7 @@ SvParserState SwHTMLParser::CallParser()
         rInput.ResetError();
     }
 
-    m_xDoc->GetPageDesc( 0 ).Add( this );
+    StartListening(m_xDoc->GetPageDesc( 0 ).GetNotifier());
 
     SvParserState eRet = HTMLParser::CallParser();
     return eRet;
@@ -929,18 +928,12 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
 #endif
 }
 
-void SwHTMLParser::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
+void SwHTMLParser::Notify(const SfxHint& rHint)
 {
-    switch( pOld ? pOld->Which() : pNew ? pNew->Which() : 0 )
+    if(rHint.GetId() == SfxHintId::Dying)
     {
-    case RES_OBJECTDYING:
-        if (pOld && static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject == GetRegisteredIn())
-        {
-            // then we kill ourself
-            EndListeningAll();
-            ReleaseRef();                   // otherwise we're done!
-        }
-        break;
+        EndListeningAll();
+        ReleaseRef();
     }
 }
 
