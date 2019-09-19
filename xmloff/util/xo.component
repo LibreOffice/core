@@ -81,7 +81,8 @@
   <implementation name="XMLDrawSettingsExportOasis">
     <service name="com.sun.star.comp.Draw.XMLOasisSettingsExporter"/>
   </implementation>
-  <implementation name="XMLDrawStylesExportOOO">
+  <implementation name="XMLDrawStylesExportOOO"
+    constructor="com_sun_star_comp_Draw_XMLStylesExporter_get_implementation">
     <service name="com.sun.star.comp.Draw.XMLStylesExporter"/>
   </implementation>
   <implementation name="XMLDrawStylesExportOasis">
