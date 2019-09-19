@@ -106,6 +106,7 @@ ODataSettings::ODataSettings(OBroadcastHelper& _rBHelper,bool _bQuery)
 
 ODataSettings_Base::ODataSettings_Base()
     :m_bApplyFilter(false)
+    ,m_bAutoGrow(false)
     ,m_aFont(::comphelper::getDefaultFont())
     ,m_nFontEmphasis(css::awt::FontEmphasisMark::NONE)
     ,m_nFontRelief(css::awt::FontRelief::NONE)
