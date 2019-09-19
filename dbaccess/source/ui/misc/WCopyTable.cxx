@@ -505,6 +505,7 @@ OCopyTableWizard::OCopyTableWizard(weld::Window* pParent, const OUString& _rDefa
     , m_nOperation( _nOperation )
     , m_ePressed( WIZARD_NONE )
     , m_bCreatePrimaryKeyColumn(false)
+    , m_bUseHeaderLine(false)
 {
     construct();
 
@@ -606,6 +607,7 @@ OCopyTableWizard::OCopyTableWizard( weld::Window* pParent, const OUString& _rDef
     , m_nOperation( _nOperation )
     , m_ePressed( WIZARD_NONE )
     , m_bCreatePrimaryKeyColumn(false)
+    , m_bUseHeaderLine(false)
 {
     construct();
     for (auto const& sourceCol : _rSourceColVec)
