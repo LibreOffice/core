@@ -2488,10 +2488,10 @@ bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutocorrWo
     {
         for (SvxAutocorrWord & aWordToDelete : aDeleteEntries)
         {
-            std::unique_ptr<SvxAutocorrWord> pFoundEntry = pAutocorr_List->FindAndRemove( &aWordToDelete );
-            if( pFoundEntry )
+            boost::optional<SvxAutocorrWord> xFoundEntry = pAutocorr_List->FindAndRemove( &aWordToDelete );
+            if( xFoundEntry )
             {
-                if( !pFoundEntry->IsTextOnly() )
+                if( !xFoundEntry->IsTextOnly() )
                 {
                     OUString aName( aWordToDelete.GetShort() );
                     if (xStorage->IsOLEStorage())
@@ -2510,24 +2510,24 @@ bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutocorrWo
 
         for (SvxAutocorrWord & aNewEntrie : aNewEntries)
         {
-            std::unique_ptr<SvxAutocorrWord> pWordToAdd(new SvxAutocorrWord( aNewEntrie.GetShort(), aNewEntrie.GetLong(), true ));
-            std::unique_ptr<SvxAutocorrWord> pRemoved = pAutocorr_List->FindAndRemove( pWordToAdd.get() );
-            if( pRemoved )
+            SvxAutocorrWord aWordToAdd(aNewEntrie.GetShort(), aNewEntrie.GetLong(), true );
+            boost::optional<SvxAutocorrWord> xRemoved = pAutocorr_List->FindAndRemove( &aWordToAdd );
+            if( xRemoved )
             {
-                if( !pRemoved->IsTextOnly() )
+                if( !xRemoved->IsTextOnly() )
                 {
                     // Still have to remove the Storage
-                    OUString sStorageName( pWordToAdd->GetShort() );
+                    OUString sStorageName( aWordToAdd.GetShort() );
                     if (xStorage->IsOLEStorage())
                         sStorageName = EncryptBlockName_Imp(sStorageName);
                     else
-                        GeneratePackageName ( pWordToAdd->GetShort(), sStorageName);
+                        GeneratePackageName ( aWordToAdd.GetShort(), sStorageName);
 
                     if( xStorage->IsContained( sStorageName ) )
                         xStorage->Remove( sStorageName );
                 }
             }
-            bRet = pAutocorr_List->Insert( std::move(pWordToAdd) );
+            bRet = pAutocorr_List->Insert( std::move(aWordToAdd) );
 
             if ( !bRet )
             {
@@ -2556,11 +2556,11 @@ bool SvxAutoCorrectLanguageLists::PutText( const OUString& rShort, const OUStrin
     // Update the word list
     if( bRet )
     {
-        std::unique_ptr<SvxAutocorrWord> pNew(new SvxAutocorrWord( rShort, rLong, true ));
-        std::unique_ptr<SvxAutocorrWord> pRemove = pAutocorr_List->FindAndRemove( pNew.get() );
-        if( pRemove )
+        SvxAutocorrWord aNew(rShort, rLong, true );
+        boost::optional<SvxAutocorrWord> xRemove = pAutocorr_List->FindAndRemove( &aNew );
+        if( xRemove )
         {
-            if( !pRemove->IsTextOnly() )
+            if( !xRemove->IsTextOnly() )
             {
                 // Still have to remove the Storage
                 OUString sStgNm( rShort );
@@ -2574,7 +2574,7 @@ bool SvxAutoCorrectLanguageLists::PutText( const OUString& rShort, const OUStrin
             }
         }
 
-        if( pAutocorr_List->Insert( std::move(pNew) ) )
+        if( pAutocorr_List->Insert( std::move(aNew) ) )
         {
             bRet = MakeBlocklist_Imp( *xStg );
             xStg = nullptr;
@@ -2605,8 +2605,7 @@ void SvxAutoCorrectLanguageLists::PutText( const OUString& rShort,
         // Update the word list
         if( bRet )
         {
-            std::unique_ptr<SvxAutocorrWord> pNew(new SvxAutocorrWord( rShort, sLong, false ));
-            if( pAutocorr_List->Insert( std::move(pNew) ) )
+            if( pAutocorr_List->Insert( SvxAutocorrWord(rShort, sLong, false) ) )
             {
                 tools::SvRef<SotStorage> xStor = new SotStorage( sUserAutoCorrFile, StreamMode::READWRITE );
                 MakeBlocklist_Imp( *xStor );
@@ -2619,20 +2618,18 @@ void SvxAutoCorrectLanguageLists::PutText( const OUString& rShort,
 }
 
 // Keep the list sorted ...
-struct CompareSvxAutocorrWordList
+struct SvxAutocorrWordList::CompareSvxAutocorrWordList
 {
-    bool operator()( SvxAutocorrWord* const& lhs, SvxAutocorrWord* const& rhs ) const
+    bool operator()( SvxAutocorrWord const & lhs, SvxAutocorrWord const & rhs ) const
     {
         CollatorWrapper& rCmp = ::GetCollatorWrapper();
-        return rCmp.compareString( lhs->GetShort(), rhs->GetShort() ) < 0;
+        return rCmp.compareString( lhs.GetShort(), rhs.GetShort() ) < 0;
     }
 };
 
 namespace {
 
-// can't use std::unique_ptr until we have C++14
-typedef std::set<SvxAutocorrWord*, CompareSvxAutocorrWordList> AutocorrWordSetType;
-typedef std::unordered_map<OUString, std::unique_ptr<SvxAutocorrWord>> AutocorrWordHashType;
+typedef std::unordered_map<OUString, SvxAutocorrWord> AutocorrWordHashType;
 
 }
 
@@ -2640,16 +2637,14 @@ struct SvxAutocorrWordList::Impl
 {
 
     // only one of these contains the data
-    mutable AutocorrWordSetType maSet;
+    // maSortedVector is manually sorted so we can optimise data movement
+    mutable AutocorrWordSetType maSortedVector;
     mutable AutocorrWordHashType maHash; // key is 'Short'
 
     void DeleteAndDestroyAll()
     {
         maHash.clear();
-
-        for (auto const& elem : maSet)
-            delete elem;
-        maSet.clear();
+        maSortedVector.clear();
     }
 };
 
@@ -2657,7 +2652,6 @@ SvxAutocorrWordList::SvxAutocorrWordList() : mpImpl(new Impl) {}
 
 SvxAutocorrWordList::~SvxAutocorrWordList()
 {
-    mpImpl->DeleteAndDestroyAll();
 }
 
 void SvxAutocorrWordList::DeleteAndDestroyAll()
@@ -2666,70 +2660,89 @@ void SvxAutocorrWordList::DeleteAndDestroyAll()
 }
 
 // returns true if inserted
-bool SvxAutocorrWordList::Insert(std::unique_ptr<SvxAutocorrWord> pWord) const
+const SvxAutocorrWord* SvxAutocorrWordList::Insert(SvxAutocorrWord aWord) const
 {
-    if ( mpImpl->maSet.empty() ) // use the hash
+    if ( mpImpl->maSortedVector.empty() ) // use the hash
     {
-        OUString aShort( pWord->GetShort() );
-        return mpImpl->maHash.insert( std::pair<OUString, std::unique_ptr<SvxAutocorrWord> >( aShort, std::move(pWord) ) ).second;
+        OUString aShort = aWord.GetShort();
+        auto [it,inserted] = mpImpl->maHash.emplace( std::move(aShort), std::move(aWord) );
+        if (inserted)
+            return &(it->second);
+        return nullptr;
     }
     else
-        return mpImpl->maSet.insert( pWord.release() ).second;
+    {
+        auto it = std::lower_bound(mpImpl->maSortedVector.begin(), mpImpl->maSortedVector.end(), aWord, CompareSvxAutocorrWordList());
+        if (it != mpImpl->maSortedVector.end() && !CompareSvxAutocorrWordList()(aWord, *it))
+        {
+            it = mpImpl->maSortedVector.insert(it, std::move(aWord));
+            return &*it;
+        }
+        return nullptr;
+    }
 }
 
 void SvxAutocorrWordList::LoadEntry(const OUString& sWrong, const OUString& sRight, bool bOnlyTxt)
 {
-    std::unique_ptr<SvxAutocorrWord> pNew(new SvxAutocorrWord( sWrong, sRight, bOnlyTxt ));
-    (void)Insert(std::move(pNew));
+    (void)Insert(SvxAutocorrWord( sWrong, sRight, bOnlyTxt ));
 }
 
 bool SvxAutocorrWordList::empty() const
 {
-    return mpImpl->maHash.empty() && mpImpl->maSet.empty();
+    return mpImpl->maHash.empty() && mpImpl->maSortedVector.empty();
 }
 
-std::unique_ptr<SvxAutocorrWord> SvxAutocorrWordList::FindAndRemove(SvxAutocorrWord *pWord)
+boost::optional<SvxAutocorrWord> SvxAutocorrWordList::FindAndRemove(SvxAutocorrWord *pWord)
 {
-    std::unique_ptr<SvxAutocorrWord> pMatch;
 
-    if ( mpImpl->maSet.empty() ) // use the hash
+    if ( mpImpl->maSortedVector.empty() ) // use the hash
     {
         AutocorrWordHashType::iterator it = mpImpl->maHash.find( pWord->GetShort() );
         if( it != mpImpl->maHash.end() )
         {
-            pMatch = std::move(it->second);
+            SvxAutocorrWord pMatch = std::move(it->second);
             mpImpl->maHash.erase (it);
+            return pMatch;
         }
     }
     else
     {
-        AutocorrWordSetType::iterator it = mpImpl->maSet.find( pWord );
-        if( it != mpImpl->maSet.end() )
+        auto it = std::lower_bound(mpImpl->maSortedVector.begin(), mpImpl->maSortedVector.end(), *pWord, CompareSvxAutocorrWordList());
+        if (it != mpImpl->maSortedVector.end() && !CompareSvxAutocorrWordList()(*pWord, *it))
         {
-            pMatch = std::unique_ptr<SvxAutocorrWord>(*it);
-            mpImpl->maSet.erase (it);
+            SvxAutocorrWord pMatch = std::move(*it);
+            mpImpl->maSortedVector.erase (it);
+            return pMatch;
         }
     }
-    return pMatch;
+    return boost::optional<SvxAutocorrWord>();
 }
 
 // return the sorted contents - defer sorting until we have to.
-SvxAutocorrWordList::Content SvxAutocorrWordList::getSortedContent() const
+const SvxAutocorrWordList::AutocorrWordSetType& SvxAutocorrWordList::getSortedContent() const
 {
-    Content aContent;
-
     // convert from hash to set permanently
-    if ( mpImpl->maSet.empty() )
+    if ( mpImpl->maSortedVector.empty() )
     {
-        // This beast has some O(N log(N)) in a terribly slow ICU collate fn.
-        for (auto & elem : mpImpl->maHash)
-            mpImpl->maSet.insert( elem.second.release() );
+        std::vector<SvxAutocorrWord> tmp;
+        tmp.reserve(mpImpl->maHash.size());
+        for (auto & rPair : mpImpl->maHash)
+            tmp.emplace_back(std::move(rPair.second));
         mpImpl->maHash.clear();
+        // sort twice - this gets the list into mostly-sorted order, which
+        // reduces the number of times we need to invoke the expensive ICU collate fn.
+        std::sort(tmp.begin(), tmp.end(),
+            [] ( SvxAutocorrWord const & lhs, SvxAutocorrWord const & rhs )
+            {
+                return lhs.GetShort() < rhs.GetShort();
+            });
+        // This beast has some O(N log(N)) in a terribly slow ICU collate fn.
+        // stable_sort is twice as fast as sort in this situation because it does
+        // fewer comparison operations.
+        std::stable_sort(tmp.begin(), tmp.end(), CompareSvxAutocorrWordList());
+        mpImpl->maSortedVector = std::move(tmp);
     }
-    for (auto const& elem : mpImpl->maSet)
-        aContent.push_back(elem);
-
-    return aContent;
+    return mpImpl->maSortedVector;
 }
 
 const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *pFnd,
@@ -2776,8 +2789,7 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                 OUString left_pattern = rTxt.copy(rStt, nEndPos - rStt - rChk.getLength() + left_wildcard);
                 // avoid double spaces before simple "word" replacement
                 left_pattern += (left_pattern.getLength() == 0 && pFnd->GetLong()[0] == 0x20) ? pFnd->GetLong().copy(1) : pFnd->GetLong();
-                SvxAutocorrWord* pNew = new SvxAutocorrWord(rTxt.copy(rStt, nEndPos - rStt), left_pattern);
-                if( Insert( std::unique_ptr<SvxAutocorrWord>(pNew) ) )
+                if( const SvxAutocorrWord* pNew = Insert( SvxAutocorrWord(rTxt.copy(rStt, nEndPos - rStt), left_pattern) ) )
                     return pNew;
             }
         } else
@@ -2843,8 +2855,7 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                         buf.append(std::u16string_view(rTxt).substr(nFndPos, nEndPos - nFndPos));
                     aLong = buf.makeStringAndClear();
                 }
-                SvxAutocorrWord* pNew = new SvxAutocorrWord(aShort, aLong);
-                if ( Insert( std::unique_ptr<SvxAutocorrWord>(pNew) ) )
+                if ( const SvxAutocorrWord* pNew = Insert( SvxAutocorrWord(aShort, aLong) ) )
                 {
                     if ( (rTxt.getLength() > nEndPos && IsWordDelim(rTxt[nEndPos])) || rTxt.getLength() == nEndPos )
                         return pNew;
@@ -2860,14 +2871,14 @@ const SvxAutocorrWord* SvxAutocorrWordList::SearchWordsInList(const OUString& rT
 {
     for (auto const& elem : mpImpl->maHash)
     {
-        if( const SvxAutocorrWord *aTmp = WordMatches( elem.second.get(), rTxt, rStt, nEndPos ) )
-            return aTmp;
+        if( const SvxAutocorrWord *pTmp = WordMatches( &elem.second, rTxt, rStt, nEndPos ) )
+            return pTmp;
     }
 
-    for (auto const& elem : mpImpl->maSet)
+    for (auto const& elem : mpImpl->maSortedVector)
     {
-        if( const SvxAutocorrWord *aTmp = WordMatches( elem, rTxt, rStt, nEndPos ) )
-            return aTmp;
+        if( const SvxAutocorrWord *pTmp = WordMatches( &elem, rTxt, rStt, nEndPos ) )
+            return pTmp;
     }
     return nullptr;
 }
