@@ -839,20 +839,24 @@ namespace sw
 
     namespace util
     {
-        InsertedTableClient::InsertedTableClient(SwTableNode & rNode)
+        InsertedTableListener::InsertedTableListener(SwTableNode& rNode)
+            : m_pTableNode(&rNode)
         {
-            rNode.Add(this);
+            StartListening(rNode.GetNotifier());
         }
 
-        SwTableNode * InsertedTableClient::GetTableNode()
+        SwTableNode* InsertedTableListener::GetTableNode()
+            { return m_pTableNode; }
+
+        void  InsertedTableListener::Notify(const SfxHint& rHint)
         {
-            return dynamic_cast<SwTableNode *> (GetRegisteredInNonConst());
+            if(rHint.GetId() == SfxHintId::Dying)
+                m_pTableNode = nullptr;
         }
 
         InsertedTablesManager::InsertedTablesManager(const SwDoc &rDoc)
             : mbHasRoot(rDoc.getIDocumentLayoutAccess().GetCurrentLayout())
-        {
-        }
+        { }
 
         void InsertedTablesManager::DelAndMakeTableFrames()
         {
@@ -877,16 +881,15 @@ namespace sw
             }
         }
 
-        void InsertedTablesManager::InsertTable(SwTableNode &rTableNode, SwPaM &rPaM)
+        void InsertedTablesManager::InsertTable(SwTableNode& rTableNode, SwPaM& rPaM)
         {
             if (!mbHasRoot)
                 return;
             //Associate this tablenode with this after position, replace an //old
             //node association if necessary
-
-            InsertedTableClient * pClient = new InsertedTableClient(rTableNode);
-
-            maTables.emplace(pClient, &(rPaM.GetPoint()->nNode));
+            maTables.emplace(
+                    std::unique_ptr<InsertedTableListener>(new InsertedTableListener(rTableNode)),
+                    &(rPaM.GetPoint()->nNode));
         }
     }
 

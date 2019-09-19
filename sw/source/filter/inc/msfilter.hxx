@@ -32,6 +32,7 @@
 #include "fltshell.hxx"
 #include <shellio.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/listener.hxx>
 
 class SwDoc;
 class SwPaM;
@@ -250,11 +251,13 @@ namespace sw
             explicit FontMapExport(const OUString &rFontDescription);
         };
 
-        class InsertedTableClient : public SwClient
+        class InsertedTableListener: public SvtListener
         {
+            SwTableNode* m_pTableNode;
         public:
-            explicit InsertedTableClient(SwTableNode & rNode);
-            SwTableNode * GetTableNode();
+            explicit InsertedTableListener(SwTableNode& rNode);
+            SwTableNode* GetTableNode();
+            virtual void Notify(const SfxHint&) override;
         };
 
         /** Handle requirements for table formatting in insert->file mode.
@@ -276,7 +279,7 @@ namespace sw
         class InsertedTablesManager
         {
         public:
-            typedef std::map<InsertedTableClient *, SwNodeIndex *> TableMap;
+            typedef std::map<std::unique_ptr<InsertedTableListener>, SwNodeIndex*> TableMap;
             void DelAndMakeTableFrames();
             void InsertTable(SwTableNode &rTableNode, SwPaM &rPaM);
             explicit InsertedTablesManager(const SwDoc &rDoc);
