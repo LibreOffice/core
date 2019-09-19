@@ -1192,7 +1192,8 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(TabPageParent pParent, const SfxItemSet
     const NfCurrencyEntry& rCurr = SvNumberFormatter::GetCurrencyEntry( LANGUAGE_SYSTEM );
     // insert SYSTEM entry
     OUString aDefaultCurr = m_sSystemDefaultString + " - " + rCurr.GetBankSymbol();
-    m_xCurrencyLB->append_text(aDefaultCurr);
+    m_xCurrencyLB->append("default", aDefaultCurr);
+    assert(m_xCurrencyLB->find_id("default") != -1);
     // all currencies
     OUString aTwoSpace( "  " );
     sal_uInt16 nCurrCount = rCurrTab.size();
@@ -1708,9 +1709,10 @@ IMPL_LINK_NOARG(OfaLanguagesTabPage, LocaleSettingHdl, weld::ComboBox&, void)
     const NfCurrencyEntry& rCurr = SvNumberFormatter::GetCurrencyEntry(
             (eLang == LANGUAGE_USER_SYSTEM_CONFIG) ? MsLangId::getSystemLanguage() : eLang);
     // Update the "Default ..." currency.
-    m_xCurrencyLB->remove_id("");
+    m_xCurrencyLB->remove_id("default");
     OUString aDefaultCurr = m_sSystemDefaultString + " - " + rCurr.GetBankSymbol();
-    m_xCurrencyLB->append_text(aDefaultCurr);
+    m_xCurrencyLB->append("default", aDefaultCurr);
+    assert(m_xCurrencyLB->find_id("default") != -1);
     m_xCurrencyLB->set_active_text(aDefaultCurr);
 
     // obtain corresponding locale data
