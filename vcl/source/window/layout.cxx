@@ -500,6 +500,13 @@ bool VclBox::set_property(const OString &rKey, const OUString &rValue)
     return true;
 }
 
+boost::property_tree::ptree VclBox::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(VclContainer::DumpAsPropertyTree());
+    aTree.put("vertical", m_bVerticalContainer);
+    return aTree;
+}
+
 sal_uInt16 VclBox::getDefaultAccessibleRole() const
 {
 #if defined(_WIN32)
