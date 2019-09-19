@@ -943,15 +943,15 @@ void SwFltControlStack::Delete(const SwPaM &rPam)
 SwFltAnchor::SwFltAnchor(SwFrameFormat* pFormat) :
     SfxPoolItem(RES_FLTR_ANCHOR), pFrameFormat(pFormat)
 {
-    pClient.reset( new SwFltAnchorClient(this) );
-    pFrameFormat->Add(pClient.get());
+    pListener.reset(new SwFltAnchorListener(this));
+    pListener->StartListening(pFrameFormat->GetNotifier());
 }
 
 SwFltAnchor::SwFltAnchor(const SwFltAnchor& rCpy) :
     SfxPoolItem(RES_FLTR_ANCHOR), pFrameFormat(rCpy.pFrameFormat)
 {
-    pClient.reset( new SwFltAnchorClient(this) );
-    pFrameFormat->Add(pClient.get());
+    pListener.reset(new SwFltAnchorListener(this));
+    pListener->StartListening(pFrameFormat->GetNotifier());
 }
 
 SwFltAnchor::~SwFltAnchor()
@@ -974,24 +974,20 @@ SfxPoolItem* SwFltAnchor::Clone(SfxItemPool*) const
     return new SwFltAnchor(*this);
 }
 
-SwFltAnchorClient::SwFltAnchorClient(SwFltAnchor * pFltAnchor)
-: m_pFltAnchor(pFltAnchor)
-{
-}
+SwFltAnchorListener::SwFltAnchorListener(SwFltAnchor* pFltAnchor)
+    : m_pFltAnchor(pFltAnchor)
+{ }
 
-void  SwFltAnchorClient::Modify(const SfxPoolItem *, const SfxPoolItem * pNew)
+void SwFltAnchorListener::Notify(const SfxHint& rHint)
 {
-    if (pNew->Which() == RES_FMT_CHG)
+    if(auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        const SwFormatChg * pFormatChg = dynamic_cast<const SwFormatChg *> (pNew);
-
-        if (pFormatChg != nullptr)
-        {
-            SwFrameFormat * pFrameFormat = dynamic_cast<SwFrameFormat *> (pFormatChg->pChangedFormat);
-
-            if (pFrameFormat != nullptr)
-                m_pFltAnchor->SetFrameFormat(pFrameFormat);
-        }
+        if(pLegacyHint->m_pNew->Which() != RES_FMT_CHG)
+            return;
+        auto pFormatChg = dynamic_cast<const SwFormatChg*>(pLegacyHint->m_pNew);
+        auto pFrameFormat = pFormatChg ? dynamic_cast<SwFrameFormat*>(pFormatChg->pChangedFormat) : nullptr;
+        if(pFrameFormat)
+            m_pFltAnchor->SetFrameFormat(pFrameFormat);
     }
 }
 
