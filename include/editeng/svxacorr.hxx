@@ -28,6 +28,7 @@
 #include <editeng/swafopt.hxx>
 #include <editeng/editengdllapi.h>
 
+#include <boost/optional.hpp>
 #include <map>
 #include <memory>
 
@@ -153,13 +154,14 @@ public:
                            // free any objects still in the set
                            ~SvxAutocorrWordList();
     void                   DeleteAndDestroyAll();
-    bool                   Insert(std::unique_ptr<SvxAutocorrWord> pWord) const;
-    std::unique_ptr<SvxAutocorrWord> FindAndRemove(SvxAutocorrWord *pWord);
+    const SvxAutocorrWord* Insert(SvxAutocorrWord aWord) const;
+    boost::optional<SvxAutocorrWord> FindAndRemove(SvxAutocorrWord *pWord);
     void                   LoadEntry(const OUString& sWrong, const OUString& sRight, bool bOnlyTxt);
     bool                   empty() const;
 
-    typedef std::vector<SvxAutocorrWord *> Content;
-    Content                getSortedContent() const;
+    struct CompareSvxAutocorrWordList;
+    typedef std::vector<SvxAutocorrWord> AutocorrWordSetType;
+    const AutocorrWordSetType & getSortedContent() const;
 
     const SvxAutocorrWord* SearchWordsInList(const OUString& rTxt, sal_Int32& rStt, sal_Int32 nEndPos) const;
 };
