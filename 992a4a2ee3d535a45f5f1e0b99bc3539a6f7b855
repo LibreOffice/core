@@ -22,6 +22,30 @@
       "revId": "992a4a2ee3d535a45f5f1e0b99bc3539a6f7b855",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_bdb7203b",
+        "filename": "oox/source/vml/vmlshapecontext.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-09-19T15:09:00Z",
+      "side": 1,
+      "message": "or, drop these modifications, and add XML_Center, etc. as  switch() cases, where XML_center etc. are processed.\n\nXML_Center:\nXML_center:\n  ...\n\nMaybe you want to check the VML standard, too, about capitaliation, to decide about capitalization in the export.",
+      "parentUuid": "7f7f9b97_4bbc0569",
+      "range": {
+        "startLine": 194,
+        "startChar": 0,
+        "endLine": 209,
+        "endChar": 1
+      },
+      "revId": "992a4a2ee3d535a45f5f1e0b99bc3539a6f7b855",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
