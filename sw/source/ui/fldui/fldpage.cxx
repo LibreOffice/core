@@ -38,7 +38,6 @@
 #include <cmdid.h>
 #include <globals.hrc>
 #include <sfx2/bindings.hxx>
-#include <calbck.hxx>
 
 using namespace ::com::sun::star;
 
