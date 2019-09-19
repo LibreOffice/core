@@ -3096,6 +3096,64 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf127235)
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testShapeAllowOverlap)
+{
+// Need to find out why this fails on macOS.
+#ifndef MACOSX
+    // Create an empty document with two, intentionally overlapping shapes.
+    // Set their AllowOverlap property to false.
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
+    awt::Point aPoint(1000, 1000);
+    awt::Size aSize(2000, 2000);
+    uno::Reference<drawing::XShape> xShape(
+        xDocument->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShape->setPosition(aPoint);
+    xShape->setSize(aSize);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xDocument, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+    xShapeProperties->setPropertyValue("AllowOverlap", uno::makeAny(false));
+    xShapeProperties->setPropertyValue("AnchorType",
+                                       uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+
+    aPoint = awt::Point(2000, 2000);
+    xShape.set(xDocument->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShape->setPosition(aPoint);
+    xShape->setSize(aSize);
+    xShapeProperties.set(xShape, uno::UNO_QUERY);
+    xShapeProperties->setPropertyValue("AllowOverlap", uno::makeAny(false));
+    xShapeProperties->setPropertyValue("AnchorType",
+                                       uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+
+    // Now verify that the rectangle of the anchored objects don't overlap.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pPageFrame = pLayout->GetLower();
+    SwFrame* pBodyFrame = pPageFrame->GetLower();
+    SwFrame* pTextFrame = pBodyFrame->GetLower();
+    CPPUNIT_ASSERT(pTextFrame->GetDrawObjs());
+    SwSortedObjs& rObjs = *pTextFrame->GetDrawObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rObjs.size());
+    SwAnchoredObject* pFirst = rObjs[0];
+    SwAnchoredObject* pSecond = rObjs[1];
+    // Without the accompanying fix in place, this test would have failed: the layout dump was
+    // <bounds left="1984" top="1984" width="1137" height="1137"/>
+    // <bounds left="2551" top="2551" width="1137" height="1137"/>
+    // so there was a clear vertical overlap. (Allow for 1px tolerance.)
+    OString aMessage("Unexpected overlap: first shape's bottom is ");
+    aMessage += OString::number(pFirst->GetObjRect().Bottom());
+    aMessage += ", second shape's top is ";
+    aMessage += OString::number(pSecond->GetObjRect().Top());
+    CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(),
+                           std::abs(pFirst->GetObjRect().Bottom() - pSecond->GetObjRect().Top())
+                               < 15);
+#endif
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
