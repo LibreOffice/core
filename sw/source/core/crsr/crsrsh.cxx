@@ -1513,22 +1513,22 @@ static bool lcl_CheckHiddenSection( SwNodeIndex& rIdx )
 }
 
 /// Try to set the cursor to the next visible content node.
-static void lcl_CheckHiddenPara( SwPosition& rPos )
-{
-    SwNodeIndex aTmp( rPos.nNode );
-    SwTextNode* pTextNd = aTmp.GetNode().GetTextNode();
-    while( pTextNd && pTextNd->HasHiddenCharAttribute( true ) )
-    {
-        SwContentNode* pContent = aTmp.GetNodes().GoNext( &aTmp );
-        if ( pContent && pContent->IsTextNode() )
-            pTextNd = pContent->GetTextNode();
-        else
-            pTextNd = nullptr;
-    }
+//static void lcl_CheckHiddenPara( SwPosition& rPos )
+//{
+//    SwNodeIndex aTmp( rPos.nNode );
+//    SwTextNode* pTextNd = aTmp.GetNode().GetTextNode();
+//    while( pTextNd && pTextNd->HasHiddenCharAttribute( true ) )
+//    {
+//        SwContentNode* pContent = aTmp.GetNodes().GoNext( &aTmp );
+//        if ( pContent && pContent->IsTextNode() )
+//            pTextNd = pContent->GetTextNode();
+//        else
+//            pTextNd = nullptr;
+//    }
 
-    if ( pTextNd )
-        rPos = SwPosition( aTmp, SwIndex( pTextNd, 0 ) );
-}
+//    if ( pTextNd )
+//        rPos = SwPosition( aTmp, SwIndex( pTextNd, 0 ) );
+//}
 
 // #i27301# - helper class that notifies the accessibility about invalid text
 // selections in its destructor
@@ -1593,11 +1593,11 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
         lcl_CheckHiddenSection( pITmpCursor->GetMark()->nNode );
 
         // Move cursor out of hidden paragraphs
-        if ( !GetViewOptions()->IsShowHiddenChar() )
-        {
-            lcl_CheckHiddenPara( *pPos );
-            lcl_CheckHiddenPara( *pITmpCursor->GetMark() );
-        }
+//        if ( !GetViewOptions()->IsShowHiddenChar() )
+//        {
+//            lcl_CheckHiddenPara( *pPos );
+//            lcl_CheckHiddenPara( *pITmpCursor->GetMark() );
+//        }
 
         std::pair<Point, bool> const tmp(aTmpPt, false);
         SwContentFrame *pTableFrame = pPos->nNode.GetNode().GetContentNode()->
@@ -1730,8 +1730,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             m_eMvState = MV_NONE;  // state for cursor travelling - GetCursorOfst
             if (Imp()->IsAccessible())
                 Imp()->InvalidateAccessibleCursorPosition( pTableFrame );
-            return;
         }
+        return;
     }
 
     if( m_pTableCursor )
