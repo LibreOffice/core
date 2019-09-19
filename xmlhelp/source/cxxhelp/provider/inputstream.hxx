@@ -23,10 +23,8 @@
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <cppuhelper/weak.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
 
 
 namespace chelp {

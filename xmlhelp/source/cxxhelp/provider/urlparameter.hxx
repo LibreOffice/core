@@ -22,7 +22,6 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
-#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 

@@ -19,14 +19,10 @@
 
 #include <config_folders.h>
 
-#include <stdio.h>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
-#include <osl/file.hxx>
-#include <ucbhelper/contentidentifier.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>

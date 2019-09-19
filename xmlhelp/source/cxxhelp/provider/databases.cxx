@@ -21,8 +21,6 @@
 #include "db.hxx"
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
-#include <osl/thread.h>
-#include <osl/process.h>
 #include <rtl/character.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -40,12 +38,10 @@
 // Extensible help
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/deployment/ExtensionRemovedException.hpp>
-#include <com/sun/star/deployment/thePackageManagerFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/beans/Optional.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
@@ -54,15 +50,10 @@
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <i18nlangtag/languagetag.hxx>
 
-#include <com/sun/star/awt/XToolkit.hpp>
-#include <com/sun/star/awt/XExtendedToolkit.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 
 #include <comphelper/storagehelper.hxx>
-
-#include <vcl/svapp.hxx>
 
 #include "databases.hxx"
 #include "urlparameter.hxx"

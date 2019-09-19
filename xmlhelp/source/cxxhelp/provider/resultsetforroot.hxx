@@ -22,7 +22,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 
 #include "resultsetbase.hxx"
 #include "urlparameter.hxx"
