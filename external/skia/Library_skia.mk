@@ -40,6 +40,7 @@ $(eval $(call gb_Library_add_defs,skia,\
 $(eval $(call gb_Library_add_defs,skia,\
 	-DSK_SUPPORT_GPU=1 \
 	-DSK_GL=1 \
+	-DSK_VULKAN=1 \
 ))
 
 $(eval $(call gb_Library_use_externals,skia,\
@@ -55,7 +56,6 @@ $(eval $(call gb_Library_add_libs,skia,\
 	-lm \
 	-ldl \
 	-lGLX \
-	-lGL \
 ))
 endif
 
@@ -71,6 +71,7 @@ $(eval $(call gb_Library_set_include,skia,\
 	$$(INCLUDE) \
 	-I$(call gb_UnpackedTarball_get_dir,skia) \
 	-I$(call gb_UnpackedTarball_get_dir,skia)/include/third_party/skcms/ \
+	-I$(call gb_UnpackedTarball_get_dir,skia)/third_party/vulkanmemoryallocator/ \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,skia,\
@@ -764,6 +765,47 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
        UnpackedTarball/skia/src/image/SkImage_GpuYUVA \
        UnpackedTarball/skia/src/image/SkSurface_Gpu \
        UnpackedTarball/skia/src/gpu/gl/glx/GrGLMakeNativeInterface_glx \
+       UnpackedTarball/skia/src/gpu/vk/GrVkAMDMemoryAllocator \
+       UnpackedTarball/skia/src/gpu/vk/GrVkBuffer \
+       UnpackedTarball/skia/src/gpu/vk/GrVkBufferView \
+       UnpackedTarball/skia/src/gpu/vk/GrVkCaps \
+       UnpackedTarball/skia/src/gpu/vk/GrVkCommandBuffer \
+       UnpackedTarball/skia/src/gpu/vk/GrVkCommandPool \
+       UnpackedTarball/skia/src/gpu/vk/GrVkDescriptorPool \
+       UnpackedTarball/skia/src/gpu/vk/GrVkDescriptorSet \
+       UnpackedTarball/skia/src/gpu/vk/GrVkDescriptorSetManager \
+       UnpackedTarball/skia/src/gpu/vk/GrVkExtensions \
+       UnpackedTarball/skia/src/gpu/vk/GrVkFramebuffer \
+       UnpackedTarball/skia/src/gpu/vk/GrVkGpuCommandBuffer \
+       UnpackedTarball/skia/src/gpu/vk/GrVkGpu \
+       UnpackedTarball/skia/src/gpu/vk/GrVkImage \
+       UnpackedTarball/skia/src/gpu/vk/GrVkImageView \
+       UnpackedTarball/skia/src/gpu/vk/GrVkIndexBuffer \
+       UnpackedTarball/skia/src/gpu/vk/GrVkInterface \
+       UnpackedTarball/skia/src/gpu/vk/GrVkMemory \
+       UnpackedTarball/skia/src/gpu/vk/GrVkPipeline \
+       UnpackedTarball/skia/src/gpu/vk/GrVkPipelineLayout \
+       UnpackedTarball/skia/src/gpu/vk/GrVkPipelineStateBuilder \
+       UnpackedTarball/skia/src/gpu/vk/GrVkPipelineStateCache \
+       UnpackedTarball/skia/src/gpu/vk/GrVkPipelineState \
+       UnpackedTarball/skia/src/gpu/vk/GrVkPipelineStateDataManager \
+       UnpackedTarball/skia/src/gpu/vk/GrVkRenderPass \
+       UnpackedTarball/skia/src/gpu/vk/GrVkRenderTarget \
+       UnpackedTarball/skia/src/gpu/vk/GrVkResourceProvider \
+       UnpackedTarball/skia/src/gpu/vk/GrVkSampler \
+       UnpackedTarball/skia/src/gpu/vk/GrVkSamplerYcbcrConversion \
+       UnpackedTarball/skia/src/gpu/vk/GrVkSecondaryCBDrawContext \
+       UnpackedTarball/skia/src/gpu/vk/GrVkSemaphore \
+       UnpackedTarball/skia/src/gpu/vk/GrVkStencilAttachment \
+       UnpackedTarball/skia/src/gpu/vk/GrVkTexture \
+       UnpackedTarball/skia/src/gpu/vk/GrVkTextureRenderTarget \
+       UnpackedTarball/skia/src/gpu/vk/GrVkTransferBuffer \
+       UnpackedTarball/skia/src/gpu/vk/GrVkTypesPriv \
+       UnpackedTarball/skia/src/gpu/vk/GrVkUniformBuffer \
+       UnpackedTarball/skia/src/gpu/vk/GrVkUniformHandler \
+       UnpackedTarball/skia/src/gpu/vk/GrVkUtil \
+       UnpackedTarball/skia/src/gpu/vk/GrVkVaryingHandler \
+       UnpackedTarball/skia/src/gpu/vk/GrVkVertexBuffer \
 ))
 
 #       UnpackedTarball/skia/src/android/SkAndroidFrameworkUtils \
@@ -853,48 +895,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 #       UnpackedTarball/skia/src/gpu/dawn/GrDawnGpu \
 #       UnpackedTarball/skia/src/gpu/dawn/GrDawnRenderTarget \
 #       UnpackedTarball/skia/src/gpu/dawn/GrDawnUtil \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkAMDMemoryAllocator \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkBuffer \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkBufferView \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkCaps \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkCommandBuffer \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkCommandPool \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkDescriptorPool \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkDescriptorSet \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkDescriptorSetManager \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkExtensions \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkFramebuffer \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkGpuCommandBuffer \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkGpu \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkImage \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkImageView \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkIndexBuffer \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkInterface \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkMemory \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkPipeline \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkPipelineLayout \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkPipelineStateBuilder \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkPipelineStateCache \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkPipelineState \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkPipelineStateDataManager \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkRenderPass \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkRenderTarget \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkResourceProvider \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkSampler \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkSamplerYcbcrConversion \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkSecondaryCBDrawContext \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkSemaphore \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkStencilAttachment \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkTexture \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkTextureRenderTarget \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkTransferBuffer \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkTypesPriv \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkUniformBuffer \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkUniformHandler \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkUtil \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkVaryingHandler \
-#       UnpackedTarball/skia/src/gpu/vk/GrVkVertexBuffer \
-
 #       UnpackedTarball/skia/src/sksl/SkSLMain \
 #       UnpackedTarball/skia/src/sksl/lex/Main \
 #       UnpackedTarball/skia/src/sksl/lex/NFA \
@@ -908,6 +908,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
        UnpackedTarball/skia/third_party/gif/SkGifImageReader \
        UnpackedTarball/skia/third_party/skcms/skcms \
+       UnpackedTarball/skia/third_party/vulkanmemoryallocator/GrVulkanMemoryAllocator \
 ))
 
 # vim: set noet sw=4 ts=4:
