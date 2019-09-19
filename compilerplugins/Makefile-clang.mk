@@ -275,6 +275,28 @@ $(CLANGOUTDIR)/sharedvisitor:
 -include $(CLANGOUTDIR)/sharedvisitor/analyzer.d
 -include $(CLANGOUTDIR)/sharedvisitor/generator.d
 # TODO WNT version
+
+# Remember the sources that are shared and if they have changed, force sharedvisitor.cxx generating.
+# Duplicated from CLANGSRCCHANGED above.
+CLANGSRCSHAREDCHANGED= \
+    $(shell mkdir -p $(CLANGOUTDIR) ; \
+            echo $(SHARED_SOURCES) | sort > $(CLANGOUTDIR)/sources-shared-new.txt; \
+            if diff $(CLANGOUTDIR)/sources-shared.txt $(CLANGOUTDIR)/sources-shared-new.txt >/dev/null 2>/dev/null; then \
+                echo 0; \
+            else \
+                mv $(CLANGOUTDIR)/sources-shared-new.txt $(CLANGOUTDIR)/sources-shared.txt; \
+                echo 1; \
+            fi; \
+    )
+ifeq ($(CLANGSRCSHAREDCHANGED),1)
+.PHONY: CLANGFORCE
+CLANGFORCE:
+$(CLANGOUTDIR)/sharedvisitor/sharedvisitor.cxx: CLANGFORCE
+endif
+# Make sharedvisitor.cxx also explicitly depend on the sources list, to force update in case CLANGSRCSHAREDCHANGED was e.g. during 'make clean'.
+$(CLANGOUTDIR)/sharedvisitor/sharedvisitor.cxx: $(CLANGOUTDIR)/sources-shared.txt
+$(CLANGOUTDIR)/sources-shared.txt:
+	touch $@
 endif
 
 ifdef LO_CLANG_USE_ANALYZER_PCH
