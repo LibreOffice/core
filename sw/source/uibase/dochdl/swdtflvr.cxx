@@ -132,7 +132,6 @@
 #include <app.hrc>
 #include <vcl/svapp.hxx>
 #include <swserv.hxx>
-#include <calbck.hxx>
 #include <fmtmeta.hxx>
 #include <itabenum.hxx>
 #include <iodetect.hxx>

@@ -127,7 +127,6 @@
 #include <unotextrange.hxx>
 
 #include <sfx2/Metadatable.hxx>
-#include <calbck.hxx>
 #include <dbmgr.hxx>
 #include <iodetect.hxx>
 
