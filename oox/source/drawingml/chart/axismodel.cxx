@@ -36,7 +36,7 @@ AxisModel::AxisModel( sal_Int32 nTypeId, bool bMSO2007Doc ) :
     mnAxisId( -1 ),
     mnAxisPos( XML_TOKEN_INVALID ),
     mnCrossAxisId( -1 ),
-    mnCrossBetween( XML_between ),
+    mnCrossBetween( -1 ),
     mnCrossMode( XML_autoZero ),
     mnLabelAlign( XML_ctr ),
     mnLabelOffset( 100 ),
