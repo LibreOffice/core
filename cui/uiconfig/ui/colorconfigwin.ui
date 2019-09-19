@@ -2,7 +2,6 @@
 <!-- Generated with glade 3.18.3 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="ColorConfigWindow">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -39,9 +38,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="doccolor_lb">
+      <object class="GtkMenuButton" id="doccolor_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -49,9 +55,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="docboundaries_lb">
+      <object class="GtkMenuButton" id="docboundaries_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -75,9 +88,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="appback_lb">
+      <object class="GtkMenuButton" id="appback_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -114,9 +134,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="objboundaries_lb">
+      <object class="GtkMenuButton" id="objboundaries_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -140,9 +167,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="tblboundaries_lb">
+      <object class="GtkMenuButton" id="tblboundaries_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -163,9 +197,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="font_lb">
+      <object class="GtkMenuButton" id="font_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -189,9 +230,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="unvisitedlinks_lb">
+      <object class="GtkMenuButton" id="unvisitedlinks_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -215,9 +263,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="visitedlinks_lb">
+      <object class="GtkMenuButton" id="visitedlinks_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -251,9 +306,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="autospellcheck_lb">
+      <object class="GtkMenuButton" id="autospellcheck_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -261,9 +323,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="shadows_lb">
+      <object class="GtkMenuButton" id="shadows_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -271,9 +340,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="smarttags_lb">
+      <object class="GtkMenuButton" id="smarttags_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -297,9 +373,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="writergrid_lb">
+      <object class="GtkMenuButton" id="writergrid_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -320,9 +403,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="field_lb">
+      <object class="GtkMenuButton" id="field_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -330,9 +420,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="index_lb">
+      <object class="GtkMenuButton" id="index_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -340,9 +437,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="script_lb">
+      <object class="GtkMenuButton" id="script_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -411,9 +515,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="section_lb">
+      <object class="GtkMenuButton" id="section_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -421,9 +532,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="hdft_lb">
+      <object class="GtkMenuButton" id="hdft_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -444,9 +562,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="pagebreak_lb">
+      <object class="GtkMenuButton" id="pagebreak_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -467,9 +592,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="direct_lb">
+      <object class="GtkMenuButton" id="direct_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -506,9 +638,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="sgml_lb">
+      <object class="GtkMenuButton" id="sgml_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -529,9 +668,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="htmlcomment_lb">
+      <object class="GtkMenuButton" id="htmlcomment_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -552,9 +698,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="htmlkeyword_lb">
+      <object class="GtkMenuButton" id="htmlkeyword_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -575,9 +728,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="unknown_lb">
+      <object class="GtkMenuButton" id="unknown_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -614,9 +774,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="calcgrid_lb">
+      <object class="GtkMenuButton" id="calcgrid_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -637,9 +804,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="brk_lb">
+      <object class="GtkMenuButton" id="brk_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -660,9 +834,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="brkmanual_lb">
+      <object class="GtkMenuButton" id="brkmanual_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -683,9 +864,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="brkauto_lb">
+      <object class="GtkMenuButton" id="brkauto_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -706,9 +894,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="det_lb">
+      <object class="GtkMenuButton" id="det_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -729,9 +924,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="deterror_lb">
+      <object class="GtkMenuButton" id="deterror_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -752,9 +954,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="ref_lb">
+      <object class="GtkMenuButton" id="ref_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -775,9 +984,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="notes_lb">
+      <object class="GtkMenuButton" id="notes_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -798,9 +1014,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="values_lb">
+      <object class="GtkMenuButton" id="values_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -821,9 +1044,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="formulas_lb">
+      <object class="GtkMenuButton" id="formulas_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -844,9 +1074,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="text_lb">
+      <object class="GtkMenuButton" id="text_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -867,9 +1104,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="protectedcells_lb">
+      <object class="GtkMenuButton" id="protectedcells_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -906,9 +1150,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="drawgrid_lb">
+      <object class="GtkMenuButton" id="drawgrid_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -945,9 +1196,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="basicid_lb">
+      <object class="GtkMenuButton" id="basicid_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -968,9 +1226,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="basiccomment_lb">
+      <object class="GtkMenuButton" id="basiccomment_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -991,9 +1256,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="basicnumber_lb">
+      <object class="GtkMenuButton" id="basicnumber_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -1014,9 +1286,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="basicstring_lb">
+      <object class="GtkMenuButton" id="basicstring_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -1037,9 +1316,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="basicop_lb">
+      <object class="GtkMenuButton" id="basicop_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -1060,9 +1346,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="basickeyword_lb">
+      <object class="GtkMenuButton" id="basickeyword_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -1083,9 +1376,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="error_lb">
+      <object class="GtkMenuButton" id="error_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -1122,9 +1422,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="sqlid_lb">
+      <object class="GtkMenuButton" id="sqlid_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -1145,9 +1452,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="sqlnumber_lb">
+      <object class="GtkMenuButton" id="sqlnumber_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -1168,9 +1482,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="sqlstring_lb">
+      <object class="GtkMenuButton" id="sqlstring_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -1191,9 +1512,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="sqlop_lb">
+      <object class="GtkMenuButton" id="sqlop_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -1214,9 +1542,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="sqlkeyword_lb">
+      <object class="GtkMenuButton" id="sqlkeyword_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -1237,9 +1572,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="sqlparam_lb">
+      <object class="GtkMenuButton" id="sqlparam_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -1260,9 +1602,16 @@
       </packing>
     </child>
     <child>
-      <object class="svxcorelo-SvxColorListBox" id="sqlcomment_lb">
+      <object class="GtkMenuButton" id="sqlcomment_lb">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="label" translatable="no"></property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
