@@ -129,6 +129,7 @@ public:
 
     void testTdf114179();
     void testTdf124243();
+    void testTdf127393();
     void testDeletedDataLabel();
     void testDataPointInheritedColorDOCX();
     void testExternalStrRefsXLSX();
@@ -218,6 +219,7 @@ public:
 
     CPPUNIT_TEST(testTdf114179);
     CPPUNIT_TEST(testTdf124243);
+    CPPUNIT_TEST(testTdf127393);
     CPPUNIT_TEST(testDeletedDataLabel);
     CPPUNIT_TEST(testDataPointInheritedColorDOCX);
     CPPUNIT_TEST(testExternalStrRefsXLSX);
@@ -1927,6 +1929,33 @@ void Chart2ImportTest::testTdf124243()
     bool bSuccess = xPS->getPropertyValue("Show") >>= bShow;
     CPPUNIT_ASSERT(bSuccess);
     CPPUNIT_ASSERT(!bShow);
+}
+
+void Chart2ImportTest::testTdf127393()
+{
+    load("/chart2/qa/extras/data/pptx/", "tdf127393.pptx");
+
+    // 1st chart
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xAxis.is());
+
+    chart2::ScaleData aScaleData1 = xAxis->getScaleData();
+    CPPUNIT_ASSERT(aScaleData1.Categories.is());
+    CPPUNIT_ASSERT(aScaleData1.ShiftedCategoryPosition);
+
+    // 2nd chart
+    xChartDoc.set(getChartDocFromDrawImpress(1, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    xAxis.set(getAxisFromDoc(xChartDoc, 0, 0, 0));
+    CPPUNIT_ASSERT(xAxis.is());
+
+    chart2::ScaleData aScaleData2 = xAxis->getScaleData();
+    CPPUNIT_ASSERT(aScaleData2.Categories.is());
+    CPPUNIT_ASSERT(!aScaleData2.ShiftedCategoryPosition);
 }
 
 namespace {

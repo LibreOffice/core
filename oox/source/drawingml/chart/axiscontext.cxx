@@ -281,7 +281,7 @@ ContextHandlerRef ValAxisContext::onCreateContext( sal_Int32 nElement, const Att
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( crossBetween ):
-            mrModel.mnCrossBetween = rAttribs.getToken( XML_val, XML_between );
+            mrModel.mnCrossBetween = rAttribs.getToken( XML_val, -1 );
             return nullptr;
         case C_TOKEN( dispUnits ):
             return new AxisDispUnitsContext( *this, mrModel.mxDispUnits.create() );
