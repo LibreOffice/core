@@ -86,7 +86,6 @@
 #include <annotsh.hxx>
 #include <swabstdlg.hxx>
 #include <swevent.hxx>
-#include <calbck.hxx>
 #include <memory>
 
 // distance between Anchor Y and initial note position
