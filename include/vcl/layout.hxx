@@ -90,6 +90,7 @@ public:
         m_bHomogeneous = bHomogeneous;
     }
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 protected:
     virtual sal_uInt16 getDefaultAccessibleRole() const override;
     void accumulateMaxes(const Size &rChildSize, Size &rSize) const;
