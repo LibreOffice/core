@@ -46,6 +46,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testFontsizeRelative();
     void testTdf45771();
     void testTdf97941();
+    void testTdf104339();
     void testTdf85770();
     void testTdf79163();
     void testTdf97542_1();
@@ -78,6 +79,7 @@ public:
     CPPUNIT_TEST(testFontsizeRelative);
     CPPUNIT_TEST(testTdf45771);
     CPPUNIT_TEST(testTdf97941);
+    CPPUNIT_TEST(testTdf104339);
     CPPUNIT_TEST(testTdf85770);
     CPPUNIT_TEST(testTdf79163);
     CPPUNIT_TEST(testTdf97542_1);
@@ -325,6 +327,18 @@ void Test::testTdf97941()
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "48");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Times New Roman");
+}
+
+void Test::testTdf104339()
+{
+    Primitive2DSequence aSequenceTdf104339 = parseSvg("/svgio/qa/cppunit/data/tdf104339.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf104339.getLength()));
+
+    drawinglayer::tools::Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf104339));
+
+    CPPUNIT_ASSERT (pDocument);
+    assertXPath(pDocument, "/primitive2D/transform/transform/transform/transform/transform/polypolygoncolor", "color", "#000000");
 }
 
 void Test::testTdf85770()
