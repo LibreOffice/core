@@ -23,16 +23,17 @@ $(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
 	check_cross_references \
 	check_named_property_values \
 	check_indexed_property_values \
+	check_range_properties \
 	check_styles \
-	check_xtexttable \
 	check_table \
 	check_xautotextcontainer \
 	check_xautotextgroup \
-	check_xmodifiable2 \
 	check_xmodel \
+	check_xmodifiable2 \
 	check_xnamedgraph \
 	check_xrefreshable \
 	check_xtextrangecompare \
+	check_xtexttable \
 	get_expression \
 	set_expression \
 	text_portion_enumeration_test \
