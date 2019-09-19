@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" class="highcharts-root" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Arial, Helvetica, sans-serif;font-size:12px;" width="600" height="400" viewBox="0 0 600 400">
+  <defs>
+    <clipPath id="highcharts-qkip48v-39">
+      <rect x="0" y="0" width="505" height="283" fill="none"/>
+    </clipPath>
+  </defs>
+  <g class="highcharts-series-group" data-z-index="3">
+    <g data-z-index="0.1" class="highcharts-series highcharts-series-0 highcharts-bubble-series highcharts-color-0 " transform="translate(85,61) scale(1 1)" clip-path="url(#highcharts-qkip48v-39)">
+      <path fill="rgb(124,181,236)" fill-opacity="0.5" d="M 501 123.5 A 13.5 13.5 0 1 1 500.99999325000056 123.48650000225 Z" stroke="#7cb5ec" stroke-width="1" class="highcharts-point highcharts-color-0"/>
+    </g>
+  </g>
+</svg>
