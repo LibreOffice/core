@@ -36,7 +36,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/lok.hxx>
-#include <unotools/pathoptions.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <tools/stream.hxx>
 

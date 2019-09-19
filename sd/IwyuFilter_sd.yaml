@@ -97,6 +97,9 @@ blacklist:
     # Needed on MACOSX
     - svl/intitem.hxx
     - app.hrc
+    sd/source/ui/dlg/sdtreelb.cxx:
+    # comphelper::ScopeGuard is actually used
+    - comphelper/scopeguard.hxx
     sd/source/ui/framework/configuration/ConfigurationTracer.hxx:
     # Needed for css shortcut
     - sal/types.h
@@ -339,6 +342,11 @@ blacklist:
     sd/source/core/stlsheet.cxx:
     # Needed for UnoType
     - com/sun/star/table/BorderLine.hpp
+    # Needed for TypedWhichId macros
+    - svx/sdtaaitm.hxx
+    - svx/sdtacitm.hxx
+    - svx/sdtayitm.hxx
+    - svx/sdtaiitm.hxx
     sd/source/core/typemap.cxx:
     # Needed by sdslots.hxx to build
     - config_options.h
@@ -385,6 +393,7 @@ blacklist:
     - svx/sdooitm.hxx
     - svx/sdprcitm.hxx
     - svx/sdtfsitm.hxx
+    - svx/unomid.hxx
     - svx/xbtmpit.hxx
     - svx/xfillit0.hxx
     - svx/xflclit.hxx
@@ -443,6 +452,8 @@ blacklist:
     sd/source/ui/framework/configuration/ConfigurationUpdater.cxx:
     # Needed for DEBUG_SD_CONFIGURATION_TRACE
     - ConfigurationTracer.hxx
+    # comphelper::ScopeGuard is actually used
+    - comphelper/scopeguard.hxx
     sd/source/ui/framework/configuration/ResourceFactoryManager.cxx:
     # Needed for VERBOSE mode
     - sal/log.hxx

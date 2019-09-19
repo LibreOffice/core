@@ -27,9 +27,9 @@
 #include <svx/unoapi.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/xfillit0.hxx>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
 #include <com/sun/star/office/XAnnotationEnumeration.hpp>
@@ -49,7 +49,6 @@
 #include <sfx2/docinf.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/ole/olehelper.hxx>
-#include <rtl/math.hxx>
 #include <memory>
 
 class SfxObjectShell;

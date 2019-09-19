@@ -58,8 +58,6 @@
 #include <svx/ImageMapInfo.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/sfxecode.hxx>
-#include <comphelper/anytostring.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

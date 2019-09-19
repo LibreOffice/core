@@ -18,7 +18,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include <tools/urlobj.hxx>
 
-#include <sal/log.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <officecfg/Office/Impress.hxx>

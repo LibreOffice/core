@@ -29,7 +29,7 @@
 #include <ViewShellHint.hxx>
 #include <app.hrc>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XController.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <svl/lstner.hxx>
 
