@@ -13,7 +13,7 @@ $(eval $(call gb_Library_set_warnings_disabled,skia))
 
 $(eval $(call gb_Library_use_unpacked,skia,skia))
 
-#$(eval $(call gb_Library_set_precompiled_header,skia,$(SRCDIR)/external/skia/inc/pch/precompiled_skia))
+$(eval $(call gb_Library_set_precompiled_header,skia,$(SRCDIR)/external/skia/inc/pch/precompiled_skia))
 
 $(eval $(call gb_Library_add_defs,skia,\
 	-DSK_GAMMA_SRGB \
@@ -24,11 +24,16 @@ $(eval $(call gb_Library_add_defs,skia,\
 	-DSK_BUILD_FOR_UNIX \
 	-DSK_USE_POSIX_THREADS \
 	-DSK_RELEASE \
-	-DGR_RELEASE=1 \
 	-DNDEBUG \
 	-DSKIA_DLL \
 	-DSK_HAS_JPEG_LIBRARY=1 \
 	-DSK_HAS_PNG_LIBRARY=1 \
+))
+
+$(eval $(call gb_Library_add_defs,skia,\
+	-DSK_DEBUG \
+	-USK_RELEASE \
+	-UNDEBUG \
 ))
 
 # TODO

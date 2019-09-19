@@ -298,6 +298,12 @@ class Filter_Local(object):
 
     def proc(self, line):
         assert line and len(line)
+
+        if line[0] == '#':
+            if not SILENT:
+                sys.stderr.write('unhandled #include : {}\n'.format(line))
+            return ''
+
         assert line[0] != '<' and line[0] != '#'
 
         filename = get_filename(line)
@@ -426,6 +432,11 @@ def filter_ignore(line, module):
     if module == 'external/pdfium':
         ignore_list += [
             'third_party/freetype/include/pstables.h',
+            ]
+    if module == 'external/skia':
+        ignore_list += [
+            'skcms_internal.h',
+            'zlib.h', # causes crc32 conflict
             ]
 
     for i in ignore_list:
