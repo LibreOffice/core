@@ -141,7 +141,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <o3tl/enumrange.hxx>
-#include <calbck.hxx>
 
 
 using ::editeng::SvxBorderLine;
