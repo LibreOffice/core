@@ -303,8 +303,21 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 basegfx::B2DPoint aFocusAttribute = rSvgRadialGradientPrimitive2D.getFocal();
 
                 rWriter.attribute("radius", OString::number(rSvgRadialGradientPrimitive2D.getRadius()));
-                rWriter.attribute("x", aFocusAttribute.getX());
-                rWriter.attribute("y", aFocusAttribute.getY());
+                rWriter.attribute("focusx", aFocusAttribute.getX());
+                rWriter.attribute("focusy", aFocusAttribute.getY());
+
+                rWriter.endElement();
+            }
+            break;
+
+            case PRIMITIVE2D_ID_SVGLINEARGRADIENTPRIMITIVE2D:
+            {
+                const SvgLinearGradientPrimitive2D& rSvgLinearGradientPrimitive2D = dynamic_cast<const SvgLinearGradientPrimitive2D&>(*pBasePrimitive);
+                rWriter.startElement("svglineargradient");
+                basegfx::B2DPoint aEndAttribute = rSvgLinearGradientPrimitive2D.getEnd();
+
+                rWriter.attribute("endx", aEndAttribute.getX());
+                rWriter.attribute("endy", aEndAttribute.getY());
 
                 rWriter.endElement();
             }

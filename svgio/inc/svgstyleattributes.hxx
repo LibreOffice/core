@@ -242,6 +242,10 @@ namespace svgio
             // #121221# Defines if evtl. an empty array *is* set
             bool                        mbStrokeDasharraySet : 1;
 
+            // tdf#94765 Check id references in gradient/pattern getters
+            OUString                    maNodeFillURL;
+            OUString                    maNodeStrokeURL;
+
             /// internal helpers
             void add_fillGradient(
                 const basegfx::B2DPolyPolygon& rPath,
@@ -275,6 +279,7 @@ namespace svgio
                 const basegfx::B2DPolyPolygon& rPath,
                 drawinglayer::primitive2d::Primitive2DContainer& rTarget,
                 const basegfx::utils::PointIndexSet* pHelpPointIndices) const;
+
 
         public:
             /// local attribute scanner
