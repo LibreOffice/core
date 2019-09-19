@@ -42,6 +42,8 @@
 #include <frmtool.hxx>
 #include <ndtxt.hxx>
 #include <dflyobj.hxx>
+#include <fmtwrapinfluenceonobjpos.hxx>
+#include <sortedobjs.hxx>
 
 using namespace objectpositioning;
 using namespace ::com::sun::star;
@@ -971,6 +973,34 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
         // keep layout frame vertical position is oriented at.
         mpVertPosOrientFrame = pUpperOfOrientFrame;
 
+        // If it was requested to not overlap with already formatted objects, take care of that
+        // here.
+        bool bAllowOverlap = rFrameFormat.GetWrapInfluenceOnObjPos().GetAllowOverlap();
+        if (!bAllowOverlap)
+        {
+            // Get the list of objects.
+            const SwSortedObjs& rSortedObjs = *pAnchorFrameForVertPos->GetDrawObjs();
+            for (const auto& pAnchoredObj : rSortedObjs)
+            {
+                if (pAnchoredObj == &GetAnchoredObj())
+                {
+                    // We found ourselves, stop iterating.
+                    break;
+                }
+
+                if (!GetAnchoredObj().GetObjRect().IsOver(pAnchoredObj->GetObjRect()))
+                {
+                    // Found an already positioned object, but it doesn't overlap, ignore.
+                    continue;
+                }
+
+                // Already formatted, overlaps: resolve the conflict by shifting ourselves down.
+                SwTwips nYDiff
+                    = pAnchoredObj->GetObjRect().Bottom() - GetAnchoredObj().GetObjRect().Top();
+                aRelPos.setY(aRelPos.getY() + nYDiff + 1);
+                GetAnchoredObj().SetObjTop(nTopOfAnch + aRelPos.Y());
+            }
+        }
     }
 
     // determine 'horizontal' position
