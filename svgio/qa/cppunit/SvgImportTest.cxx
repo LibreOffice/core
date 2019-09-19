@@ -59,6 +59,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testClipPathAndStyle();
     void testi125329();
     void testMaskingPath07b();
+    void test123926();
     void test47446();
     void test47446b();
     void testMaskText();
@@ -92,6 +93,7 @@ public:
     CPPUNIT_TEST(testClipPathAndStyle);
     CPPUNIT_TEST(testi125329);
     CPPUNIT_TEST(testMaskingPath07b);
+    CPPUNIT_TEST(test123926);
     CPPUNIT_TEST(test47446);
     CPPUNIT_TEST(test47446b);
     CPPUNIT_TEST(testMaskText);
@@ -560,6 +562,19 @@ void Test::testMaskingPath07b()
 
     CPPUNIT_ASSERT (pDocument);
 
+}
+
+void Test::test123926()
+{
+    Primitive2DSequence aSequence123926 = parseSvg("/svgio/qa/cppunit/data/tdf123926.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence123926.getLength()));
+
+    drawinglayer::tools::Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence123926));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/transform/transform/unifiedtransparence/polypolygoncolor", "color", "#7cb5ec");
 }
 
 void Test::test47446()
