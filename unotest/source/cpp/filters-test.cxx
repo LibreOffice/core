@@ -106,8 +106,9 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
             }
         }
 
-        OString aRes(OUStringToOString(sURL,
-            osl_getThreadTextEncoding()));
+        OString aRes(
+            (bExport ? OStringLiteral("save") : OStringLiteral("load")) + " "
+            + OUStringToOString(sURL, osl_getThreadTextEncoding()));
 
         OUString realUrl;
         if (bEncrypted)
