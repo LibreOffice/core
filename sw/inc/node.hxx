@@ -484,7 +484,7 @@ private:
 
 // SwTableNode
 
-class SW_DLLPUBLIC SwTableNode : public SwStartNode, public SwModify
+class SW_DLLPUBLIC SwTableNode : public SwStartNode, public sw::BroadcastingModify
 {
     friend class SwNodes;
     std::unique_ptr<SwTable> m_pTable;
