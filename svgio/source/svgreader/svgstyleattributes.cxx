@@ -1336,19 +1336,7 @@ namespace svgio
                     }
                     else if(!aURL.isEmpty())
                     {
-                        const SvgNode* pNode = mrOwner.getDocument().findSvgNodeById(aURL);
-
-                        if(pNode)
-                        {
-                            if(SVGTokenLinearGradient == pNode->getType() || SVGTokenRadialGradient == pNode->getType())
-                            {
-                                mpSvgGradientNodeFill = static_cast< const SvgGradientNode* >(pNode);
-                            }
-                            else if(SVGTokenPattern == pNode->getType())
-                            {
-                                mpSvgPatternNodeFill = static_cast< const SvgPatternNode* >(pNode);
-                            }
-                        }
+                       maNodeFillURL = aURL;
                     }
                     break;
                 }
@@ -1393,19 +1381,7 @@ namespace svgio
                     }
                     else if(!aURL.isEmpty())
                     {
-                        const SvgNode* pNode = mrOwner.getDocument().findSvgNodeById(aURL);
-
-                        if(pNode)
-                        {
-                            if(SVGTokenLinearGradient == pNode->getType() || SVGTokenRadialGradient  == pNode->getType())
-                            {
-                                mpSvgGradientNodeStroke = static_cast< const SvgGradientNode* >(pNode);
-                            }
-                            else if(SVGTokenPattern == pNode->getType())
-                            {
-                                mpSvgPatternNodeStroke = static_cast< const SvgPatternNode* >(pNode);
-                            }
-                        }
+                        maNodeStrokeURL = aURL;
                     }
                     break;
                 }
@@ -2112,6 +2088,18 @@ namespace svgio
             }
             else if (!maFill.isSet() && !mpSvgPatternNodeFill)
             {
+                if (!maNodeFillURL.isEmpty())
+                {
+                    const SvgNode* pNode = mrOwner.getDocument().findSvgNodeById(maNodeFillURL);
+
+                    if(pNode)
+                    {
+                        if(SVGTokenLinearGradient == pNode->getType() || SVGTokenRadialGradient == pNode->getType())
+                        {
+                            return static_cast< const SvgGradientNode* >(pNode);
+                        }
+                    }
+                }
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
                 if (pSvgStyleAttributes && maResolvingParent[2] < nStyleDepthLimit)
@@ -2134,6 +2122,19 @@ namespace svgio
             }
             else if (!maStroke.isSet() && !mpSvgPatternNodeStroke)
             {
+                if(!maNodeStrokeURL.isEmpty())
+                {
+                    const SvgNode* pNode = mrOwner.getDocument().findSvgNodeById(maNodeStrokeURL);
+
+                    if(pNode)
+                    {
+                        if(SVGTokenLinearGradient == pNode->getType() || SVGTokenRadialGradient  == pNode->getType())
+                        {
+                            return static_cast< const SvgGradientNode* >(pNode);
+                        }
+                    }
+                }
+
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
                 if (pSvgStyleAttributes && maResolvingParent[3] < nStyleDepthLimit)
@@ -2156,6 +2157,19 @@ namespace svgio
             }
             else if (!maFill.isSet() && !mpSvgGradientNodeFill)
             {
+                if (!maNodeFillURL.isEmpty())
+                {
+                    const SvgNode* pNode = mrOwner.getDocument().findSvgNodeById(maNodeFillURL);
+
+                    if(pNode)
+                    {
+                        if(SVGTokenPattern == pNode->getType())
+                        {
+                            return static_cast< const SvgPatternNode* >(pNode);
+                        }
+                    }
+                }
+
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
                 if (pSvgStyleAttributes && maResolvingParent[4] < nStyleDepthLimit)
@@ -2178,6 +2192,19 @@ namespace svgio
             }
             else if (!maStroke.isSet() && !mpSvgGradientNodeStroke)
             {
+                if(!maNodeStrokeURL.isEmpty())
+                {
+                    const SvgNode* pNode = mrOwner.getDocument().findSvgNodeById(maNodeStrokeURL);
+
+                    if(pNode)
+                    {
+                        if(SVGTokenPattern == pNode->getType())
+                        {
+                            return static_cast< const SvgPatternNode* >(pNode);
+                        }
+                    }
+                }
+
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
                 if (pSvgStyleAttributes && maResolvingParent[5] < nStyleDepthLimit)
