@@ -23,7 +23,6 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <svl/style.hxx>
 #include <svx/fmmodel.hxx>
-#include <svx/ImageMapInfo.hxx>
 #include <vcl/prntypes.hxx>
 #include <xmloff/autolayout.hxx>
 

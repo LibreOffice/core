@@ -23,7 +23,6 @@
 
 #include <SdShapeTypes.hxx>
 
-#include <svx/DescriptionGenerator.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 
 using namespace ::com::sun::star;

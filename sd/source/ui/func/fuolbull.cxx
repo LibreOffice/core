@@ -23,7 +23,6 @@
 #include <editeng/outliner.hxx>
 #include <editeng/eeitem.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sfxdlg.hxx>
 #include <editeng/numitem.hxx>
 #include <strings.hxx>
 
@@ -38,7 +37,6 @@
 #include <svx/nbdtmgfact.hxx>
 #include <svx/svdoutl.hxx>
 #include <memory>
-#include <sdpage.hxx>
 
 using namespace svx::sidebar;
 namespace sd {

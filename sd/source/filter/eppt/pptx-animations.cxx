@@ -59,7 +59,6 @@
 #include "pptexanimations.hxx"
 #include "pptx-animations.hxx"
 #include "../ppt/pptanimations.hxx"
-#include <comphelper/stl_types.hxx>
 
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::container;

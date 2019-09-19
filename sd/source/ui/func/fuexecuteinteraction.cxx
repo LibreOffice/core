@@ -32,8 +32,6 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/xfillit0.hxx>
 #include <tools/urlobj.hxx>
 
 #include <DrawViewShell.hxx>

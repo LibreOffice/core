@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_DLG_REMOTEDIALOGCLIENTBOX_HXX
 #define INCLUDED_SD_SOURCE_UI_DLG_REMOTEDIALOGCLIENTBOX_HXX
 
-#include <rtl/ustring.hxx>
 #include <vcl/weld.hxx>
 
 #include <memory>

@@ -29,7 +29,7 @@
 #include <vcl/help.hxx>
 #include <svx/bmpmask.hxx>
 #include <svx/svdotext.hxx>
-#include <sfx2/app.hxx>
+#include <svx/ImageMapInfo.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/sfxhelp.hxx>
@@ -40,12 +40,10 @@
 #include <svx/scene3d.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include <anminfo.hxx>
 #include <strings.hrc>
 
 
 #include <sdmod.hxx>
-#include <GraphicDocShell.hxx>
 #include <fudraw.hxx>
 #include <ViewShell.hxx>
 #include <FrameView.hxx>
@@ -54,12 +52,9 @@
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
 #include <sdresid.hxx>
-#include <drawview.hxx>
 #include <fusel.hxx>
 #include <vcl/weld.hxx>
-#include <slideshow.hxx>
 #include <svx/sdrhittesthelper.hxx>
-#include <unotools/securityoptions.hxx>
 
 using namespace ::com::sun::star;
 

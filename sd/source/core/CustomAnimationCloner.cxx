@@ -32,9 +32,6 @@
 
 #include <map>
 
-#include <comphelper/anytostring.hxx>
-#include <cppuhelper/exc_hlp.hxx>
-#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <animations/animationnodehelper.hxx>

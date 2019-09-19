@@ -47,7 +47,6 @@
 
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/embedtransfer.hxx>
 #include <vcl/svlbitm.hxx>

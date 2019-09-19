@@ -19,18 +19,10 @@
 
 #include <vector>
 
-#include <svtools/controldims.hxx>
-
 #include "RemoteDialogClientBox.hxx"
 #include <RemoteServer.hxx>
 
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/commandevent.hxx>
-#include <vcl/event.hxx>
-
-#include <sdresid.hxx>
-#include <strings.hrc>
 
 using namespace std;
 

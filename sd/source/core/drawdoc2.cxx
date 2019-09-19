@@ -26,7 +26,6 @@
 #include <editeng/paperinf.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/svdograf.hxx>
 #include <svx/svdundo.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/eeitem.hxx>
@@ -39,8 +38,6 @@
 #include <svx/svdlayer.hxx>
 
 #include <svx/svditer.hxx>
-#include <svx/ImageMapInfo.hxx>
-#include <vcl/imapobj.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <xmloff/autolayout.hxx>

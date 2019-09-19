@@ -17,27 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
-#include <com/sun/star/media/XPlayer.hpp>
 #include <fusel.hxx>
-#include <basic/sbstar.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/scene3d.hxx>
-#include <drawview.hxx>
 #include <vcl/imapobj.hxx>
-#include <svl/urihelper.hxx>
 #include <unotools/securityoptions.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xfillit0.hxx>
-#include <sfx2/app.hxx>
+#include <svx/ImageMapInfo.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <editeng/flditem.hxx>
 
@@ -45,11 +38,9 @@
 
 #include <app.hrc>
 
-#include <GraphicDocShell.hxx>
 #include <sdmod.hxx>
 #include <DrawDocShell.hxx>
 #include <stlpool.hxx>
-#include <anminfo.hxx>
 #include <fudraw.hxx>
 #include <ViewShell.hxx>
 #include <ViewShellBase.hxx>
@@ -59,13 +50,9 @@
 #include <drawdoc.hxx>
 #include <DrawViewShell.hxx>
 #include <ToolBarManager.hxx>
-#include <pgjump.hxx>
 #include <Client.hxx>
 
-#include <slideshow.hxx>
-
 #include <svx/svdundo.hxx>
-#include <avmedia/mediawindow.hxx>
 
 #include <svx/sdrhittesthelper.hxx>
 

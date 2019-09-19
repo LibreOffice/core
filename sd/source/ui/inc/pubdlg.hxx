@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_PUBDLG_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_PUBDLG_HXX
 
+#include <svtools/valueset.hxx>
 #include <vcl/weld.hxx>
 #include <pres.hxx>
 #include "assclass.hxx"

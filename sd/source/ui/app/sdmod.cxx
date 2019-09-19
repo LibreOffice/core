@@ -21,7 +21,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/commandevent.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/intitem.hxx>

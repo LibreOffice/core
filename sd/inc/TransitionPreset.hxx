@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <list>
+#include <map>
 #include <memory>
 #include <unordered_map>
 

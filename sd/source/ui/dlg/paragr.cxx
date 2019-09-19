@@ -17,12 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/field.hxx>
-
 #include <svl/cjkoptions.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <vcl/button.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>

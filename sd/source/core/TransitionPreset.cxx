@@ -28,11 +28,9 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/lok.hxx>
-#include <unotools/pathoptions.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <officecfg/Office/UI/Effects.hxx>
 
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>

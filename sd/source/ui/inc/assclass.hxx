@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_ASSCLASS_HXX
 
 #include <memory>
+#include <vector>
 
 #include <sddllapi.h>
 

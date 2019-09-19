@@ -21,7 +21,6 @@
 #include <editeng/eeitem.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
-#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
 #include <editeng/fhgtitem.hxx>
