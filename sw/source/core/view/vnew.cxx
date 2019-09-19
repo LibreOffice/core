@@ -41,7 +41,6 @@
 #include <ndgrf.hxx>
 #include <ndindex.hxx>
 #include <accessibilityoptions.hxx>
-#include <calbck.hxx>
 
 void SwViewShell::Init( const SwViewOption *pNewOpt )
 {
