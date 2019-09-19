@@ -20,7 +20,14 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CONVERT_HXX
 
 #include <sfx2/basedlgs.hxx>
+#include <sal/types.h>
+#include <rtl/ustring.hxx>
+#include <tools/link.hxx>
+#include "wrtsh.hxx"
+#include "autoformatpreview.hxx"
+#include <view.hxx>
 #include <tblafmt.hxx>
+#include <itabenum.hxx>
 
 class VclContainer;
 class SwTableAutoFormat;
@@ -30,28 +37,41 @@ struct SwInsertTableOptions;
 
 class SwConvertTableDlg : public SfxDialogController
 {
+    SwWrtShell* const     pShell;
+    SwTableAutoFormatTable* pTableTable;
+    SwTableAutoFormat*      pTAutoFormat;
+
+    sal_uInt8       lbIndex;
+    sal_uInt8       tbIndex;
+    sal_uInt8       minTableIndexInLb;
+    sal_uInt8       maxTableIndexInLb;
+
+    AutoFormatPreview m_aWndPreview;
+
     std::unique_ptr<weld::RadioButton> m_xTabBtn;
     std::unique_ptr<weld::RadioButton> m_xSemiBtn;
     std::unique_ptr<weld::RadioButton> m_xParaBtn;
     std::unique_ptr<weld::RadioButton> m_xOtherBtn;
     std::unique_ptr<weld::Entry> m_xOtherEd;
     std::unique_ptr<weld::CheckButton> m_xKeepColumn;
-
     std::unique_ptr<weld::Container> m_xOptions;
-
     std::unique_ptr<weld::CheckButton> m_xHeaderCB;
     std::unique_ptr<weld::CheckButton> m_xRepeatHeaderCB;
-
     std::unique_ptr<weld::Container> m_xRepeatRows;
     std::unique_ptr<weld::SpinButton> m_xRepeatHeaderNF;
-
     std::unique_ptr<weld::CheckButton> m_xDontSplitCB;
     std::unique_ptr<weld::Button> m_xAutoFormatBtn;
+    std::unique_ptr<weld::Button> m_xInsertBtn;
+    std::unique_ptr<weld::TreeView>  m_xLbFormat;
+    std::unique_ptr<weld::CustomWeld> m_xWndPreview;
 
-    std::unique_ptr<SwTableAutoFormat> mxTAutoFormat;
-    SwWrtShell* const     pShell;
+    // Returns 255 if mapping is not possible.
+    // This means there cannot be more than 255 autotable style.
+    sal_uInt8 lbIndexToTableIndex( const sal_uInt8 listboxIndex );
+    void InitAutoTableFormat();
 
-    DECL_LINK(AutoFormatHdl, weld::Button&, void);
+    DECL_LINK(SelFormatHdl, weld::TreeView&, void);
+    DECL_LINK(OKHdl, weld::Button&, void);
     DECL_LINK(BtnHdl, weld::Button&, void);
     DECL_LINK(CheckBoxHdl, weld::Button&, void);
     DECL_LINK(ReapeatHeaderCheckBoxHdl, weld::Button&, void);

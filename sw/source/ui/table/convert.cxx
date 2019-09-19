@@ -28,7 +28,7 @@
 #include <tablemgr.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
-#include <tblafmt.hxx>
+#include <shellres.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>
@@ -84,8 +84,8 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
     if (!m_xDontSplitCB->get_active())
         nInsMode |= SwInsertTableFlags::SplitLayout;
 
-    if (mxTAutoFormat)
-        prTAFormat = new SwTableAutoFormat(*mxTAutoFormat);
+    if (pTAutoFormat)
+        prTAFormat = new SwTableAutoFormat(*pTAutoFormat);
 
     rInsTableOpts.mnInsMode = nInsMode;
 }
@@ -93,6 +93,8 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
 SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     : SfxDialogController(rView.GetFrameWeld(),
             "modules/swriter/ui/converttexttable.ui", "ConvertTextTableDialog")
+    , pShell(&rView.GetWrtShell())
+    , pTAutoFormat(nullptr)
     , m_xTabBtn(m_xBuilder->weld_radio_button("tabs"))
     , m_xSemiBtn(m_xBuilder->weld_radio_button("semicolons"))
     , m_xParaBtn(m_xBuilder->weld_radio_button("paragraph"))
@@ -105,9 +107,15 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     , m_xRepeatRows(m_xBuilder->weld_container("repeatrows"))
     , m_xRepeatHeaderNF(m_xBuilder->weld_spin_button("repeatheadersb"))
     , m_xDontSplitCB(m_xBuilder->weld_check_button("dontsplitcb"))
-    , m_xAutoFormatBtn(m_xBuilder->weld_button("autofmt"))
-    , pShell(&rView.GetWrtShell())
+    , m_xInsertBtn(m_xBuilder->weld_button("ok"))
+    , m_xLbFormat(m_xBuilder->weld_tree_view("formatlbinstable"))
+    , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, "previewinstable", m_aWndPreview))
 {
+    const int nWidth = m_xLbFormat->get_approximate_digit_width() * 32;
+    const int nHeight = m_xLbFormat->get_height_rows(8);
+    m_xLbFormat->set_size_request(nWidth, nHeight);
+    m_xWndPreview->set_size_request(nWidth, nHeight);
+
     if (nSaveButtonState > -1)
     {
         switch (nSaveButtonState)
@@ -133,8 +141,6 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     if( bToTable )
     {
         m_xDialog->set_title(SwResId(STR_CONVERT_TEXT_TABLE));
-        m_xAutoFormatBtn->connect_clicked(LINK(this, SwConvertTableDlg, AutoFormatHdl));
-        m_xAutoFormatBtn->show();
         m_xKeepColumn->show();
         m_xKeepColumn->set_sensitive(m_xTabBtn->get_active());
     }
@@ -152,8 +158,9 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     m_xOtherBtn->connect_clicked(aLk);
     m_xOtherEd->set_sensitive(m_xOtherBtn->get_active());
 
-    const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+    m_xInsertBtn->connect_clicked(LINK(this, SwConvertTableDlg, OKHdl));
 
+    const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
     bool bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell())&HTMLMODE_ON);
 
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTableFlags(bHTMLMode);
@@ -167,15 +174,103 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     m_xRepeatHeaderCB->connect_clicked(LINK(this, SwConvertTableDlg, ReapeatHeaderCheckBoxHdl));
     ReapeatHeaderCheckBoxHdl(*m_xRepeatHeaderCB);
     CheckBoxHdl(*m_xHeaderCB);
+
+    InitAutoTableFormat();
 }
 
-IMPL_LINK_NOARG(SwConvertTableDlg, AutoFormatHdl, weld::Button&, void)
+void SwConvertTableDlg::InitAutoTableFormat()
 {
-    SwAbstractDialogFactory& rFact = swui::GetFactory();
+    m_aWndPreview.DetectRTL(pShell);
 
-    ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(rFact.CreateSwAutoFormatDlg(m_xDialog.get(), pShell, false, mxTAutoFormat.get()));
-    if (RET_OK == pDlg->Execute())
-        mxTAutoFormat = pDlg->FillAutoFormatOfIndex();
+    m_xLbFormat->connect_changed( LINK( this, SwConvertTableDlg, SelFormatHdl ) );
+
+    pTableTable = new SwTableAutoFormatTable;
+    pTableTable->Load();
+
+    // Add "- none -" style autoformat table.
+    m_xLbFormat->append_text(SwViewShell::GetShellRes()->aStrNone); // Insert to listbox
+
+    // Add other styles of autoformat tables.
+    for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(pTableTable->size());
+            i < nCount; i++)
+    {
+        SwTableAutoFormat const& rFormat = (*pTableTable)[ i ];
+        m_xLbFormat->append_text(rFormat.GetName());
+        if (pTAutoFormat && rFormat.GetName() == pTAutoFormat->GetName())
+            lbIndex = i;
+    }
+
+    // Change this min variable if you add autotable manually.
+    minTableIndexInLb = 1;
+    maxTableIndexInLb = minTableIndexInLb + static_cast<sal_uInt8>(pTableTable->size());
+    lbIndex = 0;
+    m_xLbFormat->select( lbIndex );
+    tbIndex = lbIndexToTableIndex(lbIndex);
+
+    SelFormatHdl( *m_xLbFormat );
+}
+
+sal_uInt8 SwConvertTableDlg::lbIndexToTableIndex( const sal_uInt8 listboxIndex )
+{
+    if( minTableIndexInLb != maxTableIndexInLb &&
+            minTableIndexInLb <= listboxIndex &&
+            listboxIndex < maxTableIndexInLb )
+    {
+        return listboxIndex - minTableIndexInLb;
+    }
+
+    return 255;
+}
+
+static void lcl_SetProperties( SwTableAutoFormat* pTableAutoFormat, bool bVal )
+{
+    pTableAutoFormat->SetFont( bVal );
+    pTableAutoFormat->SetJustify( bVal );
+    pTableAutoFormat->SetFrame( bVal );
+    pTableAutoFormat->SetBackground( bVal );
+    pTableAutoFormat->SetValueFormat( bVal );
+    pTableAutoFormat->SetWidthHeight( bVal );
+}
+
+IMPL_LINK_NOARG(SwConvertTableDlg, SelFormatHdl, weld::TreeView&, void)
+{
+    // Get index of selected item from the listbox
+    lbIndex = static_cast<sal_uInt8>(m_xLbFormat->get_selected_index());
+    tbIndex = lbIndexToTableIndex( lbIndex );
+
+    // To understand this index maping, look InitAutoTableFormat function to
+    // see how listbox item is implemented.
+    if( tbIndex < 255 )
+        m_aWndPreview.NotifyChange( (*pTableTable)[tbIndex] );
+    else
+    {
+        SwTableAutoFormat aTmp( SwViewShell::GetShellRes()->aStrNone );
+        lcl_SetProperties( &aTmp, false );
+
+        m_aWndPreview.NotifyChange( aTmp );
+    }
+}
+
+IMPL_LINK_NOARG(SwConvertTableDlg, OKHdl, weld::Button&, void)
+{
+    if( tbIndex < 255 )
+        pShell->SetTableStyle((*pTableTable)[tbIndex]);
+
+    if( tbIndex < 255 )
+    {
+        if( pTAutoFormat )
+            *pTAutoFormat = (*pTableTable)[ tbIndex ];
+        else
+            pTAutoFormat = new SwTableAutoFormat( (*pTableTable)[ tbIndex ] );
+    }
+    else
+    {
+        delete pTAutoFormat;
+        pTAutoFormat = new SwTableAutoFormat( SwViewShell::GetShellRes()->aStrNone );
+        lcl_SetProperties( pTAutoFormat, false );
+    }
+
+    m_xDialog->response(RET_OK);
 }
 
 IMPL_LINK(SwConvertTableDlg, BtnHdl, weld::Button&, rButton, void)
