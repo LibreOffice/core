@@ -64,6 +64,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testTdf99994();
     void testTdf99115();
     void testTdf101237();
+    void testTdf94765();
     void testBehaviourWhenWidthAndHeightIsOrIsNotSet();
 
     Primitive2DSequence parseSvg(const OUString& aSource);
@@ -95,6 +96,7 @@ public:
     CPPUNIT_TEST(testTdf99994);
     CPPUNIT_TEST(testTdf99115);
     CPPUNIT_TEST(testTdf101237);
+    CPPUNIT_TEST(testTdf94765);
     CPPUNIT_TEST(testBehaviourWhenWidthAndHeightIsOrIsNotSet);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -390,8 +392,8 @@ void Test::testTdf97542_2()
 
     CPPUNIT_ASSERT (pDocument);
 
-    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient[1]", "x", "1");
-    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient[1]", "y", "1");
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient[1]", "focusx", "1");
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient[1]", "focusy", "1");
     assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient[1]", "radius", "3");
 }
 
@@ -674,6 +676,23 @@ void Test::testTdf101237()
     assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#ff0000");
     assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "color", "#000000");
     assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "width", "5");
+}
+
+void Test::testTdf94765()
+{
+    Primitive2DSequence aSequenceTdf94765 = parseSvg("/svgio/qa/cppunit/data/tdf94765.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf94765.getLength()));
+
+    drawinglayer::tools::Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf94765));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    //Check that both rectangles use the gradient as fill
+    assertXPath(pDocument, "/primitive2D/transform/transform/svglineargradient[1]", "endx", "2");
+    assertXPath(pDocument, "/primitive2D/transform/transform/svglineargradient[1]", "endy", "1");
+    assertXPath(pDocument, "/primitive2D/transform/transform/svglineargradient[2]", "endx", "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform/svglineargradient[2]", "endy", "0");
 }
 
 void Test::testBehaviourWhenWidthAndHeightIsOrIsNotSet()
