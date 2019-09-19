@@ -1865,6 +1865,36 @@ public:
         gtk_widget_set_margin_bottom(m_pWidget, nMargin);
     }
 
+    virtual void set_margin_left(int nMargin) override
+    {
+        gtk_widget_set_margin_left(m_pWidget, nMargin);
+    }
+
+    virtual void set_margin_right(int nMargin) override
+    {
+        gtk_widget_set_margin_right(m_pWidget, nMargin);
+    }
+
+    virtual int get_margin_top() const override
+    {
+        return gtk_widget_get_margin_top(m_pWidget);
+    }
+
+    virtual int get_margin_bottom() const override
+    {
+        return gtk_widget_get_margin_bottom(m_pWidget);
+    }
+
+    virtual int get_margin_left() const override
+    {
+        return gtk_widget_get_margin_left(m_pWidget);
+    }
+
+    virtual int get_margin_right() const override
+    {
+        return gtk_widget_get_margin_right(m_pWidget);
+    }
+
     virtual void set_accessible_name(const OUString& rName) override
     {
         AtkObject* pAtkObject = gtk_widget_get_accessible(m_pWidget);

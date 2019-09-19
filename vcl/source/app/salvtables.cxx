@@ -484,6 +484,36 @@ public:
         m_xWidget->set_margin_bottom(nMargin);
     }
 
+    virtual void set_margin_left(int nMargin) override
+    {
+        m_xWidget->set_margin_left(nMargin);
+    }
+
+    virtual void set_margin_right(int nMargin) override
+    {
+        m_xWidget->set_margin_bottom(nMargin);
+    }
+
+    virtual int get_margin_top() const override
+    {
+        return m_xWidget->get_margin_top();
+    }
+
+    virtual int get_margin_bottom() const override
+    {
+        return m_xWidget->get_margin_bottom();
+    }
+
+    virtual int get_margin_left() const override
+    {
+        return m_xWidget->get_margin_left();
+    }
+
+    virtual int get_margin_right() const override
+    {
+        return m_xWidget->get_margin_bottom();
+    }
+
     virtual void set_accessible_name(const OUString& rName) override
     {
         m_xWidget->SetAccessibleName(rName);

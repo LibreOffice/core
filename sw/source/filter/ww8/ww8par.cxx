@@ -5338,7 +5338,6 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     m_xRedlineStack->closeall(*m_pPaM->GetPoint());
     while (!m_aFrameRedlines.empty())
         m_aFrameRedlines.pop();
-    m_xRedlineStack.reset();
 
     // For i120928,achieve the graphics from the special bookmark with is for graphic bullet
     {
@@ -5423,6 +5422,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     }
 
     m_pPosAfterTOC.reset();
+    m_xRedlineStack.reset();
     mpCursor.reset();
     m_pPaM = nullptr;
 
