@@ -19,11 +19,8 @@
 
 #include <ucbhelper/contentidentifier.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
-#include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/ucb/ListActionType.hpp>
-#include <com/sun/star/ucb/XSourceInitialization.hpp>
 #include <ucbhelper/resultsetmetadata.hxx>
 #include <cppuhelper/queryinterface.hxx>
 

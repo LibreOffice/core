@@ -19,10 +19,6 @@
 #ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_INC_QE_DOCGENERATOR_HXX
 #define INCLUDED_XMLHELP_SOURCE_CXXHELP_INC_QE_DOCGENERATOR_HXX
 
-#include <rtl/ref.hxx>
-#include <rtl/ustring.hxx>
-#include <vector>
-
 namespace xmlsearch {
 
     namespace qe {

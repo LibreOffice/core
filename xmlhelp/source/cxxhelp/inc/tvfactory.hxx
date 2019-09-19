@@ -20,14 +20,12 @@
 #ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_INC_TVFACTORY_HXX
 #define INCLUDED_XMLHELP_SOURCE_CXXHELP_INC_TVFACTORY_HXX
 
-#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/weak.hxx>
-#include <ucbhelper/macros.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/implbase.hxx>
 
 

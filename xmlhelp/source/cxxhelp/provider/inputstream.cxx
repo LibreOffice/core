@@ -27,7 +27,6 @@
 
 using namespace chelp;
 using namespace com::sun::star;
-using namespace com::sun::star::ucb;
 
 
 XInputStream_impl::XInputStream_impl( const OUString& aUncPath )

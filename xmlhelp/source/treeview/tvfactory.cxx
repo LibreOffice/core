@@ -23,6 +23,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/factory.hxx>
 #include <tvfactory.hxx>
 #include <tvread.hxx>
 

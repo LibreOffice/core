@@ -21,7 +21,6 @@
 #define INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_CONTENT_HXX
 
 #include <ucbhelper/contenthelper.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
 
 #include "urlparameter.hxx"
 

@@ -20,7 +20,6 @@
 
 #include "db.hxx"
 
-#include <rtl/alloc.h>
 #include <cstring>
 
 #include <com/sun/star/io/XSeekable.hpp>

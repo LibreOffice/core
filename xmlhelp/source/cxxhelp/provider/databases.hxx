@@ -23,7 +23,6 @@
 #include <sal/config.h>
 
 #include <memory>
-#include <set>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -31,9 +30,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>

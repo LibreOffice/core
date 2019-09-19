@@ -23,11 +23,8 @@
 #include <vector>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <ucbhelper/macros.hxx>
 #include <com/sun/star/uno/Type.hxx>
-#include <cppuhelper/weak.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
