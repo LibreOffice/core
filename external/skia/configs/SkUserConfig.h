@@ -60,7 +60,7 @@
     here.
  */
 //#define SK_DEBUG
-#define SK_RELEASE
+//#define SK_RELEASE
 
 /*  Skia has certain debug-only code that is extremely intensive even for debug
     builds.  This code is useful for diagnosing specific issues, but is not
@@ -175,14 +175,9 @@
 */
 //#undef SK_USER_TRACE_INCLUDE_FILE
 
-/*  Change the ordering to work in X windows.
+/*  Change the kN32_SkColorType ordering to BGRA to work in X windows.
  */
-#ifdef SK_SAMPLES_FOR_X
-#define SK_R32_SHIFT 16
-#define SK_G32_SHIFT 8
-#define SK_B32_SHIFT 0
-#define SK_A32_SHIFT 24
-#endif
+//#define SK_R32_SHIFT    16
 
 /* Determines whether to build code that supports the GPU backend. Some classes
    that are not GPU-specific, such as SkShader subclasses, have optional code
@@ -191,6 +186,6 @@
    directories from your include search path when you're not building the GPU
    backend. Defaults to 1 (build the GPU code).
  */
-#define SK_SUPPORT_GPU 0
+//#define SK_SUPPORT_GPU 1
 
 #endif
