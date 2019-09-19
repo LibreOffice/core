@@ -158,8 +158,10 @@ public:
     void                   LoadEntry(const OUString& sWrong, const OUString& sRight, bool bOnlyTxt);
     bool                   empty() const;
 
-    typedef std::vector<SvxAutocorrWord *> Content;
-    Content                getSortedContent() const;
+    struct CompareSvxAutocorrWordList;
+    // can't use std::unique_ptr until we have C++14
+    typedef o3tl::sorted_vector<SvxAutocorrWord*, CompareSvxAutocorrWordList> AutocorrWordSetType;
+    const AutocorrWordSetType & getSortedContent() const;
 
     const SvxAutocorrWord* SearchWordsInList(const OUString& rTxt, sal_Int32& rStt, sal_Int32 nEndPos) const;
 };

@@ -51,8 +51,8 @@ ErrCode SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum /*eClass*/)
                    GetNamespaceMap_().GetNameByKey ( XML_NAMESPACE_BLOCKLIST ) );
     {
         SvXMLElementExport aRoot (*this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK_LIST, true, true);
-        SvxAutocorrWordList::Content aContent = pAutocorr_List->getSortedContent();
-        for (auto const& content : aContent)
+        const SvxAutocorrWordList::AutocorrWordSetType& rContent = pAutocorr_List->getSortedContent();
+        for (auto const& content : rContent)
         {
             AddAttribute( XML_NAMESPACE_BLOCKLIST,
                           XML_ABBREVIATED_NAME,

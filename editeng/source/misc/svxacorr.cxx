@@ -2619,7 +2619,7 @@ void SvxAutoCorrectLanguageLists::PutText( const OUString& rShort,
 }
 
 // Keep the list sorted ...
-struct CompareSvxAutocorrWordList
+struct SvxAutocorrWordList::CompareSvxAutocorrWordList
 {
     bool operator()( SvxAutocorrWord* const& lhs, SvxAutocorrWord* const& rhs ) const
     {
@@ -2630,8 +2630,6 @@ struct CompareSvxAutocorrWordList
 
 namespace {
 
-// can't use std::unique_ptr until we have C++14
-typedef std::set<SvxAutocorrWord*, CompareSvxAutocorrWordList> AutocorrWordSetType;
 typedef std::unordered_map<OUString, std::unique_ptr<SvxAutocorrWord>> AutocorrWordHashType;
 
 }
@@ -2703,7 +2701,7 @@ std::unique_ptr<SvxAutocorrWord> SvxAutocorrWordList::FindAndRemove(SvxAutocorrW
     }
     else
     {
-        AutocorrWordSetType::iterator it = mpImpl->maSet.find( pWord );
+        auto it = mpImpl->maSet.find( pWord );
         if( it != mpImpl->maSet.end() )
         {
             pMatch = std::unique_ptr<SvxAutocorrWord>(*it);
@@ -2714,22 +2712,29 @@ std::unique_ptr<SvxAutocorrWord> SvxAutocorrWordList::FindAndRemove(SvxAutocorrW
 }
 
 // return the sorted contents - defer sorting until we have to.
-SvxAutocorrWordList::Content SvxAutocorrWordList::getSortedContent() const
+const SvxAutocorrWordList::AutocorrWordSetType& SvxAutocorrWordList::getSortedContent() const
 {
-    Content aContent;
-
     // convert from hash to set permanently
     if ( mpImpl->maSet.empty() )
     {
+        std::vector<SvxAutocorrWord*> tmp;
+        tmp.reserve(mpImpl->maHash.size());
+        for (auto & rPair : mpImpl->maHash)
+            tmp.push_back(rPair.second.release());
+        // sort twice - this gets the list into mostly-sorted order, which
+        // reduces the number of times we need to invoke the expensive ICU collate fn.
+        std::sort(tmp.begin(), tmp.end(),
+            [] ( SvxAutocorrWord* const& lhs, SvxAutocorrWord* const& rhs )
+            {
+                return lhs->GetShort() < rhs->GetShort();
+            });
         // This beast has some O(N log(N)) in a terribly slow ICU collate fn.
-        for (auto & elem : mpImpl->maHash)
-            mpImpl->maSet.insert( elem.second.release() );
+        mpImpl->maSet.reserve( tmp.size() );
+        for (auto & p : tmp)
+            mpImpl->maSet.insert( p );
         mpImpl->maHash.clear();
     }
-    for (auto const& elem : mpImpl->maSet)
-        aContent.push_back(elem);
-
-    return aContent;
+    return mpImpl->maSet;
 }
 
 const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *pFnd,
