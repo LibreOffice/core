@@ -6453,19 +6453,27 @@ private:
     gulong m_nPopupMenuSignalId;
     gulong m_nDragBeginSignalId;
     gulong m_nDragEndSignalId;
+    ImplSVEvent* m_pChangeEvent;
 
     DECL_LINK(async_signal_changed, void*, void);
 
-    static void signalChanged(GtkTreeView*, gpointer widget)
+    void launch_signal_changed()
     {
-        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
         //tdf#117991 selection change is sent before the focus change, and focus change
         //is what will cause a spinbutton that currently has the focus to set its contents
         //as the spin button value. So any LibreOffice callbacks on
         //signal-change would happen before the spinbutton value-change occurs.
         //To avoid this, send the signal-change to LibreOffice to occur after focus-change
         //has been processed
-        Application::PostUserEvent(LINK(pThis, GtkInstanceTreeView, async_signal_changed));
+        if (m_pChangeEvent)
+            Application::RemoveUserEvent(m_pChangeEvent);
+        m_pChangeEvent = Application::PostUserEvent(LINK(this, GtkInstanceTreeView, async_signal_changed));
+    }
+
+    static void signalChanged(GtkTreeView*, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        pThis->launch_signal_changed();
     }
 
     static void signalRowActivated(GtkTreeView*, GtkTreePath*, GtkTreeViewColumn*, gpointer widget)
@@ -6829,6 +6837,7 @@ public:
         , m_nPopupMenuSignalId(g_signal_connect(pTreeView, "popup-menu", G_CALLBACK(signalPopupMenu), this))
         , m_nDragBeginSignalId(g_signal_connect(pTreeView, "drag-begin", G_CALLBACK(signalDragBegin), this))
         , m_nDragEndSignalId(g_signal_connect(pTreeView, "drag-end", G_CALLBACK(signalDragEnd), this))
+        , m_pChangeEvent(nullptr)
     {
         m_pColumns = gtk_tree_view_get_columns(m_pTreeView);
         int nIndex(0);
@@ -8155,6 +8164,8 @@ public:
 
     virtual ~GtkInstanceTreeView() override
     {
+        if (m_pChangeEvent)
+            Application::RemoveUserEvent(m_pChangeEvent);
         g_signal_handler_disconnect(m_pTreeView, m_nDragEndSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nDragBeginSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nPopupMenuSignalId);
@@ -8184,6 +8195,7 @@ public:
 
 IMPL_LINK_NOARG(GtkInstanceTreeView, async_signal_changed, void*, void)
 {
+    m_pChangeEvent = nullptr;
     signal_changed();
 }
 
