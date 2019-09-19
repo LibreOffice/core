@@ -462,7 +462,6 @@ constructor_map = {
 custom_widgets = [
     'BookmarksBox',
     'CategoryListBox',
-    'ColorConfigCtrl',
     'ColumnEdit',
     'ContentListBox',
     'ContextVBox',

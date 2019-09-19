@@ -284,9 +284,6 @@
     <glade-widget-class title="Category ListBox" name="sdlo-CategoryListBox"
                         generic-name="Category ListBox" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Color Config Control" name="cuilo-ColorConfigCtrl"
-                        generic-name="ColorConfigCtrl" parent="GtkBox"
-                        icon-name="widget-gtk-box"/>
     <glade-widget-class title="NotebookBar Toolbar Addons" name="NotebookBarAddonsToolMergePoint"
                         generic-name="ShowText" parent="GtkToolButton"
                         icon-name="widget-gtk-toolbutton"/>
