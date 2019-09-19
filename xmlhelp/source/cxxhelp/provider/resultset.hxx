@@ -22,9 +22,6 @@
 
 #include <memory>
 #include <ucbhelper/resultsethelper.hxx>
-#include <rtl/ref.hxx>
-
-#include "content.hxx"
 
 namespace chelp {
 
