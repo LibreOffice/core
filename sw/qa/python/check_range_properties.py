@@ -27,7 +27,7 @@ class CheckRangeProperties(unittest.TestCase):
     def tearDownClass(cls):
         cls._uno.tearDown()
 
-    # see tdf#125307
+    # see tdf#127534
     def test_TextRangeProperties(self):
         xDoc = CheckRangeProperties._uno.openEmptyWriterDoc()
         xBodyText = xDoc.getText()
