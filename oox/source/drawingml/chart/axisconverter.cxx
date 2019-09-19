@@ -213,6 +213,7 @@ void AxisConverter::convertFromModel(
                     aScaleData.AxisType = (bDateAxis && !mrModel.mbAuto) ? cssc2::AxisType::DATE : cssc2::AxisType::CATEGORY;
                     aScaleData.AutoDateAxis = mrModel.mbAuto;
                     aScaleData.Categories = rTypeGroups.front()->createCategorySequence();
+                    aScaleData.ShiftedCategoryPosition = pCrossingAxis->mnCrossBetween == XML_between ? true : false;
                 }
                 else
                 {
