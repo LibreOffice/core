@@ -2030,6 +2030,19 @@ namespace svgio
                 {
                     return &maFill.getBColor();
                 }
+                else if(mbIsClipPathContent)
+                {
+                    const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                    if (pSvgStyleAttributes && maResolvingParent[0] < nStyleDepthLimit)
+                    {
+                        ++maResolvingParent[0];
+                        const basegfx::BColor* pFill = pSvgStyleAttributes->getFill();
+                        --maResolvingParent[0];
+
+                        return pFill;
+                    }
+                }
             }
             else if (!mpSvgGradientNodeFill && !mpSvgPatternNodeFill)
             {
