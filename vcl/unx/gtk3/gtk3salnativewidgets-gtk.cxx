@@ -2442,7 +2442,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         renderType = RenderType::TabItem;
         break;
     case ControlType::WindowBackground:
-        context = gtk_widget_get_style_context(mpWindow);
+        context = gtk_widget_get_style_context(gtk_widget_get_toplevel(mpWindow));
         break;
     case ControlType::Frame:
     {
@@ -2936,10 +2936,11 @@ vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale
 
 bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
 {
-    GtkStyleContext* pStyle = gtk_widget_get_style_context( mpWindow );
+    GtkWidget* pTopLevel = gtk_widget_get_toplevel(mpWindow);
+    GtkStyleContext* pStyle = gtk_widget_get_style_context(pTopLevel);
     StyleContextSave aContextState;
     aContextState.save(pStyle);
-    GtkSettings* pSettings = gtk_widget_get_settings( mpWindow );
+    GtkSettings* pSettings = gtk_widget_get_settings(pTopLevel);
     StyleSettings aStyleSet = rSettings.GetStyleSettings();
     GdkRGBA color;
 
