@@ -743,12 +743,14 @@ bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet* )
         std::vector<SvxAutocorrWord> aDeleteWords;
         std::vector<SvxAutocorrWord> aNewWords;
 
+        aDeleteWords.reserve( rStringChangeList.aDeletedEntries.size() );
         for (DoubleString & deleteEntry : rStringChangeList.aDeletedEntries)
         {
             SvxAutocorrWord aDeleteWord( deleteEntry.sShort, deleteEntry.sLong );
             aDeleteWords.push_back( aDeleteWord );
         }
 
+        aNewWords.reserve( rStringChangeList.aNewEntries.size() );
         for (DoubleString & newEntry : rStringChangeList.aNewEntries)
         {
             //fdo#67697 if the user data is set then we want to retain the
@@ -835,10 +837,10 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
     {
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
         SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eLang);
-        SvxAutocorrWordList::Content aContent = pWordList->getSortedContent();
-        m_xReplaceTLB->bulk_insert_for_each(aContent.size(), [this, &aContent](weld::TreeIter& rIter, int nIndex) {
-            auto const& elem = aContent[nIndex];
-            bool bTextOnly = elem->IsTextOnly();
+        const SvxAutocorrWordList::AutocorrWordSetType & rContent = pWordList->getSortedContent();
+        m_xReplaceTLB->bulk_insert_for_each(rContent.size(), [this, rContent](weld::TreeIter& rIter, int nIndex) {
+            auto const& elem = rContent[nIndex];
+            bool bTextOnly = elem.IsTextOnly();
             // formatted text is only in Writer
             if (bSWriter || bTextOnly)
             {
@@ -848,12 +850,12 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
                     OUString sId = OUString::number(reinterpret_cast<sal_Int64>(m_xTextOnlyCB.get()));
                     m_xReplaceTLB->set_id(rIter, sId);
                 }
-                m_xReplaceTLB->set_text(rIter, elem->GetShort(), 0);
-                m_xReplaceTLB->set_text(rIter, elem->GetLong(), 1);
+                m_xReplaceTLB->set_text(rIter, elem.GetShort(), 0);
+                m_xReplaceTLB->set_text(rIter, elem.GetLong(), 1);
             }
             else
             {
-                aFormatText.insert(elem->GetShort());
+                aFormatText.insert(elem.GetShort());
             }
         }, &m_aReplaceFixedWidths);
         m_xNewReplacePB->set_sensitive(false);
