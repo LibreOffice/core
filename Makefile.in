@@ -290,7 +290,7 @@ help showmodules gbuildtojson:
 	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
 cross-toolset: bootstrap fetch
-	# fetch again in case there are externals only needed on build platform
+# fetch again in case there are externals only needed on build platform
 ifneq ($(OS),iOS)
 	$(MAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(BUILDDIR)/Makefile fetch
 endif
