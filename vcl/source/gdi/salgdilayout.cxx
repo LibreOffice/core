@@ -21,7 +21,7 @@
 #include <config_features.h>
 #include <sal/log.hxx>
 #if HAVE_FEATURE_OPENGL
-#include <openglgdiimpl.hxx>
+#include <opengl/gdiimpl.hxx>
 #include <opengl/zone.hxx>
 #include <desktop/exithelper.h>
 #ifdef _WIN32
