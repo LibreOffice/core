@@ -268,7 +268,7 @@ void MailMergeCfg_Impl::Notify( const css::uno::Sequence< OUString >& )
 }
 
 //typedef SfxTabPage* (*FNCreateTabPage)(TabPageParent pParent, const SfxItemSet &rAttrSet);
-static VclPtr<SfxTabPage> CreateGeneralTabPage(sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet)
+static std::unique_ptr<SfxTabPage> CreateGeneralTabPage(sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet)
 {
     CreateTabPage fnCreate = nullptr;
     switch(nId)
@@ -309,8 +309,7 @@ static VclPtr<SfxTabPage> CreateGeneralTabPage(sal_uInt16 nId, TabPageParent pPa
 #endif
     }
 
-    VclPtr<SfxTabPage> pRet = fnCreate ? (*fnCreate)( pParent, &rSet ) : nullptr;
-    return pRet;
+    return fnCreate ? (*fnCreate)( pParent, &rSet ) : nullptr;
 }
 
 struct OptionsMapping_Impl
@@ -440,13 +439,13 @@ static bool lcl_isOptionHidden( sal_uInt16 _nPageId, const SvtOptionsDialogOptio
 
 struct OptionsPageInfo
 {
-    ScopedVclPtr<SfxTabPage> m_pPage;
+    std::unique_ptr<SfxTabPage> m_xPage;
     sal_uInt16          m_nPageId;
     OUString       m_sPageURL;
     OUString       m_sEventHdl;
     std::unique_ptr<ExtensionsTabPage>  m_xExtPage;
 
-    explicit OptionsPageInfo( sal_uInt16 nId ) : m_pPage( nullptr ), m_nPageId( nId ) {}
+    explicit OptionsPageInfo( sal_uInt16 nId ) : m_nPageId( nId ) {}
 };
 
 struct OptionsGroupInfo
@@ -530,16 +529,16 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
         if (xTreeLB->get_iter_depth(*xEntry))
         {
             OptionsPageInfo *pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xEntry).toInt64());
-            if(pPageInfo->m_pPage)
+            if(pPageInfo->m_xPage)
             {
-                pPageInfo->m_pPage->FillUserData();
-                OUString aPageData(pPageInfo->m_pPage->GetUserData());
+                pPageInfo->m_xPage->FillUserData();
+                OUString aPageData(pPageInfo->m_xPage->GetUserData());
                 if ( !aPageData.isEmpty() )
                 {
                     SvtViewOptions aTabPageOpt( EViewType::TabPage, OUString::number( pPageInfo->m_nPageId) );
                     SetViewOptUserItem( aTabPageOpt, aPageData );
                 }
-                pPageInfo->m_pPage.disposeAndClear();
+                pPageInfo->m_xPage.reset();
             }
 
             if (pPageInfo->m_nPageId == RID_SFXPAGE_LINGU)
@@ -621,13 +620,13 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, BackHdl_Impl, weld::Button&, void)
     if (xCurrentPageEntry && xTreeLB->get_iter_depth(*xCurrentPageEntry))
     {
         OptionsPageInfo* pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry).toInt64());
-        if (pPageInfo->m_pPage)
+        if (pPageInfo->m_xPage)
         {
             std::unique_ptr<weld::TreeIter> xParent = xTreeLB->make_iterator(xCurrentPageEntry.get());
             xTreeLB->iter_parent(*xParent);
             OptionsGroupInfo* pGroupInfo =
                 reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xParent).toInt64());
-            pPageInfo->m_pPage->Reset( pGroupInfo->m_pInItemSet.get() );
+            pPageInfo->m_xPage->Reset( pGroupInfo->m_pInItemSet.get() );
         }
         else if ( pPageInfo->m_xExtPage )
             pPageInfo->m_xExtPage->ResetPage();
@@ -643,13 +642,13 @@ void OfaTreeOptionsDialog::ApplyOptions(bool deactivate)
         if (xTreeLB->get_iter_depth(*xEntry))
         {
             OptionsPageInfo* pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xEntry).toInt64());
-            if ( pPageInfo->m_pPage && !pPageInfo->m_pPage->HasExchangeSupport() )
+            if ( pPageInfo->m_xPage && !pPageInfo->m_xPage->HasExchangeSupport() )
             {
                 std::unique_ptr<weld::TreeIter> xParent = xTreeLB->make_iterator(xEntry.get());
                 xTreeLB->iter_parent(*xParent);
                 OptionsGroupInfo* pGroupInfo =
                     reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xParent).toInt64());
-                pPageInfo->m_pPage->FillItemSet(pGroupInfo->m_pOutItemSet.get());
+                pPageInfo->m_xPage->FillItemSet(pGroupInfo->m_pOutItemSet.get());
             }
 
             if ( pPageInfo->m_xExtPage )
@@ -660,9 +659,9 @@ void OfaTreeOptionsDialog::ApplyOptions(bool deactivate)
                 }
                 pPageInfo->m_xExtPage->SavePage();
             }
-            if ( pPageInfo->m_pPage && RID_OPTPAGE_CHART_DEFCOLORS == pPageInfo->m_nPageId )
+            if ( pPageInfo->m_xPage && RID_OPTPAGE_CHART_DEFCOLORS == pPageInfo->m_nPageId )
             {
-                SvxDefaultColorOptPage* pPage = static_cast<SvxDefaultColorOptPage *>(pPageInfo->m_pPage.get());
+                SvxDefaultColorOptPage* pPage = static_cast<SvxDefaultColorOptPage *>(pPageInfo->m_xPage.get());
                 pPage->SaveChartOptions();
             }
         }
@@ -688,16 +687,16 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl, weld::Button&, void)
     if (xCurrentPageEntry && xTreeLB->get_iter_depth(*xCurrentPageEntry))
     {
         OptionsPageInfo* pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry).toInt64());
-        if ( pPageInfo->m_pPage )
+        if ( pPageInfo->m_xPage )
         {
             std::unique_ptr<weld::TreeIter> xParent = xTreeLB->make_iterator(xCurrentPageEntry.get());
             xTreeLB->iter_parent(*xParent);
 
             OptionsGroupInfo* pGroupInfo = reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xParent).toInt64());
             if ( RID_SVXPAGE_COLOR != pPageInfo->m_nPageId
-                && pPageInfo->m_pPage->HasExchangeSupport() )
+                && pPageInfo->m_xPage->HasExchangeSupport() )
             {
-                DeactivateRC nLeave = pPageInfo->m_pPage->DeactivatePage(pGroupInfo->m_pOutItemSet.get());
+                DeactivateRC nLeave = pPageInfo->m_xPage->DeactivatePage(pGroupInfo->m_pOutItemSet.get());
                 if ( nLeave == DeactivateRC::KeepPage )
                 {
                     // the page mustn't be left
@@ -705,7 +704,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl, weld::Button&, void)
                     return;
                 }
             }
-            pPageInfo->m_pPage->set_visible(false);
+            pPageInfo->m_xPage->set_visible(false);
         }
     }
 
@@ -860,22 +859,19 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     if (!bParent)
         return;
 
-    TabPage* pOldPage = nullptr;
-    TabPage* pNewPage = nullptr;
+    BuilderPage* pNewPage = nullptr;
     OptionsPageInfo* pOptPageInfo = (xCurrentPageEntry && xTreeLB->get_iter_depth(*xCurrentPageEntry))
         ? reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry).toInt64()) : nullptr;
 
-    if ( pOptPageInfo && pOptPageInfo->m_pPage && pOptPageInfo->m_pPage->IsVisible() )
+    if (pOptPageInfo && pOptPageInfo->m_xPage && pOptPageInfo->m_xPage->IsVisible())
     {
-        pOldPage = pOptPageInfo->m_pPage;
-
         std::unique_ptr<weld::TreeIter> xCurParent(xTreeLB->make_iterator(xCurrentPageEntry.get()));
         xTreeLB->iter_parent(*xCurParent);
 
         OptionsGroupInfo* pGroupInfo = reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xCurParent).toInt64());
         DeactivateRC nLeave = DeactivateRC::LeavePage;
-        if ( RID_SVXPAGE_COLOR != pOptPageInfo->m_nPageId && pOptPageInfo->m_pPage->HasExchangeSupport() )
-           nLeave = pOptPageInfo->m_pPage->DeactivatePage( pGroupInfo->m_pOutItemSet.get() );
+        if ( RID_SVXPAGE_COLOR != pOptPageInfo->m_nPageId && pOptPageInfo->m_xPage->HasExchangeSupport() )
+           nLeave = pOptPageInfo->m_xPage->DeactivatePage( pGroupInfo->m_pOutItemSet.get() );
 
         if ( nLeave == DeactivateRC::KeepPage )
         {
@@ -884,7 +880,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
             return;
         }
         else
-            pOptPageInfo->m_pPage->set_visible(false);
+            pOptPageInfo->m_xPage->set_visible(false);
     }
     else if ( pOptPageInfo && pOptPageInfo->m_xExtPage )
     {
@@ -894,7 +890,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
 
     OptionsPageInfo *pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xEntry).toInt64());
     OptionsGroupInfo* pGroupInfo = reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xParent).toInt64());
-    if(!pPageInfo->m_pPage && pPageInfo->m_nPageId > 0)
+    if(!pPageInfo->m_xPage && pPageInfo->m_nPageId > 0)
     {
         if(!pGroupInfo->m_pInItemSet)
             pGroupInfo->m_pInItemSet = pGroupInfo->m_pShell
@@ -907,17 +903,17 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
 
         TabPageParent pPageParent(xTabBox.get(), this);
 
-        pPageInfo->m_pPage.disposeAndReset( ::CreateGeneralTabPage(pPageInfo->m_nPageId, pPageParent, *pGroupInfo->m_pInItemSet ) );
+        pPageInfo->m_xPage = ::CreateGeneralTabPage(pPageInfo->m_nPageId, pPageParent, *pGroupInfo->m_pInItemSet);
 
-        if(!pPageInfo->m_pPage && pGroupInfo->m_pModule)
-            pPageInfo->m_pPage.disposeAndReset(pGroupInfo->m_pModule->CreateTabPage(pPageInfo->m_nPageId, pPageParent, *pGroupInfo->m_pInItemSet));
+        if(!pPageInfo->m_xPage && pGroupInfo->m_pModule)
+            pPageInfo->m_xPage = pGroupInfo->m_pModule->CreateTabPage(pPageInfo->m_nPageId, pPageParent, *pGroupInfo->m_pInItemSet);
 
-        DBG_ASSERT( pPageInfo->m_pPage, "tabpage could not created");
-        if ( pPageInfo->m_pPage )
+        DBG_ASSERT( pPageInfo->m_xPage, "tabpage could not created");
+        if ( pPageInfo->m_xPage )
         {
             SvtViewOptions aTabPageOpt( EViewType::TabPage, OUString::number( pPageInfo->m_nPageId) );
-            pPageInfo->m_pPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
-            pPageInfo->m_pPage->Reset( pGroupInfo->m_pInItemSet.get() );
+            pPageInfo->m_xPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
+            pPageInfo->m_xPage->Reset( pGroupInfo->m_pInItemSet.get() );
         }
     }
     else if ( 0 == pPageInfo->m_nPageId && !pPageInfo->m_xExtPage )
@@ -931,14 +927,14 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
             xTabBox.get(), pPageInfo->m_sPageURL, pPageInfo->m_sEventHdl, m_xContainerWinProvider);
     }
 
-    if ( pPageInfo->m_pPage )
+    if ( pPageInfo->m_xPage )
     {
         if ( RID_SVXPAGE_COLOR != pPageInfo->m_nPageId &&
-             pPageInfo->m_pPage->HasExchangeSupport())
+             pPageInfo->m_xPage->HasExchangeSupport())
         {
-            pPageInfo->m_pPage->ActivatePage(*pGroupInfo->m_pOutItemSet);
+            pPageInfo->m_xPage->ActivatePage(*pGroupInfo->m_pOutItemSet);
         }
-        pPageInfo->m_pPage->set_visible(true);
+        pPageInfo->m_xPage->set_visible(true);
     }
     else if ( pPageInfo->m_xExtPage )
     {
@@ -969,24 +965,12 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
                 pLastPageSaver->m_sLastPageURL_Tools = pPageInfo->m_sPageURL;
         }
     }
-    pNewPage = pPageInfo->m_pPage;
+    pNewPage = pPageInfo->m_xPage.get();
 
-    // restore lost focus, if necessary
-    vcl::Window* pFocusWin = Application::GetFocusWindow();
-    // if the focused window is not the options treebox and the old page has the focus
-    if ( pFocusWin && !xTreeLB->has_focus() && pOldPage && pOldPage->HasChildPathFocus() )
-        // then set the focus to the new page or if we are on a group set the focus to the options treebox
-        pNewPage ? pNewPage->GrabFocus() : xTreeLB->grab_focus();
-
-    //fdo#58170 use current page's layout child HelpId, unless there isn't a
-    //current page
-    OString sHelpId(HID_OFADLG_TREELISTBOX);
-    if (::isLayoutEnabled(pNewPage))
-    {
-        vcl::Window *pFirstChild = pNewPage->GetWindow(GetWindowType::FirstChild);
-        assert(pFirstChild);
-        sHelpId = pFirstChild->GetHelpId();
-    }
+    // fdo#58170 use current page's layout child HelpId, unless there isn't a current page
+    OString sHelpId(pNewPage ? pNewPage->GetHelpId() : OString());
+    if (sHelpId.isEmpty())
+        sHelpId = HID_OFADLG_TREELISTBOX;
     xTreeLB->set_help_id(sHelpId);
 }
 

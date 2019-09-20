@@ -203,13 +203,9 @@ class SwTOXSelectTabPage : public SfxTabPage
     void ApplyTOXDescription();
     void FillTOXDescription();
 
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
-
 public:
     SwTOXSelectTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXSelectTabPage() override;
-    virtual void        dispose() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
@@ -217,7 +213,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet);
 
     void                SelectType(TOXTypes eSet);  //preset TOXType, GlobalDoc
@@ -242,7 +238,7 @@ class SwTokenWindow
 
     Idle            m_aAdjustPositionsIdle;
 
-    VclPtr<SwTOXEntryTabPage>  m_pParent;
+    SwTOXEntryTabPage*  m_pParent;
     std::unique_ptr<weld::Container> m_xParentWidget;
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xContainer;
@@ -385,20 +381,16 @@ class SwTOXEntryTabPage : public SfxTabPage
     void OnModify(bool bAllLevels);
     DECL_LINK(ModifyClickHdl, weld::ToggleButton&, void);
 
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
-
 public:
     SwTOXEntryTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXEntryTabPage() override;
-    virtual void dispose() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
     virtual void        ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
                                        const SfxItemSet* rAttrSet);
     void                SetWrtShell(SwWrtShell& rSh);
 
@@ -429,9 +421,6 @@ class SwTOXStylesTabPage : public SfxTabPage
         return *pDlg->GetForm(pDlg->GetCurrentTOXType());
     }
 
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
-
 public:
     SwTOXStylesTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXStylesTabPage() override;
@@ -442,7 +431,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
                                        const SfxItemSet* rAttrSet);
 
 };

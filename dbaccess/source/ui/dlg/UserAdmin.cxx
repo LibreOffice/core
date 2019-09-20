@@ -128,16 +128,10 @@ OUserAdmin::OUserAdmin(TabPageParent pParent,const SfxItemSet& _rAttrSet)
 
 OUserAdmin::~OUserAdmin()
 {
-    disposeOnce();
-}
-
-void OUserAdmin::dispose()
-{
     m_xConnection = nullptr;
     m_xTableCtrl.disposeAndClear();
     m_xTableCtrlParent->dispose();
     m_xTableCtrlParent.clear();
-    OGenericAdministrationPage::dispose();
 }
 
 void OUserAdmin::FillUserNames()
@@ -186,9 +180,9 @@ void OUserAdmin::FillUserNames()
     m_xTableCtrl->Enable(m_xUsers.is());
 }
 
-VclPtr<SfxTabPage> OUserAdmin::Create( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+std::unique_ptr<SfxTabPage> OUserAdmin::Create( TabPageParent pParent, const SfxItemSet* _rAttrSet )
 {
-    return VclPtr<OUserAdmin>::Create( pParent, *_rAttrSet );
+    return std::make_unique<OUserAdmin>( pParent, *_rAttrSet );
 }
 
 IMPL_LINK(OUserAdmin, UserHdl, weld::Button&, rButton, void)
@@ -312,7 +306,7 @@ void OUserAdmin::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     }
     catch(const SQLException& e)
     {
-        ::dbtools::showError(::dbtools::SQLExceptionInfo(e), VCLUnoHelper::GetInterface(this), m_xORB);
+        ::dbtools::showError(::dbtools::SQLExceptionInfo(e), GetDialogController()->getDialog()->GetXWindow(), m_xORB);
     }
 
     OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);

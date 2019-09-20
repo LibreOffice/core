@@ -70,11 +70,6 @@ SwFieldDBPage::SwFieldDBPage(TabPageParent pParent, const SfxItemSet *const pCor
 
 SwFieldDBPage::~SwFieldDBPage()
 {
-    disposeOnce();
-}
-
-void SwFieldDBPage::dispose()
-{
     SwWrtShell* pSh = GetWrtShell();
     if (!pSh)
         pSh = ::GetActiveWrtShell();
@@ -82,8 +77,6 @@ void SwFieldDBPage::dispose()
     SwDBManager* pDbManager = pSh->GetDoc()->GetDBManager();
     if (pDbManager)
         pDbManager->RevokeLastRegistrations();
-
-    SwFieldPage::dispose();
 }
 
 // initialise TabPage
@@ -262,10 +255,10 @@ bool SwFieldDBPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-VclPtr<SfxTabPage> SwFieldDBPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwFieldDBPage::Create( TabPageParent pParent,
                                         const SfxItemSet *const pAttrSet )
 {
-    return VclPtr<SwFieldDBPage>::Create( pParent, pAttrSet );
+    return std::make_unique<SwFieldDBPage>( pParent, pAttrSet );
 }
 
 sal_uInt16 SwFieldDBPage::GetGroup()

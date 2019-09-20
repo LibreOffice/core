@@ -43,8 +43,8 @@
 #include <tools/urlobj.hxx>
 #include <osl/diagnose.h>
 
-#define WINDOW_SIZE_X   240
-#define WINDOW_SIZE_Y   185
+#define WINDOW_SIZE_X   60
+#define WINDOW_SIZE_Y   23
 
 namespace dbp
 {
@@ -77,8 +77,8 @@ namespace dbp
         : OControlWizardPage_Base(pPageParent, rUIXMLDescription, rID)
         , m_pDialog(pDialog)
     {
-        ::Size aPageSize(LogicToPixel(::Size(WINDOW_SIZE_X, WINDOW_SIZE_Y), MapMode(MapUnit::MapAppFont)));
-        m_xContainer->set_size_request(aPageSize.Width(), aPageSize.Height());
+        m_xContainer->set_size_request(m_xContainer->get_approximate_digit_width() * WIZARD_SIZE_X,
+                                       m_xContainer->get_text_height() * WIZARD_SIZE_Y);
     }
 
     OControlWizardPage::~OControlWizardPage()

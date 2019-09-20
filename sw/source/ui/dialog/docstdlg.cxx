@@ -33,10 +33,11 @@
 
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
-VclPtr<SfxTabPage> SwDocStatPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwDocStatPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwDocStatPage>::Create(pParent, *rSet);
+    return std::make_unique<SwDocStatPage>(pParent, *rSet);
 }
 
 SwDocStatPage::SwDocStatPage(TabPageParent pParent, const SfxItemSet &rSet)
@@ -83,7 +84,7 @@ void  SwDocStatPage::Reset(const SfxItemSet *)
 // Description: update / set data
 void SwDocStatPage::SetData(const SwDocStat &rStat)
 {
-    const LocaleDataWrapper& rLocaleData = GetSettings().GetUILocaleDataWrapper();
+    const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetUILocaleDataWrapper();
     m_xTableNo->set_label(rLocaleData.getNum(rStat.nTable, 0));
     m_xGrfNo->set_label(rLocaleData.getNum(rStat.nGrf, 0));
     m_xOLENo->set_label(rLocaleData.getNum(rStat.nOLE, 0));

@@ -24,7 +24,7 @@
 // color to use as background for an invalid range
 #define RANGE_SELECTION_INVALID_RANGE_BACKGROUND_COLOR Color(0xff6563)
 
-class TabPage;
+class BuilderPage;
 
 namespace chart
 {
@@ -32,8 +32,8 @@ namespace chart
 class TabPageNotifiable
 {
 public:
-    virtual void setInvalidPage( TabPage * pTabPage ) = 0;
-    virtual void setValidPage( TabPage * pTabPage ) = 0;
+    virtual void setInvalidPage( BuilderPage * pTabPage ) = 0;
+    virtual void setValidPage( BuilderPage * pTabPage ) = 0;
 
 protected:
     ~TabPageNotifiable() {}

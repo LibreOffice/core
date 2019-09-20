@@ -141,7 +141,6 @@ private:
 public:
                                 SfxAcceleratorConfigPage(TabPageParent pParent, const SfxItemSet& rItemSet);
     virtual                     ~SfxAcceleratorConfigPage() override;
-    virtual void                dispose() override;
 
     virtual bool                FillItemSet( SfxItemSet* ) override;
     virtual void                Reset( const SfxItemSet* ) override;

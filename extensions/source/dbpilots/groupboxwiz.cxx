@@ -60,7 +60,7 @@ namespace dbp
         return FormComponentType::GROUPBOX == _nClassId;
     }
 
-    VclPtr<TabPage> OGroupBoxWizard::createPage(::vcl::WizardTypes::WizardState _nState)
+    std::unique_ptr<BuilderPage> OGroupBoxWizard::createPage(::vcl::WizardTypes::WizardState _nState)
     {
         OString sIdent(OString::number(_nState));
         weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
@@ -70,19 +70,19 @@ namespace dbp
         switch (_nState)
         {
             case GBW_STATE_OPTIONLIST:
-                return VclPtr<ORadioSelectionPage>::Create(this, aParent);
+                return std::make_unique<ORadioSelectionPage>(this, aParent);
 
             case GBW_STATE_DEFAULTOPTION:
-                return VclPtr<ODefaultFieldSelectionPage>::Create(this, aParent);
+                return std::make_unique<ODefaultFieldSelectionPage>(this, aParent);
 
             case GBW_STATE_OPTIONVALUES:
-                return VclPtr<OOptionValuesPage>::Create(this, aParent);
+                return std::make_unique<OOptionValuesPage>(this, aParent);
 
             case GBW_STATE_DBFIELD:
-                return VclPtr<OOptionDBFieldPage>::Create(this, aParent);
+                return std::make_unique<OOptionDBFieldPage>(this, aParent);
 
             case GBW_STATE_FINALIZE:
-                return VclPtr<OFinalizeGBWPage>::Create(this, aParent);
+                return std::make_unique<OFinalizeGBWPage>(this, aParent);
         }
 
         return nullptr;
@@ -196,9 +196,9 @@ namespace dbp
     {
     }
 
-    void ORadioSelectionPage::ActivatePage()
+    void ORadioSelectionPage::Activate()
     {
-        OGBWPage::ActivatePage();
+        OGBWPage::Activate();
         m_xRadioName->grab_focus();
     }
 
@@ -353,9 +353,9 @@ namespace dbp
         implTraveledOptions();
     }
 
-    void OOptionValuesPage::ActivatePage()
+    void OOptionValuesPage::Activate()
     {
-        OGBWPage::ActivatePage();
+        OGBWPage::Activate();
         m_xValue->grab_focus();
     }
 
@@ -432,9 +432,9 @@ namespace dbp
     {
     }
 
-    void OFinalizeGBWPage::ActivatePage()
+    void OFinalizeGBWPage::Activate()
     {
-        OGBWPage::ActivatePage();
+        OGBWPage::Activate();
         m_xName->grab_focus();
     }
 

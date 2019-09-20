@@ -239,16 +239,10 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(TabPageParent pParent,
 
 SvxNumberFormatTabPage::~SvxNumberFormatTabPage()
 {
-    disposeOnce();
-}
-
-void SvxNumberFormatTabPage::dispose()
-{
     pNumFmtShell.reset();
     pNumItem.reset();
     m_xWndPreview.reset();
     m_xLbLanguage.reset();
-    SfxTabPage::dispose();
 }
 
 void SvxNumberFormatTabPage::Init_Impl()
@@ -313,10 +307,10 @@ void SvxNumberFormatTabPage::Init_Impl()
     m_xLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
 }
 
-VclPtr<SfxTabPage> SvxNumberFormatTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxNumberFormatTabPage::Create( TabPageParent pParent,
                                                    const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxNumberFormatTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SvxNumberFormatTabPage>(pParent, *rAttrSet);
 }
 
 

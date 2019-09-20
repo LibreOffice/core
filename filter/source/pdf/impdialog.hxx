@@ -225,7 +225,7 @@ public:
     ImpPDFTabGeneralPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabGeneralPage() override;
 
-    static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     void                        GetFilterConfigItem(ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem(ImpPDFTabDialog* paParent);
@@ -262,7 +262,7 @@ public:
     ImpPDFTabOpnFtrPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabOpnFtrPage() override;
 
-    static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
@@ -291,7 +291,7 @@ public:
     ImpPDFTabViewerPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabViewerPage() override;
 
-    static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
@@ -339,7 +339,7 @@ public:
     ImpPDFTabSecurityPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabSecurityPage() override;
 
-    static VclPtr<SfxTabPage>   Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
@@ -368,7 +368,7 @@ public:
     ImpPDFTabLinksPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabLinksPage() override;
 
-    static VclPtr<SfxTabPage>   Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
@@ -397,7 +397,7 @@ public:
     ImpPDFTabSigningPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabSigningPage() override;
 
-    static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );

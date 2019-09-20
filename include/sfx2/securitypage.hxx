@@ -34,7 +34,7 @@ protected:
 
 public:
     SfxSecurityPage(TabPageParent pParent, const SfxItemSet&);
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet*);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet*);
     weld::Builder& GetBuilder() const { return *m_xBuilder; }
 };
 

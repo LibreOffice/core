@@ -42,11 +42,12 @@ class SvxBrushItem;
 
 class SvxBackgroundTabPage : public SvxTabPage
 {
-    using TabPage::DeactivatePage;
-    friend class VclPtr<SvxBackgroundTabPage>;
     static const sal_uInt16 pPageRanges[];
 public:
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    SvxBackgroundTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet);
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    virtual ~SvxBackgroundTabPage() override;
+
     // returns the area of the which-values
     static const sal_uInt16* GetRanges() { return pPageRanges; }
 
@@ -65,10 +66,6 @@ protected:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 private:
-    SvxBackgroundTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet);
-    virtual ~SvxBackgroundTabPage() override;
-    virtual void dispose() override;
-
     // DDListBox for Writer -------------------------------
 
     Color       aBgdColor;
@@ -166,14 +163,10 @@ class SvxBkgTabPage : public SvxAreaTabPage
 
     DECL_LINK(TblDestinationHdl_Impl, weld::ComboBox&, void);
 public:
-    using SvxAreaTabPage::ActivatePage;
-    using SvxAreaTabPage::DeactivatePage;
-
     SvxBkgTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxBkgTabPage() override;
-    virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;

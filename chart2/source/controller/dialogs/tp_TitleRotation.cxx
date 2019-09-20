@@ -69,26 +69,20 @@ IMPL_LINK_NOARG(SchAlignmentTabPage, StackedToggleHdl, weld::ToggleButton&, void
 
 SchAlignmentTabPage::~SchAlignmentTabPage()
 {
-    disposeOnce();
-}
-
-void SchAlignmentTabPage::dispose()
-{
     m_xCtrlDial.reset();
     m_xLbTextDirection.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SchAlignmentTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SchAlignmentTabPage::Create(TabPageParent pParent,
                                                const SfxItemSet* rInAttrs)
 {
-    return VclPtr<SchAlignmentTabPage>::Create(pParent, *rInAttrs);
+    return std::make_unique<SchAlignmentTabPage>(pParent, *rInAttrs);
 }
 
-VclPtr<SfxTabPage> SchAlignmentTabPage::CreateWithoutRotation(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SchAlignmentTabPage::CreateWithoutRotation(TabPageParent pParent,
                                                               const SfxItemSet* rInAttrs)
 {
-    return VclPtr<SchAlignmentTabPage>::Create(pParent, *rInAttrs, false);
+    return std::make_unique<SchAlignmentTabPage>(pParent, *rInAttrs, false);
 }
 
 bool SchAlignmentTabPage::FillItemSet(SfxItemSet* rOutAttrs)

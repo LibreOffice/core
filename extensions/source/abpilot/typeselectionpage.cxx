@@ -134,21 +134,15 @@ namespace abp
 
     TypeSelectionPage::~TypeSelectionPage()
     {
-        disposeOnce();
-    }
-
-    void TypeSelectionPage::dispose()
-    {
         for (auto & elem : m_aAllTypes)
         {
             elem.m_bVisible = false;
         }
-        AddressBookSourcePage::dispose();
     }
 
-    void TypeSelectionPage::ActivatePage()
+    void TypeSelectionPage::Activate()
     {
-        AddressBookSourcePage::ActivatePage();
+        AddressBookSourcePage::Activate();
 
         for (auto const& elem : m_aAllTypes)
         {
@@ -162,9 +156,9 @@ namespace abp
         getDialog()->enableButtons(WizardButtonFlags::PREVIOUS, false);
     }
 
-    void TypeSelectionPage::DeactivatePage()
+    void TypeSelectionPage::Deactivate()
     {
-        AddressBookSourcePage::DeactivatePage();
+        AddressBookSourcePage::Deactivate();
         getDialog()->enableButtons(WizardButtonFlags::PREVIOUS, true);
     }
 

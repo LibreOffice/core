@@ -34,7 +34,6 @@ namespace dbaui
     */
     class OConnectionTabPage final : public OConnectionHelper
     {
-        friend class VclPtr<OConnectionTabPage>;
     private:
         // user authentication
         std::unique_ptr<weld::Label> m_xFL2;
@@ -56,8 +55,9 @@ namespace dbaui
         DECL_LINK(OnEditModified, weld::Entry&, void);
 
     public:
+        OConnectionTabPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
+        static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* _rAttrSet);
         virtual ~OConnectionTabPage() override;
-        static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* _rAttrSet );
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
 
         virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
@@ -67,9 +67,6 @@ namespace dbaui
             affect the type may be changed (compared to the previous URL).</p>
         */
     private:
-        OConnectionTabPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
-            // nControlFlags is a combination of the CBTP_xxx-constants
-
         /** enables the test connection button, if allowed
         */
         virtual bool checkTestConnection() override;

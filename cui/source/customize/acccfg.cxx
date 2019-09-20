@@ -906,11 +906,6 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(TabPageParent pParent, const 
 
 SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
 {
-    disposeOnce();
-}
-
-void SfxAcceleratorConfigPage::dispose()
-{
     m_aFillGroupIdle.Stop();
 
     // free memory - remove all dynamic user data
@@ -919,8 +914,6 @@ void SfxAcceleratorConfigPage::dispose()
         TAccInfo* pUserData = reinterpret_cast<TAccInfo*>(m_xEntriesBox->get_id(i).toInt64());
         delete pUserData;
     }
-
-    SfxTabPage::dispose();
 }
 
 void SfxAcceleratorConfigPage::InitAccCfg()

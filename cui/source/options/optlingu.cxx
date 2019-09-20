@@ -893,19 +893,13 @@ SvxLinguTabPage::SvxLinguTabPage(TabPageParent pParent, const SfxItemSet& rSet)
 
 SvxLinguTabPage::~SvxLinguTabPage()
 {
-    disposeOnce();
-}
-
-void SvxLinguTabPage::dispose()
-{
     pLinguData.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxLinguTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxLinguTabPage::Create( TabPageParent pParent,
                                             const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxLinguTabPage>::Create( pParent, *rAttrSet );
+    return std::make_unique<SvxLinguTabPage>( pParent, *rAttrSet );
 }
 
 bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )

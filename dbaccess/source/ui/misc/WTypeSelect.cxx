@@ -46,19 +46,12 @@ using namespace ::com::sun::star::sdbc;
 // OWizTypeSelectControl
 OWizTypeSelectControl::OWizTypeSelectControl(TabPageParent pParent, OWizTypeSelect* pParentTabPage)
     : OFieldDescControl(pParent, nullptr)
-    , m_xParentTabPage(pParentTabPage)
+    , m_pParentTabPage(pParentTabPage)
 {
 }
 
 OWizTypeSelectControl::~OWizTypeSelectControl()
 {
-    disposeOnce();
-}
-
-void OWizTypeSelectControl::dispose()
-{
-    m_xParentTabPage.clear();
-    OFieldDescControl::dispose();
 }
 
 void OWizTypeSelectControl::ActivateAggregate( EControlType eType )
@@ -93,7 +86,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 {
     OSL_ENSURE(nRow == -1,"nRow must be -1!");
 
-    weld::TreeView* pListBox = m_xParentTabPage->m_xColumnNames->GetWidget();
+    weld::TreeView* pListBox = m_pParentTabPage->m_xColumnNames->GetWidget();
 
     OFieldDescription* pCurFieldDescr = getCurrentFieldDescData();
 
@@ -114,7 +107,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
     {
         case FIELD_PROPERTY_COLUMNNAME:
             {
-                OCopyTableWizard* pWiz = m_xParentTabPage->m_pParent;
+                OCopyTableWizard* pWiz = m_pParentTabPage->m_pParent;
                 // first we have to check if this name already exists
                 bool bDoubleName = false;
                 bool bCase = true;
@@ -143,13 +136,13 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                     pWiz->showError(strMessage);
                     pCurFieldDescr->SetName(sName);
                     DisplayData(pCurFieldDescr);
-                    m_xParentTabPage->setDuplicateName(true);
+                    m_pParentTabPage->setDuplicateName(true);
                     return;
                 }
 
                 OUString sOldName = pCurFieldDescr->GetName();
                 pCurFieldDescr->SetName(sNewName);
-                m_xParentTabPage->setDuplicateName(false);
+                m_pParentTabPage->setDuplicateName(false);
 
                 // now we change the name
 
@@ -176,42 +169,42 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 
 css::lang::Locale  OWizTypeSelectControl::GetLocale() const
 {
-    return m_xParentTabPage->m_pParent->GetLocale();
+    return m_pParentTabPage->m_pParent->GetLocale();
 }
 
 Reference< XNumberFormatter > OWizTypeSelectControl::GetFormatter() const
 {
-    return m_xParentTabPage->m_pParent->GetFormatter();
+    return m_pParentTabPage->m_pParent->GetFormatter();
 }
 
 TOTypeInfoSP    OWizTypeSelectControl::getTypeInfo(sal_Int32 _nPos)
 {
-    return m_xParentTabPage->m_pParent->getDestTypeInfo(_nPos);
+    return m_pParentTabPage->m_pParent->getDestTypeInfo(_nPos);
 }
 
 const OTypeInfoMap* OWizTypeSelectControl::getTypeInfo() const
 {
-    return &m_xParentTabPage->m_pParent->getDestTypeInfo();
+    return &m_pParentTabPage->m_pParent->getDestTypeInfo();
 }
 
 css::uno::Reference< css::sdbc::XDatabaseMetaData> OWizTypeSelectControl::getMetaData()
 {
-    return m_xParentTabPage->m_pParent->m_xDestConnection->getMetaData();
+    return m_pParentTabPage->m_pParent->m_xDestConnection->getMetaData();
 }
 
 css::uno::Reference< css::sdbc::XConnection> OWizTypeSelectControl::getConnection()
 {
-    return m_xParentTabPage->m_pParent->m_xDestConnection;
+    return m_pParentTabPage->m_pParent->m_xDestConnection;
 }
 
 bool OWizTypeSelectControl::isAutoIncrementValueEnabled() const
 {
-    return m_xParentTabPage->m_bAutoIncrementEnabled;
+    return m_pParentTabPage->m_bAutoIncrementEnabled;
 }
 
 OUString OWizTypeSelectControl::getAutoIncrementValue() const
 {
-    return m_xParentTabPage->m_sAutoIncrementValue;
+    return m_pParentTabPage->m_sAutoIncrementValue;
 }
 
 OWizTypeSelect::OWizTypeSelect(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream* pStream)
@@ -254,13 +247,7 @@ OWizTypeSelect::OWizTypeSelect(OCopyTableWizard* pWizard, TabPageParent pParent,
 
 OWizTypeSelect::~OWizTypeSelect()
 {
-    disposeOnce();
-}
-
-void OWizTypeSelect::dispose()
-{
     m_xTypeControl.disposeAndClear();
-    OWizardPage::dispose();
 }
 
 OUString OWizTypeSelect::GetTitle() const
@@ -296,7 +283,7 @@ void OWizTypeSelect::Reset()
     m_bFirstTime = false;
 }
 
-void OWizTypeSelect::ActivatePage( )
+void OWizTypeSelect::Activate( )
 {
     bool bOldFirstTime = m_bFirstTime;
     Reset();
@@ -342,13 +329,13 @@ IMPL_LINK_NOARG(OWizTypeSelect, ButtonClickHdl, weld::Button&, void)
         m_pParserStream->Seek(nTell);
     }
 
-    ActivatePage();
+    Activate();
 }
 
 OWizTypeSelectList::OWizTypeSelectList(std::unique_ptr<weld::TreeView> xControl)
     : m_xControl(std::move(xControl))
     , m_bPKey(false)
-    , m_xParentTabPage(nullptr)
+    , m_pParentTabPage(nullptr)
 {
     m_xControl->connect_popup_menu(LINK(this, OWizTypeSelectList, CommandHdl));
 }

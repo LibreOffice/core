@@ -32,18 +32,14 @@ class ScRefAddress;
 
 class ScTpUserLists : public SfxTabPage
 {
-    friend class VclPtr<ScTpUserLists>;
 public:
-    static  VclPtr<SfxTabPage> Create          ( TabPageParent pParent,
-                                          const SfxItemSet*     rAttrSet );
+    ScTpUserLists(TabPageParent pParent, const SfxItemSet& rArgSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent,
+                                          const SfxItemSet* rAttrSet);
+    virtual ~ScTpUserLists() override;
     virtual bool        FillItemSet     ( SfxItemSet* rCoreAttrs ) override;
     virtual void        Reset           ( const SfxItemSet* rCoreAttrs ) override;
-    using SfxTabPage::DeactivatePage;
     virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;
-
-private:
-    ScTpUserLists(TabPageParent pParent, const SfxItemSet& rArgSet);
-    virtual ~ScTpUserLists() override;
 
 private:
     std::unique_ptr<weld::Label> mxFtLists;
