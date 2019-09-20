@@ -1042,6 +1042,7 @@ public:
     virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() override
     {
         auto xPage = VclPtr<VclBin>::Create(m_xContainer.get());
+        xPage->set_expand(true);
         xPage->Show();
         return css::uno::Reference<css::awt::XWindow>(xPage->GetComponentInterface(), css::uno::UNO_QUERY);
     }
