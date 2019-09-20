@@ -1871,7 +1871,7 @@ sw/res/all_right.png dbaccess/res/all_right.png
 sw/res/lc20556.png cmd/lc_insertformula.png
 sw/res/lc20557.png cmd/lc_cancel.png
 sw/res/lc20558.png cmd/lc_ok.png
-sw/res/nc20002.png cmd/sc_text.png
+sw/res/nc20002.png cmd/sc_insertframe.png
 sw/res/nc20003.png cmd/sc_graphic.png
 sw/res/nc20004.png cmd/sc_insertobject.png
 sw/res/nc20005.png sfx2/res/favourite.png
@@ -1897,7 +1897,7 @@ sw/res/sidebar/pageproppanel/last_custom_common_grey.png svx/res/symphony/last_c
 sw/res/sr20000.png cmd/sc_downsearch.png
 sw/res/sr20001.png cmd/sc_upsearch.png
 sw/res/sr20002.png sw/res/nc20001.png
-sw/res/sr20003.png cmd/sc_text.png
+sw/res/sr20003.png cmd/sc_insertframe.png
 sw/res/sr20004.png cmd/sc_adddirect.png
 sw/res/sr20005.png cmd/sc_insertdraw.png
 sw/res/sr20006.png cmd/sc_choosecontrols.png
