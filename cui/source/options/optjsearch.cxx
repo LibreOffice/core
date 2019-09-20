@@ -53,12 +53,11 @@ SvxJSearchOptionsPage::SvxJSearchOptionsPage(TabPageParent pParent, const SfxIte
 
 SvxJSearchOptionsPage::~SvxJSearchOptionsPage()
 {
-    disposeOnce();
 }
 
-VclPtr<SfxTabPage> SvxJSearchOptionsPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxJSearchOptionsPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxJSearchOptionsPage>::Create(pParent, *rSet);
+    return std::make_unique<SvxJSearchOptionsPage>(pParent, *rSet);
 }
 
 void SvxJSearchOptionsPage::SetTransliterationFlags( TransliterationFlags nSettings )

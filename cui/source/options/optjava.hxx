@@ -95,7 +95,7 @@ private:
     DECL_LINK(StartFolderPickerHdl, void *, void);
     DECL_LINK(DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void);
 
-    DECL_LINK(ExpertConfigHdl_Impl, weld::Button&, void);
+    DECL_STATIC_LINK(SvxJavaOptionsPage, ExpertConfigHdl_Impl, weld::Button&, void);
 
     void                    ClearJavaInfo();
     void                    ClearJavaList();
@@ -108,9 +108,8 @@ private:
 public:
     SvxJavaOptionsPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxJavaOptionsPage() override;
-    virtual void            dispose() override;
 
-    static VclPtr<SfxTabPage>      Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;
     virtual void            Reset( const SfxItemSet* rSet ) override;

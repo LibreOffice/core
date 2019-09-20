@@ -98,11 +98,10 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     void    SetModified() { m_aPreviewWIN.Invalidate(); }
     void    CheckForStartValue_Impl(sal_uInt16 nNumberingType);
 
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
-
 public:
     SwOutlineSettingsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage>  Create( TabPageParent pParent,
+                                       const SfxItemSet* rAttrSet);
     virtual ~SwOutlineSettingsTabPage() override;
 
     void SetWrtShell(SwWrtShell* pShell);
@@ -112,8 +111,6 @@ public:
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
-                                       const SfxItemSet* rAttrSet);
     void SetNumRule(SwNumRule *pRule)
     {
         pNumRule = pRule;

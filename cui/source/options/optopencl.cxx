@@ -45,9 +45,9 @@ SvxOpenCLTabPage::~SvxOpenCLTabPage()
 {
 }
 
-VclPtr<SfxTabPage> SvxOpenCLTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SvxOpenCLTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxOpenCLTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SvxOpenCLTabPage>(pParent, *rAttrSet);
 }
 
 bool SvxOpenCLTabPage::FillItemSet( SfxItemSet* )

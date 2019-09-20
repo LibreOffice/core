@@ -21,7 +21,15 @@
 #define INCLUDED_VCL_WIZDLG_HXX
 
 #include <memory>
+#include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/roadmapwizard.hxx>
+
+struct ImplWizPageData
+{
+    ImplWizPageData*    mpNext;
+    VclPtr<TabPage>     mpPage;
+};
 
 namespace vcl
 {

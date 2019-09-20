@@ -49,9 +49,6 @@ public:
 class SvxGrfCropPage : public SfxTabPage
 {
     friend class VclPtr<SvxGrfCropPage>;
-    using Window::CalcZoom;
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
 
     OUString        aGraphicName;
     Size            aOrigSize;
@@ -86,10 +83,6 @@ class SvxGrfCropPage : public SfxTabPage
     // Example
     std::unique_ptr<weld::CustomWeld> m_xExampleWN;
 
-    SvxGrfCropPage(TabPageParent pParent, const SfxItemSet &rSet);
-    virtual ~SvxGrfCropPage() override;
-    virtual void dispose() override;
-
     DECL_LINK(ZoomHdl, weld::MetricSpinButton&, void);
     DECL_LINK(SizeHdl, weld::MetricSpinButton&, void);
     DECL_LINK(CropModifyHdl, weld::MetricSpinButton&, void);
@@ -102,7 +95,9 @@ class SvxGrfCropPage : public SfxTabPage
 
     Size            GetGrfOrigSize( const Graphic& ) const;
 public:
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet *rSet );
+    SvxGrfCropPage(TabPageParent pParent, const SfxItemSet &rSet);
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet *rSet );
+    virtual ~SvxGrfCropPage() override;
 
     virtual bool FillItemSet( SfxItemSet *rSet ) override;
     virtual void Reset( const SfxItemSet *rSet ) override;

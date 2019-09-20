@@ -719,11 +719,6 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(TabPageParent pParent, const SfxI
 
 SvxColorOptionsTabPage::~SvxColorOptionsTabPage()
 {
-    disposeOnce();
-}
-
-void SvxColorOptionsTabPage::dispose()
-{
     if (pColorConfig)
     {
         //when the dialog is cancelled but the color scheme ListBox has been changed these
@@ -746,12 +741,11 @@ void SvxColorOptionsTabPage::dispose()
         pExtColorConfig.reset();
     }
     m_xColorConfigCT.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxColorOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SvxColorOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxColorOptionsTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SvxColorOptionsTabPage>(pParent, *rAttrSet);
 }
 
 bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet*  )
