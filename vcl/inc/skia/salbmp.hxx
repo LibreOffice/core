@@ -58,7 +58,13 @@ public:
     virtual bool ConvertToGreyscale() override;
 
 private:
+    // TODO SkSurface?
     SkBitmap mBitmap;
+    BitmapPalette mPalette;
+    int mBitCount; // bpp
+    Size mSize;
+    std::unique_ptr<sal_uInt8[]> mBuffer; // for 1bpp and 4bpp, Skia doesn't support those
+    int mScanlineSize; // size of one row in mBuffer
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_SALBMP_H
