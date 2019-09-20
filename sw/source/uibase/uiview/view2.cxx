@@ -82,6 +82,8 @@
 #include <uivwimp.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
+#include <printdata.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
@@ -195,7 +197,7 @@ static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, sal_uInt16 nWhi
  * @param nVirtNum The logical page number (user-assigned)
  * @param rPgStr   User-defined page name (will be shown if different from logical page number)
  *
- * @return OUString Formatted string: Page 1/10 (Page nVirtNumv/rPgStr)
+ * @return OUString Formatted string: Page 1 of 10 (Page 1 of 8 to print OR Page nVirtNumv/rPgStr)
  **/
 OUString SwView::GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUString& rPgStr)
 {
@@ -206,10 +208,25 @@ OUString SwView::GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUStr
     else if (nPhyNum != nVirtNum)
         extra = OUString::number(nVirtNum);
 
-    OUString aStr(extra.isEmpty() ? SwResId(STR_PAGE_COUNT) : SwResId(STR_PAGE_COUNT_CUSTOM));
+    sal_uInt16 nPageCount = GetWrtShell().GetPageCnt();
+    sal_uInt16 nPrintedPhyNum = nPhyNum;
+    sal_uInt16 nPrintedPageCount = nPageCount;
+    if (!GetWrtShell().getIDocumentDeviceAccess().getPrintData().IsPrintEmptyPages())
+        SwDoc::CalculateNonBlankPages(*m_pWrtShell->GetLayout(), nPrintedPageCount, nPrintedPhyNum);
+    // Show printed page numbers only, when they are different
+    OUString aStr( nPageCount != nPrintedPageCount
+                    ? SwResId(STR_PAGE_COUNT_PRINTED)
+                    : (extra.isEmpty() ? SwResId(STR_PAGE_COUNT) : SwResId(STR_PAGE_COUNT_CUSTOM)));
     aStr = aStr.replaceFirst("%1", OUString::number(nPhyNum));
-    aStr = aStr.replaceFirst("%2", OUString::number(GetWrtShell().GetPageCnt()));
-    aStr = aStr.replaceFirst("%3", extra);
+    aStr = aStr.replaceFirst("%2", OUString::number(nPageCount));
+    if (nPageCount != nPrintedPageCount)
+    {
+        aStr = aStr.replaceFirst("%3", OUString::number(nPrintedPhyNum));
+        aStr = aStr.replaceFirst("%4", OUString::number(nPrintedPageCount));
+    }
+    else
+        aStr = aStr.replaceFirst("%3", extra);
+
     return aStr;
 }
 
