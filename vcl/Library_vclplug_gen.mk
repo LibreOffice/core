@@ -94,7 +94,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/gdi/cairo_xlib_cairo \
     vcl/unx/generic/gdi/x11cairotextrender \
 	vcl/unx/generic/gdi/gdiimpl \
-	vcl/unx/generic/gdi/openglx11cairotextrender \
     vcl/unx/generic/gdi/salbmp \
     vcl/unx/generic/gdi/salgdi2 \
     vcl/unx/generic/gdi/font \
@@ -105,6 +104,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/window/salobj \
     vcl/unx/x11/x11sys \
     vcl/unx/x11/xlimits \
+	vcl/opengl/x11/cairotextrender \
 	vcl/opengl/x11/gdiimpl \
 	vcl/opengl/x11/salvd \
 ))

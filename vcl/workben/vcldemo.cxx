@@ -63,7 +63,7 @@
 #if HAVE_FEATURE_OPENGL
 #include <salgdi.hxx>
 #include <salframe.hxx>
-#include <openglgdiimpl.hxx>
+#include <opengl/gdiimpl.hxx>
 #include <opengl/texture.hxx>
 #include <opengl/framebuffer.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>

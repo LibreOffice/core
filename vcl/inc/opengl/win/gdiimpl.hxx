@@ -13,7 +13,7 @@
 #include <memory>
 #include <vcl/dllapi.h>
 
-#include <openglgdiimpl.hxx>
+#include <opengl/gdiimpl.hxx>
 #include <svdata.hxx>
 #include <win/salgdi.h>
 #include <o3tl/lru_map.hxx>
