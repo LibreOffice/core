@@ -43,8 +43,6 @@ class SwCondCollPage : public SfxTabPage
     std::unique_ptr<weld::Button> m_xRemovePB;
     std::unique_ptr<weld::Button> m_xAssignPB;
 
-    virtual ~SwCondCollPage() override;
-
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
 
     DECL_LINK(OnOffHdl, weld::ToggleButton&, void);
@@ -55,15 +53,13 @@ class SwCondCollPage : public SfxTabPage
     void AssignRemove(const weld::Widget*);
     void SelectHdl(const weld::Widget*);
 
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
-
     static const sal_uInt16 m_aPageRg[];
 
 public:
     SwCondCollPage(TabPageParent pParent, const SfxItemSet &rSet);
+    virtual ~SwCondCollPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return m_aPageRg; }
 
     virtual bool FillItemSet(      SfxItemSet *rSet) override;

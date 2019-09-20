@@ -173,16 +173,13 @@ class SwFramePage: public SfxTabPage
 
     SwWrtShell *getFrameDlgParentShell();
 
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
-
     static const sal_uInt16 aPageRg[];
 
 public:
     SwFramePage(TabPageParent pParent, const SfxItemSet &rSet);
     virtual ~SwFramePage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;
@@ -230,16 +227,11 @@ class SwGrfExtPage : public SfxTabPage
     DECL_LINK(BrowseHdl, weld::Button&, void);
 
     virtual void    ActivatePage(const SfxItemSet& rSet) override;
-    virtual ~SwGrfExtPage() override;
-    virtual void dispose() override;
-
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
 
 public:
     SwGrfExtPage(TabPageParent pParent, const SfxItemSet &rSet);
-
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    virtual ~SwGrfExtPage() override;
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;
     virtual void Reset(const SfxItemSet *rSet) override;
@@ -260,14 +252,11 @@ class SwFrameURLPage : public SfxTabPage
 
     DECL_LINK(InsertFileHdl, weld::Button&, void);
 
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
-
 public:
     SwFrameURLPage(TabPageParent pParent, const SfxItemSet &rSet);
     virtual ~SwFrameURLPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;
     virtual void Reset(const SfxItemSet *rSet) override;
@@ -316,9 +305,8 @@ class SwFrameAddPage : public SfxTabPage
 public:
     SwFrameAddPage(TabPageParent pParent, const SfxItemSet &rSet);
     virtual ~SwFrameAddPage() override;
-    virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
     static const sal_uInt16*  GetRanges() { return aAddPgRg; }
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;

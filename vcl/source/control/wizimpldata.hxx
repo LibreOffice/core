@@ -22,10 +22,10 @@
 
 #include <stack>
 
-struct ImplWizPageData
+struct WizPageData
 {
-    ImplWizPageData*    mpNext;
-    VclPtr<TabPage>     mpPage;
+    WizPageData*    mpNext;
+    std::unique_ptr<BuilderPage> mxPage;
 };
 
 struct ImplWizButtonData

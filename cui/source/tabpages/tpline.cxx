@@ -207,11 +207,6 @@ void SvxLineTabPage::ShowSymbolControls(bool bOn)
 
 SvxLineTabPage::~SvxLineTabPage()
 {
-    disposeOnce();
-}
-
-void SvxLineTabPage::dispose()
-{
     m_xCtlPreview.reset();
     m_xLbEndStyle.reset();
     m_xLbStartStyle.reset();
@@ -219,8 +214,6 @@ void SvxLineTabPage::dispose()
     m_xLbLineStyle.reset();
     m_aGalleryBrushItems.clear();
     m_aSymbolBrushItems.clear();
-
-    SfxTabPage::dispose();
 }
 
 void SvxLineTabPage::Construct()
@@ -1183,10 +1176,10 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     ChangePreviewHdl_Impl( nullptr );
 }
 
-VclPtr<SfxTabPage> SvxLineTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxLineTabPage::Create(TabPageParent pParent,
                                           const SfxItemSet* rAttrs)
 {
-    return VclPtr<SvxLineTabPage>::Create(pParent, *rAttrs);
+    return std::make_unique<SvxLineTabPage>(pParent, *rAttrs);
 }
 
 IMPL_LINK_NOARG(SvxLineTabPage, ChangePreviewListBoxHdl_Impl, ColorListBox&, void)
@@ -1656,16 +1649,6 @@ IMPL_LINK(SvxLineTabPage, RatioHdl_Impl, weld::ToggleButton&, rBox, void)
             SizeHdl_Impl(*m_xSymbolWidthMF);
         else
             SizeHdl_Impl(*m_xSymbolHeightMF);
-    }
-}
-
-void SvxLineTabPage::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    SfxTabPage::DataChanged( rDCEvt );
-
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-    {
-        FillListboxes();
     }
 }
 

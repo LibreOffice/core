@@ -67,8 +67,6 @@ class SwWrapTabPage: public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xWrapOutlineCB;
     std::unique_ptr<weld::CheckButton> m_xWrapOutsideCB;
 
-    virtual ~SwWrapTabPage() override;
-
     void            SetImages();
     virtual void    ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
@@ -77,15 +75,12 @@ class SwWrapTabPage: public SfxTabPage
     DECL_LINK(WrapTypeHdl, weld::ToggleButton&, void);
     DECL_LINK(ContourHdl, weld::ToggleButton&, void);
 
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
-
     static const sal_uInt16 m_aWrapPageRg[];
 
 public:
     SwWrapTabPage(TabPageParent pParent, const SfxItemSet &rSet);
-
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    virtual ~SwWrapTabPage() override;
 
     virtual bool    FillItemSet(SfxItemSet *rSet) override;
     virtual void    Reset(const SfxItemSet *rSet) override;

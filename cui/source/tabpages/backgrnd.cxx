@@ -315,11 +315,6 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(TabPageParent pParent, const SfxItemS
 
 SvxBackgroundTabPage::~SvxBackgroundTabPage()
 {
-    disposeOnce();
-}
-
-void SvxBackgroundTabPage::dispose()
-{
     m_pLoadIdle.reset();
     pImportDlg.reset();
     m_pCellBrush.reset();
@@ -333,13 +328,11 @@ void SvxBackgroundTabPage::dispose()
     m_xPreview1.reset();
     m_xBackgroundColorSet.reset();
     m_xWndPosition.reset();
-
-    SvxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxBackgroundTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SvxBackgroundTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxBackgroundTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SvxBackgroundTabPage>(pParent, *rAttrSet);
 }
 
 void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
@@ -1399,13 +1392,7 @@ SvxBkgTabPage::SvxBkgTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
 
 SvxBkgTabPage::~SvxBkgTabPage()
 {
-    disposeOnce();
-}
-
-void SvxBkgTabPage::dispose()
-{
     m_xTblLBox.reset();
-    SvxAreaTabPage::dispose();
 }
 
 void SvxBkgTabPage::ActivatePage( const SfxItemSet& )
@@ -1539,9 +1526,9 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
     return true;
 }
 
-VclPtr<SfxTabPage> SvxBkgTabPage::Create(TabPageParent pWindow, const SfxItemSet* rAttrs)
+std::unique_ptr<SfxTabPage> SvxBkgTabPage::Create(TabPageParent pWindow, const SfxItemSet* rAttrs)
 {
-    auto xRet = VclPtr<SvxBkgTabPage>::Create(pWindow, *rAttrs);
+    auto xRet = std::make_unique<SvxBkgTabPage>(pWindow, *rAttrs);
     xRet->SetOptimalSize(pWindow.pController);
     return xRet;
 }

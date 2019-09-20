@@ -43,17 +43,14 @@ class ScTabPageSortFields : public SfxTabPage
 {
 public:
     ScTabPageSortFields(TabPageParent pParent, const SfxItemSet& rArgSet);
-    virtual void dispose() override;
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rArgSet);
     virtual ~ScTabPageSortFields() override;
-    static  VclPtr<SfxTabPage> Create      ( TabPageParent               pParent,
-                                      const SfxItemSet*     rArgSet );
+
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 
 protected:
     virtual void        ActivatePage    ( const SfxItemSet& rSet ) override;
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
     virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;
 
 private:
@@ -98,15 +95,13 @@ class ScTabPageSortOptions : public SfxTabPage
 {
 public:
     ScTabPageSortOptions(TabPageParent pParent, const SfxItemSet& rArgSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* pArgSet);
 
-    static  VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* pArgSet);
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 
 protected:
     virtual void        ActivatePage    ( const SfxItemSet& rSet ) override;
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
     virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;
 
 private:

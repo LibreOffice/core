@@ -36,48 +36,48 @@ namespace dbaui
 
         /** Creates the detail page for ado
         */
-        static  VclPtr<SfxTabPage> CreateDbase( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateDbase( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for ado
         */
-        static  VclPtr<SfxTabPage> CreateAdo( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateAdo( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for ODBC
         */
-        static  VclPtr<SfxTabPage> CreateODBC( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateODBC( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for user
         */
-        static  VclPtr<SfxTabPage> CreateUser( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateUser( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for MySQLODBC
         */
-        static  VclPtr<SfxTabPage> CreateMySQLODBC( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateMySQLODBC( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for MySQLJDBC
         */
-        static  VclPtr<SfxTabPage> CreateMySQLJDBC( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateMySQLJDBC( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for MySQLNATIVE
         */
-        static  VclPtr<SfxTabPage> CreateMySQLNATIVE( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateMySQLNATIVE( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for Oracle JDBC
         */
-        static VclPtr<SfxTabPage>  CreateOracleJDBC( TabPageParent pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateOracleJDBC( TabPageParent pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for LDAP
         */
-        static  VclPtr<SfxTabPage> CreateLDAP( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateLDAP( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
 
         /// Creates the detail page for Text
-        static  VclPtr<SfxTabPage> CreateText( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateText( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
 
         /// creates the GeneratedValues page
-        static  VclPtr<SfxTabPage> CreateGeneratedValuesPage( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateGeneratedValuesPage( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
 
         /// creates the "Special Settings" page of the "Advanced Settings" dialog
-        static  VclPtr<SfxTabPage> CreateSpecialSettingsPage( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateSpecialSettingsPage( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
     };
 }
 

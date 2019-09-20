@@ -631,7 +631,7 @@ ChartTypeTabPage::ChartTypeTabPage(TabPageParent pParent , const uno::Reference<
         m_xFT_ChooseType->hide();
     }
 
-    SetText( SchResId(STR_PAGE_CHARTTYPE) );
+    SetPageTitle(SchResId(STR_PAGE_CHARTTYPE));
 
     m_xMainTypeList->connect_changed(LINK(this, ChartTypeTabPage, SelectMainTypeHdl));
     m_xSubTypeList->SetSelectHdl( LINK( this, ChartTypeTabPage, SelectSubTypeHdl ) );
@@ -691,11 +691,6 @@ ChartTypeTabPage::ChartTypeTabPage(TabPageParent pParent , const uno::Reference<
 
 ChartTypeTabPage::~ChartTypeTabPage()
 {
-    disposeOnce();
-}
-
-void ChartTypeTabPage::dispose()
-{
     //delete all dialog controller
     m_aChartTypeDialogControllerList.clear();
 
@@ -707,7 +702,6 @@ void ChartTypeTabPage::dispose()
     m_pSortByXValuesResourceGroup.reset();
     m_xSubTypeListWin.reset();
     m_xSubTypeList.reset();
-    vcl::OWizardPage::dispose();
 }
 
 ChartTypeParameter ChartTypeTabPage::getCurrentParamter() const

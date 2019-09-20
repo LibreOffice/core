@@ -137,7 +137,6 @@ IMPL_LINK_NOARG( ScHFEditPage, ObjectSelectHdl, ScEditWindow&, void )
 
 ScHFEditPage::~ScHFEditPage()
 {
-    disposeOnce();
 }
 
 void ScHFEditPage::SetNumType(SvxNumType eNumType)
@@ -789,9 +788,9 @@ ScRightHeaderEditPage::ScRightHeaderEditPage( TabPageParent pParent, const SfxIt
                     true )
     {}
 
-VclPtr<SfxTabPage> ScRightHeaderEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
+std::unique_ptr<SfxTabPage> ScRightHeaderEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
 {
-    return VclPtr<ScRightHeaderEditPage>::Create( pParent, *rCoreSet );
+    return std::make_unique<ScRightHeaderEditPage>( pParent, *rCoreSet );
 }
 
 // class ScLeftHeaderEditPage
@@ -803,9 +802,9 @@ ScLeftHeaderEditPage::ScLeftHeaderEditPage( TabPageParent pParent, const SfxItem
                     true )
     {}
 
-VclPtr<SfxTabPage> ScLeftHeaderEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
+std::unique_ptr<SfxTabPage> ScLeftHeaderEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
 {
-    return VclPtr<ScLeftHeaderEditPage>::Create( pParent, *rCoreSet );
+    return std::make_unique<ScLeftHeaderEditPage>( pParent, *rCoreSet );
 }
 
 // class ScRightFooterEditPage
@@ -817,9 +816,9 @@ ScRightFooterEditPage::ScRightFooterEditPage( TabPageParent pParent, const SfxIt
                     false )
     {}
 
-VclPtr<SfxTabPage> ScRightFooterEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
+std::unique_ptr<SfxTabPage> ScRightFooterEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
 {
-    return VclPtr<ScRightFooterEditPage>::Create( pParent, *rCoreSet );
+    return std::make_unique<ScRightFooterEditPage>( pParent, *rCoreSet );
 }
 
 // class ScLeftFooterEditPage
@@ -831,9 +830,9 @@ ScLeftFooterEditPage::ScLeftFooterEditPage( TabPageParent pParent, const SfxItem
                     false )
     {}
 
-VclPtr<SfxTabPage> ScLeftFooterEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
+std::unique_ptr<SfxTabPage> ScLeftFooterEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
 {
-    return VclPtr<ScLeftFooterEditPage>::Create( pParent, *rCoreSet );
+    return std::make_unique<ScLeftFooterEditPage>( pParent, *rCoreSet );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

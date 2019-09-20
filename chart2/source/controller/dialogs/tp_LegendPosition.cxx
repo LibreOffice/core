@@ -35,19 +35,12 @@ SchLegendPosTabPage::SchLegendPosTabPage(TabPageParent pWindow, const SfxItemSet
 
 SchLegendPosTabPage::~SchLegendPosTabPage()
 {
-    disposeOnce();
-}
-
-void SchLegendPosTabPage::dispose()
-{
     m_xLbTextDirection.reset();
-    SfxTabPage::dispose();
 }
 
-
-VclPtr<SfxTabPage> SchLegendPosTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+std::unique_ptr<SfxTabPage> SchLegendPosTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<SchLegendPosTabPage>::Create(pParent, *rOutAttrs);
+    return std::make_unique<SchLegendPosTabPage>(pParent, *rOutAttrs);
 }
 
 bool SchLegendPosTabPage::FillItemSet(SfxItemSet* rOutAttrs)

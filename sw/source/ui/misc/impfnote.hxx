@@ -64,7 +64,7 @@ public:
     SwEndNoteOptionPage(TabPageParent pParent, bool bEndNote, const SfxItemSet &rSet);
     virtual ~SwEndNoteOptionPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
     virtual bool FillItemSet(SfxItemSet *rSet) override;
     virtual void Reset( const SfxItemSet* ) override;
 
@@ -73,12 +73,10 @@ public:
 
 class SwFootNoteOptionPage : public SwEndNoteOptionPage
 {
-    friend class VclPtr<SwFootNoteOptionPage>;
-    SwFootNoteOptionPage(TabPageParent pParent, const SfxItemSet &rSet );
-    virtual ~SwFootNoteOptionPage() override;
-
 public:
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    SwFootNoteOptionPage(TabPageParent pParent, const SfxItemSet &rSet );
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    virtual ~SwFootNoteOptionPage() override;
 };
 
 #endif

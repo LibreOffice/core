@@ -200,14 +200,13 @@ private:
     void                ImplCheckPasswordState();
 
 protected:
-    virtual ~SfxDocumentPage() override;
-
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
 
 public:
     SfxDocumentPage(TabPageParent pParent, const SfxItemSet&);
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
+    virtual ~SfxDocumentPage() override;
 
     void                EnableUseUserData();
 };
@@ -224,14 +223,13 @@ private:
     std::unique_ptr<weld::TextView> m_xCommentEd;
 
 protected:
-    virtual ~SfxDocumentDescPage() override;
-
     virtual bool            FillItemSet( SfxItemSet* ) override;
     virtual void            Reset( const SfxItemSet* ) override;
 
 public:
     SfxDocumentDescPage(TabPageParent pParent, const SfxItemSet&);
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
+    virtual ~SfxDocumentDescPage() override;
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
 };
 
 // class SfxDocumentInfoDialog -------------------------------------------
@@ -447,22 +445,18 @@ class SfxCustomPropertiesPage : public SfxTabPage
 private:
     DECL_LINK(AddHdl, weld::Button&, void);
 
-    using TabPage::DeactivatePage;
-
     std::unique_ptr<CustomPropertiesControl> m_xPropertiesCtrl;
     std::unique_ptr<weld::Button> m_xAdd;
 
 protected:
-    virtual ~SfxCustomPropertiesPage() override;
-    virtual void dispose() override;
-
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
     SfxCustomPropertiesPage(TabPageParent pParent, const SfxItemSet&);
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
+    virtual ~SfxCustomPropertiesPage() override;
 };
 
 struct CmisValue
@@ -569,7 +563,6 @@ class SfxCmisPropertiesPage : public SfxTabPage
 {
 private:
     std::unique_ptr<CmisPropertiesControl> m_xPropertiesCtrl;
-    using TabPage::DeactivatePage;
 
 protected:
     virtual bool        FillItemSet( SfxItemSet* ) override;
@@ -578,9 +571,8 @@ protected:
 
 public:
     SfxCmisPropertiesPage(TabPageParent pParent, const SfxItemSet&);
-    virtual void dispose() override;
     virtual ~SfxCmisPropertiesPage() override;
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet*);
 };
 
 #endif // #ifndef _ INCLUDED_SFX2_DINFDLG_HXX

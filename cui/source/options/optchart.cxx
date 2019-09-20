@@ -129,14 +129,8 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(TabPageParent pParent, const SfxI
 
 SvxDefaultColorOptPage::~SvxDefaultColorOptPage()
 {
-    disposeOnce();
-}
-
-void SvxDefaultColorOptPage::dispose()
-{
     m_xValSetColorBoxWin.reset();
     m_xValSetColorBox.reset();
-    SfxTabPage::dispose();
 }
 
 void SvxDefaultColorOptPage::Construct()
@@ -147,9 +141,9 @@ void SvxDefaultColorOptPage::Construct()
     m_xLbChartColors->select( 0 );
 }
 
-VclPtr<SfxTabPage> SvxDefaultColorOptPage::Create( TabPageParent pParent, const SfxItemSet* rAttrs )
+std::unique_ptr<SfxTabPage> SvxDefaultColorOptPage::Create( TabPageParent pParent, const SfxItemSet* rAttrs )
 {
-    return VclPtr<SvxDefaultColorOptPage>::Create( pParent, *rAttrs );
+    return std::make_unique<SvxDefaultColorOptPage>( pParent, *rAttrs );
 }
 
 bool SvxDefaultColorOptPage::FillItemSet( SfxItemSet* rOutAttrs )

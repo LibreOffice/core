@@ -136,14 +136,8 @@ SwNumPositionTabPage::SwNumPositionTabPage(TabPageParent pParent, const SfxItemS
 
 SwNumPositionTabPage::~SwNumPositionTabPage()
 {
-    disposeOnce();
-}
-
-void SwNumPositionTabPage::dispose()
-{
     pActNum.reset();
     pOutlineDlg = nullptr;
-    SfxTabPage::dispose();
 }
 
 void SwNumPositionTabPage::InitControls()
@@ -497,10 +491,10 @@ void SwNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
     m_xIndentAtMF->set_visible( bLabelAlignmentPosAndSpaceModeActive );
 }
 
-VclPtr<SfxTabPage> SwNumPositionTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwNumPositionTabPage::Create( TabPageParent pParent,
                                                  const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwNumPositionTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SwNumPositionTabPage>(pParent, *rAttrSet);
 }
 
 void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)

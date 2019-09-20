@@ -81,7 +81,7 @@ public:
     SvxTextAnimationPage(TabPageParent pPage, const SfxItemSet& rInAttrs);
     virtual ~SvxTextAnimationPage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) override;

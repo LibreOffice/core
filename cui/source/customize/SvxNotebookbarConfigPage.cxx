@@ -152,7 +152,7 @@ SvxNotebookbarConfigPage::SvxNotebookbarConfigPage(TabPageParent pParent, const 
     rTreeView.show();
 }
 
-SvxNotebookbarConfigPage::~SvxNotebookbarConfigPage() { disposeOnce(); }
+SvxNotebookbarConfigPage::~SvxNotebookbarConfigPage() {}
 
 void SvxNotebookbarConfigPage::DeleteSelectedTopLevel() {}
 

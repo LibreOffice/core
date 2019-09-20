@@ -131,19 +131,13 @@ SwFootNotePage::SwFootNotePage(TabPageParent pParent, const SfxItemSet &rSet)
 
 SwFootNotePage::~SwFootNotePage()
 {
-    disposeOnce();
-}
-
-void SwFootNotePage::dispose()
-{
     m_xLineColorBox.reset();
     m_xLineTypeBox.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwFootNotePage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwFootNotePage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwFootNotePage>::Create(pParent, *rSet);
+    return std::make_unique<SwFootNotePage>(pParent, *rSet);
 }
 
 void SwFootNotePage::Reset(const SfxItemSet *rSet)

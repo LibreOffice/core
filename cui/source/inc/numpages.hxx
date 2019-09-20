@@ -57,9 +57,6 @@ typedef std::vector<std::unique_ptr<SvxNumSettings_Impl> > SvxNumSettingsArr_Imp
 
 class SvxSingleNumPickTabPage final : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
     SvxNumSettingsArr_Impl  aNumSettingsArr;
     std::unique_ptr<SvxNumRule> pActNum;
     std::unique_ptr<SvxNumRule> pSaveNum;
@@ -78,9 +75,8 @@ class SvxSingleNumPickTabPage final : public SfxTabPage
 public:
     SvxSingleNumPickTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxSingleNumPickTabPage() override;
-    virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -91,9 +87,6 @@ public:
 
 class SvxBulletPickTabPage final : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
     std::unique_ptr<SvxNumRule> pActNum;
     std::unique_ptr<SvxNumRule> pSaveNum;
     sal_uInt16          nActNumLvl;
@@ -111,9 +104,8 @@ class SvxBulletPickTabPage final : public SfxTabPage
 public:
     SvxBulletPickTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxBulletPickTabPage() override;
-    virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -129,9 +121,6 @@ public:
 /// TabPage for complete numeration
 class SvxNumPickTabPage final : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
     OUString            sNumCharFmtName;
     OUString            sBulletCharFormatName;
 
@@ -153,9 +142,8 @@ class SvxNumPickTabPage final : public SfxTabPage
 public:
     SvxNumPickTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxNumPickTabPage() override;
-    virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -171,9 +159,6 @@ public:
 
 class SvxBitmapPickTabPage final : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
     std::vector<OUString> aGrfNames;
 
     std::unique_ptr<SvxNumRule> pActNum;
@@ -196,9 +181,8 @@ class SvxBitmapPickTabPage final : public SfxTabPage
 public:
     SvxBitmapPickTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxBitmapPickTabPage() override;
-    virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create(TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent,
                                       const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -209,9 +193,6 @@ public:
 
 class SvxNumOptionsTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
     OUString        m_sNumCharFmtName;
     OUString        m_sBulletCharFormatName;
 
@@ -300,9 +281,8 @@ class SvxNumOptionsTabPage : public SfxTabPage
 public:
     SvxNumOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxNumOptionsTabPage() override;
-    virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -324,9 +304,6 @@ public:
 
 class SvxNumPositionTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
     std::unique_ptr<SvxNumRule> pActNum;
     std::unique_ptr<SvxNumRule> pSaveNum;
 
@@ -389,14 +366,13 @@ class SvxNumPositionTabPage : public SfxTabPage
 public:
     SvxNumPositionTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxNumPositionTabPage() override;
-    virtual void dispose() override;
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet);
 
     void                SetMetric(FieldUnit eSet);

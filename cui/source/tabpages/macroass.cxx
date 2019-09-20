@@ -125,13 +125,7 @@ SfxMacroTabPage::SfxMacroTabPage(TabPageParent pParent, const Reference< XFrame 
 
 SfxMacroTabPage::~SfxMacroTabPage()
 {
-    disposeOnce();
-}
-
-void SfxMacroTabPage::dispose()
-{
     mpImpl.reset();
-    SfxTabPage::dispose();
 }
 
 void SfxMacroTabPage::AddEvent(const OUString& rEventName, SvMacroItemId nEventId)
@@ -369,13 +363,13 @@ void SfxMacroTabPage::FillEvents()
 
 namespace
 {
-    VclPtr<SfxMacroTabPage> CreateSfxMacroTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet)
+    std::unique_ptr<SfxMacroTabPage> CreateSfxMacroTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet)
     {
-        return VclPtr<SfxMacroTabPage>::Create( pParent, nullptr, rAttrSet );
+        return std::make_unique<SfxMacroTabPage>( pParent, nullptr, rAttrSet );
     }
 }
 
-VclPtr<SfxTabPage> SfxMacroTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SfxMacroTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
     return CreateSfxMacroTabPage(pParent, *rAttrSet);
 }
@@ -386,10 +380,10 @@ SfxMacroAssignDlg::SfxMacroAssignDlg(weld::Widget* pParent,
                                    "EventAssignDialog")
 {
     TabPageParent pPageParent(get_content_area(), this);
-    VclPtr<SfxMacroTabPage> pPage = CreateSfxMacroTabPage(pPageParent, rSet);
-    pPage->SetFrame(rxDocumentFrame);
-    SetTabPage(pPage);
-    pPage->LaunchFillGroup();
+    std::unique_ptr<SfxMacroTabPage> xPage = CreateSfxMacroTabPage(pPageParent, rSet);
+    xPage->SetFrame(rxDocumentFrame);
+    SetTabPage(std::move(xPage));
+    GetTabPage()->LaunchFillGroup();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

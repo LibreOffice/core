@@ -103,12 +103,11 @@ class SwMailMergeGreetingsPage : public vcl::OWizardPage
     DECL_LINK(AssignHdl_Impl, weld::Button&, void);
 
     virtual void        UpdatePreview() override;
-    virtual void        ActivatePage() override;
+    virtual void        Activate() override;
     virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
 public:
     SwMailMergeGreetingsPage(SwMailMergeWizard* pWizard, TabPageParent pParent);
     virtual ~SwMailMergeGreetingsPage() override;
-    virtual void dispose() override;
 };
 
 class SwMailBodyDialog : public SfxDialogController, public SwGreetingsHandler

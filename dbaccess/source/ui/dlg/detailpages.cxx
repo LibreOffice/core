@@ -88,13 +88,7 @@ namespace dbaui
 
     OCommonBehaviourTabPage::~OCommonBehaviourTabPage()
     {
-        disposeOnce();
-    }
-
-    void OCommonBehaviourTabPage::dispose()
-    {
         m_xCharset.reset();
-        OGenericAdministrationPage::dispose();
     }
 
     void OCommonBehaviourTabPage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
@@ -178,12 +172,11 @@ namespace dbaui
 
     ODbaseDetailsPage::~ODbaseDetailsPage()
     {
-        disposeOnce();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateDbase(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateDbase(TabPageParent pParent, const SfxItemSet* _rAttrSet)
     {
-        return VclPtr<ODbaseDetailsPage>::Create(pParent, *_rAttrSet);
+        return std::make_unique<ODbaseDetailsPage>(pParent, *_rAttrSet);
     }
 
     void ODbaseDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
@@ -242,9 +235,9 @@ namespace dbaui
 
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateAdo(TabPageParent pParent, const SfxItemSet* rAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateAdo(TabPageParent pParent, const SfxItemSet* rAttrSet)
     {
-        return VclPtr<OAdoDetailsPage>::Create(pParent, *rAttrSet);
+        return std::make_unique<OAdoDetailsPage>(pParent, *rAttrSet);
     }
 
     // OOdbcDetailsPage
@@ -258,12 +251,11 @@ namespace dbaui
 
     OOdbcDetailsPage::~OOdbcDetailsPage()
     {
-        disposeOnce();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateODBC(TabPageParent pParent, const SfxItemSet* pAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateODBC(TabPageParent pParent, const SfxItemSet* pAttrSet)
     {
-        return VclPtr<OOdbcDetailsPage>::Create(pParent, *pAttrSet);
+        return std::make_unique<OOdbcDetailsPage>(pParent, *pAttrSet);
     }
 
     bool OOdbcDetailsPage::FillItemSet( SfxItemSet* _rSet )
@@ -300,12 +292,11 @@ namespace dbaui
 
     OUserDriverDetailsPage::~OUserDriverDetailsPage()
     {
-        disposeOnce();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateUser(TabPageParent pParent, const SfxItemSet* pAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateUser(TabPageParent pParent, const SfxItemSet* pAttrSet)
     {
-        return VclPtr<OUserDriverDetailsPage>::Create(pParent, *pAttrSet);
+        return std::make_unique<OUserDriverDetailsPage>(pParent, *pAttrSet);
     }
 
     bool OUserDriverDetailsPage::FillItemSet( SfxItemSet* _rSet )
@@ -361,9 +352,9 @@ namespace dbaui
     {
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLODBC(TabPageParent pParent, const SfxItemSet* pAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateMySQLODBC(TabPageParent pParent, const SfxItemSet* pAttrSet)
     {
-        return VclPtr<OMySQLODBCDetailsPage>::Create(pParent, *pAttrSet);
+        return std::make_unique<OMySQLODBCDetailsPage>(pParent, *pAttrSet);
     }
 
     // OMySQLJDBCDetailsPage
@@ -410,7 +401,6 @@ namespace dbaui
 
     OGeneralSpecialJDBCDetailsPage::~OGeneralSpecialJDBCDetailsPage()
     {
-        disposeOnce();
     }
 
     bool OGeneralSpecialJDBCDetailsPage::FillItemSet( SfxItemSet* _rSet )
@@ -485,7 +475,7 @@ namespace dbaui
 #endif
         const char* pMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const MessageType mt = bSuccess ? MessageType::Info : MessageType::Error;
-        OSQLMessageBox aMsg(GetFrameWeld(), DBA_RES(pMessage), OUString(), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, mt);
+        OSQLMessageBox aMsg(GetDialogFrameWeld(), DBA_RES(pMessage), OUString(), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, mt);
         aMsg.run();
     }
 
@@ -512,15 +502,9 @@ namespace dbaui
         m_xUserName->connect_changed(LINK(this,OGenericAdministrationPage,OnControlEntryModifyHdl));
     }
 
-    void MySQLNativePage::dispose()
-    {
-        m_xMySQLSettings.reset();
-        OCommonBehaviourTabPage::dispose();
-    }
-
     MySQLNativePage::~MySQLNativePage()
     {
-        disposeOnce();
+        m_xMySQLSettings.reset();
     }
 
     void MySQLNativePage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
@@ -579,19 +563,19 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLJDBC( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateMySQLJDBC( TabPageParent pParent, const SfxItemSet* _rAttrSet )
     {
-        return VclPtr<OGeneralSpecialJDBCDetailsPage>::Create(pParent, *_rAttrSet,DSID_MYSQL_PORTNUMBER);
+        return std::make_unique<OGeneralSpecialJDBCDetailsPage>(pParent, *_rAttrSet,DSID_MYSQL_PORTNUMBER);
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLNATIVE(TabPageParent pParent, const SfxItemSet* pAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateMySQLNATIVE(TabPageParent pParent, const SfxItemSet* pAttrSet)
     {
-        return VclPtr<MySQLNativePage>::Create(pParent, *pAttrSet);
+        return std::make_unique<MySQLNativePage>(pParent, *pAttrSet);
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateOracleJDBC(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateOracleJDBC(TabPageParent pParent, const SfxItemSet* _rAttrSet)
     {
-        return VclPtr<OGeneralSpecialJDBCDetailsPage>::Create(pParent, *_rAttrSet,DSID_ORACLE_PORTNUMBER, false);
+        return std::make_unique<OGeneralSpecialJDBCDetailsPage>(pParent, *_rAttrSet,DSID_ORACLE_PORTNUMBER, false);
     }
 
     // OLDAPDetailsPage
@@ -614,12 +598,11 @@ namespace dbaui
 
     OLDAPDetailsPage::~OLDAPDetailsPage()
     {
-        disposeOnce();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateLDAP(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateLDAP(TabPageParent pParent, const SfxItemSet* _rAttrSet)
     {
-        return VclPtr<OLDAPDetailsPage>::Create(pParent, *_rAttrSet);
+        return std::make_unique<OLDAPDetailsPage>(pParent, *_rAttrSet);
     }
 
     bool OLDAPDetailsPage::FillItemSet( SfxItemSet* _rSet )
@@ -680,18 +663,12 @@ namespace dbaui
 
     OTextDetailsPage::~OTextDetailsPage()
     {
-        disposeOnce();
-    }
-
-    void OTextDetailsPage::dispose()
-    {
         m_xTextConnectionHelper.reset();
-        OCommonBehaviourTabPage::dispose();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateText(TabPageParent pParent,  const SfxItemSet* pAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateText(TabPageParent pParent,  const SfxItemSet* pAttrSet)
     {
-        return VclPtr<OTextDetailsPage>::Create(pParent, *pAttrSet);
+        return std::make_unique<OTextDetailsPage>(pParent, *pAttrSet);
     }
 
     void OTextDetailsPage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
@@ -728,16 +705,16 @@ namespace dbaui
         return m_xTextConnectionHelper->prepareLeave();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateGeneratedValuesPage(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateGeneratedValuesPage(TabPageParent pParent, const SfxItemSet* _rAttrSet)
     {
-        return VclPtr<GeneratedValuesPage>::Create(pParent, *_rAttrSet);
+        return std::make_unique<GeneratedValuesPage>(pParent, *_rAttrSet);
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateSpecialSettingsPage(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateSpecialSettingsPage(TabPageParent pParent, const SfxItemSet* _rAttrSet)
     {
         OUString eType = ODbDataSourceAdministrationHelper::getDatasourceType( *_rAttrSet );
         DataSourceMetaData aMetaData( eType );
-        return VclPtr<SpecialSettingsPage>::Create(pParent, *_rAttrSet, aMetaData);
+        return std::make_unique<SpecialSettingsPage>(pParent, *_rAttrSet, aMetaData);
     }
 }   // namespace dbaui
 

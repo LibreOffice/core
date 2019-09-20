@@ -63,12 +63,11 @@ AxisPositionsTabPage::AxisPositionsTabPage(TabPageParent pWindow,const SfxItemSe
 
 AxisPositionsTabPage::~AxisPositionsTabPage()
 {
-    disposeOnce();
 }
 
-VclPtr<SfxTabPage> AxisPositionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+std::unique_ptr<SfxTabPage> AxisPositionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<AxisPositionsTabPage>::Create(pParent, *rOutAttrs);
+    return std::make_unique<AxisPositionsTabPage>(pParent, *rOutAttrs);
 }
 
 bool AxisPositionsTabPage::FillItemSet(SfxItemSet* rOutAttrs)

@@ -175,10 +175,9 @@ void SvxOnlineUpdateTabPage::UpdateUserAgent()
     }
 }
 
-VclPtr<SfxTabPage>
-SvxOnlineUpdateTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SvxOnlineUpdateTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxOnlineUpdateTabPage>::Create( pParent, *rAttrSet );
+    return std::make_unique<SvxOnlineUpdateTabPage>( pParent, *rAttrSet );
 }
 
 bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet* )
