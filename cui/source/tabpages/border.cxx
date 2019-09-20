@@ -534,11 +534,6 @@ SvxBorderTabPage::SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCor
 
 SvxBorderTabPage::~SvxBorderTabPage()
 {
-    disposeOnce();
-}
-
-void SvxBorderTabPage::dispose()
-{
     m_xLbShadowColor.reset();
     m_xWndShadowsWin.reset();
     m_xWndShadows.reset();
@@ -547,13 +542,12 @@ void SvxBorderTabPage::dispose()
     m_xFrameSelWin.reset();
     m_xWndPresetsWin.reset();
     m_xWndPresets.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxBorderTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxBorderTabPage::Create( TabPageParent pParent,
                                              const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxBorderTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SvxBorderTabPage>(pParent, *rAttrSet);
 }
 
 void SvxBorderTabPage::ResetFrameLine_Impl( svx::FrameBorderType eBorder, const SvxBorderLine* pCoreLine, bool bValid )
@@ -1490,14 +1484,6 @@ void SvxBorderTabPage::UpdateRemoveAdjCellBorderCB( sal_uInt16 nPreset )
         mbRemoveAdjacentCellBorders = false;
         m_xRemoveAdjcentCellBordersCB->set_active(false);
     }
-}
-
-void SvxBorderTabPage::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-        FillValueSets();
-
-    SfxTabPage::DataChanged( rDCEvt );
 }
 
 void SvxBorderTabPage::PageCreated(const SfxAllItemSet& aSet)

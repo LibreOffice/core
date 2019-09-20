@@ -144,16 +144,10 @@ SvxColorTabPage::SvxColorTabPage(TabPageParent pParent, const SfxItemSet& rInAtt
 
 SvxColorTabPage::~SvxColorTabPage()
 {
-    disposeOnce();
-}
-
-void SvxColorTabPage::dispose()
-{
     m_xValSetRecentListWin.reset();
     m_xValSetRecentList.reset();
     m_xValSetColorListWin.reset();
     m_xValSetColorList.reset();
-    SfxTabPage::dispose();
 }
 
 void SvxColorTabPage::ImpColorCountChanged()
@@ -268,9 +262,9 @@ void SvxColorTabPage::Reset( const SfxItemSet* rSet )
     UpdateModified();
 }
 
-VclPtr<SfxTabPage> SvxColorTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+std::unique_ptr<SfxTabPage> SvxColorTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<SvxColorTabPage>::Create(pParent, *rOutAttrs);
+    return std::make_unique<SvxColorTabPage>(pParent, *rOutAttrs);
 }
 
 // is called when the content of the MtrFields is changed for color values

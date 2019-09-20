@@ -134,7 +134,9 @@ IMPL_LINK(SvxMenuConfigPage, MenuEntriesSizeAllocHdl, const Size&, rSize, void)
 
 SvxMenuConfigPage::~SvxMenuConfigPage()
 {
-    disposeOnce();
+    for (int i = 0, nCount = m_xSaveInListBox->get_count(); i < nCount; ++i)
+        delete reinterpret_cast<SaveInData*>(m_xSaveInListBox->get_id(i).toInt64());
+    m_xSaveInListBox->clear();
 }
 
 // Populates the Menu combo box
@@ -154,15 +156,6 @@ void SvxMenuConfigPage::Init()
         m_xFrame,
         vcl::CommandInfoProvider::GetModuleIdentifier(m_xFrame));
     m_xCommandCategoryListBox->categorySelected(m_xFunctions.get(), OUString(), GetSaveInData());
-}
-
-void SvxMenuConfigPage::dispose()
-{
-    for (int i = 0, nCount = m_xSaveInListBox->get_count(); i < nCount; ++i)
-        delete reinterpret_cast<SaveInData*>(m_xSaveInListBox->get_id(i).toInt64());
-    m_xSaveInListBox->clear();
-
-    SvxConfigPage::dispose();
 }
 
 IMPL_LINK_NOARG(SvxMenuConfigPage, SelectMenuEntry, weld::TreeView&, void)

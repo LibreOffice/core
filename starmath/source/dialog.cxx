@@ -224,9 +224,9 @@ void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
     m_xAutoCloseBrackets->set_active(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_AUTO_CLOSE_BRACKETS))).GetValue());
 }
 
-VclPtr<SfxTabPage> SmPrintOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet& rSet)
+std::unique_ptr<SfxTabPage> SmPrintOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet& rSet)
 {
-    return VclPtr<SmPrintOptionsTabPage>::Create(pParent, rSet).get();
+    return std::make_unique<SmPrintOptionsTabPage>(pParent, rSet);
 }
 
 void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)

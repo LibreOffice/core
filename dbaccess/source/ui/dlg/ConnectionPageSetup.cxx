@@ -61,29 +61,29 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
-    VclPtr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateDbaseTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateDbaseTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
     {
-        return VclPtr<OConnectionTabPageSetup>::Create ( pParent, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, STR_DBASE_HELPTEXT, STR_DBASE_HEADERTEXT, STR_DBASE_PATH_OR_FILE );
+        return std::make_unique<OConnectionTabPageSetup>( pParent, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, STR_DBASE_HELPTEXT, STR_DBASE_HEADERTEXT, STR_DBASE_PATH_OR_FILE );
     }
 
-    VclPtr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateMSAccessTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateMSAccessTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
     {
-        return VclPtr<OConnectionTabPageSetup>::Create( pParent, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, STR_MSACCESS_HELPTEXT, STR_MSACCESS_HEADERTEXT, STR_MSACCESS_MDB_FILE );
+        return std::make_unique<OConnectionTabPageSetup>( pParent, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, STR_MSACCESS_HELPTEXT, STR_MSACCESS_HEADERTEXT, STR_MSACCESS_MDB_FILE );
     }
 
-    VclPtr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateADOTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateADOTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
     {
-        return VclPtr<OConnectionTabPageSetup>::Create( pParent, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, STR_ADO_HELPTEXT, STR_ADO_HEADERTEXT, STR_COMMONURL );
+        return std::make_unique<OConnectionTabPageSetup>( pParent, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, STR_ADO_HELPTEXT, STR_ADO_HEADERTEXT, STR_COMMONURL );
     }
 
-    VclPtr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateODBCTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateODBCTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
     {
-        return VclPtr<OConnectionTabPageSetup>::Create( pParent, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, STR_ODBC_HELPTEXT, STR_ODBC_HEADERTEXT, STR_NAME_OF_ODBC_DATASOURCE );
+        return std::make_unique<OConnectionTabPageSetup>( pParent, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, STR_ODBC_HELPTEXT, STR_ODBC_HEADERTEXT, STR_NAME_OF_ODBC_DATASOURCE );
     }
 
-    VclPtr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateUserDefinedTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateUserDefinedTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
     {
-        return VclPtr<OConnectionTabPageSetup>::Create(pParent, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, nullptr, nullptr, STR_COMMONURL);
+        return std::make_unique<OConnectionTabPageSetup>(pParent, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, nullptr, nullptr, STR_COMMONURL);
     }
 
     OConnectionTabPageSetup::OConnectionTabPageSetup(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId)
@@ -118,7 +118,6 @@ namespace dbaui
 
     OConnectionTabPageSetup::~OConnectionTabPageSetup()
     {
-        disposeOnce();
     }
 
     void OConnectionTabPageSetup::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)

@@ -330,11 +330,6 @@ SvxCharNamePage::SvxCharNamePage(TabPageParent pParent, const SfxItemSet& rInSet
 
 SvxCharNamePage::~SvxCharNamePage()
 {
-    disposeOnce();
-}
-
-void SvxCharNamePage::dispose()
-{
     m_pImpl.reset();
     m_xCTLFontStyleLB.reset();
     m_xEastFontLanguageLB.reset();
@@ -346,7 +341,6 @@ void SvxCharNamePage::dispose()
     m_xPreviewWin.reset();
     m_xCTLFontLanguageLB.reset();
     m_xEastFontLanguageLB.reset();
-    SvxCharBasePage::dispose();
 }
 
 void SvxCharNamePage::Initialize()
@@ -1196,9 +1190,9 @@ DeactivateRC SvxCharNamePage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SvxCharNamePage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxCharNamePage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxCharNamePage>::Create(pParent, *rSet );
+    return std::make_unique<SvxCharNamePage>(pParent, *rSet );
 }
 
 void SvxCharNamePage::Reset( const SfxItemSet* rSet )
@@ -1374,15 +1368,9 @@ Color SvxCharEffectsPage::GetPreviewFontColor(const Color& rColor) const
 
 SvxCharEffectsPage::~SvxCharEffectsPage()
 {
-    disposeOnce();
-}
-
-void SvxCharEffectsPage::dispose()
-{
     m_xUnderlineColorLB.reset();
     m_xOverlineColorLB.reset();
     m_xFontColorLB.reset();
-    SvxCharBasePage::dispose();
 }
 
 void SvxCharEffectsPage::Initialize()
@@ -1681,9 +1669,9 @@ DeactivateRC SvxCharEffectsPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SvxCharEffectsPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+std::unique_ptr<SfxTabPage> SvxCharEffectsPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SvxCharEffectsPage>::Create( pParent, *rSet );
+    return std::make_unique<SvxCharEffectsPage>( pParent, *rSet );
 }
 
 void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
@@ -2672,9 +2660,9 @@ DeactivateRC SvxCharPositionPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SvxCharPositionPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxCharPositionPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxCharPositionPage>::Create(pParent, *rSet);
+    return std::make_unique<SvxCharPositionPage>(pParent, *rSet);
 }
 
 void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
@@ -3191,9 +3179,9 @@ DeactivateRC SvxCharTwoLinesPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SvxCharTwoLinesPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxCharTwoLinesPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxCharTwoLinesPage>::Create(pParent, *rSet);
+    return std::make_unique<SvxCharTwoLinesPage>(pParent, *rSet);
 }
 
 void SvxCharTwoLinesPage::Reset( const SfxItemSet* rSet )

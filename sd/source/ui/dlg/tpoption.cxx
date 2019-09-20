@@ -95,10 +95,10 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
     ClickRotateHdl_Impl(*m_xCbxRotate);
 }
 
-VclPtr<SfxTabPage> SdTpOptionsSnap::Create( TabPageParent pWindow,
+std::unique_ptr<SfxTabPage> SdTpOptionsSnap::Create( TabPageParent pWindow,
                                             const SfxItemSet* rAttrs )
 {
-    return VclPtr<SdTpOptionsSnap>::Create(pWindow, *rAttrs);
+    return std::make_unique<SdTpOptionsSnap>(pWindow, *rAttrs);
 }
 
 /*************************************************************************
@@ -157,10 +157,10 @@ void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
     m_xCbxHandlesBezier->save_state();
 }
 
-VclPtr<SfxTabPage> SdTpOptionsContents::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SdTpOptionsContents::Create( TabPageParent pParent,
                                                 const SfxItemSet* rAttrs )
 {
-    return VclPtr<SdTpOptionsContents>::Create( pParent, *rAttrs );
+    return std::make_unique<SdTpOptionsContents>(pParent, *rAttrs);
 }
 
 /*************************************************************************
@@ -473,10 +473,10 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     UpdateCompatibilityControls ();
 }
 
-VclPtr<SfxTabPage> SdTpOptionsMisc::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SdTpOptionsMisc::Create( TabPageParent pParent,
                                             const SfxItemSet* rAttrs )
 {
-    return VclPtr<SdTpOptionsMisc>::Create( pParent, *rAttrs );
+    return std::make_unique<SdTpOptionsMisc>( pParent, *rAttrs );
 }
 
 IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl, weld::ComboBox&, void)

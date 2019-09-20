@@ -70,12 +70,11 @@ class SwMailMergeLayoutPage : public vcl::OWizardPage
                             bool bExample);
     static void             InsertGreeting(SwWrtShell& rShell, SwMailMergeConfigItem const & rConfigItem, bool bExample);
 
-    virtual void        ActivatePage() override;
+    virtual void        Activate() override;
     virtual bool        commitPage(::vcl::WizardTypes::CommitPageReason _eReason) override;
 public:
     SwMailMergeLayoutPage(SwMailMergeWizard* pWizard, TabPageParent pParent);
     virtual ~SwMailMergeLayoutPage() override;
-    virtual void            dispose() override;
 
     static SwFrameFormat*        InsertAddressAndGreeting(SwView const * pView,
                                             SwMailMergeConfigItem& rConfigItem,

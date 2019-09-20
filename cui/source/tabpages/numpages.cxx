@@ -203,20 +203,14 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(TabPageParent pParent, const Sf
 
 SvxSingleNumPickTabPage::~SvxSingleNumPickTabPage()
 {
-    disposeOnce();
-}
-
-void SvxSingleNumPickTabPage::dispose()
-{
     m_xExamplesVSWin.reset();
     m_xExamplesVS.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxSingleNumPickTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxSingleNumPickTabPage::Create(TabPageParent pParent,
                                                    const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxSingleNumPickTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SvxSingleNumPickTabPage>(pParent, *rAttrSet);
 }
 
 bool  SvxSingleNumPickTabPage::FillItemSet( SfxItemSet* rSet )
@@ -361,20 +355,14 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(TabPageParent pParent, const SfxItemS
 
 SvxBulletPickTabPage::~SvxBulletPickTabPage()
 {
-    disposeOnce();
-}
-
-void SvxBulletPickTabPage::dispose()
-{
     m_xExamplesVSWin.reset();
     m_xExamplesVS.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxBulletPickTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxBulletPickTabPage::Create(TabPageParent pParent,
                                                 const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxBulletPickTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SvxBulletPickTabPage>(pParent, *rAttrSet);
 }
 
 bool  SvxBulletPickTabPage::FillItemSet( SfxItemSet* rSet )
@@ -550,20 +538,14 @@ SvxNumPickTabPage::SvxNumPickTabPage(TabPageParent pParent, const SfxItemSet& rS
 
 SvxNumPickTabPage::~SvxNumPickTabPage()
 {
-    disposeOnce();
-}
-
-void SvxNumPickTabPage::dispose()
-{
     m_xExamplesVSWin.reset();
     m_xExamplesVS.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxNumPickTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxNumPickTabPage::Create(TabPageParent pParent,
                                              const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxNumPickTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SvxNumPickTabPage>(pParent, *rAttrSet);
 }
 
 bool  SvxNumPickTabPage::FillItemSet( SfxItemSet* rSet )
@@ -794,20 +776,14 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(TabPageParent pParent, const SfxItemS
 
 SvxBitmapPickTabPage::~SvxBitmapPickTabPage()
 {
-    disposeOnce();
-}
-
-void SvxBitmapPickTabPage::dispose()
-{
     m_xExamplesVSWin.reset();
     m_xExamplesVS.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxBitmapPickTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxBitmapPickTabPage::Create(TabPageParent pParent,
                                                 const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxBitmapPickTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SvxBitmapPickTabPage>(pParent, *rAttrSet);
 }
 
 void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
@@ -1130,16 +1106,10 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(TabPageParent pParent,
 
 SvxNumOptionsTabPage::~SvxNumOptionsTabPage()
 {
-    disposeOnce();
-}
-
-void SvxNumOptionsTabPage::dispose()
-{
     m_xPreviewWIN.reset();
     m_xBulColLB.reset();
     pActNum.reset();
     pSaveNum.reset();
-    SfxTabPage::dispose();
 }
 
 void SvxNumOptionsTabPage::SetMetric(FieldUnit eMetric)
@@ -1153,10 +1123,10 @@ void SvxNumOptionsTabPage::SetMetric(FieldUnit eMetric)
     m_xHeightMF->set_unit(eMetric);
 }
 
-VclPtr<SfxTabPage> SvxNumOptionsTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxNumOptionsTabPage::Create(TabPageParent pParent,
                                                 const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxNumOptionsTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SvxNumOptionsTabPage>(pParent, *rAttrSet);
 };
 
 void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
@@ -2552,18 +2522,12 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(TabPageParent pParent, const SfxIte
 
 SvxNumPositionTabPage::~SvxNumPositionTabPage()
 {
-    disposeOnce();
-}
-
-void SvxNumPositionTabPage::dispose()
-{
     if (m_pLevelHdlEvent)
     {
         Application::RemoveUserEvent(m_pLevelHdlEvent);
         m_pLevelHdlEvent = nullptr;
     }
     m_xPreviewWIN.reset();
-    SfxTabPage::dispose();
 }
 
 /*-------------------------------------------------------*/
@@ -2952,10 +2916,10 @@ void SvxNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
     m_xIndentAtMF->set_visible( bLabelAlignmentPosAndSpaceModeActive );
 }
 
-VclPtr<SfxTabPage> SvxNumPositionTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxNumPositionTabPage::Create(TabPageParent pParent,
                                                  const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxNumPositionTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SvxNumPositionTabPage>(pParent, *rAttrSet);
 }
 
 void SvxNumPositionTabPage::SetMetric(FieldUnit eMetric)

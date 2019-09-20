@@ -249,8 +249,8 @@ protected:
     void InsertFrom(SfxMedium &rMedium);
 
     virtual bool HasPrintOptionsPage() const override;
-    virtual VclPtr<SfxTabPage> CreatePrintOptionsPage(TabPageParent pParent,
-                                                      const SfxItemSet &rOptions) override;
+    virtual std::unique_ptr<SfxTabPage> CreatePrintOptionsPage(TabPageParent pParent,
+                                                               const SfxItemSet &rOptions) override;
     virtual void Deactivate(bool IsMDIActivate) override;
     virtual void Activate(bool IsMDIActivate) override;
     virtual void InnerResizePixel(const Point &rOfs, const Size  &rSize, bool inplaceEditModeChange) override;

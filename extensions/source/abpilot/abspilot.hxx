@@ -64,7 +64,7 @@ namespace abp
 
     private:
         // OWizardMachine overridables
-        virtual VclPtr<TabPage>     createPage( WizardState _nState ) override;
+        virtual std::unique_ptr<BuilderPage> createPage( WizardState _nState ) override;
         virtual void                enterState( WizardState _nState ) override;
         virtual bool                prepareLeaveCurrentState( CommitPageReason _eReason ) override;
         virtual bool                onFinish() override;

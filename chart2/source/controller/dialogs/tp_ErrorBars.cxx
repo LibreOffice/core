@@ -32,9 +32,9 @@ ErrorBarsTabPage::ErrorBarsTabPage(TabPageParent pParent, const SfxItemSet& rInA
 {
 }
 
-VclPtr<SfxTabPage> ErrorBarsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+std::unique_ptr<SfxTabPage> ErrorBarsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<ErrorBarsTabPage>::Create(pParent, *rOutAttrs);
+    return std::make_unique<ErrorBarsTabPage>(pParent, *rOutAttrs);
 }
 
 bool ErrorBarsTabPage::FillItemSet( SfxItemSet* rOutAttrs )
@@ -46,14 +46,6 @@ bool ErrorBarsTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 void ErrorBarsTabPage::Reset( const SfxItemSet* rInAttrs )
 {
     m_aErrorBarResources.Reset( *rInAttrs );
-}
-
-void ErrorBarsTabPage::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    SfxTabPage::DataChanged( rDCEvt );
-
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-        m_aErrorBarResources.FillValueSets();
 }
 
 void ErrorBarsTabPage::SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth )

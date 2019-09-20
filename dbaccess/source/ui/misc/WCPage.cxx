@@ -91,7 +91,7 @@ OCopyTable::OCopyTable(OCopyTableWizard* pWizard, TabPageParent pParent)
         m_xEdKeyName->set_max_length(nMaxLen ? nMaxLen : EDIT_NOLIMIT);
     }
 
-    SetText(DBA_RES(STR_COPYTABLE_TITLE_COPY));
+    SetPageTitle(DBA_RES(STR_COPYTABLE_TITLE_COPY));
 }
 
 OCopyTable::~OCopyTable()
@@ -216,7 +216,7 @@ bool OCopyTable::LeavePage()
     return true;
 }
 
-void OCopyTable::ActivatePage()
+void OCopyTable::Activate()
 {
     m_pParent->GetOKButton().set_sensitive(true);
     m_nOldOperation = m_pParent->getOperation();

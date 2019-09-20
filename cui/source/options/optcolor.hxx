@@ -26,8 +26,6 @@ class ColorConfigCtrl_Impl;
 class AbstractSvxNameDialog;
 class SvxColorOptionsTabPage : public SfxTabPage
 {
-    using SfxTabPage::DeactivatePage;
-
     bool bFillItemSetCalled;
 
     std::unique_ptr<weld::ComboBox> m_xColorSchemeLB;
@@ -52,10 +50,9 @@ class SvxColorOptionsTabPage : public SfxTabPage
 
 public:
     SvxColorOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
-    virtual void dispose() override;
     virtual ~SvxColorOptionsTabPage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

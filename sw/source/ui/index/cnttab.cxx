@@ -808,15 +808,9 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(TabPageParent pParent, const SfxItemSet& 
 
 SwTOXSelectTabPage::~SwTOXSelectTabPage()
 {
-    disposeOnce();
-}
-
-void SwTOXSelectTabPage::dispose()
-{
     pIndexRes.reset();
     pIndexEntryWrapper.reset();
     m_xLanguageLB.reset();
-    SfxTabPage::dispose();
 }
 
 void SwTOXSelectTabPage::SetWrtShell(SwWrtShell const & rSh)
@@ -1179,9 +1173,9 @@ DeactivateRC SwTOXSelectTabPage::DeactivatePage(SfxItemSet* _pSet)
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwTOXSelectTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SwTOXSelectTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwTOXSelectTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SwTOXSelectTabPage>(pParent, *rAttrSet);
 }
 
 IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl, weld::ComboBox&, rBox, void)
@@ -1915,13 +1909,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(TabPageParent pParent, const SfxItemSet& rA
 
 SwTOXEntryTabPage::~SwTOXEntryTabPage()
 {
-    disposeOnce();
-}
-
-void SwTOXEntryTabPage::dispose()
-{
     m_xTokenWIN.reset();
-    SfxTabPage::dispose();
 }
 
 IMPL_LINK_NOARG(SwTOXEntryTabPage, ModifyClickHdl, weld::ToggleButton&, void)
@@ -2124,9 +2112,9 @@ DeactivateRC SwTOXEntryTabPage::DeactivatePage( SfxItemSet* /*pSet*/)
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwTOXEntryTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SwTOXEntryTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwTOXEntryTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SwTOXEntryTabPage>(pParent, *rAttrSet);
 }
 
 IMPL_LINK_NOARG(SwTOXEntryTabPage, EditStyleHdl, weld::Button&, void)
@@ -3471,10 +3459,10 @@ DeactivateRC SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwTOXStylesTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwTOXStylesTabPage::Create(TabPageParent pParent,
                                               const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwTOXStylesTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SwTOXStylesTabPage>(pParent, *rAttrSet);
 }
 
 IMPL_LINK_NOARG(SwTOXStylesTabPage, EditStyleHdl, weld::Button&, void)

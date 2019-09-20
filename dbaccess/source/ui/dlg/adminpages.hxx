@@ -149,14 +149,13 @@ namespace dbaui
     protected:
         /// default implementation: call FillItemSet, call prepareLeave,
         virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
-        using SfxTabPage::DeactivatePage;
         /// default implementation: call implInitControls with the given item set and _bSaveValue = sal_False
         virtual void Reset(const SfxItemSet* _rCoreAttrs) override;
         /// default implementation: call implInitControls with the given item set and _bSaveValue = sal_True
         virtual void ActivatePage(const SfxItemSet& _rSet) override;
 
-        // TabPage overridables
-        virtual void    ActivatePage() override;
+        // BuilderPage overridables
+        virtual void    Activate() override;
 
     protected:
         virtual void callModifiedHdl(weld::Widget* /*pControl*/ = nullptr) { m_aModifiedHandler.Call(this); }

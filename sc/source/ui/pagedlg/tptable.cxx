@@ -140,12 +140,11 @@ void ScTablePage::ShowImage()
 
 ScTablePage::~ScTablePage()
 {
-    disposeOnce();
 }
 
-VclPtr<SfxTabPage> ScTablePage::Create(TabPageParent pParent, const SfxItemSet* rCoreSet)
+std::unique_ptr<SfxTabPage> ScTablePage::Create(TabPageParent pParent, const SfxItemSet* rCoreSet)
 {
-    return VclPtr<ScTablePage>::Create(pParent, *rCoreSet);
+    return std::make_unique<ScTablePage>(pParent, *rCoreSet);
 }
 
 void ScTablePage::Reset( const SfxItemSet* rCoreSet )
@@ -353,13 +352,6 @@ DeactivateRC ScTablePage::DeactivatePage( SfxItemSet* pSetP )
         FillItemSet( pSetP );
 
     return DeactivateRC::LeavePage;
-}
-
-void ScTablePage::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-        ShowImage();
-    SfxTabPage::DataChanged( rDCEvt );
 }
 
 // Handler:

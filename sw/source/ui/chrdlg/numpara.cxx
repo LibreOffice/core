@@ -98,9 +98,9 @@ SwParagraphNumTabPage::~SwParagraphNumTabPage()
 {
 }
 
-VclPtr<SfxTabPage> SwParagraphNumTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwParagraphNumTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwParagraphNumTabPage>::Create(pParent, *rSet);
+    return std::make_unique<SwParagraphNumTabPage>(pParent, *rSet);
 }
 
 bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )

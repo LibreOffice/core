@@ -52,12 +52,11 @@ private:
 
     void updateControls();
 
-    using OutputDevice::SetDrawMode;
 public:
     SdPrintOptions(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SdPrintOptions() override;
 
-    static  VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static  std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
