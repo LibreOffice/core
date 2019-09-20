@@ -71,6 +71,10 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,sw_uiwriter, \
     modules/swriter \
 ))
 
+$(eval $(call gb_CppunitTest_use_packages,sw_uiwriter, \
+    sfx2_classification \
+))
+
 $(call gb_CppunitTest_get_target,sw_uiwriter): \
     $(call gb_Library_get_target,textconv_dict)
 
