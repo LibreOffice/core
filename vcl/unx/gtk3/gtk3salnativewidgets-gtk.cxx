@@ -224,13 +224,14 @@ namespace
     void QuerySize(GtkStyleContext *pContext, Size &rSize)
     {
         GtkBorder margin, border, padding;
+        GtkStateFlags stateflags = gtk_style_context_get_state (pContext);
 
-        gtk_style_context_get_margin(pContext, gtk_style_context_get_state(pContext), &margin);
-        gtk_style_context_get_border(pContext, gtk_style_context_get_state(pContext), &border);
-        gtk_style_context_get_padding(pContext, gtk_style_context_get_state(pContext), &padding);
+        gtk_style_context_get_margin(pContext, stateflags, &margin);
+        gtk_style_context_get_border(pContext, stateflags, &border);
+        gtk_style_context_get_padding(pContext, stateflags, &padding);
 
         int nMinWidth, nMinHeight;
-        gtk_style_context_get(pContext, gtk_style_context_get_state(pContext),
+        gtk_style_context_get(pContext, stateflags,
                 "min-width", &nMinWidth, "min-height", &nMinHeight, nullptr);
 
         nMinWidth += margin.left + margin.right + border.left + border.right + padding.left + padding.right;
@@ -1084,9 +1085,10 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
     tools::Rectangle buttonRect = NWGetSpinButtonRect( nPart, aAreaRect );
 
     gtk_style_context_set_state(context, stateFlags);
+    stateFlags = gtk_style_context_get_state(context);
 
-    gtk_style_context_get_padding(context, gtk_style_context_get_state(context), &padding);
-    gtk_style_context_get_border(context, gtk_style_context_get_state(context), &border);
+    gtk_style_context_get_padding(context, stateFlags, &padding);
+    gtk_style_context_get_border(context, stateFlags, &border);
 
     gtk_render_background(context, cr,
                           buttonRect.Left(), buttonRect.Top(),
@@ -1098,20 +1100,24 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
     const char* icon = (nPart == ControlPart::ButtonUp) ? "list-add-symbolic" : "list-remove-symbolic";
     GtkIconTheme *pIconTheme = gtk_icon_theme_get_for_screen(gtk_widget_get_screen(mpWindow));
 
-    GtkIconInfo *info = gtk_icon_theme_lookup_icon(pIconTheme, icon, std::min(iconWidth, iconHeight),
+    gint scale = gtk_style_context_get_scale (context);
+    GtkIconInfo *info = gtk_icon_theme_lookup_icon_for_scale(pIconTheme, icon, std::min(iconWidth, iconHeight), scale,
                                                    static_cast<GtkIconLookupFlags>(0));
 
     GdkPixbuf *pixbuf = gtk_icon_info_load_symbolic_for_context(info, context, nullptr, nullptr);
     g_object_unref(info);
 
-    iconWidth = gdk_pixbuf_get_width(pixbuf);
-    iconHeight = gdk_pixbuf_get_height(pixbuf);
+    iconWidth = gdk_pixbuf_get_width(pixbuf)/scale;
+    iconHeight = gdk_pixbuf_get_height(pixbuf)/scale;
     tools::Rectangle arrowRect;
     arrowRect.SetSize(Size(iconWidth, iconHeight));
     arrowRect.setX( buttonRect.Left() + (buttonRect.GetWidth() - arrowRect.GetWidth()) / 2 );
     arrowRect.setY( buttonRect.Top() + (buttonRect.GetHeight() - arrowRect.GetHeight()) / 2 );
 
+    gtk_style_context_save (context);
+    gtk_style_context_set_scale (context, 1);
     gtk_render_icon(context, cr, pixbuf, arrowRect.Left(), arrowRect.Top());
+    gtk_style_context_restore (context);
     g_object_unref(pixbuf);
 
     gtk_render_frame(context, cr,
@@ -1189,6 +1195,10 @@ tools::Rectangle GtkSalGraphics::NWGetComboBoxButtonRect(ControlType nType,
             gtk_style_context_get_state(mpComboboxButtonArrowStyle),
             "min-width", &nArrowWidth, nullptr);
     }
+    else
+    {
+        nArrowWidth = nArrowWidth * gtk_style_context_get_scale (mpComboboxButtonArrowStyle);
+    }
 
     gint nButtonWidth = nArrowWidth + padding.left + padding.right;
     if( nPart == ControlPart::ButtonDown )
@@ -1254,6 +1264,19 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
             gtk_style_context_get(mpListboxButtonArrowStyle,
                 gtk_style_context_get_state(mpListboxButtonArrowStyle),
                 "min-width", &arrow_width, "min-height", &arrow_height, nullptr);
+        }
+    }
+    else
+    {
+        if (nType == ControlType::Combobox)
+        {
+            arrow_width = arrow_width * gtk_style_context_get_scale (mpComboboxButtonArrowStyle);
+            arrow_height = arrow_height * gtk_style_context_get_scale (mpComboboxButtonArrowStyle);
+        }
+        else if (nType == ControlType::Listbox)
+        {
+            arrow_width = arrow_width * gtk_style_context_get_scale (mpListboxButtonArrowStyle);
+            arrow_height = arrow_height * gtk_style_context_get_scale (mpListboxButtonArrowStyle);
         }
     }
 
@@ -1361,7 +1384,18 @@ GtkStyleContext* GtkSalGraphics::makeContext(GtkWidgetPath *pPath, GtkStyleConte
     GtkStyleContext* context = gtk_style_context_new();
     gtk_style_context_set_screen(context, gtk_widget_get_screen(mpWindow));
     gtk_style_context_set_path(context, pPath);
-    gtk_style_context_set_parent(context, pParent);
+    if (pParent == nullptr)
+    {
+        GtkWidget* pTopLevel = gtk_widget_get_toplevel(mpWindow);
+        GtkStyleContext* pStyle = gtk_widget_get_style_context(pTopLevel);
+        gtk_style_context_set_parent(context, pStyle);
+        gtk_style_context_set_scale (context, gtk_style_context_get_scale (pStyle));
+    }
+    else
+    {
+        gtk_style_context_set_parent(context, pParent);
+        gtk_style_context_set_scale (context, gtk_style_context_get_scale (pParent));
+    }
     gtk_widget_path_unref(pPath);
     return context;
 }
@@ -2183,10 +2217,21 @@ void GtkSalGraphics::PaintRadio(cairo_t *cr, GtkStyleContext *context,
 
 static gfloat getArrowSize(GtkStyleContext* context)
 {
-    gfloat arrow_scaling = 1.0;
-    gtk_style_context_get_style(context, "arrow-scaling", &arrow_scaling, nullptr);
-    gfloat arrow_size = 11 * arrow_scaling;
-    return arrow_size;
+    if (gtk_check_version(3, 20, 0) == nullptr)
+    {
+        gint min_width, min_weight;
+        gtk_style_context_get_style(context, "min-width", &min_width, nullptr);
+        gtk_style_context_get_style(context, "min-height", &min_weight, nullptr);
+        gfloat arrow_size = 11 * MAX (min_width, min_weight);
+        return arrow_size;
+    }
+    else
+    {
+        gfloat arrow_scaling = 1.0;
+        gtk_style_context_get_style(context, "arrow-scaling", &arrow_scaling, nullptr);
+        gfloat arrow_size = 11 * arrow_scaling;
+        return arrow_size;
+    }
 }
 
 namespace
@@ -2383,7 +2428,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         case ControlPart::Button:
             /* For all checkbuttons in the toolbars */
             flags = static_cast<GtkStateFlags>(flags |
-                    ( (rValue.getTristateVal() == ButtonValue::On) ? GTK_STATE_FLAG_ACTIVE : GTK_STATE_FLAG_NORMAL));
+                    ( (rValue.getTristateVal() == ButtonValue::On) ? GTK_STATE_FLAG_CHECKED : GTK_STATE_FLAG_NORMAL));
             context = mpToolButtonStyle;
             break;
         case ControlPart::SeparatorVert:
@@ -2486,9 +2531,10 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         {
             const char* icon = (rValue.getNumericVal() & 1) ? "pan-down-symbolic" : "pan-up-symbolic";
             GtkIconTheme *pIconTheme = gtk_icon_theme_get_for_screen(gtk_widget_get_screen(mpWindow));
-            pixbuf = gtk_icon_theme_load_icon(pIconTheme, icon,
-                                              std::max(rControlRegion.GetWidth(), rControlRegion.GetHeight()),
-                                              static_cast<GtkIconLookupFlags>(0), nullptr);
+            pixbuf = gtk_icon_theme_load_icon_for_scale(pIconTheme, icon,
+                                                        std::max(rControlRegion.GetWidth(), rControlRegion.GetHeight()),
+                                                        gtk_style_context_get_scale (context),
+                                                        static_cast<GtkIconLookupFlags>(0), nullptr);
             flags = GTK_STATE_FLAG_SELECTED;
             renderType = RenderType::Icon;
         }
@@ -2573,7 +2619,10 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         PaintCombobox(flags, cr, rControlRegion, nType, nPart);
         break;
     case RenderType::Icon:
+        gtk_style_context_save (context);
+        gtk_style_context_set_scale (context, 1);
         gtk_render_icon(context, cr, pixbuf, nX, nY);
+        gtk_style_context_restore (context);
         g_object_unref(pixbuf);
         break;
     case RenderType::Focus:
@@ -2999,16 +3048,12 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
 
     // tooltip colors
     {
-        GtkStyleContext *pCStyle = gtk_style_context_new();
-        gtk_style_context_set_screen(pCStyle, gtk_widget_get_screen(mpWindow));
         GtkWidgetPath *pCPath = gtk_widget_path_new();
         guint pos = gtk_widget_path_append_type(pCPath, GTK_TYPE_WINDOW);
         gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_TOOLTIP);
         pos = gtk_widget_path_append_type (pCPath, GTK_TYPE_LABEL);
         gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_LABEL);
-        pCStyle = gtk_style_context_new();
-        gtk_style_context_set_path(pCStyle, pCPath);
-        gtk_widget_path_free(pCPath);
+        GtkStyleContext *pCStyle = makeContext (pCPath, nullptr);
 
         GdkRGBA tooltip_bg_color, tooltip_fg_color;
         style_context_set_state(pCStyle, GTK_STATE_FLAG_NORMAL);
@@ -3022,13 +3067,10 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
 
     {
         // construct style context for text view
-        GtkStyleContext *pCStyle = gtk_style_context_new();
-        gtk_style_context_set_screen(pCStyle, gtk_widget_get_screen(mpWindow));
         GtkWidgetPath *pCPath = gtk_widget_path_new();
         gtk_widget_path_append_type( pCPath, GTK_TYPE_TEXT_VIEW );
         gtk_widget_path_iter_add_class( pCPath, -1, GTK_STYLE_CLASS_VIEW );
-        gtk_style_context_set_path( pCStyle, pCPath );
-        gtk_widget_path_free( pCPath );
+        GtkStyleContext *pCStyle = makeContext( pCPath, nullptr );
 
         // highlighting colors
         style_context_set_state(pCStyle, GTK_STATE_FLAG_SELECTED);
