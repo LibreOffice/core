@@ -690,7 +690,9 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
 #if HAVE_FEATURE_OPENGL
         assert(!OpenGLHelper::isVCLOpenGLEnabled());
 #endif
+#if HAVE_FEATURE_SKIA
         assert(!SkiaHelper::isVCLSkiaEnabled());
+#endif
         tools::Rectangle aBmpRect(Point(), rBmp.GetSizePixel());
         if (!aBmpRect.Intersection(tools::Rectangle(rSrcPtPixel, rSrcSizePixel)).IsEmpty())
         {
