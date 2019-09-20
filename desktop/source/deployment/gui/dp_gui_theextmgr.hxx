@@ -57,6 +57,7 @@ private:
 
     OUString                     m_sGetExtensionsURL;
     bool                         m_bModified;
+    bool                         m_bExtMgrDialogExecuting;
 
 public:
     static ::rtl::Reference<TheExtensionManager> s_ExtMgr;
@@ -90,7 +91,7 @@ public:
     void SetText( const OUString &rTitle );
     void Show();
     void ToTop();
-    bool Close();
+    void Close();
     bool isVisible();
 
 
