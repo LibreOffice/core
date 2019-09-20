@@ -19,36 +19,105 @@
 
 #include <skia/salbmp.hxx>
 
+#include <o3tl/safeint.hxx>
+#include <tools/helpers.hxx>
+
+#include <salgdi.hxx>
+
 SkiaSalBitmap::SkiaSalBitmap() {}
 
 SkiaSalBitmap::~SkiaSalBitmap() {}
 
+static SkColorType getSkColorType(int bitCount, const BitmapPalette& palette)
+{
+    switch (bitCount)
+    {
+        case 8:
+            return palette.IsGreyPalette() ? kGray_8_SkColorType : kAlpha_8_SkColorType;
+        case 24:
+            return kRGB_888x_SkColorType;
+        case 32:
+            return kN32_SkColorType;
+        default:
+            abort();
+    }
+}
+
+static bool isValidBitCount(sal_uInt16 nBitCount)
+{
+    return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) || (nBitCount == 24)
+           || (nBitCount == 32);
+}
+
 bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal)
 {
-    (void)rSize;
-    (void)nBitCount;
-    (void)rPal;
-    return false;
+    Destroy();
+    if (!isValidBitCount(nBitCount))
+        return false;
+    if (nBitCount >= 8)
+    {
+        // TODO SkSurface doesn't support unpremul alpha
+        if (!mBitmap.tryAllocPixels(
+                SkImageInfo::Make(rSize.Width(), rSize.Height(), getSkColorType(nBitCount, rPal),
+                                  nBitCount == 32 ? kUnpremul_SkAlphaType : kOpaque_SkAlphaType)))
+        {
+            return false;
+        }
+    }
+    else
+    {
+        // Skia doesn't support the (ancient) low bpp bit counts, so handle them manually
+        int bitScanlineWidth;
+        if (o3tl::checked_multiply<int>(rSize.Width(), nBitCount, bitScanlineWidth))
+        {
+            SAL_WARN("vcl.gdi", "checked multiply failed");
+            return false;
+        }
+        mScanlineSize = AlignedWidth4Bytes(bitScanlineWidth);
+        sal_uInt8* buffer = nullptr;
+        if (mScanlineSize != 0 && rSize.Height() != 0)
+            buffer = new sal_uInt8[mScanlineSize * rSize.Height()];
+        mBuffer.reset(buffer);
+    }
+    mPalette = rPal;
+    mBitCount = nBitCount;
+    mSize = rSize;
+    return true;
 }
 
 bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp)
 {
-    (void)rSalBmp;
-    return false;
+    return Create(rSalBmp, rSalBmp.GetBitCount());
 }
 
 bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, SalGraphics* pGraphics)
 {
-    (void)rSalBmp;
-    (void)pGraphics;
-    return false;
+    return Create(rSalBmp, pGraphics ? pGraphics->GetBitCount() : rSalBmp.GetBitCount());
 }
 
 bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
 {
-    (void)rSalBmp;
-    (void)nNewBitCount;
-    return false;
+    const SkiaSalBitmap& src = static_cast<const SkiaSalBitmap&>(rSalBmp);
+    if (nNewBitCount == src.GetBitCount())
+    {
+        mBitmap = src.mBitmap; // TODO unshare?
+        mPalette = src.mPalette;
+        mBitCount = src.mBitCount;
+        mSize = src.mSize;
+        if (src.mBuffer != nullptr)
+        {
+            sal_uInt32 dataSize = src.mScanlineSize * src.mSize.Height();
+            sal_uInt8* newBuffer = new sal_uInt8[dataSize];
+            memcpy(newBuffer, src.mBuffer.get(), dataSize);
+            mBuffer.reset(newBuffer);
+            mScanlineSize = src.mScanlineSize;
+        }
+        return true;
+    }
+    if (!Create(src.mSize, src.mBitCount, src.mPalette))
+        return false;
+    // TODO copy data
+    return true;
 }
 
 bool SkiaSalBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& rBitmapCanvas,
@@ -60,22 +129,79 @@ bool SkiaSalBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanv
     return false;
 }
 
-void SkiaSalBitmap::Destroy() {}
+void SkiaSalBitmap::Destroy()
+{
+    mBitmap.reset();
+    mBuffer.reset();
+}
 
-Size SkiaSalBitmap::GetSize() const { return Size(); }
+Size SkiaSalBitmap::GetSize() const { return mSize; }
 
-sal_uInt16 SkiaSalBitmap::GetBitCount() const { return 0; }
+sal_uInt16 SkiaSalBitmap::GetBitCount() const { return mBitCount; }
 
 BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
 {
-    (void)nMode;
-    return nullptr;
+    (void)nMode; // TODO
+    if (mBitmap.drawsNothing() && !mBuffer)
+        return nullptr;
+    BitmapBuffer* buffer = new BitmapBuffer;
+    buffer->mnWidth = mSize.Width();
+    buffer->mnHeight = mSize.Height();
+    buffer->mnBitCount = mBitCount;
+    buffer->maPalette = mPalette;
+    if (mBitCount >= 8)
+    {
+        buffer->mpBits = static_cast<sal_uInt8*>(mBitmap.getPixels());
+        buffer->mnScanlineSize = mBitmap.rowBytes();
+    }
+    else
+    {
+        buffer->mpBits = mBuffer.get();
+        buffer->mnScanlineSize = mScanlineSize;
+    }
+    switch (mBitCount)
+    {
+        case 1:
+#ifdef OSL_BIGENDIAN
+            buffer->mnFormat = ScanlineFormat::N1BitMsbPal | ScanlineFormat::TopDown;
+#else
+            buffer->mnFormat = ScanlineFormat::N1BitLsbPal | ScanlineFormat::TopDown;
+#endif
+            break;
+        case 4:
+#ifdef OSL_BIGENDIAN
+            buffer->mnFormat = ScanlineFormat::N4BitMsnPal | ScanlineFormat::TopDown;
+#else
+            buffer->mnFormat = ScanlineFormat::N4BitLsnPal | ScanlineFormat::TopDown;
+#endif
+            break;
+        case 8:
+            buffer->mnFormat = ScanlineFormat::N8BitPal | ScanlineFormat::TopDown;
+            break;
+        case 24:
+            buffer->mnFormat = ScanlineFormat::N24BitTcRgb | ScanlineFormat::TopDown;
+            break;
+        case 32:
+            buffer->mnFormat = mBitmap.colorType() == kRGBA_8888_SkColorType
+                                   ? ScanlineFormat::N32BitTcArgb
+                                   : ScanlineFormat::N32BitTcBgra;
+            buffer->mnFormat |= ScanlineFormat::TopDown;
+            break;
+        default:
+            abort();
+    }
+    return buffer;
 }
 
 void SkiaSalBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
 {
-    (void)pBuffer;
-    (void)nMode;
+    mPalette = pBuffer->maPalette;
+    (void)nMode; // TODO?
+    // Are there any more ground movements underneath us ?
+    assert(pBuffer->mnWidth == mSize.Width());
+    assert(pBuffer->mnHeight == mSize.Height());
+    assert(pBuffer->mnBitCount == mBitCount);
+    delete pBuffer;
 }
 
 bool SkiaSalBitmap::GetSystemData(BitmapSystemData& rData)
