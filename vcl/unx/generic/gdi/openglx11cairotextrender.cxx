@@ -9,7 +9,7 @@
 
 #include "openglx11cairotextrender.hxx"
 
-#include <openglgdiimpl.hxx>
+#include <opengl/gdiimpl.hxx>
 #include <salbmp.hxx>
 #include <vcl/salbtype.hxx>
 

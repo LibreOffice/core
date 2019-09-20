@@ -17342,6 +17342,7 @@ vcl/inc/opengl/RenderList.hxx
 vcl/inc/opengl/RenderState.hxx
 vcl/inc/opengl/TextureState.hxx
 vcl/inc/opengl/VertexUtils.hxx
+vcl/inc/opengl/gdiimpl.hxx
 vcl/inc/opengl/framebuffer.hxx
 vcl/inc/opengl/program.hxx
 vcl/inc/opengl/salbmp.hxx
@@ -17355,7 +17356,6 @@ vcl/inc/opengl/x11/gdiimpl.hxx
 vcl/inc/opengl/x11/glxtest.hxx
 vcl/inc/opengl/x11/salvd.hxx
 vcl/inc/opengl/zone.hxx
-vcl/inc/openglgdiimpl.hxx
 vcl/inc/osx/a11yfactory.h
 vcl/inc/osx/a11yfocustracker.hxx
 vcl/inc/osx/a11ylistener.hxx

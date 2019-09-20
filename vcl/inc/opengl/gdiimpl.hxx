@@ -23,12 +23,12 @@
 #include <vcl/dllapi.h>
 #include <vcl/opengl/OpenGLContext.hxx>
 
-#include "regionband.hxx"
-#include "salgeom.hxx"
-#include "salgdiimpl.hxx"
-#include "opengl/program.hxx"
-#include "opengl/texture.hxx"
-#include "opengl/RenderList.hxx"
+#include <regionband.hxx>
+#include <salgeom.hxx>
+#include <salgdiimpl.hxx>
+#include <opengl/program.hxx>
+#include <opengl/texture.hxx>
+#include <opengl/RenderList.hxx>
 
 #include <memory>
 
