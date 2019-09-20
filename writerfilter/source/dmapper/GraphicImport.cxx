@@ -197,6 +197,7 @@ public:
     sal_Int16 nVertRelation;
     text::WrapTextMode nWrap;
     bool      bLayoutInCell;
+    bool bAllowOverlap = true;
     bool      bOpaque;
     bool      bContour;
     bool      bContourOutside;
@@ -596,9 +597,9 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
         break;
         case NS_ooxml::LN_CT_Anchor_hidden: // 90992; - ignored
         break;
-        case NS_ooxml::LN_CT_Anchor_allowOverlap: // 90993;
-            //enable overlapping - ignored
-        break;
+        case NS_ooxml::LN_CT_Anchor_allowOverlap:
+            m_pImpl->bAllowOverlap = nIntValue != 0;
+            break;
         case NS_ooxml::LN_CT_Anchor_wp14_anchorId:
         case NS_ooxml::LN_CT_Inline_wp14_anchorId:
         {
@@ -866,6 +867,8 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         xShapeProps->setPropertyValue("Surround", uno::makeAny(static_cast<sal_Int32>(m_pImpl->nWrap)));
                         m_pImpl->applyZOrder(xShapeProps);
                         m_pImpl->applyName(xShapeProps);
+                        xShapeProps->setPropertyValue("AllowOverlap",
+                                                      uno::makeAny(m_pImpl->bAllowOverlap));
 
                         // Get the grab-bag set by oox, merge with our one and then put it back.
                         comphelper::SequenceAsHashMap aInteropGrabBag(xShapeProps->getPropertyValue("InteropGrabBag"));

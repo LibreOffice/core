@@ -563,6 +563,14 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
             case RES_FRAMEDIR:
                 aPropertyName = UNO_NAME_WRITING_MODE;
                 break;
+            case RES_WRAP_INFLUENCE_ON_OBJPOS:
+                switch (nMemberID)
+                {
+                    case MID_ALLOW_OVERLAP:
+                        aPropertyName = UNO_NAME_ALLOW_OVERLAP;
+                        break;
+                }
+                break;
         }
 
         if (!aPropertyName.isEmpty())
