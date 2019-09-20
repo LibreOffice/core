@@ -1237,9 +1237,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     {
         bool bNumberingFromBaseStyle = false;
         sal_Int32 nListId = pEntry ? lcl_getListId(pEntry, GetStyleSheetTable(), bNumberingFromBaseStyle) : -1;
-        if (nListId >= 0 && !pParaContext->isSet(PROP_NUMBERING_STYLE_NAME))
+        auto const pList(GetListTable()->GetList(nListId));
+        if (pList && nListId >= 0 && !pParaContext->isSet(PROP_NUMBERING_STYLE_NAME))
         {
-            pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny( ListDef::GetStyleName( nListId ) ), false);
+            pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny( pList->GetStyleName(nListId) ), false);
             isNumberingViaStyle = true;
 
             // Indent properties from the paragraph style have priority
@@ -6075,7 +6076,12 @@ uno::Reference<container::XIndexAccess> DomainMapper_Impl::GetCurrentNumberingRu
             *pListLevel = pStyleSheetProperties->GetListLevel();
 
         // So we are in a paragraph style and it has numbering. Look up the relevant numbering rules.
-        OUString aListName = ListDef::GetStyleName(nListId);
+        auto const pList(GetListTable()->GetList(nListId));
+        OUString aListName;
+        if (pList)
+        {
+            aListName = pList->GetStyleName(nListId);
+        }
         uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(GetTextDocument(), uno::UNO_QUERY_THROW);
         uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
         uno::Reference<container::XNameAccess> xNumberingStyles;
@@ -6190,7 +6196,9 @@ sal_Int32 DomainMapper_Impl::getNumberingProperty(const sal_Int32 nListId, sal_I
         if (nNumberingLevel < 0) // It seems it's valid to omit numbering level, and in that case it means zero.
             nNumberingLevel = 0;
 
-        const OUString aListName = ListDef::GetStyleName(nListId);
+        auto const pList(GetListTable()->GetList(nListId));
+        assert(pList);
+        const OUString aListName = pList->GetStyleName(nListId);
         const uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(GetTextDocument(), uno::UNO_QUERY_THROW);
         const uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
         uno::Reference<container::XNameAccess> xNumberingStyles;
