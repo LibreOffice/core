@@ -14,7 +14,7 @@
 
 #include <unx/salgdi.h>
 #include <unx/x11/x11gdiimpl.h>
-#include <skiagdiimpl.hxx>
+#include <skia/gdiimpl.hxx>
 
 class VCL_PLUGIN_PUBLIC X11SkiaSalGraphicsImpl : public SkiaSalGraphicsImpl, public X11GraphicsImpl
 {

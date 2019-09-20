@@ -11,7 +11,7 @@
 
 #include <salbmp.hxx>
 #include <vcl/salbtype.hxx>
-#include <skiagdiimpl.hxx>
+#include <skia/gdiimpl.hxx>
 
 #include <cairo.h>
 
