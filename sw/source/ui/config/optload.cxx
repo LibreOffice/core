@@ -495,11 +495,11 @@ SwCaptionOptPage::SwCaptionOptPage(TabPageParent pParent, const SfxItemSet& rSet
         ::FillCharStyleListBox( *m_xCharStyleLB, pSh->GetView().GetDocShell(), true, true );
     }
 
-    const sal_uInt16 nCount = pMgr->GetFormatCount(TYP_SEQFLD, false);
+    const sal_uInt16 nCount = pMgr->GetFormatCount(SwFieldTypesEnum::Sequence, false);
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        const sal_uInt16 nFormatId = pMgr->GetFormatId(TYP_SEQFLD, i);
-        m_xFormatBox->append(OUString::number(nFormatId), pMgr->GetFormatStr(TYP_SEQFLD, i));
+        const sal_uInt16 nFormatId = pMgr->GetFormatId(SwFieldTypesEnum::Sequence, i);
+        m_xFormatBox->append(OUString::number(nFormatId), pMgr->GetFormatStr(SwFieldTypesEnum::Sequence, i));
         if (nFormatId == nSelFormat)
             m_xFormatBox->set_active(i);
     }

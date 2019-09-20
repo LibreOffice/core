@@ -127,7 +127,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
     bool bMore = false;
     bool bIsText = true;
-    sal_uInt16 nInsertType = 0;
+    SwFieldTypesEnum nInsertType = SwFieldTypesEnum::Date;
     sal_uInt16 nInsertSubType = 0;
     sal_uInt32 nInsertFormat = 0;
 
@@ -140,7 +140,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             {
                 switch ( pField->GetTypeId() )
                 {
-                    case TYP_DDEFLD:
+                    case SwFieldTypesEnum::DDE:
                     {
                         ::sfx2::SvBaseLink& rLink = static_cast<SwDDEFieldType*>(pField->GetTyp())->
                                                 GetBaseLink();
@@ -228,14 +228,14 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 if( pItem )
                 {
                     sal_uInt32 nFormat = 0;
-                    sal_uInt16 nType = 0;
+                    SwFieldTypesEnum nType = SwFieldTypesEnum::Date;
                     OUString aPar1 = static_cast<const SfxStringItem *>(pItem)->GetValue();
                     OUString aPar2;
                     sal_Int32 nCommand = 0;
 
                     if( SfxItemState::SET == pArgs->GetItemState( FN_PARAM_FIELD_TYPE,
                                                                 false, &pItem ))
-                        nType = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
+                        nType = static_cast<SwFieldTypesEnum>(static_cast<const SfxUInt16Item *>(pItem)->GetValue());
                     aPar1 += OUStringLiteral1(DB_DELIM);
                     if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_1, false, &pItem ))
@@ -273,7 +273,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 if( pItem && nSlot != FN_INSERT_FIELD_CTRL)
                 {
                     sal_uInt32 nFormat = 0;
-                    sal_uInt16 nType = 0;
+                    SwFieldTypesEnum nType = SwFieldTypesEnum::Date;
                     sal_uInt16 nSubType = 0;
                     OUString aPar1 = static_cast<const SfxStringItem *>(pItem)->GetValue();
                     OUString aPar2;
@@ -281,7 +281,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                     if( SfxItemState::SET == pArgs->GetItemState( FN_PARAM_FIELD_TYPE,
                                                                 false, &pItem ))
-                        nType = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
+                        nType = static_cast<SwFieldTypesEnum>(static_cast<const SfxUInt16Item *>(pItem)->GetValue());
                     if( SfxItemState::SET == pArgs->GetItemState( FN_PARAM_FIELD_SUBTYPE,
                                                                 false, &pItem ))
                         nSubType = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
@@ -619,7 +619,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                 if( bNew )
                 {
-                    SwInsertField_Data aData(TYP_SCRIPTFLD, 0, aType, aText, bIsUrl ? 1 : 0);
+                    SwInsertField_Data aData(SwFieldTypesEnum::Script, 0, aType, aText, bIsUrl ? 1 : 0);
                     aMgr.InsertField(aData);
                     rReq.Done();
                 }
@@ -635,34 +635,34 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             break;
 
             case FN_INSERT_FLD_DATE    :
-                nInsertType = TYP_DATEFLD;
+                nInsertType = SwFieldTypesEnum::Date;
                 bIsText = false;
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_TIME    :
-                nInsertType = TYP_TIMEFLD;
+                nInsertType = SwFieldTypesEnum::Time;
                 bIsText = false;
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_PGNUMBER:
-                nInsertType = TYP_PAGENUMBERFLD;
+                nInsertType = SwFieldTypesEnum::PageNumber;
                 nInsertFormat = SVX_NUM_PAGEDESC; // Like page template
                 bIsText = false;
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_PGCOUNT :
-                nInsertType = TYP_DOCSTATFLD;
+                nInsertType = SwFieldTypesEnum::DocumentStatistics;
                 nInsertSubType = 0;
                 bIsText = false;
                 nInsertFormat = SVX_NUM_PAGEDESC;
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_TOPIC   :
-                nInsertType = TYP_DOCINFOFLD;
+                nInsertType = SwFieldTypesEnum::DocumentInfo;
                 nInsertSubType = DI_THEMA;
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_TITLE   :
-                nInsertType = TYP_DOCINFOFLD;
+                nInsertType = SwFieldTypesEnum::DocumentInfo;
                 nInsertSubType = DI_TITLE;
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_AUTHOR  :
-                nInsertType = TYP_DOCINFOFLD;
+                nInsertType = SwFieldTypesEnum::DocumentInfo;
                 nInsertSubType = DI_CREATE|DI_SUB_AUTHOR;
 
 FIELD_INSERT:

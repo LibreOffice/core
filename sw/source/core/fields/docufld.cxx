@@ -1270,11 +1270,11 @@ SwHiddenTextField::SwHiddenTextField( SwHiddenTextFieldType* pFieldType,
                                     const OUString& rCond,
                                     const OUString& rStr,
                                     bool    bHidden,
-                                    sal_uInt16  nSub) :
+                                    SwFieldTypesEnum  nSub) :
     SwField( pFieldType ), m_aCond(rCond), m_nSubType(nSub),
     m_bCanToggle(bConditional), m_bIsHidden(bHidden), m_bValid(false)
 {
-    if(m_nSubType == TYP_CONDTXTFLD)
+    if(m_nSubType == SwFieldTypesEnum::ConditionalText)
     {
         sal_Int32 nPos = 0;
         m_aTRUEText = rStr.getToken(0, '|', nPos);
@@ -1297,7 +1297,7 @@ SwHiddenTextField::SwHiddenTextField( SwHiddenTextFieldType* pFieldType,
                                     const OUString& rCond,
                                     const OUString& rTrue,
                                     const OUString& rFalse,
-                                    sal_uInt16 nSub)
+                                    SwFieldTypesEnum nSub)
     : SwField( pFieldType ), m_aTRUEText(rTrue), m_aFALSEText(rFalse), m_aCond(rCond), m_nSubType(nSub),
       m_bIsHidden(true), m_bValid(false)
 {
@@ -1309,7 +1309,7 @@ OUString SwHiddenTextField::ExpandImpl(SwRootFrame const*const) const
     // Type: !Hidden  -> show always
     //        Hide    -> evaluate condition
 
-    if( TYP_CONDTXTFLD == m_nSubType )
+    if( SwFieldTypesEnum::ConditionalText == m_nSubType )
     {
         if( m_bValid )
             return m_aContent;
@@ -1329,7 +1329,7 @@ void SwHiddenTextField::Evaluate(SwDoc* pDoc)
 {
     OSL_ENSURE(pDoc, "got no document");
 
-    if( TYP_CONDTXTFLD == m_nSubType )
+    if( SwFieldTypesEnum::ConditionalText == m_nSubType )
     {
 #if !HAVE_FEATURE_DBCONNECTIVITY
         (void) pDoc;
@@ -1387,7 +1387,7 @@ OUString SwHiddenTextField::GetFieldName() const
     OUString aStr = SwFieldType::GetTypeStr(m_nSubType) +
         " " + m_aCond + " " + m_aTRUEText;
 
-    if (m_nSubType == TYP_CONDTXTFLD)
+    if (m_nSubType == SwFieldTypesEnum::ConditionalText)
     {
         aStr += " : " + m_aFALSEText;
     }
@@ -1422,7 +1422,7 @@ OUString SwHiddenTextField::GetPar1() const
 /// set True/False text
 void SwHiddenTextField::SetPar2(const OUString& rStr)
 {
-    if (m_nSubType == TYP_CONDTXTFLD)
+    if (m_nSubType == SwFieldTypesEnum::ConditionalText)
     {
         sal_Int32 nPos = rStr.indexOf('|');
         if (nPos == -1)
@@ -1440,7 +1440,7 @@ void SwHiddenTextField::SetPar2(const OUString& rStr)
 /// get True/False text
 OUString SwHiddenTextField::GetPar2() const
 {
-    if(m_nSubType != TYP_CONDTXTFLD)
+    if(m_nSubType != SwFieldTypesEnum::ConditionalText)
     {
         return m_aTRUEText;
     }
@@ -1449,7 +1449,7 @@ OUString SwHiddenTextField::GetPar2() const
 
 sal_uInt16 SwHiddenTextField::GetSubType() const
 {
-    return m_nSubType;
+    return static_cast<sal_uInt16>(m_nSubType);
 }
 
 bool SwHiddenTextField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const

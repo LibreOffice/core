@@ -124,7 +124,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     }
 
     std::vector<OUString> aLst;
-    GetFieldMgr().GetSubTypes(TYP_DOCINFOFLD, aLst);
+    GetFieldMgr().GetSubTypes(SwFieldTypesEnum::DocumentInfo, aLst);
     std::unique_ptr<weld::TreeIter> xEntry(m_xTypeTLB->make_iterator());
     std::unique_ptr<weld::TreeIter> xExpandEntry;
     for(size_t i = 0; i < aLst.size(); ++i)
@@ -357,7 +357,7 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, weld::TreeView&, void)
 sal_Int32 SwFieldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
 {
     // fill Format-Listbox
-    sal_uInt16 nTypeId = TYP_DOCINFOFLD;
+    SwFieldTypesEnum nTypeId = SwFieldTypesEnum::DocumentInfo;
 
     EnableInsert(nSubType != USHRT_MAX);
 
@@ -437,7 +437,7 @@ bool SwFieldDokInfPage::FillItemSet(SfxItemSet* )
         nOldFormat != nFormat || m_xFixedCB->get_state_changed_from_saved()
         || (DI_CUSTOM == nSubType && aName != m_sOldCustomFieldName ))
     {
-        InsertField(TYP_DOCINFOFLD, nSubType, aName, OUString(), nFormat,
+        InsertField(SwFieldTypesEnum::DocumentInfo, nSubType, aName, OUString(), nFormat,
                 ' ', m_xFormatLB->IsAutomaticLanguage());
     }
 

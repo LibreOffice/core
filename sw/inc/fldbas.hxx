@@ -84,54 +84,55 @@ enum class SwFieldIds : sal_uInt16 {
 };
 
 /// List of FieldTypes at UI.
-enum SwFieldTypesEnum {
-    TYP_BEGIN,
-    TYP_DATEFLD = TYP_BEGIN,    // 0
-    TYP_TIMEFLD,
-    TYP_FILENAMEFLD,
-    TYP_DBNAMEFLD,
-    TYP_CHAPTERFLD,
-    TYP_PAGENUMBERFLD,
-    TYP_DOCSTATFLD,
-    TYP_AUTHORFLD,
-    TYP_SETFLD,
-    TYP_GETFLD,
-    TYP_FORMELFLD,              // 10
-    TYP_HIDDENTXTFLD,
-    TYP_SETREFFLD,
-    TYP_GETREFFLD,
-    TYP_DDEFLD,
-    TYP_MACROFLD,
-    TYP_INPUTFLD,
-    TYP_HIDDENPARAFLD,
-    TYP_DOCINFOFLD,
-    TYP_DBFLD,
-    TYP_USERFLD,                // 20
-    TYP_POSTITFLD,
-    TYP_TEMPLNAMEFLD,
-    TYP_SEQFLD,
-    TYP_DBNEXTSETFLD,
-    TYP_DBNUMSETFLD,
-    TYP_DBSETNUMBERFLD,
-    TYP_CONDTXTFLD,
-    TYP_NEXTPAGEFLD,
-    TYP_PREVPAGEFLD,
-    TYP_EXTUSERFLD,             // 30
-    TYP_FIXDATEFLD,
-    TYP_FIXTIMEFLD,
-    TYP_SETINPFLD,
-    TYP_USRINPFLD,
-    TYP_SETREFPAGEFLD,
-    TYP_GETREFPAGEFLD,
-    TYP_INTERNETFLD,
-    TYP_JUMPEDITFLD,
-    TYP_SCRIPTFLD,
-    TYP_AUTHORITY,              // 40
-    TYP_COMBINED_CHARS,
-    TYP_DROPDOWN,
-    TYP_CUSTOM,     // Unused - necessary for alignment with aSwFields in fldmgr.cxx
-    TYP_PARAGRAPHSIGFLD,
-    TYP_END
+enum class SwFieldTypesEnum : sal_uInt16 {
+    Begin,
+    Date = Begin,    // 0
+    Time,
+    Filename,
+    DatabaseName,
+    Chapter,
+    PageNumber,
+    DocumentStatistics,
+    Author,
+    Set,
+    Get,
+    Formel,              // 10
+    HiddenText,
+    SetRef,
+    GetRef,
+    DDE,
+    Macro,
+    Input,
+    HiddenParagraph,
+    DocumentInfo,
+    Database,
+    User,                // 20
+    Postit,
+    TemplateName,
+    Sequence,
+    DatabaseNextSet,
+    DatabaseNumberSet,
+    DatabaseSetNumber,
+    ConditionalText,
+    NextPage,
+    PreviousPage,
+    ExtendedUser,             // 30
+    FixedDate,
+    FixedTime,
+    SetInput,
+    UserInput,
+    SetRefPage,
+    GetRefPage,
+    Internet,
+    JumpEdit,
+    Script,
+    Authority,              // 40
+    CombinedChars,
+    Dropdown,
+    Custom,     // Unused - necessary for alignment with aSwFields in fldmgr.cxx
+    ParagraphSignature,
+    LAST,
+    Unknown = USHRT_MAX // used by SwFieldMgr::GetCurTypeId
 };
 enum SwAttrFieldType {
     ATTR_NONE,
@@ -254,7 +255,7 @@ public:
         m_wXFieldMaster = xFieldMaster;
     }
 
-    static OUString    GetTypeStr( sal_uInt16 nTypeId );
+    static OUString    GetTypeStr( SwFieldTypesEnum nTypeId );
 
     /// Only in derived classes.
     virtual OUString        GetName() const;
@@ -340,7 +341,7 @@ public:
 #endif
 
     // TYP_ID
-    sal_uInt16      GetTypeId() const;
+    SwFieldTypesEnum    GetTypeId() const;
     virtual sal_uInt16      GetSubType() const;
     virtual void        SetSubType(sal_uInt16);
 

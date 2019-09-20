@@ -48,8 +48,8 @@ class SwFieldDokPage : public SwFieldPage
     DECL_LINK(FormatHdl, weld::TreeView&, void);
     DECL_LINK(SubTypeHdl, weld::TreeView&, void);
 
-    void                AddSubType(sal_uInt16 nTypeId);
-    sal_Int32           FillFormatLB(sal_uInt16 nTypeId);
+    void                AddSubType(SwFieldTypesEnum nTypeId);
+    sal_Int32           FillFormatLB(SwFieldTypesEnum nTypeId);
 
 protected:
     virtual sal_uInt16      GetGroup() override;

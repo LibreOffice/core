@@ -68,7 +68,7 @@ struct SwFieldGroupRgn
 // with command strings
 struct SwInsertField_Data
 {
-    sal_uInt16 const m_nTypeId;
+    SwFieldTypesEnum const m_nTypeId;
     sal_uInt16 const m_nSubType;
     const OUString m_sPar1;
     const OUString m_sPar2;
@@ -83,7 +83,7 @@ struct SwInsertField_Data
     /// Marks the PostIt field's annotation start/end if it differs from the cursor selection.
     std::unique_ptr<SwPaM> m_pAnnotationRange;
 
-    SwInsertField_Data(sal_uInt16 nType, sal_uInt16 nSub, const OUString& rPar1, const OUString& rPar2,
+    SwInsertField_Data(SwFieldTypesEnum nType, sal_uInt16 nSub, const OUString& rPar1, const OUString& rPar2,
                     sal_uInt32 nFormatId, SwWrtShell* pShell = nullptr, sal_Unicode cSep = ' ', bool bIsAutoLanguage = true) :
         m_nTypeId(nType),
         m_nSubType(nSub),
@@ -166,27 +166,27 @@ public:
     // access via TypeId from the dialog
     // Ids for a range of fields
     static const SwFieldGroupRgn& GetGroupRange(bool bHtmlMode, sal_uInt16 nGrpId);
-    static sal_uInt16           GetGroup(sal_uInt16 nTypeId, sal_uInt16 nSubType);
+    static sal_uInt16           GetGroup(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType);
 
     // the current field's TypeId
-    sal_uInt16          GetCurTypeId() const;
+    SwFieldTypesEnum    GetCurTypeId() const;
 
     // TypeId for a concrete position in the list
-    static sal_uInt16   GetTypeId(sal_uInt16 nPos);
+    static SwFieldTypesEnum GetTypeId(sal_uInt16 nPos);
     // name of the type in the list of fields
     static OUString     GetTypeStr(sal_uInt16 nPos);
 
     // Pos in the list of fields
-    static sal_uInt16   GetPos(sal_uInt16 nTypeId);
+    static sal_uInt16   GetPos(SwFieldTypesEnum nTypeId);
 
     // subtypes to a type
-    void            GetSubTypes(sal_uInt16 nId, std::vector<OUString>& rToFill);
+    void                GetSubTypes(SwFieldTypesEnum nId, std::vector<OUString>& rToFill);
 
     // format to a type
-    sal_uInt16          GetFormatCount(sal_uInt16 nTypeId, bool bHtmlMode) const;
-    OUString            GetFormatStr(sal_uInt16 nTypeId, sal_uInt32 nFormatId) const;
-    sal_uInt16          GetFormatId(sal_uInt16 nTypeId, sal_uInt32 nFormatId) const;
-    sal_uInt32          GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberFormatter* pFormatter);
+    sal_uInt16          GetFormatCount(SwFieldTypesEnum nTypeId, bool bHtmlMode) const;
+    OUString            GetFormatStr(SwFieldTypesEnum nTypeId, sal_uInt32 nFormatId) const;
+    sal_uInt16          GetFormatId(SwFieldTypesEnum nTypeId, sal_uInt32 nFormatId) const;
+    sal_uInt32          GetDefaultFormat(SwFieldTypesEnum nTypeId, bool bIsText, SvNumberFormatter* pFormatter);
 
     // turn off evaluation of expression fields for insertation
     // of many expression fields (see labels)

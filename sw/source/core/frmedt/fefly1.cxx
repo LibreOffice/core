@@ -1324,7 +1324,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
             {
                 const SfxPoolItem* pItem = &pHint->GetAttr();
                 if( RES_TXTATR_FIELD == pItem->Which()
-                    && TYP_SEQFLD == static_cast<const SwFormatField*>(pItem)->GetField()->GetTypeId() )
+                    && SwFieldTypesEnum::Sequence == static_cast<const SwFormatField*>(pItem)->GetField()->GetTypeId() )
                 {
                     // sequence field found
                     SwFlyFrame* pChgFly = const_cast<SwFlyFrame*>(static_cast<const SwFlyFrame*>(pAnchor->GetUpper()));

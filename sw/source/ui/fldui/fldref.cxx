@@ -173,11 +173,11 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
 
     for (short i = rRg.nStart; i < rRg.nEnd; ++i)
     {
-        const sal_uInt16 nTypeId = SwFieldMgr::GetTypeId(i);
+        const SwFieldTypesEnum nTypeId = SwFieldMgr::GetTypeId(i);
 
-        if (!IsFieldEdit() || nTypeId != TYP_SETREFFLD)
+        if (!IsFieldEdit() || nTypeId != SwFieldTypesEnum::SetRef)
         {
-            m_xTypeLB->append(OUString::number(nTypeId), SwFieldMgr::GetTypeStr(i));
+            m_xTypeLB->append(OUString::number(static_cast<sal_uInt16>(nTypeId)), SwFieldMgr::GetTypeStr(i));
         }
     }
 
@@ -372,14 +372,14 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, weld::TreeView&, void)
 
     switch (nTypeId)
     {
-        case TYP_GETREFFLD:
+        case static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef):
             if (REFFLDFLAG & m_xTypeLB->get_id(nOld).toUInt32())
                 // the old one stays
                 nFieldDlgFormatSel = m_xFormatLB->get_selected_index();
             bName = true;
             break;
 
-        case TYP_SETREFFLD:
+        case static_cast<sal_uInt16>(SwFieldTypesEnum::SetRef):
             bName = true;
             break;
 
@@ -390,7 +390,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, weld::TreeView&, void)
             if( REFFLDFLAG & nTypeId )
             {
                 const sal_uInt16 nOldId = nOld != -1 ? m_xTypeLB->get_id(nOld).toUInt32() : 0;
-                if( nOldId & REFFLDFLAG || nOldId == TYP_GETREFFLD )
+                if( nOldId & REFFLDFLAG || nOldId == static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef) )
                     // then the old one stays
                     nFieldDlgFormatSel = m_xFormatLB->get_selected_index();
             }
@@ -426,7 +426,7 @@ void SwFieldRefPage::SubTypeHdl()
 
     switch(nTypeId)
     {
-        case TYP_GETREFFLD:
+        case static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef):
             if (!IsFieldEdit() || m_xSelectionLB->get_selected_index() != -1)
             {
                 m_xNameED->set_text(m_xSelectionLB->get_selected_text());
@@ -434,7 +434,7 @@ void SwFieldRefPage::SubTypeHdl()
             }
             break;
 
-        case TYP_SETREFFLD:
+        case static_cast<sal_uInt16>(SwFieldTypesEnum::SetRef):
         {
             SwWrtShell *pSh = GetWrtShell();
             if(!pSh)
@@ -655,7 +655,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
     else
     {
         std::vector<OUString> aLst;
-        GetFieldMgr().GetSubTypes(nTypeId, aLst);
+        GetFieldMgr().GetSubTypes(static_cast<SwFieldTypesEnum>(nTypeId), aLst);
         for(const OUString & i : aLst)
         {
             bool isSubstring = MatchSubstring( i , filterString );
@@ -769,7 +769,7 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
             bAddCrossRefFormats = true;
             [[fallthrough]];
 
-        case TYP_GETREFFLD:
+        case static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef):
         case REFFLDFLAG_BOOKMARK:
         case REFFLDFLAG_FOOTNOTE:
         case REFFLDFLAG_ENDNOTE:
@@ -785,18 +785,19 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
             }
             else
             {
-                nSize = GetFieldMgr().GetFormatCount( nTypeId, IsFieldDlgHtmlMode() );
+                nSize = GetFieldMgr().GetFormatCount( static_cast<SwFieldTypesEnum>(nTypeId), IsFieldDlgHtmlMode() );
             }
             break;
     }
 
     if (REFFLDFLAG & nTypeId)
-        nTypeId = TYP_GETREFFLD;
+        nTypeId = static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef);
 
+    SwFieldTypesEnum nFieldType = static_cast<SwFieldTypesEnum>(nTypeId);
     for (sal_uInt16 i = 0; i < nSize; i++)
     {
-        OUString sId(OUString::number(GetFieldMgr().GetFormatId( nTypeId, i )));
-        m_xFormatLB->append(sId, GetFieldMgr().GetFormatStr(nTypeId, i));
+        OUString sId(OUString::number(GetFieldMgr().GetFormatId( nFieldType, i )));
+        m_xFormatLB->append(sId, GetFieldMgr().GetFormatStr(nFieldType, i));
     }
     // #i83479#
 
@@ -804,14 +805,14 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
     if ( bAddCrossRefFormats )
     {
         sal_uInt16 nFormat = FMT_REF_NUMBER_IDX;
-        OUString sId(OUString::number(GetFieldMgr().GetFormatId(nTypeId, nFormat)));
-        m_xFormatLB->append(sId, GetFieldMgr().GetFormatStr( nTypeId, nFormat ));
+        OUString sId(OUString::number(GetFieldMgr().GetFormatId(nFieldType, nFormat)));
+        m_xFormatLB->append(sId, GetFieldMgr().GetFormatStr( nFieldType, nFormat ));
         nFormat = FMT_REF_NUMBER_NO_CONTEXT_IDX;
-        sId = OUString::number(GetFieldMgr().GetFormatId(nTypeId, nFormat));
-        m_xFormatLB->append(sId, GetFieldMgr().GetFormatStr( nTypeId, nFormat ));
+        sId = OUString::number(GetFieldMgr().GetFormatId(nFieldType, nFormat));
+        m_xFormatLB->append(sId, GetFieldMgr().GetFormatStr( nFieldType, nFormat ));
         nFormat = FMT_REF_NUMBER_FULL_CONTEXT_IDX;
-        sId = OUString::number(GetFieldMgr().GetFormatId(nTypeId, nFormat));
-        m_xFormatLB->append(sId, GetFieldMgr().GetFormatStr( nTypeId, nFormat ));
+        sId = OUString::number(GetFieldMgr().GetFormatId(nFieldType, nFormat));
+        m_xFormatLB->append(sId, GetFieldMgr().GetFormatStr( nFieldType, nFormat ));
         nExtraSize = 3;
     }
 
@@ -823,42 +824,42 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
     {
         for (sal_uInt16 i = 0; i < nSize; i++)
         {
-            OUString sId(OUString::number(GetFieldMgr().GetFormatId( nTypeId, i + SAL_N_ELEMENTS(FMT_REF_ARY))));
-            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nTypeId, i ));
+            OUString sId(OUString::number(GetFieldMgr().GetFormatId( nFieldType, i + SAL_N_ELEMENTS(FMT_REF_ARY))));
+            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, i ));
         }
         nExtraSize += nSize;
 
         if ( bAddCrossRefFormats )
         {
             sal_uInt16 nFormat = FMT_REF_NUMBER_IDX + SAL_N_ELEMENTS(FMT_REF_ARY);
-            OUString sId(OUString::number(GetFieldMgr().GetFormatId(nTypeId, nFormat)));
-            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nTypeId, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
+            OUString sId(OUString::number(GetFieldMgr().GetFormatId(nFieldType, nFormat)));
+            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
             nFormat = FMT_REF_NUMBER_NO_CONTEXT_IDX + SAL_N_ELEMENTS(FMT_REF_ARY);
-            sId = OUString::number(GetFieldMgr().GetFormatId(nTypeId, nFormat));
-            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nTypeId, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
+            sId = OUString::number(GetFieldMgr().GetFormatId(nFieldType, nFormat));
+            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
             nFormat = FMT_REF_NUMBER_FULL_CONTEXT_IDX + SAL_N_ELEMENTS(FMT_REF_ARY);
-            sId = OUString::number(GetFieldMgr().GetFormatId(nTypeId, nFormat));
-            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nTypeId, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
+            sId = OUString::number(GetFieldMgr().GetFormatId(nFieldType, nFormat));
+            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
             nExtraSize += 3;
         }
         // uppercase article
         for (sal_uInt16 i = 0; i < nSize; i++)
         {
-            OUString sId(OUString::number(GetFieldMgr().GetFormatId( nTypeId, i + 2 * SAL_N_ELEMENTS(FMT_REF_ARY))));
-            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nTypeId, i ));
+            OUString sId(OUString::number(GetFieldMgr().GetFormatId( nFieldType, i + 2 * SAL_N_ELEMENTS(FMT_REF_ARY))));
+            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, i ));
         }
         nExtraSize += nSize;
         if ( bAddCrossRefFormats )
         {
             sal_uInt16 nFormat = FMT_REF_NUMBER_IDX + 2 * SAL_N_ELEMENTS(FMT_REF_ARY);
-            OUString sId(OUString::number(GetFieldMgr().GetFormatId(nTypeId, nFormat)));
-            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nTypeId, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
+            OUString sId(OUString::number(GetFieldMgr().GetFormatId(nFieldType, nFormat)));
+            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
             nFormat = FMT_REF_NUMBER_NO_CONTEXT_IDX + 2 * SAL_N_ELEMENTS(FMT_REF_ARY);
-            sId = OUString::number(GetFieldMgr().GetFormatId(nTypeId, nFormat));
-            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nTypeId, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
+            sId = OUString::number(GetFieldMgr().GetFormatId(nFieldType, nFormat));
+            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
             nFormat = FMT_REF_NUMBER_FULL_CONTEXT_IDX + 2 * SAL_N_ELEMENTS(FMT_REF_ARY);
-            sId = OUString::number(GetFieldMgr().GetFormatId(nTypeId, nFormat));
-            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nTypeId, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
+            sId = OUString::number(GetFieldMgr().GetFormatId(nFieldType, nFormat));
+            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
             nExtraSize += 3;
         }
     }
@@ -894,8 +895,8 @@ IMPL_LINK_NOARG(SwFieldRefPage, ModifyHdl, weld::Entry&, void)
     bool bEnable = true;
     sal_uInt16 nTypeId = m_xTypeLB->get_id(GetTypeSel()).toUInt32();
 
-    if ((nTypeId == TYP_SETREFFLD && !GetFieldMgr().CanInsertRefMark(aName)) ||
-        (bEmptyName && (nTypeId == TYP_GETREFFLD || nTypeId == TYP_SETREFFLD ||
+    if ((nTypeId == static_cast<sal_uInt16>(SwFieldTypesEnum::SetRef) && !GetFieldMgr().CanInsertRefMark(aName)) ||
+        (bEmptyName && (nTypeId == static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef) || nTypeId == static_cast<sal_uInt16>(SwFieldTypesEnum::SetRef) ||
                        nTypeId == REFFLDFLAG_BOOKMARK)))
         bEnable = false;
 
@@ -919,11 +920,11 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
 
     switch(nTypeId)
     {
-        case TYP_GETREFFLD:
+        case static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef):
             nSubType = REF_SETREFATTR;
             break;
 
-        case TYP_SETREFFLD:
+        case static_cast<sal_uInt16>(SwFieldTypesEnum::SetRef):
         {
             SwFieldType* pType = GetFieldMgr().GetFieldType(SwFieldIds::SetExp, aName);
 
@@ -948,7 +949,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
         if (nTypeId == REFFLDFLAG_BOOKMARK)     // text marks!
         {
             aName = m_xNameED->get_text();
-            nTypeId = TYP_GETREFFLD;
+            nTypeId = static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef);
             nSubType = REF_BOOKMARK;
         }
         else if (REFFLDFLAG_FOOTNOTE == nTypeId)        // footnotes
@@ -958,7 +959,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
 
             size_t nPos = 0;
 
-            nTypeId = TYP_GETREFFLD;
+            nTypeId = static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef);
             nSubType = REF_FOOTNOTE;
             aName.clear();
 
@@ -979,7 +980,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
 
             size_t nPos = 0;
 
-            nTypeId = TYP_GETREFFLD;
+            nTypeId = static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef);
             nSubType = REF_ENDNOTE;
             aName.clear();
 
@@ -1009,7 +1010,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
                         *(maOutlineNodes[nOutlIdx]),
                         IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
                     aName = pMark->GetName();
-                    nTypeId = TYP_GETREFFLD;
+                    nTypeId = static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef);
                     nSubType = REF_BOOKMARK;
                 }
             }
@@ -1029,7 +1030,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
                         *(maNumItems[nNumItemIdx]->GetTextNode()),
                         IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK);
                     aName = pMark->GetName();
-                    nTypeId = TYP_GETREFFLD;
+                    nTypeId = static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef);
                     nSubType = REF_BOOKMARK;
                 }
             }
@@ -1046,7 +1047,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
 
                 size_t nPos = 0;
 
-                nTypeId = TYP_GETREFFLD;
+                nTypeId = static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef);
                 nSubType = REF_SEQUENCEFLD;
                 aName = pType->GetName();
 
@@ -1064,7 +1065,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
         }
     }
 
-    if (IsFieldEdit() && nTypeId == TYP_GETREFFLD)
+    if (IsFieldEdit() && nTypeId == static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef))
     {
         aVal = OUString::number(nSubType) + "|" + aVal;
     }
@@ -1076,7 +1077,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
         m_xSelectionLB->get_value_changed_from_saved() ||
         m_xFormatLB->get_value_changed_from_saved())
     {
-        InsertField( nTypeId, nSubType, aName, aVal, nFormat );
+        InsertField( static_cast<SwFieldTypesEnum>(nTypeId), nSubType, aName, aVal, nFormat );
     }
 
     ModifyHdl(*m_xNameED);    // enable/disable insert if applicable
